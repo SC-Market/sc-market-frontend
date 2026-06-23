@@ -15,7 +15,6 @@ import {
   Tabs,
   Tooltip,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded"
 import React from "react"
@@ -37,11 +36,11 @@ export function NotificationsButton() {
   const iconColor = getNavbarContrastText(theme)
 
   const {
-    isLoggedIn, organizationsData,
+    isLoggedIn, shopsData,
     notifications, total, unreadCount,
     page, pageSize, handleChangePage, handleChangeRowsPerPage, resetPage,
     scopeFilter, setScopeFilter,
-    contractorIdFilter, setContractorIdFilter,
+    shopIdFilter, setShopIdFilter,
     markAllReadCallback, deleteAllCallback,
   } = useNotifications()
 
@@ -147,7 +146,7 @@ export function NotificationsButton() {
             value={scopeFilter}
             onChange={(_, newValue) => {
               setScopeFilter(newValue)
-              setContractorIdFilter("") // Reset contractor filter when changing scope
+              setShopIdFilter("") // Reset shop filter when changing scope
               resetPage() // Reset to first page
             }}
             variant="scrollable"
@@ -160,70 +159,70 @@ export function NotificationsButton() {
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
             <Tab
-              label="Individual"
-              value="individual"
+              label="Personal"
+              value="personal"
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
             <Tab
-              label="Organizations"
-              value="organization"
+              label="Shop"
+              value="shop"
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
           </Tabs>
-          {scopeFilter === "organization" &&
-            organizationsData &&
-            organizationsData.length > 0 && (
+          {scopeFilter === "shop" &&
+            shopsData &&
+            shopsData.length > 0 && (
               <FormControl fullWidth size="small" sx={{ mt: 1 }}>
-                <InputLabel id="org-filter-label">
-                  Filter by Organization
+                <InputLabel id="shop-filter-label">
+                  Filter by Shop
                 </InputLabel>
                 <Select
-                  labelId="org-filter-label"
-                  value={contractorIdFilter}
-                  label="Filter by Organization"
+                  labelId="shop-filter-label"
+                  value={shopIdFilter}
+                  label="Filter by Shop"
                   onChange={(e) => {
-                    setContractorIdFilter(e.target.value)
+                    setShopIdFilter(e.target.value)
                     resetPage() // Reset to first page
                   }}
                 >
                   <MenuItem value="">
-                    <em>All Organizations</em>
+                    <em>All Shops</em>
                   </MenuItem>
-                  {organizationsData.map((org) => (
-                    <MenuItem key={org.contractor_id} value={org.contractor_id}>
-                      {org.name}
+                  {shopsData.map((shop) => (
+                    <MenuItem key={shop.shop_id} value={shop.shop_id}>
+                      {shop.name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             )}
-          {(scopeFilter !== "all" || contractorIdFilter) && (
+          {(scopeFilter !== "all" || shopIdFilter) && (
             <Box sx={{ mt: 1, display: "flex", gap: 0.5, flexWrap: "wrap" }}>
               {scopeFilter !== "all" && (
                 <Chip
                   label={
-                    scopeFilter === "individual"
-                      ? "Individual"
-                      : "Organizations"
+                    scopeFilter === "personal"
+                      ? "Personal"
+                      : "Shop"
                   }
                   size="small"
                   onDelete={() => {
                     setScopeFilter("all")
-                    setContractorIdFilter("")
+                    setShopIdFilter("")
                     resetPage()
                   }}
                 />
               )}
-              {contractorIdFilter && (
+              {shopIdFilter && (
                 <Chip
                   label={
-                    organizationsData?.find(
-                      (o) => o.contractor_id === contractorIdFilter,
-                    )?.name || "Organization"
+                    shopsData?.find(
+                      (s) => s.shop_id === shopIdFilter,
+                    )?.name || "Shop"
                   }
                   size="small"
                   onDelete={() => {
-                    setContractorIdFilter("")
+                    setShopIdFilter("")
                     resetPage()
                   }}
                 />

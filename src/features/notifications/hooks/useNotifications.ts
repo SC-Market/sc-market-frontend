@@ -5,30 +5,38 @@ import {
   useNotificationBulkDeleteMutation,
 } from "../../notifications/api/notificationApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-import { useGetUserOrganizationsQuery } from "../../contractor/api/organizationsApi"
+import { useGetMyShopsQuery } from "../../../store/api/v2/market"
 import { useNotificationPollingInterval } from "../../../hooks/notifications/useNotificationPolling"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { useBadgeAPI } from "../../../hooks/pwa/useBadgeAPI"
+import type { NotificationScope } from "../domain/types"
+
+/** Map frontend scope labels to the backend query param values */
+function mapScopeToBackend(scope: NotificationScope): "individual" | "organization" | undefined {
+  if (scope === "personal") return "individual"
+  if (scope === "shop") return "organization"
+  return undefined
+}
 
 export function useNotifications() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
-  const [scopeFilter, setScopeFilter] = useState<"individual" | "organization" | "all">("all")
-  const [contractorIdFilter, setContractorIdFilter] = useState("")
+  const [scopeFilter, setScopeFilter] = useState<NotificationScope>("all")
+  const [shopIdFilter, setShopIdFilter] = useState("")
 
   const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser
-  const { data: organizationsData } = useGetUserOrganizationsQuery(undefined, { skip: !isLoggedIn })
+  const { data: shopsData } = useGetMyShopsQuery(undefined, { skip: !isLoggedIn })
   const pollingInterval = useNotificationPollingInterval()
 
   const { data: notificationsData, refetch } = useGetNotificationsQuery(
     {
       page, pageSize,
-      scope: scopeFilter !== "all" ? scopeFilter : undefined,
-      contractorId: contractorIdFilter || undefined,
+      scope: mapScopeToBackend(scopeFilter),
+      contractorId: shopIdFilter || undefined,
     },
     {
       skip: !isLoggedIn,
@@ -74,11 +82,11 @@ export function useNotifications() {
   const resetPage = useCallback(() => setPage(0), [])
 
   return {
-    isLoggedIn, organizationsData,
+    isLoggedIn, shopsData,
     notifications, total, unreadCount,
     page, pageSize, handleChangePage, handleChangeRowsPerPage, resetPage,
     scopeFilter, setScopeFilter,
-    contractorIdFilter, setContractorIdFilter,
+    shopIdFilter, setShopIdFilter,
     markAllReadCallback, deleteAllCallback,
   }
 }

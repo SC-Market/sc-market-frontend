@@ -1,4 +1,3 @@
-import { useMemo } from "react"
 import {
   Box,
   Grid,
@@ -12,39 +11,29 @@ import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
-import { useGetUserOrderReviews } from "../../../profile/api/profileApi"
-import { useGetContractorReviewsQuery } from "../../../contractor/api/contractorApi"
-import type { OrderReview } from "../../../orders/domain/types"
+import { useGetShopReviewsQuery } from "../../../../store/api/v2/market"
+import type { ShopReviewResponse } from "../../../../store/api/v2/market"
 import { getRelativeTime } from "../../../../util/time"
 
 export function SellerReviews(props: {
-  userSeller?: { username: string } | null
-  contractorSeller?: { spectrum_id: string } | null
+  shopId?: string | null
+  shopSlug?: string | null
+  shopName?: string | null
 }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { userSeller, contractorSeller } = props
+  const { shopId, shopSlug, shopName } = props
 
-  const { data: userReviews, isLoading: userReviewsLoading } =
-    useGetUserOrderReviews(userSeller?.username || "", {
-      skip: !userSeller?.username,
-    })
+  const { data: reviewsData, isLoading } = useGetShopReviewsQuery(
+    { shopId: shopId || "", pageSize: 3 },
+    { skip: !shopId },
+  )
 
-  const { data: contractorReviews, isLoading: contractorReviewsLoading } =
-    useGetContractorReviewsQuery(contractorSeller?.spectrum_id || "", {
-      skip: !contractorSeller?.spectrum_id,
-    })
+  const reviews = reviewsData?.reviews || []
+  const totalReviews = reviewsData?.total || 0
+  const displayName = shopName || shopSlug || ""
 
-  const reviews = useMemo(() => {
-    const allReviews = userReviews || contractorReviews || []
-    return allReviews.slice(0, 3)
-  }, [userReviews, contractorReviews])
-
-  const isLoading = userReviewsLoading || contractorReviewsLoading
-  const sellerName = userSeller?.username || contractorSeller?.spectrum_id || ""
-  const totalReviews = userReviews?.length || contractorReviews?.length || 0
-
-  if (!sellerName || isLoading || !reviews.length) return null
+  if (!shopId || isLoading || !reviews.length) return null
 
   return (
     <Grid item xs={12}>
@@ -59,18 +48,14 @@ export function SellerReviews(props: {
         >
           <Typography variant="h6" color="text.secondary" fontWeight="bold">
             {t("MarketListingView.sellerReviews", {
-              seller: sellerName,
-              defaultValue: `Reviews for ${sellerName}`,
+              seller: displayName,
+              defaultValue: `Reviews for ${displayName}`,
             })}
           </Typography>
           {totalReviews > 3 && (
             <MaterialLink
               component={Link}
-              to={
-                userSeller
-                  ? `/user/${userSeller.username}/reviews`
-                  : `/contractor/${contractorSeller?.spectrum_id}/reviews`
-              }
+              to={`/shops/${shopSlug || shopId}/reviews`}
               underline="hover"
               color="primary"
               variant="body2"
@@ -84,7 +69,7 @@ export function SellerReviews(props: {
           )}
         </Box>
         <Grid container spacing={theme.layoutSpacing.component}>
-          {reviews.map((review: OrderReview) => (
+          {reviews.map((review: ShopReviewResponse) => (
             <Grid item xs={12} md={4} key={review.review_id}>
               <Box
                 sx={{
@@ -116,7 +101,7 @@ export function SellerReviews(props: {
                     icon={<StarRounded fontSize="inherit" />}
                   />
                   <Typography variant="caption" color="text.secondary">
-                    {getRelativeTime(new Date(review.timestamp))}
+                    {getRelativeTime(new Date(review.created_at))}
                   </Typography>
                 </Box>
                 <Typography
@@ -132,14 +117,13 @@ export function SellerReviews(props: {
                     mb: 1,
                   }}
                 >
-                  {review.content ||
+                  {review.comment ||
                     t("MarketListingView.noReviewContent", "No review content")}
                 </Typography>
                 <Divider light sx={{ mb: 1 }} />
                 <Typography variant="caption" color="text.secondary">
                   {t("MarketListingView.reviewBy", "by")}{" "}
-                  {review.user_author?.display_name ||
-                    review.contractor_author?.name ||
+                  {review.author?.display_name ||
                     t("MarketListingView.anonymousReviewer", "Anonymous")}
                 </Typography>
               </Box>

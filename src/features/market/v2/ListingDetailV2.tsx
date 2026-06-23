@@ -394,7 +394,11 @@ export function ListingDetailV2() {
           {/* FULL-WIDTH SECTIONS */}
 
           {/* Seller Reviews */}
-          <SellerReviews userSeller={seller ? { username: seller.slug } : null} />
+          <SellerReviews
+            shopId={seller?.shop_id}
+            shopSlug={seller?.slug}
+            shopName={seller?.name}
+          />
 
           {/* Market Analysis */}
           {gameItemId && priceRange && (
