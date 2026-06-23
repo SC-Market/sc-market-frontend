@@ -48,6 +48,11 @@ import { amber } from "@mui/material/colors"
 import { useCallback, useMemo, MouseEventHandler } from "react"
 import { EmptyReviews } from "../../../components/empty-states"
 import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
+import {
+  calculateBadgesFromShopMetrics,
+  prioritizeBadges,
+} from "../../../util/badges"
+import { BadgeDisplay } from "../../../components/rating/ListingRating"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -254,6 +259,24 @@ function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
     return vals.map((v) => (max > 0 ? (v / max) * 100 : 0))
   }, [reviewsData])
 
+  // Compute badges from shop metrics when available
+  const shopBadges = useMemo(() => {
+    const metrics = (shop as ShopPublicResponseWithMetrics).metrics
+    if (!metrics) return []
+    return prioritizeBadges(
+      calculateBadgesFromShopMetrics({
+        avg_rating: shop.rating || 0,
+        rating_count: shop.rating_count,
+        total_orders: metrics.total_orders,
+        total_completed: metrics.total_completed,
+        streak: metrics.streak,
+        response_rate: metrics.response_rate,
+        avg_completion_hours: metrics.avg_completion_hours,
+        created_at: shop.created_at,
+      }),
+    )
+  }, [shop])
+
   return (
     <Box display="flex" sx={{ maxWidth: 800, width: "100%", marginTop: 2 }}>
       <Box
@@ -304,9 +327,28 @@ function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
         <Typography variant="body1" color="text.primary">
           {shop.rating_count} review{shop.rating_count !== 1 ? "s" : ""}
         </Typography>
+        {shopBadges.length > 0 && (
+          <Box sx={{ mt: 1, fontSize: "1.2rem" }}>
+            <BadgeDisplay badges={shopBadges} />
+          </Box>
+        )}
       </Box>
     </Box>
   )
+}
+
+/**
+ * Extended ShopPublicResponse type that includes the metrics field
+ * once the backend API is updated to return it.
+ */
+interface ShopPublicResponseWithMetrics extends ShopPublicResponse {
+  metrics?: {
+    total_orders: number
+    total_completed: number
+    avg_completion_hours: number | null
+    streak: number
+    response_rate: number | null
+  }
 }
 
 function ShopTabs(props: { slug: string; currentTab: number; shop: ShopPublicResponse }) {

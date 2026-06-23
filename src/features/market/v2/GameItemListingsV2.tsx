@@ -582,6 +582,12 @@ function GameItemListingRow(props: {
                 total_orders: 0,
               },
             }}
+            shopRating={{
+              avg_rating: listing.shop_rating,
+              rating_count: 0,
+              total_orders: 0,
+              streak: 0,
+            }}
           />
         </Box>
       </TableCell>

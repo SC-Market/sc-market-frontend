@@ -1,5 +1,20 @@
 import { Rating } from "../features/contractor/domain/types"
 
+/**
+ * Input for calculating badges from shop-level metrics.
+ * Used when displaying badges on shop profiles with the new metrics endpoint.
+ */
+export interface ShopMetricsForBadges {
+  avg_rating: number
+  rating_count: number
+  total_orders: number
+  total_completed: number
+  streak: number
+  response_rate: number | null
+  avg_completion_hours: number | null
+  created_at: string // ISO date string for account age / consistency badge
+}
+
 // Badge ID constants
 export const BADGE_RATING_99_9 = "rating_99_9"
 export const BADGE_RATING_99 = "rating_99"
@@ -155,6 +170,93 @@ export function calculateBadgesFromRating(rating: Rating): string[] {
   if (
     (rating.total_assignments || 0) >= 10 &&
     (rating.response_rate || 0) >= 90
+  ) {
+    badges.push(BADGE_RESPONSIVE)
+  }
+
+  return badges
+}
+
+/**
+ * Calculates badges from shop-level metrics.
+ * Used on shop profiles when the backend provides the `metrics` field.
+ *
+ * @param metrics Shop metrics data
+ * @returns Array of badge IDs
+ */
+export function calculateBadgesFromShopMetrics(
+  metrics: ShopMetricsForBadges,
+): string[] {
+  const badges: string[] = []
+
+  // Rating badges — same thresholds, uses total_completed as order count gate
+  const orderGate = metrics.total_completed
+  if (metrics.avg_rating >= 4.995 && orderGate >= 25) {
+    badges.push(BADGE_RATING_99_9)
+  } else if (metrics.avg_rating >= 4.95 && orderGate >= 25) {
+    badges.push(BADGE_RATING_99)
+  } else if (metrics.avg_rating >= 4.75 && orderGate >= 25) {
+    badges.push(BADGE_RATING_95)
+  } else if (metrics.avg_rating >= 4.5 && orderGate >= 25) {
+    badges.push(BADGE_RATING_90)
+  }
+
+  // Volume badges — based on total_completed
+  if (metrics.total_completed >= 5000) {
+    badges.push(BADGE_VOLUME_PRO)
+  } else if (metrics.total_completed >= 1000) {
+    badges.push(BADGE_VOLUME_GOLD)
+  } else if (metrics.total_completed >= 500) {
+    badges.push(BADGE_VOLUME_SILVER)
+  } else if (metrics.total_completed >= 100) {
+    badges.push(BADGE_VOLUME_COPPER)
+  }
+
+  // Streak badges
+  if (metrics.streak >= 50) {
+    badges.push(BADGE_STREAK_PRO)
+  } else if (metrics.streak >= 25) {
+    badges.push(BADGE_STREAK_GOLD)
+  } else if (metrics.streak >= 15) {
+    badges.push(BADGE_STREAK_SILVER)
+  } else if (metrics.streak >= 5) {
+    badges.push(BADGE_STREAK_COPPER)
+  }
+
+  // Speed badges — based on avg_completion_hours
+  if (metrics.avg_completion_hours != null && metrics.total_completed >= 10) {
+    if (metrics.avg_completion_hours <= 3) {
+      badges.push(BADGE_SPEED_PRO)
+    } else if (metrics.avg_completion_hours <= 6) {
+      badges.push(BADGE_SPEED_GOLD)
+    } else if (metrics.avg_completion_hours <= 12) {
+      badges.push(BADGE_SPEED_SILVER)
+    } else if (metrics.avg_completion_hours <= 24) {
+      badges.push(BADGE_SPEED_COPPER)
+    }
+  }
+
+  // Consistency badges — based on account age (created_at)
+  const createdAt = new Date(metrics.created_at)
+  const now = new Date()
+  const ageMonths =
+    (now.getFullYear() - createdAt.getFullYear()) * 12 +
+    (now.getMonth() - createdAt.getMonth())
+  if (ageMonths >= 36 && metrics.total_completed >= 50) {
+    badges.push(BADGE_CONSISTENCY_PRO)
+  } else if (ageMonths >= 24 && metrics.total_completed >= 30) {
+    badges.push(BADGE_CONSISTENCY_GOLD)
+  } else if (ageMonths >= 12 && metrics.total_completed >= 15) {
+    badges.push(BADGE_CONSISTENCY_SILVER)
+  } else if (ageMonths >= 6 && metrics.total_completed >= 5) {
+    badges.push(BADGE_CONSISTENCY_COPPER)
+  }
+
+  // Responsive badge — response_rate from shop metrics
+  if (
+    metrics.response_rate != null &&
+    metrics.response_rate >= 90 &&
+    metrics.total_orders >= 10
   ) {
     badges.push(BADGE_RESPONSIVE)
   }
