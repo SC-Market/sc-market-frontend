@@ -42,9 +42,14 @@ export type NotificationAction =
   | "order_review_revision_requested"
 
 /**
- * Notification scope
+ * Notification scope filter (frontend tab labels)
  */
-export type NotificationScope = "individual" | "organization" | "all"
+export type NotificationScope = "all" | "personal" | "shop"
+
+/**
+ * Backend notification scope values (what the server returns on each notification)
+ */
+export type BackendNotificationScope = "individual" | "organization"
 
 /**
  * Notification data structure
@@ -57,7 +62,7 @@ export interface Notification {
   entity: NotificationEntity
   timestamp: string
   actors: MinimalUser[]
-  scope?: NotificationScope
+  scope?: BackendNotificationScope
   contractor_id?: string | null
 }
 
@@ -90,6 +95,6 @@ export interface NotificationQueryParams {
   pageSize?: number
   action?: string
   entityId?: string
-  scope?: NotificationScope
+  scope?: BackendNotificationScope
   contractorId?: string
 }

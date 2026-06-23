@@ -39,18 +39,18 @@ export function NotificationsPage() {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(20)
   const [scopeFilter, setScopeFilter] = useState<NotificationScope>("all")
-  const [contractorIdFilter, setContractorIdFilter] = useState<string>("")
+  const [shopIdFilter, setShopIdFilter] = useState<string>("")
 
   const pageData = usePageNotifications({
     page,
     pageSize,
     scope: scopeFilter,
-    contractorId: contractorIdFilter,
+    shopId: shopIdFilter,
   })
 
   const notifications = pageData.data?.notifications || []
   const pagination = pageData.data?.pagination
-  const organizationsData = pageData.data?.organizations || []
+  const shopsData = pageData.data?.shops || []
   const total = pagination?.total || 0
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
@@ -137,7 +137,7 @@ export function NotificationsPage() {
             value={scopeFilter}
             onChange={(_, newValue) => {
               setScopeFilter(newValue)
-              setContractorIdFilter("")
+              setShopIdFilter("")
               setPage(0)
             }}
             variant="scrollable"
@@ -150,72 +150,72 @@ export function NotificationsPage() {
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
             <Tab
-              label="Individual"
-              value="individual"
+              label="Personal"
+              value="personal"
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
             <Tab
-              label="Organizations"
-              value="organization"
+              label="Shop"
+              value="shop"
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
           </Tabs>
-          {scopeFilter === "organization" &&
-            organizationsData &&
-            organizationsData.length > 0 && (
+          {scopeFilter === "shop" &&
+            shopsData &&
+            shopsData.length > 0 && (
               <FormControl fullWidth size="small" sx={{ mt: 1, mb: 1 }}>
-                <InputLabel id="org-filter-label">
-                  Filter by Organization
+                <InputLabel id="shop-filter-label">
+                  Filter by Shop
                 </InputLabel>
                 <Select
-                  labelId="org-filter-label"
-                  value={contractorIdFilter}
-                  label="Filter by Organization"
+                  labelId="shop-filter-label"
+                  value={shopIdFilter}
+                  label="Filter by Shop"
                   onChange={(e) => {
-                    setContractorIdFilter(e.target.value)
+                    setShopIdFilter(e.target.value)
                     setPage(0)
                   }}
                 >
                   <MenuItem value="">
-                    <em>All Organizations</em>
+                    <em>All Shops</em>
                   </MenuItem>
-                  {organizationsData.map((org) => (
-                    <MenuItem key={org.contractor_id} value={org.contractor_id}>
-                      {org.name}
+                  {shopsData.map((shop) => (
+                    <MenuItem key={shop.shop_id} value={shop.shop_id}>
+                      {shop.name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             )}
-          {(scopeFilter !== "all" || contractorIdFilter) && (
+          {(scopeFilter !== "all" || shopIdFilter) && (
             <Box
               sx={{ mt: 1, mb: 1, display: "flex", gap: 0.5, flexWrap: "wrap" }}
             >
               {scopeFilter !== "all" && (
                 <Chip
                   label={
-                    scopeFilter === "individual"
-                      ? "Individual"
-                      : "Organizations"
+                    scopeFilter === "personal"
+                      ? "Personal"
+                      : "Shop"
                   }
                   size="small"
                   onDelete={() => {
                     setScopeFilter("all")
-                    setContractorIdFilter("")
+                    setShopIdFilter("")
                     setPage(0)
                   }}
                 />
               )}
-              {contractorIdFilter && (
+              {shopIdFilter && (
                 <Chip
                   label={
-                    organizationsData?.find(
-                      (o) => o.contractor_id === contractorIdFilter,
-                    )?.name || "Organization"
+                    shopsData?.find(
+                      (s) => s.shop_id === shopIdFilter,
+                    )?.name || "Shop"
                   }
                   size="small"
                   onDelete={() => {
-                    setContractorIdFilter("")
+                    setShopIdFilter("")
                     setPage(0)
                   }}
                 />

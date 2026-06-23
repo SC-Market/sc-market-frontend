@@ -4,15 +4,23 @@ import {
   useNotificationBulkUpdateMutation,
   useNotificationBulkDeleteMutation,
 } from "../api/notificationApi"
-import { useGetUserOrganizationsQuery, type UserOrganization } from "../../contractor/api/organizationsApi"
+import { useGetMyShopsQuery, type ShopResponse } from "../../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import type { Notification } from "../../../hooks/login/UserProfile"
+import type { NotificationScope } from "../domain/types"
+
+/** Map frontend scope labels to backend query param values */
+function mapScopeToBackend(scope: NotificationScope | undefined): "individual" | "organization" | undefined {
+  if (scope === "personal") return "individual"
+  if (scope === "shop") return "organization"
+  return undefined
+}
 
 export interface UsePageNotificationsParams {
   page: number
   pageSize: number
-  scope: string
-  contractorId?: string
+  scope: NotificationScope
+  shopId?: string
 }
 
 export interface UsePageNotificationsResult {
@@ -28,7 +36,7 @@ export interface UsePageNotificationsResult {
           hasPreviousPage: boolean
         } | undefined
         unreadCount: number
-        organizations: UserOrganization[]
+        shops: ShopResponse[]
       }
     | undefined
   isLoading: boolean
@@ -42,7 +50,7 @@ export interface UsePageNotificationsResult {
 export function usePageNotifications(
   params: UsePageNotificationsParams,
 ): UsePageNotificationsResult {
-  const { page, pageSize, scope, contractorId } = params
+  const { page, pageSize, scope, shopId } = params
 
   const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser
@@ -57,14 +65,14 @@ export function usePageNotifications(
     {
       page,
       pageSize,
-      scope: scope !== "all" ? (scope as "individual" | "organization") : undefined,
-      contractorId: contractorId || undefined,
+      scope: mapScopeToBackend(scope),
+      contractorId: shopId || undefined,
     },
     { skip: !isLoggedIn },
   )
 
-  const { data: organizationsData, isLoading: orgsLoading } =
-    useGetUserOrganizationsQuery()
+  const { data: shopsData, isLoading: shopsLoading } =
+    useGetMyShopsQuery(undefined, { skip: !isLoggedIn })
 
   const [bulkUpdate] = useNotificationBulkUpdateMutation()
   const [bulkDelete] = useNotificationBulkDeleteMutation()
@@ -81,16 +89,16 @@ export function usePageNotifications(
 
   return {
     data:
-      notificationsData || organizationsData
+      notificationsData || shopsData
         ? {
             notifications: notificationsData?.notifications || [],
             pagination: notificationsData?.pagination,
             unreadCount: notificationsData?.unread_count || 0,
-            organizations: organizationsData || [],
+            shops: shopsData || [],
           }
         : undefined,
-    isLoading: isLoading || orgsLoading,
-    isFetching: isFetching || orgsLoading,
+    isLoading: isLoading || shopsLoading,
+    isFetching: isFetching || shopsLoading,
     error,
     refetch,
     markAllAsRead,
