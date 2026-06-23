@@ -594,6 +594,7 @@ function AllStockLotsGridV2() {
       <DataGrid
         rows={rows}
         columns={columns}
+        loading={isLoading}
         processRowUpdate={handleRowUpdate}
         onProcessRowUpdateError={(error) => console.error(error)}
         pageSizeOptions={[24, 48, 96]}
@@ -604,7 +605,7 @@ function AllStockLotsGridV2() {
             <EmptyState
               title={t("stock.noLots", "No stock lots")}
               description={t("stock.noLotsDesc", "Add stock lots to manage your inventory.")}
-              sx={{ minHeight: 200 }}
+              sx={{ minHeight: 200, pb: 4 }}
             />
           ),
           toolbar: () => (
@@ -738,7 +739,7 @@ function AllocatedStockGridV2() {
             <EmptyState
               title={t("stock.noAllocations", "No allocated stock")}
               description={t("stock.noAllocationsDesc", "Stock will appear here when orders are placed against your listings.")}
-              sx={{ minHeight: 200 }}
+              sx={{ minHeight: 200, pb: 4 }}
             />
           ),
           toolbar: () => (

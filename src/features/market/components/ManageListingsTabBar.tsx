@@ -6,7 +6,7 @@
 
 import React from "react"
 import { Box, Tabs, Tab, Typography } from "@mui/material"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation, matchPath } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
 export interface ManageListingsTabBarProps {
@@ -16,12 +16,10 @@ export interface ManageListingsTabBarProps {
   rightAction?: React.ReactNode
 }
 
-const TAB_ROUTES = ["/market/manage", "/market/manage-stock", "/order/services"] as const
-
 function getTabForPath(pathname: string): number {
-  if (pathname.startsWith("/market/manage-stock")) return 1
-  if (pathname.startsWith("/order/services")) return 2
-  return 0 // /market/manage or default
+  if (pathname.includes("/stock") || pathname.includes("/manage-stock")) return 1
+  if (pathname.includes("/services")) return 2
+  return 0
 }
 
 export function ManageListingsTabBar({ title, rightAction }: ManageListingsTabBarProps) {
@@ -30,8 +28,18 @@ export function ManageListingsTabBar({ title, rightAction }: ManageListingsTabBa
   const location = useLocation()
   const currentTab = getTabForPath(location.pathname)
 
+  // Resolve shop slug from URL if under /shop/:slug/...
+  const shopMatch = matchPath("/shop/:shopSlug/*", location.pathname)
+  const shopSlug = (shopMatch?.params as { shopSlug?: string })?.shopSlug
+
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-    navigate(TAB_ROUTES[newValue])
+    if (shopSlug) {
+      const shopRoutes = [`/shop/${shopSlug}/listings`, `/shop/${shopSlug}/stock`, `/shop/${shopSlug}/services`]
+      navigate(shopRoutes[newValue])
+    } else {
+      const fallbackRoutes = ["/market/manage", "/market/manage-stock", "/order/services"]
+      navigate(fallbackRoutes[newValue])
+    }
   }
 
   return (
