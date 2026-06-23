@@ -21,7 +21,7 @@ export function useNotifications() {
 
   const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser
-  const { data: organizationsData } = useGetUserOrganizationsQuery()
+  const { data: organizationsData } = useGetUserOrganizationsQuery(undefined, { skip: !isLoggedIn })
   const pollingInterval = useNotificationPollingInterval()
 
   const { data: notificationsData, refetch } = useGetNotificationsQuery(
