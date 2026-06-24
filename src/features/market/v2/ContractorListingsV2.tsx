@@ -33,6 +33,7 @@ import { getRelativeTime } from "../../../util/time";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { has_permission } from "../../../views/contractor/OrgRoles";
 import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi";
+import { formatMarketUrl } from "../domain/urls";
 
 /**
  * ContractorListingsV2 - Display contractor organization listings with V2 variant support
@@ -344,7 +345,7 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
     >
       <Card
         component={RouterLink}
-        to={`/market/${listing.listing_id}`}
+        to={formatMarketUrl(listing)}
         sx={{
           minHeight: 400,
           padding: 3,

@@ -27,6 +27,7 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import type { MyListingItem } from "../../../../store/api/v2/market"
 import { getRelativeTime } from "../../../../util/time"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { formatMarketUrl } from "../../domain/urls"
 
 interface MyListingCardV2Props {
   listing: MyListingItem
@@ -76,7 +77,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
     <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
       <Card
         component={RouterLink}
-        to={`/market/${listing.listing_id}`}
+        to={formatMarketUrl(listing)}
         sx={{
           minHeight: 400,
           padding: 3,
