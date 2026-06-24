@@ -58,6 +58,7 @@ import { useCartDrawer } from "../hooks/AddToCartContext";
 import { AdCard } from "../../../components/ads/AdCard";
 import type { AdConfig } from "../../../components/ads/types";
 import { MARKET_ADS } from "../../../components/ads/adConfig";
+import { formatMarketUrl } from "../domain/urls";
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -977,7 +978,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
     >
       <ListingWrapper useFixedWidth={false}>
         <RouterLink
-          to={`/market/${listing.listing_id}`}
+          to={formatMarketUrl(listing)}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <CardActionArea
