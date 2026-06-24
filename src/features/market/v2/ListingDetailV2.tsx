@@ -36,6 +36,8 @@ import { SellerReviews } from "../listing-view/components/SellerReviews"
 import { SellerOtherListingsV2, RelatedListingsV2, AggregateMarketDataV2 } from "./components/ListingViewComponentsV2"
 import { ListingOrdersSection } from "./components/ListingOrdersSection"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { formatShortSlug } from "../domain/urls"
+import { MARKET_PATHS } from "../../../routes/paths"
 import { getLanguageName } from "../../../constants/languages"
 import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
@@ -138,9 +140,8 @@ export function ListingDetailV2() {
     if (gameItemType) {
       crumbs.push({ label: gameItemType, href: `/market?type=${encodeURIComponent(gameItemType)}` })
     }
-    // Only show game item name in breadcrumbs if it differs from the listing title
-    if (gameItemId && gameItemName && listing && gameItemName !== listing.title) {
-      crumbs.push({ label: gameItemName, href: `/market/aggregate/${gameItemId}` })
+    if (gameItemId && gameItemName) {
+      crumbs.push({ label: gameItemName, href: MARKET_PATHS.aggregate(gameItemId, gameItemName) })
     }
     if (listing) crumbs.push({ label: listing.title })
     return crumbs
@@ -161,7 +162,7 @@ export function ListingDetailV2() {
     return false
   }, [profile, seller, listing, belongsToSellerOrg, sellerContractor])
 
-  const canonicalUrl = listing ? `${FRONTEND_URL}/market/${listing.listing_id}` : undefined
+  const canonicalUrl = listing ? `${FRONTEND_URL}/market/${formatShortSlug(listing.listing_id, listing.title)}` : undefined
 
   return (
     <StandardPageLayout

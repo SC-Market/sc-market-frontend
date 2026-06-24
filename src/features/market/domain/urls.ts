@@ -7,6 +7,17 @@ import type {
   ExtendedMultipleSearchResult,
 } from "./types"
 
+export function formatShortSlug(id: string, name: string): string {
+  const prefix = id.replace(/-/g, "").slice(0, 8)
+  const slug = name
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/-{2,}/g, "-")
+    .slice(0, 60)
+  return `${prefix}--${slug}`
+}
+
 export function formatListingSlug(title: string): string {
   return title
     .toLowerCase()
@@ -17,10 +28,8 @@ export function formatListingSlug(title: string): string {
 export function formatMarketUrl(listing: MarketListingSearchResult): string {
   try {
     return listing?.listing_type === "aggregate"
-      ? `/market/aggregate/${listing?.listing_id}/#/${formatListingSlug(
-          listing.title,
-        )}`
-      : `/market/${listing?.listing_id}/#/${formatListingSlug(listing.title)}`
+      ? `/market/aggregate/${formatShortSlug(listing.listing_id, listing.title)}`
+      : `/market/${formatShortSlug(listing.listing_id, listing.title)}`
   } catch (e) {
     console.log(listing, e)
     return ""
@@ -38,12 +47,8 @@ export function formatCompleteListingUrl(
 ): string {
   try {
     return listing?.type === "aggregate_composite"
-      ? `/market/aggregate/${listing?.listing.listing_id}/#/${formatListingSlug(
-          listing.details.title,
-        )}`
-      : `/market/${listing?.listing.listing_id}/#/${formatListingSlug(
-          listing.details.title,
-        )}`
+      ? `/market/aggregate/${formatShortSlug(listing.listing.listing_id, listing.details.title)}`
+      : `/market/${formatShortSlug(listing.listing.listing_id, listing.details.title)}`
   } catch (e) {
     console.log(listing, e)
     return ""
@@ -53,7 +58,5 @@ export function formatCompleteListingUrl(
 export function formatMarketMultipleUrl(
   multiple: ExtendedMultipleSearchResult,
 ): string {
-  return `/market/multiple/${multiple.listing_type}/#/${formatListingSlug(
-    multiple.title,
-  )}`
+  return `/market/multiple/${formatShortSlug(multiple.listing_type, multiple.title)}`
 }

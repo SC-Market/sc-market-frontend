@@ -3,6 +3,8 @@
  * All navigation links should use these functions instead of hardcoding paths.
  */
 
+import { formatShortSlug } from "../features/market/domain/urls"
+
 export const SHOP_PATHS = {
   root: (slug: string) => `/shop/${slug}`,
   listings: (slug: string) => `/shop/${slug}/listings`,
@@ -38,7 +40,20 @@ export const USER_PATHS = {
 
 export const MARKET_PATHS = {
   search: "/market",
-  listing: (listingId: string) => `/market/${listingId}`,
+  listing: (id: string, title?: string) =>
+    title ? `/market/${formatShortSlug(id, title)}` : `/market/${id}`,
+  aggregate: (gameItemId: string, name?: string) =>
+    name ? `/market/aggregate/${formatShortSlug(gameItemId, name)}` : `/market/aggregate/${gameItemId}`,
   shops: "/shops",
   shopProfile: (slug: string) => `/shops/${slug}`,
+} as const
+
+export const WIKI_PATHS = {
+  item: (id: string, name?: string) =>
+    name ? `/wiki/items/${formatShortSlug(id, name)}` : `/wiki/items/${id}`,
+  ship: (id: string, name?: string) =>
+    name ? `/wiki/ships/${formatShortSlug(id, name)}` : `/wiki/ships/${id}`,
+  commodity: (id: string, name?: string) =>
+    name ? `/wiki/commodities/${formatShortSlug(id, name)}` : `/wiki/commodities/${id}`,
+  manufacturer: (code: string) => `/wiki/manufacturers/${code}`,
 } as const
