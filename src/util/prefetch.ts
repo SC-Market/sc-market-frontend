@@ -25,20 +25,12 @@ export async function prefetchModule(
 export async function prefetchMarketComponents(): Promise<void> {
   const prefetchPromises = [
     prefetchModule(
-      () => import("../features/market/components/ItemMarketView"),
-      "ItemMarketView",
-    ),
-    prefetchModule(
       () => import("../views/services/ServiceMarketView"),
       "ServiceMarketView",
     ),
     prefetchModule(
       () => import("../views/services/ServiceActions"),
       "ServiceActions",
-    ),
-    prefetchModule(
-      () => import("../features/market/views/ItemListings"),
-      "ItemListings",
     ),
   ]
 

@@ -1,6 +1,5 @@
 import { useState } from "react"
 import {
-  Button,
   Container,
   Typography,
   TextField,
@@ -9,6 +8,7 @@ import {
   Chip,
   Skeleton,
   MenuItem,
+  Pagination,
   InputAdornment,
 } from "@mui/material"
 import { Search, StorefrontRounded } from "@mui/icons-material"
@@ -166,22 +166,13 @@ export function ShopDirectory() {
       {/* Pagination */}
       {data && data.total > pageSize && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-          <Button
-            disabled={page <= 1}
-            onClick={() => setPage((p) => p - 1)}
-            sx={{ mr: 1 }}
-          >
-            Previous
-          </Button>
-          <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mx: 2 }}>
-            Page {page} of {Math.ceil(data.total / pageSize)}
-          </Typography>
-          <Button
-            disabled={page >= Math.ceil(data.total / pageSize)}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            Next
-          </Button>
+          <Pagination
+            count={Math.ceil(data.total / pageSize)}
+            page={page}
+            onChange={(_, value) => setPage(value)}
+            color="primary"
+            shape="rounded"
+          />
         </Box>
       )}
     </Container>

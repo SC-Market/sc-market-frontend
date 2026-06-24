@@ -1,2 +1,2 @@
-// Re-export all listing components from the feature directory
-export * from "./components/ItemListings.lazy"
+// Re-export utility function (V1 listing components have been removed)
+export { completeToSearchResult } from "./utils/listingUtils"

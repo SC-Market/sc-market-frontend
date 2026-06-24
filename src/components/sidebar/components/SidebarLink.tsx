@@ -11,8 +11,8 @@ const routePrefetchMap: Record<
 > = {
   // Market
   "/market": { importFn: () => import("../../../features/market"), key: "MarketPage" },
-  "/bulk": { importFn: () => import("../../../features/market-bulk"), key: "BulkItems" },
-  "/buyorders": { importFn: () => import("../../../features/market-buy-orders"), key: "BuyOrders" },
+  "/bulk": { importFn: () => import("../../../features/market"), key: "BulkItems" },
+  "/buyorders": { importFn: () => import("../../../features/market"), key: "BuyOrders" },
   "/market/manage": { importFn: () => import("../../../pages/market/ManageStock"), key: "ManageStock" },
 
   // Contracting

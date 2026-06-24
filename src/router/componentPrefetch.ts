@@ -60,7 +60,6 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
   "adminOrders:recent": () => import("../views/orders/RecentOrders"),
 
   // MarketPage tab components
-  "market:items": () => import("../features/market/components/ItemMarketView"),
   "market:services": () => import("../views/services/ServiceMarketView"),
   "market:serviceActions": () => import("../views/services/ServiceActions"),
   "market:contractActions": () => import("../views/contracts/ContractActions"),
@@ -68,11 +67,7 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
     import("../views/contracts/ContractListings"),
 
   // Contracts page tab components
-  "contracts:items": () =>
-    import("../features/market/components/ItemMarketView"),
   "contracts:services": () => import("../views/services/ServiceMarketView"),
-  "contracts:marketActions": () =>
-    import("../features/market/components/MarketActions"),
   "contracts:serviceActions": () => import("../views/services/ServiceActions"),
   "contracts:contractActions": () =>
     import("../views/contracts/ContractActions"),
@@ -132,16 +127,13 @@ export const COMPONENT_PREFETCH_MAP: Record<string, string[]> = {
   "/myfleet": ["fleet:ships", "fleet:deliveries"],
   "/admin/orders": ["adminOrders:analytics", "adminOrders:recent"],
   "/market": [
-    "market:items",
     "market:services",
     "market:serviceActions",
     "market:contractActions",
     "market:contractListings",
   ],
   "/contracts": [
-    "contracts:items",
     "contracts:services",
-    "contracts:marketActions",
     "contracts:serviceActions",
     "contracts:contractActions",
   ],
