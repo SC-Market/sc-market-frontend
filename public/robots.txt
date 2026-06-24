@@ -1,5 +1,10 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow: /profile
+Disallow: /settings
+Disallow: /onboarding
+Disallow: /dashboard
+Disallow: /messaging
+Disallow: /send
 
-Sitemap: https://sc-market.space/sitemap.xml
+Sitemap: https://api.sc-market.space/sitemap.xml
