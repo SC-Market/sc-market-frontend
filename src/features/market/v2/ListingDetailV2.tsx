@@ -162,12 +162,14 @@ export function ListingDetailV2() {
     return false
   }, [profile, seller, listing, belongsToSellerOrg, sellerContractor])
 
-  const canonicalUrl = listing ? `${FRONTEND_URL}/market/${formatShortSlug(listing.listing_id, listing.title)}` : undefined
+  const canonicalPath = listing ? `/market/${formatShortSlug(listing.listing_id, listing.title)}` : undefined
+  const canonicalUrl = canonicalPath ? `${FRONTEND_URL}${canonicalPath}` : undefined
 
   return (
     <StandardPageLayout
       title={listing?.title || "Listing Details"}
       headerTitle={listing?.title}
+      canonicalUrl={canonicalPath}
       breadcrumbs={breadcrumbs}
       isLoading={isLoading}
       error={error}

@@ -44,7 +44,7 @@ export function Page(
       props.canonUrl &&
       props.canonUrl != location.pathname + location.search + location.hash
     ) {
-      navigate(props.canonUrl)
+      navigate(props.canonUrl, { replace: true })
     }
   }, [location.pathname, location.hash, props.canonUrl])
 
