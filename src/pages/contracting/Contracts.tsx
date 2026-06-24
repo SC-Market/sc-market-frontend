@@ -27,19 +27,9 @@ import { MarketTabsLayout } from "../../components/layout/MarketTabsLayout"
 import { Page } from "../../components/metadata/Page"
 import { LazySection } from "../../components/layout/LazySection"
 
-const ItemMarketView = lazy(() =>
-  import("../../features/market/components/ItemMarketView").then((module) => ({
-    default: module.ItemMarketView,
-  })),
-)
 const ServiceMarketView = lazy(() =>
   import("../../views/services/ServiceMarketView").then((module) => ({
     default: module.ServiceMarketView,
-  })),
-)
-const MarketActions = lazy(() =>
-  import("../../features/market/components/MarketActions").then((module) => ({
-    default: module.MarketActions,
   })),
 )
 const ServiceActions = lazy(() =>
@@ -112,12 +102,7 @@ export function Contracts() {
                 onTabChange={handleTabChange}
                 tabs={tabs}
                 headerActions={
-                  tabPage === 0 ? (
-                    <LazySection
-                      component={MarketActions}
-                      skeleton={() => null}
-                    />
-                  ) : tabPage === 1 ? (
+                  tabPage === 1 ? (
                     <LazySection
                       component={ServiceActions}
                       skeleton={() => null}
@@ -130,12 +115,7 @@ export function Contracts() {
                   )
                 }
                 fab={
-                  showMobileSidebar && tabPage === 0 ? (
-                    <FiltersFAB
-                      onClick={() => setMarketSidebarOpen((prev) => !prev)}
-                      label={t("market.toggleSidebar")}
-                    />
-                  ) : showMobileSidebar && tabPage === 1 ? (
+                  showMobileSidebar && tabPage === 1 ? (
                     <FiltersFAB
                       onClick={() => setServiceSidebarOpen((prev) => !prev)}
                       label={t("service_market.toggle_sidebar")}
@@ -148,12 +128,6 @@ export function Contracts() {
                   ) : undefined
                 }
               >
-                <TabPanel value={tabPage} index={0}>
-                  <LazySection
-                    component={ItemMarketView}
-                    skeleton={() => null}
-                  />
-                </TabPanel>
                 <TabPanel value={tabPage} index={1}>
                   <LazySection
                     component={ServiceMarketView}
