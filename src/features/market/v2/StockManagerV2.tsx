@@ -69,7 +69,7 @@ import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { MarketSearchAreaV2 } from "./ListingSearchV2"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
-import { PullToRefresh, LongPressMenu, useLongPress } from "../../../components/gestures"
+import { LongPressMenu, useLongPress } from "../../../components/gestures"
 import { EmptyListings } from "../../../components/empty-states"
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
@@ -724,21 +724,19 @@ function DisplayStockV2({
             ])
           }}
         />
-        <PullToRefresh onRefresh={async () => onRefreshAll()}>
-          <Paper sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel), overflow: "hidden" }}>
-            {allRows.length === 0 ? (
-              <EmptyListings showCreateAction={false} />
-            ) : (
-              allRows.map((row) => (
-                <MobileListingRow
-                  key={row.id}
-                  listing={row as MyListingItem}
-                  onEdit={(l) => { setEditTarget(l); setSheetOpen(true) }}
-                />
-              ))
-            )}
-          </Paper>
-        </PullToRefresh>
+        <Paper sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel), overflow: "hidden" }}>
+          {allRows.length === 0 ? (
+            <EmptyListings showCreateAction={false} />
+          ) : (
+            allRows.map((row) => (
+              <MobileListingRow
+                key={row.id}
+                listing={row as MyListingItem}
+                onEdit={(l) => { setEditTarget(l); setSheetOpen(true) }}
+              />
+            ))
+          )}
+        </Paper>
         <TablePagination
           component="div"
           count={total}

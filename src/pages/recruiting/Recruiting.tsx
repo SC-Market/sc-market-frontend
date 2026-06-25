@@ -18,7 +18,6 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyRecruiting } from "../../components/empty-states"
-import { PullToRefresh } from "../../components/gestures"
 import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
 import { usePageRecruiting } from "../../features/recruiting/hooks/usePageRecruiting"
 
@@ -142,12 +141,6 @@ export function Recruiting() {
         <RecruitingSearchContext.Provider value={[searchState, setSearchState]}>
           <div ref={ref} />
 
-          <PullToRefresh
-            onRefresh={async () => {
-              await pageData.refetch()
-            }}
-            enabled={isMobile}
-          >
             <Grid container spacing={theme.layoutSpacing.layout}>
               {/* SC Orgs promotion banner */}
               <Grid item xs={12}>
@@ -203,7 +196,6 @@ export function Recruiting() {
                 ))
               )}
             </Grid>
-          </PullToRefresh>
 
           <Divider light sx={{ mt: 2 }} />
 
