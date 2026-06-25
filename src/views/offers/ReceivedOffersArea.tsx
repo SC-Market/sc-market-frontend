@@ -334,7 +334,7 @@ export function OfferRow(props: {
                   onClick={(e: React.MouseEvent) => e.stopPropagation()}
                   sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" }, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block" }}
                 >
-                  {row.contractor?.name || row.shop_slug}
+                  {row.shop_slug}
                 </Typography>
               )}
             </Link>
