@@ -3134,8 +3134,10 @@ export type ShopPublicResponse = {
   rating_count: number
   /** Owner information — link to user profile or org page (included in detail view) */
   owner?: ShopOwnerInfo
-  /** Number of active listings in this shop (included in detail view) */
+  /** Number of active listings in this shop */
   listing_count?: number
+  /** Number of active services in this shop */
+  service_count?: number
   /** Total completed orders (included in detail view) */
   total_sales?: number
   /** Metrics for reputation/badges (included in detail view) */

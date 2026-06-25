@@ -10,7 +10,7 @@ import {
   Typography,
   Fade,
 } from "@mui/material"
-import { ListAltRounded, ShoppingBagRounded } from "@mui/icons-material"
+import { ListAltRounded, ShoppingBagRounded, DesignServicesRounded } from "@mui/icons-material"
 import type { ShopPublicResponse } from "../../../store/api/v2/market"
 
 interface ShopCardProps {
@@ -71,9 +71,9 @@ export function ShopCard({ shop, index = 0 }: ShopCardProps) {
               </Box>
             )}
 
-            {/* Stats with icons */}
+            {/* Stats with icons — only show non-zero counts */}
             <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
-              {shop.listing_count != null && (
+              {!!shop.listing_count && (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
                   <ListAltRounded sx={{ fontSize: 13, color: "text.disabled" }} />
                   <Typography variant="caption" color="text.secondary">
@@ -81,7 +81,15 @@ export function ShopCard({ shop, index = 0 }: ShopCardProps) {
                   </Typography>
                 </Box>
               )}
-              {shop.total_sales != null && (
+              {!!shop.service_count && (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
+                  <DesignServicesRounded sx={{ fontSize: 13, color: "text.disabled" }} />
+                  <Typography variant="caption" color="text.secondary">
+                    {shop.service_count} services
+                  </Typography>
+                </Box>
+              )}
+              {!!shop.total_sales && (
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
                   <ShoppingBagRounded sx={{ fontSize: 13, color: "text.disabled" }} />
                   <Typography variant="caption" color="text.secondary">
