@@ -8,8 +8,8 @@ export function AdminModeration() {
 
   return (
     <StandardPageLayout
-      title={t("admin.moderation", "Admin Moderation")}
-      headerTitle={t("admin.moderation", "Admin Moderation")}
+      title={t("admin.moderation.pageTitle", "Admin Moderation")}
+      headerTitle={t("admin.moderation.pageTitle", "Admin Moderation")}
       sidebarOpen={true}
       maxWidth="xl"
     >

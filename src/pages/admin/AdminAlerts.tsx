@@ -8,8 +8,8 @@ export function AdminAlerts() {
 
   return (
     <StandardPageLayout
-      title={t("admin.alerts", "Admin Alerts")}
-      headerTitle={t("admin.alerts", "Admin Alerts")}
+      title={t("admin.alerts.pageTitle", "Admin Alerts")}
+      headerTitle={t("admin.alerts.pageTitle", "Admin Alerts")}
       sidebarOpen={true}
       maxWidth="xl"
     >
