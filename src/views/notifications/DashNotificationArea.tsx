@@ -79,7 +79,7 @@ export function DashNotificationArea() {
           )}
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{ overflow: "hidden", width: "100%" }}>
         <TablePagination
           labelRowsPerPage={t("rows_per_page")}
           labelDisplayedRows={({ from, to, count }) =>
@@ -95,6 +95,11 @@ export function DashNotificationArea() {
           color={"primary"}
           nextIconButtonProps={{ color: "primary" }}
           backIconButtonProps={{ color: "primary" }}
+          sx={{
+            width: "100%",
+            "& .MuiTablePagination-toolbar": { maxWidth: "100%", flexWrap: "wrap" },
+            "& .MuiTablePagination-spacer": { display: "none" },
+          }}
         />
       </Grid>
 
