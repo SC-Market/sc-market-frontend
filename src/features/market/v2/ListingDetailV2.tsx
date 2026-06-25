@@ -56,6 +56,7 @@ import {
   PersonRounded,
   StarRounded,
   VisibilityRounded,
+  ShoppingCartRounded,
   WarningRounded,
   SportsEsportsRounded,
   AccessTimeRounded,
@@ -307,6 +308,13 @@ export function ListingDetailV2() {
                           <ListingDetailItem icon={<VisibilityRounded fontSize="small" />}>
                             {t("MarketListingView.views", "Views")} {listing.view_count ?? 0}
                           </ListingDetailItem>
+
+                          {/* In carts */}
+                          {(listing.in_carts ?? 0) > 0 && (
+                            <ListingDetailItem icon={<ShoppingCartRounded fontSize="small" />}>
+                              {t("MarketListingView.inCarts", "{{count}} people have this in their cart", { count: listing.in_carts })}
+                            </ListingDetailItem>
+                          )}
 
                           {/* Languages */}
                           {seller.languages && seller.languages.length > 0 && (

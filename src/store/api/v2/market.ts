@@ -3834,6 +3834,8 @@ export type ListingDetail = {
   max_order_value?: number | null
   /** Number of views this listing has received */
   view_count?: number
+  /** Number of users who have this listing in their cart */
+  in_carts?: number
 }
 export type SellerInfo = {
   /** Shop ID */
@@ -5528,6 +5530,8 @@ export type CartItemDetail = {
   price_changed: boolean
   /** Current price if price_changed is true */
   current_price?: number
+  /** Number of other users who also have this listing in their cart */
+  others_in_cart?: number
 }
 export type GetCartResponse = {
   /** Array of cart items with variant details */
