@@ -325,16 +325,16 @@ export function OfferRow(props: {
                     : ""}
                 {(+row.most_recent_offer.cost).toLocaleString(undefined)} aUEC
               </Typography>
-              {row.contractor && (
+              {row.shop_slug && (
                 <Typography
                   variant="caption"
                   color="primary"
                   component={Link}
-                  to={`/contractor/${row.contractor.spectrum_id}`}
+                  to={`/shops/${row.shop_slug}`}
                   onClick={(e: React.MouseEvent) => e.stopPropagation()}
                   sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" }, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block" }}
                 >
-                  {row.contractor.name}
+                  {row.contractor?.name || row.shop_slug}
                 </Typography>
               )}
             </Link>
