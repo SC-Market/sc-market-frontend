@@ -69,9 +69,12 @@ export function DashNotificationArea() {
                 padding: 0,
                 maxHeight: 400,
                 overflowY: "auto",
-                overflowX: "hidden",
                 width: "100%",
-                maxWidth: "100%",
+                "& *": {
+                  wordBreak: "break-word",
+                  overflowWrap: "break-word",
+                  minWidth: 0,
+                },
               }}
             >
               {(notifications || []).map(
