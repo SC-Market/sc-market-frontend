@@ -209,7 +209,7 @@
   },
   "admin": {
     "orderStats": "Admin Order Stats",
-    "moderation": "Admin Moderation",
+    "moderation.pageTitle": "Admin Moderation",
     "moderation.title": "Moderation Dashboard",
     "moderation.description": "This page will contain moderation tools and reports.",
     "moderation.handleReport": "Handle Report",
@@ -222,7 +222,7 @@
     "moderation.reportUpdated": "Report updated successfully",
     "moderation.updateFailed": "Failed to update report",
     "moderation.actions": "Actions",
-    "alerts": "Admin Alerts",
+    "alerts.pageTitle": "Admin Alerts",
     "alerts.title": "Admin Alerts",
     "alerts.createAlert": "Create Alert",
     "alerts.editAlert": "Edit Alert",
@@ -255,7 +255,16 @@
     "alerts.contractorPlaceholder": "Type to search for contractors...",
     "alerts.contractorRequired": "Please select a contractor",
     "alerts.noContractorsFound": "No contractors found",
-    "alerts.searching": "Searching..."
+    "alerts.searching": "Searching...",
+    "notificationTest.title": "Test Notifications",
+    "notificationTest.description": "Send test notifications to verify delivery across channels.",
+    "notificationTest.validation.fillAllFields": "Please fill in all required fields",
+    "notificationTest.success": "Test notification sent successfully",
+    "notificationTest.error": "Failed to send test notification",
+    "notificationTest.notificationType": "Notification Type",
+    "notificationTest.targetUser": "Target User",
+    "notificationTest.selectUser": "Select a user",
+    "notificationTest.selectedUser": "Selected user"
   },
   "adminExpressVerify": {
     "title": "Express Verify User",
