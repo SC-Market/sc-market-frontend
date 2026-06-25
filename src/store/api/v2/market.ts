@@ -3075,6 +3075,8 @@ export type ShopResponse = {
   logo: string | null
   owner_user_id: string | null
   owner_contractor_id: string | null
+  /** Spectrum ID of the owning contractor (for use with V1 APIs that need spectrum_id not UUID) */
+  owner_contractor_spectrum_id?: string | null
   supported_languages: string[]
   tags: string[]
   accepts_custom_orders: boolean
