@@ -39,9 +39,17 @@ export function ShopCard({ shop, index = 0 }: ShopCardProps) {
                   {shop.name}
                 </Typography>
                 {shop.owner && (
-                  <Typography variant="caption" color="text.secondary" noWrap>
-                    by {shop.owner.name}
-                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, minWidth: 0 }}>
+                    <Avatar
+                      src={shop.owner.avatar_url || undefined}
+                      sx={{ width: 16, height: 16, fontSize: "0.6rem", flexShrink: 0 }}
+                    >
+                      {shop.owner.name[0]}
+                    </Avatar>
+                    <Typography variant="caption" color="text.secondary" noWrap sx={{ minWidth: 0 }}>
+                      by {shop.owner.name}
+                    </Typography>
+                  </Box>
                 )}
               </Box>
             </Box>
