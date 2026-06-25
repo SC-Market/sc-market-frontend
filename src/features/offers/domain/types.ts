@@ -69,6 +69,7 @@ export function normalizeOfferStatus(status: string, offers?: Array<{ status: st
 
 export interface OfferSessionStub {
   id: string
+  shop_slug: string | null
   contractor: MinimalContractor | null
   assigned_to: MinimalUser | null
   customer: MinimalUser
