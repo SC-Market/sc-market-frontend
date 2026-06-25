@@ -186,6 +186,13 @@ export function CartItemEntryV2(props: {
             )}
           </Box>
 
+          {/* Others in cart */}
+          {(item.others_in_cart ?? 0) > 0 && (
+            <Typography variant="caption" color="warning.main" sx={{ mt: 1, display: "block" }}>
+              {t("cart.othersInCart", "{{count}} other people have this in their cart", { count: item.others_in_cart })}
+            </Typography>
+          )}
+
           {/* Availability Warning */}
           {!item.available && (
             <Alert severity="warning" sx={{ mt: 1 }}>
