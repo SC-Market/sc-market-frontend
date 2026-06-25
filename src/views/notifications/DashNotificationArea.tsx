@@ -7,12 +7,9 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetNotificationsQuery } from "../../features/notifications/api/notificationApi"
 import { useTranslation } from "react-i18next"
 import { EmptyNotifications } from "../../components/empty-states"
-import { PullToRefresh } from "../../components/gestures"
-import { useMediaQuery } from "@mui/material"
 
 export function DashNotificationArea() {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(20)
   const { data: notificationsData, refetch } = useGetNotificationsQuery({
@@ -44,13 +41,7 @@ export function DashNotificationArea() {
     >
       {/*<Box sx={{width: '100%', padding: 2}}>*/}
       <Grid item xs={12}>
-        <PullToRefresh
-          onRefresh={async () => {
-            await refetch()
-          }}
-          enabled={isMobile}
-        >
-          {notifications.length === 0 ? (
+        {notifications.length === 0 ? (
             <Grid item xs={12}>
               <EmptyNotifications sx={{ py: 4 }} />
             </Grid>
@@ -86,7 +77,6 @@ export function DashNotificationArea() {
               )}
             </List>
           )}
-        </PullToRefresh>
       </Grid>
 
       <Grid item xs={12}>

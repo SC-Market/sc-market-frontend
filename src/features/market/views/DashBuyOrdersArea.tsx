@@ -8,7 +8,6 @@ import {
   TableCell,
   TableRow,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import {
@@ -25,7 +24,6 @@ import {
   ControlledTable,
   HeadCell,
 } from "../../../components/table/PaginatedTable"
-import { PullToRefresh } from "../../../components/gestures"
 import { EmptyState } from "../../../components/empty-states"
 import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
 
@@ -340,12 +338,11 @@ export function BuyOrderRow(props: {
 
 /**
  * Paginated table view of the current user's buy orders.
- * Same layout as OrdersViewPaginated / OffersViewPaginated: Paper, Stack header, ControlledTable, PullToRefresh.
+ * Same layout as OrdersViewPaginated / OffersViewPaginated: Paper, Stack header, ControlledTable.
  */
 export function BuyOrdersViewPaginated() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: profile } = useGetUserProfileQuery()
   const {
     data: listings,
@@ -424,13 +421,7 @@ export function BuyOrdersViewPaginated() {
           </Button>
         </Stack>
 
-        <PullToRefresh
-          onRefresh={async () => {
-            await refetch()
-          }}
-          enabled={isMobile}
-        >
-          <Box
+        <Box
             sx={{
               "& .MuiTableHead .MuiTableCell-root:first-of-type": {
                 display: { xs: "none", sm: "table-cell" },
@@ -476,8 +467,7 @@ export function BuyOrdersViewPaginated() {
                 ) : undefined
               }
             />
-          </Box>
-        </PullToRefresh>
+        </Box>
       </Paper>
     </Grid>
   )
@@ -485,7 +475,7 @@ export function BuyOrdersViewPaginated() {
 
 /**
  * Dashboard section showing the current user's buy orders.
- * Uses the same format as orders/offers (Paper, ControlledTable, PullToRefresh).
+ * Uses the same format as orders/offers (Paper, ControlledTable).
  * Renders nothing if the user has no buy orders (section is hidden).
  */
 export function DashBuyOrdersArea() {

@@ -18,21 +18,18 @@ import {
 import { HapticTablePagination } from "../../components/haptic"
 import { ClearAllRounded, MarkEmailReadRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
-import { useMediaQuery } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageNotifications } from "../../features/notifications/hooks/usePageNotifications"
 import { NotificationEntry } from "../../features/notifications/components/NotificationEntry"
 import { EmptyNotifications } from "../../components/empty-states"
-import { PullToRefresh } from "../../components/gestures"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import type { NotificationScope } from "../../features/notifications/domain/types"
 import type { Notification } from "../../hooks/login/UserProfile"
 
 export function NotificationsPage() {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
@@ -227,13 +224,7 @@ export function NotificationsPage() {
 
       {/* Notifications List */}
       <Grid item xs={12}>
-        <PullToRefresh
-          onRefresh={async () => {
-            await pageData.refetch()
-          }}
-          enabled={isMobile}
-        >
-          {pageData.isLoading ? (
+        {pageData.isLoading ? (
             <Box sx={{ py: 4, textAlign: "center" }}>
               <Typography color="text.secondary">
                 {t("common.loading", { defaultValue: "Loading..." })}
@@ -264,7 +255,6 @@ export function NotificationsPage() {
               ))}
             </List>
           )}
-        </PullToRefresh>
       </Grid>
 
       {/* Pagination */}

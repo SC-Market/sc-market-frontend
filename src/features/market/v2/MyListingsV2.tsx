@@ -35,7 +35,6 @@ import {
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { MobileFAB } from "../../../components/mobile/MobileFAB"
-import { PullToRefresh } from "../../../components/gestures"
 import { ListingSkeleton } from "../../../components/skeletons"
 import { EmptyListings } from "../../../components/empty-states"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
@@ -234,8 +233,7 @@ function MobileListingsView() {
         </Typography>
       )}
 
-      <PullToRefresh onRefresh={() => { refetch() }}>
-        <Paper
+      <Paper
           variant="outlined"
           sx={{
             borderRadius: theme.spacing(theme.borderRadius.topLevel),
@@ -263,8 +261,7 @@ function MobileListingsView() {
               />
             ))
           )}
-        </Paper>
-      </PullToRefresh>
+      </Paper>
 
       {/* Quick-edit sheet */}
       <QuickEditListingSheet

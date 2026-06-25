@@ -75,7 +75,6 @@ import { SelectGameItemStack } from "../../../components/select/SelectGameItem"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import {
-  PullToRefresh,
   LongPressMenu,
   useLongPress,
 } from "../../../components/gestures"
@@ -781,49 +780,41 @@ export function DisplayStock({
           isMobile={true}
           onAddQuickListing={() => handleOpenBottomSheet()}
         />
-        <PullToRefresh
-          onRefresh={async () => {
-            if (onRefresh) {
-              await onRefresh()
-            }
+        <Paper
+          sx={{
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
           }}
         >
-          <Paper
-            sx={{
-              borderRadius: theme.spacing(theme.borderRadius.topLevel),
-            }}
-          >
-            {allRows.length === 0 ? (
-              <EmptyListings showCreateAction={false} />
-            ) : (
-              <Grid container spacing={theme.layoutSpacing.layout}>
-                {allRows.map((row) => {
-                  const isSelected = rowSelectionModel.ids.has(row.id)
-                  // Pass necessary props for editing functionality
-                  return (
-                    <StockCard
-                      key={row.id}
-                      row={row}
-                      isSelected={isSelected}
-                      newRows={newRows}
-                      editingRows={editingRows}
-                      rowModesModel={rowModesModel}
-                      setEditingRows={setEditingRows}
-                      setRowModesModel={setRowModesModel}
-                      setFetchingItemName={setFetchingItemName}
-                      handleEditClick={(id) => () =>
-                        handleOpenBottomSheet(id.toString())
-                      }
-                      handleSaveClick={handleSaveClick}
-                      handleCancelClick={handleCancelClick}
-                      handleUpdateQuantity={handleUpdateQuantity}
-                    />
-                  )
-                })}
-              </Grid>
-            )}
-          </Paper>
-        </PullToRefresh>
+          {allRows.length === 0 ? (
+            <EmptyListings showCreateAction={false} />
+          ) : (
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              {allRows.map((row) => {
+                const isSelected = rowSelectionModel.ids.has(row.id)
+                // Pass necessary props for editing functionality
+                return (
+                  <StockCard
+                    key={row.id}
+                    row={row}
+                    isSelected={isSelected}
+                    newRows={newRows}
+                    editingRows={editingRows}
+                    rowModesModel={rowModesModel}
+                    setEditingRows={setEditingRows}
+                    setRowModesModel={setRowModesModel}
+                    setFetchingItemName={setFetchingItemName}
+                    handleEditClick={(id) => () =>
+                      handleOpenBottomSheet(id.toString())
+                    }
+                    handleSaveClick={handleSaveClick}
+                    handleCancelClick={handleCancelClick}
+                    handleUpdateQuantity={handleUpdateQuantity}
+                  />
+                )
+              })}
+            </Grid>
+          )}
+        </Paper>
 
         {/* Bottom Sheet for Quick Create */}
         <BottomSheet
