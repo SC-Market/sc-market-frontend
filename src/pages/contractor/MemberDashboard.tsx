@@ -11,9 +11,20 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
+
 
 export function MemberDashboard() {
-  const { contractor_id } = useParams<{ contractor_id: string }>()
+  // When under /shop/:shopSlug/orders, derive contractor spectrum_id from shop
+  const shopCtx = useOptionalShopRouteContext()
+  const shopSpectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
+
+  // Legacy: when mounted under /org/:contractor_id/dashboard
+  const { contractor_id: routeContractorId } = useParams<{ contractor_id: string }>()
+
+  // Use shop's owner org spectrum_id when under shop route, else route param
+  const orgSpectrumId = shopCtx ? shopSpectrumId : routeContractorId
+
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const lg = useMediaQuery(theme.breakpoints.up("lg"))
@@ -32,16 +43,16 @@ export function MemberDashboard() {
         <>
           <Grid item xs={12} lg={2.5}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics spectrumId={contractor_id} />
+              <OrderMetrics spectrumId={orgSpectrumId} />
               <DashNotificationArea />
             </Grid>
           </Grid>
           <Grid item xs={12} lg={6.5}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              {!contractor_id && <ReceivedOffersArea />}
+              {!orgSpectrumId && <ReceivedOffersArea />}
               <MatchingBuyOrdersArea />
               <MemberAssignments />
-              <UserOrderTrend spectrumId={contractor_id} />
+              <UserOrderTrend spectrumId={orgSpectrumId} />
             </Grid>
           </Grid>
         </>
@@ -50,23 +61,23 @@ export function MemberDashboard() {
         <>
           <Grid item xs={12} lg={3}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics spectrumId={contractor_id} />
+              <OrderMetrics spectrumId={orgSpectrumId} />
               <DashNotificationArea />
             </Grid>
           </Grid>
           <Grid item xs={12} lg={9}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              {!contractor_id && <ReceivedOffersArea />}
+              {!orgSpectrumId && <ReceivedOffersArea />}
               <MatchingBuyOrdersArea />
               <MemberAssignments />
-              <UserOrderTrend spectrumId={contractor_id} />
+              <UserOrderTrend spectrumId={orgSpectrumId} />
             </Grid>
           </Grid>
         </>
       )}
       {!lg && (
         <>
-          {!contractor_id && (
+          {!orgSpectrumId && (
             <Grid item xs={12}>
               <ReceivedOffersArea />
             </Grid>
@@ -75,8 +86,8 @@ export function MemberDashboard() {
           <Grid item xs={12}>
             <MemberAssignments />
           </Grid>
-          <OrderMetrics spectrumId={contractor_id} />
-          <UserOrderTrend spectrumId={contractor_id} />
+          <OrderMetrics spectrumId={orgSpectrumId} />
+          <UserOrderTrend spectrumId={orgSpectrumId} />
           <Grid item xs={12}>
             <DashNotificationArea />
           </Grid>

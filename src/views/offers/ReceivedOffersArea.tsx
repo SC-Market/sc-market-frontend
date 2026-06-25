@@ -390,13 +390,14 @@ export function OfferRow(props: {
 
 export function ReceivedOffersArea({ unassigned }: { unassigned?: boolean } = {}) {
   const shopCtx = useOptionalShopRouteContext()
-  const contractorId = shopCtx?.shop.owner_contractor_id || undefined
+  // Use the spectrum_id included in ShopResponse for V1 API compat
+  const contractorSpectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
 
   return (
     <OffersViewPaginated
-      assigned={!contractorId && !unassigned}
+      assigned={!contractorSpectrumId && !unassigned}
       unassigned={unassigned}
-      contractor={contractorId}
+      contractor={contractorSpectrumId}
     />
   )
 }

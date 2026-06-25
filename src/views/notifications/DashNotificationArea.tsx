@@ -68,7 +68,8 @@ export function DashNotificationArea() {
                 },
                 padding: 0,
                 maxHeight: 400,
-                overflowY: "scroll",
+                overflowY: "auto",
+                overflowX: "hidden",
                 width: "100%",
                 maxWidth: "100%",
               }}
