@@ -250,11 +250,13 @@ export function ContractorOrderMetricsDisplay(props: {
                     display="flex"
                     justifyContent="space-between"
                     alignItems="center"
+                    gap={1}
+                    minWidth={0}
                   >
-                    <Typography variant="body1">
+                    <Typography variant="body1" noWrap sx={{ minWidth: 0, flex: 1 }}>
                       {index + 1}. {customer.username}
                     </Typography>
-                    <Box textAlign="right">
+                    <Box textAlign="right" flexShrink={0}>
                       <Typography variant="body2" color="text.secondary">
                         {customer.order_count} {t("orderMetrics.orders")}
                       </Typography>
