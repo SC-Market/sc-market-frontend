@@ -245,6 +245,34 @@ const injectedRtkApi = api
         }),
         providesTags: ["Shops"],
       }),
+      getShopWebhooks: build.query<
+        GetShopWebhooksApiResponse,
+        GetShopWebhooksApiArg
+      >({
+        query: (queryArg) => ({ url: `/shops/${queryArg.shopId}/webhooks` }),
+        providesTags: ["Shops"],
+      }),
+      createShopWebhook: build.mutation<
+        CreateShopWebhookApiResponse,
+        CreateShopWebhookApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/webhooks`,
+          method: "POST",
+          body: queryArg.createShopWebhookRequest,
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      deleteShopWebhook: build.mutation<
+        DeleteShopWebhookApiResponse,
+        DeleteShopWebhookApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/webhooks/${queryArg.webhookId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Shops"],
+      }),
       transferShop: build.mutation<TransferShopApiResponse, TransferShopApiArg>(
         {
           query: (queryArg) => ({
@@ -1755,6 +1783,24 @@ export type GetShopReviewsApiArg = {
   page?: number
   pageSize?: number
 }
+export type GetShopWebhooksApiResponse =
+  /** status 200 Ok */ ShopWebhookResponse[]
+export type GetShopWebhooksApiArg = {
+  shopId: string
+}
+export type CreateShopWebhookApiResponse =
+  /** status 200 Ok */ ShopWebhookResponse
+export type CreateShopWebhookApiArg = {
+  shopId: string
+  createShopWebhookRequest: CreateShopWebhookRequest
+}
+export type DeleteShopWebhookApiResponse = /** status 200 Ok */ {
+  success: boolean
+}
+export type DeleteShopWebhookApiArg = {
+  shopId: string
+  webhookId: string
+}
 export type TransferShopApiResponse = /** status 200 Ok */ ShopResponse
 export type TransferShopApiArg = {
   shopId: string
@@ -3171,6 +3217,17 @@ export type ShopReviewResponse = {
     username: string
     user_id: string
   }
+}
+export type ShopWebhookResponse = {
+  webhook_id: string
+  name: string
+  webhook_url: string
+  shop_id: string
+}
+export type CreateShopWebhookRequest = {
+  name: string
+  webhook_url: string
+  actions: string[]
 }
 export type TransferShopRequest = {
   target_contractor_id: string
@@ -5968,6 +6025,9 @@ export const {
   useUpdateShopMutation,
   useArchiveShopMutation,
   useGetShopReviewsQuery,
+  useGetShopWebhooksQuery,
+  useCreateShopWebhookMutation,
+  useDeleteShopWebhookMutation,
   useTransferShopMutation,
   useCreateRequisitionMutation,
   useGetRequisitionsQuery,

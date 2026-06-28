@@ -1,23 +1,33 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Navigate } from "react-router-dom"
 import {
   Autocomplete,
+  Button,
+  Checkbox,
   Chip,
+  Divider,
   FormControlLabel,
   Grid,
+  IconButton,
   Switch,
   TextField,
   Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { SaveRounded } from "@mui/icons-material"
+import { DeleteRounded, SaveRounded } from "@mui/icons-material"
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
-import { useUpdateShopMutation } from "../../../store/api/v2/market"
+import {
+  useUpdateShopMutation,
+  useGetShopWebhooksQuery,
+  useCreateShopWebhookMutation,
+  useDeleteShopWebhookMutation,
+} from "../../../store/api/v2/market"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
+import { URL_REGEX } from "../../../util/parsing"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -40,6 +50,175 @@ const AVAILABLE_LANGUAGES = [
   { code: "uk", label: "Ukrainian" },
   { code: "zh", label: "Chinese" },
 ] as const
+
+const WEBHOOK_ACTIONS: { label: string; action_name: string }[] = [
+  { label: "Order Created", action_name: "order_create" },
+  { label: "Order Assigned", action_name: "order_assigned" },
+  { label: "Public Order Created", action_name: "public_order_create" },
+  { label: "Order Status Change", action_name: "order_status_change" },
+  { label: "Order Review", action_name: "order_review" },
+  { label: "Order Comment", action_name: "order_comment" },
+  { label: "Market Bid", action_name: "market_item_bid" },
+]
+
+function ShopWebhookSection({ shopId }: { shopId: string }) {
+  const theme = useTheme<ExtendedTheme>()
+  const issueAlert = useAlertHook()
+
+  const { data: webhooks = [] } = useGetShopWebhooksQuery({ shopId })
+  const [createWebhook] = useCreateShopWebhookMutation()
+  const [deleteWebhook] = useDeleteShopWebhookMutation()
+
+  const [name, setName] = useState("")
+  const [url, setUrl] = useState("")
+  const [actions, setActions] = useState<string[]>([])
+
+  const handleCreate = useCallback(async () => {
+    try {
+      await createWebhook({
+        shopId,
+        createShopWebhookRequest: { name, webhook_url: url, actions },
+      }).unwrap()
+      setName("")
+      setUrl("")
+      setActions([])
+      issueAlert({ message: "Webhook created", severity: "success" })
+    } catch (err) {
+      issueAlert(err as { status: number; data: { message?: string } })
+    }
+  }, [shopId, name, url, actions, createWebhook, issueAlert])
+
+  const handleDelete = useCallback(
+    async (webhookId: string) => {
+      try {
+        await deleteWebhook({ shopId, webhookId }).unwrap()
+        issueAlert({ message: "Webhook deleted", severity: "success" })
+      } catch (err) {
+        issueAlert(err as { status: number; data: { message?: string } })
+      }
+    },
+    [shopId, deleteWebhook, issueAlert],
+  )
+
+  const toggleAction = (action_name: string, checked: boolean) => {
+    if (checked) {
+      setActions((prev) =>
+        prev.includes(action_name) ? prev : [...prev, action_name],
+      )
+    } else {
+      setActions((prev) => prev.filter((a) => a !== action_name))
+    }
+  }
+
+  return (
+    <FormPaper
+      title="Webhooks"
+      subtitle="Receive notifications at a URL when events happen in this shop"
+    >
+      {webhooks.length > 0 && (
+        <Grid item xs={12}>
+          {webhooks.map((w) => (
+            <Grid
+              container
+              key={w.webhook_id}
+              alignItems="center"
+              sx={{ py: 0.5 }}
+            >
+              <Grid item xs>
+                <Typography variant="body2" color="text.secondary">
+                  {w.name}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.primary"
+                  sx={{ wordBreak: "break-all" }}
+                >
+                  {w.webhook_url}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <IconButton
+                  size="small"
+                  onClick={() => handleDelete(w.webhook_id)}
+                  aria-label={`Delete webhook ${w.name}`}
+                >
+                  <DeleteRounded
+                    fontSize="small"
+                    sx={{ color: theme.palette.error.main }}
+                  />
+                </IconButton>
+              </Grid>
+            </Grid>
+          ))}
+          <Divider sx={{ my: 2 }} />
+        </Grid>
+      )}
+
+      <Grid item xs={12}>
+        <Typography
+          variant="subtitle2"
+          color="text.secondary"
+          fontWeight="bold"
+        >
+          Add Webhook
+        </Typography>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <TextField
+          fullWidth
+          size="small"
+          label="Webhook Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          color="secondary"
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          size="small"
+          label="Webhook URL"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          color="secondary"
+          error={!!url && !url.match(URL_REGEX)}
+          helperText={
+            !!url && !url.match(URL_REGEX) ? "Invalid URL" : undefined
+          }
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container spacing={theme.layoutSpacing.compact} direction="column">
+          {WEBHOOK_ACTIONS.map(({ label, action_name }) => (
+            <Grid item key={action_name}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={actions.includes(action_name)}
+                    onChange={(e) => toggleAction(action_name, e.target.checked)}
+                    color="secondary"
+                    size="small"
+                  />
+                }
+                label={label}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          disabled={!name.trim() || !url.trim() || !url.match(URL_REGEX) || actions.length === 0}
+          onClick={handleCreate}
+        >
+          Add Webhook
+        </Button>
+      </Grid>
+    </FormPaper>
+  )
+}
 
 export function ShopSettings() {
   const { shop } = useShopRouteContext()
@@ -247,6 +426,9 @@ export function ShopSettings() {
               />
             </Grid>
           </FormPaper>
+
+          {/* Webhooks */}
+          <ShopWebhookSection shopId={shop.shop_id} />
 
           {/* Save */}
           <Grid item xs={12} container justifyContent="flex-end">
