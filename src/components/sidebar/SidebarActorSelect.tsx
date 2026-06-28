@@ -96,6 +96,9 @@ export function SidebarActorSelect() {
     }
   }
 
+  // Only show on shop routes — selector is contextual, not global
+  if (!currentShopSlug) return null
+
   if (!profile) return null
 
   return (
