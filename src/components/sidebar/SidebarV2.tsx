@@ -257,9 +257,12 @@ export function SidebarV2() {
 
       <Divider sx={{ mx: 2, my: 0.5 }} />
 
-      {/* Universal items */}
-      <List dense sx={{ px: 1 }}>
-        {universalItems.map((item) => (
+      {/* Universal items with section headers */}
+      <List dense sx={{ px: 1, flex: 1, overflowY: "auto" }}>
+        <Typography variant="overline" sx={{ px: 1.5, color: "text.secondary", fontSize: "0.65rem" }}>
+          {t("nav.groupGameData", "Game Data")}
+        </Typography>
+        {universalItems.filter(i => ["/wiki/items", "/wiki/ships", "/wiki/commodities", "/wiki/locations", "/missions", "/blueprints", "/crafting/calculator", "/resources", "/mining"].includes(i.to)).map((item) => (
           <ListItemButton
             key={item.to}
             component={Link}
@@ -269,10 +272,23 @@ export function SidebarV2() {
             onClick={() => isMobile && setDrawerOpen(false)}
           >
             <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
-            <ListItemText
-              primary={item.label}
-              primaryTypographyProps={{ variant: "body2" }}
-            />
+            <ListItemText primary={item.label} primaryTypographyProps={{ variant: "body2" }} />
+          </ListItemButton>
+        ))}
+        <Typography variant="overline" sx={{ px: 1.5, pt: 1, color: "text.secondary", fontSize: "0.65rem" }}>
+          {t("nav.groupAccount", "Account")}
+        </Typography>
+        {universalItems.filter(i => ["/messaging", "/settings"].includes(i.to)).map((item) => (
+          <ListItemButton
+            key={item.to}
+            component={Link}
+            to={item.to}
+            selected={isActive(item.to)}
+            sx={{ borderRadius: 1.5, mb: 0.25 }}
+            onClick={() => isMobile && setDrawerOpen(false)}
+          >
+            <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.label} primaryTypographyProps={{ variant: "body2" }} />
           </ListItemButton>
         ))}
       </List>
@@ -305,12 +321,28 @@ export function SidebarV2() {
         "& .MuiDrawer-paper": {
           width: sidebarDrawerWidth,
           boxSizing: "border-box",
-          top: "64px",
-          height: `calc(100% - 64px - ${bottomNavHeight}px)`,
+          top: 0,
+          height: "100%",
           borderRight: `1px solid ${theme.palette.divider}`,
         },
       }}
     >
+      {/* Site logo header */}
+      <Box sx={{ px: 2, py: 1.5, display: "flex", alignItems: "center", gap: 1.5, minHeight: 64 }}>
+        <Box
+          component={Link}
+          to="/"
+          sx={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}
+        >
+          <Box
+            component="img"
+            src="/scmarket-logo.png"
+            alt="SC Market"
+            sx={{ height: 28 }}
+          />
+        </Box>
+      </Box>
+      <Divider />
       {drawerContent}
     </Drawer>
   )
