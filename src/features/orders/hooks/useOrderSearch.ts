@@ -8,11 +8,12 @@ export interface UseOrderSearchParams {
   assigned?: boolean
   unassigned?: boolean
   contractor?: string
+  shop_id?: string
   username?: string
 }
 
 export function useOrderSearch(params: UseOrderSearchParams) {
-  const { mine, assigned, unassigned, contractor, username } = params
+  const { mine, assigned, unassigned, contractor, shop_id, username } = params
 
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>(
     unassigned ? "unassigned" : "active"
@@ -45,6 +46,7 @@ export function useOrderSearch(params: UseOrderSearchParams) {
     assigned: assigned ? username : undefined,
     unassigned: statusFilter === "unassigned" ? "true" : undefined,
     contractor,
+    shop_id,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",
     buyer_username: !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
