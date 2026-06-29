@@ -33,7 +33,7 @@ export function MemberDashboard() {
   const offersSection = <ReceivedOffersArea unassigned={!!shopCtx} />
 
   const ordersSection = shopCtx
-    ? <OrdersViewPaginated title={t("orders.title", "Orders")} contractor={spectrumId} />
+    ? <OrdersViewPaginated title={t("orders.title", "Orders")} shop_id={shopCtx.shop.shop_id} />
     : <OrdersViewPaginated title={t("MemberAssignments.assignments")} assigned />
 
   return (

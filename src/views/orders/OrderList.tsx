@@ -424,8 +424,9 @@ export function OrdersViewPaginated(props: {
   assigned?: boolean
   unassigned?: boolean
   contractor?: string
+  shop_id?: string
 }) {
-  const { title, mine, assigned, unassigned, contractor } = props
+  const { title, mine, assigned, unassigned, contractor, shop_id } = props
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: profile } = useGetUserProfileQuery()
@@ -443,7 +444,7 @@ export function OrdersViewPaginated(props: {
     hasService, setHasService,
     debouncedBuyerUsername, debouncedSellerUsername,
     activeFiltersCount, clearFilters,
-  } = useOrderSearch({ mine, assigned, unassigned, contractor, username: profile?.username })
+  } = useOrderSearch({ mine, assigned, unassigned, contractor, shop_id, username: profile?.username })
 
   const tabs: [string, string][] = [
     ["all", t("orders.tabs.all")],
