@@ -530,22 +530,6 @@ export function CreateListingV2() {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                select
-                fullWidth
-                size="small"
-                label={t("CreateListingV2.pickupMethod", "Pickup Method")}
-                value={pickupMethod}
-                onChange={(e) => setPickupMethod(e.target.value as "delivery" | "pickup" | "any" | "")}
-                helperText={t("CreateListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
-              >
-                <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
-                <MenuItem value="delivery">{t("CreateListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
-                <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
-                <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
-              </TextField>
-            </Grid>
           </FormPaper>
 
           {/* ============================================================ */}
@@ -554,7 +538,7 @@ export function CreateListingV2() {
 
           <Grid item xs={12}>
             <Button
-              variant="text"
+              variant="outlined"
               color="secondary"
               onClick={() => setShowAdvanced((prev) => !prev)}
               endIcon={
@@ -568,14 +552,32 @@ export function CreateListingV2() {
               sx={{ textTransform: "none", fontWeight: "bold" }}
             >
               {showAdvanced
-                ? t("CreateListingV2.hideAdvanced", "Hide advanced options")
-                : t("CreateListingV2.showAdvanced", "Show advanced options")}
+                ? t("CreateListingV2.hideMoreOptions", "Hide options")
+                : t("CreateListingV2.showMoreOptions", "More options")}
             </Button>
           </Grid>
 
           <Grid item xs={12}>
             <Collapse in={showAdvanced}>
               <Grid container spacing={theme.layoutSpacing.layout}>
+
+                {/* Pickup Method */}
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    select
+                    fullWidth
+                    size="small"
+                    label={t("CreateListingV2.pickupMethod", "Pickup Method")}
+                    value={pickupMethod}
+                    onChange={(e) => setPickupMethod(e.target.value as "delivery" | "pickup" | "any" | "")}
+                    helperText={t("CreateListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
+                  >
+                    <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
+                    <MenuItem value="delivery">{t("CreateListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
+                    <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
+                    <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
+                  </TextField>
+                </Grid>
 
                 {/* Listing Options */}
                 <FormPaper title={t("CreateListingV2.listingOptions", "Listing Options")}>
