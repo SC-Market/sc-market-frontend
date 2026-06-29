@@ -11,6 +11,7 @@ import {
   Badge,
   Box,
   Chip,
+  Collapse,
   Divider,
   Drawer,
   List,
@@ -45,6 +46,7 @@ import {
   RocketLaunchRounded,
   DesignServicesRounded,
   DescriptionRounded,
+  ExpandLessRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -124,10 +126,10 @@ export function SidebarV2() {
     ]
   }, [context, selectedShop, profile, t])
 
-  // Universal items (always visible)
-  const universalItems = useMemo<NavItem[]>(() => [
-    { label: t("nav.messages", "Messages"), to: "/messaging", icon: <MessageRounded /> },
-    { label: t("nav.wiki", "Wiki Items"), to: "/wiki/items", icon: <MenuBookRounded /> },
+  const [gameDataOpen, setGameDataOpen] = useState(false)
+
+  const gameDataItems = useMemo<NavItem[]>(() => [
+    { label: t("nav.wiki", "Items"), to: "/wiki/items", icon: <MenuBookRounded /> },
     { label: t("nav.wikiShips", "Ships"), to: "/wiki/ships", icon: <RocketLaunchRounded /> },
     { label: t("nav.wikiCommodities", "Commodities"), to: "/wiki/commodities", icon: <InventoryRounded /> },
     { label: t("nav.wikiLocations", "Locations"), to: "/wiki/locations", icon: <DescriptionRounded /> },
@@ -136,7 +138,6 @@ export function SidebarV2() {
     { label: t("nav.craftingCalc", "Crafting"), to: "/crafting/calculator", icon: <ScienceRounded /> },
     { label: t("nav.resources", "Resources"), to: "/resources", icon: <InventoryRounded /> },
     { label: t("nav.mining", "Mining"), to: "/mining", icon: <InventoryRounded /> },
-    { label: t("nav.settings", "Settings"), to: "/settings", icon: <SettingsRounded /> },
   ], [t])
 
   const handleContextSwitch = (ctx: NavContext, shopSlug?: string) => {
@@ -257,40 +258,56 @@ export function SidebarV2() {
 
       <Divider sx={{ mx: 2, my: 0.5 }} />
 
-      {/* Universal items with section headers */}
+      {/* Universal items */}
       <List dense sx={{ px: 1, flex: 1, overflowY: "auto" }}>
-        <Typography variant="overline" sx={{ px: 1.5, color: "text.secondary", fontSize: "0.65rem" }}>
-          {t("nav.groupGameData", "Game Data")}
-        </Typography>
-        {universalItems.filter(i => ["/wiki/items", "/wiki/ships", "/wiki/commodities", "/wiki/locations", "/missions", "/blueprints", "/crafting/calculator", "/resources", "/mining"].includes(i.to)).map((item) => (
-          <ListItemButton
-            key={item.to}
-            component={Link}
-            to={item.to}
-            selected={isActive(item.to)}
-            sx={{ borderRadius: 1.5, mb: 0.25 }}
-            onClick={() => isMobile && setDrawerOpen(false)}
-          >
-            <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} primaryTypographyProps={{ variant: "body2" }} />
-          </ListItemButton>
-        ))}
-        <Typography variant="overline" sx={{ px: 1.5, pt: 1, color: "text.secondary", fontSize: "0.65rem" }}>
-          {t("nav.groupAccount", "Account")}
-        </Typography>
-        {universalItems.filter(i => ["/messaging", "/settings"].includes(i.to)).map((item) => (
-          <ListItemButton
-            key={item.to}
-            component={Link}
-            to={item.to}
-            selected={isActive(item.to)}
-            sx={{ borderRadius: 1.5, mb: 0.25 }}
-            onClick={() => isMobile && setDrawerOpen(false)}
-          >
-            <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} primaryTypographyProps={{ variant: "body2" }} />
-          </ListItemButton>
-        ))}
+        <ListItemButton
+          sx={{ borderRadius: 1.5, mb: 0.25 }}
+          component={Link}
+          to="/messaging"
+          selected={isActive("/messaging")}
+          onClick={() => isMobile && setDrawerOpen(false)}
+        >
+          <ListItemIcon sx={{ minWidth: 36 }}><MessageRounded /></ListItemIcon>
+          <ListItemText primary={t("nav.messages", "Messages")} primaryTypographyProps={{ variant: "body2" }} />
+        </ListItemButton>
+
+        {/* Game Data — collapsible */}
+        <ListItemButton
+          sx={{ borderRadius: 1.5, mb: 0.25 }}
+          onClick={() => setGameDataOpen((v) => !v)}
+        >
+          <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
+          <ListItemText primary={t("nav.gameData", "Game Data")} primaryTypographyProps={{ variant: "body2" }} />
+          {gameDataOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
+        </ListItemButton>
+        <Collapse in={gameDataOpen}>
+          <List dense disablePadding sx={{ pl: 2 }}>
+            {gameDataItems.map((item) => (
+              <ListItemButton
+                key={item.to}
+                component={Link}
+                to={item.to}
+                selected={isActive(item.to)}
+                sx={{ borderRadius: 1.5, mb: 0.25 }}
+                onClick={() => isMobile && setDrawerOpen(false)}
+              >
+                <ListItemIcon sx={{ minWidth: 32 }}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.label} primaryTypographyProps={{ variant: "body2" }} />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
+
+        <ListItemButton
+          sx={{ borderRadius: 1.5, mb: 0.25 }}
+          component={Link}
+          to="/settings"
+          selected={isActive("/settings")}
+          onClick={() => isMobile && setDrawerOpen(false)}
+        >
+          <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
+          <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "body2" }} />
+        </ListItemButton>
       </List>
     </Stack>
   )
