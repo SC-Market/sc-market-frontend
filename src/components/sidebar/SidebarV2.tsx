@@ -128,19 +128,8 @@ export function SidebarV2() {
     ]
   }, [context, selectedShop, profile, t])
 
-  const [gameDataOpen, setGameDataOpen] = useState(false)
-
-  const gameDataItems = useMemo<NavItem[]>(() => [
-    { label: t("nav.wiki", "Items"), to: "/wiki/items", icon: <MenuBookRounded /> },
-    { label: t("nav.wikiShips", "Ships"), to: "/wiki/ships", icon: <RocketLaunchRounded /> },
-    { label: t("nav.wikiCommodities", "Commodities"), to: "/wiki/commodities", icon: <InventoryRounded /> },
-    { label: t("nav.wikiLocations", "Locations"), to: "/wiki/locations", icon: <DescriptionRounded /> },
-    { label: t("nav.missions", "Missions"), to: "/missions", icon: <DescriptionRounded /> },
-    { label: t("nav.blueprints", "Blueprints"), to: "/blueprints", icon: <ScienceRounded /> },
-    { label: t("nav.craftingCalc", "Crafting"), to: "/crafting/calculator", icon: <ScienceRounded /> },
-    { label: t("nav.resources", "Resources"), to: "/resources", icon: <InventoryRounded /> },
-    { label: t("nav.mining", "Mining"), to: "/mining", icon: <InventoryRounded /> },
-  ], [t])
+  const [wikiOpen, setWikiOpen] = useState(false)
+  const [craftingOpen, setCraftingOpen] = useState(false)
 
   const handleContextSwitch = (ctx: NavContext, shopSlug?: string) => {
     setContext(ctx)
@@ -260,53 +249,95 @@ export function SidebarV2() {
 
       <Divider sx={{ mx: 2, my: 0.5 }} />
 
-      {/* Universal items */}
+      {/* Game Data section */}
+      <Typography variant="overline" sx={{ px: 2.5, pt: 1, color: "text.secondary", fontSize: "0.65rem" }}>
+        {t("sidebar.gameData.title", "Game Data")}
+      </Typography>
       <List dense sx={{ px: 1, flex: 1, overflowY: "auto" }}>
-        <ListItemButton
-          sx={{ borderRadius: 1.5, mb: 0.25 }}
-          component={Link}
-          to="/messaging"
-          selected={isActive("/messaging")}
-          onClick={() => isMobile && setDrawerOpen(false)}
-        >
-          <ListItemIcon sx={{ minWidth: 36 }}><MessageRounded /></ListItemIcon>
-          <ListItemText primary={t("nav.messages", "Messages")} primaryTypographyProps={{ variant: "body2" }} />
+        {/* Missions */}
+        <ListItemButton component={Link} to="/missions" selected={isActive("/missions")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+          <ListItemIcon sx={{ minWidth: 36 }}><DescriptionRounded /></ListItemIcon>
+          <ListItemText primary={t("sidebar.gameData.missions", "Missions")} primaryTypographyProps={{ variant: "body2" }} />
         </ListItemButton>
 
-        {/* Game Data — collapsible */}
-        <ListItemButton
-          sx={{ borderRadius: 1.5, mb: 0.25 }}
-          onClick={() => setGameDataOpen((v) => !v)}
-        >
-          <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
-          <ListItemText primary={t("nav.gameData", "Game Data")} primaryTypographyProps={{ variant: "body2" }} />
-          {gameDataOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
+        {/* Mining */}
+        <ListItemButton component={Link} to="/mining" selected={isActive("/mining")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+          <ListItemIcon sx={{ minWidth: 36 }}><InventoryRounded /></ListItemIcon>
+          <ListItemText primary={t("sidebar.gameData.mining", "Mining")} primaryTypographyProps={{ variant: "body2" }} />
         </ListItemButton>
-        <Collapse in={gameDataOpen}>
+
+        {/* Crafting — collapsible */}
+        <ListItemButton sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => setCraftingOpen((v) => !v)}>
+          <ListItemIcon sx={{ minWidth: 36 }}><ScienceRounded /></ListItemIcon>
+          <ListItemText primary={t("sidebar.gameData.crafting", "Crafting")} primaryTypographyProps={{ variant: "body2" }} />
+          {craftingOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
+        </ListItemButton>
+        <Collapse in={craftingOpen}>
           <List dense disablePadding sx={{ pl: 2 }}>
-            {gameDataItems.map((item) => (
-              <ListItemButton
-                key={item.to}
-                component={Link}
-                to={item.to}
-                selected={isActive(item.to)}
-                sx={{ borderRadius: 1.5, mb: 0.25 }}
-                onClick={() => isMobile && setDrawerOpen(false)}
-              >
-                <ListItemIcon sx={{ minWidth: 32 }}>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.label} primaryTypographyProps={{ variant: "body2" }} />
-              </ListItemButton>
-            ))}
+            <ListItemButton component={Link} to="/blueprints" selected={isActive("/blueprints")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><ScienceRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.gameData.blueprints", "Blueprints")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/crafting/calculator" selected={isActive("/crafting/calculator")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><ScienceRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.gameData.craftingCalculator", "Crafting Calculator")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/resources" selected={isActive("/resources")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><InventoryRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.gameData.resources", "Resources")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/shopping-lists" selected={isActive("/shopping-lists")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><ShoppingCartRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.gameData.shoppingLists", "Shopping Lists")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
           </List>
         </Collapse>
 
-        <ListItemButton
-          sx={{ borderRadius: 1.5, mb: 0.25 }}
-          component={Link}
-          to="/settings"
-          selected={isActive("/settings")}
-          onClick={() => isMobile && setDrawerOpen(false)}
-        >
+        {/* Wiki — collapsible */}
+        <ListItemButton sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => setWikiOpen((v) => !v)}>
+          <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
+          <ListItemText primary={t("sidebar.wiki.title", "Wiki")} primaryTypographyProps={{ variant: "body2" }} />
+          {wikiOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
+        </ListItemButton>
+        <Collapse in={wikiOpen}>
+          <List dense disablePadding sx={{ pl: 2 }}>
+            <ListItemButton component={Link} to="/wiki/items" selected={isActive("/wiki/items")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><MenuBookRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.wiki.items", "Items")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/wiki/ships" selected={isActive("/wiki/ships")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><RocketLaunchRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.wiki.vehicles", "Ships & Vehicles")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/wiki/commodities" selected={isActive("/wiki/commodities")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><InventoryRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.wiki.commodities", "Commodities")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/wiki/locations" selected={isActive("/wiki/locations")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><DescriptionRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.wiki.locations", "Locations")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/wiki/manufacturers" selected={isActive("/wiki/manufacturers")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><StorefrontRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.wiki.manufacturers", "Manufacturers")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/wiki/refinery" selected={isActive("/wiki/refinery")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><ScienceRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.wiki.refinery", "Refinery")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+          </List>
+        </Collapse>
+      </List>
+
+      <Divider sx={{ mx: 2, my: 0.5 }} />
+
+      {/* Account items */}
+      <List dense sx={{ px: 1 }}>
+        <ListItemButton component={Link} to="/messaging" selected={isActive("/messaging")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+          <ListItemIcon sx={{ minWidth: 36 }}><MessageRounded /></ListItemIcon>
+          <ListItemText primary={t("nav.messages", "Messages")} primaryTypographyProps={{ variant: "body2" }} />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/settings" selected={isActive("/settings")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
           <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
           <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "body2" }} />
         </ListItemButton>
