@@ -41,7 +41,7 @@ export function DashNotificationArea({ shopId }: { shopId?: string } = {}) {
       xs={12}
     >
       {/*<Box sx={{width: '100%', padding: 2}}>*/}
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{ overflow: "hidden", minWidth: 0, maxWidth: "100%" }}>
         {notifications.length === 0 ? (
             <Grid item xs={12}>
               <EmptyNotifications sx={{ py: 4 }} />
