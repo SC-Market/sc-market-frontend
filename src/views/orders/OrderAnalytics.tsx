@@ -158,7 +158,7 @@ export function TopShopsAnalytics({ analytics }: OrderAnalyticsProps) {
   return (
     <Section title={"Top Shops"} xs={12} lg={3}>
       <ol>
-        {analytics.top_shops.map((s) => (
+        {(analytics.top_shops || []).map((s) => (
           <li key={s.slug}>
             <UnderlineLink
               color={"text.secondary"}
