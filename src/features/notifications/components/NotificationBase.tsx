@@ -120,7 +120,7 @@ export function NotificationBase(props: {
       component={to ? Link : "div"}
       to={to}
       onClick={onClick || defaultClick}
-      sx={{ position: "relative" }}
+      sx={{ position: "relative", minWidth: 0 }}
     >
       <ListItemIcon
         sx={{
@@ -129,6 +129,7 @@ export function NotificationBase(props: {
             : theme.palette.primary.main,
           transition: "0.3s",
           fontSize: "0.9em",
+          flexShrink: 0,
         }}
       >
         {icon}
@@ -136,11 +137,11 @@ export function NotificationBase(props: {
       <ListItemText
         sx={{
           color: "text.secondary",
-          wordWrap: "break-word",
-          overflowWrap: "break-word",
+          overflow: "hidden",
+          minWidth: 0,
         }}
       >
-        <Typography sx={{ wordBreak: "break-word" }}>
+        <Typography sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
           {props.children}
         </Typography>
         <Typography variant={"subtitle2"} color={"text.primary"}>
