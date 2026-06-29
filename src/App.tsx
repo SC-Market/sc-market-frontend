@@ -1156,6 +1156,12 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/wiki",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiHub")).WikiHub,
+        }),
+      },
+      {
         path: "/wiki/items/:id",
         lazy: async () => ({
           Component: (await import("./pages/wiki/WikiItemDetail"))
