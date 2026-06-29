@@ -8,6 +8,7 @@
 import React, { useMemo, useState } from "react"
 import {
   Avatar,
+  Badge,
   Box,
   Chip,
   Divider,
@@ -171,24 +172,45 @@ export function SidebarV2() {
           <ListItemIcon><SearchRounded /></ListItemIcon>
           <ListItemText>{t("nav.browsing", "Browsing")}</ListItemText>
         </MenuItem>
-        <Divider />
+        {shops.length > 0 && <Divider />}
         {shops.map((shop) => (
           <MenuItem
             key={shop.slug}
             selected={context === "shop" && selectedShopSlug === shop.slug}
             onClick={() => handleContextSwitch("shop", shop.slug)}
           >
-            <ListItemIcon><StorefrontRounded /></ListItemIcon>
+            <ListItemIcon>
+              <Badge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                badgeContent={<StorefrontRounded sx={{ fontSize: 12 }} />}
+              >
+                <Avatar src={shop.logo || undefined} sx={{ width: 28, height: 28 }}>
+                  <StorefrontRounded fontSize="small" />
+                </Avatar>
+              </Badge>
+            </ListItemIcon>
             <ListItemText>{shop.name}</ListItemText>
           </MenuItem>
         ))}
+        {(profile?.contractors?.length ?? 0) > 0 && <Divider />}
         {profile?.contractors?.map((org) => (
           <MenuItem
             key={org.spectrum_id}
             selected={context === "org"}
             onClick={() => handleContextSwitch("org")}
           >
-            <ListItemIcon><PeopleRounded /></ListItemIcon>
+            <ListItemIcon>
+              <Badge
+                overlap="circular"
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                badgeContent={<PeopleRounded sx={{ fontSize: 12 }} />}
+              >
+                <Avatar src={org.avatar || undefined} sx={{ width: 28, height: 28 }}>
+                  <PeopleRounded fontSize="small" />
+                </Avatar>
+              </Badge>
+            </ListItemIcon>
             <ListItemText>{org.name}</ListItemText>
           </MenuItem>
         ))}
