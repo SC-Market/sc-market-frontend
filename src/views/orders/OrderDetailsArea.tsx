@@ -20,6 +20,7 @@ import {
   DialogActions,
 } from "@mui/material"
 import React, { useEffect } from "react"
+import { Link as RouterLink } from "react-router-dom"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { format } from "../../util/time"
@@ -153,7 +154,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                 </Stack>
               </TableCell>
             </TableRow>
-            {contractor && (
+            {(order.shop || contractor) && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -161,8 +162,20 @@ export function OrderDetailsArea(props: { order: Order }) {
                   {t("orderDetailsArea.seller")}
                 </TableCell>
                 <TableCell align="right">
-                  <Stack direction="row" justifyContent={"right"}>
-                    {order.contractor && <OrgDetails org={contractor} />}
+                  <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
+                    {order.shop ? (
+                      <MaterialLink
+                        component={RouterLink}
+                        to={`/shops/${order.shop.slug}`}
+                        underline="hover"
+                        color="text.secondary"
+                        variant="subtitle2"
+                      >
+                        {order.shop.name}
+                      </MaterialLink>
+                    ) : (
+                      contractor && <OrgDetails org={contractor} />
+                    )}
                   </Stack>
                 </TableCell>
               </TableRow>
