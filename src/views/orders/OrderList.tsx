@@ -362,15 +362,15 @@ export function OrderRow(props: {
           row.shop ? (
             <Stack direction="row" alignItems="center" spacing={1} sx={{ justifyContent: "flex-end" }}>
               {row.shop.avatar && (
-                <Avatar src={row.shop.avatar} sx={{ width: 24, height: 24 }} />
+                <Avatar src={row.shop.avatar} sx={{ width: 32, height: 32 }} />
               )}
               <MaterialLink
                 component={Link}
                 to={`/shops/${row.shop.slug}`}
                 underline="hover"
                 color="text.secondary"
-                variant="body2"
-                sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 120 }}
+                variant="subtitle2"
+                sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 160 }}
               >
                 {row.shop.name}
               </MaterialLink>

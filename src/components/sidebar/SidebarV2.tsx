@@ -43,6 +43,8 @@ import {
   ListAltRounded,
   ScienceRounded,
   RocketLaunchRounded,
+  DesignServicesRounded,
+  DescriptionRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -112,16 +114,28 @@ export function SidebarV2() {
     // Browse mode
     return [
       { label: t("nav.market", "Market"), to: "/market", icon: <SearchRounded /> },
+      { label: t("nav.services", "Services"), to: "/market/services", icon: <DesignServicesRounded /> },
+      { label: t("nav.contracts", "Contracts"), to: "/contracts", icon: <DescriptionRounded /> },
       { label: t("nav.buyOrders", "Buy Orders"), to: "/buyorders", icon: <ShoppingCartRounded /> },
+      { label: t("nav.shops", "Shops"), to: "/shops", icon: <StorefrontRounded /> },
+      { label: t("nav.recruiting", "Recruiting"), to: "/recruiting", icon: <PeopleRounded /> },
       { label: t("nav.myOrders", "My Orders"), to: "/orders", icon: <LocalShippingRounded /> },
+      { label: t("nav.dashboard", "Dashboard"), to: "/dashboard", icon: <DashboardRounded /> },
     ]
   }, [context, selectedShop, profile, t])
 
   // Universal items (always visible)
   const universalItems = useMemo<NavItem[]>(() => [
     { label: t("nav.messages", "Messages"), to: "/messaging", icon: <MessageRounded /> },
-    { label: t("nav.wiki", "Wiki"), to: "/wiki/items", icon: <MenuBookRounded /> },
-    { label: t("nav.crafting", "Crafting"), to: "/blueprints", icon: <ScienceRounded /> },
+    { label: t("nav.wiki", "Wiki Items"), to: "/wiki/items", icon: <MenuBookRounded /> },
+    { label: t("nav.wikiShips", "Ships"), to: "/wiki/ships", icon: <RocketLaunchRounded /> },
+    { label: t("nav.wikiCommodities", "Commodities"), to: "/wiki/commodities", icon: <InventoryRounded /> },
+    { label: t("nav.wikiLocations", "Locations"), to: "/wiki/locations", icon: <DescriptionRounded /> },
+    { label: t("nav.missions", "Missions"), to: "/missions", icon: <DescriptionRounded /> },
+    { label: t("nav.blueprints", "Blueprints"), to: "/blueprints", icon: <ScienceRounded /> },
+    { label: t("nav.craftingCalc", "Crafting"), to: "/crafting/calculator", icon: <ScienceRounded /> },
+    { label: t("nav.resources", "Resources"), to: "/resources", icon: <InventoryRounded /> },
+    { label: t("nav.mining", "Mining"), to: "/mining", icon: <InventoryRounded /> },
     { label: t("nav.settings", "Settings"), to: "/settings", icon: <SettingsRounded /> },
   ], [t])
 
@@ -185,7 +199,7 @@ export function SidebarV2() {
                 anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 badgeContent={<StorefrontRounded sx={{ fontSize: 12 }} />}
               >
-                <Avatar src={shop.logo || undefined} sx={{ width: 28, height: 28 }}>
+                <Avatar src={shop.logo_url || undefined} sx={{ width: 28, height: 28 }}>
                   <StorefrontRounded fontSize="small" />
                 </Avatar>
               </Badge>

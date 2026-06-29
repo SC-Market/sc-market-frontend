@@ -14,6 +14,7 @@ import React, {
   useCallback,
 } from "react"
 import {
+  Avatar,
   Box,
   Button,
   Checkbox,
@@ -27,6 +28,7 @@ import {
   FormControlLabel,
   Grid,
   IconButton,
+  Link as MaterialLink,
   Paper,
   Switch,
   Tab,
@@ -121,6 +123,8 @@ export function OfferRow(props: {
   const { data: profile } = useGetUserProfileQuery()
   const [assignOffer] = useAssignOfferMutation()
   const issueAlert = useAlertHook()
+
+  const isMine = profile?.username === row.customer.username
 
   const belongsToOfferOrg = useMemo(
     () => !!row.contractor && profile?.contractors?.some(c => c.spectrum_id === row.contractor!.spectrum_id),
@@ -325,16 +329,16 @@ export function OfferRow(props: {
                     : ""}
                 {(+row.most_recent_offer.cost).toLocaleString(undefined)} aUEC
               </Typography>
-              {row.shop_slug && (
+              {row.shop && !isMine && (
                 <Typography
                   variant="caption"
                   color="primary"
                   component={Link}
-                  to={`/shops/${row.shop_slug}`}
+                  to={`/shops/${row.shop.slug}`}
                   onClick={(e: React.MouseEvent) => e.stopPropagation()}
                   sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" }, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block" }}
                 >
-                  {row.shop_slug}
+                  {row.shop.name}
                 </Typography>
               )}
             </Link>
@@ -350,7 +354,26 @@ export function OfferRow(props: {
           minWidth: { xs: 80, sm: "auto" },
         }}
       >
-        <UserAvatar user={row.customer} />
+        {isMine && row.shop ? (
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ justifyContent: "flex-end" }}>
+            {row.shop.avatar && (
+              <Avatar src={row.shop.avatar} sx={{ width: 32, height: 32 }} />
+            )}
+            <MaterialLink
+              component={Link}
+              to={`/shops/${row.shop.slug}`}
+              underline="hover"
+              color="text.secondary"
+              variant="body2"
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 140 }}
+            >
+              {row.shop.name}
+            </MaterialLink>
+          </Stack>
+        ) : (
+          <UserAvatar user={row.customer} />
+        )}
       </TableCell>
       <TableCell
         align="right"
