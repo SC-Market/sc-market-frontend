@@ -112,7 +112,7 @@ export function SidebarV2() {
     return [
       { label: t("nav.market", "Market"), to: "/market", icon: <SearchRounded /> },
       { label: t("nav.buyOrders", "Buy Orders"), to: "/buyorders", icon: <ShoppingCartRounded /> },
-      { label: t("nav.myOrders", "My Orders"), to: "/dashboard", icon: <LocalShippingRounded /> },
+      { label: t("nav.myOrders", "My Orders"), to: "/orders", icon: <LocalShippingRounded /> },
     ]
   }, [context, selectedShop, profile, t])
 
