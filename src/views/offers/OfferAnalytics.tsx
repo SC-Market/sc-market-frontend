@@ -92,7 +92,7 @@ export function OfferTopShopsAnalytics({ analytics }: OfferAnalyticsProps) {
   return (
     <Section title={"Top Shops (Offers)"} xs={12} lg={3}>
       <ol>
-        {analytics.top_shops.map((s) => (
+        {(analytics.top_shops || []).map((s) => (
           <li key={s.slug}>
             <UnderlineLink color={"text.secondary"} to={`/shops/${s.slug}`} component={Link}>
               {s.name}
