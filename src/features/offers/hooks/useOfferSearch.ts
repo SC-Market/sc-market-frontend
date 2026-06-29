@@ -16,10 +16,11 @@ export interface UseOfferSearchParams {
   assigned?: boolean
   unassigned?: boolean
   contractor?: string
+  shop_id?: string
 }
 
 export function useOfferSearch(params: UseOfferSearchParams) {
-  const { mine, assigned, unassigned, contractor } = params
+  const { mine, assigned, unassigned, contractor, shop_id } = params
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
@@ -62,6 +63,7 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     assigned: assigned ? profile?.username : undefined,
     unassigned: statusFilter === "unclaimed" ? "true" : undefined,
     contractor,
+    shop_id,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",
     buyer_username: !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,

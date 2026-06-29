@@ -425,14 +425,13 @@ export function OfferRow(props: {
 
 export function ReceivedOffersArea({ unassigned }: { unassigned?: boolean } = {}) {
   const shopCtx = useOptionalShopRouteContext()
-  // Use the spectrum_id included in ShopResponse for V1 API compat
-  const contractorSpectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
+  const shopId = shopCtx?.shop.shop_id || undefined
 
   return (
     <OffersViewPaginated
-      assigned={!contractorSpectrumId && !unassigned}
+      assigned={!shopId && !unassigned}
       unassigned={unassigned}
-      contractor={contractorSpectrumId}
+      shop_id={shopId}
     />
   )
 }
@@ -446,10 +445,11 @@ export function OffersViewPaginated(props: {
   assigned?: boolean
   unassigned?: boolean
   contractor?: string
+  shop_id?: string
 }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { mine, assigned, unassigned, contractor } = props
+  const { mine, assigned, unassigned, contractor, shop_id } = props
 
   const {
     data, isLoading, isFetching,
@@ -469,7 +469,7 @@ export function OffersViewPaginated(props: {
     debouncedBuyerUsername, debouncedSellerUsername,
     activeFiltersCount, clearFilters,
     profile, issueAlert,
-  } = useOfferSearch({ mine, assigned, unassigned, contractor })
+  } = useOfferSearch({ mine, assigned, unassigned, contractor, shop_id })
 
   const tabs = useMemo(() => {
     const t_ = [
