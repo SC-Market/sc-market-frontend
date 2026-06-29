@@ -46,6 +46,7 @@ export interface Order {
   assigned_to: string | null
   contractor: string | null
   customer: string
+  shop: { name: string; slug: string; avatar: string | null } | null
   title: string
   description: string
   timestamp: string

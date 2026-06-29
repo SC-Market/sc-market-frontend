@@ -366,7 +366,7 @@ export function OfferRow(props: {
             icon={icon}
             size={isMobile ? "small" : "medium"}
           />
-          {canClaim && (
+          {canClaim && props.enableSelection && (
             <Button
               size="small"
               variant="outlined"
@@ -448,25 +448,25 @@ export function OffersViewPaginated(props: {
     profile, issueAlert,
   } = useOfferSearch({ mine, assigned, unassigned, contractor })
 
-  const tabs = [
-    [null, t("OffersViewPaginated.all", { defaultValue: "All" })],
-    ["unclaimed", t("OffersViewPaginated.unclaimed", { defaultValue: "Unclaimed" })],
-    ["to-seller", mine
-      ? t("OffersViewPaginated.waitingForSeller", { defaultValue: "Waiting for seller" })
-      : t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })],
-    ["to-customer", mine
-      ? t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })
-      : t("OffersViewPaginated.waitingForBuyer", { defaultValue: "Waiting for buyer" })],
-    ["accepted", t("OffersViewPaginated.accepted")],
-    ["rejected", t("OffersViewPaginated.rejected")],
-  ] as const
+  const tabs = useMemo(() => {
+    const t_ = [
+      [null, t("OffersViewPaginated.all", { defaultValue: "All" })],
+      ...(!mine ? [["unclaimed", t("OffersViewPaginated.unclaimed", { defaultValue: "Unclaimed" })]] : []),
+      ["to-seller", mine
+        ? t("OffersViewPaginated.waitingForSeller", { defaultValue: "Waiting for seller" })
+        : t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })],
+      ["to-customer", mine
+        ? t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })
+        : t("OffersViewPaginated.waitingForBuyer", { defaultValue: "Waiting for buyer" })],
+      ["accepted", t("OffersViewPaginated.accepted")],
+      ["rejected", t("OffersViewPaginated.rejected")],
+    ] as [string | null, string][]
+    return t_
+  }, [mine, t])
 
   const tab = useMemo(
-    () =>
-      [null, "unclaimed", "to-seller", "to-customer", "accepted", "rejected"].indexOf(
-        statusFilter,
-      ),
-    [statusFilter],
+    () => tabs.findIndex(([key]) => key === statusFilter),
+    [statusFilter, tabs],
   )
 
   return (
@@ -555,7 +555,7 @@ export function OffersViewPaginated(props: {
                     />
                   }
                   {...a11yProps(index)}
-                  onClick={() => setStatusFilter(id)}
+                  onClick={() => setStatusFilter(id as OfferSearchStatus | "unclaimed" | null)}
                 />
               ))}
             </Tabs>
