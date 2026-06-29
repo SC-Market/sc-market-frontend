@@ -14,6 +14,7 @@ import {
   Collapse,
   Divider,
   Drawer,
+  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -47,6 +48,7 @@ import {
   DesignServicesRounded,
   DescriptionRounded,
   ExpandLessRounded,
+  ChevronLeftRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -344,21 +346,35 @@ export function SidebarV2() {
         },
       }}
     >
-      {/* Site logo header */}
-      <Box sx={{ px: 2, py: 1.5, display: "flex", alignItems: "center", gap: 1.5, minHeight: 64 }}>
+      {/* Site logo header — matches V1 SidebarHeader */}
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ px: 2, py: 1.5, minHeight: 64 }}
+      >
         <Box
           component={Link}
           to="/"
-          sx={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}
+          sx={{ display: "flex", alignItems: "center", gap: 1, textDecoration: "none", color: "inherit" }}
         >
-          <Box
-            component="img"
+          <Avatar
             src="/scmarket-logo.png"
-            alt="SC Market"
-            sx={{ height: 28 }}
+            variant="rounded"
+            sx={{ width: 40, height: 40 }}
           />
+          <Typography fontWeight={600} color="text.primary">
+            {t("sidebar.sc_market.title", "SC Market")}
+          </Typography>
         </Box>
-      </Box>
+        <IconButton
+          size="small"
+          onClick={() => setDrawerOpen(false)}
+          sx={{ color: "text.secondary" }}
+        >
+          <ChevronLeftRounded />
+        </IconButton>
+      </Stack>
       <Divider />
       {drawerContent}
     </Drawer>
