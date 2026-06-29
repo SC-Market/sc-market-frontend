@@ -163,7 +163,7 @@ export function SettingsPage() {
     <StandardPageLayout
       title={t("settings.title")}
       sidebarOpen={true}
-      maxWidth="md"
+      maxWidth="lg"
     >
       {isMobile ? (
         <>
