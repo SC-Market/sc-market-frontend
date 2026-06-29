@@ -34,7 +34,6 @@ import {
   ShoppingCartRounded,
   LocalShippingRounded,
   InventoryRounded,
-  BarChartRounded,
   SettingsRounded,
   PeopleRounded,
   SearchRounded,
@@ -77,9 +76,20 @@ export function SidebarV2() {
   const { data: profile } = useGetUserProfileQuery()
   const { data: shops = [] } = useGetMyShopsQuery()
 
-  const [context, setContext] = useState<NavContext>("browse")
-  const [selectedShopSlug, setSelectedShopSlug] = useState<string | null>(null)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  // Infer context from URL
+  const inferredContext = useMemo<{ ctx: NavContext; shopSlug: string | null }>(() => {
+    const path = location.pathname
+    const shopMatch = path.match(/^\/shop\/([^/]+)/)
+    if (shopMatch) return { ctx: "shop", shopSlug: shopMatch[1] }
+    if (path.startsWith("/org/")) return { ctx: "org", shopSlug: null }
+    return { ctx: "browse", shopSlug: null }
+  }, [location.pathname])
+
+  const [contextOverride, setContextOverride] = useState<{ ctx: NavContext; shopSlug: string | null } | null>(null)
+  const context = contextOverride?.ctx ?? inferredContext.ctx
+  const selectedShopSlug = contextOverride?.shopSlug ?? inferredContext.shopSlug
 
   const selectedShop = useMemo(
     () => shops.find((s) => s.slug === selectedShopSlug) || shops[0],
@@ -97,21 +107,17 @@ export function SidebarV2() {
     if (context === "shop" && selectedShop) {
       const slug = selectedShop.slug
       return [
-        { label: t("nav.dashboard", "Dashboard"), to: SHOP_PATHS.root(slug), icon: <DashboardRounded /> },
+        { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded /> },
         { label: t("nav.listings", "Listings"), to: SHOP_PATHS.listings(slug), icon: <ListAltRounded /> },
         { label: t("nav.createListing", "Create Listing"), to: SHOP_PATHS.create(slug), icon: <AddRounded /> },
         { label: t("nav.stock", "Stock"), to: SHOP_PATHS.stock(slug), icon: <InventoryRounded /> },
-        { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded /> },
-        { label: t("nav.analytics", "Analytics"), to: SHOP_PATHS.analytics(slug), icon: <BarChartRounded /> },
         { label: t("nav.shopSettings", "Shop Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded /> },
       ]
     }
     if (context === "org" && profile?.contractors?.[0]) {
       const spectrumId = profile.contractors[0].spectrum_id
       return [
-        { label: t("nav.orgDashboard", "Dashboard"), to: `/org/${spectrumId}/dashboard`, icon: <DashboardRounded /> },
         { label: t("nav.members", "Members"), to: `/org/${spectrumId}/members`, icon: <PeopleRounded /> },
-        { label: t("nav.fleet", "Fleet"), to: `/org/${spectrumId}/fleet`, icon: <RocketLaunchRounded /> },
         { label: t("nav.orgSettings", "Settings"), to: `/org/${spectrumId}/manage`, icon: <SettingsRounded /> },
       ]
     }
@@ -121,10 +127,7 @@ export function SidebarV2() {
       { label: t("nav.services", "Services"), to: "/market/services", icon: <DesignServicesRounded /> },
       { label: t("nav.contracts", "Contracts"), to: "/contracts", icon: <DescriptionRounded /> },
       { label: t("nav.buyOrders", "Buy Orders"), to: "/buyorders", icon: <ShoppingCartRounded /> },
-      { label: t("nav.shops", "Shops"), to: "/shops", icon: <StorefrontRounded /> },
-      { label: t("nav.recruiting", "Recruiting"), to: "/recruiting", icon: <PeopleRounded /> },
       { label: t("nav.myOrders", "My Orders"), to: "/orders", icon: <LocalShippingRounded /> },
-      { label: t("nav.dashboard", "Dashboard"), to: "/dashboard", icon: <DashboardRounded /> },
     ]
   }, [context, selectedShop, profile, t])
 
@@ -132,12 +135,17 @@ export function SidebarV2() {
   const [craftingOpen, setCraftingOpen] = useState(false)
 
   const handleContextSwitch = (ctx: NavContext, shopSlug?: string) => {
-    setContext(ctx)
-    if (shopSlug) setSelectedShopSlug(shopSlug)
+    setContextOverride({ ctx, shopSlug: shopSlug || null })
     setAnchorEl(null)
   }
 
-  const isActive = (path: string) => location.pathname.startsWith(path)
+  const isActive = (path: string) => {
+    // Exact match for short paths to avoid false positives
+    if (path === "/market" || path === "/orders" || path === "/mining" || path === "/messaging" || path === "/settings") {
+      return location.pathname === path || location.pathname.startsWith(path + "/")
+    }
+    return location.pathname === path || location.pathname.startsWith(path)
+  }
 
   const drawerContent = (
     <Stack sx={{ height: "100%", py: 1 }}>
@@ -247,13 +255,36 @@ export function SidebarV2() {
         ))}
       </List>
 
+      {/* Browse section (only in browse mode) */}
+      {context === "browse" && (
+        <>
+          <Typography variant="overline" sx={{ px: 2.5, pt: 1, color: "text.secondary", fontSize: "0.65rem" }}>
+            {t("nav.groupBrowse", "Browse")}
+          </Typography>
+          <List dense sx={{ px: 1 }}>
+            <ListItemButton component={Link} to="/shops" selected={isActive("/shops")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 36 }}><StorefrontRounded /></ListItemIcon>
+              <ListItemText primary={t("nav.shops", "Shops")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/contractors" selected={isActive("/contractors")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 36 }}><PeopleRounded /></ListItemIcon>
+              <ListItemText primary={t("nav.orgs", "Organizations")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            <ListItemButton component={Link} to="/recruiting" selected={isActive("/recruiting")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 36 }}><PeopleRounded /></ListItemIcon>
+              <ListItemText primary={t("nav.recruiting", "Recruiting")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+          </List>
+        </>
+      )}
+
       <Divider sx={{ mx: 2, my: 0.5 }} />
 
       {/* Game Data section */}
       <Typography variant="overline" sx={{ px: 2.5, pt: 1, color: "text.secondary", fontSize: "0.65rem" }}>
         {t("sidebar.gameData.title", "Game Data")}
       </Typography>
-      <List dense sx={{ px: 1, flex: 1, overflowY: "auto" }}>
+      <List dense sx={{ px: 1, overflowY: "auto" }}>
         {/* Missions */}
         <ListItemButton component={Link} to="/missions" selected={isActive("/missions")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
           <ListItemIcon sx={{ minWidth: 36 }}><DescriptionRounded /></ListItemIcon>
@@ -329,19 +360,20 @@ export function SidebarV2() {
         </Collapse>
       </List>
 
-      <Divider sx={{ mx: 2, my: 0.5 }} />
-
-      {/* Account items */}
-      <List dense sx={{ px: 1 }}>
-        <ListItemButton component={Link} to="/messaging" selected={isActive("/messaging")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
-          <ListItemIcon sx={{ minWidth: 36 }}><MessageRounded /></ListItemIcon>
-          <ListItemText primary={t("nav.messages", "Messages")} primaryTypographyProps={{ variant: "body2" }} />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/settings" selected={isActive("/settings")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
-          <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
-          <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "body2" }} />
-        </ListItemButton>
-      </List>
+      {/* Account items — sticky at bottom */}
+      <Box sx={{ flexShrink: 0 }}>
+        <Divider sx={{ mx: 2 }} />
+        <List dense sx={{ px: 1, py: 0.5 }}>
+          <ListItemButton component={Link} to="/messaging" selected={isActive("/messaging")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemIcon sx={{ minWidth: 36 }}><MessageRounded /></ListItemIcon>
+            <ListItemText primary={t("nav.messages", "Messages")} primaryTypographyProps={{ variant: "body2" }} />
+          </ListItemButton>
+          <ListItemButton component={Link} to="/settings" selected={isActive("/settings")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
+            <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "body2" }} />
+          </ListItemButton>
+        </List>
+      </Box>
     </Stack>
   )
 
