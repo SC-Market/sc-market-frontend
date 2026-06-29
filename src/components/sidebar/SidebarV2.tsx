@@ -26,7 +26,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   DashboardRounded,
@@ -77,19 +77,22 @@ export function SidebarV2() {
   const { data: shops = [] } = useGetMyShopsQuery()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const navigate = useNavigate()
 
   // Infer context from URL
-  const inferredContext = useMemo<{ ctx: NavContext; shopSlug: string | null }>(() => {
+  const inferredContext = useMemo<{ ctx: NavContext; shopSlug: string | null; orgId: string | null }>(() => {
     const path = location.pathname
     const shopMatch = path.match(/^\/shop\/([^/]+)/)
-    if (shopMatch) return { ctx: "shop", shopSlug: shopMatch[1] }
-    if (path.startsWith("/org/")) return { ctx: "org", shopSlug: null }
-    return { ctx: "browse", shopSlug: null }
+    if (shopMatch) return { ctx: "shop", shopSlug: shopMatch[1], orgId: null }
+    const orgMatch = path.match(/^\/org\/([^/]+)/)
+    if (orgMatch) return { ctx: "org", shopSlug: null, orgId: orgMatch[1] }
+    return { ctx: "browse", shopSlug: null, orgId: null }
   }, [location.pathname])
 
-  const [contextOverride, setContextOverride] = useState<{ ctx: NavContext; shopSlug: string | null } | null>(null)
+  const [contextOverride, setContextOverride] = useState<{ ctx: NavContext; shopSlug: string | null; orgId: string | null } | null>(null)
   const context = contextOverride?.ctx ?? inferredContext.ctx
   const selectedShopSlug = contextOverride?.shopSlug ?? inferredContext.shopSlug
+  const selectedOrgId = contextOverride?.orgId ?? inferredContext.orgId
 
   const selectedShop = useMemo(
     () => shops.find((s) => s.slug === selectedShopSlug) || shops[0],
@@ -98,9 +101,12 @@ export function SidebarV2() {
 
   const contextLabel = useMemo(() => {
     if (context === "shop" && selectedShop) return selectedShop.name
-    if (context === "org") return profile?.contractors?.[0]?.name || "Organization"
+    if (context === "org" && selectedOrgId) {
+      const org = profile?.contractors?.find((c) => c.spectrum_id === selectedOrgId)
+      return org?.name || "Organization"
+    }
     return t("nav.browsing", "Browsing")
-  }, [context, selectedShop, profile, t])
+  }, [context, selectedShop, selectedOrgId, profile, t])
 
   // Items based on current context
   const contextItems = useMemo<NavItem[]>(() => {
@@ -114,11 +120,10 @@ export function SidebarV2() {
         { label: t("nav.shopSettings", "Shop Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded /> },
       ]
     }
-    if (context === "org" && profile?.contractors?.[0]) {
-      const spectrumId = profile.contractors[0].spectrum_id
+    if (context === "org" && selectedOrgId) {
       return [
-        { label: t("nav.members", "Members"), to: `/org/${spectrumId}/members`, icon: <PeopleRounded /> },
-        { label: t("nav.orgSettings", "Settings"), to: `/org/${spectrumId}/manage`, icon: <SettingsRounded /> },
+        { label: t("nav.members", "Members"), to: `/org/${selectedOrgId}/members`, icon: <PeopleRounded /> },
+        { label: t("nav.orgSettings", "Settings"), to: `/org/${selectedOrgId}/manage`, icon: <SettingsRounded /> },
       ]
     }
     // Browse mode
@@ -134,8 +139,17 @@ export function SidebarV2() {
   const [wikiOpen, setWikiOpen] = useState(false)
   const [craftingOpen, setCraftingOpen] = useState(false)
 
-  const handleContextSwitch = (ctx: NavContext, shopSlug?: string) => {
-    setContextOverride({ ctx, shopSlug: shopSlug || null })
+  const handleContextSwitch = (ctx: NavContext, id?: string) => {
+    if (ctx === "shop" && id) {
+      setContextOverride({ ctx, shopSlug: id, orgId: null })
+      navigate(SHOP_PATHS.orders(id))
+    } else if (ctx === "org" && id) {
+      setContextOverride({ ctx, shopSlug: null, orgId: id })
+      navigate(`/org/${id}/members`)
+    } else {
+      setContextOverride({ ctx: "browse", shopSlug: null, orgId: null })
+      navigate("/market")
+    }
     setAnchorEl(null)
   }
 
@@ -148,7 +162,7 @@ export function SidebarV2() {
   }
 
   const drawerContent = (
-    <Stack sx={{ height: "100%", py: 1 }}>
+    <Stack sx={{ height: "100%", overflow: "hidden" }}>
       {/* Context Switcher */}
       <Box
         sx={{ px: 2, py: 1.5, cursor: "pointer" }}
@@ -211,8 +225,8 @@ export function SidebarV2() {
         {profile?.contractors?.map((org) => (
           <MenuItem
             key={org.spectrum_id}
-            selected={context === "org"}
-            onClick={() => handleContextSwitch("org")}
+            selected={context === "org" && selectedOrgId === org.spectrum_id}
+            onClick={() => handleContextSwitch("org", org.spectrum_id)}
           >
             <ListItemIcon>
               <Badge
@@ -232,8 +246,10 @@ export function SidebarV2() {
 
       <Divider sx={{ mx: 2, my: 0.5 }} />
 
+      {/* Scrollable content area */}
+      <Box sx={{ flex: 1, overflowY: "auto", py: 1 }}>
       {/* Context-specific items */}
-      <List dense sx={{ flex: 1, px: 1 }}>
+      <List dense sx={{ px: 1 }}>
         {contextItems.map((item) => (
           <ListItemButton
             key={item.to}
@@ -284,7 +300,7 @@ export function SidebarV2() {
       <Typography variant="overline" sx={{ px: 2.5, pt: 1, color: "text.secondary", fontSize: "0.65rem" }}>
         {t("sidebar.gameData.title", "Game Data")}
       </Typography>
-      <List dense sx={{ px: 1, overflowY: "auto" }}>
+      <List dense sx={{ px: 1 }}>
         {/* Missions */}
         <ListItemButton component={Link} to="/missions" selected={isActive("/missions")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
           <ListItemIcon sx={{ minWidth: 36 }}><DescriptionRounded /></ListItemIcon>
@@ -359,6 +375,7 @@ export function SidebarV2() {
           </List>
         </Collapse>
       </List>
+      </Box>
 
       {/* Account items — sticky at bottom */}
       <Box sx={{ flexShrink: 0 }}>
