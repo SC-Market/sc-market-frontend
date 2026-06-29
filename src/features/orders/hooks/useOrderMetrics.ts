@@ -7,9 +7,9 @@ export interface UseOrderMetricsResult {
   error: unknown
 }
 
-export function useOrderMetrics(spectrumId: string | undefined): UseOrderMetricsResult {
+export function useOrderMetrics(spectrumId: string | undefined, shopId?: string): UseOrderMetricsResult {
   const { data: metrics, isLoading, error } = useGetContractorOrderMetricsQuery(
-    spectrumId!,
+    { spectrumId: spectrumId!, shopId },
     { skip: !spectrumId },
   )
   return { metrics, isLoading, error }

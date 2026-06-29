@@ -309,19 +309,23 @@ const ordersApi = serviceApi.injectEndpoints({
 const ordersMetricsApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
-    getContractorOrderMetrics: builder.query<ContractorOrderMetrics, string>({
-      query: (spectrum_id) => `/api/orders/contractor/${spectrum_id}/metrics`,
+    getContractorOrderMetrics: builder.query<ContractorOrderMetrics, { spectrumId: string; shopId?: string }>({
+      query: ({ spectrumId, shopId }) => {
+        const params = shopId ? `?shop_id=${shopId}` : ""
+        return `/api/orders/contractor/${spectrumId}/metrics${params}`
+      },
       providesTags: ["Order" as const, { type: "Order" as const }],
       transformResponse: unwrapResponse,
     }),
     getContractorOrderData: builder.query<
       ContractorOrderData,
-      { spectrum_id: string; include_trends?: boolean; assigned_only?: boolean }
+      { spectrum_id: string; include_trends?: boolean; assigned_only?: boolean; shop_id?: string }
     >({
-      query: ({ spectrum_id, include_trends = true, assigned_only = false }) => {
+      query: ({ spectrum_id, include_trends = true, assigned_only = false, shop_id }) => {
         const params = new URLSearchParams()
         if (include_trends) params.append("include_trends", "true")
         if (assigned_only) params.append("assigned_only", "true")
+        if (shop_id) params.append("shop_id", shop_id)
         return `/api/orders/contractor/${spectrum_id}/data?${params.toString()}`
       },
       providesTags: ["Order" as const, { type: "Order" as const }],

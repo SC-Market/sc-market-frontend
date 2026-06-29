@@ -54,8 +54,6 @@ export function Sidebar() {
     [shopSlug, myShops],
   )
 
-  const shopOrgSpectrumId = activeShop?.owner_contractor_spectrum_id ?? undefined
-
   // Fetch pending offer counts
   const { data: myOffersData } = useSearchOffersQuery(
     { assigned: profile?.username, status: "to-customer", pageSize: 1 },
@@ -70,8 +68,8 @@ export function Sidebar() {
     { skip: !currentOrgObj?.spectrum_id },
   )
   const { data: shopOrdersData } = useSearchOffersQuery(
-    { contractor: shopOrgSpectrumId, status: "to-seller", pageSize: 1 },
-    { skip: !shopOrgSpectrumId },
+    { shopId: activeShop?.shop_id, status: "to-seller", pageSize: 1 },
+    { skip: !activeShop?.shop_id },
   )
 
   const offerCounts = useMemo(
