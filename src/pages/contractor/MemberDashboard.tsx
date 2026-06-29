@@ -65,7 +65,7 @@ export function MemberDashboard() {
             <Grid container spacing={theme.layoutSpacing.layout}>
               {offersSection}
               <MatchingBuyOrdersArea />
-              {!isOrgContext && <MemberAssignments />}
+              {(shopCtx || !isOrgContext) && <MemberAssignments />}
               <UserOrderTrend spectrumId={orgSpectrumId} />
             </Grid>
           </Grid>
@@ -83,7 +83,7 @@ export function MemberDashboard() {
             <Grid container spacing={theme.layoutSpacing.layout}>
               {offersSection}
               <MatchingBuyOrdersArea />
-              {!isOrgContext && <MemberAssignments />}
+              {(shopCtx || !isOrgContext) && <MemberAssignments />}
               <UserOrderTrend spectrumId={orgSpectrumId} />
             </Grid>
           </Grid>
@@ -95,7 +95,7 @@ export function MemberDashboard() {
             {offersSection}
           </Grid>
           <MatchingBuyOrdersArea />
-          {!isOrgContext && (
+          {(shopCtx || !isOrgContext) && (
             <Grid item xs={12}>
               <MemberAssignments />
             </Grid>
