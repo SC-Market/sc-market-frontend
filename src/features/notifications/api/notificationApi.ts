@@ -62,6 +62,7 @@ export const notificationApi = serviceApi.injectEndpoints({
         entityId?: string
         scope?: "individual" | "organization" | "all"
         contractorId?: string
+        shopId?: string
       }
     >({
       query: (params) => ({
@@ -72,6 +73,7 @@ export const notificationApi = serviceApi.injectEndpoints({
           ...(params.entityId && { entityId: params.entityId }),
           ...(params.scope && { scope: params.scope }),
           ...(params.contractorId && { contractorId: params.contractorId }),
+          ...(params.shopId && { shopId: params.shopId }),
         },
       }),
       transformResponse: (response: {

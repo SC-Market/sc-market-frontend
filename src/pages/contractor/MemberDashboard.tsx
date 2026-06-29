@@ -58,7 +58,7 @@ export function MemberDashboard() {
           <Grid item xs={12} lg={2.5}>
             <Grid container spacing={theme.layoutSpacing.layout}>
               <OrderMetrics spectrumId={orgSpectrumId} />
-              <DashNotificationArea />
+              <DashNotificationArea shopId={shopCtx?.shop.shop_id} />
             </Grid>
           </Grid>
           <Grid item xs={12} lg={6.5}>
@@ -76,7 +76,7 @@ export function MemberDashboard() {
           <Grid item xs={12} lg={3}>
             <Grid container spacing={theme.layoutSpacing.layout}>
               <OrderMetrics spectrumId={orgSpectrumId} />
-              <DashNotificationArea />
+              <DashNotificationArea shopId={shopCtx?.shop.shop_id} />
             </Grid>
           </Grid>
           <Grid item xs={12} lg={9}>
