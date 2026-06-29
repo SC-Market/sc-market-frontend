@@ -81,7 +81,14 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
 
         const data = result.data
         if (data?.flags) {
+          // Merge server flags with defaults, but preserve local overrides
+          const overrides = data.overridden_flags || []
+          const currentLocal = readStoredFlags()
           const serverFlags = { ...DEFAULT_FLAGS, ...data.flags }
+          // Keep locally-overridden values (user explicitly set them)
+          for (const key of overrides) {
+            if (key in currentLocal) serverFlags[key] = currentLocal[key]
+          }
           localStorage.setItem(STORAGE_KEY, JSON.stringify(serverFlags))
           // Also write backward-compat key
           localStorage.setItem("market_version", serverFlags.market_v2 ? "V2" : "V1")
