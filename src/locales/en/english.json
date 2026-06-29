@@ -1178,6 +1178,7 @@
       "order": "Order",
       "customer": "Customer",
       "contractor": "Contractor",
+      "shop": "Shop",
       "status": "Status",
       "actions": "Actions"
     },

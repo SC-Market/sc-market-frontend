@@ -3,17 +3,11 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { CreateOrderForm } from "../../views/orders/CreateOrderForm"
 import { MyOrders } from "../../views/orders/MyOrders"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { useGetServiceByIdQuery } from "../../features/services/api/servicesApi"
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { ServiceView } from "../../views/contracts/ServiceView"
 import { SentOffersArea } from "../../views/offers/ReceivedOffersArea"
 import { BuyOrdersViewPaginated } from "../../features/market/views/DashBuyOrdersArea"
 import { useTranslation } from "react-i18next"
-import {
-  shouldRedirectTo404,
-  shouldShowErrorPage,
-} from "../../util/errorHandling"
-import { ErrorPage } from "../errors/ErrorPage"
 import { usePageServiceOrder } from "../../features/contracting/hooks/usePageServiceOrder"
 
 export function CreateOrder(props: {}) {

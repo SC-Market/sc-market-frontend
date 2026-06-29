@@ -451,8 +451,12 @@ export function OffersViewPaginated(props: {
   const tabs = [
     [null, t("OffersViewPaginated.all", { defaultValue: "All" })],
     ["unclaimed", t("OffersViewPaginated.unclaimed", { defaultValue: "Unclaimed" })],
-    ["to-seller", t("OffersViewPaginated.waitingSeller")],
-    ["to-customer", t("OffersViewPaginated.waitingCustomer")],
+    ["to-seller", mine
+      ? t("OffersViewPaginated.waitingForSeller", { defaultValue: "Waiting for seller" })
+      : t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })],
+    ["to-customer", mine
+      ? t("OffersViewPaginated.yourTurn", { defaultValue: "Your turn" })
+      : t("OffersViewPaginated.waitingForBuyer", { defaultValue: "Waiting for buyer" })],
     ["accepted", t("OffersViewPaginated.accepted")],
     ["rejected", t("OffersViewPaginated.rejected")],
   ] as const

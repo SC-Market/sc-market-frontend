@@ -103,7 +103,7 @@ export const MyOrderHeadCells: readonly HeadCell<
     id: "other_name",
     numeric: true,
     disablePadding: false,
-    label: "orders.table.contractor",
+    label: "orders.table.shop",
   },
   {
     id: "status",
@@ -359,7 +359,23 @@ export function OrderRow(props: {
         }}
       >
         {row.mine ? (
-          row.contractor ? (
+          row.shop ? (
+            <Stack direction="row" alignItems="center" spacing={1} sx={{ justifyContent: "flex-end" }}>
+              {row.shop.avatar && (
+                <Avatar src={row.shop.avatar} sx={{ width: 24, height: 24 }} />
+              )}
+              <MaterialLink
+                component={Link}
+                to={`/shops/${row.shop.slug}`}
+                underline="hover"
+                color="text.secondary"
+                variant="body2"
+                sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 120 }}
+              >
+                {row.shop.name}
+              </MaterialLink>
+            </Stack>
+          ) : row.contractor ? (
             <ContractorAvatar contractor={row.contractor} />
           ) : row.assigned_to ? (
             <UserAvatar user={row.assigned_to} />
@@ -684,7 +700,7 @@ export function OrdersViewPaginated(props: {
           rows={(orders?.items || []).map((o) => ({
             ...o,
             other_name: mine
-              ? o.assigned_to?.username || o.contractor?.spectrum_id || null
+              ? o.shop?.name || o.assigned_to?.username || o.contractor?.spectrum_id || null
               : o.customer.username,
             mine,
           }))}
