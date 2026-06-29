@@ -1045,10 +1045,10 @@
     "orders_weekly": "Orders Weekly",
     "orders_monthly": "Orders Monthly",
     "status_trends": "Status Trends",
-    "in_progress": "In Progress",
+    "in_progress": "Being fulfilled",
     "fulfilled": "Fulfilled",
     "cancelled": "Cancelled",
-    "not_started": "Not Started"
+    "not_started": "Queued"
   },
   "orderServiceArea": {
     "associated_services": "Associated Services",
@@ -1148,8 +1148,8 @@
     "valueLast7Days": "Value Last 7 Days",
     "valueLast30Days": "Value Last 30 Days",
     "statusBreakdown": "Status Breakdown",
-    "notStarted": "Not Started",
-    "inProgress": "In Progress",
+    "notStarted": "Queued",
+    "inProgress": "Being fulfilled",
     "fulfilled": "Fulfilled",
     "cancelled": "Cancelled",
     "topCustomers": "Top Customers",
@@ -1168,9 +1168,9 @@
   "orders": {
     "status": {
       "fulfilled": "Fulfilled",
-      "inProgress": "In Progress",
+      "inProgress": "Being fulfilled",
       "cancelled": "Cancelled",
-      "notStarted": "Not Started",
+      "notStarted": "Queued",
       "active": "Active",
       "inactive": "Inactive"
     },
@@ -1186,8 +1186,8 @@
       "active": "Active",
       "past": "Past",
       "fulfilled": "Fulfilled",
-      "inProgress": "In Progress",
-      "notStarted": "Not Started",
+      "inProgress": "Being fulfilled",
+      "notStarted": "Queued",
       "cancelled": "Cancelled"
     },
     "orderLabel": "Order",
@@ -1235,7 +1235,7 @@
     "cancel": "Cancel",
     "complete_order": "Complete Order",
     "begin_work": "Begin Work",
-    "not_started": "Not Started"
+    "not_started": "Queued"
   },
   "orderSummary": {
     "title": "Order Summary",
@@ -1325,8 +1325,8 @@
     "offer": "Offer",
     "user": "User",
     "status": "Status",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "Awaiting confirmation",
+    "waitingCustomer": "Your turn to respond",
     "accepted": "Accepted",
     "rejected": "Rejected",
     "items": "items",
@@ -1411,8 +1411,8 @@
     "reject": "Reject",
     "cancelOrder": "Cancel Order",
     "cancel": "Cancel",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "Awaiting confirmation",
+    "waitingCustomer": "Your turn to respond",
     "rejected": "Rejected",
     "accepted": "Accepted"
   },
