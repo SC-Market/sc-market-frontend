@@ -179,6 +179,7 @@ export interface OfferSearchQuery {
   unassigned?: string
   contractor?: string
   customer?: string
+  shop_id?: string
   index?: number
   page_size?: number
   reverse_sort?: boolean
