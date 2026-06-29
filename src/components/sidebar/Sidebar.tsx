@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react"
 import { Drawer, Stack, useMediaQuery, useTheme, Chip } from "@mui/material"
+import { useLocation, matchPath } from "react-router-dom"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
@@ -13,6 +14,7 @@ import { useSidebarItems } from "./hooks/useSidebarItems"
 import { SidebarItemProps } from "./types"
 import { useSearchOffersQuery } from "../../store/api/offers"
 import { getCustomTabs } from "./utils/sidebarFilters"
+import { useGetMyShopsQuery } from "../../store/api/v2/market"
 
 /**
  * Main sidebar navigation component
@@ -23,6 +25,7 @@ export function Sidebar() {
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
   const bottomNavHeight = useBottomNavHeight()
+  const location = useLocation()
 
   // Custom hooks for business logic
   const { starredItems, toggleStar } = useSidebarStarring()
@@ -35,6 +38,23 @@ export function Sidebar() {
     filterItems,
     resolveItem,
   } = useSidebarItems()
+
+  // Resolve the active shop from URL slug
+  const shopSlug = useMemo(() => {
+    const m = matchPath("/shop/:shopSlug/*", location.pathname)
+    return (m?.params as { shopSlug?: string })?.shopSlug ?? null
+  }, [location.pathname])
+
+  const { data: myShops } = useGetMyShopsQuery(undefined, {
+    skip: !profile?.username,
+  })
+
+  const activeShop = useMemo(
+    () => (shopSlug ? myShops?.find((s) => s.slug === shopSlug) : undefined),
+    [shopSlug, myShops],
+  )
+
+  const shopOrgSpectrumId = activeShop?.owner_contractor_spectrum_id ?? undefined
 
   // Fetch pending offer counts
   const { data: myOffersData } = useSearchOffersQuery(
@@ -49,14 +69,19 @@ export function Sidebar() {
     { contractor: currentOrgObj?.spectrum_id, status: "to-seller", pageSize: 1 },
     { skip: !currentOrgObj?.spectrum_id },
   )
+  const { data: shopOrdersData } = useSearchOffersQuery(
+    { contractor: shopOrgSpectrumId, status: "to-seller", pageSize: 1 },
+    { skip: !shopOrgSpectrumId },
+  )
 
   const offerCounts = useMemo(
     () => ({
       myOrders: myOffersData?.data?.item_count || 0,
       assignedToMe: assignedOffersData?.data?.item_count || 0,
       orgOrders: orgOffersData?.data?.item_count || 0,
+      shopOrders: shopOrdersData?.data?.item_count || 0,
     }),
-    [myOffersData, assignedOffersData, orgOffersData],
+    [myOffersData, assignedOffersData, orgOffersData, shopOrdersData],
   )
 
   // Track previous screen size for auto-close behavior
@@ -102,6 +127,9 @@ export function Sidebar() {
     }
     if (item.text === "sidebar.org_orders" && offerCounts.orgOrders > 0) {
       return { ...item, chip: <Chip label={offerCounts.orgOrders} size="small" color="primary" /> }
+    }
+    if (item.text === "sidebar.shop_orders" && offerCounts.shopOrders > 0) {
+      return { ...item, chip: <Chip label={offerCounts.shopOrders} size="small" color="warning" /> }
     }
     return item
   }
