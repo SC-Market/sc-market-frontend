@@ -12,9 +12,9 @@ const OrderAnalyticsCharts = lazy(() =>
   })),
 )
 
-const TopContractorsAnalytics = lazy(() =>
+const TopShopsAnalytics = lazy(() =>
   import("../../views/orders/OrderAnalytics").then((m) => ({
-    default: m.TopContractorsAnalytics,
+    default: m.TopShopsAnalytics,
   })),
 )
 
@@ -42,9 +42,9 @@ const OfferAnalyticsCharts = lazy(() =>
   })),
 )
 
-const OfferTopContractorsAnalytics = lazy(() =>
+const OfferTopShopsAnalytics = lazy(() =>
   import("../../views/offers/OfferAnalytics").then((m) => ({
-    default: m.OfferTopContractorsAnalytics,
+    default: m.OfferTopShopsAnalytics,
   })),
 )
 
@@ -81,7 +81,7 @@ export function AdminOrderStats() {
         {orderAnalytics && (
           <>
             <OrderAnalyticsCharts analytics={orderAnalytics} />
-            <TopContractorsAnalytics analytics={orderAnalytics} />
+            <TopShopsAnalytics analytics={orderAnalytics} />
             <TopUsersAnalytics analytics={orderAnalytics} />
             <OrderSummary analytics={orderAnalytics} />
             <AdminRecentOrders />
@@ -97,7 +97,7 @@ export function AdminOrderStats() {
               </Typography>
             </Grid>
             <OfferAnalyticsCharts analytics={offerAnalytics} />
-            <OfferTopContractorsAnalytics analytics={offerAnalytics} />
+            <OfferTopShopsAnalytics analytics={offerAnalytics} />
             <OfferTopUsersAnalytics analytics={offerAnalytics} />
             <OfferSummary analytics={offerAnalytics} />
           </>
