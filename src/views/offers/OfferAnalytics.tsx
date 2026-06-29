@@ -88,16 +88,16 @@ export function OfferAnalyticsCharts({ analytics }: OfferAnalyticsProps) {
   )
 }
 
-export function OfferTopContractorsAnalytics({ analytics }: OfferAnalyticsProps) {
+export function OfferTopShopsAnalytics({ analytics }: OfferAnalyticsProps) {
   return (
-    <Section title={"Top Contractors (Offers)"} xs={12} lg={3}>
+    <Section title={"Top Shops (Offers)"} xs={12} lg={3}>
       <ol>
-        {analytics.top_contractors.map((c) => (
-          <li key={c.name}>
-            <UnderlineLink color={"text.secondary"} to={`/contractor/${c.name}`} component={Link}>
-              {c.name}
+        {analytics.top_shops.map((s) => (
+          <li key={s.slug}>
+            <UnderlineLink color={"text.secondary"} to={`/shops/${s.slug}`} component={Link}>
+              {s.name}
             </UnderlineLink>
-            : {c.accepted_offers}/{c.total_offers}
+            : {s.accepted_offers}/{s.total_offers}
           </li>
         ))}
       </ol>
@@ -135,13 +135,19 @@ export function OfferSummary({ analytics }: OfferAnalyticsProps) {
           <strong>Active Offers:</strong> {analytics.summary.active_offers}
         </Grid>
         <Grid item xs={6}>
+          <strong>Waiting for Buyer:</strong> {analytics.summary.waiting_for_buyer}
+        </Grid>
+        <Grid item xs={6}>
+          <strong>Waiting for Seller:</strong> {analytics.summary.waiting_for_seller}
+        </Grid>
+        <Grid item xs={6}>
           <strong>Accepted Offers:</strong> {analytics.summary.accepted_offers}
         </Grid>
         <Grid item xs={6}>
           <strong>Rejected Offers:</strong> {analytics.summary.rejected_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>Total Value:</strong> ${analytics.summary.total_value.toLocaleString()}
+          <strong>Total Value:</strong> {analytics.summary.total_value.toLocaleString()} aUEC
         </Grid>
       </Grid>
     </Section>

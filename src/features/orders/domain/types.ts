@@ -259,8 +259,9 @@ export interface OrderAnalytics {
     not_started: number
     average_fulfilled_value?: number
   }>
-  top_contractors: Array<{
+  top_shops: Array<{
     name: string
+    slug: string
     fulfilled_orders: number
     total_orders: number
   }>

@@ -231,8 +231,9 @@ export interface OfferAnalytics {
     rejected: number
     average_accepted_value?: number
   }>
-  top_contractors: Array<{
+  top_shops: Array<{
     name: string
+    slug: string
     accepted_offers: number
     total_offers: number
   }>
@@ -244,6 +245,8 @@ export interface OfferAnalytics {
   summary: {
     total_offers: number
     active_offers: number
+    waiting_for_buyer: number
+    waiting_for_seller: number
     accepted_offers: number
     rejected_offers: number
     total_value: number

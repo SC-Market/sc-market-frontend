@@ -154,20 +154,20 @@ export function OrderAnalyticsCharts({ analytics }: OrderAnalyticsProps) {
   )
 }
 
-export function TopContractorsAnalytics({ analytics }: OrderAnalyticsProps) {
+export function TopShopsAnalytics({ analytics }: OrderAnalyticsProps) {
   return (
-    <Section title={"Top Contractors"} xs={12} lg={3}>
+    <Section title={"Top Shops"} xs={12} lg={3}>
       <ol>
-        {analytics.top_contractors.map((c) => (
-          <li key={c.name}>
+        {analytics.top_shops.map((s) => (
+          <li key={s.slug}>
             <UnderlineLink
               color={"text.secondary"}
-              to={`/contractor/${c.name}`}
+              to={`/shops/${s.slug}`}
               component={Link}
             >
-              {c.name}
+              {s.name}
             </UnderlineLink>
-            : {c.fulfilled_orders}/{c.total_orders}
+            : {s.fulfilled_orders}/{s.total_orders}
           </li>
         ))}
       </ol>
@@ -213,8 +213,8 @@ export function OrderSummary({ analytics }: OrderAnalyticsProps) {
           {analytics.summary.completed_orders}
         </Grid>
         <Grid item xs={6}>
-          <strong>Total Value:</strong> $
-          {analytics.summary.total_value.toLocaleString()}
+          <strong>Total Value:</strong>{" "}
+          {analytics.summary.total_value.toLocaleString()} aUEC
         </Grid>
       </Grid>
     </Section>
