@@ -123,7 +123,10 @@ export function SidebarV2() {
     if (context === "org" && selectedOrgId) {
       return [
         { label: t("nav.members", "Members"), to: `/org/${selectedOrgId}/members`, icon: <PeopleRounded /> },
-        { label: t("nav.orgSettings", "Settings"), to: `/org/${selectedOrgId}/manage`, icon: <SettingsRounded /> },
+        { label: t("nav.orgAbout", "About"), to: `/org/${selectedOrgId}/manage/about`, icon: <SettingsRounded /> },
+        { label: t("nav.orgRoles", "Roles"), to: `/org/${selectedOrgId}/manage/roles`, icon: <PeopleRounded /> },
+        { label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PeopleRounded /> },
+        { label: t("nav.orgSettings", "Settings"), to: `/org/${selectedOrgId}/manage/settings`, icon: <SettingsRounded /> },
       ]
     }
     // Browse mode

@@ -949,11 +949,23 @@ const router = createBrowserRouter([
                 ),
                 children: [
                   {
-                    index: true,
                     lazy: async () => ({
-                      Component: (await import("./pages/contractor/OrgManage"))
-                        .OrgManage,
+                      Component: (await import("./pages/contractor/OrgManageLayout"))
+                        .OrgManageLayout,
                     }),
+                    children: [
+                      { index: true, element: <Navigate to="about" replace /> },
+                      { path: "about", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgAboutPage }) },
+                      { path: "roles", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgRolesPage }) },
+                      { path: "invites", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgInvitesPage }) },
+                      { path: "discord", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgDiscordPage }) },
+                      { path: "market", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgMarketPage }) },
+                      { path: "settings", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgSettingsPage }) },
+                      { path: "blocklist", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgBlocklistPage }) },
+                      { path: "audit", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgAuditPage }) },
+                      { path: "customers", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgCustomersPage }) },
+                      { path: "theme", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgThemePage }) },
+                    ],
                   },
                 ],
               },
