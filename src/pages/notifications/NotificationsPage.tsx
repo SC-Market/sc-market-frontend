@@ -223,7 +223,7 @@ export function NotificationsPage() {
       </Grid>
 
       {/* Notifications List */}
-      <Grid item xs={12}>
+      <Grid item xs={12} sx={{ overflow: "hidden", minWidth: 0, maxWidth: "100%" }}>
         {pageData.isLoading ? (
             <Box sx={{ py: 4, textAlign: "center" }}>
               <Typography color="text.secondary">

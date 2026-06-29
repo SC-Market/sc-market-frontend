@@ -45,7 +45,7 @@ export const Section = React.forwardRef<
         <Grid container direction={"column"}>
           {(!!title || !!element_title) && (
             <>
-              <Grid item sx={{ padding: 2 }}>
+              <Grid item sx={{ padding: 2, maxWidth: "100%" }}>
                 <Box display={"flex"} justifyContent={"space-between"}>
                   <Typography
                     variant={"h6"}
@@ -66,7 +66,7 @@ export const Section = React.forwardRef<
               </Grid>
             </>
           )}
-          <Grid item>
+          <Grid item sx={{ overflow: "hidden", minWidth: 0, maxWidth: "100%" }}>
             <Grid
               container
               spacing={theme.layoutSpacing.component}

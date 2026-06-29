@@ -12,10 +12,12 @@ export function UnderlineLink(
       color={"inherit"}
       {...props}
       sx={{
-        display: "inline-block",
+        display: "inline",
         position: "relative",
         textDecoration: "none",
         fontSize: "inherit",
+        wordBreak: "break-word",
+        overflowWrap: "break-word",
         ":after": {
           content: '""',
           position: "absolute",
