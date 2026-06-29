@@ -8,13 +8,14 @@ import { useGetNotificationsQuery } from "../../features/notifications/api/notif
 import { useTranslation } from "react-i18next"
 import { EmptyNotifications } from "../../components/empty-states"
 
-export function DashNotificationArea() {
+export function DashNotificationArea({ shopId }: { shopId?: string } = {}) {
   const theme = useTheme<ExtendedTheme>()
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(20)
   const { data: notificationsData, refetch } = useGetNotificationsQuery({
-    page: page, // API uses 0-based indexing
+    page: page,
     pageSize: pageSize,
+    shopId: shopId || undefined,
   })
   const { t } = useTranslation()
 
