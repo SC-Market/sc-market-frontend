@@ -249,7 +249,10 @@ export function SidebarV2() {
         anchor="left"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
-        sx={{ "& .MuiDrawer-paper": { width: sidebarDrawerWidth } }}
+        sx={{
+          zIndex: theme.zIndex.modal + 1,
+          "& .MuiDrawer-paper": { width: sidebarDrawerWidth },
+        }}
       >
         {drawerContent}
       </Drawer>
