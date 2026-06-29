@@ -1,4 +1,6 @@
 import { Sidebar } from "../sidebar/Sidebar"
+import { SidebarV2 } from "../sidebar/SidebarV2"
+import { useFeatureFlag } from "../../hooks/market/useFeatureFlag"
 import { Box, Theme, useTheme, useMediaQuery } from "@mui/material"
 import { Navbar } from "../navbar/Navbar"
 import React from "react"
@@ -18,6 +20,11 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DebugPanel } from "../market/v2/DebugPanel"
 import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext"
 import { ParticleField } from "../effects/ParticleField"
+
+function NavSidebar() {
+  const { flags } = useFeatureFlag()
+  return flags.nav_v2 ? <SidebarV2 /> : <Sidebar />
+}
 
 export function Root(props: { children: React.ReactNode }) {
   const theme: Theme = useTheme<ExtendedTheme>()
@@ -57,7 +64,7 @@ export function Root(props: { children: React.ReactNode }) {
       )}
       <CartDrawerProvider>
       <Navbar />
-      <Sidebar />
+      <NavSidebar />
       <Box
         component="main"
         id="main-content"
