@@ -21,6 +21,7 @@ const injectedRtkApi = api
           url: `/api/offers/search`,
           params: {
             contractor: queryArg.contractor,
+            shop_id: queryArg.shopId,
             assigned: queryArg.assigned,
             customer: queryArg.customer,
             sort_method: queryArg.sortMethod,
@@ -88,6 +89,8 @@ export type SearchOffersApiResponse =
 export type SearchOffersApiArg = {
   /** The Spectrum ID of the contracting org */
   contractor?: string
+  /** The shop UUID to filter offers by */
+  shopId?: string
   /** The assigned user's username */
   assigned?: string
   /** The customer's username */

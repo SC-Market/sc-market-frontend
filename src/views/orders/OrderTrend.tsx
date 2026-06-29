@@ -270,8 +270,8 @@ export function OrderTrendFromOrders(props: { orders: TrendOrder[] }) {
   )
 }
 
-export function OrgOrderTrend(props: { spectrumId: string | undefined }) {
-  const { orderData } = useOrgOrderTrend(props.spectrumId)
+export function OrgOrderTrend(props: { spectrumId: string | undefined; shopId?: string }) {
+  const { orderData } = useOrgOrderTrend(props.spectrumId, props.shopId)
 
   if (orderData?.metrics?.trend_data) {
     return <OrderTrendFromMetrics data={orderData} />
@@ -279,8 +279,8 @@ export function OrgOrderTrend(props: { spectrumId: string | undefined }) {
   return <OrderTrendFromOrders orders={orderData?.recent_orders || []} />
 }
 
-export function UserOrderTrend(props: { spectrumId: string | undefined }) {
-  const { orderData } = useUserOrderTrend(props.spectrumId)
+export function UserOrderTrend(props: { spectrumId: string | undefined; shopId?: string }) {
+  const { orderData } = useUserOrderTrend(props.spectrumId, props.shopId)
 
   if (orderData?.metrics?.trend_data) {
     return <OrderTrendFromMetrics data={orderData} />

@@ -8,24 +8,26 @@ export interface UseOrderTrendResult {
   orderData: ContractorOrderData | undefined
 }
 
-export function useOrgOrderTrend(spectrumId: string | undefined): UseOrderTrendResult {
+export function useOrgOrderTrend(spectrumId: string | undefined, shopId?: string): UseOrderTrendResult {
   const { data: orderData } = useGetContractorOrderDataQuery(
     {
       spectrum_id: spectrumId!,
       include_trends: true,
       assigned_only: false,
+      shop_id: shopId,
     },
     { skip: !spectrumId },
   )
   return { orderData }
 }
 
-export function useUserOrderTrend(spectrumId: string | undefined): UseOrderTrendResult {
+export function useUserOrderTrend(spectrumId: string | undefined, shopId?: string): UseOrderTrendResult {
   const { data: contractorOrderData } = useGetContractorOrderDataQuery(
     {
       spectrum_id: spectrumId!,
       include_trends: true,
       assigned_only: true,
+      shop_id: shopId,
     },
     { skip: !spectrumId },
   )

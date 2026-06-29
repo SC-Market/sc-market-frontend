@@ -49,7 +49,7 @@ export function MemberDashboard() {
         <>
           <Grid item xs={12} lg={2.5}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics spectrumId={spectrumId} />
+              <OrderMetrics spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
               <DashNotificationArea shopId={shopCtx?.shop.shop_id} />
             </Grid>
           </Grid>
@@ -58,7 +58,7 @@ export function MemberDashboard() {
               {offersSection}
               {ordersSection}
               <MatchingBuyOrdersArea />
-              <UserOrderTrend spectrumId={spectrumId} />
+              <UserOrderTrend spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
             </Grid>
           </Grid>
         </>
@@ -67,7 +67,7 @@ export function MemberDashboard() {
         <>
           <Grid item xs={12} lg={3}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics spectrumId={spectrumId} />
+              <OrderMetrics spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
               <DashNotificationArea shopId={shopCtx?.shop.shop_id} />
             </Grid>
           </Grid>
@@ -76,7 +76,7 @@ export function MemberDashboard() {
               {offersSection}
               {ordersSection}
               <MatchingBuyOrdersArea />
-              <UserOrderTrend spectrumId={spectrumId} />
+              <UserOrderTrend spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
             </Grid>
           </Grid>
         </>
@@ -88,8 +88,8 @@ export function MemberDashboard() {
           </Grid>
           {ordersSection}
           <MatchingBuyOrdersArea />
-          <OrderMetrics spectrumId={spectrumId} />
-          <UserOrderTrend spectrumId={spectrumId} />
+          <OrderMetrics spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
+          <UserOrderTrend spectrumId={spectrumId} shopId={shopCtx?.shop.shop_id} />
           <Grid item xs={12}>
             <DashNotificationArea shopId={shopCtx?.shop.shop_id} />
           </Grid>
