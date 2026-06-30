@@ -43,7 +43,7 @@ import {
   useGetRequisitionQuery,
   useSearchGameItemsQuery,
 } from "../../store/api/v2/market"
-import type { RequisitionDetail, RequisitionLineItem } from "../../store/api/v2/market"
+import type { RequisitionDetail, RequisitionLineItem, GameItemSearchResult } from "../../store/api/v2/market"
 
 const STATUS_COLORS: Record<string, "default" | "warning" | "info" | "success" | "error"> = {
   pending: "warning",
@@ -69,20 +69,18 @@ function GameItemPicker({
   })
 
   return (
-    <Autocomplete
+    <Autocomplete<GameItemSearchResult>
       size="small"
       options={results}
-      getOptionLabel={(o) => o.name || (o as any).name || ""}
-      isOptionEqualToValue={(o, v) =>
-        (o as any).game_item_id === (v as any).game_item_id
-      }
+      getOptionLabel={(o) => o.name || ""}
+      isOptionEqualToValue={(o, v) => o.id === v.id}
       loading={isFetching}
-      value={value}
+      value={value ? results.find((r) => r.id === value.id) ?? null : null}
       onChange={(_, newVal) => {
         if (newVal) {
           onChange({
-            id: (newVal as any).game_item_id,
-            name: (newVal as any).name,
+            id: newVal.id,
+            name: newVal.name,
           })
         } else {
           onChange(null)
@@ -303,7 +301,7 @@ function CreateRequisitionDialog({
 
           {error && (
             <Alert severity="error">
-              {(error as any)?.data?.message || "Failed to create requisition"}
+              {(error && "data" in error && (error.data as { message?: string })?.message) || "Failed to create requisition"}
             </Alert>
           )}
         </Stack>

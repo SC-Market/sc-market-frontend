@@ -94,8 +94,9 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
           );
           setPhotoResourceIds((prev) => [...prev, result.resource_id]);
         })
-        .catch((err: any) => {
-          const errBody = err?.data?.error || err?.data || {};
+        .catch((err) => {
+          const e = err as { data?: { error?: { message?: string; validationErrors?: { message: string }[] }; message?: string; validationErrors?: { message: string }[] } };
+          const errBody = e?.data?.error || e?.data || {};
           const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || "Upload failed";
           setUploadedImages((prev) =>
             prev.map((img) =>

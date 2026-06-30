@@ -438,7 +438,9 @@ export const marketApi = serviceApi.injectEndpoints({
         method: "POST",
         body: { quantity_available: quantity },
       }),
-      transformResponse: (response: any) => response?.data ?? response,
+      transformResponse: (response: { data?: { result: string; quantity_available: number; quantity_reserved: number } } | { result: string; quantity_available: number; quantity_reserved: number }) => {
+        return "data" in response && response.data ? response.data : response as { result: string; quantity_available: number; quantity_reserved: number }
+      },
       invalidatesTags: (result, error, { listing_id }) => [
         "MarketListings",
         "MyListings",

@@ -72,8 +72,9 @@ export function useStockManagement(
         if (onRefresh) {
           await onRefresh()
         }
-      } catch (error: any) {
-        const detail = error?.data?.details || error?.data
+      } catch (error) {
+        const e = error as { data?: { details?: { code?: string }; code?: string } }
+        const detail = e?.data?.details || e?.data
         if (detail?.code === "INVALID_QUANTITY") {
           issueAlert({
             message: t(
