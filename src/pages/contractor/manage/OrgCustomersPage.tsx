@@ -1,14 +1,13 @@
-import { Grid } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
-import { CustomerList } from "../../../views/people/Customers"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { Alert, Grid } from "@mui/material"
 
 export function OrgCustomersPage() {
-  const theme = useTheme<ExtendedTheme>()
-
   return (
-    <Grid container spacing={theme.layoutSpacing.layout}>
-      <CustomerList />
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Alert severity="info">
+          Customers are now tracked per-shop. View customers from each shop's management page.
+        </Alert>
+      </Grid>
     </Grid>
   )
 }

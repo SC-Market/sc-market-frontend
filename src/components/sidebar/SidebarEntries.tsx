@@ -33,6 +33,8 @@ import {
   ChecklistRounded,
   TerrainRounded,
   HardwareRounded,
+  PeopleRounded,
+  BlockRounded,
 } from "@mui/icons-material"
 import PaidIcon from "@mui/icons-material/PaidRounded"
 import CreateIcon from "@mui/icons-material/CreateRounded"
@@ -214,6 +216,20 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <AssignmentTurnedInRounded />,
         logged_in: true,
         shopRouteRest: "orders",
+      },
+      {
+        to: "/shop/customers",
+        text: "sidebar.shop_customers", tab_key: "shop_customers",
+        icon: <PeopleRounded />,
+        logged_in: true,
+        shopRouteRest: "customers",
+      },
+      {
+        to: "/shop/blocklist",
+        text: "sidebar.shop_blocklist", tab_key: "shop_blocklist",
+        icon: <BlockRounded />,
+        logged_in: true,
+        shopRouteRest: "blocklist",
       },
     ],
   },

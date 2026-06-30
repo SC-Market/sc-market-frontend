@@ -283,6 +283,47 @@ const injectedRtkApi = api
           invalidatesTags: ["Shops"],
         },
       ),
+      getShopBlocklist: build.query<
+        GetShopBlocklistApiResponse,
+        GetShopBlocklistApiArg
+      >({
+        query: (queryArg) => ({ url: `/shops/${queryArg.shopId}/blocklist` }),
+        providesTags: ["Shops"],
+      }),
+      blockUserFromShop: build.mutation<
+        BlockUserFromShopApiResponse,
+        BlockUserFromShopApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/blocklist`,
+          method: "POST",
+          body: queryArg.blockUserRequest,
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      unblockUserFromShop: build.mutation<
+        UnblockUserFromShopApiResponse,
+        UnblockUserFromShopApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/blocklist/${queryArg.blockedUserId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      getShopCustomers: build.query<
+        GetShopCustomersApiResponse,
+        GetShopCustomersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/customers`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Shops"],
+      }),
       createRequisition: build.mutation<
         CreateRequisitionApiResponse,
         CreateRequisitionApiArg
@@ -1806,6 +1847,32 @@ export type TransferShopApiArg = {
   shopId: string
   transferShopRequest: TransferShopRequest
 }
+export type GetShopBlocklistApiResponse =
+  /** status 200 Ok */ ShopBlocklistEntry[]
+export type GetShopBlocklistApiArg = {
+  shopId: string
+}
+export type BlockUserFromShopApiResponse = /** status 200 Ok */ {
+  success: boolean
+}
+export type BlockUserFromShopApiArg = {
+  shopId: string
+  blockUserRequest: BlockUserRequest
+}
+export type UnblockUserFromShopApiResponse = /** status 200 Ok */ {
+  success: boolean
+}
+export type UnblockUserFromShopApiArg = {
+  shopId: string
+  blockedUserId: string
+}
+export type GetShopCustomersApiResponse =
+  /** status 200 Ok */ ShopCustomersResponse
+export type GetShopCustomersApiArg = {
+  shopId: string
+  page?: number
+  pageSize?: number
+}
 export type CreateRequisitionApiResponse =
   /** status 200 Ok */ CreateRequisitionResponse
 export type CreateRequisitionApiArg = {
@@ -3231,6 +3298,35 @@ export type CreateShopWebhookRequest = {
 }
 export type TransferShopRequest = {
   target_contractor_id: string
+}
+export type ShopBlocklistEntry = {
+  id: string
+  user_id: string
+  username: string
+  display_name: string
+  avatar: string | null
+  reason: string
+  created_at: string
+}
+export type BlockUserRequest = {
+  username: string
+  reason?: string
+}
+export type ShopCustomerEntry = {
+  user_id: string
+  username: string
+  display_name: string
+  avatar: string | null
+  order_count: number
+  fulfilled_count: number
+  total_spent: number
+  last_order_at: string | null
+}
+export type ShopCustomersResponse = {
+  items: ShopCustomerEntry[]
+  total: number
+  page: number
+  page_size: number
 }
 export type RequisitionLineItem = {
   requisition_item_id: string
@@ -6029,6 +6125,10 @@ export const {
   useCreateShopWebhookMutation,
   useDeleteShopWebhookMutation,
   useTransferShopMutation,
+  useGetShopBlocklistQuery,
+  useBlockUserFromShopMutation,
+  useUnblockUserFromShopMutation,
+  useGetShopCustomersQuery,
   useCreateRequisitionMutation,
   useGetRequisitionsQuery,
   useGetRequisitionQuery,
