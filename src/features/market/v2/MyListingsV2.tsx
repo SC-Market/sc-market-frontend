@@ -54,7 +54,7 @@ function MyListingSectionV2({
 }) {
   const theme = useTheme<ExtendedTheme>()
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id || undefined
+  const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
   const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
 
   const { data, isLoading, isFetching } = useGetMyListingsQuery({
@@ -125,7 +125,7 @@ function MobileListingsView() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id || undefined
+  const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
   const issueAlert = useAlertHook()
   const [updateListing] = useUpdateListingMutation()
 

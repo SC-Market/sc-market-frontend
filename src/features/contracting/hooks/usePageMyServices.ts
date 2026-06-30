@@ -19,7 +19,7 @@ interface UsePageMyServicesResult {
 export function usePageMyServices(): UsePageMyServicesResult {
   const { data: profile } = useGetUserProfileQuery()
   const shopCtx = useOptionalShopRouteContext()
-  const contractorId = shopCtx?.shop.owner_contractor_id
+  const contractorId = shopCtx?.shop.owner_contractor_spectrum_id
 
   // Get services for user or org (org when under a shop route)
   const userServicesQuery = useGetServicesQuery(profile?.username!, {

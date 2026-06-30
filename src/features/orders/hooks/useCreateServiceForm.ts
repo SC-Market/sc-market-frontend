@@ -75,7 +75,7 @@ const INITIAL_STATE: ServiceFormState = {
 export function useCreateServiceForm(service?: Service) {
   const { t } = useTranslation()
   const shopCtx = useOptionalShopRouteContext()
-  const contractorId = shopCtx?.shop.owner_contractor_id
+  const contractorId = shopCtx?.shop.owner_contractor_spectrum_id
   const [state, setState] = useState<ServiceFormState>({ ...INITIAL_STATE })
   const issueAlert = useAlertHook()
   const navigate = useNavigate()

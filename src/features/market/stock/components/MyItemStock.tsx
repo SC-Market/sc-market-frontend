@@ -16,7 +16,7 @@ function statusesForManageStock(raw: string | undefined): string {
 
 export function MyItemStock() {
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id
+  const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id
   const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
   const [page, setPage] = useState(0)
   const [perPage, setPerPage] = useState(48)
