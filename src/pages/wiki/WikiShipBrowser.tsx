@@ -12,6 +12,7 @@ import {
   Box, Card, CardContent, Grid, Typography, Pagination, Alert, Chip, Stack,
   Divider, Tooltip, useMediaQuery, Button,
 } from "@mui/material"
+import type { SxProps } from "@mui/material"
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar"
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler"
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch"
@@ -116,7 +117,7 @@ function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: (
           borderColor: careerColor,
           boxShadow: `0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px ${careerColor}`,
         },
-      } as any}
+      } as SxProps<ExtendedTheme>}
       onClick={onClick}
     >
       {/* Career accent bar */}

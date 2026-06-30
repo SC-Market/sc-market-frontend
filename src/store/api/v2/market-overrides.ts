@@ -3,7 +3,7 @@
  * These override auto-generated endpoints that can't handle multipart uploads.
  * Import this file AFTER the generated market.ts to apply overrides.
  */
-import { generatedApiV2 } from "../../generatedApiV2"
+import { marketV2Api } from "./market"
 
 export interface UexImportPreviewItem {
   title: string
@@ -35,7 +35,7 @@ export interface UexImportResponse {
   total?: number
 }
 
-export const marketV2Overrides = generatedApiV2.injectEndpoints({
+export const marketV2Overrides = marketV2Api.injectEndpoints({
   overrideExisting: true,
   endpoints: (build) => ({
     uploadPhotos: build.mutation<
@@ -71,7 +71,7 @@ export const marketV2Overrides = generatedApiV2.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Listings V2"] as any,
+      invalidatesTags: ["Listings V2"],
     }),
   }),
 })

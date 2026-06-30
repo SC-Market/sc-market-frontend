@@ -120,8 +120,9 @@ export function LotListItemV2({
         message: t("LotListItemV2.updateSuccess", "Lot updated successfully"),
         severity: "success",
       })
-    } catch (error: any) {
-      const detail = error?.data?.details || error?.data
+    } catch (error) {
+      const e = error as { data?: { details?: { code?: string }; code?: string } }
+      const detail = e?.data?.details || e?.data
       if (detail?.code === "INVALID_QUANTITY") {
         issueAlert({
           message: t(

@@ -157,7 +157,7 @@ function AddSupplierDialog({
 
           {error && (
             <Alert severity="error">
-              {(error as any)?.data?.message || "Failed to add supplier"}
+              {(error && "data" in error && (error.data as { message?: string })?.message) || "Failed to add supplier"}
             </Alert>
           )}
         </Stack>
@@ -275,7 +275,7 @@ function EditSupplierDialog({
 
           {error && (
             <Alert severity="error">
-              {(error as any)?.data?.message || "Failed to update supplier"}
+              {(error && "data" in error && (error.data as { message?: string })?.message) || "Failed to update supplier"}
             </Alert>
           )}
         </Stack>
