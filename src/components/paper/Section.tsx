@@ -40,6 +40,7 @@ export const Section = React.forwardRef<
         sx={{
           height: fill ? "100%" : h,
           width: "100%",
+          overflow: "hidden",
         }}
       >
         <Grid container direction={"column"}>

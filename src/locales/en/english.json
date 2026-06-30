@@ -627,6 +627,8 @@
     "browse_shops": "Browse Shops",
     "my_orgs": "My Organizations",
     "shop_orders": "Shop Orders",
+    "shop_customers": "Customers",
+    "shop_blocklist": "Blocklist",
     "manage": {
       "title": "Manage"
     },
