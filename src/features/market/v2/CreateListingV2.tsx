@@ -277,7 +277,7 @@ export function CreateListingV2() {
         max_order_value: maxOrderValue ?? undefined,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
         shop_id: shop.shop_id,
-        visibility: shop.owner_contractor_id ? visibility : undefined,
+        visibility: shop.is_org_owned ? visibility : undefined,
         sale_type: saleType,
         status: listingStatus,
         auction_details: saleType === "auction" ? {
@@ -316,7 +316,7 @@ export function CreateListingV2() {
       pricingMode,
       basePrice,
       shop.shop_id,
-      shop.owner_contractor_id,
+      shop.is_org_owned,
       photoResourceIds,
       createListing,
       issueAlert,
@@ -599,7 +599,7 @@ export function CreateListingV2() {
                       <MenuItem value="inactive">{t("CreateListingV2.inactive", "Inactive (Draft)")}</MenuItem>
                     </TextField>
                   </Grid>
-                  {shop.owner_contractor_id && (
+                  {shop.is_org_owned && (
                     <Grid item xs={12} sm={6}>
                       <TextField
                         select
