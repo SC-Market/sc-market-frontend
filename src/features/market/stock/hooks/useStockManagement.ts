@@ -20,7 +20,7 @@ export function useStockManagement(
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id
+  const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id
 
   // API hooks
   const [refresh] = useMarketRefreshListingMutation()

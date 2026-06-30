@@ -227,7 +227,7 @@ export function MyServices(props: { status: string }) {
   const { status } = props
   const { data: profile } = useGetUserProfileQuery()
   const shopCtx = useOptionalShopRouteContext()
-  const contractorId = shopCtx?.shop.owner_contractor_id
+  const contractorId = shopCtx?.shop.owner_contractor_spectrum_id
   const { t } = useTranslation()
 
   const { data: listings } = useGetServicesQuery(profile?.username!, {
