@@ -85,7 +85,7 @@ function SummaryStatsBar({ shops }: { shops: ShopResponse[] }) {
 
 function ShopManagementCard({ shop }: { shop: ShopResponse }) {
   const theme = useTheme<ExtendedTheme>()
-  const isPersonal = !shop.owner_contractor_id
+  const isPersonal = !shop.is_org_owned
 
   return (
     <Card
