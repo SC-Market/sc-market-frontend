@@ -95,5 +95,6 @@ export const serviceApi = createApi({
     "EmailPreferences",
     "UserOrganizations",
     "ApiToken",
+    "ScmdbSync",
   ],
 })
