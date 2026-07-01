@@ -15,6 +15,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { ListingSearchResult } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { formatMarketUrl } from "../../domain/urls"
 
 function formatPrice(min: number, max: number) {
   if (min === max) return `${min.toLocaleString()} aUEC`
@@ -48,7 +49,7 @@ export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }
                 />
               </TableCell>
               <TableCell>
-                <MuiLink component={RouterLink} to={`/market/${l.listing_id}`} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
+                <MuiLink component={RouterLink} to={formatMarketUrl(l)} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
                   {l.title}
                 </MuiLink>
                 {l.visibility === "private" && (

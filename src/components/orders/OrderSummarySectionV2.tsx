@@ -2,6 +2,7 @@ import { Box, Typography, Divider, Stack, Link, Chip } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { OfferChanges } from "../../util/offerChanges"
 import { OrderItemDetail } from "../../store/api/v2/market"
+import { formatMarketUrl } from "../../features/market/domain/urls"
 
 /**
  * OrderSummarySectionV2 Props
@@ -93,7 +94,7 @@ export function OrderSummarySectionV2({
                 <Box>
                   {/* Link to listing */}
                   <Link
-                    href={`/market/${item.listing_id}`}
+                    href={formatMarketUrl({ listing_id: item.listing_id, title: item.listing_title })}
                     sx={{ textDecoration: "none" }}
                   >
                     {item.listing_title}
