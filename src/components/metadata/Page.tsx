@@ -44,7 +44,14 @@ export function Page(
       props.canonUrl &&
       props.canonUrl != location.pathname + location.search + location.hash
     ) {
-      navigate(props.canonUrl, { replace: true })
+      // Only redirect if the current path doesn't already contain the short-slug
+      // (avoids infinite redirect loops and race conditions during loading)
+      const currentSegment = location.pathname.split("/").pop() || ""
+      const canonSegment = props.canonUrl.split("/").pop() || ""
+      const isAlreadySlugified = currentSegment.includes("--")
+      if (!isAlreadySlugified) {
+        navigate(props.canonUrl, { replace: true })
+      }
     }
   }, [location.pathname, location.hash, props.canonUrl])
 
