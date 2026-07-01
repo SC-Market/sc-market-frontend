@@ -23,6 +23,7 @@ import {
   NotificationsActiveRounded,
   Email as EmailIcon,
   PhoneAndroidRounded,
+  SyncRounded,
 } from "@mui/icons-material"
 import { PrivacySettings } from "../../views/settings/PrivacySettings"
 import { Discord } from "../../components/icon/DiscordIcon"
@@ -35,10 +36,11 @@ import { ApiTokensSettings } from "../../features/api-tokens"
 import { PushNotificationSettings } from "../../features/push-notifications"
 import { EmailSettings } from "../../features/email"
 import { MobileNavSettings } from "../../views/settings/MobileNavSettings"
+import { ScmdbSyncSettings } from "../../features/scmdb-sync"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
-const MOBILE_NAV_TAB_INDEX = 9
+const MOBILE_NAV_TAB_INDEX = 10
 
 interface NavItem {
   index: number
@@ -61,7 +63,7 @@ export function SettingsPage() {
 
   React.useEffect(() => {
     if (!isMobile && page === MOBILE_NAV_TAB_INDEX) {
-      setPage(8)
+      setPage(9)
     }
   }, [isMobile, page])
 
@@ -92,6 +94,7 @@ export function SettingsPage() {
           icon: <Discord sx={{ marginRight: 0 }} />,
         },
         { index: 6, label: "API Tokens", icon: <SecurityRounded /> },
+        { index: 9, label: "SCMDB", icon: <SyncRounded /> },
       ],
     },
     {
@@ -151,8 +154,11 @@ export function SettingsPage() {
       <TabPanel value={page} index={8}>
         <EmailSettings />
       </TabPanel>
+      <TabPanel value={page} index={9}>
+        <ScmdbSyncSettings />
+      </TabPanel>
       {isMobile && (
-        <TabPanel value={page} index={9}>
+        <TabPanel value={page} index={10}>
           <MobileNavSettings />
         </TabPanel>
       )}
