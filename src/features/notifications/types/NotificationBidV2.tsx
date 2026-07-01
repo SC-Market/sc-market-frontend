@@ -8,6 +8,7 @@ import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
 import { useGetListingDetailQuery } from "../../../store/api/v2/market"
+import { formatMarketUrl } from "../../../features/market/domain/urls"
 
 interface BidV2Entity {
   bid_id: string
@@ -33,7 +34,7 @@ export function NotificationBidV2(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<CreateRoundedIcon />}
-      to={`/market/${bid.listing_id}`}
+      to={listing ? formatMarketUrl({ listing_id: bid.listing_id, title: listing.listing.title }) : `/market/${bid.listing_id}`}
       notif={notif}
     >
       {t("notifications.new_bid_placed_by")}{" "}
@@ -45,7 +46,7 @@ export function NotificationBidV2(props: { notif: Notification }) {
       </Link>{" "}
       {t("notifications.for")}{" "}
       <Link
-        to={`/market/${bid.listing_id}`}
+        to={listing ? formatMarketUrl({ listing_id: bid.listing_id, title: listing.listing.title }) : `/market/${bid.listing_id}`}
         style={{ textDecoration: "none", color: theme.palette.secondary.main }}
       >
         <UnderlineLink>{listing?.listing.title || "..."}</UnderlineLink>

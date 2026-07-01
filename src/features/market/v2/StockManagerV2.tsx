@@ -84,6 +84,7 @@ import {
   type MyListingItem,
 } from "../../../store/api/v2/market"
 import { MobileListingRow } from "./components/MobileListingRow"
+import { formatMarketUrl } from "../domain/urls"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 
 /* ── Types ── */
@@ -482,7 +483,7 @@ function DisplayStockV2({
             <Stack direction="row" spacing={theme.layoutSpacing.compact} alignItems="center">
               <MaterialLink
                 component={Link}
-                to={`/market/${params.row.listing_id}`}
+                to={formatMarketUrl(params.row)}
                 sx={{ fontWeight: "bold" }}
                 underline="hover"
               >

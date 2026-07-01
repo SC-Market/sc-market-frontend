@@ -20,6 +20,7 @@ import {
   Stack,
 } from "@mui/material"
 import { Section } from "../../../components/paper/Section"
+import { formatMarketUrl } from "../domain/urls"
 import { Link, useNavigate } from "react-router-dom"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { TrashCan } from "mdi-material-ui"
@@ -154,7 +155,7 @@ export function CartItemEntryV2(props: {
           <Box>
             <MaterialLink
               component={Link}
-              to={`/market/${item.listing.listing_id}`}
+              to={formatMarketUrl(item.listing)}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <UnderlineLink

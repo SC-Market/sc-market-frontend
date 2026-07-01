@@ -31,6 +31,7 @@ import { SwipeableItem } from "../../../../components/gestures"
 import { type MyListingItem } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { getRelativeTime } from "../../../../util/time"
+import { formatMarketUrl } from "../../domain/urls"
 
 interface MobileListingRowProps {
   listing: MyListingItem
@@ -48,8 +49,8 @@ export function MobileListingRow({
   const navigate = useNavigate()
 
   const handleRowClick = useCallback(
-    () => navigate(`/market/${listing.listing_id}`),
-    [navigate, listing.listing_id],
+    () => navigate(formatMarketUrl(listing)),
+    [navigate, listing],
   )
 
   const handleEditClick = useCallback(

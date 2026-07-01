@@ -2,6 +2,7 @@ import { Box, Typography, Divider, Stack, Link, Chip } from "@mui/material"
 import { OfferMarketListing } from "../../features/offers/api/offerApi"
 import { useTranslation } from "react-i18next"
 import { OfferChanges } from "../../util/offerChanges"
+import { formatMarketUrl } from "../../features/market/domain/urls"
 
 interface OrderSummarySectionProps {
   market_listings?: OfferMarketListing[]
@@ -49,7 +50,7 @@ export function OrderSummarySection({
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Box>
                   <Link
-                    href={`/market/${listing.listing.listing_id}`}
+                    href={formatMarketUrl({ listing_id: listing.listing.listing_id, title: listing.details.title })}
                     sx={{ textDecoration: "none" }}
                   >
                     {listing.details.title}

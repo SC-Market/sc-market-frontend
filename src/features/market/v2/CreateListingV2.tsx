@@ -28,6 +28,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { FormPaper } from "../../../components/paper/FormPaper";
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete";
+import { formatMarketUrl } from "../domain/urls";
 import { getQualityMode } from "../../../util/qualityMode";
 import { SelectPhotosArea, UploadedImageStatus } from "../../../components/modal/SelectPhotosArea";
 import { LocationSelector } from "../components/stock/LocationSelector";
@@ -296,7 +297,7 @@ export function CreateListingV2() {
           severity: "success",
         });
 
-        navigate(`/market/${result.listing_id}`);
+        navigate(formatMarketUrl({ listing_id: result.listing_id, title }));
       } catch (error) {
         const err = error as { data?: { message?: string } }
         issueAlert({
