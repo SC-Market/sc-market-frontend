@@ -4,13 +4,11 @@ export interface CartItem {
   price?: number
   aggregate_id?: number | string
   type: string
-  variant_id?: string // V2: variant selection for quality tiers
+  variant_id?: string
 }
 
 export interface CartSeller {
-  user_seller_id?: string | null
-  contractor_seller_id?: string | null
-  shop_id?: string | null
+  shop_id: string
   items: CartItem[]
   note?: string
 }
