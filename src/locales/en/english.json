@@ -2614,7 +2614,8 @@
       "discordIntegration": "Discord Integration",
       "market": "Market",
       "contractors": "Contractors",
-      "blocklist": "Blocked Users"
+      "blocklist": "Blocked Users",
+      "scmdb": "SCMDB"
     },
     "profile": {
       "presence": "Presence",
@@ -2757,6 +2758,24 @@
       "invalidEmail": "Please enter a valid email address",
       "individualPreferences": "Individual Preferences",
       "organizationPreferences": "Organization Preferences"
+    },
+    "scmdb": {
+      "title": "SCMDB Sync",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "description": "Connect your SCMDB account to automatically sync blueprint ownership to SC Market. When you mark a blueprint as owned in SCMDB, it will be reflected here.",
+      "snapshotWarning": "Connecting SCMDB with the snapshot event enabled will replace your current blueprint tracking on SC Market with SCMDB's data. Blueprints tracked only on SC Market will be marked as unowned.",
+      "ingestUrl": "Paste this URL into SCMDB → Profile → Sync Sinks:",
+      "lastEvent": "Last event received:",
+      "noEvents": "No events received yet. Add the URL to SCMDB to start syncing.",
+      "regenerate": "Regenerate Token",
+      "disconnect": "Disconnect",
+      "connectPrompt": "Generate a sync token to connect your SCMDB account. You'll get a URL to paste into SCMDB's Sync Sinks settings.",
+      "connect": "Connect SCMDB",
+      "regenerateTitle": "Regenerate Token?",
+      "regenerateWarning": "This will invalidate your current URL. You'll need to update it in SCMDB.",
+      "disconnectTitle": "Disconnect SCMDB?",
+      "disconnectWarning": "SCMDB will no longer be able to sync blueprints to SC Market. Your current blueprint inventory will not be affected."
     }
   },
   "orgBlocklist": {

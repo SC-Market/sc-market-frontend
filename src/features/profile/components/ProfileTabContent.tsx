@@ -1,13 +1,15 @@
 import React from "react"
-import { Container, Grid, useTheme } from "@mui/material"
+import { Link } from "react-router-dom"
+import { Alert, Container, Grid, useTheme } from "@mui/material"
 import { TabPanel } from "../../../components/tabs/Tabs"
 import { Section } from "../../../components/paper/Section"
-import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
 import { UserReviews } from "../../../views/contractor/OrgReviews"
 import { ProfileStoreView } from "./ProfileStoreView"
 import { ProfileAboutTab } from "./ProfileAboutTab"
 import { User } from "../../../datatypes/User"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
+import { useTranslation } from "react-i18next"
 
 interface ProfileTabContentProps {
   currentTab: number
@@ -40,9 +42,7 @@ export function ProfileTabContent({
         />
       </TabPanel>
       <TabPanel index={currentTab} value={2} preload>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <CreateOrderForm assigned_to={profile.username} />
-        </Grid>
+        <UserShopRedirect username={profile.username} />
       </TabPanel>
       <TabPanel index={currentTab} value={3} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
@@ -52,5 +52,29 @@ export function ProfileTabContent({
         </Grid>
       </TabPanel>
     </Container>
+  )
+}
+
+function UserShopRedirect({ username }: { username: string }) {
+  const { t } = useTranslation()
+  const { data: shops } = useGetShopsByOwnerQuery({ username })
+  const shop = shops?.[0]
+
+  if (shop) {
+    return (
+      <Alert severity="info" action={
+        <Link to={`/shops/${shop.slug}`} style={{ color: "inherit" }}>
+          {t("common.viewShop", "View Shop")}
+        </Link>
+      }>
+        {t("profile.customOrdersMovedToShop", "Custom orders are now placed through shops.")}
+      </Alert>
+    )
+  }
+
+  return (
+    <Alert severity="info">
+      {t("profile.customOrdersMovedToShop", "Custom orders are now placed through shops.")}
+    </Alert>
   )
 }
