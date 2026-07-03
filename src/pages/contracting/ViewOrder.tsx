@@ -39,11 +39,6 @@ const OrderReviewView = lazy(() =>
     default: module.OrderReviewView,
   })),
 )
-const OfferMarketListings = lazy(() =>
-  import("../../views/offers/OfferMarketListings").then((module) => ({
-    default: module.OfferMarketListings,
-  })),
-)
 const OfferMarketListingsV2Items = lazy(() =>
   import("../../views/offers/OfferMarketListingsV2Items").then((module) => ({
     default: module.OfferMarketListingsV2Items,
@@ -349,11 +344,9 @@ export function ViewOrder() {
                   activeTab === marketListingsTab &&
                   (!(pageData.isLoading || pageData.isFetching) ? (
                     <Grid item xs={12}>
-                      {orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0 ? (
+                      {orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0 && (
                         <OfferMarketListingsV2Items items={orderDetailV2.market_listings_v2} />
-                      ) : session ? (
-                        <OfferMarketListings offer={session} />
-                      ) : null}
+                      )}
                     </Grid>
                   ) : (
                     <Grid item xs={12} lg={4}>
