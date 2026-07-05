@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import {
   Avatar,
   Grid,
+  Paper,
   TableCell,
   TableRow,
   Typography,
@@ -98,6 +99,7 @@ export function ShopCustomers() {
       maxWidth="lg"
     >
       <Grid item xs={12}>
+        <Paper>
         <ControlledTable
           rows={data?.items || []}
           headCells={[...headCells]}
@@ -115,6 +117,7 @@ export function ShopCustomers() {
           onOrderChange={setOrder}
           disableSelect
         />
+        </Paper>
       </Grid>
     </StandardPageLayout>
   )
