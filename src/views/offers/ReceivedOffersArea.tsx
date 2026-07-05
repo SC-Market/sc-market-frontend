@@ -88,7 +88,30 @@ export const OffersHeadCells: readonly HeadCell<
     id: "customer",
     numeric: true,
     disablePadding: false,
-    label: "User",
+    label: "Customer",
+  },
+  {
+    id: "status",
+    numeric: true,
+    disablePadding: false,
+    label: "Status",
+  },
+]
+
+const MyOffersHeadCells: readonly HeadCell<
+  OfferSessionStub & { customer_name: string }
+>[] = [
+  {
+    id: "timestamp",
+    numeric: false,
+    disablePadding: false,
+    label: "Offer",
+  },
+  {
+    id: "customer",
+    numeric: true,
+    disablePadding: false,
+    label: "Shop",
   },
   {
     id: "status",
@@ -106,6 +129,7 @@ export function OfferRow(props: {
   labelId: string
   enableSelection?: boolean
   hasSelectedItems?: boolean
+  isSentView?: boolean
 }) {
   const { t } = useTranslation()
   const {
@@ -124,7 +148,7 @@ export function OfferRow(props: {
   const [assignOffer] = useAssignOfferMutation()
   const issueAlert = useAlertHook()
 
-  const isMine = profile?.username === row.customer.username
+  const isSent = props.isSentView ?? false
 
   const belongsToOfferOrg = useMemo(
     () => !!row.contractor && profile?.contractors?.some(c => c.spectrum_id === row.contractor!.spectrum_id),
@@ -329,7 +353,7 @@ export function OfferRow(props: {
                     : ""}
                 {(+row.most_recent_offer.cost).toLocaleString(undefined)} aUEC
               </Typography>
-              {row.shop && !isMine && (
+              {row.shop && !isSent && (
                 <Typography
                   variant="caption"
                   color="primary"
@@ -354,7 +378,7 @@ export function OfferRow(props: {
           minWidth: { xs: 80, sm: "auto" },
         }}
       >
-        {isMine && row.shop ? (
+        {isSent && row.shop ? (
           <Stack direction="row" alignItems="center" spacing={1} sx={{ justifyContent: "flex-end" }}>
             {row.shop.avatar && (
               <Avatar src={row.shop.avatar} sx={{ width: 32, height: 32 }} />
@@ -745,10 +769,10 @@ export function OffersViewPaginated(props: {
           }))}
           initialSort={"timestamp"}
           generateRow={(props) => (
-            <OfferRow {...props} enableSelection={!mine} />
+            <OfferRow {...props} enableSelection={!mine} isSentView={mine} />
           )}
           keyAttr={"id"}
-          headCells={OffersHeadCells.map((cell) => ({
+          headCells={(mine ? MyOffersHeadCells : OffersHeadCells).map((cell) => ({
             ...cell,
             label: t(
               `OffersViewPaginated.${cell.label.toLowerCase()}`,
