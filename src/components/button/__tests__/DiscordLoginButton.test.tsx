@@ -27,6 +27,7 @@ describe("DiscordLoginButton", () => {
     delete (window as any).location
     ;(window as any).location = {
       href: "",
+      origin: "http://localhost:3000",
     }
     Object.defineProperty(window.location, "href", {
       set(v: string) {
@@ -53,7 +54,7 @@ describe("DiscordLoginButton", () => {
     )
 
     expect(hrefSet).toHaveBeenCalledWith(
-      "http://backend/auth/discord?path=%2Ffoo&action=signin",
+      "http://backend/auth/discord?path=%2Ffoo&action=signin&origin=http%3A%2F%2Flocalhost%3A3000",
     )
   })
 
@@ -71,7 +72,7 @@ describe("DiscordLoginButton", () => {
     )
 
     expect(hrefSet).toHaveBeenCalledWith(
-      "http://backend/auth/discord?path=%2F&action=signin",
+      "http://backend/auth/discord?path=%2F&action=signin&origin=http%3A%2F%2Flocalhost%3A3000",
     )
   })
 })

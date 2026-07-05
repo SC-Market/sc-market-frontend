@@ -7,6 +7,7 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { BrowserRouter } from "react-router-dom"
 import { serviceApi } from "../../../../../store/service"
+import { generatedApiV2 } from "../../../../../store/generatedApiV2"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 
 // Mock translation
@@ -63,9 +64,10 @@ const createTestStore = () =>
   configureStore({
     reducer: {
       [serviceApi.reducerPath]: serviceApi.reducer,
+      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(serviceApi.middleware),
+      getDefaultMiddleware().concat(serviceApi.middleware, generatedApiV2.middleware),
   })
 
 // Create extended theme with layoutSpacing

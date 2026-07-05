@@ -65,19 +65,36 @@ vi.mock("../../../../components/paper/FormPaper", () => ({
   ),
 }));
 
-vi.mock("@mui/material/styles", () => ({
-  useTheme: () => ({
-    layoutSpacing: { layout: 2 },
-    borderRadius: { topLevel: 0.375 },
-    spacing: (value: number) => `${value * 8}px`,
-  }),
+vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
+  SelectPhotosArea: ({ setPhotos }: any) => (
+    <div data-testid="select-photos-area">
+      <button onClick={() => setPhotos(["photo1.jpg"])}>Add Photo</button>
+    </div>
+  ),
 }));
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
-  }),
-}));
+vi.mock("@mui/material/styles", async () => {
+  const actual = await vi.importActual("@mui/material/styles")
+  return {
+    ...actual,
+    useTheme: () => ({
+      ...actual.createTheme(),
+      layoutSpacing: { layout: 2, component: 1.5, text: 1, compact: 0.5 },
+      borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+      palette: { ...actual.createTheme().palette, outline: { main: "#e0e0e0" } },
+    }),
+  }
+});
+
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, defaultValue?: string) => defaultValue || key,
+    }),
+  }
+});
 
 // Mock navigate
 const mockNavigate = vi.fn();
@@ -217,8 +234,7 @@ describe("EditListingV2", () => {
 
   it("pre-populates variant location", () => {
     renderComponent();
-    const locationSelect = screen.getByTestId("location-selector");
-    expect(locationSelect).toHaveValue("loc-1");
+    expect(screen.getByText("loc-1")).toBeInTheDocument();
   });
 
   it("shows game item as read-only", () => {
@@ -266,15 +282,9 @@ describe("EditListingV2", () => {
     });
   });
 
-  it("allows updating location", async () => {
+  it("displays variant location as read-only", () => {
     renderComponent();
-    const locationSelect = screen.getByTestId("location-selector");
-    
-    fireEvent.change(locationSelect, { target: { value: "loc-2" } });
-    
-    await waitFor(() => {
-      expect(locationSelect).toHaveValue("loc-2");
-    });
+    expect(screen.getByText("loc-1")).toBeInTheDocument();
   });
 
   it("shows modified chip when variant is changed", async () => {

@@ -456,7 +456,7 @@ describe("SellerAnalyticsV2", () => {
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
       expect(marketV2Api.useGetSellerStatsQuery).toHaveBeenCalledWith({
-        sellerId: mockSellerId,
+        shopId: mockSellerId,
       })
     })
 
@@ -470,7 +470,7 @@ describe("SellerAnalyticsV2", () => {
       render(<SellerAnalyticsV2 />)
 
       expect(marketV2Api.useGetSellerStatsQuery).toHaveBeenCalledWith({
-        sellerId: undefined,
+        shopId: undefined,
       })
     })
   })

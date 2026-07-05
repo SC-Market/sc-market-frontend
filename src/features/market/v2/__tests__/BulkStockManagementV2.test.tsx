@@ -11,10 +11,28 @@ import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { BrowserRouter } from "react-router-dom"
 import { BulkStockManagementV2 } from "../BulkStockManagementV2"
+
+const testTheme = createTheme({
+  palette: { outline: { main: "#e0e0e0" } },
+  layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+} as any)
 import { marketV2Api } from "../../../../store/api/v2/market"
 import type { StockLotDetail } from "../../../../store/api/v2/market"
+import { serviceApi } from "../../../../store/service"
+
+// Mock the shop route context
+vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
+  useShopRouteContext: () => ({
+    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z" },
+  }),
+  useOptionalShopRouteContext: () => ({
+    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z" },
+  }),
+}))
 
 // Mock the alert hook
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
@@ -22,11 +40,16 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 }))
 
 // Mock translation
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
-  }),
-}))
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, defaultValue?: string) => defaultValue || key,
+      i18n: { language: "en", changeLanguage: vi.fn() },
+    }),
+  }
+})
 
 // Mock data
 const mockLots: StockLotDetail[] = [
@@ -92,14 +115,20 @@ const mockLots: StockLotDetail[] = [
   },
 ]
 
+// Mock StandardPageLayout to avoid useRouteError
+vi.mock("../../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children }: any) => <div>{children}</div>,
+}))
+
 // Create mock store
 const createMockStore = (initialState = {}) => {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
     preloadedState: initialState,
   })
 }
@@ -122,11 +151,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -145,11 +176,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -170,11 +203,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -196,11 +231,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -228,11 +265,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -266,11 +305,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -298,11 +339,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -329,11 +372,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -355,11 +400,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -388,11 +435,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -415,11 +464,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -442,11 +493,13 @@ describe("BulkStockManagementV2", () => {
 
   it("displays loading state", () => {
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     expect(screen.getByRole("progressbar")).toBeInTheDocument()
@@ -463,11 +516,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     // Component should render without error - error state is handled by the component
@@ -486,11 +541,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -508,11 +565,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -534,11 +593,13 @@ describe("BulkStockManagementV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <BulkStockManagementV2 />
-        </BrowserRouter>
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {

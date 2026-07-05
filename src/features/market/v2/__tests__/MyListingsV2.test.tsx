@@ -3,31 +3,57 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { configureStore } from "@reduxjs/toolkit";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { MyListingsV2 } from "../MyListingsV2";
 import { marketV2Api } from "../../../../store/api/v2/market";
 import type { MyListingItem } from "../../../../store/api/v2/market";
+import { serviceApi } from "../../../../store/service";
+
+const testTheme = createTheme({
+  palette: { outline: { main: "#e0e0e0" } },
+  layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+} as any);
 
 // Mock the hooks
+vi.mock("../../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children }: any) => <div>{children}</div>,
+}));
+
+vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
+  useShopRouteContext: () => ({
+    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z" },
+  }),
+  useOptionalShopRouteContext: () => ({
+    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z" },
+  }),
+}));
+
 vi.mock("../../../../hooks/layout/Drawer", () => ({
   useDrawerOpen: () => [false, vi.fn()],
 }));
 
-vi.mock("../../../../hooks/styles/Theme", () => ({
-  ExtendedTheme: {},
-}));
+vi.mock("../../../../hooks/styles/Theme", async () => {
+  const actual = await vi.importActual("../../../../hooks/styles/Theme")
+  return { ...actual }
+});
 
 vi.mock("../../../../util/time", () => ({
   getRelativeTime: (date: string) => "2 days ago",
 }));
 
 // Mock translation
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
-  }),
-}));
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, defaultValue?: string) => defaultValue || key,
+    }),
+  }
+});
 
 // Mock navigate
 const mockNavigate = vi.fn();
@@ -43,12 +69,13 @@ vi.mock("react-router-dom", async () => {
 const createMockStore = (mockData?: any) => {
   const reducer = {
     [marketV2Api.reducerPath]: marketV2Api.reducer,
+    [serviceApi.reducerPath]: serviceApi.reducer,
   } as any
-  
+
   return configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
     preloadedState: mockData,
   });
 };
@@ -101,11 +128,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Should show skeleton loaders
@@ -130,11 +159,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Check first listing
@@ -165,11 +196,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // First listing has price range
@@ -196,11 +229,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // First listing has quality range
@@ -228,11 +263,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Find status filter dropdown
@@ -268,11 +305,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Check pagination is present
@@ -296,11 +335,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Click on first listing card
@@ -332,11 +373,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Find edit buttons
@@ -369,11 +412,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Check empty state
@@ -402,11 +447,13 @@ describe("MyListingsV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <MyListingsV2 />
-        </BrowserRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <MyListingsV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Check title

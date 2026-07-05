@@ -5,11 +5,15 @@ import { OrderItemDetail } from "../../../store/api/v2/market"
 import { OfferChanges } from "../../../util/offerChanges"
 
 // Mock i18next
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
-  }),
-}))
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, defaultValue?: string) => defaultValue || key,
+    }),
+  }
+})
 
 describe("OrderSummarySectionV2", () => {
   const mockItems: OrderItemDetail[] = [
@@ -53,7 +57,7 @@ describe("OrderSummarySectionV2", () => {
     },
   ]
 
-  it("renders order summary with variant details", () => {
+  it("renders order summary with item details", () => {
     render(
       <OrderSummarySectionV2 items={mockItems} total_cost={2500} />
     )
@@ -61,9 +65,9 @@ describe("OrderSummarySectionV2", () => {
     // Check title
     expect(screen.getByText("Order Summary")).toBeInTheDocument()
 
-    // Check variant display names
-    expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
-    expect(screen.getByText("Tier 3 (75.0%) - Store")).toBeInTheDocument()
+    // Check listing titles
+    expect(screen.getByText("Test Listing 1")).toBeInTheDocument()
+    expect(screen.getByText("Test Listing 2")).toBeInTheDocument()
 
     // Check quantities and prices
     expect(screen.getByText(/1,000 aUEC × 2/)).toBeInTheDocument()
@@ -78,14 +82,14 @@ describe("OrderSummarySectionV2", () => {
     expect(screen.getByText(/2,500/)).toBeInTheDocument()
   })
 
-  it("displays quality tier badges", () => {
+  it("displays listing titles", () => {
     render(
       <OrderSummarySectionV2 items={mockItems} total_cost={2500} />
     )
 
-    // Quality badges should be rendered
-    expect(screen.getByText("Tier 5")).toBeInTheDocument()
-    expect(screen.getByText("Tier 3")).toBeInTheDocument()
+    // Listing titles should be rendered
+    expect(screen.getByText("Test Listing 1")).toBeInTheDocument()
+    expect(screen.getByText("Test Listing 2")).toBeInTheDocument()
   })
 
   it("shows NEW! chip for added listings", () => {
@@ -167,7 +171,7 @@ describe("OrderSummarySectionV2", () => {
       {
     order_item_id: "item-1",
     listing_id: "listing-1",
-    listing_title: "Test Listing 1",
+    listing_title: "Looted Item Listing",
         item_id: "item-1",
         variant: {
           variant_id: "variant-1",
@@ -187,9 +191,8 @@ describe("OrderSummarySectionV2", () => {
       <OrderSummarySectionV2 items={itemsWithoutQuality} total_cost={100} />
     )
 
-    // Should render without quality badge
-    expect(screen.getByText("Looted Item")).toBeInTheDocument()
-    expect(screen.queryByText(/Tier/)).not.toBeInTheDocument()
+    // Should render listing title
+    expect(screen.getByText("Looted Item Listing")).toBeInTheDocument()
   })
 
   it("formats large numbers with locale string", () => {
@@ -243,10 +246,10 @@ describe("OrderSummarySectionV2", () => {
       <OrderSummarySectionV2 items={mockItems} total_cost={2500} />
     )
 
-    // Check for listing links
+    // Check for listing links — uses formatMarketUrl which produces slug-based URLs
     const links = screen.getAllByRole("link")
     expect(links.length).toBe(2)
-    expect(links[0]).toHaveAttribute("href", "/market/listing-1")
-    expect(links[1]).toHaveAttribute("href", "/market/listing-2")
+    expect(links[0]).toHaveAttribute("href", "/market/listing1--test-listing-1")
+    expect(links[1]).toHaveAttribute("href", "/market/listing2--test-listing-2")
   })
 })

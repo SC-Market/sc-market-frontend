@@ -8,10 +8,73 @@ import "./setup";
 import React from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import { Provider } from "react-redux"
+import { MemoryRouter } from "react-router-dom"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { StockManagerV2 } from "../StockManagerV2"
 import { marketV2Api, GetStockLotsResponse } from "../../../../store/api/v2/market"
+import { serviceApi } from "../../../../store/service"
+
+const testTheme = createTheme({
+  palette: {
+    outline: { main: "#e0e0e0" },
+  },
+  layoutSpacing: {
+    layout: 1,
+    component: 1.5,
+    text: 1,
+    compact: 0.5,
+  },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
+} as any)
+
+// Mock the StandardPageLayout and Page to avoid useRouteError
+vi.mock("../../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children }: any) => <div data-testid="standard-page-layout">{children}</div>,
+}))
+
+vi.mock("../../../../components/metadata/Page", () => ({
+  Page: ({ children }: any) => <>{children}</>,
+  shouldShowErrorPage: () => false,
+}))
+
+// Mock the shop route context
+vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
+  useShopRouteContext: () => ({
+    shop: {
+      shop_id: "shop-1",
+      name: "Test Shop",
+      slug: "test-shop",
+      owner_spectrum_id: "owner-1",
+      is_org_owned: false,
+      avatar: null,
+      banner: null,
+      description: null,
+      created_at: "2024-01-01T00:00:00Z",
+    },
+  }),
+  useOptionalShopRouteContext: () => ({
+    shop: {
+      shop_id: "shop-1",
+      name: "Test Shop",
+      slug: "test-shop",
+      owner_spectrum_id: "owner-1",
+      is_org_owned: false,
+      avatar: null,
+      banner: null,
+      description: null,
+      created_at: "2024-01-01T00:00:00Z",
+    },
+  }),
+}))
 
 // Mock the alert hook
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
@@ -19,20 +82,26 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 }))
 
 // Mock translation
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
-  }),
-}))
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, defaultValue?: string) => defaultValue || key,
+      i18n: { language: "en", changeLanguage: vi.fn() },
+    }),
+  }
+})
 
 // Create mock store
 const createMockStore = (initialState = {}) => {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
     preloadedState: initialState,
   })
 }
@@ -115,9 +184,13 @@ describe("StockManagerV2", () => {
 
   it("renders loading state initially", () => {
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     expect(screen.getByRole("progressbar")).toBeInTheDocument()
@@ -134,9 +207,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -156,9 +233,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -180,9 +261,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -203,9 +288,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -225,9 +314,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -249,9 +342,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -270,9 +367,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -296,9 +397,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -316,9 +421,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {
@@ -340,9 +449,13 @@ describe("StockManagerV2", () => {
     )
 
     render(
-      <Provider store={store}>
-        <StockManagerV2 />
-      </Provider>,
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <StockManagerV2 />
+          </Provider>
+        </MemoryRouter>
+      </ThemeProvider>,
     )
 
     await waitFor(() => {

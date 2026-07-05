@@ -12,6 +12,8 @@ import { WishlistDetail } from "../WishlistDetail"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { marketV2Api } from "../../../store/api/v2/market"
+import { serviceApi } from "../../../store/service"
+import { generatedApiV2 } from "../../../store/generatedApiV2"
 import { BrowserRouter } from "react-router-dom"
 import { vi, describe, it, expect, beforeEach } from "vitest"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
@@ -56,9 +58,11 @@ function createTestStore(preloadedState = {}) {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
+      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware, generatedApiV2.middleware),
     preloadedState,
   })
 }

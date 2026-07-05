@@ -16,8 +16,33 @@ import { render, screen, waitFor } from "@testing-library/react"
 import { Provider } from "react-redux"
 import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
+import { vi } from "vitest"
 import { MissionDetail } from "../MissionDetail"
 import { marketV2Api } from "../../../store/api/v2/market"
+import { serviceApi } from "../../../store/service"
+import { generatedApiV2 } from "../../../store/generatedApiV2"
+
+// Mock Page to avoid serviceApi dependency
+vi.mock("../../../components/metadata/Page", () => ({
+  Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}))
+
+// Mock StandardPageLayout to avoid serviceApi/profileApi dependencies
+vi.mock("../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children, headerTitle }: { children: React.ReactNode; headerTitle?: string }) => <div>{headerTitle && <h1>{headerTitle}</h1>}{children}</div>,
+}))
+
+// Mock react-i18next
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, def?: string) => def || key,
+      i18n: { language: "en", changeLanguage: vi.fn() },
+    }),
+  }
+})
 
 // Mock mission detail data
 const mockMissionDetail = {
@@ -160,11 +185,13 @@ const createMockStore = (mockData: any, isLoading = false, error: any = null) =>
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
+      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     preloadedState: {
       [marketV2Api.reducerPath]: {
         queries: {
-          'getMissionDetail({"mission_id":"mission-1"})': {
+          'getMissionDetail({"missionId":"mission-1"})': {
             status: isLoading ? "pending" : error ? "rejected" : "fulfilled",
             data: mockData,
             error,
@@ -177,7 +204,7 @@ const createMockStore = (mockData: any, isLoading = false, error: any = null) =>
       } as any,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware, generatedApiV2.middleware),
   })
 }
 
@@ -189,7 +216,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -206,7 +233,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -222,7 +249,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -244,7 +271,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -260,7 +287,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -281,7 +308,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -300,7 +327,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -319,7 +346,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -340,7 +367,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -359,7 +386,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -377,7 +404,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -398,7 +425,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -417,7 +444,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -435,7 +462,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -457,7 +484,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -475,7 +502,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
@@ -517,7 +544,7 @@ describe("MissionDetail", () => {
       <Provider store={store}>
         <MemoryRouter initialEntries={["/missions/mission-1"]}>
           <Routes>
-            <Route path="/missions/:missionId" element={<MissionDetail />} />
+            <Route path="/missions/:slug" element={<MissionDetail />} />
           </Routes>
         </MemoryRouter>
       </Provider>
