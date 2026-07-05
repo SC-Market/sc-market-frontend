@@ -1064,13 +1064,6 @@ const router = createBrowserRouter([
                 }),
               },
               {
-                path: "blocklist",
-                lazy: async () => ({
-                  Component: (await import("./features/shops/components/ShopBlocklist"))
-                    .ShopBlocklist,
-                }),
-              },
-              {
                 path: "settings",
                 lazy: async () => ({
                   Component: (await import("./features/shops/components/ShopSettings"))

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { Link, Navigate } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 import {
   Autocomplete,
   Button,
@@ -15,7 +15,7 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { BlockRounded, DeleteRounded, PeopleRounded, SaveRounded } from "@mui/icons-material"
+import { DeleteRounded, SaveRounded } from "@mui/icons-material"
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import {
   useUpdateShopMutation,
@@ -28,6 +28,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { URL_REGEX } from "../../../util/parsing"
+import { ShopBlocklistSection } from "./ShopBlocklist"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -430,31 +431,8 @@ export function ShopSettings() {
           {/* Webhooks */}
           <ShopWebhookSection shopId={shop.shop_id} />
 
-          {/* Management Links */}
-          <FormPaper title="Management" subtitle="Additional shop tools">
-            <Grid item xs={12} sm={6}>
-              <Button
-                component={Link}
-                to={`/shop/${shop.slug}/customers`}
-                variant="outlined"
-                fullWidth
-                startIcon={<PeopleRounded />}
-              >
-                Customers
-              </Button>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Button
-                component={Link}
-                to={`/shop/${shop.slug}/blocklist`}
-                variant="outlined"
-                fullWidth
-                startIcon={<BlockRounded />}
-              >
-                Blocklist
-              </Button>
-            </Grid>
-          </FormPaper>
+          {/* Blocklist */}
+          <ShopBlocklistSection shopId={shop.shop_id} />
 
           {/* Save */}
           <Grid item xs={12} container justifyContent="flex-end">
