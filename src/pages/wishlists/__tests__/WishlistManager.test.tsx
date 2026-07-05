@@ -12,6 +12,7 @@ import { WishlistManager } from "../WishlistManager"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { marketV2Api } from "../../../store/api/v2/market"
+import { serviceApi } from "../../../store/service"
 import { BrowserRouter } from "react-router-dom"
 import { vi, describe, it, expect, beforeEach } from "vitest"
 
@@ -25,14 +26,20 @@ vi.mock("react-router-dom", async () => {
   }
 })
 
+// Mock StandardPageLayout to avoid useRouteError
+vi.mock("../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children }: any) => <div>{children}</div>,
+}))
+
 // Helper to create test store
 function createTestStore(preloadedState = {}) {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
     preloadedState,
   })
 }

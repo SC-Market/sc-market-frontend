@@ -45,6 +45,16 @@ vi.mock("react-i18next", async () => {
   }
 })
 
+// Mock StandardPageLayout to avoid serviceApi dependency
+vi.mock("../../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children, title }: any) => (
+    <div data-testid="standard-page-layout">
+      {title && <h1>{title}</h1>}
+      {children}
+    </div>
+  ),
+}))
+
 // Mock Page component to avoid contractor API dependency
 vi.mock("../../../../components/metadata/Page", () => ({
   Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,

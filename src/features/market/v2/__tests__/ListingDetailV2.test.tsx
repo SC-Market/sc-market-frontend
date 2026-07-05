@@ -5,8 +5,36 @@ import { render, screen, within } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import * as marketApi from "../../../../store/api/v2/market";
+import { serviceApi } from "../../../../store/service";
 import { ListingDetailV2 } from "../ListingDetailV2";
+
+const testTheme = createTheme({
+  layoutSpacing: { layout: 2, component: 1, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  palette: { outline: { main: "#e0e0e0" } },
+} as any);
+
+// Mock alert hook
+vi.mock("../../../../hooks/alert/AlertHook", () => ({
+  useAlertHook: () => vi.fn(),
+}));
+
+// Mock @mui/x-charts to avoid ESM resolution issues
+vi.mock("@mui/x-charts", () => ({
+  LineChart: () => <div data-testid="line-chart" />,
+  BarChart: () => <div data-testid="bar-chart" />,
+  PieChart: () => <div data-testid="pie-chart" />,
+}));
+
+vi.mock("@mui/x-charts/LineChart", () => ({
+  LineChart: () => <div data-testid="line-chart" />,
+}));
+
+vi.mock("@mui/x-charts/BarChart", () => ({
+  BarChart: () => <div data-testid="bar-chart" />,
+}));
 
 // Mock the useParams hook
 vi.mock("react-router-dom", async () => {
@@ -62,25 +90,30 @@ vi.mock("../../../../components/typography/UnderlineLink", () => ({
 }));
 
 // Mock translation
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string | { defaultValue: string; count?: number }) => {
-      if (typeof defaultValue === "object") {
-        return defaultValue.defaultValue.replace("{{count}}", String(defaultValue.count || 0));
-      }
-      return defaultValue || key;
-    },
-  }),
-}));
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, defaultValue?: string | { defaultValue: string; count?: number }) => {
+        if (typeof defaultValue === "object") {
+          return defaultValue.defaultValue.replace("{{count}}", String(defaultValue.count || 0));
+        }
+        return defaultValue || key;
+      },
+    }),
+  }
+});
 
 // Create mock store
 const createMockStore = () => {
   return configureStore({
     reducer: {
       [marketApi.marketV2Api.reducerPath]: marketApi.marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketApi.marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketApi.marketV2Api.middleware, serviceApi.middleware),
   });
 };
 
@@ -155,11 +188,13 @@ describe("ListingDetailV2", () => {
     const store = createMockStore();
     return render(
       <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/test-listing-id"]}>
-          <Routes>
-            <Route path="/market/v2/:id" element={<ListingDetailV2 />} />
-          </Routes>
-        </MemoryRouter>
+        <ThemeProvider theme={testTheme}>
+          <MemoryRouter initialEntries={["/market/v2/test-listing-id"]}>
+            <Routes>
+              <Route path="/market/v2/:id" element={<ListingDetailV2 />} />
+            </Routes>
+          </MemoryRouter>
+        </ThemeProvider>
       </Provider>
     );
   };

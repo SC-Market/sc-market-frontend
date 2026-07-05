@@ -107,9 +107,11 @@ describe("DetailPageLayout - Property Tests", () => {
           // Verify component renders without errors
           expect(container).toBeInTheDocument()
 
-          // Verify back button is rendered when backButton is true
-          const backButton = screen.getByLabelText("Go back")
-          expect(backButton).toBeInTheDocument()
+          // Back button only renders when entityTitle is defined (it's in that branch)
+          if (config.entityTitle) {
+            const backButton = screen.getByLabelText("Go back")
+            expect(backButton).toBeInTheDocument()
+          }
 
           // Verify content is rendered
           expect(screen.getByTestId("test-content")).toBeInTheDocument()

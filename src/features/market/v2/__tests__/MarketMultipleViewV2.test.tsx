@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { MarketMultipleViewV2 } from "../MarketMultipleViewV2";
+import { generatedApiV2 } from "../../../../store/generatedApiV2";
+import { serviceApi } from "../../../../store/service";
 import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
@@ -143,8 +145,11 @@ vi.mock("../../../components/paper/Section", () => ({
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      // Add minimal reducers needed for the component
+      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
     },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(generatedApiV2.middleware, serviceApi.middleware),
   });
 };
 

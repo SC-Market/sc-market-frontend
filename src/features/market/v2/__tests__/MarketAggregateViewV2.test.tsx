@@ -6,6 +6,8 @@ import { BrowserRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { MarketAggregateViewV2 } from "../MarketAggregateViewV2";
+import { generatedApiV2 } from "../../../../store/generatedApiV2";
+import { serviceApi } from "../../../../store/service";
 
 /**
  * Unit Tests for MarketAggregateViewV2 Component
@@ -161,8 +163,11 @@ vi.mock("../components/CreateBuyOrderV2", () => ({
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      // Add minimal reducers needed for testing
+      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
     },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(generatedApiV2.middleware, serviceApi.middleware),
   });
 };
 

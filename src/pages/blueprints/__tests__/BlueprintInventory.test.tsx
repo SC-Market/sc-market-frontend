@@ -19,6 +19,8 @@ import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { BlueprintInventory } from "../BlueprintInventory"
 import { marketV2Api as api } from "../../../store/api/v2/market"
+import { serviceApi } from "../../../store/service"
+import { generatedApiV2 } from "../../../store/generatedApiV2"
 
 // Mock data
 const mockInventoryData = {
@@ -63,16 +65,20 @@ const mockUseGetUserBlueprintInventoryQuery = vi.fn()
 const mockUseAddBlueprintToInventoryMutation = vi.fn()
 const mockUseRemoveBlueprintFromInventoryMutation = vi.fn()
 
-vi.mock("../../../store/api/v2/market", () => ({
-  enhancedApi: {
+vi.mock("../../../store/api/v2/market", () => {
+  const mockApi = {
     reducerPath: "api",
     reducer: () => ({}),
     middleware: () => (next: any) => (action: any) => next(action),
-  },
-  useGetUserBlueprintInventoryQuery: () => mockUseGetUserBlueprintInventoryQuery(),
-  useAddBlueprintToInventoryMutation: () => mockUseAddBlueprintToInventoryMutation(),
-  useRemoveBlueprintFromInventoryMutation: () => mockUseRemoveBlueprintFromInventoryMutation(),
-}))
+  }
+  return {
+    enhancedApi: mockApi,
+    marketV2Api: mockApi,
+    useGetUserBlueprintInventoryQuery: () => mockUseGetUserBlueprintInventoryQuery(),
+    useAddBlueprintToInventoryMutation: () => mockUseAddBlueprintToInventoryMutation(),
+    useRemoveBlueprintFromInventoryMutation: () => mockUseRemoveBlueprintFromInventoryMutation(),
+  }
+})
 
 // Mock useNavigate
 const mockNavigate = vi.fn()
@@ -89,9 +95,11 @@ const createMockStore = () => {
   return configureStore({
     reducer: {
       [api.reducerPath]: api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
+      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+      getDefaultMiddleware().concat(api.middleware, serviceApi.middleware, generatedApiV2.middleware),
   })
 }
 

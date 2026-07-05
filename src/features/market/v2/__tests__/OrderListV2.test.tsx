@@ -98,9 +98,10 @@ describe("OrderListV2", () => {
         order_id: "order-1",
         title: "Test Order 1",
         buyer_username: "buyer1",
-        seller_username: "seller1",
+        shop_name: "Shop 1",
+        shop_slug: "shop-1",
         buyer_avatar: null,
-        seller_avatar: null,
+        shop_logo: null,
         quality_tier_min: 3,
         quality_tier_max: 5,
         status: "pending",
@@ -113,9 +114,10 @@ describe("OrderListV2", () => {
         order_id: "order-2",
         title: "Test Order 2",
         buyer_username: "buyer2",
-        seller_username: "seller2",
+        shop_name: "Shop 2",
+        shop_slug: "shop-2",
         buyer_avatar: null,
-        seller_avatar: null,
+        shop_logo: null,
         quality_tier_min: 5,
         quality_tier_max: 5,
         status: "completed",
@@ -149,9 +151,10 @@ describe("OrderListV2", () => {
         order_id: "order-1",
         title: "Test Order Without Quality",
         buyer_username: "buyer1",
-        seller_username: "seller1",
+        shop_name: "Shop 1",
+        shop_slug: "shop-1",
         buyer_avatar: null,
-        seller_avatar: null,
+        shop_logo: null,
         quality_tier_min: undefined,
         quality_tier_max: undefined,
         status: "pending",
@@ -190,8 +193,8 @@ describe("OrderListV2", () => {
 
     expect(useGetOrdersQuery).toHaveBeenCalledWith(
       expect.objectContaining({
-        quality_tier_min: 3,
-        quality_tier_max: 5,
+        qualityTierMin: 3,
+        qualityTierMax: 5,
       }),
     )
   })
@@ -240,7 +243,7 @@ describe("OrderListV2", () => {
     expect(useGetOrdersQuery).toHaveBeenCalledWith(
       expect.objectContaining({
         page: 2,
-        page_size: 50,
+        pageSize: 50,
       }),
     )
   })
@@ -251,9 +254,10 @@ describe("OrderListV2", () => {
         order_id: "order-1",
         title: "Test Order",
         buyer_username: "buyer1",
-        seller_username: "seller1",
+        shop_name: "Shop 1",
+        shop_slug: "shop-1",
         buyer_avatar: null,
-        seller_avatar: null,
+        shop_logo: null,
         quality_tier_min: 3,
         quality_tier_max: 3,
         status: "pending",
@@ -277,15 +281,16 @@ describe("OrderListV2", () => {
     })
   })
 
-  it("displays seller info when role is buyer", async () => {
+  it("displays shop info when role is buyer", async () => {
     const mockOrders = [
       {
         order_id: "order-1",
         title: "Test Order",
         buyer_username: "buyer1",
-        seller_username: "seller1",
+        shop_name: "Test Shop",
+        shop_slug: "test-shop",
         buyer_avatar: null,
-        seller_avatar: "https://example.com/seller.jpg",
+        shop_logo: "https://example.com/shop.jpg",
         quality_tier_min: 3,
         quality_tier_max: 3,
         status: "pending",
@@ -305,7 +310,7 @@ describe("OrderListV2", () => {
     renderWithProviders(<OrderListV2 role="buyer" />)
 
     await waitFor(() => {
-      expect(screen.getByText(/Seller: seller1/i)).toBeInTheDocument()
+      expect(screen.getByText(/Shop: Test Shop/i)).toBeInTheDocument()
     })
   })
 
@@ -315,9 +320,10 @@ describe("OrderListV2", () => {
         order_id: "order-1",
         title: "Test Order",
         buyer_username: "buyer1",
-        seller_username: "seller1",
+        shop_name: "Test Shop",
+        shop_slug: "test-shop",
         buyer_avatar: "https://example.com/buyer.jpg",
-        seller_avatar: null,
+        shop_logo: null,
         quality_tier_min: 3,
         quality_tier_max: 3,
         status: "pending",
@@ -347,9 +353,10 @@ describe("OrderListV2", () => {
         order_id: "order-1",
         title: "Test Order",
         buyer_username: "buyer1",
-        seller_username: "seller1",
+        shop_name: "Shop 1",
+        shop_slug: "shop-1",
         buyer_avatar: null,
-        seller_avatar: null,
+        shop_logo: null,
         quality_tier_min: 3,
         quality_tier_max: 3,
         status: "pending",
@@ -399,7 +406,7 @@ describe("OrderListV2", () => {
 
       expect(useGetOrdersQuery).toHaveBeenCalledWith(
         expect.objectContaining({
-          quality_tier_min: 4,
+          qualityTierMin: 4,
         }),
       )
     })
@@ -415,7 +422,7 @@ describe("OrderListV2", () => {
 
       expect(useGetOrdersQuery).toHaveBeenCalledWith(
         expect.objectContaining({
-          quality_tier_max: 3,
+          qualityTierMax: 3,
         }),
       )
     })
@@ -433,8 +440,8 @@ describe("OrderListV2", () => {
 
       expect(useGetOrdersQuery).toHaveBeenCalledWith(
         expect.objectContaining({
-          quality_tier_min: 2,
-          quality_tier_max: 4,
+          qualityTierMin: 2,
+          qualityTierMax: 4,
         }),
       )
     })

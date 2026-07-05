@@ -22,10 +22,10 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 
 // Mock the contractor API
-vi.mock("../../../store/contractor", () => ({
+vi.mock("../../../features/contractor/api/contractorApi", () => ({
   useGetContractorBySpectrumIDQuery: vi.fn(),
-  contractorApi: {
-    reducerPath: "contractorApi",
+  contractorsApi: {
+    reducerPath: "contractorsApi",
     reducer: vi.fn((state = {}) => state),
     middleware: vi.fn(() => (next: any) => (action: any) => next(action)),
     endpoints: {},
@@ -235,8 +235,8 @@ describe("ViewOrg - Integration Tests", () => {
 
     renderWithRoute("nonexistent-org")
 
-    // Verify error page is displayed for 404 errors
-    expect(screen.getByTestId("error-page")).toBeInTheDocument()
+    // Verify navigation to 404 page
+    expect(screen.getByTestId("404-page")).toBeInTheDocument()
 
     // Verify content is not displayed
     expect(screen.queryByTestId("org-info")).not.toBeInTheDocument()

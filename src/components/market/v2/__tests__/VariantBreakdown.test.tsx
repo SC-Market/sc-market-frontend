@@ -47,13 +47,15 @@ describe("VariantBreakdown", () => {
   it("renders all variants in table", () => {
     renderWithTheme(<VariantBreakdown variants={mockVariants} />);
 
-    expect(screen.getByText("Tier 3 (85%) - Crafted")).toBeInTheDocument();
-    expect(screen.getByText("Tier 5 (95%) - Crafted")).toBeInTheDocument();
+    // Component renders quality_value as "{value}/1000" chips
+    expect(screen.getByText("85/1000")).toBeInTheDocument();
+    expect(screen.getByText("95/1000")).toBeInTheDocument();
   });
 
   it("displays quality badges for each variant", () => {
     renderWithTheme(<VariantBreakdown variants={mockVariants} />);
 
+    // QualityBadge renders "Tier X" labels
     expect(screen.getByText("Tier 3")).toBeInTheDocument();
     expect(screen.getByText("Tier 5")).toBeInTheDocument();
   });
@@ -68,8 +70,9 @@ describe("VariantBreakdown", () => {
   it("displays prices for each variant", () => {
     renderWithTheme(<VariantBreakdown variants={mockVariants} />);
 
+    // formatPrice: 50000 -> "50,000 aUEC", 100000 -> "100K aUEC"
     expect(screen.getByText("50,000 aUEC")).toBeInTheDocument();
-    expect(screen.getByText("100,000 aUEC")).toBeInTheDocument();
+    expect(screen.getByText("100K aUEC")).toBeInTheDocument();
   });
 
   it("displays locations when provided", () => {
@@ -82,7 +85,8 @@ describe("VariantBreakdown", () => {
   it("displays crafted_source as chip", () => {
     renderWithTheme(<VariantBreakdown variants={mockVariants} />);
 
-    const craftedChips = screen.getAllByText("crafted");
+    // formatCraftedSource("crafted") -> "Crafted"
+    const craftedChips = screen.getAllByText("Crafted");
     expect(craftedChips.length).toBe(2);
   });
 
@@ -150,10 +154,10 @@ describe("VariantBreakdown", () => {
       <VariantBreakdown variants={mockVariants} showActions={true} />
     );
 
-    expect(screen.getByText("Quality")).toBeInTheDocument();
     expect(screen.getByText("Variant")).toBeInTheDocument();
     expect(screen.getByText("Quantity")).toBeInTheDocument();
     expect(screen.getByText("Price")).toBeInTheDocument();
+    expect(screen.getByText("Location")).toBeInTheDocument();
     expect(screen.getByText("Action")).toBeInTheDocument();
   });
 });

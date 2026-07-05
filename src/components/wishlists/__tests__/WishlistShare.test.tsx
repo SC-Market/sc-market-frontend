@@ -122,7 +122,7 @@ describe("WishlistShare Component", () => {
       )
 
       expect(screen.getAllByText("Private").length).toBeGreaterThan(0)
-      expect(screen.getByText("Only you can view this wishlist")).toBeInTheDocument()
+      expect(screen.getByText("Only you can view this shopping list")).toBeInTheDocument()
     })
 
     it("should display public status for public wishlist", () => {
@@ -131,7 +131,7 @@ describe("WishlistShare Component", () => {
       )
 
       expect(screen.getAllByText("Public").length).toBeGreaterThan(0)
-      expect(screen.getByText("Anyone with the link can view this wishlist")).toBeInTheDocument()
+      expect(screen.getByText("Anyone with the link can view this shopping list")).toBeInTheDocument()
     })
 
     it("should show info alert when wishlist is private", () => {
@@ -167,7 +167,7 @@ describe("WishlistShare Component", () => {
       expect(screen.getByText("Copy this link to share your wishlist with others")).toBeInTheDocument()
 
       const linkInput = screen.getByDisplayValue(
-        "https://example.com/game-data/wishlists/wishlist-123?share_token=abc123xyz789"
+        "https://example.com/game-data/shopping-lists/wishlist-123?share_token=abc123xyz789"
       )
       expect(linkInput).toBeInTheDocument()
       expect(linkInput).toHaveAttribute("readonly")
@@ -186,7 +186,7 @@ describe("WishlistShare Component", () => {
         <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
       )
 
-      const expectedUrl = `https://example.com/game-data/wishlists/${mockPublicWishlist.wishlist_id}?share_token=${mockPublicWishlist.share_token}`
+      const expectedUrl = `https://example.com/game-data/shopping-lists/${mockPublicWishlist.wishlist_id}?share_token=${mockPublicWishlist.share_token}`
       expect(screen.getByDisplayValue(expectedUrl)).toBeInTheDocument()
     })
   })
@@ -214,7 +214,7 @@ describe("WishlistShare Component", () => {
 
       await waitFor(() => {
         expect(writeTextMock).toHaveBeenCalledWith(
-          "https://example.com/game-data/wishlists/wishlist-123?share_token=abc123xyz789"
+          "https://example.com/game-data/shopping-lists/wishlist-123?share_token=abc123xyz789"
         )
       })
     })
@@ -296,7 +296,7 @@ describe("WishlistShare Component", () => {
       const collaborativeSwitch = screen.getByRole("checkbox", { name: /Collaborative Mode/i })
       expect(collaborativeSwitch).not.toBeChecked()
       expect(
-        screen.getByText("Only you can add and edit items in this wishlist")
+        screen.getByText("Only you can add and edit items in this shopping list")
       ).toBeInTheDocument()
     })
 
@@ -309,7 +309,7 @@ describe("WishlistShare Component", () => {
       const collaborativeSwitch = screen.getByRole("checkbox", { name: /Collaborative Mode/i })
       expect(collaborativeSwitch).toBeChecked()
       expect(
-        screen.getByText("Organization members can add and edit items in this wishlist")
+        screen.getByText("Organization members can add and edit items in this shopping list")
       ).toBeInTheDocument()
     })
 

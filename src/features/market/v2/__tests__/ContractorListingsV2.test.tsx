@@ -7,6 +7,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { ContractorListingsV2 } from "../ContractorListingsV2";
 import { marketV2Api } from "../../../../store/api/v2/market";
+import { serviceApi } from "../../../../store/service";
 
 // Mock dependencies
 vi.mock("react-i18next", () => ({
@@ -88,12 +89,13 @@ vi.mock("../../../../components/empty-states", () => ({
 function createMockStore(mockData?: any) {
   const reducer = {
     [marketV2Api.reducerPath]: marketV2Api.reducer,
+    [serviceApi.reducerPath]: serviceApi.reducer,
   } as any;
 
   return configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
     preloadedState: mockData,
   });
 }

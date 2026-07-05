@@ -15,6 +15,8 @@ import { ShoppingList } from "../ShoppingList"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { marketV2Api } from "../../../store/api/v2/market"
+import { serviceApi } from "../../../store/service"
+import { generatedApiV2 } from "../../../store/generatedApiV2"
 import { BrowserRouter } from "react-router-dom"
 import * as marketV2ApiHooks from "../../../store/api/v2/market"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
@@ -33,6 +35,23 @@ const mockTheme = createTheme({
 vi.mock("../../../components/metadata/Page", async () => {
   return {
     Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  }
+})
+
+// Mock StandardPageLayout to avoid serviceApi/profileApi dependencies
+vi.mock("../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}))
+
+// Mock react-i18next
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, def?: string) => def || key,
+      i18n: { language: "en", changeLanguage: vi.fn() },
+    }),
   }
 })
 
@@ -59,9 +78,11 @@ function createTestStore(preloadedState = {}) {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
+      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware, generatedApiV2.middleware),
     preloadedState,
   })
 }
@@ -174,10 +195,10 @@ describe("ShoppingList", () => {
       expect(screen.getByText("Titanium")).toBeInTheDocument()
       expect(screen.getByText("Copper")).toBeInTheDocument()
 
-      // Check quantities are displayed
-      expect(screen.getByText("100")).toBeInTheDocument() // Aluminum total needed
-      expect(screen.getByText("200")).toBeInTheDocument() // Titanium total needed
-      expect(screen.getByText("50")).toBeInTheDocument() // Copper total needed and in stock
+      // Check quantities are displayed (may appear multiple times in different columns)
+      expect(screen.getAllByText("100").length).toBeGreaterThan(0) // Aluminum total needed
+      expect(screen.getAllByText("200").length).toBeGreaterThan(0) // Titanium total needed
+      expect(screen.getAllByText("50").length).toBeGreaterThan(0) // Copper total needed and in stock
     })
 
     it("should display in-stock vs to-acquire quantities (Requirement 9.2)", () => {

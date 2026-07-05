@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { CreateListingV2 } from "../CreateListingV2";
 import { generatedApi } from "../../../../store/generatedApi";
+import { generatedApiV2 } from "../../../../store/generatedApiV2";
 import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
@@ -55,14 +56,32 @@ vi.mock("../components/stock/LocationSelector", () => ({
   ),
 }));
 
+vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
+  useShopRouteContext: () => ({
+    shop: {
+      shop_id: "s1",
+      name: "Test Shop",
+      slug: "test-shop",
+      owner_spectrum_id: "o1",
+      is_org_owned: false,
+      avatar: null,
+      banner: null,
+      description: null,
+      created_at: "2024-01-01T00:00:00Z",
+    },
+  }),
+  useOptionalShopRouteContext: () => null,
+}));
+
 // Create mock store
 const createMockStore = (initialState = {}) => {
   return configureStore({
     reducer: {
       [generatedApi.reducerPath]: generatedApi.reducer,
+      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(generatedApi.middleware),
+      getDefaultMiddleware().concat(generatedApi.middleware, generatedApiV2.middleware),
     preloadedState: initialState,
   });
 };

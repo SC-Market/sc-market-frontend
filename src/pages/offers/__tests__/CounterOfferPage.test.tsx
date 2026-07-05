@@ -31,6 +31,12 @@ vi.mock("../../../views/offers/OfferServiceEditArea", () => ({
   ),
 }))
 
+vi.mock("../../../features/market/v2/OfferMarketListingsEditAreaV2", () => ({
+  OfferMarketListingsEditAreaV2: () => (
+    <div data-testid="offer-market-listings-edit">Market Listings Edit</div>
+  ),
+}))
+
 
 // Mock the Page component to avoid RTK Query issues
 vi.mock("../../../components/metadata/Page", () => ({

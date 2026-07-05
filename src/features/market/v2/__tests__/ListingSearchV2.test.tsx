@@ -4,24 +4,55 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter, MemoryRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { ListingSearchV2 } from "../ListingSearchV2";
 import { marketV2Api } from "../../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../../store/api/v2/market";
+import { serviceApi } from "../../../../store/service";
+import { generatedApiV2 } from "../../../../store/generatedApiV2";
+
+const testTheme = createTheme({
+  palette: {
+    outline: { main: "#e0e0e0" },
+  },
+  layoutSpacing: {
+    layout: 1,
+    component: 1.5,
+    text: 1,
+    compact: 0.5,
+  },
+  borderRadius: {
+    topLevel: 0.375,
+    image: 0.375,
+    button: 1,
+    input: 0.5,
+    chip: 0.5,
+    minimal: 0,
+  },
+} as any);
 
 // Mock the hooks
 vi.mock("../../../../hooks/layout/Drawer", () => ({
   useDrawerOpen: () => [false, vi.fn()],
+  sidebarDrawerWidth: 280,
 }));
 
-vi.mock("../../../../hooks/styles/Theme", () => ({
-  ExtendedTheme: {},
-}));
+vi.mock("../../../../hooks/styles/Theme", async () => {
+  const actual = await vi.importActual("../../../../hooks/styles/Theme")
+  return {
+    ...actual,
+  }
+});
 
-vi.mock("../hooks/MarketSidebar", () => ({
-  useMarketSidebarExp: () => false,
-  useMarketSidebar: () => [false, vi.fn()],
-}));
+vi.mock("../../hooks/MarketSidebar", () => {
+  const React = require("react");
+  return {
+    MarketSidebarContext: React.createContext([false, () => {}]),
+    useMarketSidebarExp: () => false,
+    useMarketSidebar: () => [false, vi.fn()],
+  };
+});
 
 vi.mock("../../../../hooks/layout/useBottomNavHeight", () => ({
   useBottomNavHeight: () => 0,
@@ -117,12 +148,14 @@ vi.mock("../../../../components/mobile/BottomSheet", () => ({
 const createMockStore = (mockData?: any) => {
   const reducer = {
     [marketV2Api.reducerPath]: marketV2Api.reducer,
+    [serviceApi.reducerPath]: serviceApi.reducer,
+    [generatedApiV2.reducerPath]: generatedApiV2.reducer,
   } as any
-  
+
   return configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware, generatedApiV2.middleware),
     preloadedState: mockData,
   });
 };
@@ -191,11 +224,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Should show skeleton loaders
@@ -221,11 +256,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Check listings are rendered
@@ -250,11 +287,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Quality filter should be present
@@ -278,11 +317,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     const { container } = render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Change quality min filter
@@ -312,11 +353,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Price filters should be present
@@ -341,11 +384,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Search input should be present
@@ -369,11 +414,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Pagination should be present
@@ -398,11 +445,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Empty state should be displayed
@@ -423,11 +472,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Error state should be displayed
@@ -460,15 +511,17 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter
-          initialEntries={[
-            "/market/v2/search?text=mining&quality_tier_min=3&quality_tier_max=5&price_min=1000&price_max=5000",
-          ]}
-        >
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter
+            initialEntries={[
+              "/market/v2/search?text=mining&quality_tier_min=3&quality_tier_max=5&price_min=1000&price_max=5000",
+            ]}
+          >
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Verify the query was called with URL params
@@ -502,11 +555,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Check variant counts are displayed
@@ -531,11 +586,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Check quality tier ranges are displayed
@@ -561,11 +618,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Click next page button
@@ -596,11 +655,13 @@ describe("ListingSearchV2", () => {
     } as any);
 
     const { container } = render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/market/v2/search"]}>
-          <ListingSearchV2 />
-        </MemoryRouter>
-      </Provider>
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <MemoryRouter initialEntries={["/market/v2/search"]}>
+            <ListingSearchV2 />
+          </MemoryRouter>
+        </Provider>
+      </ThemeProvider>
     );
 
     // Verify grid spacing is used (Grid spacing={1})
