@@ -129,7 +129,7 @@ export function OfferRow(props: {
   labelId: string
   enableSelection?: boolean
   hasSelectedItems?: boolean
-  isSentView?: boolean
+  viewAs?: "buyer" | "shop"
 }) {
   const { t } = useTranslation()
   const {
@@ -148,7 +148,7 @@ export function OfferRow(props: {
   const [assignOffer] = useAssignOfferMutation()
   const issueAlert = useAlertHook()
 
-  const isSent = props.isSentView ?? false
+  const isBuyerView = props.viewAs === "buyer"
 
   const belongsToOfferOrg = useMemo(
     () => !!row.contractor && profile?.contractors?.some(c => c.spectrum_id === row.contractor!.spectrum_id),
@@ -353,7 +353,7 @@ export function OfferRow(props: {
                     : ""}
                 {(+row.most_recent_offer.cost).toLocaleString(undefined)} aUEC
               </Typography>
-              {row.shop && !isSent && (
+              {row.shop && !isBuyerView && (
                 <Typography
                   variant="caption"
                   color="primary"
@@ -378,7 +378,7 @@ export function OfferRow(props: {
           minWidth: { xs: 80, sm: "auto" },
         }}
       >
-        {isSent && row.shop ? (
+        {isBuyerView && row.shop ? (
           <Stack direction="row" alignItems="center" spacing={1} sx={{ justifyContent: "flex-end" }}>
             {row.shop.avatar && (
               <Avatar src={row.shop.avatar} sx={{ width: 32, height: 32 }} />
@@ -769,7 +769,7 @@ export function OffersViewPaginated(props: {
           }))}
           initialSort={"timestamp"}
           generateRow={(props) => (
-            <OfferRow {...props} enableSelection={!mine} isSentView={mine} />
+            <OfferRow {...props} enableSelection={!mine} viewAs={mine ? "buyer" : "shop"} />
           )}
           keyAttr={"id"}
           headCells={(mine ? MyOffersHeadCells : OffersHeadCells).map((cell) => ({
