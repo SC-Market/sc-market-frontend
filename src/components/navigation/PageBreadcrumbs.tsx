@@ -29,6 +29,8 @@ export function PageBreadcrumbs({
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
+  if (items.length <= 1) return null
+
   return (
     <Breadcrumbs
       {...MuiBreadcrumbsProps}
