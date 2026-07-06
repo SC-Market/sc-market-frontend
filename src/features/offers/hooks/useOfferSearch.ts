@@ -72,10 +72,12 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     has_service: hasService,
   })
 
-  const totalCount = useMemo(
-    () => Object.values(data?.item_counts || {}).reduce((x, y) => x + y, 0),
-    [data],
-  )
+  const totalCount = useMemo(() => {
+    const counts = data?.item_counts || {}
+    return Object.entries(counts)
+      .filter(([key]) => key !== "unclaimed")
+      .reduce((sum, [, val]) => sum + val, 0)
+  }, [data])
   const totals = useMemo(() => new Map(Object.entries(data?.item_counts || [])), [data])
 
   // Auto-switch from "unclaimed" to "to-seller" on first load if there are 0 unclaimed items
