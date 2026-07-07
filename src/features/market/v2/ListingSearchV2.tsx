@@ -143,6 +143,20 @@ export function ListingSearchV2() {
 
   const { listings = [], total = 0, page: currentPage = 1, page_size: currentPageSize = 48 } = results || {};
 
+  // Dynamic SEO title based on active filters
+  const pageTitle = useMemo(() => {
+    const parts: string[] = []
+    if (searchQuery.text) parts.push(searchQuery.text)
+    if (searchQuery.itemType) parts.push(searchQuery.itemType)
+    if (parts.length === 0) return "Star Citizen Marketplace — SC Market"
+    return `${parts.join(" ")} for Sale — Star Citizen | SC Market`
+  }, [searchQuery.text, searchQuery.itemType])
+
+  const pageDescription = useMemo(() => {
+    const type = searchQuery.itemType || "items"
+    return `Browse ${total || ""} ${type} for sale on SC Market. Compare prices from verified Star Citizen sellers.`
+  }, [searchQuery.itemType, total])
+
   // Grid breakpoints - match V1 exactly
   const gridBreakpoints = useMemo(() => {
     const sidebarInLayout = !showMobileSidebar;
@@ -182,16 +196,22 @@ export function ListingSearchV2() {
   return (
     <>
       <Helmet>
-        <title>Star Citizen Marketplace — Buy & Sell Items | SC Market</title>
-        <meta name="description" content="Browse items for sale in Star Citizen. Ships, weapons, armor, components, and more from verified sellers on SC Market." />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
         <link rel="canonical" href={`${FRONTEND_URL}/market`} />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Star Citizen Marketplace | SC Market" />
-        <meta property="og:description" content="Browse items for sale in Star Citizen. Ships, weapons, armor, components, and more from verified sellers." />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={`${FRONTEND_URL}/market`} />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="Star Citizen Marketplace | SC Market" />
-        <meta name="twitter:description" content="Browse items for sale in Star Citizen. Ships, weapons, armor, components, and more." />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        {currentPage > 1 && (
+          <link rel="prev" href={`${FRONTEND_URL}/market?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage - 1) })}`} />
+        )}
+        {currentPage * currentPageSize < total && (
+          <link rel="next" href={`${FRONTEND_URL}/market?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage + 1) })}`} />
+        )}
       </Helmet>
       {/* Mobile/Tablet: Use bottom sheet for filters */}
       {showMobileSidebar && <MarketSidebarV2 />}

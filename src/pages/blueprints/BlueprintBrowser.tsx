@@ -236,6 +236,16 @@ export function BlueprintBrowser() {
     } catch { /* user not logged in or error */ }
   }
 
+  const pageTitle = useMemo(() => {
+    const cat = category || "All"
+    return `${cat} Blueprints — Star Citizen Crafting | SC Market`
+  }, [category])
+
+  const pageDescription = useMemo(() => {
+    const count = data?.total ?? ""
+    return `Browse ${count} Star Citizen crafting blueprints. Ingredients, craft time, and profit analysis.`
+  }, [data?.total])
+
   const handleResetFilters = () => {
     setSearchParams({}, { replace: true })
     setPage(1)
@@ -311,7 +321,8 @@ export function BlueprintBrowser() {
 
   return (
     <StandardPageLayout
-      title={t("blueprints.browser.title", "Blueprint Browser")}
+      title={pageTitle}
+      description={pageDescription}
       headerTitle={t("blueprints.browser.header", "Blueprint Browser")}
       sidebarOpen={true}
       maxWidth="xl"

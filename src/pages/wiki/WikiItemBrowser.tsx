@@ -10,6 +10,7 @@ import {
   ToggleButtonGroup, ToggleButton, Table, TableBody, TableCell, TableHead, TableRow,
   Paper, Avatar, Divider,
 } from "@mui/material"
+import { Helmet } from "react-helmet"
 import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
@@ -18,7 +19,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getFactionIcon } from "../../util/gameIcons"
 import {
@@ -199,6 +200,17 @@ export function WikiItemBrowser() {
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
   const hasFilters = !!(typeFilter || sizeFilter || gradeFilter)
 
+  const pageTitle = useMemo(() => {
+    const type = typeFilter || "All"
+    return `${type} Items — Star Citizen Game Database | SC Market`
+  }, [typeFilter])
+
+  const pageDescription = useMemo(() => {
+    const count = data?.total ?? ""
+    const type = typeFilter || "Star Citizen"
+    return `Browse ${count} ${type} items. Stats, prices, crafting uses, and locations.`
+  }, [typeFilter, data?.total])
+
   const filtersContent = (
     <Stack spacing={2}>
       <FilterSection
@@ -249,11 +261,20 @@ export function WikiItemBrowser() {
 
   return (
     <StandardPageLayout
-      title={t("wiki.items.title", "Game Items Database")}
+      title={pageTitle}
+      description={pageDescription}
       headerTitle={t("wiki.items.title", "Game Items Database")}
       sidebarOpen={true}
       maxWidth="xl"
     >
+      <Helmet>
+        {page > 1 && (
+          <link rel="prev" href={`${FRONTEND_URL}/wiki/items?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page - 1) })}`} />
+        )}
+        {page < totalPages && (
+          <link rel="next" href={`${FRONTEND_URL}/wiki/items?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page + 1) })}`} />
+        )}
+      </Helmet>
       <Grid item xs={12}>
         <FilterSidebarLayout filters={filtersContent} filterTitle="Filters" sidebarWidth={190}>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>

@@ -12,6 +12,7 @@ import {
   Box, Card, CardContent, Grid, Typography, Pagination, Alert, Chip, Stack,
   Divider, Tooltip, useMediaQuery, Button,
 } from "@mui/material"
+import { Helmet } from "react-helmet"
 import type { SxProps } from "@mui/material"
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar"
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler"
@@ -26,6 +27,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { FRONTEND_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouette"
 import { ShipDetailModal } from "../../components/game-data/ShipDetailModal"
@@ -449,6 +451,16 @@ export function WikiShipBrowser() {
 
   const hasFilters = !!(manufacturer || career || role || size || category !== "all")
 
+  const pageTitle = useMemo(() => {
+    const mfr = manufacturer || "All"
+    return `${mfr} Ships — Star Citizen Ship Database | SC Market`
+  }, [manufacturer])
+
+  const pageDescription = useMemo(() => {
+    const count = filtered.length
+    return `Browse ${count} Star Citizen ships and vehicles. Specs, loadouts, and market availability.`
+  }, [filtered.length])
+
   // ─── Sidebar filter content ───────────────────────────────────────────────
   const CATEGORY_OPTIONS = [
     { value: "all",      label: "All",             icon: <AppsIcon sx={{ fontSize: 16 }} />,           count: counts.all },
@@ -704,7 +716,15 @@ export function WikiShipBrowser() {
   }
 
   return (
-    <StandardPageLayout title="Ships & Vehicles" headerTitle="Ships & Vehicles" sidebarOpen={true} maxWidth="xl">
+    <StandardPageLayout title={pageTitle} description={pageDescription} headerTitle="Ships & Vehicles" sidebarOpen={true} maxWidth="xl">
+      <Helmet>
+        {currentPage > 1 && (
+          <link rel="prev" href={`${FRONTEND_URL}/wiki/ships?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage - 1) })}`} />
+        )}
+        {currentPage < totalPages && (
+          <link rel="next" href={`${FRONTEND_URL}/wiki/ships?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage + 1) })}`} />
+        )}
+      </Helmet>
       <Grid item xs={12}>
         <FilterSidebarLayout filters={filtersContent} filterTitle="Filters" sidebarWidth={220}>
 

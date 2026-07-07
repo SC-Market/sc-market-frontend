@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import {
   Container,
   Typography,
@@ -11,10 +11,12 @@ import {
   Pagination,
   InputAdornment,
 } from "@mui/material"
+import { Helmet } from "react-helmet"
 import { Search, StorefrontRounded } from "@mui/icons-material"
 import { useBrowseShopsQuery } from "../../../store/api/v2/market"
 import { useDebounce } from "../../../hooks/useDebounce"
 import { ShopCard } from "./ShopCard"
+import { FRONTEND_URL } from "../../../util/constants"
 
 const SHOP_TAGS = [
   "Weapons",
@@ -62,6 +64,18 @@ export function ShopDirectory() {
     pageSize,
   })
 
+  const totalPages = data ? Math.ceil(data.total / pageSize) : 0
+
+  const pageTitle = useMemo(() => {
+    const tag = selectedTag || "All"
+    return `${tag} Shops — Star Citizen Marketplace | SC Market`
+  }, [selectedTag])
+
+  const pageDescription = useMemo(() => {
+    const count = data?.total ?? ""
+    return `Browse ${count} verified Star Citizen shops. Compare ratings, listings, and specialties.`
+  }, [data?.total])
+
   const handleTagToggle = (tag: string) => {
     setSelectedTag((prev) => (prev === tag ? null : tag))
     setPage(1)
@@ -69,6 +83,16 @@ export function ShopDirectory() {
 
   return (
     <Container maxWidth="lg" sx={{ pt: 12, pb: 4 }}>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        {page > 1 && (
+          <link rel="prev" href={`${FRONTEND_URL}/shops?page=${page - 1}${selectedTag ? `&tag=${selectedTag}` : ""}`} />
+        )}
+        {page < totalPages && (
+          <link rel="next" href={`${FRONTEND_URL}/shops?page=${page + 1}${selectedTag ? `&tag=${selectedTag}` : ""}`} />
+        )}
+      </Helmet>
       {/* Header */}
       <Typography variant="h4" fontWeight={700} sx={{ mb: 3 }}>
         Browse Shops
