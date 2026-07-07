@@ -2,7 +2,11 @@ import React, { lazy, Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageAdminOrderStats } from "../../features/admin/hooks/usePageAdminOrderStats"
-import { AdminOrderStatsSkeleton } from "../../features/admin/components/AdminOrderStatsSkeleton"
+import {
+  AdminOrderStatsSkeleton,
+  OrderAnalyticsSkeleton,
+  OfferAnalyticsSkeleton,
+} from "../../features/admin/components/AdminOrderStatsSkeleton"
 import { useGetOfferAnalyticsQuery } from "../../features/admin/api/adminApi"
 import { Divider, Grid, Typography } from "@mui/material"
 
@@ -65,7 +69,7 @@ export function AdminOrderStats() {
   const { data: orderAnalytics, isLoading: ordersLoading, error: ordersError } = usePageAdminOrderStats()
   const { data: offerAnalytics, isLoading: offersLoading } = useGetOfferAnalyticsQuery()
 
-  const isLoading = ordersLoading || offersLoading
+  const isLoading = ordersLoading && offersLoading
 
   return (
     <StandardPageLayout
@@ -78,7 +82,9 @@ export function AdminOrderStats() {
       skeleton={<AdminOrderStatsSkeleton />}
     >
       <Suspense fallback={<AdminOrderStatsSkeleton />}>
-        {orderAnalytics && (
+        {ordersLoading ? (
+          <OrderAnalyticsSkeleton />
+        ) : orderAnalytics ? (
           <>
             <OrderAnalyticsCharts analytics={orderAnalytics} />
             <TopShopsAnalytics analytics={orderAnalytics} />
@@ -86,9 +92,11 @@ export function AdminOrderStats() {
             <OrderSummary analytics={orderAnalytics} />
             <AdminRecentOrders />
           </>
-        )}
+        ) : null}
 
-        {offerAnalytics && (
+        {offersLoading ? (
+          <OfferAnalyticsSkeleton />
+        ) : offerAnalytics ? (
           <>
             <Grid item xs={12}>
               <Divider sx={{ my: 4 }} />
@@ -101,7 +109,7 @@ export function AdminOrderStats() {
             <OfferTopUsersAnalytics analytics={offerAnalytics} />
             <OfferSummary analytics={offerAnalytics} />
           </>
-        )}
+        ) : null}
       </Suspense>
     </StandardPageLayout>
   )
