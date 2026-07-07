@@ -141,7 +141,7 @@ export function WikiItemDetail() {
             "@type": "Product",
             name: item.name,
             description: seoDescription,
-            image: item.image_url || undefined,
+            ...(item.image_url && { image: item.image_url }),
             url: canonicalUrl,
             ...(item.manufacturer && { manufacturer: { "@type": "Organization", name: item.manufacturer } }),
             ...(item.market_stats?.listing_count > 0 && {
