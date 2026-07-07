@@ -53,6 +53,8 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
+import { has_permission } from "../../views/contractor/OrgRoles"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
 import { SHOP_PATHS } from "../../routes/paths"
 
@@ -94,6 +96,12 @@ export function SidebarV2() {
   const selectedShopSlug = contextOverride?.shopSlug ?? inferredContext.shopSlug
   const selectedOrgId = contextOverride?.orgId ?? inferredContext.orgId
 
+  // Fetch selected org's contractor data for permission checks
+  const { data: selectedContractor } = useGetContractorBySpectrumIDQuery(
+    selectedOrgId || "",
+    { skip: !selectedOrgId },
+  )
+
   const selectedShop = useMemo(
     () => shops.find((s) => s.slug === selectedShopSlug) || shops[0],
     [shops, selectedShopSlug],
@@ -112,22 +120,42 @@ export function SidebarV2() {
   const contextItems = useMemo<NavItem[]>(() => {
     if (context === "shop" && selectedShop) {
       const slug = selectedShop.slug
-      return [
+      const perms = selectedShop.permissions
+      const items: NavItem[] = [
         { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded /> },
         { label: t("nav.listings", "Listings"), to: SHOP_PATHS.listings(slug), icon: <ListAltRounded /> },
-        { label: t("nav.createListing", "Create Listing"), to: SHOP_PATHS.create(slug), icon: <AddRounded /> },
-        { label: t("nav.stock", "Stock"), to: SHOP_PATHS.stock(slug), icon: <InventoryRounded /> },
-        { label: t("nav.shopSettings", "Shop Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded /> },
       ]
+      if (perms?.manage_market) {
+        items.push({ label: t("nav.createListing", "Create Listing"), to: SHOP_PATHS.create(slug), icon: <AddRounded /> })
+      }
+      if (perms?.manage_stock || perms?.manage_market) {
+        items.push({ label: t("nav.stock", "Stock"), to: SHOP_PATHS.stock(slug), icon: <InventoryRounded /> })
+      }
+      if (perms?.can_manage) {
+        items.push({ label: t("nav.shopSettings", "Shop Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded /> })
+      }
+      return items
     }
     if (context === "org" && selectedOrgId) {
-      return [
+      const canManageDetails = has_permission(selectedContractor, profile, "manage_org_details", profile?.contractors)
+      const canManageRoles = has_permission(selectedContractor, profile, "manage_roles", profile?.contractors)
+      const canManageInvites = has_permission(selectedContractor, profile, "manage_invites", profile?.contractors)
+      const items: NavItem[] = [
         { label: t("nav.members", "Members"), to: `/org/${selectedOrgId}/members`, icon: <PeopleRounded /> },
-        { label: t("nav.orgAbout", "About"), to: `/org/${selectedOrgId}/manage/about`, icon: <SettingsRounded /> },
-        { label: t("nav.orgRoles", "Roles"), to: `/org/${selectedOrgId}/manage/roles`, icon: <PeopleRounded /> },
-        { label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PeopleRounded /> },
-        { label: t("nav.orgSettings", "Settings"), to: `/org/${selectedOrgId}/manage/settings`, icon: <SettingsRounded /> },
       ]
+      if (canManageDetails) {
+        items.push({ label: t("nav.orgAbout", "About"), to: `/org/${selectedOrgId}/manage/about`, icon: <SettingsRounded /> })
+      }
+      if (canManageRoles) {
+        items.push({ label: t("nav.orgRoles", "Roles"), to: `/org/${selectedOrgId}/manage/roles`, icon: <PeopleRounded /> })
+      }
+      if (canManageInvites) {
+        items.push({ label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PeopleRounded /> })
+      }
+      if (canManageDetails) {
+        items.push({ label: t("nav.orgSettings", "Settings"), to: `/org/${selectedOrgId}/manage/settings`, icon: <SettingsRounded /> })
+      }
+      return items
     }
     // Browse mode
     return [
