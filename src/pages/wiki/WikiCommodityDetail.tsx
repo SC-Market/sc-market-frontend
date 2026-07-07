@@ -4,6 +4,7 @@
  */
 
 import React from "react"
+import { Helmet } from "react-helmet"
 import {
   Box, Button, Card, CardContent, Chip, Grid, Typography, Alert, Stack, Divider,
   Table, TableBody, TableCell, TableHead, TableRow, Paper, Avatar,
@@ -18,6 +19,7 @@ import { getCommodityColor } from "../../util/gameIcons"
 import { formatPrice } from "../../util/formatPrice"
 import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded, ShoppingCart } from "@mui/icons-material"
 import { useSearchOresQuery } from "../../store/api/v2/market"
+import { FRONTEND_URL } from "../../util/constants"
 
 function BoolChip({ value, label }: { value: boolean; label: string }) {
   return (
@@ -42,9 +44,23 @@ export function WikiCommodityDetail() {
   const bps = data?.blueprints_requiring || []
   const price = data?.market_price
 
+  const acquisitionMethods = [
+    r?.can_be_mined && "Mining",
+    r?.can_be_purchased && "Purchase",
+    r?.can_be_salvaged && "Salvage",
+    r?.can_be_looted && "Looting",
+  ].filter(Boolean).join(", ")
+
+  const seoTitle = r ? `${r.resource_name} — Star Citizen Commodity | SC Market` : "Commodity Detail | SC Market"
+  const seoDescription = r ? `${r.resource_name} — ${r.resource_category} commodity. ${acquisitionMethods || "Various acquisition methods"}. View mining locations, market price, and quality tiers.`.slice(0, 160) : ""
+  const canonicalUrl = `${FRONTEND_URL}/wiki/commodities/${id}`
+  const ogImage = r?.resource_icon || `${FRONTEND_URL}/logo512.png`
+
   return (
     <StandardPageLayout
-      title={r?.resource_name || "Commodity Detail"}
+      title={seoTitle}
+      description={seoDescription}
+      canonicalUrl={`/wiki/commodities/${id}`}
       headerTitle={r?.resource_name || "Commodity Detail"}
       breadcrumbs={[
         { label: "Wiki", href: "/wiki/commodities" },
@@ -58,7 +74,41 @@ export function WikiCommodityDetail() {
       maxWidth="lg"
     >
       {r && (
-        <Grid item xs={12}>
+        <>
+          <Helmet>
+            <title>{seoTitle}</title>
+            <meta name="description" content={seoDescription} />
+            <link rel="canonical" href={canonicalUrl} />
+            <meta property="og:title" content={seoTitle} />
+            <meta property="og:description" content={seoDescription} />
+            <meta property="og:url" content={canonicalUrl} />
+            <meta property="og:image" content={ogImage} />
+            <meta property="og:type" content="product" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content={seoTitle} />
+            <meta name="twitter:description" content={seoDescription} />
+            <meta name="twitter:image" content={ogImage} />
+            <script type="application/ld+json">
+              {JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Product",
+                name: r.resource_name,
+                description: seoDescription,
+                image: r.resource_icon || undefined,
+                url: canonicalUrl,
+                category: r.resource_category,
+                ...(price && (price.min_price || price.max_price) && {
+                  offers: {
+                    "@type": "AggregateOffer",
+                    lowPrice: price.min_price,
+                    highPrice: price.max_price,
+                    priceCurrency: "aUEC",
+                  },
+                }),
+              })}
+            </script>
+          </Helmet>
+          <Grid item xs={12}>
           {/* Header */}
           <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
             <GameItemAvatar
@@ -192,6 +242,7 @@ export function WikiCommodityDetail() {
             )}
           </Grid>
         </Grid>
+        </>
       )}
     </StandardPageLayout>
   )

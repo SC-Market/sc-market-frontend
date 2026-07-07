@@ -44,6 +44,8 @@ import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHi
 import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
 import { MARKET_PATHS } from "../../routes/paths"
+import { Helmet } from "react-helmet"
+import { FRONTEND_URL } from "../../util/constants"
 
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
@@ -106,13 +108,54 @@ export function WikiItemDetail() {
     )
   }
 
+  const seoTitle = `${item.name} — Star Citizen Item | SC Market`
+  const seoDescription = `${item.name} — ${item.type || "equipment"} item${item.manufacturer ? " by " + item.manufacturer : ""}. View stats, market price, crafting uses, and locations in Star Citizen.`.slice(0, 160)
+  const canonicalUrl = `${FRONTEND_URL}/wiki/items/${id}`
+  const ogImage = item.image_url || `${FRONTEND_URL}/logo512.png`
+
   return (
     <StandardPageLayout
-      title={t("wiki.itemDetail.title", "Item Details")}
+      title={seoTitle}
+      description={seoDescription}
+      canonicalUrl={`/wiki/items/${id}`}
       headerTitle={item.name}
       sidebarOpen={true}
       maxWidth="xl"
     >
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:type" content="product" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={seoDescription} />
+        <meta name="twitter:image" content={ogImage} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: item.name,
+            description: seoDescription,
+            image: item.image_url || undefined,
+            url: canonicalUrl,
+            ...(item.manufacturer && { manufacturer: { "@type": "Organization", name: item.manufacturer } }),
+            ...(item.market_stats?.listing_count > 0 && {
+              offers: {
+                "@type": "AggregateOffer",
+                lowPrice: item.market_stats.min_price,
+                highPrice: item.market_stats.max_price,
+                priceCurrency: "aUEC",
+                offerCount: item.market_stats.listing_count,
+              },
+            }),
+          })}
+        </script>
+      </Helmet>
       <Grid item xs={12}>
         <Grid container spacing={3}>
           {/* Main Info */}

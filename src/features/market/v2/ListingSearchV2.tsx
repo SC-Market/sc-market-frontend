@@ -27,7 +27,8 @@ import { useTheme } from "@mui/material/styles";
 import { isAfter, subDays } from "date-fns";
 import { useNavigate, useSearchParams, Link as RouterLink, useLocation } from "react-router-dom";
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme";
-import { FALLBACK_IMAGE_URL } from "../../../util/constants";
+import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../../util/constants";
+import { Helmet } from "react-helmet";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
 import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
@@ -180,6 +181,18 @@ export function ListingSearchV2() {
 
   return (
     <>
+      <Helmet>
+        <title>Star Citizen Marketplace — Buy & Sell Items | SC Market</title>
+        <meta name="description" content="Browse items for sale in Star Citizen. Ships, weapons, armor, components, and more from verified sellers on SC Market." />
+        <link rel="canonical" href={`${FRONTEND_URL}/market`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Star Citizen Marketplace | SC Market" />
+        <meta property="og:description" content="Browse items for sale in Star Citizen. Ships, weapons, armor, components, and more from verified sellers." />
+        <meta property="og:url" content={`${FRONTEND_URL}/market`} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content="Star Citizen Marketplace | SC Market" />
+        <meta name="twitter:description" content="Browse items for sale in Star Citizen. Ships, weapons, armor, components, and more." />
+      </Helmet>
       {/* Mobile/Tablet: Use bottom sheet for filters */}
       {showMobileSidebar && <MarketSidebarV2 />}
 

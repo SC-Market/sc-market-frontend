@@ -38,6 +38,17 @@ export function OrgMetaTags({ contractor }: OrgMetaTagsProps) {
         name="twitter:image"
         content={contractor.banner || contractor.avatar}
       />
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: contractor.name,
+          description: contractor.description,
+          url: `${FRONTEND_URL}/contractor/${contractor.spectrum_id}`,
+          image: contractor.banner || contractor.avatar,
+          logo: contractor.avatar,
+        })}
+      </script>
     </Helmet>
   )
 }

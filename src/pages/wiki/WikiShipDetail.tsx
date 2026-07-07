@@ -3,6 +3,7 @@
  */
 
 import React from "react"
+import { Helmet } from "react-helmet"
 import {
   Box, Card, CardContent, Typography, Grid, Chip,
   Alert, Divider, Table, TableBody, TableCell,
@@ -15,7 +16,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouette"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
 
 interface LoadoutNode {
@@ -125,8 +126,43 @@ export function WikiShipDetail() {
   const shipColor = getShipColor(ship.career, ship.role, ship.focus)
   const chipColor = getShipRoleColor(ship.career, ship.role, ship.focus)
 
+  const seoTitle = `${ship.name} — Star Citizen Ship | SC Market`
+  const seoDescription = `${ship.name}${ship.manufacturer ? " by " + ship.manufacturer : ""} — ${ship.focus || ship.role || "spacecraft"}. Specs, loadout, and market availability in Star Citizen.`.slice(0, 160)
+  const canonicalUrl = `${FRONTEND_URL}/wiki/ships/${id}`
+  const ogImage = ship.image_url || `${FRONTEND_URL}/logo512.png`
+
   return (
-    <StandardPageLayout title="Ship Details" headerTitle={ship.name} sidebarOpen={true} maxWidth="xl">
+    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={`/wiki/ships/${id}`} headerTitle={ship.name} sidebarOpen={true} maxWidth="xl">
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:type" content="product" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={seoDescription} />
+        <meta name="twitter:image" content={ogImage} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: ship.name,
+            description: ship.description || seoDescription,
+            image: ship.image_url || undefined,
+            url: canonicalUrl,
+            ...(ship.manufacturer && { manufacturer: { "@type": "Organization", name: ship.manufacturer } }),
+            category: [ship.career, ship.role, ship.focus].filter(Boolean).join(" / "),
+            additionalProperty: [
+              ...(ship.crew_size ? [{ "@type": "PropertyValue", name: "Crew Size", value: ship.crew_size }] : []),
+              ...(ship.length_m ? [{ "@type": "PropertyValue", name: "Length", value: `${ship.length_m}m` }] : []),
+            ],
+          })}
+        </script>
+      </Helmet>
       <Grid item xs={12}>
         <Grid container spacing={3}>
 
