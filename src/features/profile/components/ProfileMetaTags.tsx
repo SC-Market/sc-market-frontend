@@ -47,7 +47,7 @@ export function ProfileMetaTags({ profile }: ProfileMetaTagsProps) {
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Contractor",
+          "@type": "Person",
           description: profile.profile_description,
           name: profile.display_name,
           username: profile.username,

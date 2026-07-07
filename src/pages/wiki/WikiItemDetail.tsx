@@ -43,6 +43,7 @@ import { formatQuantity } from "../../util/formatQuantity"
 import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHistoryChartV2"
 import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
+import { MARKET_PATHS } from "../../routes/paths"
 
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
@@ -162,7 +163,7 @@ export function WikiItemDetail() {
                           size="small"
                           startIcon={<ShoppingCart />}
                           sx={{ mt: 2 }}
-                          onClick={() => navigate(`/market?item=${item.id}`)}
+                          onClick={() => navigate(MARKET_PATHS.aggregate(item.id, item.name))}
                         >
                           View on Market
                         </Button>

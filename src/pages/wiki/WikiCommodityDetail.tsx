@@ -5,7 +5,7 @@
 
 import React from "react"
 import {
-  Box, Card, CardContent, Chip, Grid, Typography, Alert, Stack, Divider,
+  Box, Button, Card, CardContent, Chip, Grid, Typography, Alert, Stack, Divider,
   Table, TableBody, TableCell, TableHead, TableRow, Paper, Avatar,
 } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
@@ -16,7 +16,7 @@ import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { getCommodityColor } from "../../util/gameIcons"
 import { formatPrice } from "../../util/formatPrice"
-import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded } from "@mui/icons-material"
+import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded, ShoppingCart } from "@mui/icons-material"
 import { useSearchOresQuery } from "../../store/api/v2/market"
 
 function BoolChip({ value, label }: { value: boolean; label: string }) {
@@ -92,10 +92,19 @@ export function WikiCommodityDetail() {
             <Card sx={{ mb: 2 }}>
               <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
                 <Typography variant="subtitle2" gutterBottom>Market Price</Typography>
-                <Stack direction="row" spacing={3}>
+                <Stack direction="row" spacing={3} alignItems="center">
                   {price.min_price != null && <Box><Typography variant="caption" color="text.secondary">Min</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.min_price)}</Typography></Box>}
                   {price.average_price != null && <Box><Typography variant="caption" color="text.secondary">Avg</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.average_price)}</Typography></Box>}
                   {price.max_price != null && <Box><Typography variant="caption" color="text.secondary">Max</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.max_price)}</Typography></Box>}
+                  <Box sx={{ flex: 1 }} />
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<ShoppingCart />}
+                    onClick={() => navigate(`/market?item=${encodeURIComponent(r.resource_name)}`)}
+                  >
+                    View on Market
+                  </Button>
                 </Stack>
               </CardContent>
             </Card>

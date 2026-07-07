@@ -10,6 +10,8 @@ import { Link as RouterLink } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded"
+import { Helmet } from "react-helmet"
+import { FRONTEND_URL } from "../../util/constants"
 
 interface BreadcrumbItem {
   label: string
@@ -31,7 +33,24 @@ export function PageBreadcrumbs({
 
   if (items.length <= 1) return null
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.label,
+      ...(item.href ? { item: `${FRONTEND_URL}${item.href}` } : {}),
+    })),
+  }
+
   return (
+    <>
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbSchema)}
+      </script>
+    </Helmet>
     <Breadcrumbs
       {...MuiBreadcrumbsProps}
       separator={<NavigateNextRoundedIcon fontSize="small" />}
@@ -80,5 +99,6 @@ export function PageBreadcrumbs({
         )
       })}
     </Breadcrumbs>
+    </>
   )
 }

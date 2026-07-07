@@ -1,6 +1,7 @@
 import React, { ReactElement, ReactNode, useMemo } from "react"
 import { Navigate } from "react-router-dom"
 import { Grid, GridProps } from "@mui/material"
+import { Helmet } from "react-helmet"
 import { Page } from "../metadata/Page"
 import { PageBreadcrumbs } from "../navigation/PageBreadcrumbs"
 import { ContainerGrid } from "./ContainerGrid"
@@ -25,6 +26,7 @@ export interface BreadcrumbItem {
 export interface StandardPageLayoutProps {
   // Metadata
   title?: string | null
+  description?: string
   canonicalUrl?: string
   dontUseDefaultCanonUrl?: boolean
 
@@ -78,6 +80,7 @@ export function StandardPageLayout(
 
   const {
     title,
+    description,
     canonicalUrl,
     dontUseDefaultCanonUrl,
     breadcrumbs,
@@ -143,6 +146,12 @@ export function StandardPageLayout(
       canonUrl={canonicalUrl}
       dontUseDefaultCanonUrl={dontUseDefaultCanonUrl}
     >
+      <Helmet>
+        <meta
+          name="description"
+          content={description || `${title || "SC Market"} - SC Market, the Star Citizen marketplace`}
+        />
+      </Helmet>
       <ContainerGrid
         sidebarOpen={sidebarOpen}
         sidebarWidth={sidebarWidth}

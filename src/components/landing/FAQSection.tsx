@@ -3,13 +3,41 @@ import { List, Paper, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
+import { Helmet } from "react-helmet"
 import { FAQQuestion } from "./FAQQuestion"
 
 export function FAQSection() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
+  const faqs = [
+    { question: t("landing.faqSellItemsQ"), answer: t("landing.faqSellItemsA") },
+    { question: t("landing.faqSafeQ"), answer: t("landing.faqSafeA") },
+    { question: t("landing.faqListThingsQ"), answer: t("landing.faqListThingsA") },
+    { question: t("landing.faqFeeQ"), answer: t("landing.faqFeeA") },
+    { question: t("landing.faqRealMoneyQ"), answer: t("landing.faqRealMoneyA") },
+  ]
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  }
+
   return (
+    <>
+    <Helmet>
+      <script type="application/ld+json">
+        {JSON.stringify(faqSchema)}
+      </script>
+    </Helmet>
     <Stack
       direction={"row"}
       sx={{ flexWrap: "wrap" }}
@@ -54,5 +82,6 @@ export function FAQSection() {
         </List>
       </Paper>
     </Stack>
+    </>
   )
 }

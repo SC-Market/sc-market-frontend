@@ -6,6 +6,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { ReportButton } from "../button/ReportButton"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { Helmet } from "react-helmet"
 
 export function Footer() {
   const { t } = useTranslation()
@@ -13,6 +14,18 @@ export function Footer() {
 
   return (
     <Grid item xs={12} sx={{ marginTop: 2 }}>
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "SC Market",
+            url: "https://sc-market.space",
+            logo: "https://sc-market.space/scmarket-logo.png",
+            sameAs: ["https://discord.gg/scmarket"],
+          })}
+        </script>
+      </Helmet>
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <Divider light />
