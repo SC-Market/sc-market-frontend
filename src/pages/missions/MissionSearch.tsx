@@ -199,6 +199,16 @@ export function MissionSearch() {
   const loadMore = useCallback(() => setPage(p => p + 1), [])
   const sentinelRef = useInfiniteScroll({ hasMore, isLoading: isFetching, onLoadMore: loadMore })
 
+  const pageTitle = useMemo(() => {
+    const cat = category || "All"
+    return `${cat} Missions — Star Citizen Mission Database | SC Market`
+  }, [category])
+
+  const pageDescription = useMemo(() => {
+    const count = data?.total ?? ""
+    return `Browse ${count} Star Citizen missions. Rewards, locations, and difficulty ratings.`
+  }, [data?.total])
+
   const handleResetFilters = () => {
     setSearchParams({}, { replace: true })
     setPage(1)
@@ -241,7 +251,8 @@ export function MissionSearch() {
 
   return (
     <StandardPageLayout
-      title={t("missions.search.title", "Mission Database")}
+      title={pageTitle}
+      description={pageDescription}
       headerTitle={t("missions.search.header", "Mission Database")}
       sidebarOpen={true}
       maxWidth="xl"

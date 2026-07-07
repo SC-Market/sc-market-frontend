@@ -9,6 +9,7 @@ import {
   FormControl, Grid, InputLabel, MenuItem, Pagination, Select, Stack, TextField,
   ToggleButton, ToggleButtonGroup, Typography,
 } from "@mui/material"
+import { Helmet } from "react-helmet"
 import HardwareRoundedIcon from "@mui/icons-material/HardwareRounded"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import ConstructionIcon from "@mui/icons-material/Construction"
@@ -25,7 +26,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getCommodityColor } from "../../util/gameIcons"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 
 type AcqFilter = "all" | "mined" | "purchased" | "salvaged" | "looted"
 
@@ -122,6 +123,16 @@ export function WikiCommodityBrowser() {
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
   const hasFilters = !!(category || acq !== "all")
 
+  const pageTitle = useMemo(() => {
+    const cat = category || "All"
+    return `${cat} Commodities — Star Citizen | SC Market`
+  }, [category])
+
+  const pageDescription = useMemo(() => {
+    const count = data?.total ?? ""
+    return `Browse ${count} Star Citizen commodities. Mining locations, market prices, and quality tiers.`
+  }, [data?.total])
+
   const filtersContent = (
     <Stack spacing={2}>
       <Box>
@@ -186,7 +197,15 @@ export function WikiCommodityBrowser() {
   )
 
   return (
-    <StandardPageLayout title="Commodities" headerTitle="Commodities" sidebarOpen={true} maxWidth="xl">
+    <StandardPageLayout title={pageTitle} description={pageDescription} headerTitle="Commodities" sidebarOpen={true} maxWidth="xl">
+      <Helmet>
+        {page > 1 && (
+          <link rel="prev" href={`${FRONTEND_URL}/wiki/commodities?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page - 1) })}`} />
+        )}
+        {page < totalPages && (
+          <link rel="next" href={`${FRONTEND_URL}/wiki/commodities?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page + 1) })}`} />
+        )}
+      </Helmet>
       <Grid item xs={12}>
         <FilterSidebarLayout filters={filtersContent} filterTitle="Filters" sidebarWidth={210}>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>

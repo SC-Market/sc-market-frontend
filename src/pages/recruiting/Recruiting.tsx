@@ -93,7 +93,8 @@ export function Recruiting() {
 
   return (
     <SidebarPageLayout
-      title={t("recruiting_orgs")}
+      title="Star Citizen Recruiting — Find Organizations | SC Market"
+      description="Browse recruiting posts from Star Citizen organizations. Find your next crew."
       breadcrumbs={[{ label: t("recruiting_orgs") }]}
       showOrgInBreadcrumbs={true}
       headerTitle={t("recruiting_orgs")}
