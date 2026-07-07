@@ -94,7 +94,7 @@ export function WikiCommodityDetail() {
                 "@type": "Product",
                 name: r.resource_name,
                 description: seoDescription,
-                image: r.resource_icon || undefined,
+                ...(r.resource_icon && { image: r.resource_icon }),
                 url: canonicalUrl,
                 category: r.resource_category,
                 ...(price && (price.min_price || price.max_price) && {

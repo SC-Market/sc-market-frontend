@@ -10,6 +10,7 @@ interface ProfileMetaTagsProps {
 export function ProfileMetaTags({ profile }: ProfileMetaTagsProps) {
   return (
     <Helmet>
+      <meta name="description" content={profile.profile_description?.slice(0, 160) || `${profile.display_name || profile.username} — Star Citizen player on SC Market`} />
       <meta property="og:type" content="profile" />
       <meta
         property="og:url"

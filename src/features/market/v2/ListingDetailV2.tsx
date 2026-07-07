@@ -199,6 +199,7 @@ export function ListingDetailV2() {
                   <meta property="og:type" content="product" />
                   <meta name="twitter:card" content="summary_large_image" />
                   <meta name="twitter:title" content={listing.title} />
+                  <meta name="twitter:description" content={listing.description?.slice(0, 160) || listing.title} />
                   <meta name="twitter:image" content={photos[0]} />
                   <script type="application/ld+json">
                     {JSON.stringify({

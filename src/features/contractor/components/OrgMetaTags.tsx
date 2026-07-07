@@ -10,6 +10,7 @@ interface OrgMetaTagsProps {
 export function OrgMetaTags({ contractor }: OrgMetaTagsProps) {
   return (
     <Helmet>
+      <meta name="description" content={contractor.description?.slice(0, 160) || `${contractor.name} — Star Citizen organization on SC Market`} />
       <meta property="og:type" content="website" />
       <meta
         property="og:url"

@@ -40,10 +40,12 @@ export function MiningOreDetailPage() {
             <meta property="og:title" content={seoTitle} />
             <meta property="og:description" content={seoDescription} />
             <meta property="og:url" content={canonicalUrl} />
+            <meta property="og:image" content={`${FRONTEND_URL}/scmarket-logo.png`} />
             <meta property="og:type" content="product" />
             <meta name="twitter:card" content="summary" />
             <meta name="twitter:title" content={seoTitle} />
             <meta name="twitter:description" content={seoDescription} />
+            <meta name="twitter:image" content={`${FRONTEND_URL}/scmarket-logo.png`} />
             <script type="application/ld+json">
               {JSON.stringify({
                 "@context": "https://schema.org",

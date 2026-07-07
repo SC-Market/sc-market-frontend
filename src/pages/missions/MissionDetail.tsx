@@ -62,7 +62,7 @@ export function MissionDetail() {
             <meta name="description" content={seoDescription} />
             <link rel="canonical" href={canonicalUrl} />
             <meta property="og:title" content={seoTitle} />
-            <meta property="og:description" content={seoDescription} />
+            <meta property="og:description" content={m.mission_description?.slice(0, 160) || `${m.mission_name} — Star Citizen mission`} />
             <meta property="og:url" content={canonicalUrl} />
             <meta property="og:type" content="article" />
             <meta name="twitter:card" content="summary" />
