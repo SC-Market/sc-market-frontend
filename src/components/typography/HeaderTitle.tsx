@@ -11,7 +11,7 @@ export const HeaderTitle = React.forwardRef<
     center?: boolean
   } & TypographyProps
 >((props, ref) => {
-  const { xs, lg, xl, md, center, ...rest } = props
+  const { xs, lg, xl, md, center, component = "h1", ...rest } = props
   return (
     <Grid
       item
@@ -24,6 +24,7 @@ export const HeaderTitle = React.forwardRef<
     >
       <Typography
         variant={"h4"}
+        component={component as React.ElementType}
         sx={{ fontWeight: "bold" }}
         color={"text.secondary"}
         {...rest}

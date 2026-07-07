@@ -37,7 +37,7 @@ import { SellerOtherListingsV2, RelatedListingsV2, AggregateMarketDataV2 } from 
 import { ListingOrdersSection } from "./components/ListingOrdersSection"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { formatShortSlug } from "../domain/urls"
-import { MARKET_PATHS } from "../../../routes/paths"
+import { MARKET_PATHS, WIKI_PATHS } from "../../../routes/paths"
 import { getLanguageName } from "../../../constants/languages"
 import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
@@ -60,6 +60,7 @@ import {
   WarningRounded,
   SportsEsportsRounded,
   AccessTimeRounded,
+  MenuBookRounded,
 } from "@mui/icons-material"
 import { ClockAlert } from "mdi-material-ui"
 import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
@@ -199,6 +200,27 @@ export function ListingDetailV2() {
                   <meta name="twitter:card" content="summary_large_image" />
                   <meta name="twitter:title" content={listing.title} />
                   <meta name="twitter:image" content={photos[0]} />
+                  <script type="application/ld+json">
+                    {JSON.stringify({
+                      "@context": "https://schema.org",
+                      "@type": "Product",
+                      name: listing.title,
+                      description: listing.description,
+                      image: photos[0] !== FALLBACK_IMAGE_URL ? photos[0] : undefined,
+                      url: canonicalUrl,
+                      offers: {
+                        "@type": "Offer",
+                        price: firstItem?.base_price ?? priceRange?.min,
+                        priceCurrency: "aUEC",
+                        availability: "https://schema.org/InStock",
+                        seller: {
+                          "@type": "Organization",
+                          name: seller.name,
+                          url: `${FRONTEND_URL}/shops/${seller.slug}`,
+                        },
+                      },
+                    })}
+                  </script>
                 </Helmet>
               </Grid>
             </Grid>
@@ -250,6 +272,17 @@ export function ListingDetailV2() {
                             </Typography>
                             {isNew && (
                               <Chip label="NEW" color="primary" size="small" />
+                            )}
+                            {gameItemId && (
+                              <Chip
+                                icon={<MenuBookRounded sx={{ fontSize: 14 }} />}
+                                label="Wiki"
+                                size="small"
+                                variant="outlined"
+                                component={RouterLink}
+                                to={WIKI_PATHS.item(gameItemId, gameItemName)}
+                                clickable
+                              />
                             )}
                           </Stack>
                         </Stack>
