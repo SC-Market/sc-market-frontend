@@ -46,6 +46,8 @@ import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTab
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { amber } from "@mui/material/colors"
 import { useCallback, useMemo, MouseEventHandler } from "react"
+import { Helmet } from "react-helmet"
+import { FRONTEND_URL } from "../../../util/constants"
 import { EmptyReviews } from "../../../components/empty-states"
 import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
 import {
@@ -76,8 +78,45 @@ export function ShopProfile() {
 
   const bannerProfile = { banner: shop.banner_url || "" } as unknown as User
 
+  const seoDescription = `${shop.name} — ${shop.tags?.join(", ") || "Star Citizen"} shop on SC Market.${shop.description ? ` ${shop.description.slice(0, 100)}` : ""}`
+  const seoImage = shop.banner_url || shop.logo_url || ""
+  const canonicalUrl = `${FRONTEND_URL}/shops/${shop.slug}`
+
   return (
     <Box sx={{ position: "relative" }}>
+      <Helmet>
+        <title>{shop.name} — Star Citizen Shop | SC Market</title>
+        <meta name="description" content={seoDescription.slice(0, 160)} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${shop.name} — Star Citizen Shop | SC Market`} />
+        <meta property="og:description" content={seoDescription.slice(0, 160)} />
+        <meta property="og:image" content={seoImage} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${shop.name} — Star Citizen Shop | SC Market`} />
+        <meta name="twitter:description" content={seoDescription.slice(0, 160)} />
+        <meta name="twitter:image" content={seoImage} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Store",
+            name: shop.name,
+            description: shop.description,
+            url: canonicalUrl,
+            image: seoImage,
+            ...(shop.rating != null && shop.rating_count > 0
+              ? {
+                  aggregateRating: {
+                    "@type": "AggregateRating",
+                    ratingValue: shop.rating,
+                    ratingCount: shop.rating_count,
+                  },
+                }
+              : {}),
+          })}
+        </script>
+      </Helmet>
       {theme.palette.mode === "dark" ? (
         <DarkBannerContainer profile={bannerProfile} />
       ) : (

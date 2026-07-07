@@ -27,6 +27,8 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetResourceQuery } from "../../store/api/v2/market"
+import { Helmet } from "react-helmet"
+import { FRONTEND_URL } from "../../util/constants"
 
 export function ResourceDetail() {
   const { t } = useTranslation()
@@ -65,13 +67,49 @@ export function ResourceDetail() {
     resource.can_be_looted && t("resources.looted", "Looted"),
   ].filter(Boolean) as string[]
 
+  const seoTitle = `${resource.resource_name} — Star Citizen Resource | SC Market`
+  const seoDescription = `${resource.resource_name} — ${resource.resource_category} resource. Base value: ${resource.base_value ? resource.base_value.toLocaleString() + " aUEC" : "N/A"}. Quality tiers and market availability.`.slice(0, 160)
+  const canonicalUrl = `${FRONTEND_URL}/wiki/commodities/${resource_id}`
+
   return (
     <StandardPageLayout
-      title={resource.resource_name}
+      title={seoTitle}
+      description={seoDescription}
+      canonicalUrl={`/wiki/commodities/${resource_id}`}
       headerTitle={resource.resource_name}
       sidebarOpen={true}
       maxWidth="lg"
     >
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="product" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta name="twitter:description" content={seoDescription} />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: resource.resource_name,
+            description: seoDescription,
+            url: canonicalUrl,
+            category: resource.resource_category,
+            ...(market_price && (market_price.min_price || market_price.max_price) && {
+              offers: {
+                "@type": "AggregateOffer",
+                lowPrice: market_price.min_price,
+                highPrice: market_price.max_price,
+                priceCurrency: "aUEC",
+              },
+            }),
+          })}
+        </script>
+      </Helmet>
       {/* Resource Info */}
       <Grid item xs={12} md={6}>
         <Paper sx={{ p: 2 }}>

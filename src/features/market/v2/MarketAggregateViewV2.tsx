@@ -45,6 +45,7 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy";
 import { useCookies } from "react-cookie";
 import { FRONTEND_URL } from "../../../util/constants";
+import { formatShortSlug } from "../domain/urls";
 import { Cart } from "../../../datatypes/Cart";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
@@ -296,15 +297,35 @@ export function MarketAggregateViewV2() {
       <Helmet>
         <title>{game_item.name} — SC Market</title>
         <meta property="og:title" content={game_item.name} />
-        <meta property="og:url" content={`${FRONTEND_URL}/market/aggregate/${game_item.id}`} />
+        <meta property="og:url" content={`${FRONTEND_URL}/market/aggregate/${game_item.id ? formatShortSlug(game_item.id, game_item.name) : game_item.id}`} />
         {game_item.image_url && <meta property="og:image" content={game_item.image_url} />}
-        <meta name="description" content={game_item.description} />
+        <meta name="description" content={game_item.description || `Browse all ${game_item.name} listings on SC Market. Compare prices from multiple sellers.`} />
         <meta property="og:type" content="website" />
-        <meta property="og:description" content={game_item.description} />
+        <meta property="og:description" content={game_item.description || `Browse all ${game_item.name} listings on SC Market. Compare prices from multiple sellers.`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={game_item.name} />
-        <meta name="twitter:description" content={game_item.description} />
+        <meta name="twitter:description" content={game_item.description || `Browse all ${game_item.name} listings on SC Market.`} />
         <meta name="twitter:image" content={game_item.image_url} />
+        {game_item.name && complete.listings.length > 0 && (
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name: game_item.name,
+              description: `Browse all ${game_item.name} listings on SC Market. Compare prices from multiple sellers.`,
+              image: game_item.image_url || undefined,
+              url: `${FRONTEND_URL}/market/aggregate/${formatShortSlug(game_item.id, game_item.name)}`,
+              offers: {
+                "@type": "AggregateOffer",
+                priceCurrency: "aUEC",
+                lowPrice: Math.min(...complete.listings.map((l) => l.price_min)),
+                highPrice: Math.max(...complete.listings.map((l) => l.price_max)),
+                offerCount: complete.listings.length,
+                availability: "https://schema.org/InStock",
+              },
+            })}
+          </script>
+        )}
       </Helmet>
       <MarketAggregateViewV2Admin complete={complete} gameItemId={gameItemId!} />
     </StandardPageLayout>

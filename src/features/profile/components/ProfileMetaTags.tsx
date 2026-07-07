@@ -13,7 +13,7 @@ export function ProfileMetaTags({ profile }: ProfileMetaTagsProps) {
       <meta property="og:type" content="profile" />
       <meta
         property="og:url"
-        content={`${FRONTEND_URL}/people/${profile.username}`}
+        content={`${FRONTEND_URL}/user/${profile.username}`}
       />
       <meta
         property="og:title"
@@ -30,7 +30,7 @@ export function ProfileMetaTags({ profile }: ProfileMetaTagsProps) {
       <meta name="twitter:card" content="summary_large_image" />
       <meta
         name="twitter:url"
-        content={`${FRONTEND_URL}/people/${profile.username}`}
+        content={`${FRONTEND_URL}/user/${profile.username}`}
       />
       <meta
         name="twitter:title"
