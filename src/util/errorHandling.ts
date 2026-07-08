@@ -10,18 +10,29 @@ export function shouldRedirectTo404(
 ): boolean {
   if (!error || typeof error !== "object") return false
 
-  // Check if it's a FetchBaseQueryError with status
   if ("status" in error) {
     return error.status === 400 || error.status === 404
   }
 
-  // If it's not a FetchBaseQueryError, don't redirect to 404
+  return false
+}
+
+/**
+ * Determines if an error is a 403 Forbidden
+ */
+export function isForbiddenError(
+  error: FetchBaseQueryError | SerializedError | undefined,
+): boolean {
+  if (!error || typeof error !== "object") return false
+  if ("status" in error) {
+    return error.status === 403
+  }
   return false
 }
 
 /**
  * Determines if an error should show the error page
- * Any error that's not a 400/404 should show the error page
+ * Any error that's not a 400/403/404 should show the error page
  */
 export function shouldShowErrorPage(
   error: FetchBaseQueryError | SerializedError | undefined,
@@ -29,12 +40,10 @@ export function shouldShowErrorPage(
   if (!error) return false
   if (typeof error !== "object") return true
 
-  // Check if it's a FetchBaseQueryError with status
   if ("status" in error) {
-    return error.status !== 400 && error.status !== 404
+    return error.status !== 400 && error.status !== 403 && error.status !== 404
   }
 
-  // If it's not a FetchBaseQueryError, show error page
   return true
 }
 
@@ -60,12 +69,14 @@ export function getErrorMessage(
     if (typeof error.data === "string") {
       return error.data
     }
-    if (
-      error.data &&
-      typeof error.data === "object" &&
-      "message" in error.data
-    ) {
-      return (error.data as { message: string }).message
+    if (error.data && typeof error.data === "object") {
+      const data = error.data as Record<string, unknown>
+      if (data.error && typeof data.error === "object" && "message" in (data.error as object)) {
+        return (data.error as { message: string }).message
+      }
+      if ("message" in data) {
+        return data.message as string
+      }
     }
   }
 

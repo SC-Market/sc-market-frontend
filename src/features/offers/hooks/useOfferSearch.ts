@@ -76,7 +76,7 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     const counts = data?.item_counts || {}
     return Object.entries(counts)
       .filter(([key]) => key !== "unclaimed")
-      .reduce((sum, [, val]) => sum + val, 0)
+      .reduce((sum, [, val]) => sum + (val as number), 0)
   }, [data])
   const totals = useMemo(() => new Map(Object.entries(data?.item_counts || [])), [data])
 
