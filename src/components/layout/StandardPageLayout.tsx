@@ -9,8 +9,11 @@ import { HeaderTitle } from "../typography/HeaderTitle"
 import {
   shouldRedirectTo404,
   shouldShowErrorPage,
+  isForbiddenError,
+  getErrorMessage,
 } from "../../util/errorHandling"
 import { ErrorPage } from "../../pages/errors/ErrorPage"
+import { ForbiddenPage } from "../../pages/errors/ForbiddenPage"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
@@ -124,6 +127,12 @@ export function StandardPageLayout(
     )
   ) {
     return <Navigate to="/404" />
+  }
+
+  // Handle 403 errors
+  if (isForbiddenError(error as FetchBaseQueryError | SerializedError | undefined)) {
+    const message = getErrorMessage(error as FetchBaseQueryError | SerializedError | undefined)
+    return <ForbiddenPage message={message} />
   }
 
   // Handle server errors
