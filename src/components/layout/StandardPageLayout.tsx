@@ -129,9 +129,13 @@ export function StandardPageLayout(
     return <Navigate to="/404" />
   }
 
-  // Handle 403 errors
+  // Handle 403 errors — redirect to login if not authenticated, show forbidden page otherwise
   if (isForbiddenError(error as FetchBaseQueryError | SerializedError | undefined)) {
     const message = getErrorMessage(error as FetchBaseQueryError | SerializedError | undefined)
+    if (!profile) {
+      const returnUrl = encodeURIComponent(window.location.pathname + window.location.search)
+      return <Navigate to={`/login?return=${returnUrl}`} />
+    }
     return <ForbiddenPage message={message} />
   }
 
