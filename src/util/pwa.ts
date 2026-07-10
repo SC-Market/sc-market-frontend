@@ -2,6 +2,8 @@
  * PWA utility functions for service worker registration and management
  */
 
+import { notifyBugsnag } from "./monitoring/bugsnagLoader"
+
 export interface ServiceWorkerRegistrationState {
   registration: ServiceWorkerRegistration | null
   updateAvailable: boolean
@@ -107,7 +109,12 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
         if (!import.meta.env.DEV) {
           setInterval(
             () => {
-              registration.update()
+              registration.update().catch((err) => {
+                notifyBugsnag(
+                  err instanceof Error ? err : new Error(String(err)),
+                  { context: "sw-periodic-update", scope: registration.scope },
+                )
+              })
             },
             60 * 60 * 1000,
           ) // Check every hour
@@ -138,15 +145,10 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
           }
           // Silently ignore websocket errors in dev - they're expected if HMR isn't working
         } else {
-          // In production, log detailed error information
-          console.error("Service Worker registration failed:", {
-            message: error.message,
-            stack: error.stack,
-            swPath: swPath,
-            url: window.location.href,
-            protocol: window.location.protocol,
-            hostname: window.location.hostname,
-          })
+          notifyBugsnag(
+            error instanceof Error ? error : new Error(String(error)),
+            { context: "sw-registration", swPath, url: window.location.href },
+          )
         }
         return null
       })
