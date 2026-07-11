@@ -1,5 +1,5 @@
 import React from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, useSearchParams } from "react-router-dom"
 import { Grid } from "@mui/material"
 import { AuthenticateRSI } from "../../views/authentication/AuthenticateRSI"
 import { AuthenticateRSISkeleton } from "../../views/authentication/AuthenticateRSI.skeleton"
@@ -12,10 +12,12 @@ import { usePageAuthenticateRSI } from "../../features/authentication/hooks/useP
 export function AuthenticateRSIPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const [searchParams] = useSearchParams()
   const { isRSIConfirmed, identifier } = usePageAuthenticateRSI()
 
   if (isRSIConfirmed) {
-    return <Navigate to="/dashboard" />
+    const redirectTo = searchParams.get("redirect") || "/dashboard"
+    return <Navigate to={redirectTo} />
   }
 
   const showSkeleton = identifier.isLoading || !identifier.data?.identifier

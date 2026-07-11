@@ -1,5 +1,5 @@
 import React from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, useSearchParams } from "react-router-dom"
 import { Page } from "../../components/metadata/Page"
 import { SignInArea } from "../../views/authentication/SignInArea"
 import { usePageLogin } from "../../features/authentication/hooks/usePageLogin"
@@ -12,11 +12,13 @@ import { Footer } from "../../components/footer/Footer"
 export function LoginPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const [searchParams] = useSearchParams()
   const { isAuthenticated, isLoading, errorMessage, clearError } =
     usePageLogin()
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />
+    const redirectTo = searchParams.get("redirect") || "/dashboard"
+    return <Navigate to={redirectTo} replace />
   }
 
   return (

@@ -7,7 +7,7 @@ import {
   useGetUserProfileQuery,
   useGetAuthenticatorIdentifier,
 } from "../../features/profile/api/profileApi"
-import { Navigate } from "react-router-dom"
+import { Navigate, useSearchParams } from "react-router-dom"
 import { LoginInfoPanel } from "./LoginInfoPanel"
 import { Grid } from "@mui/material"
 import { RegisterShip } from "../../views/fleet/RegisterShip"
@@ -21,8 +21,10 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 export function Login() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const [searchParams] = useSearchParams()
   const profile = useGetUserProfileQuery()
   const identifier = useGetAuthenticatorIdentifier()
+  const redirectTo = searchParams.get("redirect") || "/dashboard"
 
   return (
     <Page title={t("login.title", "Login")}>
@@ -32,7 +34,7 @@ export function Login() {
         noTopSpacer
         sx={{ paddingTop: 0 }}
       >
-        {!profile.isLoading && !profile.error && <Navigate to={"/dashboard"} />}
+        {!profile.isLoading && !profile.error && <Navigate to={redirectTo} />}
         <Grid
           item
           xs={12}

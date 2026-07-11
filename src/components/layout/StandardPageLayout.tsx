@@ -133,8 +133,8 @@ export function StandardPageLayout(
   if (isForbiddenError(error as FetchBaseQueryError | SerializedError | undefined)) {
     const message = getErrorMessage(error as FetchBaseQueryError | SerializedError | undefined)
     if (!profile) {
-      const returnUrl = encodeURIComponent(window.location.pathname + window.location.search)
-      return <Navigate to={`/login?return=${returnUrl}`} />
+      const redirectUrl = encodeURIComponent(window.location.pathname + window.location.search)
+      return <Navigate to={`/login?redirect=${redirectUrl}`} />
     }
     return <ForbiddenPage message={message} />
   }
