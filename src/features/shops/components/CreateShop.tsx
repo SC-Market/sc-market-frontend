@@ -83,11 +83,17 @@ export function CreateShop() {
   }
 
   const handleSubmit = async () => {
+    if (!name.trim()) return
+    if (slug.length < 3) {
+      issueAlert({ severity: "error", message: "Slug must be at least 3 characters" })
+      return
+    }
+
     try {
       const result = await createShop({
         createShopRequest: {
           name: name.trim(),
-          slug: slug || undefined,
+          slug: slug,
           description: description.trim() || undefined,
           contractor_id:
             ownerType === "organization" && contractorId
@@ -157,10 +163,13 @@ export function CreateShop() {
                     }
                   }}
                   fullWidth
+                  error={slug.length > 0 && slug.length < 3}
                   helperText={
-                    slug
-                      ? `Your shop URL: sc-market.space/shops/${slug}`
-                      : "URL-friendly identifier (auto-generated from name)"
+                    slug.length > 0 && slug.length < 3
+                      ? "Slug must be at least 3 characters"
+                      : slug
+                        ? `Your shop URL: sc-market.space/shops/${slug}`
+                        : "URL-friendly identifier (auto-generated from name)"
                   }
                 />
                 <TextField
