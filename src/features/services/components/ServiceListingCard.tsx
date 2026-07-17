@@ -98,6 +98,7 @@ export const ServiceListingBase = React.memo(
                 subheader={
                   <Box>
                     <ListingNameAndRating
+                      shop={service.shop}
                       user={service.user}
                       contractor={service.contractor}
                     />
