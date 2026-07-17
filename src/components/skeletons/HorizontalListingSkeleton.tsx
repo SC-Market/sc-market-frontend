@@ -10,7 +10,7 @@ import {
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme, cardFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { ListingWrapper } from "../../features/market/components/listings/ListingCard"
+import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
 
 export interface HorizontalListingSkeletonProps {
   index?: number

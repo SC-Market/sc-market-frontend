@@ -17,7 +17,7 @@ export interface ListingSkeletonProps {
   sidebarOpen?: boolean
 }
 
-import { ListingWrapper } from "../../features/market/components/listings/ListingCard"
+import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
 
 /**
  * Skeleton component for market listing cards

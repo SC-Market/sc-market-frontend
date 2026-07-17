@@ -40,7 +40,7 @@ import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect";
 import { getQualityMode } from "../../../util/qualityMode";
 import { LanguageFilter } from "../../../components/search/LanguageFilter";
-import { ListingWrapper } from "../components/listings/ListingCard";
+import { ListingWrapper } from "../components/listings/ListingWrapper";
 import { ListingSkeleton } from "../../../components/skeletons";
 import { ListingPagination } from "../components/listings/ListingPagination";
 import { EmptyListings } from "../../../components/empty-states";
