@@ -111,7 +111,7 @@ vi.mock("../components/MarketNavArea", () => ({
   MarketNavArea: () => <div data-testid="market-nav-area">Market Nav</div>,
 }));
 
-vi.mock("../components/listings/ListingCard", () => ({
+vi.mock("../components/listings/ListingWrapper", () => ({
   ListingWrapper: ({ children }: any) => <div>{children}</div>,
 }));
 

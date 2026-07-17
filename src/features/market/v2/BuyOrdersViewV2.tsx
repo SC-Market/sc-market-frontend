@@ -25,7 +25,7 @@ import {
 import { useMarketSidebarExp } from "../hooks/MarketSidebar"
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea"
 import { MarketSearchAreaV2, MarketSidebarV2 } from "./ListingSearchV2"
-import { ListingWrapper } from "../components/listings/ListingCard"
+import { ListingWrapper } from "../components/listings/ListingWrapper"
 import { ListingPagination } from "../components/listings/ListingPagination"
 import { ListingSkeleton } from "../../../components/skeletons"
 import { EmptyListings } from "../../../components/empty-states/EmptyListings"

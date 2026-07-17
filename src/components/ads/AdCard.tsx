@@ -1,7 +1,7 @@
 import { Paper, Fade, Box } from "@mui/material"
 import React from "react"
 import { AdConfig } from "./types"
-import { ListingWrapper } from "../../features/market/components/listings/ListingCard"
+import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
