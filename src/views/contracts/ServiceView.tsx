@@ -623,9 +623,11 @@ export function ServiceView(props: {
                   <MaterialLink
                     component={Link}
                     to={
-                      service.user?.username
-                        ? `/user/${service.user.username}`
-                        : `/contractor/${service.contractor?.spectrum_id}`
+                      service.shop?.slug
+                        ? `/shops/${service.shop.slug}`
+                        : service.user?.username
+                          ? `/user/${service.user.username}`
+                          : `/contractor/${service.contractor?.spectrum_id}`
                     }
                     style={{ textDecoration: "none", color: "inherit" }}
                   >

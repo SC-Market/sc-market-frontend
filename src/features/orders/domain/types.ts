@@ -152,6 +152,7 @@ export interface Service {
   cost: number
   contractor?: Contractor | null
   user?: User | null
+  shop?: { name: string; slug: string } | null
   status: "active" | "inactive"
   photos: string[]
   languages?: Array<{ code: string; name: string }>
