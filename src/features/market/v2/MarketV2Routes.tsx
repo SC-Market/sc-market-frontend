@@ -1,9 +1,36 @@
 import React from "react"
 import { useLocation, useParams } from "react-router-dom"
+import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 
 // Lazy-loaded V2 components
 const ListingSearchV2 = React.lazy(() =>
   import("./ListingSearchV2").then((m) => ({ default: m.ListingSearchV2 })),
+)
+// Phase 0 redesign (behind the `market_v2_redesign` flag) — see MARKET_V2_RESEARCH.md §7
+const MarketSearchRedesign = React.lazy(() =>
+  import("./redesign/MarketSearchRedesign").then((m) => ({
+    default: m.MarketSearchRedesign,
+  })),
+)
+const ListingDetailRedesign = React.lazy(() =>
+  import("./redesign/ListingDetailRedesign").then((m) => ({
+    default: m.ListingDetailRedesign,
+  })),
+)
+const SellFormRedesign = React.lazy(() =>
+  import("./redesign/SellFormRedesign").then((m) => ({
+    default: m.SellFormRedesign,
+  })),
+)
+const ManageMarketRedesign = React.lazy(() =>
+  import("./redesign/ManageMarketRedesign").then((m) => ({
+    default: m.ManageMarketRedesign,
+  })),
+)
+const BuyOrdersRedesign = React.lazy(() =>
+  import("./redesign/BuyOrdersRedesign").then((m) => ({
+    default: m.BuyOrdersRedesign,
+  })),
 )
 const ListingDetailV2 = React.lazy(() =>
   import("./ListingDetailV2").then((m) => ({ default: m.ListingDetailV2 })),
@@ -56,6 +83,50 @@ const BuyOrdersViewV2 = React.lazy(() =>
 export function MarketV2Routes() {
   const { pathname } = useLocation()
   const params = useParams()
+  const { flags } = useFeatureFlag()
+
+  // Phase 0 redesign: only the main search/browse grid is reworked so far.
+  // Everything else falls through to the existing V2 components untouched.
+  const isSearchPath =
+    pathname === "/market" || pathname.startsWith("/market/category/")
+  if (flags.market_v2_redesign && isSearchPath) {
+    return <MarketSearchRedesign />
+  }
+
+  // Phase 0 redesign: route the remaining market surfaces to their redesign
+  // components when the flag is on. Everything below (flag off) is untouched.
+  if (flags.market_v2_redesign) {
+    // Sell wizard — create + edit modes (one adaptive form, §8.5/§8.6)
+    if (pathname.startsWith("/market/create")) {
+      return <SellFormRedesign />
+    }
+    if (
+      pathname.startsWith("/market_edit/") ||
+      pathname.match(/^\/market\/multiple\/[^/]+\/edit$/)
+    ) {
+      return <SellFormRedesign />
+    }
+
+    // Manage Market — one page for listings + stock (§8.4)
+    if (
+      pathname === "/market/manage" ||
+      pathname === "/market/manage-stock" ||
+      pathname === "/market/me" ||
+      pathname.startsWith("/market/stock/")
+    ) {
+      return <ManageMarketRedesign />
+    }
+
+    // Buy orders (demand side)
+    if (pathname === "/buyorders") {
+      return <BuyOrdersRedesign />
+    }
+
+    // Listing detail (/market/:id) — after all other /market/xxx paths
+    if (pathname.match(/^\/market\/[^/]+$/) && params.id) {
+      return <ListingDetailRedesign />
+    }
+  }
 
   // Edit routes
   if (pathname.startsWith("/market_edit/")) {
