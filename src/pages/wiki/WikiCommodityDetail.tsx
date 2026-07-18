@@ -71,7 +71,7 @@ export function WikiCommodityDetail() {
       skeleton={<DetailPageSkeleton />}
       error={error || undefined}
       sidebarOpen={true}
-      maxWidth="lg"
+      maxWidth="md"
     >
       {r && (
         <>

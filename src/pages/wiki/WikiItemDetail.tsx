@@ -82,7 +82,7 @@ export function WikiItemDetail() {
         title={t("wiki.itemDetail.title", "Item Details")}
         headerTitle={t("wiki.itemDetail.title", "Item Details")}
         sidebarOpen={true}
-        maxWidth="xl"
+        maxWidth="md"
       >
         <Grid item xs={12}>
           <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
@@ -99,7 +99,7 @@ export function WikiItemDetail() {
         title={t("wiki.itemDetail.title", "Item Details")}
         headerTitle={t("wiki.itemDetail.title", "Item Details")}
         sidebarOpen={true}
-        maxWidth="xl"
+        maxWidth="md"
       >
         <Grid item xs={12}>
           <Alert severity="error">Failed to load item details. Please try again.</Alert>
@@ -120,7 +120,7 @@ export function WikiItemDetail() {
       canonicalUrl={`/wiki/items/${id}`}
       headerTitle={item.name}
       sidebarOpen={true}
-      maxWidth="xl"
+      maxWidth="md"
     >
       <Helmet>
         <title>{seoTitle}</title>
