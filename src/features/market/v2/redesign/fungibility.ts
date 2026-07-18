@@ -35,6 +35,8 @@
  */
 const FUNGIBLE_SUBCATEGORIES = new Set<string>([
   "Commodity", // Commodity category
+  "Container", // Other > Container — how sellers list bulk resources/materials
+  // (refined ore, gas, etc.); interchangeable by contents, so aggregate them.
   "Food/Drink", // Consumable
   "Medical Pen", // Consumable
   "Weapon Magazine", // Consumable (ammo — interchangeable by SKU)
