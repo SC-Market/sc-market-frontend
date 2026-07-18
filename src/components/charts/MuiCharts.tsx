@@ -20,6 +20,7 @@ interface MuiLineChartProps {
   xAxisType?: "time" | "category"
   yAxisLabel?: string
   smooth?: boolean
+  yScaleType?: "linear" | "log"
 }
 
 export function MuiLineChart({
@@ -29,6 +30,7 @@ export function MuiLineChart({
   xAxisType = "time",
   yAxisLabel,
   smooth = true,
+  yScaleType = "linear",
 }: MuiLineChartProps) {
   const xData = series[0]?.data.map((d) =>
     xAxisType === "time" ? new Date(d.x) : d.x,
@@ -56,6 +58,7 @@ export function MuiLineChart({
       ]}
       yAxis={[
         {
+          scaleType: yScaleType,
           valueFormatter: (value: number) => Math.round(value).toLocaleString(),
         },
       ]}
