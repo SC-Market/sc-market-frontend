@@ -292,6 +292,9 @@ function GroupCard({
           transition: theme.transitions.create(["box-shadow", "border-color"], {
             duration: theme.transitions.duration.shorter,
           }),
+          // Read as interactive/expandable when collapsed, matching how the
+          // normal listing tiles respond to hover.
+          "&:hover": open ? undefined : { borderColor: "secondary.main" },
         }}
       >
         {/* Collapsed header region mirrors a ListingCardV2 tile */}
@@ -373,56 +376,79 @@ function GroupCard({
                 padding: "8px 12px !important",
               }}
             >
+              {/* Mirror ListingCardV2: price (h6) → item name (title) → seller
+                  line. Only the seller line and the expand pill differ, so the
+                  tile reads as a normal listing with a clear "expandable" cue. */}
+              <Typography
+                variant="h6"
+                color="primary"
+                fontWeight="bold"
+                noWrap
+                sx={{ fontSize: "0.95rem", mb: 0.5 }}
+              >
+                {t("MarketRedesign.fromPrice", "from")} {formatPrice(priceMin)}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  fontSize: "0.75rem",
+                  lineHeight: 1.3,
+                  maxHeight: 36,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                  mb: 0.5,
+                }}
+              >
+                {cheapest.game_item_name}
+              </Typography>
+              {/* Seller line + clear expand pill on one row */}
               <Stack
                 direction="row"
-                alignItems="flex-end"
+                alignItems="center"
                 justifyContent="space-between"
+                spacing={1}
               >
-                <Box sx={{ minWidth: 0 }}>
-                  <Typography
-                    variant="h6"
-                    color="primary"
-                    fontWeight="bold"
-                    noWrap
-                    sx={{ fontSize: "0.95rem", mb: 0.5 }}
-                  >
-                    {t("MarketRedesign.fromPrice", "from")} {formatPrice(priceMin)}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      fontSize: "0.75rem",
-                      lineHeight: 1.3,
-                      maxHeight: 36,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      mb: 0.5,
-                    }}
-                  >
-                    {cheapest.game_item_name}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ fontSize: "0.7rem", lineHeight: 1.2 }}
-                  >
-                    {t("MarketRedesign.compareSellers", "Compare {{count}} sellers", {
-                      count: listings.length,
-                    })}
-                  </Typography>
-                </Box>
-                <ExpandMoreRounded
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  noWrap
+                  sx={{ fontSize: "0.7rem", lineHeight: 1.2, minWidth: 0 }}
+                >
+                  {t("MarketRedesign.acrossSellers", "across {{count}} sellers", {
+                    count: listings.length,
+                  })}
+                </Typography>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={0.25}
                   sx={{
                     flexShrink: 0,
-                    color: "text.secondary",
-                    transform: open ? "rotate(180deg)" : "none",
-                    transition: "transform .2s",
+                    px: 0.75,
+                    py: 0.25,
+                    borderRadius: 999,
+                    bgcolor: open ? "secondary.main" : "action.hover",
+                    color: open ? "secondary.contrastText" : "text.primary",
+                    transition: "background-color .2s, color .2s",
+                    fontSize: "0.68rem",
+                    fontWeight: 700,
                   }}
-                />
+                >
+                  {open
+                    ? t("MarketRedesign.hide", "Hide")
+                    : t("MarketRedesign.compare", "Compare")}
+                  <ExpandMoreRounded
+                    sx={{
+                      fontSize: "1rem",
+                      transform: open ? "rotate(180deg)" : "none",
+                      transition: "transform .2s",
+                    }}
+                  />
+                </Stack>
               </Stack>
             </CardContent>
           </Box>
