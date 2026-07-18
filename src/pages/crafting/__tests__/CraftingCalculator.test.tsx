@@ -1,18 +1,15 @@
 /**
  * CraftingCalculator Component Tests
- * 
+ *
  * Tests for the Crafting Calculator component including:
  * - Blueprint selection autocomplete
- * - Material input form
+ * - Material input via search
  * - Calculate button functionality
  * - Display calculation results
- * 
- * Task 13.1 - Create CraftingCalculator component
- * Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6
  */
 
 import React from "react"
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
@@ -22,7 +19,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { CraftingCalculator } from "../CraftingCalculator"
 import { marketV2Api } from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
-import { generatedApiV2 } from "../../../store/generatedApiV2"
+
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
 
@@ -60,24 +57,64 @@ vi.mock("react-router-dom", async () => {
   }
 })
 
+// Mock the profile API hook
+vi.mock("../../../features/profile/api/profileApi", () => ({
+  useGetUserProfileQuery: () => ({ data: null, isLoading: false }),
+}))
+
+// Mock the market v2 hooks used by the component
+vi.mock("../../../store/api/v2/market", async () => {
+  const actual = await vi.importActual("../../../store/api/v2/market")
+  return {
+    ...actual,
+    useSearchBlueprintsQuery: vi.fn(() => ({
+      data: { blueprints: [] },
+      isLoading: false,
+    })),
+    useSearchItemsQuery: vi.fn(() => ({
+      data: { items: [] },
+      isLoading: false,
+    })),
+    useSearchResourcesQuery: vi.fn(() => ({
+      data: { resources: [] },
+      isLoading: false,
+    })),
+    useCalculateQualityMutation: vi.fn(() => [
+      vi.fn(),
+      { data: null, isLoading: false, error: null },
+    ]),
+    useGetInventorySummaryQuery: vi.fn(() => ({
+      data: null,
+      isLoading: false,
+    })),
+    useFindCraftableBlueprintsMutation: vi.fn(() => [
+      vi.fn(),
+      { data: null, isLoading: false },
+    ]),
+  }
+})
+
+// Mock useDebounce to return value immediately
+vi.mock("../../../hooks/useDebounce", () => ({
+  useDebounce: <T,>(value: T) => value,
+}))
+
 // Helper to create a test store
 function createTestStore() {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
       [serviceApi.reducerPath]: serviceApi.reducer,
-      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware, generatedApiV2.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
   })
 }
 
 // Helper to render with providers
 function renderWithProviders(component: React.ReactElement) {
   const store = createTestStore()
-  
-  // Wrapper component to provide necessary context
+
   function TestWrapper({ children }: { children: React.ReactNode }) {
     const drawerState = React.useState(false)
     const currentOrgState = React.useState(null) as any
@@ -103,305 +140,102 @@ function renderWithProviders(component: React.ReactElement) {
   }
 }
 
-// Mock blueprint data
-const mockBlueprints = [
-  {
-    blueprint_id: "bp-1",
-    blueprint_name: "Advanced Weapon Blueprint",
-    output_item_name: "Advanced Weapon",
-    output_item_icon: "/icons/weapon.png",
-    item_category: "Weapons",
-    rarity: "Rare",
-    tier: 3,
-    ingredient_count: 3,
-    mission_count: 5,
-    crafting_time_seconds: 300,
-  },
-  {
-    blueprint_id: "bp-2",
-    blueprint_name: "Basic Armor Blueprint",
-    output_item_name: "Basic Armor",
-    item_category: "Armor",
-    rarity: "Common",
-    tier: 1,
-    ingredient_count: 2,
-    mission_count: 10,
-  },
-]
-
-// Mock calculation result
-const mockCalculationResult = {
-  output_quality_tier: 3,
-  output_quality_value: 75.5,
-  output_quantity: 1,
-  calculation_breakdown: {
-    formula_used: "weighted_average",
-    input_weights: {
-      "material-1": 0.5,
-      "material-2": 0.5,
-    },
-    quality_contributions: [
-      {
-        material_name: "Steel Ingot",
-        quality_tier: 3,
-        quality_value: 70,
-        weight: 0.5,
-        contribution: 35,
-      },
-      {
-        material_name: "Carbon Fiber",
-        quality_tier: 4,
-        quality_value: 85,
-        weight: 0.5,
-        contribution: 42.5,
-      },
-    ],
-  },
-  estimated_cost: {
-    material_cost: 5000,
-    crafting_station_fee: 500,
-    total_cost: 5500,
-  },
-  success_probability: 0.95,
-  critical_success_chance: 0.15,
-}
-
 describe("CraftingCalculator", () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  /**
-   * Requirement 5.1: WHEN a player selects a blueprint and input materials,
-   * THE Crafting_Calculator SHALL compute output item statistics
-   */
-  describe("Blueprint Selection and Calculation", () => {
-    it("should render the crafting calculator with blueprint selector", () => {
+  describe("Blueprint Selection", () => {
+    it("should render the crafting calculator page with blueprint search", () => {
       renderWithProviders(<CraftingCalculator />)
 
       expect(screen.getByText("Crafting Calculator")).toBeInTheDocument()
-      expect(screen.getByText("Select Blueprint")).toBeInTheDocument()
-      expect(screen.getByPlaceholderText("Search blueprints...")).toBeInTheDocument()
+      expect(screen.getByLabelText("Search by item name")).toBeInTheDocument()
     })
 
     it("should allow typing in blueprint search field", async () => {
       const user = userEvent.setup()
       renderWithProviders(<CraftingCalculator />)
 
-      const autocomplete = screen.getByPlaceholderText("Search blueprints...")
+      const autocomplete = screen.getByLabelText("Search by item name")
       await user.type(autocomplete, "weapon")
 
       expect(autocomplete).toHaveValue("weapon")
     })
   })
 
-  /**
-   * Requirement 5.2: THE Crafting_Calculator SHALL accept quality_tier
-   * and quality_value for each input material
-   */
-  describe("Material Input Form", () => {
-    it("should render material input form with default material", () => {
+  describe("Material Input", () => {
+    it("should render the materials section with add material autocomplete", () => {
       renderWithProviders(<CraftingCalculator />)
 
       expect(screen.getByText("Materials")).toBeInTheDocument()
-      expect(screen.getByLabelText("Material ID")).toBeInTheDocument()
-      expect(screen.getByLabelText("Tier")).toBeInTheDocument()
-      expect(screen.getByText(/Quality:/)).toBeInTheDocument()
-      expect(screen.getByLabelText("Qty")).toBeInTheDocument()
+      expect(screen.getByLabelText("Add material")).toBeInTheDocument()
     })
 
-    it("should allow adding new material inputs", async () => {
+    it("should show empty state message when no materials added", () => {
+      renderWithProviders(<CraftingCalculator />)
+
+      expect(screen.getByText("Search and add materials above")).toBeInTheDocument()
+    })
+
+    it("should allow typing in the material search autocomplete", async () => {
       const user = userEvent.setup()
       renderWithProviders(<CraftingCalculator />)
 
-      const addButton = screen.getByRole("button", { name: /Add Material/i })
-      await user.click(addButton)
+      const matInput = screen.getByLabelText("Add material")
+      await user.type(matInput, "steel")
 
-      // Should now have 2 material ID inputs
-      const materialInputs = screen.getAllByLabelText("Material ID")
-      expect(materialInputs).toHaveLength(2)
-    })
-
-    it("should allow removing material inputs (except the last one)", async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<CraftingCalculator />)
-
-      // Add a second material
-      const addButton = screen.getByRole("button", { name: /Add Material/i })
-      await user.click(addButton)
-
-      // Find delete buttons
-      const deleteButtons = screen.getAllByRole("button", { name: "" }).filter(
-        (btn) => btn.querySelector("svg[data-testid='DeleteIcon']")
-      )
-
-      // Should have 2 delete buttons now
-      expect(deleteButtons.length).toBeGreaterThanOrEqual(2)
-
-      // Click the first delete button
-      await user.click(deleteButtons[0])
-
-      // Should be back to 1 material
-      await waitFor(() => {
-        const materialInputs = screen.getAllByLabelText("Material ID")
-        expect(materialInputs).toHaveLength(1)
-      })
-    })
-
-    it("should allow setting material ID", async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<CraftingCalculator />)
-
-      const materialIdInput = screen.getByLabelText("Material ID")
-      await user.clear(materialIdInput)
-      await user.type(materialIdInput, "steel-ingot-123")
-
-      expect(materialIdInput).toHaveValue("steel-ingot-123")
-    })
-
-    it("should allow selecting quality tier (1-5)", async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<CraftingCalculator />)
-
-      const tierSelect = screen.getByLabelText("Tier")
-      await user.click(tierSelect)
-
-      // Should show tier options 1-5
-      await waitFor(() => {
-        expect(screen.getByText("Tier 1")).toBeInTheDocument()
-        expect(screen.getByText("Tier 5")).toBeInTheDocument()
-      })
-
-      await user.click(screen.getByText("Tier 3"))
-
-      expect(tierSelect).toHaveTextContent("Tier 3")
-    })
-
-    it("should allow adjusting quality value slider (0-100)", async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<CraftingCalculator />)
-
-      // Find the slider by its label
-      const qualityLabel = screen.getByText(/Quality: 50/)
-      expect(qualityLabel).toBeInTheDocument()
-
-      // The slider should be present (default value 50)
-      const slider = qualityLabel.parentElement?.querySelector('input[type="range"]')
-      expect(slider).toBeInTheDocument()
-      expect(slider).toHaveValue("50")
-    })
-
-    it("should allow setting material quantity", async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<CraftingCalculator />)
-
-      const quantityInput = screen.getByLabelText("Qty")
-      await user.clear(quantityInput)
-      await user.type(quantityInput, "5")
-
-      expect(quantityInput).toHaveValue(5)
-    })
-
-    it("should enforce minimum quantity of 1", async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<CraftingCalculator />)
-
-      const quantityInput = screen.getByLabelText("Qty")
-      await user.clear(quantityInput)
-      await user.type(quantityInput, "0")
-
-      // Should be set to 1 (minimum)
-      await waitFor(() => {
-        expect(quantityInput).toHaveValue(1)
-      })
+      expect(matInput).toHaveValue("steel")
     })
   })
 
-  /**
-   * Requirement 5.3: THE Crafting_Calculator SHALL compute output quality_tier
-   * based on input material qualities
-   * 
-   * Requirement 5.4: THE Crafting_Calculator SHALL compute output quality_value
-   * based on input material qualities
-   */
-  describe("Calculate Button and Results", () => {
-    it("should disable calculate button when no blueprint is selected", () => {
+  describe("Calculate Button", () => {
+    it("should disable calculate button when no blueprint selected and no materials", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      const calculateButton = screen.getByRole("button", { name: /Calculate Quality/i })
+      const calculateButton = screen.getByRole("button", { name: /Calculate Output Quality/i })
       expect(calculateButton).toBeDisabled()
     })
 
-    it("should show calculate button text", () => {
+    it("should show calculate button with correct text", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      expect(screen.getByRole("button", { name: /Calculate Quality/i })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: /Calculate Output Quality/i })).toBeInTheDocument()
     })
   })
 
-  /**
-   * Requirement 5.5: THE Crafting_Calculator SHALL display the calculation
-   * formula or methodology
-   */
-  describe("Calculation Breakdown Display", () => {
-    it("should have a section for calculation breakdown", () => {
-      renderWithProviders(<CraftingCalculator />)
-      
-      // The breakdown section appears after calculation
-      // This test just verifies the component renders without breakdown initially
-      expect(screen.queryByText("Calculation Breakdown")).not.toBeInTheDocument()
-    })
-  })
-
-  /**
-   * Requirement 5.6: THE Crafting_Calculator SHALL validate that input
-   * materials match blueprint requirements
-   */
-  describe("Error Handling and Validation", () => {
-    it("should allow empty material IDs (validation happens on backend)", () => {
+  describe("Mode Switching", () => {
+    it("should show Craft Calculator and What Can I Craft buttons", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      const materialIdInput = screen.getByLabelText("Material ID")
-      expect(materialIdInput).toHaveValue("")
-      
-      // Component allows empty IDs, backend will validate
-      expect(materialIdInput).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: /Craft Calculator/i })).toBeInTheDocument()
+      expect(screen.getByRole("button", { name: /What Can I Craft/i })).toBeInTheDocument()
     })
-  })
 
-  /**
-   * Additional UI/UX Tests
-   */
-  describe("User Experience", () => {
-    it("should maintain material inputs when adding/removing materials", async () => {
+    it("should switch to discover mode and show Find Craftable Items button", async () => {
       const user = userEvent.setup()
       renderWithProviders(<CraftingCalculator />)
 
-      // Set first material
-      const firstMaterialId = screen.getByLabelText("Material ID")
-      await user.clear(firstMaterialId)
-      await user.type(firstMaterialId, "steel")
+      await user.click(screen.getByRole("button", { name: /What Can I Craft/i }))
 
-      // Add second material
-      await user.click(screen.getByRole("button", { name: /Add Material/i }))
-
-      // First material should still have its value
-      const materialInputs = screen.getAllByLabelText("Material ID")
-      expect(materialInputs[0]).toHaveValue("steel")
-      expect(materialInputs[1]).toHaveValue("")
+      expect(screen.getByRole("button", { name: /Find Craftable Items/i })).toBeInTheDocument()
     })
+  })
 
-    it("should not allow removing the last material", () => {
+  describe("Calculation Breakdown Display", () => {
+    it("should not show result section initially", () => {
       renderWithProviders(<CraftingCalculator />)
 
-      // Find delete button (should be disabled when only 1 material)
-      const deleteButtons = screen.getAllByRole("button", { name: "" }).filter(
-        (btn) => btn.querySelector("svg[data-testid='DeleteIcon']")
-      )
+      expect(screen.queryByText("Estimated Output")).not.toBeInTheDocument()
+    })
+  })
 
-      // Should have at least one delete button, and it should be disabled
-      expect(deleteButtons.length).toBeGreaterThan(0)
-      expect(deleteButtons[0]).toBeDisabled()
+  describe("Inventory Import", () => {
+    it("should show import from inventory button (disabled when no inventory)", () => {
+      renderWithProviders(<CraftingCalculator />)
+
+      const importButton = screen.getByRole("button", { name: /Import from Inventory/i })
+      expect(importButton).toBeDisabled()
     })
   })
 })

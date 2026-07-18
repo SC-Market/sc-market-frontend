@@ -11,7 +11,7 @@ import { vi } from "vitest"
 import { WikiItemBrowser } from "../WikiItemBrowser"
 import { marketV2Api } from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
-import { generatedApiV2 } from "../../../store/generatedApiV2"
+
 
 // Mock Page to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", () => ({
@@ -41,10 +41,9 @@ const createMockStore = () => {
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
       [serviceApi.reducerPath]: serviceApi.reducer,
-      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware, generatedApiV2.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
   })
 }
 

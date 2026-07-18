@@ -7,10 +7,19 @@ import { configureStore } from "@reduxjs/toolkit";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { ListingSearchV2 } from "../ListingSearchV2";
-import { marketV2Api } from "../../../../store/api/v2/market";
+import { marketV2Api, useSearchListingsQuery, useSearchResourcesQuery } from "../../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../../store/api/v2/market";
 import { serviceApi } from "../../../../store/service";
-import { generatedApiV2 } from "../../../../store/generatedApiV2";
+
+vi.mock("../../../../store/api/v2/market", async () => {
+  const actual = await vi.importActual("../../../../store/api/v2/market");
+  return {
+    ...actual,
+    useSearchListingsQuery: vi.fn(),
+    useSearchResourcesQuery: vi.fn(),
+  };
+});
+
 
 const testTheme = createTheme({
   palette: {
@@ -45,8 +54,19 @@ vi.mock("../../../../hooks/styles/Theme", async () => {
   }
 });
 
-vi.mock("../../hooks/MarketSidebar", () => {
-  const React = require("react");
+// Mock MUI Fade to avoid scrollTop errors in happy-dom (MUI reflow calls node.scrollTop)
+// Also mock useMediaQuery to force desktop layout (so the filter sidebar renders inline)
+vi.mock("@mui/material", async () => {
+  const actual = await vi.importActual("@mui/material") as any;
+  return {
+    ...actual,
+    Fade: ({ children, in: show }: any) => show !== false ? children : null,
+    useMediaQuery: () => false,
+  };
+});
+
+vi.mock("../../hooks/MarketSidebar", async () => {
+  const React = await import("react");
   return {
     MarketSidebarContext: React.createContext([false, () => {}]),
     useMarketSidebarExp: () => false,
@@ -64,7 +84,13 @@ vi.mock("react-i18next", async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, defaultValue?: string) => defaultValue || key,
+      t: (key: string, defaultValueOrOptions?: string | Record<string, unknown>) => {
+        if (typeof defaultValueOrOptions === "string") return defaultValueOrOptions
+        if (defaultValueOrOptions && typeof defaultValueOrOptions === "object" && "defaultValue" in defaultValueOrOptions) {
+          return defaultValueOrOptions.defaultValue as string
+        }
+        return key
+      },
     }),
     initReactI18next: {
       type: "3rdParty",
@@ -106,12 +132,12 @@ vi.mock("../../../../components/market/v2/QualityFilter", () => ({
 }));
 
 // Mock other components
-vi.mock("../components/MarketNavArea", () => ({
+vi.mock("../../components/MarketNavArea", () => ({
   HideOnScroll: ({ children }: any) => <div>{children}</div>,
   MarketNavArea: () => <div data-testid="market-nav-area">Market Nav</div>,
 }));
 
-vi.mock("../components/listings/ListingWrapper", () => ({
+vi.mock("../../components/listings/ListingWrapper", () => ({
   ListingWrapper: ({ children }: any) => <div>{children}</div>,
 }));
 
@@ -121,7 +147,7 @@ vi.mock("../../../../components/skeletons", () => ({
   ),
 }));
 
-vi.mock("../components/listings/ListingPagination", () => ({
+vi.mock("../../components/listings/ListingPagination", () => ({
   ListingPagination: ({ count, page, onPageChange }: any) => (
     <div data-testid="listing-pagination">
       <button onClick={() => onPageChange(null, page + 1)}>Next Page</button>
@@ -149,13 +175,12 @@ const createMockStore = (mockData?: any) => {
   const reducer = {
     [marketV2Api.reducerPath]: marketV2Api.reducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
-    [generatedApiV2.reducerPath]: generatedApiV2.reducer,
   } as any
 
   return configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware, generatedApiV2.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
     preloadedState: mockData,
   });
 };
@@ -209,13 +234,28 @@ const mockListings: ListingSearchResult[] = [
 describe("ListingSearchV2", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Default mock for useSearchResourcesQuery (used by suggestions autocomplete)
+    (useSearchResourcesQuery as any).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isFetching: false,
+      error: undefined,
+    });
+    // Default mock for useSearchListingsQuery (will be overridden per test)
+    (useSearchListingsQuery as any).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isFetching: false,
+      error: undefined,
+      refetch: vi.fn(),
+    });
   });
 
   it("renders loading state initially", () => {
     const store = createMockStore();
 
     // Mock the query to return loading state
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: undefined,
       isLoading: true,
       isFetching: false,
@@ -242,7 +282,7 @@ describe("ListingSearchV2", () => {
     const store = createMockStore();
 
     // Mock the query to return data
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
@@ -273,7 +313,7 @@ describe("ListingSearchV2", () => {
   it("displays quality filter component", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
@@ -303,7 +343,7 @@ describe("ListingSearchV2", () => {
   it("updates URL params when quality filter changes", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
@@ -339,7 +379,7 @@ describe("ListingSearchV2", () => {
   it("displays price filter inputs", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
@@ -370,7 +410,7 @@ describe("ListingSearchV2", () => {
   it("displays text search input", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
@@ -400,7 +440,7 @@ describe("ListingSearchV2", () => {
   it("displays pagination controls", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 100, // More than one page
@@ -431,7 +471,7 @@ describe("ListingSearchV2", () => {
   it("displays empty state when no listings found", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: [],
         total: 0,
@@ -463,7 +503,7 @@ describe("ListingSearchV2", () => {
     const store = createMockStore();
     const mockRefetch = vi.fn();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: undefined,
       isLoading: false,
       isFetching: false,
@@ -495,9 +535,8 @@ describe("ListingSearchV2", () => {
 
   it("reads filter state from URL params", async () => {
     const store = createMockStore();
-    const mockUseQuery = vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery");
 
-    mockUseQuery.mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
@@ -526,7 +565,7 @@ describe("ListingSearchV2", () => {
 
     // Verify the query was called with URL params
     await waitFor(() => {
-      expect(mockUseQuery).toHaveBeenCalledWith(
+      expect(useSearchListingsQuery).toHaveBeenCalledWith(
         expect.objectContaining({
           text: "mining",
           qualityTierMin: 3,
@@ -538,10 +577,10 @@ describe("ListingSearchV2", () => {
     });
   });
 
-  it("displays variant count for each listing", async () => {
+  it("displays listing titles for each listing", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
@@ -564,15 +603,15 @@ describe("ListingSearchV2", () => {
       </ThemeProvider>
     );
 
-    // Check variant counts are displayed
-    expect(screen.getByText("Variants: 3")).toBeInTheDocument();
-    expect(screen.getByText("Variants: 1")).toBeInTheDocument();
+    // Check listing titles are displayed
+    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument();
+    expect(screen.getByText("Standard Ship Components")).toBeInTheDocument();
   });
 
-  it("displays quality tier range for each listing", async () => {
+  it("displays quality tier badges for each listing", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
@@ -595,16 +634,15 @@ describe("ListingSearchV2", () => {
       </ThemeProvider>
     );
 
-    // Check quality tier ranges are displayed
-    expect(screen.getByText(/Tier 3-5/)).toBeInTheDocument();
-    expect(screen.getByText(/Tier 2/)).toBeInTheDocument();
+    // Check quality tier badges are displayed (format: Q3–5, Q2)
+    expect(screen.getByText(/Q3/)).toBeInTheDocument();
+    expect(screen.getByText(/Q2/)).toBeInTheDocument();
   });
 
   it("handles pagination page change", async () => {
     const store = createMockStore();
-    const mockUseQuery = vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery");
 
-    mockUseQuery.mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 100,
@@ -641,7 +679,7 @@ describe("ListingSearchV2", () => {
   it("maintains visual parity with V1 styling", async () => {
     const store = createMockStore();
 
-    vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+    (useSearchListingsQuery as any).mockReturnValue({
       data: {
         listings: mockListings,
         total: 2,
