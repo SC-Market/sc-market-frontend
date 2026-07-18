@@ -472,6 +472,14 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
               fullWidth
               size="small"
               color="secondary"
+              sx={{
+                "& .MuiToggleButton-root": {
+                  color: "text.primary",
+                  "&.Mui-selected": {
+                    color: "secondary.main",
+                  },
+                },
+              }}
             >
               <ToggleButton value="market">{t('market.listings', 'Listings')}</ToggleButton>
               <ToggleButton value="buyorders">{t('market.buyOrders', 'Buy Orders')}</ToggleButton>

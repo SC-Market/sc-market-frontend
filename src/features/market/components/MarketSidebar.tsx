@@ -135,7 +135,8 @@ export function MarketSearchArea(props: {
               color="secondary"
               sx={{
                 "& .MuiToggleButton-root": {
-                  color: theme.palette.text.secondary,
+                  color: theme.palette.text.primary,
+                  borderColor: theme.palette.divider,
                   "&.Mui-selected": {
                     color: theme.palette.secondary.main,
                     backgroundColor: theme.palette.action.selected,
