@@ -38,7 +38,7 @@ import type {
   BuyOrderVisibility,
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
-import { useMarketSidebarExp } from "../../hooks/MarketSidebar"
+import { useDrawerOpen } from "../../../../hooks/layout/Drawer"
 import { HideOnScroll, MarketNavArea } from "../../components/MarketNavArea"
 import { MarketSearchAreaV2, MarketSidebarV2 } from "../ListingSearchV2"
 import { ListingWrapper } from "../../components/listings/ListingWrapper"
@@ -70,9 +70,9 @@ import {
 export function BuyOrdersRedesign() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const marketSidebarOpen = useMarketSidebarExp()
   const [viewMode, setViewMode] = useViewMode()
   const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const [drawerOpen] = useDrawerOpen()
 
   const [searchParams, setSearchParams] = useSearchParams()
   const [page, setPage] = useState(0)
@@ -142,11 +142,14 @@ export function BuyOrdersRedesign() {
     [],
   )
 
+  // Match ListingSearchV2's breakpoints EXACTLY so buy-order cards are the same
+  // size as main-search cards (same per-row count at each width).
   const gridBreakpoints = useMemo(() => {
-    if (marketSidebarOpen)
-      return { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4, xxl: 2, xxxl: 12 / 8 }
+    const sidebarInLayout = !showMobileSidebar
+    const base = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4, xxl: 2, xxxl: 12 / 8 }
+    if (!sidebarInLayout || drawerOpen) return base
     return { xs: 6, sm: 4, md: 4, lg: 2.4, xl: 2, xxl: 12 / 7, xxxl: 12 / 8 }
-  }, [marketSidebarOpen])
+  }, [showMobileSidebar, drawerOpen])
 
   const loading = isLoading || isFetching
 
@@ -422,18 +425,9 @@ function BuyOrderCard({
               {(order.quantity ?? 0).toLocaleString(i18n.language)}{" "}
               {t("market.requested", "requested")}
             </Typography>
-            {/* Phase 0: visual only — fulfilment flows through the existing
-                buy-order fulfil path elsewhere; kept as a disabled hint here. */}
-            <Button
-              variant="outlined"
-              color="secondary"
-              size="small"
-              fullWidth
-              sx={{ mt: 1 }}
-              disabled
-            >
-              {t("BuyOrdersRedesign.fulfil", "Fulfil from stock")}
-            </Button>
+            {/* Fulfilment is not wired in Phase 0. Rather than show a disabled
+                button (dead affordance), we hide it — it'll be added back as a
+                real action when the fulfil flow is wired. */}
           </CardContent>
         </Card>
       </Fade>
