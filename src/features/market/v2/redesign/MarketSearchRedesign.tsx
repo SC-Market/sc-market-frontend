@@ -41,10 +41,11 @@ import { isFungibleType } from "./fungibility"
  * `useSearchListingsQuery` results and derives inline aggregation client-side.
  *
  * Fungibility is not yet exposed by the backend, so it's derived from the item
- * category (see ./fungibility.ts): fungible items (commodities, components,
- * weapons, armor…) that share a name+type collapse into an expandable group
- * card; non-fungible items (ships, bundles) always render as standalone cards
- * even if names collide. See MARKET_V2_RESEARCH.md §8.3, §11.4, §7 Phase 0.
+ * category (see ./fungibility.ts). Phase 0 "narrow" split: only raw goods
+ * (commodities, consumables) are fungible — those that share a name+type
+ * collapse into an expandable group card. Everything else (graded components,
+ * weapons, armor, paints, ships, bundles, custom) renders as a standalone card.
+ * See MARKET_V2_RESEARCH.md §8.3, §11.4, §7 Phase 0.
  */
 
 type SortKey = "price" | "quality" | "rating" | "recent"
