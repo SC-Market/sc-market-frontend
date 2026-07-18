@@ -11,8 +11,14 @@ import {
 } from "./util/monitoring/bugsnagLoader"
 import { clearEmergencyReloadBudget, tryEmergencyReload } from "./util/assetReloadGuard"
 
-// Handle stale chunk errors after deployments (dynamic import failures)
-window.addEventListener("vite:preloadError", () => {
+// Handle stale chunk errors after deployments (dynamic import failures).
+// vite:preloadError is Vite's typed, cross-browser signal for a failed dynamic
+// import() — the robust way to detect a stale/missing route chunk WITHOUT
+// coupling to browser-specific error message text. preventDefault() stops Vite
+// from re-throwing, so the error never propagates to React Router; we recover
+// with a rate-limited reload to the current build instead.
+window.addEventListener("vite:preloadError", (event) => {
+  event.preventDefault()
   tryEmergencyReload()
 })
 
