@@ -1,10 +1,16 @@
 # Cloudflare Pages SPA routing
 # Sitemap routes are proxied to the API via functions/_middleware.ts
 
-# Redirect all routes to index.html for client-side routing.
-# NOTE: CF Pages applies an implicit SPA fallback that runs BEFORE _redirects, so
-# an `/assets/* -> 404` rule here has NO effect (a missing asset still returns
-# 200 index.html). Stale-chunk safety is therefore handled client-side: the SW no
-# longer caches assets (src/sw.ts), and lazy-route load failures trigger a
-# rate-limited reload (RouteErrorFallback + index.html inline guard + assetReloadGuard).
+# A missing hashed asset (old chunk after a deploy) must return a real 404, NOT
+# fall through to the SPA catch-all below and get served index.html as 200
+# text/html — which the browser can't execute as a JS module (Chrome MIME error,
+# Firefox NS_ERROR_CORRUPTED_CONTENT), a hard crash. A 404 lets the dynamic
+# import() reject cleanly so client recovery (vite:preloadError → rate-limited
+# reload) kicks in. Real files still win over this rule; it only matches paths
+# with no file. NOTE: verify in prod that this beats CF's implicit SPA fallback —
+# if a missing /assets/*.js still returns 200 text/html after deploy, this rule
+# is being bypassed and client-side recovery is the only safeguard.
+/assets/*    /assets/:splat    404
+
+# Redirect all real app routes to index.html for client-side routing.
 /*    /index.html   200

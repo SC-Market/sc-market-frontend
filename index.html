@@ -148,14 +148,6 @@
           tryEmergencyReload()
         })
 
-        if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
-          navigator.serviceWorker.addEventListener("message", function (event) {
-            if (event.data && event.data.type === "ASSET_NOT_FOUND") {
-              tryEmergencyReload()
-            }
-          })
-        }
-
         window.addEventListener(
           "error",
           function (event) {
