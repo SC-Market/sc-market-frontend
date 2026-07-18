@@ -7,11 +7,6 @@ const ListingSearchV2 = React.lazy(() =>
   import("./ListingSearchV2").then((m) => ({ default: m.ListingSearchV2 })),
 )
 // Phase 0 redesign (behind the `market_v2_redesign` flag) — see MARKET_V2_RESEARCH.md §7
-const MarketSearchRedesign = React.lazy(() =>
-  import("./redesign/MarketSearchRedesign").then((m) => ({
-    default: m.MarketSearchRedesign,
-  })),
-)
 const ListingDetailRedesign = React.lazy(() =>
   import("./redesign/ListingDetailRedesign").then((m) => ({
     default: m.ListingDetailRedesign,
@@ -85,13 +80,10 @@ export function MarketV2Routes() {
   const params = useParams()
   const { flags } = useFeatureFlag()
 
-  // Phase 0 redesign: only the main search/browse grid is reworked so far.
-  // Everything else falls through to the existing V2 components untouched.
-  const isSearchPath =
-    pathname === "/market" || pathname.startsWith("/market/category/")
-  if (flags.market_v2_redesign && isSearchPath) {
-    return <MarketSearchRedesign />
-  }
+  // Phase 0 redesign: the main search/browse grid now self-adapts inside
+  // ListingSearchV2 via the market_v2_redesign flag (grouped fungible items +
+  // real ListingCardV2), so /market and /market/category/* always render the
+  // real search page. No standalone search route.
 
   // Phase 0 redesign: route the remaining market surfaces to their redesign
   // components when the flag is on. Everything below (flag off) is untouched.
