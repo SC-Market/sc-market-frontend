@@ -112,6 +112,7 @@ export function createItemFilter(
   profile: UserProfileState | undefined,
   profileError: unknown,
   currentOrgObj: Contractor | null,
+  shopSlug?: string | null,
 ) {
   return (item: SidebarItemProps): boolean => {
     if (item.hidden) {
@@ -127,6 +128,11 @@ export function createItemFilter(
       } catch {
         return false
       }
+    }
+
+    // Hide items that require a shop context when no shop is selected
+    if (item.requiresShop && !shopSlug) {
+      return false
     }
 
     // Check login requirements

@@ -17,6 +17,7 @@ export interface SidebarItemProps {
   toOrgPublic?: boolean
   orgRouteRest?: string
   shopRouteRest?: string // Resolved to /shop/:slug/<shopRouteRest>
+  requiresShop?: boolean // Hide item if no shop is selected
   tab_key?: string // Used for org sidebar config filtering
   feature_flag?: string // Only show when this flag is enabled (e.g. "wiki")
 }
