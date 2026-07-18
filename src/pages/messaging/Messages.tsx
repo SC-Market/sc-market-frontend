@@ -39,17 +39,16 @@ export function Messages() {
   // Update current chat when data loads
   useEffect(() => {
     if (pageData.data?.chat) {
-      const newObj = { ...pageData.data.chat }
-      newObj.messages = [...newObj.messages].sort(
-        (a: Message, b: Message) => a.timestamp - b.timestamp,
-      )
       setCurrentChat(pageData.data.chat)
     }
+  }, [pageData.data?.chat, setCurrentChat])
 
+  // Clear current chat only when leaving messaging entirely
+  useEffect(() => {
     return () => {
       setCurrentChat(null)
     }
-  }, [pageData.data?.chat, setCurrentChat])
+  }, [setCurrentChat])
 
   // On mobile, hide sidebar when viewing a chat
   useEffect(() => {
