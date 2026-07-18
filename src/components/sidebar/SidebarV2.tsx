@@ -48,6 +48,7 @@ import {
   DescriptionRounded,
   ExpandLessRounded,
   ChevronLeftRounded,
+  AdminPanelSettingsRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -58,7 +59,7 @@ import { has_permission } from "../../views/contractor/OrgRoles"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
 import { SHOP_PATHS } from "../../routes/paths"
 
-type NavContext = "browse" | "shop" | "org"
+type NavContext = "browse" | "shop" | "org" | "admin"
 
 interface NavItem {
   label: string
@@ -84,6 +85,7 @@ export function SidebarV2() {
   // Infer context from URL
   const inferredContext = useMemo<{ ctx: NavContext; shopSlug: string | null; orgId: string | null }>(() => {
     const path = location.pathname
+    if (path.startsWith("/admin")) return { ctx: "admin", shopSlug: null, orgId: null }
     const shopMatch = path.match(/^\/shop\/([^/]+)/)
     if (shopMatch) return { ctx: "shop", shopSlug: shopMatch[1], orgId: null }
     const orgMatch = path.match(/^\/org\/([^/]+)/)
@@ -108,6 +110,7 @@ export function SidebarV2() {
   )
 
   const contextLabel = useMemo(() => {
+    if (context === "admin") return t("nav.admin", "Admin")
     if (context === "shop" && selectedShop) return selectedShop.name
     if (context === "org" && selectedOrgId) {
       const org = profile?.contractors?.find((c) => c.spectrum_id === selectedOrgId)
@@ -118,6 +121,18 @@ export function SidebarV2() {
 
   // Items based on current context
   const contextItems = useMemo<NavItem[]>(() => {
+    if (context === "admin") {
+      return [
+        { label: t("nav.adminOrders", "Orders"), to: "/admin/orders", icon: <LocalShippingRounded /> },
+        { label: t("nav.adminUsers", "Users"), to: "/admin/users", icon: <PeopleRounded /> },
+        { label: t("nav.adminMarket", "Market"), to: "/admin/market", icon: <StorefrontRounded /> },
+        { label: t("nav.adminAlerts", "Alerts"), to: "/admin/alerts", icon: <DescriptionRounded /> },
+        { label: t("nav.adminModeration", "Moderation"), to: "/admin/moderation", icon: <AdminPanelSettingsRounded /> },
+        { label: t("nav.adminFeatureFlags", "Feature Flags"), to: "/admin/feature-flags", icon: <SettingsRounded /> },
+        { label: t("nav.adminGameData", "Game Data Import"), to: "/admin/game-data-import", icon: <ScienceRounded /> },
+        { label: t("nav.adminAuditLogs", "Audit Logs"), to: "/admin/audit-logs", icon: <DescriptionRounded /> },
+      ]
+    }
     if (context === "shop" && selectedShop) {
       const slug = selectedShop.slug
       const perms = selectedShop.permissions
@@ -189,7 +204,10 @@ export function SidebarV2() {
   const [craftingOpen, setCraftingOpen] = useState(false)
 
   const handleContextSwitch = (ctx: NavContext, id?: string) => {
-    if (ctx === "shop" && id) {
+    if (ctx === "admin") {
+      setContextOverride({ ctx: "admin", shopSlug: null, orgId: null })
+      navigate("/admin/orders")
+    } else if (ctx === "shop" && id) {
       setContextOverride({ ctx, shopSlug: id, orgId: null })
       navigate(SHOP_PATHS.orders(id))
     } else if (ctx === "org" && id) {
@@ -219,10 +237,10 @@ export function SidebarV2() {
       >
         <Stack direction="row" alignItems="center" spacing={1.5}>
           <Avatar
-            src={context === "shop" && selectedShop ? selectedShop.logo_url || undefined : profile?.avatar}
+            src={context === "admin" ? undefined : context === "shop" && selectedShop ? selectedShop.logo_url || undefined : profile?.avatar}
             sx={{ width: 32, height: 32 }}
           >
-            {context === "shop" ? <StorefrontRounded fontSize="small" /> : undefined}
+            {context === "admin" ? <AdminPanelSettingsRounded fontSize="small" /> : context === "shop" ? <StorefrontRounded fontSize="small" /> : undefined}
           </Avatar>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="body2" fontWeight={600} noWrap>
@@ -291,6 +309,16 @@ export function SidebarV2() {
             <ListItemText>{org.name}</ListItemText>
           </MenuItem>
         ))}
+        {profile?.role === "admin" && <Divider />}
+        {profile?.role === "admin" && (
+          <MenuItem
+            selected={context === "admin"}
+            onClick={() => handleContextSwitch("admin")}
+          >
+            <ListItemIcon><AdminPanelSettingsRounded /></ListItemIcon>
+            <ListItemText>{t("nav.admin", "Admin")}</ListItemText>
+          </MenuItem>
+        )}
       </Menu>
 
       <Divider sx={{ mx: 2, my: 0.5 }} />
