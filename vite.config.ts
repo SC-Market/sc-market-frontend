@@ -59,8 +59,15 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.ts", // Our custom service worker file (TypeScript)
       injectManifest: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}"],
-        globIgnores: ["**/stats.html"], // Exclude bundle analysis report
+        // NOTE: `html` is deliberately NOT precached. Precaching index.html made
+        // precacheAndRoute (registered before our NetworkOnly navigation route)
+        // intercept navigations and serve a STALE index.html after a deploy —
+        // which references hashed chunks that no longer exist → crash on refresh.
+        // (Firefox symptom: normal refresh crashes, shift+refresh bypasses the SW
+        // and works, next normal refresh crashes again.) The app shell must always
+        // come from the network via the navigate → NetworkOnly route in sw.ts.
+        globPatterns: ["**/*.{js,css,ico,png,svg,woff2,woff,ttf}"],
+        globIgnores: ["**/stats.html", "**/*.html"], // never precache HTML (see note above)
       },
       includeAssets: [
         "favicon.ico",
