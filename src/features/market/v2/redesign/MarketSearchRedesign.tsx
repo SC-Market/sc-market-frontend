@@ -6,6 +6,7 @@ import {
   CardContent,
   CardMedia,
   Chip,
+  CircularProgress,
   Collapse,
   Container,
   Divider,
@@ -31,103 +32,72 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
 import { formatMarketUrl } from "../../domain/urls"
-import { useSearchListingsQuery } from "../../../../store/api/v2/market"
-import type { ListingSearchResult } from "../../../../store/api/v2/market"
+import {
+  useSearchListingsQuery,
+  useSearchGameItemAggregatesQuery,
+  useGetListingsQuery,
+} from "../../../../store/api/v2/market"
+import type {
+  ListingSearchResult,
+  GameItemAggregate,
+  GameItemListingResult,
+} from "../../../../store/api/v2/market"
 import { isFungibleType } from "./fungibility"
 
 /**
  * MarketSearchRedesign — Phase 0 of the Market redesign (behind the
- * `market_v2_redesign` feature flag). Frontend-only: it reads the EXISTING
- * `useSearchListingsQuery` results and derives inline aggregation client-side.
+ * `market_v2_redesign` feature flag). Frontend-only, on the existing V2 API.
  *
- * Fungibility is not yet exposed by the backend, so it's derived from the item
- * category (see ./fungibility.ts). Phase 0 "narrow" split: only raw goods
- * (commodities, consumables) are fungible — those that share a name+type
- * collapse into an expandable group card. Everything else (graded components,
- * weapons, armor, paints, ships, bundles, custom) renders as a standalone card.
+ * Two-lane hybrid so aggregation is COMPLETE (server-side), not limited to the
+ * current page's results:
+ *  - Fungible items (raw goods, per ./fungibility.ts) come from
+ *    `/game-items/aggregates` → one expandable group card per item, with the
+ *    full seller list fetched on expand from `/game-items/{id}/listings`.
+ *  - Non-fungible items come from `/listings/search` → one standalone card per
+ *    listing (photo, title, shop). Each item appears in exactly one lane
+ *    (cross-filtered by fungibility), so there are no duplicates.
+ *
  * See MARKET_V2_RESEARCH.md §8.3, §11.4, §7 Phase 0.
  */
 
 type SortKey = "price" | "quality" | "rating" | "recent"
 
-interface Group {
-  key: string
-  itemName: string
-  itemType: string
-  fungible: boolean
-  listings: ListingSearchResult[]
-  photo?: string
-  fromPrice: number
-  bestQuality: number
-  topRating: number
-  newest: number
-}
+type GridItem =
+  | { kind: "group"; key: string; agg: GameItemAggregate }
+  | { kind: "single"; key: string; listing: ListingSearchResult }
 
-function groupListings(listings: ListingSearchResult[]): Group[] {
-  const map = new Map<string, Group>()
-  for (const l of listings) {
-    const fungible = isFungibleType(l.game_item_type)
-    // Fungible items merge by name+type; non-fungible items never merge
-    // (each is its own standalone card), so key them by listing id.
-    const key = fungible
-      ? `${l.game_item_name}::${l.game_item_type}`
-      : `nf::${l.listing_id}`
-    let g = map.get(key)
-    if (!g) {
-      g = {
-        key,
-        itemName: l.game_item_name,
-        itemType: l.game_item_type,
-        fungible,
-        listings: [],
-        photo: l.photo ?? undefined,
-        fromPrice: Number.POSITIVE_INFINITY,
-        bestQuality: 0,
-        topRating: 0,
-        newest: 0,
-      }
-      map.set(key, g)
+function sortValue(item: GridItem, key: SortKey): number {
+  if (item.kind === "group") {
+    const a = item.agg
+    switch (key) {
+      case "price":
+        return a.min_price ?? 0
+      case "quality":
+        return a.quality_tier_max ?? 0
+      case "rating":
+        return 0 // aggregate has no rating; ranks after rated singles on desc
+      case "recent":
+        return 0 // aggregate has no timestamp
     }
-    g.listings.push(l)
-    if (!g.photo && l.photo) g.photo = l.photo
-    g.fromPrice = Math.min(g.fromPrice, l.price_min ?? Number.POSITIVE_INFINITY)
-    g.bestQuality = Math.max(g.bestQuality, l.quality_tier_max ?? 0)
-    g.topRating = Math.max(g.topRating, l.shop_rating ?? 0)
-    g.newest = Math.max(g.newest, new Date(l.updated_at ?? l.created_at ?? 0).getTime())
   }
-  return [...map.values()]
-}
-
-function sortGroups(groups: Group[], key: SortKey): Group[] {
-  const g = [...groups]
+  const l = item.listing
   switch (key) {
     case "price":
-      return g.sort((a, b) => a.fromPrice - b.fromPrice)
+      return l.price_min ?? 0
     case "quality":
-      return g.sort((a, b) => b.bestQuality - a.bestQuality)
+      return l.quality_tier_max ?? 0
     case "rating":
-      return g.sort((a, b) => b.topRating - a.topRating)
+      return l.shop_rating ?? 0
     case "recent":
-      return g.sort((a, b) => b.newest - a.newest)
+      return new Date(l.updated_at ?? l.created_at ?? 0).getTime()
   }
 }
 
-function sortListings(listings: ListingSearchResult[], key: SortKey): ListingSearchResult[] {
-  const l = [...listings]
-  switch (key) {
-    case "price":
-      return l.sort((a, b) => (a.price_min ?? 0) - (b.price_min ?? 0))
-    case "quality":
-      return l.sort((a, b) => (b.quality_tier_max ?? 0) - (a.quality_tier_max ?? 0))
-    case "rating":
-      return l.sort((a, b) => (b.shop_rating ?? 0) - (a.shop_rating ?? 0))
-    case "recent":
-      return l.sort(
-        (a, b) =>
-          new Date(b.updated_at ?? b.created_at ?? 0).getTime() -
-          new Date(a.updated_at ?? a.created_at ?? 0).getTime(),
-      )
-  }
+function sortGrid(items: GridItem[], key: SortKey): GridItem[] {
+  const asc = key === "price"
+  return [...items].sort((a, b) =>
+    asc ? sortValue(a, key) - sortValue(b, key) : sortValue(b, key) - sortValue(a, key),
+  )
 }
 
 export function MarketSearchRedesign() {
@@ -137,16 +107,42 @@ export function MarketSearchRedesign() {
   const [sort, setSort] = useState<SortKey>("price")
   const [expanded, setExpanded] = useState<string | null>(null)
 
-  const { data, isLoading, error } = useSearchListingsQuery({
+  const aggSortBy = sort === "price" ? "price" : "quantity"
+  const {
+    data: aggData,
+    isLoading: aggLoading,
+    error: aggError,
+  } = useSearchGameItemAggregatesQuery({
+    text: text || undefined,
+    pageSize: 96,
+    sortBy: aggSortBy,
+    sortOrder: sort === "price" ? "asc" : "desc",
+  })
+
+  const {
+    data: listData,
+    isLoading: listLoading,
+    error: listError,
+  } = useSearchListingsQuery({
     text: text || undefined,
     pageSize: 96,
     status: "active",
   })
 
-  const groups = useMemo(() => {
-    const listings = data?.listings ?? []
-    return sortGroups(groupListings(listings), sort)
-  }, [data, sort])
+  const items = useMemo<GridItem[]>(() => {
+    const fungibleGroups: GridItem[] = (aggData?.items ?? [])
+      .filter((a) => isFungibleType(a.type))
+      .map((agg) => ({ kind: "group", key: `g:${agg.game_item_id}`, agg }))
+
+    const nonFungibleCards: GridItem[] = (listData?.listings ?? [])
+      .filter((l) => !isFungibleType(l.game_item_type))
+      .map((listing) => ({ kind: "single", key: `s:${listing.listing_id}`, listing }))
+
+    return sortGrid([...fungibleGroups, ...nonFungibleCards], sort)
+  }, [aggData, listData, sort])
+
+  const isLoading = aggLoading || listLoading
+  const error = aggError || listError
 
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
@@ -204,27 +200,27 @@ export function MarketSearchRedesign() {
       )}
 
       <Grid container spacing={2.5}>
-        {groups.map((g) =>
-          g.fungible && g.listings.length > 1 ? (
-            <Grid key={g.key} size={expanded === g.key ? 12 : { xs: 12, sm: 6, md: 4, lg: 3 }}>
+        {items.map((item) =>
+          item.kind === "group" ? (
+            <Grid key={item.key} size={expanded === item.key ? 12 : { xs: 12, sm: 6, md: 4, lg: 3 }}>
               <GroupCard
-                group={g}
+                agg={item.agg}
                 sort={sort}
-                open={expanded === g.key}
+                open={expanded === item.key}
                 onToggle={() =>
-                  setExpanded((cur) => (cur === g.key ? null : g.key))
+                  setExpanded((cur) => (cur === item.key ? null : item.key))
                 }
               />
             </Grid>
           ) : (
-            <Grid key={g.key} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-              <SingleCard listing={g.listings[0]} />
+            <Grid key={item.key} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+              <SingleCard listing={item.listing} />
             </Grid>
           ),
         )}
       </Grid>
 
-      {!isLoading && !error && groups.length === 0 && (
+      {!isLoading && !error && items.length === 0 && (
         <Typography sx={{ color: "text.primary", py: 6, textAlign: "center" }}>
           {t("MarketRedesign.empty", "No listings match your search.")}
         </Typography>
@@ -258,6 +254,7 @@ function ListingImage({ src, alt, height }: { src?: string; alt: string; height:
 }
 
 function SingleCard({ listing }: { listing: ListingSearchResult }) {
+  const { t } = useTranslation()
   return (
     <Card sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}>
       <CardActionArea component={RouterLink} to={formatMarketUrl(listing)} sx={{ height: "100%" }}>
@@ -278,6 +275,13 @@ function SingleCard({ listing }: { listing: ListingSearchResult }) {
           <Typography variant="h6" sx={{ color: "primary.main", mt: 1 }}>
             {formatPriceRange(listing.price_min, listing.price_max)}
           </Typography>
+          {listing.quantity_available != null && (
+            <Typography variant="caption" sx={{ color: "text.primary" }}>
+              {t("MarketRedesign.available", "{{count}} available", {
+                count: listing.quantity_available,
+              })}
+            </Typography>
+          )}
         </CardContent>
       </CardActionArea>
     </Card>
@@ -285,21 +289,17 @@ function SingleCard({ listing }: { listing: ListingSearchResult }) {
 }
 
 function GroupCard({
-  group,
+  agg,
   sort,
   open,
   onToggle,
 }: {
-  group: Group
+  agg: GameItemAggregate
   sort: SortKey
   open: boolean
   onToggle: () => void
 }) {
   const { t } = useTranslation()
-  const sellers = useMemo(() => sortListings(group.listings, sort), [group.listings, sort])
-  const totalQty = group.listings.reduce((s, l) => s + (l.quantity_available ?? 0), 0)
-  const maxPrice = Math.max(...group.listings.map((l) => l.price_max ?? l.price_min ?? 0))
-  const dense = sellers.length > 6
 
   return (
     <Card
@@ -314,7 +314,7 @@ function GroupCard({
       }}
     >
       <CardActionArea onClick={onToggle} sx={{ p: 0 }}>
-        <ListingImage src={group.photo} alt={group.itemName} height={open ? 140 : 160} />
+        <ListingImage src={agg.image_url} alt={agg.name} height={open ? 140 : 160} />
       </CardActionArea>
       <CardContent>
         <Stack
@@ -326,24 +326,24 @@ function GroupCard({
         >
           <Box sx={{ minWidth: 0 }}>
             <Stack direction="row" spacing={1} sx={{ mb: 0.5 }} flexWrap="wrap" useFlexGap>
-              <Chip label={group.itemType} size="small" variant="outlined" sx={{ color: "text.primary" }} />
+              <Chip label={agg.type} size="small" variant="outlined" sx={{ color: "text.primary" }} />
               <Chip
                 icon={<GroupsRounded />}
                 label={t("MarketRedesign.sellersCount", "{{count}} sellers", {
-                  count: group.listings.length,
+                  count: agg.shop_count,
                 })}
                 size="small"
                 color="primary"
                 variant="outlined"
               />
             </Stack>
-            <Typography variant="subtitle1" noWrap title={group.itemName}>
-              {group.itemName}
+            <Typography variant="subtitle1" noWrap title={agg.name}>
+              {agg.name}
             </Typography>
             <Typography variant="body2" sx={{ color: "text.primary" }}>
               {t("MarketRedesign.fromPrice", "from")}{" "}
               <Box component="span" sx={{ color: "primary.main", fontWeight: 700 }}>
-                {formatPrice(group.fromPrice)}
+                {formatPrice(agg.min_price)}
               </Box>
             </Typography>
           </Box>
@@ -359,43 +359,80 @@ function GroupCard({
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Divider sx={{ my: 1.5 }} />
           <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
-            {formatPriceRange(group.fromPrice, maxPrice)} ·{" "}
-            {t("MarketRedesign.sellersCount", "{{count}} sellers", { count: group.listings.length })} ·{" "}
-            {t("MarketRedesign.unitsAvailable", "{{count}} units available", { count: totalQty })}
+            {formatPriceRange(agg.min_price, agg.max_price)} ·{" "}
+            {t("MarketRedesign.sellersCount", "{{count}} sellers", { count: agg.shop_count })} ·{" "}
+            {t("MarketRedesign.unitsAvailable", "{{count}} units available", {
+              count: agg.total_quantity,
+            })}
           </Typography>
-
-          {dense ? (
-            <Box sx={{ maxHeight: 360, overflowY: "auto" }}>
-              <Stack divider={<Divider />}>
-                {sellers.map((s, i) => (
-                  <Fade key={s.listing_id} in={open} timeout={300} style={{ transitionDelay: open ? `${Math.min(i, 8) * 40}ms` : "0ms" }}>
-                    <Box>
-                      <SellerRow listing={s} best={i === 0} />
-                    </Box>
-                  </Fade>
-                ))}
-              </Stack>
-            </Box>
-          ) : (
-            <Grid container spacing={1.5}>
-              {sellers.map((s, i) => (
-                <Grid key={s.listing_id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-                  <Grow in={open} timeout={300} style={{ transformOrigin: "top", transitionDelay: open ? `${Math.min(i, 8) * 40}ms` : "0ms" }}>
-                    <Box sx={{ height: "100%" }}>
-                      <SellerSubCard listing={s} best={i === 0} />
-                    </Box>
-                  </Grow>
-                </Grid>
-              ))}
-            </Grid>
-          )}
+          {open && <GroupSellers gameItemId={agg.game_item_id} sort={sort} />}
         </Collapse>
       </CardContent>
     </Card>
   )
 }
 
-function SellerRow({ listing, best }: { listing: ListingSearchResult; best: boolean }) {
+/**
+ * Fetches the full seller list for a fungible item on expand (complete,
+ * server-side — not limited to the search page). Adaptive layout: rich
+ * sub-cards for a handful of sellers, a compact scrollable depth list beyond ~6.
+ */
+function GroupSellers({ gameItemId, sort }: { gameItemId: string; sort: SortKey }) {
+  const { t } = useTranslation()
+  const sortBy = sort === "rating" ? "shop_rating" : sort === "quality" ? "quality" : sort === "recent" ? "price" : "price"
+  const { data, isLoading, error } = useGetListingsQuery({
+    id: gameItemId,
+    sortBy,
+    sortOrder: sort === "price" ? "asc" : "desc",
+    pageSize: 100,
+  })
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+        <CircularProgress size={24} />
+      </Box>
+    )
+  }
+  if (error) {
+    return (
+      <Typography variant="body2" sx={{ color: "error.main", py: 2 }}>
+        {t("MarketRedesign.sellersError", "Couldn't load sellers.")}
+      </Typography>
+    )
+  }
+
+  const sellers = data?.listings ?? []
+  const dense = sellers.length > 6
+
+  return dense ? (
+    <Box sx={{ maxHeight: 360, overflowY: "auto" }}>
+      <Stack divider={<Divider />}>
+        {sellers.map((s, i) => (
+          <Fade key={s.listing_id} in timeout={300} style={{ transitionDelay: `${Math.min(i, 8) * 40}ms` }}>
+            <Box>
+              <SellerRow listing={s} best={i === 0} />
+            </Box>
+          </Fade>
+        ))}
+      </Stack>
+    </Box>
+  ) : (
+    <Grid container spacing={1.5}>
+      {sellers.map((s, i) => (
+        <Grid key={s.listing_id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+          <Grow in timeout={300} style={{ transformOrigin: "top", transitionDelay: `${Math.min(i, 8) * 40}ms` }}>
+            <Box sx={{ height: "100%" }}>
+              <SellerSubCard listing={s} best={i === 0} />
+            </Box>
+          </Grow>
+        </Grid>
+      ))}
+    </Grid>
+  )
+}
+
+function SellerRow({ listing, best }: { listing: GameItemListingResult; best: boolean }) {
   return (
     <Stack
       component={RouterLink}
@@ -421,7 +458,8 @@ function SellerRow({ listing, best }: { listing: ListingSearchResult; best: bool
   )
 }
 
-function SellerSubCard({ listing, best }: { listing: ListingSearchResult; best: boolean }) {
+function SellerSubCard({ listing, best }: { listing: GameItemListingResult; best: boolean }) {
+  const { t } = useTranslation()
   return (
     <Card variant="outlined" sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}>
       <CardActionArea component={RouterLink} to={formatMarketUrl(listing)} sx={{ height: "100%" }}>
@@ -437,7 +475,9 @@ function SellerSubCard({ listing, best }: { listing: ListingSearchResult; best: 
           </Typography>
           <Typography variant="caption" sx={{ color: "text.primary" }}>
             {listing.quantity_available != null
-              ? `${listing.quantity_available.toLocaleString()} available`
+              ? t("MarketRedesign.available", "{{count}} available", {
+                  count: listing.quantity_available,
+                })
               : ""}
           </Typography>
         </CardContent>
