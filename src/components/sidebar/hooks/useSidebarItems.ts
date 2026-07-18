@@ -48,8 +48,8 @@ export function useSidebarItems() {
   }, [customOrgData])
 
   const filterItems = useCallback(
-    createItemFilter(profile, profileError, currentOrgObj),
-    [currentOrgObj, profile, profileError],
+    createItemFilter(profile, profileError, currentOrgObj, shopSlug),
+    [currentOrgObj, profile, profileError, shopSlug],
   )
 
   const resolveItem = useCallback(
