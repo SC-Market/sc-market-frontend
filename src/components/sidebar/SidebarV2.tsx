@@ -49,6 +49,8 @@ import {
   ExpandLessRounded,
   ChevronLeftRounded,
   AdminPanelSettingsRounded,
+  BusinessRounded,
+  PersonAddRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -361,11 +363,11 @@ export function SidebarV2() {
               <ListItemText primary={t("nav.shops", "Shops")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
             <ListItemButton component={Link} to="/contractors" selected={isActive("/contractors")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><PeopleRounded /></ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 36 }}><BusinessRounded /></ListItemIcon>
               <ListItemText primary={t("nav.orgs", "Organizations")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
             <ListItemButton component={Link} to="/recruiting" selected={isActive("/recruiting")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><PeopleRounded /></ListItemIcon>
+              <ListItemIcon sx={{ minWidth: 36 }}><PersonAddRounded /></ListItemIcon>
               <ListItemText primary={t("nav.recruiting", "Recruiting")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
           </List>
