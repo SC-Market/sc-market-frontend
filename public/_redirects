@@ -1,5 +1,17 @@
 # Cloudflare Pages SPA routing
 # Sitemap routes are proxied to the API via functions/_middleware.ts
 
-# Redirect all routes to index.html for client-side routing
+# Hashed build assets must NOT fall through to the SPA catch-all below. Without
+# this rule, a request for an old chunk that no longer exists after a deploy
+# matches `/* -> /index.html 200` and receives index.html with a 200 status and
+# text/html content-type. The browser then tries to execute HTML as a JS module
+# ("'text/html' is not a valid JavaScript MIME type"), which is a hard,
+# unrecoverable crash and (on Firefox) a refresh loop. Returning a real 404 for a
+# missing asset lets the dynamic import() reject cleanly so the client's
+# stale-chunk guards (vite:preloadError, RouteErrorFallback, the sw catch
+# handler, the index.html inline handler) can trigger a rate-limited reload to
+# the current build. Existing assets still win (a real file beats this rule).
+/assets/*    /assets/:splat    404
+
+# Redirect all real app routes to index.html for client-side routing.
 /*    /index.html   200

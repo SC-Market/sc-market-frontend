@@ -87,11 +87,17 @@ registerRoute(
   async ({ request, event }) => {
     try {
       const response = await fetch(request)
-      if (response.ok) return response
+      // A missing asset can come back as 200 text/html (SPA _redirects catch-all)
+      // instead of a 404. Executing that HTML as a JS module hard-crashes the
+      // page, so treat an HTML response to an asset request as "asset gone".
+      const contentType = response.headers.get("content-type") || ""
+      const isHtml = contentType.includes("text/html")
+      if (response.ok && !isHtml) return response
     } catch {
       // network error
     }
-    // Asset gone — notify only the requesting client, not all tabs
+    // Asset gone (404, or HTML masquerading as the asset) — notify the client to
+    // reload for the current build.
     const clientId =
       (event as FetchEvent).resultingClientId ||
       (event as FetchEvent).clientId
@@ -101,7 +107,9 @@ registerRoute(
         client.postMessage({ type: "ASSET_NOT_FOUND" })
       }
     }
-    return new Response("Asset not found — reload required", { status: 404 })
+    // Clean failed fetch (not a fabricated body) so the import() rejects and the
+    // guards handle recovery.
+    return Response.error()
   },
 )
 
@@ -308,21 +316,26 @@ setCatchHandler(async ({ request, event }) => {
     /\.(?:js|css|mjs)$/.test(new URL(request.url).pathname)
 
   if (isScriptOrStyle) {
-    // Try the network directly — this is the freshest copy available.
+    // Try the network directly — this is the freshest copy available. A precache
+    // handler can throw when its cache entry was evicted/corrupted even though
+    // the asset is fine on the network, so this recovers the common case.
     try {
       const fresh = await fetch(request)
       if (fresh.ok) return fresh
     } catch {
       // fall through to recovery
     }
-    // Stale build: the asset is gone (404) or unreachable. Purge caches so the
-    // next boot is clean, then ask the client to reload (rate-limited).
+    // Genuinely unrecoverable (asset gone / offline). Purge caches so the next
+    // boot is clean, and ask the client to do a rate-limited reload.
     await purgeAllCaches()
     await notifyClientToReload(event)
-    return new Response(
-      "// stale build — caches cleared, reload required",
-      { status: 503, headers: { "Content-Type": "text/javascript" } },
-    )
+    // IMPORTANT: return a network error, NOT a fabricated 503/200 body. A JS
+    // module request that receives a non-JS body (or a 503) becomes a hard,
+    // unrecoverable module error. Response.error() makes it a clean failed
+    // fetch, so the browser + existing guards (vite:preloadError,
+    // RouteErrorFallback, the index.html inline handler) handle it and the
+    // pending reload takes over.
+    return Response.error()
   }
 
   // Non-critical requests (images, etc.): fail soft, never throw.
