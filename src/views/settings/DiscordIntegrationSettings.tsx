@@ -1,7 +1,5 @@
-import { Grid } from "@mui/material"
+import { Alert, Grid } from "@mui/material"
 import React from "react"
-import { MyWebhooks } from "../notifications/ListNotificationWebhooks"
-import { AddNotificationWebhook } from "../notifications/AddNotificationWebhook"
 import { DiscordBotDetails } from "./DiscordBotDetails"
 import { ConfigureDiscord } from "../notifications/ConfigureDiscord"
 import { useTheme } from "@mui/material/styles"
@@ -17,8 +15,11 @@ export function DiscordIntegrationSettings() {
     >
       <DiscordBotDetails />
       <ConfigureDiscord />
-      <AddNotificationWebhook />
-      <MyWebhooks />
+      <Grid item xs={12}>
+        <Alert severity="info">
+          Webhooks are now managed from your shop's settings page.
+        </Alert>
+      </Grid>
     </Grid>
   )
 }
