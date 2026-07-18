@@ -147,6 +147,7 @@ export function OrderAnalyticsCharts({ analytics }: OrderAnalyticsProps) {
               },
             ]}
             height={400}
+            yScaleType="log"
           />
         </Grid>
       </Section>

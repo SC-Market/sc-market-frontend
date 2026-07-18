@@ -81,6 +81,7 @@ export function OfferAnalyticsCharts({ analytics }: OfferAnalyticsProps) {
               },
             ]}
             height={400}
+            yScaleType="log"
           />
         </Grid>
       </Section>
