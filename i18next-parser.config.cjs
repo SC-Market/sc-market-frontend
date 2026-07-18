@@ -4,7 +4,7 @@ module.exports = {
   input: ["src/**/*.{ts,tsx}"],
   sort: true,
   createOldCatalogs: false,
-  keepRemoved: false,
+  keepRemoved: true,
   defaultNamespace: "english",
   defaultValue: (locale, namespace, key) => key,
   indentation: 2,
