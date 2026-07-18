@@ -1418,8 +1418,8 @@
     "integrating_with_discord": "Integrating with Discord"
   },
   "displayed_rows": "{{from}}-{{to}} of {{count}}",
-  "displayed_rows_one": "displayed_rows",
-  "displayed_rows_other": "displayed_rows",
+  "displayed_rows_one": "{{from}}-{{to}} of {{count}}",
+  "displayed_rows_other": "{{from}}-{{to}} of {{count}}",
   "displayed_rows_range": "{{from}}–{{to}} of {{count}}",
   "displayed_rows_range_one": "displayed_rows_range",
   "displayed_rows_range_other": "displayed_rows_range",
