@@ -1,3 +1,20 @@
 /*
   Access-Control-Allow-Origin: https://api.sc-market.space
   Access-Control-Allow-Credentials: true
+
+# Service worker: never cache at the edge/browser, so a new deploy's sw.js is
+# always fetched fresh and the SW update logic can run. A stale sw.js is the
+# classic cause of clients being stuck on an old app version after deploy.
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# App shell: always revalidate so the served index.html references the current
+# hashed /assets/* chunks. A stale shell points at chunks that no longer exist
+# after a deploy → "error loading dynamically imported module".
+/index.html
+  Cache-Control: no-cache
+
+# Hashed build assets are content-addressed (filename changes when content
+# changes), so they are safe to cache forever/immutable.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
