@@ -10,8 +10,30 @@ import { useTranslation } from "react-i18next"
 import { ArrowBackRounded } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
+/**
+ * The error page is the LAST line of defense — it must render even when i18n
+ * isn't ready. This is the root errorElement, and if it renders before the i18n
+ * instance has initialized (e.g. a chunk failed to load early in boot),
+ * `useTranslation()` can hand back an undefined `t`, which then crashes the
+ * error page itself ("can't access property, t is undefined"). Wrap it so `t`
+ * is ALWAYS callable: use the real translator when available, otherwise fall
+ * back to the inline English default (or the key).
+ */
+function useSafeTranslation() {
+  const result = useTranslation()
+  const realT = result?.t
+  const safeT = (key: string, fallback?: string, opts?: Record<string, unknown>) => {
+    if (typeof realT === "function") {
+      // react-i18next: t(key, defaultValue, options)
+      return fallback != null ? realT(key, fallback, opts) : realT(key, opts)
+    }
+    return fallback ?? key
+  }
+  return { t: safeT }
+}
+
 export function FrontendErrorBody() {
-  const { t } = useTranslation()
+  const { t } = useSafeTranslation()
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const target = searchParams.get("target")
@@ -33,7 +55,7 @@ export function FrontendErrorBody() {
           color={"text.secondary"}
           align={"center"}
         >
-          {t("frontendError.title")}
+          {t("frontendError.title", "Something went wrong")}
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -42,18 +64,18 @@ export function FrontendErrorBody() {
           color={"text.primary"}
           align={"center"}
         >
-          {t("frontendError.subtitle")}{" "}
+          {t("frontendError.subtitle", "Something went wrong. Try refreshing, or reach us on")}{" "}
           <Link rel="noopener noreferrer" target="_blank" href={DISCORD_INVITE}>
             <UnderlineLink color={"text.secondary"}>Discord</UnderlineLink>
           </Link>{" "}
-          {t("frontendError.afterRefresh")}
+          {t("frontendError.afterRefresh", "if it keeps happening.")}
         </Typography>
 
         <Typography variant={"body2"} align={"center"}>
-          {t("frontendError.page")}: <code>{target}</code>
+          {t("frontendError.page", "Page")}: <code>{target}</code>
         </Typography>
         <Typography variant={"body2"} align={"center"}>
-          {t("frontendError.message")}: <code>{message}</code>
+          {t("frontendError.message", "Error")}: <code>{message}</code>
         </Typography>
       </Grid>
 
@@ -88,7 +110,7 @@ export function FrontendErrorBody() {
                 size={"large"}
                 fullWidth
               >
-                {t("frontendError.returnToDashboard")}
+                {t("frontendError.returnToDashboard", "Return to Dashboard")}
               </Button>
             </a>
           </Grid>
@@ -99,10 +121,10 @@ export function FrontendErrorBody() {
 }
 
 export function FrontendErrorPage() {
-  const { t } = useTranslation()
+  const { t } = useSafeTranslation()
   return (
     <StandardPageLayout
-      title={t("frontendError.pageTitle")}
+      title={t("frontendError.pageTitle", "Something went wrong")}
       maxWidth={"md"}
       sidebarOpen={true}
       noTopSpacer={false}
