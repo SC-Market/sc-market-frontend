@@ -29,7 +29,7 @@ interface SyncEvent extends ExtendableEvent {
 import { clientsClaim, skipWaiting } from "workbox-core"
 import type { PrecacheEntry } from "workbox-precaching"
 import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching"
-import { registerRoute } from "workbox-routing"
+import { registerRoute, setCatchHandler } from "workbox-routing"
 import {
   NetworkFirst,
   NetworkOnly,
@@ -251,6 +251,83 @@ registerRoute(
     ],
   }),
 )
+
+// ============================================================================
+// Global catch handler — recover instead of crashing
+// ============================================================================
+//
+// Without this, when ANY route handler throws/rejects (e.g. a precached entry
+// was evicted or corrupted, or the network fetch fails for a script the app
+// needs), Workbox lets the error bubble to the browser as "A serviceworker
+// intercepted the request and encountered an unexpected error". For an app
+// chunk (index-*.js, vendor chunks) that is a hard crash with no recovery,
+// and if it's the entry chunk the app never boots — so none of the client-side
+// guards (vite:preloadError, assetReloadGuard) ever run → infinite reload loop.
+//
+// Strategy: catch every handler failure. For a script/style request, treat it
+// as "I'm running a stale build": try a fresh network fetch; if that 404s or
+// fails, PURGE all SW caches (so the next load starts clean and can fetch the
+// latest index + chunks) and tell the client to do a rate-limited reload via
+// the existing ASSET_NOT_FOUND channel (bounded by assetReloadGuard, max 2 per
+// 120s — so we recover without looping). Never return undefined here.
+async function purgeAllCaches(): Promise<void> {
+  try {
+    const keys = await caches.keys()
+    await Promise.all(keys.map((k) => caches.delete(k)))
+  } catch {
+    // best-effort
+  }
+}
+
+async function notifyClientToReload(event: ExtendableEvent): Promise<void> {
+  const fetchEvent = event as FetchEvent
+  const clientId = fetchEvent.resultingClientId || fetchEvent.clientId
+  let notified = false
+  if (clientId) {
+    const client = await self.clients.get(clientId)
+    if (client) {
+      client.postMessage({ type: "ASSET_NOT_FOUND" })
+      notified = true
+    }
+  }
+  if (!notified) {
+    // Entry-chunk case: the requesting client may not be controllable yet.
+    // Broadcast so any window that IS up can trigger the guarded reload.
+    const all = await self.clients.matchAll({
+      type: "window",
+      includeUncontrolled: true,
+    })
+    for (const c of all) c.postMessage({ type: "ASSET_NOT_FOUND" })
+  }
+}
+
+setCatchHandler(async ({ request, event }) => {
+  const isScriptOrStyle =
+    request.destination === "script" ||
+    request.destination === "style" ||
+    /\.(?:js|css|mjs)$/.test(new URL(request.url).pathname)
+
+  if (isScriptOrStyle) {
+    // Try the network directly — this is the freshest copy available.
+    try {
+      const fresh = await fetch(request)
+      if (fresh.ok) return fresh
+    } catch {
+      // fall through to recovery
+    }
+    // Stale build: the asset is gone (404) or unreachable. Purge caches so the
+    // next boot is clean, then ask the client to reload (rate-limited).
+    await purgeAllCaches()
+    await notifyClientToReload(event)
+    return new Response(
+      "// stale build — caches cleared, reload required",
+      { status: 503, headers: { "Content-Type": "text/javascript" } },
+    )
+  }
+
+  // Non-critical requests (images, etc.): fail soft, never throw.
+  return Response.error()
+})
 
 // ============================================================================
 // Push Notification Handling
