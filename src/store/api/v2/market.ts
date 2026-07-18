@@ -10,6 +10,7 @@ export const addTagTypes = [
   "Offers V2",
   "Listings V2",
   "Inventory V2",
+  "Integrations - SCMDB",
   "Admin Imports",
   "Images V2",
   "Health",
@@ -636,6 +637,41 @@ const injectedRtkApi = api
           method: "DELETE",
         }),
         invalidatesTags: ["Inventory V2"],
+      }),
+      ingestWebhook: build.mutation<
+        IngestWebhookApiResponse,
+        IngestWebhookApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/integrations/scmdb/ingest/${queryArg.token}`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Integrations - SCMDB"],
+      }),
+      getConnectionStatus: build.query<
+        GetConnectionStatusApiResponse,
+        GetConnectionStatusApiArg
+      >({
+        query: () => ({ url: `/integrations/scmdb/status` }),
+        providesTags: ["Integrations - SCMDB"],
+      }),
+      connect: build.mutation<ConnectApiResponse, ConnectApiArg>({
+        query: () => ({ url: `/integrations/scmdb/connect`, method: "POST" }),
+        invalidatesTags: ["Integrations - SCMDB"],
+      }),
+      regenerate: build.mutation<RegenerateApiResponse, RegenerateApiArg>({
+        query: () => ({
+          url: `/integrations/scmdb/regenerate`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Integrations - SCMDB"],
+      }),
+      disconnect: build.mutation<DisconnectApiResponse, DisconnectApiArg>({
+        query: () => ({
+          url: `/integrations/scmdb/disconnect`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Integrations - SCMDB"],
       }),
       startImport: build.mutation<StartImportApiResponse, StartImportApiArg>({
         query: (queryArg) => ({
@@ -2120,6 +2156,22 @@ export type DeleteInventoryLotApiResponse = unknown
 export type DeleteInventoryLotApiArg = {
   lotId: string
 }
+export type IngestWebhookApiResponse = /** status 200 Ok */ ScmdbIngestResponse
+export type IngestWebhookApiArg = {
+  /** Sync token identifying the user */
+  token: string
+}
+export type GetConnectionStatusApiResponse =
+  /** status 200 Ok */ ScmdbStatusResponse
+export type GetConnectionStatusApiArg = void
+export type ConnectApiResponse = /** status 200 Ok */ ScmdbConnectResponse
+export type ConnectApiArg = void
+export type RegenerateApiResponse = /** status 200 Ok */ ScmdbConnectResponse
+export type RegenerateApiArg = void
+export type DisconnectApiResponse = /** status 200 Ok */ {
+  ok: boolean
+}
+export type DisconnectApiArg = void
 export type StartImportApiResponse = /** status 200 Ok */ {
   job: ImportJob
 }
@@ -3874,6 +3926,9 @@ export type ListingSearchResult = {
   created_at: string
   /** ISO 8601 timestamp when listing was last updated */
   updated_at: string
+  /** Game item catalog UUID — used by clients to fetch item-level aggregate
+    data (e.g. buy orders for this item) from a search result. */
+  game_item_id: string
   /** Game item name */
   game_item_name: string
   /** Game item type/category */
@@ -4133,6 +4188,18 @@ export type CreateInventoryLotRequest = {
 }
 export type LinkToListingRequest = {
   listing_id: string
+}
+export type ScmdbIngestResponse = {
+  ok: boolean
+}
+export type ScmdbStatusResponse = {
+  is_connected: boolean
+  ingest_url: string | null
+  last_event_at: string | null
+  created_at: string | null
+}
+export type ScmdbConnectResponse = {
+  ingest_url: string
 }
 export type ImportSource =
   | "cstone-items"
@@ -6158,6 +6225,11 @@ export const {
   useLinkToListingMutation,
   useUnlinkFromListingMutation,
   useDeleteInventoryLotMutation,
+  useIngestWebhookMutation,
+  useGetConnectionStatusQuery,
+  useConnectMutation,
+  useRegenerateMutation,
+  useDisconnectMutation,
   useStartImportMutation,
   useGetJobStatusQuery,
   useListJobsQuery,

@@ -25,6 +25,7 @@ import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
 import { formatMarketUrl } from "../../domain/urls"
 import type { ListingSearchResult } from "../../../../store/api/v2/market"
+import { useSearchBuyOrdersQuery } from "../../../../store/api/v2/market"
 import { ListingSkeleton } from "../../../../components/skeletons"
 import { EmptyListings } from "../../../../components/empty-states"
 import { MarketListingRating } from "../../../../components/rating/ListingRating"
@@ -86,6 +87,44 @@ function qualityChipProps(
     const max = listing.quality_tier_max ?? min
     const label = min === max ? `Q${min}` : `Q${min}–${max}`
     return { label, color: qualityColor(max) }
+  }
+  return null
+}
+
+/**
+ * Quality RANGE across every seller in a group — this is the aggregate signal a
+ * buyer wants while scanning (not the cheapest listing's quality alone): "does
+ * this item have the quality I need, roughly?". Colored by the best tier/value
+ * available. Prefers value (0-1000) over tier (1-5), consistent with the chip.
+ */
+function groupQualityChipProps(
+  listings: ListingSearchResult[],
+): { label: string; color: string } | null {
+  const values = listings.flatMap((l) =>
+    [l.quality_value_min, l.quality_value_max].filter(
+      (v): v is number => v != null,
+    ),
+  )
+  if (values.length) {
+    const min = Math.min(...values)
+    const max = Math.max(...values)
+    return {
+      label: min === max ? `${min}` : `${min}–${max}`,
+      color: qualityValueColor(max),
+    }
+  }
+  const tiers = listings.flatMap((l) =>
+    [l.quality_tier_min, l.quality_tier_max].filter(
+      (v): v is number => v != null,
+    ),
+  )
+  if (tiers.length) {
+    const min = Math.min(...tiers)
+    const max = Math.max(...tiers)
+    return {
+      label: min === max ? `Q${min}` : `Q${min}–${max}`,
+      color: qualityColor(max),
+    }
   }
   return null
 }
@@ -279,7 +318,9 @@ function GroupCard({
     (sum, l) => sum + (l.quantity_available ?? 0),
     0,
   )
-  const qc = qualityChipProps(cheapest)
+  // Aggregate quality RANGE across all sellers — the scan-level signal a buyer
+  // wants, not just the cheapest listing's quality.
+  const qc = groupQualityChipProps(listings)
 
   return (
     <Fade in={true} timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
@@ -481,11 +522,89 @@ function GroupCard({
                 count: totalQuantity,
               })}
             </Typography>
+
+            {/* Sell side — who's offering this item */}
+            <Typography
+              variant="overline"
+              sx={{ color: "text.secondary", fontWeight: 700, letterSpacing: 0.5 }}
+            >
+              {t("MarketRedesign.forSale", "For sale")}
+            </Typography>
             <GroupSellers listings={listings} />
+
+            {/* Buy side — who WANTS this item (EVE-style market depth: asks + bids
+                side by side). Only render when the group carries a game_item_id
+                (now provided by the search result) — that's the query key. */}
+            {cheapest.game_item_id && (
+              <GroupBuyOrders gameItemId={cheapest.game_item_id} />
+            )}
           </Box>
         </Collapse>
       </Card>
     </Fade>
+  )
+}
+
+/**
+ * GroupBuyOrders — the DEMAND side of an item's market depth (EVE-style: bids
+ * shown alongside asks). Lists active standing buy orders for this game_item so
+ * buyers see going rates and sellers see existing demand. Fetched lazily when a
+ * group expands (the panel only mounts on open). Fails soft: renders nothing if
+ * there are no buy orders or the query errors — it's supplementary, never blocks
+ * the sell-side view.
+ */
+function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
+  const { t } = useTranslation()
+  const { data, isLoading } = useSearchBuyOrdersQuery({
+    gameItemId,
+    sortBy: "price_per_unit",
+    sortOrder: "desc", // highest bid first — most attractive to a seller
+    pageSize: 20,
+  })
+
+  const orders = data?.buy_orders ?? []
+  if (isLoading || orders.length === 0) return null // supplementary; stay quiet when empty
+
+  return (
+    <Box sx={{ mt: 2 }}>
+      <Typography
+        variant="overline"
+        sx={{ color: "text.secondary", fontWeight: 700, letterSpacing: 0.5 }}
+      >
+        {t("MarketRedesign.wantedBy", "Wanted by {{count}} buyers", {
+          count: orders.length,
+        })}
+      </Typography>
+      <Box sx={{ maxHeight: 240, overflowY: orders.length > 5 ? "auto" : "visible" }}>
+        <Stack divider={<Divider />}>
+          {orders.map((o, i) => (
+            <Stack
+              key={o.buy_order_id}
+              direction="row"
+              spacing={1.5}
+              alignItems="center"
+              sx={{ py: 1 }}
+            >
+              <Typography variant="body2" sx={{ flex: 1, color: "text.secondary" }} noWrap>
+                {o.buyer_name}
+              </Typography>
+              {i === 0 && (
+                <Chip label={t("MarketRedesign.topBid", "Top bid")} size="small" color="secondary" sx={{ height: 20 }} />
+              )}
+              {o.negotiable && (
+                <Chip label={t("MarketRedesign.negotiable", "Negotiable")} size="small" variant="outlined" sx={{ height: 20 }} />
+              )}
+              <Typography variant="body2" sx={{ color: "text.primary", width: 90, textAlign: "right" }}>
+                {(o.quantity - o.quantity_fulfilled).toLocaleString()}
+              </Typography>
+              <Typography variant="body2" sx={{ color: "secondary.main", fontWeight: 700, width: 120, textAlign: "right" }}>
+                {formatPrice(o.price_per_unit)}
+              </Typography>
+            </Stack>
+          ))}
+        </Stack>
+      </Box>
+    </Box>
   )
 }
 
