@@ -1,14 +1,22 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { Navigate } from "react-router-dom"
 import {
+  Alert,
   Autocomplete,
+  Box,
   Button,
   Checkbox,
   Chip,
+  CircularProgress,
   Divider,
+  FormControl,
   FormControlLabel,
+  FormLabel,
   Grid,
   IconButton,
+  InputAdornment,
+  Radio,
+  RadioGroup,
   Switch,
   TextField,
   Typography,
@@ -22,6 +30,9 @@ import {
   useGetShopWebhooksQuery,
   useCreateShopWebhookMutation,
   useDeleteShopWebhookMutation,
+  useGetShopOrderSettingsQuery,
+  useUpsertShopOrderSettingMutation,
+  useDeleteShopOrderSettingMutation,
 } from "../../../store/api/v2/market"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -218,6 +229,264 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
         </Button>
       </Grid>
     </FormPaper>
+  )
+}
+
+function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
+  const issueAlert = useAlertHook()
+  const { data: settings = [], isLoading } = useGetShopOrderSettingsQuery({ shopId })
+  const [upsertSetting] = useUpsertShopOrderSettingMutation()
+  const [deleteSetting] = useDeleteShopOrderSettingMutation()
+  const [saving, setSaving] = useState(false)
+
+  // Local form state
+  const [offerMessage, setOfferMessage] = useState("")
+  const [offerEnabled, setOfferEnabled] = useState(true)
+  const [orderMessage, setOrderMessage] = useState("")
+  const [orderEnabled, setOrderEnabled] = useState(true)
+  const [requireAvailability, setRequireAvailability] = useState(false)
+  const [stockTiming, setStockTiming] = useState<"on_accepted" | "on_received" | "dont_subtract">("on_accepted")
+  const [allocationMode, setAllocationMode] = useState<"auto" | "manual" | "none">("auto")
+  const [minOrderSize, setMinOrderSize] = useState("")
+  const [minOrderSizeEnabled, setMinOrderSizeEnabled] = useState(false)
+  const [maxOrderSize, setMaxOrderSize] = useState("")
+  const [maxOrderSizeEnabled, setMaxOrderSizeEnabled] = useState(false)
+  const [minOrderValue, setMinOrderValue] = useState("")
+  const [minOrderValueEnabled, setMinOrderValueEnabled] = useState(false)
+  const [maxOrderValue, setMaxOrderValue] = useState("")
+  const [maxOrderValueEnabled, setMaxOrderValueEnabled] = useState(false)
+
+  // Hydrate from fetched settings
+  useEffect(() => {
+    if (settings.length === 0) return
+    const find = (type: string) => settings.find((s) => s.setting_type === type)
+    const offer = find("offer_message")
+    if (offer) { setOfferMessage(offer.message_content); setOfferEnabled(offer.enabled) }
+    const order = find("order_message")
+    if (order) { setOrderMessage(order.message_content); setOrderEnabled(order.enabled) }
+    const avail = find("require_availability")
+    if (avail) setRequireAvailability(avail.enabled)
+    const timing = find("stock_subtraction_timing")
+    if (timing) setStockTiming(timing.message_content as typeof stockTiming)
+    const alloc = find("allocation_mode")
+    if (alloc) setAllocationMode(alloc.message_content as typeof allocationMode)
+    const mins = find("min_order_size")
+    if (mins) { setMinOrderSize(mins.message_content); setMinOrderSizeEnabled(mins.enabled) }
+    const maxs = find("max_order_size")
+    if (maxs) { setMaxOrderSize(maxs.message_content); setMaxOrderSizeEnabled(maxs.enabled) }
+    const minv = find("min_order_value")
+    if (minv) { setMinOrderValue(minv.message_content); setMinOrderValueEnabled(minv.enabled) }
+    const maxv = find("max_order_value")
+    if (maxv) { setMaxOrderValue(maxv.message_content); setMaxOrderValueEnabled(maxv.enabled) }
+  }, [settings])
+
+  const handleSave = async () => {
+    setSaving(true)
+    try {
+      // Offer message
+      if (offerMessage.trim()) {
+        await upsertSetting({ shopId, settingType: "offer_message", upsertShopOrderSettingRequest: { message_content: offerMessage, enabled: offerEnabled } }).unwrap()
+      }
+      // Order message
+      if (orderMessage.trim()) {
+        await upsertSetting({ shopId, settingType: "order_message", upsertShopOrderSettingRequest: { message_content: orderMessage, enabled: orderEnabled } }).unwrap()
+      }
+      // Require availability
+      if (requireAvailability) {
+        await upsertSetting({ shopId, settingType: "require_availability", upsertShopOrderSettingRequest: { message_content: "", enabled: true } }).unwrap()
+      } else {
+        const existing = settings.find((s) => s.setting_type === "require_availability")
+        if (existing) await deleteSetting({ shopId, settingType: "require_availability" }).unwrap()
+      }
+      // Stock subtraction timing
+      if (stockTiming !== "on_accepted") {
+        await upsertSetting({ shopId, settingType: "stock_subtraction_timing", upsertShopOrderSettingRequest: { message_content: stockTiming, enabled: true } }).unwrap()
+      } else {
+        const existing = settings.find((s) => s.setting_type === "stock_subtraction_timing")
+        if (existing) await deleteSetting({ shopId, settingType: "stock_subtraction_timing" }).unwrap()
+      }
+      // Allocation mode
+      if (allocationMode !== "auto") {
+        await upsertSetting({ shopId, settingType: "allocation_mode", upsertShopOrderSettingRequest: { message_content: allocationMode, enabled: true } }).unwrap()
+      } else {
+        const existing = settings.find((s) => s.setting_type === "allocation_mode")
+        if (existing) await deleteSetting({ shopId, settingType: "allocation_mode" }).unwrap()
+      }
+      // Order limits
+      const saveLimitSetting = async (type: string, value: string, enabled: boolean) => {
+        if (enabled && value.trim()) {
+          await upsertSetting({ shopId, settingType: type, upsertShopOrderSettingRequest: { message_content: value.trim(), enabled: true } }).unwrap()
+        } else {
+          const existing = settings.find((s) => s.setting_type === type)
+          if (existing) await deleteSetting({ shopId, settingType: type }).unwrap()
+        }
+      }
+      await saveLimitSetting("min_order_size", minOrderSize, minOrderSizeEnabled)
+      await saveLimitSetting("max_order_size", maxOrderSize, maxOrderSizeEnabled)
+      await saveLimitSetting("min_order_value", minOrderValue, minOrderValueEnabled)
+      await saveLimitSetting("max_order_value", maxOrderValue, maxOrderValueEnabled)
+
+      issueAlert({ message: "Order settings saved", severity: "success" })
+    } catch (err) {
+      issueAlert(err as { status: number; data: { message?: string } })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <FormPaper title="Order Settings" subtitle="Loading...">
+        <Grid item xs={12}>
+          <Box display="flex" justifyContent="center" p={3}><CircularProgress /></Box>
+        </Grid>
+      </FormPaper>
+    )
+  }
+
+  return (
+    <>
+      {/* Order Messages */}
+      <FormPaper title="Order Messages" subtitle="Automated messages sent with offers and orders">
+        <Grid item xs={12}>
+          <Box mb={2}>
+            <FormControlLabel
+              control={<Switch checked={offerEnabled} onChange={(e) => setOfferEnabled(e.target.checked)} disabled={saving} />}
+              label="Offer message enabled"
+            />
+            <TextField
+              fullWidth multiline rows={3} size="small"
+              label="Offer Message"
+              value={offerMessage}
+              onChange={(e) => setOfferMessage(e.target.value)}
+              disabled={saving || !offerEnabled}
+              placeholder="Message shown when sending an offer"
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Box mb={2}>
+            <FormControlLabel
+              control={<Switch checked={orderEnabled} onChange={(e) => setOrderEnabled(e.target.checked)} disabled={saving} />}
+              label="Order message enabled"
+            />
+            <TextField
+              fullWidth multiline rows={3} size="small"
+              label="Order Message"
+              value={orderMessage}
+              onChange={(e) => setOrderMessage(e.target.value)}
+              disabled={saving || !orderEnabled}
+              placeholder="Message shown when an order is placed"
+            />
+          </Box>
+        </Grid>
+      </FormPaper>
+
+      {/* Order Requirements */}
+      <FormPaper title="Order Requirements" subtitle="Requirements before orders can be placed">
+        <Grid item xs={12}>
+          <FormControlLabel
+            control={<Switch checked={requireAvailability} onChange={(e) => setRequireAvailability(e.target.checked)} disabled={saving} />}
+            label="Require seller availability before accepting orders"
+          />
+          <Typography variant="body2" color="text.secondary">
+            When enabled, buyers must check your availability before placing an order.
+          </Typography>
+        </Grid>
+      </FormPaper>
+
+      {/* Stock Management */}
+      <FormPaper title="Stock Management" subtitle="Configure when stock is subtracted from inventory">
+        <Grid item xs={12}>
+          <FormControl component="fieldset" disabled={saving}>
+            <FormLabel component="legend">Stock subtraction timing</FormLabel>
+            <RadioGroup value={stockTiming} onChange={(e) => setStockTiming(e.target.value as typeof stockTiming)}>
+              <FormControlLabel value="on_accepted" control={<Radio />} label="On order accepted (default)" />
+              <FormControlLabel value="on_received" control={<Radio />} label="On order received/fulfilled" />
+              <FormControlLabel value="dont_subtract" control={<Radio />} label="Don't subtract stock" />
+            </RadioGroup>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <Divider sx={{ my: 2 }} />
+          <FormControl component="fieldset" disabled={saving}>
+            <FormLabel component="legend">Allocation mode</FormLabel>
+            <RadioGroup value={allocationMode} onChange={(e) => setAllocationMode(e.target.value as typeof allocationMode)}>
+              <FormControlLabel value="auto" control={<Radio />} label="Automatic (FIFO)" />
+              <FormControlLabel value="manual" control={<Radio />} label="Manual selection" />
+              <FormControlLabel value="none" control={<Radio />} label="None (legacy)" />
+            </RadioGroup>
+          </FormControl>
+        </Grid>
+      </FormPaper>
+
+      {/* Order Limits */}
+      <FormPaper title="Order Limits" subtitle="Set min/max limits for order sizes and values">
+        <Grid item xs={12} md={6}>
+          <FormControlLabel
+            control={<Switch checked={minOrderSizeEnabled} onChange={(e) => setMinOrderSizeEnabled(e.target.checked)} disabled={saving} />}
+            label="Minimum order size"
+          />
+          <TextField
+            fullWidth type="number" size="small"
+            value={minOrderSize}
+            onChange={(e) => setMinOrderSize(e.target.value)}
+            disabled={saving || !minOrderSizeEnabled}
+            InputProps={{ endAdornment: <InputAdornment position="end">items</InputAdornment> }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControlLabel
+            control={<Switch checked={maxOrderSizeEnabled} onChange={(e) => setMaxOrderSizeEnabled(e.target.checked)} disabled={saving} />}
+            label="Maximum order size"
+          />
+          <TextField
+            fullWidth type="number" size="small"
+            value={maxOrderSize}
+            onChange={(e) => setMaxOrderSize(e.target.value)}
+            disabled={saving || !maxOrderSizeEnabled}
+            InputProps={{ endAdornment: <InputAdornment position="end">items</InputAdornment> }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControlLabel
+            control={<Switch checked={minOrderValueEnabled} onChange={(e) => setMinOrderValueEnabled(e.target.checked)} disabled={saving} />}
+            label="Minimum order value"
+          />
+          <TextField
+            fullWidth type="number" size="small"
+            value={minOrderValue}
+            onChange={(e) => setMinOrderValue(e.target.value)}
+            disabled={saving || !minOrderValueEnabled}
+            InputProps={{ endAdornment: <InputAdornment position="end">aUEC</InputAdornment> }}
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <FormControlLabel
+            control={<Switch checked={maxOrderValueEnabled} onChange={(e) => setMaxOrderValueEnabled(e.target.checked)} disabled={saving} />}
+            label="Maximum order value"
+          />
+          <TextField
+            fullWidth type="number" size="small"
+            value={maxOrderValue}
+            onChange={(e) => setMaxOrderValue(e.target.value)}
+            disabled={saving || !maxOrderValueEnabled}
+            InputProps={{ endAdornment: <InputAdornment position="end">aUEC</InputAdornment> }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <LoadingButton
+            variant="contained"
+            color="secondary"
+            loading={saving}
+            startIcon={<SaveRounded />}
+            onClick={handleSave}
+          >
+            Save Order Settings
+          </LoadingButton>
+        </Grid>
+      </FormPaper>
+    </>
   )
 }
 
@@ -427,6 +696,9 @@ export function ShopSettings() {
               />
             </Grid>
           </FormPaper>
+
+          {/* Order Settings */}
+          <ShopOrderSettingsSection shopId={shop.shop_id} />
 
           {/* Webhooks */}
           <ShopWebhookSection shopId={shop.shop_id} />

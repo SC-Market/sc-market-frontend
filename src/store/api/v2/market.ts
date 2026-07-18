@@ -325,6 +325,36 @@ const injectedRtkApi = api
         }),
         providesTags: ["Shops"],
       }),
+      getShopOrderSettings: build.query<
+        GetShopOrderSettingsApiResponse,
+        GetShopOrderSettingsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/order-settings`,
+        }),
+        providesTags: ["Shops"],
+      }),
+      upsertShopOrderSetting: build.mutation<
+        UpsertShopOrderSettingApiResponse,
+        UpsertShopOrderSettingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/order-settings/${queryArg.settingType}`,
+          method: "PUT",
+          body: queryArg.upsertShopOrderSettingRequest,
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      deleteShopOrderSetting: build.mutation<
+        DeleteShopOrderSettingApiResponse,
+        DeleteShopOrderSettingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/order-settings/${queryArg.settingType}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Shops"],
+      }),
       createRequisition: build.mutation<
         CreateRequisitionApiResponse,
         CreateRequisitionApiArg
@@ -1909,6 +1939,25 @@ export type GetShopCustomersApiArg = {
   page?: number
   pageSize?: number
 }
+export type GetShopOrderSettingsApiResponse =
+  /** status 200 Ok */ ShopOrderSettingResponse[]
+export type GetShopOrderSettingsApiArg = {
+  shopId: string
+}
+export type UpsertShopOrderSettingApiResponse =
+  /** status 200 Ok */ ShopOrderSettingResponse
+export type UpsertShopOrderSettingApiArg = {
+  shopId: string
+  settingType: string
+  upsertShopOrderSettingRequest: UpsertShopOrderSettingRequest
+}
+export type DeleteShopOrderSettingApiResponse = /** status 200 Ok */ {
+  success: boolean
+}
+export type DeleteShopOrderSettingApiArg = {
+  shopId: string
+  settingType: string
+}
 export type CreateRequisitionApiResponse =
   /** status 200 Ok */ CreateRequisitionResponse
 export type CreateRequisitionApiArg = {
@@ -3379,6 +3428,30 @@ export type ShopCustomersResponse = {
   total: number
   page: number
   page_size: number
+}
+export type OrderSettingType =
+  | "offer_message"
+  | "order_message"
+  | "require_availability"
+  | "stock_subtraction_timing"
+  | "min_order_size"
+  | "max_order_size"
+  | "min_order_value"
+  | "max_order_value"
+  | "allocation_mode"
+export type ShopOrderSettingResponse = {
+  id: string
+  entity_type: "shop"
+  entity_id: string
+  setting_type: OrderSettingType
+  message_content: string
+  enabled: boolean
+  created_at: string
+  updated_at: string
+}
+export type UpsertShopOrderSettingRequest = {
+  message_content: string
+  enabled: boolean
 }
 export type RequisitionLineItem = {
   requisition_item_id: string
@@ -6196,6 +6269,9 @@ export const {
   useBlockUserFromShopMutation,
   useUnblockUserFromShopMutation,
   useGetShopCustomersQuery,
+  useGetShopOrderSettingsQuery,
+  useUpsertShopOrderSettingMutation,
+  useDeleteShopOrderSettingMutation,
   useCreateRequisitionMutation,
   useGetRequisitionsQuery,
   useGetRequisitionQuery,
