@@ -107,7 +107,7 @@ export function WikiShipDetail() {
 
   if (isLoading) {
     return (
-      <StandardPageLayout title="Ship Details" headerTitle="Ship Details" sidebarOpen={true} maxWidth="xl">
+      <StandardPageLayout title="Ship Details" headerTitle="Ship Details" sidebarOpen={true} maxWidth="md">
         <Grid item xs={12}><DetailPageSkeleton /></Grid>
       </StandardPageLayout>
     )
@@ -115,7 +115,7 @@ export function WikiShipDetail() {
 
   if (error || !ship) {
     return (
-      <StandardPageLayout title="Ship Details" headerTitle="Ship Details" sidebarOpen={true} maxWidth="xl">
+      <StandardPageLayout title="Ship Details" headerTitle="Ship Details" sidebarOpen={true} maxWidth="md">
         <Grid item xs={12}>
           <Alert severity="error">Failed to load ship details. Please try again.</Alert>
         </Grid>
@@ -132,7 +132,7 @@ export function WikiShipDetail() {
   const ogImage = ship.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
-    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={`/wiki/ships/${id}`} headerTitle={ship.name} sidebarOpen={true} maxWidth="xl">
+    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={`/wiki/ships/${id}`} headerTitle={ship.name} sidebarOpen={true} maxWidth="md">
       <Helmet>
         <title>{seoTitle}</title>
         <meta name="description" content={seoDescription} />
