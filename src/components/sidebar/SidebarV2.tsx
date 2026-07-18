@@ -140,17 +140,35 @@ export function SidebarV2() {
       const canManageDetails = has_permission(selectedContractor, profile, "manage_org_details", profile?.contractors)
       const canManageRoles = has_permission(selectedContractor, profile, "manage_roles", profile?.contractors)
       const canManageInvites = has_permission(selectedContractor, profile, "manage_invites", profile?.contractors)
+      const canManageOrders = has_permission(selectedContractor, profile, "manage_orders", profile?.contractors)
+      const canManageWebhooks = has_permission(selectedContractor, profile, "manage_webhooks", profile?.contractors)
+      const canManageBlocklist = has_permission(selectedContractor, profile, "manage_blocklist", profile?.contractors)
+      const canManageTheme = has_permission(selectedContractor, profile, "manage_theme", profile?.contractors)
       const items: NavItem[] = [
+        { label: t("nav.orgPage", "Org Page"), to: `/contractor/${selectedOrgId}`, icon: <StorefrontRounded /> },
+        { label: t("nav.orgDashboard", "Dashboard"), to: `/org/${selectedOrgId}/dashboard`, icon: <DashboardRounded /> },
         { label: t("nav.members", "Members"), to: `/org/${selectedOrgId}/members`, icon: <PeopleRounded /> },
       ]
+      if (canManageOrders) {
+        items.push({ label: t("nav.orgOrders", "Org Orders"), to: `/org/${selectedOrgId}/orders`, icon: <LocalShippingRounded /> })
+      }
       if (canManageDetails) {
-        items.push({ label: t("nav.orgAbout", "About"), to: `/org/${selectedOrgId}/manage/about`, icon: <SettingsRounded /> })
+        items.push({ label: t("nav.orgAbout", "About"), to: `/org/${selectedOrgId}/manage/about`, icon: <DescriptionRounded /> })
       }
       if (canManageRoles) {
         items.push({ label: t("nav.orgRoles", "Roles"), to: `/org/${selectedOrgId}/manage/roles`, icon: <PeopleRounded /> })
       }
       if (canManageInvites) {
         items.push({ label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PeopleRounded /> })
+      }
+      if (canManageWebhooks) {
+        items.push({ label: t("nav.orgWebhooks", "Webhooks"), to: `/org/${selectedOrgId}/manage/discord`, icon: <MessageRounded /> })
+      }
+      if (canManageBlocklist) {
+        items.push({ label: t("nav.orgBlocklist", "Blocklist"), to: `/org/${selectedOrgId}/manage/blocklist`, icon: <PeopleRounded /> })
+      }
+      if (canManageTheme) {
+        items.push({ label: t("nav.orgTheme", "Theme"), to: `/org/${selectedOrgId}/manage/theme`, icon: <DesignServicesRounded /> })
       }
       if (canManageDetails) {
         items.push({ label: t("nav.orgSettings", "Settings"), to: `/org/${selectedOrgId}/manage/settings`, icon: <SettingsRounded /> })
@@ -201,7 +219,7 @@ export function SidebarV2() {
       >
         <Stack direction="row" alignItems="center" spacing={1.5}>
           <Avatar
-            src={context === "shop" && selectedShop ? undefined : profile?.avatar}
+            src={context === "shop" && selectedShop ? selectedShop.logo_url || undefined : profile?.avatar}
             sx={{ width: 32, height: 32 }}
           >
             {context === "shop" ? <StorefrontRounded fontSize="small" /> : undefined}
