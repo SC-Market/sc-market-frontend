@@ -1,26 +1,34 @@
 /**
  * MissionDetail Component Tests
- * 
+ *
  * Tests for the MissionDetail component including:
  * - Mission information display
  * - Blueprint reward pools display
  * - Prerequisite missions display
  * - Mission chain information display
  * - Loading and error states
- * 
+ *
  * Task 11.4 - Create MissionDetail component
  */
 
 import React from "react"
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
 import { Provider } from "react-redux"
-import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom"
+import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
-import { vi } from "vitest"
+import { vi, beforeEach, describe, it, expect } from "vitest"
 import { MissionDetail } from "../MissionDetail"
-import { marketV2Api } from "../../../store/api/v2/market"
+import { marketV2Api, useGetMissionDetailQuery } from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
-import { generatedApiV2 } from "../../../store/generatedApiV2"
+
+// Mock the market API module to control useGetMissionDetailQuery
+vi.mock("../../../store/api/v2/market", async () => {
+  const actual = await vi.importActual("../../../store/api/v2/market")
+  return {
+    ...actual,
+    useGetMissionDetailQuery: vi.fn(),
+  }
+})
 
 // Mock Page to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", () => ({
@@ -180,80 +188,69 @@ const mockMissionDetail = {
   },
 }
 
-// Create mock store
-const createMockStore = (mockData: any, isLoading = false, error: any = null) => {
+// Create a simple store (no preloaded RTK Query state needed since we mock the hook)
+const createMockStore = () => {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
       [serviceApi.reducerPath]: serviceApi.reducer,
-      [generatedApiV2.reducerPath]: generatedApiV2.reducer,
-    },
-    preloadedState: {
-      [marketV2Api.reducerPath]: {
-        queries: {
-          'getMissionDetail({"missionId":"mission-1"})': {
-            status: isLoading ? "pending" : error ? "rejected" : "fulfilled",
-            data: mockData,
-            error,
-          } as any,
-        },
-        mutations: {},
-        provided: {},
-        subscriptions: {},
-        config: { online: true, focused: true, middlewareRegistered: true, refetchOnFocus: false, refetchOnReconnect: false, refetchOnMountOrArgChange: false, keepUnusedDataFor: 60, reducerPath: marketV2Api.reducerPath, invalidationBehavior: "delayed" },
-      } as any,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware, generatedApiV2.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
   })
 }
 
-describe("MissionDetail", () => {
-  it("renders loading state", () => {
-    const store = createMockStore(null, true)
+const renderWithProviders = () => {
+  const store = createMockStore()
+  return render(
+    <Provider store={store}>
+      <MemoryRouter initialEntries={["/missions/mission-1"]}>
+        <Routes>
+          <Route path="/missions/:slug" element={<MissionDetail />} />
+        </Routes>
+      </MemoryRouter>
+    </Provider>
+  )
+}
 
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+describe("MissionDetail", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    // Default: return fulfilled data
+    ;(useGetMissionDetailQuery as any).mockReturnValue({
+      data: mockMissionDetail,
+      isLoading: false,
+      error: undefined,
+    })
+  })
+
+  it("renders loading state", () => {
+    ;(useGetMissionDetailQuery as any).mockReturnValue({
+      data: undefined,
+      isLoading: true,
+      error: undefined,
+    })
+
+    renderWithProviders()
 
     // Check for loading indicator (CircularProgress)
     expect(screen.getByRole("progressbar") || screen.getByText(/loading/i)).toBeTruthy()
   })
 
   it("renders error state", () => {
-    const store = createMockStore(null, false, { message: "Failed to load" })
+    ;(useGetMissionDetailQuery as any).mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      error: { message: "Failed to load" },
+    })
 
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText(/Failed to load mission details/i)).toBeInTheDocument()
   })
 
   it("renders mission header with name and badges", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Test Mission")).toBeInTheDocument()
     expect(screen.getByText("Combat")).toBeInTheDocument()
@@ -265,33 +262,13 @@ describe("MissionDetail", () => {
   })
 
   it("renders mission description", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("This is a test mission description")).toBeInTheDocument()
   })
 
   it("renders mission metadata (location, giver, type)", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Location")).toBeInTheDocument()
     expect(screen.getByText("Stanton • Hurston • Lorville")).toBeInTheDocument()
@@ -302,17 +279,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders credit and reputation rewards", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Credits")).toBeInTheDocument()
     expect(screen.getByText("10,000 - 15,000 aUEC")).toBeInTheDocument()
@@ -321,17 +288,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders estimated rewards per hour", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Est. UEC/Hour")).toBeInTheDocument()
     expect(screen.getByText("50,000 aUEC")).toBeInTheDocument()
@@ -340,17 +297,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders blueprint reward pools with probabilities", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Blueprint Rewards")).toBeInTheDocument()
     expect(screen.getByText("Reward Pool 1")).toBeInTheDocument()
@@ -361,17 +308,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders blueprint rarity and tier badges", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Tier 3")).toBeInTheDocument()
     expect(screen.getByText("Tier 4")).toBeInTheDocument()
@@ -380,17 +317,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders drop probabilities for blueprints", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     // Should find 3 blueprints with 33.3% chance each, plus the pool header text
     const probabilities = screen.getAllByText(/33\.3% chance/i)
@@ -398,17 +325,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders prerequisite missions", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Prerequisite Missions")).toBeInTheDocument()
     expect(
@@ -419,17 +336,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders mission chain information", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Mission Chain Information")).toBeInTheDocument()
     expect(
@@ -438,17 +345,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders requirements section", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Requirements")).toBeInTheDocument()
     expect(screen.getByText("Required Rank")).toBeInTheDocument()
@@ -456,17 +353,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders community ratings", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Community Ratings")).toBeInTheDocument()
     expect(screen.getByText("Difficulty")).toBeInTheDocument()
@@ -478,17 +365,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders user rating when available", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Your Rating")).toBeInTheDocument()
     expect(screen.getByText(/Difficulty: 3\/5 • Satisfaction: 4\/5/i)).toBeInTheDocument()
@@ -496,17 +373,7 @@ describe("MissionDetail", () => {
   })
 
   it("renders mission metadata section", () => {
-    const store = createMockStore(mockMissionDetail)
-
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.getByText("Additional Information")).toBeInTheDocument()
     expect(screen.getByText("Mission Code")).toBeInTheDocument()
@@ -538,17 +405,13 @@ describe("MissionDetail", () => {
       user_rating: undefined,
     }
 
-    const store = createMockStore(minimalMissionDetail)
+    ;(useGetMissionDetailQuery as any).mockReturnValue({
+      data: minimalMissionDetail,
+      isLoading: false,
+      error: undefined,
+    })
 
-    render(
-      <Provider store={store}>
-        <MemoryRouter initialEntries={["/missions/mission-1"]}>
-          <Routes>
-            <Route path="/missions/:slug" element={<MissionDetail />} />
-          </Routes>
-        </MemoryRouter>
-      </Provider>
-    )
+    renderWithProviders()
 
     expect(screen.queryByText("Blueprint Rewards")).not.toBeInTheDocument()
     expect(screen.queryByText("Prerequisite Missions")).not.toBeInTheDocument()

@@ -60,6 +60,8 @@ import { AdCard } from "../../../components/ads/AdCard";
 import type { AdConfig } from "../../../components/ads/types";
 import { MARKET_ADS } from "../../../components/ads/adConfig";
 import { formatMarketUrl } from "../domain/urls";
+import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag";
+import { GroupedListingGrid } from "./redesign/GroupedListingGrid";
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -77,6 +79,7 @@ export function ListingSearchV2() {
   const marketSidebarOpen = useMarketSidebarExp();
   const [drawerOpen] = useDrawerOpen();
   const [viewMode, setViewMode] = useViewMode();
+  const { flags } = useFeatureFlag();
 
   // Read filter state from URL params
   const [searchParams, setSearchParams] = useSearchParams();
@@ -242,6 +245,16 @@ export function ListingSearchV2() {
               <Grid item xs={12} sx={{ px: { xs: 0 } }}>
                 {viewMode === "list" ? (
                   <ListingTableV2 listings={listings} />
+                ) : flags.market_v2_redesign ? (
+                  <GroupedListingGrid
+                    listings={listings}
+                    loading={isLoading || isFetching}
+                    error={!!error}
+                    onRetry={refetch}
+                    gridBreakpoints={gridBreakpoints}
+                    marketSidebarOpen={marketSidebarOpen}
+                    ref={ref}
+                  />
                 ) : (
                   <ListingGrid
                     listings={listings}
@@ -308,6 +321,16 @@ export function ListingSearchV2() {
                   <Grid item xs={12} sx={{ px: 0 }}>
                     {viewMode === "list" ? (
                       <ListingTableV2 listings={listings} />
+                    ) : flags.market_v2_redesign ? (
+                      <GroupedListingGrid
+                        listings={listings}
+                        loading={isLoading || isFetching}
+                        error={!!error}
+                        onRetry={refetch}
+                        gridBreakpoints={gridBreakpoints}
+                        marketSidebarOpen={marketSidebarOpen}
+                        ref={ref}
+                      />
                     ) : (
                       <ListingGrid
                         listings={listings}
@@ -872,7 +895,7 @@ function QualityFilterWrapper() {
 /**
  * ListingGrid - Grid display for V2 listings with loading and empty states
  */
-interface ListingGridProps {
+export interface ListingGridProps {
   listings: ListingSearchResult[];
   loading: boolean;
   error: boolean;

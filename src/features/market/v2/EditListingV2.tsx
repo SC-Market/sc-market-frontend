@@ -737,6 +737,7 @@ export function EditListingV2() {
           </FormPaper>
 
           {/* Variant Breakdown Section */}
+          {variants.length > 0 && (
           <FormPaper
             title={t("EditListingV2.variants", "Variants")}
             subtitle={t(
@@ -895,6 +896,7 @@ export function EditListingV2() {
               </Grid>
             ))}
           </FormPaper>
+          )}
 
           {/* Action Buttons */}
           <Grid item xs={12} container justifyContent="space-between">

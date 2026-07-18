@@ -74,7 +74,7 @@ vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
 }));
 
 vi.mock("@mui/material/styles", async () => {
-  const actual = await vi.importActual("@mui/material/styles")
+  const actual = await vi.importActual("@mui/material/styles") as typeof import("@mui/material/styles")
   return {
     ...actual,
     useTheme: () => ({
