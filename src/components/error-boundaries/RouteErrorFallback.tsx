@@ -18,7 +18,9 @@ function isStaleChunkError(error: unknown): boolean {
     /Failed to fetch dynamically imported module/i.test(msg) ||
     /error loading dynamically imported module/i.test(msg) ||
     /Importing a module script failed/i.test(msg) || // Safari
-    /'?text\/html'? is not a valid JavaScript MIME type/i.test(msg) // SPA fallback served HTML for a gone chunk
+    /'?text\/html'? is not a valid JavaScript MIME type/i.test(msg) || // Chrome: SPA fallback served HTML for a gone chunk
+    /NS_ERROR_CORRUPTED_CONTENT/i.test(msg) || // Firefox: HTML served for a gone chunk (nosniff)
+    /expected a JavaScript.*module.*but.*MIME type/i.test(msg) // Firefox alt wording
   )
 }
 
