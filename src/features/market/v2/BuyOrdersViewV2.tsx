@@ -14,7 +14,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
@@ -32,6 +32,7 @@ import { EmptyListings } from "../../../components/empty-states/EmptyListings"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BuyOrdersTableV2 } from "./components/BuyOrdersTableV2"
+import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar"
 
 /**
  * BuyOrdersViewV2 — V2 buy orders browse page.
@@ -48,13 +49,24 @@ export function BuyOrdersViewV2() {
   const [viewMode, setViewMode] = useViewMode()
   const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
 
+  const [searchParams, setSearchParams] = useSearchParams()
   const [page, setPage] = useState(0)
   const [perPage, setPerPage] = useState(48)
   const ref = useRef<HTMLDivElement>(null)
 
+  const searchText = searchParams.get("text") || searchParams.get("query") || undefined
+  const marketSearchTokens = useMemo(() => marketParamsToTokens(searchParams), [searchParams])
+
+  const handleMarketTokensChange = useCallback((tokens: SearchToken[]) => {
+    const params = marketTokensToParams(tokens)
+    setSearchParams(params)
+    setPage(0)
+  }, [setSearchParams])
+
   const { data, isLoading, isFetching } = useSearchBuyOrdersQuery({
     page: page + 1,
     pageSize: perPage,
+    text: searchText,
   })
 
   const aggregates = useMemo(() => {
@@ -92,8 +104,8 @@ export function BuyOrdersViewV2() {
   )
 
   const gridBreakpoints = useMemo(() => {
-    if (marketSidebarOpen) return { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
-    return { xs: 6, sm: 4, md: 4, lg: 2.4, xl: 2 }
+    if (marketSidebarOpen) return { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4, xxl: 2, xxxl: 12 / 8 }
+    return { xs: 6, sm: 4, md: 4, lg: 2.4, xl: 2, xxl: 12 / 7, xxxl: 12 / 8 }
   }, [marketSidebarOpen])
 
   const loading = isLoading || isFetching
@@ -164,7 +176,15 @@ export function BuyOrdersViewV2() {
                 <Divider light />
               </Grid>
               <Grid item xs={12}>
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Box sx={{ flex: 1 }}>
+                    <UnifiedSearchBar
+                      tokens={marketSearchTokens}
+                      onChange={handleMarketTokensChange}
+                      mode="market"
+                      placeholder="Search buy orders..."
+                    />
+                  </Box>
                   <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                 </Box>
               </Grid>
@@ -193,7 +213,15 @@ export function BuyOrdersViewV2() {
                 <MarketSearchAreaV2 />
               </Paper>
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
+                <Box sx={{ mb: 1.5, display: "flex", gap: 1, alignItems: "center" }}>
+                  <Box sx={{ flex: 1 }}>
+                    <UnifiedSearchBar
+                      tokens={marketSearchTokens}
+                      onChange={handleMarketTokensChange}
+                      mode="market"
+                      placeholder="Search buy orders..."
+                    />
+                  </Box>
                   <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                 </Box>
                 {cardGrid}

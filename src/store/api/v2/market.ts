@@ -1461,6 +1461,7 @@ const injectedRtkApi = api
         query: (queryArg) => ({
           url: `/buy-orders/search`,
           params: {
+            text: queryArg.text,
             game_item_id: queryArg.gameItemId,
             quality_tier_min: queryArg.qualityTierMin,
             quality_tier_max: queryArg.qualityTierMax,
@@ -2887,6 +2888,7 @@ export type CreateStandingBuyOrderApiArg = {
 export type SearchBuyOrdersApiResponse =
   /** status 200 Ok */ SearchBuyOrdersResponse
 export type SearchBuyOrdersApiArg = {
+  text?: string
   gameItemId?: string
   qualityTierMin?: number
   qualityTierMax?: number
