@@ -33,16 +33,18 @@ import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
 import { formatMarketUrl } from "../../domain/urls"
 import { useSearchListingsQuery } from "../../../../store/api/v2/market"
 import type { ListingSearchResult } from "../../../../store/api/v2/market"
+import { isFungibleType } from "./fungibility"
 
 /**
  * MarketSearchRedesign — Phase 0 of the Market redesign (behind the
  * `market_v2_redesign` feature flag). Frontend-only: it reads the EXISTING
  * `useSearchListingsQuery` results and derives inline aggregation client-side.
  *
- * Fungibility is not yet exposed by the backend, so this groups results by
- * (game_item_name + game_item_type) as an honest heuristic: an item sold by
- * more than one listing collapses into an expandable group card; everything
- * else renders as an individual card. See MARKET_V2_RESEARCH.md §8.3, §7 Phase 0.
+ * Fungibility is not yet exposed by the backend, so it's derived from the item
+ * category (see ./fungibility.ts): fungible items (commodities, components,
+ * weapons, armor…) that share a name+type collapse into an expandable group
+ * card; non-fungible items (ships, bundles) always render as standalone cards
+ * even if names collide. See MARKET_V2_RESEARCH.md §8.3, §11.4, §7 Phase 0.
  */
 
 type SortKey = "price" | "quality" | "rating" | "recent"
@@ -51,6 +53,7 @@ interface Group {
   key: string
   itemName: string
   itemType: string
+  fungible: boolean
   listings: ListingSearchResult[]
   photo?: string
   fromPrice: number
@@ -62,13 +65,19 @@ interface Group {
 function groupListings(listings: ListingSearchResult[]): Group[] {
   const map = new Map<string, Group>()
   for (const l of listings) {
-    const key = `${l.game_item_name}::${l.game_item_type}`
+    const fungible = isFungibleType(l.game_item_type)
+    // Fungible items merge by name+type; non-fungible items never merge
+    // (each is its own standalone card), so key them by listing id.
+    const key = fungible
+      ? `${l.game_item_name}::${l.game_item_type}`
+      : `nf::${l.listing_id}`
     let g = map.get(key)
     if (!g) {
       g = {
         key,
         itemName: l.game_item_name,
         itemType: l.game_item_type,
+        fungible,
         listings: [],
         photo: l.photo ?? undefined,
         fromPrice: Number.POSITIVE_INFINITY,
@@ -195,7 +204,7 @@ export function MarketSearchRedesign() {
 
       <Grid container spacing={2.5}>
         {groups.map((g) =>
-          g.listings.length > 1 ? (
+          g.fungible && g.listings.length > 1 ? (
             <Grid key={g.key} size={expanded === g.key ? 12 : { xs: 12, sm: 6, md: 4, lg: 3 }}>
               <GroupCard
                 group={g}
