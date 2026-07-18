@@ -139,6 +139,7 @@ export function SidebarV2() {
       const items: NavItem[] = [
         { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded /> },
         { label: t("nav.listings", "Listings"), to: SHOP_PATHS.listings(slug), icon: <ListAltRounded /> },
+        { label: t("nav.services", "Services"), to: SHOP_PATHS.services(slug), icon: <DesignServicesRounded /> },
       ]
       if (perms?.manage_market) {
         items.push({ label: t("nav.createListing", "Create Listing"), to: SHOP_PATHS.create(slug), icon: <AddRounded /> })
@@ -147,7 +148,10 @@ export function SidebarV2() {
         items.push({ label: t("nav.stock", "Stock"), to: SHOP_PATHS.stock(slug), icon: <InventoryRounded /> })
       }
       if (perms?.can_manage) {
-        items.push({ label: t("nav.shopSettings", "Shop Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded /> })
+        items.push(
+          { label: t("nav.customers", "Customers"), to: `/shop/${slug}/customers`, icon: <PeopleRounded /> },
+          { label: t("nav.shopSettings", "Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded /> },
+        )
       }
       return items
     }
@@ -177,10 +181,7 @@ export function SidebarV2() {
         items.push({ label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PeopleRounded /> })
       }
       if (canManageWebhooks) {
-        items.push({ label: t("nav.orgWebhooks", "Webhooks"), to: `/org/${selectedOrgId}/manage/discord`, icon: <MessageRounded /> })
-      }
-      if (canManageBlocklist) {
-        items.push({ label: t("nav.orgBlocklist", "Blocklist"), to: `/org/${selectedOrgId}/manage/blocklist`, icon: <PeopleRounded /> })
+        items.push({ label: t("nav.orgDiscord", "Discord"), to: `/org/${selectedOrgId}/manage/discord`, icon: <MessageRounded /> })
       }
       if (canManageTheme) {
         items.push({ label: t("nav.orgTheme", "Theme"), to: `/org/${selectedOrgId}/manage/theme`, icon: <DesignServicesRounded /> })

@@ -11,7 +11,12 @@ import {
   RouterProvider,
 } from "react-router-dom"
 import { PageFallback } from "./components/metadata/Page"
-import { FrontendErrorElement } from "./pages/errors/FrontendError.lazy"
+// Imported STATICALLY (not from the .lazy wrapper): this is the root
+// errorElement, so it must be in the entry bundle and always available. If it
+// were lazy, an error caused by a failed chunk load would try to render an
+// errorElement that ALSO needs to load a chunk — which fails the same way,
+// crashing with no fallback (the "FrontendError.lazy.tsx t is undefined" crash).
+import { FrontendErrorElement } from "./pages/errors/FrontendError"
 import { RouteSuspense } from "./components/router/RouteSuspense"
 import { RouteErrorFallback } from "./components/error-boundaries"
 import { startBackgroundPrefetch } from "./util/prefetch"
