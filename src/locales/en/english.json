@@ -1998,8 +1998,8 @@
     "subheading": "Everything you sell in one place. Expand a row to see the stock behind it.",
     "title": "Manage Market",
     "unspecified": "Unspecified",
-    "variants_one": "ManageMarketRedesign.variants",
-    "variants_other": "ManageMarketRedesign.variants"
+    "variants_one": "{{count}} option",
+    "variants_other": "{{count}} options"
   },
   "manageMemberList": {
     "any": "Any",
@@ -2436,19 +2436,19 @@
     "user": "User"
   },
   "MarketRedesign": {
-    "acrossSellers_one": "MarketRedesign.acrossSellers",
-    "acrossSellers_other": "MarketRedesign.acrossSellers",
-    "available_one": "MarketRedesign.available",
-    "available_other": "MarketRedesign.available",
+    "acrossSellers_one": "across {{count}} seller",
+    "acrossSellers_other": "across {{count}} sellers",
+    "available_one": "{{count}} available",
+    "available_other": "{{count}} available",
     "compare": "Compare",
-    "compareSellers_one": "MarketRedesign.compareSellers",
-    "compareSellers_other": "MarketRedesign.compareSellers",
+    "compareSellers_one": "Compare {{count}} seller",
+    "compareSellers_other": "Compare {{count}} sellers",
     "fromPrice": "from",
     "hide": "Hide",
-    "sellersCount_one": "MarketRedesign.sellersCount",
-    "sellersCount_other": "MarketRedesign.sellersCount",
-    "unitsAvailable_one": "MarketRedesign.unitsAvailable",
-    "unitsAvailable_other": "MarketRedesign.unitsAvailable"
+    "sellersCount_one": "{{count}} seller",
+    "sellersCount_other": "{{count}} sellers",
+    "unitsAvailable_one": "{{count}} unit available",
+    "unitsAvailable_other": "{{count}} units available"
   },
   "MarketSearchArea": {
     "active": "Active",

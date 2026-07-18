@@ -302,7 +302,18 @@ function GroupCard({
           onClick={onToggle}
           sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
         >
-          <Box sx={{ position: "relative", height: open ? 140 : 300 }}>
+          {/* Dark mode overlays text on a full-bleed image, so the container is
+              a fixed height. Light mode stacks a 180px image + content in normal
+              flow, so it must size to content (auto) — forcing 300 here is what
+              clipped the light-mode details. */}
+          <Box
+            sx={{
+              position: "relative",
+              ...(theme.palette.mode === "dark"
+                ? { height: open ? 140 : 300 }
+                : {}),
+            }}
+          >
             <Chip
               icon={<GroupsRounded sx={{ fontSize: "0.8rem !important" }} />}
               label={t("MarketRedesign.sellersCount", "{{count}} sellers", {
@@ -337,19 +348,22 @@ function GroupCard({
                 }}
               />
             )}
+            {/* Match ListingCardV2 exactly: dark mode = full-bleed image with a
+                gradient scrim and text overlaid at the bottom; light mode = a
+                fixed-height image with the text in normal flow BELOW it (no
+                overlay, no gradient). The earlier version forced the dark
+                overlay in light mode, which clipped the details. */}
             <CardMedia
               component="img"
               loading="lazy"
               image={cheapest.photo || FALLBACK_IMAGE_URL}
               sx={{
                 width: "100%",
-                height: "100%",
                 objectFit: "cover",
+                ...(theme.palette.mode === "dark"
+                  ? { height: "100%", aspectRatio: "16/9" }
+                  : { height: 180, aspectRatio: "16/9" }),
                 overflow: "hidden",
-                transition: theme.transitions.create("height", {
-                  duration: theme.transitions.duration.standard,
-                  easing: theme.transitions.easing.easeInOut,
-                }),
               }}
               alt={`Image of ${cheapest.game_item_name}`}
             />
@@ -369,7 +383,7 @@ function GroupCard({
             <CardContent
               sx={{
                 ...(theme.palette.mode === "dark"
-                  ? { position: "absolute", bottom: 0, zIndex: 4 }
+                  ? { position: "absolute", bottom: 0, left: 0, zIndex: 4 }
                   : {}),
                 width: "100%",
                 maxWidth: "100%",
