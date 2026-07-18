@@ -59,15 +59,13 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.ts", // Our custom service worker file (TypeScript)
       injectManifest: {
-        // NOTE: `html` is deliberately NOT precached. Precaching index.html made
-        // precacheAndRoute (registered before our NetworkOnly navigation route)
-        // intercept navigations and serve a STALE index.html after a deploy —
-        // which references hashed chunks that no longer exist → crash on refresh.
-        // (Firefox symptom: normal refresh crashes, shift+refresh bypasses the SW
-        // and works, next normal refresh crashes again.) The app shell must always
-        // come from the network via the navigate → NetworkOnly route in sw.ts.
-        globPatterns: ["**/*.{js,css,ico,png,svg,woff2,woff,ttf}"],
-        globIgnores: ["**/stats.html", "**/*.html"], // never precache HTML (see note above)
+        // The SW is intentionally minimal (push + install only) and precaches
+        // NOTHING — see src/sw.ts. We inject the smallest possible manifest just
+        // to satisfy injectManifest's token requirement; sw.ts filters it to
+        // empty. Keeping this to a single tiny file avoids generating a large
+        // unused manifest on every build.
+        globPatterns: ["favicon.ico"],
+        globIgnores: ["**/*.html", "**/*.js", "**/*.css"],
       },
       includeAssets: [
         "favicon.ico",
