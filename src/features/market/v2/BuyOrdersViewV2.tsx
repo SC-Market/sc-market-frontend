@@ -326,9 +326,12 @@ function BuyOrderAggregateCard({
                   sx={{
                     fontSize: "0.75rem",
                     lineHeight: 1.3,
+                    maxHeight: 36,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
                     mb: 0.5,
                   }}
                 >
