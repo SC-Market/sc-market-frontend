@@ -1073,7 +1073,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                   size="small"
                   sx={{
                     position: "absolute",
-                    top: isNew ? 28 : 4,
+                    top: 4,
                     right: 4,
                     zIndex: 2,
                     textTransform: "uppercase",
