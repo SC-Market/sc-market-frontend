@@ -413,10 +413,12 @@ export function SidebarV2() {
               <ListItemIcon sx={{ minWidth: 32 }}><InventoryRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.gameData.resources", "Resources")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
+            {profile && (
             <ListItemButton component={Link} to="/shopping-lists" selected={isActive("/shopping-lists")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><ShoppingCartRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.gameData.shoppingLists", "Shopping Lists")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
+            )}
           </List>
         </Collapse>
 
