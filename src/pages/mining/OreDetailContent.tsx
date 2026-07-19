@@ -47,31 +47,36 @@ export function OreDetailContent({ ore, onClose }: Props) {
         )}
       </Stack>
 
-      {/* Stats */}
-      <Section title={t("mining.stats", "Mining Stats")}>
-        <Stack spacing={1.5} sx={{ pt: 1, px: 0.5 }}>
-          <StatBar label="Instability" value={ore.instability} max={1000} />
-          <StatBar label="Resistance" value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
-          <StatBar label="Optimal Window Size" value={ore.optimalWindowThinness} max={10} />
-          <StatBar label="Optimal Window Position" value={ore.optimalWindowMidpoint != null ? ore.optimalWindowMidpoint * 100 : null} max={100} suffix="%" />
-          <StatBar label="Explosion Risk" value={ore.explosionMultiplier} max={500} />
-          <StatBar label="Cluster Factor" value={ore.clusterFactor != null ? ore.clusterFactor * 100 : null} max={100} suffix="%" />
-        </Stack>
-      </Section>
+      {/* Stats + Quality: side by side on desktop, stacked on mobile */}
+      <Box sx={{ display: "flex", flexDirection: { xs: "column", md: hasQuality ? "row" : "column" }, gap: 2 }}>
+        <Box sx={{ flex: { xs: 1, md: hasQuality ? "0 0 33.33%" : 1 }, minWidth: 0 }}>
+          <Section title={t("mining.stats", "Mining Stats")} disablePadding>
+            <Stack spacing={1.5} sx={{ pt: 1, px: 2, pb: 2, width: "100%" }}>
+              <StatBar label="Instability" value={ore.instability} max={1000} />
+              <StatBar label="Resistance" value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
+              <StatBar label="Optimal Window Size" value={ore.optimalWindowThinness} max={10} />
+              <StatBar label="Optimal Window Position" value={ore.optimalWindowMidpoint != null ? ore.optimalWindowMidpoint * 100 : null} max={100} suffix="%" />
+              <StatBar label="Explosion Risk" value={ore.explosionMultiplier} max={500} />
+              <StatBar label="Cluster Factor" value={ore.clusterFactor != null ? ore.clusterFactor * 100 : null} max={100} suffix="%" />
+            </Stack>
+          </Section>
+        </Box>
 
-      {/* Quality Distribution */}
-      {hasQuality && (
-        <Section title="Quality Distribution">
-          <Box sx={{ pt: 1, px: 0.5 }}>
-            <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
-              Quality 0–1000. Higher = better crafting &amp; sell price.
-            </Typography>
-            {ore.qualityDistributions.map((qd: OreQualityDistribution, i: number) => (
-              <QualityDistBar key={i} qd={qd} />
-            ))}
+        {hasQuality && (
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Section title="Quality Distribution" disablePadding>
+              <Box sx={{ pt: 1, px: 2, pb: 2, width: "100%" }}>
+                <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
+                  Quality 0–1000. Higher = better crafting &amp; sell price.
+                </Typography>
+                {ore.qualityDistributions.map((qd: OreQualityDistribution, i: number) => (
+                  <QualityDistBar key={i} qd={qd} />
+                ))}
+              </Box>
+            </Section>
           </Box>
-        </Section>
-      )}
+        )}
+      </Box>
 
       {/* Locations */}
       <Section title={t("mining.locations", "Locations")}>
