@@ -2,55 +2,31 @@ import React, { useCallback } from "react"
 import { NavLink } from "react-router-dom"
 import { SidebarLinkBody } from "./SidebarLinkBody"
 import { SidebarLinkProps } from "../types"
-import { prefetchModule } from "../../../util/prefetch"
+import { prefetchRoute } from "../../../router/routePrefetch"
+import { routeRegistry } from "../../../router/routeRegistry"
 
-// Route prefetch map for sidebar links
-const routePrefetchMap: Record<
-  string,
-  { importFn: () => Promise<unknown>; key: string }
-> = {
-  // Market
-  "/market": { importFn: () => import("../../../features/market"), key: "MarketPage" },
-  "/bulk": { importFn: () => import("../../../features/market"), key: "BulkItems" },
-  "/buyorders": { importFn: () => import("../../../features/market"), key: "BuyOrders" },
-  "/market/manage": { importFn: () => import("../../../pages/market/ManageStock"), key: "ManageStock" },
+// Registry keys sorted longest-first so the most specific match wins when a
+// link's target (which may carry params/query) is matched via startsWith.
+// The root "/" key is excluded from startsWith matching (it prefixes every
+// path); it is only reachable via the exact-match check below.
+const registryKeysByLength = Object.keys(routeRegistry)
+  .filter((key) => key !== "/")
+  .sort((a, b) => b.length - a.length)
 
-  // Contracting
-  "/contracts": { importFn: () => import("../../../pages/contracting/Contracts"), key: "Contracts" },
-  "/order/services": { importFn: () => import("../../../pages/contracting/Services"), key: "Services" },
-  "/orders": { importFn: () => import("../../../pages/contracting/CreateOrder"), key: "CreateOrder" },
+/**
+ * Resolve a link's `to` (which may include params/query) to the best matching
+ * registry key: exact match first, else the longest registry key that the path
+ * starts with. Mirrors the previous startsWith behavior.
+ */
+function resolveRegistryKey(to: string): string | undefined {
+  // Strip any query string before matching.
+  const path = to.split("?")[0]
 
-  // People & Orgs
-  "/contractors": { importFn: () => import("../../../pages/contractor/Contractors"), key: "Contractors" },
-  "/recruiting": { importFn: () => import("../../../pages/recruiting/Recruiting"), key: "Recruiting" },
-  "/messages": { importFn: () => import("../../../pages/messaging/Messages"), key: "Messages" },
-  "/notifications": { importFn: () => import("../../../pages/notifications/NotificationsPage"), key: "Notifications" },
-  "/settings": { importFn: () => import("../../../pages/people/SettingsPage"), key: "Settings" },
-  "/dashboard": { importFn: () => import("../../../pages/contractor/MemberDashboard"), key: "Dashboard" },
+  if (path in routeRegistry) {
+    return path
+  }
 
-  // Game Data
-  "/missions": { importFn: () => import("../../../pages/missions/MissionSearch"), key: "Missions" },
-  "/mining": { importFn: () => import("../../../pages/mining/MiningPage"), key: "Mining" },
-  "/mining/locations": { importFn: () => import("../../../pages/mining/MiningPage"), key: "MiningLocations" },
-  "/blueprints": { importFn: () => import("../../../pages/blueprints/BlueprintBrowser"), key: "Blueprints" },
-  "/crafting/calculator": { importFn: () => import("../../../pages/crafting/CraftingCalculator"), key: "CraftingCalc" },
-  "/resources": { importFn: () => import("../../../pages/resources/ResourceBrowser"), key: "Resources" },
-  "/shopping-lists": { importFn: () => import("../../../pages/wishlists/WishlistManager"), key: "ShoppingLists" },
-  "/blueprints/inventory": { importFn: () => import("../../../pages/blueprints/BlueprintInventory"), key: "BPInventory" },
-
-  // Wiki
-  "/wiki/items": { importFn: () => import("../../../pages/wiki/WikiItemBrowser"), key: "WikiItems" },
-  "/wiki/ships": { importFn: () => import("../../../pages/wiki/WikiShipBrowser"), key: "WikiShips" },
-  "/wiki/commodities": { importFn: () => import("../../../pages/wiki/WikiCommodityBrowser"), key: "WikiCommodities" },
-  "/wiki/locations": { importFn: () => import("../../../pages/wiki/WikiLocationBrowser"), key: "WikiLocations" },
-  "/wiki/manufacturers": { importFn: () => import("../../../pages/wiki/WikiManufacturerList"), key: "WikiManufacturers" },
-  "/wiki/refinery": { importFn: () => import("../../../pages/wiki/WikiRefineryPage"), key: "WikiRefinery" },
-
-  // Org management
-  "/org/members": { importFn: () => import("../../../pages/people/People"), key: "People" },
-  "/org/fleet": { importFn: () => import("../../../pages/fleet/Fleet"), key: "Fleet" },
-  "/org/manage": { importFn: () => import("../../../pages/contractor/OrgManage"), key: "OrgManage" },
-  "/org/orders": { importFn: () => import("../../../pages/contractor/OrgOrders"), key: "OrgOrders" },
+  return registryKeysByLength.find((key) => path.startsWith(key))
 }
 
 /**
@@ -58,13 +34,9 @@ const routePrefetchMap: Record<
  */
 export function SidebarLink(props: SidebarLinkProps) {
   const handleMouseEnter = useCallback(() => {
-    const matchingRoute = Object.keys(routePrefetchMap).find((route) =>
-      props.to.startsWith(route),
-    )
-
-    if (matchingRoute) {
-      const { importFn, key } = routePrefetchMap[matchingRoute]
-      prefetchModule(importFn, key)
+    const key = resolveRegistryKey(props.to)
+    if (key) {
+      prefetchRoute(key)
     }
   }, [props.to])
 

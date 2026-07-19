@@ -12,6 +12,29 @@ const prefetchedRoutes = new Set<string>()
 const prefetchingRoutes = new Map<string, Promise<void>>()
 
 /**
+ * Counter of prefetch dynamic-import() operations currently in flight.
+ *
+ * Vite compiles import() to __vitePreload, which fires a `vite:preloadError`
+ * window event on ANY failed dynamic import — including a hover-prefetch whose
+ * chunk was removed by a deploy. The global handler in src/index.tsx must NOT
+ * reload the page for a prefetch failure (the user never navigated). We
+ * increment this before awaiting the import and decrement in `finally`; the
+ * handler consults isPrefetchInFlight() to suppress the emergency reload while
+ * any prefetch is running. A counter (not a boolean) is used because prefetch
+ * is async and multiple hovers can overlap.
+ */
+let prefetchInFlightCount = 0
+
+/**
+ * Whether any prefetch dynamic import is currently in flight. Used by the
+ * global vite:preloadError handler to distinguish a prefetch failure (ignore)
+ * from a genuine navigation failure (reload).
+ */
+export function isPrefetchInFlight(): boolean {
+  return prefetchInFlightCount > 0
+}
+
+/**
  * Prefetch a single route by path
  * @param path - Route path to prefetch
  * @returns Promise that resolves when prefetch completes
@@ -36,13 +59,18 @@ export async function prefetchRoute(path: string): Promise<void> {
 
   // Start prefetching
   const prefetchPromise = (async () => {
+    prefetchInFlightCount++
     try {
       await importFn()
       prefetchedRoutes.add(path)
       console.debug(`Prefetched route: ${path}`)
     } catch (error) {
+      // A failed prefetch (e.g. stale chunk after a deploy) is swallowed here.
+      // The vite:preloadError handler checks isPrefetchInFlight() and skips the
+      // emergency reload so hovering a stale link never reloads the page.
       console.warn(`Failed to prefetch route ${path}:`, error)
     } finally {
+      prefetchInFlightCount--
       prefetchingRoutes.delete(path)
     }
   })()
