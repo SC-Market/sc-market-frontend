@@ -10,16 +10,26 @@ import {
   getBugsnagErrorBoundary,
 } from "./util/monitoring/bugsnagLoader"
 import { clearEmergencyReloadBudget, tryEmergencyReload } from "./util/assetReloadGuard"
+import { isPrefetchInFlight } from "./router/routePrefetch"
 
 // Handle stale chunk errors after deployments (dynamic import failures).
 // vite:preloadError is Vite's typed, cross-browser signal for a failed dynamic
 // import() — the robust way to detect a stale/missing route chunk WITHOUT
 // coupling to browser-specific error message text. preventDefault() stops Vite
-// from re-throwing, so the error never propagates to React Router; we recover
-// with a rate-limited reload to the current build instead.
+// from re-throwing, so the error never propagates to React Router.
+//
+// We always preventDefault(), but only recover with a rate-limited reload when
+// the failure is attributable to a real NAVIGATION. A hover-prefetch that hits
+// a stale chunk (removed by a deploy) also fires this event; reloading then
+// would yank the page out from under the user without any click. When a
+// prefetch is in flight we swallow the event silently — prefetchRoute's own
+// try/catch handles it — and the reload happens later if/when the user
+// actually navigates and the router's own dynamic import fails.
 window.addEventListener("vite:preloadError", (event) => {
   event.preventDefault()
-  tryEmergencyReload()
+  if (!isPrefetchInFlight()) {
+    tryEmergencyReload()
+  }
 })
 
 const container = document.getElementById("root")

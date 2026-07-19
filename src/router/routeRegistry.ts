@@ -14,10 +14,10 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/": () => import("../pages/home/LandingPage"),
   "/login": () => import("../pages/authentication/LoginPage"),
   "/signup": () => import("../pages/authentication/SignUpPage"),
-  "/market": () => import("../features/market"),
-  "/market/services": () => import("../features/market"),
-  "/bulk": () => import("../features/market"),
-  "/buyorders": () => import("../features/market"),
+  "/market": () => import("../components/market/MarketRouter"),
+  "/market/services": () => import("../components/market/MarketRouter"),
+  "/bulk": () => import("../components/market/MarketRouter"),
+  "/buyorders": () => import("../components/market/MarketRouter"),
   "/contractors": () => import("../pages/contractor/Contractors"),
   "/contracts": () => import("../pages/contracting/Contracts"),
   "/contracts/create": () =>
@@ -25,7 +25,7 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/recruiting": () => import("../pages/recruiting/Recruiting"),
 
   // Market routes
-  "/market/category/:name": () => import("../features/market"),
+  "/market/category/:name": () => import("../components/market/MarketRouter"),
 
   // Contractor routes
   "/contractor/:id": () => import("../pages/contractor/ViewOrg"),
@@ -64,7 +64,7 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/accountlink": () => import("../pages/authentication/AuthenticateRSI"),
 
   // Market management routes
-  "/market/manage": () => import("../pages/market/ManageStock"),
+  "/market/manage": () => import("../components/market/MarketRouter"),
   "/market/manage-stock": () => import("../pages/market/ManageStockLots"),
   "/sell": () => import("../pages/market/SellMaterials"),
 
@@ -77,13 +77,13 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
 
   // Organization routes
   "/org/register": () => import("../pages/contractor/OrgRegister"),
-  "/org/members": () => import("../pages/people/People"),
-  "/org/fleet": () => import("../pages/fleet/Fleet"),
+  "/org/members": () => import("../components/router/OrgRedirect"),
+  "/org/fleet": () => import("../components/router/OrgRedirect"),
   "/myorg": () => import("../pages/contractor/ViewOrg"),
-  "/org/send": () => import("../pages/money/SendMoney"),
-  "/org/orders": () => import("../pages/contractor/OrgOrders"),
-  "/org/manage": () => import("../pages/contractor/OrgManage"),
-  "/org/money": () => import("../pages/contractor/OrgMoney"),
+  "/org/send": () => import("../components/router/OrgRedirect"),
+  "/org/orders": () => import("../components/router/OrgRedirect"),
+  "/org/manage": () => import("../components/router/OrgRedirect"),
+  "/org/money": () => import("../components/router/OrgRedirect"),
 
   // Fleet routes
   "/myfleet": () => import("../pages/contractor/MemberFleet"),
