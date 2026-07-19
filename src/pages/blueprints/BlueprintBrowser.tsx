@@ -67,6 +67,7 @@ import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout
 
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 import { useShoppingList } from "../../features/wishlists/hooks/WishlistContext"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 
 type ViewMode = "grid" | "list"
 
@@ -101,10 +102,12 @@ export function BlueprintBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
-  
+  const { data: profile } = useGetUserProfileQuery()
+  const isLoggedIn = !!profile
+
   // View mode state
   const [viewMode, setViewMode] = useState<ViewMode>(() => (localStorage.getItem("bp-view") as ViewMode) || "grid")
-  
+
   // Search and filter state — persisted to URL params
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -175,7 +178,7 @@ export function BlueprintBrowser() {
     rarity: rarity || undefined,
     tier: tier || undefined,
     craftingStationType: craftingStation || undefined,
-    userOwnedOnly: ownedOnly || undefined,
+    userOwnedOnly: (isLoggedIn && ownedOnly) || undefined,
     source: source || undefined,
     manufacturer: manufacturer || undefined,
     ingredientName: ingredientName || undefined,
@@ -295,8 +298,10 @@ export function BlueprintBrowser() {
           {[1,2,3,4,5].map(t => <MenuItem key={t} value={t}>Tier {t}</MenuItem>)}
         </Select>
       </FormControl>
+      {isLoggedIn && (
       <FormControlLabel control={<Checkbox checked={ownedOnly} onChange={(e) => setOwnedOnly(e.target.checked)} size="small" />}
         label={<Typography variant="body2">Owned Only</Typography>} sx={{ ml: 0 }} />
+      )}
       <FormControlLabel control={<Checkbox checked={hasMissionSource} onChange={(e) => setHasMissionSource(e.target.checked)} size="small" />}
         label={<Typography variant="body2">Has Mission Source</Typography>} sx={{ ml: 0 }} />
       <FormControlLabel control={<Checkbox checked={hideUnsourceable} onChange={(e) => setHideUnsourceable(e.target.checked)} size="small" />}
@@ -330,7 +335,7 @@ export function BlueprintBrowser() {
     >
       <Grid item xs={12}>
         {/* Collection progress — shown on inventory page */}
-        {searchParams.get("inventory") === "true" && <CollectionProgressCard />}
+        {isLoggedIn && searchParams.get("inventory") === "true" && <CollectionProgressCard />}
         <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
             <UnifiedSearchBar
