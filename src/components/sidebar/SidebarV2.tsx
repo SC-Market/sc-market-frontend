@@ -51,6 +51,7 @@ import {
   AdminPanelSettingsRounded,
   BusinessRounded,
   PersonAddRounded,
+  CalculateRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -336,7 +337,7 @@ export function SidebarV2() {
             component={Link}
             to={item.to}
             selected={isActive(item.to)}
-            sx={{ borderRadius: 1.5, mb: 0.25 }}
+            sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }}
             onClick={() => isMobile && setDrawerOpen(false)}
           >
             <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
@@ -354,19 +355,19 @@ export function SidebarV2() {
       {/* Browse section (only in browse mode) */}
       {context === "browse" && (
         <>
-          <Typography variant="overline" sx={{ px: 2.5, pt: 1, color: "text.secondary", fontSize: "0.65rem" }}>
+          <Typography variant="body2" sx={{ px: 2, pt: 1.5, pb: 0.5, fontWeight: "bold", opacity: 0.7, textTransform: "uppercase", fontSize: "0.85em" }}>
             {t("nav.groupBrowse", "Browse")}
           </Typography>
           <List dense sx={{ px: 1 }}>
-            <ListItemButton component={Link} to="/shops" selected={isActive("/shops")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/shops" selected={isActive("/shops")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 36 }}><StorefrontRounded /></ListItemIcon>
               <ListItemText primary={t("nav.shops", "Shops")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/contractors" selected={isActive("/contractors")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/contractors" selected={isActive("/contractors")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 36 }}><BusinessRounded /></ListItemIcon>
               <ListItemText primary={t("nav.orgs", "Organizations")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/recruiting" selected={isActive("/recruiting")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/recruiting" selected={isActive("/recruiting")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 36 }}><PersonAddRounded /></ListItemIcon>
               <ListItemText primary={t("nav.recruiting", "Recruiting")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
@@ -377,44 +378,44 @@ export function SidebarV2() {
       <Divider sx={{ mx: 2, my: 0.5 }} />
 
       {/* Game Data section */}
-      <Typography variant="overline" sx={{ px: 2.5, pt: 1, color: "text.secondary", fontSize: "0.65rem" }}>
+      <Typography variant="body2" sx={{ px: 2, pt: 1.5, pb: 0.5, fontWeight: "bold", opacity: 0.7, textTransform: "uppercase", fontSize: "0.85em" }}>
         {t("sidebar.gameData.title", "Game Data")}
       </Typography>
       <List dense sx={{ px: 1 }}>
         {/* Missions */}
-        <ListItemButton component={Link} to="/missions" selected={isActive("/missions")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+        <ListItemButton component={Link} to="/missions" selected={isActive("/missions")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
           <ListItemIcon sx={{ minWidth: 36 }}><DescriptionRounded /></ListItemIcon>
           <ListItemText primary={t("sidebar.gameData.missions", "Missions")} primaryTypographyProps={{ variant: "body2" }} />
         </ListItemButton>
 
         {/* Mining */}
-        <ListItemButton component={Link} to="/mining" selected={isActive("/mining")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+        <ListItemButton component={Link} to="/mining" selected={isActive("/mining")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
           <ListItemIcon sx={{ minWidth: 36 }}><InventoryRounded /></ListItemIcon>
           <ListItemText primary={t("sidebar.gameData.mining", "Mining")} primaryTypographyProps={{ variant: "body2" }} />
         </ListItemButton>
 
         {/* Crafting — collapsible */}
-        <ListItemButton sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => setCraftingOpen((v) => !v)}>
+        <ListItemButton sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => setCraftingOpen((v) => !v)}>
           <ListItemIcon sx={{ minWidth: 36 }}><ScienceRounded /></ListItemIcon>
           <ListItemText primary={t("sidebar.gameData.crafting", "Crafting")} primaryTypographyProps={{ variant: "body2" }} />
           {craftingOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
         </ListItemButton>
         <Collapse in={craftingOpen}>
           <List dense disablePadding sx={{ pl: 2 }}>
-            <ListItemButton component={Link} to="/blueprints" selected={isActive("/blueprints")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/blueprints" selected={isActive("/blueprints")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><ScienceRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.gameData.blueprints", "Blueprints")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/crafting/calculator" selected={isActive("/crafting/calculator")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><ScienceRounded /></ListItemIcon>
+            <ListItemButton component={Link} to="/crafting/calculator" selected={isActive("/crafting/calculator")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 32 }}><CalculateRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.gameData.craftingCalculator", "Crafting Calculator")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/resources" selected={isActive("/resources")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/resources" selected={isActive("/resources")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><InventoryRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.gameData.resources", "Resources")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
             {profile && (
-            <ListItemButton component={Link} to="/shopping-lists" selected={isActive("/shopping-lists")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/shopping-lists" selected={isActive("/shopping-lists")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><ShoppingCartRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.gameData.shoppingLists", "Shopping Lists")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
@@ -423,34 +424,34 @@ export function SidebarV2() {
         </Collapse>
 
         {/* Wiki — collapsible */}
-        <ListItemButton sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => setWikiOpen((v) => !v)}>
+        <ListItemButton sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => setWikiOpen((v) => !v)}>
           <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
           <ListItemText primary={t("sidebar.wiki.title", "Wiki")} primaryTypographyProps={{ variant: "body2" }} />
           {wikiOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
         </ListItemButton>
         <Collapse in={wikiOpen}>
           <List dense disablePadding sx={{ pl: 2 }}>
-            <ListItemButton component={Link} to="/wiki/items" selected={isActive("/wiki/items")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/wiki/items" selected={isActive("/wiki/items")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><MenuBookRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.wiki.items", "Items")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/ships" selected={isActive("/wiki/ships")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/wiki/ships" selected={isActive("/wiki/ships")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><RocketLaunchRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.wiki.vehicles", "Ships & Vehicles")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/commodities" selected={isActive("/wiki/commodities")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/wiki/commodities" selected={isActive("/wiki/commodities")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><InventoryRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.wiki.commodities", "Commodities")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/locations" selected={isActive("/wiki/locations")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/wiki/locations" selected={isActive("/wiki/locations")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><DescriptionRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.wiki.locations", "Locations")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/manufacturers" selected={isActive("/wiki/manufacturers")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/wiki/manufacturers" selected={isActive("/wiki/manufacturers")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><StorefrontRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.wiki.manufacturers", "Manufacturers")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/refinery" selected={isActive("/wiki/refinery")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+            <ListItemButton component={Link} to="/wiki/refinery" selected={isActive("/wiki/refinery")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 32 }}><ScienceRounded /></ListItemIcon>
               <ListItemText primary={t("sidebar.wiki.refinery", "Refinery")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
@@ -463,11 +464,11 @@ export function SidebarV2() {
       <Box sx={{ flexShrink: 0 }}>
         <Divider sx={{ mx: 2 }} />
         <List dense sx={{ px: 1, py: 0.5 }}>
-          <ListItemButton component={Link} to="/messaging" selected={isActive("/messaging")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+          <ListItemButton component={Link} to="/messaging" selected={isActive("/messaging")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
             <ListItemIcon sx={{ minWidth: 36 }}><MessageRounded /></ListItemIcon>
             <ListItemText primary={t("nav.messages", "Messages")} primaryTypographyProps={{ variant: "body2" }} />
           </ListItemButton>
-          <ListItemButton component={Link} to="/settings" selected={isActive("/settings")} sx={{ borderRadius: 1.5, mb: 0.25 }} onClick={() => isMobile && setDrawerOpen(false)}>
+          <ListItemButton component={Link} to="/settings" selected={isActive("/settings")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
             <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
             <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "body2" }} />
           </ListItemButton>
