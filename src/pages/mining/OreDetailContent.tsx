@@ -5,7 +5,7 @@ import React from "react"
 import {
   Typography, Chip, Stack, Box, Button, LinearProgress,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  useMediaQuery, useTheme,
+  useTheme,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import type { OreDetailResponse, OreQualityDistribution } from "../../store/api/v2/market"
@@ -32,7 +32,6 @@ interface Props {
 export function OreDetailContent({ ore, onClose }: Props) {
   const { t } = useTranslation()
   const theme = useTheme()
-  const isDesktop = useMediaQuery(theme.breakpoints.up("md"))
   const hasQuality = (ore.qualityDistributions?.length ?? 0) > 0
 
   return (
@@ -48,36 +47,31 @@ export function OreDetailContent({ ore, onClose }: Props) {
         )}
       </Stack>
 
-      {/* Stats + Quality: side by side on desktop (4:8 ratio), stacked on mobile */}
-      <Box sx={{ display: "flex", flexDirection: isDesktop && hasQuality ? "row" : "column", gap: 2 }}>
-        <Box sx={{ flex: isDesktop && hasQuality ? "0 0 33.33%" : 1, minWidth: 0 }}>
-          <Section title={t("mining.stats", "Mining Stats")}>
-            <Stack spacing={1.5} sx={{ pt: 1, px: 0.5 }}>
-              <StatBar label="Instability" value={ore.instability} max={1000} />
-              <StatBar label="Resistance" value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
-              <StatBar label="Optimal Window Size" value={ore.optimalWindowThinness} max={10} />
-              <StatBar label="Optimal Window Position" value={ore.optimalWindowMidpoint != null ? ore.optimalWindowMidpoint * 100 : null} max={100} suffix="%" />
-              <StatBar label="Explosion Risk" value={ore.explosionMultiplier} max={500} />
-              <StatBar label="Cluster Factor" value={ore.clusterFactor != null ? ore.clusterFactor * 100 : null} max={100} suffix="%" />
-            </Stack>
-          </Section>
-        </Box>
+      {/* Stats */}
+      <Section title={t("mining.stats", "Mining Stats")}>
+        <Stack spacing={1.5} sx={{ pt: 1, px: 0.5 }}>
+          <StatBar label="Instability" value={ore.instability} max={1000} />
+          <StatBar label="Resistance" value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
+          <StatBar label="Optimal Window Size" value={ore.optimalWindowThinness} max={10} />
+          <StatBar label="Optimal Window Position" value={ore.optimalWindowMidpoint != null ? ore.optimalWindowMidpoint * 100 : null} max={100} suffix="%" />
+          <StatBar label="Explosion Risk" value={ore.explosionMultiplier} max={500} />
+          <StatBar label="Cluster Factor" value={ore.clusterFactor != null ? ore.clusterFactor * 100 : null} max={100} suffix="%" />
+        </Stack>
+      </Section>
 
-        {hasQuality && (
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Section title="Quality Distribution">
-              <Box sx={{ pt: 1, px: 0.5 }}>
-                <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
-                  Quality 0–1000. Higher = better crafting &amp; sell price.
-                </Typography>
-                {ore.qualityDistributions.map((qd: OreQualityDistribution, i: number) => (
-                  <QualityDistBar key={i} qd={qd} />
-                ))}
-              </Box>
-            </Section>
+      {/* Quality Distribution */}
+      {hasQuality && (
+        <Section title="Quality Distribution">
+          <Box sx={{ pt: 1, px: 0.5 }}>
+            <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
+              Quality 0–1000. Higher = better crafting &amp; sell price.
+            </Typography>
+            {ore.qualityDistributions.map((qd: OreQualityDistribution, i: number) => (
+              <QualityDistBar key={i} qd={qd} />
+            ))}
           </Box>
-        )}
-      </Box>
+        </Section>
+      )}
 
       {/* Locations */}
       <Section title={t("mining.locations", "Locations")}>
