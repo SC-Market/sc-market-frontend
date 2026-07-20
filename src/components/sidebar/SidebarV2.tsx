@@ -129,11 +129,17 @@ export function SidebarV2() {
         { label: t("nav.adminOrders", "Orders"), to: "/admin/orders", icon: <LocalShippingRounded /> },
         { label: t("nav.adminUsers", "Users"), to: "/admin/users", icon: <PeopleRounded /> },
         { label: t("nav.adminMarket", "Market"), to: "/admin/market", icon: <StorefrontRounded /> },
+        { label: t("nav.adminPremium", "Premium"), to: "/admin/premium", icon: <DescriptionRounded /> },
         { label: t("nav.adminAlerts", "Alerts"), to: "/admin/alerts", icon: <DescriptionRounded /> },
         { label: t("nav.adminModeration", "Moderation"), to: "/admin/moderation", icon: <AdminPanelSettingsRounded /> },
         { label: t("nav.adminFeatureFlags", "Feature Flags"), to: "/admin/feature-flags", icon: <SettingsRounded /> },
         { label: t("nav.adminGameData", "Game Data Import"), to: "/admin/game-data-import", icon: <ScienceRounded /> },
+        { label: t("nav.adminAttributes", "Attributes"), to: "/admin/attribute-definitions", icon: <ListAltRounded /> },
+        { label: t("nav.adminGameItemAttrs", "Game Item Attributes"), to: "/admin/game-item-attributes", icon: <ListAltRounded /> },
+        { label: t("nav.adminImportMonitoring", "Import Monitoring"), to: "/admin/import-monitoring", icon: <ScienceRounded /> },
+        { label: t("nav.adminMigration", "Migration"), to: "/admin/migration", icon: <SettingsRounded /> },
         { label: t("nav.adminAuditLogs", "Audit Logs"), to: "/admin/audit-logs", icon: <DescriptionRounded /> },
+        { label: t("nav.adminNotificationTest", "Notification Test"), to: "/admin/notification-test", icon: <MessageRounded /> },
       ]
     }
     if (context === "shop" && selectedShop) {
@@ -195,13 +201,23 @@ export function SidebarV2() {
       return items
     }
     // Browse mode
-    return [
+    const items: NavItem[] = [
       { label: t("nav.market", "Market"), to: "/market", icon: <SearchRounded /> },
       { label: t("nav.services", "Services"), to: "/market/services", icon: <DesignServicesRounded /> },
       { label: t("nav.contracts", "Contracts"), to: "/contracts", icon: <DescriptionRounded /> },
       { label: t("nav.buyOrders", "Buy Orders"), to: "/buyorders", icon: <ShoppingCartRounded /> },
-      { label: t("nav.myOrders", "My Orders"), to: "/orders", icon: <LocalShippingRounded /> },
     ]
+    if (profile) {
+      items.push(
+        { label: t("nav.myOrders", "My Orders"), to: "/orders", icon: <LocalShippingRounded /> },
+        { label: t("nav.assignedOrders", "Assigned to Me"), to: "/dashboard", icon: <DashboardRounded /> },
+        { label: t("nav.messages", "Messages"), to: "/messages", icon: <MessageRounded /> },
+        { label: t("nav.myShops", "My Shops"), to: "/dashboard/shops", icon: <StorefrontRounded /> },
+        { label: t("nav.inventory", "Inventory"), to: "/inventory", icon: <InventoryRounded /> },
+        { label: t("nav.availability", "Availability"), to: "/availability", icon: <DescriptionRounded /> },
+      )
+    }
+    return items
   }, [context, selectedShop, profile, t])
 
   const [wikiOpen, setWikiOpen] = useState(false)
@@ -226,7 +242,7 @@ export function SidebarV2() {
 
   const isActive = (path: string) => {
     // Exact match for short paths to avoid false positives
-    if (path === "/market" || path === "/orders" || path === "/mining" || path === "/messaging" || path === "/settings") {
+    if (path === "/market" || path === "/orders" || path === "/mining" || path === "/messages" || path === "/settings") {
       return location.pathname === path || location.pathname.startsWith(path + "/")
     }
     return location.pathname === path || location.pathname.startsWith(path)
@@ -371,6 +387,12 @@ export function SidebarV2() {
               <ListItemIcon sx={{ minWidth: 36 }}><PersonAddRounded /></ListItemIcon>
               <ListItemText primary={t("nav.recruiting", "Recruiting")} primaryTypographyProps={{ variant: "body2" }} />
             </ListItemButton>
+            {profile && (
+            <ListItemButton component={Link} to="/my-orgs" selected={isActive("/my-orgs")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 36 }}><PeopleRounded /></ListItemIcon>
+              <ListItemText primary={t("nav.myOrgs", "My Organizations")} primaryTypographyProps={{ variant: "body2" }} />
+            </ListItemButton>
+            )}
           </List>
         </>
       )}
@@ -464,10 +486,6 @@ export function SidebarV2() {
       <Box sx={{ flexShrink: 0 }}>
         <Divider sx={{ mx: 2 }} />
         <List dense sx={{ px: 1, py: 0.5 }}>
-          <ListItemButton component={Link} to="/messaging" selected={isActive("/messaging")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
-            <ListItemIcon sx={{ minWidth: 36 }}><MessageRounded /></ListItemIcon>
-            <ListItemText primary={t("nav.messages", "Messages")} primaryTypographyProps={{ variant: "body2" }} />
-          </ListItemButton>
           <ListItemButton component={Link} to="/settings" selected={isActive("/settings")} sx={{ borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375), mt: 0.5, transition: "0.3s", "&.Mui-selected": { "& .MuiListItemIcon-root": { color: "primary.main" }, "& .MuiListItemText-primary": { color: "primary.main" } } }} onClick={() => isMobile && setDrawerOpen(false)}>
             <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
             <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "body2" }} />
