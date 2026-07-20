@@ -5,14 +5,18 @@ import {
   Chip,
   Container,
   Grid,
+  InputAdornment,
   LinearProgress,
   linearProgressClasses,
+  MenuItem,
+  Pagination,
   Rating,
   Skeleton,
   Stack,
   TableCell,
   TableRow,
   Tabs,
+  TextField,
   Typography,
 } from "@mui/material"
 import { styled, useTheme } from "@mui/material/styles"
@@ -20,6 +24,7 @@ import {
   CreateRounded,
   DesignServicesRounded,
   InfoRounded,
+  SearchRounded,
   StarRounded,
   StorefrontRounded,
 } from "@mui/icons-material"
@@ -45,7 +50,8 @@ import { MarkdownRender } from "../../../components/markdown/Markdown"
 import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTable"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { amber } from "@mui/material/colors"
-import { useCallback, useMemo, MouseEventHandler } from "react"
+import { useCallback, useMemo, useState, MouseEventHandler } from "react"
+import { useDebounce } from "../../../hooks/useDebounce"
 import { Helmet } from "react-helmet"
 import { FRONTEND_URL } from "../../../util/constants"
 import { EmptyReviews } from "../../../components/empty-states"
@@ -458,41 +464,85 @@ function ShopTabContent(props: {
 }
 
 function ShopListingsTab(props: { slug: string }) {
+  const [search, setSearch] = useState("")
+  const [sortBy, setSortBy] = useState<"created_at" | "price" | "quantity">("created_at")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+  const [page, setPage] = useState(1)
+  const pageSize = 24
+  const debouncedSearch = useDebounce(search, 300)
+
   const { data, isLoading } = useSearchListingsQuery({
     shopSlug: props.slug,
-    pageSize: 40,
-    sortBy: "created_at",
-    sortOrder: "desc",
+    page,
+    pageSize,
+    sortBy,
+    sortOrder,
+    text: debouncedSearch || undefined,
   })
 
-  if (isLoading) {
-    return (
-      <Grid container spacing={2}>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <Grid item xs={6} sm={4} md={3} lg={2.4} key={i}>
-            <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 2 }} />
-          </Grid>
-        ))}
-      </Grid>
-    )
-  }
-
-  if (!data?.listings.length) {
-    return (
-      <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
-        No active listings
-      </Typography>
-    )
-  }
-
   return (
-    <Grid container spacing={2}>
-      {data.listings.map((listing, index) => (
-        <Grid item xs={6} sm={4} md={3} lg={2.4} key={listing.listing_id}>
-          <ListingCardV2 listing={listing} index={index} />
+    <Box>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mb: 2 }}>
+        <TextField
+          size="small"
+          placeholder="Search listings..."
+          value={search}
+          onChange={(e) => { setSearch(e.target.value); setPage(1) }}
+          sx={{ flex: 1 }}
+          InputProps={{ startAdornment: <InputAdornment position="start"><SearchRounded fontSize="small" /></InputAdornment> }}
+        />
+        <TextField
+          select
+          size="small"
+          value={`${sortBy}-${sortOrder}`}
+          onChange={(e) => {
+            const [s, o] = e.target.value.split("-") as ["created_at" | "price" | "quantity", "asc" | "desc"]
+            setSortBy(s); setSortOrder(o); setPage(1)
+          }}
+          sx={{ minWidth: 140 }}
+        >
+          <MenuItem value="created_at-desc">Newest</MenuItem>
+          <MenuItem value="created_at-asc">Oldest</MenuItem>
+          <MenuItem value="price-asc">Price: Low</MenuItem>
+          <MenuItem value="price-desc">Price: High</MenuItem>
+          <MenuItem value="quantity-desc">Most Stock</MenuItem>
+        </TextField>
+      </Stack>
+
+      {isLoading ? (
+        <Grid container spacing={2}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Grid item xs={6} sm={4} md={3} lg={2.4} key={i}>
+              <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 2 }} />
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
+      ) : !data?.listings.length ? (
+        <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
+          {search ? "No listings match your search" : "No active listings"}
+        </Typography>
+      ) : (
+        <>
+          <Grid container spacing={2}>
+            {data.listings.map((listing, index) => (
+              <Grid item xs={6} sm={4} md={3} lg={2.4} key={listing.listing_id}>
+                <ListingCardV2 listing={listing} index={index} />
+              </Grid>
+            ))}
+          </Grid>
+          {(data.total || 0) > pageSize && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+              <Pagination
+                count={Math.ceil((data.total || 0) / pageSize)}
+                page={page}
+                onChange={(_, p) => setPage(p)}
+                color="primary"
+              />
+            </Box>
+          )}
+        </>
+      )}
+    </Box>
   )
 }
 
