@@ -20,6 +20,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DebugPanel } from "../market/v2/DebugPanel"
 import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext"
 import { ParticleField } from "../effects/ParticleField"
+import { CommandPalette } from "../command-palette/CommandPalette"
 
 function NavSidebar() {
   const { flags } = useFeatureFlag()
@@ -50,6 +51,7 @@ export function Root(props: { children: React.ReactNode }) {
         // backgroundSize: 'cover',
       }}
     >
+      <CommandPalette />
       <ParticleField />
       <SkipNavigation />
       <CookieConsent />
