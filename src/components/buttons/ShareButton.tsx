@@ -41,7 +41,7 @@ export function ShareButton({ url, title, text }: ShareButtonProps) {
   return (
     <>
       <Tooltip title={t("ui.share", "Share")}>
-        <IconButton onClick={handleShare} size="small">
+        <IconButton onClick={handleShare} size="small" color="primary">
           <ShareRounded />
         </IconButton>
       </Tooltip>

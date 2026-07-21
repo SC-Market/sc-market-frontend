@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom"
 import {
   Alert,
   Autocomplete,
+  Avatar,
   Box,
   Button,
   Checkbox,
@@ -17,6 +18,7 @@ import {
   InputAdornment,
   Radio,
   RadioGroup,
+  Stack,
   Switch,
   TextField,
   Typography,
@@ -34,12 +36,14 @@ import {
   useUpsertShopOrderSettingMutation,
   useDeleteShopOrderSettingMutation,
 } from "../../../store/api/v2/market"
+import { useUploadImageMutation } from "../../../store/api/v2/market-overrides"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { URL_REGEX } from "../../../util/parsing"
 import { ShopBlocklistSection } from "./ShopBlocklist"
+import { ImageRounded } from "@mui/icons-material"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -514,6 +518,11 @@ export function ShopSettings() {
   const [marketOrderTemplate, setMarketOrderTemplate] = useState(
     shop.market_order_template,
   )
+  const [logoResourceId, setLogoResourceId] = useState<string | null>(null)
+  const [logoUrl, setLogoUrl] = useState<string | null>(shop.logo_url)
+  const [bannerResourceId, setBannerResourceId] = useState<string | null>(null)
+  const [bannerUrl, setBannerUrl] = useState<string | null>(shop.banner_url)
+  const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation()
 
   // Reset form when shop changes (e.g. navigating between shops)
   useEffect(() => {
@@ -524,7 +533,26 @@ export function ShopSettings() {
     setSupportedLanguages(shop.supported_languages)
     setAcceptsCustomOrders(shop.accepts_custom_orders)
     setMarketOrderTemplate(shop.market_order_template)
+    setLogoResourceId(null)
+    setLogoUrl(shop.logo_url)
+    setBannerResourceId(null)
+    setBannerUrl(shop.banner_url)
   }, [shop])
+
+  const handleImageUpload = async (file: File, kind: "logo" | "banner") => {
+    try {
+      const result = await uploadImage(file).unwrap()
+      if (kind === "logo") {
+        setLogoResourceId(result.resource_id)
+        setLogoUrl(result.url)
+      } else {
+        setBannerResourceId(result.resource_id)
+        setBannerUrl(result.url)
+      }
+    } catch (err) {
+      issueAlert(err as { status: number; data: { message?: string } })
+    }
+  }
 
   const handleSave = async () => {
     try {
@@ -538,6 +566,8 @@ export function ShopSettings() {
           supported_languages: supportedLanguages,
           accepts_custom_orders: acceptsCustomOrders,
           market_order_template: marketOrderTemplate,
+          ...(logoResourceId ? { logo: logoResourceId } : {}),
+          ...(bannerResourceId ? { banner: bannerResourceId } : {}),
         },
       }).unwrap()
 
@@ -592,6 +622,85 @@ export function ShopSettings() {
                 multiline
                 minRows={3}
               />
+            </Grid>
+          </FormPaper>
+
+          {/* Appearance */}
+          <FormPaper
+            title="Appearance"
+            subtitle="Custom logo and banner for your shop (independent of your org)"
+          >
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                Logo
+              </Typography>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Avatar
+                  src={logoUrl || undefined}
+                  variant="rounded"
+                  sx={{ width: 64, height: 64 }}
+                >
+                  <ImageRounded />
+                </Avatar>
+                <Button
+                  component="label"
+                  variant="outlined"
+                  size="small"
+                  disabled={isUploading}
+                >
+                  Upload Logo
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) handleImageUpload(file, "logo")
+                    }}
+                  />
+                </Button>
+              </Stack>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                Banner
+              </Typography>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Box
+                  sx={{
+                    width: 128,
+                    height: 64,
+                    borderRadius: 1,
+                    bgcolor: "background.default",
+                    backgroundImage: bannerUrl ? `url(${bannerUrl})` : undefined,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    border: `1px solid ${theme.palette.divider}`,
+                  }}
+                >
+                  {!bannerUrl && <ImageRounded color="disabled" />}
+                </Box>
+                <Button
+                  component="label"
+                  variant="outlined"
+                  size="small"
+                  disabled={isUploading}
+                >
+                  Upload Banner
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) handleImageUpload(file, "banner")
+                    }}
+                  />
+                </Button>
+              </Stack>
             </Grid>
           </FormPaper>
 

@@ -45,6 +45,7 @@ function FilterSection({
   selected: string
   onChange: (v: string) => void
 }) {
+  const { t } = useTranslation()
   return (
     <Box>
       <Typography
@@ -55,7 +56,7 @@ function FilterSection({
         {label}
       </Typography>
       <Stack spacing={0.25}>
-        {[{ value: "", label: "All" }, ...options].map((opt) => (
+        {[{ value: "", label: t("wiki.itemBrowser.all", "All") }, ...options].map((opt) => (
           <Box
             key={opt.value}
             onClick={() => onChange(opt.value)}
@@ -216,8 +217,8 @@ export function WikiItemBrowser() {
   const filtersContent = (
     <Stack spacing={2}>
       <FilterSection
-        label="Type"
-        options={ITEM_TYPES.map((t) => ({ value: t, label: t }))}
+        label={t("wiki.itemBrowser.filterType", "Type")}
+        options={ITEM_TYPES.map((it) => ({ value: it, label: it }))}
         selected={typeFilter}
         onChange={(v) => updateParam("type", v)}
       />
@@ -225,8 +226,8 @@ export function WikiItemBrowser() {
       <Divider />
 
       <FilterSection
-        label="Size"
-        options={SIZES.map((s) => ({ value: s, label: `Size ${s}` }))}
+        label={t("wiki.itemBrowser.filterSize", "Size")}
+        options={SIZES.map((s) => ({ value: s, label: `${t("wiki.itemBrowser.sizeLabel", "Size")} ${s}` }))}
         selected={sizeFilter}
         onChange={(v) => updateParam("size", v)}
       />
@@ -234,15 +235,15 @@ export function WikiItemBrowser() {
       <Divider />
 
       <FilterSection
-        label="Grade"
-        options={GRADES.map((g) => ({ value: g, label: `${g} Grade` }))}
+        label={t("wiki.itemBrowser.filterGrade", "Grade")}
+        options={GRADES.map((g) => ({ value: g, label: `${g} ${t("wiki.itemBrowser.gradeLabel", "Grade")}` }))}
         selected={gradeFilter}
         onChange={(v) => updateParam("grade", v)}
       />
 
       {hasFilters && (
         <Chip
-          label="Clear filters"
+          label={t("wiki.itemBrowser.clearFilters", "Clear filters")}
           size="small"
           variant="outlined"
           onClick={() => {
@@ -278,13 +279,13 @@ export function WikiItemBrowser() {
         )}
       </Helmet>
       <Grid item xs={12}>
-        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters" sidebarWidth={190}>
+        <FilterSidebarLayout filters={filtersContent} filterTitle={t("wiki.itemBrowser.filters", "Filters")} sidebarWidth={190}>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
             <UnifiedSearchBar
               tokens={searchTokens}
               onChange={handleTokensChange}
               mode="wiki-items"
-              placeholder="Search items, types, manufacturers..."
+              placeholder={t("wiki.itemBrowser.searchPlaceholder", "Search items, types, manufacturers...")}
             />
             {data && (
               <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
@@ -303,7 +304,7 @@ export function WikiItemBrowser() {
           </Box>
 
           {isLoading && <CardGridSkeleton />}
-          {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load items.</Alert>}
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{t("wiki.itemBrowser.loadError", "Failed to load items.")}</Alert>}
 
           {data && (
             <>
@@ -321,11 +322,11 @@ export function WikiItemBrowser() {
                     <TableHead>
                       <TableRow>
                         <TableCell sx={{ width: 40 }} />
-                        <TableCell>Name</TableCell>
-                        <TableCell>Type</TableCell>
-                        <TableCell>Size</TableCell>
-                        <TableCell>Grade</TableCell>
-                        <TableCell>Manufacturer</TableCell>
+                        <TableCell>{t("wiki.itemBrowser.columnName", "Name")}</TableCell>
+                        <TableCell>{t("wiki.itemBrowser.columnType", "Type")}</TableCell>
+                        <TableCell>{t("wiki.itemBrowser.columnSize", "Size")}</TableCell>
+                        <TableCell>{t("wiki.itemBrowser.columnGrade", "Grade")}</TableCell>
+                        <TableCell>{t("wiki.itemBrowser.columnManufacturer", "Manufacturer")}</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -339,7 +340,7 @@ export function WikiItemBrowser() {
 
               {data.items.length === 0 && (
                 <Box sx={{ textAlign: "center", py: 6 }}>
-                  <Typography color="text.secondary">No results found. Try adjusting your search.</Typography>
+                  <Typography color="text.secondary">{t("wiki.itemBrowser.noResults", "No results found. Try adjusting your search.")}</Typography>
                 </Box>
               )}
 

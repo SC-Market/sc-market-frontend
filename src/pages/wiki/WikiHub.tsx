@@ -28,22 +28,23 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface WikiSection {
   label: string
+  labelKey: string
   route: string
   icon: React.ReactElement
 }
 
 const WIKI_SECTIONS: WikiSection[] = [
-  { label: "Items", route: "/wiki/items", icon: <InventoryRounded /> },
-  { label: "Ships & Vehicles", route: "/wiki/ships", icon: <RocketLaunchRounded /> },
-  { label: "Commodities", route: "/wiki/commodities", icon: <ScienceRounded /> },
-  { label: "Locations", route: "/wiki/locations", icon: <LocationOnRounded /> },
-  { label: "Manufacturers", route: "/wiki/manufacturers", icon: <BusinessRounded /> },
-  { label: "Refinery", route: "/wiki/refinery", icon: <SettingsRounded /> },
-  { label: "Missions", route: "/missions", icon: <AssignmentRounded /> },
-  { label: "Blueprints", route: "/blueprints", icon: <DescriptionRounded /> },
-  { label: "Crafting Calculator", route: "/crafting/calculator", icon: <CalculateRounded /> },
-  { label: "Resources", route: "/resources", icon: <TerrainRounded /> },
-  { label: "Mining", route: "/mining", icon: <ConstructionRounded /> },
+  { label: "Items", labelKey: "wiki.hub.sectionItems", route: "/wiki/items", icon: <InventoryRounded /> },
+  { label: "Ships & Vehicles", labelKey: "wiki.hub.sectionShips", route: "/wiki/ships", icon: <RocketLaunchRounded /> },
+  { label: "Commodities", labelKey: "wiki.hub.sectionCommodities", route: "/wiki/commodities", icon: <ScienceRounded /> },
+  { label: "Locations", labelKey: "wiki.hub.sectionLocations", route: "/wiki/locations", icon: <LocationOnRounded /> },
+  { label: "Manufacturers", labelKey: "wiki.hub.sectionManufacturers", route: "/wiki/manufacturers", icon: <BusinessRounded /> },
+  { label: "Refinery", labelKey: "wiki.hub.sectionRefinery", route: "/wiki/refinery", icon: <SettingsRounded /> },
+  { label: "Missions", labelKey: "wiki.hub.sectionMissions", route: "/missions", icon: <AssignmentRounded /> },
+  { label: "Blueprints", labelKey: "wiki.hub.sectionBlueprints", route: "/blueprints", icon: <DescriptionRounded /> },
+  { label: "Crafting Calculator", labelKey: "wiki.hub.sectionCraftingCalculator", route: "/crafting/calculator", icon: <CalculateRounded /> },
+  { label: "Resources", labelKey: "wiki.hub.sectionResources", route: "/resources", icon: <TerrainRounded /> },
+  { label: "Mining", labelKey: "wiki.hub.sectionMining", route: "/mining", icon: <ConstructionRounded /> },
 ]
 
 export function WikiHub() {
@@ -100,7 +101,7 @@ export function WikiHub() {
                     {section.icon}
                   </Avatar>
                   <Typography variant="subtitle1" fontWeight={600} textAlign="center">
-                    {section.label}
+                    {t(section.labelKey, section.label)}
                   </Typography>
                 </CardContent>
               </CardActionArea>
