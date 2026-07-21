@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from "react"
 import {
   Box,
+  Button,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
   Chip,
+  CircularProgress,
   Collapse,
   Divider,
   Fade,
@@ -25,8 +27,15 @@ import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
 import { formatMarketUrl } from "../../domain/urls"
-import type { ListingSearchResult } from "../../../../store/api/v2/market"
-import { useSearchBuyOrdersQuery } from "../../../../store/api/v2/market"
+import type {
+  ListingSearchResult,
+  GameItemListingResult,
+} from "../../../../store/api/v2/market"
+import {
+  useSearchBuyOrdersQuery,
+  useGetListingsQuery,
+  useAddToCartMutation,
+} from "../../../../store/api/v2/market"
 import { ListingSkeleton } from "../../../../components/skeletons"
 import { EmptyListings } from "../../../../components/empty-states"
 import { MarketListingRating } from "../../../../components/rating/ListingRating"
@@ -601,7 +610,15 @@ function GroupCard({
             >
               {t("MarketRedesign.forSale", "For sale")}
             </Typography>
-            <GroupSellers listings={listings} />
+            {/* Sell side — one row per VARIANT (quality tier), the unit buyers
+                actually add to cart. Fetched server-side by game_item_id so it's
+                complete (all sellers, all variants), not limited to the search
+                page. Falls back to the client-grouped listings if no id. */}
+            {cheapest.game_item_id ? (
+              <GroupSellers gameItemId={cheapest.game_item_id} />
+            ) : (
+              <GroupSellersFallback listings={listings} />
+            )}
 
             {/* Buy side — who WANTS this item (EVE-style market depth: asks + bids
                 side by side). Only render when the group carries a game_item_id
@@ -680,25 +697,50 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
 }
 
 /**
- * GroupSellers — per-seller options for an expanded group. Rich sub-cards for a
- * handful of sellers, a compact scrollable market-depth row list beyond ~6.
- * Sellers arrive already sorted cheapest-first; index 0 is the "Best" price.
+ * GroupSellers — the SELL side of an item's market depth, one row per VARIANT
+ * (quality tier) per seller, not per listing. Fetched server-side by
+ * game_item_id via useGetListingsQuery (now per-variant), so it's complete (all
+ * sellers, all variants) and each row is the exact unit a buyer adds to cart
+ * (listing_id + variant_id). Sorted cheapest-first; index 0 is the "Best" price.
  */
-function GroupSellers({ listings }: { listings: ListingSearchResult[] }) {
-  const dense = listings.length > 6
+function GroupSellers({ gameItemId }: { gameItemId: string }) {
+  const { t } = useTranslation()
+  const { data, isLoading, error } = useGetListingsQuery({
+    id: gameItemId,
+    sortBy: "price",
+    sortOrder: "asc",
+    pageSize: 100,
+  })
 
+  if (isLoading) {
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+        <CircularProgress size={24} />
+      </Box>
+    )
+  }
+  const variants = data?.listings ?? []
+  if (error || variants.length === 0) {
+    return (
+      <Typography variant="body2" sx={{ color: "text.secondary", py: 1 }}>
+        {t("MarketRedesign.noSellers", "No sellers available right now.")}
+      </Typography>
+    )
+  }
+
+  const dense = variants.length > 6
   return dense ? (
     <Box sx={{ maxHeight: 360, overflowY: "auto" }}>
       <Stack divider={<Divider />}>
-        {listings.map((s, i) => (
+        {variants.map((v, i) => (
           <Fade
-            key={s.listing_id}
+            key={`${v.listing_id}:${v.variant_id}`}
             in
             timeout={300}
             style={{ transitionDelay: `${Math.min(i, 8) * 40}ms` }}
           >
             <Box>
-              <SellerRow listing={s} best={i === 0} />
+              <VariantRow variant={v} best={i === 0} />
             </Box>
           </Fade>
         ))}
@@ -706,15 +748,15 @@ function GroupSellers({ listings }: { listings: ListingSearchResult[] }) {
     </Box>
   ) : (
     <Grid container spacing={1.5}>
-      {listings.map((s, i) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={s.listing_id}>
+      {variants.map((v, i) => (
+        <Grid item xs={12} sm={6} md={4} lg={3} key={`${v.listing_id}:${v.variant_id}`}>
           <Grow
             in
             timeout={300}
             style={{ transformOrigin: "top", transitionDelay: `${Math.min(i, 8) * 40}ms` }}
           >
             <Box sx={{ height: "100%" }}>
-              <SellerSubCard listing={s} best={i === 0} />
+              <VariantSubCard variant={v} best={i === 0} />
             </Box>
           </Grow>
         </Grid>
@@ -723,35 +765,70 @@ function GroupSellers({ listings }: { listings: ListingSearchResult[] }) {
   )
 }
 
-function SellerRow({
-  listing,
-  best,
-}: {
-  listing: ListingSearchResult
-  best: boolean
-}) {
-  const qc = qualityChipProps(listing)
+/** Quality chip for a single per-variant row (single tier/value, not a range). */
+function variantQualityChip(
+  v: GameItemListingResult,
+): { label: string; color: string } | null {
+  if (v.quality_value != null) {
+    return { label: `${v.quality_value}`, color: qualityValueColor(v.quality_value) }
+  }
+  if (v.quality_tier != null) {
+    return { label: `Q${v.quality_tier}`, color: qualityColor(v.quality_tier) }
+  }
+  return null
+}
+
+function variantLabel(v: GameItemListingResult): string | null {
+  return v.variant_display_name || v.variant_short_name || null
+}
+
+/** Add-to-cart button for a variant row — the unit buyers actually purchase. */
+function AddVariantButton({ variant }: { variant: GameItemListingResult }) {
+  const { t } = useTranslation()
+  const [addToCart, { isLoading }] = useAddToCartMutation()
+  const outOfStock = (variant.quantity_available ?? 0) === 0
   return (
-    <Stack
-      component={RouterLink}
-      to={formatMarketUrl(listing)}
-      direction="row"
-      spacing={1.5}
-      alignItems="center"
-      sx={{
-        py: 1,
-        textDecoration: "none",
-        color: "inherit",
-        "&:hover": { color: "secondary.main" },
+    <Button
+      size="small"
+      variant="outlined"
+      color="primary"
+      disabled={isLoading || outOfStock}
+      onClick={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        addToCart({
+          addToCartRequest: {
+            listing_id: variant.listing_id,
+            variant_id: variant.variant_id,
+            quantity: 1,
+          },
+        })
       }}
+      sx={{ minWidth: 0, px: 1 }}
     >
+      {t("MarketRedesign.addToCart", "Add")}
+    </Button>
+  )
+}
+
+function VariantRow({ variant, best }: { variant: GameItemListingResult; best: boolean }) {
+  const qc = variantQualityChip(variant)
+  const label = variantLabel(variant)
+  return (
+    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ py: 1 }}>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-          {listing.shop_name}
-        </Typography>
+        <RouterLink
+          to={formatMarketUrl(variant)}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Typography variant="body2" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }} noWrap>
+            {variant.shop_name}
+            {label ? ` · ${label}` : ""}
+          </Typography>
+        </RouterLink>
         <MarketListingRating
-          avg_rating={listing.shop_rating}
-          rating_count={listing.shop_rating_count ?? null}
+          avg_rating={variant.shop_rating}
+          rating_count={null}
           total_rating={0}
           rating_streak={null}
           total_orders={null}
@@ -762,7 +839,6 @@ function SellerRow({
           showBadges={false}
         />
       </Box>
-      <ListingFlagChips listing={listing} />
       {qc && (
         <Chip
           label={qc.label}
@@ -771,75 +847,108 @@ function SellerRow({
         />
       )}
       {best && <Chip label="Best" size="small" color="primary" sx={{ height: 20 }} />}
-      <Typography
-        variant="body2"
-        sx={{ color: "text.primary", width: 90, textAlign: "right" }}
-      >
-        {listing.quantity_available != null
-          ? listing.quantity_available.toLocaleString()
-          : "—"}
+      <Typography variant="body2" sx={{ color: "text.primary", width: 70, textAlign: "right" }}>
+        {variant.quantity_available != null ? variant.quantity_available.toLocaleString() : "—"}
       </Typography>
-      <Typography
-        variant="body2"
-        sx={{ color: "primary.main", fontWeight: 700, width: 120, textAlign: "right" }}
-      >
-        {formatPrice(listing.price_min)}
+      <Typography variant="body2" sx={{ color: "primary.main", fontWeight: 700, width: 100, textAlign: "right" }}>
+        {formatPrice(variant.price)}
       </Typography>
+      <AddVariantButton variant={variant} />
     </Stack>
   )
 }
 
-function SellerSubCard({
-  listing,
-  best,
-}: {
-  listing: ListingSearchResult
-  best: boolean
-}) {
+function VariantSubCard({ variant, best }: { variant: GameItemListingResult; best: boolean }) {
   const { t } = useTranslation()
-  const qc = qualityChipProps(listing)
+  const qc = variantQualityChip(variant)
+  const label = variantLabel(variant)
   return (
     <Card variant="outlined" sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}>
-      <CardActionArea component={RouterLink} to={formatMarketUrl(listing)} sx={{ height: "100%" }}>
-        <CardContent>
-          <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
-            <Typography variant="body2" sx={{ color: "text.secondary", flex: 1 }} noWrap>
-              {listing.shop_name}
+      <CardContent>
+        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
+          <RouterLink to={formatMarketUrl(variant)} style={{ textDecoration: "none", color: "inherit", flex: 1, minWidth: 0 }}>
+            <Typography variant="body2" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }} noWrap>
+              {variant.shop_name}
             </Typography>
-            <ListingFlagChips listing={listing} />
-            {qc && (
-              <Chip
-                label={qc.label}
-                size="small"
-                sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }}
-              />
-            )}
-            {best && <Chip label="Best" size="small" color="primary" sx={{ height: 20 }} />}
-          </Stack>
-          <MarketListingRating
-            avg_rating={listing.shop_rating}
-            rating_count={listing.shop_rating_count ?? null}
-            total_rating={0}
-            rating_streak={null}
-            total_orders={null}
-            total_assignments={null}
-            response_rate={null}
-            badge_ids={[]}
-            display_limit={0}
-            showBadges={false}
-          />
-          <Typography variant="h6" sx={{ color: "primary.main", mt: 1 }}>
-            {formatPrice(listing.price_min)}
+          </RouterLink>
+          {qc && (
+            <Chip
+              label={qc.label}
+              size="small"
+              sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }}
+            />
+          )}
+          {best && <Chip label="Best" size="small" color="primary" sx={{ height: 20 }} />}
+        </Stack>
+        {label && (
+          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.5 }} noWrap>
+            {label}
           </Typography>
+        )}
+        <MarketListingRating
+          avg_rating={variant.shop_rating}
+          rating_count={null}
+          total_rating={0}
+          rating_streak={null}
+          total_orders={null}
+          total_assignments={null}
+          response_rate={null}
+          badge_ids={[]}
+          display_limit={0}
+          showBadges={false}
+        />
+        <Typography variant="h6" sx={{ color: "primary.main", mt: 1 }}>
+          {formatPrice(variant.price)}
+        </Typography>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 0.5 }}>
           <Typography variant="caption" sx={{ color: "text.primary" }}>
-            {listing.quantity_available != null
+            {variant.quantity_available != null
               ? t("MarketRedesign.available", "{{count}} available", {
-                  count: listing.quantity_available,
+                  count: variant.quantity_available,
                 })
               : ""}
           </Typography>
-        </CardContent>
-      </CardActionArea>
+          <AddVariantButton variant={variant} />
+        </Stack>
+      </CardContent>
     </Card>
+  )
+}
+
+/**
+ * GroupSellersFallback — used only when a group has no game_item_id (shouldn't
+ * happen with current search results, but kept as a safe fallback). Renders the
+ * client-grouped per-LISTING rows without the per-variant fetch or add-to-cart.
+ */
+function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] }) {
+  return (
+    <Stack divider={<Divider />}>
+      {listings.map((s, i) => {
+        const qc = qualityChipProps(s)
+        return (
+          <Stack
+            key={s.listing_id}
+            component={RouterLink}
+            to={formatMarketUrl(s)}
+            direction="row"
+            spacing={1.5}
+            alignItems="center"
+            sx={{ py: 1, textDecoration: "none", color: "inherit", "&:hover": { color: "secondary.main" } }}
+          >
+            <Typography variant="body2" sx={{ flex: 1, color: "text.secondary" }} noWrap>
+              {s.shop_name}
+            </Typography>
+            <ListingFlagChips listing={s} />
+            {qc && (
+              <Chip label={qc.label} size="small" sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }} />
+            )}
+            {i === 0 && <Chip label="Best" size="small" color="primary" sx={{ height: 20 }} />}
+            <Typography variant="body2" sx={{ color: "primary.main", fontWeight: 700, width: 110, textAlign: "right" }}>
+              {formatPrice(s.price_min)}
+            </Typography>
+          </Stack>
+        )
+      })}
+    </Stack>
   )
 }

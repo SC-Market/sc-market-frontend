@@ -51,13 +51,13 @@ const headCells: readonly HeadCell<GameItemListingResult>[] = [
     label: "MarketAggregateView.sellerRating",
   },
   {
-    id: "quality_tier_min",
+    id: "quality_tier",
     numeric: false,
     disablePadding: false,
     label: "Quality Tier",
   },
   {
-    id: "price_min",
+    id: "price",
     numeric: true,
     disablePadding: false,
     label: "MarketAggregateView.price",
@@ -144,8 +144,8 @@ export function GameItemListingsV2() {
     const priceMap = new Map<number, number>();
     
     listings.forEach((listing) => {
-      const tier = listing.quality_tier_min ?? 0;
-      const price = listing.price_min;
+      const tier = listing.quality_tier ?? 0;
+      const price = listing.price;
       
       if (tier > 0 && price > 0) {
         const currentBest = priceMap.get(tier);
@@ -346,9 +346,9 @@ export function GameItemListingsV2() {
           disableSelect
           rows={listings.map((listing) => ({
             ...listing,
-            isBestPrice: bestPriceByTier.get(listing.quality_tier_min ?? 0) === listing.price_min,
+            isBestPrice: bestPriceByTier.get(listing.quality_tier ?? 0) === listing.price,
           }))}
-          initialSort="price_min"
+          initialSort="price"
           keyAttr="listing_id"
           headCells={headCells}
           generateRow={(props) => (
@@ -581,15 +581,9 @@ function GameItemListingRow(props: {
 
       {/* Quality Tier */}
       <TableCell align="left">
-        {listing.quality_tier_min && listing.quality_tier_max ? (
+        {listing.quality_tier ? (
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <QualityBadge tier={listing.quality_tier_min} size="small" />
-            {listing.quality_tier_min !== listing.quality_tier_max && (
-              <>
-                <Typography variant="caption">-</Typography>
-                <QualityBadge tier={listing.quality_tier_max} size="small" />
-              </>
-            )}
+            <QualityBadge tier={listing.quality_tier} size="small" />
           </Box>
         ) : (
           <Typography variant="caption" color="text.secondary">
@@ -606,13 +600,8 @@ function GameItemListingRow(props: {
             color={props.row.isBestPrice ? "success.main" : "primary"}
             fontWeight={props.row.isBestPrice ? "bold" : "normal"}
           >
-            {listing.price_min.toLocaleString(i18n.language)} aUEC
+            {listing.price.toLocaleString(i18n.language)} aUEC
           </Typography>
-          {listing.price_min !== listing.price_max && (
-            <Typography variant="caption" color="text.secondary">
-              - {listing.price_max.toLocaleString(i18n.language)} aUEC
-            </Typography>
-          )}
           {props.row.isBestPrice && (
             <Typography variant="caption" color="success.main" display="block">
               Best Price
