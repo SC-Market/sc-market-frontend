@@ -184,6 +184,8 @@ export function WikiItemBrowser() {
   const { data, isLoading, error } = useSearchItemsQuery({
     text: queryParams.q || undefined,
     type: queryParams.type || typeFilter || undefined,
+    size: sizeFilter || undefined,
+    grade: gradeFilter || undefined,
     manufacturer: queryParams.manufacturer || undefined,
     page,
     pageSize: viewMode === "list" ? 30 : 24,

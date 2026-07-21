@@ -46,6 +46,7 @@ import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } 
 import { MARKET_PATHS } from "../../routes/paths"
 import { Helmet } from "react-helmet"
 import { FRONTEND_URL } from "../../util/constants"
+import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
@@ -85,9 +86,7 @@ export function WikiItemDetail() {
         maxWidth="md"
       >
         <Grid item xs={12}>
-          <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-            <CircularProgress />
-          </Box>
+          <DetailPageSkeleton />
         </Grid>
       </StandardPageLayout>
     )
@@ -119,6 +118,11 @@ export function WikiItemDetail() {
       description={seoDescription}
       canonicalUrl={`/wiki/items/${id}`}
       headerTitle={item.name}
+      breadcrumbs={[
+        { label: "Wiki", href: "/wiki" },
+        { label: "Items", href: "/wiki/items" },
+        { label: item.name },
+      ]}
       sidebarOpen={true}
       maxWidth="md"
     >
