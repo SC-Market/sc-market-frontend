@@ -6,15 +6,16 @@
  */
 
 import React, { useMemo, useState } from "react"
+import { useCookies } from "react-cookie"
 import {
   Avatar,
   Badge,
   Box,
-  Chip,
   Collapse,
   Divider,
   Drawer,
   IconButton,
+  InputAdornment,
   List,
   ListItemButton,
   ListItemIcon,
@@ -22,6 +23,8 @@ import {
   Menu,
   MenuItem,
   Stack,
+  TextField,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material"
@@ -52,6 +55,9 @@ import {
   BusinessRounded,
   PersonAddRounded,
   CalculateRounded,
+  StarRounded,
+  StarBorderRounded,
+  CloseRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -61,6 +67,9 @@ import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
 import { SHOP_PATHS } from "../../routes/paths"
+import { useUnreadChatCount } from "../../features/chats"
+import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
+import { haptic } from "../../util/haptics"
 
 type NavContext = "browse" | "shop" | "org" | "admin"
 
@@ -69,6 +78,8 @@ interface NavItem {
   to: string
   icon: React.ReactNode
   badge?: number
+  /** Optional subsection grouping label shown above the item */
+  group?: string
 }
 
 export function SidebarV2() {
@@ -81,9 +92,22 @@ export function SidebarV2() {
 
   const { data: profile } = useGetUserProfileQuery()
   const { data: shops = [] } = useGetMyShopsQuery()
+  const unreadChatCount = useUnreadChatCount()
+  const pendingOrderCount = usePendingOrderCount()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [search, setSearch] = useState("")
+  const [cookies, setCookie] = useCookies(["starred_nav_v2"])
+  const starred: string[] = useMemo(() => cookies.starred_nav_v2 || [], [cookies.starred_nav_v2])
   const navigate = useNavigate()
+
+  const toggleStar = (path: string) => {
+    haptic.light()
+    const next = starred.includes(path)
+      ? starred.filter((p) => p !== path)
+      : [...starred, path]
+    setCookie("starred_nav_v2", next, { path: "/", maxAge: 31536000 })
+  }
 
   // Infer context from URL
   const inferredContext = useMemo<{ ctx: NavContext; shopSlug: string | null; orgId: string | null }>(() => {
@@ -201,29 +225,38 @@ export function SidebarV2() {
       return items
     }
     // Browse mode
+    const marketplace = t("nav.groupMarketplace", "Marketplace")
+    const personal = t("nav.groupPersonal", "Personal")
     const items: NavItem[] = [
-      { label: t("nav.market", "Market"), to: "/market", icon: <SearchRounded /> },
-      { label: t("nav.services", "Services"), to: "/market/services", icon: <DesignServicesRounded /> },
-      { label: t("nav.contracts", "Contracts"), to: "/contracts", icon: <DescriptionRounded /> },
-      { label: t("nav.buyOrders", "Buy Orders"), to: "/buyorders", icon: <ShoppingCartRounded /> },
+      { label: t("nav.market", "Market"), to: "/market", icon: <SearchRounded />, group: marketplace },
+      { label: t("nav.services", "Services"), to: "/market/services", icon: <DesignServicesRounded />, group: marketplace },
+      { label: t("nav.contracts", "Contracts"), to: "/contracts", icon: <DescriptionRounded />, group: marketplace },
+      { label: t("nav.buyOrders", "Buy Orders"), to: "/buyorders", icon: <ShoppingCartRounded />, group: marketplace },
     ]
     if (profile) {
       items.push(
-        { label: t("nav.myOrders", "My Orders"), to: "/orders", icon: <LocalShippingRounded /> },
-        { label: t("nav.assignedOrders", "Assigned to Me"), to: "/dashboard", icon: <DashboardRounded /> },
-        { label: t("nav.messages", "Messages"), to: "/messages", icon: <MessageRounded /> },
-        { label: t("nav.myShops", "My Shops"), to: "/dashboard/shops", icon: <StorefrontRounded /> },
-        { label: t("nav.inventory", "Inventory"), to: "/inventory", icon: <InventoryRounded /> },
-        { label: t("nav.availability", "Availability"), to: "/availability", icon: <DescriptionRounded /> },
+        { label: t("nav.myOrders", "My Orders"), to: "/orders", icon: <LocalShippingRounded />, badge: pendingOrderCount, group: personal },
+        { label: t("nav.assignedOrders", "Assigned to Me"), to: "/dashboard", icon: <DashboardRounded />, group: personal },
+        { label: t("nav.messages", "Messages"), to: "/messages", icon: <MessageRounded />, badge: unreadChatCount, group: personal },
+        { label: t("nav.myShops", "My Shops"), to: "/dashboard/shops", icon: <StorefrontRounded />, group: personal },
+        { label: t("nav.inventory", "Inventory"), to: "/inventory", icon: <InventoryRounded />, group: personal },
+        { label: t("nav.availability", "Availability"), to: "/availability", icon: <DescriptionRounded />, group: personal },
       )
     }
     return items
-  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t])
+  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t, pendingOrderCount, unreadChatCount])
 
-  const [wikiOpen, setWikiOpen] = useState(false)
-  const [craftingOpen, setCraftingOpen] = useState(false)
+  const [wikiOpen, setWikiOpen] = useState(() => location.pathname.startsWith("/wiki"))
+  const [craftingOpen, setCraftingOpen] = useState(
+    () =>
+      location.pathname.startsWith("/blueprints") ||
+      location.pathname.startsWith("/crafting") ||
+      location.pathname.startsWith("/resources") ||
+      location.pathname.startsWith("/shopping-lists"),
+  )
 
   const handleContextSwitch = (ctx: NavContext, id?: string) => {
+    haptic.selection()
     if (ctx === "admin") {
       setContextOverride({ ctx: "admin", shopSlug: null, orgId: null })
       navigate("/admin/orders")
@@ -253,7 +286,7 @@ export function SidebarV2() {
   }
 
   const sidebarContrast = theme.palette.getContrastText(
-    (theme.palette.background as any).sidebar || theme.palette.background.paper,
+    theme.palette.background.sidebar || theme.palette.background.paper,
   )
 
   const itemSx = {
@@ -267,14 +300,116 @@ export function SidebarV2() {
       "& .MuiListItemText-primary": { color: "primary.main" },
     },
     "&:hover": { backgroundColor: theme.palette.action.hover },
+    // reveal star button on hover
+    "&:hover .nav-star, &:focus-within .nav-star": { opacity: 1 },
   }
+
+  const sectionHeaderSx = {
+    px: 2,
+    pt: 1.5,
+    pb: 0.5,
+    fontWeight: "bold",
+    opacity: 0.7,
+    textTransform: "uppercase" as const,
+    fontSize: "0.85em",
+  }
+
+  const closeIfMobile = () => {
+    if (isMobile) setDrawerOpen(false)
+  }
+
+  const q = search.trim().toLowerCase()
+  const matchesSearch = (label: string) => !q || label.toLowerCase().includes(q)
+
+  // Render a single nav link with star toggle
+  const renderNavItem = (item: NavItem, nested = false) => (
+    <ListItemButton
+      key={item.to}
+      component={Link}
+      to={item.to}
+      selected={isActive(item.to)}
+      sx={itemSx}
+      onClick={() => { haptic.light(); closeIfMobile() }}
+    >
+      <ListItemIcon sx={{ minWidth: nested ? 32 : 36 }}>{item.icon}</ListItemIcon>
+      <ListItemText primary={item.label} primaryTypographyProps={{ variant: "subtitle2" }} />
+      {item.badge && item.badge > 0 ? (
+        <Badge
+          badgeContent={item.badge}
+          color="primary"
+          sx={{ mr: 1.5, "& .MuiBadge-badge": { position: "static", transform: "none" } }}
+        />
+      ) : null}
+      <Tooltip title={starred.includes(item.to) ? t("nav.unstar", "Unpin") : t("nav.star", "Pin")}>
+        <IconButton
+          className="nav-star"
+          size="small"
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStar(item.to) }}
+          sx={{
+            opacity: starred.includes(item.to) ? 1 : 0,
+            transition: "opacity 0.2s",
+            color: starred.includes(item.to) ? "primary.main" : sidebarContrast,
+            p: 0.25,
+          }}
+        >
+          {starred.includes(item.to) ? <StarRounded fontSize="small" /> : <StarBorderRounded fontSize="small" />}
+        </IconButton>
+      </Tooltip>
+    </ListItemButton>
+  )
+
+  // Flat list of every navigable destination for starred lookup + search
+  const allNavigable = useMemo<NavItem[]>(() => {
+    const wiki: NavItem[] = [
+      { label: t("sidebar.wiki.items", "Items"), to: "/wiki/items", icon: <MenuBookRounded /> },
+      { label: t("sidebar.wiki.vehicles", "Ships & Vehicles"), to: "/wiki/ships", icon: <RocketLaunchRounded /> },
+      { label: t("sidebar.wiki.commodities", "Commodities"), to: "/wiki/commodities", icon: <InventoryRounded /> },
+      { label: t("sidebar.wiki.locations", "Locations"), to: "/wiki/locations", icon: <DescriptionRounded /> },
+      { label: t("sidebar.wiki.manufacturers", "Manufacturers"), to: "/wiki/manufacturers", icon: <StorefrontRounded /> },
+      { label: t("sidebar.wiki.refinery", "Refinery"), to: "/wiki/refinery", icon: <ScienceRounded /> },
+    ]
+    const gameData: NavItem[] = [
+      { label: t("sidebar.gameData.missions", "Missions"), to: "/missions", icon: <DescriptionRounded /> },
+      { label: t("sidebar.gameData.mining", "Mining"), to: "/mining", icon: <InventoryRounded /> },
+      { label: t("sidebar.gameData.blueprints", "Blueprints"), to: "/blueprints", icon: <ScienceRounded /> },
+      { label: t("sidebar.gameData.craftingCalculator", "Crafting Calculator"), to: "/crafting/calculator", icon: <CalculateRounded /> },
+      { label: t("sidebar.gameData.resources", "Resources"), to: "/resources", icon: <InventoryRounded /> },
+    ]
+    if (profile) {
+      gameData.push({ label: t("sidebar.gameData.shoppingLists", "Shopping Lists"), to: "/shopping-lists", icon: <ShoppingCartRounded /> })
+    }
+    return [...contextItems, ...gameData, ...wiki]
+  }, [contextItems, profile, t])
+
+  const starredItems = useMemo(
+    () => allNavigable.filter((item) => starred.includes(item.to)),
+    [allNavigable, starred],
+  )
 
   const drawerContent = (
     <Stack sx={{ height: "100%", overflow: "hidden" }}>
       {/* Context Switcher */}
       <Box
-        sx={{ px: 2, py: 1.5, cursor: "pointer" }}
+        role="button"
+        tabIndex={0}
+        aria-label={t("nav.switchContext", "Switch context")}
+        aria-haspopup="true"
+        aria-expanded={Boolean(anchorEl)}
+        sx={{
+          px: 2,
+          py: 1.5,
+          cursor: "pointer",
+          transition: "background-color 0.2s",
+          "&:hover": { backgroundColor: theme.palette.action.hover },
+          "&:focus-visible": { backgroundColor: theme.palette.action.hover, outline: "none" },
+        }}
         onClick={(e) => setAnchorEl(e.currentTarget)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault()
+            setAnchorEl(e.currentTarget as HTMLElement)
+          }
+        }}
       >
         <Stack direction="row" alignItems="center" spacing={1.5}>
           <Avatar
@@ -350,157 +485,155 @@ export function SidebarV2() {
             <ListItemText>{org.name}</ListItemText>
           </MenuItem>
         ))}
-        {profile?.role === "admin" && <Divider />}
-        {profile?.role === "admin" && (
+        {profile?.role === "admin" && [
+          <Divider key="admin-divider" />,
           <MenuItem
+            key="admin-item"
             selected={context === "admin"}
             onClick={() => handleContextSwitch("admin")}
           >
             <ListItemIcon><AdminPanelSettingsRounded /></ListItemIcon>
             <ListItemText>{t("nav.admin", "Admin")}</ListItemText>
-          </MenuItem>
-        )}
+          </MenuItem>,
+        ]}
       </Menu>
+
+      {/* Search bar */}
+      <Box sx={{ px: 2, pb: 1 }}>
+        <TextField
+          size="small"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={t("nav.searchPlaceholder", "Search navigation...")}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchRounded fontSize="small" sx={{ color: "text.secondary" }} />
+              </InputAdornment>
+            ),
+            endAdornment: search ? (
+              <InputAdornment position="end">
+                <IconButton size="small" onClick={() => setSearch("")} aria-label={t("nav.clearSearch", "Clear search")}>
+                  <CloseRounded fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ) : undefined,
+          }}
+        />
+      </Box>
 
       <Divider sx={{ mx: 2, my: 0.5 }} />
 
       {/* Scrollable content area */}
       <Box sx={{ flex: 1, overflowY: "auto", py: 1 }}>
-      {/* Context-specific items */}
-      <List dense sx={{ px: 1 }}>
-        {contextItems.map((item) => (
-          <ListItemButton
-            key={item.to}
-            component={Link}
-            to={item.to}
-            selected={isActive(item.to)}
-            sx={itemSx}
-            onClick={() => isMobile && setDrawerOpen(false)}
-          >
-            <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
-            <ListItemText
-              primary={item.label}
-              primaryTypographyProps={{ variant: "subtitle2" }}
-            />
-            {item.badge && item.badge > 0 && (
-              <Chip label={item.badge} size="small" color="primary" sx={{ height: 20, fontSize: "0.7rem" }} />
-            )}
-          </ListItemButton>
-        ))}
-      </List>
-
-      {/* Browse section (only in browse mode) */}
-      {context === "browse" && (
+      {q ? (
+        /* SEARCH RESULTS — flat filtered list across all destinations */
+        <List dense sx={{ px: 1 }}>
+          {allNavigable.filter((item) => matchesSearch(item.label)).length === 0 ? (
+            <Typography variant="body2" sx={{ px: 2, py: 2, color: "text.secondary", textAlign: "center" }}>
+              {t("nav.noResults", "No matching pages")}
+            </Typography>
+          ) : (
+            allNavigable
+              .filter((item) => matchesSearch(item.label))
+              .map((item) => renderNavItem(item))
+          )}
+        </List>
+      ) : (
         <>
-          <Typography variant="body2" sx={{ px: 2, pt: 1.5, pb: 0.5, fontWeight: "bold", opacity: 0.7, textTransform: "uppercase", fontSize: "0.85em" }}>
-            {t("nav.groupBrowse", "Browse")}
+          {/* Starred / pinned section */}
+          {starredItems.length > 0 && (
+            <>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, ...sectionHeaderSx }}>
+                <StarRounded sx={{ fontSize: "1em" }} />
+                <Typography variant="body2" component="span" sx={{ fontWeight: "bold", fontSize: "1em", textTransform: "uppercase" }}>
+                  {t("nav.pinned", "Pinned")}
+                </Typography>
+              </Box>
+              <List dense sx={{ px: 1 }}>
+                {starredItems.map((item) => renderNavItem(item))}
+              </List>
+              <Divider sx={{ mx: 2, my: 0.5 }} />
+            </>
+          )}
+
+          {/* Context-specific items — grouped by subsection */}
+          <List dense sx={{ px: 1 }}>
+            {contextItems.map((item, i) => {
+              const showGroup = item.group && item.group !== contextItems[i - 1]?.group
+              return (
+                <React.Fragment key={item.to}>
+                  {showGroup && (
+                    <Typography variant="body2" sx={sectionHeaderSx}>
+                      {item.group}
+                    </Typography>
+                  )}
+                  {renderNavItem(item)}
+                </React.Fragment>
+              )
+            })}
+          </List>
+
+          {/* Browse section (only in browse mode) */}
+          {context === "browse" && (
+            <>
+              <Typography variant="body2" sx={sectionHeaderSx}>
+                {t("nav.groupBrowse", "Browse")}
+              </Typography>
+              <List dense sx={{ px: 1 }}>
+                {renderNavItem({ label: t("nav.shops", "Shops"), to: "/shops", icon: <StorefrontRounded /> })}
+                {renderNavItem({ label: t("nav.orgs", "Organizations"), to: "/contractors", icon: <BusinessRounded /> })}
+                {renderNavItem({ label: t("nav.recruiting", "Recruiting"), to: "/recruiting", icon: <PersonAddRounded /> })}
+                {profile && renderNavItem({ label: t("nav.myOrgs", "My Organizations"), to: "/my-orgs", icon: <PeopleRounded /> })}
+              </List>
+            </>
+          )}
+
+          <Divider sx={{ mx: 2, my: 0.5 }} />
+
+          {/* Game Data section */}
+          <Typography variant="body2" sx={sectionHeaderSx}>
+            {t("sidebar.gameData.title", "Game Data")}
           </Typography>
           <List dense sx={{ px: 1 }}>
-            <ListItemButton component={Link} to="/shops" selected={isActive("/shops")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><StorefrontRounded /></ListItemIcon>
-              <ListItemText primary={t("nav.shops", "Shops")} primaryTypographyProps={{ variant: "subtitle2" }} />
+            {renderNavItem({ label: t("sidebar.gameData.missions", "Missions"), to: "/missions", icon: <DescriptionRounded /> })}
+            {renderNavItem({ label: t("sidebar.gameData.mining", "Mining"), to: "/mining", icon: <InventoryRounded /> })}
+
+            {/* Crafting — collapsible */}
+            <ListItemButton sx={itemSx} onClick={() => setCraftingOpen((v) => !v)}>
+              <ListItemIcon sx={{ minWidth: 36 }}><ScienceRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.gameData.crafting", "Crafting")} primaryTypographyProps={{ variant: "subtitle2" }} />
+              {craftingOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
             </ListItemButton>
-            <ListItemButton component={Link} to="/contractors" selected={isActive("/contractors")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><BusinessRounded /></ListItemIcon>
-              <ListItemText primary={t("nav.orgs", "Organizations")} primaryTypographyProps={{ variant: "subtitle2" }} />
+            <Collapse in={craftingOpen}>
+              <List dense disablePadding sx={{ pl: 2 }}>
+                {renderNavItem({ label: t("sidebar.gameData.blueprints", "Blueprints"), to: "/blueprints", icon: <ScienceRounded /> }, true)}
+                {renderNavItem({ label: t("sidebar.gameData.craftingCalculator", "Crafting Calculator"), to: "/crafting/calculator", icon: <CalculateRounded /> }, true)}
+                {renderNavItem({ label: t("sidebar.gameData.resources", "Resources"), to: "/resources", icon: <InventoryRounded /> }, true)}
+                {profile && renderNavItem({ label: t("sidebar.gameData.shoppingLists", "Shopping Lists"), to: "/shopping-lists", icon: <ShoppingCartRounded /> }, true)}
+              </List>
+            </Collapse>
+
+            {/* Wiki — collapsible */}
+            <ListItemButton sx={itemSx} onClick={() => setWikiOpen((v) => !v)}>
+              <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
+              <ListItemText primary={t("sidebar.wiki.title", "Wiki")} primaryTypographyProps={{ variant: "subtitle2" }} />
+              {wikiOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
             </ListItemButton>
-            <ListItemButton component={Link} to="/recruiting" selected={isActive("/recruiting")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><PersonAddRounded /></ListItemIcon>
-              <ListItemText primary={t("nav.recruiting", "Recruiting")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            {profile && (
-            <ListItemButton component={Link} to="/my-orgs" selected={isActive("/my-orgs")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><PeopleRounded /></ListItemIcon>
-              <ListItemText primary={t("nav.myOrgs", "My Organizations")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            )}
+            <Collapse in={wikiOpen}>
+              <List dense disablePadding sx={{ pl: 2 }}>
+                {renderNavItem({ label: t("sidebar.wiki.items", "Items"), to: "/wiki/items", icon: <MenuBookRounded /> }, true)}
+                {renderNavItem({ label: t("sidebar.wiki.vehicles", "Ships & Vehicles"), to: "/wiki/ships", icon: <RocketLaunchRounded /> }, true)}
+                {renderNavItem({ label: t("sidebar.wiki.commodities", "Commodities"), to: "/wiki/commodities", icon: <InventoryRounded /> }, true)}
+                {renderNavItem({ label: t("sidebar.wiki.locations", "Locations"), to: "/wiki/locations", icon: <DescriptionRounded /> }, true)}
+                {renderNavItem({ label: t("sidebar.wiki.manufacturers", "Manufacturers"), to: "/wiki/manufacturers", icon: <StorefrontRounded /> }, true)}
+                {renderNavItem({ label: t("sidebar.wiki.refinery", "Refinery"), to: "/wiki/refinery", icon: <ScienceRounded /> }, true)}
+              </List>
+            </Collapse>
           </List>
         </>
       )}
-
-      <Divider sx={{ mx: 2, my: 0.5 }} />
-
-      {/* Game Data section */}
-      <Typography variant="body2" sx={{ px: 2, pt: 1.5, pb: 0.5, fontWeight: "bold", opacity: 0.7, textTransform: "uppercase", fontSize: "0.85em" }}>
-        {t("sidebar.gameData.title", "Game Data")}
-      </Typography>
-      <List dense sx={{ px: 1 }}>
-        {/* Missions */}
-        <ListItemButton component={Link} to="/missions" selected={isActive("/missions")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-          <ListItemIcon sx={{ minWidth: 36 }}><DescriptionRounded /></ListItemIcon>
-          <ListItemText primary={t("sidebar.gameData.missions", "Missions")} primaryTypographyProps={{ variant: "subtitle2" }} />
-        </ListItemButton>
-
-        {/* Mining */}
-        <ListItemButton component={Link} to="/mining" selected={isActive("/mining")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-          <ListItemIcon sx={{ minWidth: 36 }}><InventoryRounded /></ListItemIcon>
-          <ListItemText primary={t("sidebar.gameData.mining", "Mining")} primaryTypographyProps={{ variant: "subtitle2" }} />
-        </ListItemButton>
-
-        {/* Crafting — collapsible */}
-        <ListItemButton sx={itemSx} onClick={() => setCraftingOpen((v) => !v)}>
-          <ListItemIcon sx={{ minWidth: 36 }}><ScienceRounded /></ListItemIcon>
-          <ListItemText primary={t("sidebar.gameData.crafting", "Crafting")} primaryTypographyProps={{ variant: "subtitle2" }} />
-          {craftingOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
-        </ListItemButton>
-        <Collapse in={craftingOpen}>
-          <List dense disablePadding sx={{ pl: 2 }}>
-            <ListItemButton component={Link} to="/blueprints" selected={isActive("/blueprints")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><ScienceRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.gameData.blueprints", "Blueprints")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/crafting/calculator" selected={isActive("/crafting/calculator")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><CalculateRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.gameData.craftingCalculator", "Crafting Calculator")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/resources" selected={isActive("/resources")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><InventoryRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.gameData.resources", "Resources")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            {profile && (
-            <ListItemButton component={Link} to="/shopping-lists" selected={isActive("/shopping-lists")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><ShoppingCartRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.gameData.shoppingLists", "Shopping Lists")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            )}
-          </List>
-        </Collapse>
-
-        {/* Wiki — collapsible */}
-        <ListItemButton sx={itemSx} onClick={() => setWikiOpen((v) => !v)}>
-          <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
-          <ListItemText primary={t("sidebar.wiki.title", "Wiki")} primaryTypographyProps={{ variant: "subtitle2" }} />
-          {wikiOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
-        </ListItemButton>
-        <Collapse in={wikiOpen}>
-          <List dense disablePadding sx={{ pl: 2 }}>
-            <ListItemButton component={Link} to="/wiki/items" selected={isActive("/wiki/items")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><MenuBookRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.wiki.items", "Items")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/ships" selected={isActive("/wiki/ships")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><RocketLaunchRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.wiki.vehicles", "Ships & Vehicles")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/commodities" selected={isActive("/wiki/commodities")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><InventoryRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.wiki.commodities", "Commodities")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/locations" selected={isActive("/wiki/locations")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><DescriptionRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.wiki.locations", "Locations")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/manufacturers" selected={isActive("/wiki/manufacturers")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><StorefrontRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.wiki.manufacturers", "Manufacturers")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/wiki/refinery" selected={isActive("/wiki/refinery")} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-              <ListItemIcon sx={{ minWidth: 32 }}><ScienceRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.wiki.refinery", "Refinery")} primaryTypographyProps={{ variant: "subtitle2" }} />
-            </ListItemButton>
-          </List>
-        </Collapse>
-      </List>
       </Box>
 
       {/* Account items — sticky at bottom */}
