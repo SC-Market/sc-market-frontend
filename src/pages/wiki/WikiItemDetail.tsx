@@ -101,7 +101,7 @@ export function WikiItemDetail() {
         maxWidth="md"
       >
         <Grid item xs={12}>
-          <Alert severity="error">Failed to load item details. Please try again.</Alert>
+          <Alert severity="error">{t("wiki.itemDetail.loadError", "Failed to load item details. Please try again.")}</Alert>
         </Grid>
       </StandardPageLayout>
     )
@@ -119,8 +119,8 @@ export function WikiItemDetail() {
       canonicalUrl={`/wiki/items/${id}`}
       headerTitle={item.name}
       breadcrumbs={[
-        { label: "Wiki", href: "/wiki" },
-        { label: "Items", href: "/wiki/items" },
+        { label: t("wiki.itemDetail.breadcrumbWiki", "Wiki"), href: "/wiki" },
+        { label: t("wiki.itemDetail.breadcrumbItems", "Items"), href: "/wiki/items" },
         { label: item.name },
       ]}
       sidebarOpen={true}
@@ -184,8 +184,8 @@ export function WikiItemDetail() {
                   <Box sx={{ flex: 1 }}>
                     <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap">
                       {item.type && <Chip label={item.type} color="primary" />}
-                      {item.size && <Chip label={`Size ${item.size}`} />}
-                      {item.grade && <Chip label={`Grade ${item.grade}`} />}
+                      {item.size && <Chip label={`${t("wiki.itemDetail.size", "Size")} ${item.size}`} />}
+                      {item.grade && <Chip label={`${t("wiki.itemDetail.grade", "Grade")} ${item.grade}`} />}
                       {item.manufacturer && <Chip label={item.manufacturer} clickable onClick={() => navigate(`/wiki/manufacturers/${encodeURIComponent(item.manufacturer!)}`)} />}
                     </Stack>
 
@@ -193,15 +193,15 @@ export function WikiItemDetail() {
                     {item.market_stats.listing_count > 0 && (
                       <Card variant="outlined" sx={{ mt: 2, p: 2 }}>
                         <Typography variant="h6" gutterBottom>
-                          Market Availability
+                          {t("wiki.itemDetail.marketAvailability", "Market Availability")}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          {item.market_stats.listing_count} active listing
+                          {item.market_stats.listing_count} {t("wiki.itemDetail.activeListing", "active listing")}
                           {item.market_stats.listing_count !== 1 ? "s" : ""}
                         </Typography>
                         {item.market_stats.min_price && item.market_stats.max_price && (
                           <Typography variant="body2" color="text.secondary">
-                            Price range: {item.market_stats.min_price.toLocaleString()} -{" "}
+                            {t("wiki.itemDetail.priceRange", "Price range")}: {item.market_stats.min_price.toLocaleString()} -{" "}
                             {item.market_stats.max_price.toLocaleString()} aUEC
                           </Typography>
                         )}
@@ -212,7 +212,7 @@ export function WikiItemDetail() {
                           sx={{ mt: 2 }}
                           onClick={() => navigate(MARKET_PATHS.aggregate(item.id, item.name))}
                         >
-                          View on Market
+                          {t("wiki.itemDetail.viewOnMarket", "View on Market")}
                         </Button>
                       </Card>
                     )}
@@ -224,9 +224,9 @@ export function WikiItemDetail() {
             {/* Tabs */}
             <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 2, mb: 2 }}>
               <Tabs value={tab} onChange={(_, v) => setTab(v)}>
-                <Tab label="Overview" />
-                <Tab label="Crafting" disabled={item.craftable_from.length === 0} />
-                <Tab label="Disassembly" />
+                <Tab label={t("wiki.itemDetail.tabOverview", "Overview")} />
+                <Tab label={t("wiki.itemDetail.tabCrafting", "Crafting")} disabled={item.craftable_from.length === 0} />
+                <Tab label={t("wiki.itemDetail.tabDisassembly", "Disassembly")} />
               </Tabs>
             </Box>
 
@@ -238,7 +238,7 @@ export function WikiItemDetail() {
               <Card sx={{ mt: 3 }}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    Item Attributes
+                    {t("wiki.itemDetail.itemAttributes", "Item Attributes")}
                   </Typography>
                   <TableContainer component={Paper} variant="outlined">
                     <Table size="small">
@@ -267,7 +267,7 @@ export function WikiItemDetail() {
             {/* Price History */}
             <Card sx={{ mt: 3 }}>
               <CardContent>
-                <Typography variant="h6" gutterBottom>Price History</Typography>
+                <Typography variant="h6" gutterBottom>{t("wiki.itemDetail.priceHistory", "Price History")}</Typography>
                 <PriceHistoryChartV2 gameItemId={id!} />
               </CardContent>
             </Card>
@@ -275,7 +275,7 @@ export function WikiItemDetail() {
             {/* Quality Distribution */}
             <Card sx={{ mt: 3 }}>
               <CardContent>
-                <Typography variant="h6" gutterBottom>Quality Distribution</Typography>
+                <Typography variant="h6" gutterBottom>{t("wiki.itemDetail.qualityDistribution", "Quality Distribution")}</Typography>
                 <QualityDistributionChart gameItemId={id!} />
               </CardContent>
             </Card>
@@ -286,13 +286,13 @@ export function WikiItemDetail() {
                 <CardContent>
                   <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                     <Typography variant="h6">
-                      Market Listings ({listingsData.total})
+                      {t("wiki.itemDetail.marketListings", "Market Listings")} ({listingsData.total})
                     </Typography>
                     <Button
                       size="small"
                       onClick={() => navigate(`/market/aggregate/${id}`)}
                     >
-                      View All
+                      {t("wiki.itemDetail.viewAll", "View All")}
                     </Button>
                   </Stack>
                   <TableContainer component={Paper} variant="outlined">
@@ -322,7 +322,7 @@ export function WikiItemDetail() {
                             </TableCell>
                             <TableCell align="right">
                               <Typography variant="caption" color="text.secondary">
-                                {listing.quantity_available} avail.
+                                {listing.quantity_available} {t("wiki.itemDetail.available", "avail.")}
                               </Typography>
                             </TableCell>
                             <TableCell align="right">
@@ -352,7 +352,7 @@ export function WikiItemDetail() {
               <CardContent>
                 <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
                   <Storefront color="action" />
-                  <Typography variant="h6">In-Game Shop Availability</Typography>
+                  <Typography variant="h6">{t("wiki.itemDetail.inGameShopAvailability", "In-Game Shop Availability")}</Typography>
                 </Stack>
                 {shopsLoading ? (
                   <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
@@ -363,10 +363,10 @@ export function WikiItemDetail() {
                     <Table size="small">
                       <TableHead>
                         <TableRow>
-                          <TableCell>Shop</TableCell>
-                          <TableCell>Location</TableCell>
-                          <TableCell align="right">Buy Price</TableCell>
-                          <TableCell align="right">Sell Price</TableCell>
+                          <TableCell>{t("wiki.itemDetail.columnShop", "Shop")}</TableCell>
+                          <TableCell>{t("wiki.itemDetail.columnLocation", "Location")}</TableCell>
+                          <TableCell align="right">{t("wiki.itemDetail.columnBuyPrice", "Buy Price")}</TableCell>
+                          <TableCell align="right">{t("wiki.itemDetail.columnSellPrice", "Sell Price")}</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -431,7 +431,7 @@ export function WikiItemDetail() {
                   </TableContainer>
                 ) : (
                   <Typography variant="body2" color="text.secondary">
-                    Not sold at any NPC shop
+                    {t("wiki.itemDetail.notSoldNpc", "Not sold at any NPC shop")}
                   </Typography>
                 )}
               </CardContent>
@@ -443,7 +443,7 @@ export function WikiItemDetail() {
             {tab === TAB_CRAFTING && (
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>Crafting Recipes</Typography>
+                  <Typography variant="h6" gutterBottom>{t("wiki.itemDetail.craftingRecipes", "Crafting Recipes")}</Typography>
                   {item.craftable_from.map((bp) => (
                     <Paper key={bp.blueprint_id} variant="outlined" sx={{ p: 2, mb: 2 }}>
                       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -451,12 +451,12 @@ export function WikiItemDetail() {
                           <Typography variant="subtitle1" fontWeight="bold">{bp.blueprint_name}</Typography>
                           <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
                             {bp.rarity && <Chip label={bp.rarity} size="small" />}
-                            {bp.tier && <Chip label={`Tier ${bp.tier}`} size="small" />}
+                            {bp.tier && <Chip label={`${t("wiki.itemDetail.tier", "Tier")} ${bp.tier}`} size="small" />}
                           </Stack>
                         </Box>
                         {bp.crafting_time_seconds && (
                           <Typography variant="body2" color="text.secondary">
-                            {formatCraftingTime(bp.crafting_time_seconds)} per craft
+                            {formatCraftingTime(bp.crafting_time_seconds)} {t("wiki.itemDetail.perCraft", "per craft")}
                           </Typography>
                         )}
                       </Stack>
@@ -466,14 +466,14 @@ export function WikiItemDetail() {
                           variant="outlined"
                           onClick={() => navigate(`/crafting/calculator?blueprint_id=${bp.blueprint_id}`)}
                         >
-                          Open in Calculator
+                          {t("wiki.itemDetail.openInCalculator", "Open in Calculator")}
                         </Button>
                         <Button
                           size="small"
                           sx={{ ml: 1 }}
                           onClick={() => navigate(`/blueprints/${bp.blueprint_name || bp.blueprint_id}`)}
                         >
-                          View Blueprint
+                          {t("wiki.itemDetail.viewBlueprint", "View Blueprint")}
                         </Button>
                         <Button
                           size="small"
@@ -487,13 +487,13 @@ export function WikiItemDetail() {
                             }
                           }}
                         >
-                          {(bp as BlueprintReference & { user_owns?: boolean }).user_owns ? "Owned ✓" : "Mark Owned"}
+                          {(bp as BlueprintReference & { user_owns?: boolean }).user_owns ? t("wiki.itemDetail.owned", "Owned ✓") : t("wiki.itemDetail.markOwned", "Mark Owned")}
                         </Button>
                       </Box>
                     </Paper>
                   ))}
                   {item.craftable_from.length === 0 && (
-                    <Typography color="text.secondary">This item cannot be crafted.</Typography>
+                    <Typography color="text.secondary">{t("wiki.itemDetail.cannotBeCrafted", "This item cannot be crafted.")}</Typography>
                   )}
                 </CardContent>
               </Card>
@@ -503,43 +503,42 @@ export function WikiItemDetail() {
             {tab === TAB_DISASSEMBLY && (
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>Disassembly Calculator</Typography>
+                  <Typography variant="h6" gutterBottom>{t("wiki.itemDetail.disassemblyCalculator", "Disassembly Calculator")}</Typography>
 
                   <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
                     <TextField
                       size="small"
                       type="number"
-                      label="Quantity to disassemble"
+                      label={t("wiki.itemDetail.quantityToDisassemble", "Quantity to disassemble")}
                       value={disassemblyQty}
                       onChange={(e) => setDisassemblyQty(Math.max(1, +e.target.value || 1))}
                       inputProps={{ min: 1 }}
                       sx={{ width: 200 }}
                     />
-                    <Chip label={`${formatCraftingTime(DISASSEMBLY_TIME_SECONDS * disassemblyQty)} total`} color="primary" variant="outlined" />
-                    <Chip label={`${Math.round(DISASSEMBLY_EFFICIENCY * 100)}% recovery`} variant="outlined" />
-                    <Chip label={`${DISASSEMBLY_TIME_SECONDS}s per item`} variant="outlined" />
+                    <Chip label={`${formatCraftingTime(DISASSEMBLY_TIME_SECONDS * disassemblyQty)} ${t("wiki.itemDetail.total", "total")}`} color="primary" variant="outlined" />
+                    <Chip label={`${Math.round(DISASSEMBLY_EFFICIENCY * 100)}% ${t("wiki.itemDetail.recovery", "recovery")}`} variant="outlined" />
+                    <Chip label={`${DISASSEMBLY_TIME_SECONDS}s ${t("wiki.itemDetail.perItem", "per item")}`} variant="outlined" />
                   </Stack>
 
                   {item.craftable_from.length > 0 ? (
                     <>
                       <Alert severity="info" sx={{ mb: 2 }}>
-                        Disassembly returns {Math.round(DISASSEMBLY_EFFICIENCY * 100)}% of crafting components at {DISASSEMBLY_TIME_SECONDS} seconds per item.
-                        Rare materials (Quantanium, Stileron, Savrilium, Lindinium, Riccite, Ouratite, Saldynium, Janalite) cannot be recovered.
+                        {t("wiki.itemDetail.disassemblyInfo", `Disassembly returns ${Math.round(DISASSEMBLY_EFFICIENCY * 100)}% of crafting components at ${DISASSEMBLY_TIME_SECONDS} seconds per item. Rare materials (Quantanium, Stileron, Savrilium, Lindinium, Riccite, Ouratite, Saldynium, Janalite) cannot be recovered.`, { efficiency: Math.round(DISASSEMBLY_EFFICIENCY * 100), seconds: DISASSEMBLY_TIME_SECONDS })}
                       </Alert>
 
                       {item.craftable_from.map((bp) => (
                         <Box key={bp.blueprint_id} sx={{ mb: 3 }}>
                           <Typography variant="subtitle2" gutterBottom>
-                            From: {bp.blueprint_name}
+                            {t("wiki.itemDetail.from", "From")}: {bp.blueprint_name}
                           </Typography>
                           <TableContainer component={Paper} variant="outlined">
                             <Table size="small">
                               <TableHead>
                                 <TableRow>
-                                  <TableCell>Component</TableCell>
-                                  <TableCell align="right">Recipe Qty</TableCell>
-                                  <TableCell align="right">Recovered per Item ({Math.round(DISASSEMBLY_EFFICIENCY * 100)}%)</TableCell>
-                                  <TableCell align="right">Total ({disassemblyQty}×)</TableCell>
+                                  <TableCell>{t("wiki.itemDetail.columnComponent", "Component")}</TableCell>
+                                  <TableCell align="right">{t("wiki.itemDetail.columnRecipeQty", "Recipe Qty")}</TableCell>
+                                  <TableCell align="right">{t("wiki.itemDetail.columnRecoveredPerItem", "Recovered per Item")} ({Math.round(DISASSEMBLY_EFFICIENCY * 100)}%)</TableCell>
+                                  <TableCell align="right">{t("wiki.itemDetail.columnTotal", "Total")} ({disassemblyQty}×)</TableCell>
                                 </TableRow>
                               </TableHead>
                               <TableBody>
@@ -550,7 +549,7 @@ export function WikiItemDetail() {
                                       size="small"
                                       onClick={() => navigate(`/blueprints/${bp.blueprint_name || bp.blueprint_id}`)}
                                     >
-                                      View blueprint for full ingredient list
+                                      {t("wiki.itemDetail.viewBlueprintFullList", "View blueprint for full ingredient list")}
                                     </Button>
                                   </TableCell>
                                 </TableRow>
@@ -562,7 +561,7 @@ export function WikiItemDetail() {
                     </>
                   ) : (
                     <Alert severity="warning">
-                      No crafting recipe found for this item — disassembly components unknown.
+                      {t("wiki.itemDetail.noRecipeWarning", "No crafting recipe found for this item — disassembly components unknown.")}
                     </Alert>
                   )}
                 </CardContent>
@@ -577,7 +576,7 @@ export function WikiItemDetail() {
               <Card sx={{ mb: 2 }}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    Craftable From
+                    {t("wiki.itemDetail.craftableFrom", "Craftable From")}
                   </Typography>
                   <Divider sx={{ mb: 2 }} />
                   {item.craftable_from.map((blueprint) => (
@@ -590,12 +589,12 @@ export function WikiItemDetail() {
                           <Chip label={blueprint.rarity} size="small" />
                         )}
                         {blueprint.tier && (
-                          <Chip label={`Tier ${blueprint.tier}`} size="small" />
+                          <Chip label={`${t("wiki.itemDetail.tier", "Tier")} ${blueprint.tier}`} size="small" />
                         )}
                       </Stack>
                       {blueprint.crafting_time_seconds && (
                         <Typography variant="caption" color="text.secondary" display="block">
-                          Crafting time: {formatCraftingTime(blueprint.crafting_time_seconds)}
+                          {t("wiki.itemDetail.craftingTime", "Crafting time")}: {formatCraftingTime(blueprint.crafting_time_seconds)}
                         </Typography>
                       )}
                     </Box>
@@ -609,7 +608,7 @@ export function WikiItemDetail() {
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
-                    Rewarded By Missions
+                    {t("wiki.itemDetail.rewardedByMissions", "Rewarded By Missions")}
                   </Typography>
                   <Divider sx={{ mb: 2 }} />
                   {item.rewarded_by.map((mission) => (
@@ -623,10 +622,10 @@ export function WikiItemDetail() {
                         </Typography>
                       )}
                       <Typography variant="caption" color="primary">
-                        Drop chance: {mission.drop_probability.toFixed(1)}%
+                        {t("wiki.itemDetail.dropChance", "Drop chance")}: {mission.drop_probability.toFixed(1)}%
                       </Typography>
                       <Typography variant="caption" color="text.secondary" display="block">
-                        via {mission.blueprint_name}
+                        {t("wiki.itemDetail.via", "via")} {mission.blueprint_name}
                       </Typography>
                     </Box>
                   ))}

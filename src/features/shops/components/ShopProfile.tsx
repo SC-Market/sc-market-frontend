@@ -197,7 +197,15 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
       >
         {shop.name[0]}
       </Avatar>
-      <Stack spacing={0.5}>
+      <Stack
+        spacing={0.5}
+        sx={{
+          backgroundColor: theme.palette.background.default,
+          opacity: 0.98,
+          borderRadius: theme.spacing(theme.borderRadius.topLevel),
+          p: 1.5,
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -206,7 +214,7 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
             flexWrap: "wrap",
           }}
         >
-          <Typography color="text.secondary" variant="h6" fontWeight={600}>
+          <Typography color="text.primary" variant="h6" fontWeight={700}>
             {shop.name}
           </Typography>
           <ShareButton title={`${shop.name} - SC Market`} />
@@ -234,7 +242,6 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
                 key={lang}
                 label={lang.toUpperCase()}
                 size="small"
-                variant="outlined"
                 color="primary"
                 sx={{ padding: 0.5, textTransform: "capitalize" }}
               />
@@ -248,17 +255,17 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
               size="small"
               label={`${shop.listing_count} listing${shop.listing_count !== 1 ? "s" : ""}`}
               icon={<StorefrontRounded />}
-              variant="outlined"
+              color="default"
             />
           )}
           {shop.total_sales != null && (
             <Chip
               size="small"
               label={`${shop.total_sales} sale${shop.total_sales !== 1 ? "s" : ""}`}
-              variant="outlined"
+              color="default"
             />
           )}
-          <Chip size="small" label={`Since ${memberSince}`} variant="outlined" />
+          <Chip size="small" label={`Since ${memberSince}`} color="default" />
         </Stack>
       </Stack>
     </Stack>

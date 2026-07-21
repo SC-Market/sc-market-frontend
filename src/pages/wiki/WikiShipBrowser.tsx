@@ -22,6 +22,7 @@ import GroupsIcon from "@mui/icons-material/Groups"
 import StraightenIcon from "@mui/icons-material/Straighten"
 import SearchIcon from "@mui/icons-material/Search"
 import { useTheme, alpha } from "@mui/material/styles"
+import { useTranslation } from "react-i18next"
 import { useGetShipsQuery, type WikiShipSearchResult } from "../../store/api/v2/market"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -100,6 +101,7 @@ function SectionHeader({ label, count }: { label: string; count: number }) {
 
 // ─── Vehicle card ────────────────────────────────────────────────────────────
 function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: () => void }) {
+  const { t } = useTranslation()
   const vehicleCategory = getVehicleCategory(ship)
   const careerColor = getShipColor(ship.career, ship.role, ship.focus)
   const chipColor = getShipRoleColor(ship.career, ship.role, ship.focus)
@@ -179,7 +181,7 @@ function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: (
               ? <DirectionsCarIcon sx={{ fontSize: 10 }} />
               : <TwoWheelerIcon sx={{ fontSize: 10 }} />
             }
-            {vehicleCategory === "ground" ? "Ground" : "Hoverbike"}
+            {vehicleCategory === "ground" ? t("wiki.shipBrowser.ground", "Ground") : t("wiki.shipBrowser.hoverbike", "Hoverbike")}
           </Box>
         )}
 
@@ -280,7 +282,7 @@ function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: (
         {(ship.crew_size != null || ship.length_m != null) && (
           <Stack direction="row" spacing={1} alignItems="center">
             {ship.crew_size != null && (
-              <Tooltip title="Crew" arrow>
+              <Tooltip title={t("wiki.shipBrowser.crew", "Crew")} arrow>
                 <Stack direction="row" spacing={0.3} alignItems="center">
                   <GroupsIcon sx={{ fontSize: 11, color: "text.disabled", opacity: 0.6 }} />
                   <Typography sx={{ fontSize: "0.62rem", color: "text.disabled" }}>{ship.crew_size}</Typography>
@@ -307,6 +309,7 @@ function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: (
 
 // ─── Main component ──────────────────────────────────────────────────────────
 export function WikiShipBrowser() {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
@@ -442,12 +445,12 @@ export function WikiShipBrowser() {
   // Active filter chips to show above the grid
   const activeFilterChips = useMemo(() => {
     const chips: Array<{ label: string; key: string; value: string }> = []
-    if (career)      chips.push({ label: `Career: ${formatShipCareer(career)}`, key: "career", value: "" })
+    if (career)      chips.push({ label: `${t("wiki.shipBrowser.career", "Career")}: ${formatShipCareer(career)}`, key: "career", value: "" })
     if (manufacturer) chips.push({ label: manufacturer, key: "manufacturer", value: "" })
     if (role)        chips.push({ label: formatShipRole(role), key: "role", value: "" })
-    if (size)        chips.push({ label: `Size ${size}`, key: "size", value: "" })
+    if (size)        chips.push({ label: `${t("wiki.shipBrowser.size", "Size")} ${size}`, key: "size", value: "" })
     return chips
-  }, [career, manufacturer, role, size])
+  }, [career, manufacturer, role, size, t])
 
   const hasFilters = !!(manufacturer || career || role || size || category !== "all")
 
@@ -463,10 +466,10 @@ export function WikiShipBrowser() {
 
   // ─── Sidebar filter content ───────────────────────────────────────────────
   const CATEGORY_OPTIONS = [
-    { value: "all",      label: "All",             icon: <AppsIcon sx={{ fontSize: 16 }} />,           count: counts.all },
-    { value: "ships",    label: "Ships",            icon: <RocketLaunchIcon sx={{ fontSize: 16 }} />,   count: counts.ships },
-    { value: "ground",   label: "Ground Vehicles",  icon: <DirectionsCarIcon sx={{ fontSize: 16 }} />,  count: counts.ground },
-    { value: "hoverbike", label: "Hoverbikes",      icon: <TwoWheelerIcon sx={{ fontSize: 16 }} />,     count: counts.hoverbike },
+    { value: "all",      label: t("wiki.shipBrowser.categoryAll", "All"),             icon: <AppsIcon sx={{ fontSize: 16 }} />,           count: counts.all },
+    { value: "ships",    label: t("wiki.shipBrowser.categoryShips", "Ships"),            icon: <RocketLaunchIcon sx={{ fontSize: 16 }} />,   count: counts.ships },
+    { value: "ground",   label: t("wiki.shipBrowser.categoryGround", "Ground Vehicles"),  icon: <DirectionsCarIcon sx={{ fontSize: 16 }} />,  count: counts.ground },
+    { value: "hoverbike", label: t("wiki.shipBrowser.categoryHoverbikes", "Hoverbikes"),      icon: <TwoWheelerIcon sx={{ fontSize: 16 }} />,     count: counts.hoverbike },
   ]
 
   const filtersContent = (
