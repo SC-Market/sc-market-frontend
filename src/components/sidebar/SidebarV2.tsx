@@ -592,53 +592,55 @@ export function SidebarV2() {
                 {renderNavItem({ label: t("nav.shops", "Shops"), to: "/shops", icon: <StorefrontRounded /> })}
                 {renderNavItem({ label: t("nav.orgs", "Organizations"), to: "/contractors", icon: <BusinessRounded /> })}
                 {renderNavItem({ label: t("nav.recruiting", "Recruiting"), to: "/recruiting", icon: <PersonAddRounded /> })}
-                {profile && renderNavItem({ label: t("nav.myOrgs", "My Organizations"), to: "/my-orgs", icon: <PeopleRounded /> })}
               </List>
             </>
           )}
 
-          <Divider sx={{ mx: 2, my: 0.5 }} />
+          {/* Game Data section — browse mode only */}
+          {context === "browse" && (
+            <>
+              <Divider sx={{ mx: 2, my: 0.5 }} />
+              <Typography variant="body2" sx={sectionHeaderSx}>
+                {t("sidebar.gameData.title", "Game Data")}
+              </Typography>
+              <List dense sx={{ px: 1 }}>
+                {renderNavItem({ label: t("sidebar.gameData.missions", "Missions"), to: "/missions", icon: <DescriptionRounded /> })}
+                {renderNavItem({ label: t("sidebar.gameData.mining", "Mining"), to: "/mining", icon: <InventoryRounded /> })}
 
-          {/* Game Data section */}
-          <Typography variant="body2" sx={sectionHeaderSx}>
-            {t("sidebar.gameData.title", "Game Data")}
-          </Typography>
-          <List dense sx={{ px: 1 }}>
-            {renderNavItem({ label: t("sidebar.gameData.missions", "Missions"), to: "/missions", icon: <DescriptionRounded /> })}
-            {renderNavItem({ label: t("sidebar.gameData.mining", "Mining"), to: "/mining", icon: <InventoryRounded /> })}
+                {/* Crafting — collapsible */}
+                <ListItemButton sx={itemSx} onClick={() => setCraftingOpen((v) => !v)}>
+                  <ListItemIcon sx={{ minWidth: 36 }}><ScienceRounded /></ListItemIcon>
+                  <ListItemText primary={t("sidebar.gameData.crafting", "Crafting")} primaryTypographyProps={{ variant: "subtitle2" }} />
+                  {craftingOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
+                </ListItemButton>
+                <Collapse in={craftingOpen}>
+                  <List dense disablePadding sx={{ pl: 2 }}>
+                    {renderNavItem({ label: t("sidebar.gameData.blueprints", "Blueprints"), to: "/blueprints", icon: <ScienceRounded /> }, true)}
+                    {renderNavItem({ label: t("sidebar.gameData.craftingCalculator", "Crafting Calculator"), to: "/crafting/calculator", icon: <CalculateRounded /> }, true)}
+                    {renderNavItem({ label: t("sidebar.gameData.resources", "Resources"), to: "/resources", icon: <InventoryRounded /> }, true)}
+                    {profile && renderNavItem({ label: t("sidebar.gameData.shoppingLists", "Shopping Lists"), to: "/shopping-lists", icon: <ShoppingCartRounded /> }, true)}
+                  </List>
+                </Collapse>
 
-            {/* Crafting — collapsible */}
-            <ListItemButton sx={itemSx} onClick={() => setCraftingOpen((v) => !v)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><ScienceRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.gameData.crafting", "Crafting")} primaryTypographyProps={{ variant: "subtitle2" }} />
-              {craftingOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
-            </ListItemButton>
-            <Collapse in={craftingOpen}>
-              <List dense disablePadding sx={{ pl: 2 }}>
-                {renderNavItem({ label: t("sidebar.gameData.blueprints", "Blueprints"), to: "/blueprints", icon: <ScienceRounded /> }, true)}
-                {renderNavItem({ label: t("sidebar.gameData.craftingCalculator", "Crafting Calculator"), to: "/crafting/calculator", icon: <CalculateRounded /> }, true)}
-                {renderNavItem({ label: t("sidebar.gameData.resources", "Resources"), to: "/resources", icon: <InventoryRounded /> }, true)}
-                {profile && renderNavItem({ label: t("sidebar.gameData.shoppingLists", "Shopping Lists"), to: "/shopping-lists", icon: <ShoppingCartRounded /> }, true)}
+                {/* Wiki — collapsible */}
+                <ListItemButton sx={itemSx} onClick={() => setWikiOpen((v) => !v)}>
+                  <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
+                  <ListItemText primary={t("sidebar.wiki.title", "Wiki")} primaryTypographyProps={{ variant: "subtitle2" }} />
+                  {wikiOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
+                </ListItemButton>
+                <Collapse in={wikiOpen}>
+                  <List dense disablePadding sx={{ pl: 2 }}>
+                    {renderNavItem({ label: t("sidebar.wiki.items", "Items"), to: "/wiki/items", icon: <MenuBookRounded /> }, true)}
+                    {renderNavItem({ label: t("sidebar.wiki.vehicles", "Ships & Vehicles"), to: "/wiki/ships", icon: <RocketLaunchRounded /> }, true)}
+                    {renderNavItem({ label: t("sidebar.wiki.commodities", "Commodities"), to: "/wiki/commodities", icon: <InventoryRounded /> }, true)}
+                    {renderNavItem({ label: t("sidebar.wiki.locations", "Locations"), to: "/wiki/locations", icon: <DescriptionRounded /> }, true)}
+                    {renderNavItem({ label: t("sidebar.wiki.manufacturers", "Manufacturers"), to: "/wiki/manufacturers", icon: <StorefrontRounded /> }, true)}
+                    {renderNavItem({ label: t("sidebar.wiki.refinery", "Refinery"), to: "/wiki/refinery", icon: <ScienceRounded /> }, true)}
+                  </List>
+                </Collapse>
               </List>
-            </Collapse>
-
-            {/* Wiki — collapsible */}
-            <ListItemButton sx={itemSx} onClick={() => setWikiOpen((v) => !v)}>
-              <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
-              <ListItemText primary={t("sidebar.wiki.title", "Wiki")} primaryTypographyProps={{ variant: "subtitle2" }} />
-              {wikiOpen ? <ExpandLessRounded fontSize="small" /> : <ExpandMoreRounded fontSize="small" />}
-            </ListItemButton>
-            <Collapse in={wikiOpen}>
-              <List dense disablePadding sx={{ pl: 2 }}>
-                {renderNavItem({ label: t("sidebar.wiki.items", "Items"), to: "/wiki/items", icon: <MenuBookRounded /> }, true)}
-                {renderNavItem({ label: t("sidebar.wiki.vehicles", "Ships & Vehicles"), to: "/wiki/ships", icon: <RocketLaunchRounded /> }, true)}
-                {renderNavItem({ label: t("sidebar.wiki.commodities", "Commodities"), to: "/wiki/commodities", icon: <InventoryRounded /> }, true)}
-                {renderNavItem({ label: t("sidebar.wiki.locations", "Locations"), to: "/wiki/locations", icon: <DescriptionRounded /> }, true)}
-                {renderNavItem({ label: t("sidebar.wiki.manufacturers", "Manufacturers"), to: "/wiki/manufacturers", icon: <StorefrontRounded /> }, true)}
-                {renderNavItem({ label: t("sidebar.wiki.refinery", "Refinery"), to: "/wiki/refinery", icon: <ScienceRounded /> }, true)}
-              </List>
-            </Collapse>
-          </List>
+            </>
+          )}
         </>
       )}
       </Box>
