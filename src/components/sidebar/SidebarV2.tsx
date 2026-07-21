@@ -11,6 +11,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Chip,
   Collapse,
   Divider,
   Drawer,
@@ -336,12 +337,13 @@ export function SidebarV2() {
       onClick={() => { haptic.light(); closeIfMobile() }}
     >
       <ListItemIcon sx={{ minWidth: nested ? 32 : 36 }}>{item.icon}</ListItemIcon>
-      <ListItemText primary={item.label} primaryTypographyProps={{ variant: "subtitle2" }} />
+      <ListItemText sx={{ flex: 1, minWidth: 0 }} primary={item.label} primaryTypographyProps={{ variant: "subtitle2", noWrap: true }} />
       {item.badge && item.badge > 0 ? (
-        <Badge
-          badgeContent={item.badge}
+        <Chip
+          label={item.badge}
+          size="small"
           color="primary"
-          sx={{ mr: 1.5, "& .MuiBadge-badge": { position: "static", transform: "none" } }}
+          sx={{ ml: 1, height: 20, minWidth: 20, "& .MuiChip-label": { px: 0.75, fontSize: "0.7rem" } }}
         />
       ) : null}
       <Tooltip title={starred.includes(item.to) ? t("nav.unstar", "Unpin") : t("nav.star", "Pin")}>
@@ -350,6 +352,7 @@ export function SidebarV2() {
           size="small"
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStar(item.to) }}
           sx={{
+            ml: 0.5,
             opacity: starred.includes(item.to) ? 1 : 0,
             transition: "opacity 0.2s",
             color: starred.includes(item.to) ? "primary.main" : sidebarContrast,
@@ -530,7 +533,7 @@ export function SidebarV2() {
       <Divider sx={{ mx: 2, my: 0.5 }} />
 
       {/* Scrollable content area */}
-      <Box sx={{ flex: 1, overflowY: "auto", py: 1 }}>
+      <Box sx={{ flex: 1, overflowY: "auto", pb: 1 }}>
       {q ? (
         /* SEARCH RESULTS — flat filtered list across all destinations */
         <List dense sx={{ px: 1 }}>
