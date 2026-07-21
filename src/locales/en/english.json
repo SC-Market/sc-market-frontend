@@ -2438,9 +2438,11 @@
   "MarketRedesign": {
     "acrossSellers_one": "across {{count}} seller",
     "acrossSellers_other": "across {{count}} sellers",
+    "addToCart": "Add",
     "available_one": "{{count}} available",
     "available_other": "{{count}} available",
     "compare": "Compare",
+    "noSellers": "No sellers available right now.",
     "compareSellers_one": "Compare {{count}} seller",
     "compareSellers_other": "Compare {{count}} sellers",
     "forSale": "For sale",
