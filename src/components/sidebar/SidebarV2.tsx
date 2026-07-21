@@ -149,26 +149,29 @@ export function SidebarV2() {
   // Items based on current context
   const contextItems = useMemo<NavItem[]>(() => {
     if (context === "admin") {
+      const ops = t("nav.groupAdminOps", "Operations")
+      const data = t("nav.groupAdminData", "Data & Config")
       return [
-        { label: t("nav.adminOrders", "Orders"), to: "/admin/orders", icon: <LocalShippingRounded /> },
-        { label: t("nav.adminUsers", "Users"), to: "/admin/users", icon: <PeopleRounded /> },
-        { label: t("nav.adminMarket", "Market"), to: "/admin/market", icon: <StorefrontRounded /> },
-        { label: t("nav.adminPremium", "Premium"), to: "/admin/premium", icon: <DescriptionRounded /> },
-        { label: t("nav.adminAlerts", "Alerts"), to: "/admin/alerts", icon: <DescriptionRounded /> },
-        { label: t("nav.adminModeration", "Moderation"), to: "/admin/moderation", icon: <AdminPanelSettingsRounded /> },
-        { label: t("nav.adminFeatureFlags", "Feature Flags"), to: "/admin/feature-flags", icon: <SettingsRounded /> },
-        { label: t("nav.adminGameData", "Game Data Import"), to: "/admin/game-data-import", icon: <ScienceRounded /> },
-        { label: t("nav.adminAttributes", "Attributes"), to: "/admin/attribute-definitions", icon: <ListAltRounded /> },
-        { label: t("nav.adminGameItemAttrs", "Game Item Attributes"), to: "/admin/game-item-attributes", icon: <ListAltRounded /> },
-        { label: t("nav.adminImportMonitoring", "Import Monitoring"), to: "/admin/import-monitoring", icon: <ScienceRounded /> },
-        { label: t("nav.adminMigration", "Migration"), to: "/admin/migration", icon: <SettingsRounded /> },
-        { label: t("nav.adminAuditLogs", "Audit Logs"), to: "/admin/audit-logs", icon: <DescriptionRounded /> },
-        { label: t("nav.adminNotificationTest", "Notification Test"), to: "/admin/notification-test", icon: <MessageRounded /> },
+        { label: t("nav.adminOrders", "Orders"), to: "/admin/orders", icon: <LocalShippingRounded />, group: ops },
+        { label: t("nav.adminUsers", "Users"), to: "/admin/users", icon: <PeopleRounded />, group: ops },
+        { label: t("nav.adminMarket", "Market"), to: "/admin/market", icon: <StorefrontRounded />, group: ops },
+        { label: t("nav.adminPremium", "Premium"), to: "/admin/premium", icon: <DescriptionRounded />, group: ops },
+        { label: t("nav.adminAlerts", "Alerts"), to: "/admin/alerts", icon: <DescriptionRounded />, group: ops },
+        { label: t("nav.adminModeration", "Moderation"), to: "/admin/moderation", icon: <AdminPanelSettingsRounded />, group: ops },
+        { label: t("nav.adminFeatureFlags", "Feature Flags"), to: "/admin/feature-flags", icon: <SettingsRounded />, group: data },
+        { label: t("nav.adminGameData", "Game Data Import"), to: "/admin/game-data-import", icon: <ScienceRounded />, group: data },
+        { label: t("nav.adminAttributes", "Attributes"), to: "/admin/attribute-definitions", icon: <ListAltRounded />, group: data },
+        { label: t("nav.adminGameItemAttrs", "Game Item Attributes"), to: "/admin/game-item-attributes", icon: <ListAltRounded />, group: data },
+        { label: t("nav.adminImportMonitoring", "Import Monitoring"), to: "/admin/import-monitoring", icon: <ScienceRounded />, group: data },
+        { label: t("nav.adminMigration", "Migration"), to: "/admin/migration", icon: <SettingsRounded />, group: data },
+        { label: t("nav.adminAuditLogs", "Audit Logs"), to: "/admin/audit-logs", icon: <DescriptionRounded />, group: data },
+        { label: t("nav.adminNotificationTest", "Notification Test"), to: "/admin/notification-test", icon: <MessageRounded />, group: data },
       ]
     }
     if (context === "shop" && selectedShop) {
       const slug = selectedShop.slug
       const perms = selectedShop.permissions
+      const manage = t("nav.groupManage", "Manage")
       const items: NavItem[] = [
         { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded /> },
         { label: t("nav.listings", "Listings"), to: SHOP_PATHS.listings(slug), icon: <ListAltRounded /> },
@@ -182,8 +185,8 @@ export function SidebarV2() {
       }
       if (perms?.can_manage) {
         items.push(
-          { label: t("nav.customers", "Customers"), to: `/shop/${slug}/customers`, icon: <PeopleRounded /> },
-          { label: t("nav.shopSettings", "Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded /> },
+          { label: t("nav.customers", "Customers"), to: `/shop/${slug}/customers`, icon: <PeopleRounded />, group: manage },
+          { label: t("nav.shopSettings", "Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded />, group: manage },
         )
       }
       return items
@@ -196,6 +199,7 @@ export function SidebarV2() {
       const canManageWebhooks = has_permission(selectedContractor, profile, "manage_webhooks", profile?.contractors)
       const canManageBlocklist = has_permission(selectedContractor, profile, "manage_blocklist", profile?.contractors)
       const canManageTheme = has_permission(selectedContractor, profile, "manage_theme", profile?.contractors)
+      const manage = t("nav.groupManage", "Manage")
       const items: NavItem[] = [
         { label: t("nav.orgPage", "Org Page"), to: `/contractor/${selectedOrgId}`, icon: <StorefrontRounded /> },
         { label: t("nav.orgDashboard", "Dashboard"), to: `/org/${selectedOrgId}/dashboard`, icon: <DashboardRounded /> },
@@ -205,22 +209,22 @@ export function SidebarV2() {
         items.push({ label: t("nav.orgOrders", "Org Orders"), to: `/org/${selectedOrgId}/orders`, icon: <LocalShippingRounded /> })
       }
       if (canManageDetails) {
-        items.push({ label: t("nav.orgAbout", "About"), to: `/org/${selectedOrgId}/manage/about`, icon: <DescriptionRounded /> })
+        items.push({ label: t("nav.orgAbout", "About"), to: `/org/${selectedOrgId}/manage/about`, icon: <DescriptionRounded />, group: manage })
       }
       if (canManageRoles) {
-        items.push({ label: t("nav.orgRoles", "Roles"), to: `/org/${selectedOrgId}/manage/roles`, icon: <PeopleRounded /> })
+        items.push({ label: t("nav.orgRoles", "Roles"), to: `/org/${selectedOrgId}/manage/roles`, icon: <PeopleRounded />, group: manage })
       }
       if (canManageInvites) {
-        items.push({ label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PeopleRounded /> })
+        items.push({ label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PeopleRounded />, group: manage })
       }
       if (canManageWebhooks) {
-        items.push({ label: t("nav.orgDiscord", "Discord"), to: `/org/${selectedOrgId}/manage/discord`, icon: <MessageRounded /> })
+        items.push({ label: t("nav.orgDiscord", "Discord"), to: `/org/${selectedOrgId}/manage/discord`, icon: <MessageRounded />, group: manage })
       }
       if (canManageTheme) {
-        items.push({ label: t("nav.orgTheme", "Theme"), to: `/org/${selectedOrgId}/manage/theme`, icon: <DesignServicesRounded /> })
+        items.push({ label: t("nav.orgTheme", "Theme"), to: `/org/${selectedOrgId}/manage/theme`, icon: <DesignServicesRounded />, group: manage })
       }
       if (canManageDetails) {
-        items.push({ label: t("nav.orgSettings", "Settings"), to: `/org/${selectedOrgId}/manage/settings`, icon: <SettingsRounded /> })
+        items.push({ label: t("nav.orgSettings", "Settings"), to: `/org/${selectedOrgId}/manage/settings`, icon: <SettingsRounded />, group: manage })
       }
       return items
     }
