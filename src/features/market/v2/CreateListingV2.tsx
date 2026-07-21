@@ -538,7 +538,7 @@ export function CreateListingV2() {
           {/* ADVANCED OPTIONS — collapsed by default                      */}
           {/* ============================================================ */}
 
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button
               variant="outlined"
               color="secondary"
@@ -564,22 +564,24 @@ export function CreateListingV2() {
               <Grid container spacing={theme.layoutSpacing.layout}>
 
                 {/* Pickup Method */}
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    select
-                    fullWidth
-                    size="small"
-                    label={t("CreateListingV2.pickupMethod", "Pickup Method")}
-                    value={pickupMethod}
-                    onChange={(e) => setPickupMethod(e.target.value as "delivery" | "pickup" | "any" | "")}
-                    helperText={t("CreateListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
-                  >
-                    <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
-                    <MenuItem value="delivery">{t("CreateListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
-                    <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
-                    <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
-                  </TextField>
-                </Grid>
+                <FormPaper title={t("CreateListingV2.pickupMethod", "Pickup Method")}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      select
+                      fullWidth
+                      size="small"
+                      label={t("CreateListingV2.pickupMethod", "Pickup Method")}
+                      value={pickupMethod}
+                      onChange={(e) => setPickupMethod(e.target.value as "delivery" | "pickup" | "any" | "")}
+                      helperText={t("CreateListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
+                    >
+                      <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
+                      <MenuItem value="delivery">{t("CreateListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
+                      <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
+                      <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
+                    </TextField>
+                  </Grid>
+                </FormPaper>
 
                 {/* Listing Options */}
                 <FormPaper title={t("CreateListingV2.listingOptions", "Listing Options")}>
