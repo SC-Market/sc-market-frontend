@@ -20,6 +20,7 @@ import ExpandMoreRounded from "@mui/icons-material/ExpandMoreRounded"
 import GroupsRounded from "@mui/icons-material/GroupsRounded"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { isAfter, subDays } from "date-fns"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
@@ -127,6 +128,37 @@ function groupQualityChipProps(
     }
   }
   return null
+}
+
+/**
+ * Per-listing flag chips (NEW / OUT OF STOCK / BULK DISCOUNT / internal), shared
+ * by both expanded seller views so each seller reflects the same chips a
+ * standalone ListingCardV2 would show for it. Small/dense variant for rows.
+ */
+function ListingFlagChips({ listing }: { listing: ListingSearchResult }) {
+  const { t } = useTranslation()
+  const isNew = isAfter(new Date(listing.created_at), subDays(new Date(), 3))
+  const outOfStock = (listing.quantity_available ?? 0) === 0
+  const chipSx = {
+    height: 18,
+    fontSize: "0.6rem",
+    textTransform: "uppercase" as const,
+    fontWeight: "bold" as const,
+  }
+  return (
+    <>
+      {isNew && <Chip label={t("market.new", "NEW")} color="secondary" size="small" sx={chipSx} />}
+      {outOfStock && (
+        <Chip label={t("market.outOfStock", "OUT OF STOCK")} color="error" size="small" sx={chipSx} />
+      )}
+      {listing.has_bulk_discount && (
+        <Chip label={t("market.bulkDiscount", "BULK")} color="info" size="small" sx={chipSx} />
+      )}
+      {listing.visibility === "private" && (
+        <Chip label={t("market.internalListing", "INTERNAL")} color="warning" size="small" sx={chipSx} />
+      )}
+    </>
+  )
 }
 
 type GridEntry =
@@ -730,6 +762,7 @@ function SellerRow({
           showBadges={false}
         />
       </Box>
+      <ListingFlagChips listing={listing} />
       {qc && (
         <Chip
           label={qc.label}
@@ -769,10 +802,11 @@ function SellerSubCard({
     <Card variant="outlined" sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}>
       <CardActionArea component={RouterLink} to={formatMarketUrl(listing)} sx={{ height: "100%" }}>
         <CardContent>
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
             <Typography variant="body2" sx={{ color: "text.secondary", flex: 1 }} noWrap>
               {listing.shop_name}
             </Typography>
+            <ListingFlagChips listing={listing} />
             {qc && (
               <Chip
                 label={qc.label}
