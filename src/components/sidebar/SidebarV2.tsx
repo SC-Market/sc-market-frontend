@@ -218,7 +218,7 @@ export function SidebarV2() {
       )
     }
     return items
-  }, [context, selectedShop, profile, t])
+  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t])
 
   const [wikiOpen, setWikiOpen] = useState(false)
   const [craftingOpen, setCraftingOpen] = useState(false)
@@ -241,11 +241,15 @@ export function SidebarV2() {
   }
 
   const isActive = (path: string) => {
-    // Exact match for short paths to avoid false positives
-    if (path === "/market" || path === "/orders" || path === "/mining" || path === "/messages" || path === "/settings") {
-      return location.pathname === path || location.pathname.startsWith(path + "/")
-    }
-    return location.pathname === path || location.pathname.startsWith(path)
+    const current = location.pathname
+    if (current === path) return true
+    // Don't match parent paths when a more specific child item exists in the nav
+    // e.g. /shop/x/listings should not highlight when on /shop/x/listings/create
+    const hasMoreSpecificMatch = contextItems.some(
+      (item) => item.to !== path && item.to.startsWith(path + "/") && current.startsWith(item.to),
+    )
+    if (hasMoreSpecificMatch) return false
+    return current.startsWith(path + "/") || current.startsWith(path + "?")
   }
 
   const drawerContent = (
