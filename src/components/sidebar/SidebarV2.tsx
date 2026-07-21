@@ -243,7 +243,6 @@ export function SidebarV2() {
         { label: t("nav.myOrders", "My Orders"), to: "/orders", icon: <LocalShippingRounded />, badge: pendingOrderCount, group: personal },
         { label: t("nav.assignedOrders", "Assigned to Me"), to: "/dashboard", icon: <DashboardRounded />, group: personal },
         { label: t("nav.messages", "Messages"), to: "/messages", icon: <MessageRounded />, badge: unreadChatCount, group: personal },
-        { label: t("nav.myShops", "My Shops"), to: "/dashboard/shops", icon: <StorefrontRounded />, group: personal },
         { label: t("nav.inventory", "Inventory"), to: "/inventory", icon: <InventoryRounded />, group: personal },
         { label: t("nav.availability", "Availability"), to: "/availability", icon: <DescriptionRounded />, group: personal },
       )
@@ -441,6 +440,7 @@ export function SidebarV2() {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={() => setAnchorEl(null)}
+        sx={{ zIndex: theme.zIndex.modal + 2 }}
         slotProps={{ paper: { sx: { minWidth: 200 } } }}
       >
         <MenuItem
