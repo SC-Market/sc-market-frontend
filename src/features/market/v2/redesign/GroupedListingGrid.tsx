@@ -232,7 +232,7 @@ export const GroupedListingGrid = React.forwardRef<
 
   // Reactively track which breakpoints are active (largest → smallest). Hooks
   // must run unconditionally, so query every key regardless of gridBreakpoints.
-  const up = {
+  const up: Record<string, boolean> = {
     xs: useMediaQuery(theme.breakpoints.up("xs")),
     sm: useMediaQuery(theme.breakpoints.up("sm")),
     md: useMediaQuery(theme.breakpoints.up("md")),
@@ -240,7 +240,7 @@ export const GroupedListingGrid = React.forwardRef<
     xl: useMediaQuery(theme.breakpoints.up("xl")),
     xxl: useMediaQuery(theme.breakpoints.up("xxl")),
     xxxl: useMediaQuery(theme.breakpoints.up("xxxl")),
-  } as Record<string, boolean>
+  }
 
   // Columns per row = 12 / (active span). Walk largest → smallest to find the
   // biggest breakpoint that is both active AND defined in gridBreakpoints.
