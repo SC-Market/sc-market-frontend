@@ -237,10 +237,16 @@ export function SettingsPage() {
                 value={8}
               />
               <Tab
-                label={t("settings.mobileNav.title")}
-                icon={<PhoneAndroidRounded />}
+                label="SCMDB"
+                icon={<SyncRounded />}
                 {...a11yProps(9)}
                 value={9}
+              />
+              <Tab
+                label={t("settings.mobileNav.title")}
+                icon={<PhoneAndroidRounded />}
+                {...a11yProps(10)}
+                value={10}
               />
             </Tabs>
           </Grid>
