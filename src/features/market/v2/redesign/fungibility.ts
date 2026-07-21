@@ -4,61 +4,44 @@
  * The backend does not yet expose a `fungible` flag on game_items
  * (see MARKET_V2_RESEARCH.md §11.4/§11.5), and the extracted game data has no
  * `stackable`/`fungible` field either — the only reliable signal is the item
- * category. So we derive fungibility from the item's category with a
- * conservative allowlist.
+ * category. So we derive fungibility from the item's category.
  *
- * DECISION (Phase 0): "narrow" split — only raw goods with no per-instance
- * identity aggregate across sellers. Everything that carries a grade/size or
- * per-instance state (ship components, weapons, armor, clothing, paints) and
- * all ships are non-fungible and render as standalone listings, matching how
- * the game treats them (health/wear/loadout are per-instance).
+ * DECISION (Phase 0): "wide" split — aggregate almost everything, treat only the
+ * genuinely non-fungible cases as standalone. Components, weapons (guns), armor,
+ * clothing, ammo, commodities, containers, etc. all aggregate across sellers.
+ * Yes, guns/armor/components technically degrade (per-instance health/wear), but
+ * in practice buyers shop them by model+grade like commodities, and aggregation
+ * across sellers is exactly the value there — so they're treated as fungible.
+ *
+ * Only SHIPS and BUNDLES stay non-fungible: a ship carries a unique per-instance
+ * loadout/paint/insurance, and a bundle is inherently unique to its seller. Items
+ * with no catalog type (custom / non-catalog) are also non-fungible.
  *
  * `game_item_type` on search results is the SUBCATEGORY from
- * GET /api/v2/game-items/categories (e.g. "Commodity", "Food/Drink",
- * "Quantum Drive", "Ship for Sale/Rental"). We match on subcategory, with a
- * top-level-category fallback via `isFungibleCategory`.
+ * GET /api/v2/game-items/categories (e.g. "Commodity", "Quantum Drive",
+ * "Ranged Weapon", "Ship for Sale/Rental").
  *
- * FUTURE (not committed): two wider splits are possible if we later decide
- * aggregation should cover more:
- *   - "intermediate": also treat grade-standardized components/weapons/armor as
- *     fungible (aggregation genuinely helps there), keeping ships/bundles/
- *     custom/paints non-fungible.
- *   - "wide": everything except ships and bundles is fungible.
- * To move to those, extend FUNGIBLE_SUBCATEGORIES / FUNGIBLE_CATEGORIES below
- * (or, better, replace this whole module with the backend `fungible` flag once
- * it exists). Keep this heuristic behind the market_v2_redesign flag until then.
+ * When the backend `fungible` flag lands, replace this whole module with it.
+ * Keep this heuristic behind the market_v2_redesign flag until then.
  */
 
 /**
- * Subcategories (game_item_type) that are fungible in the Phase 0 "narrow"
- * split — raw goods only. Sourced from GET /api/v2/game-items/categories.
+ * Subcategories (game_item_type) that are NON-fungible — everything else
+ * aggregates. Ships have per-instance loadout/paint/insurance; bundles are
+ * unique per seller. (Denylist rather than allowlist: with the wide split it's a
+ * far shorter, more maintainable list than enumerating every fungible category.)
  */
-const FUNGIBLE_SUBCATEGORIES = new Set<string>([
-  "Commodity", // Commodity category
-  "Container", // Other > Container — how sellers list bulk resources/materials
-  // (refined ore, gas, etc.); interchangeable by contents, so aggregate them.
-  "Food/Drink", // Consumable
-  "Medical Pen", // Consumable
-  "Weapon Magazine", // Consumable (ammo — interchangeable by SKU)
+const NON_FUNGIBLE_SUBCATEGORIES = new Set<string>([
+  "Ship for Sale/Rental", // Ship — unique per-instance loadout/paint/insurance
+  "Bundle", // Other > Bundle — a multi-item set, unique to its seller
 ])
 
 /**
- * Top-level categories that are entirely fungible, used as a fallback when a
- * result's game_item_type happens to carry the top-level category instead of a
- * subcategory. "Commodity" and "Consumable" are wholly raw goods.
- */
-const FUNGIBLE_CATEGORIES = new Set<string>(["Commodity", "Consumable"])
-
-/**
  * Returns true when a listing's item type should aggregate across sellers.
- * Narrow Phase 0 rule: only raw goods aggregate; everything else (graded
- * components, weapons, armor, clothing, paints, ships, bundles, custom) is
- * standalone. Unknown/empty types default to NON-fungible (standalone) so we
- * never wrongly merge distinct items.
+ * Wide Phase 0 rule: everything aggregates EXCEPT ships, bundles, and items with
+ * no catalog type (custom / non-catalog), which render as standalone listings.
  */
 export function isFungibleType(gameItemType: string | null | undefined): boolean {
-  if (!gameItemType) return false
-  return (
-    FUNGIBLE_SUBCATEGORIES.has(gameItemType) || FUNGIBLE_CATEGORIES.has(gameItemType)
-  )
+  if (!gameItemType) return false // custom / non-catalog → standalone
+  return !NON_FUNGIBLE_SUBCATEGORIES.has(gameItemType)
 }

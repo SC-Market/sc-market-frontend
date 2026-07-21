@@ -321,6 +321,11 @@ function GroupCard({
   // Aggregate quality RANGE across all sellers — the scan-level signal a buyer
   // wants, not just the cheapest listing's quality.
   const qc = groupQualityChipProps(listings)
+  // Aggregate-level tags (parity with ListingCardV2, adapted to a group): show
+  // BULK DISCOUNT if ANY seller offers one; the group is only fully out of stock
+  // if EVERY seller is (a group is "available" as long as one seller has stock).
+  const anyBulkDiscount = listings.some((l) => l.has_bulk_discount)
+  const allOutOfStock = listings.every((l) => (l.quantity_available ?? 0) === 0)
 
   return (
     <Fade in={true} timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
@@ -386,6 +391,40 @@ function GroupCard({
                   height: 18,
                   bgcolor: qc.color,
                   color: "#fff",
+                }}
+              />
+            )}
+            {allOutOfStock && (
+              <Chip
+                label={t("market.outOfStock", "OUT OF STOCK")}
+                color="error"
+                size="small"
+                sx={{
+                  position: "absolute",
+                  top: 26,
+                  right: 4,
+                  zIndex: 2,
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                  fontSize: "0.65rem",
+                  height: 18,
+                }}
+              />
+            )}
+            {anyBulkDiscount && (
+              <Chip
+                label={t("market.bulkDiscount", "BULK DISCOUNT")}
+                color="info"
+                size="small"
+                sx={{
+                  position: "absolute",
+                  bottom: 4,
+                  left: 4,
+                  zIndex: 2,
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                  fontSize: "0.65rem",
+                  height: 18,
                 }}
               />
             )}
