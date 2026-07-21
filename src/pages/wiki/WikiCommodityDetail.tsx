@@ -63,7 +63,7 @@ export function WikiCommodityDetail() {
       canonicalUrl={`/wiki/commodities/${id}`}
       headerTitle={r?.resource_name || "Commodity Detail"}
       breadcrumbs={[
-        { label: "Wiki", href: "/wiki/commodities" },
+        { label: "Wiki", href: "/wiki" },
         { label: "Commodities", href: "/wiki/commodities" },
         { label: r?.resource_name || "Detail" },
       ]}

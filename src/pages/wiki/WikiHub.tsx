@@ -51,7 +51,16 @@ export function WikiHub() {
   const theme: ExtendedTheme = useTheme()
 
   return (
-    <StandardPageLayout title="Game Database" maxWidth="lg">
+    <StandardPageLayout
+      title={t("wiki.hub.title", "Game Database — Star Citizen Items, Ships & More | SC Market")}
+      description={t(
+        "wiki.hub.description",
+        "Browse the complete Star Citizen game database: items, ships, commodities, locations, manufacturers, blueprints, and mining resources.",
+      )}
+      canonicalUrl="/wiki"
+      headerTitle={t("wiki.hub.header", "Game Database")}
+      maxWidth="lg"
+    >
       <Grid container spacing={2}>
         {WIKI_SECTIONS.map((section) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={section.route}>

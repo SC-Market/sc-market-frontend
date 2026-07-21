@@ -132,7 +132,7 @@ export function WikiShipDetail() {
   const ogImage = ship.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
-    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={`/wiki/ships/${id}`} headerTitle={ship.name} sidebarOpen={true} maxWidth="md">
+    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={`/wiki/ships/${id}`} headerTitle={ship.name} breadcrumbs={[{ label: "Wiki", href: "/wiki" }, { label: "Ships & Vehicles", href: "/wiki/ships" }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
       <Helmet>
         <title>{seoTitle}</title>
         <meta name="description" content={seoDescription} />

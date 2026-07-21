@@ -12,23 +12,21 @@ import {
   CardMedia,
   Typography,
   Grid,
-  CircularProgress,
-  Alert,
   Chip,
   Stack,
   Divider,
   Box,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Helmet } from "react-helmet"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetManufacturerDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { FRONTEND_URL } from "../../util/constants"
 
 export function WikiManufacturerPage() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data: manufacturer, isLoading, error } = useGetManufacturerDetailQuery({ id: id! })
@@ -37,46 +35,40 @@ export function WikiManufacturerPage() {
     navigate(`/wiki/items/${itemId}`)
   }
 
-  if (isLoading) {
-    return (
-      <StandardPageLayout
-        title={t("wiki.manufacturerDetail.title", "Manufacturer Details")}
-        headerTitle={t("wiki.manufacturerDetail.title", "Manufacturer Details")}
-        sidebarOpen={true}
-        maxWidth="xl"
-      >
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-            <CircularProgress />
-          </Box>
-        </Grid>
-      </StandardPageLayout>
-    )
-  }
-
-  if (error || !manufacturer) {
-    return (
-      <StandardPageLayout
-        title={t("wiki.manufacturerDetail.title", "Manufacturer Details")}
-        headerTitle={t("wiki.manufacturerDetail.title", "Manufacturer Details")}
-        sidebarOpen={true}
-        maxWidth="xl"
-      >
-        <Grid item xs={12}>
-          <Alert severity="error">Failed to load manufacturer details. Please try again.</Alert>
-        </Grid>
-      </StandardPageLayout>
-    )
-  }
+  const seoTitle = manufacturer
+    ? `${manufacturer.manufacturer} — Star Citizen Manufacturer | SC Market`
+    : t("wiki.manufacturerDetail.title", "Manufacturer Details")
+  const seoDescription = manufacturer
+    ? `${manufacturer.manufacturer} manufactures ${manufacturer.item_count} items in Star Citizen. Browse their full product catalog on SC Market.`.slice(0, 160)
+    : undefined
 
   return (
     <StandardPageLayout
-      title={t("wiki.manufacturerDetail.title", "Manufacturer Details")}
-      headerTitle={manufacturer.manufacturer}
+      title={seoTitle}
+      description={seoDescription}
+      canonicalUrl={`/wiki/manufacturers/${id}`}
+      headerTitle={manufacturer?.manufacturer ?? t("wiki.manufacturerDetail.title", "Manufacturer Details")}
+      breadcrumbs={[
+        { label: "Wiki", href: "/wiki" },
+        { label: "Manufacturers", href: "/wiki/manufacturers" },
+        { label: manufacturer?.manufacturer ?? "Detail" },
+      ]}
       sidebarOpen={true}
-      maxWidth="xl"
+      maxWidth="md"
+      isLoading={isLoading}
+      error={error}
+      skeleton={<Grid item xs={12}><DetailPageSkeleton /></Grid>}
     >
+      {manufacturer && (
       <Grid item xs={12}>
+        <Helmet>
+          <title>{seoTitle}</title>
+          {seoDescription && <meta name="description" content={seoDescription} />}
+          <link rel="canonical" href={`${FRONTEND_URL}/wiki/manufacturers/${id}`} />
+          <meta property="og:title" content={seoTitle} />
+          {seoDescription && <meta property="og:description" content={seoDescription} />}
+          <meta property="og:url" content={`${FRONTEND_URL}/wiki/manufacturers/${id}`} />
+        </Helmet>
         <Card sx={{ mb: 3 }}>
           <CardContent>
             {manufacturer.description && (
@@ -149,6 +141,7 @@ export function WikiManufacturerPage() {
           </Box>
         )}
       </Grid>
+      )}
     </StandardPageLayout>
   )
 }
