@@ -572,7 +572,7 @@ export function SidebarV2() {
               return (
                 <React.Fragment key={item.to}>
                   {showGroup && (
-                    <Typography variant="body2" sx={sectionHeaderSx}>
+                    <Typography variant="body2" sx={{ ...sectionHeaderSx, px: 1 }}>
                       {item.group}
                     </Typography>
                   )}
