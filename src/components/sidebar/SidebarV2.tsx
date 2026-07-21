@@ -174,6 +174,7 @@ export function SidebarV2() {
       const perms = selectedShop.permissions
       const manage = t("nav.groupManage", "Manage")
       const items: NavItem[] = [
+        { label: t("nav.shopPage", "Shop Page"), to: SHOP_PATHS.profile(slug), icon: <StorefrontRounded /> },
         { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded /> },
         { label: t("nav.listings", "Listings"), to: SHOP_PATHS.listings(slug), icon: <ListAltRounded /> },
         { label: t("nav.services", "Services"), to: SHOP_PATHS.services(slug), icon: <DesignServicesRounded /> },
@@ -213,10 +214,10 @@ export function SidebarV2() {
         items.push({ label: t("nav.orgAbout", "About"), to: `/org/${selectedOrgId}/manage/about`, icon: <DescriptionRounded />, group: manage })
       }
       if (canManageRoles) {
-        items.push({ label: t("nav.orgRoles", "Roles"), to: `/org/${selectedOrgId}/manage/roles`, icon: <PeopleRounded />, group: manage })
+        items.push({ label: t("nav.orgRoles", "Roles"), to: `/org/${selectedOrgId}/manage/roles`, icon: <AdminPanelSettingsRounded />, group: manage })
       }
       if (canManageInvites) {
-        items.push({ label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PeopleRounded />, group: manage })
+        items.push({ label: t("nav.orgInvites", "Invites"), to: `/org/${selectedOrgId}/manage/invites`, icon: <PersonAddRounded />, group: manage })
       }
       if (canManageWebhooks) {
         items.push({ label: t("nav.orgDiscord", "Discord"), to: `/org/${selectedOrgId}/manage/discord`, icon: <MessageRounded />, group: manage })
