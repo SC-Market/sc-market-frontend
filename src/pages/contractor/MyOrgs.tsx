@@ -12,7 +12,7 @@ import {
 } from "@mui/material"
 import { Groups, Settings } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { ORG_PATHS } from "../../routes/paths"
+import { ORG_PATHS, PATHS } from "../../routes/paths"
 
 export function MyOrgs() {
   const { data: profile } = useGetUserProfileQuery()
@@ -36,7 +36,7 @@ export function MyOrgs() {
           <Button
             variant="contained"
             component={RouterLink}
-            to={ORG_PATHS.register}
+            to={PATHS.orgRegister}
           >
             Create Organization
           </Button>
