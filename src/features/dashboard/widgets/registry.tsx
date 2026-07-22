@@ -17,12 +17,16 @@ import { UserOrderTrend } from "../../../views/orders/OrderTrend"
 import { ReceivedOffersArea } from "../../../views/offers/ReceivedOffersArea"
 import { MatchingBuyOrdersArea } from "../../../features/market/views/MatchingBuyOrdersArea"
 import { SellerAnalyticsV2 } from "../../../features/market/v2/components/SellerAnalyticsV2"
+import { MarketOverviewWidget } from "./MarketOverviewWidget"
+import { ReputationWidget } from "./ReputationWidget"
+import { WishlistWidget } from "./WishlistWidget"
+import { PriceHistoryWidget } from "./PriceHistoryWidget"
 import type { ResolvedScope } from "../useResolveScope"
-import type { WidgetLayout, WidgetScopeKind } from "../types"
+import type { DashboardWidget, WidgetLayout, WidgetScopeKind } from "../types"
 
 export interface WidgetRenderProps {
   scope: ResolvedScope
-  settings?: Record<string, unknown>
+  settings?: DashboardWidget["settings"]
   /** Translator, passed so widget render fns can localize their own labels. */
   t: TFunction
 }
@@ -41,6 +45,11 @@ export interface WidgetDefinition {
   defaultLayout: Pick<WidgetLayout, "w" | "h">
   /** Scope bindings this widget supports. */
   allowedScopes: WidgetScopeKind[]
+  /**
+   * When true, the add-widget gallery requires a game item to be picked and
+   * stores it as settings.gameItemId / settings.gameItemName.
+   */
+  requiresItem?: boolean
   render: (props: WidgetRenderProps) => ReactNode
 }
 
@@ -166,6 +175,51 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
       <Grid container spacing={2}>
         <SellerAnalyticsV2 sellerId={scope.shopId} />
       </Grid>
+    ),
+  },
+  {
+    type: "market_overview",
+    titleKey: "dashboard.widgets.marketOverview.title",
+    titleDefault: "Market Overview",
+    descriptionKey: "dashboard.widgets.marketOverview.description",
+    descriptionDefault: "Top items across the market by availability.",
+    defaultLayout: { w: 6, h: 5 },
+    allowedScopes: PERSONAL_ONLY,
+    render: ({ settings, t }) => (
+      <MarketOverviewWidget settings={settings} t={t} />
+    ),
+  },
+  {
+    type: "reputation",
+    titleKey: "dashboard.widgets.reputation.title",
+    titleDefault: "Reputation",
+    descriptionKey: "dashboard.widgets.reputation.description",
+    descriptionDefault: "Your seller rating, streak, order volume, and badges.",
+    defaultLayout: { w: 3, h: 3 },
+    allowedScopes: PERSONAL_ONLY,
+    render: ({ t }) => <ReputationWidget t={t} />,
+  },
+  {
+    type: "wishlist",
+    titleKey: "dashboard.widgets.wishlist.title",
+    titleDefault: "Shopping Lists",
+    descriptionKey: "dashboard.widgets.wishlist.description",
+    descriptionDefault: "Your shopping lists and how close each is to complete.",
+    defaultLayout: { w: 3, h: 4 },
+    allowedScopes: PERSONAL_ONLY,
+    render: ({ t }) => <WishlistWidget t={t} />,
+  },
+  {
+    type: "price_history",
+    titleKey: "dashboard.widgets.priceHistory.title",
+    titleDefault: "Price History",
+    descriptionKey: "dashboard.widgets.priceHistory.description",
+    descriptionDefault: "Price trend over time for a specific item.",
+    defaultLayout: { w: 6, h: 5 },
+    allowedScopes: PERSONAL_ONLY,
+    requiresItem: true,
+    render: ({ settings, t }) => (
+      <PriceHistoryWidget settings={settings} t={t} />
     ),
   },
 ]
