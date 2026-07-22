@@ -3412,7 +3412,12 @@ export type CreateShopWebhookRequest = {
   actions: string[]
 }
 export type TransferShopRequest = {
-  target_contractor_id: string
+  /** Whether ownership transfers to a user account or an org. */
+  target_type: "user" | "contractor"
+  /** Identifier of the new owner.
+    - When target_type is "user": the target user's user_id or username.
+    - When target_type is "contractor": the target org's contractor_id (UUID) or spectrum_id. */
+  target_id: string
 }
 export type ShopBlocklistEntry = {
   id: string
