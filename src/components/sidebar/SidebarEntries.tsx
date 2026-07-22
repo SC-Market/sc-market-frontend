@@ -103,7 +103,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <DesignServicesRounded />,
       },
       {
-        to: SHOP_PATHS.directory,
+        to: MARKET_PATHS.shops,
         text: "sidebar.browse_shops",
         icon: <StoreRounded />,
       },

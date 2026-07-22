@@ -21,7 +21,6 @@ export const PATHS = {
   notifications: "/notifications",
   dashboard: "/dashboard",
   dashboardShops: "/dashboard/shops",
-  assignedOrders: "/dashboard",
   inventory: "/inventory",
   availability: "/availability",
   messages: "/messages",
@@ -39,8 +38,7 @@ export const PATHS = {
 } as const
 
 export const AUTH_PATHS = {
-  login: "/login",
-  signup: "/signup",
+  // login/signup live in PATHS (canonical) — use PATHS.login / PATHS.signup
   accountLink: "/accountlink",
   emailVerify: "/email/verify",
   emailVerifyToken: (token: string) => `/email/verify/${token}`,
@@ -61,7 +59,6 @@ export const SHOP_PATHS = {
   /** Public shop profile */
   profile: (slug: string) => `/shops/${slug}`,
   profileTab: (slug: string, tab: string) => `/shops/${slug}/${tab}`,
-  directory: "/shops",
   createShop: "/shops/create",
 } as const
 
@@ -84,7 +81,7 @@ export const ORG_PATHS = {
   fleet: (spectrumId: string) => `/org/${spectrumId}/fleet`,
   send: (spectrumId: string) => `/org/${spectrumId}/send`,
   dashboard: (spectrumId: string) => `/org/${spectrumId}/dashboard`,
-  register: "/org/register",
+  // register lives in PATHS.orgRegister (canonical)
   /** Public org profile */
   profile: (spectrumId: string) => `/contractor/${spectrumId}`,
   profileTab: (spectrumId: string, tab: string) => `/contractor/${spectrumId}/${tab}`,
@@ -118,7 +115,7 @@ export const MARKET_PATHS = {
   aggregate: (gameItemId: string, name?: string) =>
     name ? `/market/aggregate/${formatShortSlug(gameItemId, name)}` : `/market/aggregate/${gameItemId}`,
   shops: "/shops",
-  shopProfile: (slug: string) => `/shops/${slug}`,
+  // per-shop profile lives in SHOP_PATHS.profile (canonical)
 } as const
 
 export const ORDER_PATHS = {
