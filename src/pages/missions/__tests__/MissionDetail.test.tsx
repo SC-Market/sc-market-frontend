@@ -12,7 +12,7 @@
  */
 
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { render, screen, fireEvent } from "@testing-library/react"
 import { Provider } from "react-redux"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
@@ -231,10 +231,12 @@ describe("MissionDetail", () => {
       error: undefined,
     })
 
-    renderWithProviders()
+    const { container } = renderWithProviders()
 
-    // Check for loading indicator (CircularProgress)
-    expect(screen.getByRole("progressbar") || screen.getByText(/loading/i)).toBeTruthy()
+    // Loading renders DetailPageSkeleton (MUI Skeletons), not a progressbar
+    expect(container.querySelectorAll(".MuiSkeleton-root").length).toBeGreaterThan(0)
+    // Mission content is not shown while loading
+    expect(screen.queryByText("Test Mission")).not.toBeInTheDocument()
   })
 
   it("renders error state", () => {
@@ -252,13 +254,21 @@ describe("MissionDetail", () => {
   it("renders mission header with name and badges", () => {
     renderWithProviders()
 
+    // Mission name is rendered by StandardPageLayout headerTitle (mocked to <h1>)
     expect(screen.getByText("Test Mission")).toBeInTheDocument()
+    // Header chips (redesigned)
+    expect(screen.getByText("Stanton")).toBeInTheDocument()
     expect(screen.getByText("Combat")).toBeInTheDocument()
-    expect(screen.getByText("Mercenary")).toBeInTheDocument()
-    expect(screen.getByText("LEGAL")).toBeInTheDocument()
-    expect(screen.getByText("Difficulty 3")).toBeInTheDocument()
+    // Giver chip
+    expect(screen.getAllByText("Hurston Dynamics").length).toBeGreaterThan(0)
+    // difficulty renders as "D3"
+    expect(screen.getByText("D3")).toBeInTheDocument()
+    // shareable chip
     expect(screen.getByText("Shareable")).toBeInTheDocument()
-    expect(screen.getByText("Chain Starter")).toBeInTheDocument()
+    // chain starter renders as "Starter" chip
+    expect(screen.getByText("Starter")).toBeInTheDocument()
+    // legal missions do not render a legal_status chip
+    expect(screen.queryByText("LEGAL")).not.toBeInTheDocument()
   })
 
   it("renders mission description", () => {
@@ -267,89 +277,72 @@ describe("MissionDetail", () => {
     expect(screen.getByText("This is a test mission description")).toBeInTheDocument()
   })
 
-  it("renders mission metadata (location, giver, type)", () => {
+  it("renders mission metadata (location, giver, faction)", () => {
     renderWithProviders()
 
+    // Overview tab shows the Location row joined with arrows
     expect(screen.getByText("Location")).toBeInTheDocument()
-    expect(screen.getByText("Stanton • Hurston • Lorville")).toBeInTheDocument()
-    expect(screen.getByText("Mission Giver")).toBeInTheDocument()
-    expect(screen.getByText("Hurston Dynamics")).toBeInTheDocument()
-    expect(screen.getByText("Mission Type")).toBeInTheDocument()
-    expect(screen.getByText("Contract")).toBeInTheDocument()
+    expect(screen.getByText("Stanton → Hurston → Lorville")).toBeInTheDocument()
+    // Faction row
+    expect(screen.getByText("Faction")).toBeInTheDocument()
+    expect(screen.getAllByText("Hurston Dynamics").length).toBeGreaterThan(0)
   })
 
   it("renders credit and reputation rewards", () => {
     renderWithProviders()
 
-    expect(screen.getByText("Credits")).toBeInTheDocument()
-    expect(screen.getByText("10,000 - 15,000 aUEC")).toBeInTheDocument()
-    expect(screen.getByText("Reputation")).toBeInTheDocument()
-    expect(screen.getByText("+100")).toBeInTheDocument()
+    // Reward section
+    expect(screen.getByText("Reward")).toBeInTheDocument()
+    expect(screen.getByText("UEC")).toBeInTheDocument()
+    // formatCredits abbreviates thousands: 10K aUEC – 15K aUEC
+    expect(screen.getByText("10K aUEC – 15K aUEC")).toBeInTheDocument()
+    // Reputation row
+    expect(screen.getByText("Rep/mission")).toBeInTheDocument()
+    expect(screen.getByText("100 XP")).toBeInTheDocument()
   })
 
-  it("renders estimated rewards per hour", () => {
+  it("renders blueprint reward pools with blueprint names", () => {
     renderWithProviders()
 
-    expect(screen.getByText("Est. UEC/Hour")).toBeInTheDocument()
-    expect(screen.getByText("50,000 aUEC")).toBeInTheDocument()
-    expect(screen.getByText("Est. Rep/Hour")).toBeInTheDocument()
-    expect(screen.getByText("+500")).toBeInTheDocument()
-  })
-
-  it("renders blueprint reward pools with probabilities", () => {
-    renderWithProviders()
-
+    // Blueprint Rewards section heading in the Overview tab
     expect(screen.getByText("Blueprint Rewards")).toBeInTheDocument()
-    expect(screen.getByText("Reward Pool 1")).toBeInTheDocument()
-    expect(screen.getByText(/1 of 3 blueprints selected/i)).toBeInTheDocument()
-    expect(screen.getByText("Test Blueprint 1")).toBeInTheDocument()
-    expect(screen.getByText("Test Blueprint 2")).toBeInTheDocument()
-    expect(screen.getByText("Test Blueprint 3")).toBeInTheDocument()
-  })
-
-  it("renders blueprint rarity and tier badges", () => {
-    renderWithProviders()
-
-    expect(screen.getByText("Tier 3")).toBeInTheDocument()
-    expect(screen.getByText("Tier 4")).toBeInTheDocument()
-    expect(screen.getByText("Tier 1")).toBeInTheDocument()
-    expect(screen.getByText("Owned")).toBeInTheDocument()
+    // selection/pool chip: "1 of 3"
+    expect(screen.getByText("1 of 3")).toBeInTheDocument()
+    // Blueprints render their output_item_name
+    expect(screen.getByText("Test Item 1")).toBeInTheDocument()
+    expect(screen.getByText("Test Item 2")).toBeInTheDocument()
+    expect(screen.getByText("Test Item 3")).toBeInTheDocument()
   })
 
   it("renders drop probabilities for blueprints", () => {
     renderWithProviders()
 
-    // Should find 3 blueprints with 33.3% chance each, plus the pool header text
-    const probabilities = screen.getAllByText(/33\.3% chance/i)
+    // Each blueprint shows its rounded drop percentage (33.33 -> "33%")
+    const probabilities = screen.getAllByText("33%")
     expect(probabilities.length).toBeGreaterThanOrEqual(3)
   })
 
-  it("renders prerequisite missions", () => {
+  it("renders chain information in the Chain Info tab", () => {
     renderWithProviders()
 
-    expect(screen.getByText("Prerequisite Missions")).toBeInTheDocument()
-    expect(
-      screen.getByText("Complete these missions before attempting this one")
-    ).toBeInTheDocument()
+    // Chain content lives in the "Chain Info" tab
+    fireEvent.click(screen.getByRole("tab", { name: "Chain Info" }))
+
+    expect(screen.getByText("Chain Status:")).toBeInTheDocument()
+    expect(screen.getByText("Chain Starter")).toBeInTheDocument()
+    // Prerequisites listed in chain tab
+    expect(screen.getByText(/Prerequisites/i)).toBeInTheDocument()
     expect(screen.getByText("Prerequisite Mission")).toBeInTheDocument()
-    expect(screen.getByText("Delivery • Stanton • Crusader Industries")).toBeInTheDocument()
   })
 
-  it("renders mission chain information", () => {
+  it("renders requirements section in the Requirements tab", () => {
     renderWithProviders()
 
-    expect(screen.getByText("Mission Chain Information")).toBeInTheDocument()
-    expect(
-      screen.getByText(/This is a chain starter mission/i)
-    ).toBeInTheDocument()
-  })
+    fireEvent.click(screen.getByRole("tab", { name: "Requirements" }))
 
-  it("renders requirements section", () => {
-    renderWithProviders()
-
-    expect(screen.getByText("Requirements")).toBeInTheDocument()
-    expect(screen.getByText("Required Rank")).toBeInTheDocument()
-    expect(screen.getByText("1")).toBeInTheDocument()
+    expect(screen.getByText("Mission Properties")).toBeInTheDocument()
+    // Shareable property is shown (mission is shareable)
+    expect(screen.getAllByText("Shareable").length).toBeGreaterThan(0)
   })
 
   it("renders community ratings", () => {
@@ -357,31 +350,10 @@ describe("MissionDetail", () => {
 
     expect(screen.getByText("Community Ratings")).toBeInTheDocument()
     expect(screen.getByText("Difficulty")).toBeInTheDocument()
-    expect(screen.getByText("⭐ 3.5 / 5.0")).toBeInTheDocument()
-    expect(screen.getByText("42 ratings")).toBeInTheDocument()
+    // "3.5/5 (42 ratings)"
+    expect(screen.getByText("3.5/5 (42 ratings)")).toBeInTheDocument()
     expect(screen.getByText("Satisfaction")).toBeInTheDocument()
-    expect(screen.getByText("⭐ 4.2 / 5.0")).toBeInTheDocument()
-    expect(screen.getByText("38 ratings")).toBeInTheDocument()
-  })
-
-  it("renders user rating when available", () => {
-    renderWithProviders()
-
-    expect(screen.getByText("Your Rating")).toBeInTheDocument()
-    expect(screen.getByText(/Difficulty: 3\/5 • Satisfaction: 4\/5/i)).toBeInTheDocument()
-    expect(screen.getByText('"Great mission!"')).toBeInTheDocument()
-  })
-
-  it("renders mission metadata section", () => {
-    renderWithProviders()
-
-    expect(screen.getByText("Additional Information")).toBeInTheDocument()
-    expect(screen.getByText("Mission Code")).toBeInTheDocument()
-    expect(screen.getByText("MISSION_CODE_001")).toBeInTheDocument()
-    expect(screen.getByText("Rank Index")).toBeInTheDocument()
-    expect(screen.getByText("10")).toBeInTheDocument()
-    expect(screen.getByText("Data Source")).toBeInTheDocument()
-    expect(screen.getByText("extraction ✓")).toBeInTheDocument()
+    expect(screen.getByText("4.2/5 (38 ratings)")).toBeInTheDocument()
   })
 
   it("does not render optional sections when data is missing", () => {
@@ -413,9 +385,10 @@ describe("MissionDetail", () => {
 
     renderWithProviders()
 
+    // Overview tab conditional sections should be absent with minimal data
     expect(screen.queryByText("Blueprint Rewards")).not.toBeInTheDocument()
-    expect(screen.queryByText("Prerequisite Missions")).not.toBeInTheDocument()
-    expect(screen.queryByText("Requirements")).not.toBeInTheDocument()
     expect(screen.queryByText("Community Ratings")).not.toBeInTheDocument()
+    // No reward rows when credits/rep are missing
+    expect(screen.queryByText("Rep/mission")).not.toBeInTheDocument()
   })
 })

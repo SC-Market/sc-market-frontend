@@ -3,6 +3,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { configureStore } from "@reduxjs/toolkit";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { MarketAggregateViewV2 } from "../MarketAggregateViewV2";
@@ -37,6 +38,27 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
+// StandardPageLayout depends on Page (useRouteError -> data router) and
+// drawer/layout contexts not present under BrowserRouter. Mock it to render
+// children plus a breadcrumb nav so component behavior can still be asserted.
+vi.mock("../../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children, title, breadcrumbs, isLoading, error }: any) => (
+    <div data-testid="standard-page-layout">
+      <h1>{title}</h1>
+      {breadcrumbs && (
+        <nav aria-label="breadcrumb">
+          {breadcrumbs.map((crumb: any, i: number) => (
+            <span key={i}>{crumb.label}</span>
+          ))}
+        </nav>
+      )}
+      {isLoading && <div data-testid="loading">Loading...</div>}
+      {error && <div data-testid="error">Error</div>}
+      {children}
+    </div>
+  ),
+}));
+
 vi.mock("react-cookie", () => ({
   useCookies: () => [
     { market_cart: [] },
@@ -67,7 +89,19 @@ vi.mock("../../../../hooks/login/CurrentOrg", () => ({
 vi.mock("../../../../components/charts/MuiCharts", () => ({
   MuiAreaChart: ({ series, height }: any) => (
     <div data-testid="mui-area-chart">
-      <div>Chart with {series.length} series</div>
+      <div>Chart with {series?.length ?? 0} series</div>
+      <div>Height: {height}</div>
+    </div>
+  ),
+  MuiBarChart: ({ series, height }: any) => (
+    <div data-testid="mui-bar-chart">
+      <div>Chart with {series?.length ?? 0} series</div>
+      <div>Height: {height}</div>
+    </div>
+  ),
+  MuiLineChart: ({ series, height }: any) => (
+    <div data-testid="mui-line-chart">
+      <div>Chart with {series?.length ?? 0} series</div>
       <div>Height: {height}</div>
     </div>
   ),
@@ -136,9 +170,9 @@ vi.mock("../../../../components/market/v2/VariantSelector", () => ({
 }));
 
 vi.mock("../../../../components/rating/ListingRating", () => ({
-  ListingNameAndRating: ({ user, contractor }: any) => (
+  ListingNameAndRating: ({ user, contractor, shop }: any) => (
     <div data-testid="seller-rating">
-      {user?.username || contractor?.name}
+      {user?.username || contractor?.name || shop?.name}
     </div>
   ),
 }));
@@ -152,11 +186,113 @@ vi.mock("../../../../components/haptic", () => ({
 }));
 
 vi.mock("../components/CreateBuyOrderV2", () => ({
-  CreateBuyOrderV2: ({ gameItemId }: any) => (
+  CreateBuyOrderV2: ({ gameItem }: any) => (
     <div data-testid="create-buy-order-v2">
-      Create Buy Order for {gameItemId}
+      Create Buy Order for {gameItem?.id}
     </div>
   ),
+}));
+
+// The component now fetches its data via RTK Query hooks; mock them with fixtures.
+vi.mock("../../../../store/api/v2/market", () => ({
+  useGetListingsQuery: () => ({
+    data: {
+      game_item: {
+        id: "test-game-item-id",
+        name: "Sample Item",
+        type: "Weapon",
+        image_url: "https://example.com/item.png",
+      },
+      listings: [
+        {
+          listing_id: "l1",
+          shop_id: "shop-1",
+          shop_slug: "seller-one",
+          shop_name: "Seller One",
+          shop_rating: 4.5,
+          price: 1000,
+          quantity_available: 10,
+          quality_tier: 5,
+        },
+        {
+          listing_id: "l2",
+          shop_id: "shop-2",
+          shop_slug: "seller-two",
+          shop_name: "Seller Two",
+          shop_rating: 4.0,
+          price: 1200,
+          quantity_available: 5,
+          quality_tier: 3,
+        },
+      ],
+    },
+    isLoading: false,
+    error: undefined,
+  }),
+  useGetQualityDistributionQuery: () => ({
+    data: {
+      distribution: [
+        {
+          quality_tier: 5,
+          listing_count: 1,
+          quantity_available: 10,
+          min_price: 1000,
+          avg_price: 1000,
+          max_price: 1000,
+          shop_count: 1,
+        },
+        {
+          quality_tier: 3,
+          listing_count: 1,
+          quantity_available: 5,
+          min_price: 1200,
+          avg_price: 1200,
+          max_price: 1200,
+          shop_count: 1,
+        },
+      ],
+    },
+    isLoading: false,
+    error: undefined,
+  }),
+  useGetPriceHistoryQuery: () => ({
+    data: {
+      data: [
+        {
+          timestamp: "2024-01-01T00:00:00Z",
+          quality_tier: 5,
+          avg_price: 1000,
+          min_price: 900,
+          max_price: 1100,
+          volume: 20,
+        },
+      ],
+    },
+    isLoading: false,
+    error: undefined,
+  }),
+  useSearchBuyOrdersQuery: () => ({
+    data: {
+      buy_orders: [
+        {
+          buy_order_id: "bo1",
+          buyer_id: "buyer-one",
+          buyer_name: "Buyer One",
+          status: "active",
+          quantity: 5,
+          quantity_fulfilled: 0,
+          negotiable: false,
+          price_per_unit: 950,
+          quality_tier_min: 3,
+          quality_tier_max: 5,
+        },
+      ],
+    },
+    isLoading: false,
+    error: undefined,
+  }),
+  useFulfillBuyOrderMutation: () => [vi.fn(), { isLoading: false }],
+  useCancelBuyOrderMutation: () => [vi.fn(), { isLoading: false }],
 }));
 
 // Create mock store
@@ -171,12 +307,21 @@ const createMockStore = () => {
   });
 };
 
+// Extended theme so components using theme.layoutSpacing / theme.borderRadius render.
+const testTheme = createTheme({
+  layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  palette: { outline: { main: "#e0e0e0" } },
+} as any);
+
 // Wrapper component for tests
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const store = createMockStore();
   return (
     <Provider store={store}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <ThemeProvider theme={testTheme}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </ThemeProvider>
     </Provider>
   );
 };
@@ -197,9 +342,9 @@ describe("MarketAggregateViewV2", () => {
       </TestWrapper>
     );
 
-    // Check that game item name is displayed (from mock data)
-    expect(screen.getByText("Sample Item")).toBeInTheDocument();
-    
+    // Check that game item name is displayed (title + breadcrumb).
+    expect(screen.getAllByText("Sample Item").length).toBeGreaterThan(0);
+
     // Check that game item type is displayed
     expect(screen.getByText("Weapon")).toBeInTheDocument();
   });
@@ -280,12 +425,11 @@ describe("MarketAggregateViewV2", () => {
       </TestWrapper>
     );
 
-    // Check that Add to Cart buttons are present
-    const addToCartButtons = screen.getAllByRole("button");
-    const cartButtons = addToCartButtons.filter(
-      (button) => button.querySelector("svg") // AddShoppingCartRounded icon
-    );
-    expect(cartButtons.length).toBeGreaterThan(0);
+    // Each sell listing row exposes a "Buy" action button.
+    const buyButtons = screen
+      .getAllByRole("button")
+      .filter((button) => /buy/i.test(button.textContent || ""));
+    expect(buyButtons.length).toBeGreaterThan(0);
   });
 
   it("displays buy orders section", () => {
@@ -295,9 +439,9 @@ describe("MarketAggregateViewV2", () => {
       </TestWrapper>
     );
 
-    // Check that buy orders section is present
-    expect(screen.getByText(/Buy Orders/i)).toBeInTheDocument();
-    
+    // "Buy Orders" appears both as a stat label and a section title.
+    expect(screen.getAllByText(/Buy Orders/i).length).toBeGreaterThan(0);
+
     // Check that buyer name is displayed
     expect(screen.getByText("Buyer One")).toBeInTheDocument();
   });
@@ -320,9 +464,9 @@ describe("MarketAggregateViewV2", () => {
       </TestWrapper>
     );
 
-    // Check that chart tabs are present
-    expect(screen.getByText(/Order Depth/i)).toBeInTheDocument();
-    expect(screen.getByText(/Supply & Demand/i)).toBeInTheDocument();
+    // Analytics card exposes Price History and Order Depth views.
+    expect(screen.getAllByText(/Order Depth/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Price History/i).length).toBeGreaterThan(0);
   });
 
   it("displays price history chart", () => {

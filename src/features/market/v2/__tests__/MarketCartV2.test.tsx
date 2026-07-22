@@ -233,16 +233,36 @@ describe("MarketCartV2", () => {
 
       renderWithProviders(<MarketCartV2 />, { store })
 
+      // Variant is rendered as separate chips: quality tier badge,
+      // quality value, and crafted source.
       await waitFor(() => {
-        expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
+        expect(screen.getAllByText("Tier 5").length).toBeGreaterThan(0)
+        expect(screen.getByText("Crafted")).toBeInTheDocument()
       })
     })
 
     it("should display cart total", async () => {
       const store = createTestStore()
 
+      // Cart totals render per seller group. Use a single-seller cart so the
+      // group total equals the combined 2,500 aUEC.
+      const singleSellerCart: GetCartResponse = {
+        ...mockCartData,
+        items: [
+          mockCartData.items[0],
+          {
+            ...mockCartData.items[1],
+            listing: {
+              ...mockCartData.items[1].listing,
+              shop_id: "seller-1",
+              shop_name: "TestSeller",
+            },
+          },
+        ],
+      }
+
       store.dispatch(
-        api.util.upsertQueryData("getCart", undefined, mockCartData)
+        api.util.upsertQueryData("getCart", undefined, singleSellerCart)
       )
 
       renderWithProviders(<MarketCartV2 />, { store })
@@ -329,7 +349,7 @@ describe("MarketCartV2", () => {
 
       await waitFor(() => {
         const checkoutButton = screen.getByRole("button", {
-          name: /cart.checkout/i,
+          name: /cart.submitOffer/i,
         })
         expect(checkoutButton).toBeDisabled()
       })

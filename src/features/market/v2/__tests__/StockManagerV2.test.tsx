@@ -2,468 +2,235 @@ import "./setup";
 /**
  * StockManagerV2 Component Tests
  *
- * **Validates: Requirements 21.1-21.12**
+ * The StockManagerV2 page renders the "Manage Listings" stock view: a page
+ * header with a Create Listing action plus a data grid of the shop's listings
+ * (driven by useGetMyListingsQuery). The data grid itself (LazyDataGrid) and the
+ * sidebar search area are mocked so the tests focus on this component's own
+ * structure and data plumbing.
  */
 
-import React from "react"
-import { render, screen, waitFor } from "@testing-library/react"
-import { Provider } from "react-redux"
-import { MemoryRouter } from "react-router-dom"
-import { ThemeProvider, createTheme } from "@mui/material/styles"
-import { configureStore } from "@reduxjs/toolkit"
-import { describe, it, expect, beforeEach, vi } from "vitest"
-import { StockManagerV2 } from "../StockManagerV2"
-import { marketV2Api, GetStockLotsResponse } from "../../../../store/api/v2/market"
-import { serviceApi } from "../../../../store/service"
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { configureStore } from "@reduxjs/toolkit";
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import type { MyListingItem } from "../../../../store/api/v2/market";
+import { marketV2Api } from "../../../../store/api/v2/market";
+import { serviceApi } from "../../../../store/service";
 
 const testTheme = createTheme({
-  palette: {
-    outline: { main: "#e0e0e0" },
-  },
-  layoutSpacing: {
-    layout: 1,
-    component: 1.5,
-    text: 1,
-    compact: 0.5,
-  },
-  borderRadius: {
-    topLevel: 0.375,
-    image: 0.375,
-    button: 1,
-    input: 0.5,
-    chip: 0.5,
-    minimal: 0,
-  },
-} as any)
+  palette: { outline: { main: "#e0e0e0" } },
+  layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+} as any);
 
-// Mock the StandardPageLayout and Page to avoid useRouteError
+// Control the listings query result at module level.
+let myListingsReturn: any = {
+  data: undefined,
+  isLoading: true,
+  isFetching: false,
+  error: undefined,
+  refetch: () => {},
+};
+
+vi.mock("../../../../store/api/v2/market", async () => {
+  const actual: any = await vi.importActual("../../../../store/api/v2/market");
+  const noopMutation = () => [vi.fn(() => ({ unwrap: () => Promise.resolve({}) })), {}];
+  return {
+    ...actual,
+    useGetMyListingsQuery: () => myListingsReturn,
+    useUpdateListingMutation: noopMutation,
+    useRefreshListingMutation: noopMutation,
+    useDeleteListingMutation: noopMutation,
+    useCreateListingMutation: noopMutation,
+    useUpdateStockLotMutation: noopMutation,
+  };
+});
+
+// Mock the lazy data grid so the grid does not suspend forever in tests.
+vi.mock("../../../../components/grid/ThemedDataGrid", () => ({
+  ThemedDataGrid: ({ rows }: any) => (
+    <div data-testid="stock-data-grid">
+      {(rows || []).map((r: any) => (
+        <div key={r.id} data-testid="stock-row">
+          {r.title}
+        </div>
+      ))}
+    </div>
+  ),
+}));
+
+// Mock the heavy sidebar search area.
+vi.mock("../ListingSearchV2", () => ({
+  MarketSearchAreaV2: () => <div data-testid="market-search-area" />,
+}));
+
+import { StockManagerV2 } from "../StockManagerV2";
+
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children }: any) => <div data-testid="standard-page-layout">{children}</div>,
-}))
+  StandardPageLayout: ({ children, isLoading }: any) => (
+    <div data-testid="standard-page-layout">
+      {isLoading && <div role="progressbar" data-testid="loading" />}
+      {children}
+    </div>
+  ),
+}));
 
 vi.mock("../../../../components/metadata/Page", () => ({
   Page: ({ children }: any) => <>{children}</>,
   shouldShowErrorPage: () => false,
-}))
+}));
 
-// Mock the shop route context
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
   useShopRouteContext: () => ({
-    shop: {
-      shop_id: "shop-1",
-      name: "Test Shop",
-      slug: "test-shop",
-      owner_spectrum_id: "owner-1",
-      is_org_owned: false,
-      avatar: null,
-      banner: null,
-      description: null,
-      created_at: "2024-01-01T00:00:00Z",
-    },
+    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop" },
   }),
   useOptionalShopRouteContext: () => ({
-    shop: {
-      shop_id: "shop-1",
-      name: "Test Shop",
-      slug: "test-shop",
-      owner_spectrum_id: "owner-1",
-      is_org_owned: false,
-      avatar: null,
-      banner: null,
-      description: null,
-      created_at: "2024-01-01T00:00:00Z",
-    },
+    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop" },
   }),
-}))
+}));
 
-// Mock the alert hook
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => vi.fn(),
-}))
+}));
 
-// Mock translation
 vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
+  const actual = await vi.importActual("react-i18next");
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, defaultValue?: string) => defaultValue || key,
+      t: (key: string, defaultValue?: string | { defaultValue?: string }) => {
+        if (typeof defaultValue === "object" && defaultValue !== null) {
+          return defaultValue.defaultValue ?? key;
+        }
+        return (defaultValue as string) || key;
+      },
       i18n: { language: "en", changeLanguage: vi.fn() },
     }),
-  }
-})
+  };
+});
 
-// Create mock store
-const createMockStore = (initialState = {}) => {
-  return configureStore({
+const createMockStore = () =>
+  configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
       [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
-    preloadedState: initialState,
-  })
-}
+  });
 
-// Mock data
-const mockStockLots: GetStockLotsResponse = {
-  lots: [
-    {
-      lot_id: "lot-1",
-      item_id: "item-1",
-      variant: {
-        variant_id: "variant-1",
-        attributes: {
-          quality_tier: 5,
-          quality_value: 95.5,
-          crafted_source: "crafted" as const,
-        },
-        display_name: "Tier 5 (95.5%) - Crafted",
-        short_name: "T5 Crafted",
-      },
-      quantity_total: 100,
-      quantity_allocated: 0,
-      location: {
-        location_id: "loc-1",
-        name: "Orison",
-        is_preset: true,
-      },
-      owner: null,
-      listed: true,
-      notes: null,
-      created_at: "2024-01-01T00:00:00Z",
-      updated_at: "2024-01-01T00:00:00Z",
-      listing_id: "listing-1",
-      listing_title: "Mock Listing",
-    game_item_name: "Test Item",
-    listing_photo: null,
-    },
-    {
-      lot_id: "lot-2",
-      item_id: "item-1",
-      variant: {
-        variant_id: "variant-2",
-        attributes: {
-          quality_tier: 3,
-          quality_value: 65.0,
-          crafted_source: "store" as const,
-        },
-        display_name: "Tier 3 (65.0%) - Store",
-        short_name: "T3 Store",
-      },
-      quantity_total: 50,
-      quantity_allocated: 0,
-      location: {
-        location_id: "loc-1",
-        name: "Orison",
-        is_preset: true,
-      },
-      owner: null,
-      listed: true,
-      notes: "Test notes",
-      created_at: "2024-01-02T00:00:00Z",
-      updated_at: "2024-01-02T00:00:00Z",
-      listing_id: "listing-1",
-      listing_title: "Mock Listing",
-    game_item_name: "Test Item",
-    listing_photo: null,
-    },
-  ],
-  total: 2,
-  page: 1,
-  page_size: 20,
-}
+const mockListings: MyListingItem[] = [
+  {
+    listing_id: "listing-1",
+    title: "High Quality Mining Tool",
+    status: "active",
+    created_at: "2024-01-15T10:00:00Z",
+    updated_at: "2024-01-16T12:00:00Z",
+    variant_count: 3,
+    quantity_available: 100,
+    price_min: 1000,
+    price_max: 5000,
+    quality_tier_min: 3,
+    quality_tier_max: 5,
+  },
+  {
+    listing_id: "listing-2",
+    title: "Standard Ship Components",
+    status: "active",
+    created_at: "2024-01-14T08:00:00Z",
+    updated_at: "2024-01-14T08:00:00Z",
+    variant_count: 1,
+    quantity_available: 50,
+    price_min: 500,
+    price_max: 500,
+    quality_tier_min: 2,
+    quality_tier_max: 2,
+  },
+] as any;
+
+const renderPage = () => {
+  const store = createMockStore();
+  return render(
+    <ThemeProvider theme={testTheme}>
+      <MemoryRouter>
+        <Provider store={store}>
+          <StockManagerV2 />
+        </Provider>
+      </MemoryRouter>
+    </ThemeProvider>,
+  );
+};
 
 describe("StockManagerV2", () => {
-  let store: ReturnType<typeof createMockStore>
-
   beforeEach(() => {
-    store = createMockStore()
-  })
+    vi.clearAllMocks();
+    myListingsReturn = {
+      data: { listings: mockListings, total: 2 },
+      isLoading: false,
+      isFetching: false,
+      error: undefined,
+      refetch: vi.fn(),
+    };
+  });
 
   it("renders loading state initially", () => {
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
+    myListingsReturn = {
+      data: undefined,
+      isLoading: true,
+      isFetching: false,
+      error: undefined,
+      refetch: vi.fn(),
+    };
+    renderPage();
+    expect(screen.getByRole("progressbar")).toBeInTheDocument();
+  });
 
-    expect(screen.getByRole("progressbar")).toBeInTheDocument()
-  })
+  it("renders the manage listings header and create button", async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getAllByText("Manage Listings").length).toBeGreaterThan(0),
+    );
+    expect(screen.getByText("Create Listing")).toBeInTheDocument();
+  });
 
-  it("renders stock manager with title and create button", async () => {
-    // Mock the API response
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
+  it("renders the sidebar search area", async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getByTestId("market-search-area")).toBeInTheDocument(),
+    );
+  });
 
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
+  it("renders a data grid populated with the shop's listings", async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getByTestId("stock-data-grid")).toBeInTheDocument(),
+    );
+    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument();
+    expect(screen.getByText("Standard Ship Components")).toBeInTheDocument();
+  });
 
-    await waitFor(() => {
-      expect(screen.getByText("Stock Management")).toBeInTheDocument()
-    })
+  it("renders an empty data grid when there are no listings", async () => {
+    myListingsReturn = {
+      data: { listings: [], total: 0 },
+      isLoading: false,
+      isFetching: false,
+      error: undefined,
+      refetch: vi.fn(),
+    };
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getByTestId("stock-data-grid")).toBeInTheDocument(),
+    );
+    expect(screen.queryAllByTestId("stock-row")).toHaveLength(0);
+  });
 
-    expect(screen.getByText("Create Lot")).toBeInTheDocument()
-  })
-
-  it("displays stock breakdown with aggregates", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      expect(screen.getByText("Total Stock")).toBeInTheDocument()
-    })
-
-    expect(screen.getByText("Available")).toBeInTheDocument()
-    const quantities = screen.getAllByText("150")
-    expect(quantities.length).toBeGreaterThan(0) // Total quantity
-  })
-
-  it("groups lots by location", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      const orisonTexts = screen.getAllByText("Orison")
-      expect(orisonTexts.length).toBeGreaterThan(0)
-    })
-
-    expect(screen.getByText("(2 lots)")).toBeInTheDocument()
-  })
-
-  it("displays variant information for each lot", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
-    })
-
-    expect(screen.getByText("Tier 3 (65.0%) - Store")).toBeInTheDocument()
-  })
-
-  it("displays quality tier filters", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      const minQualityLabels = screen.getAllByText("Min Quality")
-      expect(minQualityLabels.length).toBeGreaterThan(0)
-    })
-
-    const maxQualityLabels = screen.getAllByText("Max Quality")
-    expect(maxQualityLabels.length).toBeGreaterThan(0)
-  })
-
-  it("displays sort options", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      const sortByLabels = screen.getAllByText("Sort By")
-      expect(sortByLabels.length).toBeGreaterThan(0)
-    })
-  })
-
-  it("displays empty state when no lots exist", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        { lots: [], total: 0, page: 1, page_size: 20 },
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      expect(
-        screen.getByText(
-          "No stock lots found. Create your first lot to get started.",
-        ),
-      ).toBeInTheDocument()
-    })
-
-    expect(screen.getByText("Create First Lot")).toBeInTheDocument()
-  })
-
-  it("displays preset badge for preset locations", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      expect(screen.getByText("Preset")).toBeInTheDocument()
-    })
-  })
-
-  it("displays quality tier chips with appropriate colors", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      const tier5Chips = screen.getAllByText("Tier 5")
-      expect(tier5Chips.length).toBeGreaterThan(0)
-    })
-
-    const tier3Chips = screen.getAllByText("Tier 3")
-    expect(tier3Chips.length).toBeGreaterThan(0)
-  })
-
-  it("displays crafted source chips", async () => {
-    store.dispatch(
-      marketV2Api.util.upsertQueryData(
-        "getStockLots",
-        { listingId: "listing-1" },
-        mockStockLots,
-      ),
-    )
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <StockManagerV2 />
-          </Provider>
-        </MemoryRouter>
-      </ThemeProvider>,
-    )
-
-    await waitFor(() => {
-      const craftedChips = screen.getAllByText("crafted")
-      expect(craftedChips.length).toBeGreaterThan(0)
-    })
-
-    const storeChips = screen.getAllByText("store")
-    expect(storeChips.length).toBeGreaterThan(0)
-  })
-})
+  it("links to the archived listings view", async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getByText("sidebar.archived_listings")).toBeInTheDocument(),
+    );
+  });
+});

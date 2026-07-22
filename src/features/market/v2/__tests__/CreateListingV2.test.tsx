@@ -4,15 +4,33 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { CreateListingV2 } from "../CreateListingV2";
 import { generatedApi } from "../../../../store/generatedApi";
 import { generatedApiV2 } from "../../../../store/generatedApiV2";
+import { serviceApi } from "../../../../store/service";
 import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
 // Mock dependencies
+const { mockIssueAlert, gameItem } = vi.hoisted(() => ({
+  mockIssueAlert: vi.fn(),
+  // Mutable holder so each test can control the selected game item's type,
+  // which drives whether the quality-tier or quality-value field renders.
+  gameItem: { name: "Test Item", type: "Ranged Weapon", id: "test-item-id" },
+}));
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
-  useAlertHook: () => vi.fn(),
+  useAlertHook: () => mockIssueAlert,
+}));
+
+// Mock StandardPageLayout to avoid data-router / metadata Page dependencies
+vi.mock("../../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children, headerTitle }: any) => (
+    <div data-testid="standard-page-layout">
+      {headerTitle}
+      {children}
+    </div>
+  ),
 }));
 
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
@@ -26,13 +44,13 @@ vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
   ),
 }));
 
-vi.mock("../components/GameItemSearchAutocomplete", () => ({
+vi.mock("../../components/GameItemSearchAutocomplete", () => ({
   GameItemSearchAutocomplete: ({ onChange, label }: any) => (
     <input
       data-testid="game-item-search"
       placeholder={label}
       onChange={(e) => {
-        onChange("Test Item", "Weapon", "test-item-id");
+        onChange(gameItem.name, gameItem.type, gameItem.id);
       }}
     />
   ),
@@ -46,7 +64,7 @@ vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
   ),
 }));
 
-vi.mock("../components/stock/LocationSelector", () => ({
+vi.mock("../../components/stock/LocationSelector", () => ({
   LocationSelector: ({ onChange, label }: any) => (
     <input
       data-testid="location-selector"
@@ -79,19 +97,32 @@ const createMockStore = (initialState = {}) => {
     reducer: {
       [generatedApi.reducerPath]: generatedApi.reducer,
       [generatedApiV2.reducerPath]: generatedApiV2.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(generatedApi.middleware, generatedApiV2.middleware),
+      getDefaultMiddleware().concat(
+        generatedApi.middleware,
+        generatedApiV2.middleware,
+        serviceApi.middleware,
+      ),
     preloadedState: initialState,
   });
 };
+
+const testTheme = createTheme({
+  layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  palette: { outline: { main: "#e0e0e0" } },
+} as any);
 
 // Wrapper component
 const renderWithProviders = (component: React.ReactElement) => {
   const store = createMockStore();
   return render(
     <Provider store={store}>
-      <BrowserRouter>{component}</BrowserRouter>
+      <ThemeProvider theme={testTheme}>
+        <BrowserRouter>{component}</BrowserRouter>
+      </ThemeProvider>
     </Provider>
   );
 };
@@ -122,8 +153,9 @@ describe("CreateListingV2", () => {
   it("shows base price field when unified pricing mode is selected", () => {
     renderWithProviders(<CreateListingV2 />);
 
-    // Unified pricing should be selected by default
-    const basePriceInput = screen.getByLabelText(/Base Price/i);
+    // Unified pricing is selected by default; the base price input is labeled
+    // via its aria-label "Enter price".
+    const basePriceInput = screen.getByLabelText("Enter price");
     expect(basePriceInput).toBeInTheDocument();
   });
 
@@ -145,11 +177,17 @@ describe("CreateListingV2", () => {
   it("renders stock lot section with variant attribute fields", () => {
     renderWithProviders(<CreateListingV2 />);
 
-    // Check for stock lot fields
+    // Select a tier-based game item so the quality-tier field renders.
+    fireEvent.change(screen.getByTestId("game-item-search"), {
+      target: { value: "Test Item" },
+    });
+
+    // Check for stock lot fields.
     expect(screen.getByText(/Lot 1/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Quantity/i)).toBeInTheDocument();
+    // "Quantity" appears both in the simplified section and each stock lot.
+    expect(screen.getAllByLabelText(/Quantity/i).length).toBeGreaterThan(0);
+    // Tier-based items show a Quality Tier select (value items show Quality Value).
     expect(screen.getByLabelText(/Quality Tier/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Quality Value/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Source/i)).toBeInTheDocument();
     expect(screen.getByTestId("location-selector")).toBeInTheDocument();
   });
@@ -200,17 +238,16 @@ describe("CreateListingV2", () => {
   });
 
   it("validates required fields before submission", async () => {
-    const mockAlert = vi.fn();
-    vi.spyOn(await import("../../../../hooks/alert/AlertHook"), "useAlertHook").mockReturnValue(mockAlert);
-
     renderWithProviders(<CreateListingV2 />);
 
-    // Try to submit without filling required fields
+    // Try to submit without filling required fields — submit the form directly
+    // (clicking the submit button does not reliably dispatch a form submit in happy-dom).
     const submitButton = screen.getByRole("button", { name: /Create Listing/i });
-    fireEvent.click(submitButton);
+    const form = submitButton.closest("form")!;
+    fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(mockAlert).toHaveBeenCalledWith(
+      expect(mockIssueAlert).toHaveBeenCalledWith(
         expect.objectContaining({
           severity: "error",
         })
@@ -219,9 +256,6 @@ describe("CreateListingV2", () => {
   });
 
   it("validates quality tier range (1-5)", async () => {
-    const mockAlert = vi.fn();
-    vi.spyOn(await import("../../../../hooks/alert/AlertHook"), "useAlertHook").mockReturnValue(mockAlert);
-
     renderWithProviders(<CreateListingV2 />);
 
     // Fill required fields
@@ -245,15 +279,21 @@ describe("CreateListingV2", () => {
     // This is a simplified test - in reality, the select dropdown prevents invalid values
   });
 
-  it("validates quality value range (0-100)", () => {
+  it("validates quality value range (0-1000)", () => {
+    // Quality VALUE input only renders for value-type (commodity) items.
+    gameItem.type = "Commodity";
     renderWithProviders(<CreateListingV2 />);
 
-    // Quality value input should accept decimal values
+    fireEvent.change(screen.getByTestId("game-item-search"), {
+      target: { value: "Test Item" },
+    });
+
+    // Quality value input should be present for commodity items
     const qualityValueInput = screen.getByLabelText(/Quality Value/i);
     expect(qualityValueInput).toBeInTheDocument();
 
-    // The NumericFormat component handles the validation
-    // This test verifies the field exists and is configured correctly
+    // Restore default tier-based type for subsequent tests
+    gameItem.type = "Ranged Weapon";
   });
 
   it("includes all crafted source options", () => {

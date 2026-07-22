@@ -90,7 +90,9 @@ describe("StandardPageLayout - Breadcrumb Property Tests", () => {
               nil: undefined,
             }),
           }),
-          { minLength: 1, maxLength: 10 },
+          // PageBreadcrumbs intentionally renders nothing for a single item,
+          // so the "renders all items" property only applies to 2+ items.
+          { minLength: 2, maxLength: 10 },
         ),
         (breadcrumbs) => {
           const { container, unmount } = render(

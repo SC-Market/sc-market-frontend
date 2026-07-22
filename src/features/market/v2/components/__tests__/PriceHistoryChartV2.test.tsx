@@ -56,14 +56,14 @@ vi.mock("react-i18next", async () => {
 
 // Sample price history data
 const mockPriceHistoryData = {
-  price_history: [
+  data: [
     {
       timestamp: "2024-01-01T00:00:00Z",
       quality_tier: 1,
       avg_price: 1000,
       min_price: 900,
       max_price: 1100,
-      transaction_count: 10,
+      volume: 10,
     },
     {
       timestamp: "2024-01-02T00:00:00Z",
@@ -71,7 +71,7 @@ const mockPriceHistoryData = {
       avg_price: 1050,
       min_price: 950,
       max_price: 1150,
-      transaction_count: 12,
+      volume: 12,
     },
     {
       timestamp: "2024-01-01T00:00:00Z",
@@ -79,7 +79,7 @@ const mockPriceHistoryData = {
       avg_price: 2000,
       min_price: 1800,
       max_price: 2200,
-      transaction_count: 8,
+      volume: 8,
     },
     {
       timestamp: "2024-01-02T00:00:00Z",
@@ -87,7 +87,7 @@ const mockPriceHistoryData = {
       avg_price: 2100,
       min_price: 1900,
       max_price: 2300,
-      transaction_count: 9,
+      volume: 9,
     },
     {
       timestamp: "2024-01-01T00:00:00Z",
@@ -95,7 +95,7 @@ const mockPriceHistoryData = {
       avg_price: 5000,
       min_price: 4500,
       max_price: 5500,
-      transaction_count: 5,
+      volume: 5,
     },
     {
       timestamp: "2024-01-02T00:00:00Z",
@@ -103,7 +103,7 @@ const mockPriceHistoryData = {
       avg_price: 5200,
       min_price: 4700,
       max_price: 5700,
-      transaction_count: 6,
+      volume: 6,
     },
   ],
   game_item_id: "test-item-id",
@@ -186,7 +186,7 @@ describe("PriceHistoryChartV2", () => {
   })
 
   it("renders empty state when no data", () => {
-    const store = createTestStore({ price_history: [] }, false, false)
+    const store = createTestStore({ data: [] }, false, false)
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
@@ -330,14 +330,14 @@ describe("PriceHistoryChartV2", () => {
 
   it("handles data with null quality tier", () => {
     const dataWithNullTier = {
-      price_history: [
+      data: [
         {
           timestamp: "2024-01-01T00:00:00Z",
           quality_tier: null,
           avg_price: 1500,
           min_price: 1400,
           max_price: 1600,
-          transaction_count: 15,
+          volume: 15,
         },
         {
           timestamp: "2024-01-02T00:00:00Z",
@@ -345,7 +345,7 @@ describe("PriceHistoryChartV2", () => {
           avg_price: 1550,
           min_price: 1450,
           max_price: 1650,
-          transaction_count: 16,
+          volume: 16,
         },
       ],
       game_item_id: "test-item-id",
@@ -367,14 +367,14 @@ describe("PriceHistoryChartV2", () => {
 
   it("sorts tiers in ascending order (null first, then 1-5)", () => {
     const mixedTierData = {
-      price_history: [
+      data: [
         {
           timestamp: "2024-01-01T00:00:00Z",
           quality_tier: 5,
           avg_price: 5000,
           min_price: 4500,
           max_price: 5500,
-          transaction_count: 5,
+          volume: 5,
         },
         {
           timestamp: "2024-01-01T00:00:00Z",
@@ -382,7 +382,7 @@ describe("PriceHistoryChartV2", () => {
           avg_price: 1000,
           min_price: 900,
           max_price: 1100,
-          transaction_count: 10,
+          volume: 10,
         },
         {
           timestamp: "2024-01-01T00:00:00Z",
@@ -390,7 +390,7 @@ describe("PriceHistoryChartV2", () => {
           avg_price: 2500,
           min_price: 2000,
           max_price: 3000,
-          transaction_count: 20,
+          volume: 20,
         },
         {
           timestamp: "2024-01-01T00:00:00Z",
@@ -398,7 +398,7 @@ describe("PriceHistoryChartV2", () => {
           avg_price: 3000,
           min_price: 2700,
           max_price: 3300,
-          transaction_count: 8,
+          volume: 8,
         },
       ],
       game_item_id: "test-item-id",

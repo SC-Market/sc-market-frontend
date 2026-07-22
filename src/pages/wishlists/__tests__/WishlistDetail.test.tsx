@@ -28,6 +28,36 @@ const mockTheme = createTheme({
   },
 } as any)
 
+// Make the exported RTK Query hooks delegate to the endpoint methods so that
+// `vi.spyOn(marketV2Api.endpoints.*, "useQuery"/"useMutation")` actually
+// intercepts the hooks the component imports. (The destructured hook exports
+// are separate bindings from the endpoint properties, so spying on the
+// endpoints alone would otherwise not affect the component.)
+vi.mock("../../../store/api/v2/market", async () => {
+  const actual = (await vi.importActual("../../../store/api/v2/market")) as any
+  return {
+    ...actual,
+    useGetWishlistQuery: (...args: any[]) =>
+      actual.marketV2Api.endpoints.getWishlist.useQuery(...args),
+    useUpdateWishlistItemMutation: (...args: any[]) =>
+      actual.marketV2Api.endpoints.updateWishlistItem.useMutation(...args),
+    useRemoveWishlistItemMutation: (...args: any[]) =>
+      actual.marketV2Api.endpoints.removeWishlistItem.useMutation(...args),
+  }
+})
+
+// Mock react-i18next so translation defaults render deterministically
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, def?: string) => def || key,
+      i18n: { language: "en", changeLanguage: vi.fn() },
+    }),
+  }
+})
+
 // Mock the Page component to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", async () => {
   return {
@@ -161,6 +191,16 @@ const mockWishlistData = {
   },
 }
 
+// Returns the text of item-name headings (h6) in DOM order, filtering out
+// section headings like "Description", "Progress", "Items".
+const ITEM_NAMES = ["Quantum Drive", "Shield Generator", "Power Plant"]
+function getItemNameHeadings(): string[] {
+  return screen
+    .getAllByRole("heading", { level: 6 })
+    .map((el) => el.textContent || "")
+    .filter((text) => ITEM_NAMES.some((name) => text.includes(name)))
+}
+
 describe("WishlistDetail", () => {
   beforeEach(() => {
     mockNavigate.mockClear()
@@ -182,7 +222,6 @@ describe("WishlistDetail", () => {
       renderWithProviders(<WishlistDetail />)
 
       expect(screen.getByRole("progressbar")).toBeInTheDocument()
-      expect(screen.getByText("Loading Wishlist...")).toBeInTheDocument()
     })
 
     it("should display error message when fetch fails", () => {
@@ -194,7 +233,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByText(/Failed to load wishlist/i)).toBeInTheDocument()
+      expect(screen.getByText(/Failed to load shopping list/i)).toBeInTheDocument()
     })
 
     it("should display wishlist name and description", () => {
@@ -206,7 +245,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByText("Ship Components")).toBeInTheDocument()
+      expect(screen.getAllByText("Ship Components").length).toBeGreaterThan(0)
       expect(screen.getByText("Components for my Constellation")).toBeInTheDocument()
     })
 
@@ -326,6 +365,8 @@ describe("WishlistDetail", () => {
         error: undefined,
       } as any)
 
+      const unwrap = vi.fn().mockResolvedValue({})
+      mockUpdateItem.mockReturnValue({ unwrap })
       vi.spyOn(marketV2Api.endpoints.updateWishlistItem, "useMutation").mockReturnValue([
         mockUpdateItem,
         { isLoading: false },
@@ -338,9 +379,9 @@ describe("WishlistDetail", () => {
 
       await waitFor(() => {
         expect(mockUpdateItem).toHaveBeenCalledWith({
-          wishlist_id: "wishlist-1",
-          item_id: "item-1",
-          body: {
+          wishlistId: "wishlist-1",
+          itemId: "item-1",
+          updateWishlistItemRequest: {
             is_acquired: true,
             acquired_quantity: 4,
           },
@@ -359,20 +400,31 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByText("Craftable")).toBeInTheDocument()
+      // Items with crafting_available render a "Buy from Market" chip
+      expect(screen.getByText("Buy from Market")).toBeInTheDocument()
     })
 
-    it("should show blueprint name in tooltip", () => {
+    it("should show craft chip with blueprint name when acquisition mode is craft", () => {
+      const craftData = {
+        ...mockWishlistData,
+        items: [
+          {
+            ...mockWishlistData.items[0],
+            acquisition_mode: "craft",
+          },
+          ...mockWishlistData.items.slice(1),
+        ],
+      }
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue({
-        data: mockWishlistData,
+        data: craftData,
         isLoading: false,
         error: undefined,
       } as any)
 
       renderWithProviders(<WishlistDetail />)
 
-      const craftableChip = screen.getByText("Craftable")
-      expect(craftableChip).toBeInTheDocument()
+      const craftChip = screen.getByText("Craft: Quantum Drive Blueprint")
+      expect(craftChip).toBeInTheDocument()
     })
   })
 
@@ -434,7 +486,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByText("50,000 aUEC")).toBeInTheDocument()
+      expect(screen.getAllByText("50,000 aUEC").length).toBeGreaterThan(0)
     })
 
     it("should display progress bar", () => {
@@ -462,7 +514,8 @@ describe("WishlistDetail", () => {
       renderWithProviders(<WishlistDetail />)
 
       const priorityLabels = screen.getAllByText("Priority")
-      expect(priorityLabels.length).toBe(3)
+      // One label per item (3) plus the "Priority" sort dropdown option
+      expect(priorityLabels.length).toBeGreaterThanOrEqual(3)
     })
 
     it("should have sort dropdown with priority option", () => {
@@ -474,7 +527,9 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByLabelText("Sort By")).toBeInTheDocument()
+      // The sort control is a MUI Select (combobox); its InputLabel reads "Sort By"
+      expect(screen.getAllByText("Sort By").length).toBeGreaterThan(0)
+      expect(screen.getByRole("combobox")).toBeInTheDocument()
     })
 
     it("should sort items by priority by default", () => {
@@ -502,7 +557,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      const sortSelect = screen.getByLabelText("Sort By")
+      const sortSelect = screen.getByRole("combobox")
       await user.click(sortSelect)
 
       const nameOption = screen.getByText("Name")
@@ -510,8 +565,8 @@ describe("WishlistDetail", () => {
 
       // Items should now be sorted alphabetically
       await waitFor(() => {
-        const itemNames = screen.getAllByRole("heading", { level: 6 })
-        expect(itemNames[0].textContent).toContain("Power Plant")
+        const itemNames = getItemNameHeadings()
+        expect(itemNames[0]).toContain("Power Plant")
       })
     })
 
@@ -526,7 +581,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      const sortSelect = screen.getByLabelText("Sort By")
+      const sortSelect = screen.getByRole("combobox")
       await user.click(sortSelect)
 
       const statusOption = screen.getByText("Status")
@@ -534,8 +589,8 @@ describe("WishlistDetail", () => {
 
       // Incomplete items should come first
       await waitFor(() => {
-        const itemNames = screen.getAllByRole("heading", { level: 6 })
-        expect(itemNames[0].textContent).not.toContain("Shield Generator")
+        const itemNames = getItemNameHeadings()
+        expect(itemNames[0]).not.toContain("Shield Generator")
       })
     })
 
@@ -550,7 +605,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      const sortSelect = screen.getByLabelText("Sort By")
+      const sortSelect = screen.getByRole("combobox")
       await user.click(sortSelect)
 
       const qualityOption = screen.getByText("Quality")
@@ -558,8 +613,8 @@ describe("WishlistDetail", () => {
 
       // Highest quality items should come first
       await waitFor(() => {
-        const itemNames = screen.getAllByRole("heading", { level: 6 })
-        expect(itemNames[0].textContent).toContain("Quantum Drive")
+        const itemNames = getItemNameHeadings()
+        expect(itemNames[0]).toContain("Quantum Drive")
       })
     })
   })
@@ -644,7 +699,8 @@ describe("WishlistDetail", () => {
 
     it("should call removeItem mutation when clicking remove", async () => {
       const user = userEvent.setup()
-      const mockRemoveItem = vi.fn().mockResolvedValue({ data: { success: true } })
+      const unwrap = vi.fn().mockResolvedValue({ success: true })
+      const mockRemoveItem = vi.fn().mockReturnValue({ unwrap })
 
       vi.spyOn(marketV2Api.endpoints.getWishlist, "useQuery").mockReturnValue({
         data: mockWishlistData,
@@ -671,8 +727,8 @@ describe("WishlistDetail", () => {
 
       await waitFor(() => {
         expect(mockRemoveItem).toHaveBeenCalledWith({
-          wishlist_id: "wishlist-1",
-          item_id: "item-1",
+          wishlistId: "wishlist-1",
+          itemId: "item-1",
         })
       })
     })
@@ -691,7 +747,7 @@ describe("WishlistDetail", () => {
       const shoppingListButton = screen.getByRole("button", { name: /Shopping List/i })
       await user.click(shoppingListButton)
 
-      expect(mockNavigate).toHaveBeenCalledWith("/wishlists/wishlist-1/shopping-list")
+      expect(mockNavigate).toHaveBeenCalledWith("/shopping-lists/wishlist-1/shopping-list")
     })
   })
 
@@ -716,7 +772,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      expect(screen.getByText("No items in this wishlist")).toBeInTheDocument()
+      expect(screen.getByText("No items in this shopping list")).toBeInTheDocument()
       expect(screen.getByText(/Add items to start tracking/i)).toBeInTheDocument()
     })
 
@@ -754,8 +810,8 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      // Breadcrumbs are rendered by StandardPageLayout
-      expect(screen.getByText("Ship Components")).toBeInTheDocument()
+      // Breadcrumbs are rendered by StandardPageLayout (also appears as header title)
+      expect(screen.getAllByText("Ship Components").length).toBeGreaterThan(0)
     })
   })
 })

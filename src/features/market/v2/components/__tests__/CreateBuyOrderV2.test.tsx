@@ -54,10 +54,12 @@ vi.mock("react-router-dom", async () => {
   }
 })
 
+// A "tier" quality-mode item (armor/weapon/clothing) so the component renders
+// the Min/Max Quality Tier dropdowns. "commodity" would trigger value mode.
 const mockGameItem = {
   id: "test-item-id",
   name: "Test Item",
-  type: "commodity",
+  type: "helmet",
 }
 
 const createTestStore = () =>
@@ -141,6 +143,11 @@ describe("CreateBuyOrderV2", () => {
     vi.mocked(useAlertHook).mockReturnValue(mockAlert)
 
     renderWithProviders(<CreateBuyOrderV2 gameItem={mockGameItem} />)
+
+    // Provide a valid price + quantity first so validation reaches the quality check
+    // (the price check runs before the quality-tier check).
+    fireEvent.change(screen.getByLabelText(/min price/i), { target: { value: "1000" } })
+    fireEvent.change(screen.getByLabelText(/max price/i), { target: { value: "2000" } })
 
     // Set min > max
     const minSelect = screen.getByLabelText(/min quality tier/i)
@@ -277,17 +284,18 @@ describe("CreateBuyOrderV2", () => {
     expect(maxPriceInput).toBeDisabled()
   })
 
-  it("shows quality tier badges when tiers are selected", () => {
+  it("reflects the selected quality tier values", () => {
     renderWithProviders(<CreateBuyOrderV2 gameItem={mockGameItem} />)
 
-    const minSelect = screen.getByLabelText(/min quality tier/i)
-    const maxSelect = screen.getByLabelText(/max quality tier/i)
+    const minSelect = screen.getByLabelText(/min quality tier/i) as HTMLSelectElement
+    const maxSelect = screen.getByLabelText(/max quality tier/i) as HTMLSelectElement
 
     // Select tier range
     fireEvent.change(minSelect, { target: { value: "3" } })
     fireEvent.change(maxSelect, { target: { value: "5" } })
 
-    // Should show selected range text
-    expect(screen.getByText(/selected range/i)).toBeInTheDocument()
+    // The native selects should hold the chosen tier values
+    expect(minSelect.value).toBe("3")
+    expect(maxSelect.value).toBe("5")
   })
 })
