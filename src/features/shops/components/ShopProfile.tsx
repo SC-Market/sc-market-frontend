@@ -10,6 +10,7 @@ import {
   linearProgressClasses,
   MenuItem,
   Pagination,
+  Paper,
   Rating,
   Skeleton,
   Stack,
@@ -46,6 +47,7 @@ import { a11yProps } from "../../../components/tabs/Tabs"
 import { ShareButton } from "../../../components/buttons/ShareButton"
 import { useShopTab } from "../hooks/useShopTab"
 import { ServiceListings } from "../../services/components/ServiceListings"
+import { ServiceSearchArea } from "../../../views/services/ServiceSearchArea"
 import { MarkdownRender } from "../../../components/markdown/Markdown"
 import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTable"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
@@ -570,7 +572,16 @@ function ShopServicesTab(props: { shop: ShopPublicResponse }) {
 
   return (
     <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
-      <ServiceListings {...ownerFilter} />
+      <Grid item xs={12} md={3} sx={{ display: { xs: "none", md: "block" } }}>
+        <Paper sx={{ padding: 1 }}>
+          <ServiceSearchArea />
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={9}>
+        <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
+          <ServiceListings {...ownerFilter} />
+        </Grid>
+      </Grid>
     </Grid>
   )
 }
