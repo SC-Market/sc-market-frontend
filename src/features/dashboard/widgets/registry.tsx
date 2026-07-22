@@ -22,6 +22,7 @@ import { ReputationWidget } from "./ReputationWidget"
 import { WishlistWidget } from "./WishlistWidget"
 import { PriceHistoryWidget } from "./PriceHistoryWidget"
 import { ListingsPreviewWidget } from "./ListingsPreviewWidget"
+import { ActivityFeedWidget } from "./ActivityFeedWidget"
 import type { ResolvedScope } from "../useResolveScope"
 import type { DashboardWidget, WidgetLayout, WidgetScopeKind } from "../types"
 
@@ -57,6 +58,11 @@ export interface WidgetDefinition {
    * (settings.gameItemId / settings.gameItemName). Exactly one is stored.
    */
   requiresListingsSource?: boolean
+  /**
+   * When true, the add-widget gallery offers an optional activity-type filter
+   * stored as settings.action (empty = all activity).
+   */
+  offersActivityFilter?: boolean
   render: (props: WidgetRenderProps) => ReactNode
 }
 
@@ -242,6 +248,53 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     render: ({ settings, t }) => (
       <ListingsPreviewWidget settings={settings} t={t} />
     ),
+  },
+  {
+    type: "activity_feed",
+    titleKey: "dashboard.widgets.activityFeed.title",
+    titleDefault: "Activity Feed",
+    descriptionKey: "dashboard.widgets.activityFeed.description",
+    descriptionDefault:
+      "A timeline of recent activity, optionally filtered to one type.",
+    defaultLayout: { w: 4, h: 5 },
+    allowedScopes: SHOP_SCOPES,
+    offersActivityFilter: true,
+    render: ({ scope, settings, t }) => (
+      <ActivityFeedWidget scope={scope} settings={settings} t={t} />
+    ),
+  },
+]
+
+/**
+ * Activity-type options offered by the Activity Feed widget's filter. Each maps
+ * to a NotificationAction value the notifications API accepts. An empty value
+ * (rendered as "All activity" in the gallery) means no server-side filter.
+ */
+export const ACTIVITY_FILTER_OPTIONS: {
+  value: string
+  labelKey: string
+  labelDefault: string
+}[] = [
+  { value: "", labelKey: "dashboard.activityFeed.all", labelDefault: "All activity" },
+  {
+    value: "order_create",
+    labelKey: "dashboard.activityFeed.orders",
+    labelDefault: "New orders",
+  },
+  {
+    value: "offer_create",
+    labelKey: "dashboard.activityFeed.offers",
+    labelDefault: "Offers",
+  },
+  {
+    value: "market_item_bid_v2",
+    labelKey: "dashboard.activityFeed.bids",
+    labelDefault: "Bids",
+  },
+  {
+    value: "order_review",
+    labelKey: "dashboard.activityFeed.reviews",
+    labelDefault: "Reviews",
   },
 ]
 

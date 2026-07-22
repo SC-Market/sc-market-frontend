@@ -32,6 +32,7 @@ import {
   WIDGET_DEFINITIONS,
   widgetTitle,
   widgetDescription,
+  ACTIVITY_FILTER_OPTIONS,
 } from "./widgets/registry"
 import { addWidget } from "./widgets/addWidget"
 import { useDashboardOwner } from "./DashboardOwnerContext"
@@ -133,6 +134,8 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   // Listings-source widgets: pick "search" (free text) or "item" (specific item).
   const [sourceMode, setSourceMode] = useState<"search" | "item">("search")
   const [searchQuery, setSearchQuery] = useState("")
+  // Activity Feed: optional action filter ("" = all activity).
+  const [activityFilter, setActivityFilter] = useState("")
 
   // Restrict the scope picker to what makes sense for the dashboard owner.
   const ownerScopeAllowlist = useMemo<WidgetScopeKind[] | null>(() => {
@@ -178,6 +181,7 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
     setSelectedItem(null)
     setSourceMode("search")
     setSearchQuery("")
+    setActivityFilter("")
   }
 
   const buildScope = (): WidgetScope | null => {
@@ -206,6 +210,8 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   // Widgets with a listings source (e.g. Listings Preview) store either a
   // free-text query or a specific item, depending on the chosen source mode.
   const requiresListingsSource = definition?.requiresListingsSource ?? false
+  // Widgets with an optional activity filter (e.g. Activity Feed).
+  const offersActivityFilter = definition?.offersActivityFilter ?? false
 
   const settings: DashboardWidget["settings"] | undefined = requiresItem
     ? selectedItem
@@ -219,7 +225,9 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
         : searchQuery.trim()
           ? { query: searchQuery.trim() }
           : undefined
-      : undefined
+      : offersActivityFilter && activityFilter
+        ? { action: activityFilter }
+        : undefined
 
   const canAdd =
     !!scope &&
@@ -373,6 +381,26 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
                     />
                   )}
                 </Stack>
+              )}
+
+              {offersActivityFilter && (
+                <FormControl fullWidth size="small">
+                  <InputLabel id="widget-activity-label">
+                    {t("dashboard.activityFeed.filterLabel", "Show")}
+                  </InputLabel>
+                  <Select
+                    labelId="widget-activity-label"
+                    label={t("dashboard.activityFeed.filterLabel", "Show")}
+                    value={activityFilter}
+                    onChange={(e) => setActivityFilter(e.target.value)}
+                  >
+                    {ACTIVITY_FILTER_OPTIONS.map((opt) => (
+                      <MenuItem key={opt.value} value={opt.value}>
+                        {t(opt.labelKey, opt.labelDefault)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               )}
 
               <Button
