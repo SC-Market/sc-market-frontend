@@ -1382,6 +1382,14 @@
   },
   "Damaged": "warning",
   "dashboard": {
+    "activityFeed": {
+      "all": "All activity",
+      "bids": "Bids",
+      "filterLabel": "Show",
+      "offers": "Offers",
+      "orders": "New orders",
+      "reviews": "Reviews"
+    },
     "addAWidget": "Add a widget",
     "addNamed": "Add {{name}}",
     "addWidget": "Add widget",
@@ -1446,6 +1454,10 @@
     "wishlistError": "Couldn't load your shopping lists.",
     "wishlistProgress": "{{done}}/{{total}} items",
     "widgets": {
+      "activityFeed": {
+        "description": "A timeline of recent activity, optionally filtered to one type.",
+        "title": "Activity Feed"
+      },
       "listingsPreview": {
         "description": "A few marketplace listings for a search or a specific item.",
         "title": "Listings Preview"
