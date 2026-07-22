@@ -4361,6 +4361,8 @@ export type GameItemListingResult = {
   /** Number of ratings the shop has — used to weight "top rated" so a 5★/1-review
     shop doesn't outrank a 4.9★/300-review one. */
   shop_rating_count: number
+  /** Shop seller reputation badges, computed server-side (mirrors search DTO) */
+  shop_badge_ids: string[]
   /** Shop slug — use for profile links: /shops/:slug */
   shop_slug: string
   /** Price for this variant */
