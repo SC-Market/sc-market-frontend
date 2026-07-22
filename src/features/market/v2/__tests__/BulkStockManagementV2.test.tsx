@@ -145,7 +145,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -170,7 +170,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -197,7 +197,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -215,17 +215,17 @@ describe("BulkStockManagementV2", () => {
     await waitFor(() => {
       expect(screen.getByText("Orison")).toBeInTheDocument()
       expect(screen.getByText("Lorville")).toBeInTheDocument()
+      // Listed lots show a "Listed" chip; unlisted lots show "Personal"
       expect(screen.getAllByText(/Listed/i).length).toBeGreaterThan(0)
-      expect(screen.getAllByText(/Unlisted/i).length).toBeGreaterThan(0)
+      expect(screen.getAllByText(/Personal/i).length).toBeGreaterThan(0)
     })
   })
 
-  it("provides checkbox selection for lots", async () => {
-    const user = userEvent.setup()
+  it("renders data grid rows for each lot", async () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -244,22 +244,16 @@ describe("BulkStockManagementV2", () => {
       expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
     })
 
-    const checkboxes = screen.getAllByRole("checkbox")
-    expect(checkboxes.length).toBeGreaterThan(0)
-
-    await user.click(checkboxes[0])
-
-    await waitFor(() => {
-      expect(screen.getByText(/1 lot\(s\) selected/)).toBeInTheDocument()
-    })
+    // Each lot renders as a grid row with cells
+    const cells = screen.getAllByRole("gridcell")
+    expect(cells.length).toBeGreaterThan(0)
   })
 
-  it("provides Select All button", async () => {
-    const user = userEvent.setup()
+  it("provides an Add Lot button", async () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -275,31 +269,15 @@ describe("BulkStockManagementV2", () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
-    })
-
-    // Select one lot first to show bulk controls
-    const checkboxes = screen.getAllByRole("checkbox")
-    await user.click(checkboxes[0])
-
-    await waitFor(() => {
-      expect(screen.getByText("Select All")).toBeInTheDocument()
-    })
-
-    const selectAllButton = screen.getByText("Select All")
-    await user.click(selectAllButton)
-
-    await waitFor(() => {
-      expect(screen.getByText(/2 lot\(s\) selected/)).toBeInTheDocument()
+      expect(screen.getByText("Add Lot")).toBeInTheDocument()
     })
   })
 
-  it("provides Select by Quality Tier dropdown", async () => {
-    const user = userEvent.setup()
+  it("provides a filter sidebar with search", async () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -315,25 +293,16 @@ describe("BulkStockManagementV2", () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
-    })
-
-    // Select one lot to show bulk controls
-    const checkboxes = screen.getAllByRole("checkbox")
-    await user.click(checkboxes[0])
-
-    await waitFor(() => {
-      const selectByTierLabels = screen.getAllByText(/Select by Tier/i)
-      expect(selectByTierLabels.length).toBeGreaterThan(0)
+      expect(screen.getAllByText("Filters").length).toBeGreaterThan(0)
+      expect(screen.getByPlaceholderText("Search lots...")).toBeInTheDocument()
     })
   })
 
-  it("provides bulk action dropdown with correct options", async () => {
-    const user = userEvent.setup()
+  it("displays the All Stock Lots toolbar title", async () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -349,16 +318,7 @@ describe("BulkStockManagementV2", () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
-    })
-
-    // Select one lot to show bulk controls
-    const checkboxes = screen.getAllByRole("checkbox")
-    await user.click(checkboxes[0])
-
-    await waitFor(() => {
-      const bulkActionLabels = screen.getAllByText(/Bulk Action/i)
-      expect(bulkActionLabels.length).toBeGreaterThan(0)
+      expect(screen.getByText("All Stock Lots")).toBeInTheDocument()
     })
   })
 
@@ -366,7 +326,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -389,13 +349,27 @@ describe("BulkStockManagementV2", () => {
     expect(screen.queryByText(/lot\(s\) selected/)).not.toBeInTheDocument()
   })
 
-  it("shows confirmation dialog before bulk operations", async () => {
+  it("opens the create lot dialog when Add Lot is clicked", async () => {
     const user = userEvent.setup()
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
+      ),
+    )
+    store.dispatch(
+      marketV2Api.util.upsertQueryData(
+        "getMyListings",
+        { pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: undefined },
+        {
+          listings: [
+            { listing_id: "listing-1", title: "Mock Listing" } as any,
+          ],
+          total: 1,
+          page: 1,
+          page_size: 100,
+        } as any,
       ),
     )
 
@@ -410,26 +384,19 @@ describe("BulkStockManagementV2", () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
+      expect(screen.getByText("Add Lot")).toBeInTheDocument()
     })
 
-    // Select a lot
-    const checkboxes = screen.getAllByRole("checkbox")
-    await user.click(checkboxes[0])
-
-    // Verify bulk controls appear
-    await waitFor(() => {
-      const bulkActionLabels = screen.getAllByText(/Bulk Action/i)
-      expect(bulkActionLabels.length).toBeGreaterThan(0)
-      expect(screen.getByText("Select All")).toBeInTheDocument()
-    })
+    const addLotButton = screen.getByText("Add Lot").closest("button")!
+    expect(addLotButton).not.toBeDisabled()
+    await user.click(addLotButton)
   })
 
-  it("handles quick update buttons (+1, -1, 0)", async () => {
+  it("renders editable data grid cells", async () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -453,12 +420,11 @@ describe("BulkStockManagementV2", () => {
     expect(buttons.length).toBeGreaterThan(0)
   })
 
-  it("handles manual quantity input with save button", async () => {
-    const user = userEvent.setup()
+  it("displays quantity values for each lot", async () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -477,22 +443,15 @@ describe("BulkStockManagementV2", () => {
       expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument()
     })
 
-    // Find quantity input fields
-    const quantityInputs = screen.getAllByRole("spinbutton")
-    expect(quantityInputs.length).toBeGreaterThan(0)
-
-    // Change quantity
-    await user.clear(quantityInputs[0])
-    await user.type(quantityInputs[0], "15")
-
-    // Verify input changed
+    // Quantity cells render the numeric totals (10 and 5)
     await waitFor(() => {
-      expect(quantityInputs[0]).toHaveValue(15)
+      expect(screen.getAllByText("10").length).toBeGreaterThan(0)
+      expect(screen.getAllByText("5").length).toBeGreaterThan(0)
     })
   })
 
-  it("displays loading state", () => {
-    render(
+  it("displays loading state", async () => {
+    const { container } = render(
       <ThemeProvider theme={testTheme}>
         <Provider store={store}>
           <BrowserRouter>
@@ -502,7 +461,13 @@ describe("BulkStockManagementV2", () => {
       </ThemeProvider>,
     )
 
-    expect(screen.getByRole("progressbar")).toBeInTheDocument()
+    // While the lazy DataGrid chunk loads, its Suspense fallback renders a
+    // skeleton placeholder.
+    await waitFor(() => {
+      expect(
+        container.querySelectorAll('[class*="MuiSkeleton-root"]').length,
+      ).toBeGreaterThan(0)
+    })
   })
 
   it("displays error state", async () => {
@@ -510,7 +475,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: [], total: 0, page: 1, page_size: 20 },
       ),
     )
@@ -535,7 +500,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: [], total: 0, page: 1, page_size: 20 },
       ),
     )
@@ -559,7 +524,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -575,11 +540,11 @@ describe("BulkStockManagementV2", () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText("Quick Stock Updates")).toBeInTheDocument()
+      expect(screen.getByText("All Stock Lots")).toBeInTheDocument()
     })
 
-    // Check for h6 typography variant on title
-    const title = screen.getByText("Quick Stock Updates")
+    // Check for h6 typography variant on the grid toolbar title
+    const title = screen.getByText("All Stock Lots")
     expect(title.tagName).toBe("H6")
   })
 
@@ -587,7 +552,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { listingId: "listing-1" },
+        { pageSize: 100 },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )

@@ -119,6 +119,8 @@ const mockOrderDetail = {
     user_id: "seller-456",
     username: "seller_user",
     display_name: "Seller User",
+    name: "Seller User",
+    slug: "seller-user",
     avatar: null,
   },
   total_price: 150000,
@@ -528,8 +530,9 @@ describe("OrderDetailsAreaV2", () => {
       renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
       await waitFor(() => {
-        // All attributes should be visible
-        expect(screen.getByText(/Tier 5/)).toBeInTheDocument()
+        // All attributes should be visible (Tier 5 appears in both the
+        // display name and the QualityBadge chip)
+        expect(screen.getAllByText(/Tier 5/).length).toBeGreaterThan(0)
         expect(screen.getByText(/98\.2%/)).toBeInTheDocument()
         expect(screen.getByText(/Crafted/)).toBeInTheDocument()
         expect(screen.getByText(/BP T5/)).toBeInTheDocument()
@@ -566,8 +569,9 @@ describe("OrderDetailsAreaV2", () => {
       renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
       await waitFor(() => {
-        // Should display minimal attributes without errors
-        expect(screen.getByText("Tier 3")).toBeInTheDocument()
+        // Should display minimal attributes without errors ("Tier 3" appears
+        // in both the display name and the QualityBadge chip)
+        expect(screen.getAllByText("Tier 3").length).toBeGreaterThan(0)
         expect(screen.getByText("25,000 aUEC")).toBeInTheDocument()
       })
     })

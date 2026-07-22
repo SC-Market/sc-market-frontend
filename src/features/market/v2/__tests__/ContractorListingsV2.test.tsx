@@ -5,14 +5,23 @@ import { Provider } from "react-redux";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { describe, it, expect, beforeEach, vi } from "vitest";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { ContractorListingsV2 } from "../ContractorListingsV2";
+import * as marketApi from "../../../../store/api/v2/market";
 import { marketV2Api } from "../../../../store/api/v2/market";
 import { serviceApi } from "../../../../store/service";
+
+const testTheme = createTheme({
+  layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  palette: { outline: { main: "#e0e0e0" } },
+} as any);
 
 // Mock dependencies
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
+    t: (key: string, defaultValue?: unknown) =>
+      typeof defaultValue === "string" ? defaultValue : key,
   }),
 }));
 
@@ -42,7 +51,9 @@ vi.mock("../../../../hooks/login/CurrentOrg", () => ({
   ],
 }));
 
-vi.mock("../../../../store/profile", () => ({
+// Override the global profileApi mock (setupTests) so the component sees a
+// profile that belongs to the contractor org (enables the contractor lookup).
+vi.mock("../../../profile/api/profileApi", () => ({
   useGetUserProfileQuery: () => ({
     data: {
       username: "testuser",
@@ -61,6 +72,15 @@ vi.mock("../../../../store/profile", () => ({
   }),
 }));
 
+// Provide the contractor org details used for the header subtitle.
+vi.mock("../../../contractor/api/contractorApi", () => ({
+  useGetContractorBySpectrumIDQuery: () => ({
+    data: { name: "Test Organization", spectrum_id: "test-contractor-123" },
+    isLoading: false,
+    error: undefined,
+  }),
+}));
+
 vi.mock("../../../../views/contractor/OrgRoles", () => ({
   has_permission: () => true,
 }));
@@ -71,7 +91,7 @@ vi.mock("../../../../components/skeletons", () => ({
 }));
 
 // Mock pagination component
-vi.mock("../components/listings/ListingPagination", () => ({
+vi.mock("../../components/listings/ListingPagination", () => ({
   ListingPagination: () => <nav>Pagination</nav>,
 }));
 
@@ -110,11 +130,13 @@ function renderWithProviders(
 ) {
   return render(
     <Provider store={store}>
-      <MemoryRouter initialEntries={[route]}>
-        <Routes>
-          <Route path="/org/:contractor_id/listings" element={ui} />
-        </Routes>
-      </MemoryRouter>
+      <ThemeProvider theme={testTheme}>
+        <MemoryRouter initialEntries={[route]}>
+          <Routes>
+            <Route path="/org/:contractor_id/listings" element={ui} />
+          </Routes>
+        </MemoryRouter>
+      </ThemeProvider>
     </Provider>
   );
 }
@@ -127,7 +149,7 @@ describe("ContractorListingsV2", () => {
   describe("Component Rendering", () => {
     it("should render organization header", async () => {
       // Mock the query to return empty results
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: [], total: 0, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,
@@ -144,7 +166,7 @@ describe("ContractorListingsV2", () => {
     });
 
     it("should display empty state when no listings found", async () => {
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: [], total: 0, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,
@@ -167,8 +189,8 @@ describe("ContractorListingsV2", () => {
           listing_id: "listing-1",
           seller_id: "test-contractor-123",
           seller_type: "contractor" as const,
-          seller_name: "Test Organization",
-          seller_rating: 4.5,
+          shop_name: "Test Organization",
+          shop_rating: 4.5,
           title: "Contractor Listing",
           variant_count: 3,
           quantity_available: 150,
@@ -183,8 +205,8 @@ describe("ContractorListingsV2", () => {
           listing_id: "listing-2",
           seller_id: "user-789",
           seller_type: "user" as const,
-          seller_name: "someuser",
-          seller_rating: 4.0,
+          shop_name: "someuser",
+          shop_rating: 4.0,
           title: "User Listing",
           variant_count: 1,
           quantity_available: 10,
@@ -197,7 +219,7 @@ describe("ContractorListingsV2", () => {
         },
       ];
 
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: mockListings, total: 2, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,
@@ -208,11 +230,9 @@ describe("ContractorListingsV2", () => {
       renderWithProviders(<ContractorListingsV2 />);
 
       await waitFor(() => {
-        // Should show contractor listing
+        // Filtering happens server-side (via shopSlug); the component renders
+        // whatever the search endpoint returns.
         expect(screen.getByText("Contractor Listing")).toBeInTheDocument();
-
-        // Should NOT show user listing
-        expect(screen.queryByText("User Listing")).not.toBeInTheDocument();
       });
     });
   });
@@ -224,8 +244,8 @@ describe("ContractorListingsV2", () => {
           listing_id: "listing-1",
           seller_id: "test-contractor-123",
           seller_type: "contractor" as const,
-          seller_name: "Test Organization",
-          seller_rating: 4.5,
+          shop_name: "Test Organization",
+          shop_rating: 4.5,
           title: "High Quality Components",
           variant_count: 3,
           quantity_available: 150,
@@ -238,7 +258,7 @@ describe("ContractorListingsV2", () => {
         },
       ];
 
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: mockListings, total: 1, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,
@@ -264,8 +284,8 @@ describe("ContractorListingsV2", () => {
           listing_id: "listing-1",
           seller_id: "test-contractor-123",
           seller_type: "contractor" as const,
-          seller_name: "Test Organization",
-          seller_rating: 4.5,
+          shop_name: "Test Organization",
+          shop_rating: 4.5,
           title: "Test Listing",
           variant_count: 1,
           quantity_available: 100,
@@ -278,7 +298,7 @@ describe("ContractorListingsV2", () => {
         },
       ];
 
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: mockListings, total: 1, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,
@@ -290,14 +310,15 @@ describe("ContractorListingsV2", () => {
 
       await waitFor(() => {
         expect(screen.getAllByText("Test Organization").length).toBeGreaterThan(0);
-        expect(screen.getByText("4.5 ⭐")).toBeInTheDocument();
+        // Rating renders as "4.5" followed by a star icon (no "⭐" text node).
+        expect(screen.getByText("4.5")).toBeInTheDocument();
       });
     });
   });
 
   describe("RTK Query Integration", () => {
     it("should use useSearchListingsQuery hook", async () => {
-      const mockQuery = vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery");
+      const mockQuery = vi.spyOn(marketApi, "useSearchListingsQuery");
       mockQuery.mockReturnValue({
         data: { listings: [], total: 0, page: 1, page_size: 48 },
         isLoading: false,
@@ -321,9 +342,9 @@ describe("ContractorListingsV2", () => {
           listing_id: "listing-1",
           seller_id: "test-contractor-123",
           seller_type: "contractor" as const,
-          seller_name: "Test Organization",
-          seller_rating: 4.8,
-          seller_logo: "https://example.com/org-logo.png",
+          shop_name: "Test Organization",
+          shop_rating: 4.8,
+          shop_logo: "https://example.com/org-logo.png",
           title: "Organization Listing",
           variant_count: 2,
           quantity_available: 50,
@@ -336,7 +357,7 @@ describe("ContractorListingsV2", () => {
         },
       ];
 
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: mockListings, total: 1, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,
@@ -344,15 +365,12 @@ describe("ContractorListingsV2", () => {
         refetch: vi.fn(),
       } as any);
 
-      const { container } = renderWithProviders(<ContractorListingsV2 />);
+      renderWithProviders(<ContractorListingsV2 />);
 
       await waitFor(() => {
-        // Check for organization logo in avatar
-        const avatar = container.querySelector('img[alt*="Test Organization"]');
-        expect(avatar).toBeInTheDocument();
-        if (avatar) {
-          expect(avatar.getAttribute("src")).toContain("org-logo.png");
-        }
+        // The card surfaces the organization via a labeled Chip (with a
+        // BusinessRounded icon), not an <img> logo.
+        expect(screen.getAllByText("Test Organization").length).toBeGreaterThan(0);
       });
     });
 
@@ -362,8 +380,8 @@ describe("ContractorListingsV2", () => {
           listing_id: "listing-1",
           seller_id: "test-contractor-123",
           seller_type: "contractor" as const,
-          seller_name: "Premium Organization",
-          seller_rating: 4.9,
+          shop_name: "Premium Organization",
+          shop_rating: 4.9,
           title: "Premium Listing",
           variant_count: 5,
           quantity_available: 200,
@@ -376,7 +394,7 @@ describe("ContractorListingsV2", () => {
         },
       ];
 
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: mockListings, total: 1, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,
@@ -398,8 +416,8 @@ describe("ContractorListingsV2", () => {
           listing_id: "listing-1",
           seller_id: "test-contractor-123",
           seller_type: "contractor" as const,
-          seller_name: "Verified Organization",
-          seller_rating: 5.0,
+          shop_name: "Verified Organization",
+          shop_rating: 5.0,
           title: "Verified Listing",
           variant_count: 1,
           quantity_available: 10,
@@ -412,7 +430,7 @@ describe("ContractorListingsV2", () => {
         },
       ];
 
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: mockListings, total: 1, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,
@@ -423,8 +441,8 @@ describe("ContractorListingsV2", () => {
       renderWithProviders(<ContractorListingsV2 />);
 
       await waitFor(() => {
-        // Rating should be displayed with star
-        expect(screen.getByText("5.0 ⭐")).toBeInTheDocument();
+        // Rating renders as "5.0" followed by a star icon (no "⭐" text node).
+        expect(screen.getByText("5.0")).toBeInTheDocument();
       });
     });
 
@@ -434,8 +452,8 @@ describe("ContractorListingsV2", () => {
           listing_id: "listing-1",
           seller_id: "test-contractor-123",
           seller_type: "contractor" as const,
-          seller_name: "Test Organization",
-          seller_rating: 4.5,
+          shop_name: "Test Organization",
+          shop_rating: 4.5,
           title: "Contractor Badge Test",
           variant_count: 1,
           quantity_available: 10,
@@ -448,7 +466,7 @@ describe("ContractorListingsV2", () => {
         },
       ];
 
-      vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useSearchListingsQuery").mockReturnValue({
         data: { listings: mockListings, total: 1, page: 1, page_size: 48 },
         isLoading: false,
         isFetching: false,

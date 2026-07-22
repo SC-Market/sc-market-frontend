@@ -16,6 +16,34 @@ import { serviceApi } from "../../../store/service"
 import { BrowserRouter } from "react-router-dom"
 import { vi, describe, it, expect, beforeEach } from "vitest"
 
+// Make the exported RTK Query hooks delegate to the endpoint methods so that
+// `vi.spyOn(marketV2Api.endpoints.*, ...)` intercepts the hooks the component
+// imports (the destructured hook exports are separate bindings).
+vi.mock("../../../store/api/v2/market", async () => {
+  const actual = (await vi.importActual("../../../store/api/v2/market")) as any
+  return {
+    ...actual,
+    useGetWishlistsQuery: (...args: any[]) =>
+      actual.marketV2Api.endpoints.getWishlists.useQuery(...args),
+    useCreateWishlistMutation: (...args: any[]) =>
+      actual.marketV2Api.endpoints.createWishlist.useMutation(...args),
+    useDeleteWishlistMutation: (...args: any[]) =>
+      actual.marketV2Api.endpoints.deleteWishlist.useMutation(...args),
+  }
+})
+
+// Mock react-i18next so translation defaults render deterministically
+vi.mock("react-i18next", async () => {
+  const actual = await vi.importActual("react-i18next")
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, def?: string) => def || key,
+      i18n: { language: "en", changeLanguage: vi.fn() },
+    }),
+  }
+})
+
 // Mock navigate
 const mockNavigate = vi.fn()
 vi.mock("react-router-dom", async () => {
@@ -112,7 +140,7 @@ describe("WishlistManager", () => {
 
       renderWithProviders(<WishlistManager />)
 
-      expect(screen.getByText(/Failed to load wishlists/i)).toBeInTheDocument()
+      expect(screen.getByText(/Failed to load shopping lists/i)).toBeInTheDocument()
       expect(screen.getByText(/Please ensure you are logged in/i)).toBeInTheDocument()
     })
 
@@ -127,7 +155,8 @@ describe("WishlistManager", () => {
       renderWithProviders(<WishlistManager />)
 
       expect(screen.getByText(/No wishlists yet/i)).toBeInTheDocument()
-      expect(screen.getByText(/Create your first wishlist/i)).toBeInTheDocument()
+      // "Create your first wishlist" appears both as body text and a button label.
+      expect(screen.getAllByText(/Create your first wishlist/i).length).toBeGreaterThan(0)
     })
 
     it("should display list of wishlists with names and descriptions", () => {
@@ -245,7 +274,7 @@ describe("WishlistManager", () => {
       await user.click(createButton)
 
       expect(screen.getByRole("dialog")).toBeInTheDocument()
-      expect(screen.getByText("Create New Wishlist")).toBeInTheDocument()
+      expect(screen.getByText("Create New Shopping List")).toBeInTheDocument()
     })
 
     it("should have name and description fields in dialog", async () => {
@@ -262,7 +291,7 @@ describe("WishlistManager", () => {
       const createButton = screen.getByRole("button", { name: /Create Wishlist/i })
       await user.click(createButton)
 
-      expect(screen.getByLabelText(/Wishlist Name/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/Shopping List Name/i)).toBeInTheDocument()
       expect(screen.getByLabelText(/Description/i)).toBeInTheDocument()
     })
 
@@ -299,7 +328,7 @@ describe("WishlistManager", () => {
       await user.click(createButton)
 
       const dialog = screen.getByRole("dialog")
-      const submitButton = within(dialog).getByRole("button", { name: /Create Wishlist/i })
+      const submitButton = within(dialog).getByRole("button", { name: /Create Shopping List/i })
 
       expect(submitButton).toBeDisabled()
     })
@@ -326,7 +355,7 @@ describe("WishlistManager", () => {
       const createButton = screen.getByRole("button", { name: /Create Wishlist/i })
       await user.click(createButton)
 
-      const nameInput = screen.getByLabelText(/Wishlist Name/i)
+      const nameInput = screen.getByLabelText(/Shopping List Name/i)
       await user.type(nameInput, "Test Wishlist")
 
       const descriptionInput = screen.getByLabelText(/Description/i)
@@ -336,22 +365,25 @@ describe("WishlistManager", () => {
       await user.click(publicSwitch)
 
       const dialog = screen.getByRole("dialog")
-      const submitButton = within(dialog).getByRole("button", { name: /Create Wishlist/i })
+      const submitButton = within(dialog).getByRole("button", { name: /Create Shopping List/i })
       await user.click(submitButton)
 
       await waitFor(() => {
         expect(mockCreateWishlist).toHaveBeenCalledWith({
-          wishlist_name: "Test Wishlist",
-          wishlist_description: "Test description",
-          is_public: true,
-          is_collaborative: false,
+          createWishlistRequest: {
+            wishlist_name: "Test Wishlist",
+            wishlist_description: "Test description",
+            is_public: true,
+            is_collaborative: false,
+            organization_id: undefined,
+          },
         })
       })
     })
 
     it("should navigate to new wishlist after creation", async () => {
       const user = userEvent.setup()
-      const mockCreateWishlist = vi.fn().mockResolvedValue({
+      const mockCreateWishlist = vi.fn().mockReturnValue({
         unwrap: () => Promise.resolve({ wishlist_id: "new-wishlist-id" }),
       })
 
@@ -371,15 +403,15 @@ describe("WishlistManager", () => {
       const createButton = screen.getByRole("button", { name: /Create Wishlist/i })
       await user.click(createButton)
 
-      const nameInput = screen.getByLabelText(/Wishlist Name/i)
+      const nameInput = screen.getByLabelText(/Shopping List Name/i)
       await user.type(nameInput, "Test Wishlist")
 
       const dialog = screen.getByRole("dialog")
-      const submitButton = within(dialog).getByRole("button", { name: /Create Wishlist/i })
+      const submitButton = within(dialog).getByRole("button", { name: /Create Shopping List/i })
       await user.click(submitButton)
 
       await waitFor(() => {
-        expect(mockNavigate).toHaveBeenCalledWith("/wishlists/new-wishlist-id")
+        expect(mockNavigate).toHaveBeenCalledWith("/shopping-lists/new-wishlist-id")
       })
     })
   })
@@ -396,12 +428,13 @@ describe("WishlistManager", () => {
 
       renderWithProviders(<WishlistManager />)
 
-      const wishlistCard = screen.getByText("Ship Components").closest("div[role='button']")
+      // Card has an onClick but no role="button"; click the card containing the name
+      const wishlistCard = screen.getByText("Ship Components").closest(".MuiCard-root")
       if (wishlistCard) {
         await user.click(wishlistCard)
       }
 
-      expect(mockNavigate).toHaveBeenCalledWith("/wishlists/wishlist-1")
+      expect(mockNavigate).toHaveBeenCalledWith("/shopping-lists/wishlist-1")
     })
   })
 
@@ -424,13 +457,14 @@ describe("WishlistManager", () => {
         await user.click(deleteButton)
       }
 
-      expect(screen.getByText("Delete Wishlist?")).toBeInTheDocument()
+      expect(screen.getByText("Delete Shopping List?")).toBeInTheDocument()
       expect(screen.getByText(/This action cannot be undone/i)).toBeInTheDocument()
     })
 
     it("should call deleteWishlist mutation when confirming delete", async () => {
       const user = userEvent.setup()
-      const mockDeleteWishlist = vi.fn().mockResolvedValue({ data: { success: true } })
+      const unwrap = vi.fn().mockResolvedValue({ success: true })
+      const mockDeleteWishlist = vi.fn().mockReturnValue({ unwrap })
 
       vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
         data: { wishlists: mockWishlists },
@@ -456,7 +490,7 @@ describe("WishlistManager", () => {
       await user.click(confirmButton)
 
       await waitFor(() => {
-        expect(mockDeleteWishlist).toHaveBeenCalledWith("wishlist-1")
+        expect(mockDeleteWishlist).toHaveBeenCalledWith({ wishlistId: "wishlist-1" })
       })
     })
 
@@ -482,7 +516,7 @@ describe("WishlistManager", () => {
       await user.click(cancelButton)
 
       await waitFor(() => {
-        expect(screen.queryByText("Delete Wishlist?")).not.toBeInTheDocument()
+        expect(screen.queryByText("Delete Shopping List?")).not.toBeInTheDocument()
       })
     })
   })

@@ -1,14 +1,13 @@
 import "./setup";
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { configureStore } from "@reduxjs/toolkit";
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { MyListingsV2 } from "../MyListingsV2";
-import { marketV2Api } from "../../../../store/api/v2/market";
 import type { MyListingItem } from "../../../../store/api/v2/market";
+import { marketV2Api } from "../../../../store/api/v2/market";
 import { serviceApi } from "../../../../store/service";
 
 const testTheme = createTheme({
@@ -17,70 +16,76 @@ const testTheme = createTheme({
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
 } as any);
 
-// Mock the hooks
+// The current MyListingsV2 desktop view renders three independent lazy sections
+// (Active / Inactive / Archived), each calling useGetMyListingsQuery. We mock the
+// hook at module level so every section resolves to the same controllable result.
+let myListingsReturn: any = {
+  data: undefined,
+  isLoading: true,
+  isFetching: false,
+  error: undefined,
+  refetch: () => {},
+};
+
+vi.mock("../../../../store/api/v2/market", async () => {
+  const actual: any = await vi.importActual("../../../../store/api/v2/market");
+  return {
+    ...actual,
+    useGetMyListingsQuery: () => myListingsReturn,
+    useUpdateListingMutation: () => [
+      vi.fn(() => ({ unwrap: () => Promise.resolve({}) })),
+      {},
+    ],
+  };
+});
+
+// Import the component AFTER declaring the mock.
+import { MyListingsV2 } from "../MyListingsV2";
+
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({ children }: any) => <div>{children}</div>,
 }));
 
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
-  useShopRouteContext: () => ({
-    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z" },
-  }),
-  useOptionalShopRouteContext: () => ({
-    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z" },
-  }),
+  useShopRouteContext: () => ({ shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop" } }),
+  useOptionalShopRouteContext: () => ({ shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop" } }),
 }));
 
 vi.mock("../../../../hooks/layout/Drawer", () => ({
   useDrawerOpen: () => [false, vi.fn()],
 }));
 
-vi.mock("../../../../hooks/styles/Theme", async () => {
-  const actual = await vi.importActual("../../../../hooks/styles/Theme")
-  return { ...actual }
-});
-
 vi.mock("../../../../util/time", () => ({
-  getRelativeTime: (date: string) => "2 days ago",
+  getRelativeTime: () => "2 days ago",
 }));
 
-// Mock translation
+// react-i18next mock — return a string when a default value is provided either as
+// a plain string or inside an options object ({ defaultValue }).
 vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
+  const actual = await vi.importActual("react-i18next");
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, defaultValue?: string) => defaultValue || key,
+      t: (key: string, defaultValue?: string | { defaultValue?: string }) => {
+        if (typeof defaultValue === "object" && defaultValue !== null) {
+          return defaultValue.defaultValue ?? key;
+        }
+        return (defaultValue as string) || key;
+      },
     }),
-  }
-});
-
-// Mock navigate
-const mockNavigate = vi.fn();
-vi.mock("react-router-dom", async () => {
-  const actual = await vi.importActual("react-router-dom");
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
   };
 });
 
-// Create mock store
-const createMockStore = (mockData?: any) => {
-  const reducer = {
-    [marketV2Api.reducerPath]: marketV2Api.reducer,
-    [serviceApi.reducerPath]: serviceApi.reducer,
-  } as any
-
-  return configureStore({
-    reducer,
+const createMockStore = () =>
+  configureStore({
+    reducer: {
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
+    } as any,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
-    preloadedState: mockData,
   });
-};
 
-// Mock listing data
 const mockListings: MyListingItem[] = [
   {
     listing_id: "listing-1",
@@ -108,361 +113,108 @@ const mockListings: MyListingItem[] = [
     quality_tier_min: 2,
     quality_tier_max: 2,
   },
-];
+] as any;
+
+const renderPage = () => {
+  const store = createMockStore();
+  return render(
+    <ThemeProvider theme={testTheme}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <MyListingsV2 />
+        </BrowserRouter>
+      </Provider>
+    </ThemeProvider>,
+  );
+};
 
 describe("MyListingsV2", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it("renders loading state initially", () => {
-    const store = createMockStore();
-
-    // Mock the query to return loading state
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: undefined,
-      isLoading: true,
+    myListingsReturn = {
+      data: { listings: mockListings, total: 2 },
+      isLoading: false,
       isFetching: false,
       error: undefined,
       refetch: vi.fn(),
-    } as any);
+    };
+  });
 
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
-    );
-
-    // Should show skeleton loaders
-    expect(screen.getAllByTestId("listing-skeleton")).toHaveLength(16);
+  it("renders section headers for the desktop manage view", async () => {
+    renderPage();
+    await waitFor(() => expect(screen.getByText("Inactive Listings")).toBeInTheDocument());
+    expect(screen.getByText("Archived Listings")).toBeInTheDocument();
   });
 
   it("renders listings with variant count and total quantity", async () => {
-    const store = createMockStore();
-
-    // Mock the query to return data
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: mockListings,
-        total: 2,
-        page: 1,
-        page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
+    renderPage();
+    // Three lazy sections share the mocked query, so each listing appears once per section.
+    await waitFor(() =>
+      expect(screen.getAllByText("High Quality Mining Tool").length).toBeGreaterThan(0),
     );
+    expect(screen.getAllByText("3 variants").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("50").length).toBeGreaterThan(0);
 
-    // Check first listing
-    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument();
-    expect(screen.getByText("3 variants")).toBeInTheDocument();
-    expect(screen.getByText("50")).toBeInTheDocument();
-
-    // Check second listing
-    expect(screen.getByText("Standard Ship Components")).toBeInTheDocument();
-    expect(screen.getByText("1 variant")).toBeInTheDocument();
-    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(screen.getAllByText("Standard Ship Components").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("1 variant").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("100").length).toBeGreaterThan(0);
   });
 
   it("displays price range (min to max across variants)", async () => {
-    const store = createMockStore();
-
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: mockListings,
-        total: 2,
-        page: 1,
-        page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getAllByText("1,000 - 5,000 aUEC").length).toBeGreaterThan(0),
     );
-
-    // First listing has price range
-    expect(screen.getByText("1,000 - 5,000 aUEC")).toBeInTheDocument();
-
-    // Second listing has single price
-    expect(screen.getByText("500 aUEC")).toBeInTheDocument();
+    expect(screen.getAllByText("500 aUEC").length).toBeGreaterThan(0);
   });
 
   it("displays quality tier range for each listing", async () => {
-    const store = createMockStore();
-
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: mockListings,
-        total: 2,
-        page: 1,
-        page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
-    );
-
-    // First listing has quality range
-    expect(screen.getByText("Tier 3-5")).toBeInTheDocument();
-
-    // Second listing has single tier
-    expect(screen.getByText("Tier 2")).toBeInTheDocument();
+    renderPage();
+    await waitFor(() => expect(screen.getAllByText("Tier 3-5").length).toBeGreaterThan(0));
+    expect(screen.getAllByText("Tier 2").length).toBeGreaterThan(0);
   });
 
-  it("provides status filter dropdown", async () => {
-    const store = createMockStore();
-    const mockRefetch = vi.fn();
-
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: mockListings,
-        total: 2,
-        page: 1,
-        page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: mockRefetch,
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
-    );
-
-    // Find status filter dropdown
-    const statusFilter = screen.getByLabelText("Status");
-    expect(statusFilter).toBeInTheDocument();
-
-    // Open dropdown
-    fireEvent.mouseDown(statusFilter);
-
-    // Check options
-    await waitFor(() => {
-      expect(screen.getByText("Active")).toBeInTheDocument();
-      expect(screen.getByText("Sold")).toBeInTheDocument();
-      expect(screen.getByText("Expired")).toBeInTheDocument();
-      expect(screen.getByText("Cancelled")).toBeInTheDocument();
-    });
-  });
-
-  it("provides pagination controls", async () => {
-    const store = createMockStore();
-
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: mockListings,
-        total: 100, // More than one page
-        page: 1,
-        page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
-    );
-
-    // Check pagination is present
-    expect(screen.getByRole("navigation")).toBeInTheDocument();
-  });
-
-  it("links to listing detail page for each listing", async () => {
-    const store = createMockStore();
-
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: mockListings,
-        total: 2,
-        page: 1,
-        page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
-    );
-
-    // Click on first listing card
-    const firstListingCard = screen.getByText("High Quality Mining Tool").closest("div[role='button']");
-    if (firstListingCard) {
-      fireEvent.click(firstListingCard);
-    }
-
-    // Check navigation was called
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/market/listing-1");
-    });
-  });
-
-  it("provides edit button for each listing", async () => {
-    const store = createMockStore();
-
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: mockListings,
-        total: 2,
-        page: 1,
-        page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
-    );
-
-    // Find edit buttons
+  it("provides an edit button for each listing", async () => {
+    renderPage();
+    await waitFor(() => expect(screen.getAllByText("Edit").length).toBeGreaterThan(0));
     const editButtons = screen.getAllByText("Edit");
     expect(editButtons.length).toBeGreaterThan(0);
+  });
 
-    // Click first edit button
-    fireEvent.click(editButtons[0]);
-
-    // Check navigation was called with edit route
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/market_edit/listing-1");
-    });
+  it("links each listing card to its detail page", async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getAllByText("High Quality Mining Tool").length).toBeGreaterThan(0),
+    );
+    const card = screen
+      .getAllByText("High Quality Mining Tool")[0]
+      .closest("a") as HTMLAnchorElement;
+    expect(card).toBeTruthy();
+    // formatMarketUrl → /market/<8charid>--<slug>
+    expect(card.getAttribute("href")).toContain("/market/");
+    expect(card.getAttribute("href")).toContain("high-quality-mining-tool");
   });
 
   it("displays empty state when no listings found", async () => {
-    const store = createMockStore();
-
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: [],
-        total: 0,
-        page: 1,
-        page_size: 48,
-      },
+    myListingsReturn = {
+      data: { listings: [], total: 0 },
       isLoading: false,
       isFetching: false,
       error: undefined,
       refetch: vi.fn(),
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
+    };
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getAllByText("No listings yet").length).toBeGreaterThan(0),
     );
-
-    // Check empty state
-    expect(screen.getByText("No listings found")).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        "You haven't created any listings yet. Create your first listing to get started!"
-      )
-    ).toBeInTheDocument();
   });
 
-  it("displays listing title, status, and created date", async () => {
-    const store = createMockStore();
-
-    vi.spyOn(marketV2Api.endpoints.getMyListings, "useQuery").mockReturnValue({
-      data: {
-        listings: mockListings,
-        total: 2,
-        page: 1,
-        page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
-
-    render(
-      <ThemeProvider theme={testTheme}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <MyListingsV2 />
-          </BrowserRouter>
-        </Provider>
-      </ThemeProvider>
+  it("displays listing title, status chip, and created date", async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getAllByText("High Quality Mining Tool").length).toBeGreaterThan(0),
     );
-
-    // Check title
-    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument();
-
-    // Check status chip
-    expect(screen.getAllByText("ACTIVE")[0]).toBeInTheDocument();
-
-    // Check created date (mocked to return "2 days ago")
+    expect(screen.getAllByText("ACTIVE").length).toBeGreaterThan(0);
     expect(screen.getAllByText("2 days ago").length).toBeGreaterThan(0);
   });
 });

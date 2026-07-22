@@ -6,8 +6,16 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { GameItemListingsV2 } from "../GameItemListingsV2";
+import * as marketApi from "../../../../store/api/v2/market";
 import { marketV2Api } from "../../../../store/api/v2/market";
+
+const testTheme = createTheme({
+  layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  palette: { outline: { main: "#e0e0e0" } },
+} as any);
 
 // Mock react-router-dom useParams
 vi.mock("react-router-dom", async () => {
@@ -25,6 +33,16 @@ vi.mock("react-cookie", () => ({
     vi.fn(),
     vi.fn(),
   ],
+}));
+
+// Deterministic translations: t returns the key (or a string defaultValue).
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, defaultValue?: unknown) =>
+      typeof defaultValue === "string" ? defaultValue : key,
+    i18n: { language: "en" },
+  }),
+  Trans: ({ children }: any) => children,
 }));
 
 // Mock alert hook
@@ -60,9 +78,9 @@ vi.mock("../../../../components/market/v2/VariantSelector", () => ({
 }));
 
 vi.mock("../../../../components/rating/ListingRating", () => ({
-  ListingNameAndRating: ({ user, contractor }: any) => (
+  ListingNameAndRating: ({ user, contractor, shop }: any) => (
     <div data-testid="seller-rating">
-      {user?.username || contractor?.name}
+      {shop?.name || user?.username || contractor?.name}
     </div>
   ),
 }));
@@ -75,86 +93,87 @@ vi.mock("../../../../components/haptic", () => ({
   ),
 }));
 
-// Mock data
+// Mock data — matches the current GetGameItemListingsResponse schema.
 const mockGameItemData = {
   game_item: {
     id: "test-game-item-id",
     name: "Test Game Item",
     type: "Weapon",
-    description: "A test game item",
     image_url: "https://example.com/image.png",
   },
   quality_distribution: [
     {
       quality_tier: 1,
       listing_count: 5,
-      min_price: 1000,
-      avg_price: 1200,
-      max_price: 1500,
-      total_quantity: 50,
+      shop_count: 3,
+      price_min: 1000,
+      price_avg: 1200,
+      price_max: 1500,
+      quantity_available: 50,
     },
     {
       quality_tier: 3,
       listing_count: 10,
-      min_price: 2000,
-      avg_price: 2500,
-      max_price: 3000,
-      total_quantity: 100,
+      shop_count: 6,
+      price_min: 2000,
+      price_avg: 2500,
+      price_max: 3000,
+      quantity_available: 100,
     },
     {
       quality_tier: 5,
       listing_count: 3,
-      min_price: 5000,
-      avg_price: 5500,
-      max_price: 6000,
-      total_quantity: 30,
+      shop_count: 2,
+      price_min: 5000,
+      price_avg: 5500,
+      price_max: 6000,
+      quantity_available: 30,
     },
   ],
   listings: [
     {
       listing_id: "listing-1",
-      seller_id: "seller-1",
-      seller_type: "user" as const,
-      seller_name: "TestSeller1",
-      seller_rating: 4.5,
-      quality_tier_min: 3,
-      quality_tier_max: 3,
-      price_min: 2000,
-      price_max: 2000,
+      variant_id: "variant-1",
+      title: "Listing One",
+      shop_id: "shop-1",
+      shop_name: "TestSeller1",
+      shop_slug: "test-seller-1",
+      shop_rating: 4.5,
+      quality_tier: 3,
+      price: 2000,
       quantity_available: 10,
-      variant_count: 1,
       created_at: "2024-01-01T00:00:00Z",
     },
     {
       listing_id: "listing-2",
-      seller_id: "seller-2",
-      seller_type: "user" as const,
-      seller_name: "TestSeller2",
-      seller_rating: 4.8,
-      quality_tier_min: 5,
-      quality_tier_max: 5,
-      price_min: 5000,
-      price_max: 5000,
+      variant_id: "variant-2",
+      title: "Listing Two",
+      shop_id: "shop-2",
+      shop_name: "TestSeller2",
+      shop_slug: "test-seller-2",
+      shop_rating: 4.8,
+      quality_tier: 5,
+      price: 5000,
       quantity_available: 5,
-      variant_count: 2,
       created_at: "2024-01-02T00:00:00Z",
     },
     {
       listing_id: "listing-3",
-      seller_id: "seller-3",
-      seller_type: "contractor" as const,
-      seller_name: "TestContractor",
-      seller_rating: 4.2,
-      quality_tier_min: 1,
-      quality_tier_max: 1,
-      price_min: 1000,
-      price_max: 1000,
+      variant_id: "variant-3",
+      title: "Listing Three",
+      shop_id: "shop-3",
+      shop_name: "TestContractor",
+      shop_slug: "test-contractor",
+      shop_rating: 4.2,
+      quality_tier: 1,
+      price: 1000,
       quantity_available: 20,
-      variant_count: 1,
       created_at: "2024-01-03T00:00:00Z",
     },
   ],
   total: 3,
+  page: 1,
+  page_size: 48,
 };
 
 // Helper to create test store
@@ -173,15 +192,17 @@ function renderWithProviders(component: React.ReactElement) {
   const store = createTestStore();
   return render(
     <Provider store={store}>
-      <BrowserRouter>{component}</BrowserRouter>
+      <ThemeProvider theme={testTheme}>
+        <BrowserRouter>{component}</BrowserRouter>
+      </ThemeProvider>
     </Provider>
   );
 }
 
 describe("GameItemListingsV2", () => {
   beforeEach(() => {
-    // Mock the RTK Query hook
-    vi.spyOn(marketV2Api.endpoints.getListings, "useQuery").mockReturnValue({
+    // Mock the RTK Query hook (standalone export used by the component)
+    vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
       data: mockGameItemData,
       isLoading: false,
       isFetching: false,
@@ -230,8 +251,8 @@ describe("GameItemListingsV2", () => {
     it("should display price range table with all quality tiers", () => {
       renderWithProviders(<GameItemListingsV2 />);
       
-      // Check for table headers
-      expect(screen.getByText("Quality Tier")).toBeInTheDocument();
+      // Check for table headers ("Quality Tier" also appears as the filter label).
+      expect(screen.getAllByText("Quality Tier").length).toBeGreaterThan(0);
       expect(screen.getByText("Min Price")).toBeInTheDocument();
       expect(screen.getByText("Avg Price")).toBeInTheDocument();
       expect(screen.getByText("Max Price")).toBeInTheDocument();
@@ -240,14 +261,13 @@ describe("GameItemListingsV2", () => {
 
     it("should show correct price data for each tier", () => {
       renderWithProviders(<GameItemListingsV2 />);
-      
-      // Tier 1 prices
-      expect(screen.getByText(/1,000 aUEC/)).toBeInTheDocument();
+
+      // Prices may appear in both the distribution table and listing rows.
+      expect(screen.getAllByText(/1,000 aUEC/).length).toBeGreaterThan(0);
       expect(screen.getByText(/1,200 aUEC/)).toBeInTheDocument();
       expect(screen.getByText(/1,500 aUEC/)).toBeInTheDocument();
-      
-      // Tier 5 prices
-      expect(screen.getByText(/5,000 aUEC/)).toBeInTheDocument();
+
+      expect(screen.getAllByText(/5,000 aUEC/).length).toBeGreaterThan(0);
       expect(screen.getByText(/5,500 aUEC/)).toBeInTheDocument();
       expect(screen.getByText(/6,000 aUEC/)).toBeInTheDocument();
     });
@@ -265,10 +285,10 @@ describe("GameItemListingsV2", () => {
       
       const filterSelect = screen.getByLabelText("Quality Tier");
       await user.selectOptions(filterSelect, "3");
-      
-      // Should show filtered header
+
+      // Should show filtered header (Tier 3 also appears in badges/rows).
       await waitFor(() => {
-        expect(screen.getByText(/Tier 3/)).toBeInTheDocument();
+        expect(screen.getAllByText(/Tier 3/).length).toBeGreaterThan(0);
       });
     });
 
@@ -296,18 +316,20 @@ describe("GameItemListingsV2", () => {
 
     it("should show quality tier badges for each listing", () => {
       renderWithProviders(<GameItemListingsV2 />);
-      
-      expect(screen.getByTestId("quality-badge-1")).toBeInTheDocument();
-      expect(screen.getByTestId("quality-badge-3")).toBeInTheDocument();
-      expect(screen.getByTestId("quality-badge-5")).toBeInTheDocument();
+
+      // Badges appear both in the price-range table and in each listing row.
+      expect(screen.getAllByTestId("quality-badge-1").length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId("quality-badge-3").length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId("quality-badge-5").length).toBeGreaterThan(0);
     });
 
-    it("should display variant count for listings with multiple variants", () => {
+    it("should display quality tier information per listing", () => {
       renderWithProviders(<GameItemListingsV2 />);
-      
-      // Listing 2 has variant_count: 2, should show variant selector
-      const variantSelectors = screen.getAllByTestId("variant-selector");
-      expect(variantSelectors.length).toBeGreaterThan(0);
+
+      // Each listing row surfaces its variant's quality tier via a QualityBadge.
+      expect(screen.getAllByTestId("quality-badge-1").length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId("quality-badge-3").length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId("quality-badge-5").length).toBeGreaterThan(0);
     });
   });
 
@@ -352,26 +374,13 @@ describe("GameItemListingsV2", () => {
       expect(addToCartButtons.length).toBe(3);
     });
 
-    it("should disable add to cart when variant not selected for multi-variant listings", () => {
+    it("should render an enabled add to cart button per listing row", () => {
       renderWithProviders(<GameItemListingsV2 />);
-      
-      const addToCartButtons = screen.getAllByTestId("add-to-cart-button");
-      // Listing 2 has multiple variants, button should be disabled initially
-      const multiVariantButton = addToCartButtons[1];
-      expect(multiVariantButton).toBeDisabled();
-    });
 
-    it("should enable add to cart after variant selection", async () => {
-      const user = userEvent.setup();
-      renderWithProviders(<GameItemListingsV2 />);
-      
-      const variantSelector = screen.getAllByTestId("variant-selector")[0];
-      await user.selectOptions(variantSelector, "variant-1");
-      
-      await waitFor(() => {
-        const addToCartButtons = screen.getAllByTestId("add-to-cart-button");
-        expect(addToCartButtons[1]).not.toBeDisabled();
-      });
+      // Each per-variant row exposes its own add-to-cart button (variant is
+      // implicit per row, so buttons are not disabled).
+      const addToCartButtons = screen.getAllByTestId("add-to-cart-button");
+      addToCartButtons.forEach((button) => expect(button).not.toBeDisabled());
     });
 
     it("should allow quantity input", () => {
@@ -386,7 +395,7 @@ describe("GameItemListingsV2", () => {
     it("should use RTK Query hook for data fetching", () => {
       renderWithProviders(<GameItemListingsV2 />);
       
-      expect(marketV2Api.endpoints.getListings.useQuery).toHaveBeenCalledWith(
+      expect(marketApi.useGetListingsQuery).toHaveBeenCalledWith(
         {
           id: "test-game-item-id",
           qualityTier: undefined,
@@ -407,7 +416,7 @@ describe("GameItemListingsV2", () => {
 
   describe("Loading and error states", () => {
     it("should show loading state", () => {
-      vi.spyOn(marketV2Api.endpoints.getListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
         data: undefined,
         isLoading: true,
         isFetching: true,
@@ -422,7 +431,7 @@ describe("GameItemListingsV2", () => {
     });
 
     it("should show error state", () => {
-      vi.spyOn(marketV2Api.endpoints.getListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
         data: undefined,
         isLoading: false,
         isFetching: false,
@@ -439,7 +448,7 @@ describe("GameItemListingsV2", () => {
 
   describe("Empty states", () => {
     it("should handle empty quality distribution", () => {
-      vi.spyOn(marketV2Api.endpoints.getListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
         data: {
           ...mockGameItemData,
           quality_distribution: [],
@@ -453,11 +462,12 @@ describe("GameItemListingsV2", () => {
       } as any);
 
       renderWithProviders(<GameItemListingsV2 />);
-      expect(screen.getByText("No quality data available")).toBeInTheDocument();
+      // With no distribution, the price-range table renders its empty message.
+      expect(screen.getByText("No price data available")).toBeInTheDocument();
     });
 
     it("should handle empty listings", () => {
-      vi.spyOn(marketV2Api.endpoints.getListings, "useQuery").mockReturnValue({
+      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
         data: {
           ...mockGameItemData,
           listings: [],

@@ -3,6 +3,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { configureStore } from "@reduxjs/toolkit";
 import { MarketMultipleViewV2 } from "../MarketMultipleViewV2";
 import { generatedApiV2 } from "../../../../store/generatedApiV2";
@@ -36,7 +37,7 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-vi.mock("../../../store/profile", () => ({
+vi.mock("../../profile/api/profileApi", () => ({
   useGetUserProfileQuery: () => ({
     data: {
       username: "testuser",
@@ -45,8 +46,25 @@ vi.mock("../../../store/profile", () => ({
   }),
 }));
 
-vi.mock("../../../hooks/login/CurrentOrg", () => ({
+vi.mock("../../../../features/contractor/api/contractorApi", () => ({
+  useGetContractorBySpectrumIDQuery: () => ({ data: undefined }),
+}));
+
+vi.mock("../../../../hooks/login/CurrentOrg", () => ({
   useCurrentOrg: () => [null],
+}));
+
+// StandardPageLayout depends on Page (useRouteError -> data router) and layout
+// contexts not present under BrowserRouter. Mock it to render children plus title.
+vi.mock("../../../../components/layout/StandardPageLayout", () => ({
+  StandardPageLayout: ({ children, title, isLoading, error }: any) => (
+    <div data-testid="standard-page-layout">
+      <h1>{title}</h1>
+      {isLoading && <div data-testid="loading">Loading...</div>}
+      {error && <div data-testid="error">Error</div>}
+      {children}
+    </div>
+  ),
 }));
 
 vi.mock("react-i18next", async () => {
@@ -68,13 +86,13 @@ vi.mock("react-i18next", async () => {
 });
 
 // Mock components
-vi.mock("../../../components/market/v2/QualityBadge", () => ({
+vi.mock("../../../../components/market/v2/QualityBadge", () => ({
   QualityBadge: ({ tier, size }: any) => (
     <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>
   ),
 }));
 
-vi.mock("../../../components/market/v2/VariantSelector", () => ({
+vi.mock("../../../../components/market/v2/VariantSelector", () => ({
   VariantSelector: ({ onVariantChange, variants, selectedVariantId }: any) => (
     <select
       data-testid="variant-selector"
@@ -91,15 +109,15 @@ vi.mock("../../../components/market/v2/VariantSelector", () => ({
   ),
 }));
 
-vi.mock("../../../components/rating/ListingRating", () => ({
-  ListingNameAndRating: ({ user, contractor }: any) => (
+vi.mock("../../../../components/rating/ListingRating", () => ({
+  ListingNameAndRating: ({ user, contractor, shop }: any) => (
     <div data-testid="seller-rating">
-      {user?.username || contractor?.name}
+      {user?.username || contractor?.name || shop?.name}
     </div>
   ),
 }));
 
-vi.mock("../../../components/list/UserList", () => ({
+vi.mock("../../../../components/list/UserList", () => ({
   UserList: ({ users, title }: any) => (
     <div data-testid="user-list">
       <div>{title}</div>
@@ -110,35 +128,102 @@ vi.mock("../../../components/list/UserList", () => ({
   ),
 }));
 
-vi.mock("../../../components/list/OrderList", () => ({
+vi.mock("../../../../components/list/OrderList", () => ({
   OrderList: ({ orders }: any) => (
     <div data-testid="order-list">{orders.length} orders</div>
   ),
 }));
 
-vi.mock("../../../components/modal/ImagePreviewModal", () => ({
+vi.mock("../../../../components/modal/ImagePreviewModal", () => ({
   ImagePreviewModal: ({ open, onClose }: any) => (
     open ? <div data-testid="image-modal">Image Modal</div> : null
   ),
 }));
 
-vi.mock("../../../components/markdown/Markdown.lazy", () => ({
+vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
   MarkdownRender: ({ text }: any) => <div data-testid="markdown">{text}</div>,
 }));
 
-vi.mock("../listing-view/components/ListingDetailItem", () => ({
+vi.mock("../../listing-view/components/ListingDetailItem", () => ({
   ListingDetailItem: ({ children, icon }: any) => (
     <div data-testid="listing-detail-item">{children}</div>
   ),
 }));
 
-vi.mock("../../../components/paper/Section", () => ({
+vi.mock("../../../../components/paper/Section", () => ({
   Section: ({ children, title }: any) => (
     <div data-testid="section">
       <h3>{title}</h3>
       {children}
     </div>
   ),
+}));
+
+// The component fetches bundle data via useGetListingDetailQuery; mock it.
+vi.mock("../../../../store/api/v2/market", () => ({
+  useGetListingDetailQuery: () => ({
+    data: {
+      listing: {
+        listing_id: "test-bundle-123",
+        title: "Complete Weapon Bundle",
+        description: "A complete set of weapons with various quality tiers.",
+        status: "active",
+        created_at: "2024-01-01T00:00:00Z",
+        updated_at: "2024-01-02T00:00:00Z",
+        expires_at: "2024-02-01T00:00:00Z",
+      },
+      seller: {
+        name: "TestSeller",
+        slug: "testseller",
+        logo_url: "https://example.com/logo.png",
+        rating: 4.5,
+      },
+      items: [
+        {
+          item_id: "item-1",
+          game_item: { id: "gi-1", name: "Energy Rifle", type: "Weapon", image_url: "https://example.com/rifle.png" },
+          pricing_mode: "per_variant",
+          base_price: 0,
+          variants: [
+            {
+              variant_id: "v1",
+              attributes: { quality_tier: 3, quality_value: 75.5, crafted_source: "Crafted" },
+              display_name: "Tier 3 (75.5%) - Crafted",
+              short_name: "T3",
+              quantity: 5,
+              price: 2500,
+            },
+            {
+              variant_id: "v2",
+              attributes: { quality_tier: 5, quality_value: 95.0, crafted_source: "Crafted" },
+              display_name: "Tier 5 (95.0%) - Crafted",
+              short_name: "T5",
+              quantity: 2,
+              price: 5000,
+            },
+          ],
+        },
+        {
+          item_id: "item-2",
+          game_item: { id: "gi-2", name: "Ballistic Pistol", type: "Weapon", image_url: "https://example.com/pistol.png" },
+          pricing_mode: "unified",
+          base_price: 1500,
+          variants: [
+            {
+              variant_id: "v3",
+              attributes: { quality_tier: 4, quality_value: 85.0, crafted_source: "Store" },
+              display_name: "Tier 4 (85.0%) - Store",
+              short_name: "T4",
+              quantity: 3,
+              price: 1500,
+            },
+          ],
+        },
+      ],
+    },
+    isLoading: false,
+    error: undefined,
+  }),
 }));
 
 // Mock store setup
@@ -153,11 +238,19 @@ const createMockStore = () => {
   });
 };
 
+const testTheme = createTheme({
+  layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
+  palette: { outline: { main: "#e0e0e0" } },
+} as any);
+
 const renderWithProviders = (component: React.ReactElement) => {
   const store = createMockStore();
   return render(
     <Provider store={store}>
-      <BrowserRouter>{component}</BrowserRouter>
+      <ThemeProvider theme={testTheme}>
+        <BrowserRouter>{component}</BrowserRouter>
+      </ThemeProvider>
     </Provider>
   );
 };
@@ -166,18 +259,16 @@ describe("MarketMultipleViewV2", () => {
   describe("Bundle Display", () => {
     it("should display bundle title", () => {
       renderWithProviders(<MarketMultipleViewV2 />);
-      expect(screen.getByText("Complete Weapon Bundle")).toBeInTheDocument();
+      // Title appears in the layout header and the card header.
+      expect(screen.getAllByText("Complete Weapon Bundle").length).toBeGreaterThan(0);
     });
 
     it("should display all items in bundle", () => {
       renderWithProviders(<MarketMultipleViewV2 />);
-      
-      // Check that item selector has all items
-      const select = screen.getByRole("combobox");
-      fireEvent.mouseDown(select);
-      
-      expect(screen.getByText("Energy Rifle")).toBeInTheDocument();
-      expect(screen.getByText("Ballistic Pistol")).toBeInTheDocument();
+
+      // Both items should be present (in the item selector and/or contents).
+      expect(screen.getAllByText("Energy Rifle").length).toBeGreaterThan(0);
+      expect(screen.getAllByText("Ballistic Pistol").length).toBeGreaterThan(0);
     });
 
     it("should display bundle description", () => {
@@ -200,8 +291,8 @@ describe("MarketMultipleViewV2", () => {
     it("should display quality tier in variant display name", () => {
       renderWithProviders(<MarketMultipleViewV2 />);
       
-      expect(screen.getByText(/Tier 3 \(75\.5%\) - Crafted/)).toBeInTheDocument();
-      expect(screen.getByText(/Tier 5 \(95\.0%\) - Crafted/)).toBeInTheDocument();
+      expect(screen.getAllByText(/Tier 3 \(75\.5%\) - Crafted/).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/Tier 5 \(95\.0%\) - Crafted/).length).toBeGreaterThan(0);
     });
   });
 
@@ -210,7 +301,7 @@ describe("MarketMultipleViewV2", () => {
       renderWithProviders(<MarketMultipleViewV2 />);
       
       // Check for crafted source in display names
-      expect(screen.getByText(/Crafted/)).toBeInTheDocument();
+      expect(screen.getAllByText(/Crafted/).length).toBeGreaterThan(0);
     });
 
     it("should display quantity for each variant", () => {
