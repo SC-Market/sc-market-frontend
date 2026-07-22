@@ -1251,9 +1251,9 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                       total_orders={null}
                       total_assignments={null}
                       response_rate={null}
-                      badge_ids={[]}
-                      display_limit={0}
-                      showBadges={false}
+                      badge_ids={listing.shop_badge_ids}
+                      display_limit={3}
+                      showBadges={true}
                     />
                   </Box>
                 </Box>

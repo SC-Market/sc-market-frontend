@@ -207,6 +207,7 @@ const mockListings: ListingSearchResult[] = [
     game_item_name: "Quantum Drive",
     game_item_type: "Component",
     shop_rating_count: 42,
+    shop_badge_ids: [],
     quantity_unit: "unit" as const,
   },
   {
@@ -229,6 +230,7 @@ const mockListings: ListingSearchResult[] = [
     game_item_name: "Laser Cannon",
     game_item_type: "Weapon",
     shop_rating_count: 15,
+    shop_badge_ids: [],
     quantity_unit: "scu" as const,
   },
 ];
