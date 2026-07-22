@@ -23,6 +23,7 @@ import { WishlistWidget } from "./WishlistWidget"
 import { PriceHistoryWidget } from "./PriceHistoryWidget"
 import { ListingsPreviewWidget } from "./ListingsPreviewWidget"
 import { ActivityFeedWidget } from "./ActivityFeedWidget"
+import { ListingAnalyticsWidget } from "./ListingAnalyticsWidget"
 import type { ResolvedScope } from "../useResolveScope"
 import type { DashboardWidget, WidgetLayout, WidgetScopeKind } from "../types"
 
@@ -261,6 +262,19 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     offersActivityFilter: true,
     render: ({ scope, settings, t }) => (
       <ActivityFeedWidget scope={scope} settings={settings} t={t} />
+    ),
+  },
+  {
+    type: "listing_analytics",
+    titleKey: "dashboard.widgets.listingAnalytics.title",
+    titleDefault: "Listing Analytics",
+    descriptionKey: "dashboard.widgets.listingAnalytics.description",
+    descriptionDefault:
+      "Per-listing views, cart adds, orders, sales, and conversion rate.",
+    defaultLayout: { w: 6, h: 5 },
+    allowedScopes: SHOP_SCOPES,
+    render: ({ scope, settings, t }) => (
+      <ListingAnalyticsWidget scope={scope} settings={settings} t={t} />
     ),
   },
 ]

@@ -1402,6 +1402,17 @@
     "dontImportWidget": "Don't import this widget",
     "export": "Export",
     "import": "Import",
+    "listingAnalytics": {
+      "cartAdds": "Cart adds",
+      "conversion": "Conversion",
+      "empty": "No views or orders recorded yet.",
+      "error": "Couldn't load listing analytics.",
+      "listing": "Listing",
+      "noShop": "Pin this widget to a shop to see its listing analytics.",
+      "orders": "Orders",
+      "sales": "Sales",
+      "views": "Views"
+    },
     "listingsPreview": {
       "byItem": "By item",
       "bySearch": "By search",
@@ -1457,6 +1468,10 @@
       "activityFeed": {
         "description": "A timeline of recent activity, optionally filtered to one type.",
         "title": "Activity Feed"
+      },
+      "listingAnalytics": {
+        "description": "Per-listing views, cart adds, orders, sales, and conversion rate.",
+        "title": "Listing Analytics"
       },
       "listingsPreview": {
         "description": "A few marketplace listings for a search or a specific item.",

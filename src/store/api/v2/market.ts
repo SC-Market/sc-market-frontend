@@ -1641,6 +1641,19 @@ const injectedRtkApi = api
         }),
         providesTags: ["Analytics V2"],
       }),
+      getListingStats: build.query<
+        GetListingStatsApiResponse,
+        GetListingStatsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/analytics/listing-stats`,
+          params: {
+            shop_id: queryArg.shopId,
+            limit: queryArg.limit,
+          },
+        }),
+        providesTags: ["Analytics V2"],
+      }),
       getConfig: build.query<GetConfigApiResponse, GetConfigApiArg>({
         query: () => ({ url: `/admin/feature-flags/config` }),
         providesTags: ["Admin Feature Flags"],
@@ -3013,6 +3026,14 @@ export type GetSellerStatsApiResponse =
 export type GetSellerStatsApiArg = {
   /** Shop ID to get stats for */
   shopId?: string
+}
+export type GetListingStatsApiResponse =
+  /** status 200 Per-listing view/conversion metrics with shop-level totals */ GetListingStatsResponse
+export type GetListingStatsApiArg = {
+  /** Shop ID to get per-listing stats for */
+  shopId?: string
+  /** Maximum number of listings to return (default 20, max 100) */
+  limit?: number
 }
 export type GetConfigApiResponse = /** status 200 Ok */ FeatureFlagConfig
 export type GetConfigApiArg = void
@@ -6253,6 +6274,48 @@ export type GetSellerStatsResponse = {
   /** Price premium percentages by quality tier */
   price_premiums: QualityTierPremium[]
 }
+export type ListingConversionStat = {
+  /** Listing UUID */
+  listing_id: string
+  /** Listing title */
+  title: string
+  /** Total recorded views (including anonymous) */
+  views: number
+  /** Distinct logged-in viewers */
+  unique_viewers: number
+  /** Distinct users who added this listing to a cart */
+  cart_adds: number
+  /** Distinct orders that include this listing */
+  orders: number
+  /** Distinct fulfilled (sold) orders that include this listing */
+  sales: number
+  /** Sales as a percentage of views (0 when there are no views) */
+  conversion_rate: number
+  /** ISO 8601 timestamp when the listing was created */
+  created_at: string
+}
+export type ListingStatsTotals = {
+  /** Total views across listings */
+  views: number
+  /** Total distinct logged-in viewers across listings */
+  unique_viewers: number
+  /** Total distinct cart adds across listings */
+  cart_adds: number
+  /** Total distinct orders across listings */
+  orders: number
+  /** Total distinct fulfilled orders across listings */
+  sales: number
+  /** Aggregate sales as a percentage of aggregate views */
+  conversion_rate: number
+}
+export type GetListingStatsResponse = {
+  /** Shop ID */
+  shop_id: string
+  /** Per-listing view → conversion metrics, ordered by views descending */
+  listings: ListingConversionStat[]
+  /** Aggregate totals across the returned listings */
+  totals: ListingStatsTotals
+}
 export type FeatureFlagConfig = {
   flag_name: string
   default_version: MarketVersion
@@ -6506,6 +6569,7 @@ export const {
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,
+  useGetListingStatsQuery,
   useGetConfigQuery,
   useUpdateConfigMutation,
   useGetStatsQuery,
