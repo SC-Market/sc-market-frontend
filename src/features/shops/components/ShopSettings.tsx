@@ -519,6 +519,12 @@ export function ShopSettings() {
   const [marketOrderTemplate, setMarketOrderTemplate] = useState(
     shop.market_order_template,
   )
+  const [officialServerId, setOfficialServerId] = useState<string>(
+    shop.official_server_id ?? "",
+  )
+  const [discordThreadChannelId, setDiscordThreadChannelId] = useState<string>(
+    shop.discord_thread_channel_id ?? "",
+  )
   const [logoResourceId, setLogoResourceId] = useState<string | null>(null)
   const [logoUrl, setLogoUrl] = useState<string | null>(shop.logo_url)
   const [bannerResourceId, setBannerResourceId] = useState<string | null>(null)
@@ -534,6 +540,8 @@ export function ShopSettings() {
     setSupportedLanguages(shop.supported_languages)
     setAcceptsCustomOrders(shop.accepts_custom_orders)
     setMarketOrderTemplate(shop.market_order_template)
+    setOfficialServerId(shop.official_server_id ?? "")
+    setDiscordThreadChannelId(shop.discord_thread_channel_id ?? "")
     setLogoResourceId(null)
     setLogoUrl(shop.logo_url)
     setBannerResourceId(null)
@@ -567,6 +575,8 @@ export function ShopSettings() {
           supported_languages: supportedLanguages,
           accepts_custom_orders: acceptsCustomOrders,
           market_order_template: marketOrderTemplate,
+          official_server_id: officialServerId.trim() || null,
+          discord_thread_channel_id: discordThreadChannelId.trim() || null,
           ...(logoResourceId ? { logo: logoResourceId } : {}),
           ...(bannerResourceId ? { banner: bannerResourceId } : {}),
         },
@@ -803,6 +813,45 @@ export function ShopSettings() {
                 multiline
                 minRows={4}
                 helperText="Template shown to buyers when placing a custom order"
+              />
+            </Grid>
+          </FormPaper>
+
+          {/* Discord */}
+          <FormPaper
+            title="Discord"
+            subtitle="Where order and offer threads are created for this shop"
+          >
+            <Grid item xs={12}>
+              <Alert severity="info" sx={{ mb: 1 }}>
+                This Discord configuration is per-shop. Order and offer threads
+                for this shop are created in the server and channel below. If
+                left empty, threads fall back to your account or org Discord
+                settings. Enter the numeric Discord server (guild) ID and the
+                channel ID under which threads should be created — the SC Market
+                bot must be a member of that server with access to the channel.
+              </Alert>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Discord Server ID"
+                value={officialServerId}
+                onChange={(e) => setOfficialServerId(e.target.value)}
+                fullWidth
+                size="small"
+                placeholder="e.g. 123456789012345678"
+                helperText="Guild ID"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Thread Channel ID"
+                value={discordThreadChannelId}
+                onChange={(e) => setDiscordThreadChannelId(e.target.value)}
+                fullWidth
+                size="small"
+                placeholder="e.g. 123456789012345678"
+                helperText="Channel where threads are created"
               />
             </Grid>
           </FormPaper>

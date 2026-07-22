@@ -3302,6 +3302,10 @@ export type ShopResponse = {
   created_at: string
   updated_at: string
   banner_url: string | null
+  /** Discord server (guild) ID where order/offer threads are created for this shop */
+  official_server_id: string | null
+  /** Discord channel ID under which order/offer threads are created for this shop */
+  discord_thread_channel_id: string | null
   /** Seller reputation badges, computed server-side from shop metrics + owner data */
   badge_ids: string[]
   /** Granular permissions for the current user on this shop (only in /shops/mine) */
@@ -3379,6 +3383,10 @@ export type UpdateShopRequest = {
   default_pickup_method?: string | null
   tags?: string[]
   accepts_custom_orders?: boolean
+  /** Discord server (guild) ID where order/offer threads are created for this shop */
+  official_server_id?: string | null
+  /** Discord channel ID under which order/offer threads are created for this shop */
+  discord_thread_channel_id?: string | null
 }
 export type ShopReviewResponse = {
   review_id: string
