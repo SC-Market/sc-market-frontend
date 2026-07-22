@@ -24,9 +24,10 @@ import {
 } from "@mui/material"
 import DownloadIcon from "@mui/icons-material/Download"
 import UploadIcon from "@mui/icons-material/Upload"
+import { useTranslation } from "react-i18next"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../profile/api/profileApi"
-import { getWidgetDefinition } from "./widgets/registry"
+import { getWidgetDefinition, widgetTitle } from "./widgets/registry"
 import {
   applyRemaps,
   downloadConfig,
@@ -48,6 +49,7 @@ export function ImportExportControls({
   name,
   onImport,
 }: ImportExportControlsProps) {
+  const { t } = useTranslation()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [parsed, setParsed] = useState<ParsedImport | null>(null)
 
@@ -71,7 +73,7 @@ export function ImportExportControls({
         onClick={() => downloadConfig(config, name)}
         disabled={config.widgets.length === 0}
       >
-        Export
+        {t("dashboard.export", "Export")}
       </Button>
       <Button
         variant="outlined"
@@ -79,7 +81,7 @@ export function ImportExportControls({
         startIcon={<UploadIcon />}
         onClick={() => fileInputRef.current?.click()}
       >
-        Import
+        {t("dashboard.import", "Import")}
       </Button>
       <input
         ref={fileInputRef}
@@ -116,6 +118,7 @@ interface RemapDialogProps {
 const DROP = "__drop__"
 
 function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
+  const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const { data: myShops } = useGetMyShopsQuery()
   const orgs = profile?.contractors ?? []
@@ -141,26 +144,35 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
 
   return (
     <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Map imported widgets</DialogTitle>
+      <DialogTitle>
+        {t("dashboard.mapImportedWidgets", "Map imported widgets")}
+      </DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ mb: 2 }}>
-          These widgets were pinned to the author's own organizations or shops.
-          Pick one of yours for each, or drop it.
+          {t(
+            "dashboard.mapImportedWidgetsHint",
+            "These widgets were pinned to the author's own organizations or shops. Pick one of yours for each, or drop it.",
+          )}
         </DialogContentText>
         <Stack spacing={2}>
           {parsed.remaps.map((remap) => {
             const def = getWidgetDefinition(remap.widgetType)
             const isOrg = remap.kind === "specific_org"
             const options = isOrg ? orgs : shops
+            const widgetName = def ? widgetTitle(def, t) : remap.widgetType
+            const label = isOrg
+              ? t("dashboard.remapOrgLabel", "{{name}} — organization", {
+                  name: widgetName,
+                })
+              : t("dashboard.remapShopLabel", "{{name}} — shop", {
+                  name: widgetName,
+                })
             return (
               <FormControl key={remap.index} fullWidth size="small">
-                <InputLabel id={`remap-${remap.index}`}>
-                  {def?.title ?? remap.widgetType} —{" "}
-                  {isOrg ? "organization" : "shop"}
-                </InputLabel>
+                <InputLabel id={`remap-${remap.index}`}>{label}</InputLabel>
                 <Select
                   labelId={`remap-${remap.index}`}
-                  label={`${def?.title ?? remap.widgetType} — ${isOrg ? "organization" : "shop"}`}
+                  label={label}
                   value={choices[remap.index] ?? DROP}
                   onChange={(e) =>
                     setChoices((c) => ({
@@ -170,7 +182,9 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
                   }
                 >
                   <MenuItem value={DROP}>
-                    <em>Don't import this widget</em>
+                    <em>
+                      {t("dashboard.dontImportWidget", "Don't import this widget")}
+                    </em>
                   </MenuItem>
                   {isOrg
                     ? orgs.map((org) => (
@@ -186,8 +200,15 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
                 </Select>
                 {options.length === 0 && (
                   <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-                    You have no {isOrg ? "organizations" : "shops"} — this widget
-                    will be dropped.
+                    {isOrg
+                      ? t(
+                          "dashboard.noOrgsWidgetDropped",
+                          "You have no organizations — this widget will be dropped.",
+                        )
+                      : t(
+                          "dashboard.noShopsWidgetDropped",
+                          "You have no shops — this widget will be dropped.",
+                        )}
                   </Typography>
                 )}
               </FormControl>
@@ -196,13 +217,13 @@ function RemapDialog({ parsed, onClose, onConfirm }: RemapDialogProps) {
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t("dashboard.cancel", "Cancel")}</Button>
         <Button
           variant="contained"
           color="secondary"
           onClick={() => onConfirm(resolutions)}
         >
-          Import
+          {t("dashboard.import", "Import")}
         </Button>
       </DialogActions>
     </Dialog>
