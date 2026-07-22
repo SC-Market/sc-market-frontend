@@ -26,6 +26,7 @@ import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../profile/api/profileApi"
 import { WIDGET_DEFINITIONS } from "./widgets/registry"
 import { addWidget } from "./widgets/addWidget"
+import { useDashboardOwner } from "./DashboardOwnerContext"
 import type {
   DashboardConfig,
   WidgetScope,
@@ -40,6 +41,19 @@ const SCOPE_LABELS: Record<WidgetScopeKind, string> = {
   specific_org: "A specific organization",
   specific_shop: "A specific shop",
 }
+
+// On a shared org/shop dashboard, personal and aggregate bindings are meaningless
+// (the dashboard belongs to the owner, not the viewer). Only "current_context"
+// (which resolves to the owner) and explicit specific_* pins are allowed.
+const ORG_SHARED_SCOPES: WidgetScopeKind[] = [
+  "current_context",
+  "specific_org",
+  "specific_shop",
+]
+const SHOP_SHARED_SCOPES: WidgetScopeKind[] = [
+  "current_context",
+  "specific_shop",
+]
 
 export interface AddWidgetButtonProps {
   config: DashboardConfig
@@ -83,21 +97,48 @@ interface AddWidgetDialogProps {
 function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   const { data: profile } = useGetUserProfileQuery()
   const { data: myShops } = useGetMyShopsQuery()
+  const owner = useDashboardOwner()
   const [selectedType, setSelectedType] = useState<string | null>(null)
   const [scopeKind, setScopeKind] = useState<WidgetScopeKind>("me")
   const [targetId, setTargetId] = useState<string>("")
+
+  // Restrict the scope picker to what makes sense for the dashboard owner.
+  const ownerScopeAllowlist = useMemo<WidgetScopeKind[] | null>(() => {
+    if (!owner || owner.ownerType === "user") return null
+    return owner.ownerType === "org" ? ORG_SHARED_SCOPES : SHOP_SHARED_SCOPES
+  }, [owner])
+
+  const scopesFor = (allowed: WidgetScopeKind[]): WidgetScopeKind[] =>
+    ownerScopeAllowlist
+      ? allowed.filter((k) => ownerScopeAllowlist.includes(k))
+      : allowed
 
   const definition = useMemo(
     () => WIDGET_DEFINITIONS.find((d) => d.type === selectedType) ?? null,
     [selectedType],
   )
 
+  // Only widgets that support at least one owner-allowed scope are offered.
+  const availableWidgets = useMemo(
+    () =>
+      WIDGET_DEFINITIONS.filter((d) => scopesFor(d.allowedScopes).length > 0),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [ownerScopeAllowlist],
+  )
+
+  const scopeLabel = (k: WidgetScopeKind): string =>
+    k === "current_context" && owner && owner.ownerType !== "user"
+      ? owner.ownerType === "org"
+        ? "This organization"
+        : "This shop"
+      : SCOPE_LABELS[k]
+
   const handlePickType = (type: string) => {
     const def = WIDGET_DEFINITIONS.find((d) => d.type === type)
     setSelectedType(type)
-    // Default to the first allowed scope for this widget.
-    const firstScope = def?.allowedScopes[0] ?? "me"
-    setScopeKind(firstScope)
+    // Default to the first allowed scope for this widget (owner-filtered).
+    const allowed = scopesFor(def?.allowedScopes ?? [])
+    setScopeKind(allowed[0] ?? "me")
     setTargetId("")
   }
 
@@ -128,7 +169,7 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
       <DialogContent>
         <Stack spacing={2} sx={{ pt: 1 }}>
           <Stack spacing={0.5}>
-            {WIDGET_DEFINITIONS.map((def) => (
+            {availableWidgets.map((def) => (
               <ListItemButton
                 key={def.type}
                 selected={def.type === selectedType}
@@ -156,9 +197,9 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
                     setTargetId("")
                   }}
                 >
-                  {definition.allowedScopes.map((k) => (
+                  {scopesFor(definition.allowedScopes).map((k) => (
                     <MenuItem key={k} value={k}>
-                      {SCOPE_LABELS[k]}
+                      {scopeLabel(k)}
                     </MenuItem>
                   ))}
                 </Select>

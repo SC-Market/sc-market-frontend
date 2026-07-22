@@ -13,20 +13,10 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
 import { SHOP_PATHS } from "../../routes/paths"
-import { useFeatureFlag } from "../../hooks/market"
-import { CustomizableDashboard } from "../../features/dashboard/CustomizableDashboard"
 
 export function MemberDashboard() {
   const shopCtx = useOptionalShopRouteContext()
-  const { flags } = useFeatureFlag()
   const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
-
-  // Behind the customizable_dashboard flag, the personal dashboard is replaced by
-  // the widget-based CustomizableDashboard. Shop/org routes keep the legacy layout
-  // until shared dashboards land (see docs/customizable-dashboard-plan.md, M4).
-  if (flags.customizable_dashboard && !shopCtx) {
-    return <CustomizableDashboard />
-  }
 
   if (shopCtx && spectrumId && shopCtx.shop.permissions?.manage_orders === false) {
     return <Navigate to={SHOP_PATHS.profile(shopCtx.shop.slug)} replace />

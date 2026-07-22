@@ -20,6 +20,7 @@ export const PATHS = {
   settings: "/settings",
   notifications: "/notifications",
   dashboard: "/dashboard",
+  dashboardOverview: "/dashboard/overview",
   dashboardShops: "/dashboard/shops",
   inventory: "/inventory",
   availability: "/availability",
@@ -52,6 +53,7 @@ export const SHOP_PATHS = {
   create: (slug: string) => `/shop/${slug}/listings/create`,
   stock: (slug: string) => `/shop/${slug}/stock`,
   orders: (slug: string) => `/shop/${slug}/orders`,
+  dashboard: (slug: string) => `/shop/${slug}/dashboard`,
   services: (slug: string) => `/shop/${slug}/services`,
   settings: (slug: string) => `/shop/${slug}/settings`,
   analytics: (slug: string) => `/shop/${slug}/analytics`,
@@ -81,6 +83,7 @@ export const ORG_PATHS = {
   fleet: (spectrumId: string) => `/org/${spectrumId}/fleet`,
   send: (spectrumId: string) => `/org/${spectrumId}/send`,
   dashboard: (spectrumId: string) => `/org/${spectrumId}/dashboard`,
+  dashboardOverview: (spectrumId: string) => `/org/${spectrumId}/overview`,
   // register lives in PATHS.orgRegister (canonical)
   /** Public org profile */
   profile: (spectrumId: string) => `/contractor/${spectrumId}`,

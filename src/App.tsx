@@ -570,6 +570,14 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: "/dashboard/overview",
+            lazy: async () => ({
+              Component: (
+                await import("./features/dashboard/DashboardPages")
+              ).PersonalDashboardPage,
+            }),
+          },
+          {
             path: "/order/service/create",
             lazy: async () => ({
               Component: (await import("./pages/contracting/CreateService"))
@@ -908,6 +916,14 @@ const router = createBrowserRouter([
                 }),
               },
               {
+                path: "overview",
+                lazy: async () => ({
+                  Component: (
+                    await import("./features/dashboard/DashboardPages")
+                  ).OrgDashboardPage,
+                }),
+              },
+              {
                 path: "fleet",
                 lazy: async () => ({
                   Component: (await import("./pages/fleet/Fleet")).Fleet,
@@ -1049,6 +1065,14 @@ const router = createBrowserRouter([
                   Component: (
                     await import("./pages/contractor/MemberDashboard")
                   ).MemberDashboard,
+                }),
+              },
+              {
+                path: "dashboard",
+                lazy: async () => ({
+                  Component: (
+                    await import("./features/dashboard/DashboardPages")
+                  ).ShopDashboardPage,
                 }),
               },
               {

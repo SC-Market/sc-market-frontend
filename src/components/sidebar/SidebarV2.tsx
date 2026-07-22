@@ -64,6 +64,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useFeatureFlag } from "../../hooks/market"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
@@ -102,6 +103,7 @@ export function SidebarV2() {
 
   const { data: profile } = useGetUserProfileQuery()
   const { data: shops = [] } = useGetMyShopsQuery()
+  const { flags } = useFeatureFlag()
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
 
@@ -188,6 +190,9 @@ export function SidebarV2() {
       const manage = t("nav.groupManage", "Manage")
       const items: NavItem[] = [
         { label: t("nav.shopPage", "Shop Page"), to: SHOP_PATHS.profile(slug), icon: <StorefrontRounded /> },
+        ...(flags.customizable_dashboard
+          ? [{ label: t("nav.dashboard", "Dashboard"), to: SHOP_PATHS.dashboard(slug), icon: <DashboardRounded /> }]
+          : []),
         { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded />, badge: shopPendingOrderCount },
         { label: t("nav.listings", "Listings"), to: SHOP_PATHS.listings(slug), icon: <ListAltRounded /> },
         { label: t("nav.services", "Services"), to: SHOP_PATHS.services(slug), icon: <DesignServicesRounded /> },
@@ -216,7 +221,7 @@ export function SidebarV2() {
       const canManageTheme = has_permission(selectedContractor, profile, "manage_theme", profile?.contractors)
       const items: NavItem[] = [
         { label: t("nav.orgPage", "Org Page"), to: ORG_PATHS.profile(selectedOrgId), icon: <StorefrontRounded /> },
-        { label: t("nav.orgDashboard", "Dashboard"), to: ORG_PATHS.dashboard(selectedOrgId), icon: <DashboardRounded /> },
+        { label: t("nav.orgDashboard", "Dashboard"), to: flags.customizable_dashboard ? ORG_PATHS.dashboardOverview(selectedOrgId) : ORG_PATHS.dashboard(selectedOrgId), icon: <DashboardRounded /> },
         { label: t("nav.members", "Members"), to: ORG_PATHS.members(selectedOrgId), icon: <PeopleRounded /> },
       ]
       if (canManageOrders) {
@@ -243,6 +248,9 @@ export function SidebarV2() {
       { label: t("nav.buyOrders", "Buy Orders"), to: MARKET_PATHS.buyOrders, icon: <ShoppingCartRounded />, group: marketplace },
     ]
     if (profile) {
+      if (flags.customizable_dashboard) {
+        items.push({ label: t("nav.dashboard", "Dashboard"), to: PATHS.dashboardOverview, icon: <DashboardRounded />, group: personal })
+      }
       items.push(
         { label: t("nav.myOrders", "My Orders"), to: PATHS.myOrders, icon: <LocalShippingRounded />, badge: pendingOrderCount, group: personal },
         { label: t("nav.assignedOrders", "Assigned to Me"), to: PATHS.dashboard, icon: <DashboardRounded />, group: personal },
@@ -252,7 +260,7 @@ export function SidebarV2() {
       )
     }
     return items
-  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t, pendingOrderCount, unreadChatCount, shopPendingOrderCount])
+  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t, pendingOrderCount, unreadChatCount, shopPendingOrderCount, flags.customizable_dashboard])
 
   const [wikiOpen, setWikiOpen] = useState(() => location.pathname.startsWith("/wiki"))
   const [craftingOpen, setCraftingOpen] = useState(

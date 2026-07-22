@@ -1382,9 +1382,12 @@
   },
   "Damaged": "warning",
   "dashboard": {
+    "customize": "Customize",
+    "done": "Done",
     "matchingBuyOrders": "Buy Orders You Can Fulfill",
     "noBuyOrders": "No buy orders",
     "noBuyOrdersDescription": "Your active buy orders will appear here.",
+    "orgTitle": "{{name}} Dashboard",
     "title": "Dashboard",
     "viewAll": "View All",
     "viewAllBuyOrders": "View all buy orders"
@@ -2637,6 +2640,7 @@
     "buyOrders": "Buy Orders",
     "clearSearch": "Clear search",
     "contracts": "Contracts",
+    "dashboard": "Dashboard",
     "createListing": "Create Listing",
     "customers": "Customers",
     "groupAdminData": "Data & Config",
