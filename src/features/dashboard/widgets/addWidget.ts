@@ -29,6 +29,7 @@ export function addWidget(
   config: DashboardConfig,
   type: string,
   scope: WidgetScope,
+  settings?: DashboardWidget["settings"],
 ): DashboardConfig {
   const def = getWidgetDefinition(type)
   if (!def) return config
@@ -43,6 +44,7 @@ export function addWidget(
       w: Math.min(def.defaultLayout.w, COLUMNS),
       h: def.defaultLayout.h,
     },
+    ...(settings && Object.keys(settings).length > 0 ? { settings } : {}),
   }
 
   return { ...config, widgets: [...config.widgets, widget] }

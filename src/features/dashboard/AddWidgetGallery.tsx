@@ -32,8 +32,10 @@ import {
 } from "./widgets/registry"
 import { addWidget } from "./widgets/addWidget"
 import { useDashboardOwner } from "./DashboardOwnerContext"
+import { GameItemPicker, type GameItemChoice } from "./GameItemPicker"
 import type {
   DashboardConfig,
+  DashboardWidget,
   WidgetScope,
   WidgetScopeKind,
 } from "./types"
@@ -97,8 +99,8 @@ export function AddWidgetButton({
       <AddWidgetDialog
         open={open}
         onClose={() => setOpen(false)}
-        onAdd={(type, scope) => {
-          onConfigChange(addWidget(config, type, scope))
+        onAdd={(type, scope, settings) => {
+          onConfigChange(addWidget(config, type, scope, settings))
           setOpen(false)
         }}
       />
@@ -109,7 +111,11 @@ export function AddWidgetButton({
 interface AddWidgetDialogProps {
   open: boolean
   onClose: () => void
-  onAdd: (type: string, scope: WidgetScope) => void
+  onAdd: (
+    type: string,
+    scope: WidgetScope,
+    settings?: DashboardWidget["settings"],
+  ) => void
 }
 
 function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
@@ -120,6 +126,7 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   const [selectedType, setSelectedType] = useState<string | null>(null)
   const [scopeKind, setScopeKind] = useState<WidgetScopeKind>("me")
   const [targetId, setTargetId] = useState<string>("")
+  const [selectedItem, setSelectedItem] = useState<GameItemChoice | null>(null)
 
   // Restrict the scope picker to what makes sense for the dashboard owner.
   const ownerScopeAllowlist = useMemo<WidgetScopeKind[] | null>(() => {
@@ -162,6 +169,7 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
     const allowed = scopesFor(def?.allowedScopes ?? [])
     setScopeKind(allowed[0] ?? "me")
     setTargetId("")
+    setSelectedItem(null)
   }
 
   const buildScope = (): WidgetScope | null => {
@@ -184,6 +192,14 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   }
 
   const scope = buildScope()
+
+  // Widgets that pin to a game item (e.g. Price History) store it in settings.
+  const requiresItem = definition?.requiresItem ?? false
+  const settings: DashboardWidget["settings"] | undefined =
+    requiresItem && selectedItem
+      ? { gameItemId: selectedItem.id, gameItemName: selectedItem.name }
+      : undefined
+  const canAdd = !!scope && (!requiresItem || !!selectedItem)
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -283,11 +299,22 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
                 </Typography>
               )}
 
+              {requiresItem && (
+                <GameItemPicker
+                  value={selectedItem}
+                  onChange={setSelectedItem}
+                />
+              )}
+
               <Button
                 variant="contained"
                 color="secondary"
-                disabled={!scope}
-                onClick={() => scope && onAdd(definition.type, scope)}
+                disabled={!canAdd}
+                onClick={() =>
+                  canAdd &&
+                  scope &&
+                  onAdd(definition.type, scope, settings)
+                }
               >
                 {t("dashboard.addNamed", "Add {{name}}", {
                   name: widgetTitle(definition, t),
