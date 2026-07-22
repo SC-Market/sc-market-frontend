@@ -78,6 +78,7 @@ import {
 } from "../../routes/paths"
 import { useUnreadChatCount } from "../../features/chats"
 import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
+import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPendingOrderCount"
 import { haptic } from "../../util/haptics"
 
 type NavContext = "browse" | "shop" | "org" | "admin"
@@ -145,6 +146,10 @@ export function SidebarV2() {
     [shops, selectedShopSlug],
   )
 
+  const shopPendingOrderCount = useShopPendingOrderCount(
+    context === "shop" ? selectedShop?.slug : undefined,
+  )
+
   const contextLabel = useMemo(() => {
     if (context === "admin") return t("nav.admin", "Admin")
     if (context === "shop" && selectedShop) return selectedShop.name
@@ -183,7 +188,7 @@ export function SidebarV2() {
       const manage = t("nav.groupManage", "Manage")
       const items: NavItem[] = [
         { label: t("nav.shopPage", "Shop Page"), to: SHOP_PATHS.profile(slug), icon: <StorefrontRounded /> },
-        { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded /> },
+        { label: t("nav.orders", "Orders"), to: SHOP_PATHS.orders(slug), icon: <LocalShippingRounded />, badge: shopPendingOrderCount },
         { label: t("nav.listings", "Listings"), to: SHOP_PATHS.listings(slug), icon: <ListAltRounded /> },
         { label: t("nav.services", "Services"), to: SHOP_PATHS.services(slug), icon: <DesignServicesRounded /> },
       ]
@@ -247,7 +252,7 @@ export function SidebarV2() {
       )
     }
     return items
-  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t, pendingOrderCount, unreadChatCount])
+  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t, pendingOrderCount, unreadChatCount, shopPendingOrderCount])
 
   const [wikiOpen, setWikiOpen] = useState(() => location.pathname.startsWith("/wiki"))
   const [craftingOpen, setCraftingOpen] = useState(
