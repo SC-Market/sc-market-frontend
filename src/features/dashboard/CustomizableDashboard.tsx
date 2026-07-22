@@ -20,6 +20,7 @@ import { useGetCurrentUserProfileQuery } from "../../store/api/profile"
 import { useDashboardConfig } from "./useDashboardConfig"
 import { DashboardGrid } from "./DashboardGrid"
 import { AddWidgetButton } from "./AddWidgetGallery"
+import { ImportExportControls } from "./ImportExportControls"
 import { DashboardOwnerProvider } from "./DashboardOwnerContext"
 import { emptyConfig, type DashboardConfig, type DashboardOwnerRef } from "./types"
 
@@ -115,10 +116,17 @@ export function CustomizableDashboard({
               justifyContent="flex-end"
             >
               {editing && (
-                <AddWidgetButton
-                  config={effectiveConfig}
-                  onConfigChange={setConfig}
-                />
+                <>
+                  <AddWidgetButton
+                    config={effectiveConfig}
+                    onConfigChange={setConfig}
+                  />
+                  <ImportExportControls
+                    config={effectiveConfig}
+                    name={pageTitle}
+                    onImport={setConfig}
+                  />
+                </>
               )}
               <Button
                 variant={editing ? "contained" : "outlined"}
