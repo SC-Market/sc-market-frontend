@@ -22,9 +22,14 @@ import {
   Typography,
 } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
+import { useTranslation } from "react-i18next"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../profile/api/profileApi"
-import { WIDGET_DEFINITIONS } from "./widgets/registry"
+import {
+  WIDGET_DEFINITIONS,
+  widgetTitle,
+  widgetDescription,
+} from "./widgets/registry"
 import { addWidget } from "./widgets/addWidget"
 import { useDashboardOwner } from "./DashboardOwnerContext"
 import type {
@@ -33,13 +38,25 @@ import type {
   WidgetScopeKind,
 } from "./types"
 
-const SCOPE_LABELS: Record<WidgetScopeKind, string> = {
-  me: "You",
-  current_context: "Current context",
-  all_orgs: "All organizations",
-  all_shops: "All shops",
-  specific_org: "A specific organization",
-  specific_shop: "A specific shop",
+const SCOPE_LABEL_KEYS: Record<
+  WidgetScopeKind,
+  { key: string; default: string }
+> = {
+  me: { key: "dashboard.scope.me", default: "You" },
+  current_context: {
+    key: "dashboard.scope.currentContext",
+    default: "Current context",
+  },
+  all_orgs: { key: "dashboard.scope.allOrgs", default: "All organizations" },
+  all_shops: { key: "dashboard.scope.allShops", default: "All shops" },
+  specific_org: {
+    key: "dashboard.scope.specificOrg",
+    default: "A specific organization",
+  },
+  specific_shop: {
+    key: "dashboard.scope.specificShop",
+    default: "A specific shop",
+  },
 }
 
 // On a shared org/shop dashboard, personal and aggregate bindings are meaningless
@@ -64,6 +81,7 @@ export function AddWidgetButton({
   config,
   onConfigChange,
 }: AddWidgetButtonProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   return (
@@ -74,7 +92,7 @@ export function AddWidgetButton({
         startIcon={<AddIcon />}
         onClick={() => setOpen(true)}
       >
-        Add widget
+        {t("dashboard.addWidget", "Add widget")}
       </Button>
       <AddWidgetDialog
         open={open}
@@ -95,6 +113,7 @@ interface AddWidgetDialogProps {
 }
 
 function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
+  const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const { data: myShops } = useGetMyShopsQuery()
   const owner = useDashboardOwner()
@@ -126,12 +145,15 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
     [ownerScopeAllowlist],
   )
 
-  const scopeLabel = (k: WidgetScopeKind): string =>
-    k === "current_context" && owner && owner.ownerType !== "user"
-      ? owner.ownerType === "org"
-        ? "This organization"
-        : "This shop"
-      : SCOPE_LABELS[k]
+  const scopeLabel = (k: WidgetScopeKind): string => {
+    if (k === "current_context" && owner && owner.ownerType !== "user") {
+      return owner.ownerType === "org"
+        ? t("dashboard.scope.thisOrg", "This organization")
+        : t("dashboard.scope.thisShop", "This shop")
+    }
+    const entry = SCOPE_LABEL_KEYS[k]
+    return t(entry.key, entry.default)
+  }
 
   const handlePickType = (type: string) => {
     const def = WIDGET_DEFINITIONS.find((d) => d.type === type)
@@ -165,7 +187,7 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Add a widget</DialogTitle>
+      <DialogTitle>{t("dashboard.addAWidget", "Add a widget")}</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ pt: 1 }}>
           <Stack spacing={0.5}>
@@ -177,8 +199,8 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
                 sx={{ borderRadius: 1 }}
               >
                 <ListItemText
-                  primary={def.title}
-                  secondary={def.description}
+                  primary={widgetTitle(def, t)}
+                  secondary={widgetDescription(def, t)}
                 />
               </ListItemButton>
             ))}
@@ -187,10 +209,12 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
           {definition && (
             <>
               <FormControl fullWidth size="small">
-                <InputLabel id="widget-scope-label">Data scope</InputLabel>
+                <InputLabel id="widget-scope-label">
+                  {t("dashboard.dataScope", "Data scope")}
+                </InputLabel>
                 <Select
                   labelId="widget-scope-label"
-                  label="Data scope"
+                  label={t("dashboard.dataScope", "Data scope")}
                   value={scopeKind}
                   onChange={(e) => {
                     setScopeKind(e.target.value as WidgetScopeKind)
@@ -207,10 +231,12 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
 
               {scopeKind === "specific_org" && (
                 <FormControl fullWidth size="small">
-                  <InputLabel id="widget-org-label">Organization</InputLabel>
+                  <InputLabel id="widget-org-label">
+                    {t("dashboard.organization", "Organization")}
+                  </InputLabel>
                   <Select
                     labelId="widget-org-label"
-                    label="Organization"
+                    label={t("dashboard.organization", "Organization")}
                     value={targetId}
                     onChange={(e) => setTargetId(e.target.value)}
                   >
@@ -225,10 +251,12 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
 
               {scopeKind === "specific_shop" && (
                 <FormControl fullWidth size="small">
-                  <InputLabel id="widget-shop-label">Shop</InputLabel>
+                  <InputLabel id="widget-shop-label">
+                    {t("dashboard.shop", "Shop")}
+                  </InputLabel>
                   <Select
                     labelId="widget-shop-label"
-                    label="Shop"
+                    label={t("dashboard.shop", "Shop")}
                     value={targetId}
                     onChange={(e) => setTargetId(e.target.value)}
                   >
@@ -243,9 +271,15 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
 
               {(scopeKind === "all_orgs" || scopeKind === "all_shops") && (
                 <Typography variant="caption" color="text.secondary">
-                  Aggregate across all your{" "}
-                  {scopeKind === "all_orgs" ? "organizations" : "shops"} — coming
-                  soon.
+                  {scopeKind === "all_orgs"
+                    ? t(
+                        "dashboard.aggregateOrgsHint",
+                        "Shows one section per organization you belong to.",
+                      )
+                    : t(
+                        "dashboard.aggregateShopsHint",
+                        "Shows one section per shop you belong to.",
+                      )}
                 </Typography>
               )}
 
@@ -255,7 +289,9 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
                 disabled={!scope}
                 onClick={() => scope && onAdd(definition.type, scope)}
               >
-                Add {definition.title}
+                {t("dashboard.addNamed", "Add {{name}}", {
+                  name: widgetTitle(definition, t),
+                })}
               </Button>
             </>
           )}

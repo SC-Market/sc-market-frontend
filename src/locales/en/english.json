@@ -1382,15 +1382,79 @@
   },
   "Damaged": "warning",
   "dashboard": {
+    "addAWidget": "Add a widget",
+    "addNamed": "Add {{name}}",
+    "addWidget": "Add widget",
+    "aggregateOrgsHint": "Shows one section per organization you belong to.",
+    "aggregateShopsHint": "Shows one section per shop you belong to.",
+    "cancel": "Cancel",
     "customize": "Customize",
+    "dataScope": "Data scope",
     "done": "Done",
+    "dontImportWidget": "Don't import this widget",
+    "export": "Export",
+    "import": "Import",
+    "mapImportedWidgets": "Map imported widgets",
+    "mapImportedWidgetsHint": "These widgets were pinned to the author's own organizations or shops. Pick one of yours for each, or drop it.",
     "matchingBuyOrders": "Buy Orders You Can Fulfill",
     "noBuyOrders": "No buy orders",
     "noBuyOrdersDescription": "Your active buy orders will appear here.",
+    "noOrgsToAggregate": "You have no organizations to aggregate yet.",
+    "noOrgsWidgetDropped": "You have no organizations — this widget will be dropped.",
+    "noShopsToAggregate": "You have no shops to aggregate yet.",
+    "noShopsWidgetDropped": "You have no shops — this widget will be dropped.",
+    "organization": "Organization",
     "orgTitle": "{{name}} Dashboard",
+    "remapOrgLabel": "{{name}} — organization",
+    "remapShopLabel": "{{name}} — shop",
+    "removeWidget": "Remove widget",
+    "scope": {
+      "allOrgs": "All organizations",
+      "allShops": "All shops",
+      "currentContext": "Current context",
+      "me": "You",
+      "specificOrg": "A specific organization",
+      "specificShop": "A specific shop",
+      "thisOrg": "This organization",
+      "thisShop": "This shop"
+    },
+    "shop": "Shop",
     "title": "Dashboard",
+    "unavailableOrg": "This widget's organization is no longer available. Remove it or pick a new scope.",
+    "unavailableShop": "This widget's shop is no longer available. Remove it or pick a new scope.",
     "viewAll": "View All",
-    "viewAllBuyOrders": "View all buy orders"
+    "viewAllBuyOrders": "View all buy orders",
+    "widgets": {
+      "matchingBuyOrders": {
+        "description": "Open buy orders your inventory can fulfill.",
+        "title": "Matching Buy Orders"
+      },
+      "notifications": {
+        "description": "Your recent activity and notifications.",
+        "title": "Notifications"
+      },
+      "orderMetrics": {
+        "description": "Active/completed order counts and value, plus top customers.",
+        "title": "Order Metrics"
+      },
+      "orderTrend": {
+        "description": "Daily/weekly/monthly order count and value charts.",
+        "title": "Order Trend"
+      },
+      "orders": {
+        "assignments": "Assignments",
+        "description": "Paginated orders table (assignments, or a shop's orders).",
+        "title": "Orders"
+      },
+      "offers": {
+        "description": "Incoming offers you can claim, merge, or respond to.",
+        "title": "Received Offers"
+      },
+      "sellerAnalytics": {
+        "description": "Sales volume, price, and inventory broken down by quality tier.",
+        "title": "Seller Analytics"
+      }
+    }
   },
   "DashNotificationArea": {
     "notifications": "Notifications"
