@@ -41,13 +41,14 @@ const baseQueryWithRetry = retry(
     if (result.error?.status === 401) {
       retry.fail(result.error)
     }
-    // Don't retry other 4xx errors (except 429)
+    // Only retry transient network/5xx errors. Never retry 4xx client errors,
+    // including 429 (rate limited) — retrying a rate-limited request just
+    // amplifies the overload against an already-limited endpoint.
     if (
       result.error &&
       typeof result.error.status === "number" &&
       result.error.status >= 400 &&
-      result.error.status < 500 &&
-      result.error.status !== 429
+      result.error.status < 500
     ) {
       retry.fail(result.error)
     }
