@@ -51,11 +51,11 @@ import { ListingCardV2, type ListingGridProps } from "../ListingSearchV2"
  * mirrors its loading-skeleton and empty-state behavior exactly.
  *
  * Grouping is CLIENT-SIDE over the currently-loaded page of results only (not
- * the whole catalog): fungible items (per ./fungibility.ts) that share
- * game_item_name + game_item_type collapse into ONE expandable group card when
- * more than one seller is present. Everything else (non-fungible, or fungible
- * with a single seller) renders as the REAL `ListingCardV2` at the normal grid
- * size so it stays pixel-identical to the flag-off view.
+ * the whole catalog): fungible items (per ./fungibility.ts) that share the same
+ * game_item_id collapse into ONE expandable group card when more than one seller
+ * is present. Everything else (non-fungible, or fungible with a single seller)
+ * renders as the REAL `ListingCardV2` at the normal grid size so it stays
+ * pixel-identical to the flag-off view. Seller count = distinct shop_id.
  *
  * Only one group can be expanded at a time. Sellers within a group are sorted
  * cheapest-first; the page's own sort (via URL params) drives everything else.
@@ -176,13 +176,16 @@ type GridEntry =
 
 /** Group fungible listings sharing name+type, preserving incoming order. */
 function buildEntries(listings: ListingSearchResult[]): GridEntry[] {
-  const groupKeyOf = (l: ListingSearchResult) =>
-    `${l.game_item_type}||${l.game_item_name}`
+  // Group by the catalog item's UUID, NOT name+type. Names drift for the same
+  // item (e.g. "Scourge Railgun" vs a paint variant) and can collide across
+  // different items, so name-grouping both over- and under-merged. game_item_id
+  // is the authoritative catalog identity (now returned on search results).
+  const groupKeyOf = (l: ListingSearchResult) => l.game_item_id
 
   // First pass: bucket fungible listings by key to know group sizes.
   const buckets = new Map<string, ListingSearchResult[]>()
   for (const l of listings) {
-    if (!isFungibleType(l.game_item_type) || !l.game_item_name) continue
+    if (!isFungibleType(l.game_item_type) || !l.game_item_id) continue
     const k = groupKeyOf(l)
     const arr = buckets.get(k)
     if (arr) arr.push(l)
@@ -193,7 +196,7 @@ function buildEntries(listings: ListingSearchResult[]): GridEntry[] {
   const emitted = new Set<string>()
   const entries: GridEntry[] = []
   for (const l of listings) {
-    const isFungible = isFungibleType(l.game_item_type) && !!l.game_item_name
+    const isFungible = isFungibleType(l.game_item_type) && !!l.game_item_id
     const k = isFungible ? groupKeyOf(l) : ""
     const bucket = isFungible ? buckets.get(k) : undefined
 
@@ -353,6 +356,10 @@ function GroupCard({
   const { t } = useTranslation()
 
   const cheapest = listings[0]
+  // "N sellers" = distinct SHOPS, not listing rows. One shop can have several
+  // listings/variants of the same item (e.g. Major Guns listed twice), which
+  // would otherwise inflate the count and mismatch what the expansion shows.
+  const sellerCount = new Set(listings.map((l) => l.shop_id)).size
   const priceMin = Math.min(...listings.map((l) => l.price_min ?? 0))
   const priceMax = Math.max(...listings.map((l) => l.price_max ?? l.price_min ?? 0))
   const totalQuantity = listings.reduce(
@@ -404,7 +411,7 @@ function GroupCard({
             <Chip
               icon={<GroupsRounded sx={{ fontSize: "0.8rem !important" }} />}
               label={t("MarketRedesign.sellersCount", "{{count}} sellers", {
-                count: listings.length,
+                count: sellerCount,
               })}
               color="secondary"
               size="small"
@@ -554,7 +561,7 @@ function GroupCard({
                   sx={{ fontSize: "0.7rem", lineHeight: 1.2, minWidth: 0 }}
                 >
                   {t("MarketRedesign.acrossSellers", "across {{count}} sellers", {
-                    count: listings.length,
+                    count: sellerCount,
                   })}
                 </Typography>
                 <Stack
@@ -595,7 +602,7 @@ function GroupCard({
             <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
               {formatPriceRange(priceMin, priceMax)} {"·"}{" "}
               {t("MarketRedesign.sellersCount", "{{count}} sellers", {
-                count: listings.length,
+                count: sellerCount,
               })}{" "}
               {"·"}{" "}
               {t("MarketRedesign.unitsAvailable", "{{count}} units available", {
