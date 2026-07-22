@@ -57,13 +57,14 @@ export function createV2BaseQuery(subPath: string): BaseQueryFn<string | FetchAr
 const baseQueryWithRetry = retry(
   async (args, api, extraOptions) => {
     const result = await baseQueryWithReauth(args, api, extraOptions)
-    // Don't retry 4xx errors (except 429 rate limits)
+    // Only retry transient network/5xx errors. Never retry 4xx client errors,
+    // including 429 (rate limited) — retrying a rate-limited request just
+    // amplifies the overload against an already-limited endpoint.
     if (
       result.error &&
       typeof result.error.status === "number" &&
       result.error.status >= 400 &&
-      result.error.status < 500 &&
-      result.error.status !== 429
+      result.error.status < 500
     ) {
       retry.fail(result.error)
     }
