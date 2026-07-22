@@ -26,7 +26,7 @@ import { isAfter, subDays } from "date-fns"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
-import { formatMarketUrl } from "../../domain/urls"
+import { formatMarketUrl, formatShortSlug } from "../../domain/urls"
 import type {
   ListingSearchResult,
   GameItemListingResult,
@@ -615,7 +615,10 @@ function GroupCard({
                 complete (all sellers, all variants), not limited to the search
                 page. Falls back to the client-grouped listings if no id. */}
             {cheapest.game_item_id ? (
-              <GroupSellers gameItemId={cheapest.game_item_id} />
+              <GroupSellers
+                gameItemId={cheapest.game_item_id}
+                gameItemName={cheapest.game_item_name}
+              />
             ) : (
               <GroupSellersFallback listings={listings} />
             )}
@@ -696,14 +699,40 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
   )
 }
 
+/** Quality score for a variant (higher = better). Value preferred over tier. */
+function variantQualityScore(v: GameItemListingResult): number {
+  if (v.quality_value != null) return v.quality_value
+  if (v.quality_tier != null) return v.quality_tier
+  return -1 // unspecified quality sorts last
+}
+
+interface HighlightTag {
+  labelKey: string
+  labelFallback: string
+}
+
+interface Highlight {
+  variant: GameItemListingResult
+  /** All superlatives this variant wins (e.g. lowest price AND top rated). */
+  tags: HighlightTag[]
+}
+
 /**
- * GroupSellers — the SELL side of an item's market depth, one row per VARIANT
- * (quality tier) per seller, not per listing. Fetched server-side by
- * game_item_id via useGetListingsQuery (now per-variant), so it's complete (all
- * sellers, all variants) and each row is the exact unit a buyer adds to cart
- * (listing_id + variant_id). Sorted cheapest-first; index 0 is the "Best" price.
+ * GroupSellers — the SELL side of an item's market depth, as a SUMMARY of the
+ * few listings that matter, not a full dump. Fetched server-side by game_item_id
+ * (per-variant), so highlights are drawn from ALL sellers/variants. We surface
+ * the lowest price, the highest quality, and the highest-rated seller (deduped —
+ * one variant may win more than one, then it carries multiple tags). Each row is
+ * the exact unit a buyer adds to cart (listing_id + variant_id). "See all"
+ * opens the full aggregate page for the complete, filterable depth.
  */
-function GroupSellers({ gameItemId }: { gameItemId: string }) {
+function GroupSellers({
+  gameItemId,
+  gameItemName,
+}: {
+  gameItemId: string
+  gameItemName: string
+}) {
   const { t } = useTranslation()
   const { data, isLoading, error } = useGetListingsQuery({
     id: gameItemId,
@@ -712,6 +741,44 @@ function GroupSellers({ gameItemId }: { gameItemId: string }) {
     pageSize: 100,
   })
 
+  const variants = useMemo(() => data?.listings ?? [], [data])
+  const totalCount = data?.total ?? variants.length
+
+  // Pick the standout variants. A variant that wins several superlatives is
+  // shown once with all its tags (deduped by listing_id:variant_id).
+  const highlights = useMemo<Highlight[]>(() => {
+    if (variants.length === 0) return []
+    const keyOf = (v: GameItemListingResult) => `${v.listing_id}:${v.variant_id}`
+
+    const lowestPrice = variants.reduce((a, b) => (b.price < a.price ? b : a))
+    const highestQuality = variants.reduce((a, b) =>
+      variantQualityScore(b) > variantQualityScore(a) ? b : a,
+    )
+    const topRated = variants.reduce((a, b) =>
+      (b.shop_rating ?? 0) > (a.shop_rating ?? 0) ? b : a,
+    )
+
+    // Collect tags per winning variant. A variant that wins several
+    // superlatives is ONE row carrying multiple tags; distinct winners are
+    // separate rows (so multiple variants show as separate entries). Insertion
+    // order gives a sensible display order.
+    const tagsByKey = new Map<string, Highlight>()
+    const add = (v: GameItemListingResult, labelKey: string, labelFallback: string) => {
+      const k = keyOf(v)
+      const entry = tagsByKey.get(k) ?? { variant: v, tags: [] }
+      entry.tags.push({ labelKey, labelFallback })
+      tagsByKey.set(k, entry)
+    }
+    add(lowestPrice, "MarketRedesign.lowestPrice", "Lowest price")
+    if (variantQualityScore(highestQuality) >= 0) {
+      add(highestQuality, "MarketRedesign.highestQuality", "Highest quality")
+    }
+    if ((topRated.shop_rating ?? 0) > 0) {
+      add(topRated, "MarketRedesign.topRated", "Top rated seller")
+    }
+    return [...tagsByKey.values()]
+  }, [variants])
+
   if (isLoading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
@@ -719,7 +786,6 @@ function GroupSellers({ gameItemId }: { gameItemId: string }) {
       </Box>
     )
   }
-  const variants = data?.listings ?? []
   if (error || variants.length === 0) {
     return (
       <Typography variant="body2" sx={{ color: "text.secondary", py: 1 }}>
@@ -728,40 +794,35 @@ function GroupSellers({ gameItemId }: { gameItemId: string }) {
     )
   }
 
-  const dense = variants.length > 6
-  return dense ? (
-    <Box sx={{ maxHeight: 360, overflowY: "auto" }}>
+  return (
+    <Box>
       <Stack divider={<Divider />}>
-        {variants.map((v, i) => (
+        {highlights.map((h, i) => (
           <Fade
-            key={`${v.listing_id}:${v.variant_id}`}
+            key={`${h.variant.listing_id}:${h.variant.variant_id}`}
             in
             timeout={300}
-            style={{ transitionDelay: `${Math.min(i, 8) * 40}ms` }}
+            style={{ transitionDelay: `${Math.min(i, 6) * 40}ms` }}
           >
             <Box>
-              <VariantRow variant={v} best={i === 0} />
+              <VariantRow variant={h.variant} tags={h.tags} />
             </Box>
           </Fade>
         ))}
       </Stack>
+
+      <Button
+        component={RouterLink}
+        to={`/market/aggregate/${formatShortSlug(gameItemId, gameItemName)}`}
+        size="small"
+        variant="text"
+        sx={{ mt: 1 }}
+      >
+        {t("MarketRedesign.seeAllCount", "See all {{count}} listings", {
+          count: totalCount,
+        })}
+      </Button>
     </Box>
-  ) : (
-    <Grid container spacing={1.5}>
-      {variants.map((v, i) => (
-        <Grid item xs={12} sm={6} md={4} lg={3} key={`${v.listing_id}:${v.variant_id}`}>
-          <Grow
-            in
-            timeout={300}
-            style={{ transformOrigin: "top", transitionDelay: `${Math.min(i, 8) * 40}ms` }}
-          >
-            <Box sx={{ height: "100%" }}>
-              <VariantSubCard variant={v} best={i === 0} />
-            </Box>
-          </Grow>
-        </Grid>
-      ))}
-    </Grid>
   )
 }
 
@@ -811,7 +872,8 @@ function AddVariantButton({ variant }: { variant: GameItemListingResult }) {
   )
 }
 
-function VariantRow({ variant, best }: { variant: GameItemListingResult; best: boolean }) {
+function VariantRow({ variant, tags }: { variant: GameItemListingResult; tags: HighlightTag[] }) {
+  const { t } = useTranslation()
   const qc = variantQualityChip(variant)
   const label = variantLabel(variant)
   return (
@@ -846,7 +908,15 @@ function VariantRow({ variant, best }: { variant: GameItemListingResult; best: b
           sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }}
         />
       )}
-      {best && <Chip label="Best" size="small" color="primary" sx={{ height: 20 }} />}
+      {tags.map((tag) => (
+        <Chip
+          key={tag.labelKey}
+          label={t(tag.labelKey, tag.labelFallback)}
+          size="small"
+          color="primary"
+          sx={{ height: 20 }}
+        />
+      ))}
       <Typography variant="body2" sx={{ color: "text.primary", width: 70, textAlign: "right" }}>
         {variant.quantity_available != null ? variant.quantity_available.toLocaleString() : "—"}
       </Typography>
@@ -855,63 +925,6 @@ function VariantRow({ variant, best }: { variant: GameItemListingResult; best: b
       </Typography>
       <AddVariantButton variant={variant} />
     </Stack>
-  )
-}
-
-function VariantSubCard({ variant, best }: { variant: GameItemListingResult; best: boolean }) {
-  const { t } = useTranslation()
-  const qc = variantQualityChip(variant)
-  const label = variantLabel(variant)
-  return (
-    <Card variant="outlined" sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}>
-      <CardContent>
-        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
-          <RouterLink to={formatMarketUrl(variant)} style={{ textDecoration: "none", color: "inherit", flex: 1, minWidth: 0 }}>
-            <Typography variant="body2" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }} noWrap>
-              {variant.shop_name}
-            </Typography>
-          </RouterLink>
-          {qc && (
-            <Chip
-              label={qc.label}
-              size="small"
-              sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }}
-            />
-          )}
-          {best && <Chip label="Best" size="small" color="primary" sx={{ height: 20 }} />}
-        </Stack>
-        {label && (
-          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.5 }} noWrap>
-            {label}
-          </Typography>
-        )}
-        <MarketListingRating
-          avg_rating={variant.shop_rating}
-          rating_count={null}
-          total_rating={0}
-          rating_streak={null}
-          total_orders={null}
-          total_assignments={null}
-          response_rate={null}
-          badge_ids={[]}
-          display_limit={0}
-          showBadges={false}
-        />
-        <Typography variant="h6" sx={{ color: "primary.main", mt: 1 }}>
-          {formatPrice(variant.price)}
-        </Typography>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 0.5 }}>
-          <Typography variant="caption" sx={{ color: "text.primary" }}>
-            {variant.quantity_available != null
-              ? t("MarketRedesign.available", "{{count}} available", {
-                  count: variant.quantity_available,
-                })
-              : ""}
-          </Typography>
-          <AddVariantButton variant={variant} />
-        </Stack>
-      </CardContent>
-    </Card>
   )
 }
 
