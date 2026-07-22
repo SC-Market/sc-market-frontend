@@ -806,27 +806,28 @@ function GroupSellers({
 
   return (
     <Box>
-      <Stack divider={<Divider />}>
+      <Grid container spacing={1.5}>
         {highlights.map((h, i) => (
-          <Fade
-            key={`${h.variant.listing_id}:${h.variant.variant_id}`}
-            in
-            timeout={300}
-            style={{ transitionDelay: `${Math.min(i, 6) * 40}ms` }}
-          >
-            <Box>
-              <VariantRow variant={h.variant} tags={h.tags} />
-            </Box>
-          </Fade>
+          <Grid item xs={12} sm={6} md={4} key={`${h.variant.listing_id}:${h.variant.variant_id}`}>
+            <Grow
+              in
+              timeout={300}
+              style={{ transformOrigin: "top", transitionDelay: `${Math.min(i, 6) * 40}ms` }}
+            >
+              <Box sx={{ height: "100%" }}>
+                <VariantHighlightCard variant={h.variant} tags={h.tags} />
+              </Box>
+            </Grow>
+          </Grid>
         ))}
-      </Stack>
+      </Grid>
 
       <Button
         component={RouterLink}
         to={`/market/aggregate/${formatShortSlug(gameItemId, gameItemName)}`}
         size="small"
         variant="text"
-        sx={{ mt: 1 }}
+        sx={{ mt: 1.5 }}
       >
         {t("MarketRedesign.seeAllCount", "See all {{count}} listings", {
           count: totalCount,
@@ -882,22 +883,58 @@ function AddVariantButton({ variant }: { variant: GameItemListingResult }) {
   )
 }
 
-function VariantRow({ variant, tags }: { variant: GameItemListingResult; tags: HighlightTag[] }) {
+/**
+ * One highlight as a rich card (lowest price / highest quality / top rated).
+ * Carries all superlative tags it wins, its quality chip, shop rating, price,
+ * availability, and an add-to-cart button for that exact variant.
+ */
+function VariantHighlightCard({
+  variant,
+  tags,
+}: {
+  variant: GameItemListingResult
+  tags: HighlightTag[]
+}) {
   const { t } = useTranslation()
   const qc = variantQualityChip(variant)
   const label = variantLabel(variant)
   return (
-    <Stack direction="row" spacing={1.5} alignItems="center" sx={{ py: 1 }}>
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <RouterLink
-          to={formatMarketUrl(variant)}
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <Typography variant="body2" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }} noWrap>
-            {variant.shop_name}
-            {label ? ` · ${label}` : ""}
+    <Card variant="outlined" sx={{ height: "100%", "&:hover": { borderColor: "secondary.main" } }}>
+      <CardContent>
+        {/* Superlative tags (Lowest price / Highest quality / Top rated) */}
+        <Stack direction="row" spacing={0.5} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
+          {tags.map((tag) => (
+            <Chip
+              key={tag.labelKey}
+              label={t(tag.labelKey, tag.labelFallback)}
+              size="small"
+              color="primary"
+              sx={{ height: 20, fontSize: "0.65rem" }}
+            />
+          ))}
+        </Stack>
+
+        <Stack direction="row" alignItems="center" spacing={0.5} sx={{ mb: 0.5 }} flexWrap="wrap" useFlexGap>
+          <RouterLink to={formatMarketUrl(variant)} style={{ textDecoration: "none", color: "inherit", flex: 1, minWidth: 0 }}>
+            <Typography variant="body2" sx={{ color: "text.secondary", "&:hover": { color: "secondary.main" } }} noWrap>
+              {variant.shop_name}
+            </Typography>
+          </RouterLink>
+          {qc && (
+            <Chip
+              label={qc.label}
+              size="small"
+              sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }}
+            />
+          )}
+        </Stack>
+
+        {label && (
+          <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 0.5 }} noWrap>
+            {label}
           </Typography>
-        </RouterLink>
+        )}
+
         <MarketListingRating
           avg_rating={variant.shop_rating}
           rating_count={variant.shop_rating_count ?? null}
@@ -910,31 +947,23 @@ function VariantRow({ variant, tags }: { variant: GameItemListingResult; tags: H
           display_limit={0}
           showBadges={false}
         />
-      </Box>
-      {qc && (
-        <Chip
-          label={qc.label}
-          size="small"
-          sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }}
-        />
-      )}
-      {tags.map((tag) => (
-        <Chip
-          key={tag.labelKey}
-          label={t(tag.labelKey, tag.labelFallback)}
-          size="small"
-          color="primary"
-          sx={{ height: 20 }}
-        />
-      ))}
-      <Typography variant="body2" sx={{ color: "text.primary", width: 70, textAlign: "right" }}>
-        {variant.quantity_available != null ? variant.quantity_available.toLocaleString() : "—"}
-      </Typography>
-      <Typography variant="body2" sx={{ color: "primary.main", fontWeight: 700, width: 100, textAlign: "right" }}>
-        {formatPrice(variant.price)}
-      </Typography>
-      <AddVariantButton variant={variant} />
-    </Stack>
+
+        <Typography variant="h6" sx={{ color: "primary.main", mt: 1 }}>
+          {formatPrice(variant.price)}
+        </Typography>
+
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 0.5 }}>
+          <Typography variant="caption" sx={{ color: "text.primary" }}>
+            {variant.quantity_available != null
+              ? t("MarketRedesign.available", "{{count}} available", {
+                  count: variant.quantity_available,
+                })
+              : ""}
+          </Typography>
+          <AddVariantButton variant={variant} />
+        </Stack>
+      </CardContent>
+    </Card>
   )
 }
 
