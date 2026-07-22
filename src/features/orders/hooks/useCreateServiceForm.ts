@@ -13,6 +13,7 @@ import {
 } from "../../services/api/servicesApi"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { ORDER_PATHS } from "../../../routes/paths"
 
 interface StarmapObject {
   id: string
@@ -191,7 +192,7 @@ export function useCreateServiceForm(service?: Service) {
           }
           setState({ ...INITIAL_STATE })
           issueAlert({ message: t("CreateServiceForm.alert.submitted"), severity: "success" })
-          navigate("/order/services")
+          navigate(ORDER_PATHS.services)
         })
         .catch((err) => issueAlert(err))
     } else {
@@ -222,7 +223,7 @@ export function useCreateServiceForm(service?: Service) {
           setState({ ...INITIAL_STATE })
           setUploadedFiles([])
           issueAlert({ message: t("CreateServiceForm.alert.submitted"), severity: "success" })
-          navigate(`/order/service/${serviceId}/edit`)
+          navigate(ORDER_PATHS.serviceEdit(serviceId))
         })
         .catch((err) => issueAlert(err))
     }

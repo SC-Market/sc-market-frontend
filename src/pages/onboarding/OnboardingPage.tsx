@@ -43,6 +43,7 @@ import ScheduleIcon from "@mui/icons-material/Schedule"
 import EmailIcon from "@mui/icons-material/Email"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import GroupsIcon from "@mui/icons-material/Groups"
+import { PATHS } from "../../routes/paths"
 
 const AvailabilitySelector = lazy(() =>
   import("../../components/time/AvailabilitySelector").then((module) => ({
@@ -169,14 +170,14 @@ export function OnboardingPage() {
   const handleSkipAll = useCallback(async () => {
     await completeOnboarding().unwrap()
     dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
-    navigate("/dashboard")
+    navigate(PATHS.dashboard)
   }, [completeOnboarding, dispatch, navigate])
 
   const handleComplete = useCallback(async () => {
     try {
       await completeOnboarding().unwrap()
       dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
-      navigate("/dashboard")
+      navigate(PATHS.dashboard)
     } catch {
       issueAlert({ severity: "error", message: "Failed to complete setup" })
     }
@@ -243,7 +244,7 @@ export function OnboardingPage() {
 
   useEffect(() => {
     if (!statusLoading && status?.completed) {
-      navigate("/dashboard")
+      navigate(PATHS.dashboard)
     }
   }, [statusLoading, status?.completed, navigate])
 
@@ -438,7 +439,7 @@ export function OnboardingPage() {
               <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
                 <Button
                   variant="contained"
-                  onClick={() => navigate("/org/register")}
+                  onClick={() => navigate(PATHS.orgRegister)}
                 >
                   {t("onboarding.org.register", "Register Organization")}
                 </Button>

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom"
 import { useGetOrdersByListingQuery, type ListingOrderSummary, type ListingOfferSummary } from "../../../../store/api/v2/market"
 import { Section } from "../../../../components/paper/Section"
 import { formatPrice } from "../../../../util/formatPrice"
+import { ORDER_PATHS } from "../../../../routes/paths"
 
 export function ListingOrdersSection({ listingId }: { listingId: string }) {
   const { data, error } = useGetOrdersByListingQuery({ listingId }, { skip: !listingId })
@@ -32,7 +33,7 @@ export function ListingOrdersSection({ listingId }: { listingId: string }) {
             </TableHead>
             <TableBody>
               {data.offers.map((o: ListingOfferSummary) => (
-                <TableRow key={o.session_id} hover component={Link} to={`/offer/${o.session_id}`}
+                <TableRow key={o.session_id} hover component={Link} to={ORDER_PATHS.offer(o.session_id)}
                   sx={{ textDecoration: "none", color: "inherit" }}>
                   <TableCell>{o.buyer_name}</TableCell>
                   <TableCell><Chip label={o.status} size="small" sx={{ height: 20, fontSize: "0.65rem" }} /></TableCell>
@@ -59,7 +60,7 @@ export function ListingOrdersSection({ listingId }: { listingId: string }) {
             </TableHead>
             <TableBody>
               {data.orders.map((o: ListingOrderSummary) => (
-                <TableRow key={o.order_id} hover component={Link} to={`/contract/${o.order_id}`}
+                <TableRow key={o.order_id} hover component={Link} to={ORDER_PATHS.contract(o.order_id)}
                   sx={{ textDecoration: "none", color: "inherit" }}>
                   <TableCell>{o.buyer_name}</TableCell>
                   <TableCell><Chip label={o.status} size="small" sx={{ height: 20, fontSize: "0.65rem" }} /></TableCell>

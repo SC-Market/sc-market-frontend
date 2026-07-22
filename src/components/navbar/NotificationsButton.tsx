@@ -23,6 +23,7 @@ import { ExtendedTheme, getNavbarContrastText } from "../../hooks/styles/Theme"
 import { ClearAllRounded, MarkEmailReadRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
+import { PATHS } from "../../routes/paths"
 import { NotificationEntry } from "../../features/notifications"
 import { haptic } from "../../util/haptics"
 import { HapticIconButton, HapticTablePagination } from "../haptic"
@@ -100,7 +101,7 @@ export function NotificationsButton() {
               {t("notifications.notifications")}
             </Typography>
             <Link
-              to="/notifications"
+              to={PATHS.notifications}
               onClick={handleClose}
               style={{
                 textDecoration: "none",

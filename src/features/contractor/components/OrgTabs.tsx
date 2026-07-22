@@ -12,6 +12,7 @@ import {
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
 import { HapticTab } from "../../../components/haptic"
 import { a11yProps } from "../../../components/tabs/Tabs"
+import { ORG_PATHS } from "../../../routes/paths"
 
 interface OrgTabsProps {
   spectrumId: string
@@ -36,28 +37,28 @@ export function OrgTabs({
         <HapticTab
           label={t("orgInfo.store")}
           component={Link}
-          to={`/contractor/${spectrumId}`}
+          to={ORG_PATHS.profile(spectrumId)}
           icon={<StorefrontRounded />}
           {...a11yProps(0)}
         />
         <HapticTab
           label={t("orgInfo.about")}
           component={Link}
-          to={`/contractor/${spectrumId}/about`}
+          to={ORG_PATHS.profileTab(spectrumId, "about")}
           icon={<InfoRounded />}
           {...a11yProps(1)}
         />
         <HapticTab
           label={t("orgInfo.order")}
           component={Link}
-          to={`/contractor/${spectrumId}/order`}
+          to={ORG_PATHS.profileTab(spectrumId, "order")}
           icon={<CreateRounded />}
           {...a11yProps(2)}
         />
         <HapticTab
           label={t("orgInfo.members")}
           component={Link}
-          to={`/contractor/${spectrumId}/members`}
+          to={ORG_PATHS.profileTab(spectrumId, "members")}
           icon={<PeopleAltRoundedIcon />}
           {...a11yProps(3)}
         />
@@ -65,7 +66,7 @@ export function OrgTabs({
           <HapticTab
             label={t("orgInfo.recruiting")}
             component={Link}
-            to={`/contractor/${spectrumId}/recruiting`}
+            to={ORG_PATHS.profileTab(spectrumId, "recruiting")}
             icon={<PersonAddRounded />}
             {...a11yProps(4)}
           />
@@ -73,7 +74,7 @@ export function OrgTabs({
         <HapticTab
           label={t("orgInfo.reviews")}
           component={Link}
-          to={`/contractor/${spectrumId}/reviews`}
+          to={ORG_PATHS.profileTab(spectrumId, "reviews")}
           icon={<StarRounded />}
           {...a11yProps(5)}
         />

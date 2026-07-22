@@ -65,6 +65,7 @@ import {
   type GameItemAggregateV2,
 } from "./MarketAggregateViewV2";
 import { QualityHistogram } from "../../../components/market/v2/QualityHistogram";
+import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -910,7 +911,7 @@ function FulfillDialog({
           message: t("MarketAggregateView.submitted"),
           severity: "success",
         });
-        if (result.order_id) navigate(`/order/${result.order_id}`);
+        if (result.order_id) navigate(ORDER_PATHS.detail(result.order_id));
         onClose();
       })
       .catch((err) =>
@@ -1445,7 +1446,7 @@ export function MarketAggregateViewV2Admin({
   }, [listings, selectedTier]);
 
   const createListingUrl = [
-    `/market/create`,
+    MARKET_PATHS.create,
     `?game_item_id=${encodeURIComponent(gameItemId)}`,
     `&game_item_name=${encodeURIComponent(game_item.name)}`,
     `&game_item_type=${encodeURIComponent(game_item.type || "")}`,
@@ -1511,7 +1512,7 @@ export function MarketAggregateViewV2Admin({
               </Button>
               <Button
                 component={Link}
-                to={`/buyorder/create?game_item_id=${encodeURIComponent(gameItemId)}&game_item_name=${encodeURIComponent(game_item.name)}`}
+                to={`${MARKET_PATHS.buyOrderCreate}?game_item_id=${encodeURIComponent(gameItemId)}&game_item_name=${encodeURIComponent(game_item.name)}`}
                 variant="outlined"
                 color="warning"
                 size="small"

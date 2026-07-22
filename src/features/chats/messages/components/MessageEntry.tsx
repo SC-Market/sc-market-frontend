@@ -12,6 +12,7 @@ import { useMemo } from "react"
 import type { Message } from "../../domain/types"
 import { replaceDiscordTimestamps } from "../utils/timestampFormatter"
 import { MsgPaper } from "./MsgPaper"
+import { USER_PATHS } from "../../../../routes/paths"
 
 export function MessageEntry(props: { message: Message }) {
   const { message } = props
@@ -69,7 +70,7 @@ export function MessageEntry(props: { message: Message }) {
           </Typography>
         </Box>
 
-        <Link to={`/user/${message.author}`}>
+        <Link to={USER_PATHS.profile(message.author)}>
           <Avatar
             variant="rounded"
             sx={{
@@ -144,7 +145,7 @@ export function MessageEntry(props: { message: Message }) {
         justifyContent={"flex-end"}
         sx={{ marginBottom: 1 }}
       >
-        <Link to={`/user/${message.author}`}>
+        <Link to={USER_PATHS.profile(message.author)}>
           <Avatar
             variant="rounded"
             sx={{

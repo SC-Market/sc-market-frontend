@@ -13,6 +13,7 @@ import { MissionName } from "../../components/game-data/MissionName"
 import { MissionHeaderChips, MissionDetailTabs } from "../../components/game-data/MissionDetailContent"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { FRONTEND_URL } from "../../util/constants"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 export function MissionDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -37,7 +38,7 @@ export function MissionDetail() {
       canonicalUrl={`/missions/${slug}`}
       headerTitle={m?.mission_name || t("missions.detail.header", "Mission Detail")}
       breadcrumbs={[
-        { label: "Missions", href: "/missions" },
+        { label: "Missions", href: GAME_DATA_PATHS.missions },
         { label: m?.mission_name || "Detail" },
       ]}
       isLoading={isLoading}
@@ -93,7 +94,7 @@ export function MissionDetail() {
           <Box sx={{ mb: 2 }}>
             <MissionHeaderChips mission={m} />
           </Box>
-          <MissionDetailTabs data={data} onBlueprintClick={(id) => navigate(`/blueprints/${id}`)} />
+          <MissionDetailTabs data={data} onBlueprintClick={(id) => navigate(GAME_DATA_PATHS.blueprint(id))} />
         </Grid>
       )}
     </StandardPageLayout>

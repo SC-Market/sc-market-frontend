@@ -58,6 +58,7 @@ import {
   type WishlistItemWithDetails,
 } from "../../store/api/v2/market"
 import { AddItemDialog } from "../../components/wishlists"
+import { PATHS, GAME_DATA_PATHS } from "../../routes/paths"
 
 type SortOption = "priority" | "name" | "status" | "quality"
 
@@ -101,7 +102,7 @@ export function WishlistDetail() {
 
   // Handlers
   const handleBack = () => {
-    navigate("/shopping-lists")
+    navigate(PATHS.shoppingLists)
   }
 
   const handleAddItem = () => {
@@ -222,8 +223,8 @@ export function WishlistDetail() {
       headerTitle={wishlist.wishlist_name}
       maxWidth="xl"
       breadcrumbs={[
-        { label: "Home", href: "/" },
-        { label: "Shopping Lists", href: "/shopping-lists" },
+        { label: "Home", href: PATHS.home },
+        { label: "Shopping Lists", href: PATHS.shoppingLists },
         { label: wishlist.wishlist_name },
       ]}
       headerActions={
@@ -468,7 +469,7 @@ export function WishlistDetail() {
                           color="info"
                           variant="outlined"
                           component={Link}
-                          to={`/blueprints/${item.blueprint_id}`}
+                          to={GAME_DATA_PATHS.blueprint(item.blueprint_id!)}
                           clickable
                         />
                       ) : item.crafting_available ? (

@@ -15,6 +15,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { Section } from "../../../components/paper/Section"
+import { MARKET_PATHS } from "../../../routes/paths"
 import {
   useGetMatchesForSellerQuery,
   type StandingBuyOrder,
@@ -50,7 +51,7 @@ export function MatchingBuyOrdersArea() {
                   <TableCell>
                     <MuiLink
                       component={RouterLink}
-                      to={`/buyorder/${order.buy_order_id}`}
+                      to={MARKET_PATHS.buyOrder(order.buy_order_id)}
                       underline="hover"
                       color="text.primary"
                       fontWeight="bold"
@@ -82,7 +83,7 @@ export function MatchingBuyOrdersArea() {
       </TableContainer>
       {(data?.total || 0) > 5 && (
         <Box sx={{ p: 1, display: "flex", justifyContent: "flex-end" }}>
-          <Button component={RouterLink} to="/buyorders" size="small" color="secondary">
+          <Button component={RouterLink} to={MARKET_PATHS.buyOrders} size="small" color="secondary">
             {t("dashboard.viewAll", "View All")} ({data?.total})
           </Button>
         </Box>

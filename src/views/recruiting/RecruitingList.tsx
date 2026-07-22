@@ -33,6 +33,7 @@ import {
   BusinessRounded,
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
+import { ORG_PATHS } from "../../routes/paths"
 
 export const RecruitingPostItem = React.memo(
   function RecruitingPostItem(props: { post: RecruitingPost; index: number }) {
@@ -45,8 +46,11 @@ export const RecruitingPostItem = React.memo(
 
     // Long-press menu actions
     const longPressActions = useMemo(() => {
-      const recruitingUrl = `/contractor/${contractor.spectrum_id}/recruiting`
-      const contractorUrl = `/contractor/${contractor.spectrum_id}`
+      const recruitingUrl = ORG_PATHS.profileTab(
+        contractor.spectrum_id,
+        "recruiting",
+      )
+      const contractorUrl = ORG_PATHS.profile(contractor.spectrum_id)
 
       return [
         {
@@ -87,7 +91,7 @@ export const RecruitingPostItem = React.memo(
 
     const cardInnerContent = (
       <Link
-        to={`/contractor/${contractor.spectrum_id}/recruiting`}
+        to={ORG_PATHS.profileTab(contractor.spectrum_id, "recruiting")}
         style={{ textDecoration: "none", color: "inherit" }}
       >
         <Fade
@@ -146,7 +150,7 @@ export const RecruitingPostItem = React.memo(
                   title={
                     <MaterialLink
                       component={Link}
-                      to={`/contractor/${contractor.spectrum_id}`}
+                      to={ORG_PATHS.profile(contractor.spectrum_id)}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       <UnderlineLink

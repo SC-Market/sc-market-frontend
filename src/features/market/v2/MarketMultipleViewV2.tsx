@@ -48,6 +48,7 @@ import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import type { Order } from "../../orders/domain/types"
 import { useGetListingDetailQuery } from "../../../store/api/v2/market";
+import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
 
 /**
  * MarketMultipleViewV2 Component
@@ -141,7 +142,7 @@ function ShopSellerLink(props: {
       )}
       <Box
         component={Link}
-        to={`/shops/${props.slug}`}
+        to={SHOP_PATHS.profile(props.slug)}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -293,7 +294,7 @@ export function MarketMultipleViewV2() {
       title={complete?.title || "Bundle Listing"}
       headerTitle={complete?.title}
       breadcrumbs={[
-        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
         { label: complete?.title || "Listing" },
       ]}
       isLoading={isLoading}
@@ -447,7 +448,7 @@ export function MarketMultipleViewV2() {
                               component={Link}
                               underline="hover"
                               color="inherit"
-                              to="/market"
+                              to={MARKET_PATHS.search}
                             >
                               {t("MarketMultipleView.market")}
                             </MaterialLink>
@@ -532,7 +533,7 @@ export function MarketMultipleViewV2() {
                       }
                       action={
                         amRelated ? (
-                          <Link to={`/market/multiple/${complete.listing_id}/edit`}>
+                          <Link to={MARKET_PATHS.multipleEdit(complete.listing_id)}>
                             <IconButton>
                               <CreateRounded
                                 style={{ color: theme.palette.text.secondary }}

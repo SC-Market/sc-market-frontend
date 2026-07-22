@@ -24,6 +24,7 @@ import { useGetManufacturerDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { FRONTEND_URL } from "../../util/constants"
+import { WIKI_PATHS } from "../../routes/paths"
 
 export function WikiManufacturerPage() {
   const { t } = useTranslation()
@@ -32,7 +33,7 @@ export function WikiManufacturerPage() {
   const { data: manufacturer, isLoading, error } = useGetManufacturerDetailQuery({ id: id! })
 
   const handleItemClick = (itemId: string) => {
-    navigate(`/wiki/items/${itemId}`)
+    navigate(WIKI_PATHS.item(itemId))
   }
 
   const seoTitle = manufacturer
@@ -46,11 +47,11 @@ export function WikiManufacturerPage() {
     <StandardPageLayout
       title={seoTitle}
       description={seoDescription}
-      canonicalUrl={`/wiki/manufacturers/${id}`}
+      canonicalUrl={WIKI_PATHS.manufacturer(id!)}
       headerTitle={manufacturer?.manufacturer ?? t("wiki.manufacturerDetail.title", "Manufacturer Details")}
       breadcrumbs={[
-        { label: t("wiki.manufacturerDetail.breadcrumbWiki", "Wiki"), href: "/wiki" },
-        { label: t("wiki.manufacturerDetail.breadcrumbManufacturers", "Manufacturers"), href: "/wiki/manufacturers" },
+        { label: t("wiki.manufacturerDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub },
+        { label: t("wiki.manufacturerDetail.breadcrumbManufacturers", "Manufacturers"), href: WIKI_PATHS.manufacturers },
         { label: manufacturer?.manufacturer ?? t("wiki.manufacturerDetail.breadcrumbDetail", "Detail") },
       ]}
       sidebarOpen={true}

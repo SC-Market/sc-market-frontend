@@ -21,6 +21,7 @@ import {
 } from "../../store/api/v2/market"
 import { debounce } from "lodash"
 import { Link } from "react-router-dom"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 export interface AddItemDialogProps {
   open: boolean
@@ -192,7 +193,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
                       color="primary"
                       variant="outlined"
                       component={Link}
-                      to={`/blueprints/${itemBlueprints[0].blueprint_code}`}
+                      to={GAME_DATA_PATHS.blueprint(itemBlueprints[0].blueprint_code)}
                       clickable
                       size="small"
                     />

@@ -11,6 +11,7 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { useGetStatsQuery, type FeatureFlagStats } from "../../store/api/v2/market"
+import { ADMIN_PATHS } from "../../routes/paths"
 
 export function AdminFeatureFlagsView() {
   const { data: stats } = useGetStatsQuery()
@@ -41,7 +42,7 @@ export function AdminFeatureFlagsView() {
             <ListItemButton
               key={flag.flag_name}
               component={Link}
-              to={`/admin/feature-flags/${flag.flag_name}`}
+              to={ADMIN_PATHS.featureFlag(flag.flag_name)}
               sx={{ borderBottom: 1, borderColor: "divider" }}
             >
               <ListItemText

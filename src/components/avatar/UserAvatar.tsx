@@ -7,6 +7,7 @@ import { MinimalUser } from "../../datatypes/User"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { USER_PATHS } from "../../routes/paths"
 
 export function UserAvatar(props: { user: MinimalUser }) {
   const { user } = props
@@ -33,7 +34,7 @@ export function UserAvatar(props: { user: MinimalUser }) {
       >
         <MaterialLink
           component={Link}
-          to={`/user/${user.username}`}
+          to={USER_PATHS.profile(user.username)}
           style={{ textDecoration: "none", color: "inherit" }}
           aria-label={t(
             "accessibility.viewUserProfile",

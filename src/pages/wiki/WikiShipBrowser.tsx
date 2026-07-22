@@ -36,6 +36,7 @@ import {
   UnifiedSearchBar, shipsParamsToTokens, shipsTokensToParams, type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
 import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
+import { WIKI_PATHS } from "../../routes/paths"
 
 const PAGE_SIZE = 24
 
@@ -434,10 +435,10 @@ export function WikiShipBrowser() {
   const handleShipClick = (shipCode: string | undefined, id: string) => {
     const slug = shipCode || id
     if (isMobile) {
-      navigate(`/wiki/ships/${slug}`)
+      navigate(WIKI_PATHS.ship(slug))
     } else {
       const qs = searchParams.toString() ? `?${searchParams.toString()}` : ""
-      navigate(`/wiki/ships/${slug}${qs}`)
+      navigate(`${WIKI_PATHS.ship(slug)}${qs}`)
       setSelectedShipId(slug)
     }
   }
@@ -722,10 +723,10 @@ export function WikiShipBrowser() {
     <StandardPageLayout title={pageTitle} description={pageDescription} headerTitle={t("wiki.shipBrowser.headerTitle", "Ships & Vehicles")} sidebarOpen={true} maxWidth="xl">
       <Helmet>
         {currentPage > 1 && (
-          <link rel="prev" href={`${FRONTEND_URL}/wiki/ships?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage - 1) })}`} />
+          <link rel="prev" href={`${FRONTEND_URL}${WIKI_PATHS.ships}?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage - 1) })}`} />
         )}
         {currentPage < totalPages && (
-          <link rel="next" href={`${FRONTEND_URL}/wiki/ships?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage + 1) })}`} />
+          <link rel="next" href={`${FRONTEND_URL}${WIKI_PATHS.ships}?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage + 1) })}`} />
         )}
       </Helmet>
       <Grid item xs={12}>
@@ -829,7 +830,7 @@ export function WikiShipBrowser() {
           onClose={() => {
             setSelectedShipId(null)
             const qs = searchParams.toString() ? `?${searchParams.toString()}` : ""
-            navigate(`/wiki/ships${qs}`)
+            navigate(`${WIKI_PATHS.ships}${qs}`)
           }}
         />
       </Grid>

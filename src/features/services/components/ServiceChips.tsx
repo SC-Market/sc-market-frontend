@@ -8,6 +8,7 @@ import { orderIcons } from "../../orders/components/orderIcons"
 import type { Service } from "../../orders/domain/types"
 import { useServiceSearch } from "../../contracting/hooks/ServiceSearch"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ORDER_PATHS } from "../../../routes/paths"
 
 export function ServiceChips(props: { service: Service }) {
   const { service } = props
@@ -21,7 +22,7 @@ export function ServiceChips(props: { service: Service }) {
       event.preventDefault()
       event.stopPropagation()
       setSearchState((prev) => ({ ...prev, kind: service.kind }))
-      navigate("/order/services")
+      navigate(ORDER_PATHS.services)
     },
     [service.kind, setSearchState, navigate],
   )
@@ -31,7 +32,7 @@ export function ServiceChips(props: { service: Service }) {
       event.preventDefault()
       event.stopPropagation()
       setSearchState((prev) => ({ ...prev, language_codes: [langCode] }))
-      navigate("/order/services")
+      navigate(ORDER_PATHS.services)
     },
     [setSearchState, navigate],
   )

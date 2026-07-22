@@ -1,6 +1,7 @@
 import React from "react"
 import { Navigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
+import { PATHS } from "../../routes/paths"
 
 /**
  * Reads the current_shop_slug cookie and redirects to the appropriate
@@ -14,7 +15,7 @@ export function ShopRedirect({ subpath }: { subpath: string }) {
     return <Navigate to={`/shop/${slug}/${subpath}`} replace />
   }
 
-  return <Navigate to="/dashboard/shops" replace />
+  return <Navigate to={PATHS.dashboardShops} replace />
 }
 
 export function ShopRedirectListings({ suffix }: { suffix?: string }) {

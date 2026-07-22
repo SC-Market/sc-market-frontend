@@ -37,6 +37,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetBlueprintDetailQuery } from "../../store/api/v2/market"
 import { formatCraftingTime } from "../../constants/crafting"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 /**
  * BlueprintDetail Component
@@ -527,7 +528,7 @@ export function BlueprintDetail() {
               <Button
                 variant="outlined"
                 size="small"
-                onClick={() => navigate(`/crafting/calculator?blueprint_id=${blueprint.blueprint_id}`)}
+                onClick={() => navigate(`${GAME_DATA_PATHS.craftingCalculator}?blueprint_id=${blueprint.blueprint_id}`)}
               >
                 Open Full Calculator
               </Button>
@@ -557,7 +558,7 @@ export function BlueprintDetail() {
                       boxShadow: 2,
                     },
                   }}
-                  onClick={() => navigate(`/missions/${mission.mission_id}`)}
+                  onClick={() => navigate(GAME_DATA_PATHS.mission(mission.mission_id))}
                 >
                   <CardContent>
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

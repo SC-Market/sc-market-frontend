@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { DescriptionOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+import { PATHS } from "../../routes/paths"
 
 export interface EmptyContractsProps extends Omit<
   EmptyStateProps,
@@ -110,7 +111,7 @@ export function EmptyContracts({
         label: t("emptyStates.contracts.createContract", {
           defaultValue: "Create Contract",
         }),
-        onClick: () => navigate("/contracts/create"),
+        onClick: () => navigate(PATHS.contractsCreate),
         variant: "contained" as const,
       }
     : undefined

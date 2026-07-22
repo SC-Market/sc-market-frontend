@@ -8,6 +8,7 @@ import { OfferSession } from "../../offers/api/offerApi"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
+import { ORDER_PATHS, USER_PATHS } from "../../../routes/paths"
 
 export function NotificationOfferMessage(props: { notif: Notification }) {
   const { notif } = props
@@ -18,12 +19,12 @@ export function NotificationOfferMessage(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<CreateRoundedIcon />}
-      to={`/offer/${offer.id}`}
+      to={ORDER_PATHS.offer(offer.id)}
       notif={notif}
     >
       {t("notifications.new_offer_message_from")}{" "}
       <Link
-        to={`/user/${offer.customer.username}`}
+        to={USER_PATHS.profile(offer.customer.username)}
         style={{
           textDecoration: "none",
           color: theme.palette.secondary.main,

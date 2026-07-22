@@ -30,6 +30,7 @@ import {
 } from "../../store/api/v2/market"
 import { formatQuantity } from "../../util/formatQuantity"
 import { EmptyCart } from "../empty-states"
+import { MARKET_PATHS } from "../../routes/paths"
 
 interface CartDrawerProps {
   open: boolean
@@ -52,7 +53,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
 
   const handleCheckout = () => {
     onClose()
-    navigate("/market/cart")
+    navigate(MARKET_PATHS.cart)
   }
 
   const handleRemove = async (cartItemId: string) => {
@@ -84,7 +85,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
           sx={{ minHeight: 200, py: 3, px: 2 }}
           action={{
             label: t("cart.browseMarket", "Browse Market"),
-            onClick: () => { onClose(); navigate("/market"); },
+            onClick: () => { onClose(); navigate(MARKET_PATHS.search); },
             variant: "contained",
           }}
         />

@@ -32,6 +32,7 @@ import { EmptyListings } from "../../../components/empty-states"
 import { ListingSkeleton } from "../../../components/skeletons"
 import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BulkItemsTableV2 } from "./components/BulkItemsTableV2"
+import { MARKET_PATHS } from "../../../routes/paths"
 
 // ── Sidebar Filter ─────────────────────────────────────────────────────
 
@@ -148,7 +149,7 @@ function AggregateCard({ item }: { item: GameItemAggregate }) {
     }}>
       <CardActionArea
         component={RouterLink}
-        to={`/market/aggregate/${item.game_item_id}`}
+        to={MARKET_PATHS.aggregate(item.game_item_id)}
         sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", textDecoration: "none", color: "inherit" }}
       >
         <CardMedia

@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material"
 import type { StandingBuyOrder } from "../../../../store/api/v2/market"
+import { MARKET_PATHS } from "../../../../routes/paths"
 
 interface BuyOrderAggregate {
   item_id: string
@@ -39,7 +40,7 @@ export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate
             return (
               <TableRow key={agg.item_id} hover>
                 <TableCell>
-                  <MuiLink component={RouterLink} to={`/market/aggregate/${agg.item_id}`} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
+                  <MuiLink component={RouterLink} to={MARKET_PATHS.aggregate(agg.item_id)} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
                     {agg.item_name}
                   </MuiLink>
                 </TableCell>

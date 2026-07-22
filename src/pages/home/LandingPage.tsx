@@ -16,6 +16,7 @@ import {
 } from "../../components/landing"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
+import { PATHS, ORG_PATHS } from "../../routes/paths"
 
 export function LandingPage() {
   const { t } = useTranslation()
@@ -28,9 +29,9 @@ export function LandingPage() {
       return <Navigate to={config.homepage_path} />
     }
     if (config?.focus_mode === "internal") {
-      return <Navigate to="/dashboard" />
+      return <Navigate to={PATHS.dashboard} />
     }
-    return <Navigate to={`/contractor/${CURRENT_CUSTOM_ORG}`} />
+    return <Navigate to={ORG_PATHS.profile(CURRENT_CUSTOM_ORG)} />
   }
 
   return (

@@ -29,6 +29,7 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { useGetOrdersQuery } from "../../../store/api/v2/market"
+import { ORDER_PATHS } from "../../../routes/paths"
 
 /**
  * Props for OrderListV2 component
@@ -96,7 +97,7 @@ function OrderListItemV2(props: {
   }, [order.quality_tier_min, order.quality_tier_max])
 
   return (
-    <ListItemButton component={Link} to={`/contract/${order.order_id}`}>
+    <ListItemButton component={Link} to={ORDER_PATHS.contract(order.order_id)}>
       <ListItemAvatar>
         <Avatar
           variant="rounded"

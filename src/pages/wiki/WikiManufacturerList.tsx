@@ -17,6 +17,7 @@ import {
 } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { WIKI_PATHS } from "../../routes/paths"
 
 // Accent color + known specialty metadata per manufacturer code
 const MFR_META: Record<string, { color: string; specialties: string[]; tagline?: string }> = {
@@ -69,7 +70,7 @@ export function WikiManufacturerList() {
     () => (localStorage.getItem("wiki-mfr-view") as "grid" | "list") || "grid",
   )
 
-  const go = (code: string) => navigate(`/wiki/manufacturers/${encodeURIComponent(code)}`)
+  const go = (code: string) => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(code)))
 
   return (
     <StandardPageLayout

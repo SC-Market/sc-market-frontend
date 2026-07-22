@@ -24,6 +24,7 @@ import { useCurrentChat } from "../../hooks/CurrentChat"
 import { LazyDateTimePicker as DateTimePicker } from "../../../../components/providers/LazyDateTimePicker"
 import { useTranslation } from "react-i18next"
 import type { UserParticipant, ContractorParticipant } from "../../domain/types"
+import { PATHS, ORG_PATHS, ORDER_PATHS } from "../../../../routes/paths"
 
 export function MessageHeader(props: {
   dateTime: Date
@@ -78,7 +79,7 @@ export function MessageHeader(props: {
               aria-label={t("MessagesBody.toggleSidebar")}
               onClick={() => {
                 if (isMobile) {
-                  navigate("/messages")
+                  navigate(PATHS.messages)
                 } else {
                   setMessageSidebar((v) => !v)
                 }
@@ -200,7 +201,7 @@ export function MessageHeader(props: {
                             label={contractor.name}
                             size="small"
                             component={Link}
-                            to={`/contractor/${contractor.spectrum_id}`}
+                            to={ORG_PATHS.profile(contractor.spectrum_id)}
                             onClick={(e) => e.stopPropagation()}
                             sx={{
                               height: 20,
@@ -236,7 +237,7 @@ export function MessageHeader(props: {
                         label="View Order"
                         size="small"
                         component={Link}
-                        to={`/order/${chat!.order_id}`}
+                        to={ORDER_PATHS.detail(chat!.order_id)}
                         onClick={(e) => e.stopPropagation()}
                         clickable
                         sx={{
@@ -253,7 +254,7 @@ export function MessageHeader(props: {
                         label="View Offer"
                         size="small"
                         component={Link}
-                        to={`/offer/${chat!.session_id}`}
+                        to={ORDER_PATHS.offer(chat!.session_id)}
                         onClick={(e) => e.stopPropagation()}
                         clickable
                         sx={{

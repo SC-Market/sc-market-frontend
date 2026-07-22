@@ -41,6 +41,7 @@ import {
 } from "../../../../store/api/v2/market"
 import type { VariantDetail, ListingItemDetail } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { SHOP_PATHS } from "../../../../routes/paths"
 
 /**
  * ListingDetailRedesign — Phase 0 of the Market redesign (behind the
@@ -299,7 +300,7 @@ export function ListingDetailRedesign() {
                   spacing={1.5}
                   alignItems="center"
                   component={RouterLink}
-                  to={`/shops/${seller.slug}`}
+                  to={SHOP_PATHS.profile(seller.slug)}
                   sx={{ textDecoration: "none", color: "inherit" }}
                 >
                   <Avatar src={seller.logo_url || undefined} alt={seller.name} />

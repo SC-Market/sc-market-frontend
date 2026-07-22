@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { ShoppingCartOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+import { MARKET_PATHS } from "../../routes/paths"
 
 export interface EmptyCartProps extends Omit<
   EmptyStateProps,
@@ -87,7 +88,7 @@ export function EmptyCart({
     label: t("emptyStates.cart.browseMarket", {
       defaultValue: "Browse Market",
     }),
-    onClick: () => navigate("/market"),
+    onClick: () => navigate(MARKET_PATHS.search),
     variant: "contained" as const,
   }
 

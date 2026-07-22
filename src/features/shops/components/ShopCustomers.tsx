@@ -14,6 +14,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { ControlledTable, HeadCell } from "../../../components/table/PaginatedTable"
 import { Link } from "react-router-dom"
 import { Stack } from "@mui/system"
+import { USER_PATHS } from "../../../routes/paths"
 
 interface CustomerRow {
   user_id: string
@@ -46,7 +47,7 @@ function CustomerRowComponent(props: {
     <TableRow
       hover
       component={Link}
-      to={`/user/${row.username}`}
+      to={USER_PATHS.profile(row.username)}
       sx={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
     >
       <TableCell padding="checkbox" sx={{ display: "none" }} />

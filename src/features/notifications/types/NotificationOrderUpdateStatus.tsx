@@ -8,6 +8,7 @@ import type { Order } from "../../orders/domain/types"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
+import { ORDER_PATHS, USER_PATHS } from "../../../routes/paths"
 
 export function NotificationOrderUpdateStatus(props: { notif: Notification }) {
   const theme = useTheme<ExtendedTheme>()
@@ -25,12 +26,12 @@ export function NotificationOrderUpdateStatus(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<UpdateRounded />}
-      to={`/contract/${order.order_id}`}
+      to={ORDER_PATHS.contract(order.order_id)}
       notif={notif}
     >
       {t("notifications.order_status_updated_to", { status })}{" "}
       <Link
-        to={`/user/${notif.actors[0].username}`}
+        to={USER_PATHS.profile(notif.actors[0].username)}
         style={{
           textDecoration: "none",
           color: theme.palette.secondary.main,

@@ -51,6 +51,7 @@ import {
   useNotificationDeleteMutation,
 } from "../../features/notifications/api/notificationApi"
 import { useOrderDetails } from "../../features/orders/hooks/useOrderDetails"
+import { SHOP_PATHS } from "../../routes/paths"
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
@@ -166,7 +167,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                     {order.shop ? (
                       <MaterialLink
                         component={RouterLink}
-                        to={`/shops/${order.shop.slug}`}
+                        to={SHOP_PATHS.profile(order.shop.slug)}
                         underline="hover"
                         color="text.secondary"
                         variant="subtitle2"

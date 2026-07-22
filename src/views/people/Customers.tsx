@@ -18,6 +18,7 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { USER_PATHS } from "../../routes/paths"
 
 function PeopleRow(props: {
   row: User
@@ -60,7 +61,7 @@ function PeopleRow(props: {
           <Grid item>
             <MaterialLink
               component={Link}
-              to={`/user/${row.username}`}
+              to={USER_PATHS.profile(row.username)}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <UnderlineLink

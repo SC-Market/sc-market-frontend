@@ -28,6 +28,7 @@ import type { MyListingItem } from "../../../../store/api/v2/market"
 import { getRelativeTime } from "../../../../util/time"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
+import { MARKET_PATHS } from "../../../../routes/paths"
 
 interface MyListingCardV2Props {
   listing: MyListingItem
@@ -68,7 +69,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
     (e: React.MouseEvent) => {
       e.stopPropagation()
       e.preventDefault()
-      navigate(`/market_edit/${listing.listing_id}`)
+      navigate(MARKET_PATHS.edit(listing.listing_id))
     },
     [navigate, listing.listing_id],
   )

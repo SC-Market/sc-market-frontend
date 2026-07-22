@@ -4,6 +4,7 @@
 
 import { useEffect } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 export function BlueprintInventory() {
   const navigate = useNavigate()
@@ -13,7 +14,9 @@ export function BlueprintInventory() {
     const params = new URLSearchParams(searchParams)
     params.set("owned", "true")
     params.set("inventory", "true")
-    navigate(`/blueprints?${params.toString()}`, { replace: true })
+    navigate(`${GAME_DATA_PATHS.blueprints}?${params.toString()}`, {
+      replace: true,
+    })
   }, [])
 
   return null

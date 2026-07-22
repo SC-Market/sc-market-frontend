@@ -10,6 +10,7 @@ import {
 } from "@mui/icons-material"
 import { HapticTab } from "../../../components/haptic"
 import { a11yProps } from "../../../components/tabs/Tabs"
+import { USER_PATHS } from "../../../routes/paths"
 
 interface ProfileTabsProps {
   username: string
@@ -30,7 +31,7 @@ export function ProfileTabs({ username, currentTab }: ProfileTabsProps) {
       >
         <HapticTab
           component={Link}
-          to={`/user/${username}`}
+          to={USER_PATHS.profile(username)}
           label={t("viewProfile.store_tab")}
           icon={<StorefrontRounded />}
           {...a11yProps(0)}
@@ -38,21 +39,21 @@ export function ProfileTabs({ username, currentTab }: ProfileTabsProps) {
         <HapticTab
           label={t("viewProfile.about_tab")}
           component={Link}
-          to={`/user/${username}/about`}
+          to={USER_PATHS.profileTab(username, "about")}
           icon={<InfoRounded />}
           {...a11yProps(1)}
         />
         <HapticTab
           label={t("viewProfile.order_tab")}
           component={Link}
-          to={`/user/${username}/order`}
+          to={USER_PATHS.profileTab(username, "order")}
           icon={<CreateRounded />}
           {...a11yProps(2)}
         />
         <HapticTab
           label={t("viewProfile.reviews_tab")}
           component={Link}
-          to={`/user/${username}/reviews`}
+          to={USER_PATHS.profileTab(username, "reviews")}
           icon={<StarRounded />}
           {...a11yProps(3)}
         />

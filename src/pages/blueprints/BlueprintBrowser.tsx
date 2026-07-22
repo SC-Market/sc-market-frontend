@@ -64,6 +64,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 import { useShoppingList } from "../../features/wishlists/hooks/WishlistContext"
@@ -222,7 +223,7 @@ export function BlueprintBrowser() {
     const urlSlug = blueprintCode || blueprintId
     const params = searchParams.toString()
     const qs = params ? `?${params}` : ""
-    navigate(`/blueprints/${urlSlug}${qs}`)
+    navigate(`${GAME_DATA_PATHS.blueprint(urlSlug)}${qs}`)
     if (!isMobile) setSelectedBlueprintId(urlSlug)
   }
 
@@ -496,7 +497,7 @@ export function BlueprintBrowser() {
       <BlueprintDetailModal
         blueprintId={selectedBlueprintId}
         open={!!selectedBlueprintId}
-        onClose={() => { setSelectedBlueprintId(null); navigate(`/blueprints?${searchParams.toString()}`, { replace: true }) }}
+        onClose={() => { setSelectedBlueprintId(null); navigate(`${GAME_DATA_PATHS.blueprints}?${searchParams.toString()}`, { replace: true }) }}
       />
     </StandardPageLayout>
   )

@@ -28,6 +28,7 @@ import { tokensApi } from "../../features/api-tokens"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
 import { haptic } from "../../util/haptics"
 import { HapticIconButton } from "../../components/haptic"
+import { PATHS, USER_PATHS } from "../../routes/paths"
 
 export function ProfileNavAvatar() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -87,11 +88,11 @@ export function ProfileNavAvatar() {
 
       // Navigate to home page after successful logout
       // Using navigate instead of window.location to avoid full page reload
-      navigate("/", { replace: true })
+      navigate(PATHS.home, { replace: true })
     } catch (error) {
       // Even if logout fails, navigate to home (session might be cleared anyway)
       console.error("Logout error:", error)
-      navigate("/", { replace: true })
+      navigate(PATHS.home, { replace: true })
     }
   }
 
@@ -137,7 +138,7 @@ export function ProfileNavAvatar() {
             }}
           >
             <Link
-              to={`/user/${profile?.username}`}
+              to={USER_PATHS.profile(profile?.username as string)}
               style={{ color: "inherit", textDecoration: "none" }}
               onClick={handleClose}
             >
@@ -159,7 +160,7 @@ export function ProfileNavAvatar() {
               </ListItemButton>
             </Link>
             <Link
-              to={"/settings"}
+              to={PATHS.settings}
               style={{ color: "inherit", textDecoration: "none" }}
               onClick={handleClose}
             >

@@ -39,6 +39,7 @@ import {
   useUnlinkFromListingMutation,
 } from "../../store/api/v2/market"
 import { Link } from "react-router-dom"
+import { MARKET_PATHS } from "../../routes/paths"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { GameItemSearchAutocomplete } from "../../features/market/components/GameItemSearchAutocomplete"
 import { LocationSelector } from "../../features/market/components/stock/LocationSelector"
@@ -158,7 +159,7 @@ export default function InventoryPage() {
     <StandardPageLayout
       title={t("sidebar.inventory", "My Inventory")}
       breadcrumbs={[
-        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
         { label: t("sidebar.inventory", "My Inventory") },
       ]}
       sidebarOpen={true}
@@ -225,7 +226,7 @@ export default function InventoryPage() {
                             variant="body2"
                             fontWeight={600}
                             component={Link}
-                            to={`/market/aggregate/${lot.game_item_id}`}
+                            to={MARKET_PATHS.aggregate(lot.game_item_id)}
                             sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
                           >
                             {lot.game_item_name || t("inventory.custom_item", "Custom Item")}
@@ -262,7 +263,7 @@ export default function InventoryPage() {
                             label={lot.listing_title || "Listing"}
                             size="small"
                             component={Link}
-                            to={`/market/${lot.listing_id}`}
+                            to={MARKET_PATHS.listing(lot.listing_id)}
                             clickable
                             icon={!lot.listing_photo ? <LinkRounded /> : undefined}
                           />

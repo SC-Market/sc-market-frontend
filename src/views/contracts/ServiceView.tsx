@@ -22,6 +22,12 @@ import {
 } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Link } from "react-router-dom"
+import {
+  ORDER_PATHS,
+  ORG_PATHS,
+  SHOP_PATHS,
+  USER_PATHS,
+} from "../../routes/paths"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { getRelativeTime } from "../../util/time"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
@@ -101,8 +107,11 @@ export function ServiceSellerReviews(props: {
               component={Link}
               to={
                 userSeller
-                  ? `/user/${userSeller.username}/reviews`
-                  : `/contractor/${contractorSeller?.spectrum_id}/reviews`
+                  ? USER_PATHS.profileTab(userSeller.username, "reviews")
+                  : ORG_PATHS.profileTab(
+                      contractorSeller?.spectrum_id!,
+                      "reviews",
+                    )
               }
               underline="hover"
               color="primary"
@@ -249,7 +258,7 @@ export function ServiceSellerOtherServices(props: {
               >
                 <ButtonBase
                   component={Link}
-                  to={`/order/service/${service.service_id}`}
+                  to={ORDER_PATHS.service(service.service_id)}
                   sx={{
                     width: "100%",
                     height: "100%",
@@ -385,7 +394,7 @@ export function RelatedServicesByCategory(props: {
               >
                 <ButtonBase
                   component={Link}
-                  to={`/order/service/${service.service_id}`}
+                  to={ORDER_PATHS.service(service.service_id)}
                   sx={{
                     width: "100%",
                     height: "100%",
@@ -624,10 +633,10 @@ export function ServiceView(props: {
                     component={Link}
                     to={
                       service.shop?.slug
-                        ? `/shops/${service.shop.slug}`
+                        ? SHOP_PATHS.profile(service.shop.slug)
                         : service.user?.username
-                          ? `/user/${service.user.username}`
-                          : `/contractor/${service.contractor?.spectrum_id}`
+                          ? USER_PATHS.profile(service.user.username)
+                          : ORG_PATHS.profile(service.contractor?.spectrum_id!)
                     }
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
@@ -660,7 +669,7 @@ export function ServiceView(props: {
                   <Typography display={"inline"} variant={"subtitle2"}>
                     &nbsp;-&nbsp;
                     <ReportButton
-                      reportedUrl={`/order/service/${service.service_id}`}
+                      reportedUrl={ORDER_PATHS.service(service.service_id)}
                     />
                   </Typography>
                 </Box>
@@ -668,7 +677,7 @@ export function ServiceView(props: {
               action={
                 <>
                   {amRelated ? (
-                    <Link to={`/order/service/${service.service_id}/edit`}>
+                    <Link to={ORDER_PATHS.serviceEdit(service.service_id)}>
                       <IconButton>
                         <CreateRounded
                           sx={{ color: theme.palette.background.light }}

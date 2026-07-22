@@ -13,6 +13,7 @@ import {
 } from "../../features/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ORG_PATHS, USER_PATHS } from "../../routes/paths"
 
 export function UserDetails(props: { user: MinimalUser }) {
   const { user } = props
@@ -28,7 +29,7 @@ export function UserDetails(props: { user: MinimalUser }) {
       <Stack direction={"column"} justifyContent={"left"}>
         <MaterialLink
           component={Link}
-          to={`/user/${user.username}`}
+          to={USER_PATHS.profile(user.username)}
           underline={"hover"}
         >
           <Typography
@@ -59,7 +60,7 @@ export function OrgDetails(props: { org: MinimalContractor }) {
       <Stack direction={"column"} justifyContent={"left"}>
         <MaterialLink
           component={Link}
-          to={`/contractor/${org.spectrum_id}`}
+          to={ORG_PATHS.profile(org.spectrum_id)}
           underline={"hover"}
         >
           <Typography

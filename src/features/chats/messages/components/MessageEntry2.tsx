@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next"
 import { useMemo } from "react"
 import type { Message } from "../../domain/types"
 import { replaceDiscordTimestamps } from "../utils/timestampFormatter"
+import { USER_PATHS } from "../../../../routes/paths"
 
 export function MessageEntry2(props: { message: Message }) {
   const { message } = props
@@ -53,7 +54,7 @@ export function MessageEntry2(props: { message: Message }) {
       justifyContent={"flex-start"}
     >
       {message.author ? (
-        <Link to={`/user/${author?.username}`}>
+        <Link to={USER_PATHS.profile(author?.username!)}>
           <Avatar
             variant="rounded"
             sx={{
@@ -85,7 +86,7 @@ export function MessageEntry2(props: { message: Message }) {
           {message.author ? (
             <MaterialLink
               component={Link}
-              to={`/user/${author?.username}`}
+              to={USER_PATHS.profile(author?.username!)}
               color={"text.secondary"}
             >
               <Typography variant={"subtitle2"}>{author?.username}</Typography>

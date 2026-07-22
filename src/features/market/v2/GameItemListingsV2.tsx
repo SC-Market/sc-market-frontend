@@ -41,6 +41,7 @@ import { HapticButton } from "../../../components/haptic";
 import { Cart } from "../../../datatypes/Cart";
 import { HeaderTitle } from "../../../components/typography/HeaderTitle";
 import { Section } from "../../../components/paper/Section";
+import { MARKET_PATHS } from "../../../routes/paths";
 
 // Table column definitions for listings
 const headCells: readonly HeadCell<GameItemListingResult>[] = [
@@ -649,7 +650,7 @@ function GameItemListingRow(props: {
           {justAddedToCart ? (
             <Button
               component={Link}
-              to="/market/cart"
+              to={MARKET_PATHS.cart}
               variant="contained"
               color="secondary"
               size="large"

@@ -28,6 +28,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { TrashCan } from "mdi-material-ui"
 import { CommentVotes } from "../../components/button/CommentVotes"
 import { useTranslation } from "react-i18next"
+import { USER_PATHS } from "../../routes/paths"
 
 export const defaultAvatar =
   "https://robertsspaceindustries.com/rsi/static/images/account/avatar_default_big.jpg"
@@ -68,7 +69,7 @@ export function CommentTree(props: {
         <Box>
           <MaterialLink
             component={Link}
-            to={`/user/${comment.author?.username}`}
+            to={USER_PATHS.profile(comment.author?.username!)}
             style={{
               textDecoration: "none",
               color: "inherit",

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { ChatBubbleOutlineOutlined, InboxOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+import { PATHS } from "../../routes/paths"
 
 export interface EmptyMessagesProps extends Omit<
   EmptyStateProps,
@@ -75,7 +76,7 @@ export function EmptyMessages({
           if (isChatList) {
             // This would typically trigger a create chat dialog
             // For now, we'll just navigate to messages page
-            navigate("/messages")
+            navigate(PATHS.messages)
           }
         },
         variant: "contained" as const,

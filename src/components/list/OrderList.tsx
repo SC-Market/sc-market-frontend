@@ -9,6 +9,7 @@ import {
 import React, { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { Order } from "../../features/orders/domain/types"
+import { ORDER_PATHS } from "../../routes/paths"
 
 export function OrderListItem(props: { order: Order }) {
   const { order } = props
@@ -20,7 +21,7 @@ export function OrderListItem(props: { order: Order }) {
   ).customer_minimal
 
   return (
-    <ListItemButton component={Link} to={`/contract/${order.order_id}`}>
+    <ListItemButton component={Link} to={ORDER_PATHS.contract(order.order_id)}>
       <ListItemAvatar>
         <Avatar
           variant={"rounded"}

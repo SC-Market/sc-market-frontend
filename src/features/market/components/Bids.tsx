@@ -16,6 +16,7 @@ import { getRelativeTime } from "../../../util/time"
 import { useAcceptBidMutation } from "../api/marketApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import { USER_PATHS } from "../../../routes/paths"
 
 export interface BidRowProps {
   row: DatatypesMarketBid
@@ -43,7 +44,7 @@ export function BidRow(props: BidRowProps): ReactElement {
       <TableCell>
         {
           <Link
-            to={`/user/${row.user_bidder?.username}`}
+            to={USER_PATHS.profile(row.user_bidder?.username as string)}
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <UnderlineLink

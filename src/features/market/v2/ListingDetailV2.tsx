@@ -36,8 +36,7 @@ import { SellerReviews } from "../listing-view/components/SellerReviews"
 import { SellerOtherListingsV2, RelatedListingsV2, AggregateMarketDataV2 } from "./components/ListingViewComponentsV2"
 import { ListingOrdersSection } from "./components/ListingOrdersSection"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
-import { formatShortSlug } from "../domain/urls"
-import { MARKET_PATHS, WIKI_PATHS } from "../../../routes/paths"
+import { MARKET_PATHS, WIKI_PATHS, SHOP_PATHS } from "../../../routes/paths"
 import { getLanguageName } from "../../../constants/languages"
 import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
@@ -137,7 +136,7 @@ export function ListingDetailV2() {
   // Breadcrumbs
   const breadcrumbs = useMemo(() => {
     const crumbs: { label: string; href?: string }[] = [
-      { label: t("sidebar.market_short", "Market"), href: "/market" },
+      { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
     ]
     if (gameItemType) {
       crumbs.push({ label: gameItemType, href: `/market?type=${encodeURIComponent(gameItemType)}` })
@@ -164,7 +163,7 @@ export function ListingDetailV2() {
     return false
   }, [profile, seller, listing, belongsToSellerOrg, sellerContractor])
 
-  const canonicalPath = listing ? `/market/${formatShortSlug(listing.listing_id, listing.title)}` : undefined
+  const canonicalPath = listing ? MARKET_PATHS.listing(listing.listing_id, listing.title) : undefined
   const canonicalUrl = canonicalPath ? `${FRONTEND_URL}${canonicalPath}` : undefined
 
   return (
@@ -237,7 +236,7 @@ export function ListingDetailV2() {
                       disableTypography
                       action={
                         canEdit && listing.status !== "cancelled" ? (
-                          <IconButton component={RouterLink} to={`/market_edit/${listing.listing_id}`} sx={{ color: "inherit" }}>
+                          <IconButton component={RouterLink} to={MARKET_PATHS.edit(listing.listing_id)} sx={{ color: "inherit" }}>
                             <CreateRounded />
                           </IconButton>
                         ) : undefined
@@ -296,7 +295,7 @@ export function ListingDetailV2() {
                             <Box component="span" sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}>
                               <Link
                                 component={RouterLink}
-                                to={`/shops/${seller.slug}`}
+                                to={SHOP_PATHS.profile(seller.slug)}
                                 underline="hover"
                                 color="text.primary"
                                 variant="subtitle2"
@@ -366,7 +365,7 @@ export function ListingDetailV2() {
 
                           {/* Report */}
                           <ListingDetailItem icon={<WarningRounded fontSize="small" />}>
-                            <ReportButton reportedUrl={`/market/${listing.listing_id}`} />
+                            <ReportButton reportedUrl={MARKET_PATHS.listing(listing.listing_id)} />
                           </ListingDetailItem>
                           </Stack>
                         </Stack>

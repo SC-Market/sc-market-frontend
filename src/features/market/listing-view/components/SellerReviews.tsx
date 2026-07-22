@@ -14,6 +14,7 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { useGetShopReviewsQuery } from "../../../../store/api/v2/market"
 import type { ShopReviewResponse } from "../../../../store/api/v2/market"
 import { getRelativeTime } from "../../../../util/time"
+import { SHOP_PATHS } from "../../../../routes/paths"
 
 export function SellerReviews(props: {
   shopId?: string | null
@@ -55,7 +56,7 @@ export function SellerReviews(props: {
           {totalReviews > 3 && (
             <MaterialLink
               component={Link}
-              to={`/shops/${shopSlug || shopId}/reviews`}
+              to={SHOP_PATHS.profileTab(shopSlug || shopId, "reviews")}
               underline="hover"
               color="primary"
               variant="body2"

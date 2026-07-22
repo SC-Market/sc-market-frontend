@@ -10,6 +10,7 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { UnderlineLink } from "../typography/UnderlineLink"
+import { ORG_PATHS } from "../../routes/paths"
 import React from "react"
 
 export function UserContractorList(props: {
@@ -69,7 +70,7 @@ export function UserContractorListItem(props: {
           marginRight: 1,
         }}
       >
-        <Link to={`/contractor/${contractor?.spectrum_id}`}>
+        <Link to={ORG_PATHS.profile(contractor?.spectrum_id!)}>
           <Avatar
             variant={"rounded"}
             src={contractor?.avatar}
@@ -85,7 +86,7 @@ export function UserContractorListItem(props: {
         </Link>
       </ListItemIcon>
       <ListItemText>
-        <Link to={`/contractor/${contractor?.spectrum_id}`}>
+        <Link to={ORG_PATHS.profile(contractor?.spectrum_id!)}>
           <UnderlineLink
             color={"text.secondary"}
             variant={"subtitle1"}

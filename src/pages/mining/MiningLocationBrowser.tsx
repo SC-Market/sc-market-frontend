@@ -21,6 +21,7 @@ import { MiningLocationDetailModal } from "./MiningLocationDetailModal"
 import { UnifiedSearchBar, locationTokensToParams, locationParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
@@ -79,7 +80,7 @@ export function MiningLocationBrowser() {
 
   const handleLocationClick = (locName: string) => {
     if (isMobile) {
-      navigate(`/mining/locations/${locName}`)
+      navigate(GAME_DATA_PATHS.miningLocation(locName))
     } else {
       setSelectedLocation(locName)
       window.history.replaceState(null, "", `/mining/locations/${locName}`)
@@ -88,7 +89,7 @@ export function MiningLocationBrowser() {
 
   const handleModalClose = () => {
     setSelectedLocation(null)
-    navigate("/mining/locations", { replace: true })
+    navigate(GAME_DATA_PATHS.miningLocations, { replace: true })
   }
 
   const { data, isLoading, error } = useSearchLocationsQuery({

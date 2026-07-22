@@ -38,6 +38,7 @@ import { useUploadImageMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
 import { SelectPhotosArea, UploadedImageStatus } from "../../../components/modal/SelectPhotosArea";
+import { MARKET_PATHS } from "../../../routes/paths";
 import type {
   UpdateListingRequest,
   VariantPriceUpdate,
@@ -350,7 +351,7 @@ export function EditListingV2() {
         });
 
         // Navigate back to listing detail page
-        navigate(`/market/${id}`);
+        navigate(MARKET_PATHS.listing(id!));
       } catch (error) {
         const err = error as { data?: { message?: string } }
         issueAlert({
@@ -529,7 +530,7 @@ export function EditListingV2() {
                     try {
                       await updateListing({ id: id!, updateListingRequest: { status: "cancelled" } }).unwrap()
                       issueAlert({ message: "Listing archived", severity: "success" })
-                      navigate("/market/manage")
+                      navigate(MARKET_PATHS.manage)
                     } catch { issueAlert({ message: "Failed to archive", severity: "error" }) }
                   }}
                 >
@@ -904,7 +905,7 @@ export function EditListingV2() {
               size="large"
               variant="outlined"
               color="secondary"
-              onClick={() => navigate(`/market/${id}`)}
+              onClick={() => navigate(MARKET_PATHS.listing(id!))}
             >
               {t("EditListingV2.cancel", "Cancel")}
             </Button>

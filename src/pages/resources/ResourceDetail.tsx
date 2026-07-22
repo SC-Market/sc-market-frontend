@@ -29,6 +29,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetResourceQuery } from "../../store/api/v2/market"
 import { Helmet } from "react-helmet"
 import { FRONTEND_URL } from "../../util/constants"
+import { MARKET_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
 
 export function ResourceDetail() {
   const { t } = useTranslation()
@@ -184,7 +185,7 @@ export function ResourceDetail() {
           )}
           <Button
             component={Link}
-            to={`/market?query=${encodeURIComponent(resource.resource_name)}`}
+            to={`${MARKET_PATHS.search}?query=${encodeURIComponent(resource.resource_name)}`}
             size="small"
             sx={{ mt: 1 }}
           >
@@ -254,7 +255,7 @@ export function ResourceDetail() {
                       key={bp.blueprint_id}
                       hover
                       sx={{ cursor: "pointer" }}
-                      onClick={() => navigate(`/blueprints/${bp.blueprint_name || bp.blueprint_id}`)}
+                      onClick={() => navigate(GAME_DATA_PATHS.blueprint(bp.blueprint_name || bp.blueprint_id))}
                     >
                       <TableCell>{bp.output_item_name || bp.blueprint_name}</TableCell>
                       <TableCell align="right">{bp.quantity_required}</TableCell>

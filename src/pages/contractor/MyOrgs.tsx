@@ -33,7 +33,11 @@ export function MyOrgs() {
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Join or create an organization to collaborate with others
           </Typography>
-          <Button variant="contained" component={RouterLink} to="/org/register">
+          <Button
+            variant="contained"
+            component={RouterLink}
+            to={ORG_PATHS.register}
+          >
             Create Organization
           </Button>
         </Card>

@@ -33,6 +33,7 @@ import { debounce } from "lodash-es"
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
 import type { MarketListing } from "../../../datatypes/MarketListing"
 import { useNavigate, useLocation } from "react-router-dom"
+import { MARKET_PATHS } from "../../../routes/paths"
 
 export function MarketSearchArea(props: {
   status?: boolean
@@ -126,9 +127,10 @@ export function MarketSearchArea(props: {
               value={viewMode}
               exclusive
               onChange={(_, newValue) => {
-                if (newValue === "market") navigate("/market")
-                else if (newValue === "bulk") navigate("/bulk")
-                else if (newValue === "buyorders") navigate("/buyorders")
+                if (newValue === "market") navigate(MARKET_PATHS.search)
+                else if (newValue === "bulk") navigate(MARKET_PATHS.bulk)
+                else if (newValue === "buyorders")
+                  navigate(MARKET_PATHS.buyOrders)
               }}
               fullWidth
               size="small"

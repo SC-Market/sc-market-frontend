@@ -40,6 +40,7 @@ function formatQty(scu: number | string): string {
 import { formatCraftingTime } from "../../constants/crafting"
 import { isModifierPositive, interpolateModifier, formatModifierValue, buildPropertyDefMap, propertyDisplayName } from "../../util/statDisplay"
 import { DetailPageSkeleton } from "./GameDataSkeletons"
+import { GAME_DATA_PATHS, USER_PATHS } from "../../routes/paths"
 
 interface Props {
   blueprintId: string | null
@@ -228,7 +229,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   {(missionsExpanded ? data.missions_rewarding : data.missions_rewarding.slice(0, 8)).map((m: MissionRewardingBlueprint) => (
                     <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ height: 22, cursor: "pointer" }}
-                      onClick={() => { onClose(); navigate(`/missions/${m.mission_id}`) }} />
+                      onClick={() => { onClose(); navigate(GAME_DATA_PATHS.mission(m.mission_id)) }} />
                   ))}
                   {data.missions_rewarding.length > 8 && (
                     <Chip
@@ -384,7 +385,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             {orgOwners?.members.length ? (
               <Stack spacing={0.75}>
                 {orgOwners.members.map((m) => (
-                  <Stack key={m.user_id} direction="row" spacing={1} alignItems="center" sx={{ cursor: "pointer" }} onClick={() => { onClose(); navigate(`/user/${m.username}`) }}>
+                  <Stack key={m.user_id} direction="row" spacing={1} alignItems="center" sx={{ cursor: "pointer" }} onClick={() => { onClose(); navigate(USER_PATHS.profile(m.username)) }}>
                     <Avatar src={m.avatar} sx={{ width: 32, height: 32, fontSize: "0.65rem" }}>{m.display_name.slice(0, 2).toUpperCase()}</Avatar>
                     <Box>
                       <Typography variant="body2" fontWeight={600} color="primary">{m.display_name}</Typography>

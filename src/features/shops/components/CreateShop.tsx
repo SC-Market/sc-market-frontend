@@ -21,6 +21,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { useCreateShopMutation } from "../../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { PATHS, SHOP_PATHS } from "../../../routes/paths"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -103,7 +104,7 @@ export function CreateShop() {
       }).unwrap()
 
       issueAlert({ message: "Shop created successfully!", severity: "success" })
-      navigate(`/shop/${result.slug}/settings`)
+      navigate(SHOP_PATHS.settings(result.slug))
     } catch (err) {
       issueAlert(err as { status: number; data: { message?: string } })
     }
@@ -115,7 +116,7 @@ export function CreateShop() {
     <Container maxWidth="md" sx={{ pt: 12, pb: 6 }}>
       <MuiLink
         component={Link}
-        to="/dashboard/shops"
+        to={PATHS.dashboardShops}
         underline="hover"
         sx={{ mb: 2, display: "inline-block" }}
       >

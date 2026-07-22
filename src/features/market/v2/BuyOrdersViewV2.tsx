@@ -33,6 +33,7 @@ import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BuyOrdersTableV2 } from "./components/BuyOrdersTableV2"
 import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar"
+import { MARKET_PATHS } from "../../../routes/paths"
 
 /**
  * BuyOrdersViewV2 — V2 buy orders browse page.
@@ -130,7 +131,7 @@ export function BuyOrdersViewV2() {
                   showCreateAction={false}
                   action={{
                     label: t("buyOrderActions.createBuyOrder", "Create Buy Order"),
-                    onClick: () => navigate("/buyorder/create"),
+                    onClick: () => navigate(MARKET_PATHS.buyOrderCreate),
                     variant: "contained" as const,
                   }}
                 />
@@ -271,7 +272,7 @@ function BuyOrderAggregateCard({
   return (
     <ListingWrapper useFixedWidth={false}>
       <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
-        <Link to={`/market/aggregate/${aggregate.item_id}`} style={{ textDecoration: "none", color: "inherit" }}>
+        <Link to={MARKET_PATHS.aggregate(aggregate.item_id)} style={{ textDecoration: "none", color: "inherit" }}>
           <CardActionArea sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
             <Card sx={{ height: 300, position: "relative" }}>
               <CardMedia

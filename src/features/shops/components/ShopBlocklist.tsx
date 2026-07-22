@@ -22,6 +22,7 @@ import { FormPaper } from "../../../components/paper/FormPaper"
 import { UserSearch } from "../../../components/search/UserSearch"
 import { Link } from "react-router-dom"
 import type { User } from "../../../datatypes/User"
+import { USER_PATHS } from "../../../routes/paths"
 
 export function ShopBlocklistSection({ shopId }: { shopId: string }) {
   const issueAlert = useAlertHook()
@@ -101,7 +102,7 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
               <ListItemButton
                 key={entry.id}
                 component={Link}
-                to={`/user/${entry.username}`}
+                to={USER_PATHS.profile(entry.username)}
                 dense
                 sx={{ borderRadius: 1 }}
               >

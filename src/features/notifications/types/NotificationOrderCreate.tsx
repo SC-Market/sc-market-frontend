@@ -9,6 +9,7 @@ import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
 import { formatPrice } from "../../../util/formatPrice"
+import { ORDER_PATHS, USER_PATHS } from "../../../routes/paths"
 
 interface OrderEntity {
   order_id: string
@@ -28,12 +29,12 @@ export function NotificationOrderCreate(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<CreateRoundedIcon />}
-      to={`/contract/${order.order_id}`}
+      to={ORDER_PATHS.contract(order.order_id)}
       notif={notif}
     >
       {t("notifications.new_order_placed_by")}{" "}
       <Link
-        to={`/user/${order.customer}`}
+        to={USER_PATHS.profile(order.customer)}
         style={{
           textDecoration: "none",
           color: theme.palette.secondary.main,

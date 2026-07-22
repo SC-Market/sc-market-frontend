@@ -25,6 +25,7 @@ import { getFactionIcon } from "../../util/gameIcons"
 import {
   UnifiedSearchBar, wikiItemsTokensToParams, wikiItemsParamsToTokens, type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
+import { WIKI_PATHS } from "../../routes/paths"
 
 const CARD_HEIGHT = 280
 const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
@@ -192,7 +193,7 @@ export function WikiItemBrowser() {
     pageSize: viewMode === "list" ? 30 : 24,
   })
 
-  const handleItemClick = (itemId: string) => navigate(`/wiki/items/${itemId}`)
+  const handleItemClick = (itemId: string) => navigate(WIKI_PATHS.item(itemId))
   const handlePageChange = (_: unknown, value: number) => {
     const params = new URLSearchParams(searchParams)
     params.set("page", String(value))

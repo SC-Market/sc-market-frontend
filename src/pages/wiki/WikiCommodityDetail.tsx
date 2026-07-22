@@ -20,6 +20,7 @@ import { formatPrice } from "../../util/formatPrice"
 import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded, ShoppingCart } from "@mui/icons-material"
 import { useSearchOresQuery } from "../../store/api/v2/market"
 import { FRONTEND_URL } from "../../util/constants"
+import { WIKI_PATHS, MARKET_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
 
 function BoolChip({ value, label }: { value: boolean; label: string }) {
   return (
@@ -53,18 +54,18 @@ export function WikiCommodityDetail() {
 
   const seoTitle = r ? `${r.resource_name} — Star Citizen Commodity | SC Market` : "Commodity Detail | SC Market"
   const seoDescription = r ? `${r.resource_name} — ${r.resource_category} commodity. ${acquisitionMethods || "Various acquisition methods"}. View mining locations, market price, and quality tiers.`.slice(0, 160) : ""
-  const canonicalUrl = `${FRONTEND_URL}/wiki/commodities/${id}`
+  const canonicalUrl = `${FRONTEND_URL}${WIKI_PATHS.commodity(id!)}`
   const ogImage = r?.resource_icon || `${FRONTEND_URL}/logo512.png`
 
   return (
     <StandardPageLayout
       title={seoTitle}
       description={seoDescription}
-      canonicalUrl={`/wiki/commodities/${id}`}
+      canonicalUrl={WIKI_PATHS.commodity(id!)}
       headerTitle={r?.resource_name || t("wiki.commodityDetail.headerTitle", "Commodity Detail")}
       breadcrumbs={[
-        { label: t("wiki.commodityDetail.breadcrumbWiki", "Wiki"), href: "/wiki" },
-        { label: t("wiki.commodityDetail.breadcrumbCommodities", "Commodities"), href: "/wiki/commodities" },
+        { label: t("wiki.commodityDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub },
+        { label: t("wiki.commodityDetail.breadcrumbCommodities", "Commodities"), href: WIKI_PATHS.commodities },
         { label: r?.resource_name || t("wiki.commodityDetail.breadcrumbDetail", "Detail") },
       ]}
       isLoading={isLoading}
@@ -151,7 +152,7 @@ export function WikiCommodityDetail() {
                     size="small"
                     variant="outlined"
                     startIcon={<ShoppingCart />}
-                    onClick={() => navigate(`/market?item=${encodeURIComponent(r.resource_name)}`)}
+                    onClick={() => navigate(`${MARKET_PATHS.search}?item=${encodeURIComponent(r.resource_name)}`)}
                   >
                     {t("wiki.commodityDetail.viewOnMarket", "View on Market")}
                   </Button>
@@ -232,7 +233,7 @@ export function WikiCommodityDetail() {
                           label={bp.output_item_name || bp.blueprint_name}
                           size="small"
                           sx={{ cursor: "pointer", height: 24 }}
-                          onClick={() => navigate(`/blueprints/${bp.blueprint_id}`)}
+                          onClick={() => navigate(GAME_DATA_PATHS.blueprint(bp.blueprint_id))}
                         />
                       ))}
                     </Stack>

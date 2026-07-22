@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { Inventory2Outlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+import { MARKET_PATHS } from "../../routes/paths"
 
 export interface EmptyListingsProps extends Omit<
   EmptyStateProps,
@@ -113,7 +114,7 @@ export function EmptyListings({
         label: t("emptyStates.listings.createListing", {
           defaultValue: "Create Listing",
         }),
-        onClick: () => navigate("/market/create"),
+        onClick: () => navigate(MARKET_PATHS.create),
         variant: "contained" as const,
       }
     : undefined

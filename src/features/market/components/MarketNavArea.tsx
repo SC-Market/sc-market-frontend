@@ -21,6 +21,7 @@ import { Stack } from "@mui/system"
 import { useMarketSidebar } from ".."
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { PATHS } from "../../../routes/paths"
 
 export function MarketNavEntry(
   props: { title: string; children: React.ReactElement } & PaperProps,
@@ -171,7 +172,7 @@ export function MarketNavArea(props: { top?: boolean }) {
               <Stack direction="row" spacing={theme.layoutSpacing.compact}>
                 <Button
                   component={RouterLink}
-                  to="/login"
+                  to={PATHS.login}
                   variant="outlined"
                   color="primary"
                 >
@@ -179,7 +180,7 @@ export function MarketNavArea(props: { top?: boolean }) {
                 </Button>
                 <Button
                   component={RouterLink}
-                  to="/signup"
+                  to={PATHS.signup}
                   variant="contained"
                   color="primary"
                 >

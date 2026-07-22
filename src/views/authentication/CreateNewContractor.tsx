@@ -16,6 +16,7 @@ import { isAlphaNumeric } from "./AuthenticateRSI"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "../../components/settings/LanguageSelector"
+import { ORG_PATHS } from "../../routes/paths"
 
 export const fallback_image =
   "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
@@ -64,7 +65,7 @@ export function CreateNewContractor() {
             }),
             severity: "success",
           })
-          navigate(`/contractor/~${contractorIdentifier}`)
+          navigate(ORG_PATHS.profile(`~${contractorIdentifier}`))
         })
         .catch((error) => {
           issueAlert(error)

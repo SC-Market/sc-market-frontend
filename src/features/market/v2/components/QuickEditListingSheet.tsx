@@ -35,6 +35,7 @@ import {
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MARKET_PATHS } from "../../../../routes/paths"
 
 interface QuickEditListingSheetProps {
   listing: MyListingItem | null
@@ -95,7 +96,7 @@ export function QuickEditListingSheet({
   const handleOpenFullEditor = useCallback(() => {
     if (!listing) return
     onClose()
-    navigate(`/market_edit/${listing.listing_id}`)
+    navigate(MARKET_PATHS.edit(listing.listing_id))
   }, [listing, navigate, onClose])
 
   if (!listing) return null

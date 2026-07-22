@@ -18,6 +18,7 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
+import { ORDER_PATHS } from "../../../routes/paths"
 import { convertAvailability } from "../../../pages/availability/Availability.lazy"
 import type { Service, PaymentType } from "../domain/types"
 import type { OrderLimits } from "../domain/types"
@@ -188,7 +189,7 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
           const newWindow = window.open(`https://discord.gg/${data.discord_invite}`, "_blank")
           if (newWindow) newWindow.focus()
         }
-        navigate(`/offer/${data.session_id}`)
+        navigate(ORDER_PATHS.offer(data.session_id))
       })
       .catch((err) => issueAlert(err))
   }, [createOrder, contractor_id, assigned_to, service, issueAlert, state, navigate, t])

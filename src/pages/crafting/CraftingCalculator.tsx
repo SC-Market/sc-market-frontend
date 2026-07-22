@@ -36,6 +36,7 @@ import { QualityBandSelect } from "../../components/game-data/QualityBandSelect"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 const TIER_COLORS: Record<number, "default" | "success" | "info" | "secondary" | "warning"> = {
   1: "default", 2: "success", 3: "info", 4: "secondary", 5: "warning",
@@ -502,7 +503,7 @@ export function CraftingCalculator() {
               <Stack spacing={1}>
                 {craftableResults.map((bp) => (
                   <Paper key={bp.blueprint_id} variant="outlined" sx={{ p: 1.5, cursor: "pointer", "&:hover": { bgcolor: "action.hover" } }}
-                    onClick={() => navigate(`/blueprints/${bp.blueprint_name}`)}>
+                    onClick={() => navigate(GAME_DATA_PATHS.blueprint(bp.blueprint_name))}>
                     <Stack direction="row" spacing={1.5} alignItems="center">
                       {bp.output_item_icon && <Box component="img" src={bp.output_item_icon} sx={{ width: 32, height: 32, objectFit: "contain" }} />}
                       <Box sx={{ flex: 1 }}>

@@ -9,6 +9,7 @@ import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
 import { formatPrice } from "../../../util/formatPrice"
+import { ORDER_PATHS, USER_PATHS } from "../../../routes/paths"
 
 interface OfferEntity {
   id?: string
@@ -71,14 +72,14 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<CreateRoundedIcon />}
-      to={`/offer/${sessionId}`}
+      to={ORDER_PATHS.offer(sessionId as string)}
       notif={notif}
     >
       {notif.action === "offer_create"
         ? t("notifications.new_offer_received_from")
         : t("notifications.counter_offer_received_from")}{" "}
       <Link
-        to={`/user/${offer.customer.username}`}
+        to={USER_PATHS.profile(offer.customer.username)}
         style={{
           textDecoration: "none",
           color: theme.palette.secondary.main,

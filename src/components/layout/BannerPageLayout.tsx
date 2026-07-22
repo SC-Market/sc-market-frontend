@@ -11,6 +11,7 @@ import { ErrorPage } from "../../pages/errors/ErrorPage"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { ORG_PATHS } from "../../routes/paths"
 
 export interface BreadcrumbItem {
   label: string
@@ -88,7 +89,7 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
       breadcrumbs[0],
       {
         label: primaryContractor.name || primaryContractor.spectrum_id,
-        href: `/contractor/${primaryContractor.spectrum_id}`,
+        href: ORG_PATHS.profile(primaryContractor.spectrum_id),
       },
       ...breadcrumbs.slice(1),
     ]

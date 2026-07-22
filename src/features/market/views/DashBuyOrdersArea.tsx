@@ -26,6 +26,7 @@ import {
 } from "../../../components/table/PaginatedTable"
 import { EmptyState } from "../../../components/empty-states"
 import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
+import { MARKET_PATHS } from "../../../routes/paths"
 
 /** Row shape for the buy orders table (flattened from aggregate + buy_order) */
 export interface BuyOrderDashboardRow {
@@ -213,7 +214,7 @@ export function BuyOrderRow(props: {
     <TableRow
       hover
       component={Link}
-      to={`/market/aggregate/${row.game_item_id ?? ""}`}
+      to={MARKET_PATHS.aggregate(row.game_item_id ?? "")}
       tabIndex={-1}
       sx={{
         textDecoration: "none",
@@ -412,7 +413,7 @@ export function BuyOrdersViewPaginated() {
           <Box sx={{ flex: 1, minWidth: 0 }} />
           <Button
             component={Link}
-            to="/buyorders"
+            to={MARKET_PATHS.buyOrders}
             variant="outlined"
             size="small"
             sx={{ flexShrink: 0 }}

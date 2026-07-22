@@ -5,6 +5,7 @@ import { useCheckContractorOrderLimitsQuery, useCheckUserOrderLimitsQuery } from
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { ORDER_PATHS } from "../../../routes/paths"
 import type { OrderKind, PaymentType } from "../../orders/domain/types"
 import type { PublicContract } from "../domain/types"
 
@@ -36,7 +37,7 @@ export function useContractOfferForm(contract: PublicContract) {
     }).unwrap()
       .then((data) => {
         issueAlert({ message: t("createPublicContract.submitted"), severity: "success" })
-        navigate(`/offer/${data.session_id}`)
+        navigate(ORDER_PATHS.offer(data.session_id))
       })
       .catch((error: UnwrappedErrorInterface) => {
         if (error?.error?.code === "ORDER_LIMIT_VIOLATION") {

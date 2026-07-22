@@ -38,6 +38,7 @@ import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { DiceD20 } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
+import { ORG_PATHS } from "../../routes/paths"
 
 export const contractorKindIcons = {
   freight: <LocalShippingRoundedIcon />,
@@ -74,7 +75,7 @@ export const ContractorListItem = React.memo(
     return (
       <Grid item xs={12} lg={12}>
         <Link
-          to={`/contractor/${contractor.spectrum_id}`}
+          to={ORG_PATHS.profile(contractor.spectrum_id)}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <Fade
@@ -144,7 +145,7 @@ export const ContractorListItem = React.memo(
                     title={
                       <MaterialLink
                         component={Link}
-                        to={`/contractor/${contractor.spectrum_id}`}
+                        to={ORG_PATHS.profile(contractor.spectrum_id)}
                         style={{ textDecoration: "none", color: "inherit" }}
                       >
                         <UnderlineLink

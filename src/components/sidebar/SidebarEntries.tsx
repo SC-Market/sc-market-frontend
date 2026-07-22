@@ -47,6 +47,15 @@ import React from "react"
 import { SidebarSectionProps } from "./types"
 import { Pistol } from "mdi-material-ui"
 import { ModerationSidebarEntry } from "./ModerationSidebarEntry"
+import {
+  PATHS,
+  SHOP_PATHS,
+  MARKET_PATHS,
+  ORDER_PATHS,
+  WIKI_PATHS,
+  GAME_DATA_PATHS,
+  ADMIN_PATHS,
+} from "../../routes/paths"
 
 export const all_sidebar_entries: SidebarSectionProps[] = [
   {
@@ -58,30 +67,30 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         tab_key: "market",
         children: [
           {
-            to: "/market",
+            to: MARKET_PATHS.search,
             text: "sidebar.everything",
             icon: <HomeRounded />,
           },
           {
-            to: "/market/category/weapon",
+            to: MARKET_PATHS.category("weapon"),
             params: "type=weapon",
             text: "sidebar.weapons",
             icon: <Pistol />,
           },
           {
-            to: "/market/category/armor",
+            to: MARKET_PATHS.category("armor"),
             text: "sidebar.armor",
             params: "type=armor",
             icon: <ShieldRounded />,
           },
           {
-            to: "/market/category/component",
+            to: MARKET_PATHS.category("component"),
             text: "sidebar.components",
             params: "type=component",
             icon: <CableRounded />,
           },
           {
-            to: "/buyorders",
+            to: MARKET_PATHS.buyOrders,
             text: "sidebar.buy_orders",
             icon: <RequestQuoteRounded />,
           },
@@ -89,23 +98,23 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       },
 
       {
-        to: "/market/services",
+        to: MARKET_PATHS.services,
         text: "sidebar.contractor_services", tab_key: "services",
         icon: <DesignServicesRounded />,
       },
       {
-        to: "/shops",
+        to: SHOP_PATHS.directory,
         text: "sidebar.browse_shops",
         icon: <StoreRounded />,
       },
       {
-        to: "/contracts",
+        to: PATHS.contracts,
         text: "sidebar.open_contracts", tab_key: "contracts",
         icon: <AssignmentIcon />,
         custom: false,
       },
       {
-        to: "/contracts",
+        to: PATHS.contracts,
         text: "sidebar.open_contracts", tab_key: "contracts",
         icon: <AssignmentIcon />,
         custom: true,
@@ -124,13 +133,13 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     title: "sidebar.orders.title",
     items: [
       {
-        to: "/orders",
+        to: PATHS.myOrders,
         text: "sidebar.orders_ive_placed",
         icon: <CreateIcon />,
         logged_in: true,
       },
       {
-        to: "/dashboard",
+        to: PATHS.dashboard,
         text: "sidebar.orders_assigned_to_me", tab_key: "orders_assigned",
         icon: <AssignmentTurnedInRounded />,
         logged_in: true,
@@ -138,7 +147,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         orgRouteRest: "dashboard",
       },
       {
-        to: "/dashboard",
+        to: PATHS.dashboard,
         text: "sidebar.orders_assigned_to_me", tab_key: "orders_assigned",
         icon: <AssignmentTurnedInRounded />,
         logged_in: true,
@@ -154,7 +163,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         orgRouteRest: "orders",
       },
       {
-        to: "/messages",
+        to: PATHS.messages,
         text: "sidebar.messaging", tab_key: "messaging",
         icon: <ForumRoundedIcon />,
         logged_in: true,
@@ -165,19 +174,19 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     title: "sidebar.dashboard.title",
     items: [
       {
-        to: "/dashboard/shops",
+        to: PATHS.dashboardShops,
         text: "sidebar.my_shops", tab_key: "my_shops",
         icon: <StoreRounded />,
         logged_in: true,
       },
       {
-        to: "/inventory",
+        to: PATHS.inventory,
         text: "sidebar.inventory", tab_key: "inventory",
         icon: <InventoryRounded />,
         logged_in: true,
       },
       {
-        to: "/availability",
+        to: PATHS.availability,
         text: "sidebar.availability", tab_key: "availability",
         icon: <CalendarMonthRounded />,
         logged_in: true,
@@ -188,7 +197,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     title: "sidebar.manage.title",
     items: [
       {
-        to: "/market/manage",
+        to: MARKET_PATHS.manage,
         text: "sidebar.manage_market_listings", tab_key: "manage_listings",
         icon: <ListAltRounded />,
         logged_in: true,
@@ -196,7 +205,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         requiresShop: true,
       },
       {
-        to: "/market/manage-stock",
+        to: MARKET_PATHS.manageStock,
         text: "sidebar.manage_stock", tab_key: "manage_stock",
         icon: <WarehouseRounded />,
         logged_in: true,
@@ -204,7 +213,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         requiresShop: true,
       },
       {
-        to: "/order/services",
+        to: ORDER_PATHS.services,
         text: "sidebar.manage_services", tab_key: "manage_services",
         icon: <DashboardCustomizeRounded />,
         logged_in: true,
@@ -225,19 +234,19 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     title: "sidebar.organizations.title",
     items: [
       {
-        to: "/my-orgs",
+        to: PATHS.myOrgs,
         text: "sidebar.my_orgs",
         icon: <ManageAccountsRounded />,
         logged_in: true,
       },
       {
-        to: "/contractors",
+        to: PATHS.contractors,
         text: "sidebar.contractors",
         icon: <BusinessIcon />,
         custom: false,
       },
       {
-        to: "/recruiting",
+        to: PATHS.recruiting,
         text: "sidebar.recruiting", tab_key: "recruiting",
         icon: <PersonAddRounded />,
         custom: false,
@@ -249,7 +258,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       //     custom: true,
       // },
       {
-        to: "/org/register",
+        to: PATHS.orgRegister,
         text: "sidebar.register",
         icon: <CreateIcon />,
         org: false,
@@ -264,13 +273,13 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         text: "sidebar.gameData.missions",
         icon: <ExploreRounded />,
         tab_key: "missions",
-        to: "/missions",
+        to: GAME_DATA_PATHS.missions,
       },
       {
         text: "Mining",
         icon: <HardwareRounded />,
         tab_key: "mining",
-        to: "/mining",
+        to: GAME_DATA_PATHS.mining,
       },
       {
         text: "sidebar.gameData.crafting",
@@ -280,28 +289,28 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
           {
             text: "sidebar.gameData.blueprints",
             icon: <ConstructionRounded />,
-            to: "/blueprints",
+            to: GAME_DATA_PATHS.blueprints,
           },
           {
             text: "sidebar.gameData.craftingCalculator",
             icon: <ScienceRounded />,
-            to: "/crafting/calculator",
+            to: GAME_DATA_PATHS.craftingCalculator,
           },
           {
             text: "sidebar.gameData.resources",
             icon: <TerrainRounded />,
-            to: "/resources",
+            to: GAME_DATA_PATHS.resources,
           },
           {
             text: "Shopping Lists",
             icon: <ChecklistRounded />,
-            to: "/shopping-lists",
+            to: PATHS.shoppingLists,
             logged_in: true,
           },
           {
             text: "sidebar.gameData.blueprintInventory",
             icon: <InventoryRounded />,
-            to: "/blueprints/inventory",
+            to: GAME_DATA_PATHS.blueprintInventory,
             logged_in: true,
           },
         ],
@@ -315,32 +324,32 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
           {
             text: "sidebar.wiki.items",
             icon: <MenuBookRounded />,
-            to: "/wiki/items",
+            to: WIKI_PATHS.items,
           },
           {
             text: "sidebar.wiki.vehicles",
             icon: <RocketLaunchRounded />,
-            to: "/wiki/ships",
+            to: WIKI_PATHS.ships,
           },
           {
             text: "sidebar.wiki.commodities",
             icon: <CategoryRounded />,
-            to: "/wiki/commodities",
+            to: WIKI_PATHS.commodities,
           },
           {
             text: "sidebar.wiki.locations",
             icon: <PublicRounded />,
-            to: "/wiki/locations",
+            to: WIKI_PATHS.locations,
           },
           {
             text: "sidebar.wiki.manufacturers",
             icon: <BusinessCenterRounded />,
-            to: "/wiki/manufacturers",
+            to: WIKI_PATHS.manufacturers,
           },
           {
             text: "Refining Methods",
             icon: <ScienceRounded />,
-            to: "/wiki/refinery",
+            to: WIKI_PATHS.refinery,
           },
         ],
       },
@@ -358,25 +367,25 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             text: "sidebar.users",
             icon: <PeopleAltIcon />,
             site_admin: true,
-            to: "/admin/users",
+            to: ADMIN_PATHS.users,
           },
           {
             text: "sidebar.market.text",
             icon: <GavelIcon />,
             site_admin: true,
-            to: "/admin/market",
+            to: ADMIN_PATHS.market,
           },
           {
             text: "sidebar.orders.text",
             icon: <CreateIcon />,
             site_admin: true,
-            to: "/admin/orders",
+            to: ADMIN_PATHS.orders,
           },
           {
             text: "sidebar.premium.text",
             icon: <StarRounded />,
             site_admin: true,
-            to: "/admin/premium",
+            to: ADMIN_PATHS.premium,
           },
           {
             text: "sidebar.migration",
@@ -396,23 +405,23 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             icon: (
               <ModerationSidebarEntry
                 text="sidebar.moderation.text"
-                to="/admin/moderation"
+                to={ADMIN_PATHS.moderation}
               />
             ),
             site_admin: true,
-            to: "/admin/moderation",
+            to: ADMIN_PATHS.moderation,
           },
           {
             text: "sidebar.audit_logs.text",
             icon: <SecurityRounded />,
             site_admin: true,
-            to: "/admin/audit-logs",
+            to: ADMIN_PATHS.auditLogs,
           },
           {
             text: "sidebar.alerts.text",
             icon: <NotificationsIcon />,
             site_admin: true,
-            to: "/admin/alerts",
+            to: ADMIN_PATHS.alerts,
           },
         ],
       },
@@ -425,25 +434,25 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             text: "sidebar.attribute_definitions.text",
             icon: <CreateIcon />,
             site_admin: true,
-            to: "/admin/attribute-definitions",
+            to: ADMIN_PATHS.attributeDefinitions,
           },
           {
             text: "sidebar.game_item_attributes.text",
             icon: <CreateIcon />,
             site_admin: true,
-            to: "/admin/game-item-attributes",
+            to: ADMIN_PATHS.gameItemAttributes,
           },
           {
             text: "sidebar.import_monitoring.text",
             icon: <CloudDownloadRounded />,
             site_admin: true,
-            to: "/admin/import-monitoring",
+            to: ADMIN_PATHS.importMonitoring,
           },
           {
             text: "sidebar.game_data_import.text",
             icon: <RocketLaunchRounded />,
             site_admin: true,
-            to: "/admin/game-data-import",
+            to: ADMIN_PATHS.gameDataImport,
           },
         ],
       },
@@ -456,13 +465,13 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             text: "sidebar.feature_flags.text",
             icon: <ToggleOnRounded />,
             site_admin: true,
-            to: "/admin/feature-flags",
+            to: ADMIN_PATHS.featureFlags,
           },
           {
             text: "sidebar.notification_test.text",
             icon: <NotificationsIcon />,
             site_admin: true,
-            to: "/admin/notification-test",
+            to: ADMIN_PATHS.notificationTest,
           },
         ],
       },

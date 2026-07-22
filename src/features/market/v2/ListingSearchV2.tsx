@@ -60,6 +60,7 @@ import { AdCard } from "../../../components/ads/AdCard";
 import type { AdConfig } from "../../../components/ads/types";
 import { MARKET_ADS } from "../../../components/ads/adConfig";
 import { formatMarketUrl } from "../domain/urls";
+import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag";
 import { GroupedListingGrid } from "./redesign/GroupedListingGrid";
 
@@ -466,8 +467,8 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
               value={viewMode}
               exclusive
               onChange={(_, newValue) => {
-                if (newValue === 'market') navigate('/market');
-                else if (newValue === 'buyorders') navigate('/buyorders');
+                if (newValue === 'market') navigate(MARKET_PATHS.search);
+                else if (newValue === 'buyorders') navigate(MARKET_PATHS.buyOrders);
               }}
               fullWidth
               size="small"
@@ -1218,7 +1219,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        navigate(`/shops/${listing.shop_slug}`);
+                        navigate(SHOP_PATHS.profile(listing.shop_slug));
                       }}
                       sx={{
                         overflowX: "hidden",

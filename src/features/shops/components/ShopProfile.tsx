@@ -61,6 +61,7 @@ import {
   prioritizeBadges,
 } from "../../../util/badges"
 import { BadgeDisplay } from "../../../components/rating/ListingRating"
+import { SHOP_PATHS, ORG_PATHS, USER_PATHS } from "../../../routes/paths"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -86,7 +87,7 @@ export function ShopProfile() {
 
   const seoDescription = `${shop.name} — ${shop.tags?.join(", ") || "Star Citizen"} shop on SC Market.${shop.description ? ` ${shop.description.slice(0, 100)}` : ""}`
   const seoImage = shop.banner_url || shop.logo_url || ""
-  const canonicalUrl = `${FRONTEND_URL}/shops/${shop.slug}`
+  const canonicalUrl = `${FRONTEND_URL}${SHOP_PATHS.profile(shop.slug)}`
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -174,8 +175,8 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
 
   const ownerLink = shop.owner
     ? shop.owner.type === "contractor"
-      ? `/contractor/${shop.owner.slug}`
-      : `/user/${shop.owner.slug}`
+      ? ORG_PATHS.profile(shop.owner.slug)
+      : USER_PATHS.profile(shop.owner.slug)
     : null
 
   const memberSince = new Date(shop.created_at).toLocaleDateString(undefined, {
@@ -410,28 +411,28 @@ function ShopTabs(props: { slug: string; currentTab: number; shop: ShopPublicRes
         <HapticTab
           label="Listings"
           component={Link}
-          to={`/shops/${props.slug}`}
+          to={SHOP_PATHS.profile(props.slug)}
           icon={<StorefrontRounded />}
           {...a11yProps(0)}
         />
         <HapticTab
           label="Services"
           component={Link}
-          to={`/shops/${props.slug}/services`}
+          to={SHOP_PATHS.profileTab(props.slug, "services")}
           icon={<DesignServicesRounded />}
           {...a11yProps(1)}
         />
         <HapticTab
           label="Reviews"
           component={Link}
-          to={`/shops/${props.slug}/reviews`}
+          to={SHOP_PATHS.profileTab(props.slug, "reviews")}
           icon={<StarRounded />}
           {...a11yProps(2)}
         />
         <HapticTab
           label="About"
           component={Link}
-          to={`/shops/${props.slug}/about`}
+          to={SHOP_PATHS.profileTab(props.slug, "about")}
           icon={<InfoRounded />}
           {...a11yProps(3)}
         />
@@ -439,7 +440,7 @@ function ShopTabs(props: { slug: string; currentTab: number; shop: ShopPublicRes
           <HapticTab
             label="Order"
             component={Link}
-            to={`/shops/${props.slug}/order`}
+            to={SHOP_PATHS.profileTab(props.slug, "order")}
             icon={<CreateRounded />}
             {...a11yProps(4)}
           />
@@ -633,12 +634,12 @@ function ShopReviewRow(props: {
       <TableCell component="th" id={labelId} scope="row">
         <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item>
-            <Link to={`/user/${row.author.username}`}>
+            <Link to={USER_PATHS.profile(row.author.username)}>
               <Avatar src={row.author.avatar || undefined} />
             </Link>
           </Grid>
           <Grid item>
-            <Link to={`/user/${row.author.username}`}>
+            <Link to={USER_PATHS.profile(row.author.username)}>
               <UnderlineLink
                 color="text.secondary"
                 variant="subtitle1"
@@ -786,8 +787,8 @@ function OwnerCard(props: { owner: NonNullable<ShopPublicResponse["owner"]> }) {
   const theme = useTheme<ExtendedTheme>()
   const ownerLink =
     owner.type === "contractor"
-      ? `/contractor/${owner.slug}`
-      : `/user/${owner.slug}`
+      ? ORG_PATHS.profile(owner.slug)
+      : USER_PATHS.profile(owner.slug)
 
   return (
     <Box

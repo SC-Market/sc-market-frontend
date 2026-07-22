@@ -24,6 +24,7 @@ import { Link as RouterLink } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import { HapticIconButton } from "../haptic"
 import { PreferencesIconButton } from "../../views/settings/PreferencesIconButton"
+import { AUTH_PATHS } from "../../routes/paths"
 
 export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
@@ -149,7 +150,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
           >
             <Button
               component={RouterLink}
-              to="/login"
+              to={AUTH_PATHS.login}
               variant="outlined"
               color="primary"
               size="small"
@@ -158,7 +159,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             </Button>
             <Button
               component={RouterLink}
-              to="/signup"
+              to={AUTH_PATHS.signup}
               variant="contained"
               color="primary"
               size="small"
@@ -171,7 +172,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
           <Stack direction="row" spacing={theme.layoutSpacing.compact}>
             <Button
               component={RouterLink}
-              to="/login"
+              to={AUTH_PATHS.login}
               variant="outlined"
               color="primary"
             >
@@ -179,7 +180,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             </Button>
             <Button
               component={RouterLink}
-              to="/signup"
+              to={AUTH_PATHS.signup}
               variant="contained"
               color="primary"
             >

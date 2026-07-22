@@ -7,6 +7,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import LoadingBar from "react-top-loading-bar"
 import { Navigate } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
+import { PATHS } from "../../routes/paths"
 
 /**
  * When rendered under a route with :contractor_id (e.g. /org/:contractor_id/manage),
@@ -61,19 +62,19 @@ export function OrgContextFromRoute() {
   }, [contractor_id, contractor, isSuccess, profile, setCurrentOrg, setCookie])
 
   if (!contractor_id) {
-    return <Navigate to="/" replace />
+    return <Navigate to={PATHS.home} replace />
   }
   if (isLoading) {
     return <LoadingBar color={theme.palette.primary.main} progress={0.5} />
   }
   if (isError || !contractor) {
-    return <Navigate to="/" replace />
+    return <Navigate to={PATHS.home} replace />
   }
   if (contractor.archived) {
-    return <Navigate to="/" replace />
+    return <Navigate to={PATHS.home} replace />
   }
   if (!profile?.contractors.some((c) => c.spectrum_id === contractor_id)) {
-    return <Navigate to="/" replace />
+    return <Navigate to={PATHS.home} replace />
   }
 
   if (!ready) {

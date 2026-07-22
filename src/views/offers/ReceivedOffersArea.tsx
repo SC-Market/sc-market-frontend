@@ -69,6 +69,7 @@ import { OfferRowSkeleton } from "../../components/skeletons"
 import { useAssignOfferMutation } from "../../features/offers/api/offerApi"
 import { has_permission } from "../contractor/OrgRoles"
 import { useOfferSearch } from "../../features/offers/hooks/useOfferSearch"
+import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
 
 // Map for all statuses
 import { normalizeOfferStatus } from "../../features/offers/domain/types"
@@ -194,7 +195,7 @@ export function OfferRow(props: {
       onClick(event as React.MouseEvent<Element>)
     } else if (!enableSelection) {
       // Navigation mode - navigate to offer
-      navigate(`/offer/${row.id}`)
+      navigate(ORDER_PATHS.offer(row.id))
     }
   }
 
@@ -272,7 +273,7 @@ export function OfferRow(props: {
           isInSelectionMode
             ? handleRowClick
             : isMobile && enableSelection
-              ? () => navigate(`/offer/${row.id}`)
+              ? () => navigate(ORDER_PATHS.offer(row.id))
               : undefined
         }
         sx={{
@@ -318,7 +319,7 @@ export function OfferRow(props: {
           </Paper>
           <Stack direction={"column"} sx={{ flex: 1, minWidth: 0 }}>
             <Link
-              to={`/offer/${row.id}`}
+              to={ORDER_PATHS.offer(row.id)}
               style={{ textDecoration: "none", color: "inherit" }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -358,7 +359,7 @@ export function OfferRow(props: {
                   variant="caption"
                   color="primary"
                   component={Link}
-                  to={`/shops/${row.shop.slug}`}
+                  to={SHOP_PATHS.profile(row.shop.slug)}
                   onClick={(e: React.MouseEvent) => e.stopPropagation()}
                   sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" }, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", display: "block" }}
                 >
@@ -385,7 +386,7 @@ export function OfferRow(props: {
             )}
             <MaterialLink
               component={Link}
-              to={`/shops/${row.shop.slug}`}
+              to={SHOP_PATHS.profile(row.shop.slug)}
               underline="hover"
               color="text.secondary"
               variant="body2"
