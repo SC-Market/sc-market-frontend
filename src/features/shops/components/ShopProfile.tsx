@@ -312,8 +312,11 @@ function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
     return vals.map((v) => (max > 0 ? (v / max) * 100 : 0))
   }, [reviewsData])
 
-  // Compute badges from shop metrics when available
+  // Prefer server-computed badge_ids; fall back to client-side metrics calc
   const shopBadges = useMemo(() => {
+    if (shop.badge_ids && shop.badge_ids.length > 0) {
+      return prioritizeBadges(shop.badge_ids)
+    }
     const metrics = (shop as ShopPublicResponseWithMetrics).metrics
     if (!metrics) return []
     return prioritizeBadges(

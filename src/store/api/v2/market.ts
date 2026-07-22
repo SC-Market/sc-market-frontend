@@ -3302,6 +3302,8 @@ export type ShopResponse = {
   created_at: string
   updated_at: string
   banner_url: string | null
+  /** Seller reputation badges, computed server-side from shop metrics + owner data */
+  badge_ids: string[]
   /** Granular permissions for the current user on this shop (only in /shops/mine) */
   permissions?: {
     manage_orders: boolean
@@ -3348,6 +3350,8 @@ export type ShopPublicResponse = {
   created_at: string
   rating: number | null
   rating_count: number
+  /** Seller reputation badges, computed server-side from shop metrics + owner data */
+  badge_ids: string[]
   /** Owner information — link to user profile or org page (included in detail view) */
   owner?: ShopOwnerInfo
   /** Number of active listings in this shop */
@@ -3979,6 +3983,8 @@ export type ListingSearchResult = {
   shop_rating: number
   /** Shop rating count */
   shop_rating_count: number
+  /** Shop seller reputation badges, computed server-side */
+  shop_badge_ids: string[]
   /** Shop supported languages (ISO 639-1 codes) */
   shop_languages: string[]
   /** Minimum price across all variants */
