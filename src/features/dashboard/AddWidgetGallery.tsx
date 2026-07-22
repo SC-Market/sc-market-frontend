@@ -19,6 +19,9 @@ import {
   MenuItem,
   Select,
   Stack,
+  TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from "@mui/material"
 import AddIcon from "@mui/icons-material/Add"
@@ -127,6 +130,9 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
   const [scopeKind, setScopeKind] = useState<WidgetScopeKind>("me")
   const [targetId, setTargetId] = useState<string>("")
   const [selectedItem, setSelectedItem] = useState<GameItemChoice | null>(null)
+  // Listings-source widgets: pick "search" (free text) or "item" (specific item).
+  const [sourceMode, setSourceMode] = useState<"search" | "item">("search")
+  const [searchQuery, setSearchQuery] = useState("")
 
   // Restrict the scope picker to what makes sense for the dashboard owner.
   const ownerScopeAllowlist = useMemo<WidgetScopeKind[] | null>(() => {
@@ -170,6 +176,8 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
     setScopeKind(allowed[0] ?? "me")
     setTargetId("")
     setSelectedItem(null)
+    setSourceMode("search")
+    setSearchQuery("")
   }
 
   const buildScope = (): WidgetScope | null => {
@@ -195,11 +203,28 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
 
   // Widgets that pin to a game item (e.g. Price History) store it in settings.
   const requiresItem = definition?.requiresItem ?? false
-  const settings: DashboardWidget["settings"] | undefined =
-    requiresItem && selectedItem
+  // Widgets with a listings source (e.g. Listings Preview) store either a
+  // free-text query or a specific item, depending on the chosen source mode.
+  const requiresListingsSource = definition?.requiresListingsSource ?? false
+
+  const settings: DashboardWidget["settings"] | undefined = requiresItem
+    ? selectedItem
       ? { gameItemId: selectedItem.id, gameItemName: selectedItem.name }
       : undefined
-  const canAdd = !!scope && (!requiresItem || !!selectedItem)
+    : requiresListingsSource
+      ? sourceMode === "item"
+        ? selectedItem
+          ? { gameItemId: selectedItem.id, gameItemName: selectedItem.name }
+          : undefined
+        : searchQuery.trim()
+          ? { query: searchQuery.trim() }
+          : undefined
+      : undefined
+
+  const canAdd =
+    !!scope &&
+    (!requiresItem || !!selectedItem) &&
+    (!requiresListingsSource || !!settings)
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -304,6 +329,50 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
                   value={selectedItem}
                   onChange={setSelectedItem}
                 />
+              )}
+
+              {requiresListingsSource && (
+                <Stack spacing={1.5}>
+                  <ToggleButtonGroup
+                    size="small"
+                    exclusive
+                    fullWidth
+                    color="primary"
+                    value={sourceMode}
+                    onChange={(_, next) => {
+                      if (next) setSourceMode(next)
+                    }}
+                  >
+                    <ToggleButton value="search">
+                      {t("dashboard.listingsPreview.bySearch", "By search")}
+                    </ToggleButton>
+                    <ToggleButton value="item">
+                      {t("dashboard.listingsPreview.byItem", "By item")}
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+
+                  {sourceMode === "search" ? (
+                    <TextField
+                      size="small"
+                      fullWidth
+                      label={t(
+                        "dashboard.listingsPreview.searchLabel",
+                        "Search query",
+                      )}
+                      placeholder={t(
+                        "dashboard.listingsPreview.searchPlaceholder",
+                        "e.g. medical gown",
+                      )}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  ) : (
+                    <GameItemPicker
+                      value={selectedItem}
+                      onChange={setSelectedItem}
+                    />
+                  )}
+                </Stack>
               )}
 
               <Button

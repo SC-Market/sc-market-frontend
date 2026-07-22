@@ -21,6 +21,7 @@ import { MarketOverviewWidget } from "./MarketOverviewWidget"
 import { ReputationWidget } from "./ReputationWidget"
 import { WishlistWidget } from "./WishlistWidget"
 import { PriceHistoryWidget } from "./PriceHistoryWidget"
+import { ListingsPreviewWidget } from "./ListingsPreviewWidget"
 import type { ResolvedScope } from "../useResolveScope"
 import type { DashboardWidget, WidgetLayout, WidgetScopeKind } from "../types"
 
@@ -50,6 +51,12 @@ export interface WidgetDefinition {
    * stores it as settings.gameItemId / settings.gameItemName.
    */
   requiresItem?: boolean
+  /**
+   * When true, the add-widget gallery offers a listings source: either a
+   * free-text search (settings.query) or a specific game item
+   * (settings.gameItemId / settings.gameItemName). Exactly one is stored.
+   */
+  requiresListingsSource?: boolean
   render: (props: WidgetRenderProps) => ReactNode
 }
 
@@ -220,6 +227,20 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     requiresItem: true,
     render: ({ settings, t }) => (
       <PriceHistoryWidget settings={settings} t={t} />
+    ),
+  },
+  {
+    type: "listings_preview",
+    titleKey: "dashboard.widgets.listingsPreview.title",
+    titleDefault: "Listings Preview",
+    descriptionKey: "dashboard.widgets.listingsPreview.description",
+    descriptionDefault:
+      "A few marketplace listings for a search or a specific item.",
+    defaultLayout: { w: 6, h: 5 },
+    allowedScopes: PERSONAL_ONLY,
+    requiresListingsSource: true,
+    render: ({ settings, t }) => (
+      <ListingsPreviewWidget settings={settings} t={t} />
     ),
   },
 ]

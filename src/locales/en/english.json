@@ -1394,6 +1394,13 @@
     "dontImportWidget": "Don't import this widget",
     "export": "Export",
     "import": "Import",
+    "listingsPreview": {
+      "byItem": "By item",
+      "bySearch": "By search",
+      "empty": "No matching listings found.",
+      "searchLabel": "Search query",
+      "searchPlaceholder": "e.g. medical gown"
+    },
     "mapImportedWidgets": "Map imported widgets",
     "mapImportedWidgetsHint": "These widgets were pinned to the author's own organizations or shops. Pick one of yours for each, or drop it.",
     "marketOverviewEmpty": "No market listings to show.",
@@ -1439,6 +1446,10 @@
     "wishlistError": "Couldn't load your shopping lists.",
     "wishlistProgress": "{{done}}/{{total}} items",
     "widgets": {
+      "listingsPreview": {
+        "description": "A few marketplace listings for a search or a specific item.",
+        "title": "Listings Preview"
+      },
       "marketOverview": {
         "description": "Top items across the market by availability.",
         "title": "Market Overview"
