@@ -38,19 +38,28 @@ const ACQ_FILTERS: { value: AcqFilter; label: string; icon: React.ReactNode }[] 
   { value: "looted", label: "Lootable", icon: <InventoryIcon sx={{ fontSize: 14 }} /> },
 ]
 
+const ACQ_FILTER_KEYS: Record<AcqFilter, string> = {
+  all: "wiki.commodityBrowser.acqFilter.all",
+  mined: "wiki.commodityBrowser.acqFilter.mined",
+  purchased: "wiki.commodityBrowser.acqFilter.purchased",
+  salvaged: "wiki.commodityBrowser.acqFilter.salvaged",
+  looted: "wiki.commodityBrowser.acqFilter.looted",
+}
+
 function AcqChips({ can_be_mined, can_be_purchased, can_be_salvaged, can_be_looted }: {
   can_be_mined: boolean; can_be_purchased: boolean; can_be_salvaged: boolean; can_be_looted: boolean
 }) {
-  const chips: { label: string; icon: React.ReactElement; color: "success" | "primary" | "warning" | "error" }[] = []
-  if (can_be_mined) chips.push({ label: "Mine", icon: <HardwareRoundedIcon />, color: "success" })
-  if (can_be_purchased) chips.push({ label: "Buy", icon: <ShoppingCartIcon />, color: "primary" })
-  if (can_be_salvaged) chips.push({ label: "Salvage", icon: <ConstructionIcon />, color: "warning" })
-  if (can_be_looted) chips.push({ label: "Loot", icon: <InventoryIcon />, color: "error" })
+  const { t } = useTranslation()
+  const chips: { key: string; label: string; icon: React.ReactElement; color: "success" | "primary" | "warning" | "error" }[] = []
+  if (can_be_mined) chips.push({ key: "mine", label: t("wiki.commodityBrowser.acqChip.mine", "Mine"), icon: <HardwareRoundedIcon />, color: "success" })
+  if (can_be_purchased) chips.push({ key: "buy", label: t("wiki.commodityBrowser.acqChip.buy", "Buy"), icon: <ShoppingCartIcon />, color: "primary" })
+  if (can_be_salvaged) chips.push({ key: "salvage", label: t("wiki.commodityBrowser.acqChip.salvage", "Salvage"), icon: <ConstructionIcon />, color: "warning" })
+  if (can_be_looted) chips.push({ key: "loot", label: t("wiki.commodityBrowser.acqChip.loot", "Loot"), icon: <InventoryIcon />, color: "error" })
   return (
     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
       {chips.map((c) => (
         <Chip
-          key={c.label}
+          key={c.key}
           icon={c.icon}
           label={c.label}
           size="small"
@@ -137,10 +146,10 @@ export function WikiCommodityBrowser() {
     <Stack spacing={2}>
       <Box>
         <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, mb: 0.5, display: "block" }}>
-          Category
+          {t("wiki.commodityBrowser.category", "Category")}
         </Typography>
         <Stack spacing={0.25}>
-          {[{ label: "All Categories", value: "" }, ...categories.map((c) => ({ label: c, value: c }))].map((opt) => (
+          {[{ label: t("wiki.commodityBrowser.allCategories", "All Categories"), value: "" }, ...categories.map((c) => ({ label: c, value: c }))].map((opt) => (
             <Box
               key={opt.value}
               onClick={() => updateParam("category", opt.value)}
@@ -164,7 +173,7 @@ export function WikiCommodityBrowser() {
 
       <Box>
         <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, mb: 0.5, display: "block" }}>
-          Acquisition
+          {t("wiki.commodityBrowser.acquisition", "Acquisition")}
         </Typography>
         <ToggleButtonGroup
           orientation="vertical"
@@ -177,7 +186,7 @@ export function WikiCommodityBrowser() {
           {ACQ_FILTERS.map(({ value, label, icon }) => (
             <ToggleButton key={value} value={value} sx={{ justifyContent: "flex-start", gap: 1, textTransform: "none", fontSize: "0.8rem" }}>
               {icon}
-              {label}
+              {t(ACQ_FILTER_KEYS[value], label)}
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
@@ -185,7 +194,7 @@ export function WikiCommodityBrowser() {
 
       {hasFilters && (
         <Chip
-          label="Clear filters"
+          label={t("wiki.commodityBrowser.clearFilters", "Clear filters")}
           size="small"
           variant="outlined"
           onClick={() => setSearchParams({ q: text || "" }, { replace: true })}
@@ -197,7 +206,7 @@ export function WikiCommodityBrowser() {
   )
 
   return (
-    <StandardPageLayout title={pageTitle} description={pageDescription} headerTitle="Commodities" sidebarOpen={true} maxWidth="xl">
+    <StandardPageLayout title={pageTitle} description={pageDescription} headerTitle={t("wiki.commodityBrowser.headerTitle", "Commodities")} sidebarOpen={true} maxWidth="xl">
       <Helmet>
         {page > 1 && (
           <link rel="prev" href={`${FRONTEND_URL}/wiki/commodities?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(page - 1) })}`} />
@@ -207,11 +216,11 @@ export function WikiCommodityBrowser() {
         )}
       </Helmet>
       <Grid item xs={12}>
-        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters" sidebarWidth={210}>
+        <FilterSidebarLayout filters={filtersContent} filterTitle={t("wiki.commodityBrowser.filters", "Filters")} sidebarWidth={210}>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
             <TextField
               size="small"
-              placeholder="Search commodities..."
+              placeholder={t("wiki.commodityBrowser.searchPlaceholder", "Search commodities...")}
               value={text}
               onChange={(e) => updateParam("q", e.target.value)}
               sx={{ flex: 1, maxWidth: 360 }}
@@ -224,7 +233,7 @@ export function WikiCommodityBrowser() {
           </Box>
 
           {isLoading && <TableSkeleton rows={12} />}
-          {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load commodities.</Alert>}
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{t("wiki.commodityBrowser.loadError", "Failed to load commodities.")}</Alert>}
 
           {data && (
             <>
@@ -274,7 +283,7 @@ export function WikiCommodityBrowser() {
 
               {filtered.length === 0 && (
                 <Box sx={{ textAlign: "center", py: 6 }}>
-                  <Typography color="text.secondary">No commodities found.</Typography>
+                  <Typography color="text.secondary">{t("wiki.commodityBrowser.noResults", "No commodities found.")}</Typography>
                 </Box>
               )}
 

@@ -61,11 +61,11 @@ export function WikiCommodityDetail() {
       title={seoTitle}
       description={seoDescription}
       canonicalUrl={`/wiki/commodities/${id}`}
-      headerTitle={r?.resource_name || "Commodity Detail"}
+      headerTitle={r?.resource_name || t("wiki.commodityDetail.headerTitle", "Commodity Detail")}
       breadcrumbs={[
-        { label: "Wiki", href: "/wiki" },
-        { label: "Commodities", href: "/wiki/commodities" },
-        { label: r?.resource_name || "Detail" },
+        { label: t("wiki.commodityDetail.breadcrumbWiki", "Wiki"), href: "/wiki" },
+        { label: t("wiki.commodityDetail.breadcrumbCommodities", "Commodities"), href: "/wiki/commodities" },
+        { label: r?.resource_name || t("wiki.commodityDetail.breadcrumbDetail", "Detail") },
       ]}
       isLoading={isLoading}
       skeleton={<DetailPageSkeleton />}
@@ -129,23 +129,23 @@ export function WikiCommodityDetail() {
 
           {/* Acquisition methods + stats */}
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
-            <BoolChip value={r.can_be_mined} label="Mining" />
-            <BoolChip value={r.can_be_purchased} label="Purchase" />
-            <BoolChip value={r.can_be_salvaged} label="Salvage" />
-            <BoolChip value={r.can_be_looted} label="Loot" />
-            {r.base_value != null && <Chip label={`Base: ${r.base_value} aUEC`} size="small" variant="outlined" />}
-            {r.max_stack_size != null && <Chip label={`Stack: ${r.max_stack_size} SCU`} size="small" variant="outlined" />}
+            <BoolChip value={r.can_be_mined} label={t("wiki.commodityDetail.acqMining", "Mining")} />
+            <BoolChip value={r.can_be_purchased} label={t("wiki.commodityDetail.acqPurchase", "Purchase")} />
+            <BoolChip value={r.can_be_salvaged} label={t("wiki.commodityDetail.acqSalvage", "Salvage")} />
+            <BoolChip value={r.can_be_looted} label={t("wiki.commodityDetail.acqLoot", "Loot")} />
+            {r.base_value != null && <Chip label={`${t("wiki.commodityDetail.baseLabel", "Base")}: ${r.base_value} aUEC`} size="small" variant="outlined" />}
+            {r.max_stack_size != null && <Chip label={`${t("wiki.commodityDetail.stackLabel", "Stack")}: ${r.max_stack_size} SCU`} size="small" variant="outlined" />}
           </Stack>
 
           {/* Market Price */}
           {price && (price.average_price || price.min_price) && (
             <Card sx={{ mb: 2 }}>
               <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
-                <Typography variant="subtitle2" gutterBottom>Market Price</Typography>
+                <Typography variant="subtitle2" gutterBottom>{t("wiki.commodityDetail.marketPrice", "Market Price")}</Typography>
                 <Stack direction="row" spacing={3} alignItems="center">
-                  {price.min_price != null && <Box><Typography variant="caption" color="text.secondary">Min</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.min_price)}</Typography></Box>}
-                  {price.average_price != null && <Box><Typography variant="caption" color="text.secondary">Avg</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.average_price)}</Typography></Box>}
-                  {price.max_price != null && <Box><Typography variant="caption" color="text.secondary">Max</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.max_price)}</Typography></Box>}
+                  {price.min_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceMin", "Min")}</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.min_price)}</Typography></Box>}
+                  {price.average_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceAvg", "Avg")}</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.average_price)}</Typography></Box>}
+                  {price.max_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceMax", "Max")}</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.max_price)}</Typography></Box>}
                   <Box sx={{ flex: 1 }} />
                   <Button
                     size="small"
@@ -153,7 +153,7 @@ export function WikiCommodityDetail() {
                     startIcon={<ShoppingCart />}
                     onClick={() => navigate(`/market?item=${encodeURIComponent(r.resource_name)}`)}
                   >
-                    View on Market
+                    {t("wiki.commodityDetail.viewOnMarket", "View on Market")}
                   </Button>
                 </Stack>
               </CardContent>
@@ -168,13 +168,13 @@ export function WikiCommodityDetail() {
                   <CardContent>
                     <Typography variant="subtitle2" gutterBottom>
                       <TerrainRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />
-                      Mining Locations ({r.mining_locations.length})
+                      {t("wiki.commodityDetail.miningLocations", "Mining Locations")} ({r.mining_locations.length})
                     </Typography>
                     <Table size="small">
                       <TableBody>
                         {r.mining_locations.map((loc, i) => (
                           <TableRow key={i}>
-                            <TableCell>{loc.location_detail || loc.planet_moon || "Unknown"}</TableCell>
+                            <TableCell>{loc.location_detail || loc.planet_moon || t("wiki.commodityDetail.unknown", "Unknown")}</TableCell>
                             <TableCell align="right">
                               {loc.star_system && <Chip label={loc.star_system} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
                             </TableCell>
@@ -197,13 +197,13 @@ export function WikiCommodityDetail() {
                   <CardContent>
                     <Typography variant="subtitle2" gutterBottom>
                       <StoreRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />
-                      Purchase Locations ({r.purchase_locations.length})
+                      {t("wiki.commodityDetail.purchaseLocations", "Purchase Locations")} ({r.purchase_locations.length})
                     </Typography>
                     <Table size="small">
                       <TableBody>
                         {r.purchase_locations.map((loc, i) => (
                           <TableRow key={i}>
-                            <TableCell>{loc.station || loc.planet_moon || "Unknown"}</TableCell>
+                            <TableCell>{loc.station || loc.planet_moon || t("wiki.commodityDetail.unknown", "Unknown")}</TableCell>
                             <TableCell align="right">
                               {loc.average_price != null && <Typography variant="caption">{formatPrice(loc.average_price)}</Typography>}
                             </TableCell>
@@ -223,7 +223,7 @@ export function WikiCommodityDetail() {
                   <CardContent>
                     <Typography variant="subtitle2" gutterBottom>
                       <BuildRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />
-                      Used in Blueprints ({bps.length})
+                      {t("wiki.commodityDetail.usedInBlueprints", "Used in Blueprints")} ({bps.length})
                     </Typography>
                     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
                       {bps.map((bp) => (
@@ -249,6 +249,7 @@ export function WikiCommodityDetail() {
 }
 
 function MiningDataSection({ resourceName }: { resourceName: string }) {
+  const { t } = useTranslation()
   // Search for ores matching this resource name
   const { data } = useSearchOresQuery({ text: resourceName, pageSize: 5 })
   const ores = data?.ores || []
@@ -261,31 +262,31 @@ function MiningDataSection({ resourceName }: { resourceName: string }) {
         <CardContent>
           <Typography variant="subtitle2" gutterBottom>
             <HardwareRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />
-            Mining Stats
+            {t("wiki.commodityDetail.miningStats", "Mining Stats")}
           </Typography>
           <Stack spacing={0.5}>
             {ore.instability != null && (
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="caption" color="text.secondary">Instability</Typography>
+                <Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.instability", "Instability")}</Typography>
                 <Typography variant="caption" fontWeight={600}>{ore.instability}</Typography>
               </Stack>
             )}
             {ore.resistance != null && (
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="caption" color="text.secondary">Resistance</Typography>
+                <Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.resistance", "Resistance")}</Typography>
                 <Typography variant="caption" fontWeight={600}>{ore.resistance}</Typography>
               </Stack>
             )}
             {ore.explosionMultiplier != null && (
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="caption" color="text.secondary">Explosion Risk</Typography>
+                <Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.explosionRisk", "Explosion Risk")}</Typography>
                 <Typography variant="caption" fontWeight={600}>{ore.explosionMultiplier}</Typography>
               </Stack>
             )}
             {(ore.topLocations?.length ?? 0) > 0 && (
               <>
                 <Divider sx={{ my: 0.5 }} />
-                <Typography variant="caption" color="text.secondary" fontWeight={600}>Best Locations</Typography>
+                <Typography variant="caption" color="text.secondary" fontWeight={600}>{t("wiki.commodityDetail.bestLocations", "Best Locations")}</Typography>
                 {(ore.topLocations || []).map((loc) => (
                   <Stack key={loc.name} direction="row" justifyContent="space-between">
                     <Typography variant="caption">{loc.name}</Typography>

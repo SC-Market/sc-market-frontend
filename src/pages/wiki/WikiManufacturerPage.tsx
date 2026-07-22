@@ -49,9 +49,9 @@ export function WikiManufacturerPage() {
       canonicalUrl={`/wiki/manufacturers/${id}`}
       headerTitle={manufacturer?.manufacturer ?? t("wiki.manufacturerDetail.title", "Manufacturer Details")}
       breadcrumbs={[
-        { label: "Wiki", href: "/wiki" },
-        { label: "Manufacturers", href: "/wiki/manufacturers" },
-        { label: manufacturer?.manufacturer ?? "Detail" },
+        { label: t("wiki.manufacturerDetail.breadcrumbWiki", "Wiki"), href: "/wiki" },
+        { label: t("wiki.manufacturerDetail.breadcrumbManufacturers", "Manufacturers"), href: "/wiki/manufacturers" },
+        { label: manufacturer?.manufacturer ?? t("wiki.manufacturerDetail.breadcrumbDetail", "Detail") },
       ]}
       sidebarOpen={true}
       maxWidth="md"
@@ -77,7 +77,7 @@ export function WikiManufacturerPage() {
               </Typography>
             )}
             <Chip
-              label={`${manufacturer.item_count} items`}
+              label={`${manufacturer.item_count} ${t("wiki.manufacturerDetail.items", "items")}`}
               color="primary"
               sx={{ mt: 1 }}
             />
@@ -85,7 +85,7 @@ export function WikiManufacturerPage() {
         </Card>
 
         <Typography variant="h5" gutterBottom>
-          Products
+          {t("wiki.manufacturerDetail.products", "Products")}
         </Typography>
         <Divider sx={{ mb: 3 }} />
 

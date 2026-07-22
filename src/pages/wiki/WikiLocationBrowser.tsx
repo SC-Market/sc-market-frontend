@@ -69,13 +69,14 @@ function filterTree(nodes: WikiLocationNode[], search: string, typeFilter: strin
 }
 
 function MiningLocationSummary({ locationCode }: { locationCode: string }) {
+  const { t } = useTranslation()
   const { data, isLoading } = useGetLocationDetailQuery({ name: locationCode })
   if (isLoading || !data?.groups?.length) return null
   return (
     <Box sx={{ mt: 1 }}>
       <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mb: 0.5 }}>
         <HardwareRounded sx={{ fontSize: 13, color: "text.secondary" }} />
-        <Typography variant="caption" fontWeight={600} color="text.secondary">Mining Resources</Typography>
+        <Typography variant="caption" fontWeight={600} color="text.secondary">{t("wiki.locationBrowser.miningResources", "Mining Resources")}</Typography>
       </Stack>
       {(data.groups || []).map((g) => (
         <Box key={g.groupName} sx={{ mb: 0.5 }}>
@@ -100,6 +101,7 @@ function MiningLocationSummary({ locationCode }: { locationCode: string }) {
 }
 
 function LocationDetail({ node }: { node: WikiLocationNode }) {
+  const { t } = useTranslation()
   const isMineableType = ["planet", "moon"].includes(node.type?.toLowerCase() || "")
   const miningCode = node.id?.includes(".") ? node.id.split(".").pop() : null
   const systemColor = node.jurisdiction ? SYSTEM_COLORS[node.jurisdiction] : undefined
@@ -122,7 +124,7 @@ function LocationDetail({ node }: { node: WikiLocationNode }) {
         {node.respawnType && node.respawnType !== "None" && (
           <Chip
             icon={<Hotel sx={{ fontSize: 14 }} />}
-            label={`Respawn: ${node.respawnType}`}
+            label={`${t("wiki.locationBrowser.respawn", "Respawn")}: ${node.respawnType}`}
             size="small"
             color="info"
             variant="outlined"
@@ -133,10 +135,10 @@ function LocationDetail({ node }: { node: WikiLocationNode }) {
       {(node.size != null || node.qtArrivalRadius != null || node.qtObstructionRadius != null) && (
         <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
           {node.size != null && (
-            <Typography variant="caption" color="text.secondary">Size: {node.size.toLocaleString()} km</Typography>
+            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.size", "Size")}: {node.size.toLocaleString()} km</Typography>
           )}
           {node.qtArrivalRadius != null && (
-            <Typography variant="caption" color="text.secondary">QT Arrival: {node.qtArrivalRadius.toLocaleString()} km</Typography>
+            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.qtArrival", "QT Arrival")}: {node.qtArrivalRadius.toLocaleString()} km</Typography>
           )}
         </Stack>
       )}
@@ -251,7 +253,7 @@ export function WikiLocationBrowser() {
       {/* System selector */}
       <Box>
         <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, mb: 1, display: "block" }}>
-          System
+          {t("wiki.locationBrowser.system", "System")}
         </Typography>
         <Stack spacing={0.5}>
           {systems.map((sys) => {
@@ -273,7 +275,7 @@ export function WikiLocationBrowser() {
                 {color && (
                   <Box sx={{ width: 8, height: 8, borderRadius: "50%", bgcolor: color, flexShrink: 0 }} />
                 )}
-                <Typography variant="body2" fontWeight={active ? 700 : 400} sx={{ flex: 1 }}>{sys}</Typography>
+                <Typography variant="body2" fontWeight={active ? 700 : 400} sx={{ flex: 1 }}>{sys === "All" ? t("wiki.locationBrowser.allSystems", "All") : sys}</Typography>
               </Box>
             )
           })}
@@ -285,7 +287,7 @@ export function WikiLocationBrowser() {
       {/* Type filter */}
       <Box>
         <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, mb: 0.5, display: "block" }}>
-          Type
+          {t("wiki.locationBrowser.type", "Type")}
         </Typography>
         <ToggleButtonGroup
           orientation="vertical"
@@ -297,7 +299,7 @@ export function WikiLocationBrowser() {
         >
           {TYPE_FILTERS.map((f) => (
             <ToggleButton key={f} value={f} sx={{ justifyContent: "flex-start", textTransform: "none", fontSize: "0.8rem" }}>
-              {f === "All" ? "All Types" : `${f}s`}
+              {f === "All" ? t("wiki.locationBrowser.allTypes", "All Types") : `${f}s`}
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
@@ -317,7 +319,7 @@ export function WikiLocationBrowser() {
     return (
       <StandardPageLayout title={title} headerTitle={title} sidebarOpen={true} maxWidth="xl">
         <Grid item xs={12}>
-          <Alert severity="error">Failed to load locations. Please try again.</Alert>
+          <Alert severity="error">{t("wiki.locationBrowser.loadError", "Failed to load locations. Please try again.")}</Alert>
         </Grid>
       </StandardPageLayout>
     )
@@ -326,7 +328,7 @@ export function WikiLocationBrowser() {
   return (
     <StandardPageLayout title={title} headerTitle={title} sidebarOpen={true} maxWidth="xl">
       <Grid item xs={12}>
-        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters" sidebarWidth={200}>
+        <FilterSidebarLayout filters={filtersContent} filterTitle={t("wiki.locationBrowser.filters", "Filters")} sidebarWidth={200}>
           <TextField
             size="small"
             fullWidth
