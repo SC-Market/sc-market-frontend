@@ -24,6 +24,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { haptic } from "../../util/haptics"
+import { PATHS, MARKET_PATHS } from "../../routes/paths"
 
 interface Action {
   icon: React.ReactNode
@@ -47,21 +48,21 @@ export function ContextAwareFAB() {
       icon: <StoreRounded />,
       name: "Create Listing",
       onClick: () => {
-        navigate("/market/manage")
+        navigate(MARKET_PATHS.manage)
       },
     },
     {
       icon: <MessageRounded />,
       name: "New Message",
       onClick: () => {
-        navigate("/messages")
+        navigate(PATHS.messages)
       },
     },
     {
       icon: <DesignServicesRounded />,
       name: "Create Service",
       onClick: () => {
-        navigate("/market/services")
+        navigate(MARKET_PATHS.services)
       },
     },
     {
@@ -75,7 +76,7 @@ export function ContextAwareFAB() {
       icon: <DescriptionRounded />,
       name: "View Contracts",
       onClick: () => {
-        navigate("/contracts")
+        navigate(PATHS.contracts)
       },
     },
   ]

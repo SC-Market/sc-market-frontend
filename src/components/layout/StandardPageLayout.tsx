@@ -19,6 +19,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { PATHS, ORG_PATHS } from "../../routes/paths"
 
 export interface BreadcrumbItem {
   label: string
@@ -114,7 +115,7 @@ export function StandardPageLayout(
       breadcrumbs[0],
       {
         label: primaryContractor.name || primaryContractor.spectrum_id,
-        href: `/contractor/${primaryContractor.spectrum_id}`,
+        href: ORG_PATHS.profile(primaryContractor.spectrum_id),
       },
       ...breadcrumbs.slice(1),
     ]
@@ -134,7 +135,7 @@ export function StandardPageLayout(
     const message = getErrorMessage(error as FetchBaseQueryError | SerializedError | undefined)
     if (!profile) {
       const redirectUrl = encodeURIComponent(window.location.pathname + window.location.search)
-      return <Navigate to={`/login?redirect=${redirectUrl}`} />
+      return <Navigate to={`${PATHS.login}?redirect=${redirectUrl}`} />
     }
     return <ForbiddenPage message={message} />
   }

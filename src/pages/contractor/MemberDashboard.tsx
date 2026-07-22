@@ -12,13 +12,14 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
+import { SHOP_PATHS } from "../../routes/paths"
 
 export function MemberDashboard() {
   const shopCtx = useOptionalShopRouteContext()
   const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
 
   if (shopCtx && spectrumId && shopCtx.shop.permissions?.manage_orders === false) {
-    return <Navigate to={`/shops/${shopCtx.shop.slug}`} replace />
+    return <Navigate to={SHOP_PATHS.profile(shopCtx.shop.slug)} replace />
   }
 
   const { t } = useTranslation()

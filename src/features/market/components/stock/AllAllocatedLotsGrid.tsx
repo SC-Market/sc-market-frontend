@@ -12,6 +12,7 @@ import { Link } from "react-router-dom"
 import { useOptionalShopRouteContext } from "../../../../components/router/ShopContextFromRoute"
 import { useGetContractorAllocationsQuery } from "../../../../store/api/stockLotsApi"
 import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
+import { MARKET_PATHS, ORDER_PATHS } from "../../../../routes/paths"
 
 export function AllAllocatedLotsGrid() {
   const { t } = useTranslation()
@@ -43,7 +44,7 @@ export function AllAllocatedLotsGrid() {
               sx={{ width: 32, height: 32 }}
             />
             <Link
-              to={`/market/${params.value}`}
+              to={MARKET_PATHS.listing(params.value)}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <UnderlineLink>{title}</UnderlineLink>
@@ -58,7 +59,7 @@ export function AllAllocatedLotsGrid() {
       flex: 1.5,
       renderCell: (params) => (
         <Link
-          to={`/contract/${params.value}`}
+          to={ORDER_PATHS.contract(params.value)}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <UnderlineLink>

@@ -7,6 +7,7 @@ import {
   useGetMyShopsQuery,
   ShopResponse,
 } from "../../store/api/v2/market"
+import { PATHS } from "../../routes/paths"
 
 interface ShopRouteContext {
   shop: ShopResponse
@@ -36,7 +37,7 @@ export function ShopContextFromRoute() {
   )
 
   if (!shopSlug) {
-    return <Navigate to="/dashboard/shops" replace />
+    return <Navigate to={PATHS.dashboardShops} replace />
   }
 
   if (shopLoading || myShopsLoading) {
@@ -44,7 +45,7 @@ export function ShopContextFromRoute() {
   }
 
   if (shopError || !shopPublic) {
-    return <Navigate to="/dashboard/shops" replace />
+    return <Navigate to={PATHS.dashboardShops} replace />
   }
 
   // Find the full ShopResponse from myShops (which includes can_manage)
@@ -52,7 +53,7 @@ export function ShopContextFromRoute() {
 
   if (!ownedShop) {
     // User doesn't own this shop
-    return <Navigate to="/dashboard/shops" replace />
+    return <Navigate to={PATHS.dashboardShops} replace />
   }
 
   return <Outlet context={{ shop: ownedShop } satisfies ShopRouteContext} />

@@ -20,6 +20,7 @@ import { useCreatePublicContractMutation } from "../../features/contracting/api/
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ORDER_PATHS } from "../../routes/paths"
 
 export function CreatePublicContract() {
   const { t } = useTranslation()
@@ -58,7 +59,7 @@ export function CreatePublicContract() {
             severity: "success",
           })
 
-          navigate(`/contracts/public/${data.contract_id}`)
+          navigate(ORDER_PATHS.publicContract(data.contract_id))
         })
         .catch((error) => {
           issueAlert(error)

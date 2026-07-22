@@ -24,6 +24,7 @@ import { Section } from "../../components/paper/Section"
 import { QualityBadge } from "../../components/market/v2/QualityBadge"
 import { formatCraftedSource, hasDisplayableSource } from "../../util/variantDisplay"
 import type { OfferMarketListingV2, OrderMarketListingV2 } from "../../store/api/v2/market"
+import { MARKET_PATHS } from "../../routes/paths"
 
 export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListingV2 | OrderMarketListingV2)[] }) {
   if (!items.length) return null
@@ -54,7 +55,7 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                   hover
                   sx={{ cursor: "pointer", textDecoration: "none", color: "inherit" }}
                   component={Link}
-                  to={`/market/${item.listing_id}`}
+                  to={MARKET_PATHS.listing(item.listing_id)}
                 >
                   <TableCell>
                     <Stack direction="row" spacing={1} alignItems="center">

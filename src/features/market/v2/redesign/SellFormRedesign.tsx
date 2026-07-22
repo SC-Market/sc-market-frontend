@@ -37,6 +37,7 @@ import type {
   StockLotInput,
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { MARKET_PATHS } from "../../../../routes/paths"
 
 /**
  * SellFormRedesign — Phase 0 of the Market redesign (behind the
@@ -247,7 +248,7 @@ export function SellFormRedesign() {
         message: t("SellFormRedesign.created", "Listing created."),
         severity: "success",
       })
-      navigate("/market/me")
+      navigate(MARKET_PATHS.myListings)
     } catch (e) {
       issueAlert(e as never)
     }

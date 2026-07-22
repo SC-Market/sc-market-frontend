@@ -21,6 +21,7 @@ import {
 } from "../../util/rsiUrlUtils.ts"
 import { SentinelCode } from "../../components/authentication/SentinelCode"
 import { AuthenticateContractorSkeleton } from "./AuthenticateContractor.skeleton"
+import { PATHS } from "../../routes/paths"
 
 export function AuthenticateContractor() {
   const identifier = useGetAuthenticatorIdentifier()
@@ -49,7 +50,7 @@ export function AuthenticateContractor() {
       })
         .unwrap()
         .then((result) => {
-          navigate("/")
+          navigate(PATHS.home)
           window.location.reload()
         })
         .catch((error) => {

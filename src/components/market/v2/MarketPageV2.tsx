@@ -13,6 +13,7 @@ import { TabPanel } from "../../../components/tabs/Tabs"
 import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
 import { FeatureErrorBoundary } from "../../../components/error-boundaries"
 import { MarketV2Routes } from "../../../features/market/v2/MarketV2Routes"
+import { PATHS, MARKET_PATHS } from "../../../routes/paths"
 
 // V1 components for Services and Contracts tabs (shared across V1/V2)
 const ServiceMarketView = React.lazy(() =>
@@ -61,9 +62,9 @@ export function MarketPageV2() {
   }, [location.pathname])
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-    if (newValue === 0) navigate("/market")
-    else if (newValue === 1) navigate("/market/services")
-    else if (newValue === 2) navigate("/contracts")
+    if (newValue === 0) navigate(MARKET_PATHS.search)
+    else if (newValue === 1) navigate(MARKET_PATHS.services)
+    else if (newValue === 2) navigate(PATHS.contracts)
   }
 
   const tabs = [

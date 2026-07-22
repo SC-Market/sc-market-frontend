@@ -44,6 +44,7 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MobileListingRow } from "./components/MobileListingRow"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 import { MyListingCardV2 } from "./components/MyListingCardV2"
+import { MARKET_PATHS } from "../../../routes/paths"
 
 // ── Desktop section (unchanged) ───────────────────────────────────────────
 
@@ -302,7 +303,7 @@ function MobileListingsView() {
       </Dialog>
 
       {/* FAB — create listing */}
-      <Link to="/market/create">
+      <Link to={MARKET_PATHS.create}>
         <MobileFAB
           color="secondary"
           aria-label={t("market.createListing", "Create Listing")}
@@ -326,7 +327,7 @@ export function MyListingsV2() {
       <StandardPageLayout
         title={t("sidebar.my_market_listings", "My Listings")}
         breadcrumbs={[
-          { label: t("sidebar.market_short", "Market"), href: "/market" },
+          { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
           { label: t("sidebar.my_market_listings", "My Listings") },
         ]}
         headerTitle={
@@ -356,7 +357,7 @@ export function MyListingsV2() {
         <ManageListingsTabBar
           title={t("sidebar.my_market_listings", "My Listings")}
           rightAction={
-            <Link to="/market/create" style={{ textDecoration: "none" }}>
+            <Link to={MARKET_PATHS.create} style={{ textDecoration: "none" }}>
               <Button
                 variant="contained"
                 color="secondary"

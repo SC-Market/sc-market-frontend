@@ -49,6 +49,7 @@ import { useMediaQuery } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useOfferDetails } from "../../features/offers/hooks/useOfferDetails"
+import { SHOP_PATHS, ORDER_PATHS } from "../../routes/paths"
 
 export function OfferMessagesArea(props: { session: GetOfferSessionV2Response }) {
   const { session } = props
@@ -222,7 +223,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                     <MaterialLink
                       component={Link}
                       underline="hover"
-                      to={`/contracts/public/${publicContract?.id}`}
+                      to={ORDER_PATHS.publicContract(publicContract?.id!)}
                       color={"text.secondary"}
                     >
                       {publicContract?.title}
@@ -242,7 +243,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                     <Stack direction="column" alignItems="flex-end">
                       <MaterialLink
                         component={Link}
-                        to={`/shops/${session.shop_slug}`}
+                        to={SHOP_PATHS.profile(session.shop_slug!)}
                         underline="hover"
                         color="text.secondary"
                         variant="subtitle2"
@@ -632,7 +633,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                       {t("OfferDetailsArea.accept")}
                     </LoadingButton>
                     <Link
-                      to={`/offer/${session.session_id}/counteroffer`}
+                      to={ORDER_PATHS.counterOffer(session.session_id)}
                       style={{ width: isMobile ? "100%" : "auto" }}
                     >
                       <LoadingButton

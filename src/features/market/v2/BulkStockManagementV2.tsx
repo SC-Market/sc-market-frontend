@@ -66,6 +66,7 @@ import {
 import { getQualityMode, formatQuality, type QualityMode } from "../../../util/qualityMode"
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect"
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
+import { MARKET_PATHS } from "../../../routes/paths"
 
 /* ── Local filter context (mirrors V1 StockSearchContext) ── */
 
@@ -122,7 +123,7 @@ export function BulkStockManagementV2() {
     <StandardPageLayout
       title={t("sidebar.manage_stock", "Manage Inventory")}
       breadcrumbs={[
-        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
         { label: t("sidebar.manage_stock", "Manage Inventory") },
       ]}
       sidebarOpen={true}
@@ -470,7 +471,7 @@ function AllStockLotsGridV2() {
             {listingId ? (
               <UnderlineLink
                 component={Link}
-                to={`/market/${listingId}`}
+                to={MARKET_PATHS.listing(listingId)}
                 variant="body2"
                 noWrap
               >
@@ -713,7 +714,7 @@ function AllocatedStockGridV2() {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {photo && <Avatar src={photo} variant="rounded" sx={{ width: 28, height: 28 }} />}
             {listingId ? (
-              <UnderlineLink component={Link} to={`/market/${listingId}`} variant="body2" noWrap>
+              <UnderlineLink component={Link} to={MARKET_PATHS.listing(listingId)} variant="body2" noWrap>
                 {title}
               </UnderlineLink>
             ) : (

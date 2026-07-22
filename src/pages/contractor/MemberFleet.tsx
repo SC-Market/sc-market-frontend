@@ -7,6 +7,7 @@ import { useGetMyShips } from "../../features/fleet/api/shipsApi"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { PATHS } from "../../routes/paths"
 
 export function MemberFleet() {
   const { t } = useTranslation()
@@ -15,7 +16,7 @@ export function MemberFleet() {
   const headerActions = (
     <Box display={"flex"} justifyContent={"flex-end"}>
       <Link
-        to={`/myfleet/import`}
+        to={PATHS.myFleetImport}
         style={{ textDecoration: "none", color: "inherit" }}
       >
         <Button

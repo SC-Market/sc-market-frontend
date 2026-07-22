@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 import { OfferAnalytics } from "../../features/offers/domain/types"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { SHOP_PATHS, USER_PATHS } from "../../routes/paths"
 
 interface OfferAnalyticsProps {
   analytics: OfferAnalytics
@@ -95,7 +96,7 @@ export function OfferTopShopsAnalytics({ analytics }: OfferAnalyticsProps) {
       <ol>
         {(analytics.top_shops || []).map((s) => (
           <li key={s.slug}>
-            <UnderlineLink color={"text.secondary"} to={`/shops/${s.slug}`} component={Link}>
+            <UnderlineLink color={"text.secondary"} to={SHOP_PATHS.profile(s.slug)} component={Link}>
               {s.name}
             </UnderlineLink>
             : {s.accepted_offers}/{s.total_offers}
@@ -113,7 +114,7 @@ export function OfferTopUsersAnalytics({ analytics }: OfferAnalyticsProps) {
         {analytics.top_users.map((c, i) => (
           <ListItem key={c.username}>
             {i + 1}.&nbsp;
-            <UnderlineLink color={"text.secondary"} to={`/user/${c.username}`} component={Link}>
+            <UnderlineLink color={"text.secondary"} to={USER_PATHS.profile(c.username)} component={Link}>
               {c.username}
             </UnderlineLink>
             : {c.accepted_offers}/{c.total_offers}

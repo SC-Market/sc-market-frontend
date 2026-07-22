@@ -57,6 +57,7 @@ import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout
 import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
 import { getMissionIcon, getMissionCategoryColor } from "../../util/gameIcons"
 import { MissionName } from "../../components/game-data/MissionName"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 
@@ -171,9 +172,9 @@ export function MissionSearch() {
     const params = searchParams.toString()
     const qs = params ? `?${params}` : ""
     if (isMobile) {
-      navigate(`/missions/${missionCode}${qs}`)
+      navigate(`${GAME_DATA_PATHS.mission(missionCode)}${qs}`)
     } else {
-      navigate(`/missions/${missionCode}${qs}`, { replace: false })
+      navigate(`${GAME_DATA_PATHS.mission(missionCode)}${qs}`, { replace: false })
       setSelectedMissionId(missionId) // modal still uses ID for API
     }
   }
@@ -425,7 +426,7 @@ export function MissionSearch() {
       <MissionDetailModal
         missionId={selectedMissionId}
         open={!!selectedMissionId}
-        onClose={() => { setSelectedMissionId(null); navigate(`/missions?${searchParams.toString()}`, { replace: true }) }}
+        onClose={() => { setSelectedMissionId(null); navigate(`${GAME_DATA_PATHS.missions}?${searchParams.toString()}`, { replace: true }) }}
         onBlueprintClick={(id) => { setSelectedMissionId(null); setSelectedBlueprintId(id) }}
       />
       <BlueprintDetailModal

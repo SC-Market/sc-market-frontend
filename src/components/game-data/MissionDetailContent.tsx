@@ -32,6 +32,7 @@ import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName, MissionDescription } from "./MissionName"
 import { MissionRankCalculator } from "./MissionRankCalculator"
 import { MissionTypeDetails } from "./MissionTypeDetails"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 // ============================================================================
 // Helpers
@@ -88,7 +89,7 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
   const navigate = useNavigate()
   const go = (params: Record<string, string>) => {
     const sp = new URLSearchParams(params)
-    navigate(`/missions?${sp.toString()}`)
+    navigate(`${GAME_DATA_PATHS.missions}?${sp.toString()}`)
   }
   const giver = m.mission_giver_org || m.faction
   const showGiver = giver && !giver.includes("~mission")

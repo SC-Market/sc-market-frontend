@@ -8,6 +8,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { USER_PATHS } from "../../../../routes/paths"
 
 export function MsgPaper(
   props: PaperProps & {
@@ -45,7 +46,7 @@ export function MsgPaper(
       >
         <MaterialLink
           component={Link}
-          to={`/user/${author?.username}`}
+          to={USER_PATHS.profile(author.username)}
           color={
             other ? "text.secondary" : theme.palette.secondary.contrastText
           }

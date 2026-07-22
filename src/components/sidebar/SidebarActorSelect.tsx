@@ -22,6 +22,7 @@ import {
 } from "../../store/api/v2/market"
 import AddRoundedIcon from "@mui/icons-material/AddRounded"
 import StoreRoundedIcon from "@mui/icons-material/StoreRounded"
+import { SHOP_PATHS } from "../../routes/paths"
 
 const SHOP_SUB_PATHS = [
   "listings",
@@ -90,9 +91,9 @@ export function SidebarActorSelect() {
       const result = await quickCreateShop({
         quickCreateShopRequest: { owner_type: "user" },
       }).unwrap()
-      navigate(`/shop/${result.slug}/settings`)
+      navigate(SHOP_PATHS.settings(result.slug))
     } catch {
-      navigate("/shops/create")
+      navigate(SHOP_PATHS.createShop)
     }
   }
 

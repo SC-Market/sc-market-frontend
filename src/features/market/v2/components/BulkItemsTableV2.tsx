@@ -13,6 +13,7 @@ import {
 } from "@mui/material"
 import type { GameItemAggregate } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import { MARKET_PATHS } from "../../../../routes/paths"
 
 function formatPrice(min: number, max: number) {
   if (min === max) return `${min.toLocaleString()} aUEC`
@@ -45,7 +46,7 @@ export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
                 />
               </TableCell>
               <TableCell>
-                <MuiLink component={RouterLink} to={`/market/aggregate/${item.game_item_id}`} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
+                <MuiLink component={RouterLink} to={MARKET_PATHS.aggregate(item.game_item_id)} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
                   {item.name}
                 </MuiLink>
               </TableCell>

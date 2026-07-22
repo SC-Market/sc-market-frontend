@@ -28,6 +28,7 @@ import {
 } from "../../../../store/api/v2/market"
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../../hooks/alert/AlertHook"
 import { formatQuantity } from "../../../../util/formatQuantity"
+import { MARKET_PATHS } from "../../../../routes/paths"
 
 interface AddToCartDrawerProps {
   open: boolean
@@ -233,7 +234,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
           {(cartData?.item_count ?? 0) > 0 && (
             <Button
               component={Link}
-              to="/market/cart"
+              to={MARKET_PATHS.cart}
               variant="outlined"
               fullWidth
               size="small"

@@ -11,6 +11,7 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
 import { UnsubscribePageData } from "../hooks/usePageUnsubscribe"
+import { PATHS } from "../../../routes/paths"
 
 interface UnsubscribeContentProps {
   data: UnsubscribePageData
@@ -58,7 +59,7 @@ export function UnsubscribeContent({
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate("/settings?tab=email")}
+              onClick={() => navigate(`${PATHS.settings}?tab=email`)}
             >
               Manage Email Preferences
             </Button>
@@ -77,7 +78,7 @@ export function UnsubscribeContent({
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate("/settings?tab=email")}
+              onClick={() => navigate(`${PATHS.settings}?tab=email`)}
             >
               Go to Email Settings
             </Button>
@@ -96,7 +97,7 @@ export function UnsubscribeContent({
             <Button
               variant="contained"
               color="primary"
-              onClick={() => navigate("/settings?tab=email")}
+              onClick={() => navigate(`${PATHS.settings}?tab=email`)}
             >
               Go to Email Settings
             </Button>

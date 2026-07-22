@@ -14,6 +14,7 @@ import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
 import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageOffer } from "../../features/offers/hooks/usePageOffer"
+import { PATHS, ORDER_PATHS } from "../../routes/paths"
 
 export function ViewOfferPage() {
   const { id } = useParams<{ id: string }>()
@@ -28,7 +29,7 @@ export function ViewOfferPage() {
 
   useEffect(() => {
     if (session?.order_id) {
-      navigate(`/contract/${session.order_id}`, { replace: true })
+      navigate(ORDER_PATHS.contract(session.order_id), { replace: true })
     }
   }, [session?.order_id, navigate])
 
@@ -42,10 +43,10 @@ export function ViewOfferPage() {
       title={t("offers.viewOffer")}
       error={error}
       breadcrumbs={[
-        { label: t("offers.dashboard", "Dashboard"), href: "/dashboard" },
+        { label: t("offers.dashboard", "Dashboard"), href: PATHS.dashboard },
         {
           label: `${t("offers.offer", "Offer")} ${(id || "").substring(0, 8).toUpperCase()}`,
-          href: `/offer/${id}`,
+          href: ORDER_PATHS.offer(id!),
         },
       ]}
       maxWidth="xl"

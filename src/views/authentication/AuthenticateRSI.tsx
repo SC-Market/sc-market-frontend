@@ -21,6 +21,7 @@ import {
   isRsiUrl,
 } from "../../util/rsiUrlUtils.ts"
 import { SentinelCode } from "../../components/authentication/SentinelCode"
+import { PATHS } from "../../routes/paths"
 
 export function isAlphaNumeric(str: string) {
   let code, i, len
@@ -79,7 +80,7 @@ export function AuthenticateRSI({
             severity: "success",
           })
           setUsername("")
-          navigate("/")
+          navigate(PATHS.home)
         })
         .catch((error) => {
           issueAlert(error)

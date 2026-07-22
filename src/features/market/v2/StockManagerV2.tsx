@@ -86,6 +86,7 @@ import {
 import { MobileListingRow } from "./components/MobileListingRow"
 import { formatMarketUrl } from "../domain/urls"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
+import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths"
 
 /* ── Types ── */
 
@@ -679,7 +680,7 @@ function DisplayStockV2({
 
           return (
             <Tooltip title={t("ItemStock.editListing")}>
-              <Link to={`/market_edit/${params.value}`} style={{ color: "inherit" }}>
+              <Link to={MARKET_PATHS.edit(params.value)} style={{ color: "inherit" }}>
                 <IconButton><CreateRounded /></IconButton>
               </Link>
             </Tooltip>
@@ -828,7 +829,7 @@ export function StockManagerV2() {
     <StandardPageLayout
       title={t("sidebar.manage_listings")}
       breadcrumbs={[
-        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
         { label: t("sidebar.manage_listings", "Manage Listings") },
       ]}
       sidebarOpen={true}
@@ -868,7 +869,7 @@ export function StockManagerV2() {
                 <ManageListingsTabBar
                   title={t("sidebar.manage_listings", "Manage Listings")}
                   rightAction={
-                    <Link to={`/shop/${shop.slug}/listings/create`} style={{ textDecoration: "none" }}>
+                    <Link to={SHOP_PATHS.create(shop.slug)} style={{ textDecoration: "none" }}>
                       <Button variant="contained" color="secondary" startIcon={<AddRounded />} size="large">
                         {t("market.createListing", "Create Listing")}
                       </Button>
@@ -905,7 +906,7 @@ export function StockManagerV2() {
 
             {/* Archived listings link */}
             <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Link to="/market/me" style={{ color: "inherit" }}>
+              <Link to={MARKET_PATHS.myListings} style={{ color: "inherit" }}>
                 <UnderlineLink>{t("sidebar.archived_listings")}</UnderlineLink>
               </Link>
             </Grid>

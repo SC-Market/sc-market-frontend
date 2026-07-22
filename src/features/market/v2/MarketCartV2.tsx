@@ -49,6 +49,7 @@ import { formatCraftedSource, hasDisplayableSource } from "../../../util/variant
 import { SellerNextAvailable } from "../../../components/market/SellerNextAvailable"
 import { ShoppingListPanel } from "../../../components/game-data/ShoppingListPanel"
 import { VariantSelector } from "../../../components/market/v2/VariantSelector"
+import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths"
 
 /**
  * CartItemEntryV2 - Individual cart item with variant details
@@ -404,7 +405,7 @@ export function MarketCartV2() {
           window.open(`https://discord.gg/${result.discord_invite}`, "_blank")
         }
 
-        navigate(`/offer/${result.session_id}`)
+        navigate(ORDER_PATHS.offer(result.session_id))
       } catch (err) {
         setCheckoutDialogOpen(false)
         issueAlert(err as UnwrappedErrorInterface)
@@ -445,7 +446,7 @@ export function MarketCartV2() {
       <StandardPageLayout
         title={t("marketActions.myCart")}
         breadcrumbs={[
-          { label: t("sidebar.market_short"), href: "/market" },
+          { label: t("sidebar.market_short"), href: MARKET_PATHS.search },
           { label: t("cart.yourCart") },
         ]}
         showOrgInBreadcrumbs={true}

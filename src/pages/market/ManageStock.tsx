@@ -25,6 +25,7 @@ import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageManageStock } from "../../features/market/hooks/usePageManageStock"
 import { ManageListingsTabBar } from "../../features/market/components/ManageListingsTabBar"
+import { MARKET_PATHS } from "../../routes/paths"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -61,7 +62,7 @@ export function ManageStock() {
     <StandardPageLayout
       title={t("sidebar.manage_listings")}
       breadcrumbs={[
-        { label: t("sidebar.market_short"), href: "/market" },
+        { label: t("sidebar.market_short"), href: MARKET_PATHS.search },
         { label: t("sidebar.manage_listings", "Manage Listings") },
       ]}
       sidebarOpen={true}
@@ -105,7 +106,7 @@ export function ManageStock() {
                 <ManageListingsTabBar
                   title={t("sidebar.manage_listings", "Manage Listings")}
                   rightAction={
-                    <Link to="/market/create" style={{ textDecoration: "none" }}>
+                    <Link to={MARKET_PATHS.create} style={{ textDecoration: "none" }}>
                       <Button
                         variant="contained"
                         color="secondary"
@@ -141,7 +142,7 @@ export function ManageStock() {
               xs={12}
               sx={{ display: "flex", justifyContent: "flex-end" }}
             >
-              <Link to={"/market/me"} style={{ color: "inherit" }}>
+              <Link to={MARKET_PATHS.myListings} style={{ color: "inherit" }}>
                 <UnderlineLink>{t("sidebar.archived_listings")}</UnderlineLink>
               </Link>
             </Grid>

@@ -42,6 +42,7 @@ import {
   type WishlistItemWithDetails,
 } from "../../store/api/v2/market"
 import { GameItemAvatar } from "../game-data/GameItemAvatar"
+import { MARKET_PATHS } from "../../routes/paths"
 
 /** Format SCU quantity */
 function fmtQty(scu: number): string {
@@ -235,7 +236,7 @@ function MaterialRow({ material: m }: { material: ShoppingListMaterial }) {
         <Tooltip title={`Search market for ${m.game_item_name}`}>
           <IconButton
             size="small"
-            onClick={() => navigate(`/market?q=${marketQuery}`)}
+            onClick={() => navigate(`${MARKET_PATHS.search}?q=${marketQuery}`)}
           >
             <ShoppingCartRounded sx={{ fontSize: 16 }} />
           </IconButton>
@@ -243,7 +244,7 @@ function MaterialRow({ material: m }: { material: ShoppingListMaterial }) {
         <Tooltip title="View aggregate listings">
           <IconButton
             size="small"
-            onClick={() => navigate(`/market/aggregate/${m.game_item_id}`)}
+            onClick={() => navigate(MARKET_PATHS.aggregate(m.game_item_id))}
           >
             <OpenInNewRounded sx={{ fontSize: 16 }} />
           </IconButton>

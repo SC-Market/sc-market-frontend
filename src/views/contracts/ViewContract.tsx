@@ -20,6 +20,7 @@ import { useContractAppOpen } from "../../features/contracting/hooks/ContractApp
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { dateDiffInDays } from "../../util/dateDiff"
 import { useTranslation } from "react-i18next" //  i18n
+import { USER_PATHS } from "../../routes/paths"
 
 export function ViewContract(props: { listing: Order }) {
   const { listing } = props
@@ -66,7 +67,7 @@ export function ViewContract(props: { listing: Order }) {
               )}
               <MaterialLink
                 component={Link}
-                to={`/user/${listing.customer}`}
+                to={USER_PATHS.profile(listing.customer)}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <UnderlineLink

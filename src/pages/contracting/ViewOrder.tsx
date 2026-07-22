@@ -17,6 +17,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api
 import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageOrder } from "../../features/contracting"
+import { PATHS, ORDER_PATHS } from "../../routes/paths"
 
 // Lazy load content sections
 const OrderDetailsArea = lazy(() =>
@@ -158,14 +159,14 @@ export function ViewOrder() {
             : "Order"
       }
       breadcrumbs={[
-        { label: t("dashboard.title", "Dashboard"), href: "/dashboard" },
+        { label: t("dashboard.title", "Dashboard"), href: PATHS.dashboard },
         ...(order?.offer_session_id
           ? [
               {
                 label: t("orders.offerShort", {
                   id: order.offer_session_id.substring(0, 8).toUpperCase(),
                 }),
-                href: `/offer/${order.offer_session_id}`,
+                href: ORDER_PATHS.offer(order.offer_session_id),
               },
             ]
           : []),

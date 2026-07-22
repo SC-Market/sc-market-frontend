@@ -32,6 +32,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ServiceListingSkeleton } from "../../components/skeletons"
 import { EmptyContracts } from "../../components/empty-states"
+import { ORDER_PATHS, USER_PATHS } from "../../routes/paths"
 
 export function ContractListing(props: {
   contract: PublicContract
@@ -45,7 +46,7 @@ export function ContractListing(props: {
   return (
     <Grid item xs={12} lg={6}>
       <Link
-        to={`/contracts/public/${contract.id}`}
+        to={ORDER_PATHS.publicContract(contract.id)}
         style={{ textDecoration: "none", color: "inherit" }}
       >
         <Fade
@@ -119,7 +120,7 @@ export function ContractListing(props: {
                   >
                     <MaterialLink
                       component={Link}
-                      to={`/user/${contract.customer.username}`}
+                      to={USER_PATHS.profile(contract.customer.username)}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       <UnderlineLink

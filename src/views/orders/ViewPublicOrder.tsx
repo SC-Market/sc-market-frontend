@@ -21,6 +21,7 @@ import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { orderIcons } from "../../features/orders/components/orderIcons"
 import { useTranslation } from "react-i18next"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
+import { USER_PATHS } from "../../routes/paths"
 
 export function ViewPublicOrder() {
   const [order, refresh] = useCurrentOrder()
@@ -65,7 +66,7 @@ export function ViewPublicOrder() {
                 />
                 <MaterialLink
                   component={Link}
-                  to={`/user/${order.customer}`}
+                  to={USER_PATHS.profile(order.customer)}
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <UnderlineLink

@@ -48,6 +48,7 @@ import { FRONTEND_URL } from "../../../util/constants";
 import { formatShortSlug } from "../domain/urls";
 import { Cart } from "../../../datatypes/Cart";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
@@ -285,7 +286,7 @@ export function MarketAggregateViewV2() {
       title={game_item.name || "Market Item"}
       headerTitle={game_item.name}
       breadcrumbs={[
-        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
         ...(game_item.type && game_item.type !== "Other" ? [{ label: game_item.type, href: `/market?type=${encodeURIComponent(game_item.type)}` }] : []),
         { label: game_item.name || "Item" },
       ]}
@@ -636,7 +637,7 @@ export function AggregateRowV2(props: {
         {justAddedToCart ? (
           <Button
             component={Link}
-            to="/market/cart"
+            to={MARKET_PATHS.cart}
             variant={"contained"}
             color={"secondary"}
             size={"large"}
@@ -702,7 +703,7 @@ export function BuyOrderRowV2(props: {
             severity: "success",
           });
           if (result.order_id) {
-            navigate(`/order/${result.order_id}`);
+            navigate(ORDER_PATHS.detail(result.order_id));
           }
         })
         .catch((err) => issueAlert({

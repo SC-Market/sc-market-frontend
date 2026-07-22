@@ -19,6 +19,7 @@ import { MessageThreadSkeleton } from "../../components/skeletons"
 import { EmptyMessages } from "../../components/empty-states"
 import { useTranslation } from "react-i18next"
 import { Page } from "../../components/metadata/Page"
+import { PATHS } from "../../routes/paths"
 
 export function Messages() {
   const { chat_id } = useParams<{ chat_id: string }>()
@@ -68,9 +69,9 @@ export function Messages() {
           chat_id || null,
           (id) => {
             if (id) {
-              navigate(`/messages/${id}`)
+              navigate(`${PATHS.messages}/${id}`)
             } else {
-              navigate("/messages")
+              navigate(PATHS.messages)
             }
           },
         ]}

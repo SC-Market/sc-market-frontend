@@ -26,6 +26,7 @@ import { TabPanel } from "../../components/tabs/Tabs"
 import { MarketTabsLayout } from "../../components/layout/MarketTabsLayout"
 import { Page } from "../../components/metadata/Page"
 import { LazySection } from "../../components/layout/LazySection"
+import { PATHS, MARKET_PATHS } from "../../routes/paths"
 
 const ServiceMarketView = lazy(() =>
   import("../../views/services/ServiceMarketView").then((module) => ({
@@ -71,9 +72,9 @@ export function Contracts() {
   }, [location.pathname])
 
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-    if (newValue === 0) navigate("/market")
-    else if (newValue === 1) navigate("/market/services")
-    else if (newValue === 2) navigate("/contracts")
+    if (newValue === 0) navigate(MARKET_PATHS.search)
+    else if (newValue === 1) navigate(MARKET_PATHS.services)
+    else if (newValue === 2) navigate(PATHS.contracts)
   }
 
   const tabs = [

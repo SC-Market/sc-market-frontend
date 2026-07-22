@@ -40,6 +40,7 @@ function formatQty(scu: number | string): string {
 import { formatCraftingTime, NON_RECLAIMABLE_RESOURCES } from "../../constants/crafting"
 import { Helmet } from "react-helmet"
 import { FRONTEND_URL } from "../../util/constants"
+import { GAME_DATA_PATHS, USER_PATHS } from "../../routes/paths"
 
 export function BlueprintDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -148,7 +149,7 @@ export function BlueprintDetail() {
       canonicalUrl={`/blueprints/${slug}`}
       headerTitle={itemName}
       breadcrumbs={[
-        { label: "Blueprints", href: "/blueprints" },
+        { label: "Blueprints", href: GAME_DATA_PATHS.blueprints },
         { label: itemName },
       ]}
       isLoading={isLoading}
@@ -229,7 +230,7 @@ export function BlueprintDetail() {
                     label={m.mission_name}
                     size="small"
                     sx={{ height: 22, cursor: "pointer" }}
-                    onClick={() => navigate(`/missions/${m.mission_id}`)}
+                    onClick={() => navigate(GAME_DATA_PATHS.mission(m.mission_id))}
                   />
                 ))}
                 {data.missions_rewarding.length > 8 && (
@@ -479,7 +480,7 @@ export function BlueprintDetail() {
                   {orgOwners.members.map((m) => (
                     <Stack key={m.user_id} direction="row" spacing={1} alignItems="center"
                       sx={{ cursor: "pointer" }}
-                      onClick={() => navigate(`/user/${m.username}`)}
+                      onClick={() => navigate(USER_PATHS.profile(m.username))}
                     >
                       <Avatar src={m.avatar} sx={{ width: 32, height: 32, fontSize: "0.65rem" }}>
                         {m.display_name.slice(0, 2).toUpperCase()}

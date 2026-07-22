@@ -7,6 +7,7 @@ import {
 } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import { PATHS } from "../../../routes/paths"
 
 interface UsePageAcceptOrgInviteResult {
   inviteDetails: ReturnType<typeof useGetContractorInviteCodeQuery>["data"]
@@ -40,7 +41,7 @@ export function usePageAcceptOrgInvite(
         message: t("org.invite.accepted"),
         severity: "success",
       })
-      navigate("/")
+      navigate(PATHS.home)
     } catch (error) {
       issueAlert(error as Error)
     }

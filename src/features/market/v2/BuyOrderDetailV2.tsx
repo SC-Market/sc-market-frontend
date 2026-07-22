@@ -38,6 +38,7 @@ import {
   StorefrontRounded,
 } from "@mui/icons-material"
 import { ClockAlert } from "mdi-material-ui"
+import { MARKET_PATHS, USER_PATHS } from "../../../routes/paths"
 
 const STATUS_COLORS: Record<string, "success" | "warning" | "error" | "default"> = {
   active: "success",
@@ -64,7 +65,7 @@ export function BuyOrderDetailV2() {
 
   const breadcrumbs = useMemo(() => {
     const crumbs: { label: string; href?: string }[] = [
-      { label: t("sidebar.buyOrders", "Buy Orders"), href: "/buyorders" },
+      { label: t("sidebar.buyOrders", "Buy Orders"), href: MARKET_PATHS.buyOrders },
     ]
     if (buyOrder?.game_item_name) {
       crumbs.push({ label: buyOrder.game_item_name })
@@ -162,7 +163,7 @@ export function BuyOrderDetailV2() {
                             <ListingDetailItem icon={<PersonRounded fontSize="small" />}>
                               <Link
                                 component={RouterLink}
-                                to={`/user/${buyOrder.buyer_name}`}
+                                to={USER_PATHS.profile(buyOrder.buyer_name)}
                                 underline="hover"
                                 color="text.primary"
                                 variant="subtitle2"
@@ -317,7 +318,7 @@ export function BuyOrderDetailV2() {
                   </Box>
                   <Button
                     component={RouterLink}
-                    to={`/market/aggregate/${buyOrder.game_item_id}`}
+                    to={MARKET_PATHS.aggregate(buyOrder.game_item_id)}
                     variant="contained"
                     color="warning"
                     size="large"

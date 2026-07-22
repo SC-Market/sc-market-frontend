@@ -22,6 +22,7 @@ import { UnifiedSearchBar, miningTokensToParams, miningParamsToTokens, type Sear
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e",
@@ -70,16 +71,16 @@ export function MiningOreBrowser() {
 
   const handleOreClick = (oreName: string) => {
     if (isMobile) {
-      navigate(`/mining/ores/${oreName}`)
+      navigate(GAME_DATA_PATHS.miningOre(oreName))
     } else {
       setSelectedOre(oreName)
-      window.history.replaceState(null, "", `/mining/ores/${oreName}`)
+      window.history.replaceState(null, "", GAME_DATA_PATHS.miningOre(oreName))
     }
   }
 
   const handleModalClose = () => {
     setSelectedOre(null)
-    navigate("/mining", { replace: true })
+    navigate(GAME_DATA_PATHS.mining, { replace: true })
   }
 
   const { data, isLoading, error } = useSearchOresQuery({

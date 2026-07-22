@@ -62,6 +62,12 @@ import { MobileFAB } from "../../../components/mobile/MobileFAB"
 import { BottomSheet } from "../../../components/mobile"
 import { ContentCopyRounded } from "@mui/icons-material"
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
+import {
+  PATHS,
+  USER_PATHS,
+  ORG_PATHS,
+  ORDER_PATHS,
+} from "../../../routes/paths"
 
 // Replace Discord-like timestamp tags in messages with human-readable strings
 function replaceDiscordTimestamps(input: string) {
@@ -177,7 +183,7 @@ function MessageEntryMobile(props: { message: Message }) {
   const messageContent = (
     <Stack direction={"row"} spacing={1.5} justifyContent={"flex-start"}>
       {message.author ? (
-        <Link to={`/user/${author?.username}`}>
+        <Link to={USER_PATHS.profile(author?.username!)}>
           <Avatar
             variant="rounded"
             sx={{
@@ -296,7 +302,7 @@ function MessageHeaderMobile() {
             color="secondary"
             aria-label={t("MessagesBody.toggleSidebar")}
             onClick={() => {
-              navigate("/messages")
+              navigate(PATHS.messages)
             }}
             sx={{
               marginRight: 1,
@@ -405,7 +411,7 @@ function MessageHeaderMobile() {
                             label={contractor.name}
                             size="small"
                             component={Link}
-                            to={`/contractor/${contractor.spectrum_id}`}
+                            to={ORG_PATHS.profile(contractor.spectrum_id)}
                             onClick={(e) => e.stopPropagation()}
                             sx={{
                               height: 20,
@@ -424,7 +430,7 @@ function MessageHeaderMobile() {
                         label={t("messages.viewChat", "View Chat")}
                         size="small"
                         component={Link}
-                        to={`/messages/${chat.chat_id}`}
+                        to={`${PATHS.messages}/${chat.chat_id}`}
                         onClick={(e) => e.stopPropagation()}
                         clickable
                         sx={{
@@ -441,7 +447,7 @@ function MessageHeaderMobile() {
                         label="View Order"
                         size="small"
                         component={Link}
-                        to={`/order/${chat!.order_id}`}
+                        to={ORDER_PATHS.detail(chat!.order_id)}
                         onClick={(e) => e.stopPropagation()}
                         clickable
                         sx={{
@@ -458,7 +464,7 @@ function MessageHeaderMobile() {
                         label="View Offer"
                         size="small"
                         component={Link}
-                        to={`/offer/${chat!.session_id}`}
+                        to={ORDER_PATHS.offer(chat!.session_id)}
                         onClick={(e) => e.stopPropagation()}
                         clickable
                         sx={{

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { AssignmentOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+import { MARKET_PATHS, ORDER_PATHS } from "../../routes/paths"
 
 export interface EmptyOrdersProps extends Omit<
   EmptyStateProps,
@@ -78,14 +79,14 @@ export function EmptyOrders({
         label: t("emptyStates.orders.browseMarket", {
           defaultValue: "Browse Market",
         }),
-        onClick: () => navigate("/market"),
+        onClick: () => navigate(MARKET_PATHS.search),
         variant: "contained" as const,
       }
       defaultSecondaryAction = {
         label: t("emptyStates.orders.browseServices", {
           defaultValue: "Browse Services",
         }),
-        onClick: () => navigate("/market/services"),
+        onClick: () => navigate(MARKET_PATHS.services),
       }
     } else {
       // Received offers (none) → point to create market listing or service listing
@@ -97,14 +98,14 @@ export function EmptyOrders({
         label: t("emptyStates.orders.createMarketListing", {
           defaultValue: "Create Market Listing",
         }),
-        onClick: () => navigate("/market/create"),
+        onClick: () => navigate(MARKET_PATHS.create),
         variant: "contained" as const,
       }
       defaultSecondaryAction = {
         label: t("emptyStates.orders.createServiceListing", {
           defaultValue: "Create Service Listing",
         }),
-        onClick: () => navigate("/order/service/create"),
+        onClick: () => navigate(ORDER_PATHS.serviceCreate),
       }
     }
   } else {
@@ -119,14 +120,14 @@ export function EmptyOrders({
         label: t("emptyStates.orders.browseMarket", {
           defaultValue: "Browse Market",
         }),
-        onClick: () => navigate("/market"),
+        onClick: () => navigate(MARKET_PATHS.search),
         variant: "contained" as const,
       }
       defaultSecondaryAction = {
         label: t("emptyStates.orders.browseServices", {
           defaultValue: "Browse Services",
         }),
-        onClick: () => navigate("/market/services"),
+        onClick: () => navigate(MARKET_PATHS.services),
       }
     } else {
       // All orders (none) → point to create market listing or service listing
@@ -139,7 +140,7 @@ export function EmptyOrders({
             label: t("emptyStates.orders.createMarketListing", {
               defaultValue: "Create Market Listing",
             }),
-            onClick: () => navigate("/market/create"),
+            onClick: () => navigate(MARKET_PATHS.create),
             variant: "contained" as const,
           }
         : undefined
@@ -148,7 +149,7 @@ export function EmptyOrders({
             label: t("emptyStates.orders.createServiceListing", {
               defaultValue: "Create Service Listing",
             }),
-            onClick: () => navigate("/order/service/create"),
+            onClick: () => navigate(ORDER_PATHS.serviceCreate),
           }
         : undefined
     }

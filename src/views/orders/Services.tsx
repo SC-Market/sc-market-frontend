@@ -30,6 +30,7 @@ import {
 } from "../../features/services/api/servicesApi"
 import { useTranslation } from "react-i18next"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
+import { ORDER_PATHS } from "../../routes/paths"
 
 export interface ServiceRowProps {
   row: Service
@@ -86,7 +87,7 @@ export function ServiceDetailsRow(props: { open: boolean; service: Service }) {
           >
             <CardActionArea
               component={Link}
-              to={`/order/service/${service.service_id}/edit`}
+              to={ORDER_PATHS.serviceEdit(service.service_id)}
             >
               <Card
                 variant={"outlined"}

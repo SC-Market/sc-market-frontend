@@ -38,6 +38,7 @@ import type {
   MyListingItem,
   StockLotDetail,
 } from "../../../../store/api/v2/market"
+import { MARKET_PATHS } from "../../../../routes/paths"
 
 /**
  * ManageMarketRedesign — Phase 0 of the Market redesign (behind the
@@ -133,7 +134,7 @@ export function ManageMarketRedesign() {
           </TextField>
           <Button
             component={RouterLink}
-            to="/market/create"
+            to={MARKET_PATHS.create}
             variant="contained"
             color="primary"
             startIcon={<AddRounded />}
@@ -245,7 +246,7 @@ function ListingRow({
               <Typography
                 variant="body2"
                 component={RouterLink}
-                to="/market/me"
+                to={MARKET_PATHS.listing(listing.listing_id, listing.title)}
                 sx={{ color: "text.secondary", textDecoration: "none" }}
                 noWrap
               >

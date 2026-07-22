@@ -6,6 +6,7 @@ import { ListingWrapper } from "../../features/market/components/listings/Listin
 import { RecentListingsSkeleton } from "./RecentListingsSkeleton"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
+import { MARKET_PATHS } from "../../routes/paths"
 
 export function RecentListingsV2() {
   const { t } = useTranslation()
@@ -25,7 +26,7 @@ export function RecentListingsV2() {
         <Typography variant="h6" fontWeight="bold" color="text.secondary">
           {t("landing.recentListings", "Recent Listings")}
         </Typography>
-        <Button component={Link} to="/market" size="small" color="primary">
+        <Button component={Link} to={MARKET_PATHS.search} size="small" color="primary">
           {t("landing.seeAll", "See All")}
         </Button>
       </Box>

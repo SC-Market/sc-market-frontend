@@ -11,6 +11,7 @@ import {
 } from "../../features/orders/hooks/useOrderTrend"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
+import { ORG_PATHS, USER_PATHS } from "../../routes/paths"
 
 // Minimal interface for trend data
 interface TrendOrder {
@@ -322,7 +323,7 @@ export function TopContractors(props: { orders: OrderStub[] }) {
           <li key={c.name}>
             <UnderlineLink
               color={"text.secondary"}
-              to={`/contractor/${c.name}`}
+              to={ORG_PATHS.profile(c.name)}
               component={Link}
             >
               {c.name}
@@ -370,7 +371,7 @@ export function TopUsers(props: { orders: OrderStub[] }) {
             {i + 1}.&nbsp;
             <UnderlineLink
               color={"text.secondary"}
-              to={`/user/${c.name}`}
+              to={USER_PATHS.profile(c.name)}
               component={Link}
             >
               {c.name}
@@ -420,7 +421,7 @@ export function TopUsersThisWeek(props: { orders: OrderStub[] }) {
             {i + 1}.&nbsp;
             <UnderlineLink
               color={"text.secondary"}
-              to={`/user/${c.name}`}
+              to={USER_PATHS.profile(c.name)}
               component={Link}
             >
               {c.name}
@@ -470,7 +471,7 @@ export function TopUsersThisMonth(props: { orders: OrderStub[] }) {
             {i + 1}.&nbsp;
             <UnderlineLink
               color={"text.secondary"}
-              to={`/user/${c.name}`}
+              to={USER_PATHS.profile(c.name)}
               component={Link}
             >
               {c.name}

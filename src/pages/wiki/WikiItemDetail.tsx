@@ -43,7 +43,7 @@ import { formatQuantity } from "../../util/formatQuantity"
 import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHistoryChartV2"
 import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
-import { MARKET_PATHS } from "../../routes/paths"
+import { MARKET_PATHS, WIKI_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
 import { Helmet } from "react-helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
@@ -119,8 +119,8 @@ export function WikiItemDetail() {
       canonicalUrl={`/wiki/items/${id}`}
       headerTitle={item.name}
       breadcrumbs={[
-        { label: t("wiki.itemDetail.breadcrumbWiki", "Wiki"), href: "/wiki" },
-        { label: t("wiki.itemDetail.breadcrumbItems", "Items"), href: "/wiki/items" },
+        { label: t("wiki.itemDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub },
+        { label: t("wiki.itemDetail.breadcrumbItems", "Items"), href: WIKI_PATHS.items },
         { label: item.name },
       ]}
       sidebarOpen={true}
@@ -186,7 +186,7 @@ export function WikiItemDetail() {
                       {item.type && <Chip label={item.type} color="primary" />}
                       {item.size && <Chip label={`${t("wiki.itemDetail.size", "Size")} ${item.size}`} />}
                       {item.grade && <Chip label={`${t("wiki.itemDetail.grade", "Grade")} ${item.grade}`} />}
-                      {item.manufacturer && <Chip label={item.manufacturer} clickable onClick={() => navigate(`/wiki/manufacturers/${encodeURIComponent(item.manufacturer!)}`)} />}
+                      {item.manufacturer && <Chip label={item.manufacturer} clickable onClick={() => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(item.manufacturer!)))} />}
                     </Stack>
 
                     {/* Market Stats */}
@@ -290,7 +290,7 @@ export function WikiItemDetail() {
                     </Typography>
                     <Button
                       size="small"
-                      onClick={() => navigate(`/market/aggregate/${id}`)}
+                      onClick={() => navigate(MARKET_PATHS.aggregate(id!))}
                     >
                       {t("wiki.itemDetail.viewAll", "View All")}
                     </Button>
@@ -303,7 +303,7 @@ export function WikiItemDetail() {
                             key={listing.listing_id}
                             hover
                             sx={{ cursor: "pointer" }}
-                            onClick={() => navigate(`/market/${listing.listing_id}`)}
+                            onClick={() => navigate(MARKET_PATHS.listing(listing.listing_id))}
                           >
                             <TableCell>
                               <Typography variant="body2" noWrap sx={{ maxWidth: 200 }}>
@@ -464,14 +464,14 @@ export function WikiItemDetail() {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={() => navigate(`/crafting/calculator?blueprint_id=${bp.blueprint_id}`)}
+                          onClick={() => navigate(`${GAME_DATA_PATHS.craftingCalculator}?blueprint_id=${bp.blueprint_id}`)}
                         >
                           {t("wiki.itemDetail.openInCalculator", "Open in Calculator")}
                         </Button>
                         <Button
                           size="small"
                           sx={{ ml: 1 }}
-                          onClick={() => navigate(`/blueprints/${bp.blueprint_name || bp.blueprint_id}`)}
+                          onClick={() => navigate(GAME_DATA_PATHS.blueprint(bp.blueprint_name || bp.blueprint_id))}
                         >
                           {t("wiki.itemDetail.viewBlueprint", "View Blueprint")}
                         </Button>
@@ -547,7 +547,7 @@ export function WikiItemDetail() {
                                   <TableCell colSpan={4}>
                                     <Button
                                       size="small"
-                                      onClick={() => navigate(`/blueprints/${bp.blueprint_name || bp.blueprint_id}`)}
+                                      onClick={() => navigate(GAME_DATA_PATHS.blueprint(bp.blueprint_name || bp.blueprint_id))}
                                     >
                                       {t("wiki.itemDetail.viewBlueprintFullList", "View blueprint for full ingredient list")}
                                     </Button>

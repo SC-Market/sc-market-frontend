@@ -44,6 +44,7 @@ import { Contractor, ContractorRole } from "../../features/contractor/domain/typ
 import { useMemberActions } from "../../features/contractor/hooks/useMemberActions"
 import { has_permission } from "../../features/contractor/domain/permissions"
 import { useGetContractorMembersQuery } from "../../features/contractor/api/contractorApi"
+import { USER_PATHS } from "../../routes/paths"
 
 function PeopleRow(props: {
   row: OrgMember
@@ -90,7 +91,7 @@ function PeopleRow(props: {
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Avatar src={row.avatar} />
           <Box>
-            <Link to={`/user/${row.username}`}>
+            <Link to={USER_PATHS.profile(row.username)}>
               <UnderlineLink
                 color={"text.secondary"}
                 variant={"subtitle1"}

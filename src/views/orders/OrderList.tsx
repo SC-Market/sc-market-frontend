@@ -64,6 +64,7 @@ import {
   statusColors,
   statusNames,
 } from "../../features/orders/domain/constants"
+import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
 
 export { statusColors, statusNames }
 
@@ -184,13 +185,13 @@ export function OrderRow(props: {
       {
         label: t("orders.viewDetails", { defaultValue: "View Details" }),
         icon: <VisibilityRounded />,
-        onClick: () => navigate(`/contract/${row.order_id}`),
+        onClick: () => navigate(ORDER_PATHS.contract(row.order_id)),
       },
       {
         label: t("orders.share", { defaultValue: "Share" }),
         icon: <ShareRounded />,
         onClick: () => {
-          const url = `${window.location.origin}/contract/${row.order_id}`
+          const url = `${window.location.origin}${ORDER_PATHS.contract(row.order_id)}`
           if (navigator.share) {
             navigator
               .share({
@@ -228,7 +229,7 @@ export function OrderRow(props: {
           ? undefined
           : isMobile
             ? undefined
-            : `/contract/${row.order_id}`
+            : ORDER_PATHS.contract(row.order_id)
       }
       {...(isMobile ? longPressHandlers : {})}
       sx={{
@@ -270,7 +271,7 @@ export function OrderRow(props: {
           isInSelectionMode
             ? props.onClick
             : isMobile
-              ? () => navigate(`/contract/${row.order_id}`)
+              ? () => navigate(ORDER_PATHS.contract(row.order_id))
               : undefined
         }
         sx={{
@@ -366,7 +367,7 @@ export function OrderRow(props: {
               )}
               <MaterialLink
                 component={Link}
-                to={`/shops/${row.shop.slug}`}
+                to={SHOP_PATHS.profile(row.shop.slug)}
                 underline="hover"
                 color="text.secondary"
                 variant="subtitle2"

@@ -7,6 +7,7 @@ import { MinimalContractor } from "../../features/contractor/domain/types"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ORG_PATHS } from "../../routes/paths"
 
 export function ContractorAvatar(props: { contractor: MinimalContractor }) {
   const { contractor } = props
@@ -33,7 +34,7 @@ export function ContractorAvatar(props: { contractor: MinimalContractor }) {
       >
         <MaterialLink
           component={Link}
-          to={`/contractor/${contractor.spectrum_id}`}
+          to={ORG_PATHS.profile(contractor.spectrum_id)}
           style={{ textDecoration: "none", color: "inherit" }}
           aria-label={t(
             "accessibility.viewContractorProfile",

@@ -18,6 +18,7 @@ import { has_permission } from "../../contractor/domain/permissions"
 import { detectOfferChanges } from "../../../util/offerChanges"
 import { store } from "../../../store/store"
 import type { MinimalUser } from "../../../datatypes/User"
+import { ORDER_PATHS } from "../../../routes/paths"
 
 export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?: number) {
   const { t } = useTranslation()
@@ -111,7 +112,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     (status: "accepted" | "rejected" | "cancelled") => {
       updateStatus({ session_id: session.session_id, status })
         .unwrap()
-        .then((result) => { if ((result as { order_id?: string }).order_id) navigate(`/contract/${(result as { order_id?: string }).order_id}`) })
+        .then((result) => { if ((result as { order_id?: string }).order_id) navigate(ORDER_PATHS.contract((result as { order_id?: string }).order_id!)) })
         .catch((err) => issueAlert(err))
     },
     [session.session_id, updateStatus, navigate, issueAlert],

@@ -40,6 +40,7 @@ import { MuiAreaChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { USER_PATHS } from "../../routes/paths"
 
 function PeopleRow(props: {
   row: AdminUser
@@ -82,7 +83,7 @@ function PeopleRow(props: {
           <Grid item>
             <MaterialLink
               component={Link}
-              to={`/user/${row.username}`}
+              to={USER_PATHS.profile(row.username)}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <UnderlineLink

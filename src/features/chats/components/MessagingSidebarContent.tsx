@@ -43,6 +43,7 @@ import {
 } from "../../../components/empty-states"
 import { getRelativeTime } from "../../../util/time"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
+import { PATHS } from "../../../routes/paths"
 
 // Single chat entry in the chat list
 function ChatEntry(props: {
@@ -100,7 +101,7 @@ function ChatEntry(props: {
       onClick={() => {
         setCurrentChatID(props.chat.chat_id)
         setCreatingMessageGroup(false)
-        navigate(`/messages/${props.chat.chat_id}`)
+        navigate(`${PATHS.messages}/${props.chat.chat_id}`)
       }}
       selected={isSelected}
     >

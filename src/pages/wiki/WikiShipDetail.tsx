@@ -19,6 +19,7 @@ import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons
 import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouette"
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
+import { WIKI_PATHS } from "../../routes/paths"
 
 interface LoadoutNode {
   name?: string
@@ -61,7 +62,7 @@ function LoadoutTree({ data, navigate, depth = 0 }: {
                     label={name}
                     size="small"
                     sx={{ height: 20, fontSize: "0.7rem", cursor: itemId ? "pointer" : "default" }}
-                    onClick={itemId ? () => navigate(`/wiki/items/${itemId}`) : undefined}
+                    onClick={itemId ? () => navigate(WIKI_PATHS.item(itemId)) : undefined}
                     color={itemId ? "primary" : "default"}
                     variant="outlined"
                   />
@@ -134,7 +135,7 @@ export function WikiShipDetail() {
   const ogImage = ship.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
-    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={`/wiki/ships/${id}`} headerTitle={ship.name} breadcrumbs={[{ label: t("wiki.shipDetail.breadcrumbWiki", "Wiki"), href: "/wiki" }, { label: t("wiki.shipDetail.breadcrumbShips", "Ships & Vehicles"), href: "/wiki/ships" }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
+    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={WIKI_PATHS.ship(id!)} headerTitle={ship.name} breadcrumbs={[{ label: t("wiki.shipDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub }, { label: t("wiki.shipDetail.breadcrumbShips", "Ships & Vehicles"), href: WIKI_PATHS.ships }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
       <Helmet>
         <title>{seoTitle}</title>
         <meta name="description" content={seoDescription} />

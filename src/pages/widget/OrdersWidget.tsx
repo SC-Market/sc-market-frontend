@@ -8,6 +8,7 @@ import { getRelativeTime } from "../../util/time"
 import { HookProvider } from "../../hooks/HookProvider"
 import { lightTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { ORDER_PATHS } from "../../routes/paths"
 
 /**
  * Widget view for recent orders
@@ -128,7 +129,7 @@ function OrdersWidgetContent() {
           {recentOrders.slice(0, maxOrders).map((order) => (
             <Link
               key={order.order_id}
-              to={`/order/${order.order_id}`}
+              to={ORDER_PATHS.detail(order.order_id)}
               style={{ textDecoration: "none" }}
             >
               <Box sx={widgetStyles.orderItem}>

@@ -8,6 +8,7 @@ import type { OrderReview } from "../../orders/domain/types"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
+import { ORDER_PATHS, USER_PATHS, ORG_PATHS } from "../../../routes/paths"
 
 export function NotificationOrderReview(props: { notif: Notification }) {
   const { notif } = props
@@ -18,15 +19,15 @@ export function NotificationOrderReview(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<CreateRoundedIcon />}
-      to={`/contract/${review.order_id}`}
+      to={ORDER_PATHS.contract(review.order_id)}
       notif={notif}
     >
       {t("notifications.new_review_by")}{" "}
       <Link
         to={
           review.user_author
-            ? `/user/${review.user_author.username}`
-            : `/contractor/${review.contractor_author!.spectrum_id}`
+            ? USER_PATHS.profile(review.user_author.username)
+            : ORG_PATHS.profile(review.contractor_author!.spectrum_id)
         }
         style={{
           textDecoration: "none",

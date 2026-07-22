@@ -12,6 +12,7 @@ import {
 } from "@mui/material"
 import { ListAltRounded, ShoppingBagRounded, DesignServicesRounded } from "@mui/icons-material"
 import type { ShopPublicResponse } from "../../../store/api/v2/market"
+import { SHOP_PATHS } from "../../../routes/paths"
 
 interface ShopCardProps {
   shop: ShopPublicResponse
@@ -24,7 +25,7 @@ export function ShopCard({ shop, index = 0 }: ShopCardProps) {
       <Card sx={{ height: "100%" }}>
         <CardActionArea
           component={RouterLink}
-          to={`/shops/${shop.slug}`}
+          to={SHOP_PATHS.profile(shop.slug)}
           sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" }}
         >
           <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1, flex: 1, p: 2 }}>

@@ -10,6 +10,7 @@ import { User } from "../../../datatypes/User"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
 import { useTranslation } from "react-i18next"
+import { SHOP_PATHS } from "../../../routes/paths"
 
 interface ProfileTabContentProps {
   currentTab: number
@@ -63,7 +64,7 @@ function UserShopRedirect({ username }: { username: string }) {
   if (shop) {
     return (
       <Alert severity="info" action={
-        <Link to={`/shops/${shop.slug}`} style={{ color: "inherit" }}>
+        <Link to={SHOP_PATHS.profile(shop.slug)} style={{ color: "inherit" }}>
           {t("common.viewShop", "View Shop")}
         </Link>
       }>

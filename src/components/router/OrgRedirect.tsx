@@ -1,7 +1,7 @@
 import React from "react"
 import { Navigate } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { ORG_PATHS } from "../../routes/paths"
+import { ORG_PATHS, PATHS } from "../../routes/paths"
 
 type SingleArgOrgPath = {
   [K in keyof typeof ORG_PATHS]: (typeof ORG_PATHS)[K] extends (id: string) => string ? K : never
@@ -19,7 +19,7 @@ export function OrgRedirect({ subpath }: { subpath: SingleArgOrgPath }) {
     return <Navigate to={pathFn(currentOrg.spectrum_id)} replace />
   }
 
-  return <Navigate to="/" replace />
+  return <Navigate to={PATHS.home} replace />
 }
 
 export function OrgRedirectManage() {

@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ORDER_PATHS } from "../../routes/paths"
 
 export function CounterOfferSubmitArea(props: { session: GetOfferSessionV2Response }) {
   const { session } = props
@@ -31,7 +32,7 @@ export function CounterOfferSubmitArea(props: { session: GetOfferSessionV2Respon
           }),
           severity: "success",
         })
-        navigate(`/offer/${session.session_id}`)
+        navigate(ORDER_PATHS.offer(session.session_id))
       })
       .catch(issueAlert)
   }, [counterOffer, body, navigate, session.session_id, issueAlert, t])

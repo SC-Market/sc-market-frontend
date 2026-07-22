@@ -23,6 +23,7 @@ import { useCreateStandingBuyOrderMutation, useGetMySuppliersQuery, useSearchRes
 import { useUploadImageMutation } from "../../../../store/api/v2/market-overrides";
 import { SelectPhotosArea, UploadedImageStatus } from "../../../../components/modal/SelectPhotosArea";
 import { useNavigate } from "react-router-dom";
+import { MARKET_PATHS } from "../../../../routes/paths";
 
 import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
 import { QualityBandSelect } from "../../../../components/game-data/QualityBandSelect";
@@ -199,7 +200,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
         severity: "success",
       });
 
-      navigate("/buyorders");
+      navigate(MARKET_PATHS.buyOrders);
 
       // Reset form
       setNegotiable(false);

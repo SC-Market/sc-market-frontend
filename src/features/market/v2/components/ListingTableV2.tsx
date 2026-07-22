@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next"
 import { ListingSearchResult } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
+import { SHOP_PATHS } from "../../../../routes/paths"
 
 function formatPrice(min: number, max: number) {
   if (min === max) return `${min.toLocaleString()} aUEC`
@@ -63,7 +64,7 @@ export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }
                 <Typography variant="body2">{l.quantity_available.toLocaleString()}</Typography>
               </TableCell>
               <TableCell>
-                <MuiLink component={RouterLink} to={`/shops/${l.shop_slug}`} underline="hover" color="text.secondary" variant="caption">
+                <MuiLink component={RouterLink} to={SHOP_PATHS.profile(l.shop_slug)} underline="hover" color="text.secondary" variant="caption">
                   {l.shop_name}
                 </MuiLink>
               </TableCell>

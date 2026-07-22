@@ -25,6 +25,7 @@ import {
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetMyShopsQuery, useQuickCreateShopMutation } from "../../../store/api/v2/market"
 import type { ShopResponse } from "../../../store/api/v2/market"
+import { SHOP_PATHS } from "../../../routes/paths"
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
@@ -219,7 +220,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             size="small"
             startIcon={<Visibility />}
             component={RouterLink}
-            to={`/shops/${shop.slug}`}
+            to={SHOP_PATHS.profile(shop.slug)}
           >
             View Shop
           </Button>
@@ -229,7 +230,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
               size="small"
               startIcon={<Settings />}
               component={RouterLink}
-              to={`/shop/${shop.slug}/settings`}
+              to={SHOP_PATHS.settings(shop.slug)}
             >
               Manage
             </Button>

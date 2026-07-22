@@ -34,6 +34,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { has_permission } from "../../../views/contractor/OrgRoles";
 import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi";
 import { formatMarketUrl } from "../domain/urls";
+import { MARKET_PATHS } from "../../../routes/paths";
 
 /**
  * ContractorListingsV2 - Display contractor organization listings with V2 variant support
@@ -332,7 +333,7 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
     (e: React.MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
-      navigate(`/market_edit/${listing.listing_id}`);
+      navigate(MARKET_PATHS.edit(listing.listing_id));
     },
     [navigate, listing.listing_id],
   );

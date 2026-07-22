@@ -29,6 +29,7 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { Discord } from "../../components/icon/DiscordIcon"
+import { USER_PATHS } from "../../routes/paths"
 
 // Custom UserList for blocked users with unblock functionality
 function BlockedUserList(props: {
@@ -79,7 +80,7 @@ function BlockedUserList(props: {
           >
             <ListItemButton
               component={Link}
-              to={`/user/${user.username}`}
+              to={USER_PATHS.profile(user.username)}
               sx={{ flex: 1, borderRadius: 1 }}
             >
               <ListItemAvatar>

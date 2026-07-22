@@ -31,6 +31,7 @@ import { has_permission } from "../contractor/OrgRoles"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 import { ReportButton } from "../../components/button/ReportButton"
+import { ORG_PATHS } from "../../routes/paths"
 
 export function RecruitingPostView(props: { post: RecruitingPost }) {
   const { post } = props
@@ -73,7 +74,7 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
             avatar={
               <MaterialLink
                 component={Link}
-                to={`/contractor/${contractor.spectrum_id}`}
+                to={ORG_PATHS.profile(contractor.spectrum_id)}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <Avatar
@@ -97,7 +98,7 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
             title={
               <MaterialLink
                 component={Link}
-                to={`/contractor/${contractor.spectrum_id}`}
+                to={ORG_PATHS.profile(contractor.spectrum_id)}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <UnderlineLink

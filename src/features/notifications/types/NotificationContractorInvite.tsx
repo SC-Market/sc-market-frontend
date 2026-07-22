@@ -14,6 +14,7 @@ import {
   useDeclineContractorInviteMutation,
 } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { ORG_PATHS } from "../../../routes/paths"
 
 export function NotificationContractorInvite(props: { notif: Notification }) {
   const theme = useTheme<ExtendedTheme>()
@@ -64,7 +65,7 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
           components={{
             contractorLink: (
               <Link
-                to={`/contractor/${invite.spectrum_id}`}
+                to={ORG_PATHS.profile(invite.spectrum_id)}
                 style={{
                   textDecoration: "none",
                   color: theme.palette.secondary.main,

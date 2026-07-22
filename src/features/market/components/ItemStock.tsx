@@ -52,6 +52,7 @@ import {
 } from "@mui/icons-material"
 import { useMarketSearch } from ".."
 import { formatCompleteListingUrl } from "../../../util/urls"
+import { MARKET_PATHS } from "../../../routes/paths"
 import { Link } from "react-router-dom"
 import { MarketListingUpdateBody, UniqueListing } from "../domain/types"
 import { useTheme } from "@mui/material/styles"
@@ -642,7 +643,7 @@ export function DisplayStock({
         return (
           <Tooltip title={t("ItemStock.editListing")}>
             <Link
-              to={`/market_edit/${params.value}`}
+              to={MARKET_PATHS.edit(params.value)}
               style={{ color: "inherit" }}
             >
               <IconButton>

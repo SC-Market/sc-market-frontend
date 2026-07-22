@@ -33,6 +33,7 @@ import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrde
 import { haptic } from "../../util/haptics"
 import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { getDisabledTabs } from "../sidebar/utils/sidebarFilters"
+import { PATHS, MARKET_PATHS, ORDER_PATHS, ORG_PATHS } from "../../routes/paths"
 
 interface NavTabConfig {
   id: string
@@ -91,31 +92,31 @@ export function MobileBottomNav() {
         id: "market",
         label: "sidebar.market_short",
         icon: <StoreRounded />,
-        route: "/market",
+        route: MARKET_PATHS.search,
       },
       services: {
         id: "services",
         label: "sidebar.services_short",
         icon: <DesignServicesRounded />,
-        route: "/market/services",
+        route: MARKET_PATHS.services,
       },
       contracts: {
         id: "contracts",
         label: "sidebar.contracts_short",
         icon: <DescriptionRounded />,
-        route: "/contracts",
+        route: PATHS.contracts,
       },
       recruiting: {
         id: "recruiting",
         label: "sidebar.recruiting_short",
         icon: <PersonAddRounded />,
-        route: "/recruiting",
+        route: PATHS.recruiting,
       },
       messages: {
         id: "messages",
         label: "sidebar.messaging",
         icon: <ForumRounded />,
-        route: "/messages",
+        route: PATHS.messages,
         requiresAuth: true,
         badge: unreadChatCount,
       },
@@ -123,7 +124,7 @@ export function MobileBottomNav() {
         id: "orders",
         label: "sidebar.orders.text",
         icon: <CreateRounded />,
-        route: "/orders",
+        route: PATHS.myOrders,
         requiresAuth: true,
         badge: pendingOrderCount,
       },
@@ -131,48 +132,48 @@ export function MobileBottomNav() {
         id: "dashboard",
         label: "sidebar.dashboard.text",
         icon: <DashboardRounded />,
-        route: "/dashboard",
+        route: PATHS.dashboard,
         requiresAuth: true,
       },
       contractors: {
         id: "contractors",
         label: "sidebar.contractors_short",
         icon: <BusinessRounded />,
-        route: "/contractors",
+        route: PATHS.contractors,
       },
       availability: {
         id: "availability",
         label: "sidebar.availability_short",
         icon: <CalendarMonthRounded />,
-        route: "/availability",
+        route: PATHS.availability,
         requiresAuth: true,
       },
       "manage-listings": {
         id: "manage-listings",
         label: "sidebar.listings_short",
         icon: <ListAltRounded />,
-        route: "/market/manage?quantityAvailable=0",
+        route: `${MARKET_PATHS.manage}?quantityAvailable=0`,
         requiresAuth: true,
       },
       "manage-stock": {
         id: "manage-stock",
         label: "sidebar.stock_short",
         icon: <WarehouseRounded />,
-        route: "/market/manage-stock",
+        route: MARKET_PATHS.manageStock,
         requiresAuth: true,
       },
       "manage-services": {
         id: "manage-services",
         label: "sidebar.services_short",
         icon: <DashboardCustomizeRounded />,
-        route: "/order/services",
+        route: ORDER_PATHS.services,
         requiresAuth: true,
       },
       "org-dashboard": {
         id: "org-dashboard",
         label: "sidebar.dashboard.text",
         icon: <AssignmentTurnedInRounded />,
-        route: "/dashboard",
+        route: PATHS.dashboard,
         requiresAuth: true,
       },
       "org-public": {
@@ -180,15 +181,15 @@ export function MobileBottomNav() {
         label: "sidebar.org_public_page",
         icon: <StoreRounded />,
         route: primaryContractor
-          ? `/contractor/${primaryContractor.spectrum_id}`
-          : "/contractors",
+          ? ORG_PATHS.profile(primaryContractor.spectrum_id)
+          : PATHS.contractors,
         requiresAuth: true,
       },
       "org-availability": {
         id: "org-availability",
         label: "sidebar.availability_short",
         icon: <CalendarMonthRounded />,
-        route: "/availability",
+        route: PATHS.availability,
         requiresAuth: true,
       },
     }
@@ -295,7 +296,7 @@ export function MobileBottomNav() {
     const tab = activeTabs.find((t) => t.id === newValue)
     if (tab) {
       if (tab.requiresAuth && !isLoggedIn) {
-        navigate("/login")
+        navigate(PATHS.login)
       } else {
         navigate(tab.route)
       }

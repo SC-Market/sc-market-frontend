@@ -44,6 +44,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { URL_REGEX } from "../../../util/parsing"
 import { ShopBlocklistSection } from "./ShopBlocklist"
 import { ImageRounded } from "@mui/icons-material"
+import { SHOP_PATHS } from "../../../routes/paths"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -500,7 +501,7 @@ export function ShopSettings() {
 
   // Redirect if user doesn't have manage_market permission
   if (!shop.permissions?.manage_market) {
-    return <Navigate to={`/shop/${shop.slug}/listings`} replace />
+    return <Navigate to={SHOP_PATHS.listings(shop.slug)} replace />
   }
   const [updateShop, { isLoading }] = useUpdateShopMutation()
   const issueAlert = useAlertHook()

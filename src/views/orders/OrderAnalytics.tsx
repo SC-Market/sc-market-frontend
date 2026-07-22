@@ -8,6 +8,7 @@ import { Link } from "react-router-dom"
 import { OrderAnalytics } from "../../features/orders/domain/types"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { SHOP_PATHS, USER_PATHS } from "../../routes/paths"
 
 interface OrderAnalyticsProps {
   analytics: OrderAnalytics
@@ -163,7 +164,7 @@ export function TopShopsAnalytics({ analytics }: OrderAnalyticsProps) {
           <li key={s.slug}>
             <UnderlineLink
               color={"text.secondary"}
-              to={`/shops/${s.slug}`}
+              to={SHOP_PATHS.profile(s.slug)}
               component={Link}
             >
               {s.name}
@@ -185,7 +186,7 @@ export function TopUsersAnalytics({ analytics }: OrderAnalyticsProps) {
             {i + 1}.&nbsp;
             <UnderlineLink
               color={"text.secondary"}
-              to={`/user/${c.username}`}
+              to={USER_PATHS.profile(c.username)}
               component={Link}
             >
               {c.username}
