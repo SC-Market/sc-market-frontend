@@ -90,7 +90,7 @@ function SectionHeader({ label, count }: { label: string; count: number }) {
         sx={{
           height: 16,
           fontSize: "0.6rem",
-          bgcolor: "rgba(255,255,255,0.07)",
+          bgcolor: (theme) => alpha(theme.palette.text.primary, 0.07),
           color: "text.disabled",
           "& .MuiChip-label": { px: 0.75 },
         }}
@@ -264,9 +264,9 @@ function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: (
               sx={{
                 height: 16,
                 fontSize: "0.58rem",
-                bgcolor: "rgba(255,255,255,0.04)",
+                bgcolor: (theme) => alpha(theme.palette.text.primary, 0.04),
                 color: "text.disabled",
-                border: "1px solid rgba(255,255,255,0.10)",
+                border: (theme) => `1px solid ${alpha(theme.palette.text.primary, 0.1)}`,
                 "& .MuiChip-label": { px: 0.75 },
               }}
             />
@@ -314,6 +314,9 @@ export function WikiShipBrowser() {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+
+  // Theme-aware dropdown arrow (text color, URL-encoded for the data URI)
+  const selectArrow = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='${encodeURIComponent(theme.palette.text.disabled)}'/%3E%3C/svg%3E")`
   const [searchParams, setSearchParams] = useSearchParams()
   const urlParams = useParams<{ id?: string }>()
 
@@ -506,7 +509,7 @@ export function WikiShipBrowser() {
                   width: "100%",
                   textAlign: "left",
                   transition: "background 0.12s, color 0.12s",
-                  "&:hover": { bgcolor: isActive ? alpha(theme.palette.primary.main, 0.15) : "rgba(255,255,255,0.06)" },
+                  "&:hover": { bgcolor: isActive ? alpha(theme.palette.primary.main, 0.15) : alpha(theme.palette.text.primary, 0.06) },
                 }}
               >
                 <Box sx={{ opacity: isActive ? 1 : 0.6, display: "flex", color: "inherit" }}>
@@ -595,7 +598,7 @@ export function WikiShipBrowser() {
             cursor: "pointer",
             appearance: "none",
             outline: "none",
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E\")",
+            backgroundImage: selectArrow,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right 10px center",
             pr: 3.5,
@@ -631,7 +634,7 @@ export function WikiShipBrowser() {
             cursor: "pointer",
             appearance: "none",
             outline: "none",
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E\")",
+            backgroundImage: selectArrow,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right 10px center",
             pr: 3.5,
@@ -667,7 +670,7 @@ export function WikiShipBrowser() {
             cursor: "pointer",
             appearance: "none",
             outline: "none",
-            backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E\")",
+            backgroundImage: selectArrow,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right 10px center",
             pr: 3.5,
