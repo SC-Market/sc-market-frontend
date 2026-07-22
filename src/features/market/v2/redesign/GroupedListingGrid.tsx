@@ -943,9 +943,9 @@ function VariantHighlightCard({
           total_orders={null}
           total_assignments={null}
           response_rate={null}
-          badge_ids={[]}
-          display_limit={0}
-          showBadges={false}
+          badge_ids={variant.shop_badge_ids}
+          display_limit={3}
+          showBadges={true}
         />
 
         <Typography variant="h6" sx={{ color: "primary.main", mt: 1 }}>
