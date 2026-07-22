@@ -523,7 +523,7 @@ export function WikiItemDetail() {
                   {item.craftable_from.length > 0 ? (
                     <>
                       <Alert severity="info" sx={{ mb: 2 }}>
-                        {t("wiki.itemDetail.disassemblyInfo", `Disassembly returns ${Math.round(DISASSEMBLY_EFFICIENCY * 100)}% of crafting components at ${DISASSEMBLY_TIME_SECONDS} seconds per item. Rare materials (Quantanium, Stileron, Savrilium, Lindinium, Riccite, Ouratite, Saldynium, Janalite) cannot be recovered.`, { efficiency: Math.round(DISASSEMBLY_EFFICIENCY * 100), seconds: DISASSEMBLY_TIME_SECONDS })}
+                        {t("wiki.itemDetail.disassemblyInfo", "Disassembly returns {{efficiency}}% of crafting components at {{seconds}} seconds per item. Rare materials (Quantanium, Stileron, Savrilium, Lindinium, Riccite, Ouratite, Saldynium, Janalite) cannot be recovered.", { efficiency: Math.round(DISASSEMBLY_EFFICIENCY * 100), seconds: DISASSEMBLY_TIME_SECONDS })}
                       </Alert>
 
                       {item.craftable_from.map((bp) => (

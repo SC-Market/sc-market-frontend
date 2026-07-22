@@ -11,18 +11,31 @@ import { Speed, HighQuality, Science } from "@mui/icons-material"
 
 const speedColor: Record<string, string> = { Fast: "#4caf50", Normal: "#ff9800", Slow: "#f44336" }
 const qualityColor: Record<string, string> = { Careful: "#4caf50", Normal: "#ff9800", Wasteful: "#f44336" }
-const speedDesc: Record<string, string> = {
-  Fast: "Shortest processing time — get your refined materials quickly",
-  Normal: "Balanced processing time",
-  Slow: "Longest processing time — but often paired with better yield",
+const speedDesc: Record<string, { key: string; en: string }> = {
+  Fast: { key: "wiki.refinery.speedDesc.fast", en: "Shortest processing time — get your refined materials quickly" },
+  Normal: { key: "wiki.refinery.speedDesc.normal", en: "Balanced processing time" },
+  Slow: { key: "wiki.refinery.speedDesc.slow", en: "Longest processing time — but often paired with better yield" },
 }
-const qualityDesc: Record<string, string> = {
-  Careful: "Highest yield — minimal material loss during refining",
-  Normal: "Balanced yield — moderate material loss",
-  Wasteful: "Lowest yield — significant material loss, but cheaper",
+const qualityDesc: Record<string, { key: string; en: string }> = {
+  Careful: { key: "wiki.refinery.qualityDesc.careful", en: "Highest yield — minimal material loss during refining" },
+  Normal: { key: "wiki.refinery.qualityDesc.normal", en: "Balanced yield — moderate material loss" },
+  Wasteful: { key: "wiki.refinery.qualityDesc.wasteful", en: "Lowest yield — significant material loss, but cheaper" },
 }
 
+const bestForCopy: { speed: string; quality: string; key: string; en: string }[] = [
+  { speed: "Fast", quality: "Careful", key: "wiki.refinery.bestFor.fastCareful", en: "Best overall — fast with high yield" },
+  { speed: "Fast", quality: "Normal", key: "wiki.refinery.bestFor.fastNormal", en: "Quick turnaround, decent yield" },
+  { speed: "Fast", quality: "Wasteful", key: "wiki.refinery.bestFor.fastWasteful", en: "Fastest possible, accept material loss" },
+  { speed: "Normal", quality: "Careful", key: "wiki.refinery.bestFor.normalCareful", en: "Popular choice — good yield, reasonable time" },
+  { speed: "Normal", quality: "Normal", key: "wiki.refinery.bestFor.normalNormal", en: "Balanced all-around" },
+  { speed: "Normal", quality: "Wasteful", key: "wiki.refinery.bestFor.normalWasteful", en: "Quick-ish with lower yield" },
+  { speed: "Slow", quality: "Careful", key: "wiki.refinery.bestFor.slowCareful", en: "Maximum yield — worth the wait for expensive ores" },
+  { speed: "Slow", quality: "Normal", key: "wiki.refinery.bestFor.slowNormal", en: "Slow but steady" },
+  { speed: "Slow", quality: "Wasteful", key: "wiki.refinery.bestFor.slowWasteful", en: "Slow AND wasteful — generally avoid" },
+]
+
 function MethodCard({ method }: { method: RefiningMethod }) {
+  const { t } = useTranslation()
   return (
     <Card sx={{ height: "100%", borderLeft: 3, borderColor: qualityColor[method.quality] || "grey.500" }}>
       <CardContent>
@@ -44,10 +57,10 @@ function MethodCard({ method }: { method: RefiningMethod }) {
           />
         </Stack>
         <Typography variant="caption" color="text.secondary" display="block">
-          {speedDesc[method.speed]}
+          {speedDesc[method.speed] && t(speedDesc[method.speed].key, speedDesc[method.speed].en)}
         </Typography>
         <Typography variant="caption" color="text.secondary" display="block">
-          {qualityDesc[method.quality]}
+          {qualityDesc[method.quality] && t(qualityDesc[method.quality].key, qualityDesc[method.quality].en)}
         </Typography>
       </CardContent>
     </Card>
@@ -69,11 +82,11 @@ export function WikiRefineryPage() {
 
   return (
     <StandardPageLayout
-      title="Refining Methods"
-      headerTitle="Refining Methods"
+      title={t("wiki.refinery.title", "Refining Methods")}
+      headerTitle={t("wiki.refinery.headerTitle", "Refining Methods")}
       breadcrumbs={[
-        { label: "Wiki", href: "/wiki/items" },
-        { label: "Refining Methods" },
+        { label: t("wiki.refinery.breadcrumbWiki", "Wiki"), href: "/wiki/items" },
+        { label: t("wiki.refinery.breadcrumbRefining", "Refining Methods") },
       ]}
       isLoading={isLoading}
       skeleton={<TableSkeleton rows={9} />}
@@ -83,8 +96,10 @@ export function WikiRefineryPage() {
     >
       <Grid item xs={12}>
         <Typography variant="body1" color="text.secondary" paragraph>
-          Refining methods determine how quickly your raw ore is processed and how much refined material you receive.
-          Fast methods save time but may waste material. Careful methods maximize yield but take longer.
+          {t(
+            "wiki.refinery.description",
+            "Refining methods determine how quickly your raw ore is processed and how much refined material you receive. Fast methods save time but may waste material. Careful methods maximize yield but take longer.",
+          )}
         </Typography>
       </Grid>
 
@@ -94,10 +109,10 @@ export function WikiRefineryPage() {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell><strong>Method</strong></TableCell>
-                <TableCell align="center"><strong>Speed</strong></TableCell>
-                <TableCell align="center"><strong>Yield</strong></TableCell>
-                <TableCell><strong>Best For</strong></TableCell>
+                <TableCell><strong>{t("wiki.refinery.colMethod", "Method")}</strong></TableCell>
+                <TableCell align="center"><strong>{t("wiki.refinery.colSpeed", "Speed")}</strong></TableCell>
+                <TableCell align="center"><strong>{t("wiki.refinery.colYield", "Yield")}</strong></TableCell>
+                <TableCell><strong>{t("wiki.refinery.colBestFor", "Best For")}</strong></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -114,15 +129,9 @@ export function WikiRefineryPage() {
                   </TableCell>
                   <TableCell>
                     <Typography variant="caption" color="text.secondary">
-                      {m.speed === "Fast" && m.quality === "Careful" && "Best overall — fast with high yield"}
-                      {m.speed === "Fast" && m.quality === "Normal" && "Quick turnaround, decent yield"}
-                      {m.speed === "Fast" && m.quality === "Wasteful" && "Fastest possible, accept material loss"}
-                      {m.speed === "Normal" && m.quality === "Careful" && "Popular choice — good yield, reasonable time"}
-                      {m.speed === "Normal" && m.quality === "Normal" && "Balanced all-around"}
-                      {m.speed === "Normal" && m.quality === "Wasteful" && "Quick-ish with lower yield"}
-                      {m.speed === "Slow" && m.quality === "Careful" && "Maximum yield — worth the wait for expensive ores"}
-                      {m.speed === "Slow" && m.quality === "Normal" && "Slow but steady"}
-                      {m.speed === "Slow" && m.quality === "Wasteful" && "Slow AND wasteful — generally avoid"}
+                      {bestForCopy
+                        .filter((b) => b.speed === m.speed && b.quality === m.quality)
+                        .map((b) => t(b.key, b.en))}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -139,7 +148,7 @@ export function WikiRefineryPage() {
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mt: 2 }}>
                 <Chip label={speed} size="small" sx={{ bgcolor: speedColor[speed] + "22", color: speedColor[speed], fontWeight: 700, mr: 1 }} />
-                {speed} Processing
+                {t("wiki.refinery.processingHeader", "{{speed}} Processing", { speed })}
               </Typography>
             </Grid>
             {bySpeed[speed].map((m) => (

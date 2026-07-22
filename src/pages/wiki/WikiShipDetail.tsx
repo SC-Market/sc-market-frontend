@@ -10,6 +10,7 @@ import {
   TableContainer, TableRow, Paper, Stack,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
+import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetShipDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -100,6 +101,7 @@ function LoadoutTree({ data, navigate, depth = 0 }: {
 }
 
 export function WikiShipDetail() {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -107,7 +109,7 @@ export function WikiShipDetail() {
 
   if (isLoading) {
     return (
-      <StandardPageLayout title="Ship Details" headerTitle="Ship Details" sidebarOpen={true} maxWidth="md">
+      <StandardPageLayout title={t("wiki.shipDetail.title", "Ship Details")} headerTitle={t("wiki.shipDetail.title", "Ship Details")} sidebarOpen={true} maxWidth="md">
         <Grid item xs={12}><DetailPageSkeleton /></Grid>
       </StandardPageLayout>
     )
@@ -115,9 +117,9 @@ export function WikiShipDetail() {
 
   if (error || !ship) {
     return (
-      <StandardPageLayout title="Ship Details" headerTitle="Ship Details" sidebarOpen={true} maxWidth="md">
+      <StandardPageLayout title={t("wiki.shipDetail.title", "Ship Details")} headerTitle={t("wiki.shipDetail.title", "Ship Details")} sidebarOpen={true} maxWidth="md">
         <Grid item xs={12}>
-          <Alert severity="error">Failed to load ship details. Please try again.</Alert>
+          <Alert severity="error">{t("wiki.shipDetail.failedToLoad", "Failed to load ship details. Please try again.")}</Alert>
         </Grid>
       </StandardPageLayout>
     )
@@ -132,7 +134,7 @@ export function WikiShipDetail() {
   const ogImage = ship.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
-    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={`/wiki/ships/${id}`} headerTitle={ship.name} breadcrumbs={[{ label: "Wiki", href: "/wiki" }, { label: "Ships & Vehicles", href: "/wiki/ships" }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
+    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={`/wiki/ships/${id}`} headerTitle={ship.name} breadcrumbs={[{ label: t("wiki.shipDetail.breadcrumbWiki", "Wiki"), href: "/wiki" }, { label: t("wiki.shipDetail.breadcrumbShips", "Ships & Vehicles"), href: "/wiki/ships" }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
       <Helmet>
         <title>{seoTitle}</title>
         <meta name="description" content={seoDescription} />
@@ -206,19 +208,19 @@ export function WikiShipDetail() {
                       {ship.career && <Chip label={formatShipCareer(ship.career)} color={chipColor} variant="outlined" />}
                       {ship.role && <Chip label={formatShipRole(ship.role)} color={chipColor} />}
                       {ship.focus && !ship.role && <Chip label={ship.focus} />}
-                      {ship.size && <Chip label={`Size ${ship.size}`} />}
+                      {ship.size && <Chip label={t("wiki.shipDetail.sizeChip", "Size {{size}}", { size: ship.size })} />}
                       {ship.movement_class && <Chip label={ship.movement_class} />}
                     </Stack>
 
                     <Stack direction="row" spacing={3} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
                       {ship.crew_size != null && (
                         <Typography variant="body2" color="text.secondary">
-                          <strong>Crew:</strong> {ship.crew_size}
+                          <strong>{t("wiki.shipDetail.crew", "Crew:")}</strong> {ship.crew_size}
                         </Typography>
                       )}
                       {(ship.length_m != null || ship.width_m != null || ship.height_m != null) && (
                         <Typography variant="body2" color="text.secondary">
-                          <strong>Dimensions:</strong>{" "}
+                          <strong>{t("wiki.shipDetail.dimensions", "Dimensions:")}</strong>{" "}
                           {[ship.length_m, ship.width_m, ship.height_m]
                             .filter(v => v != null)
                             .map(v => `${v}m`)
@@ -242,7 +244,7 @@ export function WikiShipDetail() {
             <Grid item xs={12} md={6}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>Ship Specifications</Typography>
+                  <Typography variant="h6" gutterBottom>{t("wiki.shipDetail.specifications", "Ship Specifications")}</Typography>
                   <Divider sx={{ mb: 2 }} />
                   <TableContainer component={Paper} variant="outlined">
                     <Table size="small">
@@ -273,7 +275,7 @@ export function WikiShipDetail() {
             <Grid item xs={12} md={6}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>Default Loadout</Typography>
+                  <Typography variant="h6" gutterBottom>{t("wiki.shipDetail.defaultLoadout", "Default Loadout")}</Typography>
                   <Divider sx={{ mb: 2 }} />
                   <Box sx={{ maxHeight: 500, overflow: "auto" }}>
                     <LoadoutTree data={ship.default_loadout} navigate={navigate} />

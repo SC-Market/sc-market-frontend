@@ -84,7 +84,7 @@ export function WikiManufacturerList() {
       <Grid item xs={12}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            {manufacturers ? `${manufacturers.length} manufacturers` : ""}
+            {manufacturers ? `${manufacturers.length} ${t("wiki.manufacturerList.manufacturersCount", "manufacturers")}` : ""}
           </Typography>
           <ToggleButtonGroup
             size="small"
@@ -144,7 +144,7 @@ export function WikiManufacturerList() {
                             </Typography>
                           )}
                           <Chip
-                            label={`${m.item_count} items`}
+                            label={`${m.item_count} ${t("wiki.manufacturerList.items", "items")}`}
                             size="small"
                             sx={{
                               mt: 0.75, height: 18, fontSize: "0.65rem",
@@ -178,9 +178,9 @@ export function WikiManufacturerList() {
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Manufacturer</TableCell>
-                  <TableCell>Specialties</TableCell>
-                  <TableCell align="right">Items</TableCell>
+                  <TableCell>{t("wiki.manufacturerList.colManufacturer", "Manufacturer")}</TableCell>
+                  <TableCell>{t("wiki.manufacturerList.colSpecialties", "Specialties")}</TableCell>
+                  <TableCell align="right">{t("wiki.manufacturerList.colItems", "Items")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

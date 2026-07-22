@@ -479,7 +479,7 @@ export function WikiShipBrowser() {
         <Typography
           sx={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "text.disabled", mb: 0.75, display: "block" }}
         >
-          Category
+          {t("wiki.shipBrowser.filterCategory", "Category")}
         </Typography>
         <Stack spacing={0.25}>
           {CATEGORY_OPTIONS.map((opt) => {
@@ -536,7 +536,7 @@ export function WikiShipBrowser() {
         <Typography
           sx={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "text.disabled", mb: 0.75, display: "block" }}
         >
-          Career
+          {t("wiki.shipBrowser.filterCareer", "Career")}
         </Typography>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.6 }}>
           {careers.map((c) => {
@@ -574,7 +574,7 @@ export function WikiShipBrowser() {
         <Typography
           sx={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "text.disabled", mb: 0.75, display: "block" }}
         >
-          Role
+          {t("wiki.shipBrowser.filterRole", "Role")}
         </Typography>
         <Box
           component="select"
@@ -600,7 +600,7 @@ export function WikiShipBrowser() {
             pr: 3.5,
           }}
         >
-          <option value="">All roles</option>
+          <option value="">{t("wiki.shipBrowser.allRoles", "All roles")}</option>
           {roles.map((r) => <option key={r} value={r}>{formatShipRole(r)}</option>)}
         </Box>
       </Box>
@@ -610,7 +610,7 @@ export function WikiShipBrowser() {
         <Typography
           sx={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "text.disabled", mb: 0.75, display: "block" }}
         >
-          Manufacturer
+          {t("wiki.shipBrowser.filterManufacturer", "Manufacturer")}
         </Typography>
         <Box
           component="select"
@@ -636,7 +636,7 @@ export function WikiShipBrowser() {
             pr: 3.5,
           }}
         >
-          <option value="">All manufacturers</option>
+          <option value="">{t("wiki.shipBrowser.allManufacturers", "All manufacturers")}</option>
           {manufacturers.map((m) => <option key={m} value={m}>{m}</option>)}
         </Box>
       </Box>
@@ -646,7 +646,7 @@ export function WikiShipBrowser() {
         <Typography
           sx={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "text.disabled", mb: 0.75, display: "block" }}
         >
-          Size
+          {t("wiki.shipBrowser.filterSize", "Size")}
         </Typography>
         <Box
           component="select"
@@ -672,8 +672,8 @@ export function WikiShipBrowser() {
             pr: 3.5,
           }}
         >
-          <option value="">Any size</option>
-          {sizes.map((s) => <option key={s} value={s}>Size {s}</option>)}
+          <option value="">{t("wiki.shipBrowser.anySize", "Any size")}</option>
+          {sizes.map((s) => <option key={s} value={s}>{t("wiki.shipBrowser.sizeOption", "Size {{size}}", { size: s })}</option>)}
         </Box>
       </Box>
 
@@ -697,7 +697,7 @@ export function WikiShipBrowser() {
             "&:hover": { borderColor: "text.disabled", color: "text.primary" },
           }}
         >
-          ✕ Clear all filters
+          ✕ {t("wiki.shipBrowser.clearAllFilters", "Clear all filters")}
         </Box>
       )}
     </Stack>
@@ -719,7 +719,7 @@ export function WikiShipBrowser() {
   }
 
   return (
-    <StandardPageLayout title={pageTitle} description={pageDescription} headerTitle="Ships & Vehicles" sidebarOpen={true} maxWidth="xl">
+    <StandardPageLayout title={pageTitle} description={pageDescription} headerTitle={t("wiki.shipBrowser.headerTitle", "Ships & Vehicles")} sidebarOpen={true} maxWidth="xl">
       <Helmet>
         {currentPage > 1 && (
           <link rel="prev" href={`${FRONTEND_URL}/wiki/ships?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage - 1) })}`} />
@@ -729,7 +729,7 @@ export function WikiShipBrowser() {
         )}
       </Helmet>
       <Grid item xs={12}>
-        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters" sidebarWidth={220}>
+        <FilterSidebarLayout filters={filtersContent} filterTitle={t("wiki.shipBrowser.filters", "Filters")} sidebarWidth={220}>
 
           {/* Search bar + result count */}
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: activeFilterChips.length > 0 ? 1 : 2 }}>
@@ -737,7 +737,7 @@ export function WikiShipBrowser() {
               tokens={searchTokens}
               onChange={handleTokensChange}
               mode="ships"
-              placeholder="Search ships, vehicles, manufacturers..."
+              placeholder={t("wiki.shipBrowser.searchPlaceholder", "Search ships, vehicles, manufacturers...")}
             />
             {data && (
               <Typography variant="body2" sx={{ whiteSpace: "nowrap", color: "text.disabled", fontSize: "0.78rem" }}>
@@ -770,7 +770,7 @@ export function WikiShipBrowser() {
           )}
 
           {isLoading && <CardGridSkeleton />}
-          {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load ships.</Alert>}
+          {error && <Alert severity="error" sx={{ mb: 2 }}>{t("wiki.shipBrowser.failedToLoad", "Failed to load ships.")}</Alert>}
 
           {data && (
             <>
@@ -778,19 +778,19 @@ export function WikiShipBrowser() {
                 <>
                   {sections.ships.length > 0 && (
                     <>
-                      <SectionHeader label="Ships" count={filteredCounts!.ships} />
+                      <SectionHeader label={t("wiki.shipBrowser.sectionShips", "Ships")} count={filteredCounts!.ships} />
                       {renderGrid(sections.ships)}
                     </>
                   )}
                   {sections.ground.length > 0 && (
                     <>
-                      <SectionHeader label="Ground Vehicles" count={filteredCounts!.ground} />
+                      <SectionHeader label={t("wiki.shipBrowser.sectionGround", "Ground Vehicles")} count={filteredCounts!.ground} />
                       {renderGrid(sections.ground)}
                     </>
                   )}
                   {sections.hoverbike.length > 0 && (
                     <>
-                      <SectionHeader label="Hoverbikes" count={filteredCounts!.hoverbike} />
+                      <SectionHeader label={t("wiki.shipBrowser.sectionHoverbikes", "Hoverbikes")} count={filteredCounts!.hoverbike} />
                       {renderGrid(sections.hoverbike)}
                     </>
                   )}
@@ -802,7 +802,7 @@ export function WikiShipBrowser() {
               {filtered.length === 0 && (
                 <Box sx={{ textAlign: "center", py: 6 }}>
                   <SearchIcon sx={{ fontSize: 40, color: "text.disabled", opacity: 0.3, mb: 1, display: "block", mx: "auto" }} />
-                  <Typography color="text.disabled" variant="body2">No results found.</Typography>
+                  <Typography color="text.disabled" variant="body2">{t("wiki.shipBrowser.noResults", "No results found.")}</Typography>
                 </Box>
               )}
 
