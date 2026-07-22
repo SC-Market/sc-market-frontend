@@ -3199,6 +3199,20 @@
     "themeTab": "Theme",
     "whiteLabelTab": "White Label"
   },
+  "orgAbout": {
+    "appearanceSubtitle": "Logo and banner for your organization",
+    "appearanceTitle": "Appearance",
+    "banner": "Banner",
+    "description": "Description",
+    "generalSubtitle": "Basic organization information",
+    "generalTitle": "General",
+    "logo": "Logo",
+    "orgName": "Organization Name",
+    "saveChanges": "Save Changes",
+    "tagsSubtitle": "Help members and customers find your organization",
+    "tagsTitle": "Categories & Tags",
+    "uploadLogo": "Upload Logo"
+  },
   "orgAuditLogs": {
     "action": "Action",
     "action_discord_linked": "Discord Linked",
