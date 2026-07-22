@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, useNavigate } from "react-router-dom"
 import {
   Alert,
   Autocomplete,
@@ -9,6 +9,11 @@ import {
   Checkbox,
   Chip,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   FormControl,
   FormControlLabel,
@@ -16,6 +21,7 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Radio,
   RadioGroup,
   Stack,
@@ -35,16 +41,19 @@ import {
   useGetShopOrderSettingsQuery,
   useUpsertShopOrderSettingMutation,
   useDeleteShopOrderSettingMutation,
+  useTransferShopMutation,
 } from "../../../store/api/v2/market"
 import { useUploadImageMutation } from "../../../store/api/v2/market-overrides"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { URL_REGEX } from "../../../util/parsing"
 import { ShopBlocklistSection } from "./ShopBlocklist"
-import { ImageRounded } from "@mui/icons-material"
+import { ImageRounded, SwapHorizRounded } from "@mui/icons-material"
 import { SHOP_PATHS } from "../../../routes/paths"
+import type { ShopResponse } from "../../../store/api/v2/market"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -495,6 +504,150 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
   )
 }
 
+function ShopTransferSection({ shop }: { shop: ShopResponse }) {
+  const navigate = useNavigate()
+  const issueAlert = useAlertHook()
+  const { data: profile } = useGetUserProfileQuery()
+  const [transferShop, { isLoading }] = useTransferShopMutation()
+
+  const [targetType, setTargetType] = useState<"user" | "contractor">(
+    "contractor",
+  )
+  const [contractorSpectrumId, setContractorSpectrumId] = useState("")
+  const [confirmOpen, setConfirmOpen] = useState(false)
+
+  const orgs = profile?.contractors ?? []
+
+  const handleConfirm = async () => {
+    try {
+      const target_id =
+        targetType === "user" ? profile?.username ?? "" : contractorSpectrumId
+      // The transfer endpoint expects a user_id for users; profile exposes
+      // username, so we transfer to self using the backend's own resolution.
+      const result = await transferShop({
+        shopId: shop.shop_id,
+        transferShopRequest: {
+          target_type: targetType,
+          target_id,
+        },
+      }).unwrap()
+
+      setConfirmOpen(false)
+      issueAlert({
+        message: "Shop ownership transferred",
+        severity: "success",
+      })
+      // Slug is preserved across transfers; navigate to the shop.
+      navigate(SHOP_PATHS.listings(result.slug))
+    } catch (err) {
+      setConfirmOpen(false)
+      issueAlert(err as { status: number; data: { message?: string } })
+    }
+  }
+
+  const canSubmit =
+    targetType === "user"
+      ? !!profile?.username
+      : !!contractorSpectrumId
+
+  const targetLabel =
+    targetType === "user"
+      ? "your personal account"
+      : orgs.find((o) => o.spectrum_id === contractorSpectrumId)?.name ??
+        "the selected organization"
+
+  return (
+    <FormPaper
+      title="Transfer Ownership"
+      subtitle="Move this shop to another owner. This action cannot be undone by you."
+    >
+      <Grid item xs={12}>
+        <TextField
+          select
+          fullWidth
+          size="small"
+          label="Transfer to"
+          value={targetType}
+          onChange={(e) => {
+            setTargetType(e.target.value as "user" | "contractor")
+            setContractorSpectrumId("")
+          }}
+          color="secondary"
+        >
+          <MenuItem value="user">My Account</MenuItem>
+          <MenuItem value="contractor" disabled={orgs.length === 0}>
+            An Organization
+          </MenuItem>
+        </TextField>
+      </Grid>
+
+      {targetType === "contractor" && (
+        <Grid item xs={12}>
+          <TextField
+            select
+            fullWidth
+            size="small"
+            label="Organization"
+            value={contractorSpectrumId}
+            onChange={(e) => setContractorSpectrumId(e.target.value)}
+            color="secondary"
+            helperText="You must have Manage Market permission in the target org."
+          >
+            <MenuItem value="">Select an organization...</MenuItem>
+            {orgs.map((org) => (
+              <MenuItem key={org.spectrum_id} value={org.spectrum_id}>
+                {org.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+      )}
+
+      <Grid item xs={12}>
+        <Button
+          variant="outlined"
+          color="warning"
+          startIcon={<SwapHorizRounded />}
+          disabled={!canSubmit || isLoading}
+          onClick={() => setConfirmOpen(true)}
+        >
+          Transfer Ownership
+        </Button>
+      </Grid>
+
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <DialogTitle>Transfer shop ownership?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You are about to transfer <strong>{shop.name}</strong> to{" "}
+            <strong>{targetLabel}</strong>.
+          </DialogContentText>
+          <DialogContentText sx={{ mt: 2 }}>
+            Ownership will transfer immediately. Active order and offer
+            assignments held by people no longer associated with the new owner
+            may be reset so the new owner can reclaim them. Completed orders are
+            not affected. You may lose access to this shop if you cannot manage
+            the new owner.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmOpen(false)} disabled={isLoading}>
+            Cancel
+          </Button>
+          <LoadingButton
+            variant="contained"
+            color="warning"
+            loading={isLoading}
+            onClick={handleConfirm}
+          >
+            Confirm Transfer
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
+    </FormPaper>
+  )
+}
+
 export function ShopSettings() {
   const { shop } = useShopRouteContext()
   const theme = useTheme<ExtendedTheme>()
@@ -864,6 +1017,9 @@ export function ShopSettings() {
 
           {/* Blocklist */}
           <ShopBlocklistSection shopId={shop.shop_id} />
+
+          {/* Transfer Ownership */}
+          <ShopTransferSection shop={shop} />
 
           {/* Save */}
           <Grid item xs={12} container justifyContent="flex-end">
