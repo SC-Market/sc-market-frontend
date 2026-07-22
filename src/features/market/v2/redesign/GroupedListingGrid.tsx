@@ -754,8 +754,18 @@ function GroupSellers({
     const highestQuality = variants.reduce((a, b) =>
       variantQualityScore(b) > variantQualityScore(a) ? b : a,
     )
+    // Weight rating by review count (Bayesian shrink toward a prior) so a
+    // 5★/1-review shop doesn't outrank a 4.9★/300-review one. A shop with zero
+    // ratings scores the prior, not 0, but the >0 guard below still excludes it.
+    const PRIOR_MEAN = 3.5 // neutral prior for an unrated shop
+    const PRIOR_WEIGHT = 5 // ~5 reviews of "pull" toward the prior
+    const ratingScore = (v: GameItemListingResult) => {
+      const n = v.shop_rating_count ?? 0
+      const r = v.shop_rating ?? 0
+      return (PRIOR_WEIGHT * PRIOR_MEAN + n * r) / (PRIOR_WEIGHT + n)
+    }
     const topRated = variants.reduce((a, b) =>
-      (b.shop_rating ?? 0) > (a.shop_rating ?? 0) ? b : a,
+      ratingScore(b) > ratingScore(a) ? b : a,
     )
 
     // Collect tags per winning variant. A variant that wins several
@@ -890,7 +900,7 @@ function VariantRow({ variant, tags }: { variant: GameItemListingResult; tags: H
         </RouterLink>
         <MarketListingRating
           avg_rating={variant.shop_rating}
-          rating_count={null}
+          rating_count={variant.shop_rating_count ?? null}
           total_rating={0}
           rating_streak={null}
           total_orders={null}
