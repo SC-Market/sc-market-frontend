@@ -24,6 +24,7 @@ export const addTagTypes = [
   "Game Data - Crafting",
   "Game Data - Blueprints",
   "Debug V2",
+  "Dashboard V2",
   "Cart V2",
   "Buy Orders V2",
   "Availability",
@@ -1388,6 +1389,24 @@ const injectedRtkApi = api
           body: queryArg.setFeatureFlagRequest,
         }),
         invalidatesTags: ["Debug V2"],
+      }),
+      getLayout: build.query<GetLayoutApiResponse, GetLayoutApiArg>({
+        query: (queryArg) => ({
+          url: `/dashboard/layout`,
+          params: {
+            owner_type: queryArg.ownerType,
+            owner_id: queryArg.ownerId,
+          },
+        }),
+        providesTags: ["Dashboard V2"],
+      }),
+      saveLayout: build.mutation<SaveLayoutApiResponse, SaveLayoutApiArg>({
+        query: (queryArg) => ({
+          url: `/dashboard/layout`,
+          method: "PUT",
+          body: queryArg.updateDashboardLayoutRequest,
+        }),
+        invalidatesTags: ["Dashboard V2"],
       }),
       getCart: build.query<GetCartApiResponse, GetCartApiArg>({
         query: () => ({ url: `/cart` }),
@@ -2842,6 +2861,16 @@ export type SetFeatureFlagApiResponse =
 export type SetFeatureFlagApiArg = {
   /** Feature flag setting request */
   setFeatureFlagRequest: SetFeatureFlagRequest
+}
+export type GetLayoutApiResponse =
+  /** status 200 Ok */ DashboardLayoutResponse | null
+export type GetLayoutApiArg = {
+  ownerType?: DashboardOwnerType
+  ownerId?: string
+}
+export type SaveLayoutApiResponse = /** status 200 Ok */ DashboardLayoutResponse
+export type SaveLayoutApiArg = {
+  updateDashboardLayoutRequest: UpdateDashboardLayoutRequest
 }
 export type GetCartApiResponse =
   /** status 200 Cart contents with variant details and availability */ GetCartResponse
@@ -5802,6 +5831,23 @@ export type SetFeatureFlagRequest = {
   /** Whether to enable or disable the flag */
   enabled?: boolean
 }
+export type DashboardOwnerType = "user" | "org" | "shop"
+export type RecordStringUnknown = {
+  [key: string]: any
+}
+export type DashboardLayoutResponse = {
+  owner_type: DashboardOwnerType
+  owner_id: string
+  /** Opaque DashboardConfig blob (widgets, scopes, grid layout). Validated client-side. */
+  config: RecordStringUnknown
+  updated_by: string
+  updated_at: string
+}
+export type UpdateDashboardLayoutRequest = {
+  owner_type: DashboardOwnerType
+  owner_id: string
+  config: RecordStringUnknown
+}
 export type CartListingInfo = {
   /** Listing UUID */
   listing_id: string
@@ -6398,6 +6444,8 @@ export const {
   useFindCraftableBlueprintsMutation,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,
+  useGetLayoutQuery,
+  useSaveLayoutMutation,
   useGetCartQuery,
   useAddToCartMutation,
   useUpdateCartItemMutation,
