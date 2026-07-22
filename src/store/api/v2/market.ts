@@ -2862,13 +2862,12 @@ export type SetFeatureFlagApiArg = {
   /** Feature flag setting request */
   setFeatureFlagRequest: SetFeatureFlagRequest
 }
-export type GetLayoutApiResponse =
-  /** status 200 Ok */ DashboardLayoutResponse | null
+export type GetLayoutApiResponse = /** status 200 Ok */ DashboardLayout | null
 export type GetLayoutApiArg = {
   ownerType?: DashboardOwnerType
   ownerId?: string
 }
-export type SaveLayoutApiResponse = /** status 200 Ok */ DashboardLayoutResponse
+export type SaveLayoutApiResponse = /** status 200 Ok */ DashboardLayout
 export type SaveLayoutApiArg = {
   updateDashboardLayoutRequest: UpdateDashboardLayoutRequest
 }
@@ -5832,21 +5831,61 @@ export type SetFeatureFlagRequest = {
   enabled?: boolean
 }
 export type DashboardOwnerType = "user" | "org" | "shop"
-export type RecordStringUnknown = {
-  [key: string]: any
+export type WidgetScope =
+  | {
+      kind: "me"
+    }
+  | {
+      kind: "current_context"
+    }
+  | {
+      kind: "all_orgs"
+    }
+  | {
+      kind: "all_shops"
+    }
+  | {
+      spectrumId: string
+      kind: "specific_org"
+    }
+  | {
+      shopId: string
+      kind: "specific_shop"
+    }
+export type WidgetLayout = {
+  x: number
+  y: number
+  w: number
+  h: number
 }
-export type DashboardLayoutResponse = {
+export type RecordStringStringOrNumberOrBoolean = {
+  [key: string]: string | number | boolean
+}
+export type DashboardWidget = {
+  /** Stable per-instance id (a widget type may appear multiple times). */
+  id: string
+  /** Key into the widget registry. */
+  type: string
+  scope: WidgetScope
+  layout: WidgetLayout
+  /** Widget-specific settings (e.g. period). Validated per widget on the client. */
+  settings?: RecordStringStringOrNumberOrBoolean
+}
+export type DashboardConfig = {
+  version: number
+  widgets: DashboardWidget[]
+}
+export type DashboardLayout = {
   owner_type: DashboardOwnerType
   owner_id: string
-  /** Opaque DashboardConfig blob (widgets, scopes, grid layout). Validated client-side. */
-  config: RecordStringUnknown
+  config: DashboardConfig
   updated_by: string
   updated_at: string
 }
 export type UpdateDashboardLayoutRequest = {
   owner_type: DashboardOwnerType
   owner_id: string
-  config: RecordStringUnknown
+  config: DashboardConfig
 }
 export type CartListingInfo = {
   /** Listing UUID */
