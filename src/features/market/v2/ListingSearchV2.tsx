@@ -62,6 +62,7 @@ import { MARKET_ADS } from "../../../components/ads/adConfig";
 import { formatMarketUrl } from "../domain/urls";
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag";
+import { useDebounce } from "../../../hooks/useDebounce";
 import { GroupedListingGrid } from "./redesign/GroupedListingGrid";
 
 /**
@@ -397,12 +398,19 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
   const sortOrder = searchParams.get("sort_order") || "";
   const languageCodes = searchParams.get('language_codes')?.split(',').filter(Boolean) || [];
 
-  // Debounced text for autocomplete suggestions
-  const [debouncedText, setDebouncedText] = useState('');
+  // Local input state so typing feels responsive; the URL param (and the
+  // search query it drives) only updates after the user pauses typing.
+  const [localText, setLocalText] = useState(text);
+
+  // Sync the local input when the URL text changes externally (navigation,
+  // cleared filters, another control updating the query).
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedText(text), 300);
-    return () => clearTimeout(timer);
+    setLocalText(text);
   }, [text]);
+
+  // Debounced input value drives both the search request and suggestions,
+  // so we fire at most one request after the user stops typing (~400ms).
+  const debouncedText = useDebounce(localText, 400);
   const { data: suggestions } = useSearchListingsQuery(
     { text: debouncedText, pageSize: 5 },
     { skip: debouncedText.length < 2 }
@@ -426,6 +434,16 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
     },
     [searchParams, setSearchParams],
   );
+
+  // Push the debounced search text into the URL (which drives the main
+  // results query) only once the user pauses typing. Guard against writing
+  // when nothing changed to avoid redundant history updates / loops.
+  useEffect(() => {
+    if (debouncedText !== text) {
+      updateParam("text", debouncedText);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedText]);
 
   const applyFilters = useCallback(() => {
     // Trigger search by updating params (already done by individual handlers)
@@ -503,8 +521,8 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
           <Autocomplete
             freeSolo
             options={autocompleteOptions}
-            inputValue={text}
-            onInputChange={(_, value) => updateParam("text", value)}
+            inputValue={localText}
+            onInputChange={(_, value) => setLocalText(value)}
             renderInput={(params) => (
               <TextField
                 {...params}

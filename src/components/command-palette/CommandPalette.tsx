@@ -65,7 +65,7 @@ export function CommandPalette() {
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
 
-  const debouncedQuery = useDebounce(query, 200)
+  const debouncedQuery = useDebounce(query, 400)
 
   const { data: searchResults } = useSearchListingsQuery(
     { text: debouncedQuery, pageSize: 5 },
