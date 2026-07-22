@@ -60,6 +60,39 @@ export default [
     },
   },
 
+  // ── Route helpers: discourage hardcoded internal route strings ──
+  // All routes live in src/routes/paths.ts — use the PATHS.* helpers instead
+  // of hardcoding leading-slash paths in `to=` / `href=` props or navigate().
+  {
+    files: ["src/**/*.ts", "src/**/*.tsx"],
+    ignores: [
+      "src/App.tsx",
+      "src/routes/paths.ts",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts",
+      "**/*.spec.tsx",
+      "**/__tests__/**",
+    ],
+    rules: {
+      "no-restricted-syntax": [
+        "warn",
+        {
+          selector:
+            "JSXAttribute[name.name=/^(to|href)$/] > Literal[value=/^\\/[A-Za-z]/]",
+          message:
+            "Use a helper from src/routes/paths.ts instead of a hardcoded route string.",
+        },
+        {
+          selector:
+            "CallExpression[callee.name='navigate'] > Literal[value=/^\\/[A-Za-z]/]",
+          message:
+            "Use a helper from src/routes/paths.ts instead of a hardcoded route string.",
+        },
+      ],
+    },
+  },
+
   {
     plugins: {
       "react-hooks": reactHooks,
