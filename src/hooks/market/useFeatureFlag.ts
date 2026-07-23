@@ -14,8 +14,6 @@ import { marketV2Api } from "../../store/api/v2/market"
 export type MarketVersion = "V1" | "V2"
 
 export interface FeatureFlags {
-  market_v2: boolean
-  crafting: boolean
   wiki: boolean
   [key: string]: boolean
 }
@@ -37,7 +35,7 @@ export interface UseFeatureFlagReturn {
   setFlag: (flagName: string, enabled: boolean) => Promise<void>
 }
 
-const DEFAULT_FLAGS: FeatureFlags = { market_v2: true, crafting: true, wiki: true, nav_v2: false, market_v2_redesign: false, customizable_dashboard: false }
+const DEFAULT_FLAGS: FeatureFlags = { wiki: true, nav_v2: false, market_v2_redesign: false, customizable_dashboard: false }
 const STORAGE_KEY = "feature_flags"
 
 function readStoredFlags(): FeatureFlags {
