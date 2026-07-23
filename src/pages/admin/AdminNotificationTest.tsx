@@ -8,8 +8,8 @@ export function AdminNotificationTest() {
 
   return (
     <StandardPageLayout
-      title={t("admin.notificationTest", "Notification Test")}
-      headerTitle={t("admin.notificationTest", "Notification Test")}
+      title={t("nav.adminNotificationTest", "Notification Test")}
+      headerTitle={t("nav.adminNotificationTest", "Notification Test")}
       sidebarOpen={true}
       maxWidth="xl"
     >
