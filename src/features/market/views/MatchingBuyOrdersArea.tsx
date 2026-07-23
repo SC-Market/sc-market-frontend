@@ -21,12 +21,39 @@ import {
   type StandingBuyOrder,
 } from "../../../store/api/v2/market"
 
-export function MatchingBuyOrdersArea() {
+export function MatchingBuyOrdersArea({
+  showEmpty,
+}: {
+  /**
+   * When true, render an empty-state card instead of nothing when there are no
+   * matches. Used on the customizable dashboard, where a widget shouldn't
+   * silently vanish; the legacy dashboard leaves this off to hide the section.
+   */
+  showEmpty?: boolean
+} = {}) {
   const { t, i18n } = useTranslation()
   const { data, isLoading } = useGetMatchesForSellerQuery({ page: 1, pageSize: 5 })
   const orders = data?.buy_orders || []
 
-  if (isLoading || orders.length === 0) return null
+  if (isLoading) return null
+  if (orders.length === 0) {
+    if (!showEmpty) return null
+    return (
+      <Section
+        title={t("dashboard.matchingBuyOrders", "Buy Orders You Can Fulfill")}
+        xs={12}
+      >
+        <Grid item xs={12}>
+          <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
+            {t(
+              "dashboard.matchingBuyOrdersEmpty",
+              "No open buy orders match your inventory right now.",
+            )}
+          </Typography>
+        </Grid>
+      </Section>
+    )
+  }
 
   return (
     <Section
