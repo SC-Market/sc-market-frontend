@@ -34,6 +34,40 @@ export interface WidgetRenderProps {
   t: TFunction
 }
 
+/**
+ * Schematic shape shown for a widget in the add-widget gallery. Not the real
+ * widget — a lightweight approximation of its layout so the user can recognize
+ * what they're adding without resolving live data.
+ */
+export type WidgetPreviewKind =
+  | "metrics"
+  | "chart"
+  | "table"
+  | "list"
+  | "cards"
+
+/** Grouping used to organize widgets into titled subsections in the gallery. */
+export type WidgetCategory = "orders" | "market" | "activity" | "personal"
+
+/** Display order of the gallery's category subsections. */
+export const WIDGET_CATEGORY_ORDER: WidgetCategory[] = [
+  "orders",
+  "market",
+  "activity",
+  "personal",
+]
+
+/** Localized titles for each gallery subsection. */
+export const WIDGET_CATEGORY_LABELS: Record<
+  WidgetCategory,
+  { key: string; default: string }
+> = {
+  orders: { key: "dashboard.category.orders", default: "Orders & Fulfillment" },
+  market: { key: "dashboard.category.market", default: "Market & Listings" },
+  activity: { key: "dashboard.category.activity", default: "Activity" },
+  personal: { key: "dashboard.category.personal", default: "Personal" },
+}
+
 export interface WidgetDefinition {
   type: string
   /** i18n key for the display name (gallery + widget header). */
@@ -77,6 +111,10 @@ export interface WidgetDefinition {
    * widgets (the default) are given a standard Section-styled titled card.
    */
   selfChrome?: boolean
+  /** Gallery subsection this widget is grouped under. */
+  category: WidgetCategory
+  /** Schematic layout shown for this widget in the add-widget gallery. */
+  preview: WidgetPreviewKind
   render: (props: WidgetRenderProps) => ReactNode
 }
 
@@ -140,6 +178,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 2, h: 3 },
     allowedScopes: METRIC_SCOPES,
     selfChrome: true,
+    category: "orders",
+    preview: "metrics",
     render: ({ scope }) => (
       <OrderMetrics spectrumId={scope.spectrumId} shopId={scope.shopId} />
     ),
@@ -154,6 +194,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 4, h: 3 },
     allowedScopes: METRIC_SCOPES,
     selfChrome: true,
+    category: "orders",
+    preview: "chart",
     render: ({ scope }) => (
       <UserOrderTrend spectrumId={scope.spectrumId} shopId={scope.shopId} />
     ),
@@ -169,6 +211,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 4, h: 3 },
     allowedScopes: SHOP_SCOPES,
     selfChrome: true,
+    category: "orders",
+    preview: "table",
     render: ({ scope, t }) =>
       scope.shopId ? (
         <OrdersViewPaginated
@@ -192,6 +236,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 4, h: 3 },
     allowedScopes: SHOP_SCOPES,
     selfChrome: true,
+    category: "orders",
+    preview: "table",
     render: ({ scope }) => <ReceivedOffersArea unassigned={!!scope.shopId} />,
   },
   {
@@ -204,6 +250,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 4, h: 3 },
     allowedScopes: PERSONAL_ONLY,
     selfChrome: true,
+    category: "market",
+    preview: "table",
     render: () => <MatchingBuyOrdersArea showEmpty />,
   },
   {
@@ -216,6 +264,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 3, h: 3 },
     allowedScopes: SHOP_SCOPES,
     selfChrome: true,
+    category: "activity",
+    preview: "list",
     render: ({ scope }) => <DashNotificationArea shopId={scope.shopId} />,
   },
   {
@@ -229,6 +279,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 4, h: 4 },
     allowedScopes: SHOP_SCOPES,
     selfChrome: true,
+    category: "market",
+    preview: "chart",
     render: ({ scope }) => (
       <Grid container spacing={2}>
         <SellerAnalyticsV2 sellerId={scope.shopId} />
@@ -244,6 +296,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 6, h: 5 },
     minSize: { w: 4, h: 3 },
     allowedScopes: PERSONAL_ONLY,
+    category: "market",
+    preview: "list",
     render: ({ settings, t }) => (
       <MarketOverviewWidget settings={settings} t={t} />
     ),
@@ -257,6 +311,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 3, h: 3 },
     minSize: { w: 2, h: 2 },
     allowedScopes: PERSONAL_ONLY,
+    category: "personal",
+    preview: "metrics",
     render: ({ t }) => <ReputationWidget t={t} />,
   },
   {
@@ -268,6 +324,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 3, h: 4 },
     minSize: { w: 2, h: 3 },
     allowedScopes: PERSONAL_ONLY,
+    category: "personal",
+    preview: "list",
     render: ({ t }) => <WishlistWidget t={t} />,
   },
   {
@@ -280,6 +338,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 4, h: 3 },
     allowedScopes: PERSONAL_ONLY,
     requiresItem: true,
+    category: "market",
+    preview: "chart",
     render: ({ settings, t }) => (
       <PriceHistoryWidget settings={settings} t={t} />
     ),
@@ -295,6 +355,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 3, h: 4 },
     allowedScopes: PERSONAL_ONLY,
     requiresListingsSource: true,
+    category: "market",
+    preview: "cards",
     render: ({ settings, t }) => (
       <ListingsPreviewWidget settings={settings} t={t} />
     ),
@@ -310,6 +372,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     minSize: { w: 3, h: 3 },
     allowedScopes: SHOP_SCOPES,
     offersActivityFilter: true,
+    category: "activity",
+    preview: "list",
     render: ({ scope, settings, t }) => (
       <ActivityFeedWidget scope={scope} settings={settings} t={t} />
     ),
@@ -324,6 +388,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 6, h: 5 },
     minSize: { w: 4, h: 3 },
     allowedScopes: SHOP_SCOPES,
+    category: "market",
+    preview: "table",
     render: ({ scope, settings, t }) => (
       <ListingAnalyticsWidget scope={scope} settings={settings} t={t} />
     ),

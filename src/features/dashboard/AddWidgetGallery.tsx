@@ -8,14 +8,16 @@
 
 import { useMemo, useState } from "react"
 import {
+  Box,
   Button,
+  Card,
+  CardActionArea,
   Dialog,
   DialogContent,
   DialogTitle,
   FormControl,
+  Grid,
   InputLabel,
-  ListItemButton,
-  ListItemText,
   MenuItem,
   Select,
   Stack,
@@ -28,12 +30,18 @@ import AddIcon from "@mui/icons-material/Add"
 import { useTranslation } from "react-i18next"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../profile/api/profileApi"
+import { Section } from "../../components/paper/Section"
 import {
   WIDGET_DEFINITIONS,
+  WIDGET_CATEGORY_ORDER,
+  WIDGET_CATEGORY_LABELS,
   widgetTitle,
   widgetDescription,
   ACTIVITY_FILTER_OPTIONS,
+  type WidgetCategory,
+  type WidgetDefinition,
 } from "./widgets/registry"
+import { WidgetPreview } from "./widgets/WidgetPreview"
 import { addWidget } from "./widgets/addWidget"
 import { useDashboardOwner } from "./DashboardOwnerContext"
 import { GameItemPicker, type GameItemChoice } from "./GameItemPicker"
@@ -161,6 +169,17 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
     [ownerScopeAllowlist],
   )
 
+  // Grouped into gallery subsections, in the canonical category order. Empty
+  // categories are dropped.
+  const widgetsByCategory = useMemo(
+    () =>
+      WIDGET_CATEGORY_ORDER.map((category) => ({
+        category,
+        widgets: availableWidgets.filter((d) => d.category === category),
+      })).filter((group) => group.widgets.length > 0),
+    [availableWidgets],
+  )
+
   const scopeLabel = (k: WidgetScopeKind): string => {
     if (k === "current_context" && owner && owner.ownerType !== "user") {
       return owner.ownerType === "org"
@@ -234,26 +253,45 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
     (!requiresItem || !!selectedItem) &&
     (!requiresListingsSource || !!settings)
 
+  const categoryLabel = (category: WidgetCategory): string => {
+    const entry = WIDGET_CATEGORY_LABELS[category]
+    return t(entry.key, entry.default)
+  }
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>{t("dashboard.addAWidget", "Add a widget")}</DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ pt: 1 }}>
-          <Stack spacing={0.5}>
-            {availableWidgets.map((def) => (
-              <ListItemButton
-                key={def.type}
-                selected={def.type === selectedType}
-                onClick={() => handlePickType(def.type)}
-                sx={{ borderRadius: 1 }}
-              >
-                <ListItemText
-                  primary={widgetTitle(def, t)}
-                  secondary={widgetDescription(def, t)}
-                />
-              </ListItemButton>
-            ))}
-          </Stack>
+          <Section xs={12} disablePadding>
+            <Grid item xs={12}>
+              <Stack spacing={3} sx={{ p: 2 }}>
+                {widgetsByCategory.map((group) => (
+                  <Stack key={group.category} spacing={1.5}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      fontWeight="bold"
+                    >
+                      {categoryLabel(group.category)}
+                    </Typography>
+                    <Grid container spacing={1.5}>
+                      {group.widgets.map((def) => (
+                        <WidgetCard
+                          key={def.type}
+                          def={def}
+                          selected={def.type === selectedType}
+                          onSelect={() => handlePickType(def.type)}
+                          title={widgetTitle(def, t)}
+                          description={widgetDescription(def, t)}
+                        />
+                      ))}
+                    </Grid>
+                  </Stack>
+                ))}
+              </Stack>
+            </Grid>
+          </Section>
 
           {definition && (
             <>
@@ -422,5 +460,52 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
         </Stack>
       </DialogContent>
     </Dialog>
+  )
+}
+
+interface WidgetCardProps {
+  def: WidgetDefinition
+  selected: boolean
+  onSelect: () => void
+  title: string
+  description: string
+}
+
+/** A single selectable widget in the gallery: schematic preview + title + blurb. */
+function WidgetCard({
+  def,
+  selected,
+  onSelect,
+  title,
+  description,
+}: WidgetCardProps) {
+  return (
+    <Grid item xs={12} sm={6} md={4}>
+      <Card
+        variant="outlined"
+        sx={{
+          height: "100%",
+          borderColor: selected ? "primary.main" : "divider",
+          borderWidth: selected ? 2 : 1,
+        }}
+      >
+        <CardActionArea
+          onClick={onSelect}
+          sx={{ height: "100%", p: 1.5, alignItems: "stretch" }}
+        >
+          <Stack spacing={1} sx={{ height: "100%" }}>
+            <WidgetPreview kind={def.preview} />
+            <Box>
+              <Typography variant="subtitle2" fontWeight="bold" noWrap>
+                {title}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {description}
+              </Typography>
+            </Box>
+          </Stack>
+        </CardActionArea>
+      </Card>
+    </Grid>
   )
 }

@@ -1387,6 +1387,12 @@
     "aggregateOrgsHint": "Shows one section per organization you belong to.",
     "aggregateShopsHint": "Shows one section per shop you belong to.",
     "cancel": "Cancel",
+    "category": {
+      "activity": "Activity",
+      "market": "Market & Listings",
+      "orders": "Orders & Fulfillment",
+      "personal": "Personal"
+    },
     "customize": "Customize",
     "dataScope": "Data scope",
     "done": "Done",
