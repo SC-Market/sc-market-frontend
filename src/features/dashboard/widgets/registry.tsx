@@ -13,7 +13,7 @@ import { Grid } from "@mui/material"
 import { OrderMetrics } from "../../../views/orders/OrderMetrics"
 import { OrdersViewPaginated } from "../../../views/orders/OrderList"
 import { DashNotificationArea } from "../../../views/notifications/DashNotificationArea"
-import { UserOrderTrend } from "../../../views/orders/OrderTrend"
+import { UserOrderTrendChart } from "../../../views/orders/OrderTrend"
 import { ReceivedOffersArea } from "../../../views/offers/ReceivedOffersArea"
 import { MatchingBuyOrdersArea } from "../../../features/market/views/MatchingBuyOrdersArea"
 import { SellerAnalyticsV2 } from "../../../features/market/v2/components/SellerAnalyticsV2"
@@ -185,11 +185,11 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     ),
   },
   {
-    type: "order_trend",
-    titleKey: "dashboard.widgets.orderTrend.title",
-    titleDefault: "Order Trend",
-    descriptionKey: "dashboard.widgets.orderTrend.description",
-    descriptionDefault: "Daily/weekly/monthly order count and value charts.",
+    type: "order_count_trend",
+    titleKey: "dashboard.widgets.orderCountTrend.title",
+    titleDefault: "Order Count Trend",
+    descriptionKey: "dashboard.widgets.orderCountTrend.description",
+    descriptionDefault: "Daily order count over time.",
     defaultLayout: { w: 6, h: 4 },
     minSize: { w: 4, h: 3 },
     allowedScopes: METRIC_SCOPES,
@@ -197,7 +197,51 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     category: "orders",
     preview: "chart",
     render: ({ scope }) => (
-      <UserOrderTrend spectrumId={scope.spectrumId} shopId={scope.shopId} />
+      <UserOrderTrendChart
+        metric="count"
+        spectrumId={scope.spectrumId}
+        shopId={scope.shopId}
+      />
+    ),
+  },
+  {
+    type: "order_value_trend",
+    titleKey: "dashboard.widgets.orderValueTrend.title",
+    titleDefault: "Order Value Trend",
+    descriptionKey: "dashboard.widgets.orderValueTrend.description",
+    descriptionDefault: "Daily order value (aUEC) over time.",
+    defaultLayout: { w: 6, h: 4 },
+    minSize: { w: 4, h: 3 },
+    allowedScopes: METRIC_SCOPES,
+    selfChrome: true,
+    category: "orders",
+    preview: "chart",
+    render: ({ scope }) => (
+      <UserOrderTrendChart
+        metric="value"
+        spectrumId={scope.spectrumId}
+        shopId={scope.shopId}
+      />
+    ),
+  },
+  {
+    type: "order_status_trend",
+    titleKey: "dashboard.widgets.orderStatusTrend.title",
+    titleDefault: "Order Status Trend",
+    descriptionKey: "dashboard.widgets.orderStatusTrend.description",
+    descriptionDefault: "Daily order count broken down by status.",
+    defaultLayout: { w: 6, h: 4 },
+    minSize: { w: 4, h: 3 },
+    allowedScopes: METRIC_SCOPES,
+    selfChrome: true,
+    category: "orders",
+    preview: "chart",
+    render: ({ scope }) => (
+      <UserOrderTrendChart
+        metric="status"
+        spectrumId={scope.spectrumId}
+        shopId={scope.shopId}
+      />
     ),
   },
   {
