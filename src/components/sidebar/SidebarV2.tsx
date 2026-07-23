@@ -418,8 +418,14 @@ export function SidebarV2() {
           py: 1.5,
           cursor: "pointer",
           transition: "background-color 0.2s",
+          outline: "none",
           "&:hover": { backgroundColor: theme.palette.action.hover },
-          "&:focus-visible": { backgroundColor: theme.palette.action.hover, outline: "none" },
+          "&:focus": { outline: "none" },
+          "&:focus-visible": {
+            backgroundColor: theme.palette.action.hover,
+            outline: `2px solid ${theme.palette.primary.main}`,
+            outlineOffset: "-2px",
+          },
         }}
         onClick={(e) => setAnchorEl(e.currentTarget)}
         onKeyDown={(e) => {
