@@ -46,6 +46,12 @@ export interface WidgetDefinition {
   descriptionDefault: string
   /** Default grid placement (x/y are assigned when added). */
   defaultLayout: Pick<WidgetLayout, "w" | "h">
+  /**
+   * Minimum grid size (columns × rows) below which the widget's content stops
+   * rendering usefully. Applied as react-grid-layout minW/minH on resize.
+   * Falls back to DEFAULT_MIN_SIZE when omitted.
+   */
+  minSize?: Pick<WidgetLayout, "w" | "h">
   /** Scope bindings this widget supports. */
   allowedScopes: WidgetScopeKind[]
   /**
@@ -75,6 +81,23 @@ export function widgetTitle(def: WidgetDefinition, t: TFunction): string {
 /** Localized description for a widget definition. */
 export function widgetDescription(def: WidgetDefinition, t: TFunction): string {
   return t(def.descriptionKey, def.descriptionDefault)
+}
+
+/** Floor applied to any widget that doesn't declare its own minSize. */
+export const DEFAULT_MIN_SIZE: Pick<WidgetLayout, "w" | "h"> = { w: 2, h: 2 }
+
+/**
+ * Minimum grid size for a widget type, never larger than its default size so a
+ * freshly-added widget is always valid. Unknown types fall back to the default.
+ */
+export function widgetMinSize(type: string): Pick<WidgetLayout, "w" | "h"> {
+  const def = REGISTRY.get(type)
+  if (!def) return DEFAULT_MIN_SIZE
+  const min = def.minSize ?? DEFAULT_MIN_SIZE
+  return {
+    w: Math.min(min.w, def.defaultLayout.w),
+    h: Math.min(min.h, def.defaultLayout.h),
+  }
 }
 
 // Scope binding sets reused across widgets.
@@ -107,6 +130,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionDefault:
       "Active/completed order counts and value, plus top customers.",
     defaultLayout: { w: 3, h: 4 },
+    minSize: { w: 2, h: 3 },
     allowedScopes: METRIC_SCOPES,
     render: ({ scope }) => (
       <OrderMetrics spectrumId={scope.spectrumId} shopId={scope.shopId} />
@@ -119,6 +143,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.orderTrend.description",
     descriptionDefault: "Daily/weekly/monthly order count and value charts.",
     defaultLayout: { w: 6, h: 4 },
+    minSize: { w: 4, h: 3 },
     allowedScopes: METRIC_SCOPES,
     render: ({ scope }) => (
       <UserOrderTrend spectrumId={scope.spectrumId} shopId={scope.shopId} />
@@ -132,6 +157,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionDefault:
       "Paginated orders table (assignments, or a shop's orders).",
     defaultLayout: { w: 6, h: 5 },
+    minSize: { w: 4, h: 3 },
     allowedScopes: SHOP_SCOPES,
     render: ({ scope, t }) =>
       scope.shopId ? (
@@ -153,6 +179,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.offers.description",
     descriptionDefault: "Incoming offers you can claim, merge, or respond to.",
     defaultLayout: { w: 6, h: 5 },
+    minSize: { w: 4, h: 3 },
     allowedScopes: SHOP_SCOPES,
     render: ({ scope }) => <ReceivedOffersArea unassigned={!!scope.shopId} />,
   },
@@ -163,6 +190,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.matchingBuyOrders.description",
     descriptionDefault: "Open buy orders your inventory can fulfill.",
     defaultLayout: { w: 6, h: 4 },
+    minSize: { w: 4, h: 3 },
     allowedScopes: PERSONAL_ONLY,
     render: () => <MatchingBuyOrdersArea />,
   },
@@ -173,6 +201,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.notifications.description",
     descriptionDefault: "Your recent activity and notifications.",
     defaultLayout: { w: 3, h: 5 },
+    minSize: { w: 3, h: 3 },
     allowedScopes: SHOP_SCOPES,
     render: ({ scope }) => <DashNotificationArea shopId={scope.shopId} />,
   },
@@ -184,6 +213,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionDefault:
       "Sales volume, price, and inventory broken down by quality tier.",
     defaultLayout: { w: 6, h: 6 },
+    minSize: { w: 4, h: 4 },
     allowedScopes: SHOP_SCOPES,
     render: ({ scope }) => (
       <Grid container spacing={2}>
@@ -198,6 +228,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.marketOverview.description",
     descriptionDefault: "Top items across the market by availability.",
     defaultLayout: { w: 6, h: 5 },
+    minSize: { w: 4, h: 3 },
     allowedScopes: PERSONAL_ONLY,
     render: ({ settings, t }) => (
       <MarketOverviewWidget settings={settings} t={t} />
@@ -210,6 +241,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.reputation.description",
     descriptionDefault: "Your seller rating, streak, order volume, and badges.",
     defaultLayout: { w: 3, h: 3 },
+    minSize: { w: 2, h: 2 },
     allowedScopes: PERSONAL_ONLY,
     render: ({ t }) => <ReputationWidget t={t} />,
   },
@@ -220,6 +252,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.wishlist.description",
     descriptionDefault: "Your shopping lists and how close each is to complete.",
     defaultLayout: { w: 3, h: 4 },
+    minSize: { w: 2, h: 3 },
     allowedScopes: PERSONAL_ONLY,
     render: ({ t }) => <WishlistWidget t={t} />,
   },
@@ -230,6 +263,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.priceHistory.description",
     descriptionDefault: "Price trend over time for a specific item.",
     defaultLayout: { w: 6, h: 5 },
+    minSize: { w: 4, h: 3 },
     allowedScopes: PERSONAL_ONLY,
     requiresItem: true,
     render: ({ settings, t }) => (
@@ -244,6 +278,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionDefault:
       "A few marketplace listings for a search or a specific item.",
     defaultLayout: { w: 6, h: 5 },
+    minSize: { w: 3, h: 4 },
     allowedScopes: PERSONAL_ONLY,
     requiresListingsSource: true,
     render: ({ settings, t }) => (
@@ -258,6 +293,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionDefault:
       "A timeline of recent activity, optionally filtered to one type.",
     defaultLayout: { w: 4, h: 5 },
+    minSize: { w: 3, h: 3 },
     allowedScopes: SHOP_SCOPES,
     offersActivityFilter: true,
     render: ({ scope, settings, t }) => (
@@ -272,6 +308,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionDefault:
       "Per-listing views, cart adds, orders, sales, and conversion rate.",
     defaultLayout: { w: 6, h: 5 },
+    minSize: { w: 4, h: 3 },
     allowedScopes: SHOP_SCOPES,
     render: ({ scope, settings, t }) => (
       <ListingAnalyticsWidget scope={scope} settings={settings} t={t} />
