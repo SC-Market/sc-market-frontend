@@ -466,15 +466,6 @@
         "fillAllFields": "Please fill all fields"
       }
     },
-    "notificationTest.description": "Send test notifications to verify delivery across channels.",
-    "notificationTest.error": "Failed to send test notification",
-    "notificationTest.notificationType": "Notification Type",
-    "notificationTest.selectedUser": "Selected user",
-    "notificationTest.selectUser": "Select a user",
-    "notificationTest.success": "Test notification sent successfully",
-    "notificationTest.targetUser": "Target User",
-    "notificationTest.title": "Test Notifications",
-    "notificationTest.validation.fillAllFields": "Please fill in all required fields",
     "offerAnalytics": "Offer Analytics",
     "orderStats": "Admin Order Stats",
     "premium": {
