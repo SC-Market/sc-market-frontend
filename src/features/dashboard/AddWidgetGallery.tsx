@@ -6,7 +6,7 @@
  * "coming soon" placeholder until M3 wires up multi-target fan-out.
  */
 
-import { useMemo, useState } from "react"
+import { Fragment, useMemo, useState } from "react"
 import {
   Box,
   Button,
@@ -258,206 +258,217 @@ function AddWidgetDialog({ open, onClose, onAdd }: AddWidgetDialogProps) {
     return t(entry.key, entry.default)
   }
 
+  // Customization controls (scope, item/listings source, activity filter, and
+  // the Add button) for the selected widget. Rendered inline directly beneath
+  // the selected card so the options are visible proactively, not tucked away
+  // at the bottom of the dialog.
+  const customizationPanel = definition && (
+    <Stack
+      spacing={2}
+      sx={{
+        p: 2,
+        border: 1,
+        borderColor: "primary.main",
+        borderRadius: 1,
+        bgcolor: "action.hover",
+      }}
+    >
+      <FormControl fullWidth size="small">
+        <InputLabel id="widget-scope-label">
+          {t("dashboard.dataScope", "Data scope")}
+        </InputLabel>
+        <Select
+          labelId="widget-scope-label"
+          label={t("dashboard.dataScope", "Data scope")}
+          value={scopeKind}
+          onChange={(e) => {
+            setScopeKind(e.target.value as WidgetScopeKind)
+            setTargetId("")
+          }}
+        >
+          {scopesFor(definition.allowedScopes).map((k) => (
+            <MenuItem key={k} value={k}>
+              {scopeLabel(k)}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      {scopeKind === "specific_org" && (
+        <FormControl fullWidth size="small">
+          <InputLabel id="widget-org-label">
+            {t("dashboard.organization", "Organization")}
+          </InputLabel>
+          <Select
+            labelId="widget-org-label"
+            label={t("dashboard.organization", "Organization")}
+            value={targetId}
+            onChange={(e) => setTargetId(e.target.value)}
+          >
+            {(profile?.contractors ?? []).map((org) => (
+              <MenuItem key={org.spectrum_id} value={org.spectrum_id}>
+                {org.name || org.spectrum_id}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+
+      {scopeKind === "specific_shop" && (
+        <FormControl fullWidth size="small">
+          <InputLabel id="widget-shop-label">
+            {t("dashboard.shop", "Shop")}
+          </InputLabel>
+          <Select
+            labelId="widget-shop-label"
+            label={t("dashboard.shop", "Shop")}
+            value={targetId}
+            onChange={(e) => setTargetId(e.target.value)}
+          >
+            {(myShops ?? []).map((shop) => (
+              <MenuItem key={shop.shop_id} value={shop.shop_id}>
+                {shop.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+
+      {(scopeKind === "all_orgs" || scopeKind === "all_shops") && (
+        <Typography variant="caption" color="text.secondary">
+          {scopeKind === "all_orgs"
+            ? t(
+                "dashboard.aggregateOrgsHint",
+                "Shows one section per organization you belong to.",
+              )
+            : t(
+                "dashboard.aggregateShopsHint",
+                "Shows one section per shop you belong to.",
+              )}
+        </Typography>
+      )}
+
+      {requiresItem && (
+        <GameItemPicker value={selectedItem} onChange={setSelectedItem} />
+      )}
+
+      {requiresListingsSource && (
+        <Stack spacing={1.5}>
+          <ToggleButtonGroup
+            size="small"
+            exclusive
+            fullWidth
+            color="primary"
+            value={sourceMode}
+            onChange={(_, next) => {
+              if (next) setSourceMode(next)
+            }}
+          >
+            <ToggleButton value="search">
+              {t("dashboard.listingsPreview.bySearch", "By search")}
+            </ToggleButton>
+            <ToggleButton value="item">
+              {t("dashboard.listingsPreview.byItem", "By item")}
+            </ToggleButton>
+          </ToggleButtonGroup>
+
+          {sourceMode === "search" ? (
+            <TextField
+              size="small"
+              fullWidth
+              label={t(
+                "dashboard.listingsPreview.searchLabel",
+                "Search query",
+              )}
+              placeholder={t(
+                "dashboard.listingsPreview.searchPlaceholder",
+                "e.g. medical gown",
+              )}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          ) : (
+            <GameItemPicker value={selectedItem} onChange={setSelectedItem} />
+          )}
+        </Stack>
+      )}
+
+      {offersActivityFilter && (
+        <FormControl fullWidth size="small">
+          <InputLabel id="widget-activity-label">
+            {t("dashboard.activityFeed.filterLabel", "Show")}
+          </InputLabel>
+          <Select
+            labelId="widget-activity-label"
+            label={t("dashboard.activityFeed.filterLabel", "Show")}
+            value={activityFilter}
+            onChange={(e) => setActivityFilter(e.target.value)}
+          >
+            {ACTIVITY_FILTER_OPTIONS.map((opt) => (
+              <MenuItem key={opt.value} value={opt.value}>
+                {t(opt.labelKey, opt.labelDefault)}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+
+      <Button
+        variant="contained"
+        color="secondary"
+        disabled={!canAdd}
+        onClick={() =>
+          canAdd && scope && onAdd(definition.type, scope, settings)
+        }
+      >
+        {t("dashboard.addNamed", "Add {{name}}", {
+          name: widgetTitle(definition, t),
+        })}
+      </Button>
+    </Stack>
+  )
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>{t("dashboard.addAWidget", "Add a widget")}</DialogTitle>
       <DialogContent>
-        <Stack spacing={2} sx={{ pt: 1 }}>
-          <Section xs={12} disablePadding>
-            <Grid item xs={12}>
-              <Stack spacing={3} sx={{ p: 2 }}>
-                {widgetsByCategory.map((group) => (
-                  <Stack key={group.category} spacing={1.5}>
-                    <Typography
-                      variant="subtitle2"
-                      color="text.secondary"
-                      fontWeight="bold"
-                    >
-                      {categoryLabel(group.category)}
-                    </Typography>
-                    <Grid container spacing={1.5}>
-                      {group.widgets.map((def) => (
+        <Section xs={12} disablePadding>
+          <Grid item xs={12}>
+            <Stack spacing={3} sx={{ p: 2 }}>
+              {widgetsByCategory.map((group) => (
+                <Stack key={group.category} spacing={1.5}>
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    fontWeight="bold"
+                  >
+                    {categoryLabel(group.category)}
+                  </Typography>
+                  <Grid container spacing={1.5}>
+                    {group.widgets.map((def) => (
+                      <Fragment key={def.type}>
                         <WidgetCard
-                          key={def.type}
                           def={def}
                           selected={def.type === selectedType}
                           onSelect={() => handlePickType(def.type)}
                           title={widgetTitle(def, t)}
                           description={widgetDescription(def, t)}
                         />
-                      ))}
-                    </Grid>
-                  </Stack>
-                ))}
-              </Stack>
-            </Grid>
-          </Section>
-
-          {definition && (
-            <>
-              <FormControl fullWidth size="small">
-                <InputLabel id="widget-scope-label">
-                  {t("dashboard.dataScope", "Data scope")}
-                </InputLabel>
-                <Select
-                  labelId="widget-scope-label"
-                  label={t("dashboard.dataScope", "Data scope")}
-                  value={scopeKind}
-                  onChange={(e) => {
-                    setScopeKind(e.target.value as WidgetScopeKind)
-                    setTargetId("")
-                  }}
-                >
-                  {scopesFor(definition.allowedScopes).map((k) => (
-                    <MenuItem key={k} value={k}>
-                      {scopeLabel(k)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              {scopeKind === "specific_org" && (
-                <FormControl fullWidth size="small">
-                  <InputLabel id="widget-org-label">
-                    {t("dashboard.organization", "Organization")}
-                  </InputLabel>
-                  <Select
-                    labelId="widget-org-label"
-                    label={t("dashboard.organization", "Organization")}
-                    value={targetId}
-                    onChange={(e) => setTargetId(e.target.value)}
-                  >
-                    {(profile?.contractors ?? []).map((org) => (
-                      <MenuItem key={org.spectrum_id} value={org.spectrum_id}>
-                        {org.name || org.spectrum_id}
-                      </MenuItem>
+                        {def.type === selectedType && (
+                          // Full-width row break so the panel sits directly
+                          // below the selected card, spanning the category.
+                          <Grid item xs={12}>
+                            {customizationPanel}
+                          </Grid>
+                        )}
+                      </Fragment>
                     ))}
-                  </Select>
-                </FormControl>
-              )}
-
-              {scopeKind === "specific_shop" && (
-                <FormControl fullWidth size="small">
-                  <InputLabel id="widget-shop-label">
-                    {t("dashboard.shop", "Shop")}
-                  </InputLabel>
-                  <Select
-                    labelId="widget-shop-label"
-                    label={t("dashboard.shop", "Shop")}
-                    value={targetId}
-                    onChange={(e) => setTargetId(e.target.value)}
-                  >
-                    {(myShops ?? []).map((shop) => (
-                      <MenuItem key={shop.shop_id} value={shop.shop_id}>
-                        {shop.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-
-              {(scopeKind === "all_orgs" || scopeKind === "all_shops") && (
-                <Typography variant="caption" color="text.secondary">
-                  {scopeKind === "all_orgs"
-                    ? t(
-                        "dashboard.aggregateOrgsHint",
-                        "Shows one section per organization you belong to.",
-                      )
-                    : t(
-                        "dashboard.aggregateShopsHint",
-                        "Shows one section per shop you belong to.",
-                      )}
-                </Typography>
-              )}
-
-              {requiresItem && (
-                <GameItemPicker
-                  value={selectedItem}
-                  onChange={setSelectedItem}
-                />
-              )}
-
-              {requiresListingsSource && (
-                <Stack spacing={1.5}>
-                  <ToggleButtonGroup
-                    size="small"
-                    exclusive
-                    fullWidth
-                    color="primary"
-                    value={sourceMode}
-                    onChange={(_, next) => {
-                      if (next) setSourceMode(next)
-                    }}
-                  >
-                    <ToggleButton value="search">
-                      {t("dashboard.listingsPreview.bySearch", "By search")}
-                    </ToggleButton>
-                    <ToggleButton value="item">
-                      {t("dashboard.listingsPreview.byItem", "By item")}
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-
-                  {sourceMode === "search" ? (
-                    <TextField
-                      size="small"
-                      fullWidth
-                      label={t(
-                        "dashboard.listingsPreview.searchLabel",
-                        "Search query",
-                      )}
-                      placeholder={t(
-                        "dashboard.listingsPreview.searchPlaceholder",
-                        "e.g. medical gown",
-                      )}
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                  ) : (
-                    <GameItemPicker
-                      value={selectedItem}
-                      onChange={setSelectedItem}
-                    />
-                  )}
+                  </Grid>
                 </Stack>
-              )}
-
-              {offersActivityFilter && (
-                <FormControl fullWidth size="small">
-                  <InputLabel id="widget-activity-label">
-                    {t("dashboard.activityFeed.filterLabel", "Show")}
-                  </InputLabel>
-                  <Select
-                    labelId="widget-activity-label"
-                    label={t("dashboard.activityFeed.filterLabel", "Show")}
-                    value={activityFilter}
-                    onChange={(e) => setActivityFilter(e.target.value)}
-                  >
-                    {ACTIVITY_FILTER_OPTIONS.map((opt) => (
-                      <MenuItem key={opt.value} value={opt.value}>
-                        {t(opt.labelKey, opt.labelDefault)}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={!canAdd}
-                onClick={() =>
-                  canAdd &&
-                  scope &&
-                  onAdd(definition.type, scope, settings)
-                }
-              >
-                {t("dashboard.addNamed", "Add {{name}}", {
-                  name: widgetTitle(definition, t),
-                })}
-              </Button>
-            </>
-          )}
-        </Stack>
+              ))}
+            </Stack>
+          </Grid>
+        </Section>
       </DialogContent>
     </Dialog>
   )
