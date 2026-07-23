@@ -9,6 +9,7 @@ import { Responsive, WidthProvider, type Layout } from "react-grid-layout"
 import "react-grid-layout/css/styles.css"
 import "react-resizable/css/styles.css"
 import { WidgetWrapper } from "./widgets/WidgetWrapper"
+import { widgetMinSize } from "./widgets/registry"
 import type { DashboardConfig } from "./types"
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
@@ -30,13 +31,18 @@ export function DashboardGrid({
 }: DashboardGridProps) {
   const layout = useMemo<Layout[]>(
     () =>
-      config.widgets.map((w) => ({
-        i: w.id,
-        x: w.layout.x,
-        y: w.layout.y,
-        w: w.layout.w,
-        h: w.layout.h,
-      })),
+      config.widgets.map((w) => {
+        const min = widgetMinSize(w.type)
+        return {
+          i: w.id,
+          x: w.layout.x,
+          y: w.layout.y,
+          w: w.layout.w,
+          h: w.layout.h,
+          minW: min.w,
+          minH: min.h,
+        }
+      }),
     [config.widgets],
   )
 
