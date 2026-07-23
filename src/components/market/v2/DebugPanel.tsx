@@ -15,6 +15,10 @@ import SettingsIcon from "@mui/icons-material/Settings"
 import CloseIcon from "@mui/icons-material/Close"
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 
+/** Flags fully rolled out + cleaned up — hidden from the toggle menu even if the
+ * backend still returns their config rows. */
+const RETIRED_FLAGS = new Set(["market_v2", "crafting"])
+
 /**
  * DebugPanel component for switching between V1 and V2 market experiences
  * 
@@ -124,9 +128,11 @@ export function DebugPanel() {
 
           <Divider sx={{ mb: 2 }} />
 
-          {/* Flag toggles */}
+          {/* Flag toggles — retired flags (fully rolled out) are hidden */}
           <Stack spacing={1.5}>
-            {Object.entries(flags).map(([flagName, enabled]) => {
+            {Object.entries(flags)
+              .filter(([flagName]) => !RETIRED_FLAGS.has(flagName))
+              .map(([flagName, enabled]) => {
               const isOverridden = overriddenFlags.includes(flagName)
               const label = flagName.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
               return (
