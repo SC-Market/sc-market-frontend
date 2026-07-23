@@ -11,7 +11,14 @@
  */
 
 import { useMemo, useState } from "react"
-import { Box, Button, CircularProgress, Stack } from "@mui/material"
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Stack,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material"
 import EditIcon from "@mui/icons-material/Edit"
 import DoneIcon from "@mui/icons-material/Done"
 import { useTranslation } from "react-i18next"
@@ -71,6 +78,10 @@ export function CustomizableDashboard({
   title,
 }: CustomizableDashboardProps = {}) {
   const { t } = useTranslation()
+  const theme = useTheme()
+  // Phones (< sm) get a read-only single-column stack: touch drag/resize is
+  // awkward and the auto-derived multi-column grid feels arbitrary there.
+  const isPhone = useMediaQuery(theme.breakpoints.down("sm"))
   const { data: profile } = useGetCurrentUserProfileQuery(undefined, {
     skip: !!ownerProp,
   })
@@ -108,7 +119,7 @@ export function CustomizableDashboard({
         maxWidth="xl"
       >
         <Box sx={{ width: "100%", px: 1 }}>
-          {canEdit && (
+          {canEdit && !isPhone && (
             <Stack
               direction="row"
               spacing={1}
@@ -154,8 +165,9 @@ export function CustomizableDashboard({
           ) : (
             <DashboardGrid
               config={effectiveConfig}
-              editing={editing && canEdit}
+              editing={editing && canEdit && !isPhone}
               onConfigChange={setConfig}
+              stacked={isPhone}
             />
           )}
         </Box>
