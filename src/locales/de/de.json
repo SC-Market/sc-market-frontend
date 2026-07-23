@@ -1684,7 +1684,162 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard"
+    "activityFeed": {
+      "all": "Alle Aktivitäten",
+      "bids": "Gebote",
+      "filterLabel": "Anzeigen",
+      "offers": "Angebote",
+      "orders": "Neue Bestellungen",
+      "reviews": "Bewertungen"
+    },
+    "addAWidget": "Widget hinzufügen",
+    "addNamed": "{{name}} hinzufügen",
+    "addWidget": "Widget hinzufügen",
+    "aggregateOrgsHint": "Zeigt einen Abschnitt pro Organisation, der du angehörst.",
+    "aggregateShopsHint": "Zeigt einen Abschnitt pro Shop, dem du angehörst.",
+    "cancel": "Abbrechen",
+    "category": {
+      "activity": "Aktivität",
+      "market": "Markt & Angebote",
+      "orders": "Bestellungen & Abwicklung",
+      "personal": "Persönlich"
+    },
+    "customize": "Anpassen",
+    "dataScope": "Datenbereich",
+    "done": "Fertig",
+    "dontImportWidget": "Dieses Widget nicht importieren",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "listingAnalytics": {
+      "cartAdds": "In den Warenkorb",
+      "conversion": "Konversion",
+      "empty": "Noch keine Aufrufe oder Bestellungen erfasst.",
+      "error": "Angebotsstatistiken konnten nicht geladen werden.",
+      "listing": "Angebot",
+      "noShop": "Hefte dieses Widget an einen Shop, um seine Angebotsstatistiken zu sehen.",
+      "orders": "Bestellungen",
+      "sales": "Verkäufe",
+      "views": "Aufrufe"
+    },
+    "listingsPreview": {
+      "byItem": "Nach Artikel",
+      "bySearch": "Nach Suche",
+      "empty": "Keine passenden Angebote gefunden.",
+      "searchLabel": "Suchbegriff",
+      "searchPlaceholder": "z. B. medizinischer Kittel"
+    },
+    "mapImportedWidgets": "Importierte Widgets zuordnen",
+    "mapImportedWidgetsHint": "Diese Widgets waren an die Organisationen oder Shops des Autors geheftet. Wähle für jedes eines von deinen aus oder verwirf es.",
+    "marketOverviewEmpty": "Keine Angebote zum Anzeigen.",
+    "marketOverviewError": "Marktdaten konnten nicht geladen werden.",
+    "matchingBuyOrders": "Kaufaufträge, die du erfüllen kannst",
+    "matchingBuyOrdersEmpty": "Derzeit passen keine offenen Kaufaufträge zu deinem Inventar.",
+    "noBuyOrders": "Keine Kaufaufträge",
+    "noBuyOrdersDescription": "Deine aktiven Kaufaufträge erscheinen hier.",
+    "noOrgsToAggregate": "Du hast noch keine Organisationen zum Aggregieren.",
+    "noOrgsWidgetDropped": "Du hast keine Organisationen – dieses Widget wird verworfen.",
+    "noShopsToAggregate": "Du hast noch keine Shops zum Aggregieren.",
+    "noShopsWidgetDropped": "Du hast keine Shops – dieses Widget wird verworfen.",
+    "orgTitle": "{{name}} Dashboard",
+    "organization": "Organisation",
+    "priceHistoryNoItem": "Kein Artikel ausgewählt. Entferne dieses Widget und füge es erneut hinzu, um einen Artikel zu wählen.",
+    "remapOrgLabel": "{{name}} – Organisation",
+    "remapShopLabel": "{{name}} – Shop",
+    "removeWidget": "Widget entfernen",
+    "reputationError": "Deine Reputation konnte nicht geladen werden.",
+    "reputationOrders": "Bestellungen",
+    "reputationReviews": "Bewertungen",
+    "reputationStreak": "5★-Serie",
+    "scope": {
+      "allOrgs": "Alle Organisationen",
+      "allShops": "Alle Shops",
+      "currentContext": "Aktueller Kontext",
+      "me": "Du",
+      "specificOrg": "Eine bestimmte Organisation",
+      "specificShop": "Ein bestimmter Shop",
+      "thisOrg": "Diese Organisation",
+      "thisShop": "Dieser Shop"
+    },
+    "searchItem": "Artikel suchen",
+    "searchItemHint": "Gib mindestens 2 Zeichen ein",
+    "searchItemNone": "Keine Artikel gefunden",
+    "searchItemPlaceholder": "Zum Suchen tippen…",
+    "shop": "Shop",
+    "title": "Dashboard",
+    "unavailableOrg": "Die Organisation dieses Widgets ist nicht mehr verfügbar. Entferne es oder wähle einen neuen Bereich.",
+    "unavailableShop": "Der Shop dieses Widgets ist nicht mehr verfügbar. Entferne es oder wähle einen neuen Bereich.",
+    "viewAll": "Alle anzeigen",
+    "viewAllBuyOrders": "Alle Kaufaufträge anzeigen",
+    "widgets": {
+      "activityFeed": {
+        "description": "Eine Chronik der letzten Aktivitäten, optional nach Typ gefiltert.",
+        "title": "Aktivitäts-Feed"
+      },
+      "listingAnalytics": {
+        "description": "Aufrufe, Warenkorb-Adds, Bestellungen, Verkäufe und Konversionsrate pro Angebot.",
+        "title": "Angebotsstatistiken"
+      },
+      "listingsPreview": {
+        "description": "Einige Marktangebote für eine Suche oder einen bestimmten Artikel.",
+        "title": "Angebotsvorschau"
+      },
+      "marketOverview": {
+        "description": "Top-Artikel im Markt nach Verfügbarkeit.",
+        "title": "Marktübersicht"
+      },
+      "matchingBuyOrders": {
+        "description": "Offene Kaufaufträge, die dein Inventar erfüllen kann.",
+        "title": "Passende Kaufaufträge"
+      },
+      "notifications": {
+        "description": "Deine letzten Aktivitäten und Benachrichtigungen.",
+        "title": "Benachrichtigungen"
+      },
+      "offers": {
+        "description": "Eingehende Angebote, die du beanspruchen, zusammenführen oder beantworten kannst.",
+        "title": "Erhaltene Angebote"
+      },
+      "orderCountTrend": {
+        "description": "Tägliche Bestellanzahl im Zeitverlauf.",
+        "title": "Trend der Bestellanzahl"
+      },
+      "orderMetrics": {
+        "description": "Anzahl und Wert aktiver/abgeschlossener Bestellungen sowie Top-Kunden.",
+        "title": "Bestellstatistiken"
+      },
+      "orderStatusTrend": {
+        "description": "Tägliche Bestellanzahl aufgeschlüsselt nach Status.",
+        "title": "Trend der Bestellstatus"
+      },
+      "orderValueTrend": {
+        "description": "Täglicher Bestellwert (aUEC) im Zeitverlauf.",
+        "title": "Trend des Bestellwerts"
+      },
+      "orders": {
+        "assignments": "Zuweisungen",
+        "description": "Paginierte Bestelltabelle (Zuweisungen oder Bestellungen eines Shops).",
+        "title": "Bestellungen"
+      },
+      "priceHistory": {
+        "description": "Preisverlauf über die Zeit für einen bestimmten Artikel.",
+        "title": "Preisverlauf"
+      },
+      "reputation": {
+        "description": "Deine Verkäuferbewertung, Serie, Bestellvolumen und Abzeichen.",
+        "title": "Reputation"
+      },
+      "sellerAnalytics": {
+        "description": "Verkaufsvolumen, Preis und Inventar aufgeschlüsselt nach Qualitätsstufe.",
+        "title": "Verkäuferstatistiken"
+      },
+      "wishlist": {
+        "description": "Deine Einkaufslisten und wie weit jede abgeschlossen ist.",
+        "title": "Einkaufslisten"
+      }
+    },
+    "wishlistEmpty": "Du hast noch keine Einkaufslisten.",
+    "wishlistError": "Deine Einkaufslisten konnten nicht geladen werden.",
+    "wishlistProgress": "{{done}}/{{total}} Artikel"
   },
   "contractorsPage": {
     "title": "Contractors"

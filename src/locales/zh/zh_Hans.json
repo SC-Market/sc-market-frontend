@@ -1744,7 +1744,162 @@
     "settingsTab": "Settings"
   },
   "dashboard": {
-    "title": "Dashboard"
+    "activityFeed": {
+      "all": "所有动态",
+      "bids": "出价",
+      "filterLabel": "显示",
+      "offers": "报价",
+      "orders": "新订单",
+      "reviews": "评价"
+    },
+    "addAWidget": "添加小组件",
+    "addNamed": "添加{{name}}",
+    "addWidget": "添加小组件",
+    "aggregateOrgsHint": "为你所属的每个组织显示一个区块。",
+    "aggregateShopsHint": "为你所属的每个店铺显示一个区块。",
+    "cancel": "取消",
+    "category": {
+      "activity": "动态",
+      "market": "市场与商品",
+      "orders": "订单与履约",
+      "personal": "个人"
+    },
+    "customize": "自定义",
+    "dataScope": "数据范围",
+    "done": "完成",
+    "dontImportWidget": "不导入此小组件",
+    "export": "导出",
+    "import": "导入",
+    "listingAnalytics": {
+      "cartAdds": "加入购物车",
+      "conversion": "转化率",
+      "empty": "尚未记录浏览量或订单。",
+      "error": "无法加载商品分析。",
+      "listing": "商品",
+      "noShop": "将此小组件固定到某个店铺即可查看其商品分析。",
+      "orders": "订单",
+      "sales": "销售额",
+      "views": "浏览量"
+    },
+    "listingsPreview": {
+      "byItem": "按物品",
+      "bySearch": "按搜索",
+      "empty": "未找到匹配的商品。",
+      "searchLabel": "搜索查询",
+      "searchPlaceholder": "例如：医用长袍"
+    },
+    "mapImportedWidgets": "映射导入的小组件",
+    "mapImportedWidgetsHint": "这些小组件原本固定到作者自己的组织或店铺。请为每个选择你自己的一个，或将其舍弃。",
+    "marketOverviewEmpty": "没有可显示的市场商品。",
+    "marketOverviewError": "无法加载市场数据。",
+    "matchingBuyOrders": "你可履约的求购单",
+    "matchingBuyOrdersEmpty": "目前没有与你库存匹配的未完成求购单。",
+    "noBuyOrders": "没有求购单",
+    "noBuyOrdersDescription": "你的有效求购单将显示在此处。",
+    "noOrgsToAggregate": "你还没有可聚合的组织。",
+    "noOrgsWidgetDropped": "你没有组织——此小组件将被舍弃。",
+    "noShopsToAggregate": "你还没有可聚合的店铺。",
+    "noShopsWidgetDropped": "你没有店铺——此小组件将被舍弃。",
+    "orgTitle": "{{name}} 仪表板",
+    "organization": "组织",
+    "priceHistoryNoItem": "未选择物品。请删除此小组件并重新添加以选择物品。",
+    "remapOrgLabel": "{{name}} — 组织",
+    "remapShopLabel": "{{name}} — 店铺",
+    "removeWidget": "移除小组件",
+    "reputationError": "无法加载你的信誉。",
+    "reputationOrders": "订单",
+    "reputationReviews": "评价",
+    "reputationStreak": "5★连击",
+    "scope": {
+      "allOrgs": "所有组织",
+      "allShops": "所有店铺",
+      "currentContext": "当前上下文",
+      "me": "你",
+      "specificOrg": "特定组织",
+      "specificShop": "特定店铺",
+      "thisOrg": "此组织",
+      "thisShop": "此店铺"
+    },
+    "searchItem": "搜索物品",
+    "searchItemHint": "至少输入2个字符",
+    "searchItemNone": "未找到物品",
+    "searchItemPlaceholder": "输入以搜索…",
+    "shop": "店铺",
+    "title": "仪表板",
+    "unavailableOrg": "此小组件的组织已不可用。请移除它或选择新的范围。",
+    "unavailableShop": "此小组件的店铺已不可用。请移除它或选择新的范围。",
+    "viewAll": "查看全部",
+    "viewAllBuyOrders": "查看所有求购单",
+    "widgets": {
+      "activityFeed": {
+        "description": "近期动态的时间线，可按类型筛选。",
+        "title": "动态源"
+      },
+      "listingAnalytics": {
+        "description": "每个商品的浏览量、加入购物车、订单、销售额和转化率。",
+        "title": "商品分析"
+      },
+      "listingsPreview": {
+        "description": "针对搜索或特定物品的若干市场商品。",
+        "title": "商品预览"
+      },
+      "marketOverview": {
+        "description": "按可用性排列的市场热门物品。",
+        "title": "市场概览"
+      },
+      "matchingBuyOrders": {
+        "description": "你的库存可履约的未完成求购单。",
+        "title": "匹配的求购单"
+      },
+      "notifications": {
+        "description": "你的近期动态和通知。",
+        "title": "通知"
+      },
+      "offers": {
+        "description": "你可以认领、合并或回应的收到的报价。",
+        "title": "收到的报价"
+      },
+      "orderCountTrend": {
+        "description": "一段时间内的每日订单数。",
+        "title": "订单数趋势"
+      },
+      "orderMetrics": {
+        "description": "有效/已完成订单的数量与金额，以及顶级客户。",
+        "title": "订单指标"
+      },
+      "orderStatusTrend": {
+        "description": "按状态细分的每日订单数。",
+        "title": "订单状态趋势"
+      },
+      "orderValueTrend": {
+        "description": "一段时间内的每日订单金额（aUEC）。",
+        "title": "订单金额趋势"
+      },
+      "orders": {
+        "assignments": "分配",
+        "description": "分页订单表（分配，或某店铺的订单）。",
+        "title": "订单"
+      },
+      "priceHistory": {
+        "description": "特定物品随时间的价格趋势。",
+        "title": "价格历史"
+      },
+      "reputation": {
+        "description": "你的卖家评分、连击、订单量和徽章。",
+        "title": "信誉"
+      },
+      "sellerAnalytics": {
+        "description": "按质量等级细分的销量、价格和库存。",
+        "title": "卖家分析"
+      },
+      "wishlist": {
+        "description": "你的购物清单及每个清单的完成程度。",
+        "title": "购物清单"
+      }
+    },
+    "wishlistEmpty": "你还没有购物清单。",
+    "wishlistError": "无法加载你的购物清单。",
+    "wishlistProgress": "{{done}}/{{total}} 件物品"
   },
   "contractorsPage": {
     "title": "Contractors"

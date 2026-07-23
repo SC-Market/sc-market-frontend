@@ -1607,7 +1607,162 @@
     }
   },
   "dashboard": {
-    "title": ""
+    "activityFeed": {
+      "all": "所有動態",
+      "bids": "出價",
+      "filterLabel": "顯示",
+      "offers": "報價",
+      "orders": "新訂單",
+      "reviews": "評價"
+    },
+    "addAWidget": "新增小工具",
+    "addNamed": "新增{{name}}",
+    "addWidget": "新增小工具",
+    "aggregateOrgsHint": "為你所屬的每個組織顯示一個區塊。",
+    "aggregateShopsHint": "為你所屬的每個商店顯示一個區塊。",
+    "cancel": "取消",
+    "category": {
+      "activity": "動態",
+      "market": "市場與商品",
+      "orders": "訂單與履約",
+      "personal": "個人"
+    },
+    "customize": "自訂",
+    "dataScope": "資料範圍",
+    "done": "完成",
+    "dontImportWidget": "不匯入此小工具",
+    "export": "匯出",
+    "import": "匯入",
+    "listingAnalytics": {
+      "cartAdds": "加入購物車",
+      "conversion": "轉換率",
+      "empty": "尚未記錄瀏覽量或訂單。",
+      "error": "無法載入商品分析。",
+      "listing": "商品",
+      "noShop": "將此小工具釘選到某個商店即可查看其商品分析。",
+      "orders": "訂單",
+      "sales": "銷售額",
+      "views": "瀏覽量"
+    },
+    "listingsPreview": {
+      "byItem": "依物品",
+      "bySearch": "依搜尋",
+      "empty": "找不到符合的商品。",
+      "searchLabel": "搜尋查詢",
+      "searchPlaceholder": "例如：醫用長袍"
+    },
+    "mapImportedWidgets": "對應匯入的小工具",
+    "mapImportedWidgetsHint": "這些小工具原本釘選到作者自己的組織或商店。請為每個選擇你自己的一個，或將其捨棄。",
+    "marketOverviewEmpty": "沒有可顯示的市場商品。",
+    "marketOverviewError": "無法載入市場資料。",
+    "matchingBuyOrders": "你可履約的求購單",
+    "matchingBuyOrdersEmpty": "目前沒有與你庫存相符的未完成求購單。",
+    "noBuyOrders": "沒有求購單",
+    "noBuyOrdersDescription": "你的有效求購單將顯示於此。",
+    "noOrgsToAggregate": "你還沒有可彙整的組織。",
+    "noOrgsWidgetDropped": "你沒有組織——此小工具將被捨棄。",
+    "noShopsToAggregate": "你還沒有可彙整的商店。",
+    "noShopsWidgetDropped": "你沒有商店——此小工具將被捨棄。",
+    "orgTitle": "{{name}} 儀表板",
+    "organization": "組織",
+    "priceHistoryNoItem": "未選擇物品。請刪除此小工具並重新新增以選擇物品。",
+    "remapOrgLabel": "{{name}} — 組織",
+    "remapShopLabel": "{{name}} — 商店",
+    "removeWidget": "移除小工具",
+    "reputationError": "無法載入你的信譽。",
+    "reputationOrders": "訂單",
+    "reputationReviews": "評價",
+    "reputationStreak": "5★連續",
+    "scope": {
+      "allOrgs": "所有組織",
+      "allShops": "所有商店",
+      "currentContext": "目前情境",
+      "me": "你",
+      "specificOrg": "特定組織",
+      "specificShop": "特定商店",
+      "thisOrg": "此組織",
+      "thisShop": "此商店"
+    },
+    "searchItem": "搜尋物品",
+    "searchItemHint": "至少輸入2個字元",
+    "searchItemNone": "找不到物品",
+    "searchItemPlaceholder": "輸入以搜尋…",
+    "shop": "商店",
+    "title": "儀表板",
+    "unavailableOrg": "此小工具的組織已無法使用。請移除它或選擇新的範圍。",
+    "unavailableShop": "此小工具的商店已無法使用。請移除它或選擇新的範圍。",
+    "viewAll": "檢視全部",
+    "viewAllBuyOrders": "檢視所有求購單",
+    "widgets": {
+      "activityFeed": {
+        "description": "近期動態的時間軸，可依類型篩選。",
+        "title": "動態消息"
+      },
+      "listingAnalytics": {
+        "description": "每個商品的瀏覽量、加入購物車、訂單、銷售額和轉換率。",
+        "title": "商品分析"
+      },
+      "listingsPreview": {
+        "description": "針對搜尋或特定物品的若干市場商品。",
+        "title": "商品預覽"
+      },
+      "marketOverview": {
+        "description": "依可用性排列的市場熱門物品。",
+        "title": "市場概覽"
+      },
+      "matchingBuyOrders": {
+        "description": "你的庫存可履約的未完成求購單。",
+        "title": "相符的求購單"
+      },
+      "notifications": {
+        "description": "你的近期動態和通知。",
+        "title": "通知"
+      },
+      "offers": {
+        "description": "你可以認領、合併或回應的收到的報價。",
+        "title": "收到的報價"
+      },
+      "orderCountTrend": {
+        "description": "一段時間內的每日訂單數。",
+        "title": "訂單數趨勢"
+      },
+      "orderMetrics": {
+        "description": "有效/已完成訂單的數量與金額，以及頂級客戶。",
+        "title": "訂單指標"
+      },
+      "orderStatusTrend": {
+        "description": "依狀態細分的每日訂單數。",
+        "title": "訂單狀態趨勢"
+      },
+      "orderValueTrend": {
+        "description": "一段時間內的每日訂單金額（aUEC）。",
+        "title": "訂單金額趨勢"
+      },
+      "orders": {
+        "assignments": "指派",
+        "description": "分頁訂單表（指派，或某商店的訂單）。",
+        "title": "訂單"
+      },
+      "priceHistory": {
+        "description": "特定物品隨時間的價格趨勢。",
+        "title": "價格歷史"
+      },
+      "reputation": {
+        "description": "你的賣家評分、連續紀錄、訂單量和徽章。",
+        "title": "信譽"
+      },
+      "sellerAnalytics": {
+        "description": "依品質等級細分的銷量、價格和庫存。",
+        "title": "賣家分析"
+      },
+      "wishlist": {
+        "description": "你的購物清單及每個清單的完成程度。",
+        "title": "購物清單"
+      }
+    },
+    "wishlistEmpty": "你還沒有購物清單。",
+    "wishlistError": "無法載入你的購物清單。",
+    "wishlistProgress": "{{done}}/{{total}} 件物品"
   },
   "contractorsPage": {
     "title": ""
