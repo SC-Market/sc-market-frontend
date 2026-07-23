@@ -1675,7 +1675,162 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard"
+    "activityFeed": {
+      "all": "すべてのアクティビティ",
+      "bids": "入札",
+      "filterLabel": "表示",
+      "offers": "オファー",
+      "orders": "新規注文",
+      "reviews": "レビュー"
+    },
+    "addAWidget": "ウィジェットを追加",
+    "addNamed": "{{name}}を追加",
+    "addWidget": "ウィジェットを追加",
+    "aggregateOrgsHint": "所属する組織ごとにセクションを表示します。",
+    "aggregateShopsHint": "所属するショップごとにセクションを表示します。",
+    "cancel": "キャンセル",
+    "category": {
+      "activity": "アクティビティ",
+      "market": "マーケットと出品",
+      "orders": "注文と履行",
+      "personal": "個人"
+    },
+    "customize": "カスタマイズ",
+    "dataScope": "データ範囲",
+    "done": "完了",
+    "dontImportWidget": "このウィジェットをインポートしない",
+    "export": "エクスポート",
+    "import": "インポート",
+    "listingAnalytics": {
+      "cartAdds": "カート追加",
+      "conversion": "コンバージョン",
+      "empty": "まだ閲覧数や注文が記録されていません。",
+      "error": "出品分析を読み込めませんでした。",
+      "listing": "出品",
+      "noShop": "このウィジェットをショップに固定すると出品分析が表示されます。",
+      "orders": "注文",
+      "sales": "売上",
+      "views": "閲覧数"
+    },
+    "listingsPreview": {
+      "byItem": "アイテム別",
+      "bySearch": "検索別",
+      "empty": "一致する出品が見つかりませんでした。",
+      "searchLabel": "検索クエリ",
+      "searchPlaceholder": "例：医療用ガウン"
+    },
+    "mapImportedWidgets": "インポートしたウィジェットを割り当て",
+    "mapImportedWidgetsHint": "これらのウィジェットは作成者自身の組織またはショップに固定されていました。各項目に自分のものを選ぶか、削除してください。",
+    "marketOverviewEmpty": "表示するマーケット出品がありません。",
+    "marketOverviewError": "マーケットデータを読み込めませんでした。",
+    "matchingBuyOrders": "履行可能な買い注文",
+    "matchingBuyOrdersEmpty": "現在、あなたの在庫に一致する未処理の買い注文はありません。",
+    "noBuyOrders": "買い注文なし",
+    "noBuyOrdersDescription": "有効な買い注文はここに表示されます。",
+    "noOrgsToAggregate": "集計する組織がまだありません。",
+    "noOrgsWidgetDropped": "組織がありません — このウィジェットは削除されます。",
+    "noShopsToAggregate": "集計するショップがまだありません。",
+    "noShopsWidgetDropped": "ショップがありません — このウィジェットは削除されます。",
+    "orgTitle": "{{name}}のダッシュボード",
+    "organization": "組織",
+    "priceHistoryNoItem": "アイテムが選択されていません。このウィジェットを削除して再追加し、アイテムを選んでください。",
+    "remapOrgLabel": "{{name}} — 組織",
+    "remapShopLabel": "{{name}} — ショップ",
+    "removeWidget": "ウィジェットを削除",
+    "reputationError": "評価を読み込めませんでした。",
+    "reputationOrders": "注文",
+    "reputationReviews": "レビュー",
+    "reputationStreak": "5★連続",
+    "scope": {
+      "allOrgs": "すべての組織",
+      "allShops": "すべてのショップ",
+      "currentContext": "現在のコンテキスト",
+      "me": "あなた",
+      "specificOrg": "特定の組織",
+      "specificShop": "特定のショップ",
+      "thisOrg": "この組織",
+      "thisShop": "このショップ"
+    },
+    "searchItem": "アイテムを検索",
+    "searchItemHint": "2文字以上入力してください",
+    "searchItemNone": "アイテムが見つかりません",
+    "searchItemPlaceholder": "入力して検索…",
+    "shop": "ショップ",
+    "title": "ダッシュボード",
+    "unavailableOrg": "このウィジェットの組織は利用できなくなりました。削除するか、新しい範囲を選択してください。",
+    "unavailableShop": "このウィジェットのショップは利用できなくなりました。削除するか、新しい範囲を選択してください。",
+    "viewAll": "すべて表示",
+    "viewAllBuyOrders": "すべての買い注文を表示",
+    "widgets": {
+      "activityFeed": {
+        "description": "最近のアクティビティのタイムライン。タイプで絞り込めます。",
+        "title": "アクティビティフィード"
+      },
+      "listingAnalytics": {
+        "description": "出品ごとの閲覧数、カート追加、注文、売上、コンバージョン率。",
+        "title": "出品分析"
+      },
+      "listingsPreview": {
+        "description": "検索または特定アイテムのマーケット出品をいくつか表示。",
+        "title": "出品プレビュー"
+      },
+      "marketOverview": {
+        "description": "在庫状況によるマーケットの主要アイテム。",
+        "title": "マーケット概要"
+      },
+      "matchingBuyOrders": {
+        "description": "あなたの在庫で履行できる未処理の買い注文。",
+        "title": "一致する買い注文"
+      },
+      "notifications": {
+        "description": "最近のアクティビティと通知。",
+        "title": "通知"
+      },
+      "offers": {
+        "description": "受信したオファー。請求、統合、返信ができます。",
+        "title": "受信オファー"
+      },
+      "orderCountTrend": {
+        "description": "時系列での1日あたりの注文数。",
+        "title": "注文数の推移"
+      },
+      "orderMetrics": {
+        "description": "有効/完了した注文の件数と価値、および上位顧客。",
+        "title": "注文メトリクス"
+      },
+      "orderStatusTrend": {
+        "description": "ステータス別に分けた1日あたりの注文数。",
+        "title": "注文ステータスの推移"
+      },
+      "orderValueTrend": {
+        "description": "時系列での1日あたりの注文価値（aUEC）。",
+        "title": "注文価値の推移"
+      },
+      "orders": {
+        "assignments": "割り当て",
+        "description": "ページ分割された注文テーブル（割り当て、またはショップの注文）。",
+        "title": "注文"
+      },
+      "priceHistory": {
+        "description": "特定アイテムの時系列の価格推移。",
+        "title": "価格履歴"
+      },
+      "reputation": {
+        "description": "販売者評価、連続記録、注文量、バッジ。",
+        "title": "評価"
+      },
+      "sellerAnalytics": {
+        "description": "品質ティア別の販売量、価格、在庫。",
+        "title": "販売者分析"
+      },
+      "wishlist": {
+        "description": "買い物リストと各リストの完了度。",
+        "title": "買い物リスト"
+      }
+    },
+    "wishlistEmpty": "まだ買い物リストがありません。",
+    "wishlistError": "買い物リストを読み込めませんでした。",
+    "wishlistProgress": "{{done}}/{{total}} アイテム"
   },
   "contractorsPage": {
     "title": "Contractors"

@@ -1686,7 +1686,162 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard"
+    "activityFeed": {
+      "all": "Toda la actividad",
+      "bids": "Pujas",
+      "filterLabel": "Mostrar",
+      "offers": "Ofertas",
+      "orders": "Nuevos pedidos",
+      "reviews": "Reseñas"
+    },
+    "addAWidget": "Añadir un widget",
+    "addNamed": "Añadir {{name}}",
+    "addWidget": "Añadir widget",
+    "aggregateOrgsHint": "Muestra una sección por cada organización a la que perteneces.",
+    "aggregateShopsHint": "Muestra una sección por cada tienda a la que perteneces.",
+    "cancel": "Cancelar",
+    "category": {
+      "activity": "Actividad",
+      "market": "Mercado y anuncios",
+      "orders": "Pedidos y cumplimiento",
+      "personal": "Personal"
+    },
+    "customize": "Personalizar",
+    "dataScope": "Alcance de datos",
+    "done": "Listo",
+    "dontImportWidget": "No importar este widget",
+    "export": "Exportar",
+    "import": "Importar",
+    "listingAnalytics": {
+      "cartAdds": "Añadidos al carrito",
+      "conversion": "Conversión",
+      "empty": "Aún no se han registrado vistas ni pedidos.",
+      "error": "No se pudieron cargar las estadísticas de anuncios.",
+      "listing": "Anuncio",
+      "noShop": "Fija este widget a una tienda para ver sus estadísticas de anuncios.",
+      "orders": "Pedidos",
+      "sales": "Ventas",
+      "views": "Vistas"
+    },
+    "listingsPreview": {
+      "byItem": "Por artículo",
+      "bySearch": "Por búsqueda",
+      "empty": "No se encontraron anuncios coincidentes.",
+      "searchLabel": "Consulta de búsqueda",
+      "searchPlaceholder": "p. ej. bata médica"
+    },
+    "mapImportedWidgets": "Asignar widgets importados",
+    "mapImportedWidgetsHint": "Estos widgets estaban fijados a las organizaciones o tiendas del autor. Elige una de las tuyas para cada uno o descártalo.",
+    "marketOverviewEmpty": "No hay anuncios para mostrar.",
+    "marketOverviewError": "No se pudieron cargar los datos del mercado.",
+    "matchingBuyOrders": "Órdenes de compra que puedes cumplir",
+    "matchingBuyOrdersEmpty": "Ninguna orden de compra abierta coincide con tu inventario ahora mismo.",
+    "noBuyOrders": "Sin órdenes de compra",
+    "noBuyOrdersDescription": "Tus órdenes de compra activas aparecerán aquí.",
+    "noOrgsToAggregate": "Aún no tienes organizaciones para agregar.",
+    "noOrgsWidgetDropped": "No tienes organizaciones: este widget se descartará.",
+    "noShopsToAggregate": "Aún no tienes tiendas para agregar.",
+    "noShopsWidgetDropped": "No tienes tiendas: este widget se descartará.",
+    "orgTitle": "Panel de {{name}}",
+    "organization": "Organización",
+    "priceHistoryNoItem": "Ningún artículo seleccionado. Elimina este widget y vuelve a añadirlo para elegir un artículo.",
+    "remapOrgLabel": "{{name}} — organización",
+    "remapShopLabel": "{{name}} — tienda",
+    "removeWidget": "Eliminar widget",
+    "reputationError": "No se pudo cargar tu reputación.",
+    "reputationOrders": "Pedidos",
+    "reputationReviews": "Reseñas",
+    "reputationStreak": "Racha 5★",
+    "scope": {
+      "allOrgs": "Todas las organizaciones",
+      "allShops": "Todas las tiendas",
+      "currentContext": "Contexto actual",
+      "me": "Tú",
+      "specificOrg": "Una organización específica",
+      "specificShop": "Una tienda específica",
+      "thisOrg": "Esta organización",
+      "thisShop": "Esta tienda"
+    },
+    "searchItem": "Buscar artículo",
+    "searchItemHint": "Escribe al menos 2 caracteres",
+    "searchItemNone": "No se encontraron artículos",
+    "searchItemPlaceholder": "Escribe para buscar…",
+    "shop": "Tienda",
+    "title": "Panel",
+    "unavailableOrg": "La organización de este widget ya no está disponible. Elimínalo o elige un nuevo alcance.",
+    "unavailableShop": "La tienda de este widget ya no está disponible. Elimínalo o elige un nuevo alcance.",
+    "viewAll": "Ver todo",
+    "viewAllBuyOrders": "Ver todas las órdenes de compra",
+    "widgets": {
+      "activityFeed": {
+        "description": "Una cronología de la actividad reciente, filtrable por tipo.",
+        "title": "Feed de actividad"
+      },
+      "listingAnalytics": {
+        "description": "Vistas, añadidos al carrito, pedidos, ventas y tasa de conversión por anuncio.",
+        "title": "Estadísticas de anuncios"
+      },
+      "listingsPreview": {
+        "description": "Algunos anuncios del mercado para una búsqueda o un artículo específico.",
+        "title": "Vista previa de anuncios"
+      },
+      "marketOverview": {
+        "description": "Principales artículos del mercado por disponibilidad.",
+        "title": "Resumen del mercado"
+      },
+      "matchingBuyOrders": {
+        "description": "Órdenes de compra abiertas que tu inventario puede cumplir.",
+        "title": "Órdenes de compra coincidentes"
+      },
+      "notifications": {
+        "description": "Tu actividad reciente y notificaciones.",
+        "title": "Notificaciones"
+      },
+      "offers": {
+        "description": "Ofertas entrantes que puedes reclamar, fusionar o responder.",
+        "title": "Ofertas recibidas"
+      },
+      "orderCountTrend": {
+        "description": "Recuento diario de pedidos a lo largo del tiempo.",
+        "title": "Tendencia de número de pedidos"
+      },
+      "orderMetrics": {
+        "description": "Recuento y valor de pedidos activos/completados, más los mejores clientes.",
+        "title": "Estadísticas de pedidos"
+      },
+      "orderStatusTrend": {
+        "description": "Recuento diario de pedidos desglosado por estado.",
+        "title": "Tendencia de estado de pedidos"
+      },
+      "orderValueTrend": {
+        "description": "Valor diario de pedidos (aUEC) a lo largo del tiempo.",
+        "title": "Tendencia de valor de pedidos"
+      },
+      "orders": {
+        "assignments": "Asignaciones",
+        "description": "Tabla paginada de pedidos (asignaciones o pedidos de una tienda).",
+        "title": "Pedidos"
+      },
+      "priceHistory": {
+        "description": "Evolución del precio a lo largo del tiempo para un artículo específico.",
+        "title": "Historial de precios"
+      },
+      "reputation": {
+        "description": "Tu calificación de vendedor, racha, volumen de pedidos e insignias.",
+        "title": "Reputación"
+      },
+      "sellerAnalytics": {
+        "description": "Volumen de ventas, precio e inventario desglosados por nivel de calidad.",
+        "title": "Estadísticas del vendedor"
+      },
+      "wishlist": {
+        "description": "Tus listas de compra y qué tan cerca está cada una de completarse.",
+        "title": "Listas de compra"
+      }
+    },
+    "wishlistEmpty": "Aún no tienes listas de compra.",
+    "wishlistError": "No se pudieron cargar tus listas de compra.",
+    "wishlistProgress": "{{done}}/{{total}} artículos"
   },
   "contractorsPage": {
     "title": "Contractors"
