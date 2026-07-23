@@ -70,6 +70,13 @@ export interface WidgetDefinition {
    * stored as settings.action (empty = all activity).
    */
   offersActivityFilter?: boolean
+  /**
+   * When true, the widget's render() already provides its own card + title
+   * (a Section or equivalent Paper). WidgetWrapper renders it as-is — no wrapper
+   * card and no wrapper header — so there's a single header, not two. Bare
+   * widgets (the default) are given a standard Section-styled titled card.
+   */
+  selfChrome?: boolean
   render: (props: WidgetRenderProps) => ReactNode
 }
 
@@ -132,6 +139,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 3, h: 4 },
     minSize: { w: 2, h: 3 },
     allowedScopes: METRIC_SCOPES,
+    selfChrome: true,
     render: ({ scope }) => (
       <OrderMetrics spectrumId={scope.spectrumId} shopId={scope.shopId} />
     ),
@@ -145,6 +153,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 6, h: 4 },
     minSize: { w: 4, h: 3 },
     allowedScopes: METRIC_SCOPES,
+    selfChrome: true,
     render: ({ scope }) => (
       <UserOrderTrend spectrumId={scope.spectrumId} shopId={scope.shopId} />
     ),
@@ -159,6 +168,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 6, h: 5 },
     minSize: { w: 4, h: 3 },
     allowedScopes: SHOP_SCOPES,
+    selfChrome: true,
     render: ({ scope, t }) =>
       scope.shopId ? (
         <OrdersViewPaginated
@@ -181,6 +191,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 6, h: 5 },
     minSize: { w: 4, h: 3 },
     allowedScopes: SHOP_SCOPES,
+    selfChrome: true,
     render: ({ scope }) => <ReceivedOffersArea unassigned={!!scope.shopId} />,
   },
   {
@@ -192,7 +203,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 6, h: 4 },
     minSize: { w: 4, h: 3 },
     allowedScopes: PERSONAL_ONLY,
-    render: () => <MatchingBuyOrdersArea />,
+    selfChrome: true,
+    render: () => <MatchingBuyOrdersArea showEmpty />,
   },
   {
     type: "notifications",
@@ -203,6 +215,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 3, h: 5 },
     minSize: { w: 3, h: 3 },
     allowedScopes: SHOP_SCOPES,
+    selfChrome: true,
     render: ({ scope }) => <DashNotificationArea shopId={scope.shopId} />,
   },
   {
@@ -215,6 +228,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     defaultLayout: { w: 6, h: 6 },
     minSize: { w: 4, h: 4 },
     allowedScopes: SHOP_SCOPES,
+    selfChrome: true,
     render: ({ scope }) => (
       <Grid container spacing={2}>
         <SellerAnalyticsV2 sellerId={scope.shopId} />

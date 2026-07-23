@@ -1425,6 +1425,7 @@
     "marketOverviewEmpty": "No market listings to show.",
     "marketOverviewError": "Couldn't load market data.",
     "matchingBuyOrders": "Buy Orders You Can Fulfill",
+    "matchingBuyOrdersEmpty": "No open buy orders match your inventory right now.",
     "noBuyOrders": "No buy orders",
     "noBuyOrdersDescription": "Your active buy orders will appear here.",
     "noOrgsToAggregate": "You have no organizations to aggregate yet.",

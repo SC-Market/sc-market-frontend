@@ -80,16 +80,7 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
 
   return (
     <>
-      <Section xs={12}>
-        <Grid item xs={12}>
-          <Typography
-            variant={"subtitle1"}
-            color={"text.primary"}
-            fontWeight={"bold"}
-          >
-            {t("orderTrend.order_count_daily")}
-          </Typography>
-        </Grid>
+      <Section xs={12} title={t("orderTrend.order_count_daily")}>
         <Grid item xs={12}>
           <MuiLineChart
             series={[
@@ -103,16 +94,7 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
         </Grid>
       </Section>
 
-      <Section xs={12}>
-        <Grid item xs={12}>
-          <Typography
-            variant={"subtitle1"}
-            color={"text.primary"}
-            fontWeight={"bold"}
-          >
-            {t("orderTrend.order_value_daily")}
-          </Typography>
-        </Grid>
+      <Section xs={12} title={t("orderTrend.order_value_daily")}>
         <Grid item xs={12}>
           <MuiLineChart
             series={[
@@ -126,16 +108,7 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
         </Grid>
       </Section>
 
-      <Section xs={12}>
-        <Grid item xs={12}>
-          <Typography
-            variant={"subtitle1"}
-            color={"text.primary"}
-            fontWeight={"bold"}
-          >
-            {t("orderTrend.status_trends")}
-          </Typography>
-        </Grid>
+      <Section xs={12} title={t("orderTrend.status_trends")}>
         <Grid item xs={12}>
           <MuiLineChart series={statusTrendsData} height={400} />
         </Grid>

@@ -108,56 +108,54 @@ export function CustomizableDashboard({
 
   const pageTitle = title ?? t("dashboard.title")
 
+  // Edit controls live in the header row (aligned with the title), not above
+  // the grid. Personal browsing context never injects the org into breadcrumbs.
+  const headerActions =
+    canEdit && !isPhone ? (
+      <Stack direction="row" spacing={1}>
+        {editing && (
+          <>
+            <AddWidgetButton
+              config={effectiveConfig}
+              onConfigChange={setConfig}
+            />
+            <ImportExportControls
+              config={effectiveConfig}
+              name={pageTitle}
+              onImport={setConfig}
+            />
+          </>
+        )}
+        <Button
+          variant={editing ? "contained" : "outlined"}
+          color="secondary"
+          startIcon={editing ? <DoneIcon /> : <EditIcon />}
+          onClick={() => {
+            // Persist the seed layout on first edit so it becomes saved.
+            if (!editing && config.widgets.length === 0) {
+              setConfig(effectiveConfig)
+            }
+            setEditing((v) => !v)
+          }}
+        >
+          {editing
+            ? t("dashboard.done", "Done")
+            : t("dashboard.customize", "Customize")}
+        </Button>
+      </Stack>
+    ) : undefined
+
   return (
     <DashboardOwnerProvider value={owner}>
       <StandardPageLayout
         title={pageTitle}
         breadcrumbs={[{ label: pageTitle }]}
-        showOrgInBreadcrumbs={isPersonal}
         headerTitle={pageTitle}
+        headerActions={headerActions}
         sidebarOpen
         maxWidth="xl"
       >
-        <Box sx={{ width: "100%", px: 1 }}>
-          {canEdit && !isPhone && (
-            <Stack
-              direction="row"
-              spacing={1}
-              sx={{ mb: 2 }}
-              justifyContent="flex-end"
-            >
-              {editing && (
-                <>
-                  <AddWidgetButton
-                    config={effectiveConfig}
-                    onConfigChange={setConfig}
-                  />
-                  <ImportExportControls
-                    config={effectiveConfig}
-                    name={pageTitle}
-                    onImport={setConfig}
-                  />
-                </>
-              )}
-              <Button
-                variant={editing ? "contained" : "outlined"}
-                color="secondary"
-                startIcon={editing ? <DoneIcon /> : <EditIcon />}
-                onClick={() => {
-                  // Persist the seed layout on first edit so it becomes saved.
-                  if (!editing && config.widgets.length === 0) {
-                    setConfig(effectiveConfig)
-                  }
-                  setEditing((v) => !v)
-                }}
-              >
-                {editing
-                  ? t("dashboard.done", "Done")
-                  : t("dashboard.customize", "Customize")}
-              </Button>
-            </Stack>
-          )}
-
+        <Box sx={{ width: "100%" }}>
           {isLoading ? (
             <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
               <CircularProgress />
