@@ -1487,13 +1487,21 @@
         "description": "Your recent activity and notifications.",
         "title": "Notifications"
       },
+      "orderCountTrend": {
+        "description": "Daily order count over time.",
+        "title": "Order Count Trend"
+      },
       "orderMetrics": {
         "description": "Active/completed order counts and value, plus top customers.",
         "title": "Order Metrics"
       },
-      "orderTrend": {
-        "description": "Daily/weekly/monthly order count and value charts.",
-        "title": "Order Trend"
+      "orderStatusTrend": {
+        "description": "Daily order count broken down by status.",
+        "title": "Order Status Trend"
+      },
+      "orderValueTrend": {
+        "description": "Daily order value (aUEC) over time.",
+        "title": "Order Value Trend"
       },
       "orders": {
         "assignments": "Assignments",

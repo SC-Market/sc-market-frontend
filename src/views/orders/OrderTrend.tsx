@@ -262,6 +262,113 @@ export function UserOrderTrend(props: { spectrumId: string | undefined; shopId?:
   return <OrderTrendFromOrders orders={orderData?.recent_orders || []} />
 }
 
+/** Which single trend chart to render. */
+export type OrderTrendMetric = "count" | "value" | "status"
+
+const STATUS_ORDER = [
+  "in-progress",
+  "fulfilled",
+  "cancelled",
+  "not-started",
+] as const
+
+/**
+ * A single trend chart (count, value, or status) for a scope. Each is its own
+ * dashboard widget. Prefers the metrics `trend_data` path and falls back to
+ * computing from `recent_orders`; the value chart has no fallback series.
+ */
+function OrderTrendChart(props: {
+  metric: OrderTrendMetric
+  orderData: ContractorOrderData | undefined
+}) {
+  const { metric, orderData } = props
+  const { t } = useTranslation()
+
+  const recent = orderData?.recent_orders
+  const first = useMemo(
+    () =>
+      (recent ?? []).reduce(
+        (c, o) => (c < new Date(o.timestamp) ? c : new Date(o.timestamp)),
+        new Date(),
+      ),
+    [recent],
+  )
+
+  const trend = orderData?.metrics?.trend_data
+
+  const { title, series } = useMemo(() => {
+    if (metric === "count") {
+      const data = trend
+        ? trend.daily_orders.map((d) => ({ x: d.date, y: d.count }))
+        : getTotalInInterval(recent ?? [], 86400 * 1000, first)
+      return {
+        title: t("orderTrend.order_count_daily"),
+        series: [{ name: t("orderTrend.orders_daily"), data }],
+      }
+    }
+    if (metric === "value") {
+      // Value has no recent_orders fallback series; render empty when absent.
+      const data = trend
+        ? trend.daily_value.map((d) => ({ x: d.date, y: d.value }))
+        : []
+      return {
+        title: t("orderTrend.order_value_daily"),
+        series: [{ name: "Value (aUEC)", data }],
+      }
+    }
+    // status
+    if (trend) {
+      return {
+        title: t("orderTrend.status_trends"),
+        series: STATUS_ORDER.map((status) => ({
+          name: status,
+          data: trend.status_trends[status].map((d) => ({
+            x: d.date,
+            y: d.count,
+          })),
+        })),
+      }
+    }
+    return {
+      title: t("orderTrend.status_trends"),
+      series: STATUS_ORDER.map((status) => ({
+        name: status,
+        data: getTotalInInterval(
+          (recent ?? []).filter((o) => o.status === status),
+          86400 * 1000,
+          first,
+        ),
+      })),
+    }
+  }, [metric, trend, recent, first, t])
+
+  return (
+    <Section xs={12} title={title}>
+      <Grid item xs={12}>
+        <MuiLineChart series={series} height={400} />
+      </Grid>
+    </Section>
+  )
+}
+
+export function UserOrderTrendChart(props: {
+  metric: OrderTrendMetric
+  spectrumId: string | undefined
+  shopId?: string
+}) {
+  const { orderData } = useUserOrderTrend(props.spectrumId, props.shopId)
+  return <OrderTrendChart metric={props.metric} orderData={orderData} />
+}
+
+export function OrgOrderTrendChart(props: {
+  metric: OrderTrendMetric
+  spectrumId: string | undefined
+  shopId?: string
+}) {
+  const { orderData } = useOrgOrderTrend(props.spectrumId, props.shopId)
+  return <OrderTrendChart metric={props.metric} orderData={orderData} />
+}
+
 export function TopContractors(props: { orders: OrderStub[] }) {
   const { orders } = props
   const topTen = useMemo(() => {
