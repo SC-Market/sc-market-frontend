@@ -42,6 +42,7 @@ import { useRoutePrefetch } from "./hooks/router/useRoutePrefetch"
 import { prefetchHighPriorityRoutes } from "./router/routePrefetch"
 import { usePageTitle } from "./hooks/router/usePageTitle"
 import { LandingPage } from "./pages/home/LandingPage"
+import { retryDynamicImport } from "./util/retryDynamicImport"
 
 import "./util/i18n.ts"
 
@@ -148,7 +149,7 @@ const router = createBrowserRouter([
   {
     path: "/widget/orders",
     lazy: async () => ({
-      Component: (await import("./pages/widget/OrdersWidget")).OrdersWidget,
+      Component: (await retryDynamicImport(() => import("./pages/widget/OrdersWidget"))).OrdersWidget,
     }),
   },
   {
@@ -175,28 +176,28 @@ const router = createBrowserRouter([
       {
         path: "/login",
         lazy: async () => ({
-          Component: (await import("./pages/authentication/LoginPage"))
+          Component: (await retryDynamicImport(() => import("./pages/authentication/LoginPage")))
             .LoginPage,
         }),
       },
       {
         path: "/signup",
         lazy: async () => ({
-          Component: (await import("./pages/authentication/SignUpPage"))
+          Component: (await retryDynamicImport(() => import("./pages/authentication/SignUpPage")))
             .SignUpPage,
         }),
       },
       {
         path: "/offer/:id",
         lazy: async () => ({
-          Component: (await import("./pages/offers/ViewOfferPage"))
+          Component: (await retryDynamicImport(() => import("./pages/offers/ViewOfferPage")))
             .ViewOfferPage,
         }),
       },
       {
         path: "/offer/:id/counteroffer",
         lazy: async () => ({
-          Component: (await import("./pages/offers/CounterOfferPage"))
+          Component: (await retryDynamicImport(() => import("./pages/offers/CounterOfferPage")))
             .CounterOfferPage,
         }),
       },
@@ -204,19 +205,19 @@ const router = createBrowserRouter([
         path: "/market/:id",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).ListingDetailGate,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).ListingDetailGate,
         }),
       },
       {
         path: "/market/aggregate/:id",
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).AggregateDetailGate,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).AggregateDetailGate,
         }),
       },
       {
         path: "/market/multiple/:id",
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).MultipleDetailGate,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).MultipleDetailGate,
         }),
       },
       {
@@ -226,50 +227,50 @@ const router = createBrowserRouter([
       {
         path: "/market/services",
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).MarketRouter,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).MarketRouter,
         }),
       },
       {
         path: "/market/category/:name",
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).MarketRouter,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).MarketRouter,
         }),
       },
       {
         path: "/buyorder/create",
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).CreateBuyOrderGate,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).CreateBuyOrderGate,
         }),
       },
       {
         path: "/market",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).MarketRouter,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).MarketRouter,
         }),
       },
       {
         path: "/bulk",
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).MarketRouter,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).MarketRouter,
         }),
       },
       {
         path: "/buyorders",
         lazy: async () => ({
-          Component: (await import("./components/market/MarketRouter")).MarketRouter,
+          Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).MarketRouter,
         }),
       },
       {
         path: "/buyorder/:id",
         lazy: async () => ({
-          Component: (await import("./features/market/v2/BuyOrderDetailV2")).BuyOrderDetailV2,
+          Component: (await retryDynamicImport(() => import("./features/market/v2/BuyOrderDetailV2"))).BuyOrderDetailV2,
         }),
       },
       {
         path: "/contractors",
         lazy: async () => ({
-          Component: (await import("./pages/contractor/Contractors"))
+          Component: (await retryDynamicImport(() => import("./pages/contractor/Contractors")))
             .Contractors,
         }),
       },
@@ -278,7 +279,7 @@ const router = createBrowserRouter([
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
           Component: (
-            await import("./pages/contracting/CreatePublicContractPage")
+            await retryDynamicImport(() => import("./pages/contracting/CreatePublicContractPage"))
           ).CreatePublicContractPage,
         }),
       },
@@ -286,7 +287,7 @@ const router = createBrowserRouter([
         path: "/contracts",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./pages/contracting/Contracts")).Contracts,
+          Component: (await retryDynamicImport(() => import("./pages/contracting/Contracts"))).Contracts,
         }),
       },
       {
@@ -298,7 +299,7 @@ const router = createBrowserRouter([
             index: true,
             errorElement: <RouteErrorFallback />,
             lazy: async () => ({
-              Component: (await import("./pages/messaging/MessagesList"))
+              Component: (await retryDynamicImport(() => import("./pages/messaging/MessagesList")))
                 .MessagesList,
             }),
           },
@@ -306,7 +307,7 @@ const router = createBrowserRouter([
             path: ":chat_id",
             errorElement: <RouteErrorFallback />,
             lazy: async () => ({
-              Component: (await import("./pages/messaging/Messages")).Messages,
+              Component: (await retryDynamicImport(() => import("./pages/messaging/Messages"))).Messages,
             }),
           },
         ],
@@ -314,34 +315,34 @@ const router = createBrowserRouter([
       {
         path: "/contracts/public/:contract_id",
         lazy: async () => ({
-          Component: (await import("./pages/contracting/ViewPublicContract"))
+          Component: (await retryDynamicImport(() => import("./pages/contracting/ViewPublicContract")))
             .ViewPublicContract,
         }),
       },
       {
         path: "/order/service/:service_id",
         lazy: async () => ({
-          Component: (await import("./pages/contracting/CreateOrder"))
+          Component: (await retryDynamicImport(() => import("./pages/contracting/CreateOrder")))
             .ServiceCreateOrder,
         }),
       },
       {
         path: "/recruiting/post/:post_id",
         lazy: async () => ({
-          Component: (await import("./pages/recruiting/RecruitingPostPage"))
+          Component: (await retryDynamicImport(() => import("./pages/recruiting/RecruitingPostPage")))
             .RecruitingPostPage,
         }),
       },
       {
         path: "/recruiting",
         lazy: async () => ({
-          Component: (await import("./pages/recruiting/Recruiting")).Recruiting,
+          Component: (await retryDynamicImport(() => import("./pages/recruiting/Recruiting"))).Recruiting,
         }),
       },
       {
         path: "/shops",
         lazy: async () => ({
-          Component: (await import("./features/shops/components/ShopDirectory")).ShopDirectory,
+          Component: (await retryDynamicImport(() => import("./features/shops/components/ShopDirectory"))).ShopDirectory,
         }),
       },
       {
@@ -351,7 +352,7 @@ const router = createBrowserRouter([
           {
             index: true,
             lazy: async () => ({
-              Component: (await import("./features/shops/components/CreateShop")).CreateShop,
+              Component: (await retryDynamicImport(() => import("./features/shops/components/CreateShop"))).CreateShop,
             }),
           },
         ],
@@ -359,63 +360,63 @@ const router = createBrowserRouter([
       {
         path: "/shops/:slug/:tab",
         lazy: async () => ({
-          Component: (await import("./features/shops/components/ShopProfile")).ShopProfile,
+          Component: (await retryDynamicImport(() => import("./features/shops/components/ShopProfile"))).ShopProfile,
         }),
       },
       {
         path: "/shops/:slug",
         lazy: async () => ({
-          Component: (await import("./features/shops/components/ShopProfile")).ShopProfile,
+          Component: (await retryDynamicImport(() => import("./features/shops/components/ShopProfile"))).ShopProfile,
         }),
       },
       {
         path: "/contractor/:id/:tab",
         lazy: async () => ({
-          Component: (await import("./pages/contractor/ViewOrg")).ViewOrg,
+          Component: (await retryDynamicImport(() => import("./pages/contractor/ViewOrg"))).ViewOrg,
         }),
       },
       {
         path: "/contractor/:id",
         lazy: async () => ({
-          Component: (await import("./pages/contractor/ViewOrg")).ViewOrg,
+          Component: (await retryDynamicImport(() => import("./pages/contractor/ViewOrg"))).ViewOrg,
         }),
       },
       {
         path: "/contract/:id/:tab",
         lazy: async () => ({
-          Component: (await import("./pages/contracting/ViewOrder")).ViewOrder,
+          Component: (await retryDynamicImport(() => import("./pages/contracting/ViewOrder"))).ViewOrder,
         }),
       },
       {
         path: "/contract/:id",
         lazy: async () => ({
-          Component: (await import("./pages/contracting/ViewOrder")).ViewOrder,
+          Component: (await retryDynamicImport(() => import("./pages/contracting/ViewOrder"))).ViewOrder,
         }),
       },
       {
         path: "/order/:id/:tab",
         lazy: async () => ({
-          Component: (await import("./pages/contracting/ViewOrder")).ViewOrder,
+          Component: (await retryDynamicImport(() => import("./pages/contracting/ViewOrder"))).ViewOrder,
         }),
       },
       {
         path: "/order/:id",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./pages/contracting/ViewOrder")).ViewOrder,
+          Component: (await retryDynamicImport(() => import("./pages/contracting/ViewOrder"))).ViewOrder,
         }),
       },
       {
         path: "/user/:username/:tab",
         lazy: async () => ({
-          Component: (await import("./pages/people/Profile")).Profile,
+          Component: (await retryDynamicImport(() => import("./pages/people/Profile"))).Profile,
         }),
       },
       {
         path: "/user/:username",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./pages/people/Profile")).Profile,
+          Component: (await retryDynamicImport(() => import("./pages/people/Profile"))).Profile,
         }),
       },
       {
@@ -425,7 +426,7 @@ const router = createBrowserRouter([
             path: "/onboarding",
             lazy: async () => ({
               Component: (
-                await import("./pages/onboarding/OnboardingPage")
+                await retryDynamicImport(() => import("./pages/onboarding/OnboardingPage"))
               ).OnboardingPage,
             }),
           },
@@ -433,7 +434,7 @@ const router = createBrowserRouter([
             path: "/accountlink",
             lazy: async () => ({
               Component: (
-                await import("./pages/authentication/AuthenticateRSI")
+                await retryDynamicImport(() => import("./pages/authentication/AuthenticateRSI"))
               ).AuthenticateRSIPage,
             }),
           },
@@ -448,7 +449,7 @@ const router = createBrowserRouter([
           {
             path: "/market/me",
             lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).MyListingsGate,
+              Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).MyListingsGate,
             }),
           },
           {
@@ -466,31 +467,31 @@ const router = createBrowserRouter([
           {
             path: "/inventory",
             lazy: async () => ({
-              Component: (await import("./pages/inventory/InventoryPage")).default,
+              Component: (await retryDynamicImport(() => import("./pages/inventory/InventoryPage"))).default,
             }),
           },
           {
             path: "/market/cart",
             lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).MarketCartGate,
+              Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).MarketCartGate,
             }),
           },
           {
             path: "/market_edit/:id",
             lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).EditListingGate,
+              Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).EditListingGate,
             }),
           },
           {
             path: "/market/multiple/:id/edit",
             lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).EditMultipleGate,
+              Component: (await retryDynamicImport(() => import("./components/market/MarketRouter"))).EditMultipleGate,
             }),
           },
           {
             path: "/customers",
             lazy: async () => {
-              const component = (await import("./pages/people/People"))
+              const component = (await retryDynamicImport(() => import("./pages/people/People")))
                 .CustomerPage
               return {
                 Component: () => createElement(component, { customers: true }),
@@ -500,26 +501,26 @@ const router = createBrowserRouter([
           {
             path: "/messaging",
             lazy: async () => ({
-              Component: (await import("./pages/messaging/Messages")).Messages,
+              Component: (await retryDynamicImport(() => import("./pages/messaging/Messages"))).Messages,
             }),
           },
           {
             path: "/sell",
             lazy: async () => ({
-              Component: (await import("./pages/market/SellMaterials"))
+              Component: (await retryDynamicImport(() => import("./pages/market/SellMaterials")))
                 .SellMaterials,
             }),
           },
           {
             path: "/dashboard/shops",
             lazy: async () => ({
-              Component: (await import("./features/shops/components/MyShops")).MyShops,
+              Component: (await retryDynamicImport(() => import("./features/shops/components/MyShops"))).MyShops,
             }),
           },
           {
             path: "/my-orgs",
             lazy: async () => ({
-              Component: (await import("./pages/contractor/MyOrgs")).MyOrgs,
+              Component: (await retryDynamicImport(() => import("./pages/contractor/MyOrgs"))).MyOrgs,
             }),
           },
           {
@@ -530,42 +531,42 @@ const router = createBrowserRouter([
             path: "/orders",
             errorElement: <RouteErrorFallback />,
             lazy: async () => ({
-              Component: (await import("./pages/contracting/CreateOrder"))
+              Component: (await retryDynamicImport(() => import("./pages/contracting/CreateOrder")))
                 .CreateOrder,
             }),
           },
           {
             path: "/org/members",
             lazy: async () => ({
-              Component: (await import("./components/router/OrgRedirect"))
+              Component: (await retryDynamicImport(() => import("./components/router/OrgRedirect")))
                 .OrgRedirectMembers,
             }),
           },
           {
             path: "/myfleet/import",
             lazy: async () => ({
-              Component: (await import("./pages/fleet/ImportFleet"))
+              Component: (await retryDynamicImport(() => import("./pages/fleet/ImportFleet")))
                 .ImportFleet,
             }),
           },
           {
             path: "/myfleet",
             lazy: async () => ({
-              Component: (await import("./pages/contractor/MemberFleet"))
+              Component: (await retryDynamicImport(() => import("./pages/contractor/MemberFleet")))
                 .MemberFleet,
             }),
           },
           {
             path: "/delivery/:delivery_id",
             lazy: async () => ({
-              Component: (await import("./pages/contractor/MemberFleet"))
+              Component: (await retryDynamicImport(() => import("./pages/contractor/MemberFleet")))
                 .MemberFleet,
             }),
           },
           {
             path: "/dashboard",
             lazy: async () => ({
-              Component: (await import("./pages/contractor/MemberDashboard"))
+              Component: (await retryDynamicImport(() => import("./pages/contractor/MemberDashboard")))
                 .MemberDashboard,
             }),
           },
@@ -573,21 +574,21 @@ const router = createBrowserRouter([
             path: "/dashboard/overview",
             lazy: async () => ({
               Component: (
-                await import("./features/dashboard/DashboardPages")
+                await retryDynamicImport(() => import("./features/dashboard/DashboardPages"))
               ).PersonalDashboardPage,
             }),
           },
           {
             path: "/order/service/create",
             lazy: async () => ({
-              Component: (await import("./pages/contracting/CreateService"))
+              Component: (await retryDynamicImport(() => import("./pages/contracting/CreateService")))
                 .CreateService,
             }),
           },
           {
             path: "/order/service/:service_id/edit",
             lazy: async () => ({
-              Component: (await import("./pages/contracting/CreateService"))
+              Component: (await retryDynamicImport(() => import("./pages/contracting/CreateService")))
                 .UpdateService,
             }),
           },
@@ -598,34 +599,34 @@ const router = createBrowserRouter([
           {
             path: "/org/register",
             lazy: async () => ({
-              Component: (await import("./pages/contractor/OrgRegister"))
+              Component: (await retryDynamicImport(() => import("./pages/contractor/OrgRegister")))
                 .OrgRegister,
             }),
           },
           {
             path: "/contractor_invite/:invite_id",
             lazy: async () => ({
-              Component: (await import("./pages/contracting/AcceptOrgInvite"))
+              Component: (await retryDynamicImport(() => import("./pages/contracting/AcceptOrgInvite")))
                 .AcceptOrgInvite,
             }),
           },
           {
             path: "/profile/:tab",
             lazy: async () => ({
-              Component: (await import("./pages/people/MyProfile")).MyProfile,
+              Component: (await retryDynamicImport(() => import("./pages/people/MyProfile"))).MyProfile,
             }),
           },
           {
             path: "/profile",
             errorElement: <RouteErrorFallback />,
             lazy: async () => ({
-              Component: (await import("./pages/people/MyProfile")).MyProfile,
+              Component: (await retryDynamicImport(() => import("./pages/people/MyProfile"))).MyProfile,
             }),
           },
           {
             path: "/settings",
             lazy: async () => ({
-              Component: (await import("./pages/people/SettingsPage"))
+              Component: (await retryDynamicImport(() => import("./pages/people/SettingsPage")))
                 .SettingsPage,
             }),
           },
@@ -633,55 +634,55 @@ const router = createBrowserRouter([
             path: "/notifications",
             lazy: async () => ({
               Component: (
-                await import("./pages/notifications/NotificationsPage")
+                await retryDynamicImport(() => import("./pages/notifications/NotificationsPage"))
               ).NotificationsPage,
             }),
           },
           {
             path: "/email/verify/:token",
             lazy: async () => ({
-              Component: (await import("./pages/email/EmailVerificationPage"))
+              Component: (await retryDynamicImport(() => import("./pages/email/EmailVerificationPage")))
                 .EmailVerificationPage,
             }),
           },
           {
             path: "/email/verify",
             lazy: async () => ({
-              Component: (await import("./pages/email/EmailVerificationPage"))
+              Component: (await retryDynamicImport(() => import("./pages/email/EmailVerificationPage")))
                 .EmailVerificationPage,
             }),
           },
           {
             path: "/email/unsubscribe/:token",
             lazy: async () => ({
-              Component: (await import("./pages/email/UnsubscribePage"))
+              Component: (await retryDynamicImport(() => import("./pages/email/UnsubscribePage")))
                 .UnsubscribePage,
             }),
           },
           {
             path: "/email/unsubscribe",
             lazy: async () => ({
-              Component: (await import("./pages/email/UnsubscribePage"))
+              Component: (await retryDynamicImport(() => import("./pages/email/UnsubscribePage")))
                 .UnsubscribePage,
             }),
           },
           {
             path: "/availability",
             lazy: async () => ({
-              Component: (await import("./pages/availability/Availability"))
+              Component: (await retryDynamicImport(() => import("./pages/availability/Availability")))
                 .Availability,
             }),
           },
           {
             path: "/send",
             lazy: async () => ({
-              Component: (await import("./pages/money/SendMoney")).SendMoney,
+              Component: (await retryDynamicImport(() => import("./pages/money/SendMoney"))).SendMoney,
             }),
           },
           {
             path: "/send",
             lazy: async () => ({
-              Component: (await import("./pages/money/SendMoney")).SendMoney,
+              Component: (await retryDynamicImport(() => import("./pages/money/SendMoney"))).SendMoney,
             }),
           },
           {
@@ -690,49 +691,49 @@ const router = createBrowserRouter([
               {
                 path: "/admin/users",
                 lazy: async () => ({
-                  Component: (await import("./pages/people/People"))
+                  Component: (await retryDynamicImport(() => import("./pages/people/People")))
                     .AdminUserListPage,
                 }),
               },
               {
                 path: "/admin/market",
                 lazy: async () => ({
-                  Component: (await import("./pages/admin/AllMarketListings"))
+                  Component: (await retryDynamicImport(() => import("./pages/admin/AllMarketListings")))
                     .AllMarketListings,
                 }),
               },
               {
                 path: "/admin/wipe",
                 lazy: async () => ({
-                  Component: (await import("./pages/admin/AdminWipeListings"))
+                  Component: (await retryDynamicImport(() => import("./pages/admin/AdminWipeListings")))
                     .AdminWipeListings,
                 }),
               },
               {
                 path: "/admin/orders",
                 lazy: async () => ({
-                  Component: (await import("./pages/admin/AdminOrderStats"))
+                  Component: (await retryDynamicImport(() => import("./pages/admin/AdminOrderStats")))
                     .AdminOrderStats,
                 }),
               },
               {
                 path: "/admin/moderation",
                 lazy: async () => ({
-                  Component: (await import("./pages/admin/AdminModeration"))
+                  Component: (await retryDynamicImport(() => import("./pages/admin/AdminModeration")))
                     .AdminModeration,
                 }),
               },
               {
                 path: "/admin/alerts",
                 lazy: async () => ({
-                  Component: (await import("./pages/admin/AdminAlerts"))
+                  Component: (await retryDynamicImport(() => import("./pages/admin/AdminAlerts")))
                     .AdminAlerts,
                 }),
               },
               {
                 path: "/admin/audit-logs",
                 lazy: async () => ({
-                  Component: (await import("./pages/admin/AdminAuditLogs"))
+                  Component: (await retryDynamicImport(() => import("./pages/admin/AdminAuditLogs")))
                     .AdminAuditLogs,
                 }),
               },
@@ -740,7 +741,7 @@ const router = createBrowserRouter([
                 path: "/admin/notification-test",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminNotificationTest")
+                    await retryDynamicImport(() => import("./pages/admin/AdminNotificationTest"))
                   ).AdminNotificationTest,
                 }),
               },
@@ -748,7 +749,7 @@ const router = createBrowserRouter([
                 path: "/admin/attribute-definitions",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminAttributeDefinitions")
+                    await retryDynamicImport(() => import("./pages/admin/AdminAttributeDefinitions"))
                   ).AdminAttributeDefinitions,
                 }),
               },
@@ -756,7 +757,7 @@ const router = createBrowserRouter([
                 path: "/admin/game-item-attributes",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminGameItemAttributes")
+                    await retryDynamicImport(() => import("./pages/admin/AdminGameItemAttributes"))
                   ).AdminGameItemAttributes,
                 }),
               },
@@ -764,7 +765,7 @@ const router = createBrowserRouter([
                 path: "/admin/import-monitoring",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminImportMonitoring")
+                    await retryDynamicImport(() => import("./pages/admin/AdminImportMonitoring"))
                   ).AdminImportMonitoring,
                 }),
               },
@@ -772,7 +773,7 @@ const router = createBrowserRouter([
                 path: "/admin/game-data-import",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminGameDataImport")
+                    await retryDynamicImport(() => import("./pages/admin/AdminGameDataImport"))
                   ).AdminGameDataImport,
                 }),
               },
@@ -780,7 +781,7 @@ const router = createBrowserRouter([
                 path: "/admin/premium",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminPremiumManagement")
+                    await retryDynamicImport(() => import("./pages/admin/AdminPremiumManagement"))
                   ).AdminPremiumManagement,
                 }),
               },
@@ -788,7 +789,7 @@ const router = createBrowserRouter([
                 path: "/admin/feature-flags",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminFeatureFlags")
+                    await retryDynamicImport(() => import("./pages/admin/AdminFeatureFlags"))
                   ).AdminFeatureFlags,
                 }),
               },
@@ -796,7 +797,7 @@ const router = createBrowserRouter([
                 path: "/admin/feature-flags/:flagName",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminFeatureFlags")
+                    await retryDynamicImport(() => import("./pages/admin/AdminFeatureFlags"))
                   ).AdminFeatureFlagDetail,
                 }),
               },
@@ -804,7 +805,7 @@ const router = createBrowserRouter([
                 path: "/admin/supplier-dashboard",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminSupplierDashboard")
+                    await retryDynamicImport(() => import("./pages/admin/AdminSupplierDashboard"))
                   ).AdminSupplierDashboard,
                 }),
               },
@@ -812,7 +813,7 @@ const router = createBrowserRouter([
                 path: "/admin/supplier-roster",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminSupplierRoster")
+                    await retryDynamicImport(() => import("./pages/admin/AdminSupplierRoster"))
                   ).AdminSupplierRoster,
                 }),
               },
@@ -820,7 +821,7 @@ const router = createBrowserRouter([
                 path: "/admin/requisitions",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/admin/AdminRequisitions")
+                    await retryDynamicImport(() => import("./pages/admin/AdminRequisitions"))
                   ).AdminRequisitions,
                 }),
               },
@@ -832,20 +833,20 @@ const router = createBrowserRouter([
               {
                 path: "/org/fleet",
                 lazy: async () => ({
-                  Component: (await import("./components/router/OrgRedirect"))
+                  Component: (await retryDynamicImport(() => import("./components/router/OrgRedirect")))
                     .OrgRedirectFleet,
                 }),
               },
               {
                 path: "/myorg",
                 lazy: async () => ({
-                  Component: (await import("./pages/contractor/ViewOrg")).MyOrg,
+                  Component: (await retryDynamicImport(() => import("./pages/contractor/ViewOrg"))).MyOrg,
                 }),
               },
               {
                 path: "/org/send",
                 lazy: async () => ({
-                  Component: (await import("./components/router/OrgRedirect"))
+                  Component: (await retryDynamicImport(() => import("./components/router/OrgRedirect")))
                     .OrgRedirectSend,
                 }),
               },
@@ -858,7 +859,7 @@ const router = createBrowserRouter([
                 path: "/recruiting/post/create",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/recruiting/CreateRecruitingPostPage")
+                    await retryDynamicImport(() => import("./pages/recruiting/CreateRecruitingPostPage"))
                   ).CreateRecruitingPostPage,
                 }),
               },
@@ -866,7 +867,7 @@ const router = createBrowserRouter([
                 path: "/recruiting/post/:post_id/update",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/recruiting/CreateRecruitingPostPage")
+                    await retryDynamicImport(() => import("./pages/recruiting/CreateRecruitingPostPage"))
                   ).UpdateRecruitingPostPage,
                 }),
               },
@@ -878,7 +879,7 @@ const router = createBrowserRouter([
               {
                 path: "/org/orders",
                 lazy: async () => ({
-                  Component: (await import("./components/router/OrgRedirect"))
+                  Component: (await retryDynamicImport(() => import("./components/router/OrgRedirect")))
                     .OrgRedirectOrders,
                 }),
               },
@@ -890,14 +891,14 @@ const router = createBrowserRouter([
               {
                 path: "/org/manage",
                 lazy: async () => ({
-                  Component: (await import("./components/router/OrgRedirect"))
+                  Component: (await retryDynamicImport(() => import("./components/router/OrgRedirect")))
                     .OrgRedirectManage,
                 }),
               },
               {
                 path: "/org/money",
                 lazy: async () => ({
-                  Component: (await import("./components/router/OrgRedirect"))
+                  Component: (await retryDynamicImport(() => import("./components/router/OrgRedirect")))
                     .OrgRedirectMoney,
                 }),
               },
@@ -911,7 +912,7 @@ const router = createBrowserRouter([
                 path: "dashboard",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/contractor/MemberDashboard")
+                    await retryDynamicImport(() => import("./pages/contractor/MemberDashboard"))
                   ).MemberDashboard,
                 }),
               },
@@ -919,20 +920,20 @@ const router = createBrowserRouter([
                 path: "overview",
                 lazy: async () => ({
                   Component: (
-                    await import("./features/dashboard/DashboardPages")
+                    await retryDynamicImport(() => import("./features/dashboard/DashboardPages"))
                   ).OrgDashboardPage,
                 }),
               },
               {
                 path: "fleet",
                 lazy: async () => ({
-                  Component: (await import("./pages/fleet/Fleet")).Fleet,
+                  Component: (await retryDynamicImport(() => import("./pages/fleet/Fleet"))).Fleet,
                 }),
               },
               {
                 path: "send",
                 lazy: async () => {
-                  const component = (await import("./pages/money/SendMoney"))
+                  const component = (await retryDynamicImport(() => import("./pages/money/SendMoney")))
                     .SendMoney
                   return {
                     Component: () => createElement(component, { org: true }),
@@ -946,7 +947,7 @@ const router = createBrowserRouter([
                   {
                     index: true,
                     lazy: async () => ({
-                      Component: (await import("./pages/contractor/OrgOrders"))
+                      Component: (await retryDynamicImport(() => import("./pages/contractor/OrgOrders")))
                         .OrgOrders,
                     }),
                   },
@@ -968,21 +969,21 @@ const router = createBrowserRouter([
                 children: [
                   {
                     lazy: async () => ({
-                      Component: (await import("./pages/contractor/OrgManageLayout"))
+                      Component: (await retryDynamicImport(() => import("./pages/contractor/OrgManageLayout")))
                         .OrgManageLayout,
                     }),
                     children: [
                       { index: true, element: <Navigate to="about" replace /> },
-                      { path: "about", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgAboutPage }) },
-                      { path: "roles", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgRolesPage }) },
-                      { path: "invites", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgInvitesPage }) },
-                      { path: "discord", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgDiscordPage }) },
-                      { path: "market", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgMarketPage }) },
-                      { path: "settings", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgSettingsPage }) },
-                      { path: "blocklist", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgBlocklistPage }) },
-                      { path: "audit", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgAuditPage }) },
-                      { path: "customers", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgCustomersPage }) },
-                      { path: "theme", lazy: async () => ({ Component: (await import("./pages/contractor/manage")).OrgThemePage }) },
+                      { path: "about", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgAboutPage }) },
+                      { path: "roles", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgRolesPage }) },
+                      { path: "invites", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgInvitesPage }) },
+                      { path: "discord", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgDiscordPage }) },
+                      { path: "market", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgMarketPage }) },
+                      { path: "settings", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgSettingsPage }) },
+                      { path: "blocklist", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgBlocklistPage }) },
+                      { path: "audit", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgAuditPage }) },
+                      { path: "customers", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgCustomersPage }) },
+                      { path: "theme", lazy: async () => ({ Component: (await retryDynamicImport(() => import("./pages/contractor/manage"))).OrgThemePage }) },
                     ],
                   },
                 ],
@@ -994,7 +995,7 @@ const router = createBrowserRouter([
                   {
                     index: true,
                     lazy: async () => ({
-                      Component: (await import("./pages/contractor/OrgMoney"))
+                      Component: (await retryDynamicImport(() => import("./pages/contractor/OrgMoney")))
                         .OrgMoney,
                     }),
                   },
@@ -1003,7 +1004,7 @@ const router = createBrowserRouter([
               {
                 path: "members",
                 lazy: async () => {
-                  const component = (await import("./pages/people/People"))
+                  const component = (await retryDynamicImport(() => import("./pages/people/People")))
                     .CustomerPage
                   return {
                     Component: () =>
@@ -1014,21 +1015,21 @@ const router = createBrowserRouter([
               {
                 path: "listings",
                 lazy: async () => ({
-                  Component: (await import("./pages/market/ManageStock"))
+                  Component: (await retryDynamicImport(() => import("./pages/market/ManageStock")))
                     .ManageStock,
                 }),
               },
               {
                 path: "manage-stock",
                 lazy: async () => ({
-                  Component: (await import("./pages/market/ManageStockLots"))
+                  Component: (await retryDynamicImport(() => import("./pages/market/ManageStockLots")))
                     .ManageStockLots,
                 }),
               },
               {
                 path: "services",
                 lazy: async () => ({
-                  Component: (await import("./pages/contracting/MyServices"))
+                  Component: (await retryDynamicImport(() => import("./pages/contracting/MyServices")))
                     .MyServicesPage,
                 }),
               },
@@ -1041,21 +1042,21 @@ const router = createBrowserRouter([
               {
                 path: "listings",
                 lazy: async () => ({
-                  Component: (await import("./components/market/MarketRouter"))
+                  Component: (await retryDynamicImport(() => import("./components/market/MarketRouter")))
                     .ManageStockGate,
                 }),
               },
               {
                 path: "listings/create",
                 lazy: async () => ({
-                  Component: (await import("./components/market/MarketRouter"))
+                  Component: (await retryDynamicImport(() => import("./components/market/MarketRouter")))
                     .CreateListingGate,
                 }),
               },
               {
                 path: "stock",
                 lazy: async () => ({
-                  Component: (await import("./pages/market/ManageStockLots"))
+                  Component: (await retryDynamicImport(() => import("./pages/market/ManageStockLots")))
                     .ManageStockLots,
                 }),
               },
@@ -1063,7 +1064,7 @@ const router = createBrowserRouter([
                 path: "orders",
                 lazy: async () => ({
                   Component: (
-                    await import("./pages/contractor/MemberDashboard")
+                    await retryDynamicImport(() => import("./pages/contractor/MemberDashboard"))
                   ).MemberDashboard,
                 }),
               },
@@ -1071,28 +1072,28 @@ const router = createBrowserRouter([
                 path: "dashboard",
                 lazy: async () => ({
                   Component: (
-                    await import("./features/dashboard/DashboardPages")
+                    await retryDynamicImport(() => import("./features/dashboard/DashboardPages"))
                   ).ShopDashboardPage,
                 }),
               },
               {
                 path: "services",
                 lazy: async () => ({
-                  Component: (await import("./pages/contracting/MyServices"))
+                  Component: (await retryDynamicImport(() => import("./pages/contracting/MyServices")))
                     .MyServicesPage,
                 }),
               },
               {
                 path: "customers",
                 lazy: async () => ({
-                  Component: (await import("./features/shops/components/ShopCustomers"))
+                  Component: (await retryDynamicImport(() => import("./features/shops/components/ShopCustomers")))
                     .ShopCustomers,
                 }),
               },
               {
                 path: "settings",
                 lazy: async () => ({
-                  Component: (await import("./features/shops/components/ShopSettings"))
+                  Component: (await retryDynamicImport(() => import("./features/shops/components/ShopSettings")))
                     .ShopSettings,
                 }),
               },
@@ -1107,186 +1108,186 @@ const router = createBrowserRouter([
       {
         path: "/crafting/calculator",
         lazy: async () => ({
-          Component: (await import("./pages/crafting/CraftingCalculator")).CraftingCalculator,
+          Component: (await retryDynamicImport(() => import("./pages/crafting/CraftingCalculator"))).CraftingCalculator,
         }),
       },
       {
         path: "/crafting/history",
         lazy: async () => ({
-          Component: (await import("./pages/crafting/CraftingHistory")).CraftingHistory,
+          Component: (await retryDynamicImport(() => import("./pages/crafting/CraftingHistory"))).CraftingHistory,
         }),
       },
       {
         path: "/missions",
         lazy: async () => ({
-          Component: (await import("./pages/missions/MissionSearch")).MissionSearch,
+          Component: (await retryDynamicImport(() => import("./pages/missions/MissionSearch"))).MissionSearch,
         }),
       },
       {
         path: "/missions/:slug",
         lazy: async () => ({
-          Component: (await import("./pages/missions/MissionDetailGate")).MissionDetailGate,
+          Component: (await retryDynamicImport(() => import("./pages/missions/MissionDetailGate"))).MissionDetailGate,
         }),
       },
       {
         path: "/blueprints",
         lazy: async () => ({
-          Component: (await import("./pages/blueprints/BlueprintBrowser")).BlueprintBrowser,
+          Component: (await retryDynamicImport(() => import("./pages/blueprints/BlueprintBrowser"))).BlueprintBrowser,
         }),
       },
       {
         path: "/blueprints/inventory",
         lazy: async () => ({
-          Component: (await import("./pages/blueprints/BlueprintInventory")).BlueprintInventory,
+          Component: (await retryDynamicImport(() => import("./pages/blueprints/BlueprintInventory"))).BlueprintInventory,
         }),
       },
       {
         path: "/blueprints/:slug",
         lazy: async () => ({
-          Component: (await import("./pages/blueprints/BlueprintDetailGate")).BlueprintDetailGate,
+          Component: (await retryDynamicImport(() => import("./pages/blueprints/BlueprintDetailGate"))).BlueprintDetailGate,
         }),
       },
       {
         path: "/shopping-lists",
         lazy: async () => ({
-          Component: (await import("./pages/wishlists/WishlistManager")).WishlistManager,
+          Component: (await retryDynamicImport(() => import("./pages/wishlists/WishlistManager"))).WishlistManager,
         }),
       },
       {
         path: "/shopping-lists/:wishlist_id",
         lazy: async () => ({
-          Component: (await import("./pages/wishlists/WishlistDetail")).WishlistDetail,
+          Component: (await retryDynamicImport(() => import("./pages/wishlists/WishlistDetail"))).WishlistDetail,
         }),
       },
       {
         path: "/shopping-lists/:wishlist_id/shopping-list",
         lazy: async () => ({
-          Component: (await import("./pages/wishlists/ShoppingList")).ShoppingList,
+          Component: (await retryDynamicImport(() => import("./pages/wishlists/ShoppingList"))).ShoppingList,
         }),
       },
       {
         path: "/resources",
         lazy: async () => ({
-          Component: (await import("./pages/resources/ResourceBrowser")).ResourceBrowser,
+          Component: (await retryDynamicImport(() => import("./pages/resources/ResourceBrowser"))).ResourceBrowser,
         }),
       },
       {
         path: "/resources/:resource_id",
         lazy: async () => ({
-          Component: (await import("./pages/resources/ResourceDetail")).ResourceDetail,
+          Component: (await retryDynamicImport(() => import("./pages/resources/ResourceDetail"))).ResourceDetail,
         }),
       },
       {
         path: "/mining",
         lazy: async () => ({
-          Component: (await import("./pages/mining/MiningPage")).MiningPage,
+          Component: (await retryDynamicImport(() => import("./pages/mining/MiningPage"))).MiningPage,
         }),
       },
       {
         path: "/mining/ores/:name",
         lazy: async () => ({
-          Component: (await import("./pages/mining/MiningOreDetailGate")).MiningOreDetailGate,
+          Component: (await retryDynamicImport(() => import("./pages/mining/MiningOreDetailGate"))).MiningOreDetailGate,
         }),
       },
       {
         path: "/mining/locations",
         lazy: async () => ({
-          Component: (await import("./pages/mining/MiningPage")).MiningPage,
+          Component: (await retryDynamicImport(() => import("./pages/mining/MiningPage"))).MiningPage,
         }),
       },
       {
         path: "/mining/locations/:name",
         lazy: async () => ({
-          Component: (await import("./pages/mining/MiningLocationDetailGate")).MiningLocationDetailGate,
+          Component: (await retryDynamicImport(() => import("./pages/mining/MiningLocationDetailGate"))).MiningLocationDetailGate,
         }),
       },
       {
         path: "/wiki",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiHub")).WikiHub,
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiHub"))).WikiHub,
         }),
       },
       {
         path: "/wiki/items/:id",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiItemDetail"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiItemDetail")))
             .WikiItemDetail,
         }),
       },
       {
         path: "/wiki/items",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiItemBrowser"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiItemBrowser")))
             .WikiItemBrowser,
         }),
       },
       {
         path: "/wiki/ships/:id",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiShipDetailGate"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiShipDetailGate")))
             .WikiShipDetailGate,
         }),
       },
       {
         path: "/wiki/ships",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiShipBrowser"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiShipBrowser")))
             .WikiShipBrowser,
         }),
       },
       {
         path: "/wiki/commodities",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiCommodityBrowser"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiCommodityBrowser")))
             .WikiCommodityBrowser,
         }),
       },
       {
         path: "/wiki/commodities/:id",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiCommodityDetail"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiCommodityDetail")))
             .WikiCommodityDetail,
         }),
       },
       {
         path: "/wiki/locations",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiLocationBrowser"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiLocationBrowser")))
             .WikiLocationBrowser,
         }),
       },
       {
         path: "/wiki/refinery",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiRefineryPage"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiRefineryPage")))
             .WikiRefineryPage,
         }),
       },
       {
         path: "/wiki/manufacturers/:id",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiManufacturerPage"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiManufacturerPage")))
             .WikiManufacturerPage,
         }),
       },
       {
         path: "/wiki/manufacturers",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiManufacturerList"))
+          Component: (await retryDynamicImport(() => import("./pages/wiki/WikiManufacturerList")))
             .WikiManufacturerList,
         }),
       },
       {
         path: "/error",
         lazy: async () => ({
-          Component: (await import("./pages/errors/FrontendError"))
+          Component: (await retryDynamicImport(() => import("./pages/errors/FrontendError")))
             .FrontendErrorPage,
         }),
       },
       {
         path: "/*",
         lazy: async () => ({
-          Component: (await import("./pages/errors/Error404")).Error404,
+          Component: (await retryDynamicImport(() => import("./pages/errors/Error404"))).Error404,
         }),
       },
     ],
