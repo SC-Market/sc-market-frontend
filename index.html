@@ -144,10 +144,16 @@
           } catch (e) {}
         }
 
-        window.addEventListener("vite:preloadError", function () {
-          tryEmergencyReload()
-        })
-
+        // NOTE: we deliberately do NOT handle vite:preloadError here. That event
+        // is owned by the module layer (retryDynamicImport + the handler in
+        // src/index.tsx): failed route imports are retried in place first, and
+        // only escalated to a reload once retries are exhausted. Reloading here
+        // on the FIRST failed attempt would preempt that retry — and would also
+        // reload on hover-prefetch failures, which must stay silent.
+        //
+        // This capture-phase listener stays for the one case the module layer
+        // cannot cover: a top-level <script>/asset tag (e.g. the entry bundle
+        // itself) that fails to load before src/index.tsx ever runs.
         window.addEventListener(
           "error",
           function (event) {

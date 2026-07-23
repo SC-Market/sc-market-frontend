@@ -9,26 +9,29 @@ import {
   initializeBugsnagAsync,
   getBugsnagErrorBoundary,
 } from "./util/monitoring/bugsnagLoader"
-import { clearEmergencyReloadBudget, tryEmergencyReload } from "./util/assetReloadGuard"
+import { clearEmergencyReloadBudget } from "./util/assetReloadGuard"
 import { isPrefetchInFlight } from "./router/routePrefetch"
 
-// Handle stale chunk errors after deployments (dynamic import failures).
-// vite:preloadError is Vite's typed, cross-browser signal for a failed dynamic
-// import() — the robust way to detect a stale/missing route chunk WITHOUT
-// coupling to browser-specific error message text. preventDefault() stops Vite
-// from re-throwing, so the error never propagates to React Router.
+// Handle failed dynamic import()s. vite:preloadError is Vite's typed,
+// cross-browser signal for a failed dynamic import — the robust way to detect a
+// stale/missing route chunk WITHOUT coupling to browser-specific error text.
 //
-// We always preventDefault(), but only recover with a rate-limited reload when
-// the failure is attributable to a real NAVIGATION. A hover-prefetch that hits
-// a stale chunk (removed by a deploy) also fires this event; reloading then
-// would yank the page out from under the user without any click. When a
-// prefetch is in flight we swallow the event silently — prefetchRoute's own
-// try/catch handles it — and the reload happens later if/when the user
-// actually navigates and the router's own dynamic import fails.
+// This handler's ONLY job is to swallow PREFETCH failures. A hover-prefetch of a
+// stale chunk (removed by a deploy) also fires this event; without preventDefault
+// Vite re-throws and the unhandled rejection is noisy for a background fetch the
+// user never asked for. prefetchRoute's own try/catch already handles it.
+//
+// Real NAVIGATION failures are deliberately NOT preventDefault()'d here:
+//   - preventDefault() would make the awaited import() resolve to `undefined`
+//     instead of rejecting, silently defeating the retry in retryDynamicImport.
+//   - Reloading on the first failed attempt would preempt the retry entirely.
+// Instead, navigation imports are wrapped in retryDynamicImport (see App.tsx),
+// which retries transient blips in place and, only once retries are exhausted,
+// escalates to a rate-limited reload (deploy recovery) or lets the error reach
+// the route error boundary.
 window.addEventListener("vite:preloadError", (event) => {
-  event.preventDefault()
-  if (!isPrefetchInFlight()) {
-    tryEmergencyReload()
+  if (isPrefetchInFlight()) {
+    event.preventDefault()
   }
 })
 
