@@ -1,6 +1,7 @@
-import { useEffect } from "react"
+import { useMemo } from "react"
 import { useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useHead } from "@unhead/react"
 
 /**
  * Route-to-title mapping for automatic page title updates
@@ -51,18 +52,22 @@ const ROUTE_TITLES: Record<string, string> = {
 }
 
 /**
- * Hook that automatically updates the document title based on the current route
- * Falls back to a generic title if no specific mapping exists
+ * Hook that provides a ROUTE-LEVEL FALLBACK document title based on the current
+ * path. It feeds the title into Unhead at low priority (tagPriority: "low"), so
+ * any page that sets its own <title> (via <Helmet> or useHead) always wins.
+ *
+ * The bare title is set here; the " - SC Market" suffix is appended by the
+ * global idempotent titleTemplate in index.tsx — this hook must NOT append it.
  *
  * This ensures WCAG 2.1 Level AA compliance for Requirement 2.8:
- * "Page title changes during navigation"
+ * "Page title changes during navigation" — every route has a meaningful title
+ * even before (or without) a page-specific one.
  */
 export function usePageTitle() {
   const location = useLocation()
   const { t } = useTranslation()
 
-  useEffect(() => {
-    // Get the current pathname
+  const title = useMemo(() => {
     const pathname = location.pathname
 
     // Try to find an exact match first
@@ -83,23 +88,24 @@ export function usePageTitle() {
       }
     }
 
-    // Update the document title
     if (titleKey) {
-      const title = t(titleKey, { defaultValue: "SC Market" })
-      document.title = `${title} - SC Market`
-    } else {
-      // Fallback: Generate a title from the pathname
-      const segments = pathname.split("/").filter(Boolean)
-      if (segments.length > 0) {
-        const lastSegment = segments[segments.length - 1]
-        const title = lastSegment
-          .split("-")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ")
-        document.title = `${title} - SC Market`
-      } else {
-        document.title = "SC Market"
-      }
+      return t(titleKey, { defaultValue: "SC Market" })
     }
+
+    // Fallback: Generate a title from the pathname
+    const segments = pathname.split("/").filter(Boolean)
+    if (segments.length > 0) {
+      const lastSegment = segments[segments.length - 1]
+      return lastSegment
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    }
+
+    // Root with no segments — let the titleTemplate emit the bare brand.
+    return ""
   }, [location.pathname, t])
+
+  // Low priority: an explicit page <title> overrides this route fallback.
+  useHead({ title }, { tagPriority: "low" })
 }

@@ -11,7 +11,7 @@ import {
   Pagination,
   InputAdornment,
 } from "@mui/material"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { Search, StorefrontRounded } from "@mui/icons-material"
 import { useBrowseShopsQuery } from "../../../store/api/v2/market"
 import { useDebounce } from "../../../hooks/useDebounce"

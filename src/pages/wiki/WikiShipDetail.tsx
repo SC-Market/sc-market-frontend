@@ -3,7 +3,7 @@
  */
 
 import React from "react"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import {
   Box, Card, CardContent, Typography, Grid, Chip,
   Alert, Divider, Table, TableBody, TableCell,

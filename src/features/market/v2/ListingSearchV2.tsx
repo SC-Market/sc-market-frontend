@@ -28,7 +28,7 @@ import { isAfter, subDays } from "date-fns";
 import { useNavigate, useSearchParams, Link as RouterLink, useLocation } from "react-router-dom";
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme";
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../../util/constants";
-import { Helmet } from "react-helmet";
+import { Helmet } from "@unhead/react/helmet";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
 import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";

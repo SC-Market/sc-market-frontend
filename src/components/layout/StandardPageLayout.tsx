@@ -1,7 +1,7 @@
 import React, { ReactElement, ReactNode, useMemo } from "react"
 import { Navigate } from "react-router-dom"
 import { Grid, GridProps } from "@mui/material"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { Page } from "../metadata/Page"
 import { PageBreadcrumbs } from "../navigation/PageBreadcrumbs"
 import { ContainerGrid } from "./ContainerGrid"

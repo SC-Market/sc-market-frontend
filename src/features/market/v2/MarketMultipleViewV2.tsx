@@ -35,7 +35,7 @@ import { getRelativeTime } from "../../../util/time";
 import { Section } from "../../../components/paper/Section";
 import { OrderList } from "../../../components/list/OrderList";
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy";
-import { Helmet } from "react-helmet";
+import { Helmet } from "@unhead/react/helmet";
 import { FRONTEND_URL } from "../../../util/constants";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
 import { has_permission } from "../../../views/contractor/OrgRoles";

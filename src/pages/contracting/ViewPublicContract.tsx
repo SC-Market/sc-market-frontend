@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { Grid } from "@mui/material"
 import React, { lazy } from "react"

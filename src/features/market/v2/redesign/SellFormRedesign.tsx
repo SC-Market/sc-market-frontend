@@ -23,7 +23,7 @@ import Grid from "@mui/material/Grid2"
 import AddRounded from "@mui/icons-material/AddRounded"
 import DeleteOutlineRounded from "@mui/icons-material/DeleteOutlineRounded"
 import { useNavigate, useParams } from "react-router-dom"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
 import { formatPrice } from "../../../../util/formatPrice"
 import {

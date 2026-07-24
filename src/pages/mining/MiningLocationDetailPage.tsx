@@ -1,7 +1,7 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { Grid } from "@mui/material"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { useGetLocationDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"

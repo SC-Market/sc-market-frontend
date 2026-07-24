@@ -9,7 +9,7 @@ import {
   FormControl, Grid, InputLabel, MenuItem, Pagination, Select, Stack, TextField,
   ToggleButton, ToggleButtonGroup, Typography,
 } from "@mui/material"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import HardwareRoundedIcon from "@mui/icons-material/HardwareRounded"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import ConstructionIcon from "@mui/icons-material/Construction"
