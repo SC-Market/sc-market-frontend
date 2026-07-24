@@ -2,6 +2,13 @@
   Access-Control-Allow-Origin: https://api.sc-market.space
   Access-Control-Allow-Credentials: true
 
+# Web Linking (RFC 8288) headers advertising machine-readable entry points for
+# agents/tooling. The API and its catalog live on the api. subdomain, so these
+# are absolute cross-origin URLs. api-catalog rel is from RFC 9727; service-desc
+# (the OpenAPI spec) and service-doc (the human docs UI) are from RFC 8631.
+/
+  Link: <https://api.sc-market.space/.well-known/api-catalog>; rel="api-catalog", <https://api.sc-market.space/api/v2/openapi.json>; rel="service-desc"; type="application/json", <https://api.sc-market.space/docs>; rel="service-doc"; type="text/html"
+
 # Service worker: never cache at the edge/browser, so a new deploy's sw.js is
 # always fetched fresh and the SW update logic can run. A stale sw.js is the
 # classic cause of clients being stuck on an old app version after deploy.

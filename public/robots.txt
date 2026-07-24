@@ -8,8 +8,14 @@
 # NOTE: naming a bot in its own `User-agent` group makes it ignore the `*`
 # group entirely, so we deliberately keep AI crawlers under `*` to inherit the
 # same Disallow rules rather than granting them a separate, rule-free group.
+#
+# Content-Signal (contentsignals.org) declares our AI/usage preferences for the
+# crawlable content. We opt IN across the board — search indexing, AI answer
+# grounding (ai-input), and AI training (ai-train) — because visibility in both
+# search and AI answer engines is a goal, not something to opt out of.
 
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Disallow: /profile
 Disallow: /settings
 Disallow: /onboarding
