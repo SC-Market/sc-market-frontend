@@ -7,6 +7,11 @@ import {
 } from "../api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import {
+  resizeImageFile,
+  AVATAR_RESIZE,
+  BANNER_RESIZE,
+} from "../../../util/imageResize"
 
 export function useOrgDetailEdit(contractor: Contractor) {
   const { t } = useTranslation()
@@ -36,24 +41,20 @@ export function useOrgDetailEdit(contractor: Contractor) {
     }
   }, [updateContractor, contractor.spectrum_id, issueAlert, t])
 
-  const handleAvatarUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
-    if (file.size > 1 * 1000 * 1000) {
-      issueAlert({ message: t("orgDetailEdit.avatar_too_large", { defaultValue: "Avatar must be less than 1MB" }), severity: "error" }); return
-    }
+  const handleAvatarUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const original = event.target.files?.[0]
+    if (!original) return
+    const file = await resizeImageFile(original, AVATAR_RESIZE)
     uploadAvatar({ contractor: contractor.spectrum_id, file }).unwrap()
       .then(() => issueAlert({ message: t("orgDetailEdit.avatar_uploaded", { defaultValue: "Avatar uploaded successfully" }), severity: "success" }))
       .catch(issueAlert)
       .finally(() => { if (avatarFileInputRef) avatarFileInputRef.value = "" })
   }, [uploadAvatar, contractor.spectrum_id, issueAlert, avatarFileInputRef, t])
 
-  const handleBannerUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
-    if (file.size > 2.5 * 1000 * 1000) {
-      issueAlert({ message: t("orgDetailEdit.banner_too_large", { defaultValue: "Banner must be less than 2.5MB" }), severity: "error" }); return
-    }
+  const handleBannerUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const original = event.target.files?.[0]
+    if (!original) return
+    const file = await resizeImageFile(original, BANNER_RESIZE)
     uploadBanner({ contractor: contractor.spectrum_id, file }).unwrap()
       .then(() => issueAlert({ message: t("orgDetailEdit.banner_uploaded", { defaultValue: "Banner uploaded successfully" }), severity: "success" }))
       .catch(issueAlert)
