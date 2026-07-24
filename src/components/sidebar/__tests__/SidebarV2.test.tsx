@@ -203,6 +203,22 @@ describe("SidebarV2 — browse context (logged out)", () => {
     expect(screen.queryByText("Inventory")).not.toBeInTheDocument()
     expect(screen.queryByText("Availability")).not.toBeInTheDocument()
   })
+
+  it("shows a Sign in CTA linking to login instead of the context switcher", () => {
+    renderSidebar("/market")
+    const signIn = screen.getByRole("link", { name: "Sign in" })
+    expect(signIn).toBeInTheDocument()
+    expect(signIn).toHaveAttribute("href", "/login")
+    // The context switcher is logged-in only.
+    expect(
+      screen.queryByRole("button", { name: "Switch context" }),
+    ).not.toBeInTheDocument()
+  })
+
+  it("does NOT render the bottom Settings link when logged out", () => {
+    renderSidebar("/market")
+    expect(screen.queryByText("Settings")).not.toBeInTheDocument()
+  })
 })
 
 describe("SidebarV2 — browse context (logged in)", () => {

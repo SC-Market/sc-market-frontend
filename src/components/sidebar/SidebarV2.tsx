@@ -11,6 +11,7 @@ import {
   Avatar,
   Badge,
   Box,
+  Button,
   Chip,
   Collapse,
   Divider,
@@ -59,6 +60,7 @@ import {
   StarRounded,
   StarBorderRounded,
   CloseRounded,
+  LoginRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -406,53 +408,71 @@ export function SidebarV2() {
 
   const drawerContent = (
     <Stack sx={{ height: "100%", overflow: "hidden" }}>
-      {/* Context Switcher */}
-      <Box
-        role="button"
-        tabIndex={0}
-        aria-label={t("nav.switchContext", "Switch context")}
-        aria-haspopup="true"
-        aria-expanded={Boolean(anchorEl)}
-        sx={{
-          px: 2,
-          py: 1.5,
-          cursor: "pointer",
-          transition: "background-color 0.2s",
-          outline: "none",
-          "&:hover": { backgroundColor: theme.palette.action.hover },
-          "&:focus": { outline: "none" },
-          "&:focus-visible": {
-            backgroundColor: theme.palette.action.hover,
-            outline: `2px solid ${theme.palette.primary.main}`,
-            outlineOffset: "-2px",
-          },
-        }}
-        onClick={(e) => setAnchorEl(e.currentTarget)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault()
-            setAnchorEl(e.currentTarget as HTMLElement)
-          }
-        }}
-      >
-        <Stack direction="row" alignItems="center" spacing={1.5}>
-          <Avatar
-            src={context === "admin" ? undefined : context === "shop" && selectedShop ? selectedShop.logo_url || undefined : profile?.avatar}
-            sx={{ width: 32, height: 32 }}
+      {/* Identity area. Logged in: a context switcher (browse / shops / orgs /
+          admin). Logged out: a Sign in CTA — there's no identity to switch and
+          no shops/orgs/admin to offer, so showing an empty avatar + blank name
+          would be misleading. */}
+      {profile ? (
+        <Box
+          role="button"
+          tabIndex={0}
+          aria-label={t("nav.switchContext", "Switch context")}
+          aria-haspopup="true"
+          aria-expanded={Boolean(anchorEl)}
+          sx={{
+            px: 2,
+            py: 1.5,
+            cursor: "pointer",
+            transition: "background-color 0.2s",
+            outline: "none",
+            "&:hover": { backgroundColor: theme.palette.action.hover },
+            "&:focus": { outline: "none" },
+            "&:focus-visible": {
+              backgroundColor: theme.palette.action.hover,
+              outline: `2px solid ${theme.palette.primary.main}`,
+              outlineOffset: "-2px",
+            },
+          }}
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault()
+              setAnchorEl(e.currentTarget as HTMLElement)
+            }
+          }}
+        >
+          <Stack direction="row" alignItems="center" spacing={1.5}>
+            <Avatar
+              src={context === "admin" ? undefined : context === "shop" && selectedShop ? selectedShop.logo_url || undefined : profile?.avatar}
+              sx={{ width: 32, height: 32 }}
+            >
+              {context === "admin" ? <AdminPanelSettingsRounded fontSize="small" /> : context === "shop" ? <StorefrontRounded fontSize="small" /> : undefined}
+            </Avatar>
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              <Typography variant="body2" fontWeight={600} noWrap>
+                {profile?.display_name || profile?.username}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" noWrap>
+                {contextLabel}
+              </Typography>
+            </Box>
+            <ExpandMoreRounded fontSize="small" color="action" />
+          </Stack>
+        </Box>
+      ) : (
+        <Box sx={{ px: 2, py: 1.5 }}>
+          <Button
+            component={Link}
+            to={PATHS.login}
+            fullWidth
+            variant="contained"
+            startIcon={<LoginRounded />}
+            onClick={closeIfMobile}
           >
-            {context === "admin" ? <AdminPanelSettingsRounded fontSize="small" /> : context === "shop" ? <StorefrontRounded fontSize="small" /> : undefined}
-          </Avatar>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography variant="body2" fontWeight={600} noWrap>
-              {profile?.display_name || profile?.username}
-            </Typography>
-            <Typography variant="caption" color="text.secondary" noWrap>
-              {contextLabel}
-            </Typography>
-          </Box>
-          <ExpandMoreRounded fontSize="small" color="action" />
-        </Stack>
-      </Box>
+            {t("auth.signIn", "Sign in")}
+          </Button>
+        </Box>
+      )}
 
       <Menu
         anchorEl={anchorEl}
@@ -663,16 +683,19 @@ export function SidebarV2() {
       )}
       </Box>
 
-      {/* Account items — sticky at bottom */}
-      <Box sx={{ flexShrink: 0 }}>
-        <Divider sx={{ mx: 2 }} />
-        <List dense sx={{ px: 1, py: 0.5 }}>
-          <ListItemButton component={Link} to={PATHS.settings} selected={isActive(PATHS.settings)} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
-            <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
-            <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "subtitle2" }} />
-          </ListItemButton>
-        </List>
-      </Box>
+      {/* Account items — sticky at bottom. Settings requires an account, so
+          only show it when logged in. */}
+      {profile && (
+        <Box sx={{ flexShrink: 0 }}>
+          <Divider sx={{ mx: 2 }} />
+          <List dense sx={{ px: 1, py: 0.5 }}>
+            <ListItemButton component={Link} to={PATHS.settings} selected={isActive(PATHS.settings)} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
+              <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
+              <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "subtitle2" }} />
+            </ListItemButton>
+          </List>
+        </Box>
+      )}
     </Stack>
   )
 
