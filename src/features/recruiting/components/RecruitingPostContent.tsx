@@ -1,5 +1,5 @@
 import React from "react"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { RecruitingPost } from "../api/recruitingApi"
 import { RecruitingPostView } from "../../../views/recruiting/RecruitingPostView"
 import { PostCommentArea } from "./PostCommentArea"

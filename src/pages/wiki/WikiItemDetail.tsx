@@ -44,7 +44,7 @@ import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHi
 import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
 import { MARKET_PATHS, WIKI_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 

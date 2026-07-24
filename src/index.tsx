@@ -4,6 +4,7 @@ import "./index.css"
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import { createRoot } from "react-dom/client"
+import { createHead, UnheadProvider } from "@unhead/react/client"
 import { initPWA } from "./util/pwa"
 import {
   initializeBugsnagAsync,
@@ -38,6 +39,31 @@ window.addEventListener("vite:preloadError", (event) => {
 const container = document.getElementById("root")
 const root = createRoot(container!)
 
+// Unhead manages the document <head> (replaces react-helmet, which is
+// unmaintained and unsafe under React 19 concurrent rendering). The global
+// titleTemplate is the single source of truth for the " - SC Market" suffix.
+//
+// It is IDEMPOTENT: pages that set only a bare title (e.g. "Agricium") get the
+// suffix appended → "Agricium - SC Market", while pages with a keyword-rich
+// title that already contains the brand (e.g. "Aurora MR — Star Citizen Ship |
+// SC Market") pass through untouched. This lets per-page <title> tags keep
+// their SEO-optimized, front-loaded phrasing without double-appending the
+// brand, while still guaranteeing every page ends in the brand name.
+//
+// Because this template owns the suffix, imperative writers must NOT append it
+// themselves — see Page.tsx and src/hooks/router/usePageTitle.ts, which now set
+// bare titles through Unhead (useHead) rather than writing document.title.
+const head = createHead({
+  init: [
+    {
+      titleTemplate: (title) => {
+        if (!title) return "SC Market"
+        return title.includes("SC Market") ? title : `${title} - SC Market`
+      },
+    },
+  ],
+})
+
 // Get error boundary (will use fallback if Bugsnag not loaded yet)
 const ErrorBoundary = getBugsnagErrorBoundary(React)
 
@@ -54,9 +80,11 @@ initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "").catch(
 
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-    </ErrorBoundary>
+    <UnheadProvider head={head}>
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    </UnheadProvider>
   </React.StrictMode>,
 )
 

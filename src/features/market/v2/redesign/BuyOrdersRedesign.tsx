@@ -22,7 +22,7 @@ import {
 import Grid2 from "@mui/material/Grid2"
 import AddRounded from "@mui/icons-material/AddRounded"
 import { useSearchParams } from "react-router-dom"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"

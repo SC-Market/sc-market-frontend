@@ -10,7 +10,7 @@ import {
   ToggleButtonGroup, ToggleButton, Table, TableBody, TableCell, TableHead, TableRow,
   Paper, Avatar, Divider,
 } from "@mui/material"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"

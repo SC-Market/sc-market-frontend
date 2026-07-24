@@ -1,4 +1,14 @@
 # https://www.robotstxt.org/robotstxt.html
+#
+# All crawlers — including AI/answer-engine crawlers (GPTBot, ClaudeBot,
+# PerplexityBot, Google-Extended, OAI-SearchBot, CCBot, Bingbot) — are
+# intentionally allowed to crawl public pages so SC Market can be indexed and
+# cited as a source. We only disallow authenticated / user-private routes.
+#
+# NOTE: naming a bot in its own `User-agent` group makes it ignore the `*`
+# group entirely, so we deliberately keep AI crawlers under `*` to inherit the
+# same Disallow rules rather than granting them a separate, rule-free group.
+
 User-agent: *
 Disallow: /profile
 Disallow: /settings

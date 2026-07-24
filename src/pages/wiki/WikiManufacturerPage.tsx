@@ -17,7 +17,7 @@ import {
   Divider,
   Box,
 } from "@mui/material"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetManufacturerDetailQuery } from "../../store/api/v2/market"

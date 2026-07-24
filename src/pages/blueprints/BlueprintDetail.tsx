@@ -38,7 +38,7 @@ function formatQty(scu: number | string): string {
 }
 
 import { formatCraftingTime, NON_RECLAIMABLE_RESOURCES } from "../../constants/crafting"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { GAME_DATA_PATHS, USER_PATHS } from "../../routes/paths"
 

@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useEffect } from "react"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
+import { useHead } from "@unhead/react"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { FRONTEND_URL } from "../../util/constants"
 import { CircularProgress } from "@mui/material"
@@ -21,9 +22,11 @@ export function Page(
     dontUseDefaultCanonUrl?: boolean
   }>,
 ) {
-  useEffect(() => {
-    document.title = props.title ? `${props.title} - SC Market` : "SC Market"
-  }, [props.title])
+  // Set the bare page title through Unhead. The " - SC Market" suffix is added
+  // by the global idempotent titleTemplate in index.tsx, so we must NOT append
+  // it here. Passing "" lets that template emit the bare brand. This overrides
+  // the low-priority route fallback from usePageTitle.
+  useHead({ title: props.title ?? "" })
 
   const { data: customOrgData } = useGetContractorBySpectrumIDQuery(
     CURRENT_CUSTOM_ORG!,

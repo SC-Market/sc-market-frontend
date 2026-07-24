@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useParams, Link as RouterLink } from "react-router-dom"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import {
@@ -208,10 +208,13 @@ export function ListingDetailV2() {
                       description: listing.description,
                       image: photos[0] !== FALLBACK_IMAGE_URL ? photos[0] : undefined,
                       url: canonicalUrl,
+                      // NOTE: prices are in aUEC (an in-game currency, not an ISO
+                      // 4217 currency). schema.org/Offer requires a real currency
+                      // and Google rejects/ignores non-ISO priceCurrency (and warns
+                      // in Search Console), so we intentionally omit the monetary
+                      // Offer and expose the aUEC price as on-page text instead.
                       offers: {
                         "@type": "Offer",
-                        price: firstItem?.base_price ?? priceRange?.min,
-                        priceCurrency: "aUEC",
                         availability: "https://schema.org/InStock",
                         seller: {
                           "@type": "Organization",

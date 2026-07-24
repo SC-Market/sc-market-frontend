@@ -6,7 +6,7 @@ import { Trans, useTranslation } from "react-i18next"
 import { ReportButton } from "../button/ReportButton"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 
 export function Footer() {
   const { t } = useTranslation()
@@ -15,14 +15,51 @@ export function Footer() {
   return (
     <Grid item xs={12} sx={{ marginTop: 2 }}>
       <Helmet>
+        {/*
+          Site-wide structured data. The Footer renders on every page, so this is
+          the single global injection point for the Organization + WebSite nodes.
+
+          The WebSite node's SearchAction is the "sitelinks searchbox": it tells
+          Google (and AI answer engines) how to run a search directly against the
+          marketplace, which is what surfaces the prefilled-search sub-links under
+          the main result in the SERP. The target must match the real market
+          search route — /market?text=<query> (see ListingSearchV2, which reads
+          searchParams "text"). {search_term_string} is Google's required token.
+        */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "SC Market",
-            url: "https://sc-market.space",
-            logo: "https://sc-market.space/scmarket-logo.png",
-            sameAs: ["https://discord.gg/scmarket"],
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://sc-market.space/#organization",
+                name: "SC Market",
+                url: "https://sc-market.space",
+                logo: "https://sc-market.space/scmarket-logo.png",
+                description:
+                  "SC Market is the Star Citizen marketplace where players buy, sell, and trade in-game items and hire orgs for services like hauling, escort, medical, and salvage — all in aUEC.",
+                sameAs: [
+                  "https://discord.gg/scmarket",
+                  "https://github.com/henry232323/sc-market",
+                ],
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://sc-market.space/#website",
+                name: "SC Market",
+                url: "https://sc-market.space",
+                publisher: { "@id": "https://sc-market.space/#organization" },
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate:
+                      "https://sc-market.space/market?text={search_term_string}",
+                  },
+                  "query-input": "required name=search_term_string",
+                },
+              },
+            ],
           })}
         </script>
       </Helmet>

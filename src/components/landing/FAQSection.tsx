@@ -3,7 +3,7 @@ import { List, Paper, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { FAQQuestion } from "./FAQQuestion"
 
 export function FAQSection() {

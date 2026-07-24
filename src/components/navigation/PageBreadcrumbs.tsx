@@ -10,7 +10,7 @@ import { Link as RouterLink } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 
 interface BreadcrumbItem {

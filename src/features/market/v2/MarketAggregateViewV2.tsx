@@ -56,7 +56,7 @@ import {
   HeadCell,
   PaginatedTable,
 } from "../../../components/table/PaginatedTable";
-import { Helmet } from "react-helmet";
+import { Helmet } from "@unhead/react/helmet";
 import { ImagePreviewModal } from "../../../components/modal/ImagePreviewModal";
 import { ImageSearch } from "../components/ImageSearch";
 import { HeaderTitle } from "../../../components/typography/HeaderTitle";
@@ -316,11 +316,12 @@ export function MarketAggregateViewV2() {
               description: `Browse all ${game_item.name} listings on SC Market. Compare prices from multiple sellers.`,
               image: game_item.image_url || undefined,
               url: `${FRONTEND_URL}/market/aggregate/${formatShortSlug(game_item.id, game_item.name)}`,
+              // NOTE: prices are in aUEC (in-game currency, not ISO 4217). Google
+              // ignores/rejects a non-ISO priceCurrency, so we omit the monetary
+              // AggregateOffer and keep offerCount only — the aUEC price range is
+              // exposed as on-page text instead.
               offers: {
                 "@type": "AggregateOffer",
-                priceCurrency: "aUEC",
-                lowPrice: Math.min(...complete.listings.map((l) => l.price_min)),
-                highPrice: Math.max(...complete.listings.map((l) => l.price_max)),
                 offerCount: complete.listings.length,
                 availability: "https://schema.org/InStock",
               },

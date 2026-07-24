@@ -1,5 +1,5 @@
 import React from "react"
-import { Helmet } from "react-helmet"
+import { Helmet } from "@unhead/react/helmet"
 import { User } from "../../../datatypes/User"
 import { FRONTEND_URL } from "../../../util/constants"
 
