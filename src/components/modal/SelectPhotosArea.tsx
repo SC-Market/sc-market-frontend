@@ -670,7 +670,7 @@ export function SelectPhotosArea(props: {
                   focused
                   helperText={t(
                     "SelectPhotosArea.imageUrlHelp",
-                    "Enter a direct URL to an image (from Imgur, RSI, or starcitizen.tools)",
+                    "Paste a direct image link (i.imgur.com, robertsspaceindustries.com, starcitizen.tools, or cstone.space)",
                   )}
                   onChange={(event: React.ChangeEvent<{ value: string }>) => {
                     setUrlInput(event.target.value)
@@ -733,7 +733,7 @@ export function SelectPhotosArea(props: {
                     focused
                     helperText={t(
                       "SelectPhotosArea.imageUrlHelp",
-                      "Enter a direct URL to an image (from Imgur, RSI, or starcitizen.tools)",
+                      "Paste a direct image link (i.imgur.com, robertsspaceindustries.com, starcitizen.tools, or cstone.space)",
                     )}
                     onChange={(event: React.ChangeEvent<{ value: string }>) => {
                       setUrlInput(event.target.value)

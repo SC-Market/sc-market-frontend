@@ -287,6 +287,7 @@ export function CreateListingV2() {
           reserve_price: reservePrice ?? undefined,
         } : undefined,
         photo_resource_ids: photoResourceIds.length > 0 ? photoResourceIds : undefined,
+        external_photo_urls: photos.length > 0 ? photos : undefined,
       };
 
       try {
@@ -319,6 +320,7 @@ export function CreateListingV2() {
       shop.shop_id,
       shop.is_org_owned,
       photoResourceIds,
+      photos,
       createListing,
       issueAlert,
       navigate,

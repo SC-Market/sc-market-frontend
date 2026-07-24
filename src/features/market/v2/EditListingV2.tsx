@@ -268,10 +268,19 @@ export function EditListingV2() {
         request.pickup_method = pickupMethod || null;
       }
 
-      // Include photos if any were removed
+      // Sync photos: detect removals and newly-added external URLs separately.
       const originalPhotos = listingData?.listing.photos || [];
-      if (JSON.stringify(photos) !== JSON.stringify(originalPhotos)) {
-        request.photos = photos;
+      const originalSet = new Set(originalPhotos);
+      const newExternalUrls = photos.filter((p) => !originalSet.has(p));
+      // If any existing photo was removed, send the replace-set (minus the new
+      // URLs, which don't exist in the DB yet — they'll be handled separately).
+      const keptPhotos = photos.filter((p) => originalSet.has(p));
+      if (JSON.stringify(keptPhotos) !== JSON.stringify(originalPhotos)) {
+        request.photos = keptPhotos;
+      }
+      // Send newly pasted external URLs for creation.
+      if (newExternalUrls.length > 0) {
+        request.external_photo_urls = newExternalUrls;
       }
 
       // Include visibility if changed
@@ -330,7 +339,8 @@ export function EditListingV2() {
         !request.variant_prices &&
         !request.lot_updates &&
         !request.photos &&
-        !request.photo_resource_ids
+        !request.photo_resource_ids &&
+        !request.external_photo_urls
       ) {
         issueAlert({
           message: t("EditListingV2.noChanges", "No changes to save"),
