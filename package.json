@@ -110,7 +110,8 @@
     "test:coverage": "vitest run --coverage",
     "analyze": "npm run build:analyze && open dist/stats.html",
     "analyze:detailed": "node scripts/analyze-bundle.js",
-    "i18n:validate": "i18next --config i18next-parser.config.cjs 'src/**/*.{ts,tsx}' --fail-on-update"
+    "i18n:validate": "i18next --config i18next-parser.config.cjs 'src/**/*.{ts,tsx}' --fail-on-update",
+    "i18n:coverage": "tsx scripts/i18n-coverage.ts"
   },
   "webpackConfig": {
     "target": "web"
