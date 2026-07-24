@@ -3,9 +3,14 @@
  * add-widget gallery. It draws greyed-out placeholder shapes (bars, a chart
  * line, table rows, list rows, cards) rather than resolving live data, so the
  * user can recognize a widget's shape at a glance before adding it.
+ *
+ * Because several widgets share a schematic `kind` (e.g. multiple tables), each
+ * definition also carries a distinct icon, shown as a chip in the corner so the
+ * schematics stay distinguishable at a glance.
  */
 
 import { Box } from "@mui/material"
+import type { SvgIconComponent } from "@mui/icons-material"
 import type { WidgetPreviewKind } from "./registry"
 
 const BAR = "action.hover"
@@ -28,11 +33,18 @@ function Bar({
   )
 }
 
-export function WidgetPreview({ kind }: { kind: WidgetPreviewKind }) {
+export function WidgetPreview({
+  kind,
+  icon: Icon,
+}: {
+  kind: WidgetPreviewKind
+  icon?: SvgIconComponent
+}) {
   return (
     <Box
       aria-hidden
       sx={{
+        position: "relative",
         height: 72,
         borderRadius: 1,
         border: 1,
@@ -45,6 +57,26 @@ export function WidgetPreview({ kind }: { kind: WidgetPreviewKind }) {
         overflow: "hidden",
       }}
     >
+      {Icon && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 4,
+            right: 4,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 24,
+            height: 24,
+            borderRadius: "50%",
+            bgcolor: "background.paper",
+            color: "primary.main",
+            boxShadow: 1,
+          }}
+        >
+          <Icon sx={{ fontSize: 15 }} />
+        </Box>
+      )}
       {kind === "metrics" && (
         <Box sx={{ display: "flex", gap: 1, height: "100%" }}>
           {[0, 1, 2].map((i) => (

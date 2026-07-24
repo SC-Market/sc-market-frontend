@@ -10,6 +10,23 @@
 import type { ReactNode } from "react"
 import type { TFunction } from "i18next"
 import { Grid } from "@mui/material"
+import type { SvgIconComponent } from "@mui/icons-material"
+import AssignmentIcon from "@mui/icons-material/Assignment"
+import LocalOfferIcon from "@mui/icons-material/LocalOffer"
+import QueryStatsIcon from "@mui/icons-material/QueryStats"
+import ShowChartIcon from "@mui/icons-material/ShowChart"
+import StackedLineChartIcon from "@mui/icons-material/StackedLineChart"
+import PaidIcon from "@mui/icons-material/Paid"
+import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout"
+import NotificationsIcon from "@mui/icons-material/Notifications"
+import InsightsIcon from "@mui/icons-material/Insights"
+import StorefrontIcon from "@mui/icons-material/Storefront"
+import MilitaryTechIcon from "@mui/icons-material/MilitaryTech"
+import ChecklistIcon from "@mui/icons-material/Checklist"
+import TimelineIcon from "@mui/icons-material/Timeline"
+import ViewCarouselIcon from "@mui/icons-material/ViewCarousel"
+import RssFeedIcon from "@mui/icons-material/RssFeed"
+import TableChartIcon from "@mui/icons-material/TableChart"
 import { OrderMetrics } from "../../../views/orders/OrderMetrics"
 import { OrdersViewPaginated } from "../../../views/orders/OrderList"
 import { DashNotificationArea } from "../../../views/notifications/DashNotificationArea"
@@ -115,6 +132,12 @@ export interface WidgetDefinition {
   category: WidgetCategory
   /** Schematic layout shown for this widget in the add-widget gallery. */
   preview: WidgetPreviewKind
+  /**
+   * Icon shown over the schematic preview. Several widgets share a preview
+   * `kind` (e.g. multiple tables); the icon is what makes each recognizable at
+   * a glance in the gallery.
+   */
+  icon: SvgIconComponent
   render: (props: WidgetRenderProps) => ReactNode
 }
 
@@ -180,6 +203,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     selfChrome: true,
     category: "orders",
     preview: "metrics",
+    icon: QueryStatsIcon,
     render: ({ scope }) => (
       <OrderMetrics spectrumId={scope.spectrumId} shopId={scope.shopId} />
     ),
@@ -196,6 +220,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     selfChrome: true,
     category: "orders",
     preview: "chart",
+    icon: ShowChartIcon,
     render: ({ scope }) => (
       <UserOrderTrendChart
         metric="count"
@@ -216,6 +241,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     selfChrome: true,
     category: "orders",
     preview: "chart",
+    icon: PaidIcon,
     render: ({ scope }) => (
       <UserOrderTrendChart
         metric="value"
@@ -236,6 +262,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     selfChrome: true,
     category: "orders",
     preview: "chart",
+    icon: StackedLineChartIcon,
     render: ({ scope }) => (
       <UserOrderTrendChart
         metric="status"
@@ -251,12 +278,17 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     descriptionKey: "dashboard.widgets.orders.description",
     descriptionDefault:
       "Paginated orders table (assignments, or a shop's orders).",
-    defaultLayout: { w: 6, h: 5 },
-    minSize: { w: 4, h: 3 },
+    // The underlying ControlledTable always renders a fixed page (5 rows padded
+    // to a constant height) plus title/tabs/pagination chrome — a deterministic
+    // ~658px tall. Size the cell to fit that exactly so nothing scrolls:
+    // h:7 → 7*80 + 6*16 = 656px. minH keeps a resize from crushing it.
+    defaultLayout: { w: 6, h: 7 },
+    minSize: { w: 4, h: 5 },
     allowedScopes: SHOP_SCOPES,
     selfChrome: true,
     category: "orders",
     preview: "table",
+    icon: AssignmentIcon,
     render: ({ scope, t }) =>
       scope.shopId ? (
         <OrdersViewPaginated
@@ -276,12 +308,16 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     titleDefault: "Received Offers",
     descriptionKey: "dashboard.widgets.offers.description",
     descriptionDefault: "Incoming offers you can claim, merge, or respond to.",
-    defaultLayout: { w: 6, h: 5 },
-    minSize: { w: 4, h: 3 },
+    // Same fixed-page ControlledTable as `orders` — a deterministic ~614px tall.
+    // Size the cell to fit it exactly so nothing scrolls (h:7 → 656px), matching
+    // the `orders` widget so the two line up when placed side by side.
+    defaultLayout: { w: 6, h: 7 },
+    minSize: { w: 4, h: 5 },
     allowedScopes: SHOP_SCOPES,
     selfChrome: true,
     category: "orders",
     preview: "table",
+    icon: LocalOfferIcon,
     render: ({ scope }) => <ReceivedOffersArea unassigned={!!scope.shopId} />,
   },
   {
@@ -296,6 +332,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     selfChrome: true,
     category: "market",
     preview: "table",
+    icon: ShoppingCartCheckoutIcon,
     render: () => <MatchingBuyOrdersArea showEmpty />,
   },
   {
@@ -310,6 +347,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     selfChrome: true,
     category: "activity",
     preview: "list",
+    icon: NotificationsIcon,
     render: ({ scope }) => <DashNotificationArea shopId={scope.shopId} />,
   },
   {
@@ -325,6 +363,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     selfChrome: true,
     category: "market",
     preview: "chart",
+    icon: InsightsIcon,
     render: ({ scope }) => (
       <Grid container spacing={2}>
         <SellerAnalyticsV2 sellerId={scope.shopId} />
@@ -342,6 +381,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     allowedScopes: PERSONAL_ONLY,
     category: "market",
     preview: "list",
+    icon: StorefrontIcon,
     render: ({ settings, t }) => (
       <MarketOverviewWidget settings={settings} t={t} />
     ),
@@ -357,6 +397,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     allowedScopes: PERSONAL_ONLY,
     category: "personal",
     preview: "metrics",
+    icon: MilitaryTechIcon,
     render: ({ t }) => <ReputationWidget t={t} />,
   },
   {
@@ -370,6 +411,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     allowedScopes: PERSONAL_ONLY,
     category: "personal",
     preview: "list",
+    icon: ChecklistIcon,
     render: ({ t }) => <WishlistWidget t={t} />,
   },
   {
@@ -384,6 +426,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     requiresItem: true,
     category: "market",
     preview: "chart",
+    icon: TimelineIcon,
     render: ({ settings, t }) => (
       <PriceHistoryWidget settings={settings} t={t} />
     ),
@@ -401,6 +444,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     requiresListingsSource: true,
     category: "market",
     preview: "cards",
+    icon: ViewCarouselIcon,
     render: ({ settings, t }) => (
       <ListingsPreviewWidget settings={settings} t={t} />
     ),
@@ -418,6 +462,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     offersActivityFilter: true,
     category: "activity",
     preview: "list",
+    icon: RssFeedIcon,
     render: ({ scope, settings, t }) => (
       <ActivityFeedWidget scope={scope} settings={settings} t={t} />
     ),
@@ -434,6 +479,7 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     allowedScopes: SHOP_SCOPES,
     category: "market",
     preview: "table",
+    icon: TableChartIcon,
     render: ({ scope, settings, t }) => (
       <ListingAnalyticsWidget scope={scope} settings={settings} t={t} />
     ),
