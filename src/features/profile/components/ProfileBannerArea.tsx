@@ -11,6 +11,7 @@ import {
 } from "../api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { DarkBannerContainer, LightBannerContainer } from "./BannerContainers"
+import { resizeImageFile, BANNER_RESIZE } from "../../../util/imageResize"
 
 function BannerEditArea(props: {
   profile: User
@@ -35,18 +36,10 @@ function BannerEditArea(props: {
   async function handleBannerUpload(
     event: React.ChangeEvent<HTMLInputElement>,
   ) {
-    const file = event.target.files?.[0]
-    if (!file) return
+    const original = event.target.files?.[0]
+    if (!original) return
 
-    if (file.size > 2.5 * 1000 * 1000) {
-      issueAlert({
-        message: t("viewProfile.banner_too_large", {
-          defaultValue: "Banner must be less than 2.5MB",
-        }),
-        severity: "error",
-      })
-      return
-    }
+    const file = await resizeImageFile(original, BANNER_RESIZE)
 
     uploadBanner(file)
       .unwrap()

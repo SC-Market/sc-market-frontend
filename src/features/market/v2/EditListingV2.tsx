@@ -614,7 +614,10 @@ export function EditListingV2() {
           <FormPaper title={t("EditListingV2.photos", "Photos")}>
             <Grid item xs={12}>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                {t("EditListingV2.imageSizeLimit", "(Max 2.5MB per image)")}
+                {t(
+                  "EditListingV2.imageSizeLimit",
+                  "(Large images are optimized automatically)",
+                )}
               </Typography>
               <SelectPhotosArea
                 setPhotos={setPhotos}

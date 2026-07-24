@@ -5,6 +5,7 @@ import {
   useProfileUploadAvatarMutation,
 } from "../api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { resizeImageFile, AVATAR_RESIZE } from "../../../util/imageResize"
 
 export function useProfileActions() {
   const { t } = useTranslation()
@@ -35,18 +36,10 @@ export function useProfileActions() {
     return false
   }
 
-  function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (!file) return
-    if (file.size > 1 * 1000 * 1000) {
-      issueAlert({
-        message: t("viewProfile.avatar_too_large", {
-          defaultValue: "Avatar must be less than 1MB",
-        }),
-        severity: "error",
-      })
-      return
-    }
+  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const original = event.target.files?.[0]
+    if (!original) return
+    const file = await resizeImageFile(original, AVATAR_RESIZE)
     uploadAvatar(file)
       .unwrap()
       .then(() => {

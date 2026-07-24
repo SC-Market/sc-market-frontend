@@ -50,6 +50,11 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { URL_REGEX } from "../../../util/parsing"
+import {
+  resizeImageFile,
+  AVATAR_RESIZE,
+  BANNER_RESIZE,
+} from "../../../util/imageResize"
 import { ShopBlocklistSection } from "./ShopBlocklist"
 import { ImageRounded, SwapHorizRounded } from "@mui/icons-material"
 import { SHOP_PATHS } from "../../../routes/paths"
@@ -701,8 +706,12 @@ export function ShopSettings() {
     setBannerUrl(shop.banner_url)
   }, [shop])
 
-  const handleImageUpload = async (file: File, kind: "logo" | "banner") => {
+  const handleImageUpload = async (original: File, kind: "logo" | "banner") => {
     try {
+      const file = await resizeImageFile(
+        original,
+        kind === "logo" ? AVATAR_RESIZE : BANNER_RESIZE,
+      )
       const result = await uploadImage(file).unwrap()
       if (kind === "logo") {
         setLogoResourceId(result.resource_id)

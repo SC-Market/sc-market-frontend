@@ -36,6 +36,12 @@ import { Section } from "../paper/Section"
 import { external_resource_regex } from "../../features/profile"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../mobile/BottomSheet"
+import { resizeImageFiles, PHOTO_RESIZE } from "../../util/imageResize"
+
+// Sanity cap on the raw input before we attempt to decode/downscale it. This is
+// deliberately generous — downscaling brings the actual upload well below the
+// backend limits, so this only guards against pathologically huge inputs.
+const MAX_INPUT_SIZE = 25 * 1024 * 1024 // 25MB
 
 export function PhotoEntry(props: { url: string; onClose: () => void }) {
   const theme = useTheme<ExtendedTheme>()
@@ -259,7 +265,7 @@ export function SelectPhotosArea(props: {
   const [urlInput, setUrlInput] = useState("")
 
   const handleFileUpload = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
       const files = event.target.files
       if (files) {
         console.log(`[SelectPhotosArea] File upload initiated:`, {
@@ -272,9 +278,10 @@ export function SelectPhotosArea(props: {
         })
 
         const fileArray = Array.from(files)
-        const maxSize = 2 * 1024 * 1024 // 2MB in bytes
-        const validFiles = fileArray.filter((file) => file.size <= maxSize)
-        const oversizedFiles = fileArray.filter((file) => file.size > maxSize)
+        const withinCap = fileArray.filter((file) => file.size <= MAX_INPUT_SIZE)
+        const oversizedFiles = fileArray.filter(
+          (file) => file.size > MAX_INPUT_SIZE,
+        )
 
         if (oversizedFiles.length > 0) {
           console.warn(`[SelectPhotosArea] Files too large, skipping:`, {
@@ -292,8 +299,10 @@ export function SelectPhotosArea(props: {
           }
         }
 
-        if (validFiles.length > 0 && onFileUpload) {
-          onFileUpload(validFiles)
+        if (withinCap.length > 0 && onFileUpload) {
+          // Downscale in the browser before uploading to keep payloads small.
+          const resized = await resizeImageFiles(withinCap, PHOTO_RESIZE)
+          onFileUpload(resized)
         }
       }
       // Reset the input value so the same file can be selected again
@@ -327,17 +336,16 @@ export function SelectPhotosArea(props: {
   )
 
   const handleDrop = useCallback(
-    (event: React.DragEvent) => {
+    async (event: React.DragEvent) => {
       event.preventDefault()
       event.stopPropagation()
       setIsDragOver(false)
 
       const files = Array.from(event.dataTransfer.files)
       const imageFiles = files.filter((file) => file.type.startsWith("image/"))
-      const maxSize = 2 * 1024 * 1024 // 2MB in bytes
-      const validImageFiles = imageFiles.filter((file) => file.size <= maxSize)
+      const withinCap = imageFiles.filter((file) => file.size <= MAX_INPUT_SIZE)
       const oversizedImageFiles = imageFiles.filter(
-        (file) => file.size > maxSize,
+        (file) => file.size > MAX_INPUT_SIZE,
       )
 
       if (oversizedImageFiles.length > 0) {
@@ -359,10 +367,10 @@ export function SelectPhotosArea(props: {
         }
       }
 
-      if (validImageFiles.length > 0) {
+      if (withinCap.length > 0) {
         console.log(`[SelectPhotosArea] Drag and drop file upload:`, {
-          file_count: validImageFiles.length,
-          files: validImageFiles.map((f) => ({
+          file_count: withinCap.length,
+          files: withinCap.map((f) => ({
             name: f.name,
             size: f.size,
             type: f.type,
@@ -370,7 +378,9 @@ export function SelectPhotosArea(props: {
         })
 
         if (onFileUpload) {
-          onFileUpload(validImageFiles)
+          // Downscale in the browser before uploading to keep payloads small.
+          const resized = await resizeImageFiles(withinCap, PHOTO_RESIZE)
+          onFileUpload(resized)
         }
       } else if (files.length > 0) {
         console.warn(`[SelectPhotosArea] Non-image files dropped, ignoring:`, {

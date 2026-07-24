@@ -463,7 +463,10 @@ export function CreateListingV2() {
             <Grid item xs={12}>
               <Typography color="text.secondary" variant="body2" sx={{ mb: 1 }}>
                 {t("CreateListingV2.imageHint", "Add photos to your listing")}{" "}
-                {t("CreateListingV2.imageSizeLimit", "(Max 2.5MB per image)")}
+                {t(
+                  "CreateListingV2.imageSizeLimit",
+                  "(Large images are optimized automatically)",
+                )}
               </Typography>
               <SelectPhotosArea
                 setPhotos={setPhotos}
