@@ -505,7 +505,7 @@ function WidgetCard({
           sx={{ height: "100%", p: 1.5, alignItems: "stretch" }}
         >
           <Stack spacing={1} sx={{ height: "100%" }}>
-            <WidgetPreview kind={def.preview} />
+            <WidgetPreview kind={def.preview} icon={def.icon} />
             <Box>
               <Typography variant="subtitle2" fontWeight="bold" noWrap>
                 {title}
