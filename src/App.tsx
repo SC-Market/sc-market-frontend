@@ -41,6 +41,7 @@ import { useWebVitals } from "./hooks/performance/useWebVitals"
 import { useRoutePrefetch } from "./hooks/router/useRoutePrefetch"
 import { prefetchHighPriorityRoutes } from "./router/routePrefetch"
 import { usePageTitle } from "./hooks/router/usePageTitle"
+import { useLocaleMeta } from "./hooks/router/useLocaleMeta"
 import { LandingPage } from "./pages/home/LandingPage"
 import { retryDynamicImport } from "./util/retryDynamicImport"
 
@@ -54,6 +55,8 @@ function RouterEffects() {
   useRoutePrefetch()
   // Update page title based on current route
   usePageTitle()
+  // Declare the active language to crawlers (<html lang> + og:locale)
+  useLocaleMeta()
   return null
 }
 
