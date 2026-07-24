@@ -1,0 +1,34 @@
+<!doctype html>
+<!--
+  Cloudflare Pages asset-directory 404 fallback (Option B).
+
+  WHY THIS FILE EXISTS: Cloudflare Pages treats a project with no matching file
+  as a Single Page App and serves the root /index.html with a 200 for ANY
+  unmatched path — including a missing hashed chunk under /assets/ that was
+  removed by a later deploy. The browser then receives text/html for a request
+  it expected to be JavaScript and throws "Failed to fetch dynamically imported
+  module" — and because /assets/* is served `immutable`, that bad HTML response
+  is cached hard, so the error survives even a hard refresh.
+
+  Cloudflare applies its not-found fallback relative to the directory. A 404.html
+  living INSIDE /assets/ means a missing /assets/*.js resolves to THIS file with
+  a real 404 status instead of falling through to the root SPA index.html. A 404
+  lets the dynamic import() reject cleanly, so the client stale-chunk recovery
+  (retryDynamicImport -> rate-limited reload, vite:preloadError) can finally do
+  its job. SPA routing for real page URLs (/market, /dashboard, ...) is
+  unaffected — this only scopes the /assets/ directory.
+
+  Keep it tiny and static: it is never meant to be seen by a human, only to
+  supply the correct 404 status/body for a missing build artifact.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>404 – Asset not found</title>
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <h1>404 – Not Found</h1>
+    <p>This build asset no longer exists. Please reload the application.</p>
+  </body>
+</html>
