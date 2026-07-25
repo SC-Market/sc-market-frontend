@@ -26,7 +26,9 @@ describe("DebugPanel", () => {
     setMarketVersion: mockSetMarketVersion,
     isDeveloper: true,
     hasOverride: false,
-    flags: { market_v2: false, crafting: false, wiki: false },
+    // Includes retired flags (market_v2, crafting) to prove they are filtered
+    // out, plus non-retired flags (wiki, nav_v2) which should render.
+    flags: { market_v2: false, crafting: false, wiki: false, nav_v2: false },
     overriddenFlags: [] as string[],
     setFlag: mockSetFlag,
   }
@@ -162,24 +164,28 @@ describe("DebugPanel", () => {
       localStorage.setItem("debug_panel_open", "true")
       renderWithTheme(<DebugPanel />)
 
-      // Should render switches for each flag
+      // Should render switches only for non-retired flags (wiki, nav_v2).
+      // Retired flags (market_v2, crafting) are filtered out.
       const switches = screen.getAllByRole("checkbox")
-      expect(switches.length).toBe(3) // market_v2, crafting, wiki
+      expect(switches.length).toBe(2) // wiki, nav_v2
     })
 
-    it("should display flag labels", () => {
+    it("should display non-retired flag labels and hide retired ones", () => {
       localStorage.setItem("debug_panel_open", "true")
       renderWithTheme(<DebugPanel />)
 
-      expect(screen.getByText("market V2")).toBeInTheDocument()
-      expect(screen.getByText("crafting")).toBeInTheDocument()
+      // Non-retired flags render
       expect(screen.getByText("wiki")).toBeInTheDocument()
+      expect(screen.getByText("nav V2")).toBeInTheDocument()
+      // Retired flags are filtered out of the toggle menu
+      expect(screen.queryByText("market V2")).not.toBeInTheDocument()
+      expect(screen.queryByText("crafting")).not.toBeInTheDocument()
     })
 
     it("should show Override label for overridden flags", () => {
       mockUseFeatureFlag.mockReturnValue({
         ...defaultMockReturn,
-        overriddenFlags: ["market_v2"],
+        overriddenFlags: ["wiki"],
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -205,10 +211,10 @@ describe("DebugPanel", () => {
       renderWithTheme(<DebugPanel />)
 
       const switches = screen.getAllByRole("checkbox")
-      fireEvent.click(switches[0]) // Toggle market_v2
+      fireEvent.click(switches[0]) // Toggle wiki (first non-retired flag)
 
       await waitFor(() => {
-        expect(mockSetFlag).toHaveBeenCalledWith("market_v2", true)
+        expect(mockSetFlag).toHaveBeenCalledWith("wiki", true)
       })
     })
 
