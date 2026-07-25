@@ -201,120 +201,12 @@ export default defineConfig({
           },
         ],
       },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}"],
-        runtimeCaching: [
-          // Cache navigation requests (page loads) with NetworkFirst
-          // If network fails, serve from cache (if available) or let the request fail normally
-          // Never show offline.html page
-          {
-            urlPattern: ({ request }) => request.mode === "navigate",
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "pages-v1",
-              expiration: {
-                maxEntries: 100, // Increased from 50
-                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days (increased from 1 day)
-                purgeOnQuotaError: true,
-              },
-              networkTimeoutSeconds: 3, // Faster timeout for better perceived performance
-              cacheableResponse: {
-                statuses: [0, 200], // Only cache successful responses
-              },
-            },
-          },
-          {
-            // Cache API calls - match backend API domain and exclude sensitive endpoints
-            urlPattern: ({ url }) => {
-              const isApiCall =
-                url.hostname.includes("sc-market.space") ||
-                url.hostname.includes("localhost")
-              const isApiPath = url.pathname.startsWith("/api/")
-              const isExcluded =
-                url.pathname.includes("/auth/") ||
-                url.pathname.includes("/register") ||
-                url.pathname.includes("/login") ||
-                url.pathname.includes("/logout") ||
-                url.pathname.includes("/ws") ||
-                url.pathname.includes("/admin/") ||
-                url.pathname.includes("/payment")
-
-              // Allow http: in development (localhost) and https: in production
-              const isSecure =
-                url.protocol === "https:" ||
-                (url.protocol === "http:" &&
-                  (url.hostname === "localhost" ||
-                    url.hostname === "127.0.0.1"))
-
-              return isApiCall && isApiPath && !isExcluded && isSecure
-            },
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "api-cache-v1",
-              networkTimeoutSeconds: 5,
-              expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 60 * 60 * 24,
-                purgeOnQuotaError: true,
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-          {
-            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "images-v1",
-              expiration: {
-                maxEntries: 500, // Increased from 200
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days (increased from 7 days)
-                purgeOnQuotaError: true,
-              },
-            },
-          },
-          {
-            // Cache fonts aggressively (they rarely change)
-            urlPattern: /\.(?:woff|woff2|ttf|otf|eot)$/,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "fonts-v1",
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-                purgeOnQuotaError: true,
-              },
-            },
-          },
-          {
-            // Cache CSS and JS with StaleWhileRevalidate for better updates
-            urlPattern: /\.(?:css|js)$/,
-            handler: "StaleWhileRevalidate",
-            options: {
-              cacheName: "static-assets-v1",
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
-                purgeOnQuotaError: true,
-              },
-            },
-          },
-        ],
-        // Completely disable navigateFallback - never show offline page
-        navigateFallback: undefined,
-        navigateFallbackDenylist: [
-          /^\/api/,
-          /^\/_/,
-          /^\/sw\.js/,
-          /^\/dev-sw/,
-          /^\/vite/,
-          /^\/@/,
-          /^\/manifest/,
-          /^\/workbox/,
-          /.*/, // Deny all paths - never use offline fallback
-        ],
-      },
+      // NOTE: no `workbox` block. `workbox` config only applies to the
+      // `generateSW` strategy; with `injectManifest` (above) Vite-PWA ships
+      // src/sw.ts verbatim and ignores it entirely. The SW is deliberately
+      // asset-transparent (no runtime caching, no navigation cache) — see the
+      // header comment in src/sw.ts for why. HTTP caching is handled by
+      // public/_headers instead.
       devOptions: {
         enabled: false, // Disable in dev to prevent offline page from showing
         // Set to true only when you specifically want to test PWA features
