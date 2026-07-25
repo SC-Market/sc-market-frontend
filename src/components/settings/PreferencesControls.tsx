@@ -248,11 +248,10 @@ export function PreferencesControls() {
             }}
             options={languagesWithExonyms}
             getOptionLabel={(option) => `${option.endonym} (${option.exonym})`}
-            slotProps={{
-              popper: {
-                disablePortal: true,
-              },
-            }}
+            // Portal the dropdown to <body> (default) so the full option list
+            // floats free of the parent Popover's <Paper> bounds. With
+            // disablePortal the list rendered INSIDE the Popover and got clipped
+            // by its overflow — tolerable at 3 languages, but the list is now 8.
             renderInput={(params) => (
               <TextField
                 {...params}
