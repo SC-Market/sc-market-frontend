@@ -124,8 +124,10 @@ export const ServiceListingBase = React.memo(
                       WebkitLineClamp: "6",
                       lineClamp: "6",
                       WebkitBoxOrient: "vertical",
-                      overflowY: "hidden",
+                      overflow: "hidden",
                       textOverflow: "ellipsis",
+                      lineHeight: 1.5,
+                      maxHeight: "9em",
                     }}
                   >
                     <MarkdownRender
