@@ -20,7 +20,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import ExpandMoreRounded from "@mui/icons-material/ExpandMoreRounded"
 import GroupsRounded from "@mui/icons-material/GroupsRounded"
-import { Link as RouterLink } from "react-router-dom"
+import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { isAfter, subDays } from "date-fns"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
@@ -741,8 +741,27 @@ function GroupSellers({
   gameItemName: string
 }) {
   const { t } = useTranslation()
+  const [searchParams] = useSearchParams()
+
+  // Thread the page's active quality-tier filter into the per-variant fetch so
+  // the expanded group reflects the same filtered set as the grid. The
+  // /game-items/{id}/listings endpoint accepts a single `qualityTier` only, so
+  // we forward it when the page filters to one specific tier (min === max, or a
+  // lone bound). Broader tier ranges and price bounds are NOT supported by that
+  // endpoint (see GetListingsApiArg) — those remain a known limitation of the
+  // expanded view.
+  const qualityTier = useMemo(() => {
+    const min = searchParams.get("quality_tier_min")
+    const max = searchParams.get("quality_tier_max")
+    if (min && max) return min === max ? Number(min) : undefined
+    if (min) return Number(min)
+    if (max) return Number(max)
+    return undefined
+  }, [searchParams])
+
   const { data, isLoading, error } = useGetListingsQuery({
     id: gameItemId,
+    qualityTier,
     sortBy: "price",
     sortOrder: "asc",
     pageSize: 100,
