@@ -134,6 +134,9 @@ export function ListingSearchV2() {
       languageCodes: searchParams.get('language_codes') || undefined,
       pickupMethod: (searchParams.get('pickup_method') || undefined) as "delivery" | "pickup" | "any" | undefined,
       shopSlug,
+      inStock: searchParams.get('in_stock') === 'true' ? true : undefined,
+      hasPhotos: searchParams.get('has_photos') === 'true' ? true : undefined,
+      bulkDiscount: searchParams.get('bulk_discount') === 'true' ? true : undefined,
     };
   }, [searchParams, isMobile]);
 

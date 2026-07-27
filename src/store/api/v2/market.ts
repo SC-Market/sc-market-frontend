@@ -504,6 +504,8 @@ const injectedRtkApi = api
             game_item_id: queryArg.gameItemId,
             quality_tier_min: queryArg.qualityTierMin,
             quality_tier_max: queryArg.qualityTierMax,
+            quality_value_min: queryArg.qualityValueMin,
+            quality_value_max: queryArg.qualityValueMax,
             price_min: queryArg.priceMin,
             price_max: queryArg.priceMax,
             page: queryArg.page,
@@ -516,6 +518,10 @@ const injectedRtkApi = api
             language_codes: queryArg.languageCodes,
             listing_type: queryArg.listingType,
             shop_slug: queryArg.shopSlug,
+            pickup_method: queryArg.pickupMethod,
+            in_stock: queryArg.inStock,
+            has_photos: queryArg.hasPhotos,
+            bulk_discount: queryArg.bulkDiscount,
           },
         }),
         providesTags: ["Listings V2"],
@@ -2087,6 +2093,8 @@ export type SearchListingsApiArg = {
   qualityTierMin?: number
   /** Maximum quality tier (1-5) */
   qualityTierMax?: number
+  qualityValueMin?: number
+  qualityValueMax?: number
   /** Minimum price filter */
   priceMin?: number
   /** Maximum price filter */
@@ -2111,6 +2119,10 @@ export type SearchListingsApiArg = {
   languageCodes?: string
   listingType?: "single" | "bundle" | "bulk"
   shopSlug?: string
+  pickupMethod?: "delivery" | "pickup" | "any"
+  inStock?: boolean
+  hasPhotos?: boolean
+  bulkDiscount?: boolean
 }
 export type GetMyListingsApiResponse =
   /** status 200 Updated listing with variant breakdown */ GetMyListingsResponse
