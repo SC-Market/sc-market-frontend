@@ -82,14 +82,14 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "fast-check": "^4.5.3",
-    "happy-dom": "^20.6.1",
+    "happy-dom": "^20.11.1",
     "i18next-parser": "^9.4.0",
     "jest-axe": "^10.0.0",
     "prettier": "^3.5.3",
     "rollup-plugin-visualizer": "^6.0.3",
     "tsx": "^4.21.0",
     "typescript-eslint": "^8.34.1",
-    "vite": "^7.0.0-beta.2",
+    "vite": "^7.3.6",
     "vite-plugin-circular-dependency": "^0.5.0",
     "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-svgr": "^4.3.0",
@@ -115,6 +115,22 @@
   },
   "webpackConfig": {
     "target": "web"
+  },
+  "overrides": {
+    "@babel/plugin-transform-modules-systemjs": "^8.0.1",
+    "brace-expansion": "^5.0.8",
+    "minimatch": "^10.2.6",
+    "picomatch": "^2.3.2",
+    "fast-uri": "^3.1.4",
+    "flatted": "^3.4.3",
+    "js-yaml": "^4.3.0",
+    "lodash": "^4.18.1",
+    "postcss": "^8.5.23",
+    "rollup": "^4.62.3",
+    "serialize-javascript": "^7.0.7",
+    "socket.io-parser": "^4.2.7",
+    "undici": "^7.29.0",
+    "ws": "^8.21.1"
   },
   "browserslist": {
     "production": [
