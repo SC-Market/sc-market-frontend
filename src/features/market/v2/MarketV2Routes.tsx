@@ -88,16 +88,16 @@ export function MarketV2Routes() {
   // Phase 0 redesign: route the remaining market surfaces to their redesign
   // components when the flag is on. Everything below (flag off) is untouched.
   if (flags.market_v2_redesign) {
-    // Sell wizard — create + edit modes (one adaptive form, §8.5/§8.6)
+    // Sell wizard — create mode only (one adaptive form, §8.5).
     if (pathname.startsWith("/market/create")) {
       return <SellFormRedesign />
     }
-    if (
-      pathname.startsWith("/market_edit/") ||
-      pathname.match(/^\/market\/multiple\/[^/]+\/edit$/)
-    ) {
-      return <SellFormRedesign />
-    }
+    // Edit is NOT handled by SellFormRedesign: the update contract is a diff
+    // against existing variant/lot IDs (variant_prices/lot_updates), which the
+    // create-shaped form can't express — routing edit here would silently
+    // create a duplicate listing. EditListingV2 already does update correctly
+    // with full variant parity, so edit falls through to it below (flag on or
+    // off). Revisit once the Sell form gains a real update path (§8.6).
 
     // Manage Market — one page for listings + stock (§8.4)
     if (

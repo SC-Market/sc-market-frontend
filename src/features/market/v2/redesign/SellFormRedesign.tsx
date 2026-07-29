@@ -22,7 +22,7 @@ import {
 import Grid from "@mui/material/Grid2"
 import AddRounded from "@mui/icons-material/AddRounded"
 import DeleteOutlineRounded from "@mui/icons-material/DeleteOutlineRounded"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
 import { formatPrice } from "../../../../util/formatPrice"
@@ -30,7 +30,6 @@ import {
   useSearchGameItemsQuery,
   useGetMyShopsQuery,
   useCreateListingMutation,
-  useGetListingDetailQuery,
 } from "../../../../store/api/v2/market"
 import type {
   GameItemSearchResult,
@@ -46,10 +45,13 @@ import { MARKET_PATHS } from "../../../../routes/paths"
  * item needs. Optional "price by quality" reveals an inline per-tier table;
  * optional "sell as a bundle" turns the listing into a multi-item set. Sale type
  * (fixed / auction / negotiable) is a toggle inside the form. The word "fungible"
- * never appears. Edit mode is the same form, pre-filled.
+ * never appears.
  *
- * Create submits to the real `useCreateListingMutation`. Per-quality/bundle
- * shapes that the current create payload can't fully express are noted inline.
+ * CREATE ONLY. Submits to the real `useCreateListingMutation`. Editing is NOT
+ * handled here: the update contract is a diff against existing variant/lot IDs
+ * (variant_prices/lot_updates), which this create-shaped form can't express —
+ * MarketV2Routes routes edit to EditListingV2 instead. Per-quality/bundle shapes
+ * the current create payload can't fully express are noted inline. (§8.6)
  */
 
 interface QualityRow {
@@ -71,15 +73,6 @@ export function SellFormRedesign() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const issueAlert = useAlertHook()
-  const params = useParams()
-
-  // Edit mode: /market_edit/:id or /market/multiple/:id/edit carry an id.
-  const editId = params.id
-  const isEdit = !!editId
-  const { data: editData } = useGetListingDetailQuery(
-    { id: editId! },
-    { skip: !editId },
-  )
 
   const { data: shops } = useGetMyShopsQuery()
   const sellableShops = useMemo(
@@ -122,53 +115,6 @@ export function SellFormRedesign() {
     { query: itemQuery || undefined, limit: 25 },
     { skip: !asBundle },
   )
-
-  // Prefill in edit mode.
-  useEffect(() => {
-    if (!editData) return
-    const l = editData.listing
-    setShopId(l.shop_id)
-    setTitle(l.title)
-    setDescription(l.description ?? "")
-    setQuantityUnit(l.quantity_unit ?? "unit")
-    setSaleType(l.sale_type ?? "fixed")
-    const first = editData.items[0]
-    if (first) {
-      setSelectedItem({
-        id: first.game_item.id,
-        name: first.game_item.name,
-        type: first.game_item.type,
-      })
-      const variants = first.variants ?? []
-      const totalQty = variants.reduce((s, v) => s + v.quantity, 0)
-      setQuantity(String(totalQty || 1))
-      setPrice(String(first.base_price ?? variants[0]?.price ?? ""))
-      if (variants.length > 1) {
-        setByQuality(true)
-        setQualityRows(
-          variants.map((v) => ({
-            id: nextId(),
-            tier: v.attributes.quality_tier ?? 3,
-            price: String(v.price),
-            quantity: String(v.quantity),
-          })),
-        )
-      }
-    }
-    if (editData.items.length > 1) {
-      setAsBundle(true)
-      setBundleItems(
-        editData.items.map((it) => ({
-          id: nextId(),
-          item: {
-            id: it.game_item.id,
-            name: it.game_item.name,
-            type: it.game_item.type,
-          },
-        })),
-      )
-    }
-  }, [editData])
 
   // Default the shop selection to the first sellable shop.
   useEffect(() => {
@@ -257,17 +203,11 @@ export function SellFormRedesign() {
   return (
     <Container maxWidth="md" sx={{ py: 3 }}>
       <Helmet>
-        <title>
-          {isEdit
-            ? t("SellFormRedesign.editTitle", "Edit listing")
-            : t("SellFormRedesign.title", "Sell an item")}
-        </title>
+        <title>{t("SellFormRedesign.title", "Sell an item")}</title>
       </Helmet>
 
       <Typography variant="h4" sx={{ color: "text.secondary", mb: 0.5 }}>
-        {isEdit
-          ? t("SellFormRedesign.editHeading", "Edit listing")
-          : t("SellFormRedesign.heading", "Sell an item")}
+        {t("SellFormRedesign.heading", "Sell an item")}
       </Typography>
       <Typography variant="body2" sx={{ color: "text.primary", mb: 3 }}>
         {t(
@@ -654,20 +594,9 @@ export function SellFormRedesign() {
                 disabled={!canSubmit || isCreating}
                 onClick={handleSubmit}
               >
-                {isEdit
-                  ? t("SellFormRedesign.saveChanges", "Save changes")
-                  : t("SellFormRedesign.postListing", "Post listing")}
+                {t("SellFormRedesign.postListing", "Post listing")}
               </Button>
             </Stack>
-
-            {isEdit && (
-              <Alert severity="info" variant="outlined">
-                {t(
-                  "SellFormRedesign.editNote",
-                  "Quantity and stock lots are edited on the Manage Market page. This form edits listing details.",
-                )}
-              </Alert>
-            )}
           </Stack>
         </Collapse>
 
