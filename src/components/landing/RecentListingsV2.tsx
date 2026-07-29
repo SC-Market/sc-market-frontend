@@ -14,6 +14,9 @@ export function RecentListingsV2() {
     page: 1,
     pageSize: 8,
     status: "active",
+    // Landing page is a shop window — an out-of-stock listing is a dead end for
+    // a first-time visitor, so only surface listings they can actually buy.
+    inStock: true,
     sortBy: "created_at",
     sortOrder: "desc",
   })

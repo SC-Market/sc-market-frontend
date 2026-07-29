@@ -1046,6 +1046,36 @@ function qualityChipProps(listing: ListingSearchResult): { label: string; color:
   return null
 }
 
+/** Shared visual style for the small overlay chips on a listing card. */
+export const CARD_CHIP_SX = {
+  textTransform: "uppercase" as const,
+  fontWeight: "bold" as const,
+  fontSize: "0.65rem",
+  height: 18,
+} as const
+
+/**
+ * Absolute-positioned flex column for one card corner. Stacking chips in a
+ * container (instead of pinning each chip with its own top/left and manually
+ * offsetting for siblings) means any combination of chips lays out without
+ * overlapping.
+ */
+export function cardChipStackSx(corner: "top-left" | "top-right") {
+  return {
+    position: "absolute" as const,
+    top: 4,
+    ...(corner === "top-left" ? { left: 4 } : { right: 4 }),
+    zIndex: 5,
+    display: "flex",
+    flexDirection: "column" as const,
+    alignItems: corner === "top-left" ? "flex-start" : "flex-end",
+    gap: 0.5,
+    // Never cover the card's own click target.
+    pointerEvents: "none" as const,
+    maxWidth: "calc(50% - 8px)",
+  }
+}
+
 export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { t, i18n } = useTranslation();
@@ -1071,95 +1101,64 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
             sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
           >
             <Card sx={{ height: 300, position: "relative" }}>
-              {isNew && (
-                <Chip
-                  label="NEW"
-                  color="secondary"
-                  size="small"
-                  sx={{
-                    position: "absolute",
-                    top: 4,
-                    left: 4,
-                    zIndex: 2,
-                    textTransform: "uppercase",
-                    fontWeight: "bold",
-                    fontSize: "0.65rem",
-                    height: 18,
-                  }}
-                />
-              )}
-              {listing.quantity_available === 0 && (
-                <Chip
-                  label="OUT OF STOCK"
-                  color="error"
-                  size="small"
-                  sx={{
-                    position: "absolute",
-                    top: 4,
-                    right: 4,
-                    zIndex: 2,
-                    textTransform: "uppercase",
-                    fontWeight: "bold",
-                    fontSize: "0.65rem",
-                    height: 18,
-                  }}
-                />
-              )}
-              {listing.has_bulk_discount && (
-                <Chip
-                  label="BULK DISCOUNT"
-                  color="info"
-                  size="small"
-                  sx={{
-                    position: "absolute",
-                    bottom: 4,
-                    left: 4,
-                    zIndex: 2,
-                    textTransform: "uppercase",
-                    fontWeight: "bold",
-                    fontSize: "0.65rem",
-                    height: 18,
-                  }}
-                />
-              )}
-              {(() => {
-                const qc = qualityChipProps(listing)
-                return qc && (
+              {/* Corner chip stacks. Each corner is a flex column so chips can
+                  never overlap regardless of which combination is present —
+                  previously quality and NEW were both pinned to top-left for
+                  out-of-stock listings, and internal/bulk shared bottom-right
+                  via hand-computed offsets. */}
+              <Box sx={cardChipStackSx("top-left")}>
+                {isNew && (
                   <Chip
-                    label={qc.label}
+                    label={t("market.new", "NEW")}
+                    color="secondary"
                     size="small"
-                    sx={{
-                      position: "absolute",
-                      top: 4,
-                      right: listing.quantity_available === 0 ? undefined : 4,
-                      left: listing.quantity_available === 0 ? 4 : undefined,
-                      zIndex: 2,
-                      fontWeight: "bold",
-                      fontSize: "0.65rem",
-                      height: 18,
-                      bgcolor: qc.color,
-                      color: "#fff",
-                    }}
+                    sx={CARD_CHIP_SX}
                   />
-                )
-              })()}
-              {listing.visibility === "private" && (
-                <Chip
-                  label={t("market.internalListing")}
-                  color="warning"
-                  size="small"
-                  sx={{
-                    position: "absolute",
-                    bottom: listing.has_bulk_discount ? 28 : 4,
-                    right: 4,
-                    zIndex: 2,
-                    textTransform: "uppercase",
-                    fontWeight: "bold",
-                    fontSize: "0.65rem",
-                    height: 18,
-                  }}
-                />
-              )}
+                )}
+                {listing.has_bulk_discount && (
+                  <Chip
+                    label={t("market.bulkDiscount", "BULK DISCOUNT")}
+                    color="info"
+                    size="small"
+                    sx={CARD_CHIP_SX}
+                  />
+                )}
+              </Box>
+              <Box sx={cardChipStackSx("top-right")}>
+                {(() => {
+                  const qc = qualityChipProps(listing)
+                  return (
+                    qc && (
+                      <Chip
+                        label={qc.label}
+                        size="small"
+                        sx={{
+                          ...CARD_CHIP_SX,
+                          textTransform: "none",
+                          bgcolor: qc.color,
+                          color: "#fff",
+                        }}
+                      />
+                    )
+                  )
+                })()}
+                {listing.quantity_available === 0 && (
+                  <Chip
+                    label={t("market.outOfStock", "OUT OF STOCK")}
+                    color="error"
+                    size="small"
+                    sx={CARD_CHIP_SX}
+                  />
+                )}
+                {listing.visibility === "private" && (
+                  <Chip
+                    label={t("market.internalListing")}
+                    color="warning"
+                    size="small"
+                    sx={CARD_CHIP_SX}
+                  />
+                )}
+              </Box>
               <CardMedia
                 component="img"
                 loading="lazy"

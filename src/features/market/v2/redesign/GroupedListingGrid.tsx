@@ -41,7 +41,12 @@ import { EmptyListings } from "../../../../components/empty-states"
 import { MarketListingRating } from "../../../../components/rating/ListingRating"
 import { isFungibleType } from "./fungibility"
 import { useFlip } from "./useFlip"
-import { ListingCardV2, type ListingGridProps } from "../ListingSearchV2"
+import {
+  ListingCardV2,
+  CARD_CHIP_SX,
+  cardChipStackSx,
+  type ListingGridProps,
+} from "../ListingSearchV2"
 
 /**
  * GroupedListingGrid — market_v2_redesign variant of the search grid.
@@ -408,74 +413,50 @@ function GroupCard({
                 : {}),
             }}
           >
-            <Chip
-              icon={<GroupsRounded sx={{ fontSize: "0.8rem !important" }} />}
-              label={t("MarketRedesign.sellersCount", "{{count}} sellers", {
-                count: sellerCount,
-              })}
-              color="secondary"
-              size="small"
-              sx={{
-                position: "absolute",
-                top: 4,
-                left: 4,
-                zIndex: 2,
-                fontWeight: "bold",
-                fontSize: "0.65rem",
-                height: 18,
-              }}
-            />
-            {qc && (
+            {/* Same corner-stack approach as ListingCardV2 so the group card's
+                chips can't collide either (quality and OUT OF STOCK previously
+                shared top-right via a hand-computed 26px offset). */}
+            <Box sx={cardChipStackSx("top-left")}>
               <Chip
-                label={qc.label}
+                icon={<GroupsRounded sx={{ fontSize: "0.8rem !important" }} />}
+                label={t("MarketRedesign.sellersCount", "{{count}} sellers", {
+                  count: sellerCount,
+                })}
+                color="secondary"
                 size="small"
-                sx={{
-                  position: "absolute",
-                  top: 4,
-                  right: 4,
-                  zIndex: 2,
-                  fontWeight: "bold",
-                  fontSize: "0.65rem",
-                  height: 18,
-                  bgcolor: qc.color,
-                  color: "#fff",
-                }}
+                sx={{ ...CARD_CHIP_SX, textTransform: "none" }}
               />
-            )}
-            {allOutOfStock && (
-              <Chip
-                label={t("market.outOfStock", "OUT OF STOCK")}
-                color="error"
-                size="small"
-                sx={{
-                  position: "absolute",
-                  top: 26,
-                  right: 4,
-                  zIndex: 2,
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                  fontSize: "0.65rem",
-                  height: 18,
-                }}
-              />
-            )}
-            {anyBulkDiscount && (
-              <Chip
-                label={t("market.bulkDiscount", "BULK DISCOUNT")}
-                color="info"
-                size="small"
-                sx={{
-                  position: "absolute",
-                  bottom: 4,
-                  left: 4,
-                  zIndex: 2,
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                  fontSize: "0.65rem",
-                  height: 18,
-                }}
-              />
-            )}
+              {anyBulkDiscount && (
+                <Chip
+                  label={t("market.bulkDiscount", "BULK DISCOUNT")}
+                  color="info"
+                  size="small"
+                  sx={CARD_CHIP_SX}
+                />
+              )}
+            </Box>
+            <Box sx={cardChipStackSx("top-right")}>
+              {qc && (
+                <Chip
+                  label={qc.label}
+                  size="small"
+                  sx={{
+                    ...CARD_CHIP_SX,
+                    textTransform: "none",
+                    bgcolor: qc.color,
+                    color: "#fff",
+                  }}
+                />
+              )}
+              {allOutOfStock && (
+                <Chip
+                  label={t("market.outOfStock", "OUT OF STOCK")}
+                  color="error"
+                  size="small"
+                  sx={CARD_CHIP_SX}
+                />
+              )}
+            </Box>
             {/* Match ListingCardV2 exactly: dark mode = full-bleed image with a
                 gradient scrim and text overlaid at the bottom; light mode = a
                 fixed-height image with the text in normal flow BELOW it (no
