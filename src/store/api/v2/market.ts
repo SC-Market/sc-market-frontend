@@ -463,13 +463,6 @@ const injectedRtkApi = api
         query: () => ({ url: `/onboarding/complete`, method: "POST" }),
         invalidatesTags: ["Onboarding"],
       }),
-      getOfferSession: build.query<
-        GetOfferSessionApiResponse,
-        GetOfferSessionApiArg
-      >({
-        query: (queryArg) => ({ url: `/offers/${queryArg.sessionId}` }),
-        providesTags: ["Offers V2"],
-      }),
       searchOffers: build.query<SearchOffersApiResponse, SearchOffersApiArg>({
         query: (queryArg) => ({
           url: `/offers/search`,
@@ -480,6 +473,13 @@ const injectedRtkApi = api
             page_size: queryArg.pageSize,
           },
         }),
+        providesTags: ["Offers V2"],
+      }),
+      getOfferSession: build.query<
+        GetOfferSessionApiResponse,
+        GetOfferSessionApiArg
+      >({
+        query: (queryArg) => ({ url: `/offers/${queryArg.sessionId}` }),
         providesTags: ["Offers V2"],
       }),
       createListing: build.mutation<
@@ -999,12 +999,6 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Resources"],
       }),
-      getResource: build.query<GetResourceApiResponse, GetResourceApiArg>({
-        query: (queryArg) => ({
-          url: `/game-data/resources/${queryArg.resourceId}`,
-        }),
-        providesTags: ["Game Data - Resources"],
-      }),
       getResourceCategories: build.query<
         GetResourceCategoriesApiResponse,
         GetResourceCategoriesApiArg
@@ -1014,6 +1008,12 @@ const injectedRtkApi = api
           params: {
             version_id: queryArg.versionId,
           },
+        }),
+        providesTags: ["Game Data - Resources"],
+      }),
+      getResource: build.query<GetResourceApiResponse, GetResourceApiArg>({
+        query: (queryArg) => ({
+          url: `/game-data/resources/${queryArg.resourceId}`,
         }),
         providesTags: ["Game Data - Resources"],
       }),
@@ -1051,6 +1051,36 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Missions"],
       }),
+      getMissionChains: build.query<
+        GetMissionChainsApiResponse,
+        GetMissionChainsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/missions/chains`,
+          params: {
+            version_id: queryArg.versionId,
+          },
+        }),
+        providesTags: ["Game Data - Missions"],
+      }),
+      getReputationRanks: build.query<
+        GetReputationRanksApiResponse,
+        GetReputationRanksApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/missions/reputation-ranks`,
+          params: {
+            scope_code: queryArg.scopeCode,
+          },
+        }),
+        providesTags: ["Game Data - Missions"],
+      }),
+      getGameEvents: build.query<GetGameEventsApiResponse, GetGameEventsApiArg>(
+        {
+          query: () => ({ url: `/game-data/missions/events` }),
+          providesTags: ["Game Data - Missions"],
+        },
+      ),
       getMissionDetail: build.query<
         GetMissionDetailApiResponse,
         GetMissionDetailApiArg
@@ -1097,36 +1127,6 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Game Data - Missions"],
       }),
-      getMissionChains: build.query<
-        GetMissionChainsApiResponse,
-        GetMissionChainsApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/game-data/missions/chains`,
-          params: {
-            version_id: queryArg.versionId,
-          },
-        }),
-        providesTags: ["Game Data - Missions"],
-      }),
-      getReputationRanks: build.query<
-        GetReputationRanksApiResponse,
-        GetReputationRanksApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/game-data/missions/reputation-ranks`,
-          params: {
-            scope_code: queryArg.scopeCode,
-          },
-        }),
-        providesTags: ["Game Data - Missions"],
-      }),
-      getGameEvents: build.query<GetGameEventsApiResponse, GetGameEventsApiArg>(
-        {
-          query: () => ({ url: `/game-data/missions/events` }),
-          providesTags: ["Game Data - Missions"],
-        },
-      ),
       searchOres: build.query<SearchOresApiResponse, SearchOresApiArg>({
         query: (queryArg) => ({
           url: `/game-data/mining/ores`,
@@ -1277,6 +1277,36 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
+      getBlueprintCategories: build.query<
+        GetBlueprintCategoriesApiResponse,
+        GetBlueprintCategoriesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/blueprints/categories`,
+          params: {
+            version_id: queryArg.versionId,
+          },
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
+      getUserBlueprintInventory: build.query<
+        GetUserBlueprintInventoryApiResponse,
+        GetUserBlueprintInventoryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/blueprints/inventory`,
+          params: {
+            item_category: queryArg.itemCategory,
+            rarity: queryArg.rarity,
+            version_id: queryArg.versionId,
+            sort_by: queryArg.sortBy,
+            sort_order: queryArg.sortOrder,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
       getBlueprintDetail: build.query<
         GetBlueprintDetailApiResponse,
         GetBlueprintDetailApiArg
@@ -1327,36 +1357,6 @@ const injectedRtkApi = api
           method: "DELETE",
         }),
         invalidatesTags: ["Game Data - Blueprints"],
-      }),
-      getBlueprintCategories: build.query<
-        GetBlueprintCategoriesApiResponse,
-        GetBlueprintCategoriesApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/game-data/blueprints/categories`,
-          params: {
-            version_id: queryArg.versionId,
-          },
-        }),
-        providesTags: ["Game Data - Blueprints"],
-      }),
-      getUserBlueprintInventory: build.query<
-        GetUserBlueprintInventoryApiResponse,
-        GetUserBlueprintInventoryApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/game-data/blueprints/inventory`,
-          params: {
-            item_category: queryArg.itemCategory,
-            rarity: queryArg.rarity,
-            version_id: queryArg.versionId,
-            sort_by: queryArg.sortBy,
-            sort_order: queryArg.sortOrder,
-            page: queryArg.page,
-            page_size: queryArg.pageSize,
-          },
-        }),
-        providesTags: ["Game Data - Blueprints"],
       }),
       getOrgBlueprintOwners: build.query<
         GetOrgBlueprintOwnersApiResponse,
@@ -2063,11 +2063,6 @@ export type CompleteOnboardingApiResponse = /** status 200 Ok */ {
   completedAt: string
 }
 export type CompleteOnboardingApiArg = void
-export type GetOfferSessionApiResponse =
-  /** status 200 Ok */ GetOfferSessionV2Response
-export type GetOfferSessionApiArg = {
-  sessionId: string
-}
 export type SearchOffersApiResponse =
   /** status 200 Ok */ SearchOffersV2Response
 export type SearchOffersApiArg = {
@@ -2075,6 +2070,11 @@ export type SearchOffersApiArg = {
   status?: "active" | "closed"
   page?: number
   pageSize?: number
+}
+export type GetOfferSessionApiResponse =
+  /** status 200 Ok */ GetOfferSessionV2Response
+export type GetOfferSessionApiArg = {
+  sessionId: string
 }
 export type CreateListingApiResponse =
   /** status 200 Created listing with listing_id */ CreateListingResponse
@@ -2507,17 +2507,17 @@ export type SearchResourcesApiArg = {
   /** Results per page (default: 20, max: 100) */
   pageSize?: number
 }
-export type GetResourceApiResponse =
-  /** status 200 Complete resource details with blueprints and locations */ ResourceDetailResponse
-export type GetResourceApiArg = {
-  /** Resource UUID */
-  resourceId: string
-}
 export type GetResourceCategoriesApiResponse =
   /** status 200 Array of categories with counts */ ResourceCategory[]
 export type GetResourceCategoriesApiArg = {
   /** Optional game version ID (defaults to active LIVE version) */
   versionId?: string
+}
+export type GetResourceApiResponse =
+  /** status 200 Complete resource details with blueprints and locations */ ResourceDetailResponse
+export type GetResourceApiArg = {
+  /** Resource UUID */
+  resourceId: string
 }
 export type SearchMissionsApiResponse =
   /** status 200 Mission search results with pagination */ SearchMissionsResponse
@@ -2568,6 +2568,31 @@ export type SearchMissionsApiArg = {
   /** Results per page (default: 20, max: 100) */
   pageSize?: number
 }
+export type GetMissionChainsApiResponse =
+  /** status 200 Array of mission chains */ {
+    total_missions: number
+    chain_missions: Mission[]
+    starter_mission: Mission
+    chain_name: string
+    chain_id: string
+  }[]
+export type GetMissionChainsApiArg = {
+  /** Game version ID (defaults to active LIVE version) */
+  versionId?: string
+}
+export type GetReputationRanksApiResponse = /** status 200 Ok */ {
+  display_name: string
+  scopes: string[]
+  ranks: ReputationRank[]
+}
+export type GetReputationRanksApiArg = {
+  /** The reputation scope code */
+  scopeCode?: string
+}
+export type GetGameEventsApiResponse = /** status 200 Ok */ {
+  events: GameEvent[]
+}
+export type GetGameEventsApiArg = void
 export type GetMissionDetailApiResponse =
   /** status 200 Complete mission details with reward pools */ MissionDetailResponse
 export type GetMissionDetailApiArg = {
@@ -2613,31 +2638,6 @@ export type RateMissionApiArg = {
     difficulty_rating: number
   }
 }
-export type GetMissionChainsApiResponse =
-  /** status 200 Array of mission chains */ {
-    total_missions: number
-    chain_missions: Mission[]
-    starter_mission: Mission
-    chain_name: string
-    chain_id: string
-  }[]
-export type GetMissionChainsApiArg = {
-  /** Game version ID (defaults to active LIVE version) */
-  versionId?: string
-}
-export type GetReputationRanksApiResponse = /** status 200 Ok */ {
-  display_name: string
-  scopes: string[]
-  ranks: ReputationRank[]
-}
-export type GetReputationRanksApiArg = {
-  /** The reputation scope code */
-  scopeCode?: string
-}
-export type GetGameEventsApiResponse = /** status 200 Ok */ {
-  events: GameEvent[]
-}
-export type GetGameEventsApiArg = void
 export type SearchOresApiResponse = /** status 200 Ok */ SearchOresResponse
 export type SearchOresApiArg = {
   /** Search ore name */
@@ -2761,49 +2761,6 @@ export type SearchBlueprintsApiArg = {
   /** Results per page (default: 20, max: 100) */
   pageSize?: number
 }
-export type GetBlueprintDetailApiResponse =
-  /** status 200 Complete blueprint details with ingredients and missions */ BlueprintDetailResponse
-export type GetBlueprintDetailApiArg = {
-  /** Blueprint UUID */
-  blueprintId: string
-}
-export type GetBlueprintDetailByCodeApiResponse =
-  /** status 200 Ok */ BlueprintDetailResponse
-export type GetBlueprintDetailByCodeApiArg = {
-  /** The blueprint code string */
-  blueprintCode: string
-}
-export type GetBlueprintMissionsApiResponse =
-  /** status 200 Array of missions that reward this blueprint */ MissionRewardingBlueprint[]
-export type GetBlueprintMissionsApiArg = {
-  /** Blueprint UUID */
-  blueprintId: string
-  /** Optional game version ID */
-  versionId?: string
-}
-export type AddBlueprintToInventoryApiResponse =
-  /** status 200 Success response with inventory ID */ {
-    inventory_id: string
-    success: boolean
-  }
-export type AddBlueprintToInventoryApiArg = {
-  /** Blueprint UUID */
-  blueprintId: string
-  /** Acquisition details */
-  body: {
-    acquisition_notes?: string
-    acquisition_location?: string
-    acquisition_method?: string
-  }
-}
-export type RemoveBlueprintFromInventoryApiResponse =
-  /** status 200 Success response */ {
-    success: boolean
-  }
-export type RemoveBlueprintFromInventoryApiArg = {
-  /** Blueprint UUID */
-  blueprintId: string
-}
 export type GetBlueprintCategoriesApiResponse =
   /** status 200 Array of categories with counts */ BlueprintCategory[]
 export type GetBlueprintCategoriesApiArg = {
@@ -2850,6 +2807,49 @@ export type GetUserBlueprintInventoryApiArg = {
   page?: number
   /** Results per page (default: 50, max: 100) */
   pageSize?: number
+}
+export type GetBlueprintDetailApiResponse =
+  /** status 200 Complete blueprint details with ingredients and missions */ BlueprintDetailResponse
+export type GetBlueprintDetailApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
+}
+export type GetBlueprintDetailByCodeApiResponse =
+  /** status 200 Ok */ BlueprintDetailResponse
+export type GetBlueprintDetailByCodeApiArg = {
+  /** The blueprint code string */
+  blueprintCode: string
+}
+export type GetBlueprintMissionsApiResponse =
+  /** status 200 Array of missions that reward this blueprint */ MissionRewardingBlueprint[]
+export type GetBlueprintMissionsApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
+  /** Optional game version ID */
+  versionId?: string
+}
+export type AddBlueprintToInventoryApiResponse =
+  /** status 200 Success response with inventory ID */ {
+    inventory_id: string
+    success: boolean
+  }
+export type AddBlueprintToInventoryApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
+  /** Acquisition details */
+  body: {
+    acquisition_notes?: string
+    acquisition_location?: string
+    acquisition_method?: string
+  }
+}
+export type RemoveBlueprintFromInventoryApiResponse =
+  /** status 200 Success response */ {
+    success: boolean
+  }
+export type RemoveBlueprintFromInventoryApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
 }
 export type GetOrgBlueprintOwnersApiResponse = /** status 200 Ok */ {
   members: {
@@ -3926,23 +3926,6 @@ export type OfferAvailability = {
   customer: DbAvailabilityEntry[] | null
   assigned: DbAvailabilityEntry[] | null
 }
-export type GetOfferSessionV2Response = {
-  session_id: string
-  status: string
-  created_at: string
-  order_id?: string
-  contract_id?: string | null
-  discord_thread_id?: string | null
-  discord_server_id?: string | null
-  discord_invite?: string | null
-  customer: MinimalUser
-  assigned_to: MinimalUser | null
-  contractor: MinimalContractor | null
-  /** Shop slug for the seller — use to filter listings in counteroffers */
-  shop_slug?: string | null
-  offers: OfferV2[]
-  availability?: OfferAvailability | null
-}
 export type OfferSessionV2 = {
   session_id: string
   status: string
@@ -3965,6 +3948,23 @@ export type SearchOffersV2Response = {
   total: number
   page: number
   page_size: number
+}
+export type GetOfferSessionV2Response = {
+  session_id: string
+  status: string
+  created_at: string
+  order_id?: string
+  contract_id?: string | null
+  discord_thread_id?: string | null
+  discord_server_id?: string | null
+  discord_invite?: string | null
+  customer: MinimalUser
+  assigned_to: MinimalUser | null
+  contractor: MinimalContractor | null
+  /** Shop slug for the seller — use to filter listings in counteroffers */
+  shop_slug?: string | null
+  offers: OfferV2[]
+  availability?: OfferAvailability | null
 }
 export type CreateListingResponse = {
   listing_id: string
@@ -4366,7 +4366,7 @@ export type ImportSource =
   | "uex-attributes"
   | "shop-inventories"
 export type JobStatus = "running" | "completed" | "failed"
-export type RecordStringAny = {
+export type RecordStringUnknown = {
   [key: string]: any
 }
 export type ImportJob = {
@@ -4375,7 +4375,9 @@ export type ImportJob = {
   status: JobStatus
   startedAt: string
   completedAt: string | null
-  result: RecordStringAny | null
+  /** Free-form summary emitted by the import runner. Each source returns a
+    different shape, so this is only logged and serialised — never indexed. */
+  result: RecordStringUnknown | null
   error: string | null
 }
 export type ImageUploadResponse = {
@@ -4666,6 +4668,9 @@ export type SearchWikiItemsResponse = {
   page: number
   page_size: number
 }
+export type RecordStringString = {
+  [key: string]: string
+}
 export type BlueprintReference = {
   blueprint_id: string
   blueprint_name: string
@@ -4701,7 +4706,8 @@ export type WikiItemDetail = {
   p4k_id?: string
   p4k_file?: string
   name_key?: string
-  attributes: RecordStringAny
+  /** Key/value attributes from game_item_attributes (values are stored as text) */
+  attributes: RecordStringString
   craftable_from: BlueprintReference[]
   rewarded_by: MissionRewardReference[]
   market_stats: MarketStats
@@ -4731,8 +4737,10 @@ export type WikiShipDetail = {
   description?: string
   movement_class?: string
   image_url?: string
-  default_loadout?: any
-  attributes: RecordStringAny
+  /** Raw `default_loadout` attribute value from game_item_attributes (stored as text) */
+  default_loadout?: string
+  /** Key/value attributes from game_item_attributes (values are stored as text) */
+  attributes: RecordStringString
   crew_size?: number
   career?: string
   role?: string
@@ -4873,6 +4881,14 @@ export type SearchResourcesResponse = {
   /** Page size */
   page_size: number
 }
+export type ResourceCategory = {
+  /** Category name */
+  category: string
+  /** Subcategory name */
+  subcategory?: string
+  /** Number of resources in this category */
+  count: number
+}
 export type MiningLocation = {
   /** Star system */
   star_system?: string
@@ -4942,14 +4958,6 @@ export type ResourceDetailResponse = {
     max_price?: number
     min_price?: number
   }
-}
-export type ResourceCategory = {
-  /** Category name */
-  category: string
-  /** Subcategory name */
-  subcategory?: string
-  /** Number of resources in this category */
-  count: number
 }
 export type HaulingOrder = {
   resource_name: string
@@ -5026,9 +5034,6 @@ export type ItemReward = {
   name: string
   ref: string
 }
-export type RecordStringString = {
-  [key: string]: string
-}
 export type Mission = {
   mission_id: string
   version_id: string
@@ -5056,7 +5061,8 @@ export type Mission = {
   is_chain_starter: boolean
   is_chain_mission: boolean
   is_unique_mission: boolean
-  prerequisite_missions?: any
+  /** Mission UUIDs that must be completed first */
+  prerequisite_missions?: string[]
   estimated_uec_per_hour?: number
   estimated_rep_per_hour?: number
   rank_index?: number
@@ -5108,6 +5114,21 @@ export type Mission = {
   is_verified: boolean
   created_at: string
   updated_at: string
+}
+export type ReputationRank = {
+  scope_code: string
+  scope_display_name: string
+  standing_code: string
+  standing_display_name: string
+  threshold: number
+  ceiling: number
+  rank_index: number
+}
+export type GameEvent = {
+  event_id: string
+  event_code: string
+  event_name: string
+  mission_count: number
 }
 export type MissionBlueprintReward = {
   /** Blueprint UUID */
@@ -5233,21 +5254,6 @@ export type BlueprintDetail = {
   drop_probability: number
   /** Is guaranteed reward */
   is_guaranteed: boolean
-}
-export type ReputationRank = {
-  scope_code: string
-  scope_display_name: string
-  standing_code: string
-  standing_display_name: string
-  threshold: number
-  ceiling: number
-  rank_index: number
-}
-export type GameEvent = {
-  event_id: string
-  event_code: string
-  event_name: string
-  mission_count: number
 }
 export type OreTopLocation = {
   name: string
@@ -5673,6 +5679,14 @@ export type SearchBlueprintsResponse = {
   /** Page size */
   page_size: number
 }
+export type BlueprintCategory = {
+  /** Category name */
+  category: string
+  /** Subcategory name */
+  subcategory?: string
+  /** Number of blueprints in this category */
+  count: number
+}
 export type Blueprint = {
   blueprint_id: string
   version_id: string
@@ -5807,14 +5821,6 @@ export type BlueprintDetailResponse = {
   user_owns?: boolean
   /** User acquisition data */
   user_acquisition?: UserBlueprintAcquisition
-}
-export type BlueprintCategory = {
-  /** Category name */
-  category: string
-  /** Subcategory name */
-  subcategory?: string
-  /** Number of blueprints in this category */
-  count: number
 }
 export type CraftableBlueprintResult = {
   blueprint_id: string
@@ -6475,8 +6481,8 @@ export const {
   useGetOrdersByListingQuery,
   useGetOnboardingStatusQuery,
   useCompleteOnboardingMutation,
-  useGetOfferSessionQuery,
   useSearchOffersQuery,
+  useGetOfferSessionQuery,
   useCreateListingMutation,
   useSearchListingsQuery,
   useGetMyListingsQuery,
@@ -6528,17 +6534,17 @@ export const {
   useGetActiveVersionsQuery,
   useSelectVersionMutation,
   useSearchResourcesQuery,
-  useGetResourceQuery,
   useGetResourceCategoriesQuery,
+  useGetResourceQuery,
   useSearchMissionsQuery,
+  useGetMissionChainsQuery,
+  useGetReputationRanksQuery,
+  useGetGameEventsQuery,
   useGetMissionDetailQuery,
   useGetMissionDetailByCodeQuery,
   useGetMissionBlueprintsQuery,
   useCompleteMissionMutation,
   useRateMissionMutation,
-  useGetMissionChainsQuery,
-  useGetReputationRanksQuery,
-  useGetGameEventsQuery,
   useSearchOresQuery,
   useGetOreDetailQuery,
   useSearchLocationsQuery,
@@ -6551,13 +6557,13 @@ export const {
   useGetCraftableItemsQuery,
   useGetCraftingStatisticsQuery,
   useSearchBlueprintsQuery,
+  useGetBlueprintCategoriesQuery,
+  useGetUserBlueprintInventoryQuery,
   useGetBlueprintDetailQuery,
   useGetBlueprintDetailByCodeQuery,
   useGetBlueprintMissionsQuery,
   useAddBlueprintToInventoryMutation,
   useRemoveBlueprintFromInventoryMutation,
-  useGetBlueprintCategoriesQuery,
-  useGetUserBlueprintInventoryQuery,
   useGetOrgBlueprintOwnersQuery,
   useFindCraftableBlueprintsMutation,
   useGetFeatureFlagQuery,
