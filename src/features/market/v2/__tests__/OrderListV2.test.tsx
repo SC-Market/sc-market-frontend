@@ -18,10 +18,20 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { OrderListV2 } from "../OrderListV2"
 import { marketV2Api } from "../../../../store/api/v2/market"
+import type { OrderPreview } from "../../../../store/api/v2/market"
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../../__tests__/rtkQueryMocks"
+
+type MarketV2Module = typeof import("../../../../store/api/v2/market")
 
 // Mock the RTK Query hook
 vi.mock("../../../../store/api/v2/market", async () => {
-  const actual = await vi.importActual("../../../../store/api/v2/market")
+  const actual = await vi.importActual<MarketV2Module>(
+    "../../../../store/api/v2/market",
+  )
   return {
     ...actual,
     useGetOrdersQuery: vi.fn(),
@@ -57,11 +67,9 @@ describe("OrderListV2", () => {
   })
 
   it("renders loading state", () => {
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      queryLoading<typeof marketV2Api.endpoints.getOrders>(),
+    )
 
     renderWithProviders(<OrderListV2 />)
 
@@ -69,11 +77,12 @@ describe("OrderListV2", () => {
   })
 
   it("renders error state", () => {
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      error: { status: 500, data: { message: "Server error" } },
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      queryError<typeof marketV2Api.endpoints.getOrders>({
+        status: 500,
+        data: { message: "Server error" },
+      }),
+    )
 
     renderWithProviders(<OrderListV2 />)
 
@@ -81,11 +90,11 @@ describe("OrderListV2", () => {
   })
 
   it("renders empty state when no orders", () => {
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: [], total: 0, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: [], total: 0, page: 1, page_size: 20 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 />)
 
@@ -93,7 +102,7 @@ describe("OrderListV2", () => {
   })
 
   it("renders orders list with quality tier information", async () => {
-    const mockOrders = [
+    const mockOrders: OrderPreview[] = [
       {
         order_id: "order-1",
         title: "Test Order 1",
@@ -128,11 +137,11 @@ describe("OrderListV2", () => {
       },
     ]
 
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: mockOrders, total: 2, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: mockOrders, total: 2, page: 1, page_size: 20 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 />)
 
@@ -146,7 +155,7 @@ describe("OrderListV2", () => {
   })
 
   it("renders orders without quality tier when not specified", async () => {
-    const mockOrders = [
+    const mockOrders: OrderPreview[] = [
       {
         order_id: "order-1",
         title: "Test Order Without Quality",
@@ -165,11 +174,11 @@ describe("OrderListV2", () => {
       },
     ]
 
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: mockOrders, total: 1, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: mockOrders, total: 1, page: 1, page_size: 20 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 />)
 
@@ -180,11 +189,11 @@ describe("OrderListV2", () => {
   })
 
   it("passes quality tier filters to API", () => {
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: [], total: 0, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: [], total: 0, page: 1, page_size: 20 },
+      ),
+    )
 
     // Requirement 45.5: Filter orders by quality tier
     renderWithProviders(
@@ -200,11 +209,11 @@ describe("OrderListV2", () => {
   })
 
   it("passes status filter to API", () => {
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: [], total: 0, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: [], total: 0, page: 1, page_size: 20 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 status="completed" />)
 
@@ -216,11 +225,11 @@ describe("OrderListV2", () => {
   })
 
   it("passes role filter to API", () => {
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: [], total: 0, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: [], total: 0, page: 1, page_size: 20 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 role="buyer" />)
 
@@ -232,11 +241,11 @@ describe("OrderListV2", () => {
   })
 
   it("passes pagination parameters to API", () => {
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: [], total: 0, page: 2, page_size: 50 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: [], total: 0, page: 2, page_size: 50 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 page={2} pageSize={50} />)
 
@@ -249,7 +258,7 @@ describe("OrderListV2", () => {
   })
 
   it("renders with optional title", async () => {
-    const mockOrders = [
+    const mockOrders: OrderPreview[] = [
       {
         order_id: "order-1",
         title: "Test Order",
@@ -268,11 +277,11 @@ describe("OrderListV2", () => {
       },
     ]
 
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: mockOrders, total: 1, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: mockOrders, total: 1, page: 1, page_size: 20 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 title="My Orders" />)
 
@@ -282,7 +291,7 @@ describe("OrderListV2", () => {
   })
 
   it("displays shop info when role is buyer", async () => {
-    const mockOrders = [
+    const mockOrders: OrderPreview[] = [
       {
         order_id: "order-1",
         title: "Test Order",
@@ -301,11 +310,11 @@ describe("OrderListV2", () => {
       },
     ]
 
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: mockOrders, total: 1, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: mockOrders, total: 1, page: 1, page_size: 20 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 role="buyer" />)
 
@@ -315,7 +324,7 @@ describe("OrderListV2", () => {
   })
 
   it("displays buyer info when role is seller", async () => {
-    const mockOrders = [
+    const mockOrders: OrderPreview[] = [
       {
         order_id: "order-1",
         title: "Test Order",
@@ -334,11 +343,11 @@ describe("OrderListV2", () => {
       },
     ]
 
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: mockOrders, total: 1, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: mockOrders, total: 1, page: 1, page_size: 20 },
+      ),
+    )
 
     renderWithProviders(<OrderListV2 role="seller" />)
 
@@ -348,7 +357,7 @@ describe("OrderListV2", () => {
   })
 
   it("maintains visual parity with V1 OrderList component", async () => {
-    const mockOrders = [
+    const mockOrders: OrderPreview[] = [
       {
         order_id: "order-1",
         title: "Test Order",
@@ -367,11 +376,11 @@ describe("OrderListV2", () => {
       },
     ]
 
-    vi.mocked(useGetOrdersQuery).mockReturnValue({
-      data: { orders: mockOrders, total: 1, page: 1, page_size: 20 },
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrdersQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrders>(
+        { orders: mockOrders, total: 1, page: 1, page_size: 20 },
+      ),
+    )
 
     const { container } = renderWithProviders(<OrderListV2 />)
 
@@ -396,11 +405,11 @@ describe("OrderListV2", () => {
 
   describe("Quality Tier Filtering (Requirement 45.12)", () => {
     it("filters orders by minimum quality tier", () => {
-      vi.mocked(useGetOrdersQuery).mockReturnValue({
-        data: { orders: [], total: 0, page: 1, page_size: 20 },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrdersQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrders>(
+          { orders: [], total: 0, page: 1, page_size: 20 },
+        ),
+      )
 
       renderWithProviders(<OrderListV2 qualityTierMin={4} />)
 
@@ -412,11 +421,11 @@ describe("OrderListV2", () => {
     })
 
     it("filters orders by maximum quality tier", () => {
-      vi.mocked(useGetOrdersQuery).mockReturnValue({
-        data: { orders: [], total: 0, page: 1, page_size: 20 },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrdersQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrders>(
+          { orders: [], total: 0, page: 1, page_size: 20 },
+        ),
+      )
 
       renderWithProviders(<OrderListV2 qualityTierMax={3} />)
 
@@ -428,11 +437,11 @@ describe("OrderListV2", () => {
     })
 
     it("filters orders by quality tier range", () => {
-      vi.mocked(useGetOrdersQuery).mockReturnValue({
-        data: { orders: [], total: 0, page: 1, page_size: 20 },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrdersQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrders>(
+          { orders: [], total: 0, page: 1, page_size: 20 },
+        ),
+      )
 
       renderWithProviders(
         <OrderListV2 qualityTierMin={2} qualityTierMax={4} />,
@@ -447,14 +456,15 @@ describe("OrderListV2", () => {
     })
 
     it("displays only orders matching quality tier filter", async () => {
-      const mockOrders = [
+      const mockOrders: OrderPreview[] = [
         {
           order_id: "order-1",
           title: "High Quality Order",
           buyer_username: "buyer1",
-          seller_username: "seller1",
+          shop_name: "Shop 1",
+          shop_slug: "shop-1",
           buyer_avatar: null,
-          seller_avatar: null,
+          shop_logo: null,
           quality_tier_min: 4,
           quality_tier_max: 5,
           status: "pending",
@@ -465,11 +475,11 @@ describe("OrderListV2", () => {
         },
       ]
 
-      vi.mocked(useGetOrdersQuery).mockReturnValue({
-        data: { orders: mockOrders, total: 1, page: 1, page_size: 20 },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrdersQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrders>(
+          { orders: mockOrders, total: 1, page: 1, page_size: 20 },
+        ),
+      )
 
       renderWithProviders(<OrderListV2 qualityTierMin={4} />)
 
@@ -480,11 +490,11 @@ describe("OrderListV2", () => {
     })
 
     it("shows empty state when no orders match quality filter", async () => {
-      vi.mocked(useGetOrdersQuery).mockReturnValue({
-        data: { orders: [], total: 0, page: 1, page_size: 20 },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrdersQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrders>(
+          { orders: [], total: 0, page: 1, page_size: 20 },
+        ),
+      )
 
       renderWithProviders(<OrderListV2 qualityTierMin={5} />)
 

@@ -29,7 +29,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetResourceQuery } from "../../store/api/v2/market"
 import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
-import { MARKET_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
+import { MARKET_PATHS, GAME_DATA_PATHS, WIKI_PATHS } from "../../routes/paths"
 
 export function ResourceDetail() {
   const { t } = useTranslation()
@@ -70,13 +70,21 @@ export function ResourceDetail() {
 
   const seoTitle = `${resource.resource_name} — Star Citizen Resource | SC Market`
   const seoDescription = `${resource.resource_name} — ${resource.resource_category} resource. Base value: ${resource.base_value ? resource.base_value.toLocaleString() + " aUEC" : "N/A"}. Quality tiers and market availability.`.slice(0, 160)
-  const canonicalUrl = `${FRONTEND_URL}/wiki/commodities/${resource_id}`
+  // /resources/:id and /wiki/commodities/:id render the same entity, so this
+  // page deliberately points its canonical at the wiki route. Build it from the
+  // resolved resource rather than the raw path param, which may be either a
+  // full UUID or a short slug — the sitemap only lists the slug form.
+  const canonicalPath = WIKI_PATHS.commodity(
+    resource.resource_id,
+    resource.resource_name,
+  )
+  const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
 
   return (
     <StandardPageLayout
       title={seoTitle}
       description={seoDescription}
-      canonicalUrl={`/wiki/commodities/${resource_id}`}
+      canonicalUrl={canonicalPath}
       headerTitle={resource.resource_name}
       sidebarOpen={true}
       maxWidth="lg"

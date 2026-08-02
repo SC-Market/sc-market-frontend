@@ -109,14 +109,17 @@ export function WikiItemDetail() {
 
   const seoTitle = `${item.name} — Star Citizen Item | SC Market`
   const seoDescription = `${item.name} — ${item.type || "equipment"} item${item.manufacturer ? " by " + item.manufacturer : ""}. View stats, market price, crafting uses, and locations in Star Citizen.`.slice(0, 160)
-  const canonicalUrl = `${FRONTEND_URL}/wiki/items/${id}`
+  // Built from the resolved item, not the raw path param: this page is reachable
+  // by full UUID or short slug, and the sitemap only lists the slug form.
+  const canonicalPath = WIKI_PATHS.item(item.id, item.name)
+  const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
   const ogImage = item.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
     <StandardPageLayout
       title={seoTitle}
       description={seoDescription}
-      canonicalUrl={`/wiki/items/${id}`}
+      canonicalUrl={canonicalPath}
       headerTitle={item.name}
       breadcrumbs={[
         { label: t("wiki.itemDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub },

@@ -9,6 +9,11 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { QualityDistributionChart } from "../QualityDistributionChart"
 import { marketV2Api } from "../../../../../store/api/v2/market"
 import type { GetQualityDistributionResponse } from "../../../../../store/api/v2/market"
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../../../__tests__/rtkQueryMocks"
 
 // Mock the MUI X-Charts BarChart component
 vi.mock("@mui/x-charts/BarChart", () => ({
@@ -41,7 +46,7 @@ vi.mock("react-i18next", async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, defaultValue?: string, options?: any) => {
+      t: (key: string, defaultValue?: string) => {
         if (key === "market.tierBronze") return "Bronze"
         if (key === "market.tierSilver") return "Silver"
         if (key === "market.tierGold") return "Gold"
@@ -141,11 +146,9 @@ describe("QualityDistributionChart", () => {
   })
 
   it("renders loading state", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      queryLoading<typeof marketV2Api.endpoints.getQualityDistribution>(),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -153,11 +156,12 @@ describe("QualityDistributionChart", () => {
   })
 
   it("renders error state", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isError: true,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      queryError<typeof marketV2Api.endpoints.getQualityDistribution>({
+        status: 500,
+        data: { message: "Server error" },
+      }),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -167,16 +171,14 @@ describe("QualityDistributionChart", () => {
   })
 
   it("renders empty state when no data", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: {
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>({
         game_item_id: mockGameItemId,
         game_item_name: "Test Item",
         distribution: [],
         total_quantity: 0,
-      },
-      isLoading: false,
-      isError: false,
-    } as any)
+      }),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -186,8 +188,8 @@ describe("QualityDistributionChart", () => {
   })
 
   it("renders empty state when all quantities are zero", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: {
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>({
         game_item_id: mockGameItemId,
         game_item_name: "Test Item",
         distribution: [
@@ -202,10 +204,8 @@ describe("QualityDistributionChart", () => {
           },
         ],
         total_quantity: 0,
-      },
-      isLoading: false,
-      isError: false,
-    } as any)
+      }),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -215,11 +215,11 @@ describe("QualityDistributionChart", () => {
   })
 
   it("renders bar chart with quality distribution data", async () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -261,11 +261,11 @@ describe("QualityDistributionChart", () => {
       total_quantity: 80,
     }
 
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: partialData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        partialData,
+      ),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -282,11 +282,11 @@ describe("QualityDistributionChart", () => {
   it("calls onTierClick when a bar is clicked", async () => {
     const mockOnTierClick = vi.fn()
 
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     renderWithProviders(
       <QualityDistributionChart
@@ -307,11 +307,11 @@ describe("QualityDistributionChart", () => {
   })
 
   it("respects custom height prop", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     renderWithProviders(
       <QualityDistributionChart gameItemId={mockGameItemId} height={300} />
@@ -322,11 +322,11 @@ describe("QualityDistributionChart", () => {
   })
 
   it("respects custom width prop", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     const { container } = renderWithProviders(
       <QualityDistributionChart gameItemId={mockGameItemId} width={600} />
@@ -338,11 +338,11 @@ describe("QualityDistributionChart", () => {
   })
 
   it("uses default height of 400px when not specified", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -350,11 +350,11 @@ describe("QualityDistributionChart", () => {
   })
 
   it("uses default width of 100% when not specified", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     const { container } = renderWithProviders(
       <QualityDistributionChart gameItemId={mockGameItemId} />
@@ -366,11 +366,11 @@ describe("QualityDistributionChart", () => {
 
   it("passes correct gameItemId to API query", () => {
     const customGameItemId = "custom-game-item-id"
-    const spy = vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    const spy = vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={customGameItemId} />)
 
@@ -380,11 +380,11 @@ describe("QualityDistributionChart", () => {
   })
 
   it("displays quantity available on Y-axis", async () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -395,11 +395,11 @@ describe("QualityDistributionChart", () => {
   })
 
   it("maintains visual consistency with V1 charts (400px height)", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     renderWithProviders(<QualityDistributionChart gameItemId={mockGameItemId} />)
 
@@ -408,11 +408,11 @@ describe("QualityDistributionChart", () => {
   })
 
   it("is responsive for mobile (renders without errors)", () => {
-    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue({
-      data: mockDistributionData,
-      isLoading: false,
-      isError: false,
-    } as any)
+    vi.spyOn(marketV2Api, "useGetQualityDistributionQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getQualityDistribution>(
+        mockDistributionData,
+      ),
+    )
 
     // Render component
     const { container } = renderWithProviders(

@@ -54,14 +54,21 @@ export function WikiCommodityDetail() {
 
   const seoTitle = r ? `${r.resource_name} — Star Citizen Commodity | SC Market` : "Commodity Detail | SC Market"
   const seoDescription = r ? `${r.resource_name} — ${r.resource_category} commodity. ${acquisitionMethods || "Various acquisition methods"}. View mining locations, market price, and quality tiers.`.slice(0, 160) : ""
-  const canonicalUrl = `${FRONTEND_URL}${WIKI_PATHS.commodity(id!)}`
+  // Build the canonical from the *resolved* resource, not the raw path param:
+  // the same page is reachable by full UUID or by short slug, and the sitemap
+  // only ever lists the slug form. Echoing the param would emit two different
+  // canonicals for one page and split its ranking signal.
+  const canonicalPath = r
+    ? WIKI_PATHS.commodity(r.resource_id, r.resource_name)
+    : WIKI_PATHS.commodity(id!)
+  const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
   const ogImage = r?.resource_icon || `${FRONTEND_URL}/logo512.png`
 
   return (
     <StandardPageLayout
       title={seoTitle}
       description={seoDescription}
-      canonicalUrl={WIKI_PATHS.commodity(id!)}
+      canonicalUrl={canonicalPath}
       headerTitle={r?.resource_name || t("wiki.commodityDetail.headerTitle", "Commodity Detail")}
       breadcrumbs={[
         { label: t("wiki.commodityDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub },

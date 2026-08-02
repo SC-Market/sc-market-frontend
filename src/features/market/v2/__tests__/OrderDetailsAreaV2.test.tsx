@@ -17,12 +17,24 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { OrderDetailsAreaV2 } from "../OrderDetailsAreaV2"
 import { marketV2Api } from "../../../../store/api/v2/market"
+import type { GetOrderDetailApiResponse } from "../../../../store/api/v2/market"
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../../__tests__/rtkQueryMocks"
+import type { OfferMarketListingsV2 as OfferMarketListingsV2Component } from "../OfferMarketListingsV2"
+
+type MarketV2Module = typeof import("../../../../store/api/v2/market")
+type OfferMarketListingsV2Props = React.ComponentProps<
+  typeof OfferMarketListingsV2Component
+>
 
 // Mock OfferMarketListingsV2 to avoid complex nested component issues
 vi.mock("../OfferMarketListingsV2", () => ({
-  OfferMarketListingsV2: ({ items }: any) => (
+  OfferMarketListingsV2: ({ items }: OfferMarketListingsV2Props) => (
     <div data-testid="offer-market-listings-v2">
-      {items.map((item: any) => (
+      {items.map((item) => (
         <div key={item.order_item_id}>
           <span>{item.variant.display_name}</span>
           <span>{item.price_per_unit.toLocaleString()} aUEC</span>
@@ -35,7 +47,9 @@ vi.mock("../OfferMarketListingsV2", () => ({
 
 // Mock the RTK Query hook
 vi.mock("../../../../store/api/v2/market", async () => {
-  const actual = await vi.importActual("../../../../store/api/v2/market")
+  const actual = await vi.importActual<MarketV2Module>(
+    "../../../../store/api/v2/market",
+  )
   return {
     ...actual,
     useGetOrderDetailQuery: vi.fn(),
@@ -46,9 +60,7 @@ const { useGetOrderDetailQuery } = await import("../../../../store/api/v2/market
 
 // Mock the time format utility
 vi.mock("../../../../util/time", () => ({
-  format: vi.fn((date: Date, formatStr: string) => {
-    return "January 1st 2024, 12:00:00 pm"
-  }),
+  format: vi.fn(() => "January 1st 2024, 12:00:00 pm"),
 }))
 
 // Mock translation hook
@@ -107,7 +119,7 @@ function renderWithProviders(ui: React.ReactElement) {
 /**
  * Mock order detail response with variant information
  */
-const mockOrderDetail = {
+const mockOrderDetail: GetOrderDetailApiResponse = {
   order_id: "test-order-id",
   buyer: {
     user_id: "buyer-123",
@@ -116,22 +128,26 @@ const mockOrderDetail = {
     avatar: null,
   },
   seller: {
-    user_id: "seller-456",
-    username: "seller_user",
-    display_name: "Seller User",
+    shop_id: "seller-456",
     name: "Seller User",
     slug: "seller-user",
-    avatar: null,
   },
   total_price: 150000,
   status: "completed",
+  kind: "Delivery",
+  title: "Test Order",
+  description: "Test order description",
+  payment_type: "one-time",
   created_at: "2024-01-01T12:00:00Z",
   updated_at: "2024-01-01T12:00:00Z",
+  market_listings: [],
+  market_listings_v2: [],
   items: [
     {
       order_item_id: "item-1",
       listing_id: "listing-1",
       item_id: "item-1",
+      listing_title: "Listing One",
       variant: {
         variant_id: "variant-1",
         attributes: {
@@ -150,6 +166,7 @@ const mockOrderDetail = {
       order_item_id: "item-2",
       listing_id: "listing-2",
       item_id: "item-2",
+      listing_title: "Listing Two",
       variant: {
         variant_id: "variant-2",
         attributes: {
@@ -177,11 +194,11 @@ describe("OrderDetailsAreaV2", () => {
    * Requirement 45.6: Provide OrderDetailsAreaV2 React component
    */
   it("renders order details successfully", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: mockOrderDetail,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        mockOrderDetail,
+      ),
+    )
 
     renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -199,11 +216,11 @@ describe("OrderDetailsAreaV2", () => {
    * Requirement 45.7: Maintain visual parity with V1 OrderDetailsArea
    */
   it("maintains visual parity with V1 component structure", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: mockOrderDetail,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        mockOrderDetail,
+      ),
+    )
 
     const { container } = renderWithProviders(
       <OrderDetailsAreaV2 orderId="test-order-id" />,
@@ -229,11 +246,11 @@ describe("OrderDetailsAreaV2", () => {
    * Requirement 45.8: Display variant attributes for each item
    */
   it("displays variant attributes for order items", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: mockOrderDetail,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        mockOrderDetail,
+      ),
+    )
 
     renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -249,11 +266,11 @@ describe("OrderDetailsAreaV2", () => {
    * Requirement 45.9: Show quality tier with visual indicators
    */
   it("shows quality tier with visual indicators", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: mockOrderDetail,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        mockOrderDetail,
+      ),
+    )
 
     const { container } = renderWithProviders(
       <OrderDetailsAreaV2 orderId="test-order-id" />,
@@ -274,11 +291,11 @@ describe("OrderDetailsAreaV2", () => {
    * Requirement 45.10: Display per-variant pricing
    */
   it("displays per-variant pricing correctly", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: mockOrderDetail,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        mockOrderDetail,
+      ),
+    )
 
     renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -297,11 +314,11 @@ describe("OrderDetailsAreaV2", () => {
    * Requirement 45.12: Preserve variant information even if listing deleted
    */
   it("preserves variant information from order snapshot", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: mockOrderDetail,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        mockOrderDetail,
+      ),
+    )
 
     renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -320,11 +337,11 @@ describe("OrderDetailsAreaV2", () => {
    * Test: Display order status with correct color
    */
   it("displays order status with correct chip color", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: mockOrderDetail,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        mockOrderDetail,
+      ),
+    )
 
     const { container } = renderWithProviders(
       <OrderDetailsAreaV2 orderId="test-order-id" />,
@@ -344,11 +361,11 @@ describe("OrderDetailsAreaV2", () => {
    * Test: Display formatted date
    */
   it("displays formatted order date", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: mockOrderDetail,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        mockOrderDetail,
+      ),
+    )
 
     renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -361,11 +378,9 @@ describe("OrderDetailsAreaV2", () => {
    * Test: Loading state
    */
   it("shows loading state while fetching order details", () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      queryLoading<typeof marketV2Api.endpoints.getOrderDetail>(),
+    )
 
     renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -376,11 +391,12 @@ describe("OrderDetailsAreaV2", () => {
    * Test: Error state
    */
   it("shows error message when order fetch fails", async () => {
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      error: { status: 500, data: { message: "Failed to fetch" } },
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      queryError<typeof marketV2Api.endpoints.getOrderDetail>({
+        status: 500,
+        data: { message: "Failed to fetch" },
+      }),
+    )
 
     renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -395,7 +411,7 @@ describe("OrderDetailsAreaV2", () => {
    * Test: Single quality tier display
    */
   it("displays single quality tier badge when all items have same tier", async () => {
-    const singleTierOrder = {
+    const singleTierOrder: GetOrderDetailApiResponse = {
       ...mockOrderDetail,
       items: [
         {
@@ -412,11 +428,11 @@ describe("OrderDetailsAreaV2", () => {
       ],
     }
 
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: singleTierOrder,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        singleTierOrder,
+      ),
+    )
 
     const { container } = renderWithProviders(
       <OrderDetailsAreaV2 orderId="test-order-id" />,
@@ -433,7 +449,7 @@ describe("OrderDetailsAreaV2", () => {
    * Test: No quality tier display when items have no quality
    */
   it("does not display quality tier row when items have no quality tier", async () => {
-    const noQualityOrder = {
+    const noQualityOrder: GetOrderDetailApiResponse = {
       ...mockOrderDetail,
       items: [
         {
@@ -448,11 +464,11 @@ describe("OrderDetailsAreaV2", () => {
       ],
     }
 
-    vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-      data: noQualityOrder,
-      isLoading: false,
-      error: undefined,
-    } as any)
+    vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+        noQualityOrder,
+      ),
+    )
 
     renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -466,11 +482,11 @@ describe("OrderDetailsAreaV2", () => {
    */
   describe("Variant Attributes Display (Requirement 59.6)", () => {
     it("displays crafted source attribute", async () => {
-      vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-        data: mockOrderDetail,
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+          mockOrderDetail,
+        ),
+      )
 
       renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -482,11 +498,11 @@ describe("OrderDetailsAreaV2", () => {
     })
 
     it("displays quality value attribute", async () => {
-      vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-        data: mockOrderDetail,
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+          mockOrderDetail,
+        ),
+      )
 
       renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -498,7 +514,7 @@ describe("OrderDetailsAreaV2", () => {
     })
 
     it("displays multiple variant attributes together", async () => {
-      const detailedOrder = {
+      const detailedOrder: GetOrderDetailApiResponse = {
         ...mockOrderDetail,
         items: [
           {
@@ -521,11 +537,11 @@ describe("OrderDetailsAreaV2", () => {
         ],
       }
 
-      vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-        data: detailedOrder,
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+          detailedOrder,
+        ),
+      )
 
       renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -540,7 +556,7 @@ describe("OrderDetailsAreaV2", () => {
     })
 
     it("handles missing optional attributes gracefully", async () => {
-      const minimalOrder = {
+      const minimalOrder: GetOrderDetailApiResponse = {
         ...mockOrderDetail,
         items: [
           {
@@ -560,11 +576,11 @@ describe("OrderDetailsAreaV2", () => {
         ],
       }
 
-      vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-        data: minimalOrder,
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+          minimalOrder,
+        ),
+      )
 
       renderWithProviders(<OrderDetailsAreaV2 orderId="test-order-id" />)
 
@@ -577,11 +593,11 @@ describe("OrderDetailsAreaV2", () => {
     })
 
     it("displays variant attributes in table format", async () => {
-      vi.mocked(useGetOrderDetailQuery).mockReturnValue({
-        data: mockOrderDetail,
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.mocked(useGetOrderDetailQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getOrderDetail>(
+          mockOrderDetail,
+        ),
+      )
 
       const { container } = renderWithProviders(
         <OrderDetailsAreaV2 orderId="test-order-id" />,

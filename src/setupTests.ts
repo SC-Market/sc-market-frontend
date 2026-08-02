@@ -11,11 +11,23 @@ afterEach(() => cleanup())
 
 // Global fetch mock to prevent ECONNREFUSED errors from RTK Query middleware.
 // Tests that need real network behavior should override this with MSW or vi.spyOn.
-if (!globalThis.fetch || !(globalThis.fetch as any).__mocked) {
-  const mockFetch = vi.fn(() =>
-    Promise.resolve(new Response(JSON.stringify({}), { status: 200, headers: { "Content-Type": "application/json" } }))
-  ) as any
-  mockFetch.__mocked = true
+// `__mocked` is a marker this file attaches to its own stub so a second setup
+// pass does not wrap an already-mocked fetch.
+type MockedFetch = typeof globalThis.fetch & { __mocked?: true }
+
+const existingFetch: MockedFetch | undefined = globalThis.fetch
+if (!existingFetch || !existingFetch.__mocked) {
+  const mockFetch: MockedFetch = Object.assign(
+    vi.fn(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({}), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
+    ),
+    { __mocked: true as const },
+  )
   globalThis.fetch = mockFetch
 }
 

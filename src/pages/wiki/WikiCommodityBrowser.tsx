@@ -243,7 +243,7 @@ export function WikiCommodityBrowser() {
                   <Grid item xs={12} sm={6} md={4} lg={3} key={c.resource_id}>
                     <Card
                       sx={{ cursor: "pointer", height: "100%", transition: "transform 0.15s", "&:hover": { transform: "translateY(-2px)" } }}
-                      onClick={() => navigate(WIKI_PATHS.commodity(c.resource_id))}
+                      onClick={() => navigate(WIKI_PATHS.commodity(c.resource_id, c.name))}
                     >
                       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
                         <Stack direction="row" spacing={1.5} alignItems="flex-start">

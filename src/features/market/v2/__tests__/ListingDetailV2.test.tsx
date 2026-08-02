@@ -9,12 +9,28 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import * as marketApi from "../../../../store/api/v2/market";
 import { serviceApi } from "../../../../store/service";
 import { ListingDetailV2 } from "../ListingDetailV2";
+import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market";
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../../__tests__/rtkQueryMocks";
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
+import type { VariantBreakdown as VariantBreakdownComponent } from "../../../../components/market/v2/VariantBreakdown";
+import type { QualityBadge as QualityBadgeComponent } from "../../../../components/market/v2/QualityBadge";
+import type { UnderlineLink as UnderlineLinkComponent } from "../../../../components/typography/UnderlineLink";
+import type { MarkdownRender as MarkdownRenderComponent } from "../../../../components/markdown/Markdown.lazy";
+
+type VariantBreakdownProps = React.ComponentProps<typeof VariantBreakdownComponent>;
+type QualityBadgeProps = React.ComponentProps<typeof QualityBadgeComponent>;
+type UnderlineLinkProps = React.ComponentProps<typeof UnderlineLinkComponent>;
+type MarkdownRenderProps = React.ComponentProps<typeof MarkdownRenderComponent>;
 
 const testTheme = createTheme({
   layoutSpacing: { layout: 2, component: 1, text: 1, compact: 0.5 },
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
   palette: { outline: { main: "#e0e0e0" } },
-} as any);
+});
 
 // Mock alert hook
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
@@ -47,11 +63,11 @@ vi.mock("react-router-dom", async () => {
 
 // Mock StandardPageLayout to avoid context dependencies
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, title, isLoading, error }: any) => (
+  StandardPageLayout: ({ children, title, isLoading, error }: StandardPageLayoutProps) => (
     <div data-testid="standard-page-layout">
       <h1>{title}</h1>
       {isLoading && <div data-testid="loading">Loading...</div>}
-      {error && <div data-testid="error">Error: {JSON.stringify(error)}</div>}
+      {Boolean(error) && <div data-testid="error">Error: {JSON.stringify(error)}</div>}
       {children}
     </div>
   ),
@@ -59,11 +75,11 @@ vi.mock("../../../../components/layout/StandardPageLayout", () => ({
 
 // Mock VariantBreakdown component
 vi.mock("../../../../components/market/v2/VariantBreakdown", () => ({
-  VariantBreakdown: ({ variants, showActions }: any) => (
+  VariantBreakdown: ({ variants, showActions }: VariantBreakdownProps) => (
     <div data-testid="variant-breakdown">
       <table>
         <tbody>
-          {variants.map((variant: any) => (
+          {variants.map((variant) => (
             <tr key={variant.variant_id} data-testid={`variant-row-${variant.variant_id}`}>
               <td>{variant.display_name}</td>
               <td>{variant.quantity}</td>
@@ -84,14 +100,14 @@ vi.mock("../../../../components/market/v2/VariantBreakdown", () => ({
 
 // Mock QualityBadge component
 vi.mock("../../../../components/market/v2/QualityBadge", () => ({
-  QualityBadge: ({ tier }: any) => (
+  QualityBadge: ({ tier }: QualityBadgeProps) => (
     <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>
   ),
 }));
 
 // Mock UnderlineLink component
 vi.mock("../../../../components/typography/UnderlineLink", () => ({
-  UnderlineLink: ({ children }: any) => <span>{children}</span>,
+  UnderlineLink: ({ children }: UnderlineLinkProps) => <span>{children}</span>,
 }));
 
 // Mock translation
@@ -112,7 +128,7 @@ vi.mock("react-i18next", async () => {
 
 // Mock lazy Markdown to avoid Suspense with no boundary
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
-  MarkdownRender: ({ text }: any) => <div data-testid="markdown">{text}</div>,
+  MarkdownRender: ({ text }: MarkdownRenderProps) => <div data-testid="markdown">{text}</div>,
   MarkdownEditor: () => <div />,
 }));
 
@@ -129,25 +145,26 @@ const createMockStore = () => {
 };
 
 // Mock listing data
-const mockListingData = {
+const mockListingData: GetListingDetailApiResponse = {
   listing: {
     listing_id: "test-listing-id",
-    seller_id: "seller-123",
-    seller_type: "user" as const,
+    shop_id: "shop-123",
     title: "Test Listing",
     description: "Test description",
-    status: "active" as const,
-    visibility: "public" as const,
-    sale_type: "fixed" as const,
-    listing_type: "single" as const,
+    status: "active",
+    visibility: "public",
+    sale_type: "fixed",
+    listing_type: "single",
+    quantity_unit: "unit",
     created_at: "2024-01-01T00:00:00Z",
     updated_at: "2024-01-01T00:00:00Z",
   },
   seller: {
-    id: "seller-123",
+    shop_id: "shop-123",
     name: "Test Seller",
-    type: "user" as const,
+    slug: "test-seller",
     rating: 4.5,
+    languages: ["en"],
   },
   items: [
     {
@@ -157,7 +174,7 @@ const mockListingData = {
         name: "Test Item",
         type: "weapon",
       },
-      pricing_mode: "per_variant" as const,
+      pricing_mode: "per_variant",
       variants: [
         {
           variant_id: "variant-123",
@@ -213,12 +230,11 @@ describe("ListingDetailV2", () => {
   it("displays variant breakdown with all variants", () => {
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: mockListingData,
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
+        mockListingData,
+      ),
+    );
 
     renderComponent();
 
@@ -237,12 +253,11 @@ describe("ListingDetailV2", () => {
   it("displays quality tier with QualityBadge visual indicators", () => {
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: mockListingData,
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
+        mockListingData,
+      ),
+    );
 
     renderComponent();
 
@@ -254,12 +269,11 @@ describe("ListingDetailV2", () => {
   it("displays seller information with rating", () => {
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: mockListingData,
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
+        mockListingData,
+      ),
+    );
 
     renderComponent();
 
@@ -271,12 +285,11 @@ describe("ListingDetailV2", () => {
   it("displays price range when variants have different prices", () => {
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: mockListingData,
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
+        mockListingData,
+      ),
+    );
 
     renderComponent();
 
@@ -288,12 +301,11 @@ describe("ListingDetailV2", () => {
   it("displays total quantity available", () => {
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: mockListingData,
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
+        mockListingData,
+      ),
+    );
 
     renderComponent();
 
@@ -303,7 +315,7 @@ describe("ListingDetailV2", () => {
   });
 
   it("shows OUT OF STOCK chip when quantity is zero", () => {
-    const noStockData = {
+    const noStockData: GetListingDetailApiResponse = {
       ...mockListingData,
       items: [
         {
@@ -324,12 +336,11 @@ describe("ListingDetailV2", () => {
 
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: noStockData,
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
+        noStockData,
+      ),
+    );
 
     renderComponent();
 
@@ -340,12 +351,9 @@ describe("ListingDetailV2", () => {
   it("displays loading state", () => {
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      queryLoading<typeof marketApi.marketV2Api.endpoints.getListingDetail>(),
+    );
 
     renderComponent();
 
@@ -356,12 +364,12 @@ describe("ListingDetailV2", () => {
   it("displays error state when listing not found", () => {
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      error: { status: 404, data: { message: "Not found" } },
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      queryError<typeof marketApi.marketV2Api.endpoints.getListingDetail>({
+        status: 404,
+        data: { message: "Not found" },
+      }),
+    );
 
     renderComponent();
 
@@ -372,12 +380,11 @@ describe("ListingDetailV2", () => {
   it("displays listing metadata with timestamps", () => {
     const mockHook = vi.spyOn(marketApi, "useGetListingDetailQuery");
     
-    mockHook.mockReturnValue({
-      data: mockListingData,
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    mockHook.mockReturnValue(
+      querySuccess<typeof marketApi.marketV2Api.endpoints.getListingDetail>(
+        mockListingData,
+      ),
+    );
 
     renderComponent();
 

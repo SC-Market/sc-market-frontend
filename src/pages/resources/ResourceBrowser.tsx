@@ -28,6 +28,7 @@ import {
 } from "../../store/api/v2/market"
 import { ResourceCard } from "../../components/game-data/ResourceCard"
 import { useDebounce } from "../../hooks/useDebounce"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 
 export function ResourceBrowser() {
   const { t } = useTranslation()
@@ -129,7 +130,10 @@ export function ResourceBrowser() {
                   <Grid item xs={12} sm={6} md={4} lg={3} key={resource.resource_id}>
                     <ResourceCard
                       resource={resource}
-                      to={`/resources/${resource.resource_id}`}
+                      to={GAME_DATA_PATHS.resource(
+                        resource.resource_id,
+                        resource.resource_name,
+                      )}
                     />
                   </Grid>
                 ))}

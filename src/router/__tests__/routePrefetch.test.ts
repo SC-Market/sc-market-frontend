@@ -16,11 +16,11 @@ vi.mock("../routeRegistry", () => {
   }
 })
 
-// Mock requestIdleCallback
-;(globalThis as any).requestIdleCallback = vi.fn((callback) => {
-  callback({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline)
+// Mock requestIdleCallback — runs the callback synchronously.
+globalThis.requestIdleCallback = vi.fn((callback: IdleRequestCallback) => {
+  callback({ didTimeout: false, timeRemaining: () => 50 })
   return 0
-}) as any
+})
 
 import {
   prefetchRoute,
@@ -41,14 +41,14 @@ describe("routePrefetch", () => {
     it("should prefetch a route successfully", async () => {
       await prefetchRoute("/market")
 
-      expect((routeRegistry as any)["/market"]).toHaveBeenCalledTimes(1)
+      expect(vi.mocked(routeRegistry["/market"])).toHaveBeenCalledTimes(1)
     })
 
     it("should not prefetch the same route twice", async () => {
       await prefetchRoute("/market")
       await prefetchRoute("/market")
 
-      expect((routeRegistry as any)["/market"]).toHaveBeenCalledTimes(1)
+      expect(vi.mocked(routeRegistry["/market"])).toHaveBeenCalledTimes(1)
     })
 
     it("should handle non-existent routes gracefully", async () => {
@@ -68,9 +68,7 @@ describe("routePrefetch", () => {
       const mockError = new Error("Import failed")
 
       // Add a failing route to the registry
-      ;(routeRegistry as any)[errorRoute] = vi.fn(() =>
-        Promise.reject(mockError),
-      )
+      routeRegistry[errorRoute] = vi.fn(() => Promise.reject(mockError))
 
       const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
 
@@ -89,16 +87,16 @@ describe("routePrefetch", () => {
     it("should prefetch multiple routes", async () => {
       await prefetchRoutes(["/market", "/contractors", "/dashboard"])
 
-      expect((routeRegistry as any)["/market"]).toHaveBeenCalledTimes(1)
-      expect((routeRegistry as any)["/contractors"]).toHaveBeenCalledTimes(1)
-      expect((routeRegistry as any)["/dashboard"]).toHaveBeenCalledTimes(1)
+      expect(vi.mocked(routeRegistry["/market"])).toHaveBeenCalledTimes(1)
+      expect(vi.mocked(routeRegistry["/contractors"])).toHaveBeenCalledTimes(1)
+      expect(vi.mocked(routeRegistry["/dashboard"])).toHaveBeenCalledTimes(1)
     })
 
     it("should handle mixed valid and invalid routes", async () => {
       await prefetchRoutes(["/market", "/non-existent", "/contractors"])
 
-      expect((routeRegistry as any)["/market"]).toHaveBeenCalledTimes(1)
-      expect((routeRegistry as any)["/contractors"]).toHaveBeenCalledTimes(1)
+      expect(vi.mocked(routeRegistry["/market"])).toHaveBeenCalledTimes(1)
+      expect(vi.mocked(routeRegistry["/contractors"])).toHaveBeenCalledTimes(1)
     })
   })
 
@@ -119,7 +117,7 @@ describe("routePrefetch", () => {
 
     it("should use setTimeout fallback when requestIdleCallback unavailable", () => {
       const originalRequestIdleCallback = globalThis.requestIdleCallback
-      delete (globalThis as any).requestIdleCallback
+      Reflect.deleteProperty(globalThis, "requestIdleCallback")
 
       const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout")
 
@@ -188,7 +186,7 @@ describe("routePrefetch", () => {
       await prefetchRoute("/market")
 
       // Should be called twice since cache was cleared
-      expect((routeRegistry as any)["/market"]).toHaveBeenCalledTimes(2)
+      expect(vi.mocked(routeRegistry["/market"])).toHaveBeenCalledTimes(2)
     })
   })
 })

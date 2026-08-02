@@ -11,6 +11,17 @@ import { generatedApiV2 } from "../../../../store/generatedApiV2";
 import { serviceApi } from "../../../../store/service";
 import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
+import type { MarkdownEditor } from "../../../../components/markdown/Markdown";
+import type { GameItemSearchAutocomplete } from "../../components/GameItemSearchAutocomplete";
+import type { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea";
+import type { LocationSelectorProps } from "../../components/stock/LocationSelector";
+
+type MarkdownEditorProps = React.ComponentProps<typeof MarkdownEditor>;
+type GameItemSearchAutocompleteProps = React.ComponentProps<
+  typeof GameItemSearchAutocomplete
+>;
+type SelectPhotosAreaProps = React.ComponentProps<typeof SelectPhotosArea>;
 
 // Mock dependencies
 const { mockIssueAlert, gameItem } = vi.hoisted(() => ({
@@ -25,7 +36,7 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 
 // Mock StandardPageLayout to avoid data-router / metadata Page dependencies
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, headerTitle }: any) => (
+  StandardPageLayout: ({ children, headerTitle }: StandardPageLayoutProps) => (
     <div data-testid="standard-page-layout">
       {headerTitle}
       {children}
@@ -34,22 +45,30 @@ vi.mock("../../../../components/layout/StandardPageLayout", () => ({
 }));
 
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
-  MarkdownEditor: ({ onChange, value, TextFieldProps }: any) => (
+  MarkdownEditor: ({ onChange, value, TextFieldProps }: MarkdownEditorProps) => (
     <textarea
       data-testid="markdown-editor"
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      placeholder={TextFieldProps?.label}
+      // MUI's `label` is a ReactNode; only a plain string can be a placeholder.
+      placeholder={
+        typeof TextFieldProps?.label === "string"
+          ? TextFieldProps.label
+          : undefined
+      }
     />
   ),
 }));
 
 vi.mock("../../components/GameItemSearchAutocomplete", () => ({
-  GameItemSearchAutocomplete: ({ onChange, label }: any) => (
+  GameItemSearchAutocomplete: ({
+    onChange,
+    label,
+  }: GameItemSearchAutocompleteProps) => (
     <input
       data-testid="game-item-search"
       placeholder={label}
-      onChange={(e) => {
+      onChange={() => {
         onChange(gameItem.name, gameItem.type, gameItem.id);
       }}
     />
@@ -57,7 +76,7 @@ vi.mock("../../components/GameItemSearchAutocomplete", () => ({
 }));
 
 vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
-  SelectPhotosArea: ({ setPhotos }: any) => (
+  SelectPhotosArea: ({ setPhotos }: SelectPhotosAreaProps) => (
     <div data-testid="select-photos-area">
       <button onClick={() => setPhotos(["photo1.jpg"])}>Add Photo</button>
     </div>
@@ -65,11 +84,11 @@ vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
 }));
 
 vi.mock("../../components/stock/LocationSelector", () => ({
-  LocationSelector: ({ onChange, label }: any) => (
+  LocationSelector: ({ onChange, label }: LocationSelectorProps) => (
     <input
       data-testid="location-selector"
       placeholder={label}
-      onChange={(e) => onChange("location-id-123")}
+      onChange={() => onChange("location-id-123")}
     />
   ),
 }));
@@ -113,7 +132,7 @@ const testTheme = createTheme({
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
   palette: { outline: { main: "#e0e0e0" } },
-} as any);
+});
 
 // Wrapper component
 const renderWithProviders = (component: React.ReactElement) => {

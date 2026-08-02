@@ -4,36 +4,21 @@ import { render, screen, waitFor } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { SellerAnalyticsV2 } from "../SellerAnalyticsV2"
 import { marketV2Api } from "../../../../../store/api/v2/market"
+import type {
+  GetSellerStatsApiResponse,
+  QualityTierDistribution,
+  QualityTierPremium,
+  QualityTierSales,
+} from "../../../../../store/api/v2/market"
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../../../__tests__/rtkQueryMocks"
+import type { MuiBarChart, MuiLineChart } from "../../../../../components/charts/MuiCharts"
 
-// Type definitions for test data
-interface QualityTierSales {
-  quality_tier: number
-  volume: number
-  avg_price: number
-  avg_time_to_sale_hours: number
-}
-
-interface QualityTierDistribution {
-  quality_tier: number
-  quantity_available: number
-  listing_count: number
-  seller_count: number
-  avg_price: number
-  min_price: number
-  max_price: number
-}
-
-interface QualityTierPremium {
-  quality_tier: number
-  premium_percentage: number
-}
-
-interface GetSellerStatsResponse {
-  seller_id: string
-  sales_by_quality: QualityTierSales[]
-  inventory_distribution: QualityTierDistribution[]
-  price_premiums: QualityTierPremium[]
-}
+type MuiBarChartProps = React.ComponentProps<typeof MuiBarChart>
+type MuiLineChartProps = React.ComponentProps<typeof MuiLineChart>
 
 // Mock the RTK Query hook
 vi.mock("../../../../../store/api/v2/market", () => ({
@@ -44,7 +29,7 @@ vi.mock("../../../../../store/api/v2/market", () => ({
 
 // Mock the chart components
 vi.mock("../../../../../components/charts/MuiCharts", () => ({
-  MuiBarChart: ({ series }: { series: any[] }) => (
+  MuiBarChart: ({ series }: MuiBarChartProps) => (
     <div data-testid="bar-chart">
       {series.map((s, i) => (
         <div key={i} data-testid={`bar-series-${i}`}>
@@ -53,7 +38,7 @@ vi.mock("../../../../../components/charts/MuiCharts", () => ({
       ))}
     </div>
   ),
-  MuiLineChart: ({ series }: { series: any[] }) => (
+  MuiLineChart: ({ series }: MuiLineChartProps) => (
     <div data-testid="line-chart">
       {series.map((s, i) => (
         <div key={i} data-testid={`line-series-${i}`}>
@@ -149,7 +134,7 @@ describe("SellerAnalyticsV2", () => {
       quality_tier: 1,
       quantity_available: 500,
       listing_count: 10,
-      seller_count: 5,
+      shop_count: 5,
       avg_price: 1000,
       min_price: 900,
       max_price: 1100,
@@ -158,7 +143,7 @@ describe("SellerAnalyticsV2", () => {
       quality_tier: 2,
       quantity_available: 400,
       listing_count: 8,
-      seller_count: 4,
+      shop_count: 4,
       avg_price: 1500,
       min_price: 1400,
       max_price: 1600,
@@ -167,7 +152,7 @@ describe("SellerAnalyticsV2", () => {
       quality_tier: 3,
       quantity_available: 300,
       listing_count: 6,
-      seller_count: 3,
+      shop_count: 3,
       avg_price: 2000,
       min_price: 1900,
       max_price: 2100,
@@ -176,7 +161,7 @@ describe("SellerAnalyticsV2", () => {
       quality_tier: 4,
       quantity_available: 200,
       listing_count: 4,
-      seller_count: 2,
+      shop_count: 2,
       avg_price: 3000,
       min_price: 2900,
       max_price: 3100,
@@ -185,7 +170,7 @@ describe("SellerAnalyticsV2", () => {
       quality_tier: 5,
       quantity_available: 100,
       listing_count: 2,
-      seller_count: 1,
+      shop_count: 1,
       avg_price: 5000,
       min_price: 4900,
       max_price: 5100,
@@ -200,8 +185,8 @@ describe("SellerAnalyticsV2", () => {
     { quality_tier: 5, premium_percentage: 400 },
   ]
 
-  const mockSellerStatsResponse: GetSellerStatsResponse = {
-    seller_id: mockSellerId,
+  const mockSellerStatsResponse: GetSellerStatsApiResponse = {
+    shop_id: mockSellerId,
     sales_by_quality: mockSalesData,
     inventory_distribution: mockInventoryData,
     price_premiums: mockPricePremiums,
@@ -213,11 +198,9 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Loading State", () => {
     it("should display loading message when data is loading", () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: undefined,
-        isLoading: true,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        queryLoading<typeof marketV2Api.endpoints.getSellerStats>(),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -229,11 +212,12 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Error State", () => {
     it("should display error message when data fetch fails", () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: undefined,
-        isLoading: false,
-        isError: true,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        queryError<typeof marketV2Api.endpoints.getSellerStats>({
+          status: 500,
+          data: { message: "Server error" },
+        }),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -245,16 +229,14 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Empty State", () => {
     it("should display empty message when no data is available", () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: {
-          seller_id: mockSellerId,
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>({
+          shop_id: mockSellerId,
           sales_by_quality: [],
           inventory_distribution: [],
           price_premiums: [],
-        },
-        isLoading: false,
-        isError: false,
-      } as any)
+        }),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -266,11 +248,11 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Sales Volume by Quality Tier", () => {
     it("should display sales volume chart with correct data", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -290,11 +272,11 @@ describe("SellerAnalyticsV2", () => {
     })
 
     it("should transform sales volume data correctly", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -312,11 +294,11 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Average Sale Price by Quality Tier", () => {
     it("should display average sale price chart with correct data", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -340,11 +322,11 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Time to Sale by Quality Tier", () => {
     it("should display time to sale chart with correct data", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -368,11 +350,11 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Current Inventory Distribution", () => {
     it("should display inventory distribution chart with correct data", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -396,11 +378,11 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Price Premium Percentage", () => {
     it("should display price premium chart with correct data", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -422,11 +404,11 @@ describe("SellerAnalyticsV2", () => {
     })
 
     it("should calculate price premium correctly", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -447,11 +429,11 @@ describe("SellerAnalyticsV2", () => {
 
   describe("API Integration", () => {
     it("should call useGetSellerStatsQuery with correct seller ID", () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -461,11 +443,11 @@ describe("SellerAnalyticsV2", () => {
     })
 
     it("should call useGetSellerStatsQuery without seller ID when not provided", () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 />)
 
@@ -477,11 +459,11 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Visual Parity", () => {
     it("should use Section component for all chart sections", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -493,11 +475,11 @@ describe("SellerAnalyticsV2", () => {
     })
 
     it("should use MuiBarChart for bar chart sections", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -509,11 +491,11 @@ describe("SellerAnalyticsV2", () => {
     })
 
     it("should use MuiLineChart for line chart sections", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -525,11 +507,11 @@ describe("SellerAnalyticsV2", () => {
     })
 
     it("should set chart height to 400px", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: mockSellerStatsResponse,
-        isLoading: false,
-        isError: false,
-      } as any)
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>(
+          mockSellerStatsResponse,
+        ),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -545,16 +527,14 @@ describe("SellerAnalyticsV2", () => {
 
   describe("Partial Data Handling", () => {
     it("should handle missing sales data gracefully", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: {
-          seller_id: mockSellerId,
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>({
+          shop_id: mockSellerId,
           sales_by_quality: [],
           inventory_distribution: mockInventoryData,
           price_premiums: mockPricePremiums,
-        },
-        isLoading: false,
-        isError: false,
-      } as any)
+        }),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
@@ -581,16 +561,14 @@ describe("SellerAnalyticsV2", () => {
     })
 
     it("should handle missing inventory data gracefully", async () => {
-      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue({
-        data: {
-          seller_id: mockSellerId,
+      vi.mocked(marketV2Api.useGetSellerStatsQuery).mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getSellerStats>({
+          shop_id: mockSellerId,
           sales_by_quality: mockSalesData,
           inventory_distribution: [],
           price_premiums: [],
-        },
-        isLoading: false,
-        isError: false,
-      } as any)
+        }),
+      )
 
       render(<SellerAnalyticsV2 sellerId={mockSellerId} />)
 
