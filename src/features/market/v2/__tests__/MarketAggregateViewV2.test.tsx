@@ -9,6 +9,46 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { MarketAggregateViewV2 } from "../MarketAggregateViewV2";
 import { generatedApiV2 } from "../../../../store/generatedApiV2";
 import { serviceApi } from "../../../../store/service";
+import { mockMutationHook, querySuccess } from "../../../../__tests__/rtkQueryMocks";
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
+import type {
+  MuiAreaChart,
+  MuiBarChart,
+  MuiLineChart,
+} from "../../../../components/charts/MuiCharts";
+import type { TabbedChartLayout } from "../../../../components/charts/TabbedChartLayout";
+import type { DynamicKlineChart } from "../../../../components/charts/DynamicCharts";
+import type { QualityHistogram } from "../../../../components/market/v2/QualityHistogram";
+import type { QualityBadge } from "../../../../components/market/v2/QualityBadge";
+import type { QualityFilter } from "../../../../components/market/v2/QualityFilter";
+import type { VariantSelector } from "../../../../components/market/v2/VariantSelector";
+import type { ListingNameAndRating } from "../../../../components/rating/ListingRating";
+import type { HapticButton } from "../../../../components/haptic";
+import type { CreateBuyOrderV2 } from "../components/CreateBuyOrderV2";
+
+import type {
+  GetListingsApiResponse,
+  GetPriceHistoryApiResponse,
+  GetQualityDistributionApiResponse,
+  SearchBuyOrdersApiResponse,
+} from "../../../../store/api/v2/market";
+
+/** The generated market API module, used to derive endpoint response types. */
+type MarketV2Module = typeof import("../../../../store/api/v2/market");
+type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"];
+
+type MuiAreaChartProps = React.ComponentProps<typeof MuiAreaChart>;
+type MuiBarChartProps = React.ComponentProps<typeof MuiBarChart>;
+type MuiLineChartProps = React.ComponentProps<typeof MuiLineChart>;
+type TabbedChartLayoutProps = React.ComponentProps<typeof TabbedChartLayout>;
+type DynamicKlineChartProps = React.ComponentProps<typeof DynamicKlineChart>;
+type QualityHistogramProps = React.ComponentProps<typeof QualityHistogram>;
+type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>;
+type QualityFilterProps = React.ComponentProps<typeof QualityFilter>;
+type VariantSelectorProps = React.ComponentProps<typeof VariantSelector>;
+type ListingNameAndRatingProps = React.ComponentProps<typeof ListingNameAndRating>;
+type HapticButtonProps = React.ComponentProps<typeof HapticButton>;
+type CreateBuyOrderV2Props = React.ComponentProps<typeof CreateBuyOrderV2>;
 
 /**
  * Unit Tests for MarketAggregateViewV2 Component
@@ -42,18 +82,25 @@ vi.mock("react-router-dom", async () => {
 // drawer/layout contexts not present under BrowserRouter. Mock it to render
 // children plus a breadcrumb nav so component behavior can still be asserted.
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, title, breadcrumbs, isLoading, error }: any) => (
+  StandardPageLayout: ({
+    children,
+    title,
+    breadcrumbs,
+    isLoading,
+    error,
+  }: StandardPageLayoutProps) => (
     <div data-testid="standard-page-layout">
       <h1>{title}</h1>
       {breadcrumbs && (
         <nav aria-label="breadcrumb">
-          {breadcrumbs.map((crumb: any, i: number) => (
+          {breadcrumbs.map((crumb, i) => (
             <span key={i}>{crumb.label}</span>
           ))}
         </nav>
       )}
       {isLoading && <div data-testid="loading">Loading...</div>}
-      {error && <div data-testid="error">Error</div>}
+      {/* `error` is typed `unknown` on the real props, so coerce before rendering. */}
+      {Boolean(error) && <div data-testid="error">Error</div>}
       {children}
     </div>
   ),
@@ -87,19 +134,19 @@ vi.mock("../../../../hooks/login/CurrentOrg", () => ({
 
 // Mock chart components
 vi.mock("../../../../components/charts/MuiCharts", () => ({
-  MuiAreaChart: ({ series, height }: any) => (
+  MuiAreaChart: ({ series, height }: MuiAreaChartProps) => (
     <div data-testid="mui-area-chart">
       <div>Chart with {series?.length ?? 0} series</div>
       <div>Height: {height}</div>
     </div>
   ),
-  MuiBarChart: ({ series, height }: any) => (
+  MuiBarChart: ({ series, height }: MuiBarChartProps) => (
     <div data-testid="mui-bar-chart">
       <div>Chart with {series?.length ?? 0} series</div>
       <div>Height: {height}</div>
     </div>
   ),
-  MuiLineChart: ({ series, height }: any) => (
+  MuiLineChart: ({ series, height }: MuiLineChartProps) => (
     <div data-testid="mui-line-chart">
       <div>Chart with {series?.length ?? 0} series</div>
       <div>Height: {height}</div>
@@ -108,9 +155,9 @@ vi.mock("../../../../components/charts/MuiCharts", () => ({
 }));
 
 vi.mock("../../../../components/charts/TabbedChartLayout", () => ({
-  TabbedChartLayout: ({ tabs, children }: any) => (
+  TabbedChartLayout: ({ tabs, children }: TabbedChartLayoutProps) => (
     <div data-testid="tabbed-chart-layout">
-      {tabs.map((tab: string, i: number) => (
+      {tabs.map((tab, i) => (
         <button key={i}>{tab}</button>
       ))}
       {children}
@@ -119,14 +166,16 @@ vi.mock("../../../../components/charts/TabbedChartLayout", () => ({
 }));
 
 vi.mock("../../../../components/charts/DynamicCharts", () => ({
-  DynamicKlineChart: ({ children }: any) => (
-    <div data-testid="dynamic-kline-chart">{children}</div>
+  // `children` is a render prop receiving the lazily-imported klinecharts module;
+  // the stub has no module to hand it, so it renders the container only.
+  DynamicKlineChart: (_props: DynamicKlineChartProps) => (
+    <div data-testid="dynamic-kline-chart" />
   ),
 }));
 
 // Mock V2 components
 vi.mock("../../../../components/market/v2/QualityHistogram", () => ({
-  QualityHistogram: ({ distribution, title }: any) => (
+  QualityHistogram: ({ distribution, title }: QualityHistogramProps) => (
     <div data-testid="quality-histogram">
       <div>{title}</div>
       <div>{distribution.length} tiers</div>
@@ -135,15 +184,15 @@ vi.mock("../../../../components/market/v2/QualityHistogram", () => ({
 }));
 
 vi.mock("../../../../components/market/v2/QualityBadge", () => ({
-  QualityBadge: ({ tier }: any) => <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>,
+  QualityBadge: ({ tier }: QualityBadgeProps) => <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>,
 }));
 
 vi.mock("../../../../components/market/v2/QualityFilter", () => ({
-  QualityFilter: ({ selectedTier, onTierChange }: any) => (
+  QualityFilter: ({ minTier, onMinTierChange }: QualityFilterProps) => (
     <div data-testid="quality-filter">
       <select
-        value={selectedTier ?? ""}
-        onChange={(e) => onTierChange(e.target.value ? Number(e.target.value) : null)}
+        value={minTier ?? ""}
+        onChange={(e) => onMinTierChange(e.target.value ? Number(e.target.value) : null)}
       >
         <option value="">All Tiers</option>
         <option value="1">Tier 1</option>
@@ -157,7 +206,7 @@ vi.mock("../../../../components/market/v2/QualityFilter", () => ({
 }));
 
 vi.mock("../../../../components/market/v2/VariantSelector", () => ({
-  VariantSelector: ({ onVariantChange }: any) => (
+  VariantSelector: ({ onVariantChange }: VariantSelectorProps) => (
     <select
       data-testid="variant-selector"
       onChange={(e) => onVariantChange(e.target.value)}
@@ -170,7 +219,7 @@ vi.mock("../../../../components/market/v2/VariantSelector", () => ({
 }));
 
 vi.mock("../../../../components/rating/ListingRating", () => ({
-  ListingNameAndRating: ({ user, contractor, shop }: any) => (
+  ListingNameAndRating: ({ user, contractor, shop }: ListingNameAndRatingProps) => (
     <div data-testid="seller-rating">
       {user?.username || contractor?.name || shop?.name}
     </div>
@@ -178,7 +227,7 @@ vi.mock("../../../../components/rating/ListingRating", () => ({
 }));
 
 vi.mock("../../../../components/haptic", () => ({
-  HapticButton: ({ children, onClick, disabled }: any) => (
+  HapticButton: ({ children, onClick, disabled }: HapticButtonProps) => (
     <button onClick={onClick} disabled={disabled} data-testid="add-to-cart-button">
       {children}
     </button>
@@ -186,114 +235,163 @@ vi.mock("../../../../components/haptic", () => ({
 }));
 
 vi.mock("../components/CreateBuyOrderV2", () => ({
-  CreateBuyOrderV2: ({ gameItem }: any) => (
+  CreateBuyOrderV2: ({ gameItem }: CreateBuyOrderV2Props) => (
     <div data-testid="create-buy-order-v2">
       Create Buy Order for {gameItem?.id}
     </div>
   ),
 }));
 
-// The component now fetches its data via RTK Query hooks; mock them with fixtures.
-vi.mock("../../../../store/api/v2/market", () => ({
-  useGetListingsQuery: () => ({
-    data: {
-      game_item: {
-        id: "test-game-item-id",
-        name: "Sample Item",
-        type: "Weapon",
-        image_url: "https://example.com/item.png",
+// The component now fetches its data via RTK Query hooks; mock them with fixtures
+// typed against the generated OpenAPI response types so contract drift breaks the
+// build instead of silently passing.
+vi.mock("../../../../store/api/v2/market", () => {
+  const listings: GetListingsApiResponse = {
+    game_item: {
+      id: "test-game-item-id",
+      name: "Sample Item",
+      type: "Weapon",
+      image_url: "https://example.com/item.png",
+    },
+    quality_distribution: [
+      {
+        quality_tier: 5,
+        quantity_available: 10,
+        price_min: 1000,
+        price_max: 1000,
+        price_avg: 1000,
+        shop_count: 1,
+        listing_count: 1,
       },
-      listings: [
-        {
-          listing_id: "l1",
-          shop_id: "shop-1",
-          shop_slug: "seller-one",
-          shop_name: "Seller One",
-          shop_rating: 4.5,
-          price: 1000,
-          quantity_available: 10,
-          quality_tier: 5,
-        },
-        {
-          listing_id: "l2",
-          shop_id: "shop-2",
-          shop_slug: "seller-two",
-          shop_name: "Seller Two",
-          shop_rating: 4.0,
-          price: 1200,
-          quantity_available: 5,
-          quality_tier: 3,
-        },
-      ],
-    },
-    isLoading: false,
-    error: undefined,
-  }),
-  useGetQualityDistributionQuery: () => ({
-    data: {
-      distribution: [
-        {
-          quality_tier: 5,
-          listing_count: 1,
-          quantity_available: 10,
-          min_price: 1000,
-          avg_price: 1000,
-          max_price: 1000,
-          shop_count: 1,
-        },
-        {
-          quality_tier: 3,
-          listing_count: 1,
-          quantity_available: 5,
-          min_price: 1200,
-          avg_price: 1200,
-          max_price: 1200,
-          shop_count: 1,
-        },
-      ],
-    },
-    isLoading: false,
-    error: undefined,
-  }),
-  useGetPriceHistoryQuery: () => ({
-    data: {
-      data: [
-        {
-          timestamp: "2024-01-01T00:00:00Z",
-          quality_tier: 5,
-          avg_price: 1000,
-          min_price: 900,
-          max_price: 1100,
-          volume: 20,
-        },
-      ],
-    },
-    isLoading: false,
-    error: undefined,
-  }),
-  useSearchBuyOrdersQuery: () => ({
-    data: {
-      buy_orders: [
-        {
-          buy_order_id: "bo1",
-          buyer_id: "buyer-one",
-          buyer_name: "Buyer One",
-          status: "active",
-          quantity: 5,
-          quantity_fulfilled: 0,
-          negotiable: false,
-          price_per_unit: 950,
-          quality_tier_min: 3,
-          quality_tier_max: 5,
-        },
-      ],
-    },
-    isLoading: false,
-    error: undefined,
-  }),
-  useFulfillBuyOrderMutation: () => [vi.fn(), { isLoading: false }],
-  useCancelBuyOrderMutation: () => [vi.fn(), { isLoading: false }],
-}));
+      {
+        quality_tier: 3,
+        quantity_available: 5,
+        price_min: 1200,
+        price_max: 1200,
+        price_avg: 1200,
+        shop_count: 1,
+        listing_count: 1,
+      },
+    ],
+    listings: [
+      {
+        listing_id: "l1",
+        variant_id: "variant-1",
+        title: "Sample Item - Tier 5",
+        shop_id: "shop-1",
+        shop_slug: "seller-one",
+        shop_name: "Seller One",
+        shop_rating: 4.5,
+        shop_rating_count: 12,
+        shop_badge_ids: [],
+        price: 1000,
+        quantity_available: 10,
+        quality_tier: 5,
+        created_at: "2024-01-01T00:00:00Z",
+      },
+      {
+        listing_id: "l2",
+        variant_id: "variant-2",
+        title: "Sample Item - Tier 3",
+        shop_id: "shop-2",
+        shop_slug: "seller-two",
+        shop_name: "Seller Two",
+        shop_rating: 4.0,
+        shop_rating_count: 8,
+        shop_badge_ids: [],
+        price: 1200,
+        quantity_available: 5,
+        quality_tier: 3,
+        created_at: "2024-01-02T00:00:00Z",
+      },
+    ],
+    total: 2,
+    page: 1,
+    page_size: 20,
+  };
+
+  const qualityDistribution: GetQualityDistributionApiResponse = {
+    game_item_id: "test-game-item-id",
+    game_item_name: "Sample Item",
+    total_quantity: 15,
+    distribution: [
+      {
+        quality_tier: 5,
+        listing_count: 1,
+        quantity_available: 10,
+        min_price: 1000,
+        avg_price: 1000,
+        max_price: 1000,
+        shop_count: 1,
+      },
+      {
+        quality_tier: 3,
+        listing_count: 1,
+        quantity_available: 5,
+        min_price: 1200,
+        avg_price: 1200,
+        max_price: 1200,
+        shop_count: 1,
+      },
+    ],
+  };
+
+  const priceHistory: GetPriceHistoryApiResponse = {
+    game_item_id: "test-game-item-id",
+    game_item_name: "Sample Item",
+    start_date: "2024-01-01T00:00:00Z",
+    end_date: "2024-01-31T00:00:00Z",
+    interval: "day",
+    data: [
+      {
+        timestamp: "2024-01-01T00:00:00Z",
+        quality_tier: 5,
+        avg_price: 1000,
+        min_price: 900,
+        max_price: 1100,
+        volume: 20,
+      },
+    ],
+  };
+
+  const buyOrders: SearchBuyOrdersApiResponse = {
+    buy_orders: [
+      {
+        buy_order_id: "bo1",
+        game_item_id: "test-game-item-id",
+        game_item_name: "Sample Item",
+        buyer_id: "buyer-one",
+        buyer_name: "Buyer One",
+        status: "active",
+        quantity: 5,
+        quantity_fulfilled: 0,
+        negotiable: false,
+        price_per_unit: 950,
+        quality_tier_min: 3,
+        quality_tier_max: 5,
+        created_at: "2024-01-01T00:00:00Z",
+      },
+    ],
+    total: 1,
+    page: 1,
+    page_size: 20,
+  };
+
+  return {
+    useGetListingsQuery: () =>
+      querySuccess<MarketV2Endpoints["getListings"]>(listings),
+    useGetQualityDistributionQuery: () =>
+      querySuccess<MarketV2Endpoints["getQualityDistribution"]>(qualityDistribution),
+    useGetPriceHistoryQuery: () =>
+      querySuccess<MarketV2Endpoints["getPriceHistory"]>(priceHistory),
+    useSearchBuyOrdersQuery: () =>
+      querySuccess<MarketV2Endpoints["searchBuyOrders"]>(buyOrders),
+    useFulfillBuyOrderMutation: () =>
+      mockMutationHook<MarketV2Endpoints["fulfillBuyOrder"]>(),
+    useCancelBuyOrderMutation: () =>
+      mockMutationHook<MarketV2Endpoints["cancelBuyOrder"]>(),
+  };
+});
 
 // Create mock store
 const createMockStore = () => {
@@ -312,7 +410,7 @@ const testTheme = createTheme({
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
   palette: { outline: { main: "#e0e0e0" } },
-} as any);
+});
 
 // Wrapper component for tests
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {

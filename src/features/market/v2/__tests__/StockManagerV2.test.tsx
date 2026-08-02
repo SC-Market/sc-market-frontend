@@ -19,41 +19,58 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import type { MyListingItem } from "../../../../store/api/v2/market";
 import { marketV2Api } from "../../../../store/api/v2/market";
 import { serviceApi } from "../../../../store/service";
+import {
+  mockMutationHook,
+  queryLoading,
+  querySuccess,
+} from "../../../../__tests__/rtkQueryMocks";
+import type { QueryResultOf } from "../../../../__tests__/rtkQueryMocks";
+import type { ThemedDataGrid } from "../../../../components/grid/ThemedDataGrid";
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
+import type { Page } from "../../../../components/metadata/Page";
+
+/** The generated market API module, used to derive endpoint result types. */
+type MarketV2Module = typeof import("../../../../store/api/v2/market");
+type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"];
+type ThemedDataGridProps = React.ComponentProps<typeof ThemedDataGrid>;
+type PageProps = React.ComponentProps<typeof Page>;
 
 const testTheme = createTheme({
   palette: { outline: { main: "#e0e0e0" } },
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
-} as any);
+});
 
-// Control the listings query result at module level.
-let myListingsReturn: any = {
-  data: undefined,
-  isLoading: true,
-  isFetching: false,
-  error: undefined,
-  refetch: () => {},
-};
+// Control the listings query result at module level. Typed against the
+// generated endpoint so the stubbed `data` stays contract-checked.
+let myListingsReturn: QueryResultOf<MarketV2Endpoints["getMyListings"]> =
+  queryLoading<MarketV2Endpoints["getMyListings"]>();
 
 vi.mock("../../../../store/api/v2/market", async () => {
-  const actual: any = await vi.importActual("../../../../store/api/v2/market");
-  const noopMutation = () => [vi.fn(() => ({ unwrap: () => Promise.resolve({}) })), {}];
+  const actual = await vi.importActual<MarketV2Module>(
+    "../../../../store/api/v2/market",
+  );
   return {
     ...actual,
     useGetMyListingsQuery: () => myListingsReturn,
-    useUpdateListingMutation: noopMutation,
-    useRefreshListingMutation: noopMutation,
-    useDeleteListingMutation: noopMutation,
-    useCreateListingMutation: noopMutation,
-    useUpdateStockLotMutation: noopMutation,
+    useUpdateListingMutation: () =>
+      mockMutationHook<MarketV2Endpoints["updateListing"]>(),
+    useRefreshListingMutation: () =>
+      mockMutationHook<MarketV2Endpoints["refreshListing"]>(),
+    useDeleteListingMutation: () =>
+      mockMutationHook<MarketV2Endpoints["deleteListing"]>(),
+    useCreateListingMutation: () =>
+      mockMutationHook<MarketV2Endpoints["createListing"]>(),
+    useUpdateStockLotMutation: () =>
+      mockMutationHook<MarketV2Endpoints["updateStockLot"]>(),
   };
 });
 
 // Mock the lazy data grid so the grid does not suspend forever in tests.
 vi.mock("../../../../components/grid/ThemedDataGrid", () => ({
-  ThemedDataGrid: ({ rows }: any) => (
+  ThemedDataGrid: ({ rows }: ThemedDataGridProps) => (
     <div data-testid="stock-data-grid">
-      {(rows || []).map((r: any) => (
+      {(rows || []).map((r) => (
         <div key={r.id} data-testid="stock-row">
           {r.title}
         </div>
@@ -70,7 +87,7 @@ vi.mock("../ListingSearchV2", () => ({
 import { StockManagerV2 } from "../StockManagerV2";
 
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, isLoading }: any) => (
+  StandardPageLayout: ({ children, isLoading }: StandardPageLayoutProps) => (
     <div data-testid="standard-page-layout">
       {isLoading && <div role="progressbar" data-testid="loading" />}
       {children}
@@ -79,7 +96,7 @@ vi.mock("../../../../components/layout/StandardPageLayout", () => ({
 }));
 
 vi.mock("../../../../components/metadata/Page", () => ({
-  Page: ({ children }: any) => <>{children}</>,
+  Page: ({ children }: PageProps) => <>{children}</>,
   shouldShowErrorPage: () => false,
 }));
 
@@ -149,7 +166,7 @@ const mockListings: MyListingItem[] = [
     quality_tier_min: 2,
     quality_tier_max: 2,
   },
-] as any;
+];
 
 const renderPage = () => {
   const store = createMockStore();
@@ -167,23 +184,16 @@ const renderPage = () => {
 describe("StockManagerV2", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    myListingsReturn = {
-      data: { listings: mockListings, total: 2 },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    };
+    myListingsReturn = querySuccess<MarketV2Endpoints["getMyListings"]>({
+      listings: mockListings,
+      total: 2,
+      page: 1,
+      page_size: 20,
+    });
   });
 
   it("renders loading state initially", () => {
-    myListingsReturn = {
-      data: undefined,
-      isLoading: true,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    };
+    myListingsReturn = queryLoading<MarketV2Endpoints["getMyListings"]>();
     renderPage();
     expect(screen.getByRole("progressbar")).toBeInTheDocument();
   });
@@ -213,13 +223,12 @@ describe("StockManagerV2", () => {
   });
 
   it("renders an empty data grid when there are no listings", async () => {
-    myListingsReturn = {
-      data: { listings: [], total: 0 },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    };
+    myListingsReturn = querySuccess<MarketV2Endpoints["getMyListings"]>({
+      listings: [],
+      total: 0,
+      page: 1,
+      page_size: 20,
+    });
     renderPage();
     await waitFor(() =>
       expect(screen.getByTestId("stock-data-grid")).toBeInTheDocument(),

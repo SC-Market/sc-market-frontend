@@ -18,6 +18,18 @@ import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { ViewOrg } from "../ViewOrg"
 import type { Contractor } from "../../../features/contractor/domain/types"
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../__tests__/rtkQueryMocks"
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query"
+
+/** Real (unmocked) module types, used to derive the endpoint result contract. */
+type ContractorApiModule =
+  typeof import("../../../features/contractor/api/contractorApi")
+type GetContractorEndpoint =
+  ContractorApiModule["contractorsApi"]["endpoints"]["getContractorBySpectrumID"]
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 
@@ -27,7 +39,10 @@ vi.mock("../../../features/contractor/api/contractorApi", () => ({
   contractorsApi: {
     reducerPath: "contractorsApi",
     reducer: vi.fn((state = {}) => state),
-    middleware: vi.fn(() => (next: any) => (action: any) => next(action)),
+    middleware: vi.fn(
+      () => (next: (action: unknown) => unknown) => (action: unknown) =>
+        next(action),
+    ),
     endpoints: {},
   },
 }))
@@ -35,7 +50,7 @@ vi.mock("../../../features/contractor/api/contractorApi", () => ({
 // Mock i18next
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, defaultValue?: string | Record<string, any>) => {
+    t: (key: string, defaultValue?: string | Record<string, unknown>) => {
       // Handle both string and object default values
       if (typeof defaultValue === "string") {
         return defaultValue
@@ -90,7 +105,7 @@ const mockTheme = createTheme({
     component: 2,
     layout: 3,
   },
-} as any)
+})
 
 // Create a mock store
 function createMockStore() {
@@ -147,13 +162,9 @@ describe("ViewOrg - Integration Tests", () => {
    */
   it("renders with loading state", () => {
     // Mock loading state
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      isFetching: true,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue(
+      queryLoading<GetContractorEndpoint>(),
+    )
 
     renderWithRoute("test-org")
 
@@ -190,13 +201,9 @@ describe("ViewOrg - Integration Tests", () => {
     } as Contractor
 
     // Mock successful data fetch
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: mockContractor,
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue(
+      querySuccess<GetContractorEndpoint>(mockContractor),
+    )
 
     renderWithRoute("test-org")
 
@@ -225,13 +232,9 @@ describe("ViewOrg - Integration Tests", () => {
     }
 
     // Mock 404 error
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isFetching: false,
-      error: mock404Error,
-      refetch: vi.fn(),
-    } as any)
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue(
+      queryError<GetContractorEndpoint>(mock404Error),
+    )
 
     renderWithRoute("nonexistent-org")
 
@@ -253,13 +256,9 @@ describe("ViewOrg - Integration Tests", () => {
     }
 
     // Mock server error
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isFetching: false,
-      error: mockServerError,
-      refetch: vi.fn(),
-    } as any)
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue(
+      queryError<GetContractorEndpoint>(mockServerError),
+    )
 
     renderWithRoute("test-org")
 
@@ -275,18 +274,14 @@ describe("ViewOrg - Integration Tests", () => {
    * Requirements: 7.1, 7.2
    */
   it("handles network error", () => {
-    const mockNetworkError = {
+    const mockNetworkError: FetchBaseQueryError = {
       status: "FETCH_ERROR",
       error: "Network request failed",
     }
 
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isFetching: false,
-      error: mockNetworkError,
-      refetch: vi.fn(),
-    } as any)
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue(
+      queryError<GetContractorEndpoint>(mockNetworkError),
+    )
 
     renderWithRoute("test-org")
 
@@ -319,13 +314,9 @@ describe("ViewOrg - Integration Tests", () => {
       market_order_template: "",
     } as Contractor
 
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: mockContractor,
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue(
+      querySuccess<GetContractorEndpoint>(mockContractor),
+    )
 
     renderWithRoute("test-org")
 
@@ -338,13 +329,9 @@ describe("ViewOrg - Integration Tests", () => {
    * Requirements: 3.2, 8.2
    */
   it("displays skeleton during initial load", () => {
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      isFetching: true,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue(
+      queryLoading<GetContractorEndpoint>(),
+    )
 
     renderWithRoute("test-org")
 
@@ -377,13 +364,9 @@ describe("ViewOrg - Integration Tests", () => {
       market_order_template: "",
     } as Contractor
 
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: mockContractor,
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue(
+      querySuccess<GetContractorEndpoint>(mockContractor),
+    )
 
     renderWithRoute("test-org")
 

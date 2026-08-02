@@ -191,7 +191,6 @@ export const ContractorListItem = React.memo(
                   />
                   <CardContent>
                     {
-                      // @ts-ignore
                       <Typography
                         sx={{
                           "-webkit-box-orient": "vertical",

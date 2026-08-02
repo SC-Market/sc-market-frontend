@@ -9,33 +9,39 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import type { MyListingItem } from "../../../../store/api/v2/market";
 import { marketV2Api } from "../../../../store/api/v2/market";
 import { serviceApi } from "../../../../store/service";
+import {
+  mockMutationHook,
+  queryLoading,
+  querySuccess,
+} from "../../../../__tests__/rtkQueryMocks";
+import type { QueryResultOf } from "../../../../__tests__/rtkQueryMocks";
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
+
+/** The generated market API module, used to derive endpoint result types. */
+type MarketV2Module = typeof import("../../../../store/api/v2/market");
+type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"];
 
 const testTheme = createTheme({
   palette: { outline: { main: "#e0e0e0" } },
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
-} as any);
+});
 
 // The current MyListingsV2 desktop view renders three independent lazy sections
 // (Active / Inactive / Archived), each calling useGetMyListingsQuery. We mock the
 // hook at module level so every section resolves to the same controllable result.
-let myListingsReturn: any = {
-  data: undefined,
-  isLoading: true,
-  isFetching: false,
-  error: undefined,
-  refetch: () => {},
-};
+let myListingsReturn: QueryResultOf<MarketV2Endpoints["getMyListings"]> =
+  queryLoading<MarketV2Endpoints["getMyListings"]>();
 
 vi.mock("../../../../store/api/v2/market", async () => {
-  const actual: any = await vi.importActual("../../../../store/api/v2/market");
+  const actual = await vi.importActual<MarketV2Module>(
+    "../../../../store/api/v2/market",
+  );
   return {
     ...actual,
     useGetMyListingsQuery: () => myListingsReturn,
-    useUpdateListingMutation: () => [
-      vi.fn(() => ({ unwrap: () => Promise.resolve({}) })),
-      {},
-    ],
+    useUpdateListingMutation: () =>
+      mockMutationHook<MarketV2Endpoints["updateListing"]>(),
   };
 });
 
@@ -43,7 +49,9 @@ vi.mock("../../../../store/api/v2/market", async () => {
 import { MyListingsV2 } from "../MyListingsV2";
 
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children }: any) => <div>{children}</div>,
+  StandardPageLayout: ({ children }: StandardPageLayoutProps) => (
+    <div>{children}</div>
+  ),
 }));
 
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
@@ -81,7 +89,7 @@ const createMockStore = () =>
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
       [serviceApi.reducerPath]: serviceApi.reducer,
-    } as any,
+    },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
   });
@@ -113,7 +121,7 @@ const mockListings: MyListingItem[] = [
     quality_tier_min: 2,
     quality_tier_max: 2,
   },
-] as any;
+];
 
 const renderPage = () => {
   const store = createMockStore();
@@ -131,13 +139,12 @@ const renderPage = () => {
 describe("MyListingsV2", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    myListingsReturn = {
-      data: { listings: mockListings, total: 2 },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    };
+    myListingsReturn = querySuccess<MarketV2Endpoints["getMyListings"]>({
+      listings: mockListings,
+      total: 2,
+      page: 1,
+      page_size: 20,
+    });
   });
 
   it("renders section headers for the desktop manage view", async () => {
@@ -196,13 +203,12 @@ describe("MyListingsV2", () => {
   });
 
   it("displays empty state when no listings found", async () => {
-    myListingsReturn = {
-      data: { listings: [], total: 0 },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    };
+    myListingsReturn = querySuccess<MarketV2Endpoints["getMyListings"]>({
+      listings: [],
+      total: 0,
+      page: 1,
+      page_size: 20,
+    });
     renderPage();
     await waitFor(() =>
       expect(screen.getAllByText("No listings yet").length).toBeGreaterThan(0),

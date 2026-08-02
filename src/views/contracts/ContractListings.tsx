@@ -154,7 +154,6 @@ export function ContractListing(props: {
               />
               <CardContent sx={{ width: "auto", height: 120, paddingTop: 0 }}>
                 {
-                  // @ts-ignore
                   <Typography
                     sx={{
                       "-webkit-box-orient": "vertical",

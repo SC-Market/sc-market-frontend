@@ -1,4 +1,5 @@
 import "./setup";
+import React from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
@@ -6,10 +7,29 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { EditListingV2 } from "../EditListingV2";
 import { marketV2Api, useGetListingDetailQuery, useUpdateListingMutation } from "../../../../store/api/v2/market";
+import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market";
+import {
+  mockMutationHook,
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../../__tests__/rtkQueryMocks";
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
+import type { MarkdownEditor } from "../../../../components/markdown/Markdown";
+import type { LocationSelectorProps } from "../../components/stock/LocationSelector";
+import type { FormPaper } from "../../../../components/paper/FormPaper";
+import type { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea";
+
+type MarketV2Module = typeof import("../../../../store/api/v2/market");
+type MarkdownEditorProps = React.ComponentProps<typeof MarkdownEditor>;
+type FormPaperProps = React.ComponentProps<typeof FormPaper>;
+type SelectPhotosAreaProps = React.ComponentProps<typeof SelectPhotosArea>;
 
 // Mock all dependencies
 vi.mock("../../../../store/api/v2/market", async () => {
-  const actual = await vi.importActual("../../../../store/api/v2/market");
+  const actual = await vi.importActual<MarketV2Module>(
+    "../../../../store/api/v2/market",
+  );
   return {
     ...actual,
     useGetListingDetailQuery: vi.fn(),
@@ -22,7 +42,7 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 }));
 
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
-  MarkdownEditor: ({ value, onChange }: any) => (
+  MarkdownEditor: ({ value, onChange }: MarkdownEditorProps) => (
     <textarea
       data-testid="markdown-editor"
       value={value}
@@ -32,7 +52,7 @@ vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
 }));
 
 vi.mock("../components/stock/LocationSelector", () => ({
-  LocationSelector: ({ value, onChange }: any) => (
+  LocationSelector: ({ value, onChange }: LocationSelectorProps) => (
     <select
       data-testid="location-selector"
       value={value || ""}
@@ -46,18 +66,24 @@ vi.mock("../components/stock/LocationSelector", () => ({
 }));
 
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, title, isLoading, error }: any) => (
+  StandardPageLayout: ({
+    children,
+    title,
+    isLoading,
+    error,
+  }: StandardPageLayoutProps) => (
     <div data-testid="standard-page-layout">
       <h1>{title}</h1>
       {isLoading && <div data-testid="loading">Loading...</div>}
-      {error && <div data-testid="error">Error</div>}
+      {/* `error` is typed `unknown` on the real props, so coerce before rendering. */}
+      {Boolean(error) && <div data-testid="error">Error</div>}
       {children}
     </div>
   ),
 }));
 
 vi.mock("../../../../components/paper/FormPaper", () => ({
-  FormPaper: ({ children, title }: any) => (
+  FormPaper: ({ children, title }: FormPaperProps) => (
     <div data-testid="form-paper">
       <h3>{title}</h3>
       {children}
@@ -66,7 +92,7 @@ vi.mock("../../../../components/paper/FormPaper", () => ({
 }));
 
 vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
-  SelectPhotosArea: ({ setPhotos }: any) => (
+  SelectPhotosArea: ({ setPhotos }: SelectPhotosAreaProps) => (
     <div data-testid="select-photos-area">
       <button onClick={() => setPhotos(["photo1.jpg"])}>Add Photo</button>
     </div>
@@ -118,20 +144,27 @@ const createMockStore = () => {
   });
 };
 
-// Mock listing data
-const mockListingData = {
+// Mock listing data, typed against the generated response contract.
+const mockListingData: GetListingDetailApiResponse = {
   listing: {
     listing_id: "listing-123",
+    shop_id: "shop-456",
     title: "Test Listing",
     description: "Test description",
     status: "active",
+    visibility: "public",
+    sale_type: "fixed",
+    listing_type: "single",
+    quantity_unit: "unit",
     created_at: "2024-01-01T00:00:00Z",
     updated_at: "2024-01-01T00:00:00Z",
   },
   seller: {
-    id: "seller-456",
+    shop_id: "shop-456",
     name: "Test Seller",
+    slug: "test-seller",
     rating: 4.5,
+    languages: ["en"],
   },
   items: [
     {
@@ -171,14 +204,15 @@ describe("EditListingV2", () => {
     const store = createMockStore();
     
     // Mock the hooks
-    (useGetListingDetailQuery as any).mockReturnValue({
-      data: mockListingData,
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    });
-    
-    (useUpdateListingMutation as any).mockReturnValue([vi.fn(), { isLoading: false }]);
+    vi.mocked(useGetListingDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getListingDetail>(
+        mockListingData,
+      ),
+    );
+
+    vi.mocked(useUpdateListingMutation).mockReturnValue(
+      mockMutationHook<typeof marketV2Api.endpoints.updateListing>(),
+    );
 
     return render(
       <Provider store={store}>
@@ -320,20 +354,19 @@ describe("EditListingV2", () => {
   });
 
   it("prevents editing sold listings", () => {
-    (useGetListingDetailQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useGetListingDetailQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getListingDetail>({
         ...mockListingData,
         listing: {
           ...mockListingData.listing,
           status: "sold",
         },
-      },
-      isLoading: false,
-      error: undefined,
-      refetch: vi.fn(),
-    });
-    
-    (useUpdateListingMutation as any).mockReturnValue([vi.fn(), { isLoading: false }]);
+      }),
+    );
+
+    vi.mocked(useUpdateListingMutation).mockReturnValue(
+      mockMutationHook<typeof marketV2Api.endpoints.updateListing>(),
+    );
 
     const store = createMockStore();
     render(
@@ -355,14 +388,13 @@ describe("EditListingV2", () => {
   });
 
   it("displays loading state", () => {
-    (useGetListingDetailQuery as any).mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      error: undefined,
-      refetch: vi.fn(),
-    });
-    
-    (useUpdateListingMutation as any).mockReturnValue([vi.fn(), { isLoading: false }]);
+    vi.mocked(useGetListingDetailQuery).mockReturnValue(
+      queryLoading<typeof marketV2Api.endpoints.getListingDetail>(),
+    );
+
+    vi.mocked(useUpdateListingMutation).mockReturnValue(
+      mockMutationHook<typeof marketV2Api.endpoints.updateListing>(),
+    );
 
     const store = createMockStore();
     render(
@@ -379,14 +411,16 @@ describe("EditListingV2", () => {
   });
 
   it("displays error state when listing not found", () => {
-    (useGetListingDetailQuery as any).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      error: { status: 404, data: { message: "Not found" } },
-      refetch: vi.fn(),
-    });
-    
-    (useUpdateListingMutation as any).mockReturnValue([vi.fn(), { isLoading: false }]);
+    vi.mocked(useGetListingDetailQuery).mockReturnValue(
+      queryError<typeof marketV2Api.endpoints.getListingDetail>({
+        status: 404,
+        data: { message: "Not found" },
+      }),
+    );
+
+    vi.mocked(useUpdateListingMutation).mockReturnValue(
+      mockMutationHook<typeof marketV2Api.endpoints.updateListing>(),
+    );
 
     const store = createMockStore();
     render(

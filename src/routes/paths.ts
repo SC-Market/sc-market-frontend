@@ -160,6 +160,8 @@ export const GAME_DATA_PATHS = {
   blueprint: (slug: string) => `/blueprints/${slug}`,
   blueprintInventory: "/blueprints/inventory",
   resources: "/resources",
+  resource: (id: string, name?: string) =>
+    name ? `/resources/${formatShortSlug(id, name)}` : `/resources/${id}`,
   craftingCalculator: "/crafting/calculator",
   craftingHistory: "/crafting/history",
   mining: "/mining",

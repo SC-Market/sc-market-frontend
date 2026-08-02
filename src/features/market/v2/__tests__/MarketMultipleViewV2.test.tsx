@@ -10,6 +10,32 @@ import { generatedApiV2 } from "../../../../store/generatedApiV2";
 import { serviceApi } from "../../../../store/service";
 import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
+import { querySuccess } from "../../../../__tests__/rtkQueryMocks";
+import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market";
+import type { StandardPageLayoutProps } from "../../../../components/layout/StandardPageLayout";
+import type { QualityBadge } from "../../../../components/market/v2/QualityBadge";
+import type { VariantSelector } from "../../../../components/market/v2/VariantSelector";
+import type { ListingNameAndRating } from "../../../../components/rating/ListingRating";
+import type { UserList } from "../../../../components/list/UserList";
+import type { OrderList } from "../../../../components/list/OrderList";
+import type { ImagePreviewModal } from "../../../../components/modal/ImagePreviewModal";
+import type { MarkdownRender } from "../../../../components/markdown/Markdown";
+import type { ListingDetailItem } from "../../listing-view/components/ListingDetailItem";
+import type { Section } from "../../../../components/paper/Section";
+
+/** The generated market API module, used to derive endpoint response types. */
+type MarketV2Module = typeof import("../../../../store/api/v2/market");
+type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"];
+
+type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>;
+type VariantSelectorProps = React.ComponentProps<typeof VariantSelector>;
+type ListingNameAndRatingProps = React.ComponentProps<typeof ListingNameAndRating>;
+type UserListProps = React.ComponentProps<typeof UserList>;
+type OrderListProps = React.ComponentProps<typeof OrderList>;
+type ImagePreviewModalProps = React.ComponentProps<typeof ImagePreviewModal>;
+type MarkdownRenderProps = React.ComponentProps<typeof MarkdownRender>;
+type ListingDetailItemProps = React.ComponentProps<typeof ListingDetailItem>;
+type SectionProps = React.ComponentProps<typeof Section>;
 
 /**
  * MarketMultipleViewV2 Component Tests
@@ -57,11 +83,17 @@ vi.mock("../../../../hooks/login/CurrentOrg", () => ({
 // StandardPageLayout depends on Page (useRouteError -> data router) and layout
 // contexts not present under BrowserRouter. Mock it to render children plus title.
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, title, isLoading, error }: any) => (
+  StandardPageLayout: ({
+    children,
+    title,
+    isLoading,
+    error,
+  }: StandardPageLayoutProps) => (
     <div data-testid="standard-page-layout">
       <h1>{title}</h1>
       {isLoading && <div data-testid="loading">Loading...</div>}
-      {error && <div data-testid="error">Error</div>}
+      {/* `error` is typed `unknown` on the real props, so coerce before rendering. */}
+      {Boolean(error) && <div data-testid="error">Error</div>}
       {children}
     </div>
   ),
@@ -72,9 +104,17 @@ vi.mock("react-i18next", async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, defaultValue?: string, options?: any) => {
+      t: (
+        key: string,
+        defaultValue?: string,
+        options?: Record<string, string | number>,
+      ) => {
         if (options) {
-          return defaultValue?.replace(/\{\{(\w+)\}\}/g, (_, k) => options[k]) || key;
+          return (
+            defaultValue?.replace(/\{\{(\w+)\}\}/g, (_, k: string) =>
+              String(options[k]),
+            ) || key
+          );
         }
         return defaultValue || key;
       },
@@ -87,20 +127,24 @@ vi.mock("react-i18next", async () => {
 
 // Mock components
 vi.mock("../../../../components/market/v2/QualityBadge", () => ({
-  QualityBadge: ({ tier, size }: any) => (
+  QualityBadge: ({ tier }: QualityBadgeProps) => (
     <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>
   ),
 }));
 
 vi.mock("../../../../components/market/v2/VariantSelector", () => ({
-  VariantSelector: ({ onVariantChange, variants, selectedVariantId }: any) => (
+  VariantSelector: ({
+    onVariantChange,
+    variants,
+    selectedVariantId,
+  }: VariantSelectorProps) => (
     <select
       data-testid="variant-selector"
       value={selectedVariantId || ""}
-      onChange={(e) => onVariantChange(e.target.value || null)}
+      onChange={(e) => onVariantChange(e.target.value)}
     >
       <option value="">Select variant</option>
-      {variants?.map((v: any) => (
+      {variants?.map((v) => (
         <option key={v.variant_id} value={v.variant_id}>
           {v.display_name}
         </option>
@@ -110,7 +154,7 @@ vi.mock("../../../../components/market/v2/VariantSelector", () => ({
 }));
 
 vi.mock("../../../../components/rating/ListingRating", () => ({
-  ListingNameAndRating: ({ user, contractor, shop }: any) => (
+  ListingNameAndRating: ({ user, contractor, shop }: ListingNameAndRatingProps) => (
     <div data-testid="seller-rating">
       {user?.username || contractor?.name || shop?.name}
     </div>
@@ -118,40 +162,44 @@ vi.mock("../../../../components/rating/ListingRating", () => ({
 }));
 
 vi.mock("../../../../components/list/UserList", () => ({
-  UserList: ({ users, title }: any) => (
+  UserList: ({ users, title }: UserListProps) => (
     <div data-testid="user-list">
       <div>{title}</div>
-      {users.map((u: any, i: number) => (
-        <div key={i}>{u.name || u.username}</div>
+      {users.map((u, i) => (
+        <div key={i}>
+          {u && ("name" in u ? u.name : u.username)}
+        </div>
       ))}
     </div>
   ),
 }));
 
 vi.mock("../../../../components/list/OrderList", () => ({
-  OrderList: ({ orders }: any) => (
+  OrderList: ({ orders }: OrderListProps) => (
     <div data-testid="order-list">{orders.length} orders</div>
   ),
 }));
 
 vi.mock("../../../../components/modal/ImagePreviewModal", () => ({
-  ImagePreviewModal: ({ open, onClose }: any) => (
+  ImagePreviewModal: ({ open }: ImagePreviewModalProps) => (
     open ? <div data-testid="image-modal">Image Modal</div> : null
   ),
 }));
 
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
-  MarkdownRender: ({ text }: any) => <div data-testid="markdown">{text}</div>,
+  MarkdownRender: ({ text }: MarkdownRenderProps) => (
+    <div data-testid="markdown">{text}</div>
+  ),
 }));
 
 vi.mock("../../listing-view/components/ListingDetailItem", () => ({
-  ListingDetailItem: ({ children, icon }: any) => (
+  ListingDetailItem: ({ children }: ListingDetailItemProps) => (
     <div data-testid="listing-detail-item">{children}</div>
   ),
 }));
 
 vi.mock("../../../../components/paper/Section", () => ({
-  Section: ({ children, title }: any) => (
+  Section: ({ children, title }: SectionProps) => (
     <div data-testid="section">
       <h3>{title}</h3>
       {children}
@@ -159,72 +207,106 @@ vi.mock("../../../../components/paper/Section", () => ({
   ),
 }));
 
-// The component fetches bundle data via useGetListingDetailQuery; mock it.
-vi.mock("../../../../store/api/v2/market", () => ({
-  useGetListingDetailQuery: () => ({
-    data: {
-      listing: {
-        listing_id: "test-bundle-123",
-        title: "Complete Weapon Bundle",
-        description: "A complete set of weapons with various quality tiers.",
-        status: "active",
-        created_at: "2024-01-01T00:00:00Z",
-        updated_at: "2024-01-02T00:00:00Z",
-        expires_at: "2024-02-01T00:00:00Z",
-      },
-      seller: {
-        name: "TestSeller",
-        slug: "testseller",
-        logo_url: "https://example.com/logo.png",
-        rating: 4.5,
-      },
-      items: [
-        {
-          item_id: "item-1",
-          game_item: { id: "gi-1", name: "Energy Rifle", type: "Weapon", image_url: "https://example.com/rifle.png" },
-          pricing_mode: "per_variant",
-          base_price: 0,
-          variants: [
-            {
-              variant_id: "v1",
-              attributes: { quality_tier: 3, quality_value: 75.5, crafted_source: "Crafted" },
-              display_name: "Tier 3 (75.5%) - Crafted",
-              short_name: "T3",
-              quantity: 5,
-              price: 2500,
-            },
-            {
-              variant_id: "v2",
-              attributes: { quality_tier: 5, quality_value: 95.0, crafted_source: "Crafted" },
-              display_name: "Tier 5 (95.0%) - Crafted",
-              short_name: "T5",
-              quantity: 2,
-              price: 5000,
-            },
-          ],
-        },
-        {
-          item_id: "item-2",
-          game_item: { id: "gi-2", name: "Ballistic Pistol", type: "Weapon", image_url: "https://example.com/pistol.png" },
-          pricing_mode: "unified",
-          base_price: 1500,
-          variants: [
-            {
-              variant_id: "v3",
-              attributes: { quality_tier: 4, quality_value: 85.0, crafted_source: "Store" },
-              display_name: "Tier 4 (85.0%) - Store",
-              short_name: "T4",
-              quantity: 3,
-              price: 1500,
-            },
-          ],
-        },
-      ],
+// The component fetches bundle data via useGetListingDetailQuery; mock it with a
+// fixture typed against the generated response type so contract drift fails the build.
+vi.mock("../../../../store/api/v2/market", () => {
+  const listingDetail: GetListingDetailApiResponse = {
+    listing: {
+      listing_id: "test-bundle-123",
+      shop_id: "shop-1",
+      title: "Complete Weapon Bundle",
+      description: "A complete set of weapons with various quality tiers.",
+      status: "active",
+      visibility: "public",
+      sale_type: "fixed",
+      listing_type: "bundle",
+      quantity_unit: "unit",
+      created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-02T00:00:00Z",
+      expires_at: "2024-02-01T00:00:00Z",
     },
-    isLoading: false,
-    error: undefined,
-  }),
-}));
+    seller: {
+      shop_id: "shop-1",
+      name: "TestSeller",
+      slug: "testseller",
+      logo_url: "https://example.com/logo.png",
+      rating: 4.5,
+      languages: ["en"],
+    },
+    items: [
+      {
+        item_id: "item-1",
+        game_item: {
+          id: "gi-1",
+          name: "Energy Rifle",
+          type: "Weapon",
+          image_url: "https://example.com/rifle.png",
+        },
+        pricing_mode: "per_variant",
+        base_price: 0,
+        variants: [
+          {
+            variant_id: "v1",
+            attributes: {
+              quality_tier: 3,
+              quality_value: 75.5,
+              crafted_source: "crafted",
+            },
+            display_name: "Tier 3 (75.5%) - Crafted",
+            short_name: "T3",
+            quantity: 5,
+            price: 2500,
+            locations: [],
+          },
+          {
+            variant_id: "v2",
+            attributes: {
+              quality_tier: 5,
+              quality_value: 95.0,
+              crafted_source: "crafted",
+            },
+            display_name: "Tier 5 (95.0%) - Crafted",
+            short_name: "T5",
+            quantity: 2,
+            price: 5000,
+            locations: [],
+          },
+        ],
+      },
+      {
+        item_id: "item-2",
+        game_item: {
+          id: "gi-2",
+          name: "Ballistic Pistol",
+          type: "Weapon",
+          image_url: "https://example.com/pistol.png",
+        },
+        pricing_mode: "unified",
+        base_price: 1500,
+        variants: [
+          {
+            variant_id: "v3",
+            attributes: {
+              quality_tier: 4,
+              quality_value: 85.0,
+              crafted_source: "store",
+            },
+            display_name: "Tier 4 (85.0%) - Store",
+            short_name: "T4",
+            quantity: 3,
+            price: 1500,
+            locations: [],
+          },
+        ],
+      },
+    ],
+  };
+
+  return {
+    useGetListingDetailQuery: () =>
+      querySuccess<MarketV2Endpoints["getListingDetail"]>(listingDetail),
+  };
+});
 
 // Mock store setup
 const createMockStore = () => {
@@ -242,7 +324,7 @@ const testTheme = createTheme({
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
   palette: { outline: { main: "#e0e0e0" } },
-} as any);
+});
 
 const renderWithProviders = (component: React.ReactElement) => {
   const store = createMockStore();

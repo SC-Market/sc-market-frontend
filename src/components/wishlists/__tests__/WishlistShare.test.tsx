@@ -22,9 +22,15 @@ import { WishlistShare } from "../WishlistShare"
 import { marketV2Api } from "../../../store/api/v2/market"
 import type { Wishlist } from "../../../store/api/v2/market"
 
-// Mock window.location
-delete (window as any).location
-window.location = { origin: "https://example.com" } as any
+// Mock window.location so share links get a deterministic origin. `location`
+// is a non-configurable accessor in happy-dom, so it is replaced wholesale;
+// only `origin` is read by the component under test, hence the narrowing.
+Reflect.deleteProperty(window, "location")
+Object.defineProperty(window, "location", {
+  configurable: true,
+  writable: true,
+  value: { origin: "https://example.com" } as Location,
+})
 
 // Helper to create mock store
 const createMockStore = (initialState = {}) => {
@@ -203,7 +209,10 @@ describe("WishlistShare Component", () => {
 
     it("should copy link to clipboard when copy button is clicked", async () => {
       const writeTextMock = vi.fn().mockResolvedValue(undefined)
-      ;(navigator.clipboard.writeText as any) = writeTextMock
+      vi.stubGlobal("navigator", {
+        ...navigator,
+        clipboard: { ...navigator.clipboard, writeText: writeTextMock },
+      })
 
       renderWithRedux(
         <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
@@ -221,7 +230,10 @@ describe("WishlistShare Component", () => {
 
     it("should show success message after copying", async () => {
       const writeTextMock = vi.fn().mockResolvedValue(undefined)
-      ;(navigator.clipboard.writeText as any) = writeTextMock
+      vi.stubGlobal("navigator", {
+        ...navigator,
+        clipboard: { ...navigator.clipboard, writeText: writeTextMock },
+      })
 
       renderWithRedux(
         <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
@@ -237,7 +249,10 @@ describe("WishlistShare Component", () => {
 
     it("should change copy button icon to check after copying", async () => {
       const writeTextMock = vi.fn().mockResolvedValue(undefined)
-      ;(navigator.clipboard.writeText as any) = writeTextMock
+      vi.stubGlobal("navigator", {
+        ...navigator,
+        clipboard: { ...navigator.clipboard, writeText: writeTextMock },
+      })
 
       renderWithRedux(
         <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
@@ -253,7 +268,10 @@ describe("WishlistShare Component", () => {
 
     it("should handle clipboard copy failure", async () => {
       const writeTextMock = vi.fn().mockRejectedValue(new Error("Clipboard error"))
-      ;(navigator.clipboard.writeText as any) = writeTextMock
+      vi.stubGlobal("navigator", {
+        ...navigator,
+        clipboard: { ...navigator.clipboard, writeText: writeTextMock },
+      })
 
       renderWithRedux(
         <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />

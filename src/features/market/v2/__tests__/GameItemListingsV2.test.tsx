@@ -10,12 +10,31 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { GameItemListingsV2 } from "../GameItemListingsV2";
 import * as marketApi from "../../../../store/api/v2/market";
 import { marketV2Api } from "../../../../store/api/v2/market";
+import type { GetListingsApiResponse } from "../../../../store/api/v2/market";
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../../__tests__/rtkQueryMocks";
+import type { QualityHistogram } from "../../../../components/market/v2/QualityHistogram";
+import type { QualityBadge } from "../../../../components/market/v2/QualityBadge";
+import type { VariantSelector } from "../../../../components/market/v2/VariantSelector";
+import type { ListingNameAndRating } from "../../../../components/rating/ListingRating";
+import type { HapticButton } from "../../../../components/haptic";
+
+type QualityHistogramProps = React.ComponentProps<typeof QualityHistogram>;
+type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>;
+type VariantSelectorProps = React.ComponentProps<typeof VariantSelector>;
+type ListingNameAndRatingProps = React.ComponentProps<
+  typeof ListingNameAndRating
+>;
+type HapticButtonProps = React.ComponentProps<typeof HapticButton>;
 
 const testTheme = createTheme({
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
   palette: { outline: { main: "#e0e0e0" } },
-} as any);
+});
 
 // Mock react-router-dom useParams
 vi.mock("react-router-dom", async () => {
@@ -42,7 +61,7 @@ vi.mock("react-i18next", () => ({
       typeof defaultValue === "string" ? defaultValue : key,
     i18n: { language: "en" },
   }),
-  Trans: ({ children }: any) => children,
+  Trans: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 // Mock alert hook
@@ -52,7 +71,7 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 
 // Mock components
 vi.mock("../../../../components/market/v2/QualityHistogram", () => ({
-  QualityHistogram: ({ distribution, title }: any) => (
+  QualityHistogram: ({ distribution, title }: QualityHistogramProps) => (
     <div data-testid="quality-histogram">
       <div>{title}</div>
       <div>{distribution.length} tiers</div>
@@ -61,11 +80,13 @@ vi.mock("../../../../components/market/v2/QualityHistogram", () => ({
 }));
 
 vi.mock("../../../../components/market/v2/QualityBadge", () => ({
-  QualityBadge: ({ tier }: any) => <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>,
+  QualityBadge: ({ tier }: QualityBadgeProps) => (
+    <span data-testid={`quality-badge-${tier}`}>Tier {tier}</span>
+  ),
 }));
 
 vi.mock("../../../../components/market/v2/VariantSelector", () => ({
-  VariantSelector: ({ onVariantChange }: any) => (
+  VariantSelector: ({ onVariantChange }: VariantSelectorProps) => (
     <select
       data-testid="variant-selector"
       onChange={(e) => onVariantChange(e.target.value)}
@@ -78,7 +99,11 @@ vi.mock("../../../../components/market/v2/VariantSelector", () => ({
 }));
 
 vi.mock("../../../../components/rating/ListingRating", () => ({
-  ListingNameAndRating: ({ user, contractor, shop }: any) => (
+  ListingNameAndRating: ({
+    user,
+    contractor,
+    shop,
+  }: ListingNameAndRatingProps) => (
     <div data-testid="seller-rating">
       {shop?.name || user?.username || contractor?.name}
     </div>
@@ -86,15 +111,16 @@ vi.mock("../../../../components/rating/ListingRating", () => ({
 }));
 
 vi.mock("../../../../components/haptic", () => ({
-  HapticButton: ({ children, onClick, disabled }: any) => (
+  HapticButton: ({ children, onClick, disabled }: HapticButtonProps) => (
     <button onClick={onClick} disabled={disabled} data-testid="add-to-cart-button">
       {children}
     </button>
   ),
 }));
 
-// Mock data — matches the current GetGameItemListingsResponse schema.
-const mockGameItemData = {
+// Mock data — typed against the generated response contract so schema drift
+// surfaces as a compile error.
+const mockGameItemData: GetListingsApiResponse = {
   game_item: {
     id: "test-game-item-id",
     name: "Test Game Item",
@@ -139,6 +165,8 @@ const mockGameItemData = {
       shop_name: "TestSeller1",
       shop_slug: "test-seller-1",
       shop_rating: 4.5,
+      shop_rating_count: 20,
+      shop_badge_ids: [],
       quality_tier: 3,
       price: 2000,
       quantity_available: 10,
@@ -152,6 +180,8 @@ const mockGameItemData = {
       shop_name: "TestSeller2",
       shop_slug: "test-seller-2",
       shop_rating: 4.8,
+      shop_rating_count: 8,
+      shop_badge_ids: [],
       quality_tier: 5,
       price: 5000,
       quantity_available: 5,
@@ -165,6 +195,8 @@ const mockGameItemData = {
       shop_name: "TestContractor",
       shop_slug: "test-contractor",
       shop_rating: 4.2,
+      shop_rating_count: 15,
+      shop_badge_ids: [],
       quality_tier: 1,
       price: 1000,
       quantity_available: 20,
@@ -202,15 +234,9 @@ function renderWithProviders(component: React.ReactElement) {
 describe("GameItemListingsV2", () => {
   beforeEach(() => {
     // Mock the RTK Query hook (standalone export used by the component)
-    vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
-      data: mockGameItemData,
-      isLoading: false,
-      isFetching: false,
-      isSuccess: true,
-      isError: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getListings>(mockGameItemData),
+    );
   });
 
   afterEach(() => {
@@ -416,30 +442,21 @@ describe("GameItemListingsV2", () => {
 
   describe("Loading and error states", () => {
     it("should show loading state", () => {
-      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
-        data: undefined,
-        isLoading: true,
-        isFetching: true,
-        isSuccess: false,
-        isError: false,
-        error: undefined,
-        refetch: vi.fn(),
-      } as any);
+      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue(
+        queryLoading<typeof marketV2Api.endpoints.getListings>(),
+      );
 
       renderWithProviders(<GameItemListingsV2 />);
       expect(screen.getByText("Loading...")).toBeInTheDocument();
     });
 
     it("should show error state", () => {
-      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
-        data: undefined,
-        isLoading: false,
-        isFetching: false,
-        isSuccess: false,
-        isError: true,
-        error: { status: 500, data: "Server error" },
-        refetch: vi.fn(),
-      } as any);
+      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue(
+        queryError<typeof marketV2Api.endpoints.getListings>({
+          status: 500,
+          data: "Server error",
+        }),
+      );
 
       renderWithProviders(<GameItemListingsV2 />);
       expect(screen.getByText("Failed to load game item listings")).toBeInTheDocument();
@@ -448,18 +465,12 @@ describe("GameItemListingsV2", () => {
 
   describe("Empty states", () => {
     it("should handle empty quality distribution", () => {
-      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
-        data: {
+      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getListings>({
           ...mockGameItemData,
           quality_distribution: [],
-        },
-        isLoading: false,
-        isFetching: false,
-        isSuccess: true,
-        isError: false,
-        error: undefined,
-        refetch: vi.fn(),
-      } as any);
+        }),
+      );
 
       renderWithProviders(<GameItemListingsV2 />);
       // With no distribution, the price-range table renders its empty message.
@@ -467,19 +478,13 @@ describe("GameItemListingsV2", () => {
     });
 
     it("should handle empty listings", () => {
-      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue({
-        data: {
+      vi.spyOn(marketApi, "useGetListingsQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getListings>({
           ...mockGameItemData,
           listings: [],
           total: 0,
-        },
-        isLoading: false,
-        isFetching: false,
-        isSuccess: true,
-        isError: false,
-        error: undefined,
-        refetch: vi.fn(),
-      } as any);
+        }),
+      );
 
       renderWithProviders(<GameItemListingsV2 />);
       // Should still render the component structure

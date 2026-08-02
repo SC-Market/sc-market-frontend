@@ -12,23 +12,42 @@ import { WishlistManager } from "../WishlistManager"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { marketV2Api } from "../../../store/api/v2/market"
+import type {
+  CreateWishlistApiResponse,
+  GetWishlistsApiResponse,
+} from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
 import { BrowserRouter } from "react-router-dom"
 import { vi, describe, it, expect, beforeEach } from "vitest"
+import {
+  mockMutationTrigger,
+  mutationIdle,
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../__tests__/rtkQueryMocks"
+import type { StandardPageLayoutProps } from "../../../components/layout/StandardPageLayout"
+
+type MarketV2Module = typeof import("../../../store/api/v2/market")
 
 // Make the exported RTK Query hooks delegate to the endpoint methods so that
 // `vi.spyOn(marketV2Api.endpoints.*, ...)` intercepts the hooks the component
 // imports (the destructured hook exports are separate bindings).
 vi.mock("../../../store/api/v2/market", async () => {
-  const actual = (await vi.importActual("../../../store/api/v2/market")) as any
+  const actual = await vi.importActual<MarketV2Module>(
+    "../../../store/api/v2/market",
+  )
   return {
     ...actual,
-    useGetWishlistsQuery: (...args: any[]) =>
-      actual.marketV2Api.endpoints.getWishlists.useQuery(...args),
-    useCreateWishlistMutation: (...args: any[]) =>
-      actual.marketV2Api.endpoints.createWishlist.useMutation(...args),
-    useDeleteWishlistMutation: (...args: any[]) =>
-      actual.marketV2Api.endpoints.deleteWishlist.useMutation(...args),
+    useGetWishlistsQuery: (
+      ...args: Parameters<MarketV2Module["useGetWishlistsQuery"]>
+    ) => actual.marketV2Api.endpoints.getWishlists.useQuery(...args),
+    useCreateWishlistMutation: (
+      ...args: Parameters<MarketV2Module["useCreateWishlistMutation"]>
+    ) => actual.marketV2Api.endpoints.createWishlist.useMutation(...args),
+    useDeleteWishlistMutation: (
+      ...args: Parameters<MarketV2Module["useDeleteWishlistMutation"]>
+    ) => actual.marketV2Api.endpoints.deleteWishlist.useMutation(...args),
   }
 })
 
@@ -56,11 +75,11 @@ vi.mock("react-router-dom", async () => {
 
 // Mock StandardPageLayout to avoid useRouteError
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children }: any) => <div>{children}</div>,
+  StandardPageLayout: ({ children }: StandardPageLayoutProps) => <div>{children}</div>,
 }))
 
 // Helper to create test store
-function createTestStore(preloadedState = {}) {
+function createTestStore() {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
@@ -68,7 +87,6 @@ function createTestStore(preloadedState = {}) {
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
-    preloadedState,
   })
 }
 
@@ -82,7 +100,7 @@ function renderWithProviders(ui: React.ReactElement, { store = createTestStore()
 }
 
 // Mock wishlists data
-const mockWishlists = [
+const mockWishlists: GetWishlistsApiResponse["wishlists"] = [
   {
     wishlist_id: "wishlist-1",
     user_id: "user-1",
@@ -111,6 +129,18 @@ const mockWishlists = [
   },
 ]
 
+// createWishlist resolves with the full generated `Wishlist` shape, not just an id.
+const mockCreatedWishlist: CreateWishlistApiResponse = {
+  wishlist_id: "new-wishlist-id",
+  user_id: "user-1",
+  wishlist_name: "Test Wishlist",
+  wishlist_description: "Test description",
+  is_public: true,
+  is_collaborative: false,
+  created_at: "2024-01-20T10:00:00Z",
+  updated_at: "2024-01-20T10:00:00Z",
+}
+
 describe("WishlistManager", () => {
   beforeEach(() => {
     mockNavigate.mockClear()
@@ -119,11 +149,9 @@ describe("WishlistManager", () => {
   describe("Display list of user wishlists (Requirement 8.1, 8.2)", () => {
     it("should display loading state while fetching wishlists", () => {
       // Mock loading state
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: undefined,
-        isLoading: true,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        queryLoading<typeof marketV2Api.endpoints.getWishlists>(),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -132,11 +160,12 @@ describe("WishlistManager", () => {
 
     it("should display error message when fetch fails", () => {
       // Mock error state
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: undefined,
-        isLoading: false,
-        error: { status: 401, data: { message: "Unauthorized" } },
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        queryError<typeof marketV2Api.endpoints.getWishlists>({
+          status: 401,
+          data: { message: "Unauthorized" },
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -146,11 +175,11 @@ describe("WishlistManager", () => {
 
     it("should display empty state when no wishlists exist", () => {
       // Mock empty state
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: [] },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: [],
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -161,11 +190,11 @@ describe("WishlistManager", () => {
 
     it("should display list of wishlists with names and descriptions", () => {
       // Mock success state
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -175,11 +204,11 @@ describe("WishlistManager", () => {
     })
 
     it("should display item counts for each wishlist", () => {
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -188,11 +217,11 @@ describe("WishlistManager", () => {
     })
 
     it("should display visibility badges (public/private)", () => {
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -204,11 +233,11 @@ describe("WishlistManager", () => {
     })
 
     it("should display collaborative badge when applicable", () => {
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -219,11 +248,11 @@ describe("WishlistManager", () => {
 
   describe("Display progress statistics (Requirement 8.3)", () => {
     it("should display progress bar with percentage", () => {
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -232,11 +261,11 @@ describe("WishlistManager", () => {
     })
 
     it("should display completed items count", () => {
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -244,11 +273,11 @@ describe("WishlistManager", () => {
     })
 
     it("should display creation date", () => {
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -262,11 +291,11 @@ describe("WishlistManager", () => {
     it("should open create dialog when clicking create button", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: [] },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: [],
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -280,11 +309,11 @@ describe("WishlistManager", () => {
     it("should have name and description fields in dialog", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: [] },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: [],
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -298,11 +327,11 @@ describe("WishlistManager", () => {
     it("should have public and collaborative toggles", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: [] },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: [],
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -316,11 +345,11 @@ describe("WishlistManager", () => {
     it("should disable create button when name is empty", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: [] },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: [],
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -335,20 +364,21 @@ describe("WishlistManager", () => {
 
     it("should call createWishlist mutation with correct data", async () => {
       const user = userEvent.setup()
-      const mockCreateWishlist = vi.fn().mockResolvedValue({
-        data: { wishlist_id: "new-wishlist-id" },
-      })
+      const mockCreateWishlist =
+        mockMutationTrigger<typeof marketV2Api.endpoints.createWishlist>(
+          mockCreatedWishlist,
+        )
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: [] },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: [],
+        }),
+      )
 
       vi.spyOn(marketV2Api.endpoints.createWishlist, "useMutation").mockReturnValue([
         mockCreateWishlist,
-        { isLoading: false },
-      ] as any)
+        mutationIdle<typeof marketV2Api.endpoints.createWishlist>(),
+      ])
 
       renderWithProviders(<WishlistManager />)
 
@@ -383,20 +413,21 @@ describe("WishlistManager", () => {
 
     it("should navigate to new wishlist after creation", async () => {
       const user = userEvent.setup()
-      const mockCreateWishlist = vi.fn().mockReturnValue({
-        unwrap: () => Promise.resolve({ wishlist_id: "new-wishlist-id" }),
-      })
+      const mockCreateWishlist =
+        mockMutationTrigger<typeof marketV2Api.endpoints.createWishlist>(
+          mockCreatedWishlist,
+        )
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: [] },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: [],
+        }),
+      )
 
       vi.spyOn(marketV2Api.endpoints.createWishlist, "useMutation").mockReturnValue([
         mockCreateWishlist,
-        { isLoading: false },
-      ] as any)
+        mutationIdle<typeof marketV2Api.endpoints.createWishlist>(),
+      ])
 
       renderWithProviders(<WishlistManager />)
 
@@ -420,11 +451,11 @@ describe("WishlistManager", () => {
     it("should navigate to wishlist detail when clicking wishlist card", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -442,11 +473,11 @@ describe("WishlistManager", () => {
     it("should show delete confirmation dialog when clicking delete button", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 
@@ -463,19 +494,21 @@ describe("WishlistManager", () => {
 
     it("should call deleteWishlist mutation when confirming delete", async () => {
       const user = userEvent.setup()
-      const unwrap = vi.fn().mockResolvedValue({ success: true })
-      const mockDeleteWishlist = vi.fn().mockReturnValue({ unwrap })
+      const mockDeleteWishlist =
+        mockMutationTrigger<typeof marketV2Api.endpoints.deleteWishlist>({
+          success: true,
+        })
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       vi.spyOn(marketV2Api.endpoints.deleteWishlist, "useMutation").mockReturnValue([
         mockDeleteWishlist,
-        { isLoading: false },
-      ] as any)
+        mutationIdle<typeof marketV2Api.endpoints.deleteWishlist>(),
+      ])
 
       renderWithProviders(<WishlistManager />)
 
@@ -497,11 +530,11 @@ describe("WishlistManager", () => {
     it("should close dialog when canceling delete", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue({
-        data: { wishlists: mockWishlists },
-        isLoading: false,
-        error: undefined,
-      } as any)
+      vi.spyOn(marketV2Api.endpoints.getWishlists, "useQuery").mockReturnValue(
+        querySuccess<typeof marketV2Api.endpoints.getWishlists>({
+          wishlists: mockWishlists,
+        }),
+      )
 
       renderWithProviders(<WishlistManager />)
 

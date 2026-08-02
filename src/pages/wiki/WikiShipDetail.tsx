@@ -131,11 +131,14 @@ export function WikiShipDetail() {
 
   const seoTitle = `${ship.name} — Star Citizen Ship | SC Market`
   const seoDescription = `${ship.name}${ship.manufacturer ? " by " + ship.manufacturer : ""} — ${ship.focus || ship.role || "spacecraft"}. Specs, loadout, and market availability in Star Citizen.`.slice(0, 160)
-  const canonicalUrl = `${FRONTEND_URL}/wiki/ships/${id}`
+  // Built from the resolved ship, not the raw path param: this page is reachable
+  // by full UUID or short slug, and the sitemap only lists the slug form.
+  const canonicalPath = WIKI_PATHS.ship(ship.id, ship.name)
+  const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
   const ogImage = ship.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
-    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={WIKI_PATHS.ship(id!)} headerTitle={ship.name} breadcrumbs={[{ label: t("wiki.shipDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub }, { label: t("wiki.shipDetail.breadcrumbShips", "Ships & Vehicles"), href: WIKI_PATHS.ships }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
+    <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={canonicalPath} headerTitle={ship.name} breadcrumbs={[{ label: t("wiki.shipDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub }, { label: t("wiki.shipDetail.breadcrumbShips", "Ships & Vehicles"), href: WIKI_PATHS.ships }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
       <Helmet>
         <title>{seoTitle}</title>
         <meta name="description" content={seoDescription} />

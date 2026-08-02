@@ -24,20 +24,24 @@ import { Provider } from "react-redux"
 import { MemoryRouter } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { configureStore } from "@reduxjs/toolkit"
+import type { UserProfileState } from "../../../hooks/login/UserProfile"
+import type { ShopResponse } from "../../../store/api/v2/market"
+import type { Contractor } from "../../../features/contractor/domain/types"
+import type { has_permission as HasPermission } from "../../../features/contractor/domain/permissions"
 
 // ---- Mutable mock state -----------------------------------------------------
-let mockProfile: any = undefined
-let mockShops: any[] = []
+let mockProfile: UserProfileState | undefined = undefined
+let mockShops: ShopResponse[] = []
 let mockUnreadChatCount = 0
 let mockPendingOrderCount = 0
 let mockShopPendingOrderCount = 0
-let mockSelectedContractor: any = undefined
-let mockCookies: Record<string, any> = {}
-const mockSetCookie = vi.fn((name: string, value: any) => {
+let mockSelectedContractor: Contractor | undefined = undefined
+let mockCookies: Record<string, unknown> = {}
+const mockSetCookie = vi.fn((name: string, value: unknown) => {
   mockCookies[name] = value
 })
 // has_permission — controllable per-test. Default: deny everything.
-let mockHasPermission: (...args: any[]) => boolean = () => false
+let mockHasPermission: typeof HasPermission = () => false
 
 // ---- Module mocks -----------------------------------------------------------
 // Override the global profileApi mock from setupTests with our mutable profile.
@@ -56,15 +60,20 @@ vi.mock("../../../features/profile/api/profileApi", async (importOriginal) => {
 })
 
 vi.mock("../../../store/api/v2/market", async () => {
-  const actual: any = await vi.importActual("../../../store/api/v2/market")
+  const actual = await vi.importActual<typeof import("../../../store/api/v2/market")>(
+    "../../../store/api/v2/market",
+  )
   return {
     ...actual,
-    useGetMyShopsQuery: () => ({ data: mockShops, isLoading: false, refetch: vi.fn() }),
+    useGetMyShopsQuery: () =>
+      querySuccess<typeof actual.marketV2Api.endpoints.getMyShops>(mockShops),
   }
 })
 
 vi.mock("../../../features/contractor/api/contractorApi", async () => {
-  const actual: any = await vi.importActual("../../../features/contractor/api/contractorApi")
+  const actual = await vi.importActual<
+    typeof import("../../../features/contractor/api/contractorApi")
+  >("../../../features/contractor/api/contractorApi")
   return {
     ...actual,
     useGetContractorBySpectrumIDQuery: () => ({ data: mockSelectedContractor }),
@@ -84,7 +93,9 @@ vi.mock("../../../features/orders/hooks/useShopPendingOrderCount", () => ({
 }))
 
 vi.mock("../../../hooks/layout/Drawer", async () => {
-  const actual: any = await vi.importActual("../../../hooks/layout/Drawer")
+  const actual = await vi.importActual<typeof import("../../../hooks/layout/Drawer")>(
+    "../../../hooks/layout/Drawer",
+  )
   return {
     ...actual,
     useDrawerOpen: () => [true, vi.fn()],
@@ -96,7 +107,8 @@ vi.mock("../../../hooks/layout/useBottomNavHeight", () => ({
 }))
 
 vi.mock("../../../views/contractor/OrgRoles", () => ({
-  has_permission: (...args: any[]) => mockHasPermission(...args),
+  has_permission: (...args: Parameters<typeof HasPermission>) =>
+    mockHasPermission(...args),
 }))
 
 vi.mock("react-cookie", () => ({
@@ -122,17 +134,18 @@ vi.mock("react-i18next", async () => {
 import { SidebarV2 } from "../SidebarV2"
 import { marketV2Api } from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
+import { querySuccess } from "../../../__tests__/rtkQueryMocks"
 
 const testTheme = createTheme({
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
-} as any)
+})
 
 const createStore = () =>
   configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
       [serviceApi.reducerPath]: serviceApi.reducer,
-    } as any,
+    },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
   })
@@ -148,18 +161,44 @@ const renderSidebar = (path = "/market") =>
     </ThemeProvider>,
   )
 
-const loggedInProfile = {
+const loggedInProfile: UserProfileState = {
   username: "testuser",
   display_name: "Test User",
+  discord_username: "testuser#0001",
   avatar: "https://example.com/avatar.png",
   role: "user",
   contractors: [],
+  balance: 0,
+  profile_description: "",
+  settings: { discord_order_share: false, discord_public: false },
+  market_order_template: "",
+  locale: "en",
 }
 
-const shopWithPerms = (permissions: any = undefined) => ({
+const shopWithPerms = (
+  permissions: ShopResponse["permissions"] = undefined,
+): ShopResponse => ({
   shop_id: "shop-1",
   slug: "test-shop",
   name: "Test Shop",
+  description: "",
+  banner: null,
+  logo: null,
+  owner_user_id: "user-1",
+  is_org_owned: false,
+  owner_contractor_spectrum_id: null,
+  supported_languages: ["en"],
+  tags: [],
+  accepts_custom_orders: true,
+  market_order_template: "",
+  default_pickup_method: null,
+  status: "active",
+  created_at: "2024-01-01T00:00:00Z",
+  updated_at: "2024-01-01T00:00:00Z",
+  banner_url: null,
+  official_server_id: null,
+  discord_thread_channel_id: null,
+  badge_ids: [],
   logo_url: null,
   permissions,
 })
@@ -293,9 +332,36 @@ describe("SidebarV2 — org context", () => {
   beforeEach(() => {
     mockProfile = {
       ...loggedInProfile,
-      contractors: [{ spectrum_id: "TESTORG", name: "Test Org", avatar: null }],
+      contractors: [
+        {
+          spectrum_id: "TESTORG",
+          name: "Test Org",
+          avatar: "",
+          rating: {
+            avg_rating: 0,
+            rating_count: 0,
+            total_rating: 0,
+            streak: 0,
+          },
+          role: "member",
+          roles: [],
+        },
+      ],
     }
-    mockSelectedContractor = { spectrum_id: "TESTORG", name: "Test Org" }
+    mockSelectedContractor = {
+      kind: "organization",
+      spectrum_id: "TESTORG",
+      name: "Test Org",
+      avatar: "",
+      banner: "",
+      description: "",
+      fields: [],
+      size: 1,
+      rating: { avg_rating: 0, rating_count: 0, total_rating: 0, streak: 0 },
+      official_server_id: null,
+      discord_thread_channel_id: null,
+      market_order_template: "",
+    }
   })
 
   it("renders the core org items", () => {
@@ -313,7 +379,8 @@ describe("SidebarV2 — org context", () => {
 
   it("shows the single Manage entry when the user has a manage permission", () => {
     // Grant manage_org_details only — the single Manage entry should appear.
-    mockHasPermission = (_c: any, _u: any, perm: string) => perm === "manage_org_details"
+    mockHasPermission = (_contractor, _user, permission_name) =>
+      permission_name === "manage_org_details"
     renderSidebar("/org/TESTORG/members")
     expect(screen.getByText("Manage")).toBeInTheDocument()
   })

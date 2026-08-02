@@ -10,6 +10,25 @@ import { ListingSearchV2 } from "../ListingSearchV2";
 import { marketV2Api, useSearchListingsQuery, useSearchResourcesQuery } from "../../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../../store/api/v2/market";
 import { serviceApi } from "../../../../store/service";
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+  queryUninitialized,
+} from "../../../../__tests__/rtkQueryMocks";
+import type { FadeProps } from "@mui/material";
+import type { QualityFilter as QualityFilterComponent } from "../../../../components/market/v2/QualityFilter";
+import type { HideOnScroll as HideOnScrollComponent } from "../../components/MarketNavArea";
+import type { ListingWrapper as ListingWrapperComponent } from "../../components/listings/ListingWrapper";
+import type { ListingSkeletonProps } from "../../../../components/skeletons";
+import type { ListingPaginationProps } from "../../components/listings/ListingPagination";
+import type { EmptyListingsProps } from "../../../../components/empty-states";
+import type { BottomSheet as BottomSheetComponent } from "../../../../components/mobile/BottomSheet";
+
+type QualityFilterProps = React.ComponentProps<typeof QualityFilterComponent>;
+type HideOnScrollProps = React.ComponentProps<typeof HideOnScrollComponent>;
+type ListingWrapperProps = React.ComponentProps<typeof ListingWrapperComponent>;
+type BottomSheetProps = React.ComponentProps<typeof BottomSheetComponent>;
 
 vi.mock("../../../../store/api/v2/market", async () => {
   const actual = await vi.importActual("../../../../store/api/v2/market");
@@ -39,7 +58,7 @@ const testTheme = createTheme({
     chip: 0.5,
     minimal: 0,
   },
-} as any);
+});
 
 // Mock the hooks
 vi.mock("../../../../hooks/layout/Drawer", () => ({
@@ -57,10 +76,10 @@ vi.mock("../../../../hooks/styles/Theme", async () => {
 // Mock MUI Fade to avoid scrollTop errors in happy-dom (MUI reflow calls node.scrollTop)
 // Also mock useMediaQuery to force desktop layout (so the filter sidebar renders inline)
 vi.mock("@mui/material", async () => {
-  const actual = await vi.importActual("@mui/material") as any;
+  const actual = await vi.importActual<typeof import("@mui/material")>("@mui/material");
   return {
     ...actual,
-    Fade: ({ children, in: show }: any) => show !== false ? children : null,
+    Fade: ({ children, in: show }: FadeProps) => show !== false ? children : null,
     useMediaQuery: () => false,
   };
 });
@@ -101,7 +120,7 @@ vi.mock("react-i18next", async () => {
 
 // Mock QualityFilter component
 vi.mock("../../../../components/market/v2/QualityFilter", () => ({
-  QualityFilter: ({ minTier, maxTier, onMinTierChange, onMaxTierChange }: any) => (
+  QualityFilter: ({ minTier, maxTier, onMinTierChange, onMaxTierChange }: QualityFilterProps) => (
     <div data-testid="quality-filter">
       <select
         data-testid="quality-min-select"
@@ -133,22 +152,22 @@ vi.mock("../../../../components/market/v2/QualityFilter", () => ({
 
 // Mock other components
 vi.mock("../../components/MarketNavArea", () => ({
-  HideOnScroll: ({ children }: any) => <div>{children}</div>,
+  HideOnScroll: ({ children }: HideOnScrollProps) => <div>{children}</div>,
   MarketNavArea: () => <div data-testid="market-nav-area">Market Nav</div>,
 }));
 
 vi.mock("../../components/listings/ListingWrapper", () => ({
-  ListingWrapper: ({ children }: any) => <div>{children}</div>,
+  ListingWrapper: ({ children }: ListingWrapperProps) => <div>{children}</div>,
 }));
 
 vi.mock("../../../../components/skeletons", () => ({
-  ListingSkeleton: ({ index }: any) => (
+  ListingSkeleton: ({ index }: ListingSkeletonProps) => (
     <div data-testid="listing-skeleton">Skeleton {index}</div>
   ),
 }));
 
 vi.mock("../../components/listings/ListingPagination", () => ({
-  ListingPagination: ({ count, page, onPageChange }: any) => (
+  ListingPagination: ({ count, page, onPageChange }: ListingPaginationProps) => (
     <div data-testid="listing-pagination">
       <button onClick={() => onPageChange(null, page + 1)}>Next Page</button>
       <span>Total: {count}</span>
@@ -157,7 +176,7 @@ vi.mock("../../components/listings/ListingPagination", () => ({
 }));
 
 vi.mock("../../../../components/empty-states", () => ({
-  EmptyListings: ({ isSearchResult, isError, onRetry }: any) => (
+  EmptyListings: ({ isSearchResult, isError, onRetry }: EmptyListingsProps) => (
     <div data-testid="empty-listings">
       <p>No listings found</p>
       {isError && <button onClick={onRetry}>Retry</button>}
@@ -166,22 +185,19 @@ vi.mock("../../../../components/empty-states", () => ({
 }));
 
 vi.mock("../../../../components/mobile/BottomSheet", () => ({
-  BottomSheet: ({ children, open }: any) =>
+  BottomSheet: ({ children, open }: BottomSheetProps) =>
     open ? <div data-testid="bottom-sheet">{children}</div> : null,
 }));
 
 // Create mock store
-const createMockStore = (mockData?: any) => {
-  const reducer = {
-    [marketV2Api.reducerPath]: marketV2Api.reducer,
-    [serviceApi.reducerPath]: serviceApi.reducer,
-  } as any
-
+const createMockStore = () => {
   return configureStore({
-    reducer,
+    reducer: {
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [serviceApi.reducerPath]: serviceApi.reducer,
+    },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
-    preloadedState: mockData,
   });
 };
 
@@ -239,33 +255,22 @@ describe("ListingSearchV2", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default mock for useSearchResourcesQuery (used by suggestions autocomplete)
-    (useSearchResourcesQuery as any).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-    });
+    vi.mocked(useSearchResourcesQuery).mockReturnValue(
+      queryUninitialized<typeof marketV2Api.endpoints.searchResources>(),
+    );
     // Default mock for useSearchListingsQuery (will be overridden per test)
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    });
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      queryUninitialized<typeof marketV2Api.endpoints.searchListings>(),
+    );
   });
 
   it("renders loading state initially", () => {
     const store = createMockStore();
 
     // Mock the query to return loading state
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      queryLoading<typeof marketV2Api.endpoints.searchListings>(),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -286,18 +291,14 @@ describe("ListingSearchV2", () => {
     const store = createMockStore();
 
     // Mock the query to return data
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -317,18 +318,14 @@ describe("ListingSearchV2", () => {
   it("displays quality filter component", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -347,18 +344,14 @@ describe("ListingSearchV2", () => {
   it("updates URL params when quality filter changes", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     const { container } = render(
       <ThemeProvider theme={testTheme}>
@@ -383,18 +376,14 @@ describe("ListingSearchV2", () => {
   it("displays price filter inputs", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -414,18 +403,14 @@ describe("ListingSearchV2", () => {
   it("displays text search input", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -444,18 +429,14 @@ describe("ListingSearchV2", () => {
   it("displays pagination controls", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 100, // More than one page
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -475,18 +456,14 @@ describe("ListingSearchV2", () => {
   it("displays empty state when no listings found", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: [],
         total: 0,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -507,13 +484,12 @@ describe("ListingSearchV2", () => {
     const store = createMockStore();
     const mockRefetch = vi.fn();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      isFetching: false,
-      error: { status: 500, data: { message: "Server error" } },
-      refetch: mockRefetch,
-    } as any);
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      queryError<typeof marketV2Api.endpoints.searchListings>(
+        { status: 500, data: { message: "Server error" } },
+        mockRefetch,
+      ),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -540,18 +516,14 @@ describe("ListingSearchV2", () => {
   it("reads filter state from URL params", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -584,18 +556,14 @@ describe("ListingSearchV2", () => {
   it("displays listing titles for each listing", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -615,18 +583,14 @@ describe("ListingSearchV2", () => {
   it("displays quality tier badges for each listing", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -646,18 +610,14 @@ describe("ListingSearchV2", () => {
   it("handles pagination page change", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 100,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     render(
       <ThemeProvider theme={testTheme}>
@@ -683,18 +643,14 @@ describe("ListingSearchV2", () => {
   it("maintains visual parity with V1 styling", async () => {
     const store = createMockStore();
 
-    (useSearchListingsQuery as any).mockReturnValue({
-      data: {
+    vi.mocked(useSearchListingsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.searchListings>({
         listings: mockListings,
         total: 2,
         page: 1,
         page_size: 48,
-      },
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any);
+      }),
+    );
 
     const { container } = render(
       <ThemeProvider theme={testTheme}>
