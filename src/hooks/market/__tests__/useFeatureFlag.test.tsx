@@ -110,9 +110,51 @@ describe("useFeatureFlag — background sync", () => {
     })
   })
 
-  it("keeps a locally-overridden flag when the server disagrees", async () => {
-    // A user who explicitly opted in must not be silently opted back out by a
-    // rollout that has not reached their bucket.
+  it("takes the server's value for an overridden flag", async () => {
+    // The server resolves overrides itself, and at the highest precedence:
+    // isFlagEnabled checks user_feature_overrides before the enabled gate and
+    // the rollout, so data.flags already IS the override's value. The client
+    // must not second-guess it.
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ nav_v2: false }))
+    serverResponse = {
+      data: {
+        flags: { nav_v2: true },
+        overridden_flags: ["nav_v2"],
+        has_override: true,
+      },
+    }
+
+    const { result } = renderHook(() => useFeatureFlag())
+
+    await waitFor(() => expect(result.current.flags.nav_v2).toBe(true))
+    expect(result.current.hasOverride).toBe(true)
+    expect(result.current.overriddenFlags).toEqual(["nav_v2"])
+  })
+
+  it("applies a server-side override on a browser with no stored flags", async () => {
+    // The regression. The old sync kept `currentLocal[key]` for every
+    // overridden flag, and currentLocal came from readStoredFlags(), which
+    // always spreads DEFAULT_FLAGS — so `key in currentLocal` was true even
+    // when nothing had ever been stored. An enabling override therefore got
+    // overwritten by DEFAULT_FLAGS.nav_v2 (false) on any fresh browser.
+    expect(localStorage.getItem(STORAGE_KEY)).toBeNull()
+    serverResponse = {
+      data: {
+        flags: { nav_v2: true },
+        overridden_flags: ["nav_v2"],
+        has_override: true,
+      },
+    }
+
+    const { result } = renderHook(() => useFeatureFlag())
+
+    await waitFor(() => expect(result.current.flags.nav_v2).toBe(true))
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}").nav_v2).toBe(true)
+  })
+
+  it("applies a server-side override that disagrees with a stale stored value", async () => {
+    // Same shape in the other direction: a disabling override must win over a
+    // stored `true` left behind by an earlier session.
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ nav_v2: true }))
     serverResponse = {
       data: {
@@ -124,9 +166,7 @@ describe("useFeatureFlag — background sync", () => {
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    await waitFor(() => expect(result.current.hasOverride).toBe(true))
-    expect(result.current.flags.nav_v2).toBe(true)
-    expect(result.current.overriddenFlags).toEqual(["nav_v2"])
+    await waitFor(() => expect(result.current.flags.nav_v2).toBe(false))
   })
 
   it("lets the server disable a flag the user has no override for", async () => {
