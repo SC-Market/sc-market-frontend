@@ -51,7 +51,16 @@ export function AdminFeatureFlagsView() {
                     {label}
                   </Typography>
                 }
-                secondary={`Default: ${flag.default_version} · Rollout: ${flag.rollout_percentage}% · ${flag.override_count} overrides`}
+                secondary={
+                  <>
+                    {`Default: ${flag.default_version} · Rollout: ${flag.rollout_percentage}% · ${flag.override_count} overrides`}
+                    {!flag.enabled && flag.rollout_percentage > 0 && (
+                      <Typography variant="caption" color="warning.main" display="block">
+                        Rollout not in effect — Enabled is off
+                      </Typography>
+                    )}
+                  </>
+                }
               />
               <Stack direction="row" spacing={1} alignItems="center">
                 <Chip

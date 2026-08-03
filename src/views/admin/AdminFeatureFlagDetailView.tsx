@@ -143,10 +143,21 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
             <Grid item xs={12} sm={4}>
               <Typography variant="body2" gutterBottom>Rollout: {rollout}%</Typography>
               {!enabled && rollout > 0 && (
-                <Typography variant="caption" color="warning.main" display="block" gutterBottom>
-                  Not in effect — Enabled is off, so every user gets the old
-                  experience regardless of this percentage.
-                </Typography>
+                <Stack spacing={0.5} sx={{ mb: 1 }}>
+                  <Typography variant="caption" color="warning.main">
+                    Not in effect — Enabled is off, so every user gets the old
+                    experience regardless of this percentage.
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    color="warning"
+                    sx={{ alignSelf: "flex-start" }}
+                    onClick={() => setLocalEnabled(true)}
+                  >
+                    Turn on Enabled
+                  </Button>
+                </Stack>
               )}
               <Slider
                 value={rollout} onChange={(_, v) => setLocalRollout(v as number)}
