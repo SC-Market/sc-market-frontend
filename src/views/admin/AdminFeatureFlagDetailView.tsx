@@ -142,6 +142,12 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
             </Grid>
             <Grid item xs={12} sm={4}>
               <Typography variant="body2" gutterBottom>Rollout: {rollout}%</Typography>
+              {!enabled && rollout > 0 && (
+                <Typography variant="caption" color="warning.main" display="block" gutterBottom>
+                  Not in effect — Enabled is off, so every user gets the old
+                  experience regardless of this percentage.
+                </Typography>
+              )}
               <Slider
                 value={rollout} onChange={(_, v) => setLocalRollout(v as number)}
                 min={0} max={100} step={5} valueLabelDisplay="auto" size="small"

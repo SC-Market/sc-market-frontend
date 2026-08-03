@@ -1,9 +1,13 @@
 /**
  * useFeatureFlag – Multi-flag feature flag hook.
  *
- * Reads localStorage immediately (never blocks render).
- * Fetches from server in background and updates localStorage for next session.
- * Changes take effect NEXT session, not during current session.
+ * Reads localStorage immediately (never blocks render), then fetches from the
+ * server in the background and applies the result to both state and
+ * localStorage — so a flag an admin flips takes effect in the current session,
+ * on the render after the sync resolves, without a reload.
+ *
+ * Flags the user has an explicit override for are kept at their local value:
+ * an opt-in must not be undone by a rollout that has not reached their bucket.
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react"
