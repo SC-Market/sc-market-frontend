@@ -9,6 +9,7 @@ import { SidebarItemProps } from "../types"
 import { createItemFilter } from "../utils/sidebarFilters"
 import { resolveOrgRoute } from "../utils/sidebarRouting"
 import { useCookies } from "react-cookie"
+import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 
 /**
  * Hook for managing sidebar items with filtering and route resolution
@@ -18,6 +19,7 @@ export function useSidebarItems() {
   const { data: profile, error: profileError } = useGetUserProfileQuery()
   const [currentOrgObj] = useCurrentOrg()
   const [cookies] = useCookies(["current_shop_slug"])
+  const { flags } = useFeatureFlag()
 
   const orgRouteContractorId = useMemo(() => {
     const m = matchPath("/org/:contractor_id/*", location.pathname)
@@ -48,8 +50,8 @@ export function useSidebarItems() {
   }, [customOrgData])
 
   const filterItems = useCallback(
-    createItemFilter(profile, profileError, currentOrgObj, shopSlug),
-    [currentOrgObj, profile, profileError, shopSlug],
+    createItemFilter(profile, profileError, currentOrgObj, shopSlug, flags),
+    [currentOrgObj, profile, profileError, shopSlug, flags],
   )
 
   const resolveItem = useCallback(
