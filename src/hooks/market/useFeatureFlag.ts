@@ -6,8 +6,10 @@
  * localStorage — so a flag an admin flips takes effect in the current session,
  * on the render after the sync resolves, without a reload.
  *
- * Flags the user has an explicit override for are kept at their local value:
- * an opt-in must not be undone by a rollout that has not reached their bucket.
+ * The server's value always wins for a flag it sent. It resolves per-user
+ * overrides itself, at a higher precedence than both the enabled gate and the
+ * rollout, so there is nothing for the client to preserve on top of it. Local
+ * storage is a first-paint cache, not a second source of truth.
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react"
@@ -85,14 +87,16 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
 
         const data = result.data
         if (data?.flags) {
-          // Merge server flags with defaults, but preserve local overrides
-          const overrides = data.overridden_flags || []
-          const currentLocal = readStoredFlags()
+          // Defaults only fill flags the server did not mention (a flag with no
+          // feature_flag_config row is absent from the response, not false).
+          // Everything the server did send wins outright: isFlagEnabled already
+          // resolves user_feature_overrides at the highest precedence, ahead of
+          // the enabled gate and the rollout, so data.flags IS the user's
+          // override where they have one. Re-applying a local value on top of it
+          // is what used to break rollouts — the old guard tested
+          // `key in readStoredFlags()`, which always spreads DEFAULT_FLAGS and
+          // so was true even on a browser that had never stored anything.
           const serverFlags = { ...DEFAULT_FLAGS, ...data.flags }
-          // Keep locally-overridden values (user explicitly set them)
-          for (const key of overrides) {
-            if (key in currentLocal) serverFlags[key] = currentLocal[key]
-          }
           localStorage.setItem(STORAGE_KEY, JSON.stringify(serverFlags))
           // Also write backward-compat key
           localStorage.setItem("market_version", serverFlags.market_v2 ? "V2" : "V1")
