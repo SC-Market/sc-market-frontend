@@ -113,21 +113,21 @@ export function createItemFilter(
   profileError: unknown,
   currentOrgObj: Contractor | null,
   shopSlug?: string | null,
+  /**
+   * Resolved flags from useFeatureFlag. This used to read localStorage directly,
+   * which bypassed the hook and so saw neither its DEFAULT_FLAGS nor the values
+   * it syncs from the server: on a browser with no `feature_flags` key, every
+   * flagged item was hidden no matter what the server said.
+   */
+  flags: Record<string, boolean> = {},
 ) {
   return (item: SidebarItemProps): boolean => {
     if (item.hidden) {
       return false
     }
 
-    // Feature-flagged items: check the specific flag in localStorage
-    if (item.feature_flag) {
-      try {
-        const stored = localStorage.getItem("feature_flags")
-        const flags = stored ? JSON.parse(stored) : {}
-        if (!flags[item.feature_flag]) return false
-      } catch {
-        return false
-      }
+    if (item.feature_flag && !flags[item.feature_flag]) {
+      return false
     }
 
     // Hide items that require a shop context when no shop is selected
