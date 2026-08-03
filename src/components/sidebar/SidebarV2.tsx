@@ -398,8 +398,11 @@ export function SidebarV2() {
     if (profile) {
       gameData.push({ label: t("sidebar.gameData.shoppingLists", "Shopping Lists"), to: PATHS.shoppingLists, icon: <ShoppingCartRounded /> })
     }
-    return [...contextItems, ...gameData, ...wiki]
-  }, [contextItems, profile, t])
+    // Wiki is behind a flag, so it must not reach search or starred lookup when
+    // the flag is off — the v1 sidebar gates the same entry via SidebarEntries'
+    // `feature_flag: "wiki"`, and this one has to agree with it.
+    return [...contextItems, ...gameData, ...(flags.wiki ? wiki : [])]
+  }, [contextItems, profile, t, flags.wiki])
 
   const starredItems = useMemo(
     () => allNavigable.filter((item) => starred.includes(item.to)),
@@ -660,7 +663,9 @@ export function SidebarV2() {
                   </List>
                 </Collapse>
 
-                {/* Wiki — collapsible */}
+                {/* Wiki — collapsible, behind the `wiki` flag */}
+                {flags.wiki && (
+                <>
                 <ListItemButton sx={itemSx} onClick={() => setWikiOpen((v) => !v)}>
                   <ListItemIcon sx={{ minWidth: 36 }}><MenuBookRounded /></ListItemIcon>
                   <ListItemText primary={t("sidebar.wiki.title", "Wiki")} primaryTypographyProps={{ variant: "subtitle2" }} />
@@ -676,6 +681,8 @@ export function SidebarV2() {
                     {renderNavItem({ label: t("sidebar.wiki.refinery", "Refinery"), to: WIKI_PATHS.refinery, icon: <ScienceRounded /> }, true)}
                   </List>
                 </Collapse>
+                </>
+                )}
               </List>
             </>
           )}
