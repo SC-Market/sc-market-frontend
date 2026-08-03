@@ -70,7 +70,9 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
   )
   const isDeveloper = isFrontendDev || profile?.role === "admin"
 
-  // Background sync: fetch from server, update localStorage for NEXT session
+  // Background sync: fetch from server, then apply to both state and
+  // localStorage. This calls setFlags, so the result lands in the current
+  // session on the next render — not just the next one.
   useEffect(() => {
     let cancelled = false
 
