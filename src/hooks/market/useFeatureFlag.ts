@@ -41,7 +41,7 @@ export interface UseFeatureFlagReturn {
   setFlag: (flagName: string, enabled: boolean) => Promise<void>
 }
 
-const DEFAULT_FLAGS: FeatureFlags = { wiki: true, nav_v2: false, market_v2_redesign: false, customizable_dashboard: false }
+const DEFAULT_FLAGS: FeatureFlags = { wiki: true, nav_v2: true, market_v2_redesign: false, customizable_dashboard: false }
 const STORAGE_KEY = "feature_flags"
 
 function readStoredFlags(): FeatureFlags {
