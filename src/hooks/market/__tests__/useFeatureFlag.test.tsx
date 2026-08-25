@@ -50,7 +50,7 @@ describe("useFeatureFlag — initial read", () => {
     const { result } = renderHook(() => useFeatureFlag())
 
     expect(result.current.flags.wiki).toBe(true)
-    expect(result.current.flags.nav_v2).toBe(false)
+    expect(result.current.flags.nav_v2).toBe(true)
     expect(result.current.marketVersion).toBe("V1")
   })
 
@@ -86,15 +86,17 @@ describe("useFeatureFlag — background sync", () => {
   it("applies a server-enabled flag during the current session", async () => {
     // The hook's header comment claims changes only take effect next session.
     // They do not: the sync calls setFlags, so a flag an admin turns on appears
-    // without a reload. This test pins the actual behaviour.
+    // without a reload. This test pins the actual behaviour. Uses
+    // market_v2_redesign because it still defaults off (nav_v2 now defaults on),
+    // so the off → server-enabled → on transition is what's exercised.
     serverResponse = {
-      data: { flags: { nav_v2: true }, overridden_flags: [], has_override: false },
+      data: { flags: { market_v2_redesign: true }, overridden_flags: [], has_override: false },
     }
 
     const { result } = renderHook(() => useFeatureFlag())
-    expect(result.current.flags.nav_v2).toBe(false)
+    expect(result.current.flags.market_v2_redesign).toBe(false)
 
-    await waitFor(() => expect(result.current.flags.nav_v2).toBe(true))
+    await waitFor(() => expect(result.current.flags.market_v2_redesign).toBe(true))
   })
 
   it("persists synced flags for the next session", async () => {

@@ -32,7 +32,13 @@ import { BottomSheet } from "../../../../components/mobile/BottomSheet"
 import {
   useUpdateListingMutation,
   type MyListingItem,
+  type UpdateListingRequest,
 } from "../../../../store/api/v2/market"
+import { useUploadImageMutation } from "../../../../store/api/v2/market-overrides"
+import {
+  SelectPhotosArea,
+  type UploadedImageStatus,
+} from "../../../../components/modal/SelectPhotosArea"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
@@ -53,24 +59,98 @@ export function QuickEditListingSheet({
   const navigate = useNavigate()
   const issueAlert = useAlertHook()
   const [updateListing, { isLoading }] = useUpdateListingMutation()
+  const [uploadImage] = useUploadImageMutation()
 
   const [isActive, setIsActive] = useState(true)
   const [price, setPrice] = useState(0)
+  // Newly added photos (append-only in quick edit): external URLs pasted via the
+  // "Add URL" flow, plus files uploaded through the two-phase image upload.
+  // Removing/reordering existing photos still lives in the full editor.
+  const [externalUrls, setExternalUrls] = useState<string[]>([])
+  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([])
+  const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([])
+  const isUploading = uploadedImages.some((img) => img.status === "uploading")
 
   // Sync local state whenever the target listing changes
   useEffect(() => {
     if (listing) {
       setIsActive(listing.status === "active")
       setPrice(listing.price_min)
+      setExternalUrls([])
+      setUploadedImages([])
+      setPhotoResourceIds([])
     }
   }, [listing])
 
+  // Two-phase upload: upload each file immediately and track its status so a
+  // failure shows on the thumbnail (with a reason on hover/tap) rather than
+  // silently dropping the photo.
+  const handleFileUpload = useCallback(
+    (files: File[]) => {
+      for (const file of files) {
+        const tempId = `temp-${crypto.randomUUID()}`
+        setUploadedImages((prev) => [
+          ...prev,
+          { resource_id: tempId, url: "", status: "uploading", file },
+        ])
+
+        uploadImage(file)
+          .unwrap()
+          .then((result) => {
+            setUploadedImages((prev) =>
+              prev.map((img) =>
+                img.resource_id === tempId
+                  ? {
+                      ...img,
+                      resource_id: result.resource_id,
+                      url: result.url,
+                      status: "success" as const,
+                    }
+                  : img,
+              ),
+            )
+            setPhotoResourceIds((prev) => [...prev, result.resource_id])
+          })
+          .catch((err) => {
+            const e = err as {
+              data?: {
+                error?: { message?: string; validationErrors?: { message: string }[] }
+                message?: string
+                validationErrors?: { message: string }[]
+              }
+            }
+            const errBody = e?.data?.error || e?.data || {}
+            const detail =
+              errBody?.message ||
+              errBody?.validationErrors?.[0]?.message ||
+              t("quickEdit.uploadFailed", "Upload failed")
+            setUploadedImages((prev) =>
+              prev.map((img) =>
+                img.resource_id === tempId
+                  ? { ...img, status: "error" as const, error: detail }
+                  : img,
+              ),
+            )
+          })
+      }
+    },
+    [uploadImage, t],
+  )
+
+  const handleRemoveUploadedImage = useCallback((resourceId: string) => {
+    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId))
+    setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId))
+  }, [])
+
   const handleSave = useCallback(async () => {
     if (!listing) return
-    const req: { status?: "active" | "inactive"; base_price?: number } = {}
+    const req: UpdateListingRequest = {}
     const newStatus: "active" | "inactive" = isActive ? "active" : "inactive"
     if (newStatus !== listing.status) req.status = newStatus
     if (price !== listing.price_min) req.base_price = price
+    // Append newly uploaded photos and pasted external URLs (append-only here).
+    if (photoResourceIds.length > 0) req.photo_resource_ids = photoResourceIds
+    if (externalUrls.length > 0) req.external_photo_urls = externalUrls
     if (Object.keys(req).length === 0) {
       onClose()
       return
@@ -85,13 +165,27 @@ export function QuickEditListingSheet({
         severity: "success",
       })
       onClose()
-    } catch {
+    } catch (error) {
+      const err = error as { data?: { error?: { message?: string }; message?: string } }
       issueAlert({
-        message: t("quickEdit.error", "Failed to save changes"),
+        message:
+          err?.data?.error?.message ||
+          err?.data?.message ||
+          t("quickEdit.error", "Failed to save changes"),
         severity: "error",
       })
     }
-  }, [listing, isActive, price, updateListing, issueAlert, t, onClose])
+  }, [
+    listing,
+    isActive,
+    price,
+    photoResourceIds,
+    externalUrls,
+    updateListing,
+    issueAlert,
+    t,
+    onClose,
+  ])
 
   const handleOpenFullEditor = useCallback(() => {
     if (!listing) return
@@ -225,6 +319,27 @@ export function QuickEditListingSheet({
           helperText={`${t("quickEdit.priceHelp", "Current")}: ${priceHelp}`}
         />
 
+        {/* Add photos (append-only) */}
+        <Box>
+          <Typography variant="body2" fontWeight={500} sx={{ mb: 0.5 }}>
+            {t("quickEdit.photos", "Add Photos")}
+          </Typography>
+          <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 1 }}>
+            {t(
+              "quickEdit.photosHelp",
+              "New photos are added to this listing. Use the full editor to remove or reorder existing photos.",
+            )}
+          </Typography>
+          <SelectPhotosArea
+            photos={externalUrls}
+            setPhotos={setExternalUrls}
+            onFileUpload={handleFileUpload}
+            onAlert={(severity, message) => issueAlert({ severity, message })}
+            uploadedImages={uploadedImages}
+            onRemoveUploadedImage={handleRemoveUploadedImage}
+          />
+        </Box>
+
         {/* Read-only info tiles */}
         <Stack direction="row" spacing={1}>
           <Box sx={tileSx}>
@@ -260,10 +375,13 @@ export function QuickEditListingSheet({
           color="secondary"
           fullWidth
           loading={isLoading}
+          disabled={isUploading}
           onClick={handleSave}
           size="large"
         >
-          {t("quickEdit.save", "Save Changes")}
+          {isUploading
+            ? t("quickEdit.uploading", "Uploading photos…")
+            : t("quickEdit.save", "Save Changes")}
         </LoadingButton>
 
         <Button
