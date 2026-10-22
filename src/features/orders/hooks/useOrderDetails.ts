@@ -118,6 +118,10 @@ export function useOrderDetails(order: Order) {
     () => amContractor && has_permission(contractor, profile, "manage_orders", profile?.contractors),
     [contractor, profile, amContractor],
   )
+  const canClaim = useMemo(
+    () => amContractorManager || (amContractor && has_permission(contractor, profile, "claim_orders", profile?.contractors)),
+    [contractor, profile, amContractor, amContractorManager],
+  )
 
   const privateContractCustomer = useMemo(
     () => amCustomer && !(amContractorManager || amAssigned) && (order.contractor || order.assigned_to),
@@ -128,10 +132,7 @@ export function useOrderDetails(order: Order) {
     [amCustomer, order],
   )
   const isComplete = useMemo(() => ["cancelled", "fulfilled"].includes(order.status), [order.status])
-  const server_id = useMemo(
-    () => order.discord_server_id || contractor?.official_server_id,
-    [contractor?.official_server_id, order.discord_server_id],
-  )
+  const server_id = order.discord_server_id
 
   const handleClaimOrder = useCallback(async () => {
     if (!profile?.username) return
@@ -157,7 +158,7 @@ export function useOrderDetails(order: Order) {
     // Related entities
     contractor, assigned, customer,
     // Permissions
-    amCustomer, amAssigned, amContractor, amRelated, amContractorManager,
+    amCustomer, amAssigned, amContractor, amRelated, amContractorManager, canClaim,
     privateContractCustomer, publicContractCustomer, isComplete,
     server_id,
     // Thread
