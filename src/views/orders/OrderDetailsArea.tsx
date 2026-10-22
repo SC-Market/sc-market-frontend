@@ -120,7 +120,7 @@ export function OrderDetailsArea(props: { order: Order }) {
     orderDetailV2, hasV2Items,
     statusColor, status, updateOrderStatus,
     contractor, assigned, customer,
-    amCustomer, amAssigned, amContractor, amRelated, amContractorManager,
+    amCustomer, amAssigned, amContractor, amRelated, amContractorManager, canClaim,
     privateContractCustomer, publicContractCustomer, isComplete,
     server_id,
     createThread, createThreadLoading,
@@ -213,7 +213,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                         <Typography variant="body2" color="text.secondary">
                           {t("orderDetailsArea.none", "None")}
                         </Typography>
-                        {amContractor && !["cancelled", "fulfilled"].includes(order.status) && (
+                        {canClaim && !["cancelled", "fulfilled"].includes(order.status) && (
                           <Button
                             size="small"
                             variant="outlined"
