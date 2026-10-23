@@ -9,6 +9,9 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest"
 import { renderHook, waitFor, act } from "@testing-library/react"
+import React from "react"
+import { renderToString } from "react-dom/server"
+import { hydrateRoot } from "react-dom/client"
 
 const getUserProfileQuery = vi.fn(() => ({ data: undefined }))
 vi.mock("../../../features/profile/api/profileApi", () => ({
@@ -81,6 +84,49 @@ describe("useFeatureFlag — initial read", () => {
     const { result } = renderHook(() => useFeatureFlag())
 
     expect(result.current.marketVersion).toBe("V2")
+  })
+})
+
+describe("useFeatureFlag — server render and hydration", () => {
+  function RedesignFlag() {
+    const { flags } = useFeatureFlag()
+    return <span>{flags.market_v2_redesign ? "on" : "off"}</span>
+  }
+
+  it("renders the defaults on the server even with stored flags", () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ market_v2_redesign: true }))
+    expect(renderToString(<RedesignFlag />)).toContain(">off<")
+  })
+
+  it("falls back to the defaults when localStorage is unavailable", () => {
+    vi.stubGlobal("localStorage", undefined)
+    try {
+      const { result } = renderHook(() => useFeatureFlag())
+      expect(result.current.flags.market_v2_redesign).toBe(false)
+      expect(result.current.flags.nav_v2).toBe(true)
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+
+  it("hydrates with the defaults, then applies the stored flags", async () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ market_v2_redesign: true }))
+    const container = document.createElement("div")
+    container.innerHTML = renderToString(<RedesignFlag />)
+    document.body.appendChild(container)
+
+    const errors: unknown[] = []
+    let root: ReturnType<typeof hydrateRoot> | undefined
+    await act(async () => {
+      root = hydrateRoot(container, <RedesignFlag />, {
+        onRecoverableError: (error) => errors.push(error),
+      })
+    })
+
+    expect(errors).toEqual([])
+    expect(container.textContent).toBe("on")
+    act(() => root!.unmount())
+    container.remove()
   })
 })
 

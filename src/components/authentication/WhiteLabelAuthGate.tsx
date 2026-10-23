@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Typography, Button, CircularProgress } from "@mui/material"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { IS_CUSTOM_DOMAIN, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
+import { useSession } from "../../hooks/login/useSession"
+import { useCustomDomain, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 
@@ -13,16 +13,17 @@ import { useTranslation } from "react-i18next"
  */
 export function WhiteLabelAuthGate({ children }: { children: React.ReactNode }) {
   const config = getWhiteLabelConfig()
-  const { data: profile, isLoading, isError } = useGetUserProfileQuery()
+  const session = useSession()
+  const { isCustomDomain } = useCustomDomain()
   const { t } = useTranslation()
 
   // Not a custom domain or public mode — no gate
-  if (!IS_CUSTOM_DOMAIN || !config || config.focus_mode === "public") {
+  if (!isCustomDomain || !config || config.focus_mode === "public") {
     return <>{children}</>
   }
 
   // Loading auth state
-  if (isLoading) {
+  if (session.status === "unknown") {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
         <CircularProgress />
@@ -31,9 +32,12 @@ export function WhiteLabelAuthGate({ children }: { children: React.ReactNode }) 
   }
 
   // Not logged in
-  if (isError || !profile) {
-    const redirectPath = window.location.pathname
-    const origin = window.location.origin
+  if (session.status === "anonymous") {
+    const signIn = (provider: "discord" | "citizenid") => {
+      const redirectPath = window.location.pathname
+      const origin = window.location.origin
+      window.location.href = `${BACKEND_URL}/auth/${provider}?path=${encodeURIComponent(redirectPath)}&action=signin&origin=${encodeURIComponent(origin)}`
+    }
     return (
       <Box
         display="flex"
@@ -51,17 +55,13 @@ export function WhiteLabelAuthGate({ children }: { children: React.ReactNode }) 
         <Box display="flex" gap={2}>
           <Button
             variant="contained"
-            onClick={() => {
-              window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signin&origin=${encodeURIComponent(origin)}`
-            }}
+            onClick={() => signIn("discord")}
           >
             {t("whitelabel.signInDiscord", "Sign in with Discord")}
           </Button>
           <Button
             variant="outlined"
-            onClick={() => {
-              window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}&action=signin&origin=${encodeURIComponent(origin)}`
-            }}
+            onClick={() => signIn("citizenid")}
           >
             {t("whitelabel.signInCitizenId", "Sign in with Citizen ID")}
           </Button>
@@ -71,6 +71,7 @@ export function WhiteLabelAuthGate({ children }: { children: React.ReactNode }) 
   }
 
   // Logged in but membership required — check if user is a member
+  const { profile } = session
   if (config.require_membership) {
     const isMember = profile.contractors?.some(
       (c: { spectrum_id: string }) => c.spectrum_id === config.spectrum_id,

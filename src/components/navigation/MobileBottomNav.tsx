@@ -25,13 +25,13 @@ import {
   AssignmentTurnedInRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useSession } from "../../hooks/login/useSession"
 import { useTranslation } from "react-i18next"
 import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
-import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
+import { useCustomDomain, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { getDisabledTabs } from "../sidebar/utils/sidebarFilters"
 import { PATHS, MARKET_PATHS, ORDER_PATHS, ORG_PATHS } from "../../routes/paths"
 
@@ -67,8 +67,9 @@ export function MobileBottomNav() {
   const location = useLocation()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const { data: userProfile } = useGetUserProfileQuery()
-  const isLoggedIn = !!userProfile
+  const { status: sessionStatus, profile: userProfile } = useSession()
+  const isLoggedIn = sessionStatus === "authenticated"
+  const { customOrg } = useCustomDomain()
   const primaryContractor = userProfile?.contractors?.[0]
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
@@ -207,7 +208,7 @@ export function MobileBottomNav() {
     const tabIds = userTabs || defaultTabs
 
     // On white-label, filter out tabs disabled in sidebar config
-    const disabledKeys = CURRENT_CUSTOM_ORG ? getDisabledTabs() : new Set<string>()
+    const disabledKeys = customOrg ? getDisabledTabs() : new Set<string>()
 
     return tabIds
       .map((id: string) => getTabConfig(id))
@@ -217,7 +218,7 @@ export function MobileBottomNav() {
         // Hide tabs disabled by white-label sidebar config
         if (disabledKeys.has(tab.id)) return false
         // Hide contractors/recruiting on white-label (same as sidebar)
-        if (CURRENT_CUSTOM_ORG && (tab.id === "contractors" || tab.id === "recruiting")) return false
+        if (customOrg && (tab.id === "contractors" || tab.id === "recruiting")) return false
         return true
       })
       .slice(0, 5)

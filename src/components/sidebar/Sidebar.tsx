@@ -97,7 +97,7 @@ export function Sidebar() {
   }, [setDrawerOpen, xs])
 
   // Close drawer on mobile when navigating
-  const prevPathname = React.useRef<string>(window.location.pathname)
+  const prevPathname = React.useRef<string>(location.pathname)
   useEffect(() => {
     if (xs && prevPathname.current !== window.location.pathname) {
       setDrawerOpen(false)

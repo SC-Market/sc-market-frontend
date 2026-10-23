@@ -18,7 +18,7 @@ import type { UserProfileState } from "../../../hooks/login/UserProfile"
 const profile = { username: "tester", role: "user" } as UserProfileState
 
 function filterWith(flags: Record<string, boolean>) {
-  return createItemFilter(profile, undefined, null, null, flags)
+  return createItemFilter(profile, null, null, flags, undefined)
 }
 
 const wikiItem: SidebarItemProps = {

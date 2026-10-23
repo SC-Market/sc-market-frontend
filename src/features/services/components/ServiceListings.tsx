@@ -6,7 +6,7 @@ import { HapticTablePagination } from "../../../components/haptic"
 import { useServiceSearch } from "../../contracting/hooks/ServiceSearch"
 import { ServiceListingSkeleton } from "../../../components/skeletons"
 import { EmptyListings } from "../../../components/empty-states"
-import { CURRENT_CUSTOM_ORG } from "../../../hooks/contractor/CustomDomain"
+import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
   useGetPublicServicesQuery,
@@ -23,6 +23,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
 
   const ref = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
+  const { customOrg } = useCustomDomain()
 
   const queryParams: ServicesQueryParams = useMemo(() => {
     const params: ServicesQueryParams = {
@@ -77,13 +78,13 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   const displayedServices = useMemo(() => {
     if (!servicesResponse?.data) return []
     if (contractor ?? user) return servicesResponse.data
-    if (CURRENT_CUSTOM_ORG) {
+    if (customOrg) {
       return servicesResponse.data.filter(
-        (service) => service.contractor?.spectrum_id === CURRENT_CUSTOM_ORG,
+        (service) => service.contractor?.spectrum_id === customOrg,
       )
     }
     return servicesResponse.data
-  }, [servicesResponse?.data, contractor, user])
+  }, [servicesResponse?.data, contractor, user, customOrg])
 
   if (isLoading || isFetching) {
     return (

@@ -7,13 +7,8 @@ import { useCurrentChat } from "../hooks/CurrentChat"
 import {
   useSendChatMessageMutation,
   useGetChatByIDQuery,
-  chatsApi,
 } from "../api/chatsApi"
 import { useParams } from "react-router-dom"
-import { io } from "socket.io-client"
-import { WS_URL } from "../../../util/constants"
-import { useDispatch } from "react-redux"
-import type { AppDispatch } from "../../../store/store"
 import { getTime } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
@@ -26,15 +21,7 @@ import {
 } from "../messages"
 import type { Message } from "../domain/types"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-
-export const socket = io(WS_URL, {
-  withCredentials: true,
-  path: "/ws",
-  reconnectionDelay: 4000,
-  autoConnect: false,
-  secure: true,
-  transports: ["websocket", "polling", "xhr-polling"],
-})
+import { useChatSocket } from "../hooks/useChatSocket"
 
 /**
  * The main messages body used across Orders and Offers
@@ -44,102 +31,14 @@ export function MessagesBody(props: {
   forceDesktop?: boolean
 }) {
   const theme = useTheme<ExtendedTheme>()
-  const dispatch = useDispatch<AppDispatch>()
   const isMobileQuery = useMediaQuery(theme.breakpoints.down("md"))
   const isMobile = props.forceDesktop ? false : isMobileQuery
   const [currentChat, setCurrentChat] = useCurrentChat()
   const messageBoxRef = useRef<HTMLDivElement>(null)
   const [sendChatMessage] = useSendChatMessageMutation()
-  const { isSuccess } = useGetUserProfileQuery()
   const { data: profile } = useGetUserProfileQuery()
 
-  useEffect(() => {
-    if (isSuccess && !socket.connected) {
-      socket.connect()
-    }
-
-    if (!isSuccess || socket.connected) {
-      socket.disconnect()
-    }
-  }, [isSuccess])
-
-  // Listen for server messages from socket
-  useEffect(() => {
-    function onServerMessage(message: Message): void {
-      setCurrentChat((chat) => {
-        if (chat && message.chat_id === chat.chat_id) {
-          // Find matching message by content + author (replace optimistic with server message)
-          const messageIndex = chat.messages.findIndex(
-            (msg) =>
-              msg.content === message.content && msg.author === message.author,
-          )
-
-          if (messageIndex >= 0) {
-            // Replace optimistic message with server message
-            const updatedMessages = [...chat.messages]
-            updatedMessages[messageIndex] = message
-            return {
-              ...chat,
-              messages: updatedMessages.sort(
-                (a: Message, b: Message) => a.timestamp - b.timestamp,
-              ),
-            }
-          } else {
-            // New message, add it
-            return {
-              ...chat,
-              messages: [...chat.messages, message].sort(
-                (a: Message, b: Message) => a.timestamp - b.timestamp,
-              ),
-            }
-          }
-        }
-        return chat
-      })
-
-      // Also update RTK Query cache so it stays in sync
-      dispatch(
-        chatsApi.util.updateQueryData(
-          "getChatByID",
-          message.chat_id,
-          (draft) => {
-            // Find matching message by content + author (replace optimistic with server message)
-            const messageIndex = draft.messages.findIndex(
-              (msg) =>
-                msg.content === message.content &&
-                msg.author === message.author,
-            )
-
-            if (messageIndex >= 0) {
-              // Replace optimistic message with server message
-              draft.messages[messageIndex] = message
-            } else {
-              // New message, add it
-              draft.messages.push(message)
-            }
-            draft.messages.sort(
-              (a: Message, b: Message) => a.timestamp - b.timestamp,
-            )
-          },
-        ),
-      )
-    }
-    socket.on("serverMessage", onServerMessage)
-    return () => {
-      socket.off("serverMessage", onServerMessage)
-    }
-  }, [setCurrentChat, dispatch])
-
-  useEffect(() => {
-    if (currentChat) {
-      socket.emit("clientJoinRoom", { chat_id: currentChat.chat_id })
-    }
-    return () => {
-      if (currentChat) {
-        socket.emit("clientLeaveRoom", { chat_id: currentChat.chat_id })
-      }
-    }
-  }, [currentChat?.chat_id])
+  useChatSocket(currentChat?.chat_id, setCurrentChat)
 
   // Subscribe to RTK Query cache updates to sync with currentChat state
   const { chat_id } = useParams<{ chat_id: string }>()

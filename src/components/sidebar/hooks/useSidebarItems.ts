@@ -1,9 +1,9 @@
 import { useMemo, useCallback } from "react"
 import { useLocation, matchPath } from "react-router-dom"
-import { useGetUserProfileQuery } from "../../../features/profile/api/profileApi"
+import { useSession } from "../../../hooks/login/useSession"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi"
-import { CURRENT_CUSTOM_ORG } from "../../../hooks/contractor/CustomDomain"
+import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import SCMarketLogo from "../../../assets/scmarket-logo.png"
 import { SidebarItemProps } from "../types"
 import { createItemFilter } from "../utils/sidebarFilters"
@@ -16,7 +16,7 @@ import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
  */
 export function useSidebarItems() {
   const location = useLocation()
-  const { data: profile, error: profileError } = useGetUserProfileQuery()
+  const { profile } = useSession()
   const [currentOrgObj] = useCurrentOrg()
   const [cookies] = useCookies(["current_shop_slug"])
   const { flags } = useFeatureFlag()
@@ -37,21 +37,22 @@ export function useSidebarItems() {
     return fromUrl ?? cookies.current_shop_slug ?? null
   }, [location.pathname, cookies.current_shop_slug])
 
+  const { customOrg } = useCustomDomain()
   const { data: customOrgData } = useGetContractorBySpectrumIDQuery(
-    CURRENT_CUSTOM_ORG!,
-    { skip: !CURRENT_CUSTOM_ORG },
+    customOrg!,
+    { skip: !customOrg },
   )
 
   const avatar = useMemo(() => {
-    if (CURRENT_CUSTOM_ORG) {
+    if (customOrg) {
       return customOrgData?.avatar || SCMarketLogo
     }
     return SCMarketLogo
-  }, [customOrgData])
+  }, [customOrg, customOrgData])
 
   const filterItems = useCallback(
-    createItemFilter(profile, profileError, currentOrgObj, shopSlug, flags),
-    [currentOrgObj, profile, profileError, shopSlug, flags],
+    createItemFilter(profile, currentOrgObj, shopSlug, flags, customOrg),
+    [currentOrgObj, profile, shopSlug, flags, customOrg],
   )
 
   const resolveItem = useCallback(
@@ -62,7 +63,6 @@ export function useSidebarItems() {
 
   return {
     profile,
-    profileError,
     currentOrgObj,
     effectiveOrgId,
     avatar,

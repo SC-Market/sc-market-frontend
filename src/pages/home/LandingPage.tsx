@@ -1,5 +1,5 @@
 import React from "react"
-import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
+import { useCustomDomain, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -23,7 +23,8 @@ export function LandingPage() {
   const theme = useTheme<ExtendedTheme>()
 
   // Handle custom org redirect
-  if (CURRENT_CUSTOM_ORG) {
+  const { customOrg } = useCustomDomain()
+  if (customOrg) {
     const config = getWhiteLabelConfig()
     if (config?.homepage_path) {
       return <Navigate to={config.homepage_path} />
@@ -31,7 +32,7 @@ export function LandingPage() {
     if (config?.focus_mode === "internal") {
       return <Navigate to={PATHS.dashboard} />
     }
-    return <Navigate to={ORG_PATHS.profile(CURRENT_CUSTOM_ORG)} />
+    return <Navigate to={ORG_PATHS.profile(customOrg)} />
   }
 
   return (

@@ -51,6 +51,7 @@ vi.mock("../../../features/profile/api/profileApi", async (importOriginal) => {
     ...actual,
     useGetUserProfileQuery: () => ({
       data: mockProfile,
+      isSuccess: mockProfile !== undefined,
       isLoading: false,
       isError: false,
       error: undefined,

@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode, useMemo } from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, useLocation } from "react-router-dom"
 import { Grid, GridProps } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
 import { Page } from "../metadata/Page"
@@ -18,7 +18,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useSession } from "../../hooks/login/useSession"
 import { PATHS, ORG_PATHS } from "../../routes/paths"
 
 export interface BreadcrumbItem {
@@ -79,7 +79,8 @@ export function StandardPageLayout(
   props: StandardPageLayoutProps,
 ): ReactElement {
   const theme = useTheme<ExtendedTheme>()
-  const { data: profile } = useGetUserProfileQuery()
+  const { profile } = useSession()
+  const location = useLocation()
   const primaryContractor = profile?.contractors?.[0]
 
   const {
@@ -134,7 +135,7 @@ export function StandardPageLayout(
   if (isForbiddenError(error as FetchBaseQueryError | SerializedError | undefined)) {
     const message = getErrorMessage(error as FetchBaseQueryError | SerializedError | undefined)
     if (!profile) {
-      const redirectUrl = encodeURIComponent(window.location.pathname + window.location.search)
+      const redirectUrl = encodeURIComponent(location.pathname + location.search)
       return <Navigate to={`${PATHS.login}?redirect=${redirectUrl}`} />
     }
     return <ForbiddenPage message={message} />
@@ -147,7 +148,7 @@ export function StandardPageLayout(
     )
   ) {
     console.error("[StandardPageLayout] Page error – showing error page", {
-      path: typeof window !== "undefined" ? window.location.pathname : undefined,
+      path: location.pathname,
       title: title ?? undefined,
       error,
     })

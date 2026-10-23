@@ -9,6 +9,7 @@ import {
   Navigate,
   Outlet,
   RouterProvider,
+  type RouteObject,
 } from "react-router-dom"
 import { PageFallback } from "./components/metadata/Page"
 // Imported STATICALLY (not from the .lazy wrapper): this is the root
@@ -145,10 +146,10 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [periodicSyncSupported])
 
-  return <RouterProvider router={router} />
+  return <RouterProvider router={getRouter()} />
 }
 
-const router = createBrowserRouter([
+const routes: RouteObject[] = [
   // Standalone widget route (no Root layout)
   {
     path: "/widget/orders",
@@ -1296,6 +1297,15 @@ const router = createBrowserRouter([
       },
     ],
   },
-])
+]
+
+let router: ReturnType<typeof createBrowserRouter> | null = null
+
+// createBrowserRouter reads window.location/history, so it is created on first
+// render instead of at import time.
+function getRouter() {
+  if (!router) router = createBrowserRouter(routes)
+  return router
+}
 
 export default App

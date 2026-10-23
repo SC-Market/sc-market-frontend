@@ -28,7 +28,12 @@ import { AlertHookContext } from "./alert/AlertHook"
 import { ServiceSearchContext } from "../features/contracting/hooks/ServiceSearch"
 import { LightThemeContext, ThemeChoice } from "./styles/LightTheme"
 import { useCookies, CookiesProvider } from "react-cookie"
-import { CURRENT_CUSTOM_ORG, IS_CUSTOM_DOMAIN, cacheDomainOrg } from "./contractor/CustomDomain"
+import {
+  CustomDomainContext,
+  cacheDomainOrg,
+  resolveBrowserCustomDomain,
+  useCustomDomain,
+} from "./contractor/CustomDomain"
 import { setSidebarConfig } from "../components/sidebar/utils/sidebarFilters"
 import { contractorsApi } from "../store/api/contractors"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
@@ -57,6 +62,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const location = useLocation()
   const { i18n } = useTranslation()
   const dispatch = useAppDispatch()
+  const { isCustomDomain, customOrg } = useCustomDomain()
 
   const mightBeCustomTheme =
     useLightTheme !== "light" &&
@@ -96,19 +102,19 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     if (dynamicOrgTheme) return dynamicOrgTheme
 
     // Cached org theme from localStorage
-    if (CURRENT_CUSTOM_ORG) {
-      const cached = getCachedOrgTheme(CURRENT_CUSTOM_ORG, resolvedMode)
+    if (customOrg) {
+      const cached = getCachedOrgTheme(customOrg, resolvedMode)
       if (cached) return cached
     }
     return actualTheme === "light" ? CLEAN_theme : mainTheme
-  }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode])
+  }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode, customOrg])
 
   // Start proactive JWT refresh (every 13 min + on tab visibility change)
   useEffect(() => { startProactiveRefresh() }, [])
 
   // Background: resolve domain + fetch theme for white-label sites
   useEffect(() => {
-    if (!IS_CUSTOM_DOMAIN) return
+    if (!isCustomDomain) return
     const hostname = window.location.hostname
 
     async function resolveAndFetchTheme() {
@@ -156,7 +162,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     }
 
     resolveAndFetchTheme()
-  }, [resolvedMode, dispatch])
+  }, [resolvedMode, dispatch, isCustomDomain])
 
   // Build a localized theme when language changes
   const [localizedTheme, setLocalizedTheme] = useState(() =>
@@ -176,15 +182,15 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute("content", localizedTheme.palette.background.navbar)
-    if (CURRENT_CUSTOM_ORG) {
-      const favicon = getCachedFaviconUrl(CURRENT_CUSTOM_ORG)
+    if (customOrg) {
+      const favicon = getCachedFaviconUrl(customOrg)
       if (favicon) {
         document
           .querySelector('link[rel="icon"]')
           ?.setAttribute("href", favicon)
       }
     }
-  }, [localizedTheme])
+  }, [localizedTheme, customOrg])
 
   useEffect(() => {
     if (useLightTheme === "system") {
@@ -296,7 +302,10 @@ export function HookProvider(props: { children: React.ReactElement }) {
     }
   }, [searchParams, setSearchParams, issueAlert, t, isCitizenIdEnabled])
 
+  const [customDomain] = useState(resolveBrowserCustomDomain)
+
   return (
+    <CustomDomainContext.Provider value={customDomain}>
     <CookiesProvider>
       <ThemeProviderWrapper>
         <AlertHookContext.Provider value={[alert, issueAlert]}>
@@ -339,5 +348,6 @@ export function HookProvider(props: { children: React.ReactElement }) {
         </AlertHookContext.Provider>
       </ThemeProviderWrapper>
     </CookiesProvider>
+    </CustomDomainContext.Provider>
   )
 }

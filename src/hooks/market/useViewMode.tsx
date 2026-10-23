@@ -1,27 +1,14 @@
-import { useState, useCallback } from "react"
 import { ToggleButtonGroup, ToggleButton } from "@mui/material"
 import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
+import { useLocalStorageState } from "../storage/useLocalStorageState"
 
 export type ViewMode = "grid" | "list"
 
 const STORAGE_KEY = "market_view_mode"
+const VIEW_MODES: readonly ViewMode[] = ["grid", "list"]
 
 export function useViewMode(): [ViewMode, (mode: ViewMode) => void] {
-  const [mode, setModeState] = useState<ViewMode>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      return stored === "list" ? "list" : "grid"
-    } catch {
-      return "grid"
-    }
-  })
-
-  const setMode = useCallback((m: ViewMode) => {
-    setModeState(m)
-    try { localStorage.setItem(STORAGE_KEY, m) } catch {}
-  }, [])
-
-  return [mode, setMode]
+  return useLocalStorageState<ViewMode>(STORAGE_KEY, "grid", VIEW_MODES)
 }
 
 export function ViewModeToggle({ mode, onChange }: { mode: ViewMode; onChange: (m: ViewMode) => void }) {

@@ -16,7 +16,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { SidebarActorSelect } from "../SidebarActorSelect"
 import { HapticIconButton } from "../../haptic"
-import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../../hooks/contractor/CustomDomain"
+import { useCustomDomain, getWhiteLabelConfig } from "../../../hooks/contractor/CustomDomain"
 import type { UserProfileState } from "../../../hooks/login/UserProfile"
 
 interface SidebarHeaderProps {
@@ -38,6 +38,7 @@ export function SidebarHeader({
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const [, setDrawerOpen] = useDrawerOpen()
+  const { customOrg } = useCustomDomain()
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
@@ -81,7 +82,7 @@ export function SidebarHeader({
                 )}
                 fontWeight={600}
               >
-                {CURRENT_CUSTOM_ORG
+                {customOrg
                   ? getWhiteLabelConfig()?.name || t("sidebar.sc_market.title")
                   : t("sidebar.sc_market.title")}
               </Typography>

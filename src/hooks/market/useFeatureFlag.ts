@@ -16,6 +16,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useAppDispatch } from "../../store/hooks"
 import { marketV2Api } from "../../store/api/v2/market"
+import { useHydrated } from "../ssr/useHydrated"
 
 export type MarketVersion = "V1" | "V2"
 
@@ -50,8 +51,11 @@ function readStoredFlags(): FeatureFlags {
     if (stored) return { ...DEFAULT_FLAGS, ...JSON.parse(stored) }
   } catch {}
   // Backward compat: read old market_version key
-  const oldMv = localStorage.getItem("market_version")
-  if (oldMv === "V2") return { ...DEFAULT_FLAGS, market_v2: true }
+  try {
+    if (localStorage.getItem("market_version") === "V2") {
+      return { ...DEFAULT_FLAGS, market_v2: true }
+    }
+  } catch {}
   return DEFAULT_FLAGS
 }
 
@@ -62,7 +66,18 @@ function readLocalMarketVersion(): MarketVersion {
 export function useFeatureFlag(): UseFeatureFlagReturn {
   const dispatch = useAppDispatch()
   const { data: profile } = useGetUserProfileQuery()
-  const [flags, setFlags] = useState<FeatureFlags>(readStoredFlags)
+  // The server (and so the hydration render) can't see localStorage: start
+  // from DEFAULT_FLAGS there and apply the stored flags right after hydrating.
+  // A client-only render reads them straight away.
+  const hydrated = useHydrated()
+  const [flags, setFlags] = useState<FeatureFlags>(() =>
+    hydrated ? readStoredFlags() : DEFAULT_FLAGS,
+  )
+  useEffect(() => {
+    if (!hydrated) setFlags(readStoredFlags())
+    // Only the first render's value matters: it says whether we hydrated.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const [overriddenFlags, setOverriddenFlags] = useState<string[]>([])
   const [hasOverride, setHasOverride] = useState(false)
   const [error, setError] = useState<Error | null>(null)
