@@ -18,6 +18,7 @@ import { makeStore } from "./store/store"
 import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { loadProfileCache } from "./features/profile/profileCache"
 import { userApi } from "./features/profile/api/profileApi"
+import { applyTitleTemplate } from "./seo/pageHead"
 
 // Handle failed dynamic import()s. vite:preloadError is Vite's typed,
 // cross-browser signal for a failed dynamic import — the robust way to detect a
@@ -81,10 +82,7 @@ const root = createRoot(container!)
 const head = createHead({
   init: [
     {
-      titleTemplate: (title) => {
-        if (!title) return "SC Market"
-        return title.includes("SC Market") ? title : `${title} - SC Market`
-      },
+      titleTemplate: applyTitleTemplate,
     },
   ],
 })

@@ -3,6 +3,7 @@ import { Card, CardContent, Stack, Typography } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
 import type { AnswerFaq } from "../../util/answerContent"
+import { faqPageJsonLd, serializeJsonLd } from "../../seo/pageHead"
 
 /** Plain-language summary shown at the top of a game-data page. */
 export function AnswerLead({ summary }: { summary: string }) {
@@ -25,15 +26,7 @@ export function AnswerFaqs({ faqs }: { faqs: AnswerFaq[] }) {
     <>
       <Helmet>
         <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqs.map((faq) => ({
-              "@type": "Question",
-              name: faq.question,
-              acceptedAnswer: { "@type": "Answer", text: faq.answer },
-            })),
-          })}
+          {serializeJsonLd(faqPageJsonLd(faqs))}
         </script>
       </Helmet>
       <Card sx={{ mt: 2 }}>

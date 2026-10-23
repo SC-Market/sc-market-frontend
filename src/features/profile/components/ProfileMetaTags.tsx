@@ -1,61 +1,13 @@
 import React from "react"
-import { Helmet } from "@unhead/react/helmet"
 import { User } from "../../../datatypes/User"
 import { FRONTEND_URL } from "../../../util/constants"
+import { buildUserHead } from "../../../seo/entityHeads"
+import { SeoHead } from "../../../seo/SeoHead"
 
 interface ProfileMetaTagsProps {
   profile: User
 }
 
 export function ProfileMetaTags({ profile }: ProfileMetaTagsProps) {
-  return (
-    <Helmet>
-      <meta name="description" content={profile.profile_description?.slice(0, 160) || `${profile.display_name || profile.username} — Star Citizen player on SC Market`} />
-      <meta property="og:type" content="profile" />
-      <meta
-        property="og:url"
-        content={`${FRONTEND_URL}/user/${profile.username}`}
-      />
-      <meta
-        property="og:title"
-        content={`${profile.display_name} - SC Market`}
-      />
-      <meta
-        property="og:description"
-        content={
-          profile.profile_description ||
-          `${profile.display_name}'s profile on SC Market`
-        }
-      />
-      <meta property="og:image" content={profile.banner || profile.avatar} />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta
-        name="twitter:url"
-        content={`${FRONTEND_URL}/user/${profile.username}`}
-      />
-      <meta
-        name="twitter:title"
-        content={`${profile.display_name} - SC Market`}
-      />
-      <meta
-        name="twitter:description"
-        content={
-          profile.profile_description ||
-          `${profile.display_name}'s profile on SC Market`
-        }
-      />
-      <meta name="twitter:image" content={profile.banner || profile.avatar} />
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          description: profile.profile_description,
-          name: profile.display_name,
-          username: profile.username,
-          avatar_url: profile.avatar,
-          banner_url: profile.banner,
-        })}
-      </script>
-    </Helmet>
-  )
+  return <SeoHead head={buildUserHead(profile, FRONTEND_URL)} />
 }

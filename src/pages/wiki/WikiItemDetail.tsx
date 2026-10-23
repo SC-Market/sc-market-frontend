@@ -46,9 +46,11 @@ import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } 
 import { MARKET_PATHS, WIKI_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
 import { AnswerLead } from "../../components/game-data/AnswerSummary"
 import { buildItemSummary } from "../../util/answerContent"
-import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { buildItemHead } from "../../seo/gameDataHeads"
+import { headDescription } from "../../seo/pageHead"
+import { SeoHead } from "../../seo/SeoHead"
 
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
@@ -109,14 +111,13 @@ export function WikiItemDetail() {
     )
   }
 
-  const seoTitle = `${item.name} — Star Citizen Item | SC Market`
-  const seoDescription = `${item.name} — ${item.type || "equipment"} item${item.manufacturer ? " by " + item.manufacturer : ""}. View stats, market price, crafting uses, and locations in Star Citizen.`.slice(0, 160)
+  const head = buildItemHead(item, FRONTEND_URL)
+  const seoTitle = head.title
+  const seoDescription = headDescription(head)
   // Built from the resolved item, not the raw path param: this page is reachable
   // by full UUID or short slug, and the sitemap only lists the slug form.
   const canonicalPath = WIKI_PATHS.item(item.id, item.name)
-  const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
   const answerSummary = buildItemSummary(item, t)
-  const ogImage = item.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
     <StandardPageLayout
@@ -132,31 +133,7 @@ export function WikiItemDetail() {
       sidebarOpen={true}
       maxWidth="md"
     >
-      <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:type" content="product" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-        <meta name="twitter:image" content={ogImage} />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: item.name,
-            description: seoDescription,
-            ...(item.image_url && { image: item.image_url }),
-            url: canonicalUrl,
-            ...(item.manufacturer && { manufacturer: { "@type": "Organization", name: item.manufacturer } }),
-          })}
-        </script>
-      </Helmet>
+      <SeoHead head={head} />
       <Grid item xs={12}>
         <AnswerLead summary={answerSummary} />
         <Grid container spacing={3}>

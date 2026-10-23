@@ -1,10 +1,11 @@
 import SCMarketLogo from "../assets/scmarket-logo.png"
+import { DEFAULT_FRONTEND_URL, FALLBACK_IMAGE_URL } from "../seo/constants"
 
 export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost"
 export const WS_URL = import.meta.env.VITE_WS_URL || "ws://localhost"
 export const FRONTEND_URL =
-  import.meta.env.VITE_FRONTEND_URL || "https://sc-market.space"
+  import.meta.env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL
 export const VITE_VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || ""
 
 /**
@@ -15,8 +16,7 @@ export const isCitizenIdEnabled = true
 
 export const defaultAvatar = SCMarketLogo
 
-export const FALLBACK_IMAGE_URL =
-  "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+export { FALLBACK_IMAGE_URL }
 
 export const DISCORD_INVITE = "https://discord.com/invite/N4Gy8py8J4"
 

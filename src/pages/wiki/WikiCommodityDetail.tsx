@@ -4,7 +4,6 @@
  */
 
 import React from "react"
-import { Helmet } from "@unhead/react/helmet"
 import {
   Box, Button, Card, CardContent, Chip, Grid, Typography, Alert, Stack, Divider,
   Table, TableBody, TableCell, TableHead, TableRow, Paper, Avatar,
@@ -23,6 +22,9 @@ import { FRONTEND_URL } from "../../util/constants"
 import { WIKI_PATHS, MARKET_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
 import { AnswerLead, AnswerFaqs } from "../../components/game-data/AnswerSummary"
 import { buildCommodityAnswers } from "../../util/answerContent"
+import { buildCommodityHead } from "../../seo/gameDataHeads"
+import { headDescription } from "../../seo/pageHead"
+import { SeoHead } from "../../seo/SeoHead"
 
 function BoolChip({ value, label }: { value: boolean; label: string }) {
   return (
@@ -48,15 +50,9 @@ export function WikiCommodityDetail() {
   const price = data?.market_price
   const answers = data ? buildCommodityAnswers(data, t, i18n.language) : null
 
-  const acquisitionMethods = [
-    r?.can_be_mined && "Mining",
-    r?.can_be_purchased && "Purchase",
-    r?.can_be_salvaged && "Salvage",
-    r?.can_be_looted && "Looting",
-  ].filter(Boolean).join(", ")
-
-  const seoTitle = r ? `${r.resource_name} — Star Citizen Commodity | SC Market` : "Commodity Detail | SC Market"
-  const seoDescription = r ? `${r.resource_name} — ${r.resource_category} commodity. ${acquisitionMethods || "Various acquisition methods"}. View mining locations, market price, and quality tiers.`.slice(0, 160) : ""
+  const head = data?.resource ? buildCommodityHead(data, FRONTEND_URL) : null
+  const seoTitle = head?.title ?? "Commodity Detail | SC Market"
+  const seoDescription = head ? headDescription(head) : ""
   // Build the canonical from the *resolved* resource, not the raw path param:
   // the same page is reachable by full UUID or by short slug, and the sitemap
   // only ever lists the slug form. Echoing the param would emit two different
@@ -64,8 +60,6 @@ export function WikiCommodityDetail() {
   const canonicalPath = r
     ? WIKI_PATHS.commodity(r.resource_id, r.resource_name)
     : WIKI_PATHS.commodity(id!)
-  const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
-  const ogImage = r?.resource_icon || `${FRONTEND_URL}/logo512.png`
 
   return (
     <StandardPageLayout
@@ -86,31 +80,7 @@ export function WikiCommodityDetail() {
     >
       {r && (
         <>
-          <Helmet>
-            <title>{seoTitle}</title>
-            <meta name="description" content={seoDescription} />
-            <link rel="canonical" href={canonicalUrl} />
-            <meta property="og:title" content={seoTitle} />
-            <meta property="og:description" content={seoDescription} />
-            <meta property="og:url" content={canonicalUrl} />
-            <meta property="og:image" content={ogImage} />
-            <meta property="og:type" content="product" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={seoTitle} />
-            <meta name="twitter:description" content={seoDescription} />
-            <meta name="twitter:image" content={ogImage} />
-            <script type="application/ld+json">
-              {JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "Product",
-                name: r.resource_name,
-                description: seoDescription,
-                ...(r.resource_icon && { image: r.resource_icon }),
-                url: canonicalUrl,
-                category: r.resource_category,
-              })}
-            </script>
-          </Helmet>
+          {head && <SeoHead head={head} />}
           <Grid item xs={12}>
           {/* Header */}
           <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
