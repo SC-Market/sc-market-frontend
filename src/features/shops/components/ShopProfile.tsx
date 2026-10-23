@@ -45,7 +45,7 @@ import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
 import { HapticTab } from "../../../components/haptic"
 import { a11yProps } from "../../../components/tabs/Tabs"
 import { ShareButton } from "../../../components/buttons/ShareButton"
-import { useShopTab } from "../hooks/useShopTab"
+import { SHOP_LISTINGS_PAGE_SIZE, useShopTab } from "../hooks/useShopTab"
 import { ServiceListings } from "../../services/components/ServiceListings"
 import { ServiceSearchArea } from "../../../views/services/ServiceSearchArea"
 import { MarkdownRender } from "../../../components/markdown/Markdown"
@@ -482,7 +482,7 @@ function ShopListingsTab(props: { slug: string }) {
   const [sortBy, setSortBy] = useState<"created_at" | "price" | "quantity">("created_at")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const [page, setPage] = useState(1)
-  const pageSize = 24
+  const pageSize = SHOP_LISTINGS_PAGE_SIZE
   const debouncedSearch = useDebounce(search, 300)
 
   const { data, isLoading } = useSearchListingsQuery({

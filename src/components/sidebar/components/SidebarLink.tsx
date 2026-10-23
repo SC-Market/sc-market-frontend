@@ -1,9 +1,9 @@
-import React, { useCallback } from "react"
+import React, { useMemo } from "react"
 import { NavLink } from "react-router-dom"
 import { SidebarLinkBody } from "./SidebarLinkBody"
 import { SidebarLinkProps } from "../types"
-import { prefetchRoute } from "../../../router/routePrefetch"
 import { routeRegistry } from "../../../router/routeRegistry"
+import { useHoverPrefetch } from "../../../hooks/prefetch/useHoverPrefetch"
 
 // Registry keys sorted longest-first so the most specific match wins when a
 // link's target (which may carry params/query) is matched via startsWith.
@@ -30,15 +30,15 @@ function resolveRegistryKey(to: string): string | undefined {
 }
 
 /**
- * Sidebar link wrapper with prefetching
+ * Sidebar link wrapper with hover prefetching: the route chunk, plus the
+ * page's data for internal links (see router/dataPrefetchRegistry.ts)
  */
 export function SidebarLink(props: SidebarLinkProps) {
-  const handleMouseEnter = useCallback(() => {
-    const key = resolveRegistryKey(props.to)
-    if (key) {
-      prefetchRoute(key)
-    }
-  }, [props.to])
+  const registryKey = useMemo(() => resolveRegistryKey(props.to), [props.to])
+  const { onMouseEnter, onMouseLeave } = useHoverPrefetch(
+    registryKey,
+    props.external ? undefined : props.to,
+  )
 
   return props.external ? (
     <a
@@ -49,7 +49,8 @@ export function SidebarLink(props: SidebarLinkProps) {
         textDecoration: "none",
         color: "inherit",
       }}
-      onMouseEnter={handleMouseEnter}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <SidebarLinkBody {...props} />
     </a>
@@ -60,7 +61,8 @@ export function SidebarLink(props: SidebarLinkProps) {
         textDecoration: "none",
         color: "inherit",
       }}
-      onMouseEnter={handleMouseEnter}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       <SidebarLinkBody {...props} />
     </NavLink>
