@@ -4,6 +4,7 @@ import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
+import { orgPageTitle } from "../../seo/entityHeads"
 
 // Lazy load OrgInfo component
 const OrgInfo = lazy(() =>
@@ -21,7 +22,7 @@ export function ViewOrg() {
     <BannerPageLayout
       title={
         pageData.data?.contractor.name
-          ? `${pageData.data.contractor.name} - ${t("org.orgTitle")}`
+          ? orgPageTitle(pageData.data.contractor.name, t("org.orgTitle"))
           : t("org.orgTitle")
       }
       breadcrumbs={[

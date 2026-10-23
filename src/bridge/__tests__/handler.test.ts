@@ -1,0 +1,216 @@
+// @vitest-environment node
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+import { API_TIMEOUT_MS, handleBridgeRequest, type BridgeRuntime } from "../handler"
+import type { HtmlRewriterLike } from "../render"
+import * as f from "./fixtures"
+
+const SHELL = `<!doctype html><html><head><title>SC Market</title></head><body><div id="root"></div></body></html>`
+const API = "https://api.example"
+
+/**
+ * Stand-in for HTMLRewriter (a Workers-only global): records the selectors
+ * it was set up with and marks the body, so tests can tell a rewritten shell
+ * from an untouched one. The real rewriting is exercised via wrangler.
+ */
+class FakeRewriter implements HtmlRewriterLike {
+  static selectors: string[] = []
+  on(selector: string): HtmlRewriterLike {
+    FakeRewriter.selectors.push(selector)
+    return this
+  }
+  transform(response: Response): Response {
+    return new Response(`REWRITTEN ${FakeRewriter.selectors.join(",")}`, response)
+  }
+}
+
+class MemoryCache {
+  entries = new Map<string, Response>()
+  async match(request: Request) {
+    return this.entries.get(request.url)?.clone()
+  }
+  async put(request: Request, response: Response) {
+    this.entries.set(request.url, response)
+  }
+}
+
+type Upstream = (url: string, init?: RequestInit) => Promise<Response>
+
+function setup(upstream: Upstream, env: Record<string, string | undefined> = {}) {
+  const fetchSpy = vi.fn(upstream)
+  const cache = new MemoryCache()
+  const pending: Promise<unknown>[] = []
+  const next = vi.fn(async () => new Response("NEXT", { status: 200 }))
+  const assets = vi.fn(async (_input: Request | URL | string) => new Response(SHELL, { headers: { "Content-Type": "text/html; charset=utf-8" } }))
+  const runtime: BridgeRuntime = {
+    HTMLRewriter: FakeRewriter,
+    cache: cache as unknown as Cache,
+    fetch: fetchSpy as unknown as typeof fetch,
+  }
+  const run = async (path: string, init: RequestInit = {}) => {
+    const response = await handleBridgeRequest(
+      {
+        request: new Request(`https://sc-market.space${path}`, init),
+        env: { ASSETS: { fetch: assets }, VITE_BACKEND_URL: API, ...env },
+        next,
+        waitUntil: (p) => pending.push(p),
+      },
+      runtime,
+    )
+    await Promise.all(pending)
+    return response
+  }
+  return { run, fetchSpy, next, assets, cache }
+}
+
+const json = (body: unknown, status = 200) =>
+  async () => new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } })
+
+beforeEach(() => {
+  FakeRewriter.selectors = []
+})
+
+describe("handleBridgeRequest", () => {
+  it("renders a known entity with the shell's caching + CORS headers", async () => {
+    const { run, fetchSpy, assets } = setup(json(f.listing()))
+    const res = await run("/market/71012eb4--pristine-medal")
+
+    expect(res.status).toBe(200)
+    expect(await res.text()).toContain("REWRITTEN")
+    expect(FakeRewriter.selectors).toEqual(expect.arrayContaining(["title", "div#root", "head"]))
+    expect(res.headers.get("Cache-Control")).toBe("no-cache")
+    expect(res.headers.get("Content-Type")).toBe("text/html; charset=utf-8")
+    expect(res.headers.get("Access-Control-Allow-Origin")).toBe("https://api.sc-market.space")
+    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+    expect(fetchSpy).toHaveBeenCalledWith(`${API}/api/v2/listings/71012eb4--pristine-medal`, expect.anything())
+    // Shell fetched by its pretty path.
+    const shellRequest = assets.mock.calls[0][0] as Request
+    expect(new URL(shellRequest.url).pathname).toBe("/")
+  })
+
+  it("never forwards the visitor's cookies or headers to the API", async () => {
+    const { run, fetchSpy } = setup(json(f.listing()))
+    await run("/market/abc--x", {
+      headers: { Cookie: "scmarket.sid=secret", Authorization: "Bearer t", "X-Forwarded-For": "1.2.3.4" },
+    })
+    const init = fetchSpy.mock.calls[0][1] as RequestInit
+    expect(init.headers).toEqual({ Accept: "application/json" })
+    expect(init).not.toHaveProperty("credentials")
+  })
+
+  it("v2 404 → 404 shell with noindex, no summary", async () => {
+    const { run } = setup(json({ error: { code: "NOT_FOUND" } }, 404))
+    const res = await run("/market/00000000--bogus")
+    expect(res.status).toBe(404)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("notFound")
+    expect(FakeRewriter.selectors).toContain("head")
+    expect(FakeRewriter.selectors).not.toContain("div#root")
+  })
+
+  it.each([
+    ["/contractor/ZZBOGUSZZ", { error: { code: "VALIDATION_ERROR", message: "Invalid contractor" } }],
+    ["/user/zzbogususerzz", { error: "Invalid user" }],
+  ])("v1 400 (%s) → 404", async (path, body) => {
+    const { run } = setup(json(body, 400))
+    expect((await run(path)).status).toBe(404)
+  })
+
+  it("v2 400 is an error, not 'unknown': fail open", async () => {
+    const { run } = setup(json({ error: "bad" }, 400))
+    const res = await run("/wiki/items/x")
+    expect(res.status).toBe(200)
+    expect(await res.text()).toBe(SHELL)
+  })
+
+  it.each([
+    ["5xx", json({ error: "boom" }, 500)],
+    ["network error", async () => { throw new TypeError("fetch failed") }],
+    ["invalid JSON", async () => new Response("<html>", { status: 200 })],
+    ["unexpected shape", json({ nothing: true })],
+  ] as [string, Upstream][])("%s → unmodified shell, 200", async (_name, upstream) => {
+    const { run } = setup(upstream)
+    const res = await run("/market/abc--x")
+    expect(res.status).toBe(200)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("passthrough")
+    expect(await res.text()).toBe(SHELL)
+  })
+
+  describe("timeout", () => {
+    beforeEach(() => vi.useFakeTimers())
+    afterEach(() => vi.useRealTimers())
+
+    it(`aborts the API call after ${API_TIMEOUT_MS} ms and serves the shell`, async () => {
+      const hang: Upstream = (_url, init) =>
+        new Promise((_resolve, reject) => {
+          init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")))
+        })
+      const { run } = setup(hang)
+      const pending = run("/wiki/ships/x")
+      await vi.advanceTimersByTimeAsync(API_TIMEOUT_MS)
+      const res = await pending
+      expect(res.status).toBe(200)
+      expect(await res.text()).toBe(SHELL)
+    })
+  })
+
+  it("fails open when the API origin isn't configured", async () => {
+    const { run, fetchSpy } = setup(json(f.listing()), { VITE_BACKEND_URL: undefined })
+    const res = await run("/market/abc--x")
+    expect(await res.text()).toBe(SHELL)
+    expect(fetchSpy).not.toHaveBeenCalled()
+  })
+
+  it("edge-caches API JSON (and unknown answers) per URL", async () => {
+    const { run, fetchSpy } = setup(json(f.ship))
+    await run("/wiki/ships/57e51d27--crusader-intrepid")
+    await run("/wiki/ships/57e51d27--crusader-intrepid")
+    expect(fetchSpy).toHaveBeenCalledTimes(1)
+
+    const missing = setup(json({}, 404))
+    expect((await missing.run("/wiki/ships/nope")).status).toBe(404)
+    expect((await missing.run("/wiki/ships/nope")).status).toBe(404)
+    expect(missing.fetchSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it("does not cache errors", async () => {
+    const { run, fetchSpy } = setup(json({}, 503))
+    await run("/wiki/ships/x")
+    await run("/wiki/ships/x")
+    expect(fetchSpy).toHaveBeenCalledTimes(2)
+  })
+
+  it.each(["/market/cart", "/market/aggregate/abc--x", "/shops/create", "/market"])(
+    "leaves %s to Pages (next)",
+    async (path) => {
+      const { run, next, fetchSpy } = setup(json(f.listing()))
+      expect(await (await run(path)).text()).toBe("NEXT")
+      expect(next).toHaveBeenCalled()
+      expect(fetchSpy).not.toHaveBeenCalled()
+    },
+  )
+
+  it("leaves non-GET requests to Pages", async () => {
+    const { run, next } = setup(json(f.listing()))
+    await run("/market/abc--x", { method: "POST", body: "x" })
+    expect(next).toHaveBeenCalled()
+  })
+
+  it("answers HEAD without a body", async () => {
+    const { run } = setup(json(f.listing()))
+    const res = await run("/market/abc--x", { method: "HEAD" })
+    expect(res.status).toBe(200)
+    expect(res.body).toBeNull()
+  })
+
+  it("fetches the org's shop alongside the org, ignoring its failure", async () => {
+    const { run, fetchSpy } = setup(async (url) =>
+      url.includes("/shops/by-owner") ? new Response("", { status: 500 }) : json(f.contractor())(),
+    )
+    const res = await run("/contractor/NARCO")
+    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+    expect(fetchSpy.mock.calls.map((c) => c[0])).toEqual([
+      `${API}/api/contractors/NARCO`,
+      `${API}/api/v2/shops/by-owner?spectrum_id=NARCO`,
+    ])
+  })
+})
+

@@ -27,9 +27,11 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetResourceQuery } from "../../store/api/v2/market"
-import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { MARKET_PATHS, GAME_DATA_PATHS, WIKI_PATHS } from "../../routes/paths"
+import { buildResourceHead } from "../../seo/gameDataHeads"
+import { headDescription } from "../../seo/pageHead"
+import { SeoHead } from "../../seo/SeoHead"
 
 export function ResourceDetail() {
   const { t } = useTranslation()
@@ -68,8 +70,9 @@ export function ResourceDetail() {
     resource.can_be_looted && t("resources.looted", "Looted"),
   ].filter(Boolean) as string[]
 
-  const seoTitle = `${resource.resource_name} — Star Citizen Resource | SC Market`
-  const seoDescription = `${resource.resource_name} — ${resource.resource_category} resource. Base value: ${resource.base_value ? resource.base_value.toLocaleString() + " aUEC" : "N/A"}. Quality tiers and market availability.`.slice(0, 160)
+  const head = buildResourceHead(data, FRONTEND_URL)
+  const seoTitle = head.title
+  const seoDescription = headDescription(head)
   // /resources/:id and /wiki/commodities/:id render the same entity, so this
   // page deliberately points its canonical at the wiki route. Build it from the
   // resolved resource rather than the raw path param, which may be either a
@@ -78,7 +81,6 @@ export function ResourceDetail() {
     resource.resource_id,
     resource.resource_name,
   )
-  const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
 
   return (
     <StandardPageLayout
@@ -89,30 +91,7 @@ export function ResourceDetail() {
       sidebarOpen={true}
       maxWidth="lg"
     >
-      <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={`${FRONTEND_URL}/scmarket-logo.png`} />
-        <meta property="og:type" content="product" />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-        <meta name="twitter:image" content={`${FRONTEND_URL}/scmarket-logo.png`} />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: resource.resource_name,
-            description: seoDescription,
-            url: canonicalUrl,
-            category: resource.resource_category,
-          })}
-        </script>
-      </Helmet>
+      <SeoHead head={head} />
       {/* Resource Info */}
       <Grid item xs={12} md={6}>
         <Paper sx={{ p: 2 }}>

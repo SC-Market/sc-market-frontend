@@ -5,6 +5,7 @@ import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
 import { usePageUserProfile } from "../../features/profile/hooks/usePageUserProfile"
+import { userPageTitle } from "../../seo/entityHeads"
 
 const ViewProfile = lazy(
   () => import("../../features/profile/components/ViewProfile"),
@@ -19,7 +20,7 @@ export function Profile() {
     <BannerPageLayout
       title={
         pageData.data?.user?.display_name
-          ? `${pageData.data.user.display_name} - ${t("viewProfile.store_tab")}`
+          ? userPageTitle(pageData.data.user.display_name, t("viewProfile.store_tab"))
           : t("viewProfile.store_tab")
       }
       breadcrumbs={[

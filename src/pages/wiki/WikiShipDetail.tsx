@@ -3,7 +3,6 @@
  */
 
 import React from "react"
-import { Helmet } from "@unhead/react/helmet"
 import {
   Box, Card, CardContent, Typography, Grid, Chip,
   Alert, Divider, Table, TableBody, TableCell,
@@ -22,6 +21,9 @@ import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/s
 import { WIKI_PATHS } from "../../routes/paths"
 import { AnswerLead } from "../../components/game-data/AnswerSummary"
 import { buildShipSummary } from "../../util/answerContent"
+import { buildShipHead } from "../../seo/gameDataHeads"
+import { headDescription } from "../../seo/pageHead"
+import { SeoHead } from "../../seo/SeoHead"
 
 export function WikiShipDetail() {
   const { t } = useTranslation()
@@ -51,46 +53,16 @@ export function WikiShipDetail() {
   const shipColor = getShipColor(ship.career, ship.role, ship.focus)
   const chipColor = getShipRoleColor(ship.career, ship.role, ship.focus)
 
-  const seoTitle = `${ship.name} — Star Citizen Ship | SC Market`
-  const seoDescription = `${ship.name}${ship.manufacturer ? " by " + ship.manufacturer : ""} — ${ship.focus || ship.role || "spacecraft"}. Specs, loadout, and market availability in Star Citizen.`.slice(0, 160)
+  const head = buildShipHead(ship, FRONTEND_URL)
+  const seoTitle = head.title
+  const seoDescription = headDescription(head)
   // Built from the resolved ship, not the raw path param: this page is reachable
   // by full UUID or short slug, and the sitemap only lists the slug form.
   const canonicalPath = WIKI_PATHS.ship(ship.id, ship.name)
-  const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
-  const ogImage = ship.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
     <StandardPageLayout title={seoTitle} description={seoDescription} canonicalUrl={canonicalPath} headerTitle={ship.name} breadcrumbs={[{ label: t("wiki.shipDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub }, { label: t("wiki.shipDetail.breadcrumbShips", "Ships & Vehicles"), href: WIKI_PATHS.ships }, { label: ship.name }]} sidebarOpen={true} maxWidth="md">
-      <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDescription} />
-        <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDescription} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={ogImage} />
-        <meta property="og:type" content="product" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={seoTitle} />
-        <meta name="twitter:description" content={seoDescription} />
-        <meta name="twitter:image" content={ogImage} />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: ship.name,
-            description: ship.description || seoDescription,
-            image: ship.image_url || undefined,
-            url: canonicalUrl,
-            ...(ship.manufacturer && { manufacturer: { "@type": "Organization", name: ship.manufacturer } }),
-            category: [ship.career, ship.role, ship.focus].filter(Boolean).join(" / "),
-            additionalProperty: [
-              ...(ship.crew_size ? [{ "@type": "PropertyValue", name: "Crew Size", value: ship.crew_size }] : []),
-              ...(ship.length_m ? [{ "@type": "PropertyValue", name: "Length", value: `${ship.length_m}m` }] : []),
-            ],
-          })}
-        </script>
-      </Helmet>
+      <SeoHead head={head} />
       <Grid item xs={12}>
         <Grid container spacing={3}>
 

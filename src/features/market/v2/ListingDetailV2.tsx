@@ -18,7 +18,6 @@ import {
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { useParams, Link as RouterLink } from "react-router-dom"
-import { Helmet } from "@unhead/react/helmet"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import {
@@ -64,6 +63,8 @@ import {
 import { ClockAlert } from "mdi-material-ui"
 import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
 import { ReportButton } from "../../../components/button/ReportButton"
+import { buildListingHead } from "../../../seo/entityHeads"
+import { SeoHead } from "../../../seo/SeoHead"
 
 export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
@@ -164,7 +165,6 @@ export function ListingDetailV2() {
   }, [profile, seller, listing, belongsToSellerOrg, sellerContractor])
 
   const canonicalPath = listing ? MARKET_PATHS.listing(listing.listing_id, listing.title) : undefined
-  const canonicalUrl = canonicalPath ? `${FRONTEND_URL}${canonicalPath}` : undefined
 
   return (
     <StandardPageLayout
@@ -187,44 +187,7 @@ export function ListingDetailV2() {
                 <ImagePreviewPaper photos={photos} />
 
                 {/* SEO Metadata */}
-                <Helmet>
-                  <title>{listing.title} — SC Market</title>
-                  <meta name="description" content={listing.description?.slice(0, 160) || listing.title} />
-                  <link rel="canonical" href={canonicalUrl} />
-                  <meta property="og:title" content={listing.title} />
-                  <meta property="og:description" content={listing.description?.slice(0, 160) || listing.title} />
-                  <meta property="og:url" content={canonicalUrl} />
-                  <meta property="og:image" content={photos[0]} />
-                  <meta property="og:type" content="product" />
-                  <meta name="twitter:card" content="summary_large_image" />
-                  <meta name="twitter:title" content={listing.title} />
-                  <meta name="twitter:description" content={listing.description?.slice(0, 160) || listing.title} />
-                  <meta name="twitter:image" content={photos[0]} />
-                  <script type="application/ld+json">
-                    {JSON.stringify({
-                      "@context": "https://schema.org",
-                      "@type": "Product",
-                      name: listing.title,
-                      description: listing.description,
-                      image: photos[0] !== FALLBACK_IMAGE_URL ? photos[0] : undefined,
-                      url: canonicalUrl,
-                      // NOTE: prices are in aUEC (an in-game currency, not an ISO
-                      // 4217 currency). schema.org/Offer requires a real currency
-                      // and Google rejects/ignores non-ISO priceCurrency (and warns
-                      // in Search Console), so we intentionally omit the monetary
-                      // Offer and expose the aUEC price as on-page text instead.
-                      offers: {
-                        "@type": "Offer",
-                        availability: "https://schema.org/InStock",
-                        seller: {
-                          "@type": "Organization",
-                          name: seller.name,
-                          url: `${FRONTEND_URL}/shops/${seller.slug}`,
-                        },
-                      },
-                    })}
-                  </script>
-                </Helmet>
+                <SeoHead head={buildListingHead(listingData, FRONTEND_URL)} />
               </Grid>
             </Grid>
           </Grid>

@@ -2,11 +2,10 @@
 #
 # robots.txt and sitemap.xml are served directly from api.sc-market.space (see
 # the backend's sitemap.routes.ts); the frontend's public/robots.txt points
-# crawlers there. There is no functions/ middleware in this repo — an earlier
-# comment referenced a functions/_middleware.ts that never existed. Any future
-# crawler-prerendering Functions must be ROUTE-SCOPED (e.g. functions/market/…)
-# and never a root _middleware.ts, which would intercept every static asset and
-# burn the Cloudflare Functions invocation budget.
+# crawlers there. The only Functions are the route-scoped edge bridge
+# (functions/<prefix>/[[path]].ts, see src/bridge/handler.ts), limited to public
+# page prefixes by public/_routes.json. Never add a root _middleware.ts: it
+# would intercept every static asset and burn the Functions invocation budget.
 
 # A missing hashed asset (old chunk after a deploy) must return a real 404, NOT
 # fall through to the SPA catch-all below and get served index.html as 200

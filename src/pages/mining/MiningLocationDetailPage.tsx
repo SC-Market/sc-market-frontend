@@ -1,25 +1,21 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { Grid } from "@mui/material"
-import { Helmet } from "@unhead/react/helmet"
 import { useGetLocationDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { LocationDetailContent } from "./LocationDetailContent"
 import { FRONTEND_URL } from "../../util/constants"
-
-function friendlyName(name: string): string {
-  return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
-}
+import { buildMiningLocationHead, miningDisplayName, miningLocationSeoText } from "../../seo/gameDataHeads"
+import { SeoHead } from "../../seo/SeoHead"
 
 export function MiningLocationDetailPage() {
   const { name } = useParams<{ name: string }>()
   const { data: loc, isLoading, error } = useGetLocationDetailQuery({ name: name! }, { skip: !name })
-  const displayName = loc?.displayName || friendlyName(name || "")
+  const displayName = miningDisplayName(loc?.displayName, name)
+  const head = loc && name ? buildMiningLocationHead(loc, name, FRONTEND_URL) : null
 
-  const seoTitle = `${displayName} — Star Citizen Mining Location | SC Market`
-  const seoDescription = `${displayName} — mining location in Star Citizen. Available ores and mining guide.`
-  const canonicalUrl = `${FRONTEND_URL}/mining/locations/${name}`
+  const { title: seoTitle, description: seoDescription } = miningLocationSeoText(displayName)
 
   return (
     <StandardPageLayout
@@ -33,35 +29,7 @@ export function MiningLocationDetailPage() {
     >
       {loc && (
         <Grid item xs={12}>
-          <Helmet>
-            <title>{seoTitle}</title>
-            <meta name="description" content={seoDescription} />
-            <link rel="canonical" href={canonicalUrl} />
-            <meta property="og:title" content={seoTitle} />
-            <meta property="og:description" content={seoDescription} />
-            <meta property="og:url" content={canonicalUrl} />
-            <meta property="og:image" content={`${FRONTEND_URL}/scmarket-logo.png`} />
-            <meta property="og:type" content="place" />
-            <meta name="twitter:card" content="summary" />
-            <meta name="twitter:title" content={seoTitle} />
-            <meta name="twitter:description" content={seoDescription} />
-            <meta name="twitter:image" content={`${FRONTEND_URL}/scmarket-logo.png`} />
-            <script type="application/ld+json">
-              {JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "Place",
-                name: displayName,
-                description: seoDescription,
-                url: canonicalUrl,
-                ...(loc.system && {
-                  containedInPlace: {
-                    "@type": "Place",
-                    name: loc.system,
-                  },
-                }),
-              })}
-            </script>
-          </Helmet>
+          {head && <SeoHead head={head} />}
           <LocationDetailContent location={loc} />
         </Grid>
       )}

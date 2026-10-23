@@ -38,9 +38,10 @@ function formatQty(scu: number | string): string {
 }
 
 import { formatCraftingTime, NON_RECLAIMABLE_RESOURCES } from "../../constants/crafting"
-import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { GAME_DATA_PATHS, USER_PATHS } from "../../routes/paths"
+import { blueprintItemName, blueprintSeoText, buildBlueprintHead } from "../../seo/gameDataHeads"
+import { SeoHead } from "../../seo/SeoHead"
 
 export function BlueprintDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -51,7 +52,7 @@ export function BlueprintDetail() {
   )
   const bp = data?.blueprint
   const outputItem = data?.output_item
-  const itemName = outputItem?.name || bp?.blueprint_name || "Blueprint"
+  const itemName = blueprintItemName(data)
   const ingredients = data?.ingredients || []
   const slotModifiers = data?.slot_modifiers || []
   const itemAttrs = data?.item_attributes || {}
@@ -137,10 +138,8 @@ export function BlueprintDetail() {
     return Math.round(total / ingredients.length)
   }, [qualities, ingredients])
 
-  const seoTitle = `${itemName} — Star Citizen Blueprint | SC Market`
-  const seoDescription = `How to craft ${itemName}. ${ingredients.length} ingredients, ${bp?.crafting_time_seconds ? Math.round(bp.crafting_time_seconds) + "s craft time" : "craft time varies"}. ${bp?.tier ? "Tier " + bp.tier : ""}${bp?.rarity ? ", " + bp.rarity + " rarity" : ""}.`.slice(0, 160)
-  const canonicalUrl = `${FRONTEND_URL}/blueprints/${slug}`
-  const ogImage = outputItem?.icon_url || bp?.icon_url || `${FRONTEND_URL}/logo512.png`
+  const { title: seoTitle, description: seoDescription } = blueprintSeoText(data)
+  const head = data && bp && slug ? buildBlueprintHead(data, slug, FRONTEND_URL) : null
 
   return (
     <StandardPageLayout
@@ -160,33 +159,7 @@ export function BlueprintDetail() {
     >
       {data && bp && (
         <Grid item xs={12}>
-          <Helmet>
-            <title>{seoTitle}</title>
-            <meta name="description" content={seoDescription} />
-            <link rel="canonical" href={canonicalUrl} />
-            <meta property="og:title" content={seoTitle} />
-            <meta property="og:description" content={seoDescription} />
-            <meta property="og:url" content={canonicalUrl} />
-            <meta property="og:image" content={ogImage} />
-            <meta property="og:type" content="article" />
-            <meta name="twitter:card" content="summary" />
-            <meta name="twitter:title" content={seoTitle} />
-            <meta name="twitter:description" content={seoDescription} />
-            <meta name="twitter:image" content={ogImage} />
-            <script type="application/ld+json">
-              {JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "Recipe",
-                name: itemName,
-                description: seoDescription,
-                image: outputItem?.icon_url || bp.icon_url || undefined,
-                url: canonicalUrl,
-                recipeIngredient: ingredients.map((ing: BlueprintIngredient) => ing.game_item?.name || ing.slot_name).filter(Boolean),
-                ...(bp.crafting_time_seconds && { totalTime: `PT${Math.round(bp.crafting_time_seconds)}S` }),
-                recipeYield: itemName,
-              })}
-            </script>
-          </Helmet>
+          {head && <SeoHead head={head} />}
           {/* Header */}
           <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
             <GameItemAvatar

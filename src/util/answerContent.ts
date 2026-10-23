@@ -5,7 +5,6 @@
  * page's data, so search and AI answer engines can quote a direct answer
  * ("Where can I mine X?") instead of reconstructing it from tables.
  */
-import type { TFunction } from "i18next"
 import type {
   OreDetailResponse,
   ResourceDetailResponse,
@@ -13,6 +12,18 @@ import type {
   WikiShipDetail,
 } from "../store/api/v2/market"
 import { formatPrice } from "./formatPrice"
+
+/**
+ * The subset of i18next's `t()` these builders call: a key plus either a
+ * default string or `{ defaultValue, ...interpolation }`. The SPA passes
+ * react-i18next's `t`; the edge bridge passes an English-only `t`
+ * (src/bridge/englishT.ts), since this module also runs in a Cloudflare
+ * Function.
+ */
+export interface AnswerTranslate {
+  (key: string, defaultValue: string): string
+  (key: string, options: { defaultValue: string } & Record<string, unknown>): string
+}
 
 export interface AnswerFaq {
   question: string
@@ -41,7 +52,7 @@ function disjunction(items: string[], lang: string): string {
 
 export function buildCommodityAnswers(
   data: ResourceDetailResponse,
-  t: TFunction,
+  t: AnswerTranslate,
   lang: string,
 ): AnswerContent {
   const r = data.resource
@@ -161,7 +172,7 @@ export function buildCommodityAnswers(
 
 export function buildOreAnswers(
   ore: OreDetailResponse,
-  t: TFunction,
+  t: AnswerTranslate,
   lang: string,
 ): AnswerContent {
   const name = ore.displayName
@@ -202,7 +213,7 @@ export function buildOreAnswers(
   return { summary: sentences.join(" "), faqs }
 }
 
-export function buildShipSummary(ship: WikiShipDetail, t: TFunction): string {
+export function buildShipSummary(ship: WikiShipDetail, t: AnswerTranslate): string {
   const sentences: string[] = [
     t("seoAnswers.ship.intro", {
       defaultValue: "The {{name}} is a ship in Star Citizen.",
@@ -234,7 +245,7 @@ export function buildShipSummary(ship: WikiShipDetail, t: TFunction): string {
   return sentences.join(" ")
 }
 
-export function buildItemSummary(item: WikiItemDetail, t: TFunction): string {
+export function buildItemSummary(item: WikiItemDetail, t: AnswerTranslate): string {
   const sentences: string[] = [
     t("seoAnswers.item.intro", {
       defaultValue: "{{name}} is an item in Star Citizen.",

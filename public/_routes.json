@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "include": [
+    "/wiki/commodities/*",
+    "/wiki/items/*",
+    "/wiki/ships/*",
+    "/mining/ores/*",
+    "/mining/locations/*",
+    "/blueprints/*",
+    "/missions/*",
+    "/resources/*",
+    "/market/*",
+    "/shops/*",
+    "/contractor/*",
+    "/user/*",
+    "/recruiting/post/*"
+  ],
+  "exclude": [
+    "/assets/*",
+    "/sw.js",
+    "/blueprints/inventory",
+    "/market/aggregate/*",
+    "/market/cart",
+    "/market/category/*",
+    "/market/create",
+    "/market/create/*",
+    "/market/manage",
+    "/market/manage-stock",
+    "/market/me",
+    "/market/multiple/*",
+    "/market/services",
+    "/market/stock/*",
+    "/shops/create",
+    "/recruiting/post/create"
+  ]
+}

@@ -20,6 +20,7 @@ import { prefetchListingPage } from "../features/market/v2/prefetch"
 import { prefetchShopPage } from "../features/shops/prefetch"
 import { prefetchOrgPage } from "../features/contractor/prefetch"
 import { prefetchUserProfilePage } from "../features/profile/prefetch"
+import { STATIC_SIBLING_PATHS } from "./staticSiblingPaths"
 
 export interface DataPrefetchRoute {
   path: string
@@ -41,23 +42,6 @@ export const DATA_PREFETCH_ROUTES: readonly DataPrefetchRoute[] = [
   { path: "/contractor/:id/:tab", prefetch: prefetchOrgPage },
   { path: "/user/:username", prefetch: prefetchUserProfilePage },
   { path: "/user/:username/:tab", prefetch: prefetchUserProfilePage },
-]
-
-/**
- * Static src/App.tsx routes at the same depth as a dynamic pattern above.
- * react-router ranks static segments over dynamic ones (so "/market/cart"
- * renders the cart, not a listing called "cart"); matching against them too
- * keeps this registry's ranking identical to the router's.
- */
-const STATIC_SIBLING_PATHS: readonly string[] = [
-  "/market/services",
-  "/market/create",
-  "/market/me",
-  "/market/manage",
-  "/market/manage-stock",
-  "/market/cart",
-  "/shops/create",
-  "/blueprints/inventory",
 ]
 
 const ROUTES_BY_PATH = new Map(DATA_PREFETCH_ROUTES.map((r) => [r.path, r]))

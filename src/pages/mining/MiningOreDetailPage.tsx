@@ -1,7 +1,6 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { Grid } from "@mui/material"
-import { Helmet } from "@unhead/react/helmet"
 import { useGetOreDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
@@ -10,20 +9,17 @@ import { FRONTEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { AnswerLead, AnswerFaqs } from "../../components/game-data/AnswerSummary"
 import { buildOreAnswers } from "../../util/answerContent"
-
-function friendlyName(name: string): string {
-  return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
-}
+import { buildOreHead, miningDisplayName, oreSeoText } from "../../seo/gameDataHeads"
+import { SeoHead } from "../../seo/SeoHead"
 
 export function MiningOreDetailPage() {
   const { t, i18n } = useTranslation()
   const { name } = useParams<{ name: string }>()
   const { data: ore, isLoading, error } = useGetOreDetailQuery({ name: name! }, { skip: !name })
-  const displayName = ore?.displayName || friendlyName(name || "")
+  const displayName = miningDisplayName(ore?.displayName, name)
+  const head = ore && name ? buildOreHead(ore, name, FRONTEND_URL) : null
 
-  const seoTitle = `${displayName} — Star Citizen Mining Ore | SC Market`
-  const seoDescription = `${displayName} — minable ore in Star Citizen. Mining stats, locations, and market price.`
-  const canonicalUrl = `${FRONTEND_URL}/mining/ores/${name}`
+  const { title: seoTitle, description: seoDescription } = oreSeoText(displayName)
   const answers = ore ? buildOreAnswers(ore, t, i18n.language) : null
 
   return (
@@ -38,29 +34,7 @@ export function MiningOreDetailPage() {
     >
       {ore && (
         <Grid item xs={12}>
-          <Helmet>
-            <title>{seoTitle}</title>
-            <meta name="description" content={seoDescription} />
-            <link rel="canonical" href={canonicalUrl} />
-            <meta property="og:title" content={seoTitle} />
-            <meta property="og:description" content={seoDescription} />
-            <meta property="og:url" content={canonicalUrl} />
-            <meta property="og:image" content={`${FRONTEND_URL}/scmarket-logo.png`} />
-            <meta property="og:type" content="product" />
-            <meta name="twitter:card" content="summary" />
-            <meta name="twitter:title" content={seoTitle} />
-            <meta name="twitter:description" content={seoDescription} />
-            <meta name="twitter:image" content={`${FRONTEND_URL}/scmarket-logo.png`} />
-            <script type="application/ld+json">
-              {JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "Product",
-                name: displayName,
-                description: seoDescription,
-                url: canonicalUrl,
-              })}
-            </script>
-          </Helmet>
+          {head && <SeoHead head={head} />}
           {answers && <AnswerLead summary={answers.summary} />}
           <OreDetailContent ore={ore} />
           {answers && <AnswerFaqs faqs={answers.faqs} />}
