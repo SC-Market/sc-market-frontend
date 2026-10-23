@@ -29,6 +29,7 @@ import {
 import { ResourceCard } from "../../components/game-data/ResourceCard"
 import { useDebounce } from "../../hooks/useDebounce"
 import { GAME_DATA_PATHS } from "../../routes/paths"
+import { resourcesSeoText } from "../../seo/hubHeads"
 
 export function ResourceBrowser() {
   const { t } = useTranslation()
@@ -101,7 +102,7 @@ export function ResourceBrowser() {
 
   return (
     <StandardPageLayout
-      title={t("resources.title", "Resources")}
+      title={resourcesSeoText(t).title}
       headerTitle={t("resources.title", "Resources")}
       sidebarOpen={true}
       maxWidth="xl"

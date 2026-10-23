@@ -27,6 +27,7 @@ import {
 } from "../../components/game-data/UnifiedSearchBar"
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
+import { wikiItemsSeoText } from "../../seo/hubHeads"
 
 const VIEW_MODES = ["grid", "list"] as const
 const CARD_HEIGHT = 280
@@ -208,16 +209,10 @@ export function WikiItemBrowser() {
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
   const hasFilters = !!(typeFilter || sizeFilter || gradeFilter)
 
-  const pageTitle = useMemo(() => {
-    const type = typeFilter || "All"
-    return `${type} Items — Star Citizen Game Database | SC Market`
-  }, [typeFilter])
-
-  const pageDescription = useMemo(() => {
-    const count = data?.total ?? ""
-    const type = typeFilter || "Star Citizen"
-    return `Browse ${count} ${type} items. Stats, prices, crafting uses, and locations.`
-  }, [typeFilter, data?.total])
+  const { title: pageTitle, description: pageDescription } = useMemo(
+    () => wikiItemsSeoText(typeFilter, data?.total),
+    [typeFilter, data?.total],
+  )
 
   const filtersContent = (
     <Stack spacing={2}>

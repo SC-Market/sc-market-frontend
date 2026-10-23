@@ -44,7 +44,6 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy";
 import { useCookies } from "react-cookie";
 import { FRONTEND_URL } from "../../../util/constants";
-import { formatShortSlug } from "../domain/urls";
 import { Cart } from "../../../datatypes/Cart";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths";
@@ -55,7 +54,8 @@ import {
   HeadCell,
   PaginatedTable,
 } from "../../../components/table/PaginatedTable";
-import { Helmet } from "@unhead/react/helmet";
+import { SeoHead } from "../../../seo/SeoHead";
+import { buildAggregateHead } from "../../../seo/entityHeads";
 import { ImagePreviewModal } from "../../../components/modal/ImagePreviewModal";
 import { ImageSearch } from "../components/ImageSearch";
 import { HeaderTitle } from "../../../components/typography/HeaderTitle";
@@ -294,40 +294,7 @@ export function MarketAggregateViewV2() {
       sidebarOpen={true}
       maxWidth="xl"
     >
-      <Helmet>
-        <title>{game_item.name} — SC Market</title>
-        <meta property="og:title" content={game_item.name} />
-        <meta property="og:url" content={`${FRONTEND_URL}/market/aggregate/${game_item.id ? formatShortSlug(game_item.id, game_item.name) : game_item.id}`} />
-        {game_item.image_url && <meta property="og:image" content={game_item.image_url} />}
-        <meta name="description" content={game_item.description || `Browse all ${game_item.name} listings on SC Market. Compare prices from multiple sellers.`} />
-        <meta property="og:type" content="website" />
-        <meta property="og:description" content={game_item.description || `Browse all ${game_item.name} listings on SC Market. Compare prices from multiple sellers.`} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={game_item.name} />
-        <meta name="twitter:description" content={game_item.description || `Browse all ${game_item.name} listings on SC Market.`} />
-        <meta name="twitter:image" content={game_item.image_url} />
-        {game_item.name && complete.listings.length > 0 && (
-          <script type="application/ld+json">
-            {JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Product",
-              name: game_item.name,
-              description: `Browse all ${game_item.name} listings on SC Market. Compare prices from multiple sellers.`,
-              image: game_item.image_url || undefined,
-              url: `${FRONTEND_URL}/market/aggregate/${formatShortSlug(game_item.id, game_item.name)}`,
-              // NOTE: prices are in aUEC (in-game currency, not ISO 4217). Google
-              // ignores/rejects a non-ISO priceCurrency, so we omit the monetary
-              // AggregateOffer and keep offerCount only — the aUEC price range is
-              // exposed as on-page text instead.
-              offers: {
-                "@type": "AggregateOffer",
-                offerCount: complete.listings.length,
-                availability: "https://schema.org/InStock",
-              },
-            })}
-          </script>
-        )}
-      </Helmet>
+      <SeoHead head={buildAggregateHead(game_item, complete.listings.length, FRONTEND_URL)} />
       <MarketAggregateViewV2Admin complete={complete} gameItemId={gameItemId!} />
     </StandardPageLayout>
   );

@@ -35,7 +35,8 @@ import { getRelativeTime } from "../../../util/time";
 import { Section } from "../../../components/paper/Section";
 import { OrderList } from "../../../components/list/OrderList";
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy";
-import { Helmet } from "@unhead/react/helmet";
+import { SeoHead } from "../../../seo/SeoHead";
+import { buildBundleHead } from "../../../seo/entityHeads";
 import { FRONTEND_URL } from "../../../util/constants";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
 import { has_permission } from "../../../views/contractor/OrgRoles";
@@ -353,33 +354,7 @@ export function MarketMultipleViewV2() {
                   />
                 </Paper>
 
-                <Helmet>
-                  <meta name="description" content={complete.description} />
-                  <meta property="og:type" content="website" />
-                  <meta
-                    property="og:url"
-                    content={`${FRONTEND_URL}/market/multiple/${complete.listing_id}`}
-                  />
-                  <meta property="og:title" content={complete.title} />
-                  <meta property="og:description" content={complete.description} />
-                  <meta property="og:image" content={complete.photos[0]} />
-                  <meta name="twitter:card" content="summary_large_image" />
-                  <meta
-                    name="twitter:url"
-                    content={`${FRONTEND_URL}/market/multiple/${complete.listing_id}`}
-                  />
-                  <meta name="twitter:title" content={complete.title} />
-                  <meta name="twitter:description" content={complete.description} />
-                  <meta name="twitter:image" content={complete.photos[0]} />
-                  <script type="application/ld+json">{JSON.stringify({
-                    "@context": "https://schema.org",
-                    "@type": "Product",
-                    name: complete.title,
-                    description: complete.description,
-                    image: complete.photos[0],
-                    url: `${FRONTEND_URL}/market/multiple/${complete.listing_id}`,
-                  })}</script>
-                </Helmet>
+                {listingDetail && <SeoHead head={buildBundleHead(listingDetail, FRONTEND_URL)} />}
               </Grid>
 
               {/* People Section */}

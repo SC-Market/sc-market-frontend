@@ -24,6 +24,26 @@ export type BridgePageKind =
   | "org"
   | "user"
   | "recruitingPost"
+  | "aggregate"
+  | "bundle"
+  | "manufacturer"
+  // Static pages and hubs
+  | "home"
+  | "market"
+  | "shops"
+  | "wikiHub"
+  | "wikiItems"
+  | "wikiShips"
+  | "wikiCommodities"
+  | "wikiLocations"
+  | "wikiManufacturers"
+  | "miningOres"
+  | "miningLocations"
+  | "blueprints"
+  | "missions"
+  | "resources"
+  | "recruiting"
+  | "contractors"
 
 export interface BridgeRoute {
   path: string
@@ -47,6 +67,26 @@ export const BRIDGE_ROUTES: readonly BridgeRoute[] = [
   { path: "/user/:username", kind: "user" },
   { path: "/user/:username/:tab", kind: "user" },
   { path: "/recruiting/post/:post_id", kind: "recruitingPost" },
+  { path: "/market/aggregate/:id", kind: "aggregate" },
+  { path: "/market/multiple/:id", kind: "bundle" },
+  { path: "/wiki/manufacturers/:id", kind: "manufacturer" },
+  // Exact paths. "/" matches only the root (no segments), never an asset.
+  { path: "/", kind: "home" },
+  { path: "/market", kind: "market" },
+  { path: "/shops", kind: "shops" },
+  { path: "/wiki", kind: "wikiHub" },
+  { path: "/wiki/items", kind: "wikiItems" },
+  { path: "/wiki/ships", kind: "wikiShips" },
+  { path: "/wiki/commodities", kind: "wikiCommodities" },
+  { path: "/wiki/locations", kind: "wikiLocations" },
+  { path: "/wiki/manufacturers", kind: "wikiManufacturers" },
+  { path: "/mining", kind: "miningOres" },
+  { path: "/mining/locations", kind: "miningLocations" },
+  { path: "/blueprints", kind: "blueprints" },
+  { path: "/missions", kind: "missions" },
+  { path: "/resources", kind: "resources" },
+  { path: "/recruiting", kind: "recruiting" },
+  { path: "/contractors", kind: "contractors" },
 ]
 
 export interface BridgeMatch {

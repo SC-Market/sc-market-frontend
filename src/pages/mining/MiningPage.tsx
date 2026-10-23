@@ -6,6 +6,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { MiningOreBrowser } from "./MiningOreBrowser"
 import { MiningLocationBrowser } from "./MiningLocationBrowser"
+import { miningSeoText } from "../../seo/hubHeads"
 
 export function MiningPage() {
   const { t } = useTranslation()
@@ -20,7 +21,7 @@ export function MiningPage() {
 
   return (
     <StandardPageLayout
-      title={t("mining.title", "Mining Database")}
+      title={miningSeoText(t).title}
       headerTitle={t("mining.title", "Mining Database")}
       headerActions={<VersionSelector compact width={220} />}
       sidebarOpen={true}

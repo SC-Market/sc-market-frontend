@@ -68,6 +68,7 @@ import { GAME_DATA_PATHS } from "../../routes/paths"
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 import { useShoppingList } from "../../features/wishlists/hooks/WishlistContext"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { blueprintsSeoText } from "../../seo/hubHeads"
 
 type ViewMode = "grid" | "list"
 const VIEW_MODES: readonly ViewMode[] = ["grid", "list"]
@@ -239,15 +240,10 @@ export function BlueprintBrowser() {
     } catch { /* user not logged in or error */ }
   }
 
-  const pageTitle = useMemo(() => {
-    const cat = category || "All"
-    return `${cat} Blueprints — Star Citizen Crafting | SC Market`
-  }, [category])
-
-  const pageDescription = useMemo(() => {
-    const count = data?.total ?? ""
-    return `Browse ${count} Star Citizen crafting blueprints. Ingredients, craft time, and profit analysis.`
-  }, [data?.total])
+  const { title: pageTitle, description: pageDescription } = useMemo(
+    () => blueprintsSeoText(category, data?.total),
+    [category, data?.total],
+  )
 
   const handleResetFilters = () => {
     setSearchParams({}, { replace: true })

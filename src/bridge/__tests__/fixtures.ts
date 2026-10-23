@@ -1,13 +1,17 @@
 /** API response fixtures for bridge tests (only the fields the pages read). */
 import type {
   BlueprintDetailResponse,
+  GetGameItemListingsResponse,
   GetListingDetailResponse,
   LocationDetailResponse,
   MissionDetailResponse,
   OreDetailResponse,
   ResourceDetailResponse,
+  SearchWikiItemsResponse,
   ShopPublicResponse,
   WikiItemDetail,
+  WikiManufacturerDetail,
+  WikiManufacturerSearchResult,
   WikiShipDetail,
 } from "../../store/api/v2/market"
 import type { GetContractorApiResponse } from "../../store/api/contractors"
@@ -156,3 +160,74 @@ export function recruitingPost(title = "Join us"): GetRecruitingPostByIdApiRespo
     },
   } as unknown as GetRecruitingPostByIdApiResponse
 }
+
+export function manufacturer(displayName: string | null = "Clark Defense Systems"): WikiManufacturerDetail {
+  return {
+    manufacturer: "cds",
+    display_name: displayName,
+    description: "Ground-combat defensive systems.\\n\\nModels: PAB-4",
+    item_count: 517,
+    items: Array.from({ length: 80 }, (_, i) => ({
+      id: `dec45bed-3191-4f15-821a-${String(i).padStart(12, "0")}`,
+      name: `A23 Helmet ${i}`,
+      type: "Helmet",
+    })),
+  } as unknown as WikiManufacturerDetail
+}
+
+export function aggregate(name = "Medal"): GetGameItemListingsResponse {
+  return {
+    game_item: {
+      id: "1954c364-6149-4314-b9cf-1cd13f50b958",
+      name,
+      type: "Other",
+      image_url: "https://cdn.example/medal.png",
+    },
+    quality_distribution: [],
+    listings: [
+      // Two variant rows of one listing, plus a second shop.
+      { listing_id: "l1", variant_id: "v1", title: `${name} pristine`, shop_name: "Hades", shop_slug: "hades", price: 1000 },
+      { listing_id: "l1", variant_id: "v2", title: `${name} pristine`, shop_name: "Hades", shop_slug: "hades", price: 1500 },
+      { listing_id: "l2", variant_id: "v3", title: `${name} worn`, shop_name: "Narco", shop_slug: "narco", price: 250000 },
+    ],
+    total: 3,
+    page: 1,
+    page_size: 20,
+  } as unknown as GetGameItemListingsResponse
+}
+
+export function bundle(title = "Starter Bundle"): GetListingDetailResponse {
+  return {
+    listing: {
+      listing_id: "b0ba0ba0-aaaa-bbbb-cccc-000000000000",
+      title,
+      description: `${title} with two items`,
+      photos: [],
+    },
+    seller: { shop_id: "s1", name: "Hades", slug: "hades-svk-shop", rating: 5 },
+    items: [
+      { item_id: "i1", game_item: { id: "g1", name: "Medpen", type: "Medical", image_url: "https://cdn.example/pen.png" }, variants: [] },
+      { item_id: "i2", game_item: { id: "g2", name: "Helmet", type: "Armor" }, variants: [] },
+    ],
+  } as unknown as GetListingDetailResponse
+}
+
+/** `count` wiki item search results (to check the link bound). */
+export function wikiItems(count: number): SearchWikiItemsResponse {
+  return {
+    items: Array.from({ length: count }, (_, i) => ({
+      id: `38fc7b63-0000-0000-0000-${String(i).padStart(12, "0")}`,
+      name: `Item ${i}`,
+      type: "Medical",
+    })),
+    total: 11555,
+    page: 1,
+    page_size: count,
+  } as unknown as SearchWikiItemsResponse
+}
+
+export const manufacturers = [
+  { manufacturer: "paint_x_logo", display_name: "Ace Astrogation", item_count: 1 },
+  { manufacturer: "cds", display_name: "Clark Defense Systems", item_count: 517 },
+  { manufacturer: "rsi", display_name: null, item_count: 370 },
+] as WikiManufacturerSearchResult[]

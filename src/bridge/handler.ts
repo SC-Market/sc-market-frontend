@@ -44,6 +44,9 @@ export interface BridgeRuntime {
 export const API_TIMEOUT_MS = 1500
 /** How long "entity doesn't exist" answers are cached. */
 const NOT_FOUND_TTL_SECONDS = 60
+/** public/_headers' `Link` for "/" (Function responses skip _headers). */
+export const HOME_LINK_HEADER =
+  '<https://api.sc-market.space/.well-known/api-catalog>; rel="api-catalog", <https://api.sc-market.space/api/v2/openapi.json>; rel="service-desc"; type="application/json", <https://api.sc-market.space/docs>; rel="service-doc"; type="text/html"'
 /** Header carrying the upstream status on cached entries. */
 const CACHED_STATUS_HEADER = "x-bridge-upstream-status"
 
@@ -136,25 +139,31 @@ export async function resolvePage(
   const match = matchBridgeRoute(url.pathname)
   if (!match) return { kind: "passthrough", reason: "no route" }
 
-  const apiBase = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
-  if (!apiBase) return { kind: "passthrough", reason: "VITE_BACKEND_URL not set" }
-
   const page = BRIDGE_PAGES[match.route.kind]
-  const primaryRequest = page.primary(match.params)
+  const primaryRequest = page.primary?.(match.params)
   const secondaryRequest = page.secondary?.(match.params)
 
-  const [primary, secondary] = await Promise.all([
-    fetchApi(`${apiBase}${primaryRequest.path}`, primaryRequest, runtime, waitUntil),
-    secondaryRequest
-      ? fetchApi(`${apiBase}${secondaryRequest.path}`, secondaryRequest, runtime, waitUntil)
-      : undefined,
-  ])
+  let primaryJson: unknown = undefined
+  let secondaryJson: unknown = undefined
+  if (primaryRequest) {
+    const apiBase = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
+    if (!apiBase) return { kind: "passthrough", reason: "VITE_BACKEND_URL not set" }
 
-  if (primary.kind === "notFound") return { kind: "notFound" }
-  if (primary.kind === "error") return { kind: "passthrough", reason: primary.reason }
+    const [primary, secondary] = await Promise.all([
+      fetchApi(`${apiBase}${primaryRequest.path}`, primaryRequest, runtime, waitUntil),
+      secondaryRequest
+        ? fetchApi(`${apiBase}${secondaryRequest.path}`, secondaryRequest, runtime, waitUntil)
+        : undefined,
+    ])
+
+    if (primary.kind === "notFound") return { kind: "notFound" }
+    if (primary.kind === "error") return { kind: "passthrough", reason: primary.reason }
+    primaryJson = primary.json
+    secondaryJson = secondary?.kind === "ok" ? secondary.json : undefined
+  }
 
   try {
-    const doc = page.build(primary.json, secondary?.kind === "ok" ? secondary.json : undefined, {
+    const doc = page.build(primaryJson, secondaryJson, {
       params: match.params,
       origin: (env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL).replace(/\/+$/, ""),
       pathname: url.pathname,
@@ -173,16 +182,23 @@ export async function resolvePage(
  * Response headers. Function responses don't get public/_headers, so this
  * replicates what _headers gives the shell: `Cache-Control: no-cache` (the
  * /index.html rule — always revalidate so it references current hashed
- * chunks) and the `/*` CORS pair. The `/`-only `Link` header doesn't apply.
+ * chunks), the `/*` CORS pair, and for "/" the `Link` header.
  */
-function shellHeaders(shell: Response, outcome: PageOutcome["kind"]): Headers {
-  return new Headers({
+function shellHeaders(
+  shell: Response,
+  outcome: PageOutcome["kind"],
+  pathname: string,
+): Headers {
+  const headers = new Headers({
     "Content-Type": shell.headers.get("Content-Type") || "text/html; charset=utf-8",
     "Cache-Control": "no-cache",
     "Access-Control-Allow-Origin": "https://api.sc-market.space",
     "Access-Control-Allow-Credentials": "true",
     "X-SCM-Bridge": outcome,
   })
+  // The `/` rule's Link header (agent/tooling entry points).
+  if (pathname === "/") headers.set("Link", HOME_LINK_HEADER)
+  return headers
 }
 
 export async function handleBridgeRequest(
@@ -205,7 +221,7 @@ export async function handleBridgeRequest(
     console.warn(`bridge fail-open for ${url.pathname}: ${outcome.reason}`)
   }
 
-  const headers = shellHeaders(shell, outcome.kind)
+  const headers = shellHeaders(shell, outcome.kind, url.pathname)
   const status = outcome.kind === "notFound" ? 404 : 200
   const html =
     outcome.kind === "passthrough"

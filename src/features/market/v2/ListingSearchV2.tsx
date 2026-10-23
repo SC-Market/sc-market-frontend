@@ -29,6 +29,8 @@ import { useNavigate, useSearchParams, Link as RouterLink, useLocation } from "r
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme";
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../../util/constants";
 import { Helmet } from "@unhead/react/helmet";
+import { SeoHead } from "../../../seo/SeoHead";
+import { buildMarketSearchHead } from "../../../seo/hubHeads";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
 import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
@@ -151,19 +153,11 @@ export function ListingSearchV2() {
 
   const { listings = [], total = 0, page: currentPage = 1, page_size: currentPageSize = 48 } = results || {};
 
-  // Dynamic SEO title based on active filters
-  const pageTitle = useMemo(() => {
-    const parts: string[] = []
-    if (searchQuery.text) parts.push(searchQuery.text)
-    if (searchQuery.itemType) parts.push(searchQuery.itemType)
-    if (parts.length === 0) return "Star Citizen Marketplace — SC Market"
-    return `${parts.join(" ")} for Sale — Star Citizen | SC Market`
-  }, [searchQuery.text, searchQuery.itemType])
-
-  const pageDescription = useMemo(() => {
-    const type = searchQuery.itemType || "items"
-    return `Browse ${total || ""} ${type} for sale on SC Market. Compare prices from verified Star Citizen sellers.`
-  }, [searchQuery.itemType, total])
+  // Dynamic SEO head based on active filters (shared with the edge bridge)
+  const seoHead = useMemo(
+    () => buildMarketSearchHead({ text: searchQuery.text, itemType: searchQuery.itemType, total }, FRONTEND_URL),
+    [searchQuery.text, searchQuery.itemType, total],
+  )
 
   // Grid breakpoints - match V1 exactly
   const gridBreakpoints = useMemo(() => {
@@ -203,17 +197,8 @@ export function ListingSearchV2() {
 
   return (
     <>
+      <SeoHead head={seoHead} />
       <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={pageDescription} />
-        <link rel="canonical" href={`${FRONTEND_URL}/market`} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={pageDescription} />
-        <meta property="og:url" content={`${FRONTEND_URL}/market`} />
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={pageDescription} />
         {currentPage > 1 && (
           <link rel="prev" href={`${FRONTEND_URL}/market?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage - 1) })}`} />
         )}

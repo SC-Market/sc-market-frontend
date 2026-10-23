@@ -1,6 +1,7 @@
 /**
  * Minimal English-only `t()` for the edge bridge. Resolves the few
- * translation keys the bridge renders from src/locales/en/english.json and
+ * translation keys the bridge renders (answer text, layout labels, hub
+ * titles, the landing FAQ) from src/locales/en/english.json and
  * interpolates `{{name}}` like the SPA's i18next setup
  * (`escapeValue: false`: values are inserted raw; the bridge escapes on
  * output). Unknown keys fall back to the caller's default, as i18next does.
@@ -8,13 +9,31 @@
  * Named JSON imports let the Function bundler keep only these sections
  * instead of the whole ~200 KB locale file.
  */
-import { org, seoAnswers, viewProfile } from "../locales/en/english.json"
+import {
+  contractorsPage,
+  landing,
+  mining,
+  org,
+  resources,
+  seoAnswers,
+  viewProfile,
+  wiki,
+} from "../locales/en/english.json"
 import type { AnswerTranslate } from "../util/answerContent"
 
 const RESOURCES: Record<string, unknown> = {
   seoAnswers,
   org: { orgTitle: org.orgTitle },
   viewProfile: { store_tab: viewProfile.store_tab },
+  landing,
+  contractorsPage: { title: contractorsPage.title },
+  mining: { title: mining.title },
+  resources: { title: resources.title },
+  wiki: {
+    hub: wiki.hub,
+    locations: { title: wiki.locations.title },
+    manufacturers: { title: wiki.manufacturers.title },
+  },
 }
 
 function lookup(key: string): string | undefined {

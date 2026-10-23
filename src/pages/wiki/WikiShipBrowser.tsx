@@ -38,6 +38,7 @@ import {
 } from "../../components/game-data/UnifiedSearchBar"
 import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
 import { WIKI_PATHS } from "../../routes/paths"
+import { wikiShipsSeoText } from "../../seo/hubHeads"
 
 const PAGE_SIZE = 24
 
@@ -459,15 +460,10 @@ export function WikiShipBrowser() {
 
   const hasFilters = !!(manufacturer || career || role || size || category !== "all")
 
-  const pageTitle = useMemo(() => {
-    const mfr = manufacturer || "All"
-    return `${mfr} Ships — Star Citizen Ship Database | SC Market`
-  }, [manufacturer])
-
-  const pageDescription = useMemo(() => {
-    const count = filtered.length
-    return `Browse ${count} Star Citizen ships and vehicles. Specs, loadouts, and market availability.`
-  }, [filtered.length])
+  const { title: pageTitle, description: pageDescription } = useMemo(
+    () => wikiShipsSeoText(manufacturer, filtered.length),
+    [manufacturer, filtered.length],
+  )
 
   // ─── Sidebar filter content ───────────────────────────────────────────────
   const CATEGORY_OPTIONS = [

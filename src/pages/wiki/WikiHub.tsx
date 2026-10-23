@@ -25,45 +25,40 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { GAME_DATA_PATHS, WIKI_PATHS } from "../../routes/paths"
+import { WIKI_HUB_SECTIONS, wikiHubSeoText } from "../../seo/hubHeads"
 
-interface WikiSection {
-  label: string
-  labelKey: string
-  route: string
-  icon: React.ReactElement
+/** Card icons for WIKI_HUB_SECTIONS, by route. */
+const SECTION_ICONS: Record<string, React.ReactElement> = {
+  [WIKI_PATHS.items]: <InventoryRounded />,
+  [WIKI_PATHS.ships]: <RocketLaunchRounded />,
+  [WIKI_PATHS.commodities]: <ScienceRounded />,
+  [WIKI_PATHS.locations]: <LocationOnRounded />,
+  [WIKI_PATHS.manufacturers]: <BusinessRounded />,
+  [WIKI_PATHS.refinery]: <SettingsRounded />,
+  [GAME_DATA_PATHS.missions]: <AssignmentRounded />,
+  [GAME_DATA_PATHS.blueprints]: <DescriptionRounded />,
+  [GAME_DATA_PATHS.craftingCalculator]: <CalculateRounded />,
+  [GAME_DATA_PATHS.resources]: <TerrainRounded />,
+  [GAME_DATA_PATHS.mining]: <ConstructionRounded />,
 }
-
-const WIKI_SECTIONS: WikiSection[] = [
-  { label: "Items", labelKey: "wiki.hub.sectionItems", route: "/wiki/items", icon: <InventoryRounded /> },
-  { label: "Ships & Vehicles", labelKey: "wiki.hub.sectionShips", route: "/wiki/ships", icon: <RocketLaunchRounded /> },
-  { label: "Commodities", labelKey: "wiki.hub.sectionCommodities", route: "/wiki/commodities", icon: <ScienceRounded /> },
-  { label: "Locations", labelKey: "wiki.hub.sectionLocations", route: "/wiki/locations", icon: <LocationOnRounded /> },
-  { label: "Manufacturers", labelKey: "wiki.hub.sectionManufacturers", route: "/wiki/manufacturers", icon: <BusinessRounded /> },
-  { label: "Refinery", labelKey: "wiki.hub.sectionRefinery", route: "/wiki/refinery", icon: <SettingsRounded /> },
-  { label: "Missions", labelKey: "wiki.hub.sectionMissions", route: "/missions", icon: <AssignmentRounded /> },
-  { label: "Blueprints", labelKey: "wiki.hub.sectionBlueprints", route: "/blueprints", icon: <DescriptionRounded /> },
-  { label: "Crafting Calculator", labelKey: "wiki.hub.sectionCraftingCalculator", route: "/crafting/calculator", icon: <CalculateRounded /> },
-  { label: "Resources", labelKey: "wiki.hub.sectionResources", route: "/resources", icon: <TerrainRounded /> },
-  { label: "Mining", labelKey: "wiki.hub.sectionMining", route: "/mining", icon: <ConstructionRounded /> },
-]
 
 export function WikiHub() {
   const { t } = useTranslation()
   const theme: ExtendedTheme = useTheme()
 
+  const seo = wikiHubSeoText(t)
+
   return (
     <StandardPageLayout
-      title={t("wiki.hub.title", "Game Database — Star Citizen Items, Ships & More | SC Market")}
-      description={t(
-        "wiki.hub.description",
-        "Browse the complete Star Citizen game database: items, ships, commodities, locations, manufacturers, blueprints, and mining resources.",
-      )}
-      canonicalUrl="/wiki"
-      headerTitle={t("wiki.hub.header", "Game Database")}
+      title={seo.title}
+      description={seo.description}
+      canonicalUrl={WIKI_PATHS.hub}
+      headerTitle={seo.header}
       maxWidth="lg"
     >
       <Grid container spacing={2}>
-        {WIKI_SECTIONS.map((section) => (
+        {WIKI_HUB_SECTIONS.map((section) => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={section.route}>
             <Card
               sx={{
@@ -98,7 +93,7 @@ export function WikiHub() {
                       "& .MuiSvgIcon-root": { fontSize: 32 },
                     }}
                   >
-                    {section.icon}
+                    {SECTION_ICONS[section.route]}
                   </Avatar>
                   <Typography variant="subtitle1" fontWeight={600} textAlign="center">
                     {t(section.labelKey, section.label)}

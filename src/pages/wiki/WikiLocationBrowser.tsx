@@ -25,6 +25,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { wikiLocationsSeoText } from "../../seo/hubHeads"
 
 const SYSTEM_COLORS: Record<string, string> = {
   Stanton: "#00bcd4",
@@ -246,7 +247,7 @@ export function WikiLocationBrowser() {
     [locations, search, typeFilter, systemFilter],
   )
 
-  const title = t("wiki.locations.title", "Star Map & Locations")
+  const title = wikiLocationsSeoText(t).title
 
   const filtersContent = (
     <Stack spacing={2}>

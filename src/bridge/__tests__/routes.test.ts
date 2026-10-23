@@ -5,28 +5,21 @@ import { STATIC_SIBLING_PATHS } from "../../router/staticSiblingPaths"
 import routesJson from "../../../public/_routes.json"
 
 /**
- * Every src/App.tsx route under the bridge prefixes, so react-router's own
- * ranking decides which page a URL renders.
+ * Every src/App.tsx route under the bridge prefixes (plus the catch-all), so
+ * react-router's own ranking decides which page a URL renders.
  */
 const APP_ROUTES = [
   ...BRIDGE_ROUTES.map((r) => r.path),
   ...STATIC_SIBLING_PATHS,
-  "/market",
-  "/market/aggregate/:id",
-  "/market/multiple/:id",
   "/market/multiple/:id/edit",
   "/market/category/:name",
   "/market/create/:tab",
   "/market/stock/:listingId",
-  "/shops",
-  "/blueprints",
-  "/missions",
-  "/resources",
-  "/mining/locations",
-  "/wiki/items",
-  "/wiki/ships",
-  "/wiki/commodities",
+  "/wiki/refinery",
   "/recruiting/post/:post_id/update",
+  "/contracts",
+  "/login",
+  "/*",
 ]
 
 function routerMatch(pathname: string) {
@@ -58,6 +51,8 @@ const PATHS = [
   "/market/services",
   "/market/aggregate/abc--x",
   "/market/multiple/abc--x",
+  "/market/multiple/abc--x/edit",
+  "/market/aggregate",
   "/market/category/weapons",
   "/market/create/item",
   "/market/stock/123",
@@ -72,16 +67,37 @@ const PATHS = [
   "/shops",
   "/contractor/NARCO",
   "/contractor/NARCO/members",
+  "/contractors",
   "/user/JackedCitizen",
   "/user/JackedCitizen/reviews",
   "/user/Some%20Body",
+  "/recruiting",
   "/recruiting/post/c5c4c88a-430e-4b56-a5f2-47542ad12762",
   "/recruiting/post/create",
   "/recruiting/post/abc/update",
+  "/wiki",
   "/wiki/items",
+  "/wiki/ships",
+  "/wiki/commodities",
+  "/wiki/locations",
+  "/wiki/manufacturers",
+  "/wiki/manufacturers/cds",
+  "/wiki/manufacturers/Klaus%20%26%20Werner",
+  "/wiki/refinery",
+  "/mining",
   "/mining/locations",
+  "/blueprints",
+  "/missions",
+  "/resources",
   "/wiki/items/a/b",
   "/",
+  "/login",
+  "/contracts",
+  "/favicon.ico",
+  "/index.html",
+  "/sw.js",
+  "/assets/index-abc.js",
+  "/robots.txt",
 ]
 
 describe("matchBridgeRoute", () => {
@@ -98,8 +114,16 @@ describe("matchBridgeRoute", () => {
     }
   })
 
+  it("matches / only for the root itself, never a file or other page", () => {
+    expect(matchBridgeRoute("/")?.route.kind).toBe("home")
+    for (const path of ["/favicon.ico", "/index.html", "/sw.js", "/robots.txt", "/logo512.png", "/assets/index-abc.js", "/login", "/x/y"]) {
+      expect(matchBridgeRoute(path), path).toBeNull()
+    }
+  })
+
   it("decodes params like useParams", () => {
     expect(matchBridgeRoute("/user/Some%20Body")?.params).toEqual({ username: "Some Body" })
+    expect(matchBridgeRoute("/wiki/manufacturers/Klaus%20%26%20Werner")?.params).toEqual({ id: "Klaus & Werner" })
   })
 
   it("rejects undecodable params", () => {
@@ -124,8 +148,27 @@ describe("public/_routes.json", () => {
     }
   })
 
-  it("never invokes it for assets, the service worker or static siblings", () => {
-    for (const path of ["/assets/index-abc.js", "/sw.js", "/", "/index.html", "/favicon.ico"]) {
+  it("invokes it for / exactly", () => {
+    expect(routesJson.include).toContain("/")
+    expect(invokes("/")).toBe(true)
+  })
+
+  it("never invokes it for assets, files, the service worker or static siblings", () => {
+    for (const path of [
+      "/assets/index-abc.js",
+      "/assets/",
+      "/sw.js",
+      "/index.html",
+      "/favicon.ico",
+      "/robots.txt",
+      "/logo512.png",
+      "/homepage-preview.webp",
+      "/manifest.webmanifest",
+      "/fonts/roboto-v30-latin-regular.woff2",
+      "/login",
+      "/wiki/refinery",
+      "/market/multiple/abc--x/edit",
+    ]) {
       expect(invokes(path), path).toBe(false)
     }
     for (const path of STATIC_SIBLING_PATHS) {
@@ -133,7 +176,15 @@ describe("public/_routes.json", () => {
     }
   })
 
-  it("stays within Cloudflare's 100-rule limit", () => {
-    expect(routesJson.include.length + routesJson.exclude.length).toBeLessThanOrEqual(100)
+  it("has no catch-all include: every rule is an exact path or a /prefix/*", () => {
+    for (const rule of routesJson.include) {
+      expect(rule, rule).toMatch(/^\/([a-z-]+(\/[a-z-]+)*(\/\*)?)?$/)
+    }
+  })
+
+  it("stays within Cloudflare's limits (100 rules, 100 chars each)", () => {
+    const rules = [...routesJson.include, ...routesJson.exclude]
+    expect(rules.length).toBeLessThanOrEqual(100)
+    for (const rule of rules) expect(rule.length, rule).toBeLessThanOrEqual(100)
   })
 })

@@ -20,6 +20,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
 import { useSession } from "../../hooks/login/useSession"
 import { PATHS, ORG_PATHS } from "../../routes/paths"
+import { layoutDescription } from "../../seo/pageHead"
 
 export interface BreadcrumbItem {
   label: string
@@ -164,7 +165,7 @@ export function StandardPageLayout(
       <Helmet>
         <meta
           name="description"
-          content={description || `${title || "SC Market"} - SC Market, the Star Citizen marketplace`}
+          content={layoutDescription(title, description)}
         />
       </Helmet>
       <ContainerGrid

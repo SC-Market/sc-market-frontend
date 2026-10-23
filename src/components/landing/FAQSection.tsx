@@ -5,37 +5,20 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
 import { Helmet } from "@unhead/react/helmet"
 import { FAQQuestion } from "./FAQQuestion"
+import { faqPageJsonLd, serializeJsonLd } from "../../seo/pageHead"
+import { landingFaqs } from "../../seo/siteHeads"
 
 export function FAQSection() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
-  const faqs = [
-    { question: t("landing.faqSellItemsQ"), answer: t("landing.faqSellItemsA") },
-    { question: t("landing.faqSafeQ"), answer: t("landing.faqSafeA") },
-    { question: t("landing.faqListThingsQ"), answer: t("landing.faqListThingsA") },
-    { question: t("landing.faqFeeQ"), answer: t("landing.faqFeeA") },
-    { question: t("landing.faqRealMoneyQ"), answer: t("landing.faqRealMoneyA") },
-  ]
-
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
-  }
+  const faqSchema = faqPageJsonLd(landingFaqs(t))
 
   return (
     <>
     <Helmet>
       <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
+        {serializeJsonLd(faqSchema)}
       </script>
     </Helmet>
     <Stack

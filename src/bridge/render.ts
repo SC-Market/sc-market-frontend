@@ -9,6 +9,9 @@
  * - Attribute values of injected <meta>/<link>: escapeAttribute().
  * - JSON-LD: serializeJsonLd() (escapes < > & U+2028 U+2029), so content
  *   can't close the <script>.
+ * - Summary links: href must be a site-relative path (isSafeHref) and goes
+ *   through escapeAttribute(); link text is `html: false` text. At most
+ *   MAX_SUMMARY_LINKS per list.
  */
 import { PageHead, serializeJsonLd } from "../seo/pageHead"
 import type { BridgeDocument, SummaryBlock } from "./pages"
@@ -48,7 +51,18 @@ export function escapeAttribute(value: string): string {
     .replace(/>/g, "&gt;")
 }
 
-const SUMMARY_TAGS: ReadonlySet<SummaryBlock["tag"]> = new Set(["h1", "h2", "h3", "p"])
+const TEXT_TAGS: ReadonlySet<string> = new Set(["h1", "h2", "h3", "p"])
+
+/** Most links one summary list renders (crawl discovery, kept bounded). */
+export const MAX_SUMMARY_LINKS = 50
+
+/**
+ * Only site-relative paths: "/x", never "//host", "/\\host", a scheme
+ * (javascript:, https:) or whitespace/control characters.
+ */
+export function isSafeHref(href: string): boolean {
+  return /^\/(?![/\\])[^\s\u0000-\u001f\u007f]*$/.test(href)
+}
 
 /**
  * Markup appended to <head>: the page's meta/canonical/JSON-LD, plus
@@ -86,7 +100,21 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
     },
   ]
   for (const block of blocks) {
-    if (!SUMMARY_TAGS.has(block.tag)) continue
+    if (block.tag === "ul") {
+      const links = block.links.filter((l) => isSafeHref(l.href)).slice(0, MAX_SUMMARY_LINKS)
+      if (links.length === 0) continue
+      chunks.push({ content: "<ul>", html: true })
+      for (const link of links) {
+        chunks.push(
+          { content: `<li><a href="${escapeAttribute(link.href)}">`, html: true },
+          { content: link.text, html: false },
+          { content: "</a></li>", html: true },
+        )
+      }
+      chunks.push({ content: "</ul>", html: true })
+      continue
+    }
+    if (!TEXT_TAGS.has(block.tag)) continue
     chunks.push(
       { content: `<${block.tag}>`, html: true },
       { content: block.text, html: false },

@@ -7,6 +7,8 @@ import { ReportButton } from "../button/ReportButton"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Helmet } from "@unhead/react/helmet"
+import { serializeJsonLd } from "../../seo/pageHead"
+import { siteJsonLd } from "../../seo/siteHeads"
 
 export function Footer() {
   const { t } = useTranslation()
@@ -16,52 +18,12 @@ export function Footer() {
     <Grid item xs={12} sx={{ marginTop: 2 }}>
       <Helmet>
         {/*
-          Site-wide structured data. The Footer renders on every page, so this is
-          the single global injection point for the Organization + WebSite nodes.
-
-          The WebSite node's SearchAction is the "sitelinks searchbox": it tells
-          Google (and AI answer engines) how to run a search directly against the
-          marketplace, which is what surfaces the prefilled-search sub-links under
-          the main result in the SERP. The target must match the real market
-          search route — /market?text=<query> (see ListingSearchV2, which reads
-          searchParams "text"). {search_term_string} is Google's required token.
+          Site-wide structured data (Organization + WebSite with the sitelinks
+          SearchAction). The Footer renders on every page, so this is the
+          single global injection point; the edge bridge emits the same nodes
+          for "/" (src/seo/siteHeads.ts).
         */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@graph": [
-              {
-                "@type": "Organization",
-                "@id": "https://sc-market.space/#organization",
-                name: "SC Market",
-                url: "https://sc-market.space",
-                logo: "https://sc-market.space/scmarket-logo.png",
-                description:
-                  "SC Market is the Star Citizen marketplace where players buy, sell, and trade in-game items and hire orgs for services like hauling, escort, medical, and salvage — all in aUEC.",
-                sameAs: [
-                  "https://discord.gg/scmarket",
-                  "https://github.com/SC-Market",
-                ],
-              },
-              {
-                "@type": "WebSite",
-                "@id": "https://sc-market.space/#website",
-                name: "SC Market",
-                url: "https://sc-market.space",
-                publisher: { "@id": "https://sc-market.space/#organization" },
-                potentialAction: {
-                  "@type": "SearchAction",
-                  target: {
-                    "@type": "EntryPoint",
-                    urlTemplate:
-                      "https://sc-market.space/market?text={search_term_string}",
-                  },
-                  "query-input": "required name=search_term_string",
-                },
-              },
-            ],
-          })}
-        </script>
+        <script type="application/ld+json">{serializeJsonLd(siteJsonLd())}</script>
       </Helmet>
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>

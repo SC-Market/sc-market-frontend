@@ -19,6 +19,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
+import { manufacturersSeoText } from "../../seo/hubHeads"
 
 const VIEW_MODES = ["grid", "list"] as const
 
@@ -79,7 +80,7 @@ export function WikiManufacturerList() {
 
   return (
     <StandardPageLayout
-      title={t("wiki.manufacturers.title", "Manufacturers")}
+      title={manufacturersSeoText(t).title}
       headerTitle={t("wiki.manufacturers.title", "Manufacturers")}
       sidebarOpen={true}
       maxWidth="xl"

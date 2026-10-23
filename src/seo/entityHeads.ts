@@ -7,9 +7,11 @@
  * pages' hand-written domain types and the generated API types both fit.
  */
 import type {
+  GameItemMetadata,
   GetListingDetailResponse,
   ShopPublicResponse,
 } from "../store/api/v2/market"
+import { formatShortSlug } from "../features/market/domain/urls"
 import { MARKET_PATHS, ORG_PATHS, SHOP_PATHS, USER_PATHS } from "../routes/paths"
 import { FALLBACK_IMAGE_URL } from "./constants"
 import { PageHead, socialMeta } from "./pageHead"
@@ -60,6 +62,112 @@ export function buildListingHead(
             url: `${origin}${SHOP_PATHS.profile(seller.slug)}`,
           },
         },
+      },
+    ],
+  }
+}
+
+/** Aggregate page description (MarketAggregateViewV2). */
+export function aggregateSeoDescription(name: string): string {
+  return `Browse all ${name} listings on SC Market. Compare prices from multiple sellers.`
+}
+
+/**
+ * /market/aggregate/:id (MarketAggregateViewV2). The canonical comes from
+ * the page layout (the request path), so it isn't part of this head.
+ * `description` is the game item description the page has (it passes "").
+ */
+export function buildAggregateHead(
+  gameItem: Pick<GameItemMetadata, "id" | "name" | "image_url"> & { description?: string },
+  listingCount: number,
+  origin: string,
+): PageHead {
+  const name = gameItem.name
+  const image = gameItem.image_url || ""
+  const fallback = aggregateSeoDescription(name)
+  const url = `${origin}/market/aggregate/${gameItem.id ? formatShortSlug(gameItem.id, name) : gameItem.id}`
+
+  return {
+    title: `${name} — SC Market`,
+    meta: [
+      { property: "og:title", content: name },
+      { property: "og:url", content: url },
+      ...(image ? [{ property: "og:image", content: image }] : []),
+      { name: "description", content: gameItem.description || fallback },
+      { property: "og:type", content: "website" },
+      { property: "og:description", content: gameItem.description || fallback },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: name },
+      {
+        name: "twitter:description",
+        content: gameItem.description || `Browse all ${name} listings on SC Market.`,
+      },
+      { name: "twitter:image", content: image },
+    ],
+    jsonLd:
+      name && listingCount > 0
+        ? [
+            {
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name,
+              description: fallback,
+              image: image || undefined,
+              url,
+              // NOTE: prices are in aUEC (in-game currency, not ISO 4217).
+              // Google ignores/rejects a non-ISO priceCurrency, so we omit the
+              // monetary AggregateOffer and keep offerCount only — the aUEC
+              // price range is exposed as on-page text instead.
+              offers: {
+                "@type": "AggregateOffer",
+                offerCount: listingCount,
+                availability: "https://schema.org/InStock",
+              },
+            },
+          ]
+        : [],
+  }
+}
+
+/** Bundle page image (MarketMultipleViewV2): the first item's image. */
+export function bundleImage(data: Pick<GetListingDetailResponse, "items">): string {
+  return data.items[0]?.game_item.image_url || FALLBACK_IMAGE_URL
+}
+
+/**
+ * /market/multiple/:id (MarketMultipleViewV2). Title and canonical come
+ * from the page layout (listing title / the request path).
+ */
+export function buildBundleHead(
+  data: Pick<GetListingDetailResponse, "listing" | "items">,
+  origin: string,
+): PageHead {
+  const { listing } = data
+  const url = `${origin}${MARKET_PATHS.multiple(listing.listing_id)}`
+  const image = bundleImage(data)
+
+  return {
+    meta: [
+      { name: "description", content: listing.description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: url },
+      { property: "og:title", content: listing.title },
+      { property: "og:description", content: listing.description },
+      { property: "og:image", content: image },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:url", content: url },
+      { name: "twitter:title", content: listing.title },
+      { name: "twitter:description", content: listing.description },
+      { name: "twitter:image", content: image },
+    ],
+    jsonLd: [
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: listing.title,
+        description: listing.description,
+        image,
+        url,
       },
     ],
   }
