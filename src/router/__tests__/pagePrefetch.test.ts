@@ -12,6 +12,7 @@ import { generatedApiV2 } from "../../store/generatedApiV2"
 import { marketV2Api } from "../../store/api/v2/market"
 import { contractorsApi } from "../../features/contractor/api/contractorApi"
 import { recruitingApi } from "../../features/recruiting/api/recruitingApi"
+import type { StoreExtra } from "../../store/networkEnv"
 import { prefetchWikiCommodityPage } from "../../pages/wiki/prefetch"
 import { prefetchListingPage } from "../../features/market/v2/prefetch"
 import { prefetchShopPage } from "../../features/shops/prefetch"
@@ -20,9 +21,17 @@ import { prefetchOrgPage } from "../../features/contractor/prefetch"
 /**
  * Same slices as src/store/store.ts. The V2 slot uses marketV2Api (the
  * enhanced generatedApiV2, same reducer at runtime) so its typed selectors
- * accept this store's state.
+ * accept this store's state. Like makeStore(), it passes a NetworkEnv as the
+ * thunk extra argument (anonymous: no cookies, no refresh).
  */
 function makeTestStore() {
+  const extra: StoreExtra = {
+    networkEnv: {
+      credentials: "omit",
+      headers: {},
+      onUnauthorized: async () => false,
+    },
+  }
   return configureStore({
     reducer: {
       [serviceApi.reducerPath]: serviceApi.reducer,
@@ -30,7 +39,7 @@ function makeTestStore() {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
     },
     middleware: (gDM) =>
-      gDM().concat(
+      gDM({ thunk: { extraArgument: extra } }).concat(
         serviceApi.middleware,
         generatedApi.middleware,
         marketV2Api.middleware,
