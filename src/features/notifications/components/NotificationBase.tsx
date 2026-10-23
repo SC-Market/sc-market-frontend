@@ -5,8 +5,8 @@ import {
   ListItemText,
   Tooltip,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
@@ -36,7 +36,7 @@ export function NotificationBase(props: {
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { icon, to, notif, onClick } = props
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
 
   const [updateNotification] = useNotificationUpdateMutation()

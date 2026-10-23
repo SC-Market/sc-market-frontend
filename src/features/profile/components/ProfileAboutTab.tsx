@@ -10,8 +10,8 @@ import {
   Modal,
   Paper,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { EditRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
@@ -34,7 +34,7 @@ export function ProfileAboutTab(props: {
   const { profile, submitUpdate, isMyProfile } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [descriptionEditOpen, setDescriptionEditOpen] = useState(false)
   const [newDescription, setNewDescription] = useState("")
 

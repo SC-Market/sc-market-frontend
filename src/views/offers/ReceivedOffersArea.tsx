@@ -37,8 +37,8 @@ import {
   Tabs,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Link } from "react-router-dom"
 import {
   Announcement,
@@ -181,7 +181,7 @@ export function OfferRow(props: {
     }
   }, [statusKey])
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
 
   // When in selection mode (hasSelectedItems) on mobile, single tap should select
   const isInSelectionMode = isMobile && hasSelectedItems

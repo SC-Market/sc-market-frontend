@@ -5,9 +5,8 @@ import {
   Skeleton,
   Stack,
   Tabs,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { HapticTab } from "../../components/haptic"
 import { OrderDetailSkeleton } from "../../components/skeletons"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
@@ -64,8 +63,7 @@ const OrderAvailabilityArea = lazy(() =>
 export function ViewOrder() {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [activeTab, setActiveTab] = useState(0)
   const navigate = useNavigate()
 

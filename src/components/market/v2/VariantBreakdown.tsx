@@ -12,10 +12,10 @@ import {
   Typography,
   Box,
   useTheme,
-  useMediaQuery,
   Chip,
   Stack,
 } from "@mui/material";
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { LocationOnRounded } from "@mui/icons-material";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
@@ -87,7 +87,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
   showActions = true,
 }) => {
   const theme = useTheme<ExtendedTheme>();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useBreakpointDown("sm");
 
   if (variants.length === 0) {
     return (

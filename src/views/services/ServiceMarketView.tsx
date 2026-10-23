@@ -5,8 +5,8 @@ import {
   Grid,
   Paper,
   Stack,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
 import { ServiceListings } from "../contracts/ServiceListings.lazy"
 import { useServiceSidebar } from "../../features/contracting/hooks/ServiceSidebar"
@@ -17,7 +17,7 @@ import { ServiceSearchArea } from "./ServiceSearchArea"
 
 export function ServiceMarketView() {
   const theme = useTheme<ExtendedTheme>()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const xs = useIsMobile()
   const [open] = useServiceSidebar()
 
   return (

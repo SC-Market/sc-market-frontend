@@ -12,9 +12,9 @@ import {
   TextField,
   Grid,
   CircularProgress,
-  useMediaQuery,
   Tooltip,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
   AddAPhotoRounded,
   CheckCircleRounded,
@@ -285,7 +285,7 @@ export function SelectPhotosArea(props: {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [photoOpen, setPhotoOpen] = useState(false)
   const [urlModalOpen, setUrlModalOpen] = useState(false)
   const [urlInput, setUrlInput] = useState("")

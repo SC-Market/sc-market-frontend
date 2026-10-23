@@ -7,9 +7,9 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { StarRounded, StarBorderRounded } from "@mui/icons-material"
 import { useLocation, matchPath } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -60,7 +60,7 @@ export function SidebarLinkBody(props: SidebarLinkProps) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
-  const xs = useMediaQuery(theme.breakpoints.down("sm"))
+  const xs = useBreakpointDown("sm")
   const [, setDrawerOpen] = useDrawerOpen()
   const unreadChatCount = useUnreadChatCount()
   const isMessagesLink = props.to === "/messages"

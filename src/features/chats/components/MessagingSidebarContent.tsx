@@ -12,8 +12,8 @@ import {
   TextField,
   Tooltip,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { HapticIconButton } from "../../../components/haptic"
 import { useTheme } from "@mui/material/styles"
 import React, { useState, useMemo, useRef, useEffect, useCallback } from "react"
@@ -232,7 +232,7 @@ export function MessagingSidebarContent(
   props: MessagingSidebarContentProps = {},
 ) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
   const [, setCreatingMessageGroup] = useMessageGroupCreate()
   const { data: chats, isLoading, isFetching, refetch } = useGetMyChatsQuery()

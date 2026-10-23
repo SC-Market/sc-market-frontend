@@ -1,7 +1,8 @@
 import { Sidebar } from "../sidebar/Sidebar"
 import { SidebarV2 } from "../sidebar/SidebarV2"
 import { useFeatureFlag } from "../../hooks/market/useFeatureFlag"
-import { Box, Theme, useTheme, useMediaQuery } from "@mui/material"
+import { Box } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { Navbar } from "../navbar/Navbar"
 import React from "react"
 import { useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -16,7 +17,6 @@ import { MobileBottomNav } from "../navigation/MobileBottomNav"
 import { ContextAwareFAB } from "../mobile/ContextAwareFAB"
 import { useLocation } from "react-router-dom"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DebugPanel } from "../market/v2/DebugPanel"
 import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext"
 import { ParticleField } from "../effects/ParticleField"
@@ -29,8 +29,7 @@ function NavSidebar() {
 }
 
 export function Root(props: { children: React.ReactNode }) {
-  const theme: Theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [drawerOpen] = useDrawerOpen()
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")

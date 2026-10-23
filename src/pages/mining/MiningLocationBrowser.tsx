@@ -10,12 +10,10 @@ import {
   CardActionArea,
   CardContent,
   Chip,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useSearchParams, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useSearchLocationsQuery, type LocationSearchResult } from "../../store/api/v2/market"
 import { MiningLocationDetailModal } from "./MiningLocationDetailModal"
 import { UnifiedSearchBar, locationTokensToParams, locationParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
@@ -52,8 +50,7 @@ function GroupIcon({ groupName }: { groupName: string }) {
 
 export function MiningLocationBrowser() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
   const navigate = useNavigate()
   const urlParams = useParams<{ name?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()

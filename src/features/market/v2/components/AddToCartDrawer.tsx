@@ -10,15 +10,13 @@ import {
   Stack,
   TextField,
   Typography,
-  useMediaQuery,
-  useTheme,
   CircularProgress,
 } from "@mui/material"
+import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import { Close, ShoppingCartRounded, DeleteOutline } from "@mui/icons-material"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
-import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../../components/mobile/BottomSheet"
 import {
   useGetListingDetailQuery,
@@ -37,9 +35,8 @@ interface AddToCartDrawerProps {
 }
 
 export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerProps) {
-  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const issueAlert = useAlertHook()
 
   const { data: listingData, isLoading } = useGetListingDetailQuery(

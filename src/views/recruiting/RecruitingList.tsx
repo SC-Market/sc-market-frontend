@@ -12,8 +12,8 @@ import {
   Grid,
   Link as MaterialLink,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -41,7 +41,7 @@ export const RecruitingPostItem = React.memo(
     const { contractor } = post
     const theme = useTheme<ExtendedTheme>()
     const { t } = useTranslation()
-    const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+    const isMobile = useIsMobile()
     const navigate = useNavigate()
 
     // Long-press menu actions

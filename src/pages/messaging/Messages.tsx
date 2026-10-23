@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react"
-import { Box, useMediaQuery, useTheme } from "@mui/material"
+import { Box, useTheme } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
+import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState"
 import { useParams, useNavigate } from "react-router-dom"
 import {
   MessagesBody,
@@ -25,14 +27,14 @@ export function Messages() {
   const { chat_id } = useParams<{ chat_id: string }>()
   const navigate = useNavigate()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
 
   // Use page hook for data fetching
   const pageData = usePageMessages(chat_id)
 
   // On desktop, always show sidebar (unless collapsed). On mobile, hide sidebar when viewing chat
-  const [messageSidebarOpen, setMessageSidebar] = useState(!isMobile)
+  const [messageSidebarOpen, setMessageSidebar] = useHydratedInitialState(!isMobile)
   const [creatingMessageGroup, setCreatingMessageGroup] = useState(false)
 
   const [currentChat, setCurrentChat] = useCurrentChat()

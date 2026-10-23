@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
-import { Button, Grid, useMediaQuery } from "@mui/material"
+import { Button, Grid } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import {
   CreateRounded,
   RadioButtonCheckedRounded,
@@ -18,7 +19,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 export function MarketActions() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
 
   return (
     <Grid

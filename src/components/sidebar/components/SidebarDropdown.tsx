@@ -7,9 +7,9 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { ExpandLess, ExpandMore } from "@mui/icons-material"
 import { useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -28,7 +28,7 @@ export function SidebarDropdown(props: SidebarItemWithStarProps) {
   const theme = useTheme<ExtendedTheme>()
   const loc = useLocation()
   const { t } = useTranslation()
-  const xs = useMediaQuery(theme.breakpoints.down("sm"))
+  const xs = useBreakpointDown("sm")
 
   const anyChild = props.children?.some((child) => {
     const childPath = (child.to || "").split("?")[0]

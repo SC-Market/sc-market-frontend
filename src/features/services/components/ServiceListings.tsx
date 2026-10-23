@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Divider, Grid, useMediaQuery } from "@mui/material"
+import { Divider, Grid } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { HapticTablePagination } from "../../../components/haptic"
 import { useServiceSearch } from "../../contracting/hooks/ServiceSearch"

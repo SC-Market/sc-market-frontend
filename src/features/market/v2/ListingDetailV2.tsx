@@ -14,8 +14,8 @@ import {
   Paper,
   Stack,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { useParams, Link as RouterLink } from "react-router-dom"
 import { Helmet } from "@unhead/react/helmet"
@@ -69,7 +69,7 @@ export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
 
   const {
     data: listingData,

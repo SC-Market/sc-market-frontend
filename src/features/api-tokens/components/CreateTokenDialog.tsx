@@ -15,8 +15,8 @@ import {
   Chip,
   Divider,
   Grid,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTranslation } from "react-i18next"
 import {
   useCreateTokenMutation,
@@ -139,7 +139,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
 
   const isFormValid = formData.name.trim() && formData.scopes.length > 0
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   // Content to reuse
   const dialogContent = (

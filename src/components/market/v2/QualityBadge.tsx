@@ -1,6 +1,6 @@
 import React from "react";
-import { Chip, useTheme, useMediaQuery } from "@mui/material";
-import type { ExtendedTheme } from "../../../hooks/styles/Theme";
+import { Chip } from "@mui/material";
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
 
 interface QualityBadgeProps {
   tier: number | null | undefined;
@@ -25,8 +25,7 @@ export const QualityBadge: React.FC<QualityBadgeProps> = ({
   size = "medium",
   variant = "filled",
 }) => {
-  const theme = useTheme<ExtendedTheme>();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useBreakpointDown("sm");
 
   if (!tier || tier < 1 || tier > 5) {
     return null;

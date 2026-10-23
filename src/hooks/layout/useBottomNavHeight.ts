@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react"
-import { useMediaQuery, useTheme } from "@mui/material"
-import { ExtendedTheme } from "../styles/Theme"
+import { useBreakpointDown } from "./useBreakpoint"
 
 /**
  * Hook to get the current bottom navigation bar height
  * Returns 64px on mobile when visible, 0 when keyboard is open or on desktop
  */
 export function useBottomNavHeight(): number {
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
+  const isMobile = useBreakpointDown("sm")
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
   // Track keyboard visibility to determine if bottom nav is hidden

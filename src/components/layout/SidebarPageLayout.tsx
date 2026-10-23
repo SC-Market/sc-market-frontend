@@ -5,8 +5,8 @@ import {
   Divider,
   Grid,
   Stack,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
@@ -27,7 +27,7 @@ export interface SidebarPageLayoutProps extends StandardPageLayoutProps {
 export function SidebarPageLayout(props: SidebarPageLayoutProps): ReactElement {
   const { sidebar, contentMaxWidth = "md", children, ...standardProps } = props
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   return (
     <StandardPageLayout {...standardProps} maxWidth="xxl">

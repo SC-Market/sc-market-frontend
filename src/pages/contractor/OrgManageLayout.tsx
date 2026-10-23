@@ -8,8 +8,8 @@ import {
   ListItemText,
   Tab,
   Tabs,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointUp } from "../../hooks/layout/useBreakpoint"
 import {
   InfoRounded,
   PeopleAltRounded,
@@ -22,12 +22,10 @@ import {
   TuneRounded,
   PersonAddRounded,
 } from "@mui/icons-material"
-import { useTheme } from "@mui/material/styles"
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { Discord } from "../../components/icon/DiscordIcon"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { usePageOrgManage } from "../../features/contractor/hooks/usePageOrgManage"
 import { has_permission } from "../../features/contractor/domain/permissions"
 import { OrgManageSkeleton } from "../../components/skeletons/OrgManageSkeleton"
@@ -40,10 +38,9 @@ interface NavItem {
 
 export function OrgManageLayout() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const location = useLocation()
   const navigate = useNavigate()
-  const isDesktop = useMediaQuery(theme.breakpoints.up("md"))
+  const isDesktop = useBreakpointUp("md")
 
   const pageData = usePageOrgManage()
   const contractor = pageData.data?.contractor

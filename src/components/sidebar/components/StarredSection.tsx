@@ -3,9 +3,9 @@ import {
   List,
   ListSubheader,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { SidebarItem } from "./SidebarItem"
@@ -33,7 +33,7 @@ export function StarredSection({
 }: StarredSectionProps) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const xs = useMediaQuery(theme.breakpoints.down("sm"))
+  const xs = useBreakpointDown("sm")
 
   if (!xs || starredItems.length === 0) {
     return null

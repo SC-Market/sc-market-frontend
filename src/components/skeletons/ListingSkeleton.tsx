@@ -6,7 +6,6 @@ import {
   CardContent,
   Box,
   Stack,
-  useMediaQuery,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme, cardFadeGradient } from "../../hooks/styles/Theme"

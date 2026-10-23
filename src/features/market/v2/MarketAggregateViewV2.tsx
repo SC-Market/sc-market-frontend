@@ -30,7 +30,6 @@ import {
   TextField,
   Typography,
   useTheme,
-  useMediaQuery,
 } from "@mui/material";
 import { HapticButton } from "../../../components/haptic";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";

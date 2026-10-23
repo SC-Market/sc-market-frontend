@@ -8,10 +8,10 @@ import {
   AppBar,
   Box,
   Toolbar,
-  useMediaQuery,
   useScrollTrigger,
   useTheme,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { ReactNode, useEffect, useState } from "react"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -33,7 +33,7 @@ export function CollapsibleHeader({
   variant = "slide",
 }: CollapsibleHeaderProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [scrollY, setScrollY] = useState(0)
   const [isCollapsed, setIsCollapsed] = useState(false)
 

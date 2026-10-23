@@ -1,4 +1,5 @@
-import { Box, Drawer, IconButton, Tooltip, useMediaQuery } from "@mui/material"
+import { Box, Drawer, IconButton, Tooltip } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import React from "react"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -14,7 +15,7 @@ export const messagingDrawerWidth = 360
 // Sidebar with chat list and search/group creation controls
 export function MessagingSidebar() {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const [messagingSidebar, setMessagingSidebar] = useMessagingSidebar()
   const { t } = useTranslation()

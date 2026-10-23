@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ContractorListItem } from "../../views/contractor/ContractorList"
 import { ContractorSkeleton } from "../../components/skeletons"
-import { Button, Divider, Grid, useMediaQuery } from "@mui/material"
+import { Button, Divider, Grid } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
+import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState"
 import { HapticTablePagination } from "../../components/haptic"
 import {
   ContractorSearchContext,
@@ -59,9 +61,9 @@ export function Contractors() {
   })
 
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   // Start closed on mobile (BottomSheet), open on desktop (Drawer)
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
+  const [sidebarOpen, setSidebarOpen] = useHydratedInitialState(!isMobile)
 
   useEffect(() => {
     setPage(0)

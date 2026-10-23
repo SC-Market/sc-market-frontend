@@ -4,7 +4,8 @@
  * Mobile: Compact numbered Pagination component.
  */
 import React from "react"
-import { TablePagination, Pagination, Box, useMediaQuery, useTheme } from "@mui/material"
+import { TablePagination, Pagination, Box } from "@mui/material"
+import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import { useTranslation } from "react-i18next"
 
 export interface ListingPaginationProps {
@@ -20,8 +21,7 @@ const ROWS_PER_PAGE_OPTIONS = [12, 24, 48, 96]
 export function ListingPagination(props: ListingPaginationProps) {
   const { count, page, rowsPerPage, onPageChange, onRowsPerPageChange } = props
   const { t } = useTranslation()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const totalPages = Math.ceil(count / rowsPerPage)
 

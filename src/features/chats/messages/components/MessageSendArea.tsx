@@ -3,8 +3,8 @@ import {
   Button,
   IconButton,
   TextField,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import { HapticIconButton } from "../../../../components/haptic"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
@@ -14,7 +14,7 @@ import { useState, useRef, useEffect } from "react"
 
 export function MessageSendArea(props: { onSend: (content: string) => void }) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [textEntry, setTextEntry] = useState("")
   const { t } = useTranslation()
   const inputRef = useRef<HTMLDivElement>(null)

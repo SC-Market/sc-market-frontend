@@ -10,8 +10,8 @@ import {
   Box,
   Chip,
   Divider,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -61,7 +61,7 @@ export function CommandPalette() {
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const { data: shops = [] } = useGetMyShopsQuery()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
 

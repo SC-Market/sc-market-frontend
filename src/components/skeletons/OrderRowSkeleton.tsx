@@ -10,7 +10,7 @@ import {
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { useMediaQuery } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 
 export interface OrderRowSkeletonProps {
   index?: number
@@ -22,7 +22,7 @@ export interface OrderRowSkeletonProps {
  */
 export function OrderRowSkeleton({ index = 0 }: OrderRowSkeletonProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   return (
     <TableRow>

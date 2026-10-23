@@ -15,8 +15,8 @@ import {
   Stack,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -196,7 +196,7 @@ export function BulkItemsPageV2() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
-  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const showMobileSidebar = useBreakpointDown("lg")
   const [viewMode, setViewMode] = useViewMode()
 
   const queryArgs = useMemo(() => ({

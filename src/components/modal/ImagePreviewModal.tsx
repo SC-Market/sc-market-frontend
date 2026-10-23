@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState, useCallback } from "react"
 import {
   Box,
   Modal,
-  useMediaQuery,
   IconButton,
   Typography,
   Paper,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
@@ -35,7 +35,7 @@ export function ImagePreviewModal(props: {
     showThumbnails = true,
   } = props
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
   const [currentIndex, setCurrentIndex] = useState(initialIndex || 0)
 

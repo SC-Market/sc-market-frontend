@@ -13,8 +13,8 @@ import {
   Alert,
   IconButton,
   Tooltip,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import {
   ContentCopy as CopyIcon,
   Schedule as ScheduleIcon,
@@ -44,7 +44,7 @@ export function TokenDetailsDialog({
 }: TokenDetailsDialogProps) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { data: stats } = useGetTokenStatsQuery(token?.id || "", {
     skip: !token?.id,
   })

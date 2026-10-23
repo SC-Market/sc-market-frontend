@@ -8,8 +8,8 @@ import {
   Divider,
   Stack,
   Switch,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import SettingsIcon from "@mui/icons-material/Settings"
 import CloseIcon from "@mui/icons-material/Close"
@@ -33,7 +33,7 @@ const RETIRED_FLAGS = new Set(["market_v2", "crafting"])
  */
 export function DebugPanel() {
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { marketVersion, setMarketVersion, isDeveloper, hasOverride, flags, overriddenFlags, setFlag } = useFeatureFlag()
   const [isOpen, setIsOpen] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)

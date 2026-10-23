@@ -8,8 +8,8 @@ import {
   Stack,
   Tooltip,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import { HapticIconButton } from "../../../../components/haptic"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
@@ -32,7 +32,7 @@ export function MessageHeader(props: {
 }) {
   const profile = useGetUserProfileQuery()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [messageSidebarOpen, setMessageSidebar] = useMessagingSidebar()
   const navigate = useNavigate()
   const location = useLocation()

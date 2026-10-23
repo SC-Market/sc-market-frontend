@@ -1,4 +1,5 @@
-import { Box, Stack, useMediaQuery } from "@mui/material"
+import { Box, Stack } from "@mui/material"
+import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { useCurrentChat } from "../../hooks/CurrentChat"
@@ -13,7 +14,7 @@ export function MessagesArea(props: {
   inputAreaHeight?: number
 }) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { messageBoxRef, inputAreaHeight } = props
   const [chat] = useCurrentChat()
 

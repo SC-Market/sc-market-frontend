@@ -1,6 +1,7 @@
 import React from "react"
 import { Navigate } from "react-router-dom"
-import { Grid, useMediaQuery } from "@mui/material"
+import { Grid } from "@mui/material"
+import { useBreakpointUp } from "../../hooks/layout/useBreakpoint"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
 import { OrdersViewPaginated } from "../../views/orders/OrderList"
 import { DashNotificationArea } from "../../views/notifications/DashNotificationArea"
@@ -24,8 +25,8 @@ export function MemberDashboard() {
 
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const lg = useMediaQuery(theme.breakpoints.up("lg"))
-  const xxl = useMediaQuery(theme.breakpoints.up("xxl"))
+  const lg = useBreakpointUp("lg")
+  const xxl = useBreakpointUp("xxl")
 
   const pageTitle = shopCtx
     ? t("orders.title", "Orders")

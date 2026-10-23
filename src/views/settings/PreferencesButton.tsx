@@ -1,14 +1,15 @@
 import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { Fab, Popover, useMediaQuery } from "@mui/material"
+import { Fab, Popover } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { SettingsRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
 
 export function PreferencesButton() {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 

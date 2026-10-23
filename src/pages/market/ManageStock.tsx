@@ -3,9 +3,10 @@ import {
   Button,
   Grid,
   Paper,
-  useMediaQuery,
   Box,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
+import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState"
 import AddRounded from "@mui/icons-material/AddRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { MarketSearchArea } from "../../features/market/components/MarketSidebar"
@@ -30,8 +31,8 @@ import { MARKET_PATHS } from "../../routes/paths"
 export function ManageStock() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [open, setOpen] = useState(!isMobile)
+  const isMobile = useIsMobile()
+  const [open, setOpen] = useHydratedInitialState(!isMobile)
   const [searchState, setSearchState] = useMarketSearch()
   const pageData = usePageManageStock()
 

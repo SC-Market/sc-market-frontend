@@ -1,6 +1,6 @@
 import { Box, Container, Divider, Grid, Paper, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import useMediaQuery from "@mui/material/useMediaQuery"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { CardSkeleton } from "./CardSkeleton"
 import { TableSkeleton } from "./TableSkeleton"
@@ -38,7 +38,7 @@ const LISTING_GRID_BREAKPOINTS = {
  */
 export function MarketPageSkeleton() {
   const theme = useTheme<ExtendedTheme>()
-  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const showMobileSidebar = useBreakpointDown("lg")
 
   return (
     <OpenLayout sidebarOpen={true} noMobilePadding={true}>

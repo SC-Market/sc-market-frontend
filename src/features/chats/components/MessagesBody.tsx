@@ -1,4 +1,5 @@
-import { Box, Grid, useMediaQuery } from "@mui/material"
+import { Box, Grid } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -31,7 +32,7 @@ export function MessagesBody(props: {
   forceDesktop?: boolean
 }) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobileQuery = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobileQuery = useIsMobile()
   const isMobile = props.forceDesktop ? false : isMobileQuery
   const [currentChat, setCurrentChat] = useCurrentChat()
   const messageBoxRef = useRef<HTMLDivElement>(null)

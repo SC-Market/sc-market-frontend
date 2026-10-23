@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react"
-import { Drawer, Stack, useMediaQuery, useTheme, Chip } from "@mui/material"
+import { Drawer, Stack, useTheme, Chip } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useLocation, matchPath } from "react-router-dom"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -23,7 +24,7 @@ import { useGetMyShopsQuery } from "../../store/api/v2/market"
 export function Sidebar() {
   const theme = useTheme<ExtendedTheme>()
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
-  const xs = useMediaQuery(theme.breakpoints.down("sm"))
+  const xs = useBreakpointDown("sm")
   const bottomNavHeight = useBottomNavHeight()
   const location = useLocation()
 

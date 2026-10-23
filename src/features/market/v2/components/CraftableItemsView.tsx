@@ -26,9 +26,8 @@ import {
   Tooltip,
   IconButton,
   Collapse,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../../hooks/layout/useBreakpoint"
 import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
@@ -51,8 +50,7 @@ export interface CraftableItemsViewProps {
  */
 export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
   const { t } = useTranslation()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
 
   // State for filters
   const [categoryFilter, setCategoryFilter] = useState<string>(itemCategory || "")

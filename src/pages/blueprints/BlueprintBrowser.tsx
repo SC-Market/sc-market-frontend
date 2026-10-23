@@ -40,11 +40,11 @@ import {
   Stack,
   Button,
   Tooltip,
-  useMediaQuery,
   Card,
   CardContent,
   LinearProgress,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ViewModule, ViewList, RestartAltRounded, FilterList } from "@mui/icons-material"
 import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, useGetUserBlueprintInventoryQuery, type BlueprintSearchResult } from "../../store/api/v2/market"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
@@ -57,11 +57,9 @@ import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor } from "../../util/gameIcons"
 import { useTranslation } from "react-i18next"
 import { formatCraftingTime } from "../../constants/crafting"
-import { useTheme } from "@mui/material/styles"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
@@ -103,7 +101,6 @@ function CollectionProgressCard() {
 
 export function BlueprintBrowser() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   const { data: profile } = useGetUserProfileQuery()
   const isLoggedIn = !!profile
@@ -146,7 +143,7 @@ export function BlueprintBrowser() {
   const setManufacturer = (v: string) => updateParam("mfr", v)
   const ingredientName = searchParams.get("ingredient") || ""
   const setIngredientName = (v: string) => updateParam("ingredient", v)
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
   const [filterOpen, setFilterOpen] = useState(false)
   const bottomNavHeight = useBottomNavHeight()
   const [page, setPage] = useState(1)

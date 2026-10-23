@@ -21,8 +21,9 @@ import {
   TextField,
   Typography,
   InputAdornment,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
+import { useHydratedInitialState } from "../../../hooks/ssr/useHydratedInitialState"
 import {
   Delete as DeleteIcon,
   Save as SaveIcon,
@@ -116,8 +117,8 @@ function useStockFilter() {
 export function BulkStockManagementV2() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
+  const isMobile = useIsMobile()
+  const [sidebarOpen, setSidebarOpen] = useHydratedInitialState(!isMobile)
 
   return (
     <StandardPageLayout

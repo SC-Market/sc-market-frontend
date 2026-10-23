@@ -1,4 +1,5 @@
-import { Box, Container, Grid, Skeleton, Stack, useMediaQuery } from "@mui/material"
+import { Box, Container, Grid, Skeleton, Stack } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ContractorSkeleton } from "./ContractorSkeleton"
@@ -11,7 +12,7 @@ import { StandardPageLayout } from "../layout/StandardPageLayout"
  */
 export function ContractorsListSkeleton() {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   return (
     <StandardPageLayout title="Contractors" headerTitle="Contractors" maxWidth="xxl">

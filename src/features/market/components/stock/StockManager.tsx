@@ -18,9 +18,8 @@ import {
   Divider,
   Alert,
   CircularProgress,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../../hooks/layout/useBreakpoint"
 import { Add as AddIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
@@ -47,8 +46,7 @@ export interface StockManagerProps {
  */
 export function StockManager({ listingId, onClose }: StockManagerProps) {
   const { t } = useTranslation()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
 
   // State for dialogs
   const [createDialogOpen, setCreateDialogOpen] = useState(false)

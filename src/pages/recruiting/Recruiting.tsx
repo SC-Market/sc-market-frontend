@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from "react"
-import { Alert, AlertTitle, Button, Divider, Grid, useMediaQuery } from "@mui/material"
+import { Alert, AlertTitle, Button, Divider, Grid } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { HapticTablePagination } from "../../components/haptic"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { NoteAddRounded, RocketLaunchRounded } from "@mui/icons-material"
@@ -65,7 +66,7 @@ export function Recruiting() {
   }
 
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const headerActions = currentOrg && pageData.data && (
     <>

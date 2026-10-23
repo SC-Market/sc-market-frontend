@@ -1,4 +1,5 @@
-import { Box, Drawer, IconButton, useMediaQuery } from "@mui/material"
+import { Box, Drawer, IconButton } from "@mui/material"
+import { useIsMobile, useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import React, { useEffect } from "react"
 
@@ -20,8 +21,8 @@ export function ServiceSidebar() {
   const [open, setOpen] = useServiceSidebar()
   const [drawerOpen] = useDrawerOpen()
 
-  const xs = useMediaQuery(theme.breakpoints.down("lg"))
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const xs = useBreakpointDown("lg")
+  const isMobile = useIsMobile()
   useEffect(() => {
     setOpen(!xs)
   }, [setOpen, xs])

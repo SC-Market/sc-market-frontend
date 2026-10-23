@@ -9,10 +9,9 @@ import {
   IconButton,
   Stack,
   Typography,
-  useMediaQuery,
-  useTheme,
   CircularProgress,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
   Close,
   DeleteOutlineRounded,
@@ -20,7 +19,6 @@ import {
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../mobile/BottomSheet"
 import {
   useGetCartQuery,
@@ -38,10 +36,9 @@ interface CartDrawerProps {
 }
 
 export function CartDrawer({ open, onClose }: CartDrawerProps) {
-  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const { data: cart, isLoading } = useGetCartQuery(undefined, { skip: !open })
   const [removeItem] = useRemoveCartItemMutation()

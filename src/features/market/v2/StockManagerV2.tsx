@@ -38,8 +38,9 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
+import { useHydratedInitialState } from "../../../hooks/ssr/useHydratedInitialState"
 import {
   AddRounded,
   ArchiveOutlined,
@@ -305,7 +306,7 @@ function DisplayStockV2({
 }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { shop } = useShopRouteContext()
   const issueAlert = useAlertHook()
   const [updateListing] = useUpdateListingMutation()
@@ -801,9 +802,9 @@ function DisplayStockV2({
 export function StockManagerV2() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { shop } = useShopRouteContext()
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
+  const [sidebarOpen, setSidebarOpen] = useHydratedInitialState(!isMobile)
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(48)
   const [searchParams] = useSearchParams()

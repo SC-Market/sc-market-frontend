@@ -43,7 +43,7 @@ import {
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
-import { useMediaQuery } from "@mui/material"
+import { useIsMobile, useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import {
@@ -56,8 +56,7 @@ import { SHOP_PATHS } from "../../routes/paths"
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const [currentChat, setCurrentChat] = useCurrentChat()
   const { data: chatObj } = useGetChatByOrderIDQuery(order.order_id!, {
@@ -107,7 +106,7 @@ export function OrderMessagesArea(props: { order: Order }) {
 
 export function OrderDetailsArea(props: { order: Order }) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
   const { order } = props
   const { t } = useTranslation()
 
