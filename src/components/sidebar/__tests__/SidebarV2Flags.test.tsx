@@ -23,10 +23,8 @@ let mockFlags: Record<string, boolean> = {}
 vi.mock("../../../hooks/market", () => ({
   useFeatureFlag: () => ({
     flags: mockFlags,
-    marketVersion: "V1",
     isLoading: false,
     error: null,
-    setMarketVersion: vi.fn(),
     isDeveloper: false,
     hasOverride: false,
     overriddenFlags: [],

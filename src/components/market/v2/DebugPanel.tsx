@@ -20,21 +20,18 @@ import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 const RETIRED_FLAGS = new Set(["market_v2", "crafting"])
 
 /**
- * DebugPanel component for switching between V1 and V2 market experiences
- * 
- * This component provides a debug interface for developers to:
- * - View the current market version (V1 or V2)
- * - Switch between V1 and V2 experiences
- * - Persist panel open/closed state in local storage
- * 
+ * DebugPanel: lets developers toggle feature flags for themselves.
+ *
+ * - Lists every live flag (retired ones are hidden) with its override state
+ * - Toggling a flag persists it server-side and reloads the page
+ * - Persists panel open/closed state in local storage
+ *
  * The panel is only visible in Vite dev mode or for site admins (see useFeatureFlag).
- * 
- * Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
  */
 export function DebugPanel() {
   const theme = useTheme()
   const isMobile = useIsMobile()
-  const { marketVersion, setMarketVersion, isDeveloper, hasOverride, flags, overriddenFlags, setFlag } = useFeatureFlag()
+  const { isDeveloper, hasOverride, flags, overriddenFlags, setFlag } = useFeatureFlag()
   const [isOpen, setIsOpen] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)
 
@@ -53,7 +50,6 @@ export function DebugPanel() {
     localStorage.setItem("debug_panel_open", String(newState))
   }
 
-  // Handle market version change
   // Don't render if user is not a developer or override user
   if (!isDeveloper && !hasOverride) {
     return null
@@ -166,7 +162,7 @@ export function DebugPanel() {
           {isSwitching && (
             <Box mt={2}>
               <Typography variant="caption" color="primary">
-                Switching version... Page will reload.
+                Updating flag... Page will reload.
               </Typography>
             </Box>
           )}

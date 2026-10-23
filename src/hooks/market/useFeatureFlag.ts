@@ -18,20 +18,14 @@ import { useAppDispatch } from "../../store/hooks"
 import { marketV2Api } from "../../store/api/v2/market"
 import { useHydrated } from "../ssr/useHydrated"
 
-export type MarketVersion = "V1" | "V2"
-
 export interface FeatureFlags {
   wiki: boolean
   [key: string]: boolean
 }
 
 export interface UseFeatureFlagReturn {
-  /** Backward compat: V1 or V2 */
-  marketVersion: MarketVersion
   isLoading: boolean
   error: Error | null
-  /** Backward compat: set market version */
-  setMarketVersion: (version: MarketVersion) => Promise<void>
   isDeveloper: boolean
   hasOverride: boolean
   /** All resolved flags */
@@ -44,23 +38,15 @@ export interface UseFeatureFlagReturn {
 
 const DEFAULT_FLAGS: FeatureFlags = { wiki: true, nav_v2: true, market_v2_redesign: false, customizable_dashboard: false }
 const STORAGE_KEY = "feature_flags"
+/** Written by the retired market_v2 flag; removed on sight, never read. */
+const LEGACY_MARKET_VERSION_KEY = "market_version"
 
 function readStoredFlags(): FeatureFlags {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
     if (stored) return { ...DEFAULT_FLAGS, ...JSON.parse(stored) }
   } catch {}
-  // Backward compat: read old market_version key
-  try {
-    if (localStorage.getItem("market_version") === "V2") {
-      return { ...DEFAULT_FLAGS, market_v2: true }
-    }
-  } catch {}
   return DEFAULT_FLAGS
-}
-
-function readLocalMarketVersion(): MarketVersion {
-  return readStoredFlags().market_v2 ? "V2" : "V1"
 }
 
 export function useFeatureFlag(): UseFeatureFlagReturn {
@@ -75,6 +61,9 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
   )
   useEffect(() => {
     if (!hydrated) setFlags(readStoredFlags())
+    try {
+      localStorage.removeItem(LEGACY_MARKET_VERSION_KEY)
+    } catch {}
     // Only the first render's value matters: it says whether we hydrated.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -114,18 +103,11 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
           // so was true even on a browser that had never stored anything.
           const serverFlags = { ...DEFAULT_FLAGS, ...data.flags }
           localStorage.setItem(STORAGE_KEY, JSON.stringify(serverFlags))
-          // Also write backward-compat key
-          localStorage.setItem("market_version", serverFlags.market_v2 ? "V2" : "V1")
           // Update state only if changed (avoids re-renders)
           setFlags((prev) => {
             const changed = Object.keys(serverFlags).some((k) => prev[k] !== serverFlags[k])
             return changed ? serverFlags : prev
           })
-        } else if (data?.market_version) {
-          // Backward compat: server doesn't have flags yet
-          const mv = data.market_version === "V2"
-          localStorage.setItem("market_version", data.market_version)
-          setFlags((prev) => prev.market_v2 !== mv ? { ...prev, market_v2: mv } : prev)
         }
 
         if (data?.has_override !== undefined) setHasOverride(!!data.has_override)
@@ -141,28 +123,6 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
     return () => { cancelled = true }
   }, [profile?.username, dispatch])
 
-  const marketVersion: MarketVersion = flags.market_v2 ? "V2" : "V1"
-
-  const setMarketVersion = useCallback(
-    async (version: MarketVersion) => {
-      try {
-        setError(null)
-        await dispatch(
-          marketV2Api.endpoints.setFeatureFlag.initiate({
-            setFeatureFlagRequest: { market_version: version },
-          }),
-        )
-        const newFlags = { ...flags, market_v2: version === "V2" }
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(newFlags))
-        localStorage.setItem("market_version", version)
-        setFlags(newFlags)
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error("Failed to set feature flag"))
-      }
-    },
-    [flags, dispatch],
-  )
-
   const setFlag = useCallback(
     async (flagName: string, enabled: boolean) => {
       try {
@@ -174,10 +134,6 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
         )
         const newFlags = { ...flags, [flagName]: enabled }
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newFlags))
-        // Also update backward compat key
-        if (flagName === "market_v2") {
-          localStorage.setItem("market_version", enabled ? "V2" : "V1")
-        }
         setFlags(newFlags)
       } catch (err) {
         setError(err instanceof Error ? err : new Error("Failed to set flag"))
@@ -187,10 +143,8 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
   )
 
   return {
-    marketVersion,
     isLoading: false,
     error,
-    setMarketVersion,
     isDeveloper,
     hasOverride,
     flags,
