@@ -21,6 +21,8 @@ import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, Hardwa
 import { useSearchOresQuery } from "../../store/api/v2/market"
 import { FRONTEND_URL } from "../../util/constants"
 import { WIKI_PATHS, MARKET_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
+import { AnswerLead, AnswerFaqs } from "../../components/game-data/AnswerSummary"
+import { buildCommodityAnswers } from "../../util/answerContent"
 
 function BoolChip({ value, label }: { value: boolean; label: string }) {
   return (
@@ -36,7 +38,7 @@ function BoolChip({ value, label }: { value: boolean; label: string }) {
 }
 
 export function WikiCommodityDetail() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data, isLoading, error } = useGetResourceQuery({ resourceId: id! }, { skip: !id })
@@ -44,6 +46,7 @@ export function WikiCommodityDetail() {
   const r = data?.resource
   const bps = data?.blueprints_requiring || []
   const price = data?.market_price
+  const answers = data ? buildCommodityAnswers(data, t, i18n.language) : null
 
   const acquisitionMethods = [
     r?.can_be_mined && "Mining",
@@ -105,14 +108,6 @@ export function WikiCommodityDetail() {
                 ...(r.resource_icon && { image: r.resource_icon }),
                 url: canonicalUrl,
                 category: r.resource_category,
-                ...(price && (price.min_price || price.max_price) && {
-                  offers: {
-                    "@type": "AggregateOffer",
-                    lowPrice: price.min_price,
-                    highPrice: price.max_price,
-                    priceCurrency: "aUEC",
-                  },
-                }),
               })}
             </script>
           </Helmet>
@@ -134,6 +129,8 @@ export function WikiCommodityDetail() {
               </Stack>
             </Box>
           </Stack>
+
+          {answers && <AnswerLead summary={answers.summary} />}
 
           {/* Acquisition methods + stats */}
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
@@ -249,6 +246,7 @@ export function WikiCommodityDetail() {
               </Grid>
             )}
           </Grid>
+          {answers && <AnswerFaqs faqs={answers.faqs} />}
         </Grid>
         </>
       )}

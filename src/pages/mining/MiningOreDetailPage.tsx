@@ -7,12 +7,16 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { OreDetailContent } from "./OreDetailContent"
 import { FRONTEND_URL } from "../../util/constants"
+import { useTranslation } from "react-i18next"
+import { AnswerLead, AnswerFaqs } from "../../components/game-data/AnswerSummary"
+import { buildOreAnswers } from "../../util/answerContent"
 
 function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 export function MiningOreDetailPage() {
+  const { t, i18n } = useTranslation()
   const { name } = useParams<{ name: string }>()
   const { data: ore, isLoading, error } = useGetOreDetailQuery({ name: name! }, { skip: !name })
   const displayName = ore?.displayName || friendlyName(name || "")
@@ -20,6 +24,7 @@ export function MiningOreDetailPage() {
   const seoTitle = `${displayName} — Star Citizen Mining Ore | SC Market`
   const seoDescription = `${displayName} — minable ore in Star Citizen. Mining stats, locations, and market price.`
   const canonicalUrl = `${FRONTEND_URL}/mining/ores/${name}`
+  const answers = ore ? buildOreAnswers(ore, t, i18n.language) : null
 
   return (
     <StandardPageLayout
@@ -53,17 +58,12 @@ export function MiningOreDetailPage() {
                 name: displayName,
                 description: seoDescription,
                 url: canonicalUrl,
-                ...(ore.marketPrice && {
-                  offers: {
-                    "@type": "Offer",
-                    price: ore.marketPrice,
-                    priceCurrency: "aUEC",
-                  },
-                }),
               })}
             </script>
           </Helmet>
+          {answers && <AnswerLead summary={answers.summary} />}
           <OreDetailContent ore={ore} />
+          {answers && <AnswerFaqs faqs={answers.faqs} />}
         </Grid>
       )}
     </StandardPageLayout>

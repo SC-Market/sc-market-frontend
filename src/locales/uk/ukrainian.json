@@ -647,6 +647,45 @@
   "selectMarketListing": {
     "label": "Оберіть оголошення на маркеті"
   },
+  "seoAnswers": {
+    "commodity": {
+      "cheapest": "Найдешевше відоме місце для купівлі — {{location}}, приблизно за {{price}}.",
+      "faqBuyA": "{{name}} можна купити тут: {{locations}}.",
+      "faqBuyQ": "Де купити {{name}} у Star Citizen?",
+      "faqMineA": "{{name}} можна видобути тут: {{locations}}.",
+      "faqMineQ": "Де видобувати {{name}} у Star Citizen?",
+      "faqUsesA": "{{name}} — інгредієнт для крафту таких предметів, як {{items}}.",
+      "faqUsesQ": "Для чого використовується {{name}} у Star Citizen?",
+      "intro": "{{name}} — товар у Star Citizen (категорія: {{category}}).",
+      "methods": "Способи отримання: {{methods}}.",
+      "mined": "Відомі місця видобутку: {{locations}}.",
+      "price": "Ринкові ціни зараз становлять від {{min}} до {{max}}."
+    },
+    "faqTitle": "Поширені запитання",
+    "item": {
+      "intro": "{{name}} — предмет у Star Citizen.",
+      "listings": "Гравці продають його на SC Market за ціною від {{min}} до {{max}} (активних оголошень: {{total}}).",
+      "type": "Тип: {{type}}."
+    },
+    "methods": {
+      "looting": "мародерство",
+      "mining": "видобуток",
+      "purchasing": "купівля",
+      "salvaging": "утилізація"
+    },
+    "ore": {
+      "best": "Відомі місця: {{locations}}.",
+      "faqWhereA": "{{name}} можна знайти, зокрема, тут: {{locations}}.",
+      "faqWhereQ": "Де видобувати {{name}} у Star Citizen?",
+      "intro": "{{name}} — руда, яку можна видобувати у Star Citizen (рідкість: {{rarity}})."
+    },
+    "ship": {
+      "crew": "Максимальний екіпаж: {{crew}}.",
+      "intro": "{{name}} — корабель у Star Citizen.",
+      "length": "Довжина: {{length}} м.",
+      "role": "Роль: {{role}}."
+    }
+  },
   "settings": {
     "title": "Налаштування",
     "tabs": {

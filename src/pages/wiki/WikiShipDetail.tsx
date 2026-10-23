@@ -20,6 +20,8 @@ import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouet
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
 import { WIKI_PATHS } from "../../routes/paths"
+import { AnswerLead } from "../../components/game-data/AnswerSummary"
+import { buildShipSummary } from "../../util/answerContent"
 
 export function WikiShipDetail() {
   const { t } = useTranslation()
@@ -93,6 +95,7 @@ export function WikiShipDetail() {
         <Grid container spacing={3}>
 
           <Grid item xs={12}>
+            <AnswerLead summary={buildShipSummary(ship, t)} />
             <Card sx={{ overflow: "hidden" }}>
               <Box sx={{ height: 4, bgcolor: shipColor }} />
               <CardContent>

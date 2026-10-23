@@ -653,6 +653,45 @@
   "selectMarketListing": {
     "label": "选择市集商品页"
   },
+  "seoAnswers": {
+    "commodity": {
+      "cheapest": "已知最便宜的购买地点是{{location}}，约{{price}}。",
+      "faqBuyA": "可以在{{locations}}购买{{name}}。",
+      "faqBuyQ": "在《星际公民》中哪里可以买到{{name}}？",
+      "faqMineA": "可以在{{locations}}开采{{name}}。",
+      "faqMineQ": "在《星际公民》中哪里可以开采{{name}}？",
+      "faqUsesA": "{{name}}是{{items}}等物品的制作材料。",
+      "faqUsesQ": "{{name}}在《星际公民》中有什么用？",
+      "intro": "{{name}}是《星际公民》中的商品（类别：{{category}}）。",
+      "methods": "获取方式：{{methods}}。",
+      "mined": "已知采矿地点包括{{locations}}。",
+      "price": "当前市场价格为{{min}}至{{max}}。"
+    },
+    "faqTitle": "常见问题",
+    "item": {
+      "intro": "{{name}}是《星际公民》中的物品。",
+      "listings": "玩家在 SC Market 上以{{min}}至{{max}}出售（在售数量：{{total}}）。",
+      "type": "类型：{{type}}。"
+    },
+    "methods": {
+      "looting": "搜刮",
+      "mining": "采矿",
+      "purchasing": "购买",
+      "salvaging": "打捞"
+    },
+    "ore": {
+      "best": "已知地点包括{{locations}}。",
+      "faqWhereA": "可以在{{locations}}等地点找到{{name}}。",
+      "faqWhereQ": "在《星际公民》中哪里可以开采{{name}}？",
+      "intro": "{{name}}是《星际公民》中可开采的矿石（稀有度：{{rarity}}）。"
+    },
+    "ship": {
+      "crew": "最大船员数：{{crew}}。",
+      "intro": "{{name}}是《星际公民》中的一艘舰船。",
+      "length": "长度：{{length}} 米。",
+      "role": "定位：{{role}}。"
+    }
+  },
   "settings": {
     "title": "设置",
     "tabs": {
