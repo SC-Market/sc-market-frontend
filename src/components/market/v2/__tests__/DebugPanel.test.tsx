@@ -16,14 +16,11 @@ const renderWithTheme = (component: React.ReactElement) => {
 }
 
 describe("DebugPanel", () => {
-  const mockSetMarketVersion = vi.fn()
   const mockSetFlag = vi.fn().mockResolvedValue(undefined)
 
   const defaultMockReturn = {
-    marketVersion: "V1" as const,
     isLoading: false,
     error: null,
-    setMarketVersion: mockSetMarketVersion,
     isDeveloper: true,
     hasOverride: false,
     // Includes retired flags (market_v2, crafting) to prove they are filtered
@@ -229,7 +226,7 @@ describe("DebugPanel", () => {
       fireEvent.click(switches[0])
 
       await waitFor(() => {
-        expect(screen.getByText(/Switching version/i)).toBeInTheDocument()
+        expect(screen.getByText(/Updating flag/i)).toBeInTheDocument()
       })
     })
 

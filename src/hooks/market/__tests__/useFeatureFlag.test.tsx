@@ -56,7 +56,7 @@ describe("useFeatureFlag — initial read", () => {
 
     expect(result.current.flags.wiki).toBe(true)
     expect(result.current.flags.nav_v2).toBe(true)
-    expect(result.current.marketVersion).toBe("V1")
+    expect(result.current.flags.market_v2_redesign).toBe(false)
   })
 
   it("reads stored flags synchronously on the first render", () => {
@@ -78,12 +78,13 @@ describe("useFeatureFlag — initial read", () => {
     expect(result.current.flags.wiki).toBe(true)
   })
 
-  it("honours the legacy market_version key when no flags blob exists", () => {
+  it("ignores and clears the stale market_version key from the retired market_v2 flag", async () => {
     localStorage.setItem("market_version", "V2")
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    expect(result.current.marketVersion).toBe("V2")
+    expect(result.current.flags.market_v2).toBeUndefined()
+    await waitFor(() => expect(localStorage.getItem("market_version")).toBeNull())
   })
 })
 
@@ -253,12 +254,25 @@ describe("useFeatureFlag — background sync", () => {
     expect(result.current.flags.nav_v2).toBe(true)
   })
 
-  it("falls back to market_version when the server sends no flags map", async () => {
+  it("ignores a legacy market_version-only server response", async () => {
     serverResponse = { data: { market_version: "V2" } }
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    await waitFor(() => expect(result.current.marketVersion).toBe("V2"))
+    await waitFor(() => expect(dispatch).toHaveBeenCalled())
+    expect(result.current.flags.market_v2).toBeUndefined()
+    expect(localStorage.getItem("market_version")).toBeNull()
+  })
+
+  it("never writes the legacy market_version key when syncing", async () => {
+    serverResponse = {
+      data: { flags: { market_v2: true, nav_v2: true }, overridden_flags: [], has_override: false },
+    }
+
+    renderHook(() => useFeatureFlag())
+
+    await waitFor(() => expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull())
+    expect(localStorage.getItem("market_version")).toBeNull()
   })
 })
 
@@ -274,15 +288,14 @@ describe("useFeatureFlag — setFlag", () => {
     expect(JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}").nav_v2).toBe(true)
   })
 
-  it("writes the legacy key when setting market_v2", async () => {
+  it("does not special-case market_v2 or write the legacy key", async () => {
     const { result } = renderHook(() => useFeatureFlag())
 
     await act(async () => {
       await result.current.setFlag("market_v2", true)
     })
 
-    expect(localStorage.getItem("market_version")).toBe("V2")
-    expect(result.current.marketVersion).toBe("V2")
+    expect(localStorage.getItem("market_version")).toBeNull()
   })
 
   it("reports admins as developers", () => {
