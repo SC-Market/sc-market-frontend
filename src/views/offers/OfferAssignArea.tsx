@@ -6,7 +6,7 @@ import throttle from "lodash/throttle"
 import { Autocomplete, Box, Button, Grid, TextField } from "@mui/material"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { contractorsApi } from "../../features/contractor/api/contractorApi"
-import { store } from "../../store/store"
+import { useAppDispatch } from "../../store/hooks"
 import { PersonRemoveRounded, PersonRounded } from "@mui/icons-material"
 import {
   useAssignOfferMutation,
@@ -28,6 +28,7 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
 
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
+  const dispatch = useAppDispatch()
 
   const { data: membersData } = useGetContractorMembersQuery({
     spectrum_id: contractorSpectrumId || "",
@@ -46,7 +47,7 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
         return
       }
 
-      const { status, data, error } = await store.dispatch(
+      const { status, data, error } = await dispatch(
         contractorsApi.endpoints.searchContractorMembers.initiate({
           spectrum_id: contractorSpectrumId!,
           query: query,
@@ -55,7 +56,7 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
 
       setOptions(data || [])
     },
-    [contractorSpectrumId],
+    [contractorSpectrumId, dispatch],
   )
 
   const retrieve = React.useMemo(

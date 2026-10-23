@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import throttle from "lodash/throttle"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { store } from "../../../store/store"
+import { useAppDispatch } from "../../../store/hooks"
 import { starmapApi } from "../../../store/api/starmap"
 import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import type { Service, PaymentType } from "../domain/types"
@@ -76,6 +76,7 @@ const INITIAL_STATE: ServiceFormState = {
 export function useCreateServiceForm(service?: Service) {
   const { t } = useTranslation()
   const shopCtx = useOptionalShopRouteContext()
+  const dispatch = useAppDispatch()
   const contractorId = shopCtx?.shop.owner_contractor_spectrum_id
   const [state, setState] = useState<ServiceFormState>({ ...INITIAL_STATE })
   const issueAlert = useAlertHook()
@@ -117,7 +118,7 @@ export function useCreateServiceForm(service?: Service) {
   // Starmap suggestions
   const getSuggestions = useCallback(async (query: string) => {
     if (query.length < 3) return []
-    const result = await store.dispatch(
+    const result = await dispatch(
       starmapApi.endpoints.searchStarmap.initiate({ query }),
     )
     if (!result.data) return []
@@ -135,7 +136,7 @@ export function useCreateServiceForm(service?: Service) {
     )
     extended.push(...resultList)
     return extended
-  }, [])
+  }, [dispatch])
 
   const retrieveDepart = useMemo(
     () => throttle(async (query: string) => setDepartSuggest(await getSuggestions(query)), 400),

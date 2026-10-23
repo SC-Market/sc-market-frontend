@@ -1,35 +1,9 @@
 import { BACKEND_URL } from "../util/constants"
-import {
-  createApi,
-  fetchBaseQuery,
-  BaseQueryFn,
-  FetchArgs,
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react"
-import { refreshAuth } from "./refreshAuth"
-
-const rawBaseQuery = fetchBaseQuery({
-  baseUrl: `${BACKEND_URL}`,
-  credentials: "include",
-})
-
-const baseQueryWithReauth: BaseQueryFn<
-  string | FetchArgs,
-  unknown,
-  FetchBaseQueryError
-> = async (args, api, extraOptions) => {
-  let result = await rawBaseQuery(args, api, extraOptions)
-  if (result.error?.status === 401) {
-    const refreshed = await refreshAuth()
-    if (refreshed) {
-      result = await rawBaseQuery(args, api, extraOptions)
-    }
-  }
-  return result
-}
+import { createApi } from "@reduxjs/toolkit/query/react"
+import { createBaseQuery } from "./baseQuery"
 
 export const serviceApi = createApi({
-  baseQuery: baseQueryWithReauth,
+  baseQuery: createBaseQuery({ baseUrl: `${BACKEND_URL}`, retry: false }),
   endpoints: (builder) => ({}),
   reducerPath: "serviceApi",
   refetchOnReconnect: true,

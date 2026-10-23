@@ -12,6 +12,12 @@ import {
 } from "./util/monitoring/bugsnagLoader"
 import { clearEmergencyReloadBudget } from "./util/assetReloadGuard"
 import { isPrefetchInFlight } from "./router/routePrefetch"
+import { Provider } from "react-redux"
+import { setupListeners } from "@reduxjs/toolkit/query"
+import { makeStore } from "./store/store"
+import { browserNetworkEnv } from "./store/browserNetworkEnv"
+import { loadProfileCache } from "./features/profile/profileCache"
+import { userApi } from "./features/profile/api/profileApi"
 
 // Handle failed dynamic import()s. vite:preloadError is Vite's typed,
 // cross-browser signal for a failed dynamic import — the robust way to detect a
@@ -35,6 +41,25 @@ window.addEventListener("vite:preloadError", (event) => {
     event.preventDefault()
   }
 })
+
+// The browser's single store. Browser-only side effects live here, not in
+// makeStore(), so a server render can create clean per-request stores.
+const store = makeStore({ networkEnv: browserNetworkEnv })
+
+setupListeners(store.dispatch)
+
+// Seed profile cache from localStorage (prevents logged-out flash),
+// then invalidate so the next subscription triggers a network fetch.
+const cachedProfile = loadProfileCache()
+if (cachedProfile) {
+  store.dispatch(
+    userApi.util.upsertQueryData("profileGetUserProfile", undefined, cachedProfile),
+  )
+  // Mark stale so useGetUserProfileQuery refetches on mount
+  setTimeout(() => {
+    store.dispatch(userApi.util.invalidateTags(["MyProfile"]))
+  }, 0)
+}
 
 const container = document.getElementById("root")
 const root = createRoot(container!)
@@ -80,11 +105,13 @@ initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "").catch(
 
 root.render(
   <React.StrictMode>
-    <UnheadProvider head={head}>
-      <ErrorBoundary>
-        <App />
-      </ErrorBoundary>
-    </UnheadProvider>
+    <Provider store={store}>
+      <UnheadProvider head={head}>
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
+      </UnheadProvider>
+    </Provider>
   </React.StrictMode>,
 )
 

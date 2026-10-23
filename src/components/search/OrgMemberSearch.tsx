@@ -12,7 +12,7 @@ import type { SxProps } from "@mui/system"
 import { useTranslation } from "react-i18next"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { contractorsApi } from "../../features/contractor/api/contractorApi"
-import { store } from "../../store/store"
+import { useAppDispatch } from "../../store/hooks"
 import throttle from "lodash/throttle"
 
 interface OrgMember {
@@ -43,6 +43,7 @@ export function OrgMemberSearch({
   sx,
 }: OrgMemberSearchProps) {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const [currentOrg] = useCurrentOrg()
   const [query, setQuery] = useState("")
   const [options, setOptions] = useState<OrgMember[]>([])
@@ -59,7 +60,7 @@ export function OrgMemberSearch({
       // Show options even with empty search
       setLoading(true)
       try {
-        const { data } = await store.dispatch(
+        const { data } = await dispatch(
           contractorsApi.endpoints.searchContractorMembers.initiate({
             spectrum_id: currentOrg.spectrum_id,
             query: searchQuery || "",
@@ -73,7 +74,7 @@ export function OrgMemberSearch({
         setLoading(false)
       }
     },
-    [currentOrg?.spectrum_id],
+    [currentOrg?.spectrum_id, dispatch],
   )
 
   const throttledSearch = React.useMemo(

@@ -3,7 +3,7 @@ import { useGetContractorMembersQuery, contractorsApi } from "../../contractor/a
 import { useAssignOrderMutation, useUnassignOrderMutation } from "../api/ordersApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
-import { store } from "../../../store/store"
+import { useAppDispatch } from "../../../store/hooks"
 import type { MinimalUser } from "../../../datatypes/User"
 import throttle from "lodash/throttle"
 
@@ -16,6 +16,7 @@ export function useMemberAssign(orderId: string, contractorId: string | undefine
   const [options, setOptions] = useState<MinimalUser[]>([])
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
+  const dispatch = useAppDispatch()
 
   const { data: membersData } = useGetContractorMembersQuery({
     spectrum_id: contractorId || "",
@@ -31,7 +32,7 @@ export function useMemberAssign(orderId: string, contractorId: string | undefine
   const fetchOptions = useCallback(
     async (query: string) => {
       if (query.length < 3 || !contractorId) return
-      const { data } = await store.dispatch(
+      const { data } = await dispatch(
         contractorsApi.endpoints.searchContractorMembers.initiate({
           spectrum_id: contractorId,
           query,
@@ -39,7 +40,7 @@ export function useMemberAssign(orderId: string, contractorId: string | undefine
       )
       setOptions(data || [])
     },
-    [contractorId],
+    [contractorId, dispatch],
   )
 
   const retrieve = useMemo(

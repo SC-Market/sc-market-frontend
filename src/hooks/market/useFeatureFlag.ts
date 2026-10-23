@@ -14,7 +14,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { store } from "../../store/store"
+import { useAppDispatch } from "../../store/hooks"
 import { marketV2Api } from "../../store/api/v2/market"
 
 export type MarketVersion = "V1" | "V2"
@@ -60,6 +60,7 @@ function readLocalMarketVersion(): MarketVersion {
 }
 
 export function useFeatureFlag(): UseFeatureFlagReturn {
+  const dispatch = useAppDispatch()
   const { data: profile } = useGetUserProfileQuery()
   const [flags, setFlags] = useState<FeatureFlags>(readStoredFlags)
   const [overriddenFlags, setOverriddenFlags] = useState<string[]>([])
@@ -80,7 +81,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
 
     const sync = async () => {
       try {
-        const result = await store.dispatch(
+        const result = await dispatch(
           marketV2Api.endpoints.getFeatureFlag.initiate(),
         )
         if (cancelled) return
@@ -123,7 +124,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
 
     void sync()
     return () => { cancelled = true }
-  }, [profile?.username])
+  }, [profile?.username, dispatch])
 
   const marketVersion: MarketVersion = flags.market_v2 ? "V2" : "V1"
 
@@ -131,7 +132,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
     async (version: MarketVersion) => {
       try {
         setError(null)
-        await store.dispatch(
+        await dispatch(
           marketV2Api.endpoints.setFeatureFlag.initiate({
             setFeatureFlagRequest: { market_version: version },
           }),
@@ -144,14 +145,14 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
         setError(err instanceof Error ? err : new Error("Failed to set feature flag"))
       }
     },
-    [flags],
+    [flags, dispatch],
   )
 
   const setFlag = useCallback(
     async (flagName: string, enabled: boolean) => {
       try {
         setError(null)
-        await store.dispatch(
+        await dispatch(
           marketV2Api.endpoints.setFeatureFlag.initiate({
             setFeatureFlagRequest: { flag_name: flagName, enabled },
           }),
@@ -167,7 +168,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
         setError(err instanceof Error ? err : new Error("Failed to set flag"))
       }
     },
-    [flags],
+    [flags, dispatch],
   )
 
   return {

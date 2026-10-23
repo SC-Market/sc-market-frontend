@@ -19,9 +19,11 @@ vi.mock("../../../features/profile/api/profileApi", () => ({
 let serverResponse: unknown = { data: undefined }
 const dispatch = vi.fn(() => Promise.resolve(serverResponse))
 
-vi.mock("../../../store/store", () => ({
-  store: { dispatch: () => dispatch() },
-}))
+vi.mock("../../../store/hooks", () => {
+  // Stable identity, like react-redux's dispatch, so effects keyed on it don't re-run.
+  const stableDispatch = () => dispatch()
+  return { useAppDispatch: () => stableDispatch }
+})
 vi.mock("../../../store/api/v2/market", () => ({
   marketV2Api: {
     endpoints: {

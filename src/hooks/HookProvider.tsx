@@ -22,8 +22,7 @@ import { lightTheme, mainTheme } from "./styles/Theme"
 import { CLEAN_theme } from "./styles/themes/CLEAN"
 import { CLEAN_DARK_theme } from "./styles/themes/CLEAN_DARK"
 import { CurrentOrgProvider } from "./login/CurrentOrg"
-import { Provider } from "react-redux"
-import { store } from "../store/store"
+import { useAppDispatch } from "../store/hooks"
 import { AlertInterface } from "../datatypes/Alert"
 import { AlertHookContext } from "./alert/AlertHook"
 import { ServiceSearchContext } from "../features/contracting/hooks/ServiceSearch"
@@ -57,6 +56,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   )
   const location = useLocation()
   const { i18n } = useTranslation()
+  const dispatch = useAppDispatch()
 
   const mightBeCustomTheme =
     useLightTheme !== "light" &&
@@ -114,7 +114,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     async function resolveAndFetchTheme() {
       try {
         // Step 1: Resolve domain → spectrum_id
-        const domainResult = await store.dispatch(
+        const domainResult = await dispatch(
           contractorsApi.endpoints.resolveDomain.initiate(hostname),
         )
         if (!domainResult.data?.data) return
@@ -123,7 +123,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
         cacheDomainOrg(domainResult.data.data)
 
         // Step 2: Fetch org theme
-        const themeResult = await store.dispatch(
+        const themeResult = await dispatch(
           contractorsApi.endpoints.getOrgTheme.initiate(spectrum_id),
         )
         if (!themeResult.data) return
@@ -142,7 +142,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
 
         // Step 5: Fetch sidebar config for tab filtering + custom tabs
         try {
-          const sidebarResult = await store.dispatch(
+          const sidebarResult = await dispatch(
             contractorsApi.endpoints.getWhitelabelSidebar.initiate(spectrum_id),
           )
           if (sidebarResult.data) {
@@ -156,7 +156,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     }
 
     resolveAndFetchTheme()
-  }, [resolvedMode])
+  }, [resolvedMode, dispatch])
 
   // Build a localized theme when language changes
   const [localizedTheme, setLocalizedTheme] = useState(() =>
@@ -298,7 +298,6 @@ export function HookProvider(props: { children: React.ReactElement }) {
 
   return (
     <CookiesProvider>
-    <Provider store={store}>
       <ThemeProviderWrapper>
         <AlertHookContext.Provider value={[alert, issueAlert]}>
           <CurrentOrgProvider>
@@ -339,7 +338,6 @@ export function HookProvider(props: { children: React.ReactElement }) {
           </CurrentOrgProvider>
         </AlertHookContext.Provider>
       </ThemeProviderWrapper>
-    </Provider>
     </CookiesProvider>
   )
 }

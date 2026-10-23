@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { has_permission } from "../../contractor/domain/permissions"
 import { detectOfferChanges } from "../../../util/offerChanges"
-import { store } from "../../../store/store"
+import { useAppDispatch } from "../../../store/hooks"
 import type { MinimalUser } from "../../../datatypes/User"
 import { ORDER_PATHS } from "../../../routes/paths"
 
@@ -25,6 +25,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
 
   const { data: contractorData } = useGetContractorBySpectrumIDQuery(
     session.contractor?.spectrum_id!, { skip: !session.contractor?.spectrum_id },
@@ -51,11 +52,11 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
 
   const fetchOptions = useCallback(async (query: string) => {
     if (query.length < 3 || !session.contractor?.spectrum_id) return
-    const { data } = await store.dispatch(
+    const { data } = await dispatch(
       contractorsApi.endpoints.searchContractorMembers.initiate({ spectrum_id: session.contractor.spectrum_id, query }),
     )
     setOptions(data || [])
-  }, [session.contractor?.spectrum_id])
+  }, [session.contractor?.spectrum_id, dispatch])
 
   const retrieve = useMemo(() => throttle((query: string) => fetchOptions(query), 400), [fetchOptions])
   useEffect(() => { retrieve(target) }, [target, retrieve])

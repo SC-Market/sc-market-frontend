@@ -1,6 +1,7 @@
 import { vi } from "vitest"
 import { describe, it, expect, beforeEach } from "vitest"
 import type { Reducer } from "@reduxjs/toolkit"
+import type { AppStore } from "../store"
 
 // Mock reducer
 const mockReducer: Reducer = (state = {}, action: any) => state
@@ -25,7 +26,7 @@ vi.mock("../reducerInjection", () => {
     registerLazyReducer: (key: string, lazyReducer: any) => {
       lazyReducerRegistry[key] = lazyReducer
     },
-    injectReducer: async (key: string) => {
+    injectReducer: async (_store: unknown, key: string) => {
       if (loadedReducers[key]) {
         return
       }
@@ -45,9 +46,9 @@ vi.mock("../reducerInjection", () => {
         console.error(`Failed to load reducer for key ${key}:`, error)
       }
     },
-    injectReducers: async (keys: string[]) => {
+    injectReducers: async (store: AppStore, keys: string[]) => {
       const { injectReducer } = await import("../reducerInjection")
-      const loadPromises = keys.map((key: string) => injectReducer(key))
+      const loadPromises = keys.map((key: string) => injectReducer(store, key))
       await Promise.allSettled(loadPromises)
     },
     isReducerLoaded: (key: string) => key in loadedReducers,
@@ -68,6 +69,9 @@ import {
   getLoadedReducerKeys,
   clearReducerCache,
 } from "../reducerInjection"
+
+// The mocked module never touches the store.
+const store = {} as AppStore
 
 describe("reducerInjection", () => {
   beforeEach(() => {
@@ -90,7 +94,7 @@ describe("reducerInjection", () => {
       const lazyReducer = mockLazyReducers.test
       registerLazyReducer("test", lazyReducer)
 
-      await injectReducer("test")
+      await injectReducer(store, "test")
 
       expect(lazyReducer).toHaveBeenCalledTimes(1)
       expect(isReducerLoaded("test")).toBe(true)
@@ -100,8 +104,8 @@ describe("reducerInjection", () => {
       const lazyReducer = mockLazyReducers.test
       registerLazyReducer("test", lazyReducer)
 
-      await injectReducer("test")
-      await injectReducer("test")
+      await injectReducer(store, "test")
+      await injectReducer(store, "test")
 
       expect(lazyReducer).toHaveBeenCalledTimes(1)
     })
@@ -109,7 +113,7 @@ describe("reducerInjection", () => {
     it("should handle unregistered reducers gracefully", async () => {
       const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
 
-      await injectReducer("unregistered")
+      await injectReducer(store, "unregistered")
 
       expect(consoleSpy).toHaveBeenCalledWith(
         "No lazy reducer registered for key: unregistered",
@@ -125,7 +129,7 @@ describe("reducerInjection", () => {
 
       const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {})
 
-      await injectReducer("error-reducer")
+      await injectReducer(store, "error-reducer")
 
       expect(consoleSpy).toHaveBeenCalledWith(
         "Failed to load reducer for key error-reducer:",
@@ -144,7 +148,7 @@ describe("reducerInjection", () => {
       registerLazyReducer("test1", lazyReducer1)
       registerLazyReducer("test2", lazyReducer2)
 
-      await injectReducers(["test1", "test2"])
+      await injectReducers(store, ["test1", "test2"])
 
       expect(lazyReducer1).toHaveBeenCalledTimes(1)
       expect(lazyReducer2).toHaveBeenCalledTimes(1)
@@ -156,7 +160,7 @@ describe("reducerInjection", () => {
       const lazyReducer = mockLazyReducers.valid
       registerLazyReducer("valid", lazyReducer)
 
-      await injectReducers(["valid", "invalid"])
+      await injectReducers(store, ["valid", "invalid"])
 
       expect(lazyReducer).toHaveBeenCalledTimes(1)
       expect(isReducerLoaded("valid")).toBe(true)
@@ -169,7 +173,7 @@ describe("reducerInjection", () => {
       const lazyReducer = () => Promise.resolve({ default: mockReducer })
       registerLazyReducer("test", lazyReducer)
 
-      await injectReducer("test")
+      await injectReducer(store, "test")
 
       expect(isReducerLoaded("test")).toBe(true)
     })
@@ -191,7 +195,7 @@ describe("reducerInjection", () => {
       registerLazyReducer("test1", lazyReducer1)
       registerLazyReducer("test2", lazyReducer2)
 
-      await injectReducers(["test1", "test2"])
+      await injectReducers(store, ["test1", "test2"])
 
       const keys = getLoadedReducerKeys()
       expect(keys).toContain("test1")
@@ -205,7 +209,7 @@ describe("reducerInjection", () => {
       const lazyReducer = () => Promise.resolve({ default: mockReducer })
       registerLazyReducer("test", lazyReducer)
 
-      await injectReducer("test")
+      await injectReducer(store, "test")
       expect(isReducerLoaded("test")).toBe(true)
 
       clearReducerCache()

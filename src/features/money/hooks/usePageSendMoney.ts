@@ -4,7 +4,7 @@ import type { Contractor } from "../../contractor/domain/types"
 import throttle from "lodash/throttle"
 import { useCreateTransaction } from "../api/transactionsApi"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
-import { store } from "../../../store/store"
+import { useAppDispatch } from "../../../store/hooks"
 import { userApi } from "../../profile/api/profileApi"
 import { contractorsApi } from "../../../store/api/contractors"
 
@@ -15,6 +15,7 @@ export type RecipientType = "user" | "contractor"
  * Manages recipient search, form state, and transaction creation
  */
 export function usePageSendMoney(isOrgTransaction: boolean = false) {
+  const dispatch = useAppDispatch()
   const [currentOrg] = useCurrentOrg()
   const [recipientType, setRecipientType] = useState<RecipientType>("user")
   const [options, setOptions] = useState<(User | Contractor)[]>([])
@@ -42,7 +43,7 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
           ? userApi.endpoints.profileSearchUsers.initiate(query)
           : contractorsApi.endpoints.searchContractors.initiate({ query })
 
-      const dispatchResult = store.dispatch(endpoint as ReturnType<typeof userApi.endpoints.profileSearchUsers.initiate>)
+      const dispatchResult = dispatch(endpoint as ReturnType<typeof userApi.endpoints.profileSearchUsers.initiate>)
       dispatchResult
         .then((result: { data?: User[] | Contractor[] }) => {
           const data = result.data
@@ -56,7 +57,7 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
           setOptions([])
         })
     },
-    [recipientType],
+    [recipientType, dispatch],
   )
 
   const retrieve = useMemo(
