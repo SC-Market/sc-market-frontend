@@ -10,9 +10,18 @@ const NAME_TO_INDEX = new Map([
   ["order", 4],
 ])
 
+export const SHOP_LISTINGS_TAB = 0
+/** Page size of the listings tab (ShopListingsTab and its data prefetch). */
+export const SHOP_LISTINGS_PAGE_SIZE = 24
+
+/** Tab index for the `:tab` route param; unknown names fall back to listings. */
+export function shopTabIndex(tab: string | undefined): number {
+  return NAME_TO_INDEX.get(tab || "") ?? SHOP_LISTINGS_TAB
+}
+
 export function useShopTab() {
   const { tab } = useParams<{ tab?: string }>()
-  const page = useMemo(() => NAME_TO_INDEX.get(tab || "") ?? 0, [tab])
+  const page = useMemo(() => shopTabIndex(tab), [tab])
 
   return page
 }

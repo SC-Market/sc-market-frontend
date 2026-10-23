@@ -44,6 +44,7 @@ import { Contractor, ContractorRole } from "../../features/contractor/domain/typ
 import { useMemberActions } from "../../features/contractor/hooks/useMemberActions"
 import { has_permission } from "../../features/contractor/domain/permissions"
 import { useGetContractorMembersQuery } from "../../features/contractor/api/contractorApi"
+import { MEMBER_LIST_PAGE_SIZE } from "../../features/contractor/domain/constants"
 import { USER_PATHS } from "../../routes/paths"
 
 function PeopleRow(props: {
@@ -217,7 +218,7 @@ export function MemberList(props: { contractor: Contractor }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [page, setPage] = useState(0)
-  const [pageSize, setPageSize] = useState(50)
+  const [pageSize, setPageSize] = useState(MEMBER_LIST_PAGE_SIZE)
   const [searchQuery, setSearchQuery] = useState("")
   const [roleFilter, setRoleFilter] = useState("any")
 

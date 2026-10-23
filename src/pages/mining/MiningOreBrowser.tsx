@@ -23,6 +23,7 @@ import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
 import { GAME_DATA_PATHS } from "../../routes/paths"
+import { MINING_ORE_PAGE_SIZE } from "./constants"
 
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e",
@@ -36,7 +37,7 @@ function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
-const PAGE_SIZE = 24
+const PAGE_SIZE = MINING_ORE_PAGE_SIZE
 const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 
 export function MiningOreBrowser() {
@@ -148,7 +149,7 @@ export function MiningOreBrowser() {
 function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }) {
   const rarityColor = RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
   const displayName = ore.displayName || friendlyName(ore.name)
-  const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/ores/:name")
+  const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/ores/:name", GAME_DATA_PATHS.miningOre(ore.name))
 
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column", borderLeft: `3px solid ${rarityColor}` }}

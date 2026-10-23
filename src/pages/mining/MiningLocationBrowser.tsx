@@ -22,12 +22,13 @@ import { UnifiedSearchBar, locationTokensToParams, locationParamsToTokens, type 
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
 import { GAME_DATA_PATHS } from "../../routes/paths"
+import { MINING_LOCATION_PAGE_SIZE } from "./constants"
 
 function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
-const PAGE_SIZE = 24
+const PAGE_SIZE = MINING_LOCATION_PAGE_SIZE
 const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 
 import { RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/icons-material"
@@ -166,7 +167,7 @@ function systemChipColor(system: string): string {
 function LocationCard({ location, onClick }: { location: LocationSearchResult; onClick: () => void }) {
   const displayName = location.displayName || friendlyName(location.name)
   const systemDisplay = location.system || ""
-  const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/locations/:name")
+  const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/locations/:name", GAME_DATA_PATHS.miningLocation(location.name))
 
   // topOres is string[] from the search endpoint
   const hasTopOres = (location.groups || []).some((g) => (g.topOres || []).length > 0)
