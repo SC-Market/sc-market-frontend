@@ -29,8 +29,12 @@ Running the project is simple and can be done with
 npm run dev
 ```
 
-You can ensure your changes build with
+Before pushing, make sure your changes type-check, pass the tests, and build:
 
 ```shell
-npm run build && npm run check
+npm run check && npm test && npm run build
 ```
+
+CI runs the same steps on every push to `main` (`.github/workflows/ci.yml`). It
+doesn't block Cloudflare Pages deploys, so a red check means a broken `main` is
+already live — fix it promptly.
