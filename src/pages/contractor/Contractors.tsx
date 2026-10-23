@@ -18,6 +18,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyContractors } from "../../components/empty-states"
 import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
 import { usePageContractors } from "../../features/contractor/hooks/usePageContractors"
+import { contractorsSeoText } from "../../seo/hubHeads"
 
 export function Contractors() {
   const { t } = useTranslation()
@@ -71,7 +72,7 @@ export function Contractors() {
 
   return (
     <SidebarPageLayout
-      title={t("contractorsPage.title")}
+      title={contractorsSeoText(t).title}
       headerTitle={t("contractorsPage.title")}
       sidebar={
         <ContractorSidebarContext.Provider

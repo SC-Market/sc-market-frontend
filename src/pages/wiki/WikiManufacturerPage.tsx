@@ -17,7 +17,9 @@ import {
   Divider,
   Box,
 } from "@mui/material"
-import { Helmet } from "@unhead/react/helmet"
+import { SeoHead } from "../../seo/SeoHead"
+import { buildManufacturerHead, manufacturerDisplayName } from "../../seo/gameDataHeads"
+import { headDescription } from "../../seo/pageHead"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetManufacturerDetailQuery } from "../../store/api/v2/market"
@@ -36,23 +38,21 @@ export function WikiManufacturerPage() {
     navigate(WIKI_PATHS.item(itemId))
   }
 
-  const seoTitle = manufacturer
-    ? `${manufacturer.manufacturer} — Star Citizen Manufacturer | SC Market`
-    : t("wiki.manufacturerDetail.title", "Manufacturer Details")
-  const seoDescription = manufacturer
-    ? `${manufacturer.manufacturer} manufactures ${manufacturer.item_count} items in Star Citizen. Browse their full product catalog on SC Market.`.slice(0, 160)
-    : undefined
+  const head = manufacturer ? buildManufacturerHead(manufacturer, id!, FRONTEND_URL) : null
+  const seoTitle = head?.title ?? t("wiki.manufacturerDetail.title", "Manufacturer Details")
+  const seoDescription = head ? headDescription(head) : undefined
+  const displayName = manufacturer ? manufacturerDisplayName(manufacturer) : undefined
 
   return (
     <StandardPageLayout
       title={seoTitle}
       description={seoDescription}
       canonicalUrl={WIKI_PATHS.manufacturer(id!)}
-      headerTitle={manufacturer?.manufacturer ?? t("wiki.manufacturerDetail.title", "Manufacturer Details")}
+      headerTitle={displayName ?? t("wiki.manufacturerDetail.title", "Manufacturer Details")}
       breadcrumbs={[
         { label: t("wiki.manufacturerDetail.breadcrumbWiki", "Wiki"), href: WIKI_PATHS.hub },
         { label: t("wiki.manufacturerDetail.breadcrumbManufacturers", "Manufacturers"), href: WIKI_PATHS.manufacturers },
-        { label: manufacturer?.manufacturer ?? t("wiki.manufacturerDetail.breadcrumbDetail", "Detail") },
+        { label: displayName ?? t("wiki.manufacturerDetail.breadcrumbDetail", "Detail") },
       ]}
       sidebarOpen={true}
       maxWidth="md"
@@ -62,14 +62,7 @@ export function WikiManufacturerPage() {
     >
       {manufacturer && (
       <Grid item xs={12}>
-        <Helmet>
-          <title>{seoTitle}</title>
-          {seoDescription && <meta name="description" content={seoDescription} />}
-          <link rel="canonical" href={`${FRONTEND_URL}/wiki/manufacturers/${id}`} />
-          <meta property="og:title" content={seoTitle} />
-          {seoDescription && <meta property="og:description" content={seoDescription} />}
-          <meta property="og:url" content={`${FRONTEND_URL}/wiki/manufacturers/${id}`} />
-        </Helmet>
+        {head && <SeoHead head={head} />}
         <Card sx={{ mb: 3 }}>
           <CardContent>
             {manufacturer.description && (

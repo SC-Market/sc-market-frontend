@@ -17,6 +17,7 @@ import { useBrowseShopsQuery } from "../../../store/api/v2/market"
 import { useDebounce } from "../../../hooks/useDebounce"
 import { ShopCard } from "./ShopCard"
 import { FRONTEND_URL } from "../../../util/constants"
+import { shopDirectorySeoText } from "../../../seo/hubHeads"
 
 const SHOP_TAGS = [
   "Weapons",
@@ -66,15 +67,10 @@ export function ShopDirectory() {
 
   const totalPages = data ? Math.ceil(data.total / pageSize) : 0
 
-  const pageTitle = useMemo(() => {
-    const tag = selectedTag || "All"
-    return `${tag} Shops — Star Citizen Marketplace | SC Market`
-  }, [selectedTag])
-
-  const pageDescription = useMemo(() => {
-    const count = data?.total ?? ""
-    return `Browse ${count} verified Star Citizen shops. Compare ratings, listings, and specialties.`
-  }, [data?.total])
+  const { title: pageTitle, description: pageDescription } = useMemo(
+    () => shopDirectorySeoText(selectedTag, data?.total),
+    [selectedTag, data?.total],
+  )
 
   const handleTagToggle = (tag: string) => {
     setSelectedTag((prev) => (prev === tag ? null : tag))

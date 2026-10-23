@@ -1,6 +1,12 @@
 // @vitest-environment node
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { API_TIMEOUT_MS, handleBridgeRequest, type BridgeRuntime } from "../handler"
+import headersFile from "../../../public/_headers?raw"
+import {
+  API_TIMEOUT_MS,
+  handleBridgeRequest,
+  HOME_LINK_HEADER,
+  type BridgeRuntime,
+} from "../handler"
 import type { HtmlRewriterLike } from "../render"
 import * as f from "./fixtures"
 
@@ -178,7 +184,7 @@ describe("handleBridgeRequest", () => {
     expect(fetchSpy).toHaveBeenCalledTimes(2)
   })
 
-  it.each(["/market/cart", "/market/aggregate/abc--x", "/shops/create", "/market"])(
+  it.each(["/market/cart", "/market/multiple/abc--x/edit", "/shops/create", "/wiki/refinery", "/favicon.ico", "/login"])(
     "leaves %s to Pages (next)",
     async (path) => {
       const { run, next, fetchSpy } = setup(json(f.listing()))
@@ -214,3 +220,61 @@ describe("handleBridgeRequest", () => {
   })
 })
 
+describe("handleBridgeRequest: static pages and hubs", () => {
+  it("renders / without any API call, with the _headers Link header", async () => {
+    const { run, fetchSpy } = setup(json({}))
+    const res = await run("/")
+    expect(res.status).toBe(200)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+    expect(res.headers.get("Cache-Control")).toBe("no-cache")
+    expect(fetchSpy).not.toHaveBeenCalled()
+    expect(headersFile).toContain(`Link: ${HOME_LINK_HEADER}`)
+    expect(res.headers.get("Link")).toBe(HOME_LINK_HEADER)
+  })
+
+  it("renders static pages even without an API origin", async () => {
+    const { run } = setup(json({}), { VITE_BACKEND_URL: undefined })
+    for (const path of ["/", "/wiki", "/wiki/locations"]) {
+      expect((await run(path)).headers.get("X-SCM-Bridge"), path).toBe("page")
+    }
+  })
+
+  it("only sets Link on /", async () => {
+    const { run } = setup(json(f.wikiItems(3)))
+    expect((await run("/wiki/items")).headers.get("Link")).toBeNull()
+  })
+
+  it("fetches one bounded list per hub", async () => {
+    const { run, fetchSpy } = setup(json(f.wikiItems(3)))
+    const res = await run("/wiki/items")
+    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+    expect(fetchSpy.mock.calls.map((c) => c[0])).toEqual([
+      `${API}/api/v2/game-data/wiki/items?page=1&page_size=50`,
+    ])
+  })
+
+  it.each([404, 400, 500])("a hub list %i fails open (never a 404 page)", async (status) => {
+    const { run } = setup(json({}, status))
+    const res = await run("/wiki/items")
+    expect(res.status).toBe(200)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("passthrough")
+    expect(await res.text()).toBe(SHELL)
+  })
+
+  it.each(["/market/aggregate/00000000--bogus", "/market/multiple/00000000--bogus", "/wiki/manufacturers/zzbogus"])(
+    "unknown %s → 404 + noindex",
+    async (path) => {
+      const { run } = setup(json({ error: "not found" }, 404))
+      const res = await run(path)
+      expect(res.status).toBe(404)
+      expect(res.headers.get("X-SCM-Bridge")).toBe("notFound")
+    },
+  )
+
+  it("renders an aggregate listing page", async () => {
+    const { run, fetchSpy } = setup(json(f.aggregate()))
+    const res = await run("/market/aggregate/1954c364--medal")
+    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+    expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/api/v2/game-items/1954c364--medal/listings`)
+  })
+})

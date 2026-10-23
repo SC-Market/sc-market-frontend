@@ -57,6 +57,7 @@ import { getMissionIcon, getMissionCategoryColor } from "../../util/gameIcons"
 import { MissionName } from "../../components/game-data/MissionName"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
+import { missionsSeoText } from "../../seo/hubHeads"
 
 const VIEW_MODES = ["list", "grid"] as const
 
@@ -200,15 +201,10 @@ export function MissionSearch() {
   const loadMore = useCallback(() => setPage(p => p + 1), [])
   const sentinelRef = useInfiniteScroll({ hasMore, isLoading: isFetching, onLoadMore: loadMore })
 
-  const pageTitle = useMemo(() => {
-    const cat = category || "All"
-    return `${cat} Missions — Star Citizen Mission Database | SC Market`
-  }, [category])
-
-  const pageDescription = useMemo(() => {
-    const count = data?.total ?? ""
-    return `Browse ${count} Star Citizen missions. Rewards, locations, and difficulty ratings.`
-  }, [data?.total])
+  const { title: pageTitle, description: pageDescription } = useMemo(
+    () => missionsSeoText(category, data?.total),
+    [category, data?.total],
+  )
 
   const handleResetFilters = () => {
     setSearchParams({}, { replace: true })

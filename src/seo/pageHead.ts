@@ -109,3 +109,28 @@ export function faqPageJsonLd(
 export function headDescription(head: PageHead): string {
   return head.meta.find((m) => m.name === "description")?.content ?? ""
 }
+
+/**
+ * The meta description StandardPageLayout renders: the page's own, or a
+ * generic one built from its title.
+ */
+export function layoutDescription(
+  title: string | null | undefined,
+  description: string | undefined,
+): string {
+  return description || `${title || "SC Market"} - SC Market, the Star Citizen marketplace`
+}
+
+/** BreadcrumbList structured data; `url` is absolute. */
+export function breadcrumbJsonLd(items: { name: string; url: string }[]): object {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  }
+}

@@ -17,6 +17,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
 import { PATHS, ORG_PATHS } from "../../routes/paths"
+import { homeSeoText } from "../../seo/siteHeads"
 
 export function LandingPage() {
   const { t } = useTranslation()
@@ -35,9 +36,12 @@ export function LandingPage() {
     return <Navigate to={ORG_PATHS.profile(customOrg)} />
   }
 
+  const seo = homeSeoText(t)
+
   return (
     <StandardPageLayout
-      title={t("landing.title", "SC Market")}
+      title={seo.title}
+      description={seo.description}
       sidebarOpen={true}
       noFooter={true}
       maxWidth={false}

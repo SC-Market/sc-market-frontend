@@ -21,6 +21,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyRecruiting } from "../../components/empty-states"
 import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
 import { usePageRecruiting } from "../../features/recruiting/hooks/usePageRecruiting"
+import { recruitingSeoText } from "../../seo/hubHeads"
 
 export function Recruiting() {
   const { t } = useTranslation()
@@ -94,8 +95,8 @@ export function Recruiting() {
 
   return (
     <SidebarPageLayout
-      title="Star Citizen Recruiting — Find Organizations | SC Market"
-      description="Browse recruiting posts from Star Citizen organizations. Find your next crew."
+      title={recruitingSeoText().title}
+      description={recruitingSeoText().description}
       breadcrumbs={[{ label: t("recruiting_orgs") }]}
       showOrgInBreadcrumbs={true}
       headerTitle={t("recruiting_orgs")}

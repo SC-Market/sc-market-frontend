@@ -13,6 +13,7 @@ import type {
   OreDetailResponse,
   ResourceDetailResponse,
   WikiItemDetail,
+  WikiManufacturerDetail,
   WikiShipDetail,
 } from "../store/api/v2/market"
 import { GAME_DATA_PATHS, WIKI_PATHS } from "../routes/paths"
@@ -417,5 +418,39 @@ export function buildMissionHead(
         }),
       },
     ],
+  }
+}
+
+/** Name the manufacturer page shows: the display name, else the code. */
+export function manufacturerDisplayName(
+  m: Pick<WikiManufacturerDetail, "manufacturer" | "display_name">,
+): string {
+  return m.display_name || m.manufacturer
+}
+
+/**
+ * /wiki/manufacturers/:id (WikiManufacturerPage). The canonical uses the
+ * route param, as the page does.
+ */
+export function buildManufacturerHead(
+  m: Pick<WikiManufacturerDetail, "manufacturer" | "display_name" | "item_count">,
+  routeId: string,
+  origin: string,
+): PageHead {
+  const name = manufacturerDisplayName(m)
+  const title = `${name} — Star Citizen Manufacturer | SC Market`
+  const description = `${name} manufactures ${m.item_count} items in Star Citizen. Browse their full product catalog on SC Market.`.slice(0, 160)
+  const canonical = `${origin}${WIKI_PATHS.manufacturer(routeId)}`
+
+  return {
+    title,
+    canonical,
+    meta: [
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:url", content: canonical },
+    ],
+    jsonLd: [],
   }
 }
