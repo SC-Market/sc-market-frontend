@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect } from "react"
-import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
+import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
 import { Helmet } from "@unhead/react/helmet"
 import { useHead } from "@unhead/react"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
@@ -28,9 +28,10 @@ export function Page(
   // the low-priority route fallback from usePageTitle.
   useHead({ title: props.title ?? "" })
 
+  const { customOrg } = useCustomDomain()
   const { data: customOrgData } = useGetContractorBySpectrumIDQuery(
-    CURRENT_CUSTOM_ORG!,
-    { skip: !CURRENT_CUSTOM_ORG },
+    customOrg!,
+    { skip: !customOrg },
   )
 
   const location = useLocation()
@@ -74,7 +75,7 @@ export function Page(
     )
   }
 
-  return CURRENT_CUSTOM_ORG && customOrgData ? (
+  return customOrg && customOrgData ? (
     <>
       <Helmet>
         <link rel="icon" type="image/png" href={customOrgData.avatar} />

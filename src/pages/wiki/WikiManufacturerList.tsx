@@ -3,7 +3,7 @@
  * specialty category chips, and item/ship counts.
  */
 
-import React, { useState } from "react"
+import React from "react"
 import {
   Box, Card, CardContent, CardActionArea, Grid, Chip, Stack, Table, TableBody,
   TableCell, TableHead, TableRow, Paper, Typography, ToggleButtonGroup, ToggleButton,
@@ -18,6 +18,9 @@ import {
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { WIKI_PATHS } from "../../routes/paths"
+import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
+
+const VIEW_MODES = ["grid", "list"] as const
 
 // Accent color + known specialty metadata per manufacturer code
 const MFR_META: Record<string, { color: string; specialties: string[]; tagline?: string }> = {
@@ -66,8 +69,10 @@ export function WikiManufacturerList() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { data: manufacturers, isLoading, error } = useGetManufacturersQuery()
-  const [viewMode, setViewMode] = useState<"grid" | "list">(
-    () => (localStorage.getItem("wiki-mfr-view") as "grid" | "list") || "grid",
+  const [viewMode, setViewMode] = useLocalStorageState<"grid" | "list">(
+    "wiki-mfr-view",
+    "grid",
+    VIEW_MODES,
   )
 
   const go = (code: string) => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(code)))
@@ -91,7 +96,7 @@ export function WikiManufacturerList() {
             size="small"
             value={viewMode}
             exclusive
-            onChange={(_, v) => { if (v) { setViewMode(v); localStorage.setItem("wiki-mfr-view", v) } }}
+            onChange={(_, v) => { if (v) setViewMode(v) }}
           >
             <ToggleButton value="grid"><GridViewRounded fontSize="small" /></ToggleButton>
             <ToggleButton value="list"><ViewListRounded fontSize="small" /></ToggleButton>

@@ -10,10 +10,19 @@ export interface ServiceWorkerRegistrationState {
   offline: boolean
 }
 
-const registrationState: ServiceWorkerRegistrationState = {
-  registration: null,
-  updateAvailable: false,
-  offline: !navigator.onLine,
+let registrationState: ServiceWorkerRegistrationState | null = null
+
+// Created on first use (not at import) so this module has no browser access at
+// module scope.
+function getState(): ServiceWorkerRegistrationState {
+  if (!registrationState) {
+    registrationState = {
+      registration: null,
+      updateAvailable: false,
+      offline: !navigator.onLine,
+    }
+  }
+  return registrationState
 }
 
 const listeners: Array<(state: ServiceWorkerRegistrationState) => void> = []
@@ -86,7 +95,7 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
           })
         }
 
-        registrationState.registration = registration
+        getState().registration = registration
 
         // Listen for updates
         registration.addEventListener("updatefound", () => {
@@ -99,7 +108,7 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
               navigator.serviceWorker.controller
             ) {
               // New service worker available
-              registrationState.updateAvailable = true
+              getState().updateAvailable = true
               notifyListeners()
             }
           })
@@ -200,7 +209,7 @@ export function unregisterServiceWorker(): Promise<boolean> {
  * Tells the waiting SW to skipWaiting, then reloads once it takes control.
  */
 export function reloadForUpdate(): void {
-  const waiting = registrationState.registration?.waiting
+  const waiting = getState().registration?.waiting
   if (waiting) {
     // Reload once the new SW activates and claims this client
     navigator.serviceWorker.addEventListener("controllerchange", () => {
@@ -216,14 +225,14 @@ export function reloadForUpdate(): void {
  * Check if update is available
  */
 export function isUpdateAvailable(): boolean {
-  return registrationState.updateAvailable
+  return getState().updateAvailable
 }
 
 /**
  * Get current registration state
  */
 export function getRegistrationState(): ServiceWorkerRegistrationState {
-  return { ...registrationState }
+  return { ...getState() }
 }
 
 /**
@@ -234,7 +243,7 @@ export function subscribe(
 ): () => void {
   listeners.push(listener)
   // Immediately call with current state
-  listener(registrationState)
+  listener(getState())
 
   // Return unsubscribe function
   return () => {
@@ -249,7 +258,7 @@ export function subscribe(
  * Notify all listeners of state changes
  */
 function notifyListeners(): void {
-  listeners.forEach((listener) => listener(registrationState))
+  listeners.forEach((listener) => listener(getState()))
 }
 
 /**
@@ -257,7 +266,7 @@ function notifyListeners(): void {
  */
 export function initOnlineDetection(): void {
   const updateOnlineStatus = () => {
-    registrationState.offline = !navigator.onLine
+    getState().offline = !navigator.onLine
     notifyListeners()
   }
 

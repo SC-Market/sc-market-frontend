@@ -21,6 +21,7 @@ import { DebugPanel } from "../market/v2/DebugPanel"
 import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext"
 import { ParticleField } from "../effects/ParticleField"
 import { CommandPalette } from "../command-palette/CommandPalette"
+import { useHydrated } from "../../hooks/ssr/useHydrated"
 
 function NavSidebar() {
   const { flags } = useFeatureFlag()
@@ -34,6 +35,7 @@ export function Root(props: { children: React.ReactNode }) {
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
   const bottomNavHeight = useBottomNavHeight()
+  const hydrated = useHydrated()
 
   // Enable route-based prefetching
   useRoutePrefetch()
@@ -56,7 +58,7 @@ export function Root(props: { children: React.ReactNode }) {
       <SkipNavigation />
       <CookieConsent />
       {/* PWA Components */}
-      {typeof window !== "undefined" && (
+      {hydrated && (
         <>
           {/* OfflineIndicator disabled - offline popup removed */}
           {/* <OfflineIndicator /> */}

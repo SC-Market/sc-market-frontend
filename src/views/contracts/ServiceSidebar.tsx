@@ -83,11 +83,7 @@ export function ServiceSidebar() {
         borderRight: open ? 1 : 0,
         borderColor: open ? theme.palette.outline.main : "transparent",
       }}
-      container={
-        window !== undefined
-          ? () => window.document.getElementById("rootarea")
-          : undefined
-      }
+      container={() => document.getElementById("rootarea")}
     >
       <Box
         sx={{

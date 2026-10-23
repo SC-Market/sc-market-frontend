@@ -2,6 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom"
 import React, { useEffect, useMemo } from "react"
 import LoadingBar from "react-top-loading-bar"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useSession } from "../../hooks/login/useSession"
 import { BACKEND_URL } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
@@ -11,14 +12,21 @@ import { ContractorRole } from "../../features/contractor/domain/types"
 import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 
 export function LoggedInRoute() {
-  // const [profile, setProfile] = useUserProfile()
-  const { data: profile, isLoading, isSuccess } = useGetUserProfileQuery()
+  const session = useSession()
   const location = useLocation()
   const theme = useTheme()
 
-  if (isLoading) {
+  // Full-page redirect to the frontend login page, carrying the current path.
+  useEffect(() => {
+    if (session.status === "anonymous") {
+      window.location.href = `/login?redirect=${encodeURIComponent(location.pathname)}`
+    }
+  }, [session.status, location.pathname])
+
+  if (session.status === "unknown") {
     return <LoadingBar color={theme.palette.primary.main} progress={0.5} />
-  } else if (isSuccess) {
+  } else if (session.status === "authenticated") {
+    const { profile } = session
     if (
       !profile.rsi_confirmed &&
       !["/settings", "/accountlink"].includes(location.pathname)
@@ -33,16 +41,16 @@ export function LoggedInRoute() {
       return <Outlet />
     }
   } else {
-    // Redirect to frontend login page with current path as redirect parameter
-    window.location.href = `/login?redirect=${encodeURIComponent(location.pathname)}`
     return null
   }
 }
 
 export function SiteAdminRoute() {
-  const profile = useGetUserProfileQuery()
+  const session = useSession()
 
-  return profile.isSuccess && profile.data.role === "admin" ? (
+  if (session.status === "unknown") return null
+  return session.status === "authenticated" &&
+    session.profile.role === "admin" ? (
     <Outlet />
   ) : (
     <Navigate to={"/404"} />

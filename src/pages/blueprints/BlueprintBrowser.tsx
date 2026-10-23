@@ -13,6 +13,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from "react"
+import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 import {
   Box,
   Grid,
@@ -71,6 +72,7 @@ import { useShoppingList } from "../../features/wishlists/hooks/WishlistContext"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 
 type ViewMode = "grid" | "list"
+const VIEW_MODES: readonly ViewMode[] = ["grid", "list"]
 
 function CollectionProgressCard() {
   const { data } = useGetUserBlueprintInventoryQuery({ page: 1, pageSize: 1 })
@@ -107,7 +109,7 @@ export function BlueprintBrowser() {
   const isLoggedIn = !!profile
 
   // View mode state
-  const [viewMode, setViewMode] = useState<ViewMode>(() => (localStorage.getItem("bp-view") as ViewMode) || "grid")
+  const [viewMode, setViewMode] = useLocalStorageState<ViewMode>("bp-view", "grid", VIEW_MODES)
 
   // Search and filter state — persisted to URL params
   const [searchParams, setSearchParams] = useSearchParams()
@@ -258,7 +260,6 @@ export function BlueprintBrowser() {
   const handleViewModeChange = (_event: React.MouseEvent<HTMLElement>, newMode: ViewMode | null) => {
     if (newMode !== null) {
       setViewMode(newMode)
-      localStorage.setItem("bp-view", newMode)
     }
   }
 

@@ -1,6 +1,6 @@
 import { SidebarItemProps } from "../types"
 import { has_permission } from "../../../views/contractor/OrgRoles"
-import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../../hooks/contractor/CustomDomain"
+import { getWhiteLabelConfig } from "../../../hooks/contractor/CustomDomain"
 import type { UserProfileState } from "../../../hooks/login/UserProfile"
 import type { Contractor } from "../../../features/contractor/domain/types"
 import React from "react"
@@ -109,17 +109,19 @@ export function getCustomTabs(): SidebarItemProps[] {
  * On white-label domains, also applies the org's sidebar config.
  */
 export function createItemFilter(
+  /** `useSession().profile`: set only when the session is authenticated. */
   profile: UserProfileState | undefined,
-  profileError: unknown,
   currentOrgObj: Contractor | null,
-  shopSlug?: string | null,
+  shopSlug: string | null | undefined,
   /**
    * Resolved flags from useFeatureFlag. This used to read localStorage directly,
    * which bypassed the hook and so saw neither its DEFAULT_FLAGS nor the values
    * it syncs from the server: on a browser with no `feature_flags` key, every
    * flagged item was hidden no matter what the server said.
    */
-  flags: Record<string, boolean> = {},
+  flags: Record<string, boolean>,
+  /** `useCustomDomain().customOrg`: the white-label org, or undefined on the main site. */
+  customOrg: string | undefined,
 ) {
   return (item: SidebarItemProps): boolean => {
     if (item.hidden) {
@@ -138,13 +140,13 @@ export function createItemFilter(
     // Check login requirements
     if (
       (item.logged_in || item.org || item.org_admin || item.site_admin) &&
-      (profileError || !profile)
+      !profile
     ) {
       return false
     }
 
     // Check org context requirements
-    if (item.org === false && (currentOrgObj !== null || CURRENT_CUSTOM_ORG)) {
+    if (item.org === false && (currentOrgObj !== null || customOrg)) {
       return false
     }
 
@@ -177,11 +179,11 @@ export function createItemFilter(
     }
 
     // Check custom org requirements
-    if (CURRENT_CUSTOM_ORG && item.custom === false) {
+    if (customOrg && item.custom === false) {
       return false
     }
 
-    if (!CURRENT_CUSTOM_ORG && item.custom) {
+    if (!customOrg && item.custom) {
       return false
     }
 
@@ -191,7 +193,7 @@ export function createItemFilter(
     }
 
     // Apply org sidebar config on white-label domains
-    if (CURRENT_CUSTOM_ORG && sidebarConfigCache.length > 0 && item.tab_key) {
+    if (customOrg && sidebarConfigCache.length > 0 && item.tab_key) {
       const tabConfig = sidebarConfigCache.find(
         (c) => c.standard_tab_key === item.tab_key,
       )

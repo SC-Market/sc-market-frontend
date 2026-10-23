@@ -67,11 +67,7 @@ export function MessagingSidebar() {
           ),
         },
       }}
-      container={
-        window !== undefined
-          ? () => window.document.getElementById("rootarea")
-          : undefined
-      }
+      container={() => document.getElementById("rootarea")}
     >
       <MessagingSidebarContent />
     </Drawer>

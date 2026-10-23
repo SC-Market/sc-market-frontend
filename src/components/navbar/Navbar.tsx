@@ -17,7 +17,7 @@ import { NotificationsButton } from "./NotificationsButton"
 import { MenuRounded, ShoppingCartRounded } from "@mui/icons-material"
 import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useSession } from "../../hooks/login/useSession"
 import { useTranslation } from "react-i18next"
 import { Stack } from "@mui/system"
 import { Link as RouterLink } from "react-router-dom"
@@ -28,7 +28,7 @@ import { PATHS } from "../../routes/paths"
 
 export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
-  const profile = useGetUserProfileQuery()
+  const { status: sessionStatus } = useSession()
   const [cookies] = useCookies(["cart"])
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
@@ -125,7 +125,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
 
         <Typography sx={{ flexGrow: 1 }}></Typography>
 
-        {profile.data ? (
+        {sessionStatus === "authenticated" ? (
           <React.Fragment>
             <Tooltip title={t("navbar.cart", "Cart")}>
               <HapticIconButton

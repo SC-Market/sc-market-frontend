@@ -10,7 +10,7 @@ import {
 import { ErrorPage } from "../../pages/errors/ErrorPage"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useSession } from "../../hooks/login/useSession"
 import { ORG_PATHS } from "../../routes/paths"
 
 export interface BreadcrumbItem {
@@ -61,7 +61,7 @@ export interface BannerPageLayoutProps {
  * Requirements: 1.1, 1.2, 2.1, 2.2, 7.1, 7.2, 10.1, 10.2
  */
 export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
-  const { data: profile } = useGetUserProfileQuery()
+  const { profile } = useSession()
   const primaryContractor = profile?.contractors?.[0]
   
   const {

@@ -8,14 +8,14 @@ import {
   Typography,
 } from "@mui/material"
 import { useLocation, useNavigate, matchPath } from "react-router-dom"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useSession } from "../../hooks/login/useSession"
 import { useCookies } from "react-cookie"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
-import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
+import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
 import {
   useGetMyShopsQuery,
   useQuickCreateShopMutation,
@@ -37,13 +37,14 @@ export function SidebarActorSelect() {
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
-  const { data: profile } = useGetUserProfileQuery()
+  const { profile } = useSession()
+  const { customOrg } = useCustomDomain()
   const theme = useTheme<ExtendedTheme>()
 
   const [cookies, setCookie] = useCookies(["current_shop_slug"])
 
   // On white-label, don't render
-  if (CURRENT_CUSTOM_ORG) return null
+  if (customOrg) return null
 
   const { data: myShops } = useGetMyShopsQuery(undefined, { skip: !profile })
   const [quickCreateShop] = useQuickCreateShopMutation()

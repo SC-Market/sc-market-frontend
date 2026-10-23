@@ -58,6 +58,9 @@ import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
 import { getMissionIcon, getMissionCategoryColor } from "../../util/gameIcons"
 import { MissionName } from "../../components/game-data/MissionName"
 import { GAME_DATA_PATHS } from "../../routes/paths"
+import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
+
+const VIEW_MODES = ["list", "grid"] as const
 
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 
@@ -131,8 +134,8 @@ export function MissionSearch() {
   const eventOptions: SearchToken[] = useMemo(() =>
     (eventsData?.events || []).map(e => ({ type: "event" as const, label: e.event_name, value: e.event_code })), [eventsData])
 
-  const [viewMode, setViewMode] = useState<"list" | "grid">(() => (localStorage.getItem("missions-view") as "list" | "grid") || "list")
-  const handleViewModeChange = (_: React.MouseEvent<HTMLElement>, v: "list" | "grid" | null) => { if (v) { setViewMode(v); localStorage.setItem("missions-view", v) } }
+  const [viewMode, setViewMode] = useLocalStorageState<"list" | "grid">("missions-view", "list", VIEW_MODES)
+  const handleViewModeChange = (_: React.MouseEvent<HTMLElement>, v: "list" | "grid" | null) => { if (v) setViewMode(v) }
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpen, setFilterOpen] = useState(false)
   const bottomNavHeight = useBottomNavHeight()

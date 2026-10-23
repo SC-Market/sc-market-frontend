@@ -26,7 +26,9 @@ import {
   UnifiedSearchBar, wikiItemsTokensToParams, wikiItemsParamsToTokens, type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
 import { WIKI_PATHS } from "../../routes/paths"
+import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 
+const VIEW_MODES = ["grid", "list"] as const
 const CARD_HEIGHT = 280
 const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
 
@@ -161,8 +163,10 @@ export function WikiItemBrowser() {
   const sizeFilter = searchParams.get("size") || ""
   const gradeFilter = searchParams.get("grade") || ""
 
-  const [viewMode, setViewMode] = useState<"grid" | "list">(
-    () => (localStorage.getItem("wiki-items-view") as "grid" | "list") || "grid",
+  const [viewMode, setViewMode] = useLocalStorageState<"grid" | "list">(
+    "wiki-items-view",
+    "grid",
+    VIEW_MODES,
   )
 
   const searchTokens = useMemo(() => wikiItemsParamsToTokens(searchParams), [searchParams])
@@ -297,7 +301,7 @@ export function WikiItemBrowser() {
               size="small"
               value={viewMode}
               exclusive
-              onChange={(_, v) => { if (v) { setViewMode(v); localStorage.setItem("wiki-items-view", v) } }}
+              onChange={(_, v) => { if (v) setViewMode(v) }}
             >
               <ToggleButton value="grid"><GridViewRounded fontSize="small" /></ToggleButton>
               <ToggleButton value="list"><ViewListRounded fontSize="small" /></ToggleButton>
