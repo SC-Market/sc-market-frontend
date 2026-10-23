@@ -110,14 +110,6 @@ export function ResourceDetail() {
             description: seoDescription,
             url: canonicalUrl,
             category: resource.resource_category,
-            ...(market_price && (market_price.min_price || market_price.max_price) && {
-              offers: {
-                "@type": "AggregateOffer",
-                lowPrice: market_price.min_price,
-                highPrice: market_price.max_price,
-                priceCurrency: "aUEC",
-              },
-            }),
           })}
         </script>
       </Helmet>

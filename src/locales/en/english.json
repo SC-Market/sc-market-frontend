@@ -3943,6 +3943,45 @@
     "user": "User",
     "username": "Username"
   },
+  "seoAnswers": {
+    "commodity": {
+      "cheapest": "The cheapest known place to buy it is {{location}}, at about {{price}}.",
+      "faqBuyA": "{{name}} can be bought at {{locations}}.",
+      "faqBuyQ": "Where can I buy {{name}} in Star Citizen?",
+      "faqMineA": "{{name}} can be mined at {{locations}}.",
+      "faqMineQ": "Where can I mine {{name}} in Star Citizen?",
+      "faqUsesA": "{{name}} is a crafting ingredient for items such as {{items}}.",
+      "faqUsesQ": "What is {{name}} used for in Star Citizen?",
+      "intro": "{{name}} is a Star Citizen commodity in the {{category}} category.",
+      "methods": "It can be obtained by {{methods}}.",
+      "mined": "Known mining locations include {{locations}}.",
+      "price": "Market prices currently range from {{min}} to {{max}}."
+    },
+    "faqTitle": "Common questions",
+    "item": {
+      "intro": "{{name}} is an item in Star Citizen.",
+      "listings": "Players sell it on SC Market for {{min}} to {{max}} (active listings: {{total}}).",
+      "type": "Type: {{type}}."
+    },
+    "methods": {
+      "looting": "looting",
+      "mining": "mining",
+      "purchasing": "purchasing",
+      "salvaging": "salvaging"
+    },
+    "ore": {
+      "best": "Known locations include {{locations}}.",
+      "faqWhereA": "{{name}} can be found at {{locations}}, among other locations.",
+      "faqWhereQ": "Where can I mine {{name}} in Star Citizen?",
+      "intro": "{{name}} is a mineable ore in Star Citizen (rarity: {{rarity}})."
+    },
+    "ship": {
+      "crew": "Maximum crew: {{crew}}.",
+      "intro": "The {{name}} is a ship in Star Citizen.",
+      "length": "Length: {{length}} m.",
+      "role": "Role: {{role}}."
+    }
+  },
   "service_actions": {
     "create_service": "Create Service"
   },

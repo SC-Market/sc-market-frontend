@@ -647,6 +647,45 @@
   "selectMarketListing": {
     "label": "Sélectionner une annonce du marché"
   },
+  "seoAnswers": {
+    "commodity": {
+      "cheapest": "L'endroit connu le moins cher pour l'acheter est {{location}}, à environ {{price}}.",
+      "faqBuyA": "{{name}} s'achète à {{locations}}.",
+      "faqBuyQ": "Où acheter {{name}} dans Star Citizen ?",
+      "faqMineA": "{{name}} se mine à {{locations}}.",
+      "faqMineQ": "Où miner {{name}} dans Star Citizen ?",
+      "faqUsesA": "{{name}} est un ingrédient d'artisanat pour des objets comme {{items}}.",
+      "faqUsesQ": "À quoi sert {{name}} dans Star Citizen ?",
+      "intro": "{{name}} est une marchandise de Star Citizen (catégorie : {{category}}).",
+      "methods": "On peut l'obtenir par {{methods}}.",
+      "mined": "Parmi les lieux de minage connus : {{locations}}.",
+      "price": "Les prix du marché vont actuellement de {{min}} à {{max}}."
+    },
+    "faqTitle": "Questions fréquentes",
+    "item": {
+      "intro": "{{name}} est un objet de Star Citizen.",
+      "listings": "Des joueurs le vendent sur SC Market entre {{min}} et {{max}} (annonces actives : {{total}}).",
+      "type": "Type : {{type}}."
+    },
+    "methods": {
+      "looting": "le pillage",
+      "mining": "le minage",
+      "purchasing": "l'achat",
+      "salvaging": "la récupération"
+    },
+    "ore": {
+      "best": "Parmi les lieux connus : {{locations}}.",
+      "faqWhereA": "On trouve {{name}} notamment à {{locations}}.",
+      "faqWhereQ": "Où miner {{name}} dans Star Citizen ?",
+      "intro": "{{name}} est un minerai exploitable dans Star Citizen (rareté : {{rarity}})."
+    },
+    "ship": {
+      "crew": "Équipage maximum : {{crew}}.",
+      "intro": "Le {{name}} est un vaisseau de Star Citizen.",
+      "length": "Longueur : {{length}} m.",
+      "role": "Rôle : {{role}}."
+    }
+  },
   "settings": {
     "title": "Paramètres",
     "tabs": {

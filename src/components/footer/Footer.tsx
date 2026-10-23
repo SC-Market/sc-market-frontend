@@ -40,7 +40,7 @@ export function Footer() {
                   "SC Market is the Star Citizen marketplace where players buy, sell, and trade in-game items and hire orgs for services like hauling, escort, medical, and salvage — all in aUEC.",
                 sameAs: [
                   "https://discord.gg/scmarket",
-                  "https://github.com/henry232323/sc-market",
+                  "https://github.com/SC-Market",
                 ],
               },
               {

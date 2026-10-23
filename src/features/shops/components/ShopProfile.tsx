@@ -110,6 +110,7 @@ export function ShopProfile() {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Store",
+            "@id": `${canonicalUrl}#store`,
             name: shop.name,
             description: shop.description,
             url: canonicalUrl,

@@ -592,6 +592,45 @@
   "selectMarketListing": {
     "label": "選擇市集商品頁"
   },
+  "seoAnswers": {
+    "commodity": {
+      "cheapest": "已知最便宜的購買地點是{{location}}，約{{price}}。",
+      "faqBuyA": "可以在{{locations}}購買{{name}}。",
+      "faqBuyQ": "在《星際公民》中哪裡可以買到{{name}}？",
+      "faqMineA": "可以在{{locations}}開採{{name}}。",
+      "faqMineQ": "在《星際公民》中哪裡可以開採{{name}}？",
+      "faqUsesA": "{{name}}是{{items}}等物品的製作材料。",
+      "faqUsesQ": "{{name}}在《星際公民》中有什麼用途？",
+      "intro": "{{name}}是《星際公民》中的商品（類別：{{category}}）。",
+      "methods": "取得方式：{{methods}}。",
+      "mined": "已知採礦地點包括{{locations}}。",
+      "price": "目前市場價格為{{min}}至{{max}}。"
+    },
+    "faqTitle": "常見問題",
+    "item": {
+      "intro": "{{name}}是《星際公民》中的物品。",
+      "listings": "玩家在 SC Market 上以{{min}}至{{max}}出售（上架數量：{{total}}）。",
+      "type": "類型：{{type}}。"
+    },
+    "methods": {
+      "looting": "搜刮",
+      "mining": "採礦",
+      "purchasing": "購買",
+      "salvaging": "打撈"
+    },
+    "ore": {
+      "best": "已知地點包括{{locations}}。",
+      "faqWhereA": "可以在{{locations}}等地點找到{{name}}。",
+      "faqWhereQ": "在《星際公民》中哪裡可以開採{{name}}？",
+      "intro": "{{name}}是《星際公民》中可開採的礦石（稀有度：{{rarity}}）。"
+    },
+    "ship": {
+      "crew": "最大船員數：{{crew}}。",
+      "intro": "{{name}}是《星際公民》中的一艘艦船。",
+      "length": "長度：{{length}} 公尺。",
+      "role": "定位：{{role}}。"
+    }
+  },
   "settings": {
     "title": "設置",
     "tabs": {

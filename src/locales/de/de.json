@@ -647,6 +647,45 @@
   "selectMarketListing": {
     "label": "Marktangebot auswählen"
   },
+  "seoAnswers": {
+    "commodity": {
+      "cheapest": "Der günstigste bekannte Ort zum Kaufen ist {{location}}, für etwa {{price}}.",
+      "faqBuyA": "{{name}} kann man bei {{locations}} kaufen.",
+      "faqBuyQ": "Wo kann man {{name}} in Star Citizen kaufen?",
+      "faqMineA": "{{name}} kann man bei {{locations}} abbauen.",
+      "faqMineQ": "Wo kann man {{name}} in Star Citizen abbauen?",
+      "faqUsesA": "{{name}} ist eine Crafting-Zutat für Gegenstände wie {{items}}.",
+      "faqUsesQ": "Wofür wird {{name}} in Star Citizen verwendet?",
+      "intro": "{{name}} ist eine Ware in Star Citizen (Kategorie: {{category}}).",
+      "methods": "Man erhält sie durch {{methods}}.",
+      "mined": "Bekannte Abbauorte sind unter anderem {{locations}}.",
+      "price": "Die Marktpreise liegen derzeit zwischen {{min}} und {{max}}."
+    },
+    "faqTitle": "Häufige Fragen",
+    "item": {
+      "intro": "{{name}} ist ein Gegenstand in Star Citizen.",
+      "listings": "Spieler verkaufen ihn auf SC Market für {{min}} bis {{max}} (aktive Angebote: {{total}}).",
+      "type": "Typ: {{type}}."
+    },
+    "methods": {
+      "looting": "Plündern",
+      "mining": "Bergbau",
+      "purchasing": "Kauf",
+      "salvaging": "Bergung"
+    },
+    "ore": {
+      "best": "Bekannte Fundorte sind unter anderem {{locations}}.",
+      "faqWhereA": "{{name}} findet man unter anderem bei {{locations}}.",
+      "faqWhereQ": "Wo kann man {{name}} in Star Citizen abbauen?",
+      "intro": "{{name}} ist ein abbaubares Erz in Star Citizen (Seltenheit: {{rarity}})."
+    },
+    "ship": {
+      "crew": "Maximale Besatzung: {{crew}}.",
+      "intro": "Die {{name}} ist ein Schiff in Star Citizen.",
+      "length": "Länge: {{length}} m.",
+      "role": "Rolle: {{role}}."
+    }
+  },
   "settings": {
     "title": "Einstellungen",
     "tabs": {

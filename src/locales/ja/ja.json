@@ -647,6 +647,45 @@
   "selectMarketListing": {
     "label": "マーケット出品を選択"
   },
+  "seoAnswers": {
+    "commodity": {
+      "cheapest": "最も安く購入できる既知の場所は{{location}}で、約{{price}}です。",
+      "faqBuyA": "{{name}}は{{locations}}で購入できます。",
+      "faqBuyQ": "Star Citizenで{{name}}はどこで買えますか？",
+      "faqMineA": "{{name}}は{{locations}}で採掘できます。",
+      "faqMineQ": "Star Citizenで{{name}}はどこで採掘できますか？",
+      "faqUsesA": "{{name}}は{{items}}などのクラフト素材です。",
+      "faqUsesQ": "Star Citizenで{{name}}は何に使われますか？",
+      "intro": "{{name}}はStar Citizenの商品です（カテゴリ：{{category}}）。",
+      "methods": "入手方法：{{methods}}。",
+      "mined": "既知の採掘場所：{{locations}}など。",
+      "price": "現在の市場価格は{{min}}〜{{max}}です。"
+    },
+    "faqTitle": "よくある質問",
+    "item": {
+      "intro": "{{name}}はStar Citizenのアイテムです。",
+      "listings": "SC Marketではプレイヤーが{{min}}〜{{max}}で販売しています（出品数：{{total}}）。",
+      "type": "種類：{{type}}。"
+    },
+    "methods": {
+      "looting": "略奪",
+      "mining": "採掘",
+      "purchasing": "購入",
+      "salvaging": "サルベージ"
+    },
+    "ore": {
+      "best": "既知の場所：{{locations}}など。",
+      "faqWhereA": "{{name}}は{{locations}}などで見つかります。",
+      "faqWhereQ": "Star Citizenで{{name}}はどこで採掘できますか？",
+      "intro": "{{name}}はStar Citizenで採掘できる鉱石です（レア度：{{rarity}}）。"
+    },
+    "ship": {
+      "crew": "最大乗員数：{{crew}}。",
+      "intro": "{{name}}はStar Citizenの艦船です。",
+      "length": "全長：{{length}} m。",
+      "role": "役割：{{role}}。"
+    }
+  },
   "settings": {
     "title": "設定",
     "tabs": {

@@ -44,6 +44,8 @@ import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHi
 import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
 import { MARKET_PATHS, WIKI_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
+import { AnswerLead } from "../../components/game-data/AnswerSummary"
+import { buildItemSummary } from "../../util/answerContent"
 import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
@@ -113,6 +115,7 @@ export function WikiItemDetail() {
   // by full UUID or short slug, and the sitemap only lists the slug form.
   const canonicalPath = WIKI_PATHS.item(item.id, item.name)
   const canonicalUrl = `${FRONTEND_URL}${canonicalPath}`
+  const answerSummary = buildItemSummary(item, t)
   const ogImage = item.image_url || `${FRONTEND_URL}/logo512.png`
 
   return (
@@ -151,19 +154,11 @@ export function WikiItemDetail() {
             ...(item.image_url && { image: item.image_url }),
             url: canonicalUrl,
             ...(item.manufacturer && { manufacturer: { "@type": "Organization", name: item.manufacturer } }),
-            ...(item.market_stats?.listing_count > 0 && {
-              offers: {
-                "@type": "AggregateOffer",
-                lowPrice: item.market_stats.min_price,
-                highPrice: item.market_stats.max_price,
-                priceCurrency: "aUEC",
-                offerCount: item.market_stats.listing_count,
-              },
-            }),
           })}
         </script>
       </Helmet>
       <Grid item xs={12}>
+        <AnswerLead summary={answerSummary} />
         <Grid container spacing={3}>
           {/* Main Info */}
           <Grid item xs={12} md={8}>
