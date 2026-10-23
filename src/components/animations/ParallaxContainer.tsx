@@ -5,8 +5,8 @@
  */
 
 import React, { ReactNode, useRef, useEffect, useState } from "react"
-import { Box, useMediaQuery, useTheme } from "@mui/material"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { Box } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 
 interface ParallaxContainerProps {
   children: ReactNode
@@ -21,8 +21,7 @@ export function ParallaxContainer({
   disabled = false,
   sx,
 }: ParallaxContainerProps) {
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const containerRef = useRef<HTMLDivElement>(null)
   const [offset, setOffset] = useState(0)
   const [isVisible, setIsVisible] = useState(false)

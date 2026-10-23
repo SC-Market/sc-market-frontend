@@ -5,8 +5,8 @@ import {
   ContainerProps,
   Grid,
   GridProps,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { Footer } from "../footer/Footer"
@@ -29,7 +29,7 @@ export function ContainerGrid(
 ): ReactElement {
   const theme = useTheme<ExtendedTheme>()
   const bottomNavHeight = useBottomNavHeight()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 

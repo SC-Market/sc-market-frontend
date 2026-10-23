@@ -6,9 +6,9 @@ import {
   BottomNavigationAction,
   Paper,
   useTheme,
-  useMediaQuery,
   Box,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import {
   StoreRounded,
   CreateRounded,
@@ -76,7 +76,7 @@ export function MobileBottomNav() {
   const bottomNavHeight = useBottomNavHeight()
 
   // Only show on xs devices (not sm) - check this BEFORE hooks to avoid hook order issues
-  const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
+  const isMobile = useBreakpointDown("sm")
 
   // Bottom nav is hidden when keyboard is open (height is 0)
   const isKeyboardOpen = bottomNavHeight === 0 && isMobile

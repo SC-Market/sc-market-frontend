@@ -6,8 +6,8 @@ import {
   MenuItem,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
 import React, { useEffect, useState } from "react"
@@ -42,7 +42,7 @@ export function ContractSidebar() {
   const [, setSearchState] = useContractSearch()
   const [drawerOpen] = useDrawerOpen()
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
 
   // Always open on desktop (lg and up)
   useEffect(() => {

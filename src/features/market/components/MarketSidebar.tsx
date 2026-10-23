@@ -7,11 +7,11 @@ import {
   MenuItem,
   TextField,
   Typography,
-  useMediaQuery,
   Autocomplete,
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
 import React, { useState, useEffect, useMemo } from "react"
@@ -434,8 +434,7 @@ export function MarketSidebar(props: {
 
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
   const { t } = useTranslation()
 
   // Mobile/Tablet: Use bottom sheet
@@ -462,7 +461,7 @@ export function MarketSidebar(props: {
 export function MarketSideBarToggleButton() {
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
   const bottomNavHeight = useBottomNavHeight()
   const { t } = useTranslation()
 

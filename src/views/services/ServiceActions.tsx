@@ -1,15 +1,13 @@
 import { Link } from "react-router-dom"
-import { Button, Grid, useMediaQuery } from "@mui/material"
+import { Button, Grid } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { CreateRounded } from "@mui/icons-material"
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ServiceActions() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
 
   return (
     <Grid container justifyContent={{ xs: "stretch", sm: "flex-end" }}>

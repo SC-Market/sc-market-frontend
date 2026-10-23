@@ -15,8 +15,8 @@ import {
   MenuItem,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React from "react"
 import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
@@ -42,8 +42,7 @@ function AvailabilityModalWrapper(props: {
   onSave: (selections: boolean[]) => void
   initialSelections: boolean[]
 }) {
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
 
   if (isMobile) {

@@ -6,7 +6,8 @@
  */
 
 import React, { useState } from "react"
-import { Box, Grid, Paper, Typography, useMediaQuery } from "@mui/material"
+import { Box, Grid, Paper, Typography } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../mobile/BottomSheet"
@@ -30,7 +31,7 @@ export function FilterSidebarLayout({
   sidebarWidth = 300,
 }: FilterSidebarLayoutProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
   const [sheetOpen, setSheetOpen] = useState(false)
 
   if (isMobile) {

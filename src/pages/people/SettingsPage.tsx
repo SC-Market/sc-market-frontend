@@ -9,8 +9,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
-import useMediaQuery from "@mui/material/useMediaQuery"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import InfoIcon from "@mui/icons-material/Info"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import React from "react"
@@ -56,8 +55,7 @@ interface NavGroup {
 
 export function SettingsPage() {
   const { t } = useTranslation()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const [page, setPage] = React.useState(0)
 

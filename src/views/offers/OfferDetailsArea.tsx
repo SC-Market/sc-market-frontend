@@ -45,7 +45,7 @@ import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
-import { useMediaQuery } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useOfferDetails } from "../../features/offers/hooks/useOfferDetails"
@@ -105,7 +105,7 @@ export function OfferMessagesArea(props: { session: GetOfferSessionV2Response })
 
 export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; selectedOfferIndex?: number }) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
   const { t, i18n } = useTranslation()
   const { session } = props
 

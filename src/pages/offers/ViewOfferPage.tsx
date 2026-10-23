@@ -4,7 +4,8 @@ import {
   OfferDetailsArea,
   OfferMessagesArea,
 } from "../../views/offers/OfferDetailsArea"
-import { Grid, Skeleton, Tabs, useMediaQuery, useTheme, FormControl, InputLabel, Select, MenuItem, Stack } from "@mui/material"
+import { Grid, Skeleton, Tabs, FormControl, InputLabel, Select, MenuItem, Stack } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferMarketListingsV2Items } from "../../views/offers/OfferMarketListingsV2Items"
@@ -22,8 +23,7 @@ export function ViewOfferPage() {
   const session = data?.session
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [activeTab, setActiveTab] = useState(0)
   const [selectedOfferIndex, setSelectedOfferIndex] = useState(0)
 

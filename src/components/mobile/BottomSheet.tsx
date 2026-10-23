@@ -10,9 +10,9 @@ import {
   IconButton,
   SwipeableDrawer,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { ReactNode, useState, useRef, useEffect } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -46,7 +46,7 @@ export function BottomSheet({
   peekHeight = 120,
 }: BottomSheetProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [currentSnap, setCurrentSnap] = useState<
     "peek" | "half" | "66" | "75" | "full"
   >(defaultSnap)

@@ -11,13 +11,14 @@ import {
   Select,
   Stack,
   Typography,
-  useMediaQuery,
   Fade,
   FormControl,
   InputLabel,
   Alert,
   CircularProgress,
 } from "@mui/material";
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint";
+import { useHydratedInitialState } from "../../../hooks/ssr/useHydratedInitialState";
 import { useTheme } from "@mui/material/styles";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -53,10 +54,9 @@ import { MARKET_PATHS } from "../../../routes/paths";
  * **Validates: Requirements 44.5-44.10**
  */
 export function ContractorListingsV2() {
-  const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useIsMobile();
   const [drawerOpen] = useDrawerOpen();
   const { contractor_id } = useParams<{ contractor_id: string }>();
 
@@ -71,7 +71,7 @@ export function ContractorListingsV2() {
 
   // State for pagination
   const [page, setPage] = useState(0);
-  const [perPage, setPerPage] = useState(isMobile ? 12 : 48);
+  const [perPage, setPerPage] = useHydratedInitialState(isMobile ? 12 : 48);
 
   // Check if user has manage_market permission for this contractor
   const canManageListings = useMemo(() => {

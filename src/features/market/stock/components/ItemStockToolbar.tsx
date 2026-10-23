@@ -11,8 +11,8 @@ import {
   Stack,
   Toolbar,
   Tooltip,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import {
   AddRounded,
   ArchiveOutlined,
@@ -20,10 +20,8 @@ import {
   RadioButtonUncheckedRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { GridRowModes, GridRowModesModel } from "@mui/x-data-grid"
-import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { UniqueListing } from "../../domain/types"
 import { useBatchUpdateMarketListingsMutation } from "../../api/marketApi"
 import { NewListingRow } from "../types"
@@ -46,8 +44,8 @@ export function ItemStockToolbar(props: {
   }
   const [selectionModel] = context
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = props.isMobile ?? useMediaQuery(theme.breakpoints.down("md"))
+  const isMobileViewport = useIsMobile()
+  const isMobile = props.isMobile ?? isMobileViewport
   const issueAlert = useAlertHook()
 
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)

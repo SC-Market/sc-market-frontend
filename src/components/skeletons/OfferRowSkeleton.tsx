@@ -9,7 +9,7 @@ import {
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { useMediaQuery } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 
 export interface OfferRowSkeletonProps {
   index?: number
@@ -21,7 +21,7 @@ export interface OfferRowSkeletonProps {
  */
 export function OfferRowSkeleton({ index = 0 }: OfferRowSkeletonProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
 
   return (
     <TableRow>

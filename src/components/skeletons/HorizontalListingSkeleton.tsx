@@ -5,8 +5,8 @@ import {
   CardContent,
   Box,
   Stack,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme, cardFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
@@ -24,7 +24,7 @@ export function HorizontalListingSkeleton({
   index = 0,
 }: HorizontalListingSkeletonProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   return (
     <ListingWrapper>

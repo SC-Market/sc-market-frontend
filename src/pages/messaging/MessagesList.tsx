@@ -1,5 +1,6 @@
 import React, { useState } from "react"
-import { Box, useMediaQuery, useTheme } from "@mui/material"
+import { Box, useTheme } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import {
   MessagingSidebar,
@@ -18,7 +19,7 @@ import { useTranslation } from "react-i18next"
 export function MessagesList() {
   const [drawerOpen] = useDrawerOpen()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const navigate = useNavigate()
   const { t } = useTranslation()
 

@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useEffect } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
-import { Box, useTheme, useMediaQuery } from "@mui/material"
+import { Box, useTheme } from "@mui/material"
+import { useIsMobile, useBreakpointDown, useBreakpointUp, useBreakpointBetween } from "../../hooks/layout/useBreakpoint"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface VirtualizedGridProps<T> {
@@ -54,13 +55,13 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   } = props
 
   const theme = useTheme<ExtendedTheme>()
-  const isXs = useMediaQuery(theme.breakpoints.down("sm"))
-  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"))
-  const isMd = useMediaQuery(theme.breakpoints.between("md", "lg"))
-  const isLg = useMediaQuery(theme.breakpoints.between("lg", "xl"))
-  const isXl = useMediaQuery(theme.breakpoints.between("xl", "xxl"))
-  const isXxl = useMediaQuery(theme.breakpoints.up("xxl"))
-  const isBelowMd = useMediaQuery(theme.breakpoints.down("md")) // < 900px
+  const isXs = useBreakpointDown("sm")
+  const isSm = useBreakpointBetween("sm", "md")
+  const isMd = useBreakpointBetween("md", "lg")
+  const isLg = useBreakpointBetween("lg", "xl")
+  const isXl = useBreakpointBetween("xl", "xxl")
+  const isXxl = useBreakpointUp("xxl")
+  const isBelowMd = useIsMobile() // < 900px
 
   // Determine number of columns based on breakpoint
   // On medium devices (<900px), ensure 2 columns to prevent layout issues

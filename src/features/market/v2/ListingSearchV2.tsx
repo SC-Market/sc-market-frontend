@@ -6,7 +6,6 @@ import {
   Grid,
   Paper,
   Stack,
-  useMediaQuery,
   Fade,
   Button,
   TextField,
@@ -23,6 +22,7 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material";
+import { useIsMobile, useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
 import { useTheme } from "@mui/material/styles";
 import { isAfter, subDays } from "date-fns";
 import { useNavigate, useSearchParams, Link as RouterLink, useLocation } from "react-router-dom";
@@ -76,8 +76,8 @@ import { GroupedListingGrid } from "./redesign/GroupedListingGrid";
 export function ListingSearchV2() {
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
-  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"));
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const showMobileSidebar = useBreakpointDown("lg");
+  const isMobile = useIsMobile();
   const marketSidebarOpen = useMarketSidebarExp();
   const [drawerOpen] = useDrawerOpen();
   const [viewMode, setViewMode] = useViewMode();

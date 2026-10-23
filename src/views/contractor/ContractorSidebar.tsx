@@ -9,8 +9,8 @@ import {
   Rating,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile, useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
 import React, { useEffect, useState } from "react"
@@ -47,8 +47,8 @@ export function ContractorSidebar() {
   const [, setSearchState] = useContractorSearch()
   const [drawerOpen] = useDrawerOpen()
 
-  const xs = useMediaQuery(theme.breakpoints.down("lg"))
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const xs = useBreakpointDown("lg")
+  const isMobile = useIsMobile()
   useEffect(() => {
     setOpen(!xs)
   }, [setOpen, xs])

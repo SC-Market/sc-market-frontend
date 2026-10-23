@@ -10,12 +10,10 @@ import {
   CardActionArea,
   CardContent,
   Chip,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { useSearchParams, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useSearchOresQuery, type OreSearchResult } from "../../store/api/v2/market"
 import { MiningOreDetailModal } from "./MiningOreDetailModal"
 import { UnifiedSearchBar, miningTokensToParams, miningParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
@@ -42,8 +40,7 @@ const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 
 export function MiningOreBrowser() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
   const navigate = useNavigate()
   const urlParams = useParams<{ name?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()

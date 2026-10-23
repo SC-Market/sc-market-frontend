@@ -15,8 +15,8 @@ import {
   Divider,
   Grid,
   Chip,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTranslation } from "react-i18next"
 import {
   useUpdateTokenMutation,
@@ -166,7 +166,7 @@ export function EditTokenDialog({
 
   const isFormValid = formData.name.trim() && formData.scopes.length > 0
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   if (!token) return null
 

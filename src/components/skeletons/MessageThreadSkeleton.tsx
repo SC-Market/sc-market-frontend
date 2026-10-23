@@ -2,7 +2,7 @@ import { Box, Avatar, Stack, TextField, IconButton } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { useMediaQuery } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import SendIcon from "@mui/icons-material/SendRounded"
 
 export interface MessageThreadSkeletonProps {
@@ -17,7 +17,7 @@ export function MessageThreadSkeleton({
   messageCount = 5,
 }: MessageThreadSkeletonProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   return (
     <Box

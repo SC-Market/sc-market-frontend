@@ -10,9 +10,9 @@ import {
   TextField,
   TextFieldProps,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { useEffect, useRef, useState } from "react"
 import { EditRounded, CheckRounded, CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -43,7 +43,7 @@ export function InlineEdit({
   autoFocus = true,
 }: InlineEditProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(value)
   const [error, setError] = useState<string | null>(null)

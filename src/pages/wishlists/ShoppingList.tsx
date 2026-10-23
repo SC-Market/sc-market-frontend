@@ -32,8 +32,8 @@ import {
   Avatar,
   Grid,
   Divider,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import {
   ArrowBack,
   Download,
@@ -72,7 +72,7 @@ export function ShoppingList() {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   const { wishlist_id } = useParams<{ wishlist_id: string }>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   // Sorting state
   const [sortField, setSortField] = useState<SortField>("name")

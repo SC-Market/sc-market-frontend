@@ -14,14 +14,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  useMediaQuery,
-  useTheme,
   Box,
   IconButton,
   Typography,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { CloseRounded } from "@mui/icons-material"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "./BottomSheet"
 
 interface ResponsiveDialogProps {
@@ -53,8 +51,7 @@ export function ResponsiveDialog({
   fullHeight = false,
   disableBackdropClose = false,
 }: ResponsiveDialogProps) {
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   // Mobile: Use BottomSheet
   if (isMobile) {

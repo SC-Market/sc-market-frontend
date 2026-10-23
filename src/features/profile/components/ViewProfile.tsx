@@ -1,7 +1,8 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { Box, Container, Grid, useMediaQuery } from "@mui/material"
+import { Box, Container, Grid } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
 import { UserReviewSummary } from "../../../views/contractor/OrgReviews"
@@ -20,7 +21,7 @@ import { Stack } from "@mui/system"
 export function ViewProfile(props: { profile: User }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const navigate = useNavigate()
 
   const page = useProfileTab()

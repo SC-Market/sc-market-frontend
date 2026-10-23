@@ -4,9 +4,9 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  useMediaQuery,
   Badge,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, getNavbarContrastText, navbarShadow } from "../../hooks/styles/Theme"
 import React from "react"
@@ -32,7 +32,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
   const [cookies] = useCookies(["cart"])
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const { t } = useTranslation()

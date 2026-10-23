@@ -9,8 +9,8 @@ import {
   Modal,
   Paper,
   TextField,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import React, { useCallback, useEffect, useState } from "react"
 import { Section } from "../../../components/paper/Section"
 import { ContainerGrid } from "../../../components/layout/ContainerGrid"
@@ -19,7 +19,6 @@ import { ExtendedTheme, MISSING_IMAGE_URL } from "../../../hooks/styles/Theme"
 // import { store } from "../../store/store"
 // import throttle from "lodash/throttle"
 // import { transformSearchResults, wikiRestApi } from "../../store/wiki"
-import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 
@@ -32,7 +31,6 @@ export function ImageSearch(props: {
   const [image, setImage] = useState<string | null>(null)
   // const [query, setQuery] = useState<string | null>(null)
   // const [options, setOptions] = useState<string[]>([])
-  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
   // Wiki image search functionality temporarily disabled
@@ -64,7 +62,7 @@ export function ImageSearch(props: {
   //   }
   // }, [query, retrieve])
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   // Content to reuse
   const searchContent = (

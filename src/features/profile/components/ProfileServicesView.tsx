@@ -1,5 +1,6 @@
 import React, { useState } from "react"
-import { Container, Grid, Paper, useMediaQuery, Button } from "@mui/material"
+import { Container, Grid, Paper, Button } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import FilterListIcon from "@mui/icons-material/FilterList"
@@ -14,7 +15,7 @@ export function ProfileServicesView(props: { user: string }) {
   const { user } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const xs = useIsMobile()
   const bottomNavHeight = useBottomNavHeight()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -78,7 +79,7 @@ export function OrgServicesView(props: { org: string }) {
   const { org } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const xs = useIsMobile()
   const bottomNavHeight = useBottomNavHeight()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 

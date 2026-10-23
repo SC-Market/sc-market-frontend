@@ -11,6 +11,8 @@ import {
   responsiveFontSizes,
 } from "@mui/material"
 import { DrawerOpenContext } from "./layout/Drawer"
+import { useBreakpointDown } from "./layout/useBreakpoint"
+import { useHydratedInitialState } from "./ssr/useHydratedInitialState"
 import {
   CurrentChatIDContext,
   CurrentChatMessagesContext,
@@ -206,17 +208,24 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     }
   }, [useLightTheme, setCookie, removeCookie])
 
-  const xs = useMediaQuery(localizedTheme.breakpoints.down("sm"))
-  const drawerWidthState = useState(!xs)
-
   return (
     <LightThemeContext.Provider value={[useLightTheme, setUseLightTheme]}>
       <ThemeProvider theme={localizedTheme}>
-        <DrawerOpenContext.Provider value={drawerWidthState}>
-          {props.children}
-        </DrawerOpenContext.Provider>
+        <DrawerOpenProvider>{props.children}</DrawerOpenProvider>
       </ThemeProvider>
     </LightThemeContext.Provider>
+  )
+}
+
+/** Sidebar drawer state: starts open except on phones. */
+function DrawerOpenProvider(props: { children: React.ReactElement }) {
+  const xs = useBreakpointDown("sm")
+  const drawerOpenState = useHydratedInitialState(!xs)
+
+  return (
+    <DrawerOpenContext.Provider value={drawerOpenState}>
+      {props.children}
+    </DrawerOpenContext.Provider>
   )
 }
 

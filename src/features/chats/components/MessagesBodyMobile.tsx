@@ -10,12 +10,12 @@ import {
   IconButton,
   TextField,
   Typography,
-  useMediaQuery,
   useTheme,
   Chip,
   Stack,
   Button,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { HapticIconButton } from "../../../components/haptic"
 import React, {
   RefObject,
@@ -716,7 +716,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const [sendChatMessage] = useSendChatMessageMutation()
   const { data: profile } = useGetUserProfileQuery()
   const bottomNavHeight = useBottomNavHeight()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   // isKeyboardOpen is derived from bottomNavHeight (0 when keyboard is open)
   const isKeyboardOpen = bottomNavHeight === 0 && isMobile
   const inputAreaRef = useRef<HTMLDivElement>(null)

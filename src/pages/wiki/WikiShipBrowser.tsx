@@ -10,8 +10,9 @@
 import React, { useMemo, useCallback, useState } from "react"
 import {
   Box, Card, CardContent, Grid, Typography, Pagination, Alert, Chip, Stack,
-  Divider, Tooltip, useMediaQuery, Button,
+  Divider, Tooltip, Button,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Helmet } from "@unhead/react/helmet"
 import type { SxProps } from "@mui/material"
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar"
@@ -313,7 +314,7 @@ export function WikiShipBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
 
   // Theme-aware dropdown arrow (text color, URL-encoded for the data URI)
   const selectArrow = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='${encodeURIComponent(theme.palette.text.disabled)}'/%3E%3C/svg%3E")`

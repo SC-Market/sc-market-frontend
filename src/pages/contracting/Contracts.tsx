@@ -12,10 +12,11 @@ import {
   Grid,
   Box,
   Stack,
-  useMediaQuery,
   Container,
   Paper,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
+import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -49,13 +50,13 @@ export function Contracts() {
   const theme = useTheme<ExtendedTheme>()
   const location = useLocation()
   const navigate = useNavigate()
-  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const showMobileSidebar = useBreakpointDown("lg")
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
   const [contractSearchState, setContractSearchState] = useState<
     ContractSearchState
   >({ query: "", sort: "date-old" })
-  const [contractSidebarOpen, setContractSidebarOpen] = useState(
+  const [contractSidebarOpen, setContractSidebarOpen] = useHydratedInitialState(
     !showMobileSidebar,
   )
 

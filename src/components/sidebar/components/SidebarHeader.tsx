@@ -6,9 +6,9 @@ import {
   Stack,
   TextField,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { ChevronLeftRounded, SearchRounded } from "@mui/icons-material"
 import { NavLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -39,7 +39,7 @@ export function SidebarHeader({
   const { t } = useTranslation()
   const [, setDrawerOpen] = useDrawerOpen()
   const { customOrg } = useCustomDomain()
-  const xs = useMediaQuery(theme.breakpoints.down("sm"))
+  const xs = useBreakpointDown("sm")
 
   return (
     <Stack

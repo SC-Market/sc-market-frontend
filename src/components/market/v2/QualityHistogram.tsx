@@ -4,8 +4,8 @@ import {
   Paper,
   Typography,
   useTheme,
-  useMediaQuery,
 } from "@mui/material";
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { QualityBadge } from "./QualityBadge";
 
@@ -40,7 +40,7 @@ export const QualityHistogram: React.FC<QualityHistogramProps> = ({
   showPrices = false,
 }) => {
   const theme = useTheme<ExtendedTheme>();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useBreakpointDown("sm");
 
   if (distribution.length === 0) {
     return (

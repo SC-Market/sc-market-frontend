@@ -10,8 +10,8 @@ import {
   SpeedDial,
   SpeedDialAction,
   useTheme,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import {
   AddRounded,
   StoreRounded,
@@ -36,7 +36,7 @@ export function ContextAwareFAB() {
   const theme = useTheme<ExtendedTheme>()
   const location = useLocation()
   const navigate = useNavigate()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
   const bottomNavHeight = useBottomNavHeight()
   const [speedDialOpen, setSpeedDialOpen] = useState(false)
   const longPressTimer = useRef<number | undefined>(undefined)

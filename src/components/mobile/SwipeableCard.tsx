@@ -11,9 +11,9 @@ import {
   CardProps,
   IconButton,
   Stack,
-  useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { ReactNode, useRef, useState } from "react"
 import { useSwipeable } from "react-swipeable"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -40,7 +40,7 @@ export function SwipeableCard({
   CardProps,
 }: SwipeableCardProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [translateX, setTranslateX] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)

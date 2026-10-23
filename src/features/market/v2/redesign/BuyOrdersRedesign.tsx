@@ -17,8 +17,8 @@ import {
   Stack,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../../hooks/layout/useBreakpoint"
 import Grid2 from "@mui/material/Grid2"
 import AddRounded from "@mui/icons-material/AddRounded"
 import { useSearchParams } from "react-router-dom"
@@ -71,7 +71,7 @@ export function BuyOrdersRedesign() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const [viewMode, setViewMode] = useViewMode()
-  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const showMobileSidebar = useBreakpointDown("lg")
   const [drawerOpen] = useDrawerOpen()
 
   const [searchParams, setSearchParams] = useSearchParams()

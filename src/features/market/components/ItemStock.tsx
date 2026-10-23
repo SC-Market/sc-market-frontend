@@ -35,8 +35,8 @@ import {
   TextField,
   Tooltip,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import {
   CreateRounded,
   DeleteRounded,
@@ -686,7 +686,7 @@ export function DisplayStock({
   }
   const [rowSelectionModel, setRowSelectionModel] = context
 
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   // Mobile bottom sheet state
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false)

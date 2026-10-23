@@ -4,7 +4,8 @@
  * Automatically positions above bottom navigation
  */
 
-import { Fab, FabProps, useMediaQuery, useTheme } from "@mui/material"
+import { Fab, FabProps, useTheme } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React from "react"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
@@ -24,7 +25,7 @@ export function MobileFAB({
   ...fabProps
 }: MobileFABProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     haptic.light()

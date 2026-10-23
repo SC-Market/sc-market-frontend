@@ -1,9 +1,8 @@
 import React, { Suspense, useMemo, useState } from "react"
-import { CircularProgress, useMediaQuery } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { CircularProgress } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
 import { MarketSidebarContext } from "../../../features/market/hooks/MarketSidebar"
 import { ServiceSidebarContext } from "../../../features/contracting/hooks/ServiceSidebar"
@@ -47,8 +46,7 @@ export function MarketPageV2() {
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
-  const theme = useTheme<ExtendedTheme>()
-  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const showMobileSidebar = useBreakpointDown("lg")
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
 

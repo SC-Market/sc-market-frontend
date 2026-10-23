@@ -5,7 +5,8 @@ import { OrgOrderTrend } from "../../views/orders/OrderTrend"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
 import { ReceivedOffersArea } from "../../views/offers/ReceivedOffersArea"
 import { useTranslation } from "react-i18next"
-import { Grid, useMediaQuery, useTheme } from "@mui/material"
+import { Grid, useTheme } from "@mui/material"
+import { useBreakpointUp } from "../../hooks/layout/useBreakpoint"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
@@ -13,8 +14,8 @@ export function OrgOrders() {
   const { contractor_id } = useParams<{ contractor_id: string }>()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const xxl = useMediaQuery(theme.breakpoints.up("xxl"))
-  const lg = useMediaQuery(theme.breakpoints.up("lg"))
+  const xxl = useBreakpointUp("xxl")
+  const lg = useBreakpointUp("lg")
 
   return (
     <StandardPageLayout

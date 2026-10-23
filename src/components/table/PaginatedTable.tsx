@@ -12,7 +12,6 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
-  useMediaQuery,
 } from "@mui/material"
 import { visuallyHidden } from "@mui/utils"
 import { useTheme } from "@mui/material/styles"

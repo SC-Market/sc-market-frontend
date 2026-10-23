@@ -2,8 +2,7 @@ import React, { useMemo, useCallback } from "react"
 import { useSearchParams } from "react-router-dom"
 import type { MarketSearchState, SaleTypeSelect } from "../domain/types"
 import { paramsToSearchState, searchStateToParams } from "../domain/formatters"
-import { useTheme, useMediaQuery } from "@mui/material"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 
 export type { MarketSearchState, SaleTypeSelect } from "../domain/types"
 
@@ -14,8 +13,7 @@ export const MarketSearchContext = React.createContext<
 
 export const useMarketSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const defaultPageSize = isMobile ? 12 : 48
 

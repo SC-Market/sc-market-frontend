@@ -15,8 +15,8 @@ import {
   Skeleton,
   Stack,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { FlatSection } from "../../components/paper/Section"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -36,7 +36,7 @@ import { useAccountLinks } from "../../features/profile/hooks/useAccountLinks"
 export function AccountLinks() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   const {
     isLoading, isUnlinking, isSettingPrimary,

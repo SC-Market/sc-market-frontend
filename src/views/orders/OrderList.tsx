@@ -27,8 +27,8 @@ import {
   Tabs,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile, useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link, useNavigate } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
@@ -126,7 +126,7 @@ export function OrderRow(props: {
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
   const navigate = useNavigate()
   const { data: profile } = useGetUserProfileQuery()
   const [assignOrder] = useAssignOrderMutation()
@@ -445,7 +445,7 @@ export function OrdersViewPaginated(props: {
 }) {
   const { title, mine, assigned, unassigned, contractor, shop_id } = props
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { data: profile } = useGetUserProfileQuery()
   const { t } = useTranslation()
 

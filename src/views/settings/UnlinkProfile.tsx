@@ -8,22 +8,19 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  useMediaQuery,
   Box,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React from "react"
 import { useProfileUnlinkAccountMutation } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { FlatSection } from "../../components/paper/Section"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function UnlinkProfile() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [unlinkAccount, { isLoading, isSuccess, isError, error }] =
     useProfileUnlinkAccountMutation()
   const [open, setOpen] = React.useState(false)

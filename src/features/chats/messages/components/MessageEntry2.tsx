@@ -4,8 +4,8 @@ import {
   Link as MaterialLink,
   Stack,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import ContentCopyRounded from "@mui/icons-material/ContentCopyRounded"
@@ -24,7 +24,7 @@ import { USER_PATHS } from "../../../../routes/paths"
 export function MessageEntry2(props: { message: Message }) {
   const { message } = props
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
   const { data: author } = useGetUserByUsernameQuery(message.author!, {
     skip: !message.author,

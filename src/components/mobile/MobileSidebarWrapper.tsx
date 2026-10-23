@@ -4,7 +4,8 @@
  * Automatically handles responsive behavior
  */
 
-import { Box, Drawer, IconButton, useMediaQuery, useTheme } from "@mui/material"
+import { Box, Drawer, IconButton, useTheme } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { ReactNode, useEffect, useRef } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -30,7 +31,7 @@ export function MobileSidebarWrapper({
   showCloseButton = true,
 }: MobileSidebarWrapperProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   // On mobile, use BottomSheet with swipe-down to dismiss
   if (isMobile) {

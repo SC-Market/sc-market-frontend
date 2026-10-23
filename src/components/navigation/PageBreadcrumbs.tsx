@@ -4,10 +4,9 @@ import {
   Link,
   Typography,
   TypographyProps,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Link as RouterLink } from "react-router-dom"
-import { useTheme } from "@mui/material/styles"
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded"
 import { Helmet } from "@unhead/react/helmet"
@@ -28,8 +27,7 @@ export function PageBreadcrumbs({
   items,
   MuiBreadcrumbsProps,
 }: PageBreadcrumbsProps) {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useBreakpointDown("sm")
 
   if (items.length <= 1) return null
 

@@ -12,8 +12,8 @@ import {
   Paper,
   Stack,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme"
@@ -48,7 +48,7 @@ export function BuyOrdersViewV2() {
   const navigate = useNavigate()
   const marketSidebarOpen = useMarketSidebarExp()
   const [viewMode, setViewMode] = useViewMode()
-  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const showMobileSidebar = useBreakpointDown("lg")
 
   const [searchParams, setSearchParams] = useSearchParams()
   const [page, setPage] = useState(0)

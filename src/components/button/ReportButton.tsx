@@ -12,16 +12,14 @@ import {
   Typography,
   Box,
   Button,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { Report as ReportIcon } from "@mui/icons-material"
 import { useReportContentMutation } from "../../features/admin/api/moderationApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { UnderlineLink } from "../typography/UnderlineLink"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../mobile/BottomSheet"
 
 interface ReportButtonProps {
@@ -41,8 +39,7 @@ export function ReportButton({
   const [reportContent] = useReportContentMutation()
   const issueAlert = useAlertHook()
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { data: profile } = useGetUserProfileQuery()
 
   // Get current page path if none provided

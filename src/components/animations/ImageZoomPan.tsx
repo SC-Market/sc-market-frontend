@@ -6,7 +6,8 @@
  */
 
 import React, { useState, useRef, useCallback, useEffect } from "react"
-import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material"
+import { Box, IconButton, useTheme } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ZoomIn, ZoomOut, FitScreen, Close } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -28,7 +29,7 @@ export function ImageZoomPan({
   sx,
 }: ImageZoomPanProps) {
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const containerRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
   const [zoom, setZoom] = useState(1)

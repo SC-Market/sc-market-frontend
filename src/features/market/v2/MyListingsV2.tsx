@@ -20,8 +20,8 @@ import {
   Tab,
   Tabs,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import { AddCircleOutlineRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
@@ -320,7 +320,7 @@ function MobileListingsView() {
 export function MyListingsV2() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
 
   if (isMobile) {
     return (

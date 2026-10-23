@@ -13,10 +13,10 @@ import {
   Paper,
   TextField,
   Typography,
-  useMediaQuery,
   Alert,
   Stack,
 } from "@mui/material"
+import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
 import React, { useEffect, useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -71,7 +71,7 @@ function MessageHeader(props: {
 
   const [messageSidebarOpen, setMessageSidebar] = useMessagingSidebar()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
 
   return (
@@ -293,7 +293,7 @@ function MessageHeader(props: {
 function CreateChatBody(props: { selectedUsers: User[] }) {
   const { selectedUsers } = props
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { t } = useTranslation()
 
   return (

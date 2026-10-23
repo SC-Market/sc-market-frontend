@@ -8,23 +8,20 @@ import {
   IconButton,
   Box,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ServiceSidebar } from "../../views/contracts/ServiceSidebar"
 import { ServiceSidebarContext } from "../../features/contracting/hooks/ServiceSidebar"
 import { ServiceListings } from "../../views/contracts/ServiceListings.lazy"
 import { Link } from "react-router-dom"
 import { CreateRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageServices } from "../../features/contracting/hooks/usePageServices"
 
 export function Services() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const [open, setOpen] = useState(true)
   const pageData = usePageServices()
 

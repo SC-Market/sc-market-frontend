@@ -34,8 +34,8 @@ import {
   Button,
   Avatar,
   Tooltip,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ViewList, ViewModule, ShieldRounded, BuildRounded } from "@mui/icons-material"
 import { useSearchMissionsQuery, useGetGameEventsQuery, type MissionSearchResult } from "../../store/api/v2/market"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
@@ -45,10 +45,8 @@ import { MissionCard, MissionFilters } from "../../components/game-data"
 import { CardGridSkeleton, TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { UnifiedSearchBar, missionParamsToTokens, missionTokensToParams, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
 import { MissionDetailModal } from "../../components/game-data/MissionDetailModal"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
@@ -66,7 +64,6 @@ const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTra
 
 export function MissionSearch() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   
   // Search and filter state — synced with URL search params
@@ -136,7 +133,7 @@ export function MissionSearch() {
 
   const [viewMode, setViewMode] = useLocalStorageState<"list" | "grid">("missions-view", "list", VIEW_MODES)
   const handleViewModeChange = (_: React.MouseEvent<HTMLElement>, v: "list" | "grid" | null) => { if (v) setViewMode(v) }
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useBreakpointDown("lg")
   const [filterOpen, setFilterOpen] = useState(false)
   const bottomNavHeight = useBottomNavHeight()
 

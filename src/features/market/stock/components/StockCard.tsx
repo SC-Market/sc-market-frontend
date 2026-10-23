@@ -9,7 +9,6 @@ import {
   Typography,
   Avatar,
   Box,
-  useMediaQuery,
 } from "@mui/material"
 import {
   AddRounded,

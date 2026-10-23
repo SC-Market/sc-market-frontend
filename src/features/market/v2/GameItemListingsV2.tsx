@@ -16,7 +16,6 @@ import {
   TableRow,
   TextField,
   Typography,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { AddShoppingCartRounded, VisibilityRounded } from "@mui/icons-material";

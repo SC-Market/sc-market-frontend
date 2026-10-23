@@ -10,9 +10,8 @@ import {
   Stepper,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -38,7 +37,6 @@ import { isPushNotificationSupported } from "../../util/push-subscription"
 import { useDispatch } from "react-redux"
 import { serviceApi } from "../../store/service"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import ScheduleIcon from "@mui/icons-material/Schedule"
 import EmailIcon from "@mui/icons-material/Email"
 import NotificationsIcon from "@mui/icons-material/Notifications"
@@ -65,8 +63,7 @@ interface OnboardingStep {
 
 export function OnboardingPage() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const issueAlert = useAlertHook()

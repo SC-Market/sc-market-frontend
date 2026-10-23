@@ -15,8 +15,8 @@ import {
   Grow,
   Stack,
   Typography,
-  useMediaQuery,
 } from "@mui/material"
+import { useBreakpointUp } from "../../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import ExpandMoreRounded from "@mui/icons-material/ExpandMoreRounded"
 import GroupsRounded from "@mui/icons-material/GroupsRounded"
@@ -229,7 +229,6 @@ export const GroupedListingGrid = React.forwardRef<
   { listings, loading, error, onRetry, gridBreakpoints, marketSidebarOpen },
   ref,
 ) {
-  const theme = useTheme<ExtendedTheme>()
   const [expanded, setExpanded] = useState<string | null>(null)
 
   // Animate the reorder: when a card expands and earlier row-mates get bumped
@@ -241,13 +240,13 @@ export const GroupedListingGrid = React.forwardRef<
   // Reactively track which breakpoints are active (largest → smallest). Hooks
   // must run unconditionally, so query every key regardless of gridBreakpoints.
   const up: Record<string, boolean> = {
-    xs: useMediaQuery(theme.breakpoints.up("xs")),
-    sm: useMediaQuery(theme.breakpoints.up("sm")),
-    md: useMediaQuery(theme.breakpoints.up("md")),
-    lg: useMediaQuery(theme.breakpoints.up("lg")),
-    xl: useMediaQuery(theme.breakpoints.up("xl")),
-    xxl: useMediaQuery(theme.breakpoints.up("xxl")),
-    xxxl: useMediaQuery(theme.breakpoints.up("xxxl")),
+    xs: useBreakpointUp("xs"),
+    sm: useBreakpointUp("sm"),
+    md: useBreakpointUp("md"),
+    lg: useBreakpointUp("lg"),
+    xl: useBreakpointUp("xl"),
+    xxl: useBreakpointUp("xxl"),
+    xxxl: useBreakpointUp("xxxl"),
   }
 
   // Columns per row = 12 / (active span). Walk largest → smallest to find the

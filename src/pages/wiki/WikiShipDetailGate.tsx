@@ -1,13 +1,11 @@
 import React from "react"
-import { useMediaQuery, useTheme } from "@mui/material"
+import { useShowDetailPage } from "../../hooks/layout/useDetailGate"
 import { WikiShipBrowser } from "./WikiShipBrowser"
 import { WikiShipDetail } from "./WikiShipDetail"
 
 export function WikiShipDetailGate() {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
-
-  if (isMobile) return <WikiShipDetail />
+  const showDetailPage = useShowDetailPage()
+  if (showDetailPage) return <WikiShipDetail />
 
   return <WikiShipBrowser />
 }

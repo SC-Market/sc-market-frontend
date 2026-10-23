@@ -8,8 +8,8 @@ import {
   Popover,
   Typography,
   Divider,
-  useMediaQuery,
 } from "@mui/material"
+import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -34,7 +34,7 @@ export function ProfileNavAvatar() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const notifOpen = Boolean(anchorEl)
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useIsMobile()
   const { data: profile } = useGetUserProfileQuery()
   const { t } = useTranslation()
   const [logout] = useLogoutMutation()
