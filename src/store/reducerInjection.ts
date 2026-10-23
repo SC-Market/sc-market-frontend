@@ -1,5 +1,5 @@
 import { Reducer, combineReducers } from "@reduxjs/toolkit"
-import { store } from "./store"
+import type { AppStore } from "./store"
 
 /**
  * Type for a lazy-loaded reducer
@@ -30,10 +30,14 @@ export function registerLazyReducer(
 
 /**
  * Load and inject a reducer into the store
+ * @param store - Store to inject into
  * @param key - Reducer key to load
  * @returns Promise that resolves when reducer is loaded
  */
-export async function injectReducer(key: string): Promise<void> {
+export async function injectReducer(
+  store: AppStore,
+  key: string,
+): Promise<void> {
   // Check if already loaded
   if (loadedReducers[key]) {
     return
@@ -72,10 +76,14 @@ export async function injectReducer(key: string): Promise<void> {
 
 /**
  * Load multiple reducers
+ * @param store - Store to inject into
  * @param keys - Array of reducer keys to load
  */
-export async function injectReducers(keys: string[]): Promise<void> {
-  const loadPromises = keys.map((key) => injectReducer(key))
+export async function injectReducers(
+  store: AppStore,
+  keys: string[],
+): Promise<void> {
+  const loadPromises = keys.map((key) => injectReducer(store, key))
   await Promise.allSettled(loadPromises)
 }
 

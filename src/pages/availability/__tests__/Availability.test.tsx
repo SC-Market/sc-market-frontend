@@ -2,7 +2,8 @@ import { render, screen } from "@testing-library/react"
 import { Availability } from "../Availability"
 import { BrowserRouter } from "react-router-dom"
 import { Provider } from "react-redux"
-import { store } from "../../../store/store"
+import { makeStore } from "../../../store/store"
+import { browserNetworkEnv } from "../../../store/browserNetworkEnv"
 import { describe, it, expect, vi } from "vitest"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import React from "react"
@@ -68,6 +69,9 @@ vi.mock("../../../components/footer/Footer", () => ({
 // Test wrapper component
 function TestWrapper({ children }: { children: React.ReactNode }) {
   const drawerState = React.useState(false)
+  const [store] = React.useState(() =>
+    makeStore({ networkEnv: browserNetworkEnv }),
+  )
 
   return (
     <Provider store={store}>

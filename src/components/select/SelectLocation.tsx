@@ -6,7 +6,7 @@ import { Section } from "../paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { store } from "../../store/store"
+import { useAppDispatch } from "../../store/hooks"
 import { starmapApi } from "../../store/api/starmap"
 
 export function romanize(num: number) {
@@ -73,6 +73,7 @@ export interface StarmapObject {
 export function SelectLocation() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
 
   const [locationSuggest, setLocationSuggest] = useState<StarmapObject[]>([])
   const [locationTarget, setLocationTarget] = useState("")
@@ -84,7 +85,7 @@ export function SelectLocation() {
       return []
     }
 
-    const result = await store.dispatch(
+    const result = await dispatch(
       starmapApi.endpoints.searchStarmap.initiate({ query }),
     )
     if (!result.data) return []
@@ -107,7 +108,7 @@ export function SelectLocation() {
     extended.push(...(data.objects?.resultset || data.results || []))
 
     return extended
-  }, [])
+  }, [dispatch])
 
   const retrieveLocation = React.useMemo(
     () =>

@@ -1,9 +1,14 @@
 /**
  * Shared auth refresh — single mutex for the entire app.
  *
- * Every API slice and the proactive refresh timer funnel through
- * `refreshAuth()`. Only one POST /api/auth/refresh is ever in flight;
- * all other callers await the same promise.
+ * Every API slice (via browserNetworkEnv.onUnauthorized) and the proactive
+ * refresh timer funnel through `refreshAuth()`. Only one POST
+ * /api/auth/refresh is ever in flight; all other callers await the same
+ * promise.
+ *
+ * BROWSER-ONLY: `inflight` and `failedAt` are module-level, i.e. one tab's
+ * session. On a server they would be shared across every request, so nothing
+ * outside the browser NetworkEnv / proactive refresh may import this.
  */
 
 import { BACKEND_URL } from "../util/constants"

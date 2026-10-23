@@ -9,12 +9,13 @@ import {
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
-import { store } from "../../../store/store"
+import { useAppDispatch } from "../../../store/hooks"
 import type { MinimalUser } from "../../../datatypes/User"
 import throttle from "lodash/throttle"
 
 export function useManageContractors() {
   const { t } = useTranslation()
+  const dispatch = useAppDispatch()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
 
@@ -40,11 +41,11 @@ export function useManageContractors() {
 
   const fetchTransferOptions = useCallback(async (query: string) => {
     if (!transferTarget || query.length < 3) { setTransferSearchOptions([]); return }
-    const { data } = await store.dispatch(
+    const { data } = await dispatch(
       contractorsApi.endpoints.searchContractorMembers.initiate({ spectrum_id: transferTarget.spectrum_id, query }),
     )
     setTransferSearchOptions(data || [])
-  }, [transferTarget])
+  }, [transferTarget, dispatch])
 
   const retrieveTransfer = useMemo(() => throttle((query: string) => fetchTransferOptions(query), 400), [fetchTransferOptions])
   useEffect(() => { retrieveTransfer(transferSearchQuery) }, [transferSearchQuery, retrieveTransfer])

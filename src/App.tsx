@@ -34,7 +34,7 @@ import {
   ShopRedirectListings,
   ShopRedirectStock,
 } from "./components/router/ShopRedirect"
-import { store } from "./store/store"
+import { useAppDispatch } from "./store/hooks"
 import { notificationApi } from "./features/notifications/api/notificationApi"
 import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync"
 import { useWebVitals } from "./hooks/performance/useWebVitals"
@@ -61,6 +61,7 @@ function RouterEffects() {
 }
 
 function App() {
+  const dispatch = useAppDispatch()
   const { registerPeriodicSync, isSupported: periodicSyncSupported } =
     usePeriodicBackgroundSync()
 
@@ -96,17 +97,17 @@ function App() {
       const messageHandler = (event: MessageEvent) => {
         if (event.data?.type === "PUSH_NOTIFICATION_RECEIVED") {
           // SW sent this after showing a push; invalidate so notification queries refetch
-          store.dispatch(
+          dispatch(
             notificationApi.util.invalidateTags(["Notifications" as const]),
           )
         } else if (event.data?.type === "SYNC_NOTIFICATIONS") {
           // SW background sync fetched notifications; invalidate to refetch
-          store.dispatch(
+          dispatch(
             notificationApi.util.invalidateTags(["Notifications" as const]),
           )
         } else if (event.data?.type === "SYNC_DATA") {
           // SW periodic data sync; invalidate so dashboard/orders/market refetch
-          store.dispatch(
+          dispatch(
             notificationApi.util.invalidateTags([
               "Notifications",
               "Orders",

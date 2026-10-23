@@ -14,13 +14,14 @@ import { useGetContractorBySpectrumIDQuery, useGetContractorMembersQuery, contra
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { has_permission } from "../../contractor/domain/permissions"
-import { store } from "../../../store/store"
+import { useAppDispatch } from "../../../store/hooks"
 import type { MinimalUser } from "../../../datatypes/User"
 
 export function useOrderDetails(order: Order) {
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
+  const dispatch = useAppDispatch()
 
   // Inline assignment editing
   const [isEditingAssigned, setIsEditingAssigned] = useState(false)
@@ -41,13 +42,13 @@ export function useOrderDetails(order: Order) {
 
   const fetchOptions = useCallback(async (query: string) => {
     if (query.length < 3 || !order.contractor) return
-    const { data } = await store.dispatch(
+    const { data } = await dispatch(
       contractorsApi.endpoints.searchContractorMembers.initiate({
         spectrum_id: order.contractor, query,
       }),
     )
     setOptions(data || [])
-  }, [order.contractor])
+  }, [order.contractor, dispatch])
 
   const retrieve = useMemo(
     () => throttle((query: string) => fetchOptions(query), 400),
