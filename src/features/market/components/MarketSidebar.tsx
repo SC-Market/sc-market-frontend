@@ -11,27 +11,20 @@ import {
   ToggleButtonGroup,
   ToggleButton,
 } from "@mui/material"
-import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
 import React, { useState, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { useDrawerOpen } from "../../../hooks/layout/Drawer"
-import { useMarketSidebar } from ".."
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { SearchRounded } from "@mui/icons-material"
 import { SelectGameCategoryOption } from "../../../components/select/SelectGameItem"
-import FilterListIcon from "@mui/icons-material/FilterList"
 import { LanguageFilter } from "../../../components/search/LanguageFilter"
-import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useMarketFilters } from "../hooks/useMarketFilters"
 import type { SaleTypeSelect } from "../domain/types"
 import { AttributeFilterSection } from "../../../components/filters/AttributeFilterSection"
 import { marketApi } from "../api/marketApi"
 import { debounce } from "lodash-es"
-import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
-import type { MarketListing } from "../../../datatypes/MarketListing"
 import { useNavigate, useLocation } from "react-router-dom"
 import { MARKET_PATHS } from "../../../routes/paths"
 
@@ -422,77 +415,5 @@ export function MarketSearchArea(props: {
         )}
       </Grid>
     </Box>
-  )
-}
-
-export function MarketSidebar(props: {
-  status?: boolean
-  /** When true, show the Listings / Bulk / Buy Orders selector. Only set on /market, /bulk, /buyorders pages. */
-  showViewModeSelector?: boolean
-}) {
-  const { status, showViewModeSelector } = props
-
-  const [drawerOpen] = useDrawerOpen()
-  const [open, setOpen] = useMarketSidebar()
-  const isMobile = useBreakpointDown("lg")
-  const { t } = useTranslation()
-
-  // Mobile/Tablet: Use bottom sheet
-  if (isMobile) {
-    return (
-      <BottomSheet
-        open={open}
-        onClose={() => setOpen(false)}
-        title={t("market.filters", "Filters")}
-        snapPoints={["half", "75", "full"]}
-        defaultSnap="75"
-      >
-        <MarketSearchArea status={status} showViewModeSelector={showViewModeSelector} />
-      </BottomSheet>
-    )
-  }
-
-  // Desktop: Render as persistent sidebar content (no drawer)
-  return (
-    <MarketSearchArea status={status} showViewModeSelector={showViewModeSelector} />
-  )
-}
-
-export function MarketSideBarToggleButton() {
-  const [open, setOpen] = useMarketSidebar()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useBreakpointDown("lg")
-  const bottomNavHeight = useBottomNavHeight()
-  const { t } = useTranslation()
-
-  // Only show toggle button on mobile/tablet
-  if (!isMobile) {
-    return null
-  }
-
-  return (
-    <Button
-      variant="outlined"
-      color="secondary"
-      startIcon={<FilterListIcon />}
-      aria-label={t("market.toggleSidebar")}
-      onClick={() => setOpen((value) => !value)}
-      sx={{
-        position: "fixed",
-        bottom: bottomNavHeight + 16,
-        right: 24,
-        zIndex: theme.zIndex.speedDial,
-        borderRadius: 2,
-        textTransform: "none",
-        boxShadow: theme.shadows[4],
-        backgroundColor: theme.palette.background.paper,
-        "&:hover": {
-          backgroundColor: theme.palette.background.paper,
-          boxShadow: theme.shadows[8],
-        },
-      }}
-    >
-      {t("market.filters", "Filters")}
-    </Button>
   )
 }

@@ -3,11 +3,7 @@ import {
   Box,
   Button,
   Grid,
-  Paper,
-  PaperProps,
-  Theme,
   Toolbar,
-  Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, navbarShadow } from "../../../hooks/styles/Theme"
@@ -22,32 +18,6 @@ import { useMarketSidebar } from ".."
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { PATHS } from "../../../routes/paths"
-
-export function MarketNavEntry(
-  props: { title: string; children: React.ReactElement } & PaperProps,
-) {
-  const { title, children, ...paperProps } = props
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
-
-  return (
-    <Paper
-      variant={"outlined"}
-      sx={{
-        borderColor: theme.palette.outline.main,
-        display: "flex",
-        padding: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        ...paperProps.sx,
-      }}
-      {...paperProps}
-    >
-      <Typography sx={{ marginRight: 1 }}>{t(title)}</Typography>
-      {children}
-    </Paper>
-  )
-}
 
 export function HideOnScroll(props: { children: React.ReactNode }) {
   const { children } = props

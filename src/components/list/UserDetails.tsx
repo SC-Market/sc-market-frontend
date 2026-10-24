@@ -1,16 +1,9 @@
-import { MinimalUser, User } from "../../datatypes/User"
+import { MinimalUser } from "../../datatypes/User"
 import { Avatar, Typography, Link as MaterialLink } from "@mui/material"
 import { Stack } from "@mui/system"
 import React from "react"
 import { MinimalContractor } from "../../features/contractor/domain/types"
-import { UniqueListing } from "../../features/market"
 import { Link } from "react-router-dom"
-import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
-import {
-  MarketListingSearchResult,
-  MarketSearchResult,
-} from "../../features/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ORG_PATHS, USER_PATHS } from "../../routes/paths"
@@ -72,43 +65,6 @@ export function OrgDetails(props: { org: MinimalContractor }) {
           </Typography>
         </MaterialLink>
         <Typography variant={"subtitle2"}>{org.spectrum_id}</Typography>
-      </Stack>
-    </Stack>
-  )
-}
-
-export function MarketListingDetails(props: {
-  listing: MarketListingSearchResult
-}) {
-  const { listing } = props
-  const theme = useTheme<ExtendedTheme>()
-
-  return (
-    <Stack
-      direction={"row"}
-      spacing={theme.layoutSpacing.compact}
-      alignItems={"center"}
-    >
-      <Avatar
-        src={listing.photo || FALLBACK_IMAGE_URL}
-        variant={"rounded"}
-        imgProps={{
-          onError: ({ currentTarget }) => {
-            currentTarget.onerror = null
-            currentTarget.src = FALLBACK_IMAGE_URL
-          },
-        }}
-      />
-      <Stack direction={"column"} justifyContent={"left"}>
-        <MaterialLink
-          component={Link}
-          to={formatMarketUrl(listing)}
-          underline={"hover"}
-        >
-          <Typography variant={"subtitle2"} color={"text.secondary"}>
-            {listing.title}
-          </Typography>
-        </MaterialLink>
       </Stack>
     </Stack>
   )
