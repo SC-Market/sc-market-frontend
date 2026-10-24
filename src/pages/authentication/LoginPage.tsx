@@ -8,6 +8,7 @@ import { Container, Grid } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Footer } from "../../components/footer/Footer"
+import { safeRedirectPath } from "../../util/safeRedirect"
 
 export function LoginPage() {
   const { t } = useTranslation()
@@ -17,7 +18,7 @@ export function LoginPage() {
     usePageLogin()
 
   if (isAuthenticated) {
-    const redirectTo = searchParams.get("redirect") || "/dashboard"
+    const redirectTo = safeRedirectPath(searchParams.get("redirect"), "/dashboard")
     return <Navigate to={redirectTo} replace />
   }
 

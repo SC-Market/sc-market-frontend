@@ -17,6 +17,7 @@ import { AuthenticateRSISkeleton } from "../../views/authentication/Authenticate
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { safeRedirectPath } from "../../util/safeRedirect"
 
 export function Login() {
   const { t } = useTranslation()
@@ -24,7 +25,7 @@ export function Login() {
   const [searchParams] = useSearchParams()
   const profile = useGetUserProfileQuery()
   const identifier = useGetAuthenticatorIdentifier()
-  const redirectTo = searchParams.get("redirect") || "/dashboard"
+  const redirectTo = safeRedirectPath(searchParams.get("redirect"), "/dashboard")
 
   return (
     <Page title={t("login.title", "Login")}>

@@ -8,6 +8,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageAuthenticateRSI } from "../../features/authentication/hooks/usePageAuthenticateRSI"
+import { safeRedirectPath } from "../../util/safeRedirect"
 
 export function AuthenticateRSIPage() {
   const { t } = useTranslation()
@@ -16,7 +17,7 @@ export function AuthenticateRSIPage() {
   const { isRSIConfirmed, identifier } = usePageAuthenticateRSI()
 
   if (isRSIConfirmed) {
-    const redirectTo = searchParams.get("redirect") || "/dashboard"
+    const redirectTo = safeRedirectPath(searchParams.get("redirect"), "/dashboard")
     return <Navigate to={redirectTo} />
   }
 

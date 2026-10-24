@@ -4,6 +4,7 @@ import React from "react"
 import { useLocation, useSearchParams } from "react-router-dom"
 import { Discord } from "../icon/DiscordIcon"
 import { useTranslation } from "react-i18next"
+import { safeRedirectPath } from "../../util/safeRedirect"
 
 export function DiscordSignUpButton() {
   const location = useLocation()
@@ -12,7 +13,7 @@ export function DiscordSignUpButton() {
 
   // Get redirect path from query params (if coming from pageAuthentication redirect)
   // Otherwise use current pathname
-  const redirectPath = searchParams.get("redirect") || location.pathname
+  const redirectPath = safeRedirectPath(searchParams.get("redirect"), location.pathname)
 
   return (
     <Button
