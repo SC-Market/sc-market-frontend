@@ -1,0 +1,11 @@
+flowchart TD
+  R["Page request"] --> P{"Public route?<br/>(wiki, mining, market,<br/>shops, orgs, profiles)"}
+  P -- "no (dashboard, orders,<br/>messages, settings…)" --> CSR["CSR shell (static, free)"]
+  P -- "yes (every visitor,<br/>logged in or not)" --> C{"Edge cache hit?<br/>(page + game version)"}
+  C -- yes --> H["Same anonymous HTML for everyone"]
+  C -- no --> SSR["Cloudflare Worker SSR<br/>(anonymous render)"] --> H
+  H --> HY["Browser hydrates<br/>useSession() = unknown → neutral placeholders"]
+  HY --> PERS["After mount: personal UI fills in<br/>(avatar, cart, notifications)"]
+  CSR --> APP["Client-side app"]
+  PERS --> APP
+  APP --> N["Every later click: client-side navigation,<br/>JSON straight from the API"]

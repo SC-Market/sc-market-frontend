@@ -1,0 +1,14 @@
+flowchart LR
+  V["Visitor"] --> CF{"Cloudflare<br/>sc-market.space"}
+  CF -- "assets, private pages" --> ST["Static files<br/>(Pages)"]
+  CF -- "public page loads<br/>(edge proxy rule/Worker)" --> API
+  subgraph LS["Existing Lightsail service (1 vCPU shared by all 3)"]
+    API["backend (Express)<br/>only public endpoint:<br/>proxies page paths to web"]
+    WEB["web: Node SSR container<br/>(sidecar, localhost)"]
+    DIS["discord bot"]
+    API -- "localhost proxy" --> WEB
+    WEB -- "localhost JSON" --> API
+  end
+  API --> DB[("RDS Postgres")]
+  classDef new fill:#d9f2d9,stroke:#2e7d32
+  class WEB new

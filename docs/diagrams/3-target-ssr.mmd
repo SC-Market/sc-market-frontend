@@ -1,0 +1,13 @@
+sequenceDiagram
+  autonumber
+  participant C as Any visitor<br/>(human or crawler)
+  participant W as Cloudflare Worker<br/>(React Router SSR)
+  participant A as Express API<br/>(unchanged, JSON only)
+  C->>W: GET /wiki/commodities/agricium (first page load)
+  Note over W: makeStore() per request,<br/>server network env (no cookies)
+  W->>A: route loader = prefetchCommodityPage(): RTK Query initiate()
+  A-->>W: JSON
+  Note over W: Render the real React page to HTML
+  W-->>C: full HTML page + RTK cache snapshot
+  Note over C: Crawler: done, full page.<br/>Human: JS hydrates using the snapshot (no refetch)
+  C->>A: later navigation: browser fetches JSON directly,<br/>logged-in, cookies + refresh as today

@@ -1,0 +1,17 @@
+sequenceDiagram
+  autonumber
+  participant C as Any visitor<br/>(human or crawler)
+  participant F as Pages Function<br/>(page loads on public prefixes only)
+  participant P as Cloudflare Pages<br/>(static files)
+  participant A as Express API<br/>(unchanged, JSON only)
+  C->>F: GET /wiki/commodities/agricium
+  par
+    F->>A: fetch commodity data (JSON, service token, edge-cached)
+    A-->>F: JSON
+  and
+    F->>P: fetch index.html
+    P-->>F: empty shell
+  end
+  Note over F: HTMLRewriter injects title, meta,<br/>JSON-LD and the answer-first summary text
+  F-->>C: index.html with real head + summary
+  Note over C: Crawler: done, it has content.<br/>Human: app JS loads and the SPA takes over,<br/>fetching JSON from the API exactly as today

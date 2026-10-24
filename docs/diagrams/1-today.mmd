@@ -1,0 +1,15 @@
+sequenceDiagram
+  autonumber
+  participant B as Crawler / link preview<br/>(no JS)
+  participant H as Human browser
+  participant P as Cloudflare Pages<br/>(static files)
+  participant A as Express API<br/>(JSON only)
+  H->>P: GET /wiki/commodities/agricium
+  P-->>H: index.html (empty shell, generic title)
+  H->>P: GET /assets/app.js
+  H->>A: fetch commodity data (JSON)
+  A-->>H: JSON
+  Note over H: React renders the page,<br/>sets title/meta/JSON-LD in the browser
+  B->>P: GET /wiki/commodities/agricium
+  P-->>B: same empty shell
+  Note over B: Never runs JS, so it sees no content,<br/>no per-page title, no JSON-LD

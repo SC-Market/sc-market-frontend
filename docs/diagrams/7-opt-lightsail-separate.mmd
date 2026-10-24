@@ -1,0 +1,15 @@
+flowchart LR
+  V["Visitor"] --> CF{"Cloudflare<br/>sc-market.space"}
+  CF -- "assets, private pages" --> ST["Static files<br/>(Pages)"]
+  CF -- "public page loads<br/>(edge proxy rule/Worker)" --> SSR
+  subgraph LS2["NEW Lightsail container service<br/>(nano $7 / micro $10 / small $15)"]
+    SSR["web: Node SSR server<br/>(React Router serve)<br/>deployed from frontend repo"]
+  end
+  SSR -- "JSON over HTTPS<br/>(service token)" --> API
+  subgraph LS["Existing Lightsail service (unchanged)"]
+    API["backend (Express API)"]
+    DIS["discord bot"]
+  end
+  API --> DB[("RDS Postgres")]
+  classDef new fill:#d9f2d9,stroke:#2e7d32
+  class SSR new

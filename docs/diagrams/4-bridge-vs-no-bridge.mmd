@@ -1,0 +1,13 @@
+gantt
+  title What crawlers see over time (dev-days from the doc's estimates)
+  dateFormat YYYY-MM-DD
+  axisFormat Day %j
+  tickInterval 1week
+  section No bridge
+  Empty shell on every page (Phases 1-2)      :crit, n1, 2027-01-01, 8d
+  Hub pages prerendered, details still empty (Phase 3) :active, n2, after n1, 6d
+  Full SSR HTML everywhere (Phase 4)          :done, n3, after n2, 12d
+  section Bridge
+  Build the bridge Function                   :crit, b0, 2027-01-01, 2d
+  Head + summary on all public pages          :active, b1, after b0, 12d
+  Phase 4 replaces bridge route by route      :done, b2, after b1, 12d
