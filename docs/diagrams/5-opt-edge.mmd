@@ -1,0 +1,12 @@
+flowchart LR
+  V["Visitor"] --> CF{"Cloudflare<br/>sc-market.space"}
+  CF -- "public page loads" --> W["Worker / Pages Function<br/>SSR render"]
+  CF -- "assets, private pages" --> ST["Static files<br/>(Pages / Workers assets)"]
+  W -- "JSON over HTTPS<br/>(service token)" --> API
+  subgraph LS["Lightsail container service (1 vCPU)"]
+    API["backend (Express API)"]
+    DIS["discord bot"]
+  end
+  API --> DB[("RDS Postgres")]
+  classDef new fill:#d9f2d9,stroke:#2e7d32
+  class W new
