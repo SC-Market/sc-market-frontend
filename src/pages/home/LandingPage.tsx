@@ -18,6 +18,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
 import { PATHS, ORG_PATHS } from "../../routes/paths"
 import { homeSeoText } from "../../seo/siteHeads"
+import { safeRedirectPath } from "../../util/safeRedirect"
 
 export function LandingPage() {
   const { t } = useTranslation()
@@ -27,8 +28,9 @@ export function LandingPage() {
   const { customOrg } = useCustomDomain()
   if (customOrg) {
     const config = getWhiteLabelConfig()
-    if (config?.homepage_path) {
-      return <Navigate to={config.homepage_path} />
+    const homepagePath = safeRedirectPath(config?.homepage_path, "")
+    if (homepagePath) {
+      return <Navigate to={homepagePath} />
     }
     if (config?.focus_mode === "internal") {
       return <Navigate to={PATHS.dashboard} />
