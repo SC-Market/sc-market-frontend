@@ -10,19 +10,12 @@ import type { MinimalUser } from "../../../datatypes/User"
 // We omit MarketBid from datatypes to avoid conflict with API MarketBid (see MarketBidApi below).
 export type {
   MarketListing,
-  MarketBuyOrderBody,
   BaseListingType,
-  MarketMultipleBody,
   ListingStats,
   MarketListingBody,
   UniqueListing,
-  ItemType,
-  SellerListingType,
-  StockManageType,
-  MarketListingType,
   ListingDetails,
   MarketAggregate,
-  MarketMultiple,
   MarketAggregateListing,
   MarketAggregateListingComposite,
   MarketMultipleListing,
@@ -31,25 +24,10 @@ export type {
   BuyOrder,
   MarketBid as DatatypesMarketBid,
   MarketListingUpdateBody,
-  AggregateListingUpdateBody,
-  AggregateMarketListingBody,
-  AggregateMarketListing,
-  GameItemCategory,
-  GameItem,
   GameItemDescription,
 } from "../../../datatypes/MarketListing"
-export { item_types, item_types_lower } from "../../../datatypes/MarketListing"
 
 // --- API / search types (from former store/market) ---
-
-export interface Pagination {
-  page: number
-  page_size: number
-  total: number
-  totalItems: number
-  has_next: boolean
-  has_prev: boolean
-}
 
 export interface BaseMarketListingSearchResult {
   listing_id: string
@@ -105,65 +83,6 @@ export type MarketListingSearchResult =
   | ExtendedAggregateSearchResult
   | ExtendedMultipleSearchResult
 
-export interface MarketListingComplete {
-  listing_id: string
-  price: number
-  sale_type: "sale" | "auction" | "aggregate" | "multiple"
-  quantity_available: number
-  status: "active" | "inactive" | "archived"
-  title: string
-  description: string
-  item_type: string
-  internal: boolean
-  seller: {
-    user: {
-      user_id: string
-      username: string
-      avatar_url: string | null
-    } | null
-    contractor: {
-      contractor_id: string
-      name: string
-      spectrum_id: string
-      logo_url: string | null
-    } | null
-  }
-  photos: Array<{ resource_id: string; url: string }>
-  auction_details?: {
-    minimum_bid_increment: number
-    end_time: string
-    status: "active" | "inactive"
-    current_bid?: {
-      amount: number
-      bidder: {
-        user_id: string
-        username: string
-        avatar_url: string | null
-      }
-    } | null
-  } | null
-  timestamp?: string
-  expiration?: string
-  game_item_id?: string | null
-  item_name?: string | null
-  listing_type?: string
-  details_id?: string
-  minimum_price?: number
-  maximum_price?: number
-  total_rating?: number
-  avg_rating?: number
-  rating_count?: number | null
-  rating_streak?: number | null
-  total_orders?: number | null
-  total_assignments?: number | null
-  response_rate?: number | null
-  auction_end_time?: string | null
-  photo?: string
-  user_seller?: MinimalUser | null
-  contractor_seller?: MinimalUser | null
-  languages?: Array<{ code: string; name: string }>
-}
-
 /** API response shape for a bid (getListingBids / createListingBid). */
 export interface MarketBidApi {
   bid_id: string
@@ -176,10 +95,6 @@ export interface MarketBidApi {
   }
   bid_amount: number
   timestamp: string
-}
-
-export interface CreateBidRequest {
-  bid_amount: number
 }
 
 export type SaleType = "sale" | "aggregate" | "multiple" | "auction"
