@@ -129,97 +129,6 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       ],
     }),
 
-    // Create a new lot
-    createLot: builder.mutation<
-      { lot: StockLot },
-      {
-        listing_id: string
-        quantity: number
-        location_id?: string | null
-        owner_username?: string | null
-        listed?: boolean
-        notes?: string | null
-      }
-    >({
-      query: ({ listing_id, ...body }) => ({
-        url: `/api/market/listings/${listing_id}/lots`,
-        method: "POST",
-        body,
-      }),
-      transformResponse: (response: { data: { lot: StockLot } }) =>
-        response.data,
-      invalidatesTags: (result, error, { listing_id }) => [
-        { type: "MarketListings", id: listing_id },
-        { type: "MarketListings", id: "SEARCH" },
-        "MarketListings",
-        "MyListings",
-      ],
-    }),
-
-    // Update a lot
-    updateLot: builder.mutation<
-      { lot: StockLot },
-      {
-        lot_id: string
-        listing_id?: string
-        quantity?: number
-        location_id?: string | null
-        owner_username?: string | null
-        listed?: boolean
-        notes?: string | null
-        variant_attributes?: Record<string, unknown>
-      }
-    >({
-      query: ({ lot_id, ...body }) => ({
-        url: `/api/market/lots/${lot_id}`,
-        method: "PATCH",
-        body,
-      }),
-      transformResponse: (response: { data: { lot: StockLot } }) =>
-        response.data,
-      invalidatesTags: [
-        { type: "MarketListings", id: "SEARCH" },
-        { type: "StockLots", id: "SEARCH" },
-        "MarketListings",
-        "MyListings",
-      ],
-    }),
-
-    // Delete a lot
-    deleteLot: builder.mutation<{ success: boolean }, { lot_id: string }>({
-      query: ({ lot_id }) => ({
-        url: `/api/market/lots/${lot_id}`,
-        method: "DELETE",
-      }),
-      transformResponse: (response: { data: { success: boolean } }) =>
-        response.data,
-      invalidatesTags: [
-        { type: "MarketListings", id: "SEARCH" },
-        "MarketListings",
-        "MyListings",
-      ],
-    }),
-
-    // Transfer lot
-    transferLot: builder.mutation<
-      { source_lot: StockLot; destination_lot: StockLot },
-      { lot_id: string; destination_location_id: string; quantity: number }
-    >({
-      query: ({ lot_id, ...body }) => ({
-        url: `/api/market/lots/${lot_id}/transfer`,
-        method: "POST",
-        body,
-      }),
-      transformResponse: (response: {
-        data: { source_lot: StockLot; destination_lot: StockLot }
-      }) => response.data,
-      invalidatesTags: [
-        { type: "MarketListings", id: "SEARCH" },
-        "MarketListings",
-        "MyListings",
-      ],
-    }),
-
     // Get locations
     getLocations: builder.query<{ locations: Location[] }, { search?: string }>(
       {
@@ -264,19 +173,6 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       ],
     }),
 
-    getContractorAllocations: builder.query<
-      { allocations: Allocation[] },
-      { contractor_spectrum_id: string }
-    >({
-      query: ({ contractor_spectrum_id }) => ({
-        url: `/api/contractors/${contractor_spectrum_id}/allocations`,
-        method: "GET",
-      }),
-      transformResponse: (response: { data: { allocations: Allocation[] } }) =>
-        response.data,
-      providesTags: ["Orders"],
-    }),
-
     // Manual allocate order
     manualAllocateOrder: builder.mutation<
       { allocations: Allocation[] },
@@ -301,67 +197,13 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         })),
       ],
     }),
-
-    // Search all lots
-    searchLots: builder.query<
-      { lots: StockLot[]; total: number },
-      {
-        username?: string
-        contractor_spectrum_id?: string
-        location_id?: string
-        listed?: boolean
-        status?: string
-        min_quantity?: string
-        max_quantity?: string
-        search?: string
-        page_size?: number
-        offset?: number
-      }
-    >({
-      query: (params) => {
-        const searchParams = new URLSearchParams()
-        if (params.username) searchParams.append("username", params.username)
-        if (params.contractor_spectrum_id)
-          searchParams.append(
-            "contractor_spectrum_id",
-            params.contractor_spectrum_id,
-          )
-        if (params.location_id)
-          searchParams.append("location_id", params.location_id)
-        if (params.listed !== undefined)
-          searchParams.append("listed", String(params.listed))
-        if (params.status) searchParams.append("status", params.status)
-        if (params.min_quantity)
-          searchParams.append("min_quantity", params.min_quantity)
-        if (params.max_quantity)
-          searchParams.append("max_quantity", params.max_quantity)
-        if (params.search) searchParams.append("search", params.search)
-        if (params.page_size)
-          searchParams.append("page_size", String(params.page_size))
-        if (params.offset) searchParams.append("offset", String(params.offset))
-        return `/api/market/lots?${searchParams.toString()}`
-      },
-      transformResponse: (response: {
-        data: { lots: StockLot[]; total: number }
-      }) => response.data,
-      providesTags: [
-        { type: "MarketListings", id: "SEARCH" },
-        { type: "StockLots", id: "SEARCH" },
-      ],
-    }),
   }),
 })
 
 export const {
   useGetListingLotsQuery,
-  useCreateLotMutation,
-  useUpdateLotMutation,
-  useDeleteLotMutation,
-  useTransferLotMutation,
   useGetLocationsQuery,
   useCreateLocationMutation,
   useGetOrderAllocationsQuery,
-  useGetContractorAllocationsQuery,
   useManualAllocateOrderMutation,
-  useSearchLotsQuery,
 } = stockLotsApi
