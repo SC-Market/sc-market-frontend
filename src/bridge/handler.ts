@@ -17,6 +17,7 @@ import { BRIDGE_PAGES, type ApiRequest, type BridgeDocument } from "./pages"
 import { matchBridgeRoute } from "./routes"
 import { rewriteShell, type HtmlRewriterConstructor } from "./render"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
+import { isMainSiteHostname } from "../util/mainSiteHost"
 
 export interface BridgeEnv {
   ASSETS: { fetch(input: Request | URL | string): Promise<Response> }
@@ -210,6 +211,9 @@ export async function handleBridgeRequest(
 
   const url = new URL(request.url)
   if (!matchBridgeRoute(url.pathname)) return ctx.next()
+  // White-label org domains are served by the same deployment; their pages
+  // must never get SC Market's head or summary injected.
+  if (!isMainSiteHostname(url.hostname)) return ctx.next()
 
   // The pretty path: Pages redirects /index.html → /. A fresh Request so no
   // visitor conditional headers turn the shell into a bodiless 304.

@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react"
+import { isMainSiteHostname } from "../../util/mainSiteHost"
 
 // Resolve the current hostname to an org spectrum_id for white-label domains.
 // Uses localStorage cache for instant resolution, revalidated by HookProvider.
@@ -57,14 +58,6 @@ export function getWhiteLabelConfig(): WhiteLabelDomainConfig | null {
   return getCachedDomainOrg()
 }
 
-function isMainSiteHostname(hostname: string): boolean {
-  return (
-    hostname === "localhost" ||
-    hostname === "sc-market.space" ||
-    hostname === "www.sc-market.space" ||
-    hostname.endsWith(".localhost")
-  )
-}
 
 export interface CustomDomain {
   /**

@@ -52,10 +52,10 @@ function setup(upstream: Upstream, env: Record<string, string | undefined> = {})
     cache: cache as unknown as Cache,
     fetch: fetchSpy as unknown as typeof fetch,
   }
-  const run = async (path: string, init: RequestInit = {}) => {
+  const run = async (path: string, init: RequestInit = {}, origin = "https://sc-market.space") => {
     const response = await handleBridgeRequest(
       {
-        request: new Request(`https://sc-market.space${path}`, init),
+        request: new Request(`${origin}${path}`, init),
         env: { ASSETS: { fetch: assets }, VITE_BACKEND_URL: API, ...env },
         next,
         waitUntil: (p) => pending.push(p),
@@ -76,6 +76,17 @@ beforeEach(() => {
 })
 
 describe("handleBridgeRequest", () => {
+  it("passes white-label org domains through untouched, on every route", async () => {
+    for (const path of ["/", "/market/71012eb4--pristine-medal", "/wiki/ships"]) {
+      const { run, fetchSpy, next, assets } = setup(json(f.listing()))
+      const res = await run(path, {}, "https://shop.example-org.com")
+      expect(await res.text()).toBe("NEXT")
+      expect(next).toHaveBeenCalledOnce()
+      expect(fetchSpy).not.toHaveBeenCalled()
+      expect(assets).not.toHaveBeenCalled()
+    }
+  })
+
   it("renders a known entity with the shell's caching + CORS headers", async () => {
     const { run, fetchSpy, assets } = setup(json(f.listing()))
     const res = await run("/market/71012eb4--pristine-medal")
