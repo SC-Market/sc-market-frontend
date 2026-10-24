@@ -514,8 +514,7 @@ const HUB_PAGES: Record<
     ),
   ),
 
-  // The list includes paint/livery codes with 1 item; the most prolific
-  // manufacturers first keeps the links meaningful.
+  // ~108 brands; the 50 most prolific first (display_name, else the code).
   wikiManufacturers: page<WikiManufacturerSearchResult[]>({
     primary: () => v2List(`/game-data/wiki/manufacturers`, STATIC_GAME_DATA_TTL),
     build: (data, _s, ctx) =>
