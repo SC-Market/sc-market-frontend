@@ -7,7 +7,6 @@ export {
   formatListingSlug,
   formatMarketUrl,
   formatCompleteListingUrl,
-  formatMarketMultipleUrl,
 } from "../features/market/domain/urls"
 export type { FormattableListingType } from "../features/market/domain/urls"
 

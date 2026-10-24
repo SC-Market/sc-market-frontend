@@ -473,30 +473,3 @@ export function BuyOrdersViewPaginated() {
     </Grid>
   )
 }
-
-/**
- * Dashboard section showing the current user's buy orders.
- * Uses the same format as orders/offers (Paper, ControlledTable).
- * Renders nothing if the user has no buy orders (section is hidden).
- */
-export function DashBuyOrdersArea() {
-  const { data: profile } = useGetUserProfileQuery()
-  const { data: listings, isLoading } = useGetBuyOrderListingsQuery()
-
-  const hasMyBuyOrders = useMemo(() => {
-    if (!profile?.username || !listings?.length) return false
-    return listings.some((agg) =>
-      agg.buy_orders?.some((bo) => bo.buyer?.username === profile.username),
-    )
-  }, [listings, profile?.username])
-
-  if (isLoading || !profile?.username) {
-    return null
-  }
-
-  if (!hasMyBuyOrders) {
-    return null
-  }
-
-  return <BuyOrdersViewPaginated />
-}

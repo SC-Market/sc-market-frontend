@@ -2,11 +2,6 @@
  * Market-specific URL formatters (listing links, slugs).
  */
 
-import type {
-  MarketListingSearchResult,
-  ExtendedMultipleSearchResult,
-} from "./types"
-
 export function formatShortSlug(id: string, name: string): string {
   const prefix = id.replace(/-/g, "").slice(0, 8)
   const slug = name
@@ -53,10 +48,4 @@ export function formatCompleteListingUrl(
     console.log(listing, e)
     return ""
   }
-}
-
-export function formatMarketMultipleUrl(
-  multiple: ExtendedMultipleSearchResult,
-): string {
-  return `/market/multiple/${formatShortSlug(multiple.listing_type, multiple.title)}`
 }
