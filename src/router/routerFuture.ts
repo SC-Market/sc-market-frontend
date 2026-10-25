@@ -17,6 +17,7 @@ type RouterFuture = NonNullable<
 export const ROUTER_FUTURE: RouterFuture = {
   v7_relativeSplatPath: true,
   v7_fetcherPersist: true,
+  v7_normalizeFormMethod: true,
 }
 
 /** Pass as `future` to <RouterProvider>. */
