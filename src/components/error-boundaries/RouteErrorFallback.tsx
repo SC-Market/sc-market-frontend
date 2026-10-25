@@ -10,11 +10,11 @@ import { ErrorFallback } from "./ErrorFallback"
  * and displays it using the ErrorFallback component.
  *
  * NOTE on stale-chunk recovery: we deliberately do NOT sniff error message text
- * here. Failed dynamic imports of lazy route chunks (old page → new deploy) are
- * handled generically by the `vite:preloadError` listener in index.tsx, which is
- * Vite's typed, cross-browser signal and calls preventDefault() so the error
- * never reaches this fallback. If one ever does slip through, showing the normal
- * error UI (with a reload button) is an acceptable, non-looping last resort.
+ * here. Failed dynamic imports of lazy route chunks (old page → new deploy) go
+ * through retryDynamicImport: retried in place, then a rate-limited reload
+ * (assetReloadGuard). The error only reaches this fallback once the reload
+ * budget is spent, where showing the normal error UI (with a reload button) is
+ * the intended, non-looping last resort.
  */
 export function RouteErrorFallback() {
   const error = useRouteError()

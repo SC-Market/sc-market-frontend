@@ -17,10 +17,11 @@
  * fresh index.html + chunks. If the reload budget is spent, we rethrow so the
  * route error boundary shows an error page instead of looping.
  *
- * This module owns final-failure recovery so the global `vite:preloadError`
- * handler (src/index.tsx) no longer reloads on the FIRST failed attempt — doing
- * so would preempt the retry. The handler now only swallows prefetch failures;
- * real navigations reject and flow through the retry logic here.
+ * This module owns final-failure recovery. Nothing may preventDefault()
+ * `vite:preloadError` (see src/index.tsx): that turns the rejection into an
+ * `undefined` resolution. As a second line of defence, an import that resolves
+ * to a non-object is treated as a failed attempt here, so a lazy route can never
+ * resolve to `undefined` and always goes retry → reload → error page.
  */
 
 import { tryEmergencyReload } from "./assetReloadGuard"
@@ -34,6 +35,16 @@ interface RetryOptions {
 
 const DEFAULT_RETRIES = 2
 const DEFAULT_BASE_DELAY_MS = 400
+
+/** A dynamic import resolved to something that is not a module namespace. */
+export class MissingModuleError extends Error {
+  constructor(value: unknown) {
+    super(
+      `Dynamic import resolved to ${value === null ? "null" : typeof value} instead of a module`,
+    )
+    this.name = "MissingModuleError"
+  }
+}
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -54,7 +65,13 @@ export async function retryDynamicImport<T>(
   let lastError: unknown
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      return await importFn()
+      const module = await importFn()
+      if (module === null || typeof module !== "object") {
+        // A failed import whose vite:preloadError was cancelled resolves to
+        // undefined instead of rejecting. Treat it as the failure it is.
+        throw new MissingModuleError(module)
+      }
+      return module
     } catch (error) {
       lastError = error
       if (attempt === retries) break

@@ -15,7 +15,7 @@
  * normal refresh crashes" was the signature: hard refresh bypasses the SW, the
  * next normal refresh hit the bad cache again. A SW that never touches assets
  * cannot cause that class of bug. Stale-chunk recovery for lazy routes is
- * handled entirely on the client (vite:preloadError + RouteErrorFallback + the
+ * handled entirely on the client (retryDynamicImport + RouteErrorFallback + the
  * inline guard in index.html, all rate-limited by assetReloadGuard).
  *
  * Still uses vite-plugin-pwa injectManifest so we keep our custom push handlers;

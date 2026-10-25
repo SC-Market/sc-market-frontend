@@ -141,8 +141,8 @@
         }
 
         // NOTE: we deliberately do NOT handle vite:preloadError here. That event
-        // is owned by the module layer (retryDynamicImport + the handler in
-        // src/index.tsx): failed route imports are retried in place first, and
+        // is left unhandled on purpose (see src/index.tsx) so failed route
+        // imports reject into retryDynamicImport: they are retried in place first, and
         // only escalated to a reload once retries are exhausted. Reloading here
         // on the FIRST failed attempt would preempt that retry — and would also
         // reload on hover-prefetch failures, which must stay silent.

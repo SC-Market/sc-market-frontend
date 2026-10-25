@@ -11,7 +11,6 @@ import {
   getBugsnagErrorBoundary,
 } from "./util/monitoring/bugsnagLoader"
 import { clearEmergencyReloadBudget } from "./util/assetReloadGuard"
-import { isPrefetchInFlight } from "./router/routePrefetch"
 import { Provider } from "react-redux"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { makeStore } from "./store/store"
@@ -20,28 +19,15 @@ import { loadProfileCache } from "./features/profile/profileCache"
 import { userApi } from "./features/profile/api/profileApi"
 import { applyTitleTemplate } from "./seo/pageHead"
 
-// Handle failed dynamic import()s. vite:preloadError is Vite's typed,
-// cross-browser signal for a failed dynamic import — the robust way to detect a
-// stale/missing route chunk WITHOUT coupling to browser-specific error text.
-//
-// This handler's ONLY job is to swallow PREFETCH failures. A hover-prefetch of a
-// stale chunk (removed by a deploy) also fires this event; without preventDefault
-// Vite re-throws and the unhandled rejection is noisy for a background fetch the
-// user never asked for. prefetchRoute's own try/catch already handles it.
-//
-// Real NAVIGATION failures are deliberately NOT preventDefault()'d here:
-//   - preventDefault() would make the awaited import() resolve to `undefined`
-//     instead of rejecting, silently defeating the retry in retryDynamicImport.
-//   - Reloading on the first failed attempt would preempt the retry entirely.
-// Instead, navigation imports are wrapped in retryDynamicImport (see App.tsx),
-// which retries transient blips in place and, only once retries are exhausted,
-// escalates to a rate-limited reload (deploy recovery) or lets the error reach
-// the route error boundary.
-window.addEventListener("vite:preloadError", (event) => {
-  if (isPrefetchInFlight()) {
-    event.preventDefault()
-  }
-})
+// Failed dynamic import()s: there is deliberately NO vite:preloadError
+// listener. Calling preventDefault() on that event makes Vite's preload helper
+// resolve the failed import() to `undefined` instead of rejecting, so a lazy
+// route's `(await import(...)).Page` throws a TypeError, skipping the retry →
+// reload → error page path in retryDynamicImport. A window-level "is a
+// prefetch running?" check cannot tell which import failed: when the idle-time
+// prefetch is in flight while a route chunk fails, it cancelled the ROUTE's
+// error. Every prefetch path (routePrefetch, componentPrefetch, util/prefetch)
+// already catches its own rejection, so letting Vite rethrow costs nothing.
 
 // The browser's single store. Browser-only side effects live here, not in
 // makeStore(), so a server render can create clean per-request stores.
