@@ -19,6 +19,7 @@ export const ROUTER_FUTURE: RouterFuture = {
   v7_fetcherPersist: true,
   v7_normalizeFormMethod: true,
   v7_partialHydration: true,
+  v7_skipActionErrorRevalidation: true,
 }
 
 /** Pass as `future` to <RouterProvider>. */
