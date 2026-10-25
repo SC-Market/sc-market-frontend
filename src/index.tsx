@@ -49,8 +49,14 @@ const store = makeStore({ networkEnv: browserNetworkEnv })
 
 setupListeners(store.dispatch)
 
+// Start the session check (GET /api/auth/session) before anything renders:
+// the profile query and every auth-only query wait on its answer instead of
+// probing with requests that 401 for anonymous visitors.
+void browserNetworkEnv.checkSession()
+
 // Seed profile cache from localStorage (prevents logged-out flash),
-// then invalidate so the next subscription triggers a network fetch.
+// then invalidate so the next subscription triggers a network fetch (which
+// first waits for the session check above).
 const cachedProfile = loadProfileCache()
 if (cachedProfile) {
   store.dispatch(

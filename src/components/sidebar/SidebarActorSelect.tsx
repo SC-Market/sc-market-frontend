@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useLocation, useNavigate, matchPath } from "react-router-dom"
-import { useSession } from "../../hooks/login/useSession"
+import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
 import { useCookies } from "react-cookie"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useTheme } from "@mui/material/styles"
@@ -38,6 +38,7 @@ export function SidebarActorSelect() {
   const location = useLocation()
   const navigate = useNavigate()
   const { profile } = useSession()
+  const isAuthenticated = useIsAuthenticated()
   const { customOrg } = useCustomDomain()
   const theme = useTheme<ExtendedTheme>()
 
@@ -46,7 +47,7 @@ export function SidebarActorSelect() {
   // On white-label, don't render
   if (customOrg) return null
 
-  const { data: myShops } = useGetMyShopsQuery(undefined, { skip: !profile })
+  const { data: myShops } = useGetMyShopsQuery(undefined, { skip: !isAuthenticated })
   const [quickCreateShop] = useQuickCreateShopMutation()
 
   const currentShopSlug = useMemo(() => {

@@ -60,6 +60,7 @@ vi.mock("react-router-dom", async () => {
 // Mock the profile API hook
 vi.mock("../../../features/profile/api/profileApi", () => ({
   useGetUserProfileQuery: () => ({ data: null, isLoading: false }),
+  useAuthSessionCheckQuery: () => ({ data: undefined }),
 }))
 
 // Mock the market v2 hooks used by the component

@@ -65,7 +65,7 @@ import {
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
-import { useSession } from "../../hooks/login/useSession"
+import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
 import { useFeatureFlag } from "../../hooks/market"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { has_permission } from "../../views/contractor/OrgRoles"
@@ -104,7 +104,10 @@ export function SidebarV2() {
   const location = useLocation()
 
   const { profile } = useSession()
-  const { data: shops = [] } = useGetMyShopsQuery()
+  const isAuthenticated = useIsAuthenticated()
+  const { data: shops = [] } = useGetMyShopsQuery(undefined, {
+    skip: !isAuthenticated,
+  })
   const { flags } = useFeatureFlag()
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()

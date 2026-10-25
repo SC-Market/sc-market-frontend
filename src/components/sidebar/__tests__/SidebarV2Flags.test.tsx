@@ -34,6 +34,7 @@ vi.mock("../../../hooks/market", () => ({
 
 vi.mock("../../../features/profile/api/profileApi", () => ({
   useGetUserProfileQuery: () => ({ data: undefined, error: undefined }),
+  useAuthSessionCheckQuery: () => ({ data: undefined }),
 }))
 vi.mock("../../../features/contractor/api/contractorApi", () => ({
   useGetContractorBySpectrumIDQuery: () => ({ data: undefined }),

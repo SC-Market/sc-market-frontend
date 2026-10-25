@@ -6,6 +6,7 @@ import {
 } from "../../notifications/api/notificationApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetMyShopsQuery } from "../../../store/api/v2/market"
+import { useIsAuthenticated } from "../../../hooks/login/useSession"
 import { useNotificationPollingInterval } from "../../../hooks/notifications/useNotificationPolling"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
@@ -29,7 +30,10 @@ export function useNotifications() {
 
   const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser
-  const { data: shopsData } = useGetMyShopsQuery(undefined, { skip: !isLoggedIn })
+  const isAuthenticated = useIsAuthenticated()
+  const { data: shopsData } = useGetMyShopsQuery(undefined, {
+    skip: !isAuthenticated,
+  })
   const pollingInterval = useNotificationPollingInterval()
 
   const { data: notificationsData, refetch } = useGetNotificationsQuery(

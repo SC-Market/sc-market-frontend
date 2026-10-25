@@ -44,5 +44,8 @@ vi.mock("./features/profile/api/profileApi", async (importOriginal) => {
       error: undefined,
       refetch: vi.fn(),
     }),
+    // Session check unanswered: useSession() follows the profile query above
+    // and useIsAuthenticated() is false, as before the check existed.
+    useAuthSessionCheckQuery: () => ({ data: undefined }),
   }
 })

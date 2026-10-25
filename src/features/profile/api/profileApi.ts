@@ -8,6 +8,11 @@ import {
 } from "../../../hooks/login/UserProfile"
 import type { OrderReview } from "../../orders/domain/types"
 import { serviceApi } from "../../../store/service"
+import {
+  getNetworkEnv,
+  type SessionCheckResult,
+} from "../../../store/networkEnv"
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import type { RootState } from "../../../store/store"
 import type { DiscordSettings, OrderWebhook } from "../../contractor/domain/types"
 import { unwrapResponse } from "../../../store/api-utils"
@@ -22,6 +27,16 @@ import type { Rating } from "../../contractor/domain/types"
 
 const baseUrl = `${BACKEND_URL}/api/profile`
 
+/**
+ * What the profile query reports when the session check says the visitor is
+ * anonymous: the same 401 GET /api/profile would have answered, minus the
+ * request (and its console error, and the refresh attempt it triggered).
+ */
+const NOT_LOGGED_IN: FetchBaseQueryError = {
+  status: 401,
+  data: { error: { code: "UNAUTHORIZED", message: "Authentication required" } },
+}
+
 // Define a service using a base URL and expected endpoints
 export const userApi = serviceApi.injectEndpoints({
   overrideExisting: false,
@@ -34,9 +49,11 @@ export const userApi = serviceApi.injectEndpoints({
         credentials: "include",
       }),
       // Invalidate all cache on logout
-      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_, { dispatch, queryFulfilled, extra }) {
         try {
           await queryFulfilled
+          // Before the reset below re-runs the session check / profile query.
+          getNetworkEnv(extra).onLoggedOut()
           // Clear all RTK Query cache
           clearProfileCache()
           dispatch(serviceApi.util.resetApiState())
@@ -60,8 +77,31 @@ export const userApi = serviceApi.injectEndpoints({
         }
       },
     }),
+    /**
+     * App-start session check (GET /api/auth/session, see
+     * store/sessionCheck.ts), exposed as a query so components can react to
+     * it. Not app data: it wraps the NetworkEnv's auth primitive the same way
+     * the base query wraps onUnauthorized. Gate auth-only queries on
+     * useIsAuthenticated() (hooks/login/useSession) rather than on this.
+     */
+    authSessionCheck: builder.query<SessionCheckResult, void>({
+      queryFn: async (_arg, { extra }) => ({
+        data: await getNetworkEnv(extra).checkSession(),
+      }),
+      keepUnusedDataFor: Infinity,
+    }),
     profileGetUserProfile: builder.query<UserProfileState, void>({
-      query: () => `${baseUrl}`,
+      // Asks the session check first: anonymous visitors get the 401 without
+      // a request. Authenticated (or "unsupported" — old backend) sessions
+      // fetch the profile exactly as before, including 401 → refresh → retry.
+      async queryFn(_arg, api, extraOptions, baseQuery) {
+        const session = await getNetworkEnv(api.extra).checkSession()
+        if (session === "anonymous") return { error: NOT_LOGGED_IN }
+        const result = await baseQuery(baseUrl)
+        if (result.error) return { error: result.error, meta: result.meta }
+        // Same unchecked response typing the previous `query:` form had.
+        return { data: result.data as UserProfileState, meta: result.meta }
+      },
       // Keep user profile in cache for 5 minutes (frequently accessed)
       keepUnusedDataFor: 300,
       providesTags: (result, error, arg) => [
@@ -557,6 +597,8 @@ export const useGetUserByUsernameQuery =
 export const useGetUserProfileQuery =
   userApi.endpoints.profileGetUserProfile.useQuery
 export const useLogoutMutation = userApi.endpoints.logout.useMutation
+export const useAuthSessionCheckQuery =
+  userApi.endpoints.authSessionCheck.useQuery
 export const useGetUserOrderReviews =
   userApi.endpoints.profileGetUserOrderReviews.useQuery
 export const useGetUserWebhooks =

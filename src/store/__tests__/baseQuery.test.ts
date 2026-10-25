@@ -17,6 +17,8 @@ function makeEnv(overrides: Partial<NetworkEnv> = {}): NetworkEnv {
     credentials: "include",
     headers: {},
     onUnauthorized: vi.fn(() => Promise.resolve(true)),
+    checkSession: vi.fn(() => Promise.resolve("unsupported" as const)),
+    onLoggedOut: vi.fn(),
     ...overrides,
   }
 }

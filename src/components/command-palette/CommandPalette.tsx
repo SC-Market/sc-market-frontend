@@ -41,6 +41,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { SHOP_PATHS } from "../../routes/paths"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
+import { useIsAuthenticated } from "../../hooks/login/useSession"
 
 interface CommandItem {
   id: string
@@ -60,7 +61,10 @@ export function CommandPalette() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
-  const { data: shops = [] } = useGetMyShopsQuery()
+  const isAuthenticated = useIsAuthenticated()
+  const { data: shops = [] } = useGetMyShopsQuery(undefined, {
+    skip: !isAuthenticated,
+  })
   const isMobile = useBreakpointDown("sm")
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)

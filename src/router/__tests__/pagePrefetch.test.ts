@@ -30,6 +30,8 @@ function makeTestStore() {
       credentials: "omit",
       headers: {},
       onUnauthorized: async () => false,
+      checkSession: async () => "anonymous",
+      onLoggedOut: () => {},
     },
   }
   return configureStore({

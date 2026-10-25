@@ -32,6 +32,11 @@ import type { has_permission as HasPermission } from "../../../features/contract
 // ---- Mutable mock state -----------------------------------------------------
 let mockProfile: UserProfileState | undefined = undefined
 let mockShops: ShopResponse[] = []
+/** GET /api/auth/session answer (undefined = in flight). */
+let mockSessionCheck: "authenticated" | "anonymous" | "unsupported" | undefined =
+  "authenticated"
+/** skip option of each useGetMyShopsQuery call. */
+const shopsMineSkips: (boolean | undefined)[] = []
 let mockUnreadChatCount = 0
 let mockPendingOrderCount = 0
 let mockShopPendingOrderCount = 0
@@ -49,6 +54,7 @@ vi.mock("../../../features/profile/api/profileApi", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>()
   return {
     ...actual,
+    useAuthSessionCheckQuery: () => ({ data: mockSessionCheck }),
     useGetUserProfileQuery: () => ({
       data: mockProfile,
       isSuccess: mockProfile !== undefined,
@@ -66,8 +72,12 @@ vi.mock("../../../store/api/v2/market", async () => {
   )
   return {
     ...actual,
-    useGetMyShopsQuery: () =>
-      querySuccess<typeof actual.marketV2Api.endpoints.getMyShops>(mockShops),
+    useGetMyShopsQuery: (_arg?: void, opts?: { skip?: boolean }) => {
+      shopsMineSkips.push(opts?.skip)
+      return querySuccess<typeof actual.marketV2Api.endpoints.getMyShops>(
+        mockShops,
+      )
+    },
   }
 })
 
@@ -208,6 +218,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   mockProfile = undefined
   mockShops = []
+  mockSessionCheck = "authenticated"
   mockUnreadChatCount = 0
   mockPendingOrderCount = 0
   mockShopPendingOrderCount = 0
@@ -515,5 +526,33 @@ describe("SidebarV2 — pinning", () => {
       expect.any(Array),
       expect.objectContaining({ path: "/" }),
     )
+  })
+})
+
+describe("SidebarV2 — GET /api/v2/shops/mine gating", () => {
+  beforeEach(() => {
+    shopsMineSkips.length = 0
+  })
+
+  it("skips shops/mine for anonymous visitors", () => {
+    mockSessionCheck = "anonymous"
+    mockProfile = undefined
+    renderSidebar("/market")
+    expect(shopsMineSkips.length).toBeGreaterThan(0)
+    expect(shopsMineSkips.every((skip) => skip === true)).toBe(true)
+  })
+
+  it("skips shops/mine while the session check is in flight, even with a cached profile", () => {
+    mockSessionCheck = undefined
+    mockProfile = { username: "tester", role: "user" } as UserProfileState
+    renderSidebar("/market")
+    expect(shopsMineSkips.every((skip) => skip === true)).toBe(true)
+  })
+
+  it("requests shops/mine once the session check confirms the session", () => {
+    mockSessionCheck = "authenticated"
+    mockProfile = { username: "tester", role: "user" } as UserProfileState
+    renderSidebar("/market")
+    expect(shopsMineSkips.at(-1)).toBe(false)
   })
 })

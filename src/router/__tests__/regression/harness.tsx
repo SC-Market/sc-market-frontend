@@ -36,11 +36,17 @@ import {
 } from "./fixtures"
 import { takeRouteErrors } from "./instrument"
 
-/** Anonymous server-style env: no cookies, never refreshes. */
+/**
+ * Anonymous server-style env: no cookies, never refreshes. The session check
+ * reports "unsupported" so the profile query still asks the fake API, which
+ * decides the session per test (see SessionKind).
+ */
 export const testNetworkEnv: NetworkEnv = {
   credentials: "omit",
   headers: {},
   onUnauthorized: async () => false,
+  checkSession: async () => "unsupported",
+  onLoggedOut: () => {},
 }
 
 // ── Route table enumeration ────────────────────────────────────────────────

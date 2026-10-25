@@ -5,6 +5,7 @@ import {
   useNotificationBulkDeleteMutation,
 } from "../api/notificationApi"
 import { useGetMyShopsQuery, type ShopResponse } from "../../../store/api/v2/market"
+import { useIsAuthenticated } from "../../../hooks/login/useSession"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import type { Notification } from "../../../hooks/login/UserProfile"
 import type { NotificationScope } from "../domain/types"
@@ -54,6 +55,7 @@ export function usePageNotifications(
 
   const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser
+  const isAuthenticated = useIsAuthenticated()
 
   const {
     data: notificationsData,
@@ -72,7 +74,7 @@ export function usePageNotifications(
   )
 
   const { data: shopsData, isLoading: shopsLoading } =
-    useGetMyShopsQuery(undefined, { skip: !isLoggedIn })
+    useGetMyShopsQuery(undefined, { skip: !isAuthenticated })
 
   const [bulkUpdate] = useNotificationBulkUpdateMutation()
   const [bulkDelete] = useNotificationBulkDeleteMutation()

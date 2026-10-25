@@ -16,6 +16,7 @@ import { SidebarItemProps } from "./types"
 import { useSearchOffersQuery } from "../../store/api/offers"
 import { getCustomTabs } from "./utils/sidebarFilters"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
+import { useIsAuthenticated } from "../../hooks/login/useSession"
 
 /**
  * Main sidebar navigation component
@@ -46,8 +47,9 @@ export function Sidebar() {
     return (m?.params as { shopSlug?: string })?.shopSlug ?? null
   }, [location.pathname])
 
+  const isAuthenticated = useIsAuthenticated()
   const { data: myShops } = useGetMyShopsQuery(undefined, {
-    skip: !profile?.username,
+    skip: !isAuthenticated,
   })
 
   const activeShop = useMemo(
