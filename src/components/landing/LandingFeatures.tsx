@@ -16,9 +16,6 @@ import buyOrdersCap from "../../assets/buy-orders.webp"
 import miningDbCap from "../../assets/mining-db.webp"
 import openContractsCap from "../../assets/open-contracts-2026.webp"
 
-/** Every feature image is shown in the same frame so the block text lines up. */
-const FEATURE_MEDIA_ASPECT = "16/9"
-
 /** A feature screenshot. width/height are the file's pixel size (no layout shift). */
 interface FeatureImage {
   src: string
@@ -30,26 +27,41 @@ interface FeatureImage {
 /** A hub link: internal routes use the router, external ones open a new tab. */
 type FeatureLink = { label: string } & ({ to: string } | { href: string })
 
+/**
+ * The square tile every feature shows above its text. Same frame as the
+ * "For Orgs" images (LandingSmallImage): 1:1, outlined, button radius, with
+ * the screenshot covering the frame. From md up the blocks sit two per row, so
+ * the tile takes two thirds of the block to come out the size of those
+ * three-per-row images. The fill matches the screenshots' dark page background,
+ * so the icon tile reads as one of the set.
+ */
 function FeatureMedia(props: { image?: FeatureImage; icon?: ReactNode }) {
   const { image, icon } = props
   const theme = useTheme<ExtendedTheme>()
 
+  const frame = {
+    display: "block",
+    width: { xs: "100%", md: "66.667%" },
+    alignSelf: "center",
+    aspectRatio: "1/1",
+    border: `1px solid ${theme.palette.outline.main}`,
+    borderRadius: theme.spacing(theme.borderRadius.button),
+    backgroundColor: theme.palette.background.default,
+    boxSizing: "border-box",
+    overflow: "hidden",
+  } as const
+
   if (image) {
     return (
-      <img
+      <Box
+        component="img"
         src={image.src}
         width={image.width}
         height={image.height}
         alt={image.alt}
         loading="lazy"
         decoding="async"
-        style={{
-          display: "block",
-          width: "100%",
-          height: "auto",
-          aspectRatio: FEATURE_MEDIA_ASPECT,
-          objectFit: "contain",
-        }}
+        sx={{ ...frame, height: "auto", objectFit: "cover" }}
       />
     )
   }
@@ -58,13 +70,10 @@ function FeatureMedia(props: { image?: FeatureImage; icon?: ReactNode }) {
     <Box
       aria-hidden
       sx={{
-        width: "100%",
-        aspectRatio: FEATURE_MEDIA_ASPECT,
+        ...frame,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        border: `1px solid ${theme.palette.outline.main}`,
-        borderRadius: theme.spacing(theme.borderRadius.button),
         color: "text.secondary",
       }}
     >
@@ -214,8 +223,8 @@ export function LandingFeatures() {
             text={t("landing.buyOrdersText")}
             image={{
               src: buyOrdersCap,
-              width: 922,
-              height: 708,
+              width: 1000,
+              height: 1000,
               alt: t("landing.buyOrdersImageAlt"),
             }}
             links={[
@@ -230,8 +239,8 @@ export function LandingFeatures() {
             text={t("landing.gameDataText")}
             image={{
               src: miningDbCap,
-              width: 1400,
-              height: 789,
+              width: 1000,
+              height: 1000,
               alt: t("landing.gameDataImageAlt"),
             }}
             links={[
@@ -269,8 +278,8 @@ export function LandingFeatures() {
             text={t("landing.contractsText")}
             image={{
               src: openContractsCap,
-              width: 1237,
-              height: 606,
+              width: 1000,
+              height: 1000,
               alt: t("landing.contractsImageAlt"),
             }}
             links={[
