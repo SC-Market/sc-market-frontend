@@ -17,7 +17,7 @@ import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 
 /** Flags fully rolled out + cleaned up — hidden from the toggle menu even if the
  * backend still returns their config rows. */
-const RETIRED_FLAGS = new Set(["market_v2", "crafting"])
+const RETIRED_FLAGS = new Set(["market_v2", "crafting", "nav_v2", "wiki"])
 
 /**
  * DebugPanel: lets developers toggle feature flags for themselves.

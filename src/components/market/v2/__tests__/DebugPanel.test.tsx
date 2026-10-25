@@ -23,9 +23,17 @@ describe("DebugPanel", () => {
     error: null,
     isDeveloper: true,
     hasOverride: false,
-    // Includes retired flags (market_v2, crafting) to prove they are filtered
-    // out, plus non-retired flags (wiki, nav_v2) which should render.
-    flags: { market_v2: false, crafting: false, wiki: false, nav_v2: false },
+    // Includes retired flags (market_v2, crafting, nav_v2, wiki) to prove they
+    // are filtered out, plus live flags (customizable_dashboard,
+    // market_v2_redesign) which should render.
+    flags: {
+      market_v2: false,
+      crafting: false,
+      nav_v2: false,
+      wiki: false,
+      customizable_dashboard: false,
+      market_v2_redesign: false,
+    },
     overriddenFlags: [] as string[],
     setFlag: mockSetFlag,
   }
@@ -161,10 +169,10 @@ describe("DebugPanel", () => {
       localStorage.setItem("debug_panel_open", "true")
       renderWithTheme(<DebugPanel />)
 
-      // Should render switches only for non-retired flags (wiki, nav_v2).
+      // Should render switches only for live flags.
       // Retired flags (market_v2, crafting) are filtered out.
       const switches = screen.getAllByRole("checkbox")
-      expect(switches.length).toBe(2) // wiki, nav_v2
+      expect(switches.length).toBe(2) // customizable_dashboard, market_v2_redesign
     })
 
     it("should display non-retired flag labels and hide retired ones", () => {
@@ -172,17 +180,19 @@ describe("DebugPanel", () => {
       renderWithTheme(<DebugPanel />)
 
       // Non-retired flags render
-      expect(screen.getByText("wiki")).toBeInTheDocument()
-      expect(screen.getByText("nav V2")).toBeInTheDocument()
+      expect(screen.getByText("customizable dashboard")).toBeInTheDocument()
+      expect(screen.getByText("market V2 redesign")).toBeInTheDocument()
       // Retired flags are filtered out of the toggle menu
       expect(screen.queryByText("market V2")).not.toBeInTheDocument()
       expect(screen.queryByText("crafting")).not.toBeInTheDocument()
+      expect(screen.queryByText("nav V2")).not.toBeInTheDocument()
+      expect(screen.queryByText("wiki")).not.toBeInTheDocument()
     })
 
     it("should show Override label for overridden flags", () => {
       mockUseFeatureFlag.mockReturnValue({
         ...defaultMockReturn,
-        overriddenFlags: ["wiki"],
+        overriddenFlags: ["customizable_dashboard"],
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -208,10 +218,10 @@ describe("DebugPanel", () => {
       renderWithTheme(<DebugPanel />)
 
       const switches = screen.getAllByRole("checkbox")
-      fireEvent.click(switches[0]) // Toggle wiki (first non-retired flag)
+      fireEvent.click(switches[0]) // Toggle customizable_dashboard (first live flag)
 
       await waitFor(() => {
-        expect(mockSetFlag).toHaveBeenCalledWith("wiki", true)
+        expect(mockSetFlag).toHaveBeenCalledWith("customizable_dashboard", true)
       })
     })
 
