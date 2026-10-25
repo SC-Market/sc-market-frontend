@@ -150,6 +150,17 @@ function App() {
 }
 
 /**
+ * Rendered by React Router while the first page load's lazy route is still
+ * loading (before the router is initialized). Renders nothing, exactly like
+ * v6's RouterProvider without a fallbackElement; declaring it on the
+ * top-level routes keeps v7 from logging "No `HydrateFallback` element
+ * provided to render during initial hydration" on every page load.
+ */
+function InitialLoadFallback() {
+  return null
+}
+
+/**
  * The app's route table. Exported (unchanged) so tests can mount it with
  * createMemoryRouter; the app itself only uses it via getRouter() below.
  */
@@ -157,12 +168,14 @@ export const routes: RouteObject[] = [
   // Standalone widget route (no Root layout)
   {
     path: "/widget/orders",
+    HydrateFallback: InitialLoadFallback,
     lazy: async () => ({
       Component: (await retryDynamicImport(() => import("./pages/widget/OrdersWidget"))).OrdersWidget,
     }),
   },
   {
     errorElement: <FrontendErrorElement />,
+    HydrateFallback: InitialLoadFallback,
     element: (
       <HookProvider>
         <ShoppingListProvider>
