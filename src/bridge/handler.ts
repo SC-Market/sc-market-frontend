@@ -183,7 +183,7 @@ export async function resolvePage(
  * Response headers. Function responses don't get public/_headers, so this
  * replicates what _headers gives the shell: `Cache-Control: no-cache` (the
  * /index.html rule — always revalidate so it references current hashed
- * chunks), the `/*` CORS pair, and for "/" the `Link` header.
+ * chunks), the `/*` CORS and security headers, and for "/" the `Link` header.
  */
 function shellHeaders(
   shell: Response,
@@ -195,6 +195,10 @@ function shellHeaders(
     "Cache-Control": "no-cache",
     "Access-Control-Allow-Origin": "https://api.sc-market.space",
     "Access-Control-Allow-Credentials": "true",
+    "Content-Security-Policy": "frame-ancestors 'self'",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
     "X-SCM-Bridge": outcome,
   })
   // The `/` rule's Link header (agent/tooling entry points).

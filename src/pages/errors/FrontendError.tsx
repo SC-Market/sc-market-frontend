@@ -9,6 +9,7 @@ import { useSearchParams, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ArrowBackRounded } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { safeRedirectPath } from "../../util/safeRedirect"
 
 /**
  * The error page is the LAST line of defense — it must render even when i18n
@@ -42,7 +43,7 @@ export function FrontendErrorBody() {
   const handleGoBack = () => {
     // Navigate back to the errored page if target is available
     if (target) {
-      navigate(target)
+      navigate(safeRedirectPath(target, "/"))
     }
   }
 

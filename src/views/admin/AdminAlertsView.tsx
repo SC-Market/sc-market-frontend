@@ -32,6 +32,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useAdminAlerts } from "../../features/admin/hooks/useAdminAlerts"
+import { safeRedirectPath } from "../../util/safeRedirect"
 
 export function AdminAlertsView() {
   const { t } = useTranslation()
@@ -90,7 +91,10 @@ export function AdminAlertsView() {
             variant="text"
             color="primary"
             size="small"
-            onClick={() => window.open(params.value, "_blank")}
+            onClick={() => {
+            const path = safeRedirectPath(params.value, "")
+            if (path) window.open(path, "_blank", "noopener")
+          }}
           >
             {t("admin.alerts.openLink", "Open Link")}
           </Button>

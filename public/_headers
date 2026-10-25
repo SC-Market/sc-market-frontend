@@ -1,6 +1,10 @@
 /*
   Access-Control-Allow-Origin: https://api.sc-market.space
   Access-Control-Allow-Credentials: true
+  Content-Security-Policy: frame-ancestors 'self'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
 
 # Web Linking (RFC 8288) headers advertising machine-readable entry points for
 # agents/tooling. The API and its catalog live on the api. subdomain, so these

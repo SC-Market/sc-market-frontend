@@ -252,14 +252,16 @@ export function MarkdownRender(props: {
           const src = props.src
 
           if (src) {
-            const url = new URL(src)
-            let allowed = false
-            for (const domain of allowList) {
-              if (url.origin.includes(domain)) {
-                allowed = true
-                break
-              }
+            let hostname: string
+            try {
+              hostname = new URL(src).hostname
+            } catch {
+              // Relative or malformed src: not on the allow list.
+              return null
             }
+            const allowed = allowList.some(
+              (domain) => hostname === domain || hostname.endsWith("." + domain),
+            )
 
             if (!allowed) {
               return null

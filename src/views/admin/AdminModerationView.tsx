@@ -25,6 +25,7 @@ import { UserDetails } from "../../components/list/UserDetails"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
+import { safeRedirectPath } from "../../util/safeRedirect"
 
 export function AdminModerationView() {
   const { t } = useTranslation()
@@ -110,7 +111,10 @@ export function AdminModerationView() {
         <Button
           variant="text"
           color="primary"
-          onClick={() => window.open(params.value, "_blank")}
+          onClick={() => {
+            const path = safeRedirectPath(params.value, "")
+            if (path) window.open(path, "_blank", "noopener")
+          }}
         >
           Link
         </Button>
