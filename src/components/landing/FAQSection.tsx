@@ -12,59 +12,52 @@ export function FAQSection() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
-  const faqSchema = faqPageJsonLd(landingFaqs(t))
+  // One source for the visible Q&A and the FAQPage JSON-LD (the edge
+  // bridge renders the same landingFaqs).
+  const faqs = landingFaqs(t)
+  const faqSchema = faqPageJsonLd(faqs)
 
   return (
     <>
-    <Helmet>
-      <script type="application/ld+json">
-        {serializeJsonLd(faqSchema)}
-      </script>
-    </Helmet>
-    <Stack
-      direction={"row"}
-      sx={{ flexWrap: "wrap" }}
-      spacing={theme.layoutSpacing.compact}
-    >
-      <Typography
-        variant={"h3"}
-        color={"text.secondary"}
-        sx={{ maxWidth: "min(400px, 100%)", flexShrink: "0", marginBottom: 2 }}
+      <Helmet>
+        <script type="application/ld+json">{serializeJsonLd(faqSchema)}</script>
+      </Helmet>
+      <Stack
+        direction={"row"}
+        sx={{ flexWrap: "wrap" }}
+        spacing={theme.layoutSpacing.compact}
       >
-        {t("landing.faqTitle")}
-      </Typography>
-      <Paper sx={{ flexGrow: "1" }}>
-        <List
+        <Typography
+          variant={"h3"}
+          color={"text.secondary"}
           sx={{
-            borderRadius: theme.spacing(theme.borderRadius.topLevel),
-            padding: 0,
+            maxWidth: "min(400px, 100%)",
+            flexShrink: "0",
+            marginBottom: 2,
           }}
         >
-          <FAQQuestion
-            question={t("landing.faqSellItemsQ")}
-            answer={t("landing.faqSellItemsA")}
-            first
-          />
-          <FAQQuestion
-            question={t("landing.faqSafeQ")}
-            answer={t("landing.faqSafeA")}
-          />
-          <FAQQuestion
-            question={t("landing.faqListThingsQ")}
-            answer={t("landing.faqListThingsA")}
-          />
-          <FAQQuestion
-            question={t("landing.faqFeeQ")}
-            answer={t("landing.faqFeeA")}
-          />
-          <FAQQuestion
-            question={t("landing.faqRealMoneyQ")}
-            answer={t("landing.faqRealMoneyA")}
-            last
-          />
-        </List>
-      </Paper>
-    </Stack>
+          {t("landing.faqTitle")}
+        </Typography>
+        <Paper sx={{ flexGrow: "1" }}>
+          <List
+            sx={{
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
+              padding: 0,
+            }}
+          >
+            {faqs.map((faq, i) => (
+              <FAQQuestion
+                key={faq.question}
+                question={faq.question}
+                answer={faq.answer}
+                first={i === 0}
+                last={i === faqs.length - 1}
+                keepMounted
+              />
+            ))}
+          </List>
+        </Paper>
+      </Stack>
     </>
   )
 }

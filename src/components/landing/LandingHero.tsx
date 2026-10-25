@@ -61,10 +61,16 @@ export function LandingHero() {
             src={logo}
             alt={t("accessibility.scMarketLogo", "SC Market logo")}
           />
-          <Typography color="secondary" variant="h1">
+          {/* The brand line keeps the h1 look, but the page's one <h1> is
+              the keyword subtitle (landing.subtitle). */}
+          <Typography color="secondary" variant="h1" component="p">
             <b>SC MARKET</b>
           </Typography>
-          <Typography variant="h2" sx={{ width: "100%", textAlign: "center" }}>
+          <Typography
+            variant="h2"
+            component="h1"
+            sx={{ width: "100%", textAlign: "center" }}
+          >
             {t("landing.subtitle")}
           </Typography>
         </Stack>

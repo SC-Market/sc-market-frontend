@@ -1,7 +1,7 @@
 import { UnderlineLink } from "../typography/UnderlineLink"
 import { Divider, Grid, Link, Typography } from "@mui/material"
 import React from "react"
-import { DISCORD_INVITE } from "../../util/constants"
+import { DISCORD_BOT_INVITE, DISCORD_INVITE } from "../../util/constants"
 import { Trans, useTranslation } from "react-i18next"
 import { ReportButton } from "../button/ReportButton"
 import { useTheme } from "@mui/material/styles"
@@ -61,9 +61,7 @@ export function Footer() {
             <Link
               rel="noopener noreferrer"
               target="_blank"
-              href={
-                "https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot"
-              }
+              href={DISCORD_BOT_INVITE}
               aria-label={t("footer.discordBot", "Discord Bot")}
             >
               <UnderlineLink color={"text.secondary"}>

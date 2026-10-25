@@ -353,7 +353,8 @@ const HUB_PAGES: Record<
       canonical: head.canonical ?? `${ctx.origin}/`,
       head,
       summary: [
-        { tag: "h1", text: "SC Market — the Star Citizen marketplace" },
+        // Same <h1> as the SPA's LandingHero.
+        { tag: "h1", text: englishT("landing.subtitle") },
         ...paragraphs(headDescription(head)),
         ...linkBlocks("Browse SC Market", [...MAIN_HUB_LINKS]),
         { tag: "h2", text: englishT("landing.faqTitle", "Your questions, answered") },
