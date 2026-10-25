@@ -134,8 +134,11 @@ export function DashboardGrid({
               // grid height so charts/tables aren't crushed, but let content grow.
               minHeight: widget.layout.h * ROW_HEIGHT,
               display: "flex",
-              // Full-width card even when its content is narrow.
-              "& > *": { flex: 1, minWidth: 0 },
+              // The card fills the slot: full width even when its content is
+              // narrow, and full height (height:auto lets the flex stretch apply;
+              // the wrapper's height:100% can't resolve against a min-height).
+              // Doubled "&&" so this outranks the wrapper's own height rule.
+              "&& > *": { flex: 1, minWidth: 0, height: "auto" },
             }}
           >
             <WidgetWrapper widget={widget} editing={false} />
