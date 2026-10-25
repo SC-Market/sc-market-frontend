@@ -16,6 +16,7 @@ type RouterFuture = NonNullable<
 /** Pass as `future` to createBrowserRouter / createMemoryRouter. */
 export const ROUTER_FUTURE: RouterFuture = {
   v7_relativeSplatPath: true,
+  v7_fetcherPersist: true,
 }
 
 /** Pass as `future` to <RouterProvider>. */
