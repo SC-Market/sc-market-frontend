@@ -193,3 +193,20 @@ export function notifyBugsnag(
     )
   }
 }
+
+/**
+ * Leave a Bugsnag breadcrumb (only if initialized). Used for expected,
+ * environmental failures that should give context to later errors without
+ * being reported as errors themselves.
+ *
+ * @param message - Breadcrumb message
+ * @param metadata - Additional metadata
+ */
+export function leaveBugsnagBreadcrumb(
+  message: string,
+  metadata?: Record<string, unknown>,
+): void {
+  if (bugsnagInstance) {
+    bugsnagInstance.leaveBreadcrumb(message, metadata, "error")
+  }
+}

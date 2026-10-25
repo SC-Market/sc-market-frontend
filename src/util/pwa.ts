@@ -2,7 +2,10 @@
  * PWA utility functions for service worker registration and management
  */
 
-import { notifyBugsnag } from "./monitoring/bugsnagLoader"
+import {
+  leaveBugsnagBreadcrumb,
+  notifyBugsnag,
+} from "./monitoring/bugsnagLoader"
 
 export interface ServiceWorkerRegistrationState {
   registration: ServiceWorkerRegistration | null
@@ -26,6 +29,84 @@ function getState(): ServiceWorkerRegistrationState {
 }
 
 const listeners: Array<(state: ServiceWorkerRegistrationState) => void> = []
+
+/**
+ * Result of probing the service worker script after a registration failure.
+ * `ourFault` is true only when the server itself is serving a bad script (bad
+ * deploy, 404, 5xx, HTML fallback instead of JS) — i.e. something we can fix.
+ */
+export interface SwScriptProbe {
+  ourFault: boolean
+  status: number | null
+  contentType: string | null
+  probeError?: string
+}
+
+const JS_CONTENT_TYPE = /(java|ecma)script/i
+
+/**
+ * HEAD the service worker script to tell environmental registration failures
+ * (private mode, extensions, flaky network, browser quirks) apart from a script
+ * we are actually serving wrong.
+ *
+ * A HEAD that cannot complete at all (network error) is treated as
+ * environmental: the same flaky connection that broke register() breaks the
+ * probe, and a broken deploy shows up as an HTTP status, not a network error.
+ */
+export async function probeServiceWorkerScript(
+  swPath: string,
+): Promise<SwScriptProbe> {
+  let response: Response
+  try {
+    response = await fetch(swPath, { method: "HEAD", cache: "no-store" })
+  } catch (err) {
+    return {
+      ourFault: false,
+      status: null,
+      contentType: null,
+      probeError: err instanceof Error ? err.message : String(err),
+    }
+  }
+  const contentType = response.headers.get("content-type")
+  const ourFault =
+    !response.ok || !contentType || !JS_CONTENT_TYPE.test(contentType)
+  return { ourFault, status: response.status, contentType }
+}
+
+/**
+ * Handle a failed register()/update() call. Never throws.
+ * Environmental failures are logged + breadcrumbed; a broken script is
+ * reported to Bugsnag with the probe result in metadata.
+ */
+export async function handleServiceWorkerFailure(
+  error: unknown,
+  context: string,
+  swPath: string,
+): Promise<void> {
+  const err = error instanceof Error ? error : new Error(String(error))
+  try {
+    const probe = await probeServiceWorkerScript(swPath)
+    const metadata = {
+      context,
+      swPath,
+      url: window.location.href,
+      errorName: err.name,
+      errorMessage: err.message,
+      ...probe,
+    }
+    if (probe.ourFault) {
+      notifyBugsnag(err, metadata)
+    } else {
+      console.warn(
+        "Service Worker registration failed (environmental, not reported):",
+        err.message,
+      )
+      leaveBugsnagBreadcrumb("Service worker registration failed", metadata)
+    }
+  } catch (handlerError) {
+    console.warn("Service Worker failure handling errored:", handlerError)
+  }
+}
 
 /**
  * Register service worker
@@ -66,99 +147,126 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
   }
 
   // In dev mode, wait a bit for the service worker to be available
-  const registerSW = () => {
+  const registerSW = (): Promise<ServiceWorkerRegistration | null> => {
     return navigator.serviceWorker
       .register(swPath, { scope: "/" })
-      .then((registration) => {
-        console.log("✅ Service Worker registered successfully:", {
-          scope: registration.scope,
-          active: registration.active?.state,
-          installing: registration.installing?.state,
-          waiting: registration.waiting?.state,
-          controller: navigator.serviceWorker.controller?.scriptURL,
-        })
-
-        // Log when service worker becomes active
-        if (registration.active) {
-          console.log(
-            "Service Worker is active:",
-            registration.active.scriptURL,
-          )
-        }
-
-        // Wait for service worker to activate
-        if (registration.installing) {
-          registration.installing.addEventListener("statechange", () => {
-            if (registration.installing?.state === "activated") {
-              console.log("✅ Service Worker activated and controlling page")
-            }
-          })
-        }
-
-        getState().registration = registration
-
-        // Listen for updates
-        registration.addEventListener("updatefound", () => {
-          const newWorker = registration.installing
-          if (!newWorker) return
-
-          newWorker.addEventListener("statechange", () => {
-            if (
-              newWorker.state === "installed" &&
-              navigator.serviceWorker.controller
-            ) {
-              // New service worker available
-              getState().updateAvailable = true
-              notifyListeners()
-            }
-          })
-        })
-
-        // Check for updates periodically (only in production)
-        if (!import.meta.env.DEV) {
-          setInterval(
-            () => {
-              registration.update().catch((err) => {
-                notifyBugsnag(
-                  err instanceof Error ? err : new Error(String(err)),
-                  { context: "sw-periodic-update", scope: registration.scope },
-                )
-              })
-            },
-            60 * 60 * 1000,
-          ) // Check every hour
-        }
-
-        notifyListeners()
-        return registration
-      })
-      .catch((error) => {
-        // In dev mode, if registration fails, it might be because:
-        // 1. The dev SW isn't ready yet
-        // 2. Vite's websocket isn't connected (HMR issue)
-        // 3. Other dev-specific issues
-        // We'll silently fail in dev mode to avoid cluttering console
-        if (import.meta.env.DEV) {
-          // Only log if it's not a websocket-related error
-          const isWebSocketError =
-            error.message?.includes("websocket") ||
-            error.message?.includes("ws is undefined") ||
-            error.message?.includes("WebSocket") ||
-            error.stack?.includes("websocket")
-
-          if (!isWebSocketError) {
+      .then(
+        (registration: ServiceWorkerRegistration | undefined | null) => {
+          // Some browsers (private modes, extension-patched navigators) resolve
+          // register() with undefined instead of a registration or a rejection.
+          if (!registration) {
             console.warn(
-              "Service Worker registration failed (dev mode):",
-              error.message,
+              "Service Worker register() resolved without a registration",
+            )
+            leaveBugsnagBreadcrumb(
+              "Service worker register() resolved without a registration",
+              { swPath },
+            )
+            return null
+          }
+
+          console.log("✅ Service Worker registered successfully:", {
+            scope: registration.scope,
+            active: registration.active?.state,
+            installing: registration.installing?.state,
+            waiting: registration.waiting?.state,
+            controller: navigator.serviceWorker.controller?.scriptURL,
+          })
+
+          // Log when service worker becomes active
+          if (registration.active) {
+            console.log(
+              "Service Worker is active:",
+              registration.active.scriptURL,
             )
           }
-          // Silently ignore websocket errors in dev - they're expected if HMR isn't working
-        } else {
-          notifyBugsnag(
-            error instanceof Error ? error : new Error(String(error)),
-            { context: "sw-registration", swPath, url: window.location.href },
-          )
-        }
+
+          // Wait for service worker to activate
+          if (registration.installing) {
+            registration.installing.addEventListener("statechange", () => {
+              if (registration.installing?.state === "activated") {
+                console.log("✅ Service Worker activated and controlling page")
+              }
+            })
+          }
+
+          getState().registration = registration
+
+          // Listen for updates
+          registration.addEventListener("updatefound", () => {
+            const newWorker = registration.installing
+            if (!newWorker) return
+
+            newWorker.addEventListener("statechange", () => {
+              if (
+                newWorker.state === "installed" &&
+                navigator.serviceWorker.controller
+              ) {
+                // New service worker available
+                getState().updateAvailable = true
+                notifyListeners()
+              }
+            })
+          })
+
+          // Check for updates periodically (only in production)
+          if (!import.meta.env.DEV) {
+            setInterval(
+              () => {
+                Promise.resolve()
+                  .then(() => registration.update())
+                  .catch((err) =>
+                    handleServiceWorkerFailure(
+                      err,
+                      "sw-periodic-update",
+                      swPath,
+                    ),
+                  )
+              },
+              60 * 60 * 1000,
+            ) // Check every hour
+          }
+
+          notifyListeners()
+          return registration
+        },
+        async (error) => {
+          // In dev mode, if registration fails, it might be because:
+          // 1. The dev SW isn't ready yet
+          // 2. Vite's websocket isn't connected (HMR issue)
+          // 3. Other dev-specific issues
+          // We'll silently fail in dev mode to avoid cluttering console
+          if (import.meta.env.DEV) {
+            // Only log if it's not a websocket-related error
+            const isWebSocketError =
+              error?.message?.includes("websocket") ||
+              error?.message?.includes("ws is undefined") ||
+              error?.message?.includes("WebSocket") ||
+              error?.stack?.includes("websocket")
+
+            if (!isWebSocketError) {
+              console.warn(
+                "Service Worker registration failed (dev mode):",
+                error?.message,
+              )
+            }
+            // Silently ignore websocket errors in dev - they're expected if HMR isn't working
+          } else {
+            await handleServiceWorkerFailure(error, "sw-registration", swPath)
+          }
+          return null
+        },
+      )
+      .catch((error) => {
+        // A bug in our own post-registration handling (not a register()
+        // failure) — always worth reporting.
+        notifyBugsnag(
+          error instanceof Error ? error : new Error(String(error)),
+          {
+            context: "sw-post-registration",
+            swPath,
+          },
+        )
         return null
       })
   }
@@ -195,7 +303,9 @@ export function unregisterServiceWorker(): Promise<boolean> {
     .getRegistrations()
     .then((registrations) => {
       return Promise.all(
-        registrations.map((registration) => registration.unregister()),
+        registrations.map((registration) =>
+          registration ? registration.unregister() : false,
+        ),
       ).then(() => true)
     })
     .catch((error) => {
@@ -212,9 +322,13 @@ export function reloadForUpdate(): void {
   const waiting = getState().registration?.waiting
   if (waiting) {
     // Reload once the new SW activates and claims this client
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      window.location.reload()
-    }, { once: true })
+    navigator.serviceWorker.addEventListener(
+      "controllerchange",
+      () => {
+        window.location.reload()
+      },
+      { once: true },
+    )
     waiting.postMessage({ type: "SKIP_WAITING" })
   } else {
     window.location.reload()
@@ -288,13 +402,18 @@ export function initPWA(): void {
     if (import.meta.env.DEV) {
       if ("serviceWorker" in navigator) {
         // Unregister any existing service workers
-        navigator.serviceWorker.getRegistrations().then((registrations) => {
-          registrations.forEach((registration) => {
-            registration.unregister().catch(() => {
-              // Ignore errors
+        navigator.serviceWorker
+          .getRegistrations()
+          .then((registrations) => {
+            registrations.forEach((registration) => {
+              registration?.unregister().catch(() => {
+                // Ignore errors
+              })
             })
           })
-        })
+          .catch(() => {
+            // Ignore errors
+          })
       }
       // Only initialize online detection in dev mode
       initOnlineDetection()
@@ -314,14 +433,18 @@ export function initPWA(): void {
     const delay = 1000
 
     const register = () => {
-      registerServiceWorker()
+      // registerServiceWorker() handles its own failures; this outer catch
+      // (and the try around the call) guarantee nothing escapes to Bugsnag's
+      // global unhandled-rejection handler.
+      Promise.resolve()
+        .then(() => registerServiceWorker())
         .then((registration) => {
           if (registration) {
             console.log("✅ PWA Service Worker active and ready")
           }
         })
         .catch((error) => {
-          console.error("❌ Service worker registration failed:", error)
+          console.warn("Service worker registration failed:", error)
         })
     }
 
