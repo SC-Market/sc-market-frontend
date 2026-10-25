@@ -34,6 +34,85 @@ import { ServiceListingSkeleton } from "../../components/skeletons"
 import { EmptyContracts } from "../../components/empty-states"
 import { ORDER_PATHS, USER_PATHS } from "../../routes/paths"
 
+/**
+ * "<author> - <time ago> - <price> <payment type>" line on an open contract card.
+ *
+ * Each segment is its own flex item and the row wraps, so segments move to the
+ * next line as whole units instead of being squeezed into narrow columns. The
+ * author name truncates with an ellipsis if it can't fit on a line by itself;
+ * the time ago and the price never break internally.
+ */
+export function ContractListingMeta(props: { contract: PublicContract }) {
+  const { contract } = props
+  const { t } = useTranslation()
+  const key = PAYMENT_TYPE_MAP.get(contract.payment_type) || ""
+
+  return (
+    <Box
+      data-testid="contract-listing-meta"
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "baseline",
+        columnGap: 0.5,
+        minWidth: 0,
+      }}
+    >
+      <Box
+        sx={{ display: "flex", alignItems: "baseline", minWidth: 0, maxWidth: "100%" }}
+      >
+        <MaterialLink
+          component={Link}
+          to={USER_PATHS.profile(contract.customer.username)}
+          style={{ textDecoration: "none", color: "inherit" }}
+          sx={{ minWidth: 0, overflow: "hidden" }}
+        >
+          <UnderlineLink
+            color={"text.primary"}
+            variant={"subtitle2"}
+            noWrap
+            title={contract.customer.display_name}
+            sx={{
+              display: "block",
+              fontWeight: "400",
+              // UnderlineLink allows breaks inside words; a name should truncate instead.
+              wordBreak: "normal",
+              overflowWrap: "normal",
+            }}
+          >
+            {contract.customer.display_name}
+          </UnderlineLink>
+        </MaterialLink>
+        <Typography
+          component={"span"}
+          color={"text.primary"}
+          variant={"subtitle2"}
+          sx={{ flexShrink: 0, whiteSpace: "nowrap" }}
+        >
+          &nbsp;-
+        </Typography>
+      </Box>
+      <Typography
+        component={"span"}
+        color={"text.primary"}
+        variant={"subtitle2"}
+        sx={{ flexShrink: 0, whiteSpace: "nowrap" }}
+      >
+        {getRelativeTime(new Date(contract.timestamp))} -
+      </Typography>
+      <Typography
+        component={"span"}
+        color={"primary"}
+        variant={"subtitle2"}
+        sx={{ flexShrink: 0, whiteSpace: "nowrap" }}
+      >
+        {(+contract.cost).toLocaleString(undefined)} aUEC
+        {key ? ` ${t(key)}` : ""}
+      </Typography>
+    </Box>
+  )
+}
+
 export function ContractListing(props: {
   contract: PublicContract
   index: number
@@ -41,7 +120,6 @@ export function ContractListing(props: {
   const { contract, index } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const key = PAYMENT_TYPE_MAP.get(contract.payment_type) || ""
 
   return (
     <Grid item xs={12} lg={6}>
@@ -112,45 +190,7 @@ export function ContractListing(props: {
                     </Typography>
                   </Box>
                 }
-                subheader={
-                  <Box
-                    sx={{ paddingLeft: 0 }}
-                    display={"flex"}
-                    alignItems={"center"}
-                  >
-                    <MaterialLink
-                      component={Link}
-                      to={USER_PATHS.profile(contract.customer.username)}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      <UnderlineLink
-                        color={"text.primary"}
-                        variant={"subtitle2"}
-                        sx={{
-                          fontWeight: "400",
-                        }}
-                      >
-                        {contract.customer.display_name}
-                      </UnderlineLink>
-                    </MaterialLink>
-                    <Typography
-                      display={"inline"}
-                      color={"text.primary"}
-                      variant={"subtitle2"}
-                    >
-                      &nbsp;- {getRelativeTime(new Date(contract.timestamp))}{" "}
-                      -&nbsp;
-                    </Typography>
-                    <Typography
-                      display={"inline"}
-                      color={"primary"}
-                      variant={"subtitle2"}
-                    >
-                      {(+contract.cost).toLocaleString(undefined)} aUEC{" "}
-                      {key ? t(key) : ""}
-                    </Typography>
-                  </Box>
-                }
+                subheader={<ContractListingMeta contract={contract} />}
               />
               <CardContent sx={{ width: "auto", height: 120, paddingTop: 0 }}>
                 {
