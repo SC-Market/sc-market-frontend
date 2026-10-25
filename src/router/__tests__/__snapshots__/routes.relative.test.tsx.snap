@@ -4,7 +4,7 @@ exports[`navigate() resolution > from /does/not/exist navigate(".", relative=und
 {
   "from": "/does/not/exist",
   "relative": "route",
-  "result": "/",
+  "result": "/does/not/exist",
   "to": ".",
 }
 `;
@@ -13,7 +13,7 @@ exports[`navigate() resolution > from /does/not/exist navigate("..", relative=pa
 {
   "from": "/does/not/exist",
   "relative": "path",
-  "result": "/",
+  "result": "/does/not",
   "to": "..",
 }
 `;
@@ -31,7 +31,7 @@ exports[`navigate() resolution > from /does/not/exist navigate("sibling", relati
 {
   "from": "/does/not/exist",
   "relative": "route",
-  "result": "/sibling",
+  "result": "/does/not/exist/sibling",
   "to": "sibling",
 }
 `;
@@ -218,26 +218,26 @@ exports[`relative link resolution (every leaf) > / 1`] = `
 exports[`relative link resolution (every leaf) > /* 1`] = `
 {
   "links": {
-    "path:""": "/",
+    "path:""": "/__unmatched/deep/path",
     "path:"#frag"": "/__unmatched/deep/path#frag",
-    "path:"."": "/",
-    "path:".."": "/",
-    "path:"../.."": "/",
-    "path:"../sibling"": "/sibling",
-    "path:"./"": "/",
-    "path:"./child"": "/child",
+    "path:"."": "/__unmatched/deep/path",
+    "path:".."": "/__unmatched/deep",
+    "path:"../.."": "/__unmatched",
+    "path:"../sibling"": "/__unmatched/deep/sibling",
+    "path:"./"": "/__unmatched/deep/path/",
+    "path:"./child"": "/__unmatched/deep/path/child",
     "path:"?tab=x"": "/__unmatched/deep/path?tab=x",
-    "path:"child"": "/child",
-    "route:""": "/",
+    "path:"child"": "/__unmatched/deep/path/child",
+    "route:""": "/__unmatched/deep/path",
     "route:"#frag"": "/__unmatched/deep/path#frag",
-    "route:"."": "/",
+    "route:"."": "/__unmatched/deep/path",
     "route:".."": "/",
     "route:"../.."": "/",
     "route:"../sibling"": "/sibling",
-    "route:"./"": "/",
-    "route:"./child"": "/child",
+    "route:"./"": "/__unmatched/deep/path/",
+    "route:"./child"": "/__unmatched/deep/path/child",
     "route:"?tab=x"": "/__unmatched/deep/path?tab=x",
-    "route:"child"": "/child",
+    "route:"child"": "/__unmatched/deep/path/child",
   },
   "location": "/__unmatched/deep/path",
   "params": {
@@ -247,7 +247,7 @@ exports[`relative link resolution (every leaf) > /* 1`] = `
     "(layout:HookProvider)",
     "/*",
   ],
-  "resolvedDot": "/",
+  "resolvedDot": "/__unmatched/deep/path",
   "url": "/__unmatched/deep/path",
 }
 `;
