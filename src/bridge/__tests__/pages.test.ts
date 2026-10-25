@@ -282,6 +282,24 @@ describe("homepage", () => {
     expect(doc.head.jsonLd[1]).toEqual(faqPageJsonLd(landingFaqs(englishT)))
   })
 
+  it("has the SPA hero's keyword <h1>", () => {
+    expect(doc.summary[0]).toEqual({ tag: "h1", text: englishT("landing.subtitle") })
+    expect(doc.summary[0].tag === "h1" && doc.summary[0].text).toContain("Star Citizen")
+  })
+
+  it("includes the official / buying / orgs FAQs in the Q&A and FAQPage", () => {
+    const questions = landingFaqs(englishT).map((f) => f.question)
+    expect(questions).toEqual(
+      expect.arrayContaining([
+        "Is SC Market affiliated with Cloud Imperium Games?",
+        "How do I buy items in Star Citizen from other players?",
+        "Can my org sell on SC Market?",
+      ]),
+    )
+    const faqLd = doc.head.jsonLd[1] as { mainEntity: { name: string }[] }
+    expect(faqLd.mainEntity.map((q) => q.name)).toEqual(questions)
+  })
+
   it("shows the FAQ as visible Q&A and links every main hub", () => {
     for (const faq of landingFaqs(englishT)) {
       expect(doc.summary).toContainEqual({ tag: "h3", text: faq.question })

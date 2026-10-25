@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { Suspense, useState } from "react"
 import {
   Collapse,
   Divider,
@@ -22,15 +22,26 @@ export function FAQQuestion(props: {
   answer: string
   last?: boolean
   first?: boolean
+  /**
+   * Keep the collapsed answer in the DOM as text (for crawlers and in-page
+   * search) instead of mounting it only when opened.
+   */
+  keepMounted?: boolean
 }) {
   const [open, setOpen] = useState(false)
-  const { question, answer, last, first } = props
+  // Load the markdown renderer only once the answer is first opened; until
+  // then a kept-mounted answer is plain text.
+  const [opened, setOpened] = useState(false)
+  const { question, answer, last, first, keepMounted } = props
   const theme = useTheme<ExtendedTheme>()
 
   return (
     <>
       <ListItemButton
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open)
+          setOpened(true)
+        }}
         sx={{
           ...(first
             ? {
@@ -53,7 +64,7 @@ export function FAQQuestion(props: {
         </ListItemText>
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={open} timeout="auto" unmountOnExit={!keepMounted}>
         <ListItem>
           <Typography
             color={"text.secondary"}
@@ -64,7 +75,13 @@ export function FAQQuestion(props: {
               width: "100%",
             }}
           >
-            <MarkdownRender text={answer} />
+            {opened ? (
+              <Suspense fallback={answer}>
+                <MarkdownRender text={answer} />
+              </Suspense>
+            ) : (
+              answer
+            )}
           </Typography>
         </ListItem>
       </Collapse>

@@ -20,6 +20,10 @@ export { FALLBACK_IMAGE_URL }
 
 export const DISCORD_INVITE = "https://discord.com/invite/N4Gy8py8J4"
 
+/** OAuth2 URL that adds the SC Market bot to a Discord server. */
+export const DISCORD_BOT_INVITE =
+  "https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot"
+
 export const PAYMENT_TYPES = [
   { value: "one-time", translationKey: "paymentTypes.one_time" },
   { value: "hourly", translationKey: "paymentTypes.hourly" },
