@@ -24,6 +24,7 @@ import { routes } from "../../App"
 import { APP_TEST_TIMEOUT_MS, mountApp } from "./regression/harness"
 import { useMarketSearch } from "../../features/market/hooks/MarketSearch"
 import { MARKET_PATHS } from "../../routes/paths"
+import { ROUTER_FUTURE, ROUTER_PROVIDER_FUTURE } from "../routerFuture"
 
 vi.unmock("../../features/profile/api/profileApi")
 vi.mock("react-router-dom", async (importOriginal) =>
@@ -169,9 +170,11 @@ function mountHarness(url: string) {
       { path: MARKET_PATHS.search, element: <Harness /> },
       { path: MARKET_PATHS.buyOrders, element: <Harness /> },
     ],
-    { initialEntries: [url] },
+    { initialEntries: [url], future: ROUTER_FUTURE },
   )
-  const view = render(<RouterProvider router={router} />)
+  const view = render(
+    <RouterProvider router={router} future={ROUTER_PROVIDER_FUTURE} />,
+  )
   const where = () =>
     `${router.state.historyAction} ${router.state.location.pathname}${router.state.location.search}`
   return { router, view, where }
