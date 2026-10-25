@@ -31,7 +31,6 @@ import { describe, expect, it } from "vitest"
 import { routes } from "../../App"
 import { enumerateRoutes, fillPattern, routeLabel } from "./regression/harness"
 import { FIXTURE } from "./regression/fixtures"
-import { ROUTER_FUTURE, ROUTER_PROVIDER_FUTURE } from "../routerFuture"
 
 const TARGETS = [
   ".",
@@ -121,13 +120,8 @@ function readLeafProbe(container: HTMLElement) {
 }
 
 function mountProbe(url: string) {
-  const router = createMemoryRouter(probed, {
-    initialEntries: [url],
-    future: ROUTER_FUTURE,
-  })
-  const result = render(
-    <RouterProvider router={router} future={ROUTER_PROVIDER_FUTURE} />,
-  )
+  const router = createMemoryRouter(probed, { initialEntries: [url] })
+  const result = render(<RouterProvider router={router} />)
   return { router, ...result }
 }
 

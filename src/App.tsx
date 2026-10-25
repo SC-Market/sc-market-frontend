@@ -12,7 +12,6 @@ import {
   type RouteObject,
 } from "react-router-dom"
 import { PageFallback } from "./components/metadata/Page"
-import { ROUTER_FUTURE, ROUTER_PROVIDER_FUTURE } from "./router/routerFuture"
 // Imported STATICALLY (not from the .lazy wrapper): this is the root
 // errorElement, so it must be in the entry bundle and always available. If it
 // were lazy, an error caused by a failed chunk load would try to render an
@@ -147,9 +146,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [periodicSyncSupported])
 
-  return (
-    <RouterProvider router={getRouter()} future={ROUTER_PROVIDER_FUTURE} />
-  )
+  return <RouterProvider router={getRouter()} />
 }
 
 /**
@@ -1311,7 +1308,7 @@ let router: ReturnType<typeof createBrowserRouter> | null = null
 // createBrowserRouter reads window.location/history, so it is created on first
 // render instead of at import time.
 function getRouter() {
-  if (!router) router = createBrowserRouter(routes, { future: ROUTER_FUTURE })
+  if (!router) router = createBrowserRouter(routes)
   return router
 }
 

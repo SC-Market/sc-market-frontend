@@ -35,7 +35,6 @@ import {
   type SessionKind,
 } from "./fixtures"
 import { takeRouteErrors } from "./instrument"
-import { ROUTER_FUTURE, ROUTER_PROVIDER_FUTURE } from "../../routerFuture"
 
 /**
  * Anonymous server-style env: no cookies, never refreshes. The session check
@@ -350,16 +349,13 @@ export function mountApp(
   })
 
   const store = makeStore({ networkEnv: testNetworkEnv })
-  const router = createMemoryRouter(routes, {
-    initialEntries: [url],
-    future: ROUTER_FUTURE,
-  })
+  const router = createMemoryRouter(routes, { initialEntries: [url] })
   const head = createHead({ init: [{ titleTemplate: applyTitleTemplate }] })
 
   const result = render(
     <Provider store={store}>
       <UnheadProvider head={head}>
-        <RouterProvider router={router} future={ROUTER_PROVIDER_FUTURE} />
+        <RouterProvider router={router} />
       </UnheadProvider>
     </Provider>,
   )
