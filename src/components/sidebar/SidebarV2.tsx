@@ -61,6 +61,7 @@ import {
   StarBorderRounded,
   CloseRounded,
   LoginRounded,
+  HelpOutlineRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -73,6 +74,7 @@ import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market
 import {
   ADMIN_PATHS,
   GAME_DATA_PATHS,
+  HELP_PATHS,
   MARKET_PATHS,
   ORG_PATHS,
   PATHS,
@@ -83,6 +85,7 @@ import { useUnreadChatCount } from "../../features/chats"
 import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
 import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPendingOrderCount"
 import { haptic } from "../../util/haptics"
+import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 
 type NavContext = "browse" | "shop" | "org" | "admin"
 
@@ -693,19 +696,30 @@ export function SidebarV2() {
       )}
       </Box>
 
-      {/* Account items — sticky at bottom. Settings requires an account, so
-          only show it when logged in. */}
-      {profile && (
-        <Box sx={{ flexShrink: 0 }}>
-          <Divider sx={{ mx: 2 }} />
-          <List dense sx={{ px: 1, py: 0.5 }}>
+      {/* Sticky bottom block. Settings requires an account, so it only shows
+          when logged in; Help & Guides shows for everyone and stays last so
+          its position doesn't move. On white-label org domains it links out
+          to the official site (the guides only render there). */}
+      <Box sx={{ flexShrink: 0 }}>
+        <Divider sx={{ mx: 2 }} />
+        <List dense sx={{ px: 1, py: 0.5 }}>
+          {profile && (
             <ListItemButton component={Link} to={PATHS.settings} selected={isActive(PATHS.settings)} sx={itemSx} onClick={() => isMobile && setDrawerOpen(false)}>
               <ListItemIcon sx={{ minWidth: 36 }}><SettingsRounded /></ListItemIcon>
               <ListItemText primary={t("nav.settings", "Settings")} primaryTypographyProps={{ variant: "subtitle2" }} />
             </ListItemButton>
-          </List>
-        </Box>
-      )}
+          )}
+          <ListItemButton
+            {...(isOfficialSite()
+              ? { component: Link, to: HELP_PATHS.hub, selected: isActive(HELP_PATHS.hub) || isActive(HELP_PATHS.about), onClick: closeIfMobile }
+              : { component: "a", href: officialHelpUrl(HELP_PATHS.hub), target: "_blank", rel: "noopener" })}
+            sx={itemSx}
+          >
+            <ListItemIcon sx={{ minWidth: 36 }}><HelpOutlineRounded /></ListItemIcon>
+            <ListItemText primary={t("nav.helpGuides", "Help & Guides")} primaryTypographyProps={{ variant: "subtitle2" }} />
+          </ListItemButton>
+        </List>
+      </Box>
     </Stack>
   )
 

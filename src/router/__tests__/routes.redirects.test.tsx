@@ -58,6 +58,7 @@ const REDIRECT_CASES: Array<
   // Absolute <Navigate>
   ["/services → /market/services", "/services", { session: "anonymous" }],
   ["/orders/assigned → /dashboard", "/orders/assigned", { session: "admin" }],
+  ["/help → /guides", "/help", { session: "anonymous" }],
   // ShopRedirect* (cookie-driven)
   [
     "/market/manage with shop cookie",

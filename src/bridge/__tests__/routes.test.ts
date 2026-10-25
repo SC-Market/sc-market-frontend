@@ -19,6 +19,7 @@ const APP_ROUTES = [
   "/recruiting/post/:post_id/update",
   "/contracts",
   "/login",
+  "/help",
   "/*",
 ]
 
@@ -90,6 +91,12 @@ const PATHS = [
   "/missions",
   "/resources",
   "/wiki/items/a/b",
+  "/guides",
+  "/guides/buying",
+  "/guides/buying/buy-an-item",
+  "/guides/buying/buy-an-item/extra",
+  "/about",
+  "/help",
   "/",
   "/login",
   "/contracts",
@@ -168,6 +175,9 @@ describe("public/_routes.json", () => {
       "/login",
       "/wiki/refinery",
       "/market/multiple/abc--x/edit",
+      "/content/manifest.json",
+      "/content/bridge/index.json",
+      "/help",
     ]) {
       expect(invokes(path), path).toBe(false)
     }

@@ -6,6 +6,7 @@ import { visualizer } from "rollup-plugin-visualizer"
 import { VitePWA } from "vite-plugin-pwa"
 import circularDependency from "vite-plugin-circular-dependency"
 import Beasties from "beasties"
+import { contentPlugin } from "./scripts/vite/contentPlugin"
 
 // Critical CSS extraction plugin using Beasties
 function beastiesPlugin() {
@@ -38,6 +39,8 @@ function beastiesPlugin() {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    // Help & Guides Markdown (/content) → lazy chunks + bridge/sitemap JSON.
+    contentPlugin(),
     react(),
     viteTsconfigPaths(),
     svgrPlugin(),

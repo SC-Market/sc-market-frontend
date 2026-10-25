@@ -7,6 +7,8 @@
  *
  * - Data: anonymous GETs to the public API (VITE_BACKEND_URL). No visitor
  *   cookies or headers are forwarded; Workers' fetch has no cookie jar.
+ *   Help & Guides pages read the content build's static JSON (env.ASSETS)
+ *   instead.
  * - Unknown entity (API 404, or 400 from v1): shell + robots noindex, 404.
  * - Anything else going wrong (timeout, 5xx, bad JSON, a builder throwing,
  *   missing config): the unmodified shell (fail open), never an error page.
@@ -125,6 +127,31 @@ export async function fetchApi(
   return { kind: "error", reason: `upstream ${response.status}` }
 }
 
+/**
+ * Read one of this deployment's static JSON files (the content build's
+ * /content/bridge/*.json). A missing file is a 404, or, if the SPA fallback
+ * ever catches it, index.html with a 200: anything that isn't JSON counts as
+ * "doesn't exist".
+ */
+export async function fetchAsset(env: BridgeEnv, base: URL, path: string): Promise<ApiResult> {
+  let response: Response
+  try {
+    response = await env.ASSETS.fetch(new Request(new URL(path, base), { method: "GET" }))
+  } catch (error) {
+    return { kind: "error", reason: error instanceof Error ? error.name : "asset fetch failed" }
+  }
+  const type = response.headers.get("Content-Type") ?? ""
+  if (response.status === 404 || (response.ok && !type.includes("application/json"))) {
+    return { kind: "notFound" }
+  }
+  if (!response.ok) return { kind: "error", reason: `asset ${response.status}` }
+  try {
+    return { kind: "ok", json: await response.json() }
+  } catch {
+    return { kind: "error", reason: "invalid asset JSON" }
+  }
+}
+
 export type PageOutcome =
   | { kind: "page"; doc: BridgeDocument }
   | { kind: "notFound" }
@@ -146,7 +173,14 @@ export async function resolvePage(
 
   let primaryJson: unknown = undefined
   let secondaryJson: unknown = undefined
-  if (primaryRequest) {
+  if (page.asset) {
+    const assetPath = page.asset(match.params)
+    if (assetPath === null) return { kind: "notFound" }
+    const result = await fetchAsset(env, url, assetPath)
+    if (result.kind === "notFound") return { kind: "notFound" }
+    if (result.kind === "error") return { kind: "passthrough", reason: result.reason }
+    primaryJson = result.json
+  } else if (primaryRequest) {
     const apiBase = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
     if (!apiBase) return { kind: "passthrough", reason: "VITE_BACKEND_URL not set" }
 

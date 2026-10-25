@@ -44,6 +44,11 @@ export type BridgePageKind =
   | "resources"
   | "recruiting"
   | "contractors"
+  // Help & Guides and About (static JSON from the content build, not the API)
+  | "guidesHub"
+  | "guideCategory"
+  | "guide"
+  | "about"
 
 export interface BridgeRoute {
   path: string
@@ -70,6 +75,8 @@ export const BRIDGE_ROUTES: readonly BridgeRoute[] = [
   { path: "/market/aggregate/:id", kind: "aggregate" },
   { path: "/market/multiple/:id", kind: "bundle" },
   { path: "/wiki/manufacturers/:id", kind: "manufacturer" },
+  { path: "/guides/:category/:slug", kind: "guide" },
+  { path: "/guides/:category", kind: "guideCategory" },
   // Exact paths. "/" matches only the root (no segments), never an asset.
   { path: "/", kind: "home" },
   { path: "/market", kind: "market" },
@@ -87,6 +94,8 @@ export const BRIDGE_ROUTES: readonly BridgeRoute[] = [
   { path: "/resources", kind: "resources" },
   { path: "/recruiting", kind: "recruiting" },
   { path: "/contractors", kind: "contractors" },
+  { path: "/guides", kind: "guidesHub" },
+  { path: "/about", kind: "about" },
 ]
 
 export interface BridgeMatch {

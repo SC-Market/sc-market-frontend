@@ -34,12 +34,13 @@ import {
   BusinessRounded,
   DarkModeRounded,
   LightModeRounded,
+  HelpOutlineRounded,
 } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useSearchListingsQuery } from "../../store/api/v2/market"
 import { useDebounce } from "../../hooks/useDebounce"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { SHOP_PATHS } from "../../routes/paths"
+import { HELP_PATHS, SHOP_PATHS } from "../../routes/paths"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useIsAuthenticated } from "../../hooks/login/useSession"
 
@@ -115,6 +116,7 @@ export function CommandPalette() {
       { id: "mining", label: "Mining", icon: <InventoryRounded />, action: () => go("/mining"), category: "navigation", keywords: ["ore", "resource"] },
       { id: "wiki", label: "Wiki", icon: <MenuBookRounded />, action: () => go("/wiki"), category: "navigation", keywords: ["items", "ships", "database"] },
       { id: "resources", label: "Resources", icon: <InventoryRounded />, action: () => go("/resources"), category: "navigation" },
+      { id: "help", label: "Help & Guides", icon: <HelpOutlineRounded />, action: () => go(HELP_PATHS.hub), category: "navigation", keywords: ["help", "guide", "how", "faq", "about", "support"] },
     ]
 
     if (profile) {

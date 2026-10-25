@@ -45,6 +45,7 @@ export const PARAM_VALUES: Record<string, string> = {
   wishlist_id: "wishlist-1",
   resource_id: "resource-1",
   flagName: "fixture_flag",
+  category: "buying",
 }
 
 /** Per-pattern overrides where a specific param value is more meaningful. */
@@ -56,6 +57,8 @@ export const PATTERN_PARAM_OVERRIDES: Record<string, Record<string, string>> = {
   "/user/:username/:tab": { tab: "store" },
   "/profile/:tab": { tab: "store" },
   "/market/create/:tab": { tab: "unique" },
+  // A real guide, so the suite renders content rather than the 404 body.
+  "/guides/:category/:slug": { category: "buying", slug: "buy-an-item" },
 }
 
 const OWNER_ROLE: ContractorRole = {

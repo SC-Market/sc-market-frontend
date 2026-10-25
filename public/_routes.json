@@ -30,7 +30,10 @@
     "/contractors",
     "/user/*",
     "/recruiting",
-    "/recruiting/post/*"
+    "/recruiting/post/*",
+    "/guides",
+    "/guides/*",
+    "/about"
   ],
   "exclude": [
     "/assets/*",

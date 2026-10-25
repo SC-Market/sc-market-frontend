@@ -163,6 +163,10 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/wiki/manufacturers": () => import("../pages/wiki/WikiManufacturerList"),
   "/wiki/manufacturers/:id": () => import("../pages/wiki/WikiManufacturerPage"),
   "/wiki/refinery": () => import("../pages/wiki/WikiRefineryPage"),
+  "/guides": () => import("../pages/guides/GuidesHub"),
+  "/guides/:category": () => import("../pages/guides/GuideCategory"),
+  "/guides/:category/:slug": () => import("../pages/guides/GuidePage"),
+  "/about": () => import("../pages/about/AboutPage"),
 
   // Error routes
   "/error": () => import("../pages/errors/FrontendError"),

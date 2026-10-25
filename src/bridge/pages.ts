@@ -121,6 +121,7 @@ import {
 } from "../seo/hubHeads"
 import { englishT } from "./englishT"
 import type { BridgePageKind } from "./routes"
+import { CONTENT_PAGES } from "./contentPages"
 
 /**
  * Visible summary block. Text is always inserted as escaped text; a "ul" is
@@ -129,6 +130,8 @@ import type { BridgePageKind } from "./routes"
 export type SummaryBlock =
   | { tag: "h1" | "h2" | "h3" | "p"; text: string }
   | { tag: "ul"; links: SeoLink[] }
+  /** Plain-text list items (guide steps and bullet lists). */
+  | { tag: "ol" | "ul-text"; items: string[] }
 
 /** What the bridge injects into the shell for one page. */
 export interface BridgeDocument {
@@ -162,6 +165,12 @@ export interface BridgePage {
   primary?: (params: Record<string, string>) => ApiRequest
   /** Optional extra lookup; failures are ignored (value is undefined). */
   secondary?: (params: Record<string, string>) => ApiRequest
+  /**
+   * Instead of `primary`: a static JSON file of this deployment (read through
+   * env.ASSETS), passed to build as `primary`. A missing file, or `null` here
+   * (params that can't name a file), means "doesn't exist".
+   */
+  asset?: (params: Record<string, string>) => string | null
   build: (primary: unknown, secondary: unknown, ctx: PageContext) => BridgeDocument
 }
 
@@ -961,4 +970,5 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
 
   ...MARKET_DETAIL_PAGES,
   ...HUB_PAGES,
+  ...CONTENT_PAGES,
 }

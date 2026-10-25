@@ -189,3 +189,13 @@ export const ADMIN_PATHS = {
   supplierDashboard: "/admin/supplier-dashboard",
   supplierRoster: "/admin/supplier-roster",
 } as const
+
+/** Help & Guides (Markdown in /content; see src/features/help). */
+export const HELP_PATHS = {
+  hub: "/guides",
+  /** Typed-URL alias; redirects to the hub. */
+  help: "/help",
+  category: (category: string) => `/guides/${category}`,
+  guide: (category: string, slug: string) => `/guides/${category}/${slug}`,
+  about: "/about",
+} as const

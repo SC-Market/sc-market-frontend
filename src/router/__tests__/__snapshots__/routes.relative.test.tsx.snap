@@ -252,6 +252,41 @@ exports[`relative link resolution (every leaf) > /* 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /about 1`] = `
+{
+  "links": {
+    "path:""": "/about",
+    "path:"#frag"": "/about#frag",
+    "path:"."": "/about",
+    "path:".."": "/",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/sibling",
+    "path:"./"": "/about/",
+    "path:"./child"": "/about/child",
+    "path:"?tab=x"": "/about?tab=x",
+    "path:"child"": "/about/child",
+    "route:""": "/about",
+    "route:"#frag"": "/about#frag",
+    "route:"."": "/about",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/about/",
+    "route:"./child"": "/about/child",
+    "route:"?tab=x"": "/about?tab=x",
+    "route:"child"": "/about/child",
+  },
+  "location": "/about",
+  "params": {},
+  "probeChain": [
+    "(layout:HookProvider)",
+    "/about",
+  ],
+  "resolvedDot": "/about",
+  "url": "/about",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /accountlink 1`] = `
 {
   "links": {
@@ -2003,6 +2038,151 @@ exports[`relative link resolution (every leaf) > /error 1`] = `
   ],
   "resolvedDot": "/error",
   "url": "/error",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /guides 1`] = `
+{
+  "links": {
+    "path:""": "/guides",
+    "path:"#frag"": "/guides#frag",
+    "path:"."": "/guides",
+    "path:".."": "/",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/sibling",
+    "path:"./"": "/guides/",
+    "path:"./child"": "/guides/child",
+    "path:"?tab=x"": "/guides?tab=x",
+    "path:"child"": "/guides/child",
+    "route:""": "/guides",
+    "route:"#frag"": "/guides#frag",
+    "route:"."": "/guides",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/guides/",
+    "route:"./child"": "/guides/child",
+    "route:"?tab=x"": "/guides?tab=x",
+    "route:"child"": "/guides/child",
+  },
+  "location": "/guides",
+  "params": {},
+  "probeChain": [
+    "(layout:HookProvider)",
+    "/guides",
+  ],
+  "resolvedDot": "/guides",
+  "url": "/guides",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /guides/:category 1`] = `
+{
+  "links": {
+    "path:""": "/guides/buying",
+    "path:"#frag"": "/guides/buying#frag",
+    "path:"."": "/guides/buying",
+    "path:".."": "/guides",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/guides/sibling",
+    "path:"./"": "/guides/buying/",
+    "path:"./child"": "/guides/buying/child",
+    "path:"?tab=x"": "/guides/buying?tab=x",
+    "path:"child"": "/guides/buying/child",
+    "route:""": "/guides/buying",
+    "route:"#frag"": "/guides/buying#frag",
+    "route:"."": "/guides/buying",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/guides/buying/",
+    "route:"./child"": "/guides/buying/child",
+    "route:"?tab=x"": "/guides/buying?tab=x",
+    "route:"child"": "/guides/buying/child",
+  },
+  "location": "/guides/buying",
+  "params": {
+    "category": "buying",
+  },
+  "probeChain": [
+    "(layout:HookProvider)",
+    "/guides/:category",
+  ],
+  "resolvedDot": "/guides/buying",
+  "url": "/guides/buying",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /guides/:category/:slug 1`] = `
+{
+  "links": {
+    "path:""": "/guides/buying/buy-an-item",
+    "path:"#frag"": "/guides/buying/buy-an-item#frag",
+    "path:"."": "/guides/buying/buy-an-item",
+    "path:".."": "/guides/buying",
+    "path:"../.."": "/guides",
+    "path:"../sibling"": "/guides/buying/sibling",
+    "path:"./"": "/guides/buying/buy-an-item/",
+    "path:"./child"": "/guides/buying/buy-an-item/child",
+    "path:"?tab=x"": "/guides/buying/buy-an-item?tab=x",
+    "path:"child"": "/guides/buying/buy-an-item/child",
+    "route:""": "/guides/buying/buy-an-item",
+    "route:"#frag"": "/guides/buying/buy-an-item#frag",
+    "route:"."": "/guides/buying/buy-an-item",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/guides/buying/buy-an-item/",
+    "route:"./child"": "/guides/buying/buy-an-item/child",
+    "route:"?tab=x"": "/guides/buying/buy-an-item?tab=x",
+    "route:"child"": "/guides/buying/buy-an-item/child",
+  },
+  "location": "/guides/buying/buy-an-item",
+  "params": {
+    "category": "buying",
+    "slug": "buy-an-item",
+  },
+  "probeChain": [
+    "(layout:HookProvider)",
+    "/guides/:category/:slug",
+  ],
+  "resolvedDot": "/guides/buying/buy-an-item",
+  "url": "/guides/buying/buy-an-item",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /help 1`] = `
+{
+  "links": {
+    "path:""": "/help",
+    "path:"#frag"": "/help#frag",
+    "path:"."": "/help",
+    "path:".."": "/",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/sibling",
+    "path:"./"": "/help/",
+    "path:"./child"": "/help/child",
+    "path:"?tab=x"": "/help?tab=x",
+    "path:"child"": "/help/child",
+    "route:""": "/help",
+    "route:"#frag"": "/help#frag",
+    "route:"."": "/help",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/help/",
+    "route:"./child"": "/help/child",
+    "route:"?tab=x"": "/help?tab=x",
+    "route:"child"": "/help/child",
+  },
+  "location": "/help",
+  "params": {},
+  "probeChain": [
+    "(layout:HookProvider)",
+    "/help",
+  ],
+  "resolvedDot": "/help",
+  "url": "/help",
 }
 `;
 

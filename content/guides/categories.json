@@ -1,0 +1,26 @@
+[
+  {
+    "id": "getting-started",
+    "title": "Getting started",
+    "description": "Create your SC Market account, verify your RSI handle and finish setting up.",
+    "order": 10
+  },
+  {
+    "id": "buying",
+    "title": "Buying",
+    "description": "Find items on the market, check out from your cart, bid on auctions and post buy orders.",
+    "order": 20
+  },
+  {
+    "id": "selling",
+    "title": "Selling",
+    "description": "Open a shop, list items for aUEC and keep your stock up to date.",
+    "order": 30
+  },
+  {
+    "id": "orders",
+    "title": "Orders",
+    "description": "How offers become orders, what each order status means, and how trades finish in game.",
+    "order": 40
+  }
+]

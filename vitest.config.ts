@@ -1,9 +1,12 @@
 import { configDefaults, defineConfig } from "vitest/config"
 import react from "@vitejs/plugin-react-swc"
 import tsconfigPaths from "vite-tsconfig-paths"
+import { contentPlugin } from "./scripts/vite/contentPlugin"
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths()],
+  // contentPlugin: vitest doesn't inherit vite.config.ts plugins, and the
+  // guide pages import virtual:help-content.
+  plugins: [contentPlugin(), react(), tsconfigPaths()],
   test: {
     globals: true,
     environment: "happy-dom",

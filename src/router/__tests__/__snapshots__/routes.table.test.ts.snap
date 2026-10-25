@@ -2523,6 +2523,51 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/error",
   },
   {
+    "chain": "(layout:HookProvider) > /guides",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/guides",
+  },
+  {
+    "chain": "(layout:HookProvider) > /guides/:category",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/guides/:category",
+  },
+  {
+    "chain": "(layout:HookProvider) > /guides/:category/:slug",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/guides/:category/:slug",
+  },
+  {
+    "chain": "(layout:HookProvider) > /about",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/about",
+  },
+  {
+    "chain": "(layout:HookProvider) > /help",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": false,
+    "pattern": "/help",
+  },
+  {
     "chain": "(layout:HookProvider) > /*",
     "errorBoundaryAt": "(layout:HookProvider)",
     "guards": [

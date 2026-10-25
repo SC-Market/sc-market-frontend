@@ -19,5 +19,12 @@
 # is being bypassed and client-side recovery is the only safeguard.
 /assets/*    /assets/:splat    404
 
+# Same for the content build's JSON (the edge bridge and the backend sitemap
+# read these): a missing file must 404, never come back as index.html.
+/content/*   /content/:splat   404
+
+# Typed-URL alias for Help & Guides (the SPA also redirects client-side).
+/help        /guides           301
+
 # Redirect all real app routes to index.html for client-side routing.
 /*    /index.html   200

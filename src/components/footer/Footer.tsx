@@ -9,10 +9,18 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Helmet } from "@unhead/react/helmet"
 import { serializeJsonLd } from "../../seo/pageHead"
 import { siteJsonLd } from "../../seo/siteHeads"
+import { Link as RouterLink } from "react-router-dom"
+import { HELP_PATHS } from "../../routes/paths"
+import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 
 export function Footer() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  // Help pages render only on the official site; white-label domains link out.
+  const helpLink = (path: string) =>
+    isOfficialSite()
+      ? { component: RouterLink, to: path }
+      : { href: officialHelpUrl(path), target: "_blank", rel: "noopener" }
 
   return (
     <Grid item xs={12} sx={{ marginTop: 2 }}>
@@ -69,14 +77,15 @@ export function Footer() {
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
-            <Link
-              rel="noopener noreferrer"
-              target="_blank"
-              href={"https://github.com/henry232323/sc-market/wiki"}
-              aria-label={t("footer.wiki", "Wiki")}
-            >
+            <Link {...helpLink(HELP_PATHS.hub)}>
               <UnderlineLink color={"text.secondary"}>
-                {t("footer.wiki", "Wiki")}
+                {t("footer.helpGuides", "Help & Guides")}
+              </UnderlineLink>
+            </Link>
+            &nbsp;|&nbsp;
+            <Link {...helpLink(HELP_PATHS.about)}>
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.about", "About")}
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;

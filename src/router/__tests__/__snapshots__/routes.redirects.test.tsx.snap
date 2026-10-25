@@ -16,6 +16,7 @@ exports[`links rendered by nested pages > /contractor/TESTORG 1`] = `
 {
   "allLinks": [
     "/",
+    "/about",
     "/blueprints",
     "/buyorders",
     "/contractor/TESTORG",
@@ -26,6 +27,7 @@ exports[`links rendered by nested pages > /contractor/TESTORG 1`] = `
     "/contractors",
     "/contracts",
     "/crafting/calculator",
+    "/guides",
     "/login",
     "/market",
     "/market/services",
@@ -46,12 +48,14 @@ exports[`links rendered by nested pages > /contractor/TESTORG 1`] = `
   ],
   "finalUrl": "/contractor/TESTORG",
   "mainLinks": [
+    "/about",
     "/contractor/TESTORG",
     "/contractor/TESTORG/about",
     "/contractor/TESTORG/members",
     "/contractor/TESTORG/order",
     "/contractor/TESTORG/reviews",
     "/contractors",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -70,6 +74,7 @@ exports[`links rendered by nested pages > /messages 1`] = `
     "/contracts",
     "/crafting/calculator",
     "/dashboard",
+    "/guides",
     "/inventory",
     "/market",
     "/market/services",
@@ -106,6 +111,7 @@ exports[`links rendered by nested pages > /messages/chat-1 1`] = `
     "/contracts",
     "/crafting/calculator",
     "/dashboard",
+    "/guides",
     "/inventory",
     "/market",
     "/market/services",
@@ -135,7 +141,9 @@ exports[`links rendered by nested pages > /org/TESTORG/dashboard 1`] = `
 {
   "allLinks": [
     "/",
+    "/about",
     "/contractor/TESTORG",
+    "/guides",
     "/org/TESTORG/dashboard",
     "/org/TESTORG/manage",
     "/org/TESTORG/members",
@@ -146,6 +154,8 @@ exports[`links rendered by nested pages > /org/TESTORG/dashboard 1`] = `
   ],
   "finalUrl": "/org/TESTORG/dashboard",
   "mainLinks": [
+    "/about",
+    "/guides",
     "/org/TESTORG/dashboard",
     "/privacy-policy",
     "/terms-of-service",
@@ -158,7 +168,9 @@ exports[`links rendered by nested pages > /org/TESTORG/listings 1`] = `
 {
   "allLinks": [
     "/",
+    "/about",
     "/contractor/TESTORG",
+    "/guides",
     "/market",
     "/market/create",
     "/market/me",
@@ -172,6 +184,8 @@ exports[`links rendered by nested pages > /org/TESTORG/listings 1`] = `
   ],
   "finalUrl": "/org/TESTORG/listings?quantityAvailable=0",
   "mainLinks": [
+    "/about",
+    "/guides",
     "/market",
     "/market/create",
     "/market/me",
@@ -186,7 +200,9 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/about 1`] = `
 {
   "allLinks": [
     "/",
+    "/about",
     "/contractor/TESTORG",
+    "/guides",
     "/org/TESTORG/dashboard",
     "/org/TESTORG/manage",
     "/org/TESTORG/members",
@@ -197,6 +213,8 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/about 1`] = `
   ],
   "finalUrl": "/org/TESTORG/manage/about",
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -208,7 +226,9 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/roles 1`] = `
 {
   "allLinks": [
     "/",
+    "/about",
     "/contractor/TESTORG",
+    "/guides",
     "/org/TESTORG/dashboard",
     "/org/TESTORG/manage",
     "/org/TESTORG/members",
@@ -219,6 +239,8 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/roles 1`] = `
   ],
   "finalUrl": "/org/TESTORG/manage/roles",
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -230,6 +252,8 @@ exports[`links rendered by nested pages > /shop/test-shop/dashboard 1`] = `
 {
   "allLinks": [
     "/",
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/settings",
     "/shop/test-shop/customers",
@@ -244,6 +268,8 @@ exports[`links rendered by nested pages > /shop/test-shop/dashboard 1`] = `
   ],
   "finalUrl": "/shop/test-shop/orders",
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -255,6 +281,8 @@ exports[`links rendered by nested pages > /shop/test-shop/listings 1`] = `
 {
   "allLinks": [
     "/",
+    "/about",
+    "/guides",
     "/market",
     "/market/me",
     "/privacy-policy",
@@ -271,6 +299,8 @@ exports[`links rendered by nested pages > /shop/test-shop/listings 1`] = `
   ],
   "finalUrl": "/shop/test-shop/listings",
   "mainLinks": [
+    "/about",
+    "/guides",
     "/market",
     "/market/me",
     "/privacy-policy",
@@ -285,6 +315,8 @@ exports[`links rendered by nested pages > /shop/test-shop/settings 1`] = `
 {
   "allLinks": [
     "/",
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/settings",
     "/shop/test-shop/customers",
@@ -299,6 +331,8 @@ exports[`links rendered by nested pages > /shop/test-shop/settings 1`] = `
   ],
   "finalUrl": "/shop/test-shop/settings",
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -315,6 +349,7 @@ exports[`links rendered by nested pages > /shops/test-shop 1`] = `
     "/contractors",
     "/contracts",
     "/crafting/calculator",
+    "/guides",
     "/login",
     "/market",
     "/market/services",
@@ -360,6 +395,24 @@ exports[`org manage nav: relative navigate(value) from the pathless OrgManageLay
   "PUSH /org/TESTORG/manage/audit",
   "PUSH /org/TESTORG/manage/customers",
 ]
+`;
+
+exports[`redirects and guards > /help → /guides 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/guides",
+  "h1": [
+    "Help & Guides",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/guides",
+  ],
+  "session": "anonymous",
+  "title": "Help & Guides — How to Use SC Market",
+  "url": "/help",
+}
 `;
 
 exports[`redirects and guards > /market/create with shop cookie 1`] = `

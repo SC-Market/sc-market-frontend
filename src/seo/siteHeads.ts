@@ -5,6 +5,7 @@
  */
 import {
   GAME_DATA_PATHS,
+  HELP_PATHS,
   MARKET_PATHS,
   PATHS,
   WIKI_PATHS,
@@ -117,6 +118,8 @@ export const MAIN_HUB_LINKS: readonly SeoLink[] = [
   { href: GAME_DATA_PATHS.blueprints, text: "Crafting blueprints" },
   { href: GAME_DATA_PATHS.missions, text: "Missions" },
   { href: GAME_DATA_PATHS.resources, text: "Resources" },
+  { href: HELP_PATHS.hub, text: "Help & Guides" },
+  { href: HELP_PATHS.about, text: "About SC Market" },
 ]
 
 /** "/" (LandingPage). */

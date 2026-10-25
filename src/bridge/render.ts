@@ -11,7 +11,7 @@
  *   can't close the <script>.
  * - Summary links: href must be a site-relative path (isSafeHref) and goes
  *   through escapeAttribute(); link text is `html: false` text. At most
- *   MAX_SUMMARY_LINKS per list.
+ *   MAX_SUMMARY_LINKS per list (and per text list: guide steps/bullets).
  */
 import { PageHead, serializeJsonLd } from "../seo/pageHead"
 import type { BridgeDocument, SummaryBlock } from "./pages"
@@ -112,6 +112,21 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
         )
       }
       chunks.push({ content: "</ul>", html: true })
+      continue
+    }
+    if ("items" in block) {
+      const items = block.items.filter((item) => item.trim() !== "").slice(0, MAX_SUMMARY_LINKS)
+      if (items.length === 0) continue
+      const tag = block.tag === "ol" ? "ol" : "ul"
+      chunks.push({ content: `<${tag}>`, html: true })
+      for (const item of items) {
+        chunks.push(
+          { content: "<li>", html: true },
+          { content: item, html: false },
+          { content: "</li>", html: true },
+        )
+      }
+      chunks.push({ content: `</${tag}>`, html: true })
       continue
     }
     if (!TEXT_TAGS.has(block.tag)) continue

@@ -1306,6 +1306,36 @@ export const routes: RouteObject[] = [
             .FrontendErrorPage,
         }),
       },
+      // Help & Guides and About (Markdown in /content, see src/features/help).
+      {
+        path: "/guides",
+        lazy: async () => ({
+          Component: (await retryDynamicImport(() => import("./pages/guides/GuidesHub"))).GuidesHub,
+        }),
+      },
+      {
+        path: "/guides/:category",
+        lazy: async () => ({
+          Component: (await retryDynamicImport(() => import("./pages/guides/GuideCategory")))
+            .GuideCategory,
+        }),
+      },
+      {
+        path: "/guides/:category/:slug",
+        lazy: async () => ({
+          Component: (await retryDynamicImport(() => import("./pages/guides/GuidePage"))).GuidePage,
+        }),
+      },
+      {
+        path: "/about",
+        lazy: async () => ({
+          Component: (await retryDynamicImport(() => import("./pages/about/AboutPage"))).AboutPage,
+        }),
+      },
+      {
+        path: "/help",
+        element: <Navigate to={"/guides"} replace />,
+      },
       {
         path: "/*",
         lazy: async () => ({

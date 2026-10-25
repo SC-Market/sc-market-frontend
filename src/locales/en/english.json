@@ -1763,6 +1763,7 @@
   },
   "flight-ready": "success",
   "footer": {
+    "about": "About",
     "acknowledgments": "Special thanks to <ladyFleurLink>LadyFleur</ladyFleurLink> for the logo, and <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink>, and <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> for their APIs.",
     "apiDocs": "API Docs",
     "copyright": "Copyright © ",
@@ -1770,6 +1771,7 @@
     "discordBot": "Discord Bot",
     "donate": "Donate",
     "github": "Github",
+    "helpGuides": "Help & Guides",
     "privacyPolicy": "Privacy Policy",
     "referralCode": "Referral Code: {{code}}",
     "scOrgs": "SC Orgs",
@@ -1788,6 +1790,15 @@
     "returnToDashboard": "Return to Dashboard",
     "subtitle": "Please let us know in",
     "title": "An Error Occurred Loading the Page"
+  },
+  "help": {
+    "aboutLink": "About SC Market",
+    "aboutPrompt": "What is SC Market?",
+    "hubTitle": "Help & Guides",
+    "loadFailed": "This guide failed to load. Refresh the page to try again.",
+    "moreIn": "More in {{category}}",
+    "newHere": "New to SC Market?",
+    "nextSteps": "Next steps"
   },
   "image_search": {
     "cancel": "Cancel",
@@ -2815,6 +2826,7 @@
     "groupManage": "Manage",
     "groupMarketplace": "Marketplace",
     "groupPersonal": "Personal",
+    "helpGuides": "Help & Guides",
     "inventory": "Inventory",
     "listings": "Listings",
     "market": "Market",

@@ -43,7 +43,9 @@ const evilDocs = {
 
 /** The escaped-text chunks a summary should produce, in order. */
 function expectedTexts(blocks: (typeof evilDocs)["listing"]["summary"]): string[] {
-  return blocks.flatMap((b) => (b.tag === "ul" ? b.links.filter((l) => isSafeHref(l.href)).map((l) => l.text) : [b.text]))
+  return blocks.flatMap((b) =>
+    b.tag === "ul" ? b.links.filter((l) => isSafeHref(l.href)).map((l) => l.text) : "items" in b ? b.items : [b.text],
+  )
 }
 
 describe("escapeAttribute", () => {

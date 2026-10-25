@@ -19,6 +19,8 @@ exports[`routes (shard 1/4) > /admin/audit-logs 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -55,8 +57,10 @@ exports[`routes (shard 1/4) > /admin/feature-flags/:flagName 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/admin",
     "/admin/feature-flags",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -94,6 +98,8 @@ exports[`routes (shard 1/4) > /admin/import-monitoring 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -130,6 +136,8 @@ exports[`routes (shard 1/4) > /admin/wipe 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -163,7 +171,9 @@ exports[`routes (shard 1/4) > /availability 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -194,7 +204,9 @@ exports[`routes (shard 1/4) > /blueprints/:slug 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -225,7 +237,9 @@ exports[`routes (shard 1/4) > /buyorder/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -258,7 +272,9 @@ exports[`routes (shard 1/4) > /buyorder/create 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/buyorders",
+    "/guides",
     "/market",
     "/privacy-policy",
     "/terms-of-service",
@@ -290,7 +306,9 @@ exports[`routes (shard 1/4) > /contract/:id/:tab 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -324,6 +342,8 @@ exports[`routes (shard 1/4) > /delivery/:delivery_id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/myfleet/import",
     "/privacy-policy",
     "/terms-of-service",
@@ -359,6 +379,8 @@ exports[`routes (shard 1/4) > /email/verify/:token 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -372,6 +394,49 @@ exports[`routes (shard 1/4) > /email/verify/:token 1`] = `
   "stillLoading": false,
   "title": "Error - SC Market",
   "url": "/email/verify/token-1",
+}
+`;
+
+exports[`routes (shard 1/4) > /guides/:category/:slug 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/guides/buying/buy-an-item",
+  "h1": [
+    "Buy an item",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/guides/:category/:slug",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/availability",
+    "/buyorder/create",
+    "/buyorders",
+    "/guides",
+    "/guides/buying",
+    "/guides/getting-started/create-an-account",
+    "/guides/orders/how-orders-work",
+    "/market",
+    "/market/cart",
+    "/orders",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/guides/:category/:slug",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Buy an item — SC Market Guides",
+  "url": "/guides/buying/buy-an-item",
 }
 `;
 
@@ -454,7 +519,9 @@ exports[`routes (shard 1/4) > /market/multiple/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -488,6 +555,8 @@ exports[`routes (shard 1/4) > /market_edit/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -554,6 +623,8 @@ exports[`routes (shard 1/4) > /mining/locations 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -586,6 +657,8 @@ exports[`routes (shard 1/4) > /missions 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -616,7 +689,9 @@ exports[`routes (shard 1/4) > /offer/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -648,7 +723,9 @@ exports[`routes (shard 1/4) > /order/service/:service_id/edit 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -682,7 +759,9 @@ exports[`routes (shard 1/4) > /orders 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/buyorders",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -718,6 +797,8 @@ exports[`routes (shard 1/4) > /org/:contractor_id/dashboard 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/org/TESTORG/dashboard",
     "/privacy-policy",
     "/terms-of-service",
@@ -757,6 +838,8 @@ exports[`routes (shard 1/4) > /org/:contractor_id/manage/blocklist 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -799,6 +882,8 @@ exports[`routes (shard 1/4) > /org/:contractor_id/manage/invites 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -838,6 +923,8 @@ exports[`routes (shard 1/4) > /org/:contractor_id/money 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/org/TESTORG/send",
     "/privacy-policy",
     "/terms-of-service",
@@ -877,6 +964,8 @@ exports[`routes (shard 1/4) > /org/:contractor_id/orders 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -912,7 +1001,9 @@ exports[`routes (shard 1/4) > /org/:contractor_id/services 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -975,7 +1066,9 @@ exports[`routes (shard 1/4) > /profile/:tab 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1006,7 +1099,9 @@ exports[`routes (shard 1/4) > /recruiting/post/:post_id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1070,6 +1165,8 @@ exports[`routes (shard 1/4) > /resources 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1103,6 +1200,8 @@ exports[`routes (shard 1/4) > /sell 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1138,6 +1237,8 @@ exports[`routes (shard 1/4) > /shop/:shopSlug/orders 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1177,6 +1278,8 @@ exports[`routes (shard 1/4) > /shop/:shopSlug/settings 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1242,7 +1345,9 @@ exports[`routes (shard 1/4) > /user/:username/:tab 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1272,7 +1377,9 @@ exports[`routes (shard 1/4) > /widget/orders 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1303,7 +1410,9 @@ exports[`routes (shard 1/4) > /wiki/commodities/:id 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1336,6 +1445,8 @@ exports[`routes (shard 1/4) > /wiki/items 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -1366,7 +1477,9 @@ exports[`routes (shard 1/4) > /wiki/manufacturers 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
+    "/about",
     "/dashboard",
+    "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],

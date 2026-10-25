@@ -47,8 +47,14 @@ const mockSetCookie = vi.fn((name: string, value: unknown) => {
 })
 // has_permission — controllable per-test. Default: deny everything.
 let mockHasPermission: typeof HasPermission = () => false
+/** false = a white-label org domain (Help & Guides links out). */
+let mockOfficialSite = true
 
 // ---- Module mocks -----------------------------------------------------------
+vi.mock("../../../features/help/links", async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  isOfficialSite: () => mockOfficialSite,
+}))
 // Override the global profileApi mock from setupTests with our mutable profile.
 vi.mock("../../../features/profile/api/profileApi", async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>()
@@ -225,6 +231,7 @@ beforeEach(() => {
   mockSelectedContractor = undefined
   mockCookies = {}
   mockHasPermission = () => false
+  mockOfficialSite = true
   // Default to desktop viewport.
   vi.spyOn(window, "matchMedia").mockImplementation((query) => ({
     matches: false,
@@ -270,6 +277,24 @@ describe("SidebarV2 — browse context (logged out)", () => {
     renderSidebar("/market")
     expect(screen.queryByText("Settings")).not.toBeInTheDocument()
   })
+
+  it("renders the bottom Help & Guides link for logged-out visitors", () => {
+    renderSidebar("/market")
+    expect(screen.getByRole("link", { name: "Help & Guides" })).toHaveAttribute("href", "/guides")
+  })
+
+  it("highlights Help & Guides on guide and about pages", () => {
+    renderSidebar("/guides/buying/buy-an-item")
+    expect(screen.getByRole("link", { name: "Help & Guides" })).toHaveClass("Mui-selected")
+  })
+
+  it("links Help & Guides out to the official site on a white-label domain", () => {
+    mockOfficialSite = false
+    renderSidebar("/market")
+    const help = screen.getByRole("link", { name: "Help & Guides" })
+    expect(help).toHaveAttribute("href", "https://sc-market.space/guides")
+    expect(help).toHaveAttribute("target", "_blank")
+  })
 })
 
 describe("SidebarV2 — browse context (logged in)", () => {
@@ -283,6 +308,14 @@ describe("SidebarV2 — browse context (logged in)", () => {
     expect(screen.getByText("Messages")).toBeInTheDocument()
     expect(screen.getByText("Inventory")).toBeInTheDocument()
     expect(screen.getByText("Availability")).toBeInTheDocument()
+  })
+
+  it("renders Settings, then Help & Guides, in the bottom block", () => {
+    renderSidebar("/market")
+    const settings = screen.getByRole("link", { name: "Settings" })
+    const help = screen.getByRole("link", { name: "Help & Guides" })
+    expect(help).toHaveAttribute("href", "/guides")
+    expect(settings.compareDocumentPosition(help) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   it("renders the Game Data section (browse mode)", () => {
