@@ -149,7 +149,11 @@ function App() {
   return <RouterProvider router={getRouter()} />
 }
 
-const routes: RouteObject[] = [
+/**
+ * The app's route table. Exported (unchanged) so tests can mount it with
+ * createMemoryRouter; the app itself only uses it via getRouter() below.
+ */
+export const routes: RouteObject[] = [
   // Standalone widget route (no Root layout)
   {
     path: "/widget/orders",

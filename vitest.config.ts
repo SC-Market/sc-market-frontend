@@ -16,7 +16,7 @@ export default defineConfig({
     pool: "forks",
     server: {
       deps: {
-        inline: ["@exodus/bytes", "@mui/x-data-grid"],
+        inline: ["@exodus/bytes", "@mui/x-data-grid", "@mui/x-charts"],
       },
     },
     coverage: {

@@ -1,0 +1,2535 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`route matching > / 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "params": {},
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /404 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "404",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /Market 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/market",
+  ],
+  "params": {},
+  "pathnameBase": "/Market",
+}
+`;
+
+exports[`route matching > /admin/feature-flags 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/feature-flags",
+  ],
+  "params": {},
+  "pathnameBase": "/admin/feature-flags",
+}
+`;
+
+exports[`route matching > /admin/feature-flags/some_flag 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/feature-flags/:flagName",
+  ],
+  "params": {
+    "flagName": "some_flag",
+  },
+  "pathnameBase": "/admin/feature-flags/some_flag",
+}
+`;
+
+exports[`route matching > /buyorder/b-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/buyorder/:id",
+  ],
+  "params": {
+    "id": "b-1",
+  },
+  "pathnameBase": "/buyorder/b-1",
+}
+`;
+
+exports[`route matching > /buyorder/create 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/buyorder/create",
+  ],
+  "params": {},
+  "pathnameBase": "/buyorder/create",
+}
+`;
+
+exports[`route matching > /deeply/nested/unknown/path 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "deeply/nested/unknown/path",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /does-not-exist 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "does-not-exist",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /market 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/market",
+  ],
+  "params": {},
+  "pathnameBase": "/market",
+}
+`;
+
+exports[`route matching > /market/ 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/market",
+  ],
+  "params": {},
+  "pathnameBase": "/market",
+}
+`;
+
+exports[`route matching > /market/a/b/c 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "market/a/b/c",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /market/aggregate/item-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/market/aggregate/:id",
+  ],
+  "params": {
+    "id": "item-1",
+  },
+  "pathnameBase": "/market/aggregate/item-1",
+}
+`;
+
+exports[`route matching > /market/cart 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/cart",
+  ],
+  "params": {},
+  "pathnameBase": "/market/cart",
+}
+`;
+
+exports[`route matching > /market/category/weapons 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/market/category/:name",
+  ],
+  "params": {
+    "name": "weapons",
+  },
+  "pathnameBase": "/market/category/weapons",
+}
+`;
+
+exports[`route matching > /market/create 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/create",
+  ],
+  "params": {},
+  "pathnameBase": "/market/create",
+}
+`;
+
+exports[`route matching > /market/create/unique 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/create/:tab",
+  ],
+  "params": {
+    "tab": "unique",
+  },
+  "pathnameBase": "/market/create/unique",
+}
+`;
+
+exports[`route matching > /market/manage 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/manage",
+  ],
+  "params": {},
+  "pathnameBase": "/market/manage",
+}
+`;
+
+exports[`route matching > /market/manage-stock 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/manage-stock",
+  ],
+  "params": {},
+  "pathnameBase": "/market/manage-stock",
+}
+`;
+
+exports[`route matching > /market/me 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/me",
+  ],
+  "params": {},
+  "pathnameBase": "/market/me",
+}
+`;
+
+exports[`route matching > /market/multiple/m-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/market/multiple/:id",
+  ],
+  "params": {
+    "id": "m-1",
+  },
+  "pathnameBase": "/market/multiple/m-1",
+}
+`;
+
+exports[`route matching > /market/multiple/m-1/edit 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/multiple/:id/edit",
+  ],
+  "params": {
+    "id": "m-1",
+  },
+  "pathnameBase": "/market/multiple/m-1/edit",
+}
+`;
+
+exports[`route matching > /market/services 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/market/services",
+  ],
+  "params": {},
+  "pathnameBase": "/market/services",
+}
+`;
+
+exports[`route matching > /market/some-listing--abc123 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/market/:id",
+  ],
+  "params": {
+    "id": "some-listing--abc123",
+  },
+  "pathnameBase": "/market/some-listing--abc123",
+}
+`;
+
+exports[`route matching > /market/stock/listing-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/stock/:listingId",
+  ],
+  "params": {
+    "listingId": "listing-1",
+  },
+  "pathnameBase": "/market/stock/listing-1",
+}
+`;
+
+exports[`route matching > /messages 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/messages",
+    "(index)",
+  ],
+  "params": {},
+  "pathnameBase": "/messages",
+}
+`;
+
+exports[`route matching > /messages/ 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/messages",
+    "(index)",
+  ],
+  "params": {},
+  "pathnameBase": "/messages",
+}
+`;
+
+exports[`route matching > /messages/chat-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/messages",
+    ":chat_id",
+  ],
+  "params": {
+    "chat_id": "chat-1",
+  },
+  "pathnameBase": "/messages/chat-1",
+}
+`;
+
+exports[`route matching > /messages/chat-1/extra 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "messages/chat-1/extra",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /mining/locations 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/mining/locations",
+  ],
+  "params": {},
+  "pathnameBase": "/mining/locations",
+}
+`;
+
+exports[`route matching > /mining/locations/hurston 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/mining/locations/:name",
+  ],
+  "params": {
+    "name": "hurston",
+  },
+  "pathnameBase": "/mining/locations/hurston",
+}
+`;
+
+exports[`route matching > /mining/ores/quantanium 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/mining/ores/:name",
+  ],
+  "params": {
+    "name": "quantanium",
+  },
+  "pathnameBase": "/mining/ores/quantanium",
+}
+`;
+
+exports[`route matching > /order/o-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/order/:id",
+  ],
+  "params": {
+    "id": "o-1",
+  },
+  "pathnameBase": "/order/o-1",
+}
+`;
+
+exports[`route matching > /order/o-1/chat 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/order/:id/:tab",
+  ],
+  "params": {
+    "id": "o-1",
+    "tab": "chat",
+  },
+  "pathnameBase": "/order/o-1/chat",
+}
+`;
+
+exports[`route matching > /order/service/create 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/order/service/create",
+  ],
+  "params": {},
+  "pathnameBase": "/order/service/create",
+}
+`;
+
+exports[`route matching > /order/service/s-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/order/service/:service_id",
+  ],
+  "params": {
+    "service_id": "s-1",
+  },
+  "pathnameBase": "/order/service/s-1",
+}
+`;
+
+exports[`route matching > /order/service/s-1/edit 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/order/service/:service_id/edit",
+  ],
+  "params": {
+    "service_id": "s-1",
+  },
+  "pathnameBase": "/order/service/s-1/edit",
+}
+`;
+
+exports[`route matching > /order/services 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/order/services",
+  ],
+  "params": {},
+  "pathnameBase": "/order/services",
+}
+`;
+
+exports[`route matching > /org/TESTORG 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+  ],
+  "params": {
+    "contractor_id": "TESTORG",
+  },
+  "pathnameBase": "/org/TESTORG",
+}
+`;
+
+exports[`route matching > /org/TESTORG/ 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+  ],
+  "params": {
+    "contractor_id": "TESTORG",
+  },
+  "pathnameBase": "/org/TESTORG",
+}
+`;
+
+exports[`route matching > /org/TESTORG/manage 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "(index)",
+  ],
+  "params": {
+    "contractor_id": "TESTORG",
+  },
+  "pathnameBase": "/org/TESTORG/manage",
+}
+`;
+
+exports[`route matching > /org/TESTORG/manage/about 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "about",
+  ],
+  "params": {
+    "contractor_id": "TESTORG",
+  },
+  "pathnameBase": "/org/TESTORG/manage/about",
+}
+`;
+
+exports[`route matching > /org/TESTORG/manage/unknown 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "org/TESTORG/manage/unknown",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /org/TESTORG/money 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "money",
+    "(index)",
+  ],
+  "params": {
+    "contractor_id": "TESTORG",
+  },
+  "pathnameBase": "/org/TESTORG/money",
+}
+`;
+
+exports[`route matching > /org/TESTORG/orders 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "orders",
+    "(index)",
+  ],
+  "params": {
+    "contractor_id": "TESTORG",
+  },
+  "pathnameBase": "/org/TESTORG/orders",
+}
+`;
+
+exports[`route matching > /org/TESTORG/unknown 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "org/TESTORG/unknown",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /org/fleet 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/org/fleet",
+  ],
+  "params": {},
+  "pathnameBase": "/org/fleet",
+}
+`;
+
+exports[`route matching > /org/manage 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/org/manage",
+  ],
+  "params": {},
+  "pathnameBase": "/org/manage",
+}
+`;
+
+exports[`route matching > /org/members 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/members",
+  ],
+  "params": {},
+  "pathnameBase": "/org/members",
+}
+`;
+
+exports[`route matching > /org/register 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/register",
+  ],
+  "params": {},
+  "pathnameBase": "/org/register",
+}
+`;
+
+exports[`route matching > /recruiting/post/create 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgAdminRoute)",
+    "/recruiting/post/create",
+  ],
+  "params": {},
+  "pathnameBase": "/recruiting/post/create",
+}
+`;
+
+exports[`route matching > /recruiting/post/p-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/recruiting/post/:post_id",
+  ],
+  "params": {
+    "post_id": "p-1",
+  },
+  "pathnameBase": "/recruiting/post/p-1",
+}
+`;
+
+exports[`route matching > /recruiting/post/p-1/update 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgAdminRoute)",
+    "/recruiting/post/:post_id/update",
+  ],
+  "params": {
+    "post_id": "p-1",
+  },
+  "pathnameBase": "/recruiting/post/p-1/update",
+}
+`;
+
+exports[`route matching > /send 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/send",
+  ],
+  "params": {},
+  "pathnameBase": "/send",
+}
+`;
+
+exports[`route matching > /shop/test-shop 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "(index)",
+  ],
+  "params": {
+    "shopSlug": "test-shop",
+  },
+  "pathnameBase": "/shop/test-shop",
+}
+`;
+
+exports[`route matching > /shop/test-shop/listings 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings",
+  ],
+  "params": {
+    "shopSlug": "test-shop",
+  },
+  "pathnameBase": "/shop/test-shop/listings",
+}
+`;
+
+exports[`route matching > /shop/test-shop/listings/create 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings/create",
+  ],
+  "params": {
+    "shopSlug": "test-shop",
+  },
+  "pathnameBase": "/shop/test-shop/listings/create",
+}
+`;
+
+exports[`route matching > /shop/test-shop/unknown 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "shop/test-shop/unknown",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /shops/create 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/shops/create",
+    "(index)",
+  ],
+  "params": {},
+  "pathnameBase": "/shops/create",
+}
+`;
+
+exports[`route matching > /shops/test-shop 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/shops/:slug",
+  ],
+  "params": {
+    "slug": "test-shop",
+  },
+  "pathnameBase": "/shops/test-shop",
+}
+`;
+
+exports[`route matching > /shops/test-shop/about 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/shops/:slug/:tab",
+  ],
+  "params": {
+    "slug": "test-shop",
+    "tab": "about",
+  },
+  "pathnameBase": "/shops/test-shop/about",
+}
+`;
+
+exports[`route matching > /shops/test-shop/about/extra 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "shops/test-shop/about/extra",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /user/someone 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/user/:username",
+  ],
+  "params": {
+    "username": "someone",
+  },
+  "pathnameBase": "/user/someone",
+}
+`;
+
+exports[`route matching > /user/someone/store 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/user/:username/:tab",
+  ],
+  "params": {
+    "tab": "store",
+    "username": "someone",
+  },
+  "pathnameBase": "/user/someone/store",
+}
+`;
+
+exports[`route matching > /user/someone/store/extra 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "params": {
+    "*": "user/someone/store/extra",
+  },
+  "pathnameBase": "/",
+}
+`;
+
+exports[`route matching > /widget/orders 1`] = `
+{
+  "chain": [
+    "/widget/orders",
+  ],
+  "params": {},
+  "pathnameBase": "/widget/orders",
+}
+`;
+
+exports[`route matching > /wiki/items 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/wiki/items",
+  ],
+  "params": {},
+  "pathnameBase": "/wiki/items",
+}
+`;
+
+exports[`route matching > /wiki/items/i-1 1`] = `
+{
+  "chain": [
+    "(layout:HookProvider)",
+    "/wiki/items/:id",
+  ],
+  "params": {
+    "id": "i-1",
+  },
+  "pathnameBase": "/wiki/items/i-1",
+}
+`;
+
+exports[`route table > lists every leaf route 2`] = `
+[
+  {
+    "chain": "/widget/orders",
+    "errorBoundaryAt": null,
+    "guards": [],
+    "lazy": true,
+    "pattern": "/widget/orders",
+  },
+  {
+    "chain": "(layout:HookProvider) > /",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": false,
+    "pattern": "/",
+  },
+  {
+    "chain": "(layout:HookProvider) > /login",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/login",
+  },
+  {
+    "chain": "(layout:HookProvider) > /signup",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/signup",
+  },
+  {
+    "chain": "(layout:HookProvider) > /offer/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/offer/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /offer/:id/counteroffer",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/offer/:id/counteroffer",
+  },
+  {
+    "chain": "(layout:HookProvider) > /market/:id",
+    "errorBoundaryAt": "/market/:id",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/market/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /market/aggregate/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/market/aggregate/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /market/multiple/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/market/multiple/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /services",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": false,
+    "pattern": "/services",
+  },
+  {
+    "chain": "(layout:HookProvider) > /market/services",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/market/services",
+  },
+  {
+    "chain": "(layout:HookProvider) > /market/category/:name",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/market/category/:name",
+  },
+  {
+    "chain": "(layout:HookProvider) > /buyorder/create",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/buyorder/create",
+  },
+  {
+    "chain": "(layout:HookProvider) > /market",
+    "errorBoundaryAt": "/market",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/market",
+  },
+  {
+    "chain": "(layout:HookProvider) > /bulk",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/bulk",
+  },
+  {
+    "chain": "(layout:HookProvider) > /buyorders",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/buyorders",
+  },
+  {
+    "chain": "(layout:HookProvider) > /buyorder/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/buyorder/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /contractors",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/contractors",
+  },
+  {
+    "chain": "(layout:HookProvider) > /contracts/create",
+    "errorBoundaryAt": "/contracts/create",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/contracts/create",
+  },
+  {
+    "chain": "(layout:HookProvider) > /contracts",
+    "errorBoundaryAt": "/contracts",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/contracts",
+  },
+  {
+    "chain": "(layout:HookProvider) > /messages > (index)",
+    "errorBoundaryAt": "(index)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/messages",
+  },
+  {
+    "chain": "(layout:HookProvider) > /messages > :chat_id",
+    "errorBoundaryAt": ":chat_id",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/messages/:chat_id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /contracts/public/:contract_id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/contracts/public/:contract_id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /order/service/:service_id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/order/service/:service_id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /recruiting/post/:post_id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/recruiting/post/:post_id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /recruiting",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/recruiting",
+  },
+  {
+    "chain": "(layout:HookProvider) > /shops",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/shops",
+  },
+  {
+    "chain": "(layout:HookProvider) > /shops/create > (index)",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shops/create",
+  },
+  {
+    "chain": "(layout:HookProvider) > /shops/:slug/:tab",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/shops/:slug/:tab",
+  },
+  {
+    "chain": "(layout:HookProvider) > /shops/:slug",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/shops/:slug",
+  },
+  {
+    "chain": "(layout:HookProvider) > /contractor/:id/:tab",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/contractor/:id/:tab",
+  },
+  {
+    "chain": "(layout:HookProvider) > /contractor/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/contractor/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /contract/:id/:tab",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/contract/:id/:tab",
+  },
+  {
+    "chain": "(layout:HookProvider) > /contract/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/contract/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /order/:id/:tab",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/order/:id/:tab",
+  },
+  {
+    "chain": "(layout:HookProvider) > /order/:id",
+    "errorBoundaryAt": "/order/:id",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/order/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /user/:username/:tab",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/user/:username/:tab",
+  },
+  {
+    "chain": "(layout:HookProvider) > /user/:username",
+    "errorBoundaryAt": "/user/:username",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/user/:username",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /onboarding",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/onboarding",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /accountlink",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/accountlink",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/create/:tab",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": false,
+    "pattern": "/market/create/:tab",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/create",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": false,
+    "pattern": "/market/create",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/me",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/market/me",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/manage",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": false,
+    "pattern": "/market/manage",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/manage-stock",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": false,
+    "pattern": "/market/manage-stock",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/stock/:listingId",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": false,
+    "pattern": "/market/stock/:listingId",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /inventory",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/inventory",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/cart",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/market/cart",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market_edit/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/market_edit/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/multiple/:id/edit",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/market/multiple/:id/edit",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /customers",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/customers",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /messaging",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/messaging",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /sell",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/sell",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /dashboard/shops",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/dashboard/shops",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /my-orgs",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/my-orgs",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /orders/assigned",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": false,
+    "pattern": "/orders/assigned",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /orders",
+    "errorBoundaryAt": "/orders",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/orders",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/members",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/members",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /myfleet/import",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/myfleet/import",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /myfleet",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/myfleet",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /delivery/:delivery_id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/delivery/:delivery_id",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /dashboard",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/dashboard",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /dashboard/overview",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/dashboard/overview",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /order/service/create",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/order/service/create",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /order/service/:service_id/edit",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/order/service/:service_id/edit",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /order/services",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": false,
+    "pattern": "/order/services",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/register",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/register",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /contractor_invite/:invite_id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/contractor_invite/:invite_id",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /profile/:tab",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/profile/:tab",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /profile",
+    "errorBoundaryAt": "/profile",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/profile",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /settings",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/settings",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /notifications",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/notifications",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /email/verify/:token",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/email/verify/:token",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /email/verify",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/email/verify",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /email/unsubscribe/:token",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/email/unsubscribe/:token",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /email/unsubscribe",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/email/unsubscribe",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /availability",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/availability",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /send",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/send",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /send",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+    ],
+    "lazy": true,
+    "pattern": "/send",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/users",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/users",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/market",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/market",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/wipe",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/wipe",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/orders",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/orders",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/moderation",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/moderation",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/alerts",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/alerts",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/audit-logs",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/audit-logs",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/notification-test",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/notification-test",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/attribute-definitions",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/attribute-definitions",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/game-item-attributes",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/game-item-attributes",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/import-monitoring",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/import-monitoring",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/game-data-import",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/game-data-import",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/premium",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/premium",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/feature-flags",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/feature-flags",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/feature-flags/:flagName",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/feature-flags/:flagName",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/supplier-dashboard",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/supplier-dashboard",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/supplier-roster",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/supplier-roster",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/requisitions",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/requisitions",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/fleet",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/fleet",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /myorg",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgRoute",
+    ],
+    "lazy": true,
+    "pattern": "/myorg",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/send",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/send",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /recruiting/post/create",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/recruiting/post/create",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /recruiting/post/:post_id/update",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/recruiting/post/:post_id/update",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /org/orders",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/orders",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/manage",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/manage",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/money",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/money",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > dashboard",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/dashboard",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > overview",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/overview",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > fleet",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/fleet",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > send",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/send",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > orders > (index)",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/orders",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > (index)",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": false,
+    "pattern": "/org/:contractor_id/manage",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > about",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/about",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > roles",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/roles",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > invites",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/invites",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > discord",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/discord",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > market",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/market",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > settings",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/settings",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > blocklist",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/blocklist",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > audit",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/audit",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > customers",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/customers",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > theme",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/theme",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > money > (index)",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/money",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > members",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/members",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > listings",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/listings",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage-stock",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage-stock",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > services",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/services",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > listings",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/listings",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > listings/create",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/listings/create",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > stock",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/stock",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > orders",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/orders",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > dashboard",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/dashboard",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > services",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/services",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > customers",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/customers",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > settings",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": true,
+    "pattern": "/shop/:shopSlug/settings",
+  },
+  {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > (index)",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "ShopContextFromRoute",
+    ],
+    "lazy": false,
+    "pattern": "/shop/:shopSlug",
+  },
+  {
+    "chain": "(layout:HookProvider) > /crafting/calculator",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/crafting/calculator",
+  },
+  {
+    "chain": "(layout:HookProvider) > /crafting/history",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/crafting/history",
+  },
+  {
+    "chain": "(layout:HookProvider) > /missions",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/missions",
+  },
+  {
+    "chain": "(layout:HookProvider) > /missions/:slug",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/missions/:slug",
+  },
+  {
+    "chain": "(layout:HookProvider) > /blueprints",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/blueprints",
+  },
+  {
+    "chain": "(layout:HookProvider) > /blueprints/inventory",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/blueprints/inventory",
+  },
+  {
+    "chain": "(layout:HookProvider) > /blueprints/:slug",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/blueprints/:slug",
+  },
+  {
+    "chain": "(layout:HookProvider) > /shopping-lists",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/shopping-lists",
+  },
+  {
+    "chain": "(layout:HookProvider) > /shopping-lists/:wishlist_id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/shopping-lists/:wishlist_id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /shopping-lists/:wishlist_id/shopping-list",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/shopping-lists/:wishlist_id/shopping-list",
+  },
+  {
+    "chain": "(layout:HookProvider) > /resources",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/resources",
+  },
+  {
+    "chain": "(layout:HookProvider) > /resources/:resource_id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/resources/:resource_id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /mining",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/mining",
+  },
+  {
+    "chain": "(layout:HookProvider) > /mining/ores/:name",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/mining/ores/:name",
+  },
+  {
+    "chain": "(layout:HookProvider) > /mining/locations",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/mining/locations",
+  },
+  {
+    "chain": "(layout:HookProvider) > /mining/locations/:name",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/mining/locations/:name",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/items/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/items/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/items",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/items",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/ships/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/ships/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/ships",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/ships",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/commodities",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/commodities",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/commodities/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/commodities/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/locations",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/locations",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/refinery",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/refinery",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/manufacturers/:id",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/manufacturers/:id",
+  },
+  {
+    "chain": "(layout:HookProvider) > /wiki/manufacturers",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/wiki/manufacturers",
+  },
+  {
+    "chain": "(layout:HookProvider) > /error",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/error",
+  },
+  {
+    "chain": "(layout:HookProvider) > /*",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+    ],
+    "lazy": true,
+    "pattern": "/*",
+  },
+]
+`;

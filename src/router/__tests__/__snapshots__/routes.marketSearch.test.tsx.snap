@@ -1,0 +1,81 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`/market page (real app) > market / buy orders toggle navigates between the two tabs 1`] = `
+{
+  "toggles": [
+    "grid",
+    "list",
+    "market",
+    "buyorders",
+  ],
+  "visited": [
+    "PUSH /buyorders",
+    "PUSH /market",
+  ],
+}
+`;
+
+exports[`/market page (real app) > turns URL search params into the listings search request 1`] = `
+{
+  "afterNavigate": [
+    "/api/v2/listings/search?text=rifle&page=1&page_size=48&quantity_min=1",
+    "/api/v2/listings/search?text=rifle&page_size=5",
+  ],
+  "finalUrlAfterBack": "/market?query=laser&page=2&price_min=100&sort_by=price&sort_order=asc",
+  "h1": [],
+  "initial": [
+    "/api/v2/listings/search?text=laser&price_min=100&page=2&page_size=48&quantity_min=1&sort_by=price&sort_order=asc",
+    "/api/v2/listings/search?text=laser&page_size=5",
+  ],
+}
+`;
+
+exports[`market search primitives > navigate() between market tabs drops the market query 1`] = `
+{
+  "back": "POP /market?query=laser",
+  "toBuyOrders": "PUSH /buyorders",
+}
+`;
+
+exports[`market search primitives > parses the URL into search state 1`] = `
+{
+  "attributes": {
+    "size": [
+      "4",
+      "5",
+    ],
+  },
+  "index": undefined,
+  "item_type": "weapon",
+  "language_codes": undefined,
+  "maxCost": undefined,
+  "minCost": 5,
+  "page_size": 48,
+  "quantityAvailable": 1,
+  "query": "laser",
+  "sale_type": "sale",
+  "sort": "price",
+  "statuses": "active",
+}
+`;
+
+exports[`market search primitives > setSearchState pushes a normalized query string 1`] = `
+{
+  "afterSet": "PUSH /market?query=rifle&sort=price&index=2",
+  "before": "POP /market?query=laser",
+  "state": {
+    "attributes": undefined,
+    "index": 2,
+    "item_type": undefined,
+    "language_codes": undefined,
+    "maxCost": undefined,
+    "minCost": 0,
+    "page_size": 48,
+    "quantityAvailable": 1,
+    "query": "rifle",
+    "sale_type": undefined,
+    "sort": "price",
+    "statuses": "active",
+  },
+}
+`;

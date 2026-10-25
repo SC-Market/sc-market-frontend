@@ -1,0 +1,1400 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`routes (shard 3/4) > /* 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/__unmatched/deep/path",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/__unmatched/deep/path",
+}
+`;
+
+exports[`routes (shard 3/4) > /admin/attribute-definitions 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/admin/attribute-definitions",
+  "h1": [
+    "Attribute Definitions",
+    "Attribute Definitions",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/attribute-definitions",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/attribute-definitions",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Attribute Definitions - SC Market",
+  "url": "/admin/attribute-definitions",
+}
+`;
+
+exports[`routes (shard 3/4) > /admin/moderation 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/admin/moderation",
+  "h1": [
+    "Admin Moderation",
+    "Moderation Dashboard",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/moderation",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/moderation",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Admin Moderation - SC Market",
+  "url": "/admin/moderation",
+}
+`;
+
+exports[`routes (shard 3/4) > /admin/premium 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/admin/premium",
+  "h1": [
+    "Premium Management",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/premium",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/premium",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Premium Management - SC Market",
+  "url": "/admin/premium",
+}
+`;
+
+exports[`routes (shard 3/4) > /admin/supplier-roster 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/admin/supplier-roster",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/supplier-roster",
+  ],
+  "lazyPending": [],
+  "mainLinks": [],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/supplier-roster",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Supplier Roster - SC Market",
+  "url": "/admin/supplier-roster",
+}
+`;
+
+exports[`routes (shard 3/4) > /admin/users 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/admin/users",
+  "h1": [
+    "People",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/users",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/users",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Customers - SC Market",
+  "url": "/admin/users",
+}
+`;
+
+exports[`routes (shard 3/4) > /blueprints 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/blueprints",
+  "h1": [
+    "Blueprint Browser",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/blueprints",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/blueprints",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "All Blueprints — Star Citizen Crafting | SC Market",
+  "url": "/blueprints",
+}
+`;
+
+exports[`routes (shard 3/4) > /bulk 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/bulk",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/bulk",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/buyorder/create",
+    "/login",
+    "/market/cart",
+    "/market/create",
+    "/privacy-policy",
+    "/signup",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/bulk",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Market - SC Market",
+  "url": "/bulk",
+}
+`;
+
+exports[`routes (shard 3/4) > /contractor/:id/:tab 1`] = `
+{
+  "consoleErrors": [
+    "Encountered two children with the same key, \`username\`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and co",
+  ],
+  "errorElementErrors": [],
+  "finalUrl": "/contractor/TESTORG/about",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/contractor/:id/:tab",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/contractor/TESTORG",
+    "/contractor/TESTORG/about",
+    "/contractor/TESTORG/members",
+    "/contractor/TESTORG/order",
+    "/contractor/TESTORG/reviews",
+    "/contractors",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/contractor/:id/:tab",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": true,
+  "title": "Test Org - Org - SC Market",
+  "url": "/contractor/TESTORG/about",
+}
+`;
+
+exports[`routes (shard 3/4) > /contracts/create 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/contracts/create",
+  "h1": [
+    "Create Open Contract",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/contracts/create",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/contracts",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/contracts/create",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Create Open Contract - SC Market",
+  "url": "/contracts/create",
+}
+`;
+
+exports[`routes (shard 3/4) > /contracts/public/:contract_id 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/contracts/public/:contract_id",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/contracts/public/contract-1",
+}
+`;
+
+exports[`routes (shard 3/4) > /crafting/calculator 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/crafting/calculator",
+  "h1": [
+    "Crafting Calculator",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/crafting/calculator",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/crafting/calculator",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Crafting Calculator - SC Market",
+  "url": "/crafting/calculator",
+}
+`;
+
+exports[`routes (shard 3/4) > /customers 1`] = `
+{
+  "consoleErrors": [
+    "React Router caught the following error during render TypeError: Cannot read properties of undefined (reading 'length') {"componentStack":"\\n at PaginatedTable (/private/tmp/fe-harness/src/components/table/PaginatedTable.tsx:156:13)\\n at di",
+    "TypeError: Cannot read properties of undefined (reading 'length')",
+  ],
+  "errorElementErrors": [
+    "TypeError: Cannot read properties of undefined (reading 'length')",
+  ],
+  "finalUrl": "/error?message=TypeError%3A+Cannot+read+properties+of+undefined+%28reading+%27length%27%29&target=%2Fcustomers",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/customers",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/error",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "An Error Occurred - SC Market",
+  "url": "/customers",
+}
+`;
+
+exports[`routes (shard 3/4) > /dashboard/overview 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/dashboard",
+  "h1": [
+    "Dashboard",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "REPLACE",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/dashboard/overview",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/dashboard",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Dashboard - SC Market",
+  "url": "/dashboard/overview",
+}
+`;
+
+exports[`routes (shard 3/4) > /email/unsubscribe/:token 1`] = `
+{
+  "consoleErrors": [
+    "[StandardPageLayout] Page error – showing error page {"path":"/email/unsubscribe/token-1","title":"Unsubscribe from Emails","error":{}}",
+  ],
+  "errorElementErrors": [],
+  "finalUrl": "/email/unsubscribe/token-1",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/email/unsubscribe/:token",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/email/unsubscribe/:token",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Error - SC Market",
+  "url": "/email/unsubscribe/token-1",
+}
+`;
+
+exports[`routes (shard 3/4) > /inventory 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/inventory",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/inventory",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/market",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/inventory",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "My Inventory - SC Market",
+  "url": "/inventory",
+}
+`;
+
+exports[`routes (shard 3/4) > /login 1`] = `
+{
+  "consoleErrors": [
+    "Unsupported style property @media (min-width:0px). Did you mean @media (minWidth:0px)?",
+    "Unsupported style property @media (min-width:600px). Did you mean @media (minWidth:600px)?",
+  ],
+  "errorElementErrors": [],
+  "finalUrl": "/login",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/login",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/login",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Sign in to SC Market",
+  "url": "/login",
+}
+`;
+
+exports[`routes (shard 3/4) > /market/:id 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/market/:id",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/market/fixture-id",
+}
+`;
+
+exports[`routes (shard 3/4) > /market/me 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/market/me",
+  "h1": [
+    "My Market ListingsManage ListingsManage InventoryManage ServicesCreate Listing",
+    "My Market Listings",
+    "Inactive Listings",
+    "Archived Listings",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/me",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/market",
+    "/market/create",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/market/me",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "My Market Listings - SC Market",
+  "url": "/market/me",
+}
+`;
+
+exports[`routes (shard 3/4) > /market/services 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/market/services",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/market/services",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/order/service/create",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/market/services",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Market - SC Market",
+  "url": "/market/services",
+}
+`;
+
+exports[`routes (shard 3/4) > /mining 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/mining",
+  "h1": [
+    "Mining Database",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/mining",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/mining",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Mining Database - SC Market",
+  "url": "/mining",
+}
+`;
+
+exports[`routes (shard 3/4) > /my-orgs 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/my-orgs",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/my-orgs",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/contractor/TESTORG",
+    "/org/TESTORG/manage",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/my-orgs",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "My Orgs - SC Market",
+  "url": "/my-orgs",
+}
+`;
+
+exports[`routes (shard 3/4) > /myfleet/import 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/myfleet/import",
+  "h1": [
+    "Import Fleet",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/myfleet/import",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/myfleet/import",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Import Fleet - SC Market",
+  "url": "/myfleet/import",
+}
+`;
+
+exports[`routes (shard 3/4) > /onboarding 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/onboarding",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/onboarding",
+  ],
+  "lazyPending": [],
+  "mainLinks": [],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/onboarding",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Onboarding - SC Market",
+  "url": "/onboarding",
+}
+`;
+
+exports[`routes (shard 3/4) > /order/:id/:tab 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/order/:id/:tab",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/order/fixture-id/fixture-tab",
+}
+`;
+
+exports[`routes (shard 3/4) > /org/:contractor_id/fleet 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "fleet",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/org/TESTORG/fleet",
+}
+`;
+
+exports[`routes (shard 3/4) > /org/:contractor_id/listings 1`] = `
+{
+  "consoleErrors": [
+    "MUI X: Usage of the \`rowCount\` prop with client side pagination (\`paginationMode="client"\`) has no effect.",
+  ],
+  "errorElementErrors": [],
+  "finalUrl": "/org/TESTORG/listings?quantityAvailable=0",
+  "h1": [
+    "Manage Listings",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "listings",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/market",
+    "/market/create",
+    "/market/me",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "listings",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Manage Listings - SC Market",
+  "url": "/org/TESTORG/listings",
+}
+`;
+
+exports[`routes (shard 3/4) > /org/:contractor_id/manage/about 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/TESTORG/manage/about",
+  "h1": [
+    "Manage Org",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "about",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:OrgManageLayout)",
+    "about",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Manage Org - SC Market",
+  "url": "/org/TESTORG/manage/about",
+}
+`;
+
+exports[`routes (shard 3/4) > /org/:contractor_id/manage/customers 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/TESTORG/manage/customers",
+  "h1": [
+    "Manage Org",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "customers",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:OrgManageLayout)",
+    "customers",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Manage Org - SC Market",
+  "url": "/org/TESTORG/manage/customers",
+}
+`;
+
+exports[`routes (shard 3/4) > /org/:contractor_id/manage/market 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/TESTORG/manage/market",
+  "h1": [
+    "Manage Org",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "market",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:OrgManageLayout)",
+    "market",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Manage Org - SC Market",
+  "url": "/org/TESTORG/manage/market",
+}
+`;
+
+exports[`routes (shard 3/4) > /org/manage 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/manage",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/org/manage",
+  ],
+  "lazyPending": [],
+  "mainLinks": [],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/org/manage",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Manage Organization - SC Market",
+  "url": "/org/manage",
+}
+`;
+
+exports[`routes (shard 3/4) > /org/register 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/register",
+  "h1": [
+    "Register an Org",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/register",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/register",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": true,
+  "title": "Register an Org - SC Market",
+  "url": "/org/register",
+}
+`;
+
+exports[`routes (shard 3/4) > /org/send 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/send",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/org/send",
+  ],
+  "lazyPending": [],
+  "mainLinks": [],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/org/send",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Send - SC Market",
+  "url": "/org/send",
+}
+`;
+
+exports[`routes (shard 3/4) > /settings 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/settings",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/settings",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/settings",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Settings - SC Market",
+  "url": "/settings",
+}
+`;
+
+exports[`routes (shard 3/4) > /shop/:shopSlug/listings/create 1`] = `
+{
+  "consoleErrors": [
+    "<h1> cannot contain a nested <h4>.",
+    "In HTML, <h4> cannot be a child of <h1>.",
+  ],
+  "errorElementErrors": [],
+  "finalUrl": "/shop/test-shop/listings/create",
+  "h1": [
+    "Create New Listing",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings/create",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings/create",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Create Listing - SC Market",
+  "url": "/shop/test-shop/listings/create",
+}
+`;
+
+exports[`routes (shard 3/4) > /shop/:shopSlug/services 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "services",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/shop/test-shop/services",
+}
+`;
+
+exports[`routes (shard 3/4) > /shopping-lists/:wishlist_id 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/shopping-lists/wishlist-1",
+  "h1": [
+    "Shopping List Not Found",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/shopping-lists/:wishlist_id",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/shopping-lists/:wishlist_id",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Shopping List Detail - SC Market",
+  "url": "/shopping-lists/wishlist-1",
+}
+`;
+
+exports[`routes (shard 3/4) > /shops 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/shops",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/shops",
+  ],
+  "lazyPending": [],
+  "mainLinks": [],
+  "matches": [
+    "(layout:HookProvider)",
+    "/shops",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "All Shops — Star Citizen Marketplace | SC Market",
+  "url": "/shops",
+}
+`;
+
+exports[`routes (shard 3/4) > /wiki 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/wiki",
+  "h1": [
+    "Game Database",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/wiki",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/blueprints",
+    "/crafting/calculator",
+    "/mining",
+    "/missions",
+    "/privacy-policy",
+    "/resources",
+    "/terms-of-service",
+    "/wiki/commodities",
+    "/wiki/items",
+    "/wiki/locations",
+    "/wiki/manufacturers",
+    "/wiki/refinery",
+    "/wiki/ships",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/wiki",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Game Database — Star Citizen Items, Ships & More | SC Market",
+  "url": "/wiki",
+}
+`;
+
+exports[`routes (shard 3/4) > /wiki/refinery 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/wiki/refinery",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/wiki/refinery",
+}
+`;
+
+exports[`routes (shard 3/4) > /wiki/ships 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/wiki/ships",
+  "h1": [
+    "Ships & Vehicles",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:HookProvider)",
+    "/wiki/ships",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "matches": [
+    "(layout:HookProvider)",
+    "/wiki/ships",
+  ],
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "All Ships — Star Citizen Ship Database | SC Market",
+  "url": "/wiki/ships",
+}
+`;

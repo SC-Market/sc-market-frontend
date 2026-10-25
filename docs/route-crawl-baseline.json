@@ -1,0 +1,3158 @@
+{
+  "meta": {
+    "base": "http://127.0.0.1:4173",
+    "api": "https://api.sc-market.space",
+    "crawledAt": "2026-10-25T06:56:58.847Z",
+    "routeCount": 116,
+    "upstreamApiRequests": 90,
+    "browserRelaunches": 0
+  },
+  "routes": {
+    "/": {
+      "route": "/",
+      "url": "/",
+      "finalUrl": "/",
+      "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+      "h1": [
+        "SC MARKET"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/*": {
+      "route": "/*",
+      "url": "/route-crawl/does-not-exist",
+      "finalUrl": "/route-crawl/does-not-exist",
+      "title": "404 - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/accountlink": {
+      "route": "/accountlink",
+      "url": "/accountlink",
+      "finalUrl": "/login?redirect=%2Faccountlink",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/alerts": {
+      "route": "/admin/alerts",
+      "url": "/admin/alerts",
+      "finalUrl": "/login?redirect=%2Fadmin%2Falerts",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/attribute-definitions": {
+      "route": "/admin/attribute-definitions",
+      "url": "/admin/attribute-definitions",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fattribute-definitions",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/audit-logs": {
+      "route": "/admin/audit-logs",
+      "url": "/admin/audit-logs",
+      "finalUrl": "/login?redirect=%2Fadmin%2Faudit-logs",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/feature-flags": {
+      "route": "/admin/feature-flags",
+      "url": "/admin/feature-flags",
+      "finalUrl": "/login?redirect=%2Fadmin%2Ffeature-flags",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/game-data-import": {
+      "route": "/admin/game-data-import",
+      "url": "/admin/game-data-import",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fgame-data-import",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/game-item-attributes": {
+      "route": "/admin/game-item-attributes",
+      "url": "/admin/game-item-attributes",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fgame-item-attributes",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/import-monitoring": {
+      "route": "/admin/import-monitoring",
+      "url": "/admin/import-monitoring",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fimport-monitoring",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/market": {
+      "route": "/admin/market",
+      "url": "/admin/market",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fmarket",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/moderation": {
+      "route": "/admin/moderation",
+      "url": "/admin/moderation",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fmoderation",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/notification-test": {
+      "route": "/admin/notification-test",
+      "url": "/admin/notification-test",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fnotification-test",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/orders": {
+      "route": "/admin/orders",
+      "url": "/admin/orders",
+      "finalUrl": "/login?redirect=%2Fadmin%2Forders",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/premium": {
+      "route": "/admin/premium",
+      "url": "/admin/premium",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fpremium",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/requisitions": {
+      "route": "/admin/requisitions",
+      "url": "/admin/requisitions",
+      "finalUrl": "/login?redirect=%2Fadmin%2Frequisitions",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/supplier-dashboard": {
+      "route": "/admin/supplier-dashboard",
+      "url": "/admin/supplier-dashboard",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fsupplier-dashboard",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/supplier-roster": {
+      "route": "/admin/supplier-roster",
+      "url": "/admin/supplier-roster",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fsupplier-roster",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/users": {
+      "route": "/admin/users",
+      "url": "/admin/users",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fusers",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/admin/wipe": {
+      "route": "/admin/wipe",
+      "url": "/admin/wipe",
+      "finalUrl": "/login?redirect=%2Fadmin%2Fwipe",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/availability": {
+      "route": "/availability",
+      "url": "/availability",
+      "finalUrl": "/login?redirect=%2Favailability",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/blueprints": {
+      "route": "/blueprints",
+      "url": "/blueprints",
+      "finalUrl": "/blueprints",
+      "title": "All Blueprints — Star Citizen Crafting | SC Market",
+      "h1": [
+        "Blueprint Browser"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/blueprints/:slug": {
+      "route": "/blueprints/:slug",
+      "url": "/blueprints/280f47b7-8434-410c-b854-380768fdccec",
+      "finalUrl": "/blueprints/280f47b7-8434-410c-b854-380768fdccec",
+      "title": "All Blueprints — Star Citizen Crafting | SC Market",
+      "h1": [
+        "Blueprint Browser"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/v2/game-data/blueprints/280f47b7-8434-410c-b854-380768fdccec",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/game-data/blueprints/280f47b7-8434-410c-b854-380768fdccec 404",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/blueprints/inventory": {
+      "route": "/blueprints/inventory",
+      "url": "/blueprints/inventory",
+      "finalUrl": "/blueprints?owned=true&inventory=true",
+      "title": "All Blueprints — Star Citizen Crafting | SC Market",
+      "h1": [
+        "Blueprint Browser"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/bulk": {
+      "route": "/bulk",
+      "url": "/bulk",
+      "finalUrl": "/bulk",
+      "title": "Market - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/buyorder/:id": {
+      "route": "/buyorder/:id",
+      "url": "/buyorder/b7eb62d6-fae6-4e58-accb-4607c035ea4d",
+      "finalUrl": "/buyorder/b7eb62d6-fae6-4e58-accb-4607c035ea4d",
+      "title": "Savrilium - SC Market",
+      "h1": [
+        "Savrilium"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/buyorder/create": {
+      "route": "/buyorder/create",
+      "url": "/buyorder/create",
+      "finalUrl": "/buyorder/create",
+      "title": "Create Buy Order - SC Market",
+      "h1": [
+        "Create Buy Order"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/buyorders": {
+      "route": "/buyorders",
+      "url": "/buyorders",
+      "finalUrl": "/buyorders",
+      "title": "Market - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/contractor/:id": {
+      "route": "/contractor/:id",
+      "url": "/contractor/BIRDINC",
+      "finalUrl": "/contractor/BIRDINC",
+      "title": "Bird Inc - Org - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/recruiting/contractors/BIRDINC/posts",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/recruiting/contractors/BIRDINC/posts 404",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/contractor/:id/:tab": {
+      "route": "/contractor/:id/:tab",
+      "url": "/contractor/BIRDINC/reviews",
+      "finalUrl": "/contractor/BIRDINC/reviews",
+      "title": "Bird Inc - Org - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/recruiting/contractors/BIRDINC/posts",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/recruiting/contractors/BIRDINC/posts 404",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/contractors": {
+      "route": "/contractors",
+      "url": "/contractors",
+      "finalUrl": "/contractors",
+      "title": "Contractors - SC Market",
+      "h1": [
+        "Contractors"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/contracts": {
+      "route": "/contracts",
+      "url": "/contracts",
+      "finalUrl": "/contracts",
+      "title": "Contracts - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/contracts/create": {
+      "route": "/contracts/create",
+      "url": "/contracts/create",
+      "finalUrl": "/contracts/create",
+      "title": "Create Open Contract - SC Market",
+      "h1": [
+        "Create Open Contract"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [
+        "MUI: The LoadingButton component functionality is now part of the Button component from Material UI. You should use `import Button from '@mui/material/Button'` or `import { Button } from '@mui/material'`"
+      ],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/crafting/calculator": {
+      "route": "/crafting/calculator",
+      "url": "/crafting/calculator",
+      "finalUrl": "/crafting/calculator",
+      "title": "Crafting Calculator - SC Market",
+      "h1": [
+        "Crafting Calculator"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/listings/inventory-summary",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/listings/inventory-summary 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/crafting/history": {
+      "route": "/crafting/history",
+      "url": "/crafting/history",
+      "finalUrl": "/crafting/history",
+      "title": "Error - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/game-data/crafting/history",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh",
+        "[StandardPageLayout] Page error – showing error page [object Object]"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/game-data/crafting/history 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/customers": {
+      "route": "/customers",
+      "url": "/customers",
+      "finalUrl": "/login?redirect=%2Fcustomers",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/dashboard": {
+      "route": "/dashboard",
+      "url": "/dashboard",
+      "finalUrl": "/login?redirect=%2Fdashboard",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/dashboard/overview": {
+      "route": "/dashboard/overview",
+      "url": "/dashboard/overview",
+      "finalUrl": "/login?redirect=%2Fdashboard%2Foverview",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/dashboard/shops": {
+      "route": "/dashboard/shops",
+      "url": "/dashboard/shops",
+      "finalUrl": "/login?redirect=%2Fdashboard%2Fshops",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/email/unsubscribe": {
+      "route": "/email/unsubscribe",
+      "url": "/email/unsubscribe",
+      "finalUrl": "/login?redirect=%2Femail%2Funsubscribe",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/email/verify": {
+      "route": "/email/verify",
+      "url": "/email/verify",
+      "finalUrl": "/login?redirect=%2Femail%2Fverify",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/error": {
+      "route": "/error",
+      "url": "/error",
+      "finalUrl": "/error",
+      "title": "An Error Occurred - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/inventory": {
+      "route": "/inventory",
+      "url": "/inventory",
+      "finalUrl": "/login?redirect=%2Finventory",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/login": {
+      "route": "/login",
+      "url": "/login",
+      "finalUrl": "/login",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market": {
+      "route": "/market",
+      "url": "/market",
+      "finalUrl": "/market",
+      "title": "Market - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/:id": {
+      "route": "/market/:id",
+      "url": "/market/3f3b5a39-e5d6-4ef1-86e3-9258e266cd1f",
+      "finalUrl": "/market/3f3b5a39--wtb-animus-missile-launcher",
+      "title": "WTB Animus Missile Launcher — SC Market",
+      "h1": [
+        "WTB Animus Missile Launcher"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/orders/by-listing/3f3b5a39-e5d6-4ef1-86e3-9258e266cd1f",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/v2/listings/3f3b5a39--wtb-animus-missile-launcher/views",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/v2/listings/3f3b5a39-e5d6-4ef1-86e3-9258e266cd1f/views"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/orders/by-listing/3f3b5a39-e5d6-4ef1-86e3-9258e266cd1f 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405",
+        "POST /api/v2/listings/3f3b5a39--wtb-animus-missile-launcher/views 405",
+        "POST /api/v2/listings/3f3b5a39-e5d6-4ef1-86e3-9258e266cd1f/views 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/aggregate/:id": {
+      "route": "/market/aggregate/:id",
+      "url": "/market/aggregate/d2a758d8-0fdd-48fb-a80c-1c8481c2dd6e",
+      "finalUrl": "/market/aggregate/d2a758d8-0fdd-48fb-a80c-1c8481c2dd6e",
+      "title": "Animus Missile Launcher - SC Market",
+      "h1": [
+        "Animus Missile Launcher"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/suppliers",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [
+        "MUI: The LoadingButton component functionality is now part of the Button component from Material UI. You should use `import Button from '@mui/material/Button'` or `import { Button } from '@mui/material'`"
+      ],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "GET /api/v2/suppliers 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/cart": {
+      "route": "/market/cart",
+      "url": "/market/cart",
+      "finalUrl": "/login?redirect=%2Fmarket%2Fcart",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/category/:name": {
+      "route": "/market/category/:name",
+      "url": "/market/category/Ranged%20Weapon",
+      "finalUrl": "/market/category/Ranged%20Weapon",
+      "title": "Market - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/create": {
+      "route": "/market/create",
+      "url": "/market/create",
+      "finalUrl": "/login?redirect=%2Fmarket%2Fcreate",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/manage": {
+      "route": "/market/manage",
+      "url": "/market/manage",
+      "finalUrl": "/login?redirect=%2Fmarket%2Fmanage",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/manage-stock": {
+      "route": "/market/manage-stock",
+      "url": "/market/manage-stock",
+      "finalUrl": "/login?redirect=%2Fmarket%2Fmanage-stock",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/me": {
+      "route": "/market/me",
+      "url": "/market/me",
+      "finalUrl": "/login?redirect=%2Fmarket%2Fme",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market/services": {
+      "route": "/market/services",
+      "url": "/market/services",
+      "finalUrl": "/market/services",
+      "title": "Market - SC Market",
+      "h1": [
+        "Summary",
+        "Bound by sacred oath and order,",
+        "Bound by sacred oath and order,",
+        "By sworn honor and binding word,",
+        "By charter and ancient craft,",
+        "By solemn oath and steadfast steel,",
+        "By solemn oath and steadfast steel,"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/market?query": {
+      "route": "/market?query",
+      "url": "/market?query=laser&page=2",
+      "finalUrl": "/market?query=laser&page=2",
+      "title": "Market - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/messages": {
+      "route": "/messages",
+      "url": "/messages",
+      "finalUrl": "/login?redirect=%2Fmessages",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/messages/:chat_id": {
+      "route": "/messages/:chat_id",
+      "url": "/messages/chat-1",
+      "finalUrl": "/login?redirect=%2Fmessages%2Fchat-1",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/messaging": {
+      "route": "/messaging",
+      "url": "/messaging",
+      "finalUrl": "/login?redirect=%2Fmessaging",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/mining": {
+      "route": "/mining",
+      "url": "/mining",
+      "finalUrl": "/mining",
+      "title": "Mining Database - SC Market",
+      "h1": [
+        "Mining Database"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/mining/locations": {
+      "route": "/mining/locations",
+      "url": "/mining/locations",
+      "finalUrl": "/mining/locations",
+      "title": "Mining Database - SC Market",
+      "h1": [
+        "Mining Database"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/mining/locations/:name": {
+      "route": "/mining/locations/:name",
+      "url": "/mining/locations/aaronhalo",
+      "finalUrl": "/mining/locations/aaronhalo",
+      "title": "Mining Database - SC Market",
+      "h1": [
+        "Mining Database"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/mining/ores/:name": {
+      "route": "/mining/ores/:name",
+      "url": "/mining/ores/bexalite_raw",
+      "finalUrl": "/mining/ores/bexalite_raw",
+      "title": "Mining Database - SC Market",
+      "h1": [
+        "Mining Database"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/missions": {
+      "route": "/missions",
+      "url": "/missions",
+      "finalUrl": "/missions",
+      "title": "All Missions — Star Citizen Mission Database | SC Market",
+      "h1": [
+        "Mission Database"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/missions/:slug": {
+      "route": "/missions/:slug",
+      "url": "/missions/PU_Delivery_Local_DrugProduction_KlimIntro",
+      "finalUrl": "/missions/PU_Delivery_Local_DrugProduction_KlimIntro",
+      "title": "All Missions — Star Citizen Mission Database | SC Market",
+      "h1": [
+        "Mission Database"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/my-orgs": {
+      "route": "/my-orgs",
+      "url": "/my-orgs",
+      "finalUrl": "/login?redirect=%2Fmy-orgs",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/myfleet": {
+      "route": "/myfleet",
+      "url": "/myfleet",
+      "finalUrl": "/login?redirect=%2Fmyfleet",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/myfleet/import": {
+      "route": "/myfleet/import",
+      "url": "/myfleet/import",
+      "finalUrl": "/login?redirect=%2Fmyfleet%2Fimport",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/myorg": {
+      "route": "/myorg",
+      "url": "/myorg",
+      "finalUrl": "/login?redirect=%2Fmyorg",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/notifications": {
+      "route": "/notifications",
+      "url": "/notifications",
+      "finalUrl": "/login?redirect=%2Fnotifications",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/onboarding": {
+      "route": "/onboarding",
+      "url": "/onboarding",
+      "finalUrl": "/login?redirect=%2Fonboarding",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/order/service/create": {
+      "route": "/order/service/create",
+      "url": "/order/service/create",
+      "finalUrl": "/login?redirect=%2Forder%2Fservice%2Fcreate",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/order/services": {
+      "route": "/order/services",
+      "url": "/order/services",
+      "finalUrl": "/login?redirect=%2Forder%2Fservices",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/orders": {
+      "route": "/orders",
+      "url": "/orders",
+      "finalUrl": "/login?redirect=%2Forders",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/orders/assigned": {
+      "route": "/orders/assigned",
+      "url": "/orders/assigned",
+      "finalUrl": "/login?redirect=%2Forders%2Fassigned",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/:contractor_id/manage (index redirect, logged out)": {
+      "route": "/org/:contractor_id/manage (index redirect, logged out)",
+      "url": "/org/BIRDINC/manage",
+      "finalUrl": "/login?redirect=%2Forg%2FBIRDINC%2Fmanage",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/:contractor_id/manage/about": {
+      "route": "/org/:contractor_id/manage/about",
+      "url": "/org/BIRDINC/manage/about",
+      "finalUrl": "/login?redirect=%2Forg%2FBIRDINC%2Fmanage%2Fabout",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/fleet": {
+      "route": "/org/fleet",
+      "url": "/org/fleet",
+      "finalUrl": "/login?redirect=%2Forg%2Ffleet",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/manage": {
+      "route": "/org/manage",
+      "url": "/org/manage",
+      "finalUrl": "/login?redirect=%2Forg%2Fmanage",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/members": {
+      "route": "/org/members",
+      "url": "/org/members",
+      "finalUrl": "/login?redirect=%2Forg%2Fmembers",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/money": {
+      "route": "/org/money",
+      "url": "/org/money",
+      "finalUrl": "/login?redirect=%2Forg%2Fmoney",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/orders": {
+      "route": "/org/orders",
+      "url": "/org/orders",
+      "finalUrl": "/login?redirect=%2Forg%2Forders",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/register": {
+      "route": "/org/register",
+      "url": "/org/register",
+      "finalUrl": "/login?redirect=%2Forg%2Fregister",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/org/send": {
+      "route": "/org/send",
+      "url": "/org/send",
+      "finalUrl": "/login?redirect=%2Forg%2Fsend",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/profile": {
+      "route": "/profile",
+      "url": "/profile",
+      "finalUrl": "/login?redirect=%2Fprofile",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/recruiting": {
+      "route": "/recruiting",
+      "url": "/recruiting",
+      "finalUrl": "/recruiting",
+      "title": "Star Citizen Recruiting — Find Organizations | SC Market",
+      "h1": [
+        "Recruiting Orgs",
+        "Who We Are",
+        "Our Features",
+        "Join The League Today",
+        "Discord ad rough draft - revised",
+        "Why join Nightingale Industries?",
+        "The possibilities are endless!"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/recruiting/post/:post_id": {
+      "route": "/recruiting/post/:post_id",
+      "url": "/recruiting/post/74c409a8-c647-4a53-b48b-f77fa6923933",
+      "finalUrl": "/recruiting/post/74c409a8-c647-4a53-b48b-f77fa6923933",
+      "title": "Join Void Runner — Star Citizen Recruiting | SC Market",
+      "h1": [
+        "Join Void Runner"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/recruiting/post/create": {
+      "route": "/recruiting/post/create",
+      "url": "/recruiting/post/create",
+      "finalUrl": "/login?redirect=%2Frecruiting%2Fpost%2Fcreate",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/resources": {
+      "route": "/resources",
+      "url": "/resources",
+      "finalUrl": "/resources",
+      "title": "Resources - SC Market",
+      "h1": [
+        "Resources"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/resources/:resource_id": {
+      "route": "/resources/:resource_id",
+      "url": "/resources/1c18ba70-a7c7-42da-beff-1acc3df0f51d",
+      "finalUrl": "/wiki/commodities/1c18ba70--ace-interceptor-helmet",
+      "title": "Ace Interceptor Helmet — Star Citizen Commodity | SC Market",
+      "h1": [
+        "Ace Interceptor Helmet"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/sell": {
+      "route": "/sell",
+      "url": "/sell",
+      "finalUrl": "/login?redirect=%2Fsell",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/send": {
+      "route": "/send",
+      "url": "/send",
+      "finalUrl": "/login?redirect=%2Fsend",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/services": {
+      "route": "/services",
+      "url": "/services",
+      "finalUrl": "/market/services",
+      "title": "Market - SC Market",
+      "h1": [
+        "Summary",
+        "Bound by sacred oath and order,",
+        "Bound by sacred oath and order,",
+        "By sworn honor and binding word,",
+        "By charter and ancient craft,",
+        "By solemn oath and steadfast steel,",
+        "By solemn oath and steadfast steel,"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/services (redirect)": {
+      "route": "/services (redirect)",
+      "url": "/services",
+      "finalUrl": "/market/services",
+      "title": "Market - SC Market",
+      "h1": [
+        "Summary",
+        "Bound by sacred oath and order,",
+        "Bound by sacred oath and order,",
+        "By sworn honor and binding word,",
+        "By charter and ancient craft,",
+        "By solemn oath and steadfast steel,",
+        "By solemn oath and steadfast steel,"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/settings": {
+      "route": "/settings",
+      "url": "/settings",
+      "finalUrl": "/login?redirect=%2Fsettings",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/shop/:shopSlug (index redirect, logged out)": {
+      "route": "/shop/:shopSlug (index redirect, logged out)",
+      "url": "/shop/birdinc",
+      "finalUrl": "/login?redirect=%2Fshop%2Fbirdinc",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/shop/:shopSlug/listings": {
+      "route": "/shop/:shopSlug/listings",
+      "url": "/shop/birdinc/listings",
+      "finalUrl": "/login?redirect=%2Fshop%2Fbirdinc%2Flistings",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/shopping-lists": {
+      "route": "/shopping-lists",
+      "url": "/shopping-lists",
+      "finalUrl": "/shopping-lists",
+      "title": "My Shopping Lists - SC Market",
+      "h1": [
+        "My Shopping Lists"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/game-data/wishlists",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/game-data/wishlists 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/shops": {
+      "route": "/shops",
+      "url": "/shops",
+      "finalUrl": "/shops",
+      "title": "All Shops — Star Citizen Marketplace | SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/shops/:slug": {
+      "route": "/shops/:slug",
+      "url": "/shops/birdinc",
+      "finalUrl": "/shops/birdinc",
+      "title": "Bird Inc — Star Citizen Shop | SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/shops/:slug/:tab": {
+      "route": "/shops/:slug/:tab",
+      "url": "/shops/birdinc/reviews",
+      "finalUrl": "/shops/birdinc/reviews",
+      "title": "Bird Inc — Star Citizen Shop | SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/shops/create": {
+      "route": "/shops/create",
+      "url": "/shops/create",
+      "finalUrl": "/login?redirect=%2Fshops%2Fcreate",
+      "title": "Sign in to SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/signup": {
+      "route": "/signup",
+      "url": "/signup",
+      "finalUrl": "/signup",
+      "title": "Sign up for SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/user/:username": {
+      "route": "/user/:username",
+      "url": "/user/Marshall_Apollyon",
+      "finalUrl": "/user/Marshall_Apollyon",
+      "title": "Marshall_Apollyon - Store - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile/blocklist",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/profile/blocklist 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/user/:username/:tab": {
+      "route": "/user/:username/:tab",
+      "url": "/user/Marshall_Apollyon/reviews",
+      "finalUrl": "/user/Marshall_Apollyon/reviews",
+      "title": "Marshall_Apollyon - Store - SC Market",
+      "h1": [],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile/blocklist",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/profile/blocklist 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/widget/orders": {
+      "route": "/widget/orders",
+      "url": "/widget/orders",
+      "finalUrl": "/widget/orders",
+      "title": "Error - SC Market",
+      "h1": [],
+      "hasMainNav": false,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/orders/user/data",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh",
+        "[StandardPageLayout] Page error – showing error page [object Object]"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/orders/user/data 401",
+        "GET /api/profile 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki": {
+      "route": "/wiki",
+      "url": "/wiki",
+      "finalUrl": "/wiki",
+      "title": "Game Database — Star Citizen Items, Ships & More | SC Market",
+      "h1": [
+        "Game Database"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/commodities": {
+      "route": "/wiki/commodities",
+      "url": "/wiki/commodities",
+      "finalUrl": "/wiki/commodities",
+      "title": "All Commodities — Star Citizen | SC Market",
+      "h1": [
+        "Commodities"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/commodities/:id": {
+      "route": "/wiki/commodities/:id",
+      "url": "/wiki/commodities/1c18ba70-a7c7-42da-beff-1acc3df0f51d",
+      "finalUrl": "/wiki/commodities/1c18ba70--ace-interceptor-helmet",
+      "title": "Ace Interceptor Helmet — Star Citizen Commodity | SC Market",
+      "h1": [
+        "Ace Interceptor Helmet"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/items": {
+      "route": "/wiki/items",
+      "url": "/wiki/items",
+      "finalUrl": "/wiki/items",
+      "title": "All Items — Star Citizen Game Database | SC Market",
+      "h1": [
+        "Game Items Database"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/items/:id": {
+      "route": "/wiki/items/:id",
+      "url": "/wiki/items/30cb2460-872c-4f47-8119-4b364c671807",
+      "finalUrl": "/wiki/items/30cb2460--100i-2954-auspicious-red-dog-livery",
+      "title": "100i 2954 Auspicious Red Dog Livery — Star Citizen Item | SC Market",
+      "h1": [
+        "100i 2954 Auspicious Red Dog Livery"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/v1/shops/game/items/30cb2460--100i-2954-auspicious-red-dog-livery/shops",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/v1/shops/game/items/30cb2460-872c-4f47-8119-4b364c671807/shops",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v1/shops/game/items/30cb2460--100i-2954-auspicious-red-dog-livery/shops 404",
+        "GET /api/v1/shops/game/items/30cb2460-872c-4f47-8119-4b364c671807/shops 404",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/locations": {
+      "route": "/wiki/locations",
+      "url": "/wiki/locations",
+      "finalUrl": "/wiki/locations",
+      "title": "Star Map & Locations - SC Market",
+      "h1": [
+        "Star Map & Locations"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/manufacturers": {
+      "route": "/wiki/manufacturers",
+      "url": "/wiki/manufacturers",
+      "finalUrl": "/wiki/manufacturers",
+      "title": "Manufacturers - SC Market",
+      "h1": [
+        "Manufacturers"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/manufacturers/:id": {
+      "route": "/wiki/manufacturers/:id",
+      "url": "/wiki/manufacturers/aegs",
+      "finalUrl": "/wiki/manufacturers/aegs",
+      "title": "Aegis Dynamics — Star Citizen Manufacturer | SC Market",
+      "h1": [
+        "Aegis Dynamics"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/refinery": {
+      "route": "/wiki/refinery",
+      "url": "/wiki/refinery",
+      "finalUrl": "/wiki/refinery",
+      "title": "Refining Methods - SC Market",
+      "h1": [
+        "Refining Methods"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/ships": {
+      "route": "/wiki/ships",
+      "url": "/wiki/ships",
+      "finalUrl": "/wiki/ships",
+      "title": "All Ships — Star Citizen Ship Database | SC Market",
+      "h1": [
+        "Ships & Vehicles"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    },
+    "/wiki/ships/:id": {
+      "route": "/wiki/ships/:id",
+      "url": "/wiki/ships/317fb7ba--aegis-avenger-stalker",
+      "finalUrl": "/wiki/ships/317fb7ba--aegis-avenger-stalker",
+      "title": "All Ships — Star Citizen Ship Database | SC Market",
+      "h1": [
+        "Ships & Vehicles"
+      ],
+      "hasMainNav": true,
+      "hasMain": true,
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/profile",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) <api>/api/v2/shops/mine",
+        "Failed to load resource: the server responded with a status of 404 (Not Found) <api>/api/domain/127.0.0.1",
+        "Failed to load resource: the server responded with a status of 405 (Method Not Allowed) <api>/api/auth/refresh"
+      ],
+      "consoleWarnings": [],
+      "pageErrors": [],
+      "failedOwnRequests": [],
+      "apiNon2xx": [
+        "GET /api/domain/127.0.0.1 404",
+        "GET /api/profile 401",
+        "GET /api/v2/shops/mine 401",
+        "POST /api/auth/refresh 405"
+      ],
+      "navigationError": null,
+      "pendingAtTimeout": []
+    }
+  }
+}

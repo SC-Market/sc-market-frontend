@@ -1,0 +1,1022 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LoggedInRoute when logged out > sends the browser to /login with the current path as redirect 1`] = `
+{
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/dashboard/shops",
+  ],
+  "routerLocation": "/dashboard/shops",
+  "windowLocation": "/login?redirect=%2Fdashboard%2Fshops",
+}
+`;
+
+exports[`links rendered by nested pages > /contractor/TESTORG 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/blueprints",
+    "/buyorders",
+    "/contractor/TESTORG",
+    "/contractor/TESTORG/about",
+    "/contractor/TESTORG/members",
+    "/contractor/TESTORG/order",
+    "/contractor/TESTORG/reviews",
+    "/contractors",
+    "/contracts",
+    "/crafting/calculator",
+    "/login",
+    "/market",
+    "/market/services",
+    "/mining",
+    "/missions",
+    "/privacy-policy",
+    "/recruiting",
+    "/resources",
+    "/shops",
+    "/signup",
+    "/terms-of-service",
+    "/wiki/commodities",
+    "/wiki/items",
+    "/wiki/locations",
+    "/wiki/manufacturers",
+    "/wiki/refinery",
+    "/wiki/ships",
+  ],
+  "finalUrl": "/contractor/TESTORG",
+  "mainLinks": [
+    "/contractor/TESTORG",
+    "/contractor/TESTORG/about",
+    "/contractor/TESTORG/members",
+    "/contractor/TESTORG/order",
+    "/contractor/TESTORG/reviews",
+    "/contractors",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "url": "/contractor/TESTORG",
+}
+`;
+
+exports[`links rendered by nested pages > /messages 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/availability",
+    "/blueprints",
+    "/buyorders",
+    "/contractors",
+    "/contracts",
+    "/crafting/calculator",
+    "/dashboard",
+    "/inventory",
+    "/market",
+    "/market/services",
+    "/messages",
+    "/mining",
+    "/missions",
+    "/orders",
+    "/recruiting",
+    "/resources",
+    "/settings",
+    "/shopping-lists",
+    "/shops",
+    "/wiki/commodities",
+    "/wiki/items",
+    "/wiki/locations",
+    "/wiki/manufacturers",
+    "/wiki/refinery",
+    "/wiki/ships",
+  ],
+  "finalUrl": "/messages",
+  "mainLinks": [],
+  "url": "/messages",
+}
+`;
+
+exports[`links rendered by nested pages > /messages/chat-1 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/availability",
+    "/blueprints",
+    "/buyorders",
+    "/contractors",
+    "/contracts",
+    "/crafting/calculator",
+    "/dashboard",
+    "/inventory",
+    "/market",
+    "/market/services",
+    "/messages",
+    "/mining",
+    "/missions",
+    "/orders",
+    "/recruiting",
+    "/resources",
+    "/settings",
+    "/shopping-lists",
+    "/shops",
+    "/wiki/commodities",
+    "/wiki/items",
+    "/wiki/locations",
+    "/wiki/manufacturers",
+    "/wiki/refinery",
+    "/wiki/ships",
+  ],
+  "finalUrl": "/messages/chat-1",
+  "mainLinks": [],
+  "url": "/messages/chat-1",
+}
+`;
+
+exports[`links rendered by nested pages > /org/TESTORG/dashboard 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/contractor/TESTORG",
+    "/org/TESTORG/dashboard",
+    "/org/TESTORG/manage",
+    "/org/TESTORG/members",
+    "/org/TESTORG/orders",
+    "/privacy-policy",
+    "/settings",
+    "/terms-of-service",
+  ],
+  "finalUrl": "/org/TESTORG/dashboard",
+  "mainLinks": [
+    "/org/TESTORG/dashboard",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "url": "/org/TESTORG/dashboard",
+}
+`;
+
+exports[`links rendered by nested pages > /org/TESTORG/listings 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/contractor/TESTORG",
+    "/market",
+    "/market/create",
+    "/market/me",
+    "/org/TESTORG/dashboard",
+    "/org/TESTORG/manage",
+    "/org/TESTORG/members",
+    "/org/TESTORG/orders",
+    "/privacy-policy",
+    "/settings",
+    "/terms-of-service",
+  ],
+  "finalUrl": "/org/TESTORG/listings?quantityAvailable=0",
+  "mainLinks": [
+    "/market",
+    "/market/create",
+    "/market/me",
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "url": "/org/TESTORG/listings",
+}
+`;
+
+exports[`links rendered by nested pages > /org/TESTORG/manage/about 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/contractor/TESTORG",
+    "/org/TESTORG/dashboard",
+    "/org/TESTORG/manage",
+    "/org/TESTORG/members",
+    "/org/TESTORG/orders",
+    "/privacy-policy",
+    "/settings",
+    "/terms-of-service",
+  ],
+  "finalUrl": "/org/TESTORG/manage/about",
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "url": "/org/TESTORG/manage/about",
+}
+`;
+
+exports[`links rendered by nested pages > /org/TESTORG/manage/roles 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/contractor/TESTORG",
+    "/org/TESTORG/dashboard",
+    "/org/TESTORG/manage",
+    "/org/TESTORG/members",
+    "/org/TESTORG/orders",
+    "/privacy-policy",
+    "/settings",
+    "/terms-of-service",
+  ],
+  "finalUrl": "/org/TESTORG/manage/roles",
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "url": "/org/TESTORG/manage/roles",
+}
+`;
+
+exports[`links rendered by nested pages > /shop/test-shop/dashboard 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/privacy-policy",
+    "/settings",
+    "/shop/test-shop/customers",
+    "/shop/test-shop/listings",
+    "/shop/test-shop/listings/create",
+    "/shop/test-shop/orders",
+    "/shop/test-shop/services",
+    "/shop/test-shop/settings",
+    "/shop/test-shop/stock",
+    "/shops/test-shop",
+    "/terms-of-service",
+  ],
+  "finalUrl": "/shop/test-shop/orders",
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "url": "/shop/test-shop/dashboard",
+}
+`;
+
+exports[`links rendered by nested pages > /shop/test-shop/listings 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/market",
+    "/market/me",
+    "/privacy-policy",
+    "/settings",
+    "/shop/test-shop/customers",
+    "/shop/test-shop/listings",
+    "/shop/test-shop/listings/create",
+    "/shop/test-shop/orders",
+    "/shop/test-shop/services",
+    "/shop/test-shop/settings",
+    "/shop/test-shop/stock",
+    "/shops/test-shop",
+    "/terms-of-service",
+  ],
+  "finalUrl": "/shop/test-shop/listings",
+  "mainLinks": [
+    "/market",
+    "/market/me",
+    "/privacy-policy",
+    "/shop/test-shop/listings/create",
+    "/terms-of-service",
+  ],
+  "url": "/shop/test-shop/listings",
+}
+`;
+
+exports[`links rendered by nested pages > /shop/test-shop/settings 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/privacy-policy",
+    "/settings",
+    "/shop/test-shop/customers",
+    "/shop/test-shop/listings",
+    "/shop/test-shop/listings/create",
+    "/shop/test-shop/orders",
+    "/shop/test-shop/services",
+    "/shop/test-shop/settings",
+    "/shop/test-shop/stock",
+    "/shops/test-shop",
+    "/terms-of-service",
+  ],
+  "finalUrl": "/shop/test-shop/settings",
+  "mainLinks": [
+    "/privacy-policy",
+    "/terms-of-service",
+  ],
+  "url": "/shop/test-shop/settings",
+}
+`;
+
+exports[`links rendered by nested pages > /shops/test-shop 1`] = `
+{
+  "allLinks": [
+    "/",
+    "/blueprints",
+    "/buyorders",
+    "/contractors",
+    "/contracts",
+    "/crafting/calculator",
+    "/login",
+    "/market",
+    "/market/services",
+    "/mining",
+    "/missions",
+    "/recruiting",
+    "/resources",
+    "/shops",
+    "/shops/test-shop",
+    "/shops/test-shop/about",
+    "/shops/test-shop/order",
+    "/shops/test-shop/reviews",
+    "/shops/test-shop/services",
+    "/signup",
+    "/wiki/commodities",
+    "/wiki/items",
+    "/wiki/locations",
+    "/wiki/manufacturers",
+    "/wiki/refinery",
+    "/wiki/ships",
+  ],
+  "finalUrl": "/shops/test-shop",
+  "mainLinks": [
+    "/shops/test-shop",
+    "/shops/test-shop/about",
+    "/shops/test-shop/order",
+    "/shops/test-shop/reviews",
+    "/shops/test-shop/services",
+  ],
+  "url": "/shops/test-shop",
+}
+`;
+
+exports[`org manage nav: relative navigate(value) from the pathless OrgManageLayout > lands on /org/:contractor_id/manage/<tab> for every item 1`] = `
+[
+  "PUSH /org/TESTORG/manage/about",
+  "PUSH /org/TESTORG/manage/roles",
+  "PUSH /org/TESTORG/manage/invites",
+  "PUSH /org/TESTORG/manage/discord",
+  "PUSH /org/TESTORG/manage/market",
+  "PUSH /org/TESTORG/manage/settings",
+  "PUSH /org/TESTORG/manage/blocklist",
+  "PUSH /org/TESTORG/manage/audit",
+  "PUSH /org/TESTORG/manage/customers",
+]
+`;
+
+exports[`redirects and guards > /market/create with shop cookie 1`] = `
+{
+  "cookies": {
+    "current_shop_slug": "test-shop",
+  },
+  "finalUrl": "/shop/test-shop/listings/create",
+  "h1": [
+    "Create New Listing",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings/create",
+  ],
+  "session": "admin",
+  "title": "Create Listing - SC Market",
+  "url": "/market/create",
+}
+`;
+
+exports[`redirects and guards > /market/create/:tab with shop cookie 1`] = `
+{
+  "cookies": {
+    "current_shop_slug": "test-shop",
+  },
+  "finalUrl": "/shop/test-shop/listings/create",
+  "h1": [
+    "Create New Listing",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings/create",
+  ],
+  "session": "admin",
+  "title": "Create Listing - SC Market",
+  "url": "/market/create/unique",
+}
+`;
+
+exports[`redirects and guards > /market/manage with shop cookie 1`] = `
+{
+  "cookies": {
+    "current_shop_slug": "test-shop",
+  },
+  "finalUrl": "/shop/test-shop/listings",
+  "h1": [
+    "Manage Listings",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings",
+  ],
+  "session": "admin",
+  "title": "Manage Listings - SC Market",
+  "url": "/market/manage",
+}
+`;
+
+exports[`redirects and guards > /market/manage without shop cookie 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/dashboard/shops",
+  "h1": [],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/dashboard/shops",
+  ],
+  "session": "admin",
+  "title": "Shops - SC Market",
+  "url": "/market/manage",
+}
+`;
+
+exports[`redirects and guards > /market/manage-stock with shop cookie 1`] = `
+{
+  "cookies": {
+    "current_shop_slug": "test-shop",
+  },
+  "finalUrl": "/shop/test-shop/stock",
+  "h1": [
+    "Manage Inventory",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "stock",
+  ],
+  "session": "admin",
+  "title": "Manage Inventory - SC Market",
+  "url": "/market/manage-stock",
+}
+`;
+
+exports[`redirects and guards > /market/stock/:id with shop cookie 1`] = `
+{
+  "cookies": {
+    "current_shop_slug": "test-shop",
+  },
+  "finalUrl": "/shop/test-shop/listings",
+  "h1": [
+    "Manage Listings",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings",
+  ],
+  "session": "admin",
+  "title": "Manage Listings - SC Market",
+  "url": "/market/stock/listing-1",
+}
+`;
+
+exports[`redirects and guards > /myorg with org cookie 1`] = `
+{
+  "cookies": {
+    "current_contractor": "TESTORG",
+  },
+  "finalUrl": "/myorg",
+  "h1": [],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/myorg",
+  ],
+  "session": "admin",
+  "title": "My Org - SC Market",
+  "url": "/myorg",
+}
+`;
+
+exports[`redirects and guards > /myorg without org cookie 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/myorg",
+  "h1": [],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/myorg",
+  ],
+  "session": "admin",
+  "title": "My Organization - SC Market",
+  "url": "/myorg",
+}
+`;
+
+exports[`redirects and guards > /order/services with shop cookie 1`] = `
+{
+  "cookies": {
+    "current_shop_slug": "test-shop",
+  },
+  "finalUrl": "/404",
+  "h1": [],
+  "historyAction": "PUSH",
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "session": "admin",
+  "title": "404 - SC Market",
+  "url": "/order/services",
+}
+`;
+
+exports[`redirects and guards > /orders/assigned → /dashboard 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/dashboard",
+  "h1": [
+    "Dashboard",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/dashboard",
+  ],
+  "session": "admin",
+  "title": "Dashboard - SC Market",
+  "url": "/orders/assigned",
+}
+`;
+
+exports[`redirects and guards > /org/fleet with org cookie 1`] = `
+{
+  "cookies": {
+    "current_contractor": "TESTORG",
+  },
+  "finalUrl": "/",
+  "h1": [
+    "SC MARKET",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "session": "admin",
+  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "url": "/org/fleet",
+}
+`;
+
+exports[`redirects and guards > /org/manage with org cookie 1`] = `
+{
+  "cookies": {
+    "current_contractor": "TESTORG",
+  },
+  "finalUrl": "/",
+  "h1": [
+    "SC MARKET",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "session": "admin",
+  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "url": "/org/manage",
+}
+`;
+
+exports[`redirects and guards > /org/members with org cookie 1`] = `
+{
+  "cookies": {
+    "current_contractor": "TESTORG",
+  },
+  "finalUrl": "/",
+  "h1": [
+    "SC MARKET",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "session": "admin",
+  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "url": "/org/members",
+}
+`;
+
+exports[`redirects and guards > /org/members without org cookie 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/",
+  "h1": [
+    "SC MARKET",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "session": "admin",
+  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "url": "/org/members",
+}
+`;
+
+exports[`redirects and guards > /org/money with org cookie 1`] = `
+{
+  "cookies": {
+    "current_contractor": "TESTORG",
+  },
+  "finalUrl": "/",
+  "h1": [
+    "SC MARKET",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "session": "admin",
+  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "url": "/org/money",
+}
+`;
+
+exports[`redirects and guards > /org/orders with org cookie 1`] = `
+{
+  "cookies": {
+    "current_contractor": "TESTORG",
+  },
+  "finalUrl": "/",
+  "h1": [
+    "SC MARKET",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "session": "admin",
+  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "url": "/org/orders",
+}
+`;
+
+exports[`redirects and guards > /org/send with org cookie 1`] = `
+{
+  "cookies": {
+    "current_contractor": "TESTORG",
+  },
+  "finalUrl": "/",
+  "h1": [
+    "SC MARKET",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "session": "admin",
+  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "url": "/org/send",
+}
+`;
+
+exports[`redirects and guards > /services → /market/services 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/market/services",
+  "h1": [],
+  "historyAction": "PUSH",
+  "matches": [
+    "(layout:HookProvider)",
+    "/market/services",
+  ],
+  "session": "anonymous",
+  "title": "Market - SC Market",
+  "url": "/services",
+}
+`;
+
+exports[`redirects and guards > LoggedInRoute, RSI not linked → /settings 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/settings",
+  "h1": [],
+  "historyAction": "PUSH",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/settings",
+  ],
+  "session": "unverified",
+  "title": "Settings - SC Market",
+  "url": "/dashboard",
+}
+`;
+
+exports[`redirects and guards > LoggedInRoute, RSI not linked, /accountlink allowed 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/accountlink",
+  "h1": [
+    "Authenticate with RSI",
+  ],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/accountlink",
+  ],
+  "session": "unverified",
+  "title": "Account Link - SC Market",
+  "url": "/accountlink",
+}
+`;
+
+exports[`redirects and guards > LoggedInRoute, not onboarded → /onboarding 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/onboarding",
+  "h1": [],
+  "historyAction": "PUSH",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/onboarding",
+  ],
+  "session": "not-onboarded",
+  "title": "Onboarding - SC Market",
+  "url": "/dashboard",
+}
+`;
+
+exports[`redirects and guards > OrgAdminRoute /org/:id/orders as owner 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/org/TESTORG/orders",
+  "h1": [
+    "Orders",
+  ],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "orders",
+    "(index)",
+  ],
+  "session": "user",
+  "title": "Org Orders - SC Market",
+  "url": "/org/TESTORG/orders",
+}
+`;
+
+exports[`redirects and guards > OrgContextFromRoute, unknown org → / 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/",
+  "h1": [
+    "SC MARKET",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "/",
+  ],
+  "session": "admin",
+  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "url": "/org/OTHERORG/dashboard",
+}
+`;
+
+exports[`redirects and guards > ShopContextFromRoute, unknown shop → /dashboard/shops 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/dashboard/shops",
+  "h1": [],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/dashboard/shops",
+  ],
+  "session": "admin",
+  "title": "Shops - SC Market",
+  "url": "/shop/other-shop/listings",
+}
+`;
+
+exports[`redirects and guards > SiteAdminRoute as admin 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/admin/users",
+  "h1": [
+    "People",
+  ],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/users",
+  ],
+  "session": "admin",
+  "title": "Customers - SC Market",
+  "url": "/admin/users",
+}
+`;
+
+exports[`redirects and guards > SiteAdminRoute as non-admin → /404 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/404",
+  "h1": [],
+  "historyAction": "PUSH",
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "session": "user",
+  "title": "404 - SC Market",
+  "url": "/admin/users",
+}
+`;
+
+exports[`redirects and guards > org manage index → about 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/org/TESTORG/manage/about",
+  "h1": [
+    "Manage Org",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:OrgManageLayout)",
+    "about",
+  ],
+  "session": "admin",
+  "title": "Manage Org - SC Market",
+  "url": "/org/TESTORG/manage",
+}
+`;
+
+exports[`redirects and guards > shop index (trailing slash) → listings 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/shop/test-shop/listings",
+  "h1": [
+    "Manage Listings",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings",
+  ],
+  "session": "admin",
+  "title": "Manage Listings - SC Market",
+  "url": "/shop/test-shop/",
+}
+`;
+
+exports[`redirects and guards > shop index → listings 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/shop/test-shop/listings",
+  "h1": [
+    "Manage Listings",
+  ],
+  "historyAction": "REPLACE",
+  "matches": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "/shop/:shopSlug",
+    "listings",
+  ],
+  "session": "admin",
+  "title": "Manage Listings - SC Market",
+  "url": "/shop/test-shop",
+}
+`;
+
+exports[`redirects and guards > splat: /404 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/404",
+  "h1": [],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "session": "anonymous",
+  "title": "404 - SC Market",
+  "url": "/404",
+}
+`;
+
+exports[`redirects and guards > splat: unknown deep path 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/does/not/exist/at/all",
+  "h1": [],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "session": "anonymous",
+  "title": "404 - SC Market",
+  "url": "/does/not/exist/at/all",
+}
+`;
+
+exports[`redirects and guards > splat: unknown messages grandchild 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/messages/chat-1/extra",
+  "h1": [],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "session": "admin",
+  "title": "404 - SC Market",
+  "url": "/messages/chat-1/extra",
+}
+`;
+
+exports[`redirects and guards > splat: unknown org child 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/org/TESTORG/not-a-tab",
+  "h1": [],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "session": "admin",
+  "title": "404 - SC Market",
+  "url": "/org/TESTORG/not-a-tab",
+}
+`;
+
+exports[`redirects and guards > splat: unknown shop child 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/shop/test-shop/not-a-tab",
+  "h1": [],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "session": "admin",
+  "title": "404 - SC Market",
+  "url": "/shop/test-shop/not-a-tab",
+}
+`;
+
+exports[`redirects and guards > splat: unknown top-level 1`] = `
+{
+  "cookies": {},
+  "finalUrl": "/does-not-exist",
+  "h1": [],
+  "historyAction": "POP",
+  "matches": [
+    "(layout:HookProvider)",
+    "/*",
+  ],
+  "session": "anonymous",
+  "title": "404 - SC Market",
+  "url": "/does-not-exist",
+}
+`;
