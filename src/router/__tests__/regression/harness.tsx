@@ -22,7 +22,7 @@ import {
   type RouteObject,
 } from "react-router-dom"
 import { createHead, UnheadProvider } from "@unhead/react/client"
-import { vi } from "vitest"
+import { expect, vi } from "vitest"
 import { makeStore } from "../../../store/store"
 import type { NetworkEnv } from "../../../store/networkEnv"
 import { applyTitleTemplate } from "../../../seo/pageHead"
@@ -220,8 +220,32 @@ function format(...args: unknown[]): string {
   return [head, ...args.slice(i).map(str)].join(" ")
 }
 
+/**
+ * React component stacks in console errors contain absolute file paths. The
+ * checkout root (taken from the running test file's path, plus its macOS
+ * /tmp ↔ /private/tmp twin) is rewritten to "<root>" so snapshots match in
+ * any checkout. (No node:fs/process here: the app tsconfig has no Node types.)
+ */
+function checkoutRoots(): string[] {
+  const testPath = expect.getState().testPath ?? ""
+  const at = testPath.lastIndexOf("/src/")
+  if (at <= 0) return []
+  const root = testPath.slice(0, at)
+  const twin = root.startsWith("/private/")
+    ? root.slice("/private".length)
+    : `/private${root}`
+  // Longest first so "/private/tmp/x" is replaced before "/tmp/x".
+  return [root, twin].sort((a, b) => b.length - a.length)
+}
+
+function stripCheckoutRoot(text: string): string {
+  let out = text
+  for (const root of checkoutRoots()) out = out.split(root).join("<root>")
+  return out
+}
+
 function normalizeConsole(args: unknown[]): string {
-  const text = format(...args)
+  const text = stripCheckoutRoot(format(...args))
   const firstLine = text.split("\n")[0] ?? ""
   return firstLine
     .replace(/https?:\/\/localhost(:\d+)?/g, "<origin>")

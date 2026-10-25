@@ -412,7 +412,7 @@ exports[`routes (shard 3/4) > /crafting/calculator 1`] = `
 exports[`routes (shard 3/4) > /customers 1`] = `
 {
   "consoleErrors": [
-    "React Router caught the following error during render TypeError: Cannot read properties of undefined (reading 'length') {"componentStack":"\\n at PaginatedTable (/private/tmp/fe-harness/src/components/table/PaginatedTable.tsx:156:13)\\n at di",
+    "React Router caught the following error during render TypeError: Cannot read properties of undefined (reading 'length') {"componentStack":"\\n at PaginatedTable (<root>/src/components/table/PaginatedTable.tsx:156:13)\\n at div (<anonymous>)\\n",
     "TypeError: Cannot read properties of undefined (reading 'length')",
   ],
   "errorElementErrors": [
