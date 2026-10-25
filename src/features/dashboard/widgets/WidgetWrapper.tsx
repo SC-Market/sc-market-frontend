@@ -112,6 +112,17 @@ export function WidgetWrapper({ widget, editing, onRemove }: WidgetWrapperProps)
           position: "relative",
           height: "100%",
           overflow: "auto",
+          display: "flex",
+          flexDirection: "column",
+          // Stretch the widget's own card (a Section: Grid item > Paper) to the
+          // full cell, so a short widget is a full-height card, not a small card
+          // above an empty gap.
+          "& > .MuiGrid-item": {
+            flex: "1 0 auto",
+            display: "flex",
+            flexDirection: "column",
+          },
+          "& > .MuiGrid-item > .MuiPaper-root": { flex: "1 0 auto" },
         }}
       >
         {editOverlay}
