@@ -1,10 +1,14 @@
 import React, { useMemo, useState } from "react"
 import {
+  Alert,
   Box,
+  Button,
   Chip,
   List,
   ListItemButton,
+  ListItem,
   ListItemText,
+  Skeleton,
   Stack,
   TextField,
   Typography,
@@ -13,8 +17,23 @@ import { Link } from "react-router-dom"
 import { useGetStatsQuery, type FeatureFlagStats } from "../../store/api/v2/market"
 import { ADMIN_PATHS } from "../../routes/paths"
 
+/** Placeholder rows shown while the flag stats load; same shape as a flag row. */
+const SKELETON_ROWS = 4
+
+function FlagRowSkeleton() {
+  return (
+    <ListItem sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <ListItemText
+        primary={<Skeleton variant="text" width="30%" />}
+        secondary={<Skeleton variant="text" width="55%" />}
+      />
+      <Skeleton variant="rounded" width={72} height={24} />
+    </ListItem>
+  )
+}
+
 export function AdminFeatureFlagsView() {
-  const { data: stats } = useGetStatsQuery()
+  const { data: stats, isLoading, isError, refetch } = useGetStatsQuery()
   const [search, setSearch] = useState("")
 
   const filtered = useMemo(() => {
@@ -35,7 +54,24 @@ export function AdminFeatureFlagsView() {
         onChange={(e) => setSearch(e.target.value)}
         sx={{ mb: 2 }}
       />
-      <List disablePadding>
+      {isError && (
+        <Alert
+          severity="error"
+          sx={{ mb: 2 }}
+          action={
+            <Button color="inherit" size="small" onClick={() => refetch()}>
+              Retry
+            </Button>
+          }
+        >
+          Failed to load feature flags.
+        </Alert>
+      )}
+      <List disablePadding aria-busy={isLoading}>
+        {isLoading &&
+          Array.from({ length: SKELETON_ROWS }, (_, i) => (
+            <FlagRowSkeleton key={i} />
+          ))}
         {filtered.map((flag) => {
           const label = flag.flag_name.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
           return (
@@ -72,7 +108,7 @@ export function AdminFeatureFlagsView() {
             </ListItemButton>
           )
         })}
-        {filtered.length === 0 && (
+        {!isLoading && !isError && filtered.length === 0 && (
           <Typography color="text.secondary" sx={{ py: 3, textAlign: "center" }}>
             {search ? "No flags match your search" : "No feature flags configured"}
           </Typography>
