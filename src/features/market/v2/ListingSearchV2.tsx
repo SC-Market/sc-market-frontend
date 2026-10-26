@@ -56,6 +56,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { useCartDrawer } from "../hooks/AddToCartContext";
 import { AdCard } from "../../../components/ads/AdCard";
 import type { AdConfig } from "../../../components/ads/types";
@@ -65,6 +66,7 @@ import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag";
 import { useAutoApplySearchParams, type AutoApplySearchParams } from "../hooks/useAutoApplySearchParams";
 import { GroupedListingGrid } from "./redesign/GroupedListingGrid";
+import { BUY_ORDER_SORT_FIELDS } from "./buyOrderSort";
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -356,6 +358,21 @@ export function ListingSearchV2() {
   );
 }
 
+/** Options for the sidebar's "Sort By" select, as `<sort_by>:<sort_order>`. */
+const SORT_OPTIONS: ReadonlyArray<{ value: string; label: (t: TFunction) => string }> = [
+  { value: "price:asc", label: (t) => t("MarketSearchArea.sortPriceLow", "Price: Low to High") },
+  { value: "price:desc", label: (t) => t("MarketSearchArea.sortPriceHigh", "Price: High to Low") },
+  { value: "created_at:desc", label: (t) => t("MarketSearchArea.sortNewest", "Date: Newest First") },
+  { value: "created_at:asc", label: (t) => t("MarketSearchArea.sortOldest", "Date: Oldest First") },
+  { value: "quality:desc", label: (t) => t("MarketSearchArea.sortQualityHigh", "Quality: High to Low") },
+  { value: "quality:asc", label: (t) => t("MarketSearchArea.sortQualityLow", "Quality: Low to High") },
+  { value: "shop_rating:desc", label: (t) => t("MarketSearchArea.sortRatingHigh", "Rating: High to Low") },
+  { value: "shop_rating:asc", label: (t) => t("MarketSearchArea.sortRatingLow", "Rating: Low to High") },
+  { value: "updated_at:desc", label: (t) => t("MarketSearchArea.sortUpdated", "Recently Updated") },
+  { value: "quantity:desc", label: (t) => t("MarketSearchArea.sortQuantityHigh", "Quantity: High to Low") },
+  { value: "quantity:asc", label: (t) => t("MarketSearchArea.sortQuantityLow", "Quantity: Low to High") },
+];
+
 /**
  * MarketSearchAreaV2 - V2 filter sidebar content with QualityFilter
  *
@@ -503,17 +520,12 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
             color="secondary"
           >
             <MenuItem value="">{t("MarketSearchArea.sortNone", "None")}</MenuItem>
-            <MenuItem value="price:asc">{t("MarketSearchArea.sortPriceLow", "Price: Low to High")}</MenuItem>
-            <MenuItem value="price:desc">{t("MarketSearchArea.sortPriceHigh", "Price: High to Low")}</MenuItem>
-            <MenuItem value="created_at:desc">{t("MarketSearchArea.sortNewest", "Date: Newest First")}</MenuItem>
-            <MenuItem value="created_at:asc">{t("MarketSearchArea.sortOldest", "Date: Oldest First")}</MenuItem>
-            <MenuItem value="quality:desc">{t("MarketSearchArea.sortQualityHigh", "Quality: High to Low")}</MenuItem>
-            <MenuItem value="quality:asc">{t("MarketSearchArea.sortQualityLow", "Quality: Low to High")}</MenuItem>
-            <MenuItem value="shop_rating:desc">{t("MarketSearchArea.sortRatingHigh", "Rating: High to Low")}</MenuItem>
-            <MenuItem value="shop_rating:asc">{t("MarketSearchArea.sortRatingLow", "Rating: Low to High")}</MenuItem>
-            <MenuItem value="updated_at:desc">{t("MarketSearchArea.sortUpdated", "Recently Updated")}</MenuItem>
-            <MenuItem value="quantity:desc">{t("MarketSearchArea.sortQuantityHigh", "Quantity: High to Low")}</MenuItem>
-            <MenuItem value="quantity:asc">{t("MarketSearchArea.sortQuantityLow", "Quantity: Low to High")}</MenuItem>
+            {SORT_OPTIONS.filter(
+              // Buy orders only support some sort keys (see buyOrderSort.ts)
+              (o) => viewMode !== "buyorders" || o.value.split(":")[0] in BUY_ORDER_SORT_FIELDS,
+            ).map((o) => (
+              <MenuItem key={o.value} value={o.value}>{o.label(t)}</MenuItem>
+            ))}
           </TextField>
         </Grid>
 

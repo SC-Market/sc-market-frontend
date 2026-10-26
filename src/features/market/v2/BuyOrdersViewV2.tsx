@@ -25,6 +25,7 @@ import {
 import { useMarketSidebarExp } from "../hooks/MarketSidebar"
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea"
 import { MarketSearchAreaV2, MarketSidebarV2 } from "./ListingSearchV2"
+import { buyOrderSortArgs } from "./buyOrderSort"
 import { ListingWrapper } from "../components/listings/ListingWrapper"
 import { ListingPagination } from "../components/listings/ListingPagination"
 import { ListingSkeleton } from "../../../components/skeletons"
@@ -68,6 +69,7 @@ export function BuyOrdersViewV2() {
     page: page + 1,
     pageSize: perPage,
     text: searchText,
+    ...buyOrderSortArgs(searchParams),
   })
 
   const aggregates = useMemo(() => {

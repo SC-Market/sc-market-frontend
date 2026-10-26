@@ -41,6 +41,7 @@ import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { useDrawerOpen } from "../../../../hooks/layout/Drawer"
 import { HideOnScroll, MarketNavArea } from "../../components/MarketNavArea"
 import { MarketSearchAreaV2, MarketSidebarV2 } from "../ListingSearchV2"
+import { buyOrderSortArgs } from "../buyOrderSort"
 import { ListingWrapper } from "../../components/listings/ListingWrapper"
 import { ListingPagination } from "../../components/listings/ListingPagination"
 import { ListingSkeleton } from "../../../../components/skeletons"
@@ -64,7 +65,7 @@ import {
  * "Create buy order" form wired to `useCreateStandingBuyOrderMutation`.
  *
  * Reads are wired to the real `useSearchBuyOrdersQuery` with URL-param search
- * state (text/page/pageSize), matching BuyOrdersViewV2's arg mapping. Active
+ * state (text/page/pageSize/sort), matching BuyOrdersViewV2's arg mapping. Active
  * buy orders only. The Phase-0 "Fulfil from stock" button stays visual-only.
  */
 export function BuyOrdersRedesign() {
@@ -100,6 +101,7 @@ export function BuyOrdersRedesign() {
     page: page + 1,
     pageSize: perPage,
     text: searchText,
+    ...buyOrderSortArgs(searchParams),
   })
 
   // Active buy orders only (preserved redesign behavior).
