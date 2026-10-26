@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import {
   Box,
   Breadcrumbs,
@@ -17,7 +17,7 @@ import {
 } from "@mui/material"
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useTheme } from "@mui/material/styles"
-import { useParams, Link as RouterLink } from "react-router-dom"
+import { useParams, useNavigate, Link as RouterLink } from "react-router-dom"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import {
@@ -38,7 +38,9 @@ import {
   StorefrontRounded,
 } from "@mui/icons-material"
 import { ClockAlert } from "mdi-material-ui"
-import { MARKET_PATHS, USER_PATHS } from "../../../routes/paths"
+import { MARKET_PATHS, PATHS, USER_PATHS } from "../../../routes/paths"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import { FulfillBuyOrderDialog } from "./components/FulfillBuyOrderDialog"
 
 const STATUS_COLORS: Record<string, "success" | "warning" | "error" | "default"> = {
   active: "success",
@@ -54,6 +56,10 @@ export function BuyOrderDetailV2() {
   const isMobile = useBreakpointDown("sm")
 
   const { data: buyOrder, isLoading, error } = useGetBuyOrderDetailQuery({ id: id! })
+  const { data: profile } = useGetUserProfileQuery()
+  const navigate = useNavigate()
+  const [fulfillOpen, setFulfillOpen] = useState(false)
+  const isOwnBuyOrder = !!profile && buyOrder?.buyer_name === profile.username
 
   const photos = useMemo(() => {
     if (buyOrder?.photos?.length) return buyOrder.photos.map((p) => p.url)
@@ -296,7 +302,7 @@ export function BuyOrderDetailV2() {
             </Grid>
 
             {/* FULL WIDTH — Actions */}
-            {buyOrder.status === "active" && (
+            {buyOrder.status === "active" && !isOwnBuyOrder && (
               <Grid item xs={12}>
                 <Paper
                   sx={{
@@ -317,8 +323,7 @@ export function BuyOrderDetailV2() {
                     </Typography>
                   </Box>
                   <Button
-                    component={RouterLink}
-                    to={MARKET_PATHS.aggregate(buyOrder.game_item_id)}
+                    onClick={() => (profile ? setFulfillOpen(true) : navigate(PATHS.login))}
                     variant="contained"
                     color="warning"
                     size="large"
@@ -328,6 +333,13 @@ export function BuyOrderDetailV2() {
                     Fulfill Order
                   </Button>
                 </Paper>
+                {fulfillOpen && (
+                  <FulfillBuyOrderDialog
+                    buyOrder={buyOrder}
+                    open={fulfillOpen}
+                    onClose={() => setFulfillOpen(false)}
+                  />
+                )}
               </Grid>
             )}
 

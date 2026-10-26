@@ -1640,6 +1640,15 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Buy Orders V2"],
       }),
+      getFulfillmentOptions: build.query<
+        GetFulfillmentOptionsApiResponse,
+        GetFulfillmentOptionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/buy-orders/${queryArg.id}/fulfillment-options`,
+        }),
+        providesTags: ["Buy Orders V2"],
+      }),
       fulfillBuyOrder: build.mutation<
         FulfillBuyOrderApiResponse,
         FulfillBuyOrderApiArg
@@ -3099,6 +3108,11 @@ export type CancelBuyOrderApiResponse = /** status 200 Ok */ {
   message: string
 }
 export type CancelBuyOrderApiArg = {
+  id: string
+}
+export type GetFulfillmentOptionsApiResponse =
+  /** status 200 Ok */ BuyOrderFulfillmentOptionsResponse
+export type GetFulfillmentOptionsApiArg = {
   id: string
 }
 export type FulfillBuyOrderApiResponse =
@@ -6380,6 +6394,24 @@ export type UpdateStandingBuyOrderRequest = {
   negotiable?: boolean
   expires_in_days?: number
 }
+export type BuyOrderFulfillmentOption = {
+  shop_id: string
+  shop_name: string
+  listing_id: string
+  listing_title: string
+  variant_id: string
+  variant_display_name: string
+  variant_attributes: VariantAttributes
+  /** Listed stock of this variant in this listing */
+  available: number
+  /** The listing's price for this variant: what the order charges per unit */
+  price_per_unit: number
+  /** Why fulfill would reject this entry (e.g. above the buyer's price_max); null if it accepts it */
+  problem: string | null
+}
+export type BuyOrderFulfillmentOptionsResponse = {
+  options: BuyOrderFulfillmentOption[]
+}
 export type FulfillBuyOrderRequest = {
   listing_id: string
   variant_id: string
@@ -6807,6 +6839,7 @@ export const {
   useGetBuyOrderDetailQuery,
   useUpdateBuyOrderMutation,
   useCancelBuyOrderMutation,
+  useGetFulfillmentOptionsQuery,
   useFulfillBuyOrderMutation,
   useDeclineBuyOrderMutation,
   useGetNextAvailableQuery,
