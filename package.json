@@ -100,7 +100,7 @@
   "scripts": {
     "codegen:api": "tsx scripts/codegen-api.ts",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/asset-carryover.mjs dist",
     "build:analyze": "ANALYZE_BUNDLE=true vite build",
     "serve": "vite preview",
     "format": "prettier --write .",
