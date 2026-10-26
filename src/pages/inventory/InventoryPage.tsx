@@ -194,7 +194,12 @@ export default function InventoryPage() {
                 onChange={(e) => setSearch(e.target.value)}
                 InputProps={{ startAdornment: <InventoryRounded sx={{ mr: 0.5, color: "text.secondary", fontSize: 18 }} /> }}
               />
-              <Button variant="contained" startIcon={<AddRounded />} onClick={() => setCreateOpen(true)}>
+              <Button
+                variant="contained"
+                startIcon={<AddRounded />}
+                onClick={() => setCreateOpen(true)}
+                sx={{ whiteSpace: "nowrap", flexShrink: 0 }}
+              >
                 {t("inventory.addLot", "Add Lot")}
               </Button>
             </Stack>
