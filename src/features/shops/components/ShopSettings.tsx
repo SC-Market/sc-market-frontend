@@ -47,6 +47,7 @@ import { useUploadImageMutation } from "../../../store/api/v2/market-overrides"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
 import { WEBHOOK_ACTIONS } from "../domain/webhookEvents"
+import { HelpLink } from "../../help/components/HelpLink"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
@@ -140,6 +141,9 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
       title="Webhooks"
       subtitle="Receive notifications at a URL when events happen in this shop"
     >
+      <Grid item xs={12}>
+        <HelpLink guide="webhooks" />
+      </Grid>
       {webhooks.length > 0 && (
         <Grid item xs={12}>
           {webhooks.map((w) => (
@@ -417,6 +421,9 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
 
       {/* Stock Management */}
       <FormPaper title="Stock Management" subtitle="Configure when stock is subtracted from inventory">
+        <Grid item xs={12}>
+          <HelpLink guide="stockLots" />
+        </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset" disabled={saving}>
             <FormLabel component="legend">Stock subtraction timing</FormLabel>
@@ -1011,6 +1018,9 @@ export function ShopSettings() {
             title="Discord"
             subtitle="Where order and offer threads are created for this shop"
           >
+            <Grid item xs={12}>
+              <HelpLink guide="connectDiscordBot" />
+            </Grid>
             <Grid item xs={12}>
               <Alert severity="info" sx={{ mb: 1 }}>
                 To send this shop&apos;s order and offer threads to their own

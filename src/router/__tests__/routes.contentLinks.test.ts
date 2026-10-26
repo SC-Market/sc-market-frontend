@@ -10,6 +10,7 @@ import { matchRoutes } from "react-router-dom"
 import { routes } from "../../App"
 import { compileSite, type SourceFile } from "../../features/help/build/compile"
 import { HELP_PATHS } from "../../routes/paths"
+import { GUIDE_LINKS } from "../../features/help/guideLinks"
 
 const raw = import.meta.glob<string>("/content/**/*.{md,json}", {
   query: "?raw",
@@ -53,6 +54,14 @@ const REDIRECT_ONLY = new Set([
 
 const cases = pages.flatMap(({ file, links }) => links.map((href) => [file, href] as const))
 
+/** Heading anchors per guide path, for HelpLink targets like ...#post-a-buy-order. */
+const guideAnchors = new Map(
+  site.guides.map((g) => [
+    HELP_PATHS.guide(g.meta.category, g.meta.slug),
+    new Set(g.body.blocks.flatMap((b) => (b.t === "h" ? [b.id] : []))),
+  ]),
+)
+
 describe("Help & Guides content", () => {
   it("compiles, with at least one guide per category and an About page", () => {
     expect(site.guides.length).toBeGreaterThan(0)
@@ -78,5 +87,14 @@ describe("Help & Guides content", () => {
     if (pathname.startsWith(`${HELP_PATHS.hub}/`)) {
       expect(guidePaths.has(pathname) || categoryPaths.has(pathname), "unknown guide or category").toBe(true)
     }
+  })
+})
+
+describe("HelpLink targets (GUIDE_LINKS)", () => {
+  it.each(Object.entries(GUIDE_LINKS))("%s → %s is a real guide", (_key, href) => {
+    const [pathname, anchor] = href.split("#")
+    expect(guidePaths.has(pathname), "unknown guide").toBe(true)
+    expect(matchRoutes(routes, pathname)?.at(-1)?.route.path).not.toBe("/*")
+    if (anchor) expect(guideAnchors.get(pathname)?.has(anchor), `no #${anchor} heading`).toBe(true)
   })
 })

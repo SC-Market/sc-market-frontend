@@ -41,6 +41,7 @@ import { ClockAlert } from "mdi-material-ui"
 import { MARKET_PATHS, PATHS, USER_PATHS } from "../../../routes/paths"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { FulfillBuyOrderDialog } from "./components/FulfillBuyOrderDialog"
+import { HelpLink } from "../../help/components/HelpLink"
 
 const STATUS_COLORS: Record<string, "success" | "warning" | "error" | "default"> = {
   active: "success",
@@ -321,6 +322,7 @@ export function BuyOrderDetailV2() {
                     <Typography variant="body2" color="text.secondary">
                       If you have {buyOrder.game_item_name} in stock, you can fulfill this buy order directly.
                     </Typography>
+                    <HelpLink guide="fillBuyOrder" />
                   </Box>
                   <Button
                     onClick={() => (profile ? setFulfillOpen(true) : navigate(PATHS.login))}

@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageOffer } from "../../features/offers/hooks/usePageOffer"
 import { PATHS, ORDER_PATHS } from "../../routes/paths"
+import { HelpLink } from "../../features/help/components/HelpLink"
 
 export function ViewOfferPage() {
   const { id } = useParams<{ id: string }>()
@@ -40,6 +41,7 @@ export function ViewOfferPage() {
 
   return (
     <DetailPageLayout
+      headerActions={<HelpLink guide="howOrdersWork" />}
       title={t("offers.viewOffer")}
       error={error}
       breadcrumbs={[

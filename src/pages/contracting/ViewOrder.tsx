@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageOrder } from "../../features/contracting"
 import { PATHS, ORDER_PATHS } from "../../routes/paths"
+import { HelpLink } from "../../features/help/components/HelpLink"
 
 // Lazy load content sections
 const OrderDetailsArea = lazy(() =>
@@ -150,6 +151,7 @@ export function ViewOrder() {
 
   return (
     <DetailPageLayout
+      headerActions={<HelpLink guide="howOrdersWork" />}
       title={
         order?.title
           ? order.title

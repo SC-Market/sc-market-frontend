@@ -1,10 +1,11 @@
 import React from "react"
-import { Grid, List, Typography } from "@mui/material"
+import { Grid, List, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FAQQuestion } from "../../components/landing"
 import { DISCORD_INVITE } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { HelpLink } from "../../features/help/components/HelpLink"
 
 export function DiscordBotDetails(props: { org?: boolean }) {
   const theme = useTheme<ExtendedTheme>()
@@ -20,6 +21,14 @@ export function DiscordBotDetails(props: { org?: boolean }) {
         >
           {t("discord_bot.integrating_with_discord")}
         </Typography>
+        <Stack spacing={0.5} sx={{ mt: 1 }}>
+          <HelpLink guide="connectDiscordBot">
+            {t("discord_bot.learn_connect", "Connect the Discord bot")}
+          </HelpLink>
+          <HelpLink guide="orderAlerts">
+            {t("discord_bot.learn_alerts", "Order alerts and claiming")}
+          </HelpLink>
+        </Stack>
       </Grid>
       <Grid item xs={12} lg={8} md={8}>
         <List

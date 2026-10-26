@@ -45,6 +45,7 @@ import { MARKET_PATHS } from "../../routes/paths"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { GameItemSearchAutocomplete } from "../../features/market/components/GameItemSearchAutocomplete"
 import { LocationSelector } from "../../features/market/components/stock/LocationSelector"
+import { HelpLink } from "../../features/help/components/HelpLink"
 
 /* ── Confirm delete dialog ── */
 function ConfirmDeleteDialog({ open, onClose, onConfirm, loading }: { open: boolean; onClose: () => void; onConfirm: () => void; loading: boolean }) {
@@ -159,6 +160,7 @@ export default function InventoryPage() {
 
   return (
     <StandardPageLayout
+      headerActions={<HelpLink guide="stockLots" />}
       title={t("sidebar.inventory", "My Inventory")}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },

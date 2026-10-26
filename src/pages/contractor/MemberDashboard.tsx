@@ -14,6 +14,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
 import { SHOP_PATHS } from "../../routes/paths"
+import { HelpLink } from "../../features/help/components/HelpLink"
 
 export function MemberDashboard() {
   const shopCtx = useOptionalShopRouteContext()
@@ -40,6 +41,7 @@ export function MemberDashboard() {
 
   return (
     <StandardPageLayout
+      headerActions={<HelpLink guide="handleOrders" />}
       title={pageTitle}
       breadcrumbs={[{ label: pageTitle }]}
       showOrgInBreadcrumbs={!shopCtx}

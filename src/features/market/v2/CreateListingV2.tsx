@@ -46,6 +46,7 @@ import type {
   StockLotInput,
   VariantAttributes,
 } from "../../../store/api/v2/market";
+import { HelpLink } from "../../help/components/HelpLink"
 
 /**
  * Stock lot form data with variant attributes
@@ -383,6 +384,7 @@ export function CreateListingV2() {
       }
       sidebarOpen={true}
       maxWidth="lg"
+      headerActions={<HelpLink guide="sellItems" />}
     >
       <Grid item xs={12}>
       <form onSubmit={handleSubmit}>
@@ -665,6 +667,11 @@ export function CreateListingV2() {
                   </Grid>
                   {saleType === "auction" && (
                     <>
+                      <Grid item xs={12}>
+                        <HelpLink guide="auctions">
+                          {t("CreateListingV2.auctionHelp", "How auctions work")}
+                        </HelpLink>
+                      </Grid>
                       <Grid item xs={12} sm={6}>
                         <TextField
                           fullWidth

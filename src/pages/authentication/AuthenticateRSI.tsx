@@ -9,6 +9,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageAuthenticateRSI } from "../../features/authentication/hooks/usePageAuthenticateRSI"
 import { safeRedirectPath } from "../../util/safeRedirect"
+import { HelpLink } from "../../features/help/components/HelpLink"
 
 export function AuthenticateRSIPage() {
   const { t } = useTranslation()
@@ -25,6 +26,7 @@ export function AuthenticateRSIPage() {
 
   return (
     <StandardPageLayout
+      headerActions={<HelpLink guide="createAccount" />}
       title={t("login.accountLink")}
       headerTitle={t("login.authenticateWithRSI")}
       maxWidth="xl"

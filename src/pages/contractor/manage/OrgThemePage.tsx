@@ -2,6 +2,8 @@ import { usePageOrgManage } from "../../../features/contractor/hooks/usePageOrgM
 import { ThemeEditor } from "../../../components/theme-editor/ThemeEditor"
 import { WhiteLabelSettings } from "../../../views/contractor/WhiteLabelSettings"
 import { has_permission } from "../../../features/contractor/domain/permissions"
+import { HelpLink } from "../../../features/help/components/HelpLink"
+import { Box } from "@mui/material"
 import {
   useGetOrgThemeQuery,
   useUpdateOrgThemeMutation,
@@ -41,6 +43,9 @@ export function OrgThemePage() {
 
   return (
     <>
+      <Box sx={{ mb: 2 }}>
+        <HelpLink guide="orgWhiteLabelTheme" />
+      </Box>
       {canEditTheme && (
         <ThemeEditor
           initialThemeData={

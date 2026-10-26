@@ -25,6 +25,7 @@ import { formatPrice } from "../../../../util/formatPrice"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { formatMostSignificantDiff } from "../../../../util/time"
 import { UserAvatar } from "../../../../components/avatar/UserAvatar"
+import { HelpLink } from "../../../help/components/HelpLink"
 
 interface BidAreaV2Props {
   listingId: string
@@ -73,6 +74,7 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
             <Typography variant="h6" fontWeight="bold">
               {t("BidAreaV2.auction", "Auction")}
             </Typography>
+            <HelpLink guide="auctions">{t("BidAreaV2.howItWorks", "How bidding works")}</HelpLink>
           </Stack>
           <Stack direction="row" spacing={1} alignItems="center">
             <TimerRounded fontSize="small" color={isActive ? "warning" : "disabled"} />

@@ -50,6 +50,7 @@ import { SellerNextAvailable } from "../../../components/market/SellerNextAvaila
 import { ShoppingListPanel } from "../../../components/game-data/ShoppingListPanel"
 import { VariantSelector } from "../../../components/market/v2/VariantSelector"
 import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths"
+import { HelpLink } from "../../help/components/HelpLink"
 
 /**
  * CartItemEntryV2 - Individual cart item with variant details
@@ -478,6 +479,7 @@ export function MarketCartV2() {
   return (
     <StandardPageLayout
       title={t("marketActions.myCart")}
+      headerActions={<HelpLink guide="buyAnItem" />}
       breadcrumbs={[
         { label: t("sidebar.market_short"), href: "/market" },
         { label: t("cart.yourCart") },

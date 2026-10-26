@@ -5,6 +5,7 @@ import { FormPageLayout } from "../../components/layout/FormPageLayout"
 import { CreateRecruitingPost } from "../../views/recruiting/CreateRecruitingPost"
 import { useRecruitingGetPostByIDQuery } from "../../features/recruiting/api/recruitingApi"
 import { RecruitingPostViewSkeleton } from "../../components/skeletons"
+import { HelpLink } from "../../features/help/components/HelpLink"
 
 export function CreateRecruitingPostPage() {
   const { t } = useTranslation()
@@ -20,6 +21,7 @@ export function CreateRecruitingPostPage() {
       showOrgInBreadcrumbs={true}
       sidebarOpen={true}
       maxWidth="md"
+      headerActions={<HelpLink guide="orgRecruiting" />}
     >
       <CreateRecruitingPost />
     </FormPageLayout>

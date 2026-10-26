@@ -68,6 +68,7 @@ import { getQualityMode, formatQuality, type QualityMode } from "../../../util/q
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect"
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 import { MARKET_PATHS } from "../../../routes/paths"
+import { HelpLink } from "../../help/components/HelpLink"
 
 /* ── Local filter context (mirrors V1 StockSearchContext) ── */
 
@@ -123,6 +124,7 @@ export function BulkStockManagementV2() {
   return (
     <StandardPageLayout
       title={t("sidebar.manage_stock", "Manage Inventory")}
+      headerActions={<HelpLink guide="stockLots" />}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
         { label: t("sidebar.manage_stock", "Manage Inventory") },

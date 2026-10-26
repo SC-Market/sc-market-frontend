@@ -5,6 +5,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2"
 import type { GameItemSearchResult } from "../../../store/api/v2/market"
+import { HelpLink } from "../../help/components/HelpLink"
 
 export function CreateBuyOrderPageV2() {
   const { t } = useTranslation()
@@ -13,6 +14,7 @@ export function CreateBuyOrderPageV2() {
   return (
     <StandardPageLayout
       title={t("buyOrderActions.createBuyOrder", "Create Buy Order")}
+      headerActions={<HelpLink guide="postBuyOrder" />}
       headerTitle={t("buyOrderActions.createBuyOrder", "Create Buy Order")}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: "/market" },
