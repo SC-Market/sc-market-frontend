@@ -2,7 +2,7 @@
 title: Customize your white-label theme
 description: On the Theme & White Label tab, load a preset or set each color, style and corner radius for dark and light mode, then click Save Theme.
 order: 40
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [white label, theme, theme editor, colors, palette, preset, favicon, border radius, branding, homepage]
 related: [org-storefront/white-label, orgs/manage-your-org]
 howto: true
@@ -59,20 +59,19 @@ Enter the full URL of the icon shown in the browser tab. It must start with `htt
 
 ## Advanced: site settings
 
-Below the theme editor are two more sections. Saving them also needs **Manage Org Details**.
+Below the theme editor are two more sections, for members with **Manage Org Details**. A member with only **Manage Theme** sees just the theme editor, and one with only **Manage Org Details** just these sections.
 
 **Site Settings** (click **Save Settings**):
 
 - Access: **Public — anyone can browse**, or **Internal — login required**.
-- **Require org membership to access**: with **Internal**, only your org's members get in. Others see a message with a link back to SC Market. It has no effect in **Public** mode.
+- **Require org membership to access**: shows once you pick **Internal**. Only your org's members get in; others see a message with a link back to SC Market.
 - **Homepage path**: the page visitors land on, such as `/market`. It must start with `/`. Leave it blank for your org's page, or the **Assigned to Me** page in **Internal** mode.
 
 **Sidebar Tabs** (click **Save Sidebar**):
 
 - The eye icons hide or show **Player Market**, **Services**, **Contracts**, **Recruiting** and **Organizations**.
-- **Custom Tabs** add your own links: choose an icon, enter a **Label** and a **Path or URL**, and click **Add**. Links to other sites must start with `https://` and open in a new tab.
+- **Custom Tabs** add your own links: choose an icon, enter a **Label** and a **Path or URL**, and click **Add**. A page of the site starts with `/`; a link to another site must start with `https://` (not `http://`) and opens in a new tab.
 
-> [!NOTE]
-> Right now only the mobile bottom bar applies these sidebar settings: hidden tabs disappear from it. The desktop sidebar doesn't show the changes or your custom tabs yet.
+Both the sidebar and the mobile bottom bar follow these settings. Custom tabs show in the sidebar under your org's name.
 
 [White-label storefronts for orgs](/guides/org-storefront/white-label "cta")

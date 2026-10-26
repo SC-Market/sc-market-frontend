@@ -1,6 +1,6 @@
 ---
 title: Post shop events to Discord with a webhook
-description: Paste a Discord webhook URL into your shop's Settings to post new offers, order status changes and auction bids in a channel, without the bot.
+description: Paste a Discord webhook URL into your shop's Settings to post new orders, assignments, status changes, reviews and bids in a channel, without the bot.
 order: 30
 updated: 2026-10-26
 keywords: [discord, webhook, webhooks, notifications, order created, status change, bid, channel, alerts, threads]
@@ -39,12 +39,14 @@ The webhook is listed above the form, and messages start with the next matching 
 
 ## Which events are sent
 
-- **Order Created**: new offers and counter-offers for the shop, and new orders that nobody is assigned to yet.
+- **Order Created**: every new order or offer for the shop, including counter offers.
+- **Order Assigned**: an order of the shop is assigned to a member, or claimed from a Discord alert.
 - **Order Status Change**: an order of the shop moves to in progress, fulfilled, cancelled or not started.
+- **Order Review**: someone leaves a review on one of the shop's orders, with its rating and text.
 - **Market Bid**: a new bid on one of the shop's auctions.
-- **Public Order Created**: new unassigned orders placed without any shop, from anyone on SC Market. Leave it off unless you want that feed.
+- **All public orders (site-wide)**: every new open public order on SC Market, from anyone, placed without a shop. It's a feed of the whole site, not this shop's orders, so leave it off unless you want that.
 
-**Order Assigned**, **Order Review** and **Order Comment** are listed too, but they don't send anything for shop webhooks at the moment. Webhook messages never ping anyone.
+Webhook messages never ping anyone.
 
 ## Remove or replace a webhook
 

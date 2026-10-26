@@ -26,7 +26,7 @@ Most orgs only need the built-in roles: give trusted officers **Admin** in their
 4. To give a member a role, pick it in their **Roles** selector in the **Members** list.
 
 > [!WARNING]
-> Anyone with **Manage Roles** can tick any permission on the roles below them, including ones they don't have. Only give it to people you trust.
+> Members with **Manage Roles** can only hand out permissions they have themselves, when they create, edit or assign a role. They still control every role and member ranked below them, so only give it to people you trust.
 
 ## What each permission does
 
@@ -40,7 +40,7 @@ Most orgs only need the built-in roles: give trusted officers **Admin** in their
 - **Manage Webhooks**: send the org's [order threads](/guides/discord/connect-the-discord-bot) to a Discord channel with `/setup threads`, and set up its [order alerts](/guides/discord/order-alerts-and-claiming). Shop webhooks need **Manage Market** instead.
 - **Manage Blocklist**: block and unblock users for the org.
 - **Claim Orders**: claim open orders and offers from [Discord alerts](/guides/discord/order-alerts-and-claiming).
-- **Kick Members**: remove members ranked below you.
+- **Kick Members**: remove members ranked below you (not of the same rank).
 - **Manage Theme**: edit the theme of the org's [white-label](/guides/org-storefront/white-label) site. The checkbox only shows for white-label orgs.
 
 ## The Owner role

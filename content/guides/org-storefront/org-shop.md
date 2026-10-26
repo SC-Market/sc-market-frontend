@@ -2,7 +2,7 @@
 title: Sell as an org with an org shop
 description: An org shop sells in your org's name. Members with Manage Market list items and edit shared stock; Manage Orders handles the orders.
 order: 10
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [org shop, org storefront, organization shop, team selling, shared stock, org orders, manage market, private listing, reviews]
 related: [selling/sell-items, selling/handle-orders-as-a-seller, orgs/roles-and-permissions]
 howto: true
@@ -18,8 +18,8 @@ To sell as an org, create a shop owned by the org. Buyers see the org as the sel
 
 1. Open [Create Shop](/shops/create) and enter a **Shop Name**. The **Slug** is the shop's web address: at least 3 characters, lowercase letters, numbers and hyphens.
 2. Under **Ownership**, choose **Organization shop** and pick the **Organization**.
-3. Click **Create Shop**. The shop's **Settings** open.
-4. Fill in the settings, such as tags, **Supported Languages** and **Accept custom orders**, and click **Save Changes**.
+3. Optionally pick **Tags** and **Supported Languages**, and turn on **Accept custom orders**.
+4. Click **Create Shop**. The shop's **Settings** open, where you can change all of these later.
 5. Switch the sidebar to the shop and open **Create Listing** to list your first item ([sell items](/guides/selling/sell-items)).
 
 ## Org shop or personal shop
@@ -33,7 +33,7 @@ To sell as an org, create a shop owned by the org. Buyers see the org as the sel
 Org roles decide what each member can do in the org's shops:
 
 - **Every member** sees the shop in the sidebar's context switcher, with its **Orders**, **Listings** and **Services**.
-- **Manage Market**: create and edit listings, change stock lots, and open the shop's **Settings** and **Customers**.
+- **Manage Market**: create and edit listings, change stock lots, and open the shop's **Settings** (including its blocked users and [webhooks](/guides/discord/webhooks)) and **Customers**.
 - **Manage Stock**: shows **Stock** in the shop's sidebar. Changing stock lots also needs **Manage Market**.
 - **Manage Orders**: accept offers, assign orders, and see every order of the org under **Org Orders** in the org's sidebar.
 - **Claim Orders**: claim open orders from [Discord alerts](/guides/discord/order-alerts-and-claiming).

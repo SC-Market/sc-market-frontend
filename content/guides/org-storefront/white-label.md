@@ -2,7 +2,7 @@
 title: White-label storefronts for orgs
 description: White-label puts your org's SC Market storefront on its own domain or subdomain, with your theme and favicon. It's available on request.
 order: 30
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [white label, white-label, custom domain, subdomain, premium, org storefront, branding, theme]
 related: [org-storefront/white-label-theme, org-storefront/org-shop, orgs/manage-your-org]
 ---
@@ -16,6 +16,7 @@ White-label is SC Market's premium tier for orgs. It adds:
 - **Your own address**: a subdomain of `sc-market.space`, or your own domain.
 - **Your theme**: colors for dark and light mode, card and nav styles, corner rounding and a favicon. See [customize your white-label theme](/guides/org-storefront/white-label-theme).
 - **Site settings**: make the site public or members-only, and pick the page visitors land on.
+- **Sidebar tabs**: hide the market sections you don't use, and add your own links to the sidebar.
 - **The Manage Theme permission**: it appears in your role editor, so you can choose who edits the look.
 
 Everything else, such as listings, orders and stock, works the same as on sc-market.space.
@@ -31,7 +32,7 @@ Everything else, such as listings, orders and stock, works the same as on sc-mar
 2. Tell us your org's Spectrum ID and the subdomain or domain you want.
 3. We turn on white-label for the org and set up the address with you. Only SC Market staff can do this.
 
-Once it's on, members with **Manage Theme** see a **Theme & White Label** tab in the org's manage area.
+Once it's on, members with **Manage Theme** or **Manage Org Details** see a **Theme & White Label** tab in the org's manage area.
 
 ## What visitors see
 
@@ -52,6 +53,8 @@ For account safety, some actions are blocked on white-label addresses. Do them o
 
 - Turn on white-label and set the domain: SC Market staff, on request.
 - Edit the theme: members with **Manage Theme**. The Owner and Admin roles have it.
-- Change the site settings and sidebar tabs: **Manage Theme** to open the tab, plus **Manage Org Details** to save.
+- Change the site settings and sidebar tabs: members with **Manage Org Details**.
+
+Each section of the tab only shows to members with the permission it needs, so a member with just one of the two sees only their part.
 
 [Customize your white-label theme](/guides/org-storefront/white-label-theme "cta")

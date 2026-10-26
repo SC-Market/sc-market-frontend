@@ -11,7 +11,7 @@ Everything about running your org is in its **Manage Org** area. Open [My Organi
 
 ## Who can open it
 
-You need at least one of **Manage Org Details**, **Manage Roles**, **Manage Invites**, **Manage Webhooks** or **Manage Theme**. See [roles and permissions](/guides/orgs/roles-and-permissions).
+Each tab shows only to members with the permission its changes need, and **Manage** shows in the org's sidebar when at least one tab does: **Manage Org Details**, **Manage Roles**, **Manage Invites**, **Manage Webhooks**, or **Manage Theme** on a white-label org. Other permissions, such as **Manage Blocklist**, are used in the org's shops instead. See [roles and permissions](/guides/orgs/roles-and-permissions).
 
 ## About
 
@@ -27,26 +27,23 @@ Invite players by username and create invite links. Needs **Manage Invites**. Se
 
 ## Discord Integration
 
-Shows the org's **Integrated Channel** for order threads, and a **Use Official Server** button to run order threads in the SC Market Discord instead of your own. To use your own server, run `/setup threads` with `org` set to your Spectrum ID in the channel that should hold them. Both need **Manage Webhooks**. See [connect the Discord bot](/guides/discord/connect-the-discord-bot).
+Shows the org's **Integrated Channel** for order threads, and a **Use Official Server** button to run order threads in the SC Market Discord instead of your own. To use your own server, run `/setup threads` with `org` set to your Spectrum ID in the channel that should hold them. The tab and both actions need **Manage Webhooks**. See [connect the Discord bot](/guides/discord/connect-the-discord-bot).
 
 ## Settings
 
-- **Language**: the org's main language.
-- **Supported Languages**: every language your members speak. Click **Save Languages**. Players filter orgs and recruiting posts by these.
-
-Needs **Manage Org Details**.
+**Supported Languages**: every language your members speak. Click **Save Languages**. Players filter orgs and recruiting posts by these. Needs **Manage Org Details**.
 
 ## Audit Logs
 
-A history of changes to the org: members, roles, invites, settings and more. See [the org audit log](/guides/orgs/audit-logs).
+A history of changes to the org: members, roles, invites, settings and more. Needs **Manage Org Details**. See [the org audit log](/guides/orgs/audit-logs).
 
-## Market, Blocked Users and Customers
+## Listings, blocked users and customers
 
-These tabs now only point you to your shops. Listings, market settings, blocked users and customers are managed per shop, in each shop's **Settings** and **Customers** pages. See [sell as an org](/guides/org-storefront/org-shop).
+These belong to each of the org's shops, not to the org: switch the sidebar to the shop and open its **Listings**, **Settings** (which holds its blocked users) or **Customers**. See [sell as an org](/guides/org-storefront/org-shop).
 
 ## Theme & White Label
 
-Only for orgs with [white-label](/guides/org-storefront/white-label), and members with **Manage Theme**. See [customize your white-label theme](/guides/org-storefront/white-label-theme).
+Only for orgs with [white-label](/guides/org-storefront/white-label). Members with **Manage Theme** see the theme editor; members with **Manage Org Details** see the site and sidebar settings. See [customize your white-label theme](/guides/org-storefront/white-label-theme).
 
 ## Owner actions
 

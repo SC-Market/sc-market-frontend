@@ -2,7 +2,7 @@
 title: Recruit members with a recruiting post
 description: Each org can publish one recruiting post on SC Market. Players find it on the Recruiting page, upvote and comment, and join with an invite from you.
 order: 20
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [recruiting, recruit, recruiting post, find org, join org, upvote, org directory, star citizen org]
 related: [orgs/invite-and-manage-members, orgs/register-an-org]
 howto: true
@@ -12,17 +12,15 @@ Write one recruiting post for your org. It's listed on the [Recruiting](/recruit
 
 ## Before you start
 
-- The org's **Manage Recruiting** permission (Owner and Admin have it).
-- Your org selected in the sidebar's context switcher.
+- The org's **Manage Recruiting** permission (Owner and Admin have it). Without it you don't see **Create Post**.
+- Your org selected in the sidebar's context switcher. If you're in several orgs, the post is for the one selected there.
 
 ## Steps
 
 1. Open [Recruiting](/recruiting) and click **Create Post**.
-2. Enter a **Title** and a **Description** (both required). Say what your org does, when you play, which languages you speak and how to reach you.
-3. Click **Submit**. Your post opens, and it's live on the Recruiting page.
-
-> [!NOTE]
-> If you're in more than one org, the form currently posts for the first org on your account. Check the org name on your post after you submit.
+2. Check the org under **Posting for**. To post for another org, switch the sidebar to it first.
+3. Enter a **Title** and a **Description** (both required). Say what your org does, when you play, which languages you speak and how to reach you.
+4. Click **Submit**. Your post opens, and it's live on the Recruiting page.
 
 ## Update your post
 

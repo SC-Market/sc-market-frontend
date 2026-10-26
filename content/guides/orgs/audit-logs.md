@@ -1,8 +1,8 @@
 ---
 title: Check your org's audit log
-description: The Audit Logs tab records who changed what in your org, from new members and role changes to invites and settings. Filter it by action or date.
+description: The Audit Logs tab records who changed what in your org, from new members and role changes to invites and settings. Filter by action, member or date.
 order: 50
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [audit log, audit logs, org history, who changed, member removed, role assigned, invite, org security]
 related: [orgs/manage-your-org, orgs/roles-and-permissions, orgs/invite-and-manage-members]
 howto: true
@@ -19,7 +19,7 @@ Your org's **Audit Logs** tab lists every recorded change to the org, newest fir
 1. Open [My Organizations](/my-orgs), click **Manage** on your org and select **Audit Logs**.
 2. Read the list: each entry shows the action, the member who did it (or **System**), and the time.
 3. Click an entry with details to expand its **Metadata**, such as the role or the invite involved.
-4. To narrow the list, pick an action under **Filter by Action**, or set a **Start Date** and **End Date**. Click **Clear Filters** to see everything again.
+4. To narrow the list, pick an action under **Filter by Action**, a member under **Filter by member**, or set a **Start Date** and **End Date**. Click **Clear Filters** to see everything again.
 
 ## What gets recorded
 
@@ -33,7 +33,7 @@ Your org's **Audit Logs** tab lists every recorded change to the org, newest fir
 
 ## Advanced
 
-- **Filter by member**: **Filter by Actor ID** takes the member's SC Market user ID, not their username.
+- **Filter by member**: start typing a username and pick the member. You can also type the full username of someone who has left the org.
 - **Other actions**: **Filter by Action** also accepts a typed action name, for example `org.ownership_transferred` or `theme_updated`.
 - **Large orgs**: the list is paged, and the summary under it shows how many entries match.
 

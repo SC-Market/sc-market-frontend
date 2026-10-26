@@ -2,7 +2,7 @@
 title: Invite and manage org members
 description: Invite players by username or with an invite link from your org's Invites tab. New members get the Member role; kick or re-role them from Roles and Members.
 order: 20
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [org, invite, invite code, invite link, join org, members, kick, leave org, member role]
 related: [orgs/roles-and-permissions, org-storefront/recruiting, orgs/manage-your-org]
 howto: true
@@ -18,11 +18,8 @@ Invite a player by their SC Market username, or share an invite link that anyone
 ## Steps
 
 1. Open [My Organizations](/my-orgs), click **Manage** on your org and select the **Invites** tab.
-2. Under **Invite Members**, pick the player's **Username**, add an optional **Note**, and click **Submit**.
-3. The player gets a "Contractor invite from" notification on SC Market. They open it and click **Accept** (or **Decline**). A **Join Organization** button also shows on your org's page for them.
-
-> [!NOTE]
-> Invite one player per submission. If you pick several usernames at once, only the first one currently gets the notification.
+2. Under **Invite Members**, pick one or more players by **Username**, add an optional **Note**, and click **Submit**.
+3. Each player gets a "Contractor invite from" notification on SC Market. They open it and click **Accept** (or **Decline**). A **Join Organization** button also shows on your org's page for them.
 
 ## Share an invite link
 
@@ -39,7 +36,7 @@ New members only get **Member**. To give someone more permissions, open the **Ro
 
 ## Remove a member
 
-On the **Roles and Members** tab, click **Kick** on the member's row. You need the **Kick Members** permission, and you can't kick someone ranked above you. Kicking removes all their org roles.
+On the **Roles and Members** tab, click **Kick** on the member's row. You need the **Kick Members** permission, and you can only kick members ranked below you: not someone of the same rank or higher. The owner can kick anyone except themselves. Kicking removes all their org roles.
 
 ## Leave an org
 
@@ -49,7 +46,7 @@ Open [Settings](/settings), select **Contractors** and click **Leave Organizatio
 
 - **One link for a recruiting drive**: create a code with **Max Invite Uses** at 0, post it with your [recruiting post](/guides/org-storefront/recruiting), and delete it when the drive ends.
 - **Find members fast**: the **Members** list on **Roles and Members** has **Search** and a **Role** filter.
-- **Export the roster**: click **Export** above the **Members** list to download the members' usernames as a CSV file.
+- **Export the roster**: click **Export** above the **Members** list to download the members' usernames as a CSV file. Only the org's members can export it.
 - **Track who joined**: every invite, join, kick and role change is in the org's [audit log](/guides/orgs/audit-logs).
 
 ## What happens next
