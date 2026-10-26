@@ -244,56 +244,64 @@ export default defineConfig({
         chunkFileNames: "assets/[name]-[hash].js",
         entryFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",
-        manualChunks: {
-          // Core framework chunk
-          "react-core": ["react", "react-dom", "react-router-dom"],
-
-          // MUI base chunk (styles and system - used everywhere)
-          "mui-core": [
-            "@mui/material/styles",
-            "@mui/system",
-            "@emotion/react",
-            "@emotion/styled",
-          ],
-
-          // MUI common components (frequently used across the app)
-          "mui-common": [
-            "@mui/material/Button",
-            "@mui/material/TextField",
-            "@mui/material/Box",
-            "@mui/material/Typography",
-            "@mui/material/Container",
-            "@mui/material/Grid",
-            "@mui/material/Paper",
-            "@mui/material/Card",
-            "@mui/material/CardContent",
-            "@mui/material/CardActions",
-            "@mui/material/Dialog",
-            "@mui/material/DialogTitle",
-            "@mui/material/DialogContent",
-            "@mui/material/DialogActions",
-            "@mui/material/IconButton",
-            "@mui/material/Tooltip",
-            "@mui/material/CircularProgress",
-            "@mui/material/Alert",
-            "@mui/material/Snackbar",
-          ],
-
-          // MUI data components (data grid and related)
-          "mui-data": ["@mui/x-data-grid"],
-
-          // MUI icons (separate chunk for tree-shaking)
-          "mui-icons": ["@mui/icons-material"],
-
+        // Function form, not the object form: an object entry pulls the
+        // listed package AND every not-yet-assigned dependency into its chunk.
+        // That put ~100 KB of shared @mui/material code into "mui-data" (via
+        // @mui/x-data-grid) and some shared code into "charts-mui", so the entry
+        // statically imported both and every page preloaded and executed the
+        // DataGrid (508 KB) and x-charts (351 KB) chunks. Here each package is
+        // named explicitly; anything unlisted (e.g. @mui/icons-material) goes
+        // with the chunks that use it.
+        manualChunks(id: string) {
+          const m = id.match(/\/node_modules\/((?:@[^/]+\/)?[^/]+)\//)
+          if (!m) return undefined
+          const pkg = m[1]
+          if (
+            /^(react|react-dom|scheduler|react-router|react-router-dom|use-sync-external-store)$/.test(
+              pkg,
+            )
+          )
+            return "react-core"
+          // MUI styling engine (used everywhere). Never imports @mui/material,
+          // so mui-common -> mui-core is one-way (no chunk cycle). Small
+          // helpers shared by the entry AND the lazy x-* chunks live here too:
+          // Rollup moves an unassigned dependency of a manual chunk INTO that
+          // chunk, and the entry then has to import (and preload) e.g. the
+          // whole DataGrid chunk just to reach @babel/runtime.
+          if (
+            /^(@emotion\/.+|@mui\/(system|utils|styled-engine|private-theming|x-internals)|stylis|clsx|prop-types|react-is|hoist-non-react-statics|@babel\/runtime)$/.test(
+              pkg,
+            )
+          )
+            return "mui-core"
+          // All of @mui/material: ~90% of it is on every page's critical path
+          // anyway, and keeping it in one chunk avoids cycles between chunks.
+          if (
+            /^(@mui\/material|react-transition-group|@popperjs\/core)$/.test(
+              pkg,
+            )
+          )
+            return "mui-common"
+          // MUI data grid (lazy routes only)
+          if (/^@mui\/(x-data-grid|x-virtualizer)$/.test(pkg)) return "mui-data"
           // State management
-          redux: ["@reduxjs/toolkit", "react-redux"],
-
+          if (
+            /^(@reduxjs\/toolkit|react-redux|redux|redux-thunk|reselect|immer)$/.test(
+              pkg,
+            )
+          )
+            return "redux"
           // Chart libraries (lazy loaded only when needed)
-          "charts-mui": ["@mui/x-charts"],
-          "charts-kline": ["klinecharts"],
-
+          if (
+            /^(@mui\/x-charts|@mui\/x-internal-gestures|d3-.+|internmap|bezier-easing|flatqueue)$/.test(
+              pkg,
+            )
+          )
+            return "charts-mui"
+          if (pkg === "klinecharts") return "charts-kline"
           // Utility libraries
-          utils: ["lodash-es"],
+          if (pkg === "lodash-es") return "utils"
+          return undefined
         },
       },
     },
