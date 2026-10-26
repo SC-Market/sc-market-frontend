@@ -1,10 +1,11 @@
 import React from "react"
-import { List, Paper, Stack, Typography } from "@mui/material"
+import { List, Paper, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
 import { Helmet } from "@unhead/react/helmet"
 import { FAQQuestion } from "./FAQQuestion"
+import { LandingSectionTitle } from "./LandingTypography"
 import { faqPageJsonLd, serializeJsonLd } from "../../seo/pageHead"
 import { landingFaqs } from "../../seo/siteHeads"
 
@@ -27,17 +28,16 @@ export function FAQSection() {
         sx={{ flexWrap: "wrap" }}
         spacing={theme.layoutSpacing.compact}
       >
-        <Typography
-          variant={"h3"}
-          color={"text.secondary"}
+        <LandingSectionTitle
           sx={{
             maxWidth: "min(400px, 100%)",
             flexShrink: "0",
             marginBottom: 2,
+            textAlign: "left",
           }}
         >
           {t("landing.faqTitle")}
-        </Typography>
+        </LandingSectionTitle>
         <Paper sx={{ flexGrow: "1" }}>
           <List
             sx={{

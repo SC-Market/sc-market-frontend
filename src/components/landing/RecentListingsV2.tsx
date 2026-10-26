@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button, Grid, Typography } from "@mui/material"
+import { Box, Button, Grid } from "@mui/material"
 import { useSearchListingsQuery } from "../../store/api/v2/market"
 import { ListingCardV2 } from "../../features/market/v2/ListingSearchV2"
 import { ListingWrapper } from "../../features/market/components/listings/ListingWrapper"
@@ -7,6 +7,7 @@ import { RecentListingsSkeleton } from "./RecentListingsSkeleton"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { MARKET_PATHS } from "../../routes/paths"
+import { LandingSectionTitle } from "./LandingTypography"
 
 export function RecentListingsV2() {
   const { t } = useTranslation()
@@ -25,11 +26,23 @@ export function RecentListingsV2() {
 
   return (
     <Grid item xs={12}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
-        <Typography variant="h6" fontWeight="bold" color="text.secondary">
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 1,
+        }}
+      >
+        <LandingSectionTitle sx={{ textAlign: "left" }}>
           {t("landing.recentListings", "Recent Listings")}
-        </Typography>
-        <Button component={Link} to={MARKET_PATHS.search} size="small" color="primary">
+        </LandingSectionTitle>
+        <Button
+          component={Link}
+          to={MARKET_PATHS.search}
+          variant="outlined"
+          color="secondary"
+        >
           {t("landing.seeAll", "See All")}
         </Button>
       </Box>

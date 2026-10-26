@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react"
-import { Box, Button, Grid2, Stack, Typography } from "@mui/material"
+import { Box, Button, Grid2, Stack } from "@mui/material"
+import { visuallyHidden } from "@mui/utils"
 import { useTheme } from "@mui/material/styles"
 import { Link } from "react-router-dom"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -15,6 +16,11 @@ import {
 import buyOrdersCap from "../../assets/buy-orders.webp"
 import miningDbCap from "../../assets/mining-db.webp"
 import openContractsCap from "../../assets/open-contracts-2026.webp"
+import {
+  LandingBlockTitle,
+  LandingBodyText,
+  LandingSectionTitle,
+} from "./LandingTypography"
 
 /** A feature screenshot. width/height are the file's pixel size (no layout shift). */
 interface FeatureImage {
@@ -28,12 +34,11 @@ interface FeatureImage {
 type FeatureLink = { label: string } & ({ to: string } | { href: string })
 
 /**
- * The square tile every feature shows above its text. Same frame as the
- * "For Orgs" images (LandingSmallImage): 1:1, outlined, button radius, with
- * the screenshot covering the frame. From md up the blocks sit two per row, so
- * the tile takes two thirds of the block to come out the size of those
- * three-per-row images. The fill matches the screenshots' dark page background,
- * so the icon tile reads as one of the set.
+ * The 16:9 tile every feature shows above its text: full block width,
+ * outlined, button radius, like the "For Orgs" images. The screenshots are cut
+ * to exactly 16:9, so the image fills the frame and the outline sits on its
+ * edge. The fill matches the screenshots' dark page background, so the icon
+ * tile reads as one of the set.
  */
 function FeatureMedia(props: { image?: FeatureImage; icon?: ReactNode }) {
   const { image, icon } = props
@@ -41,9 +46,8 @@ function FeatureMedia(props: { image?: FeatureImage; icon?: ReactNode }) {
 
   const frame = {
     display: "block",
-    width: { xs: "100%", md: "66.667%" },
-    alignSelf: "center",
-    aspectRatio: "1/1",
+    width: "100%",
+    aspectRatio: "16/9",
     border: `1px solid ${theme.palette.outline.main}`,
     borderRadius: theme.spacing(theme.borderRadius.button),
     backgroundColor: theme.palette.background.default,
@@ -95,20 +99,8 @@ function LandingFeatureBlock(props: {
   return (
     <Stack direction={"column"} spacing={theme.layoutSpacing.component}>
       <FeatureMedia image={image} icon={icon} />
-      <Typography
-        variant={"h4"}
-        sx={{ fontWeight: "bold", textAlign: "center" }}
-        color={"text.secondary"}
-      >
-        {title}
-      </Typography>
-      <Typography
-        variant={"body1"}
-        sx={{ textAlign: "left" }}
-        color={"text.secondary"}
-      >
-        {text}
-      </Typography>
+      <LandingBlockTitle>{title}</LandingBlockTitle>
+      <LandingBodyText>{text}</LandingBodyText>
       <Stack
         direction={"row"}
         sx={{ flexWrap: "wrap", gap: 1 }}
@@ -148,147 +140,132 @@ export function LandingFeatures() {
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"column"} spacing={theme.layoutSpacing.layout * 8}>
-      <Grid2
-        container
-        justifyContent={"center"}
-        spacing={theme.layoutSpacing.layout * 4}
-      >
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <Stack direction={"column"}>
-            <Typography
-              variant={"h4"}
-              sx={{ fontWeight: "bold", textAlign: "center" }}
-              color={"text.secondary"}
-            >
-              {t("landing.buySellItemsTitle")}
-            </Typography>
-            <Typography
-              variant={"body1"}
-              sx={{ textAlign: "left" }}
-              color={"text.secondary"}
-            >
-              {t("landing.buySellItemsText")}
-            </Typography>
-          </Stack>
+    <Box component={"section"}>
+      {/* The blocks below are <h3>s; this keeps them under a section <h2>
+          without adding a visible title to the page. */}
+      <LandingSectionTitle sx={visuallyHidden}>
+        {t("landing.featuresTitle")}
+      </LandingSectionTitle>
+      <Stack direction={"column"} spacing={theme.layoutSpacing.layout * 8}>
+        <Grid2
+          container
+          justifyContent={"center"}
+          spacing={theme.layoutSpacing.layout * 4}
+        >
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <Stack direction={"column"} spacing={theme.layoutSpacing.component}>
+              <LandingBlockTitle>
+                {t("landing.buySellItemsTitle")}
+              </LandingBlockTitle>
+              <LandingBodyText>{t("landing.buySellItemsText")}</LandingBodyText>
+            </Stack>
+          </Grid2>
+
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <Stack direction={"column"} spacing={theme.layoutSpacing.component}>
+              <LandingBlockTitle>
+                {t("landing.tradeInBulkTitle")}
+              </LandingBlockTitle>
+              <LandingBodyText>{t("landing.tradeInBulkText")}</LandingBodyText>
+            </Stack>
+          </Grid2>
+
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <Stack direction={"column"} spacing={theme.layoutSpacing.component}>
+              <LandingBlockTitle>
+                {t("landing.orderServicesTitle")}
+              </LandingBlockTitle>
+              <LandingBodyText>
+                {t("landing.orderServicesText")}
+              </LandingBodyText>
+            </Stack>
+          </Grid2>
         </Grid2>
 
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <Stack direction={"column"}>
-            <Typography
-              variant={"h4"}
-              sx={{ fontWeight: "bold", textAlign: "center" }}
-              color={"text.secondary"}
-            >
-              {t("landing.tradeInBulkTitle")}
-            </Typography>
-            <Typography
-              variant={"body1"}
-              sx={{ textAlign: "left" }}
-              color={"text.secondary"}
-            >
-              {t("landing.tradeInBulkText")}
-            </Typography>
-          </Stack>
-        </Grid2>
+        <Grid2
+          container
+          justifyContent={"center"}
+          spacing={theme.layoutSpacing.layout * 4}
+        >
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <LandingFeatureBlock
+              title={t("landing.buyOrdersTitle")}
+              text={t("landing.buyOrdersText")}
+              image={{
+                src: buyOrdersCap,
+                width: 1280,
+                height: 720,
+                alt: t("landing.buyOrdersImageAlt"),
+              }}
+              links={[
+                {
+                  label: t("landing.buyOrdersLink"),
+                  to: MARKET_PATHS.buyOrders,
+                },
+              ]}
+            />
+          </Grid2>
 
-        <Grid2 size={{ xs: 12, md: 4 }}>
-          <Stack direction={"column"}>
-            <Typography
-              variant={"h4"}
-              sx={{ fontWeight: "bold", textAlign: "center" }}
-              color={"text.secondary"}
-            >
-              {t("landing.orderServicesTitle")}
-            </Typography>
-            <Typography
-              variant={"body1"}
-              sx={{ textAlign: "left" }}
-              color={"text.secondary"}
-            >
-              {t("landing.orderServicesText")}
-            </Typography>
-          </Stack>
-        </Grid2>
-      </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <LandingFeatureBlock
+              title={t("landing.gameDataTitle")}
+              text={t("landing.gameDataText")}
+              image={{
+                src: miningDbCap,
+                width: 1280,
+                height: 720,
+                alt: t("landing.gameDataImageAlt"),
+              }}
+              links={[
+                {
+                  label: t("landing.gameDataMining"),
+                  to: GAME_DATA_PATHS.mining,
+                },
+                {
+                  label: t("landing.gameDataMissions"),
+                  to: GAME_DATA_PATHS.missions,
+                },
+                {
+                  label: t("landing.gameDataBlueprints"),
+                  to: GAME_DATA_PATHS.blueprints,
+                },
+                { label: t("landing.gameDataWiki"), to: WIKI_PATHS.hub },
+              ]}
+            />
+          </Grid2>
 
-      <Grid2
-        container
-        justifyContent={"center"}
-        spacing={theme.layoutSpacing.layout * 4}
-      >
-        <Grid2 size={{ xs: 12, md: 6 }}>
-          <LandingFeatureBlock
-            title={t("landing.buyOrdersTitle")}
-            text={t("landing.buyOrdersText")}
-            image={{
-              src: buyOrdersCap,
-              width: 1000,
-              height: 1000,
-              alt: t("landing.buyOrdersImageAlt"),
-            }}
-            links={[
-              { label: t("landing.buyOrdersLink"), to: MARKET_PATHS.buyOrders },
-            ]}
-          />
-        </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <LandingFeatureBlock
+              title={t("landing.discordBotTitle")}
+              text={t("landing.discordBotText")}
+              icon={<Discord sx={{ fontSize: theme.spacing(12) }} />}
+              links={[
+                {
+                  label: t("landing.discordBotLink"),
+                  href: DISCORD_BOT_INVITE,
+                },
+              ]}
+            />
+          </Grid2>
 
-        <Grid2 size={{ xs: 12, md: 6 }}>
-          <LandingFeatureBlock
-            title={t("landing.gameDataTitle")}
-            text={t("landing.gameDataText")}
-            image={{
-              src: miningDbCap,
-              width: 1000,
-              height: 1000,
-              alt: t("landing.gameDataImageAlt"),
-            }}
-            links={[
-              {
-                label: t("landing.gameDataMining"),
-                to: GAME_DATA_PATHS.mining,
-              },
-              {
-                label: t("landing.gameDataMissions"),
-                to: GAME_DATA_PATHS.missions,
-              },
-              {
-                label: t("landing.gameDataBlueprints"),
-                to: GAME_DATA_PATHS.blueprints,
-              },
-              { label: t("landing.gameDataWiki"), to: WIKI_PATHS.hub },
-            ]}
-          />
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <LandingFeatureBlock
+              title={t("landing.contractsTitle")}
+              text={t("landing.contractsText")}
+              image={{
+                src: openContractsCap,
+                width: 1280,
+                height: 720,
+                alt: t("landing.contractsImageAlt"),
+              }}
+              links={[
+                { label: t("landing.contractsLink"), to: PATHS.contracts },
+                { label: t("landing.recruitingLink"), to: PATHS.recruiting },
+              ]}
+            />
+          </Grid2>
         </Grid2>
-
-        <Grid2 size={{ xs: 12, md: 6 }}>
-          <LandingFeatureBlock
-            title={t("landing.discordBotTitle")}
-            text={t("landing.discordBotText")}
-            icon={<Discord sx={{ fontSize: theme.spacing(12) }} />}
-            links={[
-              { label: t("landing.discordBotLink"), href: DISCORD_BOT_INVITE },
-            ]}
-          />
-        </Grid2>
-
-        <Grid2 size={{ xs: 12, md: 6 }}>
-          <LandingFeatureBlock
-            title={t("landing.contractsTitle")}
-            text={t("landing.contractsText")}
-            image={{
-              src: openContractsCap,
-              width: 1000,
-              height: 1000,
-              alt: t("landing.contractsImageAlt"),
-            }}
-            links={[
-              { label: t("landing.contractsLink"), to: PATHS.contracts },
-              { label: t("landing.recruitingLink"), to: PATHS.recruiting },
-            ]}
-          />
-        </Grid2>
-      </Grid2>
-    </Stack>
+      </Stack>
+    </Box>
   )
 }

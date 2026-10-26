@@ -1,17 +1,11 @@
 import React, { Suspense, useState } from "react"
-import {
-  Collapse,
-  Divider,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Typography,
-} from "@mui/material"
+import { Box, Collapse, Divider, ListItem, ListItemButton } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import ExpandLess from "@mui/icons-material/ExpandLess"
 import ExpandMore from "@mui/icons-material/ExpandMore"
 import { MarkdownRender } from "../markdown/Markdown.lazy"
+import { LandingBlockTitle, LandingBodyText } from "./LandingTypography"
 
 /**
  * Collapsible FAQ question component
@@ -37,38 +31,45 @@ export function FAQQuestion(props: {
 
   return (
     <>
-      <ListItemButton
-        onClick={() => {
-          setOpen(!open)
-          setOpened(true)
-        }}
-        sx={{
-          ...(first
-            ? {
-                borderTopLeftRadius: theme.spacing(0.5),
-                borderTopRightRadius: theme.spacing(0.5),
-              }
-            : {}),
-          ...(last
-            ? {
-                borderBottomLeftRadius: theme.spacing(0.5),
-                borderBottomRightRadius: theme.spacing(0.5),
-              }
-            : {}),
-        }}
-      >
-        <ListItemText>
-          <Typography variant={"h5"} color={"text.secondary"}>
+      {/* Each question is an <h3> holding its toggle button (the accordion
+          pattern), so the heading survives in the outline; the landing
+          FAQ's section <h2> sits above it, as in the edge bridge's markup. */}
+      <LandingBlockTitle bold={false} sx={{ textAlign: "left", margin: 0 }}>
+        <ListItemButton
+          component={"button"}
+          aria-expanded={open}
+          onClick={() => {
+            setOpen(!open)
+            setOpened(true)
+          }}
+          sx={{
+            width: "100%",
+            font: "inherit",
+            color: "inherit",
+            textAlign: "inherit",
+            ...(first
+              ? {
+                  borderTopLeftRadius: theme.spacing(0.5),
+                  borderTopRightRadius: theme.spacing(0.5),
+                }
+              : {}),
+            ...(last
+              ? {
+                  borderBottomLeftRadius: theme.spacing(0.5),
+                  borderBottomRightRadius: theme.spacing(0.5),
+                }
+              : {}),
+          }}
+        >
+          <Box component={"span"} sx={{ flex: "1 1 auto", marginY: 0.75 }}>
             {question}
-          </Typography>
-        </ListItemText>
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
+          </Box>
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+      </LandingBlockTitle>
       <Collapse in={open} timeout="auto" unmountOnExit={!keepMounted}>
         <ListItem>
-          <Typography
-            color={"text.secondary"}
-            variant={"body1"}
+          <LandingBodyText
             sx={{
               wordBreak: "break-word",
               overflowWrap: "break-word",
@@ -82,7 +83,7 @@ export function FAQQuestion(props: {
             ) : (
               answer
             )}
-          </Typography>
+          </LandingBodyText>
         </ListItem>
       </Collapse>
       {!last && <Divider light />}

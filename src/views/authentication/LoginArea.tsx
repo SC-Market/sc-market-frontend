@@ -50,7 +50,7 @@ export function LoginArea() {
         }}
       >
         <Stack spacing={theme.layoutSpacing.compact}>
-          <Typography variant="h4">
+          <Typography variant="h4" component="h2">
             {tabValue === "signin"
               ? t("auth.signInTitle", "Sign in to SC Market")
               : t("auth.signUpTitle", "Sign up for SC Market")}

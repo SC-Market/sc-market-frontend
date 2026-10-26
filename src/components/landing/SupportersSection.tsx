@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import CharLogo from "../../assets/CharHoldings_Logo.png"
 import UNNLogo from "../../assets/UNN_Traders_Logo.webp"
 import BirdIncLogo from "../../assets/birdinc.jpg"
+import { LandingBodyText, LandingSectionTitle } from "./LandingTypography"
 
 export function SupportersSection() {
   const { t } = useTranslation()
@@ -35,18 +36,8 @@ export function SupportersSection() {
 
   return (
     <Stack spacing={theme.layoutSpacing.layout} sx={{ maxWidth: "100%" }}>
-      <Typography
-        variant={"h3"}
-        sx={{ fontWeight: "bold", textAlign: "center" }}
-        color={"text.secondary"}
-      >
-        {t("landing.supportersTitle")}
-      </Typography>
-      <Typography
-        variant={"h5"}
-        sx={{ textAlign: "center" }}
-        color={"text.primary"}
-      >
+      <LandingSectionTitle>{t("landing.supportersTitle")}</LandingSectionTitle>
+      <LandingBodyText sx={{ textAlign: "center" }}>
         {t("landing.supportersThanks")}
         <MaterialLink
           color={"secondary"}
@@ -58,7 +49,7 @@ export function SupportersSection() {
           Patreon
         </MaterialLink>{" "}
         {t("landing.supporters")}
-      </Typography>
+      </LandingBodyText>
       <Stack
         sx={{ maxWidth: "100%", overflow: "scroll", flexWrap: "wrap" }}
         useFlexGap

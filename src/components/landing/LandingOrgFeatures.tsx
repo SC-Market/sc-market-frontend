@@ -1,11 +1,16 @@
 import React from "react"
-import { Button, Grid2, Stack, Typography } from "@mui/material"
+import { Box, Button, Grid2, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
 import recruitingCap from "../../assets/recruiting.webp"
 import manageStockCap from "../../assets/manage-stock.webp"
 import servicesCap from "../../assets/services-cap.webp"
+import {
+  LandingBlockTitle,
+  LandingBodyText,
+  LandingSectionTitle,
+} from "./LandingTypography"
 
 function LandingSmallImage(props: { src: string; title: string }) {
   const { src, title } = props
@@ -31,13 +36,7 @@ function LandingSmallImage(props: { src: string; title: string }) {
         alt={title}
         loading="lazy"
       />
-      <Typography
-        variant={"h5"}
-        sx={{ fontWeight: "bold", textAlign: "center" }}
-        color={"text.secondary"}
-      >
-        {title}
-      </Typography>
+      <LandingBlockTitle>{title}</LandingBlockTitle>
     </Stack>
   )
 }
@@ -56,22 +55,15 @@ export function LandingOrgFeatures() {
       }}
     >
       <Stack justifyContent={"center"} alignItems={"center"}>
-        <Typography
-          variant={"h3"}
-          sx={{ fontWeight: "bold", textAlign: "center" }}
-          color={"text.secondary"}
-        >
+        <LandingSectionTitle>
           SC Market
-        </Typography>
-        <Typography
-          variant={"h4"}
-          sx={{ fontWeight: "bold", textAlign: "center" }}
-          color={"text.secondary"}
-        >
-          <span style={{ color: theme.palette.secondary.main }}>
+          <Box
+            component={"span"}
+            sx={{ display: "block", color: "secondary.main" }}
+          >
             {t("landing.forOrgs")}
-          </span>
-        </Typography>
+          </Box>
+        </LandingSectionTitle>
       </Stack>
 
       <Grid2
@@ -105,13 +97,9 @@ export function LandingOrgFeatures() {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <Typography
-          variant={"h5"}
-          sx={{ textAlign: "center" }}
-          color={"text.secondary"}
-        >
+        <LandingBodyText sx={{ textAlign: "center" }}>
           {t("landing.orgsHelpText")}
-        </Typography>
+        </LandingBodyText>
         <Button
           variant={"outlined"}
           color={"secondary"}

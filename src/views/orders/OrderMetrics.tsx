@@ -18,8 +18,11 @@ export function MetricSection(props: {
     <Grid item xs={12} lg={3}>
       <Grid container spacing={theme.layoutSpacing.compact}>
         <Grid item xs={12}>
+          {/* Stat labels and values aren't headings (MUI renders these
+              variants as <h6> by default). */}
           <Typography
             variant={"subtitle1"}
+            component={"p"}
             color={"text.primary"}
             fontWeight={"bold"}
           >
@@ -27,7 +30,11 @@ export function MetricSection(props: {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant={"h6"} color={bodyColor || "text.secondary"}>
+          <Typography
+            variant={"h6"}
+            component={"div"}
+            color={bodyColor || "text.secondary"}
+          >
             {body}
           </Typography>
         </Grid>
