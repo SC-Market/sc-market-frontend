@@ -1,10 +1,10 @@
 ---
 title: Register your org on SC Market
 description: Register your RSI org with a code on its RSI page, or create a group without one. Then add its logo, banner, description, tags and languages.
-order: 1
+order: 10
 updated: 2026-10-25
 keywords: [org, organization, register org, create org, rsi org, spectrum id, contractor, logo, banner, languages]
-related: [orgs/invite-and-manage-members, orgs/manage-your-org, orgs/org-shop]
+related: [orgs/invite-and-manage-members, orgs/manage-your-org, org-storefront/org-shop]
 howto: true
 ---
 

@@ -1,10 +1,10 @@
 ---
 title: Org roles and permissions
 description: Roles decide what each member of your org can do on SC Market. Create roles on the Roles and Members page, tick their permissions and rank them by position.
-order: 10
+order: 30
 updated: 2026-10-26
 keywords: [org, organization, roles, permissions, members, owner, admin, rank, position, kick]
-related: [orgs/invite-and-manage-members, orders/handle-orders-as-a-seller, discord/order-alerts-and-claiming]
+related: [orgs/invite-and-manage-members, selling/handle-orders-as-a-seller, discord/order-alerts-and-claiming]
 howto: true
 ---
 
@@ -30,7 +30,7 @@ Most orgs only need the built-in roles: give trusted officers **Admin** in their
 
 ## What each permission does
 
-- **Manage Org Details**: edit the org's name, description, avatar, banner and language settings, read the audit log, and save [white-label](/guides/orgs/white-label) site settings.
+- **Manage Org Details**: edit the org's name, description, avatar, banner and language settings, read the audit log, and save [white-label](/guides/org-storefront/white-label) site settings.
 - **Manage Roles**: create, edit and delete roles, and assign them to members.
 - **Manage Orders**: view, accept, reject and manage all of the org's orders and offers, and review customers.
 - **Manage Invites**: create and manage invite codes and links.
@@ -41,7 +41,7 @@ Most orgs only need the built-in roles: give trusted officers **Admin** in their
 - **Manage Blocklist**: block and unblock users for the org.
 - **Claim Orders**: claim open orders and offers from [Discord alerts](/guides/discord/order-alerts-and-claiming).
 - **Kick Members**: remove members ranked below you.
-- **Manage Theme**: edit the theme of the org's [white-label](/guides/orgs/white-label) site. The checkbox only shows for white-label orgs.
+- **Manage Theme**: edit the theme of the org's [white-label](/guides/org-storefront/white-label) site. The checkbox only shows for white-label orgs.
 
 ## The Owner role
 
@@ -53,4 +53,4 @@ You also can't remove your own top role, or the last role that gives you **Manag
 
 Every change to roles and members is recorded on the org's **Audit Logs** tab, with filters for the action, who did it and the date. See [the org audit log](/guides/orgs/audit-logs).
 
-[Handle orders as an org team](/guides/orders/handle-orders-as-a-seller "cta")
+[Handle orders as an org team](/guides/selling/handle-orders-as-a-seller "cta")

@@ -26,6 +26,7 @@ import type {
 } from "mdast"
 import { HELP_PATHS } from "../../../routes/paths"
 import { buildDirectory } from "../domain/directory"
+import { GUIDE_REDIRECTS } from "../domain/redirects"
 import {
   inlineText,
   type AboutAsset,
@@ -578,6 +579,25 @@ export function compileSite(
       },
       body: compileBody(about.body, ABOUT_FILE, { resolveImage: opts.imageResolver?.(ABOUT_FILE) }),
     },
+  }
+}
+
+/**
+ * Moved URLs (../domain/redirects): each old path must be gone, so it's never
+ * both redirected and in the sitemap, and each new path must be a live page.
+ * Run by the content build on the real content.
+ */
+export function checkRedirects(
+  site: CompiledSite,
+  redirects: Readonly<Record<string, string>> = GUIDE_REDIRECTS,
+): void {
+  const livePaths = new Set([
+    ...site.categories.map((c) => HELP_PATHS.category(c.id)),
+    ...site.guides.map((g) => HELP_PATHS.guide(g.meta.category, g.meta.slug)),
+  ])
+  for (const [from, to] of Object.entries(redirects)) {
+    if (livePaths.has(from)) throw new ContentError("redirects", `"${from}" is redirected but is still a page`)
+    if (!livePaths.has(to)) throw new ContentError("redirects", `"${from}" redirects to "${to}", which isn't a page`)
   }
 }
 

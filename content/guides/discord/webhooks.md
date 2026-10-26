@@ -4,7 +4,7 @@ description: Paste a Discord webhook URL into your shop's Settings to post new o
 order: 30
 updated: 2026-10-26
 keywords: [discord, webhook, webhooks, notifications, order created, status change, bid, channel, alerts, threads]
-related: [discord/connect-the-discord-bot, discord/order-alerts-and-claiming, orgs/org-shop]
+related: [discord/connect-the-discord-bot, discord/order-alerts-and-claiming, org-storefront/org-shop]
 howto: true
 ---
 

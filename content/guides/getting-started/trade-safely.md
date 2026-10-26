@@ -1,10 +1,10 @@
 ---
 title: Trade safely on SC Market
 description: SC Market never holds aUEC, so trades are between players. Check ratings and badges, keep the deal in the order chat, and block or report bad actors.
-order: 10
+order: 20
 updated: 2026-10-25
 keywords: [safe, safety, scam, trust, reviews, ratings, badges, block, report, real money]
-related: [orders/how-orders-work, buying/buy-an-item]
+related: [buying/how-orders-work, buying/buy-an-item]
 ---
 
 SC Market is a meeting place, not a middleman: no aUEC passes through it, so it can't hold payment or refund a trade. You stay safe by choosing who you trade with, keeping a record of the deal, and blocking or reporting anyone who breaks the rules.
@@ -37,4 +37,4 @@ Use **Report Content** on a listing, service or recruiting post, or the report l
 > [!WARNING]
 > Be wary of anyone who asks you to pay first outside the order, to pay in real money, or to move the deal off SC Market before you've checked their reviews.
 
-[How orders work](/guides/orders/how-orders-work "cta")
+[How orders work](/guides/buying/how-orders-work "cta")

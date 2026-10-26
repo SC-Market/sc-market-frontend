@@ -20,6 +20,7 @@ import {
   aboutAsset,
   ABOUT_FILE,
   categoryAsset,
+  checkRedirects,
   compileSite,
   ContentError,
   contentIndex,
@@ -95,6 +96,7 @@ export function contentPlugin(): Plugin {
         return IMAGE_PLACEHOLDER + "/" + path.relative(root, abs).split(path.sep).join("/")
       },
     })
+    checkRedirects(site)
     return site
   }
 

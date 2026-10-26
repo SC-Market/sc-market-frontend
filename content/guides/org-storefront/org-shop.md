@@ -1,10 +1,10 @@
 ---
 title: Sell as an org with an org shop
 description: An org shop sells in your org's name. Members with Manage Market list items and edit shared stock; Manage Orders handles the orders.
-order: 20
+order: 10
 updated: 2026-10-25
 keywords: [org shop, org storefront, organization shop, team selling, shared stock, org orders, manage market, private listing, reviews]
-related: [selling/sell-items, orders/handle-orders-as-a-seller, orgs/roles-and-permissions]
+related: [selling/sell-items, selling/handle-orders-as-a-seller, orgs/roles-and-permissions]
 howto: true
 ---
 
@@ -46,7 +46,7 @@ The org shop has one set of stock lots for the whole team. When a member updates
 
 ## Orders and reviews
 
-Offers and orders come in on the shop's **Orders** page. Someone with **Manage Orders** accepts them and assigns each order to a member, or members claim them. See [handle orders as an org team](/guides/orders/handle-orders-as-a-seller).
+Offers and orders come in on the shop's **Orders** page. Someone with **Manage Orders** accepts them and assigns each order to a member, or members claim them. See [handle orders as an org team](/guides/selling/handle-orders-as-a-seller).
 
 Buyers can review the org after an order. Reviews show on the **Reviews** tab of your org's page, and players can sort the org directory by rating.
 
@@ -56,4 +56,4 @@ Buyers can review the org after an order. Reviews show on the **Reviews** tab of
 - **Several shops**: an org can own more than one shop, for example one per division. Each has its own listings, stock, Discord threads and webhooks.
 - **Per-shop Discord**: a shop's **Discord** settings can send its order threads to a different server than the org's. See [connect the Discord bot](/guides/discord/connect-the-discord-bot), and [webhooks](/guides/discord/webhooks) for an event feed.
 
-[Handle orders as an org team](/guides/orders/handle-orders-as-a-seller "cta")
+[Handle orders as an org team](/guides/selling/handle-orders-as-a-seller "cta")

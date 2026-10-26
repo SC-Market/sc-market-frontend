@@ -1,10 +1,10 @@
 ---
 title: White-label storefronts for orgs
 description: White-label puts your org's SC Market storefront on its own domain or subdomain, with your theme and favicon. It's available on request.
-order: 50
+order: 30
 updated: 2026-10-25
 keywords: [white label, white-label, custom domain, subdomain, premium, org storefront, branding, theme]
-related: [orgs/white-label-theme, orgs/org-shop, orgs/manage-your-org]
+related: [org-storefront/white-label-theme, org-storefront/org-shop, orgs/manage-your-org]
 ---
 
 White-label runs SC Market on your org's own web address, such as `yourorg.sc-market.space` or a domain you own, styled with your org's colors. Visitors browse, buy and talk to your team there with their normal SC Market account. It isn't self-serve: we set it up for your org on request.
@@ -14,7 +14,7 @@ White-label runs SC Market on your org's own web address, such as `yourorg.sc-ma
 White-label is SC Market's premium tier for orgs. It adds:
 
 - **Your own address**: a subdomain of `sc-market.space`, or your own domain.
-- **Your theme**: colors for dark and light mode, card and nav styles, corner rounding and a favicon. See [customize your white-label theme](/guides/orgs/white-label-theme).
+- **Your theme**: colors for dark and light mode, card and nav styles, corner rounding and a favicon. See [customize your white-label theme](/guides/org-storefront/white-label-theme).
 - **Site settings**: make the site public or members-only, and pick the page visitors land on.
 - **The Manage Theme permission**: it appears in your role editor, so you can choose who edits the look.
 
@@ -54,4 +54,4 @@ For account safety, some actions are blocked on white-label addresses. Do them o
 - Edit the theme: members with **Manage Theme**. The Owner and Admin roles have it.
 - Change the site settings and sidebar tabs: **Manage Theme** to open the tab, plus **Manage Org Details** to save.
 
-[Customize your white-label theme](/guides/orgs/white-label-theme "cta")
+[Customize your white-label theme](/guides/org-storefront/white-label-theme "cta")

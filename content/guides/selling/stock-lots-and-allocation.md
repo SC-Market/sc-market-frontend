@@ -4,7 +4,7 @@ description: Your stock is a set of lots, each with a quantity and an optional l
 order: 20
 updated: 2026-10-25
 keywords: [stock, stock lots, inventory, quantity, location, allocation, allocated, listed, personal]
-related: [selling/sell-items, orders/handle-orders-as-a-seller]
+related: [selling/sell-items, selling/handle-orders-as-a-seller]
 howto: true
 ---
 
@@ -38,4 +38,4 @@ When you accept an offer, the ordered quantity comes out of a listed lot, so buy
 
 [My Inventory](/inventory) lists every lot you own, across your shops. Use **Add Lot** there to track items you aren't selling yet: new lots start unlisted. **Unlink from listing** takes a lot off its listing without deleting it.
 
-[Handle orders as a seller](/guides/orders/handle-orders-as-a-seller "cta")
+[Handle orders as a seller](/guides/selling/handle-orders-as-a-seller "cta")

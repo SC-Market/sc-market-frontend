@@ -4,7 +4,7 @@ description: Add the bot to your server, then run /setup threads in a channel so
 order: 10
 updated: 2026-10-26
 keywords: [discord, bot, setup, setup threads, thread, order thread, server, channel, forum]
-related: [discord/order-alerts-and-claiming, discord/webhooks, orders/how-orders-work]
+related: [discord/order-alerts-and-claiming, discord/webhooks, buying/how-orders-work]
 howto: true
 ---
 

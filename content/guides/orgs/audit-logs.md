@@ -1,7 +1,7 @@
 ---
 title: Check your org's audit log
 description: The Audit Logs tab records who changed what in your org, from new members and role changes to invites and settings. Filter it by action or date.
-order: 40
+order: 50
 updated: 2026-10-25
 keywords: [audit log, audit logs, org history, who changed, member removed, role assigned, invite, org security]
 related: [orgs/manage-your-org, orgs/roles-and-permissions, orgs/invite-and-manage-members]
@@ -29,7 +29,7 @@ Your org's **Audit Logs** tab lists every recorded change to the org, newest fir
 - **The org**: **Organization Created**, **Organization Updated**, **Settings Updated**, **Discord Linked**, ownership transfers and **Organization Archived**.
 - **Shops**: **Shop Transferred**, when the org's shop moves to another owner or a shop moves into the org. Only the org's owner can transfer an org shop.
 - **Orders**: **Order Cancelled** and **Offer Rejected**.
-- **White-label**: theme changes, for orgs with [white-label](/guides/orgs/white-label).
+- **White-label**: theme changes, for orgs with [white-label](/guides/org-storefront/white-label).
 
 ## Advanced
 

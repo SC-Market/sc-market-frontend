@@ -1,7 +1,7 @@
 ---
 title: Recruit members with a recruiting post
 description: Each org can publish one recruiting post on SC Market. Players find it on the Recruiting page, upvote and comment, and join with an invite from you.
-order: 30
+order: 20
 updated: 2026-10-25
 keywords: [recruiting, recruit, recruiting post, find org, join org, upvote, org directory, star citizen org]
 related: [orgs/invite-and-manage-members, orgs/register-an-org]

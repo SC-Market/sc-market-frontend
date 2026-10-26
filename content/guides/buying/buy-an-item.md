@@ -4,7 +4,7 @@ description: Add items to your cart, submit an offer to each seller, then meet i
 order: 10
 updated: 2026-10-25
 keywords: [buy, purchase, cart, checkout, auction, bid, buy order, price]
-related: [orders/how-orders-work, getting-started/create-an-account]
+related: [buying/how-orders-work, getting-started/create-an-account]
 howto: true
 ---
 
@@ -41,4 +41,4 @@ Your offers and orders are in [My Orders](/orders). Some sellers only take offer
 > [!WARNING]
 > Trades happen between players, so SC Market can't guarantee them. Check the seller's ratings and reviews before you trade.
 
-[How orders work](/guides/orders/how-orders-work "cta")
+[How orders work](/guides/buying/how-orders-work "cta")

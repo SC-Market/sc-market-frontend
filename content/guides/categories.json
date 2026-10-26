@@ -1,38 +1,32 @@
 [
   {
     "id": "getting-started",
-    "title": "Getting started",
-    "description": "Create your SC Market account, verify your RSI handle and finish setting up.",
+    "title": "Getting started & safety",
+    "description": "Create your SC Market account, verify your RSI handle, and learn how to trade safely with other players.",
     "order": 10
   },
   {
     "id": "buying",
-    "title": "Buying",
-    "description": "Find items on the market, check out from your cart, bid on auctions and post buy orders.",
+    "title": "Buying & price alerts",
+    "description": "Find items, check out from your cart, post buy orders, get price alerts, and follow an order from offer to delivery.",
     "order": 20
   },
   {
     "id": "selling",
     "title": "Selling",
-    "description": "Open a shop, list items for aUEC and keep your stock up to date.",
+    "description": "Open a shop, list items for aUEC, manage stock, run auctions, fill buy orders and handle the orders you receive.",
     "order": 30
   },
   {
-    "id": "orders",
-    "title": "Orders",
-    "description": "How offers become orders, what each order status means, and how trades finish in game.",
+    "id": "orgs",
+    "title": "Orgs: setup & members",
+    "description": "Register your org, invite members, set up roles and permissions, and keep track of changes in the audit log.",
     "order": 40
   },
   {
-    "id": "safety",
-    "title": "Safety",
-    "description": "Trade safely: reviews, blocking and reporting, and what SC Market does and doesn't guarantee.",
-    "order": 45
-  },
-  {
-    "id": "orgs",
-    "title": "Organizations",
-    "description": "Run your org on SC Market: register it, invite members, sell and recruit as a team, and get a white-label storefront.",
+    "id": "org-storefront",
+    "title": "Orgs: shop, recruiting & white-label",
+    "description": "Sell as a team with an org shop, publish a recruiting post, and run a white-label storefront with your own theme.",
     "order": 50
   },
   {

@@ -1,5 +1,6 @@
 import React from "react"
 import {
+  Box,
   Card,
   CardActionArea,
   CardContent,
@@ -38,31 +39,47 @@ export function GuidesHub() {
           </Typography>
         )}
       </Grid>
-      {helpIndex.categories.map((category) => (
-        <Grid item xs={12} md={6} key={category.id}>
-          <Card sx={{ height: "100%" }}>
-            <CardActionArea component={RouterLink} to={HELP_PATHS.category(category.id)} sx={{ p: 2, pb: 0 }}>
-              <Typography variant="h6" component="h2" sx={{ fontWeight: 700 }}>
-                {category.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {category.description}
-              </Typography>
-            </CardActionArea>
-            <CardContent sx={{ pt: 1 }}>
-              <List dense disablePadding>
-                {guidesIn(category.id).map((guide) => (
-                  <ListItem key={guide.id} disableGutters>
-                    <Link component={RouterLink} to={HELP_PATHS.guide(guide.category, guide.slug)} color="secondary">
-                      {guide.title}
-                    </Link>
-                  </ListItem>
-                ))}
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
-      ))}
+      {/*
+        Balanced columns, not a grid: categories hold different numbers of
+        guides, and grid rows stretch every card to the tallest one in the
+        row. CSS columns pack the cards by height and read top to bottom,
+        left to right, so the user-journey order is kept.
+      */}
+      <Grid item xs={12}>
+        <Box data-testid="guides-hub-categories" sx={{ columnCount: { xs: 1, md: 2 }, columnGap: 2 }}>
+          {helpIndex.categories.map((category) => {
+            const guides = guidesIn(category.id)
+            return (
+              <Card
+                key={category.id}
+                component="section"
+                aria-labelledby={`guides-hub-${category.id}`}
+                sx={{ breakInside: "avoid", display: "inline-block", width: "100%", mb: 2 }}
+              >
+                <CardActionArea component={RouterLink} to={HELP_PATHS.category(category.id)} sx={{ p: 2, pb: 0 }}>
+                  <Typography id={`guides-hub-${category.id}`} variant="h6" component="h2" sx={{ fontWeight: 700 }}>
+                    {category.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {category.description}
+                  </Typography>
+                </CardActionArea>
+                <CardContent sx={{ pt: 1, "&:last-child": { pb: 2 } }}>
+                  <List dense disablePadding>
+                    {guides.map((guide) => (
+                      <ListItem key={guide.id} disableGutters>
+                        <Link component={RouterLink} to={HELP_PATHS.guide(guide.category, guide.slug)} color="secondary">
+                          {guide.title}
+                        </Link>
+                      </ListItem>
+                    ))}
+                  </List>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </Box>
+      </Grid>
       <Grid item xs={12}>
         <Stack direction="row" spacing={1}>
           <Typography variant="body2" color="text.secondary">

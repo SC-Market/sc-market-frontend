@@ -1,10 +1,10 @@
 ---
 title: Invite and manage org members
 description: Invite players by username or with an invite link from your org's Invites tab. New members get the Member role; kick or re-role them from Roles and Members.
-order: 5
+order: 20
 updated: 2026-10-25
 keywords: [org, invite, invite code, invite link, join org, members, kick, leave org, member role]
-related: [orgs/roles-and-permissions, orgs/recruiting, orgs/manage-your-org]
+related: [orgs/roles-and-permissions, org-storefront/recruiting, orgs/manage-your-org]
 howto: true
 ---
 
@@ -47,7 +47,7 @@ Open [Settings](/settings), select **Contractors** and click **Leave Organizatio
 
 ## Advanced
 
-- **One link for a recruiting drive**: create a code with **Max Invite Uses** at 0, post it with your [recruiting post](/guides/orgs/recruiting), and delete it when the drive ends.
+- **One link for a recruiting drive**: create a code with **Max Invite Uses** at 0, post it with your [recruiting post](/guides/org-storefront/recruiting), and delete it when the drive ends.
 - **Find members fast**: the **Members** list on **Roles and Members** has **Search** and a **Role** filter.
 - **Export the roster**: click **Export** above the **Members** list to download the members' usernames as a CSV file.
 - **Track who joined**: every invite, join, kick and role change is in the org's [audit log](/guides/orgs/audit-logs).

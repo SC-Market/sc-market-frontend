@@ -1,7 +1,7 @@
 ---
 title: How orders work
 description: Checkout sends the seller an offer. Once the offer is accepted it becomes an order, which moves from Queued to Being fulfilled to Fulfilled.
-order: 10
+order: 30
 updated: 2026-10-25
 keywords: [order, offer, counter offer, status, queued, fulfilled, cancel, review, discord thread]
 related: [buying/buy-an-item, selling/sell-items]

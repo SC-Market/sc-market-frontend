@@ -521,7 +521,7 @@ exports[`routes (shard 4/4) > /guides/:category 1`] = `
   "errorElementErrors": [],
   "finalUrl": "/guides/buying",
   "h1": [
-    "Buying",
+    "Buying & price alerts",
   ],
   "hasMainLandmark": true,
   "hasMainNav": true,
@@ -542,7 +542,7 @@ exports[`routes (shard 4/4) > /guides/:category 1`] = `
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Buying — SC Market Help & Guides",
+  "title": "Buying & price alerts — SC Market Help & Guides",
   "url": "/guides/buying",
 }
 `;

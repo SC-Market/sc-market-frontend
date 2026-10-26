@@ -4,7 +4,7 @@ description: Run /setup alerts to post your org's new orders and offers in a cha
 order: 20
 updated: 2026-10-26
 keywords: [discord, alerts, setup alerts, claim, claim order, order status, notifications]
-related: [discord/connect-the-discord-bot, discord/webhooks, orders/handle-orders-as-a-seller]
+related: [discord/connect-the-discord-bot, discord/webhooks, selling/handle-orders-as-a-seller]
 howto: true
 ---
 
@@ -38,11 +38,11 @@ Claiming works for org orders and offers only. You must be a member of the org w
 
 ## Update an order from Discord
 
-Run `/order status` with `newstatus` set to **In Progress**, **Fulfilled** or **Cancelled**. Inside the order's thread you can leave `order` empty; elsewhere, pick the order from the list. The same rules apply as on the site: see [how orders work](/guides/orders/how-orders-work).
+Run `/order status` with `newstatus` set to **In Progress**, **Fulfilled** or **Cancelled**. Inside the order's thread you can leave `order` empty; elsewhere, pick the order from the list. The same rules apply as on the site: see [how orders work](/guides/buying/how-orders-work).
 
 ## Advanced
 
 - **Stop alerts**: run `/setup remove` in the channel with `kind` set to **Order alerts**, and `org` for an org's alerts. The member who set them up, or anyone with the org's **Manage Orders** or **Manage Webhooks** permission, can remove them. If nothing matches, the bot says what the channel does have.
 - **More events**: for a message on status changes and auction bids too, add a [webhook](/guides/discord/webhooks).
 
-[Handle orders as a seller or org team](/guides/orders/handle-orders-as-a-seller "cta")
+[Handle orders as a seller or org team](/guides/selling/handle-orders-as-a-seller "cta")

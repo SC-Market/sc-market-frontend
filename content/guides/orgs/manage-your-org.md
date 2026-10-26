@@ -1,7 +1,7 @@
 ---
 title: Your org's manage pages
 description: The Manage Org area holds your org's profile, roles, invites, Discord, settings, audit log and theme. Each tab shows only if your roles allow it.
-order: 3
+order: 40
 updated: 2026-10-26
 keywords: [manage org, org settings, org admin, about, roles, invites, discord integration, audit logs, transfer ownership, archive org]
 related: [orgs/register-an-org, orgs/roles-and-permissions, orgs/invite-and-manage-members]
@@ -42,11 +42,11 @@ A history of changes to the org: members, roles, invites, settings and more. See
 
 ## Market, Blocked Users and Customers
 
-These tabs now only point you to your shops. Listings, market settings, blocked users and customers are managed per shop, in each shop's **Settings** and **Customers** pages. See [sell as an org](/guides/orgs/org-shop).
+These tabs now only point you to your shops. Listings, market settings, blocked users and customers are managed per shop, in each shop's **Settings** and **Customers** pages. See [sell as an org](/guides/org-storefront/org-shop).
 
 ## Theme & White Label
 
-Only for orgs with [white-label](/guides/orgs/white-label), and members with **Manage Theme**. See [customize your white-label theme](/guides/orgs/white-label-theme).
+Only for orgs with [white-label](/guides/org-storefront/white-label), and members with **Manage Theme**. See [customize your white-label theme](/guides/org-storefront/white-label-theme).
 
 ## Owner actions
 
@@ -59,7 +59,7 @@ Other members see **Leave Organization** there instead.
 
 ## Advanced
 
-- **Org Orders** in the org's sidebar lists every order of the org, for members with **Manage Orders**. See [handle orders as an org team](/guides/orders/handle-orders-as-a-seller).
+- **Org Orders** in the org's sidebar lists every order of the org, for members with **Manage Orders**. See [handle orders as an org team](/guides/selling/handle-orders-as-a-seller).
 - Some org settings only work on sc-market.space, not on a white-label address: roles, ownership transfer and webhooks.
 
 [Org roles and permissions](/guides/orgs/roles-and-permissions "cta")

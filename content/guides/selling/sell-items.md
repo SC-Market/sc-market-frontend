@@ -4,7 +4,7 @@ description: Every listing belongs to a shop. Create your shop, list an item wit
 order: 10
 updated: 2026-10-26
 keywords: [sell, listing, create listing, shop, stock, inventory, auction, price]
-related: [selling/stock-lots-and-allocation, selling/auctions, orders/how-orders-work]
+related: [selling/stock-lots-and-allocation, selling/auctions, buying/how-orders-work]
 howto: true
 ---
 
@@ -51,4 +51,4 @@ With the [SC Market bot](/guides/discord/connect-the-discord-bot) in your server
 
 Offers and orders for your shop appear under **Orders** in your shop's sidebar. Accept an offer to turn it into an order, then meet the buyer in game to hand over the item and collect the aUEC.
 
-[How orders work](/guides/orders/how-orders-work "cta")
+[How orders work](/guides/buying/how-orders-work "cta")

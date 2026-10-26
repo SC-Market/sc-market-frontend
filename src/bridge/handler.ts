@@ -20,6 +20,7 @@ import { matchBridgeRoute } from "./routes"
 import { rewriteShell, type HtmlRewriterConstructor } from "./render"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
 import { isMainSiteHostname } from "../util/mainSiteHost"
+import { guideRedirectTarget } from "../features/help/domain/redirects"
 
 export interface BridgeEnv {
   ASSETS: { fetch(input: Request | URL | string): Promise<Response> }
@@ -255,6 +256,16 @@ function shellHeaders(
   return headers
 }
 
+/** 301 to a moved guide's new path on the same host, keeping the query. */
+function guideRedirect(url: URL, target: string): Response {
+  const location = new URL(target, url)
+  location.search = url.search
+  return new Response(null, {
+    status: 301,
+    headers: { Location: location.toString(), "Cache-Control": "public, max-age=86400", "X-SCM-Bridge": "redirect" },
+  })
+}
+
 export async function handleBridgeRequest(
   ctx: BridgeContext,
   runtime: BridgeRuntime,
@@ -263,6 +274,10 @@ export async function handleBridgeRequest(
   if (request.method !== "GET" && request.method !== "HEAD") return ctx.next()
 
   const url = new URL(request.url)
+  // Moved Help & Guides pages. Here, not public/_redirects: Pages doesn't
+  // apply _redirects to paths a Function serves.
+  const moved = guideRedirectTarget(url.pathname)
+  if (moved) return guideRedirect(url, moved)
   if (!matchBridgeRoute(url.pathname)) return ctx.next()
   // White-label org domains are served by the same deployment; their pages
   // must never get SC Market's head or summary injected.

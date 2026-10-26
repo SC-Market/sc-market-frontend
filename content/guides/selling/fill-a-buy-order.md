@@ -4,7 +4,7 @@ description: Buy orders are requests for an item, quantity and price range. Fill
 order: 40
 updated: 2026-10-25
 keywords: [buy order, fulfill, fill, request, wanted, supply]
-related: [selling/sell-items, orders/handle-orders-as-a-seller]
+related: [selling/sell-items, selling/handle-orders-as-a-seller]
 howto: true
 ---
 
@@ -30,4 +30,4 @@ A buy order is a buyer's request for an item: the quantity they want and the pri
 
 - The order uses your listing's price and belongs to that listing's shop. With the shop's default allocation mode, its quantity comes out of your listed stock.
 - When the full quantity is filled, the buy order closes.
-- Continue as with any order: see [handle orders as a seller](/guides/orders/handle-orders-as-a-seller).
+- Continue as with any order: see [handle orders as a seller](/guides/selling/handle-orders-as-a-seller).

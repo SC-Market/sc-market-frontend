@@ -1,10 +1,10 @@
 ---
 title: Handle orders as a seller or org team
 description: Incoming offers and orders for your shop are on its Orders page. Accept the offer, then move the order through Begin Work and Complete Order.
-order: 20
+order: 50
 updated: 2026-10-25
 keywords: [seller, orders, offers, accept, assign, claim, begin work, complete order, org orders, team]
-related: [orders/how-orders-work, orgs/roles-and-permissions, discord/order-alerts-and-claiming]
+related: [buying/how-orders-work, orgs/roles-and-permissions, discord/order-alerts-and-claiming]
 howto: true
 ---
 
@@ -43,4 +43,4 @@ As a seller, you handle each sale in two parts: accept the buyer's offer, which 
 
 If your org posts order alerts to Discord, members with **Claim Orders** can claim new orders straight from the alert. See [order alerts and claiming](/guides/discord/order-alerts-and-claiming).
 
-[How orders work](/guides/orders/how-orders-work "cta")
+[How orders work](/guides/buying/how-orders-work "cta")

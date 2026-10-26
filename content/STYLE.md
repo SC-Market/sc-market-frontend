@@ -7,6 +7,10 @@ into the pages under `/guides` and `/about`. A content error fails the build.
 
 - `guides/categories.json`: the categories (id, title, description, order).
 - `guides/<category>/<slug>.md`: one guide. The file name is the URL slug.
+  Keep categories balanced (about 3-5 guides each) so the hub's columns stay even.
+- Moving or renaming a guide or category changes its URL: add the old path to
+  `src/features/help/domain/redirects.ts` (it 301s to the new one; the build
+  fails if an old path is still a page or a new one isn't) and update the links.
 - `about.md`: the About page.
 - Screenshots: `guides/<category>/img/<name>.webp`, at most 3-4 per guide.
 
@@ -19,7 +23,7 @@ order: 10                        # sort order within the category
 updated: 2026-10-25              # required; shown on the page, sitemap lastmod
 author: Khuzdul                  # optional (default Khuzdul)
 keywords: [buy, cart]            # optional
-related: [orders/how-orders-work] # optional "Next steps" (guide ids)
+related: [buying/how-orders-work] # optional "Next steps" (guide ids)
 howto: true                      # optional: HowTo JSON-LD from "## Steps"
 draft: true                      # optional: only shown by the dev server
 ```

@@ -1,6 +1,6 @@
 import React from "react"
 import { Alert, Box, Divider, Grid, Link, List, ListItem, Paper, Skeleton, Typography } from "@mui/material"
-import { Link as RouterLink, useParams } from "react-router-dom"
+import { Link as RouterLink, Navigate, useLocation, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { HelpLayout, UpdatedStamp } from "../../features/help/components/HelpLayout"
 import { Blocks } from "../../features/help/components/ContentBlocks"
@@ -16,6 +16,7 @@ import { FRONTEND_URL } from "../../util/constants"
 import { buildGuideHead, HELP_HUB_NAME } from "../../seo/contentHeads"
 import type { GuideMeta } from "../../features/help/domain/types"
 import { PageBody404 } from "../errors/Error404"
+import { guideRedirectTarget } from "../../features/help/domain/redirects"
 
 function GuideLinks({ title, guides }: { title: string; guides: GuideMeta[] }) {
   if (guides.length === 0) return null
@@ -40,11 +41,15 @@ function GuideLinks({ title, guides }: { title: string; guides: GuideMeta[] }) {
 export function GuidePage() {
   const { t } = useTranslation()
   const { category: categoryId, slug } = useParams<{ category: string; slug: string }>()
+  const location = useLocation()
+  // A moved guide or category (the edge answers these with a 301 first).
+  const moved = guideRedirectTarget(location.pathname)
   const guide = findGuide(categoryId, slug)
   const category = findCategory(guide?.category)
   const { body, error } = useContentBody(guide?.id)
   const helpCrumb = { label: t("help.hubTitle", HELP_HUB_NAME), href: HELP_PATHS.hub }
 
+  if (moved) return <Navigate to={`${moved}${location.search}${location.hash}`} replace />
   if (!guide || !category) {
     return (
       <HelpLayout

@@ -1,10 +1,10 @@
 ---
 title: Customize your white-label theme
 description: On the Theme & White Label tab, load a preset or set each color, style and corner radius for dark and light mode, then click Save Theme.
-order: 55
+order: 40
 updated: 2026-10-25
 keywords: [white label, theme, theme editor, colors, palette, preset, favicon, border radius, branding, homepage]
-related: [orgs/white-label, orgs/manage-your-org]
+related: [org-storefront/white-label, orgs/manage-your-org]
 howto: true
 ---
 
@@ -12,7 +12,7 @@ Your org's theme sets the colors and style of your white-label site. Start from 
 
 ## Before you start
 
-- White-label turned on for your org ([request it](/guides/orgs/white-label)).
+- White-label turned on for your org ([request it](/guides/org-storefront/white-label)).
 - The org's **Manage Theme** permission.
 
 ## Steps
@@ -75,4 +75,4 @@ Below the theme editor are two more sections. Saving them also needs **Manage Or
 > [!NOTE]
 > Right now only the mobile bottom bar applies these sidebar settings: hidden tabs disappear from it. The desktop sidebar doesn't show the changes or your custom tabs yet.
 
-[White-label storefronts for orgs](/guides/orgs/white-label "cta")
+[White-label storefronts for orgs](/guides/org-storefront/white-label "cta")
