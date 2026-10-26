@@ -171,7 +171,12 @@ These protect the owner's real browser session and real users.
   default context). Open a new tab in that same context with `new_page`,
   passing that `isolatedContext` name (or none for the default context).
   Check the tab is logged in (navbar avatar "Account menu", no "Sign in").
-- **New tabs are fine; NEVER open new windows or new browser contexts.**
+- **Test accounts:** the one exception to "no new contexts". Each test
+  account gets its own isolated context named after it (`test-buyer`,
+  `test-seller`, ...), so its cookies never mix with another account's or
+  the owner's. See section 6.
+- **New tabs are fine; NEVER open new windows or new browser contexts**
+  (other than the per-test-account ones above).
 - **Close every tab you opened** with `close_page` when you're done. Leave the
   owner's own tabs alone.
 - Use `select_page` before acting, and check with `list_pages` that you're on
@@ -192,7 +197,10 @@ Production is real users' marketplace.
 - Adding to and removing from the owner's **own cart** is only acceptable if
   you remove what you added and nothing else changes; prefer the Playwright
   suite (fake API) for that flow.
-- To test a write flow, use the Playwright suite against the fake API.
+- To test a write flow, use the Playwright suite against the fake API, or a
+  test account (section 6): test accounts can create listings, orders,
+  offers, chats and so on, but only with other test accounts, and nobody
+  real ever sees them.
 
 ## 5. Playwright suite
 
@@ -231,3 +239,114 @@ CI: the **E2E smoke + a11y names** job in `.github/workflows/ci.yml` builds
 the e2e bundle, runs both projects on Chromium (browsers cached) and writes the
 audit and static-scan counts to the job summary. Like the type-check job it's
 informational: Cloudflare Pages deploys don't wait for it.
+
+## 6. Test accounts (logged-in flows on production)
+
+Test accounts are real SC Market accounts marked `is_test` that agents sign
+into with a username and an authenticator (TOTP) code. They live in a
+separate "test realm", enforced on the server and in the database:
+
+- Real users never see them: their shops, orgs, listings, services,
+  contracts, buy orders and recruiting posts are left out of every search,
+  directory, aggregate, stat, sitemap and the bridge data, and their profile,
+  org and shop pages are 404 for real users. Test accounts see both test and
+  real data.
+- Test and real accounts can't trade, chat, review, bid, apply, pay, join
+  each other's orgs or be invited to them, in either direction: the API
+  answers 403 with `details.reason = "test_account_isolation"`. Test with
+  test is fine.
+- A test account is never an admin or moderator, can't create admin API
+  tokens, webhooks, Discord integrations or custom domains, and nothing it
+  does notifies a real user or posts to Discord.
+
+### Creating accounts (owner, once)
+
+1. The owner enrolls two-factor on their admin account (Settings → Two-factor).
+2. Admin → **Test accounts** (`/admin/test-accounts`). Create e.g.
+   `test-buyer` and `test-seller` (usernames must start with `test`). Each
+   creation asks for a fresh authenticator code.
+3. The page shows the account's TOTP secret **once**, with a ready-made
+   entry for the secrets file. Save it to `~/.config/scmarket-test-accounts.json`:
+
+   ```json
+   {
+     "test-buyer": { "username": "test-buyer", "secret": "BASE32SECRET" },
+     "test-seller": { "username": "test-seller", "secret": "BASE32SECRET" }
+   }
+   ```
+
+   ```bash
+   chmod 600 ~/.config/scmarket-test-accounts.json
+   ```
+
+   Never commit this file, paste it into a chat, or print a secret.
+4. Deleting an account (same page) removes it with its test orgs, shops,
+   listings and orders. Remove its entry from the file too.
+
+### Logging in as a test account (agents)
+
+1. Compute the current code from the file **without printing the secret**
+   (the command prints only the 6 digits):
+
+   ```bash
+   node -e '
+   const fs = require("fs"), { createHmac } = require("crypto")
+   const f = process.env.HOME + "/.config/scmarket-test-accounts.json"
+   const { secret } = JSON.parse(fs.readFileSync(f, "utf8"))[process.argv[1]]
+   const A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
+   let bits = ""
+   for (const c of secret.replace(/=+$/, "")) bits += A.indexOf(c).toString(2).padStart(5, "0")
+   const key = Buffer.from(bits.match(/.{8}/g).map((b) => parseInt(b, 2)))
+   const msg = Buffer.alloc(8)
+   msg.writeBigUInt64BE(BigInt(Math.floor(Date.now() / 30000)))
+   const h = createHmac("sha1", key).update(msg).digest()
+   const o = h[19] & 15
+   console.log(String((h.readUInt32BE(o) & 0x7fffffff) % 1e6).padStart(6, "0"))
+   ' test-buyer
+   ```
+
+   A code works once (replays are refused) and for about 30 seconds either
+   side. If a login fails, wait for the next 30-second step and compute a new
+   code; don't retry the same one.
+2. Open a tab on **https://sc-market.space** in the account's own, logged-out
+   isolated context (the request must come from the main site; white-label
+   domains are refused):
+
+   ```
+   new_page  url=https://sc-market.space/  isolatedContext=test-buyer
+   ```
+3. Post the login from that tab:
+
+   ```
+   evaluate_script  pageId=<yours> function=async () => {
+     const r = await fetch("https://api.sc-market.space/api/auth/test-login", {
+       method: "POST",
+       credentials: "include",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({ username: "test-buyer", code: "<6 digits>" }),
+     })
+     return r.status
+   }
+   ```
+
+   `200` means the normal session cookies are set in that context; reload the
+   page and you're logged in (sessions last like any other, 60 days). Any
+   failure is the same `401 Invalid username or code`; `429` means the budget
+   (10 attempts per hour per account, 30 per IP) is spent; `404` means test
+   login is switched off.
+4. Use one context per account (`test-buyer`, `test-seller`, ...) and keep
+   using it; log in again only when the session is gone. Close your tabs when
+   you're done.
+
+The server never logs or stores the code. Every attempt is audited
+(`test_login_events`, and `user_mfa_events` for test accounts).
+
+### Kill switch
+
+Test login is off unless the backend runs with `TEST_LOGIN_ENABLED=true`
+(Lightsail container env, set by the owner). Anything else, or unset, makes
+`POST /api/auth/test-login` answer 404; existing test sessions keep working
+until they expire or the account is deleted. To switch it off, unset the
+variable (`scripts/lightsail-env.sh` in sc-market-cdk) and redeploy. To stop a
+single account, delete it in Admin → Test accounts.
+
