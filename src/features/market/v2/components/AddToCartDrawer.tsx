@@ -125,7 +125,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
           {!isMobile && (
             <Box display="flex" justifyContent="space-between" alignItems="center">
               <Typography variant="h6" fontWeight="bold">{t("cart.addToCart", "Add to Cart")}</Typography>
-              <IconButton onClick={onClose} size="small"><Close /></IconButton>
+              <IconButton onClick={onClose} size="small" aria-label={t("cart.closeDrawer", "Close")}><Close /></IconButton>
             </Box>
           )}
 
@@ -218,7 +218,14 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
                         {ci.quantity} × {Number(ci.price_per_unit).toLocaleString()} aUEC = {Number(ci.quantity * ci.price_per_unit).toLocaleString()} aUEC
                       </Typography>
                     </Box>
-                    <IconButton size="small" onClick={() => handleRemoveCartItem(ci.cart_item_id)} color="error">
+                    <IconButton
+                      size="small"
+                      onClick={() => handleRemoveCartItem(ci.cart_item_id)}
+                      color="error"
+                      aria-label={t("cart.removeItem", "Remove {{title}} from cart", {
+                        title: `${listingData.listing.title} (${ci.variant?.display_name || "Standard"})`,
+                      })}
+                    >
                       <DeleteOutline fontSize="small" />
                     </IconButton>
                   </Box>
@@ -254,7 +261,16 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
   }
 
   return (
-    <Drawer anchor="right" open={open} onClose={onClose} PaperProps={{ sx: { width: 400, maxWidth: "90vw", p: 0 } }}>
+    <Drawer
+      anchor="right"
+      open={open}
+      onClose={onClose}
+      PaperProps={{
+        role: "dialog",
+        "aria-label": t("cart.addToCart", "Add to Cart"),
+        sx: { width: 400, maxWidth: "90vw", p: 0 },
+      }}
+    >
       {content}
     </Drawer>
   )

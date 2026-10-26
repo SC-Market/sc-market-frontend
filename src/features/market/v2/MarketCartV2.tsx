@@ -128,7 +128,12 @@ export function CartItemEntryV2(props: {
     : 0
 
   return (
-    <Grid item xs={12}>
+    <Grid
+      item
+      xs={12}
+      data-testid="cart-item"
+      data-id={item.cart_item_id}
+    >
       <Grid
         container
         spacing={theme.layoutSpacing.layout}
@@ -300,6 +305,9 @@ export function CartItemEntryV2(props: {
               size={"small"}
               onClick={() => onRemove(item.cart_item_id)}
               disabled={isUpdating}
+              aria-label={t("cart.removeItem", "Remove {{title}} from cart", {
+                title: item.listing.title,
+              })}
             >
               {t("cart.remove")}
             </Button>

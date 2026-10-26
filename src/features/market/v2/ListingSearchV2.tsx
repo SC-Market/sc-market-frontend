@@ -1001,7 +1001,11 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
       timeout={500}
       style={{ transitionDelay: `${50 + 50 * index}ms` }}
     >
-      <ListingWrapper useFixedWidth={false}>
+      <ListingWrapper
+        useFixedWidth={false}
+        data-testid="listing-card"
+        data-id={listing.listing_id}
+      >
         <RouterLink
           to={formatMarketUrl(listing)}
           style={{ textDecoration: "none", color: "inherit" }}
@@ -1205,7 +1209,9 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
               boxShadow: 2,
               "&:hover": { bgcolor: "primary.main", color: "primary.contrastText" },
             }}
-            aria-label="Add to cart"
+            aria-label={t("cart.addItemToCart", "Add {{title}} to cart", {
+              title: listing.title,
+            })}
           >
             <AddShoppingCartRounded fontSize="small" />
           </IconButton>

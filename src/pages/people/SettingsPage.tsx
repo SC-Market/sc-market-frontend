@@ -222,7 +222,7 @@ export function SettingsPage() {
             <Tabs
               value={page}
               onChange={handleChange}
-              aria-label={t("ui.aria.orgInfoArea")}
+              aria-label={t("settings.sectionsNav", "Settings sections")}
               variant="scrollable"
               textColor="secondary"
               indicatorColor="secondary"
@@ -322,7 +322,11 @@ export function SettingsPage() {
                 flexShrink: 0,
               }}
             >
-              <List component="nav" disablePadding>
+              <List
+                component="nav"
+                disablePadding
+                aria-label={t("settings.sectionsNav", "Settings sections")}
+              >
                 {navGroups.map((group) => (
                   <React.Fragment key={group.key}>
                     <Typography
