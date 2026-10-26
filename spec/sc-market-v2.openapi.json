@@ -817,12 +817,12 @@
 					"official_server_id": {
 						"type": "string",
 						"nullable": true,
-						"description": "Discord server (guild) ID where order/offer threads are created for this shop"
+						"description": "Discord server (guild) ID of this shop's own order-thread channel; null uses the owner's"
 					},
 					"discord_thread_channel_id": {
 						"type": "string",
 						"nullable": true,
-						"description": "Discord channel ID under which order/offer threads are created for this shop"
+						"description": "Discord channel ID where this shop's order and offer threads are created; null uses the owner's"
 					},
 					"badge_ids": {
 						"items": {
@@ -1144,12 +1144,12 @@
 					"official_server_id": {
 						"type": "string",
 						"nullable": true,
-						"description": "Discord server (guild) ID where order/offer threads are created for this shop"
+						"description": "Discord server (guild) ID of this shop's order-thread channel. Send it with\ndiscord_thread_channel_id; send both as null to use the owner's channel."
 					},
 					"discord_thread_channel_id": {
 						"type": "string",
 						"nullable": true,
-						"description": "Discord channel ID under which order/offer threads are created for this shop"
+						"description": "Discord channel ID where this shop's order and offer threads are created"
 					}
 				},
 				"type": "object",
@@ -1862,6 +1862,54 @@
 					"offer_id",
 					"items"
 				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PriceAlertPreferences": {
+				"description": "Price alert (watchlist) notification preferences: one toggle per channel.",
+				"properties": {
+					"site": {
+						"type": "boolean",
+						"description": "In-app notification on the site. Default: on."
+					},
+					"push": {
+						"type": "boolean",
+						"description": "Web push to the user's subscribed browsers / installed PWA. Default: on."
+					},
+					"email": {
+						"type": "boolean",
+						"description": "Email to the user's verified primary address. Default: off (opt-in)."
+					},
+					"discord": {
+						"type": "boolean",
+						"description": "Direct message from the SC Market Discord bot. Default: on."
+					}
+				},
+				"required": [
+					"site",
+					"push",
+					"email",
+					"discord"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdatePriceAlertPreferencesRequest": {
+				"description": "Channels to change; omitted channels keep their current setting.",
+				"properties": {
+					"site": {
+						"type": "boolean"
+					},
+					"push": {
+						"type": "boolean"
+					},
+					"email": {
+						"type": "boolean"
+					},
+					"discord": {
+						"type": "boolean"
+					}
+				},
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -3184,6 +3232,258 @@
 					"assigned_to",
 					"contractor",
 					"offers"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MfaFactorSummary": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					},
+					"label": {
+						"type": "string"
+					},
+					"created_at": {
+						"type": "string"
+					},
+					"last_used_at": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"type",
+					"label",
+					"created_at",
+					"last_used_at"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MfaStatusResponse": {
+				"properties": {
+					"enforcement": {
+						"type": "string",
+						"enum": [
+							"enforce",
+							"off",
+							"unconfigured"
+						],
+						"description": "\"enforce\": admin MFA is required; \"off\": rolled back; \"unconfigured\": on, but the server has no encryption key yet."
+					},
+					"required": {
+						"type": "boolean",
+						"description": "Whether this account must use two-factor authentication for admin features."
+					},
+					"enrolled": {
+						"type": "boolean"
+					},
+					"factors": {
+						"items": {
+							"$ref": "#/components/schemas/MfaFactorSummary"
+						},
+						"type": "array"
+					},
+					"recovery_codes_remaining": {
+						"type": "number",
+						"format": "double"
+					},
+					"elevated_until": {
+						"type": "string",
+						"nullable": true,
+						"description": "When this session's admin verification lapses (ISO), or null if not verified."
+					},
+					"stepup_until": {
+						"type": "string",
+						"nullable": true,
+						"description": "When this session's step-up lapses (ISO), or null."
+					},
+					"admin_locked": {
+						"type": "string",
+						"nullable": true,
+						"description": "Why admin features are held back on this request, if they are."
+					}
+				},
+				"required": [
+					"enforcement",
+					"required",
+					"enrolled",
+					"factors",
+					"recovery_codes_remaining",
+					"elevated_until",
+					"stepup_until",
+					"admin_locked"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TotpEnrollResponse": {
+				"properties": {
+					"factor_id": {
+						"type": "string"
+					},
+					"otpauth_uri": {
+						"type": "string"
+					},
+					"qr_data_url": {
+						"type": "string",
+						"description": "data: URL of an SVG QR code for otpauth_uri."
+					},
+					"manual_key": {
+						"type": "string",
+						"description": "The secret in base32, grouped by 4 for manual entry."
+					}
+				},
+				"required": [
+					"factor_id",
+					"otpauth_uri",
+					"qr_data_url",
+					"manual_key"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TotpEnrollRequest": {
+				"properties": {
+					"label": {
+						"type": "string",
+						"maxLength": 60
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RecoveryCodesResponse": {
+				"properties": {
+					"recovery_codes": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"description": "Shown once."
+					},
+					"elevated_until": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"recovery_codes",
+					"elevated_until"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TotpConfirmRequest": {
+				"properties": {
+					"factor_id": {
+						"type": "string"
+					},
+					"code": {
+						"type": "string",
+						"pattern": "^\\d{6}$"
+					}
+				},
+				"required": [
+					"factor_id",
+					"code"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MfaVerifyResponse": {
+				"properties": {
+					"method": {
+						"type": "string",
+						"enum": [
+							"totp",
+							"recovery_code"
+						]
+					},
+					"elevated_until": {
+						"type": "string"
+					},
+					"stepup_until": {
+						"type": "string"
+					},
+					"recovery_codes_remaining": {
+						"type": "number",
+						"format": "double",
+						"description": "Present after a recovery code was used."
+					}
+				},
+				"required": [
+					"method",
+					"elevated_until",
+					"stepup_until"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MfaVerifyRequest": {
+				"properties": {
+					"code": {
+						"type": "string",
+						"description": "6-digit authenticator code."
+					},
+					"recovery_code": {
+						"type": "string",
+						"description": "One of the recovery codes (XXXXX-XXXXX)."
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MfaReauthRequest": {
+				"properties": {
+					"code": {
+						"type": "string"
+					},
+					"recovery_code": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MfaResetResponse": {
+				"properties": {
+					"factors": {
+						"type": "number",
+						"format": "double"
+					},
+					"sessions": {
+						"type": "number",
+						"format": "double"
+					},
+					"tokens": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"factors",
+					"sessions",
+					"tokens"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MfaResetRequest": {
+				"properties": {
+					"reason": {
+						"type": "string",
+						"minLength": 3,
+						"maxLength": 500
+					}
+				},
+				"required": [
+					"reason"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -5528,6 +5828,11 @@
 					"manufacturer": {
 						"type": "string"
 					},
+					"manufacturer_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Manufacturer display name (e.g. \"Aegis Dynamics\") resolved from\nwiki_manufacturers the same way GET /game-data/wiki/manufacturers resolves\n`display_name`. Null when the manufacturer is unknown or unset."
+					},
 					"image_url": {
 						"type": "string"
 					},
@@ -5540,7 +5845,8 @@
 				},
 				"required": [
 					"id",
-					"name"
+					"name",
+					"manufacturer_name"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -5691,6 +5997,11 @@
 					"manufacturer": {
 						"type": "string"
 					},
+					"manufacturer_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Manufacturer display name (e.g. \"Aegis Dynamics\") resolved from\nwiki_manufacturers the same way GET /game-data/wiki/manufacturers resolves\n`display_name`. Null when the manufacturer is unknown or unset."
+					},
 					"image_url": {
 						"type": "string"
 					},
@@ -5732,6 +6043,7 @@
 				"required": [
 					"id",
 					"name",
+					"manufacturer_name",
 					"attributes",
 					"craftable_from",
 					"rewarded_by",
@@ -5753,6 +6065,11 @@
 					},
 					"manufacturer": {
 						"type": "string"
+					},
+					"manufacturer_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Manufacturer display name (e.g. \"Aegis Dynamics\") resolved from\nwiki_manufacturers the same way GET /game-data/wiki/manufacturers resolves\n`display_name`. Null when the manufacturer is unknown or unset."
 					},
 					"focus": {
 						"type": "string"
@@ -5788,7 +6105,8 @@
 				},
 				"required": [
 					"id",
-					"name"
+					"name",
+					"manufacturer_name"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -5806,6 +6124,11 @@
 					},
 					"manufacturer": {
 						"type": "string"
+					},
+					"manufacturer_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Manufacturer display name (e.g. \"Aegis Dynamics\") resolved from\nwiki_manufacturers the same way GET /game-data/wiki/manufacturers resolves\n`display_name`. Null when the manufacturer is unknown or unset."
 					},
 					"focus": {
 						"type": "string"
@@ -5856,6 +6179,7 @@
 				"required": [
 					"id",
 					"name",
+					"manufacturer_name",
 					"attributes"
 				],
 				"type": "object",
@@ -9526,13 +9850,6 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"MarketVersion": {
-				"type": "string",
-				"enum": [
-					"V1",
-					"V2"
-				]
-			},
 			"Record_string.boolean_": {
 				"properties": {},
 				"additionalProperties": {
@@ -9542,15 +9859,20 @@
 				"description": "Construct a type with a set of properties K of type T"
 			},
 			"GetFeatureFlagResponse": {
-				"description": "Response for getting feature flag\n\nReturns the current market version for the authenticated user,\nalong with developer status to determine if debug UI should be shown.",
+				"description": "Response for getting feature flags\n\nReturns every resolved flag for the caller, along with developer status to\ndetermine if debug UI should be shown.",
 				"properties": {
 					"user_id": {
 						"type": "string",
 						"description": "User ID"
 					},
 					"market_version": {
-						"$ref": "#/components/schemas/MarketVersion",
-						"description": "Current market version (V1 or V2) — backward compat"
+						"type": "string",
+						"enum": [
+							"V2"
+						],
+						"nullable": false,
+						"description": "Always \"V2\". The V1 market and its `market_v2` flag are retired; the field\nis only kept until no client reads it. Use `flags` instead.",
+						"deprecated": true
 					},
 					"is_developer": {
 						"type": "boolean",
@@ -9584,15 +9906,11 @@
 				"additionalProperties": false
 			},
 			"SetFeatureFlagResponse": {
-				"description": "Response for setting feature flag\n\nConfirms the market version has been updated for the user.",
+				"description": "Response for setting a per-user flag override.",
 				"properties": {
 					"user_id": {
 						"type": "string",
 						"description": "User ID"
-					},
-					"market_version": {
-						"$ref": "#/components/schemas/MarketVersion",
-						"description": "Updated market version"
 					},
 					"message": {
 						"type": "string",
@@ -9601,28 +9919,27 @@
 				},
 				"required": [
 					"user_id",
-					"market_version",
 					"message"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
 			"SetFeatureFlagRequest": {
-				"description": "Request for setting feature flag\n\nAllows developers to switch between V1 and V2 market experiences.\nRestricted to users with admin role.",
+				"description": "Request for setting a per-user flag override.",
 				"properties": {
-					"market_version": {
-						"$ref": "#/components/schemas/MarketVersion",
-						"description": "Market version to set (V1 or V2) — backward compat for market_v2"
-					},
 					"flag_name": {
 						"type": "string",
-						"description": "Flag name to set (e.g. \"market_v2\", \"crafting\", \"wiki\")"
+						"description": "Flag name to set (must have a feature_flag_config row, e.g. \"market_v2_redesign\")"
 					},
 					"enabled": {
 						"type": "boolean",
 						"description": "Whether to enable or disable the flag"
 					}
 				},
+				"required": [
+					"flag_name",
+					"enabled"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -11238,6 +11555,14 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"MarketVersion": {
+				"type": "string",
+				"enum": [
+					"V1",
+					"V2"
+				],
+				"description": "Legacy name for a flag row's `default_version`: \"V2\" means the flag is on for\neveryone (when enabled), \"V1\" means it is on only for the rollout bucket."
+			},
 			"FeatureFlagConfig": {
 				"properties": {
 					"flag_name": {
@@ -11267,22 +11592,25 @@
 				"properties": {
 					"flag_name": {
 						"type": "string",
-						"description": "Which flag to update (defaults to market_v2)"
+						"description": "Which flag to update"
 					},
 					"default_version": {
 						"$ref": "#/components/schemas/MarketVersion",
-						"description": "Global default version for users without overrides"
+						"description": "\"V2\" turns the flag on for everyone; \"V1\" limits it to the rollout"
 					},
 					"rollout_percentage": {
 						"type": "number",
 						"format": "double",
-						"description": "Percentage of users (0-100) to receive V2 via rollout"
+						"description": "Percentage of users (0-100) to receive the flag via rollout"
 					},
 					"enabled": {
 						"type": "boolean",
-						"description": "Master kill-switch: when false, everyone gets V1"
+						"description": "Master kill-switch: when false, the flag is off for everyone without an override"
 					}
 				},
+				"required": [
+					"flag_name"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -11666,258 +11994,6 @@
 				"required": [
 					"canDelete",
 					"blockers"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MfaFactorSummary": {
-				"properties": {
-					"id": {
-						"type": "string"
-					},
-					"type": {
-						"type": "string"
-					},
-					"label": {
-						"type": "string"
-					},
-					"created_at": {
-						"type": "string"
-					},
-					"last_used_at": {
-						"type": "string",
-						"nullable": true
-					}
-				},
-				"required": [
-					"id",
-					"type",
-					"label",
-					"created_at",
-					"last_used_at"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MfaReauthRequest": {
-				"properties": {
-					"code": {
-						"type": "string"
-					},
-					"recovery_code": {
-						"type": "string"
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MfaResetRequest": {
-				"properties": {
-					"reason": {
-						"type": "string",
-						"minLength": 3,
-						"maxLength": 500
-					}
-				},
-				"required": [
-					"reason"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MfaResetResponse": {
-				"properties": {
-					"factors": {
-						"type": "number",
-						"format": "double"
-					},
-					"sessions": {
-						"type": "number",
-						"format": "double"
-					},
-					"tokens": {
-						"type": "number",
-						"format": "double"
-					}
-				},
-				"required": [
-					"factors",
-					"sessions",
-					"tokens"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MfaStatusResponse": {
-				"properties": {
-					"enforcement": {
-						"type": "string",
-						"enum": [
-							"enforce",
-							"off",
-							"unconfigured"
-						],
-						"description": "\"enforce\": admin MFA is required; \"off\": rolled back; \"unconfigured\": on, but the server has no encryption key yet."
-					},
-					"required": {
-						"type": "boolean",
-						"description": "Whether this account must use two-factor authentication for admin features."
-					},
-					"enrolled": {
-						"type": "boolean"
-					},
-					"factors": {
-						"items": {
-							"$ref": "#/components/schemas/MfaFactorSummary"
-						},
-						"type": "array"
-					},
-					"recovery_codes_remaining": {
-						"type": "number",
-						"format": "double"
-					},
-					"elevated_until": {
-						"type": "string",
-						"nullable": true,
-						"description": "When this session's admin verification lapses (ISO), or null if not verified."
-					},
-					"stepup_until": {
-						"type": "string",
-						"nullable": true,
-						"description": "When this session's step-up lapses (ISO), or null."
-					},
-					"admin_locked": {
-						"type": "string",
-						"nullable": true,
-						"description": "Why admin features are held back on this request, if they are."
-					}
-				},
-				"required": [
-					"enforcement",
-					"required",
-					"enrolled",
-					"factors",
-					"recovery_codes_remaining",
-					"elevated_until",
-					"stepup_until",
-					"admin_locked"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MfaVerifyRequest": {
-				"properties": {
-					"code": {
-						"type": "string",
-						"description": "6-digit authenticator code."
-					},
-					"recovery_code": {
-						"type": "string",
-						"description": "One of the recovery codes (XXXXX-XXXXX)."
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"MfaVerifyResponse": {
-				"properties": {
-					"method": {
-						"type": "string",
-						"enum": [
-							"totp",
-							"recovery_code"
-						]
-					},
-					"elevated_until": {
-						"type": "string"
-					},
-					"stepup_until": {
-						"type": "string"
-					},
-					"recovery_codes_remaining": {
-						"type": "number",
-						"format": "double",
-						"description": "Present after a recovery code was used."
-					}
-				},
-				"required": [
-					"method",
-					"elevated_until",
-					"stepup_until"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"RecoveryCodesResponse": {
-				"properties": {
-					"recovery_codes": {
-						"items": {
-							"type": "string"
-						},
-						"type": "array",
-						"description": "Shown once."
-					},
-					"elevated_until": {
-						"type": "string",
-						"nullable": true
-					}
-				},
-				"required": [
-					"recovery_codes",
-					"elevated_until"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"TotpConfirmRequest": {
-				"properties": {
-					"factor_id": {
-						"type": "string"
-					},
-					"code": {
-						"type": "string",
-						"pattern": "^\\d{6}$"
-					}
-				},
-				"required": [
-					"factor_id",
-					"code"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"TotpEnrollRequest": {
-				"properties": {
-					"label": {
-						"type": "string",
-						"maxLength": 60
-					}
-				},
-				"type": "object",
-				"additionalProperties": false
-			},
-			"TotpEnrollResponse": {
-				"properties": {
-					"factor_id": {
-						"type": "string"
-					},
-					"otpauth_uri": {
-						"type": "string"
-					},
-					"qr_data_url": {
-						"type": "string",
-						"description": "data: URL of an SVG QR code for otpauth_uri."
-					},
-					"manual_key": {
-						"type": "string",
-						"description": "The secret in base32, grouped by 4 for manual entry."
-					}
-				},
-				"required": [
-					"factor_id",
-					"otpauth_uri",
-					"qr_data_url",
-					"manual_key"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -13714,6 +13790,70 @@
 				]
 			}
 		},
+		"/price-alerts/preferences": {
+			"get": {
+				"operationId": "GetPriceAlertPreferences",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PriceAlertPreferences"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get the current user's price alert channel preferences",
+				"summary": "Get price alert preferences",
+				"tags": [
+					"Price Alerts"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			},
+			"put": {
+				"operationId": "UpdatePriceAlertPreferences",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PriceAlertPreferences"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update the current user's price alert channel preferences",
+				"summary": "Update price alert preferences",
+				"tags": [
+					"Price Alerts"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdatePriceAlertPreferencesRequest"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/orders": {
 			"post": {
 				"operationId": "CreateOrder",
@@ -14107,6 +14247,278 @@
 						}
 					}
 				]
+			}
+		},
+		"/auth/mfa/status": {
+			"get": {
+				"operationId": "GetMfaStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MfaStatusResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Two-factor status for the current session.",
+				"summary": "Get two-factor status",
+				"tags": [
+					"Two-factor auth"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/auth/mfa/totp/enroll": {
+			"post": {
+				"operationId": "StartTotpEnrollment",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TotpEnrollResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Start enrolling an authenticator app. Replacing an existing one needs a\nfresh step-up. The secret is only ever returned here.",
+				"summary": "Start authenticator enrollment",
+				"tags": [
+					"Two-factor auth"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TotpEnrollRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/mfa/totp/confirm": {
+			"post": {
+				"operationId": "ConfirmTotpEnrollment",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RecoveryCodesResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Confirm enrollment with the first code. Verifies this session and returns\nthe recovery codes once.",
+				"summary": "Confirm authenticator enrollment",
+				"tags": [
+					"Two-factor auth"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TotpConfirmRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/mfa/verify": {
+			"post": {
+				"operationId": "VerifyMfa",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MfaVerifyResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Verify (or step up) this session with an authenticator or recovery code.",
+				"summary": "Verify two-factor code",
+				"tags": [
+					"Two-factor auth"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MfaVerifyRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/mfa/recovery-codes/regenerate": {
+			"post": {
+				"operationId": "RegenerateMfaRecoveryCodes",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RecoveryCodesResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Replace the recovery codes (the old ones stop working). Needs a fresh\nstep-up.",
+				"summary": "Regenerate recovery codes",
+				"tags": [
+					"Two-factor auth"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/auth/mfa/factors/{factorId}": {
+			"delete": {
+				"operationId": "RemoveMfaFactor",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"removed": {
+											"type": "boolean"
+										}
+									},
+									"required": [
+										"removed"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Remove a factor. Needs a current code and a fresh step-up. While admin\nMFA is enforced, an admin cannot remove their last factor (enroll the\nreplacement first; it replaces the old one on confirmation).",
+				"summary": "Remove a two-factor method",
+				"tags": [
+					"Two-factor auth"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "factorId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MfaReauthRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/admin/mfa/users/{username}/reset": {
+			"post": {
+				"operationId": "ResetUserMfa",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MfaResetResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Reset another admin's or user's two-factor authentication: deletes their\nfactors and recovery codes, revokes their sessions and admin-scoped API\ntokens. Needs a fresh step-up; not allowed on yourself (use the\nbreak-glass script).",
+				"summary": "Reset a user's two-factor authentication",
+				"tags": [
+					"Two-factor auth"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "username",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MfaResetRequest"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/listings": {
@@ -18965,7 +19377,7 @@
 						}
 					}
 				},
-				"description": "Get current feature flag setting\n\nReturns the current market version (V1 or V2) for the authenticated user.\nAlso indicates whether the client should show debug / feature-flag tooling\n(admin users, or any user when NODE_ENV is development).\n\nRestricted to authenticated users only.",
+				"description": "Get current feature flag settings\n\nReturns every resolved flag for the authenticated user (anonymous callers\nget an empty map). Also indicates whether the client should show debug / feature-flag tooling\n(admin users, or any user when NODE_ENV is development).",
 				"summary": "Get feature flag",
 				"tags": [
 					"Debug V2"
@@ -18987,15 +19399,12 @@
 						}
 					}
 				},
-				"description": "Set feature flag\n\nSets the market version (V1 or V2) for the authenticated user.\nThis allows developers to switch between V1 and V2 experiences.\n\nRestricted to users with developer privileges (admin role) only.",
+				"description": "Set feature flag\n\nSets a per-user override of one flag for the authenticated user.\n\nRestricted to admins, users who already have an override, and any user\nwhen NODE_ENV is development.",
 				"summary": "Set feature flag",
 				"tags": [
 					"Debug V2"
 				],
 				"security": [
-					{
-						"loggedin": []
-					},
 					{
 						"loggedin": []
 					}
@@ -20141,32 +20550,6 @@
 			}
 		},
 		"/admin/feature-flags/config": {
-			"get": {
-				"operationId": "GetConfig",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/FeatureFlagConfig"
-								}
-							}
-						}
-					}
-				},
-				"description": "Get global feature flag configuration",
-				"summary": "Get config",
-				"tags": [
-					"Admin Feature Flags"
-				],
-				"security": [
-					{
-						"loggedin": []
-					}
-				],
-				"parameters": []
-			},
 			"put": {
 				"operationId": "UpdateConfig",
 				"responses": {
@@ -20719,278 +21102,6 @@
 					}
 				],
 				"parameters": []
-			}
-		},
-		"/auth/mfa/status": {
-			"get": {
-				"operationId": "GetMfaStatus",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/MfaStatusResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Two-factor status for the current session.",
-				"summary": "Get two-factor status",
-				"tags": [
-					"Two-factor auth"
-				],
-				"security": [
-					{
-						"loggedin": []
-					}
-				],
-				"parameters": []
-			}
-		},
-		"/auth/mfa/totp/enroll": {
-			"post": {
-				"operationId": "StartTotpEnrollment",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/TotpEnrollResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Start enrolling an authenticator app. Replacing an existing one needs a\nfresh step-up. The secret is only ever returned here.",
-				"summary": "Start authenticator enrollment",
-				"tags": [
-					"Two-factor auth"
-				],
-				"security": [
-					{
-						"loggedin": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/TotpEnrollRequest"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/auth/mfa/totp/confirm": {
-			"post": {
-				"operationId": "ConfirmTotpEnrollment",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/RecoveryCodesResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Confirm enrollment with the first code. Verifies this session and returns\nthe recovery codes once.",
-				"summary": "Confirm authenticator enrollment",
-				"tags": [
-					"Two-factor auth"
-				],
-				"security": [
-					{
-						"loggedin": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/TotpConfirmRequest"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/auth/mfa/verify": {
-			"post": {
-				"operationId": "VerifyMfa",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/MfaVerifyResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Verify (or step up) this session with an authenticator or recovery code.",
-				"summary": "Verify two-factor code",
-				"tags": [
-					"Two-factor auth"
-				],
-				"security": [
-					{
-						"loggedin": []
-					}
-				],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/MfaVerifyRequest"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/auth/mfa/recovery-codes/regenerate": {
-			"post": {
-				"operationId": "RegenerateMfaRecoveryCodes",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/RecoveryCodesResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Replace the recovery codes (the old ones stop working). Needs a fresh\nstep-up.",
-				"summary": "Regenerate recovery codes",
-				"tags": [
-					"Two-factor auth"
-				],
-				"security": [
-					{
-						"loggedin": []
-					}
-				],
-				"parameters": []
-			}
-		},
-		"/auth/mfa/factors/{factorId}": {
-			"delete": {
-				"operationId": "RemoveMfaFactor",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"removed": {
-											"type": "boolean"
-										}
-									},
-									"required": [
-										"removed"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"description": "Remove a factor. Needs a current code and a fresh step-up. While admin\nMFA is enforced, an admin cannot remove their last factor (enroll the\nreplacement first; it replaces the old one on confirmation).",
-				"summary": "Remove a two-factor method",
-				"tags": [
-					"Two-factor auth"
-				],
-				"security": [
-					{
-						"loggedin": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "factorId",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/MfaReauthRequest"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/admin/mfa/users/{username}/reset": {
-			"post": {
-				"operationId": "ResetUserMfa",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/MfaResetResponse"
-								}
-							}
-						}
-					}
-				},
-				"description": "Reset another admin's or user's two-factor authentication: deletes their\nfactors and recovery codes, revokes their sessions and admin-scoped API\ntokens. Needs a fresh step-up; not allowed on yourself (use the\nbreak-glass script).",
-				"summary": "Reset a user's two-factor authentication",
-				"tags": [
-					"Two-factor auth"
-				],
-				"security": [
-					{
-						"loggedin": []
-					}
-				],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "username",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					}
-				],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/MfaResetRequest"
-							}
-						}
-					}
-				}
 			}
 		}
 	},

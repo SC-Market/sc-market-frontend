@@ -24,6 +24,7 @@ import {
   PhoneAndroidRounded,
   SyncRounded,
   LockRounded,
+  PriceChangeRounded,
 } from "@mui/icons-material"
 import { useSearchParams } from "react-router-dom"
 import { useSession } from "../../hooks/login/useSession"
@@ -40,6 +41,7 @@ import { BlocklistSettings } from "../../views/settings/BlocklistSettings"
 import { ApiTokensSettings } from "../../features/api-tokens"
 import { PushNotificationSettings } from "../../features/push-notifications"
 import { EmailSettings } from "../../features/email"
+import { PriceAlertSettings } from "../../features/price-alerts"
 import { MobileNavSettings } from "../../views/settings/MobileNavSettings"
 import { ScmdbSyncSettings } from "../../features/scmdb-sync"
 import { useTranslation } from "react-i18next"
@@ -52,6 +54,7 @@ const MfaSettings = React.lazy(() =>
 
 const MOBILE_NAV_TAB_INDEX = 10
 const MFA_TAB_INDEX = 11
+const PRICE_ALERTS_TAB_INDEX = 12
 
 interface NavItem {
   index: number
@@ -133,6 +136,11 @@ export function SettingsPage() {
           icon: <NotificationsActiveRounded />,
         },
         { index: 8, label: t("settings.email.title"), icon: <EmailIcon /> },
+        {
+          index: PRICE_ALERTS_TAB_INDEX,
+          label: t("settings.priceAlerts.title", "Price Alerts"),
+          icon: <PriceChangeRounded />,
+        },
       ],
     },
     {
@@ -190,6 +198,9 @@ export function SettingsPage() {
           </React.Suspense>
         </TabPanel>
       )}
+      <TabPanel value={page} index={PRICE_ALERTS_TAB_INDEX}>
+        <PriceAlertSettings />
+      </TabPanel>
       {isMobile && (
         <TabPanel value={page} index={10}>
           <MobileNavSettings />
@@ -276,6 +287,12 @@ export function SettingsPage() {
                 icon={<EmailIcon />}
                 {...a11yProps(8)}
                 value={8}
+              />
+              <Tab
+                label={t("settings.priceAlerts.title", "Price Alerts")}
+                icon={<PriceChangeRounded />}
+                {...a11yProps(PRICE_ALERTS_TAB_INDEX)}
+                value={PRICE_ALERTS_TAB_INDEX}
               />
               <Tab
                 label="SCMDB"

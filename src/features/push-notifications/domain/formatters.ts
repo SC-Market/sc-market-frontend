@@ -22,6 +22,7 @@ export function formatActionName(action: string): string {
     market_item_bid_v2: "Market Item Bids",
     market_item_offer: "Market Item Offers",
     buy_order_match_v2: "Buy Order Matches",
+    price_alert: "Price Alerts",
     market_bid_accepted: "Market Bid Accepted",
     market_bid_declined: "Market Bid Declined",
     market_offer_accepted: "Market Offer Accepted",

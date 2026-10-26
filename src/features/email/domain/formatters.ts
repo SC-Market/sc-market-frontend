@@ -22,6 +22,7 @@ export function formatActionName(actionName: string): string {
     // Market notifications
     market_item_bid: "Market Item Bids",
     market_item_offer: "Market Item Offers",
+    price_alert: "Price Alerts",
     market_bid_accepted: "Market Bid Accepted",
     market_bid_declined: "Market Bid Declined",
     market_offer_accepted: "Market Offer Accepted",

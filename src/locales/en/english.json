@@ -2895,6 +2895,8 @@
     "marked_all_read_other": "notifications.marked_all_read",
     "new_admin_alert": "You have received a new admin alert",
     "new_bid_placed_by": "New Bid Placed by",
+    "price_alert": "Price alert:",
+    "price_alert_hit_target": "is listed at or below your target price",
     "new_offer_message_from": "New Offer Message from",
     "new_offer_received_from": "New Offer Received From",
     "new_order_comment_by": "New Order Comment Left by",
@@ -4224,6 +4226,19 @@
       "verifyAccount": "Verify Your Account",
       "verifyAccountDescription": "You need to verify your account to access all features. Choose one of the following methods:",
       "viewUserProfile": "View User Profile"
+    },
+    "priceAlerts": {
+      "title": "Price Alerts",
+      "description": "Watch an item with /watchlist add in Discord. When a public listing hits your target price, you're alerted on the channels you turn on here.",
+      "site": "Site notification",
+      "siteHint": "Shows in your notifications on SC Market.",
+      "push": "Push notification",
+      "pushHint": "On phones and browsers where you enabled push notifications.",
+      "email": "Email",
+      "emailHint": "Sent to your verified email address. Off until you turn it on.",
+      "discord": "Discord DM",
+      "discordHint": "A direct message from the SC Market bot.",
+      "error": "Couldn't load or save your price alert settings."
     },
     "pushNotifications": {
       "androidPWARequired": "Push notifications on Android require the app to be installed as a Progressive Web App (PWA).",

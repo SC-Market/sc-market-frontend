@@ -22,6 +22,7 @@ const ship: Ship = {
   id: "ship-1",
   name: "Aegis Gladius",
   manufacturer: "Aegis Dynamics",
+  manufacturer_name: "Aegis Dynamics",
   description: "A light fighter built for dogfighting.",
   attributes: { shield_hp: "4500" },
   crew_size: 1,
