@@ -4,11 +4,8 @@ import { MemoryRouter } from "react-router-dom"
 import { ThemeProvider } from "@mui/material/styles"
 import { describe, expect, it, vi } from "vitest"
 import { mainTheme, type ExtendedTheme } from "../../../hooks/styles/Theme"
-import {
-  LandingFeatures,
-  MIN_FEATURE_TILE_WIDTH,
-  featureTileGrid,
-} from "../LandingFeatures"
+import { LandingFeatures } from "../LandingFeatures"
+import { MIN_FEATURE_TILE_WIDTH, featureTileGrid } from "../featureTileGrid"
 
 vi.mock("react-i18next", async () => {
   const actual = await vi.importActual("react-i18next")

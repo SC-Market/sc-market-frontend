@@ -11,6 +11,13 @@ import { LandingSectionTitle } from "./LandingTypography"
 export const RECENT_LISTINGS_COUNT = 8
 
 /**
+ * ListingCardV2's fixed card height. The skeleton card takes its height from
+ * its parent in dark mode (absolute content, 100% media), so on its own it
+ * collapses to ~0 and the sections below jumped ~300px when the cards came.
+ */
+const LISTING_CARD_HEIGHT = 300
+
+/**
  * The header row of the Recent Listings section: static, so the skeleton
  * renders the real one (left-aligned title, "See All") and the section
  * doesn't jump from a centered empty box to the header.
@@ -53,7 +60,15 @@ export function RecentListingsSkeleton() {
         <Box display="flex" gap={1}>
           {Array.from({ length: RECENT_LISTINGS_COUNT }).map((_, index) => (
             <ListingWrapper key={index} useFixedWidth={true}>
-              <HorizontalListingSkeleton index={index} />
+              <Box
+                sx={{
+                  height: LISTING_CARD_HEIGHT,
+                  overflow: "hidden",
+                  "& > *": { height: "100%" },
+                }}
+              >
+                <HorizontalListingSkeleton index={index} />
+              </Box>
             </ListingWrapper>
           ))}
         </Box>

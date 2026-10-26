@@ -2,7 +2,7 @@ import React from "react"
 import { Box, Grid2, Skeleton, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { featureTileGrid } from "./LandingFeatures"
+import { featureTileGrid } from "./featureTileGrid"
 
 export function LandingFeaturesSkeleton() {
   const theme = useTheme<ExtendedTheme>()

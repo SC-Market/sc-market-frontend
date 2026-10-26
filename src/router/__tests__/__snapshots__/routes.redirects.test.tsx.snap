@@ -636,7 +636,7 @@ exports[`redirects and guards > /org/fleet with org cookie 1`] = `
   },
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "historyAction": "REPLACE",
   "matches": [
@@ -656,7 +656,7 @@ exports[`redirects and guards > /org/manage with org cookie 1`] = `
   },
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "historyAction": "REPLACE",
   "matches": [
@@ -676,7 +676,7 @@ exports[`redirects and guards > /org/members with org cookie 1`] = `
   },
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "historyAction": "REPLACE",
   "matches": [
@@ -694,7 +694,7 @@ exports[`redirects and guards > /org/members without org cookie 1`] = `
   "cookies": {},
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "historyAction": "REPLACE",
   "matches": [
@@ -714,7 +714,7 @@ exports[`redirects and guards > /org/money with org cookie 1`] = `
   },
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "historyAction": "REPLACE",
   "matches": [
@@ -734,7 +734,7 @@ exports[`redirects and guards > /org/orders with org cookie 1`] = `
   },
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "historyAction": "REPLACE",
   "matches": [
@@ -754,7 +754,7 @@ exports[`redirects and guards > /org/send with org cookie 1`] = `
   },
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "historyAction": "REPLACE",
   "matches": [
@@ -864,7 +864,7 @@ exports[`redirects and guards > OrgContextFromRoute, unknown org → / 1`] = `
   "cookies": {},
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "historyAction": "REPLACE",
   "matches": [

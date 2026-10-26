@@ -1,24 +1,52 @@
-import React from "react"
+import React, { Suspense } from "react"
 import { useCustomDomain, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { Footer } from "../../components/footer/Footer"
 import { LandingPageLayout } from "../../components/landing/LandingPageLayout"
-import {
-  LandingHero,
-  OrderStatistics,
-  LandingFeatures,
-  LandingOrgFeatures,
-  SupportersSection,
-  FAQSection,
-  RecentListings,
-} from "../../components/landing"
+// Direct imports, not the components/landing barrel: the barrel also
+// re-exports the lazy sections below.
+import { LandingHero } from "../../components/landing/LandingHero"
+import { OrderStatistics } from "../../components/landing/OrderStatistics"
+import { RecentListings } from "../../components/landing/RecentListings"
+import { LandingFeaturesSkeleton } from "../../components/landing/LandingFeatures.skeleton"
+import { LandingOrgFeaturesSkeleton } from "../../components/landing/LandingOrgFeatures.skeleton"
+import { SupportersSectionSkeleton } from "../../components/landing/SupportersSection.skeleton"
+import { FAQSectionSkeleton } from "../../components/landing/FAQSection.skeleton"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
 import { PATHS, ORG_PATHS } from "../../routes/paths"
 import { homeSeoText } from "../../seo/siteHeads"
+import { retryDynamicImport } from "../../util/retryDynamicImport"
 import { safeRedirectPath } from "../../util/safeRedirect"
+
+/*
+ * Below the fold: each section is its own chunk, so the homepage's first
+ * render only needs the hero, the stats and the recent listings. The
+ * fallbacks are the sections' skeletons (the same ones the route skeleton
+ * uses), so the page keeps its length while they load.
+ */
+const LandingFeatures = React.lazy(() =>
+  retryDynamicImport(() => import("../../components/landing/LandingFeatures")).then((m) => ({
+    default: m.LandingFeatures,
+  })),
+)
+const LandingOrgFeatures = React.lazy(() =>
+  retryDynamicImport(() => import("../../components/landing/LandingOrgFeatures")).then((m) => ({
+    default: m.LandingOrgFeatures,
+  })),
+)
+const SupportersSection = React.lazy(() =>
+  retryDynamicImport(() => import("../../components/landing/SupportersSection")).then((m) => ({
+    default: m.SupportersSection,
+  })),
+)
+const FAQSection = React.lazy(() =>
+  retryDynamicImport(() => import("../../components/landing/FAQSection")).then((m) => ({
+    default: m.FAQSection,
+  })),
+)
 
 export function LandingPage() {
   const { t } = useTranslation()
@@ -61,10 +89,26 @@ export function LandingPage() {
         hero={<LandingHero />}
         statistics={<OrderStatistics />}
         recentListings={<RecentListings />}
-        features={<LandingFeatures />}
-        orgFeatures={<LandingOrgFeatures />}
-        supporters={<SupportersSection />}
-        faq={<FAQSection />}
+        features={
+          <Suspense fallback={<LandingFeaturesSkeleton />}>
+            <LandingFeatures />
+          </Suspense>
+        }
+        orgFeatures={
+          <Suspense fallback={<LandingOrgFeaturesSkeleton />}>
+            <LandingOrgFeatures />
+          </Suspense>
+        }
+        supporters={
+          <Suspense fallback={<SupportersSectionSkeleton />}>
+            <SupportersSection />
+          </Suspense>
+        }
+        faq={
+          <Suspense fallback={<FAQSectionSkeleton />}>
+            <FAQSection />
+          </Suspense>
+        }
         footer={<Footer />}
       />
     </StandardPageLayout>

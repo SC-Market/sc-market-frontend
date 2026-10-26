@@ -1,14 +1,14 @@
 import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { LandingPageLayout } from "../landing/LandingPageLayout"
-import {
-  LandingHeroSkeleton,
-  OrderStatisticsSkeleton,
-  LandingFeaturesSkeleton,
-  LandingOrgFeaturesSkeleton,
-  SupportersSectionSkeleton,
-  FAQSectionSkeleton,
-} from "../landing"
+// Direct imports, not the components/landing barrel, which also re-exports
+// the page's lazy-loaded sections.
+import { LandingHeroSkeleton } from "../landing/LandingHero.skeleton"
+import { OrderStatisticsSkeleton } from "../landing/OrderStatistics.skeleton"
+import { LandingFeaturesSkeleton } from "../landing/LandingFeatures.skeleton"
+import { LandingOrgFeaturesSkeleton } from "../landing/LandingOrgFeatures.skeleton"
+import { SupportersSectionSkeleton } from "../landing/SupportersSection.skeleton"
+import { FAQSectionSkeleton } from "../landing/FAQSection.skeleton"
 import { RecentListingsSkeleton } from "../landing/RecentListingsSkeleton"
 import { Footer } from "../footer/Footer"
 import { StandardPageLayout } from "../layout/StandardPageLayout"

@@ -1038,7 +1038,7 @@ exports[`routes (shard 2/4) > /org/members 1`] = `
   "errorElementErrors": [],
   "finalUrl": "/",
   "h1": [
-    "The Star Citizen marketplace. Buy and sell items, hire services, all for aUEC.",
+    "The player-to-player marketplace for Star Citizen",
   ],
   "hasMainLandmark": true,
   "hasMainNav": true,
