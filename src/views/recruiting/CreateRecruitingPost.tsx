@@ -7,8 +7,7 @@ import {
   useRecruitingCreatePostMutation,
   useRecruitingUpdatePostMutation,
 } from "../../features/recruiting/api/recruitingApi"
-import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useSelectedOrg } from "../../hooks/login/useSelectedOrg"
 import throttle from "lodash/throttle"
 import { RecruitingPostView } from "./RecruitingPostView"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -42,11 +41,10 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
   }, [post])
 
   const issueAlert = useAlertHook()
-  const { data: profile } = useGetUserProfileQuery()
-  const primaryContractorId = profile?.contractors?.[0]?.spectrum_id
-  const { data: contractor } = useGetContractorBySpectrumIDQuery(
-    primaryContractorId!, { skip: !primaryContractorId },
-  )
+  // A new post is for the org selected in the sidebar (the same org that
+  // /recruiting/post/create checks Manage Recruiting in); an edit keeps its org.
+  const { org: selectedOrg } = useSelectedOrg()
+  const contractor = post?.contractor ?? selectedOrg
 
   const [
     createPost, // This is the mutation trigger
@@ -61,9 +59,10 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
     async (_event: React.SyntheticEvent) => {
       let request
       if (!post) {
+        if (!contractor) return false
         request = createPost({
           ...state,
-          contractor: contractor!.spectrum_id,
+          contractor: contractor.spectrum_id,
         })
       } else {
         request = updatePost({
@@ -103,23 +102,23 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
     updateStateBuffer(state)
   }, [state, updateStateBuffer])
 
-  const fullPost: RecruitingPost = useMemo(
-    () => ({
+  const fullPost: RecruitingPost | null = useMemo(
+    () => contractor ? ({
       ...stateBuffer,
       post_id: "",
-      contractor: contractor!,
+      contractor,
       timestamp: Date.now(),
       comments: [],
       upvotes: 25,
       downvotes: 4,
-    }),
+    }) : null,
     [stateBuffer, contractor],
   )
 
   return (
     <>
       {/*TODO: Make it only update render every second or so*/}
-      <RecruitingPostView post={fullPost} />
+      {fullPost && <RecruitingPostView post={fullPost} />}
       <Section xs={12}>
         <Grid item xs={12} lg={4}>
           <Typography
@@ -130,6 +129,13 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
           >
             {t("recruiting_post.about")}
           </Typography>
+          {contractor && (
+            <Typography variant={"body2"} color={"text.secondary"}>
+              {t("recruiting_post.posting_for", "Posting for {{org}}", {
+                org: contractor.name,
+              })}
+            </Typography>
+          )}
         </Grid>
         <Grid
           item
@@ -190,6 +196,7 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
           color={"secondary"}
           type="submit"
           onClick={submitPost}
+          disabled={!contractor}
         >
           {t("recruiting_post.submit")}
         </Button>
