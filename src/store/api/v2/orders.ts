@@ -4,7 +4,6 @@
  * V2 order endpoints are defined in store/api/v2/market.ts alongside
  * the rest of the V2 market API. The relevant hooks are:
  *
- *   - useCreateOrderMutation   — POST /api/v2/orders
  *   - useGetOrdersQuery        — GET  /api/v2/orders
  *   - useGetOrderDetailQuery   — GET  /api/v2/orders/:id
  *

@@ -466,13 +466,12 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Price Alerts"],
       }),
-      createOrder: build.mutation<CreateOrderApiResponse, CreateOrderApiArg>({
-        query: (queryArg) => ({
-          url: `/orders`,
-          method: "POST",
-          body: queryArg.createOrderRequest,
-        }),
-        invalidatesTags: ["Orders V2"],
+      getOrderDetail: build.query<
+        GetOrderDetailApiResponse,
+        GetOrderDetailApiArg
+      >({
+        query: (queryArg) => ({ url: `/orders/${queryArg.orderId}` }),
+        providesTags: ["Orders V2"],
       }),
       getOrders: build.query<GetOrdersApiResponse, GetOrdersApiArg>({
         query: (queryArg) => ({
@@ -488,13 +487,6 @@ const injectedRtkApi = api
             sort_order: queryArg.sortOrder,
           },
         }),
-        providesTags: ["Orders V2"],
-      }),
-      getOrderDetail: build.query<
-        GetOrderDetailApiResponse,
-        GetOrderDetailApiArg
-      >({
-        query: (queryArg) => ({ url: `/orders/${queryArg.orderId}` }),
         providesTags: ["Orders V2"],
       }),
       getOrdersByListing: build.query<
@@ -2206,11 +2198,11 @@ export type UpdatePriceAlertPreferencesApiResponse =
 export type UpdatePriceAlertPreferencesApiArg = {
   updatePriceAlertPreferencesRequest: UpdatePriceAlertPreferencesRequest
 }
-export type CreateOrderApiResponse =
-  /** status 200 Created order with order_id and item details */ CreateOrderResponse
-export type CreateOrderApiArg = {
-  /** Order creation request with items array */
-  createOrderRequest: CreateOrderRequest
+export type GetOrderDetailApiResponse =
+  /** status 200 Order details with buyer/seller info and variant details */ GetOrderDetailResponse
+export type GetOrderDetailApiArg = {
+  /** UUID of the order to retrieve */
+  orderId: string
 }
 export type GetOrdersApiResponse =
   /** status 200 Orders list with pagination metadata */ GetOrdersResponse
@@ -2223,12 +2215,6 @@ export type GetOrdersApiArg = {
   pageSize?: number
   sortBy?: "created_at" | "updated_at" | "total_price"
   sortOrder?: "asc" | "desc"
-}
-export type GetOrderDetailApiResponse =
-  /** status 200 Order details with buyer/seller info and variant details */ GetOrderDetailResponse
-export type GetOrderDetailApiArg = {
-  /** UUID of the order to retrieve */
-  orderId: string
 }
 export type GetOrdersByListingApiResponse =
   /** status 200 Ok */ OrdersByListingResponse
@@ -3912,6 +3898,31 @@ export type UpdatePriceAlertPreferencesRequest = {
   email?: boolean
   discord?: boolean
 }
+export type OrderMarketListingV1 = {
+  listing_id: string
+  quantity: number
+  title: string
+  price: number
+}
+export type OrderVariantItem = {
+  order_item_id: string
+  variant_id: string
+  quantity: number
+  price_per_unit: number
+  attributes: VariantAttributes
+  display_name: string
+  short_name: string
+}
+export type OrderMarketListingV2 = {
+  listing_id: string
+  quantity: number
+  title: string
+  price: number
+  /** First photo URL */
+  photo?: string
+  /** V2 variant items for this listing */
+  v2_variants: OrderVariantItem[]
+}
 export type OrderVariantDetail = {
   /** UUID of the variant */
   variant_id: string
@@ -3939,105 +3950,6 @@ export type OrderItemDetail = {
   price_per_unit: number
   /** Subtotal for this item (quantity * price_per_unit) */
   subtotal: number
-}
-export type CreateOrderResponse = {
-  /** UUID of the created order */
-  order_id: string
-  /** UUID of the buyer */
-  buyer_id: string
-  /** Shop ID of the seller */
-  shop_id: string
-  /** Total price in aUEC (atomic units) */
-  total_price: number
-  /** Order status */
-  status: string
-  /** ISO 8601 timestamp of order creation */
-  created_at: string
-  /** Array of order items with variant details */
-  items: OrderItemDetail[]
-  /** Stock allocation result summary */
-  allocation_result?: {
-    total_allocated: number
-    total_requested: number
-    has_partial_allocations: boolean
-  }
-}
-export type OrderItemInput = {
-  /** UUID of the listing */
-  listing_id: string
-  /** UUID of the specific variant to purchase */
-  variant_id: string
-  /** Quantity to purchase (must be > 0) */
-  quantity: number
-}
-export type CreateOrderRequest = {
-  /** Array of items to purchase */
-  items: OrderItemInput[]
-}
-export type OrderPreview = {
-  /** UUID of the order */
-  order_id: string
-  /** Order title (from first listing) */
-  title: string
-  /** Total price in aUEC */
-  total_price: number
-  /** Order status */
-  status: string
-  /** ISO 8601 timestamp of order creation */
-  created_at: string
-  /** ISO 8601 timestamp of last update */
-  updated_at: string
-  /** Buyer username */
-  buyer_username: string
-  /** Shop name (seller) */
-  shop_name: string
-  /** Shop slug (for linking to /shops/:slug) */
-  shop_slug: string
-  /** Number of items in order */
-  item_count: number
-  /** Minimum quality tier across all items */
-  quality_tier_min?: number
-  /** Maximum quality tier across all items */
-  quality_tier_max?: number
-  /** Buyer avatar URL */
-  buyer_avatar?: string | null
-  /** Shop logo URL */
-  shop_logo?: string | null
-}
-export type GetOrdersResponse = {
-  /** Array of order previews */
-  orders: OrderPreview[]
-  /** Total number of orders matching filters */
-  total: number
-  /** Current page number */
-  page: number
-  /** Number of results per page */
-  page_size: number
-}
-export type OrderMarketListingV1 = {
-  listing_id: string
-  quantity: number
-  title: string
-  price: number
-}
-export type OrderVariantItem = {
-  order_item_id: string
-  variant_id: string
-  quantity: number
-  price_per_unit: number
-  attributes: VariantAttributes
-  display_name: string
-  short_name: string
-}
-export type OrderMarketListingV2 = {
-  listing_id: string
-  quantity: number
-  title: string
-  price: number
-  /** First photo URL */
-  photo?: string
-  /** V2 variant items for this listing */
-  v2_variants: OrderVariantItem[]
 }
 export type GetOrderDetailResponse = {
   /** UUID of the order */
@@ -4079,6 +3991,46 @@ export type GetOrderDetailResponse = {
   market_listings_v2: OrderMarketListingV2[]
   /** V2-only order items (from order_market_items_v2) */
   items: OrderItemDetail[]
+}
+export type OrderPreview = {
+  /** UUID of the order */
+  order_id: string
+  /** Order title (from first listing) */
+  title: string
+  /** Total price in aUEC */
+  total_price: number
+  /** Order status */
+  status: string
+  /** ISO 8601 timestamp of order creation */
+  created_at: string
+  /** ISO 8601 timestamp of last update */
+  updated_at: string
+  /** Buyer username */
+  buyer_username: string
+  /** Shop name (seller) */
+  shop_name: string
+  /** Shop slug (for linking to /shops/:slug) */
+  shop_slug: string
+  /** Number of items in order */
+  item_count: number
+  /** Minimum quality tier across all items */
+  quality_tier_min?: number
+  /** Maximum quality tier across all items */
+  quality_tier_max?: number
+  /** Buyer avatar URL */
+  buyer_avatar?: string | null
+  /** Shop logo URL */
+  shop_logo?: string | null
+}
+export type GetOrdersResponse = {
+  /** Array of order previews */
+  orders: OrderPreview[]
+  /** Total number of orders matching filters */
+  total: number
+  /** Current page number */
+  page: number
+  /** Number of results per page */
+  page_size: number
 }
 export type ListingOrderSummary = {
   order_id: string
@@ -6904,9 +6856,8 @@ export const {
   useGetOfferRequisitionItemsQuery,
   useGetPriceAlertPreferencesQuery,
   useUpdatePriceAlertPreferencesMutation,
-  useCreateOrderMutation,
-  useGetOrdersQuery,
   useGetOrderDetailQuery,
+  useGetOrdersQuery,
   useGetOrdersByListingQuery,
   useGetOnboardingStatusQuery,
   useCompleteOnboardingMutation,
