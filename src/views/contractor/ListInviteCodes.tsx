@@ -141,6 +141,7 @@ export function InviteRow(props: {
           align={"right"}
         >
           <IconButton
+            aria-label={t("inviteCodes.copy", "Copy invite link {{code}}", { code: row.invite_id })}
             onClick={(event) => {
               navigator.clipboard.writeText(
                 `${window.location.origin}/contractor_invite/${row.invite_id}`,
@@ -163,6 +164,7 @@ export function InviteRow(props: {
           align={"right"}
         >
           <IconButton
+            aria-label={t("inviteCodes.delete", "Delete invite {{code}}", { code: row.invite_id })}
             onClick={(event) => {
               submitDelete()
               event.stopPropagation()

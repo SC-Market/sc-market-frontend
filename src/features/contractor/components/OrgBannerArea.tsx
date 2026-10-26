@@ -11,8 +11,10 @@ import {
   LightBannerContainer,
 } from "../../profile/components/BannerContainers"
 import { isSiteAdmin } from "../../../util/siteRole"
+import { useTranslation } from "react-i18next"
 
 function OrgRefetchButton(props: { org: Contractor }) {
+  const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const [refetch] = useRefetchContractorDetailsMutation()
 
@@ -20,6 +22,7 @@ function OrgRefetchButton(props: { org: Contractor }) {
     <>
       {isSiteAdmin(profile) && (
         <Fab
+          aria-label={t("orgBanner.refetch", "Refresh org details from RSI")}
           color={"warning"}
           sx={{ left: 8, top: 8, position: "absolute" }}
           onClick={() => refetch(props.org.spectrum_id)}

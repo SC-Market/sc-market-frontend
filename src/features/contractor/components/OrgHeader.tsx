@@ -100,7 +100,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
                 color: "inherit",
               }}
             >
-              <IconButton color="primary" size="small">
+              <IconButton aria-label={t("orgHeader.rsiPage", "View on RSI")} color="primary" size="small">
                 <LinkRounded />
               </IconButton>
             </MaterialLink>

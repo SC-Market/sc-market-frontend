@@ -221,7 +221,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                     display={"inline"}
                   >
                     {newName}
-                    <IconButton>
+                    <IconButton aria-label={t("orgDetailEdit.editName", "Edit name")}>
                       <CreateIcon />
                     </IconButton>
                   </Typography>
@@ -372,6 +372,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 <Typography>{t("orgDetailEdit.no_tags")}</Typography>
               )}
               <IconButton
+                aria-label={t("orgDetailEdit.editTags", "Edit tags")}
                 sx={{
                   // position: 'absolute',
                   zIndex: 50,
@@ -428,6 +429,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
               <Grid container spacing={theme.layoutSpacing.layout}>
                 <Grid item xs={1}>
                   <IconButton
+                    aria-label={t("orgDetailEdit.editDescription", "Edit description")}
                     onClick={() => {
                       setNewDesc(contractor.description)
                       setEditingDesc(true)

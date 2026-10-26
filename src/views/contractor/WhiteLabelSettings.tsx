@@ -185,6 +185,7 @@ export function WhiteLabelSettings() {
             Controls who can access your white-label site.
           </Typography>
           <Select
+            inputProps={{ "aria-label": "Site access" }}
             size="small"
             value={focusMode}
             onChange={(e) =>
@@ -271,7 +272,7 @@ export function WhiteLabelSettings() {
                 <ListItem
                   key={i}
                   secondaryAction={
-                    <IconButton edge="end" onClick={() => removeCustomTab(i)}>
+                    <IconButton aria-label={`Remove tab ${ct.label || i + 1}`} edge="end" onClick={() => removeCustomTab(i)}>
                       <Delete />
                     </IconButton>
                   }
