@@ -21,6 +21,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetNotificationsQuery } from "../../notifications/api/notificationApi"
 import {
   useAcceptContractorInviteMutation,
+  useDeclineContractorInviteMutation,
 } from "../api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
@@ -48,20 +49,43 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
     if (!inviteNotifs?.notifications) return false
     return inviteNotifs.notifications.some(
       (n) =>
-        (n.entity as ContractorInvite)?.spectrum_id ===
-        contractor.spectrum_id,
+        (n.entity as ContractorInvite)?.spectrum_id === contractor.spectrum_id,
     )
   }, [inviteNotifs, contractor.spectrum_id])
 
   const [acceptInvite, { isLoading: isAccepting }] =
     useAcceptContractorInviteMutation()
 
+  const [declineInvite, { isLoading: isDeclining }] =
+    useDeclineContractorInviteMutation()
+
+  const handleDecline = async () => {
+    try {
+      await declineInvite({ contractor: contractor.spectrum_id }).unwrap()
+      issueAlert({
+        message: t("org.invite.declined", "Invite declined"),
+        severity: "success",
+      })
+    } catch {
+      issueAlert({
+        message: t("org.invite.declineFailed", "Failed to decline the invite"),
+        severity: "error",
+      })
+    }
+  }
+
   const handleAccept = async () => {
     try {
       await acceptInvite({ contractor: contractor.spectrum_id }).unwrap()
-      issueAlert({ message: t("org.invite.accepted", "Joined organization!"), severity: "success" })
+      issueAlert({
+        message: t("org.invite.accepted", "Joined organization!"),
+        severity: "success",
+      })
     } catch {
-      issueAlert({ message: t("org.invite.acceptFailed", "Failed to join"), severity: "error" })
+      issueAlert({
+        message: t("org.invite.acceptFailed", "Failed to join"),
+        severity: "error",
+      })
     }
   }
 
@@ -87,7 +111,12 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
             flexWrap: "wrap",
           }}
         >
-          <Typography color="text.secondary" variant="h6" component="h1" fontWeight={600}>
+          <Typography
+            color="text.secondary"
+            variant="h6"
+            component="h1"
+            fontWeight={600}
+          >
             {contractor.name}
           </Typography>
           {!contractor.spectrum_id.startsWith("~") && (
@@ -100,7 +129,11 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
                 color: "inherit",
               }}
             >
-              <IconButton aria-label={t("orgHeader.rsiPage", "View on RSI")} color="primary" size="small">
+              <IconButton
+                aria-label={t("orgHeader.rsiPage", "View on RSI")}
+                color="primary"
+                size="small"
+              >
                 <LinkRounded />
               </IconButton>
             </MaterialLink>
@@ -137,19 +170,34 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
           ))}
         </Box>
         {hasPendingInvite && !isMember && (
-          <Button
-            variant="contained"
-            color="success"
-            startIcon={<GroupAdd />}
-            onClick={handleAccept}
-            disabled={isAccepting}
-            size="small"
+          <Stack
+            direction="row"
+            spacing={1}
             sx={{ mt: 0.5 }}
+            data-testid="org-invite-actions"
           >
-            {isAccepting
-              ? t("org.invite.joining", "Joining…")
-              : t("org.invite.joinOrg", "Join Organization")}
-          </Button>
+            <Button
+              variant="contained"
+              color="success"
+              startIcon={<GroupAdd />}
+              onClick={handleAccept}
+              disabled={isAccepting || isDeclining}
+              size="small"
+            >
+              {isAccepting
+                ? t("org.invite.joining", "Joining…")
+                : t("org.invite.joinOrg", "Join Organization")}
+            </Button>
+            <Button
+              variant="outlined"
+              color="inherit"
+              onClick={handleDecline}
+              disabled={isAccepting || isDeclining}
+              size="small"
+            >
+              {t("org.invite.decline", "Decline")}
+            </Button>
+          </Stack>
         )}
       </Stack>
     </Stack>
