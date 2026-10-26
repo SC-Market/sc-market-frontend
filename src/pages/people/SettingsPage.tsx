@@ -47,17 +47,16 @@ import { ScmdbSyncSettings } from "../../features/scmdb-sync"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { PageBusy } from "../../components/metadata/PageReady"
+import { SETTINGS_TABS, settingsTabFromQuery, settingsTabKey } from "./settingsTabs"
 
 // Admin-only; loaded only when the tab is shown.
 const MfaSettings = React.lazy(() =>
   import("../../features/mfa/components/MfaSettings").then((m) => ({ default: m.MfaSettings })),
 )
 
-const MOBILE_NAV_TAB_INDEX = 10
-const MFA_TAB_INDEX = 11
-const PRICE_ALERTS_TAB_INDEX = 12
-/** `?tab=` value that opens Price Alerts (PATHS.priceAlerts). */
-const PRICE_ALERTS_TAB_PARAM = "price-alerts"
+const MOBILE_NAV_TAB_INDEX = SETTINGS_TABS["mobile-nav"]
+const MFA_TAB_INDEX = SETTINGS_TABS.mfa
+const PRICE_ALERTS_TAB_INDEX = SETTINGS_TABS["price-alerts"]
 
 interface NavItem {
   index: number
@@ -79,20 +78,14 @@ export function SettingsPage() {
   const profile = session.status === "authenticated" ? session.profile : undefined
   // Two-factor is admin-only for now (also for an admin still held back by it).
   const showMfa = !!profile && (isSiteAdmin(profile) || isMfaLockedAdmin(profile))
-  const [searchParams] = useSearchParams()
-  const tabParam = searchParams.get("tab")
-  const [page, setPage] = React.useState(() =>
-    searchParams.get("mfa")
-      ? MFA_TAB_INDEX
-      : tabParam === PRICE_ALERTS_TAB_PARAM
-        ? PRICE_ALERTS_TAB_INDEX
-        : 0,
-  )
+  const [searchParams, setSearchParams] = useSearchParams()
+  const queryTab = settingsTabFromQuery(searchParams)
+  const [page, setPage] = React.useState(() => queryTab ?? 0)
 
-  // Follow ?tab=price-alerts links opened while already on Settings.
+  // Follow ?tab= when it changes while the page is open (in-app links).
   React.useEffect(() => {
-    if (tabParam === PRICE_ALERTS_TAB_PARAM) setPage(PRICE_ALERTS_TAB_INDEX)
-  }, [tabParam])
+    if (queryTab !== null) setPage(queryTab)
+  }, [queryTab])
 
   React.useEffect(() => {
     if (!isMobile && page === MOBILE_NAV_TAB_INDEX) {
@@ -100,9 +93,23 @@ export function SettingsPage() {
     }
   }, [isMobile, page])
 
-  const handleChange = (event: React.SyntheticEvent, newPage: number) => {
+  const selectTab = (newPage: number) => {
     setPage(newPage)
+    const key = settingsTabKey(newPage)
+    if (key) {
+      setSearchParams(
+        (prev) => {
+          const next = new URLSearchParams(prev)
+          next.set("tab", key)
+          next.delete("mfa")
+          return next
+        },
+        { replace: true },
+      )
+    }
   }
+  const handleChange = (_event: React.SyntheticEvent, newPage: number) =>
+    selectTab(newPage)
 
   const navGroups: NavGroup[] = [
     {
@@ -357,7 +364,7 @@ export function SettingsPage() {
                       <ListItemButton
                         key={item.index}
                         selected={page === item.index}
-                        onClick={() => setPage(item.index)}
+                        onClick={() => selectTab(item.index)}
                         sx={{ borderRadius: 1, mx: 1 }}
                       >
                         <ListItemIcon sx={{ minWidth: 36 }}>
