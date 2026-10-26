@@ -382,6 +382,7 @@ export function MessagingSidebarContent(
         </HeaderTitle>
         {isMobile ? (
           <HapticIconButton
+            aria-label={t("MessagingSidebar.newMessage", "New message")}
             color={"secondary"}
             onClick={() => setCreatingMessageGroup(true)}
           >
@@ -410,7 +411,7 @@ export function MessagingSidebarContent(
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <IconButton size={isMobile ? "small" : "medium"}>
+                <IconButton aria-label={t("MessagingSidebar.search", "Search messages")} size={isMobile ? "small" : "medium"}>
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>

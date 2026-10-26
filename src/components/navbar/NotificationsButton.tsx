@@ -54,6 +54,7 @@ export function NotificationsButton() {
   return (
     <>
       <HapticIconButton
+        aria-label={t("navbar.notifications", "Notifications")}
         sx={{ marginRight: 2, color: iconColor }}
         onClick={handleClick}
         color="inherit"

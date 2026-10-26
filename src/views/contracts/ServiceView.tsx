@@ -678,7 +678,7 @@ export function ServiceView(props: {
                 <>
                   {amRelated ? (
                     <Link to={ORDER_PATHS.serviceEdit(service.service_id)}>
-                      <IconButton>
+                      <IconButton aria-label={t("serviceView.edit", "Edit service")}>
                         <CreateRounded
                           sx={{ color: theme.palette.background.light }}
                         />

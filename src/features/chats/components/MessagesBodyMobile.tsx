@@ -611,6 +611,7 @@ function MessageSendAreaMobile(props: {
         placeholder={t("MessagesBody.typeMessage") || "Type a message..."}
       />
       <HapticIconButton
+        aria-label={t("MessagesBody.send", "Send message")}
         color="primary"
         onClick={handleSend}
         sx={{

@@ -95,10 +95,14 @@ export function SendMoneyRecipientSection(
             props.setRecipientType(event.target.value as RecipientType)
           }}
           fullWidth
-          aria-label={t(
-            "accessibility.selectRecipientType",
-            "Select recipient type",
-          )}
+          // On the Select's combobox (inputProps reach SelectInput), so the
+          // control itself is named, not its wrapper.
+          inputProps={{
+            "aria-label": t(
+              "accessibility.selectRecipientType",
+              "Select recipient type",
+            ),
+          }}
           aria-describedby="recipient-type-help"
         >
           <MenuItem value={"user"}>{t("sendMoney.user")}</MenuItem>

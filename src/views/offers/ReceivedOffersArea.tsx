@@ -223,6 +223,8 @@ export function OfferRow(props: {
 
   return (
     <TableRow
+      data-testid="offer-row"
+      data-id={row.id}
       hover
       onClick={
         isInSelectionMode

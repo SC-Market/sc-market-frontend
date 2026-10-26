@@ -73,8 +73,9 @@ export function ViewOfferPage() {
             </Tabs>
             {session.offers.length > 1 && (
               <FormControl size="small" sx={{ minWidth: 160, ml: 2 }}>
-                <InputLabel>Version</InputLabel>
+                <InputLabel id="offer-version-label">Version</InputLabel>
                 <Select
+                  labelId="offer-version-label"
                   value={selectedOfferIndex}
                   label="Version"
                   onChange={(e) => setSelectedOfferIndex(Number(e.target.value))}

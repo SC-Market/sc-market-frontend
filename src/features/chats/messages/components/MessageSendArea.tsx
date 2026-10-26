@@ -104,6 +104,7 @@ export function MessageSendArea(props: { onSend: (content: string) => void }) {
       />
       {isMobile ? (
         <HapticIconButton
+          aria-label={t("MessagesBody.send", "Send message")}
           color="primary"
           onClick={handleSend}
           sx={{

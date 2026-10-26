@@ -617,7 +617,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                     ) : (
                       <ButtonGroup
                         variant="contained"
-                        aria-label={t("ui.aria.loadingButtonGroup")}
+                        aria-label={t("orderDetailsArea.update_status")}
                       >
                         {(isSiteAdmin(profile) ||
                           order.status === "not-started" ||

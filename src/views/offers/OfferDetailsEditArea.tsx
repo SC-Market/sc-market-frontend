@@ -94,6 +94,7 @@ export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
                   <TextField
+                    inputProps={{ "aria-label": t("OfferDetailsEditArea.title") }}
                     value={body.title}
                     onChange={(event) =>
                       setBody({ ...body, title: event.target.value })

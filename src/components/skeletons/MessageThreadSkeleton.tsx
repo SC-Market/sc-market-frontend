@@ -184,6 +184,7 @@ export function MessageThreadSkeleton({
           }}
         />
         <IconButton
+          aria-label="Send"
           disabled
           sx={{
             flexShrink: 0,

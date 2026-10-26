@@ -148,6 +148,7 @@ export function WebhookRow(props: {
           align={"right"}
         >
           <IconButton
+            aria-label={t("notificationWebhooks.delete", "Delete webhook {{name}}", { name: row.name })}
             onClick={(event) => {
               submitDelete()
               event.stopPropagation()

@@ -214,6 +214,8 @@ export function OrderRow(props: {
 
   const rowContent = (
     <TableRow
+      data-testid="order-row"
+      data-id={row.order_id}
       hover
       onClick={
         isInSelectionMode ? props.onClick : isMobile ? undefined : props.onClick
