@@ -412,6 +412,7 @@ export function ListingDetailRedesign() {
                       <Stack direction="row" spacing={1} alignItems="center">
                         <IconButton
                           onClick={() => setQty((q) => Math.max(minOrder, q - 1))}
+                          aria-label={t("MarketDetailRedesign.decreaseQuantity", "Decrease quantity")}
                           disabled={!canTransact || effectiveQty <= minOrder}
                           sx={{ border: "1px solid", borderColor: "divider" }}
                         >
@@ -430,6 +431,7 @@ export function ListingDetailRedesign() {
                         />
                         <IconButton
                           onClick={() => setQty((q) => Math.min(clampedMax, q + 1))}
+                          aria-label={t("MarketDetailRedesign.increaseQuantity", "Increase quantity")}
                           disabled={!canTransact || effectiveQty >= clampedMax}
                           sx={{ border: "1px solid", borderColor: "divider" }}
                         >

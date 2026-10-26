@@ -490,6 +490,7 @@ export function DisplayStock({
 
             return (
               <Switch
+                inputProps={{ "aria-label": t("ItemStock.status") }}
                 checked={currentStatus === "active"}
                 onChange={(e) => {
                   setEditingRows((prev) => ({
@@ -646,7 +647,7 @@ export function DisplayStock({
               to={MARKET_PATHS.edit(params.value)}
               style={{ color: "inherit" }}
             >
-              <IconButton>
+              <IconButton aria-label={t("ItemStock.editListing")}>
                 <CreateRounded />
               </IconButton>
             </Link>

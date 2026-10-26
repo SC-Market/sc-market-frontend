@@ -182,7 +182,7 @@ export function MarketSearchArea(props: {
                       startAdornment: (
                         <>
                           <InputAdornment position="start">
-                            <IconButton size="small">
+                            <IconButton size="small" aria-label={t("market.applySearchNow", "Apply search now")}>
                               <SearchIcon />
                             </IconButton>
                           </InputAdornment>

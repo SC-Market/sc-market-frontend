@@ -334,7 +334,10 @@ export function MarketMultipleViewV2() {
                   }}
                   onClick={() => setImageModalOpen((o) => !o)}
                 >
-                  <IconButton sx={{ top: 4, right: 4, position: "absolute" }}>
+                  <IconButton
+                    sx={{ top: 4, right: 4, position: "absolute" }}
+                    aria-label={t("MarketMultipleView.zoomImage", "Zoom image")}
+                  >
                     <ZoomInRounded />
                   </IconButton>
                   <img
@@ -512,7 +515,7 @@ export function MarketMultipleViewV2() {
                       action={
                         amRelated ? (
                           <Link to={MARKET_PATHS.multipleEdit(complete.listing_id)}>
-                            <IconButton>
+                            <IconButton aria-label={t("MarketMultipleView.editListing", "Edit listing")}>
                               <CreateRounded
                                 style={{ color: theme.palette.text.secondary }}
                               />
@@ -553,6 +556,7 @@ export function MarketMultipleViewV2() {
                         </Typography>
                         <Select
                           sx={{ marginBottom: 1 }}
+                          inputProps={{ "aria-label": t("MarketMultipleView.selectItem") }}
                           onChange={(event) => {
                             const index = complete.items.findIndex(
                               (item) => item.item_id === event.target.value

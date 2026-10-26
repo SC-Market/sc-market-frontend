@@ -271,7 +271,11 @@ function BuyOrderAggregateCard({
   const isDark = theme.palette.mode === "dark"
 
   return (
-    <ListingWrapper useFixedWidth={false}>
+    <ListingWrapper
+      useFixedWidth={false}
+      data-testid="buy-order-card"
+      data-id={aggregate.item_id}
+    >
       <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
         <Link to={MARKET_PATHS.aggregate(aggregate.item_id)} style={{ textDecoration: "none", color: "inherit" }}>
           <CardActionArea sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>

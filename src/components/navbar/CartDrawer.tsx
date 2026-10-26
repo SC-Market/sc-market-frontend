@@ -69,7 +69,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
               <Chip label={itemCount} size="small" color="primary" sx={{ ml: 1 }} />
             )}
           </Typography>
-          <IconButton onClick={onClose} size="small"><Close /></IconButton>
+          <IconButton onClick={onClose} size="small" aria-label={t("cart.closeDrawer", "Close")}><Close /></IconButton>
         </Box>
       )}
 
@@ -127,7 +127,13 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                     <Typography variant="body2" fontWeight="bold" color="primary">
                       {Number(item.subtotal || 0).toLocaleString()} aUEC
                     </Typography>
-                    <IconButton size="small" onClick={() => handleRemove(item.cart_item_id)}>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleRemove(item.cart_item_id)}
+                      aria-label={t("cart.removeItem", "Remove {{title}} from cart", {
+                        title: item.listing?.title || "Listing",
+                      })}
+                    >
                       <DeleteOutlineRounded fontSize="small" />
                     </IconButton>
                   </Box>

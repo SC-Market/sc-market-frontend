@@ -144,6 +144,7 @@ export function ListingRefreshButtonV2(props: ListingRefreshButtonV2Props) {
           size="small"
           onClick={handleRefresh}
           disabled={!canRefresh || isLoading}
+          aria-label={typeof tooltipTitle === "string" ? tooltipTitle : "Refresh listing"}
         >
           <RefreshRounded />
         </Fab>

@@ -483,7 +483,11 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
                   ...params.InputProps,
                   startAdornment: (
                     <InputAdornment position="start">
-                      <IconButton size="small" onClick={() => filters.flush()}>
+                      <IconButton
+                        size="small"
+                        onClick={() => filters.flush()}
+                        aria-label={t("market.applySearchNow", "Apply search now")}
+                      >
                         <SearchIcon />
                       </IconButton>
                     </InputAdornment>

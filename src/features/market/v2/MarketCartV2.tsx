@@ -584,6 +584,9 @@ export function MarketCartV2() {
                     loading={isCheckingOut}
                     disabled={hasUnavailableItems || isRemoving}
                     onClick={() => handleCheckout(group.sellerId)}
+                    aria-label={t("cart.submitOfferTo", "Submit offer to {{seller}}", {
+                      seller: group.sellerName,
+                    })}
                   >
                     {t("cart.submitOffer", "Submit Offer")}
                   </LoadingButton>

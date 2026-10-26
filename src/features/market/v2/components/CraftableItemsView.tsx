@@ -150,8 +150,9 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
           alignItems={{ xs: "stretch", sm: "center" }}
         >
           <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>{t("CraftableItemsView.category", "Category")}</InputLabel>
+            <InputLabel id="craftable-category-label">{t("CraftableItemsView.category", "Category")}</InputLabel>
             <Select
+              labelId="craftable-category-label"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
               label={t("CraftableItemsView.category", "Category")}
@@ -165,8 +166,9 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>{t("CraftableItemsView.rarity", "Rarity")}</InputLabel>
+            <InputLabel id="craftable-rarity-label">{t("CraftableItemsView.rarity", "Rarity")}</InputLabel>
             <Select
+              labelId="craftable-rarity-label"
               value={rarityFilter}
               onChange={(e) => setRarityFilter(e.target.value)}
               label={t("CraftableItemsView.rarity", "Rarity")}
@@ -181,8 +183,9 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>{t("CraftableItemsView.tier", "Tier")}</InputLabel>
+            <InputLabel id="craftable-tier-label">{t("CraftableItemsView.tier", "Tier")}</InputLabel>
             <Select
+              labelId="craftable-tier-label"
               value={tierFilter}
               onChange={(e) => setTierFilter(e.target.value as number | "")}
               label={t("CraftableItemsView.tier", "Tier")}
@@ -197,8 +200,9 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 180 }}>
-            <InputLabel>{t("CraftableItemsView.availability", "Availability")}</InputLabel>
+            <InputLabel id="craftable-availability-label">{t("CraftableItemsView.availability", "Availability")}</InputLabel>
             <Select
+              labelId="craftable-availability-label"
               value={craftableOnly ? "craftable" : "all"}
               onChange={(e) => setCraftableOnly(e.target.value === "craftable")}
               label={t("CraftableItemsView.availability", "Availability")}

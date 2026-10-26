@@ -228,7 +228,14 @@ function ListingRow({
     <Fragment>
       <TableRow hover sx={{ "& > *": { borderBottom: open ? "unset" : undefined } }}>
         <TableCell>
-          <IconButton size="small" onClick={() => setOpen((o) => !o)}>
+          <IconButton
+            size="small"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-label={t("ManageMarketRedesign.toggleLots", "Show lots for {{title}}", {
+              title: listing.title,
+            })}
+          >
             <ExpandMoreRounded
               sx={{ transform: open ? "rotate(180deg)" : "none", transition: "transform .2s" }}
             />
@@ -286,7 +293,11 @@ function ListingRow({
               aren't wired shop-scoped in this phase. */}
           <Tooltip title={t("ManageMarketRedesign.refresh", "Refresh (coming soon)")}>
             <span>
-              <IconButton size="small" disabled>
+              <IconButton
+                size="small"
+                disabled
+                aria-label={t("ManageMarketRedesign.refresh", "Refresh (coming soon)")}
+              >
                 <RefreshRounded fontSize="small" />
               </IconButton>
             </span>

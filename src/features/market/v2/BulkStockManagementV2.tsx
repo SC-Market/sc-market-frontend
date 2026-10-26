@@ -330,6 +330,7 @@ function AllStockLotsGridV2() {
         fullWidth
         size="small"
         value={props.value ?? ""}
+        inputProps={{ "aria-label": t("AllStockLots.qualityTier", "Quality tier") }}
         onChange={(e) => {
           const val = e.target.value === "" ? null : Number(e.target.value)
           apiRef.current.setEditCellValue({ id: props.id, field: props.field, value: val })
@@ -505,7 +506,12 @@ function AllStockLotsGridV2() {
       flex: 0.5,
       sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <IconButton size="small" color="error" onClick={() => handleDelete(params.row.lot_id)}>
+        <IconButton
+          size="small"
+          color="error"
+          onClick={() => handleDelete(params.row.lot_id)}
+          aria-label={t("AllStockLots.deleteLot", "Delete lot")}
+        >
           <DeleteIcon fontSize="small" />
         </IconButton>
       ),

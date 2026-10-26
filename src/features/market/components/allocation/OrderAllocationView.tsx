@@ -457,6 +457,7 @@ export function OrderAllocationView({
                         >
                           <IconButton
                             size="small"
+                            aria-label="Allocate one less from this lot"
                             onClick={() => {
                               const newMap = new Map(selectedAllocations)
                               if (selectedQty > 0) {
@@ -479,6 +480,7 @@ export function OrderAllocationView({
                           </Typography>
                           <IconButton
                             size="small"
+                            aria-label="Allocate one more from this lot"
                             onClick={() => {
                               const newMap = new Map(selectedAllocations)
                               newMap.set(params.row.lot_id, selectedQty + 1)

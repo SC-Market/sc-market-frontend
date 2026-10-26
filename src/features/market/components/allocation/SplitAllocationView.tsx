@@ -415,6 +415,7 @@ function AvailableLots({
                 <TableCell>
                   <IconButton
                     size="small"
+                    aria-label={`Allocate from ${lot.location?.name || "lot"}`}
                     disabled={
                       allocateQty === 0 || wouldExceed || isFullyAllocated
                     }
@@ -513,6 +514,7 @@ function AllocationTarget({
                 <TableCell>
                   <IconButton
                     size="small"
+                    aria-label="Deallocate"
                     disabled={deallocateQty === 0}
                     onClick={() => {
                       onDeallocate(

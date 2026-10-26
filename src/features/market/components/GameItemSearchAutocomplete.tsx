@@ -107,7 +107,7 @@ export function GameItemSearchAutocomplete({
             ...params.InputProps,
             startAdornment: (
               <InputAdornment position="start">
-                <IconButton size="small" edge="start">
+                <IconButton size="small" edge="start" aria-label={t("market.search", "Search")}>
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>

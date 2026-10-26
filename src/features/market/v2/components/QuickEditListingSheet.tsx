@@ -293,6 +293,7 @@ export function QuickEditListingSheet({
             checked={isActive}
             onChange={(e) => setIsActive(e.target.checked)}
             color="success"
+            inputProps={{ "aria-label": t("quickEdit.active", "Active") }}
           />
         </Box>
 

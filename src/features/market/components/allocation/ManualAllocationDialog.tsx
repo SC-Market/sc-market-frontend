@@ -390,6 +390,7 @@ export function ManualAllocationDialog({
                                 <IconButton
                                   size="small"
                                   onClick={() => handleDecrement(lot.lot_id)}
+                                  aria-label="Allocate one less from this lot"
                                   disabled={selectedQty === 0}
                                 >
                                   <RemoveCircleOutlineRounded fontSize="small" />
@@ -415,6 +416,7 @@ export function ManualAllocationDialog({
                                 <IconButton
                                   size="small"
                                   onClick={() => handleIncrement(lot.lot_id)}
+                                  aria-label="Allocate one more from this lot"
                                   disabled={selectedQty >= lot.available}
                                 >
                                   <AddCircleOutlineRounded fontSize="small" />

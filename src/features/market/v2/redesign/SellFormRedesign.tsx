@@ -472,6 +472,7 @@ export function SellFormRedesign() {
                           <IconButton
                             size="small"
                             disabled={qualityRows.length <= 1}
+                            aria-label={t("SellFormRedesign.removeQualityRow", "Remove quality row")}
                             onClick={() =>
                               setQualityRows((rows) => rows.filter((r) => r.id !== row.id))
                             }
@@ -540,6 +541,7 @@ export function SellFormRedesign() {
                         <IconButton
                           size="small"
                           disabled={bundleItems.length <= 1}
+                          aria-label={t("SellFormRedesign.removeBundleItem", "Remove bundle item")}
                           onClick={() =>
                             setBundleItems((items) => items.filter((it) => it.id !== bi.id))
                           }

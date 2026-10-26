@@ -207,7 +207,10 @@ export function ImportFromUex() {
                     sx={{ cursor: "pointer" }}
                   >
                     <TableCell padding="checkbox">
-                      <Checkbox checked={selectedIndices.has(index)} />
+                      <Checkbox
+                        checked={selectedIndices.has(index)}
+                        inputProps={{ "aria-label": `Select ${item.title}` }}
+                      />
                     </TableCell>
                     <TableCell>
                       {item.title}

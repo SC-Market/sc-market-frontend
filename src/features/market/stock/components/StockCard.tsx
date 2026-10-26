@@ -275,6 +275,7 @@ export const StockCard = React.memo<StockCardProps>(
               <IconButton
                 size="small"
                 color="success"
+                aria-label={t("ItemStock.increaseQuantity", "Increase quantity")}
                 onClick={(e) => {
                   e.stopPropagation()
                   handleUpdateQuantity(row.id, row.quantity_available + 1)
@@ -286,6 +287,7 @@ export const StockCard = React.memo<StockCardProps>(
               <IconButton
                 size="small"
                 color="warning"
+                aria-label={t("ItemStock.decreaseQuantity", "Decrease quantity")}
                 onClick={(e) => {
                   e.stopPropagation()
                   handleUpdateQuantity(

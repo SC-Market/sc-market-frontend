@@ -38,7 +38,12 @@ export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate
             const max = Math.max(...prices)
             const totalQty = agg.orders.reduce((sum, o) => sum + (o.quantity - (o.quantity_fulfilled || 0)), 0)
             return (
-              <TableRow key={agg.item_id} hover>
+              <TableRow
+                key={agg.item_id}
+                hover
+                data-testid="buy-order-row"
+                data-id={agg.item_id}
+              >
                 <TableCell>
                   <MuiLink component={RouterLink} to={MARKET_PATHS.aggregate(agg.item_id)} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
                     {agg.item_name}

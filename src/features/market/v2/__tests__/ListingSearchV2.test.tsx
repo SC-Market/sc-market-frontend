@@ -423,7 +423,7 @@ describe("ListingSearchV2", () => {
     );
 
     // Search input should be present
-    expect(screen.getByLabelText(/Search/i)).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: /^Search$/i })).toBeInTheDocument();
   });
 
   it("displays pagination controls", async () => {

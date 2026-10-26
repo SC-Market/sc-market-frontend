@@ -85,7 +85,13 @@ export function BulkDiscountTierEditor({
                 pct: tier.discount_percent,
               })}
             </Typography>
-            <IconButton size="small" onClick={() => removeTier(index)}>
+            <IconButton
+              size="small"
+              onClick={() => removeTier(index)}
+              aria-label={t("market.removeBulkTier", "Remove tier {{n}}", {
+                n: index + 1,
+              })}
+            >
               <Delete fontSize="small" />
             </IconButton>
           </Stack>

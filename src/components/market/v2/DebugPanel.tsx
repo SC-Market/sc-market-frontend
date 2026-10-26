@@ -142,6 +142,7 @@ export function DebugPanel() {
                     )}
                   </Box>
                   <Switch
+                    inputProps={{ "aria-label": label }}
                     checked={enabled}
                     onChange={async () => {
                       setIsSwitching(true)

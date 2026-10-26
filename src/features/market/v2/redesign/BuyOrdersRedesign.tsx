@@ -339,7 +339,11 @@ function BuyOrderCard({
         : t("BuyOrdersRedesign.public", "Public")
 
   return (
-    <ListingWrapper useFixedWidth={false}>
+    <ListingWrapper
+      useFixedWidth={false}
+      data-testid="buy-order-card"
+      data-id={order.buy_order_id}
+    >
       <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
         <Card sx={{ height: 300, position: "relative" }}>
           <CardMedia

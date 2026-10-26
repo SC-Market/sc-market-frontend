@@ -593,6 +593,7 @@ function DisplayStockV2({
             const editing = editingRows[params.id as string]
             return (
               <Switch
+                inputProps={{ "aria-label": t("ItemStock.status") }}
                 checked={(editing?.status ?? "active") === "active"}
                 onChange={(e) => {
                   const newStatus: "active" | "inactive" = e.target.checked ? "active" : "inactive"
@@ -682,7 +683,7 @@ function DisplayStockV2({
           return (
             <Tooltip title={t("ItemStock.editListing")}>
               <Link to={MARKET_PATHS.edit(params.value)} style={{ color: "inherit" }}>
-                <IconButton><CreateRounded /></IconButton>
+                <IconButton aria-label={t("ItemStock.editListing")}><CreateRounded /></IconButton>
               </Link>
             </Tooltip>
           )

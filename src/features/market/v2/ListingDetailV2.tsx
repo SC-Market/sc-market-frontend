@@ -206,7 +206,7 @@ export function ListingDetailV2() {
                       disableTypography
                       action={
                         canEdit && listing.status !== "cancelled" ? (
-                          <IconButton component={RouterLink} to={MARKET_PATHS.edit(listing.listing_id)} sx={{ color: "inherit" }}>
+                          <IconButton component={RouterLink} to={MARKET_PATHS.edit(listing.listing_id)} sx={{ color: "inherit" }} aria-label={t("MarketListingView.editListing", "Edit listing")}>
                             <CreateRounded />
                           </IconButton>
                         ) : undefined

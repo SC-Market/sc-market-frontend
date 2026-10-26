@@ -281,7 +281,13 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      <IconButton size="small" onClick={() => handleRemove(item.variant_id)}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleRemove(item.variant_id)}
+                        aria-label={t("cart.removeItem", "Remove {{title}} from cart", {
+                          title: item.listing_title,
+                        })}
+                      >
                         <TrashCan fontSize="small" color="error" />
                       </IconButton>
                     </TableCell>

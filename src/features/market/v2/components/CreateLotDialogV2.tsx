@@ -317,10 +317,11 @@ export function CreateLotDialogV2({
 
           {/* Quality Tier */}
           <FormControl fullWidth required>
-            <InputLabel>
+            <InputLabel id="create-lot-quality-tier-label">
               {t("CreateLotDialogV2.qualityTier", "Quality Tier")}
             </InputLabel>
             <Select
+              labelId="create-lot-quality-tier-label"
               value={qualityTier}
               onChange={(e) => setQualityTier(Number(e.target.value))}
               label={t("CreateLotDialogV2.qualityTier", "Quality Tier")}
@@ -360,10 +361,11 @@ export function CreateLotDialogV2({
 
           {/* Crafted Source */}
           <FormControl fullWidth>
-            <InputLabel>
+            <InputLabel id="create-lot-source-label">
               {t("CreateLotDialogV2.craftedSource", "Source")}
             </InputLabel>
             <Select
+              labelId="create-lot-source-label"
               value={craftedSource || ""}
               onChange={(e) =>
                 setCraftedSource(e.target.value || undefined)
