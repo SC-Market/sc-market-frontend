@@ -57,12 +57,27 @@ function HeroStat(props: {
   testId: string
   /** Laid out but invisible and hidden from assistive tech (keeps the grid). */
   hidden?: boolean
+  /**
+   * With `hidden`: also take no space on phones (xs-sm), where the cell
+   * would need a row of its own. From md the four cells share one row, so
+   * an invisible cell there costs nothing.
+   */
+  collapseOnPhone?: boolean
 }) {
   return (
     <Box
       data-testid={props.testId}
       {...(props.hidden
-        ? { "aria-hidden": true, inert: true, sx: { visibility: "hidden" } }
+        ? {
+            "aria-hidden": true,
+            inert: true,
+            sx: {
+              visibility: "hidden",
+              ...(props.collapseOnPhone
+                ? { display: { xs: "none", md: "block" } }
+                : {}),
+            },
+          }
         : {})}
     >
       <Typography
@@ -219,10 +234,12 @@ export function LandingHeroLayout(props: {
             </Typography>
           </Box>
 
-          {/* Four cells, always: 2x2 on phones, one row from md. The weekly
-              cells are only visible from WEEKLY_STATS_MIN_ORDERS; otherwise
-              (and while loading) they are laid out invisibly, so the hero is
-              the same height whether they show or not. */}
+          {/* One row from md (four cells; hidden weekly cells are laid out
+              invisibly, so desktop never shifts). On phones the all-time
+              stats take one row and hidden weekly cells take no space, also
+              while loading (hidden is the common case); when the weekly
+              stats do show (WEEKLY_STATS_MIN_ORDERS+) they add a second
+              row, the one rare shift. */}
           <Box
             data-testid="landing-hero-stats"
             aria-busy={stats === undefined ? true : undefined}
@@ -261,6 +278,7 @@ export function LandingHeroLayout(props: {
             <HeroStat
               testId="landing-week-orders"
               hidden={!showWeekly}
+              collapseOnPhone
               value={
                 stats && showWeekly
                   ? new Intl.NumberFormat(i18n.language).format(
@@ -273,6 +291,7 @@ export function LandingHeroLayout(props: {
             <HeroStat
               testId="landing-week-value"
               hidden={!showWeekly}
+              collapseOnPhone
               value={
                 stats && showWeekly
                   ? formatCompactAmount(stats.weekOrderValue, i18n.language)

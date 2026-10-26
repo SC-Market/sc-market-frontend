@@ -128,7 +128,7 @@ describe("LandingHero", () => {
     }
   })
 
-  it("weekly stats stay hidden (but laid out) below WEEKLY_STATS_MIN_ORDERS", () => {
+  it("weekly stats stay hidden below WEEKLY_STATS_MIN_ORDERS", () => {
     h.stats = {
       data: { ...STATS, week_orders: WEEKLY_STATS_MIN_ORDERS - 1 },
       isError: false,
