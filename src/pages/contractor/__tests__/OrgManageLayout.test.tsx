@@ -6,7 +6,7 @@
 import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import { routes } from "../../../App"
 import { enumerateRoutes } from "../../../router/__tests__/regression/harness"
 import { OrgManageLayout } from "../OrgManageLayout"
@@ -37,26 +37,56 @@ vi.mock("../../../hooks/layout/useBreakpoint", async (importOriginal) => ({
   useBreakpointUp: () => true,
 }))
 
-vi.mock("../../../features/contractor/hooks/usePageOrgManage", () => ({
-  usePageOrgManage: () => ({
-    isLoading: false,
-    error: undefined,
-    data: {
-      contractor: {
-        spectrum_id: "TESTORG",
-        premium_tier: "white_label",
-        owner_role: "owner",
-        roles: [],
-      },
-      profile: {
-        username: "owner-user",
-        contractors: [
-          { spectrum_id: "TESTORG", role: "owner", roles: ["owner"] },
-        ],
-      },
+const OWNER = {
+  contractor: {
+    spectrum_id: "TESTORG",
+    premium_tier: "white_label",
+    owner_role: "owner",
+    roles: [],
+  },
+  profile: {
+    username: "owner-user",
+    contractors: [{ spectrum_id: "TESTORG", role: "owner", roles: ["owner"] }],
+  },
+}
+
+/** A member whose only role grants `permissions`. */
+function memberWith(...permissions: string[]) {
+  return {
+    contractor: {
+      ...OWNER.contractor,
+      roles: [
+        {
+          role_id: "officer",
+          name: "Officer",
+          position: 5,
+          ...Object.fromEntries(permissions.map((p) => [p, true])),
+        },
+      ],
     },
-  }),
+    profile: {
+      username: "officer-user",
+      contractors: [{ spectrum_id: "TESTORG", role: "Officer", roles: ["officer"] }],
+    },
+  }
+}
+
+const page = vi.hoisted(() => ({ data: undefined as unknown }))
+vi.mock("../../../features/contractor/hooks/usePageOrgManage", () => ({
+  usePageOrgManage: () => ({ isLoading: false, error: undefined, data: page.data }),
 }))
+
+function navLabels(data: unknown) {
+  page.data = data
+  const { unmount } = render(
+    <MemoryRouter initialEntries={["/org/TESTORG/manage/about"]}>
+      <OrgManageLayout />
+    </MemoryRouter>,
+  )
+  const labels = screen.queryAllByRole("button").map((b) => b.textContent ?? "")
+  unmount()
+  return labels
+}
 
 const MANAGE_PREFIX = "/org/:contractor_id/manage/"
 const manageTabs = new Set(
@@ -67,6 +97,15 @@ const manageTabs = new Set(
 )
 
 describe("OrgManageLayout nav", () => {
+  beforeEach(() => {
+    page.data = OWNER
+  })
+
+  it("hides Audit Logs from members without Manage Org Details", () => {
+    expect(navLabels(memberWith("manage_invites"))).not.toContain("org.auditLogsTab")
+    expect(navLabels(memberWith("manage_org_details"))).toContain("org.auditLogsTab")
+  })
+
   it("only offers items that have a manage/<tab> route (white-label org owner)", () => {
     render(
       <MemoryRouter initialEntries={["/org/TESTORG/manage/about"]}>
