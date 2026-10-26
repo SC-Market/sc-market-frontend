@@ -93,8 +93,13 @@
       as the default dark / light themes (mainTheme, CLEAN); the theme cookie
       (light | dark | system) picks the scheme like HookProvider does. The
       MUI baseline styles take over once the app renders.
+
+      data-cfasync="false" on every script here (and on the built entry tag,
+      see cfasyncPlugin in vite.config.ts): Cloudflare Rocket Loader, if it is
+      ever switched on again, rewrites script types and replays them late from
+      its own loader, so this guard and the pre-theme ran after the app.
     -->
-    <script>
+    <script data-cfasync="false">
       ;(function () {
         try {
           var m = document.cookie.match(/(?:^|; )theme=([^;]*)/)
@@ -154,7 +159,7 @@
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" />
 
-    <script language="javascript">
+    <script data-cfasync="false">
       // Keep in sync with src/util/assetReloadGuard.ts (same keys / limits).
       ;(function () {
         var ATTEMPTS_KEY = "scmarket_asset_reload_attempts"
@@ -187,7 +192,7 @@
         // reload on hover-prefetch failures, which must stay silent.
         //
         // This capture-phase listener stays for the one case the module layer
-        // cannot cover: a top-level <script>/asset tag (e.g. the entry bundle
+        // cannot cover: a top-level script/asset tag (e.g. the entry bundle
         // itself) that fails to load before src/index.tsx ever runs.
         window.addEventListener(
           "error",
@@ -208,7 +213,7 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script type="module" src="/src/index.tsx"></script>
+    <script type="module" data-cfasync="false" src="/src/index.tsx"></script>
     <!--
   This HTML file is a template.
   If you open it directly in the browser, you will see an empty page.

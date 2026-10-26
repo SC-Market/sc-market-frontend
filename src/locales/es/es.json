@@ -2691,6 +2691,9 @@
     "pageTitle": "Error"
   },
   "frontendError": {
+    "newVersionMessage": "El sitio se actualizó mientras esta página estaba abierta. Recarga para obtener la última versión.",
+    "newVersionTitle": "Hay una nueva versión de SC Market disponible",
+    "reload": "Recargar",
     "title": "Se produjo un error al cargar la página",
     "subtitle": "Háznoslo saber en",
     "afterRefresh": "si ves este error después de actualizar la página.",

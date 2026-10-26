@@ -15,6 +15,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { usePageReady } from "./PageReady"
+import { isChunkLoadError } from "../../util/chunkLoadError"
 
 export function Page(
   props: PropsWithChildren<{
@@ -71,7 +72,12 @@ export function Page(
 
   const backupCanonUrl = location.pathname
 
-  if (error) {
+  // A route error moves to /error?message=…&target=…, EXCEPT a failed chunk
+  // load (stale build after a deploy). That one renders in place: the URL stays
+  // on the page itself, so a refresh loads the new build and works. Moving it
+  // to /error baked the message into the URL, and every later refresh (even a
+  // hard one) re-showed the old error from the query string.
+  if (error && !isChunkLoadError(error)) {
     return (
       <Navigate
         to={

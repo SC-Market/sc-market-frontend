@@ -7,6 +7,7 @@ import { VitePWA } from "vite-plugin-pwa"
 import circularDependency from "vite-plugin-circular-dependency"
 import Beasties from "beasties"
 import { contentPlugin } from "./scripts/vite/contentPlugin"
+import { cfasyncPlugin } from "./scripts/vite/cfasyncPlugin"
 
 // Critical CSS extraction plugin using Beasties
 function beastiesPlugin() {
@@ -41,6 +42,8 @@ export default defineConfig({
   plugins: [
     // Help & Guides Markdown (/content) → lazy chunks + bridge/sitemap JSON.
     contentPlugin(),
+    // Keep Cloudflare Rocket Loader off our scripts (see the plugin).
+    cfasyncPlugin(),
     react(),
     viteTsconfigPaths(),
     svgrPlugin(),

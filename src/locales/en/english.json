@@ -1791,8 +1791,11 @@
     "afterRefresh": "if you see this error after refreshing the page.",
     "goBackToPage": "Go Back to Page",
     "message": "Message",
+    "newVersionMessage": "The site was updated while this page was open. Reload to get the latest version.",
+    "newVersionTitle": "A new version of SC Market is available",
     "page": "Error page",
     "pageTitle": "An Error Occurred",
+    "reload": "Reload",
     "returnToDashboard": "Return to Dashboard",
     "subtitle": "Please let us know in",
     "title": "An Error Occurred Loading the Page"

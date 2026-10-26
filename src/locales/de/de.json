@@ -2691,6 +2691,9 @@
     "pageTitle": "Fehler"
   },
   "frontendError": {
+    "newVersionMessage": "Die Seite wurde aktualisiert, während sie geöffnet war. Lade neu, um die neueste Version zu erhalten.",
+    "newVersionTitle": "Eine neue Version von SC Market ist verfügbar",
+    "reload": "Neu laden",
     "title": "Beim Laden der Seite ist ein Fehler aufgetreten",
     "subtitle": "Bitte teilen Sie es uns mit in",
     "afterRefresh": "wenn dieser Fehler nach dem Aktualisieren der Seite weiterhin auftritt.",

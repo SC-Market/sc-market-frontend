@@ -2612,6 +2612,9 @@
     "pageTitle": "錯誤"
   },
   "frontendError": {
+    "newVersionMessage": "此頁面開啟期間網站已更新。重新載入以取得最新版本。",
+    "newVersionTitle": "SC Market 有新版本可用",
+    "reload": "重新載入",
     "title": "載入頁面時發生錯誤",
     "subtitle": "如果重新整理頁面後仍看到此錯誤，請告訴我們於",
     "afterRefresh": "如果重新整理頁面後仍看到此錯誤。",

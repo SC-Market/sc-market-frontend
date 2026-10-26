@@ -2691,6 +2691,9 @@
     "pageTitle": "エラー"
   },
   "frontendError": {
+    "newVersionMessage": "このページを開いている間にサイトが更新されました。再読み込みして最新版を取得してください。",
+    "newVersionTitle": "SC Market の新しいバージョンがあります",
+    "reload": "再読み込み",
     "title": "ページの読み込み中にエラーが発生しました",
     "subtitle": "以下でお知らせください：",
     "afterRefresh": "ページを更新してもこのエラーが表示される場合は、お知らせください。",

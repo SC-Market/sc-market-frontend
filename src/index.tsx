@@ -96,10 +96,14 @@ root.render(
 
 // Reset reload budget only after the shell has been stable long enough for lazy chunks
 // to load — clearing on every boot caused infinite reload loops with stale index.html.
+// If "load" already fired before this module ran (a script loader such as
+// Cloudflare Rocket Loader can run the entry late), start the timer now.
 if (typeof window !== "undefined") {
-  window.addEventListener("load", () => {
+  const clearLater = () => {
     window.setTimeout(() => clearEmergencyReloadBudget(), 20_000)
-  })
+  }
+  if (document.readyState === "complete") clearLater()
+  else window.addEventListener("load", clearLater, { once: true })
 }
 
 // Initialize PWA features (service worker registration, online detection)
