@@ -87,7 +87,10 @@ export function OrgManageLayout() {
     if (canManageOrders) {
       items.push({ label: t("org.blocklistTab"), icon: <Block />, value: "blocklist" })
     }
-    items.push({ label: t("org.auditLogsTab"), icon: <HistoryRounded />, value: "audit" })
+    if (canManageOrgDetails) {
+      // The API only serves audit logs to manage_org_details holders.
+      items.push({ label: t("org.auditLogsTab"), icon: <HistoryRounded />, value: "audit" })
+    }
     items.push({ label: t("org.customersTab", "Customers"), icon: <PeopleAltRounded />, value: "customers" })
     if (hasWhiteLabel && canManageTheme) {
       // The theme page holds both the theme editor and the white-label

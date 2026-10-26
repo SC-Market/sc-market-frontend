@@ -177,7 +177,9 @@ export function OrgManage() {
             {canManageOrders && (
               <Tab label={t("org.blocklistTab")} icon={<Block />} value="blocklist" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
-            <Tab label={t("org.auditLogsTab")} icon={<HistoryRounded />} value="audit" iconPosition="start" sx={{ minHeight: 48 }} />
+            {canManageOrgDetails && (
+              <Tab label={t("org.auditLogsTab")} icon={<HistoryRounded />} value="audit" iconPosition="start" sx={{ minHeight: 48 }} />
+            )}
             <Tab label={t("org.customersTab", "Customers")} icon={<PeopleAltRounded />} value="customers" iconPosition="start" sx={{ minHeight: 48 }} />
             {hasWhiteLabel && canManageTheme && (
               <Tab label={t("org.themeTab", "Theme")} icon={<PaletteRounded />} value="theme" iconPosition="start" sx={{ minHeight: 48 }} />
