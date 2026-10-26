@@ -43,10 +43,12 @@ export function GuidesHub() {
         Balanced columns, not a grid: categories hold different numbers of
         guides, and grid rows stretch every card to the tallest one in the
         row. CSS columns pack the cards by height and read top to bottom,
-        left to right, so the user-journey order is kept.
+        left to right, so the user-journey order is kept. Two columns only
+        when each gets 300px: the content area is narrow next to the app
+        sidebar and the directory, whatever the viewport.
       */}
       <Grid item xs={12}>
-        <Box data-testid="guides-hub-categories" sx={{ columnCount: { xs: 1, md: 2 }, columnGap: 2 }}>
+        <Box data-testid="guides-hub-categories" sx={{ columns: "300px 2", columnGap: 2 }}>
           {helpIndex.categories.map((category) => {
             const guides = guidesIn(category.id)
             return (
