@@ -849,7 +849,7 @@ export interface ListingGridProps {
 
 type ListingOrAd = ListingSearchResult | { _isAd: true; ad: AdConfig };
 
-const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
+const ListingGridInner = React.forwardRef<HTMLDivElement, ListingGridProps>(
   ({ listings, loading, error, onRetry, gridBreakpoints, marketSidebarOpen }, ref) => {
     const listingsWithAds = useMemo((): ListingOrAd[] => {
       if (!listings.length || listings.length < 10) return listings;
@@ -908,7 +908,12 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
   }
 );
 
-ListingGrid.displayName = "ListingGrid";
+// memo: the grid's props are stable across unrelated parent re-renders (e.g.
+// the nav drawer opening re-renders this page through DrawerOpenContext), so it
+// skips re-rendering every card on those.
+const ListingGrid = React.memo(ListingGridInner);
+
+ListingGridInner.displayName = "ListingGrid";
 
 /**
  * ListingCardV2 - V2 listing card using native V2 ListingSearchResult fields.

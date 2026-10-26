@@ -3,7 +3,6 @@ import { Box } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { Navbar } from "../navbar/Navbar"
 import React from "react"
-import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import { PreferencesButton } from "../../views/settings/PreferencesButton"
 import { CookieConsent } from "../alert/CookieConsent"
 import { useRoutePrefetch } from "../../hooks/prefetch/RoutePrefetch"
@@ -27,7 +26,10 @@ import {
 
 export function Root(props: { children: React.ReactNode }) {
   const isMobile = useIsMobile()
-  const [drawerOpen] = useDrawerOpen()
+  // Root deliberately does NOT read DrawerOpenContext: it renders the whole
+  // shell (navbar, sidebar, bottom nav, command palette, ...), so subscribing
+  // here re-rendered all of it on every drawer toggle (an INP cost on the menu
+  // button), and nothing in Root depends on the drawer state.
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
   const hydrated = useHydrated()

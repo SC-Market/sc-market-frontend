@@ -222,7 +222,7 @@ function buildEntries(listings: ListingSearchResult[]): GridEntry[] {
 /** Breakpoint keys from largest to smallest, matching the custom theme. */
 const BP_ORDER = ["xxxl", "xxl", "xl", "lg", "md", "sm", "xs"] as const
 
-export const GroupedListingGrid = React.forwardRef<
+const GroupedListingGridInner = React.forwardRef<
   HTMLDivElement,
   ListingGridProps
 >(function GroupedListingGrid(
@@ -335,6 +335,10 @@ export const GroupedListingGrid = React.forwardRef<
     </>
   )
 })
+
+// memo: skip re-rendering every card when the market page re-renders for an
+// unrelated reason (e.g. the nav drawer opening, via DrawerOpenContext).
+export const GroupedListingGrid = React.memo(GroupedListingGridInner)
 
 GroupedListingGrid.displayName = "GroupedListingGrid"
 
