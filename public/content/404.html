@@ -1,0 +1,23 @@
+<!doctype html>
+<!--
+  Cloudflare Pages 404 for the content build's files (/content/**).
+
+  Cloudflare Pages serves the root index.html with a 200 for any path with no
+  file (SPA mode, because there is no root 404.html), and its _redirects file
+  has no 404 status, so a "/content/* ... 404" rule there does nothing. A
+  404.html inside a directory does work: Pages answers a missing file with the
+  nearest 404.html above it, with a real 404 status (public/assets/404.html
+  does the same for /assets/). So a missing /content/**/*.json is a 404, never
+  index.html: the edge bridge (src/bridge/handler.ts fetchAsset) and the
+  backend sitemap read these files. Never seen by people.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>404 – Not Found</title>
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <h1>404 – Not Found</h1>
+  </body>
+</html>

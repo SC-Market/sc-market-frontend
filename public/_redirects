@@ -8,20 +8,13 @@
 # ("/" is an exact rule, never "/*"). Never add a root _middleware.ts: it
 # would intercept every static asset and burn the Functions invocation budget.
 
-# A missing hashed asset (old chunk after a deploy) must return a real 404, NOT
-# fall through to the SPA catch-all below and get served index.html as 200
-# text/html — which the browser can't execute as a JS module (Chrome MIME error,
-# Firefox NS_ERROR_CORRUPTED_CONTENT), a hard crash. A 404 lets the dynamic
-# import() reject cleanly so client recovery (vite:preloadError → rate-limited
-# reload) kicks in. Real files still win over this rule; it only matches paths
-# with no file. NOTE: verify in prod that this beats CF's implicit SPA fallback —
-# if a missing /assets/*.js still returns 200 text/html after deploy, this rule
-# is being bypassed and client-side recovery is the only safeguard.
-/assets/*    /assets/:splat    404
-
-# Same for the content build's JSON (the edge bridge and the backend sitemap
-# read these): a missing file must 404, never come back as index.html.
-/content/*   /content/:splat   404
+# Missing files under /assets/ and /content/ must return a real 404, NOT fall
+# through to the SPA catch-all below and get served index.html as 200
+# text/html. Cloudflare Pages has no 404 status in this file (a
+# "/assets/*  /assets/:splat  404" rule is ignored), so that is done with a
+# 404.html in each directory instead: public/assets/404.html (a stale chunk
+# must fail to load so client recovery reloads) and public/content/404.html
+# (the edge bridge and the backend sitemap read the content build's JSON).
 
 # Typed-URL alias for Help & Guides (the SPA also redirects client-side).
 /help        /guides           301
