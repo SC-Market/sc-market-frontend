@@ -11,8 +11,14 @@ import { onPageInteractive } from "../../util/scripts/delayedScriptLoader"
 import { startPerformanceMonitoring } from "../../util/monitoring/bugsnagLoader"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { LEGAL_PATHS } from "../../routes/paths"
-
-const TRACKING_ID = "G-KT8SEND6F2" // OUR_TRACKING_ID
+import {
+  CONSENT_COOKIE,
+  CONSENT_COOKIE_OPTIONS,
+  GA_TRACKING_ID,
+  revokeAnalytics,
+  setGoogleAnalyticsDisabled,
+  type ConsentChoice,
+} from "../../util/consent/analyticsConsent"
 
 export function CookieConsent() {
   const [cookies, setCookie] = useCookies(["cookie_consent"])
@@ -32,8 +38,9 @@ export function CookieConsent() {
     // Delay analytics initialization until page is interactive
     // This prevents analytics from blocking critical rendering path
     onPageInteractive(() => {
+      setGoogleAnalyticsDisabled(false)
       if (!ReactGA.isInitialized) {
-        ReactGA.initialize(TRACKING_ID, {
+        ReactGA.initialize(GA_TRACKING_ID, {
           gtagOptions: {
             ad_storage: "denied",
             ad_user_data: "denied",
@@ -60,12 +67,11 @@ export function CookieConsent() {
 
   if (cookies.cookie_consent !== undefined) return null
 
-  const choose = (value: "all" | "necessary") =>
-    setCookie("cookie_consent", value, {
-      path: "/",
-      sameSite: "strict",
-      maxAge: 31536000, // 1 year in seconds
-    })
+  const choose = (value: ConsentChoice) => {
+    setCookie(CONSENT_COOKIE, value, CONSENT_COOKIE_OPTIONS)
+    // Reopened from the footer after an earlier "Accept": stop what is running
+    if (value === "necessary" && ReactGA.isInitialized) revokeAnalytics()
+  }
 
   // A slim fixed bar: an overlay, so it reserves no layout space (no CLS),
   // and short enough not to cover the page's primary actions on phones.

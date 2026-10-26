@@ -330,7 +330,8 @@
     "referralCode": "使用我们的邀请码：{{code}}",
     "acknowledgments": "特别感谢 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供标志，以及 <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink> 和 <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> 提供的 API。",
     "apiDocs": "API 文档",
-    "scOrgs": "SC Orgs"
+    "scOrgs": "SC Orgs",
+    "cookiePreferences": "Cookie 偏好"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "95%+ 好评率和25+ 成交记录",
@@ -1125,7 +1126,11 @@
     "danger_zone": "危险操作区",
     "delete_account_button": "删除账户",
     "delete_account_description": "永久删除您的账户及所有相关的个人数据。此操作在 30 天宽限期结束后将无法撤销。",
-    "updated": "设置更新成功"
+    "updated": "设置更新成功",
+    "cookie_title": "Cookie 偏好",
+    "cookie_description": "登录 Cookie 和匿名错误报告始终开启。分析（Google Analytics 和页面速度测量）仅在您允许时运行。",
+    "cookie_status_all": "当前选择：允许分析。",
+    "cookie_status_necessary": "当前选择：仅必要。"
   },
   "transactions": {
     "recent_transactions": "最近交易记录",

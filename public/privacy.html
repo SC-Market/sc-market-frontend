@@ -18,7 +18,8 @@
       - error reports: frontend src/util/monitoring/bugsnagLoader.ts, backend
         src/server.ts and src/api/middleware/error-handler.ts, SCMarketBot
         util/errors.py (anonymous: no IP, no user id, no device id)
-      - IP addresses stored: listing_views, refresh_tokens, user_mfa_events,
+      - IP addresses stored: refresh_tokens, user_mfa_events (listing_views:
+        hashed IP, per the owner; update if that changes),
         user_mfa_recovery_codes, rate limits (backend)
       - hosting: sc-market-cdk (us-east-2, Lightsail + RDS), Backblaze B2
         us-west-004 (backend src/clients/backblaze)
@@ -221,6 +222,14 @@
         payments.
       </li>
       <li>
+        Donor status: if you donate to the site's owner through a third party
+        such as Patreon, we record that you are a donor and since when (for the
+        donor badge), and the username you have on that platform if you give
+        it to us so we can match you. The donation itself is processed by that
+        platform under its own terms; we never receive or store your card or
+        payment details.
+      </li>
+      <li>
         Messages and reviews: messages you send in order and offer chats
         (including messages posted in linked Discord threads, which our bot
         copies into the chat), and ratings and reviews you leave.
@@ -277,9 +286,9 @@
       <li>
         <strong>Listing views.</strong> When you open a market or service
         listing, we record the view (the listing, the time, and your account if
-        you are signed in) so sellers can see view counts. Older view records
-        also include the IP address, browser user agent, and referring page of
-        the view.
+        you are signed in) so sellers can see view counts. To count repeat views
+        from visitors who are not signed in, the record stores a hashed (not
+        readable) form of the IP address.
       </li>
       <li>
         <strong>Activity status.</strong> We record when you were last active,
@@ -528,6 +537,11 @@
         upload (Backblaze B2, US West region).
       </li>
       <li>
+        <strong>Patreon (or another donation platform):</strong> if you choose
+        to donate, the platform processes your payment under its own terms and
+        privacy policy. We only learn that you donated.
+      </li>
+      <li>
         <strong>Discord:</strong> our sign-in provider, and it delivers
         messages and commands for the SC Market Discord bot and the
         notifications posted to Discord.
@@ -609,9 +623,10 @@
       </li>
     </ul>
     <p>
-      When you first visit, our cookie banner asks for your choice. To change
-      it later, clear the "cookie_consent" cookie for sc-market.space in your
-      browser, and the banner will ask again.
+      When you first visit, our cookie banner asks for your choice. You can
+      change it at any time in <a href="/settings">Settings</a> (Privacy, "Cookie preferences"), or with the "Cookie preferences" link in the footer of any page. Choosing "Necessary only"
+      stops Google Analytics and BugSnag Performance and deletes the Google
+      Analytics cookies.
     </p>
 
     <h2 id="sociallogins">6. HOW DO WE HANDLE YOUR SOCIAL LOGINS?</h2>
@@ -784,8 +799,8 @@
       If we are relying on your consent to process your personal information,
       which may be express and/or implied consent depending on the applicable
       law, you have the right to withdraw your consent at any time. You can
-      withdraw your consent for analytics at any time by clearing the
-      "cookie_consent" cookie for sc-market.space and choosing "Necessary only", or by contacting us by using the contact details provided in
+      withdraw your consent for analytics at any time by choosing "Necessary
+      only" in <a href="/settings">Settings</a> (Privacy, "Cookie preferences"), or with the "Cookie preferences" link in the footer of any page, or by contacting us by using the contact details provided in
       the section "<a href="#contact"
         >HOW CAN YOU CONTACT US ABOUT THIS NOTICE?</a
       >" below.
@@ -915,7 +930,8 @@
           <td>
             YES. Your username (RSI handle), Spectrum ID, Discord user ID and
             username, account ID, email address if you add one, and IP address
-            (sign-in sessions, listing views, and rate limiting).
+            (sign-in sessions and rate limiting; listing views keep only a
+            hashed IP).
           </td>
         </tr>
         <tr>
@@ -946,7 +962,9 @@
           <td>
             YES. Your listings, orders, offers, contracts, and their history.
             These are trades of in-game items and services for in-game currency
-            (aUEC); we do not collect payment or financial details.
+            (aUEC). If you donate through a third party such as Patreon, we
+            record that you are a donor and since when. We do not collect
+            payment or financial details.
           </td>
         </tr>
         <tr>
@@ -1203,9 +1221,8 @@
       You have the right to request access to the personal information we
       collect from you, change that information, or delete it. To download a
       copy of your data or delete your account, use your
-      <a href="/settings">Settings</a> page. The download contains your profile,
-      orders, and organization data; for a complete copy of everything we hold
-      about you, email us at
+      <a href="/settings">Settings</a> page. The download contains the personal
+      data we hold about your account. If anything seems missing, email us at
       <a href="mailto:henry@sc-market.space">henry@sc-market.space</a>. You can
       change most profile information in Settings; your RSI handle and avatar
       come from your RSI account.

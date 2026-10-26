@@ -1,6 +1,8 @@
 import { UnderlineLink } from "../typography/UnderlineLink"
 import { Divider, Grid, Link, Typography } from "@mui/material"
 import React from "react"
+import { useCookies } from "react-cookie"
+import { CONSENT_COOKIE } from "../../util/consent/analyticsConsent"
 import { DISCORD_BOT_INVITE, DISCORD_INVITE } from "../../util/constants"
 import { Trans, useTranslation } from "react-i18next"
 import { ReportButton } from "../button/ReportButton"
@@ -15,6 +17,7 @@ import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 
 export function Footer() {
   const { t } = useTranslation()
+  const [, , removeCookie] = useCookies([CONSENT_COOKIE])
   const theme = useTheme<ExtendedTheme>()
   // Help pages render only on the official site; white-label domains link out.
   const helpLink = (path: string) =>
@@ -130,6 +133,18 @@ export function Footer() {
             >
               <UnderlineLink color={"text.secondary"}>
                 {t("footer.termsOfService", "Terms of Service")}
+              </UnderlineLink>
+            </Link>
+            &nbsp;|&nbsp;
+            {/* Reopens the cookie bar (it shows while no choice is stored) */}
+            <Link
+              component="button"
+              type="button"
+              onClick={() => removeCookie(CONSENT_COOKIE, { path: "/" })}
+              sx={{ verticalAlign: "baseline", font: "inherit" }}
+            >
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.cookiePreferences", "Cookie preferences")}
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;

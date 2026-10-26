@@ -1789,7 +1789,8 @@
     "termsOfService": "Terms of Service",
     "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC",
     "unofficial": "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
-    "wiki": "Wiki"
+    "wiki": "Wiki",
+    "cookiePreferences": "Cookie preferences"
   },
   "frontendError": {
     "afterRefresh": "if you see this error after refreshing the page.",
@@ -3705,7 +3706,11 @@
     "request_data_title": "Request my Data",
     "share_discord_with_sellers": "Share Discord Profile with Sellers",
     "title": "Privacy",
-    "updated": "Settings updated successfully"
+    "updated": "Settings updated successfully",
+    "cookie_title": "Cookie preferences",
+    "cookie_description": "Sign-in cookies and anonymous error reports are always on. Analytics (Google Analytics and page-speed measurement) only run if you allow them.",
+    "cookie_status_all": "Current choice: analytics allowed.",
+    "cookie_status_necessary": "Current choice: necessary only."
   },
   "profile": {
     "customOrdersMovedToShop": "Custom orders are now placed through shops."

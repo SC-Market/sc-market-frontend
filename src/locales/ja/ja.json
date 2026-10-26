@@ -324,7 +324,8 @@
     "referralCode": "Use our referral code: {{code}}",
     "acknowledgments": "サイトのロゴを提供してくれた <ladyFleurLink>LadyFleur</ladyFleurLink> さん、そしてAPIを提供してくれた <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink>、<starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> に特別な感謝を申し上げます。",
     "apiDocs": "API ドキュメント",
-    "scOrgs": "SC Orgs"
+    "scOrgs": "SC Orgs",
+    "cookiePreferences": "クッキーの設定"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "評価95%以上かつ取引25件以上",
@@ -1123,7 +1124,11 @@
     "danger_zone": "危険な操作",
     "delete_account_button": "アカウントを削除",
     "delete_account_description": "アカウントと関連するすべての個人データを完全に削除します。この操作は30日間の猶予期間後には取り消せません。",
-    "updated": "設定を更新しました"
+    "updated": "設定を更新しました",
+    "cookie_title": "クッキーの設定",
+    "cookie_description": "サインイン用クッキーと匿名のエラーレポートは常に有効です。アクセス解析（Google Analytics と表示速度の計測）は許可した場合のみ動作します。",
+    "cookie_status_all": "現在の選択：アクセス解析を許可",
+    "cookie_status_necessary": "現在の選択：必要なもののみ"
   },
   "transactions": {
     "recent_transactions": "最近の取引",

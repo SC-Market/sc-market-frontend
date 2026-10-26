@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { DeleteAccountDialog } from "../../features/account-deletion/components/DeleteAccountDialog"
 import { PendingDeletionBanner } from "../../features/account-deletion/components/PendingDeletionBanner"
+import { CookiePreferences } from "./CookiePreferences"
 
 export function PrivacySettings() {
   const { data: profile, refetch } = useGetUserProfileQuery()
@@ -92,6 +93,7 @@ export function PrivacySettings() {
             {t("privacy_settings.request_data_button")}
           </Button>
         </Grid>
+        <CookiePreferences />
       </FlatSection>
 
       <Divider sx={{ my: 3 }} />

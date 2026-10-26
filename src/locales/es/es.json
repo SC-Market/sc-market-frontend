@@ -324,7 +324,8 @@
     "referralCode": "Use our referral code: {{code}}",
     "acknowledgments": "Agradecimientos especiales a <ladyFleurLink>LadyFleur</ladyFleurLink> por el logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> y <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> por sus APIs.",
     "apiDocs": "Documentación de la API",
-    "scOrgs": "SC Orgs"
+    "scOrgs": "SC Orgs",
+    "cookiePreferences": "Preferencias de cookies"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "Valoración superior al 95 % y más de 25 transacciones",
@@ -1123,7 +1124,11 @@
     "danger_zone": "Zona de peligro",
     "delete_account_button": "Eliminar cuenta",
     "delete_account_description": "Elimina permanentemente tu cuenta y todos los datos personales asociados. Esta acción no se puede deshacer una vez transcurrido el periodo de gracia de 30 días.",
-    "updated": "Configuración actualizada correctamente"
+    "updated": "Configuración actualizada correctamente",
+    "cookie_title": "Preferencias de cookies",
+    "cookie_description": "Las cookies de inicio de sesión y los informes de errores anónimos están siempre activos. La analítica (Google Analytics y medición de velocidad) solo funciona si la permites.",
+    "cookie_status_all": "Elección actual: analítica permitida.",
+    "cookie_status_necessary": "Elección actual: solo necesarias."
   },
   "transactions": {
     "recent_transactions": "Transacciones recientes",

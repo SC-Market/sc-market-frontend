@@ -324,7 +324,8 @@
     "acknowledgments": "Особлива подяка <ladyFleurLink>LadyFleur</ladyFleurLink> за логотип, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> та <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> за їхні API.",
     "referralCode": "Використайте наш реферальний код: {{code}}",
     "apiDocs": "Документація API",
-    "scOrgs": "SC Orgs"
+    "scOrgs": "SC Orgs",
+    "cookiePreferences": "Налаштування cookie"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "95%+ рейтинг і 25+ транзакцій",
@@ -1123,7 +1124,11 @@
     "danger_zone": "Небезпечна зона",
     "delete_account_button": "Видалити обліковий запис",
     "delete_account_description": "Остаточно видаліть свій обліковий запис і всі пов'язані особисті дані. Цю дію неможливо скасувати після 30-денного пільгового періоду.",
-    "updated": "Налаштування успішно оновлено"
+    "updated": "Налаштування успішно оновлено",
+    "cookie_title": "Налаштування cookie",
+    "cookie_description": "Cookie для входу та анонімні звіти про помилки завжди ввімкнені. Аналітика (Google Analytics і вимірювання швидкості сторінок) працює лише за вашою згодою.",
+    "cookie_status_all": "Поточний вибір: аналітику дозволено.",
+    "cookie_status_necessary": "Поточний вибір: лише необхідні."
   },
   "transactions": {
     "recent_transactions": "Останні транзакції",
