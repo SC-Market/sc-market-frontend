@@ -132,6 +132,9 @@ export function LandingOrgFeatures() {
           href={`https://github.com/henry232323/sc-market/wiki`}
         >
           {t("landing.learnMore")}
+          {/* Give the link a descriptive name (a bare "Learn More" fails the
+              link-text audit); the visible label stays the same. */}
+          <span className="sr-only">: {t("landing.forOrgs")}</span>
         </Button>
       </Stack>
     </Stack>

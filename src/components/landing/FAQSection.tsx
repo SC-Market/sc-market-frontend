@@ -39,7 +39,10 @@ export function FAQSection() {
           {t("landing.faqTitle")}
         </LandingSectionTitle>
         <Paper sx={{ flexGrow: "1" }}>
+          {/* A div, not a <ul>: each FAQ entry is an <h3> + answer (the
+              accordion pattern), which aren't valid <ul> children. */}
           <List
+            component="div"
             sx={{
               borderRadius: theme.spacing(theme.borderRadius.topLevel),
               padding: 0,

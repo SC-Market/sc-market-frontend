@@ -68,7 +68,9 @@ export function FAQQuestion(props: {
         </ListItemButton>
       </LandingBlockTitle>
       <Collapse in={open} timeout="auto" unmountOnExit={!keepMounted}>
-        <ListItem>
+        {/* A div: the containing List is a div too (an <h3> can't be a <ul>
+            child), so an <li> here would be an orphan list item. */}
+        <ListItem component="div">
           <LandingBodyText
             sx={{
               wordBreak: "break-word",

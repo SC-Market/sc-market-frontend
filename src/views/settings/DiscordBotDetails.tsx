@@ -32,6 +32,7 @@ export function DiscordBotDetails(props: { org?: boolean }) {
       </Grid>
       <Grid item xs={12} lg={8} md={8}>
         <List
+          component="div"
           sx={{
             borderRadius: theme.spacing(2),
             backgroundColor: theme.palette.background.overlay,
