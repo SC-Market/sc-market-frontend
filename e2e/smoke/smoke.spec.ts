@@ -104,6 +104,24 @@ test.describe("logged in (fake session)", () => {
     ).toBeVisible()
   })
 
+  test("org-only route without a current org explains what to do", async ({
+    page,
+  }) => {
+    await page.goto("/org/fleet")
+    await waitForReady(page)
+    await expect(
+      main(page).getByRole("heading", {
+        name: "Select or join an organization to use this page",
+      }),
+    ).toBeVisible()
+    await expect(
+      main(page).getByRole("link", { name: "Choose an organization" }),
+    ).toHaveAttribute("href", "/my-orgs")
+    await main(page).getByRole("link", { name: "Browse organizations" }).click()
+    await expect(page).toHaveURL(/\/contractors$/)
+    await waitForReady(page)
+  })
+
   test("settings tabs render", async ({ page }) => {
     await page.goto("/settings")
     await waitForReady(page)

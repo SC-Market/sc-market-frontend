@@ -31,9 +31,9 @@ flips together with it.
   can wait for ready again and the results are the new ones.
 - **The skeleton shows while busy.** The route skeleton, lazy-chunk Suspense
   fallbacks, and the layouts' `isLoading` skeletons all report busy.
-- A page that renders nothing (for example an org-only route with no current
-  org) stays busy. If a page never becomes ready, that is a bug worth
-  reporting.
+- A page that renders nothing stays busy. If a page never becomes ready, that
+  is a bug worth reporting. (Org-only routes with no current org show a
+  "Select or join an organization" empty state and are ready.)
 
 ### Waiting with the chrome-devtools MCP
 

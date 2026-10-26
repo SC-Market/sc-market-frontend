@@ -14,6 +14,7 @@ import { isSiteAdmin } from "../../util/siteRole"
 import { RouteSkeletonFallback } from "./RouteSuspense"
 import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
+import { NoCurrentOrg } from "./NoCurrentOrg"
 
 const MfaAdminGate = lazyWithRetry(() =>
   import("../../features/mfa/components/MfaAdminGate").then((m) => ({ default: m.MfaAdminGate })),
@@ -92,7 +93,9 @@ export function OrgRoute() {
     },
   )
 
-  if (isLoading) {
+  if (!cookies.current_contractor) {
+    return <NoCurrentOrg />
+  } else if (isLoading) {
     return <RouteSkeletonFallback />
   } else if (isSuccess) {
     return <Outlet />
@@ -139,7 +142,9 @@ export function OrgAdminRoute(props: {
     }
   }, [allow, anyPermission, contractor, permission, profile])
 
-  if (isLoading) {
+  if (!cookies.current_contractor) {
+    return <NoCurrentOrg />
+  } else if (isLoading) {
     return <RouteSkeletonFallback />
   } else if (isSuccess && canView) {
     return <Outlet />

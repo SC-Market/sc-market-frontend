@@ -1677,6 +1677,12 @@
       "sendMessage": "Send Message",
       "startConversation": "Start Conversation"
     },
+    "noOrg": {
+      "browseOrgs": "Browse organizations",
+      "description": "This page works with your current organization. Pick one of your organizations, or find one to join.",
+      "myOrgs": "Choose an organization",
+      "title": "Select or join an organization to use this page"
+    },
     "notifications": {
       "noNotifications": "No notifications",
       "noNotificationsDescription": "You're all caught up! New notifications will appear here"
