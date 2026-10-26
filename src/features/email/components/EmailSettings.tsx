@@ -23,7 +23,12 @@ import { DeleteEmailDialog } from "./DeleteEmailDialog"
  * - Verify email address
  * - Manage email notification preferences per notification type
  */
-export function EmailSettings() {
+export function EmailSettings({
+  showPreferences = true,
+}: {
+  /** false: email address only (Settings -> Notifications has the matrix). */
+  showPreferences?: boolean
+} = {}) {
   const { t } = useTranslation()
   const [addEmailDialogOpen, setAddEmailDialogOpen] = useState(false)
   const [editEmailDialogOpen, setEditEmailDialogOpen] = useState(false)
@@ -159,7 +164,7 @@ export function EmailSettings() {
       </Grid>
 
       {/* Individual Preferences Section */}
-      {hasEmail && (
+      {showPreferences && hasEmail && (
         <Grid item xs={12}>
           <PreferenceSection
             title={t("settings.email.individualPreferences")}
@@ -179,7 +184,10 @@ export function EmailSettings() {
       )}
 
       {/* Organization Selector and Preferences */}
-      {hasEmail && organizationsData && organizationsData.length > 0 && (
+      {showPreferences &&
+        hasEmail &&
+        organizationsData &&
+        organizationsData.length > 0 && (
         <Grid item xs={12}>
           <OrganizationPreferenceSelector
             organizations={organizationsData}

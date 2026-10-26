@@ -256,7 +256,8 @@
     "submit": "Submit",
     "submitted": "Submitted!",
     "webhookName": "Webhook Name",
-    "webhookUrl": "Webhook URL"
+    "webhookUrl": "Webhook URL",
+    "publicContractCreated": "New public contracts (site-wide)"
   },
   "admin": {
     "alerts": {
@@ -2950,7 +2951,8 @@
     "share": "Share",
     "shareNotification": "Check out this notification",
     "submitted": "Submitted!",
-    "view_all": "View All"
+    "view_all": "View All",
+    "public_contract": "New public contract:"
   },
   "Off Course": "warning",
   "OfferDetailsArea": {
@@ -4348,7 +4350,182 @@
       "profile": "Profile",
       "scmdb": "SCMDB"
     },
-    "title": "Settings"
+    "title": "Settings",
+    "notifications": {
+      "title": "Notifications",
+      "error": "Couldn't load or save your notification settings.",
+      "scope": "Settings for",
+      "personal": "Personal",
+      "locked": "Always on",
+      "customise": "Customise",
+      "channels": {
+        "in_app": "In-app",
+        "push": "Push",
+        "email": "Email",
+        "discord_dm": "Discord DM"
+      },
+      "categories": {
+        "orders": "Orders",
+        "order_messages": "Order messages",
+        "offers": "Offers",
+        "offer_messages": "Offer messages",
+        "market": "Market bids",
+        "reviews": "Reviews",
+        "watchlist": "Price alerts",
+        "org": "Organization invites",
+        "announcements": "Announcements",
+        "reminders": "Unread message reminders",
+        "contracts": "Public contracts"
+      },
+      "events": {
+        "order_created": "New order",
+        "order_assigned": "Order assigned to you",
+        "order_status_not_started": "Order not started",
+        "order_status_in_progress": "Order in progress",
+        "order_status_fulfilled": "Order fulfilled",
+        "order_status_cancelled": "Order cancelled",
+        "order_message": "Order message",
+        "order_review": "New review",
+        "order_review_revision_requested": "Review revision requested",
+        "offer_created": "New offer",
+        "offer_countered": "Counter-offer",
+        "offer_message": "Offer message",
+        "market_bid": "New bid",
+        "org_invite": "Organization invite",
+        "admin_alert": "Announcement",
+        "reminder_unread_messages": "Unread message reminder",
+        "watchlist_price_alert": "Price alert",
+        "contract_public_created": "New public contract",
+        "offer_accepted": "Offer accepted",
+        "offer_rejected": "Offer rejected",
+        "contract_offer_received": "Offer on your contract"
+      },
+      "tabs": {
+        "orders": "Orders & offers",
+        "messages": "Messages",
+        "market": "Market & watchlist",
+        "orgs": "Orgs & contracts",
+        "account": "Account"
+      },
+      "sections": {
+        "new": {
+          "label": "New orders and offers",
+          "hint": "Someone orders from your shop or sends you an offer."
+        },
+        "updates": {
+          "label": "Order and offer updates",
+          "hint": "Changes on orders and offers you're part of."
+        },
+        "reviews": {
+          "label": "Reviews",
+          "hint": "New reviews and revision requests."
+        },
+        "chats": {
+          "label": "Messages",
+          "hint": "New messages in order and offer chats."
+        },
+        "reminders": {
+          "label": "Reminders",
+          "hint": "A reminder when messages have been waiting for a day."
+        },
+        "bids": {
+          "label": "Bids",
+          "hint": "New bids on your auctions."
+        },
+        "watchlist": {
+          "label": "Price alerts",
+          "hint": "A public listing reached the target price on your watchlist."
+        },
+        "org": {
+          "label": "Organizations",
+          "hint": "Invitations to join an organization."
+        },
+        "contracts": {
+          "label": "Public contracts",
+          "hint": "Offers on your public contracts, and new public contracts if you opt in below."
+        },
+        "announcements": {
+          "label": "Announcements",
+          "hint": "Messages from the SC Market team. Always delivered."
+        }
+      },
+      "rows": {
+        "new-order": {
+          "label": "New order",
+          "hint": "Orders for your shop, or assigned to you"
+        },
+        "new-offer": {
+          "label": "New offer or counter-offer"
+        },
+        "status": {
+          "label": "Status changes",
+          "hint": "In progress, fulfilled, cancelled"
+        },
+        "assigned": {
+          "label": "Assigned to you"
+        },
+        "decisions": {
+          "label": "Offer accepted or rejected"
+        },
+        "review": {
+          "label": "New review"
+        },
+        "revision": {
+          "label": "Review revision requested"
+        },
+        "order-messages": {
+          "label": "Order messages"
+        },
+        "offer-messages": {
+          "label": "Offer messages"
+        },
+        "reminder": {
+          "label": "Unread message reminder",
+          "hint": "At most once a day"
+        },
+        "bid": {
+          "label": "New bid"
+        },
+        "price-alert": {
+          "label": "Price alert"
+        },
+        "invite": {
+          "label": "Organization invite"
+        },
+        "contract-offer": {
+          "label": "Offer on your contract"
+        },
+        "contract-new": {
+          "label": "New public contract",
+          "hint": "Only if you turn alerts on below"
+        },
+        "admin": {
+          "label": "Announcement"
+        }
+      },
+      "subtitle": "Choose where each kind of notification reaches you.",
+      "scopeHint": "Org work has its own settings for each org.",
+      "tabsLabel": "Notification areas",
+      "mixed": "Some events on",
+      "linkDiscord": "Link Discord to get DMs",
+      "personalOnly": "Set once under Personal for all your notifications",
+      "comingSoon": "Not available for this notification yet",
+      "manageWatchlist": "Manage your watchlist",
+      "status": {
+        "pushOn": "Push: on for this device",
+        "pushOff": "Push: not set up on this device",
+        "emailOn": "Email: verified",
+        "emailUnverified": "Email: not verified",
+        "emailNone": "Email: no address",
+        "discord": "Discord DMs need a linked Discord account"
+      }
+    },
+    "contractAlerts": {
+      "title": "New public contract alerts",
+      "description": "Get an in-app and push notification when someone posts a public contract. Off by default. Leave every kind unticked to hear about all of them.",
+      "error": "Couldn't load or save your contract alerts.",
+      "toggle": "Contract alerts for"
+    }
   },
   "settingsManageContractors": {
     "actions": "Actions",

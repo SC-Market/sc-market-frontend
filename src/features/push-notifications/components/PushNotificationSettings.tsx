@@ -33,7 +33,12 @@ import { PushNotificationErrorStates } from "./PushNotificationErrorStates"
  * - Manage push notification preferences per notification type
  * - View and manage device subscriptions
  */
-export function PushNotificationSettings() {
+export function PushNotificationSettings({
+  showPreferences = true,
+}: {
+  /** false: device subscription only (Settings -> Notifications has the matrix). */
+  showPreferences?: boolean
+} = {}) {
   const { t } = useTranslation()
   const { data: organizationsData, isLoading: organizationsLoading } =
     useGetUserOrganizationsQuery()
@@ -148,7 +153,7 @@ export function PushNotificationSettings() {
       </Grid>
 
       {/* Individual Preferences Section */}
-      {isPermissionGranted && (
+      {showPreferences && isPermissionGranted && (
         <Grid item xs={12}>
           <PreferenceSection
             title={t("settings.pushNotifications.individualPreferences")}
@@ -168,7 +173,8 @@ export function PushNotificationSettings() {
       )}
 
       {/* Organization Selector and Preferences */}
-      {isPermissionGranted &&
+      {showPreferences &&
+        isPermissionGranted &&
         organizationsData &&
         organizationsData.length > 0 && (
           <Grid item xs={12}>

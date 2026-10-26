@@ -3261,6 +3261,257 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"NotificationPreferenceScope": {
+				"properties": {
+					"contractor_id": {
+						"type": "string",
+						"nullable": true,
+						"description": "null: personal notifications."
+					},
+					"name": {
+						"type": "string"
+					},
+					"spectrum_id": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"contractor_id",
+					"name",
+					"spectrum_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NotificationCategoryId": {
+				"type": "string",
+				"enum": [
+					"orders",
+					"order_messages",
+					"offers",
+					"offer_messages",
+					"market",
+					"reviews",
+					"watchlist",
+					"org",
+					"announcements",
+					"reminders",
+					"contracts"
+				]
+			},
+			"NotificationChannelId": {
+				"type": "string",
+				"enum": [
+					"in_app",
+					"push",
+					"email",
+					"discord_dm"
+				],
+				"description": "Settings -> Notifications: the category x channel matrix, with per-event\noverrides under each category."
+			},
+			"NotificationEventKey": {
+				"type": "string",
+				"enum": [
+					"order.created",
+					"order.assigned",
+					"order.status.not_started",
+					"order.status.in_progress",
+					"order.status.fulfilled",
+					"order.status.cancelled",
+					"order.message",
+					"order.review",
+					"order.review_revision_requested",
+					"offer.created",
+					"offer.countered",
+					"offer.message",
+					"market.bid",
+					"org.invite",
+					"admin.alert",
+					"reminder.unread_messages",
+					"watchlist.price_alert",
+					"offer.accepted",
+					"offer.rejected",
+					"contract.public_created",
+					"contract.offer_received"
+				]
+			},
+			"NotificationPreferenceCell": {
+				"properties": {
+					"channel": {
+						"$ref": "#/components/schemas/NotificationChannelId"
+					},
+					"enabled": {
+						"type": "boolean"
+					},
+					"locked": {
+						"type": "boolean",
+						"description": "Shown but not switchable."
+					},
+					"reason": {
+						"type": "string",
+						"enum": [
+							"always_on",
+							"discord_not_linked",
+							"personal_only",
+							"coming_soon"
+						],
+						"description": "Why: always delivered, Discord not linked, set once under Personal, or not available for this event yet."
+					},
+					"default": {
+						"type": "boolean",
+						"description": "Value when the user never chose."
+					}
+				},
+				"required": [
+					"channel",
+					"enabled",
+					"locked",
+					"default"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NotificationPreferenceEvent": {
+				"properties": {
+					"event": {
+						"$ref": "#/components/schemas/NotificationEventKey"
+					},
+					"cells": {
+						"items": {
+							"$ref": "#/components/schemas/NotificationPreferenceCell"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"event",
+					"cells"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NotificationPreferenceCategory": {
+				"properties": {
+					"category": {
+						"$ref": "#/components/schemas/NotificationCategoryId"
+					},
+					"cells": {
+						"items": {
+							"properties": {
+								"locked": {
+									"type": "boolean"
+								},
+								"state": {
+									"type": "string",
+									"enum": [
+										"on",
+										"off",
+										"mixed"
+									]
+								},
+								"channel": {
+									"$ref": "#/components/schemas/NotificationChannelId"
+								}
+							},
+							"required": [
+								"locked",
+								"state",
+								"channel"
+							],
+							"type": "object"
+						},
+						"type": "array",
+						"description": "Per channel across the category's events: on, off or mixed."
+					},
+					"events": {
+						"items": {
+							"$ref": "#/components/schemas/NotificationPreferenceEvent"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"category",
+					"cells",
+					"events"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NotificationPreferencesResponse": {
+				"properties": {
+					"contractor_id": {
+						"type": "string",
+						"nullable": true,
+						"description": "The scope `categories` is for."
+					},
+					"scopes": {
+						"items": {
+							"$ref": "#/components/schemas/NotificationPreferenceScope"
+						},
+						"type": "array",
+						"description": "Personal plus every org the user belongs to (org-scoped categories only)."
+					},
+					"categories": {
+						"items": {
+							"$ref": "#/components/schemas/NotificationPreferenceCategory"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"contractor_id",
+					"scopes",
+					"categories"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NotificationPreferenceUpdate": {
+				"properties": {
+					"category": {
+						"$ref": "#/components/schemas/NotificationCategoryId",
+						"description": "Set the whole category..."
+					},
+					"event": {
+						"$ref": "#/components/schemas/NotificationEventKey",
+						"description": "...or one event (per-event override)."
+					},
+					"channel": {
+						"$ref": "#/components/schemas/NotificationChannelId"
+					},
+					"enabled": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"channel",
+					"enabled"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateNotificationPreferencesRequest": {
+				"properties": {
+					"contractor_id": {
+						"type": "string",
+						"nullable": true,
+						"description": "null or omitted: personal."
+					},
+					"updates": {
+						"items": {
+							"$ref": "#/components/schemas/NotificationPreferenceUpdate"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"updates"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"MfaFactorSummary": {
 				"properties": {
 					"id": {
@@ -4868,8 +5119,7 @@
 				"enum": [
 					"cstone-items",
 					"uex-items",
-					"uex-attributes",
-					"shop-inventories"
+					"uex-attributes"
 				]
 			},
 			"JobStatus": {
@@ -10280,6 +10530,117 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ContractKind": {
+				"type": "string",
+				"enum": [
+					"Support",
+					"Escort",
+					"Transport",
+					"Construction",
+					"Resource Acquisition",
+					"Rental",
+					"Delivery",
+					"Medical",
+					"Intelligence Services",
+					"Misc",
+					"Custom"
+				],
+				"description": "The contract kinds the site offers (frontend orderIcons)."
+			},
+			"ContractAlertSubscription": {
+				"properties": {
+					"contractor_id": {
+						"type": "string",
+						"nullable": true,
+						"description": "null: personal; otherwise an org the user belongs to."
+					},
+					"kinds": {
+						"items": {
+							"$ref": "#/components/schemas/ContractKind"
+						},
+						"type": "array",
+						"nullable": true,
+						"description": "Only these kinds; null: every kind."
+					}
+				},
+				"required": [
+					"contractor_id",
+					"kinds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContractAlertScope": {
+				"properties": {
+					"contractor_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"contractor_id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ContractAlertsResponse": {
+				"properties": {
+					"subscriptions": {
+						"items": {
+							"$ref": "#/components/schemas/ContractAlertSubscription"
+						},
+						"type": "array",
+						"description": "Alerts are off unless a subscription exists for the scope."
+					},
+					"scopes": {
+						"items": {
+							"$ref": "#/components/schemas/ContractAlertScope"
+						},
+						"type": "array"
+					},
+					"kinds": {
+						"items": {
+							"$ref": "#/components/schemas/ContractKind"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"subscriptions",
+					"scopes",
+					"kinds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateContractAlertRequest": {
+				"properties": {
+					"contractor_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"enabled": {
+						"type": "boolean"
+					},
+					"kinds": {
+						"items": {
+							"$ref": "#/components/schemas/ContractKind"
+						},
+						"type": "array",
+						"nullable": true,
+						"description": "Only these kinds; omit or null for every kind."
+					}
+				},
+				"required": [
+					"enabled"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CartListingInfo": {
 				"description": "Listing information for cart items",
 				"properties": {
@@ -11807,9 +12168,9 @@
 				"properties": {
 					"username": {
 						"type": "string",
-						"description": "Must start with \"test\" (e.g. test-buyer).",
+						"description": "\"test\" followed by a name (e.g. test-buyer). Saved with a reserved \"~\"\nprefix (~test-buyer) that real usernames can't have.",
 						"minLength": 6,
-						"maxLength": 40
+						"maxLength": 41
 					},
 					"display_name": {
 						"type": "string",
@@ -12053,6 +12414,30 @@
 					},
 					"summary": {
 						"properties": {
+							"shopItemsRemoved": {
+								"type": "number",
+								"format": "double",
+								"description": "Shop inventory rows no longer in the game data, deleted"
+							},
+							"shopsRemoved": {
+								"type": "number",
+								"format": "double",
+								"description": "Shops no longer in the game data, deleted"
+							},
+							"shopItemsLinked": {
+								"type": "number",
+								"format": "double",
+								"description": "Shop inventory rows matched to a game item"
+							},
+							"shopItemsImported": {
+								"type": "number",
+								"format": "double"
+							},
+							"shopsImported": {
+								"type": "number",
+								"format": "double",
+								"description": "In-game shops upserted from shop-inventories.json"
+							},
 							"blueprintsUpdated": {
 								"type": "number",
 								"format": "double"
@@ -12123,6 +12508,11 @@
 							}
 						},
 						"required": [
+							"shopItemsRemoved",
+							"shopsRemoved",
+							"shopItemsLinked",
+							"shopItemsImported",
+							"shopsImported",
 							"blueprintsUpdated",
 							"blueprintsInserted",
 							"blueprintsProcessed",
@@ -12147,7 +12537,8 @@
 						"items": {
 							"type": "string"
 						},
-						"type": "array"
+						"type": "array",
+						"description": "Warnings from the import steps (skipped records, steps not run)"
 					},
 					"timestamp": {
 						"type": "string"
@@ -14083,9 +14474,9 @@
 						"schema": {
 							"type": "string",
 							"enum": [
-								"pending",
-								"assigned",
-								"completed",
+								"not-started",
+								"in-progress",
+								"fulfilled",
 								"cancelled"
 							]
 						}
@@ -14664,6 +15055,80 @@
 				]
 			}
 		},
+		"/notification-preferences": {
+			"get": {
+				"operationId": "GetNotificationPreferences",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NotificationPreferencesResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get the current user's notification preferences for one scope",
+				"summary": "Get notification preferences",
+				"tags": [
+					"Notifications"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"description": "An org the user belongs to; omit for personal notifications",
+						"in": "query",
+						"name": "contractor_id",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "UpdateNotificationPreferences",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/NotificationPreferencesResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update notification preferences for one scope",
+				"summary": "Update notification preferences",
+				"tags": [
+					"Notifications"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateNotificationPreferencesRequest"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/auth/mfa/status": {
 			"get": {
 				"operationId": "GetMfaStatus",
@@ -15112,7 +15577,7 @@
 						}
 					},
 					{
-						"description": "Only 'active' is served (the default); other statuses return no results",
+						"description": "Only 'active' is served (the default); other statuses return no results, except to site admins",
 						"in": "query",
 						"name": "status",
 						"required": false,
@@ -19952,6 +20417,70 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/UpdateDashboardLayoutRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/contract-alerts": {
+			"get": {
+				"operationId": "GetContractAlerts",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ContractAlertsResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get the current user's public contract alert subscriptions",
+				"summary": "Get contract alerts",
+				"tags": [
+					"Notifications"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			},
+			"put": {
+				"operationId": "UpdateContractAlert",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ContractAlertsResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Turn the public contract alert on or off for one scope, or change its kinds",
+				"summary": "Update contract alerts",
+				"tags": [
+					"Notifications"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateContractAlertRequest"
 							}
 						}
 					}

@@ -10,6 +10,7 @@ export const addTagTypes = [
   "Orders V2",
   "Onboarding",
   "Offers V2",
+  "Notifications",
   "Two-factor auth",
   "Listings V2",
   "Inventory V2",
@@ -530,6 +531,29 @@ const injectedRtkApi = api
       >({
         query: (queryArg) => ({ url: `/offers/${queryArg.sessionId}` }),
         providesTags: ["Offers V2"],
+      }),
+      getNotificationPreferences: build.query<
+        GetNotificationPreferencesApiResponse,
+        GetNotificationPreferencesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/notification-preferences`,
+          params: {
+            contractor_id: queryArg.contractorId,
+          },
+        }),
+        providesTags: ["Notifications"],
+      }),
+      updateNotificationPreferences: build.mutation<
+        UpdateNotificationPreferencesApiResponse,
+        UpdateNotificationPreferencesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/notification-preferences`,
+          method: "PUT",
+          body: queryArg.updateNotificationPreferencesRequest,
+        }),
+        invalidatesTags: ["Notifications"],
       }),
       getMfaStatus: build.query<GetMfaStatusApiResponse, GetMfaStatusApiArg>({
         query: () => ({ url: `/auth/mfa/status` }),
@@ -1534,6 +1558,24 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Dashboard V2"],
       }),
+      getContractAlerts: build.query<
+        GetContractAlertsApiResponse,
+        GetContractAlertsApiArg
+      >({
+        query: () => ({ url: `/contract-alerts` }),
+        providesTags: ["Notifications"],
+      }),
+      updateContractAlert: build.mutation<
+        UpdateContractAlertApiResponse,
+        UpdateContractAlertApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/contract-alerts`,
+          method: "PUT",
+          body: queryArg.updateContractAlertRequest,
+        }),
+        invalidatesTags: ["Notifications"],
+      }),
       getCart: build.query<GetCartApiResponse, GetCartApiArg>({
         query: () => ({ url: `/cart` }),
         providesTags: ["Cart V2"],
@@ -2176,7 +2218,7 @@ export type GetRequisitionsApiResponse =
   /** status 200 Ok */ GetRequisitionsResponse
 export type GetRequisitionsApiArg = {
   role?: "buyer" | "supplier"
-  status?: "pending" | "assigned" | "completed" | "cancelled"
+  status?: "not-started" | "in-progress" | "fulfilled" | "cancelled"
   page?: number
   pageSize?: number
 }
@@ -2252,6 +2294,17 @@ export type GetOfferSessionApiResponse =
 export type GetOfferSessionApiArg = {
   sessionId: string
 }
+export type GetNotificationPreferencesApiResponse =
+  /** status 200 Ok */ NotificationPreferencesResponse
+export type GetNotificationPreferencesApiArg = {
+  /** An org the user belongs to; omit for personal notifications */
+  contractorId?: string
+}
+export type UpdateNotificationPreferencesApiResponse =
+  /** status 200 Ok */ NotificationPreferencesResponse
+export type UpdateNotificationPreferencesApiArg = {
+  updateNotificationPreferencesRequest: UpdateNotificationPreferencesRequest
+}
 export type GetMfaStatusApiResponse = /** status 200 Ok */ MfaStatusResponse
 export type GetMfaStatusApiArg = void
 export type StartTotpEnrollmentApiResponse =
@@ -2312,7 +2365,7 @@ export type SearchListingsApiArg = {
   pageSize?: number
   itemType?: string
   quantityMin?: number
-  /** Only 'active' is served (the default); other statuses return no results */
+  /** Only 'active' is served (the default); other statuses return no results, except to site admins */
   status?: "active" | "inactive" | "sold" | "expired" | "cancelled"
   /** Sort field (default: created_at) */
   sortBy?:
@@ -3109,6 +3162,14 @@ export type GetLayoutApiArg = {
 export type SaveLayoutApiResponse = /** status 200 Ok */ DashboardLayout
 export type SaveLayoutApiArg = {
   updateDashboardLayoutRequest: UpdateDashboardLayoutRequest
+}
+export type GetContractAlertsApiResponse =
+  /** status 200 Ok */ ContractAlertsResponse
+export type GetContractAlertsApiArg = void
+export type UpdateContractAlertApiResponse =
+  /** status 200 Ok */ ContractAlertsResponse
+export type UpdateContractAlertApiArg = {
+  updateContractAlertRequest: UpdateContractAlertRequest
 }
 export type GetCartApiResponse =
   /** status 200 Cart contents with variant details and availability */ GetCartResponse
@@ -4221,6 +4282,91 @@ export type GetOfferSessionV2Response = {
   offers: OfferV2[]
   availability?: OfferAvailability | null
 }
+export type NotificationPreferenceScope = {
+  /** null: personal notifications. */
+  contractor_id: string | null
+  name: string
+  spectrum_id: string | null
+}
+export type NotificationCategoryId =
+  | "orders"
+  | "order_messages"
+  | "offers"
+  | "offer_messages"
+  | "market"
+  | "reviews"
+  | "watchlist"
+  | "org"
+  | "announcements"
+  | "reminders"
+  | "contracts"
+export type NotificationChannelId = "in_app" | "push" | "email" | "discord_dm"
+export type NotificationEventKey =
+  | "order.created"
+  | "order.assigned"
+  | "order.status.not_started"
+  | "order.status.in_progress"
+  | "order.status.fulfilled"
+  | "order.status.cancelled"
+  | "order.message"
+  | "order.review"
+  | "order.review_revision_requested"
+  | "offer.created"
+  | "offer.countered"
+  | "offer.message"
+  | "market.bid"
+  | "org.invite"
+  | "admin.alert"
+  | "reminder.unread_messages"
+  | "watchlist.price_alert"
+  | "offer.accepted"
+  | "offer.rejected"
+  | "contract.public_created"
+  | "contract.offer_received"
+export type NotificationPreferenceCell = {
+  channel: NotificationChannelId
+  enabled: boolean
+  /** Shown but not switchable. */
+  locked: boolean
+  /** Why: always delivered, Discord not linked, set once under Personal, or not available for this event yet. */
+  reason?: "always_on" | "discord_not_linked" | "personal_only" | "coming_soon"
+  /** Value when the user never chose. */
+  default: boolean
+}
+export type NotificationPreferenceEvent = {
+  event: NotificationEventKey
+  cells: NotificationPreferenceCell[]
+}
+export type NotificationPreferenceCategory = {
+  category: NotificationCategoryId
+  /** Per channel across the category's events: on, off or mixed. */
+  cells: {
+    locked: boolean
+    state: "on" | "off" | "mixed"
+    channel: NotificationChannelId
+  }[]
+  events: NotificationPreferenceEvent[]
+}
+export type NotificationPreferencesResponse = {
+  /** The scope `categories` is for. */
+  contractor_id: string | null
+  /** Personal plus every org the user belongs to (org-scoped categories only). */
+  scopes: NotificationPreferenceScope[]
+  categories: NotificationPreferenceCategory[]
+}
+export type NotificationPreferenceUpdate = {
+  /** Set the whole category... */
+  category?: NotificationCategoryId
+  /** ...or one event (per-event override). */
+  event?: NotificationEventKey
+  channel: NotificationChannelId
+  enabled: boolean
+}
+export type UpdateNotificationPreferencesRequest = {
+  /** null or omitted: personal. */
+  contractor_id?: string | null
+  updates: NotificationPreferenceUpdate[]
+}
 export type MfaFactorSummary = {
   id: string
   type: string
@@ -4682,11 +4828,7 @@ export type ScmdbStatusResponse = {
 export type ScmdbConnectResponse = {
   ingest_url: string
 }
-export type ImportSource =
-  | "cstone-items"
-  | "uex-items"
-  | "uex-attributes"
-  | "shop-inventories"
+export type ImportSource = "cstone-items" | "uex-items" | "uex-attributes"
 export type JobStatus = "running" | "completed" | "failed"
 export type RecordStringUnknown = {
   [key: string]: any
@@ -6277,6 +6419,40 @@ export type UpdateDashboardLayoutRequest = {
   owner_id: string
   config: DashboardConfig
 }
+export type ContractKind =
+  | "Support"
+  | "Escort"
+  | "Transport"
+  | "Construction"
+  | "Resource Acquisition"
+  | "Rental"
+  | "Delivery"
+  | "Medical"
+  | "Intelligence Services"
+  | "Misc"
+  | "Custom"
+export type ContractAlertSubscription = {
+  /** null: personal; otherwise an org the user belongs to. */
+  contractor_id: string | null
+  /** Only these kinds; null: every kind. */
+  kinds: ContractKind[] | null
+}
+export type ContractAlertScope = {
+  contractor_id: string | null
+  name: string
+}
+export type ContractAlertsResponse = {
+  /** Alerts are off unless a subscription exists for the scope. */
+  subscriptions: ContractAlertSubscription[]
+  scopes: ContractAlertScope[]
+  kinds: ContractKind[]
+}
+export type UpdateContractAlertRequest = {
+  contractor_id?: string | null
+  enabled: boolean
+  /** Only these kinds; omit or null for every kind. */
+  kinds?: ContractKind[] | null
+}
 export type CartListingInfo = {
   /** Listing UUID */
   listing_id: string
@@ -6732,7 +6908,8 @@ export type CreateTestAccountResponse = {
   qr_data_url: string
 }
 export type CreateTestAccountRequest = {
-  /** Must start with "test" (e.g. test-buyer). */
+  /** "test" followed by a name (e.g. test-buyer). Saved with a reserved "~"
+    prefix (~test-buyer) that real usernames can't have. */
   username: string
   display_name: string
 }
@@ -6792,6 +6969,15 @@ export type ImportErrorResponse = {
 export type ImportGameDataResponse = {
   success: boolean
   summary: {
+    /** Shop inventory rows no longer in the game data, deleted */
+    shopItemsRemoved: number
+    /** Shops no longer in the game data, deleted */
+    shopsRemoved: number
+    /** Shop inventory rows matched to a game item */
+    shopItemsLinked: number
+    shopItemsImported: number
+    /** In-game shops upserted from shop-inventories.json */
+    shopsImported: number
     blueprintsUpdated: number
     blueprintsInserted: number
     blueprintsProcessed: number
@@ -6810,6 +6996,7 @@ export type ImportGameDataResponse = {
     validP4KItems: number
     totalP4KItems: number
   }
+  /** Warnings from the import steps (skipped records, steps not run) */
   errors: string[]
   timestamp: string
 }
@@ -6892,6 +7079,8 @@ export const {
   useCompleteOnboardingMutation,
   useSearchOffersQuery,
   useGetOfferSessionQuery,
+  useGetNotificationPreferencesQuery,
+  useUpdateNotificationPreferencesMutation,
   useGetMfaStatusQuery,
   useStartTotpEnrollmentMutation,
   useConfirmTotpEnrollmentMutation,
@@ -6987,6 +7176,8 @@ export const {
   useSetFeatureFlagMutation,
   useGetLayoutQuery,
   useSaveLayoutMutation,
+  useGetContractAlertsQuery,
+  useUpdateContractAlertMutation,
   useGetCartQuery,
   useAddToCartMutation,
   useUpdateCartItemMutation,

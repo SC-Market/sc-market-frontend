@@ -20,7 +20,6 @@ import {
   Block,
   SecurityRounded,
   NotificationsActiveRounded,
-  Email as EmailIcon,
   PhoneAndroidRounded,
   SyncRounded,
   LockRounded,
@@ -39,8 +38,7 @@ import { MarketSettings } from "../../views/settings/MarketSettings"
 import { ContractorsSettings } from "../../views/settings/ContractorsSettings"
 import { BlocklistSettings } from "../../views/settings/BlocklistSettings"
 import { ApiTokensSettings } from "../../features/api-tokens"
-import { PushNotificationSettings } from "../../features/push-notifications"
-import { EmailSettings } from "../../features/email"
+import { NotificationSettings } from "../../features/notification-preferences"
 import { PriceAlertSettings } from "../../features/price-alerts"
 import { MobileNavSettings } from "../../views/settings/MobileNavSettings"
 import { ScmdbSyncSettings } from "../../features/scmdb-sync"
@@ -76,9 +74,11 @@ export function SettingsPage() {
   const isMobile = useIsMobile()
 
   const session = useSession()
-  const profile = session.status === "authenticated" ? session.profile : undefined
+  const profile =
+    session.status === "authenticated" ? session.profile : undefined
   // Two-factor is admin-only for now (also for an admin still held back by it).
-  const showMfa = !!profile && (isSiteAdmin(profile) || isMfaLockedAdmin(profile))
+  const showMfa =
+    !!profile && (isSiteAdmin(profile) || isMfaLockedAdmin(profile))
   const [searchParams, setSearchParams] = useSearchParams()
   const queryTab = settingsTabFromQuery(searchParams)
   const [page, setPage] = React.useState(() => queryTab ?? 0)
@@ -153,10 +153,9 @@ export function SettingsPage() {
       items: [
         {
           index: 7,
-          label: t("settings.pushNotifications.title"),
+          label: t("settings.notifications.title", "Notifications"),
           icon: <NotificationsActiveRounded />,
         },
-        { index: 8, label: t("settings.email.title"), icon: <EmailIcon /> },
         {
           index: PRICE_ALERTS_TAB_INDEX,
           label: t("settings.priceAlerts.title", "Price Alerts"),
@@ -204,10 +203,7 @@ export function SettingsPage() {
         <ApiTokensSettings />
       </TabPanel>
       <TabPanel value={page} index={7}>
-        <PushNotificationSettings />
-      </TabPanel>
-      <TabPanel value={page} index={8}>
-        <EmailSettings />
+        <NotificationSettings />
       </TabPanel>
       <TabPanel value={page} index={9}>
         <ScmdbSyncSettings />
@@ -298,16 +294,10 @@ export function SettingsPage() {
                 value={6}
               />
               <Tab
-                label={t("settings.pushNotifications.title")}
+                label={t("settings.notifications.title", "Notifications")}
                 icon={<NotificationsActiveRounded />}
                 {...a11yProps(7)}
                 value={7}
-              />
-              <Tab
-                label={t("settings.email.title")}
-                icon={<EmailIcon />}
-                {...a11yProps(8)}
-                value={8}
               />
               <Tab
                 label={t("settings.priceAlerts.title", "Price Alerts")}
@@ -378,9 +368,7 @@ export function SettingsPage() {
                 ))}
               </List>
             </Box>
-            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-              {renderContent()}
-            </Box>
+            <Box sx={{ flexGrow: 1, minWidth: 0 }}>{renderContent()}</Box>
           </Box>
         </Grid>
       )}
