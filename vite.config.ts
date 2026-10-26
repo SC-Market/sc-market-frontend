@@ -5,37 +5,9 @@ import svgrPlugin from "vite-plugin-svgr"
 import { visualizer } from "rollup-plugin-visualizer"
 import { VitePWA } from "vite-plugin-pwa"
 import circularDependency from "vite-plugin-circular-dependency"
-import Beasties from "beasties"
 import { contentPlugin } from "./scripts/vite/contentPlugin"
 import { cfasyncPlugin } from "./scripts/vite/cfasyncPlugin"
-
-// Critical CSS extraction plugin using Beasties
-function beastiesPlugin() {
-  return {
-    name: "vite-plugin-beasties",
-    enforce: "post" as const,
-    async transformIndexHtml(html: string) {
-      if (process.env.NODE_ENV !== "production") return html
-      const beasties = new Beasties({
-        inline: true,
-        width: 1920,
-        height: 1080,
-        preload: "media",
-        inlineThreshold: 10240,
-        pruneSource: false,
-        mergeStylesheets: true,
-        compress: true,
-        logLevel: "warn",
-      })
-      try {
-        return await beasties.process(html)
-      } catch (error) {
-        console.warn("Beasties failed to process HTML:", error)
-        return html
-      }
-    },
-  }
-}
+import { inlineEntryCssPlugin } from "./scripts/vite/inlineEntryCssPlugin"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -232,8 +204,8 @@ export default defineConfig({
       brotliSize: true,
       template: "treemap", // Use treemap for better visualization
     }),
-    // Critical CSS extraction for production builds
-    beastiesPlugin(),
+    // Inline the small entry stylesheet (no render-blocking request)
+    inlineEntryCssPlugin(),
   ],
   build: {
     sourcemap: true,
