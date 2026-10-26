@@ -27,9 +27,11 @@ export function LoggedInRoute() {
   // Full-page redirect to the frontend login page, carrying the current path.
   useEffect(() => {
     if (session.status === "anonymous") {
-      window.location.href = `/login?redirect=${encodeURIComponent(location.pathname)}`
+      // Keep the query string: email links such as /settings?tab=email must
+      // still open the right tab after signing in.
+      window.location.href = `/login?redirect=${encodeURIComponent(location.pathname + location.search)}`
     }
-  }, [session.status, location.pathname])
+  }, [session.status, location.pathname, location.search])
 
   if (session.status === "unknown") {
     // Keep the page's skeleton up while the session resolves (the profile
