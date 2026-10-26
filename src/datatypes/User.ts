@@ -1,3 +1,4 @@
+import type { SiteRole } from "../util/siteRole"
 import { Rating } from "../features/contractor/domain/types"
 import type { BadgeMetadata } from "../store/api/v2/market"
 
@@ -57,7 +58,7 @@ export interface AdminUser {
   user_id: string
   display_name: string
   profile_description: string
-  role: "user" | "admin"
+  role: SiteRole
   banned: boolean
   username: string
   avatar: string
@@ -86,7 +87,7 @@ export interface AdminUsersResponse {
 export interface AdminUsersQuery {
   page?: number
   page_size?: number
-  role?: "user" | "admin"
+  role?: SiteRole
   banned?: boolean
   rsi_confirmed?: boolean
 }

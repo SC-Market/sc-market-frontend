@@ -92,10 +92,6 @@ export const SCOPE_CATEGORIES = {
   admin: {
     label: "Admin",
     scopes: [
-      { value: "admin:read", label: "Read Admin Data" },
-      { value: "admin:write", label: "Write Admin Data" },
-      { value: "admin:spectrum", label: "Spectrum Migration" },
-      { value: "admin:stats", label: "View Statistics" },
       { value: "admin", label: "Full Admin Access" },
     ],
   },
@@ -107,3 +103,14 @@ export const SCOPE_CATEGORIES = {
     ],
   },
 } as const
+
+/** Scopes only site admins may grant (the backend enforces the same list). */
+const ADMIN_ONLY_SCOPES: readonly string[] = [
+  "admin",
+  "moderation:read",
+  "moderation:write",
+]
+
+export function isAdminOnlyScope(scope: string): boolean {
+  return ADMIN_ONLY_SCOPES.includes(scope)
+}

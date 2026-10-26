@@ -86,6 +86,7 @@ import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrde
 import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPendingOrderCount"
 import { haptic } from "../../util/haptics"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
+import { isSiteAdmin } from "../../util/siteRole"
 
 type NavContext = "browse" | "shop" | "org" | "admin"
 
@@ -539,7 +540,7 @@ export function SidebarV2() {
             <ListItemText>{org.name}</ListItemText>
           </MenuItem>
         ))}
-        {profile?.role === "admin" && [
+        {isSiteAdmin(profile) && [
           <Divider key="admin-divider" />,
           <MenuItem
             key="admin-item"

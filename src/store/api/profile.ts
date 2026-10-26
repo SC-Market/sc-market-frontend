@@ -1,3 +1,4 @@
+import type { SiteRole } from "../../util/siteRole"
 import { generatedApi as api } from "../generatedApi"
 export const addTagTypes = ["Profiles", "Email"] as const
 const injectedRtkApi = api
@@ -247,7 +248,7 @@ export type GetCurrentUserProfileSuccess = {
   /** User profile description */
   profile_description: string
   /** User role */
-  role: "user" | "admin"
+  role: SiteRole
   /** Whether the user is banned */
   banned: boolean
   /** User balance */

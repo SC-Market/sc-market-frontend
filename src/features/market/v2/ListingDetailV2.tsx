@@ -65,6 +65,7 @@ import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
 import { ReportButton } from "../../../components/button/ReportButton"
 import { buildListingHead } from "../../../seo/entityHeads"
 import { SeoHead } from "../../../seo/SeoHead"
+import { isSiteAdmin } from "../../../util/siteRole"
 
 export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
@@ -156,7 +157,7 @@ export function ListingDetailV2() {
 
   const canEdit = useMemo(() => {
     if (!profile || !seller || !listing) return false
-    if (profile.role === "admin") return true
+    if (isSiteAdmin(profile)) return true
     if (seller.slug === profile.username) return true
     if (belongsToSellerOrg && sellerContractor) {
       return has_permission(sellerContractor, profile, "manage_market", profile.contractors)

@@ -43,6 +43,7 @@ import {
   WarehouseRounded,
   WorkRounded,
 } from "@mui/icons-material"
+import { isSiteAdmin } from "../../../util/siteRole"
 
 const SIDEBAR_ICON_MAP: Record<string, React.ReactElement> = {
   home: <HomeRounded />, store: <StoreRounded />, dashboard: <DashboardRounded />,
@@ -188,7 +189,7 @@ export function createItemFilter(
     }
 
     // Check site admin requirements
-    if (item.site_admin && profile?.role !== "admin") {
+    if (item.site_admin && !isSiteAdmin(profile)) {
       return false
     }
 

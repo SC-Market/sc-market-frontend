@@ -17,6 +17,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useAppDispatch } from "../../store/hooks"
 import { marketV2Api } from "../../store/api/v2/market"
 import { useHydrated } from "../ssr/useHydrated"
+import { isSiteAdmin } from "../../util/siteRole"
 
 export interface FeatureFlags {
   wiki: boolean
@@ -75,7 +76,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
     () => import.meta.env.DEV || import.meta.env.MODE === "development",
     [],
   )
-  const isDeveloper = isFrontendDev || profile?.role === "admin"
+  const isDeveloper = isFrontendDev || isSiteAdmin(profile)
 
   // Background sync: fetch from server, then apply to both state and
   // localStorage. This calls setFlags, so the result lands in the current

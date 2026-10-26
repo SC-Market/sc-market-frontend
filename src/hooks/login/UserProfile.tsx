@@ -1,3 +1,4 @@
+import type { SiteRole } from "../../util/siteRole"
 import {
   Contractor,
   ContractorInvite,
@@ -58,7 +59,7 @@ export interface UserProfileState {
   display_name: string
   discord_username: string
   avatar: string
-  role: "user" | "admin"
+  role: SiteRole
   contractors: (MinimalContractor & { roles: string[]; role: string })[]
   balance: number
   rsi_confirmed?: boolean

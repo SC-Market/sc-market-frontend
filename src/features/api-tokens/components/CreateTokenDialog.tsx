@@ -21,11 +21,12 @@ import { useTranslation } from "react-i18next"
 import {
   useCreateTokenMutation,
 } from "../api/tokensApi"
-import { SCOPE_CATEGORIES } from "../domain/scopes"
+import { SCOPE_CATEGORIES, isAdminOnlyScope } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
+import { isSiteAdmin } from "../../../util/siteRole"
 
 interface CreateTokenDialogProps {
   open: boolean
@@ -37,7 +38,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   const [createToken, { isLoading }] = useCreateTokenMutation()
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
-  const isAdmin = profile?.role === "admin"
+  const isAdmin = isSiteAdmin(profile)
 
   // Filter scopes based on user role - admins can see all, non-admins can't see admin/moderation scopes
   const allScopes = Object.values(SCOPE_CATEGORIES).flatMap((cat) =>
@@ -46,11 +47,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   const availableScopes: string[] = isAdmin
     ? allScopes
     : allScopes.filter(
-        (scope) =>
-          !scope.startsWith("admin:") &&
-          scope !== "admin" &&
-          scope !== "moderation:read" &&
-          scope !== "moderation:write",
+        (scope) => !isAdminOnlyScope(scope),
       )
 
   const [formData, setFormData] = useState({

@@ -22,12 +22,13 @@ import {
   useUpdateTokenMutation,
   ApiToken,
 } from "../api/tokensApi"
-import { SCOPE_CATEGORIES } from "../domain/scopes"
+import { SCOPE_CATEGORIES, isAdminOnlyScope } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { isSiteAdmin } from "../../../util/siteRole"
 
 interface EditTokenDialogProps {
   open: boolean
@@ -44,7 +45,7 @@ export function EditTokenDialog({
   const [updateToken, { isLoading }] = useUpdateTokenMutation()
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
-  const isAdmin = profile?.role === "admin"
+  const isAdmin = isSiteAdmin(profile)
   const issueAlert = useAlertHook()
 
   // Filter scopes based on user role - admins can see all, non-admins can't see admin/moderation scopes
@@ -54,11 +55,7 @@ export function EditTokenDialog({
   const availableScopes: string[] = isAdmin
     ? allScopes
     : allScopes.filter(
-        (scope) =>
-          !scope.startsWith("admin:") &&
-          scope !== "admin" &&
-          scope !== "moderation:read" &&
-          scope !== "moderation:write",
+        (scope) => !isAdminOnlyScope(scope),
       )
 
   const [formData, setFormData] = useState({
@@ -87,11 +84,7 @@ export function EditTokenDialog({
       const scopesToShow = isAdmin
         ? token.scopes
         : token.scopes.filter(
-            (scope: string) =>
-              !scope.startsWith("admin:") &&
-              scope !== "admin" &&
-              scope !== "moderation:read" &&
-              scope !== "moderation:write",
+            (scope: string) => !isAdminOnlyScope(scope),
           )
 
       setFormData({

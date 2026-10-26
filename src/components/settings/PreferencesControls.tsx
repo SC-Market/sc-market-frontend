@@ -20,6 +20,7 @@ import {
   useGetUserProfileQuery,
 } from "../../features/profile/api/profileApi"
 import { useEffect, useMemo, useCallback, useState } from "react"
+import { isSiteAdmin } from "../../util/siteRole"
 
 const FONT_OPTIONS = [
   { label: "Default (Roboto)", value: "" },
@@ -94,7 +95,7 @@ export function PreferencesControls() {
   const [updateLocale] = useProfileUpdateLocale()
   const { data: userProfile } = useGetUserProfileQuery()
   const isDev = import.meta.env.DEV || import.meta.env.MODE === "development"
-  const isAdmin = userProfile?.role === "admin"
+  const isAdmin = isSiteAdmin(userProfile)
 
   const [selectedFont, setSelectedFont] = useState(getStoredFont)
 

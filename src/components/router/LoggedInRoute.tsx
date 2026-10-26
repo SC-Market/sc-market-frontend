@@ -10,6 +10,7 @@ import { useCookies } from "react-cookie"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { ContractorRole } from "../../features/contractor/domain/types"
 import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
+import { isSiteAdmin } from "../../util/siteRole"
 
 export function LoggedInRoute() {
   const session = useSession()
@@ -50,7 +51,7 @@ export function SiteAdminRoute() {
 
   if (session.status === "unknown") return null
   return session.status === "authenticated" &&
-    session.profile.role === "admin" ? (
+    isSiteAdmin(session.profile) ? (
     <Outlet />
   ) : (
     <Navigate to={"/404"} />

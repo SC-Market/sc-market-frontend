@@ -10,6 +10,7 @@ import {
   DarkBannerContainer,
   LightBannerContainer,
 } from "../../profile/components/BannerContainers"
+import { isSiteAdmin } from "../../../util/siteRole"
 
 function OrgRefetchButton(props: { org: Contractor }) {
   const { data: profile } = useGetUserProfileQuery()
@@ -17,7 +18,7 @@ function OrgRefetchButton(props: { org: Contractor }) {
 
   return (
     <>
-      {profile?.role === "admin" && (
+      {isSiteAdmin(profile) && (
         <Fab
           color={"warning"}
           sx={{ left: 8, top: 8, position: "absolute" }}

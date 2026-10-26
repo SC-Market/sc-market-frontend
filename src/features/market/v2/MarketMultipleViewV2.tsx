@@ -50,6 +50,7 @@ import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import type { Order } from "../../orders/domain/types"
 import { useGetListingDetailQuery } from "../../../store/api/v2/market";
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
+import { isSiteAdmin } from "../../../util/siteRole"
 
 /**
  * MarketMultipleViewV2 Component
@@ -251,7 +252,7 @@ export function MarketMultipleViewV2() {
   );
 
   const amRelated = useMemo(
-    () => amSeller || amContractorManager || profile?.role === "admin",
+    () => amSeller || amContractorManager || isSiteAdmin(profile),
     [amSeller, amContractorManager, profile?.role]
   );
 

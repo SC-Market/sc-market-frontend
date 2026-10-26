@@ -4,6 +4,7 @@ import { useGetOrgBlocklistQuery } from "../../contractor/api/contractorApi"
 import { useAdminUnlinkUserAccountMutation } from "../../admin/api/adminApi"
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import { isSiteAdmin } from "../../../util/siteRole"
 
 export function useUserActions(username: string) {
   const { t } = useTranslation()
@@ -19,7 +20,7 @@ export function useUserActions(username: string) {
   const isPersonallyBlocked = personalBlocklist.some((e) => e.blocked_user?.username === username)
   const isSelf = myProfile?.username === username
   const isOrgBlocked = orgBlocklist.some((e) => e.blocked_user?.username === username)
-  const isAdmin = myProfile?.role === "admin"
+  const isAdmin = isSiteAdmin(myProfile)
 
   const handleConfirmUnlink = useCallback(async () => {
     try {

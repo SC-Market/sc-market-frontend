@@ -53,6 +53,7 @@ import { startProactiveRefresh } from "../store/proactiveRefresh"
 
 import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
+import { isSiteAdmin } from "../util/siteRole"
 
 function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
@@ -74,7 +75,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const { data: userProfile } = useGetUserProfileQuery(undefined, {
     skip: isDev || !mightBeCustomTheme,
   })
-  const isAdmin = userProfile?.role === "admin"
+  const isAdmin = isSiteAdmin(userProfile)
 
   // Determine the actual theme to use (resolves "system" to light/dark)
   const actualTheme = useMemo(() => {

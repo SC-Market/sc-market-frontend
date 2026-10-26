@@ -52,6 +52,7 @@ import {
 } from "../../features/notifications/api/notificationApi"
 import { useOrderDetails } from "../../features/orders/hooks/useOrderDetails"
 import { SHOP_PATHS } from "../../routes/paths"
+import { isSiteAdmin } from "../../util/siteRole"
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
@@ -547,7 +548,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                       {t("orderDetailsArea.cancel")}
                     </LoadingButton>
                   )}
-                  {(profile?.role === "admin" ||
+                  {(isSiteAdmin(profile) ||
                     amContractorManager ||
                     amAssigned) &&
                     (isMobile ? (
@@ -556,7 +557,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                         spacing={theme.layoutSpacing.compact}
                         sx={{ width: "100%" }}
                       >
-                        {(profile?.role === "admin" ||
+                        {(isSiteAdmin(profile) ||
                           order.status === "not-started" ||
                           order.status === "in-progress") && (
                           <LoadingButton
@@ -569,7 +570,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.complete_order")}
                           </LoadingButton>
                         )}
-                        {(profile?.role === "admin" ||
+                        {(isSiteAdmin(profile) ||
                           order.status === "not-started") && (
                           <LoadingButton
                             variant={"contained"}
@@ -581,7 +582,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.begin_work")}
                           </LoadingButton>
                         )}
-                        {profile?.role === "admin" && (
+                        {isSiteAdmin(profile) && (
                           <LoadingButton
                             variant={"contained"}
                             color={"info"}
@@ -592,7 +593,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.not_started")}
                           </LoadingButton>
                         )}
-                        {(profile?.role === "admin" || !isComplete) && (
+                        {(isSiteAdmin(profile) || !isComplete) && (
                           <LoadingButton
                             variant={"contained"}
                             color={"error"}
@@ -609,7 +610,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                         variant="contained"
                         aria-label={t("ui.aria.loadingButtonGroup")}
                       >
-                        {(profile?.role === "admin" ||
+                        {(isSiteAdmin(profile) ||
                           order.status === "not-started" ||
                           order.status === "in-progress") && (
                           <LoadingButton
@@ -621,7 +622,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.complete_order")}
                           </LoadingButton>
                         )}
-                        {(profile?.role === "admin" ||
+                        {(isSiteAdmin(profile) ||
                           order.status === "not-started") && (
                           <LoadingButton
                             variant={"contained"}
@@ -632,7 +633,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.begin_work")}
                           </LoadingButton>
                         )}
-                        {profile?.role === "admin" && (
+                        {isSiteAdmin(profile) && (
                           <LoadingButton
                             variant={"contained"}
                             color={"info"}
@@ -642,7 +643,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.not_started")}
                           </LoadingButton>
                         )}
-                        {(profile?.role === "admin" || !isComplete) && (
+                        {(isSiteAdmin(profile) || !isComplete) && (
                           <LoadingButton
                             variant={"contained"}
                             color={"error"}
