@@ -2044,18 +2044,6 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/discord",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > market",
-    "errorBoundaryAt": "(layout:HookProvider)",
-    "guards": [
-      "HookProvider",
-      "LoggedInRoute",
-      "OrgContextFromRoute",
-      "OrgAdminRoute",
-    ],
-    "lazy": true,
-    "pattern": "/org/:contractor_id/manage/market",
-  },
-  {
     "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > settings",
     "errorBoundaryAt": "(layout:HookProvider)",
     "guards": [
@@ -2068,18 +2056,6 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/settings",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > blocklist",
-    "errorBoundaryAt": "(layout:HookProvider)",
-    "guards": [
-      "HookProvider",
-      "LoggedInRoute",
-      "OrgContextFromRoute",
-      "OrgAdminRoute",
-    ],
-    "lazy": true,
-    "pattern": "/org/:contractor_id/manage/blocklist",
-  },
-  {
     "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > audit",
     "errorBoundaryAt": "(layout:HookProvider)",
     "guards": [
@@ -2090,18 +2066,6 @@ exports[`route table > lists every leaf route 2`] = `
     ],
     "lazy": true,
     "pattern": "/org/:contractor_id/manage/audit",
-  },
-  {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > customers",
-    "errorBoundaryAt": "(layout:HookProvider)",
-    "guards": [
-      "HookProvider",
-      "LoggedInRoute",
-      "OrgContextFromRoute",
-      "OrgAdminRoute",
-    ],
-    "lazy": true,
-    "pattern": "/org/:contractor_id/manage/customers",
   },
   {
     "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > theme",

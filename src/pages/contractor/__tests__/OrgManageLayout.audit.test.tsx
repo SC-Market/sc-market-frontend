@@ -43,17 +43,19 @@ vi.mock("../../../features/contractor/hooks/usePageOrgManage", () => ({
 
 function navLabels() {
   render(
-    <MemoryRouter initialEntries={["/org/TESTORG/manage/customers"]}>
+    <MemoryRouter initialEntries={["/org/TESTORG/manage/invites"]}>
       <OrgManageLayout />
     </MemoryRouter>,
   )
-  return screen.getAllByRole("button").map((b) => b.textContent ?? "")
+  return screen.queryAllByRole("button").map((b) => b.textContent ?? "")
 }
 
 describe("OrgManageLayout audit log item", () => {
   it("is hidden from members without Manage Org Details", () => {
-    h.granted = new Set(["manage_orders"])
-    expect(navLabels()).not.toContain("org.auditLogsTab")
+    h.granted = new Set(["manage_invites"])
+    const labels = navLabels()
+    expect(labels).toContain("org.invitesTab")
+    expect(labels).not.toContain("org.auditLogsTab")
   })
 
   it("is shown to Manage Org Details holders", () => {

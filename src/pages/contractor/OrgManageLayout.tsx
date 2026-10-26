@@ -12,11 +12,8 @@ import {
 import { useBreakpointUp } from "../../hooks/layout/useBreakpoint"
 import {
   InfoRounded,
-  PeopleAltRounded,
   AccountBoxRounded,
-  StoreRounded,
   SettingsRounded,
-  Block,
   HistoryRounded,
   PaletteRounded,
   PersonAddRounded,
@@ -62,10 +59,6 @@ export function OrgManageLayout() {
     () => has_permission(contractor, profile, "manage_invites", profile?.contractors),
     [contractor, profile],
   )
-  const canManageOrders = useMemo(
-    () => has_permission(contractor, profile, "manage_orders", profile?.contractors),
-    [contractor, profile],
-  )
 
   const navItems = useMemo(() => {
     const items: NavItem[] = []
@@ -81,17 +74,12 @@ export function OrgManageLayout() {
       items.push({ label: t("org.discordTab"), icon: <Discord />, value: "discord" })
     }
     if (canManageOrgDetails) {
-      items.push({ label: t("org.marketTab"), icon: <StoreRounded />, value: "market" })
       items.push({ label: t("org.settingsTab"), icon: <SettingsRounded />, value: "settings" })
-    }
-    if (canManageOrders) {
-      items.push({ label: t("org.blocklistTab"), icon: <Block />, value: "blocklist" })
     }
     if (canManageOrgDetails) {
       // The API only serves audit logs to manage_org_details holders.
       items.push({ label: t("org.auditLogsTab"), icon: <HistoryRounded />, value: "audit" })
     }
-    items.push({ label: t("org.customersTab", "Customers"), icon: <PeopleAltRounded />, value: "customers" })
     if (hasWhiteLabel && canManageTheme) {
       // The theme page holds both the theme editor and the white-label
       // settings (OrgThemePage), so one item covers both. There is no
@@ -104,7 +92,7 @@ export function OrgManageLayout() {
     }
 
     return items
-  }, [canManageOrgDetails, canManageRoles, canManageInvites, canManageOrders, canManageTheme, hasWhiteLabel, t])
+  }, [canManageOrgDetails, canManageRoles, canManageInvites, canManageTheme, hasWhiteLabel, t])
 
   // Extract the active sub-route from the pathname
   const activeItem = useMemo(() => {

@@ -3958,88 +3958,6 @@ exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/audi
 }
 `;
 
-exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/blocklist 1`] = `
-{
-  "links": {
-    "path:""": "/org/TESTORG/manage/blocklist",
-    "path:"#frag"": "/org/TESTORG/manage/blocklist#frag",
-    "path:"."": "/org/TESTORG/manage/blocklist",
-    "path:".."": "/org/TESTORG/manage",
-    "path:"../.."": "/org/TESTORG",
-    "path:"../sibling"": "/org/TESTORG/manage/sibling",
-    "path:"./"": "/org/TESTORG/manage/blocklist/",
-    "path:"./child"": "/org/TESTORG/manage/blocklist/child",
-    "path:"?tab=x"": "/org/TESTORG/manage/blocklist?tab=x",
-    "path:"child"": "/org/TESTORG/manage/blocklist/child",
-    "route:""": "/org/TESTORG/manage/blocklist",
-    "route:"#frag"": "/org/TESTORG/manage/blocklist#frag",
-    "route:"."": "/org/TESTORG/manage/blocklist",
-    "route:".."": "/org/TESTORG/manage",
-    "route:"../.."": "/org/TESTORG",
-    "route:"../sibling"": "/org/TESTORG/manage/sibling",
-    "route:"./"": "/org/TESTORG/manage/blocklist/",
-    "route:"./child"": "/org/TESTORG/manage/blocklist/child",
-    "route:"?tab=x"": "/org/TESTORG/manage/blocklist?tab=x",
-    "route:"child"": "/org/TESTORG/manage/blocklist/child",
-  },
-  "location": "/org/TESTORG/manage/blocklist",
-  "params": {
-    "contractor_id": "TESTORG",
-  },
-  "probeChain": [
-    "(layout:HookProvider)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "manage",
-    "(layout:lazy)",
-    "blocklist",
-  ],
-  "resolvedDot": "/org/TESTORG/manage/blocklist",
-  "url": "/org/TESTORG/manage/blocklist",
-}
-`;
-
-exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/customers 1`] = `
-{
-  "links": {
-    "path:""": "/org/TESTORG/manage/customers",
-    "path:"#frag"": "/org/TESTORG/manage/customers#frag",
-    "path:"."": "/org/TESTORG/manage/customers",
-    "path:".."": "/org/TESTORG/manage",
-    "path:"../.."": "/org/TESTORG",
-    "path:"../sibling"": "/org/TESTORG/manage/sibling",
-    "path:"./"": "/org/TESTORG/manage/customers/",
-    "path:"./child"": "/org/TESTORG/manage/customers/child",
-    "path:"?tab=x"": "/org/TESTORG/manage/customers?tab=x",
-    "path:"child"": "/org/TESTORG/manage/customers/child",
-    "route:""": "/org/TESTORG/manage/customers",
-    "route:"#frag"": "/org/TESTORG/manage/customers#frag",
-    "route:"."": "/org/TESTORG/manage/customers",
-    "route:".."": "/org/TESTORG/manage",
-    "route:"../.."": "/org/TESTORG",
-    "route:"../sibling"": "/org/TESTORG/manage/sibling",
-    "route:"./"": "/org/TESTORG/manage/customers/",
-    "route:"./child"": "/org/TESTORG/manage/customers/child",
-    "route:"?tab=x"": "/org/TESTORG/manage/customers?tab=x",
-    "route:"child"": "/org/TESTORG/manage/customers/child",
-  },
-  "location": "/org/TESTORG/manage/customers",
-  "params": {
-    "contractor_id": "TESTORG",
-  },
-  "probeChain": [
-    "(layout:HookProvider)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "manage",
-    "(layout:lazy)",
-    "customers",
-  ],
-  "resolvedDot": "/org/TESTORG/manage/customers",
-  "url": "/org/TESTORG/manage/customers",
-}
-`;
-
 exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/discord 1`] = `
 {
   "links": {
@@ -4119,47 +4037,6 @@ exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/invi
   ],
   "resolvedDot": "/org/TESTORG/manage/invites",
   "url": "/org/TESTORG/manage/invites",
-}
-`;
-
-exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/market 1`] = `
-{
-  "links": {
-    "path:""": "/org/TESTORG/manage/market",
-    "path:"#frag"": "/org/TESTORG/manage/market#frag",
-    "path:"."": "/org/TESTORG/manage/market",
-    "path:".."": "/org/TESTORG/manage",
-    "path:"../.."": "/org/TESTORG",
-    "path:"../sibling"": "/org/TESTORG/manage/sibling",
-    "path:"./"": "/org/TESTORG/manage/market/",
-    "path:"./child"": "/org/TESTORG/manage/market/child",
-    "path:"?tab=x"": "/org/TESTORG/manage/market?tab=x",
-    "path:"child"": "/org/TESTORG/manage/market/child",
-    "route:""": "/org/TESTORG/manage/market",
-    "route:"#frag"": "/org/TESTORG/manage/market#frag",
-    "route:"."": "/org/TESTORG/manage/market",
-    "route:".."": "/org/TESTORG/manage",
-    "route:"../.."": "/org/TESTORG",
-    "route:"../sibling"": "/org/TESTORG/manage/sibling",
-    "route:"./"": "/org/TESTORG/manage/market/",
-    "route:"./child"": "/org/TESTORG/manage/market/child",
-    "route:"?tab=x"": "/org/TESTORG/manage/market?tab=x",
-    "route:"child"": "/org/TESTORG/manage/market/child",
-  },
-  "location": "/org/TESTORG/manage/market",
-  "params": {
-    "contractor_id": "TESTORG",
-  },
-  "probeChain": [
-    "(layout:HookProvider)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "manage",
-    "(layout:lazy)",
-    "market",
-  ],
-  "resolvedDot": "/org/TESTORG/manage/market",
-  "url": "/org/TESTORG/manage/market",
 }
 `;
 

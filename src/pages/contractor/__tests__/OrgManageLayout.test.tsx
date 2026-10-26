@@ -101,6 +101,14 @@ describe("OrgManageLayout nav", () => {
     page.data = OWNER
   })
 
+  it("has no Market, Blocked Users or Customers tabs (those live on each shop)", () => {
+    const labels = navLabels(OWNER)
+    expect(labels).not.toContain("org.marketTab")
+    expect(labels).not.toContain("org.blocklistTab")
+    expect(labels).not.toContain("Customers")
+    for (const tab of ["market", "blocklist", "customers"]) expect(manageTabs.has(tab)).toBe(false)
+  })
+
   it("hides Audit Logs from members without Manage Org Details", () => {
     expect(navLabels(memberWith("manage_invites"))).not.toContain("org.auditLogsTab")
     expect(navLabels(memberWith("manage_org_details"))).toContain("org.auditLogsTab")
