@@ -109,6 +109,11 @@ describe("OrgManageLayout nav", () => {
     for (const tab of ["market", "blocklist", "customers"]) expect(manageTabs.has(tab)).toBe(false)
   })
 
+  it("shows Discord Integration with Manage Webhooks, not Manage Invites", () => {
+    expect(navLabels(memberWith("manage_invites"))).toEqual(["org.invitesTab"])
+    expect(navLabels(memberWith("manage_webhooks"))).toEqual(["org.discordTab"])
+  })
+
   it("hides Audit Logs from members without Manage Org Details", () => {
     expect(navLabels(memberWith("manage_invites"))).not.toContain("org.auditLogsTab")
     expect(navLabels(memberWith("manage_org_details"))).toContain("org.auditLogsTab")

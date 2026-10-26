@@ -127,6 +127,12 @@ vi.mock("../../../views/contractor/OrgRoles", () => ({
   has_permission: (...args: Parameters<typeof HasPermission>) =>
     mockHasPermission(...args),
 }))
+// The Manage entry's rules (manageTabs) use the domain permission check.
+vi.mock("../../../features/contractor/domain/permissions", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../../features/contractor/domain/permissions")>()),
+  has_permission: (...args: Parameters<typeof HasPermission>) =>
+    mockHasPermission(...args),
+}))
 
 vi.mock("react-cookie", () => ({
   useCookies: () => [mockCookies, mockSetCookie, vi.fn()],
@@ -427,6 +433,27 @@ describe("SidebarV2 — org context", () => {
       permission_name === "manage_org_details"
     renderSidebar("/org/TESTORG/members")
     expect(screen.getByText("Manage")).toBeInTheDocument()
+  })
+
+  it("hides Manage with only Manage Blocklist (no manage tab needs it)", () => {
+    mockHasPermission = (_contractor, _user, permission_name) =>
+      permission_name === "manage_blocklist"
+    renderSidebar("/org/TESTORG/members")
+    expect(screen.queryByText("Manage")).not.toBeInTheDocument()
+  })
+
+  it("shows Manage with only Manage Webhooks (the Discord tab)", () => {
+    mockHasPermission = (_contractor, _user, permission_name) =>
+      permission_name === "manage_webhooks"
+    renderSidebar("/org/TESTORG/members")
+    expect(screen.getByText("Manage")).toBeInTheDocument()
+  })
+
+  it("hides Manage with only Manage Theme on an org without white-label", () => {
+    mockHasPermission = (_contractor, _user, permission_name) =>
+      permission_name === "manage_theme"
+    renderSidebar("/org/TESTORG/members")
+    expect(screen.queryByText("Manage")).not.toBeInTheDocument()
   })
 })
 

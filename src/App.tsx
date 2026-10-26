@@ -32,6 +32,7 @@ import {
   OrgAdminRoute,
 } from "./components/router/LoggedInRoute"
 import { OrgContextFromRoute } from "./components/router/OrgContextFromRoute"
+import { canOpenOrgManage } from "./features/contractor/domain/manageTabs"
 import { ShopContextFromRoute } from "./components/router/ShopContextFromRoute"
 import {
   ShopRedirect,
@@ -1000,17 +1001,7 @@ export const routes: RouteObject[] = [
               },
               {
                 path: "manage",
-                element: (
-                  <OrgAdminRoute
-                    anyPermission={[
-                      "manage_org_details",
-                      "manage_invites",
-                      "manage_roles",
-                      "manage_webhooks",
-                      "manage_theme",
-                    ]}
-                  />
-                ),
+                element: <OrgAdminRoute allow={canOpenOrgManage} />,
                 children: [
                   {
                     lazy: async () => ({

@@ -8,7 +8,8 @@ import { useTheme } from "@mui/material/styles"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useCookies } from "react-cookie"
 import { has_permission } from "../../views/contractor/OrgRoles"
-import { ContractorRole } from "../../features/contractor/domain/types"
+import type { Contractor, ContractorRole } from "../../features/contractor/domain/types"
+import type { UserProfileState } from "../../hooks/login/UserProfile"
 import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 import { isSiteAdmin } from "../../util/siteRole"
 import { RouteSkeletonFallback } from "./RouteSuspense"
@@ -101,8 +102,10 @@ export function OrgRoute() {
 export function OrgAdminRoute(props: {
   permission?: keyof ContractorRole
   anyPermission?: (keyof ContractorRole)[]
+  /** Custom check, e.g. canOpenOrgManage. */
+  allow?: (contractor: Contractor, profile: UserProfileState) => boolean
 }) {
-  const { permission, anyPermission } = props
+  const { permission, anyPermission, allow } = props
   const [cookies] = useCookies(["current_contractor"])
   const {
     data: contractor,
@@ -125,7 +128,9 @@ export function OrgAdminRoute(props: {
   }, [profile])
 
   const canView = useMemo(() => {
-    if (permission) {
+    if (allow) {
+      return !!contractor && !!profile && allow(contractor, profile)
+    } else if (permission) {
       return has_permission(
         contractor!,
         profile!,
@@ -139,7 +144,7 @@ export function OrgAdminRoute(props: {
     } else {
       return false
     }
-  }, [anyPermission, contractor, permission, profile])
+  }, [allow, anyPermission, contractor, permission, profile])
 
   if (isLoading) {
     return <RouteSkeletonFallback />

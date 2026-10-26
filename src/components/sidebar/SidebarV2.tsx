@@ -71,6 +71,7 @@ import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
 import { useFeatureFlag } from "../../hooks/market"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { has_permission } from "../../views/contractor/OrgRoles"
+import { canOpenOrgManage } from "../../features/contractor/domain/manageTabs"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
 import {
   ADMIN_PATHS,
@@ -224,13 +225,7 @@ export function SidebarV2() {
       return items
     }
     if (context === "org" && selectedOrgId) {
-      const canManageDetails = has_permission(selectedContractor, profile, "manage_org_details", profile?.contractors)
-      const canManageRoles = has_permission(selectedContractor, profile, "manage_roles", profile?.contractors)
-      const canManageInvites = has_permission(selectedContractor, profile, "manage_invites", profile?.contractors)
       const canManageOrders = has_permission(selectedContractor, profile, "manage_orders", profile?.contractors)
-      const canManageWebhooks = has_permission(selectedContractor, profile, "manage_webhooks", profile?.contractors)
-      const canManageBlocklist = has_permission(selectedContractor, profile, "manage_blocklist", profile?.contractors)
-      const canManageTheme = has_permission(selectedContractor, profile, "manage_theme", profile?.contractors)
       const items: NavItem[] = [
         { label: t("nav.orgPage", "Org Page"), to: ORG_PATHS.profile(selectedOrgId), icon: <StorefrontRounded /> },
         { label: t("nav.orgDashboard", "Dashboard"), to: flags.customizable_dashboard ? ORG_PATHS.dashboardOverview(selectedOrgId) : ORG_PATHS.dashboard(selectedOrgId), icon: <DashboardRounded /> },
@@ -240,12 +235,10 @@ export function SidebarV2() {
         items.push({ label: t("nav.orgOrders", "Org Orders"), to: ORG_PATHS.orders(selectedOrgId), icon: <LocalShippingRounded /> })
       }
       // Single Manage entry — the manage page has its own tab bar for
-      // About/Roles/Invites/Discord/Theme/Settings/Audit/etc. Don't duplicate
-      // those sub-destinations in the sidebar.
-      const canManageAny =
-        canManageDetails || canManageRoles || canManageInvites ||
-        canManageWebhooks || canManageBlocklist || canManageTheme
-      if (canManageAny) {
+      // About/Roles/Invites/Discord/Theme/Settings/Audit. Don't duplicate
+      // those sub-destinations in the sidebar. It shows exactly when at least
+      // one of those tabs would (same rules as the manage route).
+      if (canOpenOrgManage(selectedContractor, profile)) {
         items.push({ label: t("nav.orgManage", "Manage"), to: ORG_PATHS.manage(selectedOrgId), icon: <SettingsRounded /> })
       }
       return items

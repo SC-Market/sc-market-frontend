@@ -23,7 +23,7 @@ import { useTranslation } from "react-i18next"
 import { Discord } from "../../components/icon/DiscordIcon"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageOrgManage } from "../../features/contractor/hooks/usePageOrgManage"
-import { has_permission } from "../../features/contractor/domain/permissions"
+import { visibleOrgManageTabs, type OrgManageTab } from "../../features/contractor/domain/manageTabs"
 import { OrgManageSkeleton } from "../../components/skeletons/OrgManageSkeleton"
 
 interface NavItem {
@@ -41,58 +41,22 @@ export function OrgManageLayout() {
   const pageData = usePageOrgManage()
   const contractor = pageData.data?.contractor
   const profile = pageData.data?.profile
-  const hasWhiteLabel = contractor?.premium_tier === "white_label"
-
-  const canManageRoles = useMemo(
-    () => has_permission(contractor, profile, "manage_roles", profile?.contractors),
-    [contractor, profile],
-  )
-  const canManageOrgDetails = useMemo(
-    () => has_permission(contractor, profile, "manage_org_details", profile?.contractors),
-    [contractor, profile],
-  )
-  const canManageTheme = useMemo(
-    () => has_permission(contractor, profile, "manage_theme", profile?.contractors),
-    [contractor, profile],
-  )
-  const canManageInvites = useMemo(
-    () => has_permission(contractor, profile, "manage_invites", profile?.contractors),
-    [contractor, profile],
-  )
-
-  const navItems = useMemo(() => {
-    const items: NavItem[] = []
-
-    if (canManageOrgDetails) {
-      items.push({ label: t("org.aboutTab"), icon: <InfoRounded />, value: "about" })
-    }
-    if (canManageRoles) {
-      items.push({ label: t("org.rolesTab"), icon: <AccountBoxRounded />, value: "roles" })
-    }
-    if (canManageInvites) {
-      items.push({ label: t("org.invitesTab"), icon: <PersonAddRounded />, value: "invites" })
-      items.push({ label: t("org.discordTab"), icon: <Discord />, value: "discord" })
-    }
-    if (canManageOrgDetails) {
-      items.push({ label: t("org.settingsTab"), icon: <SettingsRounded />, value: "settings" })
-    }
-    if (canManageOrgDetails) {
-      // The API only serves audit logs to manage_org_details holders.
-      items.push({ label: t("org.auditLogsTab"), icon: <HistoryRounded />, value: "audit" })
-    }
-    if (hasWhiteLabel && canManageTheme) {
+  // Which tabs show (and so who can do what) is decided in one place,
+  // visibleOrgManageTabs; this only adds labels and icons.
+  const navItems = useMemo<NavItem[]>(() => {
+    const meta: Record<OrgManageTab, Omit<NavItem, "value">> = {
+      about: { label: t("org.aboutTab"), icon: <InfoRounded /> },
+      roles: { label: t("org.rolesTab"), icon: <AccountBoxRounded /> },
+      invites: { label: t("org.invitesTab"), icon: <PersonAddRounded /> },
+      discord: { label: t("org.discordTab"), icon: <Discord /> },
+      settings: { label: t("org.settingsTab"), icon: <SettingsRounded /> },
+      audit: { label: t("org.auditLogsTab"), icon: <HistoryRounded /> },
       // The theme page holds both the theme editor and the white-label
-      // settings (OrgThemePage), so one item covers both. There is no
-      // manage/whitelabel route.
-      items.push({
-        label: t("org.themeWhiteLabelTab", "Theme & White Label"),
-        icon: <PaletteRounded />,
-        value: "theme",
-      })
+      // settings (OrgThemePage), so one item covers both.
+      theme: { label: t("org.themeWhiteLabelTab", "Theme & White Label"), icon: <PaletteRounded /> },
     }
-
-    return items
-  }, [canManageOrgDetails, canManageRoles, canManageInvites, canManageTheme, hasWhiteLabel, t])
+    return visibleOrgManageTabs(contractor, profile).map((value) => ({ value, ...meta[value] }))
+  }, [contractor, profile, t])
 
   // Extract the active sub-route from the pathname
   const activeItem = useMemo(() => {

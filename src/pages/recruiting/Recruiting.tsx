@@ -14,7 +14,9 @@ import { RecruitingPostItem } from "../../views/recruiting/RecruitingList"
 import { RecruitingPostSkeleton } from "../../components/skeletons"
 import type { RecruitingPost } from "../../features/recruiting/domain/types"
 import { Link } from "react-router-dom"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useSelectedOrg } from "../../hooks/login/useSelectedOrg"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { has_permission } from "../../features/contractor/domain/permissions"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -36,12 +38,16 @@ export function Recruiting() {
     language_codes: undefined,
   })
 
-  const [currentOrg] = useCurrentOrg()
+  // Create/Update Post act for the org selected in the sidebar and need its
+  // Manage Recruiting permission (same check as /recruiting/post/create).
+  const { org: selectedOrg } = useSelectedOrg()
+  const { data: profile } = useGetUserProfileQuery()
+  const canRecruit = has_permission(selectedOrg, profile, "manage_recruiting", profile?.contractors)
   const pageData = usePageRecruiting({
     page,
     perPage,
     searchState,
-    currentOrgSpectrumId: currentOrg?.spectrum_id,
+    currentOrgSpectrumId: canRecruit ? selectedOrg?.spectrum_id : undefined,
   })
 
   const ref = useRef<HTMLDivElement>(null)
@@ -69,7 +75,7 @@ export function Recruiting() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const isMobile = useIsMobile()
 
-  const headerActions = currentOrg && pageData.data && (
+  const headerActions = canRecruit && pageData.data && (
     <>
       {pageData.data.alreadyPosted ? (
         <Link
@@ -178,7 +184,7 @@ export function Recruiting() {
                         (searchState.language_codes &&
                           searchState.language_codes.length > 0)
                       }
-                      showCreateAction={!!currentOrg}
+                      showCreateAction={canRecruit}
                       sx={{ py: 4 }}
                     />
                   </Grid>
