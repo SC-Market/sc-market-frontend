@@ -2,7 +2,7 @@
 title: Buy an item
 description: Add items to your cart, submit an offer to each seller, then meet in game to pay in aUEC. SC Market never handles the payment.
 order: 10
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [buy, purchase, cart, checkout, auction, bid, buy order, price, price alert, watchlist]
 related: [buying/how-orders-work, getting-started/create-an-account, buying/price-alerts-watchlist]
 howto: true
@@ -37,6 +37,17 @@ Can't find what you need? [Create a buy order](/buyorder/create) with the item, 
 ## Wait for a better price
 
 Too expensive, or out of stock? Click **Watch price** on the item or listing and set your target price. You get an alert when someone lists it at or below that price: see [get price alerts with the watchlist](/guides/buying/price-alerts-watchlist).
+
+## Advanced: search and buy from Discord
+
+In a server with the [SC Market bot](/guides/discord/connect-the-discord-bot), and with your Discord account linked to SC Market:
+
+1. Run `/search` with a `query`, such as `Medical Supplies`. To see one shop's listings, pick it in `seller` instead (or as well).
+2. Narrow the results with the optional `item_type`, `sorting`, `quantity_available`, `min_cost`, `max_cost`, `quality_min` and `quality_max`.
+3. Page through the in-stock results with the arrow buttons.
+4. Click **Buy** to order: enter the **Quantity** and an optional **Note to Seller**. Or click **Offer** to propose a price: **Your Offer (aUEC)**, **Quantity** and a **Message to Seller**.
+
+The offer or order then shows in [My Orders](/orders) as usual. Nothing in stock at your price? `/watchlist add` alerts you when a matching listing appears.
 
 ## What happens next
 

@@ -2,7 +2,7 @@
 title: Handle orders as a seller or org team
 description: Incoming offers and orders for your shop are on its Orders page. Accept the offer, then move the order through Begin Work and Complete Order.
 order: 50
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [seller, orders, offers, accept, assign, claim, begin work, complete order, org orders, team]
 related: [buying/how-orders-work, orgs/roles-and-permissions, discord/order-alerts-and-claiming]
 howto: true
@@ -39,8 +39,11 @@ As a seller, you handle each sale in two parts: accept the buyer's offer, which 
 - Org shop: the assigned member or anyone with **Manage Orders**.
 - Buyers can only cancel. Fulfilled and cancelled orders can't change again.
 
-## Claim from Discord
+## Advanced: work from Discord
 
-If your org posts order alerts to Discord, members with **Claim Orders** can claim new orders straight from the alert. See [order alerts and claiming](/guides/discord/order-alerts-and-claiming).
+With the [SC Market bot](/guides/discord/connect-the-discord-bot) set up and your Discord account linked, you can do the same steps without opening the site.
+
+- **Claim**: if your org posts order alerts, members with **Claim Orders** click **Claim** on the alert to take a new order. See [order alerts and claiming](/guides/discord/order-alerts-and-claiming).
+- **Update the status**: run `/order status` and pick `newstatus`: **In Progress**, **Fulfilled** or **Cancelled**. Inside an order's thread it updates that order; anywhere else, pick the order in `order` (it suggests your open orders). The same rules apply as on the site, and the buyer and the order thread are notified.
 
 [How orders work](/guides/buying/how-orders-work "cta")

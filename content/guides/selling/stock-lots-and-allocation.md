@@ -1,14 +1,14 @@
 ---
 title: Manage stock lots
-description: Your stock is a set of lots, each with a quantity and an optional location. Edit them on your shop's Stock page; sold stock comes out when you accept an offer.
+description: Your stock is kept in lots. Change a listing's quantity on your shop's Listings page, or edit the lots on its Stock page. Sold stock comes out on accept.
 order: 20
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [stock, stock lots, inventory, quantity, location, allocation, allocated, listed, personal]
 related: [selling/sell-items, selling/handle-orders-as-a-seller]
 howto: true
 ---
 
-Stock on SC Market is kept in lots: a quantity of one item variant, with an optional location and quality. A listing sells from its lots, so buyers can only order what the lots hold. You manage lots on your shop's **Stock** page.
+Stock on SC Market is kept in lots: a quantity of one item variant, with an optional location and quality. A listing sells from its lots, so buyers can only order what the lots hold. For most listings you just change the quantity on your shop's **Listings** page; the **Stock** page manages the lots themselves.
 
 ## Before you start
 
@@ -16,6 +16,16 @@ Stock on SC Market is kept in lots: a quantity of one item variant, with an opti
 - In an org shop: the org's **Manage Market** permission to change lots.
 
 ## Steps
+
+The quick way, for a listing with one lot: change the listing's quantity.
+
+1. Switch the sidebar to your shop and open **Listings**.
+2. Click the edit icon (**Edit**) on the listing's row.
+3. Change the **Quantity** and click the save icon (**Save**). The new quantity goes to the listing's first listed lot.
+
+## Advanced: work with the lots
+
+Use the **Stock** page when a listing has several lots, or to change a lot's location.
 
 1. Switch the sidebar to your shop and open **Stock**. The page opens on **Manage Inventory**.
 2. Find the lot in **All Stock Lots**. Use **Search lots...** or the **Listing** filter to narrow the list.

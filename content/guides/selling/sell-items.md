@@ -38,6 +38,15 @@ Choose **Auction** as the sale type and set an end time, a minimum bid increment
 - **Listings** in your shop's sidebar shows every listing. Use **Edit**, **Activate**, **Deactivate** or **Archive** to change one.
 - **Stock** shows **All Stock Lots**: item, variant, quantity, location and the listing each lot belongs to. Edit a lot's quantity there when your inventory changes. See [manage stock lots](/guides/selling/stock-lots-and-allocation).
 
+## Advanced: list and update many items at once
+
+Your shop's **Listings** page works on several listings at a time:
+
+- **Change many at once**: tick the listings' checkboxes, then click **Activate**, **Deactivate** or **Archive**. Archive asks you to confirm with **Archive permanently**: archived listings leave the market for good.
+- **Quick listings**: click the plus icon (**Add Quick Listing**) to add a row, pick the item, set the price and quantity, and click the save icon. The row becomes an active listing titled after the item, without the full form. Edit it later to add a description and photos.
+- **Edit in place**: click a row's edit icon to change its **Price**, **Quantity** or **Status**, then the save icon.
+- **Import a catalog**: `/listing import` in Discord copies your sell listings from UEXCorp (see below).
+
 ## Advanced: manage listings from Discord
 
 With the [SC Market bot](/guides/discord/connect-the-discord-bot) in your server and your Discord account linked, `/listing` does the common edits without opening the site. Set `owner` to **Me** or one of your orgs.
