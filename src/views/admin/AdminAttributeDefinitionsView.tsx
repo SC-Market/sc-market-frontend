@@ -60,8 +60,8 @@ export function AdminAttributeDefinitionsView() {
     { field: "actions", headerName: t("admin.attributes.actions", "Actions"), width: 150, display: "flex" as const, flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Box>
-          <IconButton size="small" onClick={() => handleOpenEditModal(params.row)} color="primary"><AdminIcons.Edit /></IconButton>
-          <IconButton size="small" onClick={() => handleOpenDeleteModal(params.row)} color="error"><AdminIcons.Delete /></IconButton>
+          <IconButton size="small" onClick={() => handleOpenEditModal(params.row)} color="primary" aria-label={t("admin.common.edit", "Edit")}><AdminIcons.Edit /></IconButton>
+          <IconButton size="small" onClick={() => handleOpenDeleteModal(params.row)} color="error" aria-label={t("admin.common.delete", "Delete")}><AdminIcons.Delete /></IconButton>
         </Box>
       ) },
   ]
@@ -152,10 +152,10 @@ export function AdminAttributeDefinitionsView() {
               )}
             />
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>
+              <InputLabel id="admin-attribute-definitions-attribute-type-label">
                 {t("admin.attributes.field.attributeType", "Attribute Type")}
               </InputLabel>
-              <Select
+              <Select labelId="admin-attribute-definitions-attribute-type-label"
                 value={formData.attribute_type}
                 label={t(
                   "admin.attributes.field.attributeType",
@@ -306,10 +306,10 @@ export function AdminAttributeDefinitionsView() {
               sx={{ mb: 2 }}
             />
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>
+              <InputLabel id="admin-attribute-definitions-attribute-type-2-label">
                 {t("admin.attributes.field.attributeType", "Attribute Type")}
               </InputLabel>
-              <Select
+              <Select labelId="admin-attribute-definitions-attribute-type-2-label"
                 value={formData.attribute_type}
                 label={t(
                   "admin.attributes.field.attributeType",
@@ -461,6 +461,8 @@ export function AdminAttributeDefinitionsView() {
                 )}
               </Typography>
               <Select
+                inputProps={{ "aria-label": t("admin.attributes.cascadeDelete", "Also delete game item attributes") }}
+                SelectDisplayProps={{ "aria-label": t("admin.attributes.cascadeDelete", "Also delete game item attributes") }}
                 value={cascadeDelete ? "yes" : "no"}
                 onChange={(e) => setCascadeDelete(e.target.value === "yes")}
                 size="small"

@@ -235,8 +235,8 @@ export function AdminPremiumManagementView() {
             </Box>
           )}
           <FormControl fullWidth sx={{ mt: 1 }}>
-            <InputLabel>{t("admin.premium.tier", "Tier")}</InputLabel>
-            <Select
+            <InputLabel id="admin-premium-management-view-tier-label">{t("admin.premium.tier", "Tier")}</InputLabel>
+            <Select labelId="admin-premium-management-view-tier-label"
               value={selectedTier}
               label={t("admin.premium.tier", "Tier")}
               onChange={(e) => setSelectedTier(e.target.value)}

@@ -142,6 +142,7 @@ export function AdminAlertsView() {
             size="small"
             onClick={() => handleOpenEditModal(params.row)}
             color="primary"
+            aria-label={t("admin.common.edit", "Edit")}
           >
             <AdminIcons.Edit />
           </IconButton>
@@ -149,6 +150,7 @@ export function AdminAlertsView() {
             size="small"
             onClick={() => handleOpenDeleteModal(params.row)}
             color="error"
+            aria-label={t("admin.common.delete", "Delete")}
           >
             <AdminIcons.Delete />
           </IconButton>
@@ -181,10 +183,10 @@ export function AdminAlertsView() {
       >
         <Grid item xs={12} md={3}>
           <FormControl size="small" fullWidth>
-            <InputLabel>
+            <InputLabel id="admin-alerts-view-target-type-label">
               {t("admin.alerts.targetTypeFilter", "Target Type")}
             </InputLabel>
-            <Select
+            <Select labelId="admin-alerts-view-target-type-label"
               value={targetTypeFilter}
               label={t("admin.alerts.targetTypeFilter", "Target Type")}
               onChange={(e) => setTargetTypeFilter(e.target.value as typeof targetTypeFilter)}
@@ -200,10 +202,10 @@ export function AdminAlertsView() {
         </Grid>
         <Grid item xs={12} md={3}>
           <FormControl size="small" fullWidth>
-            <InputLabel>
+            <InputLabel id="admin-alerts-view-active-status-label">
               {t("admin.alerts.activeFilter", "Active Status")}
             </InputLabel>
-            <Select
+            <Select labelId="admin-alerts-view-active-status-label"
               value={activeFilter === null ? "" : activeFilter}
               label={t("admin.alerts.activeFilter", "Active Status")}
               onChange={(e) =>
@@ -297,10 +299,10 @@ export function AdminAlertsView() {
               type="url"
             />
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>
+              <InputLabel id="admin-alerts-view-target-type-2-label">
                 {t("admin.alerts.targetType", "Target Type")}
               </InputLabel>
-              <Select
+              <Select labelId="admin-alerts-view-target-type-2-label"
                 value={formData.target_type}
                 label={t("admin.alerts.targetType", "Target Type")}
                 onChange={(e) => handleTargetTypeChange(e.target.value)}
@@ -438,10 +440,10 @@ export function AdminAlertsView() {
               type="url"
             />
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>
+              <InputLabel id="admin-alerts-view-target-type-3-label">
                 {t("admin.alerts.targetType", "Target Type")}
               </InputLabel>
-              <Select
+              <Select labelId="admin-alerts-view-target-type-3-label"
                 value={formData.target_type}
                 label={t("admin.alerts.targetType", "Target Type")}
                 onChange={(e) => handleTargetTypeChange(e.target.value)}

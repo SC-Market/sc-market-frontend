@@ -210,10 +210,10 @@ export function AdminModerationView() {
         </HeaderTitle>
         <Grid item xs={12} md={3}>
           <FormControl size="small" fullWidth>
-            <InputLabel>
+            <InputLabel id="admin-moderation-view-status-filter-label">
               {t("admin.moderation.filter.status", "Status Filter")}
             </InputLabel>
-            <Select
+            <Select labelId="admin-moderation-view-status-filter-label"
               value={statusFilter}
               label={t("admin.moderation.filter.status", "Status Filter")}
               onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
@@ -271,10 +271,10 @@ export function AdminModerationView() {
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>
+              <InputLabel id="admin-moderation-view-status-label">
                 {t("admin.moderation.field.status", "Status")}
               </InputLabel>
-              <Select
+              <Select labelId="admin-moderation-view-status-label"
                 value={updateStatus}
                 label={t("admin.moderation.field.status", "Status")}
                 onChange={(e) => setUpdateStatus(e.target.value)}

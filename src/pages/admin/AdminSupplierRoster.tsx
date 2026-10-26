@@ -111,8 +111,8 @@ function AddSupplierDialog({
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           <FormControl fullWidth size="small">
-            <InputLabel>Supplier type</InputLabel>
-            <Select
+            <InputLabel id="admin-supplier-roster-supplier-type-label">Supplier type</InputLabel>
+            <Select labelId="admin-supplier-roster-supplier-type-label"
               value={kind}
               label="Supplier type"
               onChange={(e) => setKind(e.target.value as "user" | "contractor")}
@@ -133,8 +133,8 @@ function AddSupplierDialog({
           />
 
           <FormControl fullWidth size="small">
-            <InputLabel>Tier (optional)</InputLabel>
-            <Select
+            <InputLabel id="admin-supplier-roster-tier-optional-label">Tier (optional)</InputLabel>
+            <Select labelId="admin-supplier-roster-tier-optional-label"
               value={tier}
               label="Tier (optional)"
               onChange={(e) => setTier(e.target.value as SupplierTier)}
@@ -238,8 +238,8 @@ function EditSupplierDialog({
           </Stack>
 
           <FormControl fullWidth size="small">
-            <InputLabel>Tier</InputLabel>
-            <Select
+            <InputLabel id="admin-supplier-roster-tier-label">Tier</InputLabel>
+            <Select labelId="admin-supplier-roster-tier-label"
               value={tier}
               label="Tier"
               onChange={(e) => setTier(e.target.value as SupplierTier)}
@@ -252,8 +252,8 @@ function EditSupplierDialog({
           </FormControl>
 
           <FormControl fullWidth size="small">
-            <InputLabel>Status</InputLabel>
-            <Select
+            <InputLabel id="admin-supplier-roster-status-label">Status</InputLabel>
+            <Select labelId="admin-supplier-roster-status-label"
               value={status}
               label="Status"
               onChange={(e) => setStatus(e.target.value as SupplierStatus)}

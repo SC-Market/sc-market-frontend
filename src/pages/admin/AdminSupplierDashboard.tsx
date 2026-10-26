@@ -423,7 +423,7 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
                       from {req.buyer?.display_name ?? req.buyer?.username}
                     </Typography>
                   </Box>
-                  <IconButton size="small">
+                  <IconButton size="small" aria-label="Open requisition">
                     <OpenInNewRounded sx={{ fontSize: 14 }} />
                   </IconButton>
                 </Stack>
@@ -537,7 +537,7 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
                     />
                   </TableCell>
                   <TableCell>
-                    <IconButton size="small" onClick={(e) => { e.stopPropagation(); navigate(`/orders/${order.order_id}`) }}>
+                    <IconButton size="small" aria-label="Open order" onClick={(e) => { e.stopPropagation(); navigate(`/orders/${order.order_id}`) }}>
                       <OpenInNewRounded sx={{ fontSize: 14 }} />
                     </IconButton>
                   </TableCell>

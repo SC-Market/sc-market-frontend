@@ -125,7 +125,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
             <Grid item xs={12} sm={4}>
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Typography>Enabled</Typography>
-                <Switch checked={enabled} onChange={(e) => setLocalEnabled(e.target.checked)} />
+                <Switch checked={enabled} onChange={(e) => setLocalEnabled(e.target.checked)} inputProps={{ "aria-label": "Enabled" }} />
               </Stack>
               <Typography variant="caption" color="text.secondary">
                 When off, all users get the old experience
@@ -133,8 +133,8 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
             </Grid>
             <Grid item xs={12} sm={4}>
               <FormControl fullWidth size="small">
-                <InputLabel>Default</InputLabel>
-                <Select value={defaultVersion} label="Default" onChange={(e) => setLocalDefault(e.target.value as MarketVersion)}>
+                <InputLabel id="admin-feature-flag-detail-view-default-label">Default</InputLabel>
+                <Select labelId="admin-feature-flag-detail-view-default-label" value={defaultVersion} label="Default" onChange={(e) => setLocalDefault(e.target.value as MarketVersion)}>
                   <MenuItem value="V1">V1 (Off)</MenuItem>
                   <MenuItem value="V2">V2 (On)</MenuItem>
                 </Select>
@@ -160,6 +160,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
                 </Stack>
               )}
               <Slider
+                aria-label="Rollout percentage"
                 value={rollout} onChange={(_, v) => setLocalRollout(v as number)}
                 min={0} max={100} step={5} valueLabelDisplay="auto" size="small"
                 marks={[{ value: 0, label: "0%" }, { value: 50, label: "50%" }, { value: 100, label: "100%" }]}
@@ -212,7 +213,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
                 <TableCell><Chip label={o.enabled ? "ON" : "OFF"} color={o.enabled ? "success" : "default"} size="small" /></TableCell>
                 <TableCell>{new Date(o.updated_at).toLocaleString()}</TableCell>
                 <TableCell align="right">
-                  <IconButton size="small" onClick={() => handleRemove(o.username)} color="error">
+                  <IconButton size="small" onClick={() => handleRemove(o.username)} color="error" aria-label={`Remove override for ${o.username}`}>
                     <DeleteRounded fontSize="small" />
                   </IconButton>
                 </TableCell>
@@ -231,7 +232,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
             {newUsername && <Chip label={newUsername} onDelete={() => setNewUsername("")} />}
             <Stack direction="row" alignItems="center" spacing={1}>
               <Typography variant="body2">Enabled</Typography>
-              <Switch checked={newEnabled} onChange={(e) => setNewEnabled(e.target.checked)} />
+              <Switch checked={newEnabled} onChange={(e) => setNewEnabled(e.target.checked)} inputProps={{ "aria-label": "Enabled for this user" }} />
             </Stack>
           </Stack>
         </DialogContent>

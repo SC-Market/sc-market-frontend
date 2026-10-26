@@ -244,6 +244,7 @@ export function AdminGameItemAttributesView({
             size="small"
             onClick={() => handleOpenEditModal(params.row)}
             color="primary"
+            aria-label={t("admin.common.edit", "Edit")}
           >
             <AdminIcons.Edit />
           </IconButton>
@@ -251,6 +252,7 @@ export function AdminGameItemAttributesView({
             size="small"
             onClick={() => handleOpenDeleteModal(params.row)}
             color="error"
+            aria-label={t("admin.common.delete", "Delete")}
           >
             <AdminIcons.Delete />
           </IconButton>
@@ -348,10 +350,10 @@ export function AdminGameItemAttributesView({
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>
+              <InputLabel id="admin-game-item-attributes-attribute-label">
                 {t("admin.gameItemAttributes.attributeName", "Attribute")}
               </InputLabel>
-              <Select
+              <Select labelId="admin-game-item-attributes-attribute-label"
                 value={formData.attribute_name}
                 label={t("admin.gameItemAttributes.attributeName", "Attribute")}
                 onChange={(e) =>
@@ -374,10 +376,10 @@ export function AdminGameItemAttributesView({
             {selectedDefinition?.allowed_values &&
             selectedDefinition.allowed_values.length > 0 ? (
               <FormControl fullWidth>
-                <InputLabel>
+                <InputLabel id="admin-game-item-attributes-value-label">
                   {t("admin.gameItemAttributes.value", "Value")}
                 </InputLabel>
-                <Select
+                <Select labelId="admin-game-item-attributes-value-label"
                   value={formData.attribute_value}
                   label={t("admin.gameItemAttributes.value", "Value")}
                   onChange={(e) =>

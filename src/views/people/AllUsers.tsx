@@ -219,8 +219,8 @@ export function AdminUserList(props: {
           }}
         >
           <FormControl size="small" sx={{ minWidth: 140, flexShrink: 0 }}>
-            <InputLabel>{t("adminUsers.role")}</InputLabel>
-            <Select
+            <InputLabel id="all-users-role-label">{t("adminUsers.role")}</InputLabel>
+            <Select labelId="all-users-role-label"
               value={roleFilter || ""}
               label={t("adminUsers.role")}
               onChange={(e) => {
@@ -235,8 +235,8 @@ export function AdminUserList(props: {
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 140, flexShrink: 0 }}>
-            <InputLabel>{t("adminUsers.banned_status")}</InputLabel>
-            <Select
+            <InputLabel id="all-users-banned-status-label">{t("adminUsers.banned_status")}</InputLabel>
+            <Select labelId="all-users-banned-status-label"
               value={bannedFilter === undefined ? "" : bannedFilter.toString()}
               label={t("adminUsers.banned_status")}
               onChange={(e) => {
@@ -253,8 +253,8 @@ export function AdminUserList(props: {
           </FormControl>
 
           <FormControl size="small" sx={{ minWidth: 140, flexShrink: 0 }}>
-            <InputLabel>{t("adminUsers.verification")}</InputLabel>
-            <Select
+            <InputLabel id="all-users-verification-label">{t("adminUsers.verification")}</InputLabel>
+            <Select labelId="all-users-verification-label"
               value={rsiFilter === undefined ? "" : rsiFilter.toString()}
               label={t("adminUsers.verification")}
               onChange={(e) => {

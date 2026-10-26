@@ -214,8 +214,8 @@ export function AdminGameDataImportView() {
 
       <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
         <FormControl size="small" sx={{ minWidth: 120 }}>
-          <InputLabel>Channel</InputLabel>
-          <Select value={gameChannel} label="Channel" onChange={(e) => setGameChannel(e.target.value as typeof gameChannel)}>
+          <InputLabel id="admin-game-data-import-view-channel-label">Channel</InputLabel>
+          <Select labelId="admin-game-data-import-view-channel-label" value={gameChannel} label="Channel" onChange={(e) => setGameChannel(e.target.value as typeof gameChannel)}>
             <MenuItem value="LIVE">LIVE</MenuItem>
             <MenuItem value="PTU">PTU</MenuItem>
             <MenuItem value="EPTU">EPTU</MenuItem>

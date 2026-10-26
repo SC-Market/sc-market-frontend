@@ -153,13 +153,13 @@ export function AdminNotificationTestView() {
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
-              <InputLabel>
+              <InputLabel id="admin-notification-test-type-label">
                 {t(
                   "admin.notificationTest.notificationType",
                   "Notification Type",
                 )}
               </InputLabel>
-              <Select
+              <Select labelId="admin-notification-test-type-label"
                 value={notificationType}
                 onChange={(e) => setNotificationType(e.target.value)}
                 label={t(
@@ -209,13 +209,13 @@ export function AdminNotificationTestView() {
 
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
-              <InputLabel>
+              <InputLabel id="admin-notification-test-contractor-label">
                 {t(
                   "admin.notificationTest.contractor",
                   "Contractor (Optional - for org-scoped testing)",
                 )}
               </InputLabel>
-              <Select
+              <Select labelId="admin-notification-test-contractor-label"
                 value={contractorId}
                 onChange={(e) => setContractorId(e.target.value)}
                 label={t(
