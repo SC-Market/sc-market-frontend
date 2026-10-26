@@ -144,6 +144,7 @@ exports[`links rendered by nested pages > /org/TESTORG/dashboard 1`] = `
     "/about",
     "/contractor/TESTORG",
     "/guides",
+    "/guides/selling/handle-orders-as-a-seller",
     "/org/TESTORG/dashboard",
     "/org/TESTORG/manage",
     "/org/TESTORG/members",
@@ -156,6 +157,7 @@ exports[`links rendered by nested pages > /org/TESTORG/dashboard 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
+    "/guides/selling/handle-orders-as-a-seller",
     "/org/TESTORG/dashboard",
     "/privacy-policy",
     "/terms-of-service",
@@ -229,6 +231,7 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/roles 1`] = `
     "/about",
     "/contractor/TESTORG",
     "/guides",
+    "/guides/orgs/roles-and-permissions",
     "/org/TESTORG/dashboard",
     "/org/TESTORG/manage",
     "/org/TESTORG/members",
@@ -241,6 +244,7 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/roles 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
+    "/guides/orgs/roles-and-permissions",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -254,6 +258,7 @@ exports[`links rendered by nested pages > /shop/test-shop/dashboard 1`] = `
     "/",
     "/about",
     "/guides",
+    "/guides/selling/handle-orders-as-a-seller",
     "/privacy-policy",
     "/settings",
     "/shop/test-shop/customers",
@@ -270,6 +275,7 @@ exports[`links rendered by nested pages > /shop/test-shop/dashboard 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
+    "/guides/selling/handle-orders-as-a-seller",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -317,6 +323,9 @@ exports[`links rendered by nested pages > /shop/test-shop/settings 1`] = `
     "/",
     "/about",
     "/guides",
+    "/guides/discord/connect-the-discord-bot",
+    "/guides/discord/webhooks",
+    "/guides/selling/stock-lots-and-allocation",
     "/privacy-policy",
     "/settings",
     "/shop/test-shop/customers",
@@ -333,6 +342,9 @@ exports[`links rendered by nested pages > /shop/test-shop/settings 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
+    "/guides/discord/connect-the-discord-bot",
+    "/guides/discord/webhooks",
+    "/guides/selling/stock-lots-and-allocation",
     "/privacy-policy",
     "/terms-of-service",
   ],
@@ -389,11 +401,8 @@ exports[`org manage nav: relative navigate(value) from the pathless OrgManageLay
   "PUSH /org/TESTORG/manage/roles",
   "PUSH /org/TESTORG/manage/invites",
   "PUSH /org/TESTORG/manage/discord",
-  "PUSH /org/TESTORG/manage/market",
   "PUSH /org/TESTORG/manage/settings",
-  "PUSH /org/TESTORG/manage/blocklist",
   "PUSH /org/TESTORG/manage/audit",
-  "PUSH /org/TESTORG/manage/customers",
 ]
 `;
 
