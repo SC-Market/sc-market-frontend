@@ -179,6 +179,9 @@ export interface RouteRecord {
   consoleErrors: string[]
 }
 
+/** The Help & Guides directory nav (GuidesDirectory), on every help page. */
+const GUIDES_DIRECTORY_SELECTOR = 'nav[aria-label="All guides"]'
+
 export interface MountedApp {
   router: ReturnType<typeof createMemoryRouter>
   requests: FakeApiRequest[]
@@ -385,11 +388,18 @@ export function mountApp(
     record: () => {
       const s = router.state
       const main = document.querySelector("#main-content")
-      const links = main
-        ? [...main.querySelectorAll("a[href]")]
-            .map((a) => a.getAttribute("href") ?? "")
-            .filter((href) => href.startsWith("/"))
-        : []
+      // Help & Guides pages (the ones with the guides directory) get all their
+      // links from /content, and routes.contentLinks.test checks every one.
+      // Recording them here made each new guide or content edit break these
+      // snapshots, so help pages record a marker instead.
+      const isHelpPage = !!main?.querySelector(GUIDES_DIRECTORY_SELECTOR)
+      const links = !main
+        ? []
+        : isHelpPage
+          ? ["(help page: links checked by routes.contentLinks.test)"]
+          : [...main.querySelectorAll("a[href]")]
+              .map((a) => a.getAttribute("href") ?? "")
+              .filter((href) => href.startsWith("/"))
       const errors = s.errors
         ? Object.fromEntries(
             Object.entries(s.errors).map(([routeId, error]) => {
