@@ -140,8 +140,22 @@ export function AccountLinks() {
         </Grid>
 
         {isLoading ? (
+          // Placeholder rows the size of the linked-account rows below (most
+          // users have one or two), so the cards under this one don't drop
+          // ~200px when the links arrive.
           <Grid item xs={12}>
-            <Typography>Loading...</Typography>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {[0, 1].map((i) => (
+                <Skeleton
+                  key={i}
+                  variant="rounded"
+                  height={70}
+                  sx={{
+                    borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                  }}
+                />
+              ))}
+            </Box>
           </Grid>
         ) : (
           <>

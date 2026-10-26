@@ -232,7 +232,7 @@ export function InventoryPageSkeleton() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Array.from({ length: 10 }).map((_, i) => (
+              {Array.from({ length: 16 }).map((_, i) => (
                 <TableRow key={i}>
                   {headers.map((h) => (
                     <TableCell key={h}>

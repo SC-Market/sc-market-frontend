@@ -214,7 +214,7 @@ export default function InventoryPage() {
                 {/* While the first page loads: placeholder rows in the same
                     table, so the column widths and page height match */}
                 {isLoading &&
-                  Array.from({ length: 10 }).map((_, i) => (
+                  Array.from({ length: 16 }).map((_, i) => (
                     <TableRow key={`skeleton-${i}`}>
                       <TableCell>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
