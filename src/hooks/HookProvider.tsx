@@ -54,6 +54,7 @@ import { startProactiveRefresh } from "../store/proactiveRefresh"
 import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
 import { isSiteAdmin } from "../util/siteRole"
+import { AdminMfaHost } from "../features/mfa/components/AdminMfaHost"
 
 function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
@@ -332,6 +333,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
                   >
                     <CssBaseline key="css-baseline" />
                     {props.children}
+                    <AdminMfaHost />
                     <Snackbar
                       open={!!alert}
                       autoHideDuration={6000}

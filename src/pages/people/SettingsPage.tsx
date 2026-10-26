@@ -23,7 +23,13 @@ import {
   Email as EmailIcon,
   PhoneAndroidRounded,
   SyncRounded,
+  LockRounded,
 } from "@mui/icons-material"
+import { useSearchParams } from "react-router-dom"
+import { useSession } from "../../hooks/login/useSession"
+import { isSiteAdmin } from "../../util/siteRole"
+import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
+
 import { PrivacySettings } from "../../views/settings/PrivacySettings"
 import { Discord } from "../../components/icon/DiscordIcon"
 import { ProfileSettings } from "../../views/settings/ProfileSettings"
@@ -39,7 +45,13 @@ import { ScmdbSyncSettings } from "../../features/scmdb-sync"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
+// Admin-only; loaded only when the tab is shown.
+const MfaSettings = React.lazy(() =>
+  import("../../features/mfa/components/MfaSettings").then((m) => ({ default: m.MfaSettings })),
+)
+
 const MOBILE_NAV_TAB_INDEX = 10
+const MFA_TAB_INDEX = 11
 
 interface NavItem {
   index: number
@@ -57,7 +69,14 @@ export function SettingsPage() {
   const { t } = useTranslation()
   const isMobile = useIsMobile()
 
-  const [page, setPage] = React.useState(0)
+  const session = useSession()
+  const profile = session.status === "authenticated" ? session.profile : undefined
+  // Two-factor is admin-only for now (also for an admin still held back by it).
+  const showMfa = !!profile && (isSiteAdmin(profile) || isMfaLockedAdmin(profile))
+  const [searchParams] = useSearchParams()
+  const [page, setPage] = React.useState(() =>
+    searchParams.get("mfa") ? MFA_TAB_INDEX : 0,
+  )
 
   React.useEffect(() => {
     if (!isMobile && page === MOBILE_NAV_TAB_INDEX) {
@@ -80,6 +99,15 @@ export function SettingsPage() {
           label: t("settings.tabs.privacy"),
           icon: <PrivacyTipRounded />,
         },
+        ...(showMfa
+          ? [
+              {
+                index: MFA_TAB_INDEX,
+                label: t("mfa.settings.title", "Two-factor authentication"),
+                icon: <LockRounded />,
+              },
+            ]
+          : []),
       ],
     },
     {
@@ -155,6 +183,13 @@ export function SettingsPage() {
       <TabPanel value={page} index={9}>
         <ScmdbSyncSettings />
       </TabPanel>
+      {showMfa && (
+        <TabPanel value={page} index={MFA_TAB_INDEX}>
+          <React.Suspense fallback={null}>
+            <MfaSettings />
+          </React.Suspense>
+        </TabPanel>
+      )}
       {isMobile && (
         <TabPanel value={page} index={10}>
           <MobileNavSettings />
@@ -192,6 +227,14 @@ export function SettingsPage() {
                 {...a11yProps(1)}
                 value={1}
               />
+              {showMfa && (
+                <Tab
+                  label={t("mfa.settings.title", "Two-factor authentication")}
+                  icon={<LockRounded />}
+                  {...a11yProps(MFA_TAB_INDEX)}
+                  value={MFA_TAB_INDEX}
+                />
+              )}
               <Tab
                 label={t("settings.tabs.discordIntegration")}
                 icon={<Discord sx={{ marginRight: 1 }} />}

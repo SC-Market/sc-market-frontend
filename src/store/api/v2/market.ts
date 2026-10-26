@@ -33,6 +33,7 @@ export const addTagTypes = [
   "Admin Feature Flags",
   "Admin",
   "Accounts V2",
+  "Two-factor auth",
 ] as const
 const injectedRtkApi = api
   .enhanceEndpoints({
@@ -1786,6 +1787,71 @@ const injectedRtkApi = api
         query: () => ({ url: `/accounts/deletion-precheck` }),
         providesTags: ["Accounts V2"],
       }),
+      getMfaStatus: build.query<GetMfaStatusApiResponse, GetMfaStatusApiArg>({
+        query: () => ({ url: `/auth/mfa/status` }),
+        providesTags: ["Two-factor auth"],
+      }),
+      startTotpEnrollment: build.mutation<
+        StartTotpEnrollmentApiResponse,
+        StartTotpEnrollmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/auth/mfa/totp/enroll`,
+          method: "POST",
+          body: queryArg.totpEnrollRequest,
+        }),
+        invalidatesTags: ["Two-factor auth"],
+      }),
+      confirmTotpEnrollment: build.mutation<
+        ConfirmTotpEnrollmentApiResponse,
+        ConfirmTotpEnrollmentApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/auth/mfa/totp/confirm`,
+          method: "POST",
+          body: queryArg.totpConfirmRequest,
+        }),
+        invalidatesTags: ["Two-factor auth"],
+      }),
+      verifyMfa: build.mutation<VerifyMfaApiResponse, VerifyMfaApiArg>({
+        query: (queryArg) => ({
+          url: `/auth/mfa/verify`,
+          method: "POST",
+          body: queryArg.mfaVerifyRequest,
+        }),
+        invalidatesTags: ["Two-factor auth"],
+      }),
+      regenerateMfaRecoveryCodes: build.mutation<
+        RegenerateMfaRecoveryCodesApiResponse,
+        RegenerateMfaRecoveryCodesApiArg
+      >({
+        query: () => ({
+          url: `/auth/mfa/recovery-codes/regenerate`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Two-factor auth"],
+      }),
+      removeMfaFactor: build.mutation<
+        RemoveMfaFactorApiResponse,
+        RemoveMfaFactorApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/auth/mfa/factors/${queryArg.factorId}`,
+          method: "DELETE",
+          body: queryArg.mfaReauthRequest,
+        }),
+        invalidatesTags: ["Two-factor auth"],
+      }),
+      resetUserMfa: build.mutation<ResetUserMfaApiResponse, ResetUserMfaApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/admin/mfa/users/${queryArg.username}/reset`,
+            method: "POST",
+            body: queryArg.mfaResetRequest,
+          }),
+          invalidatesTags: ["Two-factor auth"],
+        },
+      ),
     }),
     overrideExisting: false,
   })
@@ -3116,6 +3182,37 @@ export type GetDeletionStatusApiArg = void
 export type PreDeletionCheckApiResponse =
   /** status 200 Ok */ DeletionPreCheckResponse
 export type PreDeletionCheckApiArg = void
+export type GetMfaStatusApiResponse = /** status 200 Ok */ MfaStatusResponse
+export type GetMfaStatusApiArg = void
+export type StartTotpEnrollmentApiResponse =
+  /** status 200 Ok */ TotpEnrollResponse
+export type StartTotpEnrollmentApiArg = {
+  totpEnrollRequest: TotpEnrollRequest
+}
+export type ConfirmTotpEnrollmentApiResponse =
+  /** status 200 Ok */ RecoveryCodesResponse
+export type ConfirmTotpEnrollmentApiArg = {
+  totpConfirmRequest: TotpConfirmRequest
+}
+export type VerifyMfaApiResponse = /** status 200 Ok */ MfaVerifyResponse
+export type VerifyMfaApiArg = {
+  mfaVerifyRequest: MfaVerifyRequest
+}
+export type RegenerateMfaRecoveryCodesApiResponse =
+  /** status 200 Ok */ RecoveryCodesResponse
+export type RegenerateMfaRecoveryCodesApiArg = void
+export type RemoveMfaFactorApiResponse = /** status 200 Ok */ {
+  removed: boolean
+}
+export type RemoveMfaFactorApiArg = {
+  factorId: string
+  mfaReauthRequest: MfaReauthRequest
+}
+export type ResetUserMfaApiResponse = /** status 200 Ok */ MfaResetResponse
+export type ResetUserMfaApiArg = {
+  username: string
+  mfaResetRequest: MfaResetRequest
+}
 export type VariantType = {
   /** Unique identifier for the variant type */
   variant_type_id: string
@@ -6438,6 +6535,73 @@ export type DeletionPreCheckResponse = {
     type: string
   }[]
 }
+export type MfaFactorSummary = {
+  id: string
+  type: string
+  label: string
+  created_at: string
+  last_used_at: string | null
+}
+export type MfaStatusResponse = {
+  /** "enforce": admin MFA is required; "off": rolled back; "unconfigured": on, but the server has no encryption key yet. */
+  enforcement: "enforce" | "off" | "unconfigured"
+  /** Whether this account must use two-factor authentication for admin features. */
+  required: boolean
+  enrolled: boolean
+  factors: MfaFactorSummary[]
+  recovery_codes_remaining: number
+  /** When this session's admin verification lapses (ISO), or null if not verified. */
+  elevated_until: string | null
+  /** When this session's step-up lapses (ISO), or null. */
+  stepup_until: string | null
+  /** Why admin features are held back on this request, if they are. */
+  admin_locked: string | null
+}
+export type TotpEnrollResponse = {
+  factor_id: string
+  otpauth_uri: string
+  /** data: URL of an SVG QR code for otpauth_uri. */
+  qr_data_url: string
+  /** The secret in base32, grouped by 4 for manual entry. */
+  manual_key: string
+}
+export type TotpEnrollRequest = {
+  label?: string
+}
+export type RecoveryCodesResponse = {
+  /** Shown once. */
+  recovery_codes: string[]
+  elevated_until: string | null
+}
+export type TotpConfirmRequest = {
+  factor_id: string
+  code: string
+}
+export type MfaVerifyResponse = {
+  method: "totp" | "recovery_code"
+  elevated_until: string
+  stepup_until: string
+  /** Present after a recovery code was used. */
+  recovery_codes_remaining?: number
+}
+export type MfaVerifyRequest = {
+  /** 6-digit authenticator code. */
+  code?: string
+  /** One of the recovery codes (XXXXX-XXXXX). */
+  recovery_code?: string
+}
+export type MfaReauthRequest = {
+  code?: string
+  recovery_code?: string
+}
+export type MfaResetResponse = {
+  factors: number
+  sessions: number
+  tokens: number
+}
+export type MfaResetRequest = {
+  reason: string
+}
 export const {
   useGetVariantTypesQuery,
   useGetMySuppliersQuery,
@@ -6607,4 +6771,11 @@ export const {
   useCancelDeletionMutation,
   useGetDeletionStatusQuery,
   usePreDeletionCheckQuery,
+  useGetMfaStatusQuery,
+  useStartTotpEnrollmentMutation,
+  useConfirmTotpEnrollmentMutation,
+  useVerifyMfaMutation,
+  useRegenerateMfaRecoveryCodesMutation,
+  useRemoveMfaFactorMutation,
+  useResetUserMfaMutation,
 } = injectedRtkApi

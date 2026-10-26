@@ -88,6 +88,8 @@ import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPen
 import { haptic } from "../../util/haptics"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 import { isSiteAdmin } from "../../util/siteRole"
+import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
+import LockRounded from "@mui/icons-material/LockRounded"
 
 type NavContext = "browse" | "shop" | "org" | "admin"
 
@@ -538,15 +540,23 @@ export function SidebarV2() {
             <ListItemText>{org.name}</ListItemText>
           </MenuItem>
         ))}
-        {isSiteAdmin(profile) && [
+        {(isSiteAdmin(profile) || isMfaLockedAdmin(profile)) && [
           <Divider key="admin-divider" />,
           <MenuItem
             key="admin-item"
             selected={context === "admin"}
             onClick={() => handleContextSwitch("admin")}
           >
-            <ListItemIcon><AdminPanelSettingsRounded /></ListItemIcon>
-            <ListItemText>{t("nav.admin", "Admin")}</ListItemText>
+            <ListItemIcon>
+              {isSiteAdmin(profile) ? <AdminPanelSettingsRounded /> : <LockRounded />}
+            </ListItemIcon>
+            <ListItemText
+              secondary={
+                isSiteAdmin(profile) ? undefined : t("mfa.nav.locked", "Verify to unlock")
+              }
+            >
+              {t("nav.admin", "Admin")}
+            </ListItemText>
           </MenuItem>,
         ]}
       </Menu>

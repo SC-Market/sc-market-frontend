@@ -13,6 +13,12 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react"
 import { getNetworkEnv, type NetworkEnv } from "./networkEnv"
+import {
+  MFA_CHALLENGE_CODES,
+  isMfaEndpoint,
+  mfaErrorCode,
+  requestMfaChallenge,
+} from "../features/mfa/challengeBroker"
 
 export type AppBaseQuery = BaseQueryFn<
   string | FetchArgs,
@@ -62,6 +68,14 @@ export function createBaseQuery({
     if (result.error?.status === 401) {
       const refreshed = await env.onUnauthorized()
       if (refreshed) {
+        result = await rawQuery(args, api, extraOptions)
+      }
+    }
+    // Admin two-factor: 403 (not 401, which only refreshes) with an MFA code
+    // means "verify, then try again". Retry once after a successful prompt.
+    if (result.error?.status === 403 && !isMfaEndpoint(args)) {
+      const kind = MFA_CHALLENGE_CODES[mfaErrorCode(result.error) ?? ""]
+      if (kind && (await requestMfaChallenge(kind))) {
         result = await rawQuery(args, api, extraOptions)
       }
     }

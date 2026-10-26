@@ -1,3 +1,4 @@
+import type { AdminLock } from "../../features/mfa/adminLock"
 import type { SiteRole } from "../../util/siteRole"
 import {
   Contractor,
@@ -60,6 +61,12 @@ export interface UserProfileState {
   discord_username: string
   avatar: string
   role: SiteRole
+  /**
+   * Set when this account is a site admin but the backend is holding admin
+   * power back on this request (two-factor not set up or not verified, or a
+   * white-label domain).
+   */
+  admin_locked?: AdminLock
   contractors: (MinimalContractor & { roles: string[]; role: string })[]
   balance: number
   rsi_confirmed?: boolean

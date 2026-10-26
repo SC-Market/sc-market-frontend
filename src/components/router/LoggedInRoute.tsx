@@ -12,6 +12,11 @@ import { ContractorRole } from "../../features/contractor/domain/types"
 import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 import { isSiteAdmin } from "../../util/siteRole"
 import { RouteSkeletonFallback } from "./RouteSuspense"
+import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
+
+const MfaAdminGate = React.lazy(() =>
+  import("../../features/mfa/components/MfaAdminGate").then((m) => ({ default: m.MfaAdminGate })),
+)
 
 export function LoggedInRoute() {
   const session = useSession()
@@ -59,12 +64,20 @@ export function SiteAdminRoute() {
   const session = useSession()
 
   if (session.status === "unknown") return <RouteSkeletonFallback />
-  return session.status === "authenticated" &&
-    isSiteAdmin(session.profile) ? (
-    <Outlet />
-  ) : (
-    <Navigate to={"/404"} />
-  )
+  if (session.status === "authenticated") {
+    if (isSiteAdmin(session.profile)) return <Outlet />
+    // A site admin whose admin power is held back until two-factor is set up
+    // or verified: prompt in place instead of a 404.
+    const lock = session.profile.admin_locked
+    if (lock && isMfaLockedAdmin(session.profile)) {
+      return (
+        <React.Suspense fallback={<RouteSkeletonFallback />}>
+          <MfaAdminGate lock={lock} />
+        </React.Suspense>
+      )
+    }
+  }
+  return <Navigate to={"/404"} />
 }
 
 export function OrgRoute() {
