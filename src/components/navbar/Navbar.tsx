@@ -12,7 +12,7 @@ import { ExtendedTheme, getNavbarContrastText, navbarShadow } from "../../hooks/
 import React from "react"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useLocation } from "react-router-dom"
-import { messagingDrawerWidth } from "../../features/chats"
+import { messagingDrawerWidth } from "../../features/chats/constants"
 import { NotificationsButton } from "./NotificationsButton"
 import { MenuRounded, ShoppingCartRounded } from "@mui/icons-material"
 import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"

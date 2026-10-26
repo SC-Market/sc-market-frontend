@@ -10,7 +10,9 @@ import { MenuRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 
-export const messagingDrawerWidth = 360
+import { messagingDrawerWidth } from "../constants"
+
+export { messagingDrawerWidth }
 
 // Sidebar with chat list and search/group creation controls
 export function MessagingSidebar() {

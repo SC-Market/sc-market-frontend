@@ -84,7 +84,7 @@ import {
   SHOP_PATHS,
   WIKI_PATHS,
 } from "../../routes/paths"
-import { useUnreadChatCount } from "../../features/chats"
+import { useUnreadChatCount } from "../../features/chats/hooks/UnreadChatCount"
 import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
 import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPendingOrderCount"
 import { haptic } from "../../util/haptics"

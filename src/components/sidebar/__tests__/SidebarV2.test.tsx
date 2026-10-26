@@ -105,7 +105,7 @@ vi.mock("../../../features/contractor/api/contractorApi", async () => {
   }
 })
 
-vi.mock("../../../features/chats", () => ({
+vi.mock("../../../features/chats/hooks/UnreadChatCount", () => ({
   useUnreadChatCount: () => mockUnreadChatCount,
 }))
 

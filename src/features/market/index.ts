@@ -31,4 +31,3 @@ export { useMarketSearch } from "./hooks/MarketSearch"
 
 // Components
 export { MarketEditTemplate } from "./components/MarketEditTemplate"
-export { ItemStockContext, ManageStockArea } from "./components/ItemStock"

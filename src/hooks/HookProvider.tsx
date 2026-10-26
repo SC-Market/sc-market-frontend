@@ -13,13 +13,12 @@ import {
 import { DrawerOpenContext } from "./layout/Drawer"
 import { useBreakpointDown } from "./layout/useBreakpoint"
 import { useHydratedInitialState } from "./ssr/useHydratedInitialState"
-import {
-  CurrentChatIDContext,
-  CurrentChatMessagesContext,
-  CurrentChatContext,
-  type Chat,
-  type Message,
-} from "../features/chats"
+// Direct imports, not the features/chats barrel: the barrel also re-exports
+// the chat views, which drags socket.io and the chat UI into the entry bundle.
+import { CurrentChatIDContext } from "../features/chats/hooks/CurrentChatID"
+import { CurrentChatMessagesContext } from "../features/chats/hooks/CurrentChatMessages"
+import { CurrentChatContext } from "../features/chats/hooks/CurrentChat"
+import type { Chat, Message } from "../features/chats/domain/types"
 import { lightTheme, mainTheme } from "./styles/Theme"
 import { CLEAN_theme } from "./styles/themes/CLEAN"
 import { CLEAN_DARK_theme } from "./styles/themes/CLEAN_DARK"

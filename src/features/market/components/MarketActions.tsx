@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material"
 import React, { useCallback, useContext } from "react"
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
-import { ItemStockContext, ManageStockArea } from ".."
+import { ItemStockContext, ManageStockArea } from "../stock"
 import { MarketListingUpdateBody, UniqueListing } from "../domain/types"
 import { useUpdateMarketListingMutation } from "../api/marketApi"
 import LoadingButton from "@mui/lab/LoadingButton"

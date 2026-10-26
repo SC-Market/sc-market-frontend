@@ -7,10 +7,8 @@ import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
-import {
-  DatatypesMarketBid,
-  useGetMarketListingQuery,
-} from "../../../features/market"
+import type { DatatypesMarketBid } from "../../../features/market/domain/types"
+import { useGetMarketListingQuery } from "../../../features/market/api/marketApi"
 import { formatMarketUrl } from "../../../features/market/domain/urls"
 
 export function NotificationBid(props: { notif: Notification }) {

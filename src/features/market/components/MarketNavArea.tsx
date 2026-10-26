@@ -14,7 +14,7 @@ import { NotificationsButton } from "../../../components/navbar/NotificationsBut
 import { ProfileNavAvatar } from "../../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { Stack } from "@mui/system"
-import { useMarketSidebar } from ".."
+import { useMarketSidebar } from "../hooks/MarketSidebar"
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { PATHS } from "../../../routes/paths"
