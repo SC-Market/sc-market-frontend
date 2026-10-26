@@ -654,7 +654,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      const moreButtons = screen.getAllByRole("button", { name: "" })
+      const moreButtons = screen.getAllByRole("button", { name: /^Actions for / })
       const moreButton = moreButtons.find((btn) => btn.querySelector('[data-testid="MoreVertIcon"]'))
 
       if (moreButton) {
@@ -685,7 +685,7 @@ describe("WishlistDetail", () => {
 
       renderWithProviders(<WishlistDetail />)
 
-      const moreButtons = screen.getAllByRole("button", { name: "" })
+      const moreButtons = screen.getAllByRole("button", { name: /^Actions for / })
       const moreButton = moreButtons.find((btn) => btn.querySelector('[data-testid="MoreVertIcon"]'))
 
       if (moreButton) {

@@ -73,8 +73,8 @@ export function ShoppingListPanel() {
     <Stack spacing={1.5}>
       {lists.length > 1 && (
         <FormControl fullWidth size="small">
-          <InputLabel>Shopping List</InputLabel>
-          <Select value={activeId} label="Shopping List" onChange={(e) => setSelectedListId(e.target.value)}>
+          <InputLabel id="shopping-list-panel-shopping-list-label">Shopping List</InputLabel>
+          <Select labelId="shopping-list-panel-shopping-list-label" value={activeId} label="Shopping List" onChange={(e) => setSelectedListId(e.target.value)}>
             {lists.map((l) => (
               <MenuItem key={l.wishlist_id} value={l.wishlist_id}>
                 {l.wishlist_name} ({l.item_count} items)
@@ -182,7 +182,7 @@ function BlueprintItemRow({ item, wishlistId }: { item: WishlistItemWithDetails;
         inputProps={{ min: 1, style: { textAlign: "center" } }}
         sx={{ width: 50, "& input": { py: 0.25, fontSize: "0.8rem" } }}
       />
-      <IconButton size="small" onClick={() => removeItem({ wishlistId, itemId: item.item_id })}>
+      <IconButton size="small" onClick={() => removeItem({ wishlistId, itemId: item.item_id })} aria-label={`Remove ${item.game_item_name || "item"} from shopping list`}>
         <DeleteRounded sx={{ fontSize: 16 }} />
       </IconButton>
     </Stack>

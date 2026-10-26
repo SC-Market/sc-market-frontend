@@ -342,6 +342,7 @@ export function WishlistManager() {
                   size="small"
                   onClick={(e) => handleDeleteClick(wishlist.wishlist_id, wishlist.wishlist_name, e)}
                   color="error"
+                  aria-label={t("wishlists.deleteNamed", "Delete {{name}}", { name: wishlist.wishlist_name })}
                 >
                   <Delete fontSize="small" />
                 </IconButton>

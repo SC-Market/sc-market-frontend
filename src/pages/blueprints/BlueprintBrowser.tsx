@@ -277,24 +277,24 @@ export function BlueprintBrowser() {
       <TextField fullWidth size="small" label="Search" value={searchText}
         onChange={(e) => setSearchText(e.target.value)} placeholder="Item or blueprint name..." />
       <FormControl fullWidth size="small">
-        <InputLabel>Category</InputLabel>
-        <Select value={category} label="Category" onChange={(e) => { setCategory(e.target.value); setSubcategory("") }}>
+        <InputLabel id="blueprint-browser-category-label">Category</InputLabel>
+        <Select labelId="blueprint-browser-category-label" value={category} label="Category" onChange={(e) => { setCategory(e.target.value); setSubcategory("") }}>
           <MenuItem value="">All</MenuItem>
           {uniqueCategories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
         </Select>
       </FormControl>
       {subcategoriesForCategory.length > 0 && (
         <FormControl fullWidth size="small">
-          <InputLabel>Subcategory</InputLabel>
-          <Select value={subcategory} label="Subcategory" onChange={(e) => setSubcategory(e.target.value)}>
+          <InputLabel id="blueprint-browser-subcategory-label">Subcategory</InputLabel>
+          <Select labelId="blueprint-browser-subcategory-label" value={subcategory} label="Subcategory" onChange={(e) => setSubcategory(e.target.value)}>
             <MenuItem value="">All</MenuItem>
             {subcategoriesForCategory.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
           </Select>
         </FormControl>
       )}
       <FormControl fullWidth size="small">
-        <InputLabel>Tier</InputLabel>
-        <Select value={tier} label="Tier" onChange={(e) => setTier(e.target.value === "" ? "" : Number(e.target.value))}>
+        <InputLabel id="blueprint-browser-tier-label">Tier</InputLabel>
+        <Select labelId="blueprint-browser-tier-label" value={tier} label="Tier" onChange={(e) => setTier(e.target.value === "" ? "" : Number(e.target.value))}>
           <MenuItem value="">All</MenuItem>
           {[1,2,3,4,5].map(t => <MenuItem key={t} value={t}>Tier {t}</MenuItem>)}
         </Select>
@@ -308,8 +308,8 @@ export function BlueprintBrowser() {
       <FormControlLabel control={<Checkbox checked={hideUnsourceable} onChange={(e) => setHideUnsourceable(e.target.checked)} size="small" />}
         label={<Typography variant="body2">Hide Unsourceable</Typography>} sx={{ ml: 0 }} />
       <FormControl fullWidth size="small">
-        <InputLabel>Source</InputLabel>
-        <Select value={source} label="Source" onChange={(e) => setSource(e.target.value)}>
+        <InputLabel id="blueprint-browser-source-label">Source</InputLabel>
+        <Select labelId="blueprint-browser-source-label" value={source} label="Source" onChange={(e) => setSource(e.target.value)}>
           <MenuItem value="">All</MenuItem>
           <MenuItem value="default">Default (all players)</MenuItem>
           <MenuItem value="mission_reward">Mission Reward</MenuItem>
@@ -349,8 +349,8 @@ export function BlueprintBrowser() {
               {data ? data.total : ""}
             </Typography>
             <ToggleButtonGroup value={viewMode} exclusive onChange={handleViewModeChange} size="small">
-              <ToggleButton value="grid"><ViewModule /></ToggleButton>
-              <ToggleButton value="list"><ViewList /></ToggleButton>
+              <ToggleButton value="grid" aria-label={t("ui.viewMode.grid", "Grid view")}><ViewModule /></ToggleButton>
+              <ToggleButton value="list" aria-label={t("ui.viewMode.list", "List view")}><ViewList /></ToggleButton>
             </ToggleButtonGroup>
           </Box>
 

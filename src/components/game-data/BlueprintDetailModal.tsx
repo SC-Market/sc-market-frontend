@@ -173,7 +173,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
           >
             {userOwns ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
           </IconButton>
-          <IconButton onClick={onClose} size="small"><Close /></IconButton>
+          <IconButton onClick={onClose} size="small" aria-label={t("common.close", "Close")}><Close /></IconButton>
         </Stack>
       </DialogTitle>
 
@@ -306,7 +306,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                       <Typography variant="body2" fontWeight={600} lineHeight={1.2}>{ing.game_item?.name || "Unknown"}</Typography>
                       <Typography variant="caption" color="text.secondary" lineHeight={1}>{formatQty(parseFloat(String(ing.quantity_required)) * craftQty)}{craftQty > 1 && ` (${formatQty(ing.quantity_required)} ea)`}{ing.min_quality_tier ? ` · min T${ing.min_quality_tier}` : ""}</Typography>
                     </Box>
-                    <Slider size="small" min={qr.min} max={qr.max} value={qv} onChange={(_, v) => setQuality(idx, v as number)} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 12, height: 12 } }} />
+                    <Slider size="small" min={qr.min} max={qr.max} value={qv} onChange={(_, v) => setQuality(idx, v as number)} aria-label={`Quality of ${ing.game_item?.name || "ingredient"}`} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 12, height: 12 } }} />
                     <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: qr.min, max: qr.max }} sx={{ width: 70, "& input": { py: 0.5, fontSize: "0.8rem" } }} />
                   </Stack>
                   {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: SlotModifier, mi: number) => {

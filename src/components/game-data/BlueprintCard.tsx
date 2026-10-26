@@ -103,7 +103,11 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
 
   if (viewMode === "grid") {
     return (
-      <Card sx={{ height: "100%", position: "relative" }}>
+      <Card
+        sx={{ height: "100%", position: "relative" }}
+        data-testid="blueprint-card"
+        data-id={bp.blueprint_id}
+      >
         {onBookmarkToggle && bp.source !== "default" && (
           <Tooltip title={effectiveOwned ? "Remove from inventory" : "Add to inventory"} arrow>
           <IconButton
@@ -188,7 +192,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
 
   // List mode
   return (
-    <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_name)}>
+    <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_name)} data-testid="blueprint-card" data-id={bp.blueprint_id}>
       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
         <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
           <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={36} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />

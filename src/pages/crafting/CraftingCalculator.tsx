@@ -103,6 +103,7 @@ function MaterialQualityInput({
         Quality
       </Typography>
       <Slider
+        aria-label="Quality"
         value={value}
         onChange={(_, val) => onChange(val as number)}
         min={0} max={1000} step={1}
@@ -340,7 +341,7 @@ export function CraftingCalculator() {
                           onChange={e => updateMaterial(mat.id, "quantity", Math.max(1, +e.target.value || 1))}
                           inputProps={{ min: 1 }}
                         />
-                        <IconButton size="small" onClick={() => removeMaterial(mat.id)}>
+                        <IconButton size="small" onClick={() => removeMaterial(mat.id)} aria-label="Remove material">
                           <Delete fontSize="small" />
                         </IconButton>
                       </Stack>

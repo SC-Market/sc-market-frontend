@@ -113,6 +113,8 @@ function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: (
 
   return (
     <Card
+      data-testid="ship-card"
+      data-id={ship.id}
       sx={{
         cursor: "pointer",
         height: "100%",
@@ -585,6 +587,7 @@ export function WikiShipBrowser() {
         </Typography>
         <Box
           component="select"
+          aria-label={t("wiki.shipBrowser.filterRole", "Role")}
           value={role}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateParam("role", e.target.value)}
           sx={{
@@ -621,6 +624,7 @@ export function WikiShipBrowser() {
         </Typography>
         <Box
           component="select"
+          aria-label={t("wiki.shipBrowser.filterManufacturer", "Manufacturer")}
           value={manufacturer}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateParam("manufacturer", e.target.value)}
           sx={{
@@ -657,6 +661,7 @@ export function WikiShipBrowser() {
         </Typography>
         <Box
           component="select"
+          aria-label={t("wiki.shipBrowser.filterSize", "Size")}
           value={size}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateParam("size", e.target.value)}
           sx={{

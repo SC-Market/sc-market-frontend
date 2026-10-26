@@ -39,7 +39,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
         <Typography variant="h6" noWrap sx={{ flex: 1 }}>
           <MissionName name={m?.mission_name} variant="inherit" />
         </Typography>
-        <IconButton onClick={onClose} size="small"><Close /></IconButton>
+        <IconButton onClick={onClose} size="small" aria-label="Close"><Close /></IconButton>
       </DialogTitle>
 
       {m && (

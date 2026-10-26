@@ -84,6 +84,7 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
             Crew size: <strong>{crewSize}</strong> {crewSize > 1 && `(${xpPerRun} XP each)`}
           </Typography>
           <Slider
+            aria-label="Crew size"
             value={crewSize}
             onChange={(_, v) => setCrewSize(v as number)}
             min={1}

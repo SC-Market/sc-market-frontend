@@ -26,7 +26,7 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6">{displayName}</Typography>
-        <IconButton onClick={onClose} size="small"><Close /></IconButton>
+        <IconButton onClick={onClose} size="small" aria-label="Close"><Close /></IconButton>
       </DialogTitle>
       <DialogContent dividers>
         {isLoading && (

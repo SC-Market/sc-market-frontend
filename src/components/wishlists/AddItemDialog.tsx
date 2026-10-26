@@ -199,8 +199,8 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
                     />
                   ) : (
                     <FormControl fullWidth size="small">
-                      <InputLabel>Blueprint *</InputLabel>
-                      <Select
+                      <InputLabel id="add-item-dialog-blueprint-label">Blueprint *</InputLabel>
+                      <Select labelId="add-item-dialog-blueprint-label"
                         value={selectedBlueprintId || ""}
                         label="Blueprint *"
                         onChange={(e) => setSelectedBlueprintId(e.target.value || null)}
@@ -247,7 +247,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
           {/* Priority */}
           <Box>
             <Typography variant="subtitle2" gutterBottom>Priority: {priority}</Typography>
-            <Slider value={priority} onChange={(_, v) => setPriority(v as number)}
+            <Slider aria-label="Priority" value={priority} onChange={(_, v) => setPriority(v as number)}
               min={1} max={5} step={1}
               marks={[{ value: 1, label: "Low" }, { value: 3, label: "Medium" }, { value: 5, label: "Critical" }]}
               valueLabelDisplay="auto"

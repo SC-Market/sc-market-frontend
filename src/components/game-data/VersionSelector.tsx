@@ -145,6 +145,15 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
     }
   }
 
+  // Compact mode has no visible label: name the combobox directly (its
+  // default aria-labelledby points at its own value text).
+  const compactNameProps = compact
+    ? ({
+        "aria-label": "Game version",
+        "aria-labelledby": undefined,
+      } as React.HTMLAttributes<HTMLDivElement>)
+    : undefined
+
   if (isLoading || !activeVersions) {
     return (
       <Box sx={{ width }}>
@@ -156,6 +165,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           label={compact ? undefined : "Game Version"}
           disabled
           value=""
+          SelectProps={{ SelectDisplayProps: compactNameProps }}
         >
           <MenuItem value="">Loading...</MenuItem>
         </TextField>
@@ -184,6 +194,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
         value={selectedVersionId}
         onChange={(e) => handleVersionChange(e.target.value)}
         SelectProps={{
+          SelectDisplayProps: compactNameProps,
           IconComponent: KeyboardArrowDownRoundedIcon,
           renderValue: (value) => {
             const version = versions.find((v) => v.data?.version_id === value)

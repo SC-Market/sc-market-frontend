@@ -282,8 +282,8 @@ export function MissionSearch() {
           onChange={handleViewModeChange}
           size="small"
         >
-          <ToggleButton value="list"><ViewList /></ToggleButton>
-          <ToggleButton value="grid"><ViewModule /></ToggleButton>
+          <ToggleButton value="list" aria-label={t("ui.viewMode.list", "List view")}><ViewList /></ToggleButton>
+          <ToggleButton value="grid" aria-label={t("ui.viewMode.grid", "Grid view")}><ViewModule /></ToggleButton>
         </ToggleButtonGroup>
       </Box>
 

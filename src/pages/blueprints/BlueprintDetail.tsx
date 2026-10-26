@@ -333,6 +333,7 @@ export function BlueprintDetail() {
                     </Box>
                     <Slider
                       size="small"
+                      aria-label={`Quality of ${ing.game_item?.name || "ingredient"}`}
                       min={qr.min} max={qr.max} value={qv}
                       onChange={(_, v) => setQuality(idx, v as number)}
                       sx={{

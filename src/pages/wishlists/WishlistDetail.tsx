@@ -322,8 +322,8 @@ export function WishlistDetail() {
             </Typography>
 
             <FormControl size="small" sx={{ minWidth: 150 }}>
-              <InputLabel>{t("wishlists.sortBy", "Sort By")}</InputLabel>
-              <Select
+              <InputLabel id="wishlist-detail-sort-by-label">{t("wishlists.sortBy", "Sort By")}</InputLabel>
+              <Select labelId="wishlist-detail-sort-by-label"
                 value={sortBy}
                 label="Sort By"
                 onChange={handleSortChange}
@@ -403,6 +403,8 @@ export function WishlistDetail() {
                       <IconButton
                         size="small"
                         onClick={(e) => handleItemMenuOpen(e, item)}
+                        aria-label={t("wishlists.itemActionsFor", "Actions for {{name}}", { name: item.game_item_name })}
+                        aria-haspopup="menu"
                       >
                         <MoreVert />
                       </IconButton>

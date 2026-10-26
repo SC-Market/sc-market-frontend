@@ -67,8 +67,8 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
         onChange={(e) => props.onSearchTextChange(e.target.value)} placeholder="Mission name..." />
 
       <FormControl fullWidth size="small">
-        <InputLabel>Category</InputLabel>
-        <Select multiple value={props.category ? props.category.split(",") : []} label="Category"
+        <InputLabel id="mission-filters-category-label">Category</InputLabel>
+        <Select labelId="mission-filters-category-label" multiple value={props.category ? props.category.split(",") : []} label="Category"
           onChange={(e) => props.onCategoryChange((e.target.value as string[]).join(","))}
           renderValue={(sel) => (sel as string[]).join(", ") || "All"}>
           {["Mercenary","Bounty Hunter","Delivery","Hauling","Investigation","Mining","Salvage","Maintenance","Race","Courier"].map(c =>
@@ -78,8 +78,8 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel>Career</InputLabel>
-        <Select value={props.careerType} label="Career" onChange={(e) => props.onCareerTypeChange(e.target.value)}>
+        <InputLabel id="mission-filters-career-label">Career</InputLabel>
+        <Select labelId="mission-filters-career-label" value={props.careerType} label="Career" onChange={(e) => props.onCareerTypeChange(e.target.value)}>
           <MenuItem value="">All</MenuItem>
           {["Mercenary","Hauling","Mining","Exploration","Combat","Trading","Medical","Salvage"].map(c =>
             <MenuItem key={c} value={c}>{c}</MenuItem>
@@ -88,8 +88,8 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel>System</InputLabel>
-        <Select multiple value={props.starSystem ? props.starSystem.split(",") : []} label="System"
+        <InputLabel id="mission-filters-system-label">System</InputLabel>
+        <Select labelId="mission-filters-system-label" multiple value={props.starSystem ? props.starSystem.split(",") : []} label="System"
           onChange={(e) => props.onStarSystemChange((e.target.value as string[]).join(","))}
           renderValue={(sel) => (sel as string[]).join(", ") || "All"}>
           {["Stanton","Pyro","Nyx","Terra","Magnus"].map(s =>
@@ -99,8 +99,8 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel>Legal</InputLabel>
-        <Select value={props.legalStatus} label="Legal" onChange={(e) => props.onLegalStatusChange(e.target.value as "" | "LEGAL" | "ILLEGAL")}>
+        <InputLabel id="mission-filters-legal-label">Legal</InputLabel>
+        <Select labelId="mission-filters-legal-label" value={props.legalStatus} label="Legal" onChange={(e) => props.onLegalStatusChange(e.target.value as "" | "LEGAL" | "ILLEGAL")}>
           <MenuItem value="">All</MenuItem>
           <MenuItem value="LEGAL">Legal</MenuItem>
           <MenuItem value="ILLEGAL">Illegal</MenuItem>
@@ -108,8 +108,8 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel>Difficulty</InputLabel>
-        <Select
+        <InputLabel id="mission-filters-difficulty-label">Difficulty</InputLabel>
+        <Select labelId="mission-filters-difficulty-label"
           value={props.difficultyRange[0] === 1 && props.difficultyRange[1] === 5 ? "" : `${props.difficultyRange[0]}-${props.difficultyRange[1]}`}
           label="Difficulty"
           onChange={(e) => {
@@ -161,8 +161,8 @@ function EventSelect({ value, onChange }: { value: string; onChange: (v: string)
   const events = data?.events || []
   return (
     <FormControl fullWidth size="small">
-      <InputLabel>Event</InputLabel>
-      <Select value={value} onChange={(e) => onChange(e.target.value as string)} label="Event">
+      <InputLabel id="mission-filters-event-label">Event</InputLabel>
+      <Select labelId="mission-filters-event-label" value={value} onChange={(e) => onChange(e.target.value as string)} label="Event">
         <MenuItem value="">All Events</MenuItem>
         {events.map((e) => (
           <MenuItem key={e.event_code} value={e.event_code}>

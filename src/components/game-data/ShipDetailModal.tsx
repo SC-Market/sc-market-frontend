@@ -32,7 +32,7 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
         <Typography variant="h6" noWrap sx={{ flex: 1 }}>
           {ship?.name || "Ship Details"}
         </Typography>
-        <IconButton onClick={onClose} size="small"><Close /></IconButton>
+        <IconButton onClick={onClose} size="small" aria-label="Close"><Close /></IconButton>
       </DialogTitle>
 
       <DialogContent sx={{ minHeight: 400 }}>

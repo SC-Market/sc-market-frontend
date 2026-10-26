@@ -481,7 +481,7 @@ describe("WishlistManager", () => {
 
       renderWithProviders(<WishlistManager />)
 
-      const deleteButtons = screen.getAllByRole("button", { name: "" })
+      const deleteButtons = screen.getAllByRole("button", { name: /^Delete / })
       const deleteButton = deleteButtons.find((btn) => btn.querySelector('[data-testid="DeleteIcon"]'))
 
       if (deleteButton) {
@@ -512,7 +512,7 @@ describe("WishlistManager", () => {
 
       renderWithProviders(<WishlistManager />)
 
-      const deleteButtons = screen.getAllByRole("button", { name: "" })
+      const deleteButtons = screen.getAllByRole("button", { name: /^Delete / })
       const deleteButton = deleteButtons.find((btn) => btn.querySelector('[data-testid="DeleteIcon"]'))
 
       if (deleteButton) {
@@ -538,7 +538,7 @@ describe("WishlistManager", () => {
 
       renderWithProviders(<WishlistManager />)
 
-      const deleteButtons = screen.getAllByRole("button", { name: "" })
+      const deleteButtons = screen.getAllByRole("button", { name: /^Delete / })
       const deleteButton = deleteButtons.find((btn) => btn.querySelector('[data-testid="DeleteIcon"]'))
 
       if (deleteButton) {

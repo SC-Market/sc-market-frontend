@@ -26,7 +26,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClic
   ].filter(Boolean) as string[]
 
   return (
-    <Card sx={{ height: "100%" }}>
+    <Card sx={{ height: "100%" }} data-testid="resource-card" data-id={resource.resource_id}>
       <CardActionArea
         {...(to ? { component: RouterLink, to } : { onClick: () => onClick?.(resource.resource_id) })}
         sx={{ height: "100%", textDecoration: "none", color: "inherit" }}

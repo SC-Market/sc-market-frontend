@@ -79,7 +79,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
       : `${formatCredits(mission.credit_reward_min)} – ${formatCredits(mission.credit_reward_max)}`
 
   return (
-    <Card sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column" }}>
+    <Card sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column" }} data-testid="mission-card" data-id={mission.mission_id}>
       <CardActionArea onClick={() => onClick?.(mission.mission_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
         <CardContent sx={{ p: 1.5, pb: 0 }}>
           {/* Header: Avatar + Title + Subtitle */}

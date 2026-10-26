@@ -211,7 +211,12 @@ export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placehol
         ))
       }
       renderInput={(params) => (
-        <TextField {...params} placeholder={tokens.length ? "" : placeholder || "Search..."} />
+        <TextField
+          {...params}
+          placeholder={tokens.length ? "" : placeholder || "Search..."}
+          // A stable name: the placeholder disappears once tokens are added.
+          inputProps={{ ...params.inputProps, "aria-label": placeholder || "Search" }}
+        />
       )}
       sx={{ flex: 1, minWidth: 200 }}
     />

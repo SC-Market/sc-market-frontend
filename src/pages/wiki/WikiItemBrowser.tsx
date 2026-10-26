@@ -89,6 +89,8 @@ function FilterSection({
 function ItemGridCard({ item, onClick }: { item: WikiItemSearchResult; onClick: () => void }) {
   return (
     <Card
+      data-testid="wiki-item-card"
+      data-id={item.id}
       sx={{
         cursor: "pointer",
         height: CARD_HEIGHT,
@@ -304,8 +306,8 @@ export function WikiItemBrowser() {
               exclusive
               onChange={(_, v) => { if (v) setViewMode(v) }}
             >
-              <ToggleButton value="grid"><GridViewRounded fontSize="small" /></ToggleButton>
-              <ToggleButton value="list"><ViewListRounded fontSize="small" /></ToggleButton>
+              <ToggleButton value="grid" aria-label={t("ui.viewMode.grid", "Grid view")}><GridViewRounded fontSize="small" /></ToggleButton>
+              <ToggleButton value="list" aria-label={t("ui.viewMode.list", "List view")}><ViewListRounded fontSize="small" /></ToggleButton>
             </ToggleButtonGroup>
           </Box>
 
