@@ -181,6 +181,22 @@ describe("documents", () => {
     expect(meta(user, "description")).toBe("Jacked Citizen — Star Citizen player on SC Market")
   })
 
+  // Unlisted listings are link-only and private ones org-internal: a crawler
+  // that follows a link to one must not index it.
+  it("unlisted and private listings and bundles are noindex; public ones are not", () => {
+    const withVisibility = (visibility: string) => ({
+      ...f.listing(),
+      listing: { ...f.listing().listing, visibility },
+    }) as ReturnType<typeof f.listing>
+    for (const visibility of ["unlisted", "private"]) {
+      expect(meta(build("listing", withVisibility(visibility), { id: "x" }), "robots")).toBe("noindex")
+      expect(
+        meta(build("bundle", { ...f.bundle(), listing: { ...f.bundle().listing, visibility } } as ReturnType<typeof f.bundle>, { id: "x" }, "/market/multiple/x"), "robots"),
+      ).toBe("noindex")
+    }
+    expect(meta(build("listing", withVisibility("public"), { id: "x" }), "robots")).toBeUndefined()
+  })
+
   it("keeps hostile text as data (escaped later, never interpreted here)", () => {
     const doc = build("listing", f.listing(f.EVIL), { id: "x" })
     expect(doc.summary[0]).toEqual({ tag: "h1", text: f.EVIL })

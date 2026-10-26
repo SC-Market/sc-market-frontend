@@ -17,6 +17,19 @@ import { FALLBACK_IMAGE_URL } from "./constants"
 import { PageHead, socialMeta } from "./pageHead"
 
 /** /market/:id (ListingDetailV2). */
+/**
+ * Robots tag for a listing that isn't public: an unlisted listing is
+ * link-only and a private one is org-internal, so neither may be indexed
+ * (the SPA and the edge bridge both render these heads).
+ */
+function listingRobotsMeta(
+  listing: Pick<GetListingDetailResponse["listing"], "visibility">,
+): PageHead["meta"] {
+  return listing.visibility === "unlisted" || listing.visibility === "private"
+    ? [{ name: "robots", content: "noindex" }]
+    : []
+}
+
 export function buildListingHead(
   data: Pick<GetListingDetailResponse, "listing" | "seller">,
   origin: string,
@@ -31,6 +44,7 @@ export function buildListingHead(
     canonical,
     meta: [
       { name: "description", content: description },
+      ...listingRobotsMeta(listing),
       ...socialMeta({
         title: listing.title,
         description,
@@ -149,6 +163,7 @@ export function buildBundleHead(
   return {
     meta: [
       { name: "description", content: listing.description },
+      ...listingRobotsMeta(listing),
       { property: "og:type", content: "website" },
       { property: "og:url", content: url },
       { property: "og:title", content: listing.title },
