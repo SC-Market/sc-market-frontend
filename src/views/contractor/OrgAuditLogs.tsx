@@ -1,4 +1,5 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
+import throttle from "lodash/throttle"
 import {
   Box,
   Button,
@@ -14,7 +15,10 @@ import {
   Autocomplete,
 } from "@mui/material"
 import { ExpandMore, ExpandLess } from "@mui/icons-material"
-import { useGetContractorAuditLogsQuery } from "../../features/contractor/api/contractorApi"
+import {
+  useGetContractorAuditLogsQuery,
+  useSearchContractorMembersQuery,
+} from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 import { AuditLogEntry } from "../../features/contractor/domain/types"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -149,7 +153,16 @@ export function OrgAuditLogs() {
     // If translation exists, use it; otherwise format the action name
     return translated !== key ? translated : formatAction(action)
   }
-  const [actorIdFilter, setActorIdFilter] = useState<string>("")
+  // Filter by member: autocomplete over the org's members (any username can
+  // be typed, for someone who has since left).
+  const [actorUsernameFilter, setActorUsernameFilter] = useState<string>("")
+  const [actorInput, setActorInput] = useState<string>("")
+  const [actorQuery, setActorQuery] = useState<string>("")
+  const searchActors = useMemo(() => throttle((q: string) => setActorQuery(q), 400), [])
+  const { data: actorOptions = [] } = useSearchContractorMembersQuery(
+    { spectrum_id: contractor?.spectrum_id || "", query: actorQuery },
+    { skip: !contractor?.spectrum_id || actorQuery.length < 2 },
+  )
   const [startDateFilter, setStartDateFilter] = useState<string>("")
   const [endDateFilter, setEndDateFilter] = useState<string>("")
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
@@ -162,7 +175,7 @@ export function OrgAuditLogs() {
       page: page + 1, // Backend uses 1-based pagination
       page_size: pageSize,
       action: actionFilter || undefined,
-      actor_id: actorIdFilter || undefined,
+      actor_username: actorUsernameFilter || undefined,
       start_date: startDateFilter || undefined,
       end_date: endDateFilter || undefined,
     },
@@ -171,7 +184,8 @@ export function OrgAuditLogs() {
 
   const handleClearFilters = () => {
     setActionFilter("")
-    setActorIdFilter("")
+    setActorUsernameFilter("")
+    setActorInput("")
     setStartDateFilter("")
     setEndDateFilter("")
     setPage(0)
@@ -252,14 +266,39 @@ export function OrgAuditLogs() {
               sx={{ minWidth: 200 }}
               freeSolo
             />
-            <TextField
-              label={t("orgAuditLogs.filter_actor_id")}
-              value={actorIdFilter}
-              onChange={(e) => {
-                setActorIdFilter(e.target.value)
+            <Autocomplete
+              freeSolo
+              options={actorOptions.map((u) => u.username)}
+              filterOptions={(x) => x}
+              value={actorUsernameFilter || null}
+              inputValue={actorInput}
+              onInputChange={(_e, value, reason) => {
+                setActorInput(value)
+                searchActors(value.trim())
+                if (reason === "clear" || value === "") {
+                  setActorUsernameFilter("")
+                  setPage(0)
+                }
+              }}
+              onChange={(_e, value) => {
+                setActorUsernameFilter((value ?? "").trim())
                 setPage(0)
               }}
-              size="small"
+              onBlur={() => {
+                // A typed name (e.g. someone who has left) filters on blur.
+                if (actorInput.trim() !== actorUsernameFilter) {
+                  setActorUsernameFilter(actorInput.trim())
+                  setPage(0)
+                }
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label={t("orgAuditLogs.filter_actor")}
+                  placeholder={t("orgAuditLogs.filter_actor_placeholder")}
+                  size="small"
+                />
+              )}
               sx={{ minWidth: 200 }}
             />
             <TextField

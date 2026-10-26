@@ -178,7 +178,8 @@ export const contractorsApi = serviceApi.injectEndpoints({
         page?: number
         page_size?: number
         action?: string
-        actor_id?: string
+        /** The actor's username (an unknown name matches nothing). */
+        actor_username?: string
         start_date?: string
         end_date?: string
       }
@@ -188,7 +189,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
         page = 1,
         page_size = 20,
         action,
-        actor_id,
+        actor_username,
         start_date,
         end_date,
       }) => {
@@ -197,7 +198,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
           page_size: page_size.toString(),
         })
         if (action) params.append("action", action)
-        if (actor_id) params.append("actor_id", actor_id)
+        if (actor_username) params.append("actor_username", actor_username)
         if (start_date) params.append("start_date", start_date)
         if (end_date) params.append("end_date", end_date)
 
@@ -855,6 +856,7 @@ export const {
   useDeleteContractorInviteMutation,
   useGetContractorsQuery,
   useSearchContractorsQuery,
+  useSearchContractorMembersQuery,
   useLeaveContractorMutation,
   useGetOrgBlocklistQuery,
   useBlockUserForOrgMutation,
