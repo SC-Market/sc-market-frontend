@@ -19,7 +19,6 @@ import {
   Block,
   HistoryRounded,
   PaletteRounded,
-  TuneRounded,
   PersonAddRounded,
 } from "@mui/icons-material"
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom"
@@ -91,8 +90,14 @@ export function OrgManageLayout() {
     items.push({ label: t("org.auditLogsTab"), icon: <HistoryRounded />, value: "audit" })
     items.push({ label: t("org.customersTab", "Customers"), icon: <PeopleAltRounded />, value: "customers" })
     if (hasWhiteLabel && canManageTheme) {
-      items.push({ label: t("org.themeTab", "Theme"), icon: <PaletteRounded />, value: "theme" })
-      items.push({ label: t("org.whiteLabelTab", "White Label"), icon: <TuneRounded />, value: "whitelabel" })
+      // The theme page holds both the theme editor and the white-label
+      // settings (OrgThemePage), so one item covers both. There is no
+      // manage/whitelabel route.
+      items.push({
+        label: t("org.themeWhiteLabelTab", "Theme & White Label"),
+        icon: <PaletteRounded />,
+        value: "theme",
+      })
     }
 
     return items
