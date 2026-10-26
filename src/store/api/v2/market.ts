@@ -1913,6 +1913,34 @@ const injectedRtkApi = api
         query: () => ({ url: `/accounts/deletion-precheck` }),
         providesTags: ["Accounts V2"],
       }),
+      listTestAccounts: build.query<
+        ListTestAccountsApiResponse,
+        ListTestAccountsApiArg
+      >({
+        query: () => ({ url: `/admin/test-accounts` }),
+        providesTags: ["Admin"],
+      }),
+      createTestAccount: build.mutation<
+        CreateTestAccountApiResponse,
+        CreateTestAccountApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/test-accounts`,
+          method: "POST",
+          body: queryArg.createTestAccountRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      deleteTestAccount: build.mutation<
+        DeleteTestAccountApiResponse,
+        DeleteTestAccountApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/test-accounts/${queryArg.username}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Admin"],
+      }),
     }),
     overrideExisting: false,
   })
@@ -3303,6 +3331,19 @@ export type GetDeletionStatusApiArg = void
 export type PreDeletionCheckApiResponse =
   /** status 200 Ok */ DeletionPreCheckResponse
 export type PreDeletionCheckApiArg = void
+export type ListTestAccountsApiResponse =
+  /** status 200 Ok */ TestAccountListResponse
+export type ListTestAccountsApiArg = void
+export type CreateTestAccountApiResponse =
+  /** status 200 Ok */ CreateTestAccountResponse
+export type CreateTestAccountApiArg = {
+  createTestAccountRequest: CreateTestAccountRequest
+}
+export type DeleteTestAccountApiResponse =
+  /** status 200 Ok */ DeleteTestAccountResponse
+export type DeleteTestAccountApiArg = {
+  username: string
+}
 export type WatchlistItem = {
   /** Watchlist item id */
   id: string
@@ -6782,6 +6823,44 @@ export type DeletionPreCheckResponse = {
     type: string
   }[]
 }
+export type TestAccountSummary = {
+  user_id: string
+  username: string
+  display_name: string
+  created_at: string
+  banned: boolean
+  has_authenticator: boolean
+  last_login_at: string | null
+  failed_logins_24h: number
+}
+export type TestAccountListResponse = {
+  /** Whether POST /api/auth/test-login is switched on (TEST_LOGIN_ENABLED). */
+  login_enabled: boolean
+  accounts: TestAccountSummary[]
+}
+export type CreateTestAccountResponse = {
+  user_id: string
+  username: string
+  display_name: string
+  /** otpauth:// URI of the account's authenticator. Shown once. */
+  otpauth_uri: string
+  /** Base32 TOTP secret, no spaces. Shown once. */
+  secret: string
+  /** The secret grouped by 4, for manual entry. */
+  manual_key: string
+  /** data: URL of an SVG QR code for otpauth_uri. */
+  qr_data_url: string
+}
+export type CreateTestAccountRequest = {
+  /** Must start with "test" (e.g. test-buyer). */
+  username: string
+  display_name: string
+}
+export type DeleteTestAccountResponse = {
+  mode: "deleted" | "disabled"
+  orgs: number
+  shops: number
+}
 export const {
   useGetWatchlistQuery,
   useAddWatchlistItemMutation,
@@ -6964,4 +7043,7 @@ export const {
   useCancelDeletionMutation,
   useGetDeletionStatusQuery,
   usePreDeletionCheckQuery,
+  useListTestAccountsQuery,
+  useCreateTestAccountMutation,
+  useDeleteTestAccountMutation,
 } = injectedRtkApi

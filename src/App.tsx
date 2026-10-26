@@ -784,6 +784,13 @@ export const routes: RouteObject[] = [
                 }),
               },
               {
+                path: "/admin/test-accounts",
+                lazy: async () => ({
+                  Component: (await retryDynamicImport(() => import("./pages/admin/AdminTestAccounts")))
+                    .AdminTestAccounts,
+                }),
+              },
+              {
                 path: "/admin/notification-test",
                 lazy: async () => ({
                   Component: (

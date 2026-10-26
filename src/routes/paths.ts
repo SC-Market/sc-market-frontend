@@ -187,6 +187,8 @@ export const ADMIN_PATHS = {
   importMonitoring: "/admin/import-monitoring",
   auditLogs: "/admin/audit-logs",
   notificationTest: "/admin/notification-test",
+  testAccounts: "/admin/test-accounts",
+  wipe: "/admin/wipe",
   requisitions: "/admin/requisitions",
   supplierDashboard: "/admin/supplier-dashboard",
   supplierRoster: "/admin/supplier-roster",

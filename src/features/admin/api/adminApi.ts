@@ -168,7 +168,7 @@ export const adminApi = serviceApi.injectEndpoints({
       }
     >({
       query: (body) => ({
-        url: `${baseUrl}/test-notification`,
+        url: `${baseUrl}/notifications/test`,
         method: "POST",
         body,
       }),
