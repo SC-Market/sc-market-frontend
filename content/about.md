@@ -1,7 +1,7 @@
 ---
 title: About SC Market
 description: SC Market is a free, unofficial marketplace for Star Citizen. Players buy, sell and trade in-game items and services for aUEC.
-updated: 2026-10-25
+updated: 2026-10-26
 ---
 
 SC Market is the Star Citizen marketplace where players buy, sell, and trade in-game items and hire orgs for services like hauling, escort, medical, and salvage, all in aUEC.
@@ -26,7 +26,7 @@ This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperi
 
 ## For organizations
 
-Orgs can run their own shop on SC Market and sell as a team. Org storefronts can also get a custom domain on request: [contact us on Discord](https://discord.com/invite/N4Gy8py8J4).
+Orgs can run their own shop on SC Market and sell as a team. For recruiting and member management, use our sister site [SC Orgs](https://sc-orgs.space). Org storefronts can also get a custom domain on request: [contact us on Discord](https://discord.com/invite/N4Gy8py8J4).
 
 ## Supporters
 

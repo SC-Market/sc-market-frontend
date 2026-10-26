@@ -2,7 +2,7 @@
 title: Register your org on SC Market
 description: Register your RSI org with a code on its RSI page, or create a group without one. Then add its logo, banner, description, tags and languages.
 order: 10
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [org, organization, register org, create org, rsi org, spectrum id, contractor, logo, banner, languages]
 related: [orgs/invite-and-manage-members, orgs/manage-your-org, org-storefront/org-shop]
 howto: true
@@ -52,6 +52,6 @@ To get a Discord thread for each order and alerts your team can claim, connect t
 
 ## What happens next
 
-You get the **Owner** role. The org also starts with an **Admin** and a **Member** role, and new members get **Member**. Invite your members next, then open a shop so the org can sell.
+You get the **Owner** role. The org also starts with an **Admin** and a **Member** role, and new members get **Member**. Invite your members next, then open a shop so the org can sell. To find new members, we recommend [recruiting on SC Orgs](/guides/org-storefront/recruiting).
 
 [Invite and manage members](/guides/orgs/invite-and-manage-members "cta")

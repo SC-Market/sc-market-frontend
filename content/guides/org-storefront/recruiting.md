@@ -1,45 +1,38 @@
 ---
-title: Recruit members with a recruiting post
-description: Each org can publish one recruiting post on SC Market. Players find it on the Recruiting page, upvote and comment, and join with an invite from you.
+title: Recruit members for your org
+description: Recruit on SC Orgs, our sister site for running orgs. It has an org directory, applications you review, and member tools. SC Market posts still work.
 order: 20
 updated: 2026-10-26
-keywords: [recruiting, recruit, recruiting post, find org, join org, upvote, org directory, star citizen org]
+keywords: [recruiting, recruit, sc orgs, applications, apply to join, org directory, find org, join org, recruiting post, star citizen org]
 related: [orgs/invite-and-manage-members, orgs/register-an-org]
 howto: true
 ---
 
-Write one recruiting post for your org. It's listed on the [Recruiting](/recruiting) page and on a **Recruiting** tab of your org's page. Players who like it get in touch, and you invite them.
+Recruit on [SC Orgs](https://sc-orgs.space), our sister site for running Star Citizen orgs. Players find your org in its directory and click **Apply to Join**. You review each application, and the player is notified at every step.
 
-## Before you start
+## Why SC Orgs
 
-- The org's **Manage Recruiting** permission (Owner and Admin have it). Without it you don't see **Create Post**.
-- Your org selected in the sidebar's context switcher. If you're in several orgs, the post is for the one selected there.
+- **Org directory**: players browse [Communities](https://sc-orgs.space/communities) and filter it by focus, such as mining or combat, and by playstyle.
+- **Applications**: players apply from your org page. You and your officers approve, interview or reject them, with a reason they can read.
+- **Members**: roles and permissions, invites and events, all in the same place as your recruits.
 
 ## Steps
 
-1. Open [Recruiting](/recruiting) and click **Create Post**.
-2. Check the org under **Posting for**. To post for another org, switch the sidebar to it first.
-3. Enter a **Title** and a **Description** (both required). Say what your org does, when you play, which languages you speak and how to reach you.
-4. Click **Submit**. Your post opens, and it's live on the Recruiting page.
+1. [Register your org on SC Orgs](https://sc-orgs.space/guides/register-your-org). You paste a short code on your RSI org page, which takes about two minutes.
+2. Fill in your **Description**, **Languages**, **Playstyle** and **Focus Areas**. Players filter the directory by focus and playstyle.
+3. Share your org's SC Orgs page on Discord or Spectrum. Players apply from there.
+4. [Review applications](https://sc-orgs.space/guides/review-applications) on your org's **Recruitment** page: **Approve**, **Interview** or **Reject**.
 
-## Update your post
+> [!TIP]
+> Players looking for an org post on **Looking for Org** on SC Orgs. Click **Send interest** on a listing to tell them your org wants them.
 
-An org has one post at a time. To change it, open [Recruiting](/recruiting) and click **Update Post**, or click the edit icon on the post itself. Edit the text and click **Submit**.
+## Recruiting posts on SC Market
 
-## How players find your org
+If you already use one, SC Market's recruiting post still works. Each org has one post, listed on [Recruiting](/recruiting) and on the **Recruiting** tab of your org's page.
 
-- **Recruiting page**: players **Search** posts, sort them (for example by **Activity**, **Upvotes (All time)**, **Rating** or **Member Count**), and filter by **Org Tags**, **Minimum Rating** and language. Set your tags and languages on your [org profile](/guides/orgs/register-an-org) so you show up.
-- **Org directory**: [Organizations](/contractors) lists every org with the same kind of filters.
-- **Upvotes and comments**: signed-in players can upvote a post once a week and reply under **Reply to Post**. The **Activity** sort ranks posts by their upvotes in the last month.
+- **Post or edit**: you need the **Manage Recruiting** permission (Owner and Admin have it), with your org selected in the sidebar. Open [Recruiting](/recruiting), click **Create Post** (or **Update Post**), enter a **Title** and a **Description**, and click **Submit**.
+- **Formatting**: the description supports Markdown. YouTube links embed, and so do images hosted on Imgur or RSI.
+- **How players find it**: they search and sort posts, and filter by **Org Tags**, **Minimum Rating** and language. Signed-in players can upvote a post once a week and comment on it.
+- **How they join**: there's no apply button. A player contacts you and you [invite them](/guides/orgs/invite-and-manage-members), or you put a multi-use invite link in the post.
 
-## How players join
-
-There's no apply button. A player contacts you, through a comment, your Discord or in game, and you send them an invite. See [invite and manage members](/guides/orgs/invite-and-manage-members).
-
-## Advanced
-
-- **Rich posts**: the description supports GitHub-flavored Markdown. YouTube links embed automatically, and you can embed images hosted on Imgur or RSI.
-- **Open invite link**: put a multi-use invite link in the post, so players can join without waiting for you. Delete the code when you stop recruiting.
-- **Share it**: each post has its own page, so you can link it from Discord or Spectrum.
-
-[Invite and manage members](/guides/orgs/invite-and-manage-members "cta")
+[Register your org on SC Orgs](https://sc-orgs.space/guides/register-your-org "cta")

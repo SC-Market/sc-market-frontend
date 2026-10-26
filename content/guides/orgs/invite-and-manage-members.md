@@ -44,7 +44,7 @@ Open [Settings](/settings), select **Contractors** and click **Leave Organizatio
 
 ## Advanced
 
-- **One link for a recruiting drive**: create a code with **Max Invite Uses** at 0, post it with your [recruiting post](/guides/org-storefront/recruiting), and delete it when the drive ends.
+- **One link for a recruiting drive**: create a code with **Max Invite Uses** at 0, share it on Discord or wherever you [recruit](/guides/org-storefront/recruiting), and delete it when the drive ends.
 - **Find members fast**: the **Members** list on **Roles and Members** has **Search** and a **Role** filter.
 - **Export the roster**: click **Export** above the **Members** list to download the members' usernames as a CSV file. Only the org's members can export it.
 - **Track who joined**: every invite, join, kick and role change is in the org's [audit log](/guides/orgs/audit-logs).
