@@ -6,14 +6,25 @@ import { useTranslation } from "react-i18next"
 import recruitingCap from "../../assets/recruiting.webp"
 import manageStockCap from "../../assets/manage-stock.webp"
 import servicesCap from "../../assets/services-cap.webp"
+import recruitingCapSmall from "../../assets/recruiting-640.webp"
+import manageStockCapSmall from "../../assets/manage-stock-640.webp"
+import servicesCapSmall from "../../assets/services-cap-640.webp"
+import { LandingImg, screenshotSrcSet } from "./LandingImage"
 import {
   LandingBlockTitle,
   LandingBodyText,
   LandingSectionTitle,
 } from "./LandingTypography"
 
-function LandingSmallImage(props: { src: string; title: string }) {
-  const { src, title } = props
+/** A square-cropped screenshot; width/height are the full file's pixel size. */
+function LandingSmallImage(props: {
+  src: string
+  smallSrc: string
+  width: number
+  height: number
+  title: string
+}) {
+  const { src, smallSrc, width, height, title } = props
   const theme = useTheme<ExtendedTheme>()
 
   return (
@@ -23,10 +34,15 @@ function LandingSmallImage(props: { src: string; title: string }) {
       justifyContent={"center"}
       alignItems={"center"}
     >
-      <img
+      <LandingImg
         src={src}
-        style={{
+        srcSet={screenshotSrcSet(smallSrc, src, width)}
+        sizes="(min-width: 900px) 400px, 100vw"
+        width={width}
+        height={height}
+        sx={{
           width: "100%",
+          height: "auto",
           aspectRatio: "1/1",
           border: `1px solid ${theme.palette.outline.main}`,
           marginBottom: theme.spacing(2),
@@ -35,6 +51,7 @@ function LandingSmallImage(props: { src: string; title: string }) {
         }}
         alt={title}
         loading="lazy"
+        decoding="async"
       />
       <LandingBlockTitle>{title}</LandingBlockTitle>
     </Stack>
@@ -74,18 +91,27 @@ export function LandingOrgFeatures() {
         <Grid2 size={{ xs: 12, md: 4 }}>
           <LandingSmallImage
             src={recruitingCap}
+            smallSrc={recruitingCapSmall}
+            width={1909}
+            height={1699}
             title={t("landing.orgRecruitment")}
           />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>
           <LandingSmallImage
             src={servicesCap}
+            smallSrc={servicesCapSmall}
+            width={899}
+            height={847}
             title={t("landing.serviceListings")}
           />
         </Grid2>
         <Grid2 size={{ xs: 12, md: 4 }}>
           <LandingSmallImage
             src={manageStockCap}
+            smallSrc={manageStockCapSmall}
+            width={857}
+            height={839}
             title={t("landing.stockManagement")}
           />
         </Grid2>

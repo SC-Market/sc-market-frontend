@@ -12,6 +12,10 @@ import CharLogo from "../../assets/CharHoldings_Logo.png"
 import UNNLogo from "../../assets/UNN_Traders_Logo.webp"
 import BirdIncLogo from "../../assets/birdinc.jpg"
 import { LandingBodyText, LandingSectionTitle } from "./LandingTypography"
+import { LandingImg } from "./LandingImage"
+
+/** Supporter logos are shown 128px tall; width/height are the files' pixel sizes. */
+const SUPPORTER_LOGO_HEIGHT = 128
 
 export function SupportersSection() {
   const { t } = useTranslation()
@@ -19,16 +23,22 @@ export function SupportersSection() {
   const supporters = [
     {
       avatar: BirdIncLogo,
+      width: 691,
+      height: 248,
       url: "https://robertsspaceindustries.com/en/orgs/BIRDINC",
       name: "BIRD Inc",
     },
     {
       avatar: UNNLogo,
+      width: 1024,
+      height: 256,
       url: "https://joinunn.com/",
       name: "The Unnamed",
     },
     {
       avatar: CharLogo,
+      width: 895,
+      height: 256,
       url: "https://robertsspaceindustries.com/orgs/CHAR",
       name: "Char Holdings",
     },
@@ -86,12 +96,18 @@ export function SupportersSection() {
                   { name: supporter.name },
                 )}
               >
-                <img
+                <LandingImg
                   src={supporter.avatar}
-                  style={{
-                    maxHeight: 128,
+                  width={supporter.width}
+                  height={supporter.height}
+                  loading="lazy"
+                  decoding="async"
+                  sx={{
+                    height: SUPPORTER_LOGO_HEIGHT,
+                    width: "auto",
                     maxWidth: "100%",
-                    borderRadius: `${theme.spacing(theme.borderRadius.button)}px`,
+                    objectFit: "contain",
+                    borderRadius: theme.spacing(theme.borderRadius.button),
                   }}
                   alt={t("accessibility.supporterLogo", "{{name}} logo", {
                     name: supporter.name,

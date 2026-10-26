@@ -1,5 +1,8 @@
 import React, { Suspense } from "react"
-import { useCustomDomain, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
+import {
+  useCustomDomain,
+  getWhiteLabelConfig,
+} from "../../hooks/contractor/CustomDomain"
 import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -28,24 +31,32 @@ import { safeRedirectPath } from "../../util/safeRedirect"
  * uses), so the page keeps its length while they load.
  */
 const LandingFeatures = React.lazy(() =>
-  retryDynamicImport(() => import("../../components/landing/LandingFeatures")).then((m) => ({
+  retryDynamicImport(
+    () => import("../../components/landing/LandingFeatures"),
+  ).then((m) => ({
     default: m.LandingFeatures,
   })),
 )
 const LandingOrgFeatures = React.lazy(() =>
-  retryDynamicImport(() => import("../../components/landing/LandingOrgFeatures")).then((m) => ({
+  retryDynamicImport(
+    () => import("../../components/landing/LandingOrgFeatures"),
+  ).then((m) => ({
     default: m.LandingOrgFeatures,
   })),
 )
 const SupportersSection = React.lazy(() =>
-  retryDynamicImport(() => import("../../components/landing/SupportersSection")).then((m) => ({
+  retryDynamicImport(
+    () => import("../../components/landing/SupportersSection"),
+  ).then((m) => ({
     default: m.SupportersSection,
   })),
 )
 const FAQSection = React.lazy(() =>
-  retryDynamicImport(() => import("../../components/landing/FAQSection")).then((m) => ({
-    default: m.FAQSection,
-  })),
+  retryDynamicImport(() => import("../../components/landing/FAQSection")).then(
+    (m) => ({
+      default: m.FAQSection,
+    }),
+  ),
 )
 
 export function LandingPage() {

@@ -19,7 +19,10 @@ export function OrderStatisticsSkeleton() {
       spacing={theme.layoutSpacing.layout}
       justifyContent={"center"}
     >
-      <MetricSection title={t("landing.ordersThisWeek")} body={<Skeleton width="4ch" />} />
+      <MetricSection
+        title={t("landing.ordersThisWeek")}
+        body={<Skeleton width="4ch" />}
+      />
       <MetricSection
         title={t("landing.valueOfOrdersThisWeek")}
         body={<Skeleton width="14ch" />}

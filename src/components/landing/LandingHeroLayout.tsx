@@ -14,6 +14,8 @@ import SearchIcon from "@mui/icons-material/Search"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
 import logo from "../../assets/scmarket-logo.webp"
+import logo96 from "../../assets/scmarket-logo-96.webp"
+import { LandingImg } from "./LandingImage"
 import { MARKET_PATHS } from "../../routes/paths"
 import { formatCompactAmount } from "../../util/formatCompactAmount"
 
@@ -131,12 +133,15 @@ export function LandingHeroLayout(props: {
       <Container maxWidth="lg">
         <Stack spacing={{ xs: 2.5, md: 3 }} alignItems="flex-start">
           <Stack direction="row" spacing={1.5} alignItems="center">
-            <Box
-              component="img"
-              src={logo}
+            {/* Decorative: the brand name is right next to it. Not the LCP
+                (the <h1> is), so a 96px file covers 1x/2x screens. */}
+            <LandingImg
+              src={logo96}
+              srcSet={`${logo96} 2x, ${logo} 3x`}
               alt=""
               width={LOGO_SIZE}
               height={LOGO_SIZE}
+              decoding="async"
               sx={{ width: LOGO_SIZE, height: LOGO_SIZE, borderRadius: "50%" }}
             />
             <Typography
@@ -202,7 +207,13 @@ export function LandingHeroLayout(props: {
             sx={{ width: "100%" }}
           >
             <HeroSearch />
-            <Stack direction="row" spacing={1.5} useFlexGap flexWrap="wrap" sx={{ flexShrink: 0 }}>
+            <Stack
+              direction="row"
+              spacing={1.5}
+              useFlexGap
+              flexWrap="wrap"
+              sx={{ flexShrink: 0 }}
+            >
               <Button
                 component={Link}
                 to={MARKET_PATHS.search}
