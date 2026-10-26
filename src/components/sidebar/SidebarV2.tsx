@@ -785,6 +785,7 @@ export function SidebarV2() {
           size="small"
           onClick={() => setDrawerOpen(false)}
           sx={{ color: "text.secondary" }}
+          aria-label={t("sidebar.close", "Close sidebar")}
         >
           <ChevronLeftRounded />
         </IconButton>

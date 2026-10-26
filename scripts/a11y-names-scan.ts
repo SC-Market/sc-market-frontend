@@ -48,7 +48,13 @@ export interface Finding {
   tag: string
 }
 
-const ICON_LIKE = new Set(["IconButton", "Fab", "ToggleButton", "button"])
+const ICON_LIKE = new Set([
+  "IconButton",
+  "HapticIconButton",
+  "Fab",
+  "ToggleButton",
+  "button",
+])
 const TOGGLES = new Set(["Checkbox", "Switch", "Radio", "Slider"])
 const NAME_ATTRS = ["aria-label", "aria-labelledby"]
 

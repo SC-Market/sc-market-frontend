@@ -99,8 +99,13 @@ export function ProfileNavAvatar() {
   return (
     <React.Fragment>
       {/*{redirect && <Navigate to={redirect}/>}*/}
-      <HapticIconButton onClick={handleClick}>
-        <Avatar src={profile?.avatar} />
+      <HapticIconButton
+        onClick={handleClick}
+        aria-label={t("navbar.accountMenu", "Account menu")}
+        aria-haspopup="true"
+        aria-expanded={notifOpen}
+      >
+        <Avatar src={profile?.avatar} alt="" />
       </HapticIconButton>
       <Popover
         open={notifOpen}
