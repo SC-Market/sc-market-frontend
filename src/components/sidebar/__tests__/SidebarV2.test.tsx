@@ -394,6 +394,7 @@ describe("SidebarV2 — org context", () => {
       ],
     }
     mockSelectedContractor = {
+      contractor_id: "00000000-0000-4000-8000-000000000001",
       kind: "organization",
       spectrum_id: "TESTORG",
       name: "Test Org",

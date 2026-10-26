@@ -83,6 +83,7 @@ const OWNER_ROLE: ContractorRole = {
 const RATING = { avg_rating: 0, rating_count: 0, total_rating: 0, streak: 0 }
 
 export const fixtureContractor: Contractor = {
+  contractor_id: "00000000-0000-4000-8000-000000000001",
   kind: "organization",
   avatar: "",
   banner: "",

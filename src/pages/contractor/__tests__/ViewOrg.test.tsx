@@ -181,6 +181,7 @@ describe("ViewOrg - Integration Tests", () => {
    */
   it("renders with data", async () => {
     const mockContractor: Contractor = {
+      contractor_id: "00000000-0000-4000-8000-000000000001",
       kind: "organization",
       avatar: "https://example.com/avatar.png",
       banner: "https://example.com/banner.png",
@@ -293,6 +294,7 @@ describe("ViewOrg - Integration Tests", () => {
    */
   it("uses usePageOrg hook for data fetching", () => {
     const mockContractor: Contractor = {
+      contractor_id: "00000000-0000-4000-8000-000000000001",
       kind: "organization",
       avatar: "https://example.com/avatar.png",
       banner: "https://example.com/banner.png",
@@ -341,6 +343,7 @@ describe("ViewOrg - Integration Tests", () => {
    */
   it("maintains original page structure without duplicate breadcrumbs", async () => {
     const mockContractor: Contractor = {
+      contractor_id: "00000000-0000-4000-8000-000000000001",
       kind: "organization",
       avatar: "https://example.com/avatar.png",
       banner: "https://example.com/banner.png",

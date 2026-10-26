@@ -20,6 +20,7 @@ import { StorefrontRounded } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
 import { useCreateShopMutation } from "../../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { PATHS, SHOP_PATHS } from "../../../routes/paths"
 import { usePageReady } from "../../../components/metadata/PageReady"
@@ -68,7 +69,12 @@ export function CreateShop() {
   const [ownerType, setOwnerType] = useState<"personal" | "organization">(
     "personal",
   )
-  const [contractorId, setContractorId] = useState("")
+  // The picker works with Spectrum IDs (that's what the profile lists); the
+  // API wants the org's contractor_id, so look the org up.
+  const [orgSpectrumId, setOrgSpectrumId] = useState("")
+  const isOrgShop = ownerType === "organization" && !!orgSpectrumId
+  const { data: selectedOrg, isFetching: isOrgLoading } =
+    useGetContractorBySpectrumIDQuery(orgSpectrumId, { skip: !isOrgShop })
   const [tags, setTags] = useState<string[]>([])
   const [supportedLanguages, setSupportedLanguages] = useState<string[]>([])
   const [acceptsCustomOrders, setAcceptsCustomOrders] = useState(false)
@@ -91,6 +97,10 @@ export function CreateShop() {
       issueAlert({ severity: "error", message: "Slug must be at least 3 characters" })
       return
     }
+    if (ownerType === "organization" && !selectedOrg) {
+      issueAlert({ severity: "error", message: "Select an organization" })
+      return
+    }
 
     try {
       const result = await createShop({
@@ -98,10 +108,10 @@ export function CreateShop() {
           name: name.trim(),
           slug: slug,
           description: description.trim() || undefined,
-          contractor_id:
-            ownerType === "organization" && contractorId
-              ? contractorId
-              : undefined,
+          contractor_id: isOrgShop ? selectedOrg!.contractor_id : undefined,
+          tags,
+          supported_languages: supportedLanguages,
+          accepts_custom_orders: acceptsCustomOrders,
         },
       }).unwrap()
 
@@ -216,8 +226,8 @@ export function CreateShop() {
                 <TextField
                   select
                   label="Organization"
-                  value={contractorId}
-                  onChange={(e) => setContractorId(e.target.value)}
+                  value={orgSpectrumId}
+                  onChange={(e) => setOrgSpectrumId(e.target.value)}
                   fullWidth
                   sx={{ mt: 2 }}
                   SelectProps={{ native: true }}
@@ -323,7 +333,10 @@ export function CreateShop() {
                 loading={isLoading}
                 startIcon={<StorefrontRounded />}
                 onClick={handleSubmit}
-                disabled={!name.trim()}
+                disabled={
+                  !name.trim() ||
+                  (ownerType === "organization" && (!selectedOrg || isOrgLoading))
+                }
                 size="large"
               >
                 Create Shop

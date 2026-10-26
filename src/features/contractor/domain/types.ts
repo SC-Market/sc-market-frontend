@@ -33,6 +33,8 @@ export interface Rating {
 }
 
 export interface Contractor {
+  /** The org's internal id (UUID). APIs that take an org id want this, not spectrum_id. */
+  contractor_id: string
   kind: "independent" | "organization"
   avatar: string
   banner: string
