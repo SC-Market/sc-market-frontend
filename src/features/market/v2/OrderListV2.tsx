@@ -28,7 +28,7 @@ import {
   Alert,
 } from "@mui/material"
 import { Link } from "react-router-dom"
-import { useGetOrdersQuery } from "../../../store/api/v2/market"
+import { useGetOrdersQuery, type GetOrdersApiArg } from "../../../store/api/v2/market"
 import { ORDER_PATHS } from "../../../routes/paths"
 
 /**
@@ -38,8 +38,8 @@ interface OrderListV2Props {
   /** Optional title for the list */
   title?: string | null
   
-  /** Filter by order status */
-  status?: "pending" | "completed" | "cancelled"
+  /** Filter by order status (the statuses orders store) */
+  status?: GetOrdersApiArg["status"]
   
   /** Filter by role (buyer or seller) */
   role?: "buyer" | "seller"

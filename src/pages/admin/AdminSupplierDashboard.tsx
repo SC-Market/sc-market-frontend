@@ -107,8 +107,9 @@ const ORDER_STATUS_CHIP: Record<
   string,
   { label: string; color: "warning" | "success" | "error" | "default" }
 > = {
-  pending: { label: "Pending", color: "warning" },
-  completed: { label: "Complete", color: "success" },
+  "not-started": { label: "Not started", color: "warning" },
+  "in-progress": { label: "In progress", color: "warning" },
+  fulfilled: { label: "Fulfilled", color: "success" },
   cancelled: { label: "Cancelled", color: "error" },
 }
 
@@ -604,7 +605,7 @@ function buildActivityFeed(
     })
 
   orders
-    .filter((o) => o.status === "completed")
+    .filter((o) => o.status === "fulfilled")
     .slice(0, 2)
     .forEach((o) => {
       items.push({
@@ -679,7 +680,7 @@ export function AdminSupplierDashboard() {
   const activeBuyOrders = buyOrders.filter((o) => o.status === "active")
   const pendingReqs = reqs.filter((r) => r.status === "pending")
   const recentRevenue = orders
-    .filter((o) => o.status === "completed")
+    .filter((o) => o.status === "fulfilled")
     .reduce((sum, o) => sum + o.total_price, 0)
   const supplierCount = suppliersData?.total ?? 0
 
@@ -754,13 +755,13 @@ export function AdminSupplierDashboard() {
           icon={<PaymentsRounded sx={{ fontSize: 18 }} />}
           label="Revenue (all time)"
           value={`${formatAuec(recentRevenue)} aUEC`}
-          sub={`${orders.filter((o) => o.status === "completed").length} orders completed`}
+          sub={`${orders.filter((o) => o.status === "fulfilled").length} orders completed`}
           loading={ordersLoading}
         />
         <StatCard
           icon={<CheckCircleOutlineRounded sx={{ fontSize: 18 }} />}
           label="Fulfilled Orders"
-          value={orders.filter((o) => o.status === "completed").length}
+          value={orders.filter((o) => o.status === "fulfilled").length}
           sub={`of ${orders.length} total`}
           loading={ordersLoading}
         />

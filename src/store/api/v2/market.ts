@@ -2207,7 +2207,8 @@ export type GetOrderDetailApiArg = {
 export type GetOrdersApiResponse =
   /** status 200 Orders list with pagination metadata */ GetOrdersResponse
 export type GetOrdersApiArg = {
-  status?: "pending" | "completed" | "cancelled"
+  /** Only orders with this status, as orders store it */
+  status?: "not-started" | "in-progress" | "fulfilled" | "cancelled"
   role?: "buyer" | "seller"
   qualityTierMin?: number
   qualityTierMax?: number

@@ -113,7 +113,7 @@ describe("OrderListV2", () => {
         shop_logo: null,
         quality_tier_min: 3,
         quality_tier_max: 5,
-        status: "pending",
+        status: "not-started",
         created_at: "2024-01-01T00:00:00Z",
         total_price: 10000,
         item_count: 2,
@@ -129,7 +129,7 @@ describe("OrderListV2", () => {
         shop_logo: null,
         quality_tier_min: 5,
         quality_tier_max: 5,
-        status: "completed",
+        status: "fulfilled",
         created_at: "2024-01-02T00:00:00Z",
         total_price: 20000,
         item_count: 1,
@@ -166,7 +166,7 @@ describe("OrderListV2", () => {
         shop_logo: null,
         quality_tier_min: undefined,
         quality_tier_max: undefined,
-        status: "pending",
+        status: "not-started",
         created_at: "2024-01-01T00:00:00Z",
         total_price: 10000,
         item_count: 1,
@@ -215,11 +215,11 @@ describe("OrderListV2", () => {
       ),
     )
 
-    renderWithProviders(<OrderListV2 status="completed" />)
+    renderWithProviders(<OrderListV2 status="fulfilled" />)
 
     expect(useGetOrdersQuery).toHaveBeenCalledWith(
       expect.objectContaining({
-        status: "completed",
+        status: "fulfilled",
       }),
     )
   })
@@ -269,7 +269,7 @@ describe("OrderListV2", () => {
         shop_logo: null,
         quality_tier_min: 3,
         quality_tier_max: 3,
-        status: "pending",
+        status: "not-started",
         created_at: "2024-01-01T00:00:00Z",
         total_price: 10000,
         item_count: 1,
@@ -302,7 +302,7 @@ describe("OrderListV2", () => {
         shop_logo: "https://example.com/shop.jpg",
         quality_tier_min: 3,
         quality_tier_max: 3,
-        status: "pending",
+        status: "not-started",
         created_at: "2024-01-01T00:00:00Z",
         total_price: 10000,
         item_count: 1,
@@ -335,7 +335,7 @@ describe("OrderListV2", () => {
         shop_logo: null,
         quality_tier_min: 3,
         quality_tier_max: 3,
-        status: "pending",
+        status: "not-started",
         created_at: "2024-01-01T00:00:00Z",
         total_price: 10000,
         item_count: 1,
@@ -368,7 +368,7 @@ describe("OrderListV2", () => {
         shop_logo: null,
         quality_tier_min: 3,
         quality_tier_max: 3,
-        status: "pending",
+        status: "not-started",
         created_at: "2024-01-01T00:00:00Z",
         total_price: 10000,
         item_count: 1,
@@ -467,7 +467,7 @@ describe("OrderListV2", () => {
           shop_logo: null,
           quality_tier_min: 4,
           quality_tier_max: 5,
-          status: "pending",
+          status: "not-started",
           created_at: "2024-01-01T00:00:00Z",
           total_price: 50000,
           item_count: 1,
