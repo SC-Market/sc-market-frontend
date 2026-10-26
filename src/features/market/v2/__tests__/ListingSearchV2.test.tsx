@@ -687,7 +687,7 @@ describe("ListingSearchV2", () => {
  * ✅ Maintains visual parity with V1 styling
  * 
  * Requirements Validated:
- * - 11.1-11.5: Component reuse (MarketTabsLayout, StandardPageLayout, MarketSidebar, ListingCard, ListingPagination)
+ * - 11.1-11.5: Component reuse (MarketPageLayout, StandardPageLayout, MarketSidebar, ListingCard, ListingPagination)
  * - 12.1-12.12: Visual parity (card styling, typography, grid spacing, animations)
  * - 13.1-13.12: URL-based filter state (useSearchParams, quality_tier_min/max, price_min/max)
  * - 15.1-15.12: Listing search with quality filters (API endpoint, filters, pagination, performance)

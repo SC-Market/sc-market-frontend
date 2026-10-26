@@ -248,7 +248,9 @@ exports[`routes (shard 4/4) > /buyorders 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/buyorders",
-  "h1": [],
+  "h1": [
+    "Buy Orders",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
@@ -351,7 +353,9 @@ exports[`routes (shard 4/4) > /contracts 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/contracts",
-  "h1": [],
+  "h1": [
+    "Contracts",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
@@ -508,7 +512,9 @@ exports[`routes (shard 4/4) > /market/category/:name 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/market/category/fixture-name",
-  "h1": [],
+  "h1": [
+    "Market",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",

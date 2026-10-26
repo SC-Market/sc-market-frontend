@@ -706,7 +706,9 @@ exports[`redirects and guards > /services → /market/services 1`] = `
 {
   "cookies": {},
   "finalUrl": "/market/services",
-  "h1": [],
+  "h1": [
+    "Services",
+  ],
   "historyAction": "PUSH",
   "matches": [
     "(layout:HookProvider)",

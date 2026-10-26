@@ -59,16 +59,14 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
   "adminOrders:analytics": () => import("../views/orders/OrderAnalytics"),
   "adminOrders:recent": () => import("../views/orders/RecentOrders"),
 
-  // MarketPage tab components
+  // Lazy chunks for the market pages (and the sibling pages linked from the sidebar)
   "market:services": () => import("../views/services/ServiceMarketView"),
   "market:serviceActions": () => import("../views/services/ServiceActions"),
   "market:contractActions": () => import("../views/contracts/ContractActions"),
   "market:contractListings": () =>
     import("../views/contracts/ContractListings"),
 
-  // Contracts page tab components
-  "contracts:services": () => import("../views/services/ServiceMarketView"),
-  "contracts:serviceActions": () => import("../views/services/ServiceActions"),
+  // Contracts page lazy components
   "contracts:contractActions": () =>
     import("../views/contracts/ContractActions"),
 }
@@ -132,11 +130,7 @@ export const COMPONENT_PREFETCH_MAP: Record<string, string[]> = {
     "market:contractActions",
     "market:contractListings",
   ],
-  "/contracts": [
-    "contracts:services",
-    "contracts:serviceActions",
-    "contracts:contractActions",
-  ],
+  "/contracts": ["contracts:contractActions"],
 }
 
 /**

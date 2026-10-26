@@ -1,20 +1,21 @@
 import React, { Suspense, useMemo, useState } from "react"
 import { CircularProgress } from "@mui/material"
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { Page } from "../../../components/metadata/Page"
 import { MarketSidebarContext } from "../../../features/market/hooks/MarketSidebar"
 import { ServiceSidebarContext } from "../../../features/contracting/hooks/ServiceSidebar"
-import { MarketTabsLayout } from "../../../components/layout/MarketTabsLayout"
-import { MarketActions, BuyOrderActions } from "../../../features/market/components/MarketActions"
-import { TabPanel } from "../../../components/tabs/Tabs"
+import { MarketPageLayout } from "../../../components/layout/MarketPageLayout"
+import {
+  MarketActions,
+  BuyOrderActions,
+} from "../../../features/market/components/MarketActions"
 import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
 import { FeatureErrorBoundary } from "../../../components/error-boundaries"
 import { MarketV2Routes } from "../../../features/market/v2/MarketV2Routes"
-import { PATHS, MARKET_PATHS } from "../../../routes/paths"
 
-// V1 components for Services and Contracts tabs (shared across V1/V2)
+// V1 components for the Services page (shared across V1/V2)
 const ServiceMarketView = React.lazy(() =>
   import("../../../views/services/ServiceMarketView").then((m) => ({
     default: m.ServiceMarketView,
@@ -25,53 +26,37 @@ const ServiceActions = React.lazy(() =>
     default: m.ServiceActions,
   })),
 )
-const ContractActions = React.lazy(() =>
-  import("../../../views/contracts/ContractActions").then((m) => ({
-    default: m.ContractActions,
-  })),
-)
-const ContractListings = React.lazy(() =>
-  import("../../../views/contracts/ContractListings").then((m) => ({
-    default: m.ContractListings,
-  })),
-)
+
+type MarketPageKind = "items" | "buyorders" | "services"
 
 /**
- * MarketPageV2 — V2 market page with the same tabbed layout as V1.
+ * MarketPageV2 — the /market, /buyorders and /market/services pages.
  *
- * Items tab renders V2 components (ListingSearchV2, BuyOrdersViewV2, etc.)
- * Services and Contracts tabs render V1 components (shared, not market-specific).
+ * Items and buy orders render V2 components (ListingSearchV2, BuyOrdersViewV2, etc.).
+ * Services renders the V1 ServiceMarketView (shared, not market-specific).
+ * Navigation between these pages lives in the sidebar, so the header just
+ * names the current page and shows its actions.
  */
 export function MarketPageV2() {
   const { t } = useTranslation()
   const location = useLocation()
-  const navigate = useNavigate()
   const showMobileSidebar = useBreakpointDown("lg")
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
 
-  // Everyone can create listings — the create page handles which shop to create under
-  const canCreateListing = true
-
-  const tabPage = useMemo(() => {
-    if (location.pathname.startsWith("/market/services")) return 1
-    if (location.pathname.startsWith("/contracts")) return 2
-    return 0
+  const page = useMemo<MarketPageKind>(() => {
+    if (location.pathname.startsWith("/market/services")) return "services"
+    if (location.pathname.startsWith("/buyorders")) return "buyorders"
+    return "items"
   }, [location.pathname])
 
-  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-    if (newValue === 0) navigate(MARKET_PATHS.search)
-    else if (newValue === 1) navigate(MARKET_PATHS.services)
-    else if (newValue === 2) navigate(PATHS.contracts)
-  }
-
-  const tabs = [
-    { value: 0, label: t("market.itemsTab") },
-    { value: 1, label: t("market.servicesTab") },
-    { value: 2, label: t("market.contractsTab", "Open Contracts") },
-  ]
-
-  const isBuyOrders = location.pathname.startsWith("/buyorders")
+  // Same labels as the sidebar entries for these pages (SidebarV2)
+  const title =
+    page === "services"
+      ? t("nav.services", "Services")
+      : page === "buyorders"
+        ? t("nav.buyOrders", "Buy Orders")
+        : t("nav.market", "Market")
 
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
@@ -81,56 +66,46 @@ export function MarketPageV2() {
         <ServiceSidebarContext.Provider
           value={[serviceSidebarOpen, setServiceSidebarOpen]}
         >
-          <MarketTabsLayout
-            title={t("market.market")}
-            tabIndex={tabPage}
-            onTabChange={handleTabChange}
-            tabs={tabs}
+          <MarketPageLayout
+            title={title}
             headerActions={
-              tabPage === 0 ? (
-                isBuyOrders ? <BuyOrderActions /> : canCreateListing ? <MarketActions /> : null
-              ) : tabPage === 1 ? (
+              page === "services" ? (
                 <Suspense fallback={<CircularProgress size={24} />}>
                   <ServiceActions />
                 </Suspense>
+              ) : page === "buyorders" ? (
+                <BuyOrderActions />
               ) : (
-                <Suspense fallback={<CircularProgress size={24} />}>
-                  <ContractActions />
-                </Suspense>
+                // Everyone can create listings — the create page handles which shop to create under
+                <MarketActions />
               )
             }
             fab={
-              showMobileSidebar && tabPage === 0 ? (
-                <FiltersFAB
-                  onClick={() => setMarketSidebarOpen((prev) => !prev)}
-                  label={t("market.toggleSidebar")}
-                />
-              ) : showMobileSidebar && tabPage === 1 ? (
+              !showMobileSidebar ? undefined : page === "services" ? (
                 <FiltersFAB
                   onClick={() => setServiceSidebarOpen((prev) => !prev)}
                   label={t("service_market.toggle_sidebar")}
                 />
-              ) : undefined
+              ) : (
+                <FiltersFAB
+                  onClick={() => setMarketSidebarOpen((prev) => !prev)}
+                  label={t("market.toggleSidebar")}
+                />
+              )
             }
           >
-            <TabPanel value={tabPage} index={0}>
-              <Suspense fallback={null}>
-                <MarketV2Routes />
-              </Suspense>
-            </TabPanel>
-            <TabPanel value={tabPage} index={1}>
+            {page === "services" ? (
               <FeatureErrorBoundary featureName="Services">
                 <Suspense fallback={null}>
                   <ServiceMarketView />
                 </Suspense>
               </FeatureErrorBoundary>
-            </TabPanel>
-            <TabPanel value={tabPage} index={2}>
+            ) : (
               <Suspense fallback={null}>
-                <ContractListings />
+                <MarketV2Routes />
               </Suspense>
-            </TabPanel>
-          </MarketTabsLayout>
+            )}
+          </MarketPageLayout>
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
     </Page>
