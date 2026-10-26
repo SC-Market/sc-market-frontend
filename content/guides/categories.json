@@ -32,13 +32,13 @@
   {
     "id": "orgs",
     "title": "Organizations",
-    "description": "Run your org on SC Market: roles, permissions and team selling.",
+    "description": "Run your org on SC Market: register it, invite members, sell and recruit as a team, and get a white-label storefront.",
     "order": 50
   },
   {
     "id": "discord",
     "title": "Discord",
-    "description": "Connect the SC Market bot for order threads, alerts and claiming orders from Discord.",
+    "description": "Connect the SC Market bot for order threads, alerts and claiming orders, or post shop events with a webhook.",
     "order": 60
   }
 ]

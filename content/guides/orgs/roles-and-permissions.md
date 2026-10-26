@@ -4,7 +4,7 @@ description: Roles decide what each member of your org can do on SC Market. Crea
 order: 10
 updated: 2026-10-25
 keywords: [org, organization, roles, permissions, members, owner, admin, rank, position, kick]
-related: [orders/handle-orders-as-a-seller, discord/order-alerts-and-claiming]
+related: [orgs/invite-and-manage-members, orders/handle-orders-as-a-seller, discord/order-alerts-and-claiming]
 howto: true
 ---
 
@@ -13,6 +13,10 @@ Each org member has one or more roles, and each role is a set of permissions. Yo
 ## Before you start
 
 - A role with **Manage Roles** in the org. New orgs start with **Owner** (position 0, every permission), **Admin** (position 1, every permission) and **Member** (position 10, only **Claim Orders**). New members get **Member**.
+
+## The quick way
+
+Most orgs only need the built-in roles: give trusted officers **Admin** in their **Roles** selector on the **Members** list, and leave everyone else on **Member**. Create your own roles, as below, when you need something in between, such as a trader who can list items but not manage roles.
 
 ## Steps
 
@@ -26,18 +30,18 @@ Each org member has one or more roles, and each role is a set of permissions. Yo
 
 ## What each permission does
 
-- **Manage Org Details**: edit the org's name, description, avatar, banner and language settings.
+- **Manage Org Details**: edit the org's name, description, avatar, banner and language settings, read the audit log, and save [white-label](/guides/orgs/white-label) site settings.
 - **Manage Roles**: create, edit and delete roles, and assign them to members.
 - **Manage Orders**: view, accept, reject and manage all of the org's orders and offers, and review customers.
 - **Manage Invites**: create and manage invite codes and links.
-- **Manage Market**: create, edit and remove the org's listings and stock lots, and manage the org's shops.
+- **Manage Market**: create, edit and remove the org's listings and stock lots, and manage the org's shops, including their [webhooks](/guides/discord/webhooks).
 - **Manage Stock**: shows **Stock** in an org shop's sidebar. Changing stock lots also needs **Manage Market**.
 - **Manage Recruiting**: create and manage recruiting posts.
-- **Manage Webhooks**: Discord and notification webhooks, and [registering the Discord bot](/guides/discord/connect-the-discord-bot) for the org.
+- **Manage Webhooks**: [register the Discord bot](/guides/discord/connect-the-discord-bot) for the org and set up its order alerts. Shop webhooks need **Manage Market** instead.
 - **Manage Blocklist**: block and unblock users for the org.
 - **Claim Orders**: claim open orders and offers from [Discord alerts](/guides/discord/order-alerts-and-claiming).
 - **Kick Members**: remove members ranked below you.
-- **Manage Theme**: only for orgs with a white-label storefront.
+- **Manage Theme**: edit the theme of the org's [white-label](/guides/orgs/white-label) site. The checkbox only shows for white-label orgs.
 
 ## The Owner role
 
@@ -47,6 +51,6 @@ You also can't remove your own top role, or the last role that gives you **Manag
 
 ## What happens next
 
-Every change to roles and members is recorded on the org's **Audit Logs** tab, with filters for the action, who did it and the date.
+Every change to roles and members is recorded on the org's **Audit Logs** tab, with filters for the action, who did it and the date. See [the org audit log](/guides/orgs/audit-logs).
 
 [Handle orders as an org team](/guides/orders/handle-orders-as-a-seller "cta")
