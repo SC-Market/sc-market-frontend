@@ -403,8 +403,6 @@ describe("SidebarV2 — org context", () => {
       fields: [],
       size: 1,
       rating: { avg_rating: 0, rating_count: 0, total_rating: 0, streak: 0 },
-      official_server_id: null,
-      discord_thread_channel_id: null,
       market_order_template: "",
     }
   })

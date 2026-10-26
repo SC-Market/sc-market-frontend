@@ -57,25 +57,27 @@ export function ConfigureDiscord(props: { org?: boolean }) {
           alignItems={"center"}
           spacing={theme.layoutSpacing.compact}
         >
-          <Avatar src={settings?.guild_avatar} />
-          <a
-            href={`https://discord.com/channels/${
-              settings?.official_server_id
-            }/${settings?.discord_thread_channel_id || ""}`}
-            target={"_blank"}
-            rel="noreferrer"
-          >
-            <UnderlineLink color={"text.secondary"}>
-              {settings?.guild_name ? (
-                <>
-                  {settings?.guild_name}: #{settings?.channel_name}
-                </>
-              ) : (
-                t("ConfigureDiscord.notConfigured")
-              )}
-            </UnderlineLink>
-          </a>
+          <Avatar src={settings?.guild_avatar ?? undefined} />
+          {settings?.guild_id && settings?.channel_id ? (
+            <a
+              href={`https://discord.com/channels/${settings.guild_id}/${settings.channel_id}`}
+              target={"_blank"}
+              rel="noreferrer"
+            >
+              <UnderlineLink color={"text.secondary"}>
+                {settings.guild_name ?? settings.guild_id}: #
+                {settings.channel_name ?? settings.channel_id}
+              </UnderlineLink>
+            </a>
+          ) : (
+            <Typography color={"text.secondary"}>
+              {t("ConfigureDiscord.notConfigured")}
+            </Typography>
+          )}
         </Stack>
+        <Typography variant={"body2"} color={"text.secondary"}>
+          {t("ConfigureDiscord.setUpWithBot")}
+        </Typography>
         <Box
           display={"flex"}
           justifyContent={"space-between"}

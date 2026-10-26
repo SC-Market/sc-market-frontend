@@ -2,7 +2,7 @@
 title: Your org's manage pages
 description: The Manage Org area holds your org's profile, roles, invites, Discord, settings, audit log and theme. Each tab shows only if your roles allow it.
 order: 3
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [manage org, org settings, org admin, about, roles, invites, discord integration, audit logs, transfer ownership, archive org]
 related: [orgs/register-an-org, orgs/roles-and-permissions, orgs/invite-and-manage-members]
 ---
@@ -27,7 +27,7 @@ Invite players by username and create invite links. Needs **Manage Invites**. Se
 
 ## Discord Integration
 
-Shows the org's **Integrated Channel** for order threads, and a **Use Official Server** button to run order threads in the SC Market Discord instead of your own. Changing the Discord setup needs **Manage Webhooks**. See [connect the Discord bot](/guides/discord/connect-the-discord-bot).
+Shows the org's **Integrated Channel** for order threads, and a **Use Official Server** button to run order threads in the SC Market Discord instead of your own. To use your own server, run `/setup threads` with `org` set to your Spectrum ID in the channel that should hold them. Both need **Manage Webhooks**. See [connect the Discord bot](/guides/discord/connect-the-discord-bot).
 
 ## Settings
 

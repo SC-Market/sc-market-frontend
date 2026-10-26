@@ -1064,7 +1064,7 @@
     "how_to_get_notified": "如何在有订单创建时收到提醒",
     "how_to_get_notified_answer": "将官方的[SC市集Discord机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入到您的服务器以在一条订单被创建或被指派给您时收到自动私信。您也可以用下方设置去在[SC市集的官方服务器]({{DISCORD_INVITE}})里完成订单。",
     "how_to_communicate": "如何用Discord与买家交流",
-    "how_to_communicate_answer": "将官方的[SC市集Discord机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入到您的服务器后，您可以注册一条频道以在订单下单时自动在其中创建买卖方的讨论串。买家会自动收到您的服务器邀请，之后可以在那里协商完成订单的相关事宜。\n\n1. 把[机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)添加进您的服务器。\n\n2. 对一个独立用户或一整个合约组织使用`/register server`指令。如需将订单关联至您个人，使用`/register server user`指令。如需关联一个组织，使用`/register server contractor ORGNAME`。在此之后，相关用户将会在下单后自动收到您的服务器邀请。\n\n3. 对一个独立用户或一整个合约组织使用`/register channel` 指令。如需将订单关联至您个人，使用`/register channel user`指令。如需关联一个组织，使用`/register channel contractor ORGNAME`。在此之后，买家与指派的卖家将会在下单后被加入到同一讨论串中。"
+    "how_to_communicate_answer": "将官方的[SC市集Discord机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的服务器，并选择一个用于订单讨论串的频道：之后每个新订单或报价都会在该频道中创建一个私密讨论串，买家和指派的卖家都会被加入，买家也会收到您的服务器邀请，方便你们一起完成订单。\n\n1. 在SC市集设置中关联您的Discord账号，然后把[机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的服务器。\n\n2. 在用于存放订单讨论串的频道中运行`/setup threads`。如果是组织的订单，在`org`中填写组织的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下给您个人的订单，请留空。\n\n3. 可选：在员工频道中运行`/setup alerts`（使用相同的`org`），每个新订单和报价都会附带一个Claim按钮发布出来。\n\n您需要在Discord服务器中拥有**管理频道**权限。对于组织，您还需要该组织在SC市集上的**Manage Webhooks**权限（讨论串）或**Manage Orders**权限（提醒）。在讨论串频道中，机器人需要查看频道、创建私密子区、在子区中发送消息和创建邀请的权限。运行`/setup status`可查看一个频道的设置，运行`/help`可查看所有指令。"
   },
   "preferences": {
     "page_settings": "页面设置",
@@ -1757,6 +1757,7 @@
     "orderManagement": "订单管理",
     "integratedChannel": "集成频道",
     "notConfigured": "未配置",
+    "setUpWithBot": "如需使用您自己的Discord服务器，请在用于存放订单讨论串的频道中运行 /setup threads。",
     "useOfficial1": "使用官方",
     "serverName": "SC Market 服务器",
     "useOfficial2": "用于订单。这将替换你现有的集成设置。",

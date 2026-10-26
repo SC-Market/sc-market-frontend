@@ -255,10 +255,6 @@ export type GetCurrentUserProfileSuccess = {
   balance: number
   /** Account creation timestamp */
   created_at: string
-  /** Discord official server ID */
-  official_server_id?: string | null
-  /** Discord thread channel ID */
-  discord_thread_channel_id?: string | null
   /** Default market order template */
   market_order_template: string
   /** Preferred locale */

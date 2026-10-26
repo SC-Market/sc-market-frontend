@@ -96,8 +96,6 @@ export const fixtureContractor: Contractor = {
   default_role: OWNER_ROLE.role_id,
   owner_role: OWNER_ROLE.role_id,
   balance: 0,
-  official_server_id: null,
-  discord_thread_channel_id: null,
   market_order_template: "",
   archived: false,
 }

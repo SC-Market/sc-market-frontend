@@ -195,8 +195,6 @@ describe("ViewOrg - Integration Tests", () => {
       description: "Test description",
       fields: [],
       spectrum_id: "test-org",
-      official_server_id: null,
-      discord_thread_channel_id: null,
       market_order_template: "",
     } as Contractor
 
@@ -309,8 +307,6 @@ describe("ViewOrg - Integration Tests", () => {
       description: "Test description",
       fields: [],
       spectrum_id: "test-org",
-      official_server_id: null,
-      discord_thread_channel_id: null,
       market_order_template: "",
     } as Contractor
 
@@ -359,8 +355,6 @@ describe("ViewOrg - Integration Tests", () => {
       description: "Test description",
       fields: [],
       spectrum_id: "test-org",
-      official_server_id: null,
-      discord_thread_channel_id: null,
       market_order_template: "",
     } as Contractor
 

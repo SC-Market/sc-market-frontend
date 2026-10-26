@@ -1007,7 +1007,7 @@
     "how_to_get_notified": "如何在有訂單創建時收到提醒",
     "how_to_get_notified_answer": "將官方的[SC市集Discord機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入到您的服務器以在一條訂單被創建或被指派給您時收到自動私信。您也可以用下方設置去在[SC市集的官方服務器]({{DISCORD_INVITE}})裏完成訂單。",
     "how_to_communicate": "如何用Discord與買家交流",
-    "how_to_communicate_answer": "將官方的[SC市集Discord機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入到您的服務器後，您可以註冊一條頻道以在訂單下單時自動在其中創建買賣方的討論串。買家會自動收到您的服務器邀請，之後可以在那裏協商完成訂單的相關事宜。\n\n1. 把[機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)添加進您的服務器。\n\n2. 對一個獨立用戶或一整個合約組織使用`/register server`指令。如需將訂單關聯至您個人，使用`/register server user`指令。如需關聯一個組織，使用`/register server contractor ORGNAME`。在此之後，相關用戶將會在下單後自動收到您的服務器邀請。\n\n3. 對一個獨立用戶或一整個合約組織使用`/register channel` 指令。如需將訂單關聯至您個人，使用`/register channel user`指令。如需關聯一個組織，使用`/register channel contractor ORGNAME`。在此之後，買家與指派的賣家將會在下單後被加入到同一討論串中。"
+    "how_to_communicate_answer": "將官方的[SC市集Discord機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的伺服器，並選擇一個用於訂單討論串的頻道：之後每個新訂單或報價都會在該頻道中建立一個私密討論串，買家和指派的賣家都會被加入，買家也會收到您的伺服器邀請，方便你們一起完成訂單。\n\n1. 在SC市集設定中連結您的Discord帳號，然後把[機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的伺服器。\n\n2. 在用於存放訂單討論串的頻道中執行`/setup threads`。如果是組織的訂單，在`org`中填寫組織的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下給您個人的訂單，請留空。\n\n3. 可選：在員工頻道中執行`/setup alerts`（使用相同的`org`），每個新訂單和報價都會附帶一個Claim按鈕發佈出來。\n\n您需要在Discord伺服器中擁有**管理頻道**權限。對於組織，您還需要該組織在SC市集上的**Manage Webhooks**權限（討論串）或**Manage Orders**權限（提醒）。在討論串頻道中，機器人需要檢視頻道、建立私人討論串、在討論串中傳送訊息和建立邀請的權限。執行`/setup status`可查看一個頻道的設定，執行`/help`可查看所有指令。"
   },
   "preferences": {
     "page_settings": "頁面設置",
@@ -1700,6 +1700,7 @@
     "orderManagement": "訂單管理",
     "integratedChannel": "整合頻道",
     "notConfigured": "尚未設定",
+    "setUpWithBot": "如需使用您自己的Discord伺服器，請在用於存放訂單討論串的頻道中執行 /setup threads。",
     "useOfficial1": "使用官方",
     "serverName": "SC Market 伺服器",
     "useOfficial2": "來處理訂單。這將取代你現有的整合設定。",

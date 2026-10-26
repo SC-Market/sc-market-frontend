@@ -895,10 +895,10 @@ export type GetContractorDiscordSettingsApiResponse =
     guild_name?: string | null
     /** Discord channel name */
     channel_name?: string | null
-    /** Official Discord server ID */
-    official_server_id?: string | null
-    /** Discord thread channel ID */
-    discord_thread_channel_id?: string | null
+    /** Discord server ID of the org's order-thread channel */
+    guild_id?: string | null
+    /** Discord channel ID where the org's order threads are created */
+    channel_id?: string | null
   }
 export type GetContractorDiscordSettingsApiArg = {
   /** Contractor spectrum ID */

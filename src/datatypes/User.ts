@@ -67,8 +67,6 @@ export interface AdminUser {
   created_at: string
   locale: string
   rsi_confirmed: boolean
-  official_server_id: string | null
-  discord_thread_channel_id: string | null
   market_order_template: string
 }
 

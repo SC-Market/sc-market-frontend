@@ -2,7 +2,7 @@
 title: Org roles and permissions
 description: Roles decide what each member of your org can do on SC Market. Create roles on the Roles and Members page, tick their permissions and rank them by position.
 order: 10
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [org, organization, roles, permissions, members, owner, admin, rank, position, kick]
 related: [orgs/invite-and-manage-members, orders/handle-orders-as-a-seller, discord/order-alerts-and-claiming]
 howto: true
@@ -37,7 +37,7 @@ Most orgs only need the built-in roles: give trusted officers **Admin** in their
 - **Manage Market**: create, edit and remove the org's listings and stock lots, and manage the org's shops, including their [webhooks](/guides/discord/webhooks).
 - **Manage Stock**: shows **Stock** in an org shop's sidebar. Changing stock lots also needs **Manage Market**.
 - **Manage Recruiting**: create and manage recruiting posts.
-- **Manage Webhooks**: [register the Discord bot](/guides/discord/connect-the-discord-bot) for the org and set up its order alerts. Shop webhooks need **Manage Market** instead.
+- **Manage Webhooks**: send the org's [order threads](/guides/discord/connect-the-discord-bot) to a Discord channel with `/setup threads`, and set up its [order alerts](/guides/discord/order-alerts-and-claiming). Shop webhooks need **Manage Market** instead.
 - **Manage Blocklist**: block and unblock users for the org.
 - **Claim Orders**: claim open orders and offers from [Discord alerts](/guides/discord/order-alerts-and-claiming).
 - **Kick Members**: remove members ranked below you.

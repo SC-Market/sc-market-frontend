@@ -2,7 +2,7 @@
 title: "Sell items: open a shop, list items and manage stock"
 description: Every listing belongs to a shop. Create your shop, list an item with a price in aUEC and a quantity, then keep your stock lots up to date.
 order: 10
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [sell, listing, create listing, shop, stock, inventory, auction, price]
 related: [selling/stock-lots-and-allocation, selling/auctions, orders/how-orders-work]
 howto: true
@@ -37,6 +37,15 @@ Choose **Auction** as the sale type and set an end time, a minimum bid increment
 
 - **Listings** in your shop's sidebar shows every listing. Use **Edit**, **Activate**, **Deactivate** or **Archive** to change one.
 - **Stock** shows **All Stock Lots**: item, variant, quantity, location and the listing each lot belongs to. Edit a lot's quantity there when your inventory changes. See [manage stock lots](/guides/selling/stock-lots-and-allocation).
+
+## Advanced: manage listings from Discord
+
+With the [SC Market bot](/guides/discord/connect-the-discord-bot) in your server and your Discord account linked, `/listing` does the common edits without opening the site. Set `owner` to **Me** or one of your orgs.
+
+- `/listing create` opens a short form for a new listing (title, price, quantity, description).
+- `/listing price` changes a listing's price, and `/listing stock` sets, adds to or subtracts from its quantity.
+- `/listing view` shows your listings with their stock and price.
+- `/listing import` copies your sell listings from UEXCorp, after you confirm.
 
 ## What happens next
 

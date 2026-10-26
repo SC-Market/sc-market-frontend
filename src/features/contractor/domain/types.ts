@@ -48,8 +48,6 @@ export interface Contractor {
   default_role?: string
   owner_role?: string
   balance?: number
-  official_server_id: string | null
-  discord_thread_channel_id: string | null
   market_order_template: string
   locale?: string
   archived?: boolean
@@ -132,12 +130,14 @@ export interface OrderWebhook {
 
 // ── Discord ──
 
+/** An owner's order-thread channel, as GET .../settings/discord returns it. */
 export interface DiscordSettings {
-  guild_avatar: string
-  guild_name: string
-  channel_name: string
-  official_server_id: string
-  discord_thread_channel_id: string
+  guild_id: string | null
+  channel_id: string | null
+  /** Null when the bot can't see the server (or nothing is set up). */
+  guild_name: string | null
+  guild_avatar: string | null
+  channel_name: string | null
 }
 
 // ── Audit Logs ──

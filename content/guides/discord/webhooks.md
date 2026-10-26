@@ -2,7 +2,7 @@
 title: Post shop events to Discord with a webhook
 description: Paste a Discord webhook URL into your shop's Settings to post new offers, order status changes and auction bids in a channel, without the bot.
 order: 30
-updated: 2026-10-25
+updated: 2026-10-26
 keywords: [discord, webhook, webhooks, notifications, order created, status change, bid, channel, alerts, threads]
 related: [discord/connect-the-discord-bot, discord/order-alerts-and-claiming, orgs/org-shop]
 howto: true
@@ -32,7 +32,7 @@ In Discord, `/help alerts` shows the same comparison.
 3. Under **Add Webhook**, enter a **Webhook Name** and paste the **Webhook URL**.
 4. Tick the events to send (see below), then click **Add Webhook**.
 
-The webhook is listed above the form, and messages start with the next matching event. Running `/setup` in Discord with **Webhook** as the kind shows these steps too.
+The webhook is listed above the form, and messages start with the next matching event. In Discord, `/setup webhook` shows these steps too.
 
 > [!NOTE]
 > Only Discord webhook URLs work, the kind that start with `https://discord.com/api/webhooks/`. Other addresses are refused.

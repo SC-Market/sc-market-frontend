@@ -59,6 +59,7 @@ import { ShopBlocklistSection } from "./ShopBlocklist"
 import { ImageRounded, SwapHorizRounded } from "@mui/icons-material"
 import { SHOP_PATHS } from "../../../routes/paths"
 import type { ShopResponse } from "../../../store/api/v2/market"
+import { shopDiscordChannelError } from "../utils/discordChannel"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -725,7 +726,16 @@ export function ShopSettings() {
     }
   }
 
+  const discordError = shopDiscordChannelError(
+    officialServerId,
+    discordThreadChannelId,
+  )
+
   const handleSave = async () => {
+    if (discordError) {
+      issueAlert({ message: discordError, severity: "error" })
+      return
+    }
     try {
       await updateShop({
         shopId: shop.shop_id,
@@ -986,12 +996,12 @@ export function ShopSettings() {
           >
             <Grid item xs={12}>
               <Alert severity="info" sx={{ mb: 1 }}>
-                This Discord configuration is per-shop. Order and offer threads
-                for this shop are created in the server and channel below. If
-                left empty, threads fall back to your account or org Discord
-                settings. Enter the numeric Discord server (guild) ID and the
-                channel ID under which threads should be created — the SC Market
-                bot must be a member of that server with access to the channel.
+                To send this shop&apos;s order and offer threads to their own
+                channel, enter its Discord server ID and channel ID. Leave both
+                empty to use {shop.is_org_owned ? "your org's" : "your"} thread
+                channel, which you set by running /setup threads in Discord. The
+                SC Market bot must be in that server and able to see the
+                channel.
               </Alert>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -1002,7 +1012,8 @@ export function ShopSettings() {
                 fullWidth
                 size="small"
                 placeholder="e.g. 123456789012345678"
-                helperText="Guild ID"
+                helperText="Server (guild) ID"
+                error={!!discordError}
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -1013,7 +1024,8 @@ export function ShopSettings() {
                 fullWidth
                 size="small"
                 placeholder="e.g. 123456789012345678"
-                helperText="Channel where threads are created"
+                helperText={discordError ?? "Channel where threads are created"}
+                error={!!discordError}
               />
             </Grid>
           </FormPaper>
