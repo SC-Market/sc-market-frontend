@@ -4,7 +4,6 @@
  * See src/router/dataPrefetch.ts for the contract.
  */
 import { marketV2Api } from "../../store/api/v2/market"
-import { shopsApi } from "../../store/api/shops"
 import { PrefetchDispatch, settleQuery } from "../../router/dataPrefetch"
 
 /**
@@ -39,7 +38,8 @@ export async function prefetchWikiCommodityPage(
  * /wiki/items/:id — WikiItemDetail plus the Overview tab's
  * PriceHistoryChartV2 and QualityDistributionChart (default tab). The charts
  * only take the route id, so they are fetched in parallel with the item
- * rather than after it.
+ * rather than after it. In-game shops need the item's UUID, so they follow
+ * the item.
  */
 export async function prefetchWikiItemPage(
   dispatch: PrefetchDispatch,
@@ -49,7 +49,15 @@ export async function prefetchWikiItemPage(
   if (!id) return
 
   await Promise.all([
-    settleQuery(dispatch(marketV2Api.endpoints.getItemDetail.initiate({ id }))),
+    // The shops query takes the resolved item UUID (the route id may be a slug)
+    settleQuery(dispatch(marketV2Api.endpoints.getItemDetail.initiate({ id }))).then(
+      ({ data }) =>
+        data?.id
+          ? settleQuery(
+              dispatch(marketV2Api.endpoints.getItemShops.initiate({ id: data.id })),
+            )
+          : undefined,
+    ),
     settleQuery(
       dispatch(
         marketV2Api.endpoints.searchListings.initiate({
@@ -60,7 +68,6 @@ export async function prefetchWikiItemPage(
         }),
       ),
     ),
-    settleQuery(dispatch(shopsApi.endpoints.getItemShops.initiate({ itemId: id }))),
     settleQuery(
       dispatch(
         marketV2Api.endpoints.getPriceHistory.initiate({

@@ -14,7 +14,6 @@ import {
   Typography,
   Grid,
   Chip,
-  CircularProgress,
   Alert,
   Button,
   Divider,
@@ -33,8 +32,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetItemDetailQuery, useSearchListingsQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintReference } from "../../store/api/v2/market"
-import { useGetItemShopsQuery } from "../../store/api/shops"
+import { useGetItemDetailQuery, useGetItemShopsQuery, useSearchListingsQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintReference } from "../../store/api/v2/market"
 import { ShoppingCart, Gavel, Storefront } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -77,11 +75,13 @@ export function WikiItemDetail() {
     { skip: !id },
   )
 
-  // Fetch NPC shop availability for this item
-  const { data: shopAvailability, isLoading: shopsLoading } = useGetItemShopsQuery(
-    { itemId: id! },
-    { skip: !id },
+  // NPC shop availability. The route param may be a short slug; the shops
+  // endpoint takes the item's UUID, so wait for the detail to resolve it.
+  const { data: shopsData } = useGetItemShopsQuery(
+    { id: item?.id ?? "" },
+    { skip: !item?.id },
   )
+  const shopAvailability = shopsData?.shops
 
   const [tab, setTab] = useState(TAB_OVERVIEW)
   const [disassemblyQty, setDisassemblyQty] = useState(1)
@@ -337,18 +337,16 @@ export function WikiItemDetail() {
               </Card>
             )}
 
-            {/* In-Game Shop Availability */}
-            <Card sx={{ mt: 3 }}>
-              <CardContent>
-                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                  <Storefront color="action" />
-                  <Typography variant="h6">{t("wiki.itemDetail.inGameShopAvailability", "In-Game Shop Availability")}</Typography>
-                </Stack>
-                {shopsLoading ? (
-                  <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
-                    <CircularProgress size={24} />
-                  </Box>
-                ) : shopAvailability && shopAvailability.length > 0 ? (
+            {/* In-Game Shop Availability. Only shown when a shop stocks the
+                item: the shop inventories are a separate import (not every
+                game version has one), so "no shops" doesn't mean "not sold". */}
+            {shopAvailability && shopAvailability.length > 0 && (
+              <Card sx={{ mt: 3 }}>
+                <CardContent>
+                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+                    <Storefront color="action" />
+                    <Typography variant="h6">{t("wiki.itemDetail.inGameShopAvailability", "In-Game Shop Availability")}</Typography>
+                  </Stack>
                   <TableContainer component={Paper} variant="outlined">
                     <Table size="small">
                       <TableHead>
@@ -419,13 +417,9 @@ export function WikiItemDetail() {
                       </TableBody>
                     </Table>
                   </TableContainer>
-                ) : (
-                  <Typography variant="body2" color="text.secondary">
-                    {t("wiki.itemDetail.notSoldNpc", "Not sold at any NPC shop")}
-                  </Typography>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
               </>
             )}
 

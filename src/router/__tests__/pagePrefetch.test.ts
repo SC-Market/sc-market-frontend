@@ -13,7 +13,7 @@ import { marketV2Api } from "../../store/api/v2/market"
 import { contractorsApi } from "../../features/contractor/api/contractorApi"
 import { recruitingApi } from "../../features/recruiting/api/recruitingApi"
 import type { StoreExtra } from "../../store/networkEnv"
-import { prefetchWikiCommodityPage } from "../../pages/wiki/prefetch"
+import { prefetchWikiCommodityPage, prefetchWikiItemPage } from "../../pages/wiki/prefetch"
 import { prefetchListingPage } from "../../features/market/v2/prefetch"
 import { prefetchShopPage } from "../../features/shops/prefetch"
 import { prefetchOrgPage } from "../../features/contractor/prefetch"
@@ -140,6 +140,37 @@ describe("page data prefetch", () => {
     await prefetchWikiCommodityPage(store.dispatch, { id: "missing" })
 
     expect(requestedPaths(fetchMock)).toEqual(["/api/v2/game-data/resources/missing"])
+    expectNoSubscriptions(store)
+  })
+
+  it("wiki item: in-game shops are fetched once, by the resolved UUID, not the slug", async () => {
+    const itemId = "11111111-2222-4333-8444-555555555555"
+    const fetchMock = mockApi({
+      "/game-data/wiki/items/p4-ar-11111111": { id: itemId, name: "P4-AR" },
+      [`/game-data/wiki/items/${itemId}/shops`]: { shops: [] },
+      "/listings/search": { listings: [], total: 0 },
+      "/analytics/price-history": { data: [] },
+      "/analytics/quality-distribution": { distribution: [] },
+    })
+
+    await prefetchWikiItemPage(store.dispatch, { id: "p4-ar-11111111" })
+
+    const shopRequests = requestedPaths(fetchMock).filter((p) => p.includes("/shops"))
+    expect(shopRequests).toEqual([`/api/v2/game-data/wiki/items/${itemId}/shops`])
+    // WikiItemDetail: useGetItemShopsQuery({ id: item.id })
+    expect(
+      marketV2Api.endpoints.getItemShops.select({ id: itemId })(store.getState()).status,
+    ).toBe("fulfilled")
+    expect(requestedPaths(fetchMock).some((p) => p.includes("/api/v1/"))).toBe(false)
+    expectNoSubscriptions(store)
+  })
+
+  it("wiki item: no shops request when the item doesn't resolve", async () => {
+    const fetchMock = mockApi({})
+
+    await prefetchWikiItemPage(store.dispatch, { id: "missing" })
+
+    expect(requestedPaths(fetchMock).filter((p) => p.includes("/shops"))).toEqual([])
     expectNoSubscriptions(store)
   })
 
