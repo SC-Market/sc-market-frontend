@@ -11,6 +11,7 @@ import { browserNetworkEnv } from "../browserNetworkEnv"
 import { resetSessionCheck, checkSession } from "../sessionCheck"
 import { refreshAuth, resetRefreshBackoff } from "../refreshAuth"
 import { userApi } from "../../features/profile/api/profileApi"
+import { seedCachedProfile as seedProfileFromCache } from "../../features/profile/seedCachedProfile"
 import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
 import { useGetMyShopsQuery } from "../api/v2/market"
 import {
@@ -96,10 +97,7 @@ function deferSession(body: { authenticated: boolean }) {
 function seedCachedProfile(store: ReturnType<typeof makeStore>) {
   // Same as src/index.tsx.
   saveProfileCache(profile)
-  store.dispatch(
-    userApi.util.upsertQueryData("profileGetUserProfile", undefined, profile),
-  )
-  setTimeout(() => store.dispatch(userApi.util.invalidateTags(["MyProfile"])), 0)
+  seedProfileFromCache(store)
 }
 
 let originalFetch: typeof fetch
@@ -179,6 +177,27 @@ describe("logged-in user", () => {
     await waitFor(() => expect(probe()).toBe("authenticated:tester:0"))
     observer.disconnect()
     expect(seen.some((t) => t.startsWith("anonymous"))).toBe(false)
+    expect(requests).toContain("GET /api/profile")
+  })
+
+  // Regression: index.tsx invalidated the seeded entry on a setTimeout(0).
+  // createRoot renders asynchronously, so that usually ran before anything
+  // subscribed, and RTK Query removes an invalidated entry with no
+  // subscribers: every signed-in page first rendered the signed-out sidebar.
+  it("the seeded profile survives until the app's first (asynchronous) render", async () => {
+    const release = deferSession({ authenticated: true })
+    const store = makeStore({ networkEnv: browserNetworkEnv })
+    void browserNetworkEnv.checkSession()
+    seedCachedProfile(store)
+    await new Promise((r) => setTimeout(r, 20))
+    render(
+      <Provider store={store}>
+        <Probe />
+      </Provider>,
+    )
+    expect(probe()).toBe("authenticated:tester:-")
+    release()
+    await waitFor(() => expect(probe()).toBe("authenticated:tester:0"))
     expect(requests).toContain("GET /api/profile")
   })
 

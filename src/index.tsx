@@ -15,8 +15,7 @@ import { Provider } from "react-redux"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { makeStore } from "./store/store"
 import { browserNetworkEnv } from "./store/browserNetworkEnv"
-import { loadProfileCache } from "./features/profile/profileCache"
-import { userApi } from "./features/profile/api/profileApi"
+import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate } from "./seo/pageHead"
 
 // Failed dynamic import()s: there is deliberately NO vite:preloadError
@@ -40,19 +39,9 @@ setupListeners(store.dispatch)
 // probing with requests that 401 for anonymous visitors.
 void browserNetworkEnv.checkSession()
 
-// Seed profile cache from localStorage (prevents logged-out flash),
-// then invalidate so the next subscription triggers a network fetch (which
-// first waits for the session check above).
-const cachedProfile = loadProfileCache()
-if (cachedProfile) {
-  store.dispatch(
-    userApi.util.upsertQueryData("profileGetUserProfile", undefined, cachedProfile),
-  )
-  // Mark stale so useGetUserProfileQuery refetches on mount
-  setTimeout(() => {
-    store.dispatch(userApi.util.invalidateTags(["MyProfile"]))
-  }, 0)
-}
+// Seed the profile from localStorage (no logged-out flash for returning
+// users); its refetch waits for the session check above.
+seedCachedProfile(store)
 
 const container = document.getElementById("root")
 const root = createRoot(container!)
