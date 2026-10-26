@@ -3692,7 +3692,8 @@
   "profileNavAvatar": {
     "logout": "Logout",
     "profile": "Profile",
-    "settings": "Settings"
+    "settings": "Settings",
+    "priceAlerts": "Price alerts"
   },
   "quickEdit": {
     "activeDesc": "Visible to buyers",
@@ -4230,7 +4231,7 @@
     },
     "priceAlerts": {
       "title": "Price Alerts",
-      "description": "Watch an item with /watchlist add in Discord. When a public listing hits your target price, you're alerted on the channels you turn on here.",
+      "description": "When a public listing hits your target price, you're alerted on the channels you turn on here.",
       "site": "Site notification",
       "siteHint": "Shows in your notifications on SC Market.",
       "push": "Push notification",
@@ -4239,7 +4240,8 @@
       "emailHint": "Sent to your verified email address. Off until you turn it on.",
       "discord": "Discord DM",
       "discordHint": "A direct message from the SC Market bot.",
-      "error": "Couldn't load or save your price alert settings."
+      "error": "Couldn't load or save your price alert settings.",
+      "channelsTitle": "Alert channels"
     },
     "pushNotifications": {
       "androidPWARequired": "Push notifications on Android require the app to be installed as a Progressive Web App (PWA).",
@@ -5065,5 +5067,44 @@
     "sortQuality": "Quality",
     "sortStatus": "Status",
     "totalItems": "Total Items"
+  },
+  "priceAlerts": {
+    "watch": {
+      "button": "Watch price",
+      "title": "Watch price",
+      "editTitle": "Edit price alert",
+      "explainer": "Get an alert when {{name}} is listed at or below your target price.",
+      "targetPrice": "Target price",
+      "invalidPrice": "Enter a whole number above 1 aUEC.",
+      "currentLowest": "Current lowest: {{price}}",
+      "noListings": "No public listings right now.",
+      "error": "Couldn't save your price alert.",
+      "stop": "Stop watching",
+      "add": "Watch price",
+      "saved": "Watching {{name}} at ≤ {{price}}",
+      "removed": "Stopped watching {{name}}",
+      "watching": "Watching ≤ {{price}}"
+    },
+    "manager": {
+      "title": "Watchlist",
+      "description": "Watch an item and get an alert when a public listing is at or below your target price. Use Watch price on an item or listing page, add one here, or use /watchlist add in Discord.",
+      "full": "Your watchlist is full ({{max}} items). Remove one to add another.",
+      "loadError": "Couldn't load your watchlist.",
+      "removeError": "Couldn't remove that item.",
+      "empty": "You aren't watching anything yet.",
+      "item": "Item",
+      "target": "Target price",
+      "lowest": "Current lowest",
+      "lastAlerted": "Last alerted",
+      "textMatch": "Matches listing titles",
+      "none": "None listed",
+      "never": "Never",
+      "edit": "Edit target price",
+      "editAria": "Edit {{name}}",
+      "remove": "Stop watching",
+      "removeAria": "Stop watching {{name}}",
+      "count": "{{count}} of {{max}} items",
+      "add": "Add item"
+    }
   }
 }

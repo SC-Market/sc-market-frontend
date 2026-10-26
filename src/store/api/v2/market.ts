@@ -1,5 +1,6 @@
 import { generatedApiV2 as api } from "../../generatedApiV2"
 export const addTagTypes = [
+  "Watchlist",
   "Variant Types V2",
   "Suppliers V2",
   "Stock Lots V2",
@@ -42,6 +43,42 @@ const injectedRtkApi = api
   })
   .injectEndpoints({
     endpoints: (build) => ({
+      getWatchlist: build.query<GetWatchlistApiResponse, GetWatchlistApiArg>({
+        query: () => ({ url: `/watchlist` }),
+        providesTags: ["Watchlist"],
+      }),
+      addWatchlistItem: build.mutation<
+        AddWatchlistItemApiResponse,
+        AddWatchlistItemApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/watchlist`,
+          method: "POST",
+          body: queryArg.addWatchlistItemRequest,
+        }),
+        invalidatesTags: ["Watchlist"],
+      }),
+      updateWatchlistItem: build.mutation<
+        UpdateWatchlistItemApiResponse,
+        UpdateWatchlistItemApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/watchlist/${queryArg.watchlistId}`,
+          method: "PATCH",
+          body: queryArg.updateWatchlistItemRequest,
+        }),
+        invalidatesTags: ["Watchlist"],
+      }),
+      removeWatchlistItem: build.mutation<
+        RemoveWatchlistItemApiResponse,
+        RemoveWatchlistItemApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/watchlist/${queryArg.watchlistId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Watchlist"],
+      }),
       getVariantTypes: build.query<
         GetVariantTypesApiResponse,
         GetVariantTypesApiArg
@@ -1880,6 +1917,23 @@ const injectedRtkApi = api
     overrideExisting: false,
   })
 export { injectedRtkApi as marketV2Api }
+export type GetWatchlistApiResponse = /** status 200 Ok */ WatchlistResponse
+export type GetWatchlistApiArg = void
+export type AddWatchlistItemApiResponse = /** status 200 Ok */ WatchlistItem
+export type AddWatchlistItemApiArg = {
+  addWatchlistItemRequest: AddWatchlistItemRequest
+}
+export type UpdateWatchlistItemApiResponse = /** status 200 Ok */ WatchlistItem
+export type UpdateWatchlistItemApiArg = {
+  watchlistId: string
+  updateWatchlistItemRequest: UpdateWatchlistItemRequest
+}
+export type RemoveWatchlistItemApiResponse = /** status 200 Ok */ {
+  success: boolean
+}
+export type RemoveWatchlistItemApiArg = {
+  watchlistId: string
+}
 export type GetVariantTypesApiResponse =
   /** status 200 All variant type definitions with validation rules */ GetVariantTypesResponse
 export type GetVariantTypesApiArg = void
@@ -2234,6 +2288,7 @@ export type SearchListingsApiArg = {
   pageSize?: number
   itemType?: string
   quantityMin?: number
+  /** Only 'active' is served (the default); other statuses return no results */
   status?: "active" | "inactive" | "sold" | "expired" | "cancelled"
   /** Sort field (default: created_at) */
   sortBy?:
@@ -3248,6 +3303,44 @@ export type GetDeletionStatusApiArg = void
 export type PreDeletionCheckApiResponse =
   /** status 200 Ok */ DeletionPreCheckResponse
 export type PreDeletionCheckApiArg = void
+export type WatchlistItem = {
+  /** Watchlist item id */
+  id: string
+  /** What is watched: the game item's name for item watches, otherwise the
+    text matched as a phrase in listing titles. */
+  query: string
+  /** Set for item watches: only listings of exactly this game item match. */
+  game_item_id: string | null
+  /** Name of the watched game item (item watches only). */
+  item_name: string | null
+  /** Image of the watched game item (item watches only). */
+  item_image_url: string | null
+  /** Alert when a public listing is at or below this price (aUEC). */
+  max_price: number
+  /** Lowest public, in-stock price this watch would alert on now; null if none. */
+  current_lowest: number | null
+  /** When the last alert for this item was sent; alerts have a 1 hour cooldown. */
+  last_notified_at: string | null
+  created_at: string
+}
+export type WatchlistResponse = {
+  items: WatchlistItem[]
+  /** Most items one user may watch. */
+  max_items: number
+}
+export type AddWatchlistItemRequest = {
+  /** Watch exactly this game item. */
+  game_item_id?: string
+  /** Free text matched as a phrase in listing titles; used when game_item_id is absent. */
+  query?: string
+  /** Target price in aUEC: a whole number above 1 (1 aUEC listings are
+    placeholders and never alert). */
+  max_price: number
+}
+export type UpdateWatchlistItemRequest = {
+  /** New target price in aUEC. */
+  max_price: number
+}
 export type VariantType = {
   /** Unique identifier for the variant type */
   variant_type_id: string
@@ -3516,8 +3609,12 @@ export type CreateShopRequest = {
   description?: string
   banner?: string
   logo?: string
-  /** If set, shop is owned by this org. User must have manage_market in the org. */
+  /** If set, shop is owned by this org: its contractor_id (UUID), not its
+    spectrum_id. User must have manage_market in the org. */
   contractor_id?: string
+  supported_languages?: string[]
+  tags?: string[]
+  accepts_custom_orders?: boolean
 }
 export type ShopOwnerInfo = {
   type: "user" | "contractor"
@@ -6686,6 +6783,10 @@ export type DeletionPreCheckResponse = {
   }[]
 }
 export const {
+  useGetWatchlistQuery,
+  useAddWatchlistItemMutation,
+  useUpdateWatchlistItemMutation,
+  useRemoveWatchlistItemMutation,
   useGetVariantTypesQuery,
   useGetMySuppliersQuery,
   useAddSupplierMutation,

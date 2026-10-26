@@ -3,8 +3,8 @@ title: Buy an item
 description: Add items to your cart, submit an offer to each seller, then meet in game to pay in aUEC. SC Market never handles the payment.
 order: 10
 updated: 2026-10-25
-keywords: [buy, purchase, cart, checkout, auction, bid, buy order, price]
-related: [buying/how-orders-work, getting-started/create-an-account]
+keywords: [buy, purchase, cart, checkout, auction, bid, buy order, price, price alert, watchlist]
+related: [buying/how-orders-work, getting-started/create-an-account, buying/price-alerts-watchlist]
 howto: true
 ---
 
@@ -33,6 +33,10 @@ Auction listings have a bid panel showing the **Current Bid** and when it **Ends
 ## Post a buy order
 
 Can't find what you need? [Create a buy order](/buyorder/create) with the item, quantity and price range you'll pay. Sellers can fill it from their listings, which creates an order with you directly. Browse open requests on [Buy Orders](/buyorders).
+
+## Wait for a better price
+
+Too expensive, or out of stock? Click **Watch price** on the item or listing and set your target price. You get an alert when someone lists it at or below that price: see [get price alerts with the watchlist](/guides/buying/price-alerts-watchlist).
 
 ## What happens next
 

@@ -53,6 +53,7 @@ import { headDescription } from "../../seo/pageHead"
 import { SeoHead } from "../../seo/SeoHead"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
+import { WatchPriceButton } from "../../features/price-alerts/components/WatchPriceButton"
 
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
@@ -169,6 +170,14 @@ export function WikiItemDetail() {
                       {item.grade && <Chip label={`${t("wiki.itemDetail.grade", "Grade")} ${item.grade}`} />}
                       {item.manufacturer && <Chip label={item.manufacturer} clickable onClick={() => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(item.manufacturer!)))} />}
                     </Stack>
+
+                    <Box sx={{ mb: 2 }}>
+                      <WatchPriceButton
+                        gameItemId={item.id}
+                        itemName={item.name}
+                        currentPrice={item.market_stats.min_price}
+                      />
+                    </Box>
 
                     {/* Market Stats */}
                     {item.market_stats.listing_count > 0 && (

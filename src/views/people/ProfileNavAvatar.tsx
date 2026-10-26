@@ -17,6 +17,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import {
   LogoutRounded,
   PeopleRounded,
+  PriceChangeRounded,
   SettingsRounded,
 } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
@@ -182,6 +183,28 @@ export function ProfileNavAvatar() {
                 <ListItemText sx={{ maxWidth: 300 }}>
                   <Typography noWrap color={"text.secondary"}>
                     {t("profileNavAvatar.settings")}
+                  </Typography>
+                </ListItemText>
+              </ListItemButton>
+            </Link>
+            <Link
+              to={PATHS.priceAlerts}
+              style={{ color: "inherit", textDecoration: "none" }}
+              onClick={handleClose}
+            >
+              <ListItemButton>
+                <ListItemIcon
+                  sx={{
+                    transition: "0.3s",
+                    fontSize: "0.9em",
+                    color: theme.palette.primary.main,
+                  }}
+                >
+                  <PriceChangeRounded />
+                </ListItemIcon>
+                <ListItemText sx={{ maxWidth: 300 }}>
+                  <Typography noWrap color={"text.secondary"}>
+                    {t("profileNavAvatar.priceAlerts", "Price alerts")}
                   </Typography>
                 </ListItemText>
               </ListItemButton>

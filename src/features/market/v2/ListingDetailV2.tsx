@@ -67,6 +67,7 @@ import { buildListingHead } from "../../../seo/entityHeads"
 import { SeoHead } from "../../../seo/SeoHead"
 import { isSiteAdmin } from "../../../util/siteRole"
 import { ListingDetailContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton"
+import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton"
 
 export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
@@ -362,6 +363,17 @@ export function ListingDetailV2() {
                           )}
                           <Divider light />
                         </>
+                      )}
+
+                      {/* Price alert for the listed game item */}
+                      {gameItemId && gameItemName && (
+                        <Box sx={{ my: 1.5 }}>
+                          <WatchPriceButton
+                            gameItemId={gameItemId}
+                            itemName={gameItemName}
+                            currentPrice={priceRange?.min}
+                          />
+                        </Box>
                       )}
 
                       {/* Status badges */}

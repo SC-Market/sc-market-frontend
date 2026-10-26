@@ -56,6 +56,8 @@ const MfaSettings = React.lazy(() =>
 const MOBILE_NAV_TAB_INDEX = 10
 const MFA_TAB_INDEX = 11
 const PRICE_ALERTS_TAB_INDEX = 12
+/** `?tab=` value that opens Price Alerts (PATHS.priceAlerts). */
+const PRICE_ALERTS_TAB_PARAM = "price-alerts"
 
 interface NavItem {
   index: number
@@ -78,9 +80,19 @@ export function SettingsPage() {
   // Two-factor is admin-only for now (also for an admin still held back by it).
   const showMfa = !!profile && (isSiteAdmin(profile) || isMfaLockedAdmin(profile))
   const [searchParams] = useSearchParams()
+  const tabParam = searchParams.get("tab")
   const [page, setPage] = React.useState(() =>
-    searchParams.get("mfa") ? MFA_TAB_INDEX : 0,
+    searchParams.get("mfa")
+      ? MFA_TAB_INDEX
+      : tabParam === PRICE_ALERTS_TAB_PARAM
+        ? PRICE_ALERTS_TAB_INDEX
+        : 0,
   )
+
+  // Follow ?tab=price-alerts links opened while already on Settings.
+  React.useEffect(() => {
+    if (tabParam === PRICE_ALERTS_TAB_PARAM) setPage(PRICE_ALERTS_TAB_INDEX)
+  }, [tabParam])
 
   React.useEffect(() => {
     if (!isMobile && page === MOBILE_NAV_TAB_INDEX) {

@@ -21,6 +21,7 @@ import {
   LocalShippingRounded,
   PeopleRounded,
   SettingsRounded,
+  PriceChangeRounded,
   AddRounded,
   DashboardRounded,
   DescriptionRounded,
@@ -40,7 +41,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useSearchListingsQuery } from "../../store/api/v2/market"
 import { useDebounce } from "../../hooks/useDebounce"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { HELP_PATHS, SHOP_PATHS } from "../../routes/paths"
+import { HELP_PATHS, PATHS, SHOP_PATHS } from "../../routes/paths"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useIsAuthenticated } from "../../hooks/login/useSession"
 
@@ -126,6 +127,7 @@ export function CommandPalette() {
         { id: "dashboard", label: "Dashboard", icon: <DashboardRounded />, action: () => go("/dashboard"), category: "navigation" },
         { id: "inventory", label: "Inventory", icon: <InventoryRounded />, action: () => go("/inventory"), category: "navigation" },
         { id: "settings", label: "Settings", icon: <SettingsRounded />, action: () => go("/settings"), category: "navigation" },
+        { id: "price-alerts", label: "Price alerts", description: "Your watchlist and alert channels", icon: <PriceChangeRounded />, action: () => go(PATHS.priceAlerts), category: "navigation", keywords: ["watchlist", "watch price", "price alert", "notify", "target price"] },
         { id: "my-orgs", label: "My Organizations", icon: <PeopleRounded />, action: () => go("/my-orgs"), category: "navigation" },
       )
       for (const shop of shops) {

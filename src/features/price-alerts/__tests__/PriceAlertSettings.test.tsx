@@ -16,6 +16,9 @@ vi.mock("../../../store/api/v2/market", () => ({
     { isLoading: false, isError: false },
   ],
 }))
+vi.mock("../components/WatchlistManager", () => ({
+  WatchlistManager: () => <div data-testid="watchlist-manager" />,
+}))
 vi.mock("../../../components/paper/Section", () => ({
   FlatSection: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
@@ -33,6 +36,11 @@ describe("PriceAlertSettings", () => {
     expect(toggles.map((t) => t.checked)).toEqual([true, true, false, false])
     expect(screen.getByText("Email")).toBeTruthy()
     expect(screen.getByText("Discord DM")).toBeTruthy()
+  })
+
+  it("shows the watchlist on the same tab", () => {
+    render(<PriceAlertSettings />)
+    expect(screen.getByTestId("watchlist-manager")).toBeTruthy()
   })
 
   it("saves only the channel that was toggled", () => {

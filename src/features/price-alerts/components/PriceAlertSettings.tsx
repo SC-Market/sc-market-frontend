@@ -2,9 +2,9 @@ import React from "react"
 import {
   Alert,
   Box,
-  CircularProgress,
   FormControlLabel,
   Grid,
+  Skeleton,
   Switch,
   Typography,
 } from "@mui/material"
@@ -15,6 +15,7 @@ import {
   useUpdatePriceAlertPreferencesMutation,
   type PriceAlertPreferences,
 } from "../../../store/api/v2/market"
+import { WatchlistManager } from "./WatchlistManager"
 
 const CHANNELS: Array<keyof PriceAlertPreferences> = [
   "site",
@@ -24,9 +25,9 @@ const CHANNELS: Array<keyof PriceAlertPreferences> = [
 ]
 
 /**
- * Where watchlist price alerts (Discord `/watchlist add`) are delivered.
- * Push and email are the same settings as "Price Alerts" on the Push and
- * Email tabs.
+ * Settings -> Price Alerts: the user's watchlist, and where its alerts are
+ * delivered. Push and email are the same settings as "Price Alerts" on the
+ * Push and Email tabs.
  */
 export function PriceAlertSettings() {
   const { t } = useTranslation()
@@ -68,12 +69,21 @@ export function PriceAlertSettings() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <FlatSection title={t("settings.priceAlerts.title", "Price Alerts")}>
+        <FlatSection title={t("priceAlerts.manager.title", "Watchlist")}>
+          <Grid item xs={12}>
+            <WatchlistManager />
+          </Grid>
+        </FlatSection>
+      </Grid>
+      <Grid item xs={12}>
+        <FlatSection
+          title={t("settings.priceAlerts.channelsTitle", "Alert channels")}
+        >
           <Grid item xs={12}>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               {t(
                 "settings.priceAlerts.description",
-                "Watch an item with /watchlist add in Discord. When a public listing hits your target price, you're alerted on the channels you turn on here.",
+                "When a public listing hits your target price, you're alerted on the channels you turn on here.",
               )}
             </Typography>
             {(isError || saveFailed) && (
@@ -85,7 +95,15 @@ export function PriceAlertSettings() {
               </Alert>
             )}
             {isLoading || !data
-              ? !isError && <CircularProgress />
+              ? !isError &&
+                CHANNELS.map((channel) => (
+                  <Skeleton
+                    key={channel}
+                    variant="rounded"
+                    height={44}
+                    sx={{ mb: 1 }}
+                  />
+                ))
               : CHANNELS.map((channel) => (
                   <FormControlLabel
                     key={channel}
