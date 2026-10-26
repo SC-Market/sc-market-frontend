@@ -138,6 +138,23 @@ describe("routePrefetch", () => {
       expect(globalThis.requestIdleCallback).toHaveBeenCalled()
     })
 
+    it("warms /dashboard only for a returning signed-in visitor", async () => {
+      localStorage.removeItem("cached_user_profile")
+      prefetchHighPriorityRoutes()
+      await new Promise((r) => setTimeout(r, 0))
+      expect(vi.mocked(routeRegistry["/market"])).toHaveBeenCalled()
+      expect(vi.mocked(routeRegistry["/dashboard"])).not.toHaveBeenCalled()
+
+      localStorage.setItem(
+        "cached_user_profile",
+        JSON.stringify({ username: "someone" }),
+      )
+      prefetchHighPriorityRoutes()
+      await new Promise((r) => setTimeout(r, 0))
+      expect(vi.mocked(routeRegistry["/dashboard"])).toHaveBeenCalledTimes(1)
+      localStorage.removeItem("cached_user_profile")
+    })
+
     it("should skip prefetch on slow connections", () => {
       // Mock slow connection
       Object.defineProperty(navigator, "connection", {

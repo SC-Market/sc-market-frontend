@@ -1,5 +1,6 @@
 import { routeRegistry, RouteImportFunction } from "./routeRegistry"
 import { ROUTE_PREFETCH_MAP } from "../types/routes"
+import { loadProfileCache } from "../features/profile/profileCache"
 
 /**
  * Cache to track which routes have been prefetched
@@ -150,8 +151,12 @@ export function prefetchHighPriorityRoutes(): void {
     return
   }
 
-  // High-priority routes to prefetch
-  const highPriorityRoutes = ["/market", "/contractors", "/dashboard"]
+  // High-priority routes to prefetch. /dashboard is sign-in only and its chunk
+  // statically pulls in the chart library (@mui/x-charts), so it is warmed
+  // only for a returning signed-in visitor (cached profile), not for every
+  // anonymous one.
+  const highPriorityRoutes = ["/market", "/contractors"]
+  if (loadProfileCache()) highPriorityRoutes.push("/dashboard")
 
   // Use requestIdleCallback for non-blocking prefetch
   if ("requestIdleCallback" in window) {

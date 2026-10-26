@@ -44,32 +44,17 @@ export async function prefetchCommonComponents(): Promise<void> {
       () => import("../views/contracts/ServiceListings"),
       "ServiceListings",
     ),
-    prefetchModule(() => import("../views/people/AllUsers"), "AllUsers"),
-    prefetchModule(() => import("../views/orders/OrderTrend"), "OrderTrend"),
   ]
 
   await Promise.allSettled(prefetchPromises)
 }
 
-// Prefetch chart libraries (heavy dependencies)
-export async function prefetchChartLibraries(): Promise<void> {
-  const prefetchPromises = [
-    prefetchModule(() => import("@mui/x-charts"), "@mui/x-charts"),
-    prefetchModule(() => import("klinecharts"), "klinecharts"),
-  ]
-
-  await Promise.allSettled(prefetchPromises)
-}
-
-// Prefetch locale files
-export async function prefetchLocales(): Promise<void> {
-  const prefetchPromises = [
-    prefetchModule(() => import("../locales/uk/ukrainian.json"), "ukrainian"),
-    prefetchModule(() => import("../locales/zh/zh_Hans.json"), "zh_Hans"),
-  ]
-
-  await Promise.allSettled(prefetchPromises)
-}
+// Not prefetched in the background: the chart libraries (@mui/x-charts,
+// klinecharts), chart views (AllUsers, OrderTrend) and locale JSON. A dynamic
+// import() also EXECUTES the chunk, so warming ~1 MB of chart code and JSON
+// 2 s after every page load cost every visitor main-thread time (and input
+// delay) for pages most never open. Charts load on demand behind Suspense;
+// locales are warmed by util/i18n.ts.
 
 // Check if we should prefetch based on network conditions
 function shouldPrefetch(): boolean {
@@ -110,8 +95,6 @@ export async function startBackgroundPrefetch(): Promise<void> {
     // Prefetch in priority order
     await prefetchMarketComponents()
     await prefetchCommonComponents()
-    await prefetchChartLibraries()
-    await prefetchLocales()
 
     console.debug("Background prefetch completed")
   }, 2000) // 2 second delay
