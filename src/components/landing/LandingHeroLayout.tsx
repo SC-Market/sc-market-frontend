@@ -5,7 +5,6 @@ import {
   Container,
   IconButton,
   InputAdornment,
-  Paper,
   Skeleton,
   Stack,
   TextField,
@@ -109,21 +108,25 @@ function HeroSearch() {
             : MARKET_PATHS.search,
         )
       }}
-      sx={{ width: "100%" }}
+      data-testid="landing-hero-search"
+      sx={{ flex: 1, minWidth: 0 }}
     >
       <TextField
         fullWidth
         type="search"
-        label={label}
         placeholder={t("landing.heroSearchPlaceholder")}
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        // The label stays floated so the placeholder is always visible; at
-        // 0.8 opacity it reads 6:1 on the Paper (MUI's dark default, 0.5,
-        // is about 3:1).
-        sx={{ "& .MuiInputBase-input::placeholder": { opacity: 0.8 } }}
+        // The field itself is the contrasting surface (background.paper).
+        // No visible label (the form and the input are named "Search the
+        // market"), so the placeholder always shows; at 0.8 opacity it reads
+        // 6:1 on the Paper (MUI's dark default, 0.5, is about 3:1).
+        sx={{
+          "& .MuiOutlinedInput-root": { backgroundColor: "background.paper" },
+          "& .MuiInputBase-input::placeholder": { opacity: 0.8 },
+        }}
         slotProps={{
-          inputLabel: { shrink: true },
+          htmlInput: { "aria-label": label },
           input: {
             endAdornment: (
               <InputAdornment position="end">
@@ -279,27 +282,24 @@ export function LandingHeroLayout(props: {
             />
           </Box>
 
-          {/* The search field on a Paper surface (contrast against the
-              gradient), then the two CTAs in their own full-width row:
-              side by side from sm, stacked on phones. */}
-          <Paper
-            data-testid="landing-hero-search"
-            sx={{ width: "100%", p: { xs: 1.5, md: 2 } }}
-          >
-            <HeroSearch />
-          </Paper>
+          {/* One row from md: the search field takes the free width, the
+              two CTAs sit to its right. Stacked full-width on phones. The
+              field's own background is the Paper colour, so it stands out
+              from the gradient without a card around it. */}
           <Stack
-            direction={{ xs: "column", sm: "row" }}
+            direction={{ xs: "column", md: "row" }}
             spacing={1.5}
+            alignItems="stretch"
             sx={{ width: "100%" }}
           >
+            <HeroSearch />
             <Button
               component={Link}
               to={MARKET_PATHS.search}
               variant="contained"
               color="primary"
               size="large"
-              sx={{ flex: 1, whiteSpace: "nowrap" }}
+              sx={{ flexShrink: 0, whiteSpace: "nowrap", px: 3 }}
             >
               {t("landing.heroBrowse")}
             </Button>
@@ -309,7 +309,7 @@ export function LandingHeroLayout(props: {
               variant="outlined"
               color="secondary"
               size="large"
-              sx={{ flex: 1, whiteSpace: "nowrap" }}
+              sx={{ flexShrink: 0, whiteSpace: "nowrap", px: 3 }}
             >
               {t("landing.heroSell")}
             </Button>
