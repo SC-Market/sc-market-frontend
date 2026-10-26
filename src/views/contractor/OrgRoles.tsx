@@ -71,6 +71,13 @@ function RolePermissionCheck(props: {
               }}
               color={"secondary"}
               name={label}
+              inputProps={{
+                "aria-label": t("manageRoles.permissionForRole", {
+                  defaultValue: "{{permission}} for {{role}}",
+                  permission: t(`manageRoles.permissions.${permission_name}`),
+                  role: role.name || t("manageRoles.newRole", "new role"),
+                }),
+              }}
             />
           }
           label={t(`manageRoles.permissions.${permission_name}`)}
@@ -266,6 +273,10 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                       onClick={submitUpdate}
                       variant={"contained"}
                       sx={{ marginRight: 1 }}
+                      aria-label={t("manageRoles.saveRole", {
+                        defaultValue: "Save role {{role}}",
+                        role: role.name,
+                      })}
                     >
                       {t("manageRoles.save")}
                     </Button>
@@ -274,6 +285,10 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                         color={"error"}
                         variant={"contained"}
                         onClick={deleteRoleCallback}
+                        aria-label={t("manageRoles.deleteRole", {
+                          defaultValue: "Delete role {{role}}",
+                          role: role.name,
+                        })}
                       >
                         {t("manageRoles.delete")}
                       </Button>
@@ -298,6 +313,7 @@ function RoleRow(props: {
   manage?: boolean
 }): ReactElement {
   const { row, index, onClick, isItemSelected, labelId } = props
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   const [currentOrg] = useCurrentOrg()
@@ -317,9 +333,9 @@ function RoleRow(props: {
       <TableRow
         hover
         // onClick={onClick}
-        role="checkbox"
-        aria-checked={isItemSelected}
         tabIndex={-1}
+        data-testid="org-role-row"
+        data-id={row.role_id}
         key={index}
         selected={isItemSelected}
         // component={Link} to={`/contract/${row.order_id}`}
@@ -350,6 +366,11 @@ function RoleRow(props: {
                 setOpen((o) => !o)
                 event.stopPropagation()
               }}
+              aria-label={t("manageRoles.editRole", {
+                defaultValue: "Edit role {{role}}",
+                role: row.name,
+              })}
+              aria-expanded={open}
             >
               {open ? (
                 <KeyboardArrowDownRounded />

@@ -487,6 +487,13 @@ function ShopListingsTab(props: { slug: string }) {
         <TextField
           select
           size="small"
+          inputProps={{ "aria-label": "Sort listings" }}
+          SelectProps={{
+            SelectDisplayProps: {
+              "aria-label": "Sort listings",
+              "aria-labelledby": undefined,
+            },
+          }}
           value={`${sortBy}-${sortOrder}`}
           onChange={(e) => {
             const [s, o] = e.target.value.split("-") as ["created_at" | "price" | "quantity", "asc" | "desc"]

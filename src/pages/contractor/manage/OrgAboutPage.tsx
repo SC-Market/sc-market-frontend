@@ -114,6 +114,14 @@ function OrgAboutForm(props: { contractor: Contractor }) {
           <MarkdownEditor
             value={newDesc}
             onChange={(value: string) => setNewDesc(value)}
+            TextFieldProps={{
+              inputProps: {
+                "aria-label": t(
+                  "orgDetailEdit.descriptionEditor",
+                  "Organization description",
+                ),
+              },
+            }}
           />
         </Grid>
       </FormPaper>

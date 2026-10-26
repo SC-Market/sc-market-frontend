@@ -150,7 +150,10 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
                     to={`/recruiting/post/${post.post_id}/update`}
                     style={{ marginLeft: 2 }}
                   >
-                    <IconButton sx={{ color: theme.palette.background.light }}>
+                    <IconButton
+                      sx={{ color: theme.palette.background.light }}
+                      aria-label={t("recruiting.editPost", "Edit post")}
+                    >
                       <CreateRounded />
                     </IconButton>
                   </Link>

@@ -135,11 +135,21 @@ export function OrgManageLayout() {
         <Grid item xs={12}>
           <Box sx={{ display: "flex", gap: 3 }}>
             <Box sx={{ width: 220, flexShrink: 0 }}>
-              <List dense>
+              <List
+                dense
+                component="nav"
+                aria-label={t(
+                  "org.manageSectionsNav",
+                  "Organization settings sections",
+                )}
+              >
                 {navItems.map((item) => (
                   <ListItemButton
                     key={item.value}
                     selected={activeItem === item.value}
+                    aria-current={
+                      activeItem === item.value ? "page" : undefined
+                    }
                     onClick={() => handleNavChange(item.value)}
                     sx={{ borderRadius: 1 }}
                   >
@@ -176,6 +186,10 @@ export function OrgManageLayout() {
             onChange={(_e, value: string) => handleNavChange(value)}
             variant="scrollable"
             scrollButtons="auto"
+            aria-label={t(
+              "org.manageSectionsNav",
+              "Organization settings sections",
+            )}
           >
             {navItems.map((item) => (
               <Tab

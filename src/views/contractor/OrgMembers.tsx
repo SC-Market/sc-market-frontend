@@ -68,11 +68,11 @@ function PeopleRow(props: {
     <TableRow
       hover
       onClick={onClick}
-      role="checkbox"
-      aria-checked={isItemSelected}
       tabIndex={-1}
       key={row.username}
       selected={isItemSelected}
+      data-testid="org-member-row"
+      data-id={row.username}
     >
       {/*<TableCell padding="checkbox">*/}
       {/*    <Checkbox*/}
@@ -115,6 +115,10 @@ function PeopleRow(props: {
                 color={"error"}
                 sx={{ marginRight: 2 }}
                 onClick={kickCallback}
+                aria-label={t("manageMemberList.kickMember", {
+                  defaultValue: "Kick {{username}}",
+                  username: row.username,
+                })}
               >
                 {t("manageMemberList.kick")}
               </Button>
@@ -127,6 +131,13 @@ function PeopleRow(props: {
                   {...params}
                   variant="standard"
                   label={t("manageMemberList.roles")}
+                  inputProps={{
+                    ...params.inputProps,
+                    "aria-label": t("manageMemberList.rolesFor", {
+                      defaultValue: "Roles for {{username}}",
+                      username: row.username,
+                    }),
+                  }}
                 />
               )}
               options={(contractor?.roles || []).filter(
@@ -257,7 +268,7 @@ export function MemberList(props: { contractor: Contractor }) {
             size="small"
             InputProps={{
               endAdornment: (
-                <IconButton>
+                <IconButton aria-label={t("manageMemberList.search")}>
                   <SearchIcon />
                 </IconButton>
               ),
@@ -385,7 +396,7 @@ export function ManageMemberList() {
             size={"small"}
             InputProps={{
               endAdornment: (
-                <IconButton>
+                <IconButton aria-label={t("manageMemberList.search")}>
                   <SearchIcon />
                 </IconButton>
               ),

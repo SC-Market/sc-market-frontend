@@ -111,6 +111,13 @@ export function ShopDirectory() {
         <TextField
           select
           size="medium"
+          inputProps={{ "aria-label": "Sort shops" }}
+          SelectProps={{
+            SelectDisplayProps: {
+              "aria-label": "Sort shops",
+              "aria-labelledby": undefined,
+            },
+          }}
           value={sortIndex}
           onChange={(e) => setSortIndex(Number(e.target.value))}
           sx={{ width: 180 }}
@@ -146,7 +153,13 @@ export function ShopDirectory() {
       ) : data?.shops && data.shops.length > 0 ? (
         <Grid container spacing={2}>
           {data.shops.map((shop, index) => (
-            <Grid item {...SHOP_GRID_BREAKPOINTS} key={shop.shop_id}>
+            <Grid
+              item
+              {...SHOP_GRID_BREAKPOINTS}
+              key={shop.shop_id}
+              data-testid="shop-card"
+              data-id={shop.slug}
+            >
               <ShopCard shop={shop} index={index} />
             </Grid>
           ))}

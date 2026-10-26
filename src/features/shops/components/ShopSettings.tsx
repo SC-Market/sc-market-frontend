@@ -450,6 +450,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           />
           <TextField
             fullWidth type="number" size="small"
+            inputProps={{ "aria-label": "Minimum order size (items)" }}
             value={minOrderSize}
             onChange={(e) => setMinOrderSize(e.target.value)}
             disabled={saving || !minOrderSizeEnabled}
@@ -463,6 +464,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           />
           <TextField
             fullWidth type="number" size="small"
+            inputProps={{ "aria-label": "Maximum order size (items)" }}
             value={maxOrderSize}
             onChange={(e) => setMaxOrderSize(e.target.value)}
             disabled={saving || !maxOrderSizeEnabled}
@@ -476,6 +478,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           />
           <TextField
             fullWidth type="number" size="small"
+            inputProps={{ "aria-label": "Minimum order value (aUEC)" }}
             value={minOrderValue}
             onChange={(e) => setMinOrderValue(e.target.value)}
             disabled={saving || !minOrderValueEnabled}
@@ -489,6 +492,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           />
           <TextField
             fullWidth type="number" size="small"
+            inputProps={{ "aria-label": "Maximum order value (aUEC)" }}
             value={maxOrderValue}
             onChange={(e) => setMaxOrderValue(e.target.value)}
             disabled={saving || !maxOrderValueEnabled}

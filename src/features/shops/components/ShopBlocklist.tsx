@@ -117,6 +117,7 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
                   edge="end"
                   size="small"
                   color="error"
+                  aria-label={`Unblock ${entry.display_name || entry.username}`}
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
