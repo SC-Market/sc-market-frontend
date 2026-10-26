@@ -40,6 +40,10 @@ vi.mock("../../../../store/api/v2/market-overrides", () => ({
 vi.mock("../../../profile/api/profileApi", () => ({
   useGetUserProfileQuery: () => ({ data: { contractors: [] } }),
 }))
+// Transfer Ownership looks up the owning org's owner role.
+vi.mock("../../../contractor/api/contractorApi", () => ({
+  useGetContractorBySpectrumIDQuery: () => ({ data: undefined }),
+}))
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => issueAlert,
 }))
