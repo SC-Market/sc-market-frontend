@@ -1,0 +1,23 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "SC Market",
+    "documentationUrl": "https://sc-market.space/guides",
+    "logoUrl": "https://sc-market.space/scmarket-logo.png"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:sc-market.space:api:public-rest-api",
+      "displayName": "SC Market public REST API",
+      "type": "application/vnd.oai.openapi+json",
+      "url": "https://api.sc-market.space/api/v2/openapi.json",
+      "description": "OpenAPI description of the SC Market API: Star Citizen marketplace listings, shops, services, contractors and game data (items, ships, commodities, locations). Prices are in aUEC.",
+      "tags": ["star-citizen", "marketplace", "game-data", "openapi"],
+      "representativeQueries": [
+        "Find Star Citizen items for sale and their aUEC prices",
+        "Look up a Star Citizen ship or item in the game database",
+        "List Star Citizen orgs offering hauling or escort services"
+      ]
+    }
+  ]
+}

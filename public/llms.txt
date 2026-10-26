@@ -1,0 +1,36 @@
+# SC Market
+
+> SC Market is the Star Citizen marketplace where players buy, sell and trade in-game items and hire orgs for services such as hauling, escort, medical rescue and salvage. All trades are in aUEC (in-game currency); no real money is involved. It is a fan-made community site, not affiliated with Cloud Imperium Games or Roberts Space Industries.
+
+Pages are rendered in the browser; the public pages below also serve a plain-HTML summary to clients that don't run JavaScript. Machine-readable data is available from the public REST API.
+
+## Marketplace
+
+- [Marketplace](https://sc-market.space/market): items for sale and buy orders from players and orgs
+- [Shops](https://sc-market.space/shops): player and org storefronts
+- [Services](https://sc-market.space/market/services): services offered by players and orgs
+- [Contractors](https://sc-market.space/contractors): orgs and contractors and their ratings
+- [Recruiting](https://sc-market.space/recruiting): org recruiting posts
+
+## Game database
+
+- [Game database](https://sc-market.space/wiki): items, ships, commodities, locations and manufacturers
+- [Items](https://sc-market.space/wiki/items)
+- [Ships and vehicles](https://sc-market.space/wiki/ships)
+- [Commodities](https://sc-market.space/wiki/commodities)
+- [Star map and locations](https://sc-market.space/wiki/locations)
+- [Manufacturers](https://sc-market.space/wiki/manufacturers)
+- [Mining ores](https://sc-market.space/mining) and [mining locations](https://sc-market.space/mining/locations)
+- [Crafting blueprints](https://sc-market.space/blueprints)
+- [Missions](https://sc-market.space/missions)
+
+## Help
+
+- [Help & Guides](https://sc-market.space/guides): how buying, selling, orders, orgs and the Discord bot work
+- [About SC Market](https://sc-market.space/about)
+
+## API
+
+- [API documentation](https://api.sc-market.space/docs)
+- [OpenAPI description](https://api.sc-market.space/api/v2/openapi.json)
+- [API catalog (RFC 9727)](https://api.sc-market.space/.well-known/api-catalog)
