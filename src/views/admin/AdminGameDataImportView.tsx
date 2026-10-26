@@ -75,6 +75,7 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
                 job.result.summary.missionsInserted && `${job.result.summary.missionsInserted} missions`,
                 job.result.summary.missionsUpdated && `${job.result.summary.missionsUpdated} missions updated`,
                 job.result.summary.blueprintsInserted && `${job.result.summary.blueprintsInserted} blueprints`,
+                job.result.summary.shopsImported && `${job.result.summary.shopsImported} shops refreshed`,
               ].filter(Boolean).join(", ") || "No changes"
             : job.error
               ? job.error.slice(0, 60)
@@ -190,9 +191,15 @@ export function AdminGameDataImportView() {
   return (
     <Box>
       <HeaderTitle>Game Data Import</HeaderTitle>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
         Upload a <code>game-data.zip</code> extracted from Star Citizen's Data.p4k.
       </Typography>
+      <Alert severity="info" sx={{ mb: 3 }}>
+        The import also refreshes in-game shops ("where to buy" on wiki item pages) from the{" "}
+        <code>shop-inventories.json</code> in the same ZIP: shops and prices are replaced by the ZIP's,
+        and shops or items it no longer lists are removed. A ZIP without that file leaves the shops
+        unchanged (the job lists a warning).
+      </Alert>
 
       {/* Upload area */}
       <Paper
