@@ -192,6 +192,7 @@ export function AuthenticateRSI({
           />
         </Typography>
         <Checkbox
+          inputProps={{ "aria-label": t("authenticateRSI.acceptTos", "Accept the terms of service") }}
           value={tosAccepted}
           onChange={(event, checked) => setTosAccepted(checked)}
           color={error && !tosAccepted ? "error" : undefined}

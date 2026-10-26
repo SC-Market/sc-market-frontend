@@ -68,7 +68,7 @@ export function ProfileHeader({
                 ? `#${profile.discord_profile.discriminator}`
                 : ""}
             </UnderlineLink>
-            <IconButton color="primary">
+            <IconButton aria-label={t("profile.discordProfile", "Discord profile")} color="primary">
               <Discord />
             </IconButton>
           </MaterialLink>

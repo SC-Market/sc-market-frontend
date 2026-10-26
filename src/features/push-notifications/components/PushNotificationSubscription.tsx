@@ -194,7 +194,16 @@ export function PushNotificationSubscription({
                 <ListItemSecondaryAction>
                   <IconButton
                     edge="end"
-                    aria-label="delete"
+                    aria-label={t(
+                      "settings.pushNotifications.removeDevice",
+                      "Remove device {{device}}",
+                      {
+                        device:
+                          subscription.user_agent ||
+                          t("settings.pushNotifications.unknownDevice"),
+                      },
+                    )}
+                    data-id={subscription.subscription_id}
                     onClick={() =>
                       handleUnsubscribe(subscription.subscription_id)
                     }

@@ -282,7 +282,7 @@ export function AvailabilityDisplay(
       subtitle={
         profile?.username === name ? (
           <Link to={"/availability"} style={{ color: "inherit" }}>
-            <IconButton>
+            <IconButton aria-label={t("availability.edit", "Edit availability")}>
               <CreateRoundedIcon />
             </IconButton>
           </Link>

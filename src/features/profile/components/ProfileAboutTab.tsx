@@ -150,6 +150,7 @@ export function ProfileAboutTab(props: {
             )}
             {isMyProfile && (
               <Fab
+                aria-label={t("profile.editDescription", "Edit description")}
                 color={"primary"}
                 size={"small"}
                 sx={{

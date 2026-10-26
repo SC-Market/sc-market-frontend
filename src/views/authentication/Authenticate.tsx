@@ -53,10 +53,10 @@ export function Authenticate(props: {}) {
           variant="outlined"
           aria-label={t("auth.aria.outlinedGroup")}
         >
-          <IconButton color={"primary"}>
+          <IconButton aria-label={t("auth.google", "Google")} color={"primary"}>
             <Google />
           </IconButton>
-          <IconButton color={"primary"}>
+          <IconButton aria-label={t("auth.discord", "Discord")} color={"primary"}>
             <Discord />
           </IconButton>
         </ButtonGroup>
@@ -66,7 +66,7 @@ export function Authenticate(props: {}) {
       </Grid>
       <Grid item xs={8}>
         <Typography>
-          <Checkbox />
+          <Checkbox inputProps={{ "aria-label": t("auth.terms") }} />
           {t("auth.terms")}
         </Typography>
       </Grid>
