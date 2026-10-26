@@ -45,6 +45,7 @@ import {
 } from "../../../store/api/v2/market"
 import { useUploadImageMutation } from "../../../store/api/v2/market-overrides"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
@@ -524,6 +525,17 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
 
   const orgs = profile?.contractors ?? []
 
+  // Only the owner may give a shop away (the API refuses manage_market
+  // members): for an org shop, that is the org's owner role.
+  const orgSpectrumId = shop.owner_contractor_spectrum_id
+  const { data: owningOrg } = useGetContractorBySpectrumIDQuery(orgSpectrumId ?? "", {
+    skip: !orgSpectrumId,
+  })
+  const membership = orgs.find((c) => c.spectrum_id === orgSpectrumId)
+  const canTransfer = orgSpectrumId
+    ? !!owningOrg?.owner_role && !!membership?.roles.includes(owningOrg.owner_role)
+    : true
+
   const handleConfirm = async () => {
     try {
       const target_id =
@@ -561,6 +573,8 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
       ? "your personal account"
       : orgs.find((o) => o.spectrum_id === contractorSpectrumId)?.name ??
         "the selected organization"
+
+  if (!canTransfer) return null
 
   return (
     <FormPaper
