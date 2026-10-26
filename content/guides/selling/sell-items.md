@@ -4,7 +4,7 @@ description: Every listing belongs to a shop. Create your shop, list an item wit
 order: 10
 updated: 2026-10-25
 keywords: [sell, listing, create listing, shop, stock, inventory, auction, price]
-related: [orders/how-orders-work, buying/buy-an-item]
+related: [selling/stock-lots-and-allocation, selling/auctions, orders/how-orders-work]
 howto: true
 ---
 
@@ -17,7 +17,7 @@ To sell on SC Market you list items from a shop: create the shop once, then crea
 ## Steps
 
 1. Open [My Shops](/dashboard/shops) and click **Create Shop**. SC Market creates a personal shop named after you. Click **Manage** to rename it and fill in its settings.
-2. With your shop selected, open **Create Listing** in the sidebar, or go to [create a listing](/market/create).
+2. Switch the sidebar to your shop and open **Create Listing**.
 3. Under **About**, pick the game item with **Select Game Item**, then enter a **Title** and **Description**. You can add photos.
 4. Under **Pricing & Quantity**, enter the **Price** in aUEC and the **Quantity** you have.
 5. Click **Create Listing**. An **Active** listing is visible to buyers right away.
@@ -31,13 +31,12 @@ To sell on behalf of an org, [create a shop](/shops/create) and choose **Organiz
 
 ## Run an auction
 
-Choose **Auction** as the sale type, then set the **Auction End Time** and the **Min Bid Increment (aUEC)**. A **Reserve Price** is optional: the auction won't sell below it. When the auction ends, the highest bidder gets an offer at their bid.
+Choose **Auction** as the sale type and set an end time, a minimum bid increment and an optional reserve price. See [run and bid on auctions](/guides/selling/auctions).
 
 ## Manage listings and stock
 
 - **Listings** in your shop's sidebar shows every listing. Use **Edit**, **Activate**, **Deactivate** or **Archive** to change one.
-- **Stock** shows **All Stock Lots**: item, variant, quantity, location and the listing each lot belongs to. Click **Add Lot** to add stock, or edit a lot when your inventory changes.
-- **Allocated Stock** lists the stock reserved by orders placed against your listings.
+- **Stock** shows **All Stock Lots**: item, variant, quantity, location and the listing each lot belongs to. Edit a lot's quantity there when your inventory changes. See [manage stock lots](/guides/selling/stock-lots-and-allocation).
 
 ## What happens next
 

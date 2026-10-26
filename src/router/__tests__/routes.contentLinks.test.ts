@@ -34,6 +34,23 @@ const pages = [
 const guidePaths = new Set(site.guides.map((g) => HELP_PATHS.guide(g.meta.category, g.meta.slug)))
 const categoryPaths = new Set(site.categories.map((c) => HELP_PATHS.category(c.id)))
 
+/**
+ * Legacy paths that only redirect somewhere else (often based on a cookie).
+ * Guides must link the real destination instead.
+ */
+const REDIRECT_ONLY = new Set([
+  "/market/create",
+  "/market/create/:tab",
+  "/market/manage",
+  "/market/manage-stock",
+  "/market/stock/:listingId",
+  "/orders/assigned",
+  "/order/services",
+  "/services",
+  "/help",
+  "/org/:contractor_id/listings",
+])
+
 const cases = pages.flatMap(({ file, links }) => links.map((href) => [file, href] as const))
 
 describe("Help & Guides content", () => {
@@ -55,6 +72,8 @@ describe("Help & Guides content", () => {
     const leaf = matches.at(-1)?.route
     expect(leaf, "no route matched").toBeDefined()
     expect(leaf?.path, "only the /* 404 splat matched").not.toBe("/*")
+    const pattern = matches.map((m) => m.route.path ?? "").filter(Boolean).join("/").replace(/\/+/g, "/")
+    expect(REDIRECT_ONLY.has(pattern) || REDIRECT_ONLY.has(leaf?.path ?? ""), `${pattern} only redirects`).toBe(false)
     expect(pathname.startsWith("/admin"), "links into the admin area").toBe(false)
     if (pathname.startsWith(`${HELP_PATHS.hub}/`)) {
       expect(guidePaths.has(pathname) || categoryPaths.has(pathname), "unknown guide or category").toBe(true)

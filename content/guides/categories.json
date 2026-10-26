@@ -22,5 +22,23 @@
     "title": "Orders",
     "description": "How offers become orders, what each order status means, and how trades finish in game.",
     "order": 40
+  },
+  {
+    "id": "safety",
+    "title": "Safety",
+    "description": "Trade safely: reviews, blocking and reporting, and what SC Market does and doesn't guarantee.",
+    "order": 45
+  },
+  {
+    "id": "orgs",
+    "title": "Organizations",
+    "description": "Run your org on SC Market: roles, permissions and team selling.",
+    "order": 50
+  },
+  {
+    "id": "discord",
+    "title": "Discord",
+    "description": "Connect the SC Market bot for order threads, alerts and claiming orders from Discord.",
+    "order": 60
   }
 ]
