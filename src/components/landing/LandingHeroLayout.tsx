@@ -109,7 +109,7 @@ function HeroSearch() {
             : MARKET_PATHS.search,
         )
       }}
-      sx={{ flex: 1, minWidth: 0 }}
+      sx={{ width: "100%" }}
     >
       <TextField
         fullWidth
@@ -279,41 +279,41 @@ export function LandingHeroLayout(props: {
             />
           </Box>
 
-          {/* Search and the two CTAs on one Paper surface across the whole
-              hero width: one row from md (the field takes the free space),
-              stacked full-width on phones. */}
+          {/* The search field on a Paper surface (contrast against the
+              gradient), then the two CTAs in their own full-width row:
+              side by side from sm, stacked on phones. */}
           <Paper
             data-testid="landing-hero-search"
             sx={{ width: "100%", p: { xs: 1.5, md: 2 } }}
           >
-            <Stack
-              direction={{ xs: "column", md: "row" }}
-              spacing={1.5}
-              alignItems="stretch"
-            >
-              <HeroSearch />
-              <Button
-                component={Link}
-                to={MARKET_PATHS.search}
-                variant="contained"
-                color="primary"
-                size="large"
-                sx={{ flexShrink: 0, whiteSpace: "nowrap" }}
-              >
-                {t("landing.heroBrowse")}
-              </Button>
-              <Button
-                component={Link}
-                to={props.sellHref}
-                variant="outlined"
-                color="secondary"
-                size="large"
-                sx={{ flexShrink: 0, whiteSpace: "nowrap" }}
-              >
-                {t("landing.heroSell")}
-              </Button>
-            </Stack>
+            <HeroSearch />
           </Paper>
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={1.5}
+            sx={{ width: "100%" }}
+          >
+            <Button
+              component={Link}
+              to={MARKET_PATHS.search}
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{ flex: 1, whiteSpace: "nowrap" }}
+            >
+              {t("landing.heroBrowse")}
+            </Button>
+            <Button
+              component={Link}
+              to={props.sellHref}
+              variant="outlined"
+              color="secondary"
+              size="large"
+              sx={{ flex: 1, whiteSpace: "nowrap" }}
+            >
+              {t("landing.heroSell")}
+            </Button>
+          </Stack>
         </Stack>
       </Container>
     </Box>
