@@ -9,6 +9,7 @@ import {
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { HapticTab } from "../../components/haptic"
 import { OrderDetailSkeleton } from "../../components/skeletons"
+import { OrderPageBodySkeleton } from "../../components/skeletons/AccountPageSkeletons"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useGetOrderDetailQuery } from "../../store/api/v2/market"
 import { has_permission } from "../../views/contractor/OrgRoles"
@@ -176,7 +177,7 @@ export function ViewOrder() {
       entityTitle={order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`}
       isLoading={pageData.isLoading}
       error={pageData.error}
-      skeleton={<OrderDetailSkeleton showContractor showAssigned />}
+      skeleton={<OrderPageBodySkeleton />}
       sidebarOpen={true}
       maxWidth="xl"
     >

@@ -18,7 +18,10 @@ import { PageFallback } from "./components/metadata/Page"
 // errorElement that ALSO needs to load a chunk — which fails the same way,
 // crashing with no fallback (the "FrontendError.lazy.tsx t is undefined" crash).
 import { FrontendErrorElement } from "./pages/errors/FrontendError"
-import { RouteSuspense } from "./components/router/RouteSuspense"
+import {
+  RouteSkeletonFallback,
+  RouteSuspense,
+} from "./components/router/RouteSuspense"
 import { RouteErrorFallback } from "./components/error-boundaries"
 import { startBackgroundPrefetch } from "./util/prefetch"
 import { SharedIntersectionObserver } from "./hooks/prefetch/usePrefetchOnVisible"
@@ -154,14 +157,30 @@ function App() {
 }
 
 /**
- * Rendered by React Router while the first page load's lazy route is still
- * loading (before the router is initialized). Renders nothing, exactly like
- * v6's RouterProvider without a fallbackElement; declaring it on the
- * top-level routes keeps v7 from logging "No `HydrateFallback` element
- * provided to render during initial hydration" on every page load.
+ * HydrateFallback for the two top-level routes. Declaring one keeps v7 from
+ * logging "No `HydrateFallback` element provided to render during initial
+ * hydration". The standalone widget renders nothing while it loads; under the
+ * app layout every page route declares its own (withPageHydrateFallback), so
+ * the layout itself never falls back to this.
  */
 function InitialLoadFallback() {
   return null
+}
+
+/**
+ * Gives every page route the route skeleton as its HydrateFallback. On the
+ * first page load React Router renders the HydrateFallback of the deepest
+ * matched route that declares one while that page's lazy chunk loads; with
+ * one on each page route, the app shell (Root: navbar, sidebar, footer)
+ * renders right away and only the page area shows its skeleton, instead of
+ * the whole screen staying blank until the chunk arrives.
+ */
+function withPageHydrateFallback(children: RouteObject[]): RouteObject[] {
+  return children.map((route) =>
+    route.HydrateFallback || route.hydrateFallbackElement
+      ? route
+      : ({ ...route, HydrateFallback: RouteSkeletonFallback } as RouteObject),
+  )
 }
 
 /**
@@ -194,7 +213,7 @@ export const routes: RouteObject[] = [
         </ShoppingListProvider>
       </HookProvider>
     ),
-    children: [
+    children: withPageHydrateFallback([
       {
         path: "/",
         element: <LandingPage />,
@@ -1346,7 +1365,7 @@ export const routes: RouteObject[] = [
           Component: (await retryDynamicImport(() => import("./pages/errors/Error404"))).Error404,
         }),
       },
-    ],
+    ]),
   },
 ]
 

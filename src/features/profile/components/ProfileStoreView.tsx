@@ -1,7 +1,11 @@
 import React from "react"
-import { Grid, Skeleton, Typography } from "@mui/material"
+import { Grid, Typography } from "@mui/material"
 import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
 import { ShopCard } from "../../shops/components/ShopCard"
+import {
+  OWNER_SHOP_GRID_BREAKPOINTS,
+  ShopListSkeleton,
+} from "../../../components/skeletons/ShopCardSkeleton"
 
 export function ProfileStoreView(props: { user: string }) {
   return <ShopList username={props.user} />
@@ -18,15 +22,7 @@ function ShopList(props: { username?: string; spectrumId?: string }) {
   })
 
   if (isLoading) {
-    return (
-      <Grid container spacing={2}>
-        {[1, 2].map((i) => (
-          <Grid item xs={12} sm={6} md={4} key={i}>
-            <Skeleton variant="rectangular" height={220} sx={{ borderRadius: 2 }} />
-          </Grid>
-        ))}
-      </Grid>
-    )
+    return <ShopListSkeleton />
   }
 
   if (!shops || shops.length === 0) {
@@ -40,7 +36,7 @@ function ShopList(props: { username?: string; spectrumId?: string }) {
   return (
     <Grid container spacing={2}>
       {shops.map((shop, index) => (
-        <Grid item xs={12} sm={6} md={4} key={shop.shop_id}>
+        <Grid item {...OWNER_SHOP_GRID_BREAKPOINTS} key={shop.shop_id}>
           <ShopCard shop={shop} index={index} />
         </Grid>
       ))}

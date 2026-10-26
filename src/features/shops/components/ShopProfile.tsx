@@ -37,6 +37,7 @@ import {
 } from "../../../store/api/v2/market"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
+  BANNER_OVERLAP,
   DarkBannerContainer,
   LightBannerContainer,
 } from "../../profile/components/BannerContainers"
@@ -65,6 +66,11 @@ import { BadgeDisplay } from "../../../components/rating/ListingRating"
 import { SHOP_PATHS, ORG_PATHS, USER_PATHS } from "../../../routes/paths"
 import { buildShopHead } from "../../../seo/entityHeads"
 import { SeoHead } from "../../../seo/SeoHead"
+import {
+  SHOP_LISTING_GRID_BREAKPOINTS,
+  ShopListingsGridSkeleton,
+  ShopProfileSkeleton,
+} from "../../../components/skeletons/ShopProfileSkeleton"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -98,9 +104,8 @@ export function ShopProfile() {
       )}
       <Box
         sx={{
-          ...(theme.palette.mode === "dark"
-            ? { position: "relative", top: -450 }
-            : { position: "relative", top: -200 }),
+          position: "relative",
+          top: -BANNER_OVERLAP[theme.palette.mode],
         }}
       >
         <Container maxWidth="xl">
@@ -488,13 +493,7 @@ function ShopListingsTab(props: { slug: string }) {
       </Stack>
 
       {isLoading ? (
-        <Grid container spacing={2}>
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Grid item xs={6} sm={4} md={3} lg={2.4} key={i}>
-              <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 2 }} />
-            </Grid>
-          ))}
-        </Grid>
+        <ShopListingsGridSkeleton />
       ) : !data?.listings.length ? (
         <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
           {search ? "No listings match your search" : "No active listings"}
@@ -503,7 +502,7 @@ function ShopListingsTab(props: { slug: string }) {
         <>
           <Grid container spacing={2}>
             {data.listings.map((listing, index) => (
-              <Grid item xs={6} sm={4} md={3} lg={2.4} key={listing.listing_id}>
+              <Grid item {...SHOP_LISTING_GRID_BREAKPOINTS} key={listing.listing_id}>
                 <ListingCardV2 listing={listing} index={index} />
               </Grid>
             ))}
@@ -799,134 +798,6 @@ function OwnerCard(props: { owner: NonNullable<ShopPublicResponse["owner"]> }) {
           {owner.name}
         </Typography>
       </Stack>
-    </Box>
-  )
-}
-
-function ShopProfileSkeleton() {
-  const theme = useTheme<ExtendedTheme>()
-
-  return (
-    <Box sx={{ position: "relative" }}>
-      <Skeleton
-        variant="rectangular"
-        sx={{
-          height: theme.palette.mode === "dark" ? 500 : 250,
-          width: "100%",
-          borderRadius: 0,
-        }}
-      />
-      <Container
-        maxWidth="xl"
-        sx={{
-          ...(theme.palette.mode === "dark"
-            ? { position: "relative", top: -450 }
-            : { position: "relative", top: -200 }),
-        }}
-      >
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <Grid item xs={12}>
-            <Grid
-              container
-              spacing={theme.layoutSpacing.component}
-              alignItems="flex-end"
-              justifyContent="space-between"
-              minHeight={375}
-            >
-              <Grid item xs={12} md={8}>
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  alignItems="flex-start"
-                  flexWrap="wrap"
-                >
-                  <Skeleton
-                    variant="rectangular"
-                    sx={{
-                      height: theme.spacing(12),
-                      width: theme.spacing(12),
-                      flexShrink: 0,
-                      borderRadius: 2,
-                    }}
-                  />
-                  <Stack spacing={0.5}>
-                    <Skeleton variant="text" width={200} height={28} />
-                    <Skeleton variant="text" width={120} height={20} />
-                    <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
-                      <Skeleton
-                        variant="rectangular"
-                        width={80}
-                        height={28}
-                        sx={{ borderRadius: 1 }}
-                      />
-                      <Skeleton
-                        variant="rectangular"
-                        width={80}
-                        height={28}
-                        sx={{ borderRadius: 1 }}
-                      />
-                      <Skeleton
-                        variant="rectangular"
-                        width={80}
-                        height={28}
-                        sx={{ borderRadius: 1 }}
-                      />
-                    </Stack>
-                  </Stack>
-                </Stack>
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Skeleton
-                  variant="rectangular"
-                  sx={{
-                    height: 120,
-                    width: "100%",
-                    borderRadius: 1,
-                    maxWidth: 320,
-                    ml: "auto",
-                  }}
-                />
-              </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
-              <Tabs value={0} aria-label="Shop tabs" variant="scrollable">
-                <HapticTab
-                  label={<Skeleton width={60} />}
-                  icon={<StorefrontRounded />}
-                  {...a11yProps(0)}
-                />
-                <HapticTab
-                  label={<Skeleton width={60} />}
-                  icon={<DesignServicesRounded />}
-                  {...a11yProps(1)}
-                />
-                <HapticTab
-                  label={<Skeleton width={60} />}
-                  icon={<StarRounded />}
-                  {...a11yProps(2)}
-                />
-                <HapticTab
-                  label={<Skeleton width={60} />}
-                  icon={<InfoRounded />}
-                  {...a11yProps(3)}
-                />
-              </Tabs>
-            </Box>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Skeleton
-              variant="rectangular"
-              width="100%"
-              height={400}
-              sx={{ borderRadius: 2 }}
-            />
-          </Grid>
-        </Grid>
-      </Container>
     </Box>
   )
 }

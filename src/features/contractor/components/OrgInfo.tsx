@@ -17,6 +17,11 @@ import {
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { OrgBannerArea } from "./OrgBannerArea"
+import {
+  BANNER_HEIGHT,
+  BANNER_OVERLAP,
+} from "../../profile/components/BannerContainers"
+import { ShopListSkeleton } from "../../../components/skeletons/ShopCardSkeleton"
 import { OrgMetaTags } from "./OrgMetaTags"
 import { OrgHeader } from "./OrgHeader"
 import { OrgTabs } from "./OrgTabs"
@@ -39,9 +44,8 @@ export function OrgInfo(props: { contractor: Contractor }) {
       <OrgBannerArea org={contractor} />
       <Box
         sx={{
-          ...(theme.palette.mode === "dark"
-            ? { position: "relative", top: -450 }
-            : { position: "relative", top: -200 }),
+          position: "relative",
+          top: -BANNER_OVERLAP[theme.palette.mode],
         }}
       >
         <Container maxWidth="xl">
@@ -85,7 +89,7 @@ export function OrgInfoSkeleton() {
         <Skeleton
           variant="rectangular"
           sx={{
-            height: theme.palette.mode === "dark" ? 450 : 200,
+            height: BANNER_HEIGHT[theme.palette.mode],
             width: "100%",
             borderRadius: 0,
           }}
@@ -93,9 +97,8 @@ export function OrgInfoSkeleton() {
         <Container
           maxWidth={"xl"}
           sx={{
-            ...(theme.palette.mode === "dark"
-              ? { position: "relative", top: -450 }
-              : { position: "relative", top: -200 }),
+            position: "relative",
+            top: -BANNER_OVERLAP[theme.palette.mode],
           }}
         >
           <Grid container spacing={theme.layoutSpacing.layout}>
@@ -192,57 +195,48 @@ export function OrgInfoSkeleton() {
                   aria-label={t("ui.aria.orgInfoArea")}
                   variant="scrollable"
                 >
+                  {/* OrgTabs' always-present tabs (Recruiting only shows
+                      when the org has a post) */}
                   <HapticTab
-                    label={<Skeleton width={60} />}
+                    label={t("orgInfo.store")}
                     icon={<StorefrontRounded />}
                     {...a11yProps(0)}
                   />
                   <HapticTab
-                    label={<Skeleton width={60} />}
-                    icon={<DesignServicesRounded />}
+                    label={t("orgInfo.about")}
+                    icon={<InfoRounded />}
                     {...a11yProps(1)}
                   />
                   <HapticTab
-                    label={<Skeleton width={60} />}
-                    icon={<InfoRounded />}
+                    label={t("orgInfo.order")}
+                    icon={<CreateRounded />}
                     {...a11yProps(2)}
                   />
                   <HapticTab
-                    label={<Skeleton width={60} />}
-                    icon={<CreateRounded />}
+                    label={t("orgInfo.members")}
+                    icon={<PeopleAltRoundedIcon />}
                     {...a11yProps(3)}
                   />
                   <HapticTab
-                    label={<Skeleton width={60} />}
-                    icon={<PeopleAltRoundedIcon />}
-                    {...a11yProps(4)}
-                  />
-                  <HapticTab
-                    label={<Skeleton width={60} />}
-                    icon={<PersonAddRounded />}
-                    {...a11yProps(5)}
-                  />
-                  <HapticTab
-                    label={<Skeleton width={60} />}
+                    label={t("orgInfo.reviews")}
                     icon={<StarRounded />}
-                    {...a11yProps(6)}
+                    {...a11yProps(5)}
                   />
                 </Tabs>
               </Box>
             </Grid>
-            <Grid item xs={12}>
-              <Grid container spacing={theme.layoutSpacing.layout}>
-                <Skeleton
-                  variant="rectangular"
-                  width="100%"
-                  height={400}
-                  sx={{
-                    borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                  }}
-                />
-              </Grid>
-            </Grid>
           </Grid>
+        </Container>
+        {/* OrgTabContent: the store tab's shop cards */}
+        <Container
+          maxWidth="xl"
+          sx={{
+            pt: 3,
+            position: "relative",
+            top: -BANNER_OVERLAP[theme.palette.mode],
+          }}
+        >
+          <ShopListSkeleton />
         </Container>
       </Box>
   

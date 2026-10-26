@@ -8,7 +8,6 @@ import {
   FormPageSkeleton,
   AdminPageSkeleton,
   MessageListSkeleton,
-  OrderDetailSkeleton,
   ContractDetailSkeleton,
   RecruitingPostViewSkeleton,
   OfferDetailSkeleton,
@@ -22,7 +21,22 @@ import {
   MyListingsSkeleton,
   ServicesListSkeleton,
 } from "../components/skeletons"
-import { ProfileRouteSkeleton, OrgRouteSkeleton } from "./profileRouteSkeletons"
+import {
+  ProfileRouteSkeleton,
+  OrgRouteSkeleton,
+  MyProfileRouteSkeleton,
+  MyOrgRouteSkeleton,
+} from "./profileRouteSkeletons"
+import { ShopDirectorySkeleton } from "../components/skeletons/ShopCardSkeleton"
+import { ShopProfileSkeleton } from "../components/skeletons/ShopProfileSkeleton"
+import {
+  InventoryPageSkeleton,
+  NotificationsPageSkeleton,
+  OrderPageSkeleton,
+  OrdersPageSkeleton,
+  SettingsPageSkeleton,
+} from "../components/skeletons/AccountPageSkeletons"
+import { DashboardPageSkeleton } from "../features/dashboard/DashboardPageSkeleton"
 
 /**
  * Maps route paths to their appropriate skeleton components
@@ -47,6 +61,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/market/manage-stock": ListPageSkeleton,
   "/market/stock/:listingId": ListPageSkeleton,
   "/market/cart": MarketCartSkeleton,
+  "/inventory": InventoryPageSkeleton,
   "/buyorder/create": FormPageSkeleton,
   "/sell": FormPageSkeleton,
 
@@ -54,7 +69,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/contractors": ContractorsListSkeleton,
   "/contractor/:id": OrgRouteSkeleton,
   "/contractor/:id/:tab": OrgRouteSkeleton,
-  "/myorg": OrgRouteSkeleton,
+  "/myorg": MyOrgRouteSkeleton,
   "/org/register": FormPageSkeleton,
   "/contractor_invite/:invite_id": PageSkeleton,
 
@@ -62,15 +77,20 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/contracts": ContractsListSkeleton,
   "/contracts/create": FormPageSkeleton,
   "/contracts/public/:contract_id": ContractDetailSkeleton,
-  "/contract/:id": OrderDetailSkeleton,
-  "/contract/:id/:tab": OrderDetailSkeleton,
-  "/order/:id": OrderDetailSkeleton,
-  "/order/:id/:tab": OrderDetailSkeleton,
+  "/contract/:id": OrderPageSkeleton,
+  "/contract/:id/:tab": OrderPageSkeleton,
+  "/order/:id": OrderPageSkeleton,
+  "/order/:id/:tab": OrderPageSkeleton,
   "/order/service/:service_id": FormPageSkeleton,
   "/order/service/create": FormPageSkeleton,
   "/order/service/:service_id/edit": FormPageSkeleton,
   "/order/services": ServicesListSkeleton,
-  "/orders": FormPageSkeleton,
+  "/orders": OrdersPageSkeleton,
+
+  // Shop routes
+  "/shops": ShopDirectorySkeleton,
+  "/shops/:slug": ShopProfileSkeleton,
+  "/shops/:slug/:tab": ShopProfileSkeleton,
 
   // Recruiting routes
   "/recruiting": RecruitingListSkeleton,
@@ -85,12 +105,13 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   // User routes
   "/user/:username": ProfileRouteSkeleton,
   "/user/:username/:tab": ProfileRouteSkeleton,
-  "/profile": ProfileRouteSkeleton,
-  "/profile/:tab": ProfileRouteSkeleton,
-  "/settings": FormPageSkeleton,
+  "/profile": MyProfileRouteSkeleton,
+  "/profile/:tab": MyProfileRouteSkeleton,
+  "/settings": SettingsPageSkeleton,
 
   // Dashboard routes
   "/dashboard": DashboardSkeleton,
+  "/dashboard/overview": DashboardPageSkeleton,
 
   // Messaging routes
   "/messages": MessageListSkeleton,
@@ -136,7 +157,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/admin/import-monitoring": AdminPageSkeleton,
 
   // Other routes
-  "/notifications": ListPageSkeleton,
+  "/notifications": NotificationsPageSkeleton,
   "/availability": FormPageSkeleton,
   "/send": FormPageSkeleton,
   "/accountlink": FormPageSkeleton,

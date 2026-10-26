@@ -125,8 +125,10 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
         noSidebar={noSidebar}
         noMobilePadding={noMobilePadding}
       >
-        {/* Breadcrumbs - only render if provided and not loading */}
-        {!isLoading && enhancedBreadcrumbs && enhancedBreadcrumbs.length > 0 && (
+        {/* Breadcrumbs - also while loading (pages pass a "Loading…" label
+            for the last crumb), so the banner below doesn't drop when the
+            data arrives */}
+        {enhancedBreadcrumbs && enhancedBreadcrumbs.length > 0 && (
           <PageBreadcrumbs
             items={enhancedBreadcrumbs}
             MuiBreadcrumbsProps={{

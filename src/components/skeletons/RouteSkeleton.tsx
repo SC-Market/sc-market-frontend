@@ -1,20 +1,44 @@
-import { Box, Container, Grid } from "@mui/material"
+import React from "react"
+import { Box, Grid } from "@mui/material"
+import { ContainerGrid } from "../layout/ContainerGrid"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { CardSkeleton } from "./CardSkeleton"
 import { TableSkeleton } from "./TableSkeleton"
+
+/**
+ * Page frame of the generic route skeletons: the same scroll container,
+ * navbar spacer and paddings as StandardPageLayout (ContainerGrid), but no
+ * footer: a footer under a short skeleton would sit in view and then get
+ * pushed down when the page arrives.
+ */
+function RouteFrame({
+  maxWidth,
+  children,
+}: {
+  maxWidth: "md" | "lg" | "xl"
+  children: React.ReactNode
+}) {
+  return (
+    <ContainerGrid sidebarOpen={true} maxWidth={maxWidth} noFooter>
+      <Grid item xs={12}>
+        {children}
+      </Grid>
+    </ContainerGrid>
+  )
+}
 
 /**
  * Generic page skeleton with header and content area
  */
 export function PageSkeleton() {
   return (
-    <Container maxWidth="xl" sx={{ py: 3 }}>
+    <RouteFrame maxWidth="xl">
       <Box sx={{ mb: 3 }}>
         <BaseSkeleton variant="text" width="40%" height={40} />
         <BaseSkeleton variant="text" width="60%" height={24} sx={{ mt: 1 }} />
       </Box>
       <BaseSkeleton variant="rectangular" width="100%" height={400} />
-    </Container>
+    </RouteFrame>
   )
 }
 
@@ -23,7 +47,7 @@ export function PageSkeleton() {
  */
 export function DashboardSkeleton() {
   return (
-    <Container maxWidth="xl" sx={{ py: 3 }}>
+    <RouteFrame maxWidth="xl">
       <Box sx={{ mb: 3 }}>
         <BaseSkeleton variant="text" width="40%" height={40} />
       </Box>
@@ -46,7 +70,7 @@ export function DashboardSkeleton() {
           <CardSkeleton height={400} />
         </Grid>
       </Grid>
-    </Container>
+    </RouteFrame>
   )
 }
 
@@ -55,7 +79,7 @@ export function DashboardSkeleton() {
  */
 export function ProfileSkeleton() {
   return (
-    <Container maxWidth="lg" sx={{ py: 3 }}>
+    <RouteFrame maxWidth="lg">
       {/* Header with avatar and info */}
       <Box sx={{ display: "flex", gap: 3, mb: 3 }}>
         <BaseSkeleton variant="circular" width={120} height={120} />
@@ -79,7 +103,7 @@ export function ProfileSkeleton() {
           </Grid>
         ))}
       </Grid>
-    </Container>
+    </RouteFrame>
   )
 }
 
@@ -88,13 +112,13 @@ export function ProfileSkeleton() {
  */
 export function ListPageSkeleton() {
   return (
-    <Container maxWidth="xl" sx={{ py: 3 }}>
+    <RouteFrame maxWidth="xl">
       <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}>
         <BaseSkeleton variant="text" width="30%" height={40} />
         <BaseSkeleton variant="rectangular" width={120} height={40} />
       </Box>
       <TableSkeleton rows={10} columns={5} />
-    </Container>
+    </RouteFrame>
   )
 }
 
@@ -103,7 +127,7 @@ export function ListPageSkeleton() {
  */
 export function DetailPageSkeleton() {
   return (
-    <Container maxWidth="lg" sx={{ py: 3 }}>
+    <RouteFrame maxWidth="lg">
       {/* Breadcrumbs */}
       <Box sx={{ mb: 2 }}>
         <BaseSkeleton variant="text" width="40%" height={24} />
@@ -127,7 +151,7 @@ export function DetailPageSkeleton() {
           </Box>
         </Grid>
       </Grid>
-    </Container>
+    </RouteFrame>
   )
 }
 
@@ -136,7 +160,7 @@ export function DetailPageSkeleton() {
  */
 export function FormPageSkeleton() {
   return (
-    <Container maxWidth="md" sx={{ py: 3 }}>
+    <RouteFrame maxWidth="md">
       <Box sx={{ mb: 3 }}>
         <BaseSkeleton variant="text" width="50%" height={40} />
         <BaseSkeleton variant="text" width="70%" height={24} sx={{ mt: 1 }} />
@@ -162,7 +186,7 @@ export function FormPageSkeleton() {
           <BaseSkeleton variant="rectangular" width={100} height={40} />
         </Box>
       </Box>
-    </Container>
+    </RouteFrame>
   )
 }
 

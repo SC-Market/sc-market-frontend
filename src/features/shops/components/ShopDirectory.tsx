@@ -6,7 +6,6 @@ import {
   Grid,
   Box,
   Chip,
-  Skeleton,
   MenuItem,
   Pagination,
   InputAdornment,
@@ -16,20 +15,14 @@ import { Search, StorefrontRounded } from "@mui/icons-material"
 import { useBrowseShopsQuery } from "../../../store/api/v2/market"
 import { useDebounce } from "../../../hooks/useDebounce"
 import { ShopCard } from "./ShopCard"
+import { ShopCardGridSkeleton } from "../../../components/skeletons/ShopCardSkeleton"
+import {
+  SHOP_DIRECTORY_PAGE_SIZE,
+  SHOP_GRID_BREAKPOINTS,
+  SHOP_TAGS,
+} from "../shopDirectoryConfig"
 import { FRONTEND_URL } from "../../../util/constants"
 import { shopDirectorySeoText } from "../../../seo/hubHeads"
-
-const SHOP_TAGS = [
-  "Weapons",
-  "Armor",
-  "Components",
-  "Cargo",
-  "Mining",
-  "Salvage",
-  "Medical",
-  "Vehicles",
-  "Services",
-] as const
 
 type SortOption = "rating" | "total_sales" | "created_at" | "name"
 
@@ -51,7 +44,7 @@ export function ShopDirectory() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [sortIndex, setSortIndex] = useState(0)
   const [page, setPage] = useState(1)
-  const pageSize = 24
+  const pageSize = SHOP_DIRECTORY_PAGE_SIZE
 
   const debouncedSearch = useDebounce(search, 300)
   const currentSort = SORT_OPTIONS[sortIndex]
@@ -143,21 +136,11 @@ export function ShopDirectory() {
 
       {/* Shop grid */}
       {isLoading ? (
-        <Grid container spacing={2}>
-          {Array.from({ length: 12 }).map((_, i) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
-              <Skeleton
-                variant="rectangular"
-                height={220}
-                sx={{ borderRadius: 2 }}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        <ShopCardGridSkeleton />
       ) : data?.shops && data.shops.length > 0 ? (
         <Grid container spacing={2}>
           {data.shops.map((shop, index) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={shop.shop_id}>
+            <Grid item {...SHOP_GRID_BREAKPOINTS} key={shop.shop_id}>
               <ShopCard shop={shop} index={index} />
             </Grid>
           ))}

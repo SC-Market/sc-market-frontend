@@ -5,6 +5,14 @@ import { User } from "../../../datatypes/User"
 import type { Contractor } from "../../contractor/domain/types"
 import { ExtendedTheme, bannerFadeGradient } from "../../../hooks/styles/Theme"
 
+/**
+ * Banner heights of the profile / org / shop pages. The page header below is
+ * pulled up over the banner by BANNER_OVERLAP. Their skeletons use the same
+ * numbers so the header lands in the same place.
+ */
+export const BANNER_HEIGHT = { dark: 500, light: 250 } as const
+export const BANNER_OVERLAP = { dark: 450, light: 200 } as const
+
 export function LightBannerContainer(props: {
   children?: React.ReactNode
   profile: User | Contractor
@@ -24,7 +32,7 @@ export function LightBannerContainer(props: {
   return (
     <Paper
       sx={{
-        height: 250,
+        height: BANNER_HEIGHT.light,
         background: imageLoaded
           ? `url(${profile.banner})`
           : theme.palette.background.paper,
@@ -60,7 +68,7 @@ export function DarkBannerContainer(props: {
   return (
     <Paper
       sx={{
-        height: 500,
+        height: BANNER_HEIGHT.dark,
         background: imageLoaded
           ? `url(${profile.banner})`
           : theme.palette.background.paper,
@@ -76,7 +84,7 @@ export function DarkBannerContainer(props: {
         sx={{
           width: "100%",
           position: "absolute",
-          height: 500,
+          height: BANNER_HEIGHT.dark,
           top: 0,
           left: 0,
           background: bannerFadeGradient(theme),

@@ -21,6 +21,7 @@ import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { NotificationListSkeleton } from "../../components/skeletons/AccountPageSkeletons"
 import { usePageNotifications } from "../../features/notifications/hooks/usePageNotifications"
 import { NotificationEntry } from "../../features/notifications/components/NotificationEntry"
 import { EmptyNotifications } from "../../components/empty-states"
@@ -225,11 +226,7 @@ export function NotificationsPage() {
       {/* Notifications List */}
       <Grid item xs={12} sx={{ overflow: "hidden", minWidth: 0, maxWidth: "100%" }}>
         {pageData.isLoading ? (
-            <Box sx={{ py: 4, textAlign: "center" }}>
-              <Typography color="text.secondary">
-                {t("common.loading", { defaultValue: "Loading..." })}
-              </Typography>
-            </Box>
+            <NotificationListSkeleton />
           ) : notifications.length === 0 ? (
             <EmptyNotifications sx={{ py: 4 }} />
           ) : (

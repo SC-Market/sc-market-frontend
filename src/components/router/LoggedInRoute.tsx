@@ -11,6 +11,7 @@ import { has_permission } from "../../views/contractor/OrgRoles"
 import { ContractorRole } from "../../features/contractor/domain/types"
 import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 import { isSiteAdmin } from "../../util/siteRole"
+import { RouteSkeletonFallback } from "./RouteSuspense"
 
 export function LoggedInRoute() {
   const session = useSession()
@@ -25,7 +26,15 @@ export function LoggedInRoute() {
   }, [session.status, location.pathname])
 
   if (session.status === "unknown") {
-    return <LoadingBar color={theme.palette.primary.main} progress={0.5} />
+    // Keep the page's skeleton up while the session resolves (the profile
+    // request can take seconds); a bare loading bar left the page area empty
+    // and then swapped straight to the page.
+    return (
+      <>
+        <LoadingBar color={theme.palette.primary.main} progress={0.5} />
+        <RouteSkeletonFallback />
+      </>
+    )
   } else if (session.status === "authenticated") {
     const { profile } = session
     if (
@@ -49,7 +58,7 @@ export function LoggedInRoute() {
 export function SiteAdminRoute() {
   const session = useSession()
 
-  if (session.status === "unknown") return null
+  if (session.status === "unknown") return <RouteSkeletonFallback />
   return session.status === "authenticated" &&
     isSiteAdmin(session.profile) ? (
     <Outlet />
@@ -68,7 +77,7 @@ export function OrgRoute() {
   )
 
   if (isLoading) {
-    return null
+    return <RouteSkeletonFallback />
   } else if (isSuccess) {
     return <Outlet />
   } else if (isError) {
@@ -120,7 +129,7 @@ export function OrgAdminRoute(props: {
   }, [anyPermission, contractor, permission, profile])
 
   if (isLoading) {
-    return null
+    return <RouteSkeletonFallback />
   } else if (isSuccess && canView) {
     return <Outlet />
   } else if (isError) {

@@ -21,6 +21,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Skeleton,
 } from "@mui/material"
 import {
   AddRounded,
@@ -210,6 +211,25 @@ export default function InventoryPage() {
                 </TableRow>
               </TableHead>
               <TableBody>
+                {/* While the first page loads: placeholder rows in the same
+                    table, so the column widths and page height match */}
+                {isLoading &&
+                  Array.from({ length: 10 }).map((_, i) => (
+                    <TableRow key={`skeleton-${i}`}>
+                      <TableCell>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          <Skeleton variant="rounded" width={28} height={28} />
+                          <Skeleton variant="text" width={160} />
+                        </Box>
+                      </TableCell>
+                      <TableCell><Skeleton variant="text" width={80} /></TableCell>
+                      <TableCell align="right"><Skeleton variant="text" width={40} sx={{ ml: "auto" }} /></TableCell>
+                      <TableCell><Skeleton variant="text" width={100} /></TableCell>
+                      <TableCell><Skeleton variant="text" width={140} /></TableCell>
+                      <TableCell><Skeleton variant="rounded" width={64} height={24} /></TableCell>
+                      <TableCell align="right"><Skeleton variant="text" width={72} sx={{ ml: "auto" }} /></TableCell>
+                    </TableRow>
+                  ))}
                 {filtered.map((lot) => (
                   <TableRow key={lot.lot_id} hover>
                     <TableCell>
