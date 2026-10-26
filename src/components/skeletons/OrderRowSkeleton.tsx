@@ -1,4 +1,5 @@
 import {
+  Box,
   TableRow,
   TableCell,
   Avatar,
@@ -25,15 +26,32 @@ export function OrderRowSkeleton({ index = 0 }: OrderRowSkeletonProps) {
   const isMobile = useIsMobile()
 
   return (
-    <TableRow>
-      {/* Checkbox column - matches table structure when selection is enabled */}
+    <TableRow
+      // OrderRow's cell padding, which also applies to its checkbox cell
+      sx={{
+        "& .MuiTableCell-root": {
+          padding: { xs: theme.spacing(1), sm: theme.spacing(2) },
+        },
+      }}
+    >
+      {/* Checkbox column: a 42px checkbox, hidden on phones like OrderRow's */}
       <TableCell
         padding="checkbox"
         sx={{
-          display: { xs: "none", sm: "table-cell" }, // Hide checkbox on mobile, matching table header
+          display: { xs: "none", sm: "table-cell" },
         }}
       >
-        <BaseSkeleton variant="rectangular" width={24} height={24} />
+        <Box
+          sx={{
+            width: 42,
+            height: 42,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <BaseSkeleton variant="rectangular" width={18} height={18} />
+        </Box>
       </TableCell>
       {/* Order column (timestamp) */}
       <TableCell
