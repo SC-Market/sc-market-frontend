@@ -172,7 +172,7 @@ export function WhiteLabelSettings() {
     configSaving, handleSaveConfig,
     disabledTabs, toggleTab,
     customTabs, addCustomTab, removeCustomTab, updateCustomTabIcon,
-    newLabel, setNewLabel, newPath, setNewPath, newIcon, setNewIcon,
+    newLabel, setNewLabel, newPath, setNewPath, newIcon, setNewIcon, newPathError,
     sidebarSaving, handleSaveSidebar,
     snack, setSnack,
   } = useWhiteLabelSettings()
@@ -197,17 +197,20 @@ export function WhiteLabelSettings() {
             <MenuItem value="internal">Internal — login required</MenuItem>
           </Select>
         </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={requireMembership}
-                onChange={(e) => setRequireMembership(e.target.checked)}
-              />
-            }
-            label="Require org membership to access"
-          />
-        </Grid>
+        {/* Only an Internal (login required) site can also require membership. */}
+        {focusMode === "internal" && (
+          <Grid item xs={12}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={requireMembership}
+                  onChange={(e) => setRequireMembership(e.target.checked)}
+                />
+              }
+              label="Require org membership to access"
+            />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <TextField
             label="Homepage path"
@@ -331,17 +334,19 @@ export function WhiteLabelSettings() {
               placeholder="/custom-page or https://..."
               value={newPath}
               onChange={(e) => setNewPath(e.target.value)}
+              error={!!newPathError}
               helperText={
-                newPath && isExternal(newPath)
+                newPathError ??
+                (newPath && isExternal(newPath)
                   ? "Will open in a new tab"
-                  : undefined
+                  : undefined)
               }
               sx={{ flex: 2 }}
             />
             <Button
               variant="outlined"
               onClick={addCustomTab}
-              disabled={!newLabel.trim() || !newPath.trim()}
+              disabled={!newLabel.trim() || !newPath.trim() || !!newPathError}
               startIcon={<Add />}
               sx={{ whiteSpace: "nowrap", mt: "4px" }}
             >

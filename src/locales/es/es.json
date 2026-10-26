@@ -2383,7 +2383,7 @@
       "manage_invites": "Crear y gestionar códigos y enlaces de invitación para la organización",
       "manage_market": "Crear, editar y eliminar anuncios de mercado en nombre de la organización",
       "manage_orders": "Ver, aceptar, rechazar y gestionar todos los pedidos de la organización",
-      "manage_org_details": "Editar el nombre, la descripción, el avatar, el banner, la configuración de idioma y el tema de marca blanca de la organización",
+      "manage_org_details": "Editar el nombre, la descripción, el avatar, el banner y los idiomas de la organización, leer el registro de auditoría y cambiar los ajustes del sitio y de la barra lateral de marca blanca",
       "manage_recruiting": "Crear y gestionar publicaciones de reclutamiento para la organización",
       "manage_roles": "Crear, editar y eliminar roles y asignarlos a los miembros",
       "manage_stock": "Añadir, editar y eliminar lotes de inventario y gestionar las existencias",

@@ -22,8 +22,14 @@ export const ORG_MANAGE_TABS = [
   { value: "settings", anyOf: ["manage_org_details"] },
   // GET /contractors/:id/audit-logs.
   { value: "audit", anyOf: ["manage_org_details"] },
-  // White-label orgs only: the theme editor and white-label settings.
-  { value: "theme", anyOf: ["manage_theme"], whiteLabelOnly: true },
+  // White-label orgs only: the theme editor (saved with Manage Theme) and
+  // the site and sidebar settings (saved with Manage Org Details) share this
+  // tab; each section shows for its own permission (OrgThemePage).
+  {
+    value: "theme",
+    anyOf: ["manage_theme", "manage_org_details"],
+    whiteLabelOnly: true,
+  },
 ] as const satisfies readonly {
   value: string
   anyOf: readonly Permission[]
@@ -46,7 +52,9 @@ export function visibleOrgManageTabs(
   return ORG_MANAGE_TABS.filter(
     (tab) =>
       (!("whiteLabelOnly" in tab) || isWhiteLabel) &&
-      tab.anyOf.some((p) => has_permission(contractor, profile, p, profile.contractors)),
+      tab.anyOf.some((p) =>
+        has_permission(contractor, profile, p, profile.contractors),
+      ),
   ).map((tab) => tab.value)
 }
 

@@ -2396,7 +2396,7 @@
       "manage_invites": "为组织创建和管理邀请码及链接",
       "manage_market": "代表组织创建、编辑和移除市场商品条目",
       "manage_orders": "查看、接受、拒绝和管理组织的所有订单",
-      "manage_org_details": "编辑组织名称、描述、头像、横幅、语言设置和白标主题",
+      "manage_org_details": "编辑组织名称、描述、头像、横幅和语言，查看审计日志，并更改白标站点和侧边栏设置",
       "manage_recruiting": "为组织创建和管理招募帖子",
       "manage_roles": "创建、编辑和删除角色并将其分配给成员",
       "manage_stock": "添加、编辑和移除库存批次并管理库存",

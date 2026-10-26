@@ -2220,7 +2220,7 @@
       "manage_invites": "Create and manage invite codes and links for the organization",
       "manage_market": "Create, edit, and remove market listings on behalf of the organization",
       "manage_orders": "View, accept, reject, and manage all orders for the organization",
-      "manage_org_details": "Edit organization name, description, avatar, banner, language settings, and white-label theme",
+      "manage_org_details": "Edit the organization's name, description, avatar, banner and languages, read the audit log, and change white-label site and sidebar settings",
       "manage_recruiting": "Create and manage recruiting posts for the organization",
       "manage_roles": "Create, edit, and delete roles and assign them to members",
       "manage_stock": "Add, edit, and remove stock lots and manage inventory",

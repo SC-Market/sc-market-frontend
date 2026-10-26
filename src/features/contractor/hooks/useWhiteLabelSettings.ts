@@ -44,7 +44,19 @@ const TOGGLEABLE_TABS = [
 ] as const
 
 function isExternal(path: string): boolean {
-  return path.startsWith("http://") || path.startsWith("https://")
+  return path.startsWith("https://")
+}
+
+/**
+ * Same rule as the API (PUT whitelabel/sidebar): a site path starting with
+ * "/" or an https:// link. Returns the problem, or null when it's fine.
+ */
+function customTabPathError(path: string): string | null {
+  const p = path.trim()
+  if (!p) return null
+  if (p.startsWith("/") || p.startsWith("https://")) return null
+  if (p.startsWith("http://")) return "Links to other sites must use https://"
+  return "Enter a path starting with / or a link starting with https://"
 }
 
 export function useWhiteLabelSettings() {
@@ -96,7 +108,8 @@ export function useWhiteLabelSettings() {
   const handleSaveConfig = useCallback(async () => {
     if (!spectrumId) return
     try {
-      await updateConfig({ spectrum_id: spectrumId, focus_mode: focusMode, homepage_path: homepagePath || null, require_membership: requireMembership }).unwrap()
+      // Membership only applies to an Internal (login required) site.
+      await updateConfig({ spectrum_id: spectrumId, focus_mode: focusMode, homepage_path: homepagePath || null, require_membership: focusMode === "internal" && requireMembership }).unwrap()
       setSnack("Settings saved")
     } catch { setSnack("Failed to save settings") }
   }, [spectrumId, focusMode, homepagePath, requireMembership, updateConfig])
@@ -126,7 +139,7 @@ export function useWhiteLabelSettings() {
 
   const addCustomTab = useCallback(() => {
     const label = newLabel.trim(); const path = newPath.trim()
-    if (!label || !path) return
+    if (!label || !path || customTabPathError(path)) return
     setCustomTabs((prev) => [...prev, { label, path, icon: newIcon }])
     setNewLabel(""); setNewPath(""); setNewIcon(DEFAULT_ICON)
   }, [newLabel, newPath, newIcon])
@@ -146,10 +159,11 @@ export function useWhiteLabelSettings() {
     disabledTabs, toggleTab,
     customTabs, addCustomTab, removeCustomTab, updateCustomTabIcon,
     newLabel, setNewLabel, newPath, setNewPath, newIcon, setNewIcon,
+    newPathError: customTabPathError(newPath),
     sidebarSaving, handleSaveSidebar,
     snack, setSnack,
     TOGGLEABLE_TABS,
   }
 }
 
-export { TOGGLEABLE_TABS, DEFAULT_ICON, isExternal, type CustomTab, type SidebarConfigItem }
+export { TOGGLEABLE_TABS, DEFAULT_ICON, isExternal, customTabPathError, type CustomTab, type SidebarConfigItem }
