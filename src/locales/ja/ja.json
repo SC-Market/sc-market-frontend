@@ -4209,6 +4209,7 @@
     "action_role_deleted": "役割を削除",
     "action_role_updated": "役割を更新",
     "action_settings_updated": "設定を更新",
+    "action_shop_transferred": "ショップ譲渡",
     "actor": "実行者",
     "clear_filters": "フィルターをクリア",
     "description": "この組織に対して行われたすべてのアクションと変更を表示します。",

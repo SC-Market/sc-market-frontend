@@ -4209,6 +4209,7 @@
     "action_role_deleted": "Rol eliminado",
     "action_role_updated": "Rol actualizado",
     "action_settings_updated": "Configuración actualizada",
+    "action_shop_transferred": "Tienda transferida",
     "actor": "Autor",
     "clear_filters": "Borrar filtros",
     "description": "Consulta todas las acciones y cambios realizados en esta organización.",

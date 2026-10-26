@@ -4185,6 +4185,7 @@
     "action_role_deleted": "已刪除角色",
     "action_role_updated": "已更新角色",
     "action_settings_updated": "已更新設定",
+    "action_shop_transferred": "店鋪已轉讓",
     "actor": "執行者",
     "clear_filters": "清除篩選",
     "description": "檢視對此組織所做的所有動作與變更。",

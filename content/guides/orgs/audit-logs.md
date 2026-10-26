@@ -27,6 +27,7 @@ Your org's **Audit Logs** tab lists every recorded change to the org, newest fir
 - **Roles**: **Role Created**, **Role Updated**, **Role Deleted**.
 - **Invites**: **Invite Created**, **Invite Deleted**, **Invite Accepted**.
 - **The org**: **Organization Created**, **Organization Updated**, **Settings Updated**, **Discord Linked**, ownership transfers and **Organization Archived**.
+- **Shops**: **Shop Transferred**, when the org's shop moves to another owner or a shop moves into the org. Only the org's owner can transfer an org shop.
 - **Orders**: **Order Cancelled** and **Offer Rejected**.
 - **White-label**: theme changes, for orgs with [white-label](/guides/orgs/white-label).
 

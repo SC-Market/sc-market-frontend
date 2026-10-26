@@ -72,7 +72,7 @@ function getActionColor(
 }
 
 // List of known audit log actions
-const AUDIT_LOG_ACTIONS = [
+export const AUDIT_LOG_ACTIONS = [
   "org.created",
   "org.updated",
   "org.archived",
@@ -90,9 +90,19 @@ const AUDIT_LOG_ACTIONS = [
   "offer.rejected",
   "settings.updated",
   "discord.linked",
+  "shop.transferred",
 ] as const
 
 type AuditLogAction = (typeof AUDIT_LOG_ACTIONS)[number]
+
+/**
+ * i18n key of an action's label. Keys are flat ("orgAuditLogs.action_org_created"):
+ * "orgAuditLogs.action" is itself the column header string, so it can't also
+ * be a namespace (the old "orgAuditLogs.action.org_created" never resolved).
+ */
+export function auditActionKey(action: string): string {
+  return `orgAuditLogs.action_${action.replace(/\./g, "_")}`
+}
 
 const headCells: readonly HeadCell<AuditLogEntry & { expanded?: boolean }>[] = [
   {
@@ -134,7 +144,7 @@ export function OrgAuditLogs() {
 
   // Get localized action label
   const getActionLabel = (action: string): string => {
-    const key = `orgAuditLogs.action.${action.replace(/\./g, "_")}`
+    const key = auditActionKey(action)
     const translated = t(key)
     // If translation exists, use it; otherwise format the action name
     return translated !== key ? translated : formatAction(action)

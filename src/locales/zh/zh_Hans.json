@@ -4267,6 +4267,7 @@
     "action_role_deleted": "角色已删除",
     "action_role_updated": "角色已更新",
     "action_settings_updated": "设置已更新",
+    "action_shop_transferred": "店铺已转让",
     "actor": "操作者",
     "clear_filters": "清除筛选",
     "description": "查看对此组织进行的所有操作和更改。",

@@ -3425,6 +3425,7 @@
     "action_role_deleted": "Role Deleted",
     "action_role_updated": "Role Updated",
     "action_settings_updated": "Settings Updated",
+    "action_shop_transferred": "Shop Transferred",
     "actor": "Actor",
     "clear_filters": "Clear Filters",
     "description": "View all actions and changes made to this organization.",
