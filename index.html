@@ -64,17 +64,14 @@
     -->
     <title>SC Market</title>
 
-    <!-- Preload critical Roboto fonts for optimal LCP -->
+    <!--
+      Preload the theme's text font (Electrolize, self-hosted; src/fonts.css)
+      so it is usually in before the app's first render. Roboto is only a
+      fallback in the theme's font stack and is no longer preloaded.
+    -->
     <link
       rel="preload"
-      href="/fonts/roboto-v30-latin-regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/roboto-v30-latin-500.woff2"
+      href="/fonts/electrolize-v20-latin-400.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -84,7 +81,8 @@
     <link rel="dns-prefetch" href="https://sc-market.space" />
     <link rel="dns-prefetch" href="https://sessions.bugsnag.com" />
     <link rel="preconnect" href="https://sc-market.space" crossorigin />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- The app's first requests (session check, profile, listings) go here. -->
+    <link rel="preconnect" href="https://api.sc-market.space" crossorigin />
 
     <!--
       Page background before the app's CSS loads. Without it the edge
@@ -154,10 +152,6 @@
       }
     </style>
 
-    <!-- Preconnect to font CDN if using external fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Electrolize&display=swap" />
 
     <script data-cfasync="false">
       // Keep in sync with src/util/assetReloadGuard.ts (same keys / limits).

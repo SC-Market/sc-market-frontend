@@ -17,8 +17,9 @@ export const themeBase: ExtendedThemeOptions = {
   },
   typography: {
     allVariants: {
-      // Roboto with Arial fallback (similar metrics) for minimal CLS during font swap
-      fontFamily: `var(--sc-custom-font, "Electrolize"), "Roboto", Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
+      // Electrolize, then metric-matched fallbacks (src/fonts.css) so its
+      // font-display swap doesn't reflow the page
+      fontFamily: `var(--sc-custom-font, "Electrolize"), "Electrolize Fallback", "Electrolize Fallback Roboto", "Roboto", Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
     },
   },
   components: getBaseComponentOverrides(),
