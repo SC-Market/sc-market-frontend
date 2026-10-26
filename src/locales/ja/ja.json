@@ -1308,11 +1308,6 @@
     "editDescription": "説明を編集",
     "loading": "読み込み中"
   },
-  "viewPublicOrder": {
-    "new": "新着",
-    "apply": "応募",
-    "applied": "応募しました！"
-  },
   "myServices": {
     "title": "タイトル",
     "no_title": "タイトルが未設定です",
@@ -1360,7 +1355,7 @@
     "new": "新着",
     "see_more": "もっと見る",
     "apply": "応募",
-    "publicOrderTitle": "公開注文",
+    "publicContractTitle": "公開契約",
     "publicContracts": "公開契約",
     "createPublicContract": "公開契約を作成",
     "contractsTitle": "契約",
@@ -1561,17 +1556,6 @@
   "orderAvailabilityArea": {
     "customer_name": "{{name}}（顧客）",
     "assigned_name": "{{name}}（担当者）"
-  },
-  "orderApplicantsArea": {
-    "applicants": "応募者",
-    "accepted": "承認しました！",
-    "failed_accept": "承認に失敗しました！",
-    "expand": "展開",
-    "accept": "承認",
-    "applied": "応募しました！",
-    "failed_apply": "応募に失敗しました！",
-    "apply": "応募",
-    "message": "メッセージ"
   },
   "myOrders": {
     "title": "マイ注文"

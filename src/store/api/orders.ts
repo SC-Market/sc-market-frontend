@@ -3,7 +3,6 @@ export const addTagTypes = [
   "Orders",
   "Offers",
   "Order Reviews",
-  "Order Applicants",
   "Order Threads",
 ] as const
 const injectedRtkApi = api
@@ -122,36 +121,6 @@ const injectedRtkApi = api
       getOrderById: build.query<GetOrderByIdApiResponse, GetOrderByIdApiArg>({
         query: (queryArg) => ({ url: `/api/orders/${queryArg.orderId}` }),
         providesTags: ["Orders"],
-      }),
-      postApply: build.mutation<PostApplyApiResponse, PostApplyApiArg>({
-        query: (queryArg) => ({
-          url: `/api/orders/${queryArg.orderId}/applicants`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Order Applicants"],
-      }),
-      acceptContractorApplicationOnOrder: build.mutation<
-        AcceptContractorApplicationOnOrderApiResponse,
-        AcceptContractorApplicationOnOrderApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/orders/${queryArg.orderId}/applicants/contractors/${queryArg.spectrumId}`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Order Applicants"],
-      }),
-      acceptUserApplicationOnOrder: build.mutation<
-        AcceptUserApplicationOnOrderApiResponse,
-        AcceptUserApplicationOnOrderApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/orders/${queryArg.orderId}/applicants/users/${queryArg.username}`,
-          method: "POST",
-          body: queryArg.body,
-        }),
-        invalidatesTags: ["Order Applicants"],
       }),
       createOrderThread: build.mutation<
         CreateOrderThreadApiResponse,
@@ -468,34 +437,6 @@ export type GetOrderByIdApiResponse =
 export type GetOrderByIdApiArg = {
   orderId: string
 }
-export type PostApplyApiResponse =
-  /** status 201 Created - Resource successfully created */ {
-    data: {}
-  }
-export type PostApplyApiArg = {
-  orderId: string
-  body: {
-    message: string
-  }
-}
-export type AcceptContractorApplicationOnOrderApiResponse =
-  /** status 201 Created - Resource successfully created */ {
-    data: object
-  }
-export type AcceptContractorApplicationOnOrderApiArg = {
-  orderId: string
-  spectrumId: string
-  body: {}
-}
-export type AcceptUserApplicationOnOrderApiResponse =
-  /** status 201 Created - Resource successfully created */ {
-    data: object
-  }
-export type AcceptUserApplicationOnOrderApiArg = {
-  orderId: string
-  username: string
-  body: {}
-}
 export type CreateOrderThreadApiResponse =
   /** status 201 Created - Resource successfully created */ {
     data: {}
@@ -737,8 +678,5 @@ export const {
   useUpdateOrderReviewMutation,
   useUpdateOrderMutation,
   useGetOrderByIdQuery,
-  usePostApplyMutation,
-  useAcceptContractorApplicationOnOrderMutation,
-  useAcceptUserApplicationOnOrderMutation,
   useCreateOrderThreadMutation,
 } = injectedRtkApi

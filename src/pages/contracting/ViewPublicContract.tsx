@@ -44,7 +44,7 @@ export function ViewPublicContract() {
 
   return (
     <DetailPageLayout
-      title={`${contract?.title || t("contracts.viewContract")} - ${t("contracts.publicOrderTitle")}`}
+      title={`${contract?.title || t("contracts.viewContract")} - ${t("contracts.publicContractTitle")}`}
       breadcrumbs={[
         {
           label: t("contracts.publicContracts"),

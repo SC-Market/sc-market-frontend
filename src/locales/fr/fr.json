@@ -1308,11 +1308,6 @@
     "editDescription": "Modifier la description",
     "loading": "Chargement"
   },
-  "viewPublicOrder": {
-    "new": "Nouveau",
-    "apply": "Postuler",
-    "applied": "Candidature envoyée !"
-  },
   "myServices": {
     "title": "Titre",
     "no_title": "Titre non défini",
@@ -1360,7 +1355,7 @@
     "new": "Nouveau",
     "see_more": "Voir plus",
     "apply": "Postuler",
-    "publicOrderTitle": "Commande publique",
+    "publicContractTitle": "Contrat public",
     "publicContracts": "Contrats publics",
     "createPublicContract": "Créer un contrat public",
     "contractsTitle": "Contrats",
@@ -1561,17 +1556,6 @@
   "orderAvailabilityArea": {
     "customer_name": "{{name}} (Client)",
     "assigned_name": "{{name}} (Assigné)"
-  },
-  "orderApplicantsArea": {
-    "applicants": "Candidats",
-    "accepted": "Accepté !",
-    "failed_accept": "Échec de l'acceptation !",
-    "expand": "Développer",
-    "accept": "Accepter",
-    "applied": "Candidature envoyée !",
-    "failed_apply": "Échec de la candidature !",
-    "apply": "Postuler",
-    "message": "Message"
   },
   "myOrders": {
     "title": "Mes commandes"

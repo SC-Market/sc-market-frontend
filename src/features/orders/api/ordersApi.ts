@@ -47,45 +47,6 @@ const ordersApi = serviceApi.injectEndpoints({
       ],
       transformResponse: unwrapResponse,
     }),
-    applyToOrder: builder.mutation<
-      void,
-      {
-        order_id: string
-        contractor_id: string | undefined | null
-        message?: string
-      }
-    >({
-      query: (arg) => ({
-        url: `/api/orders/${arg.order_id}/applications`,
-        method: "POST",
-        body: { contractor: arg.contractor_id, message: arg.message },
-      }),
-      invalidatesTags: [
-        { type: "Order" as const },
-        "Order" as const,
-        { type: "Order" as const },
-      ],
-    }),
-    acceptOrderApplicant: builder.mutation<
-      void,
-      {
-        order_id: string
-        contractor_id: string | undefined | null
-        user_id: string | undefined | null
-      }
-    >({
-      query: (arg) => ({
-        url: `/api/orders/${arg.order_id}/applicants/${
-          arg.contractor_id ? "contractors" : "users"
-        }/${arg.contractor_id || arg.user_id}`,
-        method: "POST",
-      }),
-      invalidatesTags: [
-        { type: "Order" as const },
-        "Order" as const,
-        { type: "Order" },
-      ],
-    }),
     assignOrder: builder.mutation<void, { order_id: string; username: string }>({
       query: (arg) => ({
         url: `/api/orders/${arg.order_id}`,
@@ -350,8 +311,6 @@ export const {
   useUnassignOrderMutation,
   useGetOrderByIdQuery,
   useCreateOrderMutation,
-  useApplyToOrderMutation,
-  useAcceptOrderApplicantMutation,
   useAssignOrderMutation,
   useLeaveOrderReviewMutation,
   useSetOrderStatusMutation,

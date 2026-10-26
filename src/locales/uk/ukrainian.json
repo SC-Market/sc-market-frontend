@@ -1308,11 +1308,6 @@
     "editDescription": "Редагувати опис",
     "loading": "Завантаження"
   },
-  "viewPublicOrder": {
-    "new": "Новий",
-    "apply": "Подати заявку",
-    "applied": "Заявку подано!"
-  },
   "myServices": {
     "title": "Назва",
     "no_title": "Назву не вказано",
@@ -1360,7 +1355,7 @@
     "new": "Нове",
     "see_more": "Детальніше",
     "apply": "Подати заявку",
-    "publicOrderTitle": "Публічне замовлення",
+    "publicContractTitle": "Публічний контракт",
     "publicContracts": "Публічні контракти",
     "createPublicContract": "Створити публічний контракт",
     "contractShort": "Контракт {{id}}",
@@ -1561,17 +1556,6 @@
   "orderAvailabilityArea": {
     "customer_name": "{{name}} (Клієнт)",
     "assigned_name": "{{name}} (Призначено)"
-  },
-  "orderApplicantsArea": {
-    "applicants": "Заявники",
-    "accepted": "Прийнято!",
-    "failed_accept": "Не вдалося прийняти!",
-    "expand": "Розгорнути",
-    "accept": "Прийняти",
-    "applied": "Подано!",
-    "failed_apply": "Не вдалося подати!",
-    "apply": "Подати",
-    "message": "Повідомлення"
   },
   "myOrders": {
     "title": "Мої замовлення"

@@ -1253,11 +1253,6 @@
     "editDescription": "編輯描述",
     "loading": "載入中"
   },
-  "viewPublicOrder": {
-    "new": "新增",
-    "apply": "申請",
-    "applied": "已申請！"
-  },
   "myServices": {
     "title": "標題",
     "no_title": "未定義標題",
@@ -1305,7 +1300,7 @@
     "new": "新增",
     "see_more": "查看更多",
     "apply": "申請",
-    "publicOrderTitle": "公開訂單",
+    "publicContractTitle": "公開合約",
     "publicContracts": "公開合約",
     "createPublicContract": "建立公開合約",
     "contractsTitle": "合約",
@@ -1506,17 +1501,6 @@
   "orderAvailabilityArea": {
     "customer_name": "{{name}}（顧客）",
     "assigned_name": "{{name}}（已指派）"
-  },
-  "orderApplicantsArea": {
-    "applicants": "申請者",
-    "accepted": "已接受！",
-    "failed_accept": "接受失敗！",
-    "expand": "展開",
-    "accept": "接受",
-    "applied": "已申請！",
-    "failed_apply": "申請失敗！",
-    "apply": "申請",
-    "message": "訊息"
   },
   "myOrders": {
     "title": "我的訂單"

@@ -1310,11 +1310,6 @@
     "editDescription": "编辑描述",
     "loading": "加载中"
   },
-  "viewPublicOrder": {
-    "new": "新",
-    "apply": "申请",
-    "applied": "已申请！"
-  },
   "myServices": {
     "title": "标题",
     "no_title": "未定义标题",
@@ -1362,7 +1357,7 @@
     "new": "新",
     "see_more": "查看更多",
     "apply": "申请",
-    "publicOrderTitle": "公共订单",
+    "publicContractTitle": "公共合同",
     "publicContracts": "公共合同",
     "createPublicContract": "创建公共合同",
     "contractsTitle": "合同",
@@ -1563,17 +1558,6 @@
   "orderAvailabilityArea": {
     "customer_name": "{{name}}（客户）",
     "assigned_name": "{{name}}（受托方）"
-  },
-  "orderApplicantsArea": {
-    "applicants": "申请人",
-    "accepted": "已接受！",
-    "failed_accept": "接受失败！",
-    "expand": "展开",
-    "accept": "接受",
-    "applied": "已申请！",
-    "failed_apply": "申请失败！",
-    "apply": "申请",
-    "message": "消息"
   },
   "myOrders": {
     "title": "我的订单"

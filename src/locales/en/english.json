@@ -1083,7 +1083,7 @@
     "new": "New",
     "openContracts": "Open Contracts",
     "publicContracts": "Public Contracts",
-    "publicOrderTitle": "Public Order",
+    "publicContractTitle": "Public Contract",
     "see_more": "See More",
     "toggleSidebar": "toggle market sidebar",
     "viewContract": "View Contract"
@@ -3132,17 +3132,6 @@
     "subtitle": "Let's get your account set up so you can start trading.",
     "welcome": "Welcome to SC Market"
   },
-  "orderApplicantsArea": {
-    "accept": "Accept",
-    "accepted": "Accepted!",
-    "applicants": "Applicants",
-    "applied": "Applied!",
-    "apply": "Apply",
-    "expand": "Expand",
-    "failed_accept": "Failed to accept!",
-    "failed_apply": "Failed to apply!",
-    "message": "Message"
-  },
   "orderAvailabilityArea": {
     "assigned_name": "{{name}} (Assigned)",
     "customer_name": "{{name}} (Customer)"
@@ -4826,11 +4815,6 @@
     "store_services": "Services",
     "store_tab": "Store",
     "submitted": "Submitted!"
-  },
-  "viewPublicOrder": {
-    "applied": "Applied!",
-    "apply": "Apply",
-    "new": "New"
   },
   "Webhooks": {
     "failedToSubmit": "Failed to submit! ",

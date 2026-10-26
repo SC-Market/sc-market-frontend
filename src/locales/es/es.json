@@ -1308,11 +1308,6 @@
     "editDescription": "Editar descripción",
     "loading": "Cargando"
   },
-  "viewPublicOrder": {
-    "new": "Nuevo",
-    "apply": "Solicitar",
-    "applied": "¡Solicitud enviada!"
-  },
   "myServices": {
     "title": "Título",
     "no_title": "Título no definido",
@@ -1360,7 +1355,7 @@
     "new": "Nuevo",
     "see_more": "Ver más",
     "apply": "Solicitar",
-    "publicOrderTitle": "Pedido público",
+    "publicContractTitle": "Contrato público",
     "publicContracts": "Contratos públicos",
     "createPublicContract": "Crear contrato público",
     "contractsTitle": "Contratos",
@@ -1561,17 +1556,6 @@
   "orderAvailabilityArea": {
     "customer_name": "{{name}} (Cliente)",
     "assigned_name": "{{name}} (Asignado)"
-  },
-  "orderApplicantsArea": {
-    "applicants": "Solicitantes",
-    "accepted": "¡Aceptado!",
-    "failed_accept": "¡No se pudo aceptar!",
-    "expand": "Expandir",
-    "accept": "Aceptar",
-    "applied": "¡Solicitud enviada!",
-    "failed_apply": "¡No se pudo enviar la solicitud!",
-    "apply": "Solicitar",
-    "message": "Mensaje"
   },
   "myOrders": {
     "title": "Mis pedidos"

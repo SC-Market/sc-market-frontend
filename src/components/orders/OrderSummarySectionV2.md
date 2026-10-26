@@ -197,10 +197,6 @@ Replace V1 `OrderSummarySection` with `OrderSummarySectionV2` in:
    - Display offer items with variants
    - Track changes in counter-offers
 
-3. **Public Order Views** (`ViewPublicOrder.tsx`)
-   - Show order summary to buyers/sellers
-   - Display variant information publicly
-
 ### Migration from V1
 
 ```tsx

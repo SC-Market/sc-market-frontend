@@ -1308,11 +1308,6 @@
     "editDescription": "Beschreibung bearbeiten",
     "loading": "Wird geladen"
   },
-  "viewPublicOrder": {
-    "new": "Neu",
-    "apply": "Bewerben",
-    "applied": "Beworben!"
-  },
   "myServices": {
     "title": "Titel",
     "no_title": "Titel nicht definiert",
@@ -1360,7 +1355,7 @@
     "new": "Neu",
     "see_more": "Mehr anzeigen",
     "apply": "Bewerben",
-    "publicOrderTitle": "Öffentliche Bestellung",
+    "publicContractTitle": "Öffentlicher Auftrag",
     "publicContracts": "Öffentliche Aufträge",
     "createPublicContract": "Öffentlichen Auftrag erstellen",
     "contractsTitle": "Aufträge",
@@ -1561,17 +1556,6 @@
   "orderAvailabilityArea": {
     "customer_name": "{{name}} (Kunde)",
     "assigned_name": "{{name}} (Zugewiesen)"
-  },
-  "orderApplicantsArea": {
-    "applicants": "Bewerber",
-    "accepted": "Angenommen!",
-    "failed_accept": "Annehmen fehlgeschlagen!",
-    "expand": "Erweitern",
-    "accept": "Annehmen",
-    "applied": "Beworben!",
-    "failed_apply": "Bewerbung fehlgeschlagen!",
-    "apply": "Bewerben",
-    "message": "Nachricht"
   },
   "myOrders": {
     "title": "Meine Bestellungen"

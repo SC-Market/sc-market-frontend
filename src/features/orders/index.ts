@@ -39,8 +39,6 @@ export {
   useGetOrderByIdQuery,
   useCreateOrderMutation,
   useCreateOrderThreadMutation,
-  useApplyToOrderMutation,
-  useAcceptOrderApplicantMutation,
   useAssignOrderMutation,
   useUnassignOrderMutation,
   useLeaveOrderReviewMutation,
@@ -74,7 +72,6 @@ export { useOrderMetrics } from "./hooks/useOrderMetrics"
 export { useOrgOrderTrend, useUserOrderTrend } from "./hooks/useOrderTrend"
 export { useOrderReview } from "./hooks/useOrderReview"
 export { useMemberAssign } from "./hooks/useMemberAssign"
-export { useAcceptApplicant, useApplyToOrder } from "./hooks/useOrderApplications"
 export { useOrderSearch } from "./hooks/useOrderSearch"
 export { usePendingOrderCount } from "./hooks/usePendingOrderCount"
 export { CurrentOrderContext, useCurrentOrder } from "./hooks/CurrentOrderContext"
