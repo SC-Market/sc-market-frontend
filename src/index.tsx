@@ -17,6 +17,7 @@ import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate } from "./seo/pageHead"
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
+import { initialLocaleReady } from "./util/i18n"
 
 // Failed dynamic import()s: there is deliberately NO vite:preloadError
 // listener. Calling preventDefault() on that event makes Vite's preload helper
@@ -85,16 +86,21 @@ initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "").catch(
   },
 )
 
-root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <UnheadProvider head={head}>
-        <ErrorBoundary>
-          <App />
-        </ErrorBoundary>
-      </UnheadProvider>
-    </Provider>
-  </React.StrictMode>,
+// A non-English visitor's first render waits (briefly, capped) for their
+// locale's strings, so the page doesn't render English and then reflow; for
+// English it resolves at once. See initialLocaleReady in util/i18n.ts.
+void initialLocaleReady.then(() =>
+  root.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <UnheadProvider head={head}>
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
+        </UnheadProvider>
+      </Provider>
+    </React.StrictMode>,
+  ),
 )
 
 // Reset reload budget only after the shell has been stable long enough for lazy chunks

@@ -33,7 +33,19 @@ export const languages = [
 
 export const SUPPORTED_LOCALES = languages.map((l) => l.code)
 
-export async function loadLocale(locale: string): Promise<void> {
+/**
+ * The shipped locale code for a language tag: "de-DE" -> "de", "zh" ->
+ * "zh-CN", "en-GB" -> "en". Detected languages are often regional tags, and a
+ * bundle has to be added under the shipped code for i18next to find it.
+ */
+export function toSupportedLocale(tag: string): string {
+  if (SUPPORTED_LOCALES.includes(tag)) return tag
+  const base = tag.split("-")[0]
+  return SUPPORTED_LOCALES.find((l) => l.split("-")[0] === base) || "en"
+}
+
+export async function loadLocale(requested: string): Promise<void> {
+  const locale = toSupportedLocale(requested)
   if (i18n.hasResourceBundle(locale, "translation")) {
     return
   }
@@ -168,23 +180,45 @@ i18n.on("languageChanged", async (lng) => {
   await loadLocale(lng)
 })
 
-if (typeof window !== "undefined") {
-  const detectedLang = i18n.language || "en"
+/** Longest the first render waits for a non-English locale's strings. */
+const INITIAL_LOCALE_WAIT_MS = 2500
 
-  if (detectedLang !== "en") {
-    loadLocale(detectedLang)
-  }
-
-  // Other locales are NOT warmed in the background: that downloaded and
-  // evaluated ~1.5 MB of JSON 1 s after every page load. Switching language
-  // loads the one bundle it needs (changeLocale / PreferencesControls await it
-  // before changing language).
-}
+/**
+ * Resolves when the detected language's strings are loaded (or after
+ * INITIAL_LOCALE_WAIT_MS, so a slow network never blocks the app). index.tsx
+ * waits for it before the first render, so a German visitor's first paint is
+ * already German: rendering English first and swapping the strings in ~2 s
+ * later reflowed the hero, navbar and cookie bar (CLS ~0.05). Until then the
+ * edge bridge's HTML stays on screen. English resolves at once.
+ *
+ * Other locales are NOT warmed in the background: that downloaded and
+ * evaluated ~1.5 MB of JSON 1 s after every page load. Switching language
+ * loads the one bundle it needs (changeLocale awaits it).
+ */
+export const initialLocaleReady: Promise<void> = (() => {
+  if (typeof window === "undefined") return Promise.resolve()
+  const detected = toSupportedLocale(i18n.language || "en")
+  if (detected === "en") return Promise.resolve()
+  const load = loadLocale(detected).then(() => {
+    // e.g. detected "zh" -> bundle under "zh-CN": switch to the shipped code
+    if (
+      i18n.language !== detected &&
+      toSupportedLocale(i18n.language) === detected
+    )
+      return i18n.changeLanguage(detected).then(() => undefined)
+  })
+  return Promise.race([
+    load,
+    new Promise<void>((resolve) =>
+      window.setTimeout(resolve, INITIAL_LOCALE_WAIT_MS),
+    ),
+  ]).catch(() => undefined)
+})()
 
 /** Load a locale's strings, then switch to it (no English flash). */
 export async function changeLocale(locale: string): Promise<void> {
   await loadLocale(locale)
-  await i18n.changeLanguage(locale)
+  await i18n.changeLanguage(toSupportedLocale(locale))
 }
 
 export function useLocaleManager() {
