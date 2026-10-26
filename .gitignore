@@ -42,7 +42,7 @@ twa/
 *.aab
 *.idsig
 .gradle/
-app/
+/app/
 gradle/
 build.gradle
 settings.gradle
@@ -60,3 +60,7 @@ local.properties
 /playwright-report
 /test-results
 /e2e/.a11y-report
+
+# React Router framework mode: build output (deployed as dist/) and typegen
+/build
+/.react-router

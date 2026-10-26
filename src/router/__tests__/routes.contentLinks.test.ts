@@ -7,7 +7,7 @@
  */
 import { describe, expect, it } from "vitest"
 import { matchRoutes } from "react-router-dom"
-import { routes } from "../../App"
+import { routes } from "../../router/routeObjects"
 import { compileSite, type SourceFile } from "../../features/help/build/compile"
 import { HELP_PATHS } from "../../routes/paths"
 import { GUIDE_LINKS } from "../../features/help/guideLinks"

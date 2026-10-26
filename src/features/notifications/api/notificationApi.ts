@@ -7,7 +7,7 @@ const baseUrl = `${BACKEND_URL}/api/notification`
 
 /**
  * Notification API. Uses tag "Notifications" so that when the service worker
- * sends PUSH_NOTIFICATION_RECEIVED or SYNC_NOTIFICATIONS, App.tsx can call
+ * sends PUSH_NOTIFICATION_RECEIVED or SYNC_NOTIFICATIONS, src/root.tsx can call
  * notificationApi.util.invalidateTags(["Notifications"]) and RTK Query will
  * refetch any currently subscribed getNotifications queries (e.g. NotificationsButton).
  */

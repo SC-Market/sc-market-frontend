@@ -1,33 +1,58 @@
-import React from "react"
-import "./fonts.css"
-import "./index.css"
-import App from "./App"
-import { createRoot } from "react-dom/client"
+/**
+ * Client entry (React Router framework mode, SPA: react-router.config.ts).
+ * React Router's inline bootstrap script (<Scripts /> in root.tsx) loads the
+ * route manifest and the root route, then imports this module.
+ */
+import React, { StrictMode, type ErrorInfo } from "react"
+import { hydrateRoot } from "react-dom/client"
+import { HydratedRouter } from "react-router-dom"
 import { createHead, UnheadProvider } from "@unhead/react/client"
+import { Provider } from "react-redux"
+import { setupListeners } from "@reduxjs/toolkit/query"
 import { initPWA } from "./util/pwa"
 import {
   initializeBugsnagAsync,
   getBugsnagErrorBoundary,
+  isBugsnagInitialized,
+  notifyBugsnag,
 } from "./util/monitoring/bugsnagLoader"
 import { clearEmergencyReloadBudget } from "./util/assetReloadGuard"
-import { Provider } from "react-redux"
-import { setupListeners } from "@reduxjs/toolkit/query"
 import { makeStore } from "./store/store"
 import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate } from "./seo/pageHead"
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
 import { initialLocaleReady } from "./util/i18n"
+import { registerRouteModules } from "./routes/registerRouteModules"
+import { provideShell } from "./routes/shell"
+import { shell } from "./app/shell"
+import { providePages } from "./routes/definePage"
+import { pages } from "./app/pages"
+import { removeBridgeSummary } from "./document/bridgeSummary"
+
+// The entry chunk has loaded: from here on, chunk failures are handled by the
+// app (retryDynamicImport), not by document.html's bootstrap guard.
+window.__scmEntryStarted = true
 
 // Failed dynamic import()s: there is deliberately NO vite:preloadError
 // listener. Calling preventDefault() on that event makes Vite's preload helper
-// resolve the failed import() to `undefined` instead of rejecting, so a lazy
-// route's `(await import(...)).Page` throws a TypeError, skipping the retry →
+// resolve the failed import() to `undefined` instead of rejecting, so a page's
+// `(await import(...)).Page` throws a TypeError, skipping the retry →
 // reload → error page path in retryDynamicImport. A window-level "is a
 // prefetch running?" check cannot tell which import failed: when the idle-time
 // prefetch is in flight while a route chunk fails, it cancelled the ROUTE's
 // error. Every prefetch path (routePrefetch, componentPrefetch, util/prefetch)
 // already catches its own rejection, so letting Vite rethrow costs nothing.
+
+// The root and the route modules render the app shell's components and load
+// their pages by name (routes/shell.ts, routes/definePage.tsx); the shell and
+// the page import()s are bundled here, with the entry.
+provideShell(shell)
+providePages(pages)
+
+// All route modules are in this bundle; React Router must never import one
+// itself (see routes/routeModules.ts).
+registerRouteModules()
 
 // The browser's single store. Browser-only side effects live here, not in
 // makeStore(), so a server render can create clean per-request stores.
@@ -46,9 +71,6 @@ seedCachedProfile(store)
 
 // Before the first render, so the first images' load events are seen.
 initLazyImagePlaceholders()
-
-const container = document.getElementById("root")
-const root = createRoot(container!)
 
 // Unhead manages the document <head> (replaces react-helmet, which is
 // unmaintained and unsafe under React 19 concurrent rendering). The global
@@ -75,39 +97,67 @@ const head = createHead({
 // Get error boundary (will use fallback if Bugsnag not loaded yet)
 const ErrorBoundary = getBugsnagErrorBoundary(React)
 
+// Hydration errors React recovered from (it re-rendered on the client).
+// Bugsnag starts after the page is interactive, so earlier ones wait for it.
+const pendingRecoverableErrors: Array<[unknown, ErrorInfo]> = []
+function reportRecoverableError(error: unknown, errorInfo: ErrorInfo) {
+  const err = error instanceof Error ? error : new Error(String(error))
+  notifyBugsnag(err, {
+    kind: "react-recoverable-error",
+    componentStack: errorInfo.componentStack,
+  })
+}
+function onRecoverableError(error: unknown, errorInfo: ErrorInfo) {
+  if (import.meta.env.DEV) console.error("Recoverable error:", error)
+  if (isBugsnagInitialized()) reportRecoverableError(error, errorInfo)
+  else pendingRecoverableErrors.push([error, errorInfo])
+}
+
 // Initialize Bugsnag asynchronously (non-blocking)
 // This happens after page is interactive to avoid blocking critical rendering
-initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "").catch(
-  (error) => {
+initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "")
+  .then(() => {
+    for (const [error, info] of pendingRecoverableErrors.splice(0)) {
+      reportRecoverableError(error, info)
+    }
+  })
+  .catch((error) => {
     // Silently fail - error monitoring is not critical for app functionality
     if (import.meta.env.DEV) {
       console.warn("Bugsnag initialization failed (non-critical):", error)
     }
-  },
-)
+  })
+
+const container = document.getElementById("root")!
+
+// The edge bridge's crawler summary is not part of the React tree.
+removeBridgeSummary(container)
 
 // A non-English visitor's first render waits (briefly, capped) for their
 // locale's strings, so the page doesn't render English and then reflow; for
 // English it resolves at once. See initialLocaleReady in util/i18n.ts.
 void initialLocaleReady.then(() =>
-  root.render(
-    <React.StrictMode>
+  hydrateRoot(
+    container,
+    <StrictMode>
       <Provider store={store}>
         <UnheadProvider head={head}>
           <ErrorBoundary>
-            <App />
+            <HydratedRouter />
           </ErrorBoundary>
         </UnheadProvider>
       </Provider>
-    </React.StrictMode>,
+    </StrictMode>,
+    { onRecoverableError },
   ),
 )
 
 // Reset reload budget only after the shell has been stable long enough for lazy chunks
 // to load — clearing on every boot caused infinite reload loops with stale index.html.
 // If "load" already fired before this module ran (a script loader such as
-// Cloudflare Rocket Loader can run the entry late), start the timer now.
-if (typeof window !== "undefined") {
+// Cloudflare Rocket Loader can run the entry late, and React Router imports
+// this module from a script), start the timer now.
+{
   const clearLater = () => {
     window.setTimeout(() => clearEmergencyReloadBudget(), 20_000)
   }

@@ -16,30 +16,19 @@
  * next normal refresh hit the bad cache again. A SW that never touches assets
  * cannot cause that class of bug. Stale-chunk recovery for lazy routes is
  * handled entirely on the client (retryDynamicImport + RouteErrorFallback + the
- * inline guard in index.html, all rate-limited by assetReloadGuard).
+ * inline guard in src/document/document.html, all rate-limited by
+ * assetReloadGuard).
  *
- * Still uses vite-plugin-pwa injectManifest so we keep our custom push handlers;
- * the injected __WB_MANIFEST is referenced (required by the plugin) but not used
- * for precaching.
+ * Built on its own by scripts/build/finalize.ts (one self-contained file,
+ * dist/sw.js). There is no precache manifest and no workbox: nothing here may
+ * precache, register routes or listen for fetch events —
+ * scripts/build/checkServiceWorker.ts fails the build if the output does.
  */
 
-// injectManifest injects the precache manifest into self.__WB_MANIFEST. We don't
-// precache, but the build REQUIRES the token to be referenced, so we declare and
-// reference it without using it.
-declare const self: ServiceWorkerGlobalScope & {
-  __WB_MANIFEST: Array<unknown>
-}
+declare const self: ServiceWorkerGlobalScope
 
-import { clientsClaim } from "workbox-core"
-import { precacheAndRoute } from "workbox-precaching"
-
-// injectManifest bundles this file (esbuild) BEFORE substituting the manifest,
-// so the `self.__WB_MANIFEST` token must survive bundling — i.e. it can't be an
-// unused expression (that gets tree-shaken, and then injection fails with
-// "Unable to find a place to inject the manifest"). Passing it as a call
-// argument keeps it. We filter it to empty so NOTHING is actually precached:
-// the SW stays asset-transparent, we just satisfy the build's token requirement.
-precacheAndRoute((self.__WB_MANIFEST || []).filter(() => false))
+// A module (not a script), so `self` above can be redeclared with SW types.
+export {}
 
 // ============================================================================
 // Lifecycle
@@ -59,7 +48,7 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
     (async () => {
       const keys = await caches.keys()
       await Promise.all(keys.map((k) => caches.delete(k)))
-      clientsClaim()
+      await self.clients.claim()
     })(),
   )
 })
@@ -184,7 +173,7 @@ self.addEventListener("push", (event: PushEvent) => {
   }
 
   // Notify all window clients so the app can invalidate RTK Query cache and refetch
-  // notifications. App.tsx listens for PUSH_NOTIFICATION_RECEIVED and dispatches
+  // notifications. src/root.tsx listens for PUSH_NOTIFICATION_RECEIVED and dispatches
   // notificationApi.util.invalidateTags(["Notifications"]) so subscribed
   // useGetNotificationsQuery hooks refetch.
   const notifyClients = self.clients

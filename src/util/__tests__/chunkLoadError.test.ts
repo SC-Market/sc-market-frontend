@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { isChunkLoadError } from "../chunkLoadError"
 import { MissingModuleError } from "../retryDynamicImport"
-import { addCfasyncFalse } from "../../../scripts/vite/cfasyncPlugin"
+import { addCfasyncFalse } from "../../document/cfasync"
 
 describe("isChunkLoadError", () => {
   it.each([

@@ -14,7 +14,7 @@
  */
 import { act, fireEvent } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { routes } from "../../App"
+import { routes } from "../../router/routeObjects"
 import {
   APP_TEST_TIMEOUT_MS,
   mountApp,

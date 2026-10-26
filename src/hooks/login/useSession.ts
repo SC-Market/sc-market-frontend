@@ -28,7 +28,7 @@ const ANONYMOUS: Session = { status: "anonymous", profile: undefined }
  *   request, once the check says anonymous — or any other error, the same
  *   rule `LoggedInRoute` and the sidebar filters already applied).
  *
- * A profile seeded from localStorage (src/index.tsx) reports "authenticated"
+ * A profile seeded from localStorage (src/entry.client.tsx) reports "authenticated"
  * immediately, so returning users get no logged-out flash; the profile
  * refetch behind it waits for the session check and flips to "anonymous" if
  * the session turned out to be gone.

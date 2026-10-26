@@ -1,18 +1,24 @@
+/// <reference types="node" />
 /**
  * Guard: every lazily loaded component goes through stale-chunk recovery.
  *
  * A bare `lazy(() => import(...))` / `React.lazy(...)` caches the first failed
  * chunk fetch and throws it to the nearest error boundary: after a deploy that
  * crashed whole pages (and, for an always-mounted host, the whole app). Use
- * `lazyWithRetry` from src/util/lazyWithRetry.tsx instead. Route `lazy:`
- * loaders must likewise wrap their import in retryDynamicImport.
+ * `lazyWithRetry` from src/util/lazyWithRetry.tsx instead. Pages load through
+ * definePage (src/routes/definePage.tsx), which wraps their import in
+ * retryDynamicImport; route modules never import() anything themselves.
  */
 import { readdirSync, readFileSync, statSync } from "node:fs"
 import path from "node:path"
 import { describe, it, expect } from "vitest"
 
 const SRC = path.resolve(__dirname, "../..")
-const ALLOWED = new Set([path.join("util", "lazyWithRetry.tsx")])
+const ALLOWED = new Set([
+  path.join("util", "lazyWithRetry.tsx"),
+  // Its lazy() only ever awaits load(), which goes through retryDynamicImport.
+  path.join("routes", "definePage.tsx"),
+])
 
 function sourceFiles(dir: string): string[] {
   const out: string[] = []
@@ -37,6 +43,7 @@ function stripComments(code: string): string {
 
 const BARE_LAZY = /(?<![\w$.])(?:React\.)?lazy\s*(?:<[^()]*>)?\s*\(/g
 const UNWRAPPED_ROUTE_IMPORT = /await\s+import\s*\(/g
+const ANY_IMPORT = /(?<![\w$.])import\s*\(/g
 
 function offenders(pattern: RegExp, files: string[]): string[] {
   const found: string[] = []
@@ -59,10 +66,20 @@ describe("lazy loading goes through stale-chunk recovery", () => {
     expect(offenders(BARE_LAZY, files)).toEqual([])
   })
 
-  it("has no route loader awaiting a bare import() (wrap it in retryDynamicImport)", () => {
-    const app = files.filter((f) => path.relative(SRC, f) === "App.tsx")
-    expect(app).toHaveLength(1)
-    expect(offenders(UNWRAPPED_ROUTE_IMPORT, app)).toEqual([])
+  it("route modules never import() (pages load through definePage)", () => {
+    const routeModules = files.filter((f) =>
+      /^routes[\\/](pages|elements|layouts)[\\/]/.test(path.relative(SRC, f)),
+    )
+    expect(routeModules.length).toBeGreaterThan(100)
+    expect(offenders(ANY_IMPORT, routeModules)).toEqual([])
+  })
+
+  it("definePage loads every page chunk through retryDynamicImport", () => {
+    const code = readFileSync(
+      path.join(SRC, "routes", "definePage.tsx"),
+      "utf8",
+    )
+    expect(code).toContain("retryDynamicImport(importPage)")
   })
 
   it("detects the patterns it guards against", () => {

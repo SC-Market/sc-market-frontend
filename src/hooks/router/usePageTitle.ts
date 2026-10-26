@@ -57,7 +57,7 @@ const ROUTE_TITLES: Record<string, string> = {
  * any page that sets its own <title> (via <Helmet> or useHead) always wins.
  *
  * The bare title is set here; the " - SC Market" suffix is appended by the
- * global idempotent titleTemplate in index.tsx — this hook must NOT append it.
+ * global idempotent titleTemplate in src/entry.client.tsx — this hook must NOT append it.
  *
  * This ensures WCAG 2.1 Level AA compliance for Requirement 2.8:
  * "Page title changes during navigation" — every route has a meaningful title

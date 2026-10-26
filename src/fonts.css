@@ -33,7 +33,7 @@
 /*
  * Electrolize: the theme's primary font (hooks/styles/theme). Self-hosted
  * (OFL; Google Fonts v20 latin subset, the same file fonts.gstatic.com served)
- * and preloaded from index.html, instead of a render-blocking
+ * and preloaded from src/document/document.html, instead of a render-blocking
  * fonts.googleapis.com stylesheet that only discovered the font file after the
  * CSS arrived from a second origin.
  */

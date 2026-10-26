@@ -5,7 +5,7 @@
  * get a 301 at the edge first (src/bridge/__tests__/guideRedirects.test.ts).
  */
 import { describe, expect, it, vi } from "vitest"
-import { routes } from "../../App"
+import { routes } from "../../router/routeObjects"
 import { APP_TEST_TIMEOUT_MS, renderRoute } from "./regression/harness"
 import { GUIDE_REDIRECTS } from "../../features/help/domain/redirects"
 

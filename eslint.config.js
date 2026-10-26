@@ -66,7 +66,7 @@ export default [
   {
     files: ["src/**/*.ts", "src/**/*.tsx"],
     ignores: [
-      "src/App.tsx",
+      "src/routes/elements/**",
       "src/routes/paths.ts",
       "**/*.test.ts",
       "**/*.test.tsx",
@@ -88,6 +88,28 @@ export default [
             "CallExpression[callee.name='navigate'] > Literal[value=/^\\/[A-Za-z]/]",
           message:
             "Use a helper from src/routes/paths.ts instead of a hardcoded route string.",
+        },
+      ],
+    },
+  },
+
+  // ── Route modules (src/routes.ts): pages load only through definePage ──
+  // definePage retries a failed chunk, spends the reload budget and then
+  // shows the error in place; a bare import()/lazy() here skips all of that.
+  // The import()s themselves live in src/app/pages.ts (see definePage.tsx).
+  {
+    files: ["src/routes/pages/**/*.tsx", "src/routes/elements/**/*.tsx", "src/routes/layouts/**/*.tsx"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "ImportExpression",
+          message:
+            'Route modules load pages with definePage("Name") (src/app/pages.ts), never import().',
+        },
+        {
+          selector: "CallExpression[callee.name='lazy'], CallExpression[callee.property.name='lazy']",
+          message: "Route modules load pages through definePage, not React.lazy.",
         },
       ],
     },

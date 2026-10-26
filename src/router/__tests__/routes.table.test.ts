@@ -10,7 +10,7 @@
  */
 import { describe, expect, it } from "vitest"
 import { matchRoutes } from "react-router-dom"
-import { routes } from "../../App"
+import { routes } from "../../router/routeObjects"
 import { enumerateRoutes, fillPattern, routeLabel } from "./regression/harness"
 import { FIXTURE } from "./regression/fixtures"
 

@@ -20,7 +20,7 @@ import {
   useSearchParams,
 } from "react-router-dom"
 import { describe, expect, it, vi } from "vitest"
-import { routes } from "../../App"
+import { routes } from "../../router/routeObjects"
 import { APP_TEST_TIMEOUT_MS, mountApp } from "./regression/harness"
 import { useMarketSearch } from "../../features/market/hooks/MarketSearch"
 import { MARKET_PATHS } from "../../routes/paths"

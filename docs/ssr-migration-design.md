@@ -212,6 +212,14 @@ Estimates are focused dev-days for one senior dev. Every phase ships to `main` i
   - `curl -sI https://<preview>/assets/missing.js` behaves the same as today.
 - **Rollback:** CF Pages rollback. Keep the branch-free history so one revert restores `index.html` and `App.tsx`.
 
+**Phase 2 as built (branch `feat/rr-framework-mode`, React Router 7.18, not v8 yet):**
+- `react-router.config.ts` (`ssr:false`, `appDirectory: "src"`), `src/root.tsx`, `src/entry.client.tsx`, `src/entry.server.tsx`. `npm run build` = `react-router build` + `scripts/build/finalize.ts` (lays `build/client` out as `dist/`, inlines the entry CSS, builds `sw.js`, checks the shell) + the asset carry-over. Pages settings unchanged.
+- The `<head>` is NOT React: `src/document/document.html` (was `index.html`) is filled by `entry.server.tsx`, and React hydrates `<div id="root">` only. That keeps the bridge's HTMLRewriter edits (title/meta/JSON-LD) out of React's way; the bridge's summary carries `data-bridge-summary` and the client removes it before hydrating.
+- Adding a route: an entry in `src/routes.ts`, a module under `src/routes/{pages,elements,layouts}` (a page module is `definePage("Name")`), and for a page an entry in `src/app/pages.ts` (its `import()`). Components route modules render come from `src/app/shell.ts`.
+- Stale chunks: React Router's own route-module loader reloads on any failed import with no limit. It never runs here: every route module is bundled into the entry and registered with React Router before it starts (`src/routes/registerRouteModules.ts`). Page chunks load through `definePage` → `retryDynamicImport` (retry, 2 reloads / 120 s, then the error in place). The inline guard also covers React Router's inline bootstrap script.
+- The import()s live in `src/app/pages.ts`, not in the route modules: React Router makes every route module a build entry, and chunks imported from there split the app shell into ~200 shared chunks.
+- Service worker: built on its own, no workbox; build + CI fail on any precache/route/fetch handler.
+
 ### Phase 3: prerender hub pages and a bounded game-data set (≈4-6 days incl. backend ask)
 - **Decision: prerender hubs only.** "Prerender all game-data pages" doesn't fit:
   - The live sitemap has ~15.5k game-data URLs (items capped at 10k of 11,555), ×2 files (`.html` + `.data` for routes with a server loader), ×N per locale, against 20k files per site on Free (100k on paid) and a 20-minute Pages build timeout.

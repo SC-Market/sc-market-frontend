@@ -4,7 +4,7 @@
  * parallel; together they cover every leaf route in src/App.tsx.
  */
 import { describe, expect, it } from "vitest"
-import { routes } from "../../../App"
+import { routes } from "../../../router/routeObjects"
 import {
   APP_TEST_TIMEOUT_MS,
   defaultSessionFor,

@@ -1,5 +1,5 @@
 /**
- * Accessible-name audit: every route of the app (src/App.tsx), loaded in the
+ * Accessible-name audit: every route of the app (src/routes.ts), loaded in the
  * e2e build with the fake API, checked with axe-core for controls that have
  * no accessible name (unlabeled buttons, links, inputs, selects, toggles).
  * Accessible names are what the chrome-devtools MCP a11y snapshot and

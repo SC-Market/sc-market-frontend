@@ -1,0 +1,9 @@
+// Route module: the OrgInvitesPage page. Wired up in src/routes.ts.
+
+import { definePage } from "../definePage"
+
+const page = definePage("OrgInvitesPage")
+
+export const clientLoader = page.clientLoader
+export const shouldRevalidate = page.shouldRevalidate
+export default page.Component

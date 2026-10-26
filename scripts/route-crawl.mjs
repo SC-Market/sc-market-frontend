@@ -98,45 +98,23 @@ function parseArgs(argv) {
   return args
 }
 
-// ── route table from src/App.tsx ────────────────────────────────────────────
+// ── route table from src/routes.ts ──────────────────────────────────────────
 
 /**
- * Read the `routes` array literal in src/App.tsx with the TypeScript compiler
- * (already a repo dependency) and return every leaf path pattern — the same
- * flattening the vitest harness does on the live objects.
+ * Load src/routes.ts (plain route config objects; transpiled with the
+ * TypeScript compiler, already a repo dependency) and return every leaf path
+ * pattern — the same flattening the vitest harness does.
  */
-function readRoutePatterns() {
+async function readRoutePatterns() {
   const require = createRequire(import.meta.url)
   const ts = require("typescript")
-  const file = resolve(ROOT, "src/App.tsx")
-  const sf = ts.createSourceFile(
-    file,
-    readFileSync(file, "utf8"),
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TSX,
+  const source = readFileSync(resolve(ROOT, "src/routes.ts"), "utf8")
+  const js = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+  }).outputText
+  const { default: routeConfig } = await import(
+    `data:text/javascript,${encodeURIComponent(js)}`
   )
-
-  let routesArray = null
-  const find = (node) => {
-    if (
-      ts.isVariableDeclaration(node) &&
-      node.name.getText(sf) === "routes" &&
-      node.initializer &&
-      ts.isArrayLiteralExpression(node.initializer)
-    ) {
-      routesArray = node.initializer
-    }
-    if (!routesArray) ts.forEachChild(node, find)
-  }
-  find(sf)
-  if (!routesArray)
-    throw new Error("could not find `routes` array in src/App.tsx")
-
-  const prop = (obj, name) =>
-    obj.properties.find(
-      (p) => ts.isPropertyAssignment(p) && p.name.getText(sf) === name,
-    )
 
   const join = (parent, child) => {
     if (child === undefined) return parent
@@ -145,33 +123,14 @@ function readRoutePatterns() {
   }
 
   const leaves = []
-  const walk = (array, parentPath) => {
-    for (const el of array.elements) {
-      if (!ts.isObjectLiteralExpression(el)) continue
-      const pathProp = prop(el, "path")
-      const indexProp = prop(el, "index")
-      const childrenProp = prop(el, "children")
-      const isIndex =
-        indexProp && indexProp.initializer.kind === ts.SyntaxKind.TrueKeyword
-      const path = isIndex
-        ? parentPath
-        : join(
-            parentPath,
-            pathProp && ts.isStringLiteralLike(pathProp.initializer)
-              ? pathProp.initializer.text
-              : undefined,
-          )
-      if (
-        childrenProp &&
-        ts.isArrayLiteralExpression(childrenProp.initializer)
-      ) {
-        walk(childrenProp.initializer, path)
-      } else {
-        leaves.push(path || "/")
-      }
+  const walk = (entries, parentPath) => {
+    for (const entry of entries) {
+      const path = entry.index ? parentPath : join(parentPath, entry.path)
+      if (entry.children?.length) walk(entry.children, path)
+      else leaves.push(path || "/")
     }
   }
-  walk(routesArray, "")
+  walk(routeConfig, "")
   return [...new Set(leaves)]
 }
 
@@ -221,9 +180,9 @@ const EXTRA_URLS = {
     "/org/BIRDINC/manage",
 }
 
-function crawlTargets(only) {
+async function crawlTargets(only) {
   const targets = []
-  for (const pattern of readRoutePatterns()) {
+  for (const pattern of await readRoutePatterns()) {
     if (!pattern.includes(":") && !pattern.includes("*"))
       targets.push({ route: pattern, url: pattern })
   }
@@ -530,7 +489,7 @@ async function crawlOne(browser, proxy, args, target) {
 async function crawl(args) {
   const require = createRequire(resolve(args.puppeteerDir, "noop.js"))
   const puppeteer = require("puppeteer-core")
-  const targets = crawlTargets(args.only).filter(
+  const targets = (await crawlTargets(args.only)).filter(
     (_, i) => !args.shard || i % args.shard.n === args.shard.k - 1,
   )
   const launch = () =>

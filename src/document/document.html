@@ -47,21 +47,8 @@
       content="https://sc-market.space/homepage-preview.webp"
     />
 
-    <!--    <link rel="apple-touch-icon" href="/logo192.png"/>-->
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-      Note: vite-plugin-pwa automatically injects the manifest link, so we don't need to include it here.
-    -->
-    <!--
-      Notice the use of  in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    <!-- Web app manifest (static file in public/, see public/manifest.webmanifest). -->
+    <link rel="manifest" href="/manifest.webmanifest" />
     <title>SC Market</title>
 
     <!--
@@ -92,10 +79,11 @@
       (light | dark | system) picks the scheme like HookProvider does. The
       MUI baseline styles take over once the app renders.
 
-      data-cfasync="false" on every script here (and on the built entry tag,
-      see cfasyncPlugin in vite.config.ts): Cloudflare Rocket Loader, if it is
-      ever switched on again, rewrites script types and replays them late from
-      its own loader, so this guard and the pre-theme ran after the app.
+      data-cfasync="false" on every script here (and on React Router's
+      scripts, see src/root.tsx and src/document/cfasync.ts): Cloudflare
+      Rocket Loader, if it is ever switched on again, rewrites script types
+      and replays them late from its own loader, so this guard and the
+      pre-theme ran after the app.
     -->
     <script data-cfasync="false">
       ;(function () {
@@ -179,44 +167,54 @@
         }
 
         // NOTE: we deliberately do NOT handle vite:preloadError here. That event
-        // is left unhandled on purpose (see src/index.tsx) so failed route
+        // is left unhandled on purpose (see src/entry.client.tsx) so failed route
         // imports reject into retryDynamicImport: they are retried in place first, and
         // only escalated to a reload once retries are exhausted. Reloading here
         // on the FIRST failed attempt would preempt that retry — and would also
         // reload on hover-prefetch failures, which must stay silent.
         //
-        // This capture-phase listener stays for the one case the module layer
-        // cannot cover: a top-level script/asset tag (e.g. the entry bundle
-        // itself) that fails to load before src/index.tsx ever runs.
+        // These listeners stay for the one case the module layer cannot
+        // cover: the app's own bootstrap failing before src/entry.client.tsx
+        // ever runs. React Router starts the app from an inline module script
+        // (<Scripts /> in src/root.tsx) that statically imports its route
+        // manifest and the root route chunk, then import()s the entry chunk:
+        // - a failed static import fires "error" on that inline script (no
+        //   src), and a failed external script fires it on its tag;
+        // - a failed import() of the entry chunk is an unhandled rejection.
+        //   Only until the entry has run (window.__scmEntryStarted): after
+        //   that the app's own retry/reload logic owns chunk failures.
         window.addEventListener(
           "error",
           function (event) {
-            if (event.target && event.target.tagName === "SCRIPT") {
-              var src = (event.target.src || event.target.getAttribute("src") || "").toString()
+            var el = event.target
+            if (el && el.tagName === "SCRIPT") {
+              var src = (el.src || el.getAttribute("src") || "").toString()
               var isOurAsset =
                 src.indexOf("/assets/") !== -1 ||
-                (src.indexOf(window.location.origin) === 0 && /\.(js|mjs)$/.test(src))
+                (src.indexOf(window.location.origin) === 0 && /\.(js|mjs)$/.test(src)) ||
+                (!src && el.type === "module")
               if (isOurAsset) tryEmergencyReload()
             }
           },
           true
         )
+        window.addEventListener("unhandledrejection", function (event) {
+          if (window.__scmEntryStarted) return
+          var reason = event.reason
+          var text = reason && reason.message ? String(reason.message) : String(reason)
+          if (
+            /dynamically imported module|Importing a module script failed/i.test(text) &&
+            text.indexOf("/assets/") !== -1
+          ) {
+            tryEmergencyReload()
+          }
+        })
       })()
     </script>
+    <!--app-head-->
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <script type="module" data-cfasync="false" src="/src/index.tsx"></script>
-    <!--
-  This HTML file is a template.
-  If you open it directly in the browser, you will see an empty page.
-
-  You can add webfonts, meta tags, or analytics to this file.
-  The build step will place the bundled scripts into the <body> tag.
-
-  To begin the development, run `npm start` or `yarn start`.
-  To create a production bundle, use `npm run build` or `yarn build`.
--->
+    <div id="root"><!--app-html--></div>
   </body>
 </html>

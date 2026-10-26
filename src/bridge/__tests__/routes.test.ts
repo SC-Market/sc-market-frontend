@@ -5,7 +5,7 @@ import { STATIC_SIBLING_PATHS } from "../../router/staticSiblingPaths"
 import routesJson from "../../../public/_routes.json"
 
 /**
- * Every src/App.tsx route under the bridge prefixes (plus the catch-all), so
+ * Every src/routes.ts route under the bridge prefixes (plus the catch-all), so
  * react-router's own ranking decides which page a URL renders.
  */
 const APP_ROUTES = [

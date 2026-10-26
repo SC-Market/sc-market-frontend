@@ -24,7 +24,7 @@ export interface PageHead {
 
 /**
  * Idempotent " - SC Market" title suffix. Single source of truth for the
- * Unhead titleTemplate (src/index.tsx) and the bridge.
+ * Unhead titleTemplate (src/entry.client.tsx) and the bridge.
  */
 export function applyTitleTemplate(title: string | null | undefined): string {
   if (!title) return "SC Market"

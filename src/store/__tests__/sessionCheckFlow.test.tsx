@@ -71,7 +71,7 @@ function renderApp(
   seed?: (store: ReturnType<typeof makeStore>) => void,
 ) {
   const store = makeStore({ networkEnv: browserNetworkEnv })
-  // Same boot order as src/index.tsx.
+  // Same boot order as src/entry.client.tsx.
   void browserNetworkEnv.checkSession()
   seed?.(store)
   render(

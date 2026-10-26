@@ -7,7 +7,7 @@ import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { routes } from "../../../App"
+import { routes } from "../../../router/routeObjects"
 import { enumerateRoutes } from "../../../router/__tests__/regression/harness"
 import { OrgManageLayout } from "../OrgManageLayout"
 

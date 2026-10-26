@@ -1,5 +1,5 @@
 /**
- * Adds data-cfasync="false" to every <script> tag in the built index.html.
+ * Adds data-cfasync="false" to every <script> tag in a built HTML page.
  *
  * Cloudflare Rocket Loader (a zone setting, outside this repo) rewrites each
  * script's type to "<hash>-text/javascript" / "<hash>-module" and replays them
@@ -9,12 +9,10 @@
  * are left alone, so the guard and the entry run natively whether Rocket
  * Loader is on or off.
  *
- * index.html sets the attribute on its own tags, but Vite replaces the entry
- * tag with a generated one (and plugins may add more), so the final HTML is
- * patched here, after every other transform.
+ * document.html sets the attribute on its own tags and src/root.tsx passes it
+ * to React Router's <Scripts />; entry.server.tsx runs every rendered page
+ * through this as well, so a script added anywhere else can't miss it.
  */
-import type { Plugin } from "vite"
-
 const SCRIPT_OPEN_TAG = /<script\b([^>]*)>/gi
 
 export function addCfasyncFalse(html: string): string {
@@ -23,15 +21,4 @@ export function addCfasyncFalse(html: string): string {
       ? tag
       : `<script data-cfasync="false"${attrs}>`,
   )
-}
-
-export function cfasyncPlugin(): Plugin {
-  return {
-    name: "sc-market-cfasync",
-    enforce: "post",
-    transformIndexHtml: {
-      order: "post",
-      handler: (html) => addCfasyncFalse(html),
-    },
-  }
 }

@@ -3,7 +3,7 @@
 exports[`route matching > / 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/",
   ],
   "params": {},
@@ -14,7 +14,7 @@ exports[`route matching > / 1`] = `
 exports[`route matching > /404 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -27,7 +27,7 @@ exports[`route matching > /404 1`] = `
 exports[`route matching > /Market 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market",
   ],
   "params": {},
@@ -38,7 +38,7 @@ exports[`route matching > /Market 1`] = `
 exports[`route matching > /admin/feature-flags 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/feature-flags",
@@ -51,7 +51,7 @@ exports[`route matching > /admin/feature-flags 1`] = `
 exports[`route matching > /admin/feature-flags/some_flag 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/feature-flags/:flagName",
@@ -66,7 +66,7 @@ exports[`route matching > /admin/feature-flags/some_flag 1`] = `
 exports[`route matching > /buyorder/b-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/buyorder/:id",
   ],
   "params": {
@@ -79,7 +79,7 @@ exports[`route matching > /buyorder/b-1 1`] = `
 exports[`route matching > /buyorder/create 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/buyorder/create",
   ],
   "params": {},
@@ -90,7 +90,7 @@ exports[`route matching > /buyorder/create 1`] = `
 exports[`route matching > /deeply/nested/unknown/path 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -103,7 +103,7 @@ exports[`route matching > /deeply/nested/unknown/path 1`] = `
 exports[`route matching > /does-not-exist 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -116,7 +116,7 @@ exports[`route matching > /does-not-exist 1`] = `
 exports[`route matching > /market 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market",
   ],
   "params": {},
@@ -127,7 +127,7 @@ exports[`route matching > /market 1`] = `
 exports[`route matching > /market/ 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market",
   ],
   "params": {},
@@ -138,7 +138,7 @@ exports[`route matching > /market/ 1`] = `
 exports[`route matching > /market/a/b/c 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -151,7 +151,7 @@ exports[`route matching > /market/a/b/c 1`] = `
 exports[`route matching > /market/aggregate/item-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market/aggregate/:id",
   ],
   "params": {
@@ -164,7 +164,7 @@ exports[`route matching > /market/aggregate/item-1 1`] = `
 exports[`route matching > /market/cart 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/cart",
   ],
@@ -176,7 +176,7 @@ exports[`route matching > /market/cart 1`] = `
 exports[`route matching > /market/category/weapons 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market/category/:name",
   ],
   "params": {
@@ -189,7 +189,7 @@ exports[`route matching > /market/category/weapons 1`] = `
 exports[`route matching > /market/create 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/create",
   ],
@@ -201,7 +201,7 @@ exports[`route matching > /market/create 1`] = `
 exports[`route matching > /market/create/unique 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/create/:tab",
   ],
@@ -215,7 +215,7 @@ exports[`route matching > /market/create/unique 1`] = `
 exports[`route matching > /market/manage 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/manage",
   ],
@@ -227,7 +227,7 @@ exports[`route matching > /market/manage 1`] = `
 exports[`route matching > /market/manage-stock 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/manage-stock",
   ],
@@ -239,7 +239,7 @@ exports[`route matching > /market/manage-stock 1`] = `
 exports[`route matching > /market/me 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/me",
   ],
@@ -251,7 +251,7 @@ exports[`route matching > /market/me 1`] = `
 exports[`route matching > /market/multiple/m-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market/multiple/:id",
   ],
   "params": {
@@ -264,7 +264,7 @@ exports[`route matching > /market/multiple/m-1 1`] = `
 exports[`route matching > /market/multiple/m-1/edit 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/multiple/:id/edit",
   ],
@@ -278,7 +278,7 @@ exports[`route matching > /market/multiple/m-1/edit 1`] = `
 exports[`route matching > /market/services 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market/services",
   ],
   "params": {},
@@ -289,7 +289,7 @@ exports[`route matching > /market/services 1`] = `
 exports[`route matching > /market/some-listing--abc123 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market/:id",
   ],
   "params": {
@@ -302,7 +302,7 @@ exports[`route matching > /market/some-listing--abc123 1`] = `
 exports[`route matching > /market/stock/listing-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/stock/:listingId",
   ],
@@ -316,7 +316,7 @@ exports[`route matching > /market/stock/listing-1 1`] = `
 exports[`route matching > /messages 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/messages",
     "(index)",
   ],
@@ -328,7 +328,7 @@ exports[`route matching > /messages 1`] = `
 exports[`route matching > /messages/ 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/messages",
     "(index)",
   ],
@@ -340,7 +340,7 @@ exports[`route matching > /messages/ 1`] = `
 exports[`route matching > /messages/chat-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/messages",
     ":chat_id",
   ],
@@ -354,7 +354,7 @@ exports[`route matching > /messages/chat-1 1`] = `
 exports[`route matching > /messages/chat-1/extra 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -367,7 +367,7 @@ exports[`route matching > /messages/chat-1/extra 1`] = `
 exports[`route matching > /mining/locations 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/mining/locations",
   ],
   "params": {},
@@ -378,7 +378,7 @@ exports[`route matching > /mining/locations 1`] = `
 exports[`route matching > /mining/locations/hurston 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/mining/locations/:name",
   ],
   "params": {
@@ -391,7 +391,7 @@ exports[`route matching > /mining/locations/hurston 1`] = `
 exports[`route matching > /mining/ores/quantanium 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/mining/ores/:name",
   ],
   "params": {
@@ -404,7 +404,7 @@ exports[`route matching > /mining/ores/quantanium 1`] = `
 exports[`route matching > /order/o-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/order/:id",
   ],
   "params": {
@@ -417,7 +417,7 @@ exports[`route matching > /order/o-1 1`] = `
 exports[`route matching > /order/o-1/chat 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/order/:id/:tab",
   ],
   "params": {
@@ -431,7 +431,7 @@ exports[`route matching > /order/o-1/chat 1`] = `
 exports[`route matching > /order/service/create 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/order/service/create",
   ],
@@ -443,7 +443,7 @@ exports[`route matching > /order/service/create 1`] = `
 exports[`route matching > /order/service/s-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/order/service/:service_id",
   ],
   "params": {
@@ -456,7 +456,7 @@ exports[`route matching > /order/service/s-1 1`] = `
 exports[`route matching > /order/service/s-1/edit 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/order/service/:service_id/edit",
   ],
@@ -470,7 +470,7 @@ exports[`route matching > /order/service/s-1/edit 1`] = `
 exports[`route matching > /order/services 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/order/services",
   ],
@@ -482,7 +482,7 @@ exports[`route matching > /order/services 1`] = `
 exports[`route matching > /org/TESTORG 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
   ],
@@ -496,7 +496,7 @@ exports[`route matching > /org/TESTORG 1`] = `
 exports[`route matching > /org/TESTORG/ 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
   ],
@@ -510,7 +510,7 @@ exports[`route matching > /org/TESTORG/ 1`] = `
 exports[`route matching > /org/TESTORG/manage 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "manage",
@@ -527,7 +527,7 @@ exports[`route matching > /org/TESTORG/manage 1`] = `
 exports[`route matching > /org/TESTORG/manage/about 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "manage",
@@ -544,7 +544,7 @@ exports[`route matching > /org/TESTORG/manage/about 1`] = `
 exports[`route matching > /org/TESTORG/manage/unknown 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -557,7 +557,7 @@ exports[`route matching > /org/TESTORG/manage/unknown 1`] = `
 exports[`route matching > /org/TESTORG/money 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "money",
@@ -573,7 +573,7 @@ exports[`route matching > /org/TESTORG/money 1`] = `
 exports[`route matching > /org/TESTORG/orders 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "orders",
@@ -589,7 +589,7 @@ exports[`route matching > /org/TESTORG/orders 1`] = `
 exports[`route matching > /org/TESTORG/unknown 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -602,7 +602,7 @@ exports[`route matching > /org/TESTORG/unknown 1`] = `
 exports[`route matching > /org/fleet 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:OrgRoute)",
     "/org/fleet",
@@ -615,7 +615,7 @@ exports[`route matching > /org/fleet 1`] = `
 exports[`route matching > /org/manage 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:OrgRoute)",
     "/org/manage",
@@ -628,7 +628,7 @@ exports[`route matching > /org/manage 1`] = `
 exports[`route matching > /org/members 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/members",
   ],
@@ -640,7 +640,7 @@ exports[`route matching > /org/members 1`] = `
 exports[`route matching > /org/register 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/register",
   ],
@@ -652,7 +652,7 @@ exports[`route matching > /org/register 1`] = `
 exports[`route matching > /recruiting/post/create 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:OrgAdminRoute)",
     "/recruiting/post/create",
@@ -665,7 +665,7 @@ exports[`route matching > /recruiting/post/create 1`] = `
 exports[`route matching > /recruiting/post/p-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/recruiting/post/:post_id",
   ],
   "params": {
@@ -678,7 +678,7 @@ exports[`route matching > /recruiting/post/p-1 1`] = `
 exports[`route matching > /recruiting/post/p-1/update 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:OrgAdminRoute)",
     "/recruiting/post/:post_id/update",
@@ -693,7 +693,7 @@ exports[`route matching > /recruiting/post/p-1/update 1`] = `
 exports[`route matching > /send 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/send",
   ],
@@ -705,7 +705,7 @@ exports[`route matching > /send 1`] = `
 exports[`route matching > /shop/test-shop 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "(index)",
@@ -720,7 +720,7 @@ exports[`route matching > /shop/test-shop 1`] = `
 exports[`route matching > /shop/test-shop/listings 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "listings",
@@ -735,7 +735,7 @@ exports[`route matching > /shop/test-shop/listings 1`] = `
 exports[`route matching > /shop/test-shop/listings/create 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "listings/create",
@@ -750,7 +750,7 @@ exports[`route matching > /shop/test-shop/listings/create 1`] = `
 exports[`route matching > /shop/test-shop/unknown 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -763,7 +763,7 @@ exports[`route matching > /shop/test-shop/unknown 1`] = `
 exports[`route matching > /shops/create 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/shops/create",
     "(index)",
   ],
@@ -775,7 +775,7 @@ exports[`route matching > /shops/create 1`] = `
 exports[`route matching > /shops/test-shop 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/shops/:slug",
   ],
   "params": {
@@ -788,7 +788,7 @@ exports[`route matching > /shops/test-shop 1`] = `
 exports[`route matching > /shops/test-shop/about 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/shops/:slug/:tab",
   ],
   "params": {
@@ -802,7 +802,7 @@ exports[`route matching > /shops/test-shop/about 1`] = `
 exports[`route matching > /shops/test-shop/about/extra 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -815,7 +815,7 @@ exports[`route matching > /shops/test-shop/about/extra 1`] = `
 exports[`route matching > /user/someone 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/user/:username",
   ],
   "params": {
@@ -828,7 +828,7 @@ exports[`route matching > /user/someone 1`] = `
 exports[`route matching > /user/someone/store 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/user/:username/:tab",
   ],
   "params": {
@@ -842,7 +842,7 @@ exports[`route matching > /user/someone/store 1`] = `
 exports[`route matching > /user/someone/store/extra 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "params": {
@@ -865,7 +865,7 @@ exports[`route matching > /widget/orders 1`] = `
 exports[`route matching > /wiki/items 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/wiki/items",
   ],
   "params": {},
@@ -876,7 +876,7 @@ exports[`route matching > /wiki/items 1`] = `
 exports[`route matching > /wiki/items/i-1 1`] = `
 {
   "chain": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/wiki/items/:id",
   ],
   "params": {
@@ -896,756 +896,756 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/widget/orders",
   },
   {
-    "chain": "(layout:HookProvider) > /",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": false,
     "pattern": "/",
   },
   {
-    "chain": "(layout:HookProvider) > /login",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /login",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/login",
   },
   {
-    "chain": "(layout:HookProvider) > /signup",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /signup",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/signup",
   },
   {
-    "chain": "(layout:HookProvider) > /offer/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /offer/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/offer/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /offer/:id/counteroffer",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /offer/:id/counteroffer",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/offer/:id/counteroffer",
   },
   {
-    "chain": "(layout:HookProvider) > /market/:id",
+    "chain": "(layout:AppLayout) > /market/:id",
     "errorBoundaryAt": "/market/:id",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/market/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /market/aggregate/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /market/aggregate/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/market/aggregate/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /market/multiple/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /market/multiple/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/market/multiple/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /services",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /services",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": false,
     "pattern": "/services",
   },
   {
-    "chain": "(layout:HookProvider) > /market/services",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /market/services",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/market/services",
   },
   {
-    "chain": "(layout:HookProvider) > /market/category/:name",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /market/category/:name",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/market/category/:name",
   },
   {
-    "chain": "(layout:HookProvider) > /buyorder/create",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /buyorder/create",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/buyorder/create",
   },
   {
-    "chain": "(layout:HookProvider) > /market",
+    "chain": "(layout:AppLayout) > /market",
     "errorBoundaryAt": "/market",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/market",
   },
   {
-    "chain": "(layout:HookProvider) > /bulk",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /bulk",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/bulk",
   },
   {
-    "chain": "(layout:HookProvider) > /buyorders",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /buyorders",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/buyorders",
   },
   {
-    "chain": "(layout:HookProvider) > /buyorder/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /buyorder/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/buyorder/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /contractors",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /contractors",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/contractors",
   },
   {
-    "chain": "(layout:HookProvider) > /contracts/create",
+    "chain": "(layout:AppLayout) > /contracts/create",
     "errorBoundaryAt": "/contracts/create",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/contracts/create",
   },
   {
-    "chain": "(layout:HookProvider) > /contracts",
+    "chain": "(layout:AppLayout) > /contracts",
     "errorBoundaryAt": "/contracts",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/contracts",
   },
   {
-    "chain": "(layout:HookProvider) > /messages > (index)",
+    "chain": "(layout:AppLayout) > /messages > (index)",
     "errorBoundaryAt": "(index)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/messages",
   },
   {
-    "chain": "(layout:HookProvider) > /messages > :chat_id",
+    "chain": "(layout:AppLayout) > /messages > :chat_id",
     "errorBoundaryAt": ":chat_id",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/messages/:chat_id",
   },
   {
-    "chain": "(layout:HookProvider) > /contracts/public/:contract_id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /contracts/public/:contract_id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/contracts/public/:contract_id",
   },
   {
-    "chain": "(layout:HookProvider) > /order/service/:service_id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /order/service/:service_id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/order/service/:service_id",
   },
   {
-    "chain": "(layout:HookProvider) > /recruiting/post/:post_id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /recruiting/post/:post_id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/recruiting/post/:post_id",
   },
   {
-    "chain": "(layout:HookProvider) > /recruiting",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /recruiting",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/recruiting",
   },
   {
-    "chain": "(layout:HookProvider) > /shops",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /shops",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/shops",
   },
   {
-    "chain": "(layout:HookProvider) > /shops/create > (index)",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /shops/create > (index)",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/shops/create",
   },
   {
-    "chain": "(layout:HookProvider) > /shops/:slug/:tab",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /shops/:slug/:tab",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/shops/:slug/:tab",
   },
   {
-    "chain": "(layout:HookProvider) > /shops/:slug",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /shops/:slug",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/shops/:slug",
   },
   {
-    "chain": "(layout:HookProvider) > /contractor/:id/:tab",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /contractor/:id/:tab",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/contractor/:id/:tab",
   },
   {
-    "chain": "(layout:HookProvider) > /contractor/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /contractor/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/contractor/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /contract/:id/:tab",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /contract/:id/:tab",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/contract/:id/:tab",
   },
   {
-    "chain": "(layout:HookProvider) > /contract/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /contract/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/contract/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /order/:id/:tab",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /order/:id/:tab",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/order/:id/:tab",
   },
   {
-    "chain": "(layout:HookProvider) > /order/:id",
+    "chain": "(layout:AppLayout) > /order/:id",
     "errorBoundaryAt": "/order/:id",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/order/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /user/:username/:tab",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /user/:username/:tab",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/user/:username/:tab",
   },
   {
-    "chain": "(layout:HookProvider) > /user/:username",
+    "chain": "(layout:AppLayout) > /user/:username",
     "errorBoundaryAt": "/user/:username",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/user/:username",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /onboarding",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /onboarding",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/onboarding",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /accountlink",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /accountlink",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/accountlink",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/create/:tab",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market/create/:tab",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": false,
     "pattern": "/market/create/:tab",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/create",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market/create",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": false,
     "pattern": "/market/create",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/me",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market/me",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/market/me",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/manage",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market/manage",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": false,
     "pattern": "/market/manage",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/manage-stock",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market/manage-stock",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": false,
     "pattern": "/market/manage-stock",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/stock/:listingId",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market/stock/:listingId",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": false,
     "pattern": "/market/stock/:listingId",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /inventory",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /inventory",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/inventory",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/cart",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market/cart",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/market/cart",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market_edit/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market_edit/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/market_edit/:id",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /market/multiple/:id/edit",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /market/multiple/:id/edit",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/market/multiple/:id/edit",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /customers",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /customers",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/customers",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /messaging",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /messaging",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/messaging",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /sell",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /sell",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/sell",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /dashboard/shops",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /dashboard/shops",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/dashboard/shops",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /my-orgs",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /my-orgs",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/my-orgs",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /orders/assigned",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /orders/assigned",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": false,
     "pattern": "/orders/assigned",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /orders",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /orders",
     "errorBoundaryAt": "/orders",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/orders",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/members",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/members",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/org/members",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /myfleet/import",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /myfleet/import",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/myfleet/import",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /myfleet",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /myfleet",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/myfleet",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /delivery/:delivery_id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /delivery/:delivery_id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/delivery/:delivery_id",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /dashboard",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /dashboard",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/dashboard",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /dashboard/overview",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /dashboard/overview",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/dashboard/overview",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /order/service/create",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /order/service/create",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/order/service/create",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /order/service/:service_id/edit",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /order/service/:service_id/edit",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/order/service/:service_id/edit",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /order/services",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /order/services",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": false,
     "pattern": "/order/services",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/register",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/register",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/org/register",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /contractor_invite/:invite_id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /contractor_invite/:invite_id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/contractor_invite/:invite_id",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /profile/:tab",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /profile/:tab",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/profile/:tab",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /profile",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /profile",
     "errorBoundaryAt": "/profile",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/profile",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /settings",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /settings",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/settings",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /notifications",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /notifications",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/notifications",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /email/verify/:token",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /email/verify/:token",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/email/verify/:token",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /email/verify",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /email/verify",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/email/verify",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /email/unsubscribe/:token",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /email/unsubscribe/:token",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/email/unsubscribe/:token",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /email/unsubscribe",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /email/unsubscribe",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/email/unsubscribe",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /availability",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /availability",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/availability",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /send",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /send",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/send",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /send",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /send",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
     ],
     "lazy": true,
     "pattern": "/send",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/users",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/users",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1653,10 +1653,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/users",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/market",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/market",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1664,10 +1664,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/market",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/wipe",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/wipe",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1675,10 +1675,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/wipe",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/orders",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/orders",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1686,10 +1686,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/orders",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/moderation",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/moderation",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1697,10 +1697,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/moderation",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/alerts",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/alerts",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1708,10 +1708,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/alerts",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/audit-logs",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/audit-logs",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1719,10 +1719,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/audit-logs",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/test-accounts",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/test-accounts",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1730,10 +1730,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/test-accounts",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/notification-test",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/notification-test",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1741,10 +1741,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/notification-test",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/attribute-definitions",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/attribute-definitions",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1752,10 +1752,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/attribute-definitions",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/game-item-attributes",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/game-item-attributes",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1763,10 +1763,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/game-item-attributes",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/import-monitoring",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/import-monitoring",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1774,10 +1774,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/import-monitoring",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/game-data-import",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/game-data-import",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1785,10 +1785,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/game-data-import",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/premium",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/premium",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1796,10 +1796,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/premium",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/feature-flags",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/feature-flags",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1807,10 +1807,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/feature-flags",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/feature-flags/:flagName",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/feature-flags/:flagName",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1818,10 +1818,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/feature-flags/:flagName",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/supplier-dashboard",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/supplier-dashboard",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1829,10 +1829,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/supplier-dashboard",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/supplier-roster",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/supplier-roster",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1840,10 +1840,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/supplier-roster",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/requisitions",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/requisitions",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "SiteAdminRoute",
     ],
@@ -1851,10 +1851,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/requisitions",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/fleet",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/fleet",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgRoute",
     ],
@@ -1862,10 +1862,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/fleet",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /myorg",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:OrgRoute) > /myorg",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgRoute",
     ],
@@ -1873,10 +1873,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/myorg",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/send",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/send",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgRoute",
     ],
@@ -1884,10 +1884,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/send",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /recruiting/post/create",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /recruiting/post/create",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgAdminRoute",
     ],
@@ -1895,10 +1895,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/recruiting/post/create",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /recruiting/post/:post_id/update",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /recruiting/post/:post_id/update",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgAdminRoute",
     ],
@@ -1906,10 +1906,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/recruiting/post/:post_id/update",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /org/orders",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:OrgAdminRoute) > /org/orders",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgAdminRoute",
     ],
@@ -1917,10 +1917,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/orders",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/manage",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/manage",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgRoute",
     ],
@@ -1928,10 +1928,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/manage",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/money",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:OrgRoute) > /org/money",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgRoute",
     ],
@@ -1939,10 +1939,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/money",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > dashboard",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > dashboard",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
@@ -1950,10 +1950,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/dashboard",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > overview",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > overview",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
@@ -1961,10 +1961,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/overview",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > fleet",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > fleet",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
@@ -1972,10 +1972,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/fleet",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > send",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > send",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
@@ -1983,10 +1983,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/send",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > orders > (index)",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > orders > (index)",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -1995,10 +1995,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/orders",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > (index)",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > (index)",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2007,10 +2007,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > about",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > about",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2019,10 +2019,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/about",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > roles",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > roles",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2031,10 +2031,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/roles",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > invites",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > invites",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2043,10 +2043,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/invites",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > discord",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > discord",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2055,10 +2055,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/discord",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > settings",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > settings",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2067,10 +2067,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/settings",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > audit",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > audit",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2079,10 +2079,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/audit",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > theme",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > theme",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2091,10 +2091,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/theme",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > money > (index)",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > money > (index)",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
       "OrgAdminRoute",
@@ -2103,10 +2103,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/money",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > members",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > members",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
@@ -2114,10 +2114,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/members",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > listings",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > listings",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
@@ -2125,10 +2125,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/listings",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > manage-stock",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage-stock",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
@@ -2136,10 +2136,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage-stock",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /org/:contractor_id > services",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > services",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
@@ -2147,10 +2147,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/services",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > listings",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > listings",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2158,10 +2158,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug/listings",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > listings/create",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > listings/create",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2169,10 +2169,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug/listings/create",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > stock",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > stock",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2180,10 +2180,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug/stock",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > orders",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > orders",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2191,10 +2191,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug/orders",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > dashboard",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > dashboard",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2202,10 +2202,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug/dashboard",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > services",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > services",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2213,10 +2213,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug/services",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > customers",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > customers",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2224,10 +2224,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug/customers",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > settings",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > settings",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2235,10 +2235,10 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug/settings",
   },
   {
-    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > /shop/:shopSlug > (index)",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /shop/:shopSlug > (index)",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
       "LoggedInRoute",
       "ShopContextFromRoute",
     ],
@@ -2246,307 +2246,307 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/shop/:shopSlug",
   },
   {
-    "chain": "(layout:HookProvider) > /crafting/calculator",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /crafting/calculator",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/crafting/calculator",
   },
   {
-    "chain": "(layout:HookProvider) > /crafting/history",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /crafting/history",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/crafting/history",
   },
   {
-    "chain": "(layout:HookProvider) > /missions",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /missions",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/missions",
   },
   {
-    "chain": "(layout:HookProvider) > /missions/:slug",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /missions/:slug",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/missions/:slug",
   },
   {
-    "chain": "(layout:HookProvider) > /blueprints",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /blueprints",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/blueprints",
   },
   {
-    "chain": "(layout:HookProvider) > /blueprints/inventory",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /blueprints/inventory",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/blueprints/inventory",
   },
   {
-    "chain": "(layout:HookProvider) > /blueprints/:slug",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /blueprints/:slug",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/blueprints/:slug",
   },
   {
-    "chain": "(layout:HookProvider) > /shopping-lists",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /shopping-lists",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/shopping-lists",
   },
   {
-    "chain": "(layout:HookProvider) > /shopping-lists/:wishlist_id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /shopping-lists/:wishlist_id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/shopping-lists/:wishlist_id",
   },
   {
-    "chain": "(layout:HookProvider) > /shopping-lists/:wishlist_id/shopping-list",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /shopping-lists/:wishlist_id/shopping-list",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/shopping-lists/:wishlist_id/shopping-list",
   },
   {
-    "chain": "(layout:HookProvider) > /resources",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /resources",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/resources",
   },
   {
-    "chain": "(layout:HookProvider) > /resources/:resource_id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /resources/:resource_id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/resources/:resource_id",
   },
   {
-    "chain": "(layout:HookProvider) > /mining",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /mining",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/mining",
   },
   {
-    "chain": "(layout:HookProvider) > /mining/ores/:name",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /mining/ores/:name",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/mining/ores/:name",
   },
   {
-    "chain": "(layout:HookProvider) > /mining/locations",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /mining/locations",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/mining/locations",
   },
   {
-    "chain": "(layout:HookProvider) > /mining/locations/:name",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /mining/locations/:name",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/mining/locations/:name",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/items/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/items/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/items/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/items",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/items",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/items",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/ships/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/ships/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/ships/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/ships",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/ships",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/ships",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/commodities",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/commodities",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/commodities",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/commodities/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/commodities/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/commodities/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/locations",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/locations",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/locations",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/refinery",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/refinery",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/refinery",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/manufacturers/:id",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/manufacturers/:id",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/manufacturers/:id",
   },
   {
-    "chain": "(layout:HookProvider) > /wiki/manufacturers",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /wiki/manufacturers",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/wiki/manufacturers",
   },
   {
-    "chain": "(layout:HookProvider) > /error",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /error",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/error",
   },
   {
-    "chain": "(layout:HookProvider) > /guides",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /guides",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/guides",
   },
   {
-    "chain": "(layout:HookProvider) > /guides/:category",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /guides/:category",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/guides/:category",
   },
   {
-    "chain": "(layout:HookProvider) > /guides/:category/:slug",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /guides/:category/:slug",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/guides/:category/:slug",
   },
   {
-    "chain": "(layout:HookProvider) > /about",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /about",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/about",
   },
   {
-    "chain": "(layout:HookProvider) > /help",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /help",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": false,
     "pattern": "/help",
   },
   {
-    "chain": "(layout:HookProvider) > /*",
-    "errorBoundaryAt": "(layout:HookProvider)",
+    "chain": "(layout:AppLayout) > /*",
+    "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
-      "HookProvider",
+      "AppLayout",
     ],
     "lazy": true,
     "pattern": "/*",

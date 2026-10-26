@@ -5,7 +5,7 @@
  *
  * Why this exists: React Router `lazy()` loaders do `(await import(...)).Export`.
  * When the chunk fetch fails, Vite's `__vitePreload` dispatches `vite:preloadError`;
- * our global handler (src/index.tsx) historically `preventDefault()`d it, which made
+ * our global handler (src/entry.client.tsx) historically `preventDefault()`d it, which made
  * the rejected import resolve to `undefined` — so `.Export` threw the confusing
  * "Can't access <Export> of undefined" TypeError. A ~1s blip should never reach
  * that path: a single retry after a short backoff absorbs it with no reload and no
@@ -30,7 +30,7 @@
  * spent we rethrow so the error UI shows instead of looping.
  *
  * This module owns final-failure recovery. Nothing may preventDefault()
- * `vite:preloadError` (see src/index.tsx): that turns the rejection into an
+ * `vite:preloadError` (see src/entry.client.tsx): that turns the rejection into an
  * `undefined` resolution. As a second line of defence, an import that resolves
  * to a non-object is treated as a failed attempt here, so a lazy route can never
  * resolve to `undefined` and always goes retry → reload → error page.

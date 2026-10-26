@@ -1,7 +1,7 @@
 /**
  * Admin: Supplier Roster
  * Lets admin users manage their supplier relationships — add, tier, remove.
- * Gated to admin role via SiteAdminRoute in App.tsx.
+ * Gated to admin role via SiteAdminRoute in src/routes.ts.
  * Will be moved to /seller/suppliers once the feature is stable.
  */
 

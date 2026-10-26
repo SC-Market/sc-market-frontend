@@ -137,8 +137,9 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
     return Promise.resolve(null)
   }
 
-  // In development, use the dev service worker path
-  // In production, vite-plugin-pwa generates sw.js in the dist folder
+  // In production, scripts/build/finalize.ts builds src/sw.ts to /sw.js.
+  // The dev server has no service worker build, so dev registration fails
+  // quietly (environmental, see handleRegistrationFailure).
   const swPath = import.meta.env.DEV ? "/dev-sw.js?dev-sw" : "/sw.js"
 
   // Log for debugging

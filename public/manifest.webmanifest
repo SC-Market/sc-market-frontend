@@ -1,0 +1,166 @@
+{
+  "name": "SC Market - Star Citizen Marketplace",
+  "short_name": "SC Market",
+  "description": "Buy, sell, and trade Star Citizen items and services. Connect with players, manage contracts, and browse the marketplace.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111828",
+  "theme_color": "#111828",
+  "lang": "en",
+  "scope": "/",
+  "id": "space.sc-market.app",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-192x192-safe.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512x512-safe.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512x512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Market",
+      "short_name": "Market",
+      "description": "Browse market listings",
+      "url": "/market",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "short_name": "Services",
+      "description": "Browse contractor services",
+      "url": "/market/services",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Messages",
+      "short_name": "Messages",
+      "description": "View messages",
+      "url": "/messages",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Contracts",
+      "short_name": "Contracts",
+      "description": "View contracts",
+      "url": "/contracts",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "My Orders",
+      "short_name": "Orders",
+      "description": "View my orders",
+      "url": "/orders",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View dashboard",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Recruiting",
+      "short_name": "Recruiting",
+      "description": "Browse recruiting posts",
+      "url": "/recruiting",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "categories": [
+    "games",
+    "shopping",
+    "social"
+  ],
+  "widgets": [
+    {
+      "name": "Recent Orders",
+      "short_name": "Orders",
+      "description": "View your recent orders",
+      "tag": "recent-orders",
+      "template": "/widget/orders",
+      "ms_ac_template": "/widget/orders",
+      "data": "/api/orders/user/data",
+      "type": "application/json",
+      "update": 300000,
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

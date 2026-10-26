@@ -1,7 +1,7 @@
 /**
  * Admin: Requisition Orders
  * Create and track supplier requisition orders (item-anchored, not listing-anchored).
- * Gated to admin role via SiteAdminRoute in App.tsx.
+ * Gated to admin role via SiteAdminRoute in src/routes.ts.
  * Will be moved to /seller/requisitions once the feature is stable.
  */
 

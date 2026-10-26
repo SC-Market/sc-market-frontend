@@ -37,7 +37,18 @@ jobs:
         run: npm test
 
       - name: Build production bundle
+        # Also checks the built shell and that sw.js stays push-only
+        # (scripts/build/finalize.ts).
         run: npm run build
+
+      - name: Service worker stays push-only
+        # No precache, routing or fetch handler, ever: an asset-caching SW
+        # caused deploy crash loops (see src/sw.ts).
+        run: |
+          if grep -nE "precacheAndRoute\(|registerRoute\(|__WB_MANIFEST|addEventListener\([\"'\`]fetch|onfetch\s*=" src/sw.ts dist/sw.js; then
+            echo "::error::sw.js must not precache or handle fetches"
+            exit 1
+          fi
 
   e2e:
     # Read-only Playwright smoke flows + the accessible-name audit, against a

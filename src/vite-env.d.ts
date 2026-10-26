@@ -15,3 +15,8 @@ declare module "virtual:help-content" {
     () => Promise<{ default: import("./features/help/domain/types").ContentBody }>
   >
 }
+
+interface Window {
+  /** Set by entry.client.tsx once the entry chunk runs (see document.html's guard). */
+  __scmEntryStarted?: boolean
+}

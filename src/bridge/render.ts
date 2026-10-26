@@ -15,6 +15,7 @@
  */
 import { PageHead, serializeJsonLd } from "../seo/pageHead"
 import type { BridgeDocument, SummaryBlock } from "./pages"
+import { BRIDGE_SUMMARY_ATTRIBUTE } from "../document/bridgeSummary"
 
 /** The slice of Cloudflare's HTMLRewriter API the bridge uses. */
 export interface RewriterContentOptions {
@@ -88,16 +89,16 @@ export function headMarkup(head: PageHead | null, canonical: string | null, noin
 }
 
 /**
- * Visible summary for #root. React's createRoot() replaces #root's children
- * on first render, so this shows only until the SPA mounts. Tags come from a
- * fixed set; every text node is a `html: false` chunk.
+ * Visible summary for #root. It shows only until the SPA starts: the client
+ * entry removes it (by its data-bridge-summary attribute) before hydrating
+ * #root. Tags come from a fixed set; every text node is a `html: false` chunk.
  */
 export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
   const chunks: HtmlChunk[] = [
     {
       // Top spacing is padding, not margin: a margin collapses through
       // <body>, so the page sat 32px low and shifted up when the app mounted.
-      content: `<main style="max-width:720px;margin:0 auto;padding:32px 16px">`,
+      content: `<main ${BRIDGE_SUMMARY_ATTRIBUTE} style="max-width:720px;margin:0 auto;padding:32px 16px">`,
       html: true,
     },
   ]

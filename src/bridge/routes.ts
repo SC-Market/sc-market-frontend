@@ -1,6 +1,6 @@
 /**
  * Public routes the edge bridge renders a head + summary for. Patterns are
- * copied from src/App.tsx and matched the way react-router ranks them:
+ * copied from src/routes.ts and matched the way react-router ranks them:
  * static segments beat dynamic ones (STATIC_SIBLING_PATHS), matching is
  * case-insensitive and ignores a trailing slash. A unit test checks this
  * matcher against react-router's own matchRoutes.

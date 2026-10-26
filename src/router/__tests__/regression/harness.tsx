@@ -1,6 +1,6 @@
 /**
- * Route regression harness: mounts the app's real route table (`routes` from
- * src/App.tsx) in a memory router inside the same providers src/index.tsx
+ * Route regression harness: mounts the app's real route table (src/routes.ts,
+ * as RouteObjects from src/router/routeObjects.tsx) in a memory router inside the same providers src/index.tsx
  * uses (Redux store from makeStore with a test NetworkEnv, Unhead), and
  * records a stable, diffable description of what each route rendered.
  *
@@ -75,7 +75,9 @@ function elementName(element: React.ReactNode): string | null {
 export function routeLabel(route: RouteObject): string {
   if (route.index) return "(index)"
   if (route.path !== undefined) return route.path
-  const name = elementName(route.element) ?? (route.lazy ? "lazy" : "?")
+  // A page route (src/routes/definePage.tsx) loads its chunk in its loader.
+  const name =
+    elementName(route.element) ?? (route.lazy || route.loader ? "lazy" : "?")
   return `(layout:${name})`
 }
 
@@ -110,7 +112,7 @@ export function enumerateRoutes(routes: RouteObject[]): RouteLeaf[] {
           chain: nextChain,
           guards: nextGuards,
           index: !!route.index,
-          lazy: !!route.lazy,
+          lazy: !!route.lazy || !!route.loader,
           errorBoundaryAt: boundary,
         })
       }

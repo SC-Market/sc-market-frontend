@@ -38,7 +38,7 @@ export function MarketRouter() {
   )
 }
 
-// Pre-built gates for App.tsx route definitions — all render V2 directly
+// Pre-built gates for the route modules (src/routes/pages) — all render V2 directly
 export const ListingDetailGate = () => {
   const { id } = useParams<{ id: string }>()
   return <React.Suspense fallback={<MarketLoadingFallback />}><ListingDetailV2 key={id} /></React.Suspense>

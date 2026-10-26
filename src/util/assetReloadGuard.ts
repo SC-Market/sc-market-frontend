@@ -1,6 +1,6 @@
 /**
  * Rate-limited full page reload when assets fail (post-deploy hash mismatch, etc.).
- * Must stay in sync with the inline script in index.html (same keys / limits).
+ * Must stay in sync with the inline script in src/document/document.html (same keys / limits).
  */
 const ATTEMPTS_KEY = "scmarket_asset_reload_attempts"
 const WINDOW_START_KEY = "scmarket_asset_reload_window_start"

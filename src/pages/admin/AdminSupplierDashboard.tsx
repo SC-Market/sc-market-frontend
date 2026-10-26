@@ -2,7 +2,7 @@
  * Supplier Dashboard
  * Aggregator-facing view: incoming buy orders, open requisitions,
  * stock snapshot, recent orders, and activity feed.
- * Gated to admin role via SiteAdminRoute in App.tsx.
+ * Gated to admin role via SiteAdminRoute in src/routes.ts.
  */
 
 import React, { useState } from "react"

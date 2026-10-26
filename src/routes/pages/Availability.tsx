@@ -1,0 +1,9 @@
+// Route module: the Availability page. Wired up in src/routes.ts.
+
+import { definePage } from "../definePage"
+
+const page = definePage("Availability")
+
+export const clientLoader = page.clientLoader
+export const shouldRevalidate = page.shouldRevalidate
+export default page.Component

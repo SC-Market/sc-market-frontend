@@ -1,5 +1,6 @@
 /**
- * Inlines the entry stylesheet(s) into the built index.html.
+ * Inlines the entry stylesheet(s) into the built index.html (run by
+ * scripts/build/finalize.ts on the finished build).
  *
  * The entry CSS is small (~2 KB: the @font-face rules and base styles; MUI's
  * styles come from emotion at runtime), but as a <link rel="stylesheet"> it is
@@ -15,8 +16,6 @@
  * found in this build's bundle and under MAX_INLINE_BYTES are inlined, so a
  * large future stylesheet stays a cacheable file.
  */
-import type { Plugin } from "vite"
-
 const MAX_INLINE_BYTES = 16 * 1024
 
 const STYLESHEET_LINK =
@@ -33,26 +32,4 @@ export function inlineStylesheets(
     if (/<\/style/i.test(css)) return tag
     return `<style data-inlined-from="/${fileName}">${css}</style>`
   })
-}
-
-export function inlineEntryCssPlugin(): Plugin {
-  return {
-    name: "sc-market-inline-entry-css",
-    apply: "build",
-    enforce: "post",
-    transformIndexHtml: {
-      order: "post",
-      handler(html, ctx) {
-        const bundle = ctx.bundle
-        if (!bundle) return html
-        return inlineStylesheets(html, (fileName) => {
-          const asset = bundle[fileName]
-          if (!asset || asset.type !== "asset") return undefined
-          return typeof asset.source === "string"
-            ? asset.source
-            : new TextDecoder().decode(asset.source)
-        })
-      },
-    },
-  }
 }

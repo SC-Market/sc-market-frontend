@@ -34,7 +34,7 @@ export function Page(
   usePageReady(!!props.loading)
 
   // Set the bare page title through Unhead. The " - SC Market" suffix is added
-  // by the global idempotent titleTemplate in index.tsx, so we must NOT append
+  // by the global idempotent titleTemplate in src/entry.client.tsx, so we must NOT append
   // it here. Passing "" lets that template emit the bare brand. This overrides
   // the low-priority route fallback from usePageTitle.
   useHead({ title: props.title ?? "" })

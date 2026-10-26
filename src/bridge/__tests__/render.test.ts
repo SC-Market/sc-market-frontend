@@ -88,7 +88,7 @@ describe.each(Object.entries(evilDocs))("hostile %s content", (_name, doc) => {
     const textChunks = chunks.filter((c) => !c.html)
     expect(textChunks.map((c) => c.content)).toEqual(expectedTexts(doc.summary))
     for (const c of chunks.filter((c) => c.html)) {
-      expect(c.content).toMatch(/^(<\/?(main|h1|h2|h3|p|ul)( style="[^"]*")?>|<li><a href="\/[^"<>\s]*">|<\/a><\/li>)$/)
+      expect(c.content).toMatch(/^(<\/?(main|h1|h2|h3|p|ul)( data-bridge-summary)?( style="[^"]*")?>|<li><a href="\/[^"<>\s]*">|<\/a><\/li>)$/)
     }
 
     const dom = parse("", `<div id="root">${assemble(chunks)}</div>`)
@@ -110,7 +110,7 @@ describe("headMarkup", () => {
 
   it("drops summary blocks with unexpected tags", () => {
     const chunks = summaryChunks([{ tag: "script" as "p", text: "x" }, { tag: "p", text: "ok" }])
-    expect(assemble(chunks)).toBe(`<main style="max-width:720px;margin:0 auto;padding:32px 16px"><p>ok</p></main>`)
+    expect(assemble(chunks)).toBe(`<main data-bridge-summary style="max-width:720px;margin:0 auto;padding:32px 16px"><p>ok</p></main>`)
   })
 })
 

@@ -12,7 +12,7 @@ exports[`routes (shard 4/4) > /about 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/about",
   ],
   "lazyPending": [],
@@ -20,7 +20,7 @@ exports[`routes (shard 4/4) > /about 1`] = `
     "(help page: links checked by routes.contentLinks.test)",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/about",
   ],
   "pageReady": "true",
@@ -44,7 +44,7 @@ exports[`routes (shard 4/4) > /accountlink 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/accountlink",
   ],
@@ -58,7 +58,7 @@ exports[`routes (shard 4/4) > /accountlink 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/dashboard",
   ],
@@ -84,7 +84,7 @@ exports[`routes (shard 4/4) > /admin/alerts 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/alerts",
@@ -97,7 +97,7 @@ exports[`routes (shard 4/4) > /admin/alerts 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/alerts",
@@ -124,7 +124,7 @@ exports[`routes (shard 4/4) > /admin/attribute-definitions 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/attribute-definitions",
@@ -137,7 +137,7 @@ exports[`routes (shard 4/4) > /admin/attribute-definitions 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/attribute-definitions",
@@ -163,7 +163,7 @@ exports[`routes (shard 4/4) > /admin/market 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/market",
@@ -176,7 +176,7 @@ exports[`routes (shard 4/4) > /admin/market 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/market",
@@ -202,7 +202,7 @@ exports[`routes (shard 4/4) > /admin/premium 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/premium",
@@ -215,7 +215,7 @@ exports[`routes (shard 4/4) > /admin/premium 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/premium",
@@ -239,7 +239,7 @@ exports[`routes (shard 4/4) > /admin/supplier-roster 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/supplier-roster",
@@ -247,7 +247,7 @@ exports[`routes (shard 4/4) > /admin/supplier-roster 1`] = `
   "lazyPending": [],
   "mainLinks": [],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
     "/admin/supplier-roster",
@@ -273,7 +273,7 @@ exports[`routes (shard 4/4) > /buyorders 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/buyorders",
   ],
   "lazyPending": [],
@@ -287,7 +287,7 @@ exports[`routes (shard 4/4) > /buyorders 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/buyorders",
   ],
   "pageReady": "true",
@@ -313,7 +313,7 @@ exports[`routes (shard 4/4) > /contractor/:id 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/contractor/:id",
   ],
   "lazyPending": [],
@@ -330,7 +330,7 @@ exports[`routes (shard 4/4) > /contractor/:id 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/contractor/:id",
   ],
   "pageReady": "true",
@@ -352,7 +352,7 @@ exports[`routes (shard 4/4) > /contractor_invite/:invite_id 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/contractor_invite/:invite_id",
   ],
@@ -365,7 +365,7 @@ exports[`routes (shard 4/4) > /contractor_invite/:invite_id 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -389,7 +389,7 @@ exports[`routes (shard 4/4) > /contracts 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/contracts",
   ],
   "lazyPending": [],
@@ -401,7 +401,7 @@ exports[`routes (shard 4/4) > /contracts 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/contracts",
   ],
   "pageReady": "true",
@@ -423,7 +423,7 @@ exports[`routes (shard 4/4) > /email/unsubscribe 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/email/unsubscribe",
   ],
@@ -435,7 +435,7 @@ exports[`routes (shard 4/4) > /email/unsubscribe 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/email/unsubscribe",
   ],
@@ -458,7 +458,7 @@ exports[`routes (shard 4/4) > /error 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/error",
   ],
   "lazyPending": [],
@@ -470,7 +470,7 @@ exports[`routes (shard 4/4) > /error 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/error",
   ],
   "pageReady": "true",
@@ -492,7 +492,7 @@ exports[`routes (shard 4/4) > /market/aggregate/:id 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market/aggregate/:id",
   ],
   "lazyPending": [],
@@ -504,7 +504,7 @@ exports[`routes (shard 4/4) > /market/aggregate/:id 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -526,7 +526,7 @@ exports[`routes (shard 4/4) > /market/cart 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/cart",
   ],
@@ -539,7 +539,7 @@ exports[`routes (shard 4/4) > /market/cart 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -563,7 +563,7 @@ exports[`routes (shard 4/4) > /market/category/:name 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market/category/:name",
   ],
   "lazyPending": [],
@@ -579,7 +579,7 @@ exports[`routes (shard 4/4) > /market/category/:name 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/market/category/:name",
   ],
   "pageReady": "true",
@@ -601,7 +601,7 @@ exports[`routes (shard 4/4) > /market/manage 1`] = `
   "hasMainNav": true,
   "historyAction": "REPLACE",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/market/manage",
   ],
@@ -611,7 +611,7 @@ exports[`routes (shard 4/4) > /market/manage 1`] = `
     "/shops/test-shop",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/dashboard/shops",
   ],
@@ -638,14 +638,14 @@ exports[`routes (shard 4/4) > /messaging 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/messaging",
   ],
   "lazyPending": [],
   "mainLinks": [],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/messaging",
   ],
@@ -668,7 +668,7 @@ exports[`routes (shard 4/4) > /mining/locations/:name 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/mining/locations/:name",
   ],
   "lazyPending": [],
@@ -680,7 +680,7 @@ exports[`routes (shard 4/4) > /mining/locations/:name 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -702,7 +702,7 @@ exports[`routes (shard 4/4) > /missions/:slug 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/missions/:slug",
   ],
   "lazyPending": [],
@@ -714,7 +714,7 @@ exports[`routes (shard 4/4) > /missions/:slug 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -738,7 +738,7 @@ exports[`routes (shard 4/4) > /myfleet 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/myfleet",
   ],
@@ -751,7 +751,7 @@ exports[`routes (shard 4/4) > /myfleet 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/myfleet",
   ],
@@ -774,7 +774,7 @@ exports[`routes (shard 4/4) > /notifications 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/notifications",
   ],
@@ -787,7 +787,7 @@ exports[`routes (shard 4/4) > /notifications 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -809,7 +809,7 @@ exports[`routes (shard 4/4) > /order/:id 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/order/:id",
   ],
   "lazyPending": [],
@@ -821,7 +821,7 @@ exports[`routes (shard 4/4) > /order/:id 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -843,7 +843,7 @@ exports[`routes (shard 4/4) > /order/service/:service_id 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/order/service/:service_id",
   ],
   "lazyPending": [],
@@ -855,7 +855,7 @@ exports[`routes (shard 4/4) > /order/service/:service_id 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -879,7 +879,7 @@ exports[`routes (shard 4/4) > /order/service/create 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/order/service/create",
   ],
@@ -891,7 +891,7 @@ exports[`routes (shard 4/4) > /order/service/create 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/order/service/create",
   ],
@@ -916,7 +916,7 @@ exports[`routes (shard 4/4) > /orders/assigned 1`] = `
   "hasMainNav": true,
   "historyAction": "REPLACE",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/orders/assigned",
   ],
@@ -930,7 +930,7 @@ exports[`routes (shard 4/4) > /orders/assigned 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/dashboard",
   ],
@@ -953,7 +953,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/fleet 1`] = `
   "hasMainNav": true,
   "historyAction": "PUSH",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "fleet",
@@ -967,7 +967,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/fleet 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/*",
   ],
   "pageReady": "true",
@@ -991,7 +991,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/manage/about 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "manage",
@@ -1006,7 +1006,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/manage/about 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "manage",
@@ -1034,7 +1034,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/manage/settings 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "manage",
@@ -1049,7 +1049,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/manage/settings 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "manage",
@@ -1077,7 +1077,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/members 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "members",
@@ -1090,7 +1090,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/members 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
     "members",
@@ -1114,7 +1114,7 @@ exports[`routes (shard 4/4) > /org/manage 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:OrgRoute)",
     "/org/manage",
@@ -1129,7 +1129,7 @@ exports[`routes (shard 4/4) > /org/manage 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:OrgRoute)",
     "/org/manage",
@@ -1153,7 +1153,7 @@ exports[`routes (shard 4/4) > /org/send 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:OrgRoute)",
     "/org/send",
@@ -1168,7 +1168,7 @@ exports[`routes (shard 4/4) > /org/send 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:OrgRoute)",
     "/org/send",
@@ -1192,7 +1192,7 @@ exports[`routes (shard 4/4) > /resources/:resource_id 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/resources/:resource_id",
   ],
   "lazyPending": [],
@@ -1203,7 +1203,7 @@ exports[`routes (shard 4/4) > /resources/:resource_id 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/resources/:resource_id",
   ],
   "pageReady": "true",
@@ -1227,7 +1227,7 @@ exports[`routes (shard 4/4) > /shop/:shopSlug 1`] = `
   "hasMainNav": true,
   "historyAction": "REPLACE",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "(index)",
@@ -1243,7 +1243,7 @@ exports[`routes (shard 4/4) > /shop/:shopSlug 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "listings",
@@ -1269,7 +1269,7 @@ exports[`routes (shard 4/4) > /shop/:shopSlug/dashboard 1`] = `
   "hasMainNav": true,
   "historyAction": "REPLACE",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "dashboard",
@@ -1283,7 +1283,7 @@ exports[`routes (shard 4/4) > /shop/:shopSlug/dashboard 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "orders",
@@ -1309,7 +1309,7 @@ exports[`routes (shard 4/4) > /shop/:shopSlug/listings 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "listings",
@@ -1325,7 +1325,7 @@ exports[`routes (shard 4/4) > /shop/:shopSlug/listings 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
     "listings",
@@ -1351,7 +1351,7 @@ exports[`routes (shard 4/4) > /shopping-lists 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/shopping-lists",
   ],
   "lazyPending": [],
@@ -1362,7 +1362,7 @@ exports[`routes (shard 4/4) > /shopping-lists 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/shopping-lists",
   ],
   "pageReady": "true",
@@ -1384,7 +1384,7 @@ exports[`routes (shard 4/4) > /shops/create 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/shops/create",
     "(index)",
   ],
@@ -1393,7 +1393,7 @@ exports[`routes (shard 4/4) > /shops/create 1`] = `
     "/dashboard/shops",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/shops/create",
     "(index)",
   ],
@@ -1419,7 +1419,7 @@ exports[`routes (shard 4/4) > /signup 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/signup",
   ],
   "lazyPending": [],
@@ -1430,7 +1430,7 @@ exports[`routes (shard 4/4) > /signup 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/signup",
   ],
   "pageReady": "true",
@@ -1454,7 +1454,7 @@ exports[`routes (shard 4/4) > /wiki/locations 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/wiki/locations",
   ],
   "lazyPending": [],
@@ -1465,7 +1465,7 @@ exports[`routes (shard 4/4) > /wiki/locations 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/wiki/locations",
   ],
   "pageReady": "true",
@@ -1489,7 +1489,7 @@ exports[`routes (shard 4/4) > /wiki/ships/:id 1`] = `
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/wiki/ships/:id",
   ],
   "lazyPending": [],
@@ -1500,7 +1500,7 @@ exports[`routes (shard 4/4) > /wiki/ships/:id 1`] = `
     "/terms",
   ],
   "matches": [
-    "(layout:HookProvider)",
+    "(layout:AppLayout)",
     "/wiki/ships/:id",
   ],
   "pageReady": "true",
