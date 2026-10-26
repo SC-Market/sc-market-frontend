@@ -192,6 +192,15 @@ describe("public/_routes.json", () => {
     }
   })
 
+  it("has a Function file for every included prefix", () => {
+    const files = Object.keys(import.meta.glob("/functions/**/*.ts"))
+    for (const rule of routesJson.include) {
+      const segment = rule.split("/")[1]
+      const file = segment ? `/functions/${segment}/[[path]].ts` : "/functions/index.ts"
+      expect(files, rule).toContain(file)
+    }
+  })
+
   it("stays within Cloudflare's limits (100 rules, 100 chars each)", () => {
     const rules = [...routesJson.include, ...routesJson.exclude]
     expect(rules.length).toBeLessThanOrEqual(100)
