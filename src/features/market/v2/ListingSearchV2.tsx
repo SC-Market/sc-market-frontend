@@ -1099,6 +1099,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
               >
                 <Typography
                   variant="h6"
+                  component="p"
                   color="primary"
                   fontWeight="bold"
                   noWrap
