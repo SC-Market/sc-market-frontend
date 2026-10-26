@@ -2209,7 +2209,10 @@ export type GetOrdersApiResponse =
 export type GetOrdersApiArg = {
   /** Only orders with this status, as orders store it */
   status?: "not-started" | "in-progress" | "fulfilled" | "cancelled"
-  role?: "buyer" | "seller"
+  /** buyer: orders the user placed; customer: the same (the word
+    /offers and the V1 API use for the buyer); seller: orders of the user's
+    shops or assigned to them. Omitted: both. */
+  role?: "buyer" | "customer" | "seller"
   qualityTierMin?: number
   qualityTierMax?: number
   page?: number
