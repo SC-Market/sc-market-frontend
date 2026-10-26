@@ -70,6 +70,10 @@ function App() {
   useWebVitals()
 
   useEffect(() => {
+    // The app's theme styles are in now; drop index.html's pre-app page
+    // background so it can't show through under a different theme.
+    document.documentElement.removeAttribute("data-pre-theme")
+
     // Start background prefetching after the app loads
     startBackgroundPrefetch()
 
