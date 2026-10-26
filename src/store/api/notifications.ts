@@ -172,7 +172,6 @@ export type NotificationActionType =
   | "order_review"
   | "order_review_revision_requested"
   | "order_contractor_applied"
-  | "public_order_create"
   | "order_message"
   | "offer_create"
   | "counter_offer_create"

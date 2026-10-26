@@ -185,12 +185,6 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
           <NotificationActionCheck
             actions={actions}
             setActions={setActions}
-            label={t("AddNotificationWebhook.publicOrderCreated")}
-            action_name={"public_order_create"}
-          />
-          <NotificationActionCheck
-            actions={actions}
-            setActions={setActions}
             label={t("AddNotificationWebhook.orderStatusChange")}
             action_name={"order_status_change"}
           />

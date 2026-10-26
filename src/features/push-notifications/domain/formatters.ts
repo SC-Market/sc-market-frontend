@@ -15,7 +15,6 @@ export function formatActionName(action: string): string {
     order_review: "Order Reviews",
     order_review_revision_requested: "Review Revision Requested",
     order_contractor_applied: "Contractor Applied to Order",
-    public_order_create: "New Public Order",
 
     // Market notifications
     market_item_bid: "Market Item Bids",
