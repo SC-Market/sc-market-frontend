@@ -1,7 +1,7 @@
 /**
  * SidebarV2 test suite.
  *
- * Covers the context-aware navigation panel behind the `nav_v2` flag:
+ * Covers the context-aware navigation panel (the site's only sidebar):
  *   - browse context (logged out / logged in)
  *   - shop context + permission gating
  *   - org context + has_permission gating

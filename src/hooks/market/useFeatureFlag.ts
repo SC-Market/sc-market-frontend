@@ -20,7 +20,6 @@ import { useHydrated } from "../ssr/useHydrated"
 import { isSiteAdmin } from "../../util/siteRole"
 
 export interface FeatureFlags {
-  wiki: boolean
   [key: string]: boolean
 }
 
@@ -37,7 +36,7 @@ export interface UseFeatureFlagReturn {
   setFlag: (flagName: string, enabled: boolean) => Promise<void>
 }
 
-const DEFAULT_FLAGS: FeatureFlags = { wiki: true, nav_v2: true, market_v2_redesign: false, customizable_dashboard: false }
+const DEFAULT_FLAGS: FeatureFlags = { market_v2_redesign: false, customizable_dashboard: false }
 const STORAGE_KEY = "feature_flags"
 /** Written by the retired market_v2 flag; removed on sight, never read. */
 const LEGACY_MARKET_VERSION_KEY = "market_version"

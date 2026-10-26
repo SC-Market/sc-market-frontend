@@ -54,28 +54,30 @@ describe("useFeatureFlag — initial read", () => {
   it("starts from the built-in defaults with an empty localStorage", () => {
     const { result } = renderHook(() => useFeatureFlag())
 
-    expect(result.current.flags.wiki).toBe(true)
-    expect(result.current.flags.nav_v2).toBe(true)
+    expect(result.current.flags.customizable_dashboard).toBe(false)
     expect(result.current.flags.market_v2_redesign).toBe(false)
+    // Retired flags (always on, no longer gated) have no default.
+    expect(result.current.flags.nav_v2).toBeUndefined()
+    expect(result.current.flags.wiki).toBeUndefined()
   })
 
   it("reads stored flags synchronously on the first render", () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ nav_v2: true }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customizable_dashboard: true }))
 
     const { result } = renderHook(() => useFeatureFlag())
 
     // No waitFor: the value must be present on the very first render, or gated
     // components flash the wrong treatment before the sync lands.
-    expect(result.current.flags.nav_v2).toBe(true)
+    expect(result.current.flags.customizable_dashboard).toBe(true)
   })
 
   it("layers stored flags over the defaults rather than replacing them", () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ nav_v2: true }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customizable_dashboard: true }))
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    expect(result.current.flags.nav_v2).toBe(true)
-    expect(result.current.flags.wiki).toBe(true)
+    expect(result.current.flags.customizable_dashboard).toBe(true)
+    expect(result.current.flags.market_v2_redesign).toBe(false)
   })
 
   it("ignores and clears the stale market_version key from the retired market_v2 flag", async () => {
@@ -104,7 +106,7 @@ describe("useFeatureFlag — server render and hydration", () => {
     try {
       const { result } = renderHook(() => useFeatureFlag())
       expect(result.current.flags.market_v2_redesign).toBe(false)
-      expect(result.current.flags.nav_v2).toBe(true)
+      expect(result.current.flags.customizable_dashboard).toBe(false)
     } finally {
       vi.unstubAllGlobals()
     }
@@ -136,8 +138,8 @@ describe("useFeatureFlag — background sync", () => {
     // The hook's header comment claims changes only take effect next session.
     // They do not: the sync calls setFlags, so a flag an admin turns on appears
     // without a reload. This test pins the actual behaviour. Uses
-    // market_v2_redesign because it still defaults off (nav_v2 now defaults on),
-    // so the off → server-enabled → on transition is what's exercised.
+    // market_v2_redesign because it defaults off, so the off → server-enabled →
+    // on transition is what's exercised.
     serverResponse = {
       data: { flags: { market_v2_redesign: true }, overridden_flags: [], has_override: false },
     }
@@ -150,14 +152,14 @@ describe("useFeatureFlag — background sync", () => {
 
   it("persists synced flags for the next session", async () => {
     serverResponse = {
-      data: { flags: { nav_v2: true }, overridden_flags: [], has_override: false },
+      data: { flags: { customizable_dashboard: true }, overridden_flags: [], has_override: false },
     }
 
     renderHook(() => useFeatureFlag())
 
     await waitFor(() => {
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
-      expect(stored.nav_v2).toBe(true)
+      expect(stored.customizable_dashboard).toBe(true)
     })
   })
 
@@ -166,20 +168,20 @@ describe("useFeatureFlag — background sync", () => {
     // isFlagEnabled checks user_feature_overrides before the enabled gate and
     // the rollout, so data.flags already IS the override's value. The client
     // must not second-guess it.
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ nav_v2: false }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customizable_dashboard: false }))
     serverResponse = {
       data: {
-        flags: { nav_v2: true },
-        overridden_flags: ["nav_v2"],
+        flags: { customizable_dashboard: true },
+        overridden_flags: ["customizable_dashboard"],
         has_override: true,
       },
     }
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    await waitFor(() => expect(result.current.flags.nav_v2).toBe(true))
+    await waitFor(() => expect(result.current.flags.customizable_dashboard).toBe(true))
     expect(result.current.hasOverride).toBe(true)
-    expect(result.current.overriddenFlags).toEqual(["nav_v2"])
+    expect(result.current.overriddenFlags).toEqual(["customizable_dashboard"])
   })
 
   it("applies a server-side override on a browser with no stored flags", async () => {
@@ -187,71 +189,71 @@ describe("useFeatureFlag — background sync", () => {
     // overridden flag, and currentLocal came from readStoredFlags(), which
     // always spreads DEFAULT_FLAGS — so `key in currentLocal` was true even
     // when nothing had ever been stored. An enabling override therefore got
-    // overwritten by DEFAULT_FLAGS.nav_v2 (false) on any fresh browser.
+    // overwritten by DEFAULT_FLAGS.customizable_dashboard (false) on any fresh browser.
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull()
     serverResponse = {
       data: {
-        flags: { nav_v2: true },
-        overridden_flags: ["nav_v2"],
+        flags: { customizable_dashboard: true },
+        overridden_flags: ["customizable_dashboard"],
         has_override: true,
       },
     }
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    await waitFor(() => expect(result.current.flags.nav_v2).toBe(true))
-    expect(JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}").nav_v2).toBe(true)
+    await waitFor(() => expect(result.current.flags.customizable_dashboard).toBe(true))
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}").customizable_dashboard).toBe(true)
   })
 
   it("applies a server-side override that disagrees with a stale stored value", async () => {
     // Same shape in the other direction: a disabling override must win over a
     // stored `true` left behind by an earlier session.
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ nav_v2: true }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customizable_dashboard: true }))
     serverResponse = {
       data: {
-        flags: { nav_v2: false },
-        overridden_flags: ["nav_v2"],
+        flags: { customizable_dashboard: false },
+        overridden_flags: ["customizable_dashboard"],
         has_override: true,
       },
     }
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    await waitFor(() => expect(result.current.flags.nav_v2).toBe(false))
+    await waitFor(() => expect(result.current.flags.customizable_dashboard).toBe(false))
   })
 
   it("lets the server disable a flag the user has no override for", async () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ nav_v2: true }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customizable_dashboard: true }))
     serverResponse = {
-      data: { flags: { nav_v2: false }, overridden_flags: [], has_override: false },
+      data: { flags: { customizable_dashboard: false }, overridden_flags: [], has_override: false },
     }
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    await waitFor(() => expect(result.current.flags.nav_v2).toBe(false))
+    await waitFor(() => expect(result.current.flags.customizable_dashboard).toBe(false))
   })
 
   it("leaves flags absent from the server response at their default", async () => {
     // A flag with no feature_flag_config row is missing from the response
     // entirely rather than being false, so the client default has to hold.
     serverResponse = {
-      data: { flags: { nav_v2: true }, overridden_flags: [], has_override: false },
+      data: { flags: { customizable_dashboard: true }, overridden_flags: [], has_override: false },
     }
 
     const { result } = renderHook(() => useFeatureFlag())
 
-    await waitFor(() => expect(result.current.flags.nav_v2).toBe(true))
-    expect(result.current.flags.wiki).toBe(true)
+    await waitFor(() => expect(result.current.flags.customizable_dashboard).toBe(true))
+    expect(result.current.flags.market_v2_redesign).toBe(false)
   })
 
   it("keeps the stored flags when the sync fails", async () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ nav_v2: true }))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ customizable_dashboard: true }))
     dispatch.mockImplementationOnce(() => Promise.reject(new Error("offline")))
 
     const { result } = renderHook(() => useFeatureFlag())
 
     await waitFor(() => expect(result.current.error).not.toBeNull())
-    expect(result.current.flags.nav_v2).toBe(true)
+    expect(result.current.flags.customizable_dashboard).toBe(true)
   })
 
   it("ignores a legacy market_version-only server response", async () => {
@@ -266,7 +268,7 @@ describe("useFeatureFlag — background sync", () => {
 
   it("never writes the legacy market_version key when syncing", async () => {
     serverResponse = {
-      data: { flags: { market_v2: true, nav_v2: true }, overridden_flags: [], has_override: false },
+      data: { flags: { market_v2: true, customizable_dashboard: true }, overridden_flags: [], has_override: false },
     }
 
     renderHook(() => useFeatureFlag())
@@ -281,11 +283,11 @@ describe("useFeatureFlag — setFlag", () => {
     const { result } = renderHook(() => useFeatureFlag())
 
     await act(async () => {
-      await result.current.setFlag("nav_v2", true)
+      await result.current.setFlag("customizable_dashboard", true)
     })
 
-    expect(result.current.flags.nav_v2).toBe(true)
-    expect(JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}").nav_v2).toBe(true)
+    expect(result.current.flags.customizable_dashboard).toBe(true)
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}").customizable_dashboard).toBe(true)
   })
 
   it("does not special-case market_v2 or write the legacy key", async () => {

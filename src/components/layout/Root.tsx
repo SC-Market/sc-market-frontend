@@ -1,6 +1,4 @@
-import { Sidebar } from "../sidebar/Sidebar"
 import { SidebarV2 } from "../sidebar/SidebarV2"
-import { useFeatureFlag } from "../../hooks/market/useFeatureFlag"
 import { Box } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { Navbar } from "../navbar/Navbar"
@@ -22,11 +20,6 @@ import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext
 import { ParticleField } from "../effects/ParticleField"
 import { CommandPalette } from "../command-palette/CommandPalette"
 import { useHydrated } from "../../hooks/ssr/useHydrated"
-
-function NavSidebar() {
-  const { flags } = useFeatureFlag()
-  return flags.nav_v2 ? <SidebarV2 /> : <Sidebar />
-}
 
 export function Root(props: { children: React.ReactNode }) {
   const isMobile = useIsMobile()
@@ -67,7 +60,7 @@ export function Root(props: { children: React.ReactNode }) {
       )}
       <CartDrawerProvider>
       <Navbar />
-      <NavSidebar />
+      <SidebarV2 />
       <Box
         component="main"
         id="main-content"
