@@ -627,8 +627,8 @@ function AllStockLotsGridV2() {
       />
       {addLotListingId && (
         <CreateLotDialogV2
-          listingId={addLotListingId}
-          itemId=""
+          listings={listings}
+          defaultListingId={addLotListingId}
           locations={locations}
           open={!!addLotListingId}
           onClose={() => setAddLotListingId(null)}

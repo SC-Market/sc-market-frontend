@@ -6,7 +6,7 @@
  * **Validates: Requirements 21.1-21.12**
  */
 
-import React, { useState, useCallback } from "react"
+import React, { useState, useCallback, useEffect } from "react"
 import {
   Dialog,
   DialogTitle,
@@ -27,35 +27,39 @@ import {
   Box,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import type { LocationInfo } from "../../../../store/api/v2/market"
-import { useGetVariantTypesQuery } from "../../../../store/api/v2/market"
+import type { LocationInfo, VariantAttributes } from "../../../../store/api/v2/market"
+import {
+  useCreateStockLotMutation,
+  useGetListingDetailQuery,
+  useGetVariantTypesQuery,
+} from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { extractErrorMessage } from "../../../../store/api-utils"
 import { LocationSelector } from "../../components/stock/LocationSelector"
 
 export interface CreateLotDialogV2Props {
   open: boolean
   onClose: () => void
-  listingId: string
-  itemId: string
+  /** The seller's listings the lot can be added to */
+  listings: { listing_id: string; title: string }[]
+  /** Listing preselected when the dialog opens */
+  defaultListingId: string
   locations: LocationInfo[]
 }
 
 /**
  * CreateLotDialogV2 Component
  *
- * Form for creating new stock lots with variant attribute inputs.
- * Includes quality tier, quality value, crafted source, and blueprint tier fields.
- *
- * NOTE: There is NO create stock lot endpoint in the V2 API yet.
- * The only available stock lot mutations are useUpdateStockLotMutation and
- * useBulkUpdateStockLotsMutation. The submit handler is a no-op until the
- * backend endpoint is implemented.
+ * Form for creating a stock lot (POST /stock-lots) on one of the seller's
+ * listings, with variant attribute inputs: quality tier, quality value,
+ * crafted source, and blueprint tier. The lot is added to the listing's item
+ * (bundles: the item picked in the form).
  */
 export function CreateLotDialogV2({
   open,
   onClose,
-  listingId,
-  itemId,
+  listings,
+  defaultListingId,
   locations,
 }: CreateLotDialogV2Props) {
   const { t } = useTranslation()
@@ -63,6 +67,22 @@ export function CreateLotDialogV2({
 
   // Fetch variant type definitions from V2 API
   const { data: variantTypesData } = useGetVariantTypesQuery()
+
+  const [listingId, setListingId] = useState(defaultListingId)
+  useEffect(() => setListingId(defaultListingId), [defaultListingId])
+
+  // A lot belongs to a listing item; resolve the chosen listing's items
+  const { data: listingDetail, isFetching: listingLoading } = useGetListingDetailQuery(
+    { id: listingId },
+    { skip: !listingId },
+  )
+  const listingItems = listingDetail?.items ?? []
+  const [itemId, setItemId] = useState("")
+  useEffect(() => {
+    setItemId(listingItems.length === 1 ? listingItems[0].item_id : "")
+  }, [listingDetail]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const [createStockLot] = useCreateStockLotMutation()
 
   // Form state
   const [quantity, setQuantity] = useState(0)
@@ -101,6 +121,17 @@ export function CreateLotDialogV2({
 
   // Handle submit
   const handleSubmit = useCallback(async () => {
+    if (!itemId) {
+      issueAlert({
+        message: t(
+          "CreateLotDialogV2.itemRequired",
+          "Choose the listing (and item) to add this lot to",
+        ),
+        severity: "error",
+      })
+      return
+    }
+
     // Validate quantity
     if (quantity <= 0) {
       issueAlert({
@@ -154,23 +185,36 @@ export function CreateLotDialogV2({
 
     setIsLoading(true)
 
+    const variantAttributes: VariantAttributes = { quality_tier: qualityTier }
+    if (qualityValue !== undefined) variantAttributes.quality_value = qualityValue
+    if (craftedSource) {
+      variantAttributes.crafted_source = craftedSource as VariantAttributes["crafted_source"]
+    }
+    if (blueprintTier !== undefined) variantAttributes.blueprint_tier = blueprintTier
+
     try {
-      // TODO: No create stock lot endpoint exists in the V2 API yet.
-      // The only available mutations are useUpdateStockLotMutation and
-      // useBulkUpdateStockLotsMutation. Implement this when the backend
-      // adds a POST /v2/stock-lots endpoint.
+      await createStockLot({
+        createStockLotRequest: {
+          item_id: itemId,
+          quantity,
+          variant_attributes: variantAttributes,
+          location_id: locationId ?? undefined,
+          listed,
+          notes: notes.trim() || undefined,
+        },
+      }).unwrap()
 
       issueAlert({
-        message: t(
-          "CreateLotDialogV2.createSuccess",
-          "Lot created successfully",
-        ),
+        message: t("CreateLotDialogV2.createSuccess", "Lot created"),
         severity: "success",
       })
       handleClose()
     } catch (error) {
+      const reason = extractErrorMessage((error as { data?: unknown })?.data)
       issueAlert({
-        message: t("CreateLotDialogV2.createError", "Failed to create lot"),
+        message: reason
+          ? t("CreateLotDialogV2.createErrorReason", "Failed to create lot: {{reason}}", { reason })
+          : t("CreateLotDialogV2.createError", "Failed to create lot"),
         severity: "error",
       })
     } finally {
@@ -186,6 +230,7 @@ export function CreateLotDialogV2({
     listed,
     notes,
     itemId,
+    createStockLot,
     issueAlert,
     t,
     handleClose,
@@ -210,6 +255,43 @@ export function CreateLotDialogV2({
 
       <DialogContent>
         <Stack spacing={2} mt={1}>
+          {/* Listing (and item, for bundles) the lot is added to */}
+          <TextField
+            select
+            fullWidth
+            required
+            label={t("CreateLotDialogV2.listing", "Listing")}
+            value={listings.some((l) => l.listing_id === listingId) ? listingId : ""}
+            onChange={(e) => setListingId(e.target.value)}
+            helperText={
+              listingId && !listingLoading && listingItems.length === 0
+                ? t("CreateLotDialogV2.noItems", "This listing has no item to add stock to")
+                : undefined
+            }
+          >
+            {listings.map((l) => (
+              <MenuItem key={l.listing_id} value={l.listing_id}>
+                {l.title}
+              </MenuItem>
+            ))}
+          </TextField>
+          {listingItems.length > 1 && (
+            <TextField
+              select
+              fullWidth
+              required
+              label={t("CreateLotDialogV2.item", "Item")}
+              value={itemId}
+              onChange={(e) => setItemId(e.target.value)}
+            >
+              {listingItems.map((item) => (
+                <MenuItem key={item.item_id} value={item.item_id}>
+                  {item.game_item.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+
           {/* Quantity */}
           <TextField
             type="number"
@@ -405,7 +487,7 @@ export function CreateLotDialogV2({
         <Button
           onClick={handleSubmit}
           variant="contained"
-          disabled={isLoading}
+          disabled={isLoading || !itemId}
         >
           {isLoading ? (
             <CircularProgress size={20} />

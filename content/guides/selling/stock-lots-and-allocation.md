@@ -20,7 +20,8 @@ Stock on SC Market is kept in lots: a quantity of one item variant, with an opti
 1. Switch the sidebar to your shop and open **Stock**. The page opens on **Manage Inventory**.
 2. Find the lot in **All Stock Lots**. Use **Search lots...** or the **Listing** filter to narrow the list.
 3. Edit the lot's **Quantity** or **Location (optional)** in the grid.
-4. To remove a lot you no longer have, click its delete icon.
+4. To add stock, click **Add Lot**, pick the **Listing**, enter the **Quantity** and the lot's quality, and click **Create Lot**.
+5. To remove a lot you no longer have, click its delete icon.
 
 > [!TIP]
 > To give a listing several lots, for example the same item at two locations or in two qualities, add them under **More options** › **Stock Lots** › **Add Stock Lot** when you create the listing.
