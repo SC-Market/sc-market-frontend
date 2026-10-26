@@ -1,609 +1,552 @@
 /**
  * SplitAllocationView Component
  *
- * Two-panel allocation interface:
- * - Left: Available lots with quantity inputs
- * - Right: Allocation targets showing required vs allocated
+ * The order page's Stock Allocation tab. For each of the order's V2 lines:
+ * - Left: the lots of the same listing item and variant with free units
+ * - Right: the lots the line's units are allocated from
  *
- * Lots come from V2 GET /api/v2/stock-lots (listing_id + the selling org's
- * spectrum_id, which limits them to that org's members). Allocations are
- * read and changed through /api/orders/:id/allocations, which only the
- * order's seller side may use.
+ * Everything goes through V2 /api/v2/orders/{orderId}/allocations (read,
+ * auto-allocate, set a lot's allocation, release), which only the order's
+ * seller side may use. Allocating takes units out of the lot; releasing puts
+ * them back.
  */
 
-import React, { useState, useMemo } from "react"
+import React, { useState } from "react"
 import {
+  Alert,
+  Avatar,
   Box,
   Card,
   CardContent,
-  Grid,
-  Stack,
-  Typography,
-  TextField,
-  IconButton,
   Chip,
-  Avatar,
-  Link,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
+  CircularProgress,
+  Grid,
+  IconButton,
   InputAdornment,
+  Link,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
 } from "@mui/material"
 import {
-  ArrowForwardRounded,
-  ArrowBackRounded,
   InventoryRounded,
-  KeyboardArrowRight,
   KeyboardArrowLeft,
+  KeyboardArrowRight,
 } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import {
-  useManualAllocateOrderMutation,
+  useAutoAllocateOrderStockMutation,
   useGetOrderAllocationsQuery,
-  Allocation,
-} from "../../../../store/api/stockLotsApi"
-import {
-  useGetStockLotsQuery,
-  type StockLotDetail,
+  useManualAllocateOrderStockMutation,
+  useReleaseOrderStockMutation,
+  type OrderAllocation,
+  type OrderAllocationLine,
+  type OrderAllocationLot,
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { MARKET_PATHS } from "../../../../routes/paths"
 
-interface ListingAllocation {
-  listing_id: string
-  quantity: number
-}
-
 interface SplitAllocationViewProps {
   orderId: string
-  /** Spectrum ID of the org selling the order; scopes the stock-lot lookup */
-  spectrumId: string
-  listings: ListingAllocation[]
 }
 
-interface StockLotWithAvailable extends StockLotDetail {
-  quantity_available: number
+/** The message of a failed V2 request ({ error: { message } }). */
+function apiErrorMessage(error: unknown, fallback: string): string {
+  if (error && typeof error === "object" && "data" in error) {
+    const data = (error as { data?: { error?: { message?: unknown } } }).data
+    if (typeof data?.error?.message === "string") return data.error.message
+  }
+  return fallback
 }
 
-import type { AllocationListingData } from "../../../../store/api/stockLotsApi"
+function lotLocation(lot: OrderAllocationLot | null) {
+  return lot?.location?.name || "Unknown"
+}
 
-function getListingTitle(
-  listingData: AllocationListingData | undefined | null,
-  lots: StockLotDetail[] | undefined,
-): string {
+function LotOwner({ lot }: { lot: OrderAllocationLot | null }) {
+  if (!lot?.owner) {
+    return (
+      <Typography variant="body2" color="text.disabled">
+        —
+      </Typography>
+    )
+  }
   return (
-    listingData?.details?.title ||
-    listingData?.title ||
-    lots?.[0]?.listing_title ||
-    "Item"
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      <Avatar
+        src={lot.owner.avatar_url || undefined}
+        sx={{ width: 24, height: 24 }}
+      />
+      <Typography variant="body2" color="text.secondary">
+        {lot.owner.display_name || lot.owner.username}
+      </Typography>
+    </Box>
   )
 }
 
-function getListingImage(
-  listingData: AllocationListingData | undefined | null,
-  lots: StockLotDetail[] | undefined,
-): string | undefined {
-  return listingData?.photos?.[0] || lots?.[0]?.listing_photo || undefined
-}
-
-/** A listing's listed lots in the selling org's shops (V2 stock lots). */
-function useListingLots(listingId: string, spectrumId: string) {
-  return useGetStockLotsQuery({
-    listingId,
-    spectrumId,
-    listed: true,
-    pageSize: 100,
-  })
-}
-
-export function SplitAllocationView({
-  orderId,
-  spectrumId,
-  listings,
-}: SplitAllocationViewProps) {
+export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
   const issueAlert = useAlertHook()
+  const { data, isLoading, error } = useGetOrderAllocationsQuery({ orderId })
+  const [manualAllocate] = useManualAllocateOrderStockMutation()
+  const [autoAllocate, { isLoading: autoLoading }] =
+    useAutoAllocateOrderStockMutation()
+  const [release, { isLoading: releaseLoading }] =
+    useReleaseOrderStockMutation()
 
-  const { data: allocationsData } = useGetOrderAllocationsQuery({
-    order_id: orderId,
-  })
-
-  const [manualAllocate] = useManualAllocateOrderMutation()
-
-  const groupedAllocations = allocationsData?.grouped_allocations || []
-
-  const handleAllocate = async (
+  /** Sets the units `lotId` holds for the line (absolute, 0 releases). */
+  const setLotAllocation = async (
+    line: OrderAllocationLine,
     lotId: string,
-    listingId: string,
     quantity: number,
+    success: string,
   ) => {
-    // Validate against order quantity
-    const listing = listings.find((l) => l.listing_id === listingId)
-    if (listing) {
-      const currentAllocated = allocationsByListing.get(listingId) || 0
-      if (currentAllocated + quantity > listing.quantity) {
-        issueAlert({
-          severity: "error",
-          message: `Cannot allocate ${currentAllocated + quantity} units. Order only requires ${listing.quantity}.`,
-        })
-        return
-      }
-    }
-
     try {
       await manualAllocate({
-        order_id: orderId,
-        allocations: [{ lot_id: lotId, listing_id: listingId, quantity }],
+        orderId,
+        manualOrderAllocationRequest: {
+          allocations: [
+            { lot_id: lotId, quantity, order_item_id: line.order_item_id },
+          ],
+        },
       }).unwrap()
-      issueAlert({
-        severity: "success",
-        message: "Stock allocated successfully",
-      })
-    } catch (error) {
-      const err = error as { data?: { message?: string } }
+      issueAlert({ severity: "success", message: success })
+    } catch (e) {
       issueAlert({
         severity: "error",
-        message: err?.data?.message || "Failed to allocate stock",
+        message: apiErrorMessage(e, "Failed to update the allocation"),
       })
     }
   }
 
-  const handleDeallocate = async (
-    allocationId: string,
-    lotId: string,
-    listingId: string,
-    currentQuantity: number,
-    amountToRemove: number,
-  ) => {
-    const newQuantity = Math.max(0, currentQuantity - amountToRemove)
+  const handleAutoAllocate = async () => {
     try {
-      await manualAllocate({
-        order_id: orderId,
-        allocations: [
-          { lot_id: lotId, listing_id: listingId, quantity: newQuantity },
-        ],
-      }).unwrap()
+      const res = await autoAllocate({ orderId }).unwrap()
       issueAlert({
-        severity: "success",
-        message: "Allocation updated successfully",
+        severity:
+          res.total_allocated < res.total_requested ? "warning" : "success",
+        message: `${res.total_allocated} of ${res.total_requested} units allocated`,
       })
-    } catch (error) {
-      const err = error as { data?: { message?: string } }
+    } catch (e) {
       issueAlert({
         severity: "error",
-        message: err?.data?.message || "Failed to update allocation",
+        message: apiErrorMessage(e, "Failed to allocate stock"),
       })
     }
   }
 
-  const allocationsByListing = useMemo(() => {
-    const map = new Map<string, number>()
-    groupedAllocations.forEach((group) => {
-      map.set(group.listing_id, group.total_allocated)
-    })
-    return map
-  }, [groupedAllocations])
-
-  const [inputValues, setInputValues] = React.useState<
-    Record<string, Record<string, number>>
-  >({})
-
-  // Update input values after allocations change
-  React.useEffect(() => {
-    setInputValues((prev) => {
-      const newValues: Record<string, Record<string, number>> = {}
-      listings.forEach((listing) => {
-        const currentAllocated =
-          allocationsByListing.get(listing.listing_id) || 0
-        const remaining = listing.quantity - currentAllocated
-        const group = groupedAllocations.find(
-          (g) => g.listing_id === listing.listing_id,
-        )
-        const lotsData = group?.allocations || []
-
-        newValues[listing.listing_id] = {}
-        // Only update if there's remaining to allocate
-        if (remaining > 0) {
-          lotsData.forEach((alloc) => {
-            if (alloc.lot) {
-              const lotId = alloc.lot_id
-              // Keep existing value if it exists and is valid, otherwise set to 0
-              newValues[listing.listing_id][lotId] =
-                prev[listing.listing_id]?.[lotId] || 0
-            }
-          })
-        }
+  const handleReleaseAll = async () => {
+    try {
+      await release({ orderId, releaseOrderAllocationsRequest: {} }).unwrap()
+      issueAlert({
+        severity: "success",
+        message: "Allocated stock returned to its lots",
       })
-      return newValues
-    })
-  }, [groupedAllocations, allocationsByListing, listings])
+    } catch (e) {
+      issueAlert({
+        severity: "error",
+        message: apiErrorMessage(e, "Failed to release stock"),
+      })
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" p={4}>
+        <CircularProgress aria-label="Loading stock allocations" />
+      </Box>
+    )
+  }
+  if (error || !data) {
+    return (
+      <Alert severity="error">
+        {apiErrorMessage(error, "Failed to load stock allocations")}
+      </Alert>
+    )
+  }
+
+  const fullyAllocated = data.total_allocated >= data.total_requested
 
   return (
     <Card>
       <CardContent>
-        <Grid container spacing={2}>
-          {/* Left: Available Lots */}
-          <Grid item xs={12} md={6}>
-            <Stack spacing={2}>
-              <Typography variant="h6">Available Stock</Typography>
-              {listings.map((listing) => {
-                const group = groupedAllocations.find(
-                  (g) => g.listing_id === listing.listing_id,
-                )
-                return (
-                  <AvailableLots
-                    key={listing.listing_id}
-                    listingId={listing.listing_id}
-                    spectrumId={spectrumId}
-                    listingData={group?.listing}
-                    allocations={group?.allocations || []}
-                    onAllocate={handleAllocate}
-                    orderQuantity={listing.quantity}
-                    currentAllocated={
-                      allocationsByListing.get(listing.listing_id) || 0
-                    }
-                    allocateQtys={inputValues[listing.listing_id] || {}}
-                    setAllocateQtys={(qtys) =>
-                      setInputValues((prev) => ({
-                        ...prev,
-                        [listing.listing_id]: qtys,
-                      }))
-                    }
-                  />
-                )
-              })}
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={1}
+          alignItems={{ sm: "center" }}
+          justifyContent="space-between"
+          mb={2}
+        >
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography variant="h6">Stock Allocation</Typography>
+            <Chip
+              label={`${data.total_allocated} / ${data.total_requested}`}
+              color={fullyAllocated ? "success" : "warning"}
+              size="small"
+            />
+            <Chip
+              label={`Mode: ${data.allocation_mode}`}
+              size="small"
+              variant="outlined"
+            />
+          </Stack>
+          {data.editable && data.lines.length > 0 && (
+            <Stack direction="row" spacing={1}>
+              <LoadingButton
+                variant="contained"
+                size="small"
+                loading={autoLoading}
+                disabled={fullyAllocated}
+                onClick={handleAutoAllocate}
+              >
+                Auto-allocate
+              </LoadingButton>
+              <LoadingButton
+                variant="outlined"
+                size="small"
+                loading={releaseLoading}
+                disabled={data.total_allocated === 0}
+                onClick={handleReleaseAll}
+              >
+                Release all
+              </LoadingButton>
             </Stack>
-          </Grid>
+          )}
+        </Stack>
 
-          {/* Right: Allocation Targets */}
-          <Grid item xs={12} md={6}>
-            <Stack spacing={2}>
-              <Typography variant="h6">Allocation Targets</Typography>
-              {listings.map((listing) => {
-                const group = groupedAllocations.find(
-                  (g) => g.listing_id === listing.listing_id,
-                )
-                return (
-                  <AllocationTarget
-                    key={listing.listing_id}
-                    listingId={listing.listing_id}
-                    spectrumId={spectrumId}
-                    listingData={group?.listing}
-                    required={listing.quantity}
-                    allocated={
-                      allocationsByListing.get(listing.listing_id) || 0
-                    }
-                    allocations={group?.allocations || []}
-                    onDeallocate={handleDeallocate}
-                  />
-                )
-              })}
-            </Stack>
-          </Grid>
-        </Grid>
+        {!data.editable && (
+          <Alert severity="info" sx={{ mb: 2 }}>
+            This order is {data.order_status}; its allocations can no longer
+            change.
+          </Alert>
+        )}
+        {data.lines.length === 0 && (
+          <Typography color="text.secondary">
+            This order has no items to allocate stock for.
+          </Typography>
+        )}
+
+        <Stack spacing={3}>
+          {data.lines.map((line) => (
+            <LineAllocation
+              key={line.order_item_id}
+              line={line}
+              editable={data.editable}
+              onSet={setLotAllocation}
+            />
+          ))}
+        </Stack>
       </CardContent>
     </Card>
   )
 }
 
-function AvailableLots({
-  listingId,
-  spectrumId,
-  listingData,
-  allocations,
-  onAllocate,
-  orderQuantity,
-  currentAllocated,
-  allocateQtys,
-  setAllocateQtys,
+function LineAllocation({
+  line,
+  editable,
+  onSet,
 }: {
-  listingId: string
-  spectrumId: string
-  listingData?: AllocationListingData | null
-  allocations: Allocation[]
-  onAllocate: (lotId: string, listingId: string, quantity: number) => void
-  orderQuantity: number
-  currentAllocated: number
-  allocateQtys: Record<string, number>
-  setAllocateQtys: (qtys: Record<string, number>) => void
+  line: OrderAllocationLine
+  editable: boolean
+  onSet: (
+    line: OrderAllocationLine,
+    lotId: string,
+    quantity: number,
+    success: string,
+  ) => Promise<void>
 }) {
-  const { data: lotsData } = useListingLots(listingId, spectrumId)
-
-  // quantity_allocated counts every active allocation of the lot (this
-  // order's included), so what is left is what can still be allocated.
-  const lots: StockLotWithAvailable[] = useMemo(() => {
-    return (lotsData?.lots || [])
-      .map((lot) => ({
-        ...lot,
-        quantity_available: lot.quantity_total - lot.quantity_allocated,
-      }))
-      .filter((lot) => lot.quantity_available > 0)
-  }, [lotsData?.lots])
-
-  const title = getListingTitle(listingData, lotsData?.lots)
-  const image = getListingImage(listingData, lotsData?.lots)
-
-  if (lots.length === 0) return null
+  const remaining = line.quantity - line.quantity_allocated
+  const heldByLot = new Map<string, number>()
+  for (const a of line.allocations)
+    if (a.lot_id) heldByLot.set(a.lot_id, a.quantity)
 
   return (
     <Box>
-      <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+      <Stack direction="row" spacing={1} alignItems="center" mb={1}>
         <Avatar
-          src={image}
+          src={line.listing_photo || undefined}
           sx={{ width: 32, height: 32, borderRadius: 1 }}
           variant="rounded"
         >
           <InventoryRounded />
         </Avatar>
         <Link
-          href={MARKET_PATHS.listing(listingId)}
+          href={MARKET_PATHS.listing(line.listing_id)}
           target="_blank"
           underline="hover"
         >
-          <Typography variant="h6">{title}</Typography>
+          <Typography variant="subtitle1">{line.listing_title}</Typography>
         </Link>
+        <Chip
+          label={line.variant.display_name}
+          size="small"
+          variant="outlined"
+        />
+        <Chip
+          label={`${line.quantity_allocated} / ${line.quantity}`}
+          color={remaining <= 0 ? "success" : "warning"}
+          size="small"
+        />
       </Stack>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Typography variant="subtitle2" gutterBottom>
+            Available Stock
+          </Typography>
+          <AvailableLots
+            line={line}
+            remaining={remaining}
+            editable={editable}
+            onAllocate={(lotId, qty) =>
+              onSet(
+                line,
+                lotId,
+                (heldByLot.get(lotId) ?? 0) + qty,
+                "Stock allocated",
+              )
+            }
+          />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="subtitle2" gutterBottom>
+            Allocated
+          </Typography>
+          <AllocatedLots
+            allocations={line.allocations}
+            editable={editable}
+            onDeallocate={async (alloc, qty) => {
+              if (alloc.lot_id)
+                await onSet(
+                  line,
+                  alloc.lot_id,
+                  alloc.quantity - qty,
+                  "Allocation updated",
+                )
+            }}
+          />
+        </Grid>
+      </Grid>
+    </Box>
+  )
+}
 
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Location</TableCell>
-            <TableCell>User</TableCell>
-            <TableCell width={120}>Quantity</TableCell>
-            <TableCell width={50}></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {lots.map((lot) => {
-            const allocateQty = allocateQtys[lot.lot_id] || 0
-            const remaining = orderQuantity - currentAllocated
-            const isFullyAllocated = remaining <= 0
-            const wouldExceed =
-              allocateQty > 0 && currentAllocated + allocateQty > orderQuantity
-            return (
-              <TableRow key={lot.lot_id}>
-                <TableCell>{lot.location?.name || "Unknown"}</TableCell>
-                <TableCell>
-                  {lot.owner ? (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Avatar
-                        src={lot.owner.avatar_url || undefined}
-                        sx={{ width: 24, height: 24 }}
-                      />
-                      <Typography variant="body2" color="text.secondary">
-                        {lot.owner.display_name || lot.owner.username}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <Typography variant="body2" color="text.disabled">
-                      —
-                    </Typography>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <TextField
+function AvailableLots({
+  line,
+  remaining,
+  editable,
+  onAllocate,
+}: {
+  line: OrderAllocationLine
+  remaining: number
+  editable: boolean
+  onAllocate: (lotId: string, quantity: number) => Promise<void>
+}) {
+  const [qtys, setQtys] = useState<Record<string, number>>({})
+
+  if (line.available_lots.length === 0) {
+    return (
+      <Typography variant="body2" color="text.secondary">
+        No free stock of this variant.
+      </Typography>
+    )
+  }
+
+  return (
+    <Table size="small">
+      <TableHead>
+        <TableRow>
+          <TableCell>Location</TableCell>
+          <TableCell>User</TableCell>
+          <TableCell width={130}>Quantity</TableCell>
+          <TableCell width={50} />
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {line.available_lots.map((lot) => {
+          const qty = qtys[lot.lot_id] || 0
+          const wouldExceed = qty > remaining
+          const disabled = !editable || remaining <= 0
+          return (
+            <TableRow key={lot.lot_id}>
+              <TableCell>
+                {lotLocation(lot)}
+                {!lot.listed && (
+                  <Chip
+                    label="Unlisted"
                     size="small"
-                    inputMode="numeric"
-                    value={allocateQty || ""}
-                    onChange={(e) => {
-                      const val = Math.max(
+                    variant="outlined"
+                    sx={{ ml: 1 }}
+                  />
+                )}
+              </TableCell>
+              <TableCell>
+                <LotOwner lot={lot} />
+              </TableCell>
+              <TableCell>
+                <TextField
+                  size="small"
+                  inputMode="numeric"
+                  value={qty || ""}
+                  disabled={disabled}
+                  error={wouldExceed}
+                  helperText={
+                    wouldExceed ? `Line needs ${remaining} more` : undefined
+                  }
+                  inputProps={{
+                    "aria-label": `Quantity to allocate from ${lotLocation(lot)}`,
+                  }}
+                  onChange={(e) =>
+                    setQtys({
+                      ...qtys,
+                      [lot.lot_id]: Math.max(
                         0,
                         Math.min(
                           lot.quantity_available,
                           parseInt(e.target.value) || 0,
                         ),
-                      )
-                      setAllocateQtys({
-                        ...allocateQtys,
-                        [lot.lot_id]: val,
-                      })
-                    }}
-                    onFocus={(e) => {
-                      if (!allocateQty) {
-                        const autoFill = Math.min(
+                      ),
+                    })
+                  }
+                  onFocus={() => {
+                    if (!qty) {
+                      setQtys({
+                        ...qtys,
+                        [lot.lot_id]: Math.min(
                           lot.quantity_available,
                           remaining,
-                        )
-                        setAllocateQtys({
-                          ...allocateQtys,
-                          [lot.lot_id]: autoFill,
-                        })
-                      }
-                    }}
-                    disabled={isFullyAllocated}
-                    error={wouldExceed}
-                    helperText={
-                      wouldExceed
-                        ? `Would exceed order quantity (${orderQuantity})`
-                        : undefined
-                    }
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          / {lot.quantity_available}
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={{ width: 120 }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <IconButton
-                    size="small"
-                    aria-label={`Allocate from ${lot.location?.name || "lot"}`}
-                    disabled={
-                      allocateQty === 0 || wouldExceed || isFullyAllocated
-                    }
-                    onClick={() => {
-                      onAllocate(lot.lot_id, listingId, allocateQty)
-                      setAllocateQtys({
-                        ...allocateQtys,
-                        [lot.lot_id]: 0,
+                        ),
                       })
-                    }}
-                  >
-                    <KeyboardArrowRight />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
-    </Box>
+                    }
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        / {lot.quantity_available}
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{ width: 130 }}
+                />
+              </TableCell>
+              <TableCell>
+                <IconButton
+                  size="small"
+                  aria-label={`Allocate from ${lotLocation(lot)}`}
+                  disabled={disabled || qty === 0 || wouldExceed}
+                  onClick={async () => {
+                    await onAllocate(lot.lot_id, qty)
+                    setQtys({ ...qtys, [lot.lot_id]: 0 })
+                  }}
+                >
+                  <KeyboardArrowRight />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          )
+        })}
+      </TableBody>
+    </Table>
   )
 }
 
-function AllocationTarget({
-  listingId,
-  spectrumId,
-  listingData,
-  required,
-  allocated,
+function AllocatedLots({
   allocations,
+  editable,
   onDeallocate,
 }: {
-  listingId: string
-  spectrumId: string
-  listingData?: AllocationListingData | null
-  required: number
-  allocated: number
-  allocations: Allocation[]
-  onDeallocate: (
-    allocationId: string,
-    lotId: string,
-    listingId: string,
-    currentQuantity: number,
-    amountToRemove: number,
-  ) => void
+  allocations: OrderAllocation[]
+  editable: boolean
+  onDeallocate: (allocation: OrderAllocation, quantity: number) => Promise<void>
 }) {
-  const [deallocateQtys, setDeallocateQtys] = React.useState<
-    Record<string, number>
-  >({})
-  const { data: lotsData } = useListingLots(listingId, spectrumId)
-  const title = getListingTitle(listingData, lotsData?.lots)
-  const image = getListingImage(listingData, lotsData?.lots)
+  const [qtys, setQtys] = useState<Record<string, number>>({})
 
-  const isComplete = allocated >= required
+  if (allocations.length === 0) {
+    return (
+      <Typography variant="body2" color="text.secondary">
+        Nothing allocated yet.
+      </Typography>
+    )
+  }
 
   return (
-    <Box>
-      <Stack direction="row" spacing={1} alignItems="center" mb={2}>
-        <Avatar
-          src={image}
-          sx={{ width: 32, height: 32, borderRadius: 1 }}
-          variant="rounded"
-        >
-          <InventoryRounded />
-        </Avatar>
-        <Link
-          href={MARKET_PATHS.listing(listingId)}
-          target="_blank"
-          underline="hover"
-        >
-          <Typography variant="h6">{title}</Typography>
-        </Link>
-        <Chip
-          label={`${allocated} / ${required}`}
-          color={isComplete ? "success" : "warning"}
-          size="small"
-        />
-      </Stack>
-
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell width={50}></TableCell>
-            <TableCell width={120}>Quantity</TableCell>
-            <TableCell>Location</TableCell>
-            <TableCell>User</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {allocations.map((alloc) => {
-            const deallocateQty = deallocateQtys[alloc.allocation_id] || 0
-            return (
-              <TableRow key={alloc.allocation_id}>
-                <TableCell>
-                  <IconButton
-                    size="small"
-                    aria-label="Deallocate"
-                    disabled={deallocateQty === 0}
-                    onClick={() => {
-                      onDeallocate(
-                        alloc.allocation_id,
-                        alloc.lot_id,
-                        listingId,
-                        alloc.quantity,
-                        deallocateQty,
-                      )
-                      setDeallocateQtys((prev) => ({
-                        ...prev,
-                        [alloc.allocation_id]: 0,
-                      }))
-                    }}
-                  >
-                    <KeyboardArrowLeft />
-                  </IconButton>
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    size="small"
-                    inputMode="numeric"
-                    value={deallocateQty || ""}
-                    onChange={(e) => {
-                      const val = Math.max(
+    <Table size="small">
+      <TableHead>
+        <TableRow>
+          <TableCell width={50} />
+          <TableCell width={130}>Quantity</TableCell>
+          <TableCell>Location</TableCell>
+          <TableCell>User</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {allocations.map((alloc) => {
+          const qty = qtys[alloc.allocation_id] || 0
+          // A deleted lot has nowhere to return units to.
+          const disabled = !editable || !alloc.lot_id
+          return (
+            <TableRow key={alloc.allocation_id}>
+              <TableCell>
+                <IconButton
+                  size="small"
+                  aria-label={`Return units to ${lotLocation(alloc.lot)}`}
+                  disabled={disabled || qty === 0}
+                  onClick={async () => {
+                    await onDeallocate(alloc, qty)
+                    setQtys({ ...qtys, [alloc.allocation_id]: 0 })
+                  }}
+                >
+                  <KeyboardArrowLeft />
+                </IconButton>
+              </TableCell>
+              <TableCell>
+                <TextField
+                  size="small"
+                  inputMode="numeric"
+                  value={qty || ""}
+                  disabled={disabled}
+                  inputProps={{
+                    "aria-label": `Quantity to return to ${lotLocation(alloc.lot)}`,
+                  }}
+                  onChange={(e) =>
+                    setQtys({
+                      ...qtys,
+                      [alloc.allocation_id]: Math.max(
                         0,
                         Math.min(alloc.quantity, parseInt(e.target.value) || 0),
-                      )
-                      setDeallocateQtys((prev) => ({
-                        ...prev,
-                        [alloc.allocation_id]: val,
-                      }))
-                    }}
-                    onFocus={(e) => {
-                      if (!deallocateQty) {
-                        setDeallocateQtys((prev) => ({
-                          ...prev,
-                          [alloc.allocation_id]: alloc.quantity,
-                        }))
-                      }
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          / {alloc.quantity}
-                        </InputAdornment>
                       ),
-                    }}
-                    sx={{ width: 120 }}
-                  />
-                </TableCell>
-                <TableCell>{alloc.lot?.location?.name || "Unknown"}</TableCell>
-                <TableCell>
-                  {alloc.lot?.owner ? (
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Avatar
-                        src={alloc.lot.owner.avatar || undefined}
-                        sx={{ width: 24, height: 24 }}
-                      />
-                      <Typography variant="body2" color="text.secondary">
-                        {alloc.lot.owner.display_name ||
-                          alloc.lot.owner.username}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <Typography variant="body2" color="text.disabled">
-                      —
-                    </Typography>
-                  )}
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
-    </Box>
+                    })
+                  }
+                  onFocus={() => {
+                    if (!qty)
+                      setQtys({
+                        ...qtys,
+                        [alloc.allocation_id]: alloc.quantity,
+                      })
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        / {alloc.quantity}
+                      </InputAdornment>
+                    ),
+                  }}
+                  sx={{ width: 130 }}
+                />
+              </TableCell>
+              <TableCell>
+                {alloc.lot ? lotLocation(alloc.lot) : "Deleted lot"}
+              </TableCell>
+              <TableCell>
+                <LotOwner lot={alloc.lot} />
+              </TableCell>
+            </TableRow>
+          )
+        })}
+      </TableBody>
+    </Table>
   )
 }

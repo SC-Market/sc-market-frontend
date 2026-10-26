@@ -364,25 +364,7 @@ export function ViewOrder() {
                   order?.contractor &&
                   activeTab === allocationTab && (
                     <Grid item xs={12}>
-                      <SplitAllocationView
-                        orderId={order.order_id}
-                        spectrumId={order.contractor}
-                        listings={
-                          // Use V2 order items if available, fall back to V1
-                          (orderDetailV2?.items?.length
-                            ? orderDetailV2.items.map((item) => ({
-                                listing_id: item.listing_id,
-                                quantity: item.quantity,
-                              }))
-                            : order.market_listings?.map((listing: { listing_id: string | { listing_id: string }; quantity: number }) => ({
-                                listing_id:
-                                  typeof listing.listing_id === "string"
-                                    ? listing.listing_id
-                                    : listing.listing_id?.listing_id,
-                                quantity: listing.quantity,
-                              }))) || []
-                        }
-                      />
+                      <SplitAllocationView orderId={order.order_id} />
                     </Grid>
                   )}
 

@@ -6,4 +6,3 @@
 
 export { SplitAllocationView } from "./SplitAllocationView"
 export { InsufficientStockDialog } from "./InsufficientStockDialog"
-export { AllocationStatusDisplay } from "./AllocationStatusDisplay"

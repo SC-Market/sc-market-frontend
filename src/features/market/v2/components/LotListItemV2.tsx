@@ -191,8 +191,9 @@ export function LotListItemV2({
                 {lot.quantity_total.toLocaleString()}
               </Typography>
               <Stack direction="row" spacing={0.5} alignItems="center">
+                {/* Allocated units are already out of quantity_total */}
                 <Typography variant="caption" color="success.main">
-                  {(lot.quantity_total - (lot.quantity_allocated || 0)).toLocaleString()} {t("LotListItemV2.available", "available")}
+                  {lot.quantity_total.toLocaleString()} {t("LotListItemV2.available", "available")}
                 </Typography>
                 {(lot.quantity_allocated || 0) > 0 && (
                   <Typography variant="caption" color="warning.main">

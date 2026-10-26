@@ -499,6 +499,47 @@ const injectedRtkApi = api
         }),
         providesTags: ["Orders V2"],
       }),
+      getOrderAllocations: build.query<
+        GetOrderAllocationsApiResponse,
+        GetOrderAllocationsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/${queryArg.orderId}/allocations`,
+        }),
+        providesTags: ["Orders V2", "Stock Lots V2"],
+      }),
+      autoAllocateOrderStock: build.mutation<
+        AutoAllocateOrderStockApiResponse,
+        AutoAllocateOrderStockApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/${queryArg.orderId}/allocations/auto`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Orders V2", "Stock Lots V2"],
+      }),
+      manualAllocateOrderStock: build.mutation<
+        ManualAllocateOrderStockApiResponse,
+        ManualAllocateOrderStockApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/${queryArg.orderId}/allocations/manual`,
+          method: "POST",
+          body: queryArg.manualOrderAllocationRequest,
+        }),
+        invalidatesTags: ["Orders V2", "Stock Lots V2"],
+      }),
+      releaseOrderStock: build.mutation<
+        ReleaseOrderStockApiResponse,
+        ReleaseOrderStockApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/${queryArg.orderId}/allocations/release`,
+          method: "POST",
+          body: queryArg.releaseOrderAllocationsRequest,
+        }),
+        invalidatesTags: ["Orders V2", "Stock Lots V2"],
+      }),
       getOnboardingStatus: build.query<
         GetOnboardingStatusApiResponse,
         GetOnboardingStatusApiArg
@@ -2274,6 +2315,28 @@ export type GetOrdersByListingApiArg = {
   /** Listing UUID */
   listingId: string
 }
+export type GetOrderAllocationsApiResponse =
+  /** status 200 Ok */ OrderAllocationsResponse
+export type GetOrderAllocationsApiArg = {
+  orderId: string
+}
+export type AutoAllocateOrderStockApiResponse =
+  /** status 200 Ok */ OrderAllocationsResponse
+export type AutoAllocateOrderStockApiArg = {
+  orderId: string
+}
+export type ManualAllocateOrderStockApiResponse =
+  /** status 200 Ok */ OrderAllocationsResponse
+export type ManualAllocateOrderStockApiArg = {
+  orderId: string
+  manualOrderAllocationRequest: ManualOrderAllocationRequest
+}
+export type ReleaseOrderStockApiResponse =
+  /** status 200 Ok */ OrderAllocationsResponse
+export type ReleaseOrderStockApiArg = {
+  orderId: string
+  releaseOrderAllocationsRequest: ReleaseOrderAllocationsRequest
+}
 export type GetOnboardingStatusApiResponse =
   /** status 200 Ok */ OnboardingStatusResponse
 export type GetOnboardingStatusApiArg = void
@@ -3581,9 +3644,11 @@ export type StockLotDetail = {
   listing_photo: string | null
   /** Variant information */
   variant: StockLotVariant
-  /** Total quantity in this lot */
+  /** Units in this lot that are free: not allocated to any order */
   quantity_total: number
-  /** Quantity currently allocated to active orders */
+  /** Units taken from this lot for orders that are still open. They are
+    already out of quantity_total (allocating moves them out), so the lot
+    held quantity_total + quantity_allocated before those orders. */
   quantity_allocated: number
   /** Location information (null if unspecified) */
   location: LocationInfo | null
@@ -4128,6 +4193,68 @@ export type ListingOfferSummary = {
 export type OrdersByListingResponse = {
   orders: ListingOrderSummary[]
   offers: ListingOfferSummary[]
+}
+export type OrderAllocationLot = {
+  lot_id: string
+  /** Units still free in the lot (not held by any order) */
+  quantity_available: number
+  /** Whether the lot is listed for sale. Unlisted lots can still be allocated by hand. */
+  listed: boolean
+  location: LocationInfo | null
+  owner: OwnerInfo | null
+}
+export type OrderAllocation = {
+  allocation_id: string
+  order_item_id: string
+  /** Null if the lot has been deleted since */
+  lot_id: string | null
+  quantity: number
+  /** User who allocated by hand; null for automatic allocation */
+  allocated_by: string | null
+  created_at: string
+  updated_at: string
+  lot: OrderAllocationLot | null
+}
+export type OrderAllocationLine = {
+  order_item_id: string
+  listing_id: string
+  listing_title: string
+  listing_photo: string | null
+  variant: StockLotVariant
+  /** Units the line requires */
+  quantity: number
+  /** Units currently held for the line */
+  quantity_allocated: number
+  allocations: OrderAllocation[]
+  /** Lots of the same listing item and variant with free units, oldest first */
+  available_lots: OrderAllocationLot[]
+}
+export type OrderAllocationsResponse = {
+  order_id: string
+  order_status: string
+  /** The selling shop's allocation mode: auto, manual or none */
+  allocation_mode: "auto" | "manual" | "none"
+  /** False once the order is cancelled or fulfilled */
+  editable: boolean
+  lines: OrderAllocationLine[]
+  total_requested: number
+  total_allocated: number
+}
+export type ManualOrderAllocationInput = {
+  /** Lot to allocate from (UUID) */
+  lot_id: string
+  /** Units of this lot the order should hold after the request (not a delta).
+    0 releases the lot's allocation. */
+  quantity: number
+  /** Order line, needed only when the lot matches several lines */
+  order_item_id?: string
+}
+export type ManualOrderAllocationRequest = {
+  allocations: ManualOrderAllocationInput[]
+}
+export type ReleaseOrderAllocationsRequest = {
+  /** Allocations to release; omit to release all of the order's allocations */
+  allocation_ids?: string[]
 }
 export type OnboardingStatusResponse = {
   completed: boolean
@@ -7075,6 +7202,10 @@ export const {
   useGetOrderDetailQuery,
   useGetOrdersQuery,
   useGetOrdersByListingQuery,
+  useGetOrderAllocationsQuery,
+  useAutoAllocateOrderStockMutation,
+  useManualAllocateOrderStockMutation,
+  useReleaseOrderStockMutation,
   useGetOnboardingStatusQuery,
   useCompleteOnboardingMutation,
   useSearchOffersQuery,
