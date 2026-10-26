@@ -12,7 +12,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
-import { languages } from "../../util/i18n"
+import { changeLocale, languages } from "../../util/i18n"
 import { useLightTheme, ThemeChoice } from "../../hooks/styles/LightTheme"
 import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
 import {
@@ -113,7 +113,7 @@ export function PreferencesControls() {
   // Initialize language from user profile if available
   useEffect(() => {
     if (userProfile?.locale && userProfile.locale !== i18n.language) {
-      i18n.changeLanguage(userProfile.locale)
+      void changeLocale(userProfile.locale)
     }
   }, [userProfile?.locale, i18n])
 
@@ -121,12 +121,12 @@ export function PreferencesControls() {
     try {
       // Update the backend with the new locale
       await updateLocale({ locale: language }).unwrap()
-      // Update the frontend i18n
-      i18n.changeLanguage(language)
+      // Update the frontend i18n (strings first, so there's no English flash)
+      await changeLocale(language)
     } catch (error) {
       console.error("Failed to update locale:", error)
       // Still update the frontend even if backend fails
-      i18n.changeLanguage(language)
+      await changeLocale(language)
     }
   }
 

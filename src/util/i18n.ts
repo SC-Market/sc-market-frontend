@@ -152,6 +152,13 @@ i18n
     interpolation: {
       escapeValue: false,
     },
+    // Re-render when a locale bundle arrives. Bundles other than English load
+    // on demand (loadLocale), sometimes after the language is already set
+    // (the detected language at startup); without this, components kept
+    // showing the English fallback until something else re-rendered them.
+    react: {
+      bindI18nStore: "added",
+    },
     resources: {
       en: { translation: en },
     },
@@ -168,10 +175,16 @@ if (typeof window !== "undefined") {
     loadLocale(detectedLang)
   }
 
-  // Warm the remaining locale bundles in the background so switching is instant.
-  setTimeout(() => {
-    preloadLocales(SUPPORTED_LOCALES.filter((l) => l !== "en" && l !== detectedLang))
-  }, 1000)
+  // Other locales are NOT warmed in the background: that downloaded and
+  // evaluated ~1.5 MB of JSON 1 s after every page load. Switching language
+  // loads the one bundle it needs (changeLocale / PreferencesControls await it
+  // before changing language).
+}
+
+/** Load a locale's strings, then switch to it (no English flash). */
+export async function changeLocale(locale: string): Promise<void> {
+  await loadLocale(locale)
+  await i18n.changeLanguage(locale)
 }
 
 export function useLocaleManager() {
@@ -181,8 +194,7 @@ export function useLocaleManager() {
   const changeLocale = async (locale: string) => {
     setIsLoading(true)
     try {
-      await loadLocale(locale)
-      await i18n.changeLanguage(locale)
+      await changeLocale(locale)
       setCurrentLocale(locale)
     } catch (error) {
       console.error("Failed to change locale:", error)
