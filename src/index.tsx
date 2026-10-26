@@ -17,6 +17,7 @@ import { makeStore } from "./store/store"
 import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate } from "./seo/pageHead"
+import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
 
 // Failed dynamic import()s: there is deliberately NO vite:preloadError
 // listener. Calling preventDefault() on that event makes Vite's preload helper
@@ -42,6 +43,9 @@ void browserNetworkEnv.checkSession()
 // Seed the profile from localStorage (no logged-out flash for returning
 // users); its refetch waits for the session check above.
 seedCachedProfile(store)
+
+// Before the first render, so the first images' load events are seen.
+initLazyImagePlaceholders()
 
 const container = document.getElementById("root")
 const root = createRoot(container!)

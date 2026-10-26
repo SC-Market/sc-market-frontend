@@ -53,6 +53,18 @@ img[loading="lazy"] {
   }
 }
 
+/* Loaded (or failed): drop the placeholder. See util/lazyImagePlaceholder.ts. */
+img[loading="lazy"][data-img-settled] {
+  background: none;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  img[loading="lazy"] {
+    animation: none;
+  }
+}
+
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
