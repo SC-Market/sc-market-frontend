@@ -141,7 +141,7 @@ export function DashboardGrid({
               "&& > *": { flex: 1, minWidth: 0, height: "auto" },
             }}
           >
-            <WidgetWrapper widget={widget} editing={false} />
+            <WidgetWrapper widget={widget} editing={false} fitCell={false} />
           </Box>
         ))}
       </Box>

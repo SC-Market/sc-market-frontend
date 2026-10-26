@@ -27,9 +27,15 @@ export interface WidgetWrapperProps {
   widget: DashboardWidget
   editing: boolean
   onRemove?: (id: string) => void
+  /**
+   * The widget sits in a fixed-size grid cell (default). Self-chromed cards are
+   * then sized to the cell and their content scrolls inside the card, both ways.
+   * Pass false where the slot grows with its content (the stacked phone layout).
+   */
+  fitCell?: boolean
 }
 
-export function WidgetWrapper({ widget, editing, onRemove }: WidgetWrapperProps) {
+export function WidgetWrapper({ widget, editing, onRemove, fitCell = true }: WidgetWrapperProps) {
   const { t } = useTranslation()
   const definition = getWidgetDefinition(widget.type)
   const scope = useResolveScope(widget.scope)
@@ -114,15 +120,7 @@ export function WidgetWrapper({ widget, editing, onRemove }: WidgetWrapperProps)
           overflow: "auto",
           display: "flex",
           flexDirection: "column",
-          // Stretch the widget's own card (a Section: Grid item > Paper) to the
-          // full cell, so a short widget is a full-height card, not a small card
-          // above an empty gap.
-          "& > .MuiGrid-item": {
-            flex: "1 0 auto",
-            display: "flex",
-            flexDirection: "column",
-          },
-          "& > .MuiGrid-item > .MuiPaper-root": { flex: "1 0 auto" },
+          ...(fitCell ? SELF_CHROME_FIT_CELL : SELF_CHROME_GROW),
         }}
       >
         {editOverlay}
@@ -168,6 +166,45 @@ export function WidgetWrapper({ widget, editing, onRemove }: WidgetWrapperProps)
     </Paper>
   )
 }
+
+/**
+ * Stretch the widget's own card (a Section: Grid item > Paper) to the full
+ * cell, so a short widget is a full-height card, not a small card above an
+ * empty gap.
+ */
+const SELF_CHROME_GROW = {
+  "& > .MuiGrid-item": {
+    flex: "1 0 auto",
+    display: "flex",
+    flexDirection: "column",
+  },
+  "& > .MuiGrid-item > .MuiPaper-root": { flex: "1 0 auto" },
+} as const
+
+/**
+ * In a fixed-size grid cell the card is instead sized to the cell exactly and
+ * its content scrolls inside the card, vertically and horizontally. Table
+ * widgets (offers, assignments, notifications) are often taller than a saved
+ * layout's height and wider than a narrow grid column; before this the card
+ * ran past the cell's bottom edge (the cell scrolled, so the card looked cut
+ * off with no bottom border) and spilled sideways under ~600px. The card's
+ * inner layout is left alone.
+ */
+const SELF_CHROME_FIT_CELL = {
+  "& > .MuiGrid-item": {
+    flex: "1 1 0",
+    minHeight: 0,
+    minWidth: 0,
+    display: "flex",
+    flexDirection: "column",
+  },
+  "& > .MuiGrid-item > .MuiPaper-root": {
+    flex: "1 1 0",
+    minHeight: 0,
+    minWidth: 0,
+    overflow: "auto",
+  },
+} as const
 
 interface AggregateWidgetProps {
   aggregate: "all_orgs" | "all_shops"
