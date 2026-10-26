@@ -59,6 +59,7 @@
   "devDependencies": {
     "@axe-core/react": "^4.11.1",
     "@eslint/js": "^9.29.0",
+    "@playwright/test": "^1.64.1",
     "@rtk-query/codegen-openapi": "^2.2.0",
     "@swc/core": "^1.7.42",
     "@testing-library/dom": "^10.4.0",
@@ -108,6 +109,10 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
+    "e2e:build": "VITE_BACKEND_URL=http://localhost:4173 VITE_WS_URL=ws://localhost:4173 vite build --outDir dist-e2e",
+    "e2e": "playwright test",
+    "e2e:a11y": "playwright test --project=a11y",
+    "e2e:a11y:report": "tsx e2e/a11y/report.ts",
     "analyze": "npm run build:analyze && open dist/stats.html",
     "analyze:detailed": "node scripts/analyze-bundle.js",
     "i18n:validate": "i18next --config i18next-parser.config.cjs 'src/**/*.{ts,tsx}' --fail-on-update",

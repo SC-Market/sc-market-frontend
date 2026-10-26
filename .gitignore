@@ -54,3 +54,9 @@ local.properties
 
 # Local AI-assistant state (Kiro sessions, settings); never commit.
 .kiro/
+
+# Playwright (e2e/): the e2e build, reports and traces
+/dist-e2e
+/playwright-report
+/test-results
+/e2e/.a11y-report

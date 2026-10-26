@@ -38,3 +38,68 @@ jobs:
 
       - name: Build production bundle
         run: npm run build
+
+  e2e:
+    # Read-only Playwright smoke flows + the accessible-name audit, against a
+    # local production build with the API faked inside the test process
+    # (e2e/support/fakeApi.ts; nothing reaches production). Informational,
+    # like the job above. See docs/testing-with-mcp.md.
+    name: E2E smoke + a11y names
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Chromium
+        if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Chromium system dependencies
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - name: Type-check e2e
+        run: npx tsc --noEmit -p e2e
+
+      - name: Build e2e bundle
+        run: npm run e2e:build
+
+      - name: Smoke flows
+        run: npx playwright test --project=smoke
+
+      - name: Accessible-name audit
+        if: ${{ !cancelled() }}
+        run: npx playwright test --project=a11y
+
+      - name: Audit summary
+        if: ${{ !cancelled() }}
+        run: npx tsx e2e/a11y/report.ts
+
+      - name: Static accessible-name scan
+        if: ${{ !cancelled() }}
+        run: npx tsx scripts/a11y-names-scan.ts --check
+
+      - name: Upload Playwright report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

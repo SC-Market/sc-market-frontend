@@ -12,7 +12,8 @@ export default defineConfig({
     environment: "happy-dom",
     setupFiles: "./src/setupTests.ts",
     // Agent/tool git worktrees live under .claude/; never run their copies.
-    exclude: [...configDefaults.exclude, "**/.claude/**"],
+    // e2e/: Playwright specs (npm run e2e), not vitest.
+    exclude: [...configDefaults.exclude, "**/.claude/**", "e2e/**"],
     // No test depends on processed CSS files (MUI styles come from Emotion at
     // runtime), and processing CSS for every test file is slow.
     css: false,
