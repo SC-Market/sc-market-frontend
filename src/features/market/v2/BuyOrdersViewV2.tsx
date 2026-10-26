@@ -40,6 +40,7 @@ import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BuyOrdersTableV2 } from "./components/BuyOrdersTableV2"
 import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar"
 import { MARKET_PATHS } from "../../../routes/paths"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 /**
  * BuyOrdersViewV2 — V2 buy orders browse page.
@@ -70,7 +71,7 @@ export function BuyOrdersViewV2() {
     setPage(0)
   }, [setSearchParams])
 
-  const { data, isLoading, isFetching } = useSearchBuyOrdersQuery({
+  const { data, isFetching, currentData } = useSearchBuyOrdersQuery({
     page: page + 1,
     pageSize: perPage,
     text: searchText,
@@ -113,7 +114,7 @@ export function BuyOrdersViewV2() {
 
   const gridBreakpoints = buyOrderGridBreakpoints(marketSidebarOpen)
 
-  const loading = isLoading || isFetching
+  const loading = isAwaitingData({ isFetching, currentData })
 
   const cardGrid = (
     <>

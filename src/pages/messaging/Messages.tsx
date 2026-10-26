@@ -119,7 +119,7 @@ export function Messages() {
               {creatingMessageGroup ? (
                 <CreateMessageGroupBody />
               ) : chat_id ? (
-                pageData.isLoading || pageData.isFetching ? (
+                pageData.awaitingData ? (
                   <MessageThreadSkeleton />
                 ) : currentChat ? (
                   isMobile ? (

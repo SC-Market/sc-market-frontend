@@ -3,6 +3,7 @@ import {
   useRecruitingGetPostByOrgQuery,
 } from "../api/recruitingApi"
 import { RecruitingSearchState } from "../hooks/RecruitingSearch"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 interface UsePageRecruitingParams {
   page: number
@@ -21,6 +22,8 @@ interface UsePageRecruitingResult {
     | undefined
   isLoading: boolean
   isFetching: boolean
+  /** No data for the current args yet (first load or new args); false during a background refetch. */
+  awaitingData: boolean
   error: unknown
   refetch: () => void
 }
@@ -54,6 +57,7 @@ export function usePageRecruiting(
       : undefined,
     isLoading: postsQuery.isLoading,
     isFetching: postsQuery.isFetching || myPostQuery.isFetching,
+    awaitingData: isAwaitingData(postsQuery),
     error: postsQuery.error || myPostQuery.error,
     refetch: () => {
       postsQuery.refetch()

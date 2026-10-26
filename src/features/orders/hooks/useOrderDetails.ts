@@ -103,9 +103,9 @@ export function useOrderDetails(order: Order) {
   }, [unassignUser, order.order_id, issueAlert, t])
 
   // Related entity queries
-  const { data: contractor } = useGetContractorBySpectrumIDQuery(order.contractor!, { skip: !order.contractor })
-  const { data: assigned } = useGetUserByUsernameQuery(order.assigned_to!, { skip: !order.assigned_to })
-  const { data: customer } = useGetUserByUsernameQuery(order.customer!, { skip: !order.customer })
+  const { data: contractor, isLoading: contractorLoading } = useGetContractorBySpectrumIDQuery(order.contractor!, { skip: !order.contractor })
+  const { data: assigned, isLoading: assignedLoading } = useGetUserByUsernameQuery(order.assigned_to!, { skip: !order.assigned_to })
+  const { data: customer, isLoading: customerLoading } = useGetUserByUsernameQuery(order.customer!, { skip: !order.customer })
 
   // Permission checks
   const amCustomer = useMemo(() => order.customer === profile?.username, [order, profile])
@@ -158,6 +158,7 @@ export function useOrderDetails(order: Order) {
     statusColor, status, updateOrderStatus,
     // Related entities
     contractor, assigned, customer,
+    contractorLoading, assignedLoading, customerLoading,
     // Permissions
     amCustomer, amAssigned, amContractor, amRelated, amContractorManager, canClaim,
     privateContractCustomer, publicContractCustomer, isComplete,

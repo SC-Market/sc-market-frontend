@@ -36,6 +36,7 @@ import { has_permission } from "../../../views/contractor/OrgRoles";
 import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi";
 import { formatMarketUrl } from "../domain/urls";
 import { MARKET_PATHS } from "../../../routes/paths";
+import { isAwaitingData } from "../../../util/queryLoading"
 
 /**
  * ContractorListingsV2 - Display contractor organization listings with V2 variant support
@@ -83,8 +84,8 @@ export function ContractorListingsV2() {
   // Filter by seller_type = 'contractor' and seller_id = contractor_id
   const {
     data: results,
-    isLoading,
     isFetching,
+    currentData,
     error,
     refetch,
   } = useSearchListingsQuery({
@@ -187,7 +188,7 @@ export function ContractorListingsV2() {
         <Grid item xs={12}>
           <ListingGrid
             listings={contractorListings}
-            loading={isLoading || isFetching}
+            loading={isAwaitingData({ isFetching, currentData })}
             error={!!error}
             onRetry={refetch}
             gridBreakpoints={gridBreakpoints}

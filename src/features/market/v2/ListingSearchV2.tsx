@@ -72,6 +72,7 @@ import {
   listingSearchGridBreakpoints,
 } from "./marketSearchLayout";
 import { MARKET_FILTER_PANEL_SX } from "../../../components/layout/MarketPageLayout";
+import { isAwaitingData } from "../../../util/queryLoading"
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -151,8 +152,8 @@ export function ListingSearchV2() {
   // Fetch listings using RTK Query
   const {
     data: results,
-    isLoading,
     isFetching,
+    currentData,
     error,
     refetch,
   } = useSearchListingsQuery(searchQuery);
@@ -239,7 +240,7 @@ export function ListingSearchV2() {
                 ) : flags.market_v2_redesign ? (
                   <GroupedListingGrid
                     listings={listings}
-                    loading={isLoading || isFetching}
+                    loading={isAwaitingData({ isFetching, currentData })}
                     error={!!error}
                     onRetry={refetch}
                     gridBreakpoints={gridBreakpoints}
@@ -249,7 +250,7 @@ export function ListingSearchV2() {
                 ) : (
                   <ListingGrid
                     listings={listings}
-                    loading={isLoading || isFetching}
+                    loading={isAwaitingData({ isFetching, currentData })}
                     error={!!error}
                     onRetry={refetch}
                     gridBreakpoints={gridBreakpoints}
@@ -305,7 +306,7 @@ export function ListingSearchV2() {
                     ) : flags.market_v2_redesign ? (
                       <GroupedListingGrid
                         listings={listings}
-                        loading={isLoading || isFetching}
+                        loading={isAwaitingData({ isFetching, currentData })}
                         error={!!error}
                         onRetry={refetch}
                         gridBreakpoints={gridBreakpoints}
@@ -315,7 +316,7 @@ export function ListingSearchV2() {
                     ) : (
                       <ListingGrid
                         listings={listings}
-                        loading={isLoading || isFetching}
+                        loading={isAwaitingData({ isFetching, currentData })}
                         error={!!error}
                         onRetry={refetch}
                         gridBreakpoints={gridBreakpoints}

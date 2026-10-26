@@ -73,7 +73,7 @@ export function ViewOrder() {
   const chatObj = pageData.data?.chat
   const session = pageData.data?.offerSession
 
-  const { data: orderDetailV2 } = useGetOrderDetailQuery({ orderId: id! }, { skip: !id })
+  const { data: orderDetailV2, isLoading: orderDetailV2Loading } = useGetOrderDetailQuery({ orderId: id! }, { skip: !id })
   const { data: profile } = useGetUserProfileQuery()
 
   const belongsToOrderOrg = useMemo(
@@ -250,7 +250,10 @@ export function ViewOrder() {
                 {/* Details Tab */}
                 {activeTab === detailsTab && (
                   <>
-                    {!(pageData.isLoading || pageData.isFetching) && order ? (
+                    {/* Gate on data, not isFetching: a background refetch
+                        (e.g. after the message notifications are cleared)
+                        must keep the loaded details on screen. */}
+                    {order ? (
                       <OrderDetailsArea order={order} />
                     ) : (
                       <Grid item xs={12} lg={8} md={6}>
@@ -262,8 +265,7 @@ export function ViewOrder() {
                       <Grid item xs={12} lg={4} md={6}>
                         <Stack spacing={2}>
                           {isAssigned &&
-                            (!(pageData.isLoading || pageData.isFetching) &&
-                            order ? (
+                            (order ? (
                               <OrderMessagesArea order={order} />
                             ) : (
                               <Skeleton width={"100%"} height={400} />
@@ -312,7 +314,7 @@ export function ViewOrder() {
                 {/* Messages Tab - mobile only */}
                 {isMobile && activeTab === messagesTab && (
                   <>
-                    {!(pageData.isLoading || pageData.isFetching) && order ? (
+                    {order ? (
                       isAssigned ? (
                         <Grid item xs={12}>
                           <OrderMessagesArea order={order} />
@@ -329,7 +331,7 @@ export function ViewOrder() {
                 {/* Service Tab */}
                 {session?.offers[0]?.service &&
                   activeTab === serviceTab &&
-                  (!(pageData.isLoading || pageData.isFetching) && session ? (
+                  (session ? (
                     <Grid item xs={12}>
                       <OfferServiceArea offer={session} />
                     </Grid>
@@ -342,7 +344,7 @@ export function ViewOrder() {
                 {/* Market Listings / Items Tab */}
                 {hasItems &&
                   activeTab === marketListingsTab &&
-                  (!(pageData.isLoading || pageData.isFetching) ? (
+                  (!orderDetailV2Loading ? (
                     <Grid item xs={12}>
                       {orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0 && (
                         <OfferMarketListingsV2Items items={orderDetailV2.market_listings_v2} />

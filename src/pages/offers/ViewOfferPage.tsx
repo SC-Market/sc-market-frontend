@@ -19,7 +19,7 @@ import { PATHS, ORDER_PATHS } from "../../routes/paths"
 
 export function ViewOfferPage() {
   const { id } = useParams<{ id: string }>()
-  const { data, error, isLoading, isFetching } = usePageOffer(id)
+  const { data, error, awaitingData } = usePageOffer(id)
   const session = data?.session
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -94,7 +94,7 @@ export function ViewOfferPage() {
       {/* Details Tab */}
       {activeTab === 0 && (
         <>
-          {!(isLoading || isFetching) && session ? (
+          {!awaitingData && session ? (
             <OfferDetailsArea session={session} selectedOfferIndex={selectedOfferIndex} />
           ) : (
             <Grid item xs={12} lg={8} md={6}>
@@ -121,7 +121,7 @@ export function ViewOfferPage() {
 
       {/* Dynamic tabs */}
       {(() => {
-        if (isLoading || isFetching || !session) return null
+        if (awaitingData || !session) return null
 
         let tabIndex = 0
         tabIndex++ // details

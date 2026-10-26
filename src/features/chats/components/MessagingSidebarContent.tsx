@@ -44,6 +44,7 @@ import {
 import { getRelativeTime } from "../../../util/time"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { PATHS } from "../../../routes/paths"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 // Single chat entry in the chat list
 function ChatEntry(props: {
@@ -235,7 +236,7 @@ export function MessagingSidebarContent(
   const isMobile = useIsMobile()
   const { t } = useTranslation()
   const [, setCreatingMessageGroup] = useMessageGroupCreate()
-  const { data: chats, isLoading, isFetching, refetch } = useGetMyChatsQuery()
+  const { data: chats, isFetching, currentData, refetch } = useGetMyChatsQuery()
   const [searchQuery, setSearchQuery] = useState("")
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
@@ -416,7 +417,7 @@ export function MessagingSidebarContent(
           overflow: "auto", // Only the list scrolls, not the whole sidebar
         }}
       >
-        {isLoading || isFetching ? (
+        {isAwaitingData({ isFetching, currentData }) ? (
           <>
             {Array.from({ length: 5 }).map((_, i) => (
               <MessageListSkeleton key={i} index={i} />

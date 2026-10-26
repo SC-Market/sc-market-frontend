@@ -45,6 +45,7 @@ import { MobileListingRow } from "./components/MobileListingRow"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 import { MyListingCardV2 } from "./components/MyListingCardV2"
 import { MARKET_PATHS } from "../../../routes/paths"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 // ── Desktop section (unchanged) ───────────────────────────────────────────
 
@@ -58,7 +59,7 @@ function MyListingSectionV2({
   const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
   const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
 
-  const { data, isLoading, isFetching } = useGetMyListingsQuery({
+  const { data, isLoading, isFetching, currentData } = useGetMyListingsQuery({
     status,
     page: 1,
     pageSize: 48,
@@ -68,7 +69,7 @@ function MyListingSectionV2({
   })
 
   const listings = data?.listings ?? []
-  const loading = isLoading || isFetching
+  const loading = isAwaitingData({ isFetching, currentData })
 
   if (loading) {
     return (

@@ -4,6 +4,7 @@ import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
 } from "../../notifications/api/notificationApi"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 /**
  * Page hook for offer detail pages.
@@ -45,6 +46,8 @@ export function usePageOffer(offerId: string | undefined) {
         : undefined,
     isLoading: offerQuery.isLoading || notificationsQuery.isLoading,
     isFetching: offerQuery.isFetching || notificationsQuery.isFetching,
+    /** No offer for the current id yet; false during background refetches. */
+    awaitingData: isAwaitingData(offerQuery),
     error: offerQuery.error || notificationsQuery.error,
     refetch: () => {
       offerQuery.refetch()

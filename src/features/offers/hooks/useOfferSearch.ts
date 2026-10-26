@@ -10,6 +10,7 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useDebounce } from "../../../hooks/useDebounce"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 export interface UseOfferSearchParams {
   mine?: boolean
@@ -55,7 +56,7 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     setSelectedOfferIds(selected.map(String))
   }
 
-  const { data, isLoading, isFetching } = useSearchOfferSessionsQuery({
+  const { data, currentData, isLoading, isFetching } = useSearchOfferSessionsQuery({
     status: statusFilter === "unclaimed" ? undefined : (statusFilter || undefined),
     index: page,
     page_size: pageSize,
@@ -132,6 +133,8 @@ export function useOfferSearch(params: UseOfferSearchParams) {
 
   return {
     data, isLoading, isFetching,
+    /** No result for the current filters / page yet; false during background refetches. */
+    awaitingData: isAwaitingData({ isFetching, currentData }),
     page, setPage, pageSize, setPageSize,
     order, setOrder, orderBy, setOrderBy,
     statusFilter, setStatusFilter,

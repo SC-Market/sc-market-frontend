@@ -6,12 +6,13 @@ import {
 import { RecruitingPostViewSkeleton } from "../../../components/skeletons"
 import { RecruitingPostView } from "../../../views/recruiting/RecruitingPostView"
 import { PostCommentArea } from "./PostCommentArea"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 export function RecruitingPostArea(props: { spectrum_id: string }) {
   const {
     data: post,
-    isLoading,
     isFetching,
+    currentData,
   } = useRecruitingGetPostByOrgQuery(props.spectrum_id)
 
   const { data: comments } = useRecruitingGetPostCommentsByIDQuery(
@@ -23,7 +24,7 @@ export function RecruitingPostArea(props: { spectrum_id: string }) {
 
   return (
     <>
-      {isLoading || isFetching ? (
+      {isAwaitingData({ isFetching, currentData }) ? (
         <RecruitingPostViewSkeleton />
       ) : post ? (
         <>

@@ -21,7 +21,7 @@ import {
 } from "@mui/material"
 import React, { useEffect } from "react"
 import { Link as RouterLink } from "react-router-dom"
-import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
+import { OrgDetails, UserDetails, UserDetailsSkeleton } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { format } from "../../util/time"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
@@ -120,6 +120,7 @@ export function OrderDetailsArea(props: { order: Order }) {
     orderDetailV2, hasV2Items,
     statusColor, status, updateOrderStatus,
     contractor, assigned, customer,
+    contractorLoading, assignedLoading, customerLoading,
     amCustomer, amAssigned, amContractor, amRelated, amContractorManager, canClaim,
     privateContractCustomer, publicContractCustomer, isComplete,
     server_id,
@@ -151,11 +152,15 @@ export function OrderDetailsArea(props: { order: Order }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {customer && <UserDetails user={customer} />}
+                  {customer ? (
+                    <UserDetails user={customer} />
+                  ) : (
+                    customerLoading && <UserDetailsSkeleton />
+                  )}
                 </Stack>
               </TableCell>
             </TableRow>
-            {(order.shop || contractor) && (
+            {(order.shop || contractor || contractorLoading) && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -175,13 +180,15 @@ export function OrderDetailsArea(props: { order: Order }) {
                         {order.shop.name}
                       </MaterialLink>
                     ) : (
-                      contractor && <OrgDetails org={contractor} />
+                      contractor ? <OrgDetails org={contractor} /> : <UserDetailsSkeleton />
                     )}
                   </Stack>
                 </TableCell>
               </TableRow>
             )}
-            {(assigned || amContractor) && (
+            {/* While the user loads the row holds a same-size placeholder, so
+                it doesn't appear or grow when the user arrives. */}
+            {(assigned || assignedLoading || amContractor) && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -208,6 +215,8 @@ export function OrderDetailsArea(props: { order: Order }) {
                   <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
                     {assigned ? (
                       <UserDetails user={assigned} />
+                    ) : assignedLoading ? (
+                      <UserDetailsSkeleton />
                     ) : (
                       <>
                         <Typography variant="body2" color="text.secondary">

@@ -167,7 +167,7 @@ export function Recruiting() {
                   Check out <strong>SC Orgs</strong> at sc-orgs.space — our new dedicated platform for org recruitment, event scheduling, and community management.
                 </Alert>
               </Grid>
-              {!(pageData.isLoading || pageData.isFetching) ? (
+              {!pageData.awaitingData ? (
                 (pageData.data?.posts?.items || []).length === 0 ? (
                   <Grid item xs={12}>
                     <EmptyRecruiting

@@ -13,6 +13,7 @@ import {
   ServicesQueryParams,
 } from "../api/servicesApi"
 import { ServiceListing } from "./ServiceListing"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 export function ServiceListings(props: { user?: string; contractor?: string }) {
   const [page, setPage] = useState(0)
@@ -49,8 +50,8 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
 
   const {
     data: servicesResponse,
-    isLoading,
     isFetching,
+    currentData,
     error,
     refetch,
   } = useGetPublicServicesQuery(queryParams)
@@ -86,7 +87,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     return servicesResponse.data
   }, [servicesResponse?.data, contractor, user, customOrg])
 
-  if (isLoading || isFetching) {
+  if (isAwaitingData({ isFetching, currentData })) {
     return (
       <>
         {Array.from({ length: perPage }).map((_, i) => (

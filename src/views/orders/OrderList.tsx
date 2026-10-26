@@ -450,7 +450,7 @@ export function OrdersViewPaginated(props: {
   const { t } = useTranslation()
 
   const {
-    orders, isLoading, isFetching,
+    orders, awaitingData,
     page, setPage, pageSize, setPageSize,
     order, setOrder, orderBy, setOrderBy,
     statusFilter, setStatusFilter, totalCounts,
@@ -722,10 +722,10 @@ export function OrdersViewPaginated(props: {
             label: t(cell.label),
           }))}
           disableSelect={false}
-          loading={isLoading || isFetching}
+          loading={awaitingData}
           loadingRowComponent={OrderRowSkeleton}
           emptyStateComponent={
-            !(isLoading || isFetching) && (orders?.items || []).length === 0 ? (
+            !awaitingData && (orders?.items || []).length === 0 ? (
               <EmptyOrders
                 isOffers={false}
                 isSent={mine}

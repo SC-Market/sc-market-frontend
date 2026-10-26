@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { useSearchOrdersQuery } from "../api/ordersApi"
 import { useDebounce } from "../../../hooks/useDebounce"
 import type { OrderSearchSortMethod, OrderSearchStatus, OrderStatusFilter, OrderTotalCounts, OrderStub } from "../domain/types"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 export interface UseOrderSearchParams {
   mine?: boolean
@@ -38,7 +39,7 @@ export function useOrderSearch(params: UseOrderSearchParams) {
     setPage(0)
   }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
 
-  const { data: orders, isLoading, isFetching } = useSearchOrdersQuery({
+  const { data: orders, currentData, isLoading, isFetching } = useSearchOrdersQuery({
     status: statusFilter === "all" ? undefined : statusFilter === "unassigned" ? "active" : statusFilter,
     index: page,
     page_size: pageSize,
@@ -99,6 +100,8 @@ export function useOrderSearch(params: UseOrderSearchParams) {
     orders,
     isLoading,
     isFetching,
+    /** No result for the current filters / page yet; false during background refetches. */
+    awaitingData: isAwaitingData({ isFetching, currentData }),
     // Pagination
     page, setPage,
     pageSize, setPageSize,

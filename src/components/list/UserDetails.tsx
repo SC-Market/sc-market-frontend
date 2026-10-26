@@ -1,5 +1,5 @@
 import { MinimalUser } from "../../datatypes/User"
-import { Avatar, Typography, Link as MaterialLink } from "@mui/material"
+import { Avatar, Skeleton, Typography, Link as MaterialLink } from "@mui/material"
 import { Stack } from "@mui/system"
 import React from "react"
 import { MinimalContractor } from "../../features/contractor/domain/types"
@@ -65,6 +65,34 @@ export function OrgDetails(props: { org: MinimalContractor }) {
           </Typography>
         </MaterialLink>
         <Typography variant={"subtitle2"}>{org.spectrum_id}</Typography>
+      </Stack>
+    </Stack>
+  )
+}
+
+/**
+ * Placeholder with the size of UserDetails / OrgDetails (40px avatar, a
+ * subtitle1 name line and a subtitle2 handle line), for a row whose user or
+ * org is still loading, so the row doesn't grow when it arrives.
+ */
+export function UserDetailsSkeleton() {
+  const theme = useTheme<ExtendedTheme>()
+
+  return (
+    <Stack
+      direction={"row"}
+      spacing={theme.layoutSpacing.compact}
+      alignItems={"center"}
+      aria-hidden
+    >
+      <Skeleton variant="circular" width={40} height={40} />
+      <Stack direction={"column"} justifyContent={"left"}>
+        <Typography variant={"subtitle1"}>
+          <Skeleton width={110} />
+        </Typography>
+        <Typography variant={"subtitle2"}>
+          <Skeleton width={80} />
+        </Typography>
       </Stack>
     </Stack>
   )

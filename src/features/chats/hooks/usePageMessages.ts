@@ -6,6 +6,7 @@ import {
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useEffect } from "react"
 import type { Chat } from "../domain/types"
+import { isAwaitingData } from "../../../util/queryLoading"
 import type { UserProfileState } from "../../../hooks/login/UserProfile"
 
 export interface UsePageMessagesResult {
@@ -17,6 +18,8 @@ export interface UsePageMessagesResult {
     | undefined
   isLoading: boolean
   isFetching: boolean
+  /** No data for the current args yet (first load or new args); false during a background refetch. */
+  awaitingData: boolean
   error: unknown
   refetch: () => void
 }
@@ -33,6 +36,7 @@ export function usePageMessages(
 
   const {
     data: chatObj,
+    currentData: currentChatObj,
     isLoading,
     isFetching,
     error,
@@ -99,6 +103,7 @@ export function usePageMessages(
       : undefined,
     isLoading,
     isFetching,
+    awaitingData: isAwaitingData({ isFetching, currentData: currentChatObj }),
     error,
     refetch: refetchChat,
   }

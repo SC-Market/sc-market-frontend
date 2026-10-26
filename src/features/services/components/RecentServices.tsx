@@ -8,6 +8,7 @@ import {
 import { EmptyListings } from "../../../components/empty-states"
 import { HorizontalServiceListings } from "./HorizontalServiceListings"
 import { RecentServicesSkeleton } from "./RecentServicesSkeleton"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 export function OrgRecentServices(props: { org: string }) {
   const { org } = props
@@ -27,7 +28,7 @@ export function OrgRecentServices(props: { org: string }) {
 
 export function UserRecentServices(props: { user: string }) {
   const { user } = props
-  const { data: services, isLoading, isFetching } = useGetServicesQuery(user)
+  const { data: services, isFetching, currentData } = useGetServicesQuery(user)
   const { t } = useTranslation()
   const filteredServices = useMemo(() => {
     return [...(services || [])]
@@ -35,7 +36,7 @@ export function UserRecentServices(props: { user: string }) {
       .slice(0, 25)
   }, [services])
 
-  if (isLoading || isFetching) {
+  if (isAwaitingData({ isFetching, currentData })) {
     return <RecentServicesSkeleton />
   }
 

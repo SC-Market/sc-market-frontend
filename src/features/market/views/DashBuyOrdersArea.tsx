@@ -27,6 +27,7 @@ import {
 import { EmptyState } from "../../../components/empty-states"
 import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
 import { MARKET_PATHS } from "../../../routes/paths"
+import { isAwaitingData } from "../../../util/queryLoading"
 
 /** Row shape for the buy orders table (flattened from aggregate + buy_order) */
 export interface BuyOrderDashboardRow {
@@ -347,10 +348,11 @@ export function BuyOrdersViewPaginated() {
   const { data: profile } = useGetUserProfileQuery()
   const {
     data: listings,
-    isLoading,
+    currentData,
     isFetching,
     refetch,
   } = useGetBuyOrderListingsQuery()
+  const awaitingData = isAwaitingData({ isFetching, currentData })
 
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
@@ -453,10 +455,10 @@ export function BuyOrdersViewPaginated() {
                 label: t(cell.label),
               }))}
               disableSelect={true}
-              loading={isLoading || isFetching}
+              loading={awaitingData}
               loadingRowComponent={BuyOrderRowSkeleton}
               emptyStateComponent={
-                !(isLoading || isFetching) && rows.length === 0 ? (
+                !awaitingData && rows.length === 0 ? (
                   <EmptyState
                     title={t("dashboard.noBuyOrders", "No buy orders")}
                     description={t(

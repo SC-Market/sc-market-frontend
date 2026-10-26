@@ -55,6 +55,7 @@ import {
   marketTokensToParams,
   type SearchToken,
 } from "../../../../components/game-data/UnifiedSearchBar"
+import { isAwaitingData } from "../../../../util/queryLoading"
 
 /**
  * BuyOrdersRedesign — Phase 0 of the Market redesign (behind the
@@ -97,7 +98,7 @@ export function BuyOrdersRedesign() {
     [setSearchParams],
   )
 
-  const { data, isLoading, isFetching } = useSearchBuyOrdersQuery({
+  const { data, isLoading, isFetching, currentData } = useSearchBuyOrdersQuery({
     page: page + 1,
     pageSize: perPage,
     text: searchText,
@@ -153,7 +154,7 @@ export function BuyOrdersRedesign() {
     return { xs: 6, sm: 4, md: 4, lg: 2.4, xl: 2, xxl: 12 / 7, xxxl: 12 / 8 }
   }, [showMobileSidebar, drawerOpen])
 
-  const loading = isLoading || isFetching
+  const loading = isAwaitingData({ isFetching, currentData })
 
   const cardGrid = (
     <>

@@ -477,7 +477,7 @@ export function OffersViewPaginated(props: {
   const { mine, assigned, unassigned, contractor, shop_id } = props
 
   const {
-    data, isLoading, isFetching,
+    data, awaitingData,
     page, setPage, pageSize, setPageSize,
     order, setOrder, orderBy, setOrderBy,
     statusFilter, setStatusFilter,
@@ -785,7 +785,7 @@ export function OffersViewPaginated(props: {
           onSelectChange={!mine ? handleSelectChange : undefined}
           onPageChange={setPage}
           emptyStateComponent={
-            !(isLoading || isFetching) && (data?.items || []).length === 0 ? (
+            !awaitingData && (data?.items || []).length === 0 ? (
               <EmptyOrders
                 isOffers={true}
                 isSent={mine}
@@ -802,7 +802,7 @@ export function OffersViewPaginated(props: {
           order={order}
           onOrderByChange={setOrderBy}
           orderBy={orderBy}
-          loading={isLoading || isFetching}
+          loading={awaitingData}
           loadingRowComponent={OfferRowSkeleton}
         />
         <Dialog

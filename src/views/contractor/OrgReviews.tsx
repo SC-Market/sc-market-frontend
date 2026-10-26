@@ -28,6 +28,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { EmptyReviews } from "../../components/empty-states"
 import { Grid } from "@mui/material"
+import { isAwaitingData } from "../../util/queryLoading"
 
 function ReviewRow(props: {
   row: OrderReview
@@ -177,11 +178,11 @@ export function UserReviews(props: { user: MinimalUser }) {
   const { t } = useTranslation()
   const {
     data: rows,
-    isLoading,
     isFetching,
+    currentData,
   } = useGetUserOrderReviews(props.user.username)
 
-  if (isLoading || isFetching) {
+  if (isAwaitingData({ isFetching, currentData })) {
     // Show skeleton while loading - PaginatedTable doesn't have loading prop
     return (
       <Grid item xs={12}>
