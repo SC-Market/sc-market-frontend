@@ -780,7 +780,7 @@ exports[`redirects and guards > /services → /market/services 1`] = `
     "/market/services",
   ],
   "session": "anonymous",
-  "title": "Market - SC Market",
+  "title": "Services - SC Market",
   "url": "/services",
 }
 `;
