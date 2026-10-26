@@ -18,6 +18,13 @@
  *   with data already shown) can never flip it back to busy. A new navigation
  *   resets it until the page settles again for the new location.
  *
+ * - The URL changes before React renders the new page: the router updates
+ *   history synchronously and renders in a transition. The router's own
+ *   location key (setRouterKey, from a router subscription) therefore marks
+ *   the page busy right away; it is ready again only once React has
+ *   committed that same location (setLocationKey) and the page settled. No
+ *   one can observe a new URL with a stale "ready".
+ *
  * Changes are evaluated once per batch (a microtask by default), not per
  * call: when a Suspense fallback is replaced by the content it stood in for,
  * React runs the fallback's cleanup and the content's registration in the
@@ -30,6 +37,7 @@ export class PageReadyStore {
   private sources = new Map<number, boolean>()
   private nextId = 1
   private locationKey: string | null = null
+  private routerKey: string | null = null
   private latchedKey: string | null = null
   private ready = false
   private listeners = new Set<() => void>()
@@ -73,6 +81,17 @@ export class PageReadyStore {
     this.recompute()
   }
 
+  /**
+   * Called from a router subscription, synchronously with the history
+   * update (before React renders the new location). Optional: without it
+   * (a non-data router) only the committed location key is used.
+   */
+  setRouterKey(key: string): void {
+    if (this.routerKey === key) return
+    this.routerKey = key
+    this.recompute()
+  }
+
   isReady = (): boolean => this.ready
 
   subscribe = (listener: () => void): (() => void) => {
@@ -98,11 +117,15 @@ export class PageReadyStore {
   /** Evaluate pending changes now. */
   flush(): void {
     this.scheduled = false
-    if (this.locationKey !== null && this.isSettled()) {
+    // The rendered location is the one the router is at (or no router
+    // subscription): only then can the page be ready.
+    const current =
+      this.locationKey !== null &&
+      (this.routerKey === null || this.routerKey === this.locationKey)
+    if (current && this.isSettled()) {
       this.latchedKey = this.locationKey
     }
-    const ready =
-      this.locationKey !== null && this.latchedKey === this.locationKey
+    const ready = current && this.latchedKey === this.locationKey
     if (ready === this.ready) return
     this.ready = ready
     for (const listener of this.listeners) listener()

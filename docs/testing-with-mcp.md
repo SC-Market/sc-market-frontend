@@ -43,8 +43,10 @@ evaluate_script  pageId=<yours> function=() => document.querySelector("#main-con
 ```
 
 Poll `evaluate_script` until it returns `true`, then call `take_snapshot`.
-After clicking a link, first check the URL changed (the old page is still
-"ready" until the new location commits), then wait for ready again.
+After clicking a link, check the URL changed, then wait for ready again.
+The signal goes busy in the same task as the URL change (it follows the
+router, not just React's render), so a new URL never reads "ready" with the
+old page's content.
 
 ### Waiting in Playwright
 
@@ -158,8 +160,11 @@ These protect the owner's real browser session and real users.
   Open pages in it with `new_page` and `isolatedContext: "shared-anon"`.
   Reuse it; don't create other isolated contexts.
 - **Logged in:** use the owner's existing logged-in context. Find it with
-  `list_pages` (its pages are the ones not in `shared-anon`), and open a new
-  tab in that context with `new_page` (no `isolatedContext`).
+  `list_pages`: the context of the owner's open, logged-in sc-market.space
+  tabs (shown as `isolatedContext=<name>` after the URL, or none for the
+  default context). Open a new tab in that same context with `new_page`,
+  passing that `isolatedContext` name (or none for the default context).
+  Check the tab is logged in (navbar avatar "Account menu", no "Sign in").
 - **New tabs are fine; NEVER open new windows or new browser contexts.**
 - **Close every tab you opened** with `close_page` when you're done. Leave the
   owner's own tabs alone.

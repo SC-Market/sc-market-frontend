@@ -54,8 +54,8 @@ test.describe("logged out", () => {
     await waitForReady(page)
     const directory = page.getByRole("navigation", { name: "All guides" })
     await expect(directory).toBeVisible()
-    // After a navigation: wait for the new URL first, then for ready (the
-    // old page is still "ready" until the new location commits). Under heavy
+    // After a navigation: wait for the new URL, then for ready (the signal
+    // goes busy together with the URL change). Under heavy
     // parallel load a click on the directory occasionally didn't navigate;
     // retry the click rather than fail the whole flow on it.
     await expect(async () => {

@@ -18,7 +18,7 @@ import React, {
   useState,
   useSyncExternalStore,
 } from "react"
-import { useLocation } from "react-router-dom"
+import { UNSAFE_DataRouterContext, useLocation } from "react-router-dom"
 import { PageReadyStore } from "./pageReadyStore"
 
 // Layout effects so a page's loading state reaches the store in the same
@@ -38,6 +38,16 @@ export function PageReadyProvider(props: { children: React.ReactNode }) {
   useIsomorphicLayoutEffect(() => {
     store.setLocationKey(location.key)
   }, [store, location.key])
+  // The router updates the URL before React renders the new location (it
+  // renders in a transition). Its subscription fires with the history
+  // update, so the page goes busy at once instead of reading "ready" for
+  // the old page under the new URL.
+  const router = useContext(UNSAFE_DataRouterContext)?.router
+  useEffect(() => {
+    if (!router) return
+    store.setRouterKey(router.state.location.key)
+    return router.subscribe((state) => store.setRouterKey(state.location.key))
+  }, [store, router])
   return (
     <PageReadyContext.Provider value={store}>
       {props.children}

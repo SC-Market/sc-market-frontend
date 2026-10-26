@@ -1,6 +1,12 @@
 import React, { Suspense, useState } from "react"
 import { act, render, screen } from "@testing-library/react"
-import { MemoryRouter, useNavigate } from "react-router-dom"
+import {
+  createMemoryRouter,
+  MemoryRouter,
+  Outlet,
+  RouterProvider,
+  useNavigate,
+} from "react-router-dom"
 import { describe, expect, it } from "vitest"
 import { isPrimaryLoading, PageReadyStore } from "../pageReadyStore"
 import {
@@ -75,6 +81,28 @@ describe("PageReadyStore", () => {
     const id = store.register(false)
     flush()
     expect(store.isReady()).toBe(true)
+    store.update(id, true)
+    store.setLocationKey("b")
+    flush()
+    expect(store.isReady()).toBe(false)
+    store.update(id, false)
+    flush()
+    expect(store.isReady()).toBe(true)
+  })
+
+  it("goes busy as soon as the router moves, before React renders", () => {
+    const { store, flush } = manualStore()
+    store.setRouterKey("a")
+    store.setLocationKey("a")
+    const id = store.register(false)
+    flush()
+    expect(store.isReady()).toBe(true)
+    // History updated (router subscription); React hasn't rendered "b" yet
+    // and the old page's sources are still settled.
+    store.setRouterKey("b")
+    flush()
+    expect(store.isReady()).toBe(false)
+    // React commits "b"; the page reports loading, then settles.
     store.update(id, true)
     store.setLocationKey("b")
     flush()
@@ -257,6 +285,42 @@ describe("page-ready React bindings", () => {
     })
     expect(main()).toHaveAttribute("data-ready", "false")
     await act(async () => setLoading(false))
+    expect(main()).toHaveAttribute("data-ready", "true")
+  })
+
+  it("works under a data router (router subscription)", async () => {
+    let finish: (v: boolean) => void = () => {}
+    function SlowPage() {
+      const [loading, set] = useState(true)
+      finish = set
+      return <Source loading={loading} />
+    }
+    const router = createMemoryRouter(
+      [
+        {
+          element: (
+            <PageReadyProvider>
+              <Main>
+                <Outlet />
+              </Main>
+            </PageReadyProvider>
+          ),
+          children: [
+            { path: "/a", element: <Source loading={false} /> },
+            { path: "/b", element: <SlowPage /> },
+          ],
+        },
+      ],
+      { initialEntries: ["/a"] },
+    )
+    render(<RouterProvider router={router} />)
+    await act(async () => {})
+    expect(main()).toHaveAttribute("data-ready", "true")
+    await act(async () => {
+      await router.navigate("/b")
+    })
+    expect(main()).toHaveAttribute("data-ready", "false")
+    await act(async () => finish(false))
     expect(main()).toHaveAttribute("data-ready", "true")
   })
 
