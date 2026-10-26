@@ -38,13 +38,27 @@ export function DetailSkeleton() {
   )
 }
 
-/** Skeleton for a grid of cards (missions, blueprints) */
-export function CardGridSkeleton({ count = 8 }: { count?: number }) {
+/**
+ * Skeleton for a grid of cards (missions, blueprints, ores…). `cardHeight`
+ * should be the loaded card's typical height; the default count fills more
+ * than a desktop viewport so the footer can't flash into view and jump.
+ */
+export function CardGridSkeleton({
+  count = 16,
+  cardHeight = 180,
+}: {
+  count?: number
+  cardHeight?: number
+}) {
   return (
     <Grid container spacing={2}>
       {Array.from({ length: count }).map((_, i) => (
         <Grid key={i} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
-          <Skeleton variant="rounded" height={180} sx={{ borderRadius: 1 }} />
+          <Skeleton
+            variant="rounded"
+            height={cardHeight}
+            sx={{ borderRadius: 1 }}
+          />
         </Grid>
       ))}
     </Grid>

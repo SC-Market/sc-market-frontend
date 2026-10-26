@@ -349,7 +349,8 @@ export function BlueprintBrowser() {
           </Box>
 
           {/* Loading State */}
-          {isLoading && (viewMode === "grid" ? <CardGridSkeleton /> : <TableSkeleton />)}
+          {/* Grid cards: icon row, name, ingredient chips, actions (~270px) */}
+          {isLoading && (viewMode === "grid" ? <CardGridSkeleton count={12} cardHeight={270} /> : <TableSkeleton />)}
 
           {/* Error State */}
           {error && (

@@ -42,7 +42,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
-import { CardGridSkeleton, TableSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { UnifiedSearchBar, missionParamsToTokens, missionTokensToParams, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { useTranslation } from "react-i18next"
 import { MissionDetailModal } from "../../components/game-data/MissionDetailModal"
@@ -258,8 +258,31 @@ export function MissionSearch() {
       <Grid item xs={12}>
         <FilterSidebarLayout filters={filterContent} filterTitle={t("missions.filters", "Filters")}>
 
+      {/* Search toolbar: rendered while loading too, so the results below
+          start at the same height in the skeleton and the loaded page */}
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
+        <UnifiedSearchBar
+          tokens={searchTokens}
+          onChange={handleTokensChange}
+          extraOptions={eventOptions}
+          placeholder="Search missions, systems, categories..."
+        />
+        <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+          {isLoading ? <Skeleton variant="text" width={32} /> : data?.total}
+        </Typography>
+        <ToggleButtonGroup
+          value={viewMode}
+          exclusive
+          onChange={handleViewModeChange}
+          size="small"
+        >
+          <ToggleButton value="list"><ViewList /></ToggleButton>
+          <ToggleButton value="grid"><ViewModule /></ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
       {/* Loading State */}
-      {isLoading && (viewMode === "grid" ? <CardGridSkeleton /> : <TableSkeleton />)}
+      {isLoading && (viewMode === "grid" ? <CardGridSkeleton /> : <MissionTableSkeleton />)}
 
       {/* Error State */}
       {error && (
@@ -271,27 +294,6 @@ export function MissionSearch() {
       {/* Results */}
       {data && (
         <>
-          <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
-            <UnifiedSearchBar
-              tokens={searchTokens}
-              onChange={handleTokensChange}
-              extraOptions={eventOptions}
-              placeholder="Search missions, systems, categories..."
-            />
-            <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
-              {data.total}
-            </Typography>
-            <ToggleButtonGroup
-              value={viewMode}
-              exclusive
-              onChange={handleViewModeChange}
-              size="small"
-            >
-              <ToggleButton value="list"><ViewList /></ToggleButton>
-              <ToggleButton value="grid"><ViewModule /></ToggleButton>
-            </ToggleButtonGroup>
-          </Box>
-
           <Grid container spacing={0.75} alignItems="stretch">
             {viewMode === "grid" ? (
               allMissions.map((mission) => (
@@ -302,20 +304,8 @@ export function MissionSearch() {
             ) : (
               <Grid item xs={12}>
                 <Paper>
-                  <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell sx={{ width: 40 }} />
-                        <TableCell>System</TableCell>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Faction</TableCell>
-                        <TableCell sx={{ maxWidth: 280 }}>Tags</TableCell>
-                        <TableCell>Materials</TableCell>
-                        <TableCell align="center">BPs</TableCell>
-                        <TableCell align="right">Base XP</TableCell>
-                        <TableCell align="right">Reward</TableCell>
-                      </TableRow>
-                    </TableHead>
+                  <Table size="small" sx={MISSION_TABLE_SX}>
+                    <MissionTableHead />
                     <TableBody>
                       {allMissions.map((m) => (
                         <TableRow
@@ -431,4 +421,58 @@ export function MissionSearch() {
         onClose={() => setSelectedBlueprintId(null)}
       />
     </StandardPageLayout>  )
+}
+
+/** Mission list table cell padding (loaded table and its skeleton). */
+const MISSION_TABLE_SX = { "& td, & th": { py: 0.5, px: 1 } } as const
+
+function MissionTableHead() {
+  return (
+    <TableHead>
+      <TableRow>
+        <TableCell sx={{ width: 40 }} />
+        <TableCell>System</TableCell>
+        <TableCell>Title</TableCell>
+        <TableCell>Faction</TableCell>
+        <TableCell sx={{ maxWidth: 280 }}>Tags</TableCell>
+        <TableCell>Materials</TableCell>
+        <TableCell align="center">BPs</TableCell>
+        <TableCell align="right">Base XP</TableCell>
+        <TableCell align="right">Reward</TableCell>
+      </TableRow>
+    </TableHead>
+  )
+}
+
+/** The mission list while the first page loads: same table, placeholder rows. */
+function MissionTableSkeleton({ rows = 15 }: { rows?: number }) {
+  return (
+    <Grid container spacing={0.75}>
+      <Grid item xs={12}>
+        <Paper>
+          <Table size="small" sx={MISSION_TABLE_SX}>
+            <MissionTableHead />
+            <TableBody>
+              {Array.from({ length: rows }).map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell sx={{ width: 40, py: 0.5 }}>
+                    <Skeleton variant="rounded" width={24} height={24} />
+                  </TableCell>
+                  {[60, 200, 80, 120, 50, 24, 50, 90].map((w, j) => (
+                    <TableCell key={j}>
+                      <Skeleton
+                        variant="text"
+                        width={w}
+                        sx={{ ml: j >= 6 ? "auto" : undefined }}
+                      />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Grid>
+    </Grid>
+  )
 }
