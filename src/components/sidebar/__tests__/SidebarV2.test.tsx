@@ -28,6 +28,7 @@ import type { UserProfileState } from "../../../hooks/login/UserProfile"
 import type { ShopResponse } from "../../../store/api/v2/market"
 import type { Contractor } from "../../../features/contractor/domain/types"
 import type { has_permission as HasPermission } from "../../../features/contractor/domain/permissions"
+import type { SidebarConfigItem } from "../../../store/api/contractors"
 
 // ---- Mutable mock state -----------------------------------------------------
 let mockProfile: UserProfileState | undefined = undefined
@@ -49,6 +50,13 @@ const mockSetCookie = vi.fn((name: string, value: unknown) => {
 let mockHasPermission: typeof HasPermission = () => false
 /** false = a white-label org domain (Help & Guides links out). */
 let mockOfficialSite = true
+let mockWhiteLabel: { hidden: Set<string>; customTabs: SidebarConfigItem[] } = {
+  hidden: new Set(),
+  customTabs: [],
+}
+vi.mock("../../../features/contractor/hooks/useWhiteLabelSidebar", () => ({
+  useWhiteLabelSidebar: () => mockWhiteLabel,
+}))
 
 // ---- Module mocks -----------------------------------------------------------
 vi.mock("../../../features/help/links", async (importOriginal) => ({
@@ -238,6 +246,7 @@ beforeEach(() => {
   mockCookies = {}
   mockHasPermission = () => false
   mockOfficialSite = true
+  mockWhiteLabel = { hidden: new Set(), customTabs: [] }
   // Default to desktop viewport.
   vi.spyOn(window, "matchMedia").mockImplementation((query) => ({
     matches: false,
@@ -300,6 +309,49 @@ describe("SidebarV2 — browse context (logged out)", () => {
     const help = screen.getByRole("link", { name: "Help & Guides" })
     expect(help).toHaveAttribute("href", "https://sc-market.space/guides")
     expect(help).toHaveAttribute("target", "_blank")
+  })
+})
+
+describe("SidebarV2 — white-label sidebar settings", () => {
+  const customTab = (custom_label: string, custom_path: string, sort_order: number): SidebarConfigItem => ({
+    standard_tab_key: null,
+    custom_label,
+    custom_path,
+    custom_icon: "link",
+    is_external: custom_path.startsWith("https://"),
+    enabled: true,
+    sort_order,
+  })
+
+  it("hides the tabs the org turned off, including Recruiting and Organizations", () => {
+    mockWhiteLabel = { hidden: new Set(["market", "contracts", "recruiting", "contractors"]), customTabs: [] }
+    renderSidebar("/market/services")
+    expect(screen.queryByText("Market")).not.toBeInTheDocument()
+    expect(screen.queryByText("Contracts")).not.toBeInTheDocument()
+    expect(screen.queryByText("Recruiting")).not.toBeInTheDocument()
+    expect(screen.queryByText("Organizations")).not.toBeInTheDocument()
+    expect(screen.getByText("Services")).toBeInTheDocument()
+    expect(screen.getByText("Shops")).toBeInTheDocument()
+  })
+
+  it("shows every tab when nothing is hidden", () => {
+    renderSidebar("/market")
+    expect(screen.getByText("Recruiting")).toBeInTheDocument()
+    expect(screen.getByText("Organizations")).toBeInTheDocument()
+  })
+
+  it("adds the org's custom tabs; external ones open in a new tab", () => {
+    mockWhiteLabel = {
+      hidden: new Set(),
+      customTabs: [customTab("Staff Portal", "https://staff.example.com", 12), customTab("Our Fleet", "/fleet", 13)],
+    }
+    renderSidebar("/market")
+    const staff = screen.getByRole("link", { name: /Staff Portal/ })
+    expect(staff).toHaveAttribute("href", "https://staff.example.com")
+    expect(staff).toHaveAttribute("target", "_blank")
+    const fleet = screen.getByRole("link", { name: /Our Fleet/ })
+    expect(fleet).toHaveAttribute("href", "/fleet")
+    expect(fleet).not.toHaveAttribute("target")
   })
 })
 

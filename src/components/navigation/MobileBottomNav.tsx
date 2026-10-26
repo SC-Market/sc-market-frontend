@@ -31,8 +31,7 @@ import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
-import { useCustomDomain, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
-import { getDisabledTabs } from "../sidebar/utils/sidebarFilters"
+import { useWhiteLabelSidebar } from "../../features/contractor/hooks/useWhiteLabelSidebar"
 import { PATHS, MARKET_PATHS, ORDER_PATHS, ORG_PATHS } from "../../routes/paths"
 
 interface NavTabConfig {
@@ -69,7 +68,7 @@ export function MobileBottomNav() {
   const { t } = useTranslation()
   const { status: sessionStatus, profile: userProfile } = useSession()
   const isLoggedIn = sessionStatus === "authenticated"
-  const { customOrg } = useCustomDomain()
+  const whiteLabel = useWhiteLabelSidebar()
   const primaryContractor = userProfile?.contractors?.[0]
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
@@ -207,18 +206,14 @@ export function MobileBottomNav() {
     const userTabs = saved ? JSON.parse(saved) : null
     const tabIds = userTabs || defaultTabs
 
-    // On white-label, filter out tabs disabled in sidebar config
-    const disabledKeys = customOrg ? getDisabledTabs() : new Set<string>()
 
     return tabIds
       .map((id: string) => getTabConfig(id))
       .filter((tab: NavTabConfig | null): tab is NavTabConfig => {
         if (!tab) return false
         if (tab.requiresAuth && !isLoggedIn) return false
-        // Hide tabs disabled by white-label sidebar config
-        if (disabledKeys.has(tab.id)) return false
-        // Hide contractors/recruiting on white-label (same as sidebar)
-        if (customOrg && (tab.id === "contractors" || tab.id === "recruiting")) return false
+        // Hide tabs the white-label org hid (same settings as the sidebar)
+        if (whiteLabel.hidden.has(tab.id)) return false
         return true
       })
       .slice(0, 5)
@@ -226,11 +221,11 @@ export function MobileBottomNav() {
 
   const [activeTabs, setActiveTabs] = useState<NavTabConfig[]>(getActiveTabs())
 
-  // Update tabs when login state changes
+  // Update tabs when login state or the white-label sidebar settings change
   useEffect(() => {
     setActiveTabs(getActiveTabs())
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn])
+  }, [isLoggedIn, whiteLabel.hidden])
 
   // Listen for settings updates
   useEffect(() => {

@@ -36,7 +36,6 @@ import {
   resolveBrowserCustomDomain,
   useCustomDomain,
 } from "./contractor/CustomDomain"
-import { setSidebarConfig } from "../components/sidebar/utils/sidebarFilters"
 import { contractorsApi } from "../store/api/contractors"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
 import {
@@ -150,16 +149,6 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
         const built = buildOrgTheme(theme_data, resolvedMode)
         setDynamicOrgTheme(built)
 
-        // Step 5: Fetch sidebar config for tab filtering + custom tabs
-        try {
-          const sidebarResult = await dispatch(
-            contractorsApi.endpoints.getWhitelabelSidebar.initiate(spectrum_id),
-          )
-          if (sidebarResult.data) {
-            const items = sidebarResult.data.data || []
-            setSidebarConfig(items)
-          }
-        } catch { /* sidebar config is optional */ }
       } catch {
         // API unavailable — cached/hardcoded theme continues to work
       }

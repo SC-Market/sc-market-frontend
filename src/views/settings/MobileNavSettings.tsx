@@ -25,8 +25,7 @@ import {
 } from "@mui/icons-material"
 import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd"
 import { useTranslation } from "react-i18next"
-import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
-import { getDisabledTabs } from "../../components/sidebar/utils/sidebarFilters"
+import { useWhiteLabelSidebar } from "../../features/contractor/hooks/useWhiteLabelSidebar"
 
 interface NavTab {
   id: string
@@ -133,16 +132,9 @@ const STORAGE_KEY = "mobile_nav_tabs"
 
 export function MobileNavSettings() {
   const { t } = useTranslation()
-  const { customOrg } = useCustomDomain()
-
-  // On white-label, hide tabs disabled in sidebar config
-  const disabledKeys = customOrg ? getDisabledTabs() : new Set<string>()
-  const hiddenOnWhiteLabel = new Set(["contractors", "recruiting"])
-  const availableTabs = ALL_NAV_TABS.filter((tab) => {
-    if (customOrg && hiddenOnWhiteLabel.has(tab.id)) return false
-    if (disabledKeys.has(tab.id)) return false
-    return true
-  })
+  // On white-label, offer only the tabs the org didn't hide
+  const whiteLabel = useWhiteLabelSidebar()
+  const availableTabs = ALL_NAV_TABS.filter((tab) => !whiteLabel.hidden.has(tab.id))
 
   const [selectedTabs, setSelectedTabs] = useState<string[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY)

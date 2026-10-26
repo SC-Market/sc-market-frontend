@@ -63,6 +63,7 @@ import {
   CloseRounded,
   LoginRounded,
   HelpOutlineRounded,
+  OpenInNewRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -88,6 +89,9 @@ import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrde
 import { useShopPendingOrderCount } from "../../features/orders/hooks/useShopPendingOrderCount"
 import { haptic } from "../../util/haptics"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
+import { useWhiteLabelSidebar } from "../../features/contractor/hooks/useWhiteLabelSidebar"
+import { whiteLabelTabIcon } from "../../features/contractor/components/whiteLabelIcons"
+import { getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { isSiteAdmin } from "../../util/siteRole"
 import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
 import LockRounded from "@mui/icons-material/LockRounded"
@@ -101,6 +105,8 @@ interface NavItem {
   badge?: number
   /** Optional subsection grouping label shown above the item */
   group?: string
+  /** Key a white-label org can hide it with (Sidebar Tabs settings) */
+  whiteLabelKey?: string
 }
 
 export function SidebarV2() {
@@ -117,6 +123,10 @@ export function SidebarV2() {
     skip: !isAuthenticated,
   })
   const { flags } = useFeatureFlag()
+  // On a white-label domain: the tabs the org hid and its own links.
+  const whiteLabel = useWhiteLabelSidebar()
+  const shownOnWhiteLabel = (item: NavItem) =>
+    !item.whiteLabelKey || !whiteLabel.hidden.has(item.whiteLabelKey)
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
 
@@ -247,11 +257,11 @@ export function SidebarV2() {
     const marketplace = t("nav.groupMarketplace", "Marketplace")
     const personal = t("nav.groupPersonal", "Personal")
     const items: NavItem[] = [
-      { label: t("nav.market", "Market"), to: MARKET_PATHS.search, icon: <SearchRounded />, group: marketplace },
-      { label: t("nav.services", "Services"), to: MARKET_PATHS.services, icon: <DesignServicesRounded />, group: marketplace },
-      { label: t("nav.contracts", "Contracts"), to: PATHS.contracts, icon: <DescriptionRounded />, group: marketplace },
+      { label: t("nav.market", "Market"), to: MARKET_PATHS.search, icon: <SearchRounded />, group: marketplace, whiteLabelKey: "market" },
+      { label: t("nav.services", "Services"), to: MARKET_PATHS.services, icon: <DesignServicesRounded />, group: marketplace, whiteLabelKey: "services" },
+      { label: t("nav.contracts", "Contracts"), to: PATHS.contracts, icon: <DescriptionRounded />, group: marketplace, whiteLabelKey: "contracts" },
       { label: t("nav.buyOrders", "Buy Orders"), to: MARKET_PATHS.buyOrders, icon: <ShoppingCartRounded />, group: marketplace },
-    ]
+    ].filter((item) => !item.whiteLabelKey || !whiteLabel.hidden.has(item.whiteLabelKey))
     if (profile) {
       if (flags.customizable_dashboard) {
         items.push({ label: t("nav.dashboard", "Dashboard"), to: PATHS.dashboardOverview, icon: <DashboardRounded />, group: personal })
@@ -265,7 +275,7 @@ export function SidebarV2() {
       )
     }
     return items
-  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t, pendingOrderCount, unreadChatCount, shopPendingOrderCount, flags.customizable_dashboard])
+  }, [context, selectedShop, selectedOrgId, selectedContractor, profile, shops, t, pendingOrderCount, unreadChatCount, shopPendingOrderCount, flags.customizable_dashboard, whiteLabel.hidden])
 
   const [wikiOpen, setWikiOpen] = useState(() => location.pathname.startsWith("/wiki"))
   const [craftingOpen, setCraftingOpen] = useState(
@@ -638,9 +648,42 @@ export function SidebarV2() {
                 {t("nav.groupBrowse", "Browse")}
               </Typography>
               <List dense sx={{ px: 1 }}>
-                {renderNavItem({ label: t("nav.shops", "Shops"), to: MARKET_PATHS.shops, icon: <StorefrontRounded /> })}
-                {renderNavItem({ label: t("nav.orgs", "Organizations"), to: PATHS.contractors, icon: <BusinessRounded /> })}
-                {renderNavItem({ label: t("nav.recruiting", "Recruiting"), to: PATHS.recruiting, icon: <PersonAddRounded /> })}
+                {[
+                  { label: t("nav.shops", "Shops"), to: MARKET_PATHS.shops, icon: <StorefrontRounded /> },
+                  { label: t("nav.orgs", "Organizations"), to: PATHS.contractors, icon: <BusinessRounded />, whiteLabelKey: "contractors" },
+                  { label: t("nav.recruiting", "Recruiting"), to: PATHS.recruiting, icon: <PersonAddRounded />, whiteLabelKey: "recruiting" },
+                ]
+                  .filter(shownOnWhiteLabel)
+                  .map((item) => renderNavItem(item))}
+              </List>
+            </>
+          )}
+
+          {/* A white-label org's own links (Sidebar Tabs › Custom Tabs) */}
+          {context === "browse" && whiteLabel.customTabs.length > 0 && (
+            <>
+              <Divider sx={{ mx: 2, my: 0.5 }} />
+              <Typography variant="body2" sx={sectionHeaderSx}>
+                {getWhiteLabelConfig()?.name || t("nav.groupLinks", "Links")}
+              </Typography>
+              <List dense sx={{ px: 1 }}>
+                {whiteLabel.customTabs.map((tab) => {
+                  const path = tab.custom_path!
+                  const external = path.startsWith("https://")
+                  return (
+                    <ListItemButton
+                      key={`${tab.sort_order}-${path}`}
+                      {...(external
+                        ? { component: "a", href: path, target: "_blank", rel: "noopener noreferrer" }
+                        : { component: Link, to: path, selected: isActive(path), onClick: closeIfMobile })}
+                      sx={itemSx}
+                    >
+                      <ListItemIcon sx={{ minWidth: 36 }}>{whiteLabelTabIcon(tab.custom_icon)}</ListItemIcon>
+                      <ListItemText primary={tab.custom_label || path} primaryTypographyProps={{ variant: "subtitle2", noWrap: true }} />
+                      {external && <OpenInNewRounded fontSize="small" sx={{ opacity: 0.6 }} />}
+                    </ListItemButton>
+                  )
+                })}
               </List>
             </>
           )}
