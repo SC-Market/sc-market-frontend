@@ -489,6 +489,9 @@ export function MarkdownEditor(props: {
             }
             helperText={"Markdown enabled"}
             inputRef={inputRef}
+            // A name for the bare editor; pages override it via TextFieldProps
+            // (label or inputProps) with what the text is for.
+            inputProps={{ "aria-label": "Markdown text" }}
             {...TextFieldProps}
           />
         </Box>

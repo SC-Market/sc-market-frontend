@@ -21,6 +21,7 @@ import {
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { CloseRounded } from "@mui/icons-material"
 import { BottomSheet } from "./BottomSheet"
+import { useTranslation } from "react-i18next"
 
 interface ResponsiveDialogProps {
   open: boolean
@@ -51,6 +52,7 @@ export function ResponsiveDialog({
   fullHeight = false,
   disableBackdropClose = false,
 }: ResponsiveDialogProps) {
+  const { t } = useTranslation()
   const isMobile = useIsMobile()
 
   // Mobile: Use BottomSheet
@@ -80,7 +82,7 @@ export function ResponsiveDialog({
             <Typography variant="h6" fontWeight={600}>
               {title}
             </Typography>
-            <IconButton onClick={onClose} size="small">
+            <IconButton aria-label={t("ui.close", "Close")} onClick={onClose} size="small">
               <CloseRounded />
             </IconButton>
           </Box>

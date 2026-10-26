@@ -145,6 +145,7 @@ export function ThemeEditor({
   isSaving,
 }: ThemeEditorProps) {
   const { t } = useTranslation()
+  const labelIds = React.useId()
   const issueAlert = useAlertHook()
   const [editMode, setEditMode] = useState<"dark" | "light">("dark")
   const [themeData, setThemeData] = useState(initialThemeData)
@@ -320,6 +321,7 @@ export function ThemeEditor({
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <input
                     type="color"
+                    aria-label={t(field.labelKey, field.fallback)}
                     value={(getNestedValue(currentMode, field.path) as string) || "#000000"}
                     onChange={(e) => updateValue(field.path, e.target.value)}
                     style={{ width: 32, height: 32, border: "none", cursor: "pointer", flexShrink: 0 }}
@@ -330,6 +332,9 @@ export function ThemeEditor({
                     </Typography>
                     <TextField
                       size="small"
+                      inputProps={{
+                        "aria-label": `${t(field.labelKey, field.fallback)} (hex)`,
+                      }}
                       value={getNestedValue(currentMode, field.path) ?? ""}
                       onChange={(e) => updateValue(field.path, e.target.value)}
                       sx={{ "& input": { fontSize: 11, py: 0.5, px: 0.75 } }}
@@ -356,8 +361,9 @@ export function ThemeEditor({
           <Grid container spacing={1.5}>
             <Grid item xs={4}>
               <FormControl fullWidth size="small">
-                <InputLabel>{t("theme.paperStyle", "Paper Style")}</InputLabel>
+                <InputLabel id={`${labelIds}-paperStyle`}>{t("theme.paperStyle", "Paper Style")}</InputLabel>
                 <Select
+                  labelId={`${labelIds}-paperStyle`}
                   value={paperVariant}
                   label={t("theme.paperStyle", "Paper Style")}
                   onChange={(e) => updateComponentVariant("MuiPaper", e.target.value)}
@@ -369,14 +375,15 @@ export function ThemeEditor({
               {paperVariant === "elevation" && (
                 <Box sx={{ mt: 1 }}>
                   <Typography variant="caption">{t("theme.elevationLevel", "Elevation Level")}</Typography>
-                  <Slider size="small" min={0} max={24} value={paperElevation} onChange={(_, v) => updateComponentElevation("MuiPaper", v as number)} valueLabelDisplay="auto" />
+                  <Slider size="small" aria-label={t("theme.paperElevation", "Paper elevation level")} min={0} max={24} value={paperElevation} onChange={(_, v) => updateComponentElevation("MuiPaper", v as number)} valueLabelDisplay="auto" />
                 </Box>
               )}
             </Grid>
             <Grid item xs={4}>
               <FormControl fullWidth size="small">
-                <InputLabel>{t("theme.cardStyle", "Card Style")}</InputLabel>
+                <InputLabel id={`${labelIds}-cardStyle`}>{t("theme.cardStyle", "Card Style")}</InputLabel>
                 <Select
+                  labelId={`${labelIds}-cardStyle`}
                   value={cardVariant}
                   label={t("theme.cardStyle", "Card Style")}
                   onChange={(e) => updateComponentVariant("MuiCard", e.target.value)}
@@ -388,14 +395,15 @@ export function ThemeEditor({
               {cardVariant === "elevation" && (
                 <Box sx={{ mt: 1 }}>
                   <Typography variant="caption">{t("theme.elevationLevel", "Elevation Level")}</Typography>
-                  <Slider size="small" min={0} max={24} value={cardElevation} onChange={(_, v) => updateComponentElevation("MuiCard", v as number)} valueLabelDisplay="auto" />
+                  <Slider size="small" aria-label={t("theme.cardElevation", "Card elevation level")} min={0} max={24} value={cardElevation} onChange={(_, v) => updateComponentElevation("MuiCard", v as number)} valueLabelDisplay="auto" />
                 </Box>
               )}
             </Grid>
             <Grid item xs={4}>
               <FormControl fullWidth size="small">
-                <InputLabel>{t("theme.navStyle", "Nav Style")}</InputLabel>
+                <InputLabel id={`${labelIds}-navStyle`}>{t("theme.navStyle", "Nav Style")}</InputLabel>
                 <Select
+                  labelId={`${labelIds}-navStyle`}
                   value={navKind}
                   label={t("theme.navStyle", "Nav Style")}
                   onChange={(e) => updateValue(["navKind"], e.target.value)}
@@ -413,8 +421,9 @@ export function ThemeEditor({
           </Typography>
           <Box sx={{ mb: 1 }}>
             <FormControl size="small" sx={{ minWidth: 100 }}>
-              <InputLabel>{t("theme.unit", "Unit")}</InputLabel>
+              <InputLabel id={`${labelIds}-unit`}>{t("theme.unit", "Unit")}</InputLabel>
               <Select
+                  labelId={`${labelIds}-unit`}
                 value={borderRadiusUnit}
                 label={t("theme.unit", "Unit")}
                 onChange={(e) => updateValue(["borderRadiusUnit"], e.target.value)}
@@ -434,6 +443,7 @@ export function ThemeEditor({
                 </Typography>
                 <Slider
                   size="small"
+                  aria-label={t(field.labelKey, field.fallback)}
                   min={0}
                   max={borderRadiusUnit === "px" ? 32 : borderRadiusUnit === "%" ? 50 : 3}
                   step={borderRadiusUnit === "px" ? 1 : borderRadiusUnit === "%" ? 1 : 0.125}

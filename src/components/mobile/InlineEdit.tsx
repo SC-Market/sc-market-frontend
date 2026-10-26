@@ -16,6 +16,7 @@ import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import React, { useEffect, useRef, useState } from "react"
 import { EditRounded, CheckRounded, CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useTranslation } from "react-i18next"
 
 interface InlineEditProps {
   value: string
@@ -42,6 +43,7 @@ export function InlineEdit({
   validate,
   autoFocus = true,
 }: InlineEditProps) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const [isEditing, setIsEditing] = useState(false)
@@ -154,7 +156,7 @@ export function InlineEdit({
             mt: multiline ? 0.5 : 0,
           }}
         >
-          <IconButton
+          <IconButton aria-label={t("ui.save", "Save")}
             size="small"
             color="primary"
             onClick={handleSave}
@@ -162,7 +164,7 @@ export function InlineEdit({
           >
             <CheckRounded fontSize="small" />
           </IconButton>
-          <IconButton
+          <IconButton aria-label={t("ui.cancel", "Cancel")}
             size="small"
             color="error"
             onClick={handleCancel}
@@ -205,7 +207,7 @@ export function InlineEdit({
           {value || placeholder}
         </Typography>
       )}
-      <IconButton size="small" sx={{ opacity: 0.6 }}>
+      <IconButton aria-label={t("ui.edit", "Edit")} size="small" sx={{ opacity: 0.6 }}>
         <EditRounded fontSize="small" />
       </IconButton>
     </Box>

@@ -10,6 +10,7 @@ import React, { ReactNode, useEffect, useRef } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "./BottomSheet"
+import { useTranslation } from "react-i18next"
 
 interface MobileSidebarWrapperProps {
   open: boolean
@@ -30,6 +31,7 @@ export function MobileSidebarWrapper({
   drawerWidth = 300,
   showCloseButton = true,
 }: MobileSidebarWrapperProps) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
 
@@ -72,7 +74,7 @@ export function MobileSidebarWrapper({
           }}
         >
           {showCloseButton && (
-            <IconButton onClick={onClose} size="small">
+            <IconButton aria-label={t("ui.close", "Close")} onClick={onClose} size="small">
               <CloseRounded />
             </IconButton>
           )}

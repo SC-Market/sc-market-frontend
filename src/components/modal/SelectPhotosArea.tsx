@@ -44,6 +44,7 @@ import { resizeImageFiles, PHOTO_RESIZE } from "../../util/imageResize"
 const MAX_INPUT_SIZE = 25 * 1024 * 1024 // 25MB
 
 export function PhotoEntry(props: { url: string; onClose: () => void }) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   return (
     <Paper
@@ -54,7 +55,7 @@ export function PhotoEntry(props: { url: string; onClose: () => void }) {
         position: "relative",
       }}
     >
-      <Fab
+      <Fab aria-label={t("photos.removePhoto", "Remove photo")}
         size={"small"}
         sx={{
           transform: "scale(0.6)",
@@ -75,6 +76,7 @@ export function PhotoEntry(props: { url: string; onClose: () => void }) {
 }
 
 export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [previewUrl, setPreviewUrl] = useState<string>("")
 
@@ -97,7 +99,7 @@ export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
         position: "relative",
       }}
     >
-      <Fab
+      <Fab aria-label={t("photos.removePhoto", "Remove photo")}
         size={"small"}
         sx={{
           transform: "scale(0.6)",
@@ -156,7 +158,7 @@ export function UploadingPhotoEntry(props: {
         position: "relative",
       }}
     >
-      <Fab
+      <Fab aria-label={t("photos.cancelUpload", "Cancel upload")}
         size={"small"}
         sx={{
           transform: "scale(0.6)",

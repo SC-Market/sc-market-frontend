@@ -8,6 +8,7 @@ import {
 import { useHapticFeedback } from "../../hooks/gestures/useHapticFeedback"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useTranslation } from "react-i18next"
 
 export interface SwipeableItemProps {
   /**
@@ -88,6 +89,7 @@ export function SwipeableItem({
   showDefaultActions = false,
   onSwipeAction,
 }: SwipeableItemProps) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [swipeOffset, setSwipeOffset] = useState(0)
   const [isSwiping, setIsSwiping] = useState(false)
@@ -181,7 +183,7 @@ export function SwipeableItem({
   // Default actions
   const defaultLeftAction =
     showDefaultActions && onSwipeRight ? (
-      <IconButton
+      <IconButton aria-label={t("gestures.favorite", "Favorite")}
         onClick={(e) => {
           e.stopPropagation()
           onSwipeRight()
@@ -200,7 +202,7 @@ export function SwipeableItem({
 
   const defaultRightAction =
     showDefaultActions && onSwipeLeft ? (
-      <IconButton
+      <IconButton aria-label={t("gestures.swipeLeftAction", "Delete")}
         onClick={(e) => {
           e.stopPropagation()
           onSwipeLeft()

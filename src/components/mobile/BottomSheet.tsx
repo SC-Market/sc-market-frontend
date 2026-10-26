@@ -17,6 +17,7 @@ import React, { ReactNode, useState, useRef, useEffect } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
+import { useTranslation } from "react-i18next"
 
 interface BottomSheetProps {
   open: boolean
@@ -45,6 +46,7 @@ export function BottomSheet({
   defaultSnap = "full",
   peekHeight = 120,
 }: BottomSheetProps) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const [currentSnap, setCurrentSnap] = useState<
@@ -258,7 +260,7 @@ export function BottomSheet({
             </Typography>
           )}
           {showCloseButton && (
-            <IconButton
+            <IconButton aria-label={t("ui.close", "Close")}
               onClick={() => {
                 haptic.light()
                 onClose()

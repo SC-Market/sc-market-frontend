@@ -14,10 +14,12 @@ import {
   CloseRounded,
 } from "@mui/icons-material"
 import { usePWAInstallPrompt } from "../../hooks/pwa/usePWAInstallPrompt"
+import { useTranslation } from "react-i18next"
 
 const DISMISS_KEY = "pwa_install_dismissed"
 
 export function InstallPrompt() {
+  const { t } = useTranslation()
   const { canInstall, isInstalled, triggerInstall } = usePWAInstallPrompt()
   const [showPrompt, setShowPrompt] = useState(false)
 
@@ -75,7 +77,7 @@ export function InstallPrompt() {
               <Typography variant="body2" component="div">• Home screen icon</Typography>
             </Stack>
           </Box>
-          <IconButton size="small" onClick={handleDismiss} sx={{ alignSelf: "flex-start" }}>
+          <IconButton aria-label={t("pwa.dismissInstall", "Dismiss install prompt")} size="small" onClick={handleDismiss} sx={{ alignSelf: "flex-start" }}>
             <CloseRounded />
           </IconButton>
         </Stack>

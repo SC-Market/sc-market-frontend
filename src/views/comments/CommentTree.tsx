@@ -87,12 +87,15 @@ export function CommentTree(props: {
           <IconButton
             color={"secondary"}
             onClick={() => setReplyOpen((o) => !o)}
+            aria-label={t("comments.reply", "Reply")}
+            aria-expanded={replyOpen}
           >
             <ReplyRounded />
           </IconButton>
           {comment.author && comment.author?.username === profile?.username && (
             <IconButton
               color={"error"}
+              aria-label={t("comments.delete", "Delete comment")}
               onClick={() =>
                 deleteComment({
                   comment_id: comment.comment_id,
