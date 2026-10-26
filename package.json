@@ -23,7 +23,6 @@
     "@tanstack/react-virtual": "^3.13.13",
     "@unhead/react": "^3.2.3",
     "@vitejs/plugin-react-swc": "^3.10.2",
-    "beasties": "^0.4.1",
     "date-fns": "^2.30.0",
     "i18next": "^25.3.2",
     "i18next-browser-languagedetector": "^8.2.0",
