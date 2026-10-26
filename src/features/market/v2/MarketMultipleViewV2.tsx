@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
+import { ListingDetailContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi";
@@ -300,6 +301,7 @@ export function MarketMultipleViewV2() {
         { label: complete?.title || "Listing" },
       ]}
       isLoading={isLoading}
+      skeleton={<ListingDetailContentSkeleton withBreadcrumbs={false} />}
       error={!complete && !isLoading ? error : undefined}
       sidebarOpen={true}
       maxWidth="xl"

@@ -44,6 +44,7 @@ import { Cart } from "../../../datatypes/Cart";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { MARKET_PATHS, PATHS } from "../../../routes/paths";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
+import { MarketAggregateContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
 import {
@@ -287,6 +288,7 @@ export function MarketAggregateViewV2() {
         { label: game_item.name || "Item" },
       ]}
       isLoading={isLoading}
+      skeleton={<MarketAggregateContentSkeleton />}
       error={error}
       sidebarOpen={true}
       maxWidth="xl"

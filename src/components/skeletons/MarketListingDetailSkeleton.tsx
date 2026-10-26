@@ -14,16 +14,23 @@ import { BaseSkeleton } from "./BaseSkeleton"
  * the listing loads: the breadcrumb and title rows, then the image (4/12 from lg) beside the
  * main card (8/12, min 400px tall), stacked below lg.
  */
-export function ListingDetailContentSkeleton() {
+export function ListingDetailContentSkeleton({
+  withBreadcrumbs = true,
+}: {
+  /** False for pages that already draw their breadcrumbs while loading. */
+  withBreadcrumbs?: boolean
+} = {}) {
   const theme = useTheme<ExtendedTheme>()
 
   return (
     <>
       {/* Breadcrumbs: while loading the page has only "Market", which
           PageBreadcrumbs doesn't draw; once loaded it has 2-4 crumbs */}
-      <Grid item xs={12}>
-        <BaseSkeleton variant="text" width={280} height={24} />
-      </Grid>
+      {withBreadcrumbs && (
+        <Grid item xs={12}>
+          <BaseSkeleton variant="text" width={280} height={24} />
+        </Grid>
+      )}
       <PageHeaderRowSkeleton width="45%" />
       <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.layout}>
@@ -78,6 +85,90 @@ export function ListingDetailContentSkeleton() {
         </Grid>
       </Grid>
     </>
+  )
+}
+
+/**
+ * Body of the aggregate page (MarketAggregateViewV2Admin) while the item's
+ * listings load. The page draws its breadcrumbs while loading, but its title
+ * row only once the item is known. Sizes are the loaded page's at lg: the
+ * 300px item image (4/12) beside the market overview (8/12), then the sell
+ * and buy order books side by side (472px), the order depth chart and the
+ * buy order form.
+ */
+export function MarketAggregateContentSkeleton({
+  withBreadcrumbs = false,
+}: {
+  withBreadcrumbs?: boolean
+} = {}) {
+  const theme = useTheme<ExtendedTheme>()
+  const block = (height: number) => (
+    <BaseSkeleton
+      variant="rectangular"
+      height={height}
+      sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
+    />
+  )
+
+  return (
+    <>
+      {withBreadcrumbs && (
+        <Grid item xs={12}>
+          <BaseSkeleton variant="text" width={280} height={24} />
+        </Grid>
+      )}
+      <PageHeaderRowSkeleton width="45%" />
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} lg={4}>
+            {/* The item image paper is a fixed 300px box */}
+            <BaseSkeleton
+              variant="rectangular"
+              height={300}
+              sx={{ borderRadius: theme.spacing(theme.borderRadius.image) }}
+            />
+          </Grid>
+          <Grid item xs={12} lg={8}>
+            {block(300)}
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            {block(472)}
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            {block(472)}
+          </Grid>
+          <Grid item xs={12}>
+            {block(279)}
+          </Grid>
+          <Grid item xs={12}>
+            {block(530)}
+          </Grid>
+        </Grid>
+      </Grid>
+    </>
+  )
+}
+
+/**
+ * Route skeleton for /market/aggregate/:id: the "Market" breadcrumb frame
+ * (not drawn) around MarketAggregateContentSkeleton.
+ */
+export function MarketAggregateSkeleton() {
+  const { t } = useTranslation()
+  return (
+    <StandardPageLayout
+      noFooter
+      breadcrumbs={[
+        {
+          label: t("sidebar.market_short", "Market"),
+          href: MARKET_PATHS.search,
+        },
+      ]}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <MarketAggregateContentSkeleton withBreadcrumbs />
+    </StandardPageLayout>
   )
 }
 
