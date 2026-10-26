@@ -59,7 +59,7 @@ test.describe("logged out", () => {
     // parallel load a click on the directory occasionally didn't navigate;
     // retry the click rather than fail the whole flow on it.
     await expect(async () => {
-      await directory.getByRole("link", { name: "Buying", exact: true }).click()
+      await directory.getByRole("link", { name: /^Buying\b/ }).click()
       await expect(page).toHaveURL(/\/guides\/buying$/, { timeout: 2000 })
     }).toPass({ timeout: 15_000 })
     await waitForReady(page)

@@ -56,7 +56,7 @@ import { waitForReady } from "../support/test"
 await page.goto("/market")
 await waitForReady(page) // main[data-ready="true"] and aria-busy="false"
 
-await page.getByRole("link", { name: "Buying", exact: true }).click()
+await page.getByRole("link", { name: /^Buying\b/ }).click()
 await expect(page).toHaveURL(/\/guides\/buying$/) // URL first...
 await waitForReady(page) // ...then ready
 ```
