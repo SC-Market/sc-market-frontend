@@ -1,20 +1,29 @@
 /**
  * ListingOrdersSection — shows related orders and pending offers for a listing.
- * Only visible to the listing owner / org members (backend enforces).
+ *
+ * Only for viewers who can manage the listing's shop (the shop owner, or a
+ * manage_market member of the owning org). That is the rule the backend's
+ * GET /orders/by-listing enforces, and /shops/mine reports it per shop as
+ * permissions.can_manage, so the query is only sent when it can succeed:
+ * anonymous visitors and other users never request it (it would 401/403).
  */
 
 import React from "react"
 import { Grid, Typography, Chip, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import { Link } from "react-router-dom"
-import { useGetOrdersByListingQuery, type ListingOrderSummary, type ListingOfferSummary } from "../../../../store/api/v2/market"
+import { useGetMyShopsQuery, useGetOrdersByListingQuery, type ListingOrderSummary, type ListingOfferSummary } from "../../../../store/api/v2/market"
 import { Section } from "../../../../components/paper/Section"
 import { formatPrice } from "../../../../util/formatPrice"
 import { ORDER_PATHS } from "../../../../routes/paths"
+import { useIsAuthenticated } from "../../../../hooks/login/useSession"
 
-export function ListingOrdersSection({ listingId }: { listingId: string }) {
-  const { data, error } = useGetOrdersByListingQuery({ listingId }, { skip: !listingId })
+export function ListingOrdersSection({ listingId, shopId }: { listingId: string; shopId: string }) {
+  const isAuthenticated = useIsAuthenticated()
+  const { data: myShops } = useGetMyShopsQuery(undefined, { skip: !isAuthenticated })
+  const canManage = !!myShops?.some((shop) => shop.shop_id === shopId && shop.permissions?.can_manage)
+  const { data, error } = useGetOrdersByListingQuery({ listingId }, { skip: !listingId || !canManage })
 
-  if (error || !data) return null
+  if (!canManage || error || !data) return null
   if (!data.orders.length && !data.offers.length) return null
 
   return (

@@ -435,7 +435,7 @@ export function ListingDetailV2() {
           )}
 
           {/* Related Orders/Offers (seller only) */}
-          <ListingOrdersSection listingId={listing.listing_id} />
+          <ListingOrdersSection listingId={listing.listing_id} shopId={seller.shop_id} />
 
           {/* Seller's Other Listings */}
           <SellerOtherListingsV2
