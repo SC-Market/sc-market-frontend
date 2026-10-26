@@ -19,6 +19,9 @@ import openContractsCap from "../../assets/open-contracts-2026.webp"
 import buyOrdersCapSmall from "../../assets/buy-orders-640.webp"
 import miningDbCapSmall from "../../assets/mining-db-640.webp"
 import openContractsCapSmall from "../../assets/open-contracts-2026-640.webp"
+import buyOrdersCapMid from "../../assets/buy-orders-800.webp"
+import miningDbCapMid from "../../assets/mining-db-800.webp"
+import openContractsCapMid from "../../assets/open-contracts-2026-800.webp"
 import { LandingImg, screenshotSrcSet } from "./LandingImage"
 import { featureTileGrid } from "./featureTileGrid"
 import {
@@ -32,6 +35,8 @@ interface FeatureImage {
   src: string
   /** The 640px variant, offered next to `src` in a srcset. */
   smallSrc: string
+  /** The 800px variant (see screenshotSrcSet). */
+  midSrc?: string
   width: number
   height: number
   alt: string
@@ -66,7 +71,12 @@ function FeatureMedia(props: { image?: FeatureImage; icon?: ReactNode }) {
     return (
       <LandingImg
         src={image.src}
-        srcSet={screenshotSrcSet(image.smallSrc, image.src, image.width)}
+        srcSet={screenshotSrcSet(
+          image.smallSrc,
+          image.src,
+          image.width,
+          image.midSrc,
+        )}
         sizes="(min-width: 900px) 560px, 100vw"
         width={image.width}
         height={image.height}
@@ -200,6 +210,7 @@ export function LandingFeatures() {
                 image={{
                   src: buyOrdersCap,
                   smallSrc: buyOrdersCapSmall,
+                  midSrc: buyOrdersCapMid,
                   width: 1280,
                   height: 720,
                   alt: t("landing.buyOrdersImageAlt"),
@@ -220,6 +231,7 @@ export function LandingFeatures() {
                 image={{
                   src: miningDbCap,
                   smallSrc: miningDbCapSmall,
+                  midSrc: miningDbCapMid,
                   width: 1280,
                   height: 720,
                   alt: t("landing.gameDataImageAlt"),
@@ -263,6 +275,7 @@ export function LandingFeatures() {
                 image={{
                   src: openContractsCap,
                   smallSrc: openContractsCapSmall,
+                  midSrc: openContractsCapMid,
                   width: 1280,
                   height: 720,
                   alt: t("landing.contractsImageAlt"),

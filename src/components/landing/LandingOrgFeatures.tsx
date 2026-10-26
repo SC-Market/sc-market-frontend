@@ -7,6 +7,7 @@ import recruitingCap from "../../assets/recruiting.webp"
 import manageStockCap from "../../assets/manage-stock.webp"
 import servicesCap from "../../assets/services-cap.webp"
 import recruitingCapSmall from "../../assets/recruiting-640.webp"
+import recruitingCapMid from "../../assets/recruiting-800.webp"
 import manageStockCapSmall from "../../assets/manage-stock-640.webp"
 import servicesCapSmall from "../../assets/services-cap-640.webp"
 import { LandingImg, screenshotSrcSet } from "./LandingImage"
@@ -20,11 +21,13 @@ import {
 function LandingSmallImage(props: {
   src: string
   smallSrc: string
+  /** Optional 800px variant (see screenshotSrcSet). */
+  midSrc?: string
   width: number
   height: number
   title: string
 }) {
-  const { src, smallSrc, width, height, title } = props
+  const { src, smallSrc, midSrc, width, height, title } = props
   const theme = useTheme<ExtendedTheme>()
 
   return (
@@ -36,7 +39,7 @@ function LandingSmallImage(props: {
     >
       <LandingImg
         src={src}
-        srcSet={screenshotSrcSet(smallSrc, src, width)}
+        srcSet={screenshotSrcSet(smallSrc, src, width, midSrc)}
         sizes="(min-width: 900px) 400px, 100vw"
         width={width}
         height={height}
@@ -92,6 +95,7 @@ export function LandingOrgFeatures() {
           <LandingSmallImage
             src={recruitingCap}
             smallSrc={recruitingCapSmall}
+            midSrc={recruitingCapMid}
             width={1909}
             height={1699}
             title={t("landing.orgRecruitment")}
