@@ -102,6 +102,14 @@ describe("bridge: guide pages", () => {
     expect(headMarkup(d.head, d.canonical, false)).toContain('"@type":"HowTo"')
   })
 
+  it("includes the full guides directory as crawlable links", async () => {
+    const body = html(await doc(path))
+    expect(body).toContain("All guides")
+    for (const g of site.guides) expect(body).toContain(`<a href="/guides/${g.meta.category}/${g.meta.slug}">`)
+    for (const c of site.categories) expect(body).toContain(`<a href="/guides/${c.id}">`)
+    expect(body).toContain('<a href="/about">')
+  })
+
   it("reads static assets only, never the API", async () => {
     const e = env()
     await resolve(path, e)
@@ -133,10 +141,11 @@ describe("bridge: hubs and About", () => {
     expect(body).toContain('<a href="/about">')
   })
 
-  it("renders a category page", async () => {
+  it("renders a category page with the directory", async () => {
     const d = await doc(`/guides/${category.id}`)
     expect(d.canonical).toBe(`https://sc-market.space/guides/${category.id}`)
     expect(html(d)).toContain(`<h1>`)
+    for (const g of site.guides) expect(html(d)).toContain(`<a href="/guides/${g.meta.category}/${g.meta.slug}">`)
   })
 
   it("renders About with AboutPage JSON-LD pointing at the Organization", async () => {
@@ -146,5 +155,6 @@ describe("bridge: hubs and About", () => {
       "@id": "https://sc-market.space/#organization",
     })
     expect(html(d)).toContain("not affiliated with the Cloud Imperium group")
+    for (const g of site.guides) expect(html(d)).toContain(`<a href="/guides/${g.meta.category}/${g.meta.slug}">`)
   })
 })

@@ -80,8 +80,13 @@ export interface ContentIndex {
   about: AboutMeta
 }
 
+/** Every bridge asset carries the full directory (crawlable links). */
+interface WithDirectory {
+  directory: import("./directory").ContentDirectory
+}
+
 /** /content/bridge/guides/<category>/<slug>.json */
-export interface GuideAsset {
+export interface GuideAsset extends WithDirectory {
   version: 1
   guide: GuideMeta
   category: CategoryMeta
@@ -90,14 +95,14 @@ export interface GuideAsset {
 }
 
 /** /content/bridge/guides/<category>.json */
-export interface CategoryAsset {
+export interface CategoryAsset extends WithDirectory {
   version: 1
   category: CategoryMeta
   guides: GuideMeta[]
 }
 
 /** /content/bridge/about.json */
-export interface AboutAsset {
+export interface AboutAsset extends WithDirectory {
   version: 1
   about: AboutMeta
   body: ContentBody

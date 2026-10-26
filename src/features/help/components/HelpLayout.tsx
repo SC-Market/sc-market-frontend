@@ -4,8 +4,9 @@
  * official site (owner decision, design doc §16).
  */
 import React, { ReactNode, useEffect } from "react"
-import { Box, Typography } from "@mui/material"
-import { useLocation } from "react-router-dom"
+import { Box, Breadcrumbs, Grid, Link, Typography } from "@mui/material"
+import { Link as RouterLink, useLocation } from "react-router-dom"
+import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded"
 import {
   StandardPageLayout,
   type BreadcrumbItem,
@@ -13,6 +14,7 @@ import {
 import { SeoHead } from "../../../seo/SeoHead"
 import { headDescription, type PageHead } from "../../../seo/pageHead"
 import { isOfficialSite, officialHelpUrl } from "../links"
+import { GuidesDirectory, GuidesDirectoryToggle } from "./GuidesDirectory"
 
 export function HelpLayout(props: {
   head: PageHead | null
@@ -20,7 +22,6 @@ export function HelpLayout(props: {
   path: string
   headerTitle: ReactNode
   breadcrumbs?: BreadcrumbItem[]
-  maxWidth?: "md" | "lg"
   children: ReactNode
 }) {
   const location = useLocation()
@@ -40,11 +41,41 @@ export function HelpLayout(props: {
       description={props.head ? headDescription(props.head) : undefined}
       canonicalUrl={props.path}
       headerTitle={props.headerTitle}
-      breadcrumbs={props.breadcrumbs}
-      maxWidth={props.maxWidth ?? "md"}
+      maxWidth="lg"
     >
       {props.head && <SeoHead head={props.head} />}
-      {props.children}
+      {/* Visual breadcrumbs only: the page head already carries the full
+          BreadcrumbList (SC Market › Help & Guides › …), and the layout's
+          own breadcrumbs would emit a second, shorter one. */}
+      {props.breadcrumbs && props.breadcrumbs.length > 1 && (
+        <Grid item xs={12} sx={{ order: -1 }}>
+          <Breadcrumbs separator={<NavigateNextRoundedIcon fontSize="small" />}>
+            {props.breadcrumbs.map((crumb) =>
+              crumb.href ? (
+                <Link key={crumb.label} component={RouterLink} to={crumb.href} color="secondary" underline="hover">
+                  {crumb.label}
+                </Link>
+              ) : (
+                <Typography key={crumb.label} color="text.primary">
+                  {crumb.label}
+                </Typography>
+              ),
+            )}
+          </Breadcrumbs>
+        </Grid>
+      )}
+      {/* Directory of every guide: sticky column on desktop, a toggle on mobile. */}
+      <Grid item xs={12} sx={{ display: { md: "none" } }}>
+        <GuidesDirectoryToggle />
+      </Grid>
+      <Grid item md={3} sx={{ display: { xs: "none", md: "block" } }}>
+        <GuidesDirectory />
+      </Grid>
+      <Grid item xs={12} md={9}>
+        <Grid container spacing={2}>
+          {props.children}
+        </Grid>
+      </Grid>
     </StandardPageLayout>
   )
 }

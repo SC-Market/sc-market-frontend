@@ -25,6 +25,7 @@ import type {
   RootContent,
 } from "mdast"
 import { HELP_PATHS } from "../../../routes/paths"
+import { buildDirectory } from "../domain/directory"
 import {
   inlineText,
   type AboutAsset,
@@ -620,6 +621,7 @@ export function guideAsset(site: CompiledSite, guide: CompiledGuide): GuideAsset
   const category = site.categories.find((c) => c.id === guide.meta.category)!
   return {
     version: 1,
+    directory: buildDirectory(contentIndex(site)),
     guide: guide.meta,
     category,
     body: publicBody(guide.body),
@@ -633,11 +635,17 @@ export function guideAsset(site: CompiledSite, guide: CompiledGuide): GuideAsset
 export function categoryAsset(site: CompiledSite, category: CategoryMeta): CategoryAsset {
   return {
     version: 1,
+    directory: buildDirectory(contentIndex(site)),
     category,
     guides: site.guides.filter((g) => g.meta.category === category.id).map((g) => g.meta),
   }
 }
 
 export function aboutAsset(site: CompiledSite): AboutAsset {
-  return { version: 1, about: site.about.meta, body: publicBody(site.about.body) }
+  return {
+    version: 1,
+    directory: buildDirectory(contentIndex(site)),
+    about: site.about.meta,
+    body: publicBody(site.about.body),
+  }
 }

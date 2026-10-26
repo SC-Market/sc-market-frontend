@@ -24,7 +24,7 @@ export function GuidesHub() {
   const start = helpIndex.guides[0]
 
   return (
-    <HelpLayout head={head} path={HELP_PATHS.hub} headerTitle={t("help.hubTitle", HELP_HUB_NAME)} maxWidth="lg">
+    <HelpLayout head={head} path={HELP_PATHS.hub} headerTitle={t("help.hubTitle", HELP_HUB_NAME)}>
       <Grid item xs={12}>
         <Typography variant="body1" color="text.secondary">
           {helpHubSeoText.description}

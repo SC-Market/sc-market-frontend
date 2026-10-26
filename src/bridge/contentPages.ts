@@ -15,6 +15,7 @@ import {
   type IndexAsset,
 } from "../features/help/domain/types"
 import { CONTENT_ASSET_PATHS } from "../features/help/domain/assetPaths"
+import type { ContentDirectory } from "../features/help/domain/directory"
 import { HELP_PATHS } from "../routes/paths"
 import {
   aboutTitle,
@@ -121,6 +122,19 @@ function asset<T>(json: unknown, name: string): T {
   return json
 }
 
+/** The guides directory (as in the SPA's sidebar): one bounded list per category. */
+function directoryBlocks(directory: ContentDirectory): SummaryBlock[] {
+  return [
+    { tag: "h2", text: "All guides" },
+    { tag: "ul", links: [directory.hub] },
+    ...directory.categories.flatMap((c): SummaryBlock[] => [
+      { tag: "h3", text: c.link.text },
+      { tag: "ul", links: [c.link, ...c.guides] },
+    ]),
+    { tag: "ul", links: [directory.about] },
+  ]
+}
+
 function updatedLine(updated: string, author: string): SummaryBlock {
   return { tag: "p", text: `Updated ${updated} by ${author}` }
 }
@@ -162,7 +176,8 @@ export const CONTENT_PAGES: Record<"guidesHub" | "guideCategory" | "guide" | "ab
   guideCategory: {
     asset: (params) => (SEGMENT.test(params.category) ? CONTENT_ASSET_PATHS.category(params.category) : null),
     build: (json, _s, ctx): BridgeDocument => {
-      const { category, guides } = asset<CategoryAsset>(json, "category")
+      const page = asset<CategoryAsset>(json, "category")
+      const { category, guides } = page
       const head = buildGuideCategoryHead(category, guides, ctx.origin)
       return {
         title: applyTitleTemplate(head.title),
@@ -176,6 +191,7 @@ export const CONTENT_PAGES: Record<"guidesHub" | "guideCategory" | "guide" | "ab
             { tag: "p", text: guide.description },
           ]),
           { tag: "ul", links: [...guides.map(guideLink), { href: HELP_PATHS.hub, text: HELP_HUB_NAME }] },
+          ...directoryBlocks(page.directory),
         ],
       }
     },
@@ -209,6 +225,7 @@ export const CONTENT_PAGES: Record<"guidesHub" | "guideCategory" | "guide" | "ab
               { href: HELP_PATHS.hub, text: HELP_HUB_NAME },
             ]),
           },
+          ...directoryBlocks(page.directory),
         ],
       }
     },
@@ -230,6 +247,7 @@ export const CONTENT_PAGES: Record<"guidesHub" | "guideCategory" | "guide" | "ab
           updatedLine(page.about.updated, page.about.author),
           ...body,
           { tag: "ul", links: dedupe([...links, { href: HELP_PATHS.hub, text: HELP_HUB_NAME }]) },
+          ...directoryBlocks(page.directory),
         ],
       }
     },
