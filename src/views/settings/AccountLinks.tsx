@@ -140,23 +140,32 @@ export function AccountLinks() {
         </Grid>
 
         {isLoading ? (
-          // Placeholder rows the size of the linked-account rows below (most
-          // users have one or two), so the cards under this one don't drop
-          // ~200px when the links arrive.
-          <Grid item xs={12}>
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {[0, 1].map((i) => (
-                <Skeleton
-                  key={i}
-                  variant="rounded"
-                  height={70}
-                  sx={{
-                    borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                  }}
-                />
-              ))}
-            </Box>
-          </Grid>
+          // Placeholders the size of what loads below: two linked-account
+          // rows (most users have one or two; a row is 65px) and the "Link
+          // New Account" block (its heading and one line), so
+          // the cards under this one don't drop when the links arrive.
+          <>
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                {[0, 1].map((i) => (
+                  <Skeleton
+                    key={i}
+                    variant="rounded"
+                    height={65}
+                    sx={{
+                      borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                    }}
+                  />
+                ))}
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
+                {t("settings.profile.linkNewAccount", "Link New Account")}
+              </Typography>
+              <Skeleton variant="rounded" width={200} height={20} />
+            </Grid>
+          </>
         ) : (
           <>
             {authProviders.length > 0 && (

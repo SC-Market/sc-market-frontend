@@ -5,7 +5,6 @@ import {
   Grid,
   Typography,
   Alert,
-  CircularProgress,
 } from "@mui/material"
 import { FlatSection } from "../../components/paper/Section"
 import { LanguageSelector } from "../../components/settings/LanguageSelector"
@@ -80,40 +79,34 @@ export function LanguageSettings() {
         </Grid>
       )}
 
-      {isLoading ? (
-        <Grid item xs={12}>
-          <Box display="flex" justifyContent="center" p={3}>
-            <CircularProgress />
-          </Box>
-        </Grid>
-      ) : (
-        <>
-          <Grid item xs={12}>
-            <LanguageSelector
-              selectedLanguages={selectedLanguages}
-              onChange={setSelectedLanguages}
-              label={t("settings.languages.label", "Supported Languages")}
-              helperText={t(
-                "settings.languages.field.helperText",
-                "Select the languages you can communicate in",
-              )}
-            />
-          </Grid>
+      {/* While the languages load, the same selector and button render
+          disabled, so the card has its loaded size (no spinner stage). */}
+      <Grid item xs={12}>
+        <LanguageSelector
+          selectedLanguages={selectedLanguages}
+          onChange={setSelectedLanguages}
+          label={t("settings.languages.label", "Supported Languages")}
+          helperText={t(
+            "settings.languages.field.helperText",
+            "Select the languages you can communicate in",
+          )}
+          disabled={isLoading}
+        />
+      </Grid>
 
-          <Grid item xs={12}>
-            <Box display="flex" justifyContent="flex-end" gap={2}>
-              <LoadingButton
-                variant="outlined"
-                onClick={handleSave}
-                loading={saving}
-                color="primary"
-              >
-                {t("settings.languages.save", "Save Languages")}
-              </LoadingButton>
-            </Box>
-          </Grid>
-        </>
-      )}
+      <Grid item xs={12}>
+        <Box display="flex" justifyContent="flex-end" gap={2}>
+          <LoadingButton
+            variant="outlined"
+            onClick={handleSave}
+            loading={saving}
+            disabled={isLoading}
+            color="primary"
+          >
+            {t("settings.languages.save", "Save Languages")}
+          </LoadingButton>
+        </Box>
+      </Grid>
     </FlatSection>
   )
 }
