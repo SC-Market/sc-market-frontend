@@ -12,13 +12,19 @@ import { Box } from "@mui/material"
 import { WidgetWrapper } from "./widgets/WidgetWrapper"
 import { getWidgetDefinition, widgetMinSize } from "./widgets/registry"
 import { BASE_COLS, reflowLayout } from "./reflowLayout"
+import {
+  DASHBOARD_BREAKPOINTS,
+  DASHBOARD_COLS,
+  DASHBOARD_GRID_MARGIN,
+  DASHBOARD_ROW_HEIGHT,
+} from "./gridConstants"
 import type { DashboardConfig, DashboardWidget } from "./types"
 
 const ResponsiveGridLayout = WidthProvider(Responsive)
 
-const COLS = { lg: BASE_COLS, md: BASE_COLS, sm: 6, xs: 4, xxs: 2 }
-const BREAKPOINTS = { lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }
-const ROW_HEIGHT = 80
+const COLS = DASHBOARD_COLS
+const BREAKPOINTS = DASHBOARD_BREAKPOINTS
+const ROW_HEIGHT = DASHBOARD_ROW_HEIGHT
 
 export interface DashboardGridProps {
   config: DashboardConfig
@@ -161,7 +167,7 @@ export function DashboardGrid({
       onBreakpointChange={(_breakpoint, nextCols) => handleColsChange(nextCols)}
       onWidthChange={(_width, _margin, nextCols) => handleColsChange(nextCols)}
       onLayoutChange={handleLayoutChange}
-      margin={[16, 16]}
+      margin={[DASHBOARD_GRID_MARGIN, DASHBOARD_GRID_MARGIN]}
     >
       {renderable.map((widget) => (
         <div key={widget.id}>

@@ -11,12 +11,7 @@
  */
 
 import { useMemo, useState } from "react"
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Stack,
-} from "@mui/material"
+import { Box, Button, Stack } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import EditIcon from "@mui/icons-material/Edit"
 import DoneIcon from "@mui/icons-material/Done"
@@ -28,39 +23,9 @@ import { DashboardGrid } from "./DashboardGrid"
 import { AddWidgetButton } from "./AddWidgetGallery"
 import { ImportExportControls } from "./ImportExportControls"
 import { DashboardOwnerProvider } from "./DashboardOwnerContext"
-import { emptyConfig, type DashboardConfig, type DashboardOwnerRef } from "./types"
-
-/** Default layout for a fresh personal dashboard — mirrors the legacy widgets. */
-function defaultPersonalConfig(): DashboardConfig {
-  return {
-    version: 1,
-    widgets: [
-      { id: "seed-metrics", type: "order_metrics", scope: { kind: "me" }, layout: { x: 0, y: 0, w: 3, h: 4 } },
-      { id: "seed-notifications", type: "notifications", scope: { kind: "me" }, layout: { x: 0, y: 4, w: 3, h: 5 } },
-      { id: "seed-offers", type: "offers", scope: { kind: "me" }, layout: { x: 3, y: 0, w: 9, h: 5 } },
-      { id: "seed-orders", type: "orders", scope: { kind: "me" }, layout: { x: 3, y: 5, w: 9, h: 5 } },
-      { id: "seed-buy-orders", type: "matching_buy_orders", scope: { kind: "me" }, layout: { x: 3, y: 10, w: 9, h: 4 } },
-      { id: "seed-count-trend", type: "order_count_trend", scope: { kind: "me" }, layout: { x: 3, y: 14, w: 9, h: 4 } },
-    ],
-  }
-}
-
-/**
- * Default layout for a fresh shared (org/shop) dashboard. Owner-relative scopes
- * resolve to the owner, so `current_context` binds the widgets to this org/shop.
- * Personal-only widgets (matching_buy_orders) are omitted.
- */
-function defaultSharedConfig(): DashboardConfig {
-  return {
-    version: 1,
-    widgets: [
-      { id: "seed-metrics", type: "order_metrics", scope: { kind: "current_context" }, layout: { x: 0, y: 0, w: 3, h: 4 } },
-      { id: "seed-offers", type: "offers", scope: { kind: "current_context" }, layout: { x: 3, y: 0, w: 9, h: 5 } },
-      { id: "seed-orders", type: "orders", scope: { kind: "current_context" }, layout: { x: 3, y: 5, w: 9, h: 5 } },
-      { id: "seed-count-trend", type: "order_count_trend", scope: { kind: "current_context" }, layout: { x: 3, y: 10, w: 9, h: 4 } },
-    ],
-  }
-}
+import { defaultPersonalConfig, defaultSharedConfig } from "./defaultConfigs"
+import { DashboardGridSkeleton } from "./DashboardGridSkeleton"
+import { emptyConfig, type DashboardOwnerRef } from "./types"
 
 export interface CustomizableDashboardProps {
   /** Owner of the dashboard. Omit for the current user's personal dashboard. */
@@ -85,15 +50,16 @@ export function CustomizableDashboard({
   })
 
   const owner = useMemo<DashboardOwnerRef>(
-    () =>
-      ownerProp ?? { ownerType: "user", ownerId: profile?.user_id ?? "" },
+    () => ownerProp ?? { ownerType: "user", ownerId: profile?.user_id ?? "" },
     [ownerProp, profile?.user_id],
   )
 
   const isPersonal = owner.ownerType === "user"
   const canEdit = canEditProp ?? isPersonal
 
-  const { config, isLoading, setConfig } = useDashboardConfig(owner, { canEdit })
+  const { config, isLoading, setConfig } = useDashboardConfig(owner, {
+    canEdit,
+  })
   const [editing, setEditing] = useState(false)
 
   // A dashboard with no saved layout and nothing cached gets a default seed so
@@ -155,9 +121,7 @@ export function CustomizableDashboard({
       >
         <Box sx={{ width: "100%" }}>
           {isLoading ? (
-            <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-              <CircularProgress />
-            </Box>
+            <DashboardGridSkeleton config={defaultConfig()} stacked={isPhone} />
           ) : (
             <DashboardGrid
               config={effectiveConfig}

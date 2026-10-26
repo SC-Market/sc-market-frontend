@@ -11,16 +11,34 @@
  * In edit mode a drag handle + remove control float as an overlay in the corner
  * so they work identically for both kinds. Scope-resolution / unavailable /
  * aggregate placeholder states are handled here for both.
+ *
+ * Each widget body has its own Suspense boundary: a widget that lazy-loads a
+ * chunk (a chart, the markdown renderer…) shows a placeholder in its own grid
+ * cell instead of suspending the whole dashboard into the route skeleton.
  */
 
-import { Alert, Box, Divider, IconButton, Paper, Tooltip, Typography } from "@mui/material"
+import { Suspense } from "react"
+import {
+  Alert,
+  Box,
+  Divider,
+  IconButton,
+  Paper,
+  Skeleton,
+  Tooltip,
+  Typography,
+} from "@mui/material"
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator"
 import CloseIcon from "@mui/icons-material/Close"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
 import { useResolveScope } from "../useResolveScope"
 import { useAggregateTargets } from "../useAggregateTargets"
-import { getWidgetDefinition, widgetTitle, type WidgetDefinition } from "./registry"
+import {
+  getWidgetDefinition,
+  widgetTitle,
+  type WidgetDefinition,
+} from "./registry"
 import type { DashboardWidget } from "../types"
 
 export interface WidgetWrapperProps {
@@ -91,7 +109,12 @@ export function WidgetWrapper({ widget, editing, onRemove, fitCell = true }: Wid
     >
       <Box
         className="dashboard-widget-drag-handle"
-        sx={{ cursor: "move", display: "flex", color: "text.secondary", p: 0.5 }}
+        sx={{
+          cursor: "move",
+          display: "flex",
+          color: "text.secondary",
+          p: 0.5,
+        }}
       >
         <DragIndicatorIcon fontSize="small" />
       </Box>
@@ -124,7 +147,16 @@ export function WidgetWrapper({ widget, editing, onRemove, fitCell = true }: Wid
         }}
       >
         {editOverlay}
-        {body}
+        <Suspense
+          fallback={
+            <Skeleton
+              variant="rounded"
+              sx={{ flex: "1 0 auto", height: "100%", minHeight: 120 }}
+            />
+          }
+        >
+          {body}
+        </Suspense>
       </Box>
     )
   }
@@ -162,7 +194,13 @@ export function WidgetWrapper({ widget, editing, onRemove, fitCell = true }: Wid
         </Typography>
       </Box>
       <Divider light />
-      <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }}>{body}</Box>
+      <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }}>
+        <Suspense
+          fallback={<Skeleton variant="rounded" sx={{ height: "100%" }} />}
+        >
+          {body}
+        </Suspense>
+      </Box>
     </Paper>
   )
 }
