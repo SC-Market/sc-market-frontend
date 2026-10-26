@@ -362,9 +362,9 @@ const HUB_PAGES: Record<
       canonical: head.canonical ?? `${ctx.origin}/`,
       head,
       summary: [
-        // Same <h1> as the SPA's LandingHero.
-        { tag: "h1", text: englishT("landing.subtitle") },
-        ...paragraphs(headDescription(head)),
+        // Same <h1> and intro line as the SPA's LandingHero.
+        { tag: "h1", text: englishT("landing.heroTitle") },
+        ...paragraphs(englishT("landing.heroText"), headDescription(head)),
         ...linkBlocks("Browse SC Market", [...MAIN_HUB_LINKS]),
         { tag: "h2", text: englishT("landing.faqTitle", "Your questions, answered") },
         ...faqs.flatMap((faq): SummaryBlock[] => [

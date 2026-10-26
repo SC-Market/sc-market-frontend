@@ -2652,9 +2652,6 @@
     "viewCart": "查看购物车"
   },
   "landing": {
-    "subtitle": "买卖商品，买卖服务。",
-    "totalOrders": "订单总数",
-    "totalOrderValue": "订单总价值",
     "ordersThisWeek": "本周订单",
     "valueOfOrdersThisWeek": "本周订单价值",
     "buySellItemsTitle": "买卖物品",

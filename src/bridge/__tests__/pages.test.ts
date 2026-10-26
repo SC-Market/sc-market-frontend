@@ -298,9 +298,10 @@ describe("homepage", () => {
     expect(doc.head.jsonLd[1]).toEqual(faqPageJsonLd(landingFaqs(englishT)))
   })
 
-  it("has the SPA hero's keyword <h1>", () => {
-    expect(doc.summary[0]).toEqual({ tag: "h1", text: englishT("landing.subtitle") })
+  it("has the SPA hero's keyword <h1> and intro line", () => {
+    expect(doc.summary[0]).toEqual({ tag: "h1", text: englishT("landing.heroTitle") })
     expect(doc.summary[0].tag === "h1" && doc.summary[0].text).toContain("Star Citizen")
+    expect(doc.summary[1]).toEqual({ tag: "p", text: englishT("landing.heroText") })
   })
 
   it("includes the official / buying / orgs FAQs in the Q&A and FAQPage", () => {

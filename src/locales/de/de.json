@@ -2639,9 +2639,6 @@
     "viewCart": "Warenkorb anzeigen"
   },
   "landing": {
-    "subtitle": "Waren kaufen und verkaufen. Dienstleistungen kaufen und verkaufen.",
-    "totalOrders": "Bestellungen insgesamt",
-    "totalOrderValue": "Gesamtbestellwert",
     "ordersThisWeek": "Bestellungen diese Woche",
     "valueOfOrdersThisWeek": "Wert der Bestellungen diese Woche",
     "buySellItemsTitle": "Artikel kaufen und verkaufen",

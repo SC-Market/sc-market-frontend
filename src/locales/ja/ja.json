@@ -2639,9 +2639,6 @@
     "viewCart": "カートを見る"
   },
   "landing": {
-    "subtitle": "商品を売買しよう。サービスを売買しよう。",
-    "totalOrders": "総注文数",
-    "totalOrderValue": "総注文金額",
     "ordersThisWeek": "今週の注文数",
     "valueOfOrdersThisWeek": "今週の注文金額",
     "buySellItemsTitle": "アイテムの売買",

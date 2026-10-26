@@ -5,7 +5,7 @@ import { SxProps, Theme, Typography } from "@mui/material"
  * The homepage's three text levels, so every section uses the same sizes.
  * The visual variant is fixed per level; the element is the semantic level
  * (sections are <h2>, blocks inside them <h3>), so the page keeps one <h1>
- * (the hero's landing.subtitle) and an unbroken heading outline.
+ * (the hero's landing.heroTitle) and an unbroken heading outline.
  */
 
 type TextProps = { children: ReactNode; sx?: SxProps<Theme> }

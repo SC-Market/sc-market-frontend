@@ -13,13 +13,11 @@ export function OrderStatistics() {
   const { t } = useTranslation()
   const { data: stats, isLoading } = useGetMarketStatsQuery()
   usePageReady(isLoading)
-  const { total_orders, total_order_value, week_orders, week_order_value } =
-    stats || {
-      total_orders: 0,
-      total_order_value: 0,
-      week_orders: 0,
-      week_order_value: 0,
-    }
+  // The all-time totals are in the hero (LandingHero); this row is the week.
+  const { week_orders, week_order_value } = stats || {
+    week_orders: 0,
+    week_order_value: 0,
+  }
 
   const theme = useTheme<ExtendedTheme>()
 
@@ -33,19 +31,6 @@ export function OrderStatistics() {
       spacing={theme.layoutSpacing.layout}
       justifyContent={"center"}
     >
-      <MetricSection
-        title={t("landing.totalOrders")}
-        body={<CountUp end={total_orders} separator="," duration={2} />}
-      />
-      <MetricSection
-        title={t("landing.totalOrderValue")}
-        body={
-          <Box display={"flex"}>
-            <CountUp end={total_order_value} separator="," duration={2} />
-            &nbsp;aUEC
-          </Box>
-        }
-      />
       {+week_orders > 0 && (
         <>
           <MetricSection

@@ -1,9 +1,16 @@
 import React from "react"
 import { Grid, Skeleton } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
+import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { MetricSection } from "../../views/orders/OrderMetrics"
 
+/**
+ * The weekly stats row while loading: the same MetricSections with their real
+ * (static) titles, and a text skeleton in place of each number.
+ */
 export function OrderStatisticsSkeleton() {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
   return (
@@ -12,11 +19,11 @@ export function OrderStatisticsSkeleton() {
       spacing={theme.layoutSpacing.layout}
       justifyContent={"center"}
     >
-      {[1, 2, 3, 4].map((i) => (
-        <Grid item key={i}>
-          <Skeleton variant="rectangular" width={200} height={100} />
-        </Grid>
-      ))}
+      <MetricSection title={t("landing.ordersThisWeek")} body={<Skeleton width="4ch" />} />
+      <MetricSection
+        title={t("landing.valueOfOrdersThisWeek")}
+        body={<Skeleton width="14ch" />}
+      />
     </Grid>
   )
 }

@@ -2639,9 +2639,6 @@
     "viewCart": "Voir le panier"
   },
   "landing": {
-    "subtitle": "Achetez et vendez des marchandises. Achetez et vendez des services.",
-    "totalOrders": "Total des commandes",
-    "totalOrderValue": "Valeur totale des commandes",
     "ordersThisWeek": "Commandes cette semaine",
     "valueOfOrdersThisWeek": "Valeur des commandes cette semaine",
     "buySellItemsTitle": "Acheter et vendre des articles",

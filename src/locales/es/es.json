@@ -2639,9 +2639,6 @@
     "viewCart": "Ver carrito"
   },
   "landing": {
-    "subtitle": "Compra y vende mercancías. Compra y vende servicios.",
-    "totalOrders": "Total de pedidos",
-    "totalOrderValue": "Valor total de los pedidos",
     "ordersThisWeek": "Pedidos esta semana",
     "valueOfOrdersThisWeek": "Valor de los pedidos esta semana",
     "buySellItemsTitle": "Compra y vende artículos",

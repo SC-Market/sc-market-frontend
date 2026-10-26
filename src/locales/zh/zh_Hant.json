@@ -2560,9 +2560,6 @@
     "viewCart": "查看購物車"
   },
   "landing": {
-    "subtitle": "買賣商品，買賣服務。",
-    "totalOrders": "訂單總數",
-    "totalOrderValue": "訂單總價值",
     "ordersThisWeek": "本週訂單數",
     "valueOfOrdersThisWeek": "本週訂單價值",
     "buySellItemsTitle": "買賣物品",
