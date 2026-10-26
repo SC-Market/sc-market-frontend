@@ -8,6 +8,7 @@
 
 import React, { useMemo, useState } from "react"
 import { useCookies } from "react-cookie"
+import scMarketLogo from "../../assets/scmarket-logo.webp"
 import {
   Avatar,
   Badge,
@@ -814,8 +815,11 @@ export function SidebarV2() {
           to={PATHS.home}
           sx={{ display: "flex", alignItems: "center", gap: 1, textDecoration: "none", color: "inherit" }}
         >
+          {/* Decorative: the link's text says "SC Market". The hashed webp
+              (13 KB, also the home hero's logo) instead of the 512px PNG. */}
           <Avatar
-            src="/scmarket-logo.png"
+            src={scMarketLogo}
+            alt=""
             variant="rounded"
             sx={{ width: 40, height: 40 }}
           />
