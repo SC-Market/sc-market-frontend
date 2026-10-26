@@ -117,9 +117,9 @@ const REQ_STATUS_CHIP: Record<
   string,
   { label: string; color: "warning" | "primary" | "success" | "error" | "default" }
 > = {
-  pending: { label: "Awaiting", color: "warning" },
-  in_offer: { label: "In Offer", color: "primary" },
-  completed: { label: "Complete", color: "success" },
+  "not-started": { label: "Awaiting", color: "warning" },
+  "in-progress": { label: "In progress", color: "primary" },
+  fulfilled: { label: "Fulfilled", color: "success" },
   cancelled: { label: "Cancelled", color: "error" },
 }
 
@@ -354,7 +354,7 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
 function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
   const navigate = useNavigate()
 
-  const urgent = reqs.filter((r) => r.status === "pending")
+  const urgent = reqs.filter((r) => r.status === "not-started")
 
   return (
     <Paper variant="outlined" sx={{ overflow: "hidden" }}>
@@ -384,7 +384,7 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
       ) : (
         <Stack divider={<Divider />}>
           {reqs.slice(0, 5).map((req) => {
-            const sc = REQ_STATUS_CHIP[req.status] ?? REQ_STATUS_CHIP["pending"]
+            const sc = REQ_STATUS_CHIP[req.status] ?? REQ_STATUS_CHIP["not-started"]
             return (
               <Box
                 key={req.order_id}
@@ -588,7 +588,7 @@ function buildActivityFeed(
     })
 
   reqs
-    .filter((r) => r.status === "pending")
+    .filter((r) => r.status === "not-started")
     .slice(0, 2)
     .forEach((r) => {
       items.push({
@@ -678,7 +678,7 @@ export function AdminSupplierDashboard() {
   const orders = ordersData?.orders ?? []
 
   const activeBuyOrders = buyOrders.filter((o) => o.status === "active")
-  const pendingReqs = reqs.filter((r) => r.status === "pending")
+  const pendingReqs = reqs.filter((r) => r.status === "not-started")
   const recentRevenue = orders
     .filter((o) => o.status === "fulfilled")
     .reduce((sum, o) => sum + o.total_price, 0)
@@ -746,7 +746,7 @@ export function AdminSupplierDashboard() {
         <StatCard
           icon={<AssignmentRounded sx={{ fontSize: 18 }} />}
           label="Open Requisitions"
-          value={reqs.filter((r) => r.status !== "completed" && r.status !== "cancelled").length}
+          value={reqs.filter((r) => r.status !== "fulfilled" && r.status !== "cancelled").length}
           sub={pendingReqs.length ? `${pendingReqs.length} awaiting response` : undefined}
           accent={pendingReqs.length > 0}
           loading={reqLoading}
@@ -790,7 +790,7 @@ export function AdminSupplierDashboard() {
             {reqLoading ? (
               <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 1 }} />
             ) : (
-              <RequisitionsPanel reqs={reqs.filter((r) => r.status !== "completed" && r.status !== "cancelled")} />
+              <RequisitionsPanel reqs={reqs.filter((r) => r.status !== "fulfilled" && r.status !== "cancelled")} />
             )}
           </Stack>
         </Grid>

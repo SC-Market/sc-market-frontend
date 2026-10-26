@@ -47,9 +47,9 @@ import type { RequisitionDetail, RequisitionLineItem, GameItemSearchResult } fro
 import { usePageReady } from "../../components/metadata/PageReady"
 
 const STATUS_COLORS: Record<string, "default" | "warning" | "info" | "success" | "error"> = {
-  pending: "warning",
-  assigned: "info",
-  completed: "success",
+  "not-started": "warning",
+  "in-progress": "info",
+  fulfilled: "success",
   cancelled: "error",
 }
 
