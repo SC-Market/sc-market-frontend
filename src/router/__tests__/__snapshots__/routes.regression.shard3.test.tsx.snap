@@ -22,8 +22,8 @@ exports[`routes (shard 3/4) > /admin/game-data-import 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -62,8 +62,8 @@ exports[`routes (shard 3/4) > /admin/moderation 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -102,8 +102,8 @@ exports[`routes (shard 3/4) > /admin/notification-test 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -173,8 +173,8 @@ exports[`routes (shard 3/4) > /admin/users 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -209,8 +209,8 @@ exports[`routes (shard 3/4) > /blueprints/:slug 1`] = `
     "/about",
     "/dashboard",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -248,9 +248,9 @@ exports[`routes (shard 3/4) > /bulk 1`] = `
     "/login",
     "/market/cart",
     "/market/create",
-    "/privacy-policy",
+    "/privacy",
     "/signup",
-    "/terms-of-service",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -290,8 +290,8 @@ exports[`routes (shard 3/4) > /contractor/:id/:tab 1`] = `
     "/contractor/TESTORG/reviews",
     "/contractors",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -326,8 +326,8 @@ exports[`routes (shard 3/4) > /contracts/create 1`] = `
     "/about",
     "/contracts",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -360,8 +360,8 @@ exports[`routes (shard 3/4) > /contracts/public/:contract_id 1`] = `
     "/about",
     "/dashboard",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -396,8 +396,8 @@ exports[`routes (shard 3/4) > /customers 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -435,8 +435,8 @@ exports[`routes (shard 3/4) > /dashboard/overview 1`] = `
     "/dashboard",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -472,8 +472,8 @@ exports[`routes (shard 3/4) > /email/unsubscribe/:token 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -541,8 +541,8 @@ exports[`routes (shard 3/4) > /inventory 1`] = `
     "/guides",
     "/guides/selling/stock-lots-and-allocation",
     "/market",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -578,8 +578,8 @@ exports[`routes (shard 3/4) > /login 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -612,8 +612,8 @@ exports[`routes (shard 3/4) > /market/:id 1`] = `
     "/about",
     "/dashboard",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -653,8 +653,8 @@ exports[`routes (shard 3/4) > /market/me 1`] = `
     "/guides",
     "/market",
     "/market/create",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -690,8 +690,8 @@ exports[`routes (shard 3/4) > /market/services 1`] = `
     "/about",
     "/guides",
     "/order/service/create",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -725,8 +725,8 @@ exports[`routes (shard 3/4) > /mining/locations 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -760,8 +760,8 @@ exports[`routes (shard 3/4) > /missions 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -829,8 +829,8 @@ exports[`routes (shard 3/4) > /myfleet/import 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -926,8 +926,8 @@ exports[`routes (shard 3/4) > /order/:id/:tab 1`] = `
     "/about",
     "/dashboard",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -965,8 +965,8 @@ exports[`routes (shard 3/4) > /org/:contractor_id/manage 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1013,8 +1013,8 @@ exports[`routes (shard 3/4) > /org/:contractor_id/manage/discord 1`] = `
     "/guides",
     "/guides/discord/connect-the-discord-bot",
     "/guides/discord/order-alerts-and-claiming",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1056,8 +1056,8 @@ exports[`routes (shard 3/4) > /org/:contractor_id/money 1`] = `
     "/about",
     "/guides",
     "/org/TESTORG/send",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1098,8 +1098,8 @@ exports[`routes (shard 3/4) > /org/:contractor_id/overview 1`] = `
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
     "/org/TESTORG/dashboard",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1136,8 +1136,8 @@ exports[`routes (shard 3/4) > /org/:contractor_id/services 1`] = `
     "/about",
     "/dashboard",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1204,8 +1204,8 @@ exports[`routes (shard 3/4) > /org/register 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1240,8 +1240,8 @@ exports[`routes (shard 3/4) > /resources 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1274,8 +1274,8 @@ exports[`routes (shard 3/4) > /settings 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1313,8 +1313,8 @@ exports[`routes (shard 3/4) > /shop/:shopSlug/orders 1`] = `
     "/about",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1358,8 +1358,8 @@ exports[`routes (shard 3/4) > /shop/:shopSlug/settings 1`] = `
     "/guides/discord/connect-the-discord-bot",
     "/guides/discord/webhooks",
     "/guides/selling/stock-lots-and-allocation",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1422,8 +1422,8 @@ exports[`routes (shard 3/4) > /wiki/commodities/:id 1`] = `
     "/about",
     "/dashboard",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1457,8 +1457,8 @@ exports[`routes (shard 3/4) > /wiki/items 1`] = `
   "mainLinks": [
     "/about",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",
@@ -1491,8 +1491,8 @@ exports[`routes (shard 3/4) > /wiki/manufacturers 1`] = `
     "/about",
     "/dashboard",
     "/guides",
-    "/privacy-policy",
-    "/terms-of-service",
+    "/privacy",
+    "/terms",
   ],
   "matches": [
     "(layout:HookProvider)",

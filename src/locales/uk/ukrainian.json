@@ -267,6 +267,7 @@
     "loginFailed": "Не вдалося увійти. Спробуйте ще раз.",
     "loginWithCitizenID": "Увійти за допомогою Citizen iD",
     "oauthError": "Під час автентифікації сталася помилка. Спробуйте ще раз.",
+    "signInBlurb": "Безкоштовно — увійдіть через обліковий запис RSI (<citizenIdLink>Citizen iD</citizenIdLink>) або Discord.",
     "signInTab": "Вкладка входу",
     "signInTitle": "Увійти в SC Market",
     "signInWithCitizenID": "Увійти за допомогою Citizen iD",
@@ -275,7 +276,9 @@
     "signUpTab": "Вкладка реєстрації",
     "signUpTitle": "Зареєструватися в SC Market",
     "signUpWithCitizenID": "Зареєструватися за допомогою Citizen iD",
-    "signUpWithDiscord": "Зареєструватися за допомогою Discord"
+    "signUpWithDiscord": "Зареєструватися за допомогою Discord",
+    "legalAgreement": "Входячи, ви погоджуєтеся з нашими <termsLink>Умовами користування</termsLink> та <privacyLink>Політикою конфіденційності</privacyLink>.",
+    "legalAgreementSignUp": "Реєструючись, ви погоджуєтеся з нашими <termsLink>Умовами користування</termsLink> та <privacyLink>Політикою конфіденційності</privacyLink>."
   },
   "availability": {
     "select_availability": "Оберіть доступність",
@@ -301,9 +304,10 @@
   },
   "cookie_consent": {
     "title": "Згода на файли cookie",
-    "description": "Ми використовуємо cookie для покращення роботи користувача та аналізу продуктивності (наприклад, Google Analytics). Натисніть «Прийняти всі», щоб погодитися з усіма cookie, або «Прийняти необхідні», щоб прийняти лише необхідні.",
-    "accept_all": "Прийняти всі",
-    "accept_necessary": "Прийняти необхідні"
+    "description": "Ми використовуємо cookie для входу. Аналітика — лише за вашою згодою.",
+    "privacy": "Конфіденційність",
+    "accept_all": "Прийняти",
+    "accept_necessary": "Лише необхідні"
   },
   "footer": {
     "support": "Підтримка",

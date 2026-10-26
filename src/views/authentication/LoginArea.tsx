@@ -1,14 +1,5 @@
 import React, { useState } from "react"
-import {
-  Grid,
-  Link as MuiLink,
-  Paper,
-  Stack,
-  Typography,
-  Tabs,
-  Tab,
-  Box,
-} from "@mui/material"
+import { Grid, Paper, Stack, Typography, Tabs, Tab, Box } from "@mui/material"
 import { DiscordLoginButton } from "../../components/button/DiscordLoginButton"
 import { DiscordSignUpButton } from "../../components/button/DiscordSignUpButton"
 import { CitizenIDLoginButton } from "../../components/button/CitizenIDLoginButton"
@@ -17,6 +8,8 @@ import { useTranslation } from "react-i18next"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { SignInBlurb } from "./SignInBlurb"
+import { LegalAgreementNotice } from "./LegalAgreementNotice"
 
 export function LoginArea() {
   const { t } = useTranslation()
@@ -55,21 +48,7 @@ export function LoginArea() {
               ? t("auth.signInTitle", "Sign in to SC Market")
               : t("auth.signUpTitle", "Sign up for SC Market")}
           </Typography>
-          {isCitizenIdEnabled && (
-            <Typography variant="body1" color="text.secondary">
-              {t(
-                "auth.citizenIdBlurb",
-                "Sign in and verify with your RSI account to simplify your account management across the Star Citizen community tools using identity federation.",
-              )}{" "}
-              <MuiLink
-                href="https://citizenid.space/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Citizen iD
-              </MuiLink>
-            </Typography>
-          )}
+          {isCitizenIdEnabled && <SignInBlurb />}
         </Stack>
 
         <Tabs
@@ -105,6 +84,8 @@ export function LoginArea() {
             )}
           </Stack>
         </Box>
+
+        <LegalAgreementNotice action={tabValue} />
       </Paper>
     </Grid>
   )

@@ -14,6 +14,45 @@ import type { Client } from "@bugsnag/core"
 import type { BugsnagPluginReactResult } from "@bugsnag/plugin-react"
 
 let bugsnagInstance: Client | null = null
+let performanceStarted = false
+
+/**
+ * "https://sc-market.space/a/b?x=1#y" -> "https://sc-market.space/a/b".
+ * Query strings can carry OAuth codes and search terms.
+ */
+export function stripQuery(url: string): string {
+  const cut = url.search(/[?#]/)
+  return cut === -1 ? url : url.slice(0, cut)
+}
+
+/**
+ * BugSnag Performance (page-load and navigation timings) is analytics, so it
+ * only starts after the visitor clicks "Accept" in the cookie banner
+ * (components/alert/CookieConsent.tsx). It stores no device id, sends no
+ * page URL or referrer, and sends network request URLs without query strings.
+ */
+export async function startPerformanceMonitoring(apiKey: string) {
+  if (performanceStarted || !apiKey) return
+  performanceStarted = true
+  try {
+    const BugsnagPerformance = await import("@bugsnag/browser-performance")
+    BugsnagPerformance.default.start({
+      apiKey,
+      generateAnonymousId: false,
+      // The page URL attribute is the full href (query string included).
+      sendPageAttributes: { url: false, referrer: false, title: true },
+      networkRequestCallback: (requestInfo) => ({
+        ...requestInfo,
+        url: requestInfo.url ? stripQuery(requestInfo.url) : requestInfo.url,
+      }),
+    })
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.warn("Bugsnag Performance failed to start (non-critical):", error)
+    }
+  }
+}
+
 let bugsnagReactPlugin: BugsnagPluginReactResult | null = null
 
 /**
@@ -32,22 +71,38 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
     onPageInteractive(async () => {
       try {
         // Dynamically import Bugsnag modules
-        const [Bugsnag, BugsnagPluginReact, BugsnagPerformance] =
-          await Promise.all([
-            import("@bugsnag/js"),
-            import("@bugsnag/plugin-react"),
-            import("@bugsnag/browser-performance"),
-          ])
+        const [Bugsnag, BugsnagPluginReact] = await Promise.all([
+          import("@bugsnag/js"),
+          import("@bugsnag/plugin-react"),
+        ])
 
-        // Initialize Bugsnag
+        // Error reporting is essential and anonymous, so it runs without
+        // cookie consent and sends no user identity: no IP address, no stored
+        // device id, no user id, and no query strings. Only error,
+        // navigation (path only), state and manual breadcrumbs are kept:
+        // request breadcrumbs carry API URLs, user (click) breadcrumbs carry
+        // on-screen text, and log breadcrumbs carry console output. The
+        // privacy policy (public/privacy.html) describes exactly this.
         bugsnagInstance = Bugsnag.default.start({
           apiKey,
           plugins: [new BugsnagPluginReact.default()],
-        })
-
-        // Initialize Bugsnag Performance
-        BugsnagPerformance.default.start({
-          apiKey,
+          collectUserIp: false,
+          generateAnonymousId: false,
+          enabledBreadcrumbTypes: ["error", "manual", "navigation", "state"],
+          onBreadcrumb: (breadcrumb) => {
+            for (const key of ["from", "to"]) {
+              const value = breadcrumb.metadata[key]
+              if (typeof value === "string") {
+                breadcrumb.metadata[key] = stripQuery(value)
+              }
+            }
+          },
+          onError: (event) => {
+            if (event.request.url) {
+              event.request.url = stripQuery(event.request.url)
+            }
+            if (event.context) event.context = stripQuery(event.context)
+          },
         })
 
         bugsnagReactPlugin = bugsnagInstance.getPlugin("react") ?? null

@@ -267,6 +267,7 @@
     "loginFailed": "登入失敗。請再試一次。",
     "loginWithCitizenID": "使用 Citizen iD 登入",
     "oauthError": "驗證期間發生錯誤。請再試一次。",
+    "signInBlurb": "免費加入 — 使用您的 RSI 帳戶（<citizenIdLink>Citizen iD</citizenIdLink>）或 Discord 帳戶登入。",
     "signInTab": "登入分頁",
     "signInTitle": "登入 SC Market",
     "signInWithCitizenID": "使用 Citizen iD 登入",
@@ -275,7 +276,9 @@
     "signUpTab": "註冊分頁",
     "signUpTitle": "註冊 SC Market",
     "signUpWithCitizenID": "使用 Citizen iD 註冊",
-    "signUpWithDiscord": "使用 Discord 註冊"
+    "signUpWithDiscord": "使用 Discord 註冊",
+    "legalAgreement": "登入即表示您同意我們的<termsLink>服務條款</termsLink>和<privacyLink>隱私政策</privacyLink>。",
+    "legalAgreementSignUp": "註冊即表示您同意我們的<termsLink>服務條款</termsLink>和<privacyLink>隱私政策</privacyLink>。"
   },
   "availability": {
     "select_availability": "選擇在線時間段",
@@ -301,8 +304,9 @@
   },
   "cookie_consent": {
     "title": "同意Cookie",
-    "description": "我們使用Cookie以優化用戶體驗並分析服務性能（通過Google Analytics）。點擊“全部接受” 以接受全部的Cookie，或\"僅必要\"以只接受必要的Cookie。",
-    "accept_all": "全部接受",
+    "description": "我們使用 Cookie 來保持登入。僅在您同意時啟用分析。",
+    "privacy": "隱私",
+    "accept_all": "接受",
     "accept_necessary": "僅必要"
   },
   "footer": {

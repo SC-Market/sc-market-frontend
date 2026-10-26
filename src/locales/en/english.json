@@ -635,6 +635,8 @@
     "email": "Email",
     "genericAuthError": "An authentication error occurred. Please try again or contact support if the problem persists.",
     "genericError": "An error occurred. Please try again.",
+    "legalAgreement": "By signing in, you agree to our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
+    "legalAgreementSignUp": "By signing up, you agree to our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
     "linkCitizenID": "Link Citizen iD",
     "loginFailed": "Failed to sign in. Please try again.",
     "loginWith": "Login with",
@@ -644,6 +646,7 @@
     "password": "Password",
     "repeatPassword": "Repeat Password",
     "signIn": "Sign in",
+    "signInBlurb": "Free to join — sign in with your RSI account (<citizenIdLink>Citizen iD</citizenIdLink>) or your Discord account.",
     "signInTab": "Sign in tab",
     "signInTitle": "Sign in to SC Market",
     "signInWithCitizenID": "Sign in with Citizen iD",
@@ -1083,9 +1086,10 @@
     "viewContract": "View Contract"
   },
   "cookie_consent": {
-    "accept_all": "Accept All",
-    "accept_necessary": "Accept Necessary",
-    "description": "We use cookies to improve the user experience and analyze its performance (i.e. Google Analytics). Click \"Accept All\" to accept all cookies or \"Accept Necessary\" to accept only necessary cookies.",
+    "accept_all": "Accept",
+    "accept_necessary": "Necessary only",
+    "description": "We use cookies for sign-in. Analytics only if you say yes.",
+    "privacy": "Privacy",
     "title": "Cookie Consent"
   },
   "CounterOfferSubmitArea": {

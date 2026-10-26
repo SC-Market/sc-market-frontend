@@ -267,6 +267,7 @@
     "loginFailed": "サインインに失敗しました。もう一度お試しください。",
     "loginWithCitizenID": "Citizen iDでサインイン",
     "oauthError": "認証中にエラーが発生しました。もう一度お試しください。",
+    "signInBlurb": "無料で参加できます — RSI アカウント（<citizenIdLink>Citizen iD</citizenIdLink>）または Discord アカウントでサインインしてください。",
     "signInTab": "サインインタブ",
     "signInTitle": "SC Marketにサインイン",
     "signInWithCitizenID": "Citizen iDでサインイン",
@@ -275,7 +276,9 @@
     "signUpTab": "新規登録タブ",
     "signUpTitle": "SC Marketに新規登録",
     "signUpWithCitizenID": "Citizen iDで新規登録",
-    "signUpWithDiscord": "Discordで新規登録"
+    "signUpWithDiscord": "Discordで新規登録",
+    "legalAgreement": "サインインすると、<termsLink>利用規約</termsLink>と<privacyLink>プライバシーポリシー</privacyLink>に同意したものとみなされます。",
+    "legalAgreementSignUp": "登録すると、<termsLink>利用規約</termsLink>と<privacyLink>プライバシーポリシー</privacyLink>に同意したものとみなされます。"
   },
   "availability": {
     "select_availability": "対応可能時間を選択",
@@ -301,9 +304,10 @@
   },
   "cookie_consent": {
     "title": "クッキーの同意",
-    "description": "We use cookies to improve the user experience and analyze its performance (i.e. Google Analytics). Click “Accept All” to accept all cookies or \"Accept Necessary\" to accept only necessary cookies.",
-    "accept_all": "すべて許可",
-    "accept_necessary": "必要なもののみ許可"
+    "description": "サインインのためにクッキーを使用します。アクセス解析は同意した場合のみです。",
+    "privacy": "プライバシー",
+    "accept_all": "許可",
+    "accept_necessary": "必要なもののみ"
   },
   "footer": {
     "support": "サポート",

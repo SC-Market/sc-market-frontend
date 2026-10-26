@@ -10,7 +10,7 @@ import { Helmet } from "@unhead/react/helmet"
 import { serializeJsonLd } from "../../seo/pageHead"
 import { siteJsonLd } from "../../seo/siteHeads"
 import { Link as RouterLink } from "react-router-dom"
-import { HELP_PATHS } from "../../routes/paths"
+import { HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 
 export function Footer() {
@@ -114,7 +114,7 @@ export function Footer() {
             <Link
               rel="noopener noreferrer"
               target="_blank"
-              href={"/privacy-policy"}
+              href={LEGAL_PATHS.privacy}
               aria-label={t("footer.privacyPolicy", "Privacy Policy")}
             >
               <UnderlineLink color={"text.secondary"}>
@@ -125,7 +125,7 @@ export function Footer() {
             <Link
               rel="noopener noreferrer"
               target="_blank"
-              href={"/terms-of-service"}
+              href={LEGAL_PATHS.terms}
               aria-label={t("footer.termsOfService", "Terms of Service")}
             >
               <UnderlineLink color={"text.secondary"}>

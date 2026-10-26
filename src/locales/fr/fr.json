@@ -267,6 +267,7 @@
     "loginFailed": "Échec de la connexion. Veuillez réessayer.",
     "loginWithCitizenID": "Se connecter avec Citizen iD",
     "oauthError": "Une erreur s'est produite lors de l'authentification. Veuillez réessayer.",
+    "signInBlurb": "Gratuit — connectez-vous avec votre compte RSI (<citizenIdLink>Citizen iD</citizenIdLink>) ou votre compte Discord.",
     "signInTab": "Onglet de connexion",
     "signInTitle": "Se connecter à SC Market",
     "signInWithCitizenID": "Se connecter avec Citizen iD",
@@ -275,7 +276,9 @@
     "signUpTab": "Onglet d'inscription",
     "signUpTitle": "S'inscrire à SC Market",
     "signUpWithCitizenID": "S'inscrire avec Citizen iD",
-    "signUpWithDiscord": "S'inscrire avec Discord"
+    "signUpWithDiscord": "S'inscrire avec Discord",
+    "legalAgreement": "En vous connectant, vous acceptez nos <termsLink>Conditions d'utilisation</termsLink> et notre <privacyLink>Politique de confidentialité</privacyLink>.",
+    "legalAgreementSignUp": "En vous inscrivant, vous acceptez nos <termsLink>Conditions d'utilisation</termsLink> et notre <privacyLink>Politique de confidentialité</privacyLink>."
   },
   "availability": {
     "select_availability": "Sélectionner la disponibilité",
@@ -301,9 +304,10 @@
   },
   "cookie_consent": {
     "title": "Consentement aux cookies",
-    "description": "Nous utilisons des cookies pour améliorer l'expérience utilisateur et analyser ses performances (par ex. Google Analytics). Cliquez sur « Tout accepter » pour accepter tous les cookies ou sur « Accepter les nécessaires » pour n'accepter que les cookies nécessaires.",
-    "accept_all": "Tout accepter",
-    "accept_necessary": "Accepter les nécessaires"
+    "description": "Nous utilisons des cookies pour la connexion. Les statistiques seulement si vous acceptez.",
+    "privacy": "Confidentialité",
+    "accept_all": "Accepter",
+    "accept_necessary": "Nécessaires uniquement"
   },
   "footer": {
     "support": "Assistance",

@@ -19,5 +19,12 @@
 # Typed-URL alias for Help & Guides (the SPA also redirects client-side).
 /help        /guides           301
 
+# Legal pages moved from the Termly export names to /terms and /privacy
+# (public/terms.html, public/privacy.html; Pages serves them extensionless).
+/terms-of-service       /terms     301
+/terms-of-service.html  /terms     301
+/privacy-policy         /privacy   301
+/privacy-policy.html    /privacy   301
+
 # Redirect all real app routes to index.html for client-side routing.
 /*    /index.html   200

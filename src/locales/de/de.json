@@ -267,6 +267,7 @@
     "loginFailed": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
     "loginWithCitizenID": "Mit Citizen iD anmelden",
     "oauthError": "Bei der Authentifizierung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+    "signInBlurb": "Kostenlos — melden Sie sich mit Ihrem RSI-Konto (<citizenIdLink>Citizen iD</citizenIdLink>) oder Ihrem Discord-Konto an.",
     "signInTab": "Anmelde-Tab",
     "signInTitle": "Bei SC Market anmelden",
     "signInWithCitizenID": "Mit Citizen iD anmelden",
@@ -275,7 +276,9 @@
     "signUpTab": "Registrierungs-Tab",
     "signUpTitle": "Für SC Market registrieren",
     "signUpWithCitizenID": "Mit Citizen iD registrieren",
-    "signUpWithDiscord": "Mit Discord registrieren"
+    "signUpWithDiscord": "Mit Discord registrieren",
+    "legalAgreement": "Mit der Anmeldung stimmen Sie unseren <termsLink>Nutzungsbedingungen</termsLink> und unserer <privacyLink>Datenschutzerklärung</privacyLink> zu.",
+    "legalAgreementSignUp": "Mit der Registrierung stimmen Sie unseren <termsLink>Nutzungsbedingungen</termsLink> und unserer <privacyLink>Datenschutzerklärung</privacyLink> zu."
   },
   "availability": {
     "select_availability": "Verfügbarkeit auswählen",
@@ -301,9 +304,10 @@
   },
   "cookie_consent": {
     "title": "Cookie-Einwilligung",
-    "description": "We use cookies to improve the user experience and analyze its performance (i.e. Google Analytics). Click “Accept All” to accept all cookies or \"Accept Necessary\" to accept only necessary cookies.",
-    "accept_all": "Alle akzeptieren",
-    "accept_necessary": "Notwendige akzeptieren"
+    "description": "Wir verwenden Cookies für die Anmeldung. Analyse nur, wenn Sie zustimmen.",
+    "privacy": "Datenschutz",
+    "accept_all": "Akzeptieren",
+    "accept_necessary": "Nur notwendige"
   },
   "footer": {
     "support": "Support",

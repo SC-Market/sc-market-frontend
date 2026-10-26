@@ -89,7 +89,7 @@ export async function handleServiceWorkerFailure(
     const metadata = {
       context,
       swPath,
-      url: window.location.href,
+      url: window.location.origin + window.location.pathname,
       errorName: err.name,
       errorMessage: err.message,
       ...probe,

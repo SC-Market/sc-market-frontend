@@ -203,3 +203,14 @@ export const HELP_PATHS = {
   guide: (category: string, slug: string) => `/guides/${category}/${slug}`,
   about: "/about",
 } as const
+
+/**
+ * Legal pages. Static HTML (public/terms.html, public/privacy.html) served by
+ * Cloudflare Pages at these paths, not SPA routes: link with a plain `href`
+ * (full page load), never a router `Link`. The old Termly paths 301 here (see
+ * public/_redirects).
+ */
+export const LEGAL_PATHS = {
+  terms: "/terms",
+  privacy: "/privacy",
+} as const

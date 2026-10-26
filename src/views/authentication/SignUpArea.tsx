@@ -1,11 +1,13 @@
 import React from "react"
-import { Alert, Link as MuiLink, Paper, Stack, Typography } from "@mui/material"
+import { Alert, Paper, Stack, Typography } from "@mui/material"
 import { DiscordSignUpButton } from "../../components/button/DiscordSignUpButton"
 import { CitizenIDSignUpButton } from "../../components/button/CitizenIDSignUpButton"
 import { useTranslation } from "react-i18next"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { SignInBlurb } from "./SignInBlurb"
+import { LegalAgreementNotice } from "./LegalAgreementNotice"
 
 export interface SignUpAreaProps {
   errorMessage?: string | null
@@ -31,21 +33,7 @@ export function SignUpArea({ errorMessage, onClearError }: SignUpAreaProps) {
         <Typography variant="h4">
           {t("auth.signUpTitle", "Sign up for SC Market")}
         </Typography>
-        {isCitizenIdEnabled && (
-          <Typography variant="body1" color="text.secondary">
-            {t(
-              "auth.citizenIdBlurb",
-              "Sign in and verify with your RSI account to simplify your account management across the Star Citizen community tools using identity federation.",
-            )}{" "}
-            <MuiLink
-              href="https://citizenid.space/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Citizen iD
-            </MuiLink>
-          </Typography>
-        )}
+        {isCitizenIdEnabled && <SignInBlurb />}
       </Stack>
 
       {errorMessage && (
@@ -58,6 +46,8 @@ export function SignUpArea({ errorMessage, onClearError }: SignUpAreaProps) {
         {isCitizenIdEnabled && <CitizenIDSignUpButton />}
         <DiscordSignUpButton />
       </Stack>
+
+      <LegalAgreementNotice action="signup" />
     </Paper>
   )
 }

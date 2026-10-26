@@ -37,4 +37,4 @@ SC Market is supported by its community on [Patreon](https://www.patreon.com/hen
 - [Discord](https://discord.com/invite/N4Gy8py8J4): support, questions and feedback.
 - [GitHub](https://github.com/henry232323/sc-market): source code and issues.
 - [API docs](https://api.sc-market.space/docs): build your own tools on SC Market data.
-- [Privacy Policy](https://sc-market.space/privacy-policy) and [Terms of Service](https://sc-market.space/terms-of-service).
+- [Privacy Policy](https://sc-market.space/privacy) and [Terms of Service](https://sc-market.space/terms).

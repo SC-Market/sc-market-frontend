@@ -10,7 +10,6 @@ import { useCookies } from "react-cookie"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import type { Contractor, ContractorRole } from "../../features/contractor/domain/types"
 import type { UserProfileState } from "../../hooks/login/UserProfile"
-import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 import { isSiteAdmin } from "../../util/siteRole"
 import { RouteSkeletonFallback } from "./RouteSuspense"
 import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
@@ -119,15 +118,6 @@ export function OrgAdminRoute(props: {
   })
 
   const { data: profile } = useGetUserProfileQuery()
-
-  useEffect(() => {
-    if (profile) {
-      const Bugsnag = getBugsnagInstance()
-      if (Bugsnag) {
-        Bugsnag.setUser(profile?.username)
-      }
-    }
-  }, [profile])
 
   const canView = useMemo(() => {
     if (allow) {

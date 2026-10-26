@@ -21,7 +21,7 @@ import {
   isRsiUrl,
 } from "../../util/rsiUrlUtils.ts"
 import { SentinelCode } from "../../components/authentication/SentinelCode"
-import { PATHS } from "../../routes/paths"
+import { PATHS, LEGAL_PATHS } from "../../routes/paths"
 
 export function isAlphaNumeric(str: string) {
   let code, i, len
@@ -181,7 +181,7 @@ export function AuthenticateRSI({
                 <UnderlineLink
                   color={"primary"}
                   component={"a"}
-                  href={"/terms-of-service.html"}
+                  href={LEGAL_PATHS.terms}
                   target={"_blank"}
                   rel="noreferrer"
                 >
