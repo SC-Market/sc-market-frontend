@@ -1719,6 +1719,17 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/audit-logs",
   },
   {
+    "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/test-accounts",
+    "errorBoundaryAt": "(layout:HookProvider)",
+    "guards": [
+      "HookProvider",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/test-accounts",
+  },
+  {
     "chain": "(layout:HookProvider) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/notification-test",
     "errorBoundaryAt": "(layout:HookProvider)",
     "guards": [

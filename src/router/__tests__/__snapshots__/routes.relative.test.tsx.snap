@@ -917,6 +917,43 @@ exports[`relative link resolution (every leaf) > /admin/supplier-roster 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /admin/test-accounts 1`] = `
+{
+  "links": {
+    "path:""": "/admin/test-accounts",
+    "path:"#frag"": "/admin/test-accounts#frag",
+    "path:"."": "/admin/test-accounts",
+    "path:".."": "/admin",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/admin/sibling",
+    "path:"./"": "/admin/test-accounts/",
+    "path:"./child"": "/admin/test-accounts/child",
+    "path:"?tab=x"": "/admin/test-accounts?tab=x",
+    "path:"child"": "/admin/test-accounts/child",
+    "route:""": "/admin/test-accounts",
+    "route:"#frag"": "/admin/test-accounts#frag",
+    "route:"."": "/admin/test-accounts",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/admin/test-accounts/",
+    "route:"./child"": "/admin/test-accounts/child",
+    "route:"?tab=x"": "/admin/test-accounts?tab=x",
+    "route:"child"": "/admin/test-accounts/child",
+  },
+  "location": "/admin/test-accounts",
+  "params": {},
+  "probeChain": [
+    "(layout:HookProvider)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/test-accounts",
+  ],
+  "resolvedDot": "/admin/test-accounts",
+  "url": "/admin/test-accounts",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /admin/users 1`] = `
 {
   "links": {
