@@ -21,8 +21,10 @@
       - error reports: frontend src/util/monitoring/bugsnagLoader.ts, backend
         src/server.ts and src/api/middleware/error-handler.ts, SCMarketBot
         util/errors.py (anonymous: no IP, no user id, no device id)
-      - IP addresses stored: refresh_tokens, user_mfa_events (listing_views:
-        hashed IP, per the owner; update if that changes),
+      - IP addresses stored: refresh_tokens, user_mfa_events; listing_views
+        keeps viewer_ip_hash only (daily-rotating HMAC), purged after 90 days
+        when anonymous (backend tasks/timers.ts purge_anonymous_listing_views)
+      - export: backend services/data-export (GET /api/profile/my_data),
         user_mfa_recovery_codes, rate limits (backend)
       - hosting: sc-market-cdk (us-east-2, Lightsail + RDS), Backblaze B2
         us-west-004 (backend src/clients/backblaze)
@@ -288,10 +290,15 @@
       </li>
       <li>
         <strong>Listing views.</strong> When you open a market or service
-        listing, we record the view (the listing, the time, and your account if
-        you are signed in) so sellers can see view counts. To count repeat views
-        from visitors who are not signed in, the record stores a hashed (not
-        readable) form of the IP address.
+        listing, we record the view so sellers can see view counts: the listing,
+        the time, your account if you are signed in, your session ID (a view
+        from the same session within 24 hours counts once), your browser user
+        agent (first 256 characters), and the website you came from (its domain
+        only, not the full address). We also store a keyed hash of your IP
+        address (HMAC-SHA256 with a key that changes every day and is derived
+        from a server secret): it cannot be turned back into your IP address
+        without that secret, and we never read it. Views from visitors who are
+        not signed in are deleted after 90 days.
       </li>
       <li>
         <strong>Activity status.</strong> We record when you were last active,
@@ -692,6 +699,10 @@
         described in section 5.
       </li>
       <li>Rate-limit counters expire within minutes.</li>
+      <li>
+        Listing views from visitors who are not signed in are deleted after 90
+        days.
+      </li>
     </ul>
     <p>
       When you delete your account, it is scheduled for deletion after a 30-day
@@ -1224,9 +1235,14 @@
       You have the right to request access to the personal information we
       collect from you, change that information, or delete it. To download a
       copy of your data or delete your account, use your
-      <a href="/settings">Settings</a> page. The download contains the personal
-      data we hold about your account. If anything seems missing, email us at
-      <a href="mailto:henry@sc-market.space">henry@sc-market.space</a>. You can
+      <a href="/settings">Settings</a> page. The download is a JSON file with
+      the personal data we hold about you: your profile and settings, email
+      addresses, linked accounts and Discord details, security records (without
+      any secrets), notifications, organizations and shops, your chats and the
+      messages you sent, all your trading data, ships, crafting and other hobby
+      data, reviews and comments, reports you filed, and your activity. Other
+      people appear in it by username only. You can download it up to 5 times
+      per hour. You can
       change most profile information in Settings; your RSI handle and avatar
       come from your RSI account.
     </p>
