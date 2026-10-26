@@ -402,18 +402,15 @@ exports[`routes (shard 3/4) > /crafting/calculator 1`] = `
 
 exports[`routes (shard 3/4) > /customers 1`] = `
 {
-  "consoleErrors": [
-    "React Router caught the following error during render TypeError: Cannot read properties of undefined (reading 'length')",
-    "TypeError: Cannot read properties of undefined (reading 'length')",
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/customers",
+  "h1": [
+    "People",
   ],
-  "errorElementErrors": [
-    "TypeError: Cannot read properties of undefined (reading 'length')",
-  ],
-  "finalUrl": "/error?message=TypeError%3A+Cannot+read+properties+of+undefined+%28reading+%27length%27%29&target=%2Fcustomers",
-  "h1": [],
   "hasMainLandmark": true,
   "hasMainNav": true,
-  "historyAction": "PUSH",
+  "historyAction": "POP",
   "initialMatches": [
     "(layout:HookProvider)",
     "(layout:LoggedInRoute)",
@@ -422,19 +419,19 @@ exports[`routes (shard 3/4) > /customers 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
-    "/dashboard",
     "/guides",
     "/privacy-policy",
     "/terms-of-service",
   ],
   "matches": [
     "(layout:HookProvider)",
-    "/error",
+    "(layout:LoggedInRoute)",
+    "/customers",
   ],
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "An Error Occurred - SC Market",
+  "title": "Customers - SC Market",
   "url": "/customers",
 }
 `;

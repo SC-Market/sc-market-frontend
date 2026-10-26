@@ -139,7 +139,10 @@ export function CustomerList(props: {
     <Section xs={12} title={t("customerList.customers")} disablePadding>
       {isLoading ? null : (
         <PaginatedTable<User>
-          rows={data!}
+          // `data` is undefined when the request failed (e.g. 403/404) or was
+          // skipped (no contractor_id on /customers); render an empty table
+          // instead of crashing PaginatedTable on `rows.length`.
+          rows={data ?? []}
           initialSort={"username"}
           generateRow={PeopleRow}
           keyAttr={"username"}
