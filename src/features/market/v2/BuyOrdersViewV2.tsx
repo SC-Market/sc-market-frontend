@@ -236,6 +236,19 @@ export function BuyOrdersViewV2() {
   )
 }
 
+/**
+ * Lowest and highest price among an item's buy orders, ignoring orders posted
+ * without a price (price_per_unit 0: negotiable, taking offers). Null when no
+ * order names a price. Counting the 0s gave "∞ – 0 aUEC".
+ */
+export function buyOrderPriceRange(
+  orders: Pick<StandingBuyOrder, "price_per_unit">[],
+): { min: number; max: number } | null {
+  const prices = orders.map((o) => o.price_per_unit).filter((p) => p > 0)
+  if (!prices.length) return null
+  return { min: Math.min(...prices), max: Math.max(...prices) }
+}
+
 /** Card for a game item with active buy orders */
 function BuyOrderAggregateCard({
   aggregate,
@@ -247,14 +260,7 @@ function BuyOrderAggregateCard({
   const theme = useTheme<ExtendedTheme>()
   const { t, i18n } = useTranslation()
 
-  const maxPrice = useMemo(
-    () => aggregate.orders.reduce((max, o) => Math.max(max, o.price_per_unit || 0), 0),
-    [aggregate.orders],
-  )
-  const minPrice = useMemo(
-    () => aggregate.orders.reduce((min, o) => Math.min(min, o.price_per_unit || Infinity), Infinity),
-    [aggregate.orders],
-  )
+  const priceRange = useMemo(() => buyOrderPriceRange(aggregate.orders), [aggregate.orders])
   const totalQty = useMemo(
     () => aggregate.orders.reduce((sum, o) => sum + (o.quantity - (o.quantity_fulfilled || 0)), 0),
     [aggregate.orders],
@@ -264,9 +270,12 @@ function BuyOrderAggregateCard({
     [aggregate.orders],
   )
 
-  const priceDisplay = minPrice === maxPrice
-    ? `${maxPrice.toLocaleString(i18n.language)} aUEC`
-    : `${minPrice.toLocaleString(i18n.language)} – ${maxPrice.toLocaleString(i18n.language)} aUEC`
+  // Orders posted without a price (negotiable, price_per_unit 0) take offers
+  const priceDisplay = !priceRange
+    ? t("BuyOrdersRedesign.priceNegotiable", "Make an offer")
+    : priceRange.min === priceRange.max
+      ? `${priceRange.max.toLocaleString(i18n.language)} aUEC`
+      : `${priceRange.min.toLocaleString(i18n.language)} – ${priceRange.max.toLocaleString(i18n.language)} aUEC`
 
   const isDark = theme.palette.mode === "dark"
 
