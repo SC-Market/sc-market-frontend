@@ -14,6 +14,7 @@ import {
   Paper,
   Stack,
   Table,
+  TableContainer,
   TableBody,
   TableCell,
   TableHead,
@@ -167,10 +168,21 @@ export default function InventoryPage() {
       maxWidth="xl"
       isLoading={isLoading}
     >
-      <Grid item xs={12}>
-        <Paper sx={{ p: 2 }}>
+      {/* minWidth 0: a flex item sizes to its content by default, so the
+          wide table used to stretch the card past the page and clip the
+          Actions column. The table now scrolls inside the card instead. */}
+      <Grid item xs={12} sx={{ minWidth: 0 }}>
+        <Paper sx={{ p: 2, minWidth: 0 }}>
           {/* Header */}
-          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            flexWrap="wrap"
+            useFlexGap
+            spacing={1}
+            sx={{ mb: 2 }}
+          >
             <Typography variant="h5" fontWeight="bold" color="text.secondary">
               {t("inventory.title", "Inventory")}
             </Typography>
@@ -198,6 +210,7 @@ export default function InventoryPage() {
               </Typography>
             </Box>
           ) : (
+            <TableContainer sx={{ overflowX: "auto" }}>
             <Table size="small">
               <TableHead>
                 <TableRow>
@@ -207,7 +220,7 @@ export default function InventoryPage() {
                   <TableCell>{t("inventory.location", "Location")}</TableCell>
                   <TableCell>{t("inventory.listing", "Listing")}</TableCell>
                   <TableCell>{t("inventory.status", "Status")}</TableCell>
-                  <TableCell align="right">{t("inventory.actions", "Actions")}</TableCell>
+                  <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>{t("inventory.actions", "Actions")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -282,6 +295,7 @@ export default function InventoryPage() {
                           <Chip
                             label={lot.listing_title || "Listing"}
                             size="small"
+                            sx={{ maxWidth: 240 }}
                             component={Link}
                             to={MARKET_PATHS.listing(lot.listing_id)}
                             clickable
@@ -322,6 +336,7 @@ export default function InventoryPage() {
                 ))}
               </TableBody>
             </Table>
+            </TableContainer>
           )}
 
           {/* Pagination */}
