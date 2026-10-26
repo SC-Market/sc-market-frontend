@@ -33,8 +33,8 @@ export const addTagTypes = [
   "Availability",
   "Auctions V2",
   "Analytics V2",
-  "Admin Feature Flags",
   "Admin",
+  "Admin Feature Flags",
   "Accounts V2",
 ] as const
 const injectedRtkApi = api
@@ -1012,6 +1012,12 @@ const injectedRtkApi = api
           providesTags: ["Game Data - Wiki"],
         },
       ),
+      getItemShops: build.query<GetItemShopsApiResponse, GetItemShopsApiArg>({
+        query: (queryArg) => ({
+          url: `/game-data/wiki/items/${queryArg.id}/shops`,
+        }),
+        providesTags: ["Game Data - Wiki"],
+      }),
       getShips: build.query<GetShipsApiResponse, GetShipsApiArg>({
         query: (queryArg) => ({
           url: `/game-data/wiki/ships`,
@@ -1783,6 +1789,34 @@ const injectedRtkApi = api
         }),
         providesTags: ["Analytics V2"],
       }),
+      listTestAccounts: build.query<
+        ListTestAccountsApiResponse,
+        ListTestAccountsApiArg
+      >({
+        query: () => ({ url: `/admin/test-accounts` }),
+        providesTags: ["Admin"],
+      }),
+      createTestAccount: build.mutation<
+        CreateTestAccountApiResponse,
+        CreateTestAccountApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/test-accounts`,
+          method: "POST",
+          body: queryArg.createTestAccountRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      deleteTestAccount: build.mutation<
+        DeleteTestAccountApiResponse,
+        DeleteTestAccountApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/test-accounts/${queryArg.username}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Admin"],
+      }),
       updateConfig: build.mutation<UpdateConfigApiResponse, UpdateConfigApiArg>(
         {
           query: (queryArg) => ({
@@ -1904,34 +1938,6 @@ const injectedRtkApi = api
       >({
         query: () => ({ url: `/accounts/deletion-precheck` }),
         providesTags: ["Accounts V2"],
-      }),
-      listTestAccounts: build.query<
-        ListTestAccountsApiResponse,
-        ListTestAccountsApiArg
-      >({
-        query: () => ({ url: `/admin/test-accounts` }),
-        providesTags: ["Admin"],
-      }),
-      createTestAccount: build.mutation<
-        CreateTestAccountApiResponse,
-        CreateTestAccountApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/test-accounts`,
-          method: "POST",
-          body: queryArg.createTestAccountRequest,
-        }),
-        invalidatesTags: ["Admin"],
-      }),
-      deleteTestAccount: build.mutation<
-        DeleteTestAccountApiResponse,
-        DeleteTestAccountApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/test-accounts/${queryArg.username}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Admin"],
       }),
     }),
     overrideExisting: false,
@@ -2622,6 +2628,12 @@ export type GetItemDetailApiArg = {
   /** Game item UUID */
   id: string
 }
+export type GetItemShopsApiResponse =
+  /** status 200 Shops stocking the item, cheapest buy price first */ WikiItemShopsResponse
+export type GetItemShopsApiArg = {
+  /** Game item UUID (resolve short slugs with GET /game-data/wiki/items/{id} first) */
+  id: string
+}
 export type GetShipsApiResponse =
   /** status 200 Ship search results with pagination */ {
     page_size: number
@@ -3254,6 +3266,19 @@ export type GetListingStatsApiArg = {
   /** Maximum number of listings to return (default 20, max 100) */
   limit?: number
 }
+export type ListTestAccountsApiResponse =
+  /** status 200 Ok */ TestAccountListResponse
+export type ListTestAccountsApiArg = void
+export type CreateTestAccountApiResponse =
+  /** status 200 Ok */ CreateTestAccountResponse
+export type CreateTestAccountApiArg = {
+  createTestAccountRequest: CreateTestAccountRequest
+}
+export type DeleteTestAccountApiResponse =
+  /** status 200 Ok */ DeleteTestAccountResponse
+export type DeleteTestAccountApiArg = {
+  username: string
+}
 export type UpdateConfigApiResponse = /** status 200 Ok */ FeatureFlagConfig
 export type UpdateConfigApiArg = {
   updateConfigRequest: UpdateConfigRequest
@@ -3321,19 +3346,6 @@ export type GetDeletionStatusApiArg = void
 export type PreDeletionCheckApiResponse =
   /** status 200 Ok */ DeletionPreCheckResponse
 export type PreDeletionCheckApiArg = void
-export type ListTestAccountsApiResponse =
-  /** status 200 Ok */ TestAccountListResponse
-export type ListTestAccountsApiArg = void
-export type CreateTestAccountApiResponse =
-  /** status 200 Ok */ CreateTestAccountResponse
-export type CreateTestAccountApiArg = {
-  createTestAccountRequest: CreateTestAccountRequest
-}
-export type DeleteTestAccountApiResponse =
-  /** status 200 Ok */ DeleteTestAccountResponse
-export type DeleteTestAccountApiArg = {
-  username: string
-}
 export type WatchlistItem = {
   /** Watchlist item id */
   id: string
@@ -5030,6 +5042,19 @@ export type WikiItemDetail = {
   rewarded_by: MissionRewardReference[]
   market_stats: MarketStats
 }
+export type WikiItemShop = {
+  shop_id: string
+  shop_name: string
+  shop_location: string
+  /** Price the shop sells the item to players for, in aUEC; null if it doesn't sell it */
+  buy_price: number | null
+  /** Price the shop pays players for the item, in aUEC; null if it doesn't buy it */
+  sell_price: number | null
+}
+export type WikiItemShopsResponse = {
+  /** Shops that stock the item, cheapest first; empty when no shop does */
+  shops: WikiItemShop[]
+}
 export type WikiShipSearchResult = {
   id: string
   name: string
@@ -6678,6 +6703,44 @@ export type GetListingStatsResponse = {
   /** Aggregate totals across the returned listings */
   totals: ListingStatsTotals
 }
+export type TestAccountSummary = {
+  user_id: string
+  username: string
+  display_name: string
+  created_at: string
+  banned: boolean
+  has_authenticator: boolean
+  last_login_at: string | null
+  failed_logins_24h: number
+}
+export type TestAccountListResponse = {
+  /** Whether POST /api/auth/test-login is switched on (TEST_LOGIN_ENABLED). */
+  login_enabled: boolean
+  accounts: TestAccountSummary[]
+}
+export type CreateTestAccountResponse = {
+  user_id: string
+  username: string
+  display_name: string
+  /** otpauth:// URI of the account's authenticator. Shown once. */
+  otpauth_uri: string
+  /** Base32 TOTP secret, no spaces. Shown once. */
+  secret: string
+  /** The secret grouped by 4, for manual entry. */
+  manual_key: string
+  /** data: URL of an SVG QR code for otpauth_uri. */
+  qr_data_url: string
+}
+export type CreateTestAccountRequest = {
+  /** Must start with "test" (e.g. test-buyer). */
+  username: string
+  display_name: string
+}
+export type DeleteTestAccountResponse = {
+  mode: "deleted" | "disabled"
+  orgs: number
+  shops: number
+}
 export type MarketVersion = "V1" | "V2"
 export type FeatureFlagConfig = {
   flag_name: string
@@ -6779,44 +6842,6 @@ export type DeletionPreCheckResponse = {
     type: string
   }[]
 }
-export type TestAccountSummary = {
-  user_id: string
-  username: string
-  display_name: string
-  created_at: string
-  banned: boolean
-  has_authenticator: boolean
-  last_login_at: string | null
-  failed_logins_24h: number
-}
-export type TestAccountListResponse = {
-  /** Whether POST /api/auth/test-login is switched on (TEST_LOGIN_ENABLED). */
-  login_enabled: boolean
-  accounts: TestAccountSummary[]
-}
-export type CreateTestAccountResponse = {
-  user_id: string
-  username: string
-  display_name: string
-  /** otpauth:// URI of the account's authenticator. Shown once. */
-  otpauth_uri: string
-  /** Base32 TOTP secret, no spaces. Shown once. */
-  secret: string
-  /** The secret grouped by 4, for manual entry. */
-  manual_key: string
-  /** data: URL of an SVG QR code for otpauth_uri. */
-  qr_data_url: string
-}
-export type CreateTestAccountRequest = {
-  /** Must start with "test" (e.g. test-buyer). */
-  username: string
-  display_name: string
-}
-export type DeleteTestAccountResponse = {
-  mode: "deleted" | "disabled"
-  orgs: number
-  shops: number
-}
 export const {
   useGetWatchlistQuery,
   useAddWatchlistItemMutation,
@@ -6915,6 +6940,7 @@ export const {
   useGenerateShoppingListQuery,
   useSearchItemsQuery,
   useGetItemDetailQuery,
+  useGetItemShopsQuery,
   useGetShipsQuery,
   useGetShipDetailQuery,
   useGetCommoditiesQuery,
@@ -6984,6 +7010,9 @@ export const {
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,
   useGetListingStatsQuery,
+  useListTestAccountsQuery,
+  useCreateTestAccountMutation,
+  useDeleteTestAccountMutation,
   useUpdateConfigMutation,
   useGetStatsQuery,
   useGetUserOverridesQuery,
@@ -6998,7 +7027,4 @@ export const {
   useCancelDeletionMutation,
   useGetDeletionStatusQuery,
   usePreDeletionCheckQuery,
-  useListTestAccountsQuery,
-  useCreateTestAccountMutation,
-  useDeleteTestAccountMutation,
 } = injectedRtkApi
