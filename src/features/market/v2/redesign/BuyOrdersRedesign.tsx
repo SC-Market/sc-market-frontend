@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Card,
+  CardActionArea,
   CardContent,
   CardMedia,
   Chip,
@@ -21,12 +22,13 @@ import {
 import { useBreakpointDown } from "../../../../hooks/layout/useBreakpoint"
 import Grid2 from "@mui/material/Grid2"
 import AddRounded from "@mui/icons-material/AddRounded"
-import { useSearchParams } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { Helmet } from "@unhead/react/helmet"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { formatPrice } from "../../../../util/formatPrice"
+import { MARKET_PATHS } from "../../../../routes/paths"
 import {
   useSearchBuyOrdersQuery,
   useSearchGameItemsQuery,
@@ -314,7 +316,7 @@ export function BuyOrdersRedesign() {
  * sizing and per-theme visual treatment (dark = full-bleed image + gradient +
  * overlaid text; light = fixed-height image + content below) via ListingWrapper.
  */
-function BuyOrderCard({
+export function BuyOrderCard({
   order,
   index,
 }: {
@@ -331,6 +333,26 @@ function BuyOrderCard({
   const imageUrl = order.photos?.[0]?.url || FALLBACK_IMAGE_URL
   const isDark = theme.palette.mode === "dark"
 
+  // A negotiable order may be posted without a price (price_per_unit 0):
+  // the buyer takes offers instead of naming one.
+  const priceLabel =
+    order.price_per_unit > 0
+      ? formatPrice(order.price_per_unit)
+      : order.negotiable
+        ? t("BuyOrdersRedesign.priceNegotiable", "Make an offer")
+        : t("BuyOrdersRedesign.priceUnset", "No price set")
+
+  const accessibleName = t(
+    "BuyOrdersRedesign.cardLabel",
+    "Buy order: {{item}}, {{price}}, {{remaining}} of {{quantity}} requested",
+    {
+      item: order.game_item_name,
+      price: priceLabel,
+      remaining: remaining.toLocaleString(i18n.language),
+      quantity: (order.quantity ?? 0).toLocaleString(i18n.language),
+    },
+  )
+
   const visibilityLabel =
     order.visibility === "roster_only"
       ? t("BuyOrdersRedesign.rosterOnly", "Roster")
@@ -346,6 +368,12 @@ function BuyOrderCard({
     >
       <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
         <Card sx={{ height: 300, position: "relative" }}>
+          <CardActionArea
+            component={Link}
+            to={MARKET_PATHS.buyOrder(order.buy_order_id)}
+            aria-label={accessibleName}
+            sx={{ height: "100%", position: "relative", display: "block" }}
+          >
           <CardMedia
             component="img"
             loading="lazy"
@@ -399,7 +427,7 @@ function BuyOrderCard({
                 noWrap
                 sx={{ fontSize: "0.95rem" }}
               >
-                {formatPrice(order.price_per_unit)}
+                {priceLabel}
               </Typography>
               <Chip
                 label={visibilityLabel}
@@ -440,6 +468,7 @@ function BuyOrderCard({
                 button (dead affordance), we hide it — it'll be added back as a
                 real action when the fulfil flow is wired. */}
           </CardContent>
+          </CardActionArea>
         </Card>
       </Fade>
     </ListingWrapper>

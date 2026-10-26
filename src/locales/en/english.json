@@ -824,6 +824,7 @@
   "BuyOrdersRedesign": {
     "by": "by {{name}}",
     "cancel": "Cancel",
+    "cardLabel": "Buy order: {{item}}, {{price}}, {{remaining}} of {{quantity}} requested",
     "createBuyOrder": "Create buy order",
     "empty": "No open buy orders right now.",
     "error": "Failed to load buy orders.",
@@ -840,6 +841,8 @@
     "newBuyOrder": "New buy order",
     "no": "No",
     "post": "Post buy order",
+    "priceNegotiable": "Make an offer",
+    "priceUnset": "No price set",
     "posted": "Buy order posted.",
     "public": "Public",
     "quantityLabel": "Quantity",
