@@ -9,7 +9,6 @@ import {
   AdminPageSkeleton,
   MessageListSkeleton,
   ContractDetailSkeleton,
-  RecruitingPostViewSkeleton,
   OfferDetailSkeleton,
   MarketListingDetailSkeleton,
   MarketAggregateSkeleton,
@@ -38,6 +37,11 @@ import {
   SettingsPageSkeleton,
 } from "../components/skeletons/AccountPageSkeletons"
 import { DashboardPageSkeleton } from "../features/dashboard/DashboardPageSkeleton"
+import {
+  CreateRecruitingPostSkeleton,
+  RecruitingPostPageSkeleton,
+  UpdateRecruitingPostSkeleton,
+} from "../components/skeletons/RecruitingPageSkeletons"
 
 /**
  * Maps route paths to their appropriate skeleton components
@@ -95,9 +99,9 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
 
   // Recruiting routes
   "/recruiting": RecruitingListSkeleton,
-  "/recruiting/post/:post_id": RecruitingPostViewSkeleton,
-  "/recruiting/post/create": FormPageSkeleton,
-  "/recruiting/post/:post_id/update": FormPageSkeleton,
+  "/recruiting/post/:post_id": RecruitingPostPageSkeleton,
+  "/recruiting/post/create": CreateRecruitingPostSkeleton,
+  "/recruiting/post/:post_id/update": UpdateRecruitingPostSkeleton,
 
   // Offer routes
   "/offer/:id": OfferDetailSkeleton,

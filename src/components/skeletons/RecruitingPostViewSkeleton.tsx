@@ -1,22 +1,24 @@
 import React from "react"
 import {
-  Avatar,
-  Box,
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   Grid,
   Skeleton,
-  Stack,
+  Typography,
 } from "@mui/material"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useTheme } from "@mui/material/styles"
-import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
+import {
+  RECRUITING_AVATAR_SIZE,
+  RecruitingPostHeaderSkeleton,
+  RecruitingTagChipsSkeleton,
+} from "./RecruitingPostSkeleton"
 
-export function RecruitingPostViewSkeleton() {
-  const theme = useTheme<ExtendedTheme>()
-
+/**
+ * A recruiting post's card (RecruitingPostView) while it loads: the post
+ * page, the update page and the create page's preview. `empty` is the
+ * create page's preview, which has no title or text yet.
+ */
+export function RecruitingPostViewSkeleton(props: { empty?: boolean } = {}) {
   return (
     <Grid item xs={12} lg={12}>
       <Card
@@ -28,127 +30,37 @@ export function RecruitingPostViewSkeleton() {
         <CardHeader
           avatar={
             <Skeleton
-              variant="rectangular"
-              sx={{
-                maxHeight: theme.spacing(12),
-                maxWidth: theme.spacing(12),
-                width: "100%",
-                height: "100%",
-                borderRadius: theme.spacing(theme.borderRadius.image),
-              }}
+              variant="rounded"
+              width={RECRUITING_AVATAR_SIZE}
+              height={RECRUITING_AVATAR_SIZE}
             />
           }
-          title={
-            <Skeleton variant="text" width={200} height={24} sx={{ mb: 0.5 }} />
-          }
-          subheader={
-            <Box>
-              <Grid
-                container
-                alignItems={"center"}
-                spacing={theme.layoutSpacing.compact}
-              >
-                <Grid item>
-                  <PeopleAltRoundedIcon
-                    style={{ color: theme.palette.text.primary }}
-                  />
-                </Grid>
-                <Grid item>
-                  <Skeleton
-                    variant="text"
-                    width={40}
-                    height={20}
-                    sx={{ marginLeft: 1 }}
-                  />
-                </Grid>
-              </Grid>
-              <Stack
-                direction="row"
-                spacing={0.5}
-                alignItems="center"
-                sx={{ mt: 0.5 }}
-              >
-                <Skeleton variant="circular" width={16} height={16} />
-                <Skeleton variant="text" width={60} height={16} />
-              </Stack>
-              <Skeleton
-                variant="text"
-                width={80}
-                height={20}
-                sx={{ mt: 0.5 }}
-              />
-            </Box>
-          }
+          title={<RecruitingPostHeaderSkeleton extraLine />}
+          disableTypography
           action={
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Skeleton
-                variant="rectangular"
-                width={60}
-                height={40}
-                sx={{ borderRadius: 1 }}
-              />
-              <Skeleton variant="circular" width={40} height={40} />
-            </Stack>
+            <Skeleton
+              variant="rounded"
+              width={64}
+              height={31}
+              sx={{ borderRadius: 4 }}
+            />
           }
         />
         <CardContent>
-          <Skeleton
-            variant="text"
-            width="70%"
-            height={40}
-            sx={{ mx: "auto", mb: 3 }}
-          />
-          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="95%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="90%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="85%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="80%" height={20} sx={{ mb: 0.5 }} />
-          <Skeleton variant="text" width="75%" height={20} />
+          {!props.empty && (
+            <>
+              <Typography variant={"h4"} textAlign={"center"}>
+                <Skeleton variant="text" width="70%" sx={{ mx: "auto" }} />
+              </Typography>
+              <Typography variant={"body2"} component="div">
+                {[100, 96, 100, 92, 98, 100, 90, 97, 94, 70].map((w, i) => (
+                  <Skeleton key={i} variant="text" width={`${w}%`} />
+                ))}
+              </Typography>
+            </>
+          )}
         </CardContent>
-        <CardActions>
-          <Box>
-            <Stack direction="row" spacing={1} flexWrap="wrap">
-              <Skeleton
-                variant="rectangular"
-                width={100}
-                height={32}
-                sx={{
-                  borderRadius: 1,
-                  marginBottom: 1,
-                }}
-              />
-              <Skeleton
-                variant="rectangular"
-                width={100}
-                height={32}
-                sx={{
-                  borderRadius: 1,
-                  marginBottom: 1,
-                }}
-              />
-              <Skeleton
-                variant="rectangular"
-                width={100}
-                height={32}
-                sx={{
-                  borderRadius: 1,
-                  marginBottom: 1,
-                }}
-              />
-              <Skeleton
-                variant="rectangular"
-                width={100}
-                height={32}
-                sx={{
-                  borderRadius: 1,
-                  marginBottom: 1,
-                }}
-              />
-            </Stack>
-          </Box>
-        </CardActions>
+        <RecruitingTagChipsSkeleton />
       </Card>
     </Grid>
   )

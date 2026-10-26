@@ -6,6 +6,10 @@ import { LazySection } from "../../components/layout/LazySection"
 import { usePageRecruitingPost } from "../../features/recruiting/hooks/usePageRecruitingPost"
 import { RecruitingPostContentSkeleton } from "../../features/recruiting/components/RecruitingPostContent.skeleton"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
+import {
+  RECRUITING_POST_LOADING_LABEL,
+  RecruitingPostTitleSkeleton,
+} from "../../components/skeletons/RecruitingPageSkeletons"
 
 const RecruitingPostContent = lazyWithRetry(() =>
   import("../../features/recruiting/components/RecruitingPostContent").then(
@@ -20,18 +24,18 @@ export function RecruitingPostPage() {
 
   return (
     <DetailPageLayout
-      title={pageData.data?.post.title || t("recruiting_post.page.createPost")}
+      title={pageData.data?.post.title || t("recruiting.title", "Recruiting")}
       breadcrumbs={[
         {
           label: t("recruiting.title", "Recruiting"),
           href: "/recruiting",
         },
         {
-          label:
-            pageData.data?.post.title || t("recruiting_post.page.createPost"),
+          label: pageData.data?.post.title || RECRUITING_POST_LOADING_LABEL,
         },
       ]}
       entityTitle={pageData.data?.post.title}
+      headerTitle={<RecruitingPostTitleSkeleton />}
       isLoading={pageData.isLoading}
       error={pageData.error}
       skeleton={<RecruitingPostContentSkeleton />}

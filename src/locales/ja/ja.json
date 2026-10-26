@@ -1238,7 +1238,8 @@
     "viewDetails": "詳細を見る",
     "viewContractor": "契約者を見る",
     "share": "共有",
-    "title": "採用"
+    "title": "採用",
+    "scOrgsNote": "メンバーを募集中ですか？SC Orgs には応募の管理、組織ディレクトリ、メンバー管理ツールがあります →"
   },
   "contractor": {
     "fields": {

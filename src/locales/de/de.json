@@ -1238,7 +1238,8 @@
     "viewDetails": "Details anzeigen",
     "viewContractor": "Auftragnehmer anzeigen",
     "share": "Teilen",
-    "title": "Rekrutierung"
+    "title": "Rekrutierung",
+    "scOrgsNote": "Ihr rekrutiert? SC Orgs bietet Bewerbungen, ein Org-Verzeichnis und Tools für Mitglieder →"
   },
   "contractor": {
     "fields": {

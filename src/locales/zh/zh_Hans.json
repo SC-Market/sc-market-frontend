@@ -1240,7 +1240,8 @@
     "viewDetails": "查看详情",
     "viewContractor": "查看合约组织",
     "share": "分享",
-    "title": "招募"
+    "title": "招募",
+    "scOrgsNote": "正在招募成员？SC Orgs 提供入会申请、组织目录和成员管理工具 →"
   },
   "contractor": {
     "fields": {

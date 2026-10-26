@@ -1238,7 +1238,8 @@
     "viewDetails": "Ver detalles",
     "viewContractor": "Ver contratista",
     "share": "Compartir",
-    "title": "Reclutamiento"
+    "title": "Reclutamiento",
+    "scOrgsNote": "¿Reclutando? SC Orgs tiene solicitudes, un directorio de organizaciones y herramientas para miembros →"
   },
   "contractor": {
     "fields": {

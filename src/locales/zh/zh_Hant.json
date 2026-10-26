@@ -1183,7 +1183,8 @@
     "viewDetails": "查看詳情",
     "viewContractor": "查看合約組織",
     "share": "分享",
-    "title": "招募"
+    "title": "招募",
+    "scOrgsNote": "正在招募成員？SC Orgs 提供入會申請、組織目錄和成員管理工具 →"
   },
   "contractor": {
     "fields": {

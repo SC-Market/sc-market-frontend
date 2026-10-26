@@ -1,9 +1,9 @@
-import React, { useCallback, useRef, useState } from "react"
-import { Alert, AlertTitle, Button, Divider, Grid } from "@mui/material"
+import React, { Suspense, useCallback, useRef, useState } from "react"
+import { Button, Grid } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { HapticTablePagination } from "../../components/haptic"
 import FilterListIcon from "@mui/icons-material/FilterList"
-import { NoteAddRounded, RocketLaunchRounded } from "@mui/icons-material"
+import { NoteAddRounded } from "@mui/icons-material"
 import { RecruitingSidebar } from "../../views/recruiting/RecruitingSidebar"
 import { RecruitingSidebarContext } from "../../features/recruiting/hooks/RecruitingSidebar"
 import {
@@ -11,7 +11,11 @@ import {
   RecruitingSearchState,
 } from "../../features/recruiting/hooks/RecruitingSearch"
 import { RecruitingPostItem } from "../../views/recruiting/RecruitingList"
-import { RecruitingPostSkeleton } from "../../components/skeletons"
+import {
+  RecruitingListFrame,
+  RecruitingPostListSkeleton,
+} from "../../components/skeletons/RecruitingListSkeleton"
+import { PageBusy, usePageReady } from "../../components/metadata/PageReady"
 import type { RecruitingPost } from "../../features/recruiting/domain/types"
 import { Link } from "react-router-dom"
 import { useSelectedOrg } from "../../hooks/login/useSelectedOrg"
@@ -49,6 +53,8 @@ export function Recruiting() {
     searchState,
     currentOrgSpectrumId: canRecruit ? selectedOrg?.spectrum_id : undefined,
   })
+  // The header and filters are static; the page is ready once the posts are in.
+  usePageReady(pageData.awaitingData)
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -150,46 +156,55 @@ export function Recruiting() {
         <RecruitingSearchContext.Provider value={[searchState, setSearchState]}>
           <div ref={ref} />
 
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              {/* SC Orgs promotion banner */}
-              <Grid item xs={12}>
-                <Alert
-                  severity="info"
-                  icon={<RocketLaunchRounded />}
-                  action={
-                    <Button
-                      color="inherit"
-                      size="small"
-                      href="https://sc-orgs.space"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Visit SC Orgs
-                    </Button>
+          <RecruitingListFrame
+            pagination={
+              <HapticTablePagination
+                labelRowsPerPage={t("rows_per_page")}
+                labelDisplayedRows={({ from, to, count }) =>
+                  t("displayed_rows", { from, to, count })
+                }
+                rowsPerPageOptions={[5, 15, 25]}
+                component="div"
+                count={pageData.data?.posts?.total || 0}
+                rowsPerPage={perPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                color={"primary"}
+                nextIconButtonProps={{ color: "primary" }}
+                backIconButtonProps={{ color: "primary" }}
+                sx={{ mt: 2 }}
+              />
+            }
+          >
+            {!pageData.awaitingData ? (
+              (pageData.data?.posts?.items || []).length === 0 ? (
+                <Grid item xs={12}>
+                  <EmptyRecruiting
+                    isSearchResult={
+                      searchState.query !== "" ||
+                      (searchState.fields && searchState.fields.length > 0) ||
+                      searchState.rating > 0 ||
+                      (searchState.language_codes &&
+                        searchState.language_codes.length > 0)
+                    }
+                    showCreateAction={canRecruit}
+                    sx={{ py: 4 }}
+                  />
+                </Grid>
+              ) : (
+                // The cards render their text with the lazy Markdown chunk:
+                // keep the card skeletons (and the page busy) until it loads,
+                // instead of suspending the whole page into the route skeleton.
+                <Suspense
+                  fallback={
+                    <>
+                      <PageBusy />
+                      <RecruitingPostListSkeleton />
+                    </>
                   }
-                  sx={{ mb: 1 }}
                 >
-                  <AlertTitle>Looking for recruitment &amp; event management?</AlertTitle>
-                  Check out <strong>SC Orgs</strong> at sc-orgs.space — our new dedicated platform for org recruitment, event scheduling, and community management.
-                </Alert>
-              </Grid>
-              {!pageData.awaitingData ? (
-                (pageData.data?.posts?.items || []).length === 0 ? (
-                  <Grid item xs={12}>
-                    <EmptyRecruiting
-                      isSearchResult={
-                        searchState.query !== "" ||
-                        (searchState.fields && searchState.fields.length > 0) ||
-                        searchState.rating > 0 ||
-                        (searchState.language_codes &&
-                          searchState.language_codes.length > 0)
-                      }
-                      showCreateAction={canRecruit}
-                      sx={{ py: 4 }}
-                    />
-                  </Grid>
-                ) : (
-                  (pageData.data?.posts?.items ?? []).map(
+                  {(pageData.data?.posts?.items ?? []).map(
                     (item: RecruitingPost, index: number) => (
                       <RecruitingPostItem
                         post={item}
@@ -197,34 +212,13 @@ export function Recruiting() {
                         index={index}
                       />
                     ),
-                  )
-                )
-              ) : (
-                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                  <RecruitingPostSkeleton key={i} />
-                ))
-              )}
-            </Grid>
-
-          <Divider light sx={{ mt: 2 }} />
-
-          <HapticTablePagination
-            labelRowsPerPage={t("rows_per_page")}
-            labelDisplayedRows={({ from, to, count }) =>
-              t("displayed_rows", { from, to, count })
-            }
-            rowsPerPageOptions={[5, 15, 25]}
-            component="div"
-            count={pageData.data?.posts?.total || 0}
-            rowsPerPage={perPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            color={"primary"}
-            nextIconButtonProps={{ color: "primary" }}
-            backIconButtonProps={{ color: "primary" }}
-            sx={{ mt: 2 }}
-          />
+                  )}
+                </Suspense>
+              )
+            ) : (
+              <RecruitingPostListSkeleton />
+            )}
+          </RecruitingListFrame>
         </RecruitingSearchContext.Provider>
       </RecruitingSidebarContext.Provider>
     </SidebarPageLayout>
