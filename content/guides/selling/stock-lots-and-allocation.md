@@ -32,7 +32,7 @@ Each lot's **Status** is **Listed** or **Personal**. Listed stock counts toward 
 
 ## What happens when you sell
 
-When you accept an offer, the ordered quantity comes out of a listed lot, so buyers can't order stock you've already sold. If the order is cancelled, the quantity goes back to the lot. **Allocated Stock** on the Stock page lists lots that have stock reserved for open orders.
+When you accept an offer, the ordered quantity comes out of a listed lot, so buyers can't order stock you've already sold. If the order is cancelled, the quantity goes back to the lot. That's the default **Automatic (FIFO)** allocation mode; to pick lots yourself, choose **Manual selection** under **Allocation mode** in your shop's **Settings**. **Allocated Stock** on the Stock page lists lots that have stock reserved for open orders.
 
 ## Your personal inventory
 

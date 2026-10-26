@@ -15,7 +15,10 @@ import {
   FormControl,
   FormLabel,
   InputAdornment,
+  Link,
 } from "@mui/material"
+import { Link as RouterLink } from "react-router-dom"
+import { PATHS } from "../../routes/paths"
 import { FlatSection } from "../paper/Section"
 import { useTranslation } from "react-i18next"
 import { useOrderSettings } from "../../features/orders/hooks/useOrderSettings"
@@ -33,7 +36,6 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
     orderMessage, setOrderMessage, orderEnabled, setOrderEnabled,
     requireAvailabilityEnabled, setRequireAvailabilityEnabled,
     stockSubtractionTiming, setStockSubtractionTiming,
-    allocationMode, setAllocationMode,
     minOrderSize, setMinOrderSize, minOrderSizeEnabled, setMinOrderSizeEnabled,
     maxOrderSize, setMaxOrderSize, maxOrderSizeEnabled, setMaxOrderSizeEnabled,
     minOrderValue, setMinOrderValue, minOrderValueEnabled, setMinOrderValueEnabled,
@@ -279,91 +281,22 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
           </Box>
         </Grid>
 
-        {/* Allocation Mode Setting */}
+        {/* Allocation mode is a per-shop setting (Shop Settings › Orders);
+            the org/user value here was never the one orders used. */}
         <Grid item xs={12}>
           <Box mb={3}>
             <Typography variant="subtitle1" gutterBottom>
               {t("OrderSettings.allocationMode", "Stock Allocation Mode")}
             </Typography>
-
-            <FormControl component="fieldset" disabled={saving} sx={{ mb: 1 }}>
-              <FormLabel component="legend">
-                {t(
-                  "OrderSettings.allocationModeLabel",
-                  "How should stock be allocated to orders?",
-                )}
-              </FormLabel>
-              <RadioGroup
-                value={allocationMode}
-                onChange={(e) =>
-                  setAllocationMode(
-                    e.target.value as "auto" | "manual" | "none",
-                  )
-                }
-              >
-                <FormControlLabel
-                  value="auto"
-                  control={<Radio />}
-                  label={
-                    <Box>
-                      <Typography variant="body2">
-                        {t(
-                          "OrderSettings.allocationModeAuto",
-                          "Automatic (Recommended)",
-                        )}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {t(
-                          "OrderSettings.allocationModeAutoDescription",
-                          "Stock is automatically allocated when orders are created using FIFO (oldest stock first)",
-                        )}
-                      </Typography>
-                    </Box>
-                  }
-                />
-                <FormControlLabel
-                  value="manual"
-                  control={<Radio />}
-                  label={
-                    <Box>
-                      <Typography variant="body2">
-                        {t("OrderSettings.allocationModeManual", "Manual")}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {t(
-                          "OrderSettings.allocationModeManualDescription",
-                          "You manually select which stock lots to allocate to each order",
-                        )}
-                      </Typography>
-                    </Box>
-                  }
-                />
-                <FormControlLabel
-                  value="none"
-                  control={<Radio />}
-                  label={
-                    <Box>
-                      <Typography variant="body2">
-                        {t("OrderSettings.allocationModeNone", "None (Legacy)")}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {t(
-                          "OrderSettings.allocationModeNoneDescription",
-                          "No physical allocation - stock is tracked at listing level only",
-                        )}
-                      </Typography>
-                    </Box>
-                  }
-                />
-              </RadioGroup>
-            </FormControl>
-
-            <Alert severity="info" sx={{ mt: 2 }}>
+            <Alert severity="info">
               <Typography variant="body2">
                 {t(
-                  "OrderSettings.allocationModeNote",
-                  "Note: This setting controls how stock is physically allocated to orders. It is independent of the stock subtraction timing setting above, which controls when stock becomes visible to buyers.",
-                )}
+                  "OrderSettings.allocationModeMoved",
+                  "Stock allocation mode is set per shop: open your shop's Settings, under Stock Management › Allocation mode.",
+                )}{" "}
+                <Link component={RouterLink} to={PATHS.dashboardShops}>
+                  {t("OrderSettings.allocationModeShops", "Your shops")}
+                </Link>
               </Typography>
             </Alert>
           </Box>

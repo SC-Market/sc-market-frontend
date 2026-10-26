@@ -25,18 +25,12 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
   const [stockSubtractionTiming, setStockSubtractionTiming] = useState<
     "on_accepted" | "on_received" | "dont_subtract"
   >("on_accepted")
-  const [allocationMode, setAllocationMode] = useState<
-    "auto" | "manual" | "none"
-  >("auto")
   const [offerSettingId, setOfferSettingId] = useState<string | null>(null)
   const [orderSettingId, setOrderSettingId] = useState<string | null>(null)
   const [requireAvailabilitySettingId, setRequireAvailabilitySettingId] =
     useState<string | null>(null)
   const [stockSubtractionTimingSettingId, setStockSubtractionTimingSettingId] =
     useState<string | null>(null)
-  const [allocationModeSettingId, setAllocationModeSettingId] = useState<
-    string | null
-  >(null)
   const [minOrderSize, setMinOrderSize] = useState<string>("")
   const [maxOrderSize, setMaxOrderSize] = useState<string>("")
   const [minOrderValue, setMinOrderValue] = useState<string>("")
@@ -139,25 +133,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
         // No setting = default to "on_accepted"
         setStockSubtractionTiming("on_accepted")
         setStockSubtractionTimingSettingId(null)
-      }
-
-      const allocationModeSetting = settings.find(
-        (s) => s.setting_type === "allocation_mode",
-      )
-
-      if (allocationModeSetting) {
-        // If setting exists, use its value
-        setAllocationMode(
-          (allocationModeSetting.message_content as
-            | "auto"
-            | "manual"
-            | "none") || "auto",
-        )
-        setAllocationModeSettingId(allocationModeSetting.id)
-      } else {
-        // No setting = default to "auto"
-        setAllocationMode("auto")
-        setAllocationModeSettingId(null)
       }
 
       // Initialize order limits
@@ -544,81 +519,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
       )
     }
 
-    // Handle allocation mode
-    if (allocationMode === "auto") {
-      // "auto" is the default - delete setting if it exists
-      if (allocationModeSettingId) {
-        if (entityType === "user") {
-          promise = promise
-            .then(() => deleteUserSetting(allocationModeSettingId).unwrap())
-            .then(() => {
-              setAllocationModeSettingId(null)
-            })
-        } else {
-          promise = promise
-            .then(() =>
-              deleteContractorSetting({
-                contractorId: entityId!,
-                id: allocationModeSettingId,
-              }).unwrap(),
-            )
-            .then(() => {
-              setAllocationModeSettingId(null)
-            })
-        }
-      }
-      // If no setting exists, nothing to do (already at default)
-    } else {
-      // "manual" or "none" - create or update setting
-      const request: CreateOrderSettingRequest = {
-        setting_type: "allocation_mode",
-        message_content: allocationMode,
-        enabled: true,
-      }
-
-      if (allocationModeSettingId) {
-        // Update existing
-        if (entityType === "user") {
-          promise = promise.then(() =>
-            updateUserSetting({
-              id: allocationModeSettingId,
-              message_content: allocationMode,
-              enabled: true,
-            }).unwrap(),
-          )
-        } else {
-          promise = promise.then(() =>
-            updateContractorSetting({
-              contractorId: entityId!,
-              id: allocationModeSettingId,
-              message_content: allocationMode,
-              enabled: true,
-            }).unwrap(),
-          )
-        }
-      } else {
-        // Create new
-        if (entityType === "user") {
-          promise = promise
-            .then(() => createUserSetting(request).unwrap())
-            .then((result) => {
-              setAllocationModeSettingId(result.setting.id)
-            })
-        } else {
-          promise = promise
-            .then(() =>
-              createContractorSetting({
-                contractorId: entityId!,
-                ...request,
-              }).unwrap(),
-            )
-            .then((result) => {
-              setAllocationModeSettingId(result.setting.id)
-            })
-        }
-      }
-    }
-
     promise
       .then(() => {
         issueAlert({
@@ -665,7 +565,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
       | "order_message"
       | "require_availability"
       | "stock_subtraction_timing"
-      | "allocation_mode"
       | "min_order_size"
       | "max_order_size"
       | "min_order_value"
@@ -685,9 +584,7 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
             ? requireAvailabilitySettingId
             : settingType === "stock_subtraction_timing"
               ? stockSubtractionTimingSettingId
-              : settingType === "allocation_mode"
-                ? allocationModeSettingId
-                : settingType === "min_order_size"
+              : settingType === "min_order_size"
                   ? minOrderSizeSettingId
                   : settingType === "max_order_size"
                     ? maxOrderSizeSettingId
@@ -725,9 +622,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
         } else if (settingType === "stock_subtraction_timing") {
           setStockSubtractionTiming("on_accepted")
           setStockSubtractionTimingSettingId(null)
-        } else if (settingType === "allocation_mode") {
-          setAllocationMode("auto")
-          setAllocationModeSettingId(null)
         } else if (settingType === "min_order_size") {
           setMinOrderSize("")
           setMinOrderSizeEnabled(false)
@@ -791,7 +685,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
     orderMessage, setOrderMessage, orderEnabled, setOrderEnabled,
     requireAvailabilityEnabled, setRequireAvailabilityEnabled,
     stockSubtractionTiming, setStockSubtractionTiming,
-    allocationMode, setAllocationMode,
     minOrderSize, setMinOrderSize, minOrderSizeEnabled, setMinOrderSizeEnabled,
     maxOrderSize, setMaxOrderSize, maxOrderSizeEnabled, setMaxOrderSizeEnabled,
     minOrderValue, setMinOrderValue, minOrderValueEnabled, setMinOrderValueEnabled,
@@ -799,7 +692,7 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
     saving, error, success,
     handleSave, handleDelete,
     offerSettingId, orderSettingId,
-    requireAvailabilitySettingId, stockSubtractionTimingSettingId, allocationModeSettingId,
+    requireAvailabilitySettingId, stockSubtractionTimingSettingId,
     minOrderSizeSettingId, maxOrderSizeSettingId, minOrderValueSettingId, maxOrderValueSettingId,
   }
 }

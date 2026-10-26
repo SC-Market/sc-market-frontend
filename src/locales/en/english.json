@@ -3274,6 +3274,8 @@
     "allocationModeLabel": "How should stock be allocated to orders?",
     "allocationModeManual": "Manual",
     "allocationModeManualDescription": "You manually select which stock lots to allocate to each order",
+    "allocationModeMoved": "Stock allocation mode is set per shop: open your shop's Settings, under Stock Management › Allocation mode.",
+    "allocationModeShops": "Your shops",
     "allocationModeNone": "None (Legacy)",
     "allocationModeNoneDescription": "No physical allocation - stock is tracked at listing level only",
     "allocationModeNote": "Note: This setting controls how stock is physically allocated to orders. It is independent of the stock subtraction timing setting above, which controls when stock becomes visible to buyers.",
