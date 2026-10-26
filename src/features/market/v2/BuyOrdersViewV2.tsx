@@ -29,6 +29,11 @@ import { buyOrderSortArgs } from "./buyOrderSort"
 import { ListingWrapper } from "../components/listings/ListingWrapper"
 import { ListingPagination } from "../components/listings/ListingPagination"
 import { ListingSkeleton } from "../../../components/skeletons"
+import {
+  LISTING_GRID_SKELETON_COUNT,
+  buyOrderGridBreakpoints,
+} from "./marketSearchLayout"
+import { MARKET_FILTER_PANEL_SX } from "../../../components/layout/MarketPageLayout"
 import { EmptyListings } from "../../../components/empty-states/EmptyListings"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
@@ -106,10 +111,7 @@ export function BuyOrdersViewV2() {
     [],
   )
 
-  const gridBreakpoints = useMemo(() => {
-    if (marketSidebarOpen) return { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4, xxl: 2, xxxl: 12 / 8 }
-    return { xs: 6, sm: 4, md: 4, lg: 2.4, xl: 2, xxl: 12 / 7, xxxl: 12 / 8 }
-  }, [marketSidebarOpen])
+  const gridBreakpoints = buyOrderGridBreakpoints(marketSidebarOpen)
 
   const loading = isLoading || isFetching
 
@@ -118,7 +120,7 @@ export function BuyOrdersViewV2() {
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <Grid container spacing={1}>
         {loading
-          ? new Array(Math.min(perPage, 12))
+          ? new Array(Math.min(perPage, LISTING_GRID_SKELETON_COUNT))
               .fill(undefined)
               .map((_, i) => (
                 <Grid item {...gridBreakpoints} key={i}>
@@ -202,17 +204,7 @@ export function BuyOrdersViewV2() {
               spacing={theme.layoutSpacing.layout}
               sx={{ width: "100%", maxWidth: "xxxl" }}
             >
-              <Paper
-                sx={{
-                  position: "sticky",
-                  top: "calc(64px + 16px)",
-                  maxHeight: "calc(100vh - 64px - 32px)",
-                  height: "fit-content",
-                  width: 300,
-                  flexShrink: 0,
-                  overflowY: "auto",
-                }}
-              >
+              <Paper sx={MARKET_FILTER_PANEL_SX}>
                 <MarketSearchAreaV2 />
               </Paper>
               <Box sx={{ flex: 1, minWidth: 0 }}>

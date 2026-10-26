@@ -7,6 +7,11 @@ vi.mock("../v2/MarketPageV2", () => ({
   MarketPageV2: () => <div data-testid="market-v2">Market V2</div>,
 }))
 
+// The Suspense fallback is the route skeleton (tested with the route table)
+vi.mock("../../router/RouteSuspense", () => ({
+  RouteSkeletonFallback: () => <div role="progressbar" />,
+}))
+
 describe("MarketRouter", () => {
   it("should render V2 market page", async () => {
     render(<MarketRouter />)
@@ -21,7 +26,7 @@ describe("MarketRouter", () => {
   it("should show loading fallback while lazy component loads", () => {
     render(<MarketRouter />)
 
-    // The Suspense fallback contains a CircularProgress
+    // The Suspense fallback is the route skeleton (mocked above)
     // In test environment lazy components may load immediately,
     // but the component structure supports a loading state
     // Just verify component renders successfully

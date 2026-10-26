@@ -1,4 +1,4 @@
-import React, { useState, lazy } from "react"
+import React, { useState } from "react"
 import { ContractListings } from "../../views/contracts/ContractListings"
 import { ContractSidebar } from "../../views/contracts/ContractSidebar"
 import { ContractSidebarContext } from "../../features/contracting/hooks/ContractSidebar"
@@ -13,15 +13,14 @@ import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { MarketPageLayout } from "../../components/layout/MarketPageLayout"
+import {
+  MARKET_FILTER_PANEL_SX,
+  MarketPageLayout,
+} from "../../components/layout/MarketPageLayout"
 import { Page } from "../../components/metadata/Page"
-import { LazySection } from "../../components/layout/LazySection"
-
-const ContractActions = lazy(() =>
-  import("../../views/contracts/ContractActions").then((module) => ({
-    default: module.ContractActions,
-  })),
-)
+// Static, not lazy: a one-button header that otherwise popped in late and
+// shifted the header row (on phones it is a full-width row of its own).
+import { ContractActions } from "../../views/contracts/ContractActions"
 
 export function Contracts() {
   const { t } = useTranslation()
@@ -42,9 +41,7 @@ export function Contracts() {
         >
           <MarketPageLayout
             title={t("nav.contracts", "Contracts")}
-            headerActions={
-              <LazySection component={ContractActions} skeleton={() => null} />
-            }
+            headerActions={<ContractActions />}
             fab={
               showMobileSidebar ? (
                 <FiltersFAB
@@ -78,17 +75,7 @@ export function Contracts() {
                     sx={{ width: "100%", maxWidth: "xxxl" }}
                   >
                     {contractSidebarOpen && (
-                      <Paper
-                        sx={{
-                          position: "sticky",
-                          top: "calc(64px + 16px)",
-                          maxHeight: "calc(100vh - 64px - 32px)",
-                          height: "fit-content",
-                          width: 300,
-                          flexShrink: 0,
-                          overflowY: "auto",
-                        }}
-                      >
+                      <Paper sx={MARKET_FILTER_PANEL_SX}>
                         <ContractSidebar />
                       </Paper>
                     )}

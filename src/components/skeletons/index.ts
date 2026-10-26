@@ -32,7 +32,6 @@ export type { ContractDetailSkeletonProps } from "./ContractDetailSkeleton"
 // Route-specific skeletons
 export {
   PageSkeleton,
-  MarketPageSkeleton,
   DashboardSkeleton,
   ProfileSkeleton,
   ListPageSkeleton,
@@ -57,7 +56,11 @@ export { MarketCartSkeleton } from "./MarketCartSkeleton"
 export { ContractorsListSkeleton } from "./ContractorsListSkeleton"
 export { FleetSkeleton } from "./FleetSkeleton"
 export { RecruitingListSkeleton } from "./RecruitingListSkeleton"
-export { ContractsListSkeleton } from "./ContractsListSkeleton"
+export {
+  MarketPageSkeleton,
+  ContractsListSkeleton,
+  HeaderActionsSkeleton,
+} from "./MarketPageSkeleton"
 export { LandingPageSkeleton } from "./LandingPageSkeleton"
 export { MyListingsSkeleton } from "./MyListingsSkeleton"
 export { ServicesListSkeleton } from "./ServicesListSkeleton"

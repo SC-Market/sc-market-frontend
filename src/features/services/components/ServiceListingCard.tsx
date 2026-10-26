@@ -130,10 +130,16 @@ export const ServiceListingBase = React.memo(
                       maxHeight: "9em",
                     }}
                   >
-                    <MarkdownRender
-                      text={service.service_description}
-                      plainText
-                    />
+                    {/* Local boundary: the markdown chunk loading must not
+                        suspend the whole services list (that blanked the
+                        page between the skeleton and the cards). The box's
+                        height is fixed by the 160px image column. */}
+                    <React.Suspense fallback={null}>
+                      <MarkdownRender
+                        text={service.service_description}
+                        plainText
+                      />
+                    </React.Suspense>
                   </Typography>
                   {service.photos[0] ? (
                     <Avatar

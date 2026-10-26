@@ -23,6 +23,7 @@ vi.mock("../../../../components/layout/ContainerGrid", () => ({
 }))
 vi.mock("../../../../hooks/layout/useBreakpoint", () => ({
   useBreakpointDown: () => false,
+  useIsMobile: () => false,
 }))
 vi.mock("../../../../features/market/components/MarketActions", () => ({
   MarketActions: () => <button>Create Listing</button>,
@@ -40,6 +41,8 @@ vi.mock("../../../../views/services/ServiceActions", () => ({
 
 const theme = createTheme({
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
+  // Read by the services body skeleton (the Suspense fallback)
+  borderRadius: { topLevel: 1, image: 1 },
 })
 
 function renderAt(path: string) {

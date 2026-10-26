@@ -1,5 +1,4 @@
-import React, { Suspense, useMemo, useState } from "react"
-import { CircularProgress } from "@mui/material"
+import React, { Suspense, useState } from "react"
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
 import { useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -14,6 +13,14 @@ import {
 import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
 import { FeatureErrorBoundary } from "../../../components/error-boundaries"
 import { MarketV2Routes } from "../../../features/market/v2/MarketV2Routes"
+import { marketPageKind, marketPageTitle } from "./marketPageKind"
+// Static, not lazy: a one-button header that otherwise popped in after a
+// spinner and shifted the header row.
+import { ServiceActions } from "../../../views/services/ServiceActions"
+import {
+  MarketSearchSkeleton,
+  ServiceMarketSkeleton,
+} from "../../skeletons/MarketSearchSkeleton"
 
 // V1 components for the Services page (shared across V1/V2)
 const ServiceMarketView = React.lazy(() =>
@@ -21,13 +28,6 @@ const ServiceMarketView = React.lazy(() =>
     default: m.ServiceMarketView,
   })),
 )
-const ServiceActions = React.lazy(() =>
-  import("../../../views/services/ServiceActions").then((m) => ({
-    default: m.ServiceActions,
-  })),
-)
-
-type MarketPageKind = "items" | "buyorders" | "services"
 
 /**
  * MarketPageV2 — the /market, /buyorders and /market/services pages.
@@ -44,19 +44,8 @@ export function MarketPageV2() {
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
 
-  const page = useMemo<MarketPageKind>(() => {
-    if (location.pathname.startsWith("/market/services")) return "services"
-    if (location.pathname.startsWith("/buyorders")) return "buyorders"
-    return "items"
-  }, [location.pathname])
-
-  // Same labels as the sidebar entries for these pages (SidebarV2)
-  const title =
-    page === "services"
-      ? t("nav.services", "Services")
-      : page === "buyorders"
-        ? t("nav.buyOrders", "Buy Orders")
-        : t("nav.market", "Market")
+  const page = marketPageKind(location.pathname)
+  const title = marketPageTitle(page, t)
 
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
@@ -70,9 +59,7 @@ export function MarketPageV2() {
             title={title}
             headerActions={
               page === "services" ? (
-                <Suspense fallback={<CircularProgress size={24} />}>
-                  <ServiceActions />
-                </Suspense>
+                <ServiceActions />
               ) : page === "buyorders" ? (
                 <BuyOrderActions />
               ) : (
@@ -96,12 +83,18 @@ export function MarketPageV2() {
           >
             {page === "services" ? (
               <FeatureErrorBoundary featureName="Services">
-                <Suspense fallback={null}>
+                <Suspense fallback={<ServiceMarketSkeleton />}>
                   <ServiceMarketView />
                 </Suspense>
               </FeatureErrorBoundary>
             ) : (
-              <Suspense fallback={null}>
+              <Suspense
+                fallback={
+                  <MarketSearchSkeleton
+                    kind={page === "buyorders" ? "buyorders" : "listings"}
+                  />
+                }
+              >
                 <MarketV2Routes />
               </Suspense>
             )}

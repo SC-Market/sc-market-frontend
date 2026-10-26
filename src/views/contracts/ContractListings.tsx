@@ -30,7 +30,7 @@ import { dateDiffInDays } from "../../util/dateDiff"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { ServiceListingSkeleton } from "../../components/skeletons"
+import { ContractListingSkeleton } from "../../components/skeletons/ContractListingSkeleton"
 import { EmptyContracts } from "../../components/empty-states"
 import { ORDER_PATHS, USER_PATHS } from "../../routes/paths"
 
@@ -205,7 +205,11 @@ export function ContractListing(props: {
                       // whiteSpace: "pre-line"
                     }}
                   >
-                    <MarkdownRender text={contract.description} />
+                    {/* Local boundary so the markdown chunk can't suspend
+                        the whole list; the box height is fixed at 120px. */}
+                    <React.Suspense fallback={null}>
+                      <MarkdownRender text={contract.description} />
+                    </React.Suspense>
                   </Typography>
                 }
               </CardContent>
@@ -335,7 +339,7 @@ export function ContractListings(props: { user?: string }) {
     return (
       <>
         {Array.from({ length: perPage }).map((_, i) => (
-          <ServiceListingSkeleton key={i} index={i} />
+          <ContractListingSkeleton key={i} index={i} />
         ))}
       </>
     )

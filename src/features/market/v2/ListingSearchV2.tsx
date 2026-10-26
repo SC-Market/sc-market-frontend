@@ -67,6 +67,11 @@ import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag";
 import { useAutoApplySearchParams, type AutoApplySearchParams } from "../hooks/useAutoApplySearchParams";
 import { GroupedListingGrid } from "./redesign/GroupedListingGrid";
 import { BUY_ORDER_SORT_FIELDS } from "./buyOrderSort";
+import {
+  LISTING_GRID_SKELETON_COUNT,
+  listingSearchGridBreakpoints,
+} from "./marketSearchLayout";
+import { MARKET_FILTER_PANEL_SX } from "../../../components/layout/MarketPageLayout";
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -161,12 +166,7 @@ export function ListingSearchV2() {
   )
 
   // Grid breakpoints - match V1 exactly
-  const gridBreakpoints = useMemo(() => {
-    const sidebarInLayout = !showMobileSidebar;
-    const base = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4, xxl: 2, xxxl: 12 / 8 };
-    if (!sidebarInLayout || drawerOpen) return base;
-    return { xs: 6, sm: 4, md: 4, lg: 2.4, xl: 2, xxl: 12 / 7, xxxl: 12 / 8 };
-  }, [showMobileSidebar, drawerOpen]);
+  const gridBreakpoints = listingSearchGridBreakpoints(!showMobileSidebar, drawerOpen);
 
   // Pagination handlers
   const ref = useRef<HTMLDivElement>(null);
@@ -281,17 +281,7 @@ export function ListingSearchV2() {
               sx={{ width: "100%", maxWidth: "xxxl" }}
             >
               {/* Desktop: Persistent sidebar */}
-              <Paper
-                sx={{
-                  position: "sticky",
-                  top: "calc(64px + 16px)",
-                  maxHeight: "calc(100vh - 64px - 32px)",
-                  height: "fit-content",
-                  width: 300,
-                  flexShrink: 0,
-                  overflowY: "auto",
-                }}
-              >
+              <Paper sx={MARKET_FILTER_PANEL_SX}>
                 <MarketSearchAreaV2 />
               </Paper>
 
@@ -869,7 +859,7 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
     if (loading) {
       return (
         <Grid container spacing={1}>
-          {new Array(16).fill(undefined).map((_, i) => (
+          {new Array(LISTING_GRID_SKELETON_COUNT).fill(undefined).map((_, i) => (
             <Grid item {...gridBreakpoints} key={i}>
               <ListingSkeleton index={i} sidebarOpen={marketSidebarOpen} />
             </Grid>

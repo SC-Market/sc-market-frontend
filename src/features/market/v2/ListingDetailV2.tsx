@@ -66,6 +66,7 @@ import { ReportButton } from "../../../components/button/ReportButton"
 import { buildListingHead } from "../../../seo/entityHeads"
 import { SeoHead } from "../../../seo/SeoHead"
 import { isSiteAdmin } from "../../../util/siteRole"
+import { ListingDetailContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton"
 
 export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
@@ -174,6 +175,7 @@ export function ListingDetailV2() {
       canonicalUrl={canonicalPath}
       breadcrumbs={breadcrumbs}
       isLoading={isLoading}
+      skeleton={<ListingDetailContentSkeleton />}
       error={error}
       sidebarOpen={true}
       maxWidth="xl"

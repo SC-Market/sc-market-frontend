@@ -1,16 +1,11 @@
-import {
-  Box,
-  Container,
-  Divider,
-  Grid,
-  Paper,
-  Stack,
-} from "@mui/material"
+import { Box, Container, Divider, Grid, Paper, Stack } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
 import { ServiceListings } from "../contracts/ServiceListings.lazy"
 import { useServiceSidebar } from "../../features/contracting/hooks/ServiceSidebar"
-import React from "react"
+import React, { Suspense } from "react"
+import { MARKET_FILTER_PANEL_SX } from "../../components/layout/MarketPageLayout"
+import { ServiceListingsSkeleton } from "../../components/skeletons/MarketSearchSkeleton"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ServiceSearchArea } from "./ServiceSearchArea"
@@ -37,7 +32,9 @@ export function ServiceMarketView() {
                   spacing={theme.layoutSpacing.layout}
                   justifyContent={"center"}
                 >
-                  <ServiceListings />
+                  <Suspense fallback={<ServiceListingsSkeleton />}>
+                    <ServiceListings />
+                  </Suspense>
                 </Grid>
               </Grid>
             </Grid>
@@ -48,17 +45,7 @@ export function ServiceMarketView() {
               spacing={theme.layoutSpacing.layout}
               sx={{ width: "100%", maxWidth: "xxl" }}
             >
-              <Paper
-                sx={{
-                  position: "sticky",
-                  top: "calc(64px + 16px)",
-                  maxHeight: "calc(100vh - 64px - 32px)",
-                  height: "fit-content",
-                  width: 300,
-                  flexShrink: 0,
-                  overflowY: "auto",
-                }}
-              >
+              <Paper sx={MARKET_FILTER_PANEL_SX}>
                 <ServiceSearchArea />
               </Paper>
 
@@ -68,7 +55,9 @@ export function ServiceMarketView() {
                   spacing={theme.layoutSpacing.layout}
                   justifyContent={"center"}
                 >
-                  <ServiceListings />
+                  <Suspense fallback={<ServiceListingsSkeleton />}>
+                    <ServiceListings />
+                  </Suspense>
                 </Grid>
               </Box>
             </Stack>

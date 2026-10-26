@@ -3,7 +3,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 
 export interface BaseSkeletonProps extends Omit<SkeletonProps, "variant"> {
-  variant?: "text" | "rectangular" | "circular"
+  variant?: "text" | "rectangular" | "rounded" | "circular"
   width?: number | string
   height?: number | string
   animation?: "pulse" | "wave" | false

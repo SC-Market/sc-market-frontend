@@ -10,6 +10,20 @@ import {
 import { OpenLayout } from "./ContainerGrid"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
+/**
+ * The desktop filter panel beside the results on the MarketPageLayout pages
+ * (market, buy orders, services, contracts) and in their skeletons.
+ */
+export const MARKET_FILTER_PANEL_SX = {
+  position: "sticky",
+  top: "calc(64px + 16px)",
+  maxHeight: "calc(100vh - 64px - 32px)",
+  height: "fit-content",
+  width: 300,
+  flexShrink: 0,
+  overflowY: "auto",
+} as const
+
 export interface MarketPageLayoutProps {
   /** Page title in the header (names the current page, e.g. "Market", "Services") */
   title: string
@@ -19,6 +33,8 @@ export interface MarketPageLayoutProps {
   children: ReactNode
   /** Optional FAB to show on mobile (e.g. filter toggle) */
   fab?: ReactNode
+  /** Leave out the footer (the page's skeleton does) */
+  noFooter?: boolean
 }
 
 /**
@@ -31,12 +47,13 @@ export function MarketPageLayout({
   headerActions,
   children,
   fab,
+  noFooter,
 }: MarketPageLayoutProps) {
   const theme = useTheme<ExtendedTheme>()
 
   return (
     <>
-      <OpenLayout sidebarOpen={true} noMobilePadding={true}>
+      <OpenLayout sidebarOpen={true} noMobilePadding={true} noFooter={noFooter}>
         <Container
           maxWidth="xxl"
           sx={{

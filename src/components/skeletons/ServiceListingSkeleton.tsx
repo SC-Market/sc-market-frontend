@@ -128,32 +128,14 @@ export function ServiceListingSkeleton({
                 spacing={theme.layoutSpacing.compact}
                 flexWrap="wrap"
               >
-                {/* Service kind chip (primary, outlined) */}
+                {/* Service kind chip (primary, outlined). The rush and
+                    language chips are optional; most cards show just this
+                    one row, so the placeholder does too. */}
                 <BaseSkeleton
                   variant="rectangular"
                   width={120}
-                  height={36}
-                  sx={{ borderRadius: 1, marginBottom: 1 }}
-                />
-                {/* Optional rush chip (warning) */}
-                <BaseSkeleton
-                  variant="rectangular"
-                  width={80}
-                  height={36}
-                  sx={{ borderRadius: 1, marginBottom: 1 }}
-                />
-                {/* Optional language chips */}
-                <BaseSkeleton
-                  variant="rectangular"
-                  width={70}
-                  height={36}
-                  sx={{ borderRadius: 1, marginBottom: 1 }}
-                />
-                <BaseSkeleton
-                  variant="rectangular"
-                  width={60}
-                  height={36}
-                  sx={{ borderRadius: 1, marginBottom: 1 }}
+                  height={32}
+                  sx={{ borderRadius: 4, marginBottom: 1 }}
                 />
               </Stack>
             </Box>

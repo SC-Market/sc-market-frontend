@@ -1,6 +1,6 @@
 import React, { ReactElement, ReactNode, useMemo } from "react"
 import { Navigate, useLocation } from "react-router-dom"
-import { Grid, GridProps } from "@mui/material"
+import { Grid, GridProps, Skeleton } from "@mui/material"
 import { Helmet } from "@unhead/react/helmet"
 import { Page } from "../metadata/Page"
 import { PageBreadcrumbs } from "../navigation/PageBreadcrumbs"
@@ -110,7 +110,8 @@ export function StandardPageLayout(
 
   // Inject primary contractor into breadcrumbs if it exists and is enabled
   const enhancedBreadcrumbs = useMemo(() => {
-    if (!breadcrumbs || !primaryContractor || !showOrgInBreadcrumbs) return breadcrumbs
+    if (!breadcrumbs || !primaryContractor || !showOrgInBreadcrumbs)
+      return breadcrumbs
 
     // Insert org after first breadcrumb (home)
     return [
@@ -133,10 +134,16 @@ export function StandardPageLayout(
   }
 
   // Handle 403 errors — redirect to login if not authenticated, show forbidden page otherwise
-  if (isForbiddenError(error as FetchBaseQueryError | SerializedError | undefined)) {
-    const message = getErrorMessage(error as FetchBaseQueryError | SerializedError | undefined)
+  if (
+    isForbiddenError(error as FetchBaseQueryError | SerializedError | undefined)
+  ) {
+    const message = getErrorMessage(
+      error as FetchBaseQueryError | SerializedError | undefined,
+    )
     if (!profile) {
-      const redirectUrl = encodeURIComponent(location.pathname + location.search)
+      const redirectUrl = encodeURIComponent(
+        location.pathname + location.search,
+      )
       return <Navigate to={`${PATHS.login}?redirect=${redirectUrl}`} />
     }
     return <ForbiddenPage message={message} />
@@ -171,7 +178,9 @@ export function StandardPageLayout(
       <ContainerGrid
         sidebarOpen={sidebarOpen}
         sidebarWidth={sidebarWidth}
-        maxWidth={maxWidth as "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl" | false}
+        maxWidth={
+          maxWidth as "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl" | false
+        }
         noFooter={noFooter}
         noSidebar={noSidebar}
         noMobilePadding={noMobilePadding}
@@ -188,21 +197,7 @@ export function StandardPageLayout(
 
         {/* Header with title and actions */}
         {(headerTitle || headerActions) && (
-          <Grid
-            item
-            container
-            justifyContent="space-between"
-            spacing={theme.layoutSpacing?.layout ?? 1}
-            xs={12}
-          >
-            {headerTitle && (
-              <HeaderTitle md={7} lg={7} xl={7}>
-                {headerTitle}
-              </HeaderTitle>
-            )}
-
-            {headerActions && <Grid item>{headerActions}</Grid>}
-          </Grid>
+          <PageHeaderRow title={headerTitle} actions={headerActions} />
         )}
 
         {/* Content or skeleton */}
@@ -210,4 +205,45 @@ export function StandardPageLayout(
       </ContainerGrid>
     </Page>
   )
+}
+
+/** StandardPageLayout's title + actions row. */
+export function PageHeaderRow({
+  title,
+  actions,
+}: {
+  title?: ReactNode
+  actions?: ReactNode
+}) {
+  const theme = useTheme<ExtendedTheme>()
+  return (
+    <Grid
+      item
+      container
+      justifyContent="space-between"
+      spacing={theme.layoutSpacing?.layout ?? 1}
+      xs={12}
+    >
+      {title && (
+        <HeaderTitle md={7} lg={7} xl={7}>
+          {title}
+        </HeaderTitle>
+      )}
+
+      {actions && <Grid item>{actions}</Grid>}
+    </Grid>
+  )
+}
+
+/**
+ * The header row of a page whose title only exists once its data loads
+ * (e.g. a listing's name): a title-sized placeholder in the same row, for
+ * the page's `skeleton`, so the content below doesn't drop when it arrives.
+ */
+export function PageHeaderRowSkeleton({
+  width = "50%",
+}: {
+  width?: string | number
+}) {
+  return <PageHeaderRow title={<Skeleton variant="text" width={width} />} />
 }

@@ -1,6 +1,6 @@
 import React from "react"
-import { CircularProgress, Box } from "@mui/material"
 import { useParams } from "react-router-dom"
+import { RouteSkeletonFallback } from "../router/RouteSuspense"
 
 const MarketPageV2 = React.lazy(() =>
   import("./v2/MarketPageV2").then((module) => ({
@@ -20,13 +20,11 @@ const MarketAggregateViewV2 = React.lazy(() => import("../../features/market/v2/
 const MarketMultipleViewV2 = React.lazy(() => import("../../features/market/v2/MarketMultipleViewV2").then(m => ({ default: m.MarketMultipleViewV2 })))
 const CreateBuyOrderPageV2 = React.lazy(() => import("../../features/market/v2/CreateBuyOrderPageV2").then(m => ({ default: m.CreateBuyOrderPageV2 })))
 
-function MarketLoadingFallback() {
-  return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-      <CircularProgress />
-    </Box>
-  )
-}
+/**
+ * While a market page's chunk loads, show that page's route skeleton (the
+ * same one the route Suspense and HydrateFallback use), not a spinner.
+ */
+const MarketLoadingFallback = RouteSkeletonFallback
 
 /**
  * MarketRouter – renders V2 market tabbed page.
