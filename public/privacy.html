@@ -14,7 +14,10 @@
       - cookies: backend src/server.ts (scmarket.sid), src/api/util/jwt.ts,
         src/api/routes/auth-routes.ts; frontend CookieConsent.tsx, HookProvider.tsx
       - consent gate: frontend src/components/alert/CookieConsent.tsx (GA and
-        BugSnag Performance only after "Accept")
+        BugSnag Performance only after "Accept"); Web Vitals to GA:
+        src/hooks/performance/useWebVitals.tsx
+      - fonts: self-hosted (src/fonts.css); Google Fonts only in the site-admin
+        font preview (PreferencesControls.tsx)
       - error reports: frontend src/util/monitoring/bugsnagLoader.ts, backend
         src/server.ts and src/api/middleware/error-handler.ts, SCMarketBot
         util/errors.py (anonymous: no IP, no user id, no device id)
@@ -556,9 +559,7 @@
       </li>
       <li>
         <strong>Google:</strong> Google Analytics receives usage information
-        from our website, only if you click "Accept". Our website also loads
-        a font from Google Fonts, which receives your IP address and browser
-        information when it delivers the font.
+        from our website, only if you click "Accept".
       </li>
       <li>
         <strong>Web push services:</strong> if you turn on push notifications,
@@ -608,8 +609,10 @@
       </li>
       <li>
         <strong>Analytics (optional):</strong> only if you click "Accept",
-        Google Analytics sets cookies to measure how the website is used, and
-        BugSnag Performance measures how fast pages load (without storing an
+        Google Analytics sets cookies to measure how the website is used and
+        how quickly pages load and respond (Core Web Vitals timings, with the
+        page element involved, such as a button or image, but not its text),
+        and BugSnag Performance measures how fast pages load (without storing an
         identifier for you or sending page addresses). If you click "Necessary only", or make no choice, neither runs.
       </li>
       <li>

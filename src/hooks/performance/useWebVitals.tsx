@@ -1,92 +1,153 @@
 import { useEffect } from "react"
-import { onCLS, onFID, onLCP, onFCP, onTTFB, onINP, Metric } from "web-vitals"
+import type {
+  CLSMetricWithAttribution,
+  FCPMetricWithAttribution,
+  INPMetricWithAttribution,
+  LCPMetricWithAttribution,
+  TTFBMetricWithAttribution,
+} from "web-vitals/attribution"
+import { CONSENT_COOKIE } from "../../util/consent/analyticsConsent"
 
 /**
- * Hook to track Core Web Vitals and send them to analytics
+ * Tracks Core Web Vitals (LCP, INP, CLS, plus FCP and TTFB) and sends them to
+ * Google Analytics 4 with their attribution, so field data shows WHAT is slow:
+ * the element that shifted the most (CLS), the element and phase of the
+ * slowest interaction (INP), and the LCP element and its load phases.
  *
- * Tracks:
- * - LCP (Largest Contentful Paint) - measures loading performance
- * - FID (First Input Delay) / INP (Interaction to Next Paint) - measures interactivity
- * - CLS (Cumulative Layout Shift) - measures visual stability
- * - FCP (First Contentful Paint) - measures initial render
- * - TTFB (Time to First Byte) - measures server response time
- *
- * Metrics are sent to Google Analytics 4 if available, and logged in development.
- * Core Web Vitals are performance metrics and don't contain personal data.
+ * Consent: analytics only. Nothing is measured or loaded unless the visitor
+ * chose "Accept" (cookie_consent=all) before the page loaded, and each send
+ * re-checks the choice and that GA is running. The data is timings and CSS
+ * selectors of page elements (e.g. "main>div.MuiCard-root"); no text, values
+ * or identifiers. Described in public/privacy.html (Analytics).
  */
 
-// Helper to safely check if we're in development mode
-// Vite provides import.meta.env.DEV for development mode detection
+type AttributedMetric =
+  | CLSMetricWithAttribution
+  | FCPMetricWithAttribution
+  | INPMetricWithAttribution
+  | LCPMetricWithAttribution
+  | TTFBMetricWithAttribution
+
+type Gtag = (
+  command: "event",
+  name: string,
+  params: Record<string, string | number | boolean>,
+) => void
+
 const isDevelopment = (): boolean => {
   try {
-    // Vite replaces import.meta.env at build time
     return import.meta.env.DEV === true
   } catch {
     return false
   }
 }
 
-export function useWebVitals() {
-  useEffect(() => {
-    // Function to send metrics to analytics
-    const sendToAnalytics = (metric: Metric) => {
-      // Check if gtag is available (Google Analytics)
-      // react-ga4 sets up gtag, so this will work if GA is initialized
-      const win = window as typeof globalThis & { gtag?: (...args: [string, string, Record<string, string | number | boolean>]) => void }
-      if (typeof window !== "undefined" && win.gtag) {
-        try {
-          const gtag = win.gtag
+function analyticsConsented(): boolean {
+  return document.cookie
+    .split(";")
+    .some((c) => c.trim() === `${CONSENT_COOKIE}=all`)
+}
 
-          // Send to Google Analytics 4
-          // Using the recommended format for Core Web Vitals in GA4
-          gtag("event", metric.name, {
-            event_category: "Web Vitals",
-            event_label: metric.id,
-            // CLS is reported as a decimal, convert to integer for consistency
-            value: Math.round(
-              metric.name === "CLS" ? metric.value * 1000 : metric.value,
-            ),
-            non_interaction: true,
-            // Include additional metric details as custom parameters
-            metric_id: metric.id,
-            metric_value: metric.value,
-            metric_delta: metric.delta,
-            // Include rating (good, needs-improvement, poor)
-            metric_rating:
-              metric.rating === "good"
-                ? "good"
-                : metric.rating === "needs-improvement"
-                  ? "needs-improvement"
-                  : "poor",
-          })
-        } catch (error) {
-          // Silently fail if analytics is not properly configured
-          if (isDevelopment()) {
-            console.warn("[Web Vitals] Failed to send to analytics:", error)
-          }
-        }
-      }
+/** GA4 caps string parameter values at 100 characters. */
+const param = (value: string | undefined): string => (value ?? "").slice(0, 100)
 
-      // Also log to console in development for debugging
-      if (isDevelopment()) {
-        console.log("[Web Vitals]", {
-          name: metric.name,
-          value: metric.value,
-          rating: metric.rating,
-          delta: metric.delta,
-          id: metric.id,
-        })
+const ms = (value: number | undefined): number => Math.round(value ?? 0)
+
+/** The attribution fields sent for each metric (flat GA event params). */
+export function attributionParams(
+  metric: AttributedMetric,
+): Record<string, string | number> {
+  switch (metric.name) {
+    case "CLS": {
+      const a = metric.attribution
+      return {
+        debug_target: param(a.largestShiftTarget),
+        debug_time: ms(a.largestShiftTime),
+        debug_shift_value: Math.round((a.largestShiftValue ?? 0) * 1000),
+        debug_load_state: param(a.loadState),
       }
     }
+    case "INP": {
+      const a = metric.attribution
+      return {
+        debug_target: param(a.interactionTarget),
+        debug_event: param(a.interactionType),
+        debug_input_delay: ms(a.inputDelay),
+        debug_processing: ms(a.processingDuration),
+        debug_presentation: ms(a.presentationDelay),
+        debug_load_state: param(a.loadState),
+      }
+    }
+    case "LCP": {
+      const a = metric.attribution
+      return {
+        debug_target: param(a.element),
+        // Path only: no query string (could carry tokens on CDN URLs)
+        debug_url: param(a.url ? a.url.split("?")[0] : ""),
+        debug_ttfb: ms(a.timeToFirstByte),
+        debug_load_delay: ms(a.resourceLoadDelay),
+        debug_load_time: ms(a.resourceLoadDuration),
+        debug_render_delay: ms(a.elementRenderDelay),
+      }
+    }
+    default:
+      return {}
+  }
+}
 
-    // Track Core Web Vitals
-    // These callbacks will be invoked when each metric is ready
-    // Metrics are reported once per page load/navigation
-    onCLS(sendToAnalytics) // Cumulative Layout Shift
-    onFID(sendToAnalytics) // First Input Delay (legacy, still tracked for compatibility)
-    onINP(sendToAnalytics) // Interaction to Next Paint (replaces FID in 2024)
-    onLCP(sendToAnalytics) // Largest Contentful Paint
-    onFCP(sendToAnalytics) // First Contentful Paint
-    onTTFB(sendToAnalytics) // Time to First Byte
+function sendToAnalytics(metric: AttributedMetric) {
+  const gtag = (window as Window & { gtag?: Gtag }).gtag
+  if (gtag && analyticsConsented()) {
+    try {
+      gtag("event", metric.name, {
+        event_category: "Web Vitals",
+        event_label: metric.id,
+        // CLS is a decimal; scale it so GA's integer value keeps precision
+        value: Math.round(
+          metric.name === "CLS" ? metric.value * 1000 : metric.value,
+        ),
+        non_interaction: true,
+        metric_id: metric.id,
+        metric_value: metric.value,
+        metric_delta: metric.delta,
+        metric_rating: metric.rating,
+        ...attributionParams(metric),
+      })
+    } catch (error) {
+      if (isDevelopment()) {
+        console.warn("[Web Vitals] Failed to send to analytics:", error)
+      }
+    }
+  }
+
+  if (isDevelopment()) {
+    console.log("[Web Vitals]", metric.name, metric.value, metric.attribution)
+  }
+}
+
+export function useWebVitals() {
+  useEffect(() => {
+    // No analytics consent, no measurement: the attribution build is not even
+    // downloaded. (A visitor who accepts mid-visit is measured from their next
+    // page load, like GA's own page views.)
+    if (!analyticsConsented() && !isDevelopment()) return
+
+    let cancelled = false
+    import("web-vitals/attribution")
+      .then(({ onCLS, onINP, onLCP, onFCP, onTTFB }) => {
+        if (cancelled) return
+        // The observers are buffered, so starting after load misses nothing.
+        onCLS(sendToAnalytics)
+        onINP(sendToAnalytics)
+        onLCP(sendToAnalytics)
+        onFCP(sendToAnalytics)
+        onTTFB(sendToAnalytics)
+      })
+      .catch(() => {
+        // Optional instrumentation: a failed (e.g. stale) chunk is ignored.
+      })
+    return () => {
+      cancelled = true
+    }
   }, [])
 }

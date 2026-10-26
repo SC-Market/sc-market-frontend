@@ -2,7 +2,6 @@ import React from "react"
 import "./fonts.css"
 import "./index.css"
 import App from "./App"
-import reportWebVitals from "./reportWebVitals"
 import { createRoot } from "react-dom/client"
 import { createHead, UnheadProvider } from "@unhead/react/client"
 import { initPWA } from "./util/pwa"
@@ -123,8 +122,3 @@ setTimeout(() => {
     }
   }
 }, 2000) // Wait 2 seconds to ensure app is fully initialized
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()
