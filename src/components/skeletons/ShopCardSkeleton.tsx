@@ -34,12 +34,12 @@ export function ShopCardSkeleton({ index = 0 }: { index?: number }) {
               sx={{ flexShrink: 0 }}
             />
             <Box sx={{ minWidth: 0, flex: 1 }}>
-              <BaseSkeleton variant="text" width="70%" height={28} />
+              <BaseSkeleton variant="text" width="70%" height={24} />
               <BaseSkeleton variant="text" width="45%" height={20} />
             </Box>
           </Box>
           <BaseSkeleton variant="text" width={110} height={18} />
-          <BaseSkeleton variant="text" width="60%" height={20} />
+          <BaseSkeleton variant="text" width="60%" height={17} />
           <Box>
             <BaseSkeleton variant="text" width="100%" height={20} />
             <BaseSkeleton variant="text" width="75%" height={20} />

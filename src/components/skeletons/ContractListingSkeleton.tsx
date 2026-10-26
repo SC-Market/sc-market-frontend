@@ -39,8 +39,12 @@ export function ContractListingSkeleton({ index = 0 }: { index?: number }) {
             <CardHeader
               disableTypography
               title={<BaseSkeleton variant="text" width="55%" height={32} />}
+              // Customer, time and cost wrap onto two lines at card width
               subheader={
-                <BaseSkeleton variant="text" width="45%" height={22} />
+                <>
+                  <BaseSkeleton variant="text" width="55%" height={22} />
+                  <BaseSkeleton variant="text" width="35%" height={18} />
+                </>
               }
             />
             <CardContent sx={{ width: "auto", height: 120, paddingTop: 0 }}>

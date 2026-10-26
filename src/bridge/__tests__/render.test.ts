@@ -110,7 +110,7 @@ describe("headMarkup", () => {
 
   it("drops summary blocks with unexpected tags", () => {
     const chunks = summaryChunks([{ tag: "script" as "p", text: "x" }, { tag: "p", text: "ok" }])
-    expect(assemble(chunks)).toBe(`<main style="max-width:720px;margin:32px auto;padding:0 16px"><p>ok</p></main>`)
+    expect(assemble(chunks)).toBe(`<main style="max-width:720px;margin:0 auto;padding:32px 16px"><p>ok</p></main>`)
   })
 })
 

@@ -11,7 +11,7 @@ import { BaseSkeleton } from "./BaseSkeleton"
 
 /**
  * Body of the listing detail page (features/market/v2/ListingDetailV2) while
- * the listing loads: the title row, then the image (4/12 from lg) beside the
+ * the listing loads: the breadcrumb and title rows, then the image (4/12 from lg) beside the
  * main card (8/12, min 400px tall), stacked below lg.
  */
 export function ListingDetailContentSkeleton() {
@@ -19,6 +19,11 @@ export function ListingDetailContentSkeleton() {
 
   return (
     <>
+      {/* Breadcrumbs: while loading the page has only "Market", which
+          PageBreadcrumbs doesn't draw; once loaded it has 2-4 crumbs */}
+      <Grid item xs={12}>
+        <BaseSkeleton variant="text" width={280} height={24} />
+      </Grid>
       <PageHeaderRowSkeleton width="45%" />
       <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.layout}>

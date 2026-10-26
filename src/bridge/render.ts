@@ -95,7 +95,9 @@ export function headMarkup(head: PageHead | null, canonical: string | null, noin
 export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
   const chunks: HtmlChunk[] = [
     {
-      content: `<main style="max-width:720px;margin:32px auto;padding:0 16px">`,
+      // Top spacing is padding, not margin: a margin collapses through
+      // <body>, so the page sat 32px low and shifted up when the app mounted.
+      content: `<main style="max-width:720px;margin:0 auto;padding:32px 16px">`,
       html: true,
     },
   ]
