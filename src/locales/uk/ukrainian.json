@@ -2634,7 +2634,18 @@
     "faqRealMoneyA": "Ні. Усі транзакції на SC Market мають здійснюватися тільки у aUEC.",
     "recentListings": "Нещодавні оголошення",
     "seeAll": "Переглянути всі",
-    "title": "SC Market"
+    "title": "SC Market",
+    "heroTitle": "Маркет Star Citizen від гравців для гравців",
+    "heroText": "Купуйте та продавайте товари й замовляйте послуги з оплатою в aUEC у грі. Ми не беремо комісії.",
+    "heroOrdersLabel": "оформлених замовлень",
+    "heroValueLabel": "aUEC у замовленнях",
+    "heroWeekOrdersLabel": "замовлень цього тижня",
+    "heroWeekValueLabel": "aUEC цього тижня",
+    "heroSearchLabel": "Пошук на маркеті",
+    "heroSearchPlaceholder": "Зброя, броня, товари...",
+    "heroSearchSubmit": "Пошук",
+    "heroBrowse": "Перейти до маркету",
+    "heroSell": "Почати продавати"
   },
   "fleet": {
     "fleetTitle": "Флот",

@@ -70,7 +70,14 @@ function HeroStat(props: {
         variant="h4"
         component="p"
         color="text.secondary"
-        sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
+        // One line always (h5 size on phones so "1,6 Billionen" fits half
+        // the width); labels may wrap, and hidden cells carry the same
+        // labels, so a row is the same height shown or hidden.
+        sx={{
+          typography: { xs: "h5", md: "h4" },
+          fontWeight: "bold",
+          whiteSpace: "nowrap",
+        }}
       >
         {props.value ?? <Skeleton width="5ch" />}
       </Typography>
@@ -219,7 +226,7 @@ export function LandingHeroLayout(props: {
             sx={{
               display: "grid",
               gridTemplateColumns: {
-                xs: "repeat(2, max-content)",
+                xs: "repeat(2, minmax(0, 1fr))",
                 md: "repeat(4, max-content)",
               },
               columnGap: { xs: 3, sm: 6 },

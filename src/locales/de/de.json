@@ -2672,7 +2672,18 @@
     "faqRealMoneyA": "Nein. Alle Transaktionen auf SC Market sollten in aUEC abgewickelt werden.",
     "recentListings": "Neueste Angebote",
     "seeAll": "Alle anzeigen",
-    "title": "SC Market"
+    "title": "SC Market",
+    "heroTitle": "Der Marktplatz von Spielern für Spieler in Star Citizen",
+    "heroText": "Artikel kaufen und verkaufen, Dienstleistungen beauftragen – bezahlt wird in aUEC im Spiel. Wir nehmen keine Provision.",
+    "heroOrdersLabel": "aufgegebene Bestellungen",
+    "heroValueLabel": "aUEC in Bestellungen",
+    "heroWeekOrdersLabel": "Bestellungen diese Woche",
+    "heroWeekValueLabel": "aUEC diese Woche",
+    "heroSearchLabel": "Markt durchsuchen",
+    "heroSearchPlaceholder": "Waffen, Rüstung, Rohstoffe...",
+    "heroSearchSubmit": "Suchen",
+    "heroBrowse": "Zum Markt",
+    "heroSell": "Jetzt verkaufen"
   },
   "fleet": {
     "fleetTitle": "Flotte",

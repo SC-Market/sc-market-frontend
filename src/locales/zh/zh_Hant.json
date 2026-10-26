@@ -2593,7 +2593,18 @@
     "faqRealMoneyA": "不行。SC Market 上的所有交易都應以 aUEC 完成。",
     "recentListings": "最新刊登",
     "seeAll": "查看全部",
-    "title": "SC Market"
+    "title": "SC Market",
+    "heroTitle": "Star Citizen 玩家對玩家交易市集",
+    "heroText": "買賣物品、雇用服務，於遊戲內以 aUEC 付款。我們不抽取任何佣金。",
+    "heroOrdersLabel": "筆訂單",
+    "heroValueLabel": "aUEC 訂單總額",
+    "heroWeekOrdersLabel": "本週訂單",
+    "heroWeekValueLabel": "本週 aUEC 訂單額",
+    "heroSearchLabel": "搜尋市集",
+    "heroSearchPlaceholder": "武器、護甲、商品……",
+    "heroSearchSubmit": "搜尋",
+    "heroBrowse": "瀏覽市集",
+    "heroSell": "開始販售"
   },
   "fleet": {
     "fleetTitle": "艦隊",

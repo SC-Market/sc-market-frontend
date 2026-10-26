@@ -2672,7 +2672,18 @@
     "faqRealMoneyA": "いいえ。SC Market 上のすべての取引はaUECで行う必要があります。",
     "recentListings": "最近の出品",
     "seeAll": "すべて表示",
-    "title": "SC Market"
+    "title": "SC Market",
+    "heroTitle": "Star Citizen のプレイヤー同士のマーケットプレイス",
+    "heroText": "アイテムの売買やサービスの依頼ができ、支払いはゲーム内の aUEC で行います。手数料はいただきません。",
+    "heroOrdersLabel": "件の注文",
+    "heroValueLabel": "aUEC の注文総額",
+    "heroWeekOrdersLabel": "今週の注文件数",
+    "heroWeekValueLabel": "今週の aUEC 注文額",
+    "heroSearchLabel": "マーケットを検索",
+    "heroSearchPlaceholder": "武器、アーマー、コモディティ...",
+    "heroSearchSubmit": "検索",
+    "heroBrowse": "マーケットを見る",
+    "heroSell": "出品を始める"
   },
   "fleet": {
     "fleetTitle": "フリート",
