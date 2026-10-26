@@ -4,8 +4,8 @@
  * disables dragging/resizing and hides remove controls.
  */
 
-import { useMemo, useRef, useState } from "react"
-import { Responsive, WidthProvider, type Layout } from "react-grid-layout"
+import { useLayoutEffect, useMemo, useRef, useState } from "react"
+import { Responsive, type Layout } from "react-grid-layout"
 import "react-grid-layout/css/styles.css"
 import "react-resizable/css/styles.css"
 import { Box } from "@mui/material"
@@ -20,7 +20,29 @@ import {
 } from "./gridConstants"
 import type { DashboardConfig, DashboardWidget } from "./types"
 
-const ResponsiveGridLayout = WidthProvider(Responsive)
+/**
+ * The grid's container width, measured before the first paint.
+ *
+ * Not react-grid-layout's WidthProvider: it renders the grid at a default
+ * 1280px first and measures after mount, so every mount (the first load, and
+ * again when the saved layout arrives) painted the widgets at the wrong width
+ * for a frame and then snapped them to the real one (~0.035 CLS each time).
+ * A layout effect measures before the browser paints, so the first painted
+ * frame already has the real width (same approach as DashboardGridSkeleton).
+ */
+function useGridWidth(active: boolean) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [width, setWidth] = useState<number | null>(null)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!active || !el) return
+    setWidth(el.offsetWidth)
+    const observer = new ResizeObserver(() => setWidth(el.offsetWidth))
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [active])
+  return { ref, width }
+}
 
 const COLS = DASHBOARD_COLS
 const BREAKPOINTS = DASHBOARD_BREAKPOINTS
@@ -49,6 +71,7 @@ export function DashboardGrid({
   onConfigChange,
   stacked = false,
 }: DashboardGridProps) {
+  const { ref: gridRef, width: gridWidth } = useGridWidth(!stacked)
   // Only widgets the registry knows render anything. Unknown types stay in the
   // saved config untouched, but get no grid cell, so they leave no blank gap.
   const renderable = useMemo(
@@ -155,29 +178,34 @@ export function DashboardGrid({
   }
 
   return (
-    <ResponsiveGridLayout
-      className="dashboard-grid"
-      layouts={layouts}
-      cols={COLS}
-      breakpoints={BREAKPOINTS}
-      rowHeight={ROW_HEIGHT}
-      isDraggable={canArrange}
-      isResizable={canArrange}
-      draggableHandle=".dashboard-widget-drag-handle"
-      onBreakpointChange={(_breakpoint, nextCols) => handleColsChange(nextCols)}
-      onWidthChange={(_width, _margin, nextCols) => handleColsChange(nextCols)}
-      onLayoutChange={handleLayoutChange}
-      margin={[DASHBOARD_GRID_MARGIN, DASHBOARD_GRID_MARGIN]}
-    >
-      {renderable.map((widget) => (
-        <div key={widget.id}>
-          <WidgetWrapper
-            widget={widget}
-            editing={editing}
-            onRemove={handleRemove}
-          />
-        </div>
-      ))}
-    </ResponsiveGridLayout>
+    <div ref={gridRef}>
+      {gridWidth !== null && (
+        <Responsive
+          width={gridWidth}
+          className="dashboard-grid"
+          layouts={layouts}
+          cols={COLS}
+          breakpoints={BREAKPOINTS}
+          rowHeight={ROW_HEIGHT}
+          isDraggable={canArrange}
+          isResizable={canArrange}
+          draggableHandle=".dashboard-widget-drag-handle"
+          onBreakpointChange={(_breakpoint, nextCols) => handleColsChange(nextCols)}
+          onWidthChange={(_width, _margin, nextCols) => handleColsChange(nextCols)}
+          onLayoutChange={handleLayoutChange}
+          margin={[DASHBOARD_GRID_MARGIN, DASHBOARD_GRID_MARGIN]}
+        >
+          {renderable.map((widget) => (
+            <div key={widget.id}>
+              <WidgetWrapper
+                widget={widget}
+                editing={editing}
+                onRemove={handleRemove}
+              />
+            </div>
+          ))}
+        </Responsive>
+      )}
+    </div>
   )
 }
