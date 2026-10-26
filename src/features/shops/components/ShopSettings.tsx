@@ -46,6 +46,7 @@ import {
 import { useUploadImageMutation } from "../../../store/api/v2/market-overrides"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
+import { WEBHOOK_ACTIONS } from "../domain/webhookEvents"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
@@ -84,15 +85,6 @@ const AVAILABLE_LANGUAGES = [
   { code: "zh", label: "Chinese" },
 ] as const
 
-const WEBHOOK_ACTIONS: { label: string; action_name: string }[] = [
-  { label: "Order Created", action_name: "order_create" },
-  { label: "Order Assigned", action_name: "order_assigned" },
-  { label: "Public Order Created", action_name: "public_order_create" },
-  { label: "Order Status Change", action_name: "order_status_change" },
-  { label: "Order Review", action_name: "order_review" },
-  { label: "Order Comment", action_name: "order_comment" },
-  { label: "Market Bid", action_name: "market_item_bid" },
-]
 
 function ShopWebhookSection({ shopId }: { shopId: string }) {
   const theme = useTheme<ExtendedTheme>()
@@ -222,7 +214,7 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.compact} direction="column">
-          {WEBHOOK_ACTIONS.map(({ label, action_name }) => (
+          {WEBHOOK_ACTIONS.map(({ label, description, action_name }) => (
             <Grid item key={action_name}>
               <FormControlLabel
                 control={
@@ -233,7 +225,14 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
                     size="small"
                   />
                 }
-                label={label}
+                label={
+                  <span>
+                    {label}
+                    <Typography component="span" variant="caption" color="text.secondary" sx={{ display: "block" }}>
+                      {description}
+                    </Typography>
+                  </span>
+                }
               />
             </Grid>
           ))}
