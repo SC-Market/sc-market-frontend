@@ -30,6 +30,8 @@ const PAGE_SIZE = MINING_LOCATION_PAGE_SIZE
 const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 
 import { RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/icons-material"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 function groupLabel(groupName: string): string {
   const g = (groupName || "").toLowerCase()
@@ -90,13 +92,17 @@ export function MiningLocationBrowser() {
     navigate(GAME_DATA_PATHS.miningLocations, { replace: true })
   }
 
-  const { data, isLoading, error } = useSearchLocationsQuery({
+  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchLocationsQuery({
     text: queryParams.q || undefined,
     system: queryParams.system || undefined,
     locationType: (queryParams.location_type as "surface" | "asteroidfield" | undefined) || undefined,
     page,
     pageSize: PAGE_SIZE,
   })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+  )
 
   return (
     <>

@@ -21,6 +21,7 @@ import {
   MarketSearchSkeleton,
   ServiceMarketSkeleton,
 } from "../../skeletons/MarketSearchSkeleton"
+import { PageBusy } from "../../metadata/PageReady"
 
 // V1 components for the Services page (shared across V1/V2)
 const ServiceMarketView = React.lazy(() =>
@@ -83,16 +84,26 @@ export function MarketPageV2() {
           >
             {page === "services" ? (
               <FeatureErrorBoundary featureName="Services">
-                <Suspense fallback={<ServiceMarketSkeleton />}>
+                <Suspense
+                  fallback={
+                    <>
+                      <PageBusy />
+                      <ServiceMarketSkeleton />
+                    </>
+                  }
+                >
                   <ServiceMarketView />
                 </Suspense>
               </FeatureErrorBoundary>
             ) : (
               <Suspense
                 fallback={
-                  <MarketSearchSkeleton
-                    kind={page === "buyorders" ? "buyorders" : "listings"}
-                  />
+                  <>
+                    <PageBusy />
+                    <MarketSearchSkeleton
+                      kind={page === "buyorders" ? "buyorders" : "listings"}
+                    />
+                  </>
                 }
               >
                 <MarketV2Routes />

@@ -14,6 +14,8 @@ import {
 } from "../api/servicesApi"
 import { ServiceListing } from "./ServiceListing"
 import { isAwaitingData } from "../../../util/queryLoading"
+import { usePageReady } from "../../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 
 export function ServiceListings(props: { user?: string; contractor?: string }) {
   const [page, setPage] = useState(0)
@@ -54,7 +56,12 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     currentData,
     error,
     refetch,
+    isLoading: pageIsLoading,
   } = useGetPublicServicesQuery(queryParams)
+  // Primary content wherever services are listed: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading: pageIsLoading, isFetching, currentData }),
+  )
 
   const handleChangePage = useCallback(
     (event: unknown, newPage: number) => {

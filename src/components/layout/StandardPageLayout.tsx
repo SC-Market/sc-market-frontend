@@ -166,6 +166,7 @@ export function StandardPageLayout(
   return (
     <Page
       title={title}
+      loading={isLoading}
       canonUrl={canonicalUrl}
       dontUseDefaultCanonUrl={dontUseDefaultCanonUrl}
     >

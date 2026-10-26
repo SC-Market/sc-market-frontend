@@ -22,6 +22,8 @@ export function HelpLayout(props: {
   path: string
   headerTitle: ReactNode
   breadcrumbs?: BreadcrumbItem[]
+  /** The page's content is still loading (page-ready signal on <main>). */
+  loading?: boolean
   children: ReactNode
 }) {
   const location = useLocation()
@@ -41,6 +43,7 @@ export function HelpLayout(props: {
       description={props.head ? headDescription(props.head) : undefined}
       canonicalUrl={props.path}
       headerTitle={props.headerTitle}
+      isLoading={props.loading}
       maxWidth="lg"
     >
       {props.head && <SeoHead head={props.head} />}

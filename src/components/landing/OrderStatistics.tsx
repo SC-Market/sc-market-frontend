@@ -7,10 +7,12 @@ import CountUp from "react-countup"
 import { MetricSection } from "../../views/orders/OrderMetrics"
 import { useGetMarketStatsQuery } from "../../features/market/api/marketApi"
 import { OrderStatisticsSkeleton } from "./OrderStatistics.skeleton"
+import { usePageReady } from "../metadata/PageReady"
 
 export function OrderStatistics() {
   const { t } = useTranslation()
   const { data: stats, isLoading } = useGetMarketStatsQuery()
+  usePageReady(isLoading)
   const { total_orders, total_order_value, week_orders, week_order_value } =
     stats || {
       total_orders: 0,

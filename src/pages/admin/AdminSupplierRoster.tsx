@@ -53,6 +53,7 @@ import type {
   SupplierTier,
   SupplierStatus,
 } from "../../store/api/v2/market"
+import { usePageReady } from "../../components/metadata/PageReady"
 
 const TIER_COLORS: Record<string, "success" | "primary" | "warning" | "default"> = {
   preferred: "success",
@@ -407,6 +408,7 @@ export function AdminSupplierRoster() {
 
   const { data: suppliersData, isLoading: suppliersLoading } =
     useGetMySuppliersQuery({})
+  usePageReady(suppliersLoading)
   const { data: aggregatorsData, isLoading: aggregatorsLoading } =
     useGetMyAggregatorsQuery({})
 

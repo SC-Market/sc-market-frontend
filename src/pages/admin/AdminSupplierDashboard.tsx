@@ -58,6 +58,7 @@ import type {
   RequisitionDetail,
   OrderPreview,
 } from "../../store/api/v2/market"
+import { usePageReady } from "../../components/metadata/PageReady"
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -669,6 +670,7 @@ export function AdminSupplierDashboard() {
     sortOrder: "desc",
   })
   const { data: suppliersData } = useGetMySuppliersQuery({})
+  usePageReady(boLoading || reqLoading || ordersLoading)
 
   const buyOrders = buyOrdersData?.buy_orders ?? []
   const reqs = requisitionsData?.requisitions ?? []

@@ -19,6 +19,8 @@ import { EmptyContractors } from "../../components/empty-states"
 import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
 import { usePageContractors } from "../../features/contractor/hooks/usePageContractors"
 import { contractorsSeoText } from "../../seo/hubHeads"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 export function Contractors() {
   const { t } = useTranslation()
@@ -60,6 +62,8 @@ export function Contractors() {
     index: page,
     ...searchState,
   })
+  // The org directory is this page's primary content.
+  usePageReady(isPrimaryLoading(pageData))
 
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()

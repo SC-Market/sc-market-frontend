@@ -42,6 +42,7 @@ import EmailIcon from "@mui/icons-material/Email"
 import NotificationsIcon from "@mui/icons-material/Notifications"
 import GroupsIcon from "@mui/icons-material/Groups"
 import { PATHS } from "../../routes/paths"
+import { usePageReady } from "../../components/metadata/PageReady"
 
 const AvailabilitySelector = lazy(() =>
   import("../../components/time/AvailabilitySelector").then((module) => ({
@@ -62,6 +63,7 @@ interface OnboardingStep {
 
 
 export function OnboardingPage() {
+  usePageReady(false)
   const { t } = useTranslation()
   const isMobile = useIsMobile()
   const navigate = useNavigate()

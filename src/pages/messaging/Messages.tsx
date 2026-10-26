@@ -65,7 +65,10 @@ export function Messages() {
   }, [isMobile, chat_id])
 
   return (
-    <Page title={t("messages.title", { defaultValue: "Messages" })}>
+    <Page
+      title={t("messages.title", { defaultValue: "Messages" })}
+      loading={!!chat_id && pageData.isLoading}
+    >
       <CurrentChatIDContext.Provider
         value={[
           chat_id || null,

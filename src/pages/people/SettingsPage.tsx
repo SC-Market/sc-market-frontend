@@ -46,6 +46,7 @@ import { MobileNavSettings } from "../../views/settings/MobileNavSettings"
 import { ScmdbSyncSettings } from "../../features/scmdb-sync"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { PageBusy } from "../../components/metadata/PageReady"
 
 // Admin-only; loaded only when the tab is shown.
 const MfaSettings = React.lazy(() =>
@@ -193,7 +194,7 @@ export function SettingsPage() {
       </TabPanel>
       {showMfa && (
         <TabPanel value={page} index={MFA_TAB_INDEX}>
-          <React.Suspense fallback={null}>
+          <React.Suspense fallback={<PageBusy />}>
             <MfaSettings />
           </React.Suspense>
         </TabPanel>

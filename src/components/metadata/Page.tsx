@@ -14,14 +14,24 @@ import {
 } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { usePageReady } from "./PageReady"
 
 export function Page(
   props: PropsWithChildren<{
     title?: string | null
     canonUrl?: string
     dontUseDefaultCanonUrl?: boolean
+    /**
+     * The page's primary data is still loading (its skeleton is showing).
+     * Drives the page-ready signal on <main> (`aria-busy` / `data-ready`);
+     * see PageReady.tsx and docs/testing-with-mcp.md. Omit for pages with no
+     * primary data: they are ready as soon as they mount.
+     */
+    loading?: boolean
   }>,
 ) {
+  usePageReady(!!props.loading)
+
   // Set the bare page title through Unhead. The " - SC Market" suffix is added
   // by the global idempotent titleTemplate in index.tsx, so we must NOT append
   // it here. Passing "" lets that template emit the bare brand. This overrides

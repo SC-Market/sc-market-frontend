@@ -20,13 +20,16 @@ import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext
 import { ParticleField } from "../effects/ParticleField"
 import { CommandPalette } from "../command-palette/CommandPalette"
 import { useHydrated } from "../../hooks/ssr/useHydrated"
+import {
+  PageReadyProvider,
+  usePageReadyAttributes,
+} from "../metadata/PageReady"
 
 export function Root(props: { children: React.ReactNode }) {
   const isMobile = useIsMobile()
   const [drawerOpen] = useDrawerOpen()
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
-  const bottomNavHeight = useBottomNavHeight()
   const hydrated = useHydrated()
 
   // Enable route-based prefetching
@@ -61,37 +64,65 @@ export function Root(props: { children: React.ReactNode }) {
       <CartDrawerProvider>
       <Navbar />
       <SidebarV2 />
-      <Box
-        component="main"
-        id="main-content"
-        role="main"
-        aria-label="Main content"
-        sx={{
-          display: "flex",
-          flexDirection: "column", // Vertical layout for main content
-          flex: 1,
-          minHeight: 0, // Allow flex item to shrink below content size
-          overflow: "hidden", // Prevent this container from scrolling
-          position: "relative", // For absolute positioning of bottom nav
-          // Add padding bottom to account for bottom nav (dynamically adjusts when keyboard opens)
-          paddingBottom: `${bottomNavHeight}px`,
-        }}
-      >
-        <Box
-          sx={{
-            flex: 1,
-            minHeight: 0, // Allow flex item to shrink
-            overflow: "auto", // Main content can scroll internally
-          }}
+      <PageReadyProvider>
+        <MainContent
+          floating={
+            <>
+              {!isMessagingPage && !isMobile && <PreferencesButton />}
+              <DebugPanel />
+              <MobileBottomNav />
+              <ContextAwareFAB />
+            </>
+          }
         >
           {props.children}
-        </Box>
-        {!isMessagingPage && !isMobile && <PreferencesButton />}
-        <DebugPanel />
-        <MobileBottomNav />
-        <ContextAwareFAB />
-      </Box>
+        </MainContent>
+      </PageReadyProvider>
       </CartDrawerProvider>
+    </Box>
+  )
+}
+
+/**
+ * The main content area. Carries the page-ready signal: `aria-busy` and
+ * `data-ready` (see PageReady.tsx, docs/testing-with-mcp.md). Its own
+ * component so a ready change re-renders only this element, not Root.
+ * `floating`: the controls that sit beside the scrolling page area.
+ */
+function MainContent(props: {
+  children: React.ReactNode
+  floating: React.ReactNode
+}) {
+  const bottomNavHeight = useBottomNavHeight()
+  const readyAttributes = usePageReadyAttributes()
+  return (
+    <Box
+      component="main"
+      id="main-content"
+      role="main"
+      aria-label="Main content"
+      {...readyAttributes}
+      sx={{
+        display: "flex",
+        flexDirection: "column", // Vertical layout for main content
+        flex: 1,
+        minHeight: 0, // Allow flex item to shrink below content size
+        overflow: "hidden", // Prevent this container from scrolling
+        position: "relative", // For absolute positioning of bottom nav
+        // Add padding bottom to account for bottom nav (dynamically adjusts when keyboard opens)
+        paddingBottom: `${bottomNavHeight}px`,
+      }}
+    >
+      <Box
+        sx={{
+          flex: 1,
+          minHeight: 0, // Allow flex item to shrink
+          overflow: "auto", // Main content can scroll internally
+        }}
+      >
+        {props.children}
+      </Box>
+      {props.floating}
     </Box>
   )
 }

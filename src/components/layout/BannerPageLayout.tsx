@@ -116,6 +116,7 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
   return (
     <Page
       title={title}
+      loading={isLoading}
       canonUrl={canonicalUrl}
       dontUseDefaultCanonUrl={dontUseDefaultCanonUrl}
     >

@@ -39,6 +39,8 @@ import {
 import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
 import { WIKI_PATHS } from "../../routes/paths"
 import { wikiShipsSeoText } from "../../seo/hubHeads"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 const PAGE_SIZE = 24
 
@@ -358,7 +360,11 @@ export function WikiShipBrowser() {
     if (urlParams.id && !isMobile) setSelectedShipId(urlParams.id)
   }, [urlParams.id, isMobile])
 
-  const { data, isLoading, error } = useGetShipsQuery({ pageSize: 500 })
+  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useGetShipsQuery({ pageSize: 500 })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+  )
   const allVehicles = data?.ships ?? []
 
   const manufacturers = useMemo(

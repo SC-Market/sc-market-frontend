@@ -22,6 +22,8 @@ import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { MINING_ORE_PAGE_SIZE } from "./constants"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e",
@@ -81,7 +83,7 @@ export function MiningOreBrowser() {
     navigate(GAME_DATA_PATHS.mining, { replace: true })
   }
 
-  const { data, isLoading, error } = useSearchOresQuery({
+  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchOresQuery({
     text: queryParams.q || undefined,
     system: queryParams.system || undefined,
     miningMethod: (queryParams.mining_method as "ship" | "ground" | "fps" | undefined) || undefined,
@@ -89,6 +91,10 @@ export function MiningOreBrowser() {
     page,
     pageSize: PAGE_SIZE,
   })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+  )
 
   return (
     <>

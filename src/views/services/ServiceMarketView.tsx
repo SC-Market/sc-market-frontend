@@ -9,6 +9,7 @@ import { ServiceListingsSkeleton } from "../../components/skeletons/MarketSearch
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ServiceSearchArea } from "./ServiceSearchArea"
+import { PageBusy } from "../../components/metadata/PageReady"
 
 export function ServiceMarketView() {
   const theme = useTheme<ExtendedTheme>()
@@ -32,7 +33,14 @@ export function ServiceMarketView() {
                   spacing={theme.layoutSpacing.layout}
                   justifyContent={"center"}
                 >
-                  <Suspense fallback={<ServiceListingsSkeleton />}>
+                  <Suspense
+                    fallback={
+                      <>
+                        <PageBusy />
+                        <ServiceListingsSkeleton />
+                      </>
+                    }
+                  >
                     <ServiceListings />
                   </Suspense>
                 </Grid>
@@ -55,7 +63,14 @@ export function ServiceMarketView() {
                   spacing={theme.layoutSpacing.layout}
                   justifyContent={"center"}
                 >
-                  <Suspense fallback={<ServiceListingsSkeleton />}>
+                  <Suspense
+                    fallback={
+                      <>
+                        <PageBusy />
+                        <ServiceListingsSkeleton />
+                      </>
+                    }
+                  >
                     <ServiceListings />
                   </Suspense>
                 </Grid>

@@ -58,6 +58,8 @@ import { MissionName } from "../../components/game-data/MissionName"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 import { missionsSeoText } from "../../seo/hubHeads"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 const VIEW_MODES = ["list", "grid"] as const
 
@@ -149,7 +151,7 @@ export function MissionSearch() {
   useEffect(() => { setPage(1); setAllMissions([]) }, [filterKey])
 
   // Query missions with filters
-  const { data, isLoading, isFetching, error } = useSearchMissionsQuery({
+  const { data, isLoading, isFetching, error, currentData: pageCurrentData } = useSearchMissionsQuery({
     text: debouncedSearch || undefined,
     category: category || undefined,
     careerType: careerType || undefined,
@@ -168,6 +170,10 @@ export function MissionSearch() {
     page,
     pageSize: 40,
   })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching, currentData: pageCurrentData }),
+  )
 
   const handleMissionClick = (missionCode: string, missionId: string) => {
     const params = searchParams.toString()

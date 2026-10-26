@@ -56,6 +56,8 @@ import {
   type SearchToken,
 } from "../../../../components/game-data/UnifiedSearchBar"
 import { isAwaitingData } from "../../../../util/queryLoading"
+import { usePageReady } from "../../../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
 
 /**
  * BuyOrdersRedesign — Phase 0 of the Market redesign (behind the
@@ -104,6 +106,8 @@ export function BuyOrdersRedesign() {
     text: searchText,
     ...buyOrderSortArgs(searchParams),
   })
+  // Primary content: drives main[data-ready].
+  usePageReady(isPrimaryLoading({ isLoading, isFetching, currentData }))
 
   // Active buy orders only (preserved redesign behavior).
   const activeOrders = useMemo(

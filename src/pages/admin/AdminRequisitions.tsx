@@ -44,6 +44,7 @@ import {
   useSearchGameItemsQuery,
 } from "../../store/api/v2/market"
 import type { RequisitionDetail, RequisitionLineItem, GameItemSearchResult } from "../../store/api/v2/market"
+import { usePageReady } from "../../components/metadata/PageReady"
 
 const STATUS_COLORS: Record<string, "default" | "warning" | "info" | "success" | "error"> = {
   pending: "warning",
@@ -464,6 +465,7 @@ export function AdminRequisitions() {
   const [viewId, setViewId] = useState<string | null>(null)
 
   const { data, isLoading } = useGetRequisitionsQuery({})
+  usePageReady(isLoading)
   const requisitions: RequisitionDetail[] = data?.requisitions || []
 
   return (

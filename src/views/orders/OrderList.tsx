@@ -65,6 +65,7 @@ import {
   statusNames,
 } from "../../features/orders/domain/constants"
 import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
+import { usePageReady } from "../../components/metadata/PageReady"
 
 export { statusColors, statusNames }
 
@@ -462,6 +463,8 @@ export function OrdersViewPaginated(props: {
     debouncedBuyerUsername, debouncedSellerUsername,
     activeFiltersCount, clearFilters,
   } = useOrderSearch({ mine, assigned, unassigned, contractor, shop_id, username: profile?.username })
+  // Order lists are primary content on the orders and dashboard pages.
+  usePageReady(awaitingData)
 
   const tabs: [string, string][] = [
     ["all", t("orders.tabs.all")],

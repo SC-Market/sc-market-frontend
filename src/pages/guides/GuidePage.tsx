@@ -67,6 +67,7 @@ export function GuidePage() {
       head={buildGuideHead(guide, category, body?.steps ?? [], FRONTEND_URL)}
       path={HELP_PATHS.guide(guide.category, guide.slug)}
       headerTitle={guide.title}
+      loading={!body && !error}
       breadcrumbs={[
         helpCrumb,
         { label: category.title, href: HELP_PATHS.category(category.id) },

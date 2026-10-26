@@ -34,6 +34,8 @@ import { ContractListingSkeleton } from "../../components/skeletons/ContractList
 import { EmptyContracts } from "../../components/empty-states"
 import { ORDER_PATHS, USER_PATHS } from "../../routes/paths"
 import { isAwaitingData } from "../../util/queryLoading"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 /**
  * "<author> - <time ago> - <price> <payment type>" line on an open contract card.
@@ -280,7 +282,12 @@ export function ContractListings(props: { user?: string }) {
     currentData,
     error,
     refetch,
+    isLoading: pageIsLoading,
   } = useGetPublicContractsQuery()
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading: pageIsLoading, isFetching, currentData }),
+  )
 
   const filteredListings = useMemo(
     () =>

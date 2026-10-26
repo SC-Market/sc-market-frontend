@@ -42,6 +42,8 @@ import {
 import type { VariantDetail, ListingItemDetail } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { SHOP_PATHS } from "../../../../routes/paths"
+import { usePageReady } from "../../../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
 
 /**
  * ListingDetailRedesign — Phase 0 of the Market redesign (behind the
@@ -62,9 +64,13 @@ export function ListingDetailRedesign() {
   const issueAlert = useAlertHook()
   const { id } = useParams<{ id: string }>()
 
-  const { data, isLoading, error } = useGetListingDetailQuery(
+  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useGetListingDetailQuery(
     { id: id! },
     { skip: !id },
+  )
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
   )
 
   const [addToCart, { isLoading: isAdding }] = useAddToCartMutation()

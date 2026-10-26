@@ -51,6 +51,8 @@ import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons
 import { buildItemHead } from "../../seo/gameDataHeads"
 import { headDescription } from "../../seo/pageHead"
 import { SeoHead } from "../../seo/SeoHead"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
@@ -61,7 +63,11 @@ export function WikiItemDetail() {
   const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { data: item, isLoading, error } = useGetItemDetailQuery({ id: id! })
+  const { data: item, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useGetItemDetailQuery({ id: id! })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+  )
   const { openAddToCart } = useCartDrawer()
 
   // Fetch related market listings for this item

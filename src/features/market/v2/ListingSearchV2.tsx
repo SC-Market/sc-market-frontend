@@ -43,6 +43,8 @@ import { getQualityMode } from "../../../util/qualityMode";
 import { LanguageFilter } from "../../../components/search/LanguageFilter";
 import { ListingWrapper } from "../components/listings/ListingWrapper";
 import { ListingSkeleton } from "../../../components/skeletons";
+import { usePageReady } from "../../../components/metadata/PageReady";
+import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore";
 import { ListingPagination } from "../components/listings/ListingPagination";
 import { EmptyListings } from "../../../components/empty-states";
 import { useMarketSidebarExp } from "../hooks/MarketSidebar";
@@ -157,6 +159,8 @@ export function ListingSearchV2() {
     error,
     refetch,
   } = useSearchListingsQuery(searchQuery);
+  // The results grid is the market page's primary content (main[data-ready]).
+  usePageReady(isPrimaryLoading({ isFetching, currentData }));
 
   const { listings = [], total = 0, page: currentPage = 1, page_size: currentPageSize = 48 } = results || {};
 

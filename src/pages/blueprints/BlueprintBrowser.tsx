@@ -69,6 +69,8 @@ const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTra
 import { useShoppingList } from "../../features/wishlists/hooks/WishlistContext"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { blueprintsSeoText } from "../../seo/hubHeads"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 type ViewMode = "grid" | "list"
 const VIEW_MODES: readonly ViewMode[] = ["grid", "list"]
@@ -172,7 +174,7 @@ export function BlueprintBrowser() {
   useEffect(() => { setPage(1); setAllBlueprints([]) }, [filterKey])
 
   // Query blueprints with filters
-  const { data, isLoading, isFetching, error } = useSearchBlueprintsQuery({
+  const { data, isLoading, isFetching, error, currentData: pageCurrentData } = useSearchBlueprintsQuery({
     text: debouncedSearch || undefined,
     itemCategory: category || undefined,
     itemSubcategory: subcategory || undefined,
@@ -186,6 +188,10 @@ export function BlueprintBrowser() {
     page,
     pageSize: 40,
   }, { refetchOnMountOrArgChange: true })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching, currentData: pageCurrentData }),
+  )
 
   // Accumulate results
   useEffect(() => {

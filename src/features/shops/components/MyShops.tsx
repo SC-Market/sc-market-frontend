@@ -26,6 +26,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetMyShopsQuery, useQuickCreateShopMutation } from "../../../store/api/v2/market"
 import type { ShopResponse } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
+import { usePageReady } from "../../../components/metadata/PageReady"
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
@@ -375,6 +376,7 @@ function EmptyState({ onCreateClick, isCreating }: { onCreateClick: () => void; 
 
 export function MyShops() {
   const { data: shops, isLoading } = useGetMyShopsQuery()
+  usePageReady(isLoading)
   const [quickCreate, { isLoading: isCreating }] = useQuickCreateShopMutation()
 
   const handleQuickCreate = async () => {

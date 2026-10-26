@@ -45,6 +45,8 @@ import { getRelativeTime } from "../../../util/time"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
+import { usePageReady } from "../../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 
 // Single chat entry in the chat list
 function ChatEntry(props: {
@@ -236,7 +238,17 @@ export function MessagingSidebarContent(
   const isMobile = useIsMobile()
   const { t } = useTranslation()
   const [, setCreatingMessageGroup] = useMessageGroupCreate()
-  const { data: chats, isFetching, currentData, refetch } = useGetMyChatsQuery()
+  const {
+    data: chats,
+    isFetching,
+    currentData,
+    refetch,
+    isLoading: pageIsLoading,
+  } = useGetMyChatsQuery()
+  // The chat list is primary content on the messages pages.
+  usePageReady(
+    isPrimaryLoading({ isLoading: pageIsLoading, isFetching, currentData }),
+  )
   const [searchQuery, setSearchQuery] = useState("")
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 

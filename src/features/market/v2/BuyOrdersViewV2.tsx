@@ -41,6 +41,8 @@ import { BuyOrdersTableV2 } from "./components/BuyOrdersTableV2"
 import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
+import { usePageReady } from "../../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 
 /**
  * BuyOrdersViewV2 — V2 buy orders browse page.
@@ -71,12 +73,16 @@ export function BuyOrdersViewV2() {
     setPage(0)
   }, [setSearchParams])
 
-  const { data, isFetching, currentData } = useSearchBuyOrdersQuery({
+  const { data, isFetching, currentData, isLoading: pageIsLoading } = useSearchBuyOrdersQuery({
     page: page + 1,
     pageSize: perPage,
     text: searchText,
     ...buyOrderSortArgs(searchParams),
   })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading: pageIsLoading, isFetching, currentData }),
+  )
 
   const aggregates = useMemo(() => {
     if (!data?.buy_orders) return []

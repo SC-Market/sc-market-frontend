@@ -174,6 +174,11 @@ export interface RouteRecord {
   hasMainLandmark: boolean
   /** A skeleton/spinner is still showing after settling (page stuck loading). */
   stillLoading: boolean
+  /**
+   * The page-ready signal on <main> after settling: `data-ready` (with
+   * `aria-busy` checked to agree). See components/metadata/PageReady.tsx.
+   */
+  pageReady: string | null
   /** Internal hrefs rendered inside <main>, sorted and de-duplicated. */
   mainLinks: string[]
   consoleErrors: string[]
@@ -431,6 +436,7 @@ export function mountApp(
         stillLoading:
           document.querySelector('.MuiSkeleton-root, [role="progressbar"]') !==
           null,
+        pageReady: readySignal(main),
         mainLinks: [...new Set(links)].sort(),
         consoleErrors: [...new Set(consoleErrors)].sort(),
       }
@@ -439,6 +445,20 @@ export function mountApp(
   }
   current = handle
   return handle
+}
+
+/**
+ * `data-ready` of <main>, or a marker when `aria-busy` disagrees with it
+ * (they must always flip together).
+ */
+function readySignal(main: Element | null): string | null {
+  if (!main) return null
+  const ready = main.getAttribute("data-ready")
+  const busy = main.getAttribute("aria-busy")
+  const agree =
+    (ready === "true" && busy === "false") ||
+    (ready === "false" && busy === "true")
+  return agree ? ready : `inconsistent: data-ready=${ready} aria-busy=${busy}`
 }
 
 /** Mount, settle, record, unmount. */

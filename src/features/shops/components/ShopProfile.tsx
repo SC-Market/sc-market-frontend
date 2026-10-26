@@ -71,13 +71,19 @@ import {
   ShopListingsGridSkeleton,
   ShopProfileSkeleton,
 } from "../../../components/skeletons/ShopProfileSkeleton"
+import { usePageReady } from "../../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
   const theme = useTheme<ExtendedTheme>()
-  const { data: shop, isLoading, error } = useGetShopQuery(
+  const { data: shop, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useGetShopQuery(
     { slug: slug! },
     { skip: !slug },
+  )
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
   )
   const currentTab = useShopTab()
 
@@ -454,7 +460,7 @@ function ShopListingsTab(props: { slug: string }) {
   const pageSize = SHOP_LISTINGS_PAGE_SIZE
   const debouncedSearch = useDebounce(search, 300)
 
-  const { data, isLoading } = useSearchListingsQuery({
+  const { data, isLoading, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchListingsQuery({
     shopSlug: props.slug,
     page,
     pageSize,
@@ -462,6 +468,10 @@ function ShopListingsTab(props: { slug: string }) {
     sortOrder,
     text: debouncedSearch || undefined,
   })
+  // Shop listings tab: primary content.
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+  )
 
   return (
     <Box>

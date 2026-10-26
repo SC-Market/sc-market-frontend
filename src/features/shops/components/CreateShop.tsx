@@ -22,6 +22,7 @@ import { useCreateShopMutation } from "../../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { PATHS, SHOP_PATHS } from "../../../routes/paths"
+import { usePageReady } from "../../../components/metadata/PageReady"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -55,6 +56,7 @@ function generateSlug(name: string): string {
 }
 
 export function CreateShop() {
+  usePageReady(false)
   const navigate = useNavigate()
   const [createShop, { isLoading }] = useCreateShopMutation()
   const { data: profile } = useGetUserProfileQuery()

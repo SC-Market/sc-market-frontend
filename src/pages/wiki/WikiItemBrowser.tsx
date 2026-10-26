@@ -28,6 +28,8 @@ import {
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 import { wikiItemsSeoText } from "../../seo/hubHeads"
+import { usePageReady } from "../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
 const VIEW_MODES = ["grid", "list"] as const
 const CARD_HEIGHT = 280
@@ -188,7 +190,7 @@ export function WikiItemBrowser() {
     setSearchParams(params, { replace: true })
   }
 
-  const { data, isLoading, error } = useSearchItemsQuery({
+  const { data, isLoading, error, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchItemsQuery({
     text: queryParams.q || undefined,
     type: queryParams.type || typeFilter || undefined,
     size: sizeFilter || undefined,
@@ -197,6 +199,10 @@ export function WikiItemBrowser() {
     page,
     pageSize: viewMode === "list" ? 30 : 24,
   })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+  )
 
   const handleItemClick = (itemId: string) => navigate(WIKI_PATHS.item(itemId))
   const handlePageChange = (_: unknown, value: number) => {

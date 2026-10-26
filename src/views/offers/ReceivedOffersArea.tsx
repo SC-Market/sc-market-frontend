@@ -73,6 +73,7 @@ import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
 
 // Map for all statuses
 import { normalizeOfferStatus } from "../../features/offers/domain/types"
+import { usePageReady } from "../../components/metadata/PageReady"
 
 // Status icon mapping for offer rows
 
@@ -495,6 +496,8 @@ export function OffersViewPaginated(props: {
     activeFiltersCount, clearFilters,
     profile, issueAlert,
   } = useOfferSearch({ mine, assigned, unassigned, contractor, shop_id })
+  // Offer lists are primary content on the orders and dashboard pages.
+  usePageReady(awaitingData)
 
   const tabs = useMemo(() => {
     const t_ = [

@@ -13,8 +13,11 @@ import {
 import { Groups, Settings } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { ORG_PATHS, PATHS } from "../../routes/paths"
+import { usePageReady } from "../../components/metadata/PageReady"
 
 export function MyOrgs() {
+  // No data of its own (the profile is already loaded): ready on mount.
+  usePageReady(false)
   const { data: profile } = useGetUserProfileQuery()
   const orgs = profile?.contractors || []
 

@@ -23,6 +23,8 @@ import {
 } from "../shopDirectoryConfig"
 import { FRONTEND_URL } from "../../../util/constants"
 import { shopDirectorySeoText } from "../../../seo/hubHeads"
+import { usePageReady } from "../../../components/metadata/PageReady"
+import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 
 type SortOption = "rating" | "total_sales" | "created_at" | "name"
 
@@ -49,7 +51,7 @@ export function ShopDirectory() {
   const debouncedSearch = useDebounce(search, 300)
   const currentSort = SORT_OPTIONS[sortIndex]
 
-  const { data, isLoading } = useBrowseShopsQuery({
+  const { data, isLoading, isFetching: pageIsFetching, currentData: pageCurrentData } = useBrowseShopsQuery({
     search: debouncedSearch || undefined,
     tag: selectedTag || undefined,
     sortBy: currentSort.sortBy,
@@ -57,6 +59,10 @@ export function ShopDirectory() {
     page,
     pageSize,
   })
+  // Primary content: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+  )
 
   const totalPages = data ? Math.ceil(data.total / pageSize) : 0
 

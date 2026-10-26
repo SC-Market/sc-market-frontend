@@ -8,9 +8,11 @@ import {
   RecentListingsHeader,
   RecentListingsSkeleton,
 } from "./RecentListingsSkeleton"
+import { usePageReady } from "../metadata/PageReady"
+import { isPrimaryLoading } from "../metadata/pageReadyStore"
 
 export function RecentListingsV2() {
-  const { data, isLoading } = useSearchListingsQuery({
+  const { data, isLoading, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchListingsQuery({
     page: 1,
     pageSize: RECENT_LISTINGS_COUNT,
     status: "active",
@@ -20,6 +22,10 @@ export function RecentListingsV2() {
     sortBy: "created_at",
     sortOrder: "desc",
   })
+  // Primary content of the home page: drives main[data-ready].
+  usePageReady(
+    isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
+  )
 
   if (isLoading || !data) return <RecentListingsSkeleton />
 
