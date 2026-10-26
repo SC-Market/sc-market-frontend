@@ -15,6 +15,7 @@ describe("shop webhook events", () => {
       "order_status_change",
       "order_review",
       "market_item_bid",
+      "public_contract_create",
     ])
   })
 })

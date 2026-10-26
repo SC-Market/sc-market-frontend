@@ -9,6 +9,7 @@ import { Order, OrderComment, OrderReview } from "../../features/orders/domain/t
 import { MarketBid, MarketListing } from "../../features/market"
 import { MinimalUser } from "../../datatypes/User"
 import { OfferSession } from "../../features/offers/api/offerApi"
+import type { PublicContract } from "../../features/contracting/domain/types"
 
 export interface Notification {
   read: boolean
@@ -24,6 +25,7 @@ export interface Notification {
     | OrderReview
     | OrderComment
     | OfferSession
+    | PublicContract
   timestamp: string
   actors: MinimalUser[]
   scope?: "individual" | "organization"

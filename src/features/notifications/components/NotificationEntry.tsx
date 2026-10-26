@@ -14,6 +14,7 @@ import {
 } from "../types"
 import { NotificationBidV2 } from "../types/NotificationBidV2"
 import { NotificationPriceAlert } from "../types/NotificationPriceAlert"
+import { NotificationPublicContract } from "../types/NotificationPublicContract"
 
 export function NotificationEntry(props: { notif: Notification }) {
   const { notif } = props
@@ -45,6 +46,8 @@ export function NotificationEntry(props: { notif: Notification }) {
       return <NotificationBidV2 notif={notif} />
     case "price_alert":
       return <NotificationPriceAlert notif={notif} />
+    case "public_contract_create":
+      return <NotificationPublicContract notif={notif} />
     case "admin_alert":
       return <NotificationAdminAlert notif={notif} />
     case "order_review_revision_requested":

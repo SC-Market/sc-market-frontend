@@ -30,4 +30,9 @@ export const WEBHOOK_ACTIONS: {
     description: "A new bid on one of this shop's auctions",
     action_name: "market_item_bid",
   },
+  {
+    label: "New public contracts (site-wide)",
+    description: "Every new public contract posted on SC Market, by anyone",
+    action_name: "public_contract_create",
+  },
 ]
