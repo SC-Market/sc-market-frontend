@@ -1,7 +1,15 @@
 body {
   margin: 0;
-  /* Roboto with Arial fallback (similar metrics) for minimal CLS */
+  /*
+   * The theme's font stack (hooks/styles/theme), so text shown before the app
+   * renders (the edge bridge's HTML summary) is already in Electrolize or its
+   * metric-matched fallback (fonts.css): no Roboto web-font swap shifting it,
+   * and no font change when the app takes over.
+   */
   font-family:
+    "Electrolize",
+    "Electrolize Fallback",
+    "Electrolize Fallback Roboto",
     "Roboto",
     Arial,
     -apple-system,
