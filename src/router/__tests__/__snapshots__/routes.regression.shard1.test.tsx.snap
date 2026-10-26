@@ -1316,7 +1316,9 @@ exports[`routes (shard 1/4) > /shops/:slug/:tab 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/shops/test-shop/about",
-  "h1": [],
+  "h1": [
+    "Test Shop",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",

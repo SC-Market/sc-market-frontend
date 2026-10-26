@@ -193,7 +193,7 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
             flexWrap: "wrap",
           }}
         >
-          <Typography color="text.primary" variant="h6" fontWeight={700}>
+          <Typography color="text.primary" variant="h6" component="h1" fontWeight={700}>
             {shop.name}
           </Typography>
           <ShareButton title={`${shop.name} - SC Market`} />

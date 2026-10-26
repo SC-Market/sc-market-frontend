@@ -87,7 +87,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
             flexWrap: "wrap",
           }}
         >
-          <Typography color="text.secondary" variant="h6" fontWeight={600}>
+          <Typography color="text.secondary" variant="h6" component="h1" fontWeight={600}>
             {contractor.name}
           </Typography>
           {!contractor.spectrum_id.startsWith("~") && (

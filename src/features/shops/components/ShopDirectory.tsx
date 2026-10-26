@@ -89,7 +89,7 @@ export function ShopDirectory() {
         )}
       </Helmet>
       {/* Header */}
-      <Typography variant="h4" fontWeight={700} sx={{ mb: 3 }}>
+      <Typography variant="h4" component="h1" fontWeight={700} sx={{ mb: 3 }}>
         Browse Shops
       </Typography>
 

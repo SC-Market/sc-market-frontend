@@ -294,7 +294,7 @@ exports[`routes (shard 4/4) > /buyorders 1`] = `
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Market - SC Market",
+  "title": "Buy Orders - SC Market",
   "url": "/buyorders",
 }
 `;
@@ -306,7 +306,9 @@ exports[`routes (shard 4/4) > /contractor/:id 1`] = `
   ],
   "errorElementErrors": [],
   "finalUrl": "/contractor/TESTORG",
-  "h1": [],
+  "h1": [
+    "Test Org",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",

@@ -272,7 +272,9 @@ exports[`routes (shard 3/4) > /contractor/:id/:tab 1`] = `
   ],
   "errorElementErrors": [],
   "finalUrl": "/contractor/TESTORG/about",
-  "h1": [],
+  "h1": [
+    "Test Org",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
@@ -701,7 +703,7 @@ exports[`routes (shard 3/4) > /market/services 1`] = `
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Market - SC Market",
+  "title": "Services - SC Market",
   "url": "/market/services",
 }
 `;
@@ -1381,7 +1383,9 @@ exports[`routes (shard 3/4) > /shops 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/shops",
-  "h1": [],
+  "h1": [
+    "Browse Shops",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",

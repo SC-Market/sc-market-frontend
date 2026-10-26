@@ -1249,7 +1249,7 @@ exports[`routes (shard 2/4) > /services 1`] = `
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Market - SC Market",
+  "title": "Services - SC Market",
   "url": "/services",
 }
 `;
@@ -1374,7 +1374,9 @@ exports[`routes (shard 2/4) > /shops/:slug 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/shops/test-shop",
-  "h1": [],
+  "h1": [
+    "Test Shop",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",

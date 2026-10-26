@@ -15,8 +15,13 @@ vi.mock("react-i18next", async () => {
   }
 })
 
+// Records the document (tab) title the page asks for
 vi.mock("../../../../components/metadata/Page", () => ({
-  Page: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Page: ({ children, title }: { children: React.ReactNode; title?: string }) => (
+    <div data-testid="page" data-page-title={title}>
+      {children}
+    </div>
+  ),
 }))
 vi.mock("../../../../components/layout/ContainerGrid", () => ({
   OpenLayout: ({ children }: { children: React.ReactNode }) => <main>{children}</main>,
@@ -64,6 +69,8 @@ describe("MarketPageV2", () => {
   ])("%s: titled %s, shows its action and content, no tabs", async (path, title, action, content) => {
     renderAt(path)
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(title)
+    // Tab title matches the page ("Buy Orders - SC Market", not "Market")
+    expect(screen.getByTestId("page")).toHaveAttribute("data-page-title", title)
     expect(await screen.findByRole("button", { name: action })).toBeInTheDocument()
     expect(await screen.findByTestId(content)).toBeInTheDocument()
     expect(screen.queryByRole("tablist")).toBeNull()

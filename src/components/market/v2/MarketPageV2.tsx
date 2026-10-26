@@ -49,7 +49,7 @@ export function MarketPageV2() {
   const title = marketPageTitle(page, t)
 
   return (
-    <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
+    <Page title={title} dontUseDefaultCanonUrl={true}>
       <MarketSidebarContext.Provider
         value={[marketSidebarOpen, setMarketSidebarOpen]}
       >
