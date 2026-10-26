@@ -6,6 +6,16 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
 
+# HSTS on the main site only: white-label custom domains are served by this
+# same project and must not get it. No includeSubDomains (not every
+# *.sc-market.space host is confirmed to serve https) and no preload. The edge
+# bridge (src/bridge/handler.ts HSTS_HEADER) sends the same value.
+https://sc-market.space/*
+  Strict-Transport-Security: max-age=31536000
+
+https://www.sc-market.space/*
+  Strict-Transport-Security: max-age=31536000
+
 # Web Linking (RFC 8288) headers advertising machine-readable entry points for
 # agents/tooling. The API and its catalog live on the api. subdomain, so these
 # are absolute cross-origin URLs. api-catalog rel is from RFC 9727; service-desc

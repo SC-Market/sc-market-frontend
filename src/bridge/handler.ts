@@ -219,11 +219,20 @@ export async function resolvePage(
  * /index.html rule — always revalidate so it references current hashed
  * chunks), the `/*` CORS and security headers, and for "/" the `Link` header.
  */
+/**
+ * HSTS for the main site, mirroring the `https://sc-market.space/*` rules in
+ * public/_headers. Not includeSubDomains: not every *.sc-market.space host is
+ * known to serve https. Never sent on white-label custom domains (they are
+ * served by the same deployment, but their TLS is the org's business).
+ */
+export const HSTS_HEADER = "max-age=31536000"
+
 function shellHeaders(
   shell: Response,
   outcome: PageOutcome["kind"],
-  pathname: string,
+  url: URL,
 ): Headers {
+  const pathname = url.pathname
   const headers = new Headers({
     "Content-Type": shell.headers.get("Content-Type") || "text/html; charset=utf-8",
     "Cache-Control": "no-cache",
@@ -237,6 +246,12 @@ function shellHeaders(
   })
   // The `/` rule's Link header (agent/tooling entry points).
   if (pathname === "/") headers.set("Link", HOME_LINK_HEADER)
+  if (
+    url.protocol === "https:" &&
+    (url.hostname === "sc-market.space" || url.hostname === "www.sc-market.space")
+  ) {
+    headers.set("Strict-Transport-Security", HSTS_HEADER)
+  }
   return headers
 }
 
@@ -263,7 +278,7 @@ export async function handleBridgeRequest(
     console.warn(`bridge fail-open for ${url.pathname}: ${outcome.reason}`)
   }
 
-  const headers = shellHeaders(shell, outcome.kind, url.pathname)
+  const headers = shellHeaders(shell, outcome.kind, url)
   const status = outcome.kind === "notFound" ? 404 : 200
   const html =
     outcome.kind === "passthrough"

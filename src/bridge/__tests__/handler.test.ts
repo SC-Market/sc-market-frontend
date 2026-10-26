@@ -5,6 +5,7 @@ import {
   API_TIMEOUT_MS,
   handleBridgeRequest,
   HOME_LINK_HEADER,
+  HSTS_HEADER,
   type BridgeRuntime,
 } from "../handler"
 import type { HtmlRewriterLike } from "../render"
@@ -248,6 +249,28 @@ describe("handleBridgeRequest: static pages and hubs", () => {
     for (const path of ["/", "/wiki", "/wiki/locations"]) {
       expect((await run(path)).headers.get("X-SCM-Bridge"), path).toBe("page")
     }
+  })
+
+  it("sends HSTS on the main site, matching public/_headers", async () => {
+    const { run } = setup(json({}))
+    const res = await run("/")
+    expect(res.headers.get("Strict-Transport-Security")).toBe(HSTS_HEADER)
+    expect(HSTS_HEADER).not.toMatch(/includeSubDomains|preload/)
+    expect(headersFile).toContain(
+      `https://sc-market.space/*\n  Strict-Transport-Security: ${HSTS_HEADER}`,
+    )
+    expect(headersFile).toContain(
+      `https://www.sc-market.space/*\n  Strict-Transport-Security: ${HSTS_HEADER}`,
+    )
+    // Not as a catch-all rule, which would also hit white-label domains.
+    const catchAll = headersFile.split(/\n\n/).find((b) => b.startsWith("/*"))
+    expect(catchAll).not.toContain("Strict-Transport-Security")
+  })
+
+  it("does not send HSTS on plain-http dev hosts", async () => {
+    const { run } = setup(json({}))
+    const res = await run("/", {}, "http://localhost")
+    expect(res.headers.get("Strict-Transport-Security")).toBeNull()
   })
 
   it("only sets Link on /", async () => {
