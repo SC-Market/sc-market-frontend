@@ -114,6 +114,12 @@ first; they're also what screen-reader users get.
    page.locator('[data-testid="listing-card"][data-id="…"]')
    ```
 
+   Repeated-entity test ids in use (all with `data-id`): `listing-card`,
+   `cart-item`, `buy-order-card`, `buy-order-row`, `offer-row`,
+   `order-row`, `org-role-row`, `org-member-row`, `shop-card`,
+   `blueprint-card`, `mission-card`, `resource-card`, `wiki-item-card`,
+   `ship-card`.
+
    Never put a test id on something that can have a good accessible name
    instead, and never select on MUI class names (`css-…` hashes change on
    every style edit).
