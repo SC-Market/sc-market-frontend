@@ -27,8 +27,13 @@ import {
   type CreateTestAccountResponse,
 } from "../../store/api/v2/market"
 import { describeMfaError } from "../../features/mfa/errors"
+import {
+  credentialsJson,
+  downloadJson,
+  type TestAccountCredential,
+} from "../../util/testAccountCredentials"
 
-const USERNAME_RE = /^test[a-z0-9_-]{2,36}$/i
+const USERNAME_RE = /^~?test[a-z0-9_-]{2,36}$/i
 
 function CopyButton(props: { value: string; testId?: string }) {
   const { t } = useTranslation()
@@ -48,12 +53,17 @@ function CopyButton(props: { value: string; testId?: string }) {
 }
 
 /** Shown once, right after creation. Closing drops the secret from the store. */
-function SecretDialog(props: { account: CreateTestAccountResponse | undefined; onClose: () => void }) {
+function SecretDialog(props: {
+  account: CreateTestAccountResponse | undefined
+  session: TestAccountCredential[]
+  onClose: () => void
+}) {
   const { t } = useTranslation()
   const a = props.account
-  const fileEntry = a
-    ? JSON.stringify({ [a.username]: { username: a.username, secret: a.secret } }, null, 2)
-    : ""
+  const credential: TestAccountCredential | null = a
+    ? { username: a.username, secret: a.secret, otpauth_uri: a.otpauth_uri }
+    : null
+  const fileEntry = credential ? credentialsJson([credential]) : ""
   return (
     <Dialog open={!!a} maxWidth="sm" fullWidth>
       <DialogTitle>{t("admin.testAccounts.secretTitle", "Save this authenticator secret now")}</DialogTitle>
@@ -95,7 +105,35 @@ function SecretDialog(props: { account: CreateTestAccountResponse | undefined; o
               >
                 {fileEntry}
               </Box>
-              <CopyButton value={fileEntry} />
+              <Stack direction="row" spacing={1} sx={{ mt: 1 }} flexWrap="wrap" useFlexGap>
+                <Button
+                  variant="contained"
+                  size="small"
+                  data-testid="download-test-account-credentials"
+                  onClick={() => credential && downloadJson(credentialsJson([credential]))}
+                >
+                  {t("admin.testAccounts.download", "Download credentials")}
+                </Button>
+                {props.session.length > 1 && (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    data-testid="download-all-test-account-credentials"
+                    onClick={() => downloadJson(credentialsJson(props.session))}
+                  >
+                    {t("admin.testAccounts.downloadAll", "Download all created this session ({{count}})", {
+                      count: props.session.length,
+                    })}
+                  </Button>
+                )}
+                <CopyButton value={fileEntry} />
+              </Stack>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                {t(
+                  "admin.testAccounts.chmod",
+                  "Save it as ~/.config/scmarket-test-accounts.json and run chmod 600 on it. Merge several downloads with jq -s add a.json b.json.",
+                )}
+              </Typography>
             </Box>
           </Stack>
         )}
@@ -117,6 +155,9 @@ export function AdminTestAccountsView() {
   const [username, setUsername] = useState("")
   const [displayName, setDisplayName] = useState("")
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
+  // Accounts created on this page since it loaded, for "Download all". Only in
+  // this component's state: gone on reload, never stored or sent anywhere.
+  const [session, setSession] = useState<TestAccountCredential[]>([])
 
   const validUsername = USERNAME_RE.test(username.trim())
   const canCreate = validUsername && displayName.trim().length > 0 && !createState.isLoading
@@ -128,6 +169,11 @@ export function AdminTestAccountsView() {
       createTestAccountRequest: { username: username.trim(), display_name: displayName.trim() },
     })
     if ("data" in result && result.data) {
+      const c = result.data
+      setSession((prev) => [
+        ...prev.filter((p) => p.username !== c.username),
+        { username: c.username, secret: c.secret, otpauth_uri: c.otpauth_uri },
+      ])
       setUsername("")
       setDisplayName("")
     }
@@ -163,7 +209,7 @@ export function AdminTestAccountsView() {
                 setUsername(e.target.value)
               }}
               error={username !== "" && !validUsername}
-              helperText={t("admin.testAccounts.usernameHelp", 'Starts with "test", e.g. test-buyer')}
+              helperText={t("admin.testAccounts.usernameHelp", "\"test\" + a name, e.g. test-buyer; saved as ~test-buyer")}
               inputProps={{ "data-testid": "test-account-username", autoComplete: "off" }}
             />
             <TextField
@@ -239,7 +285,7 @@ export function AdminTestAccountsView() {
         </TableContainer>
       </Paper>
 
-      <SecretDialog account={createState.data} onClose={() => createState.reset()} />
+      <SecretDialog account={createState.data} session={session} onClose={() => createState.reset()} />
 
       <Dialog open={confirmDelete !== null} onClose={() => setConfirmDelete(null)}>
         <DialogTitle>{t("admin.testAccounts.deleteTitle", "Delete {{username}}?", { username: confirmDelete })}</DialogTitle>

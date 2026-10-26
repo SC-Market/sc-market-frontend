@@ -263,17 +263,23 @@ separate "test realm", enforced on the server and in the database:
 
 1. The owner enrolls two-factor on their admin account (Settings → Two-factor).
 2. Admin → **Test accounts** (`/admin/test-accounts`). Create e.g.
-   `test-buyer` and `test-seller` (usernames must start with `test`). Each
-   creation asks for a fresh authenticator code.
-3. The page shows the account's TOTP secret **once**, with a ready-made
-   entry for the secrets file. Save it to `~/.config/scmarket-test-accounts.json`:
+   `test-buyer` and `test-seller`. They are saved as `~test-buyer` and
+   `~test-seller`: the `~` prefix is reserved for test accounts (RSI and
+   Discord handles never contain it, and a DB CHECK ties it to `is_test`).
+   Each creation asks for a fresh authenticator code.
+3. The page shows the account's TOTP secret **once**. Use **Download
+   credentials** (or **Download all created this session**) and save the
+   file as `~/.config/scmarket-test-accounts.json`:
 
    ```json
    {
-     "test-buyer": { "username": "test-buyer", "secret": "BASE32SECRET" },
-     "test-seller": { "username": "test-seller", "secret": "BASE32SECRET" }
+     "~test-buyer": { "username": "~test-buyer", "secret": "BASE32SECRET", "otpauth_uri": "otpauth://..." },
+     "~test-seller": { "username": "~test-seller", "secret": "BASE32SECRET", "otpauth_uri": "otpauth://..." }
    }
    ```
+
+   `otpauth_uri` is optional. Merge several downloads with
+   `jq -s add a.json b.json > ~/.config/scmarket-test-accounts.json`.
 
    ```bash
    chmod 600 ~/.config/scmarket-test-accounts.json
@@ -292,7 +298,8 @@ separate "test realm", enforced on the server and in the database:
    node -e '
    const fs = require("fs"), { createHmac } = require("crypto")
    const f = process.env.HOME + "/.config/scmarket-test-accounts.json"
-   const { secret } = JSON.parse(fs.readFileSync(f, "utf8"))[process.argv[1]]
+   const entry = JSON.parse(fs.readFileSync(f, "utf8"))[process.argv[1]]
+   const secret = entry.secret ?? entry.totp_secret
    const A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567"
    let bits = ""
    for (const c of secret.replace(/=+$/, "")) bits += A.indexOf(c).toString(2).padStart(5, "0")
@@ -302,7 +309,7 @@ separate "test realm", enforced on the server and in the database:
    const h = createHmac("sha1", key).update(msg).digest()
    const o = h[19] & 15
    console.log(String((h.readUInt32BE(o) & 0x7fffffff) % 1e6).padStart(6, "0"))
-   ' test-buyer
+   ' '~test-buyer'
    ```
 
    A code works once (replays are refused) and for about 30 seconds either
@@ -323,7 +330,7 @@ separate "test realm", enforced on the server and in the database:
        method: "POST",
        credentials: "include",
        headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({ username: "test-buyer", code: "<6 digits>" }),
+       body: JSON.stringify({ username: "~test-buyer", code: "<6 digits>" }),
      })
      return r.status
    }
