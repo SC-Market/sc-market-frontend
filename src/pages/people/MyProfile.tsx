@@ -1,11 +1,12 @@
-import React, { lazy } from "react"
+import React from "react"
 import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
 import { usePageMyProfile } from "../../features/profile/hooks/usePageMyProfile"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const ViewProfile = lazy(
+const ViewProfile = lazyWithRetry(
   () => import("../../features/profile/components/ViewProfile"),
 )
 

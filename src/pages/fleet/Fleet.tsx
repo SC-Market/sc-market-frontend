@@ -1,4 +1,4 @@
-import React, { lazy } from "react"
+import React from "react"
 import { Grid } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -7,13 +7,14 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { usePageFleet } from "../../features/fleet"
 import { FleetPageSkeleton } from "../../features/fleet/components/FleetSections.skeleton"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const Ships = lazy(() =>
+const Ships = lazyWithRetry(() =>
   import("../../views/fleet/Ships").then((module) => ({
     default: module.Ships,
   })),
 )
-const ActiveDeliveries = lazy(() =>
+const ActiveDeliveries = lazyWithRetry(() =>
   import("../../views/fleet/ActiveDeliveries").then((module) => ({
     default: module.ActiveDeliveries,
   })),

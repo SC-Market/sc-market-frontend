@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, lazy } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Grid, Skeleton } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -6,8 +6,9 @@ import { LazySection } from "../../components/layout/LazySection"
 import { useGetUserProfileQuery, useProfileUpdateAvailabilityMutation, useProfileGetAvailabilityQuery } from "../../features/profile/api/profileApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { convertAvailability } from "../../util/availability"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const AvailabilitySelector = lazy(() =>
+const AvailabilitySelector = lazyWithRetry(() =>
   import("../../components/time/AvailabilitySelector").then((module) => ({
     default: module.AvailabilitySelector,
   })),

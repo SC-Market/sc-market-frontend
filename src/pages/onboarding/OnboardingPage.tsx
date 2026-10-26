@@ -1,4 +1,4 @@
-import React, { lazy, useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
   Box,
   Button,
@@ -43,8 +43,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications"
 import GroupsIcon from "@mui/icons-material/Groups"
 import { PATHS } from "../../routes/paths"
 import { usePageReady } from "../../components/metadata/PageReady"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const AvailabilitySelector = lazy(() =>
+const AvailabilitySelector = lazyWithRetry(() =>
   import("../../components/time/AvailabilitySelector").then((module) => ({
     default: module.AvailabilitySelector,
   })),

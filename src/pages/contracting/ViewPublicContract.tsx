@@ -2,21 +2,22 @@ import { useParams } from "react-router-dom"
 import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { Grid } from "@mui/material"
-import React, { lazy } from "react"
+import React from "react"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import { ContractDetailsTableSkeleton } from "../../components/skeletons"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePagePublicContract } from "../../features/contracting"
 import { PublicContract } from "../../features/contracting/api/publicContractsApi"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 // Lazy load content sections
-const ContractDetailsArea = lazy(() =>
+const ContractDetailsArea = lazyWithRetry(() =>
   import("../../views/contracts/ContractDetailsArea").then((module) => ({
     default: module.ContractDetailsArea,
   })),
 )
-const ContractOfferForm = lazy(() =>
+const ContractOfferForm = lazyWithRetry(() =>
   import("../../views/contracts/ContractOfferForm").then((module) => ({
     default: module.ContractOfferForm,
   })),

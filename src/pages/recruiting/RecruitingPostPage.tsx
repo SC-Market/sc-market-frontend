@@ -1,12 +1,13 @@
-import React, { lazy } from "react"
+import React from "react"
 import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { usePageRecruitingPost } from "../../features/recruiting/hooks/usePageRecruitingPost"
 import { RecruitingPostContentSkeleton } from "../../features/recruiting/components/RecruitingPostContent.skeleton"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const RecruitingPostContent = lazy(() =>
+const RecruitingPostContent = lazyWithRetry(() =>
   import("../../features/recruiting/components/RecruitingPostContent").then(
     (m) => ({ default: m.RecruitingPostContent }),
   ),

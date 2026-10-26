@@ -22,9 +22,10 @@ import {
   ServiceMarketSkeleton,
 } from "../../skeletons/MarketSearchSkeleton"
 import { PageBusy } from "../../metadata/PageReady"
+import { lazyWithRetry } from "../../../util/lazyWithRetry"
 
 // V1 components for the Services page (shared across V1/V2)
-const ServiceMarketView = React.lazy(() =>
+const ServiceMarketView = lazyWithRetry(() =>
   import("../../../views/services/ServiceMarketView").then((m) => ({
     default: m.ServiceMarketView,
   })),

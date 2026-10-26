@@ -1,11 +1,12 @@
-import { lazy, Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { Skeleton } from "@mui/material"
 import type { DataGridProps } from "@mui/x-data-grid"
 import type { Localization } from "@mui/x-data-grid/utils/getGridLocalization"
 import { getMuiDataGridLocale } from "../../util/i18n"
 import { useTranslation } from "react-i18next"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const DataGrid = lazy(() =>
+const DataGrid = lazyWithRetry(() =>
   import("@mui/x-data-grid").then((m) => ({ default: m.DataGrid })),
 )
 

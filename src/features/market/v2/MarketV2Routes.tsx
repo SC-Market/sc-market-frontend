@@ -1,71 +1,72 @@
 import React from "react"
 import { useLocation, useParams } from "react-router-dom"
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
+import { lazyWithRetry } from "../../../util/lazyWithRetry"
 
 // Lazy-loaded V2 components
-const ListingSearchV2 = React.lazy(() =>
+const ListingSearchV2 = lazyWithRetry(() =>
   import("./ListingSearchV2").then((m) => ({ default: m.ListingSearchV2 })),
 )
 // Phase 0 redesign (behind the `market_v2_redesign` flag) — see MARKET_V2_RESEARCH.md §7
-const ListingDetailRedesign = React.lazy(() =>
+const ListingDetailRedesign = lazyWithRetry(() =>
   import("./redesign/ListingDetailRedesign").then((m) => ({
     default: m.ListingDetailRedesign,
   })),
 )
-const SellFormRedesign = React.lazy(() =>
+const SellFormRedesign = lazyWithRetry(() =>
   import("./redesign/SellFormRedesign").then((m) => ({
     default: m.SellFormRedesign,
   })),
 )
-const ManageMarketRedesign = React.lazy(() =>
+const ManageMarketRedesign = lazyWithRetry(() =>
   import("./redesign/ManageMarketRedesign").then((m) => ({
     default: m.ManageMarketRedesign,
   })),
 )
-const BuyOrdersRedesign = React.lazy(() =>
+const BuyOrdersRedesign = lazyWithRetry(() =>
   import("./redesign/BuyOrdersRedesign").then((m) => ({
     default: m.BuyOrdersRedesign,
   })),
 )
-const ListingDetailV2 = React.lazy(() =>
+const ListingDetailV2 = lazyWithRetry(() =>
   import("./ListingDetailV2").then((m) => ({ default: m.ListingDetailV2 })),
 )
-const MarketAggregateViewV2 = React.lazy(() =>
+const MarketAggregateViewV2 = lazyWithRetry(() =>
   import("./MarketAggregateViewV2").then((m) => ({
     default: m.MarketAggregateViewV2,
   })),
 )
-const MarketMultipleViewV2 = React.lazy(() =>
+const MarketMultipleViewV2 = lazyWithRetry(() =>
   import("./MarketMultipleViewV2").then((m) => ({
     default: m.MarketMultipleViewV2,
   })),
 )
-const CreateListingV2 = React.lazy(() =>
+const CreateListingV2 = lazyWithRetry(() =>
   import("./CreateListingV2").then((m) => ({ default: m.CreateListingV2 })),
 )
-const MyListingsV2 = React.lazy(() =>
+const MyListingsV2 = lazyWithRetry(() =>
   import("./MyListingsV2").then((m) => ({ default: m.MyListingsV2 })),
 )
-const StockManagerV2 = React.lazy(() =>
+const StockManagerV2 = lazyWithRetry(() =>
   import("./StockManagerV2").then((m) => ({ default: m.StockManagerV2 })),
 )
-const BulkStockManagementV2 = React.lazy(() =>
+const BulkStockManagementV2 = lazyWithRetry(() =>
   import("./BulkStockManagementV2").then((m) => ({
     default: m.BulkStockManagementV2,
   })),
 )
-const BulkItemsPageV2 = React.lazy(() =>
+const BulkItemsPageV2 = lazyWithRetry(() =>
   import("./BulkItemsPageV2").then((m) => ({
     default: m.BulkItemsPageV2,
   })),
 )
-const MarketCartV2 = React.lazy(() =>
+const MarketCartV2 = lazyWithRetry(() =>
   import("./MarketCartV2").then((m) => ({ default: m.MarketCartV2 })),
 )
-const EditListingV2 = React.lazy(() =>
+const EditListingV2 = lazyWithRetry(() =>
   import("./EditListingV2").then((m) => ({ default: m.EditListingV2 })),
 )
-const BuyOrdersViewV2 = React.lazy(() =>
+const BuyOrdersViewV2 = lazyWithRetry(() =>
   import("./BuyOrdersViewV2").then((m) => ({ default: m.BuyOrdersViewV2 })),
 )
 

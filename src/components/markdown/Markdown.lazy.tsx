@@ -1,9 +1,10 @@
-import { lazy } from "react"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-export const MarkdownRender = lazy(() =>
+
+export const MarkdownRender = lazyWithRetry(() =>
   import("./Markdown").then((m) => ({ default: m.MarkdownRender })),
 )
 
-export const MarkdownEditor = lazy(() =>
+export const MarkdownEditor = lazyWithRetry(() =>
   import("./Markdown").then((m) => ({ default: m.MarkdownEditor })),
 )

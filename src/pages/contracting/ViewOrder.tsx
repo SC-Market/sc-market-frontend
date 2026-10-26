@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom"
-import React, { useMemo, useState, lazy } from "react"
+import React, { useMemo, useState } from "react"
 import {
   Grid,
   Skeleton,
@@ -19,44 +19,45 @@ import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageOrder } from "../../features/contracting"
 import { PATHS, ORDER_PATHS } from "../../routes/paths"
 import { HelpLink } from "../../features/help/components/HelpLink"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 // Lazy load content sections
-const OrderDetailsArea = lazy(() =>
+const OrderDetailsArea = lazyWithRetry(() =>
   import("../../views/orders/OrderDetailsArea").then((module) => ({
     default: module.OrderDetailsArea,
   })),
 )
-const OrderMessagesArea = lazy(() =>
+const OrderMessagesArea = lazyWithRetry(() =>
   import("../../views/orders/OrderDetailsArea").then((module) => ({
     default: module.OrderMessagesArea,
   })),
 )
-const OrderReviewArea = lazy(() =>
+const OrderReviewArea = lazyWithRetry(() =>
   import("../../views/orders/OrderReviewArea").then((module) => ({
     default: module.OrderReviewArea,
   })),
 )
-const OrderReviewView = lazy(() =>
+const OrderReviewView = lazyWithRetry(() =>
   import("../../views/orders/OrderReviewView").then((module) => ({
     default: module.OrderReviewView,
   })),
 )
-const OfferMarketListingsV2Items = lazy(() =>
+const OfferMarketListingsV2Items = lazyWithRetry(() =>
   import("../../views/offers/OfferMarketListingsV2Items").then((module) => ({
     default: module.OfferMarketListingsV2Items,
   })),
 )
-const OfferServiceArea = lazy(() =>
+const OfferServiceArea = lazyWithRetry(() =>
   import("../../views/offers/OfferServiceArea").then((module) => ({
     default: module.OfferServiceArea,
   })),
 )
-const SplitAllocationView = lazy(() =>
+const SplitAllocationView = lazyWithRetry(() =>
   import("../../features/market/components/allocation").then((module) => ({
     default: module.SplitAllocationView,
   })),
 )
-const OrderAvailabilityArea = lazy(() =>
+const OrderAvailabilityArea = lazyWithRetry(() =>
   import("../../views/orders/OrderAvailabilityArea").then((module) => ({
     default: module.OrderAvailabilityArea,
   })),

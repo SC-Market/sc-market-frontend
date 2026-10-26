@@ -1,6 +1,7 @@
-import React, { lazy, Suspense, ComponentType } from "react"
+import React, { Suspense, ComponentType } from "react"
 import { SvgIconProps } from "@mui/material/SvgIcon"
 import CircularProgress from "@mui/material/CircularProgress"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 /**
  * Lazy load Material-UI icons for admin pages to reduce initial bundle size.
@@ -13,7 +14,7 @@ import CircularProgress from "@mui/material/CircularProgress"
 export function lazyIcon(
   importFunc: () => Promise<{ default: ComponentType<SvgIconProps> }>,
 ): ComponentType<SvgIconProps> {
-  const LazyIconComponent = lazy(importFunc)
+  const LazyIconComponent = lazyWithRetry(importFunc)
 
   return function LazyIconWrapper(props: SvgIconProps) {
     return (

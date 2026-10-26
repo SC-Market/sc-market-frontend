@@ -21,7 +21,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
 import { PATHS, ORG_PATHS } from "../../routes/paths"
 import { homeSeoText } from "../../seo/siteHeads"
-import { retryDynamicImport } from "../../util/retryDynamicImport"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 import { safeRedirectPath } from "../../util/safeRedirect"
 
 /*
@@ -30,33 +30,25 @@ import { safeRedirectPath } from "../../util/safeRedirect"
  * fallbacks are the sections' skeletons (the same ones the route skeleton
  * uses), so the page keeps its length while they load.
  */
-const LandingFeatures = React.lazy(() =>
-  retryDynamicImport(
-    () => import("../../components/landing/LandingFeatures"),
-  ).then((m) => ({
+const LandingFeatures = lazyWithRetry(() =>
+  import("../../components/landing/LandingFeatures").then((m) => ({
     default: m.LandingFeatures,
   })),
 )
-const LandingOrgFeatures = React.lazy(() =>
-  retryDynamicImport(
-    () => import("../../components/landing/LandingOrgFeatures"),
-  ).then((m) => ({
+const LandingOrgFeatures = lazyWithRetry(() =>
+  import("../../components/landing/LandingOrgFeatures").then((m) => ({
     default: m.LandingOrgFeatures,
   })),
 )
-const SupportersSection = React.lazy(() =>
-  retryDynamicImport(
-    () => import("../../components/landing/SupportersSection"),
-  ).then((m) => ({
+const SupportersSection = lazyWithRetry(() =>
+  import("../../components/landing/SupportersSection").then((m) => ({
     default: m.SupportersSection,
   })),
 )
-const FAQSection = React.lazy(() =>
-  retryDynamicImport(() => import("../../components/landing/FAQSection")).then(
-    (m) => ({
+const FAQSection = lazyWithRetry(() =>
+  import("../../components/landing/FAQSection").then((m) => ({
       default: m.FAQSection,
-    }),
-  ),
+    })),
 )
 
 export function LandingPage() {

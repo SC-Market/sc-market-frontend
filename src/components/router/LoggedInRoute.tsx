@@ -13,8 +13,9 @@ import type { UserProfileState } from "../../hooks/login/UserProfile"
 import { isSiteAdmin } from "../../util/siteRole"
 import { RouteSkeletonFallback } from "./RouteSuspense"
 import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const MfaAdminGate = React.lazy(() =>
+const MfaAdminGate = lazyWithRetry(() =>
   import("../../features/mfa/components/MfaAdminGate").then((m) => ({ default: m.MfaAdminGate })),
 )
 

@@ -128,7 +128,7 @@ describe("stale route chunk while a prefetch is in flight", () => {
     await expect(loadLoginRoute(routeImport)).rejects.toThrow(
       /Failed to fetch dynamically imported module/,
     )
-    expect(routeImport).toHaveBeenCalledTimes(3)
+    expect(routeImport).toHaveBeenCalledTimes(6) // 1 + 5 default retries
     expect(reload).toHaveBeenCalledTimes(1)
   })
 
@@ -167,7 +167,7 @@ describe("stale route chunk while a prefetch is in flight", () => {
       await expect(loadLoginRoute(routeImport)).rejects.toBeInstanceOf(
         MissingModuleError,
       )
-      expect(routeImport).toHaveBeenCalledTimes(3)
+      expect(routeImport).toHaveBeenCalledTimes(6) // 1 + 5 default retries
       expect(reload).toHaveBeenCalledTimes(1)
     } finally {
       window.removeEventListener("vite:preloadError", cancel)
@@ -175,8 +175,10 @@ describe("stale route chunk while a prefetch is in flight", () => {
   })
 
   it("still swallows a failed prefetch without reloading", async () => {
-    vi.mocked(routeRegistry["/dashboard"]).mockImplementation(() =>
-      vitePreload(() => Promise.reject(staleChunkError("Dashboard"))),
+    // /market: always in the high-priority set (/dashboard is only warmed for
+    // a cached signed-in profile since 1c7ec8b4).
+    vi.mocked(routeRegistry["/market"]).mockImplementation(() =>
+      vitePreload(() => Promise.reject(staleChunkError("Market"))),
     )
     clearPrefetchCache()
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
@@ -184,7 +186,7 @@ describe("stale route chunk while a prefetch is in flight", () => {
     prefetchHighPriorityRoutes()
     await vi.waitFor(() =>
       expect(warn).toHaveBeenCalledWith(
-        "Failed to prefetch route /dashboard:",
+        "Failed to prefetch route /market:",
         expect.any(TypeError),
       ),
     )

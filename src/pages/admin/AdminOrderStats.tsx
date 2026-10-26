@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react"
+import React, { Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageAdminOrderStats } from "../../features/admin/hooks/usePageAdminOrderStats"
@@ -9,56 +9,57 @@ import {
 } from "../../features/admin/components/AdminOrderStatsSkeleton"
 import { useGetOfferAnalyticsQuery } from "../../features/admin/api/adminApi"
 import { Divider, Grid, Typography } from "@mui/material"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const OrderAnalyticsCharts = lazy(() =>
+const OrderAnalyticsCharts = lazyWithRetry(() =>
   import("../../views/orders/OrderAnalytics").then((m) => ({
     default: m.OrderAnalyticsCharts,
   })),
 )
 
-const TopShopsAnalytics = lazy(() =>
+const TopShopsAnalytics = lazyWithRetry(() =>
   import("../../views/orders/OrderAnalytics").then((m) => ({
     default: m.TopShopsAnalytics,
   })),
 )
 
-const TopUsersAnalytics = lazy(() =>
+const TopUsersAnalytics = lazyWithRetry(() =>
   import("../../views/orders/OrderAnalytics").then((m) => ({
     default: m.TopUsersAnalytics,
   })),
 )
 
-const OrderSummary = lazy(() =>
+const OrderSummary = lazyWithRetry(() =>
   import("../../views/orders/OrderAnalytics").then((m) => ({
     default: m.OrderSummary,
   })),
 )
 
-const AdminRecentOrders = lazy(() =>
+const AdminRecentOrders = lazyWithRetry(() =>
   import("../../views/orders/RecentOrders").then((m) => ({
     default: m.AdminRecentOrders,
   })),
 )
 
-const OfferAnalyticsCharts = lazy(() =>
+const OfferAnalyticsCharts = lazyWithRetry(() =>
   import("../../views/offers/OfferAnalytics").then((m) => ({
     default: m.OfferAnalyticsCharts,
   })),
 )
 
-const OfferTopShopsAnalytics = lazy(() =>
+const OfferTopShopsAnalytics = lazyWithRetry(() =>
   import("../../views/offers/OfferAnalytics").then((m) => ({
     default: m.OfferTopShopsAnalytics,
   })),
 )
 
-const OfferTopUsersAnalytics = lazy(() =>
+const OfferTopUsersAnalytics = lazyWithRetry(() =>
   import("../../views/offers/OfferAnalytics").then((m) => ({
     default: m.OfferTopUsersAnalytics,
   })),
 )
 
-const OfferSummary = lazy(() =>
+const OfferSummary = lazyWithRetry(() =>
   import("../../views/offers/OfferAnalytics").then((m) => ({
     default: m.OfferSummary,
   })),

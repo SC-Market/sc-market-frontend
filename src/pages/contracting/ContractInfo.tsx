@@ -1,4 +1,4 @@
-import React, { useState, lazy } from "react"
+import React, { useState } from "react"
 import { useParams } from "react-router-dom"
 import { ContractAppOpenContext } from "../../features/contracting/hooks/ContractApp"
 import { useTranslation } from "react-i18next"
@@ -6,14 +6,15 @@ import { ContractDetailSkeleton } from "../../components/skeletons"
 import { Grid } from "@mui/material"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageContract } from "../../features/contracting"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 // Lazy load content sections
-const ViewContract = lazy(() =>
+const ViewContract = lazyWithRetry(() =>
   import("../../views/contracts/ViewContract").then((module) => ({
     default: module.ViewContract,
   })),
 )
-const ContractApp = lazy(() =>
+const ContractApp = lazyWithRetry(() =>
   import("../../views/contracts/ContractApp").then((module) => ({
     default: module.ContractApp,
   })),

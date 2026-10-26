@@ -1,24 +1,25 @@
 import React from "react"
 import { useParams } from "react-router-dom"
 import { RouteSkeletonFallback } from "../router/RouteSuspense"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
-const MarketPageV2 = React.lazy(() =>
+const MarketPageV2 = lazyWithRetry(() =>
   import("./v2/MarketPageV2").then((module) => ({
     default: module.MarketPageV2,
   })),
 )
 
 // V2 standalone pages
-const ListingDetailV2 = React.lazy(() => import("../../features/market/v2/ListingDetailV2").then(m => ({ default: m.ListingDetailV2 })))
-const CreateListingV2 = React.lazy(() => import("../../features/market/v2/CreateListingV2").then(m => ({ default: m.CreateListingV2 })))
-const EditListingV2 = React.lazy(() => import("../../features/market/v2/EditListingV2").then(m => ({ default: m.EditListingV2 })))
-const MyListingsV2 = React.lazy(() => import("../../features/market/v2/MyListingsV2").then(m => ({ default: m.MyListingsV2 })))
-const MarketCartV2 = React.lazy(() => import("../../features/market/v2/MarketCartV2").then(m => ({ default: m.MarketCartV2 })))
-const StockManagerV2 = React.lazy(() => import("../../features/market/v2/StockManagerV2").then(m => ({ default: m.StockManagerV2 })))
-const BulkStockManagementV2 = React.lazy(() => import("../../features/market/v2/BulkStockManagementV2").then(m => ({ default: m.BulkStockManagementV2 })))
-const MarketAggregateViewV2 = React.lazy(() => import("../../features/market/v2/MarketAggregateViewV2").then(m => ({ default: m.MarketAggregateViewV2 })))
-const MarketMultipleViewV2 = React.lazy(() => import("../../features/market/v2/MarketMultipleViewV2").then(m => ({ default: m.MarketMultipleViewV2 })))
-const CreateBuyOrderPageV2 = React.lazy(() => import("../../features/market/v2/CreateBuyOrderPageV2").then(m => ({ default: m.CreateBuyOrderPageV2 })))
+const ListingDetailV2 = lazyWithRetry(() => import("../../features/market/v2/ListingDetailV2").then(m => ({ default: m.ListingDetailV2 })))
+const CreateListingV2 = lazyWithRetry(() => import("../../features/market/v2/CreateListingV2").then(m => ({ default: m.CreateListingV2 })))
+const EditListingV2 = lazyWithRetry(() => import("../../features/market/v2/EditListingV2").then(m => ({ default: m.EditListingV2 })))
+const MyListingsV2 = lazyWithRetry(() => import("../../features/market/v2/MyListingsV2").then(m => ({ default: m.MyListingsV2 })))
+const MarketCartV2 = lazyWithRetry(() => import("../../features/market/v2/MarketCartV2").then(m => ({ default: m.MarketCartV2 })))
+const StockManagerV2 = lazyWithRetry(() => import("../../features/market/v2/StockManagerV2").then(m => ({ default: m.StockManagerV2 })))
+const BulkStockManagementV2 = lazyWithRetry(() => import("../../features/market/v2/BulkStockManagementV2").then(m => ({ default: m.BulkStockManagementV2 })))
+const MarketAggregateViewV2 = lazyWithRetry(() => import("../../features/market/v2/MarketAggregateViewV2").then(m => ({ default: m.MarketAggregateViewV2 })))
+const MarketMultipleViewV2 = lazyWithRetry(() => import("../../features/market/v2/MarketMultipleViewV2").then(m => ({ default: m.MarketMultipleViewV2 })))
+const CreateBuyOrderPageV2 = lazyWithRetry(() => import("../../features/market/v2/CreateBuyOrderPageV2").then(m => ({ default: m.CreateBuyOrderPageV2 })))
 
 /**
  * While a market page's chunk loads, show that page's route skeleton (the

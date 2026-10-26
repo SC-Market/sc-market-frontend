@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom"
-import { lazy, Suspense } from "react"
+import { Suspense } from "react"
 import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
 import { orgPageTitle } from "../../seo/entityHeads"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 // Lazy load OrgInfo component
-const OrgInfo = lazy(() =>
+const OrgInfo = lazyWithRetry(() =>
   import("../../features/contractor").then((module) => ({
     default: module.OrgInfo,
   })),

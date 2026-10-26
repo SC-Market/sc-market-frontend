@@ -1,6 +1,7 @@
-import { ComponentType, lazy, Suspense } from "react"
+import { ComponentType, Suspense } from "react"
 import { Skeleton } from "@mui/material"
 import type { DateTimePickerProps } from "@mui/x-date-pickers"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 // The picker AND its LocalizationProvider (DatePickerProvider pulls in the
 // date-fns adapter, i.e. date-fns parse/format) load together on first use.
@@ -8,9 +9,9 @@ import type { DateTimePickerProps } from "@mui/x-date-pickers"
 // since the chat views that use this wrapper are in the entry.
 //
 // `DateTimePicker` is generic over its date type and its accessible-field DOM
-// structure flag. `lazy()` cannot carry generics through, so pin it to the
+// structure flag. `lazyWithRetry()` cannot carry generics through, so pin it to the
 // concrete instantiation this wrapper exposes.
-const LocalizedDateTimePicker = lazy<ComponentType<DateTimePickerProps<Date>>>(
+const LocalizedDateTimePicker = lazyWithRetry<ComponentType<DateTimePickerProps<Date>>>(
   () =>
     Promise.all([
       import("./DatePickerProvider"),

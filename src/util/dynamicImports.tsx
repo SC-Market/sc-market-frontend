@@ -3,6 +3,7 @@ import { CircularProgress, Box } from "@mui/material"
 import { PageFallback } from "../components/metadata/Page"
 import { ComponentErrorBoundary } from "../components/error-boundaries"
 import { ErrorFallback } from "../components/error-boundaries"
+import { lazyWithRetry } from "./lazyWithRetry"
 
 interface DynamicImportOptions {
   fallback?: ReactNode
@@ -18,7 +19,7 @@ export function createDynamicImport<P extends object = object>(
   // React.lazy requires an exact ComponentType<P> return. Cast the union
   // away because callers may pass re-exported lazy components whose type
   // is ComponentType<never> (which is safe but not provably assignable).
-  const LazyComponent = React.lazy(
+  const LazyComponent = lazyWithRetry(
     importFn as () => Promise<{ default: React.ComponentType<P> }>,
   )
 

@@ -5,7 +5,7 @@
  * Mobile:  single-query list with status-filter tabs + quick-edit bottom sheet + FAB.
  */
 
-import React, { lazy, useCallback, useState } from "react"
+import React, { useCallback, useState } from "react"
 import {
   Box,
   Button,
@@ -46,6 +46,7 @@ import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 import { MyListingCardV2 } from "./components/MyListingCardV2"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
+import { lazyWithRetry } from "../../../util/lazyWithRetry"
 
 // ── Desktop section (unchanged) ───────────────────────────────────────────
 
@@ -106,13 +107,13 @@ function MyListingSectionV2({
 }
 
 // Lazy wrappers so each section loads independently
-const ActiveListingsV2 = lazy(() =>
+const ActiveListingsV2 = lazyWithRetry(() =>
   Promise.resolve({ default: () => <MyListingSectionV2 status="active" /> }),
 )
-const InactiveListingsV2 = lazy(() =>
+const InactiveListingsV2 = lazyWithRetry(() =>
   Promise.resolve({ default: () => <MyListingSectionV2 status="inactive" /> }),
 )
-const ArchivedListingsV2 = lazy(() =>
+const ArchivedListingsV2 = lazyWithRetry(() =>
   Promise.resolve({ default: () => <MyListingSectionV2 status="cancelled" /> }),
 )
 function ListingsSkeleton() {

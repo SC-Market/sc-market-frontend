@@ -24,9 +24,10 @@ import {
 } from "@mui/icons-material"
 import React, { useState, useRef, useCallback, Suspense } from "react"
 import { useTranslation } from "react-i18next"
+import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 // Lazy load heavy modal components
-const ImageSearch = React.lazy(() =>
+const ImageSearch = lazyWithRetry(() =>
   import("../../features/market/components/ImageSearch").then((module) => ({
     default: module.ImageSearch,
   })),
