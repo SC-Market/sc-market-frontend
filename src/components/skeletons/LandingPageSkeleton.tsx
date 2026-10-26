@@ -4,7 +4,6 @@ import { LandingPageLayout } from "../landing/LandingPageLayout"
 // Direct imports, not the components/landing barrel, which also re-exports
 // the page's lazy-loaded sections.
 import { LandingHeroSkeleton } from "../landing/LandingHero.skeleton"
-import { OrderStatisticsSkeleton } from "../landing/OrderStatistics.skeleton"
 import { LandingFeaturesSkeleton } from "../landing/LandingFeatures.skeleton"
 import { LandingOrgFeaturesSkeleton } from "../landing/LandingOrgFeatures.skeleton"
 import { SupportersSectionSkeleton } from "../landing/SupportersSection.skeleton"
@@ -40,7 +39,6 @@ export function LandingPageSkeleton() {
     >
       <LandingPageLayout
         hero={<LandingHeroSkeleton />}
-        statistics={<OrderStatisticsSkeleton />}
         recentListings={<RecentListingsSkeleton />}
         features={<LandingFeaturesSkeleton />}
         orgFeatures={<LandingOrgFeaturesSkeleton />}

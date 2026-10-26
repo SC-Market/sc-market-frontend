@@ -2644,8 +2644,6 @@
     "viewCart": "Ver carrito"
   },
   "landing": {
-    "ordersThisWeek": "Pedidos esta semana",
-    "valueOfOrdersThisWeek": "Valor de los pedidos esta semana",
     "buySellItemsTitle": "Compra y vende artículos",
     "buySellItemsText": "Publica los artículos que quieras vender en la cantidad que quieras. Recibe alertas en Discord cuando alguien realice un pedido y trabaja con los compradores para completar sus pedidos. No nos llevamos comisión.",
     "tradeInBulkTitle": "Comercia a granel",

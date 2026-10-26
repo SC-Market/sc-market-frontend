@@ -24,11 +24,14 @@ vi.mock("../../../hooks/login/useSession", () => ({
 }))
 // The real English strings (the test setup has no i18n instance).
 vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual<typeof import("react-i18next")>("react-i18next")
+  const actual =
+    await vi.importActual<typeof import("react-i18next")>("react-i18next")
   const { default: catalog } = await import("../../../locales/en/english.json")
   const t = (key: string) =>
     key.split(".").reduce<unknown>((node, part) => {
-      return node && typeof node === "object" ? (node as Record<string, unknown>)[part] : undefined
+      return node && typeof node === "object"
+        ? (node as Record<string, unknown>)[part]
+        : undefined
     }, catalog) ?? key
   return { ...actual, useTranslation: () => ({ t, i18n: { language: "en" } }) }
 })
@@ -38,6 +41,7 @@ vi.mock("../../../features/market/api/marketApi", () => ({
 
 const { LandingHero } = await import("../LandingHero")
 const { LandingHeroSkeleton } = await import("../LandingHero.skeleton")
+const { WEEKLY_STATS_MIN_ORDERS } = await import("../LandingHeroLayout")
 
 const STATS: MarketStats = {
   total_orders: 10174,
@@ -92,9 +96,16 @@ describe("LandingHero", () => {
 
   it("shows the all-time totals, the big one in words", () => {
     renderWith(<LandingHero />)
-    expect(screen.getByTestId("landing-total-orders")).toHaveTextContent("10,174")
-    expect(screen.getByTestId("landing-total-value")).toHaveTextContent("1.6 trillion")
-    expect(screen.getByTestId("landing-hero-stats")).not.toHaveAttribute("aria-busy")
+    expect(screen.getByTestId("landing-total-orders")).toHaveTextContent(
+      "10,174",
+    )
+    expect(screen.getByTestId("landing-total-value")).toHaveTextContent(
+      "1.6 trillion",
+    )
+    expect(screen.getByTestId("landing-hero-stats")).not.toHaveAttribute(
+      "aria-busy",
+    )
+    expect(WEEKLY_STATS_MIN_ORDERS).toBe(40)
   })
 
   it("holds the stat numbers with skeletons while loading, labels stay real", () => {
@@ -107,48 +118,100 @@ describe("LandingHero", () => {
     expect(row).toHaveTextContent(english.landing.heroValueLabel)
   })
 
-  it("leaves the stats out when the request failed", () => {
+  it("keeps the stats cells (empty, hidden) when the request failed", () => {
     h.stats = { data: undefined, isError: true }
     renderWith(<LandingHero />)
-    expect(screen.queryByTestId("landing-hero-stats")).toBeNull()
+    const row = screen.getByTestId("landing-hero-stats")
+    expect(row).not.toHaveAttribute("aria-busy")
+    for (const id of ["landing-total-orders", "landing-total-value"]) {
+      expect(screen.getByTestId(id)).toHaveAttribute("aria-hidden", "true")
+    }
+  })
+
+  it("weekly stats stay hidden (but laid out) below WEEKLY_STATS_MIN_ORDERS", () => {
+    h.stats = {
+      data: { ...STATS, week_orders: WEEKLY_STATS_MIN_ORDERS - 1 },
+      isError: false,
+    }
+    renderWith(<LandingHero />)
+    for (const id of ["landing-week-orders", "landing-week-value"]) {
+      const cell = screen.getByTestId(id)
+      expect(cell).toHaveAttribute("aria-hidden", "true")
+      expect(cell).toHaveAttribute("inert")
+    }
+    expect(screen.getByTestId("landing-week-orders")).not.toHaveTextContent(
+      "39",
+    )
+  })
+
+  it("weekly stats show from WEEKLY_STATS_MIN_ORDERS, in the same style", () => {
+    h.stats = {
+      data: {
+        ...STATS,
+        week_orders: WEEKLY_STATS_MIN_ORDERS,
+        week_order_value: 12375400,
+      },
+      isError: false,
+    }
+    renderWith(<LandingHero />)
+    const orders = screen.getByTestId("landing-week-orders")
+    const value = screen.getByTestId("landing-week-value")
+    expect(orders).not.toHaveAttribute("aria-hidden")
+    expect(orders).toHaveTextContent(
+      `${WEEKLY_STATS_MIN_ORDERS}${english.landing.heroWeekOrdersLabel}`,
+    )
+    expect(value).toHaveTextContent(
+      `12.3 million${english.landing.heroWeekValueLabel}`,
+    )
   })
 
   it("has no sign-in card; one primary CTA and a sell CTA via login when signed out", () => {
     renderWith(<LandingHero />)
     expect(screen.queryByText(/sign in/i)).toBeNull()
-    expect(screen.getByRole("link", { name: english.landing.heroBrowse })).toHaveAttribute(
-      "href",
-      "/market",
-    )
-    expect(screen.getByRole("link", { name: english.landing.heroSell })).toHaveAttribute(
-      "href",
-      "/login?redirect=%2Fmarket%2Fcreate",
-    )
+    expect(
+      screen.getByRole("link", { name: english.landing.heroBrowse }),
+    ).toHaveAttribute("href", "/market")
+    expect(
+      screen.getByRole("link", { name: english.landing.heroSell }),
+    ).toHaveAttribute("href", "/login?redirect=%2Fmarket%2Fcreate")
   })
 
   it("signed in: the sell CTA goes straight to the create-listing page", () => {
     h.session = { status: "authenticated", profile: {} as never }
     renderWith(<LandingHero />)
-    expect(screen.getByRole("link", { name: english.landing.heroSell })).toHaveAttribute(
-      "href",
-      "/market/create",
-    )
+    expect(
+      screen.getByRole("link", { name: english.landing.heroSell }),
+    ).toHaveAttribute("href", "/market/create")
   })
 
   it("the search submits to the market's text filter", () => {
     renderWith(<LandingHero />)
-    const search = screen.getByRole("search", { name: english.landing.heroSearchLabel })
+    const search = screen.getByRole("search", {
+      name: english.landing.heroSearchLabel,
+    })
     fireEvent.change(within(search).getByRole("searchbox"), {
       target: { value: " p4-ar rifle " },
     })
-    fireEvent.click(within(search).getByRole("button", { name: english.landing.heroSearchSubmit }))
-    expect(screen.getByTestId("location")).toHaveTextContent("/market?text=p4-ar%20rifle")
+    fireEvent.click(
+      within(search).getByRole("button", {
+        name: english.landing.heroSearchSubmit,
+      }),
+    )
+    expect(screen.getByTestId("location")).toHaveTextContent(
+      "/market?text=p4-ar%20rifle",
+    )
   })
 
   it("an empty search opens the market", () => {
     renderWith(<LandingHero />)
-    const search = screen.getByRole("search", { name: english.landing.heroSearchLabel })
-    fireEvent.click(within(search).getByRole("button", { name: english.landing.heroSearchSubmit }))
+    const search = screen.getByRole("search", {
+      name: english.landing.heroSearchLabel,
+    })
+    fireEvent.click(
+      within(search).getByRole("button", {
+        name: english.landing.heroSearchSubmit,
+      }),
+    )
     expect(screen.getByTestId("location")).toHaveTextContent(/^\/market$/)
   })
 
@@ -157,7 +220,12 @@ describe("LandingHero", () => {
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
       english.landing.heroTitle,
     )
-    expect(screen.getByTestId("landing-hero-stats")).toHaveAttribute("aria-busy", "true")
-    expect(screen.getByRole("link", { name: english.landing.heroBrowse })).toBeInTheDocument()
+    expect(screen.getByTestId("landing-hero-stats")).toHaveAttribute(
+      "aria-busy",
+      "true",
+    )
+    expect(
+      screen.getByRole("link", { name: english.landing.heroBrowse }),
+    ).toBeInTheDocument()
   })
 })

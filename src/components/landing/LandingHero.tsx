@@ -17,7 +17,6 @@ export function landingSellHref(signedIn: boolean): string {
 
 export function LandingHero() {
   const session = useSession()
-  // Shares the cached request with the weekly stats row (OrderStatistics).
   const { data, isError } = useGetMarketStatsQuery()
   return (
     <LandingHeroLayout
@@ -28,6 +27,8 @@ export function LandingHero() {
           : data && {
               totalOrders: data.total_orders,
               totalOrderValue: data.total_order_value,
+              weekOrders: data.week_orders,
+              weekOrderValue: data.week_order_value,
             }
       }
     />

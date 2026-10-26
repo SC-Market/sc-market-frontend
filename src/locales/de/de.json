@@ -2644,8 +2644,6 @@
     "viewCart": "Warenkorb anzeigen"
   },
   "landing": {
-    "ordersThisWeek": "Bestellungen diese Woche",
-    "valueOfOrdersThisWeek": "Wert der Bestellungen diese Woche",
     "buySellItemsTitle": "Artikel kaufen und verkaufen",
     "buySellItemsText": "Bieten Sie Ihre Artikel in beliebiger Menge zum Verkauf an. Erhalten Sie Benachrichtigungen in Discord, wenn jemand eine Bestellung aufgibt, und arbeiten Sie mit Käufern zusammen, um deren Bestellungen zu erfüllen. Wir behalten keine Provision ein.",
     "tradeInBulkTitle": "Im großen Stil handeln",

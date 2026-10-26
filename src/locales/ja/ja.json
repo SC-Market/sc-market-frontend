@@ -2644,8 +2644,6 @@
     "viewCart": "カートを見る"
   },
   "landing": {
-    "ordersThisWeek": "今週の注文数",
-    "valueOfOrdersThisWeek": "今週の注文金額",
     "buySellItemsTitle": "アイテムの売買",
     "buySellItemsText": "対応できる数量で、あなたのアイテムを出品しましょう。誰かが注文するとDiscordに通知が届き、購入者と協力して注文を処理できます。手数料はいただきません。",
     "tradeInBulkTitle": "まとめて取引",

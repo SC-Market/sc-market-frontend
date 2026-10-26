@@ -7,8 +7,6 @@
 
 export { RecentListingsSkeleton } from "./RecentListingsSkeleton"
 export { FAQQuestion } from "./FAQQuestion"
-export { OrderStatistics } from "./OrderStatistics"
-export { OrderStatisticsSkeleton } from "./OrderStatistics.skeleton"
 export { RecentListings } from "./RecentListings"
 export { LandingHero } from "./LandingHero"
 export { LandingHeroSkeleton } from "./LandingHero.skeleton"

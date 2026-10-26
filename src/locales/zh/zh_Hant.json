@@ -2565,8 +2565,6 @@
     "viewCart": "查看購物車"
   },
   "landing": {
-    "ordersThisWeek": "本週訂單數",
-    "valueOfOrdersThisWeek": "本週訂單價值",
     "buySellItemsTitle": "買賣物品",
     "buySellItemsText": "以您能支援的任何數量上架您想出售的物品。當有人下單時在 Discord 收到通知，並與買家合作完成他們的訂單。我們不收取任何抽成。",
     "tradeInBulkTitle": "大量交易",

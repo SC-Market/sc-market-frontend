@@ -2657,8 +2657,6 @@
     "viewCart": "查看购物车"
   },
   "landing": {
-    "ordersThisWeek": "本周订单",
-    "valueOfOrdersThisWeek": "本周订单价值",
     "buySellItemsTitle": "买卖物品",
     "buySellItemsText": "以你能提供的任意数量上架待售物品。有人下单时可在 Discord 收到提醒，并与买家协作完成订单。我们不收取任何抽成。",
     "tradeInBulkTitle": "批量交易",

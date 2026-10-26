@@ -5,7 +5,6 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface LandingPageLayoutProps {
   hero: ReactNode
-  statistics: ReactNode
   recentListings: ReactNode
   features: ReactNode
   orgFeatures: ReactNode
@@ -40,9 +39,6 @@ export function LandingPageLayout(props: LandingPageLayoutProps) {
           justifyContent={"center"}
           direction={"column"}
         >
-          {/* Order Statistics */}
-          {props.statistics}
-
           {/* Recent Listings */}
           <Box
             maxWidth={"100%"}

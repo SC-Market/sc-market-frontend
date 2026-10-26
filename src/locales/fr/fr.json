@@ -2644,8 +2644,6 @@
     "viewCart": "Voir le panier"
   },
   "landing": {
-    "ordersThisWeek": "Commandes cette semaine",
-    "valueOfOrdersThisWeek": "Valeur des commandes cette semaine",
     "buySellItemsTitle": "Acheter et vendre des articles",
     "buySellItemsText": "Mettez vos articles en vente dans la quantité de votre choix. Recevez des alertes sur Discord lorsqu'une commande est passée, et travaillez avec les acheteurs pour honorer leurs commandes. Nous ne prenons aucune commission.",
     "tradeInBulkTitle": "Échangez en gros",
