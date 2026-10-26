@@ -4,6 +4,11 @@
  * Two-panel allocation interface:
  * - Left: Available lots with quantity inputs
  * - Right: Allocation targets showing required vs allocated
+ *
+ * Lots come from V2 GET /api/v2/stock-lots (listing_id + the selling org's
+ * spectrum_id, which limits them to that org's members). Allocations are
+ * read and changed through /api/orders/:id/allocations, which only the
+ * order's seller side may use.
  */
 
 import React, { useState, useMemo } from "react"
@@ -35,15 +40,16 @@ import {
 } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import {
-  useGetListingLotsQuery,
   useManualAllocateOrderMutation,
   useGetOrderAllocationsQuery,
-  ManualAllocationInput,
   Allocation,
-  StockLot,
 } from "../../../../store/api/stockLotsApi"
-import { useGetMarketListingQuery } from "../../api/marketApi"
+import {
+  useGetStockLotsQuery,
+  type StockLotDetail,
+} from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { MARKET_PATHS } from "../../../../routes/paths"
 
 interface ListingAllocation {
   listing_id: string
@@ -52,31 +58,49 @@ interface ListingAllocation {
 
 interface SplitAllocationViewProps {
   orderId: string
+  /** Spectrum ID of the org selling the order; scopes the stock-lot lookup */
+  spectrumId: string
   listings: ListingAllocation[]
 }
 
-interface StockLotWithAvailable extends StockLot {
+interface StockLotWithAvailable extends StockLotDetail {
   quantity_available: number
-  owner?: {
-    user_id: string
-    username: string
-    display_name: string
-    avatar: string | null
-  } | null
 }
 
 import type { AllocationListingData } from "../../../../store/api/stockLotsApi"
 
-function getListingTitle(listingData: AllocationListingData | undefined | null): string {
-  return listingData?.details?.title || listingData?.title || "Item"
+function getListingTitle(
+  listingData: AllocationListingData | undefined | null,
+  lots: StockLotDetail[] | undefined,
+): string {
+  return (
+    listingData?.details?.title ||
+    listingData?.title ||
+    lots?.[0]?.listing_title ||
+    "Item"
+  )
 }
 
-function getListingImage(listingData: AllocationListingData | undefined | null): string | undefined {
-  return listingData?.photos?.[0]
+function getListingImage(
+  listingData: AllocationListingData | undefined | null,
+  lots: StockLotDetail[] | undefined,
+): string | undefined {
+  return listingData?.photos?.[0] || lots?.[0]?.listing_photo || undefined
+}
+
+/** A listing's listed lots in the selling org's shops (V2 stock lots). */
+function useListingLots(listingId: string, spectrumId: string) {
+  return useGetStockLotsQuery({
+    listingId,
+    spectrumId,
+    listed: true,
+    pageSize: 100,
+  })
 }
 
 export function SplitAllocationView({
   orderId,
+  spectrumId,
   listings,
 }: SplitAllocationViewProps) {
   const issueAlert = useAlertHook()
@@ -211,6 +235,7 @@ export function SplitAllocationView({
                   <AvailableLots
                     key={listing.listing_id}
                     listingId={listing.listing_id}
+                    spectrumId={spectrumId}
                     listingData={group?.listing}
                     allocations={group?.allocations || []}
                     onAllocate={handleAllocate}
@@ -243,6 +268,7 @@ export function SplitAllocationView({
                   <AllocationTarget
                     key={listing.listing_id}
                     listingId={listing.listing_id}
+                    spectrumId={spectrumId}
                     listingData={group?.listing}
                     required={listing.quantity}
                     allocated={
@@ -263,6 +289,7 @@ export function SplitAllocationView({
 
 function AvailableLots({
   listingId,
+  spectrumId,
   listingData,
   allocations,
   onAllocate,
@@ -272,6 +299,7 @@ function AvailableLots({
   setAllocateQtys,
 }: {
   listingId: string
+  spectrumId: string
   listingData?: AllocationListingData | null
   allocations: Allocation[]
   onAllocate: (lotId: string, listingId: string, quantity: number) => void
@@ -280,33 +308,21 @@ function AvailableLots({
   allocateQtys: Record<string, number>
   setAllocateQtys: (qtys: Record<string, number>) => void
 }) {
-  const { data: lotsData } = useGetListingLotsQuery({
-    listing_id: listingId,
-    listed: true,
-  })
+  const { data: lotsData } = useListingLots(listingId, spectrumId)
 
-  const allocatedByLot = useMemo(() => {
-    const map = new Map<string, number>()
-    allocations.forEach((alloc) => {
-      const current = map.get(alloc.lot_id) || 0
-      map.set(alloc.lot_id, current + alloc.quantity)
-    })
-    return map
-  }, [allocations])
-
+  // quantity_allocated counts every active allocation of the lot (this
+  // order's included), so what is left is what can still be allocated.
   const lots: StockLotWithAvailable[] = useMemo(() => {
     return (lotsData?.lots || [])
       .map((lot) => ({
         ...lot,
-        quantity_available:
-          lot.quantity_total - (allocatedByLot.get(lot.lot_id) || 0),
+        quantity_available: lot.quantity_total - lot.quantity_allocated,
       }))
       .filter((lot) => lot.quantity_available > 0)
-  }, [lotsData?.lots, allocatedByLot])
+  }, [lotsData?.lots])
 
-  const effectiveListing = listingData || lotsData?.listing
-  const title = getListingTitle(effectiveListing)
-  const image = getListingImage(effectiveListing)
+  const title = getListingTitle(listingData, lotsData?.lots)
+  const image = getListingImage(listingData, lotsData?.lots)
 
   if (lots.length === 0) return null
 
@@ -321,7 +337,7 @@ function AvailableLots({
           <InventoryRounded />
         </Avatar>
         <Link
-          href={`/market/listing/${listingId}`}
+          href={MARKET_PATHS.listing(listingId)}
           target="_blank"
           underline="hover"
         >
@@ -352,7 +368,7 @@ function AvailableLots({
                   {lot.owner ? (
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <Avatar
-                        src={lot.owner.avatar || undefined}
+                        src={lot.owner.avatar_url || undefined}
                         sx={{ width: 24, height: 24 }}
                       />
                       <Typography variant="body2" color="text.secondary">
@@ -441,6 +457,7 @@ function AvailableLots({
 
 function AllocationTarget({
   listingId,
+  spectrumId,
   listingData,
   required,
   allocated,
@@ -448,6 +465,7 @@ function AllocationTarget({
   onDeallocate,
 }: {
   listingId: string
+  spectrumId: string
   listingData?: AllocationListingData | null
   required: number
   allocated: number
@@ -463,13 +481,9 @@ function AllocationTarget({
   const [deallocateQtys, setDeallocateQtys] = React.useState<
     Record<string, number>
   >({})
-  const { data: lotsData } = useGetListingLotsQuery({
-    listing_id: listingId,
-    listed: true,
-  })
-  const effectiveListing = listingData || lotsData?.listing
-  const title = getListingTitle(effectiveListing)
-  const image = getListingImage(effectiveListing)
+  const { data: lotsData } = useListingLots(listingId, spectrumId)
+  const title = getListingTitle(listingData, lotsData?.lots)
+  const image = getListingImage(listingData, lotsData?.lots)
 
   const isComplete = allocated >= required
 
@@ -484,7 +498,7 @@ function AllocationTarget({
           <InventoryRounded />
         </Avatar>
         <Link
-          href={`/market/listing/${listingId}`}
+          href={MARKET_PATHS.listing(listingId)}
           target="_blank"
           underline="hover"
         >

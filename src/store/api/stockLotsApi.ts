@@ -46,12 +46,6 @@ export interface Location {
   created_at: string
 }
 
-export interface StockAggregates {
-  total: number
-  available: number
-  reserved: number
-}
-
 export interface Allocation {
   allocation_id: string
   lot_id: string
@@ -94,41 +88,6 @@ export interface ManualAllocationInput {
 
 export const stockLotsApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
-    // Get lots for a listing
-    getListingLots: builder.query<
-      {
-        lots: StockLot[]
-        listing: AllocationListingData | null
-        aggregates: StockAggregates
-      },
-      {
-        listing_id: string
-        location_id?: string | null
-        owner_id?: string | null
-        listed?: boolean
-      }
-    >({
-      query: ({ listing_id, location_id, owner_id, listed }) => {
-        const params = new URLSearchParams()
-        if (location_id) params.append("location_id", location_id)
-        if (owner_id) params.append("owner_id", owner_id)
-        if (listed !== undefined) params.append("listed", String(listed))
-
-        return `/api/market/listings/${listing_id}/lots?${params.toString()}`
-      },
-      transformResponse: (response: {
-        data: {
-          lots: StockLot[]
-          listing: AllocationListingData | null
-          aggregates: StockAggregates
-        }
-      }) => response.data,
-      providesTags: (result, error, { listing_id }) => [
-        { type: "MarketListings", id: listing_id },
-        { type: "StockLots", id: listing_id },
-      ],
-    }),
-
     // Get locations
     getLocations: builder.query<{ locations: Location[] }, { search?: string }>(
       {
@@ -201,7 +160,6 @@ export const stockLotsApi = serviceApi.injectEndpoints({
 })
 
 export const {
-  useGetListingLotsQuery,
   useGetLocationsQuery,
   useCreateLocationMutation,
   useGetOrderAllocationsQuery,

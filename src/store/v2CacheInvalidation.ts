@@ -40,6 +40,11 @@ export const v2CacheInvalidationMiddleware: Middleware = (storeApi) => (next) =>
       storeApi.dispatch(marketV2Api.util.invalidateTags(["Orders V2"]))
     }
 
+    // Allocating stock to an order changes the lots' quantity_allocated
+    if (endpointName === "manualAllocateOrder") {
+      storeApi.dispatch(marketV2Api.util.invalidateTags(["Stock Lots V2"]))
+    }
+
     if (endpointName === "updateOfferStatus") {
       storeApi.dispatch(marketV2Api.util.invalidateTags(["Orders V2"]))
     }

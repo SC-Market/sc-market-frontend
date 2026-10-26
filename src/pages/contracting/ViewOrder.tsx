@@ -360,11 +360,12 @@ export function ViewOrder() {
 
                 {/* Stock Allocation Tab */}
                 {amContractorManager &&
-                  order &&
+                  order?.contractor &&
                   activeTab === allocationTab && (
                     <Grid item xs={12}>
                       <SplitAllocationView
                         orderId={order.order_id}
+                        spectrumId={order.contractor}
                         listings={
                           // Use V2 order items if available, fall back to V1
                           (orderDetailV2?.items?.length
