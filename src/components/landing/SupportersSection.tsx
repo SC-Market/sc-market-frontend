@@ -118,7 +118,7 @@ export function SupportersSection() {
               <Typography
                 variant={"body2"}
                 align={"center"}
-                color={"text.secondary"}
+                color={"text.primary"}
               >
                 {supporter.name}
               </Typography>

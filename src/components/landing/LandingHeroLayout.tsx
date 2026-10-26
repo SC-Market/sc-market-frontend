@@ -45,12 +45,12 @@ function HeroStat(props: {
       <Typography
         variant="h4"
         component="p"
-        color="text.primary"
+        color="text.secondary"
         sx={{ fontWeight: "bold", whiteSpace: "nowrap" }}
       >
         {props.value ?? <Skeleton width="5ch" />}
       </Typography>
-      <Typography variant="body1" color="text.secondary">
+      <Typography variant="body1" color="text.primary">
         {props.label}
       </Typography>
     </Box>
@@ -107,6 +107,12 @@ function HeroSearch() {
   )
 }
 
+/*
+ * Text colours follow the site theme, where text.secondary is the brighter
+ * one: the <h1> and the stat numbers use it, the intro line and the stat
+ * labels use the duller text.primary (as MetricSection does).
+ */
+
 /**
  * The homepage hero, shared by the page and its skeletons so the loading
  * state has the loaded layout at every breakpoint. Everything is static text
@@ -159,14 +165,14 @@ export function LandingHeroLayout(props: {
               id="landing-hero-title"
               variant="h2"
               component="h1"
-              color="text.primary"
+              color="text.secondary"
               sx={{ fontWeight: "bold", maxWidth: 900 }}
             >
               {t("landing.heroTitle")}
             </Typography>
             <Typography
               variant="body1"
-              color="text.secondary"
+              color="text.primary"
               sx={{ mt: 1.5, maxWidth: 640 }}
             >
               {t("landing.heroText")}

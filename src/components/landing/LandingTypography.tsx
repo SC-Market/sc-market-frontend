@@ -49,12 +49,15 @@ export function LandingBlockTitle(
   )
 }
 
-/** Running text under a title. */
+/**
+ * Running text under a title: the duller text.primary, like body copy across
+ * the site (in this theme text.secondary is the brighter one, for titles).
+ */
 export function LandingBodyText(props: TextProps) {
   return (
     <Typography
       variant={"body1"}
-      color={"text.secondary"}
+      color={"text.primary"}
       sx={withSx({ textAlign: "left" }, props.sx)}
     >
       {props.children}

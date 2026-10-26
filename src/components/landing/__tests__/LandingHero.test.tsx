@@ -78,6 +78,18 @@ describe("LandingHero", () => {
     expect(headings[0]).toHaveTextContent("Star Citizen")
   })
 
+  it("headline and numbers use the bright text.secondary, supporting copy text.primary", () => {
+    // In this theme text.secondary is the brighter colour.
+    const bright = mainTheme.palette.text.secondary.toLowerCase()
+    const dull = mainTheme.palette.text.primary.toLowerCase()
+    renderWith(<LandingHero />)
+    const color = (el: Element) => getComputedStyle(el).color.toLowerCase()
+    expect(color(screen.getByRole("heading", { level: 1 }))).toBe(bright)
+    expect(color(screen.getByText("10,174"))).toBe(bright)
+    expect(color(screen.getByText(english.landing.heroText))).toBe(dull)
+    expect(color(screen.getByText(english.landing.heroOrdersLabel))).toBe(dull)
+  })
+
   it("shows the all-time totals, the big one in words", () => {
     renderWith(<LandingHero />)
     expect(screen.getByTestId("landing-total-orders")).toHaveTextContent("10,174")
