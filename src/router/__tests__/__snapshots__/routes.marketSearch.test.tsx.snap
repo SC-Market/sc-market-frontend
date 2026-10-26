@@ -18,11 +18,13 @@ exports[`/market page (real app) > market / buy orders toggle navigates between 
 exports[`/market page (real app) > turns URL search params into the listings search request 1`] = `
 {
   "afterNavigate": [
-    "/api/v2/listings/search?text=rifle&page=1&page_size=48&quantity_min=1",
     "/api/v2/listings/search?text=rifle&page_size=5",
+    "/api/v2/listings/search?text=rifle&page=1&page_size=48&quantity_min=1",
   ],
   "finalUrlAfterBack": "/market?query=laser&page=2&price_min=100&sort_by=price&sort_order=asc",
-  "h1": [],
+  "h1": [
+    "Market",
+  ],
   "initial": [
     "/api/v2/listings/search?text=laser&price_min=100&page=2&page_size=48&quantity_min=1&sort_by=price&sort_order=asc",
     "/api/v2/listings/search?text=laser&page_size=5",

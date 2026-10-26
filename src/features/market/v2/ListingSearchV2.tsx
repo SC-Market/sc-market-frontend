@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef, useState, useEffect } from "react";
+import React, { useMemo, useCallback, useRef } from "react";
 import {
   Box,
   Container,
@@ -7,7 +7,6 @@ import {
   Paper,
   Stack,
   Fade,
-  Button,
   TextField,
   MenuItem,
   Typography,
@@ -34,7 +33,7 @@ import { buildMarketSearchHead } from "../../../seo/hubHeads";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
 import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
-import { useSearchListingsQuery, useSearchResourcesQuery } from "../../../store/api/v2/market";
+import { useGetCategoriesQuery, useSearchListingsQuery, useSearchResourcesQuery } from "../../../store/api/v2/market";
 import type { ListingSearchResult, SearchListingsApiArg } from "../../../store/api/v2/market";
 import { formatPriceRange } from "../../../util/formatPrice";
 import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar";
@@ -52,7 +51,7 @@ import { ListingTableV2 } from "./components/ListingTableV2";
 import { useDrawerOpen } from "../../../hooks/layout/Drawer";
 import { BottomSheet } from "../../../components/mobile/BottomSheet";
 import { useMarketSidebar } from "../hooks/MarketSidebar";
-import { SearchRounded, AddShoppingCartRounded } from "@mui/icons-material";
+import { AddShoppingCartRounded } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -64,7 +63,7 @@ import { MARKET_ADS } from "../../../components/ads/adConfig";
 import { formatMarketUrl } from "../domain/urls";
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag";
-import { useDebounce } from "../../../hooks/useDebounce";
+import { useAutoApplySearchParams, type AutoApplySearchParams } from "../hooks/useAutoApplySearchParams";
 import { GroupedListingGrid } from "./redesign/GroupedListingGrid";
 
 /**
@@ -359,16 +358,17 @@ export function ListingSearchV2() {
 
 /**
  * MarketSearchAreaV2 - V2 filter sidebar content with QualityFilter
- * 
- * Simplified version of V1 MarketSearchArea with V2-specific filters.
- * Maintains visual parity with V1 styling.
+ *
+ * Filters auto-apply (no Search button): text and number inputs after the
+ * user pauses typing, selects / sorting / picked options immediately. See
+ * useAutoApplySearchParams for the debounce, history and no-op rules.
  */
 export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}) {
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const filters = useAutoApplySearchParams();
 
   const viewMode = useMemo(() => {
     if (location.pathname.startsWith('/bulk')) return 'bulk';
@@ -376,67 +376,21 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
     return 'market';
   }, [location.pathname]);
 
-  // Read current filter values from URL (V2 params with V1 fallbacks)
-  const text = searchParams.get("text") || searchParams.get("query") || "";
-  const priceMin = searchParams.get("price_min") || searchParams.get("minCost") || "";
-  const priceMax = searchParams.get("price_max") || searchParams.get("maxCost") || "";
-  const itemType = searchParams.get("item_type") || searchParams.get("type") || "";
-  const quantityMin = searchParams.get("quantity_min") || searchParams.get("quantityAvailable") || "";
-  const sortBy = searchParams.get("sort_by") || searchParams.get("sort") || "";
-  const sortOrder = searchParams.get("sort_order") || "";
-  const languageCodes = searchParams.get('language_codes')?.split(',').filter(Boolean) || [];
+  const sortBy = filters.applied("sort_by");
+  const sortOrder = filters.applied("sort_order");
+  const languageCodes = filters.applied("language_codes").split(",").filter(Boolean);
 
-  // Local input state so typing feels responsive; the URL param (and the
-  // search query it drives) only updates after the user pauses typing.
-  const [localText, setLocalText] = useState(text);
-
-  // Sync the local input when the URL text changes externally (navigation,
-  // cleared filters, another control updating the query).
-  useEffect(() => {
-    setLocalText(text);
-  }, [text]);
-
-  // Debounced input value drives both the search request and suggestions,
-  // so we fire at most one request after the user stops typing (~400ms).
-  const debouncedText = useDebounce(localText, 400);
+  // Suggestions follow the applied (debounced) search text, so they load
+  // together with the results instead of on every keystroke.
+  const appliedText = filters.applied("text");
   const { data: suggestions } = useSearchListingsQuery(
-    { text: debouncedText, pageSize: 5 },
-    { skip: debouncedText.length < 2 }
+    { text: appliedText, pageSize: 5 },
+    { skip: appliedText.length < 2 }
   );
   const autocompleteOptions = useMemo(
     () => suggestions?.listings?.map(l => l.title) ?? [],
     [suggestions],
   );
-
-  // Update URL params
-  const updateParam = useCallback(
-    (key: string, value: string) => {
-      const params = new URLSearchParams(searchParams);
-      if (value) {
-        params.set(key, value);
-      } else {
-        params.delete(key);
-      }
-      params.set("page", "1"); // Reset to first page
-      setSearchParams(params);
-    },
-    [searchParams, setSearchParams],
-  );
-
-  // Push the debounced search text into the URL (which drives the main
-  // results query) only once the user pauses typing. Guard against writing
-  // when nothing changed to avoid redundant history updates / loops.
-  useEffect(() => {
-    if (debouncedText !== text) {
-      updateParam("text", debouncedText);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedText]);
-
-  const applyFilters = useCallback(() => {
-    // Trigger search by updating params (already done by individual handlers)
-    // This button is for user convenience
-  }, []);
 
   return (
     <Box
@@ -457,8 +411,8 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
               select
               size="small"
               label={t("MarketSearchArea.status", "Status")}
-              value={searchParams.get("status") || ""}
-              onChange={(e) => updateParam("status", e.target.value)}
+              value={filters.applied("status")}
+              onChange={(e) => filters.setNow({ status: e.target.value })}
               color="secondary"
             >
               <MenuItem value="">{t("MarketSearchArea.allStatuses", "All")}</MenuItem>
@@ -495,22 +449,17 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
         )}
 
         <Grid item xs={12}>
-          <Button
-            onClick={applyFilters}
-            startIcon={<SearchRounded />}
-            variant={"contained"}
-            fullWidth
-          >
-            {t("MarketSearchArea.searchBtn", "Search")}
-          </Button>
-        </Grid>
-
-        <Grid item xs={12}>
           <Autocomplete
             freeSolo
             options={autocompleteOptions}
-            inputValue={localText}
-            onInputChange={(_, value) => setLocalText(value)}
+            value={appliedText || null}
+            inputValue={filters.value("text")}
+            onInputChange={(_, value, reason) => {
+              if (reason === "input") filters.setDebounced("text", value);
+            }}
+            // Picking a suggestion, Enter (freeSolo "createOption") and the clear button
+            onChange={(_, value) => filters.flush({ text: value ?? "" })}
+            onBlur={() => filters.flush()}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -522,7 +471,7 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
                   ...params.InputProps,
                   startAdornment: (
                     <InputAdornment position="start">
-                      <IconButton size="small">
+                      <IconButton size="small" onClick={() => filters.flush()}>
                         <SearchIcon />
                       </IconButton>
                     </InputAdornment>
@@ -548,18 +497,8 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
             label={t("MarketSearchArea.sort", "Sort By")}
             value={sortBy ? `${sortBy}:${sortOrder || "desc"}` : ""}
             onChange={(e) => {
-              const val = e.target.value;
-              if (!val) {
-                updateParam("sort_by", "");
-                updateParam("sort_order", "");
-              } else {
-                const [field, order] = val.split(":");
-                const params = new URLSearchParams(searchParams);
-                params.set("sort_by", field);
-                params.set("sort_order", order);
-                params.set("page", "1");
-                setSearchParams(params);
-              }
+              const [field = "", order = ""] = e.target.value ? e.target.value.split(":") : [];
+              filters.setNow({ sort_by: field, sort_order: order });
             }}
             color="secondary"
           >
@@ -586,14 +525,7 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
         </Grid>
 
         <Grid item xs={12}>
-          <TextField
-            fullWidth
-            size="small"
-            label={t("MarketSearchArea.itemType", "Item Type")}
-            value={itemType}
-            onChange={(e) => updateParam("item_type", e.target.value)}
-            color="secondary"
-          />
+          <ItemTypeFilter filters={filters} />
         </Grid>
 
         <Grid item xs={12}>
@@ -601,8 +533,7 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
             fullWidth
             size="small"
             label={t("MarketSearchArea.quantityMin", "Min Quantity")}
-            value={quantityMin}
-            onChange={(e) => updateParam("quantity_min", e.target.value)}
+            {...filters.bindText("quantity_min")}
             color="secondary"
             inputProps={{
               inputMode: "numeric",
@@ -615,8 +546,7 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
           <TextField
             fullWidth
             label={t("MarketSearchArea.minCost", "Min Price")}
-            value={priceMin}
-            onChange={(e) => updateParam("price_min", e.target.value)}
+            {...filters.bindText("price_min")}
             size={"small"}
             color={"secondary"}
             inputProps={{
@@ -636,8 +566,7 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
           <TextField
             fullWidth
             label={t("MarketSearchArea.maxCost", "Max Price")}
-            value={priceMax}
-            onChange={(e) => updateParam("price_max", e.target.value)}
+            {...filters.bindText("price_max")}
             size={"small"}
             color={"secondary"}
             inputProps={{
@@ -655,13 +584,13 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
 
         {/* Quality Filter - V2 specific */}
         <Grid item xs={12}>
-          <QualityFilterWrapper />
+          <QualityFilterWrapper filters={filters} />
         </Grid>
 
         <Grid item xs={12}>
           <LanguageFilter
             selectedLanguages={languageCodes}
-            onChange={(codes) => updateParam('language_codes', codes.length ? codes.join(',') : '')}
+            onChange={(codes) => filters.setNow({ language_codes: codes.join(",") })}
           />
         </Grid>
 
@@ -672,8 +601,8 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
             fullWidth
             size="small"
             label={t("market.pickupMethod", "Pickup Method")}
-            value={searchParams.get("pickup_method") || ""}
-            onChange={(e) => updateParam("pickup_method", e.target.value)}
+            value={filters.applied("pickup_method")}
+            onChange={(e) => filters.setNow({ pickup_method: e.target.value })}
           >
             <MenuItem value="">{t("market.anyPickup", "Any")}</MenuItem>
             <MenuItem value="delivery">{t("market.delivery", "Delivery")}</MenuItem>
@@ -682,6 +611,61 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
         </Grid>
       </Grid>
     </Box>
+  );
+}
+
+/**
+ * ItemTypeFilter - free-solo Autocomplete for the `item_type` filter.
+ *
+ * Options are the known item types (game item subcategories, grouped by
+ * category). Users can also type their own value: the listings search matches
+ * a broad category name (case-insensitive, partial) to all of its
+ * subcategories, otherwise the exact subcategory. Picking an option / Enter
+ * apply immediately; typed text is debounced like the search field.
+ */
+export function ItemTypeFilter({ filters }: { filters: AutoApplySearchParams }) {
+  const { t } = useTranslation();
+  const { data: categories } = useGetCategoriesQuery();
+
+  const { options, categoryOf } = useMemo(() => {
+    const categoryOf = new Map<string, string>();
+    for (const c of categories ?? []) {
+      if (c.subcategory && !categoryOf.has(c.subcategory)) {
+        categoryOf.set(c.subcategory, c.category);
+      }
+    }
+    // groupBy needs options ordered by group
+    const options = [...categoryOf.keys()].sort((a, b) =>
+      (categoryOf.get(a) ?? "").localeCompare(categoryOf.get(b) ?? ""),
+    );
+    return { options, categoryOf };
+  }, [categories]);
+
+  const applied = filters.applied("item_type");
+
+  return (
+    <Autocomplete
+      freeSolo
+      options={options}
+      groupBy={(option) => categoryOf.get(option) ?? ""}
+      value={applied || null}
+      inputValue={filters.value("item_type")}
+      onInputChange={(_, value, reason) => {
+        if (reason === "input") filters.setDebounced("item_type", value);
+      }}
+      // Picking an option, Enter (freeSolo "createOption") and the clear button
+      onChange={(_, value) => filters.flush({ item_type: value ?? "" })}
+      onBlur={() => filters.flush()}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          fullWidth
+          size="small"
+          label={t("MarketSearchArea.itemType", "Item Type")}
+          color="secondary"
+        />
+      )}
+    />
   );
 }
 
@@ -723,90 +707,31 @@ export function MarketSidebarV2() {
  * When no item_type is set the filter defaults to tier mode so users can still
  * filter the mixed result set by quality tier.
  */
-function QualityFilterWrapper() {
+function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
   const theme = useTheme<ExtendedTheme>();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  const itemType = searchParams.get("item_type") || searchParams.get("type") || "";
+  const itemType = filters.applied("item_type");
   const qualityMode = getQualityMode(itemType || undefined);
 
+  const toNumber = (v: string) => (v ? Number(v) : null);
+  const toParam = (v: number | null) => (v === null ? "" : String(v));
+
   // --- Tier state (quality_tier_min / quality_tier_max) ---
-  const minTier = useMemo(() => {
-    const value = searchParams.get("quality_tier_min");
-    return value ? Number(value) : null;
-  }, [searchParams]);
-
-  const maxTier = useMemo(() => {
-    const value = searchParams.get("quality_tier_max");
-    return value ? Number(value) : null;
-  }, [searchParams]);
-
-  const handleMinTierChange = useCallback(
-    (tier: number | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (tier === null) {
-        params.delete("quality_tier_min");
-      } else {
-        params.set("quality_tier_min", String(tier));
-      }
-      params.set("page", "1");
-      setSearchParams(params);
-    },
-    [searchParams, setSearchParams],
-  );
-
-  const handleMaxTierChange = useCallback(
-    (tier: number | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (tier === null) {
-        params.delete("quality_tier_max");
-      } else {
-        params.set("quality_tier_max", String(tier));
-      }
-      params.set("page", "1");
-      setSearchParams(params);
-    },
-    [searchParams, setSearchParams],
-  );
+  const minTier = toNumber(filters.applied("quality_tier_min"));
+  const maxTier = toNumber(filters.applied("quality_tier_max"));
+  const handleMinTierChange = (tier: number | null) =>
+    filters.setNow({ quality_tier_min: toParam(tier) });
+  const handleMaxTierChange = (tier: number | null) =>
+    filters.setNow({ quality_tier_max: toParam(tier) });
 
   // --- Value state (quality_value_min / quality_value_max) ---
-  const valueMin = useMemo(() => {
-    const v = searchParams.get("quality_value_min");
-    return v ? Number(v) : null;
-  }, [searchParams]);
-
-  const valueMax = useMemo(() => {
-    const v = searchParams.get("quality_value_max");
-    return v ? Number(v) : null;
-  }, [searchParams]);
-
-  const handleValueMinChange = useCallback(
-    (value: number | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value === null) {
-        params.delete("quality_value_min");
-      } else {
-        params.set("quality_value_min", String(value));
-      }
-      params.set("page", "1");
-      setSearchParams(params);
-    },
-    [searchParams, setSearchParams],
-  );
-
-  const handleValueMaxChange = useCallback(
-    (value: number | null) => {
-      const params = new URLSearchParams(searchParams);
-      if (value === null) {
-        params.delete("quality_value_max");
-      } else {
-        params.set("quality_value_max", String(value));
-      }
-      params.set("page", "1");
-      setSearchParams(params);
-    },
-    [searchParams, setSearchParams],
-  );
+  const valueMin = toNumber(filters.applied("quality_value_min"));
+  const valueMax = toNumber(filters.applied("quality_value_max"));
+  const handleValueMinChange = (value: number | null) =>
+    filters.setNow({ quality_value_min: toParam(value) });
+  const handleValueMaxChange = (value: number | null) =>
+    filters.setNow({ quality_value_max: toParam(value) });
 
   // --- Fetch quality bands when a specific game item is selected ---
   const gameItemId = searchParams.get("game_item_id") || undefined;
@@ -863,11 +788,7 @@ function QualityFilterWrapper() {
                 size="small"
                 color="secondary"
                 label="Min Value"
-                value={valueMin ?? ""}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  handleValueMinChange(v === "" ? null : Number(v));
-                }}
+                {...filters.bindText("quality_value_min")}
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0, max: 1000 }}
               />
             </Grid>
@@ -877,11 +798,7 @@ function QualityFilterWrapper() {
                 size="small"
                 color="secondary"
                 label="Max Value"
-                value={valueMax ?? ""}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  handleValueMaxChange(v === "" ? null : Number(v));
-                }}
+                {...filters.bindText("quality_value_max")}
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0, max: 1000 }}
               />
             </Grid>
