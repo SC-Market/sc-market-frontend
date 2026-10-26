@@ -9,12 +9,6 @@ import {
   Link,
   Skeleton,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   Tooltip,
   Typography,
@@ -107,88 +101,82 @@ export function WatchlistManager() {
           {t("priceAlerts.manager.empty", "You aren't watching anything yet.")}
         </Typography>
       ) : data ? (
-        <TableContainer>
-          <Table
-            size="small"
+        <Box>
+          <Box
+            component="ul"
+            sx={{ listStyle: "none", m: 0, p: 0 }}
             aria-label={t("priceAlerts.manager.title", "Watchlist")}
           >
-            <TableHead>
-              <TableRow>
-                <TableCell>{t("priceAlerts.manager.item", "Item")}</TableCell>
-                <TableCell align="right">
-                  {t("priceAlerts.manager.target", "Target price")}
-                </TableCell>
-                <TableCell align="right">
-                  {t("priceAlerts.manager.lowest", "Current lowest")}
-                </TableCell>
-                <TableCell>
-                  {t("priceAlerts.manager.lastAlerted", "Last alerted")}
-                </TableCell>
-                <TableCell align="right" />
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {items.map((item) => (
-                <TableRow
-                  key={item.id}
-                  data-testid="watchlist-item"
-                  data-id={item.id}
+            {items.map((item) => (
+              <Box
+                component="li"
+                key={item.id}
+                data-testid="watchlist-item"
+                data-id={item.id}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1.5,
+                  py: 1.25,
+                  borderBottom: 1,
+                  borderColor: "divider",
+                }}
+              >
+                <Avatar
+                  variant="rounded"
+                  src={item.item_image_url ?? undefined}
+                  alt=""
+                  sx={{ width: 40, height: 40 }}
                 >
-                  <TableCell>
-                    <Stack direction="row" spacing={1.5} alignItems="center">
-                      <Avatar
-                        variant="rounded"
-                        src={item.item_image_url ?? undefined}
-                        alt=""
-                        sx={{ width: 32, height: 32 }}
-                      >
-                        {itemLabel(item).charAt(0)}
-                      </Avatar>
-                      <Box sx={{ minWidth: 0 }}>
-                        {item.game_item_id ? (
-                          <Link
-                            component={RouterLink}
-                            to={WIKI_PATHS.item(
-                              item.game_item_id,
-                              item.item_name ?? undefined,
-                            )}
-                            underline="hover"
-                            color="text.primary"
-                            variant="body2"
-                          >
-                            {itemLabel(item)}
-                          </Link>
-                        ) : (
-                          <>
-                            <Typography variant="body2">
-                              “{item.query}”
-                            </Typography>
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                            >
-                              {t(
-                                "priceAlerts.manager.textMatch",
-                                "Matches listing titles",
-                              )}
-                            </Typography>
-                          </>
-                        )}
-                      </Box>
-                    </Stack>
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                    ≤ {formatAuec(item.max_price)}
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                    {item.current_lowest == null ? (
+                  {itemLabel(item).charAt(0).toUpperCase()}
+                </Avatar>
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  {item.game_item_id ? (
+                    <Link
+                      component={RouterLink}
+                      to={WIKI_PATHS.item(
+                        item.game_item_id,
+                        item.item_name ?? undefined,
+                      )}
+                      underline="hover"
+                      color="text.primary"
+                      variant="body2"
+                      sx={{ fontWeight: 600, textTransform: "capitalize" }}
+                    >
+                      {itemLabel(item)}
+                    </Link>
+                  ) : (
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      “{item.query}”{" "}
                       <Typography
-                        variant="body2"
-                        color="text.secondary"
                         component="span"
+                        variant="caption"
+                        color="text.secondary"
                       >
-                        {t("priceAlerts.manager.none", "None listed")}
+                        {t(
+                          "priceAlerts.manager.textMatch",
+                          "Matches listing titles",
+                        )}
                       </Typography>
+                    </Typography>
+                  )}
+                  <Typography variant="body2" color="primary.main">
+                    {t(
+                      "priceAlerts.manager.targetValue",
+                      "Alert at ≤ {{price}}",
+                      {
+                        price: formatAuec(item.max_price),
+                      },
+                    )}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    component="div"
+                  >
+                    {t("priceAlerts.manager.lowest", "Current lowest")}:{" "}
+                    {item.current_lowest == null ? (
+                      t("priceAlerts.manager.none", "None listed")
                     ) : item.game_item_id ? (
                       <Link
                         component={RouterLink}
@@ -208,53 +196,53 @@ export function WatchlistManager() {
                     ) : (
                       formatAuec(item.current_lowest)
                     )}
-                  </TableCell>
-                  <TableCell sx={{ whiteSpace: "nowrap" }}>
+                    {" · "}
+                    {t("priceAlerts.manager.lastAlerted", "Last alerted")}:{" "}
                     {item.last_notified_at
                       ? getRelativeTime(new Date(item.last_notified_at))
                       : t("priceAlerts.manager.never", "Never")}
-                  </TableCell>
-                  <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                    <Tooltip
-                      title={t("priceAlerts.manager.edit", "Edit target price")}
+                  </Typography>
+                </Box>
+                <Stack direction="row" spacing={0.5} sx={{ flexShrink: 0 }}>
+                  <Tooltip
+                    title={t("priceAlerts.manager.edit", "Edit target price")}
+                  >
+                    <IconButton
+                      size="small"
+                      onClick={() => setEditing(item)}
+                      aria-label={t(
+                        "priceAlerts.manager.editAria",
+                        "Edit {{name}}",
+                        {
+                          name: itemLabel(item),
+                        },
+                      )}
                     >
-                      <IconButton
-                        size="small"
-                        onClick={() => setEditing(item)}
-                        aria-label={t(
-                          "priceAlerts.manager.editAria",
-                          "Edit {{name}}",
-                          {
-                            name: itemLabel(item),
-                          },
-                        )}
-                      >
-                        <EditRounded fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip
-                      title={t("priceAlerts.manager.remove", "Stop watching")}
+                      <EditRounded fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip
+                    title={t("priceAlerts.manager.remove", "Stop watching")}
+                  >
+                    <IconButton
+                      size="small"
+                      disabled={removeState.isLoading}
+                      onClick={() => remove({ watchlistId: item.id })}
+                      aria-label={t(
+                        "priceAlerts.manager.removeAria",
+                        "Stop watching {{name}}",
+                        {
+                          name: itemLabel(item),
+                        },
+                      )}
                     >
-                      <IconButton
-                        size="small"
-                        disabled={removeState.isLoading}
-                        onClick={() => remove({ watchlistId: item.id })}
-                        aria-label={t(
-                          "priceAlerts.manager.removeAria",
-                          "Stop watching {{name}}",
-                          {
-                            name: itemLabel(item),
-                          },
-                        )}
-                      >
-                        <DeleteOutlineRounded fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      <DeleteOutlineRounded fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              </Box>
+            ))}
+          </Box>
           <Typography
             variant="caption"
             color="text.secondary"
@@ -265,7 +253,7 @@ export function WatchlistManager() {
               max: data.max_items,
             })}
           </Typography>
-        </TableContainer>
+        </Box>
       ) : null}
 
       {editing && (
@@ -306,52 +294,51 @@ function AddWatchlistItemForm({ disabled }: { disabled: boolean }) {
 
   return (
     <Box>
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={1}
-        alignItems={{ sm: "flex-start" }}
-      >
-        <Box sx={{ flex: 2, minWidth: 0 }}>
-          <GameItemPicker
-            value={item}
-            onChange={(v) => {
-              setItem(v)
-              reset()
-            }}
-          />
-        </Box>
-        <TextField
-          size="small"
-          sx={{ flex: 1, minWidth: 140 }}
-          label={t("priceAlerts.watch.targetPrice", "Target price")}
-          value={price}
-          onChange={(e) => setPrice(e.target.value.replace(/[^\d]/g, ""))}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") void submit()
+      <Stack spacing={1.5}>
+        <GameItemPicker
+          value={item}
+          onChange={(v) => {
+            setItem(v)
+            reset()
           }}
-          inputProps={{ inputMode: "numeric" }}
-          InputProps={{
-            endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
-          }}
-          error={invalid}
-          helperText={
-            invalid
-              ? t(
-                  "priceAlerts.watch.invalidPrice",
-                  "Enter a whole number above 1 aUEC.",
-                )
-              : " "
-          }
         />
-        <Button
-          variant="contained"
-          startIcon={<NotificationAddRounded />}
-          onClick={submit}
-          disabled={disabled || isLoading || !item || parsed == null}
-          sx={{ whiteSpace: "nowrap", height: 40 }}
-        >
-          {t("priceAlerts.manager.add", "Add item")}
-        </Button>
+        <Stack direction="row" spacing={1} alignItems="flex-start">
+          <TextField
+            size="small"
+            sx={{ flex: 1, minWidth: 0 }}
+            label={t("priceAlerts.watch.targetPrice", "Target price")}
+            value={price}
+            onChange={(e) => setPrice(e.target.value.replace(/[^\d]/g, ""))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") void submit()
+            }}
+            inputProps={{ inputMode: "numeric" }}
+            InputLabelProps={{ shrink: true }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">aUEC</InputAdornment>
+              ),
+            }}
+            error={invalid}
+            helperText={
+              invalid
+                ? t(
+                    "priceAlerts.watch.invalidPrice",
+                    "Enter a whole number above 1 aUEC.",
+                  )
+                : undefined
+            }
+          />
+          <Button
+            variant="contained"
+            startIcon={<NotificationAddRounded />}
+            onClick={submit}
+            disabled={disabled || isLoading || !item || parsed == null}
+            sx={{ whiteSpace: "nowrap", height: 40, flexShrink: 0 }}
+          >
+            {t("priceAlerts.manager.add", "Add item")}
+          </Button>
+        </Stack>
       </Stack>
       {error && (
         <Alert severity="error" sx={{ mt: 1 }}>

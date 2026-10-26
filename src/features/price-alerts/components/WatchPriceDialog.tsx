@@ -150,6 +150,7 @@ export function WatchPriceDialog({
               if (e.key === "Enter") void save()
             }}
             inputProps={{ inputMode: "numeric" }}
+            InputLabelProps={{ shrink: true }}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">aUEC</InputAdornment>

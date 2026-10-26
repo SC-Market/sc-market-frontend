@@ -93,7 +93,7 @@ describe("WatchlistManager", () => {
     expect(rows).toHaveLength(2)
     expect(rows.map((r) => r.getAttribute("data-id"))).toEqual(["w1", "w2"])
     expect(rows[0].textContent).toContain("Medical Supplies")
-    expect(rows[0].textContent).toContain("≤ 25,000 aUEC")
+    expect(rows[0].textContent).toContain("Alert at ≤ 25,000 aUEC")
     expect(rows[0].textContent).toContain("21,500 aUEC")
     expect(rows[0].textContent).toContain("Never")
     expect(rows[1].textContent).toContain("Matches listing titles")

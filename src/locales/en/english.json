@@ -5092,8 +5092,6 @@
       "loadError": "Couldn't load your watchlist.",
       "removeError": "Couldn't remove that item.",
       "empty": "You aren't watching anything yet.",
-      "item": "Item",
-      "target": "Target price",
       "lowest": "Current lowest",
       "lastAlerted": "Last alerted",
       "textMatch": "Matches listing titles",
@@ -5104,7 +5102,8 @@
       "remove": "Stop watching",
       "removeAria": "Stop watching {{name}}",
       "count": "{{count}} of {{max}} items",
-      "add": "Add item"
+      "add": "Add item",
+      "targetValue": "Alert at ≤ {{price}}"
     }
   }
 }
