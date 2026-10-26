@@ -15,6 +15,7 @@ import { RouteSkeletonFallback } from "./RouteSuspense"
 import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
 import { NoCurrentOrg } from "./NoCurrentOrg"
+import { NoOrgPermission, type OrgAdminArea } from "./NoOrgPermission"
 
 const MfaAdminGate = lazyWithRetry(() =>
   import("../../features/mfa/components/MfaAdminGate").then((m) => ({ default: m.MfaAdminGate })),
@@ -105,12 +106,14 @@ export function OrgRoute() {
 }
 
 export function OrgAdminRoute(props: {
+  /** What the guarded pages manage; worded in the no-permission state. */
+  area: OrgAdminArea
   permission?: keyof ContractorRole
   anyPermission?: (keyof ContractorRole)[]
   /** Custom check, e.g. canOpenOrgManage. */
   allow?: (contractor: Contractor, profile: UserProfileState) => boolean
 }) {
-  const { permission, anyPermission, allow } = props
+  const { area, permission, anyPermission, allow } = props
   const [cookies] = useCookies(["current_contractor"])
   const {
     data: contractor,
@@ -121,7 +124,7 @@ export function OrgAdminRoute(props: {
     skip: !cookies.current_contractor,
   })
 
-  const { data: profile } = useGetUserProfileQuery()
+  const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
 
   const canView = useMemo(() => {
     if (allow) {
@@ -144,10 +147,12 @@ export function OrgAdminRoute(props: {
 
   if (!cookies.current_contractor) {
     return <NoCurrentOrg />
-  } else if (isLoading) {
+  } else if (isLoading || profileLoading) {
     return <RouteSkeletonFallback />
   } else if (isSuccess && canView) {
     return <Outlet />
+  } else if (isSuccess) {
+    return <NoOrgPermission area={area} org={contractor} />
   } else if (isError) {
     return <Navigate to={"/"} />
   }

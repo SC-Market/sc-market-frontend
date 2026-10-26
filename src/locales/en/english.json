@@ -1683,6 +1683,16 @@
       "myOrgs": "Choose an organization",
       "title": "Select or join an organization to use this page"
     },
+    "noOrgPermission": {
+      "backToOrg": "Go to {{org}}",
+      "description": "Your role in this organization doesn't include this permission. Ask an organization admin if you need access.",
+      "titles": {
+        "money": "You don't have permission to manage this organization's money",
+        "orders": "You don't have permission to manage this organization's orders",
+        "recruiting": "You don't have permission to manage this organization's recruiting",
+        "settings": "You don't have permission to manage this organization's settings"
+      }
+    },
     "notifications": {
       "noNotifications": "No notifications",
       "noNotificationsDescription": "You're all caught up! New notifications will appear here"

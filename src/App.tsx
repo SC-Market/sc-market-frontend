@@ -906,7 +906,7 @@ export const routes: RouteObject[] = [
             ],
           },
           {
-            element: <OrgAdminRoute permission="manage_recruiting" />,
+            element: <OrgAdminRoute area="recruiting" permission="manage_recruiting" />,
             children: [
               {
                 path: "/recruiting/post/create",
@@ -927,7 +927,7 @@ export const routes: RouteObject[] = [
             ],
           },
           {
-            element: <OrgAdminRoute permission="manage_orders" />,
+            element: <OrgAdminRoute area="orders" permission="manage_orders" />,
             children: [
               {
                 path: "/org/orders",
@@ -995,7 +995,7 @@ export const routes: RouteObject[] = [
               },
               {
                 path: "orders",
-                element: <OrgAdminRoute permission="manage_orders" />,
+                element: <OrgAdminRoute area="orders" permission="manage_orders" />,
                 children: [
                   {
                     index: true,
@@ -1008,7 +1008,7 @@ export const routes: RouteObject[] = [
               },
               {
                 path: "manage",
-                element: <OrgAdminRoute allow={canOpenOrgManage} />,
+                element: <OrgAdminRoute area="settings" allow={canOpenOrgManage} />,
                 children: [
                   {
                     lazy: async () => ({
@@ -1030,7 +1030,7 @@ export const routes: RouteObject[] = [
               },
               {
                 path: "money",
-                element: <OrgAdminRoute permission="manage_stock" />,
+                element: <OrgAdminRoute area="money" permission="manage_stock" />,
                 children: [
                   {
                     index: true,
