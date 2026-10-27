@@ -4409,7 +4409,10 @@
       "regenerateTitle": "Regenerate Token?",
       "regenerateWarning": "This will invalidate your current URL. You'll need to update it in SCMDB.",
       "snapshotWarning": "Connecting SCMDB with the snapshot event enabled will replace your current blueprint tracking on SC Market with SCMDB's data. Blueprints tracked only on SC Market will be marked as unowned.",
-      "title": "SCMDB Sync"
+      "title": "SCMDB Sync",
+      "tokenActive": "A sync token is active. Its URL is only shown when it's created; regenerate the token to get a new URL.",
+      "tokenHint": "Sync token ending in …{{hint}} is active. Its URL is only shown when it's created; regenerate the token to get a new URL.",
+      "urlShownOnce": "Copy this URL now. It contains your sync token and won't be shown again. If you lose it, regenerate the token."
     },
     "tabs": {
       "blocklist": "Blocked Users",

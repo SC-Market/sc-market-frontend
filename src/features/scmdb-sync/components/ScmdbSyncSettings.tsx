@@ -41,28 +41,34 @@ export function ScmdbSyncSettings() {
   const [disconnect, { isLoading: isDisconnecting }] = useDisconnectScmdbMutation()
 
   const [copied, setCopied] = useState(false)
+  // The ingest URL holds the secret token, which the server stores hashed:
+  // it comes back only from connect/regenerate, so it's shown once, here.
+  const [newIngestUrl, setNewIngestUrl] = useState<string | null>(null)
   const [regenerateDialogOpen, setRegenerateDialogOpen] = useState(false)
   const [disconnectDialogOpen, setDisconnectDialogOpen] = useState(false)
 
   const handleConnect = async () => {
-    await connect()
+    const res = await connect()
+    if ("data" in res && res.data) setNewIngestUrl(res.data.ingest_url)
   }
 
   const handleCopy = async () => {
-    if (status?.ingest_url) {
-      await navigator.clipboard.writeText(status.ingest_url)
+    if (newIngestUrl) {
+      await navigator.clipboard.writeText(newIngestUrl)
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     }
   }
 
   const handleRegenerate = async () => {
-    await regenerate()
+    const res = await regenerate()
+    if ("data" in res && res.data) setNewIngestUrl(res.data.ingest_url)
     setRegenerateDialogOpen(false)
   }
 
   const handleDisconnect = async () => {
     await disconnect()
+    setNewIngestUrl(null)
     setDisconnectDialogOpen(false)
   }
 
@@ -115,27 +121,50 @@ export function ScmdbSyncSettings() {
           <CardContent>
             {status?.is_connected ? (
               <Box display="flex" flexDirection="column" gap={2}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  {t("settings.scmdb.ingestUrl", "Paste this URL into SCMDB → Profile → Sync Sinks:")}
-                </Typography>
+                {newIngestUrl ? (
+                  <>
+                    <Typography variant="subtitle2" color="text.secondary">
+                      {t("settings.scmdb.ingestUrl", "Paste this URL into SCMDB → Profile → Sync Sinks:")}
+                    </Typography>
 
-                <TextField
-                  fullWidth
-                  size="small"
-                  value={status.ingest_url || ""}
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton onClick={handleCopy} size="small">
-                            {copied ? <CheckIcon color="success" /> : <CopyIcon />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-                />
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={newIngestUrl}
+                      slotProps={{
+                        input: {
+                          readOnly: true,
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton onClick={handleCopy} size="small">
+                                {copied ? <CheckIcon color="success" /> : <CopyIcon />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        },
+                      }}
+                    />
+
+                    <Alert severity="warning">
+                      {t(
+                        "settings.scmdb.urlShownOnce",
+                        "Copy this URL now. It contains your sync token and won't be shown again. If you lose it, regenerate the token.",
+                      )}
+                    </Alert>
+                  </>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    {status.token_hint
+                      ? t("settings.scmdb.tokenHint", {
+                          defaultValue: "Sync token ending in …{{hint}} is active. Its URL is only shown when it's created; regenerate the token to get a new URL.",
+                          hint: status.token_hint,
+                        })
+                      : t(
+                          "settings.scmdb.tokenActive",
+                          "A sync token is active. Its URL is only shown when it's created; regenerate the token to get a new URL.",
+                        )}
+                  </Typography>
+                )}
 
                 {status.last_event_at && (
                   <Typography variant="body2" color="text.secondary">

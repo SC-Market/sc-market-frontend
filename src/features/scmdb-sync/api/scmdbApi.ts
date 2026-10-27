@@ -2,7 +2,10 @@ import { serviceApi } from "../../../store/service"
 
 export interface ScmdbStatusResponse {
   is_connected: boolean
-  ingest_url: string | null
+  /** Always null: the token is stored hashed, the URL is shown only once. */
+  ingest_url: null
+  /** Last 4 characters of the active token. */
+  token_hint: string | null
   last_event_at: string | null
   created_at: string | null
 }
