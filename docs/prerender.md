@@ -3,8 +3,8 @@
 Some public pages are rendered to HTML at build time (`react-router build`,
 `prerender` in `react-router.config.ts`). Visitors and crawlers get the
 page's content in the first response, and the browser hydrates it.
-Everything else is still the SPA shell (`__spa-fallback.html`, with the
-edge bridge's head and summary on the routes it knows).
+Everything else is still the SPA shell (`index.html`, with the edge
+bridge's head and summary on the routes it knows).
 
 The full design and its decisions are in `ssr-migration-design.md` (Phase 3).
 
@@ -71,9 +71,17 @@ on a prerendered page is fetched in the browser until it is added there.
 - `scripts/build/prerendered.ts` (run by `finalize.ts`) inlines the entry
   CSS, adds `Cache-Control: no-cache` for each page to `_headers`, and
   checks the bridge leaves every prerendered path alone.
+- Files, laid out for Cloudflare Pages (`layOutForPages`): each page is
+  `<path>.html` (`wiki/items.html`; `wiki/items/index.html` would be
+  answered with a 308 to `/wiki/items/`), the homepage is `__home.html`
+  (`public/_redirects` rewrites `/` to it), and `index.html` stays the SPA
+  shell, which `/* /index.html 200` serves for every other path. That
+  catch-all has to point at `index.html`: Pages serves existing files
+  before it, but a catch-all to any other file is served for every path,
+  assets included. The edge bridge fetches the shell as
+  `__spa-fallback.html` (the same file).
 - `public/_routes.json` excludes the prerendered hubs, `/`, `/guides` and
-  `/about` from the Pages Function, and `public/_redirects` serves
-  `__spa-fallback.html` for every other path.
+  `/about` from the Pages Function.
 
 ## Adding a page
 
