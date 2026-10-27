@@ -23,6 +23,7 @@ import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate } from "./seo/pageHead"
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
 import { initialLocaleReady } from "./util/i18n"
+import { installLinkIntentPrefetch } from "./router/routePrefetch"
 import { registerRouteModules } from "./routes/registerRouteModules"
 import { provideShell } from "./routes/shell"
 import { shell } from "./app/shell"
@@ -71,6 +72,9 @@ seedCachedProfile(store)
 
 // Before the first render, so the first images' load events are seen.
 initLazyImagePlaceholders()
+
+// Warm a link's route chunk when the visitor presses, focuses or hovers it.
+installLinkIntentPrefetch()
 
 // Unhead manages the document <head> (replaces react-helmet, which is
 // unmaintained and unsafe under React 19 concurrent rendering). The global

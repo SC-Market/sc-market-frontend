@@ -5,13 +5,11 @@
  */
 import { useEffect } from "react"
 import { Outlet } from "react-router-dom"
-import { startBackgroundPrefetch } from "../util/prefetch"
 import { SharedIntersectionObserver } from "../hooks/prefetch/usePrefetchOnVisible"
 import { useAppDispatch } from "../store/hooks"
 import { notificationApi } from "../features/notifications/api/notificationApi"
 import { usePeriodicBackgroundSync } from "../hooks/pwa/usePeriodicBackgroundSync"
 import { useWebVitals } from "../hooks/performance/useWebVitals"
-import { prefetchHighPriorityRoutes } from "../router/routePrefetch"
 import { markRouterReady } from "../routes/definePage"
 
 export function App() {
@@ -29,11 +27,11 @@ export function App() {
     // background so it can't show through under a different theme.
     document.documentElement.removeAttribute("data-pre-theme")
 
-    // Start background prefetching after the app loads
-    startBackgroundPrefetch()
-
-    // Prefetch high-priority routes
-    prefetchHighPriorityRoutes()
+    // No blanket background prefetching here: it evaluated chunks for pages
+    // most visitors never open while the current page was still rendering
+    // (idle long tasks, input delay). Prefetching is per page ("likely next",
+    // via the idle queue in router/idlePrefetchQueue.ts) and on intent
+    // (installLinkIntentPrefetch in entry.client.tsx).
 
     // Register periodic background sync if supported
     if (periodicSyncSupported) {

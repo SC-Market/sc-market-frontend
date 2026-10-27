@@ -1,6 +1,7 @@
 /**
- * Stale-chunk race: a route chunk fails to load while the idle-time
- * high-priority prefetch (App.tsx → prefetchHighPriorityRoutes) is in flight.
+ * Stale-chunk race: a route chunk fails to load while a route prefetch
+ * (routePrefetch.prefetchRoutes, as the idle prefetch queue runs it) is in
+ * flight.
  *
  * The old global `vite:preloadError` handler called preventDefault() whenever
  * ANY prefetch was in flight. Vite's preload helper then resolved the failed
@@ -29,10 +30,7 @@ globalThis.requestIdleCallback = vi.fn((cb: IdleRequestCallback) => {
 })
 
 import { routeRegistry } from "../../router/routeRegistry"
-import {
-  clearPrefetchCache,
-  prefetchHighPriorityRoutes,
-} from "../../router/routePrefetch"
+import { clearPrefetchCache, prefetchRoutes } from "../../router/routePrefetch"
 import { retryDynamicImport, MissingModuleError } from "../retryDynamicImport"
 
 /** Same semantics as Vite's __vitePreload: dispatch a cancelable
@@ -60,7 +58,9 @@ const reload = vi.fn()
 const originalLocation = window.location
 
 /** The exact shape App.tsx's lazy loaders use. */
-async function loadLoginRoute(routeImport: () => Promise<{ LoginPage: unknown }>) {
+async function loadLoginRoute(
+  routeImport: () => Promise<{ LoginPage: unknown }>,
+) {
   return {
     Component: (await retryDynamicImport(routeImport, { baseDelayMs: 1 }))
       .LoginPage,
@@ -79,7 +79,7 @@ describe("stale route chunk while a prefetch is in flight", () => {
       value: { ...originalLocation, reload },
     })
 
-    // Every high-priority prefetch hangs until released, so it is in flight
+    // Every route prefetch hangs until released, so it is in flight
     // for the whole route load.
     const pending = new Promise<void>((resolve) => {
       releasePrefetch = resolve
@@ -89,7 +89,7 @@ describe("stale route chunk while a prefetch is in flight", () => {
         vitePreload(() => pending.then(() => ({ default: {} }))),
       )
     }
-    prefetchHighPriorityRoutes()
+    void prefetchRoutes(["/market", "/contractors"])
     expect(routeRegistry["/market"]).toHaveBeenCalled()
   })
 
@@ -175,15 +175,14 @@ describe("stale route chunk while a prefetch is in flight", () => {
   })
 
   it("still swallows a failed prefetch without reloading", async () => {
-    // /market: always in the high-priority set (/dashboard is only warmed for
-    // a cached signed-in profile since 1c7ec8b4).
+    // /market: one of the prefetched routes.
     vi.mocked(routeRegistry["/market"]).mockImplementation(() =>
       vitePreload(() => Promise.reject(staleChunkError("Market"))),
     )
     clearPrefetchCache()
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
 
-    prefetchHighPriorityRoutes()
+    void prefetchRoutes(["/market", "/contractors"])
     await vi.waitFor(() =>
       expect(warn).toHaveBeenCalledWith(
         "Failed to prefetch route /market:",

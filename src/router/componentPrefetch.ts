@@ -3,6 +3,8 @@
  * This enables prefetching of tab components and other lazy-loaded sections
  */
 
+import { enqueueIdlePrefetch } from "./idlePrefetchQueue"
+
 export type ComponentImportFunction = () => Promise<unknown>
 
 /**
@@ -201,18 +203,10 @@ export function prefetchComponentsForPath(path: string): void {
     return
   }
 
-  // Use requestIdleCallback for non-blocking prefetch
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(
-      () => {
-        prefetchComponents(componentIds)
-      },
-      { timeout: 1000 },
-    )
-  } else {
-    setTimeout(() => {
-      prefetchComponents(componentIds)
-    }, 50)
+  // One at a time, in idle slices, after the page has settled
+  // (see idlePrefetchQueue.ts)
+  for (const id of componentIds) {
+    enqueueIdlePrefetch(`component:${id}`, () => prefetchComponent(id))
   }
 }
 

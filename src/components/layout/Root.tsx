@@ -5,7 +5,6 @@ import { Navbar } from "../navbar/Navbar"
 import React from "react"
 import { PreferencesButton } from "../../views/settings/PreferencesButton"
 import { CookieConsent } from "../alert/CookieConsent"
-import { useRoutePrefetch } from "../../hooks/prefetch/RoutePrefetch"
 import { SkipNavigation } from "../accessibility/SkipNavigation"
 import { OfflineIndicator } from "../pwa/OfflineIndicator"
 import { UpdateNotification } from "../pwa/UpdateNotification"
@@ -33,9 +32,6 @@ export function Root(props: { children: React.ReactNode }) {
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
   const hydrated = useHydrated()
-
-  // Enable route-based prefetching
-  useRoutePrefetch()
 
   return (
     <Box

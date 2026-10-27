@@ -1,6 +1,6 @@
 import { routeRegistry, RouteImportFunction } from "./routeRegistry"
 import { ROUTE_PREFETCH_MAP } from "../types/routes"
-import { loadProfileCache } from "../features/profile/profileCache"
+import { enqueueIdlePrefetch } from "./idlePrefetchQueue"
 
 /**
  * Cache to track which routes have been prefetched
@@ -55,6 +55,91 @@ export async function prefetchRoute(path: string): Promise<void> {
   return prefetchPromise
 }
 
+const patternCache = new Map<string, RegExp>()
+function patternRegex(pattern: string): RegExp {
+  let re = patternCache.get(pattern)
+  if (!re) {
+    re = new RegExp(
+      "^" +
+        pattern
+          .split("/")
+          .map((seg) =>
+            seg.startsWith(":")
+              ? "[^/]+"
+              : seg.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+          )
+          .join("/") +
+        "/?$",
+    )
+    patternCache.set(pattern, re)
+  }
+  return re
+}
+
+/**
+ * Intent prefetch for a concrete link target ("/market?type=x",
+ * "/contractor/foo"): finds its routeRegistry entry (exact, else the first
+ * matching ":param" pattern) and warms that chunk. Unknown targets are a
+ * silent no-op. For hover / focus / touchstart on links.
+ */
+export function prefetchRouteForUrl(url: string): void {
+  const path = url.split(/[?#]/)[0] || "/"
+  const key =
+    path in routeRegistry
+      ? path
+      : Object.keys(routeRegistry).find(
+          (pattern) =>
+            pattern.includes(":") && patternRegex(pattern).test(path),
+        )
+  if (key) void prefetchRoute(key)
+}
+
+const HOVER_INTENT_MS = 100
+
+function internalHref(target: EventTarget | null): string | null {
+  const el = target instanceof Element ? target.closest("a[href]") : null
+  if (!el) return null
+  const href = el.getAttribute("href") || ""
+  // Same-origin app paths only ("/market", not "//cdn", "https://", "#x")
+  if (!href.startsWith("/") || href.startsWith("//")) return null
+  if (el.getAttribute("target") === "_blank" || el.hasAttribute("download"))
+    return null
+  return href
+}
+
+let linkIntentInstalled = false
+
+/**
+ * One document-level listener that warms a link's route chunk on intent:
+ * pointerdown / touchstart (the press lands ~100 ms before the click), focus,
+ * and on desktop a hover that lasts HOVER_INTENT_MS. Covers every internal
+ * <a href="/..."> (nav, cards, landing links) without per-component handlers,
+ * and replaces the blanket idle prefetch of "high-priority" routes.
+ */
+export function installLinkIntentPrefetch(doc: Document = document): void {
+  if (linkIntentInstalled) return
+  linkIntentInstalled = true
+  const now = (e: Event) => {
+    const href = internalHref(e.target)
+    if (href) prefetchRouteForUrl(href)
+  }
+  let hoverTimer: ReturnType<typeof setTimeout> | undefined
+  let hovered: string | null = null
+  const over = (e: Event) => {
+    const href = internalHref(e.target)
+    if (href === hovered) return
+    hovered = href
+    clearTimeout(hoverTimer)
+    if (href)
+      hoverTimer = setTimeout(() => prefetchRouteForUrl(href), HOVER_INTENT_MS)
+  }
+  const opts = { capture: true, passive: true } as const
+  doc.addEventListener("pointerdown", now, opts)
+  doc.addEventListener("touchstart", now, opts)
+  doc.addEventListener("focusin", now, opts)
+  doc.addEventListener("mouseover", over, opts)
+}
+
 /**
  * Prefetch multiple routes
  * @param paths - Array of route paths to prefetch
@@ -76,19 +161,10 @@ export function prefetchRoutesForPath(currentPath: string): void {
     return
   }
 
-  // Use requestIdleCallback for non-blocking prefetch
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(
-      () => {
-        prefetchRoutes(routesToPrefetch)
-      },
-      { timeout: 2000 }, // Fallback to setTimeout after 2s
-    )
-  } else {
-    // Fallback for browsers without requestIdleCallback
-    setTimeout(() => {
-      prefetchRoutes(routesToPrefetch)
-    }, 100)
+  // One at a time, in idle slices, after the page has settled
+  // (see idlePrefetchQueue.ts)
+  for (const path of routesToPrefetch) {
+    enqueueIdlePrefetch(`route:${path}`, () => prefetchRoute(path))
   }
 }
 
@@ -112,65 +188,6 @@ export function prefetchRouteOnInteraction(
   element.addEventListener(event, handleInteraction, { once: true })
 
   return () => element.removeEventListener(event, handleInteraction)
-}
-
-/**
- * Check if network conditions are suitable for prefetching
- */
-function shouldPrefetch(): boolean {
-  // Check if user has data saver enabled
-  if ("connection" in navigator) {
-    const connection = (
-      navigator as Navigator & {
-        connection?: { saveData?: boolean; effectiveType?: string }
-      }
-    ).connection
-    if (connection?.saveData) {
-      return false
-    }
-
-    // Don't prefetch on slow connections
-    if (
-      connection?.effectiveType &&
-      ["slow-2g", "2g"].includes(connection.effectiveType)
-    ) {
-      return false
-    }
-  }
-
-  return true
-}
-
-/**
- * Prefetch high-priority routes during idle time
- * These are routes that are commonly accessed
- */
-export function prefetchHighPriorityRoutes(): void {
-  if (!shouldPrefetch()) {
-    console.debug("Skipping route prefetch due to network conditions")
-    return
-  }
-
-  // High-priority routes to prefetch. /dashboard is sign-in only and its chunk
-  // statically pulls in the chart library (@mui/x-charts), so it is warmed
-  // only for a returning signed-in visitor (cached profile), not for every
-  // anonymous one.
-  const highPriorityRoutes = ["/market", "/contractors"]
-  if (loadProfileCache()) highPriorityRoutes.push("/dashboard")
-
-  // Use requestIdleCallback for non-blocking prefetch
-  if ("requestIdleCallback" in window) {
-    requestIdleCallback(
-      () => {
-        prefetchRoutes(highPriorityRoutes)
-      },
-      { timeout: 3000 },
-    )
-  } else {
-    setTimeout(() => {
-      prefetchRoutes(highPriorityRoutes)
-    }, 2000)
-  }
 }
 
 /**

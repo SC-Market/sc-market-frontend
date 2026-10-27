@@ -1,5 +1,5 @@
 import { vi } from "vitest"
-import { describe, it, expect, beforeEach } from "vitest"
+import { describe, it, expect, beforeEach, afterEach } from "vitest"
 
 // Mock the route registry to avoid importing actual modules
 vi.mock("../routeRegistry", () => {
@@ -26,10 +26,11 @@ import {
   prefetchRoute,
   prefetchRoutes,
   prefetchRoutesForPath,
+  prefetchRouteForUrl,
   clearPrefetchCache,
-  prefetchHighPriorityRoutes,
 } from "../routePrefetch"
 import { routeRegistry } from "../routeRegistry"
+import { GRACE_MS, resetIdlePrefetchQueue } from "../idlePrefetchQueue"
 
 describe("routePrefetch", () => {
   beforeEach(() => {
@@ -101,98 +102,42 @@ describe("routePrefetch", () => {
   })
 
   describe("prefetchRoutesForPath", () => {
-    it("should prefetch routes based on current path", () => {
-      prefetchRoutesForPath("/")
-
-      // Should trigger requestIdleCallback
-      expect(globalThis.requestIdleCallback).toHaveBeenCalled()
+    beforeEach(() => {
+      resetIdlePrefetchQueue()
+      vi.useFakeTimers()
+    })
+    afterEach(() => {
+      vi.useRealTimers()
     })
 
-    it("should not prefetch if no routes configured for path", () => {
+    it("queues the page's likely-next routes and loads them after the grace period", async () => {
+      prefetchRoutesForPath("/")
+      expect(vi.mocked(routeRegistry["/market"])).not.toHaveBeenCalled()
+
+      await vi.advanceTimersByTimeAsync(GRACE_MS + 100)
+      expect(vi.mocked(routeRegistry["/market"])).toHaveBeenCalledTimes(1)
+      expect(vi.mocked(routeRegistry["/contractors"])).toHaveBeenCalledTimes(1)
+    })
+
+    it("does nothing for a path with no prefetch map entry", async () => {
       prefetchRoutesForPath("/unknown-path")
-
-      // Should not trigger requestIdleCallback for unknown paths
-      // (it returns early before calling requestIdleCallback)
-    })
-
-    it("should use setTimeout fallback when requestIdleCallback unavailable", () => {
-      const originalRequestIdleCallback = globalThis.requestIdleCallback
-      Reflect.deleteProperty(globalThis, "requestIdleCallback")
-
-      const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout")
-
-      prefetchRoutesForPath("/")
-
-      expect(setTimeoutSpy).toHaveBeenCalled()
-
-      // Restore
-      globalThis.requestIdleCallback = originalRequestIdleCallback
-      setTimeoutSpy.mockRestore()
+      await vi.advanceTimersByTimeAsync(GRACE_MS + 100)
+      expect(vi.mocked(routeRegistry["/market"])).not.toHaveBeenCalled()
     })
   })
 
-  describe("prefetchHighPriorityRoutes", () => {
-    it("should prefetch high-priority routes", () => {
-      prefetchHighPriorityRoutes()
-
-      expect(globalThis.requestIdleCallback).toHaveBeenCalled()
+  describe("prefetchRouteForUrl", () => {
+    it("warms the route chunk for a concrete link target, ignoring the query", async () => {
+      prefetchRouteForUrl("/market/cart?ref=nav")
+      await Promise.resolve()
+      expect(vi.mocked(routeRegistry["/market/cart"])).toHaveBeenCalledTimes(1)
     })
 
-    it("warms /dashboard only for a returning signed-in visitor", async () => {
-      localStorage.removeItem("cached_user_profile")
-      prefetchHighPriorityRoutes()
-      await new Promise((r) => setTimeout(r, 0))
-      expect(vi.mocked(routeRegistry["/market"])).toHaveBeenCalled()
-      expect(vi.mocked(routeRegistry["/dashboard"])).not.toHaveBeenCalled()
-
-      localStorage.setItem(
-        "cached_user_profile",
-        JSON.stringify({ username: "someone" }),
-      )
-      prefetchHighPriorityRoutes()
-      await new Promise((r) => setTimeout(r, 0))
-      expect(vi.mocked(routeRegistry["/dashboard"])).toHaveBeenCalledTimes(1)
-      localStorage.removeItem("cached_user_profile")
-    })
-
-    it("should skip prefetch on slow connections", () => {
-      // Mock slow connection
-      Object.defineProperty(navigator, "connection", {
-        value: {
-          effectiveType: "2g",
-        },
-        configurable: true,
-      })
-
-      const consoleSpy = vi.spyOn(console, "debug").mockImplementation(() => {})
-
-      prefetchHighPriorityRoutes()
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Skipping route prefetch due to network conditions",
-      )
-
-      consoleSpy.mockRestore()
-    })
-
-    it("should skip prefetch when data saver is enabled", () => {
-      // Mock data saver
-      Object.defineProperty(navigator, "connection", {
-        value: {
-          saveData: true,
-        },
-        configurable: true,
-      })
-
-      const consoleSpy = vi.spyOn(console, "debug").mockImplementation(() => {})
-
-      prefetchHighPriorityRoutes()
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Skipping route prefetch due to network conditions",
-      )
-
-      consoleSpy.mockRestore()
+    it("is a silent no-op for unknown targets", () => {
+      const debug = vi.spyOn(console, "debug").mockImplementation(() => {})
+      prefetchRouteForUrl("/no-such-page")
+      expect(debug).not.toHaveBeenCalled()
+      debug.mockRestore()
     })
   })
 
