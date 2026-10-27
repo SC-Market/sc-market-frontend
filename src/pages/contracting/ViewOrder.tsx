@@ -11,7 +11,11 @@ import { HapticTab } from "../../components/haptic"
 import { OrderDetailSkeleton } from "../../components/skeletons"
 import { OrderPageBodySkeleton } from "../../components/skeletons/AccountPageSkeletons"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { useGetOrderDetailQuery } from "../../store/api/v2/market"
+import {
+  useGetMyShopsQuery,
+  useGetOrderDetailQuery,
+} from "../../store/api/v2/market"
+import { canManageOrderStock } from "../../features/market/components/allocation/canManageOrderStock"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
@@ -115,6 +119,19 @@ export function ViewOrder() {
         profile?.contractors,
       ),
     [orderContractor, profile, amContractor],
+  )
+
+  const { data: myShops } = useGetMyShopsQuery(undefined, { skip: !profile })
+  const canManageStock = useMemo(
+    () =>
+      canManageOrderStock({
+        hasV2Items: !!orderDetailV2?.items?.length,
+        orgOrderManager: amContractorManager,
+        assigned: !!amAssigned,
+        shopId: orderDetailV2?.seller?.shop_id,
+        myShops,
+      }),
+    [orderDetailV2, amContractorManager, amAssigned, myShops],
   )
 
   const isAssigned = useMemo(() => {
@@ -225,7 +242,7 @@ export function ViewOrder() {
                     label={t("orders.marketListings", "Items")}
                   />
                 )}
-              {amContractorManager && (
+              {canManageStock && (
                 <HapticTab label={t("orders.allocation", "Stock Allocation")} />
               )}
               {amRelated && (
@@ -245,7 +262,7 @@ export function ViewOrder() {
               session.offers[0].market_listings.length > 0) ||
               (orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0)
             const marketListingsTab = hasItems ? tabIndex++ : -1
-            const allocationTab = amContractorManager ? tabIndex++ : -1
+            const allocationTab = canManageStock ? tabIndex++ : -1
             const availabilityTab = amRelated ? tabIndex++ : -1
 
             return (
@@ -360,8 +377,8 @@ export function ViewOrder() {
                   ))}
 
                 {/* Stock Allocation Tab */}
-                {amContractorManager &&
-                  order?.contractor &&
+                {canManageStock &&
+                  order &&
                   activeTab === allocationTab && (
                     <Grid item xs={12}>
                       <SplitAllocationView orderId={order.order_id} />
