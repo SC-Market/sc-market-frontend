@@ -14,8 +14,6 @@ export const SCOPE_CATEGORIES = {
     scopes: [
       { value: "market:read", label: "Read Market" },
       { value: "market:write", label: "Write Market" },
-      { value: "market:purchase", label: "Purchase Items" },
-      { value: "market:photos", label: "Manage Photos" },
     ],
   },
   orders: {
@@ -23,7 +21,6 @@ export const SCOPE_CATEGORIES = {
     scopes: [
       { value: "orders:read", label: "Read Orders" },
       { value: "orders:write", label: "Write Orders" },
-      { value: "orders:reviews", label: "Write Reviews" },
     ],
   },
   contractors: {
@@ -31,12 +28,6 @@ export const SCOPE_CATEGORIES = {
     scopes: [
       { value: "contractors:read", label: "Read Organizations" },
       { value: "contractors:write", label: "Write Organizations" },
-      { value: "contractors:members", label: "Manage Members" },
-      { value: "contractors:webhooks", label: "Manage Webhooks" },
-      { value: "contractors:blocklist", label: "Manage Blocklist" },
-      { value: "orgs:read", label: "Read Org Settings" },
-      { value: "orgs:write", label: "Write Org Settings" },
-      { value: "orgs:manage", label: "Manage Org" },
     ],
   },
   services: {
@@ -44,7 +35,6 @@ export const SCOPE_CATEGORIES = {
     scopes: [
       { value: "services:read", label: "Read Services" },
       { value: "services:write", label: "Write Services" },
-      { value: "services:photos", label: "Manage Photos" },
     ],
   },
   offers: {

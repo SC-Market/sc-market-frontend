@@ -292,11 +292,13 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
 
             <Grid item xs={12}>
               <Typography variant="h6" gutterBottom>
-                Contractor Access
+                Organization Access
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Restrict this token to specific contractors. Leave empty for
-                access to all contractors.
+                Choose the organizations this token may act for. Leave empty to
+                give it no organization access: it can then only use your
+                personal account. A token with the Full Access scope can act
+                for all of your organizations.
               </Typography>
 
               {contractors && contractors.length > 0 ? (

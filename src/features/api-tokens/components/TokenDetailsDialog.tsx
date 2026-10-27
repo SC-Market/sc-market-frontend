@@ -222,12 +222,14 @@ export function TokenDetailsDialog({
       <Grid item xs={12}>
         <Typography variant="subtitle1" gutterBottom>
           <BusinessIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-          Contractor Access
+          Organization Access
         </Typography>
         <Typography variant="body2">
-          {(token.contractor_spectrum_ids || []).length === 0
-            ? "Unrestricted — access to all your organizations"
-            : `Restricted to ${(token.contractor_spectrum_ids || []).length} organization(s)`}
+          {(token.contractor_spectrum_ids || []).length > 0
+            ? `Restricted to ${(token.contractor_spectrum_ids || []).length} organization(s)`
+            : (token.scopes || []).some((s) => s === "full" || s === "admin")
+              ? "All your organizations (Full Access scope)"
+              : "None: this token can only use your personal account"}
         </Typography>
         {(token.contractor_spectrum_ids || []).length > 0 && (
           <Box sx={{ mt: 1 }}>
