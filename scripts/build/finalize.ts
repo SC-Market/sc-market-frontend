@@ -46,12 +46,14 @@ if (!existsSync(path.join(CLIENT_DIR, SHELL_FILE))) {
   )
 }
 
-// 1. build/client → <out>, without React Router's prerendered `.data`
-// files: route modules load data through their clientLoader, never .data.
+// 1. build/client → <out>, including React Router's prerendered `.data`
+// files: the client fetches `<path>.data` (`/_root.data` for /) for the
+// prerendered routes, which have a server loader. Without them Pages
+// answers with the SPA shell and React Router fails to decode it
+// ("unable to decode turbo-stream response").
 rmSync(outDir, { recursive: true, force: true })
 cpSync(CLIENT_DIR, outDir, {
   recursive: true,
-  filter: (source) => !source.endsWith(".data"),
 })
 finalizePrerenderedPages(outDir)
 const stats = path.join(ROOT, "build/stats.html")

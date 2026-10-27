@@ -61,7 +61,21 @@ export function finalizePrerenderedPages(outDir: string): string[] {
   }
 
   const headersFile = path.join(outDir, "_headers")
-  const rules = paths.map((p) => `${p}\n  Cache-Control: no-cache\n`).join("\n")
+  // Each page's single-fetch data (React Router's `<path>.data`, `_root.data`
+  // for /): turbo-stream, never cached across deploys.
+  const dataFiles = paths.map((p) => (p === "/" ? "/_root.data" : `${p}.data`))
+  for (const file of dataFiles) {
+    if (!existsSync(path.join(outDir, file))) {
+      throw new Error(
+        `${file} is missing: React Router didn't prerender its data`,
+      )
+    }
+  }
+  // One splat rule for the data files: Pages allows 100 header rules.
+  const rules = [
+    ...paths.map((p) => `${p}\n  Cache-Control: no-cache\n`),
+    `/*.data\n  Cache-Control: no-cache\n  Content-Type: text/x-script\n`,
+  ].join("\n")
   writeFileSync(
     headersFile,
     `${readFileSync(headersFile, "utf8").trimEnd()}\n\n# Prerendered pages (scripts/build/prerendered.ts).\n${rules}`,
