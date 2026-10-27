@@ -2002,6 +2002,19 @@ const injectedRtkApi = api
         query: () => ({ url: `/admin/active-listing-count` }),
         providesTags: ["Admin"],
       }),
+      previewAdminAlertAudience: build.query<
+        PreviewAdminAlertAudienceApiResponse,
+        PreviewAdminAlertAudienceApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/alerts/preview`,
+          params: {
+            target_type: queryArg.targetType,
+            target_spectrum_id: queryArg.targetSpectrumId,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
       requestDeletion: build.mutation<
         RequestDeletionApiResponse,
         RequestDeletionApiArg
@@ -3474,6 +3487,13 @@ export type GetActiveListingCountApiResponse = /** status 200 Ok */ {
   count: number
 }
 export type GetActiveListingCountApiArg = void
+export type PreviewAdminAlertAudienceApiResponse =
+  /** status 200 Ok */ AdminAlertAudiencePreview
+export type PreviewAdminAlertAudienceApiArg = {
+  targetType: AdminAlertTargetType
+  /** The org, when target_type is specific_org */
+  targetSpectrumId?: string
+}
 export type RequestDeletionApiResponse =
   /** status 200 Ok */ RequestDeletionResponse
 export type RequestDeletionApiArg = {
@@ -7171,6 +7191,20 @@ export type GameDataImportJob = {
   error: string | null
   details: string | null
 }
+export type AdminAlertAudiencePreview = {
+  /** Users the alert would reach (the posting admin excluded). */
+  recipients: number
+  /** Of those, how many have a verified email (email reach). */
+  verified_emails: number
+  /** Of those, how many have Discord linked (Discord DM reach). */
+  discord_linked: number
+}
+export type AdminAlertTargetType =
+  | "all_users"
+  | "org_members"
+  | "org_owners"
+  | "admins_only"
+  | "specific_org"
 export type RequestDeletionResponse = {
   scheduledAt: string
   message: string
@@ -7380,6 +7414,7 @@ export const {
   useGetImportJobStatusQuery,
   useExpireAllListingsMutation,
   useGetActiveListingCountQuery,
+  usePreviewAdminAlertAudienceQuery,
   useRequestDeletionMutation,
   useCancelDeletionMutation,
   useGetDeletionStatusQuery,

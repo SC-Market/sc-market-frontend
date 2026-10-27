@@ -1,3 +1,5 @@
+export type AdminAlertChannel = "in_app" | "push" | "email" | "discord_dm"
+
 export interface AdminAlert {
   alert_id: string
   title: string
@@ -13,6 +15,8 @@ export interface AdminAlert {
   created_by: string
   created_at: string
   active: boolean
+  /** Channels the alert was sent on. */
+  channels?: AdminAlertChannel[]
 }
 
 export interface AdminAlertCreate {
@@ -26,6 +30,10 @@ export interface AdminAlertCreate {
     | "admins_only"
     | "specific_org"
   target_spectrum_id?: string | null
+  /** In-app is always added. Default: in-app and push. */
+  channels?: AdminAlertChannel[]
+  /** Required when email goes to all users. */
+  confirm_email_all_users?: boolean
 }
 
 export interface AdminAlertUpdate {

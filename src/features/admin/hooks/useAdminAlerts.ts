@@ -8,7 +8,7 @@ import {
 import { useSearchContractorsQuery } from "../../contractor/api/contractorApi"
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
-import type { AdminAlert, AdminAlertCreate } from "../../../datatypes/AdminAlert"
+import type { AdminAlert, AdminAlertChannel, AdminAlertCreate } from "../../../datatypes/AdminAlert"
 import type { MinimalContractor } from "../../contractor/domain/types"
 
 const INITIAL_FORM: AdminAlertCreate = {
@@ -18,6 +18,9 @@ const INITIAL_FORM: AdminAlertCreate = {
   target_type: "all_users",
   target_spectrum_id: null,
 }
+
+/** New alerts: in-app + push; email and Discord DM unchecked. */
+const DEFAULT_CHANNELS: AdminAlertChannel[] = ["in_app", "push"]
 
 function validateUrl(url: string): boolean {
   if (!url || url.trim() === "") return true
@@ -60,6 +63,8 @@ export function useAdminAlerts() {
   const [contractorError, setContractorError] = useState("")
   const [contractorSearchQuery, setContractorSearchQuery] = useState("")
   const [selectedContractor, setSelectedContractor] = useState<MinimalContractor | null>(null)
+  const [channels, setChannels] = useState<AdminAlertChannel[]>([...DEFAULT_CHANNELS])
+  const [confirmEmailOpen, setConfirmEmailOpen] = useState(false)
 
   const { data: contractorOptions = [], isLoading: isSearchingContractors } =
     useSearchContractorsQuery({ query: contractorSearchQuery }, { skip: contractorSearchQuery.length < 3 })
@@ -84,6 +89,7 @@ export function useAdminAlerts() {
 
   const resetForm = useCallback(() => {
     setFormData({ ...INITIAL_FORM })
+    setChannels([...DEFAULT_CHANNELS]); setConfirmEmailOpen(false)
     setLinkError(""); setContractorError("")
     setSelectedContractor(null); setContractorSearchQuery("")
   }, [])
@@ -104,15 +110,19 @@ export function useAdminAlerts() {
     setSelectedAlert(null); resetForm()
   }, [resetForm])
 
-  const handleCreateAlert = useCallback(() => {
+  /** Emailing all users asks for a confirmation first (`confirmed` after it). */
+  const handleCreateAlert = useCallback((confirmed: boolean = false) => {
     if (linkError) return
     if (formData.target_type === "specific_org" && !formData.target_spectrum_id) {
       setContractorError(t("admin.alerts.contractorRequired", "Please select a contractor")); return
     }
-    createAlertMut(formData).unwrap()
+    const emailAll = formData.target_type === "all_users" && channels.includes("email")
+    if (emailAll && !confirmed) { setConfirmEmailOpen(true); return }
+    setConfirmEmailOpen(false)
+    createAlertMut({ ...formData, channels, ...(emailAll ? { confirm_email_all_users: true } : {}) }).unwrap()
       .then(() => { issueAlert({ message: t("admin.alerts.created", "Alert created successfully"), severity: "success" }); handleCloseModals() })
       .catch((err: UnwrappedErrorInterface) => issueAlert(err))
-  }, [formData, linkError, createAlertMut, issueAlert, handleCloseModals, t])
+  }, [formData, channels, linkError, createAlertMut, issueAlert, handleCloseModals, t])
 
   const handleUpdateAlert = useCallback(() => {
     if (!selectedAlert || linkError) return
@@ -149,6 +159,7 @@ export function useAdminAlerts() {
     handleOpenCreateModal, handleOpenEditModal, handleOpenDeleteModal, handleCloseModals,
     // Form
     formData, setFormData,
+    channels, setChannels, confirmEmailOpen, setConfirmEmailOpen,
     linkError, handleLinkChange,
     contractorError, contractorSearchQuery, setContractorSearchQuery,
     selectedContractor, contractorOptions, isSearchingContractors,

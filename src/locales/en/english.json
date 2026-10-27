@@ -298,6 +298,27 @@
       "updating": "Updating...",
       "validation": {
         "invalidUrl": "Please enter a valid URL (http:// or https://)"
+      },
+      "channels": {
+        "label": "Send by",
+        "in_app": "In-app",
+        "push": "Push",
+        "email": "Email",
+        "discord_dm": "Discord DM",
+        "hint": "Chosen channels are delivered even to users who turned them off. Others are not used."
+      },
+      "preview": {
+        "recipients": "~{{count}} recipients",
+        "emails": "email to ~{{count}} verified addresses",
+        "discord": "Discord DM to ~{{count}} linked accounts",
+        "pickOrg": "Pick an organization to see the audience.",
+        "loading": "Counting recipients…"
+      },
+      "confirmEmail": {
+        "title": "Email every user?",
+        "body": "This alert will be emailed to every user with a verified address, including those who turned announcement emails off.",
+        "cancel": "Go back",
+        "confirm": "Send the email"
       }
     },
     "alerts.actions": "Actions",

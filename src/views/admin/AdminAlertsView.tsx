@@ -33,6 +33,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useAdminAlerts } from "../../features/admin/hooks/useAdminAlerts"
 import { safeRedirectPath } from "../../util/safeRedirect"
+import { AlertChannelsField } from "../../features/admin/components/AlertChannelsField"
 
 export function AdminAlertsView() {
   const { t } = useTranslation()
@@ -47,6 +48,7 @@ export function AdminAlertsView() {
     isCreateModalOpen, isEditModalOpen, isDeleteModalOpen,
     handleOpenCreateModal, handleOpenEditModal, handleOpenDeleteModal, handleCloseModals,
     formData, setFormData,
+    channels, setChannels, confirmEmailOpen, setConfirmEmailOpen,
     linkError, handleLinkChange,
     contractorError, contractorSearchQuery, setContractorSearchQuery,
     selectedContractor, contractorOptions, isSearchingContractors,
@@ -77,6 +79,21 @@ export function AdminAlertsView() {
           variant="outlined"
           size="small"
         />
+      ),
+    },
+    {
+      field: "channels",
+      headerName: t("admin.alerts.channels.label", "Send by"),
+      width: 180,
+      display: "flex",
+      flex: 1,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+          {((params.value as string[] | undefined) ?? []).map((c) => (
+            <Chip key={c} label={c.replace("_", " ")} size="small" variant="outlined" />
+          ))}
+        </Box>
       ),
     },
     {
@@ -369,6 +386,12 @@ export function AdminAlertsView() {
                 loadingText={t("admin.alerts.searching", "Searching...")}
               />
             )}
+            <AlertChannelsField
+              channels={channels}
+              onChange={setChannels}
+              targetType={formData.target_type}
+              targetSpectrumId={formData.target_spectrum_id}
+            />
             <MarkdownEditor
               value={formData.content}
               onChange={(value: string) =>
@@ -388,7 +411,7 @@ export function AdminAlertsView() {
         <DialogActions>
           <Button onClick={handleCloseModals}>Cancel</Button>
           <Button
-            onClick={handleCreateAlert}
+            onClick={() => handleCreateAlert()}
             variant="contained"
             disabled={
               isCreating ||
@@ -401,6 +424,33 @@ export function AdminAlertsView() {
             {isCreating
               ? t("admin.alerts.creating", "Creating...")
               : t("admin.alerts.create", "Create")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Emailing every user: confirm first. */}
+      <Dialog open={confirmEmailOpen} onClose={() => setConfirmEmailOpen(false)} maxWidth="xs">
+        <DialogTitle>{t("admin.alerts.confirmEmail.title", "Email every user?")}</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2">
+            {t(
+              "admin.alerts.confirmEmail.body",
+              "This alert will be emailed to every user with a verified address, including those who turned announcement emails off.",
+            )}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmEmailOpen(false)}>
+            {t("admin.alerts.confirmEmail.cancel", "Go back")}
+          </Button>
+          <Button
+            color="warning"
+            variant="contained"
+            disabled={isCreating}
+            onClick={() => handleCreateAlert(true)}
+            data-testid="confirm-email-all"
+          >
+            {t("admin.alerts.confirmEmail.confirm", "Send the email")}
           </Button>
         </DialogActions>
       </Dialog>
