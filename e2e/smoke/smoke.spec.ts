@@ -129,7 +129,7 @@ test.describe("logged in (fake session)", () => {
     for (const name of [
       "Profile",
       "Privacy",
-      "Email Notifications",
+      "Notifications",
       "Price Alerts",
       "Blocked Users",
     ]) {

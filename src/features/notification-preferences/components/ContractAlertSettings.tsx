@@ -119,6 +119,9 @@ export function ContractAlertSettings() {
                               checked={!!kinds?.includes(k)}
                               sx={{ p: 0 }}
                               tabIndex={-1}
+                              inputProps={{
+                                "aria-label": t(`orderKinds.${k}`, k),
+                              }}
                             />
                           }
                           aria-pressed={!!kinds?.includes(k)}
