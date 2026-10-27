@@ -15,7 +15,10 @@ import type { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MARKET_FILTER_PANEL_SX } from "../layout/MarketPageLayout"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ListingSkeleton } from "./ListingSkeleton"
-import { ServiceListingSkeleton } from "./ServiceListingSkeleton"
+import {
+  SERVICE_LISTINGS_PAGE_SIZE,
+  ServiceListingSkeleton,
+} from "./ServiceListingSkeleton"
 
 /** Filter fields of MarketSearchAreaV2 / ServiceSearchArea, as placeholders. */
 export function FilterPanelSkeleton({ fields = 7 }: { fields?: number }) {
@@ -154,8 +157,16 @@ export function MarketSearchSkeleton({
   )
 }
 
-/** Service cards shown while ServiceListings (and its chunk) loads. */
-export function ServiceListingsSkeleton({ count = 6 }: { count?: number }) {
+/**
+ * Service cards shown while ServiceListings (and its chunk) loads: the same
+ * number of cards as the list's own loading state, so the boundaries can
+ * swap without the page changing height.
+ */
+export function ServiceListingsSkeleton({
+  count = SERVICE_LISTINGS_PAGE_SIZE,
+}: {
+  count?: number
+}) {
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (

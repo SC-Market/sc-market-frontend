@@ -6,7 +6,6 @@ import {
   Grid,
   Paper,
   Stack,
-  Fade,
   TextField,
   MenuItem,
   Typography,
@@ -85,6 +84,9 @@ import { CARD_CHIP_SX, cardChipStackSx } from "./cardChips"
  * Adds QualityFilter component for quality tier filtering.
  * Maintains identical styling to V1 (Grid spacing={1}, card heights, typography).
  */
+// Unhead reads tagPriority off the element (not a DOM attribute of <title>).
+const HIGH_TAG_PRIORITY = { tagPriority: "high" } as Record<string, string>;
+
 export function ListingSearchV2() {
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
@@ -206,6 +208,10 @@ export function ListingSearchV2() {
     <>
       <SeoHead head={seoHead} />
       <Helmet>
+        {/* The search page's own title beats MarketPageV2's generic "Market"
+            title. Both mount in the same commit (MarketRouter preloads this
+            chunk), so mount order can't decide it. */}
+        <title {...HIGH_TAG_PRIORITY}>{seoHead.title}</title>
         {currentPage > 1 && (
           <link rel="prev" href={`${FRONTEND_URL}/market?${new URLSearchParams({ ...Object.fromEntries(searchParams), page: String(currentPage - 1) })}`} />
         )}
@@ -965,7 +971,7 @@ function qualityChipProps(listing: ListingSearchResult): { label: string; color:
   return null
 }
 
-export function ListingCardV2({ listing, index }: ListingCardV2Props) {
+export function ListingCardV2({ listing }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -975,12 +981,10 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
 
   const isNew = isAfter(new Date(listing.created_at), subDays(new Date(), 3));
 
+  // No fade-in: the cards replace their skeletons in place; a fade from
+  // opacity 0 blanked the grid between skeleton and content.
   return (
-    <Fade
-      in={true}
-      timeout={500}
-      style={{ transitionDelay: `${50 + 50 * index}ms` }}
-    >
+    <>
       <ListingWrapper
         useFixedWidth={false}
         data-testid="listing-card"
@@ -1206,6 +1210,6 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
           </IconButton>
         )}
       </ListingWrapper>
-    </Fade>
+    </>
   );
 }

@@ -3,10 +3,9 @@ import { useLocation, useParams } from "react-router-dom"
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 import { lazyWithRetry } from "../../../util/lazyWithRetry"
 
+import { ListingSearchV2 } from "./ListingSearchV2.lazy"
+
 // Lazy-loaded V2 components
-const ListingSearchV2 = lazyWithRetry(() =>
-  import("./ListingSearchV2").then((m) => ({ default: m.ListingSearchV2 })),
-)
 // Phase 0 redesign (behind the `market_v2_redesign` flag) — see MARKET_V2_RESEARCH.md §7
 const ListingDetailRedesign = lazyWithRetry(() =>
   import("./redesign/ListingDetailRedesign").then((m) => ({
@@ -135,10 +134,7 @@ export function MarketV2Routes() {
   }
 
   // Multiple detail
-  if (
-    pathname.startsWith("/market/multiple/") &&
-    !pathname.endsWith("/edit")
-  ) {
+  if (pathname.startsWith("/market/multiple/") && !pathname.endsWith("/edit")) {
     return <MarketMultipleViewV2 />
   }
 
@@ -154,9 +150,7 @@ export function MarketV2Routes() {
 
   // Stock management for specific listing
   if (pathname.startsWith("/market/stock/")) {
-    return (
-      <StockManagerV2 />
-    )
+    return <StockManagerV2 />
   }
 
   // Manage stock (overview)

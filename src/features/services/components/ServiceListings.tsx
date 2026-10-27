@@ -4,7 +4,8 @@ import { Divider, Grid } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { HapticTablePagination } from "../../../components/haptic"
 import { useServiceSearch } from "../../contracting/hooks/ServiceSearch"
-import { ServiceListingSkeleton } from "../../../components/skeletons"
+import { SERVICE_LISTINGS_PAGE_SIZE } from "../../../components/skeletons/ServiceListingSkeleton"
+import { ServiceListingsSkeleton } from "../../../components/skeletons/MarketSearchSkeleton"
 import { EmptyListings } from "../../../components/empty-states"
 import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -19,7 +20,7 @@ import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 
 export function ServiceListings(props: { user?: string; contractor?: string }) {
   const [page, setPage] = useState(0)
-  const [perPage, setPerPage] = useState(20)
+  const [perPage, setPerPage] = useState(SERVICE_LISTINGS_PAGE_SIZE)
   const [searchState] = useServiceSearch()
   const { user, contractor } = props
   const theme = useTheme<ExtendedTheme>()
@@ -95,13 +96,8 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   }, [servicesResponse?.data, contractor, user, customOrg])
 
   if (isAwaitingData({ isFetching, currentData })) {
-    return (
-      <>
-        {Array.from({ length: perPage }).map((_, i) => (
-          <ServiceListingSkeleton key={i} index={i} />
-        ))}
-      </>
-    )
+    // The same cards as the route skeleton and the chunk fallbacks above.
+    return <ServiceListingsSkeleton count={perPage} />
   }
 
   if (error) {

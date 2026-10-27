@@ -4,7 +4,10 @@ import type { TFunction } from "i18next"
 export type MarketPageKind = "items" | "buyorders" | "services"
 
 export function marketPageKind(pathname: string): MarketPageKind {
-  if (pathname.startsWith("/market/services")) return "services"
+  // "/services" only redirects to /market/services; its skeleton is the same.
+  if (pathname.startsWith("/market/services") || pathname === "/services") {
+    return "services"
+  }
   if (pathname.startsWith("/buyorders")) return "buyorders"
   return "items"
 }

@@ -51,6 +51,8 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   // Market routes
   "/market": MarketPageSkeleton,
   "/market/services": MarketPageSkeleton,
+  // Redirects to /market/services: the same skeleton while it does.
+  "/services": MarketPageSkeleton,
   "/market/category/:name": MarketPageSkeleton,
   "/bulk": MarketPageSkeleton,
   "/buyorders": MarketPageSkeleton,
