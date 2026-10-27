@@ -1,5 +1,8 @@
 import { MARKET_PATHS, PATHS } from "../../routes/paths"
-import type { SearchListingsApiArg } from "../../store/api/v2/market"
+import type {
+  SearchBuyOrdersApiArg,
+  SearchListingsApiArg,
+} from "../../store/api/v2/market"
 
 /**
  * A link to a signed-in-only page: the page itself when signed in. Signed
@@ -16,19 +19,35 @@ export function landingSellHref(signedIn: boolean): string {
   return loginGatedHref(MARKET_PATHS.create, signedIn)
 }
 
-/** Rows in the hero's "Latest listings" table. */
-export const LATEST_LISTINGS_COUNT = 6
+/**
+ * Listing cards in "Latest listings": two rows at every grid width (5
+ * columns from lg); the grid hides the ones past two rows on narrower
+ * screens, and phones scroll one row sideways.
+ */
+export const LATEST_LISTINGS_COUNT = 10
 
 /**
- * The hero's listing query (the table and the "live listings" total).
- * The homepage is a shop window: an out-of-stock listing is a dead end for
- * a first-time visitor, so only listings they can buy.
+ * The homepage's listing query ("Latest listings" and the hero's "live
+ * listings" total, one request). The homepage is a shop window: an
+ * out-of-stock listing is a dead end for a first-time visitor, so only
+ * listings they can buy.
  */
 export const LATEST_LISTINGS_ARGS: SearchListingsApiArg = {
   page: 1,
   pageSize: LATEST_LISTINGS_COUNT,
   status: "active",
   inStock: true,
+  sortBy: "created_at",
+  sortOrder: "desc",
+}
+
+/** Rows in the hero's "Wanted now" table. */
+export const WANTED_NOW_COUNT = 6
+
+/** The hero's buy-order query: the newest open public buy orders. */
+export const WANTED_NOW_ARGS: SearchBuyOrdersApiArg = {
+  page: 1,
+  pageSize: WANTED_NOW_COUNT,
   sortBy: "created_at",
   sortOrder: "desc",
 }

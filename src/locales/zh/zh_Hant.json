@@ -514,9 +514,7 @@
     "visibilityPrivate": "私人（僅限組織成員）",
     "visibilityPrivateHelp": "僅組織成員可見",
     "visibilityPublic": "公開",
-    "visibilityPublicHelp": "所有買家皆可見",
-    "qualityRange": "品質 {{range}}",
-    "requestedBy": "來自 {{name}}"
+    "visibilityPublicHelp": "所有買家皆可見"
   },
   "marketActions": {
     "createListing": "創建商品頁",
@@ -2603,17 +2601,9 @@
     "intentSellText": "免費刊登，不抽成",
     "intentSellAction": "建立刊登",
     "latestListingsTitle": "最新刊登",
-    "latestListingsItem": "物品",
-    "latestListingsShop": "商店",
-    "latestListingsPrice": "價格",
-    "latestListingsPerScu": "/ SCU",
-    "latestListingsQuantity": "×{{quantity}}",
     "latestListingsEmpty": "尚無刊登。",
     "latestListingsError": "無法載入最新刊登。",
     "wantedNowTitle": "正在收購",
-    "wantedNowText": "進行中的收購訂單。您有這些嗎？賣給他們吧。",
-    "wantedNowSeeAll": "查看全部",
-    "wantedNowEmpty": "目前沒有進行中的收購訂單。來刊登第一筆吧。",
     "wantedNowError": "無法載入收購訂單。",
     "topShopsTitle": "高評價商店",
     "topShopsText": "每筆訂單後由買家評價。",
@@ -2663,7 +2653,13 @@
     "faqOfficialQ": "SC Market 與 Cloud Imperium Games 有關聯嗎？",
     "faqOfficialA": "沒有。SC Market 是由粉絲建立的社群網站，未獲 Cloud Imperium Games 或 Roberts Space Industries 認可，也與其無關聯。",
     "faqOrgsQ": "我的組織可以在 SC Market 上販售嗎？",
-    "faqOrgsA": "可以。組織擁有共用店面，成員可以代表組織認領並完成訂單。之後，顧客會對整個組織進行評價。"
+    "faqOrgsA": "可以。組織擁有共用店面，成員可以代表組織認領並完成訂單。之後，顧客會對整個組織進行評價。",
+    "wantedNowItem": "物品",
+    "wantedNowBuyer": "買家",
+    "wantedNowPrice": "出價",
+    "wantedNowQuantity": "×{{quantity}}",
+    "wantedNowPost": "建立收購訂單：告訴賣家您需要什麼",
+    "latestListingsText": "玩家商店的新品，直接來自賣家。"
   },
   "fleet": {
     "fleetTitle": "艦隊",

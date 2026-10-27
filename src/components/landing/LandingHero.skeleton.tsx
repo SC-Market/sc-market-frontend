@@ -4,7 +4,7 @@ import { LandingHeroLayout } from "./LandingHeroLayout"
 
 /**
  * The hero while the homepage loads: the real layout, with the stat numbers
- * and the latest listings rows as same-size skeletons.
+ * and the buy-order rows as same-size skeletons.
  */
 export function LandingHeroSkeleton() {
   const session = useSession()
@@ -12,7 +12,7 @@ export function LandingHeroSkeleton() {
     <LandingHeroLayout
       stats={undefined}
       liveListings={undefined}
-      listings={undefined}
+      buyOrders={undefined}
       signedIn={session.status === "authenticated"}
     />
   )

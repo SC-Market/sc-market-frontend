@@ -514,9 +514,7 @@
     "visibilityPrivate": "Privé (membres de l'org uniquement)",
     "visibilityPrivateHelp": "Visible uniquement par les membres de l'organisation",
     "visibilityPublic": "Public",
-    "visibilityPublicHelp": "Visible par tous les acheteurs",
-    "qualityRange": "Qualité {{range}}",
-    "requestedBy": "par {{name}}"
+    "visibilityPublicHelp": "Visible par tous les acheteurs"
   },
   "marketActions": {
     "createListing": "Créer une annonce",
@@ -2682,17 +2680,9 @@
     "intentSellText": "Gratuit, sans commission",
     "intentSellAction": "Créer une annonce",
     "latestListingsTitle": "Dernières annonces",
-    "latestListingsItem": "Article",
-    "latestListingsShop": "Boutique",
-    "latestListingsPrice": "Prix",
-    "latestListingsPerScu": "/ SCU",
-    "latestListingsQuantity": "×{{quantity}}",
     "latestListingsEmpty": "Aucune annonce pour le moment.",
     "latestListingsError": "Impossible de charger les dernières annonces.",
     "wantedNowTitle": "Recherché en ce moment",
-    "wantedNowText": "Ordres d'achat ouverts. Vous avez l'un de ces articles ? Vendez-le-leur.",
-    "wantedNowSeeAll": "Tout voir",
-    "wantedNowEmpty": "Aucun ordre d'achat ouvert pour le moment. Publiez le premier.",
     "wantedNowError": "Impossible de charger les ordres d'achat.",
     "topShopsTitle": "Boutiques les mieux notées",
     "topShopsText": "Notées par les acheteurs après chaque commande.",
@@ -2742,7 +2732,13 @@
     "faqOfficialQ": "SC Market est-il affilié à Cloud Imperium Games ?",
     "faqOfficialA": "Non. SC Market est un site communautaire créé par des fans ; il n'est ni approuvé par Cloud Imperium Games ou Roberts Space Industries, ni affilié à eux.",
     "faqOrgsQ": "Mon org peut-elle vendre sur SC Market ?",
-    "faqOrgsA": "Oui. Les orgs disposent d'une boutique partagée, et les membres peuvent prendre en charge et honorer des commandes au nom de l'org. Les clients notent ensuite l'org dans son ensemble."
+    "faqOrgsA": "Oui. Les orgs disposent d'une boutique partagée, et les membres peuvent prendre en charge et honorer des commandes au nom de l'org. Les clients notent ensuite l'org dans son ensemble.",
+    "wantedNowItem": "Article",
+    "wantedNowBuyer": "Acheteur",
+    "wantedNowPrice": "Paie",
+    "wantedNowQuantity": "×{{quantity}}",
+    "wantedNowPost": "Créez un ordre d'achat : dites aux vendeurs ce qu'il vous faut",
+    "latestListingsText": "Les nouveautés des boutiques de joueurs, directement des vendeurs."
   },
   "fleet": {
     "fleetTitle": "Flotte",

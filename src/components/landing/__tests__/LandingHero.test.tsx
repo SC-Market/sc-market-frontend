@@ -1,7 +1,7 @@
 /**
  * The homepage hero: one <h1>, the all-time stats (live, with same-line
  * skeletons while loading), a market search, the category chips, the four
- * intent cards and the latest listings table. There is no sign-in card:
+ * intent cards and the "Wanted now" buy-order table. There is no sign-in card:
  * sign-in lives in the navbar and the sidebar.
  */
 import React from "react"
@@ -13,19 +13,22 @@ import { mainTheme } from "../../../hooks/styles/Theme"
 import type { Session } from "../../../hooks/login/useSession"
 import type { MarketStats } from "../../../features/market/domain/types"
 import type {
-  ListingSearchResult,
+  SearchBuyOrdersResponse,
   SearchListingsResponse,
+  StandingBuyOrder,
 } from "../../../store/api/v2/market"
 import english from "../../../locales/en/english.json"
 
 type StatsResult = { data?: MarketStats; isError: boolean; isLoading: boolean }
-type ListingsResult = {
-  data?: SearchListingsResponse
-  currentData?: SearchListingsResponse
+type QueryResult<T> = {
+  data?: T
+  currentData?: T
   isError: boolean
   isLoading: boolean
   isFetching: boolean
 }
+type ListingsResult = QueryResult<SearchListingsResponse>
+type OrdersResult = QueryResult<SearchBuyOrdersResponse>
 
 const h = vi.hoisted(() => ({
   session: { status: "unknown" } as Session,
@@ -36,6 +39,12 @@ const h = vi.hoisted(() => ({
     isLoading: true,
     isFetching: true,
   } as ListingsResult,
+  orders: {
+    data: undefined,
+    isError: false,
+    isLoading: true,
+    isFetching: true,
+  } as OrdersResult,
 }))
 vi.mock("../../../hooks/login/useSession", () => ({
   useSession: () => h.session,
@@ -63,6 +72,7 @@ vi.mock("../../../features/market/api/marketApi", () => ({
 }))
 vi.mock("../../../store/api/v2/market", () => ({
   useSearchListingsQuery: () => h.listings,
+  useSearchBuyOrdersQuery: () => h.orders,
 }))
 
 const { LandingHero } = await import("../LandingHero")
@@ -76,52 +86,55 @@ const STATS: MarketStats = {
   week_order_value: 12375400,
 }
 
-function listing(
+function order(
   id: string,
-  title: string,
-  extra: Partial<ListingSearchResult> = {},
-): ListingSearchResult {
+  name: string,
+  extra: Partial<StandingBuyOrder> = {},
+): StandingBuyOrder {
   return {
-    listing_id: id,
-    title,
-    shop_id: "s1",
-    shop_name: "ImShen's Shop",
-    shop_slug: "imshen",
-    shop_rating: 5,
-    shop_rating_count: 3,
-    shop_badge_ids: [],
-    shop_languages: ["en"],
-    price_min: 3500000,
-    price_max: 3500000,
-    quantity_available: 3,
-    variant_count: 1,
+    buy_order_id: id,
+    game_item_id: `item-${id}`,
+    game_item_name: name,
+    buyer_id: "b1",
+    buyer_name: "RunicSage",
+    quantity: 3,
+    quantity_fulfilled: 1,
+    price_per_unit: 3000000,
+    negotiable: false,
+    status: "active",
     created_at: "2026-10-26T00:00:00Z",
-    updated_at: "2026-10-26T00:00:00Z",
-    game_item_id: "g1",
-    game_item_name: title,
-    game_item_type: "Weapon",
-    quantity_unit: "unit",
     ...extra,
   }
 }
 
 const LISTINGS: SearchListingsResponse = {
-  listings: [
-    listing("11111111-aaaa", "Carinite 959Q", { quantity_unit: "scu" }),
-    listing("22222222-bbbb", 'A03 "Scorched" Sniper Rifle'),
-  ],
+  listings: [],
   total: 439,
+  page: 1,
+  page_size: 10,
+}
+
+const ORDERS: SearchBuyOrdersResponse = {
+  buy_orders: [
+    order("o1", "Savrilium", {
+      photos: [{ resource_id: "r1", url: "https://cdn.example/savrilium.webp" }],
+    }),
+    order("o2", "Killshot Rifle", { price_per_unit: 0 }),
+  ],
+  total: 2,
   page: 1,
   page_size: 6,
 }
 
-const loaded = (data: SearchListingsResponse): ListingsResult => ({
-  data,
-  currentData: data,
-  isError: false,
-  isLoading: false,
-  isFetching: false,
-})
+function loaded<T>(data: T): QueryResult<T> {
+  return {
+    data,
+    currentData: data,
+    isError: false,
+    isLoading: false,
+    isFetching: false,
+  }
+}
 
 function LocationProbe() {
   const location = useLocation()
@@ -145,6 +158,7 @@ beforeEach(() => {
   h.session = { status: "anonymous", profile: undefined }
   h.stats = { data: STATS, isError: false, isLoading: false }
   h.listings = loaded(LISTINGS)
+  h.orders = loaded(ORDERS)
 })
 
 describe("LandingHero", () => {
@@ -296,39 +310,58 @@ describe("LandingHero", () => {
     ).toHaveAttribute("href", "/market/services")
   })
 
-  it("the latest listings table links each listing, with its price and unit", () => {
+  it("the Wanted now table links each buy order, with its photo, price and quantity", () => {
     renderWith(<LandingHero />)
     const table = screen.getByRole("region", {
-      name: english.landing.latestListingsTitle,
+      name: english.landing.wantedNowTitle,
     })
-    const rows = within(table).getAllByTestId("listing-row")
-    expect(rows.map((r) => r.getAttribute("data-id"))).toEqual([
-      "11111111-aaaa",
-      "22222222-bbbb",
-    ])
+    const rows = within(table).getAllByTestId("buy-order-row")
+    expect(rows.map((r) => r.getAttribute("data-id"))).toEqual(["o1", "o2"])
     expect(
-      within(rows[0]).getByRole("link", { name: "Carinite 959Q" }),
-    ).toHaveAttribute("href", expect.stringMatching(/^\/market\/11111111--carinite-959q$/))
-    expect(rows[0]).toHaveTextContent("3.5M aUEC/ SCU")
-    expect(rows[1]).toHaveTextContent("3.5M aUEC×3")
-    // Always LATEST_LISTINGS_COUNT body rows, so a short list keeps its height.
-    expect(table.querySelectorAll("tbody tr")).toHaveLength(6)
+      within(rows[0]).getByRole("link", { name: "Savrilium" }),
+    ).toHaveAttribute("href", "/buyorder/o1")
+    const thumb = rows[0].querySelector("img")!
+    expect(thumb).toHaveAttribute("src", "https://cdn.example/savrilium.webp")
+    expect(thumb).toHaveAttribute("width", "32")
+    expect(thumb).toHaveAttribute("height", "32")
+    expect(rows[0]).toHaveTextContent("3M aUEC×2")
+    expect(rows[1]).toHaveTextContent("Make an offer")
+    expect(
+      within(table).getByRole("link", { name: english.landing.seeAll }),
+    ).toHaveAttribute("href", "/buyorders")
   })
 
-  it("the latest listings table holds skeleton rows while loading and a message on failure", () => {
-    h.listings = {
+  it("a short list keeps six rows: the first free one invites a buy order", () => {
+    renderWith(<LandingHero />)
+    const table = screen.getByTestId("landing-wanted-now")
+    expect(table.querySelectorAll("tbody tr")).toHaveLength(6)
+    const post = within(table).getByTestId("landing-post-buy-order")
+    expect(
+      within(post).getByRole("link", { name: english.landing.wantedNowPost }),
+    ).toHaveAttribute("href", "/buyorder/create")
+    expect(within(table).getAllByTestId("landing-post-buy-order")).toHaveLength(1)
+  })
+
+  it("the Wanted now table holds skeleton rows while loading and a message on failure", () => {
+    h.orders = {
       data: undefined,
       isError: false,
       isLoading: true,
       isFetching: true,
     }
     const { unmount } = renderWith(<LandingHero />)
-    const table = screen.getByTestId("landing-latest-listings")
+    const table = screen.getByTestId("landing-wanted-now")
     expect(table).toHaveAttribute("aria-busy", "true")
     expect(table.querySelectorAll("tbody tr")).toHaveLength(6)
-    expect(table.querySelectorAll("tbody .MuiSkeleton-root").length).toBe(18)
+    expect(table.querySelectorAll("tbody .MuiSkeleton-root").length).toBe(24)
     unmount()
 
+    h.orders = {
+      data: undefined,
+      isError: true,
+      isLoading: false,
+      isFetching: false,
+    }
     h.listings = {
       data: undefined,
       isError: true,
@@ -336,9 +369,9 @@ describe("LandingHero", () => {
       isFetching: false,
     }
     renderWith(<LandingHero />)
-    const failed = screen.getByTestId("landing-latest-listings")
+    const failed = screen.getByTestId("landing-wanted-now")
     expect(failed.querySelectorAll("tbody tr")).toHaveLength(6)
-    expect(failed).toHaveTextContent(english.landing.latestListingsError)
+    expect(failed).toHaveTextContent(english.landing.wantedNowError)
     expect(screen.getByTestId("landing-live-listings")).toHaveAttribute(
       "aria-hidden",
       "true",
@@ -381,9 +414,7 @@ describe("LandingHero", () => {
       screen.getByRole("link", { name: english.landing.intentBuyAction }),
     ).toBeInTheDocument()
     expect(
-      screen.getByTestId("landing-latest-listings").querySelectorAll(
-        "tbody tr",
-      ),
+      screen.getByTestId("landing-wanted-now").querySelectorAll("tbody tr"),
     ).toHaveLength(6)
   })
 })

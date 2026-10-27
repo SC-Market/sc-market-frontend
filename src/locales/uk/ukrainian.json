@@ -514,9 +514,7 @@
     "visibilityPrivate": "Приватне (лише для членів організації)",
     "visibilityPrivateHelp": "Видимо лише членам організації",
     "visibilityPublic": "Публічне",
-    "visibilityPublicHelp": "Видимо всім покупцям",
-    "qualityRange": "Якість {{range}}",
-    "requestedBy": "від {{name}}"
+    "visibilityPublicHelp": "Видимо всім покупцям"
   },
   "marketActions": {
     "createListing": "Створити оголошення",
@@ -2644,17 +2642,9 @@
     "intentSellText": "Безкоштовно, без комісії",
     "intentSellAction": "Створити оголошення",
     "latestListingsTitle": "Нові оголошення",
-    "latestListingsItem": "Предмет",
-    "latestListingsShop": "Магазин",
-    "latestListingsPrice": "Ціна",
-    "latestListingsPerScu": "/ SCU",
-    "latestListingsQuantity": "×{{quantity}}",
     "latestListingsEmpty": "Оголошень поки немає.",
     "latestListingsError": "Не вдалося завантажити нові оголошення.",
     "wantedNowTitle": "Шукають зараз",
-    "wantedNowText": "Відкриті замовлення на купівлю. Маєте щось із цього? Продайте їм.",
-    "wantedNowSeeAll": "Переглянути всі",
-    "wantedNowEmpty": "Зараз немає відкритих замовлень на купівлю. Створіть перше.",
     "wantedNowError": "Не вдалося завантажити замовлення на купівлю.",
     "topShopsTitle": "Магазини з найвищим рейтингом",
     "topShopsText": "Покупці оцінюють після кожного замовлення.",
@@ -2704,7 +2694,13 @@
     "faqOfficialQ": "Чи пов'язаний SC Market з Cloud Imperium Games?",
     "faqOfficialA": "Ні. SC Market — це фанатський спільнотний сайт, який не схвалений Cloud Imperium Games чи Roberts Space Industries і не пов'язаний з ними.",
     "faqOrgsQ": "Чи може моя організація продавати на SC Market?",
-    "faqOrgsA": "Так. Організації отримують спільну вітрину, а учасники можуть брати й виконувати замовлення від імені організації. Потім клієнти оцінюють організацію загалом."
+    "faqOrgsA": "Так. Організації отримують спільну вітрину, а учасники можуть брати й виконувати замовлення від імені організації. Потім клієнти оцінюють організацію загалом.",
+    "wantedNowItem": "Предмет",
+    "wantedNowBuyer": "Покупець",
+    "wantedNowPrice": "Платить",
+    "wantedNowQuantity": "×{{quantity}}",
+    "wantedNowPost": "Створіть замовлення на купівлю: скажіть продавцям, що вам потрібно",
+    "latestListingsText": "Новинки з магазинів гравців, просто від продавців."
   },
   "fleet": {
     "fleetTitle": "Флот",

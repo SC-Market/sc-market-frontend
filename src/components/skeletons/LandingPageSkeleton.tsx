@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles"
 import { LandingPageLayout } from "../landing/LandingPageLayout"
 // Direct imports, not the components/landing barrel.
 import { LandingHeroSkeleton } from "../landing/LandingHero.skeleton"
-import { WantedNowSkeleton } from "../landing/WantedNow.skeleton"
+import { LatestListingsSkeleton } from "../landing/LatestListings.skeleton"
 import { TopRatedShopsSkeleton } from "../landing/TopRatedShops.skeleton"
 import { StartSelling } from "../landing/StartSelling"
 import { LandingGameData } from "../landing/LandingGameData"
@@ -40,7 +40,7 @@ export function LandingPageSkeleton() {
     >
       <LandingPageLayout
         hero={<LandingHeroSkeleton />}
-        wantedNow={<WantedNowSkeleton />}
+        latestListings={<LatestListingsSkeleton />}
         topShops={<TopRatedShopsSkeleton />}
         startSelling={
           <StartSelling signedIn={session.status === "authenticated"} />

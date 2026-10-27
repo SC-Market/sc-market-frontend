@@ -18,10 +18,10 @@ import logo96 from "../../assets/scmarket-logo-96.webp"
 import { LandingImg } from "./LandingImage"
 import { MARKET_PATHS } from "../../routes/paths"
 import { formatCompactAmount } from "../../util/formatCompactAmount"
-import type { ListingSearchResult } from "../../store/api/v2/market"
+import type { StandingBuyOrder } from "../../store/api/v2/market"
 import { LANDING_CATEGORIES } from "./landingLinks"
 import { LandingIntents } from "./LandingIntents"
-import { LatestListingsTable } from "./LatestListingsTable"
+import { WantedNowTable } from "./WantedNowTable"
 
 /**
  * Totals from the market stats endpoint: undefined while loading (same-size
@@ -238,11 +238,11 @@ function HeroCategories() {
 /**
  * The homepage hero, shared by the page and its skeletons so the loading
  * state has the loaded layout at every breakpoint. Everything is static text
- * except the stats (same-line skeletons while loading) and the latest
- * listings table (fixed-height skeleton rows).
+ * except the stats (same-line skeletons while loading) and the "Wanted
+ * now" buy-order table (fixed-height skeleton rows).
  *
  * Desktop (lg): headline, stats, search and categories on the left, the
- * latest listings on the right, the four intent cards across both. Below
+ * newest buy orders on the right, the four intent cards across both. Below
  * lg one column, the intents straight under the search (DOM order, so the
  * tab order matches), then the table. Layout is CSS only (sx breakpoints),
  * so the markup is the same at every width.
@@ -254,8 +254,8 @@ export function LandingHeroLayout(props: {
   stats: LandingHeroStats | null | undefined
   /** Live listings total: undefined while loading, null when it failed. */
   liveListings: number | null | undefined
-  /** The latest listings: undefined while loading, null when it failed. */
-  listings: ListingSearchResult[] | null | undefined
+  /** The newest open buy orders: undefined while loading, null when it failed. */
+  buyOrders: StandingBuyOrder[] | null | undefined
   signedIn: boolean
 }) {
   const { t, i18n } = useTranslation()
@@ -422,7 +422,7 @@ export function LandingHeroLayout(props: {
           </Box>
 
           <Box sx={{ gridColumn: { lg: 2 }, gridRow: { lg: 1 }, minWidth: 0 }}>
-            <LatestListingsTable listings={props.listings} />
+            <WantedNowTable orders={props.buyOrders} />
           </Box>
         </Box>
       </Container>

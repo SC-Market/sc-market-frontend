@@ -514,9 +514,7 @@
     "visibilityPrivate": "非公開（組織メンバーのみ）",
     "visibilityPrivateHelp": "組織メンバーにのみ表示されます",
     "visibilityPublic": "公開",
-    "visibilityPublicHelp": "すべての購入者に表示されます",
-    "qualityRange": "品質 {{range}}",
-    "requestedBy": "{{name}} より"
+    "visibilityPublicHelp": "すべての購入者に表示されます"
   },
   "marketActions": {
     "createListing": "出品を作成",
@@ -2682,17 +2680,9 @@
     "intentSellText": "無料で出品、手数料なし",
     "intentSellAction": "出品を作成",
     "latestListingsTitle": "最新の出品",
-    "latestListingsItem": "アイテム",
-    "latestListingsShop": "ショップ",
-    "latestListingsPrice": "価格",
-    "latestListingsPerScu": "/ SCU",
-    "latestListingsQuantity": "×{{quantity}}",
     "latestListingsEmpty": "まだ出品はありません。",
     "latestListingsError": "最新の出品を読み込めませんでした。",
     "wantedNowTitle": "いま求められているもの",
-    "wantedNowText": "受付中の買い注文です。持っているなら、売ってみましょう。",
-    "wantedNowSeeAll": "すべて表示",
-    "wantedNowEmpty": "現在、受付中の買い注文はありません。最初の注文を掲載しましょう。",
     "wantedNowError": "買い注文を読み込めませんでした。",
     "topShopsTitle": "高評価のショップ",
     "topShopsText": "注文ごとに購入者が評価しています。",
@@ -2742,7 +2732,13 @@
     "faqOfficialQ": "SC Market は Cloud Imperium Games と提携していますか？",
     "faqOfficialA": "いいえ。SC Market はファンが運営するコミュニティサイトで、Cloud Imperium Games や Roberts Space Industries の公認・提携を受けていません。",
     "faqOrgsQ": "組織で SC Market に出品できますか？",
-    "faqOrgsA": "はい。組織は共有のストアフロントを持て、メンバーが組織に代わって注文を引き受け、処理できます。顧客は組織全体を評価します。"
+    "faqOrgsA": "はい。組織は共有のストアフロントを持て、メンバーが組織に代わって注文を引き受け、処理できます。顧客は組織全体を評価します。",
+    "wantedNowItem": "アイテム",
+    "wantedNowBuyer": "購入者",
+    "wantedNowPrice": "支払額",
+    "wantedNowQuantity": "×{{quantity}}",
+    "wantedNowPost": "買い注文を作成：欲しいものを販売者に伝えましょう",
+    "latestListingsText": "プレイヤーのショップに届いたばかりの出品です。"
   },
   "fleet": {
     "fleetTitle": "フリート",

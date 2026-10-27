@@ -5,7 +5,6 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
-  Chip,
   Fade,
   Typography,
 } from "@mui/material"
@@ -17,7 +16,6 @@ import type { StandingBuyOrder } from "../../../store/api/v2/market"
 import { ListingWrapper } from "../components/listings/ListingWrapper"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS } from "../../../routes/paths"
-import { CARD_CHIP_SX, cardChipStackSx } from "./cardChips"
 
 /** A game item with its active buy orders (one card on /buyorders). */
 export interface BuyOrderAggregate {
@@ -59,52 +57,13 @@ export function buyOrderPriceRange(
   return { min: Math.min(...prices), max: Math.max(...prices) }
 }
 
-/**
- * The quality an order asks for, "905–1000" (value 0-1000) or "Q3–5"
- * (tier); null when it takes any quality.
- */
-export function buyOrderQualityRange(
-  order: Pick<
-    StandingBuyOrder,
-    | "quality_value_min"
-    | "quality_value_max"
-    | "quality_tier_min"
-    | "quality_tier_max"
-  >,
-): string | null {
-  const range = (min: number, max: number) =>
-    min === max ? `${min}` : `${min}–${max}`
-  if (order.quality_value_min != null) {
-    return range(
-      order.quality_value_min,
-      order.quality_value_max ?? order.quality_value_min,
-    )
-  }
-  if (order.quality_tier_min != null) {
-    return `Q${range(
-      order.quality_tier_min,
-      order.quality_tier_max ?? order.quality_tier_min,
-    )}`
-  }
-  return null
-}
-
-/**
- * Card for a game item with active buy orders (/buyorders, the homepage's
- * "Wanted now"). `showOrderDetails`: for an item with a single order, name
- * the buyer and show its quality / negotiable chips.
- */
+/** Card for a game item with active buy orders (/buyorders). */
 export function BuyOrderAggregateCard({
   aggregate,
   index,
-  useFixedWidth = false,
-  showOrderDetails = false,
 }: {
   aggregate: BuyOrderAggregate
   index: number
-  /** The fixed card width of a horizontal rail (ListingWrapper). */
-  useFixedWidth?: boolean
-  showOrderDetails?: boolean
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { t, i18n } = useTranslation()
@@ -127,11 +86,6 @@ export function BuyOrderAggregateCard({
         ?.url || FALLBACK_IMAGE_URL,
     [aggregate.orders],
   )
-  const single =
-    showOrderDetails && aggregate.orders.length === 1
-      ? aggregate.orders[0]
-      : null
-  const quality = single ? buyOrderQualityRange(single) : null
 
   // Orders posted without a price (negotiable, price_per_unit 0) take offers
   const priceDisplay = !priceRange
@@ -144,7 +98,7 @@ export function BuyOrderAggregateCard({
 
   return (
     <ListingWrapper
-      useFixedWidth={useFixedWidth}
+      useFixedWidth={false}
       data-testid="buy-order-card"
       data-id={aggregate.item_id}
     >
@@ -157,28 +111,6 @@ export function BuyOrderAggregateCard({
             sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
           >
             <Card sx={{ height: 300, position: "relative" }}>
-              {single && (quality || single.negotiable) && (
-                <Box sx={cardChipStackSx("top-left")}>
-                  {quality && (
-                    <Chip
-                      label={t("market.qualityRange", "Quality {{range}}", {
-                        range: quality,
-                      })}
-                      color="info"
-                      size="small"
-                      sx={CARD_CHIP_SX}
-                    />
-                  )}
-                  {single.negotiable && (
-                    <Chip
-                      label={t("BuyOrdersRedesign.negotiable", "Negotiable")}
-                      color="info"
-                      size="small"
-                      sx={CARD_CHIP_SX}
-                    />
-                  )}
-                </Box>
-              )}
               <CardMedia
                 component="img"
                 loading="lazy"
@@ -216,8 +148,6 @@ export function BuyOrderAggregateCard({
                     ? { position: "absolute", bottom: 0, zIndex: 4 }
                     : {}),
                   maxWidth: "100%",
-                  // A single-order caption ("by <buyer>") ends in an ellipsis.
-                  ...(single ? { boxSizing: "border-box", width: "100%" } : {}),
                   padding: "8px 12px !important",
                 }}
               >
@@ -250,21 +180,12 @@ export function BuyOrderAggregateCard({
                 <Typography
                   variant="caption"
                   color="text.secondary"
-                  noWrap={!!single}
-                  sx={{
-                    fontSize: "0.7rem",
-                    lineHeight: 1,
-                    ...(single ? { display: "block", lineHeight: 1.2 } : {}),
-                  }}
+                  sx={{ fontSize: "0.7rem", lineHeight: 1 }}
                 >
                   {totalQty.toLocaleString(i18n.language)}{" "}
                   {t("market.requested", "requested")}
                   {" · "}
-                  {single
-                    ? t("market.requestedBy", "by {{name}}", {
-                        name: single.buyer_name,
-                      })
-                    : `${aggregate.orders.length} ${t("market.buyOrders", "buy orders")}`}
+                  {aggregate.orders.length} {t("market.buyOrders", "buy orders")}
                 </Typography>
               </CardContent>
             </Card>

@@ -10,7 +10,7 @@ import { Footer } from "../../components/footer/Footer"
 import { LandingPageLayout } from "../../components/landing/LandingPageLayout"
 // Direct imports, not the components/landing barrel.
 import { LandingHero } from "../../components/landing/LandingHero"
-import { WantedNowSkeleton } from "../../components/landing/WantedNow.skeleton"
+import { LatestListingsSkeleton } from "../../components/landing/LatestListings.skeleton"
 import { TopRatedShopsSkeleton } from "../../components/landing/TopRatedShops.skeleton"
 import { StartSelling } from "../../components/landing/StartSelling"
 import { LandingGameData } from "../../components/landing/LandingGameData"
@@ -26,14 +26,14 @@ import { safeRedirectPath } from "../../util/safeRedirect"
 
 /*
  * Below the fold, the two data sections are their own chunks (they bring
- * the buy-order and shop cards); their fallbacks are their skeletons, the
+ * the listing and shop cards); their fallbacks are their skeletons, the
  * same size as the loaded sections. The static sections after them are
  * plain markup in this chunk: no skeleton to swap, so nothing to shift, and
  * the page is complete HTML for a later prerender.
  */
-const WantedNow = lazyWithRetry(() =>
-  import("../../components/landing/WantedNow").then((m) => ({
-    default: m.WantedNow,
+const LatestListings = lazyWithRetry(() =>
+  import("../../components/landing/LatestListings").then((m) => ({
+    default: m.LatestListings,
   })),
 )
 const TopRatedShops = lazyWithRetry(() =>
@@ -83,9 +83,9 @@ export function LandingPage() {
     >
       <LandingPageLayout
         hero={<LandingHero />}
-        wantedNow={
-          <Suspense fallback={<WantedNowSkeleton />}>
-            <WantedNow />
+        latestListings={
+          <Suspense fallback={<LatestListingsSkeleton />}>
+            <LatestListings />
           </Suspense>
         }
         topShops={

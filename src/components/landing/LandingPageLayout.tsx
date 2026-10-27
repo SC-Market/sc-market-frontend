@@ -3,7 +3,7 @@ import { Box, Container, Stack } from "@mui/material"
 
 interface LandingPageLayoutProps {
   hero: ReactNode
-  wantedNow: ReactNode
+  latestListings: ReactNode
   topShops: ReactNode
   startSelling: ReactNode
   gameData: ReactNode
@@ -25,7 +25,7 @@ export function LandingPageLayout(props: LandingPageLayoutProps) {
 
       <Container maxWidth="lg">
         <Stack spacing={{ xs: 5, md: 6 }} sx={{ pt: { xs: 3, md: 3 } }}>
-          {props.wantedNow}
+          {props.latestListings}
           {props.topShops}
           {props.startSelling}
           {props.gameData}
