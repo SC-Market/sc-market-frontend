@@ -1239,6 +1239,120 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ShopSlugUnavailableReason": {
+				"type": "string",
+				"enum": [
+					"invalid",
+					"reserved_word",
+					"reserved_org",
+					"reserved_user",
+					"taken"
+				],
+				"description": "Why a slug can't be used."
+			},
+			"ReservedShopSlug": {
+				"description": "Words no shop may take as its slug, because a URL with the slug in it would\nresolve to something else.\n\nA shop slug sits in these path positions:\n  frontend  /shops/:slug   (public profile; /shops/create is a page)\n            /shop/:shopSlug (shop dashboard; only children follow the slug)\n  backend   /api/v2/shops/{slug}   (GET; /shops/mine, /shops/by-owner,\n            /shops/slug-availability are routes, POST /shops/quick too)\n            /api/shops/...         (v1; /api/shops/game is the in-game shop API)\n\nThis list is the single source for both repos: it is published in the\nOpenAPI spec as the ReservedShopSlug enum, which the frontend's route-table\ntest reads, and the backend route test (reserved-shop-slugs.test.ts) checks\nevery literal segment at the slug position of the generated route table\nagainst it. A new route segment that is not listed here fails one of those\ntests. The rest of the list are words a future route is likely to use.\n\nCompared lowercase. Existing shops that already hold one of these keep it\n(see shop-slug.service.ts); new shops and renames can't take it.",
+				"enum": [
+					"mine",
+					"quick",
+					"by-owner",
+					"slug-availability",
+					"create",
+					"game",
+					"new",
+					"edit",
+					"settings",
+					"manage",
+					"dashboard",
+					"admin",
+					"api",
+					"all",
+					"browse",
+					"search",
+					"directory",
+					"explore",
+					"featured",
+					"popular",
+					"trending",
+					"top",
+					"categories",
+					"category",
+					"tags",
+					"reviews",
+					"listings",
+					"services",
+					"orders",
+					"stock",
+					"customers",
+					"help",
+					"about",
+					"support",
+					"login",
+					"logout",
+					"signup",
+					"register",
+					"account",
+					"profile",
+					"shop",
+					"shops",
+					"market",
+					"sc-market",
+					"scmarket",
+					"official",
+					"staff",
+					"moderator",
+					"system",
+					"root",
+					"null",
+					"undefined",
+					"index",
+					"www",
+					"static",
+					"assets"
+				],
+				"type": "string"
+			},
+			"ShopSlugAvailabilityResponse": {
+				"properties": {
+					"slug": {
+						"type": "string",
+						"description": "The slug that was checked (trimmed)"
+					},
+					"available": {
+						"type": "boolean"
+					},
+					"reason": {
+						"$ref": "#/components/schemas/ShopSlugUnavailableReason",
+						"description": "Set when available is false"
+					},
+					"message": {
+						"type": "string",
+						"description": "Human-readable reason (English) when available is false"
+					},
+					"reserved_for": {
+						"type": "string",
+						"description": "Spectrum ID (reserved_org) or username (reserved_user) holding the slug"
+					},
+					"reserved_word": {
+						"$ref": "#/components/schemas/ReservedShopSlug",
+						"description": "The route word the slug collides with (reserved_word)"
+					},
+					"suggestions": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"description": "Free alternatives for this owner, best first. Empty when available."
+					}
+				},
+				"required": [
+					"slug",
+					"available",
+					"suggestions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UpdateShopRequest": {
 				"properties": {
 					"name": {
@@ -11823,6 +11937,13 @@
 					},
 					"bidder": {
 						"properties": {
+							"is_you": {
+								"type": "boolean"
+							},
+							"bidder_number": {
+								"type": "number",
+								"format": "double"
+							},
 							"avatar": {
 								"type": "string",
 								"nullable": true
@@ -11831,15 +11952,19 @@
 								"type": "string"
 							},
 							"username": {
-								"type": "string"
+								"type": "string",
+								"nullable": true
 							}
 						},
 						"required": [
+							"is_you",
+							"bidder_number",
 							"avatar",
 							"display_name",
 							"username"
 						],
-						"type": "object"
+						"type": "object",
+						"description": "Who placed the bid. Only the seller side (whoever may manage the listing's\nshop) sees the real account. Everyone else sees \"Bidder N\", numbered by\nfirst bid on this auction, with no username or avatar; `is_you` marks the\nviewer's own bid."
 					},
 					"amount": {
 						"type": "number",
@@ -11882,7 +12007,20 @@
 					"reserve_price": {
 						"type": "number",
 						"format": "double",
-						"nullable": true
+						"nullable": true,
+						"description": "The seller's reserve. Only present for the seller side; everyone else\ngets `has_reserve` and `reserve_met`."
+					},
+					"has_reserve": {
+						"type": "boolean"
+					},
+					"reserve_met": {
+						"type": "boolean",
+						"nullable": true,
+						"description": "Whether the highest bid meets the reserve. null when there is no reserve."
+					},
+					"is_seller": {
+						"type": "boolean",
+						"description": "Whether the viewer is on the seller side (may manage the listing's shop)."
 					},
 					"status": {
 						"type": "string"
@@ -11894,13 +12032,23 @@
 					},
 					"total_bids": {
 						"type": "number",
+						"format": "double",
+						"description": "Number of active bids (one per bidder), across all pages."
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"page_size": {
+						"type": "number",
 						"format": "double"
 					},
 					"bids": {
 						"items": {
 							"$ref": "#/components/schemas/BidDetail"
 						},
-						"type": "array"
+						"type": "array",
+						"description": "Active bids, highest first, paginated."
 					}
 				},
 				"required": [
@@ -11908,10 +12056,14 @@
 					"end_time",
 					"min_bid_increment",
 					"buyout_price",
-					"reserve_price",
+					"has_reserve",
+					"reserve_met",
+					"is_seller",
 					"status",
 					"current_highest_bid",
 					"total_bids",
+					"page",
+					"page_size",
 					"bids"
 				],
 				"type": "object",
@@ -13988,6 +14140,59 @@
 					{
 						"in": "query",
 						"name": "spectrum_id",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/shops/slug-availability": {
+			"get": {
+				"operationId": "GetShopSlugAvailability",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ShopSlugAvailabilityResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Check whether a slug is free for a shop, before creating or renaming it.\nUnavailable answers say why (invalid, reserved route word, reserved for\nan org's Spectrum ID or a user's personal shop, taken) and suggest free\nalternatives. The owner is the caller's personal shop, or `contractor_id`'s\norg shop (needs manage_market), or `shop_id`'s owner when renaming that\nshop (needs to manage it; its own slug counts as free).",
+				"summary": "Check shop slug availability",
+				"tags": [
+					"Shops"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "slug",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "contractor_id",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "shop_id",
 						"required": false,
 						"schema": {
 							"type": "string"
@@ -21845,7 +22050,7 @@
 						}
 					}
 				},
-				"description": "Get auction details and bids for a listing",
+				"description": "Get auction details and bids for a listing.\n\nThe auction is visible exactly when its listing is: public listings to\neveryone, unlisted ones to whoever has the link, private ones to members\nof the owning org, and test shops' listings to test accounts only. Others\nget a 404.",
 				"tags": [
 					"Auctions V2"
 				],
@@ -21857,6 +22062,26 @@
 						"required": true,
 						"schema": {
 							"type": "string"
+						}
+					},
+					{
+						"description": "1-based page of bids (default 1)",
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "Bids per page (default 20, max 100)",
+						"in": "query",
+						"name": "page_size",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
 						}
 					}
 				]

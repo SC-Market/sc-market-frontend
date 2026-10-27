@@ -255,6 +255,20 @@ const injectedRtkApi = api
         }),
         providesTags: ["Shops"],
       }),
+      getShopSlugAvailability: build.query<
+        GetShopSlugAvailabilityApiResponse,
+        GetShopSlugAvailabilityApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/slug-availability`,
+          params: {
+            slug: queryArg.slug,
+            contractor_id: queryArg.contractorId,
+            shop_id: queryArg.shopId,
+          },
+        }),
+        providesTags: ["Shops"],
+      }),
       getShop: build.query<GetShopApiResponse, GetShopApiArg>({
         query: (queryArg) => ({ url: `/shops/${queryArg.slug}` }),
         providesTags: ["Shops"],
@@ -1818,7 +1832,13 @@ const injectedRtkApi = api
         GetAuctionDetailApiResponse,
         GetAuctionDetailApiArg
       >({
-        query: (queryArg) => ({ url: `/auctions/${queryArg.listingId}` }),
+        query: (queryArg) => ({
+          url: `/auctions/${queryArg.listingId}`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
         providesTags: ["Auctions V2"],
       }),
       placeBid: build.mutation<PlaceBidApiResponse, PlaceBidApiArg>({
@@ -2180,6 +2200,13 @@ export type GetShopsByOwnerApiResponse =
 export type GetShopsByOwnerApiArg = {
   username?: string
   spectrumId?: string
+}
+export type GetShopSlugAvailabilityApiResponse =
+  /** status 200 Ok */ ShopSlugAvailabilityResponse
+export type GetShopSlugAvailabilityApiArg = {
+  slug: string
+  contractorId?: string
+  shopId?: string
 }
 export type GetShopApiResponse = /** status 200 Ok */ ShopPublicResponse
 export type GetShopApiArg = {
@@ -3378,6 +3405,10 @@ export type GetAuctionDetailApiResponse =
   /** status 200 Ok */ AuctionDetailResponse
 export type GetAuctionDetailApiArg = {
   listingId: string
+  /** 1-based page of bids (default 1) */
+  page?: number
+  /** Bids per page (default 20, max 100) */
+  pageSize?: number
 }
 export type PlaceBidApiResponse = /** status 200 Ok */ PlaceBidResponse
 export type PlaceBidApiArg = {
@@ -3869,6 +3900,84 @@ export type QuickCreateShopRequest = {
   owner_type: "user" | "contractor"
   /** Required when owner_type is "contractor" */
   contractor_id?: string
+}
+export type ShopSlugUnavailableReason =
+  | "invalid"
+  | "reserved_word"
+  | "reserved_org"
+  | "reserved_user"
+  | "taken"
+export type ReservedShopSlug =
+  | "mine"
+  | "quick"
+  | "by-owner"
+  | "slug-availability"
+  | "create"
+  | "game"
+  | "new"
+  | "edit"
+  | "settings"
+  | "manage"
+  | "dashboard"
+  | "admin"
+  | "api"
+  | "all"
+  | "browse"
+  | "search"
+  | "directory"
+  | "explore"
+  | "featured"
+  | "popular"
+  | "trending"
+  | "top"
+  | "categories"
+  | "category"
+  | "tags"
+  | "reviews"
+  | "listings"
+  | "services"
+  | "orders"
+  | "stock"
+  | "customers"
+  | "help"
+  | "about"
+  | "support"
+  | "login"
+  | "logout"
+  | "signup"
+  | "register"
+  | "account"
+  | "profile"
+  | "shop"
+  | "shops"
+  | "market"
+  | "sc-market"
+  | "scmarket"
+  | "official"
+  | "staff"
+  | "moderator"
+  | "system"
+  | "root"
+  | "null"
+  | "undefined"
+  | "index"
+  | "www"
+  | "static"
+  | "assets"
+export type ShopSlugAvailabilityResponse = {
+  /** The slug that was checked (trimmed) */
+  slug: string
+  available: boolean
+  /** Set when available is false */
+  reason?: ShopSlugUnavailableReason
+  /** Human-readable reason (English) when available is false */
+  message?: string
+  /** Spectrum ID (reserved_org) or username (reserved_user) holding the slug */
+  reserved_for?: string
+  /** The route word the slug collides with (reserved_word) */
+  reserved_word?: ReservedShopSlug
+  /** Free alternatives for this owner, best first. Empty when available. */
+  suggestions: string[]
 }
 export type UpdateShopRequest = {
   name?: string
@@ -6905,10 +7014,16 @@ export type SellerNextAvailableResponse = {
 }
 export type BidDetail = {
   bid_id: string
+  /** Who placed the bid. Only the seller side (whoever may manage the listing's
+    shop) sees the real account. Everyone else sees "Bidder N", numbered by
+    first bid on this auction, with no username or avatar; `is_you` marks the
+    viewer's own bid. */
   bidder: {
+    is_you: boolean
+    bidder_number: number
     avatar: string | null
     display_name: string
-    username: string
+    username: string | null
   }
   amount: number
   is_active: boolean
@@ -6919,10 +7034,21 @@ export type AuctionDetailResponse = {
   end_time: string
   min_bid_increment: number
   buyout_price: number | null
-  reserve_price: number | null
+  /** The seller's reserve. Only present for the seller side; everyone else
+    gets `has_reserve` and `reserve_met`. */
+  reserve_price?: number | null
+  has_reserve: boolean
+  /** Whether the highest bid meets the reserve. null when there is no reserve. */
+  reserve_met: boolean | null
+  /** Whether the viewer is on the seller side (may manage the listing's shop). */
+  is_seller: boolean
   status: string
   current_highest_bid: number | null
+  /** Number of active bids (one per bidder), across all pages. */
   total_bids: number
+  page: number
+  page_size: number
+  /** Active bids, highest first, paginated. */
   bids: BidDetail[]
 }
 export type PlaceBidResponse = {
@@ -7245,6 +7371,7 @@ export const {
   useBrowseShopsQuery,
   useQuickCreateShopMutation,
   useGetShopsByOwnerQuery,
+  useGetShopSlugAvailabilityQuery,
   useGetShopQuery,
   useUpdateShopMutation,
   useArchiveShopMutation,

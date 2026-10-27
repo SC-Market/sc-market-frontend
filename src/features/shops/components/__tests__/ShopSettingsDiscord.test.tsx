@@ -33,6 +33,10 @@ vi.mock("../../../../store/api/v2/market", () => ({
   useUpsertShopOrderSettingMutation: mutation,
   useDeleteShopOrderSettingMutation: mutation,
   useTransferShopMutation: mutation,
+  useGetShopSlugAvailabilityQuery: () => ({
+    data: undefined,
+    isFetching: false,
+  }),
 }))
 vi.mock("../../../../store/api/v2/market-overrides", () => ({
   useUploadImageMutation: mutation,

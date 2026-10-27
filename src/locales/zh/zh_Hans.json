@@ -4692,6 +4692,21 @@
     "quickCreate": "创建店铺",
     "retry": "重试"
   },
+  "ShopSlugField": {
+    "label": "短链接",
+    "hint": "用于 URL 的标识（根据名称自动生成）",
+    "tooShort": "短链接至少需要 {{min}} 个字符",
+    "checking": "正在检查是否可用…",
+    "available": "可用：{{url}}",
+    "suggestions": "试试：",
+    "reason": {
+      "taken": "其他商店已在使用此 URL",
+      "reserved_word": "“{{slug}}”已被网站保留，不能用作商店 URL",
+      "reserved_org": "此 URL 已为组织 {{holder}} 保留",
+      "reserved_user": "此 URL 已为 {{holder}} 的个人商店保留",
+      "invalid": "请使用 3–50 个小写字母、数字和连字符，并以字母或数字开头和结尾"
+    }
+  },
   "stock": {
     "allocated": "已分配",
     "allocatedAt": "分配时间",

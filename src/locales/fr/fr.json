@@ -4634,6 +4634,21 @@
     "quickCreate": "Créer une boutique",
     "retry": "Réessayer"
   },
+  "ShopSlugField": {
+    "label": "Slug",
+    "hint": "Identifiant pour l'URL (généré à partir du nom)",
+    "tooShort": "Le slug doit contenir au moins {{min}} caractères",
+    "checking": "Vérification de la disponibilité…",
+    "available": "Disponible : {{url}}",
+    "suggestions": "Essayez :",
+    "reason": {
+      "taken": "Une autre boutique utilise déjà cette URL",
+      "reserved_word": "« {{slug}} » est réservé par le site et ne peut pas être l'URL d'une boutique",
+      "reserved_org": "Cette URL est réservée à l'organisation {{holder}}",
+      "reserved_user": "Cette URL est réservée à la boutique personnelle de {{holder}}",
+      "invalid": "Utilisez 3 à 50 lettres minuscules, chiffres et tirets, en commençant et en terminant par une lettre ou un chiffre"
+    }
+  },
   "SimpleStockInput": {
     "advancedFeatureComingSoon": "Gestion avancée des stocks bientôt disponible",
     "available": "Disponible",

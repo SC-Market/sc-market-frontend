@@ -4634,6 +4634,21 @@
     "quickCreate": "ショップを作成",
     "retry": "再試行"
   },
+  "ShopSlugField": {
+    "label": "スラッグ",
+    "hint": "URL 用の識別子（名前から自動生成）",
+    "tooShort": "スラッグは {{min}} 文字以上にしてください",
+    "checking": "利用可能か確認しています…",
+    "available": "利用可能: {{url}}",
+    "suggestions": "候補:",
+    "reason": {
+      "taken": "この URL は別のショップが使用しています",
+      "reserved_word": "「{{slug}}」はサイトで予約されているため、ショップの URL には使えません",
+      "reserved_org": "この URL は組織 {{holder}} 用に予約されています",
+      "reserved_user": "この URL は {{holder}} さんの個人ショップ用に予約されています",
+      "invalid": "小文字の英字・数字・ハイフンを 3〜50 文字で使い、先頭と末尾は英字か数字にしてください"
+    }
+  },
   "SimpleStockInput": {
     "advancedFeatureComingSoon": "高度な在庫管理機能は近日公開予定",
     "available": "利用可能",

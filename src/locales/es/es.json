@@ -4634,6 +4634,21 @@
     "quickCreate": "Crear tienda",
     "retry": "Reintentar"
   },
+  "ShopSlugField": {
+    "label": "Slug",
+    "hint": "Identificador apto para URL (generado a partir del nombre)",
+    "tooShort": "El slug debe tener al menos {{min}} caracteres",
+    "checking": "Comprobando disponibilidad…",
+    "available": "Disponible: {{url}}",
+    "suggestions": "Prueba:",
+    "reason": {
+      "taken": "Otra tienda ya usa esta URL",
+      "reserved_word": "«{{slug}}» está reservado por el sitio y no puede ser la URL de una tienda",
+      "reserved_org": "Esta URL está reservada para la organización {{holder}}",
+      "reserved_user": "Esta URL está reservada para la tienda personal de {{holder}}",
+      "invalid": "Usa de 3 a 50 letras minúsculas, números y guiones, empezando y terminando con una letra o un número"
+    }
+  },
   "SimpleStockInput": {
     "advancedFeatureComingSoon": "Gestión avanzada de inventario próximamente",
     "available": "Disponible",

@@ -4634,6 +4634,21 @@
     "quickCreate": "Shop erstellen",
     "retry": "Erneut versuchen"
   },
+  "ShopSlugField": {
+    "label": "Slug",
+    "hint": "URL-freundliche Kennung (wird aus dem Namen erzeugt)",
+    "tooShort": "Der Slug muss mindestens {{min}} Zeichen lang sein",
+    "checking": "Verfügbarkeit wird geprüft…",
+    "available": "Verfügbar: {{url}}",
+    "suggestions": "Vorschläge:",
+    "reason": {
+      "taken": "Ein anderer Shop verwendet diese URL bereits",
+      "reserved_word": "„{{slug}}“ ist von der Website reserviert und kann keine Shop-URL sein",
+      "reserved_org": "Diese URL ist für die Organisation {{holder}} reserviert",
+      "reserved_user": "Diese URL ist für den persönlichen Shop von {{holder}} reserviert",
+      "invalid": "Verwende 3–50 Kleinbuchstaben, Ziffern und Bindestriche; Anfang und Ende müssen ein Buchstabe oder eine Ziffer sein"
+    }
+  },
   "SimpleStockInput": {
     "advancedFeatureComingSoon": "Erweiterte Bestandsverwaltung folgt in Kürze",
     "available": "Verfügbar",

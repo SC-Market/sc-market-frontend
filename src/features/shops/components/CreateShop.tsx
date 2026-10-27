@@ -18,7 +18,12 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton"
 import { StorefrontRounded } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
-import { useCreateShopMutation } from "../../../store/api/v2/market"
+import {
+  useCreateShopMutation,
+  type ShopSlugAvailabilityResponse,
+} from "../../../store/api/v2/market"
+import { ShopSlugField, SHOP_SLUG_MIN_LENGTH } from "./ShopSlugField"
+import { shopSlugConflictFromError } from "../shopSlugConflict"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
@@ -78,6 +83,9 @@ export function CreateShop() {
   const [tags, setTags] = useState<string[]>([])
   const [supportedLanguages, setSupportedLanguages] = useState<string[]>([])
   const [acceptsCustomOrders, setAcceptsCustomOrders] = useState(false)
+  const [slugConflict, setSlugConflict] = useState<
+    ShopSlugAvailabilityResponse | undefined
+  >(undefined)
 
   const autoSlug = useMemo(() => generateSlug(name), [name])
   const slug = slugOverride ?? autoSlug
@@ -93,10 +101,8 @@ export function CreateShop() {
 
   const handleSubmit = async () => {
     if (!name.trim()) return
-    if (slug.length < 3) {
-      issueAlert({ severity: "error", message: "Slug must be at least 3 characters" })
-      return
-    }
+    // The slug field shows why a too-short slug can't be used.
+    if (slug.length < SHOP_SLUG_MIN_LENGTH) return
     if (ownerType === "organization" && !selectedOrg) {
       issueAlert({ severity: "error", message: "Select an organization" })
       return
@@ -118,6 +124,8 @@ export function CreateShop() {
       issueAlert({ message: "Shop created successfully!", severity: "success" })
       navigate(SHOP_PATHS.settings(result.slug))
     } catch (err) {
+      // Taken or reserved: the slug field shows why, with free suggestions.
+      setSlugConflict(shopSlugConflictFromError(err))
       issueAlert(err as { status: number; data: { message?: string } })
     }
   }
@@ -166,24 +174,19 @@ export function CreateShop() {
                   required
                   placeholder="My Awesome Shop"
                 />
-                <TextField
-                  label="Slug"
+                <ShopSlugField
                   value={slug}
-                  onChange={(e) => handleSlugChange(e.target.value)}
+                  onChange={handleSlugChange}
                   onFocus={() => {
                     if (slugOverride === null) {
                       setSlugOverride(autoSlug)
                     }
                   }}
-                  fullWidth
-                  error={slug.length > 0 && slug.length < 3}
-                  helperText={
-                    slug.length > 0 && slug.length < 3
-                      ? "Slug must be at least 3 characters"
-                      : slug
-                        ? `Your shop URL: sc-market.space/shops/${slug}`
-                        : "URL-friendly identifier (auto-generated from name)"
+                  contractorId={
+                    isOrgShop ? selectedOrg?.contractor_id : undefined
                   }
+                  conflict={slugConflict}
+                  urlPrefix="sc-market.space/shops/"
                 />
                 <TextField
                   label="Description"

@@ -4634,6 +4634,21 @@
     "quickCreate": "建立商店",
     "retry": "重試"
   },
+  "ShopSlugField": {
+    "label": "短連結",
+    "hint": "用於 URL 的識別碼（依名稱自動產生）",
+    "tooShort": "短連結至少需要 {{min}} 個字元",
+    "checking": "正在檢查是否可用…",
+    "available": "可用：{{url}}",
+    "suggestions": "試試：",
+    "reason": {
+      "taken": "其他商店已在使用此 URL",
+      "reserved_word": "「{{slug}}」已被網站保留，不能用作商店 URL",
+      "reserved_org": "此 URL 已為組織 {{holder}} 保留",
+      "reserved_user": "此 URL 已為 {{holder}} 的個人商店保留",
+      "invalid": "請使用 3–50 個小寫字母、數字和連字號，並以字母或數字開頭和結尾"
+    }
+  },
   "SimpleStockInput": {
     "advancedFeatureComingSoon": "進階庫存管理即將推出",
     "available": "可用",

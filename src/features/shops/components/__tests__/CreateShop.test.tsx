@@ -12,18 +12,23 @@ import { mainTheme } from "../../../../hooks/styles/Theme"
 
 const ORG_ID = "6f1c2c3e-1b2a-4c5d-8e9f-0a1b2c3d4e5f"
 
-const { createShop, orgQuery } = vi.hoisted(() => ({
+const { createShop, orgQuery, availability } = vi.hoisted(() => ({
   createShop: vi.fn(),
   orgQuery: vi.fn(),
+  availability: vi.fn(),
 }))
 
 vi.mock("../../../../store/api/v2/market", () => ({
   useCreateShopMutation: () => [
     (arg: unknown) => ({
-      unwrap: () => Promise.resolve(createShop(arg) ?? { slug: "org-shop" }),
+      unwrap: async () => (await createShop(arg)) ?? { slug: "org-shop" },
     }),
     { isLoading: false },
   ],
+  useGetShopSlugAvailabilityQuery: (arg: unknown, opts: { skip: boolean }) => {
+    if (!opts.skip) availability(arg)
+    return { data: undefined, isFetching: false }
+  },
 }))
 vi.mock("../../../profile/api/profileApi", () => ({
   useGetUserProfileQuery: () => ({
@@ -95,5 +100,48 @@ describe("CreateShop", () => {
 
     await waitFor(() => expect(createShop).toHaveBeenCalled())
     expect(createShop.mock.calls[0][0].createShopRequest.contractor_id).toBeUndefined()
+  })
+
+  it("checks the slug for the org and offers the 409's suggestions as chips", async () => {
+    createShop.mockRejectedValueOnce({
+      status: 409,
+      data: {
+        error: {
+          code: "CONFLICT",
+          message: "Another shop already uses this URL",
+          details: {
+            slug: "org-shop",
+            available: false,
+            reason: "taken",
+            suggestions: ["org-shop-2", "org-shop-testorg"],
+          },
+        },
+      },
+    })
+    render(
+      <ThemeProvider theme={mainTheme}>
+        <MemoryRouter>
+          <CreateShop />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+    fireEvent.change(screen.getByLabelText(/Shop Name/), { target: { value: "Org Shop" } })
+    fireEvent.click(screen.getByLabelText("Organization shop"))
+    fireEvent.change(screen.getByLabelText("Organization"), { target: { value: "TESTORG" } })
+
+    await waitFor(() =>
+      expect(availability).toHaveBeenCalledWith({
+        slug: "org-shop",
+        contractorId: ORG_ID,
+        shopId: undefined,
+      }),
+    )
+
+    fireEvent.click(screen.getByRole("button", { name: /Create Shop/ }))
+    fireEvent.click(await screen.findByText("org-shop-testorg"))
+    fireEvent.click(screen.getByRole("button", { name: /Create Shop/ }))
+
+    await waitFor(() => expect(createShop).toHaveBeenCalledTimes(2))
+    expect(createShop.mock.calls[1][0].createShopRequest.slug).toBe("org-shop-testorg")
   })
 })

@@ -61,7 +61,12 @@ import {
 import { ShopBlocklistSection } from "./ShopBlocklist"
 import { ImageRounded, SwapHorizRounded } from "@mui/icons-material"
 import { SHOP_PATHS } from "../../../routes/paths"
-import type { ShopResponse } from "../../../store/api/v2/market"
+import type {
+  ShopResponse,
+  ShopSlugAvailabilityResponse,
+} from "../../../store/api/v2/market"
+import { ShopSlugField } from "./ShopSlugField"
+import { shopSlugConflictFromError } from "../shopSlugConflict"
 import { shopDiscordChannelError } from "../utils/discordChannel"
 
 const AVAILABLE_TAGS = [
@@ -691,6 +696,9 @@ export function ShopSettings() {
 
   const [name, setName] = useState(shop.name)
   const [slug, setSlug] = useState(shop.slug)
+  const [slugConflict, setSlugConflict] = useState<
+    ShopSlugAvailabilityResponse | undefined
+  >(undefined)
   const [description, setDescription] = useState(shop.description)
   const [tags, setTags] = useState<string[]>(shop.tags)
   const [supportedLanguages, setSupportedLanguages] = useState<string[]>(
@@ -780,6 +788,8 @@ export function ShopSettings() {
 
       issueAlert({ message: "Shop settings saved", severity: "success" })
     } catch (err) {
+      // Taken or reserved: the slug field shows why, with free suggestions.
+      setSlugConflict(shopSlugConflictFromError(err))
       issueAlert(err as { status: number; data: { message?: string } })
     }
   }
@@ -810,13 +820,14 @@ export function ShopSettings() {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <TextField
-                label="Slug"
+              <ShopSlugField
                 value={slug}
-                onChange={(e) => setSlug(e.target.value)}
-                fullWidth
+                onChange={(value) => setSlug(value.trim().toLowerCase())}
+                shopId={shop.shop_id}
+                currentSlug={shop.slug}
+                conflict={slugConflict}
+                urlPrefix="sc-market.space/shops/"
                 size="small"
-                helperText={`sc-market.space/shop/${slug || "..."}`}
               />
             </Grid>
             <Grid item xs={12}>

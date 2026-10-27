@@ -4676,6 +4676,21 @@
     "quickCreate": "Create Shop",
     "retry": "Retry"
   },
+  "ShopSlugField": {
+    "label": "Slug",
+    "hint": "URL-friendly identifier (auto-generated from name)",
+    "tooShort": "Slug must be at least {{min}} characters",
+    "checking": "Checking availability…",
+    "available": "Available: {{url}}",
+    "suggestions": "Try:",
+    "reason": {
+      "taken": "Another shop already uses this URL",
+      "reserved_word": "\"{{slug}}\" is reserved by the site and can't be a shop URL",
+      "reserved_org": "This URL is reserved for the organization {{holder}}",
+      "reserved_user": "This URL is reserved for {{holder}}'s personal shop",
+      "invalid": "Use 3–50 lowercase letters, numbers and hyphens, starting and ending with a letter or number"
+    }
+  },
   "sidebar": {
     "admin": {
       "game_data": "Game Data",
