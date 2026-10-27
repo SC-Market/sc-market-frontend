@@ -145,7 +145,10 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
                 </TableRow>
               </TableHead>
               <TableBody>
-                {auction.bids.map((bid, i) => (
+                {auction.bids.map((bid) => {
+                  // The highest bid across all pages, not this page's first row.
+                  const isHighest = bid.amount === auction.current_highest_bid
+                  return (
                   <TableRow
                     key={bid.bid_id}
                     selected={bid.bidder.is_you}
@@ -159,11 +162,11 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
                         {bid.bidder.is_you && (
                           <Chip label={t("BidAreaV2.isYou", "Your bid")} size="small" color="primary" variant="outlined" />
                         )}
-                        {i === 0 && <Chip label={t("BidAreaV2.highest", "Highest")} size="small" color="success" />}
+                        {isHighest && <Chip label={t("BidAreaV2.highest", "Highest")} size="small" color="success" />}
                       </Stack>
                     </TableCell>
                     <TableCell align="right">
-                      <Typography variant="body2" fontWeight={i === 0 ? "bold" : "normal"}>
+                      <Typography variant="body2" fontWeight={isHighest ? "bold" : "normal"}>
                         {formatPrice(bid.amount)}
                       </Typography>
                     </TableCell>
@@ -173,7 +176,8 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
                       </Typography>
                     </TableCell>
                   </TableRow>
-                ))}
+                  )
+                })}
               </TableBody>
             </Table>
           </>
