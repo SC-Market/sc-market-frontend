@@ -180,8 +180,6 @@ export type NotificationActionType =
   | "market_item_bid_v2"
   | "market_item_offer"
   | "buy_order_match_v2"
-  | "market_bid_accepted"
-  | "market_bid_declined"
   | "market_offer_accepted"
   | "market_offer_declined"
   | "contractor_invite"
