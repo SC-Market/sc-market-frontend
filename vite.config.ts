@@ -7,6 +7,7 @@ import svgrPlugin from "vite-plugin-svgr"
 import { visualizer } from "rollup-plugin-visualizer"
 import circularDependency from "vite-plugin-circular-dependency"
 import { contentPlugin } from "./scripts/vite/contentPlugin"
+import { ssrRtkHooksPlugin } from "./scripts/vite/ssrRtkHooksPlugin"
 
 // React Router framework mode (react-router.config.ts): `react-router build`
 // runs this config twice, for the client (build/client) and for the
@@ -37,6 +38,8 @@ export default defineConfig(({ command, isSsrBuild }) => ({
   plugins: [
     // Help & Guides Markdown (/content) → lazy chunks + bridge/sitemap JSON.
     contentPlugin(),
+    // Build-time render: RTK Query hooks start their queries during render.
+    ssrRtkHooksPlugin(import.meta.dirname),
     reactRouter(),
     viteTsconfigPaths(),
     svgrPlugin(),

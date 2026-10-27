@@ -197,6 +197,12 @@ export function MissionSearch() {
   }, [urlParams.slug, isMobile])
 
   // Accumulate results for infinite scroll
+  // The first page renders straight from the query (before the accumulating
+  // effect runs), so the first render — and a prerendered page — has it.
+  const shownMissions =
+    allMissions.length === 0 && page === 1 && data?.missions
+      ? data.missions
+      : allMissions
   useEffect(() => {
     if (data?.missions) {
       setAllMissions(prev => page === 1 ? data.missions : [...prev, ...data.missions])
@@ -302,7 +308,7 @@ export function MissionSearch() {
         <>
           <Grid container spacing={0.75} alignItems="stretch">
             {viewMode === "grid" ? (
-              allMissions.map((mission) => (
+              shownMissions.map((mission) => (
                 <Grid item xs={6} sm={6} md={4} lg={3} key={mission.mission_id} sx={{ display: "flex" }}>
                   <MissionCard mission={mission} onClick={() => handleMissionClick(mission.mission_code, mission.mission_id)} />
                 </Grid>
@@ -313,7 +319,7 @@ export function MissionSearch() {
                   <Table size="small" sx={MISSION_TABLE_SX}>
                     <MissionTableHead />
                     <TableBody>
-                      {allMissions.map((m) => (
+                      {shownMissions.map((m) => (
                         <TableRow
                           key={m.mission_id}
                           hover
@@ -396,7 +402,7 @@ export function MissionSearch() {
             )}
           </Grid>
 
-          {allMissions.length === 0 && !isFetching && (
+          {shownMissions.length === 0 && !isFetching && (
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
               <Typography color="text.secondary">
                 {t("missions.noResults", "No results found. Try adjusting your filters.")}

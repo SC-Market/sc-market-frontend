@@ -58,7 +58,6 @@ export function getWhiteLabelConfig(): WhiteLabelDomainConfig | null {
   return getCachedDomainOrg()
 }
 
-
 export interface CustomDomain {
   /**
    * Whether the hostname is a custom white-label domain (not the main site).
@@ -76,9 +75,12 @@ const MAIN_SITE: CustomDomain = { isCustomDomain: false, customOrg: undefined }
  * and the domain cache. Browser-only; HookProvider calls it once per mount and
  * provides the result, so it stays fixed for the page's lifetime — background
  * revalidation updates the cache for the next load, not the current one.
- * A server render will provide a value derived from the request Host instead.
+ * The build-time render of a prerendered page (src/prerender/paths.ts) is the
+ * main site: prerendered pages are only hydrated on the main site
+ * (entry.client.tsx renders them from scratch on white-label domains).
  */
 export function resolveBrowserCustomDomain(): CustomDomain {
+  if (typeof window === "undefined") return MAIN_SITE
   const isCustomDomain = !isMainSiteHostname(window.location.hostname)
   return {
     isCustomDomain,

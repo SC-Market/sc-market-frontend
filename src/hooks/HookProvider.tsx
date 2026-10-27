@@ -13,6 +13,7 @@ import {
 import { DrawerOpenContext } from "./layout/Drawer"
 import { useBreakpointDown } from "./layout/useBreakpoint"
 import { useHydratedInitialState } from "./ssr/useHydratedInitialState"
+import { useHydrated } from "./ssr/useHydrated"
 // Direct imports, not the features/chats barrel: the barrel also re-exports
 // the chat views, which drags socket.io and the chat UI into the entry bundle.
 import { CurrentChatIDContext } from "../features/chats/hooks/CurrentChatID"
@@ -58,8 +59,13 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
   const prefersLight = useMediaQuery("(prefers-color-scheme: light)")
   const isDev = import.meta.env.DEV || import.meta.env.MODE === "development"
-  const [useLightTheme, setUseLightTheme] = useState<ThemeChoice>(
-    cookies.theme || "system",
+  // Hydration-safe: a prerendered page was rendered with the default theme
+  // (no cookie at build time), so hydrate with that and switch to the
+  // visitor's theme right after (useHydratedInitialState). In the SPA the
+  // first render already has the cookie's theme.
+  const hydrated = useHydrated()
+  const [useLightTheme, setUseLightTheme] = useHydratedInitialState<ThemeChoice>(
+    hydrated ? cookies.theme || "system" : "system",
   )
   const location = useLocation()
   const { i18n } = useTranslation()

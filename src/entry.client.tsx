@@ -4,7 +4,7 @@
  * route manifest and the root route, then imports this module.
  */
 import React, { StrictMode, type ErrorInfo } from "react"
-import { hydrateRoot } from "react-dom/client"
+import { createRoot, hydrateRoot } from "react-dom/client"
 import { HydratedRouter } from "react-router-dom"
 import { createHead, UnheadProvider } from "@unhead/react/client"
 import { Provider } from "react-redux"
@@ -22,14 +22,20 @@ import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate } from "./seo/pageHead"
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
-import { initialLocaleReady } from "./util/i18n"
+import i18n, { initialLocaleReady } from "./util/i18n"
 import { installLinkIntentPrefetch } from "./router/routePrefetch"
-import { registerRouteModules } from "./routes/registerRouteModules"
+import {
+  loadMatchedPages,
+  registerRouteModules,
+} from "./routes/registerRouteModules"
 import { provideShell } from "./routes/shell"
 import { shell } from "./app/shell"
 import { providePages } from "./routes/definePage"
 import { pages } from "./app/pages"
 import { removeBridgeSummary } from "./document/bridgeSummary"
+import { isMainSiteHostname } from "./util/mainSiteHost"
+import { hydratePrerenderedData, takePrerenderedData } from "./store/hydration"
+import { retryDynamicImport } from "./util/retryDynamicImport"
 
 // The entry chunk has loaded: from here on, chunk failures are handled by the
 // app (retryDynamicImport), not by document.html's bootstrap guard.
@@ -60,6 +66,17 @@ registerRouteModules()
 const store = makeStore({ networkEnv: browserNetworkEnv })
 
 setupListeners(store.dispatch)
+
+// A prerendered page (src/prerender/paths.ts) ships the game data its HTML
+// was rendered with. Load it before anything else touches the store, and
+// hydrate against exactly that state (Provider serverState): what this
+// browser adds below (the cached profile, the session check) re-renders
+// after hydration instead of mismatching the anonymous HTML.
+const prerenderedData = takePrerenderedData()
+if (prerenderedData) {
+  store.dispatch(hydratePrerenderedData(prerenderedData.api))
+}
+const serverState = prerenderedData ? store.getState() : undefined
 
 // Start the session check (GET /api/auth/session) before anything renders:
 // the profile query and every auth-only query wait on its answer instead of
@@ -112,7 +129,8 @@ function reportRecoverableError(error: unknown, errorInfo: ErrorInfo) {
   })
 }
 function onRecoverableError(error: unknown, errorInfo: ErrorInfo) {
-  if (import.meta.env.DEV) console.error("Recoverable error:", error)
+  // Visible in the console too (agents and tests look for it).
+  console.warn("[hydration] recoverable error:", error)
   if (isBugsnagInitialized()) reportRecoverableError(error, errorInfo)
   else pendingRecoverableErrors.push([error, errorInfo])
 }
@@ -137,24 +155,62 @@ const container = document.getElementById("root")!
 // The edge bridge's crawler summary is not part of the React tree.
 removeBridgeSummary(container)
 
+const app = (
+  <StrictMode>
+    <Provider store={store} serverState={serverState}>
+      <UnheadProvider head={head}>
+        <ErrorBoundary>
+          <HydratedRouter />
+        </ErrorBoundary>
+      </UnheadProvider>
+    </Provider>
+  </StrictMode>
+)
+
+// A prerendered page is the main site's, anonymous, in English and dark. On
+// an org's white-label domain, in another language or the light theme the
+// app renders from
+// scratch instead of hydrating it (document.html keeps it hidden until the
+// root route's first effect).
+const renderFresh = () =>
+  container.hasAttribute("data-prerendered") &&
+  (!isMainSiteHostname(window.location.hostname) ||
+    !i18n.language.toLowerCase().startsWith("en") ||
+    // Set by document.html's pre-theme script for the light theme.
+    document.documentElement.getAttribute("data-pre-theme") === "light")
+
 // A non-English visitor's first render waits (briefly, capped) for their
 // locale's strings, so the page doesn't render English and then reflow; for
 // English it resolves at once. See initialLocaleReady in util/i18n.ts.
-void initialLocaleReady.then(() =>
-  hydrateRoot(
-    container,
-    <StrictMode>
-      <Provider store={store}>
-        <UnheadProvider head={head}>
-          <ErrorBoundary>
-            <HydratedRouter />
-          </ErrorBoundary>
-        </UnheadProvider>
-      </Provider>
-    </StrictMode>,
-    { onRecoverableError },
-  ),
-)
+//
+// Hydrating waits for the code the HTML was rendered with: the page's chunk
+// and its guide body. Anything still loading would suspend while hydrating,
+// and React replaces a suspended part with its fallback (a skeleton) as soon
+// as something above it updates, e.g. when the session check answers: the
+// page would flash and shift. The HTML is on screen meanwhile.
+async function hydrationCode(): Promise<void> {
+  if (!prerenderedData) return
+  const bodies = prerenderedData.contentBodies ?? []
+  await Promise.allSettled([
+    loadMatchedPages(window.location.pathname),
+    bodies.length > 0
+      ? retryDynamicImport(() => import("./features/help/content")).then(
+          (content) => content.preloadContentBodies(bodies),
+        )
+      : undefined,
+  ])
+}
+
+void initialLocaleReady.then(async () => {
+  if (renderFresh()) {
+    container.replaceChildren()
+    container.removeAttribute("data-prerendered")
+    createRoot(container, { onRecoverableError }).render(app)
+  } else {
+    await hydrationCode()
+    hydrateRoot(container, app, { onRecoverableError })
+  }
+})
 
 // Reset reload budget only after the shell has been stable long enough for lazy chunks
 // to load — clearing on every boot caused infinite reload loops with stale index.html.

@@ -111,6 +111,29 @@ function pageFor(name: PageName): PageEntry<object, object> {
   return pages[name] as unknown as PageEntry<object, object>
 }
 
+/**
+ * Each page route's clientLoader → its chunk loader (see loadPageOf). Keyed
+ * by the clientLoader: React Router wraps a route module's default export.
+ */
+const pageLoaders = new WeakMap<object, () => Promise<unknown>>()
+
+/**
+ * Load the page chunk behind a route module (from definePage), or resolve
+ * at once for any other module. entry.client.tsx waits for the current
+ * page's chunk before hydrating a prerendered page: a page still suspended
+ * while hydrating is thrown away and re-rendered from its fallback as soon
+ * as anything above it updates.
+ */
+export function loadPageOf(routeModule: unknown): Promise<unknown> {
+  const clientLoader = (routeModule as { clientLoader?: unknown } | undefined)
+    ?.clientLoader
+  const load =
+    typeof clientLoader === "function"
+      ? pageLoaders.get(clientLoader)
+      : undefined
+  return load ? load() : Promise.resolve()
+}
+
 /** The route module for the page `name` in src/app/pages.ts. */
 export function definePage<K extends PageName>(
   name: K,
@@ -192,6 +215,7 @@ export function createPageRoute<M, P extends object>(
   }
 
   Object.defineProperty(Page, "name", { value: name })
+  pageLoaders.set(clientLoader, load)
 
   return {
     Component: Page as ComponentType,

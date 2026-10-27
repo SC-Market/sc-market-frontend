@@ -19,7 +19,11 @@ import { useTranslation } from "react-i18next"
 import {
   useGetCommoditiesQuery, useGetResourceCategoriesQuery,
 } from "../../store/api/v2/market"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import {
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -238,8 +242,16 @@ export function WikiCommodityBrowser() {
                 {filtered.map((c) => (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={c.resource_id}>
                     <Card
-                      sx={{ cursor: "pointer", height: "100%", transition: "transform 0.15s", "&:hover": { transform: "translateY(-2px)" } }}
-                      onClick={() => navigate(WIKI_PATHS.commodity(c.resource_id, c.name))}
+                      component={RouterLink}
+                      to={WIKI_PATHS.commodity(c.resource_id, c.name)}
+                      sx={{
+                        display: "block",
+                        textDecoration: "none",
+                        cursor: "pointer",
+                        height: "100%",
+                        transition: "transform 0.15s",
+                        "&:hover": { transform: "translateY(-2px)" },
+                      }}
                     >
                       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
                         <Stack direction="row" spacing={1.5} alignItems="flex-start">

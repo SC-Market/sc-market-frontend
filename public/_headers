@@ -29,10 +29,17 @@ https://www.sc-market.space/*
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
 
-# App shell: always revalidate so the served index.html references the current
+# App shell (__spa-fallback.html; index.html is the prerendered homepage):
+# always revalidate so the served HTML references the current
 # hashed /assets/* chunks. A stale shell points at chunks that no longer exist
 # after a deploy → "error loading dynamically imported module".
 /index.html
+  Cache-Control: no-cache
+
+/__spa-fallback.html
+  Cache-Control: no-cache
+
+/__spa-fallback
   Cache-Control: no-cache
 
 # Hashed build assets are content-addressed (filename changes when content

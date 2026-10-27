@@ -24,6 +24,7 @@ import { build } from "vite"
 import { checkServiceWorker } from "./checkServiceWorker"
 import { checkShell } from "./checkShell"
 import { inlineStylesheets } from "../vite/inlineEntryCssPlugin"
+import { finalizePrerenderedPages } from "./prerendered"
 
 const ROOT = path.resolve(import.meta.dirname, "../..")
 const CLIENT_DIR = path.join(ROOT, "build/client")
@@ -35,15 +36,24 @@ function argValue(name: string, fallback: string): string {
 
 const outDir = path.resolve(ROOT, argValue("--out", "dist"))
 
-if (!existsSync(path.join(CLIENT_DIR, "index.html"))) {
+/** React Router's SPA shell (written as index.html when / isn't prerendered). */
+const SHELL_FILE = existsSync(path.join(CLIENT_DIR, "__spa-fallback.html"))
+  ? "__spa-fallback.html"
+  : "index.html"
+if (!existsSync(path.join(CLIENT_DIR, SHELL_FILE))) {
   throw new Error(
-    `${CLIENT_DIR}/index.html is missing: run react-router build first`,
+    `${CLIENT_DIR}/${SHELL_FILE} is missing: run react-router build first`,
   )
 }
 
-// 1. build/client → <out>
+// 1. build/client → <out>, without React Router's prerendered `.data`
+// files: route modules load data through their clientLoader, never .data.
 rmSync(outDir, { recursive: true, force: true })
-cpSync(CLIENT_DIR, outDir, { recursive: true })
+cpSync(CLIENT_DIR, outDir, {
+  recursive: true,
+  filter: (source) => !source.endsWith(".data"),
+})
+finalizePrerenderedPages(outDir)
 const stats = path.join(ROOT, "build/stats.html")
 if (existsSync(stats)) cpSync(stats, path.join(outDir, "stats.html"))
 
@@ -76,7 +86,7 @@ checkServiceWorker(readFileSync(path.join(outDir, "sw.js"), "utf8"))
 
 // 3. The shell every path is served: inline the small entry stylesheet (no
 // render-blocking request; see inlineEntryCssPlugin.ts), then check it.
-const shellFile = path.join(outDir, "index.html")
+const shellFile = path.join(outDir, SHELL_FILE)
 const shell = inlineStylesheets(readFileSync(shellFile, "utf8"), (fileName) => {
   const file = path.join(outDir, fileName)
   return existsSync(file) ? readFileSync(file, "utf8") : undefined

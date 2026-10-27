@@ -26,6 +26,9 @@ export function App() {
     // The app's theme styles are in now; drop document.html's pre-app page
     // background so it can't show through under a different theme.
     document.documentElement.removeAttribute("data-pre-theme")
+    // A prerendered page that was rendered from scratch (entry.client.tsx)
+    // is ready to show.
+    document.documentElement.removeAttribute("data-render-fresh")
 
     // No blanket background prefetching here: it evaluated chunks for pages
     // most visitors never open while the current page was still rendering

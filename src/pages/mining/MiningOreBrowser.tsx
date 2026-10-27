@@ -12,7 +12,13 @@ import {
   Chip,
 } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
-import { useSearchParams, useNavigate, useParams } from "react-router-dom"
+import { inAppClick } from "../../components/links/inAppClick"
+import {
+  Link as RouterLink,
+  useSearchParams,
+  useNavigate,
+  useParams,
+} from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useSearchOresQuery, type OreSearchResult } from "../../store/api/v2/market"
 import { MiningOreDetailModal } from "./MiningOreDetailModal"
@@ -155,12 +161,51 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
   const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/ores/:name", GAME_DATA_PATHS.miningOre(ore.name))
 
   return (
-    <Card sx={{ height: "100%", display: "flex", flexDirection: "column", borderLeft: `3px solid ${rarityColor}` }}
-      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
-        <CardContent sx={{ p: 1.5, flex: 1, display: "flex", flexDirection: "column", "&:last-child": { pb: 1.5 } }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
-            <Typography variant="body2" fontWeight={600} noWrap sx={{ flex: 1 }}>
+    <Card
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        borderLeft: `3px solid ${rarityColor}`,
+      }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <CardActionArea
+        component={RouterLink}
+        to={GAME_DATA_PATHS.miningOre(ore.name)}
+        onClick={inAppClick(onClick)}
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          justifyContent: "flex-start",
+        }}
+      >
+        <CardContent
+          sx={{
+            p: 1.5,
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            "&:last-child": { pb: 1.5 },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 0.5,
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight={600}
+              noWrap
+              sx={{ flex: 1 }}
+            >
               {displayName}
             </Typography>
             {ore.rarity && (

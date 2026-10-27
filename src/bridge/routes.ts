@@ -50,6 +50,28 @@ export type BridgePageKind =
   | "guide"
   | "about"
 
+/**
+ * Pages prerendered at build time (src/prerender/paths.ts). The bridge serves
+ * them as they are (handler.ts); their head is built at build time from the
+ * same page builders (src/server/bridgeHead.ts).
+ */
+export const PRERENDERED_KINDS: ReadonlySet<BridgePageKind> = new Set([
+  "home",
+  "wikiHub",
+  "wikiItems",
+  "wikiShips",
+  "wikiCommodities",
+  "wikiLocations",
+  "wikiManufacturers",
+  "miningOres",
+  "miningLocations",
+  "resources",
+  "guidesHub",
+  "guideCategory",
+  "guide",
+  "about",
+])
+
 export interface BridgeRoute {
   path: string
   kind: BridgePageKind

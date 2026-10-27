@@ -26,5 +26,7 @@
 /privacy-policy         /privacy   301
 /privacy-policy.html    /privacy   301
 
-# Redirect all real app routes to index.html for client-side routing.
-/*    /index.html   200
+# Every other app path gets the SPA shell (React Router's SPA fallback; the
+# homepage and the pages in src/prerender/paths.ts are their own files, which
+# Pages serves first).
+/*    /__spa-fallback.html   200

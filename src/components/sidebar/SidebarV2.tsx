@@ -68,6 +68,7 @@ import {
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
+import { useHydrated } from "../../hooks/ssr/useHydrated"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
 import { useFeatureFlag } from "../../hooks/market"
@@ -140,6 +141,7 @@ export function SidebarV2() {
   const { t } = useTranslation()
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const isMobile = useBreakpointDown("sm")
+  const hydrated = useHydrated()
   const mobileDrawerWarm = useWarmWhenIdle(isMobile)
   const bottomNavHeight = useBottomNavHeight()
   const location = useLocation()
@@ -822,6 +824,10 @@ export function SidebarV2() {
       sx={{
         width: drawerOpen ? sidebarDrawerWidth : 0,
         flexShrink: 0,
+        // A prerendered page's first render is the desktop one (the viewport
+        // isn't known yet): on phones the open sidebar stays hidden by CSS
+        // until the app switches to the mobile drawer (closed by default).
+        ...(hydrated ? {} : { display: { xs: "none", sm: "block" } }),
         "& .MuiDrawer-paper": {
           width: sidebarDrawerWidth,
           boxSizing: "border-box",

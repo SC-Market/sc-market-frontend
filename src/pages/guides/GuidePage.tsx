@@ -1,9 +1,9 @@
-import React from "react"
-import { Alert, Box, Divider, Grid, Link, List, ListItem, Paper, Skeleton, Typography } from "@mui/material"
+import React, { Suspense } from "react"
+import { Box, Divider, Grid, Link, List, ListItem, Paper, Skeleton, Typography } from "@mui/material"
 import { Link as RouterLink, Navigate, useLocation, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { HelpLayout, UpdatedStamp } from "../../features/help/components/HelpLayout"
-import { Blocks } from "../../features/help/components/ContentBlocks"
+import { ContentBody } from "../../features/help/components/ContentBody"
 import {
   findCategory,
   findGuide,
@@ -82,18 +82,18 @@ export function GuidePage() {
       <Grid item xs={12}>
         <Paper sx={{ p: { xs: 2, sm: 3 } }}>
           <UpdatedStamp updated={guide.updated} author={guide.author} />
-          {body ? (
-            <Blocks blocks={body.blocks} />
-          ) : error ? (
-            <Alert severity="error">{t("help.loadFailed", "This guide failed to load. Refresh the page to try again.")}</Alert>
-          ) : (
-            <Box aria-busy="true">
-              <Typography variant="body1">{guide.description}</Typography>
-              <Skeleton height={28} />
-              <Skeleton height={28} />
-              <Skeleton height={28} width="60%" />
-            </Box>
-          )}
+          <Suspense
+            fallback={
+              <Box aria-busy="true">
+                <Typography variant="body1">{guide.description}</Typography>
+                <Skeleton height={28} />
+                <Skeleton height={28} />
+                <Skeleton height={28} width="60%" />
+              </Box>
+            }
+          >
+            <ContentBody contentKey={guide.id} />
+          </Suspense>
           <Divider sx={{ mt: 3 }} />
           <GuideLinks title={t("help.nextSteps", "Next steps")} guides={related} />
           <GuideLinks title={t("help.moreIn", "More in {{category}}", { category: category.title })} guides={more} />

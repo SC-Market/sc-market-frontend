@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom"
 import React, { useState } from "react"
 import {
   Dialog,
@@ -42,11 +43,10 @@ export function ReportButton({
   const isMobile = useIsMobile()
   const { data: profile } = useGetUserProfileQuery()
 
-  // Get current page path if none provided
-  const getCurrentUrl = () => {
-    if (reportedUrl) return reportedUrl
-    return window.location.pathname
-  }
+  // Get current page path if none provided (from the router: this also
+  // renders at build time for prerendered pages, where there's no window)
+  const { pathname } = useLocation()
+  const getCurrentUrl = () => reportedUrl || pathname
 
   const handleOpen = () => {
     // Check if user is authenticated

@@ -24,8 +24,16 @@ import StraightenIcon from "@mui/icons-material/Straighten"
 import SearchIcon from "@mui/icons-material/Search"
 import { useTheme, alpha } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useGetShipsQuery, type WikiShipSearchResult } from "../../store/api/v2/market"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import {
+  useGetShipsQuery,
+  type WikiShipSearchResult,
+} from "../../store/api/v2/market"
+import {
+  Link as RouterLink,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -36,7 +44,12 @@ import { ShipDetailModal } from "../../components/game-data/ShipDetailModal"
 import {
   UnifiedSearchBar, shipsParamsToTokens, shipsTokensToParams, type SearchToken,
 } from "../../components/game-data/UnifiedSearchBar"
-import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
+import {
+  formatShipRole,
+  formatShipCareer,
+  getShipRoleColor,
+} from "../../util/shipDisplay"
+import { inAppClick } from "../../components/links/inAppClick"
 import { WIKI_PATHS } from "../../routes/paths"
 import { wikiShipsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
@@ -105,7 +118,14 @@ function SectionHeader({ label, count }: { label: string; count: number }) {
 }
 
 // ─── Vehicle card ────────────────────────────────────────────────────────────
-function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: () => void }) {
+function VehicleCard({
+  ship,
+  onClick,
+}: {
+  ship: WikiShipSearchResult
+  onClick: () => void
+}) {
+  const href = WIKI_PATHS.ship(ship.id, ship.name)
   const { t } = useTranslation()
   const vehicleCategory = getVehicleCategory(ship)
   const careerColor = getShipColor(ship.career, ship.role, ship.focus)
@@ -113,23 +133,28 @@ function VehicleCard({ ship, onClick }: { ship: WikiShipSearchResult; onClick: (
 
   return (
     <Card
+      component={RouterLink}
+      to={href}
       data-testid="ship-card"
       data-id={ship.id}
-      sx={{
-        cursor: "pointer",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        transition: "transform 0.15s, border-color 0.15s, box-shadow 0.15s",
-        "--career-color": careerColor,
-        "&:hover": {
-          transform: "translateY(-3px)",
-          borderColor: careerColor,
-          boxShadow: `0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px ${careerColor}`,
-        },
-      } as SxProps<ExtendedTheme>}
-      onClick={onClick}
+      sx={
+        {
+          cursor: "pointer",
+          textDecoration: "none",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+          transition: "transform 0.15s, border-color 0.15s, box-shadow 0.15s",
+          "--career-color": careerColor,
+          "&:hover": {
+            transform: "translateY(-3px)",
+            borderColor: careerColor,
+            boxShadow: `0 6px 24px rgba(0,0,0,0.5), 0 0 0 1px ${careerColor}`,
+          },
+        } as SxProps<ExtendedTheme>
+      }
+      onClick={inAppClick(onClick)}
     >
       {/* Career accent bar */}
       <Box sx={{ height: 2, bgcolor: careerColor, flexShrink: 0 }} />

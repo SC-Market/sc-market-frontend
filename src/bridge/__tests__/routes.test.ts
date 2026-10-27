@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { matchRoutes } from "react-router-dom"
-import { BRIDGE_ROUTES, matchBridgeRoute } from "../routes"
+import { BRIDGE_ROUTES, matchBridgeRoute, PRERENDERED_KINDS } from "../routes"
+import { GAME_DATA_HUB_PATHS, HOME_PATH } from "../../prerender/paths"
 import { STATIC_SIBLING_PATHS } from "../../router/staticSiblingPaths"
 import routesJson from "../../../public/_routes.json"
 
@@ -149,15 +150,21 @@ describe("public/_routes.json", () => {
   // _routes.json rules are case-sensitive, so mixed-case URLs (which the
   // router still renders) just get the plain shell. Links and the sitemap
   // only use the lowercase prefixes.
-  it("invokes the Function for every lowercase-prefix bridge route", () => {
+  it("invokes the Function for every lowercase-prefix bridge route that isn't prerendered", () => {
     for (const path of PATHS.filter((p) => p.split("/")[1] === p.split("/")[1].toLowerCase())) {
-      if (matchBridgeRoute(path)) expect(invokes(path), path).toBe(true)
+      const match = matchBridgeRoute(path)
+      if (match && !PRERENDERED_KINDS.has(match.route.kind)) {
+        expect(invokes(path), path).toBe(true)
+      }
     }
   })
 
-  it("invokes it for / exactly", () => {
-    expect(routesJson.include).toContain("/")
-    expect(invokes("/")).toBe(true)
+  // Prerendered pages are static files: Pages serves them without running
+  // the Function (and it would only pass them through, see handler.ts).
+  it("skips the Function for the prerendered homepage, hubs, /guides and /about", () => {
+    for (const path of [HOME_PATH, ...GAME_DATA_HUB_PATHS, "/guides", "/about"]) {
+      expect(invokes(path), path).toBe(false)
+    }
   })
 
   it("never invokes it for assets, files, the service worker or static siblings", () => {

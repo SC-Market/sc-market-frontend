@@ -16,7 +16,7 @@
  *   asset URLs); the API JSON is edge-cached per URL with the Cache API.
  */
 import { BRIDGE_PAGES, type ApiRequest, type BridgeDocument } from "./pages"
-import { matchBridgeRoute } from "./routes"
+import { matchBridgeRoute, PRERENDERED_KINDS } from "./routes"
 import { rewriteShell, type HtmlRewriterConstructor } from "./render"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
 import { isMainSiteHostname } from "../util/mainSiteHost"
@@ -46,6 +46,11 @@ export interface BridgeRuntime {
 
 /** Upstream API budget per request; on timeout the shell is served as-is. */
 export const API_TIMEOUT_MS = 1500
+/**
+ * The SPA shell, by its pretty path (Pages redirects /x.html → /x). Not "/":
+ * that's the prerendered homepage.
+ */
+export const SHELL_PATH = "/__spa-fallback"
 /** How long "entity doesn't exist" answers are cached. */
 const NOT_FOUND_TTL_SECONDS = 60
 /** public/_headers' `Link` for "/" (Function responses skip _headers). */
@@ -278,14 +283,22 @@ export async function handleBridgeRequest(
   // apply _redirects to paths a Function serves.
   const moved = guideRedirectTarget(url.pathname)
   if (moved) return guideRedirect(url, moved)
-  if (!matchBridgeRoute(url.pathname)) return ctx.next()
+  const route = matchBridgeRoute(url.pathname)
+  if (!route) return ctx.next()
+  // Prerendered pages (src/prerender/paths.ts): the static file already has
+  // this head (built with these same builders) and the real page body.
+  // public/_routes.json keeps most of them from invoking the bridge at all;
+  // this covers the rest (guide pages, a trailing slash).
+  if (PRERENDERED_KINDS.has(route.route.kind)) return ctx.next()
   // White-label org domains are served by the same deployment; their pages
   // must never get SC Market's head or summary injected.
   if (!isMainSiteHostname(url.hostname)) return ctx.next()
 
   // The pretty path: Pages redirects /index.html → /. A fresh Request so no
   // visitor conditional headers turn the shell into a bodiless 304.
-  const shell = await env.ASSETS.fetch(new Request(new URL("/", url), { method: "GET" }))
+  const shell = await env.ASSETS.fetch(
+    new Request(new URL(SHELL_PATH, url), { method: "GET" }),
+  )
   if (!shell.ok || !shell.body) return ctx.next()
 
   const outcome = await resolvePage(url, env, runtime, ctx.waitUntil)

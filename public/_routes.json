@@ -38,6 +38,7 @@
   "exclude": [
     "/assets/*",
     "/sw.js",
+    "/",
     "/blueprints/inventory",
     "/market/cart",
     "/market/category/*",
@@ -50,6 +51,17 @@
     "/market/services",
     "/market/stock/*",
     "/shops/create",
-    "/recruiting/post/create"
+    "/recruiting/post/create",
+    "/wiki",
+    "/wiki/items",
+    "/wiki/ships",
+    "/wiki/commodities",
+    "/wiki/locations",
+    "/wiki/manufacturers",
+    "/mining",
+    "/mining/locations",
+    "/resources",
+    "/guides",
+    "/about"
   ]
 }

@@ -9,7 +9,7 @@ import {
   TableCell, TableHead, TableRow, Paper, Typography, ToggleButtonGroup, ToggleButton,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { Link as RouterLink, useNavigate } from "react-router-dom"
 import { useGetManufacturersQuery } from "../../store/api/v2/market"
 import {
   GridViewRounded, ViewListRounded, RocketLaunch, DirectionsCar,
@@ -112,14 +112,19 @@ export function WikiManufacturerList() {
               return (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={m.manufacturer}>
                   <Card
+                    component={RouterLink}
+                    to={WIKI_PATHS.manufacturer(
+                      encodeURIComponent(m.manufacturer),
+                    )}
                     sx={{
+                      display: "block",
+                      textDecoration: "none",
                       cursor: "pointer",
                       transition: "transform 0.15s",
                       "&:hover": { transform: "translateY(-2px)" },
                       height: "100%",
                       overflow: "hidden",
                     }}
-                    onClick={() => go(m.manufacturer)}
                   >
                     {/* Manufacturer color accent */}
                     <Box sx={{ height: 3, bgcolor: meta.color }} />
@@ -198,8 +203,29 @@ export function WikiManufacturerList() {
                     <TableRow key={m.manufacturer} hover sx={{ cursor: "pointer" }} onClick={() => go(m.manufacturer)}>
                       <TableCell>
                         <Stack direction="row" spacing={1} alignItems="center">
-                          <Box sx={{ width: 4, height: 28, borderRadius: 1, bgcolor: meta.color, flexShrink: 0 }} />
-                          <Typography variant="body2" fontWeight={600}>{displayName}</Typography>
+                          <Box
+                            sx={{
+                              width: 4,
+                              height: 28,
+                              borderRadius: 1,
+                              bgcolor: meta.color,
+                              flexShrink: 0,
+                            }}
+                          />
+                          <Typography
+                            variant="body2"
+                            fontWeight={600}
+                            component={RouterLink}
+                            to={WIKI_PATHS.manufacturer(
+                              encodeURIComponent(m.manufacturer),
+                            )}
+                            onClick={(event: React.MouseEvent) =>
+                              event.stopPropagation()
+                            }
+                            sx={{ color: "inherit", textDecoration: "none" }}
+                          >
+                            {displayName}
+                          </Typography>
                         </Stack>
                       </TableCell>
                       <TableCell>

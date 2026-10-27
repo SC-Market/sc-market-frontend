@@ -8,6 +8,9 @@ export function isMainSiteHostname(hostname: string): boolean {
     hostname === "localhost" ||
     hostname === "sc-market.space" ||
     hostname === "www.sc-market.space" ||
-    hostname.endsWith(".localhost")
+    hostname.endsWith(".localhost") ||
+    // Cloudflare Pages preview deployments of this project: they preview the
+    // main site (orgs' white-label domains are their own hostnames).
+    hostname.endsWith(".sc-market-frontend.pages.dev")
   )
 }

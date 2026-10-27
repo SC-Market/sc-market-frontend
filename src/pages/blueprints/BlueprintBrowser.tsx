@@ -200,8 +200,14 @@ export function BlueprintBrowser() {
     }
   }, [data, page])
 
+  // The first page renders straight from the query (before the accumulating
+  // effect runs), so the first render — and a prerendered page — has it.
+  const shownBlueprints =
+    allBlueprints.length === 0 && page === 1 && data?.blueprints
+      ? data.blueprints
+      : allBlueprints
   const filteredBlueprints = useMemo(() => {
-    let result = allBlueprints
+    let result = shownBlueprints
     if (hideUnsourceable) {
       result = result.filter((bp) => bp.source === "default" || bp.mission_count > 0)
     }
@@ -209,7 +215,7 @@ export function BlueprintBrowser() {
       result = result.filter((bp) => bp.mission_count > 0)
     }
     return result
-  }, [allBlueprints, hasMissionSource, hideUnsourceable])
+  }, [shownBlueprints, hasMissionSource, hideUnsourceable])
 
   const hasMore = data ? page * data.page_size < data.total : false
   const loadMore = useCallback(() => setPage(p => p + 1), [])

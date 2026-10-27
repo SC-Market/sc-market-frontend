@@ -6,6 +6,7 @@ import {
   handleBridgeRequest,
   HOME_LINK_HEADER,
   HSTS_HEADER,
+  SHELL_PATH,
   type BridgeRuntime,
 } from "../handler"
 import type { HtmlRewriterLike } from "../render"
@@ -100,9 +101,9 @@ describe("handleBridgeRequest", () => {
     expect(res.headers.get("Access-Control-Allow-Origin")).toBe("https://api.sc-market.space")
     expect(res.headers.get("X-SCM-Bridge")).toBe("page")
     expect(fetchSpy).toHaveBeenCalledWith(`${API}/api/v2/listings/71012eb4--pristine-medal`, expect.anything())
-    // Shell fetched by its pretty path.
+    // The SPA shell, by its pretty path (/ is the prerendered homepage).
     const shellRequest = assets.mock.calls[0][0] as Request
-    expect(new URL(shellRequest.url).pathname).toBe("/")
+    expect(new URL(shellRequest.url).pathname).toBe(SHELL_PATH)
   })
 
   it("never forwards the visitor's cookies or headers to the API", async () => {
@@ -232,28 +233,35 @@ describe("handleBridgeRequest", () => {
   })
 })
 
-describe("handleBridgeRequest: static pages and hubs", () => {
-  it("renders / without any API call, with the _headers Link header", async () => {
-    const { run, fetchSpy } = setup(json({}))
-    const res = await run("/")
-    expect(res.status).toBe(200)
-    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
-    expect(res.headers.get("Cache-Control")).toBe("no-cache")
-    expect(fetchSpy).not.toHaveBeenCalled()
-    expect(headersFile).toContain(`Link: ${HOME_LINK_HEADER}`)
-    expect(res.headers.get("Link")).toBe(HOME_LINK_HEADER)
-  })
+describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => {
+  it.each([
+    "/",
+    "/wiki",
+    "/wiki/items",
+    "/wiki/locations",
+    "/mining",
+    "/guides",
+    "/guides/buying/buy-an-item",
+    "/about",
+  ])(
+    "passes prerendered %s through to its static file, untouched",
+    async (path) => {
+      const { run, fetchSpy, next, assets } = setup(json(f.wikiItems(3)))
+      const res = await run(path)
+      expect(await res.text()).toBe("NEXT")
+      expect(next).toHaveBeenCalledOnce()
+      expect(fetchSpy).not.toHaveBeenCalled()
+      expect(assets).not.toHaveBeenCalled()
+    },
+  )
 
-  it("renders static pages even without an API origin", async () => {
-    const { run } = setup(json({}), { VITE_BACKEND_URL: undefined })
-    for (const path of ["/", "/wiki", "/wiki/locations"]) {
-      expect((await run(path)).headers.get("X-SCM-Bridge"), path).toBe("page")
-    }
+  it("keeps the homepage's Link header in public/_headers (a static file now)", () => {
+    expect(headersFile).toContain(`/\n  Link: ${HOME_LINK_HEADER}`)
   })
 
   it("sends HSTS on the main site, matching public/_headers", async () => {
-    const { run } = setup(json({}))
-    const res = await run("/")
+    const { run } = setup(json(f.listing()))
+    const res = await run("/market/71012eb4--pristine-medal")
     expect(res.headers.get("Strict-Transport-Security")).toBe(HSTS_HEADER)
     expect(HSTS_HEADER).not.toMatch(/includeSubDomains|preload/)
     expect(headersFile).toContain(
@@ -268,28 +276,35 @@ describe("handleBridgeRequest: static pages and hubs", () => {
   })
 
   it("does not send HSTS on plain-http dev hosts", async () => {
-    const { run } = setup(json({}))
-    const res = await run("/", {}, "http://localhost")
+    const { run } = setup(json(f.listing()))
+    const res = await run(
+      "/market/71012eb4--pristine-medal",
+      {},
+      "http://localhost",
+    )
     expect(res.headers.get("Strict-Transport-Security")).toBeNull()
   })
 
-  it("only sets Link on /", async () => {
-    const { run } = setup(json(f.wikiItems(3)))
-    expect((await run("/wiki/items")).headers.get("Link")).toBeNull()
+  it("never sets Link on bridged pages", async () => {
+    const { run } = setup(json(f.listing()))
+    expect(
+      (await run("/market/71012eb4--pristine-medal")).headers.get("Link"),
+    ).toBeNull()
   })
 
   it("fetches one bounded list per hub", async () => {
-    const { run, fetchSpy } = setup(json(f.wikiItems(3)))
-    const res = await run("/wiki/items")
-    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+    const { run, fetchSpy } = setup(
+      json({ blueprints: [f.blueprint], total: 1, page: 1, page_size: 50 }),
+    )
+    await run("/blueprints")
     expect(fetchSpy.mock.calls.map((c) => c[0])).toEqual([
-      `${API}/api/v2/game-data/wiki/items?page=1&page_size=50`,
+      `${API}/api/v2/game-data/blueprints/search?page=1&page_size=50`,
     ])
   })
 
   it.each([404, 400, 500])("a hub list %i fails open (never a 404 page)", async (status) => {
     const { run } = setup(json({}, status))
-    const res = await run("/wiki/items")
+    const res = await run("/blueprints")
     expect(res.status).toBe(200)
     expect(res.headers.get("X-SCM-Bridge")).toBe("passthrough")
     expect(await res.text()).toBe(SHELL)

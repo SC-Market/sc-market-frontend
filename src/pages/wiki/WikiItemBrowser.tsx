@@ -14,8 +14,15 @@ import { Helmet } from "@unhead/react/helmet"
 import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useSearchItemsQuery, type WikiItemSearchResult } from "../../store/api/v2/market"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import {
+  useSearchItemsQuery,
+  type WikiItemSearchResult,
+} from "../../store/api/v2/market"
+import {
+  Link as RouterLink,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -86,20 +93,23 @@ function FilterSection({
   )
 }
 
-function ItemGridCard({ item, onClick }: { item: WikiItemSearchResult; onClick: () => void }) {
+function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
+  // A real link (crawlable, middle-click, prerendered with the hub).
   return (
     <Card
+      component={RouterLink}
+      to={WIKI_PATHS.item(item.id, item.name)}
       data-testid="wiki-item-card"
       data-id={item.id}
       sx={{
         cursor: "pointer",
+        textDecoration: "none",
         height: CARD_HEIGHT,
         display: "flex",
         flexDirection: "column",
         transition: "transform 0.15s",
         "&:hover": { transform: "translateY(-2px)" },
       }}
-      onClick={onClick}
     >
       <CardMedia
         component="img"
@@ -144,7 +154,16 @@ function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: (
         />
       </TableCell>
       <TableCell sx={{ py: 0.5 }}>
-        <Typography variant="body2" fontWeight={600}>{item.name}</Typography>
+        <Typography
+          variant="body2"
+          fontWeight={600}
+          component={RouterLink}
+          to={WIKI_PATHS.item(item.id, item.name)}
+          onClick={(event: React.MouseEvent) => event.stopPropagation()}
+          sx={{ color: "inherit", textDecoration: "none" }}
+        >
+          {item.name}
+        </Typography>
       </TableCell>
       <TableCell sx={{ py: 0.5 }}>
         <Chip label={item.display_type || item.type || "—"} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />
@@ -320,7 +339,7 @@ export function WikiItemBrowser() {
                 <Grid container spacing={1}>
                   {data.items.map((item) => (
                     <Grid item {...gridBreakpoints} key={item.id}>
-                      <ItemGridCard item={item} onClick={() => handleItemClick(item.id)} />
+                      <ItemGridCard item={item} />
                     </Grid>
                   ))}
                 </Grid>

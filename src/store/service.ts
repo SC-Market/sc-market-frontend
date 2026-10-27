@@ -1,12 +1,15 @@
 import { BACKEND_URL } from "../util/constants"
 import { createApi } from "@reduxjs/toolkit/query/react"
 import { createBaseQuery } from "./baseQuery"
+import { extractPrerenderedApiState } from "./hydration"
 
 export const serviceApi = createApi({
   baseQuery: createBaseQuery({ baseUrl: `${BACKEND_URL}`, retry: false }),
   endpoints: (builder) => ({}),
   reducerPath: "serviceApi",
   refetchOnReconnect: true,
+  // Data from a prerendered page (store/hydration.ts).
+  extractRehydrationInfo: extractPrerenderedApiState,
   refetchOnFocus: false,
   keepUnusedDataFor: 600,
   tagTypes: [

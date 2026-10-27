@@ -98,6 +98,38 @@
             "data-pre-theme",
             light ? "light" : "dark",
           )
+          // The cookie bar is in a prerendered page's HTML; hide it if the
+          // visitor already chose (src/components/alert/CookieConsent.tsx).
+          if (/(?:^|; )cookie_consent=/.test(document.cookie)) {
+            document.documentElement.setAttribute("data-consent-set", "")
+          }
+          // A prerendered page (src/prerender/paths.ts) is the main site's,
+          // in English, dark. Where the app will show something else (an
+          // org's white-label domain, another language, the light theme),
+          // entry.client renders it
+          // from scratch instead of hydrating, and it stays hidden until then
+          // rather than showing the wrong branding or language first. Keep in
+          // sync with src/util/mainSiteHost.ts and i18next's detection order
+          // (?lng, i18next cookie, localStorage, browser) in util/i18n.ts.
+          var h = location.hostname
+          var mainSite =
+            h === "localhost" ||
+            h === "sc-market.space" ||
+            h === "www.sc-market.space" ||
+            /\.localhost$/.test(h) ||
+            /\.sc-market-frontend\.pages\.dev$/.test(h)
+          var c = document.cookie.match(/(?:^|; )i18next=([^;]*)/)
+          var lng =
+            new URLSearchParams(location.search).get("lng") ||
+            (c && decodeURIComponent(c[1])) ||
+            localStorage.getItem("i18nextLng") ||
+            navigator.language ||
+            "en"
+          // ...and in the light theme: prerendered pages are dark (the
+          // default), and the app's theme isn't CSS variables yet.
+          if (!mainSite || light || /^(de|es|fr|ja|uk|zh)\b/i.test(lng)) {
+            document.documentElement.setAttribute("data-render-fresh", "")
+          }
         } catch (e) {}
       })()
     </script>
@@ -113,6 +145,12 @@
       }
       html[data-pre-theme="dark"] a {
         color: #10b881;
+      }
+      html[data-consent-set] [data-cookie-consent-bar] {
+        display: none;
+      }
+      html[data-render-fresh] #root[data-prerendered] {
+        visibility: hidden;
       }
     </style>
 
@@ -140,7 +178,6 @@
       }
     </style>
 
-
     <script data-cfasync="false">
       // Keep in sync with src/util/assetReloadGuard.ts (same keys / limits).
       ;(function () {
@@ -152,7 +189,10 @@
         function tryEmergencyReload() {
           try {
             var now = Date.now()
-            var windowStart = parseInt(sessionStorage.getItem(WINDOW_START_KEY) || "0", 10)
+            var windowStart = parseInt(
+              sessionStorage.getItem(WINDOW_START_KEY) || "0",
+              10,
+            )
             var n = parseInt(sessionStorage.getItem(ATTEMPTS_KEY) || "0", 10)
             if (!windowStart || now - windowStart > WINDOW_MS) {
               windowStart = now
@@ -191,19 +231,23 @@
               var src = (el.src || el.getAttribute("src") || "").toString()
               var isOurAsset =
                 src.indexOf("/assets/") !== -1 ||
-                (src.indexOf(window.location.origin) === 0 && /\.(js|mjs)$/.test(src)) ||
+                (src.indexOf(window.location.origin) === 0 &&
+                  /\.(js|mjs)$/.test(src)) ||
                 (!src && el.type === "module")
               if (isOurAsset) tryEmergencyReload()
             }
           },
-          true
+          true,
         )
         window.addEventListener("unhandledrejection", function (event) {
           if (window.__scmEntryStarted) return
           var reason = event.reason
-          var text = reason && reason.message ? String(reason.message) : String(reason)
+          var text =
+            reason && reason.message ? String(reason.message) : String(reason)
           if (
-            /dynamically imported module|Importing a module script failed/i.test(text) &&
+            /dynamically imported module|Importing a module script failed/i.test(
+              text,
+            ) &&
             text.indexOf("/assets/") !== -1
           ) {
             tryEmergencyReload()

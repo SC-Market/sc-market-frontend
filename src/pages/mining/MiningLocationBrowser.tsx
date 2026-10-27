@@ -12,7 +12,13 @@ import {
   Chip,
 } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
-import { useSearchParams, useNavigate, useParams } from "react-router-dom"
+import { inAppClick } from "../../components/links/inAppClick"
+import {
+  Link as RouterLink,
+  useSearchParams,
+  useNavigate,
+  useParams,
+} from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useSearchLocationsQuery, type LocationSearchResult } from "../../store/api/v2/market"
 import { MiningLocationDetailModal } from "./MiningLocationDetailModal"
@@ -176,9 +182,23 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
   const hasTopOres = (location.groups || []).some((g) => (g.topOres || []).length > 0)
 
   return (
-    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
+    <Card
+      sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <CardActionArea
+        component={RouterLink}
+        to={GAME_DATA_PATHS.miningLocation(location.name)}
+        onClick={inAppClick(onClick)}
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          justifyContent: "flex-start",
+        }}
+      >
         <CardContent sx={{ p: 1.5, flex: 1, "&:last-child": { pb: 1.5 } }}>
           <Typography variant="body2" fontWeight={600} noWrap>{displayName}</Typography>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ my: 0.5 }}>

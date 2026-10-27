@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { Box, Button, Link, Paper, Typography } from "@mui/material"
 import { useCookies } from "react-cookie"
+import { useHydrated } from "../../hooks/ssr/useHydrated"
 import { CookieRounded } from "@mui/icons-material"
 import ReactGA from "react-ga4"
 import { useLocation } from "react-router-dom"
@@ -65,7 +66,11 @@ export function CookieConsent() {
   // Sit just above the mobile bottom navigation (64px on phones, 0 otherwise)
   const bottomNavHeight = useBottomNavHeight()
 
-  if (cookies.cookie_consent !== undefined) return null
+  // Hydration-safe: a prerendered page was rendered without the cookie, so
+  // it has the bar; hydrate with it (document.html hides it by CSS when the
+  // visitor already chose) and drop it right after.
+  const hydrated = useHydrated()
+  if (hydrated && cookies.cookie_consent !== undefined) return null
 
   const choose = (value: ConsentChoice) => {
     setCookie(CONSENT_COOKIE, value, CONSENT_COOKIE_OPTIONS)
@@ -78,6 +83,7 @@ export function CookieConsent() {
   return (
     <Paper
       role="region"
+      data-cookie-consent-bar=""
       aria-label={t("cookie_consent.title")}
       elevation={6}
       sx={{

@@ -239,6 +239,18 @@ Estimates are focused dev-days for one senior dev. Every phase ships to `main` i
 - **Verify:** `curl -s -A "Mozilla/5.0 (compatible; GPTBot/1.2; +https://openai.com/gptbot)" https://sc-market.space/wiki/ships/<slug>` contains the ship name in `<h1>`, `<title>…SC Market`, `og:title`, and `application/ld+json`. Repeat with `ClaudeBot`, `Bingbot`, `Discordbot`, and test a Discord link preview. Check Search Console / Bing Webmaster "URL inspection" rendered HTML.
 - **Rollback:** remove paths from `prerender`, so they fall back to the SPA.
 
+**Phase 3 as built (branch `feat/rr-prerender`; per-page details in `docs/prerender.md`):**
+- Prerendered: `/`, the game-data hubs (`/wiki`, its 6 lists, `/mining`, `/mining/locations`, `/resources`), `/guides` with every category and guide, and `/about`. No detail pages (Phase 4). `/blueprints` and `/missions` stay on the bridge until their cards are links. Hub cards are now real links (crawlable).
+- No CF changes: still `ssr:false`, a static build plus the existing Pages Function. `_redirects` serves `__spa-fallback.html`; `_routes.json` excludes the prerendered paths (62 of 100 rules); `_headers` gets no-cache per page.
+- Data: no loaders and no backend ask. The build renders each page on a fresh store with RTK Query's server-side hooks and waits for its queries (`entry.server.tsx`). Only the game-data endpoints in `PRERENDERABLE_ENDPOINTS` are shipped (JSON next to `#root`, `extractRehydrationInfo` on all 3 slices); everything live renders as loading and is fetched by the browser, so the homepage's live sections are skeletons in the HTML.
+- Each prerendered route exports `loader = prerenderLoader` (returns null): without a server loader React Router reruns the `clientLoader` on hydration and swaps the page for the root `HydrateFallback`.
+- Head: the bridge's builders (`src/server/bridgeHead.ts`), so prerendered and bridged pages get the same title/meta/JSON-LD.
+- Emotion: styles are collected per render into `<head>` (`src/server/emotionStyles.ts`). Emotion's default inline mode loses the rules written during a render attempt that React retries, which left classes without CSS and shifted the page after hydration.
+- Hydration waits for the page's chunk and guide body (`loadMatchedPages`, `preloadContentBodies`): a part of the page that suspends while hydrating is replaced by its skeleton as soon as anything above it updates.
+- Responsive markup: layout differences between mobile and desktop are CSS (`sx` breakpoints); the persistent drawer and desktop-only header controls are hidden by CSS on small screens until hydration. Signed-in UI is added after hydration in fixed-size slots.
+- Render-fresh fallback: white-label domains, the light theme and non-English visitors render from scratch (`createRoot`) instead of hydrating; `document.html` keeps the prerendered HTML hidden for them until the first render. Removing this needs the theme as CSS variables and build-time translations.
+- Measured locally (dev build, 390 and 1440: the homepage, every hub, /guides, a category, a guide and /about; the guide also with a cold cache): CLS 0, no hydration warnings.
+
 ### Phase 4: runtime SSR for listings/shops/orgs/users and the game-data long tail (≈8-12 days)
 - **Scope:**
   - Move to Workers + `@cloudflare/vite-plugin`. Workers static assets with `run_worker_first` limited to the public prefixes, or Pages with a `_routes.json` include list. Never a catch-all.
