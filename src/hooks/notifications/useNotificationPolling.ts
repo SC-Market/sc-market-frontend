@@ -11,8 +11,12 @@ import { useGetPushSubscriptionsQuery } from "../../features/push-notifications"
  * - 600000 = 10 minutes (push enabled + app in foreground)
  * - 120000 = 2 minutes (push not enabled)
  */
-export function useNotificationPollingInterval(): number {
-  const { data: subscriptions } = useGetPushSubscriptionsQuery()
+export function useNotificationPollingInterval(enabled = true): number {
+  // `enabled`: the caller's notifications query runs (the bell waits for the
+  // startup gate on the first page load; util/startupDeferral.ts).
+  const { data: subscriptions } = useGetPushSubscriptionsQuery(undefined, {
+    skip: !enabled,
+  })
   const [isVisible, setIsVisible] = useState(true)
 
   // Check if user has push subscriptions

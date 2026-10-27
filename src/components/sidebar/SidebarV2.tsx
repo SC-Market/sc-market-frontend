@@ -71,6 +71,7 @@ import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useHydrated } from "../../hooks/ssr/useHydrated"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
+import { useStartupGateOpen } from "../../util/startupDeferral"
 import { useFeatureFlag } from "../../hooks/market"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { has_permission } from "../../views/contractor/OrgRoles"
@@ -153,8 +154,13 @@ export function SidebarV2() {
 
   const { profile } = useSession()
   const isAuthenticated = useIsAuthenticated()
+  // The shops only show in the context switcher's menu, except on a shop
+  // page (the shop context): elsewhere they wait for the startup gate
+  // (util/startupDeferral.ts) instead of competing with the first page.
+  const startupDone = useStartupGateOpen()
+  const onShopPage = /^\/shop\//.test(location.pathname)
   const { data: shops = [] } = useGetMyShopsQuery(undefined, {
-    skip: !isAuthenticated,
+    skip: !isAuthenticated || (!startupDone && !onShopPage),
   })
   const { flags } = useFeatureFlag()
   // On a white-label domain: the tabs the org hid and its own links.

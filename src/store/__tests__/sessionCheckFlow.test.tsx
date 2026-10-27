@@ -201,6 +201,27 @@ describe("logged-in user", () => {
     expect(requests).toContain("GET /api/profile")
   })
 
+  // entry.client.tsx defers the cached profile's refetch to the startup gate
+  // (util/startupDeferral.ts): the first render uses the cached copy.
+  it("the cached profile's refetch waits for refetchAfter", async () => {
+    saveProfileCache(profile)
+    let open!: () => void
+    const gate = new Promise<void>((resolve) => (open = resolve))
+    const store = makeStore({ networkEnv: browserNetworkEnv })
+    void browserNetworkEnv.checkSession()
+    void seedProfileFromCache(store, undefined, gate)
+    render(
+      <Provider store={store}>
+        <Probe />
+      </Provider>,
+    )
+    await waitFor(() => expect(probe()).toBe("authenticated:tester:0"))
+    expect(requests).not.toContain("GET /api/profile")
+    open()
+    await waitFor(() => expect(requests).toContain("GET /api/profile"))
+    expect(probe()).toBe("authenticated:tester:0")
+  })
+
   it("expired access token: the session check's rotation stands in for the refresh", async () => {
     // The backend rotated from the refresh cookie inside GET /api/auth/session.
     // A request that raced it with the old cookie 401s; refreshAuth waits for

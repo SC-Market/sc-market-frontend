@@ -54,6 +54,8 @@ export const notificationApi = serviceApi.injectEndpoints({
           hasPreviousPage: boolean
         }
         unread_count: number
+        /** Unread order notifications (assigned, status): the My Orders badge. */
+        unread_order_count: number
       },
       {
         page?: number
@@ -88,6 +90,8 @@ export const notificationApi = serviceApi.injectEndpoints({
             hasPreviousPage: boolean
           }
           unread_count: number
+          /** Unread order notifications (assigned, status): the My Orders badge. */
+          unread_order_count: number
         }
       }) => {
         return unwrapResponse(response) as {
@@ -101,6 +105,8 @@ export const notificationApi = serviceApi.injectEndpoints({
             hasPreviousPage: boolean
           }
           unread_count: number
+          /** Unread order notifications (assigned, status): the My Orders badge. */
+          unread_order_count: number
         }
       },
       providesTags: (result, error, arg) => [

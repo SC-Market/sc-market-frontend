@@ -20,6 +20,10 @@ import React, {
 } from "react"
 import { UNSAFE_DataRouterContext, useLocation } from "react-router-dom"
 import { PageReadyStore } from "./pageReadyStore"
+import {
+  noteAppCommitted,
+  openStartupGate,
+} from "../../util/startupDeferral"
 
 // Layout effects so a page's loading state reaches the store in the same
 // commit that renders it: nothing (an agent's poll, a paint) sees a stale
@@ -43,6 +47,16 @@ export function PageReadyProvider(props: { children: React.ReactNode }) {
   // update, so the page goes busy at once instead of reading "ready" for
   // the old page under the new URL.
   const router = useContext(UNSAFE_DataRouterContext)?.router
+  // The first page that gets ready opens the startup gate (deferred chrome
+  // queries, util/startupDeferral.ts); its fallback timer starts now.
+  useEffect(() => {
+    noteAppCommitted()
+    const openWhenReady = () => {
+      if (store.isReady()) openStartupGate()
+    }
+    openWhenReady()
+    return store.subscribe(openWhenReady)
+  }, [store])
   useEffect(() => {
     if (!router) return
     store.setRouterKey(router.state.location.key)

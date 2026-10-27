@@ -18,6 +18,7 @@ import { useAppDispatch } from "../../store/hooks"
 import { marketV2Api } from "../../store/api/v2/market"
 import { useHydrated } from "../ssr/useHydrated"
 import { isSiteAdmin } from "../../util/siteRole"
+import { whenStartupGateOpen } from "../../util/startupDeferral"
 
 export interface FeatureFlags {
   [key: string]: boolean
@@ -40,6 +41,15 @@ const DEFAULT_FLAGS: FeatureFlags = { market_v2_redesign: false, customizable_da
 const STORAGE_KEY = "feature_flags"
 /** Written by the retired market_v2 flag; removed on sight, never read. */
 const LEGACY_MARKET_VERSION_KEY = "market_version"
+
+/** Whether this browser has a stored copy of the server's flags. */
+function hasStoredFlags(): boolean {
+  try {
+    return localStorage.getItem(STORAGE_KEY) !== null
+  } catch {
+    return false
+  }
+}
 
 function readStoredFlags(): FeatureFlags {
   try {
@@ -85,6 +95,13 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
 
     const sync = async () => {
       try {
+        // With a stored copy the first paint already uses the server's last
+        // answer, so on the first page load the sync waits for the startup
+        // gate (util/startupDeferral.ts) instead of competing with the
+        // page's own request; its answer still wins when it lands. Without
+        // one (first visit) it runs at once: the layout may depend on it.
+        if (hasStoredFlags()) await whenStartupGateOpen()
+        if (cancelled) return
         const result = await dispatch(
           marketV2Api.endpoints.getFeatureFlag.initiate(),
         )

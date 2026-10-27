@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import {
   useGetNotificationsQuery,
   useNotificationBulkUpdateMutation,
@@ -12,6 +12,11 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { useBadgeAPI } from "../../../hooks/pwa/useBadgeAPI"
 import type { NotificationScope } from "../domain/types"
+import { useStartupGateOpen } from "../../../util/startupDeferral"
+import {
+  CHROME_NOTIFICATIONS_PAGE,
+  CHROME_NOTIFICATIONS_PAGE_SIZE,
+} from "../chromeNotifications"
 
 /** Map frontend scope labels to the backend query param values */
 function mapScopeToBackend(scope: NotificationScope): "individual" | "organization" | undefined {
@@ -23,33 +28,40 @@ function mapScopeToBackend(scope: NotificationScope): "individual" | "organizati
 export function useNotifications() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
-  const [page, setPage] = useState(0)
-  const [pageSize, setPageSize] = useState(5)
+  // The initial state is the chrome's request (CHROME_NOTIFICATIONS_ARGS),
+  // shared with the My Orders badge.
+  const [page, setPage] = useState(CHROME_NOTIFICATIONS_PAGE)
+  const [pageSize, setPageSize] = useState(CHROME_NOTIFICATIONS_PAGE_SIZE)
   const [scopeFilter, setScopeFilter] = useState<NotificationScope>("all")
   const [shopIdFilter, setShopIdFilter] = useState("")
 
   const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser
   const isAuthenticated = useIsAuthenticated()
+  // The bell (its count, list, shop filter and polling) waits for the
+  // startup gate on the first page load (util/startupDeferral.ts).
+  const startupDone = useStartupGateOpen()
   const { data: shopsData } = useGetMyShopsQuery(undefined, {
-    skip: !isAuthenticated,
+    skip: !isAuthenticated || !startupDone,
   })
-  const pollingInterval = useNotificationPollingInterval()
+  const pollingInterval = useNotificationPollingInterval(isLoggedIn && startupDone)
 
-  const { data: notificationsData, refetch } = useGetNotificationsQuery(
+  const { data: notificationsData } = useGetNotificationsQuery(
     {
       page, pageSize,
       scope: mapScopeToBackend(scopeFilter),
       contractorId: shopIdFilter || undefined,
     },
     {
-      skip: !isLoggedIn,
+      skip: !isLoggedIn || !startupDone,
       pollingInterval: pollingInterval > 0 ? pollingInterval : undefined,
       refetchOnMountOrArgChange: true,
     },
   )
 
-  useEffect(() => { refetch() }, [page, pageSize, refetch])
+  // No refetch() effect on page / pageSize: refetchOnMountOrArgChange
+  // already fetches each new page, and refetch() throws while the query is
+  // skipped (logged out, or before the startup gate opens).
 
   const notifications = notificationsData?.notifications || []
   const total = notificationsData?.pagination?.total || 0

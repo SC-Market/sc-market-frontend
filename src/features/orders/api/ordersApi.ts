@@ -12,7 +12,7 @@ import { createOptimisticUpdate } from "../../../util/optimisticUpdates"
 import { unwrapResponse } from "../../../store/api-utils"
 import type { RootState } from "../../../store/store"
 
-const ordersApi = serviceApi.injectEndpoints({
+export const ordersApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
     getOrderById: builder.query<Order, string>({

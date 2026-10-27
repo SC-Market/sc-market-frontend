@@ -36,6 +36,11 @@ import { removeBridgeSummary } from "./document/bridgeSummary"
 import { isMainSiteHostname } from "./util/mainSiteHost"
 import { hydratePrerenderedData, takePrerenderedData } from "./store/hydration"
 import { retryDynamicImport } from "./util/retryDynamicImport"
+import { matchesMobile, prefetchFirstPageData } from "./router/firstPageData"
+import {
+  armStartupDeferral,
+  whenStartupGateOpen,
+} from "./util/startupDeferral"
 
 // The entry chunk has loaded: from here on, chunk failures are handled by the
 // app (retryDynamicImport), not by document.html's bootstrap guard.
@@ -83,9 +88,24 @@ const serverState = prerenderedData ? store.getState() : undefined
 // probing with requests that 401 for anonymous visitors.
 const sessionChecked = browserNetworkEnv.checkSession()
 
+// Signed-in chrome (badges, chats, shops, push status) and the cached
+// profile's refetch wait until the page has shown its content
+// (util/startupDeferral.ts).
+armStartupDeferral()
+
 // Seed the profile from localStorage (no logged-out flash for returning
-// users); its refetch waits for the session check above.
-const profileRefetched = seedCachedProfile(store)
+// users). Its refetch (which also waits for the session check) reconciles
+// the copy once the startup gate opens.
+void seedCachedProfile(store, undefined, whenStartupGateOpen())
+
+// The page's own data starts now, in parallel with its chunk and the session
+// check, not after the app's first commit (router/firstPageData.ts). After
+// serverState above: the hydration render must see the prerendered state.
+const pageData = prefetchFirstPageData(store, window.location, {
+  isMobile: matchesMobile(),
+  mainSite: isMainSiteHostname(window.location.hostname),
+  session: sessionChecked,
+})
 
 // Before the first render, so the first images' load events are seen.
 initLazyImagePlaceholders()
@@ -195,13 +215,19 @@ const pageCode = loadMatchedPages(window.location.pathname)
 // while hydrating is replaced by its fallback (a skeleton) as soon as
 // something above it updates, e.g. when the session check answers: the page
 // would flash and shift.
-// It also waits (capped) for the session check and a returning visitor's
-// profile refetch: their answers update the store, and an update that lands
-// while the first, long render is under way makes React render the whole app
-// a second time (measured: +0.5-1 s at 4x CPU for signed-in visitors).
+// It also waits (capped) for the session check: its answer decides signed in
+// or out, and a store update that lands while the first, long render is
+// under way makes React render the whole app a second time (measured:
+// +0.5-1 s at 4x CPU for signed-in visitors). The cached profile's refetch
+// is not waited for: it is deferred until the page is ready (see above).
+// For the same reason a page rendered from scratch (not hydrated) also waits,
+// within the same cap, for its own first data (pageData above): it then
+// renders its content straight away, without a skeleton pass and without
+// the response restarting that first render. A hydrated page doesn't: it
+// renders the prerendered state (serverState) and takes its data after.
 const FIRST_RENDER_DATA_WAIT_MS = 1500
 const firstRenderData = Promise.race([
-  Promise.allSettled([sessionChecked, profileRefetched]),
+  Promise.allSettled([sessionChecked, prerenderedData ? undefined : pageData]),
   new Promise<void>((resolve) =>
     window.setTimeout(resolve, FIRST_RENDER_DATA_WAIT_MS),
   ),

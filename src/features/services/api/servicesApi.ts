@@ -43,7 +43,7 @@ interface ServicesQueryParams {
   user?: string
 }
 
-const servicesApi = serviceApi.injectEndpoints({
+export const servicesApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
     getServices: builder.query<Service[], string>({

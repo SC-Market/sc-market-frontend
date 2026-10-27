@@ -15,17 +15,26 @@ import { loadProfileCache } from "./profileCache"
  * setTimeout(0). The seeded profile was dropped before anything read it, so
  * every signed-in page first rendered the signed-out sidebar and reflowed when
  * the profile arrived.
+ *
+ * `refetchAfter` delays the refetch (entry.client.tsx: until the startup
+ * gate opens, util/startupDeferral.ts). The first render uses the seeded
+ * copy; the session check alone decides signed in or out before it, and the
+ * refetch only reconciles the copy (a changed avatar, a new org) once the
+ * page has shown its content, instead of landing in the middle of the
+ * first render and forcing a second one.
  */
 export function seedCachedProfile(
   store: AppStore,
   profile: UserProfileState | null = loadProfileCache(),
+  refetchAfter: Promise<unknown> = Promise.resolve(),
 ): Promise<unknown> {
   if (!profile) return Promise.resolve()
-  return Promise.resolve(
+  return Promise.all([
     store.dispatch(
       userApi.util.upsertQueryData("profileGetUserProfile", undefined, profile),
     ),
-  ).then(() =>
+    refetchAfter,
+  ]).then(() =>
     store.dispatch(
       userApi.endpoints.profileGetUserProfile.initiate(undefined, {
         subscribe: false,

@@ -226,6 +226,8 @@ export type PaginatedNotificationsResponse = {
   }
   /** Total number of unread notifications matching the current search criteria */
   unread_count: number
+  /** Unread order notifications of the user (order assigned, order status changed), regardless of the filters: the count behind the My Orders badge */
+  unread_order_count: number
 }
 export const {
   useUpdateNotificationMutation,
