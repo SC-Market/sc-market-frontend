@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router-dom"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const update = vi.fn()
+const updateMute = vi.fn()
 const query = vi.fn()
 const cell = (channel: string, enabled: boolean, extra: object = {}) => ({
   channel,
@@ -18,6 +19,7 @@ const data = {
     { contractor_id: null, name: "Personal", spectrum_id: null },
     { contractor_id: "org-1", name: "Acme", spectrum_id: "ACME" },
   ],
+  mute: { muted: false, until: null },
   categories: [
     {
       category: "orders",
@@ -73,6 +75,10 @@ vi.mock("../../../store/api/v2/market", () => ({
     update,
     { isLoading: false, isError: false },
   ],
+  useUpdateNotificationOrgMuteMutation: () => [
+    updateMute,
+    { isLoading: false, isError: false },
+  ],
   useGetContractAlertsQuery: () => ({
     data: undefined,
     isLoading: true,
@@ -110,6 +116,7 @@ const renderTabs = () =>
 describe("NotificationPreferencesTabs", () => {
   beforeEach(() => {
     update.mockClear()
+    updateMute.mockClear()
     query.mockClear()
   })
 
@@ -170,5 +177,26 @@ describe("NotificationPreferencesTabs", () => {
     )
     expect(push.getAttribute("aria-checked")).toBe("true")
     expect(push.getAttribute("aria-disabled")).toBe("true")
+  })
+
+  it("an org scope offers Mute this org; Personal doesn't", () => {
+    renderTabs()
+    expect(screen.queryByTestId("notif-org-mute")).toBeNull()
+    fireEvent.mouseDown(
+      within(screen.getByTestId("notif-scope")).getByRole("combobox"),
+    )
+    fireEvent.click(screen.getByRole("option", { name: "Acme" }))
+    const mute = screen.getByTestId("notif-org-mute")
+    fireEvent.mouseDown(within(mute).getByRole("combobox"))
+    fireEvent.click(
+      screen.getByRole("option", { name: "Until I turn it back on" }),
+    )
+    expect(updateMute).toHaveBeenCalledWith({
+      updateNotificationOrgMuteRequest: {
+        contractor_id: "org-1",
+        muted: true,
+        until: null,
+      },
+    })
   })
 })

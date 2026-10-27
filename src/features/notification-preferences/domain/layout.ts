@@ -160,9 +160,20 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
     label: "Orgs & contracts",
     labelKey: k("tabs.orgs"),
     sections: [
-      section("org", "Organizations", "Invitations to join an organization.", [
-        row("invite", "Organization invite", ["org.invite"]),
-      ]),
+      section(
+        "org",
+        "Organizations",
+        "Invitations to join an organization, and members joining yours.",
+        [
+          row("invite", "Organization invite", ["org.invite"]),
+          row(
+            "member-joined",
+            "New member joined",
+            ["org.member_joined"],
+            "Orgs where you can manage invites",
+          ),
+        ],
+      ),
       section(
         "contracts",
         "Public contracts",

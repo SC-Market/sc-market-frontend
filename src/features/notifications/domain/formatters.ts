@@ -20,6 +20,7 @@ export function getNotificationIcon(action: string): string {
     order_comment: "comment",
     order_message: "message",
     contractor_invite: "group_add",
+    org_member_joined: "group_add",
     market_item_bid: "gavel",
     market_item_bid_v2: "gavel",
     market_item_offer: "local_offer",

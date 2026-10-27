@@ -596,6 +596,17 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Notifications"],
       }),
+      updateNotificationOrgMute: build.mutation<
+        UpdateNotificationOrgMuteApiResponse,
+        UpdateNotificationOrgMuteApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/notification-preferences/mute`,
+          method: "PUT",
+          body: queryArg.updateNotificationOrgMuteRequest,
+        }),
+        invalidatesTags: ["Notifications"],
+      }),
       getMfaStatus: build.query<GetMfaStatusApiResponse, GetMfaStatusApiArg>({
         query: () => ({ url: `/auth/mfa/status` }),
         providesTags: ["Two-factor auth"],
@@ -2368,6 +2379,11 @@ export type UpdateNotificationPreferencesApiResponse =
   /** status 200 Ok */ NotificationPreferencesResponse
 export type UpdateNotificationPreferencesApiArg = {
   updateNotificationPreferencesRequest: UpdateNotificationPreferencesRequest
+}
+export type UpdateNotificationOrgMuteApiResponse =
+  /** status 200 Ok */ NotificationPreferencesResponse
+export type UpdateNotificationOrgMuteApiArg = {
+  updateNotificationOrgMuteRequest: UpdateNotificationOrgMuteRequest
 }
 export type GetMfaStatusApiResponse = /** status 200 Ok */ MfaStatusResponse
 export type GetMfaStatusApiArg = void
@@ -4427,6 +4443,7 @@ export type NotificationCategoryId =
   | "reviews"
   | "watchlist"
   | "org"
+  | "org_members"
   | "announcements"
   | "reminders"
   | "contracts"
@@ -4446,6 +4463,7 @@ export type NotificationEventKey =
   | "offer.message"
   | "market.bid"
   | "org.invite"
+  | "org.member_joined"
   | "admin.alert"
   | "reminder.unread_messages"
   | "watchlist.price_alert"
@@ -4477,12 +4495,19 @@ export type NotificationPreferenceCategory = {
   }[]
   events: NotificationPreferenceEvent[]
 }
+export type NotificationOrgMute = {
+  muted: boolean
+  /** When the mute ends (ISO); null = until turned back on. */
+  until: string | null
+}
 export type NotificationPreferencesResponse = {
   /** The scope `categories` is for. */
   contractor_id: string | null
   /** Personal plus every org the user belongs to (org-scoped categories only). */
   scopes: NotificationPreferenceScope[]
   categories: NotificationPreferenceCategory[]
+  /** Org scope only: whether the user muted this org (push, email and Discord DM stop; in-app stays). */
+  mute?: NotificationOrgMute
 }
 export type NotificationPreferenceUpdate = {
   /** Set the whole category... */
@@ -4496,6 +4521,12 @@ export type UpdateNotificationPreferencesRequest = {
   /** null or omitted: personal. */
   contractor_id?: string | null
   updates: NotificationPreferenceUpdate[]
+}
+export type UpdateNotificationOrgMuteRequest = {
+  contractor_id: string
+  muted: boolean
+  /** ISO time the mute ends; omit or null for "until I turn it back on". */
+  until?: string | null
 }
 export type MfaFactorSummary = {
   id: string
@@ -7106,7 +7137,7 @@ export type ImportGameDataResponse = {
     /** Shop inventory rows matched to a game item */
     shopItemsLinked: number
     shopItemsImported: number
-    /** In-game shops upserted from shop-inventories.json */
+    /** In-game shops upserted from shop-inventories.json (0 unless GAME_DATA_IMPORT_SHOPS=true) */
     shopsImported: number
     blueprintsUpdated: number
     blueprintsInserted: number
@@ -7215,6 +7246,7 @@ export const {
   useGetOfferSessionQuery,
   useGetNotificationPreferencesQuery,
   useUpdateNotificationPreferencesMutation,
+  useUpdateNotificationOrgMuteMutation,
   useGetMfaStatusQuery,
   useStartTotpEnrollmentMutation,
   useConfirmTotpEnrollmentMutation,

@@ -15,6 +15,8 @@ import {
 import { NotificationBidV2 } from "../types/NotificationBidV2"
 import { NotificationPriceAlert } from "../types/NotificationPriceAlert"
 import { NotificationPublicContract } from "../types/NotificationPublicContract"
+import { NotificationOrgMemberJoined } from "../types/NotificationOrgMemberJoined"
+import { NotificationOfferDecision } from "../types/NotificationOfferDecision"
 
 export function NotificationEntry(props: { notif: Notification }) {
   const { notif } = props
@@ -50,6 +52,12 @@ export function NotificationEntry(props: { notif: Notification }) {
       return <NotificationPublicContract notif={notif} />
     case "admin_alert":
       return <NotificationAdminAlert notif={notif} />
+    case "org_member_joined":
+      return <NotificationOrgMemberJoined notif={notif} />
+    case "offer_accepted":
+    case "offer_rejected":
+    case "contract_offer_received":
+      return <NotificationOfferDecision notif={notif} />
     case "order_review_revision_requested":
       return <NotificationReviewRevisionRequest notif={notif} />
     default:

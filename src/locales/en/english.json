@@ -3000,7 +3000,12 @@
     "shareNotification": "Check out this notification",
     "submitted": "Submitted!",
     "view_all": "View All",
-    "public_contract": "New public contract:"
+    "public_contract": "New public contract:",
+    "someone": "Someone",
+    "org_member_joined": "{{who}} joined {{org}}",
+    "offer_accepted": "{{who}} accepted your offer",
+    "offer_rejected": "{{who}} rejected your offer",
+    "contract_offer_received": "{{who}} made an offer on your contract"
   },
   "Off Course": "warning",
   "OfferDetailsArea": {
@@ -4446,7 +4451,8 @@
         "contract_public_created": "New public contract",
         "offer_accepted": "Offer accepted",
         "offer_rejected": "Offer rejected",
-        "contract_offer_received": "Offer on your contract"
+        "contract_offer_received": "Offer on your contract",
+        "org_member_joined": "New member joined"
       },
       "tabs": {
         "orders": "Orders & offers",
@@ -4486,7 +4492,7 @@
         },
         "org": {
           "label": "Organizations",
-          "hint": "Invitations to join an organization."
+          "hint": "Invitations to join an organization, and members joining yours."
         },
         "contracts": {
           "label": "Public contracts",
@@ -4549,6 +4555,10 @@
         },
         "admin": {
           "label": "Announcement"
+        },
+        "member-joined": {
+          "label": "New member joined",
+          "hint": "Orgs where you can manage invites"
         }
       },
       "subtitle": "Choose where each kind of notification reaches you.",
@@ -4566,6 +4576,16 @@
         "emailUnverified": "Email: not verified",
         "emailNone": "Email: no address",
         "discord": "Discord DMs need a linked Discord account"
+      },
+      "mute": {
+        "label": "Mute this org",
+        "off": "Not muted",
+        "8h": "For 8 hours",
+        "1w": "For 1 week",
+        "on": "Until I turn it back on",
+        "until": "Muted until {{time}}",
+        "active": "No push, email or Discord DMs from {{org}}. It still shows in your notifications.",
+        "hint": "Stops push, email and Discord DMs from this org. In-app notifications and announcements still arrive."
       }
     },
     "contractAlerts": {

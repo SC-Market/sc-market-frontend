@@ -21,6 +21,7 @@ import { FlatSection } from "../../../components/paper/Section"
 import {
   useGetNotificationPreferencesQuery,
   useUpdateNotificationPreferencesMutation,
+  useUpdateNotificationOrgMuteMutation,
   type NotificationChannelId,
   type NotificationEventKey,
   type NotificationPreferenceCell,
@@ -61,7 +62,25 @@ export function NotificationPreferencesTabs() {
     useGetNotificationPreferencesQuery(scope ? { contractorId: scope } : {})
   const [update, { isLoading: isSaving, isError: saveFailed }] =
     useUpdateNotificationPreferencesMutation()
-  const busy = isSaving || isFetching
+  const [updateMute, { isLoading: isMuting, isError: muteFailed }] =
+    useUpdateNotificationOrgMuteMutation()
+  const busy = isSaving || isFetching || isMuting
+
+  const MUTE_HOURS = { "8h": 8, "1w": 24 * 7 } as const
+  const setMute = (choice: "off" | "8h" | "1w" | "on") => {
+    if (!scope) return
+    updateMute({
+      updateNotificationOrgMuteRequest: {
+        contractor_id: scope,
+        muted: choice !== "off",
+        until:
+          choice === "8h" || choice === "1w"
+            ? new Date(Date.now() + MUTE_HOURS[choice] * 3600_000).toISOString()
+            : null,
+      },
+    })
+  }
+  const scopeName = data?.scopes.find((s) => s.contractor_id === scope)?.name
 
   const cells: CellMap = React.useMemo(() => {
     const map: CellMap = new Map()
@@ -262,7 +281,7 @@ export function NotificationPreferencesTabs() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      {(isError || saveFailed) && (
+      {(isError || saveFailed || muteFailed) && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {t(
             "settings.notifications.error",
@@ -329,6 +348,70 @@ export function NotificationPreferencesTabs() {
               "settings.notifications.scopeHint",
               "Org work has its own settings for each org.",
             )}
+          </Typography>
+        </Box>
+      )}
+
+      {scope && data?.mute && current.id !== "account" && (
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            mb: 2,
+            flexWrap: "wrap",
+          }}
+          data-testid="notif-org-mute"
+        >
+          <FormControl size="small" sx={{ minWidth: 220 }}>
+            <InputLabel id="notif-mute">
+              {t("settings.notifications.mute.label", "Mute this org")}
+            </InputLabel>
+            <Select
+              labelId="notif-mute"
+              label={t("settings.notifications.mute.label", "Mute this org")}
+              value={
+                data.mute.muted ? (data.mute.until ? "timed" : "on") : "off"
+              }
+              disabled={busy}
+              onChange={(e) =>
+                setMute(e.target.value as "off" | "8h" | "1w" | "on")
+              }
+              data-testid="notif-mute"
+            >
+              <MenuItem value="off">
+                {t("settings.notifications.mute.off", "Not muted")}
+              </MenuItem>
+              <MenuItem value="8h">
+                {t("settings.notifications.mute.8h", "For 8 hours")}
+              </MenuItem>
+              <MenuItem value="1w">
+                {t("settings.notifications.mute.1w", "For 1 week")}
+              </MenuItem>
+              <MenuItem value="on">
+                {t("settings.notifications.mute.on", "Until I turn it back on")}
+              </MenuItem>
+              {data.mute.until && (
+                <MenuItem value="timed" disabled>
+                  {t("settings.notifications.mute.until", {
+                    defaultValue: "Muted until {{time}}",
+                    time: new Date(data.mute.until).toLocaleString(),
+                  })}
+                </MenuItem>
+              )}
+            </Select>
+          </FormControl>
+          <Typography variant="caption" color="text.secondary">
+            {data.mute.muted
+              ? t("settings.notifications.mute.active", {
+                  defaultValue:
+                    "No push, email or Discord DMs from {{org}}. It still shows in your notifications.",
+                  org: scopeName,
+                })
+              : t(
+                  "settings.notifications.mute.hint",
+                  "Stops push, email and Discord DMs from this org. In-app notifications and announcements still arrive.",
+                )}
           </Typography>
         </Box>
       )}
