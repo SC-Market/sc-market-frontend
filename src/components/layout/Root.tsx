@@ -1,5 +1,4 @@
 import { SidebarV2 } from "../sidebar/SidebarV2"
-import { perfOff } from "../../util/perfFlags"
 import { Box } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { Navbar } from "../navbar/Navbar"
@@ -47,10 +46,10 @@ export function Root(props: { children: React.ReactNode }) {
         // backgroundSize: 'cover',
       }}
     >
-      {!perfOff("extras") && <CommandPalette />}
+      <CommandPalette />
       <ParticleField />
-      {!perfOff("extras") && <SkipNavigation />}
-      {!perfOff("extras") && <CookieConsent />}
+      <SkipNavigation />
+      <CookieConsent />
       {/* PWA Components */}
       {hydrated && (
         <>
@@ -61,12 +60,12 @@ export function Root(props: { children: React.ReactNode }) {
         </>
       )}
       <CartDrawerProvider>
-      {!perfOff("navbar") && <Navbar />}
-      {!perfOff("sidebar") && <SidebarV2 />}
+      <Navbar />
+      <SidebarV2 />
       <PageReadyProvider>
         <MainContent
           floating={
-            perfOff("extras") ? null : <>
+            <>
               {!isMessagingPage && !isMobile && <PreferencesButton />}
               <DebugPanel />
               <MobileBottomNav />

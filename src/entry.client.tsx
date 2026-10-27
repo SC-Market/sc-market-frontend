@@ -34,7 +34,6 @@ import { providePages } from "./routes/definePage"
 import { pages } from "./app/pages"
 import { removeBridgeSummary } from "./document/bridgeSummary"
 import { isMainSiteHostname } from "./util/mainSiteHost"
-import { perfOff } from "./util/perfFlags"
 import { hydratePrerenderedData, takePrerenderedData } from "./store/hydration"
 import { retryDynamicImport } from "./util/retryDynamicImport"
 
@@ -86,9 +85,7 @@ const sessionChecked = browserNetworkEnv.checkSession()
 
 // Seed the profile from localStorage (no logged-out flash for returning
 // users); its refetch waits for the session check above.
-const profileRefetched = perfOff("seed")
-  ? Promise.resolve()
-  : seedCachedProfile(store)
+const profileRefetched = seedCachedProfile(store)
 
 // Before the first render, so the first images' load events are seen.
 initLazyImagePlaceholders()
@@ -140,7 +137,7 @@ function onRecoverableError(error: unknown, errorInfo: ErrorInfo) {
 
 // Initialize Bugsnag asynchronously (non-blocking)
 // This happens after page is interactive to avoid blocking critical rendering
-;(perfOff("bugsnag") ? new Promise<void>(() => {}) : initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || ""))
+initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "")
   .then(() => {
     for (const [error, info] of pendingRecoverableErrors.splice(0)) {
       reportRecoverableError(error, info)

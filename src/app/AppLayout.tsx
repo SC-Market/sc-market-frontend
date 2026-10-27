@@ -16,7 +16,6 @@ import { useRoutePrefetch } from "../hooks/router/useRoutePrefetch"
 import { usePageTitle } from "../hooks/router/usePageTitle"
 import { useLocaleMeta } from "../hooks/router/useLocaleMeta"
 import { markRouterReady } from "../routes/definePage"
-import { perfOff } from "../util/perfFlags"
 
 /**
  * Component that runs inside the router context to enable route-based hooks
@@ -40,7 +39,7 @@ export function AppLayout() {
           <Root>
             <RouterEffects />
             <RouteSuspense>
-              {perfOff("page") ? null : <Outlet />}
+              <Outlet />
             </RouteSuspense>
           </Root>
         </WhiteLabelAuthGate>
