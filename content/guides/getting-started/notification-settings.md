@@ -2,8 +2,8 @@
 title: Choose your notifications
 description: Pick where each kind of notification reaches you (in-app, push, email, Discord DM), per organization, and opt in to alerts for new public contracts.
 order: 30
-updated: 2026-10-26
-keywords: [notifications, push, email, discord, discord dm, settings, unsubscribe, public contracts, contract alerts, webhook, notification settings]
+updated: 2026-10-27
+keywords: [notifications, push, email, discord, discord dm, settings, unsubscribe, public contracts, contract alerts, webhook, notification settings, mute organization, new member]
 related: [buying/price-alerts-watchlist, discord/order-alerts-and-claiming, discord/webhooks]
 howto: true
 ---
@@ -13,7 +13,7 @@ SC Market tells you about orders, offers, messages, bids, reviews, invites, pric
 ## Before you start
 
 - **Push:** turn on push notifications for this browser or phone at the bottom of the same page. On iPhone, add SC Market to your Home Screen first.
-- **Email:** add and verify an email address at the bottom of the same page. Email is off for everything until you turn it on.
+- **Email:** add and verify an email address at the bottom of the same page. Email is off until you turn it on, except for organization invites (on unless you turn it off) and announcements (always sent).
 - **Discord DM:** link your Discord account under **Settings › Discord**. DMs are off by default, except for price alerts.
 
 ## Steps
@@ -25,15 +25,17 @@ SC Market tells you about orders, offers, messages, bids, reviews, invites, pric
 
 Some pills can't be changed:
 - **In-app** is always on, except for price alerts.
-- **Announcements** from the SC Market team are always delivered, in-app and by push.
+- **Announcements** from the SC Market team are always delivered: in-app, by push and by email.
 - **Discord DM** is greyed out until you link Discord. For some order, offer and message notifications it isn't available yet.
 
 ## Organization notifications
 
-Orders, offers, messages, bids, reviews and public contracts that you get as a member of an organization have their own settings for each organization. Pick the organization under **Settings for** to change them.
-- Your personal settings don't apply to organization work.
-- The organization's settings don't apply to your personal orders.
-- In-app and Discord DM are set once, under **Personal**, for everything.
+Orders, offers, messages, bids, reviews, new members and public contracts that you get as a member of an organization have their own settings for each organization. Pick the organization under **Settings for** to change them.
+- You only get an organization's notifications when your role allows the work: orders, offers and their messages need **Manage orders**, bids need **Manage market**, and **New member joined** needs **Manage invites**.
+- Your personal settings don't apply to organization work, and the organization's settings don't apply to your personal orders. As a customer you always use your personal settings.
+- Discord DM can be set per organization. Without an organization setting, your personal one applies.
+- **Mute this org** (under **Settings for**, once you pick the organization) stops push, email and Discord DMs from that organization for 8 hours, a week, or until you turn it back on. Its notifications still appear on the site, and announcements still arrive.
+- **New member joined** tells you, on the site only by default, when someone joins an organization where you can manage invites.
 
 ## Offers and public contracts
 
