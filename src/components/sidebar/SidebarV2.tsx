@@ -143,6 +143,11 @@ export function SidebarV2() {
   const isMobile = useBreakpointDown("sm")
   const hydrated = useHydrated()
   const mobileDrawerWarm = useWarmWhenIdle(isMobile)
+  // The per-item pin buttons (Tooltip + IconButton on every nav link) are a
+  // large share of the sidebar's first render at 4x CPU, and the signed-in
+  // sidebar has the most items. They're hover/focus-only, so the first render
+  // draws a look-alike static icon and the real buttons arrive when idle.
+  const pinButtonsReady = useWarmWhenIdle(true)
   const bottomNavHeight = useBottomNavHeight()
   const location = useLocation()
 
@@ -387,6 +392,14 @@ export function SidebarV2() {
   const q = search.trim().toLowerCase()
   const matchesSearch = (label: string) => !q || label.toLowerCase().includes(q)
 
+  const pinSx = (isStarred: boolean) => ({
+    ml: 0.5,
+    opacity: isStarred ? 1 : 0,
+    transition: "opacity 0.2s",
+    color: isStarred ? "primary.main" : sidebarContrast,
+    p: 0.25,
+  })
+
   // Render a single nav link with star toggle
   const renderNavItem = (item: NavItem, nested = false) => (
     <ListItemButton
@@ -407,22 +420,22 @@ export function SidebarV2() {
           sx={{ ml: 1, height: 20, minWidth: 20, "& .MuiChip-label": { px: 0.75, fontSize: "0.7rem" } }}
         />
       ) : null}
-      <Tooltip title={starred.includes(item.to) ? t("nav.unstar", "Unpin") : t("nav.star", "Pin")}>
-        <IconButton
-          className="nav-star"
-          size="small"
-          onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStar(item.to) }}
-          sx={{
-            ml: 0.5,
-            opacity: starred.includes(item.to) ? 1 : 0,
-            transition: "opacity 0.2s",
-            color: starred.includes(item.to) ? "primary.main" : sidebarContrast,
-            p: 0.25,
-          }}
-        >
+      {pinButtonsReady ? (
+        <Tooltip title={starred.includes(item.to) ? t("nav.unstar", "Unpin") : t("nav.star", "Pin")}>
+          <IconButton
+            className="nav-star"
+            size="small"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleStar(item.to) }}
+            sx={pinSx(starred.includes(item.to))}
+          >
+            {starred.includes(item.to) ? <StarRounded fontSize="small" /> : <StarBorderRounded fontSize="small" />}
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Box component="span" aria-hidden className="nav-star" sx={{ ...pinSx(starred.includes(item.to)), display: "inline-flex" }}>
           {starred.includes(item.to) ? <StarRounded fontSize="small" /> : <StarBorderRounded fontSize="small" />}
-        </IconButton>
-      </Tooltip>
+        </Box>
+      )}
     </ListItemButton>
   )
 

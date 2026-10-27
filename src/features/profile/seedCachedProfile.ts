@@ -19,9 +19,9 @@ import { loadProfileCache } from "./profileCache"
 export function seedCachedProfile(
   store: AppStore,
   profile: UserProfileState | null = loadProfileCache(),
-): void {
-  if (!profile) return
-  void Promise.resolve(
+): Promise<unknown> {
+  if (!profile) return Promise.resolve()
+  return Promise.resolve(
     store.dispatch(
       userApi.util.upsertQueryData("profileGetUserProfile", undefined, profile),
     ),

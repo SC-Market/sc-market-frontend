@@ -630,7 +630,8 @@ describe("SidebarV2 — pinning", () => {
     const user = userEvent.setup()
     renderSidebar("/market")
     // Each nav item has a pin IconButton (tooltip "Pin"); click the first.
-    const pinButtons = screen.getAllByLabelText("Pin")
+    // They mount once the page is idle (a static icon stands in until then).
+    const pinButtons = await screen.findAllByLabelText("Pin", {}, { timeout: 4000 })
     await user.click(pinButtons[0])
     expect(mockSetCookie).toHaveBeenCalledWith(
       "starred_nav_v2",

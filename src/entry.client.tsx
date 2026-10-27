@@ -82,11 +82,13 @@ const serverState = prerenderedData ? store.getState() : undefined
 // Start the session check (GET /api/auth/session) before anything renders:
 // the profile query and every auth-only query wait on its answer instead of
 // probing with requests that 401 for anonymous visitors.
-void browserNetworkEnv.checkSession()
+const sessionChecked = browserNetworkEnv.checkSession()
 
 // Seed the profile from localStorage (no logged-out flash for returning
 // users); its refetch waits for the session check above.
-if (!perfOff("seed")) seedCachedProfile(store)
+const profileRefetched = perfOff("seed")
+  ? Promise.resolve()
+  : seedCachedProfile(store)
 
 // Before the first render, so the first images' load events are seen.
 initLazyImagePlaceholders()
@@ -196,10 +198,23 @@ const pageCode = loadMatchedPages(window.location.pathname)
 // while hydrating is replaced by its fallback (a skeleton) as soon as
 // something above it updates, e.g. when the session check answers: the page
 // would flash and shift.
+// It also waits (capped) for the session check and a returning visitor's
+// profile refetch: their answers update the store, and an update that lands
+// while the first, long render is under way makes React render the whole app
+// a second time (measured: +0.5-1 s at 4x CPU for signed-in visitors).
+const FIRST_RENDER_DATA_WAIT_MS = 1500
+const firstRenderData = Promise.race([
+  Promise.allSettled([sessionChecked, profileRefetched]),
+  new Promise<void>((resolve) =>
+    window.setTimeout(resolve, FIRST_RENDER_DATA_WAIT_MS),
+  ),
+])
+
 async function firstRenderCode(): Promise<void> {
   const bodies = prerenderedData?.contentBodies ?? []
   await Promise.allSettled([
     pageCode,
+    firstRenderData,
     bodies.length > 0
       ? retryDynamicImport(() => import("./features/help/content")).then(
           (content) => content.preloadContentBodies(bodies),
