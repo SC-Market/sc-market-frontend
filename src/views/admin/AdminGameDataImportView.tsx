@@ -195,10 +195,9 @@ export function AdminGameDataImportView() {
         Upload a <code>game-data.zip</code> extracted from Star Citizen's Data.p4k.
       </Typography>
       <Alert severity="info" sx={{ mb: 3 }}>
-        The import also refreshes in-game shops ("where to buy" on wiki item pages) from the{" "}
-        <code>shop-inventories.json</code> in the same ZIP: shops and prices are replaced by the ZIP's,
-        and shops or items it no longer lists are removed. A ZIP without that file leaves the shops
-        unchanged (the job lists a warning).
+        In-game shops ("where to buy" on wiki item pages) are not imported: the shop data in the game
+        files is out of date, and current shop inventories and prices are not in them. A{" "}
+        <code>shop-inventories.json</code> in the ZIP is ignored (the job notes it).
       </Alert>
 
       {/* Upload area */}
