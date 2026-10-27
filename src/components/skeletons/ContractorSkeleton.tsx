@@ -13,6 +13,10 @@ import {
 import { ExtendedTheme, bannerFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
+import {
+  CONTRACTOR_CARD_AVATAR_SIZE,
+  CONTRACTOR_CARD_HEADER_SX,
+} from "../../views/contractor/contractorCardSx"
 
 export interface ContractorSkeletonProps {
   /**
@@ -58,14 +62,14 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
             }}
           >
             <CardHeader
+              sx={CONTRACTOR_CARD_HEADER_SX}
               avatar={
                 <Skeleton
                   variant="rectangular"
                   sx={{
                     maxHeight: theme.spacing(12),
                     maxWidth: theme.spacing(12),
-                    width: "100%",
-                    height: "100%",
+                    ...CONTRACTOR_CARD_AVATAR_SIZE,
                     borderRadius: theme.spacing(theme.borderRadius.image),
                   }}
                 />
@@ -75,7 +79,7 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
                   variant="text"
                   width={200}
                   height={24}
-                  sx={{ mb: 0.5 }}
+                  sx={{ mb: 0.5, maxWidth: "100%" }}
                 />
               }
               subheader={

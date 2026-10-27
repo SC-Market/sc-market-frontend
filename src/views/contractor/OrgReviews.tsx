@@ -61,7 +61,12 @@ function ReviewRow(props: {
         key={row.user_author?.username || row.contractor_author!.spectrum_id}
         selected={isItemSelected}
       >
-        <TableCell component="th" id={labelId} scope="row">
+        <TableCell
+          component="th"
+          id={labelId}
+          scope="row"
+          sx={{ overflowWrap: "anywhere" }}
+        >
           <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item>
               <Avatar
@@ -105,7 +110,7 @@ function ReviewRow(props: {
             />
           </Typography>
         </TableCell>
-        <TableCell align={"right"}>
+        <TableCell align={"right"} sx={{ overflowWrap: "anywhere" }}>
           <Box
             sx={{
               height: "100%",

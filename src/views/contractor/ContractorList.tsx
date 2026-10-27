@@ -39,6 +39,10 @@ import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { DiceD20 } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
 import { ORG_PATHS } from "../../routes/paths"
+import {
+  CONTRACTOR_CARD_AVATAR_SIZE,
+  CONTRACTOR_CARD_HEADER_SX,
+} from "./contractorCardSx"
 
 export const contractorKindIcons = {
   freight: <LocalShippingRoundedIcon />,
@@ -116,6 +120,7 @@ export const ContractorListItem = React.memo(
                   }}
                 >
                   <CardHeader
+                    sx={CONTRACTOR_CARD_HEADER_SX}
                     avatar={
                       <Avatar
                         src={
@@ -134,10 +139,9 @@ export const ContractorListItem = React.memo(
                         sx={{
                           maxHeight: theme.spacing(12),
                           maxWidth: theme.spacing(12),
-                          // maxWidth:'100%',
-                          // maxHeight:'100%',
-                          width: "100%",
-                          height: "100%",
+                          // A fixed, smaller avatar on phones leaves the
+                          // name room (and matches ContractorSkeleton)
+                          ...CONTRACTOR_CARD_AVATAR_SIZE,
                           objectFit: "cover",
                         }}
                       />
@@ -199,6 +203,8 @@ export const ContractorListItem = React.memo(
                           overflow: "hidden",
                           lineClamp: "4",
                           textOverflow: "ellipsis",
+                          // long links / unbroken words in descriptions
+                          overflowWrap: "anywhere",
                           // whiteSpace: "pre-line"
                         }}
                         variant={"body2"}

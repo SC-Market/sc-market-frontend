@@ -53,7 +53,10 @@ export { OfferDetailSkeleton } from "./OfferDetailSkeleton"
 export type { OfferDetailSkeletonProps } from "./OfferDetailSkeleton"
 export { MarketListingDetailSkeleton, MarketAggregateSkeleton } from "./MarketListingDetailSkeleton"
 export { MarketCartSkeleton } from "./MarketCartSkeleton"
-export { ContractorsListSkeleton } from "./ContractorsListSkeleton"
+export {
+  ContractorsListSkeleton,
+  ContractorCardsSkeleton,
+} from "./ContractorsListSkeleton"
 export { FleetSkeleton } from "./FleetSkeleton"
 export { RecruitingListSkeleton } from "./RecruitingListSkeleton"
 export {

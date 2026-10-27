@@ -194,6 +194,8 @@ export function OrgInfoSkeleton() {
                   value={0}
                   aria-label={t("ui.aria.orgInfoArea")}
                   variant="scrollable"
+                  scrollButtons="auto"
+                  allowScrollButtonsMobile
                 >
                   {/* OrgTabs' always-present tabs (Recruiting only shows
                       when the org has a post) */}

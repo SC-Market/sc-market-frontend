@@ -26,6 +26,7 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { HeadCell } from "../../components/table/PaginatedTable"
+import { MOBILE_WRAP_PAGINATION_SX } from "../../components/table/paginationSx"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { MinimalUser } from "../../datatypes/User"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -262,10 +263,16 @@ export function MemberList(props: { contractor: Contractor }) {
       title={t("manageMemberList.members")}
       disablePadding
       subtitle={
-        <Stack spacing={theme.layoutSpacing.compact} direction="row">
+        <Stack
+          spacing={theme.layoutSpacing.compact}
+          direction="row"
+          // a full row of its own on a phone (Section wraps it under the title)
+          sx={{ flex: { xs: "1 1 100%", sm: "0 1 auto" } }}
+        >
           <TextField
             label={t("manageMemberList.search")}
             size="small"
+            sx={{ flex: { xs: 1, sm: "0 1 auto" } }}
             InputProps={{
               endAdornment: (
                 <IconButton aria-label={t("manageMemberList.search")}>
@@ -282,6 +289,7 @@ export function MemberList(props: { contractor: Contractor }) {
           <TextField
             select
             label={t("manageMemberList.role")}
+            sx={{ minWidth: { xs: 120, sm: 0 } }}
             value={roleFilter}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setRoleFilter(event.target.value)
@@ -329,6 +337,7 @@ export function MemberList(props: { contractor: Contractor }) {
           </TableBody>
         </Table>
         <TablePagination
+          sx={MOBILE_WRAP_PAGINATION_SX}
           component="div"
           count={total}
           page={page}
@@ -459,6 +468,7 @@ export function ManageMemberList() {
           </TableBody>
         </Table>
         <TablePagination
+          sx={MOBILE_WRAP_PAGINATION_SX}
           component="div"
           count={total}
           page={page}

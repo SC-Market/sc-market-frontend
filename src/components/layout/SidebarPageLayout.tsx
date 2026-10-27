@@ -29,6 +29,16 @@ export function SidebarPageLayout(props: SidebarPageLayoutProps): ReactElement {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
 
+  if (isMobile) {
+    return (
+      <StandardPageLayout {...standardProps} maxWidth="xxl">
+        <SidebarPageMobileBody sidebar={sidebar}>
+          {children}
+        </SidebarPageMobileBody>
+      </StandardPageLayout>
+    )
+  }
+
   return (
     <StandardPageLayout {...standardProps} maxWidth="xxl">
       <Container
@@ -39,32 +49,53 @@ export function SidebarPageLayout(props: SidebarPageLayoutProps): ReactElement {
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {isMobile ? (
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              {sidebar}
+          <Stack
+            direction="row"
+            justifyContent="center"
+            spacing={theme.layoutSpacing.layout}
+            sx={{ width: "100%", maxWidth: "xxl" }}
+          >
+            {sidebar}
 
-              <Grid item xs={12}>
-                <Divider light />
-              </Grid>
-
-              <Grid item xs={12}>
-                {children}
-              </Grid>
-            </Grid>
-          ) : (
-            <Stack
-              direction="row"
-              justifyContent="center"
-              spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxl" }}
-            >
-              {sidebar}
-
-              <Box sx={{ flex: 1, maxWidth: contentMaxWidth }}>{children}</Box>
-            </Stack>
-          )}
+            <Box sx={{ flex: 1, maxWidth: contentMaxWidth }}>{children}</Box>
+          </Stack>
         </Box>
       </Container>
     </StandardPageLayout>
+  )
+}
+
+/**
+ * SidebarPageLayout's mobile body: the `sidebar` slot (Grid items such as an
+ * inline search field; the filters BottomSheet is a portal), a divider, then
+ * the content. The route skeletons render it too, so they lay out the same.
+ *
+ * It is a Grid item of StandardPageLayout's spacing grid. As a bare child of
+ * that container (it used to be a Container) it started at the container's
+ * negative margin: the whole column sat 4px left of the screen edge, clipped,
+ * with an 8px gap on the right.
+ */
+export function SidebarPageMobileBody({
+  sidebar,
+  children,
+}: {
+  sidebar: ReactNode
+  children: ReactNode
+}) {
+  const theme = useTheme<ExtendedTheme>()
+  return (
+    <Grid item xs={12} sx={{ minWidth: 0 }}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
+        {sidebar}
+
+        <Grid item xs={12}>
+          <Divider light />
+        </Grid>
+
+        <Grid item xs={12} sx={{ minWidth: 0 }}>
+          {children}
+        </Grid>
+      </Grid>
+    </Grid>
   )
 }

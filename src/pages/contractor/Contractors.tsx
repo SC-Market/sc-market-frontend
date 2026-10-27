@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ContractorListItem } from "../../views/contractor/ContractorList"
-import { ContractorSkeleton } from "../../components/skeletons"
-import { Button, Divider, Grid } from "@mui/material"
+import { ContractorCardsSkeleton } from "../../components/skeletons"
+import { Divider, Grid } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { useHydratedInitialState } from "../../hooks/ssr/useHydratedInitialState"
 import { HapticTablePagination } from "../../components/haptic"
@@ -11,10 +11,9 @@ import {
 } from "../../features/contractor/hooks/ContractorSearch"
 import { ContractorSidebarContext } from "../../features/contractor/hooks/ContractorSidebar"
 import { ContractorSidebar } from "../../views/contractor/ContractorSidebar"
-import FilterListIcon from "@mui/icons-material/FilterList"
+import { FiltersFAB } from "../../components/mobile/FiltersFAB"
+import { MOBILE_WRAP_PAGINATION_SX } from "../../components/table/paginationSx"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyContractors } from "../../components/empty-states"
 import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
 import { usePageContractors } from "../../features/contractor/hooks/usePageContractors"
@@ -65,7 +64,6 @@ export function Contractors() {
   // The org directory is this page's primary content.
   usePageReady(isPrimaryLoading(pageData))
 
-  const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   // Start closed on mobile (BottomSheet), open on desktop (Drawer)
   const [sidebarOpen, setSidebarOpen] = useHydratedInitialState(!isMobile)
@@ -86,31 +84,10 @@ export function Contractors() {
             value={[searchState, setSearchState]}
           >
             {isMobile && (
-              <Button
-                variant="outlined"
-                color="secondary"
-                startIcon={<FilterListIcon />}
-                aria-label={t("toggle_contractor_sidebar")}
-                onClick={() => {
-                  setSidebarOpen(true)
-                }}
-                sx={{
-                  position: "fixed",
-                  bottom: { xs: 80, sm: 24 },
-                  right: 24,
-                  zIndex: theme.zIndex.speedDial,
-                  borderRadius: 2,
-                  textTransform: "none",
-                  boxShadow: theme.shadows[4],
-                  backgroundColor: theme.palette.background.paper,
-                  "&:hover": {
-                    backgroundColor: theme.palette.background.paper,
-                    boxShadow: theme.shadows[8],
-                  },
-                }}
-              >
-                {t("contractorsPage.filters", "Filters")}
-              </Button>
+              <FiltersFAB
+                onClick={() => setSidebarOpen(true)}
+                label={t("toggle_contractor_sidebar")}
+              />
             )}
             <ContractorSidebar />
           </ContractorSearchContext.Provider>
@@ -123,13 +100,7 @@ export function Contractors() {
           {pageData.error ? (
             <EmptyContractors isError onRetry={() => pageData.refetch()} />
           ) : pageData.isFetching ? (
-            <Grid container spacing={2}>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                <Grid item xs={12} key={i}>
-                  <ContractorSkeleton />
-                </Grid>
-              ))}
-            </Grid>
+            <ContractorCardsSkeleton />
           ) : pageData.data && pageData.data.items.length > 0 ? (
             <Grid container spacing={2}>
               {pageData.data.items.map((item, index) => (
@@ -169,7 +140,7 @@ export function Contractors() {
             color={"primary"}
             nextIconButtonProps={{ color: "primary" }}
             backIconButtonProps={{ color: "primary" }}
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, ...MOBILE_WRAP_PAGINATION_SX }}
           />
         </ContractorSearchContext.Provider>
       </ContractorSidebarContext.Provider>

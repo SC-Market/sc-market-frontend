@@ -47,7 +47,14 @@ export const Section = React.forwardRef<
           {(!!title || !!element_title) && (
             <>
               <Grid item sx={{ padding: 2, maxWidth: "100%" }}>
-                <Box display={"flex"} justifyContent={"space-between"}>
+                {/* wrap: on a phone the subtitle controls (search fields)
+                    go below the title instead of squeezing it */}
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  flexWrap={"wrap"}
+                  gap={1}
+                >
                   <Typography
                     variant={"h6"}
                     align={"left"}
@@ -67,7 +74,19 @@ export const Section = React.forwardRef<
               </Grid>
             </>
           )}
-          <Grid item sx={{ overflow: "hidden", minWidth: 0, maxWidth: "100%" }}>
+          {/* width: the column container's wrapping flex line grows to its
+              widest item (and MUI sets max-width: none on column items), so
+              without it wide content (a table on a phone) made this item
+              wider than the Paper and was clipped instead of fitting. */}
+          <Grid
+            item
+            sx={{
+              overflow: "hidden",
+              minWidth: 0,
+              maxWidth: "100%",
+              width: "100%",
+            }}
+          >
             <Grid
               container
               spacing={theme.layoutSpacing.component}

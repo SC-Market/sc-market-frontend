@@ -72,6 +72,21 @@ export function ContractorSidebar() {
     }))
   }, [fields, setSearchState, query, rating, sorting, languageCodes])
 
+  // On mobile the search field sits above the results (like the market's);
+  // the rest of the filters are in the BottomSheet.
+  const searchField = (
+    <TextField
+      fullWidth
+      label={t("contractorSidebar.search")}
+      InputProps={{
+        startAdornment: <SearchIcon />,
+      }}
+      value={query}
+      onChange={handleQueryChange}
+      color={"secondary"}
+    />
+  )
+
   // Content component to reuse
   const sidebarContent = (
     <Box
@@ -84,18 +99,11 @@ export function ContractorSidebar() {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label={t("contractorSidebar.search")}
-            InputProps={{
-              startAdornment: <SearchIcon />,
-            }}
-            value={query}
-            onChange={handleQueryChange}
-            color={"secondary"}
-          />
-        </Grid>
+        {!isMobile && (
+          <Grid item xs={12}>
+            {searchField}
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
             {t("contractorSidebar.sorting")}
@@ -221,14 +229,19 @@ export function ContractorSidebar() {
   // On mobile, use BottomSheet - don't render Drawer at all
   if (isMobile) {
     return (
-      <BottomSheet
-        open={open}
-        onClose={() => setOpen(false)}
-        title={t("contractorSidebar.filters", "Filters")}
-        maxHeight="90vh"
-      >
-        {sidebarContent}
-      </BottomSheet>
+      <>
+        <Grid item xs={12}>
+          {searchField}
+        </Grid>
+        <BottomSheet
+          open={open}
+          onClose={() => setOpen(false)}
+          title={t("contractorSidebar.filters", "Filters")}
+          maxHeight="90vh"
+        >
+          {sidebarContent}
+        </BottomSheet>
+      </>
     )
   }
 

@@ -33,6 +33,10 @@ export function OrgTabs({
         value={currentTab}
         aria-label={t("ui.aria.orgInfoArea")}
         variant="scrollable"
+        // On a phone not every tab fits: show the scroll arrows so the
+        // rest (Members, Reviews) can be found. Same in OrgInfoSkeleton.
+        scrollButtons="auto"
+        allowScrollButtonsMobile
       >
         <HapticTab
           label={t("orgInfo.store")}

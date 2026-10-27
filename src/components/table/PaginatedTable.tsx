@@ -19,6 +19,7 @@ import { TransparentHeaderCell } from "./TransparentHeaderCell"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useOnScreen } from "../../hooks/useOnScreen"
 import { useTranslation } from "react-i18next"
+import { MOBILE_WRAP_PAGINATION_SX } from "./paginationSx"
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -353,6 +354,7 @@ export function PaginatedTable<T>(props: {
         </Table>
       </TableContainer>
       <TablePagination
+        sx={MOBILE_WRAP_PAGINATION_SX}
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
         count={rows.length}
@@ -595,6 +597,7 @@ export function ControlledTable<T>(props: {
         </Table>
       </TableContainer>
       <TablePagination
+        sx={MOBILE_WRAP_PAGINATION_SX}
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
         count={rowCount}
