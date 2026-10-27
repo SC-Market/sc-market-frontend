@@ -183,16 +183,22 @@ const renderFresh = () =>
 // locale's strings, so the page doesn't render English and then reflow; for
 // English it resolves at once. See initialLocaleReady in util/i18n.ts.
 //
-// Hydrating waits for the code the HTML was rendered with: the page's chunk
-// and its guide body. Anything still loading would suspend while hydrating,
-// and React replaces a suspended part with its fallback (a skeleton) as soon
-// as something above it updates, e.g. when the session check answers: the
-// page would flash and shift. The HTML is on screen meanwhile.
-async function hydrationCode(): Promise<void> {
-  if (!prerenderedData) return
-  const bodies = prerenderedData.contentBodies ?? []
+// The first render waits for the current page's chunk (started right away,
+// in parallel with the session check): a page that is still loading would
+// suspend, so the app would first show the route skeleton and then mount the
+// page (with its own loading state) in its place. The shell's
+// HydrateFallback (the app frame, or the prerendered HTML) is on screen
+// meanwhile.
+const pageCode = loadMatchedPages(window.location.pathname)
+
+// A prerendered page also waits for its guide body. Anything still loading
+// while hydrating is replaced by its fallback (a skeleton) as soon as
+// something above it updates, e.g. when the session check answers: the page
+// would flash and shift.
+async function firstRenderCode(): Promise<void> {
+  const bodies = prerenderedData?.contentBodies ?? []
   await Promise.allSettled([
-    loadMatchedPages(window.location.pathname),
+    pageCode,
     bodies.length > 0
       ? retryDynamicImport(() => import("./features/help/content")).then(
           (content) => content.preloadContentBodies(bodies),
@@ -207,7 +213,7 @@ void initialLocaleReady.then(async () => {
     container.removeAttribute("data-prerendered")
     createRoot(container, { onRecoverableError }).render(app)
   } else {
-    await hydrationCode()
+    await firstRenderCode()
     hydrateRoot(container, app, { onRecoverableError })
   }
 })
