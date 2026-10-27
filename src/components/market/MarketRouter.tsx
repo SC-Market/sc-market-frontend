@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useLocation, useParams } from "react-router-dom"
 import { RouteSkeletonFallback } from "../router/RouteSuspense"
-import { lazyWithRetry } from "../../util/lazyWithRetry"
+import { lazyWithPreload, lazyWithRetry } from "../../util/lazyWithRetry"
 import { marketPageKind } from "./v2/marketPageKind"
 import { ServiceMarketView } from "../../views/services/ServiceMarketView.lazy"
 import { ServiceListings } from "../../views/contracts/ServiceListings.lazy"
@@ -33,13 +33,18 @@ const BODY_CHUNKS: Record<MarketBody, () => Promise<unknown>[]> = {
   other: () => [],
 }
 
-const marketPages = new Map<MarketBody, React.ComponentType>()
+const marketPages = new Map<
+  MarketBody,
+  React.ComponentType & { preload: () => Promise<void> }
+>()
 
 /** MarketPageV2, loaded together with the chunks of `body`. */
-function marketPageFor(body: MarketBody): React.ComponentType {
+function marketPageFor(
+  body: MarketBody,
+): React.ComponentType & { preload: () => Promise<void> } {
   let page = marketPages.get(body)
   if (!page) {
-    page = lazyWithRetry(() =>
+    page = lazyWithPreload(() =>
       Promise.all([
         import("./v2/MarketPageV2"),
         // A body chunk that fails here is loaded again when it renders, under
@@ -63,6 +68,15 @@ const BulkStockManagementV2 = lazyWithRetry(() => import("../../features/market/
 const MarketAggregateViewV2 = lazyWithRetry(() => import("../../features/market/v2/MarketAggregateViewV2").then(m => ({ default: m.MarketAggregateViewV2 })))
 const MarketMultipleViewV2 = lazyWithRetry(() => import("../../features/market/v2/MarketMultipleViewV2").then(m => ({ default: m.MarketMultipleViewV2 })))
 const CreateBuyOrderPageV2 = lazyWithRetry(() => import("../../features/market/v2/CreateBuyOrderPageV2").then(m => ({ default: m.CreateBuyOrderPageV2 })))
+
+/**
+ * Loads the market page and its tab body for `pathname` before the first
+ * render / navigation (definePage's preloadForPath hook), so the route
+ * skeleton isn't replaced by MarketRouter's own Suspense fallback.
+ */
+export function preloadForPath(pathname: string): Promise<void> {
+  return marketPageFor(marketBody(pathname)).preload()
+}
 
 /**
  * While a market page's chunk loads, show that page's route skeleton (the

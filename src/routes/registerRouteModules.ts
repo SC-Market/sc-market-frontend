@@ -75,7 +75,7 @@ export async function loadMatchedPages(
   const matches = matchRoutes(tree(undefined), pathname) ?? []
   await Promise.allSettled(
     matches.map(({ route }) =>
-      loadPageOf(route.id ? modules[route.id] : undefined),
+      loadPageOf(route.id ? modules[route.id] : undefined, pathname),
     ),
   )
 }

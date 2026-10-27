@@ -70,7 +70,7 @@ export interface DefinePageOptions<P> {
 
 export interface PageRouteModule {
   Component: ComponentType
-  clientLoader: () => Promise<null>
+  clientLoader: (args?: { request?: Request }) => Promise<null>
   shouldRevalidate: () => boolean
   /** Load the page chunk (cached; a failure is retried on the next call). */
   load: () => Promise<ComponentType<never>>
@@ -115,7 +115,10 @@ function pageFor(name: PageName): PageEntry<object, object> {
  * Each page route's clientLoader → its chunk loader (see loadPageOf). Keyed
  * by the clientLoader: React Router wraps a route module's default export.
  */
-const pageLoaders = new WeakMap<object, () => Promise<unknown>>()
+const pageLoaders = new WeakMap<
+  object,
+  (pathname: string) => Promise<unknown>
+>()
 
 /**
  * Load the page chunk behind a route module (from definePage), or resolve
@@ -124,14 +127,17 @@ const pageLoaders = new WeakMap<object, () => Promise<unknown>>()
  * while hydrating is thrown away and re-rendered from its fallback as soon
  * as anything above it updates.
  */
-export function loadPageOf(routeModule: unknown): Promise<unknown> {
+export function loadPageOf(
+  routeModule: unknown,
+  pathname: string,
+): Promise<unknown> {
   const clientLoader = (routeModule as { clientLoader?: unknown } | undefined)
     ?.clientLoader
   const load =
     typeof clientLoader === "function"
       ? pageLoaders.get(clientLoader)
       : undefined
-  return load ? load() : Promise.resolve()
+  return load ? load(pathname) : Promise.resolve()
 }
 
 /** The route module for the page `name` in src/app/pages.ts. */
@@ -157,12 +163,21 @@ export function createPageRoute<M, P extends object>(
 ): PageRouteModule {
   let loaded: ComponentType<P> | null = null
   let pending: Promise<ComponentType<P>> | null = null
+  // The page module's optional `preloadForPath(pathname)`: the chunks it
+  // lazy-loads for that URL (e.g. MarketRouter's tab body), so the page
+  // renders without a second skeleton swap.
+  let preloadFor: ((pathname: string) => Promise<unknown>) | undefined
 
   function load(): Promise<ComponentType<P>> {
     if (!pending) {
       pending = retryDynamicImport(importPage).then(
         (module) => {
           loaded = pick(module)
+          const preload = (module as { preloadForPath?: unknown })
+            .preloadForPath
+          if (typeof preload === "function") {
+            preloadFor = preload as (pathname: string) => Promise<unknown>
+          }
           return loaded
         },
         (error: unknown) => {
@@ -201,9 +216,20 @@ export function createPageRoute<M, P extends object>(
     )
   }
 
-  async function clientLoader(): Promise<null> {
-    if (loaded) return null
-    const promise = load()
+  /** The page chunk, then what it preloads for `pathname` (never fails). */
+  async function loadFor(pathname: string): Promise<void> {
+    await load()
+    await preloadFor?.(pathname).catch(() => undefined)
+  }
+
+  async function clientLoader(args?: { request?: Request }): Promise<null> {
+    const pathname = args?.request
+      ? new URL(args.request.url).pathname
+      : undefined
+    if (loaded && (!routerReady || !preloadFor || pathname === undefined)) {
+      return null
+    }
+    const promise = pathname === undefined ? load() : loadFor(pathname)
     if (routerReady) {
       await promise
     } else {
@@ -215,7 +241,7 @@ export function createPageRoute<M, P extends object>(
   }
 
   Object.defineProperty(Page, "name", { value: name })
-  pageLoaders.set(clientLoader, load)
+  pageLoaders.set(clientLoader, loadFor)
 
   return {
     Component: Page as ComponentType,
