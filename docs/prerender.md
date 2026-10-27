@@ -111,3 +111,23 @@ on a prerendered page is fetched in the browser until it is added there.
 - The data passes call the API from the build machine, anonymously. If the
   API is down during a build, a page renders its loading state and the
   browser fetches the data (the build doesn't fail).
+
+## Follow-up: refresh after a game-data import (needs owner setup)
+
+After a game-data import the prerendered hubs keep the previous patch's
+data until the next frontend deploy. Options, none built yet:
+
+- **Cloudflare Pages deploy hook** (preferred): create a deploy hook for
+  the production branch in the Pages project settings and have the
+  backend's import job `POST` to it when an import finishes. A rebuild
+  re-runs the prerender with the new data. Needs the owner to create the
+  hook and store its URL as a backend secret; it counts against the
+  monthly build quota (one build per import).
+- **Scheduled rebuild**: a GitHub Actions cron calling the same hook (for
+  example daily). Simpler, but up to a day stale and builds even when
+  nothing changed.
+- **Client refetch of shipped data** after hydration (no setup): the hubs
+  would update in place when the data changed, at the cost of an extra
+  request per visit and a possible content change after first paint; the
+  crawler HTML would still be stale until a deploy.
+
