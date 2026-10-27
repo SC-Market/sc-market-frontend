@@ -17,9 +17,15 @@ import { SHOP_PATHS } from "../../../routes/paths"
 interface ShopCardProps {
   shop: ShopPublicResponse
   index?: number
+  /**
+   * Leave out the tag and language chips: identity, rating, stats and the
+   * description only, so every card has the same rows (the homepage's
+   * fixed-height "Top rated shops").
+   */
+  compact?: boolean
 }
 
-export function ShopCard({ shop, index = 0 }: ShopCardProps) {
+export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
   return (
     <Fade in timeout={400} style={{ transitionDelay: `${50 + 30 * index}ms` }}>
       <Card sx={{ height: "100%" }}>
@@ -64,7 +70,7 @@ export function ShopCard({ shop, index = 0 }: ShopCardProps) {
             </Box>
 
             {/* Tags */}
-            {shop.tags.length > 0 && (
+            {!compact && shop.tags.length > 0 && (
               <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                 {shop.tags.slice(0, 3).map((tag) => (
                   <Chip key={tag} label={tag} size="small" variant="outlined" color="primary" sx={{ fontSize: "0.65rem", height: 20 }} />
@@ -101,7 +107,7 @@ export function ShopCard({ shop, index = 0 }: ShopCardProps) {
             </Box>
 
             {/* Languages */}
-            {shop.supported_languages.length > 1 && (
+            {!compact && shop.supported_languages.length > 1 && (
               <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                 {shop.supported_languages.map((lang) => (
                   <Chip key={lang} label={lang.toUpperCase()} size="small" variant="outlined" sx={{ fontSize: "0.6rem", height: 18 }} />

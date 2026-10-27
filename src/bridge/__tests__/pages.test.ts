@@ -232,7 +232,7 @@ describe("hub and static page text matches the SPA's i18next", () => {
       expect(englishT(section.labelKey, section.label)).toBe(t(section.labelKey, section.label))
     }
     // Real translations, not key fallbacks.
-    expect(landingFaqs(englishT)[0].question).toBe("How do I sell items?")
+    expect(landingFaqs(englishT)[0].question).toBe("Does SC Market take a fee?")
     expect(miningSeoText(englishT).title).toBe("Mining Database")
   })
 })
@@ -304,6 +304,27 @@ describe("homepage", () => {
     expect(doc.summary[1]).toEqual({ tag: "p", text: englishT("landing.heroText") })
   })
 
+  it("has the SPA homepage's sections: intents, start selling, why SC Market", () => {
+    const headings = doc.summary.flatMap((b) => (b.tag === "h2" ? [b.text] : []))
+    expect(headings).toEqual([
+      "What do you want to do?",
+      "Browse SC Market",
+      "Start selling",
+      "Why SC Market",
+      "Your questions, answered",
+    ])
+    expect(linksOf(doc)[0]).toEqual({ href: "/market", text: "Buy: Items from player shops" })
+    expect(doc.summary).toContainEqual({
+      tag: "ol",
+      items: [
+        "List it: Any item or service, any quantity, priced in aUEC.",
+        "Get a Discord alert: The bot pings you and opens a thread for each order.",
+        "Meet in game: Hand off the goods and aUEC, then rate each other.",
+      ],
+    })
+    expect(doc.summary).toContainEqual({ tag: "h3", text: "Two-way reviews" })
+  })
+
   it("includes the official / buying / orgs FAQs in the Q&A and FAQPage", () => {
     const questions = landingFaqs(englishT).map((f) => f.question)
     expect(questions).toEqual(
@@ -322,7 +343,13 @@ describe("homepage", () => {
       expect(doc.summary).toContainEqual({ tag: "h3", text: faq.question })
       expect(doc.summary).toContainEqual({ tag: "p", text: faq.answer })
     }
-    expect(linksOf(doc).map((l) => l.href)).toEqual(MAIN_HUB_LINKS.map((l) => l.href))
+    expect(linksOf(doc).map((l) => l.href)).toEqual([
+      "/market",
+      "/market/services",
+      "/buyorder/create",
+      "/market/create",
+      ...MAIN_HUB_LINKS.map((l) => l.href),
+    ])
     for (const href of ["/market", "/shops", "/wiki", "/mining", "/blueprints", "/missions", "/recruiting", "/contractors"]) {
       expect(linksOf(doc).map((l) => l.href)).toContain(href)
     }

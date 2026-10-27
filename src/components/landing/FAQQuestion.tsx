@@ -21,12 +21,16 @@ export function FAQQuestion(props: {
    * search) instead of mounting it only when opened.
    */
   keepMounted?: boolean
+  /** Start expanded. */
+  defaultOpen?: boolean
+  /** Body-size questions (the homepage's narrow FAQ column). */
+  dense?: boolean
 }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(!!props.defaultOpen)
   // Load the markdown renderer only once the answer is first opened; until
   // then a kept-mounted answer is plain text.
   const [opened, setOpened] = useState(false)
-  const { question, answer, last, first, keepMounted } = props
+  const { question, answer, last, first, keepMounted, dense } = props
   const theme = useTheme<ExtendedTheme>()
 
   return (
@@ -34,7 +38,13 @@ export function FAQQuestion(props: {
       {/* Each question is an <h3> holding its toggle button (the accordion
           pattern), so the heading survives in the outline; the landing
           FAQ's section <h2> sits above it, as in the edge bridge's markup. */}
-      <LandingBlockTitle bold={false} sx={{ textAlign: "left", margin: 0 }}>
+      <LandingBlockTitle
+        bold={false}
+        sx={{
+          textAlign: "left",
+          margin: 0,
+        }}
+      >
         <ListItemButton
           component={"button"}
           aria-expanded={open}
@@ -47,6 +57,8 @@ export function FAQQuestion(props: {
             font: "inherit",
             color: "inherit",
             textAlign: "inherit",
+            // The h3's variant sets a responsive size; the button sets its own.
+            ...(dense ? { fontSize: "1rem", lineHeight: 1.5 } : {}),
             ...(first
               ? {
                   borderTopLeftRadius: theme.spacing(0.5),
@@ -73,6 +85,7 @@ export function FAQQuestion(props: {
         <ListItem component="div">
           <LandingBodyText
             sx={{
+              ...(dense ? { fontSize: "0.875rem" } : {}),
               wordBreak: "break-word",
               overflowWrap: "break-word",
               width: "100%",

@@ -1,17 +1,15 @@
 import React from "react"
-import { List, Paper, Stack } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { List, Paper } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { Helmet } from "@unhead/react/helmet"
 import { FAQQuestion } from "./FAQQuestion"
-import { LandingSectionTitle } from "./LandingTypography"
+import { LandingSection, LandingSectionHeader } from "./LandingSection"
 import { faqPageJsonLd, serializeJsonLd } from "../../seo/pageHead"
 import { landingFaqs } from "../../seo/siteHeads"
 
+/** The homepage FAQ: an accordion on Paper, the first answer open. Static. */
 export function FAQSection() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
 
   // One source for the visible Q&A and the FAQPage JSON-LD (the edge
   // bridge renders the same landingFaqs).
@@ -19,48 +17,29 @@ export function FAQSection() {
   const faqSchema = faqPageJsonLd(faqs)
 
   return (
-    <>
+    <LandingSection labelledBy="landing-faq-title" testId="landing-faq">
       <Helmet>
         <script type="application/ld+json">{serializeJsonLd(faqSchema)}</script>
       </Helmet>
-      <Stack
-        direction={"row"}
-        sx={{ flexWrap: "wrap" }}
-        spacing={theme.layoutSpacing.compact}
-      >
-        <LandingSectionTitle
-          sx={{
-            maxWidth: "min(400px, 100%)",
-            flexShrink: "0",
-            marginBottom: 2,
-            textAlign: "left",
-          }}
-        >
-          {t("landing.faqTitle")}
-        </LandingSectionTitle>
-        <Paper sx={{ flexGrow: "1" }}>
-          {/* A div, not a <ul>: each FAQ entry is an <h3> + answer (the
-              accordion pattern), which aren't valid <ul> children. */}
-          <List
-            component="div"
-            sx={{
-              borderRadius: theme.spacing(theme.borderRadius.topLevel),
-              padding: 0,
-            }}
-          >
-            {faqs.map((faq, i) => (
-              <FAQQuestion
-                key={faq.question}
-                question={faq.question}
-                answer={faq.answer}
-                first={i === 0}
-                last={i === faqs.length - 1}
-                keepMounted
-              />
-            ))}
-          </List>
-        </Paper>
-      </Stack>
-    </>
+      <LandingSectionHeader id="landing-faq-title" title={t("landing.faqTitle")} />
+      <Paper>
+        {/* A div, not a <ul>: each FAQ entry is an <h3> + answer (the
+            accordion pattern), which aren't valid <ul> children. */}
+        <List component="div" sx={{ padding: 0 }}>
+          {faqs.map((faq, i) => (
+            <FAQQuestion
+              key={faq.question}
+              question={faq.question}
+              answer={faq.answer}
+              first={i === 0}
+              last={i === faqs.length - 1}
+              defaultOpen={i === 0}
+              dense
+              keepMounted
+            />
+          ))}
+        </List>
+      </Paper>
+    </LandingSection>
   )
 }

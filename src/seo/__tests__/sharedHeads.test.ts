@@ -43,14 +43,14 @@ describe("site JSON-LD (Footer)", () => {
 describe("landing", () => {
   it("FAQ comes from the landing locale keys, in display order", () => {
     expect(landingFaqs(t).map((f) => f.question)).toEqual([
-      t("landing.faqSellItemsQ"),
+      t("landing.faqFeeQ"),
       t("landing.faqBuyQ"),
+      t("landing.faqRealMoneyQ"),
+      t("landing.faqOrgsQ"),
       t("landing.faqSafeQ"),
       t("landing.faqOfficialQ"),
+      t("landing.faqSellItemsQ"),
       t("landing.faqListThingsQ"),
-      t("landing.faqOrgsQ"),
-      t("landing.faqFeeQ"),
-      t("landing.faqRealMoneyQ"),
     ])
   })
 

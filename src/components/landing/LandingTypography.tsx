@@ -16,9 +16,10 @@ function withSx(base: SxProps<Theme>, sx?: SxProps<Theme>): SxProps<Theme> {
 }
 
 /** A homepage section title ("For Orgs", "Our Supporters", the FAQ, ...). */
-export function LandingSectionTitle(props: TextProps) {
+export function LandingSectionTitle(props: TextProps & { id?: string }) {
   return (
     <Typography
+      id={props.id}
       variant={"h3"}
       component={"h2"}
       color={"text.secondary"}

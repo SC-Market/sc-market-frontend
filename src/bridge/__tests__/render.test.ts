@@ -88,7 +88,7 @@ describe.each(Object.entries(evilDocs))("hostile %s content", (_name, doc) => {
     const textChunks = chunks.filter((c) => !c.html)
     expect(textChunks.map((c) => c.content)).toEqual(expectedTexts(doc.summary))
     for (const c of chunks.filter((c) => c.html)) {
-      expect(c.content).toMatch(/^(<\/?(main|h1|h2|h3|p|ul)( data-bridge-summary)?( style="[^"]*")?>|<li><a href="\/[^"<>\s]*">|<\/a><\/li>)$/)
+      expect(c.content).toMatch(/^(<\/?(main|h1|h2|h3|p|ul|ol|li)( data-bridge-summary)?( style="[^"]*")?>|<li><a href="\/[^"<>\s]*">|<\/a><\/li>)$/)
     }
 
     const dom = parse("", `<div id="root">${assemble(chunks)}</div>`)

@@ -362,10 +362,45 @@ const HUB_PAGES: Record<
       canonical: head.canonical ?? `${ctx.origin}/`,
       head,
       summary: [
-        // Same <h1> and intro line as the SPA's LandingHero.
+        // The SPA homepage's copy, in its order: the hero's <h1> and intro,
+        // the intent cards, how selling works, why SC Market, the FAQ.
         { tag: "h1", text: englishT("landing.heroTitle") },
         ...paragraphs(englishT("landing.heroText"), headDescription(head)),
+        ...linkBlocks(englishT("landing.intentsLabel"), [
+          {
+            href: MARKET_PATHS.search,
+            text: `${englishT("landing.intentBuyTitle")}: ${englishT("landing.intentBuyText")}`,
+          },
+          {
+            href: MARKET_PATHS.services,
+            text: `${englishT("landing.intentHireTitle")}: ${englishT("landing.intentHireText")}`,
+          },
+          {
+            href: MARKET_PATHS.buyOrderCreate,
+            text: `${englishT("landing.intentWantedTitle")}: ${englishT("landing.intentWantedText")}`,
+          },
+          {
+            href: MARKET_PATHS.create,
+            text: `${englishT("landing.intentSellTitle")}: ${englishT("landing.intentSellText")}`,
+          },
+        ]),
         ...linkBlocks("Browse SC Market", [...MAIN_HUB_LINKS]),
+        { tag: "h2", text: englishT("landing.sellTitle") },
+        ...paragraphs(englishT("landing.sellText")),
+        {
+          tag: "ol",
+          items: ([1, 2, 3] as const).map(
+            (n) =>
+              `${englishT(`landing.sellStep${n}Title`)}: ${englishT(`landing.sellStep${n}Text`)}`,
+          ),
+        },
+        { tag: "h2", text: englishT("landing.whyTitle") },
+        ...(["Reviews", "Fees", "Alerts", "Orgs"] as const).flatMap(
+          (point): SummaryBlock[] => [
+            { tag: "h3", text: englishT(`landing.trust${point}Title`) },
+            { tag: "p", text: englishT(`landing.trust${point}Text`) },
+          ],
+        ),
         { tag: "h2", text: englishT("landing.faqTitle", "Your questions, answered") },
         ...faqs.flatMap((faq): SummaryBlock[] => [
           { tag: "h3", text: faq.question },

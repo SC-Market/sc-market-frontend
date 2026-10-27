@@ -1,53 +1,59 @@
 import React from "react"
-import {
-  ButtonBase,
-  Link as MaterialLink,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Box, Link as MaterialLink, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
-import CharLogo from "../../assets/CharHoldings_Logo.png"
-import UNNLogo from "../../assets/UNN_Traders_Logo.webp"
-import BirdIncLogo from "../../assets/birdinc.jpg"
-import { LandingBodyText, LandingSectionTitle } from "./LandingTypography"
+import bird32 from "../../assets/supporters/birdinc-32.webp"
+import bird64 from "../../assets/supporters/birdinc-64.webp"
+import unn32 from "../../assets/supporters/unn-32.webp"
+import unn64 from "../../assets/supporters/unn-64.webp"
+import char32 from "../../assets/supporters/char-32.webp"
+import char64 from "../../assets/supporters/char-64.webp"
 import { LandingImg } from "./LandingImage"
 
-/** Supporter logos are shown 128px tall; width/height are the files' pixel sizes. */
-const SUPPORTER_LOGO_HEIGHT = 128
+/** Supporter logos are shown this tall (px); the files are 1x and 2x of it. */
+const SUPPORTER_LOGO_HEIGHT = 32
 
+const SUPPORTERS = [
+  {
+    src: bird32,
+    src2x: bird64,
+    width: 89,
+    url: "https://robertsspaceindustries.com/en/orgs/BIRDINC",
+    name: "BIRD Inc",
+  },
+  {
+    src: unn32,
+    src2x: unn64,
+    width: 128,
+    url: "https://joinunn.com/",
+    name: "The Unnamed",
+  },
+  {
+    src: char32,
+    src2x: char64,
+    width: 112,
+    url: "https://robertsspaceindustries.com/orgs/CHAR",
+    name: "Char Holdings",
+  },
+]
+
+/** "Our Supporters": the supporting orgs' logos and the Patreon thanks. Static. */
 export function SupportersSection() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const supporters = [
-    {
-      avatar: BirdIncLogo,
-      width: 691,
-      height: 248,
-      url: "https://robertsspaceindustries.com/en/orgs/BIRDINC",
-      name: "BIRD Inc",
-    },
-    {
-      avatar: UNNLogo,
-      width: 1024,
-      height: 256,
-      url: "https://joinunn.com/",
-      name: "The Unnamed",
-    },
-    {
-      avatar: CharLogo,
-      width: 895,
-      height: 256,
-      url: "https://robertsspaceindustries.com/orgs/CHAR",
-      name: "Char Holdings",
-    },
-  ]
 
   return (
-    <Stack spacing={theme.layoutSpacing.layout} sx={{ maxWidth: "100%" }}>
-      <LandingSectionTitle>{t("landing.supportersTitle")}</LandingSectionTitle>
-      <LandingBodyText sx={{ textAlign: "center" }}>
+    <Box data-testid="landing-supporters">
+      <Typography
+        variant="h6"
+        component="h3"
+        color="text.secondary"
+        sx={{ fontSize: "1rem", fontWeight: "bold", mb: 0.5 }}
+      >
+        {t("landing.supportersTitle")}
+      </Typography>
+      <Typography variant="body2" color="text.primary" sx={{ mb: 1.25 }}>
         {t("landing.supportersThanks")}
         <MaterialLink
           color={"secondary"}
@@ -59,73 +65,42 @@ export function SupportersSection() {
           Patreon
         </MaterialLink>{" "}
         {t("landing.supporters")}
-      </LandingBodyText>
-      <Stack
-        sx={{ maxWidth: "100%", overflow: "scroll", flexWrap: "wrap" }}
-        useFlexGap
-        spacing={theme.layoutSpacing.layout}
-        direction={"row"}
-        justifyContent={"center"}
-        alignItems={"center"}
+      </Typography>
+      <Box
+        sx={{ display: "flex", alignItems: "center", gap: 2.5, flexWrap: "wrap" }}
       >
-        {supporters.map((supporter) => (
+        {SUPPORTERS.map((supporter) => (
           <MaterialLink
+            key={supporter.name}
             href={supporter.url}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              color: "inherit",
-              textDecoration: "none",
-            }}
-            key={supporter.name}
+            aria-label={t(
+              "accessibility.viewSupporterWebsite",
+              "Visit {{name}} website",
+              { name: supporter.name },
+            )}
+            sx={{ display: "block", lineHeight: 0 }}
           >
-            <Stack
-              spacing={theme.layoutSpacing.text}
-              direction={"column"}
-              key={supporter.name}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <ButtonBase
-                sx={{
-                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                }}
-                aria-label={t(
-                  "accessibility.viewSupporterWebsite",
-                  "Visit {{name}} website",
-                  { name: supporter.name },
-                )}
-              >
-                <LandingImg
-                  src={supporter.avatar}
-                  width={supporter.width}
-                  height={supporter.height}
-                  loading="lazy"
-                  decoding="async"
-                  sx={{
-                    height: SUPPORTER_LOGO_HEIGHT,
-                    width: "auto",
-                    maxWidth: "100%",
-                    objectFit: "contain",
-                    borderRadius: theme.spacing(theme.borderRadius.button),
-                  }}
-                  alt={t("accessibility.supporterLogo", "{{name}} logo", {
-                    name: supporter.name,
-                  })}
-                />
-              </ButtonBase>
-
-              <Typography
-                variant={"body2"}
-                align={"center"}
-                color={"text.primary"}
-              >
-                {supporter.name}
-              </Typography>
-            </Stack>
+            <LandingImg
+              src={supporter.src}
+              srcSet={`${supporter.src} 1x, ${supporter.src2x} 2x`}
+              width={supporter.width}
+              height={SUPPORTER_LOGO_HEIGHT}
+              loading="lazy"
+              decoding="async"
+              sx={{
+                height: SUPPORTER_LOGO_HEIGHT,
+                width: "auto",
+                borderRadius: theme.spacing(theme.borderRadius.image),
+              }}
+              alt={t("accessibility.supporterLogo", "{{name}} logo", {
+                name: supporter.name,
+              })}
+            />
           </MaterialLink>
         ))}
-      </Stack>
-    </Stack>
+      </Box>
+    </Box>
   )
 }

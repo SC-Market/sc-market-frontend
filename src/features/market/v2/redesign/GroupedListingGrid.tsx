@@ -41,12 +41,8 @@ import { EmptyListings } from "../../../../components/empty-states"
 import { MarketListingRating } from "../../../../components/rating/ListingRating"
 import { isFungibleType } from "./fungibility"
 import { useFlip } from "./useFlip"
-import {
-  ListingCardV2,
-  CARD_CHIP_SX,
-  cardChipStackSx,
-  type ListingGridProps,
-} from "../ListingSearchV2"
+import { ListingCardV2, type ListingGridProps } from "../ListingSearchV2"
+import { CARD_CHIP_SX, cardChipStackSx } from "../cardChips"
 
 /**
  * GroupedListingGrid — market_v2_redesign variant of the search grid.

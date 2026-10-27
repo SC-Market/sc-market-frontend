@@ -8,51 +8,45 @@ import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { Footer } from "../../components/footer/Footer"
 import { LandingPageLayout } from "../../components/landing/LandingPageLayout"
-// Direct imports, not the components/landing barrel: the barrel also
-// re-exports the lazy sections below.
+// Direct imports, not the components/landing barrel.
 import { LandingHero } from "../../components/landing/LandingHero"
-import { RecentListings } from "../../components/landing/RecentListings"
-import { LandingFeaturesSkeleton } from "../../components/landing/LandingFeatures.skeleton"
-import { LandingOrgFeaturesSkeleton } from "../../components/landing/LandingOrgFeatures.skeleton"
-import { SupportersSectionSkeleton } from "../../components/landing/SupportersSection.skeleton"
-import { FAQSectionSkeleton } from "../../components/landing/FAQSection.skeleton"
+import { WantedNowSkeleton } from "../../components/landing/WantedNow.skeleton"
+import { TopRatedShopsSkeleton } from "../../components/landing/TopRatedShops.skeleton"
+import { StartSelling } from "../../components/landing/StartSelling"
+import { LandingGameData } from "../../components/landing/LandingGameData"
+import { LandingTrust } from "../../components/landing/LandingTrust"
+import { FAQSection } from "../../components/landing/FAQSection"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
+import { useSession } from "../../hooks/login/useSession"
 import { PATHS, ORG_PATHS } from "../../routes/paths"
 import { homeSeoText } from "../../seo/siteHeads"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
 import { safeRedirectPath } from "../../util/safeRedirect"
 
 /*
- * Below the fold: each section is its own chunk, so the homepage's first
- * render only needs the hero, the stats and the recent listings. The
- * fallbacks are the sections' skeletons (the same ones the route skeleton
- * uses), so the page keeps its length while they load.
+ * Below the fold, the two data sections are their own chunks (they bring
+ * the buy-order and shop cards); their fallbacks are their skeletons, the
+ * same size as the loaded sections. The static sections after them are
+ * plain markup in this chunk: no skeleton to swap, so nothing to shift, and
+ * the page is complete HTML for a later prerender.
  */
-const LandingFeatures = lazyWithRetry(() =>
-  import("../../components/landing/LandingFeatures").then((m) => ({
-    default: m.LandingFeatures,
+const WantedNow = lazyWithRetry(() =>
+  import("../../components/landing/WantedNow").then((m) => ({
+    default: m.WantedNow,
   })),
 )
-const LandingOrgFeatures = lazyWithRetry(() =>
-  import("../../components/landing/LandingOrgFeatures").then((m) => ({
-    default: m.LandingOrgFeatures,
+const TopRatedShops = lazyWithRetry(() =>
+  import("../../components/landing/TopRatedShops").then((m) => ({
+    default: m.TopRatedShops,
   })),
-)
-const SupportersSection = lazyWithRetry(() =>
-  import("../../components/landing/SupportersSection").then((m) => ({
-    default: m.SupportersSection,
-  })),
-)
-const FAQSection = lazyWithRetry(() =>
-  import("../../components/landing/FAQSection").then((m) => ({
-      default: m.FAQSection,
-    })),
 )
 
 export function LandingPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const session = useSession()
+  const signedIn = session.status === "authenticated"
 
   // Handle custom org redirect
   const { customOrg } = useCustomDomain()
@@ -89,27 +83,20 @@ export function LandingPage() {
     >
       <LandingPageLayout
         hero={<LandingHero />}
-        recentListings={<RecentListings />}
-        features={
-          <Suspense fallback={<LandingFeaturesSkeleton />}>
-            <LandingFeatures />
+        wantedNow={
+          <Suspense fallback={<WantedNowSkeleton />}>
+            <WantedNow />
           </Suspense>
         }
-        orgFeatures={
-          <Suspense fallback={<LandingOrgFeaturesSkeleton />}>
-            <LandingOrgFeatures />
+        topShops={
+          <Suspense fallback={<TopRatedShopsSkeleton />}>
+            <TopRatedShops />
           </Suspense>
         }
-        supporters={
-          <Suspense fallback={<SupportersSectionSkeleton />}>
-            <SupportersSection />
-          </Suspense>
-        }
-        faq={
-          <Suspense fallback={<FAQSectionSkeleton />}>
-            <FAQSection />
-          </Suspense>
-        }
+        startSelling={<StartSelling signedIn={signedIn} />}
+        gameData={<LandingGameData />}
+        trust={<LandingTrust />}
+        faq={<FAQSection />}
         footer={<Footer />}
       />
     </StandardPageLayout>

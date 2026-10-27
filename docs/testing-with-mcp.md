@@ -118,7 +118,9 @@ first; they're also what screen-reader users get.
    `cart-item`, `buy-order-card`, `buy-order-row`, `offer-row`,
    `order-row`, `org-role-row`, `org-member-row`, `shop-card`,
    `blueprint-card`, `mission-card`, `resource-card`, `wiki-item-card`,
-   `ship-card`.
+   `ship-card`, `listing-row` (the homepage's latest listings table),
+   `landing-intent` (the homepage's Buy / Hire / Wanted / Sell cards;
+   `data-id` is the intent).
 
    Never put a test id on something that can have a good accessible name
    instead, and never select on MUI class names (`css-…` hashes change on

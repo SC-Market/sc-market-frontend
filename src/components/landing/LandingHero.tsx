@@ -1,36 +1,36 @@
 import React from "react"
 import { useSession } from "../../hooks/login/useSession"
 import { useGetMarketStatsQuery } from "../../features/market/api/marketApi"
-import { MARKET_PATHS, PATHS } from "../../routes/paths"
+import { useSearchListingsQuery } from "../../store/api/v2/market"
+import { usePageReady } from "../metadata/PageReady"
+import { isPrimaryLoading } from "../metadata/pageReadyStore"
 import { LandingHeroLayout } from "./LandingHeroLayout"
-
-/**
- * "Start selling" goes straight to the create-listing page when signed in.
- * Signed out (or not known yet) it goes through the login page with a
- * redirect, the same URL LoggedInRoute would send them to.
- */
-export function landingSellHref(signedIn: boolean): string {
-  return signedIn
-    ? MARKET_PATHS.create
-    : `${PATHS.login}?redirect=${encodeURIComponent(MARKET_PATHS.create)}`
-}
+import { LATEST_LISTINGS_ARGS } from "./landingLinks"
 
 export function LandingHero() {
   const session = useSession()
-  const { data, isError } = useGetMarketStatsQuery()
+  const stats = useGetMarketStatsQuery()
+  const listings = useSearchListingsQuery(LATEST_LISTINGS_ARGS)
+  // The hero's data is the page's primary content: drives main[data-ready].
+  usePageReady(stats.isLoading)
+  usePageReady(isPrimaryLoading(listings))
+
+  const failed = listings.isError && !listings.data
   return (
     <LandingHeroLayout
-      sellHref={landingSellHref(session.status === "authenticated")}
+      signedIn={session.status === "authenticated"}
       stats={
-        isError && !data
+        stats.isError && !stats.data
           ? null
-          : data && {
-              totalOrders: data.total_orders,
-              totalOrderValue: data.total_order_value,
-              weekOrders: data.week_orders,
-              weekOrderValue: data.week_order_value,
+          : stats.data && {
+              totalOrders: stats.data.total_orders,
+              totalOrderValue: stats.data.total_order_value,
+              weekOrders: stats.data.week_orders,
+              weekOrderValue: stats.data.week_order_value,
             }
       }
+      liveListings={failed ? null : listings.data?.total}
+      listings={failed ? null : listings.data?.listings}
     />
   )
 }

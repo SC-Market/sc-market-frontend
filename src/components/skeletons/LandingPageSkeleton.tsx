@@ -1,26 +1,27 @@
 import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { LandingPageLayout } from "../landing/LandingPageLayout"
-// Direct imports, not the components/landing barrel, which also re-exports
-// the page's lazy-loaded sections.
+// Direct imports, not the components/landing barrel.
 import { LandingHeroSkeleton } from "../landing/LandingHero.skeleton"
-import { LandingFeaturesSkeleton } from "../landing/LandingFeatures.skeleton"
-import { LandingOrgFeaturesSkeleton } from "../landing/LandingOrgFeatures.skeleton"
-import { SupportersSectionSkeleton } from "../landing/SupportersSection.skeleton"
-import { FAQSectionSkeleton } from "../landing/FAQSection.skeleton"
-import { RecentListingsSkeleton } from "../landing/RecentListingsSkeleton"
+import { WantedNowSkeleton } from "../landing/WantedNow.skeleton"
+import { TopRatedShopsSkeleton } from "../landing/TopRatedShops.skeleton"
+import { StartSelling } from "../landing/StartSelling"
+import { LandingGameData } from "../landing/LandingGameData"
+import { LandingTrust } from "../landing/LandingTrust"
+import { FAQSection } from "../landing/FAQSection"
 import { Footer } from "../footer/Footer"
 import { StandardPageLayout } from "../layout/StandardPageLayout"
 import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
+import { useSession } from "../../hooks/login/useSession"
 
 /**
- * Skeleton for landing page
- * Uses the same StandardPageLayout as LandingPage so the top bar spacer and
- * container structure match, preventing reflow/flash when the real page loads.
- * Uses the same LandingPageLayout and individual component skeletons for content.
+ * Skeleton for the landing page: the same StandardPageLayout and
+ * LandingPageLayout as LandingPage, the data sections as their skeletons and
+ * the static sections as themselves, so nothing moves when the page loads.
  */
 export function LandingPageSkeleton() {
   const theme = useTheme<ExtendedTheme>()
+  const session = useSession()
   return (
     <StandardPageLayout
       title="SC Market"
@@ -39,11 +40,14 @@ export function LandingPageSkeleton() {
     >
       <LandingPageLayout
         hero={<LandingHeroSkeleton />}
-        recentListings={<RecentListingsSkeleton />}
-        features={<LandingFeaturesSkeleton />}
-        orgFeatures={<LandingOrgFeaturesSkeleton />}
-        supporters={<SupportersSectionSkeleton />}
-        faq={<FAQSectionSkeleton />}
+        wantedNow={<WantedNowSkeleton />}
+        topShops={<TopRatedShopsSkeleton />}
+        startSelling={
+          <StartSelling signedIn={session.status === "authenticated"} />
+        }
+        gameData={<LandingGameData />}
+        trust={<LandingTrust />}
+        faq={<FAQSection />}
         footer={<Footer />}
       />
     </StandardPageLayout>
