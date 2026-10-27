@@ -26,9 +26,12 @@
 /privacy-policy         /privacy   301
 /privacy-policy.html    /privacy   301
 
-# Every other app path gets the SPA shell (React Router's SPA fallback; the
-# homepage and the pages in src/prerender/paths.ts are their own files, which
-# Pages serves first). The target is the extensionless path: Pages answers
-# a request for /__spa-fallback.html with a 308 to /__spa-fallback, so a
-# rewrite to the .html name redirects every path there.
-/*    /__spa-fallback   200
+# The prerendered homepage (scripts/build/prerendered.ts moves it to
+# __home.html: index.html has to be the SPA shell, see below).
+/     /__home        200
+
+# Every other app path gets the SPA shell. Keep this exact rule: Pages
+# serves existing files (assets, prerendered pages such as wiki/items.html)
+# before a "/* /index.html 200" catch-all, but a catch-all to any other file
+# is served for every path, assets included.
+/*    /index.html   200

@@ -92,6 +92,12 @@ const shell = inlineStylesheets(readFileSync(shellFile, "utf8"), (fileName) => {
   return existsSync(file) ? readFileSync(file, "utf8") : undefined
 })
 writeFileSync(shellFile, shell)
+// Pages serves index.html for every app path (public/_redirects); with the
+// homepage prerendered (moved to __home.html) that is the shell again. The
+// bridge fetches __spa-fallback.html.
+if (SHELL_FILE !== "index.html") {
+  writeFileSync(path.join(outDir, "index.html"), shell)
+}
 checkShell(shell)
 
 console.log(

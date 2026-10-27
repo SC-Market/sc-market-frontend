@@ -6,12 +6,15 @@
  *   dropped (the asset carry-over keeps recent ones, not all);
  * - check the edge bridge leaves each path alone: excluded in
  *   public/_routes.json (no Function invocation at all), or a page kind the
- *   bridge passes through (src/bridge/routes.ts PRERENDERED_KINDS).
+ *   bridge passes through (src/bridge/routes.ts PRERENDERED_KINDS);
+ * - lay them out the way Cloudflare Pages serves them (layOutForPages).
  */
 import {
   existsSync,
   readFileSync,
   readdirSync,
+  renameSync,
+  rmdirSync,
   statSync,
   writeFileSync,
 } from "node:fs"
@@ -85,5 +88,59 @@ export function finalizePrerenderedPages(outDir: string): string[] {
     throw new Error(
       `public/_routes.json has ${total} rules (Cloudflare's limit is 100)`,
     )
+  layOutForPages(outDir, paths)
   return paths
+}
+
+/** The prerendered homepage's file; public/_redirects rewrites / to it. */
+export const HOME_FILE = "__home.html"
+
+/**
+ * Move the pages where Cloudflare Pages serves them without a redirect and
+ * without the SPA catch-all getting in the way:
+ * - `<path>/index.html` → `<path>.html`: Pages serves `/wiki/items` from
+ *   `wiki/items.html`, but answers it with a 308 to `/wiki/items/` when the
+ *   file is `wiki/items/index.html`;
+ * - the homepage → `__home.html`, because `index.html` must be the SPA
+ *   shell: only the `/* /index.html 200` catch-all leaves existing files
+ *   alone (a catch-all to any other file is served for every path, assets
+ *   included), and public/_redirects rewrites `/` to `/__home`.
+ * Call before the shell is written to index.html.
+ */
+export function layOutForPages(outDir: string, paths: string[]): void {
+  for (const urlPath of paths) {
+    if (urlPath === "/") {
+      renameSync(path.join(outDir, "index.html"), path.join(outDir, HOME_FILE))
+      continue
+    }
+    const dir = path.join(outDir, urlPath)
+    const target = `${dir}.html`
+    if (existsSync(target)) {
+      throw new Error(
+        `${target} exists: can't move ${urlPath}/index.html there`,
+      )
+    }
+    renameSync(path.join(dir, "index.html"), target)
+  }
+  // Directories that only held a page (deepest first).
+  for (const urlPath of [...paths].sort().reverse()) {
+    if (urlPath === "/") continue
+    const dir = path.join(outDir, urlPath)
+    if (existsSync(dir) && readdirSync(dir).length === 0) rmdirSync(dir)
+  }
+  const redirects = readFileSync(path.join(outDir, "_redirects"), "utf8")
+  const rules = redirects
+    .split("\n")
+    .map((line) => line.trim().split(/\s+/).join(" "))
+    .filter((line) => line !== "" && !line.startsWith("#"))
+  const homeRule = "/ /__home 200"
+  const catchAll = "/* /index.html 200"
+  if (paths.includes("/") && rules.indexOf(homeRule) === -1) {
+    throw new Error(`public/_redirects must rewrite / to /__home (${homeRule})`)
+  }
+  if (rules.at(-1) !== catchAll) {
+    throw new Error(
+      `public/_redirects must end with the SPA catch-all (${catchAll})`,
+    )
+  }
 }
