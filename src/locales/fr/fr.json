@@ -424,6 +424,8 @@
     "unit": "unité",
     "available": "{{count}} disponible(s)",
     "internalListing": "Annonce Interne",
+    "unlistedListing": "Non répertorié",
+    "showUnlistedAdmin": "Afficher les non répertoriés (admin)",
     "addDiscountTier": "Ajouter un palier",
     "allListingsTitle": "Toutes les annonces du marché",
     "allTiers": "Tous les paliers",

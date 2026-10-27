@@ -424,6 +424,8 @@
     "unit": "u.",
     "available": "{{count}} disponibles",
     "internalListing": "Listado Interno",
+    "unlistedListing": "No listado",
+    "showUnlistedAdmin": "Mostrar no listados (admin)",
     "addDiscountTier": "Añadir nivel",
     "allListingsTitle": "Todos los anuncios de mercado",
     "allTiers": "Todos los niveles",

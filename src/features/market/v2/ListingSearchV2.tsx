@@ -1080,6 +1080,15 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                     sx={CARD_CHIP_SX}
                   />
                 )}
+                {/* Only a site admin's search with includeUnlisted ever returns these. */}
+                {listing.visibility === "unlisted" && (
+                  <Chip
+                    label={t("market.unlistedListing", "Unlisted")}
+                    color="default"
+                    size="small"
+                    sx={CARD_CHIP_SX}
+                  />
+                )}
               </Box>
               <CardMedia
                 component="img"

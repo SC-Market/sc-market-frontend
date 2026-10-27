@@ -430,6 +430,8 @@
     "unit": "ea",
     "available": "{{count}}在售",
     "internalListing": "内部商品页",
+    "unlistedListing": "未列出",
+    "showUnlistedAdmin": "显示未列出（管理员）",
     "aria": {
       "listingTabs": "市场商品选项卡"
     },

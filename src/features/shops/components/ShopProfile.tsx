@@ -4,6 +4,7 @@ import {
   Box,
   Chip,
   Container,
+  FormControlLabel,
   Grid,
   InputAdornment,
   LinearProgress,
@@ -14,6 +15,7 @@ import {
   Rating,
   Skeleton,
   Stack,
+  Switch,
   TableCell,
   TableRow,
   Tabs,
@@ -73,6 +75,9 @@ import {
 } from "../../../components/skeletons/ShopProfileSkeleton"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import { isSiteAdmin } from "../../../util/siteRole"
+import { useTranslation } from "react-i18next"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -452,13 +457,19 @@ function ShopTabContent(props: {
   }
 }
 
-function ShopListingsTab(props: { slug: string }) {
+export function ShopListingsTab(props: { slug: string }) {
   const [search, setSearch] = useState("")
   const [sortBy, setSortBy] = useState<"created_at" | "price" | "quantity">("created_at")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const [page, setPage] = useState(1)
   const pageSize = SHOP_LISTINGS_PAGE_SIZE
   const debouncedSearch = useDebounce(search, 300)
+  const { t } = useTranslation()
+  // Admin-only: also show the shop's unlisted (link-only) listings. The
+  // backend honours includeUnlisted for site admins only.
+  const { data: profile } = useGetUserProfileQuery()
+  const isAdmin = isSiteAdmin(profile)
+  const [showUnlisted, setShowUnlisted] = useState(false)
 
   const { data, isLoading, isFetching: pageIsFetching, currentData: pageCurrentData } = useSearchListingsQuery({
     shopSlug: props.slug,
@@ -467,6 +478,7 @@ function ShopListingsTab(props: { slug: string }) {
     sortBy,
     sortOrder,
     text: debouncedSearch || undefined,
+    includeUnlisted: isAdmin && showUnlisted ? true : undefined,
   })
   // Shop listings tab: primary content.
   usePageReady(
@@ -507,6 +519,19 @@ function ShopListingsTab(props: { slug: string }) {
           <MenuItem value="price-desc">Price: High</MenuItem>
           <MenuItem value="quantity-desc">Most Stock</MenuItem>
         </TextField>
+        {isAdmin && (
+          <FormControlLabel
+            control={
+              <Switch
+                size="small"
+                checked={showUnlisted}
+                onChange={(e) => { setShowUnlisted(e.target.checked); setPage(1) }}
+              />
+            }
+            label={t("market.showUnlistedAdmin", "Show unlisted (admin)")}
+            sx={{ whiteSpace: "nowrap", ml: { sm: 1 } }}
+          />
+        )}
       </Stack>
 
       {isLoading ? (

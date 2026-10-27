@@ -424,6 +424,8 @@
     "unit": "個",
     "available": "在庫 {{count}} 個",
     "internalListing": "内部リスト",
+    "unlistedListing": "限定公開",
+    "showUnlistedAdmin": "限定公開を表示（管理者）",
     "addDiscountTier": "ティアを追加",
     "allListingsTitle": "すべてのマーケット出品",
     "allTiers": "すべてのティア",

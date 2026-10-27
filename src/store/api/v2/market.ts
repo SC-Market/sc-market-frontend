@@ -701,6 +701,7 @@ const injectedRtkApi = api
             in_stock: queryArg.inStock,
             has_photos: queryArg.hasPhotos,
             bulk_discount: queryArg.bulkDiscount,
+            include_unlisted: queryArg.includeUnlisted,
           },
         }),
         providesTags: ["Listings V2"],
@@ -2447,6 +2448,8 @@ export type SearchListingsApiArg = {
   inStock?: boolean
   hasPhotos?: boolean
   bulkDiscount?: boolean
+  /** Site admins only: also list unlisted (link-only) listings (the admin Market page, the admin "Show unlisted" toggle on shop pages). Ignored for everyone else. */
+  includeUnlisted?: boolean
 }
 export type GetMyListingsApiResponse =
   /** status 200 Updated listing with variant breakdown */ GetMyListingsResponse

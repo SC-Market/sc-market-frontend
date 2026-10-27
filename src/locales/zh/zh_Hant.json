@@ -453,6 +453,8 @@
     "errorLoadingQualityDistribution": "載入品質分佈時發生錯誤",
     "errorLoadingSellerStats": "載入賣家分析時發生錯誤",
     "internalListing": "內部商品",
+    "unlistedListing": "未列出",
+    "showUnlistedAdmin": "顯示未列出（管理員）",
     "internalListings": "內部商品",
     "inventoryDistributionByQualityTier": "目前庫存分佈",
     "listings": "商品",

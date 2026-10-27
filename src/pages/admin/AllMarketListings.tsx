@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import {
   Box,
+  Chip,
   Divider,
   Grid,
   Skeleton,
@@ -32,6 +33,7 @@ type ListingStatus = "active" | "inactive" | "expired" | "sold" | "cancelled"
 
 function AdminListingCard({ listing }: { listing: ListingSearchResult }) {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
 
   return (
     <Fade in style={{ transitionDuration: "300ms" }}>
@@ -44,6 +46,13 @@ function AdminListingCard({ listing }: { listing: ListingSearchResult }) {
             sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
           >
             <Card sx={{ height: 280, position: "relative" }}>
+              {listing.visibility === "unlisted" && (
+                <Chip
+                  label={t("market.unlistedListing", "Unlisted")}
+                  size="small"
+                  sx={{ position: "absolute", top: 8, right: 8, zIndex: 1 }}
+                />
+              )}
               <CardMedia
                 component="img"
                 loading="lazy"
@@ -122,12 +131,15 @@ function AdminListingsSection({ status }: { status: ListingStatus }) {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(48)
 
+  // The non-active tabs also show unlisted (link-only) listings. The backend
+  // honours includeUnlisted for site admins only.
   const { data, isLoading } = useSearchListingsQuery({
     status,
     page,
     pageSize,
     sortBy: "updated_at",
     sortOrder: "desc",
+    includeUnlisted: status !== "active" ? true : undefined,
   })
 
   if (isLoading) return <ListingsSkeleton />

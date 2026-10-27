@@ -424,6 +424,8 @@
     "unit": "St.",
     "available": "{{count}} verfügbar",
     "internalListing": "Interne Anzeige",
+    "unlistedListing": "Nicht gelistet",
+    "showUnlistedAdmin": "Nicht gelistete anzeigen (Admin)",
     "addDiscountTier": "Stufe hinzufügen",
     "allListingsTitle": "Alle Marktangebote",
     "allTiers": "Alle Stufen",

@@ -2337,6 +2337,8 @@
     "filters": "Filters",
     "inactiveListings": "Inactive Listings",
     "internalListing": "Internal Listing",
+    "unlistedListing": "Unlisted",
+    "showUnlistedAdmin": "Show unlisted (admin)",
     "internalListings": "Internal Listings",
     "inventoryDistributionByQualityTier": "Current Inventory Distribution",
     "item_name": "Item Name",

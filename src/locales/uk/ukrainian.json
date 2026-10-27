@@ -453,6 +453,8 @@
     "errorLoadingQualityDistribution": "Помилка завантаження розподілу за якістю",
     "errorLoadingSellerStats": "Помилка завантаження аналітики продавця",
     "internalListing": "Внутрішнє оголошення",
+    "unlistedListing": "Не в списку",
+    "showUnlistedAdmin": "Показати не в списку (адмін)",
     "internalListings": "Внутрішні оголошення",
     "inventoryDistributionByQualityTier": "Поточний розподіл запасів",
     "listings": "Оголошення",
