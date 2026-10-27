@@ -28,5 +28,7 @@
 
 # Every other app path gets the SPA shell (React Router's SPA fallback; the
 # homepage and the pages in src/prerender/paths.ts are their own files, which
-# Pages serves first).
-/*    /__spa-fallback.html   200
+# Pages serves first). The target is the extensionless path: Pages answers
+# a request for /__spa-fallback.html with a 308 to /__spa-fallback, so a
+# rewrite to the .html name redirects every path there.
+/*    /__spa-fallback   200
