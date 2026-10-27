@@ -146,12 +146,19 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
               </TableHead>
               <TableBody>
                 {auction.bids.map((bid, i) => (
-                  <TableRow key={bid.bid_id}>
+                  <TableRow
+                    key={bid.bid_id}
+                    selected={bid.bidder.is_you}
+                    aria-current={bid.bidder.is_you ? "true" : undefined}
+                  >
                     <TableCell>
                       <Stack direction="row" spacing={1} alignItems="center">
-                        <Typography variant="body2">
+                        <Typography variant="body2" fontWeight={bid.bidder.is_you ? "bold" : "normal"}>
                           {bid.bidder.display_name}
                         </Typography>
+                        {bid.bidder.is_you && (
+                          <Chip label={t("BidAreaV2.isYou", "Your bid")} size="small" color="primary" variant="outlined" />
+                        )}
                         {i === 0 && <Chip label={t("BidAreaV2.highest", "Highest")} size="small" color="success" />}
                       </Stack>
                     </TableCell>

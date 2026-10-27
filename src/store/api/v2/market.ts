@@ -5111,11 +5111,16 @@ export type ScmdbIngestResponse = {
 }
 export type ScmdbStatusResponse = {
   is_connected: boolean
-  ingest_url: string | null
+  /** Always null. The token is stored hashed, so the URL can't be shown again
+    after connect/regenerate returned it. Kept for older clients. */
+  ingest_url: null | null
+  /** Last 4 characters of the active token, e.g. to show "…ab12". */
+  token_hint: string | null
   last_event_at: string | null
   created_at: string | null
 }
 export type ScmdbConnectResponse = {
+  /** The ingest URL, containing the secret token. Returned only here, once. */
   ingest_url: string
 }
 export type ImportSource = "cstone-items" | "uex-items" | "uex-attributes"
