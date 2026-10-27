@@ -20,6 +20,7 @@ import { Scripts } from "react-router-dom"
 import "./fonts.css"
 import "./index.css"
 import { shellComponent } from "./routes/shell"
+import { ShellFallback } from "./document/ShellFallback"
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
@@ -33,11 +34,11 @@ export function Layout({ children }: { children: ReactNode }) {
 
 /**
  * Shown by React Router until the first page's route modules and loaders
- * are ready, and rendered into index.html at build time. Empty, like the
- * old <div id="root"></div>: the app shell appears as soon as the app runs.
+ * are ready, and rendered into index.html at build time: the app frame and
+ * a page placeholder (see ShellFallback), so the shell is never blank.
  */
 export function HydrateFallback() {
-  return null
+  return <ShellFallback />
 }
 
 export default shellComponent("App")

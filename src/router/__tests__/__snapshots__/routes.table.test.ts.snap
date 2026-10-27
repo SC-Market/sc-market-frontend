@@ -901,7 +901,7 @@ exports[`route table > lists every leaf route 2`] = `
     "guards": [
       "AppLayout",
     ],
-    "lazy": false,
+    "lazy": true,
     "pattern": "/",
   },
   {
@@ -973,7 +973,7 @@ exports[`route table > lists every leaf route 2`] = `
     "guards": [
       "AppLayout",
     ],
-    "lazy": false,
+    "lazy": true,
     "pattern": "/services",
   },
   {
