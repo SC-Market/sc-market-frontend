@@ -17,7 +17,14 @@ Since the Phase 2 migration (docs/ssr-migration-design.md) the route table is
    ```
    Add `export const ErrorBoundary = shellComponent("RouteErrorFallback")`
    (from `../shell`) for an in-page error boundary.
-2. A redirect or eager element: a module in `src/routes/elements/`. A guard or
+2. A redirect or eager element: a module in `src/routes/elements/`. A
+   redirect to an absolute path also exports
+   `clientLoader = () => redirect("/target")` (`replace("/target")` for a
+   `<Navigate replace>`), so it happens before anything
+   renders (a `<Navigate>` alone renders an empty frame first, then navigates
+   in an effect); the `<Navigate>` stays as the component. The converter
+   generates exactly this for `<Navigate to="/…">`, so regenerating keeps it;
+   relative targets (`to="about"`) stay a plain `<Navigate>`. A guard or
    layout: `src/routes/layouts/`. Components they render come from the app
    shell by name (`shellComponent("LoggedInRoute")`); add new ones to
    `src/app/shell.ts`.

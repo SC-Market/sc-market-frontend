@@ -1408,7 +1408,7 @@ exports[`route table > lists every leaf route 2`] = `
       "AppLayout",
       "LoggedInRoute",
     ],
-    "lazy": false,
+    "lazy": true,
     "pattern": "/orders/assigned",
   },
   {
@@ -2539,7 +2539,7 @@ exports[`route table > lists every leaf route 2`] = `
     "guards": [
       "AppLayout",
     ],
-    "lazy": false,
+    "lazy": true,
     "pattern": "/help",
   },
   {

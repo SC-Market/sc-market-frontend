@@ -303,13 +303,44 @@ function elementModule(
   )
   const abs = path.join(SRC, file + ".tsx")
   const names = usedImports(el).filter((n) => n !== tag)
+  // <Navigate to="/x"> (or to={"/x"}): the absolute target, else undefined
+  // (relative or computed targets stay a plain <Navigate>).
+  function staticAbsoluteTo(
+    e: ts.JsxSelfClosingElement | ts.JsxOpeningElement,
+  ): string | undefined {
+    for (const a of e.attributes.properties) {
+      if (!ts.isJsxAttribute(a) || a.name.getText() !== "to") continue
+      let init: ts.Node | undefined = a.initializer
+      if (init && ts.isJsxExpression(init)) init = init.expression
+      if (init && ts.isStringLiteralLike(init) && init.text.startsWith("/"))
+        return init.text
+    }
+    return undefined
+  }
   let lines: string[]
   if (tag === "Navigate") {
+    const target = staticAbsoluteTo(el)
+    // <Navigate replace> → replace() (no history entry), else redirect().
+    const fn = el.attributes.properties.some(
+      (a) => ts.isJsxAttribute(a) && a.name.getText() === "replace",
+    )
+      ? "replace"
+      : "redirect"
     lines = [
       HEADER(`renders ${src(el)}`),
-      `import { Navigate } from "react-router-dom"`,
+      target
+        ? `import { Navigate, ${fn} } from "react-router-dom"`
+        : `import { Navigate } from "react-router-dom"`,
       ...(errorElement ? [`import { shellComponent } from "../shell"`] : []),
       ``,
+      // Redirect before rendering: a <Navigate> alone renders an empty
+      // frame first (it navigates in an effect).
+      ...(target
+        ? [
+            `export const clientLoader = () => ${fn}(${JSON.stringify(target)})`,
+            ``,
+          ]
+        : []),
       ...errorBoundaryExport(errorElement),
       `export default function Redirect() {`,
       `  return ${src(el)}`,

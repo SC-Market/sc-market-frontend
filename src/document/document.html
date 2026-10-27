@@ -161,8 +161,14 @@
         display: none;
       }
       /* ShellFallback (src/document/ShellFallback.tsx): the app frame. */
+      /*
+       * Colours from the themes: dark = theme/mainTheme.ts (paper, outline),
+       * light = themes/CLEAN.ts (the light mode: sidebar on paper, navbar on
+       * background.navbar, outline).
+       */
       .scm-shell {
-        --scm-panel: #111828;
+        --scm-side: #111828;
+        --scm-bar: #111828;
         --scm-line: #2d3748;
         --scm-block: rgba(255, 255, 255, 0.06);
         position: fixed;
@@ -171,14 +177,15 @@
         overflow: hidden;
       }
       html[data-pre-theme="light"] .scm-shell {
-        --scm-panel: #ffffff;
-        --scm-line: #e2e8f0;
-        --scm-block: rgba(0, 0, 0, 0.07);
+        --scm-side: #f4f4f5;
+        --scm-bar: #ffffff;
+        --scm-line: rgba(0, 0, 0, 0.15);
+        --scm-block: rgba(0, 0, 0, 0.11);
       }
       .scm-shell-side {
         width: 280px;
         flex: none;
-        background: var(--scm-panel);
+        background: var(--scm-side);
         border-right: 1px solid var(--scm-line);
       }
       .scm-shell-col {
@@ -190,7 +197,7 @@
       .scm-shell-bar {
         height: 64px;
         flex: none;
-        background: var(--scm-panel);
+        background: var(--scm-bar);
         border-bottom: 1px solid var(--scm-line);
       }
       .scm-shell-page {
@@ -245,7 +252,7 @@
           display: block;
           height: 64px;
           flex: none;
-          background: var(--scm-panel);
+          background: var(--scm-bar);
           border-top: 1px solid var(--scm-line);
         }
       }
