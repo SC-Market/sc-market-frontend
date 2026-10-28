@@ -4,11 +4,16 @@ vi.mock("../monitoring/bugsnagLoader", () => ({
   notifyBugsnag: vi.fn(),
   leaveBugsnagBreadcrumb: vi.fn(),
 }))
+// Registration only runs on production; the tests' page is on localhost.
+vi.mock("../deploymentStage", () => ({
+  currentDeploymentStage: vi.fn(),
+}))
 
 import {
   notifyBugsnag,
   leaveBugsnagBreadcrumb,
 } from "../monitoring/bugsnagLoader"
+import { currentDeploymentStage } from "../deploymentStage"
 import {
   registerServiceWorker,
   initPWA,
@@ -52,6 +57,7 @@ describe("pwa service worker registration", () => {
     vi.clearAllMocks()
     // Production path: classification only runs outside dev.
     vi.stubEnv("DEV", false)
+    vi.mocked(currentDeploymentStage).mockReturnValue("production")
     vi.spyOn(console, "log").mockImplementation(() => {})
     vi.spyOn(console, "warn").mockImplementation(() => {})
   })
@@ -62,6 +68,18 @@ describe("pwa service worker registration", () => {
     vi.restoreAllMocks()
     vi.useRealTimers()
   })
+
+  it.each(["development", "preview"] as const)(
+    "does not register (or report) on %s builds",
+    async (stage) => {
+      vi.mocked(currentDeploymentStage).mockReturnValueOnce(stage)
+      const register = vi.fn(() => Promise.resolve(undefined))
+      setServiceWorker(register)
+      await expect(registerServiceWorker()).resolves.toBeNull()
+      expect(navigator.serviceWorker.register).not.toHaveBeenCalled()
+      expect(mockNotify).not.toHaveBeenCalled()
+    },
+  )
 
   it("handles register() resolving undefined without touching .scope", async () => {
     setServiceWorker(() => Promise.resolve(undefined))

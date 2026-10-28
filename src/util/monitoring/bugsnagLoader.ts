@@ -8,12 +8,20 @@
 
 import React from "react"
 import { onPageInteractive } from "../scripts/delayedScriptLoader"
+import { currentDeploymentStage } from "../deploymentStage"
 
 let bugsnagInitialized = false
 import type { Client } from "@bugsnag/core"
 import type { BugsnagPluginReactResult } from "@bugsnag/plugin-react"
 
 let bugsnagInstance: Client | null = null
+
+/**
+ * Only production reports. Local builds (`vite dev`, `vite preview` on
+ * localhost) and Cloudflare branch previews start BugSnag with their own
+ * release stage, which is not enabled, so nothing they hit is sent.
+ */
+export const ENABLED_RELEASE_STAGES = ["production"]
 let performanceStarted = false
 
 /**
@@ -38,6 +46,8 @@ export async function startPerformanceMonitoring(apiKey: string) {
     const BugsnagPerformance = await import("@bugsnag/browser-performance")
     BugsnagPerformance.default.start({
       apiKey,
+      releaseStage: currentDeploymentStage(),
+      enabledReleaseStages: ENABLED_RELEASE_STAGES,
       generateAnonymousId: false,
       // The page URL attribute is the full href (query string included).
       sendPageAttributes: { url: false, referrer: false, title: true },
@@ -85,6 +95,8 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
         // privacy policy (public/privacy.html) describes exactly this.
         bugsnagInstance = Bugsnag.default.start({
           apiKey,
+          releaseStage: currentDeploymentStage(),
+          enabledReleaseStages: ENABLED_RELEASE_STAGES,
           plugins: [new BugsnagPluginReact.default()],
           collectUserIp: false,
           generateAnonymousId: false,

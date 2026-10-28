@@ -6,6 +6,7 @@ import {
   leaveBugsnagBreadcrumb,
   notifyBugsnag,
 } from "./monitoring/bugsnagLoader"
+import { currentDeploymentStage } from "./deploymentStage"
 
 export interface ServiceWorkerRegistrationState {
   registration: ServiceWorkerRegistration | null
@@ -117,6 +118,16 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
     return Promise.resolve(null)
   }
 
+  // Only production builds ship /sw.js. On local builds (vite dev, vite
+  // preview on localhost) and Cloudflare branch previews the path falls
+  // through to the HTML app shell, and register() fails with a SecurityError
+  // (MIME type text/html). Skip registration there instead.
+  const stage = currentDeploymentStage()
+  if (stage !== "production") {
+    console.log(`Service Worker not registered on ${stage} builds`)
+    return Promise.resolve(null)
+  }
+
   // Check if we're on a secure context (HTTPS or localhost)
   const isSecureContext =
     window.location.protocol === "https:" ||
@@ -137,17 +148,10 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
     return Promise.resolve(null)
   }
 
-  // In production, scripts/build/finalize.ts builds src/sw.ts to /sw.js.
-  // The dev server has no service worker build, so dev registration fails
-  // quietly (environmental, see handleRegistrationFailure).
-  const swPath = import.meta.env.DEV ? "/dev-sw.js?dev-sw" : "/sw.js"
+  // scripts/build/finalize.ts builds src/sw.ts to /sw.js.
+  const swPath = "/sw.js"
+  console.log("Registering service worker from:", swPath)
 
-  // Log for debugging
-  if (!import.meta.env.DEV) {
-    console.log("Registering service worker from:", swPath)
-  }
-
-  // In dev mode, wait a bit for the service worker to be available
   const registerSW = (): Promise<ServiceWorkerRegistration | null> => {
     return navigator.serviceWorker
       .register(swPath, { scope: "/" })
@@ -232,29 +236,7 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
           return registration
         },
         async (error) => {
-          // In dev mode, if registration fails, it might be because:
-          // 1. The dev SW isn't ready yet
-          // 2. Vite's websocket isn't connected (HMR issue)
-          // 3. Other dev-specific issues
-          // We'll silently fail in dev mode to avoid cluttering console
-          if (import.meta.env.DEV) {
-            // Only log if it's not a websocket-related error
-            const isWebSocketError =
-              error?.message?.includes("websocket") ||
-              error?.message?.includes("ws is undefined") ||
-              error?.message?.includes("WebSocket") ||
-              error?.stack?.includes("websocket")
-
-            if (!isWebSocketError) {
-              console.warn(
-                "Service Worker registration failed (dev mode):",
-                error?.message,
-              )
-            }
-            // Silently ignore websocket errors in dev - they're expected if HMR isn't working
-          } else {
-            await handleServiceWorkerFailure(error, "sw-registration", swPath)
-          }
+          await handleServiceWorkerFailure(error, "sw-registration", swPath)
           return null
         },
       )
@@ -270,23 +252,6 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
         )
         return null
       })
-  }
-
-  // In dev mode, wait a bit for Vite to serve the dev service worker
-  if (import.meta.env.DEV) {
-    return new Promise((resolve) => {
-      // Try immediately
-      registerSW()
-        .then(resolve)
-        .catch(() => {
-          // If it fails, wait a bit and try again
-          setTimeout(() => {
-            registerSW()
-              .then(resolve)
-              .catch(() => resolve(null))
-          }, 1000)
-        })
-    })
   }
 
   return registerSW()
