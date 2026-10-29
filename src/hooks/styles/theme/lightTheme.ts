@@ -95,7 +95,11 @@ export const lightThemeOptions: ExtendedThemeOptions = {
     },
     MuiCssBaseline: {
       styleOverrides: {
-        html: {},
+        // mainThemeOptions paints html with the dark background (deep-merged
+        // into every theme). Light themes leave html transparent so the
+        // body's background.default fills the canvas (overscroll and short
+        // pages included) instead of a dark strip.
+        html: { backgroundColor: "transparent" },
       },
     },
   },

@@ -155,6 +155,16 @@
         background-color: #ffffff;
         color: #1a1a1a;
       }
+      /*
+       * A prerendered page's MUI styles are the dark theme's (body
+       * background #0b0f1a). In the light theme the page renders from
+       * scratch, so until the app's light styles arrive the body keeps the
+       * light background instead of flashing dark. App.tsx removes
+       * data-pre-theme after the app's first render.
+       */
+      html[data-pre-theme="light"] body {
+        background-color: #ffffff;
+      }
       html[data-pre-theme="dark"] a {
         color: #10b881;
       }
