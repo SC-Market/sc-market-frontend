@@ -46,6 +46,7 @@ import {
   type IdentitySearchRow,
 } from "../../store/api/v2/market"
 import { describeMfaError } from "../../features/mfa/errors"
+import { isSiteAdmin } from "../../util/siteRole"
 
 export const REASON_MIN = 5
 export const REASON_MAX = 500
@@ -85,7 +86,7 @@ function StatusChips(props: { user: IdentitySearchRow }) {
       )}
       {user.banned && <Chip size="small" color="error" label={t("adminIdentity.status.deactivated", "Deactivated")} />}
       {user.is_test && <Chip size="small" label={t("adminIdentity.status.test", "Test account")} />}
-      {user.role === "admin" && <Chip size="small" color="info" label={t("adminIdentity.status.admin", "Site admin")} />}
+      {isSiteAdmin(user) && <Chip size="small" color="info" label={t("adminIdentity.status.admin", "Site admin")} />}
       {user.rsi_confirmed && (
         <Chip size="small" color="success" label={t("adminIdentity.status.verified", "RSI verified")} />
       )}
@@ -288,7 +289,7 @@ function UserPanel(props: { userId: string }) {
   if (error) return <Alert severity="error">{describeMfaError(error, t)}</Alert>
   if (!user) return null
 
-  const locked = user.is_tombstone || user.is_test || user.role === "admin"
+  const locked = user.is_tombstone || user.is_test || isSiteAdmin(user)
   const hasDiscord = user.discord_provider_id !== null || user.discord_id_column !== null
 
   return (

@@ -584,6 +584,43 @@ exports[`relative link resolution (every leaf) > /admin/game-item-attributes 1`]
 }
 `;
 
+exports[`relative link resolution (every leaf) > /admin/identity 1`] = `
+{
+  "links": {
+    "path:""": "/admin/identity",
+    "path:"#frag"": "/admin/identity#frag",
+    "path:"."": "/admin/identity",
+    "path:".."": "/admin",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/admin/sibling",
+    "path:"./"": "/admin/identity/",
+    "path:"./child"": "/admin/identity/child",
+    "path:"?tab=x"": "/admin/identity?tab=x",
+    "path:"child"": "/admin/identity/child",
+    "route:""": "/admin/identity",
+    "route:"#frag"": "/admin/identity#frag",
+    "route:"."": "/admin/identity",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/admin/identity/",
+    "route:"./child"": "/admin/identity/child",
+    "route:"?tab=x"": "/admin/identity?tab=x",
+    "route:"child"": "/admin/identity/child",
+  },
+  "location": "/admin/identity",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "(layout:SiteAdminRoute)",
+    "/admin/identity",
+  ],
+  "resolvedDot": "/admin/identity",
+  "url": "/admin/identity",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /admin/import-monitoring 1`] = `
 {
   "links": {
