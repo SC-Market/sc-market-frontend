@@ -70,6 +70,10 @@ export function GameItemAvatar({
         ...sx,
       }}
       imgProps={{
+        // Icons in lists and cards: lazy, so a prerendered page doesn't get
+        // a <link rel="preload"> (and an Early Hint) per icon from React's
+        // server render, most of them below the fold.
+        loading: "lazy",
         style: {
           objectFit: isSvg ? "contain" : "cover",
         },
