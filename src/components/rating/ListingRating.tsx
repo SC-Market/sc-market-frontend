@@ -4,7 +4,6 @@ import {
   AccessTimeRounded,
   AutoAwesomeRounded,
   AutoGraphOutlined,
-  StarRounded,
   WhatshotRounded,
   WorkspacePremiumRounded,
   TrendingUpRounded,
@@ -16,13 +15,13 @@ import {
 import {
   Box,
   Link as MaterialLink,
-  Rating as MuiRating,
   Tooltip,
 } from "@mui/material"
 import { Rating } from "../../features/contractor/domain/types"
 import React, { useEffect, useMemo } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { UnderlineLink } from "../typography/UnderlineLink"
+import { StaticRatingStars } from "./StaticRatingStars"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
@@ -237,18 +236,9 @@ export function SellerRatingStars(props: {
   }, [user, contractor, shopRating])
 
   return (
-    <MuiRating
-      readOnly
-      precision={0.1}
+    <StaticRatingStars
       value={rating}
-      icon={<StarRounded fontSize="inherit" />}
-      emptyIcon={
-        <StarRounded
-          style={{ color: theme.palette.text.primary }}
-          fontSize="inherit"
-        />
-      }
-      size={"small"}
+      emptyColor={theme.palette.text.primary}
     />
   )
 }
@@ -268,19 +258,9 @@ export function MarketRatingStars(props: { rating: Rating }) {
         padding: 0,
       }}
     >
-      <MuiRating
-        readOnly
-        precision={0.1}
+      <StaticRatingStars
         value={rating.avg_rating}
-        icon={<StarRounded fontSize="inherit" />}
-        emptyIcon={
-          <StarRounded
-            style={{ color: theme.palette.text.primary }}
-            fontSize="inherit"
-          />
-        }
-        size={"small"}
-        sx={{ "& .MuiRating-icon": { fontSize: "inherit" } }}
+        emptyColor={theme.palette.text.primary}
       />
     </Box>
   )
