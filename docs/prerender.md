@@ -22,6 +22,8 @@ The full design and its decisions are in `ssr-migration-design.md` (Phase 3).
 | `/wiki/refinery` | Refining methods | — |
 | `/mining`, `/mining/locations` | Ores / mining locations, the active game version | Filters |
 | `/resources` | Resources and categories | Filters |
+| `/blueprints` | First page of blueprints (`searchBlueprints` with `sourceable=true`: "Hide Unsourceable" is on by default, so 40 blueprint links), categories | Other pages, filters, searches; the list revalidates on mount (`refetchOnMountOrArgChange`, for `user_owns`) |
+| `/missions` | First page of missions (`searchMissions`, events excluded: 40 mission links), game events | Other pages, filters, searches |
 | `/guides`, `/guides/<category>`, `/guides/<category>/<slug>`, `/about` | The whole guide (from `content/`) | — |
 
 Personal UI (sign-in state, cart, notifications, theme and language
@@ -29,24 +31,18 @@ choices) is never in the HTML: every page is rendered anonymous, dark and
 in English, and the browser adds the visitor's own UI after hydrating, in
 slots that keep their size (no layout shift).
 
-`/blueprints` and `/missions` stay on the bridge for now. Their cards and
-list rows are real links (`inAppClick`: a plain click still opens the
-modal), so a prerender has crawlable content, but:
-
-- `/blueprints` filters "Hide Unsourceable" (on by default) server-side
-  now (`searchBlueprints` with `sourceable=true`), so its first page is a
-  full 40 blueprint links. It takes the same steps as `/missions` below
-  (`GAME_DATA_HUB_PATHS`, `loader = prerenderLoader` in
-  `src/routes/pages/BlueprintBrowser.tsx`, `"blueprints"` in
-  `PRERENDERED_KINDS`, and `"/blueprints"` excluded in
-  `public/_routes.json`).
-- `/missions` renders 40 mission links (measured; the bridge links 50,
-  the other prerendered hubs ship 24). To prerender it: add it to
-  `GAME_DATA_HUB_PATHS`, export `loader = prerenderLoader` from
-  `src/routes/pages/MissionSearch.tsx`, add `"missions"` to
-  `PRERENDERED_KINDS`, and exclude `"/missions"` in `public/_routes.json`
-  (fewer Function invocations, not more). It adds 2 files
-  (`missions.html`, ~350 KB / 36 KB gzip, and `missions.data`).
+`/blueprints` and `/missions` ship their first page. Their cards and list
+rows are real links (`inAppClick`: a plain click still opens the modal).
+The build renders them with the page's own default query args (the
+blueprint list's `{ page: 1, pageSize: 40, sourceable: true }`, the
+mission list's `{ excludeEvents: true, page: 1, pageSize: 40 }`, the same
+args as `prefetchBlueprintPage`), so the browser's first render reads the
+shipped cache entry and hydrates the same 40 links. Their detail pages
+(`/blueprints/<name>`, `/missions/<code>`) stay on the bridge:
+`public/_routes.json` excludes only the exact hub paths, and
+`/blueprints/*` and `/missions/*` stay included. Each hub adds 2 files
+(`blueprints.html`, ~430 KB / 41 KB gzip; `missions.html`, ~350 KB /
+36 KB gzip; and their `.data`).
 
 A URL with a query string that changes the page (`/missions?category=…`,
 `/wiki/ships?q=…`; not `utm_*`, `fbclid`, `gclid`, `msclkid`, `ref`,
@@ -123,6 +119,11 @@ on a prerendered page is fetched in the browser until it is added there.
    after the first paint. Anything that differs between the server and the
    browser's first render (window size, cookies, storage) must be CSS
    (`sx` breakpoints) or wait for `useHydrated()`.
+   The first-screen card staging (`components/grid/firstScreen.tsx`,
+   used by the market, services and shop grids) renders every card on the
+   server and only the first screen in the browser's first render, so a
+   grid that uses it must not be prerendered with data until it starts
+   full when hydrating. The blueprint and mission grids don't use it.
 
 ## Known limits
 

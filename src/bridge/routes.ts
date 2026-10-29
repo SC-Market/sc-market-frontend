@@ -65,6 +65,8 @@ export const PRERENDERED_KINDS: ReadonlySet<BridgePageKind> = new Set([
   "wikiManufacturers",
   "miningOres",
   "miningLocations",
+  "blueprints",
+  "missions",
   "resources",
   "guidesHub",
   "guideCategory",

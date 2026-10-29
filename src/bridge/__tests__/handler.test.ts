@@ -240,6 +240,8 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
     "/wiki/items",
     "/wiki/locations",
     "/mining",
+    "/blueprints",
+    "/missions",
     "/guides",
     "/guides/buying/buy-an-item",
     "/about",
@@ -293,18 +295,16 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
   })
 
   it("fetches one bounded list per hub", async () => {
-    const { run, fetchSpy } = setup(
-      json({ blueprints: [f.blueprint], total: 1, page: 1, page_size: 50 }),
-    )
-    await run("/blueprints")
+    const { run, fetchSpy } = setup(json({ items: [], total: 0 }))
+    await run("/recruiting")
     expect(fetchSpy.mock.calls.map((c) => c[0])).toEqual([
-      `${API}/api/v2/game-data/blueprints/search?page=1&page_size=50`,
+      `${API}/api/recruiting/posts?index=0&pageSize=50&sorting=activity`,
     ])
   })
 
   it.each([404, 400, 500])("a hub list %i fails open (never a 404 page)", async (status) => {
     const { run } = setup(json({}, status))
-    const res = await run("/blueprints")
+    const res = await run("/recruiting")
     expect(res.status).toBe(200)
     expect(res.headers.get("X-SCM-Bridge")).toBe("passthrough")
     expect(await res.text()).toBe(SHELL)

@@ -167,6 +167,18 @@ describe("public/_routes.json", () => {
     }
   })
 
+  // The hubs' detail pages stay on the bridge: only the exact hub path is
+  // excluded, never "/blueprints/*" or "/missions/*".
+  it("still invokes it for /blueprints and /missions detail pages", () => {
+    for (const path of [
+      "/blueprints/82cec6d6-7716-4318-bd49-39002e5dfa96",
+      "/missions/PU_Station_WasteDisposal_Lawful",
+    ]) {
+      expect(invokes(path), path).toBe(true)
+    }
+    expect(invokes("/blueprints/inventory")).toBe(false)
+  })
+
   it("never invokes it for assets, files, the service worker or static siblings", () => {
     for (const path of [
       "/assets/index-abc.js",

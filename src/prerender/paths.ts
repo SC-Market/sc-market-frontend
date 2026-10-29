@@ -5,10 +5,9 @@
  * Only pages whose content is static (guides, about) or changes with the game
  * data (the game database hubs), and only where the prerendered page is at
  * least as good for crawlers as the edge bridge's (links to the entries
- * included). /blueprints and /missions stay on the bridge for now (their
- * cards and rows are links; see docs/prerender.md): /blueprints (40 links,
- * "Hide Unsourceable" filtered by the search API) and /missions (40 links)
- * are ready once added here and public/_routes.json excludes them. Live hubs (market, shops, recruiting,
+ * included). /blueprints (40 links: "Hide Unsourceable", on by default, is
+ * the search API's `sourceable=true`) and /missions (40 links) ship their
+ * first page; their detail pages stay on the bridge. Live hubs (market, shops, recruiting,
  * contractors) and every detail page stay on the SPA shell + edge bridge.
  * Every other path is the SPA shell (__spa-fallback.html, public/_redirects).
  *
@@ -36,6 +35,8 @@ export const GAME_DATA_HUB_PATHS = [
   "/wiki/refinery",
   "/mining",
   "/mining/locations",
+  "/blueprints",
+  "/missions",
   "/resources",
 ] as const
 
