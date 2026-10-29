@@ -2585,7 +2585,7 @@ export type SearchListingsApiArg = {
   includeUnlisted?: boolean
 }
 export type GetMyListingsApiResponse =
-  /** status 200 Updated listing with variant breakdown */ GetMyListingsResponse
+  /** status 200 User's listings with pagination metadata */ GetMyListingsResponse
 export type GetMyListingsApiArg = {
   /** Filter by listing status */
   status?: "active" | "inactive" | "sold" | "expired" | "cancelled"
@@ -2601,19 +2601,22 @@ export type GetMyListingsApiArg = {
   shopId?: string
 }
 export type GetInventorySummaryApiResponse =
-  /** status 200 Complete listing detail with variant breakdown */ InventorySummaryResponse
+  /** status 200 Ok */ InventorySummaryResponse
 export type GetInventorySummaryApiArg = {
   spectrumId?: string
 }
 export type GetListingDetailApiResponse =
-  /** status 200 Ok */ GetListingDetailResponse
+  /** status 200 Complete listing detail with variant breakdown */ GetListingDetailResponse
 export type GetListingDetailApiArg = {
+  /** Listing UUID */
   id: string
 }
 export type UpdateListingApiResponse =
-  /** status 200 Search results with pagination metadata */ GetListingDetailResponse
+  /** status 200 Updated listing with variant breakdown */ GetListingDetailResponse
 export type UpdateListingApiArg = {
+  /** Listing UUID */
   id: string
+  /** Update request with optional fields */
   updateListingRequest: UpdateListingRequest
 }
 export type DeleteListingApiResponse = /** status 200 Success message */ {

@@ -59,13 +59,13 @@ The API has two versions, `/api/v1` and `/api/v2`, and a token works on both. Mo
 - **Read Only** gives every read scope. **Full Access** gives every scope and works for all your orgs, whatever you tick under **Organization Access**. Pick single scopes instead when you can.
 - Game data and the public market (search, shop pages, listing pages) need no token at all.
 
-Tokens can never manage tokens, set up two-factor sign-in or use the site's debug tools: those calls answer `403`. The **Admin** and **Moderation** scopes are only for site admins.
+Tokens can never manage tokens, set up two-factor sign-in, change your email or linked RSI account, download your data export or use the site's debug tools: those calls answer `403`. `GET /api/v1/profile` answers any valid token, whatever its scopes, which is why it's the call to check a token with. The **Admin** and **Moderation** scopes are only for site admins.
 
 ### Common calls
 
 Write calls send JSON: add `-H "Content-Type: application/json"` and the body with `-d`.
 
-- **Your shops**: `GET /api/v2/shops/mine` (Read Market). It lists your personal shop and the org shops you manage, with each `shop_id`.
+- **Your shops**: `GET /api/v2/shops/mine` (Read Market). It lists your personal shop and the shops of the orgs the token has under **Organization Access**, with each `shop_id` and your permissions there.
 - **Your listings**: `GET /api/v2/listings/mine?shop_id=…&status=active` (Read Market).
 - **Stock of a listing**: `GET /api/v2/stock-lots?listing_id=…` (Read Market) lists its lots, each with a `lot_id`.
 - **Set stock**: `PUT /api/v2/stock-lots/{lot_id}` with `{"quantity_total": 40}`. For many lots at once, `POST /api/v2/stock-lots/bulk-update` with `{"updates": [{"lot_id": "…", "quantity_total": 40}]}` (Write Market).
@@ -78,7 +78,13 @@ Every call, with its parameters and answers, is in the [API docs](https://api.sc
 
 ### Orgs
 
-To work with an org's shop, its listings or its orders, the token needs that org under **Organization Access**, and you need the org permission for it, the same as on the site (for example **Manage Market** for listings and stock). Without the org, a call that names the org's shop, listing, lot or order answers `403`.
+To work with an org's shop, its listings or its orders, the token needs that org under **Organization Access**, and you need the org permission for it, the same as on the site (for example **Manage Market** for listings and stock). Without the org:
+
+- A call that names the org, its shop, listing, lot, order or offer answers `403`, on v1 and v2.
+- Lists leave the org out: your orders and offers as a seller, your shops, stock, buy orders, requisitions, suppliers and the org's private listings show only the orgs the token has.
+- What you bought or asked for yourself stays in your lists, even from an org's shop.
+
+**Full Access** tokens work for all your orgs.
 
 ### Paging
 
