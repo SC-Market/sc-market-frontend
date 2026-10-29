@@ -14,6 +14,7 @@
 import {
   cpSync,
   existsSync,
+  readdirSync,
   rmSync,
   renameSync,
   readFileSync,
@@ -23,7 +24,11 @@ import path from "node:path"
 import { build } from "vite"
 import { checkServiceWorker } from "./checkServiceWorker"
 import { checkShell } from "./checkShell"
-import { inlineStylesheets } from "../vite/inlineEntryCssPlugin"
+import {
+  dropRouteCss,
+  inlinedStylesheetHrefs,
+  inlineStylesheets,
+} from "../vite/inlineEntryCssPlugin"
 import { finalizePrerenderedPages } from "./prerendered"
 
 const ROOT = path.resolve(import.meta.dirname, "../..")
@@ -101,6 +106,19 @@ if (SHELL_FILE !== "index.html") {
   writeFileSync(path.join(outDir, "index.html"), shell)
 }
 checkShell(shell)
+
+// 4. React Router's client manifest still lists the inlined stylesheet as the
+// root route's `css`, so it preloaded the file on every shell-rendered page
+// and never used it (dropRouteCss). The CSS is in the page; drop it there.
+const inlined = inlinedStylesheetHrefs(shell)
+const assetsDir = path.join(outDir, "assets")
+for (const name of readdirSync(assetsDir)) {
+  if (!/^manifest-[\w-]+\.js$/.test(name)) continue
+  const file = path.join(assetsDir, name)
+  const js = readFileSync(file, "utf8")
+  const out = dropRouteCss(js, inlined)
+  if (out !== js) writeFileSync(file, out)
+}
 
 console.log(
   `finalize: ${path.relative(ROOT, CLIENT_DIR)} → ${path.relative(ROOT, outDir)}, sw.js built`,

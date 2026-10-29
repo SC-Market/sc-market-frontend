@@ -33,3 +33,34 @@ export function inlineStylesheets(
     return `<style data-inlined-from="/${fileName}">${css}</style>`
   })
 }
+
+const INLINED_FROM = /<style data-inlined-from="(\/[^"]+\.css)">/g
+
+/** The hrefs of the stylesheets inlineStylesheets inlined into `html`. */
+export function inlinedStylesheetHrefs(html: string): string[] {
+  return [...html.matchAll(INLINED_FROM)].map((m) => m[1])
+}
+
+/**
+ * Drops inlined stylesheets from the `css` lists of React Router's client
+ * manifest (assets/manifest-*.js).
+ *
+ * React Router preloads a route's `css` when it loads the route module
+ * (`<link rel="preload" as="style">`, skipped only when a
+ * `<link rel="stylesheet">` with that href is in the document). With the
+ * stylesheet inlined there is no such link, so it fetched the file again and
+ * never applied it: Chrome's "preloaded but not used" warning on every
+ * shell-rendered page. The CSS is already in the page, so the manifest
+ * shouldn't list it.
+ */
+export function dropRouteCss(manifestJs: string, hrefs: string[]): string {
+  if (hrefs.length === 0) return manifestJs
+  const drop = new Set(hrefs)
+  return manifestJs.replace(/"css":\[([^\]]*)\]/g, (whole, list: string) => {
+    const kept = list
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s !== "" && !drop.has(s.replace(/^"|"$/g, "")))
+    return `"css":[${kept.join(",")}]`
+  })
+}
