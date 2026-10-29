@@ -188,6 +188,7 @@ export const ADMIN_PATHS = {
   auditLogs: "/admin/audit-logs",
   notificationTest: "/admin/notification-test",
   testAccounts: "/admin/test-accounts",
+  identity: "/admin/identity",
   wipe: "/admin/wipe",
   requisitions: "/admin/requisitions",
   supplierDashboard: "/admin/supplier-dashboard",

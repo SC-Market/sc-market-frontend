@@ -593,7 +593,16 @@
     "org_member_joined": "{{who}} ist {{org}} beigetreten",
     "offer_accepted": "{{who}} hat Ihr Angebot angenommen",
     "offer_rejected": "{{who}} hat Ihr Angebot abgelehnt",
-    "contract_offer_received": "{{who}} hat ein Angebot für Ihren Auftrag abgegeben"
+    "contract_offer_received": "{{who}} hat ein Angebot für Ihren Auftrag abgegeben",
+    "account_identity": {
+      "account_deactivated": "Ein Admin hat dein Konto deaktiviert.",
+      "account_reactivated": "Ein Admin hat dein Konto reaktiviert.",
+      "discord_unlinked": "Ein Admin hat Discord von deinem Konto getrennt. Du kannst in den Einstellungen wieder ein Discord-Konto verknüpfen.",
+      "generic": "Ein Admin hat dein Konto geändert.",
+      "spectrum_cleared": "Ein Admin hat die RSI-Verknüpfung von deinem Konto entfernt. Verifiziere dein RSI-Konto in den Einstellungen erneut.",
+      "spectrum_set": "Ein Admin hat die RSI-Verknüpfung deines Kontos aktualisiert.",
+      "username_released": "Ein Admin hat deinen Benutzernamen freigegeben. Dein Benutzername ist jetzt {{username}}. Nutze „Handle synchronisieren“ in den Einstellungen, um deinen aktuellen RSI-Handle zurückzubekommen."
+    }
   },
   "onboarding": {
     "welcome": "Willkommen bei SC Market",
@@ -4434,7 +4443,8 @@
     "star": "Anheften",
     "stock": "Bestand",
     "switchContext": "Kontext wechseln",
-    "unstar": "Lösen"
+    "unstar": "Lösen",
+    "adminIdentity": "Identität"
   },
   "navbar": {
     "cart": "Warenkorb",
@@ -5417,5 +5427,92 @@
       "add": "Gegenstand hinzufügen",
       "targetValue": "Alarm bei ≤ {{price}}"
     }
+  },
+  "adminIdentity": {
+    "actions": {
+      "deactivate": "Konto deaktivieren",
+      "fixSpectrum": "Spectrum-Verknüpfung korrigieren",
+      "reactivate": "Konto reaktivieren",
+      "releaseUsername": "Benutzernamen freigeben",
+      "unlinkDiscord": "Discord trennen"
+    },
+    "columns": {
+      "discord": "Discord-ID",
+      "displayName": "Anzeigename",
+      "spectrum": "Spectrum-ID",
+      "status": "Status",
+      "username": "Benutzername"
+    },
+    "detail": {
+      "by": "Von",
+      "change": "Änderung",
+      "created": "Erstellt",
+      "deletedAt": "Löschung beantragt",
+      "deletionScheduled": "Löschung geplant",
+      "discord": "Discord (verknüpft)",
+      "discordColumn": "Discord (alte Spalte)",
+      "discordColumnStale": "{{id}} (veraltet: keine passende Verknüpfung)",
+      "displayName": "Anzeigename",
+      "lastUsed": "Letzte Anmeldung",
+      "linkedAt": "Verknüpft",
+      "noProviders": "Keine verknüpften Anmeldungen.",
+      "noRecent": "Keine.",
+      "noSessions": "Keine aktiven Sitzungen.",
+      "primary": "primär",
+      "providerId": "ID",
+      "providerType": "Anbieter",
+      "providerUsername": "Name beim Verknüpfen",
+      "providers": "Verknüpfte Anmeldungen",
+      "recent": "Letzte Identitätsänderungen",
+      "role": "Rolle",
+      "sessionAgent": "Browser",
+      "sessionExpires": "Läuft ab",
+      "sessionRefreshed": "Zuletzt erneuert",
+      "sessions": "Aktive Sitzungen",
+      "spectrumId": "Spectrum-ID",
+      "twins": "Andere Konten mit diesem Benutzernamen in anderer Schreibweise: {{names}}",
+      "userId": "Nutzer-ID",
+      "when": "Wann"
+    },
+    "dialog": {
+      "allowNoLogin": "Discord ist die einzige Anmeldemethode. Konto ohne Anmeldemethode lassen.",
+      "cancel": "Abbrechen",
+      "deactivateBody": "Das Konto kann sich nicht mehr anmelden oder API-Tokens nutzen, und seine Sitzungen enden sofort.",
+      "reactivateBody": "Das Konto kann sich wieder anmelden.",
+      "reason": "Grund",
+      "reasonHelp": "Pflichtfeld, {{min}} bis {{max}} Zeichen. Wird im Audit-Log gespeichert; der Nutzer sieht ihn nie.",
+      "releaseBody": "Benennt {{username}} in einen Platzhalter (user_xxxxxxxx) um, damit der Handle frei wird. Sonst ändert sich am Konto nichts. Der Nutzer wird benachrichtigt und kann seinen aktuellen RSI-Handle mit „Handle synchronisieren“ zurückholen.",
+      "spectrumBody": "Entfernen löscht die Spectrum-ID und die RSI-Verifizierung. Setzen schreibt eine Spectrum-ID, die kein anderes Konto hat; eine anderswo vergebene ID wird nie verschoben.",
+      "spectrumClear": "Entfernen",
+      "spectrumId": "Spectrum-ID (nur Ziffern)",
+      "spectrumSet": "Setzen",
+      "stepUpNote": "Du wirst nach einem Zwei-Faktor-Code gefragt, wenn du in den letzten 10 Minuten keinen eingegeben hast.",
+      "unlinkBody": "Entfernt die Discord-Verknüpfung und die alte Discord-ID von diesem Konto, damit dieses Discord-Konto anderswo genutzt werden kann. Es wird keinem anderen Konto zugeordnet."
+    },
+    "done": "{{action}}: gespeichert, protokolliert und der Nutzer wurde benachrichtigt.",
+    "intro": "Finde ein Konto und behebe Identitätskonflikte. Verknüpfte Identitäten wandern nie zwischen Konten: Jede Aktion entfernt oder setzt einen Wert nur auf diesem Konto. Jede Änderung braucht einen Grund und einen frischen Zwei-Faktor-Code, wird im Audit-Log gespeichert und der Nutzer wird benachrichtigt.",
+    "kinds": {
+      "account_deactivated": "Konto deaktiviert",
+      "account_reactivated": "Konto reaktiviert",
+      "discord_unlinked": "Discord getrennt",
+      "spectrum_cleared": "Spectrum-Verknüpfung entfernt",
+      "spectrum_set": "Spectrum-ID gesetzt",
+      "username_released": "Benutzername freigegeben"
+    },
+    "loading": "Wird geladen...",
+    "locked": "Gelöschte Konten, Testkonten und Seitenadmins können hier nicht geändert werden.",
+    "noResults": "Keine passenden Konten.",
+    "results": "Suchergebnisse",
+    "search": "Suchen",
+    "searchLabel": "Benutzername, Anzeigename, Discord-ID, Spectrum-ID oder Nutzer-ID",
+    "status": {
+      "admin": "Seitenadmin",
+      "deactivated": "Deaktiviert",
+      "deleted": "Gelöscht",
+      "deletionPending": "Löschung ausstehend",
+      "test": "Testkonto",
+      "verified": "RSI-verifiziert"
+    },
+    "title": "Kontoidentität"
   }
 }

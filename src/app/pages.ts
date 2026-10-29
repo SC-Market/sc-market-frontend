@@ -74,6 +74,10 @@ export const pages = {
     () => import("../pages/admin/AdminSupplierRoster"),
     (m) => m.AdminSupplierRoster,
   ),
+  AdminIdentity: pageEntry(
+    () => import("../pages/admin/AdminIdentity"),
+    (m) => m.AdminIdentity,
+  ),
   AdminTestAccounts: pageEntry(
     () => import("../pages/admin/AdminTestAccounts"),
     (m) => m.AdminTestAccounts,

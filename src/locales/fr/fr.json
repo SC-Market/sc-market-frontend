@@ -595,7 +595,16 @@
     "org_member_joined": "{{who}} a rejoint {{org}}",
     "offer_accepted": "{{who}} a accepté votre offre",
     "offer_rejected": "{{who}} a refusé votre offre",
-    "contract_offer_received": "{{who}} a fait une offre sur votre contrat"
+    "contract_offer_received": "{{who}} a fait une offre sur votre contrat",
+    "account_identity": {
+      "account_deactivated": "Un admin a désactivé ton compte.",
+      "account_reactivated": "Un admin a réactivé ton compte.",
+      "discord_unlinked": "Un admin a dissocié Discord de ton compte. Tu peux associer de nouveau un compte Discord dans les paramètres.",
+      "generic": "Un admin a modifié ton compte.",
+      "spectrum_cleared": "Un admin a retiré le lien RSI de ton compte. Vérifie de nouveau ton compte RSI dans les paramètres.",
+      "spectrum_set": "Un admin a mis à jour le lien RSI de ton compte.",
+      "username_released": "Un admin a libéré ton nom d'utilisateur. Ton nom d'utilisateur est maintenant {{username}}. Utilise « Synchroniser le pseudo » dans les paramètres pour récupérer ton pseudo RSI actuel."
+    }
   },
   "onboarding": {
     "welcome": "Bienvenue sur SC Market",
@@ -4465,7 +4474,8 @@
     "star": "Épingler",
     "stock": "Stock",
     "switchContext": "Changer de contexte",
-    "unstar": "Désépingler"
+    "unstar": "Désépingler",
+    "adminIdentity": "Identité"
   },
   "navbar": {
     "cart": "Panier",
@@ -5449,5 +5459,92 @@
       "add": "Ajouter un article",
       "targetValue": "Alerte à ≤ {{price}}"
     }
+  },
+  "adminIdentity": {
+    "actions": {
+      "deactivate": "Désactiver le compte",
+      "fixSpectrum": "Corriger le lien Spectrum",
+      "reactivate": "Réactiver le compte",
+      "releaseUsername": "Libérer le nom d'utilisateur",
+      "unlinkDiscord": "Dissocier Discord"
+    },
+    "columns": {
+      "discord": "Identifiant Discord",
+      "displayName": "Nom affiché",
+      "spectrum": "Identifiant Spectrum",
+      "status": "Statut",
+      "username": "Nom d'utilisateur"
+    },
+    "detail": {
+      "by": "Par",
+      "change": "Changement",
+      "created": "Créé",
+      "deletedAt": "Suppression demandée",
+      "deletionScheduled": "Suppression prévue",
+      "discord": "Discord (associé)",
+      "discordColumn": "Discord (ancienne colonne)",
+      "discordColumnStale": "{{id}} (obsolète : aucun lien correspondant)",
+      "displayName": "Nom affiché",
+      "lastUsed": "Dernière connexion",
+      "linkedAt": "Associé",
+      "noProviders": "Aucune connexion associée.",
+      "noRecent": "Aucun.",
+      "noSessions": "Aucune session active.",
+      "primary": "principale",
+      "providerId": "Identifiant",
+      "providerType": "Fournisseur",
+      "providerUsername": "Nom lors de l'association",
+      "providers": "Connexions associées",
+      "recent": "Changements d'identité récents",
+      "role": "Rôle",
+      "sessionAgent": "Navigateur",
+      "sessionExpires": "Expire",
+      "sessionRefreshed": "Dernier renouvellement",
+      "sessions": "Sessions actives",
+      "spectrumId": "Identifiant Spectrum",
+      "twins": "Autres comptes avec ce nom d'utilisateur dans une autre casse : {{names}}",
+      "userId": "Identifiant utilisateur",
+      "when": "Quand"
+    },
+    "dialog": {
+      "allowNoLogin": "Discord est la seule méthode de connexion. Laisser le compte sans méthode de connexion.",
+      "cancel": "Annuler",
+      "deactivateBody": "Le compte ne peut plus se connecter ni utiliser de jetons d'API, et ses sessions se terminent tout de suite.",
+      "reactivateBody": "Le compte peut de nouveau se connecter.",
+      "reason": "Motif",
+      "reasonHelp": "Obligatoire, de {{min}} à {{max}} caractères. Conservé dans le journal d'audit ; l'utilisateur ne le voit jamais.",
+      "releaseBody": "Renomme {{username}} en un nom provisoire (user_xxxxxxxx) pour libérer le pseudo. Rien d'autre ne change sur le compte. L'utilisateur est prévenu et peut récupérer son pseudo RSI actuel avec « Synchroniser le pseudo ».",
+      "spectrumBody": "Supprimer retire l'identifiant Spectrum et la vérification RSI. Définir enregistre un identifiant Spectrum qu'aucun autre compte ne détient ; un identifiant détenu ailleurs n'est jamais déplacé.",
+      "spectrumClear": "Supprimer",
+      "spectrumId": "Identifiant Spectrum (chiffres)",
+      "spectrumSet": "Définir",
+      "stepUpNote": "Un code à deux facteurs te sera demandé si tu n'en as pas saisi un dans les 10 dernières minutes.",
+      "unlinkBody": "Retire le lien Discord et l'ancien identifiant Discord de ce compte pour que ce compte Discord puisse être utilisé ailleurs. Il n'est transféré à aucun autre compte."
+    },
+    "done": "{{action}} : enregistré, journalisé et l'utilisateur a été prévenu.",
+    "intro": "Trouve un compte et corrige les conflits d'identité. Les identités associées ne passent jamais d'un compte à l'autre : chaque action retire ou définit une valeur sur ce compte uniquement. Chaque changement demande un motif et un code à deux facteurs récent, est inscrit au journal d'audit et prévient l'utilisateur.",
+    "kinds": {
+      "account_deactivated": "Compte désactivé",
+      "account_reactivated": "Compte réactivé",
+      "discord_unlinked": "Discord dissocié",
+      "spectrum_cleared": "Lien Spectrum supprimé",
+      "spectrum_set": "Identifiant Spectrum défini",
+      "username_released": "Nom d'utilisateur libéré"
+    },
+    "loading": "Chargement...",
+    "locked": "Les comptes supprimés, les comptes de test et les admins du site ne peuvent pas être modifiés ici.",
+    "noResults": "Aucun compte ne correspond.",
+    "results": "Résultats de recherche",
+    "search": "Rechercher",
+    "searchLabel": "Nom d'utilisateur, nom affiché, identifiant Discord, identifiant Spectrum ou identifiant utilisateur",
+    "status": {
+      "admin": "Admin du site",
+      "deactivated": "Désactivé",
+      "deleted": "Supprimé",
+      "deletionPending": "Suppression en attente",
+      "test": "Compte de test",
+      "verified": "Vérifié RSI"
+    },
+    "title": "Identité du compte"
   }
 }

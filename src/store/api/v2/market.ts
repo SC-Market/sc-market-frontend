@@ -2067,6 +2067,82 @@ const injectedRtkApi = api
         query: () => ({ url: `/accounts/deletion-precheck` }),
         providesTags: ["Accounts V2"],
       }),
+      searchIdentityUsers: build.query<
+        SearchIdentityUsersApiResponse,
+        SearchIdentityUsersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users`,
+          params: {
+            q: queryArg.q,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      getIdentityUser: build.query<
+        GetIdentityUserApiResponse,
+        GetIdentityUserApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}`,
+        }),
+        providesTags: ["Admin"],
+      }),
+      releaseIdentityUsername: build.mutation<
+        ReleaseIdentityUsernameApiResponse,
+        ReleaseIdentityUsernameApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/release-username`,
+          method: "POST",
+          body: queryArg.identityActionRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      unlinkIdentityDiscord: build.mutation<
+        UnlinkIdentityDiscordApiResponse,
+        UnlinkIdentityDiscordApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/unlink-discord`,
+          method: "POST",
+          body: queryArg.unlinkDiscordRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      fixIdentitySpectrum: build.mutation<
+        FixIdentitySpectrumApiResponse,
+        FixIdentitySpectrumApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/spectrum`,
+          method: "POST",
+          body: queryArg.spectrumFixRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      deactivateIdentityUser: build.mutation<
+        DeactivateIdentityUserApiResponse,
+        DeactivateIdentityUserApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/deactivate`,
+          method: "POST",
+          body: queryArg.identityActionRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      reactivateIdentityUser: build.mutation<
+        ReactivateIdentityUserApiResponse,
+        ReactivateIdentityUserApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/reactivate`,
+          method: "POST",
+          body: queryArg.identityActionRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
     }),
     overrideExisting: false,
   })
@@ -3540,6 +3616,45 @@ export type GetDeletionStatusApiArg = void
 export type PreDeletionCheckApiResponse =
   /** status 200 Ok */ DeletionPreCheckResponse
 export type PreDeletionCheckApiArg = void
+export type SearchIdentityUsersApiResponse =
+  /** status 200 Ok */ IdentitySearchResponse
+export type SearchIdentityUsersApiArg = {
+  q: string
+}
+export type GetIdentityUserApiResponse = /** status 200 Ok */ IdentityDetail
+export type GetIdentityUserApiArg = {
+  userId: string
+}
+export type ReleaseIdentityUsernameApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type ReleaseIdentityUsernameApiArg = {
+  userId: string
+  identityActionRequest: IdentityActionRequest
+}
+export type UnlinkIdentityDiscordApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type UnlinkIdentityDiscordApiArg = {
+  userId: string
+  unlinkDiscordRequest: UnlinkDiscordRequest
+}
+export type FixIdentitySpectrumApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type FixIdentitySpectrumApiArg = {
+  userId: string
+  spectrumFixRequest: SpectrumFixRequest
+}
+export type DeactivateIdentityUserApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type DeactivateIdentityUserApiArg = {
+  userId: string
+  identityActionRequest: IdentityActionRequest
+}
+export type ReactivateIdentityUserApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type ReactivateIdentityUserApiArg = {
+  userId: string
+  identityActionRequest: IdentityActionRequest
+}
 export type WatchlistItem = {
   /** Watchlist item id */
   id: string
@@ -7355,6 +7470,104 @@ export type DeletionPreCheckResponse = {
     type: string
   }[]
 }
+export type IdentitySearchRow = {
+  user_id: string
+  username: string
+  display_name: string
+  role: string
+  rsi_confirmed: boolean
+  spectrum_user_id: string | null
+  discord_provider_id: string | null
+  discord_id_column: string | null
+  banned: boolean
+  is_test: boolean
+  is_tombstone: boolean
+  deletion_pending: boolean
+}
+export type IdentitySearchResponse = {
+  users: IdentitySearchRow[]
+}
+export type IdentityProvider = {
+  provider_type: string
+  provider_id: string
+  /** Discord username or RSI handle recorded at link time. */
+  provider_username: string | null
+  is_primary: boolean
+  linked_at: string | null
+  /** Last login with this provider (token refresh at login). */
+  last_used_at: string | null
+}
+export type IdentitySession = {
+  /** When this session last refreshed (refresh tokens rotate every ~15 min). */
+  refreshed_at: string
+  expires_at: string
+  user_agent: string | null
+}
+export type IdentityActionKind =
+  | "username_released"
+  | "discord_unlinked"
+  | "spectrum_cleared"
+  | "spectrum_set"
+  | "account_deactivated"
+  | "account_reactivated"
+export type IdentityAuditEntry = {
+  audit_log_id: string
+  kind: IdentityActionKind
+  actor_user_id: string | null
+  actor_username: string | null
+  reason: string | null
+  created_at: string
+}
+export type IdentityDetail = {
+  user_id: string
+  username: string
+  display_name: string
+  role: string
+  rsi_confirmed: boolean
+  spectrum_user_id: string | null
+  discord_provider_id: string | null
+  discord_id_column: string | null
+  banned: boolean
+  is_test: boolean
+  is_tombstone: boolean
+  deletion_pending: boolean
+  created_at: string | null
+  deleted_at: string | null
+  deletion_scheduled_at: string | null
+  /** accounts.discord_id is set but no Discord provider matches it (stale legacy column). */
+  discord_column_stale: boolean
+  providers: IdentityProvider[]
+  sessions: IdentitySession[]
+  /** Other accounts whose username differs only by case. */
+  username_twins: {
+    username: string
+    user_id: string
+  }[]
+  recent_actions: IdentityAuditEntry[]
+}
+export type IdentityActionResponse = {
+  audit_log_id: string
+  kind: IdentityActionKind
+  user: IdentityDetail
+}
+export type IdentityActionRequest = {
+  /** Why (kept in the audit log, never shown to the user). */
+  reason: string
+}
+export type UnlinkDiscordRequest = {
+  /** Why (kept in the audit log, never shown to the user). */
+  reason: string
+  /** Unlink even though Discord is the account's only login method. */
+  allow_no_login?: boolean
+}
+export type SpectrumFixRequest = {
+  /** Why (kept in the audit log, never shown to the user). */
+  reason: string
+  /** clear: remove the Spectrum id (and RSI verification); set: write spectrum_user_id. */
+  mode: "clear" | "set"
+  /** Required for "set". Digits only; refused if another account holds it. */
+  spectrum_user_id?: string
+}
 export const {
   useGetWatchlistQuery,
   useAddWatchlistItemMutation,
@@ -7551,4 +7764,11 @@ export const {
   useCancelDeletionMutation,
   useGetDeletionStatusQuery,
   usePreDeletionCheckQuery,
+  useSearchIdentityUsersQuery,
+  useGetIdentityUserQuery,
+  useReleaseIdentityUsernameMutation,
+  useUnlinkIdentityDiscordMutation,
+  useFixIdentitySpectrumMutation,
+  useDeactivateIdentityUserMutation,
+  useReactivateIdentityUserMutation,
 } = injectedRtkApi

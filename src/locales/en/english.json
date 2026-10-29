@@ -2968,7 +2968,8 @@
     "star": "Pin",
     "stock": "Stock",
     "switchContext": "Switch context",
-    "unstar": "Unpin"
+    "unstar": "Unpin",
+    "adminIdentity": "Identity"
   },
   "navbar": {
     "cart": "Cart",
@@ -3023,7 +3024,16 @@
     "org_member_joined": "{{who}} joined {{org}}",
     "offer_accepted": "{{who}} accepted your offer",
     "offer_rejected": "{{who}} rejected your offer",
-    "contract_offer_received": "{{who}} made an offer on your contract"
+    "contract_offer_received": "{{who}} made an offer on your contract",
+    "account_identity": {
+      "account_deactivated": "An admin deactivated your account.",
+      "account_reactivated": "An admin reactivated your account.",
+      "discord_unlinked": "An admin unlinked Discord from your account. You can link a Discord account again in Settings.",
+      "generic": "An admin changed your account.",
+      "spectrum_cleared": "An admin removed the RSI link from your account. Verify your RSI account again in Settings.",
+      "spectrum_set": "An admin updated the RSI link on your account.",
+      "username_released": "An admin released your username. Your username is now {{username}}. Use Sync handle in Settings to get your current RSI handle back."
+    }
   },
   "Off Course": "warning",
   "OfferDetailsArea": {
@@ -5417,5 +5427,92 @@
       "add": "Add item",
       "targetValue": "Alert at ≤ {{price}}"
     }
+  },
+  "adminIdentity": {
+    "actions": {
+      "deactivate": "Deactivate account",
+      "fixSpectrum": "Fix Spectrum link",
+      "reactivate": "Reactivate account",
+      "releaseUsername": "Release username",
+      "unlinkDiscord": "Unlink Discord"
+    },
+    "columns": {
+      "discord": "Discord id",
+      "displayName": "Display name",
+      "spectrum": "Spectrum id",
+      "status": "Status",
+      "username": "Username"
+    },
+    "detail": {
+      "by": "By",
+      "change": "Change",
+      "created": "Created",
+      "deletedAt": "Deletion requested",
+      "deletionScheduled": "Deletion scheduled",
+      "discord": "Discord (linked)",
+      "discordColumn": "Discord (legacy column)",
+      "discordColumnStale": "{{id}} (stale: no matching link)",
+      "displayName": "Display name",
+      "lastUsed": "Last login",
+      "linkedAt": "Linked",
+      "noProviders": "No linked logins.",
+      "noRecent": "None.",
+      "noSessions": "No active sessions.",
+      "primary": "primary",
+      "providerId": "Id",
+      "providerType": "Provider",
+      "providerUsername": "Name at link time",
+      "providers": "Linked logins",
+      "recent": "Recent identity changes",
+      "role": "Role",
+      "sessionAgent": "Browser",
+      "sessionExpires": "Expires",
+      "sessionRefreshed": "Last refreshed",
+      "sessions": "Active sessions",
+      "spectrumId": "Spectrum id",
+      "twins": "Other accounts with this username in a different case: {{names}}",
+      "userId": "User id",
+      "when": "When"
+    },
+    "dialog": {
+      "allowNoLogin": "Discord is the only login method. Leave the account without one.",
+      "cancel": "Cancel",
+      "deactivateBody": "The account can no longer log in or use API tokens, and its sessions end now.",
+      "reactivateBody": "The account can log in again.",
+      "reason": "Reason",
+      "reasonHelp": "Required, {{min}} to {{max}} characters. Kept in the audit log; the user never sees it.",
+      "releaseBody": "Renames {{username}} to a placeholder (user_xxxxxxxx) so the handle is free. Nothing else on the account changes. The user is notified and can get their own current RSI handle back with Sync handle.",
+      "spectrumBody": "Clear removes the Spectrum id and the RSI verification. Set writes a Spectrum id that no other account holds; an id held elsewhere is never moved.",
+      "spectrumClear": "Clear",
+      "spectrumId": "Spectrum id (digits)",
+      "spectrumSet": "Set",
+      "stepUpNote": "You will be asked for a two-factor code if you haven't entered one in the last 10 minutes.",
+      "unlinkBody": "Removes the Discord link and the legacy Discord id from this account so that Discord account can be used elsewhere. It is not moved to any other account."
+    },
+    "done": "{{action}}: saved, audited and the user was notified.",
+    "intro": "Find an account and fix identity conflicts. Linked identities never move between accounts: each action removes or sets a value on this account only. Every change needs a reason and a fresh two-factor code, is written to the audit log and notifies the user.",
+    "kinds": {
+      "account_deactivated": "Account deactivated",
+      "account_reactivated": "Account reactivated",
+      "discord_unlinked": "Discord unlinked",
+      "spectrum_cleared": "Spectrum link cleared",
+      "spectrum_set": "Spectrum id set",
+      "username_released": "Username released"
+    },
+    "loading": "Loading...",
+    "locked": "Deleted accounts, test accounts and site admins can't be changed here.",
+    "noResults": "No accounts match.",
+    "results": "Search results",
+    "search": "Search",
+    "searchLabel": "Username, display name, Discord id, Spectrum id or user id",
+    "status": {
+      "admin": "Site admin",
+      "deactivated": "Deactivated",
+      "deleted": "Deleted",
+      "deletionPending": "Deletion pending",
+      "test": "Test account",
+      "verified": "RSI verified"
+    },
+    "title": "Account identity"
   }
 }

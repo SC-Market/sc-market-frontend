@@ -120,6 +120,7 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/admin/alerts": () => import("../pages/admin/AdminAlerts"),
   "/admin/audit-logs": () => import("../pages/admin/AdminAuditLogs"),
   "/admin/test-accounts": () => import("../pages/admin/AdminTestAccounts"),
+  "/admin/identity": () => import("../pages/admin/AdminIdentity"),
   "/admin/notification-test": () =>
     import("../pages/admin/AdminNotificationTest"),
   "/admin/attribute-definitions": () =>

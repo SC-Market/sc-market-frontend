@@ -595,7 +595,16 @@
     "org_member_joined": "{{who}} se unió a {{org}}",
     "offer_accepted": "{{who}} aceptó tu oferta",
     "offer_rejected": "{{who}} rechazó tu oferta",
-    "contract_offer_received": "{{who}} hizo una oferta en tu contrato"
+    "contract_offer_received": "{{who}} hizo una oferta en tu contrato",
+    "account_identity": {
+      "account_deactivated": "Un admin desactivó tu cuenta.",
+      "account_reactivated": "Un admin reactivó tu cuenta.",
+      "discord_unlinked": "Un admin desvinculó Discord de tu cuenta. Puedes vincular de nuevo una cuenta de Discord en Ajustes.",
+      "generic": "Un admin cambió tu cuenta.",
+      "spectrum_cleared": "Un admin quitó el vínculo de RSI de tu cuenta. Vuelve a verificar tu cuenta de RSI en Ajustes.",
+      "spectrum_set": "Un admin actualizó el vínculo de RSI de tu cuenta.",
+      "username_released": "Un admin liberó tu nombre de usuario. Ahora tu nombre de usuario es {{username}}. Usa «Sincronizar handle» en Ajustes para recuperar tu handle actual de RSI."
+    }
   },
   "onboarding": {
     "welcome": "Bienvenido a SC Market",
@@ -4465,7 +4474,8 @@
     "star": "Fijar",
     "stock": "Inventario",
     "switchContext": "Cambiar de contexto",
-    "unstar": "Dejar de fijar"
+    "unstar": "Dejar de fijar",
+    "adminIdentity": "Identidad"
   },
   "navbar": {
     "cart": "Carrito",
@@ -5449,5 +5459,92 @@
       "add": "Añadir objeto",
       "targetValue": "Alerta a ≤ {{price}}"
     }
+  },
+  "adminIdentity": {
+    "actions": {
+      "deactivate": "Desactivar cuenta",
+      "fixSpectrum": "Corregir vínculo de Spectrum",
+      "reactivate": "Reactivar cuenta",
+      "releaseUsername": "Liberar nombre de usuario",
+      "unlinkDiscord": "Desvincular Discord"
+    },
+    "columns": {
+      "discord": "ID de Discord",
+      "displayName": "Nombre visible",
+      "spectrum": "ID de Spectrum",
+      "status": "Estado",
+      "username": "Nombre de usuario"
+    },
+    "detail": {
+      "by": "Por",
+      "change": "Cambio",
+      "created": "Creada",
+      "deletedAt": "Eliminación solicitada",
+      "deletionScheduled": "Eliminación programada",
+      "discord": "Discord (vinculado)",
+      "discordColumn": "Discord (columna antigua)",
+      "discordColumnStale": "{{id}} (obsoleto: sin vínculo que coincida)",
+      "displayName": "Nombre visible",
+      "lastUsed": "Último inicio de sesión",
+      "linkedAt": "Vinculado",
+      "noProviders": "No hay inicios de sesión vinculados.",
+      "noRecent": "Ninguno.",
+      "noSessions": "No hay sesiones activas.",
+      "primary": "principal",
+      "providerId": "ID",
+      "providerType": "Proveedor",
+      "providerUsername": "Nombre al vincular",
+      "providers": "Inicios de sesión vinculados",
+      "recent": "Cambios de identidad recientes",
+      "role": "Rol",
+      "sessionAgent": "Navegador",
+      "sessionExpires": "Caduca",
+      "sessionRefreshed": "Última renovación",
+      "sessions": "Sesiones activas",
+      "spectrumId": "ID de Spectrum",
+      "twins": "Otras cuentas con este nombre de usuario con distintas mayúsculas: {{names}}",
+      "userId": "ID de usuario",
+      "when": "Cuándo"
+    },
+    "dialog": {
+      "allowNoLogin": "Discord es el único método de inicio de sesión. Dejar la cuenta sin ninguno.",
+      "cancel": "Cancelar",
+      "deactivateBody": "La cuenta ya no puede iniciar sesión ni usar tokens de API, y sus sesiones terminan ahora.",
+      "reactivateBody": "La cuenta puede volver a iniciar sesión.",
+      "reason": "Motivo",
+      "reasonHelp": "Obligatorio, de {{min}} a {{max}} caracteres. Se guarda en el registro de auditoría; el usuario nunca lo ve.",
+      "releaseBody": "Cambia el nombre de {{username}} a uno provisional (user_xxxxxxxx) para liberar el handle. No cambia nada más en la cuenta. Se avisa al usuario, que puede recuperar su handle actual de RSI con «Sincronizar handle».",
+      "spectrumBody": "Eliminar quita el ID de Spectrum y la verificación de RSI. Establecer guarda un ID de Spectrum que ninguna otra cuenta tenga; un ID que tiene otra cuenta nunca se mueve.",
+      "spectrumClear": "Eliminar",
+      "spectrumId": "ID de Spectrum (solo dígitos)",
+      "spectrumSet": "Establecer",
+      "stepUpNote": "Se te pedirá un código de dos factores si no has introducido uno en los últimos 10 minutos.",
+      "unlinkBody": "Quita el vínculo de Discord y el ID de Discord antiguo de esta cuenta para que esa cuenta de Discord pueda usarse en otra. No se transfiere a ninguna otra cuenta."
+    },
+    "done": "{{action}}: guardado, auditado y el usuario fue notificado.",
+    "intro": "Busca una cuenta y corrige conflictos de identidad. Las identidades vinculadas nunca pasan de una cuenta a otra: cada acción quita o establece un valor solo en esta cuenta. Cada cambio requiere un motivo y un código de dos factores reciente, se guarda en el registro de auditoría y avisa al usuario.",
+    "kinds": {
+      "account_deactivated": "Cuenta desactivada",
+      "account_reactivated": "Cuenta reactivada",
+      "discord_unlinked": "Discord desvinculado",
+      "spectrum_cleared": "Vínculo de Spectrum eliminado",
+      "spectrum_set": "ID de Spectrum establecido",
+      "username_released": "Nombre de usuario liberado"
+    },
+    "loading": "Cargando...",
+    "locked": "Las cuentas eliminadas, las cuentas de prueba y los admins del sitio no se pueden cambiar aquí.",
+    "noResults": "Ninguna cuenta coincide.",
+    "results": "Resultados de búsqueda",
+    "search": "Buscar",
+    "searchLabel": "Nombre de usuario, nombre visible, ID de Discord, ID de Spectrum o ID de usuario",
+    "status": {
+      "admin": "Admin del sitio",
+      "deactivated": "Desactivada",
+      "deleted": "Eliminada",
+      "deletionPending": "Eliminación pendiente",
+      "test": "Cuenta de prueba",
+      "verified": "Verificada en RSI"
+    },
+    "title": "Identidad de la cuenta"
   }
 }

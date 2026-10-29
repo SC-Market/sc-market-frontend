@@ -17,6 +17,7 @@ import { NotificationPriceAlert } from "../types/NotificationPriceAlert"
 import { NotificationPublicContract } from "../types/NotificationPublicContract"
 import { NotificationOrgMemberJoined } from "../types/NotificationOrgMemberJoined"
 import { NotificationOfferDecision } from "../types/NotificationOfferDecision"
+import { NotificationAccountIdentity } from "../types/NotificationAccountIdentity"
 
 export function NotificationEntry(props: { notif: Notification }) {
   const { notif } = props
@@ -60,6 +61,8 @@ export function NotificationEntry(props: { notif: Notification }) {
       return <NotificationOfferDecision notif={notif} />
     case "order_review_revision_requested":
       return <NotificationReviewRevisionRequest notif={notif} />
+    case "account_identity_changed":
+      return <NotificationAccountIdentity notif={notif} />
     default:
       return null
   }

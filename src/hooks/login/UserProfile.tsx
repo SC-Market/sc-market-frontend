@@ -10,6 +10,7 @@ import { MarketBid, MarketListing } from "../../features/market"
 import { MinimalUser } from "../../datatypes/User"
 import { OfferSession } from "../../features/offers/api/offerApi"
 import type { PublicContract } from "../../features/contracting/domain/types"
+import type { AccountIdentityNotice } from "../../features/notifications/types/NotificationAccountIdentity"
 
 export interface Notification {
   read: boolean
@@ -26,6 +27,7 @@ export interface Notification {
     | OrderComment
     | OfferSession
     | PublicContract
+    | AccountIdentityNotice
   timestamp: string
   actors: MinimalUser[]
   scope?: "individual" | "organization"

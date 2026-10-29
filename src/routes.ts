@@ -476,6 +476,11 @@ export default [
                 file: "routes/pages/AdminTestAccounts.tsx",
               },
               {
+                id: "routes/pages/AdminIdentity",
+                path: "/admin/identity",
+                file: "routes/pages/AdminIdentity.tsx",
+              },
+              {
                 id: "routes/pages/AdminNotificationTest",
                 path: "/admin/notification-test",
                 file: "routes/pages/AdminNotificationTest.tsx",

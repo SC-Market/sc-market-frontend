@@ -158,6 +158,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/admin/moderation": AdminPageSkeleton,
   "/admin/alerts": AdminPageSkeleton,
   "/admin/audit-logs": AdminPageSkeleton,
+  "/admin/identity": AdminPageSkeleton,
   "/admin/notification-test": AdminPageSkeleton,
   "/admin/attribute-definitions": AdminPageSkeleton,
   "/admin/game-item-attributes": AdminPageSkeleton,

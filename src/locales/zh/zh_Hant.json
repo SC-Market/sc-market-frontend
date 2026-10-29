@@ -593,7 +593,16 @@
     "org_member_joined": "{{who}} 加入了 {{org}}",
     "offer_accepted": "{{who}} 接受了您的報價",
     "offer_rejected": "{{who}} 拒絕了您的報價",
-    "contract_offer_received": "{{who}} 對您的合約提出了報價"
+    "contract_offer_received": "{{who}} 對您的合約提出了報價",
+    "account_identity": {
+      "account_deactivated": "管理員停用了你的帳號。",
+      "account_reactivated": "管理員重新啟用了你的帳號。",
+      "discord_unlinked": "管理員解除了你帳號的 Discord 連結。你可以在設定中重新連結 Discord 帳號。",
+      "generic": "管理員變更了你的帳號。",
+      "spectrum_cleared": "管理員移除了你帳號的 RSI 連結。請在設定中重新驗證你的 RSI 帳號。",
+      "spectrum_set": "管理員更新了你帳號的 RSI 連結。",
+      "username_released": "管理員釋出了你的使用者名稱。你現在的使用者名稱是 {{username}}。在設定中使用「同步名稱」可取回你目前的 RSI 名稱。"
+    }
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "爲此帖點贊"
@@ -4355,7 +4364,8 @@
     "star": "釘選",
     "stock": "庫存",
     "switchContext": "切換情境",
-    "unstar": "取消釘選"
+    "unstar": "取消釘選",
+    "adminIdentity": "身分"
   },
   "navbar": {
     "cart": "購物車",
@@ -5417,5 +5427,92 @@
       "add": "新增物品",
       "targetValue": "≤ {{price}} 時提醒"
     }
+  },
+  "adminIdentity": {
+    "actions": {
+      "deactivate": "停用帳號",
+      "fixSpectrum": "修正 Spectrum 連結",
+      "reactivate": "重新啟用帳號",
+      "releaseUsername": "釋出使用者名稱",
+      "unlinkDiscord": "解除 Discord 連結"
+    },
+    "columns": {
+      "discord": "Discord ID",
+      "displayName": "顯示名稱",
+      "spectrum": "Spectrum ID",
+      "status": "狀態",
+      "username": "使用者名稱"
+    },
+    "detail": {
+      "by": "執行者",
+      "change": "變更",
+      "created": "建立時間",
+      "deletedAt": "申請刪除時間",
+      "deletionScheduled": "預定刪除時間",
+      "discord": "Discord（已連結）",
+      "discordColumn": "Discord（舊欄位）",
+      "discordColumnStale": "{{id}}（過時：沒有相符的連結）",
+      "displayName": "顯示名稱",
+      "lastUsed": "上次登入",
+      "linkedAt": "連結時間",
+      "noProviders": "沒有已連結的登入方式。",
+      "noRecent": "無。",
+      "noSessions": "沒有使用中的工作階段。",
+      "primary": "主要",
+      "providerId": "ID",
+      "providerType": "提供者",
+      "providerUsername": "連結時的名稱",
+      "providers": "已連結的登入方式",
+      "recent": "最近的身分變更",
+      "role": "角色",
+      "sessionAgent": "瀏覽器",
+      "sessionExpires": "到期時間",
+      "sessionRefreshed": "上次更新",
+      "sessions": "使用中的工作階段",
+      "spectrumId": "Spectrum ID",
+      "twins": "僅大小寫不同的同名帳號：{{names}}",
+      "userId": "使用者 ID",
+      "when": "時間"
+    },
+    "dialog": {
+      "allowNoLogin": "Discord 是唯一的登入方式。允許帳號沒有任何登入方式。",
+      "cancel": "取消",
+      "deactivateBody": "此帳號將無法再登入或使用 API 權杖，其工作階段會立即結束。",
+      "reactivateBody": "此帳號可以重新登入。",
+      "reason": "原因",
+      "reasonHelp": "必填，{{min}} 到 {{max}} 個字元。保存在稽核日誌中；使用者永遠看不到。",
+      "releaseBody": "將 {{username}} 重新命名為暫時的使用者名稱（user_xxxxxxxx），以釋出該名稱。帳號的其他內容不變。使用者會收到通知，並可透過「同步名稱」取回目前的 RSI 名稱。",
+      "spectrumBody": "清除會移除 Spectrum ID 和 RSI 驗證。設定會寫入一個沒有其他帳號持有的 Spectrum ID；其他帳號持有的 ID 永遠不會被移動。",
+      "spectrumClear": "清除",
+      "spectrumId": "Spectrum ID（僅限數字）",
+      "spectrumSet": "設定",
+      "stepUpNote": "如果你在過去 10 分鐘內沒有輸入過雙重驗證碼，系統會要求你輸入。",
+      "unlinkBody": "從此帳號移除 Discord 連結和舊的 Discord ID，讓該 Discord 帳號可在別處使用。它不會被移到任何其他帳號。"
+    },
+    "done": "{{action}}：已儲存、已記入稽核日誌，並已通知使用者。",
+    "intro": "尋找帳號並解決身分衝突。已連結的身分永遠不會在帳號之間移動：每個操作只會移除或設定此帳號上的值。每次變更都需要填寫原因和新的雙重驗證碼，會記入稽核日誌並通知使用者。",
+    "kinds": {
+      "account_deactivated": "已停用帳號",
+      "account_reactivated": "已重新啟用帳號",
+      "discord_unlinked": "已解除 Discord 連結",
+      "spectrum_cleared": "已清除 Spectrum 連結",
+      "spectrum_set": "已設定 Spectrum ID",
+      "username_released": "已釋出使用者名稱"
+    },
+    "loading": "載入中...",
+    "locked": "已刪除的帳號、測試帳號和網站管理員無法在此變更。",
+    "noResults": "沒有相符的帳號。",
+    "results": "搜尋結果",
+    "search": "搜尋",
+    "searchLabel": "使用者名稱、顯示名稱、Discord ID、Spectrum ID 或使用者 ID",
+    "status": {
+      "admin": "網站管理員",
+      "deactivated": "已停用",
+      "deleted": "已刪除",
+      "deletionPending": "等待刪除",
+      "test": "測試帳號",
+      "verified": "已通過 RSI 驗證"
+    },
+    "title": "帳號身分"
   }
 }

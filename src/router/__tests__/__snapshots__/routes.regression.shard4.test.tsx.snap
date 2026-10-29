@@ -1,37 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`routes (shard 4/4) > /about 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/about",
-  "h1": [
-    "About SC Market",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "/about",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "(help page: links checked by routes.contentLinks.test)",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "/about",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "anonymous",
-  "stillLoading": false,
-  "title": "About SC Market — SC Market",
-  "url": "/about",
-}
-`;
-
 exports[`routes (shard 4/4) > /accountlink 1`] = `
 {
   "consoleErrors": [],
@@ -111,14 +79,14 @@ exports[`routes (shard 4/4) > /admin/alerts 1`] = `
 }
 `;
 
-exports[`routes (shard 4/4) > /admin/attribute-definitions 1`] = `
+exports[`routes (shard 4/4) > /admin/game-data-import 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/admin/attribute-definitions",
+  "finalUrl": "/admin/game-data-import",
   "h1": [
-    "Attribute Definitions",
-    "Attribute Definitions",
+    "Game Data Import",
+    "Game Data Import",
   ],
   "hasMainLandmark": true,
   "hasMainNav": true,
@@ -127,7 +95,7 @@ exports[`routes (shard 4/4) > /admin/attribute-definitions 1`] = `
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
-    "/admin/attribute-definitions",
+    "/admin/game-data-import",
   ],
   "lazyPending": [],
   "mainLinks": [
@@ -140,14 +108,14 @@ exports[`routes (shard 4/4) > /admin/attribute-definitions 1`] = `
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
-    "/admin/attribute-definitions",
+    "/admin/game-data-import",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Attribute Definitions - SC Market",
-  "url": "/admin/attribute-definitions",
+  "title": "Game Data Import - SC Market",
+  "url": "/admin/game-data-import",
 }
 `;
 
@@ -190,13 +158,14 @@ exports[`routes (shard 4/4) > /admin/market 1`] = `
 }
 `;
 
-exports[`routes (shard 4/4) > /admin/premium 1`] = `
+exports[`routes (shard 4/4) > /admin/notification-test 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/admin/premium",
+  "finalUrl": "/admin/notification-test",
   "h1": [
-    "Premium Management",
+    "Notification Test",
+    "Test Notifications",
   ],
   "hasMainLandmark": true,
   "hasMainNav": true,
@@ -205,7 +174,7 @@ exports[`routes (shard 4/4) > /admin/premium 1`] = `
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
-    "/admin/premium",
+    "/admin/notification-test",
   ],
   "lazyPending": [],
   "mainLinks": [
@@ -218,22 +187,22 @@ exports[`routes (shard 4/4) > /admin/premium 1`] = `
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
-    "/admin/premium",
+    "/admin/notification-test",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Premium Management - SC Market",
-  "url": "/admin/premium",
+  "title": "Notification Test - SC Market",
+  "url": "/admin/notification-test",
 }
 `;
 
-exports[`routes (shard 4/4) > /admin/supplier-roster 1`] = `
+exports[`routes (shard 4/4) > /admin/supplier-dashboard 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/admin/supplier-roster",
+  "finalUrl": "/admin/supplier-dashboard",
   "h1": [],
   "hasMainLandmark": true,
   "hasMainNav": true,
@@ -242,7 +211,7 @@ exports[`routes (shard 4/4) > /admin/supplier-roster 1`] = `
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
-    "/admin/supplier-roster",
+    "/admin/supplier-dashboard",
   ],
   "lazyPending": [],
   "mainLinks": [],
@@ -250,14 +219,48 @@ exports[`routes (shard 4/4) > /admin/supplier-roster 1`] = `
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "(layout:SiteAdminRoute)",
-    "/admin/supplier-roster",
+    "/admin/supplier-dashboard",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Supplier Roster - SC Market",
-  "url": "/admin/supplier-roster",
+  "title": "Supplier Dashboard - SC Market",
+  "url": "/admin/supplier-dashboard",
+}
+`;
+
+exports[`routes (shard 4/4) > /blueprints/:slug 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/blueprints/:slug",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/dashboard",
+    "/guides",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/*",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/blueprints/fixture-slug",
 }
 `;
 
@@ -448,37 +451,35 @@ exports[`routes (shard 4/4) > /email/unsubscribe 1`] = `
 }
 `;
 
-exports[`routes (shard 4/4) > /error 1`] = `
+exports[`routes (shard 4/4) > /guides/:category/:slug 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/error",
-  "h1": [],
+  "finalUrl": "/guides/buying/buy-an-item",
+  "h1": [
+    "Buy an item",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
     "(layout:AppLayout)",
-    "/error",
+    "/guides/:category/:slug",
   ],
   "lazyPending": [],
   "mainLinks": [
-    "/about",
-    "/dashboard",
-    "/guides",
-    "/privacy",
-    "/terms",
+    "(help page: links checked by routes.contentLinks.test)",
   ],
   "matches": [
     "(layout:AppLayout)",
-    "/error",
+    "/guides/:category/:slug",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "An Error Occurred - SC Market",
-  "url": "/error",
+  "title": "Buy an item — SC Market Guides",
+  "url": "/guides/buying/buy-an-item",
 }
 `;
 
@@ -658,71 +659,73 @@ exports[`routes (shard 4/4) > /messaging 1`] = `
 }
 `;
 
-exports[`routes (shard 4/4) > /mining/locations/:name 1`] = `
+exports[`routes (shard 4/4) > /mining/locations 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/404",
-  "h1": [],
+  "finalUrl": "/mining/locations",
+  "h1": [
+    "Mining Database",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
-  "historyAction": "PUSH",
+  "historyAction": "POP",
   "initialMatches": [
     "(layout:AppLayout)",
-    "/mining/locations/:name",
+    "/mining/locations",
   ],
   "lazyPending": [],
   "mainLinks": [
     "/about",
-    "/dashboard",
     "/guides",
     "/privacy",
     "/terms",
   ],
   "matches": [
     "(layout:AppLayout)",
-    "/*",
+    "/mining/locations",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "404 - SC Market",
-  "url": "/mining/locations/fixture-name",
+  "title": "Mining Database - SC Market",
+  "url": "/mining/locations",
 }
 `;
 
-exports[`routes (shard 4/4) > /missions/:slug 1`] = `
+exports[`routes (shard 4/4) > /missions 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/404",
-  "h1": [],
+  "finalUrl": "/missions",
+  "h1": [
+    "Mission Database",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
-  "historyAction": "PUSH",
+  "historyAction": "POP",
   "initialMatches": [
     "(layout:AppLayout)",
-    "/missions/:slug",
+    "/missions",
   ],
   "lazyPending": [],
   "mainLinks": [
     "/about",
-    "/dashboard",
     "/guides",
     "/privacy",
     "/terms",
   ],
   "matches": [
     "(layout:AppLayout)",
-    "/*",
+    "/missions",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "404 - SC Market",
-  "url": "/missions/fixture-slug",
+  "title": "All Missions — Star Citizen Mission Database | SC Market",
+  "url": "/missions",
 }
 `;
 
@@ -761,6 +764,45 @@ exports[`routes (shard 4/4) > /myfleet 1`] = `
   "stillLoading": true,
   "title": "My Fleet - SC Market",
   "url": "/myfleet",
+}
+`;
+
+exports[`routes (shard 4/4) > /myorg 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/myorg",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/myorg",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/contractors",
+    "/guides",
+    "/my-orgs",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "(layout:OrgRoute)",
+    "/myorg",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "My Organization - SC Market",
+  "url": "/myorg",
 }
 `;
 
@@ -943,7 +985,181 @@ exports[`routes (shard 4/4) > /orders/assigned 1`] = `
 }
 `;
 
-exports[`routes (shard 4/4) > /org/:contractor_id/fleet 1`] = `
+exports[`routes (shard 4/4) > /org/:contractor_id/manage 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/TESTORG/manage/about",
+  "h1": [
+    "Manage Org",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "REPLACE",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "(index)",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/guides",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:OrgManageLayout)",
+    "about",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Manage Org - SC Market",
+  "url": "/org/TESTORG/manage",
+}
+`;
+
+exports[`routes (shard 4/4) > /org/:contractor_id/manage/discord 1`] = `
+{
+  "consoleErrors": [
+    "<p> cannot contain a nested <p>.",
+    "In HTML, <p> cannot be a descendant of <p>.",
+  ],
+  "errorElementErrors": [],
+  "finalUrl": "/org/TESTORG/manage/discord",
+  "h1": [
+    "Manage Org",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "discord",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/guides",
+    "/guides/discord/connect-the-discord-bot",
+    "/guides/discord/order-alerts-and-claiming",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:OrgManageLayout)",
+    "discord",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Manage Org - SC Market",
+  "url": "/org/TESTORG/manage/discord",
+}
+`;
+
+exports[`routes (shard 4/4) > /org/:contractor_id/money 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/TESTORG/money",
+  "h1": [
+    "Money",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "money",
+    "(index)",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/guides",
+    "/org/TESTORG/send",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "money",
+    "(index)",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Money - SC Market",
+  "url": "/org/TESTORG/money",
+}
+`;
+
+exports[`routes (shard 4/4) > /org/:contractor_id/overview 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/org/TESTORG/dashboard",
+  "h1": [
+    "Dashboard",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "REPLACE",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "overview",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/guides",
+    "/guides/selling/handle-orders-as-a-seller",
+    "/org/TESTORG/dashboard",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "dashboard",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Dashboard - SC Market",
+  "url": "/org/TESTORG/overview",
+}
+`;
+
+exports[`routes (shard 4/4) > /org/:contractor_id/services 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
@@ -956,7 +1172,7 @@ exports[`routes (shard 4/4) > /org/:contractor_id/fleet 1`] = `
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/org/:contractor_id",
-    "fleet",
+    "services",
   ],
   "lazyPending": [],
   "mainLinks": [
@@ -975,140 +1191,15 @@ exports[`routes (shard 4/4) > /org/:contractor_id/fleet 1`] = `
   "session": "admin",
   "stillLoading": false,
   "title": "404 - SC Market",
-  "url": "/org/TESTORG/fleet",
+  "url": "/org/TESTORG/services",
 }
 `;
 
-exports[`routes (shard 4/4) > /org/:contractor_id/manage/about 1`] = `
+exports[`routes (shard 4/4) > /org/orders 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/org/TESTORG/manage/about",
-  "h1": [
-    "Manage Org",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "manage",
-    "(layout:lazy)",
-    "about",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/guides",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "manage",
-    "(layout:OrgManageLayout)",
-    "about",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "Manage Org - SC Market",
-  "url": "/org/TESTORG/manage/about",
-}
-`;
-
-exports[`routes (shard 4/4) > /org/:contractor_id/manage/settings 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/org/TESTORG/manage/settings",
-  "h1": [
-    "Manage Org",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "manage",
-    "(layout:lazy)",
-    "settings",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/guides",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "manage",
-    "(layout:OrgManageLayout)",
-    "settings",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "Manage Org - SC Market",
-  "url": "/org/TESTORG/manage/settings",
-}
-`;
-
-exports[`routes (shard 4/4) > /org/:contractor_id/members 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/org/TESTORG/members",
-  "h1": [
-    "People",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "members",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/guides",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "members",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "Customers - SC Market",
-  "url": "/org/TESTORG/members",
-}
-`;
-
-exports[`routes (shard 4/4) > /org/manage 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/org/manage",
+  "finalUrl": "/org/orders",
   "h1": [],
   "hasMainLandmark": true,
   "hasMainNav": true,
@@ -1116,8 +1207,8 @@ exports[`routes (shard 4/4) > /org/manage 1`] = `
   "initialMatches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "(layout:OrgRoute)",
-    "/org/manage",
+    "(layout:OrgAdminRoute)",
+    "/org/orders",
   ],
   "lazyPending": [],
   "mainLinks": [
@@ -1131,69 +1222,32 @@ exports[`routes (shard 4/4) > /org/manage 1`] = `
   "matches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "(layout:OrgRoute)",
-    "/org/manage",
+    "(layout:OrgAdminRoute)",
+    "/org/orders",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Manage Organization - SC Market",
-  "url": "/org/manage",
+  "title": "Organization Orders - SC Market",
+  "url": "/org/orders",
 }
 `;
 
-exports[`routes (shard 4/4) > /org/send 1`] = `
+exports[`routes (shard 4/4) > /resources 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/org/send",
-  "h1": [],
+  "finalUrl": "/resources",
+  "h1": [
+    "Resources",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
     "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "(layout:OrgRoute)",
-    "/org/send",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/contractors",
-    "/guides",
-    "/my-orgs",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "(layout:OrgRoute)",
-    "/org/send",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "Send - SC Market",
-  "url": "/org/send",
-}
-`;
-
-exports[`routes (shard 4/4) > /resources/:resource_id 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/resources/resource-1",
-  "h1": [],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "/resources/:resource_id",
+    "/resources",
   ],
   "lazyPending": [],
   "mainLinks": [
@@ -1204,60 +1258,18 @@ exports[`routes (shard 4/4) > /resources/:resource_id 1`] = `
   ],
   "matches": [
     "(layout:AppLayout)",
-    "/resources/:resource_id",
+    "/resources",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Resource Details - SC Market",
-  "url": "/resources/resource-1",
+  "title": "Resources - SC Market",
+  "url": "/resources",
 }
 `;
 
-exports[`routes (shard 4/4) > /shop/:shopSlug 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/shop/test-shop/listings",
-  "h1": [
-    "Manage Listings",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "REPLACE",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/shop/:shopSlug",
-    "(index)",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/guides",
-    "/market",
-    "/market/me",
-    "/privacy",
-    "/shop/test-shop/listings/create",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/shop/:shopSlug",
-    "listings",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "Manage Listings - SC Market",
-  "url": "/shop/test-shop",
-}
-`;
-
-exports[`routes (shard 4/4) > /shop/:shopSlug/dashboard 1`] = `
+exports[`routes (shard 4/4) > /shop/:shopSlug/orders 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
@@ -1267,12 +1279,12 @@ exports[`routes (shard 4/4) > /shop/:shopSlug/dashboard 1`] = `
   ],
   "hasMainLandmark": true,
   "hasMainNav": true,
-  "historyAction": "REPLACE",
+  "historyAction": "POP",
   "initialMatches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
-    "dashboard",
+    "orders",
   ],
   "lazyPending": [],
   "mainLinks": [
@@ -1293,17 +1305,20 @@ exports[`routes (shard 4/4) > /shop/:shopSlug/dashboard 1`] = `
   "session": "admin",
   "stillLoading": false,
   "title": "Orders - SC Market",
-  "url": "/shop/test-shop/dashboard",
+  "url": "/shop/test-shop/orders",
 }
 `;
 
-exports[`routes (shard 4/4) > /shop/:shopSlug/listings 1`] = `
+exports[`routes (shard 4/4) > /shop/:shopSlug/settings 1`] = `
 {
-  "consoleErrors": [],
+  "consoleErrors": [
+    "<h1> cannot contain a nested <h4>.",
+    "In HTML, <h4> cannot be a child of <h1>.",
+  ],
   "errorElementErrors": [],
-  "finalUrl": "/shop/test-shop/listings",
+  "finalUrl": "/shop/test-shop/settings",
   "h1": [
-    "Manage Listings",
+    "Shop Settings",
   ],
   "hasMainLandmark": true,
   "hasMainNav": true,
@@ -1312,65 +1327,30 @@ exports[`routes (shard 4/4) > /shop/:shopSlug/listings 1`] = `
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
-    "listings",
+    "settings",
   ],
   "lazyPending": [],
   "mainLinks": [
     "/about",
     "/guides",
-    "/market",
-    "/market/me",
+    "/guides/discord/connect-the-discord-bot",
+    "/guides/discord/webhooks",
+    "/guides/selling/stock-lots-and-allocation",
     "/privacy",
-    "/shop/test-shop/listings/create",
     "/terms",
   ],
   "matches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
     "/shop/:shopSlug",
-    "listings",
+    "settings",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Manage Listings - SC Market",
-  "url": "/shop/test-shop/listings",
-}
-`;
-
-exports[`routes (shard 4/4) > /shopping-lists 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/shopping-lists",
-  "h1": [
-    "My Shopping Lists",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "/shopping-lists",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/guides",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "/shopping-lists",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "anonymous",
-  "stillLoading": false,
-  "title": "My Shopping Lists - SC Market",
-  "url": "/shopping-lists",
+  "title": "Shop Settings - SC Market",
+  "url": "/shop/test-shop/settings",
 }
 `;
 
@@ -1442,55 +1422,54 @@ exports[`routes (shard 4/4) > /signup 1`] = `
 }
 `;
 
-exports[`routes (shard 4/4) > /wiki/locations 1`] = `
+exports[`routes (shard 4/4) > /wiki/commodities/:id 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/wiki/locations",
-  "h1": [
-    "Star Map & Locations",
-  ],
+  "finalUrl": "/404",
+  "h1": [],
   "hasMainLandmark": true,
   "hasMainNav": true,
-  "historyAction": "POP",
+  "historyAction": "PUSH",
   "initialMatches": [
     "(layout:AppLayout)",
-    "/wiki/locations",
+    "/wiki/commodities/:id",
   ],
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/dashboard",
     "/guides",
     "/privacy",
     "/terms",
   ],
   "matches": [
     "(layout:AppLayout)",
-    "/wiki/locations",
+    "/*",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Star Map & Locations - SC Market",
-  "url": "/wiki/locations",
+  "title": "404 - SC Market",
+  "url": "/wiki/commodities/fixture-id",
 }
 `;
 
-exports[`routes (shard 4/4) > /wiki/ships/:id 1`] = `
+exports[`routes (shard 4/4) > /wiki/items 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/wiki/ships/fixture-id",
+  "finalUrl": "/wiki/items",
   "h1": [
-    "Ship Details",
+    "Game Items Database",
   ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
     "(layout:AppLayout)",
-    "/wiki/ships/:id",
+    "/wiki/items",
   ],
   "lazyPending": [],
   "mainLinks": [
@@ -1501,13 +1480,47 @@ exports[`routes (shard 4/4) > /wiki/ships/:id 1`] = `
   ],
   "matches": [
     "(layout:AppLayout)",
-    "/wiki/ships/:id",
+    "/wiki/items",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Ship Details - SC Market",
-  "url": "/wiki/ships/fixture-id",
+  "title": "All Items — Star Citizen Game Database | SC Market",
+  "url": "/wiki/items",
+}
+`;
+
+exports[`routes (shard 4/4) > /wiki/manufacturers 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/wiki/manufacturers",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/dashboard",
+    "/guides",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/*",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/wiki/manufacturers",
 }
 `;

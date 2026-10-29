@@ -593,7 +593,16 @@
     "org_member_joined": "{{who}}さんが{{org}}に参加しました",
     "offer_accepted": "{{who}}さんがあなたのオファーを承認しました",
     "offer_rejected": "{{who}}さんがあなたのオファーを拒否しました",
-    "contract_offer_received": "{{who}}さんがあなたの契約にオファーを送りました"
+    "contract_offer_received": "{{who}}さんがあなたの契約にオファーを送りました",
+    "account_identity": {
+      "account_deactivated": "管理者があなたのアカウントを無効化しました。",
+      "account_reactivated": "管理者があなたのアカウントを再有効化しました。",
+      "discord_unlinked": "管理者があなたのアカウントから Discord の連携を解除しました。設定で再び Discord アカウントを連携できます。",
+      "generic": "管理者があなたのアカウントを変更しました。",
+      "spectrum_cleared": "管理者があなたのアカウントから RSI の連携を外しました。設定で RSI アカウントを再認証してください。",
+      "spectrum_set": "管理者があなたのアカウントの RSI 連携を更新しました。",
+      "username_released": "管理者があなたのユーザー名を解放しました。現在のユーザー名は {{username}} です。設定の「ハンドルを同期」で現在の RSI ハンドルを取り戻せます。"
+    }
   },
   "onboarding": {
     "welcome": "SC Marketへようこそ",
@@ -4434,7 +4443,8 @@
     "star": "ピン留め",
     "stock": "在庫",
     "switchContext": "コンテキストを切り替え",
-    "unstar": "ピン留めを解除"
+    "unstar": "ピン留めを解除",
+    "adminIdentity": "ID 管理"
   },
   "navbar": {
     "cart": "カート",
@@ -5417,5 +5427,92 @@
       "add": "アイテムを追加",
       "targetValue": "{{price}}以下でアラート"
     }
+  },
+  "adminIdentity": {
+    "actions": {
+      "deactivate": "アカウントを無効化",
+      "fixSpectrum": "Spectrum の連携を修正",
+      "reactivate": "アカウントを再有効化",
+      "releaseUsername": "ユーザー名を解放",
+      "unlinkDiscord": "Discord の連携を解除"
+    },
+    "columns": {
+      "discord": "Discord ID",
+      "displayName": "表示名",
+      "spectrum": "Spectrum ID",
+      "status": "状態",
+      "username": "ユーザー名"
+    },
+    "detail": {
+      "by": "実行者",
+      "change": "変更",
+      "created": "作成日時",
+      "deletedAt": "削除申請日時",
+      "deletionScheduled": "削除予定日時",
+      "discord": "Discord（連携）",
+      "discordColumn": "Discord（旧カラム）",
+      "discordColumnStale": "{{id}}（古い値：一致する連携なし）",
+      "displayName": "表示名",
+      "lastUsed": "最終ログイン",
+      "linkedAt": "連携日時",
+      "noProviders": "連携済みのログインはありません。",
+      "noRecent": "なし。",
+      "noSessions": "有効なセッションはありません。",
+      "primary": "メイン",
+      "providerId": "ID",
+      "providerType": "プロバイダー",
+      "providerUsername": "連携時の名前",
+      "providers": "連携済みのログイン",
+      "recent": "最近の ID 変更",
+      "role": "ロール",
+      "sessionAgent": "ブラウザー",
+      "sessionExpires": "有効期限",
+      "sessionRefreshed": "最終更新",
+      "sessions": "有効なセッション",
+      "spectrumId": "Spectrum ID",
+      "twins": "大文字・小文字だけが違う同じユーザー名のアカウント：{{names}}",
+      "userId": "ユーザー ID",
+      "when": "日時"
+    },
+    "dialog": {
+      "allowNoLogin": "Discord が唯一のログイン方法です。ログイン方法がない状態にしてもよい。",
+      "cancel": "キャンセル",
+      "deactivateBody": "このアカウントはログインも API トークンの利用もできなくなり、セッションはただちに終了します。",
+      "reactivateBody": "このアカウントは再びログインできます。",
+      "reason": "理由",
+      "reasonHelp": "必須、{{min}}〜{{max}} 文字。監査ログに残り、ユーザーには表示されません。",
+      "releaseBody": "{{username}} を仮のユーザー名（user_xxxxxxxx）に変更し、ハンドルを空けます。アカウントのほかの内容は変わりません。ユーザーには通知され、「ハンドルを同期」で現在の RSI ハンドルを取り戻せます。",
+      "spectrumBody": "削除は Spectrum ID と RSI 認証を外します。設定はほかのアカウントが持っていない Spectrum ID を書き込みます。ほかで使われている ID は決して移動しません。",
+      "spectrumClear": "削除",
+      "spectrumId": "Spectrum ID（数字のみ）",
+      "spectrumSet": "設定",
+      "stepUpNote": "過去 10 分以内に二要素コードを入力していない場合は、コードの入力を求められます。",
+      "unlinkBody": "このアカウントから Discord の連携と旧 Discord ID を外し、その Discord アカウントをほかで使えるようにします。ほかのアカウントには移しません。"
+    },
+    "done": "{{action}}：保存して監査ログに記録し、ユーザーに通知しました。",
+    "intro": "アカウントを探して ID の競合を解消します。連携済みの ID がアカウント間で移動することはありません。各操作はこのアカウントの値を外すか設定するだけです。変更にはすべて理由と新しい二要素コードが必要で、監査ログに記録され、ユーザーに通知されます。",
+    "kinds": {
+      "account_deactivated": "アカウントを無効化",
+      "account_reactivated": "アカウントを再有効化",
+      "discord_unlinked": "Discord の連携を解除",
+      "spectrum_cleared": "Spectrum の連携を削除",
+      "spectrum_set": "Spectrum ID を設定",
+      "username_released": "ユーザー名を解放"
+    },
+    "loading": "読み込み中...",
+    "locked": "削除済みアカウント、テストアカウント、サイト管理者はここでは変更できません。",
+    "noResults": "一致するアカウントはありません。",
+    "results": "検索結果",
+    "search": "検索",
+    "searchLabel": "ユーザー名、表示名、Discord ID、Spectrum ID、ユーザー ID",
+    "status": {
+      "admin": "サイト管理者",
+      "deactivated": "無効",
+      "deleted": "削除済み",
+      "deletionPending": "削除待ち",
+      "test": "テストアカウント",
+      "verified": "RSI 認証済み"
+    },
+    "title": "アカウントの ID"
   }
 }

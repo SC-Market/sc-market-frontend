@@ -1730,6 +1730,17 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/admin/test-accounts",
   },
   {
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/identity",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+      "LoggedInRoute",
+      "SiteAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/admin/identity",
+  },
+  {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > (layout:SiteAdminRoute) > /admin/notification-test",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
