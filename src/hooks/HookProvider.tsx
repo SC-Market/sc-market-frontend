@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   Alert,
   Box,
@@ -190,22 +190,39 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     }
   }, [localizedTheme, customOrg])
 
-  useEffect(() => {
-    if (useLightTheme === "system") {
-      // Remove cookie when system is selected
-      removeCookie("theme", { path: "/" })
-    } else {
-      // Save preference when light or dark is selected
-      setCookie("theme", useLightTheme, {
-        path: "/",
-        sameSite: "strict",
-        maxAge: 31536000, // 1 year in seconds
-      })
-    }
-  }, [useLightTheme, setCookie, removeCookie])
+  // Persist the visitor's choice when they make it (PreferencesControls),
+  // not from an effect on the state: while a prerendered page hydrates, the
+  // state is the build's default ("system") until useHydratedInitialState
+  // re-seeds it from the cookie, and an effect on it removed the stored
+  // "dark" (or custom) theme before the re-seed could read it.
+  const themeRef = useRef(useLightTheme)
+  themeRef.current = useLightTheme
+  const setTheme = useCallback<React.Dispatch<React.SetStateAction<ThemeChoice>>>(
+    (next) => {
+      const value = typeof next === "function" ? next(themeRef.current) : next
+      if (value === "system") {
+        removeCookie("theme", { path: "/" })
+      } else {
+        setCookie("theme", value, {
+          path: "/",
+          sameSite: "strict",
+          maxAge: 31536000, // 1 year in seconds
+        })
+      }
+      setUseLightTheme(value)
+    },
+    [setCookie, removeCookie, setUseLightTheme],
+  )
+  const themeContext = useMemo(
+    (): [ThemeChoice, React.Dispatch<React.SetStateAction<ThemeChoice>>] => [
+      useLightTheme,
+      setTheme,
+    ],
+    [useLightTheme, setTheme],
+  )
 
   return (
-    <LightThemeContext.Provider value={[useLightTheme, setUseLightTheme]}>
+    <LightThemeContext.Provider value={themeContext}>
       <ThemeProvider theme={localizedTheme}>
         <DrawerOpenProvider>{props.children}</DrawerOpenProvider>
       </ThemeProvider>
