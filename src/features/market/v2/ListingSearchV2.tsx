@@ -69,6 +69,8 @@ import { useAutoApplySearchParams, type AutoApplySearchParams } from "../hooks/u
 import { GroupedListingGrid } from "./redesign/GroupedListingGrid";
 import { BUY_ORDER_SORT_FIELDS } from "./buyOrderSort";
 import {
+  LISTING_CARD_HEIGHT,
+  LISTING_CARD_ROW_HEIGHT,
   LISTING_GRID_SKELETON_COUNT,
   listingSearchGridBreakpoints,
 } from "./marketSearchLayout";
@@ -77,6 +79,7 @@ import { isAwaitingData } from "../../../util/queryLoading"
 import { listingSearchArgs } from "./listingSearchArgs"
 import { useStartupGateOpen } from "../../../util/startupDeferral"
 import { CARD_CHIP_SX, cardChipStackSx } from "./cardChips"
+import { CardStub, firstScreenCards, useFirstScreenRender } from "../../../components/grid/firstScreen"
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -842,6 +845,11 @@ const ListingGridInner = React.forwardRef<HTMLDivElement, ListingGridProps>(
       return result;
     }, [listings]);
 
+    // Only the first screen of cards in the commit that shows the results;
+    // the rest right after (components/grid/firstScreen.tsx).
+    const firstScreen = firstScreenCards(gridBreakpoints, LISTING_CARD_ROW_HEIGHT);
+    const rendered = useFirstScreenRender(listingsWithAds.length, firstScreen.count);
+
     if (loading) {
       return (
         <Grid container spacing={1}>
@@ -873,9 +881,14 @@ const ListingGridInner = React.forwardRef<HTMLDivElement, ListingGridProps>(
         <Grid container spacing={1}>
           {listingsWithAds.map((item, index) => (
             <Grid item {...gridBreakpoints} key={'_isAd' in item ? `ad-${index}` : item.listing_id}>
-              {'_isAd' in item
-                ? <AdCard ad={item.ad} index={index} />
-                : <ListingCardV2 listing={item} index={index} />
+              {index >= rendered
+                ? <CardStub
+                    height={LISTING_CARD_HEIGHT}
+                    {...('_isAd' in item ? {} : { to: formatMarketUrl(item), label: item.title })}
+                  />
+                : '_isAd' in item
+                  ? <AdCard ad={item.ad} index={index} />
+                  : <ListingCardV2 listing={item} index={index} priority={index < firstScreen.priorityCount} />
               }
             </Grid>
           ))}
@@ -901,6 +914,8 @@ ListingGridInner.displayName = "ListingGrid";
 interface ListingCardV2Props {
   listing: ListingSearchResult;
   index: number;
+  /** In the grid's first rows: fetch the image at high priority. */
+  priority?: boolean;
 }
 
 /** Quality tier color: 1=grey, 2=green, 3=blue, 4=purple, 5=gold */
@@ -941,7 +956,7 @@ function qualityChipProps(listing: ListingSearchResult): { label: string; color:
   return null
 }
 
-export function ListingCardV2({ listing }: ListingCardV2Props) {
+export function ListingCardV2({ listing, priority = false }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -967,7 +982,7 @@ export function ListingCardV2({ listing }: ListingCardV2Props) {
           <CardActionArea
             sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
           >
-            <Card sx={{ height: 300, position: "relative" }}>
+            <Card sx={{ height: LISTING_CARD_HEIGHT, position: "relative" }}>
               {/* Corner chip stacks. Each corner is a flex column so chips can
                   never overlap regardless of which combination is present —
                   previously quality and NEW were both pinned to top-left for
@@ -1038,6 +1053,10 @@ export function ListingCardV2({ listing }: ListingCardV2Props) {
               <CardMedia
                 component="img"
                 loading="lazy"
+                // Intrinsic 16:9 size (CSS sets the displayed size).
+                width={320}
+                height={180}
+                fetchPriority={priority ? "high" : undefined}
                 image={listing.photo || FALLBACK_IMAGE_URL}
                 sx={{
                   width: "100%",

@@ -45,6 +45,13 @@ import {
 } from "../../profile/components/BannerContainers"
 import type { User } from "../../../datatypes/User"
 import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
+import { LISTING_CARD_HEIGHT } from "../../market/v2/marketSearchLayout"
+import {
+  CardStub,
+  firstScreenCards,
+  useFirstScreenRender,
+} from "../../../components/grid/firstScreen"
+import { formatMarketUrl } from "../../market/domain/urls"
 import { HapticTab } from "../../../components/haptic"
 import { a11yProps } from "../../../components/tabs/Tabs"
 import { ShareButton } from "../../../components/buttons/ShareButton"
@@ -484,6 +491,16 @@ export function ShopListingsTab(props: { slug: string }) {
   usePageReady(
     isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
   )
+  // Only the first screen of cards in the first commit; the rest right after
+  // (components/grid/firstScreen.tsx). Grid spacing={2}: a 16px row gap.
+  const firstScreen = firstScreenCards(
+    SHOP_LISTING_GRID_BREAKPOINTS,
+    LISTING_CARD_HEIGHT + 16,
+  )
+  const rendered = useFirstScreenRender(
+    data?.listings.length ?? 0,
+    firstScreen.count,
+  )
 
   return (
     <Box>
@@ -545,7 +562,19 @@ export function ShopListingsTab(props: { slug: string }) {
           <Grid container spacing={2}>
             {data.listings.map((listing, index) => (
               <Grid item {...SHOP_LISTING_GRID_BREAKPOINTS} key={listing.listing_id}>
-                <ListingCardV2 listing={listing} index={index} />
+                {index >= rendered ? (
+                  <CardStub
+                    height={LISTING_CARD_HEIGHT}
+                    to={formatMarketUrl(listing)}
+                    label={listing.title}
+                  />
+                ) : (
+                  <ListingCardV2
+                    listing={listing}
+                    index={index}
+                    priority={index < firstScreen.priorityCount}
+                  />
+                )}
               </Grid>
             ))}
           </Grid>

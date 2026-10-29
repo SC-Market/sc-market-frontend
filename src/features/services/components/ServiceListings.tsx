@@ -13,7 +13,17 @@ import {
   useGetPublicServicesQuery,
   ServicesQueryParams,
 } from "../api/servicesApi"
-import { ServiceListing } from "./ServiceListing"
+import {
+  SERVICE_LISTING_GRID_BREAKPOINTS,
+  ServiceListing,
+} from "./ServiceListing"
+import { SERVICE_CARD_HEIGHT } from "./ServiceListingCard"
+import { formatServiceUrl } from "../../../util/urls"
+import {
+  CardStub,
+  firstScreenCards,
+  useFirstScreenRender,
+} from "../../../components/grid/firstScreen"
 import { isAwaitingData } from "../../../util/queryLoading"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
@@ -95,6 +105,19 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     return servicesResponse.data
   }, [servicesResponse?.data, contractor, user, customOrg])
 
+  // Only the first screen of cards in the commit that shows the services;
+  // the rest right after (components/grid/firstScreen.tsx). The row gap is
+  // the grid's layout spacing.
+  const firstScreen = firstScreenCards(
+    SERVICE_LISTING_GRID_BREAKPOINTS,
+    SERVICE_CARD_HEIGHT +
+      Number.parseFloat(theme.spacing(theme.layoutSpacing.layout)),
+  )
+  const rendered = useFirstScreenRender(
+    displayedServices.length,
+    firstScreen.count,
+  )
+
   if (isAwaitingData({ isFetching, currentData })) {
     // The same cards as the route skeleton and the chunk fallbacks above.
     return <ServiceListingsSkeleton count={perPage} />
@@ -128,13 +151,28 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.layout}>
-          {displayedServices.map((service, index) => (
-            <ServiceListing
-              service={service}
-              key={service.service_id}
-              index={index}
-            />
-          ))}
+          {displayedServices.map((service, index) =>
+            index >= rendered ? (
+              <Grid
+                item
+                {...SERVICE_LISTING_GRID_BREAKPOINTS}
+                key={service.service_id}
+              >
+                <CardStub
+                  height={SERVICE_CARD_HEIGHT}
+                  to={formatServiceUrl(service)}
+                  label={service.service_name}
+                />
+              </Grid>
+            ) : (
+              <ServiceListing
+                service={service}
+                key={service.service_id}
+                index={index}
+                priority={index < firstScreen.priorityCount}
+              />
+            ),
+          )}
           {servicesResponse && displayedServices.length === 0 && (
             <Grid item xs={12}>
               <EmptyListings

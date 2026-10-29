@@ -22,9 +22,17 @@ import { PAYMENT_TYPE_MAP } from "../../../util/constants"
 import { formatServiceUrl } from "../../../util/urls"
 import { ServiceChips } from "./ServiceChips"
 
+/** A service card's height (the card under its link), at every width. */
+export const SERVICE_CARD_HEIGHT = 321
+
 export const ServiceListingBase = React.memo(
-  function ServiceListingBase(props: { service: Service; index: number }) {
-    const { service } = props
+  function ServiceListingBase(props: {
+    service: Service
+    index: number
+    /** In the list's first rows: fetch the image at high priority. */
+    priority?: boolean
+  }) {
+    const { service, priority = false } = props
     const { t } = useTranslation()
     const theme = useTheme<ExtendedTheme>()
     const key = PAYMENT_TYPE_MAP.get(service.payment_type) || ""
@@ -143,6 +151,14 @@ export const ServiceListingBase = React.memo(
                     }
                     variant={"rounded"}
                     sx={{ height: 128 + 32, width: 128 + 32 }}
+                    slotProps={{
+                      img: {
+                        loading: "lazy",
+                        width: 160,
+                        height: 160,
+                        fetchPriority: priority ? "high" : undefined,
+                      },
+                    }}
                   />
                 ) : (
                   <Box sx={{ height: 128 + 32 }} />
@@ -160,7 +176,8 @@ export const ServiceListingBase = React.memo(
       prevProps.service.service_id === nextProps.service.service_id &&
       prevProps.service.cost === nextProps.service.cost &&
       prevProps.service.status === nextProps.service.status &&
-      prevProps.index === nextProps.index
+      prevProps.index === nextProps.index &&
+      prevProps.priority === nextProps.priority
     )
   },
 )

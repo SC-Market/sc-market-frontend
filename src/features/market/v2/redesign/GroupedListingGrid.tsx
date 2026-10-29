@@ -42,6 +42,15 @@ import { MarketListingRating } from "../../../../components/rating/ListingRating
 import { isFungibleType } from "./fungibility"
 import { useFlip } from "./useFlip"
 import { ListingCardV2, type ListingGridProps } from "../ListingSearchV2"
+import {
+  LISTING_CARD_HEIGHT,
+  LISTING_CARD_ROW_HEIGHT,
+} from "../marketSearchLayout"
+import {
+  CardStub,
+  firstScreenCards,
+  useFirstScreenRender,
+} from "../../../../components/grid/firstScreen"
 import { CARD_CHIP_SX, cardChipStackSx } from "../cardChips"
 
 /**
@@ -275,6 +284,12 @@ const GroupedListingGridInner = React.forwardRef<
     return [...before, expandedItem, ...restWithout]
   }, [entries, expanded, columns])
 
+  // Only the first screen of cards in the commit that shows the results;
+  // the rest right after (components/grid/firstScreen.tsx).
+  const firstScreen = firstScreenCards(gridBreakpoints, LISTING_CARD_ROW_HEIGHT)
+  const rendered = useFirstScreenRender(entries.length, firstScreen.count)
+  const priority = (index: number) => index < firstScreen.priorityCount
+
   if (loading) {
     return (
       <Grid container spacing={1}>
@@ -305,9 +320,25 @@ const GroupedListingGridInner = React.forwardRef<
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <Grid container spacing={1}>
         {orderedEntries.map(({ entry, index }) =>
-          entry.kind === "single" ? (
+          index >= rendered ? (
             <Grid item {...gridBreakpoints} key={entry.key} ref={register(entry.key)}>
-              <ListingCardV2 listing={entry.listing} index={index} />
+              {entry.kind === "single" ? (
+                <CardStub
+                  height={LISTING_CARD_HEIGHT}
+                  to={formatMarketUrl(entry.listing)}
+                  label={entry.listing.title}
+                />
+              ) : (
+                <CardStub height={LISTING_CARD_HEIGHT} />
+              )}
+            </Grid>
+          ) : entry.kind === "single" ? (
+            <Grid item {...gridBreakpoints} key={entry.key} ref={register(entry.key)}>
+              <ListingCardV2
+                listing={entry.listing}
+                index={index}
+                priority={priority(index)}
+              />
             </Grid>
           ) : (
             <Grid
@@ -319,6 +350,7 @@ const GroupedListingGridInner = React.forwardRef<
               <GroupCard
                 listings={entry.listings}
                 index={index}
+                priority={priority(index)}
                 open={expanded === entry.key}
                 onToggle={() =>
                   setExpanded((cur) => (cur === entry.key ? null : entry.key))
@@ -348,11 +380,14 @@ GroupedListingGrid.displayName = "GroupedListingGrid"
 function GroupCard({
   listings,
   index,
+  priority,
   open,
   onToggle,
 }: {
   listings: ListingSearchResult[]
   index: number
+  /** In the grid's first rows: fetch the image at high priority. */
+  priority: boolean
   open: boolean
   onToggle: () => void
 }) {
@@ -464,6 +499,10 @@ function GroupCard({
             <CardMedia
               component="img"
               loading="lazy"
+              // Intrinsic 16:9 size (CSS sets the displayed size).
+              width={320}
+              height={180}
+              fetchPriority={priority ? "high" : undefined}
               image={cheapest.photo || FALLBACK_IMAGE_URL}
               sx={{
                 width: "100%",

@@ -52,5 +52,11 @@ export function buyOrderGridBreakpoints(
     : LISTING_GRID_BREAKPOINTS_WIDE
 }
 
+/** A listing card's height (ListingCardV2's Card, GroupCard collapsed). */
+export const LISTING_CARD_HEIGHT = 300
+
+/** A grid row of listing cards: the card plus the Grid's spacing={1} gap. */
+export const LISTING_CARD_ROW_HEIGHT = LISTING_CARD_HEIGHT + 8
+
 /** Skeleton cards the listing grid shows while a page of results loads. */
 export const LISTING_GRID_SKELETON_COUNT = 16
