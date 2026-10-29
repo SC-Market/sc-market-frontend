@@ -189,6 +189,8 @@ export function BlueprintBrowser() {
     // "Hide Unsourceable" (on by default) filters server-side, so every page
     // is full and `total` counts what is shown.
     sourceable: hideUnsourceable || undefined,
+    // "Has Mission Source" filters server-side too (mission_count > 0).
+    hasMissionSource: hasMissionSource || undefined,
     page,
     pageSize: 40,
   }, { refetchOnMountOrArgChange: true })
@@ -210,13 +212,6 @@ export function BlueprintBrowser() {
     allBlueprints.length === 0 && page === 1 && data?.blueprints
       ? data.blueprints
       : allBlueprints
-  const filteredBlueprints = useMemo(() => {
-    let result = shownBlueprints
-    if (hasMissionSource) {
-      result = result.filter((bp) => bp.mission_count > 0)
-    }
-    return result
-  }, [shownBlueprints, hasMissionSource])
 
   const hasMore = data ? page * data.page_size < data.total : false
   const loadMore = useCallback(() => setPage(p => p + 1), [])
@@ -379,7 +374,7 @@ export function BlueprintBrowser() {
               {/* Grid View */}
               {viewMode === "grid" && (
                 <Grid container spacing={2}>
-                  {filteredBlueprints.map((blueprint) => (
+                  {shownBlueprints.map((blueprint) => (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={blueprint.blueprint_id}>
                       <BlueprintCard
                         blueprint={blueprint}
@@ -409,7 +404,7 @@ export function BlueprintBrowser() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {filteredBlueprints.map((bp) => (
+                      {shownBlueprints.map((bp) => (
                         <TableRow
                           key={bp.blueprint_id}
                           hover
@@ -495,7 +490,7 @@ export function BlueprintBrowser() {
                 </Paper>
               )}
 
-              {filteredBlueprints.length === 0 && !isFetching && (
+              {shownBlueprints.length === 0 && !isFetching && (
                 <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
                   <Typography color="text.secondary">
                     No blueprints found. Try adjusting your filters.

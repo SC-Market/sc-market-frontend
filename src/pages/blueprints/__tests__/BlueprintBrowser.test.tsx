@@ -198,4 +198,28 @@ describe("BlueprintBrowser", () => {
     expect(searchArgs.at(-1)?.sourceable).toBeUndefined()
     window.history.pushState({}, "", "/")
   })
+
+  it("leaves the mission-source filter off by default", () => {
+    window.history.pushState({}, "", "/blueprints")
+    searchArgs.length = 0
+    renderWithProviders(<BlueprintBrowser />)
+    expect(searchArgs.at(-1)?.hasMissionSource).toBeUndefined()
+  })
+
+  it("asks the API for mission-sourced blueprints when Has Mission Source is on", () => {
+    window.history.pushState({}, "", "/blueprints?missions=true")
+    searchArgs.length = 0
+    renderWithProviders(<BlueprintBrowser />)
+    expect(searchArgs.at(-1)).toMatchObject({
+      hasMissionSource: true,
+      sourceable: true,
+      page: 1,
+      pageSize: 40,
+    })
+    // The server does the filtering: every returned blueprint is shown and
+    // the header total is the server's total.
+    expect(screen.getByText("Test Item")).toBeInTheDocument()
+    expect(screen.getByText("1")).toBeInTheDocument()
+    window.history.pushState({}, "", "/")
+  })
 })

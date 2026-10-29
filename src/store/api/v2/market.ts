@@ -1482,6 +1482,7 @@ const injectedRtkApi = api
             manufacturer: queryArg.manufacturer,
             ingredient_name: queryArg.ingredientName,
             sourceable: queryArg.sourceable,
+            has_mission_source: queryArg.hasMissionSource,
             version_id: queryArg.versionId,
             page: queryArg.page,
             page_size: queryArg.pageSize,
@@ -3225,6 +3226,8 @@ export type SearchBlueprintsApiArg = {
   ingredientName?: string
   /** Only blueprints a player can get: default blueprints (everyone has them) and blueprints rewarded by at least one mission */
   sourceable?: boolean
+  /** Only blueprints rewarded by at least one mission */
+  hasMissionSource?: boolean
   /** Game version ID (defaults to active LIVE version) */
   versionId?: string
   /** Page number (default: 1) */
