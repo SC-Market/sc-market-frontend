@@ -75,6 +75,27 @@
       "updating": "更新中...",
       "validation": {
         "invalidUrl": "請輸入有效的網址（http:// 或 https://）"
+      },
+      "channels": {
+        "label": "傳送方式",
+        "in_app": "站內",
+        "push": "推播",
+        "email": "電子郵件",
+        "discord_dm": "Discord 私訊",
+        "hint": "所選管道即使使用者已關閉也會送達，未選的管道不會使用。"
+      },
+      "preview": {
+        "recipients": "約 {{count}} 位收件者",
+        "emails": "電子郵件寄送至約 {{count}} 個已驗證地址",
+        "discord": "Discord 私訊傳送至約 {{count}} 個已連結帳號",
+        "pickOrg": "選擇組織以檢視受眾。",
+        "loading": "正在計算收件者…"
+      },
+      "confirmEmail": {
+        "title": "要寄送電子郵件給所有使用者嗎？",
+        "body": "這則警示將以電子郵件寄送給每位擁有已驗證地址的使用者，包括已關閉公告郵件的使用者。",
+        "cancel": "返回",
+        "confirm": "寄送電子郵件"
       }
     },
     "alerts.actions": "操作",
@@ -310,12 +331,14 @@
     "accept_necessary": "僅必要"
   },
   "footer": {
+    "about": "關於",
     "support": "支持",
     "discord": "Discord",
     "discordBot": "Discord機器人",
     "wiki": "維基",
     "donate": "捐贈",
     "github": "Github",
+    "helpGuides": "說明與指南",
     "privacyPolicy": "隱私政策",
     "termsOfService": "服務條款",
     "copyright": "著作權©",
@@ -540,6 +563,8 @@
     "accept": "同意",
     "decline": "拒絕",
     "new_bid_placed_by": "新出價來自",
+    "price_alert": "價格提醒：",
+    "price_alert_hit_target": "的刊登價格已達到或低於您的目標價",
     "for": "for",
     "clear_all": "清除全部通知",
     "mark_all_as_read": "全部已讀",
@@ -547,7 +572,7 @@
     "clear_all_failed": "清除通知失敗",
     "cleared_all": "已清除 {{count}} 則通知",
     "cleared_all_one": "notifications.cleared_all",
-    "cleared_all_other": "notifications.cleared_all",
+    "cleared_all_other": "已清除 {{count}} 則通知",
     "click_to_open_link": "點擊以開啟連結",
     "delete": "刪除",
     "mark_all_read_failed": "將通知標示為已讀失敗",
@@ -555,14 +580,20 @@
     "markAsUnread": "標示為未讀",
     "marked_all_read": "已將 {{count}} 則通知標示為已讀",
     "marked_all_read_one": "notifications.marked_all_read",
-    "marked_all_read_other": "notifications.marked_all_read",
+    "marked_all_read_other": "已將 {{count}} 則通知標示為已讀",
     "new_admin_alert": "您收到一則新的管理員警示",
     "new_offer_message_from": "新報價訊息來自",
     "notification": "通知",
     "reviewRevisionRequested": "{{requester}} 要求修改他們的評論",
     "share": "分享",
     "shareNotification": "看看這則通知",
-    "view_all": "檢視全部"
+    "view_all": "檢視全部",
+    "public_contract": "新的公開合約：",
+    "someone": "有人",
+    "org_member_joined": "{{who}} 加入了 {{org}}",
+    "offer_accepted": "{{who}} 接受了您的報價",
+    "offer_rejected": "{{who}} 拒絕了您的報價",
+    "contract_offer_received": "{{who}} 對您的合約提出了報價"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "爲此帖點贊"
@@ -640,6 +671,196 @@
   },
   "settings": {
     "title": "設置",
+    "notifications": {
+      "title": "通知",
+      "error": "無法載入或儲存您的通知設定。",
+      "scope": "設定對象",
+      "personal": "個人",
+      "locked": "一律開啟",
+      "customise": "自訂",
+      "channels": {
+        "in_app": "站內",
+        "push": "推播",
+        "email": "電子郵件",
+        "discord_dm": "Discord 私訊"
+      },
+      "categories": {
+        "orders": "訂單",
+        "order_messages": "訂單訊息",
+        "offers": "報價",
+        "offer_messages": "報價訊息",
+        "market": "市集出價",
+        "reviews": "評價",
+        "watchlist": "價格提醒",
+        "org": "組織邀請",
+        "announcements": "公告",
+        "reminders": "未讀訊息提醒",
+        "contracts": "公開合約"
+      },
+      "events": {
+        "order_created": "新訂單",
+        "order_assigned": "指派給您的訂單",
+        "order_status_not_started": "訂單尚未開始",
+        "order_status_in_progress": "訂單進行中",
+        "order_status_fulfilled": "訂單已完成",
+        "order_status_cancelled": "訂單已取消",
+        "order_message": "訂單訊息",
+        "order_review": "新評價",
+        "order_review_revision_requested": "評價修改要求",
+        "offer_created": "新報價",
+        "offer_countered": "還價",
+        "offer_message": "報價訊息",
+        "market_bid": "新出價",
+        "org_invite": "組織邀請",
+        "admin_alert": "公告",
+        "reminder_unread_messages": "未讀訊息提醒",
+        "watchlist_price_alert": "價格提醒",
+        "contract_public_created": "新的公開合約",
+        "offer_accepted": "報價已接受",
+        "offer_rejected": "報價已拒絕",
+        "contract_offer_received": "您的合約收到報價",
+        "org_member_joined": "新成員加入"
+      },
+      "tabs": {
+        "orders": "訂單與報價",
+        "messages": "訊息",
+        "market": "市集與追蹤清單",
+        "orgs": "組織與合約",
+        "account": "帳號"
+      },
+      "sections": {
+        "new": {
+          "label": "新訂單與報價",
+          "hint": "有人向您的商店下單或傳送報價給您。"
+        },
+        "updates": {
+          "label": "訂單與報價更新",
+          "hint": "您參與的訂單和報價有所變更。"
+        },
+        "reviews": {
+          "label": "評價",
+          "hint": "新評價與修改要求。"
+        },
+        "chats": {
+          "label": "訊息",
+          "hint": "訂單和報價聊天中的新訊息。"
+        },
+        "reminders": {
+          "label": "提醒",
+          "hint": "訊息等待超過一天時提醒您。"
+        },
+        "bids": {
+          "label": "出價",
+          "hint": "您的拍賣收到新出價。"
+        },
+        "watchlist": {
+          "label": "價格提醒",
+          "hint": "追蹤清單中的物品有公開刊登達到目標價。"
+        },
+        "org": {
+          "label": "組織",
+          "hint": "加入組織的邀請，以及有成員加入您的組織。"
+        },
+        "contracts": {
+          "label": "公開合約",
+          "hint": "您的公開合約收到的報價，以及新的公開合約（需在下方開啟）。"
+        },
+        "announcements": {
+          "label": "公告",
+          "hint": "來自 SC Market 團隊的訊息。一律送達。"
+        }
+      },
+      "rows": {
+        "new-order": {
+          "label": "新訂單",
+          "hint": "您商店的訂單，或指派給您的訂單"
+        },
+        "new-offer": {
+          "label": "新報價或還價"
+        },
+        "status": {
+          "label": "狀態變更",
+          "hint": "進行中、已完成、已取消"
+        },
+        "assigned": {
+          "label": "指派給您"
+        },
+        "decisions": {
+          "label": "報價遭接受或拒絕"
+        },
+        "review": {
+          "label": "新評價"
+        },
+        "revision": {
+          "label": "評價修改要求"
+        },
+        "order-messages": {
+          "label": "訂單訊息"
+        },
+        "offer-messages": {
+          "label": "報價訊息"
+        },
+        "reminder": {
+          "label": "未讀訊息提醒",
+          "hint": "每天最多一次"
+        },
+        "bid": {
+          "label": "新出價"
+        },
+        "price-alert": {
+          "label": "價格提醒"
+        },
+        "invite": {
+          "label": "組織邀請"
+        },
+        "contract-offer": {
+          "label": "您的合約收到報價"
+        },
+        "contract-new": {
+          "label": "新的公開合約",
+          "hint": "僅在下方開啟提醒後"
+        },
+        "admin": {
+          "label": "公告"
+        },
+        "member-joined": {
+          "label": "新成員加入",
+          "hint": "您可管理邀請的組織"
+        }
+      },
+      "subtitle": "選擇每種通知的接收方式。",
+      "scopeHint": "每個組織的工作通知都有各自的設定。",
+      "tabsLabel": "通知類別",
+      "mixed": "部分事件已開啟",
+      "linkDiscord": "連結 Discord 以接收私訊",
+      "personalOnly": "在「個人」中統一設定，適用於您的所有通知",
+      "comingSoon": "此通知尚不支援",
+      "manageWatchlist": "管理追蹤清單",
+      "status": {
+        "pushOn": "推播：此裝置已開啟",
+        "pushOff": "推播：此裝置尚未設定",
+        "emailOn": "電子郵件：已驗證",
+        "emailUnverified": "電子郵件：未驗證",
+        "emailNone": "電子郵件：無地址",
+        "discord": "Discord 私訊需要已連結的 Discord 帳號"
+      },
+      "mute": {
+        "label": "將此組織設為靜音",
+        "off": "未靜音",
+        "8h": "8 小時",
+        "1w": "1 週",
+        "on": "直到我重新開啟",
+        "until": "靜音至 {{time}}",
+        "active": "不會收到來自 {{org}} 的推播、電子郵件或 Discord 私訊。仍會顯示在您的通知中。",
+        "hint": "停止此組織的推播、電子郵件和 Discord 私訊。站內通知和公告仍會送達。"
+      }
+    },
+    "contractAlerts": {
+      "title": "新公開合約提醒",
+      "description": "有人張貼公開合約時，透過站內和推播通知提醒您。預設關閉。不勾選任何類型即接收所有類型。",
+      "error": "無法載入或儲存您的合約提醒。",
+      "toggle": "合約提醒對象"
+    },
     "tabs": {
       "profile": "個人資料",
       "privacy": "隱私",
@@ -692,6 +913,20 @@
       "usernames": "使用者名稱：",
       "verifyAccount": "驗證您的帳號",
       "verifyAccountDescription": "您需要驗證帳號才能使用所有功能。請選擇下列其中一種方式："
+    },
+    "priceAlerts": {
+      "title": "價格提醒",
+      "description": "當公開刊登達到您的目標價時，您會透過此處開啟的管道收到提醒。",
+      "site": "站內通知",
+      "siteHint": "顯示在您的 SC Market 通知中。",
+      "push": "推播通知",
+      "pushHint": "在您已啟用推播通知的手機和瀏覽器上。",
+      "email": "電子郵件",
+      "emailHint": "寄送至您已驗證的電子郵件地址。需手動開啟。",
+      "discord": "Discord 私訊",
+      "discordHint": "來自 SC Market 機器人的私訊。",
+      "error": "無法載入或儲存您的價格提醒設定。",
+      "channelsTitle": "提醒管道"
     },
     "email": {
       "addEmail": "新增電子郵件地址",
@@ -795,7 +1030,7 @@
       "organizationPreferences": "組織偏好設定",
       "otherDevices": "{{count}} 部其他裝置",
       "otherDevices_one": "settings.pushNotifications.otherDevices",
-      "otherDevices_other": "settings.pushNotifications.otherDevices",
+      "otherDevices_other": "{{count}} 部其他裝置",
       "otherDevices_plural": "{{count}} 部其他裝置",
       "permissionDeniedError": "權限{{status}}。請在瀏覽器設定中啟用通知。",
       "permissionDeniedMessage": "請在瀏覽器設定中啟用通知，以使用推播通知。",
@@ -810,7 +1045,7 @@
       "title": "推播通知",
       "totalDevices": "共 {{count}} 部裝置",
       "totalDevices_one": "settings.pushNotifications.totalDevices",
-      "totalDevices_other": "settings.pushNotifications.totalDevices",
+      "totalDevices_other": "共 {{count}} 部裝置",
       "totalDevices_plural": "共 {{count}} 部裝置",
       "unknownDevice": "未知裝置",
       "unsubscribe": "取消訂閱",
@@ -832,7 +1067,10 @@
       "regenerateTitle": "要重新產生權杖嗎？",
       "regenerateWarning": "這會使您目前的網址失效。您需要在 SCMDB 中更新它。",
       "snapshotWarning": "在啟用快照事件的情況下連接 SCMDB 會以 SCMDB 的資料取代您目前在 SC Market 上的藍圖追蹤。僅在 SC Market 上追蹤的藍圖將被標記為未擁有。",
-      "title": "SCMDB 同步"
+      "title": "SCMDB 同步",
+      "tokenActive": "同步權杖已啟用。其網址僅在建立時顯示；如需新網址，請重新產生權杖。",
+      "tokenHint": "末碼為 …{{hint}} 的同步權杖已啟用。其網址僅在建立時顯示；如需新網址，請重新產生權杖。",
+      "urlShownOnce": "請立即複製此網址。其中包含您的同步權杖，且不會再次顯示。若遺失，請重新產生權杖。"
     }
   },
   "sidebar": {
@@ -1161,6 +1399,7 @@
   },
   "recruiting_post": {
     "about": "關於我們",
+    "posting_for": "代表 {{org}} 張貼",
     "title_required": "標題*",
     "description_required": "簡介*",
     "submit": "提交",
@@ -1230,6 +1469,7 @@
   "profileNavAvatar": {
     "profile": "個人檔案",
     "settings": "設定",
+    "priceAlerts": "價格提醒",
     "logout": "登出"
   },
   "viewProfile": {
@@ -1591,17 +1831,17 @@
     "merge_error": "合併報價失敗",
     "merge_offers": "合併報價 ({{count}})",
     "merge_offers_one": "OffersViewPaginated.merge_offers",
-    "merge_offers_other": "OffersViewPaginated.merge_offers",
+    "merge_offers_other": "合併報價（{{count}}）",
     "merge_offers_combined_cost": "合計費用：{{cost}} aUEC",
     "merge_offers_confirm_body": "合併 {{count}} 個報價工作階段將建立一個新的合併報價工作階段，並關閉所選的工作階段。此動作無法復原。",
     "merge_offers_confirm_body_one": "OffersViewPaginated.merge_offers_confirm_body",
-    "merge_offers_confirm_body_other": "OffersViewPaginated.merge_offers_confirm_body",
+    "merge_offers_confirm_body_other": "合併 {{count}} 個報價工作階段將建立一個新的合併報價工作階段，並關閉所選的工作階段。此動作無法復原。",
     "merge_offers_confirm_button": "合併報價",
     "merge_offers_confirm_cancel": "取消",
     "merge_offers_confirm_title": "合併報價工作階段？",
     "merge_offers_selected_count": "已選擇：{{count}} 個報價工作階段",
     "merge_offers_selected_count_one": "OffersViewPaginated.merge_offers_selected_count",
-    "merge_offers_selected_count_other": "OffersViewPaginated.merge_offers_selected_count",
+    "merge_offers_selected_count_other": "已選擇：{{count}} 個報價工作階段",
     "merge_offers_warning": "所有選取的報價工作階段將被關閉，並以單一合併報價工作階段取代。",
     "merge_success": "報價合併成功",
     "seller": "賣家",
@@ -1706,6 +1946,7 @@
     "addWebhook": "新增 Discord 通知 Webhook",
     "webhookName": "Webhook 名稱",
     "webhookUrl": "Webhook 網址",
+    "publicContractCreated": "新的公開合約（全站）",
     "invalidUrl": "網址無效",
     "orderCreated": "訂單已建立",
     "orderAssigned": "訂單已指派給我",
@@ -1879,8 +2120,6 @@
     "failedSubmit": "送出失敗！{{error}}"
   },
   "MarketListingView": {
-    "seeOtherListings": "查看此物品的其他{{count}}個列表",
-    "averagePrice": "平均價格",
     "addedToCart": "已加入購物車！",
     "price": "價格",
     "ofAvailable": "共 {{count}} 件可購",
@@ -1905,7 +2144,7 @@
     "previousOrders": "先前的訂單",
     "anonymousReviewer": "匿名",
     "inCarts_one": "MarketListingView.inCarts",
-    "inCarts_other": "MarketListingView.inCarts",
+    "inCarts_other": "{{count}} 人已將此商品加入購物車",
     "languages": "語言",
     "noReviewContent": "無評論內容",
     "orders": "訂單",
@@ -1915,7 +2154,7 @@
     "sellerReviews": "{{seller}} 的評論",
     "viewAllReviews": "檢視全部 {{count}} 則評論",
     "viewAllReviews_one": "MarketListingView.viewAllReviews",
-    "viewAllReviews_other": "MarketListingView.viewAllReviews",
+    "viewAllReviews_other": "檢視全部 {{count}} 則評價",
     "viewInCart": "在購物車中檢視",
     "views": "瀏覽次數"
   },
@@ -2029,7 +2268,7 @@
     "orHigher": "高",
     "addToCart": "加入購物車",
     "ofAvailable_one": "MarketAggregateView.ofAvailable",
-    "ofAvailable_other": "MarketAggregateView.ofAvailable",
+    "ofAvailable_other": "，共 {{count}} 件可售",
     "quantityRequested": "需求（想要 ≥ 價格）",
     "stockAvailable": "供應（庫存 ≤ 價格）",
     "viewCount": "總瀏覽次數"
@@ -2102,12 +2341,12 @@
     "archive": "封存",
     "bulkArchiveBody": "您即將封存 {{count}} 則刊登。封存後對買家及公開搜尋而言是永久性的。您仍可在「我的刊登」下檢視已封存的刊登。",
     "bulkArchiveBody_one": "ItemStock.bulkArchiveBody",
-    "bulkArchiveBody_other": "ItemStock.bulkArchiveBody",
+    "bulkArchiveBody_other": "您即將封存 {{count}} 則刊登。封存後，買家和公開搜尋將永久無法看到這些刊登。您仍可在「我的刊登」中檢視已封存的刊登。",
     "bulkArchiveCancel": "取消",
     "bulkArchiveConfirm": "永久封存",
     "bulkArchivedSuccess": "已封存 {{count}} 則刊登。",
     "bulkArchivedSuccess_one": "ItemStock.bulkArchivedSuccess",
-    "bulkArchivedSuccess_other": "ItemStock.bulkArchivedSuccess",
+    "bulkArchivedSuccess_other": "已封存 {{count}} 則刊登。",
     "bulkArchiveTitle": "要封存所選刊登嗎？",
     "cannotReduceStock": "無法減少庫存 — 有單位已配置給進行中的訂單",
     "editingNewListing": "正在編輯新刊登...",
@@ -2518,7 +2757,7 @@
     "adding": "正在加入...",
     "addToCart": "加入購物車",
     "alreadyInCart_one": "cart.alreadyInCart",
-    "alreadyInCart_other": "cart.alreadyInCart",
+    "alreadyInCart_other": "購物車中已有 {{count}} 件",
     "available": "可用",
     "availableNow": "現在可用",
     "belowMinQty": "最小數量：{{min}}（購物車有 {{total}}）",
@@ -2534,7 +2773,7 @@
     "itemRemoved": "物品已從購物車移除",
     "nextAvailable": "下次可用",
     "othersInCart_one": "cart.othersInCart",
-    "othersInCart_other": "cart.othersInCart",
+    "othersInCart_other": "另有 {{count}} 人已將此商品加入購物車",
     "priceChanged": "價格已變更",
     "priceChangedFrom": "價格已從 {{old}} 變更為 {{new}} aUEC",
     "priceDecreased": "價格已降低",
@@ -2611,6 +2850,8 @@
     "topShopsEmpty": "尚無商店。",
     "topShopsError": "無法載入商店。",
     "sellTitle": "開始販售",
+    "seoDescription": "SC Market 是 Star Citizen 交易市集，玩家可以買賣、交易遊戲內物品，並僱用組織提供運輸、護航、醫療、打撈等服務——全部以 aUEC 交易。",
+    "seoTitle": "SC Market — Star Citizen 交易市集：以 aUEC 買賣和交易物品",
     "sellText": "以個人或組織身分開設商店。組織成員可以一起認領並完成訂單，共用同一個店面、庫存與信譽。",
     "sellStep1Title": "刊登",
     "sellStep1Text": "任何物品或服務，任意數量，以 aUEC 定價。",
@@ -2693,6 +2934,16 @@
     "goBackToPage": "返回頁面",
     "returnToDashboard": "返回儀表板",
     "pageTitle": "發生錯誤"
+  },
+  "help": {
+    "learnHow": "瞭解做法",
+    "aboutLink": "關於 SC Market",
+    "aboutPrompt": "SC Market 是什麼？",
+    "hubTitle": "說明與指南",
+    "loadFailed": "此指南載入失敗。請重新整理頁面再試一次。",
+    "moreIn": "更多{{category}}內容",
+    "newHere": "第一次使用 SC Market？",
+    "nextSteps": "後續步驟"
   },
   "org": {
     "orgTitle": "組織",
@@ -2962,7 +3213,7 @@
     "createMarketListing": "建立新的市集商品",
     "dataTableDescription": "包含 {{count}} 列的資料表",
     "dataTableDescription_one": "accessibility.dataTableDescription",
-    "dataTableDescription_other": "accessibility.dataTableDescription",
+    "dataTableDescription_other": "包含 {{count}} 列的資料表",
     "decorativeImage": "",
     "defaultListingHelp": "選擇此組合商品要顯示的預設商品",
     "defaultListingInput": "選擇預設商品",
@@ -2971,7 +3222,7 @@
     "downvoteComment": "為此留言按倒讚",
     "downvoteCount": "倒讚：{{count}}",
     "downvoteCount_one": "accessibility.downvoteCount",
-    "downvoteCount_other": "accessibility.downvoteCount",
+    "downvoteCount_other": "倒讚：{{count}}",
     "edit": "編輯",
     "editQuantityHelp": "編輯此庫存項目的可用數量",
     "editQuantityInput": "編輯可用數量",
@@ -3064,7 +3315,7 @@
     "recipientTypeHelp": "選擇要將款項傳送給使用者還是承包商",
     "recruitmentUpvoteCount": "讚：{{count}}",
     "recruitmentUpvoteCount_one": "accessibility.recruitmentUpvoteCount",
-    "recruitmentUpvoteCount_other": "accessibility.recruitmentUpvoteCount",
+    "recruitmentUpvoteCount_other": "讚：{{count}}",
     "registerShip": "註冊艦船",
     "registerShipHelp": "將所選艦船註冊至您的艦隊",
     "reportContent": "檢舉此內容",
@@ -3150,7 +3401,7 @@
     "upvoteComment": "為此留言按讚",
     "upvoteCount": "讚：{{count}}",
     "upvoteCount_one": "accessibility.upvoteCount",
-    "upvoteCount_other": "accessibility.upvoteCount",
+    "upvoteCount_other": "讚：{{count}}",
     "upvoteRecruitmentPost": "為此招募貼文按讚",
     "userAvatar": "{{username}} 的頭像",
     "view": "檢視",
@@ -3285,7 +3536,7 @@
     "placeBid": "出價",
     "time": "時間",
     "totalBids_one": "BidAreaV2.totalBids",
-    "totalBids_other": "BidAreaV2.totalBids",
+    "totalBids_other": "{{count}} 次出價",
     "yourBid": "您的出價（aUEC）"
   },
   "blocklist": {
@@ -3341,6 +3592,7 @@
   "BuyOrdersRedesign": {
     "by": "由 {{name}}",
     "cancel": "取消",
+    "cardLabel": "收購訂單：{{item}}，{{price}}，需求 {{quantity}}，剩餘 {{remaining}}",
     "createBuyOrder": "建立收購訂單",
     "empty": "目前沒有開放的收購訂單。",
     "error": "載入收購訂單失敗。",
@@ -3357,6 +3609,8 @@
     "newBuyOrder": "新收購訂單",
     "no": "否",
     "post": "張貼收購訂單",
+    "priceNegotiable": "歡迎報價",
+    "priceUnset": "未設定價格",
     "posted": "收購訂單已張貼。",
     "public": "公開",
     "quantityLabel": "數量",
@@ -3563,14 +3817,19 @@
     "craftedSource": "來源",
     "create": "建立批次",
     "createError": "建立批次失敗",
+    "createErrorReason": "建立批次失敗：{{reason}}",
     "createSuccess": "批次建立成功",
     "invalidQualityTier": "品質級距必須介於 1 與 5 之間",
     "invalidQualityValue": "品質數值必須介於 0 與 1000 之間",
     "invalidQuantity": "數量必須大於 0",
+    "item": "物品",
+    "itemRequired": "選擇要加入此批次的刊登（及物品）",
     "listed": "已上架",
     "listedHelper": "已上架的庫存會顯示在公開商品中",
+    "listing": "刊登",
     "location": "地點（選填）",
     "locationOwnership": "地點與擁有者",
+    "noItems": "此刊登沒有可加入庫存的物品",
     "none": "無",
     "notes": "備註（選填）",
     "notesPlaceholder": "新增有關此批次的任何備註...",
@@ -3589,7 +3848,7 @@
   "displayed_rows_one": "{{from}}-{{to}} 共 {{count}}",
   "displayed_rows_other": "{{from}}-{{to}} 共 {{count}}",
   "displayed_rows_range_one": "displayed_rows_range",
-  "displayed_rows_range_other": "displayed_rows_range",
+  "displayed_rows_range_other": "{{from}}–{{to}} / 共 {{count}}",
   "EditListingV2": {
     "about": "關於",
     "basePrice": "基本價格",
@@ -3688,6 +3947,22 @@
       "selectChat": "選擇聊天以開始傳訊",
       "sendMessage": "傳送訊息",
       "startConversation": "展開對話"
+    },
+    "noOrg": {
+      "browseOrgs": "瀏覽組織",
+      "description": "此頁面以您目前的組織為準。請選擇您的組織，或尋找可加入的組織。",
+      "myOrgs": "選擇組織",
+      "title": "選擇或加入組織以使用此頁面"
+    },
+    "noOrgPermission": {
+      "backToOrg": "前往 {{org}}",
+      "description": "您在此組織中的角色不包含此權限。如需存取，請洽詢組織管理員。",
+      "titles": {
+        "money": "您沒有管理此組織資金的權限",
+        "orders": "您沒有管理此組織訂單的權限",
+        "recruiting": "您沒有管理此組織招募的權限",
+        "settings": "您沒有管理此組織設定的權限"
+      }
     },
     "notifications": {
       "noNotifications": "無通知",
@@ -4051,6 +4326,7 @@
     "groupManage": "管理",
     "groupMarketplace": "市集",
     "groupPersonal": "個人",
+    "helpGuides": "說明與指南",
     "inventory": "庫存",
     "listings": "商品",
     "market": "市集",
@@ -4174,6 +4450,8 @@
     "allocationModeLabel": "應如何將庫存配置給訂單？",
     "allocationModeManual": "手動",
     "allocationModeManualDescription": "您手動選擇要將哪些庫存批次配置給每筆訂單",
+    "allocationModeMoved": "庫存配置模式依商店設定：請開啟商店的設定，在 庫存管理 › 配置模式 中調整。",
+    "allocationModeShops": "您的商店",
     "allocationModeNone": "無（舊版）",
     "allocationModeNoneDescription": "不進行實體配置 — 庫存僅在刊登層級追蹤",
     "allocationModeNote": "注意：此設定控制庫存如何實體配置給訂單。它與上方的庫存扣減時機設定無關，後者控制庫存何時對買家可見。",
@@ -4622,7 +4900,7 @@
     "sellerReviews": "{{seller}} 的評論",
     "viewAllReviews": "檢視全部 {{count}} 則評論",
     "viewAllReviews_one": "serviceView.viewAllReviews",
-    "viewAllReviews_other": "serviceView.viewAllReviews"
+    "viewAllReviews_other": "檢視全部 {{count}} 則評價"
   },
   "ShopSelector": {
     "created": "商店已建立：{{name}}",
@@ -4811,7 +5089,7 @@
     },
     "linkCopied": "連結已複製到剪貼簿",
     "remove": "移除",
-    "reset": "ui.reset",
+    "reset": "重設",
     "save": "儲存",
     "share": "分享",
     "yes": "是"
@@ -5101,5 +5379,43 @@
     "sortQuality": "品質",
     "sortStatus": "狀態",
     "totalItems": "物品總數"
+  },
+  "priceAlerts": {
+    "watch": {
+      "button": "追蹤價格",
+      "title": "追蹤價格",
+      "editTitle": "編輯價格提醒",
+      "explainer": "當 {{name}} 的刊登價格達到或低於您的目標價時提醒您。",
+      "targetPrice": "目標價",
+      "invalidPrice": "請輸入大於 1 aUEC 的整數。",
+      "currentLowest": "目前最低：{{price}}",
+      "noListings": "目前沒有公開刊登。",
+      "error": "無法儲存您的價格提醒。",
+      "stop": "停止追蹤",
+      "add": "追蹤價格",
+      "saved": "正在追蹤 {{name}}，目標價 ≤ {{price}}",
+      "removed": "已停止追蹤 {{name}}",
+      "watching": "追蹤中 ≤ {{price}}"
+    },
+    "manager": {
+      "title": "追蹤清單",
+      "description": "追蹤物品，當有公開刊登的價格達到或低於您的目標價時收到提醒。可在物品或刊登頁面點選「追蹤價格」、在此新增，或在 Discord 中使用 /watchlist add。",
+      "full": "您的追蹤清單已滿（{{max}} 項）。請移除一項後再新增。",
+      "loadError": "無法載入您的追蹤清單。",
+      "removeError": "無法移除該物品。",
+      "empty": "您尚未追蹤任何物品。",
+      "lowest": "目前最低",
+      "lastAlerted": "上次提醒",
+      "textMatch": "比對刊登標題",
+      "none": "尚無刊登",
+      "never": "從未",
+      "edit": "編輯目標價",
+      "editAria": "編輯 {{name}}",
+      "remove": "停止追蹤",
+      "removeAria": "停止追蹤 {{name}}",
+      "count": "{{count}} / {{max}} 項",
+      "add": "新增物品",
+      "targetValue": "≤ {{price}} 時提醒"
+    }
   }
 }

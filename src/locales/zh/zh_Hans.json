@@ -81,6 +81,27 @@
       "updating": "更新中...",
       "validation": {
         "invalidUrl": "请输入有效的 URL（http:// 或 https://）"
+      },
+      "channels": {
+        "label": "发送方式",
+        "in_app": "站内",
+        "push": "推送",
+        "email": "邮件",
+        "discord_dm": "Discord 私信",
+        "hint": "所选渠道即使用户已关闭也会送达，未选的渠道不会使用。"
+      },
+      "preview": {
+        "recipients": "约 {{count}} 位接收者",
+        "emails": "邮件发送至约 {{count}} 个已验证地址",
+        "discord": "Discord 私信发送至约 {{count}} 个已关联账户",
+        "pickOrg": "选择一个组织以查看受众。",
+        "loading": "正在统计接收者…"
+      },
+      "confirmEmail": {
+        "title": "向所有用户发送邮件？",
+        "body": "此提醒将通过邮件发送给每位拥有已验证地址的用户，包括已关闭公告邮件的用户。",
+        "cancel": "返回",
+        "confirm": "发送邮件"
       }
     },
     "alerts.actions": "操作",
@@ -316,12 +337,14 @@
     "accept_necessary": "仅必要"
   },
   "footer": {
+    "about": "关于",
     "support": "支持",
     "discord": "Discord",
     "discordBot": "Discord机器人",
     "wiki": "维基",
     "donate": "捐赠",
     "github": "Github",
+    "helpGuides": "帮助与指南",
     "privacyPolicy": "隐私政策",
     "termsOfService": "服务条款",
     "copyright": "著作权©",
@@ -546,6 +569,8 @@
     "accept": "同意",
     "decline": "拒绝",
     "new_bid_placed_by": "新出价，来自",
+    "price_alert": "价格提醒：",
+    "price_alert_hit_target": "的上架价格已达到或低于你的目标价",
     "for": "为",
     "clear_all": "清除全部通知",
     "mark_all_as_read": "全部已读",
@@ -553,7 +578,7 @@
     "clear_all_failed": "清除通知失败",
     "cleared_all": "已清除 {{count}} 条通知",
     "cleared_all_one": "notifications.cleared_all",
-    "cleared_all_other": "notifications.cleared_all",
+    "cleared_all_other": "已清除 {{count}} 条通知",
     "click_to_open_link": "点击以打开链接",
     "delete": "删除",
     "mark_all_read_failed": "将通知标记为已读失败",
@@ -561,14 +586,20 @@
     "markAsUnread": "标记为未读",
     "marked_all_read": "已将 {{count}} 条通知标记为已读",
     "marked_all_read_one": "notifications.marked_all_read",
-    "marked_all_read_other": "notifications.marked_all_read",
+    "marked_all_read_other": "已将 {{count}} 条通知标记为已读",
     "new_admin_alert": "你收到了一条新的管理员警报",
     "new_offer_message_from": "新报价消息来自",
     "notification": "通知",
     "reviewRevisionRequested": "{{requester}} 请求修改其评价",
     "share": "分享",
     "shareNotification": "查看此通知",
-    "view_all": "查看全部"
+    "view_all": "查看全部",
+    "public_contract": "新的公共合同：",
+    "someone": "有人",
+    "org_member_joined": "{{who}} 加入了 {{org}}",
+    "offer_accepted": "{{who}} 接受了你的报价",
+    "offer_rejected": "{{who}} 拒绝了你的报价",
+    "contract_offer_received": "{{who}} 对你的合同提出了报价"
   },
   "onboarding": {
     "welcome": "欢迎来到 SC Market",
@@ -701,6 +732,196 @@
   },
   "settings": {
     "title": "设置",
+    "notifications": {
+      "title": "通知",
+      "error": "无法加载或保存你的通知设置。",
+      "scope": "设置对象",
+      "personal": "个人",
+      "locked": "始终开启",
+      "customise": "自定义",
+      "channels": {
+        "in_app": "站内",
+        "push": "推送",
+        "email": "邮件",
+        "discord_dm": "Discord 私信"
+      },
+      "categories": {
+        "orders": "订单",
+        "order_messages": "订单消息",
+        "offers": "报价",
+        "offer_messages": "报价消息",
+        "market": "市场出价",
+        "reviews": "评价",
+        "watchlist": "价格提醒",
+        "org": "组织邀请",
+        "announcements": "公告",
+        "reminders": "未读消息提醒",
+        "contracts": "公共合同"
+      },
+      "events": {
+        "order_created": "新订单",
+        "order_assigned": "分配给你的订单",
+        "order_status_not_started": "订单未开始",
+        "order_status_in_progress": "订单进行中",
+        "order_status_fulfilled": "订单已完成",
+        "order_status_cancelled": "订单已取消",
+        "order_message": "订单消息",
+        "order_review": "新评价",
+        "order_review_revision_requested": "评价修改请求",
+        "offer_created": "新报价",
+        "offer_countered": "还价",
+        "offer_message": "报价消息",
+        "market_bid": "新出价",
+        "org_invite": "组织邀请",
+        "admin_alert": "公告",
+        "reminder_unread_messages": "未读消息提醒",
+        "watchlist_price_alert": "价格提醒",
+        "contract_public_created": "新的公共合同",
+        "offer_accepted": "报价已接受",
+        "offer_rejected": "报价已拒绝",
+        "contract_offer_received": "你的合同收到报价",
+        "org_member_joined": "新成员加入"
+      },
+      "tabs": {
+        "orders": "订单与报价",
+        "messages": "消息",
+        "market": "市场与关注列表",
+        "orgs": "组织与合同",
+        "account": "账户"
+      },
+      "sections": {
+        "new": {
+          "label": "新订单和报价",
+          "hint": "有人在你的店铺下单或向你发送报价。"
+        },
+        "updates": {
+          "label": "订单和报价更新",
+          "hint": "你参与的订单和报价发生变更。"
+        },
+        "reviews": {
+          "label": "评价",
+          "hint": "新评价和修改请求。"
+        },
+        "chats": {
+          "label": "消息",
+          "hint": "订单和报价聊天中的新消息。"
+        },
+        "reminders": {
+          "label": "提醒",
+          "hint": "消息等待超过一天时提醒你。"
+        },
+        "bids": {
+          "label": "出价",
+          "hint": "你的拍卖收到新出价。"
+        },
+        "watchlist": {
+          "label": "价格提醒",
+          "hint": "关注列表中的物品有公开商品达到目标价。"
+        },
+        "org": {
+          "label": "组织",
+          "hint": "加入组织的邀请，以及有成员加入你的组织。"
+        },
+        "contracts": {
+          "label": "公共合同",
+          "hint": "你的公共合同收到的报价，以及新的公共合同（需在下方开启）。"
+        },
+        "announcements": {
+          "label": "公告",
+          "hint": "来自 SC Market 团队的消息。始终送达。"
+        }
+      },
+      "rows": {
+        "new-order": {
+          "label": "新订单",
+          "hint": "你店铺的订单，或分配给你的订单"
+        },
+        "new-offer": {
+          "label": "新报价或还价"
+        },
+        "status": {
+          "label": "状态变更",
+          "hint": "进行中、已完成、已取消"
+        },
+        "assigned": {
+          "label": "分配给你"
+        },
+        "decisions": {
+          "label": "报价被接受或拒绝"
+        },
+        "review": {
+          "label": "新评价"
+        },
+        "revision": {
+          "label": "评价修改请求"
+        },
+        "order-messages": {
+          "label": "订单消息"
+        },
+        "offer-messages": {
+          "label": "报价消息"
+        },
+        "reminder": {
+          "label": "未读消息提醒",
+          "hint": "每天最多一次"
+        },
+        "bid": {
+          "label": "新出价"
+        },
+        "price-alert": {
+          "label": "价格提醒"
+        },
+        "invite": {
+          "label": "组织邀请"
+        },
+        "contract-offer": {
+          "label": "你的合同收到报价"
+        },
+        "contract-new": {
+          "label": "新的公共合同",
+          "hint": "仅在下方开启提醒后"
+        },
+        "admin": {
+          "label": "公告"
+        },
+        "member-joined": {
+          "label": "新成员加入",
+          "hint": "你可管理邀请的组织"
+        }
+      },
+      "subtitle": "选择每类通知的接收方式。",
+      "scopeHint": "每个组织的工作通知都有单独的设置。",
+      "tabsLabel": "通知类别",
+      "mixed": "部分事件已开启",
+      "linkDiscord": "关联 Discord 以接收私信",
+      "personalOnly": "在“个人”中统一设置，适用于你的所有通知",
+      "comingSoon": "此通知暂不支持",
+      "manageWatchlist": "管理关注列表",
+      "status": {
+        "pushOn": "推送：此设备已开启",
+        "pushOff": "推送：此设备未设置",
+        "emailOn": "邮箱：已验证",
+        "emailUnverified": "邮箱：未验证",
+        "emailNone": "邮箱：无地址",
+        "discord": "Discord 私信需要关联 Discord 账户"
+      },
+      "mute": {
+        "label": "将此组织静音",
+        "off": "未静音",
+        "8h": "8 小时",
+        "1w": "1 周",
+        "on": "直到我重新开启",
+        "until": "静音至 {{time}}",
+        "active": "不会收到来自 {{org}} 的推送、邮件或 Discord 私信。通知仍会显示在你的通知列表中。",
+        "hint": "停止此组织的推送、邮件和 Discord 私信。站内通知和公告仍会送达。"
+      }
+    },
+    "contractAlerts": {
+      "title": "新公共合同提醒",
+      "description": "有人发布公共合同时，通过站内和推送通知提醒你。默认关闭。不勾选任何类型即接收全部类型。",
+      "error": "无法加载或保存你的合同提醒。",
+      "toggle": "合同提醒对象"
+    },
     "tabs": {
       "profile": "个人资料",
       "privacy": "隐私",
@@ -753,6 +974,20 @@
       "usernames": "用户名：",
       "verifyAccount": "验证您的账户",
       "verifyAccountDescription": "您需要验证账户才能使用所有功能。请选择以下方式之一："
+    },
+    "priceAlerts": {
+      "title": "价格提醒",
+      "description": "当公开商品达到你的目标价时，你将通过此处开启的渠道收到提醒。",
+      "site": "站内通知",
+      "siteHint": "显示在你的 SC Market 通知中。",
+      "push": "推送通知",
+      "pushHint": "在你已启用推送通知的手机和浏览器上。",
+      "email": "邮件",
+      "emailHint": "发送至你已验证的邮箱地址。需手动开启。",
+      "discord": "Discord 私信",
+      "discordHint": "来自 SC Market 机器人的私信。",
+      "error": "无法加载或保存你的价格提醒设置。",
+      "channelsTitle": "提醒渠道"
     },
     "locale": {
       "title": "组织语言",
@@ -856,7 +1091,7 @@
       "organizationPreferences": "组织偏好设置",
       "otherDevices": "{{count}} 台其他设备",
       "otherDevices_one": "settings.pushNotifications.otherDevices",
-      "otherDevices_other": "settings.pushNotifications.otherDevices",
+      "otherDevices_other": "{{count}} 台其他设备",
       "otherDevices_plural": "{{count}} 台其他设备",
       "permissionDeniedError": "权限{{status}}。请在浏览器设置中启用通知。",
       "permissionDeniedMessage": "请在浏览器设置中启用通知以使用推送通知。",
@@ -871,7 +1106,7 @@
       "title": "推送通知",
       "totalDevices": "共 {{count}} 台设备",
       "totalDevices_one": "settings.pushNotifications.totalDevices",
-      "totalDevices_other": "settings.pushNotifications.totalDevices",
+      "totalDevices_other": "共 {{count}} 台设备",
       "totalDevices_plural": "共 {{count}} 台设备",
       "unknownDevice": "未知设备",
       "unsubscribe": "取消订阅",
@@ -893,7 +1128,10 @@
       "regenerateTitle": "重新生成令牌？",
       "regenerateWarning": "这将使您当前的 URL 失效。您需要在 SCMDB 中更新它。",
       "snapshotWarning": "在启用快照事件的情况下连接 SCMDB，将用 SCMDB 的数据替换您在 SC Market 上当前的蓝图追踪。仅在 SC Market 上追踪的蓝图将被标记为未拥有。",
-      "title": "SCMDB 同步"
+      "title": "SCMDB 同步",
+      "tokenActive": "同步令牌已启用。其 URL 仅在创建时显示；如需新的 URL，请重新生成令牌。",
+      "tokenHint": "尾号为 …{{hint}} 的同步令牌已启用。其 URL 仅在创建时显示；如需新的 URL，请重新生成令牌。",
+      "urlShownOnce": "请立即复制此 URL。它包含你的同步令牌，且不会再次显示。如果丢失，请重新生成令牌。"
     }
   },
   "sidebar": {
@@ -1218,6 +1456,7 @@
   },
   "recruiting_post": {
     "about": "关于我们",
+    "posting_for": "代表 {{org}} 发布",
     "title_required": "标题*",
     "description_required": "简介*",
     "submit": "提交",
@@ -1287,6 +1526,7 @@
   "profileNavAvatar": {
     "profile": "个人资料",
     "settings": "设置",
+    "priceAlerts": "价格提醒",
     "logout": "退出登录"
   },
   "viewProfile": {
@@ -1656,11 +1896,11 @@
     "has_market_listings": "含市场商品",
     "has_service": "含服务",
     "merge_offers_one": "OffersViewPaginated.merge_offers",
-    "merge_offers_other": "OffersViewPaginated.merge_offers",
+    "merge_offers_other": "合并报价（{{count}}）",
     "merge_offers_confirm_body_one": "OffersViewPaginated.merge_offers_confirm_body",
-    "merge_offers_confirm_body_other": "OffersViewPaginated.merge_offers_confirm_body",
+    "merge_offers_confirm_body_other": "合并 {{count}} 个报价会话将创建一个新的合并报价会话，并关闭所选会话。此操作无法撤销。",
     "merge_offers_selected_count_one": "OffersViewPaginated.merge_offers_selected_count",
-    "merge_offers_selected_count_other": "OffersViewPaginated.merge_offers_selected_count",
+    "merge_offers_selected_count_other": "已选择：{{count}} 个报价会话",
     "seller": "卖家",
     "seller_username": "卖家用户名",
     "seller_username_placeholder": "输入卖家用户名或 spectrum ID",
@@ -1763,6 +2003,7 @@
     "addWebhook": "添加 Discord 通知 Webhook",
     "webhookName": "Webhook 名称",
     "webhookUrl": "Webhook 链接",
+    "publicContractCreated": "新的公共合同（全站）",
     "invalidUrl": "无效的链接",
     "orderCreated": "订单已创建",
     "orderAssigned": "分配给我的订单",
@@ -1936,8 +2177,6 @@
     "failedSubmit": "提交失败！{{error}}"
   },
   "MarketListingView": {
-    "seeOtherListings": "查看此物品的其他{{count}}个列表",
-    "averagePrice": "平均价格",
     "addedToCart": "已加入购物车！",
     "price": "价格",
     "ofAvailable": "，共 {{count}} 件可用",
@@ -1963,7 +2202,7 @@
     "previousOrders": "历史订单",
     "anonymousReviewer": "匿名",
     "inCarts_one": "MarketListingView.inCarts",
-    "inCarts_other": "MarketListingView.inCarts",
+    "inCarts_other": "{{count}} 人已将此商品加入购物车",
     "languages": "语言",
     "noReviewContent": "无评价内容",
     "otherListingsFrom": "{{seller}} 的其他商品",
@@ -1972,7 +2211,7 @@
     "sellerReviews": "{{seller}} 的评价",
     "viewAllReviews": "查看全部 {{count}} 条评价",
     "viewAllReviews_one": "MarketListingView.viewAllReviews",
-    "viewAllReviews_other": "MarketListingView.viewAllReviews",
+    "viewAllReviews_other": "查看全部 {{count}} 条评价",
     "viewInCart": "在购物车中查看",
     "views": "浏览量"
   },
@@ -2110,7 +2349,7 @@
     "orHigher": "更高",
     "addToCart": "加入购物车",
     "ofAvailable_one": "MarketAggregateView.ofAvailable",
-    "ofAvailable_other": "MarketAggregateView.ofAvailable",
+    "ofAvailable_other": "，共 {{count}} 件可用",
     "quantityRequested": "需求（想要 ≥ 价格）",
     "stockAvailable": "供应（库存 ≤ 价格）",
     "viewCount": "总浏览量"
@@ -2186,12 +2425,12 @@
     "archive": "归档",
     "bulkArchiveBody": "您即将归档 {{count}} 个商品条目。归档对买家和公开搜索而言是永久性的。您仍可在“我的商品条目”下查看已归档的条目。",
     "bulkArchiveBody_one": "ItemStock.bulkArchiveBody",
-    "bulkArchiveBody_other": "ItemStock.bulkArchiveBody",
+    "bulkArchiveBody_other": "你即将归档 {{count}} 个商品。归档后，买家和公开搜索将永久无法看到这些商品。你仍可在“我的商品”中查看已归档的商品。",
     "bulkArchiveCancel": "取消",
     "bulkArchiveConfirm": "永久归档",
     "bulkArchivedSuccess": "已归档 {{count}} 个商品条目。",
     "bulkArchivedSuccess_one": "ItemStock.bulkArchivedSuccess",
-    "bulkArchivedSuccess_other": "ItemStock.bulkArchivedSuccess",
+    "bulkArchivedSuccess_other": "已归档 {{count}} 个商品。",
     "bulkArchiveTitle": "归档所选商品条目？",
     "cannotReduceStock": "无法减少库存 — 部分单位已被分配给活动订单",
     "editingNewListing": "正在编辑新商品条目...",
@@ -2610,7 +2849,7 @@
     "adding": "正在添加...",
     "addToCart": "加入购物车",
     "alreadyInCart_one": "cart.alreadyInCart",
-    "alreadyInCart_other": "cart.alreadyInCart",
+    "alreadyInCart_other": "购物车中已有 {{count}} 件",
     "available": "可用",
     "availableNow": "现在可用",
     "belowMinQty": "最小数量：{{min}}（购物车有 {{total}}）",
@@ -2626,7 +2865,7 @@
     "itemRemoved": "物品已从购物车移除",
     "nextAvailable": "下次可用",
     "othersInCart_one": "cart.othersInCart",
-    "othersInCart_other": "cart.othersInCart",
+    "othersInCart_other": "另有 {{count}} 人已将此商品加入购物车",
     "priceChanged": "价格已变动",
     "priceChangedFrom": "价格从 {{old}} 变为 {{new}} aUEC",
     "priceDecreased": "价格下降",
@@ -2703,6 +2942,8 @@
     "topShopsEmpty": "暂无商店。",
     "topShopsError": "无法加载商店。",
     "sellTitle": "开始出售",
+    "seoDescription": "SC Market 是 Star Citizen 交易市场，玩家可以买卖、交易游戏内物品，并雇佣组织提供运输、护航、医疗、打捞等服务——全部以 aUEC 结算。",
+    "seoTitle": "SC Market — Star Citizen 交易市场：用 aUEC 买卖和交易物品",
     "sellText": "以个人或组织身份开设商店。组织成员可以共同认领并完成订单，共享同一个店面、库存和信誉。",
     "sellStep1Title": "上架",
     "sellStep1Text": "任何物品或服务，任意数量，以 aUEC 定价。",
@@ -2785,6 +3026,16 @@
     "goBackToPage": "返回页面",
     "returnToDashboard": "返回仪表盘",
     "pageTitle": "发生错误"
+  },
+  "help": {
+    "learnHow": "了解方法",
+    "aboutLink": "关于 SC Market",
+    "aboutPrompt": "SC Market 是什么？",
+    "hubTitle": "帮助与指南",
+    "loadFailed": "此指南加载失败。请刷新页面重试。",
+    "moreIn": "更多{{category}}内容",
+    "newHere": "初次使用 SC Market？",
+    "nextSteps": "后续步骤"
   },
   "org": {
     "orgTitle": "组织",
@@ -3040,7 +3291,7 @@
     "cancel": "取消",
     "linkCopied": "链接已复制到剪贴板",
     "remove": "移除",
-    "reset": "ui.reset",
+    "reset": "重置",
     "save": "保存",
     "share": "分享",
     "yes": "是"
@@ -3103,7 +3354,7 @@
     "createMarketListing": "创建新的市场商品",
     "dataTableDescription": "包含 {{count}} 行的数据表",
     "dataTableDescription_one": "accessibility.dataTableDescription",
-    "dataTableDescription_other": "accessibility.dataTableDescription",
+    "dataTableDescription_other": "包含 {{count}} 行的数据表",
     "decorativeImage": "",
     "defaultListingHelp": "选择此组合商品要显示的默认商品",
     "defaultListingInput": "选择默认商品",
@@ -3112,7 +3363,7 @@
     "downvoteComment": "为此评论点踩",
     "downvoteCount": "点踩数：{{count}}",
     "downvoteCount_one": "accessibility.downvoteCount",
-    "downvoteCount_other": "accessibility.downvoteCount",
+    "downvoteCount_other": "点踩数：{{count}}",
     "edit": "编辑",
     "endTimeHelp": "选择此次拍卖的结束时间",
     "endTimeInput": "选择拍卖结束时间",
@@ -3203,7 +3454,7 @@
     "recipientTypeHelp": "选择向用户还是承包商转账",
     "recruitmentUpvoteCount": "点赞数：{{count}}",
     "recruitmentUpvoteCount_one": "accessibility.recruitmentUpvoteCount",
-    "recruitmentUpvoteCount_other": "accessibility.recruitmentUpvoteCount",
+    "recruitmentUpvoteCount_other": "点赞数：{{count}}",
     "registerShip": "登记飞船",
     "registerShipHelp": "将所选飞船登记到你的舰队",
     "reportContent": "举报此内容",
@@ -3285,7 +3536,7 @@
     "upvoteComment": "为此评论点赞",
     "upvoteCount": "点赞数：{{count}}",
     "upvoteCount_one": "accessibility.upvoteCount",
-    "upvoteCount_other": "accessibility.upvoteCount",
+    "upvoteCount_other": "点赞数：{{count}}",
     "upvoteRecruitmentPost": "为此招募帖点赞",
     "userAvatar": "{{username}} 的头像",
     "view": "查看",
@@ -3418,7 +3669,7 @@
     "placeBid": "出价",
     "time": "时间",
     "totalBids_one": "BidAreaV2.totalBids",
-    "totalBids_other": "BidAreaV2.totalBids",
+    "totalBids_other": "{{count}} 次出价",
     "yourBid": "你的出价 (aUEC)"
   },
   "blocklist": {
@@ -3474,6 +3725,7 @@
   "BuyOrdersRedesign": {
     "by": "由 {{name}}",
     "cancel": "取消",
+    "cardLabel": "求购订单：{{item}}，{{price}}，需求 {{quantity}}，剩余 {{remaining}}",
     "createBuyOrder": "创建求购订单",
     "empty": "目前没有开放的求购订单。",
     "error": "加载求购订单失败。",
@@ -3490,6 +3742,8 @@
     "newBuyOrder": "新建求购订单",
     "no": "否",
     "post": "发布求购订单",
+    "priceNegotiable": "欢迎报价",
+    "priceUnset": "未设定价格",
     "posted": "求购订单已发布。",
     "public": "公开",
     "quantityLabel": "数量",
@@ -3700,14 +3954,19 @@
     "craftedSource": "来源",
     "create": "创建批次",
     "createError": "创建批次失败",
+    "createErrorReason": "创建批次失败：{{reason}}",
     "createSuccess": "批次创建成功",
     "invalidQualityTier": "质量档位必须在 1 到 5 之间",
     "invalidQualityValue": "质量值必须在 0 到 1000 之间",
     "invalidQuantity": "数量必须大于 0",
+    "item": "物品",
+    "itemRequired": "选择要添加此批次的商品（及物品）",
     "listed": "已上架",
     "listedHelper": "已上架的库存会出现在公开的商品条目中",
+    "listing": "商品",
     "location": "位置（可选）",
     "locationOwnership": "位置与所有权",
+    "noItems": "此商品没有可添加库存的物品",
     "none": "无",
     "notes": "备注（可选）",
     "notesPlaceholder": "添加关于此批次的任何备注...",
@@ -3726,7 +3985,7 @@
   "displayed_rows_one": "{{from}}-{{to}}，共 {{count}}",
   "displayed_rows_other": "{{from}}-{{to}}，共 {{count}}",
   "displayed_rows_range_one": "displayed_rows_range",
-  "displayed_rows_range_other": "displayed_rows_range",
+  "displayed_rows_range_other": "{{from}}–{{to}} / 共 {{count}}",
   "EditListingV2": {
     "about": "关于",
     "basePrice": "基础价格",
@@ -3825,6 +4084,22 @@
       "selectChat": "选择一个聊天以开始发消息",
       "sendMessage": "发送消息",
       "startConversation": "开始会话"
+    },
+    "noOrg": {
+      "browseOrgs": "浏览组织",
+      "description": "此页面基于你当前的组织。请选择你的一个组织，或寻找可加入的组织。",
+      "myOrgs": "选择组织",
+      "title": "选择或加入一个组织以使用此页面"
+    },
+    "noOrgPermission": {
+      "backToOrg": "前往 {{org}}",
+      "description": "你在此组织中的角色不包含此权限。如需访问，请联系组织管理员。",
+      "titles": {
+        "money": "你没有管理此组织资金的权限",
+        "orders": "你没有管理此组织订单的权限",
+        "recruiting": "你没有管理此组织招募的权限",
+        "settings": "你没有管理此组织设置的权限"
+      }
     },
     "notifications": {
       "noNotifications": "暂无通知",
@@ -4188,6 +4463,7 @@
     "groupManage": "管理",
     "groupMarketplace": "市场",
     "groupPersonal": "个人",
+    "helpGuides": "帮助与指南",
     "inventory": "库存",
     "listings": "商品",
     "market": "市场",
@@ -4256,6 +4532,8 @@
     "allocationModeLabel": "库存应如何分配给订单？",
     "allocationModeManual": "手动",
     "allocationModeManualDescription": "您手动选择将哪些库存批次分配给每个订单",
+    "allocationModeMoved": "库存分配模式按店铺设置：请打开店铺的设置，在 库存管理 › 分配模式 中调整。",
+    "allocationModeShops": "你的店铺",
     "allocationModeNone": "无（旧版）",
     "allocationModeNoneDescription": "无实物分配 — 库存仅在商品条目层级追踪",
     "allocationModeNote": "注意：此设置控制库存如何实物分配给订单。它独立于上方的库存扣减时机设置，后者控制库存何时对买家可见。",
@@ -4680,7 +4958,7 @@
     "sellerReviews": "{{seller}} 的评价",
     "viewAllReviews": "查看全部 {{count}} 条评价",
     "viewAllReviews_one": "serviceView.viewAllReviews",
-    "viewAllReviews_other": "serviceView.viewAllReviews"
+    "viewAllReviews_other": "查看全部 {{count}} 条评价"
   },
   "ShopSelector": {
     "created": "店铺已创建：{{name}}",
@@ -5107,5 +5385,43 @@
     "sortQuality": "品质",
     "sortStatus": "状态",
     "totalItems": "物品总数"
+  },
+  "priceAlerts": {
+    "watch": {
+      "button": "关注价格",
+      "title": "关注价格",
+      "editTitle": "编辑价格提醒",
+      "explainer": "当 {{name}} 的上架价格达到或低于你的目标价时提醒你。",
+      "targetPrice": "目标价",
+      "invalidPrice": "请输入大于 1 aUEC 的整数。",
+      "currentLowest": "当前最低：{{price}}",
+      "noListings": "目前没有公开商品。",
+      "error": "无法保存你的价格提醒。",
+      "stop": "取消关注",
+      "add": "关注价格",
+      "saved": "正在关注 {{name}}，目标价 ≤ {{price}}",
+      "removed": "已取消关注 {{name}}",
+      "watching": "关注中 ≤ {{price}}"
+    },
+    "manager": {
+      "title": "关注列表",
+      "description": "关注物品，当有公开商品的价格达到或低于你的目标价时收到提醒。可在物品或商品页面点击“关注价格”，在此处添加，或在 Discord 中使用 /watchlist add。",
+      "full": "你的关注列表已满（{{max}} 件）。请移除一件后再添加。",
+      "loadError": "无法加载你的关注列表。",
+      "removeError": "无法移除该物品。",
+      "empty": "你还没有关注任何物品。",
+      "lowest": "当前最低",
+      "lastAlerted": "上次提醒",
+      "textMatch": "匹配商品标题",
+      "none": "暂无上架",
+      "never": "从未",
+      "edit": "编辑目标价",
+      "editAria": "编辑 {{name}}",
+      "remove": "取消关注",
+      "removeAria": "取消关注 {{name}}",
+      "count": "{{count}} / {{max}} 件",
+      "add": "添加物品",
+      "targetValue": "≤ {{price}} 时提醒"
+    }
   }
 }

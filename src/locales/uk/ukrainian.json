@@ -75,6 +75,27 @@
       "updating": "Оновлення...",
       "validation": {
         "invalidUrl": "Будь ласка, введіть коректну URL-адресу (http:// або https://)"
+      },
+      "channels": {
+        "label": "Канали надсилання",
+        "in_app": "У застосунку",
+        "push": "Push",
+        "email": "Email",
+        "discord_dm": "Особисті повідомлення Discord",
+        "hint": "Вибрані канали спрацюють навіть для користувачів, які їх вимкнули. Інші канали не використовуються."
+      },
+      "preview": {
+        "recipients": "Отримувачів: ~{{count}}",
+        "emails": "Email: ~{{count}} підтверджених адрес",
+        "discord": "Особисті повідомлення Discord: ~{{count}} прив'язаних облікових записів",
+        "pickOrg": "Виберіть організацію, щоб побачити аудиторію.",
+        "loading": "Підрахунок отримувачів…"
+      },
+      "confirmEmail": {
+        "title": "Надіслати email усім користувачам?",
+        "body": "Це сповіщення буде надіслано електронною поштою кожному користувачу з підтвердженою адресою, зокрема тим, хто вимкнув листи з оголошеннями.",
+        "cancel": "Повернутися",
+        "confirm": "Надіслати email"
       }
     },
     "alerts.actions": "Дії",
@@ -310,12 +331,14 @@
     "accept_necessary": "Лише необхідні"
   },
   "footer": {
+    "about": "Про нас",
     "support": "Підтримка",
     "discord": "Discord",
     "discordBot": "Discord-бот",
     "wiki": "Вікі",
     "donate": "Пожертвувати",
     "github": "Github",
+    "helpGuides": "Довідка та посібники",
     "privacyPolicy": "Політика конфіденційності",
     "termsOfService": "Умови користування",
     "copyright": "Авторське право ©",
@@ -540,29 +563,41 @@
     "accept": "Прийняти",
     "decline": "Відхилити",
     "new_bid_placed_by": "Нова ставка від",
+    "price_alert": "Цінове сповіщення:",
+    "price_alert_hit_target": "виставлено за вашою цільовою ціною або нижче",
     "for": "для",
     "clear_all": "Очистити всі сповіщення",
     "mark_all_as_read": "Позначити всі як прочитані",
     "admin_alert": "Сповіщення адміністратора",
     "clear_all_failed": "Не вдалося очистити сповіщення",
     "cleared_all": "Очищено {{count}} сповіщень",
-    "cleared_all_one": "notifications.cleared_all",
-    "cleared_all_other": "notifications.cleared_all",
+    "cleared_all_one": "Очищено {{count}} сповіщення",
+    "cleared_all_few": "Очищено {{count}} сповіщення",
+    "cleared_all_many": "Очищено {{count}} сповіщень",
+    "cleared_all_other": "Очищено {{count}} сповіщення",
     "click_to_open_link": "Натисніть, щоб відкрити посилання",
     "delete": "Видалити",
     "mark_all_read_failed": "Не вдалося позначити сповіщення як прочитані",
     "markAsRead": "Позначити як прочитане",
     "markAsUnread": "Позначити як непрочитане",
     "marked_all_read": "Позначено {{count}} сповіщень як прочитані",
-    "marked_all_read_one": "notifications.marked_all_read",
-    "marked_all_read_other": "notifications.marked_all_read",
+    "marked_all_read_one": "Позначено {{count}} сповіщення як прочитане",
+    "marked_all_read_few": "Позначено {{count}} сповіщення як прочитані",
+    "marked_all_read_many": "Позначено {{count}} сповіщень як прочитані",
+    "marked_all_read_other": "Позначено {{count}} сповіщення як прочитані",
     "new_admin_alert": "Ви отримали нове сповіщення адміністратора",
     "new_offer_message_from": "Нове повідомлення про пропозицію від",
     "notification": "Сповіщення",
     "reviewRevisionRequested": "{{requester}} запросив перегляд свого відгуку",
     "share": "Поділитися",
     "shareNotification": "Перегляньте це сповіщення",
-    "view_all": "Переглянути все"
+    "view_all": "Переглянути все",
+    "public_contract": "Новий публічний контракт:",
+    "someone": "Хтось",
+    "org_member_joined": "{{who}} приєднується до {{org}}",
+    "offer_accepted": "{{who}} приймає вашу пропозицію",
+    "offer_rejected": "{{who}} відхиляє вашу пропозицію",
+    "contract_offer_received": "{{who}} надсилає пропозицію щодо вашого контракту"
   },
   "onboarding": {
     "welcome": "Ласкаво просимо до SC Market",
@@ -695,6 +730,196 @@
   },
   "settings": {
     "title": "Налаштування",
+    "notifications": {
+      "title": "Сповіщення",
+      "error": "Не вдалося завантажити або зберегти налаштування сповіщень.",
+      "scope": "Налаштування для",
+      "personal": "Особисті",
+      "locked": "Завжди ввімкнено",
+      "customise": "Налаштувати",
+      "channels": {
+        "in_app": "У застосунку",
+        "push": "Push",
+        "email": "Email",
+        "discord_dm": "Особисті повідомлення Discord"
+      },
+      "categories": {
+        "orders": "Замовлення",
+        "order_messages": "Повідомлення в замовленнях",
+        "offers": "Пропозиції",
+        "offer_messages": "Повідомлення в пропозиціях",
+        "market": "Ставки на ринку",
+        "reviews": "Відгуки",
+        "watchlist": "Цінові сповіщення",
+        "org": "Запрошення до організацій",
+        "announcements": "Оголошення від команди",
+        "reminders": "Нагадування про непрочитані повідомлення",
+        "contracts": "Публічні контракти"
+      },
+      "events": {
+        "order_created": "Нове замовлення",
+        "order_assigned": "Замовлення призначено вам",
+        "order_status_not_started": "Замовлення не розпочато",
+        "order_status_in_progress": "Замовлення виконується",
+        "order_status_fulfilled": "Замовлення виконано",
+        "order_status_cancelled": "Замовлення скасовано",
+        "order_message": "Повідомлення в замовленні",
+        "order_review": "Новий відгук",
+        "order_review_revision_requested": "Запит на зміну відгуку",
+        "offer_created": "Нова пропозиція",
+        "offer_countered": "Зустрічна пропозиція",
+        "offer_message": "Повідомлення в пропозиції",
+        "market_bid": "Нова ставка",
+        "org_invite": "Запрошення до організації",
+        "admin_alert": "Оголошення від команди",
+        "reminder_unread_messages": "Нагадування про непрочитані повідомлення",
+        "watchlist_price_alert": "Цінове сповіщення",
+        "contract_public_created": "Новий публічний контракт",
+        "offer_accepted": "Пропозицію прийнято",
+        "offer_rejected": "Пропозицію відхилено",
+        "contract_offer_received": "Пропозиція щодо вашого контракту",
+        "org_member_joined": "Приєднався новий учасник"
+      },
+      "tabs": {
+        "orders": "Замовлення та пропозиції",
+        "messages": "Повідомлення",
+        "market": "Ринок і список відстеження",
+        "orgs": "Організації та контракти",
+        "account": "Обліковий запис"
+      },
+      "sections": {
+        "new": {
+          "label": "Нові замовлення та пропозиції",
+          "hint": "Хтось замовляє у вашому магазині або надсилає вам пропозицію."
+        },
+        "updates": {
+          "label": "Оновлення замовлень і пропозицій",
+          "hint": "Зміни в замовленнях і пропозиціях, у яких ви берете участь."
+        },
+        "reviews": {
+          "label": "Відгуки",
+          "hint": "Нові відгуки та запити на їх зміну."
+        },
+        "chats": {
+          "label": "Повідомлення",
+          "hint": "Нові повідомлення в чатах замовлень і пропозицій."
+        },
+        "reminders": {
+          "label": "Нагадування",
+          "hint": "Нагадування, коли повідомлення чекають на відповідь уже добу."
+        },
+        "bids": {
+          "label": "Ставки",
+          "hint": "Нові ставки на ваших аукціонах."
+        },
+        "watchlist": {
+          "label": "Цінові сповіщення",
+          "hint": "Публічне оголошення досягло цільової ціни зі списку відстеження."
+        },
+        "org": {
+          "label": "Організації",
+          "hint": "Запрошення до організацій і нові учасники у ваших."
+        },
+        "contracts": {
+          "label": "Публічні контракти",
+          "hint": "Пропозиції щодо ваших публічних контрактів, а також нові публічні контракти, якщо ви підпишетеся нижче."
+        },
+        "announcements": {
+          "label": "Оголошення від команди",
+          "hint": "Повідомлення від команди SC Market. Надходять завжди."
+        }
+      },
+      "rows": {
+        "new-order": {
+          "label": "Нове замовлення",
+          "hint": "Замовлення для вашого магазину або призначені вам"
+        },
+        "new-offer": {
+          "label": "Нова або зустрічна пропозиція"
+        },
+        "status": {
+          "label": "Зміни статусу",
+          "hint": "Виконується, виконано, скасовано"
+        },
+        "assigned": {
+          "label": "Призначено вам"
+        },
+        "decisions": {
+          "label": "Пропозицію прийнято або відхилено"
+        },
+        "review": {
+          "label": "Новий відгук"
+        },
+        "revision": {
+          "label": "Запит на зміну відгуку"
+        },
+        "order-messages": {
+          "label": "Повідомлення в замовленнях"
+        },
+        "offer-messages": {
+          "label": "Повідомлення в пропозиціях"
+        },
+        "reminder": {
+          "label": "Нагадування про непрочитані повідомлення",
+          "hint": "Не частіше ніж раз на день"
+        },
+        "bid": {
+          "label": "Нова ставка"
+        },
+        "price-alert": {
+          "label": "Цінове сповіщення"
+        },
+        "invite": {
+          "label": "Запрошення до організації"
+        },
+        "contract-offer": {
+          "label": "Пропозиція щодо вашого контракту"
+        },
+        "contract-new": {
+          "label": "Новий публічний контракт",
+          "hint": "Лише якщо ви ввімкнете сповіщення нижче"
+        },
+        "admin": {
+          "label": "Оголошення від команди"
+        },
+        "member-joined": {
+          "label": "Приєднався новий учасник",
+          "hint": "Організації, де ви можете керувати запрошеннями"
+        }
+      },
+      "subtitle": "Виберіть, куди надходитиме кожен тип сповіщень.",
+      "scopeHint": "Для роботи в організаціях кожна організація має власні налаштування.",
+      "tabsLabel": "Розділи сповіщень",
+      "mixed": "Частину подій увімкнено",
+      "linkDiscord": "Прив'яжіть Discord, щоб отримувати особисті повідомлення",
+      "personalOnly": "Налаштовується один раз у розділі «Особисті» для всіх ваших сповіщень",
+      "comingSoon": "Для цього сповіщення поки недоступно",
+      "manageWatchlist": "Керувати списком відстеження",
+      "status": {
+        "pushOn": "Push: увімкнено на цьому пристрої",
+        "pushOff": "Push: не налаштовано на цьому пристрої",
+        "emailOn": "Email: підтверджено",
+        "emailUnverified": "Email: не підтверджено",
+        "emailNone": "Email: адресу не вказано",
+        "discord": "Для особистих повідомлень Discord потрібен прив'язаний обліковий запис Discord"
+      },
+      "mute": {
+        "label": "Вимкнути сповіщення від цієї організації",
+        "off": "Не вимкнено",
+        "8h": "На 8 годин",
+        "1w": "На 1 тиждень",
+        "on": "Доки я не ввімкну знову",
+        "until": "Вимкнено до {{time}}",
+        "active": "Жодних push-сповіщень, email чи особистих повідомлень Discord від {{org}}. Сповіщення й надалі з'являються у вашому списку сповіщень.",
+        "hint": "Зупиняє push-сповіщення, email і особисті повідомлення Discord від цієї організації. Сповіщення в застосунку та оголошення від команди надходитимуть і далі."
+      }
+    },
+    "contractAlerts": {
+      "title": "Сповіщення про нові публічні контракти",
+      "description": "Отримуйте сповіщення в застосунку та push-сповіщення, коли хтось публікує публічний контракт. За замовчуванням вимкнено. Не позначайте жодного типу, щоб отримувати сповіщення про всі.",
+      "error": "Не вдалося завантажити або зберегти сповіщення про контракти.",
+      "toggle": "Сповіщення про контракти для"
+    },
     "tabs": {
       "profile": "Профіль",
       "privacy": "Приватність",
@@ -747,6 +972,20 @@
       "usernames": "Імена користувачів:",
       "verifyAccount": "Підтвердьте свій обліковий запис",
       "verifyAccountDescription": "Вам потрібно підтвердити свій обліковий запис, щоб отримати доступ до всіх функцій. Виберіть один із наведених нижче методів:"
+    },
+    "priceAlerts": {
+      "title": "Цінові сповіщення",
+      "description": "Коли публічне оголошення досягає вашої цільової ціни, ви отримуєте сповіщення через канали, які ввімкнете тут.",
+      "site": "Сповіщення на сайті",
+      "siteHint": "З'являється у ваших сповіщеннях на SC Market.",
+      "push": "Push-сповіщення",
+      "pushHint": "На телефонах і в браузерах, де ви ввімкнули push-сповіщення.",
+      "email": "Email",
+      "emailHint": "Надсилається на вашу підтверджену адресу електронної пошти. Вимкнено, доки ви не ввімкнете.",
+      "discord": "Особисті повідомлення Discord",
+      "discordHint": "Особисте повідомлення від бота SC Market.",
+      "error": "Не вдалося завантажити або зберегти налаштування цінових сповіщень.",
+      "channelsTitle": "Канали сповіщень"
     },
     "email": {
       "addEmail": "Додати адресу електронної пошти",
@@ -849,8 +1088,10 @@
       "notRequested": "Не запитано",
       "organizationPreferences": "Налаштування організації",
       "otherDevices": "{{count}} інший пристрій",
-      "otherDevices_one": "settings.pushNotifications.otherDevices",
-      "otherDevices_other": "settings.pushNotifications.otherDevices",
+      "otherDevices_one": "{{count}} інший пристрій",
+      "otherDevices_few": "{{count}} інші пристрої",
+      "otherDevices_many": "{{count}} інших пристроїв",
+      "otherDevices_other": "{{count}} іншого пристрою",
       "otherDevices_plural": "{{count}} інших пристроїв",
       "permissionDeniedError": "Дозвіл {{status}}. Увімкніть сповіщення в налаштуваннях браузера.",
       "permissionDeniedMessage": "Увімкніть сповіщення в налаштуваннях браузера, щоб використовувати push-сповіщення.",
@@ -864,8 +1105,10 @@
       "subscribing": "Підписування...",
       "title": "Push-сповіщення",
       "totalDevices": "{{count}} пристрій загалом",
-      "totalDevices_one": "settings.pushNotifications.totalDevices",
-      "totalDevices_other": "settings.pushNotifications.totalDevices",
+      "totalDevices_one": "{{count}} пристрій загалом",
+      "totalDevices_few": "{{count}} пристрої загалом",
+      "totalDevices_many": "{{count}} пристроїв загалом",
+      "totalDevices_other": "{{count}} пристрою загалом",
       "totalDevices_plural": "{{count}} пристроїв загалом",
       "unknownDevice": "Невідомий пристрій",
       "unsubscribe": "Відписатися",
@@ -887,7 +1130,10 @@
       "regenerateTitle": "Перегенерувати токен?",
       "regenerateWarning": "Це зробить вашу поточну URL-адресу недійсною. Вам потрібно буде оновити її в SCMDB.",
       "snapshotWarning": "Підключення SCMDB з увімкненою подією знімка замінить ваше поточне відстеження креслень на SC Market даними SCMDB. Креслення, які відстежуються лише на SC Market, будуть позначені як такі, що вам не належать.",
-      "title": "Синхронізація SCMDB"
+      "title": "Синхронізація SCMDB",
+      "tokenActive": "Токен синхронізації активний. Його URL-адреса показується лише під час створення; перегенеруйте токен, щоб отримати нову URL-адресу.",
+      "tokenHint": "Активний токен синхронізації, що закінчується на …{{hint}}. Його URL-адреса показується лише під час створення; перегенеруйте токен, щоб отримати нову URL-адресу.",
+      "urlShownOnce": "Скопіюйте цю URL-адресу зараз. Вона містить ваш токен синхронізації й більше не буде показана. Якщо ви її втратите, перегенеруйте токен."
     }
   },
   "sidebar": {
@@ -1216,6 +1462,7 @@
   },
   "recruiting_post": {
     "about": "Про",
+    "posting_for": "Публікація від імені {{org}}",
     "title_required": "Заголовок*",
     "description_required": "Опис*",
     "submit": "Надіслати",
@@ -1285,6 +1532,7 @@
   "profileNavAvatar": {
     "profile": "Профіль",
     "settings": "Налаштування",
+    "priceAlerts": "Цінові сповіщення",
     "logout": "Вихід"
   },
   "viewProfile": {
@@ -1653,12 +1901,18 @@
     "filters": "Фільтри",
     "has_market_listings": "Має ринкові оголошення",
     "has_service": "Має послугу",
-    "merge_offers_one": "OffersViewPaginated.merge_offers",
-    "merge_offers_other": "OffersViewPaginated.merge_offers",
-    "merge_offers_confirm_body_one": "OffersViewPaginated.merge_offers_confirm_body",
-    "merge_offers_confirm_body_other": "OffersViewPaginated.merge_offers_confirm_body",
-    "merge_offers_selected_count_one": "OffersViewPaginated.merge_offers_selected_count",
-    "merge_offers_selected_count_other": "OffersViewPaginated.merge_offers_selected_count",
+    "merge_offers_one": "Об'єднати пропозиції ({{count}})",
+    "merge_offers_few": "Об'єднати пропозиції ({{count}})",
+    "merge_offers_many": "Об'єднати пропозиції ({{count}})",
+    "merge_offers_other": "Об'єднати пропозиції ({{count}})",
+    "merge_offers_confirm_body_one": "Об'єднання {{count}} сесії пропозицій створить нову об'єднану сесію пропозиції та закриє вибрану сесію. Цю дію неможливо скасувати.",
+    "merge_offers_confirm_body_few": "Об'єднання {{count}} сесій пропозицій створить нову об'єднану сесію пропозиції та закриє вибрані сесії. Цю дію неможливо скасувати.",
+    "merge_offers_confirm_body_many": "Об'єднання {{count}} сесій пропозицій створить нову об'єднану сесію пропозиції та закриє вибрані сесії. Цю дію неможливо скасувати.",
+    "merge_offers_confirm_body_other": "Об'єднання {{count}} сесії пропозицій створить нову об'єднану сесію пропозиції та закриє вибрані сесії. Цю дію неможливо скасувати.",
+    "merge_offers_selected_count_one": "Вибрано: {{count}} сесія пропозицій",
+    "merge_offers_selected_count_few": "Вибрано: {{count}} сесії пропозицій",
+    "merge_offers_selected_count_many": "Вибрано: {{count}} сесій пропозицій",
+    "merge_offers_selected_count_other": "Вибрано: {{count}} сесії пропозицій",
     "seller": "Продавець",
     "seller_username": "Ім'я користувача продавця",
     "seller_username_placeholder": "Введіть ім'я користувача продавця або spectrum ID",
@@ -1761,6 +2015,7 @@
     "addWebhook": "Додати Discord вебхук для сповіщень",
     "webhookName": "Назва вебхука",
     "webhookUrl": "URL вебхука",
+    "publicContractCreated": "Нові публічні контракти (на всьому сайті)",
     "invalidUrl": "Недійсний URL",
     "orderCreated": "Замовлення створено",
     "orderAssigned": "Замовлення призначене мені",
@@ -1934,8 +2189,6 @@
     "failedSubmit": "Не вдалося оновити! {{error}}"
   },
   "MarketListingView": {
-    "seeOtherListings": "Переглянути {{count}} інших оголошень для цього товару",
-    "averagePrice": "Середня ціна",
     "addedToCart": "Додано в кошик!",
     "price": "Ціна",
     "ofAvailable": "з {{count}} доступно",
@@ -1959,8 +2212,10 @@
     "activeOrders": "Активні замовлення",
     "previousOrders": "Завершені замовлення",
     "anonymousReviewer": "Анонім",
-    "inCarts_one": "MarketListingView.inCarts",
-    "inCarts_other": "MarketListingView.inCarts",
+    "inCarts_one": "{{count}} людина має це в кошику",
+    "inCarts_few": "{{count}} людини мають це в кошику",
+    "inCarts_many": "{{count}} людей мають це в кошику",
+    "inCarts_other": "{{count}} людини мають це в кошику",
     "languages": "Мови",
     "noReviewContent": "Немає тексту відгуку",
     "orders": "Замовлення",
@@ -1969,8 +2224,10 @@
     "reviewBy": "від",
     "sellerReviews": "Відгуки про {{seller}}",
     "viewAllReviews": "Переглянути всі {{count}} відгуків",
-    "viewAllReviews_one": "MarketListingView.viewAllReviews",
-    "viewAllReviews_other": "MarketListingView.viewAllReviews",
+    "viewAllReviews_one": "Переглянути {{count}} відгук",
+    "viewAllReviews_few": "Переглянути всі {{count}} відгуки",
+    "viewAllReviews_many": "Переглянути всі {{count}} відгуків",
+    "viewAllReviews_other": "Переглянути всі {{count}} відгуку",
     "viewInCart": "Переглянути в кошику",
     "views": "Перегляди"
   },
@@ -2069,8 +2326,10 @@
     "orLower": "нижче",
     "orHigher": "вище",
     "addToCart": "Додати до кошика",
-    "ofAvailable_one": "MarketAggregateView.ofAvailable",
-    "ofAvailable_other": "MarketAggregateView.ofAvailable",
+    "ofAvailable_one": "з {{count}} доступного",
+    "ofAvailable_few": "з {{count}} доступних",
+    "ofAvailable_many": "з {{count}} доступних",
+    "ofAvailable_other": "з {{count}} доступних",
     "quantityRequested": "Попит (потрібно ≥ ціни)",
     "stockAvailable": "Пропозиція (запас ≤ ціни)",
     "viewCount": "Усього переглядів"
@@ -2145,13 +2404,17 @@
     "views": "Перегляди",
     "archive": "Архівувати",
     "bulkArchiveBody": "Ви збираєтеся заархівувати {{count}} оголошення. Архівування є остаточним для покупців і публічного пошуку. Ви все ще можете переглядати заархівовані оголошення в розділі Мої оголошення.",
-    "bulkArchiveBody_one": "ItemStock.bulkArchiveBody",
-    "bulkArchiveBody_other": "ItemStock.bulkArchiveBody",
+    "bulkArchiveBody_one": "Ви збираєтеся заархівувати {{count}} оголошення. Архівування є остаточним для покупців і публічного пошуку. Ви все ще можете переглядати заархівовані оголошення в розділі Мої оголошення.",
+    "bulkArchiveBody_few": "Ви збираєтеся заархівувати {{count}} оголошення. Архівування є остаточним для покупців і публічного пошуку. Ви все ще можете переглядати заархівовані оголошення в розділі Мої оголошення.",
+    "bulkArchiveBody_many": "Ви збираєтеся заархівувати {{count}} оголошень. Архівування є остаточним для покупців і публічного пошуку. Ви все ще можете переглядати заархівовані оголошення в розділі Мої оголошення.",
+    "bulkArchiveBody_other": "Ви збираєтеся заархівувати {{count}} оголошення. Архівування є остаточним для покупців і публічного пошуку. Ви все ще можете переглядати заархівовані оголошення в розділі Мої оголошення.",
     "bulkArchiveCancel": "Скасувати",
     "bulkArchiveConfirm": "Заархівувати остаточно",
     "bulkArchivedSuccess": "Заархівовано {{count}} оголошення.",
-    "bulkArchivedSuccess_one": "ItemStock.bulkArchivedSuccess",
-    "bulkArchivedSuccess_other": "ItemStock.bulkArchivedSuccess",
+    "bulkArchivedSuccess_one": "Заархівовано {{count}} оголошення.",
+    "bulkArchivedSuccess_few": "Заархівовано {{count}} оголошення.",
+    "bulkArchivedSuccess_many": "Заархівовано {{count}} оголошень.",
+    "bulkArchivedSuccess_other": "Заархівовано {{count}} оголошення.",
     "bulkArchiveTitle": "Заархівувати вибрані оголошення?",
     "cannotReduceStock": "Неможливо зменшити запаси — одиниці зарезервовано для активних замовлень",
     "editingNewListing": "Редагування нового оголошення...",
@@ -2558,8 +2821,10 @@
     "added": "Додано до кошика",
     "adding": "Додавання...",
     "addToCart": "Додати до кошика",
-    "alreadyInCart_one": "cart.alreadyInCart",
-    "alreadyInCart_other": "cart.alreadyInCart",
+    "alreadyInCart_one": "{{count}} вже в кошику",
+    "alreadyInCart_few": "{{count}} вже в кошику",
+    "alreadyInCart_many": "{{count}} вже в кошику",
+    "alreadyInCart_other": "{{count}} вже в кошику",
     "available": "доступно",
     "availableNow": "Доступно зараз",
     "belowMinQty": "Мінімальна кількість: {{min}} (у кошику {{total}})",
@@ -2574,8 +2839,10 @@
     "invalidQty": "Кількість має бути принаймні 1",
     "itemRemoved": "Предмет видалено з кошика",
     "nextAvailable": "Наступна наявність",
-    "othersInCart_one": "cart.othersInCart",
-    "othersInCart_other": "cart.othersInCart",
+    "othersInCart_one": "Ще {{count}} людина має це в кошику",
+    "othersInCart_few": "Ще {{count}} людини мають це в кошику",
+    "othersInCart_many": "Ще {{count}} людей мають це в кошику",
+    "othersInCart_other": "Ще {{count}} людини мають це в кошику",
     "priceChanged": "Ціна змінилася",
     "priceChangedFrom": "Ціна змінилася з {{old}} на {{new}} aUEC",
     "priceDecreased": "Ціна знизилася",
@@ -2652,6 +2919,8 @@
     "topShopsEmpty": "Магазинів поки немає.",
     "topShopsError": "Не вдалося завантажити магазини.",
     "sellTitle": "Почніть продавати",
+    "seoDescription": "SC Market — це маркетплейс Star Citizen, де гравці купують, продають і обмінюють внутрішньоігрові предмети та наймають організації для послуг на кшталт перевезення вантажів, супроводу, медичної допомоги й утилізації — усе за aUEC.",
+    "seoTitle": "SC Market — маркетплейс Star Citizen: купуйте, продавайте й обмінюйте предмети за aUEC",
     "sellText": "Відкрийте магазин самостійно або як організація. Учасники організації разом беруть і виконують замовлення, маючи спільну вітрину, запаси й репутацію.",
     "sellStep1Title": "Розмістіть оголошення",
     "sellStep1Text": "Будь-який товар чи послуга, у будь-якій кількості, з ціною в aUEC.",
@@ -2734,6 +3003,16 @@
     "goBackToPage": "Повернутись на сторінку",
     "returnToDashboard": "Повернутись на головну",
     "pageTitle": "Виникла помилка"
+  },
+  "help": {
+    "learnHow": "Дізнатися як",
+    "aboutLink": "Про SC Market",
+    "aboutPrompt": "Що таке SC Market?",
+    "hubTitle": "Довідка та посібники",
+    "loadFailed": "Не вдалося завантажити цей посібник. Оновіть сторінку, щоб спробувати ще раз.",
+    "moreIn": "Більше в розділі «{{category}}»",
+    "newHere": "Уперше на SC Market?",
+    "nextSteps": "Наступні кроки"
   },
   "org": {
     "orgTitle": "Орга",
@@ -2989,7 +3268,7 @@
     "cancel": "Скасувати",
     "linkCopied": "Посилання скопійовано в буфер обміну",
     "remove": "Видалити",
-    "reset": "ui.reset",
+    "reset": "Скинути",
     "save": "Зберегти",
     "share": "Поділитися",
     "yes": "Так"
@@ -3100,8 +3379,10 @@
     "createListingDescription": "Перейти на сторінку створення оголошення",
     "createMarketListing": "Створити нове ринкове оголошення",
     "dataTableDescription": "Таблиця даних з {{count}} рядками",
-    "dataTableDescription_one": "accessibility.dataTableDescription",
-    "dataTableDescription_other": "accessibility.dataTableDescription",
+    "dataTableDescription_one": "Таблиця даних з {{count}} рядком",
+    "dataTableDescription_few": "Таблиця даних з {{count}} рядками",
+    "dataTableDescription_many": "Таблиця даних з {{count}} рядками",
+    "dataTableDescription_other": "Таблиця даних з {{count}} рядка",
     "decorativeImage": "",
     "defaultListingHelp": "Виберіть оголошення за замовчуванням для показу в цьому множинному оголошенні",
     "defaultListingInput": "Виберіть оголошення за замовчуванням",
@@ -3109,8 +3390,10 @@
     "delete": "Видалити",
     "downvoteComment": "Голосувати проти цього коментаря",
     "downvoteCount": "Голосів проти: {{count}}",
-    "downvoteCount_one": "accessibility.downvoteCount",
-    "downvoteCount_other": "accessibility.downvoteCount",
+    "downvoteCount_one": "Голосів проти: {{count}}",
+    "downvoteCount_few": "Голосів проти: {{count}}",
+    "downvoteCount_many": "Голосів проти: {{count}}",
+    "downvoteCount_other": "Голосів проти: {{count}}",
     "edit": "Редагувати",
     "endTimeHelp": "Виберіть, коли має завершитися цей аукціон",
     "endTimeInput": "Виберіть час завершення аукціону",
@@ -3200,8 +3483,10 @@
     "recipientSelector": "Селектор отримувача",
     "recipientTypeHelp": "Виберіть, кому надіслати гроші — користувачу чи підряднику",
     "recruitmentUpvoteCount": "Голосів за: {{count}}",
-    "recruitmentUpvoteCount_one": "accessibility.recruitmentUpvoteCount",
-    "recruitmentUpvoteCount_other": "accessibility.recruitmentUpvoteCount",
+    "recruitmentUpvoteCount_one": "Голосів за: {{count}}",
+    "recruitmentUpvoteCount_few": "Голосів за: {{count}}",
+    "recruitmentUpvoteCount_many": "Голосів за: {{count}}",
+    "recruitmentUpvoteCount_other": "Голосів за: {{count}}",
     "registerShip": "Зареєструвати корабель",
     "registerShipHelp": "Зареєструвати вибраний корабель до вашого флоту",
     "reportContent": "Поскаржитися на цей вміст",
@@ -3282,8 +3567,10 @@
     "totalPriceHelp": "Загальна ціна розраховується автоматично на основі ціни за одиницю й кількості",
     "upvoteComment": "Голосувати за цей коментар",
     "upvoteCount": "Голосів за: {{count}}",
-    "upvoteCount_one": "accessibility.upvoteCount",
-    "upvoteCount_other": "accessibility.upvoteCount",
+    "upvoteCount_one": "Голосів за: {{count}}",
+    "upvoteCount_few": "Голосів за: {{count}}",
+    "upvoteCount_many": "Голосів за: {{count}}",
+    "upvoteCount_other": "Голосів за: {{count}}",
     "upvoteRecruitmentPost": "Голосувати за цю публікацію про набір",
     "userAvatar": "Аватар {{username}}",
     "view": "Переглянути",
@@ -3415,8 +3702,10 @@
     "minBid": "Мін. ставка",
     "placeBid": "Зробити ставку",
     "time": "Час",
-    "totalBids_one": "BidAreaV2.totalBids",
-    "totalBids_other": "BidAreaV2.totalBids",
+    "totalBids_one": "{{count}} ставка",
+    "totalBids_few": "{{count}} ставки",
+    "totalBids_many": "{{count}} ставок",
+    "totalBids_other": "{{count}} ставки",
     "yourBid": "Ваша ставка (aUEC)"
   },
   "blocklist": {
@@ -3472,6 +3761,7 @@
   "BuyOrdersRedesign": {
     "by": "від {{name}}",
     "cancel": "Скасувати",
+    "cardLabel": "Замовлення на купівлю: {{item}}, {{price}}, {{remaining}} із {{quantity}} запитаних",
     "createBuyOrder": "Створити замовлення на купівлю",
     "empty": "Наразі немає відкритих замовлень на купівлю.",
     "error": "Не вдалося завантажити замовлення на купівлю.",
@@ -3488,6 +3778,8 @@
     "newBuyOrder": "Нове замовлення на купівлю",
     "no": "Ні",
     "post": "Опублікувати замовлення на купівлю",
+    "priceNegotiable": "Запропонуйте ціну",
+    "priceUnset": "Ціну не вказано",
     "posted": "Замовлення на купівлю опубліковано.",
     "public": "Публічне",
     "quantityLabel": "Кількість",
@@ -3694,14 +3986,19 @@
     "craftedSource": "Джерело",
     "create": "Створити партію",
     "createError": "Не вдалося створити партію",
+    "createErrorReason": "Не вдалося створити партію: {{reason}}",
     "createSuccess": "Партію успішно створено",
     "invalidQualityTier": "Рівень якості має бути від 1 до 5",
     "invalidQualityValue": "Значення якості має бути від 0 до 1000",
     "invalidQuantity": "Кількість має бути більше 0",
+    "item": "Предмет",
+    "itemRequired": "Виберіть оголошення (і предмет), до якого додати цю партію",
     "listed": "Опубліковано",
     "listedHelper": "Опубліковані запаси відображаються в публічних оголошеннях",
+    "listing": "Оголошення",
     "location": "Локація (необов'язково)",
     "locationOwnership": "Локація та володіння",
+    "noItems": "У цьому оголошенні немає предмета, до якого можна додати запаси",
     "none": "Немає",
     "notes": "Примітки (необов'язково)",
     "notesPlaceholder": "Додайте примітки про цю партію...",
@@ -3718,9 +4015,13 @@
   },
   "Damaged": "warning",
   "displayed_rows_one": "{{from}}-{{to}} з {{count}}",
+  "displayed_rows_few": "{{from}}-{{to}} з {{count}}",
+  "displayed_rows_many": "{{from}}-{{to}} з {{count}}",
   "displayed_rows_other": "{{from}}-{{to}} з {{count}}",
-  "displayed_rows_range_one": "displayed_rows_range",
-  "displayed_rows_range_other": "displayed_rows_range",
+  "displayed_rows_range_one": "{{from}}–{{to}} з {{count}}",
+  "displayed_rows_range_few": "{{from}}–{{to}} з {{count}}",
+  "displayed_rows_range_many": "{{from}}–{{to}} з {{count}}",
+  "displayed_rows_range_other": "{{from}}–{{to}} з {{count}}",
   "EditListingV2": {
     "about": "Про оголошення",
     "basePrice": "Базова ціна",
@@ -3819,6 +4120,22 @@
       "selectChat": "Виберіть чат, щоб почати листування",
       "sendMessage": "Надіслати повідомлення",
       "startConversation": "Почати розмову"
+    },
+    "noOrg": {
+      "browseOrgs": "Переглянути організації",
+      "description": "Ця сторінка працює з вашою поточною організацією. Виберіть одну зі своїх організацій або знайдіть, до якої приєднатися.",
+      "myOrgs": "Вибрати організацію",
+      "title": "Виберіть організацію або приєднайтеся до неї, щоб користуватися цією сторінкою"
+    },
+    "noOrgPermission": {
+      "backToOrg": "Перейти до {{org}}",
+      "description": "Ваша роль у цій організації не має цього дозволу. Якщо вам потрібен доступ, зверніться до адміністратора організації.",
+      "titles": {
+        "money": "У вас немає дозволу керувати коштами цієї організації",
+        "orders": "У вас немає дозволу керувати замовленнями цієї організації",
+        "recruiting": "У вас немає дозволу керувати набором цієї організації",
+        "settings": "У вас немає дозволу керувати налаштуваннями цієї організації"
+      }
     },
     "notifications": {
       "noNotifications": "Немає сповіщень",
@@ -4035,6 +4352,8 @@
     "title": "Керування ринком",
     "unspecified": "Не вказано",
     "variants_one": "{{count}} варіант",
+    "variants_few": "{{count}} варіанти",
+    "variants_many": "{{count}} варіантів",
     "variants_other": "{{count}} варіантів"
   },
   "marketAggregateView": {
@@ -4046,6 +4365,8 @@
     "auction": "Аукціон",
     "availability": "{{count}} {{unit}} доступно",
     "availability_one": "{{count}} {{unit}} доступно",
+    "availability_few": "{{count}} {{unit}} доступно",
+    "availability_many": "{{count}} {{unit}} доступно",
     "availability_other": "{{count}} {{unit}} доступно",
     "bidPreview": "Попередній перегляд ставки",
     "bundle": "Набір",
@@ -4061,6 +4382,8 @@
     "negotiable": "Договірна",
     "ofAvailable": "з {{count}}",
     "ofAvailable_one": "з {{count}}",
+    "ofAvailable_few": "з {{count}}",
+    "ofAvailable_many": "з {{count}}",
     "ofAvailable_other": "з {{count}}",
     "orderPlaced": "Замовлення розміщено",
     "placeBid": "Зробити ставку",
@@ -4078,12 +4401,18 @@
   },
   "MarketRedesign": {
     "acrossSellers_one": "у {{count}} продавця",
+    "acrossSellers_few": "у {{count}} продавців",
+    "acrossSellers_many": "у {{count}} продавців",
     "acrossSellers_other": "у {{count}} продавців",
     "addToCart": "Додати",
     "available_one": "{{count}} доступний",
+    "available_few": "{{count}} доступно",
+    "available_many": "{{count}} доступно",
     "available_other": "{{count}} доступно",
     "compare": "Порівняти",
     "compareSellers_one": "Порівняти {{count}} продавця",
+    "compareSellers_few": "Порівняти {{count}} продавців",
+    "compareSellers_many": "Порівняти {{count}} продавців",
     "compareSellers_other": "Порівняти {{count}} продавців",
     "forSale": "У продажу",
     "fromPrice": "від",
@@ -4093,14 +4422,22 @@
     "negotiable": "Договірна",
     "noSellers": "Наразі немає доступних продавців.",
     "seeAllCount_one": "Переглянути всі {{count}} оголошення",
+    "seeAllCount_few": "Переглянути всі {{count}} оголошення",
+    "seeAllCount_many": "Переглянути всі {{count}} оголошень",
     "seeAllCount_other": "Переглянути всі {{count}} оголошень",
     "sellersCount_one": "{{count}} продавець",
+    "sellersCount_few": "{{count}} продавці",
+    "sellersCount_many": "{{count}} продавців",
     "sellersCount_other": "{{count}} продавців",
     "topBid": "Найвища ставка",
     "topRated": "Продавець з найвищим рейтингом",
     "unitsAvailable_one": "{{count}} одиниця доступна",
+    "unitsAvailable_few": "{{count}} одиниці доступні",
+    "unitsAvailable_many": "{{count}} одиниць доступно",
     "unitsAvailable_other": "{{count}} одиниць доступно",
     "wantedBy_one": "Хоче {{count}} покупець",
+    "wantedBy_few": "Хочуть {{count}} покупці",
+    "wantedBy_many": "Хочуть {{count}} покупців",
     "wantedBy_other": "Хочуть {{count}} покупців"
   },
   "messages": {
@@ -4182,6 +4519,7 @@
     "groupManage": "Керування",
     "groupMarketplace": "Маркетплейс",
     "groupPersonal": "Особисте",
+    "helpGuides": "Довідка та посібники",
     "inventory": "Інвентар",
     "listings": "Оголошення",
     "market": "Ринок",
@@ -4250,6 +4588,8 @@
     "allocationModeLabel": "Як слід розподіляти запаси на замовлення?",
     "allocationModeManual": "Ручний",
     "allocationModeManualDescription": "Ви вручну вибираєте, які партії запасів розподілити на кожне замовлення",
+    "allocationModeMoved": "Режим розподілу запасів налаштовується для кожного магазину окремо: відкрийте Налаштування свого магазину, розділ Керування запасами › Режим розподілу.",
+    "allocationModeShops": "Ваші магазини",
     "allocationModeNone": "Немає (застарілий)",
     "allocationModeNoneDescription": "Немає фізичного розподілу — запаси відстежуються лише на рівні оголошення",
     "allocationModeNote": "Примітка: Це налаштування контролює, як запаси фізично розподіляються на замовлення. Воно не залежить від налаштування часу віднімання запасів вище, яке контролює, коли запаси стають видимими для покупців.",
@@ -4673,8 +5013,10 @@
     "reviewBy": "від",
     "sellerReviews": "Відгуки про {{seller}}",
     "viewAllReviews": "Переглянути всі {{count}} відгуків",
-    "viewAllReviews_one": "serviceView.viewAllReviews",
-    "viewAllReviews_other": "serviceView.viewAllReviews"
+    "viewAllReviews_one": "Переглянути {{count}} відгук",
+    "viewAllReviews_few": "Переглянути всі {{count}} відгуки",
+    "viewAllReviews_many": "Переглянути всі {{count}} відгуків",
+    "viewAllReviews_other": "Переглянути всі {{count}} відгуку"
   },
   "ShopSelector": {
     "created": "Магазин створено: {{name}}",
@@ -5101,5 +5443,43 @@
     "sortQuality": "Якість",
     "sortStatus": "Статус",
     "totalItems": "Усього предметів"
+  },
+  "priceAlerts": {
+    "watch": {
+      "button": "Відстежувати ціну",
+      "title": "Відстежувати ціну",
+      "editTitle": "Редагувати цінове сповіщення",
+      "explainer": "Отримайте сповіщення, коли {{name}} виставлять за вашою цільовою ціною або нижче.",
+      "targetPrice": "Цільова ціна",
+      "invalidPrice": "Введіть ціле число, більше за 1 aUEC.",
+      "currentLowest": "Зараз найнижча: {{price}}",
+      "noListings": "Зараз немає публічних оголошень.",
+      "error": "Не вдалося зберегти цінове сповіщення.",
+      "stop": "Припинити відстеження",
+      "add": "Відстежувати ціну",
+      "saved": "Відстежується {{name}} за ціною ≤ {{price}}",
+      "removed": "Відстеження {{name}} припинено",
+      "watching": "Відстежується ≤ {{price}}"
+    },
+    "manager": {
+      "title": "Список відстеження",
+      "description": "Відстежуйте предмет і отримуйте сповіщення, коли публічне оголошення має ціну, що дорівнює вашій цільовій або нижчу. Натисніть «Відстежувати ціну» на сторінці предмета чи оголошення, додайте предмет тут або скористайтеся командою /watchlist add у Discord.",
+      "full": "Ваш список відстеження заповнено (максимум: {{max}}). Видаліть один предмет, щоб додати інший.",
+      "loadError": "Не вдалося завантажити список відстеження.",
+      "removeError": "Не вдалося видалити цей предмет.",
+      "empty": "Ви поки нічого не відстежуєте.",
+      "lowest": "Зараз найнижча",
+      "lastAlerted": "Останнє сповіщення",
+      "textMatch": "Збіг за назвами оголошень",
+      "none": "Немає оголошень",
+      "never": "Ніколи",
+      "edit": "Змінити цільову ціну",
+      "editAria": "Редагувати {{name}}",
+      "remove": "Припинити відстеження",
+      "removeAria": "Припинити відстеження {{name}}",
+      "count": "Предметів: {{count}} із {{max}}",
+      "add": "Додати предмет",
+      "targetValue": "Сповіщення при ≤ {{price}}"
+    }
   }
 }

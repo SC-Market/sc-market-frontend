@@ -75,6 +75,27 @@
       "updating": "更新中...",
       "validation": {
         "invalidUrl": "有効なURLを入力してください（http:// または https://）"
+      },
+      "channels": {
+        "label": "送信方法",
+        "in_app": "アプリ内",
+        "push": "プッシュ",
+        "email": "メール",
+        "discord_dm": "Discord DM",
+        "hint": "選択したチャネルは、そのチャネルをオフにしているユーザーにも配信されます。選択していないチャネルは使用されません。"
+      },
+      "preview": {
+        "recipients": "約{{count}}人の受信者",
+        "emails": "確認済みの約{{count}}件のアドレスにメール送信",
+        "discord": "連携済みの約{{count}}件のアカウントにDiscord DM送信",
+        "pickOrg": "組織を選択すると対象者が表示されます。",
+        "loading": "受信者数を集計中…"
+      },
+      "confirmEmail": {
+        "title": "すべてのユーザーにメールを送信しますか？",
+        "body": "このアラートは、お知らせメールをオフにしているユーザーも含め、確認済みのメールアドレスを持つすべてのユーザーに送信されます。",
+        "cancel": "戻る",
+        "confirm": "メールを送信"
       }
     },
     "alerts.actions": "操作",
@@ -310,12 +331,14 @@
     "accept_necessary": "必要なもののみ"
   },
   "footer": {
+    "about": "概要",
     "support": "サポート",
     "discord": "Discord",
     "discordBot": "Discord ボット",
     "wiki": "ウィキ",
     "donate": "寄付",
     "github": "Github",
+    "helpGuides": "ヘルプとガイド",
     "privacyPolicy": "プライバシーポリシー",
     "termsOfService": "利用規約",
     "copyright": "Copyright ©",
@@ -540,6 +563,8 @@
     "accept": "承認",
     "decline": "辞退",
     "new_bid_placed_by": "新しい入札の入札者：",
+    "price_alert": "価格アラート：",
+    "price_alert_hit_target": "が目標価格以下で出品されています",
     "for": "対象：",
     "clear_all": "すべての通知をクリア",
     "mark_all_as_read": "すべて既読にする",
@@ -547,7 +572,7 @@
     "clear_all_failed": "通知のクリアに失敗しました",
     "cleared_all": "{{count}} 件の通知をクリアしました",
     "cleared_all_one": "notifications.cleared_all",
-    "cleared_all_other": "notifications.cleared_all",
+    "cleared_all_other": "{{count}}件の通知を消去しました",
     "click_to_open_link": "クリックしてリンクを開く",
     "delete": "削除",
     "mark_all_read_failed": "通知を既読にできませんでした",
@@ -555,14 +580,20 @@
     "markAsUnread": "未読にする",
     "marked_all_read": "{{count}} 件の通知を既読にしました",
     "marked_all_read_one": "notifications.marked_all_read",
-    "marked_all_read_other": "notifications.marked_all_read",
+    "marked_all_read_other": "{{count}}件の通知を既読にしました",
     "new_admin_alert": "新しい管理者アラートを受信しました",
     "new_offer_message_from": "新しいオファーメッセージの送信者",
     "notification": "通知",
     "reviewRevisionRequested": "{{requester}} がレビューの修正を依頼しました",
     "share": "共有",
     "shareNotification": "この通知をチェック",
-    "view_all": "すべて表示"
+    "view_all": "すべて表示",
+    "public_contract": "新しい公開契約：",
+    "someone": "誰か",
+    "org_member_joined": "{{who}}さんが{{org}}に参加しました",
+    "offer_accepted": "{{who}}さんがあなたのオファーを承認しました",
+    "offer_rejected": "{{who}}さんがあなたのオファーを拒否しました",
+    "contract_offer_received": "{{who}}さんがあなたの契約にオファーを送りました"
   },
   "onboarding": {
     "welcome": "SC Marketへようこそ",
@@ -695,6 +726,196 @@
   },
   "settings": {
     "title": "設定",
+    "notifications": {
+      "title": "通知",
+      "error": "通知設定を読み込みまたは保存できませんでした。",
+      "scope": "設定の対象",
+      "personal": "個人",
+      "locked": "常にオン",
+      "customise": "カスタマイズ",
+      "channels": {
+        "in_app": "アプリ内",
+        "push": "プッシュ",
+        "email": "メール",
+        "discord_dm": "Discord DM"
+      },
+      "categories": {
+        "orders": "注文",
+        "order_messages": "注文メッセージ",
+        "offers": "オファー",
+        "offer_messages": "オファーメッセージ",
+        "market": "マーケットの入札",
+        "reviews": "レビュー",
+        "watchlist": "価格アラート",
+        "org": "組織への招待",
+        "announcements": "お知らせ",
+        "reminders": "未読メッセージのリマインダー",
+        "contracts": "公開契約"
+      },
+      "events": {
+        "order_created": "新しい注文",
+        "order_assigned": "自分に割り当てられた注文",
+        "order_status_not_started": "注文：未着手",
+        "order_status_in_progress": "注文：進行中",
+        "order_status_fulfilled": "注文：完了",
+        "order_status_cancelled": "注文：キャンセル",
+        "order_message": "注文メッセージ",
+        "order_review": "新しいレビュー",
+        "order_review_revision_requested": "レビューの修正依頼",
+        "offer_created": "新しいオファー",
+        "offer_countered": "カウンターオファー",
+        "offer_message": "オファーメッセージ",
+        "market_bid": "新しい入札",
+        "org_invite": "組織への招待",
+        "admin_alert": "お知らせ",
+        "reminder_unread_messages": "未読メッセージのリマインダー",
+        "watchlist_price_alert": "価格アラート",
+        "contract_public_created": "新しい公開契約",
+        "offer_accepted": "オファーの承認",
+        "offer_rejected": "オファーの拒否",
+        "contract_offer_received": "あなたの契約へのオファー",
+        "org_member_joined": "新しいメンバーの参加"
+      },
+      "tabs": {
+        "orders": "注文とオファー",
+        "messages": "メッセージ",
+        "market": "マーケットとウォッチリスト",
+        "orgs": "組織と契約",
+        "account": "アカウント"
+      },
+      "sections": {
+        "new": {
+          "label": "新しい注文とオファー",
+          "hint": "あなたのショップに注文が入ったときや、オファーが届いたとき。"
+        },
+        "updates": {
+          "label": "注文とオファーの更新",
+          "hint": "あなたが関わっている注文やオファーの変更。"
+        },
+        "reviews": {
+          "label": "レビュー",
+          "hint": "新しいレビューと修正依頼。"
+        },
+        "chats": {
+          "label": "メッセージ",
+          "hint": "注文やオファーのチャットに届いた新しいメッセージ。"
+        },
+        "reminders": {
+          "label": "リマインダー",
+          "hint": "未読メッセージが1日経過したときにお知らせします。"
+        },
+        "bids": {
+          "label": "入札",
+          "hint": "あなたのオークションへの新しい入札。"
+        },
+        "watchlist": {
+          "label": "価格アラート",
+          "hint": "ウォッチリストの目標価格に達した公開出品。"
+        },
+        "org": {
+          "label": "組織",
+          "hint": "組織への参加招待と、あなたの組織への新しいメンバーの参加。"
+        },
+        "contracts": {
+          "label": "公開契約",
+          "hint": "あなたの公開契約へのオファーと、下でオンにした場合は新しい公開契約。"
+        },
+        "announcements": {
+          "label": "お知らせ",
+          "hint": "SC Marketチームからのメッセージです。常に配信されます。"
+        }
+      },
+      "rows": {
+        "new-order": {
+          "label": "新しい注文",
+          "hint": "あなたのショップへの注文、またはあなたに割り当てられた注文"
+        },
+        "new-offer": {
+          "label": "新しいオファー・カウンターオファー"
+        },
+        "status": {
+          "label": "ステータスの変更",
+          "hint": "進行中、完了、キャンセル"
+        },
+        "assigned": {
+          "label": "自分への割り当て"
+        },
+        "decisions": {
+          "label": "オファーの承認・拒否"
+        },
+        "review": {
+          "label": "新しいレビュー"
+        },
+        "revision": {
+          "label": "レビューの修正依頼"
+        },
+        "order-messages": {
+          "label": "注文メッセージ"
+        },
+        "offer-messages": {
+          "label": "オファーメッセージ"
+        },
+        "reminder": {
+          "label": "未読メッセージのリマインダー",
+          "hint": "最大1日1回"
+        },
+        "bid": {
+          "label": "新しい入札"
+        },
+        "price-alert": {
+          "label": "価格アラート"
+        },
+        "invite": {
+          "label": "組織への招待"
+        },
+        "contract-offer": {
+          "label": "あなたの契約へのオファー"
+        },
+        "contract-new": {
+          "label": "新しい公開契約",
+          "hint": "下でアラートをオンにした場合のみ"
+        },
+        "admin": {
+          "label": "お知らせ"
+        },
+        "member-joined": {
+          "label": "新しいメンバーの参加",
+          "hint": "招待を管理できる組織"
+        }
+      },
+      "subtitle": "通知の種類ごとに受け取り方法を選択してください。",
+      "scopeHint": "組織での作業は、組織ごとに個別の設定があります。",
+      "tabsLabel": "通知のカテゴリ",
+      "mixed": "一部のイベントがオン",
+      "linkDiscord": "DMを受け取るにはDiscordを連携してください",
+      "personalOnly": "「個人」で一度設定すると、すべての通知に適用されます",
+      "comingSoon": "この通知ではまだ利用できません",
+      "manageWatchlist": "ウォッチリストを管理",
+      "status": {
+        "pushOn": "プッシュ：このデバイスでオン",
+        "pushOff": "プッシュ：このデバイスでは未設定",
+        "emailOn": "メール：確認済み",
+        "emailUnverified": "メール：未確認",
+        "emailNone": "メール：アドレス未登録",
+        "discord": "Discord DMにはDiscordアカウントの連携が必要です"
+      },
+      "mute": {
+        "label": "この組織をミュート",
+        "off": "ミュートしない",
+        "8h": "8時間",
+        "1w": "1週間",
+        "on": "解除するまで",
+        "until": "{{time}}までミュート中",
+        "active": "{{org}}からのプッシュ、メール、Discord DMは届きません。通知一覧には引き続き表示されます。",
+        "hint": "この組織からのプッシュ、メール、Discord DMを停止します。アプリ内通知とお知らせは引き続き届きます。"
+      }
+    },
+    "contractAlerts": {
+      "title": "新しい公開契約のアラート",
+      "description": "誰かが公開契約を投稿したときに、アプリ内通知とプッシュ通知を受け取ります。デフォルトではオフです。すべての種類のチェックを外したままにすると、すべての公開契約について通知されます。",
+      "error": "契約アラートを読み込みまたは保存できませんでした。",
+      "toggle": "契約アラートの対象"
+    },
     "tabs": {
       "profile": "プロフィール",
       "privacy": "プライバシー",
@@ -747,6 +968,20 @@
       "usernames": "ユーザー名：",
       "verifyAccount": "アカウントを認証",
       "verifyAccountDescription": "すべての機能を利用するにはアカウントの認証が必要です。次のいずれかの方法を選択してください："
+    },
+    "priceAlerts": {
+      "title": "価格アラート",
+      "description": "公開出品が目標価格に達すると、ここでオンにしたチャネルでお知らせします。",
+      "site": "サイト内通知",
+      "siteHint": "SC Marketの通知に表示されます。",
+      "push": "プッシュ通知",
+      "pushHint": "プッシュ通知を有効にしたスマートフォンやブラウザに届きます。",
+      "email": "メール",
+      "emailHint": "確認済みのメールアドレスに送信されます。オンにするまでは無効です。",
+      "discord": "Discord DM",
+      "discordHint": "SC Marketボットからのダイレクトメッセージです。",
+      "error": "価格アラートの設定を読み込みまたは保存できませんでした。",
+      "channelsTitle": "アラートの通知チャネル"
     },
     "email": {
       "addEmail": "メールアドレスを追加",
@@ -850,7 +1085,7 @@
       "organizationPreferences": "組織設定",
       "otherDevices": "他{{count}}台のデバイス",
       "otherDevices_one": "settings.pushNotifications.otherDevices",
-      "otherDevices_other": "settings.pushNotifications.otherDevices",
+      "otherDevices_other": "他のデバイス{{count}}台",
       "otherDevices_plural": "他{{count}}台のデバイス",
       "permissionDeniedError": "権限が{{status}}です。ブラウザの設定で通知を有効にしてください。",
       "permissionDeniedMessage": "プッシュ通知を使用するには、ブラウザの設定で通知を有効にしてください。",
@@ -865,7 +1100,7 @@
       "title": "プッシュ通知",
       "totalDevices": "合計{{count}}台のデバイス",
       "totalDevices_one": "settings.pushNotifications.totalDevices",
-      "totalDevices_other": "settings.pushNotifications.totalDevices",
+      "totalDevices_other": "合計{{count}}台のデバイス",
       "totalDevices_plural": "合計{{count}}台のデバイス",
       "unknownDevice": "不明なデバイス",
       "unsubscribe": "購読を解除",
@@ -887,7 +1122,10 @@
       "regenerateTitle": "トークンを再生成しますか？",
       "regenerateWarning": "現在のURLが無効になります。SCMDBで更新する必要があります。",
       "snapshotWarning": "スナップショットイベントを有効にしてSCMDBを接続すると、SC Marketの現在のブループリントトラッキングがSCMDBのデータで置き換えられます。SC Marketでのみトラッキングされているブループリントは未所有としてマークされます。",
-      "title": "SCMDB同期"
+      "title": "SCMDB同期",
+      "tokenActive": "同期トークンが有効です。URLはトークン作成時にのみ表示されます。新しいURLを取得するにはトークンを再生成してください。",
+      "tokenHint": "末尾が…{{hint}}の同期トークンが有効です。URLはトークン作成時にのみ表示されます。新しいURLを取得するにはトークンを再生成してください。",
+      "urlShownOnce": "このURLを今すぐコピーしてください。同期トークンが含まれており、再表示されません。紛失した場合はトークンを再生成してください。"
     }
   },
   "sidebar": {
@@ -1055,7 +1293,7 @@
   "displayed_rows": "{{from}}–{{to}} of {{count}}",
   "displayed_rows_range": "{{from}}–{{to}} / {{count}}",
   "displayed_rows_range_more": "{{from}}–{{to}} / {{to}}以上",
-  "all": "all",
+  "all": "すべて",
   "contractors": {
     "contractor": "コントラクター",
     "title": "コントラクター"
@@ -1216,6 +1454,7 @@
   },
   "recruiting_post": {
     "about": "概要",
+    "posting_for": "{{org}}として投稿",
     "title_required": "タイトル*",
     "description_required": "説明*",
     "submit": "送信",
@@ -1285,6 +1524,7 @@
   "profileNavAvatar": {
     "profile": "プロフィール",
     "settings": "設定",
+    "priceAlerts": "価格アラート",
     "logout": "ログアウト"
   },
   "viewProfile": {
@@ -1646,17 +1886,17 @@
     "merge_error": "オファーの統合に失敗しました",
     "merge_offers": "オファーを統合（{{count}}）",
     "merge_offers_one": "OffersViewPaginated.merge_offers",
-    "merge_offers_other": "OffersViewPaginated.merge_offers",
+    "merge_offers_other": "オファーを統合（{{count}}）",
     "merge_offers_combined_cost": "合計費用：{{cost}} aUEC",
     "merge_offers_confirm_body": "{{count}} 件のオファーセッションを統合すると、新しい統合オファーセッションが作成され、選択したセッションは終了します。この操作は取り消せません。",
     "merge_offers_confirm_body_one": "OffersViewPaginated.merge_offers_confirm_body",
-    "merge_offers_confirm_body_other": "OffersViewPaginated.merge_offers_confirm_body",
+    "merge_offers_confirm_body_other": "{{count}}件のオファーセッションを統合すると、新しい統合オファーセッションが作成され、選択したセッションはクローズされます。この操作は元に戻せません。",
     "merge_offers_confirm_button": "オファーを統合",
     "merge_offers_confirm_cancel": "キャンセル",
     "merge_offers_confirm_title": "オファーセッションを統合しますか？",
     "merge_offers_selected_count": "選択中：{{count}} 件のオファーセッション",
     "merge_offers_selected_count_one": "OffersViewPaginated.merge_offers_selected_count",
-    "merge_offers_selected_count_other": "OffersViewPaginated.merge_offers_selected_count",
+    "merge_offers_selected_count_other": "選択中：{{count}}件のオファーセッション",
     "merge_offers_warning": "選択したすべてのオファーセッションが終了し、1 つの統合オファーセッションに置き換えられます。",
     "merge_success": "オファーを統合しました",
     "seller": "出品者",
@@ -1761,6 +2001,7 @@
     "addWebhook": "Discord通知Webhookを追加",
     "webhookName": "Webhook名",
     "webhookUrl": "Webhook URL",
+    "publicContractCreated": "新しい公開契約（サイト全体）",
     "invalidUrl": "無効なURL",
     "orderCreated": "注文の作成",
     "orderAssigned": "自分への注文の割り当て",
@@ -1934,8 +2175,6 @@
     "failedSubmit": "送信に失敗しました！{{error}}"
   },
   "MarketListingView": {
-    "seeOtherListings": "このアイテムの他の{{count}}件の出品を見る",
-    "averagePrice": "平均価格",
     "addedToCart": "カートに追加しました！",
     "price": "価格",
     "ofAvailable": "/ 在庫 {{count}} 個",
@@ -1961,7 +2200,7 @@
     "previousOrders": "過去の注文",
     "anonymousReviewer": "匿名",
     "inCarts_one": "MarketListingView.inCarts",
-    "inCarts_other": "MarketListingView.inCarts",
+    "inCarts_other": "{{count}}人がこの商品をカートに入れています",
     "languages": "言語",
     "noReviewContent": "レビュー内容なし",
     "otherListingsFrom": "{{seller}} のその他の出品",
@@ -1970,7 +2209,7 @@
     "sellerReviews": "{{seller}} のレビュー",
     "viewAllReviews": "{{count}} 件のレビューをすべて表示",
     "viewAllReviews_one": "MarketListingView.viewAllReviews",
-    "viewAllReviews_other": "MarketListingView.viewAllReviews",
+    "viewAllReviews_other": "{{count}}件のレビューをすべて表示",
     "viewInCart": "カート内で見る",
     "views": "閲覧数"
   },
@@ -2108,7 +2347,7 @@
     "orHigher": "以上",
     "addToCart": "カートに追加",
     "ofAvailable_one": "MarketAggregateView.ofAvailable",
-    "ofAvailable_other": "MarketAggregateView.ofAvailable",
+    "ofAvailable_other": "/ 在庫{{count}}個",
     "quantityRequested": "需要（希望価格 ≥ 価格）",
     "stockAvailable": "供給（在庫価格 ≤ 価格）",
     "viewCount": "総閲覧数"
@@ -2181,12 +2420,12 @@
     "archive": "アーカイブ",
     "bulkArchiveBody": "{{count}}件の出品をアーカイブしようとしています。アーカイブは購入者と公開検索に対して永続的です。アーカイブした出品は「自分の出品」で引き続き表示できます。",
     "bulkArchiveBody_one": "ItemStock.bulkArchiveBody",
-    "bulkArchiveBody_other": "ItemStock.bulkArchiveBody",
+    "bulkArchiveBody_other": "{{count}}件の出品をアーカイブしようとしています。アーカイブすると、購入者や公開検索からは完全に表示されなくなります。アーカイブした出品は「マイ出品」で引き続き確認できます。",
     "bulkArchiveCancel": "キャンセル",
     "bulkArchiveConfirm": "完全にアーカイブ",
     "bulkArchivedSuccess": "{{count}}件の出品をアーカイブしました。",
     "bulkArchivedSuccess_one": "ItemStock.bulkArchivedSuccess",
-    "bulkArchivedSuccess_other": "ItemStock.bulkArchivedSuccess",
+    "bulkArchivedSuccess_other": "{{count}}件の出品をアーカイブしました。",
     "bulkArchiveTitle": "選択した出品をアーカイブしますか？",
     "cannotReduceStock": "在庫を減らせません — 対象の在庫はアクティブな注文に確保されています",
     "editingNewListing": "新しい出品を編集中...",
@@ -2597,7 +2836,7 @@
     "adding": "追加中...",
     "addToCart": "カートに追加",
     "alreadyInCart_one": "cart.alreadyInCart",
-    "alreadyInCart_other": "cart.alreadyInCart",
+    "alreadyInCart_other": "カートに{{count}}個追加済み",
     "available": "在庫あり",
     "availableNow": "今すぐ入手可能",
     "belowMinQty": "最小数量：{{min}}（カートは {{total}} です）",
@@ -2613,7 +2852,7 @@
     "itemRemoved": "アイテムをカートから削除しました",
     "nextAvailable": "次回入荷",
     "othersInCart_one": "cart.othersInCart",
-    "othersInCart_other": "cart.othersInCart",
+    "othersInCart_other": "他に{{count}}人がこの商品をカートに入れています",
     "priceChanged": "価格が変更されました",
     "priceChangedFrom": "価格が {{old}} から {{new}} aUEC に変更されました",
     "priceDecreased": "価格が下がりました",
@@ -2690,6 +2929,8 @@
     "topShopsEmpty": "まだショップはありません。",
     "topShopsError": "ショップを読み込めませんでした。",
     "sellTitle": "出品を始める",
+    "seoDescription": "SC Marketは、プレイヤーがゲーム内アイテムを売買・トレードし、輸送・護衛・医療・サルベージなどのサービスを組織に依頼できるStar Citizenのマーケットプレイスです。取引はすべてaUECで行われます。",
+    "seoTitle": "SC Market — Star Citizenマーケットプレイス：aUECでアイテムを売買・トレード",
     "sellText": "個人でも組織でもショップを開けます。組織のメンバーは、共有のストアフロント・在庫・評価のもとで、一緒に注文を引き受けて処理できます。",
     "sellStep1Title": "出品する",
     "sellStep1Text": "どんなアイテムやサービスも、好きな数量で、aUEC の価格で。",
@@ -2772,6 +3013,16 @@
     "goBackToPage": "ページに戻る",
     "returnToDashboard": "ダッシュボードに戻る",
     "pageTitle": "エラーが発生しました"
+  },
+  "help": {
+    "learnHow": "詳しく見る",
+    "aboutLink": "SC Marketについて",
+    "aboutPrompt": "SC Marketとは？",
+    "hubTitle": "ヘルプとガイド",
+    "loadFailed": "ガイドを読み込めませんでした。ページを再読み込みしてもう一度お試しください。",
+    "moreIn": "{{category}}の他の記事",
+    "newHere": "SC Marketは初めてですか？",
+    "nextSteps": "次のステップ"
   },
   "org": {
     "orgTitle": "組織",
@@ -3041,7 +3292,7 @@
     "createMarketListing": "新しいマーケット出品を作成",
     "dataTableDescription": "{{count}}行のデータテーブル",
     "dataTableDescription_one": "accessibility.dataTableDescription",
-    "dataTableDescription_other": "accessibility.dataTableDescription",
+    "dataTableDescription_other": "{{count}}行のデータテーブル",
     "decorativeImage": "",
     "defaultListingHelp": "この複数出品で表示するデフォルトの出品を選択してください",
     "defaultListingInput": "デフォルトの出品を選択",
@@ -3050,7 +3301,7 @@
     "downvoteComment": "このコメントに低評価",
     "downvoteCount": "低評価: {{count}}件",
     "downvoteCount_one": "accessibility.downvoteCount",
-    "downvoteCount_other": "accessibility.downvoteCount",
+    "downvoteCount_other": "低評価: {{count}}件",
     "edit": "編集",
     "editQuantityHelp": "この在庫アイテムの利用可能数量を編集します",
     "editQuantityInput": "利用可能数量を編集",
@@ -3143,7 +3394,7 @@
     "recipientTypeHelp": "送金先をユーザーまたはコントラクターのどちらにするか選択します",
     "recruitmentUpvoteCount": "高評価: {{count}}件",
     "recruitmentUpvoteCount_one": "accessibility.recruitmentUpvoteCount",
-    "recruitmentUpvoteCount_other": "accessibility.recruitmentUpvoteCount",
+    "recruitmentUpvoteCount_other": "高評価: {{count}}件",
     "registerShip": "船を登録",
     "registerShipHelp": "選択した船をフリートに登録します",
     "reportContent": "このコンテンツを報告",
@@ -3229,7 +3480,7 @@
     "upvoteComment": "このコメントに高評価",
     "upvoteCount": "高評価: {{count}}件",
     "upvoteCount_one": "accessibility.upvoteCount",
-    "upvoteCount_other": "accessibility.upvoteCount",
+    "upvoteCount_other": "高評価: {{count}}件",
     "upvoteRecruitmentPost": "この募集投稿に高評価",
     "userAvatar": "{{username}}のアバター",
     "view": "表示",
@@ -3364,7 +3615,7 @@
     "placeBid": "入札する",
     "time": "時刻",
     "totalBids_one": "BidAreaV2.totalBids",
-    "totalBids_other": "BidAreaV2.totalBids",
+    "totalBids_other": "{{count}}件の入札",
     "yourBid": "あなたの入札額（aUEC）"
   },
   "blocklist": {
@@ -3420,6 +3671,7 @@
   "BuyOrdersRedesign": {
     "by": "{{name}} による",
     "cancel": "キャンセル",
+    "cardLabel": "買い注文：{{item}}、{{price}}、{{quantity}}件中{{remaining}}件募集中",
     "createBuyOrder": "買い注文を作成",
     "empty": "現在、公開中の買い注文はありません。",
     "error": "買い注文の読み込みに失敗しました。",
@@ -3436,6 +3688,8 @@
     "newBuyOrder": "新しい買い注文",
     "no": "いいえ",
     "post": "買い注文を投稿",
+    "priceNegotiable": "オファーを送る",
+    "priceUnset": "価格未設定",
     "posted": "買い注文を投稿しました。",
     "public": "公開",
     "quantityLabel": "数量",
@@ -3642,14 +3896,19 @@
     "craftedSource": "入手元",
     "create": "ロットを作成",
     "createError": "ロットの作成に失敗しました",
+    "createErrorReason": "ロットの作成に失敗しました：{{reason}}",
     "createSuccess": "ロットを作成しました",
     "invalidQualityTier": "品質ティアは 1〜5 の範囲でなければなりません",
     "invalidQualityValue": "品質値は 0〜1000 の範囲でなければなりません",
     "invalidQuantity": "数量は 0 より大きくする必要があります",
+    "item": "アイテム",
+    "itemRequired": "このロットを追加する出品（とアイテム）を選択してください",
     "listed": "販売中",
     "listedHelper": "販売中の在庫は公開出品に表示されます",
+    "listing": "出品",
     "location": "場所（任意）",
     "locationOwnership": "場所と所有者",
+    "noItems": "この出品には在庫を追加できるアイテムがありません",
     "none": "なし",
     "notes": "メモ（任意）",
     "notesPlaceholder": "このロットに関するメモを追加...",
@@ -3668,7 +3927,7 @@
   "displayed_rows_one": "{{from}}-{{to}} / {{count}}",
   "displayed_rows_other": "{{count}} 件中 {{from}}-{{to}}",
   "displayed_rows_range_one": "displayed_rows_range",
-  "displayed_rows_range_other": "displayed_rows_range",
+  "displayed_rows_range_other": "{{from}}–{{to}} / {{count}}",
   "EditListingV2": {
     "about": "概要",
     "basePrice": "基本価格",
@@ -3767,6 +4026,22 @@
       "selectChat": "チャットを選択してメッセージを始めましょう",
       "sendMessage": "メッセージを送信",
       "startConversation": "会話を始める"
+    },
+    "noOrg": {
+      "browseOrgs": "組織を探す",
+      "description": "このページは現在の組織で使用します。所属している組織を選択するか、参加する組織を探してください。",
+      "myOrgs": "組織を選択",
+      "title": "このページを使用するには、組織を選択するか組織に参加してください"
+    },
+    "noOrgPermission": {
+      "backToOrg": "{{org}}へ移動",
+      "description": "この組織でのあなたのロールには、この権限が含まれていません。アクセスが必要な場合は組織の管理者に依頼してください。",
+      "titles": {
+        "money": "この組織の資金を管理する権限がありません",
+        "orders": "この組織の注文を管理する権限がありません",
+        "recruiting": "この組織の募集を管理する権限がありません",
+        "settings": "この組織の設定を管理する権限がありません"
+      }
     },
     "notifications": {
       "noNotifications": "通知はありません",
@@ -4130,6 +4405,7 @@
     "groupManage": "管理",
     "groupMarketplace": "マーケットプレイス",
     "groupPersonal": "個人",
+    "helpGuides": "ヘルプとガイド",
     "inventory": "在庫",
     "listings": "出品",
     "market": "マーケット",
@@ -4198,6 +4474,8 @@
     "allocationModeLabel": "注文への在庫の割り当て方法",
     "allocationModeManual": "手動",
     "allocationModeManualDescription": "各注文に割り当てる在庫ロットを手動で選択します",
+    "allocationModeMoved": "在庫割り当てモードはショップごとに設定します。ショップの設定を開き、「在庫管理 › 割り当てモード」から変更してください。",
+    "allocationModeShops": "あなたのショップ",
     "allocationModeNone": "なし（従来方式）",
     "allocationModeNoneDescription": "物理的な割り当てなし - 在庫は出品レベルでのみ追跡されます",
     "allocationModeNote": "注意：この設定は注文への在庫の物理的な割り当て方法を制御します。上記の在庫減算タイミング設定（買い手に在庫が表示されるタイミングを制御）とは独立しています。",
@@ -4622,7 +4900,7 @@
     "sellerReviews": "{{seller}} のレビュー",
     "viewAllReviews": "{{count}} 件のレビューをすべて表示",
     "viewAllReviews_one": "serviceView.viewAllReviews",
-    "viewAllReviews_other": "serviceView.viewAllReviews"
+    "viewAllReviews_other": "{{count}}件のレビューをすべて表示"
   },
   "ShopSelector": {
     "created": "ショップを作成しました：{{name}}",
@@ -4811,7 +5089,7 @@
     },
     "linkCopied": "リンクをクリップボードにコピーしました",
     "remove": "削除",
-    "reset": "ui.reset",
+    "reset": "リセット",
     "save": "保存",
     "share": "共有",
     "yes": "はい"
@@ -5101,5 +5379,43 @@
     "sortQuality": "品質",
     "sortStatus": "ステータス",
     "totalItems": "合計アイテム数"
+  },
+  "priceAlerts": {
+    "watch": {
+      "button": "価格をウォッチ",
+      "title": "価格をウォッチ",
+      "editTitle": "価格アラートを編集",
+      "explainer": "{{name}}が目標価格以下で出品されたときにアラートを受け取ります。",
+      "targetPrice": "目標価格",
+      "invalidPrice": "1 aUECより大きい整数を入力してください。",
+      "currentLowest": "現在の最安値：{{price}}",
+      "noListings": "現在、公開出品はありません。",
+      "error": "価格アラートを保存できませんでした。",
+      "stop": "ウォッチを解除",
+      "add": "価格をウォッチ",
+      "saved": "{{name}}を{{price}}以下でウォッチ中",
+      "removed": "{{name}}のウォッチを解除しました",
+      "watching": "{{price}}以下でウォッチ中"
+    },
+    "manager": {
+      "title": "ウォッチリスト",
+      "description": "アイテムをウォッチすると、公開出品が目標価格以下になったときにアラートを受け取れます。アイテムや出品のページで「価格をウォッチ」を使うか、ここで追加するか、Discordで /watchlist add を使用してください。",
+      "full": "ウォッチリストがいっぱいです（{{max}}件）。追加するには1件削除してください。",
+      "loadError": "ウォッチリストを読み込めませんでした。",
+      "removeError": "アイテムを削除できませんでした。",
+      "empty": "まだ何もウォッチしていません。",
+      "lowest": "現在の最安値",
+      "lastAlerted": "最終アラート",
+      "textMatch": "出品タイトルに一致",
+      "none": "出品なし",
+      "never": "なし",
+      "edit": "目標価格を編集",
+      "editAria": "{{name}}を編集",
+      "remove": "ウォッチを解除",
+      "removeAria": "{{name}}のウォッチを解除",
+      "count": "{{count}} / {{max}}件",
+      "add": "アイテムを追加",
+      "targetValue": "{{price}}以下でアラート"
+    }
   }
 }

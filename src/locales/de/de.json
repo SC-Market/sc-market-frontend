@@ -75,6 +75,27 @@
       "updating": "Wird aktualisiert...",
       "validation": {
         "invalidUrl": "Bitte geben Sie eine gültige URL ein (http:// oder https://)"
+      },
+      "channels": {
+        "label": "Senden über",
+        "in_app": "In der App",
+        "push": "Push",
+        "email": "E-Mail",
+        "discord_dm": "Discord-DM",
+        "hint": "Die gewählten Kanäle werden auch an Nutzer zugestellt, die sie deaktiviert haben. Andere werden nicht verwendet."
+      },
+      "preview": {
+        "recipients": "~{{count}} Empfänger",
+        "emails": "E-Mail an ~{{count}} bestätigte Adressen",
+        "discord": "Discord-DM an ~{{count}} verknüpfte Konten",
+        "pickOrg": "Wählen Sie eine Organisation, um die Zielgruppe zu sehen.",
+        "loading": "Empfänger werden gezählt…"
+      },
+      "confirmEmail": {
+        "title": "E-Mail an alle Nutzer senden?",
+        "body": "Diese Meldung wird per E-Mail an alle Nutzer mit bestätigter Adresse gesendet – auch an diejenigen, die Ankündigungs-E-Mails deaktiviert haben.",
+        "cancel": "Zurück",
+        "confirm": "E-Mail senden"
       }
     },
     "alerts.actions": "Aktionen",
@@ -310,12 +331,14 @@
     "accept_necessary": "Nur notwendige"
   },
   "footer": {
+    "about": "Über uns",
     "support": "Support",
     "discord": "Discord",
     "discordBot": "Discord Bot",
     "wiki": "Wiki",
     "donate": "Spenden",
     "github": "Github",
+    "helpGuides": "Hilfe & Anleitungen",
     "privacyPolicy": "Datenschutzerklärung",
     "termsOfService": "Nutzungsbedingungen",
     "copyright": "Copyright ©",
@@ -540,29 +563,37 @@
     "accept": "Annehmen",
     "decline": "Ablehnen",
     "new_bid_placed_by": "Neues Gebot abgegeben von",
+    "price_alert": "Preisalarm:",
+    "price_alert_hit_target": "wird zu oder unter Ihrem Zielpreis angeboten",
     "for": "für",
     "clear_all": "Alle Benachrichtigungen löschen",
     "mark_all_as_read": "Alle als gelesen markieren",
     "admin_alert": "Admin-Benachrichtigung",
     "clear_all_failed": "Benachrichtigungen konnten nicht gelöscht werden",
     "cleared_all": "{{count}} Benachrichtigungen gelöscht",
-    "cleared_all_one": "notifications.cleared_all",
-    "cleared_all_other": "notifications.cleared_all",
+    "cleared_all_one": "{{count}} Benachrichtigung gelöscht",
+    "cleared_all_other": "{{count}} Benachrichtigungen gelöscht",
     "click_to_open_link": "Zum Öffnen des Links klicken",
     "delete": "Löschen",
     "mark_all_read_failed": "Benachrichtigungen konnten nicht als gelesen markiert werden",
     "markAsRead": "Als gelesen markieren",
     "markAsUnread": "Als ungelesen markieren",
     "marked_all_read": "{{count}} Benachrichtigungen als gelesen markiert",
-    "marked_all_read_one": "notifications.marked_all_read",
-    "marked_all_read_other": "notifications.marked_all_read",
+    "marked_all_read_one": "{{count}} Benachrichtigung als gelesen markiert",
+    "marked_all_read_other": "{{count}} Benachrichtigungen als gelesen markiert",
     "new_admin_alert": "Sie haben eine neue Admin-Benachrichtigung erhalten",
     "new_offer_message_from": "Neue Angebotsnachricht von",
     "notification": "Benachrichtigung",
     "reviewRevisionRequested": "{{requester}} hat eine Überarbeitung seiner Bewertung angefordert",
     "share": "Teilen",
     "shareNotification": "Sehen Sie sich diese Benachrichtigung an",
-    "view_all": "Alle anzeigen"
+    "view_all": "Alle anzeigen",
+    "public_contract": "Neuer öffentlicher Auftrag:",
+    "someone": "Jemand",
+    "org_member_joined": "{{who}} ist {{org}} beigetreten",
+    "offer_accepted": "{{who}} hat Ihr Angebot angenommen",
+    "offer_rejected": "{{who}} hat Ihr Angebot abgelehnt",
+    "contract_offer_received": "{{who}} hat ein Angebot für Ihren Auftrag abgegeben"
   },
   "onboarding": {
     "welcome": "Willkommen bei SC Market",
@@ -695,6 +726,196 @@
   },
   "settings": {
     "title": "Einstellungen",
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "error": "Ihre Benachrichtigungseinstellungen konnten nicht geladen oder gespeichert werden.",
+      "scope": "Einstellungen für",
+      "personal": "Persönlich",
+      "locked": "Immer aktiv",
+      "customise": "Anpassen",
+      "channels": {
+        "in_app": "In der App",
+        "push": "Push",
+        "email": "E-Mail",
+        "discord_dm": "Discord-DM"
+      },
+      "categories": {
+        "orders": "Bestellungen",
+        "order_messages": "Bestellnachrichten",
+        "offers": "Angebote",
+        "offer_messages": "Angebotsnachrichten",
+        "market": "Marktgebote",
+        "reviews": "Bewertungen",
+        "watchlist": "Preisalarme",
+        "org": "Organisationseinladungen",
+        "announcements": "Ankündigungen",
+        "reminders": "Erinnerungen an ungelesene Nachrichten",
+        "contracts": "Öffentliche Aufträge"
+      },
+      "events": {
+        "order_created": "Neue Bestellung",
+        "order_assigned": "Ihnen zugewiesene Bestellung",
+        "order_status_not_started": "Bestellung nicht begonnen",
+        "order_status_in_progress": "Bestellung in Bearbeitung",
+        "order_status_fulfilled": "Bestellung erfüllt",
+        "order_status_cancelled": "Bestellung storniert",
+        "order_message": "Bestellnachricht",
+        "order_review": "Neue Bewertung",
+        "order_review_revision_requested": "Überarbeitung der Bewertung angefordert",
+        "offer_created": "Neues Angebot",
+        "offer_countered": "Gegenangebot",
+        "offer_message": "Angebotsnachricht",
+        "market_bid": "Neues Gebot",
+        "org_invite": "Organisationseinladung",
+        "admin_alert": "Ankündigung",
+        "reminder_unread_messages": "Erinnerung an ungelesene Nachrichten",
+        "watchlist_price_alert": "Preisalarm",
+        "contract_public_created": "Neuer öffentlicher Auftrag",
+        "offer_accepted": "Angebot angenommen",
+        "offer_rejected": "Angebot abgelehnt",
+        "contract_offer_received": "Angebot für Ihren Auftrag",
+        "org_member_joined": "Neues Mitglied beigetreten"
+      },
+      "tabs": {
+        "orders": "Bestellungen & Angebote",
+        "messages": "Nachrichten",
+        "market": "Markt & Beobachtungsliste",
+        "orgs": "Orgs & Aufträge",
+        "account": "Konto"
+      },
+      "sections": {
+        "new": {
+          "label": "Neue Bestellungen und Angebote",
+          "hint": "Jemand bestellt in Ihrem Shop oder sendet Ihnen ein Angebot."
+        },
+        "updates": {
+          "label": "Updates zu Bestellungen und Angeboten",
+          "hint": "Änderungen an Bestellungen und Angeboten, an denen Sie beteiligt sind."
+        },
+        "reviews": {
+          "label": "Bewertungen",
+          "hint": "Neue Bewertungen und Überarbeitungsanfragen."
+        },
+        "chats": {
+          "label": "Nachrichten",
+          "hint": "Neue Nachrichten in Bestell- und Angebotschats."
+        },
+        "reminders": {
+          "label": "Erinnerungen",
+          "hint": "Eine Erinnerung, wenn Nachrichten seit einem Tag warten."
+        },
+        "bids": {
+          "label": "Gebote",
+          "hint": "Neue Gebote auf Ihre Auktionen."
+        },
+        "watchlist": {
+          "label": "Preisalarme",
+          "hint": "Ein öffentliches Angebot hat den Zielpreis auf Ihrer Beobachtungsliste erreicht."
+        },
+        "org": {
+          "label": "Organisationen",
+          "hint": "Einladungen in eine Organisation und Mitglieder, die Ihrer beitreten."
+        },
+        "contracts": {
+          "label": "Öffentliche Aufträge",
+          "hint": "Angebote für Ihre öffentlichen Aufträge und neue öffentliche Aufträge, wenn Sie dies unten aktivieren."
+        },
+        "announcements": {
+          "label": "Ankündigungen",
+          "hint": "Nachrichten vom SC-Market-Team. Werden immer zugestellt."
+        }
+      },
+      "rows": {
+        "new-order": {
+          "label": "Neue Bestellung",
+          "hint": "Bestellungen für Ihren Shop oder Ihnen zugewiesen"
+        },
+        "new-offer": {
+          "label": "Neues Angebot oder Gegenangebot"
+        },
+        "status": {
+          "label": "Statusänderungen",
+          "hint": "In Bearbeitung, erfüllt, storniert"
+        },
+        "assigned": {
+          "label": "Ihnen zugewiesen"
+        },
+        "decisions": {
+          "label": "Angebot angenommen oder abgelehnt"
+        },
+        "review": {
+          "label": "Neue Bewertung"
+        },
+        "revision": {
+          "label": "Überarbeitung der Bewertung angefordert"
+        },
+        "order-messages": {
+          "label": "Bestellnachrichten"
+        },
+        "offer-messages": {
+          "label": "Angebotsnachrichten"
+        },
+        "reminder": {
+          "label": "Erinnerung an ungelesene Nachrichten",
+          "hint": "Höchstens einmal am Tag"
+        },
+        "bid": {
+          "label": "Neues Gebot"
+        },
+        "price-alert": {
+          "label": "Preisalarm"
+        },
+        "invite": {
+          "label": "Organisationseinladung"
+        },
+        "contract-offer": {
+          "label": "Angebot für Ihren Auftrag"
+        },
+        "contract-new": {
+          "label": "Neuer öffentlicher Auftrag",
+          "hint": "Nur wenn Sie die Benachrichtigungen unten aktivieren"
+        },
+        "admin": {
+          "label": "Ankündigung"
+        },
+        "member-joined": {
+          "label": "Neues Mitglied beigetreten",
+          "hint": "Orgs, in denen Sie Einladungen verwalten können"
+        }
+      },
+      "subtitle": "Legen Sie fest, wo Sie jede Art von Benachrichtigung erreicht.",
+      "scopeHint": "Für die Arbeit in Orgs gibt es eigene Einstellungen pro Org.",
+      "tabsLabel": "Benachrichtigungsbereiche",
+      "mixed": "Einige Ereignisse aktiv",
+      "linkDiscord": "Discord verknüpfen, um DMs zu erhalten",
+      "personalOnly": "Wird einmal unter „Persönlich“ für alle Ihre Benachrichtigungen festgelegt",
+      "comingSoon": "Für diese Benachrichtigung noch nicht verfügbar",
+      "manageWatchlist": "Beobachtungsliste verwalten",
+      "status": {
+        "pushOn": "Push: auf diesem Gerät aktiv",
+        "pushOff": "Push: auf diesem Gerät nicht eingerichtet",
+        "emailOn": "E-Mail: bestätigt",
+        "emailUnverified": "E-Mail: nicht bestätigt",
+        "emailNone": "E-Mail: keine Adresse",
+        "discord": "Für Discord-DMs ist ein verknüpftes Discord-Konto erforderlich"
+      },
+      "mute": {
+        "label": "Diese Org stummschalten",
+        "off": "Nicht stummgeschaltet",
+        "8h": "Für 8 Stunden",
+        "1w": "Für 1 Woche",
+        "on": "Bis ich es wieder einschalte",
+        "until": "Stummgeschaltet bis {{time}}",
+        "active": "Keine Push-Benachrichtigungen, E-Mails oder Discord-DMs von {{org}}. Erscheint weiterhin in Ihren Benachrichtigungen.",
+        "hint": "Stoppt Push-Benachrichtigungen, E-Mails und Discord-DMs von dieser Org. In-App-Benachrichtigungen und Ankündigungen kommen weiterhin an."
+      }
+    },
+    "contractAlerts": {
+      "title": "Benachrichtigungen zu neuen öffentlichen Aufträgen",
+      "description": "Erhalten Sie eine In-App- und Push-Benachrichtigung, wenn jemand einen öffentlichen Auftrag veröffentlicht. Standardmäßig deaktiviert. Lassen Sie alle Arten abgewählt, um über alle informiert zu werden.",
+      "error": "Ihre Auftragsbenachrichtigungen konnten nicht geladen oder gespeichert werden.",
+      "toggle": "Auftragsbenachrichtigungen für"
+    },
     "tabs": {
       "profile": "Profil",
       "privacy": "Datenschutz",
@@ -747,6 +968,20 @@
       "usernames": "Benutzernamen:",
       "verifyAccount": "Konto bestätigen",
       "verifyAccountDescription": "Sie müssen Ihr Konto bestätigen, um auf alle Funktionen zugreifen zu können. Wählen Sie eine der folgenden Methoden:"
+    },
+    "priceAlerts": {
+      "title": "Preisalarme",
+      "description": "Wenn ein öffentliches Angebot Ihren Zielpreis erreicht, werden Sie über die hier aktivierten Kanäle benachrichtigt.",
+      "site": "Website-Benachrichtigung",
+      "siteHint": "Erscheint in Ihren Benachrichtigungen auf SC Market.",
+      "push": "Push-Benachrichtigung",
+      "pushHint": "Auf Smartphones und in Browsern, auf denen Sie Push-Benachrichtigungen aktiviert haben.",
+      "email": "E-Mail",
+      "emailHint": "Wird an Ihre bestätigte E-Mail-Adresse gesendet. Deaktiviert, bis Sie es einschalten.",
+      "discord": "Discord-DM",
+      "discordHint": "Eine Direktnachricht vom SC Market Bot.",
+      "error": "Ihre Preisalarm-Einstellungen konnten nicht geladen oder gespeichert werden.",
+      "channelsTitle": "Benachrichtigungskanäle"
     },
     "email": {
       "addEmail": "E-Mail-Adresse hinzufügen",
@@ -849,8 +1084,8 @@
       "notRequested": "Nicht angefordert",
       "organizationPreferences": "Organisationseinstellungen",
       "otherDevices": "{{count}} weiteres Gerät",
-      "otherDevices_one": "settings.pushNotifications.otherDevices",
-      "otherDevices_other": "settings.pushNotifications.otherDevices",
+      "otherDevices_one": "{{count}} weiteres Gerät",
+      "otherDevices_other": "{{count}} weitere Geräte",
       "otherDevices_plural": "{{count}} weitere Geräte",
       "permissionDeniedError": "Berechtigung {{status}}. Bitte aktivieren Sie Benachrichtigungen in Ihren Browsereinstellungen.",
       "permissionDeniedMessage": "Bitte aktivieren Sie Benachrichtigungen in Ihren Browsereinstellungen, um Push-Benachrichtigungen zu verwenden.",
@@ -864,8 +1099,8 @@
       "subscribing": "Wird abonniert...",
       "title": "Push-Benachrichtigungen",
       "totalDevices": "{{count}} Gerät insgesamt",
-      "totalDevices_one": "settings.pushNotifications.totalDevices",
-      "totalDevices_other": "settings.pushNotifications.totalDevices",
+      "totalDevices_one": "{{count}} Gerät insgesamt",
+      "totalDevices_other": "{{count}} Geräte insgesamt",
       "totalDevices_plural": "{{count}} Geräte insgesamt",
       "unknownDevice": "Unbekanntes Gerät",
       "unsubscribe": "Abmelden",
@@ -887,7 +1122,10 @@
       "regenerateTitle": "Token neu generieren?",
       "regenerateWarning": "Dadurch wird Ihre aktuelle URL ungültig. Sie müssen sie in SCMDB aktualisieren.",
       "snapshotWarning": "Wenn Sie SCMDB mit aktiviertem Snapshot-Ereignis verbinden, wird Ihr aktuelles Blueprint-Tracking auf SC Market durch die Daten von SCMDB ersetzt. Nur auf SC Market erfasste Blueprints werden als nicht im Besitz markiert.",
-      "title": "SCMDB-Synchronisierung"
+      "title": "SCMDB-Synchronisierung",
+      "tokenActive": "Ein Synchronisierungstoken ist aktiv. Seine URL wird nur bei der Erstellung angezeigt; generieren Sie das Token neu, um eine neue URL zu erhalten.",
+      "tokenHint": "Das Synchronisierungstoken mit der Endung …{{hint}} ist aktiv. Seine URL wird nur bei der Erstellung angezeigt; generieren Sie das Token neu, um eine neue URL zu erhalten.",
+      "urlShownOnce": "Kopieren Sie diese URL jetzt. Sie enthält Ihr Synchronisierungstoken und wird nicht erneut angezeigt. Wenn Sie sie verlieren, generieren Sie das Token neu."
     }
   },
   "sidebar": {
@@ -1055,7 +1293,7 @@
   "displayed_rows": "{{from}}–{{to}} of {{count}}",
   "displayed_rows_range": "{{from}}–{{to}} von {{count}}",
   "displayed_rows_range_more": "{{from}}–{{to}} von mehr als {{to}}",
-  "all": "all",
+  "all": "Alle",
   "contractors": {
     "contractor": "Auftragnehmer",
     "title": "Auftragnehmer"
@@ -1216,6 +1454,7 @@
   },
   "recruiting_post": {
     "about": "Über",
+    "posting_for": "Beitrag für {{org}}",
     "title_required": "Titel*",
     "description_required": "Beschreibung*",
     "submit": "Absenden",
@@ -1285,6 +1524,7 @@
   "profileNavAvatar": {
     "profile": "Profil",
     "settings": "Einstellungen",
+    "priceAlerts": "Preisalarme",
     "logout": "Abmelden"
   },
   "viewProfile": {
@@ -1645,18 +1885,18 @@
     "has_service": "Hat Dienstleistung",
     "merge_error": "Angebote konnten nicht zusammengeführt werden",
     "merge_offers": "Angebote zusammenführen ({{count}})",
-    "merge_offers_one": "OffersViewPaginated.merge_offers",
-    "merge_offers_other": "OffersViewPaginated.merge_offers",
+    "merge_offers_one": "Angebote zusammenführen ({{count}})",
+    "merge_offers_other": "Angebote zusammenführen ({{count}})",
     "merge_offers_combined_cost": "Gesamtkosten: {{cost}} aUEC",
     "merge_offers_confirm_body": "Das Zusammenführen von {{count}} Angebotssitzungen erstellt eine neue zusammengeführte Angebotssitzung und schließt die ausgewählten Sitzungen. Diese Aktion kann nicht rückgängig gemacht werden.",
-    "merge_offers_confirm_body_one": "OffersViewPaginated.merge_offers_confirm_body",
-    "merge_offers_confirm_body_other": "OffersViewPaginated.merge_offers_confirm_body",
+    "merge_offers_confirm_body_one": "Das Zusammenführen von {{count}} Angebotssitzung erstellt eine neue zusammengeführte Angebotssitzung und schließt die ausgewählte Sitzung. Dies kann nicht rückgängig gemacht werden.",
+    "merge_offers_confirm_body_other": "Das Zusammenführen von {{count}} Angebotssitzungen erstellt eine neue zusammengeführte Angebotssitzung und schließt die ausgewählten Sitzungen. Dies kann nicht rückgängig gemacht werden.",
     "merge_offers_confirm_button": "Angebote zusammenführen",
     "merge_offers_confirm_cancel": "Abbrechen",
     "merge_offers_confirm_title": "Angebotssitzungen zusammenführen?",
     "merge_offers_selected_count": "Ausgewählt: {{count}} Angebotssitzungen",
-    "merge_offers_selected_count_one": "OffersViewPaginated.merge_offers_selected_count",
-    "merge_offers_selected_count_other": "OffersViewPaginated.merge_offers_selected_count",
+    "merge_offers_selected_count_one": "Ausgewählt: {{count}} Angebotssitzung",
+    "merge_offers_selected_count_other": "Ausgewählt: {{count}} Angebotssitzungen",
     "merge_offers_warning": "Alle ausgewählten Angebotssitzungen werden geschlossen und durch eine einzige zusammengeführte Angebotssitzung ersetzt.",
     "merge_success": "Angebote erfolgreich zusammengeführt",
     "seller": "Verkäufer",
@@ -1761,6 +2001,7 @@
     "addWebhook": "Discord-Benachrichtigungs-Webhook hinzufügen",
     "webhookName": "Webhook-Name",
     "webhookUrl": "Webhook-URL",
+    "publicContractCreated": "Neue öffentliche Aufträge (seitenweit)",
     "invalidUrl": "Ungültige URL",
     "orderCreated": "Bestellung erstellt",
     "orderAssigned": "Mir zugewiesene Bestellung",
@@ -1934,8 +2175,6 @@
     "failedSubmit": "Übermittlung fehlgeschlagen! {{error}}"
   },
   "MarketListingView": {
-    "seeOtherListings": "Siehe {{count}} weitere Angebote für diesen Artikel",
-    "averagePrice": "Durchschnittspreis",
     "addedToCart": "Zum Warenkorb hinzugefügt!",
     "price": "Preis",
     "ofAvailable": "von {{count}} verfügbar",
@@ -1960,8 +2199,8 @@
     "activeOrders": "Aktive Bestellungen",
     "previousOrders": "Vorherige Bestellungen",
     "anonymousReviewer": "Anonym",
-    "inCarts_one": "MarketListingView.inCarts",
-    "inCarts_other": "MarketListingView.inCarts",
+    "inCarts_one": "{{count}} Person hat dies im Warenkorb",
+    "inCarts_other": "{{count}} Personen haben dies im Warenkorb",
     "languages": "Sprachen",
     "noReviewContent": "Kein Bewertungsinhalt",
     "otherListingsFrom": "Weitere Angebote von {{seller}}",
@@ -1969,8 +2208,8 @@
     "reviewBy": "von",
     "sellerReviews": "Bewertungen für {{seller}}",
     "viewAllReviews": "Alle {{count}} Bewertungen anzeigen",
-    "viewAllReviews_one": "MarketListingView.viewAllReviews",
-    "viewAllReviews_other": "MarketListingView.viewAllReviews",
+    "viewAllReviews_one": "{{count}} Bewertung ansehen",
+    "viewAllReviews_other": "Alle {{count}} Bewertungen ansehen",
     "viewInCart": "Im Warenkorb anzeigen",
     "views": "Aufrufe"
   },
@@ -2107,8 +2346,8 @@
     "orLower": "niedriger",
     "orHigher": "höher",
     "addToCart": "In den Warenkorb",
-    "ofAvailable_one": "MarketAggregateView.ofAvailable",
-    "ofAvailable_other": "MarketAggregateView.ofAvailable",
+    "ofAvailable_one": "von {{count}} verfügbar",
+    "ofAvailable_other": "von {{count}} verfügbar",
     "quantityRequested": "Nachfrage (gesucht ≥ Preis)",
     "stockAvailable": "Angebot (Bestand ≤ Preis)",
     "viewCount": "Aufrufe gesamt"
@@ -2180,13 +2419,13 @@
     "editListing": "Angebot bearbeiten",
     "archive": "Archivieren",
     "bulkArchiveBody": "Sie sind dabei, {{count}} Angebot(e) zu archivieren. Die Archivierung ist für Käufer und die öffentliche Suche endgültig. Sie können archivierte Angebote weiterhin unter „Meine Angebote“ ansehen.",
-    "bulkArchiveBody_one": "ItemStock.bulkArchiveBody",
-    "bulkArchiveBody_other": "ItemStock.bulkArchiveBody",
+    "bulkArchiveBody_one": "Sie sind dabei, {{count}} Angebot zu archivieren. Die Archivierung ist für Käufer und die öffentliche Suche dauerhaft. Archivierte Angebote können Sie weiterhin unter „Meine Angebote“ ansehen.",
+    "bulkArchiveBody_other": "Sie sind dabei, {{count}} Angebote zu archivieren. Die Archivierung ist für Käufer und die öffentliche Suche dauerhaft. Archivierte Angebote können Sie weiterhin unter „Meine Angebote“ ansehen.",
     "bulkArchiveCancel": "Abbrechen",
     "bulkArchiveConfirm": "Dauerhaft archivieren",
     "bulkArchivedSuccess": "{{count}} Angebot(e) archiviert.",
-    "bulkArchivedSuccess_one": "ItemStock.bulkArchivedSuccess",
-    "bulkArchivedSuccess_other": "ItemStock.bulkArchivedSuccess",
+    "bulkArchivedSuccess_one": "{{count}} Angebot archiviert.",
+    "bulkArchivedSuccess_other": "{{count}} Angebote archiviert.",
     "bulkArchiveTitle": "Ausgewählte Angebote archivieren?",
     "cannotReduceStock": "Bestand kann nicht reduziert werden – Einheiten sind aktiven Bestellungen zugesagt",
     "editingNewListing": "Neues Angebot wird bearbeitet...",
@@ -2596,8 +2835,8 @@
     "added": "Zum Warenkorb hinzugefügt",
     "adding": "Wird hinzugefügt...",
     "addToCart": "In den Warenkorb",
-    "alreadyInCart_one": "cart.alreadyInCart",
-    "alreadyInCart_other": "cart.alreadyInCart",
+    "alreadyInCart_one": "{{count}} bereits im Warenkorb",
+    "alreadyInCart_other": "{{count}} bereits im Warenkorb",
     "available": "verfügbar",
     "availableNow": "Jetzt verfügbar",
     "belowMinQty": "Mindestmenge: {{min}} (Warenkorb hat {{total}})",
@@ -2612,8 +2851,8 @@
     "invalidQty": "Die Menge muss mindestens 1 betragen",
     "itemRemoved": "Gegenstand aus dem Warenkorb entfernt",
     "nextAvailable": "Als Nächstes verfügbar",
-    "othersInCart_one": "cart.othersInCart",
-    "othersInCart_other": "cart.othersInCart",
+    "othersInCart_one": "{{count}} weitere Person hat dies im Warenkorb",
+    "othersInCart_other": "{{count}} weitere Personen haben dies im Warenkorb",
     "priceChanged": "Preis geändert",
     "priceChangedFrom": "Preis geändert von {{old}} auf {{new}} aUEC",
     "priceDecreased": "Preis gesunken",
@@ -2690,6 +2929,8 @@
     "topShopsEmpty": "Noch keine Shops.",
     "topShopsError": "Die Shops konnten nicht geladen werden.",
     "sellTitle": "Jetzt verkaufen",
+    "seoDescription": "SC Market ist der Star-Citizen-Marktplatz, auf dem Spieler Ingame-Gegenstände kaufen, verkaufen und tauschen und Orgs für Dienstleistungen wie Transport, Eskorte, medizinische Versorgung und Bergung anheuern – alles in aUEC.",
+    "seoTitle": "SC Market — Star-Citizen-Marktplatz: Gegenstände in aUEC kaufen, verkaufen & tauschen",
     "sellText": "Eröffnen Sie einen Shop allein oder als Org. Org-Mitglieder übernehmen und erfüllen Bestellungen gemeinsam, mit einem gemeinsamen Shop, Lagerbestand und Ruf.",
     "sellStep1Title": "Einstellen",
     "sellStep1Text": "Jeder Artikel und jede Dienstleistung, in jeder Menge, Preis in aUEC.",
@@ -2772,6 +3013,16 @@
     "goBackToPage": "Zurück zur Seite",
     "returnToDashboard": "Zurück zum Dashboard",
     "pageTitle": "Ein Fehler ist aufgetreten"
+  },
+  "help": {
+    "learnHow": "So geht's",
+    "aboutLink": "Über SC Market",
+    "aboutPrompt": "Was ist SC Market?",
+    "hubTitle": "Hilfe & Anleitungen",
+    "loadFailed": "Diese Anleitung konnte nicht geladen werden. Aktualisieren Sie die Seite, um es erneut zu versuchen.",
+    "moreIn": "Mehr in {{category}}",
+    "newHere": "Neu bei SC Market?",
+    "nextSteps": "Nächste Schritte"
   },
   "org": {
     "orgTitle": "Org",
@@ -3040,8 +3291,8 @@
     "createListingDescription": "Zur Seite zum Erstellen eines Angebots navigieren",
     "createMarketListing": "Ein neues Marktangebot erstellen",
     "dataTableDescription": "Datentabelle mit {{count}} Zeilen",
-    "dataTableDescription_one": "accessibility.dataTableDescription",
-    "dataTableDescription_other": "accessibility.dataTableDescription",
+    "dataTableDescription_one": "Datentabelle mit {{count}} Zeile",
+    "dataTableDescription_other": "Datentabelle mit {{count}} Zeilen",
     "decorativeImage": "",
     "defaultListingHelp": "Wählen Sie das Standardangebot aus, das für dieses Sammelangebot angezeigt werden soll",
     "defaultListingInput": "Standardangebot auswählen",
@@ -3049,8 +3300,8 @@
     "delete": "Löschen",
     "downvoteComment": "Diesen Kommentar herabstufen",
     "downvoteCount": "Herabstufungen: {{count}}",
-    "downvoteCount_one": "accessibility.downvoteCount",
-    "downvoteCount_other": "accessibility.downvoteCount",
+    "downvoteCount_one": "Negative Stimmen: {{count}}",
+    "downvoteCount_other": "Negative Stimmen: {{count}}",
     "edit": "Bearbeiten",
     "editQuantityHelp": "Die verfügbare Menge für diesen Bestandsposten bearbeiten",
     "editQuantityInput": "Verfügbare Menge bearbeiten",
@@ -3142,8 +3393,8 @@
     "recipientSelector": "Empfängerauswahl",
     "recipientTypeHelp": "Wählen Sie aus, ob Sie Geld an einen Benutzer oder Auftragnehmer senden möchten",
     "recruitmentUpvoteCount": "Hochstufungen: {{count}}",
-    "recruitmentUpvoteCount_one": "accessibility.recruitmentUpvoteCount",
-    "recruitmentUpvoteCount_other": "accessibility.recruitmentUpvoteCount",
+    "recruitmentUpvoteCount_one": "Positive Stimmen: {{count}}",
+    "recruitmentUpvoteCount_other": "Positive Stimmen: {{count}}",
     "registerShip": "Schiff registrieren",
     "registerShipHelp": "Das ausgewählte Schiff in Ihrer Flotte registrieren",
     "reportContent": "Diesen Inhalt melden",
@@ -3228,8 +3479,8 @@
     "updateAmountInput": "Betrag zur Bestandsaktualisierung eingeben",
     "upvoteComment": "Diesen Kommentar hochstufen",
     "upvoteCount": "Hochstufungen: {{count}}",
-    "upvoteCount_one": "accessibility.upvoteCount",
-    "upvoteCount_other": "accessibility.upvoteCount",
+    "upvoteCount_one": "Positive Stimmen: {{count}}",
+    "upvoteCount_other": "Positive Stimmen: {{count}}",
     "upvoteRecruitmentPost": "Diesen Rekrutierungsbeitrag hochstufen",
     "userAvatar": "Avatar von {{username}}",
     "view": "Anzeigen",
@@ -3363,8 +3614,8 @@
     "minBid": "Mindestgebot",
     "placeBid": "Gebot abgeben",
     "time": "Zeit",
-    "totalBids_one": "BidAreaV2.totalBids",
-    "totalBids_other": "BidAreaV2.totalBids",
+    "totalBids_one": "{{count}} Gebot",
+    "totalBids_other": "{{count}} Gebote",
     "yourBid": "Ihr Gebot (aUEC)"
   },
   "blocklist": {
@@ -3420,6 +3671,7 @@
   "BuyOrdersRedesign": {
     "by": "von {{name}}",
     "cancel": "Abbrechen",
+    "cardLabel": "Kaufauftrag: {{item}}, {{price}}, {{remaining}} von {{quantity}} angefragt",
     "createBuyOrder": "Kaufauftrag erstellen",
     "empty": "Derzeit keine offenen Kaufaufträge.",
     "error": "Kaufaufträge konnten nicht geladen werden.",
@@ -3436,6 +3688,8 @@
     "newBuyOrder": "Neuer Kaufauftrag",
     "no": "Nein",
     "post": "Kaufauftrag veröffentlichen",
+    "priceNegotiable": "Angebot unterbreiten",
+    "priceUnset": "Kein Preis festgelegt",
     "posted": "Kaufauftrag veröffentlicht.",
     "public": "Öffentlich",
     "quantityLabel": "Menge",
@@ -3642,14 +3896,19 @@
     "craftedSource": "Quelle",
     "create": "Los erstellen",
     "createError": "Los konnte nicht erstellt werden",
+    "createErrorReason": "Los konnte nicht erstellt werden: {{reason}}",
     "createSuccess": "Los erfolgreich erstellt",
     "invalidQualityTier": "Die Qualitätsstufe muss zwischen 1 und 5 liegen",
     "invalidQualityValue": "Der Qualitätswert muss zwischen 0 und 1000 liegen",
     "invalidQuantity": "Die Menge muss größer als 0 sein",
+    "item": "Gegenstand",
+    "itemRequired": "Wählen Sie das Angebot (und den Gegenstand), zu dem dieses Los hinzugefügt werden soll",
     "listed": "Angeboten",
     "listedHelper": "Angebotener Bestand erscheint in öffentlichen Angeboten",
+    "listing": "Angebot",
     "location": "Standort (optional)",
     "locationOwnership": "Standort & Eigentum",
+    "noItems": "Dieses Angebot hat keinen Gegenstand, dem Bestand hinzugefügt werden kann",
     "none": "Keine",
     "notes": "Notizen (optional)",
     "notesPlaceholder": "Fügen Sie Notizen zu diesem Los hinzu...",
@@ -3667,8 +3926,8 @@
   "Damaged": "warning",
   "displayed_rows_one": "{{from}}-{{to}} von {{count}}",
   "displayed_rows_other": "{{from}}-{{to}} von {{count}}",
-  "displayed_rows_range_one": "displayed_rows_range",
-  "displayed_rows_range_other": "displayed_rows_range",
+  "displayed_rows_range_one": "{{from}}–{{to}} von {{count}}",
+  "displayed_rows_range_other": "{{from}}–{{to}} von {{count}}",
   "EditListingV2": {
     "about": "Über",
     "basePrice": "Grundpreis",
@@ -3767,6 +4026,22 @@
       "selectChat": "Wählen Sie einen Chat aus, um mit dem Schreiben zu beginnen",
       "sendMessage": "Nachricht senden",
       "startConversation": "Unterhaltung beginnen"
+    },
+    "noOrg": {
+      "browseOrgs": "Organisationen durchsuchen",
+      "description": "Diese Seite arbeitet mit Ihrer aktuellen Organisation. Wählen Sie eine Ihrer Organisationen aus oder suchen Sie eine, der Sie beitreten können.",
+      "myOrgs": "Organisation auswählen",
+      "title": "Wählen Sie eine Organisation aus oder treten Sie einer bei, um diese Seite zu nutzen"
+    },
+    "noOrgPermission": {
+      "backToOrg": "Zu {{org}}",
+      "description": "Ihre Rolle in dieser Organisation umfasst diese Berechtigung nicht. Wenden Sie sich an einen Administrator der Organisation, wenn Sie Zugriff benötigen.",
+      "titles": {
+        "money": "Sie haben keine Berechtigung, die Finanzen dieser Organisation zu verwalten",
+        "orders": "Sie haben keine Berechtigung, die Bestellungen dieser Organisation zu verwalten",
+        "recruiting": "Sie haben keine Berechtigung, die Rekrutierung dieser Organisation zu verwalten",
+        "settings": "Sie haben keine Berechtigung, die Einstellungen dieser Organisation zu verwalten"
+      }
     },
     "notifications": {
       "noNotifications": "Keine Benachrichtigungen",
@@ -4130,6 +4405,7 @@
     "groupManage": "Verwalten",
     "groupMarketplace": "Marktplatz",
     "groupPersonal": "Persönlich",
+    "helpGuides": "Hilfe & Anleitungen",
     "inventory": "Inventar",
     "listings": "Angebote",
     "market": "Markt",
@@ -4198,6 +4474,8 @@
     "allocationModeLabel": "Wie soll der Bestand den Bestellungen zugewiesen werden?",
     "allocationModeManual": "Manuell",
     "allocationModeManualDescription": "Sie wählen manuell aus, welche Bestandsposten jeder Bestellung zugewiesen werden",
+    "allocationModeMoved": "Der Bestandszuweisungsmodus wird pro Shop festgelegt: Öffnen Sie die Einstellungen Ihres Shops unter Bestandsverwaltung › Zuweisungsmodus.",
+    "allocationModeShops": "Ihre Shops",
     "allocationModeNone": "Keine (veraltet)",
     "allocationModeNoneDescription": "Keine physische Zuweisung – der Bestand wird nur auf Angebotsebene erfasst",
     "allocationModeNote": "Hinweis: Diese Einstellung steuert, wie der Bestand physisch den Bestellungen zugewiesen wird. Sie ist unabhängig von der obigen Einstellung zum Zeitpunkt des Bestandsabzugs, die steuert, wann der Bestand für Käufer sichtbar wird.",
@@ -4621,8 +4899,8 @@
     "reviewBy": "von",
     "sellerReviews": "Bewertungen für {{seller}}",
     "viewAllReviews": "Alle {{count}} Bewertungen anzeigen",
-    "viewAllReviews_one": "serviceView.viewAllReviews",
-    "viewAllReviews_other": "serviceView.viewAllReviews"
+    "viewAllReviews_one": "{{count}} Bewertung ansehen",
+    "viewAllReviews_other": "Alle {{count}} Bewertungen ansehen"
   },
   "ShopSelector": {
     "created": "Shop erstellt: {{name}}",
@@ -4811,7 +5089,7 @@
     },
     "linkCopied": "Link in die Zwischenablage kopiert",
     "remove": "Entfernen",
-    "reset": "ui.reset",
+    "reset": "Zurücksetzen",
     "save": "Speichern",
     "share": "Teilen",
     "yes": "Ja"
@@ -5101,5 +5379,43 @@
     "sortQuality": "Qualität",
     "sortStatus": "Status",
     "totalItems": "Artikel insgesamt"
+  },
+  "priceAlerts": {
+    "watch": {
+      "button": "Preis beobachten",
+      "title": "Preis beobachten",
+      "editTitle": "Preisalarm bearbeiten",
+      "explainer": "Erhalten Sie einen Alarm, wenn {{name}} zu oder unter Ihrem Zielpreis angeboten wird.",
+      "targetPrice": "Zielpreis",
+      "invalidPrice": "Geben Sie eine ganze Zahl über 1 aUEC ein.",
+      "currentLowest": "Aktuell niedrigster: {{price}}",
+      "noListings": "Derzeit keine öffentlichen Angebote.",
+      "error": "Ihr Preisalarm konnte nicht gespeichert werden.",
+      "stop": "Nicht mehr beobachten",
+      "add": "Preis beobachten",
+      "saved": "{{name}} wird bei ≤ {{price}} beobachtet",
+      "removed": "{{name}} wird nicht mehr beobachtet",
+      "watching": "Beobachtet ≤ {{price}}"
+    },
+    "manager": {
+      "title": "Beobachtungsliste",
+      "description": "Beobachten Sie einen Gegenstand und erhalten Sie einen Alarm, wenn ein öffentliches Angebot zu oder unter Ihrem Zielpreis liegt. Nutzen Sie „Preis beobachten“ auf einer Gegenstands- oder Angebotsseite, fügen Sie hier einen hinzu oder verwenden Sie /watchlist add in Discord.",
+      "full": "Ihre Beobachtungsliste ist voll ({{max}} Gegenstände). Entfernen Sie einen, um einen weiteren hinzuzufügen.",
+      "loadError": "Ihre Beobachtungsliste konnte nicht geladen werden.",
+      "removeError": "Dieser Gegenstand konnte nicht entfernt werden.",
+      "empty": "Sie beobachten noch nichts.",
+      "lowest": "Aktuell niedrigster",
+      "lastAlerted": "Letzter Alarm",
+      "textMatch": "Passt auf Angebotstitel",
+      "none": "Keine Angebote",
+      "never": "Nie",
+      "edit": "Zielpreis bearbeiten",
+      "editAria": "{{name}} bearbeiten",
+      "remove": "Nicht mehr beobachten",
+      "removeAria": "{{name}} nicht mehr beobachten",
+      "count": "{{count}} von {{max}} Gegenständen",
+      "add": "Gegenstand hinzufügen",
+      "targetValue": "Alarm bei ≤ {{price}}"
+    }
   }
 }
