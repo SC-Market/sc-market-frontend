@@ -597,6 +597,7 @@
     "account_identity": {
       "account_deactivated": "Ein Admin hat dein Konto deaktiviert.",
       "account_reactivated": "Ein Admin hat dein Konto reaktiviert.",
+      "discord_link_skipped": "Dein Discord-Konto ist bereits mit einem anderen SC-Market-Konto verknüpft und wurde deshalb nicht mit diesem verknüpft. Wenn beide Konten dir gehören, wende dich an den SC-Market-Support.",
       "discord_unlinked": "Ein Admin hat Discord von deinem Konto getrennt. Du kannst in den Einstellungen wieder ein Discord-Konto verknüpfen.",
       "generic": "Ein Admin hat dein Konto geändert.",
       "spectrum_cleared": "Ein Admin hat die RSI-Verknüpfung von deinem Konto entfernt. Verifiziere dein RSI-Konto in den Einstellungen erneut.",
@@ -5114,12 +5115,7 @@
   },
   "Under Attack": "error",
   "userActions": {
-    "adminUnlinkAccount": "RSI-Konto entkoppeln (Admin)",
-    "adminUnlinkDialogCancel": "Abbrechen",
-    "adminUnlinkDialogConfirm": "Konto entkoppeln",
-    "adminUnlinkDialogDescription": "Sind Sie sicher, dass Sie das Star Citizen-Konto für {{username}} entkoppeln möchten? Dadurch wird ihr Profil auf den nicht verifizierten Status zurückgesetzt und ihr Benutzername auf das Standardformat basierend auf ihrer Discord-ID zurückgeändert.",
-    "adminUnlinkDialogTitle": "Entkopplung des RSI-Kontos bestätigen",
-    "adminUnlinkSuccess": "RSI-Konto für {{username}} erfolgreich entkoppelt",
+    "adminOpenIdentity": "In Admin -> Identität öffnen",
     "blockForOrg": "{{username}} für {{orgName}} blockieren",
     "blockPersonally": "{{username}} als {{myUsername}} blockieren",
     "menu": "Menü für Benutzeraktionen",
@@ -5494,6 +5490,7 @@
     "kinds": {
       "account_deactivated": "Konto deaktiviert",
       "account_reactivated": "Konto reaktiviert",
+      "discord_link_skipped": "Discord nicht verknüpft (gehört zu einem anderen Konto)",
       "discord_unlinked": "Discord getrennt",
       "spectrum_cleared": "Spectrum-Verknüpfung entfernt",
       "spectrum_set": "Spectrum-ID gesetzt",

@@ -3028,6 +3028,7 @@
     "account_identity": {
       "account_deactivated": "An admin deactivated your account.",
       "account_reactivated": "An admin reactivated your account.",
+      "discord_link_skipped": "Your Discord account is already linked to another SC Market account, so it wasn't linked to this one. If both accounts are yours, contact SC Market support.",
       "discord_unlinked": "An admin unlinked Discord from your account. You can link a Discord account again in Settings.",
       "generic": "An admin changed your account.",
       "spectrum_cleared": "An admin removed the RSI link from your account. Verify your RSI account again in Settings.",
@@ -5084,12 +5085,7 @@
   "Under Attack": "error",
   "update_post": "Update Post",
   "userActions": {
-    "adminUnlinkAccount": "Unlink RSI Account (Admin)",
-    "adminUnlinkDialogCancel": "Cancel",
-    "adminUnlinkDialogConfirm": "Unlink Account",
-    "adminUnlinkDialogDescription": "Are you sure you want to unlink the Star Citizen account for {{username}}? This will reset their profile to unverified status and change their username back to the default format based on their Discord ID.",
-    "adminUnlinkDialogTitle": "Confirm Unlink RSI Account",
-    "adminUnlinkSuccess": "Successfully unlinked RSI account for {{username}}",
+    "adminOpenIdentity": "Open in Admin -> Identity",
     "blockForOrg": "Block {{username}} for {{orgName}}",
     "blockPersonally": "Block {{username}} as {{myUsername}}",
     "menu": "User actions menu",
@@ -5494,6 +5490,7 @@
     "kinds": {
       "account_deactivated": "Account deactivated",
       "account_reactivated": "Account reactivated",
+      "discord_link_skipped": "Discord not linked (held by another account)",
       "discord_unlinked": "Discord unlinked",
       "spectrum_cleared": "Spectrum link cleared",
       "spectrum_set": "Spectrum id set",

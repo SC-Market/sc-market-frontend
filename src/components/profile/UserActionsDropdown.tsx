@@ -22,17 +22,9 @@ import {
 import { BlockUserButton, BlockUserForOrgButton } from "./BlockUserButton"
 import { UnblockUserButton, UnblockUserForOrgButton } from "./UnblockUserButton"
 
-
-import { LinkOff as LinkOffIcon } from "@mui/icons-material"
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-} from "@mui/material"
-import LoadingButton from "@mui/lab/LoadingButton"
+import { ManageAccountsRounded as ManageAccountsIcon } from "@mui/icons-material"
+import { Link as RouterLink } from "react-router-dom"
+import { ADMIN_PATHS } from "../../routes/paths"
 
 interface UserActionsDropdownProps {
   user: User
@@ -46,15 +38,12 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
   const {
     myProfile, contractor,
     isPersonallyBlocked, isSelf, isOrgBlocked, isAdmin,
-    isUnlinking, unlinkDialogOpen, setUnlinkDialogOpen, handleConfirmUnlink,
     personalBlocklistLoading, orgBlocklistLoading,
   } = useUserActions(user.username)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
   const handleViewRSIPage = () => { window.open(`https://robertsspaceindustries.com/citizens/${user.username}`, "_blank"); handleClose() }
   const handleSuccess = () => handleClose()
-  const handleUnlinkClick = () => { setUnlinkDialogOpen(true); handleClose() }
-  const handleCancelUnlink = () => setUnlinkDialogOpen(false)
 
   return (
     <>
@@ -154,20 +143,18 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
                 />
               ))}
 
-            {isAdmin && user.rsi_confirmed && (
-              <ListItemButton onClick={handleUnlinkClick}>
-                <ListItemIcon
-                  sx={{
-                    transition: "0.3s",
-                    fontSize: "0.9em",
-                    color: theme.palette.error.main,
-                  }}
-                >
-                  <LinkOffIcon />
+            {isAdmin && (
+              <ListItemButton
+                component={RouterLink}
+                to={`${ADMIN_PATHS.identity}?q=${encodeURIComponent(user.username)}`}
+                onClick={handleClose}
+              >
+                <ListItemIcon sx={{ transition: "0.3s", fontSize: "0.9em", color: theme.palette.primary.main }}>
+                  <ManageAccountsIcon />
                 </ListItemIcon>
                 <ListItemText>
                   <Box color={"text.secondary"} fontSize="0.9em">
-                    {t("userActions.adminUnlinkAccount")}
+                    {t("userActions.adminOpenIdentity", "Open in Admin -> Identity")}
                   </Box>
                 </ListItemText>
               </ListItemButton>
@@ -176,36 +163,6 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
         </Box>
       </Popover>
 
-      <Dialog
-        open={unlinkDialogOpen}
-        onClose={handleCancelUnlink}
-        aria-labelledby="admin-unlink-dialog-title"
-        aria-describedby="admin-unlink-dialog-description"
-      >
-        <DialogTitle id="admin-unlink-dialog-title">
-          {t("userActions.adminUnlinkDialogTitle")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="admin-unlink-dialog-description">
-            {t("userActions.adminUnlinkDialogDescription", {
-              username: user.username,
-            })}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelUnlink}>
-            {t("userActions.adminUnlinkDialogCancel")}
-          </Button>
-          <LoadingButton
-            onClick={handleConfirmUnlink}
-            color="error"
-            loading={isUnlinking}
-            variant="contained"
-          >
-            {t("userActions.adminUnlinkDialogConfirm")}
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
     </>
   )
 }

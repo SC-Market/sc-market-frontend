@@ -599,6 +599,7 @@
     "account_identity": {
       "account_deactivated": "Un admin a désactivé ton compte.",
       "account_reactivated": "Un admin a réactivé ton compte.",
+      "discord_link_skipped": "Ton compte Discord est déjà associé à un autre compte SC Market, il n'a donc pas été associé à celui-ci. Si les deux comptes sont à toi, contacte le support SC Market.",
       "discord_unlinked": "Un admin a dissocié Discord de ton compte. Tu peux associer de nouveau un compte Discord dans les paramètres.",
       "generic": "Un admin a modifié ton compte.",
       "spectrum_cleared": "Un admin a retiré le lien RSI de ton compte. Vérifie de nouveau ton compte RSI dans les paramètres.",
@@ -5146,12 +5147,7 @@
   },
   "Under Attack": "error",
   "userActions": {
-    "adminUnlinkAccount": "Dissocier le compte RSI (Admin)",
-    "adminUnlinkDialogCancel": "Annuler",
-    "adminUnlinkDialogConfirm": "Dissocier le compte",
-    "adminUnlinkDialogDescription": "Êtes-vous sûr de vouloir dissocier le compte Star Citizen de {{username}} ? Cela réinitialisera son profil au statut non vérifié et rétablira son nom d'utilisateur au format par défaut basé sur son ID Discord.",
-    "adminUnlinkDialogTitle": "Confirmer la dissociation du compte RSI",
-    "adminUnlinkSuccess": "Compte RSI de {{username}} dissocié avec succès",
+    "adminOpenIdentity": "Ouvrir dans Admin -> Identité",
     "blockForOrg": "Bloquer {{username}} pour {{orgName}}",
     "blockPersonally": "Bloquer {{username}} en tant que {{myUsername}}",
     "menu": "Menu des actions utilisateur",
@@ -5526,6 +5522,7 @@
     "kinds": {
       "account_deactivated": "Compte désactivé",
       "account_reactivated": "Compte réactivé",
+      "discord_link_skipped": "Discord non associé (détenu par un autre compte)",
       "discord_unlinked": "Discord dissocié",
       "spectrum_cleared": "Lien Spectrum supprimé",
       "spectrum_set": "Identifiant Spectrum défini",

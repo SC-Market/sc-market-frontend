@@ -33,6 +33,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
+import { useSearchParams } from "react-router-dom"
 import {
   useDeactivateIdentityUserMutation,
   useFixIdentitySpectrumMutation,
@@ -72,6 +73,8 @@ export function kindLabel(kind: IdentityActionKind, t: TFunction): string {
       return t("adminIdentity.kinds.account_deactivated", "Account deactivated")
     case "account_reactivated":
       return t("adminIdentity.kinds.account_reactivated", "Account reactivated")
+    case "discord_link_skipped":
+      return t("adminIdentity.kinds.discord_link_skipped", "Discord not linked (held by another account)")
   }
 }
 
@@ -472,8 +475,11 @@ function UserPanel(props: { userId: string }) {
 
 export function AdminIdentityView() {
   const { t } = useTranslation()
-  const [input, setInput] = useState("")
-  const [query, setQuery] = useState("")
+  // ?q= prefills and runs the search (the profile menu's "Open in Admin -> Identity").
+  const [searchParams] = useSearchParams()
+  const initial = (searchParams.get("q") ?? "").trim().slice(0, 100)
+  const [input, setInput] = useState(initial)
+  const [query, setQuery] = useState(initial.length >= 2 ? initial : "")
   const [selected, setSelected] = useState<string | null>(null)
   const { data, error, isFetching } = useSearchIdentityUsersQuery({ q: query }, { skip: query.length < 2 })
 

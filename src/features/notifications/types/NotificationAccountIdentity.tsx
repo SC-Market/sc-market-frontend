@@ -18,6 +18,7 @@ export interface AccountIdentityNotice {
     | "spectrum_set"
     | "account_deactivated"
     | "account_reactivated"
+    | "discord_link_skipped"
   new_username: string | null
   created_at: string
 }
@@ -49,6 +50,11 @@ export function NotificationAccountIdentity(props: { notif: Notification }) {
         return t("notifications.account_identity.account_deactivated", "An admin deactivated your account.")
       case "account_reactivated":
         return t("notifications.account_identity.account_reactivated", "An admin reactivated your account.")
+      case "discord_link_skipped":
+        return t(
+          "notifications.account_identity.discord_link_skipped",
+          "Your Discord account is already linked to another SC Market account, so it wasn't linked to this one. If both accounts are yours, contact SC Market support.",
+        )
       default:
         return t("notifications.account_identity.generic", "An admin changed your account.")
     }

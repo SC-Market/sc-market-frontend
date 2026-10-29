@@ -1,6 +1,7 @@
 import React from "react"
 import { render, screen, fireEvent, act, within } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
+import { MemoryRouter } from "react-router-dom"
 import { AdminIdentityView } from "../AdminIdentityView"
 import type { IdentityDetail, IdentitySearchRow } from "../../../store/api/v2/market"
 
@@ -96,7 +97,7 @@ beforeEach(() => {
 })
 
 async function openUser() {
-  render(<AdminIdentityView />)
+  render(<MemoryRouter><AdminIdentityView /></MemoryRouter>)
   fireEvent.change(screen.getByTestId("identity-search"), { target: { value: "  stale " } })
   await act(async () => {
     fireEvent.submit(screen.getByTestId("identity-search").closest("form")!)
@@ -130,7 +131,7 @@ describe("AdminIdentityView", () => {
   })
 
   it("needs at least 2 characters to search", () => {
-    render(<AdminIdentityView />)
+    render(<MemoryRouter><AdminIdentityView /></MemoryRouter>)
     fireEvent.change(screen.getByTestId("identity-search"), { target: { value: "a" } })
     expect(screen.getByRole("button", { name: "Search" })).toBeDisabled()
   })
@@ -220,5 +221,26 @@ describe("AdminIdentityView", () => {
     const panel = await openUser()
     expect(within(panel).getByRole("button", { name: /reactivate account/i })).toBeEnabled()
     expect(within(panel).queryByRole("button", { name: /deactivate account/i })).toBeNull()
+  })
+
+  it("?q= prefills and runs the search (profile menu link)", () => {
+    render(
+      <MemoryRouter initialEntries={["/admin/identity?q=StaleHandle"]}>
+        <AdminIdentityView />
+      </MemoryRouter>,
+    )
+    expect(screen.getByTestId("identity-search")).toHaveValue("StaleHandle")
+    expect(m.searchArgs[m.searchArgs.length - 1]).toEqual({ q: "StaleHandle" })
+    expect(screen.getByTestId(`identity-row-${USER_ID}`)).toBeInTheDocument()
+  })
+
+  it("labels a skipped Discord link in recent changes", async () => {
+    m.user.data = detail({
+      recent_actions: [
+        { audit_log_id: "a2", kind: "discord_link_skipped", actor_user_id: null, actor_username: null, reason: "Discord account already linked to another SC Market account", created_at: "2026-10-29T00:00:00.000Z" },
+      ],
+    })
+    const panel = await openUser()
+    expect(within(panel).getByText("Discord not linked (held by another account)")).toBeInTheDocument()
   })
 })

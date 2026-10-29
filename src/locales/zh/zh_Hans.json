@@ -603,6 +603,7 @@
     "account_identity": {
       "account_deactivated": "管理员停用了你的账户。",
       "account_reactivated": "管理员重新启用了你的账户。",
+      "discord_link_skipped": "你的 Discord 账户已关联到另一个 SC Market 账户，因此没有关联到此账户。如果两个账户都是你的，请联系 SC Market 支持。",
       "discord_unlinked": "管理员解除了你账户的 Discord 关联。你可以在设置中重新关联 Discord 账户。",
       "generic": "管理员更改了你的账户。",
       "spectrum_cleared": "管理员移除了你账户的 RSI 关联。请在设置中重新验证你的 RSI 账户。",
@@ -5120,12 +5121,7 @@
   },
   "Under Attack": "error",
   "userActions": {
-    "adminUnlinkAccount": "取消关联 RSI 账户（管理员）",
-    "adminUnlinkDialogCancel": "取消",
-    "adminUnlinkDialogConfirm": "取消关联账户",
-    "adminUnlinkDialogDescription": "确定要取消关联 {{username}} 的 Star Citizen 账户吗？这将把其个人资料重置为未验证状态，并将其用户名改回基于其 Discord ID 的默认格式。",
-    "adminUnlinkDialogTitle": "确认取消关联 RSI 账户",
-    "adminUnlinkSuccess": "已成功取消关联 {{username}} 的 RSI 账户",
+    "adminOpenIdentity": "在 管理 -> 身份 中打开",
     "blockForOrg": "以 {{orgName}} 的身份屏蔽 {{username}}",
     "blockPersonally": "以 {{myUsername}} 的身份屏蔽 {{username}}",
     "menu": "用户操作菜单",
@@ -5500,6 +5496,7 @@
     "kinds": {
       "account_deactivated": "已停用账户",
       "account_reactivated": "已重新启用账户",
+      "discord_link_skipped": "未关联 Discord（已被其他账户使用）",
       "discord_unlinked": "已解除 Discord 关联",
       "spectrum_cleared": "已清除 Spectrum 关联",
       "spectrum_set": "已设置 Spectrum ID",

@@ -601,6 +601,7 @@
     "account_identity": {
       "account_deactivated": "Адміністратор деактивував ваш обліковий запис.",
       "account_reactivated": "Адміністратор знову активував ваш обліковий запис.",
+      "discord_link_skipped": "Ваш обліковий запис Discord уже прив'язано до іншого облікового запису SC Market, тому його не прив'язано до цього. Якщо обидва облікові записи ваші, зверніться до підтримки SC Market.",
       "discord_unlinked": "Адміністратор від'єднав Discord від вашого облікового запису. Ви можете знову прив'язати обліковий запис Discord у налаштуваннях.",
       "generic": "Адміністратор змінив ваш обліковий запис.",
       "spectrum_cleared": "Адміністратор видалив зв'язок із RSI з вашого облікового запису. Підтвердьте свій обліковий запис RSI знову в налаштуваннях.",
@@ -5178,12 +5179,7 @@
   },
   "Under Attack": "error",
   "userActions": {
-    "adminUnlinkAccount": "Від'єднати обліковий запис RSI (Адміністратор)",
-    "adminUnlinkDialogCancel": "Скасувати",
-    "adminUnlinkDialogConfirm": "Від'єднати обліковий запис",
-    "adminUnlinkDialogDescription": "Ви впевнені, що хочете від'єднати обліковий запис Star Citizen для {{username}}? Це скине їхній профіль до непідтвердженого статусу та змінить їхнє ім'я користувача назад на формат за замовчуванням на основі їхнього Discord ID.",
-    "adminUnlinkDialogTitle": "Підтвердьте від'єднання облікового запису RSI",
-    "adminUnlinkSuccess": "Успішно від'єднано обліковий запис RSI для {{username}}",
+    "adminOpenIdentity": "Відкрити в Адмін -> Ідентичність",
     "blockForOrg": "Заблокувати {{username}} для {{orgName}}",
     "blockPersonally": "Заблокувати {{username}} як {{myUsername}}",
     "menu": "Меню дій користувача",
@@ -5558,6 +5554,7 @@
     "kinds": {
       "account_deactivated": "Обліковий запис деактивовано",
       "account_reactivated": "Обліковий запис знову активовано",
+      "discord_link_skipped": "Discord не прив'язано (належить іншому обліковому запису)",
       "discord_unlinked": "Discord від'єднано",
       "spectrum_cleared": "Зв'язок зі Spectrum видалено",
       "spectrum_set": "Spectrum ID встановлено",

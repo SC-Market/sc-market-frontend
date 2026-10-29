@@ -597,6 +597,7 @@
     "account_identity": {
       "account_deactivated": "管理者があなたのアカウントを無効化しました。",
       "account_reactivated": "管理者があなたのアカウントを再有効化しました。",
+      "discord_link_skipped": "あなたの Discord アカウントは別の SC Market アカウントに連携済みのため、このアカウントには連携されませんでした。両方のアカウントがあなたのものなら、SC Market サポートに連絡してください。",
       "discord_unlinked": "管理者があなたのアカウントから Discord の連携を解除しました。設定で再び Discord アカウントを連携できます。",
       "generic": "管理者があなたのアカウントを変更しました。",
       "spectrum_cleared": "管理者があなたのアカウントから RSI の連携を外しました。設定で RSI アカウントを再認証してください。",
@@ -5114,12 +5115,7 @@
   },
   "Under Attack": "error",
   "userActions": {
-    "adminUnlinkAccount": "RSIアカウントの連携を解除（管理者）",
-    "adminUnlinkDialogCancel": "キャンセル",
-    "adminUnlinkDialogConfirm": "アカウントの連携を解除",
-    "adminUnlinkDialogDescription": "{{username}}のStar Citizenアカウントの連携を解除してもよろしいですか？これにより、プロフィールが未認証状態にリセットされ、ユーザー名がDiscord IDに基づくデフォルトの形式に戻ります。",
-    "adminUnlinkDialogTitle": "RSIアカウントの連携解除を確認",
-    "adminUnlinkSuccess": "{{username}}のRSIアカウントの連携を解除しました",
+    "adminOpenIdentity": "管理 -> ID 管理で開く",
     "blockForOrg": "{{orgName}}として{{username}}をブロック",
     "blockPersonally": "{{myUsername}}として{{username}}をブロック",
     "menu": "ユーザー操作メニュー",
@@ -5494,6 +5490,7 @@
     "kinds": {
       "account_deactivated": "アカウントを無効化",
       "account_reactivated": "アカウントを再有効化",
+      "discord_link_skipped": "Discord は未連携（別のアカウントが使用中）",
       "discord_unlinked": "Discord の連携を解除",
       "spectrum_cleared": "Spectrum の連携を削除",
       "spectrum_set": "Spectrum ID を設定",

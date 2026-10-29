@@ -7516,6 +7516,7 @@ export type IdentityActionKind =
   | "spectrum_set"
   | "account_deactivated"
   | "account_reactivated"
+  | "discord_link_skipped"
 export type IdentityAuditEntry = {
   audit_log_id: string
   kind: IdentityActionKind

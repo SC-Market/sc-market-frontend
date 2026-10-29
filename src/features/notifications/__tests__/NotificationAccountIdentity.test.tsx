@@ -48,6 +48,7 @@ describe("account_identity_changed notification", () => {
     ["spectrum_set", "updated the RSI link"],
     ["account_deactivated", "deactivated your account"],
     ["account_reactivated", "reactivated your account"],
+    ["discord_link_skipped", "already linked to another SC Market account"],
   ])("%s", (kind, text) => {
     render(<NotificationEntry notif={notice(kind)} />)
     expect(screen.getByTestId("notif").textContent).toContain(text)
