@@ -125,9 +125,21 @@
             localStorage.getItem("i18nextLng") ||
             navigator.language ||
             "en"
+          // ...and with a filter in the URL (/missions?category=...): the
+          // file was rendered without one, so the first render differs.
+          // Keep in sync with src/document/pageQuery.ts.
+          var filtered = false
+          new URLSearchParams(location.search).forEach(function (_v, k) {
+            if (!/^(utm_.*|fbclid|gclid|msclkid|ref|lng)$/.test(k)) filtered = true
+          })
           // ...and in the light theme: prerendered pages are dark (the
           // default), and the app's theme isn't CSS variables yet.
-          if (!mainSite || light || /^(de|es|fr|ja|uk|zh)\b/i.test(lng)) {
+          if (
+            !mainSite ||
+            light ||
+            filtered ||
+            /^(de|es|fr|ja|uk|zh)\b/i.test(lng)
+          ) {
             document.documentElement.setAttribute("data-render-fresh", "")
           }
         } catch (e) {}

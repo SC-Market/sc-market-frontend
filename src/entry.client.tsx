@@ -33,6 +33,7 @@ import { shell } from "./app/shell"
 import { providePages } from "./routes/definePage"
 import { pages } from "./app/pages"
 import { removeBridgeSummary } from "./document/bridgeSummary"
+import { hasPageQuery } from "./document/pageQuery"
 import { isMainSiteHostname } from "./util/mainSiteHost"
 import { hydratePrerenderedData, takePrerenderedData } from "./store/hydration"
 import { retryDynamicImport } from "./util/retryDynamicImport"
@@ -188,13 +189,14 @@ const app = (
 )
 
 // A prerendered page is the main site's, anonymous, in English and dark. On
-// an org's white-label domain, in another language or the light theme the
-// app renders from
-// scratch instead of hydrating it (document.html keeps it hidden until the
-// root route's first effect).
+// an org's white-label domain, in another language, in the light theme or
+// with a filter in the URL (hasPageQuery) the app renders from scratch
+// instead of hydrating it (document.html keeps it hidden until the root
+// route's first effect).
 const renderFresh = () =>
   container.hasAttribute("data-prerendered") &&
   (!isMainSiteHostname(window.location.hostname) ||
+    hasPageQuery(window.location.search) ||
     !i18n.language.toLowerCase().startsWith("en") ||
     // Set by document.html's pre-theme script for the light theme.
     document.documentElement.getAttribute("data-pre-theme") === "light")
