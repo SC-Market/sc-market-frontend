@@ -33,10 +33,13 @@ slots that keep their size (no layout shift).
 list rows are real links (`inAppClick`: a plain click still opens the
 modal), so a prerender has crawlable content, but:
 
-- `/blueprints` hides unsourceable blueprints in the browser ("Hide
-  Unsourceable", on by default), so the first page of 40 shows about 2 of
-  them; the bridge links 50. It can be prerendered once
-  `searchBlueprints` takes that filter server-side.
+- `/blueprints` filters "Hide Unsourceable" (on by default) server-side
+  now (`searchBlueprints` with `sourceable=true`), so its first page is a
+  full 40 blueprint links. It takes the same steps as `/missions` below
+  (`GAME_DATA_HUB_PATHS`, `loader = prerenderLoader` in
+  `src/routes/pages/BlueprintBrowser.tsx`, `"blueprints"` in
+  `PRERENDERED_KINDS`, and `"/blueprints"` excluded in
+  `public/_routes.json`).
 - `/missions` renders 40 mission links (measured; the bridge links 50,
   the other prerendered hubs ship 24). To prerender it: add it to
   `GAME_DATA_HUB_PATHS`, export `loader = prerenderLoader` from

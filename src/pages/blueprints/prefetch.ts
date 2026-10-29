@@ -37,7 +37,11 @@ export async function prefetchBlueprintPage(
     settleQuery(dispatch(marketV2Api.endpoints.getBlueprintCategories.initiate({}))),
     settleQuery(
       dispatch(
-        marketV2Api.endpoints.searchBlueprints.initiate({ page: 1, pageSize: 40 }),
+        marketV2Api.endpoints.searchBlueprints.initiate({
+          sourceable: true,
+          page: 1,
+          pageSize: 40,
+        }),
       ),
     ),
   ])

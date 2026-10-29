@@ -186,6 +186,9 @@ export function BlueprintBrowser() {
     source: source || undefined,
     manufacturer: manufacturer || undefined,
     ingredientName: ingredientName || undefined,
+    // "Hide Unsourceable" (on by default) filters server-side, so every page
+    // is full and `total` counts what is shown.
+    sourceable: hideUnsourceable || undefined,
     page,
     pageSize: 40,
   }, { refetchOnMountOrArgChange: true })
@@ -209,14 +212,11 @@ export function BlueprintBrowser() {
       : allBlueprints
   const filteredBlueprints = useMemo(() => {
     let result = shownBlueprints
-    if (hideUnsourceable) {
-      result = result.filter((bp) => bp.source === "default" || bp.mission_count > 0)
-    }
     if (hasMissionSource) {
       result = result.filter((bp) => bp.mission_count > 0)
     }
     return result
-  }, [shownBlueprints, hasMissionSource, hideUnsourceable])
+  }, [shownBlueprints, hasMissionSource])
 
   const hasMore = data ? page * data.page_size < data.total : false
   const loadMore = useCallback(() => setPage(p => p + 1), [])

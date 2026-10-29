@@ -6,11 +6,9 @@
  * data (the game database hubs), and only where the prerendered page is at
  * least as good for crawlers as the edge bridge's (links to the entries
  * included). /blueprints and /missions stay on the bridge for now (their
- * cards and rows are links; see docs/prerender.md): /blueprints hides
- * unsourceable blueprints in the browser, so its first page of 40 shows only
- * a few of them (the bridge links 50) until the search API takes that filter;
- * /missions renders 40 links and is ready once public/_routes.json excludes
- * it. Live hubs (market, shops, recruiting,
+ * cards and rows are links; see docs/prerender.md): /blueprints (40 links,
+ * "Hide Unsourceable" filtered by the search API) and /missions (40 links)
+ * are ready once added here and public/_routes.json excludes them. Live hubs (market, shops, recruiting,
  * contractors) and every detail page stay on the SPA shell + edge bridge.
  * Every other path is the SPA shell (__spa-fallback.html, public/_redirects).
  *

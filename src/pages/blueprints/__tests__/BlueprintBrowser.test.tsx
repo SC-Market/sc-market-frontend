@@ -88,6 +88,9 @@ const MOCK_CATEGORIES = {
   error: undefined,
 }
 
+// Args of every useSearchBlueprintsQuery call (the hub's server-side filters).
+const searchArgs = vi.hoisted(() => [] as Array<Record<string, unknown>>)
+
 // Mock the API hooks
 vi.mock("../../../store/api/v2/market", async () => {
   const actual = await vi.importActual("../../../store/api/v2/market")
@@ -98,7 +101,10 @@ vi.mock("../../../store/api/v2/market", async () => {
       reducer: () => ({}),
       middleware: { concat: () => [] },
     },
-    useSearchBlueprintsQuery: () => MOCK_BLUEPRINT_SEARCH,
+    useSearchBlueprintsQuery: (args: Record<string, unknown>) => {
+      searchArgs.push(args)
+      return MOCK_BLUEPRINT_SEARCH
+    },
     useGetBlueprintCategoriesQuery: () => MOCK_CATEGORIES,
     useGetUserBlueprintInventoryQuery: () => ({
       data: undefined,
@@ -176,5 +182,20 @@ describe("BlueprintBrowser", () => {
     renderWithProviders(<BlueprintBrowser />)
     // The header shows the raw total returned by the query
     expect(screen.getByText("1")).toBeInTheDocument()
+  })
+
+  it("asks the API for sourceable blueprints only by default (Hide Unsourceable)", () => {
+    window.history.pushState({}, "", "/blueprints")
+    searchArgs.length = 0
+    renderWithProviders(<BlueprintBrowser />)
+    expect(searchArgs.at(-1)).toMatchObject({ sourceable: true, page: 1, pageSize: 40 })
+  })
+
+  it("drops the sourceable filter when Hide Unsourceable is off", () => {
+    window.history.pushState({}, "", "/blueprints?hide_unsourceable=false")
+    searchArgs.length = 0
+    renderWithProviders(<BlueprintBrowser />)
+    expect(searchArgs.at(-1)?.sourceable).toBeUndefined()
+    window.history.pushState({}, "", "/")
   })
 })
