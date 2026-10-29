@@ -36,6 +36,11 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Locale catalogs complete
+        # Every locale has every en key, with its own plural forms and the
+        # same {{placeholders}} / tags (scripts/check-i18n.mjs).
+        run: npm run i18n:check
+
       - name: Build production bundle
         # Also checks the built shell and that sw.js stays push-only
         # (scripts/build/finalize.ts).

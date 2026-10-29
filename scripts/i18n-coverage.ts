@@ -36,7 +36,11 @@ const LOCALE_FILES: Record<string, string> = {
 type Json = string | number | boolean | null | Json[] | { [k: string]: Json }
 
 /** Flatten a nested catalog into dotted/indexed leaf keys. */
-function flatten(value: Json, prefix = "", out = new Set<string>()): Set<string> {
+function flatten(
+  value: Json,
+  prefix = "",
+  out = new Set<string>(),
+): Set<string> {
   if (Array.isArray(value)) {
     value.forEach((v, i) => flatten(v, `${prefix}[${i}]`, out))
   } else if (value !== null && typeof value === "object") {
@@ -52,7 +56,9 @@ function flatten(value: Json, prefix = "", out = new Set<string>()): Set<string>
 }
 
 function load(file: string): Set<string> {
-  return flatten(JSON.parse(readFileSync(resolve(localesDir, file), "utf8")) as Json)
+  return flatten(
+    JSON.parse(readFileSync(resolve(localesDir, file), "utf8")) as Json,
+  )
 }
 
 const args = process.argv.slice(2)
@@ -67,7 +73,13 @@ const report = Object.entries(LOCALE_FILES)
   .map(([code, file]) => {
     const keys = load(file)
     const missing = [...en].filter((k) => !keys.has(k)).sort()
-    const extra = [...keys].filter((k) => !en.has(k)).sort()
+    // CLDR plural forms English doesn't use (uk _few/_many, fr/es _many) are
+    // required by those languages, not stale; scripts/check-i18n.mjs checks them.
+    const isPluralForm = (k: string) => {
+      const m = k.match(/^(.*)_(zero|two|few|many)$/)
+      return !!m && en.has(`${m[1]}_other`)
+    }
+    const extra = [...keys].filter((k) => !en.has(k) && !isPluralForm(k)).sort()
     const coverage = ((en.size - missing.length) / en.size) * 100
     return { code, total: keys.size, missing, extra, coverage }
   })
@@ -96,7 +108,9 @@ if (asJson) {
       console.log(`\n=== ${r.code}: ${r.missing.length} missing keys ===`)
       for (const k of r.missing) console.log(`  ${k}`)
       if (r.extra.length) {
-        console.log(`\n  --- ${r.extra.length} stale keys (in ${r.code}, not in en) ---`)
+        console.log(
+          `\n  --- ${r.extra.length} stale keys (in ${r.code}, not in en) ---`,
+        )
         for (const k of r.extra) console.log(`  ${k}`)
       }
     }
