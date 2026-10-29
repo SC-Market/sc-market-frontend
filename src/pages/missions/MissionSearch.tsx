@@ -38,7 +38,8 @@ import {
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ViewList, ViewModule, ShieldRounded, BuildRounded } from "@mui/icons-material"
 import { useSearchMissionsQuery, useGetGameEventsQuery, type MissionSearchResult } from "../../store/api/v2/market"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { Link as RouterLink, useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { inAppClick } from "../../components/links/inAppClick"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
@@ -310,7 +311,7 @@ export function MissionSearch() {
             {viewMode === "grid" ? (
               shownMissions.map((mission) => (
                 <Grid item xs={6} sm={6} md={4} lg={3} key={mission.mission_id} sx={{ display: "flex" }}>
-                  <MissionCard mission={mission} onClick={() => handleMissionClick(mission.mission_code, mission.mission_id)} />
+                  <MissionCard mission={mission} href={GAME_DATA_PATHS.mission(mission.mission_code)} onClick={() => handleMissionClick(mission.mission_code, mission.mission_id)} />
                 </Grid>
               ))
             ) : (
@@ -344,7 +345,19 @@ export function MissionSearch() {
                             </Typography>
                           </TableCell>
                           <TableCell>
-                            <Tooltip title={m.mission_name} arrow enterDelay={500}><span><MissionName name={m.mission_name} variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 260, display: "block" }} /></span></Tooltip>
+                            {/* A real link (crawlable, middle-click); a plain click opens the modal like the row. */}
+                            <Tooltip title={m.mission_name} arrow enterDelay={500}>
+                              <RouterLink
+                                to={GAME_DATA_PATHS.mission(m.mission_code)}
+                                onClick={(event) => {
+                                  event.stopPropagation()
+                                  inAppClick(() => handleMissionClick(m.mission_code, m.mission_id))(event)
+                                }}
+                                style={{ color: "inherit", textDecoration: "none", display: "block" }}
+                              >
+                                <MissionName name={m.mission_name} variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 260, display: "block" }} />
+                              </RouterLink>
+                            </Tooltip>
                           </TableCell>
                           <TableCell>
                             <Typography variant="caption" color="text.secondary" noWrap sx={{ maxWidth: 100, display: "block" }}>

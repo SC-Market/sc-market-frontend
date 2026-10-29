@@ -16,7 +16,9 @@ import {
 } from "@mui/material"
 import { Bookmark, BookmarkBorder, Circle, PlaylistAddRounded } from "@mui/icons-material"
 import { formatCategoryName } from "../../util/categoryDisplay"
-import { useNavigate } from "react-router-dom"
+import { Link as RouterLink, useNavigate } from "react-router-dom"
+import { inAppClick } from "../links/inAppClick"
+import { GAME_DATA_PATHS } from "../../routes/paths"
 import { getResourceCategoryIcon, getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
@@ -100,6 +102,10 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
   const ings = bp.ingredients || []
   // Default blueprints are always owned by everyone
   const effectiveOwned = bp.source === "default" || bp.user_owns
+  // A real link (crawlable, prerendered with /blueprints, middle-click opens
+  // the page); a plain click opens it in-app (onClick, e.g. the modal). The
+  // detail route takes the blueprint name (or id), not blueprint_code.
+  const href = GAME_DATA_PATHS.blueprint(bp.blueprint_name)
 
   if (viewMode === "grid") {
     return (
@@ -114,14 +120,18 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             size="small"
             sx={{ position: "absolute", top: 4, right: 4, zIndex: 1 }}
             color={effectiveOwned ? "primary" : "default"}
-            onClick={(e) => { e.stopPropagation(); onBookmarkToggle(bp.blueprint_id, !bp.user_owns) }}
+            onClick={(e) => { e.stopPropagation(); e.preventDefault(); onBookmarkToggle(bp.blueprint_id, !bp.user_owns) }}
           >
             {effectiveOwned ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
           </IconButton>
           </Tooltip>
         )}
 
-        <CardActionArea onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_name)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
+        <CardActionArea
+          component={RouterLink}
+          to={href}
+          onClick={inAppClick(() => onClick?.(bp.blueprint_id, bp.blueprint_name))}
+          sx={{ textDecoration: "none", color: "inherit", height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
           <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
             <Box sx={{ display: "flex", gap: 0.75, mb: 1, pr: 3 }}>
               <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={32} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
@@ -153,12 +163,12 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           </CardContent>
 
           <CardActions disableSpacing sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
-            {effectiveOwned && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?owned=true") }} sx={microChip} />}
-            {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?source=default") }} sx={microChip} />}
-            {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
+            {effectiveOwned && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/blueprints?owned=true") }} sx={microChip} />}
+            {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/blueprints?source=default") }} sx={microChip} />}
+            {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
             {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
-            {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
-            {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?category=${bp.item_category}`) }} sx={microChip} />}
+            {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
+            {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?category=${bp.item_category}`) }} sx={microChip} />}
             {[...new Set((bp.modifier_properties || []).map(modAbbr))].map(tag => (
               <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
             ))}
@@ -178,7 +188,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
               </Typography>
               {onWishlistAdd && (
                 <Tooltip title="Add to Shopping List" arrow>
-                <IconButton size="small" onClick={(e) => { e.stopPropagation(); onWishlistAdd(bp.blueprint_id) }}>
+                <IconButton size="small" onClick={(e) => { e.stopPropagation(); e.preventDefault(); onWishlistAdd(bp.blueprint_id) }}>
                   <PlaylistAddRounded sx={{ fontSize: 16 }} />
                 </IconButton>
                 </Tooltip>
@@ -192,18 +202,23 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
 
   // List mode
   return (
-    <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_name)} data-testid="blueprint-card" data-id={bp.blueprint_id}>
+    <Card
+      component={RouterLink}
+      to={href}
+      sx={{ display: "block", cursor: "pointer", textDecoration: "none", "&:hover": { boxShadow: 3 } }}
+      onClick={inAppClick(() => onClick?.(bp.blueprint_id, bp.blueprint_name))}
+      data-testid="blueprint-card" data-id={bp.blueprint_id}>
       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
         <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
           <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={36} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="body2" fontWeight={600} noWrap>{bp.output_item_name}</Typography>
             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.25 }}>
-              {effectiveOwned && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?owned=true") }} sx={microChip} />}
-              {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?source=default") }} sx={microChip} />}
-              {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
+              {effectiveOwned && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/blueprints?owned=true") }} sx={microChip} />}
+              {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/blueprints?source=default") }} sx={microChip} />}
+              {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
               {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
-              {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
+              {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
               {[...new Set((bp.modifier_properties || []).map(modAbbr))].map(tag => (
                 <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
               ))}
@@ -225,7 +240,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           </Box>
           {onWishlistAdd && (
             <Tooltip title="Add to Shopping List" arrow>
-            <IconButton size="small" onClick={(e) => { e.stopPropagation(); onWishlistAdd(bp.blueprint_id) }}>
+            <IconButton size="small" onClick={(e) => { e.stopPropagation(); e.preventDefault(); onWishlistAdd(bp.blueprint_id) }}>
               <PlaylistAddRounded fontSize="small" />
             </IconButton>
             </Tooltip>
@@ -235,7 +250,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             <IconButton
               size="small"
               color={effectiveOwned ? "primary" : "default"}
-              onClick={(e) => { e.stopPropagation(); onBookmarkToggle(bp.blueprint_id, !bp.user_owns) }}
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); onBookmarkToggle(bp.blueprint_id, !bp.user_owns) }}
             >
               {effectiveOwned ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
             </IconButton>

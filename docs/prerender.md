@@ -29,8 +29,27 @@ choices) is never in the HTML: every page is rendered anonymous, dark and
 in English, and the browser adds the visitor's own UI after hydrating, in
 slots that keep their size (no layout shift).
 
-`/blueprints` and `/missions` stay on the bridge: their cards are not
-links yet, so a prerender would add no crawlable content.
+`/blueprints` and `/missions` stay on the bridge for now. Their cards and
+list rows are real links (`inAppClick`: a plain click still opens the
+modal), so a prerender has crawlable content, but:
+
+- `/blueprints` hides unsourceable blueprints in the browser ("Hide
+  Unsourceable", on by default), so the first page of 40 shows about 2 of
+  them; the bridge links 50. It can be prerendered once
+  `searchBlueprints` takes that filter server-side.
+- `/missions` renders 40 mission links (measured; the bridge links 50,
+  the other prerendered hubs ship 24). To prerender it: add it to
+  `GAME_DATA_HUB_PATHS`, export `loader = prerenderLoader` from
+  `src/routes/pages/MissionSearch.tsx`, add `"missions"` to
+  `PRERENDERED_KINDS`, and exclude `"/missions"` in `public/_routes.json`
+  (fewer Function invocations, not more). It adds 2 files
+  (`missions.html`, ~350 KB / 36 KB gzip, and `missions.data`).
+
+A URL with a query string that changes the page (`/missions?category=…`,
+`/wiki/ships?q=…`; not `utm_*`, `fbclid`, `gclid`, `msclkid`, `ref`,
+`lng`) gets the same prerendered file, rendered without it, so the app
+renders it from scratch instead of hydrating (`src/document/pageQuery.ts`,
+and document.html hides the HTML until then).
 
 ## How fresh it is
 
@@ -106,7 +125,23 @@ on a prerendered page is fetched in the browser until it is added there.
 
 - The light theme, other languages and white-label domains don't get the
   hydration speed-up: they render from scratch (the theme is not CSS
-  variables yet, and translations aren't loaded at build time).
+  variables yet, and translations aren't loaded at build time). What it
+  would take, with static files only:
+  - **Light theme:** one HTML for both themes, which needs MUI CSS theme
+    variables (`cssVariables` + `colorSchemes`, the pre-theme script setting
+    the scheme attribute before paint) and the 54 `palette.mode` reads in
+    25 files moved to CSS. A second, light copy of each page doesn't work:
+    Pages picks the file by path only, never by cookie.
+  - **Other languages:** per-language files need per-language paths
+    (`/de/wiki/...`); `?lng=` can't select a file. That's a route-table
+    and hreflang decision (design doc §6 Q5), plus translations loaded at
+    build time; files grow by the page count x 2 per language (today 7
+    other languages: x8).
+  - **White-label domains:** not possible statically. Every org host is
+    served by the same deployment, Pages chooses files by path and not by
+    `Host`, and the org's branding comes from the API at runtime. It needs
+    the Worker (Phase 4) or a Function, which the Free plan's quota rules
+    out. They stay on render-from-scratch.
 - The HTML carries each page's MUI styles: about 30-50 KB gzip per page.
 - The data passes call the API from the build machine, anonymously. If the
   API is down during a build, a page renders its loading state and the

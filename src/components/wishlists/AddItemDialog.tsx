@@ -193,7 +193,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
                       color="primary"
                       variant="outlined"
                       component={Link}
-                      to={GAME_DATA_PATHS.blueprint(itemBlueprints[0].blueprint_code)}
+                      to={GAME_DATA_PATHS.blueprint(itemBlueprints[0].blueprint_name)}
                       clickable
                       size="small"
                     />

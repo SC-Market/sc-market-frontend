@@ -47,7 +47,8 @@ import {
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { ViewModule, ViewList, RestartAltRounded, FilterList } from "@mui/icons-material"
 import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, useGetUserBlueprintInventoryQuery, type BlueprintSearchResult } from "../../store/api/v2/market"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { Link as RouterLink, useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { inAppClick } from "../../components/links/inAppClick"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
@@ -427,7 +428,19 @@ export function BlueprintBrowser() {
                           </TableCell>
                           <TableCell>
                             <Tooltip title={bp.output_item_name} arrow enterDelay={500}>
-                            <Typography variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 240 }}>
+                            {/* A real link (crawlable, middle-click); a plain click opens the modal like the row. */}
+                            <Typography
+                              variant="body2"
+                              fontWeight={600}
+                              noWrap
+                              component={RouterLink}
+                              to={GAME_DATA_PATHS.blueprint(bp.blueprint_name)}
+                              onClick={(event: React.MouseEvent) => {
+                                event.stopPropagation()
+                                inAppClick(() => handleBlueprintClick(bp.blueprint_id, bp.blueprint_name))(event)
+                              }}
+                              sx={{ maxWidth: 240, display: "block", color: "inherit", textDecoration: "none" }}
+                            >
                               {bp.output_item_name}
                             </Typography>
                             </Tooltip>

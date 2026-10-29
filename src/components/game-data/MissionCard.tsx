@@ -14,7 +14,8 @@ import {
   Box,
 } from "@mui/material"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
-import { useNavigate } from "react-router-dom"
+import { Link as RouterLink, useNavigate } from "react-router-dom"
+import { inAppClick } from "../links/inAppClick"
 
 /** Shared micro chip style matching V2 listing cards */
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
@@ -51,6 +52,11 @@ export interface MissionCardProps {
     ship_encounter_count: number
     hauling_orders?: Array<{ resource_name: string; min_scu: number; max_scu: number }>
   }
+  /**
+   * The mission page. The card is then a real link (crawlable, prerendered
+   * with /missions, middle-click opens it); a plain click still calls onClick.
+   */
+  href?: string
   onClick?: (missionId: string) => void
 }
 
@@ -66,7 +72,7 @@ function abbrResource(name: string): string {
   return words.map(w => w[0]).join("").slice(0, 4).toUpperCase()
 }
 
-export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) => {
+export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick }) => {
   const nav = useNavigate()
   const giver = mission.mission_giver_org || mission.faction
   const displayGiver = giver?.includes("~mission") ? "Various" : giver
@@ -80,7 +86,11 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
 
   return (
     <Card sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column" }} data-testid="mission-card" data-id={mission.mission_id}>
-      <CardActionArea onClick={() => onClick?.(mission.mission_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
+      <CardActionArea
+        {...(href
+          ? { component: RouterLink, to: href, onClick: inAppClick(() => onClick?.(mission.mission_id)) }
+          : { onClick: () => onClick?.(mission.mission_id) })}
+        sx={{ textDecoration: "none", color: "inherit", height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
         <CardContent sx={{ p: 1.5, pb: 0 }}>
           {/* Header: Avatar + Title + Subtitle */}
           <Box sx={{ display: "flex", gap: 1, mb: 0.75 }}>

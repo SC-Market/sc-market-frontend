@@ -638,7 +638,8 @@ const HUB_PAGES: Record<
           name: "Crafting Blueprints",
           linksHeading: "Blueprints",
           links: data.blueprints.map((bp) => ({
-            href: GAME_DATA_PATHS.blueprint(enc(bp.blueprint_code)),
+            // The detail route takes the blueprint name or id, not blueprint_code.
+            href: GAME_DATA_PATHS.blueprint(enc(bp.blueprint_name)),
             text: bp.output_item_name || bp.blueprint_name,
           })),
         },
