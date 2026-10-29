@@ -55,10 +55,14 @@ class OpenAPIMCPServer {
   private server: Server
 
   constructor() {
-    this.server = new Server({
-      name: "openapi-mcp-server",
-      version: "1.0.0",
-    })
+    this.server = new Server(
+      {
+        name: "openapi-mcp-server",
+        version: "1.0.0",
+      },
+      // SDK 1.x refuses handlers for capabilities the server doesn't declare.
+      { capabilities: { tools: {}, resources: {} } },
+    )
 
     this.setupToolHandlers()
     this.setupResourceHandlers()
