@@ -1140,6 +1140,84 @@
       "tokenActive": "Hay un token de sincronización activo. Su URL solo se muestra al crearlo; regenera el token para obtener una URL nueva.",
       "tokenHint": "El token de sincronización que termina en …{{hint}} está activo. Su URL solo se muestra al crearlo; regenera el token para obtener una URL nueva.",
       "urlShownOnce": "Copia esta URL ahora. Contiene tu token de sincronización y no se volverá a mostrar. Si la pierdes, regenera el token."
+    },
+    "publicApi": {
+      "title": "Tokens de API",
+      "intro": "Tokens para la API pública de SC Market (/api/public/v1). Cada uno tiene un conjunto de permisos, las organizaciones en cuyo nombre puede actuar y una fecha de caducidad, y nunca puede hacer más que tú.",
+      "docsLink": "Referencia de la API",
+      "create": "Crear token",
+      "empty": "Todavía no tienes tokens de API.",
+      "loadError": "No se pudieron cargar tus tokens de API. Inténtalo más tarde.",
+      "status": {
+        "active": "Activo",
+        "expired": "Caducado",
+        "revoked": "Revocado"
+      },
+      "expiresOn": "Caduca el {{date}}",
+      "expiredOn": "Caducó el {{date}}",
+      "revokedOn": "Revocado el {{date}}",
+      "lastUsed": "Último uso: {{date}}",
+      "neverUsed": "Nunca usado",
+      "requests30d": "Solicitudes en los últimos 30 días: {{n}}",
+      "orgsNone": "Solo tiendas personales",
+      "orgsList": "Organizaciones: {{orgs}}",
+      "revoke": "Revocar",
+      "revokeTitle": "¿Revocar este token?",
+      "revokeBody": "Todo lo que use «{{name}}» dejará de funcionar en menos de un minuto. No se puede deshacer.",
+      "revokeError": "No se pudo revocar el token.",
+      "cancel": "Cancelar",
+      "dialog": {
+        "title": "Crear un token de API",
+        "name": "Nombre",
+        "nameHelp": "Para distinguir tus tokens, por ejemplo, el nombre de tu bot.",
+        "description": "Descripción (opcional)",
+        "preset": "Qué puede hacer",
+        "orgs": "Organizaciones en cuyo nombre puede actuar",
+        "orgsHelp": "Déjalas todas sin marcar si es solo para tu tienda personal. Aun así necesitas tú mismo el permiso en la organización.",
+        "noOrgs": "No eres miembro de ninguna organización.",
+        "expiry": "Caduca tras",
+        "daysOption": "{{days}} días",
+        "create": "Crear token",
+        "creating": "Creando…",
+        "error": "No se pudo crear el token."
+      },
+      "created": {
+        "title": "Tu nuevo token",
+        "warning": "Cópialo ahora: solo se muestra esta vez y no se puede recuperar después.",
+        "copy": "Copiar token",
+        "copied": "Copiado",
+        "done": "Listo"
+      },
+      "presets": {
+        "shop_sync": {
+          "name": "Sincronizar tienda",
+          "description": "Leer tus tiendas, anuncios y existencias."
+        },
+        "order_desk": {
+          "name": "Gestión de pedidos",
+          "description": "Leer tus tiendas y pedidos, hacer avanzar pedidos y aceptar o rechazar ofertas."
+        },
+        "read_only": {
+          "name": "Solo lectura",
+          "description": "Leer tus tiendas, anuncios, existencias, pedidos y ofertas. No cambia nada."
+        }
+      },
+      "scopes": {
+        "shops_read": "Leer tiendas",
+        "listings_read": "Leer anuncios",
+        "stock_read": "Leer existencias",
+        "orders_read": "Leer pedidos",
+        "orders_write": "Cambiar el estado de pedidos",
+        "offers_read": "Leer ofertas",
+        "offers_write": "Aceptar o rechazar ofertas"
+      },
+      "legacy": {
+        "title": "Tokens antiguos",
+        "badge": "Antiguo",
+        "create": "Crear token antiguo",
+        "notice": "Los tokens antiguos siguen funcionando en las rutas anteriores de la API (/api/v1 y /api/v2), pero no en la API pública. Para herramientas nuevas, crea un token arriba.",
+        "sunset": "Los tokens antiguos dejarán de funcionar el {{date}}. Crea tokens nuevos arriba y pasa tus herramientas a la API pública antes de esa fecha."
+      }
     }
   },
   "sidebar": {

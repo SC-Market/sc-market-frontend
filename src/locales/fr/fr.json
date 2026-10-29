@@ -1140,6 +1140,84 @@
       "tokenActive": "Un jeton de synchronisation est actif. Son URL n'est affichée qu'à sa création ; régénérez le jeton pour obtenir une nouvelle URL.",
       "tokenHint": "Le jeton de synchronisation se terminant par …{{hint}} est actif. Son URL n'est affichée qu'à sa création ; régénérez le jeton pour obtenir une nouvelle URL.",
       "urlShownOnce": "Copiez cette URL maintenant. Elle contient votre jeton de synchronisation et ne sera plus affichée. Si vous la perdez, régénérez le jeton."
+    },
+    "publicApi": {
+      "title": "Jetons d'API",
+      "intro": "Des jetons pour l'API publique de SC Market (/api/public/v1). Chacun a un ensemble de permissions, les organisations pour lesquelles il peut agir et une date d'expiration, et il ne peut jamais faire plus que vous.",
+      "docsLink": "Référence de l'API",
+      "create": "Créer un jeton",
+      "empty": "Vous n'avez pas encore de jeton d'API.",
+      "loadError": "Impossible de charger vos jetons d'API. Réessayez plus tard.",
+      "status": {
+        "active": "Actif",
+        "expired": "Expiré",
+        "revoked": "Révoqué"
+      },
+      "expiresOn": "Expire le {{date}}",
+      "expiredOn": "Expiré le {{date}}",
+      "revokedOn": "Révoqué le {{date}}",
+      "lastUsed": "Dernière utilisation : {{date}}",
+      "neverUsed": "Jamais utilisé",
+      "requests30d": "Requêtes sur les 30 derniers jours : {{n}}",
+      "orgsNone": "Boutiques personnelles uniquement",
+      "orgsList": "Organisations : {{orgs}}",
+      "revoke": "Révoquer",
+      "revokeTitle": "Révoquer ce jeton ?",
+      "revokeBody": "Tout ce qui utilise « {{name}} » cessera de fonctionner en moins d'une minute. C'est irréversible.",
+      "revokeError": "Impossible de révoquer le jeton.",
+      "cancel": "Annuler",
+      "dialog": {
+        "title": "Créer un jeton d'API",
+        "name": "Nom",
+        "nameHelp": "Pour distinguer vos jetons, par exemple le nom de votre bot.",
+        "description": "Description (facultative)",
+        "preset": "Ce qu'il peut faire",
+        "orgs": "Organisations pour lesquelles il peut agir",
+        "orgsHelp": "Laissez tout décoché pour votre boutique personnelle seulement. Vous avez quand même besoin vous-même de la permission dans l'organisation.",
+        "noOrgs": "Vous n'êtes membre d'aucune organisation.",
+        "expiry": "Expire après",
+        "daysOption": "{{days}} jours",
+        "create": "Créer le jeton",
+        "creating": "Création…",
+        "error": "Impossible de créer le jeton."
+      },
+      "created": {
+        "title": "Votre nouveau jeton",
+        "warning": "Copiez-le maintenant : il n'est affiché qu'une seule fois et ne peut pas être récupéré ensuite.",
+        "copy": "Copier le jeton",
+        "copied": "Copié",
+        "done": "Terminé"
+      },
+      "presets": {
+        "shop_sync": {
+          "name": "Synchro boutique",
+          "description": "Lire vos boutiques, annonces et stocks."
+        },
+        "order_desk": {
+          "name": "Gestion des commandes",
+          "description": "Lire vos boutiques et commandes, faire avancer les commandes, et accepter ou refuser les offres."
+        },
+        "read_only": {
+          "name": "Lecture seule",
+          "description": "Lire vos boutiques, annonces, stocks, commandes et offres. Ne modifie rien."
+        }
+      },
+      "scopes": {
+        "shops_read": "Lire les boutiques",
+        "listings_read": "Lire les annonces",
+        "stock_read": "Lire les stocks",
+        "orders_read": "Lire les commandes",
+        "orders_write": "Changer le statut des commandes",
+        "offers_read": "Lire les offres",
+        "offers_write": "Accepter ou refuser les offres"
+      },
+      "legacy": {
+        "title": "Anciens jetons",
+        "badge": "Ancien",
+        "create": "Créer un ancien jeton",
+        "notice": "Les anciens jetons fonctionnent toujours sur les anciennes routes de l'API (/api/v1 et /api/v2), mais pas sur l'API publique. Pour de nouveaux outils, créez un jeton ci-dessus.",
+        "sunset": "Les anciens jetons ne fonctionneront plus à partir du {{date}}. Créez de nouveaux jetons ci-dessus et passez vos outils à l'API publique avant cette date."
+      }
     }
   },
   "sidebar": {

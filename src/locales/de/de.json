@@ -1136,6 +1136,84 @@
       "tokenActive": "Ein Synchronisierungstoken ist aktiv. Seine URL wird nur bei der Erstellung angezeigt; generieren Sie das Token neu, um eine neue URL zu erhalten.",
       "tokenHint": "Das Synchronisierungstoken mit der Endung …{{hint}} ist aktiv. Seine URL wird nur bei der Erstellung angezeigt; generieren Sie das Token neu, um eine neue URL zu erhalten.",
       "urlShownOnce": "Kopieren Sie diese URL jetzt. Sie enthält Ihr Synchronisierungstoken und wird nicht erneut angezeigt. Wenn Sie sie verlieren, generieren Sie das Token neu."
+    },
+    "publicApi": {
+      "title": "API-Tokens",
+      "intro": "Tokens für die öffentliche SC-Market-API (/api/public/v1). Jedes hat eine Berechtigungsvorlage, die Organisationen, für die es handeln darf, und ein Ablaufdatum. Es kann nie mehr als du.",
+      "docsLink": "API-Referenz",
+      "create": "Token erstellen",
+      "empty": "Du hast noch keine API-Tokens.",
+      "loadError": "Deine API-Tokens konnten nicht geladen werden. Versuch es später noch einmal.",
+      "status": {
+        "active": "Aktiv",
+        "expired": "Abgelaufen",
+        "revoked": "Widerrufen"
+      },
+      "expiresOn": "Läuft ab am {{date}}",
+      "expiredOn": "Abgelaufen am {{date}}",
+      "revokedOn": "Widerrufen am {{date}}",
+      "lastUsed": "Zuletzt verwendet {{date}}",
+      "neverUsed": "Nie verwendet",
+      "requests30d": "Anfragen in den letzten 30 Tagen: {{n}}",
+      "orgsNone": "Nur persönliche Shops",
+      "orgsList": "Organisationen: {{orgs}}",
+      "revoke": "Widerrufen",
+      "revokeTitle": "Dieses Token widerrufen?",
+      "revokeBody": "Alles, was „{{name}}“ nutzt, funktioniert innerhalb einer Minute nicht mehr. Das lässt sich nicht rückgängig machen.",
+      "revokeError": "Das Token konnte nicht widerrufen werden.",
+      "cancel": "Abbrechen",
+      "dialog": {
+        "title": "API-Token erstellen",
+        "name": "Name",
+        "nameHelp": "Damit du deine Tokens auseinanderhalten kannst, z. B. der Name deines Bots.",
+        "description": "Beschreibung (optional)",
+        "preset": "Was es darf",
+        "orgs": "Organisationen, für die es handeln darf",
+        "orgsHelp": "Lass alle leer, wenn es nur für deinen persönlichen Shop ist. Du brauchst die Berechtigung in der Organisation trotzdem selbst.",
+        "noOrgs": "Du bist in keiner Organisation Mitglied.",
+        "expiry": "Läuft ab nach",
+        "daysOption": "{{days}} Tagen",
+        "create": "Token erstellen",
+        "creating": "Wird erstellt…",
+        "error": "Das Token konnte nicht erstellt werden."
+      },
+      "created": {
+        "title": "Dein neues Token",
+        "warning": "Kopiere es jetzt: Es wird nur dieses eine Mal angezeigt und lässt sich später nicht abrufen.",
+        "copy": "Token kopieren",
+        "copied": "Kopiert",
+        "done": "Fertig"
+      },
+      "presets": {
+        "shop_sync": {
+          "name": "Shop-Abgleich",
+          "description": "Deine Shops, Angebote und Bestände lesen."
+        },
+        "order_desk": {
+          "name": "Bestellannahme",
+          "description": "Deine Shops und Bestellungen lesen, Bestellungen weiterführen und Angebote annehmen oder ablehnen."
+        },
+        "read_only": {
+          "name": "Nur lesen",
+          "description": "Deine Shops, Angebote, Bestände, Bestellungen und Gebote lesen. Ändert nichts."
+        }
+      },
+      "scopes": {
+        "shops_read": "Shops lesen",
+        "listings_read": "Angebote lesen",
+        "stock_read": "Bestand lesen",
+        "orders_read": "Bestellungen lesen",
+        "orders_write": "Bestellstatus ändern",
+        "offers_read": "Gebote lesen",
+        "offers_write": "Gebote annehmen oder ablehnen"
+      },
+      "legacy": {
+        "title": "Alte Tokens",
+        "badge": "Alt",
+        "create": "Altes Token erstellen",
+        "notice": "Alte Tokens funktionieren weiterhin auf den bisherigen API-Routen (/api/v1 und /api/v2), aber nicht auf der öffentlichen API. Erstelle für neue Tools oben ein Token.",
+        "sunset": "Alte Tokens funktionieren ab dem {{date}} nicht mehr. Erstelle oben neue Tokens und stelle deine Tools vorher auf die öffentliche API um."
+      }
     }
   },
   "sidebar": {

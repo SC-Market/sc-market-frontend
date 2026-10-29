@@ -6,6 +6,7 @@ export const addTagTypes = [
   "Stock Lots V2",
   "Shops",
   "Requisitions V2",
+  "Public API tokens",
   "Price Alerts",
   "Orders V2",
   "Onboarding",
@@ -463,6 +464,41 @@ const injectedRtkApi = api
         }),
         providesTags: ["Requisitions V2"],
       }),
+      getPublicApiTokenOptions: build.query<
+        GetPublicApiTokenOptionsApiResponse,
+        GetPublicApiTokenOptionsApiArg
+      >({
+        query: () => ({ url: `/public-api-tokens/options` }),
+        providesTags: ["Public API tokens"],
+      }),
+      listPublicApiTokens: build.query<
+        ListPublicApiTokensApiResponse,
+        ListPublicApiTokensApiArg
+      >({
+        query: () => ({ url: `/public-api-tokens` }),
+        providesTags: ["Public API tokens"],
+      }),
+      createPublicApiToken: build.mutation<
+        CreatePublicApiTokenApiResponse,
+        CreatePublicApiTokenApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/public-api-tokens`,
+          method: "POST",
+          body: queryArg.createPublicApiTokenRequest,
+        }),
+        invalidatesTags: ["Public API tokens"],
+      }),
+      revokePublicApiToken: build.mutation<
+        RevokePublicApiTokenApiResponse,
+        RevokePublicApiTokenApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/public-api-tokens/${queryArg.tokenId}/revoke`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Public API tokens"],
+      }),
       getPriceAlertPreferences: build.query<
         GetPriceAlertPreferencesApiResponse,
         GetPriceAlertPreferencesApiArg
@@ -500,6 +536,8 @@ const injectedRtkApi = api
             page_size: queryArg.pageSize,
             sort_by: queryArg.sortBy,
             sort_order: queryArg.sortOrder,
+            shop_id: queryArg.shopId,
+            updated_since: queryArg.updatedSince,
           },
         }),
         providesTags: ["Orders V2"],
@@ -743,6 +781,7 @@ const injectedRtkApi = api
               sort_order: queryArg.sortOrder,
               spectrum_id: queryArg.spectrumId,
               shop_id: queryArg.shopId,
+              updated_since: queryArg.updatedSince,
             },
           }),
           providesTags: ["Listings V2"],
@@ -1987,6 +2026,82 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Admin Feature Flags"],
       }),
+      searchIdentityUsers: build.query<
+        SearchIdentityUsersApiResponse,
+        SearchIdentityUsersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users`,
+          params: {
+            q: queryArg.q,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      getIdentityUser: build.query<
+        GetIdentityUserApiResponse,
+        GetIdentityUserApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}`,
+        }),
+        providesTags: ["Admin"],
+      }),
+      releaseIdentityUsername: build.mutation<
+        ReleaseIdentityUsernameApiResponse,
+        ReleaseIdentityUsernameApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/release-username`,
+          method: "POST",
+          body: queryArg.identityActionRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      unlinkIdentityDiscord: build.mutation<
+        UnlinkIdentityDiscordApiResponse,
+        UnlinkIdentityDiscordApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/unlink-discord`,
+          method: "POST",
+          body: queryArg.unlinkDiscordRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      fixIdentitySpectrum: build.mutation<
+        FixIdentitySpectrumApiResponse,
+        FixIdentitySpectrumApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/spectrum`,
+          method: "POST",
+          body: queryArg.spectrumFixRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      deactivateIdentityUser: build.mutation<
+        DeactivateIdentityUserApiResponse,
+        DeactivateIdentityUserApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/deactivate`,
+          method: "POST",
+          body: queryArg.identityActionRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      reactivateIdentityUser: build.mutation<
+        ReactivateIdentityUserApiResponse,
+        ReactivateIdentityUserApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/identity/users/${queryArg.userId}/reactivate`,
+          method: "POST",
+          body: queryArg.identityActionRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
       importGameData: build.mutation<
         ImportGameDataApiResponse,
         ImportGameDataApiArg
@@ -2068,82 +2183,6 @@ const injectedRtkApi = api
       >({
         query: () => ({ url: `/accounts/deletion-precheck` }),
         providesTags: ["Accounts V2"],
-      }),
-      searchIdentityUsers: build.query<
-        SearchIdentityUsersApiResponse,
-        SearchIdentityUsersApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/identity/users`,
-          params: {
-            q: queryArg.q,
-          },
-        }),
-        providesTags: ["Admin"],
-      }),
-      getIdentityUser: build.query<
-        GetIdentityUserApiResponse,
-        GetIdentityUserApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/identity/users/${queryArg.userId}`,
-        }),
-        providesTags: ["Admin"],
-      }),
-      releaseIdentityUsername: build.mutation<
-        ReleaseIdentityUsernameApiResponse,
-        ReleaseIdentityUsernameApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/identity/users/${queryArg.userId}/release-username`,
-          method: "POST",
-          body: queryArg.identityActionRequest,
-        }),
-        invalidatesTags: ["Admin"],
-      }),
-      unlinkIdentityDiscord: build.mutation<
-        UnlinkIdentityDiscordApiResponse,
-        UnlinkIdentityDiscordApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/identity/users/${queryArg.userId}/unlink-discord`,
-          method: "POST",
-          body: queryArg.unlinkDiscordRequest,
-        }),
-        invalidatesTags: ["Admin"],
-      }),
-      fixIdentitySpectrum: build.mutation<
-        FixIdentitySpectrumApiResponse,
-        FixIdentitySpectrumApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/identity/users/${queryArg.userId}/spectrum`,
-          method: "POST",
-          body: queryArg.spectrumFixRequest,
-        }),
-        invalidatesTags: ["Admin"],
-      }),
-      deactivateIdentityUser: build.mutation<
-        DeactivateIdentityUserApiResponse,
-        DeactivateIdentityUserApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/identity/users/${queryArg.userId}/deactivate`,
-          method: "POST",
-          body: queryArg.identityActionRequest,
-        }),
-        invalidatesTags: ["Admin"],
-      }),
-      reactivateIdentityUser: build.mutation<
-        ReactivateIdentityUserApiResponse,
-        ReactivateIdentityUserApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/identity/users/${queryArg.userId}/reactivate`,
-          method: "POST",
-          body: queryArg.identityActionRequest,
-        }),
-        invalidatesTags: ["Admin"],
       }),
     }),
     overrideExisting: false,
@@ -2409,6 +2448,22 @@ export type GetOfferRequisitionItemsApiResponse = /** status 200 Ok */ {
 export type GetOfferRequisitionItemsApiArg = {
   offerId: string
 }
+export type GetPublicApiTokenOptionsApiResponse =
+  /** status 200 Ok */ PublicApiTokenOptions
+export type GetPublicApiTokenOptionsApiArg = void
+export type ListPublicApiTokensApiResponse =
+  /** status 200 Ok */ PublicApiTokenList
+export type ListPublicApiTokensApiArg = void
+export type CreatePublicApiTokenApiResponse =
+  /** status 200 Ok */ CreatedPublicApiToken
+export type CreatePublicApiTokenApiArg = {
+  createPublicApiTokenRequest: CreatePublicApiTokenRequest
+}
+export type RevokePublicApiTokenApiResponse =
+  /** status 200 Ok */ PublicApiTokenSummary
+export type RevokePublicApiTokenApiArg = {
+  tokenId: string
+}
 export type GetPriceAlertPreferencesApiResponse =
   /** status 200 Ok */ PriceAlertPreferences
 export type GetPriceAlertPreferencesApiArg = void
@@ -2438,6 +2493,10 @@ export type GetOrdersApiArg = {
   pageSize?: number
   sortBy?: "created_at" | "updated_at" | "total_price"
   sortOrder?: "asc" | "desc"
+  /** Only orders of this shop (still only those the user may see) */
+  shopId?: string
+  /** Only orders created or fulfilled at or after this time */
+  updatedSince?: string
 }
 export type GetOrdersByListingApiResponse =
   /** status 200 Ok */ OrdersByListingResponse
@@ -2600,6 +2659,8 @@ export type GetMyListingsApiArg = {
   sortOrder?: "asc" | "desc"
   spectrumId?: string
   shopId?: string
+  /** Only listings updated at or after this time */
+  updatedSince?: string
 }
 export type GetInventorySummaryApiResponse =
   /** status 200 Ok */ InventorySummaryResponse
@@ -3578,6 +3639,45 @@ export type RemoveUserOverrideApiArg = {
   username: string
   flagName?: string
 }
+export type SearchIdentityUsersApiResponse =
+  /** status 200 Ok */ IdentitySearchResponse
+export type SearchIdentityUsersApiArg = {
+  q: string
+}
+export type GetIdentityUserApiResponse = /** status 200 Ok */ IdentityDetail
+export type GetIdentityUserApiArg = {
+  userId: string
+}
+export type ReleaseIdentityUsernameApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type ReleaseIdentityUsernameApiArg = {
+  userId: string
+  identityActionRequest: IdentityActionRequest
+}
+export type UnlinkIdentityDiscordApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type UnlinkIdentityDiscordApiArg = {
+  userId: string
+  unlinkDiscordRequest: UnlinkDiscordRequest
+}
+export type FixIdentitySpectrumApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type FixIdentitySpectrumApiArg = {
+  userId: string
+  spectrumFixRequest: SpectrumFixRequest
+}
+export type DeactivateIdentityUserApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type DeactivateIdentityUserApiArg = {
+  userId: string
+  identityActionRequest: IdentityActionRequest
+}
+export type ReactivateIdentityUserApiResponse =
+  /** status 200 Ok */ IdentityActionResponse
+export type ReactivateIdentityUserApiArg = {
+  userId: string
+  identityActionRequest: IdentityActionRequest
+}
 export type ImportGameDataApiResponse =
   /** status 200 Ok */
   | {
@@ -3625,45 +3725,6 @@ export type GetDeletionStatusApiArg = void
 export type PreDeletionCheckApiResponse =
   /** status 200 Ok */ DeletionPreCheckResponse
 export type PreDeletionCheckApiArg = void
-export type SearchIdentityUsersApiResponse =
-  /** status 200 Ok */ IdentitySearchResponse
-export type SearchIdentityUsersApiArg = {
-  q: string
-}
-export type GetIdentityUserApiResponse = /** status 200 Ok */ IdentityDetail
-export type GetIdentityUserApiArg = {
-  userId: string
-}
-export type ReleaseIdentityUsernameApiResponse =
-  /** status 200 Ok */ IdentityActionResponse
-export type ReleaseIdentityUsernameApiArg = {
-  userId: string
-  identityActionRequest: IdentityActionRequest
-}
-export type UnlinkIdentityDiscordApiResponse =
-  /** status 200 Ok */ IdentityActionResponse
-export type UnlinkIdentityDiscordApiArg = {
-  userId: string
-  unlinkDiscordRequest: UnlinkDiscordRequest
-}
-export type FixIdentitySpectrumApiResponse =
-  /** status 200 Ok */ IdentityActionResponse
-export type FixIdentitySpectrumApiArg = {
-  userId: string
-  spectrumFixRequest: SpectrumFixRequest
-}
-export type DeactivateIdentityUserApiResponse =
-  /** status 200 Ok */ IdentityActionResponse
-export type DeactivateIdentityUserApiArg = {
-  userId: string
-  identityActionRequest: IdentityActionRequest
-}
-export type ReactivateIdentityUserApiResponse =
-  /** status 200 Ok */ IdentityActionResponse
-export type ReactivateIdentityUserApiArg = {
-  userId: string
-  identityActionRequest: IdentityActionRequest
-}
 export type WatchlistItem = {
   /** Watchlist item id */
   id: string
@@ -4295,6 +4356,69 @@ export type OfferRequisitionItemInput = {
 export type SetOfferRequisitionItemsRequest = {
   offer_id: string
   items: OfferRequisitionItemInput[]
+}
+export type PublicScope =
+  | "shops:read"
+  | "listings:read"
+  | "stock:read"
+  | "orders:read"
+  | "orders:write"
+  | "offers:read"
+  | "offers:write"
+export type PublicTokenPreset = "shop_sync" | "order_desk" | "read_only"
+export type PublicApiTokenPresetInfo = {
+  id: PublicTokenPreset
+  scopes: PublicScope[]
+}
+export type PublicApiTokenOrg = {
+  contractor_id: string
+  spectrum_id: string
+  name: string
+}
+export type PublicApiTokenOptions = {
+  scopes: PublicScope[]
+  presets: PublicApiTokenPresetInfo[]
+  default_lifetime_days: number
+  max_lifetime_days: number
+  max_active_tokens: number
+  /** Orgs the user can grant: the orgs they are a member of. */
+  orgs: PublicApiTokenOrg[]
+  /** When legacy tokens stop working, once announced; null while not scheduled. */
+  legacy_sunset_at: string | null
+}
+export type PublicApiTokenSummary = {
+  id: string
+  name: string
+  description: string | null
+  preset: string
+  scopes: string[]
+  /** Orgs the token may act for. Empty: personal shops only. */
+  orgs: PublicApiTokenOrg[]
+  /** Last 4 characters of the token. */
+  token_hint: string
+  expires_at: string
+  last_used_at: string | null
+  revoked_at: string | null
+  created_at: string
+  /** Requests in the last 30 days. */
+  requests_30d: number
+  status: "active" | "expired" | "revoked"
+}
+export type PublicApiTokenList = {
+  tokens: PublicApiTokenSummary[]
+}
+export type CreatedPublicApiToken = {
+  /** The token. Shown once: it can't be retrieved again. */
+  token: string
+  summary: PublicApiTokenSummary
+}
+export type CreatePublicApiTokenRequest = {
+  name: string
+  description?: string | null
+  preset: PublicTokenPreset
+  /** Orgs to grant, by spectrum id. Empty: personal shops only. */
+  org_spectrum_ids: string[]
+  expires_in_days: number
 }
 export type PriceAlertPreferences = {
   /** In-app notification on the site. Default: on. */
@@ -7396,89 +7520,6 @@ export type SetUserOverrideRequest = {
   flag_name: string
   enabled: boolean
 }
-export type ImportErrorResponse = {
-  success: false
-  error: string
-  details?: string
-  timestamp: string
-}
-export type ImportGameDataResponse = {
-  success: boolean
-  summary: {
-    /** Shop inventory rows no longer in the game data, deleted */
-    shopItemsRemoved: number
-    /** Shops no longer in the game data, deleted */
-    shopsRemoved: number
-    /** Shop inventory rows matched to a game item */
-    shopItemsLinked: number
-    shopItemsImported: number
-    /** In-game shops upserted from shop-inventories.json (0 unless GAME_DATA_IMPORT_SHOPS=true) */
-    shopsImported: number
-    blueprintsUpdated: number
-    blueprintsInserted: number
-    blueprintsProcessed: number
-    missionsUpdated: number
-    missionsInserted: number
-    missionsProcessed: number
-    fullSetsCreated: number
-    nameChanges: number
-    updated: number
-    inserted: number
-    matchedFuzzy: number
-    matchedCStoneUUID: number
-    matchedExact: number
-    matched: number
-    existingDBItems: number
-    validP4KItems: number
-    totalP4KItems: number
-  }
-  /** Warnings from the import steps (skipped records, steps not run) */
-  errors: string[]
-  timestamp: string
-}
-export type GameDataImportJob = {
-  id: string
-  status: "validating" | "extracting" | "importing" | "completed" | "failed"
-  startedAt: string
-  completedAt: string | null
-  progress: string | null
-  result: ImportGameDataResponse | null
-  error: string | null
-  details: string | null
-}
-export type AdminAlertAudiencePreview = {
-  /** Users the alert would reach (the posting admin excluded). */
-  recipients: number
-  /** Of those, how many have a verified email (email reach). */
-  verified_emails: number
-  /** Of those, how many have Discord linked (Discord DM reach). */
-  discord_linked: number
-}
-export type AdminAlertTargetType =
-  | "all_users"
-  | "org_members"
-  | "org_owners"
-  | "admins_only"
-  | "specific_org"
-export type RequestDeletionResponse = {
-  scheduledAt: string
-  message: string
-}
-export type RequestDeletionBody = {
-  reason?: string
-}
-export type DeletionStatusResponse = {
-  pending: boolean
-  scheduledAt?: string
-  isTombstone: boolean
-}
-export type DeletionPreCheckResponse = {
-  canDelete: boolean
-  blockers: {
-    detail: string
-    type: string
-  }[]
-}
 export type IdentitySearchRow = {
   user_id: string
   username: string
@@ -7578,6 +7619,89 @@ export type SpectrumFixRequest = {
   /** Required for "set". Digits only; refused if another account holds it. */
   spectrum_user_id?: string
 }
+export type ImportErrorResponse = {
+  success: false
+  error: string
+  details?: string
+  timestamp: string
+}
+export type ImportGameDataResponse = {
+  success: boolean
+  summary: {
+    /** Shop inventory rows no longer in the game data, deleted */
+    shopItemsRemoved: number
+    /** Shops no longer in the game data, deleted */
+    shopsRemoved: number
+    /** Shop inventory rows matched to a game item */
+    shopItemsLinked: number
+    shopItemsImported: number
+    /** In-game shops upserted from shop-inventories.json (0 unless GAME_DATA_IMPORT_SHOPS=true) */
+    shopsImported: number
+    blueprintsUpdated: number
+    blueprintsInserted: number
+    blueprintsProcessed: number
+    missionsUpdated: number
+    missionsInserted: number
+    missionsProcessed: number
+    fullSetsCreated: number
+    nameChanges: number
+    updated: number
+    inserted: number
+    matchedFuzzy: number
+    matchedCStoneUUID: number
+    matchedExact: number
+    matched: number
+    existingDBItems: number
+    validP4KItems: number
+    totalP4KItems: number
+  }
+  /** Warnings from the import steps (skipped records, steps not run) */
+  errors: string[]
+  timestamp: string
+}
+export type GameDataImportJob = {
+  id: string
+  status: "validating" | "extracting" | "importing" | "completed" | "failed"
+  startedAt: string
+  completedAt: string | null
+  progress: string | null
+  result: ImportGameDataResponse | null
+  error: string | null
+  details: string | null
+}
+export type AdminAlertAudiencePreview = {
+  /** Users the alert would reach (the posting admin excluded). */
+  recipients: number
+  /** Of those, how many have a verified email (email reach). */
+  verified_emails: number
+  /** Of those, how many have Discord linked (Discord DM reach). */
+  discord_linked: number
+}
+export type AdminAlertTargetType =
+  | "all_users"
+  | "org_members"
+  | "org_owners"
+  | "admins_only"
+  | "specific_org"
+export type RequestDeletionResponse = {
+  scheduledAt: string
+  message: string
+}
+export type RequestDeletionBody = {
+  reason?: string
+}
+export type DeletionStatusResponse = {
+  pending: boolean
+  scheduledAt?: string
+  isTombstone: boolean
+}
+export type DeletionPreCheckResponse = {
+  canDelete: boolean
+  blockers: {
+    detail: string
+    type: string
+  }[]
+}
 export const {
   useGetWatchlistQuery,
   useAddWatchlistItemMutation,
@@ -7620,6 +7744,10 @@ export const {
   useGetRequisitionQuery,
   useSetOfferRequisitionItemsMutation,
   useGetOfferRequisitionItemsQuery,
+  useGetPublicApiTokenOptionsQuery,
+  useListPublicApiTokensQuery,
+  useCreatePublicApiTokenMutation,
+  useRevokePublicApiTokenMutation,
   useGetPriceAlertPreferencesQuery,
   useUpdatePriceAlertPreferencesMutation,
   useGetOrderDetailQuery,
@@ -7764,6 +7892,13 @@ export const {
   useGetUserOverridesQuery,
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
+  useSearchIdentityUsersQuery,
+  useGetIdentityUserQuery,
+  useReleaseIdentityUsernameMutation,
+  useUnlinkIdentityDiscordMutation,
+  useFixIdentitySpectrumMutation,
+  useDeactivateIdentityUserMutation,
+  useReactivateIdentityUserMutation,
   useImportGameDataMutation,
   useListGameDataImportJobsQuery,
   useGetImportJobStatusQuery,
@@ -7774,11 +7909,4 @@ export const {
   useCancelDeletionMutation,
   useGetDeletionStatusQuery,
   usePreDeletionCheckQuery,
-  useSearchIdentityUsersQuery,
-  useGetIdentityUserQuery,
-  useReleaseIdentityUsernameMutation,
-  useUnlinkIdentityDiscordMutation,
-  useFixIdentitySpectrumMutation,
-  useDeactivateIdentityUserMutation,
-  useReactivateIdentityUserMutation,
 } = injectedRtkApi

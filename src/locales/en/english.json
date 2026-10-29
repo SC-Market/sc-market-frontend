@@ -4625,6 +4625,84 @@
       "description": "Get an in-app and push notification when someone posts a public contract. Off by default. Leave every kind unticked to hear about all of them.",
       "error": "Couldn't load or save your contract alerts.",
       "toggle": "Contract alerts for"
+    },
+    "publicApi": {
+      "title": "API tokens",
+      "intro": "Tokens for the SC Market public API (/api/public/v1). Each one has a preset of permissions, the orgs it may act for and an expiry date, and it can never do more than you can.",
+      "docsLink": "API reference",
+      "create": "Create token",
+      "empty": "You have no API tokens yet.",
+      "loadError": "Couldn't load your API tokens. Try again later.",
+      "status": {
+        "active": "Active",
+        "expired": "Expired",
+        "revoked": "Revoked"
+      },
+      "expiresOn": "Expires {{date}}",
+      "expiredOn": "Expired {{date}}",
+      "revokedOn": "Revoked {{date}}",
+      "lastUsed": "Last used {{date}}",
+      "neverUsed": "Never used",
+      "requests30d": "Requests in the last 30 days: {{n}}",
+      "orgsNone": "Personal shops only",
+      "orgsList": "Orgs: {{orgs}}",
+      "revoke": "Revoke",
+      "revokeTitle": "Revoke this token?",
+      "revokeBody": "Anything using \"{{name}}\" stops working within a minute. This can't be undone.",
+      "revokeError": "Couldn't revoke the token.",
+      "cancel": "Cancel",
+      "dialog": {
+        "title": "Create an API token",
+        "name": "Name",
+        "nameHelp": "So you can tell your tokens apart, like the name of your bot.",
+        "description": "Description (optional)",
+        "preset": "What it may do",
+        "orgs": "Orgs it may act for",
+        "orgsHelp": "Leave them all unticked for your personal shop only. You still need the org permission yourself.",
+        "noOrgs": "You aren't a member of any org.",
+        "expiry": "Expires after",
+        "daysOption": "{{days}} days",
+        "create": "Create token",
+        "creating": "Creating…",
+        "error": "Couldn't create the token."
+      },
+      "created": {
+        "title": "Your new token",
+        "warning": "Copy it now: it's shown only this once and can't be retrieved later.",
+        "copy": "Copy token",
+        "copied": "Copied",
+        "done": "Done"
+      },
+      "presets": {
+        "shop_sync": {
+          "name": "Shop sync",
+          "description": "Read your shops, listings and stock."
+        },
+        "order_desk": {
+          "name": "Order desk",
+          "description": "Read your shops and orders, move orders on, and accept or decline offers."
+        },
+        "read_only": {
+          "name": "Read only",
+          "description": "Read your shops, listings, stock, orders and offers. Changes nothing."
+        }
+      },
+      "scopes": {
+        "shops_read": "Read shops",
+        "listings_read": "Read listings",
+        "stock_read": "Read stock",
+        "orders_read": "Read orders",
+        "orders_write": "Change order status",
+        "offers_read": "Read offers",
+        "offers_write": "Accept or decline offers"
+      },
+      "legacy": {
+        "title": "Legacy tokens",
+        "badge": "Legacy",
+        "create": "Create legacy token",
+        "notice": "Legacy tokens still work on the old API routes (/api/v1 and /api/v2), but not on the public API. For new tools, create a token above.",
+        "sunset": "Legacy tokens stop working on {{date}}. Create new tokens above and move your tools to the public API before then."
+      }
     }
   },
   "settingsManageContractors": {

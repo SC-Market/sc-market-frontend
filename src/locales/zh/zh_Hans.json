@@ -1142,6 +1142,84 @@
       "tokenActive": "同步令牌已启用。其 URL 仅在创建时显示；如需新的 URL，请重新生成令牌。",
       "tokenHint": "尾号为 …{{hint}} 的同步令牌已启用。其 URL 仅在创建时显示；如需新的 URL，请重新生成令牌。",
       "urlShownOnce": "请立即复制此 URL。它包含你的同步令牌，且不会再次显示。如果丢失，请重新生成令牌。"
+    },
+    "publicApi": {
+      "title": "API 令牌",
+      "intro": "用于 SC Market 公开 API（/api/public/v1）的令牌。每个令牌都有一组预设权限、可代为操作的组织和到期日期，且权限绝不会超过你本人。",
+      "docsLink": "API 参考",
+      "create": "创建令牌",
+      "empty": "你还没有 API 令牌。",
+      "loadError": "无法加载你的 API 令牌，请稍后再试。",
+      "status": {
+        "active": "有效",
+        "expired": "已过期",
+        "revoked": "已撤销"
+      },
+      "expiresOn": "{{date}} 到期",
+      "expiredOn": "{{date}} 已过期",
+      "revokedOn": "{{date}} 已撤销",
+      "lastUsed": "上次使用：{{date}}",
+      "neverUsed": "从未使用",
+      "requests30d": "过去 30 天的请求数：{{n}}",
+      "orgsNone": "仅个人店铺",
+      "orgsList": "组织：{{orgs}}",
+      "revoke": "撤销",
+      "revokeTitle": "撤销此令牌？",
+      "revokeBody": "所有使用“{{name}}”的程序将在一分钟内停止工作。此操作无法撤回。",
+      "revokeError": "无法撤销令牌。",
+      "cancel": "取消",
+      "dialog": {
+        "title": "创建 API 令牌",
+        "name": "名称",
+        "nameHelp": "用于区分你的令牌，例如你的机器人名称。",
+        "description": "描述（可选）",
+        "preset": "可执行的操作",
+        "orgs": "可代为操作的组织",
+        "orgsHelp": "如果只用于你的个人店铺，请全部不勾选。你本人仍需在组织中拥有相应权限。",
+        "noOrgs": "你不是任何组织的成员。",
+        "expiry": "有效期",
+        "daysOption": "{{days}} 天",
+        "create": "创建令牌",
+        "creating": "正在创建…",
+        "error": "无法创建令牌。"
+      },
+      "created": {
+        "title": "你的新令牌",
+        "warning": "请立即复制：它只显示这一次，之后无法再次获取。",
+        "copy": "复制令牌",
+        "copied": "已复制",
+        "done": "完成"
+      },
+      "presets": {
+        "shop_sync": {
+          "name": "店铺同步",
+          "description": "读取你的店铺、商品和库存。"
+        },
+        "order_desk": {
+          "name": "订单台",
+          "description": "读取你的店铺和订单，推进订单，并接受或拒绝报价。"
+        },
+        "read_only": {
+          "name": "只读",
+          "description": "读取你的店铺、商品、库存、订单和报价。不做任何更改。"
+        }
+      },
+      "scopes": {
+        "shops_read": "读取店铺",
+        "listings_read": "读取商品",
+        "stock_read": "读取库存",
+        "orders_read": "读取订单",
+        "orders_write": "更改订单状态",
+        "offers_read": "读取报价",
+        "offers_write": "接受或拒绝报价"
+      },
+      "legacy": {
+        "title": "旧版令牌",
+        "badge": "旧版",
+        "create": "创建旧版令牌",
+        "notice": "旧版令牌仍可在原有的 API 路由（/api/v1 和 /api/v2）上使用，但不能用于公开 API。新工具请在上方创建令牌。",
+        "sunset": "旧版令牌将于 {{date}} 停止工作。请在此之前于上方创建新令牌，并将你的工具迁移到公开 API。"
+      }
     }
   },
   "sidebar": {

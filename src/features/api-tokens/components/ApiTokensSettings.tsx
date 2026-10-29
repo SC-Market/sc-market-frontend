@@ -34,13 +34,13 @@ import { CreateTokenDialog } from "./CreateTokenDialog"
 import { EditTokenDialog } from "./EditTokenDialog"
 import { TokenDetailsDialog } from "./TokenDetailsDialog"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink.tsx"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { HelpLink } from "../../help/components/HelpLink"
+import {
+  LegacyTokensNotice,
+  PublicApiTokensSettings,
+} from "./PublicApiTokensSettings"
 
 export function ApiTokensSettings() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const { data: tokens, isLoading, error } = useGetTokensQuery()
   const [deleteToken] = useDeleteTokenMutation()
 
@@ -117,60 +117,53 @@ export function ApiTokensSettings() {
     return "default"
   }
 
-  if (isLoading) {
-    return (
-      <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item xs={12}>
-          <Typography>Loading tokens...</Typography>
-        </Grid>
-      </Grid>
-    )
-  }
-
-  if (error) {
-    return (
-      <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item xs={12}>
-          <Alert severity="error">
-            Failed to load API tokens. Please try again later.
-          </Alert>
-        </Grid>
-      </Grid>
-    )
-  }
-
   return (
     <Grid container spacing={3}>
+      <Grid item xs={12}>
+        <PublicApiTokensSettings />
+      </Grid>
+
+      <Grid item xs={12}>
+        <Divider />
+      </Grid>
+
       <Grid item xs={12}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Box display="flex" alignItems="center" gap={1.5}>
             <Typography variant="h5" component="h2">
-              API Tokens
+              {t("settings.publicApi.legacy.title")}
             </Typography>
-            <HelpLink guide="apiTokens" />
+            <Chip
+              size="small"
+              variant="outlined"
+              label={t("settings.publicApi.legacy.badge")}
+            />
           </Box>
           <Button
-            variant="contained"
+            variant="outlined"
             startIcon={<AddIcon />}
             onClick={handleCreateToken}
           >
-            Create Token
+            {t("settings.publicApi.legacy.create")}
           </Button>
         </Box>
       </Grid>
 
       <Grid item xs={12}>
-        <Alert severity="info" sx={{ mb: 2 }}>
-          API tokens allow third-party applications to access your account with
-          specific permissions. You can create tokens with limited scopes and
-          contractor access for enhanced security.
-          <a href="https://api.sc-market.space/docs" target="_blank">
-            <Button>Open API Docs</Button>
-          </a>
-        </Alert>
+        <LegacyTokensNotice />
       </Grid>
 
-      {tokens && tokens.length === 0 ? (
+      {isLoading ? (
+        <Grid item xs={12}>
+          <Typography>Loading tokens...</Typography>
+        </Grid>
+      ) : error ? (
+        <Grid item xs={12}>
+          <Alert severity="error">
+            Failed to load API tokens. Please try again later.
+          </Alert>
+        </Grid>
+      ) : tokens && tokens.length === 0 ? (
         <Grid item xs={12}>
           <Card>
             <CardContent sx={{ textAlign: "center", py: 4 }}>

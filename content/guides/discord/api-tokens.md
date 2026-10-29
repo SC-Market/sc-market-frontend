@@ -1,117 +1,112 @@
 ---
 title: Use the SC Market API with a token
-description: Create an API token in Settings and send it with each request, so your own bot or script can read and update your listings, stock and orders.
+description: Create an API token in Settings and call the SC Market public API, so your bot or script can read your shops, stock and orders and answer offers.
 order: 40
-updated: 2026-10-28
-keywords: [api, api token, token, bearer, developer, bot, script, integration, automation, stock sync, scm_live, revoke]
+updated: 2026-10-29
+keywords: [api, public api, api token, token, bearer, developer, bot, script, integration, automation, stock sync, scmp_live, scm_live, legacy token, revoke]
 related: [discord/webhooks, selling/stock-lots-and-allocation, selling/handle-orders-as-a-seller]
 howto: true
 ---
 
-An API token lets your own bot, script or spreadsheet tool use SC Market as you, without a browser: read your listings and orders, or keep your stock in sync. You create it in [Settings → API Tokens](/settings?tab=api-tokens), choose what it may do, and send it with every request.
+An API token lets your own bot, script or spreadsheet tool use SC Market as you, without a browser: read your shops, listings and stock, follow your orders, move them on and answer offers. You create the token in [Settings → API Tokens](/settings?tab=api-tokens), pick what it may do, and send it with every request to the **public API** at `https://api.sc-market.space/api/public/v1`.
 
 > [!NOTE]
-> A dedicated public API for tokens is on the way, with its own address, permissions for each kind of task (like stock or orders) and limits for each token. This guide covers tokens as they work today. They keep working until the new API is ready, and the switch will be announced ahead of time.
+> The public API is the way to go for anything new. Tokens made before it, now listed under **Legacy tokens**, keep working on the old `/api/v1` and `/api/v2` routes for now, but not on the public API (see [Legacy tokens](#legacy-tokens) below). Any switch-off will be announced ahead of time.
 
 ## Before you start
 
-- An SC Market account. Each token belongs to you and can only do what you can do.
+- An SC Market account. Each token belongs to you and can only do what you can do, right now: if you lose a permission in an org, your tokens lose it too.
 - Somewhere private to run your code, such as a server or your own computer. A token in a web page or a shared sheet is a token anyone can copy.
 
 ## Steps
 
-1. Open [Settings → API Tokens](/settings?tab=api-tokens) and click **Create Token**.
-2. Enter a **Token Name**, like the name of your bot. A **Description** is optional.
-3. Under **Permissions (Scopes)**, tick only what it needs. For example, **Read Market** and **Write Market** to sync stock, or **Read Orders** to watch your orders.
-4. Under **Organization Access**, tick each org it may act for. Leave them all unticked if it only works with your personal shop.
-5. Optional: set an **Expiration Date** (in UTC). If you leave it empty, the token never expires.
-6. Click **Create Token**. Click **Copy Token** and store it somewhere safe: it's only shown this once.
+1. Open [Settings → API Tokens](/settings?tab=api-tokens) and click **Create token**.
+2. Enter a **Name**, like the name of your bot. A **Description** is optional.
+3. Under **What it may do**, pick a preset:
+   - **Shop sync**: read your shops, listings and stock.
+   - **Order desk**: read your shops and orders, move orders on, and accept or decline offers.
+   - **Read only**: read shops, listings, stock, orders and offers, and change nothing.
+4. Under **Orgs it may act for**, tick each org it may work with. Leave them all unticked if it only works with your personal shop.
+5. Under **Expires after**, choose how long it lasts (90 days by default, a year at most).
+6. Click **Create token**, then **Copy token**, and store it somewhere safe: it's only shown this once.
 
 ## Make your first request
 
-Send the token in the `Authorization` header to `https://api.sc-market.space`:
+Send the token in the `Authorization` header:
 
 ```
-curl https://api.sc-market.space/api/v1/profile \
-  -H "Authorization: Bearer scm_live_…"
+curl https://api.sc-market.space/api/public/v1/me \
+  -H "Authorization: Bearer scmp_live_…"
 ```
 
-You get your own profile back, which shows the token works. A `401` means the token is wrong, expired or deleted.
+You get back your user and the token's scopes, orgs and expiry date, which shows the token works. A `401` means the token is wrong, expired or revoked.
 
-## Change or delete a token
+## Revoke a token
 
-In [Settings → API Tokens](/settings?tab=api-tokens), each token shows its scopes, its orgs and when it was last used.
-
-- **Change it**: click the edit icon, change the scopes, orgs or expiration date, and click **Update Token**. The token itself stays the same.
-- **Delete it**: click the delete icon, then **Delete**. The token stops working right away, and anything still using it gets a `401`. If a token leaks, delete it and create a new one.
+In [Settings → API Tokens](/settings?tab=api-tokens), each token shows its preset, scopes, orgs, expiry date, when it was last used and how many requests it made in the last 30 days. Click the revoke icon, then **Revoke**. Anything still using it gets a `401` within a minute. If a token leaks, revoke it and create a new one. To change what a token may do, create a new one and revoke the old one.
 
 ## Advanced
 
-### Which scope each call needs
+### What you can call
 
-The API has two versions, `/api/v1` and `/api/v2`, and a token works on both. Most of the selling tools are in v2. Each call needs a scope for its area: a **Read** scope to look, and a **Write** scope to create, change or delete.
+Every call needs the scope shown in brackets; the presets above bundle them. `{shop}` is a shop's id or its slug.
 
-- **Market** (`market:read`, `market:write`): shops, listings, stock lots, buy orders, auctions, inventory, images, suppliers, the watchlist, price alerts and market stats.
-- **Orders** (`orders:read`, `orders:write`): orders, the cart and requisitions.
-- **Offers** (`offers:read`, `offers:write`): offers and counter offers.
-- **Profile** (`profile:read`, `profile:write`): your account, availability, wishlists and the SCMDB link.
-- **Organizations**, **Services**, **Chats**, **Notifications**, **Recruiting** and **Comments**: the v1 calls of those areas, plus org domains and notification settings in v2.
-- **Read Only** gives every read scope. **Full Access** gives every scope and works for all your orgs, whatever you tick under **Organization Access**. Pick single scopes instead when you can.
-- Game data and the public market (search, shop pages, listing pages) need no token at all.
+- **The token itself**: `GET /me` (any token).
+- **Your shops**: `GET /shops` lists your personal shop and the shops of the orgs the token has, with your permissions in each; `GET /shops/{shop}` (shops:read).
+- **Listings**: `GET /shops/{shop}/listings?status=active` lists every listing of the shop, private and unlisted ones included; `GET /listings/{id}` (listings:read).
+- **Stock**: `GET /listings/{id}/stock` lists the listing's stock lots, with quantities and locations (stock:read).
+- **Orders**: `GET /orders?role=seller&status=not-started`, also with `shop` and `updated_since`; `GET /orders/{id}` (orders:read).
+- **Move an order on**: `POST /orders/{id}/status` with `{"status": "in-progress"}`, `"fulfilled"` or `"cancelled"` (orders:write). The same rules and notifications apply as on the site: the seller side moves an order forward, and the customer may cancel.
+- **Offers**: `GET /offers?role=seller&status=active`; `GET /offers/{id}` (offers:read).
+- **Answer an offer**: `POST /offers/{id}/accept` (creates the order) or `POST /offers/{id}/decline` (offers:write). Only when it's your turn: the seller answers the customer's offer, the customer answers a counter offer.
 
-Tokens can never manage tokens, set up two-factor sign-in, change your email or linked RSI account, download your data export or use the site's debug tools: those calls answer `403`. `GET /api/v1/profile` answers any valid token, whatever its scopes, which is why it's the call to check a token with. The **Admin** and **Moderation** scopes are only for site admins.
+Write calls send JSON: add `-H "Content-Type: application/json"` and the body with `-d`. The full list, with every parameter and answer, is in the [API docs](https://api.sc-market.space/docs) and the [OpenAPI spec](https://api.sc-market.space/api/public/v1/openapi.json).
 
-### Common calls
-
-Write calls send JSON: add `-H "Content-Type: application/json"` and the body with `-d`.
-
-- **Your shops**: `GET /api/v2/shops/mine` (Read Market). It lists your personal shop and the shops of the orgs the token has under **Organization Access**, with each `shop_id` and your permissions there.
-- **Your listings**: `GET /api/v2/listings/mine?shop_id=…&status=active` (Read Market).
-- **Stock of a listing**: `GET /api/v2/stock-lots?listing_id=…` (Read Market) lists its lots, each with a `lot_id`.
-- **Set stock**: `PUT /api/v2/stock-lots/{lot_id}` with `{"quantity_total": 40}`. For many lots at once, `POST /api/v2/stock-lots/bulk-update` with `{"updates": [{"lot_id": "…", "quantity_total": 40}]}` (Write Market).
-- **Orders to work on**: `GET /api/v2/orders?role=seller&status=not-started`, and one order with `GET /api/v2/orders/{order_id}` (Read Orders).
-- **Move an order on**: `PUT /api/v1/orders/{order_id}` with `{"status": "in-progress"}`, `"fulfilled"` or `"cancelled"` (Write Orders). The same rules apply as on the site.
-- **Open offers**: `GET /api/v2/offers/search?role=seller&status=active` (Read Offers).
-- **Market search, no token needed**: `GET /api/v2/listings/search?text=…`.
-
-Every call, with its parameters and answers, is in the [API docs](https://api.sc-market.space/docs), for both v1 and v2.
+Game data and the public market (search, shop pages, listing pages) need no token at all and aren't part of the public API.
 
 ### Orgs
 
-To work with an org's shop, its listings or its orders, the token needs that org under **Organization Access**, and you need the org permission for it, the same as on the site (for example **Manage Market** for listings and stock). Without the org:
+To work with an org's shop, its listings, orders or offers, the token needs that org under **Orgs it may act for**, and you need the org permission for it yourself, the same as on the site (for example **Manage Orders** to move an org's order on).
 
-- A call that names the org, its shop, listing, lot, order or offer answers `403`, on v1 and v2.
-- Lists leave the org out: your orders and offers as a seller, your shops, stock, buy orders, requisitions, suppliers and the org's private listings show only the orgs the token has.
-- What you bought or asked for yourself stays in your lists, even from an org's shop.
+- Anything of an org the token doesn't have answers `404`, as if it didn't exist.
+- Lists leave those orgs out: your shops, and your orders and offers as a seller.
+- What you bought or asked for yourself stays visible, even from an org's shop.
 
-**Full Access** tokens work for all your orgs.
+### Answers and paging
 
-### Paging
-
-v2 lists take `page` (from 1, at most 500) and `page_size` (20 by default, at most 100; anything bigger is cut to 100). The answer has the items plus `total`, `page` and `page_size`, like `{"listings": […], "total": 42, "page": 1, "page_size": 20}`. Stop when you've read `total` items.
+A successful answer is `{"data": …}`. Lists take `page` (from 1) and `page_size` (25 by default, at most 100; anything bigger is cut to 100), and answer like `{"data": {"orders": […], "total": 42, "page": 1, "page_size": 25}}`. Stop when you've read `total` items. For syncing, ask only for what changed with `updated_since` (an ISO date and time, like `2026-10-29T12:00:00Z`).
 
 ### Errors
 
-Errors look like `{"error": {"code": "FORBIDDEN", "message": "Insufficient token permissions"}}`.
+Errors look like `{"error": {"code": "INSUFFICIENT_SCOPE", "message": "…"}}`.
 
-- `400 VALIDATION_ERROR`: a parameter or the body is wrong. `validationErrors` lists the fields when there are any.
-- `401 UNAUTHORIZED`: no token, or it's wrong, expired or deleted.
-- `403 FORBIDDEN`: the token lacks the scope (`Insufficient token permissions`) or the org (`Token does not have access to this contractor`), or you lack the permission yourself.
-- `404 NOT_FOUND`: it doesn't exist, or you can't see it.
-- `409 CONFLICT`: it changed or clashes with something else. Read it again, then retry.
-- `429 RATE_LIMIT_EXCEEDED`: slow down (see below).
-
-On public calls, like market search or a shop page, a token that doesn't work or doesn't cover the call is simply ignored: you get the public answer, not an error. Check your token with `/api/v1/profile` if results look like you're signed out.
+- `400 VALIDATION_ERROR`: a parameter or the body is wrong. `validationErrors` lists the fields.
+- `401 UNAUTHORIZED`: no token. `401 INVALID_TOKEN`: the token is wrong, expired, revoked, or a legacy token.
+- `403 INSUFFICIENT_SCOPE`: the token lacks the scope; `details.required` and `details.granted` say which. `403 FORBIDDEN`: you may not do this yourself (for example, it isn't your turn on an offer). `403 ACCOUNT_BANNED`: the account is banned.
+- `404 NOT_FOUND`: it doesn't exist, or the token can't reach it.
+- `409 CONFLICT`: the order or offer is already closed.
+- `429 RATE_LIMIT_EXCEEDED`: slow down; wait the seconds in `Retry-After`.
+- `503 SERVICE_UNAVAILABLE`: the API is busy; wait the seconds in `Retry-After` and retry.
 
 ### Rate limits
 
-- **v1** calls count against your account, from each IP address: 500 points a minute. Most calls cost 1 point and some heavy ones 15. Each answer has `X-RateLimit-Remaining` and `X-RateLimit-Reset` (when the minute ends, in unix seconds); `X-RateLimit-Limit` is what that call cost. When you run out, you get a `429` whose `retryAfter` (also the `X-RateLimit-Retry-After` header) says how many seconds to wait.
-- **v2** has no limit per token yet, apart from photo uploads. Stay around one request a second, and wait before retrying on `429` or `503`.
-- Without a token, v1 allows 120 calls a minute from each IP address, then refuses calls for a minute.
+- Each token: 120 reads a minute (at most 30 in any 10 seconds) and 30 writes a minute.
+- All your tokens together: 300 requests a minute.
+- Every answer has `X-RateLimit-Limit`, `X-RateLimit-Remaining` and `X-RateLimit-Reset` (unix seconds) for the token.
+- After 20 requests with a wrong token from one IP address in 15 minutes, that address gets `429` for a while.
 
 ### Keep your tokens safe
 
-- Call the API from your server or script, not from a web page: browsers block other websites from calling the API, and anyone who opens the page could copy the token.
-- Use one token for each tool, so you can delete one without breaking the others. You can have up to 25.
-- Set an expiration date, and delete tokens you no longer use. **Last used** shows which ones are idle.
+- Call the API from your server or script, not from a web page: the public API doesn't answer browsers on other sites, and anyone who opens the page could copy the token.
+- Use one token for each tool, so you can revoke one without breaking the others. You can have up to 25 active tokens.
+- Give each token only the preset and orgs it needs, and revoke tokens you no longer use. **Last used** shows which ones are idle.
+- Tokens of test accounts start with `scmp_test_` and only see the test realm.
 - If your account is banned or deleted, its tokens stop working.
+
+## Legacy tokens
+
+Tokens made before the public API (they start with `scm_live_`) are listed under **Legacy tokens** in [Settings → API Tokens](/settings?tab=api-tokens). They still work, as before, on the old routes under `https://api.sc-market.space/api/v1` and `/api/v2`, with the scopes and orgs you gave them. You can still create one there with **Create legacy token**.
+
+- A legacy token doesn't work on the public API, and a public API token doesn't work on the old routes: each answers `401 INVALID_TOKEN` on the other. There's no way to convert one into the other; create a new token instead.
+- On the old routes, a legacy token that doesn't cover a public call (like market search) is ignored, so you get the anonymous answer. Check a legacy token with `GET /api/v1/profile`.
+- Legacy tokens will stop working some time after the public API is in use. The date will be announced on this page and in your token settings well ahead of time.
