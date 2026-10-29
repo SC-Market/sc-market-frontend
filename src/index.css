@@ -46,7 +46,12 @@ img[loading="lazy"] {
     rgba(0, 0, 0, 0.06) 75%
   );
   background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  /* A few passes, not infinite: a lazy image below the fold never loads (so
+     never gets data-img-settled) until it's scrolled to, and an infinite
+     background-position animation repaints every frame for each of them. On
+     /market (48 cards) that kept the renderer at ~0.5 core (measured) for as long
+     as the page was open. After the last pass the gradient stays, static. */
+  animation: shimmer 1.5s 3;
 }
 
 @media (prefers-color-scheme: dark) {
