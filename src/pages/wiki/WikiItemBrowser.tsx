@@ -116,6 +116,8 @@ function ItemGridCard({ item }: { item: WikiItemSearchResult }) {
         height="160"
         image={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
         alt={item.name}
+        // Lazy: no server-render preload (Early Hint) per card.
+        loading="lazy"
         sx={{ objectFit: "contain", bgcolor: "background.default", p: 1 }}
         onError={({ currentTarget }) => { currentTarget.onerror = null; currentTarget.src = FALLBACK_IMAGE_URL }}
       />
@@ -150,7 +152,7 @@ function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: (
           src={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
           variant="rounded"
           sx={{ width: 32, height: 32, bgcolor: "background.default" }}
-          imgProps={{ style: { objectFit: "contain" } }}
+          imgProps={{ loading: "lazy", style: { objectFit: "contain" } }}
         />
       </TableCell>
       <TableCell sx={{ py: 0.5 }}>

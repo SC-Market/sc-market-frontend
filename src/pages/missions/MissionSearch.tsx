@@ -333,7 +333,7 @@ export function MissionSearch() {
                               src={getMissionIcon(m.category) || undefined}
                               variant="rounded"
                               sx={{ width: 24, height: 24, bgcolor: getMissionCategoryColor(m.category) }}
-                              imgProps={{ style: { objectFit: "contain", padding: 4 } }}
+                              imgProps={{ loading: "lazy", style: { objectFit: "contain", padding: 4 } }}
                             >
                               {(m.category || "?")[0].toUpperCase()}
                             </Avatar>

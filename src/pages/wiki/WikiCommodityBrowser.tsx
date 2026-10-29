@@ -262,7 +262,7 @@ export function WikiCommodityBrowser() {
                               width: 40, height: 40, flexShrink: 0,
                               bgcolor: getCommodityColor(c.resource_subcategory) || "grey.800",
                             }}
-                            imgProps={{ style: { objectFit: "contain" } }}
+                            imgProps={{ loading: "lazy", style: { objectFit: "contain" } }}
                           />
                           <Box sx={{ flex: 1, minWidth: 0 }}>
                             <Typography variant="body2" fontWeight={700} noWrap>{c.name}</Typography>

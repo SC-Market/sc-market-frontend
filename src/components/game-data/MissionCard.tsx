@@ -98,7 +98,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick
             <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: getMissionCategoryColor(mission.category), flexShrink: 0 }}
               src={missionIcon || undefined}
               variant="rounded"
-              imgProps={{ style: { objectFit: "contain", padding: 4 } }}
+              imgProps={{ loading: "lazy", style: { objectFit: "contain", padding: 4 } }}
             >
               {initials(displayGiver)}
             </Avatar>
