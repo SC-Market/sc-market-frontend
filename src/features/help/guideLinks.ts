@@ -17,6 +17,7 @@ export const GUIDE_LINKS = {
   connectDiscordBot: "/guides/discord/connect-the-discord-bot",
   orderAlerts: "/guides/discord/order-alerts-and-claiming",
   webhooks: "/guides/discord/webhooks",
+  apiTokens: "/guides/discord/api-tokens",
   orgRoles: "/guides/orgs/roles-and-permissions",
   orgInvites: "/guides/orgs/invite-and-manage-members",
   orgAuditLogs: "/guides/orgs/audit-logs",

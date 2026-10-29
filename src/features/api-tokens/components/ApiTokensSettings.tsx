@@ -36,6 +36,7 @@ import { TokenDetailsDialog } from "./TokenDetailsDialog"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink.tsx"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { HelpLink } from "../../help/components/HelpLink"
 
 export function ApiTokensSettings() {
   const { t } = useTranslation()
@@ -142,9 +143,12 @@ export function ApiTokensSettings() {
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h5" component="h2">
-            API Tokens
-          </Typography>
+          <Box display="flex" alignItems="center" gap={1.5}>
+            <Typography variant="h5" component="h2">
+              API Tokens
+            </Typography>
+            <HelpLink guide="apiTokens" />
+          </Box>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
