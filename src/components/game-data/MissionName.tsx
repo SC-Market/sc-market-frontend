@@ -1,55 +1,21 @@
 import React from "react"
 import { Typography, TypographyProps } from "@mui/material"
+import { readableMissionText } from "../../seo/missionText"
 
 /** Style for placeholder tokens like [DESTINATION] */
 const placeholderSx = { fontFamily: "monospace", color: "secondary.main", fontSize: "0.9em" } as const
 
 /**
- * Renders a mission name with ~mission(...) placeholders styled as
- * monospace secondary-colored [LABEL] spans.
+ * Renders a mission name with its game placeholders as readable words
+ * ("Active Bounty: [TARGET NAME]" → "Active Bounty: Target"), the same text
+ * the page title and the edge bridge use (src/seo/missionText.ts).
  */
 export function MissionName({
   name,
   ...props
 }: { name: string | null | undefined } & Omit<TypographyProps, "children">) {
   if (!name) return <Typography {...props}>Unknown Mission</Typography>
-
-  const cleaned = name.replace(/<\/?em\d*>/gi, "")
-
-  const parts = cleaned.split(/(~mission\([^)]+\))/)
-
-  return (
-    <Typography {...props}>
-      {parts.map((part, i) => {
-        const match = part.match(/^~mission\(([^)]+)\)$/)
-        if (!match) return <React.Fragment key={i}>{part}</React.Fragment>
-
-        const inner = match[1]
-        const key = inner.split("|").pop() || inner
-        
-        // ~mission(Contractor) or ~mission(Contractor|...) → "Various"
-        if (inner === "Contractor" || inner.startsWith("Contractor|")) {
-          return (
-            <Typography key={i} component="span" sx={placeholderSx}>
-              Various
-            </Typography>
-          )
-        }
-
-        const label = key
-          .replace(/([a-z])([A-Z])/g, "$1 $2")
-          .replace(/[_]/g, " ")
-          .trim()
-          .toUpperCase()
-
-        return (
-          <Typography key={i} component="span" sx={placeholderSx}>
-            [{label}]
-          </Typography>
-        )
-      })}
-    </Typography>
-  )
+  return <Typography {...props}>{readableMissionText(name)}</Typography>
 }
 
 /**

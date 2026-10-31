@@ -22,5 +22,7 @@ Disallow: /onboarding
 Disallow: /dashboard
 Disallow: /messaging
 Disallow: /send
+# Error pages (the old route-error redirect put the error in the URL).
+Disallow: /error
 
-Sitemap: https://api.sc-market.space/sitemap.xml
+Sitemap: https://sc-market.space/sitemap.xml

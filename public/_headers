@@ -29,6 +29,10 @@ https://www.sc-market.space/*
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
 
+# The error page is never a search result (robots.txt also disallows it).
+/error
+  X-Robots-Tag: noindex
+
 # App shell (index.html, and __spa-fallback.html for the edge bridge) and the
 # prerendered homepage (__home.html, served at /; its canonical is /):
 # always revalidate so the served HTML references the current

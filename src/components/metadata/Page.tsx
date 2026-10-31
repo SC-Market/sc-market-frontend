@@ -6,16 +6,11 @@ import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api
 import { FRONTEND_URL } from "../../util/constants"
 import { CircularProgress } from "@mui/material"
 import { Stack } from "@mui/system"
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useRouteError,
-} from "react-router-dom"
+import { useLocation, useNavigate, useRouteError } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { usePageReady } from "./PageReady"
-import { isChunkLoadError } from "../../util/chunkLoadError"
+import { isPaginatedPath, queryIndexing } from "../../seo/queryIndexing"
 
 export function Page(
   props: PropsWithChildren<{
@@ -70,26 +65,22 @@ export function Page(
     }
   }, [location.pathname, location.hash, props.canonUrl])
 
+  // Same rules as the edge bridge (src/seo/queryIndexing.ts): `?page=N` of
+  // a paginated hub is its own self-canonical page; any other query (search,
+  // filters, sort) is a noindex variant whose canonical is the clean URL.
+  const indexing = queryIndexing(new URLSearchParams(location.search))
+  const pageSuffix =
+    indexing.pageNumber && isPaginatedPath(location.pathname)
+      ? `?page=${indexing.pageNumber}`
+      : ""
+  const noindexQuery = indexing.hasQuery && !pageSuffix
   const backupCanonUrl = location.pathname
 
-  // A route error moves to /error?message=…&target=…, EXCEPT a failed chunk
-  // load (stale build after a deploy). That one renders in place: the URL stays
-  // on the page itself, so a refresh loads the new build and works. Moving it
-  // to /error baked the message into the URL, and every later refresh (even a
-  // hard one) re-showed the old error from the query string.
-  if (error && !isChunkLoadError(error)) {
-    return (
-      <Navigate
-        to={
-          "/error?" +
-          new URLSearchParams([
-            ["message", error.toString()],
-            ["target", location.pathname],
-          ]).toString()
-        }
-      />
-    )
-  }
+  // A route error (this Page is inside the route's error element, whose
+  // children are the error body) renders IN PLACE: the URL stays on the
+  // failed page. It used to move to /error?message=…&target=…, which baked
+  // the message into the URL (every later refresh re-showed it) and gave
+  // crawlers an /error URL to index. The error body is noindex.
 
   return customOrg && customOrgData ? (
     <>
@@ -104,9 +95,10 @@ export function Page(
         {(props.canonUrl || !props.dontUseDefaultCanonUrl) && (
           <link
             rel="canonical"
-            href={`${FRONTEND_URL}${props.canonUrl || backupCanonUrl}`}
+            href={`${FRONTEND_URL}${props.canonUrl || backupCanonUrl}${pageSuffix}`}
           />
         )}
+        {noindexQuery && <meta name="robots" content="noindex" />}
       </Helmet>
       {props.children}
     </>

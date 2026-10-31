@@ -10,7 +10,7 @@
 import React, { useMemo, useCallback, useState } from "react"
 import {
   Box, Card, CardContent, Grid, Typography, Pagination, Alert, Chip, Stack,
-  Divider, Tooltip, Button,
+  Divider, Tooltip, Button, Link as MuiLink,
 } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import { Helmet } from "@unhead/react/helmet"
@@ -54,6 +54,7 @@ import { WIKI_PATHS } from "../../routes/paths"
 import { wikiShipsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
+import { linkedPaginationItem } from "../../components/pagination/linkedPaginationItem"
 
 const PAGE_SIZE = 24
 
@@ -340,6 +341,38 @@ function VehicleCard({
 }
 
 // ─── Main component ──────────────────────────────────────────────────────────
+/**
+ * Every ship and vehicle as a plain A–Z link list under the grid: the grid
+ * pages 24 at a time, so without this the page (prerendered for crawlers)
+ * linked only the first page of ships.
+ */
+function AllShipsIndex(props: { ships: { id: string; name: string }[] }) {
+  const { t } = useTranslation()
+  const sorted = useMemo(
+    () => [...props.ships].sort((a, b) => a.name.localeCompare(b.name, "en")),
+    [props.ships],
+  )
+  return (
+    <Box component="nav" aria-label={t("wiki.shipBrowser.allShips", "All ships and vehicles")} sx={{ mt: 6 }}>
+      <Typography variant="h6" component="h2" color="text.secondary" sx={{ mb: 1 }}>
+        {t("wiki.shipBrowser.allShips", "All ships and vehicles")} ({sorted.length})
+      </Typography>
+      <Box
+        component="ul"
+        sx={{ listStyle: "none", p: 0, m: 0, columnWidth: 220, columnGap: 3 }}
+      >
+        {sorted.map((ship) => (
+          <Box component="li" key={ship.id} sx={{ breakInside: "avoid", py: 0.25 }}>
+            <MuiLink component={RouterLink} to={WIKI_PATHS.ship(ship.id, ship.name)} variant="body2" color="text.primary" underline="hover">
+              {ship.name}
+            </MuiLink>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  )
+}
+
 export function WikiShipBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -853,9 +886,12 @@ export function WikiShipBrowser() {
                       window.scrollTo({ top: 0, behavior: "smooth" })
                     }}
                     color="primary"
+                    renderItem={linkedPaginationItem(WIKI_PATHS.ships, searchParams)}
                   />
                 </Box>
               )}
+
+              {allVehicles.length > 0 && <AllShipsIndex ships={allVehicles} />}
             </>
           )}
         </FilterSidebarLayout>

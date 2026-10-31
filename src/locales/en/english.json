@@ -1844,6 +1844,7 @@
     "page": "Error page",
     "pageTitle": "An Error Occurred",
     "reload": "Reload",
+    "retry": "Try again",
     "returnToDashboard": "Return to Dashboard",
     "subtitle": "Please let us know in",
     "title": "An Error Occurred Loading the Page"
@@ -2080,8 +2081,8 @@
     "sellStep3Title": "Meet in game",
     "sellText": "Open a shop on your own or as an org. Org members claim and fulfill orders together, with one shared storefront, stock and reputation.",
     "sellTitle": "Start selling",
-    "seoDescription": "SC Market is the Star Citizen marketplace where players buy, sell, and trade in-game items and hire orgs for services like hauling, escort, medical, and salvage — all in aUEC.",
-    "seoTitle": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+    "seoDescription": "Trade with other Star Citizen players: buy and sell items, ship components and commodities for aUEC, post buy orders, and hire orgs for hauling, escort and salvage.",
+    "seoTitle": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
     "supporters": "supporters",
     "supportersThanks": "Thank you to all of our ",
     "supportersTitle": "Our Supporters",
@@ -2854,6 +2855,9 @@
     "title": "Mining Database"
   },
   "missions": {
+    "about": {
+      "title": "About the mission database"
+    },
     "detail": {
       "header": "Mission Detail"
     },
@@ -5384,6 +5388,7 @@
       "title": "Refining Methods"
     },
     "shipBrowser": {
+      "allShips": "All ships and vehicles",
       "allManufacturers": "All manufacturers",
       "allRoles": "All roles",
       "anySize": "Any size",

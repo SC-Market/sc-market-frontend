@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest"
 import { matchRoutes } from "react-router-dom"
 import { BRIDGE_ROUTES, matchBridgeRoute, PRERENDERED_KINDS } from "../routes"
+import { BRIDGE_PAGES } from "../pages"
+import { PAGINATED_PATHS } from "../../seo/queryIndexing"
 import { GAME_DATA_HUB_PATHS, HOME_PATH } from "../../prerender/paths"
 import { STATIC_SIBLING_PATHS } from "../../router/staticSiblingPaths"
 import routesJson from "../../../public/_routes.json"
@@ -139,6 +141,10 @@ describe("matchBridgeRoute", () => {
   })
 })
 
+/** The sitemap proxy's rule (functions/[sitemap].ts). */
+const SITEMAP_RULE = "/sitemap*.xml"
+const PAGINATED_PRERENDERED_HUBS: string[] = ["/wiki/items", "/wiki/ships", "/wiki/commodities"]
+
 describe("public/_routes.json", () => {
   const toRegex = (rule: string) =>
     new RegExp(`^${rule.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")}$`)
@@ -163,8 +169,26 @@ describe("public/_routes.json", () => {
   // the Function (and it would only pass them through, see handler.ts).
   it("skips the Function for the prerendered homepage, hubs, /guides and /about", () => {
     for (const path of [HOME_PATH, ...GAME_DATA_HUB_PATHS, "/guides", "/about"]) {
+      if (PAGINATED_PRERENDERED_HUBS.includes(path)) continue
       expect(invokes(path), path).toBe(false)
     }
+  })
+
+  // Their ?page=N (and filter-query noindex) is served by the bridge over the
+  // static file; the clean URL is still passed straight through (handler.ts).
+  it("invokes it for the paginated prerendered hubs, whose kinds are paginated", () => {
+    for (const path of PAGINATED_PRERENDERED_HUBS) {
+      expect(invokes(path), path).toBe(true)
+      const kind = matchBridgeRoute(path)!.route.kind
+      expect(PRERENDERED_KINDS.has(kind), path).toBe(true)
+      expect(BRIDGE_PAGES[kind].paginated, path).toBe(true)
+    }
+  })
+
+  it("invokes it for the main-host sitemap proxy only", () => {
+    expect(invokes("/sitemap.xml")).toBe(true)
+    expect(invokes("/sitemap-market-0.xml")).toBe(true)
+    expect(invokes("/sitemaps")).toBe(false)
   })
 
   // The hubs' detail pages stay on the bridge: only the exact hub path is
@@ -207,6 +231,7 @@ describe("public/_routes.json", () => {
 
   it("has no catch-all include: every rule is an exact path or a /prefix/*", () => {
     for (const rule of routesJson.include) {
+      if (rule === SITEMAP_RULE) continue
       expect(rule, rule).toMatch(/^\/([a-z-]+(\/[a-z-]+)*(\/\*)?)?$/)
     }
   })
@@ -215,7 +240,12 @@ describe("public/_routes.json", () => {
     const files = Object.keys(import.meta.glob("/functions/**/*.ts"))
     for (const rule of routesJson.include) {
       const segment = rule.split("/")[1]
-      const file = segment ? `/functions/${segment}/[[path]].ts` : "/functions/index.ts"
+      const file =
+        rule === SITEMAP_RULE
+          ? "/functions/[sitemap].ts"
+          : segment
+            ? `/functions/${segment}/[[path]].ts`
+            : "/functions/index.ts"
       expect(files, rule).toContain(file)
     }
   })
@@ -224,5 +254,16 @@ describe("public/_routes.json", () => {
     const rules = [...routesJson.include, ...routesJson.exclude]
     expect(rules.length).toBeLessThanOrEqual(100)
     for (const rule of rules) expect(rule.length, rule).toBeLessThanOrEqual(100)
+  })
+})
+
+describe("pagination: SPA and bridge agree", () => {
+  it("PAGINATED_PATHS are exactly the paginated bridge kinds' paths", () => {
+    const paginatedKinds = Object.entries(BRIDGE_PAGES)
+      .filter(([, page]) => page.paginated)
+      .map(([kind]) => kind)
+      .sort()
+    const kindsOfPaths = PAGINATED_PATHS.map((p) => matchBridgeRoute(p)!.route.kind).sort()
+    expect(kindsOfPaths).toEqual(paginatedKinds)
   })
 })

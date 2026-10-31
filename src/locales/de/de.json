@@ -3101,7 +3101,8 @@
     "message": "Nachricht",
     "goBackToPage": "Zurück zur Seite",
     "returnToDashboard": "Zurück zum Dashboard",
-    "pageTitle": "Ein Fehler ist aufgetreten"
+    "pageTitle": "Ein Fehler ist aufgetreten",
+    "retry": "Erneut versuchen"
   },
   "help": {
     "learnHow": "So geht's",
@@ -4438,6 +4439,9 @@
     "noResults": "Keine Ergebnisse gefunden. Passen Sie Ihre Filter an.",
     "search": {
       "header": "Missions-Datenbank"
+    },
+    "about": {
+      "title": "Über die Missionsdatenbank"
     }
   },
   "myListings": {
@@ -5410,7 +5414,8 @@
       "sectionHoverbikes": "Hoverbikes",
       "sectionShips": "Schiffe",
       "size": "Größe",
-      "sizeOption": "Größe {{size}}"
+      "sizeOption": "Größe {{size}}",
+      "allShips": "Alle Schiffe und Fahrzeuge"
     },
     "shipDetail": {
       "breadcrumbShips": "Schiffe & Fahrzeuge",

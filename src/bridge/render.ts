@@ -65,6 +65,11 @@ export function isSafeHref(href: string): boolean {
   return /^\/(?![/\\])[^\s\u0000-\u001f\u007f]*$/.test(href)
 }
 
+/** Off-site links a summary may carry: SC Orgs pages only. */
+export function isPartnerHref(href: string): boolean {
+  return /^https:\/\/sc-orgs\.space\/[A-Za-z0-9/_%-]*$/.test(href)
+}
+
 /**
  * Markup appended to <head>: the page's meta/canonical/JSON-LD, plus
  * robots noindex for unknown entities.
@@ -108,13 +113,23 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
       if (links.length === 0) continue
       chunks.push({ content: "<ul>", html: true })
       for (const link of links) {
+        const rel = link.rel === "prev" || link.rel === "next" ? ` rel="${link.rel}"` : ""
         chunks.push(
-          { content: `<li><a href="${escapeAttribute(link.href)}">`, html: true },
+          { content: `<li><a href="${escapeAttribute(link.href)}"${rel}>`, html: true },
           { content: link.text, html: false },
           { content: "</a></li>", html: true },
         )
       }
       chunks.push({ content: "</ul>", html: true })
+      continue
+    }
+    if (block.tag === "external") {
+      if (!isPartnerHref(block.href)) continue
+      chunks.push(
+        { content: `<p><a href="${escapeAttribute(block.href)}" rel="noopener">`, html: true },
+        { content: block.text, html: false },
+        { content: "</a></p>", html: true },
+      )
       continue
     }
     if ("items" in block) {

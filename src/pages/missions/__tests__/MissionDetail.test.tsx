@@ -255,7 +255,7 @@ describe("MissionDetail", () => {
     renderWithProviders()
 
     // Mission name is rendered by StandardPageLayout headerTitle (mocked to <h1>)
-    expect(screen.getByText("Test Mission")).toBeInTheDocument()
+    expect(screen.getByText("Test Mission — Hurston Dynamics, Rank 10, Stanton")).toBeInTheDocument()
     // Header chips (redesigned)
     expect(screen.getByText("Stanton")).toBeInTheDocument()
     expect(screen.getByText("Combat")).toBeInTheDocument()

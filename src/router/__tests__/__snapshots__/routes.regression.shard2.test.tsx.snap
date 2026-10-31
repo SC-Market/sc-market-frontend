@@ -52,7 +52,7 @@ exports[`routes (shard 2/4) > / 1`] = `
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": true,
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/",
 }
 `;
@@ -601,7 +601,7 @@ exports[`routes (shard 2/4) > /market 1`] = `
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Star Citizen Marketplace — SC Market",
+  "title": "Star Citizen Player Trading — Buy & Sell Items for aUEC | SC Market",
   "url": "/market",
 }
 `;
@@ -1081,7 +1081,7 @@ exports[`routes (shard 2/4) > /org/members 1`] = `
   "routeErrors": null,
   "session": "admin",
   "stillLoading": true,
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/members",
 }
 `;

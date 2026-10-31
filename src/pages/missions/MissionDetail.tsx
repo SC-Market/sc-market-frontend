@@ -3,9 +3,11 @@
  */
 
 import React from "react"
-import { Box, Alert, Grid } from "@mui/material"
+import { Box, Alert, Grid, Typography } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetMissionDetailQuery } from "../../store/api/v2/market"
+import { useGetActiveVersionsQuery, useGetMissionDetailQuery } from "../../store/api/v2/market"
+import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
+import { missionSummaryLine, missionTitle, readableMissionText } from "../../seo/missionText"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { MissionName } from "../../components/game-data/MissionName"
@@ -29,7 +31,8 @@ export function MissionDetail() {
 
   const m = data?.mission
 
-  const head = data && m && slug ? buildMissionHead(data, slug, FRONTEND_URL) : null
+  const { data: versions } = useGetActiveVersionsQuery()
+  const head = data && m && slug ? buildMissionHead(data, slug, FRONTEND_URL, versions?.LIVE) : null
   const seoTitle = head?.title ?? "Mission Detail | SC Market"
   const seoDescription = head ? headDescription(head) : ""
 
@@ -38,10 +41,10 @@ export function MissionDetail() {
       title={seoTitle}
       description={seoDescription}
       canonicalUrl={`/missions/${slug}`}
-      headerTitle={m?.mission_name || t("missions.detail.header", "Mission Detail")}
+      headerTitle={m ? missionTitle(m) : t("missions.detail.header", "Mission Detail")}
       breadcrumbs={[
         { label: "Missions", href: GAME_DATA_PATHS.missions },
-        { label: m?.mission_name || "Detail" },
+        { label: m ? readableMissionText(m.mission_name) : "Detail" },
       ]}
       isLoading={isLoading}
       error={error || undefined}
@@ -64,7 +67,12 @@ export function MissionDetail() {
           <Box sx={{ mb: 2 }}>
             <MissionHeaderChips mission={m} />
           </Box>
+          {/* The quotable one-liner (same text as the description and the bridge). */}
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
+            {missionSummaryLine(m, data.blueprint_rewards)}
+          </Typography>
           <MissionDetailTabs data={data} onBlueprintClick={(id) => navigate(GAME_DATA_PATHS.blueprint(id))} />
+          <GameDataFreshness />
         </Grid>
       )}
     </StandardPageLayout>

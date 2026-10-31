@@ -1,4 +1,7 @@
 import { useMemo, useState } from "react"
+import { useSearchParams } from "react-router-dom"
+import { linkedPaginationItem } from "../../../components/pagination/linkedPaginationItem"
+import { MARKET_PATHS } from "../../../routes/paths"
 import {
   Container,
   Typography,
@@ -45,7 +48,12 @@ export function ShopDirectory() {
   const [search, setSearch] = useState("")
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [sortIndex, setSortIndex] = useState(0)
-  const [page, setPage] = useState(1)
+  // The page is in the URL (?page=N), so each page has its own crawlable,
+  // self-canonical URL (src/seo/queryIndexing.ts).
+  const [searchParams, setSearchParams] = useSearchParams()
+  const page = Math.max(1, Number(searchParams.get("page")) || 1)
+  const setPage = (next: number) =>
+    setSearchParams(next > 1 ? { page: String(next) } : {}, { replace: next === 1 })
   const pageSize = SHOP_DIRECTORY_PAGE_SIZE
 
   const debouncedSearch = useDebounce(search, 300)
@@ -194,6 +202,7 @@ export function ShopDirectory() {
             onChange={(_, value) => setPage(value)}
             color="primary"
             shape="rounded"
+            renderItem={linkedPaginationItem(MARKET_PATHS.shops, searchParams)}
           />
         </Box>
       )}

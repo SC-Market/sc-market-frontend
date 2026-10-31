@@ -3022,7 +3022,8 @@
     "message": "訊息",
     "goBackToPage": "返回頁面",
     "returnToDashboard": "返回儀表板",
-    "pageTitle": "發生錯誤"
+    "pageTitle": "發生錯誤",
+    "retry": "重試"
   },
   "help": {
     "learnHow": "瞭解做法",
@@ -4359,6 +4360,9 @@
     "noResults": "找不到結果。請嘗試調整篩選條件。",
     "search": {
       "header": "任務資料庫"
+    },
+    "about": {
+      "title": "關於任務資料庫"
     }
   },
   "myListings": {
@@ -5410,7 +5414,8 @@
       "sectionHoverbikes": "懸浮車",
       "sectionShips": "船艦",
       "size": "尺寸",
-      "sizeOption": "尺寸 {{size}}"
+      "sizeOption": "尺寸 {{size}}",
+      "allShips": "所有艦船和載具"
     },
     "shipDetail": {
       "breadcrumbShips": "船艦與載具",

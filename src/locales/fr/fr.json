@@ -3115,7 +3115,8 @@
     "message": "Message",
     "goBackToPage": "Retourner à la page",
     "returnToDashboard": "Retour au tableau de bord",
-    "pageTitle": "Une erreur est survenue"
+    "pageTitle": "Une erreur est survenue",
+    "retry": "Réessayer"
   },
   "help": {
     "learnHow": "En savoir plus",
@@ -4469,6 +4470,9 @@
     "noResults": "Aucun résultat trouvé. Essayez d'ajuster vos filtres.",
     "search": {
       "header": "Base de données des missions"
+    },
+    "about": {
+      "title": "À propos de la base de données des missions"
     }
   },
   "myListings": {
@@ -5442,7 +5446,8 @@
       "sectionHoverbikes": "Hoverbikes",
       "sectionShips": "Vaisseaux",
       "size": "Taille",
-      "sizeOption": "Taille {{size}}"
+      "sizeOption": "Taille {{size}}",
+      "allShips": "Tous les vaisseaux et véhicules"
     },
     "shipDetail": {
       "breadcrumbShips": "Vaisseaux et véhicules",

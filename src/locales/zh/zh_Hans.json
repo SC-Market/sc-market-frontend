@@ -3114,7 +3114,8 @@
     "message": "消息",
     "goBackToPage": "返回页面",
     "returnToDashboard": "返回仪表盘",
-    "pageTitle": "发生错误"
+    "pageTitle": "发生错误",
+    "retry": "重试"
   },
   "help": {
     "learnHow": "了解方法",
@@ -4496,6 +4497,9 @@
     "noResults": "未找到结果。请尝试调整您的筛选条件。",
     "search": {
       "header": "任务数据库"
+    },
+    "about": {
+      "title": "关于任务数据库"
     }
   },
   "myListings": {
@@ -5416,7 +5420,8 @@
       "sectionHoverbikes": "悬浮摩托",
       "sectionShips": "飞船",
       "size": "尺寸",
-      "sizeOption": "尺寸 {{size}}"
+      "sizeOption": "尺寸 {{size}}",
+      "allShips": "所有舰船和载具"
     },
     "shipDetail": {
       "breadcrumbShips": "飞船与载具",

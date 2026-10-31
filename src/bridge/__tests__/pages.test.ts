@@ -29,7 +29,7 @@ import {
 const ORIGIN = "https://sc-market.space"
 
 function ctx(params: Record<string, string>, pathname = "/x"): PageContext {
-  return { params, origin: ORIGIN, pathname }
+  return { params, origin: ORIGIN, pathname, pageNumber: 1, related: {} }
 }
 
 function build(kind: BridgePageKind, data: unknown, params: Record<string, string>, pathname?: string, secondary?: unknown) {
@@ -152,14 +152,15 @@ describe("documents", () => {
     expect(bp.title).toBe("Arrowhead Sniper Rifle — Star Citizen Blueprint | SC Market")
     expect(bp.summary.map(text)).toContain("Ingredients: Gold, Barrel.")
     const mission = build("mission", f.mission, { slug: "PU_X" })
-    expect(meta(mission, "og:description")).toBe("Haul waste.")
+    expect(meta(mission, "og:description")).toBe("Waste Disposal is a delivery Star Citizen mission in Stanton, paying 5,000 aUEC.")
+    expect(mission.head.jsonLd.map((j) => (j as { "@type": string })["@type"])).toEqual(["WebPage", "BreadcrumbList"])
     expect(mission.canonical).toBe(`${ORIGIN}/missions/PU_X`)
   })
 
   it("listing, shop, recruiting post", () => {
     const listing = build("listing", f.listing(), { id: "x" })
-    expect(listing.title).toBe("Pristine Medal — SC Market")
-    expect(meta(listing, "og:title")).toBe("Pristine Medal")
+    expect(listing.title).toBe("Pristine Medal — 12,000 aUEC · Star Citizen | SC Market")
+    expect(meta(listing, "og:title")).toBe("Pristine Medal — 12,000 aUEC")
     expect(listing.canonical).toBe(`${ORIGIN}/market/71012eb4--pristine-medal`)
     const shop = build("shop", f.shop(), { slug: "hades-svk-shop" })
     expect(shop.head.jsonLd[0]).toMatchObject({ "@type": "Store", aggregateRating: { ratingCount: 3 } })
@@ -200,13 +201,54 @@ describe("documents", () => {
   it("keeps hostile text as data (escaped later, never interpreted here)", () => {
     const doc = build("listing", f.listing(f.EVIL), { id: "x" })
     expect(doc.summary[0]).toEqual({ tag: "h1", text: f.EVIL })
-    expect(doc.title).toBe(`${f.EVIL} — SC Market`)
+    expect(doc.title).toBe(`${f.EVIL} — 12,000 aUEC · Star Citizen | SC Market`)
+  })
+
+  it("listing body: price, stock, seller and rating, dates, and 10+ links", () => {
+    const search = (prefix: string, shop: string, n: number) => ({
+      listings: Array.from({ length: n }, (_, i) => ({
+        listing_id: `${prefix}${i}0000-0000`,
+        title: `${prefix} ${i}`,
+        price_min: 1000 + i,
+        shop_name: shop,
+        shop_slug: shop.toLowerCase(),
+      })),
+      total: n,
+      page: 1,
+      page_size: 12,
+    })
+    const doc = BRIDGE_PAGES.listing.build(f.listing(), undefined, {
+      ...ctx({ id: "71012eb4--pristine-medal" }),
+      related: {
+        shop: { ...f.shop(), rating: 4.8, rating_count: 12 },
+        sellerListings: search("aaaa", "Hades", 6),
+        sameItem: search("bbbb", "Other", 8),
+      },
+    })
+    const body = doc.summary.map(text).join("\n")
+    expect(body).toContain("Price: 12,000 aUEC per unit.")
+    expect(body).toContain("3 units available.")
+    expect(body).toContain("Sold by Hades (rated 4.8/5 from 12 reviews).")
+    expect(body).toContain("Listed 30 Oct 2026.")
+    const links = linksOf(doc).map((l) => l.href)
+    expect(links).toContain("/market/aggregate/1954c364--pristine-medal")
+    expect(links).toContain("/wiki/items/1954c364--pristine-medal")
+    expect(links).toContain("/shops/hades-svk-shop")
+    expect(links.filter((h) => h.startsWith("/market/aaaa"))).toHaveLength(6)
+    expect(links.filter((h) => h.startsWith("/market/bbbb"))).toHaveLength(8)
+    expect(links.length).toBeGreaterThanOrEqual(10)
+    expect(doc.head.meta.find((m) => m.name === "description")?.content).toBe(
+      "12,000 aUEC · sold by Hades · rated 5/5 · 3 available. Pristine Medal in mint condition",
+    )
+    expect(JSON.stringify(doc.head.jsonLd)).not.toMatch(/Offer|priceCurrency/)
+    expect(doc.head.jsonLd.map((j) => (j as { "@type": string })["@type"])).toEqual(["Product", "BreadcrumbList"])
   })
 
   it("truncates long summary text", () => {
     const long = build("listing", { ...f.listing(), listing: { ...f.listing().listing, description: "word ".repeat(400) } }, { id: "x" })
-    expect(text(long.summary[1]).length).toBeLessThanOrEqual(500)
-    expect(text(long.summary[1]).endsWith("…")).toBe(true)
+    const description = long.summary.find((b) => b.tag === "p" && b.text.startsWith("word"))!
+    expect(text(description).length).toBeLessThanOrEqual(500)
+    expect(text(description).endsWith("…")).toBe(true)
   })
 })
 
@@ -239,8 +281,8 @@ describe("hub and static page text matches the SPA's i18next", () => {
 
 describe("hub API requests", () => {
   const cases: [BridgePageKind, string][] = [
-    ["market", "/api/v2/listings/search?page=1&page_size=50&quantity_min=1"],
-    ["shops", "/api/v2/shops?page=1&page_size=50&sort_by=rating&sort_order=desc"],
+    ["market", "/api/v2/listings/search?page=1&page_size=48&quantity_min=1"],
+    ["shops", "/api/v2/shops?page=1&page_size=24&sort_by=rating&sort_order=desc"],
     ["wikiItems", "/api/v2/game-data/wiki/items?page=1&page_size=50"],
     ["wikiShips", "/api/v2/game-data/wiki/ships?page=1&page_size=50"],
     ["wikiCommodities", "/api/v2/game-data/wiki/commodities?page=1&page_size=50"],
@@ -278,15 +320,16 @@ function jsonLdTypes(doc: ReturnType<typeof build>): string[] {
   return doc.head.jsonLd.map((j) => (j as { "@type"?: string })["@type"] ?? "@graph")
 }
 
+/** The page's entry links (not the hub's page-number links). */
 function linksOf(doc: ReturnType<typeof build>) {
-  return doc.summary.flatMap((b) => (b.tag === "ul" ? b.links : []))
+  return doc.summary.flatMap((b) => (b.tag === "ul" ? b.links : [])).filter((l) => !/[?]page=\d+$/.test(l.href) && !l.text.startsWith("Page "))
 }
 
 describe("homepage", () => {
   const doc = build("home", undefined, {}, "/")
 
   it("has the keyword title, canonical and site + FAQ structured data", () => {
-    expect(doc.title).toBe("SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC")
+    expect(doc.title).toBe("SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC")
     expect(doc.canonical).toBe(`${ORIGIN}/`)
     expect(meta(doc, "description")).toBe(homeSeoText(englishT).description)
     expect(meta(doc, "og:title")).toBe(doc.title)
@@ -396,7 +439,7 @@ describe("hub documents", () => {
   it("market keeps ListingSearchV2's head and adds structured data", () => {
     const doc = build("market", { listings: [{ listing_id: "71012eb4-aaaa", title: "Pristine Medal", shop_name: "Hades", price_min: 12000 }], total: 7 }, {})
     const spa = buildMarketSearchHead({ total: 7 }, ORIGIN)
-    expect(doc.title).toBe("Star Citizen Marketplace — SC Market")
+    expect(doc.title).toBe("Star Citizen Player Trading — Buy & Sell Items for aUEC | SC Market")
     expect(doc.head.meta).toEqual(spa.meta)
     expect(doc.canonical).toBe(`${ORIGIN}/market`)
     expect(jsonLdTypes(doc)).toEqual(["BreadcrumbList", "CollectionPage"])
@@ -439,7 +482,9 @@ describe("market detail + manufacturer documents", () => {
     expect(doc.canonical).toBe(`${ORIGIN}/market/aggregate/1954c364--medal`)
     expect(meta(doc, "og:url")).toBe(`${ORIGIN}/market/aggregate/1954c364--medal`)
     expect(meta(doc, "description")).toBe("Browse all Medal listings on SC Market. Compare prices from multiple sellers.")
-    expect(doc.head.jsonLd[0]).toMatchObject({ "@type": "Product", offers: { "@type": "AggregateOffer", offerCount: 3 } })
+    expect(doc.head.jsonLd[0]).toMatchObject({ "@type": "Product" })
+    // No AggregateOffer: aUEC isn't an ISO 4217 currency.
+    expect(JSON.stringify(doc.head.jsonLd)).not.toMatch(/Offer|priceCurrency/)
     expect(doc.summary.map(text)).toContain("3 listings from 2 shops, 1,000 aUEC to 250,000 aUEC.")
     expect(linksOf(doc).map((l) => l.href)).toEqual(["/market/l1--medal-pristine", "/market/l2--medal-worn"])
   })

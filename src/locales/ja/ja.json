@@ -3101,7 +3101,8 @@
     "message": "メッセージ",
     "goBackToPage": "ページに戻る",
     "returnToDashboard": "ダッシュボードに戻る",
-    "pageTitle": "エラーが発生しました"
+    "pageTitle": "エラーが発生しました",
+    "retry": "再試行"
   },
   "help": {
     "learnHow": "詳しく見る",
@@ -4438,6 +4439,9 @@
     "noResults": "結果が見つかりません。フィルターを調整してみてください。",
     "search": {
       "header": "ミッションデータベース"
+    },
+    "about": {
+      "title": "ミッションデータベースについて"
     }
   },
   "myListings": {
@@ -5410,7 +5414,8 @@
       "sectionHoverbikes": "ホバーバイク",
       "sectionShips": "艦船",
       "size": "サイズ",
-      "sizeOption": "サイズ {{size}}"
+      "sizeOption": "サイズ {{size}}",
+      "allShips": "すべての艦船と車両"
     },
     "shipDetail": {
       "breadcrumbShips": "艦船と車両",

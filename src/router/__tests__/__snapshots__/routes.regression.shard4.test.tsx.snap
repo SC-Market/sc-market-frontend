@@ -636,7 +636,7 @@ exports[`routes (shard 4/4) > /market/category/:name 1`] = `
   "routeErrors": null,
   "session": "anonymous",
   "stillLoading": false,
-  "title": "Star Citizen Marketplace — SC Market",
+  "title": "Star Citizen Player Trading — Buy & Sell Items for aUEC | SC Market",
   "url": "/market/category/fixture-name",
 }
 `;

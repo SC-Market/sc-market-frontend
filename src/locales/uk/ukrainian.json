@@ -3091,7 +3091,8 @@
     "message": "Повідомлення",
     "goBackToPage": "Повернутись на сторінку",
     "returnToDashboard": "Повернутись на головну",
-    "pageTitle": "Виникла помилка"
+    "pageTitle": "Виникла помилка",
+    "retry": "Спробувати ще раз"
   },
   "help": {
     "learnHow": "Дізнатися як",
@@ -4552,6 +4553,9 @@
     "noResults": "Результатів не знайдено. Спробуйте скоригувати фільтри.",
     "search": {
       "header": "База даних місій"
+    },
+    "about": {
+      "title": "Про базу даних місій"
     }
   },
   "myListings": {
@@ -5474,7 +5478,8 @@
       "sectionHoverbikes": "Ховербайки",
       "sectionShips": "Кораблі",
       "size": "Розмір",
-      "sizeOption": "Розмір {{size}}"
+      "sizeOption": "Розмір {{size}}",
+      "allShips": "Усі кораблі й транспорт"
     },
     "shipDetail": {
       "breadcrumbShips": "Кораблі та транспортні засоби",

@@ -278,13 +278,16 @@ describe("stale chunk recovery", () => {
     expect(reload).toHaveBeenCalledTimes(1)
   })
 
-  it("other route errors still move to /error with the message", async () => {
+  // Crawlers followed the old move to /error?message=… and indexed those
+  // URLs (Search Console soft 404s): the error now stays on the page's URL.
+  it("other route errors render in place too, never moving to /error", async () => {
     const router = await pageLoad("/broken", freshChunk)
 
-    await waitFor(() => expect(router.state.location.pathname).toBe("/error"))
-    const params = new URLSearchParams(router.state.location.search)
-    expect(params.get("message")).toBe("Error: API exploded")
-    expect(params.get("target")).toBe("/broken")
+    expect(await screen.findByText("Error: API exploded")).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe("/broken")
+    expect(router.state.location.search).toBe("")
     expect(reload).not.toHaveBeenCalled()
+    fireEvent.click(screen.getByRole("button", { name: "Try again" }))
+    expect(reload).toHaveBeenCalledTimes(1)
   })
 })

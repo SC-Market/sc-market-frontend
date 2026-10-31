@@ -3115,7 +3115,8 @@
     "message": "Mensaje",
     "goBackToPage": "Volver a la página",
     "returnToDashboard": "Volver al panel",
-    "pageTitle": "Se produjo un error"
+    "pageTitle": "Se produjo un error",
+    "retry": "Reintentar"
   },
   "help": {
     "learnHow": "Descubre cómo",
@@ -4469,6 +4470,9 @@
     "noResults": "No se encontraron resultados. Prueba a ajustar los filtros.",
     "search": {
       "header": "Base de datos de misiones"
+    },
+    "about": {
+      "title": "Acerca de la base de datos de misiones"
     }
   },
   "myListings": {
@@ -5442,7 +5446,8 @@
       "sectionHoverbikes": "Motos flotantes",
       "sectionShips": "Naves",
       "size": "Tamaño",
-      "sizeOption": "Tamaño {{size}}"
+      "sizeOption": "Tamaño {{size}}",
+      "allShips": "Todas las naves y vehículos"
     },
     "shipDetail": {
       "breadcrumbShips": "Naves y vehículos",

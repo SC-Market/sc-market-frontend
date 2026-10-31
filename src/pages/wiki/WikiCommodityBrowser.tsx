@@ -33,6 +33,7 @@ import { getCommodityColor } from "../../util/gameIcons"
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../util/constants"
 import { WIKI_PATHS } from "../../routes/paths"
 import { wikiCommoditiesSeoText } from "../../seo/hubHeads"
+import { linkedPaginationItem } from "../../components/pagination/linkedPaginationItem"
 
 type AcqFilter = "all" | "mined" | "purchased" | "salvaged" | "looted"
 
@@ -298,7 +299,7 @@ export function WikiCommodityBrowser() {
 
               {totalPages > 1 && (
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                  <Pagination count={totalPages} page={page} onChange={(_, p) => updateParam("page", String(p))} color="primary" />
+                  <Pagination count={totalPages} page={page} onChange={(_, p) => updateParam("page", String(p))} color="primary" renderItem={linkedPaginationItem(WIKI_PATHS.commodities, searchParams)} />
                 </Box>
               )}
             </>

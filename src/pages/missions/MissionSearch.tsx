@@ -50,6 +50,8 @@ import { MissionDetailModal } from "../../components/game-data/MissionDetailModa
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
+import { missionsCapabilityText } from "../../seo/missionText"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
@@ -433,6 +435,19 @@ export function MissionSearch() {
         </>
       )}
         </FilterSidebarLayout>
+      </Grid>
+      {/* What the database offers, in plain text (prerendered, so search and
+          answer engines can describe it). Shared with the bridge and SSR. */}
+      <Grid item xs={12} component="section" aria-labelledby="missions-about">
+        <Typography id="missions-about" variant="h6" component="h2" color="text.secondary" sx={{ mt: 4, mb: 1 }}>
+          {t("missions.about.title", "About the mission database")}
+        </Typography>
+        {missionsCapabilityText(data?.total).map((line) => (
+          <Typography key={line} variant="body2" color="text.primary" component="p" sx={{ mb: 0.75 }}>
+            {line}
+          </Typography>
+        ))}
+        <GameDataFreshness />
       </Grid>
       <MissionDetailModal
         missionId={selectedMissionId}

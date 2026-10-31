@@ -660,7 +660,7 @@ exports[`redirects and guards > /org/fleet with org cookie 1`] = `
     "/",
   ],
   "session": "admin",
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/fleet",
 }
 `;
@@ -680,7 +680,7 @@ exports[`redirects and guards > /org/manage with org cookie 1`] = `
     "/",
   ],
   "session": "admin",
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/manage",
 }
 `;
@@ -700,7 +700,7 @@ exports[`redirects and guards > /org/members with org cookie 1`] = `
     "/",
   ],
   "session": "admin",
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/members",
 }
 `;
@@ -718,7 +718,7 @@ exports[`redirects and guards > /org/members without org cookie 1`] = `
     "/",
   ],
   "session": "admin",
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/members",
 }
 `;
@@ -738,7 +738,7 @@ exports[`redirects and guards > /org/money with org cookie 1`] = `
     "/",
   ],
   "session": "admin",
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/money",
 }
 `;
@@ -758,7 +758,7 @@ exports[`redirects and guards > /org/orders with org cookie 1`] = `
     "/",
   ],
   "session": "admin",
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/orders",
 }
 `;
@@ -778,7 +778,7 @@ exports[`redirects and guards > /org/send with org cookie 1`] = `
     "/",
   ],
   "session": "admin",
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/send",
 }
 `;
@@ -888,7 +888,7 @@ exports[`redirects and guards > OrgContextFromRoute, unknown org → / 1`] = `
     "/",
   ],
   "session": "admin",
-  "title": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
   "url": "/org/OTHERORG/dashboard",
 }
 `;

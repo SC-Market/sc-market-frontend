@@ -29,16 +29,16 @@ function parse(headHtml: string, bodyHtml = ""): Document {
 }
 
 const evilDocs = {
-  listing: BRIDGE_PAGES.listing.build(f.listing(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/x" }),
-  shop: BRIDGE_PAGES.shop.build(f.shop(f.EVIL), undefined, { params: { slug: "x" }, origin: ORIGIN, pathname: "/shops/x" }),
-  org: BRIDGE_PAGES.org.build(f.contractor(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/contractor/x" }),
-  user: BRIDGE_PAGES.user.build(f.user(f.EVIL), undefined, { params: { username: "x" }, origin: ORIGIN, pathname: "/user/x" }),
-  post: BRIDGE_PAGES.recruitingPost.build(f.recruitingPost(f.EVIL), undefined, { params: { post_id: "x" }, origin: ORIGIN, pathname: "/recruiting/post/x" }),
-  aggregate: BRIDGE_PAGES.aggregate.build(f.aggregate(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/aggregate/x" }),
-  bundle: BRIDGE_PAGES.bundle.build(f.bundle(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/multiple/x" }),
-  manufacturer: BRIDGE_PAGES.manufacturer.build(f.manufacturer(f.EVIL), undefined, { params: { id: f.EVIL }, origin: ORIGIN, pathname: "/wiki/manufacturers/x" }),
-  shopsHub: BRIDGE_PAGES.shops.build({ shops: [{ slug: f.EVIL, name: f.EVIL }], total: 1 }, undefined, { params: {}, origin: ORIGIN, pathname: "/shops" }),
-  home: BRIDGE_PAGES.home.build(undefined, undefined, { params: {}, origin: ORIGIN, pathname: "/" }),
+  listing: BRIDGE_PAGES.listing.build(f.listing(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/x", pageNumber: 1, related: {} }),
+  shop: BRIDGE_PAGES.shop.build(f.shop(f.EVIL), undefined, { params: { slug: "x" }, origin: ORIGIN, pathname: "/shops/x", pageNumber: 1, related: {} }),
+  org: BRIDGE_PAGES.org.build(f.contractor(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/contractor/x", pageNumber: 1, related: {} }),
+  user: BRIDGE_PAGES.user.build(f.user(f.EVIL), undefined, { params: { username: "x" }, origin: ORIGIN, pathname: "/user/x", pageNumber: 1, related: {} }),
+  post: BRIDGE_PAGES.recruitingPost.build(f.recruitingPost(f.EVIL), undefined, { params: { post_id: "x" }, origin: ORIGIN, pathname: "/recruiting/post/x", pageNumber: 1, related: {} }),
+  aggregate: BRIDGE_PAGES.aggregate.build(f.aggregate(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/aggregate/x", pageNumber: 1, related: {} }),
+  bundle: BRIDGE_PAGES.bundle.build(f.bundle(f.EVIL), undefined, { params: { id: "x" }, origin: ORIGIN, pathname: "/market/multiple/x", pageNumber: 1, related: {} }),
+  manufacturer: BRIDGE_PAGES.manufacturer.build(f.manufacturer(f.EVIL), undefined, { params: { id: f.EVIL }, origin: ORIGIN, pathname: "/wiki/manufacturers/x", pageNumber: 1, related: {} }),
+  shopsHub: BRIDGE_PAGES.shops.build({ shops: [{ slug: f.EVIL, name: f.EVIL }], total: 1 }, undefined, { params: {}, origin: ORIGIN, pathname: "/shops", pageNumber: 1, related: {} }),
+  home: BRIDGE_PAGES.home.build(undefined, undefined, { params: {}, origin: ORIGIN, pathname: "/", pageNumber: 1, related: {} }),
 }
 
 /** The escaped-text chunks a summary should produce, in order. */

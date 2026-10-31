@@ -39,13 +39,15 @@ export function marketSearchSeoText(opts: {
   const parts = [opts.text, opts.itemType].filter((p): p is string => !!p)
   const title =
     parts.length === 0
-      ? "Star Citizen Marketplace — SC Market"
+      ? "Star Citizen Player Trading — Buy & Sell Items for aUEC | SC Market"
       : `${parts.join(" ")} for Sale — Star Citizen | SC Market`
-  const type = opts.itemType || "items"
-  return {
-    title,
-    description: `Browse ${opts.total || ""} ${type} for sale on SC Market. Compare prices from verified Star Citizen sellers.`,
-  }
+  // "sc trade" / "star citizen trade" searchers: this is player-to-player
+  // trading of items (not terminal commodity prices), so say exactly that.
+  const description =
+    parts.length === 0
+      ? `Trade with other players: ${opts.total ? `${opts.total} ` : ""}Star Citizen items, armor, weapons, ship components and commodities for sale in aUEC. Compare prices from rated sellers.`
+      : `Browse ${opts.total || ""} ${opts.itemType || "items"} for sale on SC Market. Compare prices from verified Star Citizen sellers.`
+  return { title, description }
 }
 
 /** /market head as ListingSearchV2 renders it (minus rel=prev/next). */
