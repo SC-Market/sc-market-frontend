@@ -348,7 +348,8 @@
     "acknowledgments": "Remerciements spéciaux à <ladyFleurLink>LadyFleur</ladyFleurLink> pour le logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> et <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> pour leurs APIs.",
     "apiDocs": "Documentation de l'API",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "Préférences de cookies"
+    "cookiePreferences": "Préférences de cookies",
+    "changelog": "Nouveautés"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "Note de 95 %+ et plus de 25 transactions",
@@ -5621,5 +5622,11 @@
       "verified": "Vérifié RSI"
     },
     "title": "Identité du compte"
+  },
+  "changelog": {
+    "title": "Nouveautés",
+    "empty": "Aucune mise à jour publiée pour le moment. Revenez bientôt.",
+    "feed": "Flux Atom",
+    "allUpdates": "Toutes les mises à jour"
   }
 }

@@ -1832,7 +1832,8 @@
     "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC",
     "unofficial": "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
     "wiki": "Wiki",
-    "cookiePreferences": "Cookie preferences"
+    "cookiePreferences": "Cookie preferences",
+    "changelog": "Changelog"
   },
   "frontendError": {
     "afterRefresh": "if you see this error after refreshing the page.",
@@ -5589,5 +5590,11 @@
       "verified": "RSI verified"
     },
     "title": "Account identity"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "empty": "No updates have been published yet. Check back soon.",
+    "feed": "Atom feed",
+    "allUpdates": "All updates"
   }
 }

@@ -348,7 +348,8 @@
     "acknowledgments": "特別感謝 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供標誌，以及 <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink> 和 <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> 提供的 API。",
     "apiDocs": "API 文件",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "Cookie 偏好"
+    "cookiePreferences": "Cookie 偏好",
+    "changelog": "更新日誌"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "95%+ 好評率和25+ 成交記錄",
@@ -5589,5 +5590,11 @@
       "verified": "已通過 RSI 驗證"
     },
     "title": "帳號身分"
+  },
+  "changelog": {
+    "title": "更新日誌",
+    "empty": "尚未發布任何更新，請稍後再來查看。",
+    "feed": "Atom 訂閱源",
+    "allUpdates": "全部更新"
   }
 }

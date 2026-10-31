@@ -348,7 +348,8 @@
     "referralCode": "Використайте наш реферальний код: {{code}}",
     "apiDocs": "Документація API",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "Налаштування cookie"
+    "cookiePreferences": "Налаштування cookie",
+    "changelog": "Журнал змін"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "95%+ рейтинг і 25+ транзакцій",
@@ -5653,5 +5654,11 @@
       "verified": "Підтверджено в RSI"
     },
     "title": "Ідентичність облікового запису"
+  },
+  "changelog": {
+    "title": "Журнал змін",
+    "empty": "Оновлень ще не опубліковано. Зазирніть пізніше.",
+    "feed": "Atom-стрічка",
+    "allUpdates": "Усі оновлення"
   }
 }

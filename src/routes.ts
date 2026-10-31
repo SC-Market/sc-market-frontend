@@ -940,6 +940,11 @@ export default [
         file: "routes/pages/AboutPage.tsx",
       },
       {
+        id: "routes/pages/ChangelogPage",
+        path: "/changelog/:slug?",
+        file: "routes/pages/ChangelogPage.tsx",
+      },
+      {
         id: "routes/elements/Navigate.guides",
         path: "/help",
         file: "routes/elements/Navigate.guides.tsx",

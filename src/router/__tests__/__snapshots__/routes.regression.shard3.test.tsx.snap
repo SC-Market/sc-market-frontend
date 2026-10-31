@@ -1,39 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`routes (shard 3/4) > /* 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/__unmatched/deep/path",
-  "h1": [],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "/*",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/dashboard",
-    "/guides",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "/*",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "anonymous",
-  "stillLoading": false,
-  "title": "404 - SC Market",
-  "url": "/__unmatched/deep/path",
-}
-`;
-
 exports[`routes (shard 3/4) > /admin/feature-flags/:flagName 1`] = `
 {
   "consoleErrors": [],
@@ -56,6 +22,7 @@ exports[`routes (shard 3/4) > /admin/feature-flags/:flagName 1`] = `
     "/about",
     "/admin",
     "/admin/feature-flags",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -95,6 +62,7 @@ exports[`routes (shard 3/4) > /admin/identity 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -135,6 +103,7 @@ exports[`routes (shard 3/4) > /admin/import-monitoring 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -175,6 +144,7 @@ exports[`routes (shard 3/4) > /admin/moderation 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -214,6 +184,7 @@ exports[`routes (shard 3/4) > /admin/users 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -251,6 +222,7 @@ exports[`routes (shard 3/4) > /blueprints/inventory 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -287,6 +259,7 @@ exports[`routes (shard 3/4) > /bulk 1`] = `
   "mainLinks": [
     "/about",
     "/buyorder/create",
+    "/changelog",
     "/guides",
     "/login",
     "/market/cart",
@@ -328,6 +301,7 @@ exports[`routes (shard 3/4) > /contractor/:id/:tab 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/contractor/TESTORG",
     "/contractor/TESTORG/about",
     "/contractor/TESTORG/members",
@@ -369,6 +343,7 @@ exports[`routes (shard 3/4) > /contracts/create 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/contracts",
     "/guides",
     "/privacy",
@@ -403,6 +378,7 @@ exports[`routes (shard 3/4) > /contracts/public/:contract_id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -437,6 +413,7 @@ exports[`routes (shard 3/4) > /crafting/history 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -474,6 +451,7 @@ exports[`routes (shard 3/4) > /customers 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -511,6 +489,7 @@ exports[`routes (shard 3/4) > /dashboard/overview 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
@@ -550,6 +529,7 @@ exports[`routes (shard 3/4) > /email/unsubscribe/:token 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -600,6 +580,38 @@ exports[`routes (shard 3/4) > /guides/:category 1`] = `
 }
 `;
 
+exports[`routes (shard 3/4) > /help 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/guides",
+  "h1": [
+    "Help & Guides",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "REPLACE",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/help",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "(help page: links checked by routes.contentLinks.test)",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/guides",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Help & Guides — How to Use SC Market",
+  "url": "/help",
+}
+`;
+
 exports[`routes (shard 3/4) > /inventory 1`] = `
 {
   "consoleErrors": [],
@@ -617,6 +629,7 @@ exports[`routes (shard 3/4) > /inventory 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/selling/stock-lots-and-allocation",
     "/market",
@@ -656,6 +669,7 @@ exports[`routes (shard 3/4) > /login 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -689,6 +703,7 @@ exports[`routes (shard 3/4) > /market/:id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -729,6 +744,7 @@ exports[`routes (shard 3/4) > /market/me 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/market",
     "/market/create",
@@ -767,6 +783,7 @@ exports[`routes (shard 3/4) > /market/services 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/order/service/create",
     "/privacy",
@@ -801,6 +818,7 @@ exports[`routes (shard 3/4) > /mining/ores/:name 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -871,6 +889,7 @@ exports[`routes (shard 3/4) > /myfleet/import 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -935,6 +954,7 @@ exports[`routes (shard 3/4) > /order/:id/:tab 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -973,6 +993,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/dashboard 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
     "/org/TESTORG/dashboard",
@@ -1018,6 +1039,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/manage/invites 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/orgs/invite-and-manage-members",
     "/privacy",
@@ -1062,6 +1084,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/manage/theme 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1103,6 +1126,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/manage-stock 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/selling/stock-lots-and-allocation",
     "/market",
@@ -1145,6 +1169,7 @@ exports[`routes (shard 3/4) > /org/:contractor_id/orders 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1183,6 +1208,7 @@ exports[`routes (shard 3/4) > /org/fleet 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/contractors",
     "/guides",
     "/my-orgs",
@@ -1223,6 +1249,7 @@ exports[`routes (shard 3/4) > /org/register 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1259,6 +1286,7 @@ exports[`routes (shard 3/4) > /recruiting/post/:post_id/update 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/contractors",
     "/guides",
     "/my-orgs",
@@ -1297,6 +1325,7 @@ exports[`routes (shard 3/4) > /settings 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1335,6 +1364,7 @@ exports[`routes (shard 3/4) > /shop/:shopSlug/customers 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1374,6 +1404,7 @@ exports[`routes (shard 3/4) > /shop/:shopSlug/stock 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/selling/stock-lots-and-allocation",
     "/market",
@@ -1413,6 +1444,7 @@ exports[`routes (shard 3/4) > /shopping-lists/:wishlist_id/shopping-list 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1478,6 +1510,7 @@ exports[`routes (shard 3/4) > /wiki/commodities 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1513,6 +1546,7 @@ exports[`routes (shard 3/4) > /wiki/items/:id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1546,6 +1580,7 @@ exports[`routes (shard 3/4) > /wiki/manufacturers/:id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",

@@ -1,5 +1,5 @@
 /**
- * Page frame for Help & Guides and About. On a white-label org domain the
+ * Page frame for Help & Guides, About and the changelog. On a white-label org domain the
  * guides aren't rendered: the visitor is sent to the same page on the
  * official site (owner decision, design doc §16).
  */
@@ -24,8 +24,11 @@ export function HelpLayout(props: {
   breadcrumbs?: BreadcrumbItem[]
   /** The page's content is still loading (page-ready signal on <main>). */
   loading?: boolean
+  /** The guides directory column (default); the changelog leaves it out. */
+  directory?: boolean
   children: ReactNode
 }) {
+  const directory = props.directory ?? true
   const location = useLocation()
   const official = isOfficialSite()
 
@@ -68,13 +71,17 @@ export function HelpLayout(props: {
         </Grid>
       )}
       {/* Directory of every guide: sticky column on desktop, a toggle on mobile. */}
-      <Grid item xs={12} sx={{ display: { md: "none" } }}>
-        <GuidesDirectoryToggle />
-      </Grid>
-      <Grid item md={3} sx={{ display: { xs: "none", md: "block" } }}>
-        <GuidesDirectory />
-      </Grid>
-      <Grid item xs={12} md={9}>
+      {directory && (
+        <Grid item xs={12} sx={{ display: { md: "none" } }}>
+          <GuidesDirectoryToggle />
+        </Grid>
+      )}
+      {directory && (
+        <Grid item md={3} sx={{ display: { xs: "none", md: "block" } }}>
+          <GuidesDirectory />
+        </Grid>
+      )}
+      <Grid item xs={12} md={directory ? 9 : 12}>
         <Grid container spacing={2}>
           {props.children}
         </Grid>

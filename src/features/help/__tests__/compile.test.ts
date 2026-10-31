@@ -1,8 +1,11 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest"
 import {
+  changelogFeed,
+  changelogStatus,
   compileBody,
   compileSite,
+  contentIndex,
   ContentError,
   DEFAULT_AUTHOR,
   parseFrontmatter,
@@ -177,6 +180,84 @@ describe("compileSite", () => {
       { id: "empty", title: "Empty", description: "E.", order: 2 },
     ]) }],
   ])("fails the build on %s, naming the file", (_name, overrides) => {
+    expect(() => compileSite(site(overrides), { today })).toThrow(ContentError)
+  })
+})
+
+function entry(date: string, status: string, extra = ""): string {
+  return `---\ntitle: "Week of ${date}"\ndate: ${date}\nsummary: "What changed."\ntags: [market, orders]\nstatus: ${status}\n${extra}---\n## Market\n\nSee the [market](/market).\n`
+}
+
+describe("changelog", () => {
+  const files = site({
+    "changelog/2026-05-04.md": entry("2026-05-04", "published"),
+    "changelog/2026-05-11.md": entry("2026-05-11", "published"),
+    "changelog/2026-05-18.md": entry("2026-05-18", "draft"),
+  })
+
+  it("compiles published entries newest first and drops drafts entirely", () => {
+    const compiled = compileSite(files, { today })
+    expect(compiled.changelog.map((e) => e.meta)).toEqual([
+      { slug: "2026-05-11", date: "2026-05-11", title: "Week of 2026-05-11", summary: "What changed.", tags: ["market", "orders"] },
+      { slug: "2026-05-04", date: "2026-05-04", title: "Week of 2026-05-04", summary: "What changed.", tags: ["market", "orders"] },
+    ])
+    expect(compiled.changelog[0].body.links).toEqual(["/market"])
+    const everything = JSON.stringify([contentIndex(compiled), sitemapManifest(compiled), changelogFeed(compiled, { origin: "https://x.test", siteName: "X", today })])
+    expect(everything).not.toContain("2026-05-18")
+  })
+
+  it("keeps drafts for the dev server only", () => {
+    expect(compileSite(files, { today, includeDrafts: true }).changelog).toHaveLength(3)
+  })
+
+  it("lists /changelog and its entries in the sitemap manifest once one is published", () => {
+    expect(sitemapManifest(compileSite(files, { today })).pages.slice(-3)).toEqual([
+      { path: "/changelog", updated: "2026-05-11" },
+      { path: "/changelog/2026-05-11", updated: "2026-05-11" },
+      { path: "/changelog/2026-05-04", updated: "2026-05-04" },
+    ])
+    const draftsOnly = site({ "changelog/2026-05-18.md": entry("2026-05-18", "draft") })
+    expect(sitemapManifest(compileSite(draftsOnly, { today })).pages.map((p) => p.path)).not.toContain("/changelog")
+  })
+
+  it("writes an Atom feed of the published entries, escaped, valid when empty", () => {
+    const feed = changelogFeed(
+      compileSite(site({ "changelog/2026-05-04.md": entry("2026-05-04", "published").replace("Week of 2026-05-04", "Fish & <chips>") }), { today }),
+      { origin: "https://x.test", siteName: "X", today },
+    )
+    expect(feed).toContain('<feed xmlns="http://www.w3.org/2005/Atom"')
+    expect(feed).toContain("<title>Fish &amp; &lt;chips&gt;</title>")
+    expect(feed).toContain('<link rel="alternate" type="text/html" href="https://x.test/changelog/2026-05-04"/>')
+    expect(feed).toContain("<updated>2026-05-04T00:00:00Z</updated>")
+    expect(feed).toContain('<category term="market"/>')
+
+    const empty = changelogFeed(compileSite(site(), { today }), { origin: "https://x.test", siteName: "X", today })
+    expect(empty).not.toContain("<entry>")
+    expect(empty).toContain(`<updated>${today}T00:00:00Z</updated>`)
+  })
+
+  it("reads the status from the frontmatter alone", () => {
+    expect(changelogStatus(entry("2026-05-04", "draft"), "changelog/2026-05-04.md")).toBe("draft")
+    expect(changelogStatus(entry("2026-05-04", "published"), "changelog/2026-05-04.md")).toBe("published")
+    expect(() => changelogStatus(entry("2026-05-04", "live"), "changelog/2026-05-04.md")).toThrow(ContentError)
+  })
+
+  it("lets a draft be dated ahead, but not a published entry", () => {
+    const ahead = { "changelog/2026-07-06.md": entry("2026-07-06", "draft") }
+    expect(compileSite(site(ahead), { today, includeDrafts: true }).changelog).toHaveLength(1)
+    expect(() => compileSite(site({ "changelog/2026-07-06.md": entry("2026-07-06", "published") }), { today })).toThrow(ContentError)
+  })
+
+  it.each([
+    ["a missing status", { "changelog/2026-05-04.md": entry("2026-05-04", "published").replace("status: published\n", "") }],
+    ["an unknown status", { "changelog/2026-05-04.md": entry("2026-05-04", "hidden") }],
+    ["a date that isn't the file name", { "changelog/2026-05-04.md": entry("2026-05-05", "published") }],
+    ["a bad file name", { "changelog/week-1.md": entry("2026-05-04", "published") }],
+    ["a missing summary", { "changelog/2026-05-04.md": entry("2026-05-04", "published").replace('summary: "What changed."\n', "") }],
+    ["a long summary", { "changelog/2026-05-04.md": entry("2026-05-04", "published").replace("What changed.", "x".repeat(161)) }],
+    ["an unknown key", { "changelog/2026-05-04.md": entry("2026-05-04", "published", "author: Me\n") }],
+    ["a bad body", { "changelog/2026-05-04.md": entry("2026-05-04", "published") + "\n# Heading\n" }],
+  ])("fails the build on %s", (_name, overrides) => {
     expect(() => compileSite(site(overrides), { today })).toThrow(ContentError)
   })
 })

@@ -28,6 +28,7 @@ Pages are rendered in the browser; the public pages below also serve a plain-HTM
 
 - [Help & Guides](https://sc-market.space/guides): how buying, selling, orders, orgs and the Discord bot work
 - [About SC Market](https://sc-market.space/about)
+- [Changelog](https://sc-market.space/changelog): what's new on SC Market, week by week ([Atom feed](https://sc-market.space/changelog.xml))
 
 ## API
 

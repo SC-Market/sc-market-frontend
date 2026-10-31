@@ -348,7 +348,8 @@
     "acknowledgments": "サイトのロゴを提供してくれた <ladyFleurLink>LadyFleur</ladyFleurLink> さん、そしてAPIを提供してくれた <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink>、<starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> に特別な感謝を申し上げます。",
     "apiDocs": "API ドキュメント",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "クッキーの設定"
+    "cookiePreferences": "クッキーの設定",
+    "changelog": "更新履歴"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "評価95%以上かつ取引25件以上",
@@ -5589,5 +5590,11 @@
       "verified": "RSI 認証済み"
     },
     "title": "アカウントの ID"
+  },
+  "changelog": {
+    "title": "更新履歴",
+    "empty": "まだ公開された更新はありません。また後でご確認ください。",
+    "feed": "Atom フィード",
+    "allUpdates": "すべての更新"
   }
 }

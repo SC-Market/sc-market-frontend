@@ -12,7 +12,7 @@ import { Helmet } from "@unhead/react/helmet"
 import { serializeJsonLd } from "../../seo/pageHead"
 import { siteJsonLd } from "../../seo/siteHeads"
 import { Link as RouterLink } from "react-router-dom"
-import { HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
+import { CHANGELOG_PATHS, HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
 
 export function Footer() {
@@ -89,6 +89,12 @@ export function Footer() {
             <Link {...helpLink(HELP_PATHS.about)}>
               <UnderlineLink color={"text.secondary"}>
                 {t("footer.about", "About")}
+              </UnderlineLink>
+            </Link>
+            &nbsp;|&nbsp;
+            <Link {...helpLink(CHANGELOG_PATHS.index)}>
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.changelog", "Changelog")}
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;

@@ -19,6 +19,7 @@ exports[`links rendered by nested pages > /contractor/TESTORG 1`] = `
     "/about",
     "/blueprints",
     "/buyorders",
+    "/changelog",
     "/contractor/TESTORG",
     "/contractor/TESTORG/about",
     "/contractor/TESTORG/members",
@@ -49,6 +50,7 @@ exports[`links rendered by nested pages > /contractor/TESTORG 1`] = `
   "finalUrl": "/contractor/TESTORG",
   "mainLinks": [
     "/about",
+    "/changelog",
     "/contractor/TESTORG",
     "/contractor/TESTORG/about",
     "/contractor/TESTORG/members",
@@ -144,6 +146,7 @@ exports[`links rendered by nested pages > /org/TESTORG/dashboard 1`] = `
   "allLinks": [
     "/",
     "/about",
+    "/changelog",
     "/contractor/TESTORG",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
@@ -158,6 +161,7 @@ exports[`links rendered by nested pages > /org/TESTORG/dashboard 1`] = `
   "finalUrl": "/org/TESTORG/dashboard",
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
     "/org/TESTORG/dashboard",
@@ -173,6 +177,7 @@ exports[`links rendered by nested pages > /org/TESTORG/listings 1`] = `
   "allLinks": [
     "/",
     "/about",
+    "/changelog",
     "/contractor/TESTORG",
     "/guides",
     "/market",
@@ -189,6 +194,7 @@ exports[`links rendered by nested pages > /org/TESTORG/listings 1`] = `
   "finalUrl": "/org/TESTORG/listings?quantityAvailable=0",
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/market",
     "/market/create",
@@ -205,6 +211,7 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/about 1`] = `
   "allLinks": [
     "/",
     "/about",
+    "/changelog",
     "/contractor/TESTORG",
     "/guides",
     "/org/TESTORG/dashboard",
@@ -218,6 +225,7 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/about 1`] = `
   "finalUrl": "/org/TESTORG/manage/about",
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -231,6 +239,7 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/roles 1`] = `
   "allLinks": [
     "/",
     "/about",
+    "/changelog",
     "/contractor/TESTORG",
     "/guides",
     "/guides/orgs/roles-and-permissions",
@@ -245,6 +254,7 @@ exports[`links rendered by nested pages > /org/TESTORG/manage/roles 1`] = `
   "finalUrl": "/org/TESTORG/manage/roles",
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/orgs/roles-and-permissions",
     "/privacy",
@@ -259,6 +269,7 @@ exports[`links rendered by nested pages > /shop/test-shop/dashboard 1`] = `
   "allLinks": [
     "/",
     "/about",
+    "/changelog",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
     "/privacy",
@@ -276,6 +287,7 @@ exports[`links rendered by nested pages > /shop/test-shop/dashboard 1`] = `
   "finalUrl": "/shop/test-shop/orders",
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
     "/privacy",
@@ -290,6 +302,7 @@ exports[`links rendered by nested pages > /shop/test-shop/listings 1`] = `
   "allLinks": [
     "/",
     "/about",
+    "/changelog",
     "/guides",
     "/market",
     "/market/me",
@@ -308,6 +321,7 @@ exports[`links rendered by nested pages > /shop/test-shop/listings 1`] = `
   "finalUrl": "/shop/test-shop/listings",
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/market",
     "/market/me",
@@ -324,6 +338,7 @@ exports[`links rendered by nested pages > /shop/test-shop/settings 1`] = `
   "allLinks": [
     "/",
     "/about",
+    "/changelog",
     "/guides",
     "/guides/discord/connect-the-discord-bot",
     "/guides/discord/webhooks",
@@ -343,6 +358,7 @@ exports[`links rendered by nested pages > /shop/test-shop/settings 1`] = `
   "finalUrl": "/shop/test-shop/settings",
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/discord/connect-the-discord-bot",
     "/guides/discord/webhooks",
@@ -976,9 +992,7 @@ exports[`redirects and guards > shop index → listings 1`] = `
 {
   "cookies": {},
   "finalUrl": "/shop/test-shop/listings",
-  "h1": [
-    "Manage Listings",
-  ],
+  "h1": [],
   "historyAction": "REPLACE",
   "matches": [
     "(layout:AppLayout)",
@@ -987,7 +1001,7 @@ exports[`redirects and guards > shop index → listings 1`] = `
     "listings",
   ],
   "session": "admin",
-  "title": "Manage Listings - SC Market",
+  "title": "Listings - SC Market",
   "url": "/shop/test-shop",
 }
 `;

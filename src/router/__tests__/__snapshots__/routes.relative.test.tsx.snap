@@ -1350,6 +1350,43 @@ exports[`relative link resolution (every leaf) > /buyorders 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /changelog/:slug? 1`] = `
+{
+  "links": {
+    "path:""": "/changelog/fixture-slug",
+    "path:"#frag"": "/changelog/fixture-slug#frag",
+    "path:"."": "/changelog/fixture-slug",
+    "path:".."": "/changelog",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/changelog/sibling",
+    "path:"./"": "/changelog/fixture-slug/",
+    "path:"./child"": "/changelog/fixture-slug/child",
+    "path:"?tab=x"": "/changelog/fixture-slug?tab=x",
+    "path:"child"": "/changelog/fixture-slug/child",
+    "route:""": "/changelog/fixture-slug",
+    "route:"#frag"": "/changelog/fixture-slug#frag",
+    "route:"."": "/changelog/fixture-slug",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/changelog/fixture-slug/",
+    "route:"./child"": "/changelog/fixture-slug/child",
+    "route:"?tab=x"": "/changelog/fixture-slug?tab=x",
+    "route:"child"": "/changelog/fixture-slug/child",
+  },
+  "location": "/changelog/fixture-slug",
+  "params": {
+    "slug": "fixture-slug",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/changelog/:slug?",
+  ],
+  "resolvedDot": "/changelog/fixture-slug",
+  "url": "/changelog/fixture-slug",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /contract/:id 1`] = `
 {
   "links": {

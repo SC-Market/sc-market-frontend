@@ -9,6 +9,9 @@
  *   into the small Block tree in ../domain/types. Raw HTML, tables,
  *   reference links, h1 and other unsupported syntax fail the build with the
  *   file name, so content can't loosen what the renderer accepts.
+ * - Changelog entries (changelog/<YYYY-MM-DD>.md) need `status: draft` or
+ *   `status: published`; drafts are dropped before anything else reads them,
+ *   so a draft never reaches the bundle, the bridge files or the feed.
  * - Callouts use GitHub alert syntax (`> [!TIP]`), screenshots are a
  *   paragraph holding one `![alt](./img/x.webp "caption")`, a CTA button is a
  *   paragraph holding one `[Label](/path "cta")`.
@@ -24,7 +27,7 @@ import type {
   Root,
   RootContent,
 } from "mdast"
-import { HELP_PATHS } from "../../../routes/paths"
+import { CHANGELOG_PATHS, HELP_PATHS } from "../../../routes/paths"
 import { buildDirectory } from "../domain/directory"
 import { GUIDE_REDIRECTS } from "../domain/redirects"
 import {
@@ -35,6 +38,7 @@ import {
   type CalloutKind,
   type CategoryAsset,
   type CategoryMeta,
+  type ChangelogMeta,
   type ContentBody,
   type ContentIndex,
   type GuideAsset,
@@ -119,6 +123,9 @@ const KNOWN_GUIDE_KEYS = new Set([
   "draft",
 ])
 const KNOWN_ABOUT_KEYS = new Set(["title", "description", "updated", "author"])
+const KNOWN_CHANGELOG_KEYS = new Set(["title", "date", "summary", "tags", "status"])
+/** The only `status` values a changelog entry may have. */
+export const CHANGELOG_STATUSES = ["draft", "published"] as const
 
 function requireString(data: Record<string, FrontmatterValue>, key: string, file: string): string {
   const value = data[key]
@@ -431,10 +438,18 @@ export interface CompiledGuide {
   file: string
 }
 
+export interface CompiledChangelogEntry {
+  meta: ChangelogMeta
+  body: CompiledBody
+  file: string
+}
+
 export interface CompiledSite {
   categories: CategoryMeta[]
   guides: CompiledGuide[]
   about: { meta: AboutMeta; body: CompiledBody; file: string }
+  /** Published entries only, newest first. */
+  changelog: CompiledChangelogEntry[]
 }
 
 export const CATEGORIES_FILE = "guides/categories.json"
@@ -443,6 +458,49 @@ export const ABOUT_FILE = "about.md"
 export const IGNORED_FILES: ReadonlySet<string> = new Set(["STYLE.md", "README.md"])
 
 const GUIDE_FILE = /^guides\/([a-z0-9]+(?:-[a-z0-9]+)*)\/([a-z0-9]+(?:-[a-z0-9]+)*)\.md$/
+const CHANGELOG_FILE = /^changelog\/(\d{4}-\d{2}-\d{2})\.md$/
+
+/**
+ * Whether a changelog file is published, from its frontmatter alone (the
+ * prerender list reads this without compiling Markdown). Throws on a
+ * missing or unknown status.
+ */
+export function changelogStatus(source: string, file: string): (typeof CHANGELOG_STATUSES)[number] {
+  const { data } = parseFrontmatter(source, file)
+  const status = data.status
+  if (status !== "draft" && status !== "published") {
+    throw new ContentError(file, `"status" must be ${CHANGELOG_STATUSES.join(" or ")}`)
+  }
+  return status
+}
+
+function compileChangelogEntry(
+  file: string,
+  source: string,
+  slug: string,
+  opts: { today: string; imageResolver?: (file: string) => CompileOptions["resolveImage"] },
+): CompiledChangelogEntry {
+  const { data, body } = parseFrontmatter(source, file)
+  checkUnknownKeys(data, KNOWN_CHANGELOG_KEYS, file)
+  const date = requireString(data, "date", file)
+  if (date !== slug) throw new ContentError(file, `"date" (${date}) must match the file name (${slug})`)
+  // Drafts (dev server only) may be dated ahead; a published entry may not.
+  if (data.status === "published") checkUpdated(date, opts.today, file)
+  else if (!ISO_DATE.test(date)) throw new ContentError(file, `"date" must be a YYYY-MM-DD date`)
+  const summary = requireString(data, "summary", file)
+  checkDescription(summary, file)
+  return {
+    file,
+    meta: {
+      slug,
+      date,
+      title: requireString(data, "title", file),
+      summary,
+      tags: stringList(data, "tags", file).map((tag) => tag.trim()).filter(Boolean),
+    },
+    body: compileBody(body, file, { resolveImage: opts.imageResolver?.(file) }),
+  }
+}
 
 function parseCategories(source: string): CategoryMeta[] {
   let parsed: unknown
@@ -493,9 +551,18 @@ export function compileSite(
   if (aboutSource === undefined) throw new ContentError(ABOUT_FILE, "missing")
 
   const guides: CompiledGuide[] = []
+  const changelog: CompiledChangelogEntry[] = []
   for (const { path, source } of files) {
     if (path === CATEGORIES_FILE || path === ABOUT_FILE || IGNORED_FILES.has(path)) continue
     if (/\/img\//.test(path)) continue
+    if (path.startsWith("changelog/")) {
+      const entry = CHANGELOG_FILE.exec(path)
+      if (!entry) throw new ContentError(path, "changelog files must be changelog/<YYYY-MM-DD>.md")
+      // A draft is dropped here, before its body is even parsed.
+      if (changelogStatus(source, path) === "draft" && !opts.includeDrafts) continue
+      changelog.push(compileChangelogEntry(path, source, entry[1], opts))
+      continue
+    }
     const match = GUIDE_FILE.exec(path)
     if (!match) {
       throw new ContentError(path, "content files must be guides/<category>/<slug>.md (kebab-case)")
@@ -579,6 +646,7 @@ export function compileSite(
       },
       body: compileBody(about.body, ABOUT_FILE, { resolveImage: opts.imageResolver?.(ABOUT_FILE) }),
     },
+    changelog: changelog.sort((a, b) => b.meta.date.localeCompare(a.meta.date)),
   }
 }
 
@@ -608,6 +676,7 @@ export function contentIndex(site: CompiledSite): ContentIndex {
     categories: site.categories,
     guides: site.guides.map((g) => g.meta),
     about: site.about.meta,
+    changelog: site.changelog.map((e) => e.meta),
   }
 }
 
@@ -630,7 +699,63 @@ export function sitemapManifest(site: CompiledSite): SitemapManifest {
     pages.push({ path: HELP_PATHS.guide(guide.meta.category, guide.meta.slug), updated: guide.meta.updated })
   }
   pages.push({ path: HELP_PATHS.about, updated: site.about.meta.updated })
+  // The changelog index is noindex until an entry is published: not listed.
+  if (site.changelog.length > 0) {
+    pages.push({ path: CHANGELOG_PATHS.index, updated: site.changelog[0].meta.date })
+    for (const entry of site.changelog) {
+      pages.push({ path: CHANGELOG_PATHS.entry(entry.meta.slug), updated: entry.meta.date })
+    }
+  }
   return { version: 1, pages }
+}
+
+function escapeXml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;")
+}
+
+/**
+ * The changelog's Atom feed (/changelog.xml): published entries, newest
+ * first, with their summary and a link to the entry. Valid with no entries.
+ */
+export function changelogFeed(
+  site: CompiledSite,
+  opts: { origin: string; siteName: string; today: string },
+): string {
+  const indexUrl = `${opts.origin}${CHANGELOG_PATHS.index}`
+  const feedUrl = `${opts.origin}${CHANGELOG_PATHS.feed}`
+  const updated = `${site.changelog[0]?.meta.date ?? opts.today}T00:00:00Z`
+  const lines = [
+    '<?xml version="1.0" encoding="utf-8"?>',
+    '<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">',
+    `  <title>${escapeXml(`${opts.siteName} changelog`)}</title>`,
+    `  <subtitle>${escapeXml(`What's new on ${opts.siteName}.`)}</subtitle>`,
+    `  <id>${escapeXml(indexUrl)}</id>`,
+    `  <link rel="alternate" type="text/html" href="${escapeXml(indexUrl)}"/>`,
+    `  <link rel="self" type="application/atom+xml" href="${escapeXml(feedUrl)}"/>`,
+    `  <updated>${updated}</updated>`,
+    `  <author><name>${escapeXml(opts.siteName)}</name></author>`,
+  ]
+  for (const { meta } of site.changelog) {
+    const url = `${opts.origin}${CHANGELOG_PATHS.entry(meta.slug)}`
+    lines.push(
+      "  <entry>",
+      `    <title>${escapeXml(meta.title)}</title>`,
+      `    <id>${escapeXml(url)}</id>`,
+      `    <link rel="alternate" type="text/html" href="${escapeXml(url)}"/>`,
+      `    <published>${meta.date}T00:00:00Z</published>`,
+      `    <updated>${meta.date}T00:00:00Z</updated>`,
+      `    <summary>${escapeXml(meta.summary)}</summary>`,
+      ...meta.tags.map((tag) => `    <category term="${escapeXml(tag)}"/>`),
+      "  </entry>",
+    )
+  }
+  lines.push("</feed>", "")
+  return lines.join("\n")
 }
 
 function publicBody(body: CompiledBody): ContentBody {
