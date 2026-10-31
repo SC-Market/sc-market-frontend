@@ -613,6 +613,7 @@ const MAX_BLUEPRINT_LOOKUPS = 5
 interface MissionRelated extends Record<string, unknown> {
   versions: ActiveVersionsResponse
   giverMissions: SearchMissionsResponse
+  similarMissions: SearchMissionsResponse
 }
 
 /** Every blueprint a mission can reward, de-duplicated, best chance first. */
@@ -692,6 +693,14 @@ function missionDoc(
       href: GAME_DATA_PATHS.mission(enc(other.mission_code)),
       text: [readableMissionText(other.mission_name), missionRewardRange(other)].filter(Boolean).join(" — "),
     }))
+  const seen = new Set([m.mission_code, ...arr(ctx.related.giverMissions?.missions).map((o) => o.mission_code)])
+  const similar = arr(ctx.related.similarMissions?.missions)
+    .filter((other) => !seen.has(other.mission_code))
+    .slice(0, Math.max(0, 10 - more.length))
+    .map((other) => ({
+      href: GAME_DATA_PATHS.mission(enc(other.mission_code)),
+      text: [missionTitle(other), missionRewardRange(other)].filter(Boolean).join(" — "),
+    }))
   const stamp = freshnessStamp(version)
 
   const body: SummaryBlock[] = [
@@ -725,6 +734,7 @@ function missionDoc(
       ? [{ tag: "h2" as const, text: "Item rewards" }, { tag: "ul-text" as const, items: arr(m.item_rewards).map((r) => r.name) }]
       : []),
     ...linkBlocks(giver ? `More missions from ${giver}` : "More missions", more),
+    ...linkBlocks(`Similar ${missionType(m) ?? ""} missions${m.star_system ? ` in ${m.star_system}` : ""}`.replace(/\s+/g, " "), similar),
     ...linkBlocks("Browse", [
       { href: GAME_DATA_PATHS.missions, text: "All Star Citizen missions" },
       { href: GAME_DATA_PATHS.blueprints, text: "Crafting blueprints" },
@@ -1652,6 +1662,15 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
             blueprints.map((bp, i) => [`blueprint${i}`, v2(`/game-data/blueprints/${enc(bp.blueprint_id)}`, STATIC_GAME_DATA_TTL)]),
           ),
         }
+      },
+      // A giver with few missions: add same-type missions in the same system.
+      (data, _s, related) => {
+        const others = arr(related.giverMissions?.missions).filter((o) => o.mission_code !== data.mission.mission_code)
+        const m = data.mission
+        if (others.length >= 10 || !m.category) return {}
+        const query = new URLSearchParams({ page: "1", page_size: "15", category: m.category })
+        if (m.star_system) query.set("star_system", m.star_system)
+        return { similarMissions: v2List(`/game-data/missions/search?${query.toString()}`, STATIC_GAME_DATA_TTL) }
       },
     ],
     build: (data, _s, ctx) => missionDoc(data, ctx),
