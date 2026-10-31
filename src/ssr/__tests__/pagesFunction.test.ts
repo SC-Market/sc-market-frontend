@@ -1,6 +1,8 @@
 // @vitest-environment node
 import { describe, it, expect, vi } from "vitest"
 import {
+  cacheUse,
+  isCrawler,
   kindEnabled,
   onRequest,
   ssrDecision,
@@ -11,6 +13,7 @@ import {
 vi.mock("../serverBuild", () => {
   throw new Error("no server build in tests")
 })
+vi.mock("../buildVersion", () => ({ SSR_BUILD_VERSION: "test" }))
 
 const PREVIEW = "https://ssr-phase4.sc-market-frontend.pages.dev"
 const PROD = "https://sc-market.space"
@@ -90,6 +93,35 @@ describe("ssrDecision", () => {
   })
   it("is off in production by default", () => {
     expect(ssrDecision(req(`${PROD}/shops/foo`), env).render).toBe(false)
+  })
+})
+
+describe("cacheUse", () => {
+  it("serves fresh pages, revalidates stale ones, renders old ones", () => {
+    expect(cacheUse(10, false)).toBe("hit")
+    expect(cacheUse(300, false)).toBe("stale")
+    expect(cacheUse(3600, false)).toBe("expired")
+    expect(cacheUse(Number.NaN, false)).toBe("expired")
+  })
+  it("lets crawlers take day-old pages without a re-render", () => {
+    expect(cacheUse(300, true)).toBe("stale")
+    expect(cacheUse(3600, true)).toBe("hit")
+    expect(cacheUse(2 * 86400, true)).toBe("expired")
+  })
+  it("recognises crawlers", () => {
+    expect(
+      isCrawler(
+        "Mozilla/5.0 (compatible; GPTBot/1.2; +https://openai.com/gptbot)",
+      ),
+    ).toBe(true)
+    expect(isCrawler("Mozilla/5.0 (compatible; bingbot/2.0)")).toBe(true)
+    expect(isCrawler("Mozilla/5.0 (compatible; Discordbot/2.0)")).toBe(true)
+    expect(
+      isCrawler(
+        "Mozilla/5.0 (Macintosh) AppleWebKit/537.36 Chrome/130 Safari/537.36",
+      ),
+    ).toBe(false)
+    expect(isCrawler(null)).toBe(false)
   })
 })
 

@@ -75,7 +75,9 @@ describe("createApiFetch", () => {
   })
 
   it("never reads the bridge's entries for the same URL", async () => {
-    const { api, cache, calls } = setup(() => new Response("{}", { status: 404 }))
+    const { api, cache, calls } = setup(
+      () => new Response("{}", { status: 404 }),
+    )
     // The bridge's format: the API URL as the key, its own status header.
     cache.entries.set(
       URL_A,

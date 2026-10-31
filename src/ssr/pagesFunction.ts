@@ -29,6 +29,7 @@ import {
   SSR_OUTCOME_HEADER,
   type SsrEntryModule,
 } from "./protocol"
+import { SSR_BUILD_VERSION } from "./buildVersion"
 
 declare const caches: { default: Cache }
 
@@ -78,6 +79,36 @@ const API_TTL_SECONDS = 60
 /** Rendered HTML: fresh for 60 s, then served stale while re-rendering. */
 export const HTML_FRESH_SECONDS = 60
 export const HTML_STALE_SECONDS = 600
+/**
+ * Crawlers get cached HTML up to a day old without a re-render: most crawl
+ * a URL at most daily, so with the visitors' 11 minutes every crawler hit
+ * would be a render. Five crawlers on one URL a day = one render a day.
+ */
+export const CRAWLER_STALE_SECONDS = 24 * 60 * 60
+
+const CRAWLER_UA =
+  /bot\b|bot\/|crawler|spider|slurp|facebookexternalhit|embedly|preview|bingpreview|mediapartners/i
+
+export function isCrawler(userAgent: string | null): boolean {
+  return !!userAgent && CRAWLER_UA.test(userAgent)
+}
+
+export type CacheUse =
+  /** Serve it. */
+  | "hit"
+  /** Serve it and re-render in the background. */
+  | "stale"
+  /** Too old for this visitor: render. */
+  | "expired"
+
+/** What a cached page of `ageSeconds` is good for; pure (tested). */
+export function cacheUse(ageSeconds: number, crawler: boolean): CacheUse {
+  if (!(ageSeconds >= 0)) return "expired"
+  if (ageSeconds <= HTML_FRESH_SECONDS) return "hit"
+  if (ageSeconds <= HTML_FRESH_SECONDS + HTML_STALE_SECONDS) return "stale"
+  if (crawler && ageSeconds <= CRAWLER_STALE_SECONDS) return "hit"
+  return "expired"
+}
 
 const RENDERED_AT_HEADER = "x-ssr-rendered-at"
 
@@ -113,6 +144,8 @@ export function ssrDecision(request: Request, env: SsrEnv): SsrDecision {
     return { render: false, reason: "method" }
   }
   const url = new URL(request.url)
+  // React Router data requests: the clientLoaders never make them.
+  if (url.pathname.endsWith(".data")) return { render: false, reason: ".data" }
   const match = matchBridgeRoute(url.pathname)
   if (!match || !SSR_KINDS.has(match.route.kind)) {
     return { render: false, reason: "not an ssr page" }
@@ -148,7 +181,8 @@ type Handler = (
 let handler: Handler | null = null
 let entryModule: SsrEntryModule | null = null
 let inlineCss: Record<string, string> = {}
-let buildVersion = "dev"
+/** Renders in flight in this isolate, by cache key (one per path). */
+const inFlight = new Map<string, Promise<Rendered>>()
 
 async function loadHandler() {
   if (handler) return handler
@@ -162,7 +196,6 @@ async function loadHandler() {
   handler = (request, context) => created(request, context)
   entryModule = serverBuild.entry.module as unknown as SsrEntryModule
   inlineCss = inlineStylesheetsByHref
-  buildVersion = serverBuild.assets.version
   return handler!
 }
 
@@ -170,7 +203,7 @@ function cacheKey(url: URL): Request {
   // One anonymous variant per path; the deploy's asset version keeps a
   // new deploy from serving HTML that references the previous chunks.
   return new Request(
-    `https://ssr-cache.sc-market.internal/${buildVersion}${url.pathname.toLowerCase()}`,
+    `https://ssr-cache.sc-market.internal/${SSR_BUILD_VERSION}${url.pathname.toLowerCase()}`,
     { method: "GET" },
   )
 }
@@ -251,23 +284,30 @@ function pageResponse(
   })
 }
 
-/** Render and store in the edge cache; null when there's no page to cache. */
-async function renderAndStore(
-  context: PagesContext,
-  url: URL,
-): Promise<Rendered> {
-  const rendered = await withDeadline(render(context, url), SSR_DEADLINE_MS)
-  if (rendered.kind === "page") {
-    const entry = new Response(rendered.html, {
-      headers: {
-        "Content-Type": "text/html; charset=utf-8",
-        "Cache-Control": `public, max-age=${HTML_FRESH_SECONDS + HTML_STALE_SECONDS}`,
-        [RENDERED_AT_HEADER]: String(Date.now()),
-      },
-    })
-    context.waitUntil(caches.default.put(cacheKey(url), entry).catch(() => {}))
-  }
-  return rendered
+/**
+ * Render and store in the edge cache. Concurrent requests for one path in
+ * this isolate share one render.
+ */
+function renderAndStore(context: PagesContext, url: URL): Promise<Rendered> {
+  const key = cacheKey(url).url
+  const running = inFlight.get(key)
+  if (running) return running
+  const job = (async (): Promise<Rendered> => {
+    const rendered = await withDeadline(render(context, url), SSR_DEADLINE_MS)
+    if (rendered.kind === "page") {
+      const entry = new Response(rendered.html, {
+        headers: {
+          "Content-Type": "text/html; charset=utf-8",
+          "Cache-Control": `public, max-age=${CRAWLER_STALE_SECONDS}`,
+          [RENDERED_AT_HEADER]: String(Date.now()),
+        },
+      })
+      context.waitUntil(caches.default.put(key, entry).catch(() => {}))
+    }
+    return rendered
+  })().finally(() => inFlight.delete(key))
+  inFlight.set(key, job)
+  return job
 }
 
 export async function onRequest(context: PagesContext): Promise<Response> {
@@ -279,22 +319,25 @@ export async function onRequest(context: PagesContext): Promise<Response> {
 
   const url = new URL(context.request.url)
   try {
-    await loadHandler()
+    // A cache hit never loads the app (no render, ~1 ms CPU).
     const cached = await caches.default.match(cacheKey(url))
     if (cached) {
       const age =
         (Date.now() - Number(cached.headers.get(RENDERED_AT_HEADER))) / 1000
-      const html = await cached.text()
-      if (age > HTML_FRESH_SECONDS) {
-        // Stale: serve it and re-render in the background.
+      const use = cacheUse(
+        age,
+        isCrawler(context.request.headers.get("User-Agent")),
+      )
+      if (use === "stale") {
         context.waitUntil(
           renderAndStore(context, url).catch((error) =>
             console.warn(`ssr revalidate ${url.pathname}: ${String(error)}`),
           ),
         )
-        return pageResponse(context.request, html, url, "stale")
       }
-      return pageResponse(context.request, html, url, "hit")
+      if (use !== "expired") {
+        return pageResponse(context.request, await cached.text(), url, use)
+      }
     }
 
     const rendered = await renderAndStore(context, url)

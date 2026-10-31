@@ -159,6 +159,17 @@ for (const name of readdirSync(assetsDir)) {
   }
 }
 writeFileSync(path.join(SSR_DIR, "inline-css.json"), JSON.stringify(inlineCss))
+// The build version for the Function's HTML cache keys (src/ssr/buildVersion.ts).
+const manifestFile = readdirSync(assetsDir).find((name) =>
+  /^manifest-[\w-]+\.js$/.test(name),
+)
+if (!manifestFile) throw new Error(`${assetsDir} has no manifest-*.js`)
+writeFileSync(
+  path.join(SSR_DIR, "version.json"),
+  JSON.stringify({
+    version: manifestFile.slice("manifest-".length, -".js".length),
+  }),
+)
 
 console.log(
   `finalize: ${path.relative(ROOT, CLIENT_DIR)} → ${path.relative(ROOT, outDir)}, sw.js built`,
