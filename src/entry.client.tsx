@@ -38,10 +38,7 @@ import { isMainSiteHostname } from "./util/mainSiteHost"
 import { hydratePrerenderedData, takePrerenderedData } from "./store/hydration"
 import { retryDynamicImport } from "./util/retryDynamicImport"
 import { matchesMobile, prefetchFirstPageData } from "./router/firstPageData"
-import {
-  armStartupDeferral,
-  whenStartupGateOpen,
-} from "./util/startupDeferral"
+import { armStartupDeferral, whenStartupGateOpen } from "./util/startupDeferral"
 
 // The entry chunk has loaded: from here on, chunk failures are handled by the
 // app (retryDynamicImport), not by document.html's bootstrap guard.
@@ -256,6 +253,18 @@ void initialLocaleReady.then(async () => {
   } else {
     await firstRenderCode()
     hydrateRoot(container, app, { onRecoverableError })
+    // A server-rendered page's live data can be minutes old (edge cache):
+    // refresh it in place once the page has settled.
+    if (prerenderedData) {
+      const shipped = prerenderedData.api
+      // Optional: a failed chunk load just skips it (no reload).
+      void whenStartupGateOpen()
+        .then(() => import("./store/refreshShippedData"))
+        .then(({ refreshShippedLiveData }) =>
+          refreshShippedLiveData(store.dispatch, shipped),
+        )
+        .catch(() => {})
+    }
   }
 })
 

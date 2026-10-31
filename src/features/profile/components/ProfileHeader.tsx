@@ -1,6 +1,7 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import {
+  Box,
   Grid,
   IconButton,
   Link as MaterialLink,
@@ -42,15 +43,25 @@ export function ProfileHeader({
         />
       </Grid>
       <Grid item>
-        <Typography
-          color="text.secondary"
-          variant="h6"
-          fontWeight={600}
-          sx={{ display: "flex", alignItems: "center" }}
-        >
-          {profile.username} <UserActionsDropdown user={profile} />
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          {/* The page's one <h1>: the user's display name (crawlers and
+              screen readers; looks like the old username line). */}
+          <Typography
+            component="h1"
+            color="text.secondary"
+            variant="h6"
+            fontWeight={600}
+          >
+            {profile.display_name || profile.username}
+          </Typography>
+          <UserActionsDropdown user={profile} />
           <ShareButton title={`${profile.display_name} - SC Market`} />
-        </Typography>
+        </Box>
+        {profile.display_name && profile.display_name !== profile.username && (
+          <Typography color="text.primary" variant="subtitle2" fontWeight={600}>
+            {profile.username}
+          </Typography>
+        )}
         {profile.discord_profile && (
           <MaterialLink
             component="a"
@@ -68,7 +79,10 @@ export function ProfileHeader({
                 ? `#${profile.discord_profile.discriminator}`
                 : ""}
             </UnderlineLink>
-            <IconButton aria-label={t("profile.discordProfile", "Discord profile")} color="primary">
+            <IconButton
+              aria-label={t("profile.discordProfile", "Discord profile")}
+              color="primary"
+            >
               <Discord />
             </IconButton>
           </MaterialLink>
