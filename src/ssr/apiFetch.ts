@@ -53,6 +53,17 @@ function cacheable(status: number): boolean {
   return status === 200 || status === 400 || status === 404
 }
 
+/**
+ * The edge-cache key for an API URL. Its own namespace: the bridge caches
+ * the same URLs in the same cache, in its own format (handler.ts fetchApi).
+ */
+export function apiCacheKey(url: string): Request {
+  return new Request(
+    `https://ssr-api-cache.sc-market.internal/?url=${encodeURIComponent(url)}`,
+    { method: "GET" },
+  )
+}
+
 export function createApiFetch(options: ApiFetchOptions): ApiFetch {
   const answers = new Map<string, Promise<Answer>>()
   const unprefetched: string[] = []
@@ -60,11 +71,12 @@ export function createApiFetch(options: ApiFetchOptions): ApiFetch {
   let upstreamCalls = 0
 
   async function load(url: string): Promise<Answer> {
-    const cacheKey = new Request(url, { method: "GET" })
+    const cacheKey = apiCacheKey(url)
     const cached = await options.cache?.match(cacheKey).catch(() => undefined)
-    if (cached) {
+    const cachedStatus = Number(cached?.headers.get(CACHE_STATUS_HEADER))
+    if (cached && cachedStatus) {
       return {
-        status: Number(cached.headers.get(CACHE_STATUS_HEADER)) || 200,
+        status: cachedStatus,
         body: await cached.text(),
         contentType: cached.headers.get("Content-Type") ?? "application/json",
       }

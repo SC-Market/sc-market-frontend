@@ -24,6 +24,7 @@ import React, { startTransition, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { breakpointsValues } from "../../hooks/styles/theme/constants"
+import { useHydrated } from "../../hooks/ssr/useHydrated"
 
 type BreakpointKey = keyof typeof breakpointsValues
 
@@ -83,7 +84,14 @@ export function useFirstScreenRender(
   firstScreen: number,
 ): number {
   const [full, setFull] = useState(false)
-  const staged = !full && total > firstScreen
+  // Decided at mount: a grid hydrating server HTML (a prerendered or
+  // server-rendered page) has every card in that HTML, so its hydrating
+  // render must render them all too (a staged render would not match and
+  // React would throw the page's HTML away). Grids mounted later (client
+  // navigations, the SPA's createRoot) stage as before.
+  const hydrated = useHydrated()
+  const [stageOnMount] = useState(hydrated)
+  const staged = stageOnMount && !full && total > firstScreen
 
   useEffect(() => {
     if (!staged) return

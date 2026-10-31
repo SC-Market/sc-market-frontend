@@ -74,6 +74,17 @@ describe("createApiFetch", () => {
     expect(upstream).not.toHaveBeenCalled()
   })
 
+  it("never reads the bridge's entries for the same URL", async () => {
+    const { api, cache, calls } = setup(() => new Response("{}", { status: 404 }))
+    // The bridge's format: the API URL as the key, its own status header.
+    cache.entries.set(
+      URL_A,
+      new Response("{}", { headers: { "x-bridge-upstream-status": "404" } }),
+    )
+    expect((await api.fetch(URL_A)).status).toBe(404)
+    expect(calls).toHaveLength(1)
+  })
+
   it("keeps 404s (cached) and the status", async () => {
     const { api, cache, settle } = setup(
       () => new Response("{}", { status: 404 }),
