@@ -8,6 +8,8 @@ import { visualizer } from "rollup-plugin-visualizer"
 import circularDependency from "vite-plugin-circular-dependency"
 import { contentPlugin } from "./scripts/vite/contentPlugin"
 import { ssrRtkHooksPlugin } from "./scripts/vite/ssrRtkHooksPlugin"
+import { keepServerBuildPlugin } from "./scripts/vite/keepServerBuildPlugin"
+import { workerSsrResolvePlugin } from "./scripts/vite/workerSsrResolvePlugin"
 
 // React Router framework mode (react-router.config.ts): `react-router build`
 // runs this config twice, for the client (build/client) and for the
@@ -41,6 +43,9 @@ export default defineConfig(({ command, isSsrBuild }) => ({
     // Build-time render: RTK Query hooks start their queries during render.
     ssrRtkHooksPlugin(import.meta.dirname),
     reactRouter(),
+    // The server build, kept for the SSR Pages Function (docs/ssr-worker.md).
+    keepServerBuildPlugin(import.meta.dirname),
+    workerSsrResolvePlugin(),
     viteTsconfigPaths(),
     svgrPlugin(),
     // Circular dependency detection - reports circular imports in build output
@@ -147,7 +152,18 @@ export default defineConfig(({ command, isSsrBuild }) => ({
   // node_modules, where some only resolve through a bundler (e.g.
   // "date-fns/locale", a directory import). The dev server's module runner
   // can't evaluate bundled CommonJS, so dev keeps Vite's default.
-  ssr: command === "build" ? { noExternal: true } : {},
+  //
+  // The same server build also runs on Cloudflare (the SSR Pages Function,
+  // docs/ssr-worker.md), so it is built for workers: web-standard package
+  // builds (workerSsrResolvePlugin), no Node built-ins. Those builds run on
+  // Node 22 at build time too (web streams, fetch).
+  ssr:
+    command === "build"
+      ? {
+          noExternal: true,
+          target: "webworker",
+        }
+      : {},
   optimizeDeps: {
     include: [
       "react",

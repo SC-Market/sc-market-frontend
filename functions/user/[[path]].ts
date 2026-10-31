@@ -1,4 +1,6 @@
-// Edge bridge for /user/* (see src/bridge/handler.ts and public/_routes.json).
-import { onRequest as bridge } from "../../src/bridge/pagesFunction"
+// /user/*: server-rendered entity pages (src/ssr/pagesFunction.ts), the
+// edge bridge for everything else and as the fallback (src/bridge/handler.ts,
+// public/_routes.json).
+import { onRequest as ssr } from "../../src/ssr/pagesFunction"
 
-export const onRequest = bridge
+export const onRequest = ssr

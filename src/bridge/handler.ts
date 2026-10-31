@@ -95,7 +95,10 @@ export async function fetchApi(
     })
     body = await response.text()
   } catch (error) {
-    return { kind: "error", reason: error instanceof Error ? error.name : "fetch failed" }
+    return {
+      kind: "error",
+      reason: error instanceof Error ? error.name : "fetch failed",
+    }
   } finally {
     clearTimeout(timer)
   }
@@ -139,15 +142,27 @@ export async function fetchApi(
  * ever catches it, index.html with a 200: anything that isn't JSON counts as
  * "doesn't exist".
  */
-export async function fetchAsset(env: BridgeEnv, base: URL, path: string): Promise<ApiResult> {
+export async function fetchAsset(
+  env: BridgeEnv,
+  base: URL,
+  path: string,
+): Promise<ApiResult> {
   let response: Response
   try {
-    response = await env.ASSETS.fetch(new Request(new URL(path, base), { method: "GET" }))
+    response = await env.ASSETS.fetch(
+      new Request(new URL(path, base), { method: "GET" }),
+    )
   } catch (error) {
-    return { kind: "error", reason: error instanceof Error ? error.name : "asset fetch failed" }
+    return {
+      kind: "error",
+      reason: error instanceof Error ? error.name : "asset fetch failed",
+    }
   }
   const type = response.headers.get("Content-Type") ?? ""
-  if (response.status === 404 || (response.ok && !type.includes("application/json"))) {
+  if (
+    response.status === 404 ||
+    (response.ok && !type.includes("application/json"))
+  ) {
     return { kind: "notFound" }
   }
   if (!response.ok) return { kind: "error", reason: `asset ${response.status}` }
@@ -184,21 +199,34 @@ export async function resolvePage(
     if (assetPath === null) return { kind: "notFound" }
     const result = await fetchAsset(env, url, assetPath)
     if (result.kind === "notFound") return { kind: "notFound" }
-    if (result.kind === "error") return { kind: "passthrough", reason: result.reason }
+    if (result.kind === "error")
+      return { kind: "passthrough", reason: result.reason }
     primaryJson = result.json
   } else if (primaryRequest) {
     const apiBase = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
-    if (!apiBase) return { kind: "passthrough", reason: "VITE_BACKEND_URL not set" }
+    if (!apiBase)
+      return { kind: "passthrough", reason: "VITE_BACKEND_URL not set" }
 
     const [primary, secondary] = await Promise.all([
-      fetchApi(`${apiBase}${primaryRequest.path}`, primaryRequest, runtime, waitUntil),
+      fetchApi(
+        `${apiBase}${primaryRequest.path}`,
+        primaryRequest,
+        runtime,
+        waitUntil,
+      ),
       secondaryRequest
-        ? fetchApi(`${apiBase}${secondaryRequest.path}`, secondaryRequest, runtime, waitUntil)
+        ? fetchApi(
+            `${apiBase}${secondaryRequest.path}`,
+            secondaryRequest,
+            runtime,
+            waitUntil,
+          )
         : undefined,
     ])
 
     if (primary.kind === "notFound") return { kind: "notFound" }
-    if (primary.kind === "error") return { kind: "passthrough", reason: primary.reason }
+    if (primary.kind === "error")
+      return { kind: "passthrough", reason: primary.reason }
     primaryJson = primary.json
     secondaryJson = secondary?.kind === "ok" ? secondary.json : undefined
   }
@@ -206,7 +234,10 @@ export async function resolvePage(
   try {
     const doc = page.build(primaryJson, secondaryJson, {
       params: match.params,
-      origin: (env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL).replace(/\/+$/, ""),
+      origin: (env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL).replace(
+        /\/+$/,
+        "",
+      ),
       pathname: url.pathname,
     })
     return { kind: "page", doc }
@@ -238,9 +269,22 @@ function shellHeaders(
   outcome: PageOutcome["kind"],
   url: URL,
 ): Headers {
+  const headers = documentHeaders(
+    url,
+    shell.headers.get("Content-Type") || "text/html; charset=utf-8",
+  )
+  headers.set("X-SCM-Bridge", outcome)
+  return headers
+}
+
+/**
+ * What public/_headers gives an HTML document, for Function responses (the
+ * bridge's and the SSR Function's, src/ssr/pagesFunction.ts).
+ */
+export function documentHeaders(url: URL, contentType: string): Headers {
   const pathname = url.pathname
   const headers = new Headers({
-    "Content-Type": shell.headers.get("Content-Type") || "text/html; charset=utf-8",
+    "Content-Type": contentType,
     "Cache-Control": "no-cache",
     "Access-Control-Allow-Origin": "https://api.sc-market.space",
     "Access-Control-Allow-Credentials": "true",
@@ -248,13 +292,13 @@ function shellHeaders(
     "X-Frame-Options": "DENY",
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "strict-origin-when-cross-origin",
-    "X-SCM-Bridge": outcome,
   })
   // The `/` rule's Link header (agent/tooling entry points).
   if (pathname === "/") headers.set("Link", HOME_LINK_HEADER)
   if (
     url.protocol === "https:" &&
-    (url.hostname === "sc-market.space" || url.hostname === "www.sc-market.space")
+    (url.hostname === "sc-market.space" ||
+      url.hostname === "www.sc-market.space")
   ) {
     headers.set("Strict-Transport-Security", HSTS_HEADER)
   }
@@ -267,7 +311,11 @@ function guideRedirect(url: URL, target: string): Response {
   location.search = url.search
   return new Response(null, {
     status: 301,
-    headers: { Location: location.toString(), "Cache-Control": "public, max-age=86400", "X-SCM-Bridge": "redirect" },
+    headers: {
+      Location: location.toString(),
+      "Cache-Control": "public, max-age=86400",
+      "X-SCM-Bridge": "redirect",
+    },
   })
 }
 
@@ -313,9 +361,14 @@ export async function handleBridgeRequest(
       ? shell
       : rewriteShell(
           shell,
-          outcome.kind === "page" ? { kind: "page", doc: outcome.doc } : { kind: "notFound" },
+          outcome.kind === "page"
+            ? { kind: "page", doc: outcome.doc }
+            : { kind: "notFound" },
           runtime.HTMLRewriter,
         )
 
-  return new Response(request.method === "HEAD" ? null : html.body, { status, headers })
+  return new Response(request.method === "HEAD" ? null : html.body, {
+    status,
+    headers,
+  })
 }

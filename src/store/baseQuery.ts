@@ -49,6 +49,7 @@ export function createBaseQuery({
       rawQuery = fetchBaseQuery({
         baseUrl,
         credentials: env.credentials,
+        ...(env.fetchFn ? { fetchFn: env.fetchFn } : {}),
         prepareHeaders: (headers) => {
           for (const [name, value] of Object.entries(env.headers)) {
             headers.set(name, value)

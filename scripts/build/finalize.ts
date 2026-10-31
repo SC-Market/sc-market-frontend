@@ -8,6 +8,9 @@
  *    checks it never precaches or handles fetches (checkServiceWorker.ts).
  * 3. Inlines the entry stylesheet into the HTML shell and checks it
  *    (checkShell.ts).
+ * 4. Drops the SSR route placeholders' files (src/ssr/routePlaceholders.ts)
+ *    and writes build/ssr/inline-css.json for the SSR Pages Function
+ *    (docs/ssr-worker.md), which bundles build/ssr after this.
  *
  *   tsx scripts/build/finalize.ts [--out dist]
  */
@@ -30,6 +33,7 @@ import {
   inlineStylesheets,
 } from "../vite/inlineEntryCssPlugin"
 import { finalizePrerenderedPages } from "./prerendered"
+import { SSR_ROUTE_PLACEHOLDERS } from "../../src/ssr/routePlaceholders"
 
 const ROOT = path.resolve(import.meta.dirname, "../..")
 const CLIENT_DIR = path.join(ROOT, "build/client")
@@ -60,6 +64,18 @@ rmSync(outDir, { recursive: true, force: true })
 cpSync(CLIENT_DIR, outDir, {
   recursive: true,
 })
+// Not pages (src/ssr/routePlaceholders.ts): React Router "prerendered" them
+// only so those routes may have a server loader.
+for (const placeholder of SSR_ROUTE_PLACEHOLDERS) {
+  rmSync(path.join(outDir, placeholder), { recursive: true, force: true })
+  rmSync(path.join(outDir, `${placeholder}.data`), { force: true })
+}
+for (const placeholder of SSR_ROUTE_PLACEHOLDERS) {
+  // The first segment's directory, if nothing else is in it.
+  const top = path.join(outDir, placeholder.split("/")[1])
+  if (existsSync(top) && readdirSync(top).length === 0)
+    rmSync(top, { recursive: true })
+}
 finalizePrerenderedPages(outDir)
 const stats = path.join(ROOT, "build/stats.html")
 if (existsSync(stats)) cpSync(stats, path.join(outDir, "stats.html"))
@@ -119,6 +135,30 @@ for (const name of readdirSync(assetsDir)) {
   const out = dropRouteCss(js, inlined)
   if (out !== js) writeFileSync(file, out)
 }
+
+// 5. The SSR Pages Function's copy of step 3: the stylesheets a page
+// inlines, by href (src/ssr/serverBuild.ts). Every small stylesheet of the
+// build, like inlineStylesheets() would inline from disk.
+const SSR_DIR = path.join(ROOT, "build/ssr")
+if (!existsSync(path.join(SSR_DIR, "index.js"))) {
+  throw new Error(
+    `${SSR_DIR}/index.js is missing: the SSR Function needs the server build (keepServerBuildPlugin)`,
+  )
+}
+const inlineCss: Record<string, string> = {}
+for (const name of readdirSync(assetsDir)) {
+  if (!name.endsWith(".css") || name.startsWith("._")) continue
+  const css = readFileSync(path.join(assetsDir, name), "utf8")
+  if (
+    inlineStylesheets(
+      `<link rel="stylesheet" href="/assets/${name}">`,
+      () => css,
+    ).startsWith("<style")
+  ) {
+    inlineCss[`/assets/${name}`] = css
+  }
+}
+writeFileSync(path.join(SSR_DIR, "inline-css.json"), JSON.stringify(inlineCss))
 
 console.log(
   `finalize: ${path.relative(ROOT, CLIENT_DIR)} → ${path.relative(ROOT, outDir)}, sw.js built`,

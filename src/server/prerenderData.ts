@@ -56,13 +56,31 @@ export function isPrerenderableQuery(entry: QueryEntry | undefined): boolean {
 
 /** `{ [reducerPath]: { queries } }` with only the shippable queries. */
 export function prerenderableApiState(state: RootState): PrerenderedApiState {
+  return apiStateWhere(state, isPrerenderableQuery)
+}
+
+/**
+ * Every fulfilled query, live data included: a request-time render (the SSR
+ * Pages Function, src/ssr/render.tsx) ships what it rendered with, so the
+ * browser hydrates against the same data. Its HTML is at most a minute old
+ * (edge cache), unlike a prerendered page's.
+ */
+export function fulfilledApiState(state: RootState): PrerenderedApiState {
+  return apiStateWhere(
+    state,
+    (entry) => entry?.status === "fulfilled" && !!entry.endpointName,
+  )
+}
+
+function apiStateWhere(
+  state: RootState,
+  keep: (entry: QueryEntry | undefined) => boolean,
+): PrerenderedApiState {
   const out: PrerenderedApiState = {}
   for (const [reducerPath, slice] of Object.entries(state)) {
     const queries = (slice as ApiSliceState).queries ?? {}
     const kept = Object.fromEntries(
-      Object.entries(queries).filter(([, entry]) =>
-        isPrerenderableQuery(entry),
-      ),
+      Object.entries(queries).filter(([, entry]) => keep(entry)),
     )
     // RTK's rehydration also reads `mutations` and `provided`; ship none.
     if (Object.keys(kept).length > 0) {

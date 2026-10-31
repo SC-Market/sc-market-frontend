@@ -1,10 +1,12 @@
 /**
- * Server entry. Runs only at build time (react-router.config.ts has
- * `ssr: false`):
+ * Server entry. At build time (react-router.config.ts has `ssr: false`):
  * - the SPA shell: React Router renders the root route (with its empty
  *   HydrateFallback) to build/client/index.html, served for every app path;
  * - prerendered pages (src/prerender/paths.ts): the real page, rendered with
  *   build-time data, to build/client/<path>/index.html.
+ * At request time, on the SSR Pages Function (docs/ssr-worker.md), the
+ * entity pages: React Router's loaders load the data, then one render
+ * (src/ssr/render.tsx).
  *
  * The page is src/document/document.html with the React tree rendered into
  * its <div id="root">; entry.client.tsx hydrates that same element. The
@@ -37,6 +39,10 @@ import {
 import { createServerNetworkEnv } from "./server/serverNetworkEnv"
 import { createRenderCache, emotionStyleTags } from "./server/emotionStyles"
 import { bridgeHeadTags } from "./server/bridgeHead"
+import { buildContentSource } from "./server/contentSource"
+import { getSsrRequest } from "./ssr/context"
+import { renderSsrPage } from "./ssr/render"
+import { isSsrPlaceholderPath } from "./ssr/routePlaceholders"
 import { applyTitleTemplate } from "./seo/pageHead"
 import { DEFAULT_FRONTEND_URL } from "./seo/constants"
 import { provideShell } from "./routes/shell"
@@ -46,6 +52,10 @@ import { pages } from "./app/pages"
 
 provideShell(shell)
 providePages(pages)
+
+// For the SSR Pages Function (src/ssr/protocol.ts SsrEntryModule): it
+// reaches the app through this module (React Router's build.entry.module).
+export { createSsrLoadContext } from "./ssr/createSsrRequest"
 
 const API_SLICES = [serviceApi, generatedApi, generatedApiV2] as const
 
@@ -98,7 +108,26 @@ export default async function handleRequest(
   responseStatusCode: number,
   responseHeaders: Headers,
   routerContext: EntryContext,
+  loadContext?: unknown,
 ): Promise<Response> {
+  const ssr = getSsrRequest(loadContext)
+  if (ssr) {
+    return renderSsrPage(
+      request,
+      responseStatusCode,
+      responseHeaders,
+      routerContext,
+      ssr,
+    )
+  }
+  // Not a page (src/ssr/routePlaceholders.ts): finalize.ts deletes the file.
+  if (isSsrPlaceholderPath(new URL(request.url).pathname)) {
+    return new Response("<!-- ssr route placeholder -->", {
+      status: 200,
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    })
+  }
+
   const stylesheets = Object.values(routerContext.manifest.routes).flatMap(
     (route) => route?.css ?? [],
   )
@@ -165,14 +194,23 @@ export default async function handleRequest(
   const contentBodies = takeRenderedContentBodies()
 
   const url = new URL(request.url)
+  const assets = buildContentSource()
+  if (!assets) {
+    throw new Error(
+      "prerender: no build content source (react-router.config.ts registers it)",
+    )
+  }
   const bridge = await bridgeHeadTags(url.pathname, url.origin, {
-    VITE_BACKEND_URL: import.meta.env.VITE_BACKEND_URL,
-    VITE_FRONTEND_URL:
-      import.meta.env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL,
+    env: {
+      VITE_BACKEND_URL: import.meta.env.VITE_BACKEND_URL,
+      VITE_FRONTEND_URL:
+        import.meta.env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL,
+    },
+    assets,
   })
-  if (bridge.kind === "none") {
+  if (bridge.kind !== "page") {
     console.warn(
-      `prerender ${url.pathname}: page head from the app (${bridge.reason})`,
+      `prerender ${url.pathname}: page head from the app (${bridge.kind === "none" ? bridge.reason : "not found"})`,
     )
   }
   const pageHeadTags =

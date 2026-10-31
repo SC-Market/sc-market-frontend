@@ -64,3 +64,7 @@ local.properties
 # React Router framework mode: build output (deployed as dist/) and typegen
 /build
 /.react-router
+
+# wrangler pages dev / check startup state
+.wrangler/
+worker-startup.cpuprofile

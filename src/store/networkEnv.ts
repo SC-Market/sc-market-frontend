@@ -15,8 +15,16 @@
  */
 
 export interface NetworkEnv {
-  /** fetch() credentials mode for API requests. */
-  credentials: RequestCredentials
+  /**
+   * fetch() credentials mode for API requests. Unset on Cloudflare: Workers'
+   * fetch doesn't implement the option (and keeps no cookies anyway).
+   */
+  credentials?: RequestCredentials
+  /**
+   * The fetch API requests go through (default: the global fetch). The SSR
+   * render passes one with a timeout and an edge cache (src/ssr/networkEnv.ts).
+   */
+  fetchFn?: typeof fetch
   /** Headers added to every API request. */
   headers: Record<string, string>
   /**
