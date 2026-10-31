@@ -5628,5 +5628,16 @@
     "empty": "Todavía no se ha publicado ninguna actualización. Vuelve pronto.",
     "feed": "Feed Atom",
     "allUpdates": "Todas las actualizaciones"
+  },
+  "orgLinkBack": {
+    "title": "Opcional: enlázanos",
+    "manageTitle": "Enlázanos",
+    "line": "Encuentra nuestra tienda en SC Market: {{url}}",
+    "verifyHint": "Totalmente opcional y no necesario para la verificación: si quieres, añade también esta línea a la página de tu organización en RSI para que los visitantes encuentren tu tienda en SC Market. Solo se comprueba el código de arriba.",
+    "verifiedHint": "¡Tu organización está verificada! Ya puedes quitar el código de verificación de RSI. Si quieres, deja esta línea opcional en la página de tu organización para que los visitantes encuentren tu tienda. Solo se puede quitar el código; la línea puede quedarse.",
+    "manageHint": "Opcional: añade esta línea a la página de tu organización en RSI para que los visitantes encuentren tu tienda en SC Market. No tiene nada que ver con la verificación y nunca es obligatoria.",
+    "copy": "Copiar línea",
+    "copied": "Copiado",
+    "continue": "Continuar"
   }
 }

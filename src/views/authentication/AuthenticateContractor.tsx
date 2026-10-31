@@ -20,6 +20,7 @@ import {
   isRsiUrl,
 } from "../../util/rsiUrlUtils.ts"
 import { SentinelCode } from "../../components/authentication/SentinelCode"
+import { OrgLinkBackLine } from "../../components/authentication/OrgLinkBackLine"
 import { AuthenticateContractorSkeleton } from "./AuthenticateContractor.skeleton"
 import { PATHS } from "../../routes/paths"
 
@@ -27,6 +28,8 @@ export function AuthenticateContractor() {
   const identifier = useGetAuthenticatorIdentifier()
   const [orgName, setOrgName] = useState("")
   const [error, setError] = useState(false)
+  // Spectrum ID of the org just verified; shows the success step
+  const [verifiedOrg, setVerifiedOrg] = useState<string | null>(null)
   const { t } = useTranslation()
 
   const [
@@ -49,9 +52,8 @@ export function AuthenticateContractor() {
         contractor: orgName,
       })
         .unwrap()
-        .then((result) => {
-          navigate(PATHS.home)
-          window.location.reload()
+        .then(() => {
+          setVerifiedOrg(orgName)
         })
         .catch((error) => {
           issueAlert(error)
@@ -59,7 +61,7 @@ export function AuthenticateContractor() {
 
       return false
     },
-    [activateContractorLink, orgName, issueAlert, t, navigate],
+    [activateContractorLink, orgName, issueAlert],
   )
 
   if (identifier.isLoading || !identifier.data?.identifier) {
@@ -67,6 +69,29 @@ export function AuthenticateContractor() {
   }
 
   const identifierCode = identifier.data.identifier
+
+  if (verifiedOrg) {
+    return (
+      <Section xs={12} lg={12}>
+        <Grid item xs={12}>
+          <OrgLinkBackLine spectrumId={verifiedOrg} context="verified" />
+        </Grid>
+        <Grid item xs={12}>
+          <Box display={"flex"} justifyContent={"flex-end"}>
+            <Button
+              variant={"contained"}
+              onClick={() => {
+                navigate(PATHS.home)
+                window.location.reload()
+              }}
+            >
+              {t("orgLinkBack.continue")}
+            </Button>
+          </Box>
+        </Grid>
+      </Section>
+    )
+  }
 
   return (
     <Section xs={12} lg={12}>
@@ -132,6 +157,11 @@ export function AuthenticateContractor() {
           />
         </Typography>
       </Grid>
+      {orgName && (
+        <Grid item xs={12}>
+          <OrgLinkBackLine spectrumId={orgName} context="verify" />
+        </Grid>
+      )}
       <Grid item xs={12}>
         <Divider light />
       </Grid>

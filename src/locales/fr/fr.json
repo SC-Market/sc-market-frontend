@@ -5628,5 +5628,16 @@
     "empty": "Aucune mise à jour publiée pour le moment. Revenez bientôt.",
     "feed": "Flux Atom",
     "allUpdates": "Toutes les mises à jour"
+  },
+  "orgLinkBack": {
+    "title": "Facultatif : un lien vers nous",
+    "manageTitle": "Un lien vers nous",
+    "line": "Retrouvez notre boutique sur SC Market : {{url}}",
+    "verifyHint": "Entièrement facultatif et inutile pour la vérification : si vous le souhaitez, ajoutez aussi cette ligne à la page de votre organisation sur RSI pour que les visiteurs trouvent votre boutique sur SC Market. Seul le code ci-dessus est vérifié.",
+    "verifiedHint": "Votre organisation est vérifiée ! Vous pouvez maintenant retirer le code de vérification sur RSI. Si vous le souhaitez, gardez cette ligne facultative sur la page de votre organisation pour que les visiteurs trouvent votre boutique. Seul le code peut être retiré ; la ligne peut rester.",
+    "manageHint": "Facultatif : ajoutez cette ligne à la page de votre organisation sur RSI pour que les visiteurs trouvent votre boutique sur SC Market. Elle n'a rien à voir avec la vérification et n'est jamais obligatoire.",
+    "copy": "Copier la ligne",
+    "copied": "Copié",
+    "continue": "Continuer"
   }
 }

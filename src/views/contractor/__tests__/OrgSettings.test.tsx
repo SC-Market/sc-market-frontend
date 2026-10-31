@@ -11,6 +11,9 @@ import { mainTheme } from "../../../hooks/styles/Theme"
 vi.mock("../OrgLanguageSettings", () => ({
   OrgLanguageSettings: () => <div>supported languages</div>,
 }))
+vi.mock("../OrgLinkBackSettings", () => ({
+  OrgLinkBackSettings: () => <div>link back to us</div>,
+}))
 
 import { OrgSettings } from "../OrgSettings"
 
@@ -23,5 +26,6 @@ describe("OrgSettings", () => {
     )
     expect(screen.getByText("supported languages")).toBeTruthy()
     expect(screen.queryByRole("combobox")).toBeNull()
+    expect(screen.getByText("link back to us")).toBeTruthy()
   })
 })

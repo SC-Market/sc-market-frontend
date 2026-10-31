@@ -5596,5 +5596,16 @@
     "empty": "No updates have been published yet. Check back soon.",
     "feed": "Atom feed",
     "allUpdates": "All updates"
+  },
+  "orgLinkBack": {
+    "title": "Optional: link back to us",
+    "manageTitle": "Link back to us",
+    "line": "Find our shop on SC Market: {{url}}",
+    "verifyHint": "Totally optional and not needed to verify: if you like, also add this line to your RSI org page so visitors can find your shop on SC Market. Only the code above is checked.",
+    "verifiedHint": "Your org is verified! You can now remove the verification code from RSI. If you like, keep this optional line on your org page so visitors can find your shop. Only the code can be removed; the line can stay.",
+    "manageHint": "Optional: add this line to your RSI org page so visitors can find your shop on SC Market. It has nothing to do with verification and is never required.",
+    "copy": "Copy line",
+    "copied": "Copied",
+    "continue": "Continue"
   }
 }
