@@ -8,17 +8,36 @@ SPA shell. Design: `ssr-migration-design.md` §5, Phase 4. Prerendered pages:
 
 ## What is server-rendered
 
-| Path | Loader (`src/ssr/loaders.ts`) | 404 when |
+| Path | Loader (`src/ssr/loaders.ts`) | Cache (fresh / stale / crawlers) |
 | --- | --- | --- |
-| `/market/<id>` | `prefetchListingPage` | v2 listing 404 |
-| `/shops/<slug>[/<tab>]` | `prefetchShopPage` | v2 shop 404 |
-| `/contractor/<id>[/<tab>]` | `prefetchOrgPage` | v1 contractor 400/404 |
-| `/user/<name>[/<tab>]` | `prefetchUserProfilePage` | v1 user 400/404 |
+| `/market/<id>`, `/shops/<slug>[/<tab>]`, `/contractor/<id>[/<tab>]`, `/user/<name>[/<tab>]` | the pages' `prefetchXPage` | 60 s / 600 s / 24 h |
+| `/wiki/items/<id>`, `/wiki/commodities/<id>` | item / commodity prefetch + LIVE version | per game version: 10 min / 6 h / 24 h (live prices) |
+| `/wiki/ships/<id>`, `/mining/ores/<name>`, `/mining/locations/<name>`, `/blueprints/<slug>`, `/missions/<slug>`, `/resources/<id>` | the detail query + LIVE version | per game version: 6 h / 7 days / 7 days |
 
-Every other path on those prefixes (`/market`, `/shops`, aggregates,
-bundles) and the other bridged prefixes keep the edge bridge
-(`src/bridge/`). Game-data detail pages are the next step (they need the
-`useMediaQuery` detail gates fixed first, see below).
+Unknown entities (v2 404, v1 400/404) answer from the bridge: 404 + noindex.
+Everything else on those prefixes (hubs, aggregates, bundles, manufacturers)
+keeps the bridge; the prerendered hubs never invoke a Function.
+
+- **Detail gates** (ships, ores, mining locations, blueprints, missions):
+  the server renders the standalone detail page, and a gate that hydrates
+  server HTML keeps it (`useShowDetailPage`, decided at mount), so there is
+  one canonical server render and no swap to browser + modal afterwards.
+- **Variants:** the theme cookie (`light`) and the language (`?lng`, else
+  the `i18next` cookie, which the detector now also writes, SameSite=Lax)
+  are rendered on the server with a per-request `i18n.cloneInstance`. The
+  HTML marks them on `<html>` (`lang`, `data-ssr-lng`, `data-ssr-theme`);
+  the browser hydrates when the visitor's variant matches and renders from
+  scratch otherwise (localStorage-only languages, `theme=system` with a
+  light OS). Only non-default variants get their own cache key.
+- **Live data:** after hydrating, the page refetches the live queries it
+  shipped on a scratch store and writes successful answers into the page
+  (`src/store/refreshShippedData.ts`); a failed refresh changes nothing.
+- **Missions:** readable placeholders, disambiguated titles, a quotable
+  summary, every tab panel in the HTML, giver/faction/reputation rows,
+  chips, blueprint rewards and prerequisites as `<a href>`, the freshness
+  stamp ("Data from Star Citizen <build> LIVE, updated <date>, from game
+  files") and JSON-LD `dateModified` (`src/seo/missionText.ts`, shared with
+  the head and the bridge).
 
 ## How it works
 
@@ -162,12 +181,15 @@ render, edge-cached 60 s): use the WAF rule and robots crawl-delay.
 
 ## Not done yet
 
-- Game-data detail pages (items, ships, ores, locations, blueprints,
-  missions): one canonical server render for the five `useMediaQuery`
-  detail gates, then Cache API keyed by path + LIVE game version.
-- Visitor variants on the server: theme cookie (needs MUI CSS variables or a
-  per-theme cache key), `i18n.cloneInstance()` per request with the
-  locale's strings, `Host` for white-label shells.
-- A background refetch of shipped live data after hydration (the HTML can be
-  up to 11 minutes old).
-- Delete the bridge's listing/shop/org/user kinds once SSR has run clean.
+- Backend: the temporary CORS allowance for
+  `https://ssr-phase4.sc-market-frontend.pages.dev` (the preview's own API
+  calls fail CORS until then, so browser checks after hydration are
+  limited there).
+- Backend: mission rewards carry no game item id (`MissionBlueprintReward`
+  has no output item id, `ItemReward` only `name`/`ref`), so item rewards
+  can't link to `/wiki/items/<id>` or `/market/aggregate/<id>` yet. Needs
+  `output_game_item_id` / `game_item_id` in the v2 mission detail response
+  (TSOA, then codegen).
+- Hub capability text and the bridge's mission summary: the SEO work on
+  main (`src/seo/`); reuse those builders here once merged.
+- Delete the bridge's page kinds that SSR now covers once it has run clean.

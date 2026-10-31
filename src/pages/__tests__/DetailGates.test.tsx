@@ -1,8 +1,8 @@
 /**
  * The five viewport detail gates must put the entity's detail page in
  * server/hydration output (the desktop modal is a closed Portal on the
- * server), hydrate without a mismatch, and keep today's SPA behavior:
- * browser + modal on desktop, detail page below `lg`.
+ * server), hydrate without a mismatch and keep that page, and keep today's
+ * SPA behavior: browser + modal on desktop, detail page below `lg`.
  *
  * The detail pages and browsers are stubbed: this tests the gate, not the
  * pages behind it.
@@ -73,11 +73,13 @@ describe.each(GATES)("%s", (_name, Gate, detailPage, desktopBrowser) => {
     expect(rendered).toEqual([detailPage])
   })
 
+  // A gate that hydrates server HTML keeps the detail page on every
+  // viewport (no swap to browser + modal right after: useShowDetailPage).
   it.each([
-    ["desktop", DESKTOP_WIDTH, desktopBrowser],
+    ["desktop", DESKTOP_WIDTH, detailPage],
     ["a phone", PHONE_WIDTH, detailPage],
   ])(
-    "hydrates the server HTML without a mismatch, then shows the %s experience",
+    "hydrates the server HTML without a mismatch and keeps the detail page on %s",
     async (_viewport, width, expected) => {
       const container = document.createElement("div")
       container.innerHTML = renderToString(app)

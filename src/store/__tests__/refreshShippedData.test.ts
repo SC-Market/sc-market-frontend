@@ -10,6 +10,7 @@ describe("liveShippedQueries", () => {
             status: "fulfilled",
             endpointName: "getListingDetail",
             originalArgs: { id: "a" },
+            data: { listing: 1 },
           },
           "getShips(undefined)": {
             status: "fulfilled",
@@ -29,6 +30,7 @@ describe("liveShippedQueries", () => {
         reducerPath: "generatedApiV2",
         endpointName: "getListingDetail",
         originalArgs: { id: "a" },
+        data: { listing: 1 },
       },
     ])
   })

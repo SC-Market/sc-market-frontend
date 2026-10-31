@@ -271,7 +271,11 @@ void initialLocaleReady.then(async () => {
       void whenStartupGateOpen()
         .then(() => import("./store/refreshShippedData"))
         .then(({ refreshShippedLiveData }) =>
-          refreshShippedLiveData(store.dispatch, shipped),
+          refreshShippedLiveData(
+            store,
+            makeStore({ networkEnv: browserNetworkEnv }),
+            shipped,
+          ),
         )
         .catch(() => {})
     }

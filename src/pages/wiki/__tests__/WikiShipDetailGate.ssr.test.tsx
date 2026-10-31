@@ -79,7 +79,8 @@ describe("WikiShipDetailGate server render", () => {
   })
 
   it.each([
-    ["desktop", DESKTOP_WIDTH, "ship browser with detail modal"],
+    // The hydrated detail page stays (useShowDetailPage decides at mount).
+    ["desktop", DESKTOP_WIDTH, "A light fighter built for dogfighting."],
     ["a phone", PHONE_WIDTH, "A light fighter built for dogfighting."],
   ])("hydrates without a mismatch on %s", async (_label, width, expected) => {
     const container = document.createElement("div")
