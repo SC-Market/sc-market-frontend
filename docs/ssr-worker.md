@@ -63,19 +63,24 @@ bundles) and the other bridged prefixes keep the edge bridge
 ## Caching
 
 - **HTML:** Cache API (`caches.default`, per data center), one entry per
-  path and deploy (the build's asset version is in the key). Fresh 60 s;
-  60-660 s old it is served and re-rendered in the background
-  (`s-maxage=60, stale-while-revalidate=600`, stated in `CDN-Cache-Control`).
+  path and deploy (the build's asset version, `build/ssr/version.json`, is
+  in the key, so a cache hit never loads the app). Visitors: fresh 60 s,
+  then served for up to 600 s more while it re-renders in the background
+  (`s-maxage=60, stale-while-revalidate=600`, stated in
+  `CDN-Cache-Control`). Crawlers (`isCrawler`): any entry up to 24 h old,
+  no re-render, so several crawlers on one URL cost one render a day.
+  Concurrent misses of one path in an isolate share one render.
   Browsers get `Cache-Control: no-cache` as before (stale-chunk recovery).
-- **API JSON:** Cache API per URL, 60 s, shared by the loaders and the head.
+- **API JSON:** Cache API per URL, 60 s, shared by the loaders and the head
+  (its own key namespace: the bridge caches the same URLs differently).
 - Response header `X-SCM-SSR: miss | hit | stale`; absent when the bridge
-  answered.
+  answered (`X-SCM-Bridge` instead).
 
 ## Switches and rollback
 
 | What | How | Takes effect |
 | --- | --- | --- |
-| Instant kill, all or some paths | Zone Transform Rule (Rules → Transform Rules → Modify Request Header) that sets `X-SCM-SSR-Off: 1`, filtered on the paths to switch off | Seconds, no deploy |
+| Instant kill, all or some paths | Zone Transform Rule (Rules → Transform Rules → Modify Request Header) that sets `X-SCM-SSR-Off: 1`, filtered on the paths to switch off (custom domain only, not pages.dev) | Seconds, no deploy |
 | Kill switch | Pages env var `SSR_ENABLED=false` (production: SSR is off unless it is `true`) | Next deployment ("Retry deployment", no code change) |
 | Per page kind | Pages env var `SSR_KINDS=listing,shop` (omit kinds to roll them back) | Next deployment |
 | Per prefix, permanent | Point `functions/<prefix>/[[path]].ts` back at `src/bridge/pagesFunction` | A commit |
@@ -88,14 +93,42 @@ serves the static shell if the Function dies (exception or CPU limit).
 
 ## Cost guards
 
-- Only the four entity prefixes invoke SSR; hubs, assets and `.data` never do.
-- HTML cache hits cost ~1 ms CPU; only misses and background revalidations
-  render.
+- Only the four entity prefixes invoke SSR; hubs, assets and static files
+  never invoke a Function (`_routes.json`, unchanged), and `.data` requests
+  never render.
+- Cache hits cost ~1-2 ms CPU and never load the app; only misses and
+  background revalidations render. Crawlers reuse day-old HTML.
 - Unknown entities answer from the bridge (its API 404 cache, 60 s).
-- CPU cap: `limits.cpu_ms` can only be set from a Wrangler file on Pages,
-  which would make the file the source of truth for the whole project's
-  settings (see owner steps). Until then the render deadline bounds wall time
-  and `passThroughOnException()` fails open on the default limit.
+- A 2.5 s deadline on loaders + render, then the bridge answers.
+- CPU cap: on Pages, `limits.cpu_ms` can only come from a Wrangler file,
+  and that file becomes the source of truth for the whole project's
+  settings (env vars, compatibility date, bindings) for production and all
+  previews. It is not added on this branch; see "Go-live" below.
+
+## Go-live (owner)
+
+1. Rocket Loader off (Speed → Optimization → Content Optimization).
+2. Usage alerts: Notifications → Add → "Usage Based Billing" for Workers
+   (requests and CPU time), e.g. at 8M requests and 25M CPU-ms a month.
+3. Optional WAF rate limiting rule (Security → WAF → Rate limiting rules;
+   Free includes one): `starts_with(http.request.uri.path, "/market/") or
+   starts_with(http.request.uri.path, "/shops/") or
+   starts_with(http.request.uri.path, "/contractor/") or
+   starts_with(http.request.uri.path, "/user/")`, 60 requests per 10 s per
+   IP, action Block or Managed Challenge for 10 s.
+4. Prepare the instant kill switch (disabled): Rules → Transform Rules →
+   Modify Request Header, "Set static" `X-SCM-SSR-Off` = `1`, expression as
+   above (or a single prefix). Enable it to switch SSR off.
+5. Optional CPU cap: add `wrangler.toml` with `pages_build_output_dir =
+   "dist"`, the project's current compatibility date/flags and env vars
+   (copied from the dashboard first: the file replaces them), and
+   `[limits] cpu_ms = 500`. Warm renders measure 30-100 ms locally, a cold
+   isolate's first render ~350 ms (x1.5-2.5 on Workers).
+6. Turn it on: Pages → Settings → Variables (Production) `SSR_ENABLED=true`,
+   then redeploy (Deployments → Retry deployment).
+7. Watch: Workers & Pages → sc-market-frontend → Functions metrics
+   (requests, CPU time median/p99, errors) and Real-time logs
+   (`ssr fail-open`, `not prefetched`).
 
 ## Measured (local, Node 22 on Apple Silicon; Workers run ~1.5-2.5x slower)
 
@@ -109,8 +142,23 @@ serves the static shell if the Function dies (exception or CPU limit).
 | Unknown entity | 2 ms | (bridge 404) |
 
 First render in a fresh isolate adds ~250-300 ms (evaluating the app).
-`wrangler check startup --pages`: 12.7 ms active (bundle 15.5 MiB, 2.9 MiB
-gzip).
+`wrangler check startup --pages`: 13.9 ms active (bundle 15.5 MiB, 2.9 MiB
+gzip). On the preview: misses 0.5-1.8 s to first byte (API calls), hits
+70-100 ms.
+
+## Cost (Workers Paid: $5 incl. 10M requests + 30M CPU-ms)
+
+Assumes ~90 ms CPU per render on Workers (measured x1.7) and ~2 ms per hit.
+
+| Entity page loads / month | Renders | CPU-ms | Monthly |
+| --- | --- | --- | --- |
+| 1M, 50% hits | 0.5M | 46M | $5.32 |
+| 3M (the bridge's Free ceiling), 50% hits | 1.5M | 138M | $7.16 |
+| + one aggressive crawler, every entity sitemap URL (~40k) daily | +1.2M | +108M | +$2.16 |
+| Worst case: 10 such crawlers, no cache benefit | 12M | 1.1B | ~$27 |
+
+Origin load is the bigger risk in the crawler rows (3-5 API calls per
+render, edge-cached 60 s): use the WAF rule and robots crawl-delay.
 
 ## Not done yet
 
