@@ -27,17 +27,35 @@ export function RequestContextProvider({
   )
 }
 
+/** Rendered without a request (the build-time prerender): the default. */
+const BUILD_TIME: RequestContextValue = {
+  host: "",
+  lng: "en",
+  theme: "system",
+  url: "",
+}
+
+/**
+ * The variant the server HTML was rendered in, as the SSR Function marks it
+ * on <html> (renderDocument): prerendered pages and the SPA shell carry no
+ * marks, which means the default (English, "system").
+ */
+export function renderedVariant(): Pick<RequestContextValue, "lng" | "theme"> {
+  const html = document.documentElement
+  return {
+    lng: html.getAttribute("data-ssr-lng") || "en",
+    theme: html.getAttribute("data-ssr-theme") === "light" ? "light" : "system",
+  }
+}
+
 /** The rendering request (server) or the current page (browser). */
 export function useRequestContext(): RequestContextValue {
   const value = useContext(RequestContext)
   if (value) return value
-  if (typeof window === "undefined") {
-    throw new Error("useRequestContext: no request context on the server")
-  }
+  if (typeof window === "undefined") return BUILD_TIME
   return {
     host: window.location.hostname,
-    lng: document.documentElement.lang || "en",
-    theme: "system",
+    ...renderedVariant(),
     url: window.location.href,
   }
 }

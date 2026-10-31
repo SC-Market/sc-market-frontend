@@ -54,6 +54,7 @@ import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
 import { isSiteAdmin } from "../util/siteRole"
 import { AdminMfaHost } from "../features/mfa/components/AdminMfaHost"
+import { useRequestContext } from "../ssr/requestContext"
 
 function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
@@ -63,9 +64,14 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   // (no cookie at build time), so hydrate with that and switch to the
   // visitor's theme right after (useHydratedInitialState). In the SPA the
   // first render already has the cookie's theme.
+  // A server-rendered page (SSR Function) may have been rendered in the
+  // visitor's light theme (src/ssr/protocol.ts): hydrate with the theme the
+  // HTML has (useRequestContext: the request on the server, the HTML's mark
+  // in the browser).
   const hydrated = useHydrated()
+  const renderedTheme = useRequestContext().theme
   const [useLightTheme, setUseLightTheme] = useHydratedInitialState<ThemeChoice>(
-    hydrated ? cookies.theme || "system" : "system",
+    hydrated ? cookies.theme || "system" : renderedTheme,
   )
   const location = useLocation()
   const { i18n } = useTranslation()

@@ -29,6 +29,9 @@ import { bridgeHeadTags } from "../server/bridgeHead"
 import { applyTitleTemplate } from "../seo/pageHead"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
 import { RequestContextProvider } from "./requestContext"
+import { I18nextProvider } from "react-i18next"
+import i18n, { loadLocale } from "../util/i18n"
+import { setServerRenderLanguage } from "../util/renderLanguage"
 import type { SsrRequest } from "./context"
 import { SSR_OUTCOME_HEADER } from "./protocol"
 
@@ -78,6 +81,72 @@ export async function renderSsrPage(
   // From here on, queries no loader started stay loading (apiFetch.ts).
   ssr.api.freeze()
 
+  // The page's language: this request's own i18next instance (sharing the
+  // loaded strings), never the module-wide one other requests also use.
+  const { lng, theme } = ssr.requestContext
+  if (lng !== "en") await loadLocale(lng)
+  const i18nInstance = i18n.cloneInstance({ lng, initAsync: false })
+
+  return renderExclusively(() =>
+    renderPage(request, responseHeaders, routerContext, ssr, bridge, {
+      i18nInstance,
+      lng,
+      theme,
+    }),
+  )
+}
+
+/**
+ * One render at a time per isolate: renders are CPU-bound anyway (no gain
+ * from interleaving them), and helpers outside React read the render's
+ * language from module state (util/renderLanguage.ts).
+ */
+let renderQueue: Promise<unknown> = Promise.resolve()
+function renderExclusively<T>(render: () => Promise<T>): Promise<T> {
+  const run = renderQueue.then(render, render)
+  renderQueue = run.catch(() => {})
+  return run
+}
+
+interface Variant {
+  i18nInstance: typeof i18n
+  lng: string
+  theme: "light" | "system"
+}
+
+async function renderPage(
+  request: Request,
+  responseHeaders: Headers,
+  routerContext: EntryContext,
+  ssr: SsrRequest,
+  bridge: Awaited<ReturnType<typeof bridgeHeadTags>>,
+  variant: Variant,
+): Promise<Response> {
+  setServerRenderLanguage(variant.lng)
+  try {
+    return await renderPageNow(
+      request,
+      responseHeaders,
+      routerContext,
+      ssr,
+      bridge,
+      variant,
+    )
+  } finally {
+    setServerRenderLanguage(null)
+  }
+}
+
+async function renderPageNow(
+  request: Request,
+  responseHeaders: Headers,
+  routerContext: EntryContext,
+  ssr: SsrRequest,
+  bridge: Awaited<ReturnType<typeof bridgeHeadTags>>,
+  variant: Variant,
+): Promise<Response> {
+  const url = new URL(request.url)
+
   const head = createHead<ResolvableHead>({
     init: [{ titleTemplate: applyTitleTemplate }],
   })
@@ -87,9 +156,11 @@ export async function renderSsrPage(
     <CacheProvider value={cache}>
       <Provider store={ssr.store}>
         <RequestContextProvider value={ssr.requestContext}>
-          <UnheadProvider value={head}>
-            <ServerRouter context={routerContext} url={request.url} />
-          </UnheadProvider>
+          <I18nextProvider i18n={variant.i18nInstance}>
+            <UnheadProvider value={head}>
+              <ServerRouter context={routerContext} url={request.url} />
+            </UnheadProvider>
+          </I18nextProvider>
         </RequestContextProvider>
       </Provider>
     </CacheProvider>,
@@ -127,6 +198,10 @@ export async function renderSsrPage(
     stylesheets,
     styleTags: emotionStyleTags(cache, appHtml),
     pageHeadTags,
+    variant:
+      variant.lng !== "en" || variant.theme === "light"
+        ? { lng: variant.lng, theme: variant.theme }
+        : undefined,
     data: {
       elementId: PRERENDERED_DATA_ELEMENT_ID,
       value: {

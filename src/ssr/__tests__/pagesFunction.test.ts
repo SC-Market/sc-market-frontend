@@ -48,7 +48,7 @@ describe("kindEnabled (per-prefix rollback)", () => {
       false,
     )
     expect(kindEnabled({ SSR_KINDS: "shop, user" } as never, "user")).toBe(true)
-    expect(kindEnabled({} as never, "item")).toBe(false)
+    expect(kindEnabled({} as never, "manufacturer")).toBe(false)
   })
 })
 
@@ -69,7 +69,7 @@ describe("ssrDecision", () => {
   })
   it("leaves hubs, other pages, filtered URLs and white-label hosts to the bridge", () => {
     expect(ssrDecision(req(`${PREVIEW}/market`), env).render).toBe(false)
-    expect(ssrDecision(req(`${PREVIEW}/wiki/items/x`), env).render).toBe(false)
+    expect(ssrDecision(req(`${PREVIEW}/wiki/manufacturers/x`), env).render).toBe(false)
     expect(ssrDecision(req(`${PREVIEW}/shops/foo?q=x`), env).render).toBe(false)
     expect(
       ssrDecision(req(`${PREVIEW}/shops/foo?utm_source=x`), env).render,

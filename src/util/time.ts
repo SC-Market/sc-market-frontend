@@ -1,4 +1,5 @@
 import i18n from "../util/i18n"
+import { getServerRenderLanguage } from "./renderLanguage"
 import {
   differenceInMonths,
   differenceInDays,
@@ -13,9 +14,12 @@ import { enUS, uk, zhCN } from "date-fns/locale"
 
 const locales = { en: enUS, uk, "zh-CN": zhCN }
 
+/** The page's language: the server render's, or i18next's in the browser. */
+const language = () => getServerRenderLanguage() ?? i18n.language
+
 export const format = (date: Date | number, formatStr: string) =>
   dateFnsFormat(date, formatStr, {
-    locale: locales[i18n.language as keyof typeof locales] || enUS,
+    locale: locales[language() as keyof typeof locales] || enUS,
   })
 
 const units = {
@@ -28,7 +32,7 @@ const units = {
 }
 
 const getRtf = () =>
-  new Intl.RelativeTimeFormat(i18n.language, { numeric: "auto" })
+  new Intl.RelativeTimeFormat(language(), { numeric: "auto" })
 
 export const getRelativeTime = (d1: Date, d2: Date = new Date()) => {
   const elapsed = d1.getTime() - d2.getTime()

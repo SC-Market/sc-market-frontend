@@ -134,11 +134,25 @@
           })
           // ...and in the light theme: prerendered pages are dark (the
           // default), and the app's theme isn't CSS variables yet.
+          // A server-rendered page (SSR Function) marks the language and
+          // theme it was rendered in on <html>; without marks it is the
+          // default (English, dark). Keep in sync with entry.client's
+          // renderFresh and util/locales.ts toSupportedLocale.
+          var root = document.documentElement
+          var ssrLng = (root.getAttribute("data-ssr-lng") || "en").toLowerCase()
+          var ssrLight = root.getAttribute("data-ssr-theme") === "light"
+          var want = lng.toLowerCase()
+          want = /^zh-(tw|hk|mo|hant)/.test(want)
+            ? "zh-tw"
+            : /^zh/.test(want)
+              ? "zh-cn"
+              : want.split("-")[0]
+          if (!/^(en|de|es|fr|ja|uk|zh-cn|zh-tw)$/.test(want)) want = "en"
           if (
             !mainSite ||
-            light ||
+            light !== ssrLight ||
             filtered ||
-            /^(de|es|fr|ja|uk|zh)\b/i.test(lng)
+            want !== ssrLng
           ) {
             document.documentElement.setAttribute("data-render-fresh", "")
           }

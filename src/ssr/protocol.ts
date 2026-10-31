@@ -6,6 +6,7 @@
  * the app through the server build's entry module (`build.entry.module`).
  */
 import type { ContentSource } from "../server/contentSource"
+import { toSupportedLocale } from "../util/locales"
 
 /** Header on entry.server's answer: "page" | "not-found" | "route-error". */
 export const SSR_OUTCOME_HEADER = "X-SCM-SSR-Outcome"
@@ -13,21 +14,56 @@ export const SSR_OUTCOME_HEADER = "X-SCM-SSR-Outcome"
 export interface RequestContextValue {
   /** Request hostname (white-label domains render a different shell). */
   host: string
-  /** Language the page is rendered in (BCP-47). */
+  /** Language the page is rendered in (a shipped locale, "en" by default). */
   lng: string
-  /** "dark" | "light" | "system" ("system" when no cookie). */
-  theme: string
+  /**
+   * Theme the page is rendered in: "light" when the visitor's theme cookie
+   * says so, otherwise "system" (rendered dark, like a prerendered page).
+   */
+  theme: "light" | "system"
   /** The full request URL. */
   url: string
 }
 
-/** Parse the request's context from a Request (server). */
+function cookieValue(cookies: string, name: string): string | undefined {
+  const match = new RegExp(`(?:^|;\\s*)${name}=([^;]*)`).exec(cookies)
+  if (!match) return undefined
+  try {
+    return decodeURIComponent(match[1]).trim()
+  } catch {
+    return undefined
+  }
+}
+
+/**
+ * The page variant to render for a request: `?lng` or the i18next cookie
+ * (the browser's detection order, minus localStorage and the browser
+ * language, which the server can't see), and the theme cookie. Cookies are
+ * only read here, never forwarded.
+ */
 export function requestContextFrom(request: Request): RequestContextValue {
   const url = new URL(request.url)
   const cookies = request.headers.get("Cookie") ?? ""
-  const theme = /(?:^|;\s*)theme=([^;]+)/.exec(cookies)?.[1]?.trim() || "system"
-  const lng = url.searchParams.get("lng") || "en"
-  return { host: url.hostname, lng, theme, url: url.href }
+  const theme = cookieValue(cookies, "theme") === "light" ? "light" : "system"
+  const requested =
+    url.searchParams.get("lng") || cookieValue(cookies, "i18next") || "en"
+  return {
+    host: url.hostname,
+    lng: toSupportedLocale(requested),
+    theme,
+    url: url.href,
+  }
+}
+
+/**
+ * The cache-key suffix of a rendered variant: empty for the default (dark,
+ * English), so most visitors and every crawler share one entry per path.
+ */
+export function variantKey(context: RequestContextValue): string {
+  const parts: string[] = []
+  if (context.theme === "light") parts.push("theme=light")
+  if (context.lng !== "en") parts.push(`lng=${context.lng}`)
+  return parts.length > 0 ? `~${parts.join("~")}` : ""
 }
 
 /** What the Function passes to the server build's createSsrRequest(). */

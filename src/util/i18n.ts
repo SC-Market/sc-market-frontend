@@ -4,6 +4,7 @@ import LanguageDetector from "i18next-browser-languagedetector"
 
 import en from "../locales/en/english.json"
 import { useEffect, useState } from "react"
+import { toSupportedLocale } from "./locales"
 
 import {
   enUS as coreEnUS,
@@ -16,33 +17,7 @@ import {
   ukUA as coreUkUA,
 } from "@mui/material/locale"
 
-// Every locale we ship translation files for. `code` is the i18next/BCP-47
-// language tag; `endonym` is the language's own native name (shown in the
-// switcher). Keys missing from a locale fall back to English (fallbackLng),
-// so partially-translated locales degrade gracefully rather than showing blanks.
-export const languages = [
-  { code: "en", endonym: "English" },
-  { code: "de", endonym: "Deutsch" },
-  { code: "es", endonym: "Español" },
-  { code: "fr", endonym: "Français" },
-  { code: "ja", endonym: "日本語" },
-  { code: "uk", endonym: "Українська" },
-  { code: "zh-CN", endonym: "简体中文" },
-  { code: "zh-TW", endonym: "繁體中文" },
-]
-
-export const SUPPORTED_LOCALES = languages.map((l) => l.code)
-
-/**
- * The shipped locale code for a language tag: "de-DE" -> "de", "zh" ->
- * "zh-CN", "en-GB" -> "en". Detected languages are often regional tags, and a
- * bundle has to be added under the shipped code for i18next to find it.
- */
-export function toSupportedLocale(tag: string): string {
-  if (SUPPORTED_LOCALES.includes(tag)) return tag
-  const base = tag.split("-")[0]
-  return SUPPORTED_LOCALES.find((l) => l.split("-")[0] === base) || "en"
-}
+export { languages, SUPPORTED_LOCALES, toSupportedLocale } from "./locales"
 
 export async function loadLocale(requested: string): Promise<void> {
   const locale = toSupportedLocale(requested)
@@ -158,6 +133,15 @@ i18n
   .use(initReactI18next)
   .init({
     debug: import.meta.env.DEV,
+    // The default order (?lng, i18next cookie, localStorage, browser), and
+    // the choice is also kept in a cookie: the SSR Function renders the
+    // page in that language (src/ssr/protocol.ts). Lax so it is sent on
+    // arrivals from search results and chat links too.
+    detection: {
+      caches: ["localStorage", "cookie"],
+      cookieOptions: { path: "/", sameSite: "lax" },
+      cookieMinutes: 60 * 24 * 365,
+    },
     supportedLngs: ["en", "de", "es", "fr", "ja", "uk", "zh-CN", "zh-TW"],
     fallbackLng: "en",
     nonExplicitSupportedLngs: true,

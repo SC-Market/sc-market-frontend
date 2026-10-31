@@ -25,6 +25,13 @@ export interface DocumentParts {
    * <script> after #root.
    */
   data?: { elementId: string; value: unknown }
+  /**
+   * A server-rendered page's variant (src/ssr/render.tsx): its language and
+   * theme, marked on <html> so the browser knows what it may hydrate
+   * (entry.client.tsx, document.html's pre-theme script). Omitted: the
+   * default (English, dark).
+   */
+  variant?: { lng: string; theme: "light" | "system" }
 }
 
 /** JSON that can't close its <script> (or start a comment) early. */
@@ -72,5 +79,16 @@ export function renderDocument(template: string, parts: DocumentParts): string {
         `<div id="root"${parts.pageHeadTags ? " data-prerendered" : ""}>${parts.appHtml}</div>${data}`,
     )
   if (parts.pageHeadTags) html = applyPageHead(html, parts.pageHeadTags)
+  if (parts.variant) {
+    const { lng, theme } = parts.variant
+    if (!html.includes('<html lang="en">')) {
+      throw new Error('document.html must start with <html lang="en">')
+    }
+    html = html.replace(
+      '<html lang="en">',
+      () =>
+        `<html lang="${escapeAttribute(lng)}" data-ssr-lng="${escapeAttribute(lng)}" data-ssr-theme="${theme === "light" ? "light" : "dark"}">`,
+    )
+  }
   return addCfasyncFalse(html)
 }

@@ -32,6 +32,11 @@ import { prefetchUserProfilePage } from "../features/profile/prefetch"
 import { marketV2Api } from "../store/api/v2/market"
 import { contractorsApi } from "../features/contractor/api/contractorApi"
 import { userApi } from "../features/profile/api/profileApi"
+import {
+  prefetchWikiCommodityPage,
+  prefetchWikiItemPage,
+} from "../pages/wiki/prefetch"
+import { prefetchResourcePage } from "../pages/resources/prefetch"
 
 /** v2 answers 404 for an unknown entity; v1 (orgs, users) 400 or 404. */
 const V2_NOT_FOUND: readonly unknown[] = [404]
@@ -109,4 +114,121 @@ export const userLoader = ssrLoader(prefetchUserProfilePage, {
         )
       : null,
   notFound: V1_NOT_FOUND,
+})
+
+// ---------------------------------------------------------------------------
+// Game-data detail pages. The detail gates (ships, ores, mining locations,
+// blueprints, missions) render their standalone detail page on the server
+// and while hydrating (useShowDetailPage), so these load that page's data
+// only, never the desktop browser list behind the modal. Every page also
+// gets the LIVE game version (the freshness stamp).
+
+const activeVersions = (dispatch: PrefetchDispatch) =>
+  settleQuery(dispatch(marketV2Api.endpoints.getActiveVersions.initiate()))
+
+/** The page's own prefetch plus the active game version. */
+function withVersions(prefetch: DataPrefetchFn): DataPrefetchFn {
+  return async (dispatch, params) => {
+    await Promise.all([prefetch(dispatch, params), activeVersions(dispatch)])
+  }
+}
+
+/** Nothing beyond the primary query (it is the page's data). */
+const primaryOnly: DataPrefetchFn = async () => {}
+
+export const itemLoader = ssrLoader(withVersions(prefetchWikiItemPage), {
+  query: (dispatch, { id }) =>
+    id
+      ? settleQuery(
+          dispatch(marketV2Api.endpoints.getItemDetail.initiate({ id })),
+        )
+      : null,
+  notFound: V2_NOT_FOUND,
+})
+
+export const commodityLoader = ssrLoader(
+  withVersions(prefetchWikiCommodityPage),
+  {
+    query: (dispatch, { id }) =>
+      id
+        ? settleQuery(
+            dispatch(
+              marketV2Api.endpoints.getResource.initiate({ resourceId: id }),
+            ),
+          )
+        : null,
+    notFound: V2_NOT_FOUND,
+  },
+)
+
+export const resourceLoader = ssrLoader(withVersions(prefetchResourcePage), {
+  query: (dispatch, { resource_id }) =>
+    resource_id
+      ? settleQuery(
+          dispatch(
+            marketV2Api.endpoints.getResource.initiate({
+              resourceId: resource_id,
+            }),
+          ),
+        )
+      : null,
+  notFound: V2_NOT_FOUND,
+})
+
+export const shipLoader = ssrLoader(withVersions(primaryOnly), {
+  query: (dispatch, { id }) =>
+    id
+      ? settleQuery(
+          dispatch(marketV2Api.endpoints.getShipDetail.initiate({ id })),
+        )
+      : null,
+  notFound: V2_NOT_FOUND,
+})
+
+export const oreLoader = ssrLoader(withVersions(primaryOnly), {
+  query: (dispatch, { name }) =>
+    name
+      ? settleQuery(
+          dispatch(marketV2Api.endpoints.getOreDetail.initiate({ name })),
+        )
+      : null,
+  notFound: V2_NOT_FOUND,
+})
+
+export const miningLocationLoader = ssrLoader(withVersions(primaryOnly), {
+  query: (dispatch, { name }) =>
+    name
+      ? settleQuery(
+          dispatch(marketV2Api.endpoints.getLocationDetail.initiate({ name })),
+        )
+      : null,
+  notFound: V2_NOT_FOUND,
+})
+
+export const blueprintLoader = ssrLoader(withVersions(primaryOnly), {
+  query: (dispatch, { slug }) =>
+    slug
+      ? settleQuery(
+          dispatch(
+            marketV2Api.endpoints.getBlueprintDetail.initiate({
+              blueprintId: slug,
+            }),
+          ),
+        )
+      : null,
+  notFound: V2_NOT_FOUND,
+})
+
+export const missionLoader = ssrLoader(withVersions(primaryOnly), {
+  query: (dispatch, { slug }) =>
+    slug
+      ? settleQuery(
+          dispatch(
+            marketV2Api.endpoints.getMissionDetail.initiate({
+              missionId: slug,
+            }),
+          ),
+        )
+      : null,
+  notFound: V2_NOT_FOUND,
 })

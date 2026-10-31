@@ -22,7 +22,8 @@ import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate } from "./seo/pageHead"
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
-import i18n, { initialLocaleReady } from "./util/i18n"
+import i18n, { initialLocaleReady, toSupportedLocale } from "./util/i18n"
+import { renderedVariant } from "./ssr/requestContext"
 import { installLinkIntentPrefetch } from "./router/routePrefetch"
 import {
   loadMatchedPages,
@@ -190,13 +191,22 @@ const app = (
 // with a filter in the URL (hasPageQuery) the app renders from scratch
 // instead of hydrating it (document.html keeps it hidden until the root
 // route's first effect).
-const renderFresh = () =>
-  container.hasAttribute("data-prerendered") &&
-  (!isMainSiteHostname(window.location.hostname) ||
+// A server-rendered page may be in the visitor's language and light theme
+// already (the SSR Function marks the variant on <html>): it hydrates when
+// the variant it has is the one the visitor gets.
+const renderFresh = () => {
+  if (!container.hasAttribute("data-prerendered")) return false
+  const rendered = renderedVariant()
+  const visitorLight =
+    // Set by document.html's pre-theme script.
+    document.documentElement.getAttribute("data-pre-theme") === "light"
+  return (
+    !isMainSiteHostname(window.location.hostname) ||
     hasPageQuery(window.location.search) ||
-    !i18n.language.toLowerCase().startsWith("en") ||
-    // Set by document.html's pre-theme script for the light theme.
-    document.documentElement.getAttribute("data-pre-theme") === "light")
+    toSupportedLocale(i18n.language) !== rendered.lng ||
+    visitorLight !== (rendered.theme === "light")
+  )
+}
 
 // A non-English visitor's first render waits (briefly, capped) for their
 // locale's strings, so the page doesn't render English and then reflow; for

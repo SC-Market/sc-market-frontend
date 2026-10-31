@@ -23,10 +23,11 @@ import { matchBridgeRoute, type BridgePageKind } from "../bridge/routes"
 import { inlineStylesheets } from "../../scripts/vite/inlineEntryCssPlugin"
 import { isMainSiteHostname } from "../util/mainSiteHost"
 import { hasPageQuery } from "../document/pageQuery"
-import { createApiFetch } from "./apiFetch"
+import { createApiFetch, type ApiFetch } from "./apiFetch"
 import {
   requestContextFrom,
   SSR_OUTCOME_HEADER,
+  variantKey,
   type SsrEntryModule,
 } from "./protocol"
 import { SSR_BUILD_VERSION } from "./buildVersion"
@@ -60,7 +61,28 @@ export const SSR_KINDS: ReadonlySet<BridgePageKind> = new Set([
   "shop",
   "org",
   "user",
+  ...GAME_DATA_KINDS(),
 ])
+
+/**
+ * Game-data detail pages: their HTML is cached per LIVE game version (a
+ * game-data import starts a new key), so it can be kept much longer.
+ */
+function GAME_DATA_KINDS(): BridgePageKind[] {
+  return [
+    "item",
+    "commodity",
+    "resource",
+    "ship",
+    "ore",
+    "miningLocation",
+    "blueprint",
+    "mission",
+  ]
+}
+export const GAME_DATA_KIND_SET: ReadonlySet<BridgePageKind> = new Set(
+  GAME_DATA_KINDS(),
+)
 
 /**
  * Request header that switches SSR off for that request (any value): set
@@ -93,6 +115,38 @@ export function isCrawler(userAgent: string | null): boolean {
   return !!userAgent && CRAWLER_UA.test(userAgent)
 }
 
+/** How long a cached page is fresh, served stale, and good for crawlers. */
+export interface CachePolicy {
+  fresh: number
+  stale: number
+  crawler: number
+}
+
+/** Listings, shops, orgs, users: s-maxage=60, stale-while-revalidate=600. */
+export const ENTITY_POLICY: CachePolicy = {
+  fresh: HTML_FRESH_SECONDS,
+  stale: HTML_STALE_SECONDS,
+  crawler: CRAWLER_STALE_SECONDS,
+}
+/** Game data (per game version): changes only with an import. */
+export const GAME_DATA_POLICY: CachePolicy = {
+  fresh: 6 * 60 * 60,
+  stale: 7 * 24 * 60 * 60,
+  crawler: 7 * 24 * 60 * 60,
+}
+/** Items and commodities also show live market prices and listings. */
+export const MARKET_GAME_DATA_POLICY: CachePolicy = {
+  fresh: 10 * 60,
+  stale: 6 * 60 * 60,
+  crawler: 24 * 60 * 60,
+}
+
+export function cachePolicy(kind: BridgePageKind): CachePolicy {
+  if (kind === "item" || kind === "commodity") return MARKET_GAME_DATA_POLICY
+  if (GAME_DATA_KIND_SET.has(kind)) return GAME_DATA_POLICY
+  return ENTITY_POLICY
+}
+
 export type CacheUse =
   /** Serve it. */
   | "hit"
@@ -102,11 +156,15 @@ export type CacheUse =
   | "expired"
 
 /** What a cached page of `ageSeconds` is good for; pure (tested). */
-export function cacheUse(ageSeconds: number, crawler: boolean): CacheUse {
+export function cacheUse(
+  ageSeconds: number,
+  crawler: boolean,
+  policy: CachePolicy = ENTITY_POLICY,
+): CacheUse {
   if (!(ageSeconds >= 0)) return "expired"
-  if (ageSeconds <= HTML_FRESH_SECONDS) return "hit"
-  if (ageSeconds <= HTML_FRESH_SECONDS + HTML_STALE_SECONDS) return "stale"
-  if (crawler && ageSeconds <= CRAWLER_STALE_SECONDS) return "hit"
+  if (ageSeconds <= policy.fresh) return "hit"
+  if (ageSeconds <= policy.fresh + policy.stale) return "stale"
+  if (crawler && ageSeconds <= policy.crawler) return "hit"
   return "expired"
 }
 
@@ -199,13 +257,75 @@ async function loadHandler() {
   return handler!
 }
 
-function cacheKey(url: URL): Request {
-  // One anonymous variant per path; the deploy's asset version keeps a
-  // new deploy from serving HTML that references the previous chunks.
-  return new Request(
-    `https://ssr-cache.sc-market.internal/${SSR_BUILD_VERSION}${url.pathname.toLowerCase()}`,
-    { method: "GET" },
-  )
+function cacheKey(url: URL, variant: string, gameVersion: string): string {
+  // One anonymous HTML per path and rendered variant (variantKey: empty for
+  // the default, so most visitors and crawlers share one entry), plus the
+  // LIVE game version for game-data pages; the deploy's asset version keeps
+  // a new deploy from serving HTML that references the previous chunks.
+  return `https://ssr-cache.sc-market.internal/${SSR_BUILD_VERSION}${url.pathname.toLowerCase()}${variant}${gameVersion}`
+}
+
+/** The LIVE game version as a cache-key part ("" when unknown). */
+async function liveGameVersionKey(api: ApiFetch, env: SsrEnv): Promise<string> {
+  const base = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
+  if (!base) return ""
+  try {
+    const response = await api.fetch(`${base}/api/v2/game-data/versions/active`)
+    if (!response.ok) return ""
+    const live = (
+      (await response.json()) as {
+        LIVE?: { version_id?: string; last_data_update?: string }
+      }
+    ).LIVE
+    return live?.version_id
+      ? `@${live.version_id}:${live.last_data_update ?? ""}`
+      : ""
+  } catch {
+    return ""
+  }
+}
+
+/** One request's cache plan: its key, policy and API fetch. */
+interface Plan {
+  key: string
+  /** False when the game version couldn't be read: render, don't cache. */
+  cacheable: boolean
+  policy: CachePolicy
+  api: ApiFetch
+}
+
+function newApiFetch(context: PagesContext): ApiFetch {
+  return createApiFetch({
+    fetch: (input, init) => fetch(input, init),
+    cache: caches.default,
+    waitUntil: (p) => context.waitUntil(p),
+    timeoutMs: API_TIMEOUT_MS,
+    ttlSeconds: API_TTL_SECONDS,
+  })
+}
+
+async function planFor(
+  context: PagesContext,
+  url: URL,
+  kind: BridgePageKind,
+): Promise<Plan> {
+  const api = newApiFetch(context)
+  const variant = variantKey(requestContextFrom(context.request))
+  if (!GAME_DATA_KIND_SET.has(kind)) {
+    return {
+      key: cacheKey(url, variant, ""),
+      cacheable: true,
+      policy: cachePolicy(kind),
+      api,
+    }
+  }
+  const version = await liveGameVersionKey(api, context.env)
+  return {
+    key: cacheKey(url, variant, version),
+    cacheable: version !== "",
+    policy: cachePolicy(kind),
+    api,
+  }
 }
 
 type Rendered =
@@ -213,15 +333,12 @@ type Rendered =
   | { kind: "notFound" }
   | { kind: "failed"; reason: string }
 
-async function render(context: PagesContext, url: URL): Promise<Rendered> {
+async function render(
+  context: PagesContext,
+  url: URL,
+  api: ApiFetch,
+): Promise<Rendered> {
   const requestHandler = await loadHandler()
-  const api = createApiFetch({
-    fetch: (input, init) => fetch(input, init),
-    cache: caches.default,
-    waitUntil: (p) => context.waitUntil(p),
-    timeoutMs: API_TIMEOUT_MS,
-    ttlSeconds: API_TTL_SECONDS,
-  })
   const loadContext = entryModule!.createSsrLoadContext({
     requestContext: requestContextFrom(context.request),
     api,
@@ -267,6 +384,7 @@ function pageResponse(
   html: string,
   url: URL,
   cacheState: string,
+  policy: CachePolicy,
 ): Response {
   const headers = documentHeaders(url, "text/html; charset=utf-8")
   // Browsers always revalidate the HTML (it references hashed chunks: the
@@ -275,7 +393,7 @@ function pageResponse(
   // any cache rule in front of the Function.
   headers.set(
     "CDN-Cache-Control",
-    `max-age=${HTML_FRESH_SECONDS}, stale-while-revalidate=${HTML_STALE_SECONDS}`,
+    `max-age=${policy.fresh}, stale-while-revalidate=${policy.stale}`,
   )
   headers.set("X-SCM-SSR", cacheState)
   return new Response(request.method === "HEAD" ? null : html, {
@@ -285,28 +403,35 @@ function pageResponse(
 }
 
 /**
- * Render and store in the edge cache. Concurrent requests for one path in
+ * Render and store in the edge cache. Concurrent requests for one key in
  * this isolate share one render.
  */
-function renderAndStore(context: PagesContext, url: URL): Promise<Rendered> {
-  const key = cacheKey(url).url
-  const running = inFlight.get(key)
+function renderAndStore(
+  context: PagesContext,
+  url: URL,
+  plan: Plan,
+): Promise<Rendered> {
+  const running = inFlight.get(plan.key)
   if (running) return running
   const job = (async (): Promise<Rendered> => {
-    const rendered = await withDeadline(render(context, url), SSR_DEADLINE_MS)
-    if (rendered.kind === "page") {
+    const rendered = await withDeadline(
+      render(context, url, plan.api),
+      SSR_DEADLINE_MS,
+    )
+    if (rendered.kind === "page" && plan.cacheable) {
+      const { fresh, stale, crawler } = plan.policy
       const entry = new Response(rendered.html, {
         headers: {
           "Content-Type": "text/html; charset=utf-8",
-          "Cache-Control": `public, max-age=${CRAWLER_STALE_SECONDS}`,
+          "Cache-Control": `public, max-age=${Math.max(fresh + stale, crawler)}`,
           [RENDERED_AT_HEADER]: String(Date.now()),
         },
       })
-      context.waitUntil(caches.default.put(key, entry).catch(() => {}))
+      context.waitUntil(caches.default.put(plan.key, entry).catch(() => {}))
     }
     return rendered
-  })().finally(() => inFlight.delete(key))
-  inFlight.set(key, job)
+  })().finally(() => inFlight.delete(plan.key))
+  inFlight.set(plan.key, job)
   return job
 }
 
@@ -319,30 +444,49 @@ export async function onRequest(context: PagesContext): Promise<Response> {
 
   const url = new URL(context.request.url)
   try {
+    const plan = await planFor(context, url, decision.kind)
     // A cache hit never loads the app (no render, ~1 ms CPU).
-    const cached = await caches.default.match(cacheKey(url))
+    const cached = plan.cacheable
+      ? await caches.default.match(plan.key)
+      : undefined
     if (cached) {
       const age =
         (Date.now() - Number(cached.headers.get(RENDERED_AT_HEADER))) / 1000
       const use = cacheUse(
         age,
         isCrawler(context.request.headers.get("User-Agent")),
+        plan.policy,
       )
       if (use === "stale") {
+        // A fresh API fetch: the background render must not share this
+        // request's (already used) one.
+        const background = { ...plan, api: newApiFetch(context) }
         context.waitUntil(
-          renderAndStore(context, url).catch((error) =>
+          renderAndStore(context, url, background).catch((error) =>
             console.warn(`ssr revalidate ${url.pathname}: ${String(error)}`),
           ),
         )
       }
       if (use !== "expired") {
-        return pageResponse(context.request, await cached.text(), url, use)
+        return pageResponse(
+          context.request,
+          await cached.text(),
+          url,
+          use,
+          plan.policy,
+        )
       }
     }
 
-    const rendered = await renderAndStore(context, url)
+    const rendered = await renderAndStore(context, url, plan)
     if (rendered.kind === "page") {
-      return pageResponse(context.request, rendered.html, url, "miss")
+      return pageResponse(
+        context.request,
+        rendered.html,
+        url,
+        "miss",
+        plan.policy,
+      )
     }
     if (rendered.kind === "failed") {
       console.warn(`ssr fail-open ${url.pathname}: ${rendered.reason}`)

@@ -24,6 +24,14 @@ export const SSR_ROUTE_PLACEHOLDERS: readonly string[] = [
   `/contractor/${P}/${P}`,
   `/user/${P}`,
   `/user/${P}/${P}`,
+  `/wiki/items/${P}`,
+  `/wiki/commodities/${P}`,
+  `/wiki/ships/${P}`,
+  `/mining/ores/${P}`,
+  `/mining/locations/${P}`,
+  `/blueprints/${P}`,
+  `/missions/${P}`,
+  `/resources/${P}`,
 ]
 
 export function isSsrPlaceholderPath(pathname: string): boolean {
