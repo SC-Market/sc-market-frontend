@@ -16,6 +16,12 @@ import type {
   WikiManufacturerDetail,
   WikiShipDetail,
 } from "../store/api/v2/market"
+import {
+  missionDisplayTitle,
+  missionGiver,
+  missionSummary,
+  readableMissionText,
+} from "./missionText"
 import { GAME_DATA_PATHS, WIKI_PATHS } from "../routes/paths"
 import { PageHead, socialMeta } from "./pageHead"
 
@@ -380,8 +386,9 @@ export function buildMissionHead(
   origin: string,
 ): PageHead {
   const m = data.mission
-  const title = `${m.mission_name} — Star Citizen Mission | SC Market`
-  const description = `${m.mission_name} — ${m.category || ""} mission${m.star_system ? " in " + m.star_system : ""}. Rewards, objectives, and walkthrough in Star Citizen.`.slice(0, 160)
+  const name = readableMissionText(m.mission_name, missionGiver(m))
+  const title = `${missionDisplayTitle(m)} — Star Citizen Mission | SC Market`
+  const description = missionSummary(data).slice(0, 160)
   const canonical = `${origin}${GAME_DATA_PATHS.mission(routeSlug)}`
 
   return {
@@ -393,8 +400,8 @@ export function buildMissionHead(
         title,
         description,
         ogDescription:
-          m.mission_description?.slice(0, 160) ||
-          `${m.mission_name} — Star Citizen mission`,
+          readableMissionText(m.mission_description, missionGiver(m)).slice(0, 160) ||
+          description,
         url: canonical,
         ogType: "article",
         twitterCard: "summary",
@@ -404,8 +411,11 @@ export function buildMissionHead(
       {
         "@context": "https://schema.org",
         "@type": "HowTo",
-        name: m.mission_name,
-        description: m.mission_description || description,
+        name,
+        description:
+          readableMissionText(m.mission_description, missionGiver(m)) ||
+          description,
+        ...(m.updated_at && { dateModified: m.updated_at }),
         ...(m.credit_reward_max && {
           estimatedCost: {
             "@type": "MonetaryAmount",

@@ -26,13 +26,14 @@ import {
   BuildRounded,
 } from "@mui/icons-material"
 import type { MissionDetailResponse, Mission, MissionRewardPool, MissionBlueprintReward, HaulingOrder } from "../../store/api/v2/market"
-import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName, MissionDescription } from "./MissionName"
 import { MissionRankCalculator } from "./MissionRankCalculator"
 import { MissionTypeDetails } from "./MissionTypeDetails"
 import { GAME_DATA_PATHS } from "../../routes/paths"
+import { missionGiver, usableGiver } from "../../seo/missionText"
 
 // ============================================================================
 // Helpers
@@ -86,33 +87,31 @@ function BoolChip({ value, label }: { value: boolean | undefined; label: string 
 // ============================================================================
 
 export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
-  const navigate = useNavigate()
-  const go = (params: Record<string, string>) => {
-    const sp = new URLSearchParams(params)
-    navigate(`${GAME_DATA_PATHS.missions}?${sp.toString()}`)
-  }
-  const giver = m.mission_giver_org || m.faction
-  const showGiver = giver && !giver.includes("~mission")
+  // Real links (crawlable, open in a new tab), to the filtered mission list.
+  const to = (params: Record<string, string>) =>
+    `${GAME_DATA_PATHS.missions}?${new URLSearchParams(params).toString()}`
+  const link = (params: Record<string, string>) =>
+    ({ component: Link, to: to(params), clickable: true }) as const
+  const giver = missionGiver(m)
 
   return (
     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-      {m.star_system && <Chip label={m.star_system} size="small" variant="outlined" clickable onClick={() => go({ system: m.star_system! })} />}
+      {m.star_system && <Chip label={m.star_system} size="small" variant="outlined" {...link({ system: m.star_system })} />}
       {m.category && (
         <Chip
           label={getMissionTypeLabel(m.category)}
           size="small"
-          clickable
-          onClick={() => go({ category: m.category })}
+          {...link({ category: m.category })}
           icon={getMissionIcon(m.category) ? <img src={getMissionIcon(m.category)!} alt="" style={{ width: 16, height: 16 }} /> : undefined}
         />
       )}
-      {showGiver && <Chip label={giver} size="small" variant="outlined" clickable onClick={() => go({ giver: giver! })} />}
-      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" clickable onClick={() => go({ legal: "ILLEGAL" })} />}
+      {giver && <Chip label={giver} size="small" variant="outlined" {...link({ giver })} />}
+      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" {...link({ legal: "ILLEGAL" })} />}
       {m.is_unique_mission && <Chip label="Unique" size="small" color="warning" />}
-      {m.is_chain_starter && <Chip label="Starter" size="small" color="secondary" clickable onClick={() => go({ chain: "true" })} />}
+      {m.is_chain_starter && <Chip label="Starter" size="small" color="secondary" {...link({ chain: "true" })} />}
       {m.is_chain_mission && !m.is_chain_starter && <Chip label="Chain" size="small" color="secondary" variant="outlined" />}
-      {m.is_shareable && <Chip label="Shareable" size="small" variant="outlined" clickable onClick={() => go({ shareable: "true" })} />}
-      {m.associated_event && <Chip label={m.associated_event} size="small" clickable onClick={() => go({ show_events: "true", event: m.associated_event! })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
+      {m.is_shareable && <Chip label="Shareable" size="small" variant="outlined" {...link({ shareable: "true" })} />}
+      {m.associated_event && <Chip label={m.associated_event} size="small" {...link({ show_events: "true", event: m.associated_event })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
       {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" />}
     </Stack>
   )
@@ -144,10 +143,12 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
       <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="scrollable">
         {tabs.map((t) => <Tab key={t.id} label={t.label} />)}
       </Tabs>
+      {/* Every panel is in the page (the inactive ones hidden), so the HTML
+          has the whole mission: rewards, requirements, cooldowns, chain. */}
       <Box sx={{ pt: 2 }}>
-        {activeTab === "overview" && <OverviewTab data={data} onBlueprintClick={onBlueprintClick} />}
-        {activeTab === "details" && <MissionTypeDetails data={data} />}
-        {activeTab === "requirements" && <RequirementsTab data={data} />}
+        <Box hidden={activeTab !== "overview"}><OverviewTab data={data} onBlueprintClick={onBlueprintClick} /></Box>
+        {hasDetails && <Box hidden={activeTab !== "details"}><MissionTypeDetails data={data} /></Box>}
+        <Box hidden={activeTab !== "requirements"}><RequirementsTab data={data} /></Box>
         {activeTab === "calculator" && m.reward_scope && (
           <MissionRankCalculator
             reputationReward={m.reputation_reward || 0}
@@ -158,7 +159,7 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
             isShareable={m.is_shareable}
           />
         )}
-        {activeTab === "chain" && <ChainTab data={data} />}
+        {hasChain && <Box hidden={activeTab !== "chain"}><ChainTab data={data} /></Box>}
       </Box>
     </>
   )
@@ -174,7 +175,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
   return (
     <Stack spacing={2}>
       {m.mission_description && (
-        <MissionDescription text={m.mission_description} variant="body2" color="text.secondary" sx={{ whiteSpace: "pre-line" }} />
+        <MissionDescription text={m.mission_description} giver={missionGiver(m)} variant="body2" color="text.secondary" sx={{ whiteSpace: "pre-line" }} />
       )}
 
       <Divider />
@@ -203,10 +204,22 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
             <Typography variant="body2">{m.reputation_reward.toLocaleString()} XP</Typography>
           </Stack>
         )}
-        {m.faction && !m.faction.includes("~mission") && (
+        {usableGiver(m.mission_giver_org) && (
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="body2" color="text.secondary">Mission giver</Typography>
+            <Typography variant="body2">{m.mission_giver_org}</Typography>
+          </Stack>
+        )}
+        {usableGiver(m.faction) && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">Faction</Typography>
             <Typography variant="body2">{m.faction}</Typography>
+          </Stack>
+        )}
+        {usableGiver(m.reputation_reward_faction) && m.reputation_reward_faction !== m.faction && (
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="body2" color="text.secondary">Reputation with</Typography>
+            <Typography variant="body2">{m.reputation_reward_faction}</Typography>
           </Stack>
         )}
         {m.reward_scope && (
@@ -260,7 +273,16 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                           <TableCell>
                             <Stack direction="row" spacing={0.75} alignItems="center">
                               <BuildRounded sx={{ fontSize: 14, color: "success.main" }} />
-                              <Typography variant="body2" fontWeight={600}>{bp.output_item_name || bp.blueprint_name}</Typography>
+                              <Typography
+                                variant="body2"
+                                fontWeight={600}
+                                component={Link}
+                                to={GAME_DATA_PATHS.blueprint(bp.blueprint_id)}
+                                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                                sx={{ color: "inherit", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                              >
+                                {bp.output_item_name || bp.blueprint_name}
+                              </Typography>
                               {bp.user_owns && <CheckCircleOutline sx={{ fontSize: 14, color: "success.main" }} />}
                             </Stack>
                           </TableCell>
@@ -475,7 +497,9 @@ function ChainTab({ data }: { data: MissionDetailResponse }) {
           <Stack spacing={0.5}>
             {data.prerequisite_missions!.map((pm) => (
               <Stack key={pm.mission_id} direction="row" spacing={1} alignItems="center">
-                <MissionName name={pm.mission_name} variant="body2" />
+                <Link to={GAME_DATA_PATHS.mission(pm.mission_id)} style={{ color: "inherit" }}>
+                  <MissionName name={pm.mission_name} variant="body2" component="span" />
+                </Link>
                 {pm.category && <Chip label={getMissionTypeLabel(pm.category)} size="small" variant="outlined" />}
               </Stack>
             ))}

@@ -255,7 +255,7 @@ describe("MissionDetail", () => {
     renderWithProviders()
 
     // Mission name is rendered by StandardPageLayout headerTitle (mocked to <h1>)
-    expect(screen.getByText("Test Mission")).toBeInTheDocument()
+    expect(screen.getByText("Test Mission (Hurston Dynamics, Combat, Stanton)")).toBeInTheDocument()
     // Header chips (redesigned)
     expect(screen.getByText("Stanton")).toBeInTheDocument()
     expect(screen.getByText("Combat")).toBeInTheDocument()
@@ -263,8 +263,8 @@ describe("MissionDetail", () => {
     expect(screen.getAllByText("Hurston Dynamics").length).toBeGreaterThan(0)
     // difficulty renders as "D3"
     expect(screen.getByText("D3")).toBeInTheDocument()
-    // shareable chip
-    expect(screen.getByText("Shareable")).toBeInTheDocument()
+    // shareable chip (also in the Requirements panel, which is in the DOM)
+    expect(screen.getAllByText("Shareable").length).toBeGreaterThan(0)
     // chain starter renders as "Starter" chip
     expect(screen.getByText("Starter")).toBeInTheDocument()
     // legal missions do not render a legal_status chip

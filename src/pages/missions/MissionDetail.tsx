@@ -3,12 +3,18 @@
  */
 
 import React from "react"
-import { Box, Alert, Grid } from "@mui/material"
+import { Box, Alert, Grid, Typography } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { MissionName } from "../../components/game-data/MissionName"
+import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
+import {
+  missionDisplayTitle,
+  missionGiver,
+  missionSummary,
+  readableMissionText,
+} from "../../seo/missionText"
 import { MissionHeaderChips, MissionDetailTabs } from "../../components/game-data/MissionDetailContent"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { FRONTEND_URL } from "../../util/constants"
@@ -38,10 +44,10 @@ export function MissionDetail() {
       title={seoTitle}
       description={seoDescription}
       canonicalUrl={`/missions/${slug}`}
-      headerTitle={m?.mission_name || t("missions.detail.header", "Mission Detail")}
+      headerTitle={m ? missionDisplayTitle(m) : t("missions.detail.header", "Mission Detail")}
       breadcrumbs={[
         { label: "Missions", href: GAME_DATA_PATHS.missions },
-        { label: m?.mission_name || "Detail" },
+        { label: m ? readableMissionText(m.mission_name, missionGiver(m)) : "Detail" },
       ]}
       isLoading={isLoading}
       error={error || undefined}
@@ -61,10 +67,15 @@ export function MissionDetail() {
       {data && m && (
         <Grid item xs={12}>
           {head && <SeoHead head={head} />}
+          {/* A quotable one-line summary (the page head uses the same). */}
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            {missionSummary(data)}
+          </Typography>
           <Box sx={{ mb: 2 }}>
             <MissionHeaderChips mission={m} />
           </Box>
           <MissionDetailTabs data={data} onBlueprintClick={(id) => navigate(GAME_DATA_PATHS.blueprint(id))} />
+          <GameDataFreshness />
         </Grid>
       )}
     </StandardPageLayout>

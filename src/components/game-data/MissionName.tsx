@@ -1,86 +1,68 @@
 import React from "react"
 import { Typography, TypographyProps } from "@mui/material"
-
-/** Style for placeholder tokens like [DESTINATION] */
-const placeholderSx = { fontFamily: "monospace", color: "secondary.main", fontSize: "0.9em" } as const
+import { missionTextParts } from "../../seo/missionText"
 
 /**
- * Renders a mission name with ~mission(...) placeholders styled as
- * monospace secondary-colored [LABEL] spans.
+ * A placeholder the game fills in at runtime ("Location", "Target Name"):
+ * readable words, set apart by colour and italics.
  */
-export function MissionName({
-  name,
-  ...props
-}: { name: string | null | undefined } & Omit<TypographyProps, "children">) {
-  if (!name) return <Typography {...props}>Unknown Mission</Typography>
+const placeholderSx = { color: "secondary.main", fontStyle: "italic" } as const
 
-  const cleaned = name.replace(/<\/?em\d*>/gi, "")
-
-  const parts = cleaned.split(/(~mission\([^)]+\))/)
-
+function Parts({
+  text,
+  giver,
+}: {
+  text: string | null | undefined
+  giver?: string | null
+}) {
   return (
-    <Typography {...props}>
-      {parts.map((part, i) => {
-        const match = part.match(/^~mission\(([^)]+)\)$/)
-        if (!match) return <React.Fragment key={i}>{part}</React.Fragment>
-
-        const inner = match[1]
-        const key = inner.split("|").pop() || inner
-        
-        // ~mission(Contractor) or ~mission(Contractor|...) → "Various"
-        if (inner === "Contractor" || inner.startsWith("Contractor|")) {
-          return (
-            <Typography key={i} component="span" sx={placeholderSx}>
-              Various
-            </Typography>
-          )
-        }
-
-        const label = key
-          .replace(/([a-z])([A-Z])/g, "$1 $2")
-          .replace(/[_]/g, " ")
-          .trim()
-          .toUpperCase()
-
-        return (
+    <>
+      {missionTextParts(text, giver).map((part, i) =>
+        part.placeholder ? (
           <Typography key={i} component="span" sx={placeholderSx}>
-            [{label}]
+            {part.text}
           </Typography>
-        )
-      })}
-    </Typography>
+        ) : (
+          <React.Fragment key={i}>{part.text}</React.Fragment>
+        ),
+      )}
+    </>
   )
 }
 
 /**
- * Renders mission description text with [PLACEHOLDER] tokens styled
- * as monospace secondary-colored spans. Also handles ~mission() syntax.
+ * A mission name with the game's placeholders (~mission(...), [LOCATION])
+ * as readable words (src/seo/missionText.ts, shared with the page head).
  */
-export function MissionDescription({
-  text,
+export function MissionName({
+  name,
+  giver,
   ...props
-}: { text: string | null | undefined } & Omit<TypographyProps, "children">) {
-  if (!text) return null
-
-  // First strip em tags, convert ~mission() to [LABEL], then style all [BRACKETS]
-  const processed = text
-    .replace(/<\/?em\d*>/gi, "")
-    .replace(/~mission\(([^|)]+)\|?[^)]*\)/g, (_, key) => {
-      if (key === "Contractor") return "[Various]"
-      return `[${key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_]/g, " ").trim().toUpperCase()}]`
-    })
-    .replace(/\\n/g, "\n")
-
-  // Split on [ANYTHING] tokens
-  const parts = processed.split(/(\[[A-Z][A-Z0-9 _/]*\])/)
-
+}: { name: string | null | undefined; giver?: string | null } & Omit<
+  TypographyProps,
+  "children"
+>) {
+  if (!name) return <Typography {...props}>Unknown Mission</Typography>
   return (
     <Typography {...props}>
-      {parts.map((part, i) =>
-        /^\[[A-Z][A-Z0-9 _/]*\]$/.test(part)
-          ? <Typography key={i} component="span" sx={placeholderSx}>{part}</Typography>
-          : <React.Fragment key={i}>{part}</React.Fragment>
-      )}
+      <Parts text={name} giver={giver} />
+    </Typography>
+  )
+}
+
+/** Mission description text, placeholders as in MissionName. */
+export function MissionDescription({
+  text,
+  giver,
+  ...props
+}: { text: string | null | undefined; giver?: string | null } & Omit<
+  TypographyProps,
+  "children"
+>) {
+  if (!text) return null
+  return (
+    <Typography {...props}>
+      <Parts text={text} giver={giver} />
     </Typography>
   )
 }
