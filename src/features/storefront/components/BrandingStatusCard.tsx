@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next"
 import { useGetOrgStorefrontStatusQuery } from "../../../store/api/v2/market"
 import { ORG_PATHS, PATHS } from "../../../routes/paths"
 import { EnquireBrandedStorefront } from "./EnquireBrandedStorefront"
+import { isRsiVerifiedSpectrumId } from "../domain"
 
 function Criterion(props: { met: boolean; primary: string; secondary?: React.ReactNode }) {
   return (
@@ -61,7 +62,10 @@ export function BrandingStatusCard(props: { spectrumId: string }) {
 
   const { branding } = data
   const { criteria } = branding
-  const subdomain = `${props.spectrumId.toLowerCase()}.sc-market.space`
+  // Subdomains are RSI spectrum IDs; a "~" custom org has none yet.
+  const subdomain = isRsiVerifiedSpectrumId(props.spectrumId)
+    ? `${props.spectrumId.toLowerCase()}.sc-market.space`
+    : "yourorg.sc-market.space"
 
   return (
     <Paper sx={{ p: 2 }} data-testid="branding-status">
