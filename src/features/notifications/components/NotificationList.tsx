@@ -1,5 +1,5 @@
 import React from "react"
-import { List, ListSubheader, type SxProps, type Theme } from "@mui/material"
+import { Box, List, ListSubheader, type SxProps, type Theme } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import type { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -63,7 +63,6 @@ export function NotificationList({
               <React.Fragment key={group}>
                 <ListSubheader
                   disableSticky
-                  component="h2"
                   sx={{
                     typography: "overline",
                     lineHeight: 2.5,
@@ -73,7 +72,12 @@ export function NotificationList({
                     pt: 1,
                   }}
                 >
-                  {t(key, fallback)}
+                  <Box
+                    component="h2"
+                    sx={{ m: 0, font: "inherit", color: "inherit" }}
+                  >
+                    {t(key, fallback)}
+                  </Box>
                 </ListSubheader>
                 {rows(items)}
               </React.Fragment>

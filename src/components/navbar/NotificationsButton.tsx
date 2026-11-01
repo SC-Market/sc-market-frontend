@@ -146,7 +146,13 @@ export function NotificationsButton() {
             }}
           />
         </Box>
-        <Box sx={{ overflowY: "auto", flex: "1 1 auto", minHeight: 0 }}>
+        <Box
+          sx={{ overflowY: "auto", flex: "1 1 auto", minHeight: 0 }}
+          // following a notification's link leaves the popover
+          onClick={(e) => {
+            if ((e.target as HTMLElement).closest("a[href]")) handleClose()
+          }}
+        >
           {notifications.length === 0 ? (
             <EmptyNotifications sx={{ minHeight: 0, py: 4 }} />
           ) : (

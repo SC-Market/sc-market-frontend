@@ -153,8 +153,11 @@ export function NotificationBase(props: {
 
   return (
     <>
-      <LongPressMenu actions={actions} enabled={isMobile}>
+      {/* The long-press wrapper is the list's <li>; the row inside is a div
+          so the list stays ul > li. */}
+      <LongPressMenu actions={actions} enabled={isMobile} component="li">
         <ListItem
+          component="div"
           disablePadding
           secondaryAction={actionsButton}
           sx={{
