@@ -1908,6 +1908,7 @@
     "commentLabel": "コメント",
     "ratingLabel": "評価：",
     "leaveReviewButton": "レビューを残す",
+    "notFinishedHint": "注文が完了またはキャンセルされると、レビューを残せます。",
     "alert": {
       "success": "レビューを残しました！",
       "error": "レビューの投稿に失敗しました！"

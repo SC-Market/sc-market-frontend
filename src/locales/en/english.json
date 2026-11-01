@@ -3498,6 +3498,7 @@
     "commentLabel": "Comment",
     "leaveFor": "Leave a review for",
     "leaveReviewButton": "Leave Review",
+    "notFinishedHint": "You can review once the order is completed or cancelled.",
     "ratingLabel": "Rating:",
     "review": "Review"
   },

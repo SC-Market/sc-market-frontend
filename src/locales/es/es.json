@@ -1912,6 +1912,7 @@
     "commentLabel": "Comentario",
     "ratingLabel": "Valoración:",
     "leaveReviewButton": "Dejar reseña",
+    "notFinishedHint": "Podrá dejar una reseña cuando el pedido esté completado o cancelado.",
     "alert": {
       "success": "¡Reseña dejada!",
       "error": "¡No se pudo dejar la reseña!"

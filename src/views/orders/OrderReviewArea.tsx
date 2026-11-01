@@ -4,9 +4,15 @@ import { Section } from "../../components/paper/Section"
 import { AddRounded, StarRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { Order } from "../../features/orders/domain/types"
+import { Order, OrderStatus } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { useOrderReview } from "../../features/orders/hooks/useOrderReview"
+
+/** Reviews are accepted only once an order is finished (matches the backend gate). */
+export const REVIEWABLE_ORDER_STATUSES: readonly OrderStatus[] = [
+  "fulfilled",
+  "cancelled",
+]
 
 export function OrderReviewArea(props: {
   asCustomer?: boolean
@@ -19,6 +25,7 @@ export function OrderReviewArea(props: {
   const role = props.asCustomer ? "customer" : "contractor"
   const { content, setContent, rating, setRating, submitReview } =
     useOrderReview(order.order_id, role)
+  const finished = REVIEWABLE_ORDER_STATUSES.includes(order.status)
 
   return (
     <>
@@ -41,6 +48,7 @@ export function OrderReviewArea(props: {
             }}
             color={"secondary"}
             label={t("orderReviewArea.commentLabel")}
+            disabled={!finished}
           />
         </Grid>
 
@@ -58,7 +66,8 @@ export function OrderReviewArea(props: {
             onChange={(event, newValue) => {
               setRating(newValue!)
             }}
-            precision={0.5}
+            precision={1}
+            disabled={!finished}
             size={"large"}
             color={"white"}
             icon={<StarRounded fontSize="inherit" />}
@@ -72,15 +81,30 @@ export function OrderReviewArea(props: {
         </Grid>
 
         <Grid item xs={12}>
-          <Grid container justifyContent={"right"}>
-            <Button
-              color={"secondary"}
-              startIcon={<AddRounded />}
-              onClick={submitReview}
-              variant={"contained"}
-            >
-              {t("orderReviewArea.leaveReviewButton")}
-            </Button>
+          <Grid
+            container
+            justifyContent={"right"}
+            alignItems={"center"}
+            spacing={1}
+          >
+            {!finished && (
+              <Grid item>
+                <Typography variant={"body2"} color={"text.primary"}>
+                  {t("orderReviewArea.notFinishedHint")}
+                </Typography>
+              </Grid>
+            )}
+            <Grid item>
+              <Button
+                color={"secondary"}
+                startIcon={<AddRounded />}
+                onClick={submitReview}
+                variant={"contained"}
+                disabled={!finished}
+              >
+                {t("orderReviewArea.leaveReviewButton")}
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Section>

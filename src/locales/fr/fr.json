@@ -1912,6 +1912,7 @@
     "commentLabel": "Commentaire",
     "ratingLabel": "Note :",
     "leaveReviewButton": "Laisser un avis",
+    "notFinishedHint": "Vous pourrez laisser un avis une fois la commande terminée ou annulée.",
     "alert": {
       "success": "Avis publié !",
       "error": "Échec de la publication de l'avis !"

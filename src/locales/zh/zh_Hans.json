@@ -1910,6 +1910,7 @@
     "commentLabel": "评论",
     "ratingLabel": "评分：",
     "leaveReviewButton": "发表评价",
+    "notFinishedHint": "订单完成或取消后即可评价。",
     "alert": {
       "success": "已发表评价！",
       "error": "发表评价失败！"

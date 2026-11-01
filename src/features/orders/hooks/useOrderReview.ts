@@ -2,6 +2,7 @@ import { useCallback, useState } from "react"
 import { useLeaveOrderReviewMutation } from "../api/ordersApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import { extractErrorMessage } from "../../../store/api-utils"
 
 export function useOrderReview(orderId: string, role: "customer" | "contractor") {
   const [content, setContent] = useState("")
@@ -22,9 +23,10 @@ export function useOrderReview(orderId: string, role: "customer" | "contractor")
       issueAlert({ message: t("orderReviewArea.alert.success"), severity: "success" })
       setContent("")
     } else {
-      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
+      // RTK puts the server body under error.data ({ error: { code, message } }).
+      const error = "error" in res ? (res.error as { data?: unknown }) : undefined
       issueAlert({
-        message: `${t("orderReviewArea.alert.error")} ${error?.error || error?.data?.error || ""}`,
+        message: `${t("orderReviewArea.alert.error")} ${extractErrorMessage(error?.data) || ""}`,
         severity: "error",
       })
     }

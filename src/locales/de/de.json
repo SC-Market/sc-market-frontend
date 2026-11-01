@@ -1908,6 +1908,7 @@
     "commentLabel": "Kommentar",
     "ratingLabel": "Bewertung:",
     "leaveReviewButton": "Bewertung abgeben",
+    "notFinishedHint": "Sie können eine Bewertung abgeben, sobald die Bestellung abgeschlossen oder storniert ist.",
     "alert": {
       "success": "Bewertung abgegeben!",
       "error": "Bewertung konnte nicht abgegeben werden!"

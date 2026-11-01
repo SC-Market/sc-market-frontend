@@ -1853,6 +1853,7 @@
     "commentLabel": "留言",
     "ratingLabel": "評分：",
     "leaveReviewButton": "留下評價",
+    "notFinishedHint": "訂單完成或取消後即可評價。",
     "alert": {
       "success": "已留下評價！",
       "error": "留下評價失敗！"
