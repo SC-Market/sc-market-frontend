@@ -3230,7 +3230,8 @@
     "themeTab": "Tema",
     "themeWhiteLabelTab": "Tema y marca blanca",
     "whiteLabelTab": "Marca blanca",
-    "storefrontTab": "Escaparate"
+    "storefrontTab": "Escaparate",
+    "analyticsTab": "Estadísticas"
   },
   "dashboard": {
     "activityFeed": {
@@ -5830,6 +5831,30 @@
     "verified": {
       "label": "Org verificada",
       "tooltip": "Esta org demostró que gestiona su página de org de RSI al registrarse en SC Market."
+    },
+    "analytics": {
+      "loadFailed": "No se pudieron cargar las estadísticas de la org. Inténtalo más tarde.",
+      "title": "Estadísticas de la org",
+      "intro": "Todas las tiendas de tu org sumadas. Las visitas se cuentan desde que empezó su registro.",
+      "views": "Visitas a anuncios",
+      "uniqueViewers": "Visitantes con sesión",
+      "cartAdds": "Añadidos al carrito",
+      "orders": "Pedidos del mercado",
+      "sales": "Ventas",
+      "conversion": "Ventas por visita",
+      "completed": "Pedidos completados (de todo tipo)",
+      "listings": "Anuncios activos",
+      "byShop": "Por tienda",
+      "shop": "Tienda",
+      "topListings": "Anuncios más vistos",
+      "listing": "Anuncio",
+      "byMember": "Pedidos por miembro",
+      "byMemberNote": "Solo lo ven los miembros con Gestionar pedidos. Ordenado por nombre, para repartir el trabajo; no es una clasificación. Pedidos abiertos sin asignar: {{n}}.",
+      "noAssigned": "Aún no se han asignado pedidos a miembros.",
+      "member": "Miembro",
+      "assigned": "Asignados",
+      "done": "Completados",
+      "open": "Abiertos"
     }
   }
 }

@@ -80,6 +80,7 @@ export const ORG_PATHS = {
   manageCustomers: (spectrumId: string) => `/org/${spectrumId}/manage/customers`,
   manageTheme: (spectrumId: string) => `/org/${spectrumId}/manage/theme`,
   manageStorefront: (spectrumId: string) => `/org/${spectrumId}/manage/storefront`,
+  manageAnalytics: (spectrumId: string) => `/org/${spectrumId}/manage/analytics`,
   members: (spectrumId: string) => `/org/${spectrumId}/members`,
   orders: (spectrumId: string) => `/org/${spectrumId}/orders`,
   money: (spectrumId: string) => `/org/${spectrumId}/money`,

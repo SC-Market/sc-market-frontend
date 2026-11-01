@@ -3646,7 +3646,8 @@
     "themeTab": "Theme",
     "themeWhiteLabelTab": "Theme & White Label",
     "whiteLabelTab": "White Label",
-    "storefrontTab": "Storefront"
+    "storefrontTab": "Storefront",
+    "analyticsTab": "Analytics"
   },
   "orgAbout": {
     "appearanceSubtitle": "Logo and banner for your organization",
@@ -5797,6 +5798,30 @@
     "verified": {
       "label": "Verified org",
       "tooltip": "This org proved it runs its RSI org page when it registered on SC Market."
+    },
+    "analytics": {
+      "loadFailed": "Org analytics couldn't be loaded. Try again later.",
+      "title": "Org analytics",
+      "intro": "Every shop your org owns, added up. Views are counted since view tracking began.",
+      "views": "Listing views",
+      "uniqueViewers": "Signed-in viewers",
+      "cartAdds": "Cart adds",
+      "orders": "Market orders",
+      "sales": "Sales",
+      "conversion": "Sales per view",
+      "completed": "Completed orders (all kinds)",
+      "listings": "Active listings",
+      "byShop": "By shop",
+      "shop": "Shop",
+      "topListings": "Most viewed listings",
+      "listing": "Listing",
+      "byMember": "Orders per member",
+      "byMemberNote": "Only members with Manage Orders see this. Listed by name, to help share out the work; it isn't a ranking. Open orders nobody has claimed: {{n}}.",
+      "noAssigned": "No orders have been assigned to members yet.",
+      "member": "Member",
+      "assigned": "Assigned",
+      "done": "Completed",
+      "open": "Open"
     }
   }
 }

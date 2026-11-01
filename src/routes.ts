@@ -692,6 +692,11 @@ export default [
                         path: "storefront",
                         file: "routes/pages/OrgStorefrontPage.tsx",
                       },
+                      {
+                        id: "routes/pages/OrgAnalyticsPage",
+                        path: "analytics",
+                        file: "routes/pages/OrgAnalyticsPage.tsx",
+                      },
                     ],
                   },
                 ],

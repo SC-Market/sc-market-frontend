@@ -18,6 +18,7 @@ import {
   PaletteRounded,
   PersonAddRounded,
   StorefrontRounded,
+  InsightsRounded,
 } from "@mui/icons-material"
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -57,6 +58,7 @@ export function OrgManageLayout() {
       // The theme page holds both the theme editor and the white-label
       // settings (OrgThemePage), so one item covers both.
       storefront: { label: t("org.storefrontTab", "Storefront"), icon: <StorefrontRounded /> },
+      analytics: { label: t("org.analyticsTab", "Analytics"), icon: <InsightsRounded /> },
       theme: { label: t("org.themeWhiteLabelTab", "Theme & White Label"), icon: <PaletteRounded /> },
     }
     return visibleOrgManageTabs(contractor, profile, brandingUnlocked).map((value) => ({ value, ...meta[value] }))

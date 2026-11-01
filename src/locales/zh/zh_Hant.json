@@ -3137,7 +3137,8 @@
     "themeTab": "主題",
     "themeWhiteLabelTab": "主題與白牌",
     "whiteLabelTab": "白牌",
-    "storefrontTab": "店面"
+    "storefrontTab": "店面",
+    "analyticsTab": "分析"
   },
   "dashboard": {
     "activityFeed": {
@@ -5796,6 +5797,30 @@
     "verified": {
       "label": "已驗證組織",
       "tooltip": "該組織在註冊 SC Market 時證明了自己管理著其 RSI 組織頁面。"
+    },
+    "analytics": {
+      "loadFailed": "無法載入組織分析，請稍後再試。",
+      "title": "組織分析",
+      "intro": "你的組織擁有的所有店鋪的合計。瀏覽量從開始統計時算起。",
+      "views": "商品瀏覽量",
+      "uniqueViewers": "已登入訪客",
+      "cartAdds": "加入購物車",
+      "orders": "市場訂單",
+      "sales": "銷售",
+      "conversion": "每次瀏覽的銷售率",
+      "completed": "已完成訂單（所有類型）",
+      "listings": "上架中商品",
+      "byShop": "依店鋪",
+      "shop": "店鋪",
+      "topListings": "瀏覽最多的商品",
+      "listing": "商品",
+      "byMember": "依成員統計的訂單",
+      "byMemberNote": "只有擁有「管理訂單」權限的成員可以看到。依名稱排列，用於分配工作，並非排名。無人認領的未完成訂單：{{n}}。",
+      "noAssigned": "還沒有訂單分配給成員。",
+      "member": "成員",
+      "assigned": "已分配",
+      "done": "已完成",
+      "open": "未完成"
     }
   }
 }

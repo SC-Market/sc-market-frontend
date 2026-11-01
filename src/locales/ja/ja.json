@@ -3216,7 +3216,8 @@
     "themeTab": "テーマ",
     "themeWhiteLabelTab": "テーマとホワイトラベル",
     "whiteLabelTab": "ホワイトラベル",
-    "storefrontTab": "ストアフロント"
+    "storefrontTab": "ストアフロント",
+    "analyticsTab": "分析"
   },
   "dashboard": {
     "activityFeed": {
@@ -5796,6 +5797,30 @@
     "verified": {
       "label": "認証済み組織",
       "tooltip": "この組織は SC Market への登録時に、RSI の組織ページを管理していることを証明しました。"
+    },
+    "analytics": {
+      "loadFailed": "組織の分析を読み込めませんでした。しばらくしてからもう一度お試しください。",
+      "title": "組織の分析",
+      "intro": "組織が所有するすべてのショップの合計です。閲覧数は計測開始以降の数です。",
+      "views": "出品の閲覧数",
+      "uniqueViewers": "ログイン中の閲覧者",
+      "cartAdds": "カート追加",
+      "orders": "マーケット注文",
+      "sales": "販売",
+      "conversion": "閲覧あたりの販売率",
+      "completed": "完了した注文（全種類）",
+      "listings": "公開中の出品",
+      "byShop": "ショップ別",
+      "shop": "ショップ",
+      "topListings": "よく見られている出品",
+      "listing": "出品",
+      "byMember": "メンバー別の注文",
+      "byMemberNote": "「注文の管理」権限を持つメンバーだけが見られます。作業分担のため名前順で表示しており、ランキングではありません。誰も担当していない未完了の注文：{{n}}件。",
+      "noAssigned": "まだメンバーに割り当てられた注文はありません。",
+      "member": "メンバー",
+      "assigned": "担当",
+      "done": "完了",
+      "open": "未完了"
     }
   }
 }

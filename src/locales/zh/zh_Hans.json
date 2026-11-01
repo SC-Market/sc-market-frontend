@@ -3229,7 +3229,8 @@
     "themeTab": "主题",
     "themeWhiteLabelTab": "主题与白标",
     "whiteLabelTab": "白标",
-    "storefrontTab": "店面"
+    "storefrontTab": "店面",
+    "analyticsTab": "分析"
   },
   "dashboard": {
     "activityFeed": {
@@ -5802,6 +5803,30 @@
     "verified": {
       "label": "已验证组织",
       "tooltip": "该组织在注册 SC Market 时证明了自己管理着其 RSI 组织页面。"
+    },
+    "analytics": {
+      "loadFailed": "无法加载组织分析，请稍后再试。",
+      "title": "组织分析",
+      "intro": "你的组织拥有的所有店铺的合计。浏览量从开始统计时算起。",
+      "views": "商品浏览量",
+      "uniqueViewers": "已登录访客",
+      "cartAdds": "加入购物车",
+      "orders": "市场订单",
+      "sales": "销售",
+      "conversion": "每次浏览的销售率",
+      "completed": "已完成订单（所有类型）",
+      "listings": "在售商品",
+      "byShop": "按店铺",
+      "shop": "店铺",
+      "topListings": "浏览最多的商品",
+      "listing": "商品",
+      "byMember": "按成员统计的订单",
+      "byMemberNote": "只有拥有“管理订单”权限的成员可以看到。按名称排列，用于分配工作，并非排名。无人认领的未完成订单：{{n}}。",
+      "noAssigned": "还没有订单分配给成员。",
+      "member": "成员",
+      "assigned": "已分配",
+      "done": "已完成",
+      "open": "未完成"
     }
   }
 }

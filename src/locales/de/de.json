@@ -3216,7 +3216,8 @@
     "themeTab": "Design",
     "themeWhiteLabelTab": "Design & White-Label",
     "whiteLabelTab": "White-Label",
-    "storefrontTab": "Storefront"
+    "storefrontTab": "Storefront",
+    "analyticsTab": "Statistiken"
   },
   "dashboard": {
     "activityFeed": {
@@ -5797,6 +5798,30 @@
     "verified": {
       "label": "Verifizierte Org",
       "tooltip": "Diese Org hat bei der Registrierung auf SC Market nachgewiesen, dass sie ihre RSI-Org-Seite verwaltet."
+    },
+    "analytics": {
+      "loadFailed": "Die Org-Statistiken konnten nicht geladen werden. Versuche es später erneut.",
+      "title": "Org-Statistiken",
+      "intro": "Alle Shops deiner Org zusammengerechnet. Aufrufe werden seit Beginn der Aufruferfassung gezählt.",
+      "views": "Angebotsaufrufe",
+      "uniqueViewers": "Angemeldete Besucher",
+      "cartAdds": "In den Warenkorb",
+      "orders": "Marktbestellungen",
+      "sales": "Verkäufe",
+      "conversion": "Verkäufe pro Aufruf",
+      "completed": "Abgeschlossene Bestellungen (alle Arten)",
+      "listings": "Aktive Angebote",
+      "byShop": "Nach Shop",
+      "shop": "Shop",
+      "topListings": "Meistgesehene Angebote",
+      "listing": "Angebot",
+      "byMember": "Bestellungen pro Mitglied",
+      "byMemberNote": "Nur Mitglieder mit „Bestellungen verwalten“ sehen das. Nach Namen sortiert, um die Arbeit zu verteilen; es ist keine Rangliste. Offene Bestellungen, die niemand übernommen hat: {{n}}.",
+      "noAssigned": "Mitgliedern wurden noch keine Bestellungen zugewiesen.",
+      "member": "Mitglied",
+      "assigned": "Zugewiesen",
+      "done": "Abgeschlossen",
+      "open": "Offen"
     }
   }
 }

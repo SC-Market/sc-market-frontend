@@ -3230,7 +3230,8 @@
     "themeTab": "Thème",
     "themeWhiteLabelTab": "Thème et marque blanche",
     "whiteLabelTab": "Marque blanche",
-    "storefrontTab": "Vitrine"
+    "storefrontTab": "Vitrine",
+    "analyticsTab": "Statistiques"
   },
   "dashboard": {
     "activityFeed": {
@@ -5830,6 +5831,30 @@
     "verified": {
       "label": "Org vérifiée",
       "tooltip": "Cette org a prouvé qu'elle gère sa page d'org RSI lors de son inscription sur SC Market."
+    },
+    "analytics": {
+      "loadFailed": "Impossible de charger les statistiques de l'org. Réessayez plus tard.",
+      "title": "Statistiques de l'org",
+      "intro": "Toutes les boutiques de votre org, additionnées. Les vues sont comptées depuis le début de leur suivi.",
+      "views": "Vues des annonces",
+      "uniqueViewers": "Visiteurs connectés",
+      "cartAdds": "Ajouts au panier",
+      "orders": "Commandes du marché",
+      "sales": "Ventes",
+      "conversion": "Ventes par vue",
+      "completed": "Commandes terminées (tous types)",
+      "listings": "Annonces actives",
+      "byShop": "Par boutique",
+      "shop": "Boutique",
+      "topListings": "Annonces les plus vues",
+      "listing": "Annonce",
+      "byMember": "Commandes par membre",
+      "byMemberNote": "Visible uniquement par les membres qui gèrent les commandes. Trié par nom, pour répartir le travail ; ce n'est pas un classement. Commandes ouvertes que personne n'a prises : {{n}}.",
+      "noAssigned": "Aucune commande n'a encore été attribuée à des membres.",
+      "member": "Membre",
+      "assigned": "Attribuées",
+      "done": "Terminées",
+      "open": "Ouvertes"
     }
   }
 }

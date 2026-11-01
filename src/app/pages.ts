@@ -402,6 +402,10 @@ export const pages = {
     () => import("../pages/contractor/manage"),
     (m) => m.OrgSettingsPage,
   ),
+  OrgAnalyticsPage: pageEntry(
+    () => import("../pages/contractor/manage"),
+    (m) => m.OrgAnalyticsPage,
+  ),
   OrgStorefrontPage: pageEntry(
     () => import("../pages/contractor/manage"),
     (m) => m.OrgStorefrontPage,

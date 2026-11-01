@@ -27,6 +27,12 @@ export const ORG_MANAGE_TABS = [
     value: "storefront",
     anyOf: ["manage_org_details", "manage_theme", "manage_market"],
   },
+  // The org's shops' analytics rolled up (orders per member only with
+  // Manage Orders, decided by the backend).
+  {
+    value: "analytics",
+    anyOf: ["manage_orders", "manage_market", "manage_org_details"],
+  },
   // Orgs whose branding is unlocked (a staff grant or the unlock criteria,
   // useBrandingUnlocked): the theme editor (saved with Manage Theme) and
   // the site and sidebar settings (saved with Manage Org Details) share this
