@@ -81,9 +81,9 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
-          pl: "22px",
-          pr: "16px",
-          py: "18px",
+          pl: "20px",
+          pr: "14px",
+          py: "14px",
         }}
       >
         <Typography
@@ -106,7 +106,9 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
             textTransform: "uppercase",
             lineHeight: 0.95,
             letterSpacing: "0.01em",
-            fontSize: "clamp(1.5rem, 15cqi, 2.6rem)",
+            // Sized by the card's width: two-column phone grids get a
+            // ~175px card, desktop ones up to ~300px.
+            fontSize: "clamp(1.1rem, 11cqi, 2.4rem)",
             overflowWrap: "anywhere",
             textShadow: `0 0 18px ${ad.accent}55`,
           }}
@@ -115,11 +117,22 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         </Typography>
         <Box
           aria-hidden
-          sx={{ mt: 1.5, width: 40, height: 3, bgcolor: ad.accent }}
+          sx={{ mt: 1, flexShrink: 0, width: 40, height: 3, bgcolor: ad.accent }}
         />
         <Typography
           component="p"
-          sx={{ mt: 1.5, fontSize: "0.85rem", lineHeight: 1.35, opacity: 0.85 }}
+          sx={{
+            mt: 1,
+            fontSize: "clamp(0.72rem, 4.6cqi, 0.9rem)",
+            lineHeight: 1.3,
+            opacity: 0.85,
+            // Long translations on narrow cards: clamp, never push the call
+            // to action or the disclaimer out of the card.
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 4,
+            overflow: "hidden",
+          }}
         >
           {t(`${ad.copyKey}.tagline`)}
         </Typography>
@@ -143,8 +156,8 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         <Typography
           component="p"
           sx={{
-            mt: 1.25,
-            fontSize: "0.8rem",
+            mt: 1,
+            fontSize: "0.75rem",
             fontWeight: 800,
             letterSpacing: "0.22em",
             textTransform: "uppercase",
@@ -154,7 +167,7 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
         </Typography>
         <Typography
           component="p"
-          sx={{ fontSize: "0.62rem", lineHeight: 1.3, opacity: 0.55 }}
+          sx={{ fontSize: "0.6rem", lineHeight: 1.25, opacity: 0.55 }}
         >
           {t("ads.scOrgs.disclaimer")}
         </Typography>
