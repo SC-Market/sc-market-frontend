@@ -143,17 +143,17 @@ export function NotificationsPage() {
             sx={{ minHeight: 40 }}
           >
             <Tab
-              label="All"
+              label={t("notifications.scope.all", "All")}
               value="all"
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
             <Tab
-              label="Personal"
+              label={t("notifications.scope.personal", "Personal")}
               value="personal"
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
             <Tab
-              label="Shop"
+              label={t("notifications.scope.shop", "Shop")}
               value="shop"
               sx={{ minHeight: 40, fontSize: "0.875rem" }}
             />
@@ -163,19 +163,19 @@ export function NotificationsPage() {
             shopsData.length > 0 && (
               <FormControl fullWidth size="small" sx={{ mt: 1, mb: 1 }}>
                 <InputLabel id="shop-filter-label">
-                  Filter by Shop
+                  {t("notifications.filter_by_shop", "Filter by shop")}
                 </InputLabel>
                 <Select
                   labelId="shop-filter-label"
                   value={shopIdFilter}
-                  label="Filter by Shop"
+                  label={t("notifications.filter_by_shop", "Filter by shop")}
                   onChange={(e) => {
                     setShopIdFilter(e.target.value)
                     setPage(0)
                   }}
                 >
                   <MenuItem value="">
-                    <em>All Shops</em>
+                    <em>{t("notifications.all_shops", "All shops")}</em>
                   </MenuItem>
                   {shopsData.map((shop) => (
                     <MenuItem key={shop.shop_id} value={shop.shop_id}>
@@ -193,8 +193,8 @@ export function NotificationsPage() {
                 <Chip
                   label={
                     scopeFilter === "personal"
-                      ? "Personal"
-                      : "Shop"
+                      ? t("notifications.scope.personal", "Personal")
+                      : t("notifications.scope.shop", "Shop")
                   }
                   size="small"
                   onDelete={() => {
@@ -209,7 +209,7 @@ export function NotificationsPage() {
                   label={
                     shopsData?.find(
                       (s) => s.shop_id === shopIdFilter,
-                    )?.name || "Shop"
+                    )?.name || t("notifications.scope.shop", "Shop")
                   }
                   size="small"
                   onDelete={() => {

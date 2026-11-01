@@ -71,7 +71,11 @@ export function NotificationListSkeleton({ rows = 8 }: { rows?: number }) {
 }
 
 /** NotificationsPage's scope tab labels. */
-const NOTIFICATION_SCOPE_TABS = ["All", "Personal", "Shop"]
+const NOTIFICATION_SCOPE_TABS: [string, string][] = [
+  ["notifications.scope.all", "All"],
+  ["notifications.scope.personal", "Personal"],
+  ["notifications.scope.shop", "Shop"],
+]
 
 export function NotificationsPageSkeleton() {
   const { t } = useTranslation()
@@ -100,10 +104,10 @@ export function NotificationsPageSkeleton() {
           }}
         >
           <Tabs value={0} variant="scrollable" sx={{ minHeight: 40 }}>
-            {NOTIFICATION_SCOPE_TABS.map((label) => (
+            {NOTIFICATION_SCOPE_TABS.map(([key, fallback]) => (
               <Tab
-                key={label}
-                label={label}
+                key={key}
+                label={t(key, fallback)}
                 sx={{ minHeight: 40, fontSize: "0.875rem" }}
               />
             ))}
