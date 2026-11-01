@@ -73,6 +73,8 @@ describe("VariantBreakdown", () => {
     // formatPrice: 50000 -> "50,000 aUEC", 100000 -> "100K aUEC"
     expect(screen.getByText("50,000 aUEC")).toBeInTheDocument();
     expect(screen.getByText("100K aUEC")).toBeInTheDocument();
+    // The exact price is the abbreviated one's title (and in the HTML).
+    expect(screen.getByText("100K aUEC")).toHaveAttribute("title", "100,000 aUEC");
   });
 
   it("displays locations when provided", () => {
