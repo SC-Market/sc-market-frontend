@@ -5793,6 +5793,10 @@
       "market": "Browse the market"
     },
     "runAnOrg": "Run an org? Give it a storefront like this one.",
-    "onScMarket": "Storefront on SC Market"
+    "onScMarket": "Storefront on SC Market",
+    "verified": {
+      "label": "Verified org",
+      "tooltip": "This org proved it runs its RSI org page when it registered on SC Market."
+    }
   }
 }

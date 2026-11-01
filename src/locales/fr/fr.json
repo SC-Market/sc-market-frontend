@@ -5826,6 +5826,10 @@
       "market": "Parcourir le marché"
     },
     "runAnOrg": "Vous dirigez une org ? Offrez-lui une vitrine comme celle-ci.",
-    "onScMarket": "Vitrine sur SC Market"
+    "onScMarket": "Vitrine sur SC Market",
+    "verified": {
+      "label": "Org vérifiée",
+      "tooltip": "Cette org a prouvé qu'elle gère sa page d'org RSI lors de son inscription sur SC Market."
+    }
   }
 }

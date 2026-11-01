@@ -5826,6 +5826,10 @@
       "market": "Explorar el mercado"
     },
     "runAnOrg": "¿Diriges una org? Dale un escaparate como este.",
-    "onScMarket": "Escaparate en SC Market"
+    "onScMarket": "Escaparate en SC Market",
+    "verified": {
+      "label": "Org verificada",
+      "tooltip": "Esta org demostró que gestiona su página de org de RSI al registrarse en SC Market."
+    }
   }
 }

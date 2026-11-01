@@ -5792,6 +5792,10 @@
       "market": "マーケットを見る"
     },
     "runAnOrg": "組織を運営していますか？このようなストアフロントを作りましょう。",
-    "onScMarket": "SC Market のストアフロント"
+    "onScMarket": "SC Market のストアフロント",
+    "verified": {
+      "label": "認証済み組織",
+      "tooltip": "この組織は SC Market への登録時に、RSI の組織ページを管理していることを証明しました。"
+    }
   }
 }

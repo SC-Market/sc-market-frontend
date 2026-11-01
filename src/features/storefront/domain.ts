@@ -35,6 +35,15 @@ export function orgScopedListingArgs<T extends SearchListingsApiArg>(
   return customOrg ? { ...args, org: customOrg } : args
 }
 
+/**
+ * An org registered through its RSI org page (SC Market's verification):
+ * its spectrum ID is RSI's, not a "~" custom identifier (test orgs are
+ * "~TEST…"). Same rule as the backend's isRsiVerifiedOrg.
+ */
+export function isRsiVerifiedSpectrumId(spectrumId: string | null | undefined): boolean {
+  return !!spectrumId && !spectrumId.startsWith("~")
+}
+
 /** "4.9" for a 0–5 average, null without reviews. */
 export function ratingLabel(avg: number | null | undefined): string | null {
   return typeof avg === "number" && Number.isFinite(avg) ? avg.toFixed(1) : null

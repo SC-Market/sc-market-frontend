@@ -5793,6 +5793,10 @@
       "market": "Markt durchsuchen"
     },
     "runAnOrg": "Leitest du eine Org? Gib ihr einen Storefront wie diesen.",
-    "onScMarket": "Storefront auf SC Market"
+    "onScMarket": "Storefront auf SC Market",
+    "verified": {
+      "label": "Verifizierte Org",
+      "tooltip": "Diese Org hat bei der Registrierung auf SC Market nachgewiesen, dass sie ihre RSI-Org-Seite verwaltet."
+    }
   }
 }

@@ -5792,6 +5792,10 @@
       "market": "瀏覽市場"
     },
     "runAnOrg": "在經營組織？為它打造這樣的店面吧。",
-    "onScMarket": "SC Market 上的店面"
+    "onScMarket": "SC Market 上的店面",
+    "verified": {
+      "label": "已驗證組織",
+      "tooltip": "該組織在註冊 SC Market 時證明了自己管理著其 RSI 組織頁面。"
+    }
   }
 }

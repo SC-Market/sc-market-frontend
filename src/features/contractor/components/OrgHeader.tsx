@@ -24,6 +24,8 @@ import {
   useDeclineContractorInviteMutation,
 } from "../api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { VerifiedOrgBadge } from "../../storefront/components/VerifiedOrgBadge"
+import { isRsiVerifiedSpectrumId } from "../../storefront/domain"
 
 interface OrgHeaderProps {
   contractor: Contractor
@@ -119,6 +121,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
           >
             {contractor.name}
           </Typography>
+          {isRsiVerifiedSpectrumId(contractor.spectrum_id) && <VerifiedOrgBadge />}
           {!contractor.spectrum_id.startsWith("~") && (
             <MaterialLink
               component="a"
