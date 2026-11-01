@@ -512,11 +512,11 @@ export function EditListingV2() {
                     onClick={async () => {
                       try {
                         await updateListing({ id: id!, updateListingRequest: { status: "active" } }).unwrap()
-                        issueAlert({ message: "Listing activated", severity: "success" })
-                      } catch { issueAlert({ message: "Failed to activate", severity: "error" }) }
+                        issueAlert({ message: t("marketV2.activated"), severity: "success" })
+                      } catch { issueAlert({ message: t("marketV2.activateFailed"), severity: "error" }) }
                     }}
                   >
-                    Activate
+                    {t("marketV2.activate")}
                   </Button>
                 ) : (
                   <Button
@@ -525,11 +525,11 @@ export function EditListingV2() {
                     onClick={async () => {
                       try {
                         await updateListing({ id: id!, updateListingRequest: { status: "inactive" } }).unwrap()
-                        issueAlert({ message: "Listing deactivated", severity: "success" })
-                      } catch { issueAlert({ message: "Failed to deactivate", severity: "error" }) }
+                        issueAlert({ message: t("marketV2.deactivated"), severity: "success" })
+                      } catch { issueAlert({ message: t("marketV2.deactivateFailed"), severity: "error" }) }
                     }}
                   >
-                    Deactivate
+                    {t("marketV2.deactivate")}
                   </Button>
                 )}
                 <Button
@@ -539,12 +539,12 @@ export function EditListingV2() {
                   onClick={async () => {
                     try {
                       await updateListing({ id: id!, updateListingRequest: { status: "cancelled" } }).unwrap()
-                      issueAlert({ message: "Listing archived", severity: "success" })
+                      issueAlert({ message: t("marketV2.archived"), severity: "success" })
                       navigate(MARKET_PATHS.manage)
-                    } catch { issueAlert({ message: "Failed to archive", severity: "error" }) }
+                    } catch { issueAlert({ message: t("marketV2.archiveFailed"), severity: "error" }) }
                   }}
                 >
-                  Archive
+                  {t("marketV2.archive")}
                 </Button>
               </Box>
             </Grid>
@@ -780,7 +780,7 @@ export function EditListingV2() {
                     }}
                   >
                     <Typography variant="subtitle2" fontWeight="bold">
-                      {v.display_name || `Variant ${index + 1}`}
+                      {v.display_name || t("marketV2.variantN", { n: index + 1 })}
                     </Typography>
                     <Stack direction="row" spacing={0.5} alignItems="center">
                       {v.locations.length > 0 && (

@@ -1,3 +1,4 @@
+import "../../../util/i18n"
 /**
  * MissionFilters Component Tests
  *

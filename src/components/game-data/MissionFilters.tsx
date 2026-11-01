@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 /**
  * MissionFilters — vertical sidebar layout for mission filtering
  */
@@ -52,6 +53,7 @@ export interface MissionFiltersProps {
 }
 
 export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
+  const { t } = useTranslation()
   const triState = (
     value: boolean | undefined,
     onChange: (v: boolean | undefined) => void,
@@ -63,35 +65,35 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
 
   return (
     <Stack spacing={1.5}>
-      <TextField fullWidth size="small" label="Search" value={props.searchText}
-        onChange={(e) => props.onSearchTextChange(e.target.value)} placeholder="Mission name..." />
+      <TextField fullWidth size="small" label={t("missionsUi.search")} value={props.searchText}
+        onChange={(e) => props.onSearchTextChange(e.target.value)} placeholder={t("missionsUi.missionNamePlaceholder")} />
 
       <FormControl fullWidth size="small">
-        <InputLabel id="mission-filters-category-label">Category</InputLabel>
-        <Select labelId="mission-filters-category-label" multiple value={props.category ? props.category.split(",") : []} label="Category"
+        <InputLabel id="mission-filters-category-label">{t("missionsUi.category")}</InputLabel>
+        <Select labelId="mission-filters-category-label" multiple value={props.category ? props.category.split(",") : []} label={t("missionsUi.category")}
           onChange={(e) => props.onCategoryChange((e.target.value as string[]).join(","))}
-          renderValue={(sel) => (sel as string[]).join(", ") || "All"}>
+          renderValue={(sel) => (sel as string[]).join(", ") || t("missionsUi.all")}>
           {["Mercenary","Bounty Hunter","Delivery","Hauling","Investigation","Mining","Salvage","Maintenance","Race","Courier"].map(c =>
-            <MenuItem key={c} value={c}>{c}</MenuItem>
+            <MenuItem key={c} value={c}>{t(`missionsUi.categories.${c.replace(/ /g, "")}`)}</MenuItem>
           )}
         </Select>
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel id="mission-filters-career-label">Career</InputLabel>
-        <Select labelId="mission-filters-career-label" value={props.careerType} label="Career" onChange={(e) => props.onCareerTypeChange(e.target.value)}>
-          <MenuItem value="">All</MenuItem>
+        <InputLabel id="mission-filters-career-label">{t("missionsUi.career")}</InputLabel>
+        <Select labelId="mission-filters-career-label" value={props.careerType} label={t("missionsUi.career")} onChange={(e) => props.onCareerTypeChange(e.target.value)}>
+          <MenuItem value="">{t("missionsUi.all")}</MenuItem>
           {["Mercenary","Hauling","Mining","Exploration","Combat","Trading","Medical","Salvage"].map(c =>
-            <MenuItem key={c} value={c}>{c}</MenuItem>
+            <MenuItem key={c} value={c}>{t(`missionsUi.careers.${c}`)}</MenuItem>
           )}
         </Select>
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel id="mission-filters-system-label">System</InputLabel>
-        <Select labelId="mission-filters-system-label" multiple value={props.starSystem ? props.starSystem.split(",") : []} label="System"
+        <InputLabel id="mission-filters-system-label">{t("missionsUi.system")}</InputLabel>
+        <Select labelId="mission-filters-system-label" multiple value={props.starSystem ? props.starSystem.split(",") : []} label={t("missionsUi.system")}
           onChange={(e) => props.onStarSystemChange((e.target.value as string[]).join(","))}
-          renderValue={(sel) => (sel as string[]).join(", ") || "All"}>
+          renderValue={(sel) => (sel as string[]).join(", ") || t("missionsUi.all")}>
           {["Stanton","Pyro","Nyx","Terra","Magnus"].map(s =>
             <MenuItem key={s} value={s}>{s}</MenuItem>
           )}
@@ -99,71 +101,72 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel id="mission-filters-legal-label">Legal</InputLabel>
-        <Select labelId="mission-filters-legal-label" value={props.legalStatus} label="Legal" onChange={(e) => props.onLegalStatusChange(e.target.value as "" | "LEGAL" | "ILLEGAL")}>
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="LEGAL">Legal</MenuItem>
-          <MenuItem value="ILLEGAL">Illegal</MenuItem>
+        <InputLabel id="mission-filters-legal-label">{t("missionsUi.legal")}</InputLabel>
+        <Select labelId="mission-filters-legal-label" value={props.legalStatus} label={t("missionsUi.legal")} onChange={(e) => props.onLegalStatusChange(e.target.value as "" | "LEGAL" | "ILLEGAL")}>
+          <MenuItem value="">{t("missionsUi.all")}</MenuItem>
+          <MenuItem value="LEGAL">{t("missionsUi.legal")}</MenuItem>
+          <MenuItem value="ILLEGAL">{t("missionsUi.illegal")}</MenuItem>
         </Select>
       </FormControl>
 
       <FormControl fullWidth size="small">
-        <InputLabel id="mission-filters-difficulty-label">Difficulty</InputLabel>
+        <InputLabel id="mission-filters-difficulty-label">{t("missionsUi.difficulty")}</InputLabel>
         <Select labelId="mission-filters-difficulty-label"
           value={props.difficultyRange[0] === 1 && props.difficultyRange[1] === 5 ? "" : `${props.difficultyRange[0]}-${props.difficultyRange[1]}`}
-          label="Difficulty"
+          label={t("missionsUi.difficulty")}
           onChange={(e) => {
             if (!e.target.value) { props.onDifficultyRangeChange([1, 5]); return }
             const [min, max] = (e.target.value as string).split("-").map(Number)
             props.onDifficultyRangeChange([min, max])
           }}
         >
-          <MenuItem value="">All Difficulties</MenuItem>
-          <MenuItem value="1-2">Easy (1–2)</MenuItem>
-          <MenuItem value="3-3">Medium (3)</MenuItem>
-          <MenuItem value="4-5">Hard (4–5)</MenuItem>
+          <MenuItem value="">{t("missionsUi.allDifficulties")}</MenuItem>
+          <MenuItem value="1-2">{t("missionsUi.easy")}</MenuItem>
+          <MenuItem value="3-3">{t("missionsUi.medium")}</MenuItem>
+          <MenuItem value="4-5">{t("missionsUi.hard")}</MenuItem>
         </Select>
       </FormControl>
 
-      <TextField fullWidth size="small" label="Faction" value={props.faction}
-        onChange={(e) => props.onFactionChange(e.target.value)} placeholder="e.g. UEE" />
+      <TextField fullWidth size="small" label={t("missionsUi.faction")} value={props.faction}
+        onChange={(e) => props.onFactionChange(e.target.value)} placeholder={t("missionsUi.factionPlaceholder")} />
 
-      <TextField fullWidth size="small" label="Mission Giver" value={props.missionGiver}
-        onChange={(e) => props.onMissionGiverChange(e.target.value)} placeholder="e.g. Miles" />
+      <TextField fullWidth size="small" label={t("missionsUi.missionGiver")} value={props.missionGiver}
+        onChange={(e) => props.onMissionGiverChange(e.target.value)} placeholder={t("missionsUi.missionGiverPlaceholder")} />
 
-      <TextField fullWidth size="small" label="Min Reward (aUEC)" type="number" value={props.creditRewardMin}
+      <TextField fullWidth size="small" label={t("missionsUi.minReward")} type="number" value={props.creditRewardMin}
         onChange={(e) => props.onCreditRewardMinChange(e.target.value === "" ? "" : Number(e.target.value))}
         inputProps={{ min: 0 }} />
 
       <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" {...triState(props.hasBlueprints, props.onHasBlueprintsChange)} />}
-        label={<Typography variant="body2">Blueprints {props.hasBlueprints === undefined ? "(any)" : props.hasBlueprints ? "(yes)" : "(no)"}</Typography>} />
+        label={<Typography variant="body2">{t("missionsUi.blueprints")} {props.hasBlueprints === undefined ? t("missionsUi.triAny") : props.hasBlueprints ? t("missionsUi.triYes") : t("missionsUi.triNo")}</Typography>} />
       <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" {...triState(props.isShareable, props.onIsShareableChange)} />}
-        label={<Typography variant="body2">Shareable {props.isShareable === undefined ? "(any)" : props.isShareable ? "(yes)" : "(no)"}</Typography>} />
+        label={<Typography variant="body2">{t("missionsUi.shareable")} {props.isShareable === undefined ? t("missionsUi.triAny") : props.isShareable ? t("missionsUi.triYes") : t("missionsUi.triNo")}</Typography>} />
       <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" {...triState(props.isChainStarter, props.onIsChainStarterChange)} />}
-        label={<Typography variant="body2">Chain Starter {props.isChainStarter === undefined ? "(any)" : props.isChainStarter ? "(yes)" : "(no)"}</Typography>} />
+        label={<Typography variant="body2">{t("missionsUi.chainStarter")} {props.isChainStarter === undefined ? t("missionsUi.triAny") : props.isChainStarter ? t("missionsUi.triYes") : t("missionsUi.triNo")}</Typography>} />
 
       <Divider />
-      <Typography variant="caption" color="text.secondary" fontWeight={600}>Events</Typography>
+      <Typography variant="caption" color="text.secondary" fontWeight={600}>{t("missionsUi.events")}</Typography>
       <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" checked={props.showEventMissions}
         onChange={(e) => { props.onShowEventMissionsChange(e.target.checked); if (!e.target.checked) props.onEventCodeChange("") }} />}
-        label={<Typography variant="body2">Show event missions</Typography>} />
+        label={<Typography variant="body2">{t("missionsUi.showEventMissions")}</Typography>} />
       {props.showEventMissions && <EventSelect value={props.eventCode} onChange={props.onEventCodeChange} />}
 
       <Button size="small" startIcon={<RestartAltRounded />} onClick={props.onResetFilters} sx={{ textTransform: "none" }}>
-        Reset Filters
+        {t("missionsUi.resetFilters")}
       </Button>
     </Stack>
   )
 }
 
 function EventSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { t } = useTranslation()
   const { data } = useGetGameEventsQuery()
   const events = data?.events || []
   return (
     <FormControl fullWidth size="small">
-      <InputLabel id="mission-filters-event-label">Event</InputLabel>
-      <Select labelId="mission-filters-event-label" value={value} onChange={(e) => onChange(e.target.value as string)} label="Event">
-        <MenuItem value="">All Events</MenuItem>
+      <InputLabel id="mission-filters-event-label">{t("missionsUi.event")}</InputLabel>
+      <Select labelId="mission-filters-event-label" value={value} onChange={(e) => onChange(e.target.value as string)} label={t("missionsUi.event")}>
+        <MenuItem value="">{t("missionsUi.allEvents")}</MenuItem>
         {events.map((e) => (
           <MenuItem key={e.event_code} value={e.event_code}>
             {e.event_name} ({e.mission_count})

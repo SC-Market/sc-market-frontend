@@ -246,8 +246,8 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
               value={qualityTierMin ?? ""}
               onChange={(e) => setQualityTierMin(e.target.value === "" ? null : Number(e.target.value))}
               SelectProps={{ native: true }}>
-              <option value="">Any</option>
-              {[1,2,3,4,5].map(t => <option key={t} value={t}>Tier {t}</option>)}
+              <option value="">{t("marketV2.any")}</option>
+              {[1,2,3,4,5].map(n => <option key={n} value={n}>{t("marketV2.tierN", { tier: n })}</option>)}
             </TextField>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -256,8 +256,8 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
               value={qualityTierMax ?? ""}
               onChange={(e) => setQualityTierMax(e.target.value === "" ? null : Number(e.target.value))}
               SelectProps={{ native: true }}>
-              <option value="">Any</option>
-              {[1,2,3,4,5].map(t => <option key={t} value={t}>Tier {t}</option>)}
+              <option value="">{t("marketV2.any")}</option>
+              {[1,2,3,4,5].map(n => <option key={n} value={n}>{t("marketV2.tierN", { tier: n })}</option>)}
             </TextField>
           </Grid>
         </>)}
@@ -269,13 +269,13 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
                 bands={qualityBands}
                 value={qualityValueMin}
                 onChange={setQualityValueMin}
-                label="Min Quality"
+                label={t("marketV2.minQuality")}
               />
             ) : (
               <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
                 size="small" fullWidth color="secondary"
                 isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
-                label="Min Quality (0-1000)"
+                label={t("marketV2.minQualityRange")}
                 value={qualityValueMin ?? ""}
                 onValueChange={(v) => setQualityValueMin(v.floatValue ?? null)} />
             )}
@@ -286,13 +286,13 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
                 bands={qualityBands}
                 value={qualityValueMax}
                 onChange={setQualityValueMax}
-                label="Max Quality"
+                label={t("marketV2.maxQuality")}
               />
             ) : (
               <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
                 size="small" fullWidth color="secondary"
                 isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
-                label="Max Quality (0-1000)"
+                label={t("marketV2.maxQualityRange")}
                 value={qualityValueMax ?? ""}
                 onValueChange={(v) => setQualityValueMax(v.floatValue ?? null)} />
             )}
@@ -434,8 +434,8 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
               value={visibility}
               onChange={(e) => setVisibility(e.target.value as "public" | "roster_only")}
             >
-              <FormControlLabel value="public" control={<Radio color="secondary" size="small" />} label="Public" />
-              <FormControlLabel value="roster_only" control={<Radio color="secondary" size="small" />} label="Roster Only" />
+              <FormControlLabel value="public" control={<Radio color="secondary" size="small" />} label={t("marketV2.public")} />
+              <FormControlLabel value="roster_only" control={<Radio color="secondary" size="small" />} label={t("marketV2.rosterOnly")} />
             </RadioGroup>
           </Grid>
         )}

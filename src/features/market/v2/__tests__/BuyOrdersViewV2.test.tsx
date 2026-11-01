@@ -1,3 +1,4 @@
+import "../../../../util/i18n"
 import { describe, it, expect } from "vitest"
 import { BuyOrdersViewV2 } from "../BuyOrdersViewV2"
 import { buyOrderPriceRange } from "../BuyOrderAggregateCard"

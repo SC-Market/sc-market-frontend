@@ -164,7 +164,7 @@ export function BuyOrdersViewV2() {
                       tokens={marketSearchTokens}
                       onChange={handleMarketTokensChange}
                       mode="market"
-                      placeholder="Search buy orders..."
+                      placeholder={t("marketV2.searchBuyOrders")}
                     />
                   </Box>
                   <ViewModeToggle mode={viewMode} onChange={setViewMode} />
@@ -191,7 +191,7 @@ export function BuyOrdersViewV2() {
                       tokens={marketSearchTokens}
                       onChange={handleMarketTokensChange}
                       mode="market"
-                      placeholder="Search buy orders..."
+                      placeholder={t("marketV2.searchBuyOrders")}
                     />
                   </Box>
                   <ViewModeToggle mode={viewMode} onChange={setViewMode} />

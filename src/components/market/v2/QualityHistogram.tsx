@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React from "react";
 import {
   Box,
@@ -39,6 +40,7 @@ export const QualityHistogram: React.FC<QualityHistogramProps> = ({
   title = "Quality Distribution",
   showPrices = false,
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>();
   const isMobile = useBreakpointDown("sm");
 
@@ -55,7 +57,7 @@ export const QualityHistogram: React.FC<QualityHistogramProps> = ({
         </Typography>
         <Box sx={{ textAlign: "center", py: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            No quality data available
+            {t("marketV2.noQualityData")}
           </Typography>
         </Box>
       </Paper>
@@ -88,7 +90,7 @@ export const QualityHistogram: React.FC<QualityHistogramProps> = ({
             >
               <QualityBadge tier={item.tier} size="small" />
               <Typography variant="body2" sx={{ flex: 1 }}>
-                {item.count} {item.count === 1 ? "listing" : "listings"}
+                {t("shops.listingCount", { count: item.count })}
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {item.percentage.toFixed(1)}%
@@ -122,7 +124,7 @@ export const QualityHistogram: React.FC<QualityHistogramProps> = ({
                 color="text.secondary"
                 sx={{ mt: 0.5, display: "block" }}
               >
-                Avg: {item.averagePrice.toLocaleString()} aUEC
+                {t("marketV2.avgPrice", { price: item.averagePrice.toLocaleString() })}
               </Typography>
             )}
           </Box>
@@ -141,7 +143,7 @@ export const QualityHistogram: React.FC<QualityHistogramProps> = ({
         }}
       >
         <Typography variant="caption" color="text.secondary">
-          Total Listings
+          {t("marketV2.totalListings")}
         </Typography>
         <Typography variant="caption" fontWeight="bold">
           {distribution.reduce((sum, item) => sum + item.count, 0)}

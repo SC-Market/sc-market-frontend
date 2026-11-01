@@ -337,7 +337,7 @@ function DisplayStockV2({
         await refreshListing({ id }).unwrap()
         issueAlert({ message: t("ItemStock.refreshed", "Listing refreshed"), severity: "success" })
       } catch {
-        issueAlert({ message: "Failed to refresh", severity: "error" })
+        issueAlert({ message: t("marketV2.refreshFailed"), severity: "error" })
       }
     },
     [refreshListing, issueAlert, t],

@@ -68,7 +68,7 @@ export function MissionDetail() {
       )}
       {error && (
         <Grid item xs={12}>
-          <Alert severity="error">Failed to load mission details.</Alert>
+          <Alert severity="error">{t("missionsUi.detailLoadFailed")}</Alert>
         </Grid>
       )}
       {data && m && (

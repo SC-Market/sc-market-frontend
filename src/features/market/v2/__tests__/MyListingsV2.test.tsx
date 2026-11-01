@@ -159,11 +159,11 @@ describe("MyListingsV2", () => {
     await waitFor(() =>
       expect(screen.getAllByText("High Quality Mining Tool").length).toBeGreaterThan(0),
     );
-    expect(screen.getAllByText("3 variants").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("marketV2.variantCount").length).toBeGreaterThan(0);
     expect(screen.getAllByText("50").length).toBeGreaterThan(0);
 
     expect(screen.getAllByText("Standard Ship Components").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("1 variant").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("marketV2.variantCount").length).toBeGreaterThan(0);
     expect(screen.getAllByText("100").length).toBeGreaterThan(0);
   });
 

@@ -92,7 +92,7 @@ export function BuyOrderDetailV2() {
 
   return (
     <StandardPageLayout
-      title={buyOrder?.game_item_name || "Buy Order"}
+      title={buyOrder?.game_item_name || t("marketV2.buyOrder")}
       headerTitle={buyOrder?.game_item_name}
       breadcrumbs={breadcrumbs}
       isLoading={isLoading}
@@ -178,7 +178,7 @@ export function BuyOrderDetailV2() {
                                 {buyOrder.buyer_name}
                               </Link>
                               <Typography variant="caption" color="text.secondary" sx={{ ml: 0.5 }}>
-                                is looking for this item
+                                {t("marketV2.isLookingFor")}
                               </Typography>
                             </ListingDetailItem>
 
@@ -186,7 +186,7 @@ export function BuyOrderDetailV2() {
                             {buyOrder.visibility && buyOrder.visibility !== "public" && (
                               <ListingDetailItem icon={<VisibilityRounded fontSize="small" />}>
                                 <Chip
-                                  label={buyOrder.visibility === "roster_only" ? "Roster Only" : "Private"}
+                                  label={buyOrder.visibility === "roster_only" ? t("marketV2.rosterOnly") : t("marketV2.private")}
                                   size="small"
                                   variant="outlined"
                                   color="secondary"
@@ -196,13 +196,13 @@ export function BuyOrderDetailV2() {
 
                             {/* Created */}
                             <ListingDetailItem icon={<AccessTimeRounded fontSize="small" />}>
-                              Posted {getRelativeTime(new Date(buyOrder.created_at))}
+                              {t("marketV2.posted", { time: getRelativeTime(new Date(buyOrder.created_at)) })}
                             </ListingDetailItem>
 
                             {/* Expires */}
                             {buyOrder.expires_at && (
                               <ListingDetailItem icon={<ClockAlert fontSize="small" />}>
-                                Expires {getRelativeTime(new Date(buyOrder.expires_at))}
+                                {t("marketV2.expires", { time: getRelativeTime(new Date(buyOrder.expires_at)) })}
                               </ListingDetailItem>
                             )}
                           </Stack>
@@ -223,14 +223,14 @@ export function BuyOrderDetailV2() {
                             }}
                           >
                             <Typography variant="overline" color="text.secondary" sx={{ letterSpacing: 1.5 }}>
-                              Offering
+                              {t("marketV2.offering")}
                             </Typography>
                             <Typography variant="h4" fontWeight="bold" color="warning.main">
                               {priceDisplay}
                             </Typography>
                             {!buyOrder.negotiable && buyOrder.quantity > 1 && (
                               <Typography variant="body2" color="text.secondary">
-                                Total: {(buyOrder.price_per_unit * remaining).toLocaleString(i18n.language)} aUEC for remaining quantity
+                                {t("marketV2.totalForRemaining", { total: (buyOrder.price_per_unit * remaining).toLocaleString(i18n.language) })}
                               </Typography>
                             )}
                           </Paper>
@@ -239,13 +239,13 @@ export function BuyOrderDetailV2() {
                           <Box>
                             <Stack direction="row" justifyContent="space-between" alignItems="baseline" sx={{ mb: 0.5 }}>
                               <Typography variant="subtitle2" color="text.secondary">
-                                Quantity
+                                {t("marketV2.quantity")}
                               </Typography>
                               <Typography variant="subtitle2" fontWeight="bold">
-                                {remaining.toLocaleString(i18n.language)} remaining
+                                {t("marketV2.remaining", { n: remaining.toLocaleString(i18n.language) })}
                                 {buyOrder.quantity_fulfilled > 0 && (
                                   <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 0.5 }}>
-                                    of {buyOrder.quantity.toLocaleString(i18n.language)} requested
+                                    {t("marketV2.ofRequested", { n: buyOrder.quantity.toLocaleString(i18n.language) })}
                                   </Typography>
                                 )}
                               </Typography>
@@ -271,14 +271,14 @@ export function BuyOrderDetailV2() {
                           {(buyOrder.quality_tier_min || buyOrder.quality_value_min != null) && (
                             <Box>
                               <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.5 }}>
-                                Quality Requirements
+                                {t("marketV2.qualityRequirements")}
                               </Typography>
                               {buyOrder.quality_tier_min && (
                                 <Stack direction="row" alignItems="center" spacing={0.5}>
                                   <QualityBadge tier={buyOrder.quality_tier_min} size="small" />
                                   {buyOrder.quality_tier_max && buyOrder.quality_tier_max !== buyOrder.quality_tier_min && (
                                     <>
-                                      <Typography variant="caption" color="text.secondary">to</Typography>
+                                      <Typography variant="caption" color="text.secondary">{t("marketV2.rangeTo")}</Typography>
                                       <QualityBadge tier={buyOrder.quality_tier_max} size="small" />
                                     </>
                                   )}
@@ -317,10 +317,10 @@ export function BuyOrderDetailV2() {
                 >
                   <Box>
                     <Typography variant="h6" fontWeight="bold">
-                      Can you supply this?
+                      {t("marketV2.canYouSupply")}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      If you have {buyOrder.game_item_name} in stock, you can fulfill this buy order directly.
+                      {t("marketV2.canYouSupplyBody", { item: buyOrder.game_item_name })}
                     </Typography>
                     <HelpLink guide="fillBuyOrder" />
                   </Box>
@@ -332,7 +332,7 @@ export function BuyOrderDetailV2() {
                     startIcon={<StorefrontRounded />}
                     sx={{ whiteSpace: "nowrap", fontWeight: "bold" }}
                   >
-                    Fulfill Order
+                    {t("marketV2.fulfillOrder")}
                   </Button>
                 </Paper>
                 {fulfillOpen && (
@@ -354,7 +354,7 @@ export function BuyOrderDetailV2() {
                 color="secondary"
                 startIcon={<ShoppingCartRounded />}
               >
-                View all listings for {buyOrder.game_item_name}
+                {t("marketV2.viewAllListingsFor", { item: buyOrder.game_item_name })}
               </Button>
             </Grid>
           </Grid>

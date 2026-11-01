@@ -150,8 +150,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
                 {t("myListings.variants", "Variants")}
               </Typography>
               <Typography variant="body1" fontWeight="medium">
-                {listing.variant_count}{" "}
-                {listing.variant_count === 1 ? "variant" : "variants"}
+                {t("marketV2.variantCount", { count: listing.variant_count })}
               </Typography>
             </Box>
 

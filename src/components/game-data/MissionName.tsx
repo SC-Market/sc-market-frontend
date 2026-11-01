@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React from "react"
 import { Typography, TypographyProps } from "@mui/material"
 import { missionTextParts } from "../../seo/missionText"
@@ -42,7 +43,8 @@ export function MissionName({
   TypographyProps,
   "children"
 >) {
-  if (!name) return <Typography {...props}>Unknown Mission</Typography>
+  const { t } = useTranslation()
+  if (!name) return <Typography {...props}>{t("missionsUi.unknownMission")}</Typography>
   return (
     <Typography {...props}>
       <Parts text={name} giver={giver} />

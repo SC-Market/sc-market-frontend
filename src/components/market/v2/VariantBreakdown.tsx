@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React from "react";
 import { formatCraftedSource } from "../../../util/variantDisplay";
 import {
@@ -58,6 +59,7 @@ function hasDisplayableAttributes(variant: Variant): boolean {
 }
 
 function VariantInfo({ variant }: { variant: Variant }) {
+  const { t } = useTranslation()
   if (!hasDisplayableAttributes(variant)) return null;
   const { quality_tier, quality_value, crafted_source } = variant.attributes;
   return (
@@ -86,6 +88,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
   onSelectVariant,
   showActions = true,
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>();
   const isMobile = useBreakpointDown("sm");
 
@@ -93,7 +96,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
     return (
       <Box sx={{ textAlign: "center", py: 4 }}>
         <Typography variant="body2" color="text.secondary">
-          No variants available
+          {t("marketV2.noVariants")}
         </Typography>
       </Box>
     );
@@ -121,7 +124,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
 
               <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Typography variant="body2" color="text.secondary">
-                  Qty: {variant.quantity.toLocaleString()}
+                  {t("marketV2.qtyColon", { quantity: variant.quantity.toLocaleString() })}
                 </Typography>
                 <Typography variant="h6" color="primary" fontWeight="bold" title={formatExactPrice(variant.price)}>
                   {formatPrice(variant.price)}
@@ -138,7 +141,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
                   disabled={variant.quantity === 0}
                   fullWidth
                 >
-                  Add to Cart
+                  {t("marketV2.addToCart")}
                 </Button>
               )}
             </Stack>
@@ -157,11 +160,11 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
       <Table size="small">
         <TableHead>
           <TableRow>
-            {showVariantColumn && <TableCell>Variant</TableCell>}
-            <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Price</TableCell>
-            <TableCell>Location</TableCell>
-            {showActions && <TableCell align="center">Action</TableCell>}
+            {showVariantColumn && <TableCell>{t("marketV2.variant")}</TableCell>}
+            <TableCell align="right">{t("marketV2.quantity")}</TableCell>
+            <TableCell align="right">{t("marketV2.price")}</TableCell>
+            <TableCell>{t("missionsUi.location")}</TableCell>
+            {showActions && <TableCell align="center">{t("marketV2.action")}</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -205,7 +208,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
                       onClick={() => onSelectVariant(variant.variant_id)}
                       disabled={variant.quantity === 0}
                     >
-                      Add
+                      {t("marketV2.add")}
                     </Button>
                   )}
                 </TableCell>

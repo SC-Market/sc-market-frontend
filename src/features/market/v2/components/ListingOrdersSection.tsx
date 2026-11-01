@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 /**
  * ListingOrdersSection — shows related orders and pending offers for a listing.
  *
@@ -18,6 +19,7 @@ import { ORDER_PATHS } from "../../../../routes/paths"
 import { useIsAuthenticated } from "../../../../hooks/login/useSession"
 
 export function ListingOrdersSection({ listingId, shopId }: { listingId: string; shopId: string }) {
+  const { t } = useTranslation()
   const isAuthenticated = useIsAuthenticated()
   const { data: myShops } = useGetMyShopsQuery(undefined, { skip: !isAuthenticated })
   const canManage = !!myShops?.some((shop) => shop.shop_id === shopId && shop.permissions?.can_manage)
@@ -27,17 +29,17 @@ export function ListingOrdersSection({ listingId, shopId }: { listingId: string;
   if (!data.orders.length && !data.offers.length) return null
 
   return (
-    <Section xs={12} title="Orders & Offers">
+    <Section xs={12} title={t("marketV2.ordersAndOffers")}>
       {data.offers.length > 0 && (
         <Grid item xs={12}>
-          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Pending Offers ({data.offers.length})</Typography>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>{t("marketV2.pendingOffers", { count: data.offers.length })}</Typography>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Buyer</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="right">Qty</TableCell>
-                <TableCell align="right">Price</TableCell>
+                <TableCell>{t("marketV2.buyer")}</TableCell>
+                <TableCell>{t("marketV2.status")}</TableCell>
+                <TableCell align="right">{t("marketV2.qty")}</TableCell>
+                <TableCell align="right">{t("marketV2.price")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -57,14 +59,14 @@ export function ListingOrdersSection({ listingId, shopId }: { listingId: string;
 
       {data.orders.length > 0 && (
         <Grid item xs={12} sx={{ mt: data.offers.length ? 2 : 0 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Orders ({data.orders.length})</Typography>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>{t("marketV2.ordersCount", { count: data.orders.length })}</Typography>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Buyer</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="right">Qty</TableCell>
-                <TableCell align="right">Price</TableCell>
+                <TableCell>{t("marketV2.buyer")}</TableCell>
+                <TableCell>{t("marketV2.status")}</TableCell>
+                <TableCell align="right">{t("marketV2.qty")}</TableCell>
+                <TableCell align="right">{t("marketV2.price")}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

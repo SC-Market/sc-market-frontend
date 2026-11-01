@@ -1,3 +1,4 @@
+import "../../../util/i18n"
 /**
  * MissionDetail Component Tests
  *
@@ -40,17 +41,7 @@ vi.mock("../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({ children, headerTitle }: { children: React.ReactNode; headerTitle?: string }) => <div>{headerTitle && <h1>{headerTitle}</h1>}{children}</div>,
 }))
 
-// Mock react-i18next
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, def?: string) => def || key,
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
-  }
-})
+// Real English catalog (src/util/i18n), so the rendered text is what users see
 
 // Mock mission detail data
 const mockMissionDetail = {

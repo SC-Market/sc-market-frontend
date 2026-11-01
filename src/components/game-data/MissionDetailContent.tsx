@@ -89,6 +89,7 @@ function BoolChip({ value, label }: { value: boolean | undefined; label: string 
 // ============================================================================
 
 export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
+  const { t } = useTranslation()
   // Real links (crawlable), to the mission list filtered by the chip.
   const go = (params: Record<string, string>) => ({
     clickable: true,
@@ -109,11 +110,11 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
         />
       )}
       {giver && <Chip label={giver} size="small" variant="outlined" {...go({ giver })} />}
-      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" {...go({ legal: "ILLEGAL" })} />}
-      {m.is_unique_mission && <Chip label="Unique" size="small" color="warning" />}
-      {m.is_chain_starter && <Chip label="Starter" size="small" color="secondary" {...go({ chain: "true" })} />}
-      {m.is_chain_mission && !m.is_chain_starter && <Chip label="Chain" size="small" color="secondary" variant="outlined" />}
-      {m.is_shareable && <Chip label="Shareable" size="small" variant="outlined" {...go({ shareable: "true" })} />}
+      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label={t("missionsUi.illegal")} size="small" color="error" {...go({ legal: "ILLEGAL" })} />}
+      {m.is_unique_mission && <Chip label={t("missionsUi.unique")} size="small" color="warning" />}
+      {m.is_chain_starter && <Chip label={t("missionsUi.starter")} size="small" color="secondary" {...go({ chain: "true" })} />}
+      {m.is_chain_mission && !m.is_chain_starter && <Chip label={t("missionsUi.chain")} size="small" color="secondary" variant="outlined" />}
+      {m.is_shareable && <Chip label={t("missionsUi.shareable")} size="small" variant="outlined" {...go({ shareable: "true" })} />}
       {m.associated_event && <Chip label={m.associated_event} size="small" {...go({ show_events: "true", event: m.associated_event! })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
       {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" />}
     </Stack>
@@ -227,13 +228,13 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       <Divider />
 
       {/* Reward */}
-      <Typography variant="subtitle2">Reward</Typography>
+      <Typography variant="subtitle2">{t("missionsUi.reward")}</Typography>
       <Stack spacing={0.5}>
         {(m.credit_reward_min || m.credit_reward_max) && (() => {
           const isFee = (m.credit_reward_min ?? 0) < 0
           return (
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" color="text.secondary">{isFee ? "Fee" : "UEC"}</Typography>
+              <Typography variant="body2" color="text.secondary">{isFee ? t("missionsUi.feeLabel") : "UEC"}</Typography>
               <Typography variant="body2" color={isFee ? "error.main" : "success.main"} fontWeight={600}>
                 {isFee
                   ? formatCredits(Math.abs(m.credit_reward_min!))
@@ -246,31 +247,31 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
         })()}
         {m.reputation_reward != null && m.reputation_reward > 0 && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Rep/mission</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.repPerMission")}</Typography>
             <Typography variant="body2">{m.reputation_reward.toLocaleString()} XP</Typography>
           </Stack>
         )}
         {usableGiver(m.mission_giver_org) && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Mission giver</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.missionGiverLower")}</Typography>
             <Typography variant="body2">{m.mission_giver_org}</Typography>
           </Stack>
         )}
         {usableGiver(m.faction) && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Faction</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.faction")}</Typography>
             <Typography variant="body2">{m.faction}</Typography>
           </Stack>
         )}
         {usableGiver(m.reputation_reward_faction) && m.reputation_reward_faction !== m.faction && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Reputation with</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.reputationWith")}</Typography>
             <Typography variant="body2">{m.reputation_reward_faction}</Typography>
           </Stack>
         )}
         {m.reward_scope && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Scope</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.scope")}</Typography>
             <Typography variant="body2">{formatScope(m.reward_scope)}</Typography>
           </Stack>
         )}
@@ -282,7 +283,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {data.blueprint_rewards?.length > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">Blueprint Rewards</Typography>
+          <Typography variant="subtitle2">{t("missionsUi.blueprintRewards")}</Typography>
           {data.blueprint_rewards.map((pool, poolIdx) => {
             const poolChance = pool.pool_chance != null ? pool.pool_chance * 100 : null
             const bpCount = pool.blueprints?.length || pool.reward_pool_size || 0
@@ -296,17 +297,17 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                   )}
                   <Box sx={{ flex: 1 }} />
                   {poolChance != null && (
-                    <Chip label={`${poolChance}% chance`} size="small" color={poolChance >= 100 ? "success" : "default"} sx={{ height: 20, fontSize: "0.7rem" }} />
+                    <Chip label={t("missionsUi.percentChance", { pct: poolChance })} size="small" color={poolChance >= 100 ? "success" : "default"} sx={{ height: 20, fontSize: "0.7rem" }} />
                   )}
                   {pool.selection_count > 0 && bpCount > 0 && (
-                    <Chip label={`${pool.selection_count} of ${bpCount}`} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
+                    <Chip label={t("missionsUi.nOfM", { n: pool.selection_count, m: bpCount })} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
                   )}
                 </Stack>
                 <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Blueprint</TableCell>
-                      <TableCell align="right">Drop Chance</TableCell>
+                      <TableCell>{t("missionsUi.blueprint")}</TableCell>
+                      <TableCell align="right">{t("missionsUi.dropChance")}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -367,7 +368,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                           <TableCell align="right">
                             <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
                               <LinearProgress variant="determinate" value={Math.min(pct, 100)} sx={{ width: 50, height: 4, borderRadius: 2 }} />
-                              <Typography variant="caption">{pct >= 100 ? "Guaranteed" : `${pct.toFixed(0)}%`}</Typography>
+                              <Typography variant="caption">{pct >= 100 ? t("missionsUi.guaranteed") : `${pct.toFixed(0)}%`}</Typography>
                             </Stack>
                           </TableCell>
                         </TableRow>
@@ -385,7 +386,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {(data.hauling_orders?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">Hauling Orders</Typography>
+          <Typography variant="subtitle2">{t("missionsUi.haulingOrders")}</Typography>
           <Stack spacing={0.25}>
             {data.hauling_orders!.map((h, i) => (
               <Stack key={i} direction="row" justifyContent="space-between">
@@ -403,7 +404,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {(m.item_rewards?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">Item Rewards</Typography>
+          <Typography variant="subtitle2">{t("missionsUi.itemRewards")}</Typography>
           <Stack spacing={0.25}>
             {m.item_rewards!.map((item, i) =>
               item.game_item_slug ? (
@@ -429,7 +430,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
         <>
           <Divider />
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Location</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.location")}</Typography>
             <Typography variant="body2">{[m.star_system, m.planet_moon, m.location_detail].filter(Boolean).join(" → ")}</Typography>
           </Stack>
         </>
@@ -439,17 +440,17 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
       {(m.community_difficulty_avg || m.community_satisfaction_avg) && (
         <>
           <Divider />
-          <Typography variant="subtitle2">Community Ratings</Typography>
+          <Typography variant="subtitle2">{t("missionsUi.communityRatings")}</Typography>
           {m.community_difficulty_avg != null && (
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" color="text.secondary">Difficulty</Typography>
-              <Typography variant="body2">{m.community_difficulty_avg.toFixed(1)}/5 ({m.community_difficulty_count} ratings)</Typography>
+              <Typography variant="body2" color="text.secondary">{t("missionsUi.difficulty")}</Typography>
+              <Typography variant="body2">{t("missionsUi.ratingOutOf5", { avg: m.community_difficulty_avg.toFixed(1), count: m.community_difficulty_count })}</Typography>
             </Stack>
           )}
           {m.community_satisfaction_avg != null && (
             <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" color="text.secondary">Satisfaction</Typography>
-              <Typography variant="body2">{m.community_satisfaction_avg.toFixed(1)}/5 ({m.community_satisfaction_count} ratings)</Typography>
+              <Typography variant="body2" color="text.secondary">{t("missionsUi.satisfaction")}</Typography>
+              <Typography variant="body2">{t("missionsUi.ratingOutOf5", { avg: m.community_satisfaction_avg.toFixed(1), count: m.community_satisfaction_count })}</Typography>
             </Stack>
           )}
         </>
@@ -463,22 +464,23 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
 // ============================================================================
 
 function RequirementsTab({ data }: { data: MissionDetailResponse }) {
+  const { t } = useTranslation()
   const m = data.mission
   return (
     <Stack spacing={2}>
       {(m.min_standing || m.max_standing) && (
         <>
-          <Typography variant="subtitle2">Required Standing</Typography>
+          <Typography variant="subtitle2">{t("missionsUi.requiredStanding")}</Typography>
           <Stack spacing={0.5}>
             {m.min_standing && (
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">Min</Typography>
+                <Typography variant="body2" color="text.secondary">{t("missionsUi.min")}</Typography>
                 <Typography variant="body2">{m.min_standing_display || m.min_standing}</Typography>
               </Stack>
             )}
             {m.max_standing && (
               <Stack direction="row" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">Max</Typography>
+                <Typography variant="body2" color="text.secondary">{t("missionsUi.max")}</Typography>
                 <Typography variant="body2">{m.max_standing_display || m.max_standing}</Typography>
               </Stack>
             )}
@@ -487,22 +489,22 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
         </>
       )}
 
-      <Typography variant="subtitle2">Mission Properties</Typography>
+      <Typography variant="subtitle2">{t("missionsUi.properties")}</Typography>
       <Stack spacing={0.75}>
-        <BoolChip value={m.is_shareable} label="Shareable" />
-        <BoolChip value={m.is_illegal} label="Illegal" />
-        <BoolChip value={m.is_lawful} label="Lawful" />
-        <BoolChip value={m.is_unique_mission} label="Once Only" />
-        <BoolChip value={m.can_reaccept_after_abandoning} label="Re-accept after abandon" />
-        <BoolChip value={m.can_reaccept_after_failing} label="Re-accept after fail" />
-        <BoolChip value={m.available_in_prison} label="Available in prison" />
+        <BoolChip value={m.is_shareable} label={t("missionsUi.shareable")} />
+        <BoolChip value={m.is_illegal} label={t("missionsUi.illegal")} />
+        <BoolChip value={m.is_lawful} label={t("missionsUi.lawful")} />
+        <BoolChip value={m.is_unique_mission} label={t("missionsUi.onceOnly")} />
+        <BoolChip value={m.can_reaccept_after_abandoning} label={t("missionsUi.reacceptAbandon")} />
+        <BoolChip value={m.can_reaccept_after_failing} label={t("missionsUi.reacceptFail")} />
+        <BoolChip value={m.available_in_prison} label={t("missionsUi.availableInPrison")} />
       </Stack>
 
       {m.required_reputation != null && (
         <>
           <Divider />
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Required Reputation</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.requiredReputation")}</Typography>
             <Typography variant="body2">{m.required_reputation.toLocaleString()} XP</Typography>
           </Stack>
         </>
@@ -510,29 +512,29 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
 
       <Divider />
 
-      <Typography variant="subtitle2">Timing</Typography>
+      <Typography variant="subtitle2">{t("missionsUi.timing")}</Typography>
       <Stack spacing={0.5}>
         {m.time_to_complete != null && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />Time to Complete</Typography>
+            <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />{t("missionsUi.timeToComplete")}</Typography>
             <Typography variant="body2">{formatDuration(m.time_to_complete)}</Typography>
           </Stack>
         )}
         {m.personal_cooldown_time != null && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />Cooldown</Typography>
+            <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />{t("missionsUi.cooldown")}</Typography>
             <Typography variant="body2">{formatDuration(m.personal_cooldown_time)}</Typography>
           </Stack>
         )}
         {m.abandoned_cooldown_time != null && m.abandoned_cooldown_time !== m.personal_cooldown_time && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Abandon cooldown</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.abandonCooldown")}</Typography>
             <Typography variant="body2">{formatDuration(m.abandoned_cooldown_time)}</Typography>
           </Stack>
         )}
         {m.deadline_seconds != null && (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Deadline</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.deadline")}</Typography>
             <Typography variant="body2">{formatDuration(m.deadline_seconds)}</Typography>
           </Stack>
         )}
@@ -541,7 +543,7 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
       {(m.accept_locations?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">Available At</Typography>
+          <Typography variant="subtitle2">{t("missionsUi.availableAt")}</Typography>
           <Stack spacing={0.25}>
             {m.accept_locations!.map((loc, i) => (
               <Typography key={i} variant="body2">{loc}</Typography>
@@ -554,7 +556,7 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
         <>
           <Divider />
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">Max Crimestat</Typography>
+            <Typography variant="body2" color="text.secondary">{t("missionsUi.maxCrimestat")}</Typography>
             <Typography variant="body2">{m.max_crimestat}</Typography>
           </Stack>
         </>
@@ -568,22 +570,23 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
 // ============================================================================
 
 function ChainTab({ data }: { data: MissionDetailResponse }) {
+  const { t } = useTranslation()
   const m = data.mission
   return (
     <Stack spacing={2}>
       <Stack direction="row" spacing={1} alignItems="center">
-        <Typography variant="subtitle2">Chain Status:</Typography>
-        {m.is_chain_starter && <Chip label="Chain Starter" size="small" color="secondary" />}
-        {m.is_chain_mission && !m.is_chain_starter && <Chip label="Part of Chain" size="small" />}
+        <Typography variant="subtitle2">{t("missionsUi.chainStatus")}</Typography>
+        {m.is_chain_starter && <Chip label={t("missionsUi.chainStarter")} size="small" color="secondary" />}
+        {m.is_chain_mission && !m.is_chain_starter && <Chip label={t("missionsUi.partOfChain")} size="small" />}
         {!m.is_chain_mission && !m.is_chain_starter && (
-          <Typography variant="body2" color="text.secondary">Standalone mission</Typography>
+          <Typography variant="body2" color="text.secondary">{t("missionsUi.standalone")}</Typography>
         )}
       </Stack>
 
       {(data.prerequisite_missions?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">Prerequisites ({data.prerequisite_missions!.length})</Typography>
+          <Typography variant="subtitle2">{t("missionsUi.prerequisites", { count: data.prerequisite_missions!.length })}</Typography>
           <Stack spacing={0.5}>
             {data.prerequisite_missions!.map((pm) => (
               <Stack key={pm.mission_id} direction="row" spacing={1} alignItems="center">
@@ -599,7 +602,7 @@ function ChainTab({ data }: { data: MissionDetailResponse }) {
 
       {m.required_rank != null && (
         <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="subtitle2">Required Rank:</Typography>
+          <Typography variant="subtitle2">{t("missionsUi.requiredRank")}</Typography>
           <Typography variant="body2">{m.required_rank}</Typography>
         </Stack>
       )}

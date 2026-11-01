@@ -294,7 +294,7 @@ export function MarketMultipleViewV2() {
 
   return (
     <StandardPageLayout
-      title={complete?.title || "Bundle Listing"}
+      title={complete?.title || t("marketV2.bundleListing")}
       headerTitle={complete?.title}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },

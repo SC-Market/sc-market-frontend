@@ -127,7 +127,7 @@ export function BuyOrderAggregateCard({
                   currentTarget.onerror = null
                   currentTarget.src = FALLBACK_IMAGE_URL
                 }}
-                alt={`Image of ${aggregate.item_name}`}
+                alt={t("marketV2.imageOf", { name: aggregate.item_name })}
               />
               <Box
                 sx={{

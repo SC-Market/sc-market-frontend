@@ -117,7 +117,8 @@ const ArchivedListingsV2 = lazyWithRetry(() =>
   Promise.resolve({ default: () => <MyListingSectionV2 status="cancelled" /> }),
 )
 function ListingsSkeleton() {
-  return <Grid item xs={12}><div>Loading…</div></Grid>
+  const { t } = useTranslation()
+  return <Grid item xs={12}><div>{t("marketV2.loadingEllipsis")}</div></Grid>
 }
 
 // ── Mobile view ───────────────────────────────────────────────────────────

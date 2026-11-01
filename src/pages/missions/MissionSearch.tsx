@@ -281,7 +281,7 @@ export function MissionSearch() {
           tokens={searchTokens}
           onChange={handleTokensChange}
           extraOptions={eventOptions}
-          placeholder="Search missions, systems, categories..."
+          placeholder={t("missionsUi.searchPlaceholder")}
         />
         <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
           {isLoading ? <Skeleton variant="text" width={32} /> : data?.total}
@@ -303,7 +303,7 @@ export function MissionSearch() {
       {/* Error State */}
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load missions. Please try again.
+          {t("missionsUi.listLoadFailed")}
         </Alert>
       )}
 
@@ -364,18 +364,18 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell>
                             <Typography variant="caption" color="text.secondary" noWrap sx={{ maxWidth: 100, display: "block" }}>
-                              {m.faction?.includes("~mission") ? "Various" : m.faction || "—"}
+                              {m.faction?.includes("~mission") ? t("missionsUi.various") : m.faction || "—"}
                             </Typography>
                           </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={0.25} flexWrap="wrap" useFlexGap>
                               {m.category && <Tooltip title={getMissionTypeLabel(m.category)}><Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={microChip} /></Tooltip>}
-                              {(m.is_illegal || m.legal_status === "ILLEGAL") && <Tooltip title="Illegal Mission"><Chip label="Illegal" size="small" color="error" sx={microChip} /></Tooltip>}
-                              {m.is_unique_mission && <Tooltip title="Unique (one-time)"><Chip label="Unique" size="small" color="warning" sx={microChip} /></Tooltip>}
-                              {m.is_chain_starter && <Tooltip title="Chain Starter"><Chip label="Starter" size="small" color="secondary" sx={microChip} /></Tooltip>}
-                              {m.is_chain_mission && !m.is_chain_starter && <Tooltip title="Part of Chain"><Chip label="Chain" size="small" color="secondary" variant="outlined" sx={microChip} /></Tooltip>}
+                              {(m.is_illegal || m.legal_status === "ILLEGAL") && <Tooltip title={t("missionsUi.illegalMission")}><Chip label={t("missionsUi.illegal")} size="small" color="error" sx={microChip} /></Tooltip>}
+                              {m.is_unique_mission && <Tooltip title={t("missionsUi.uniqueOneTime")}><Chip label={t("missionsUi.unique")} size="small" color="warning" sx={microChip} /></Tooltip>}
+                              {m.is_chain_starter && <Tooltip title={t("missionsUi.chainStarter")}><Chip label={t("missionsUi.starter")} size="small" color="secondary" sx={microChip} /></Tooltip>}
+                              {m.is_chain_mission && !m.is_chain_starter && <Tooltip title={t("missionsUi.partOfChain")}><Chip label={t("missionsUi.chain")} size="small" color="secondary" variant="outlined" sx={microChip} /></Tooltip>}
                               {m.associated_event && <Tooltip title={m.associated_event}><Chip label={m.associated_event} size="small" sx={{ ...microChip, maxWidth: 100, bgcolor: "info.main", color: "#fff" }} /></Tooltip>}
-                              {m.ship_encounter_count > 0 && <Tooltip title={`${m.ship_encounter_count} ships`}><Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={m.ship_encounter_count} size="small" color="info" variant="outlined" sx={microChip} /></Tooltip>}
+                              {m.ship_encounter_count > 0 && <Tooltip title={t("missionsUi.shipCount", { count: m.ship_encounter_count })}><Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={m.ship_encounter_count} size="small" color="info" variant="outlined" sx={microChip} /></Tooltip>}
                             </Stack>
                           </TableCell>
                           <TableCell>
@@ -392,7 +392,7 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell align="center">
                             {m.blueprint_reward_count > 0
-                              ? <Tooltip title={m.blueprint_reward_names?.join(", ") || `${m.blueprint_reward_count} blueprints`} arrow><Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={m.blueprint_reward_count} size="small" color="success" sx={{ ...microChip, minWidth: 24 }} /></Tooltip>
+                              ? <Tooltip title={m.blueprint_reward_names?.join(", ") || t("missionsUi.blueprintCount", { count: m.blueprint_reward_count })} arrow><Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={m.blueprint_reward_count} size="small" color="success" sx={{ ...microChip, minWidth: 24 }} /></Tooltip>
                               : <Typography variant="caption" color="text.disabled">—</Typography>}
                           </TableCell>
                           <TableCell align="right">
@@ -403,7 +403,7 @@ export function MissionSearch() {
                           <TableCell align="right">
                             <Typography variant="body2" color={(m.credit_reward_min ?? 0) < 0 ? "error.main" : "success.main"} fontWeight={600} noWrap>
                               {(m.credit_reward_min ?? 0) < 0
-                                ? `Fee: ${formatCredits(Math.abs(m.credit_reward_min!))}`
+                                ? t("missionsUi.fee", { amount: formatCredits(Math.abs(m.credit_reward_min!)) })
                                 : m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
                                   ? formatCredits(m.credit_reward_min)
                                   : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
@@ -469,18 +469,19 @@ export function MissionSearch() {
 const MISSION_TABLE_SX = { "& td, & th": { py: 0.5, px: 1 } } as const
 
 function MissionTableHead() {
+  const { t } = useTranslation()
   return (
     <TableHead>
       <TableRow>
         <TableCell sx={{ width: 40 }} />
-        <TableCell>System</TableCell>
-        <TableCell>Title</TableCell>
-        <TableCell>Faction</TableCell>
-        <TableCell sx={{ maxWidth: 280 }}>Tags</TableCell>
-        <TableCell>Materials</TableCell>
-        <TableCell align="center">BPs</TableCell>
-        <TableCell align="right">Base XP</TableCell>
-        <TableCell align="right">Reward</TableCell>
+        <TableCell>{t("missionsUi.system")}</TableCell>
+        <TableCell>{t("missionsUi.title")}</TableCell>
+        <TableCell>{t("missionsUi.faction")}</TableCell>
+        <TableCell sx={{ maxWidth: 280 }}>{t("missionsUi.tags")}</TableCell>
+        <TableCell>{t("missionsUi.materials")}</TableCell>
+        <TableCell align="center">{t("missionsUi.bps")}</TableCell>
+        <TableCell align="right">{t("missionsUi.baseXp")}</TableCell>
+        <TableCell align="right">{t("missionsUi.reward")}</TableCell>
       </TableRow>
     </TableHead>
   )

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 /**
  * MissionDetailModal — thin dialog wrapper around shared MissionDetailContent.
  */
@@ -26,6 +27,7 @@ interface MissionDetailModalProps {
 }
 
 export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick }: MissionDetailModalProps) {
+  const { t } = useTranslation()
   const { data, isLoading, error } = useGetMissionDetailQuery(
     { missionId: missionId! },
     { skip: !missionId },
@@ -39,7 +41,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
         <Typography variant="h6" noWrap sx={{ flex: 1 }}>
           <MissionName name={m?.mission_name} variant="inherit" />
         </Typography>
-        <IconButton onClick={onClose} size="small" aria-label="Close"><Close /></IconButton>
+        <IconButton onClick={onClose} size="small" aria-label={t("missionsUi.close")}><Close /></IconButton>
       </DialogTitle>
 
       {m && (
@@ -50,7 +52,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
 
       <DialogContent sx={{ minHeight: 400 }}>
         {isLoading && <DetailSkeleton />}
-        {error && <Alert severity="error">Failed to load mission.</Alert>}
+        {error && <Alert severity="error">{t("missionsUi.loadFailed")}</Alert>}
         {data && <MissionDetailTabs data={data} onBlueprintClick={onBlueprintClick} />}
       </DialogContent>
     </Dialog>

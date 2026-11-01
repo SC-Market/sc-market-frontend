@@ -218,11 +218,11 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Item</TableCell>
-                  <TableCell>Variant</TableCell>
-                  <TableCell align="right">Qty</TableCell>
-                  <TableCell align="right">Price</TableCell>
-                  <TableCell align="right">Subtotal</TableCell>
+                  <TableCell>{t("marketV2.item")}</TableCell>
+                  <TableCell>{t("marketV2.variant")}</TableCell>
+                  <TableCell align="right">{t("marketV2.qty")}</TableCell>
+                  <TableCell align="right">{t("marketV2.price")}</TableCell>
+                  <TableCell align="right">{t("marketV2.subtotal")}</TableCell>
                   <TableCell width={48} />
                 </TableRow>
               </TableHead>
@@ -295,7 +295,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                 ))}
                 <TableRow>
                   <TableCell colSpan={4} align="right">
-                    <Typography variant="subtitle2">Total</Typography>
+                    <Typography variant="subtitle2">{t("marketV2.total")}</Typography>
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="h6" color="primary" fontWeight={700}>
@@ -337,7 +337,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                 select
                 fullWidth
                 size="small"
-                label="Select Variant"
+                label={t("marketV2.selectVariant")}
                 value={selectedVariantId}
                 onChange={(e) => setSelectedVariantId(e.target.value)}
                 SelectProps={{ IconComponent: KeyboardArrowDownRoundedIcon }}
@@ -357,7 +357,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                       )}
                       <Box sx={{ flex: 1 }} />
                       <Typography variant="caption" color="text.secondary">
-                        Qty: {v.quantity}
+                        {t("marketV2.qtyColon", { quantity: v.quantity })}
                       </Typography>
                       <Typography variant="body2" color="primary" fontWeight="bold">
                         {formatPrice(v.price)}
@@ -384,7 +384,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    of {selectedVariant?.quantity || 0} available
+                    {t("marketV2.ofAvailable", { n: selectedVariant?.quantity || 0 })}
                   </InputAdornment>
                 ),
               }}

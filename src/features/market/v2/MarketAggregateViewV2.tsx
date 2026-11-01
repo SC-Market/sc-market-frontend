@@ -283,7 +283,7 @@ export function MarketAggregateViewV2() {
 
   return (
     <StandardPageLayout
-      title={head?.title ?? "Market Item"}
+      title={head?.title ?? t("marketV2.marketItem")}
       description={head ? headDescription(head) : undefined}
       headerTitle={game_item.name}
       breadcrumbs={[
@@ -673,7 +673,7 @@ export function BuyOrderRowV2(props: {
         });
       })
       .catch((err) => issueAlert({
-        message: err?.data?.message || "Failed to cancel",
+        message: err?.data?.message || t("marketV2.cancelFailed"),
         severity: "error",
       }));
     return false;

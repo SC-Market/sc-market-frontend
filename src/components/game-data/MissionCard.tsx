@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 /**
  * MissionCard - Compact card for grid display
  */
@@ -73,13 +74,14 @@ function abbrResource(name: string): string {
 }
 
 export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick }) => {
+  const { t } = useTranslation()
   const nav = useNavigate()
   const giver = mission.mission_giver_org || mission.faction
   const displayGiver = giver?.includes("~mission") ? "Various" : giver
   const missionIcon = getMissionIcon(mission.category) || getFactionIcon(mission.faction)
   const isFee = (mission.credit_reward_min ?? 0) < 0
   const reward = isFee
-    ? `Fee: ${formatCredits(Math.abs(mission.credit_reward_min!))}`
+    ? t("missionsUi.fee", { amount: formatCredits(Math.abs(mission.credit_reward_min!)) })
     : mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
       ? formatCredits(mission.credit_reward_min)
       : `${formatCredits(mission.credit_reward_min)} – ${formatCredits(mission.credit_reward_max)}`
@@ -106,7 +108,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick
             <Box sx={{ minWidth: 0 }}>
               <MissionName name={mission.mission_name} variant="body2" fontWeight={600} noWrap />
               <Typography variant="caption" color="text.secondary" noWrap display="block">
-                {displayGiver || mission.star_system || "Unknown"}
+                {displayGiver || mission.star_system || t("missionsUi.unknown")}
               </Typography>
             </Box>
           </Box>
@@ -115,13 +117,13 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: "4px", mb: 0.5 }}>
             {mission.star_system && <Chip label={mission.star_system} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?system=${mission.star_system}`) }} sx={microChip} />}
             {mission.category && <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?category=${mission.category}`) }} sx={microChip} />}
-            {(mission.is_illegal || mission.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?legal=ILLEGAL") }} sx={microChip} />}
-            {mission.is_unique_mission && <Chip label="Unique" size="small" color="warning" sx={microChip} />}
-            {mission.is_chain_starter && <Chip label="Starter" size="small" color="secondary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?chain=true") }} sx={microChip} />}
-            {mission.is_chain_mission && !mission.is_chain_starter && <Chip label="Chain" size="small" color="secondary" variant="outlined" sx={microChip} />}
+            {(mission.is_illegal || mission.legal_status === "ILLEGAL") && <Chip label={t("missionsUi.illegal")} size="small" color="error" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?legal=ILLEGAL") }} sx={microChip} />}
+            {mission.is_unique_mission && <Chip label={t("missionsUi.unique")} size="small" color="warning" sx={microChip} />}
+            {mission.is_chain_starter && <Chip label={t("missionsUi.starter")} size="small" color="secondary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?chain=true") }} sx={microChip} />}
+            {mission.is_chain_mission && !mission.is_chain_starter && <Chip label={t("missionsUi.chain")} size="small" color="secondary" variant="outlined" sx={microChip} />}
             {mission.associated_event && <Chip label={mission.associated_event} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?show_events=true&event=${mission.associated_event}`) }} sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }} />}
             {mission.ship_encounter_count > 0 && <Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={mission.ship_encounter_count} size="small" color="info" variant="outlined" sx={microChip} />}
-            {mission.blueprint_reward_count > 0 && <Tooltip title={mission.blueprint_reward_names?.join(", ") || `${mission.blueprint_reward_count} blueprints`} arrow><Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={`${mission.blueprint_reward_count} BP`} size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?blueprints=true") }} sx={microChip} /></Tooltip>}
+            {mission.blueprint_reward_count > 0 && <Tooltip title={mission.blueprint_reward_names?.join(", ") || t("missionsUi.blueprintCount", { count: mission.blueprint_reward_count })} arrow><Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={`${mission.blueprint_reward_count} BP`} size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?blueprints=true") }} sx={microChip} /></Tooltip>}
           </Box>
 
           {/* Material badges */}
@@ -140,11 +142,11 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick
         {/* Reward lines — pinned to bottom */}
         <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0 }}>Reward</Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ flexShrink: 0 }}>{t("missionsUi.reward")}</Typography>
             <Typography variant="caption" color={isFee ? "error.main" : "success.main"} fontWeight={600} textAlign="right">{reward}</Typography>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" color="text.secondary">Base XP</Typography>
+            <Typography variant="caption" color="text.secondary">{t("missionsUi.baseXp")}</Typography>
             <Typography variant="caption" color={mission.reputation_reward ? "text.primary" : "text.secondary"}>
               {mission.reputation_reward ? `${mission.reputation_reward.toLocaleString()}` : "—"}
             </Typography>

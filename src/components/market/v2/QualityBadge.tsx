@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React from "react";
 import { Chip } from "@mui/material";
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
@@ -20,6 +21,7 @@ export const QualityBadge: React.FC<QualityBadgeProps> = ({
   size = "medium",
   variant = "filled",
 }) => {
+  const { t } = useTranslation()
   const isMobile = useBreakpointDown("sm");
 
   if (!tier || tier < 1 || tier > 5) {
@@ -31,7 +33,7 @@ export const QualityBadge: React.FC<QualityBadgeProps> = ({
 
   return (
     <Chip
-      label={`Tier ${tier}`}
+      label={t("marketV2.tierN", { tier })}
       size={displaySize}
       variant={variant}
       sx={{
