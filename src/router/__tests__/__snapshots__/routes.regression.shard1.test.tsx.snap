@@ -324,6 +324,7 @@ exports[`routes (shard 1/4) > /contractor/:id/:tab 1`] = `
     "/developers",
     "/guides",
     "/guides/discord/api-tokens",
+    "/guides/org-storefront/white-label",
     "/privacy",
     "/terms",
   ],
