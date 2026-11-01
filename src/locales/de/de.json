@@ -701,31 +701,13 @@
       "spectrum_set": "Ein Admin hat die RSI-Verknüpfung deines Kontos aktualisiert.",
       "username_released": "Ein Admin hat deinen Benutzernamen freigegeben. Dein Benutzername ist jetzt {{username}}. Nutze „Handle synchronisieren“ in den Einstellungen, um deinen aktuellen RSI-Handle zurückzubekommen."
     },
-    "actions": "Aktionen für Benachrichtigung",
-    "unread": "Ungelesen",
-    "groups": {
-      "today": "Heute",
-      "yesterday": "Gestern",
-      "week": "Diese Woche",
-      "older": "Älter"
-    },
     "scope": {
       "all": "Alle",
       "personal": "Persönlich",
-      "shop": "Shop",
-      "label": "Benachrichtigungen anzeigen für"
+      "shop": "Shop"
     },
     "filter_by_shop": "Nach Shop filtern",
     "all_shops": "Alle Shops",
-    "clear_all_confirm_title": "Alle Benachrichtigungen löschen?",
-    "clear_all_confirm_body": "Dadurch werden alle Benachrichtigungen gelöscht, ob gelesen oder nicht. Das lässt sich nicht rückgängig machen.",
-    "clear_all_confirm": "Alle löschen",
-    "unread_count_one": "{{count}} ungelesen",
-    "unread_count_other": "{{count}} ungelesen",
-    "all_caught_up": "Alles erledigt",
-    "empty_filtered": "Nichts für diesen Filter",
-    "empty_filtered_description": "Sieh dir stattdessen alle Benachrichtigungen an.",
-    "show_all": "Alle anzeigen",
     "storefront_enquiry": {
       "created": "{{name}} hat eine gebrandete Storefront angefragt: {{subdomain}}",
       "generic": "Neue Anfrage für eine gebrandete Storefront"
@@ -4780,9 +4762,7 @@
   "navbar": {
     "cart": "Warenkorb",
     "toggle_drawer": "Sidebar umschalten",
-    "notifications": "Benachrichtigungen",
-    "notificationsUnread_one": "Benachrichtigungen, {{count}} ungelesen",
-    "notificationsUnread_other": "Benachrichtigungen, {{count}} ungelesen"
+    "notifications": "Benachrichtigungen"
   },
   "Off Course": "warning",
   "offerTrend": {

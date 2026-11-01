@@ -3157,9 +3157,7 @@
   "navbar": {
     "cart": "Cart",
     "toggle_drawer": "Toggle sidebar",
-    "notifications": "Notifications",
-    "notificationsUnread_one": "Notifications, {{count}} unread",
-    "notificationsUnread_other": "Notifications, {{count}} unread"
+    "notifications": "Notifications"
   },
   "navigation": {
     "goBack": "Go Back"
@@ -3221,31 +3219,13 @@
       "spectrum_set": "An admin updated the RSI link on your account.",
       "username_released": "An admin released your username. Your username is now {{username}}. Use Sync handle in Settings to get your current RSI handle back."
     },
-    "actions": "Notification actions",
-    "unread": "Unread",
-    "groups": {
-      "today": "Today",
-      "yesterday": "Yesterday",
-      "week": "Earlier this week",
-      "older": "Older"
-    },
     "scope": {
       "all": "All",
       "personal": "Personal",
-      "shop": "Shop",
-      "label": "Show notifications for"
+      "shop": "Shop"
     },
     "filter_by_shop": "Filter by shop",
     "all_shops": "All shops",
-    "clear_all_confirm_title": "Clear all notifications?",
-    "clear_all_confirm_body": "This deletes every notification, read or not. It can't be undone.",
-    "clear_all_confirm": "Clear all",
-    "unread_count_one": "{{count}} unread",
-    "unread_count_other": "{{count}} unread",
-    "all_caught_up": "You're all caught up",
-    "empty_filtered": "Nothing here for this filter",
-    "empty_filtered_description": "Try all notifications instead.",
-    "show_all": "Show all",
     "storefront_enquiry": {
       "created": "{{name}} asked for a branded storefront: {{subdomain}}",
       "generic": "New branded storefront enquiry"

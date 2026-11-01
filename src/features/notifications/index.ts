@@ -1,8 +1,8 @@
 export { NotificationEntry } from "./components/NotificationEntry"
-export { NotificationBase } from "./components/NotificationBase"
-export { NotificationList } from "./components/NotificationList"
-export { NotificationScopeFilter } from "./components/NotificationScopeFilter"
-export { NotificationBulkActions } from "./components/NotificationBulkActions"
+export {
+  NotificationBase,
+  NotificationDeleteButton,
+} from "./components/NotificationBase"
 export { NotificationContractorInvite } from "./types/NotificationContractorInvite"
 export { useNotifications } from "./hooks/useNotifications"
 export { usePageNotifications } from "./hooks/usePageNotifications"

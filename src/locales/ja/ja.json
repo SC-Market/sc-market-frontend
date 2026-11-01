@@ -701,31 +701,13 @@
       "spectrum_set": "管理者があなたのアカウントの RSI 連携を更新しました。",
       "username_released": "管理者があなたのユーザー名を解放しました。現在のユーザー名は {{username}} です。設定の「ハンドルを同期」で現在の RSI ハンドルを取り戻せます。"
     },
-    "actions": "通知の操作",
-    "unread": "未読",
-    "groups": {
-      "today": "今日",
-      "yesterday": "昨日",
-      "week": "今週",
-      "older": "それ以前"
-    },
     "scope": {
       "all": "すべて",
       "personal": "個人",
-      "shop": "ショップ",
-      "label": "表示する通知"
+      "shop": "ショップ"
     },
     "filter_by_shop": "ショップで絞り込む",
     "all_shops": "すべてのショップ",
-    "clear_all_confirm_title": "すべての通知を削除しますか？",
-    "clear_all_confirm_body": "既読・未読に関係なく、すべての通知が削除されます。元に戻せません。",
-    "clear_all_confirm": "すべて削除",
-    "unread_count_one": "未読 {{count}} 件",
-    "unread_count_other": "未読 {{count}} 件",
-    "all_caught_up": "すべて確認済みです",
-    "empty_filtered": "このフィルターに該当する通知はありません",
-    "empty_filtered_description": "すべての通知を表示してみてください。",
-    "show_all": "すべて表示",
     "storefront_enquiry": {
       "created": "{{name}} がブランドストアフロントをリクエストしました：{{subdomain}}",
       "generic": "ブランドストアフロントの新しい問い合わせ"
@@ -4779,9 +4761,7 @@
   "navbar": {
     "cart": "カート",
     "toggle_drawer": "サイドバーを切り替え",
-    "notifications": "通知",
-    "notificationsUnread_one": "通知、未読 {{count}} 件",
-    "notificationsUnread_other": "通知、未読 {{count}} 件"
+    "notifications": "通知"
   },
   "Off Course": "warning",
   "offerTrend": {

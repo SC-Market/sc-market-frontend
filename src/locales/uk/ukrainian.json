@@ -705,33 +705,13 @@
       "spectrum_set": "Адміністратор оновив зв'язок із RSI у вашому обліковому записі.",
       "username_released": "Адміністратор звільнив ваше ім'я користувача. Тепер ваше ім'я користувача — {{username}}. Скористайтеся «Синхронізувати хендл» у налаштуваннях, щоб повернути свій поточний хендл RSI."
     },
-    "actions": "Дії зі сповіщенням",
-    "unread": "Непрочитане",
-    "groups": {
-      "today": "Сьогодні",
-      "yesterday": "Вчора",
-      "week": "Цього тижня",
-      "older": "Раніше"
-    },
     "scope": {
       "all": "Усі",
       "personal": "Особисті",
-      "shop": "Магазин",
-      "label": "Показати сповіщення для"
+      "shop": "Магазин"
     },
     "filter_by_shop": "Фільтр за магазином",
     "all_shops": "Усі магазини",
-    "clear_all_confirm_title": "Очистити всі сповіщення?",
-    "clear_all_confirm_body": "Буде видалено всі сповіщення, прочитані й ні. Це не можна скасувати.",
-    "clear_all_confirm": "Очистити все",
-    "unread_count_one": "{{count}} непрочитане",
-    "unread_count_few": "{{count}} непрочитані",
-    "unread_count_many": "{{count}} непрочитаних",
-    "unread_count_other": "{{count}} непрочитаних",
-    "all_caught_up": "Усе переглянуто",
-    "empty_filtered": "Для цього фільтра нічого немає",
-    "empty_filtered_description": "Спробуйте переглянути всі сповіщення.",
-    "show_all": "Показати всі",
     "storefront_enquiry": {
       "created": "{{name}} просить брендовану вітрину: {{subdomain}}",
       "generic": "Новий запит на брендовану вітрину"
@@ -4898,11 +4878,7 @@
   "navbar": {
     "cart": "Кошик",
     "toggle_drawer": "Перемкнути бічну панель",
-    "notifications": "Сповіщення",
-    "notificationsUnread_one": "Сповіщення, {{count}} непрочитане",
-    "notificationsUnread_few": "Сповіщення, {{count}} непрочитані",
-    "notificationsUnread_many": "Сповіщення, {{count}} непрочитаних",
-    "notificationsUnread_other": "Сповіщення, {{count}} непрочитаних"
+    "notifications": "Сповіщення"
   },
   "Off Course": "warning",
   "offerTrend": {

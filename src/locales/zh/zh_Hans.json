@@ -707,31 +707,13 @@
       "spectrum_set": "管理员更新了你账户的 RSI 关联。",
       "username_released": "管理员释放了你的用户名。你现在的用户名是 {{username}}。在设置中使用“同步名称”可取回你当前的 RSI 名称。"
     },
-    "actions": "通知操作",
-    "unread": "未读",
-    "groups": {
-      "today": "今天",
-      "yesterday": "昨天",
-      "week": "本周早些时候",
-      "older": "更早"
-    },
     "scope": {
       "all": "全部",
       "personal": "个人",
-      "shop": "店铺",
-      "label": "显示以下通知"
+      "shop": "店铺"
     },
     "filter_by_shop": "按店铺筛选",
     "all_shops": "所有店铺",
-    "clear_all_confirm_title": "清除所有通知？",
-    "clear_all_confirm_body": "这会删除所有通知（无论是否已读），且无法撤销。",
-    "clear_all_confirm": "全部清除",
-    "unread_count_one": "{{count}} 条未读",
-    "unread_count_other": "{{count}} 条未读",
-    "all_caught_up": "已全部看完",
-    "empty_filtered": "此筛选条件下没有通知",
-    "empty_filtered_description": "试试查看全部通知。",
-    "show_all": "显示全部",
     "storefront_enquiry": {
       "created": "{{name}} 申请了品牌店面：{{subdomain}}",
       "generic": "新的品牌店面咨询"
@@ -4837,9 +4819,7 @@
   "navbar": {
     "cart": "购物车",
     "toggle_drawer": "切换侧边栏",
-    "notifications": "通知",
-    "notificationsUnread_one": "通知，{{count}} 条未读",
-    "notificationsUnread_other": "通知，{{count}} 条未读"
+    "notifications": "通知"
   },
   "Off Course": "warning",
   "offerTrend": {

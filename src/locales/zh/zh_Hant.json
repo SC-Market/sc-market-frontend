@@ -701,31 +701,13 @@
       "spectrum_set": "管理員更新了你帳號的 RSI 連結。",
       "username_released": "管理員釋出了你的使用者名稱。你現在的使用者名稱是 {{username}}。在設定中使用「同步名稱」可取回你目前的 RSI 名稱。"
     },
-    "actions": "通知操作",
-    "unread": "未讀",
-    "groups": {
-      "today": "今天",
-      "yesterday": "昨天",
-      "week": "本週稍早",
-      "older": "更早"
-    },
     "scope": {
       "all": "全部",
       "personal": "個人",
-      "shop": "商店",
-      "label": "顯示以下通知"
+      "shop": "商店"
     },
     "filter_by_shop": "依商店篩選",
     "all_shops": "所有商店",
-    "clear_all_confirm_title": "清除所有通知？",
-    "clear_all_confirm_body": "這會刪除所有通知（無論是否已讀），且無法復原。",
-    "clear_all_confirm": "全部清除",
-    "unread_count_one": "{{count}} 則未讀",
-    "unread_count_other": "{{count}} 則未讀",
-    "all_caught_up": "已全部看完",
-    "empty_filtered": "此篩選條件下沒有通知",
-    "empty_filtered_description": "試試查看全部通知。",
-    "show_all": "顯示全部",
     "storefront_enquiry": {
       "created": "{{name}} 申請了品牌店面：{{subdomain}}",
       "generic": "新的品牌店面諮詢"
@@ -4700,9 +4682,7 @@
   "navbar": {
     "cart": "購物車",
     "toggle_drawer": "切換側邊欄",
-    "notifications": "通知",
-    "notificationsUnread_one": "通知，{{count}} 則未讀",
-    "notificationsUnread_other": "通知，{{count}} 則未讀"
+    "notifications": "通知"
   },
   "Off Course": "warning",
   "offerTrend": {
