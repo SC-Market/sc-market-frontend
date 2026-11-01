@@ -69,6 +69,7 @@ import {
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
+import { MobileNavDrawer } from "./MobileNavDrawer"
 import { useHydrated } from "../../hooks/ssr/useHydrated"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
@@ -835,19 +836,15 @@ export function SidebarV2() {
 
   if (isMobile) {
     return (
-      <Drawer
-        anchor="left"
+      <MobileNavDrawer
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         // Mounted (hidden) once the page is idle, then kept: see useWarmWhenIdle.
-        ModalProps={{ keepMounted: mobileDrawerWarm }}
-        sx={{
-          zIndex: theme.zIndex.modal + 1,
-          "& .MuiDrawer-paper": { width: sidebarDrawerWidth },
-        }}
+        keepMounted={mobileDrawerWarm}
+        width={sidebarDrawerWidth}
       >
         {drawerContent}
-      </Drawer>
+      </MobileNavDrawer>
     )
   }
 
