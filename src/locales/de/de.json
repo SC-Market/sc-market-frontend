@@ -331,6 +331,12 @@
     "accept_necessary": "Nur notwendige"
   },
   "footer": {
+    "developers": "Entwickler",
+    "developersOverview": "API-Überblick",
+    "apiGuide": "API-Anleitung",
+    "openApiSpec": "OpenAPI-Spezifikation",
+    "priceFeed": "Preisdaten-Feed",
+    "sdk": "SDK auf GitHub",
     "about": "Über uns",
     "support": "Support",
     "discord": "Discord",

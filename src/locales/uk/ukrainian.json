@@ -331,6 +331,12 @@
     "accept_necessary": "Лише необхідні"
   },
   "footer": {
+    "developers": "Розробникам",
+    "developersOverview": "Огляд API",
+    "apiGuide": "Посібник з API",
+    "openApiSpec": "Специфікація OpenAPI",
+    "priceFeed": "Стрічка даних про ціни",
+    "sdk": "SDK на GitHub",
     "about": "Про нас",
     "support": "Підтримка",
     "discord": "Discord",

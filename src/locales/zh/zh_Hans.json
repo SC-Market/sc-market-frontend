@@ -337,6 +337,12 @@
     "accept_necessary": "仅必要"
   },
   "footer": {
+    "developers": "开发者",
+    "developersOverview": "API 概览",
+    "apiGuide": "API 指南",
+    "openApiSpec": "OpenAPI 规范",
+    "priceFeed": "价格数据源",
+    "sdk": "GitHub 上的 SDK",
     "about": "关于",
     "support": "支持",
     "discord": "Discord",

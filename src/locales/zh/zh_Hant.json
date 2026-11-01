@@ -331,6 +331,12 @@
     "accept_necessary": "僅必要"
   },
   "footer": {
+    "developers": "開發者",
+    "developersOverview": "API 概覽",
+    "apiGuide": "API 指南",
+    "openApiSpec": "OpenAPI 規範",
+    "priceFeed": "價格資料來源",
+    "sdk": "GitHub 上的 SDK",
     "about": "關於",
     "support": "支持",
     "discord": "Discord",

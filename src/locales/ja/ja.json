@@ -331,6 +331,12 @@
     "accept_necessary": "必要なもののみ"
   },
   "footer": {
+    "developers": "開発者向け",
+    "developersOverview": "API概要",
+    "apiGuide": "APIガイド",
+    "openApiSpec": "OpenAPI仕様",
+    "priceFeed": "価格データフィード",
+    "sdk": "GitHubのSDK",
     "about": "概要",
     "support": "サポート",
     "discord": "Discord",
