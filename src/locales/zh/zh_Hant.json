@@ -350,6 +350,7 @@
     "copyright": "著作權©",
     "trademark": "Star Citizen®（“星際公民”），Squadron 42®（“42中隊”），Roberts Space Industries®（“羅伯茨太空工業”），以及Cloud Imperium®（“雲間帝國”）均爲Cloud Imperium Rights有限責任公司旗下的註冊商標。",
     "unofficial": "這是一個非官方的星際公民玩家自制網站，不附屬於雲間帝國（Cloud Imperium）公司集團。所有這個網站上不爲站長或用戶羣體所作的內容均爲它們對應所屬人的財產。",
+    "officialSite": "星際公民官方網站：",
     "referralCode": "使用我們的邀請碼：{{code}}",
     "acknowledgments": "特別感謝 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供標誌，以及 <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink> 和 <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> 提供的 API。",
     "apiDocs": "API 文件",

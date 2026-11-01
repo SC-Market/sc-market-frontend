@@ -244,6 +244,22 @@ export function Footer() {
               "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
             )}
             <br />
+            {/* RSI's fansite rules: the notice plus a link to the official site. */}
+            {t("footer.officialSite", "Official Star Citizen site:")}{" "}
+            <Link
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://robertsspaceindustries.com"
+            >
+              <UnderlineLink
+                component="span"
+                color="text.primary"
+                variant="body2"
+              >
+                robertsspaceindustries.com
+              </UnderlineLink>
+            </Link>
+            <br />
             <Trans
               i18nKey="footer.acknowledgments"
               components={{
