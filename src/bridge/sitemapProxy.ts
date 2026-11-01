@@ -48,7 +48,7 @@ export async function handleSitemapRequest(ctx: BridgeContext, runtime: SitemapR
 
   const cacheKey = new Request(`${url.origin}${url.pathname}`, { method: "GET" })
   const cached = await runtime.cache?.match(cacheKey)
-  if (cached) return request.method === "HEAD" ? xmlResponse(null, cached.status, Object.fromEntries(cached.headers)) : cached
+  if (cached) return request.method === "HEAD" ? new Response(null, { status: cached.status, headers: cached.headers }) : cached
 
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), SITEMAP_TIMEOUT_MS)
@@ -77,5 +77,5 @@ export async function handleSitemapRequest(ctx: BridgeContext, runtime: SitemapR
     url.pathname === "/sitemap.xml" ? body.split(`${apiBase}/sitemap-`).join(`${url.origin}/sitemap-`) : body
   const response = xmlResponse(xml, 200, { "Cache-Control": `public, max-age=${SITEMAP_TTL_SECONDS}` })
   if (runtime.cache) ctx.waitUntil(runtime.cache.put(cacheKey, response.clone()))
-  return request.method === "HEAD" ? xmlResponse(null, 200, Object.fromEntries(response.headers)) : response
+  return request.method === "HEAD" ? new Response(null, { status: 200, headers: response.headers }) : response
 }
