@@ -14,6 +14,10 @@
 // Usage: node scripts/check-i18n.mjs [--json] [--list]
 //   exits 1 when any locale is missing keys or has placeholder mismatches.
 //   Extra keys (present in a locale, absent from en) are reported, not fatal.
+//   "same-as-en" counts values left in English in a locale that does not use
+//   the Latin alphabet (ja, uk, zh): almost always a missed translation. It is
+//   reported, not fatal. Latin-script locales are skipped there because
+//   cognates ("Total", "Description", "Transport") are legitimately equal.
 import { readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -121,6 +125,17 @@ const isKeyEcho = (key, value) =>
   typeof value === "string" &&
   (value === key || value === key.replace(PLURAL_RE, "$1"))
 
+// Locales whose script is not Latin: an English value there is untranslated.
+const NON_LATIN = new Set(["ja", "uk", "zh-CN", "zh-TW"])
+// Words that stay in English/Latin script everywhere: product and game proper
+// nouns, units and protocol names.
+const KEEP_RE =
+  /https?:\/\/\S+|\{\{[^}]*\}\}|\b(SC Market|SC Orgs|Star Citizen|Citizen iD|RSI|Spectrum|Discord|DM|Github|GitHub|SCMDB|UEX|aUEC|UEC|[cm]?SCU|HTML|URL|ID|API|Webhook|Favicon|TOTP|2FA)\b/g
+const isSameAsEn = (enValue, value) =>
+  typeof value === "string" &&
+  value === enValue &&
+  /[A-Za-z]{3,}/.test(value.replace(KEEP_RE, ""))
+
 export function audit() {
   const locales = Object.keys(LOCALE_FILES)
   const en = loadLocale(SOURCE)
@@ -130,11 +145,26 @@ export function audit() {
       .filter(([k, v]) => isKeyEcho(k, v))
       .map(([k]) => `${ns}:${k} (en value is the key name)`),
   )
-  report[SOURCE] = { missing: enEchoes, extra: [], placeholder: [], total: 0 }
+  // i18next v21+ ignores the old `key_plural` suffix: the plural form never
+  // shows. Plurals are `key_one` / `key_other` (+ the locale's own forms).
+  enEchoes.push(
+    ...Object.entries(en).flatMap(([ns, keys]) =>
+      Object.keys(keys)
+        .filter((k) => k.endsWith("_plural"))
+        .map((k) => `${ns}:${k} (legacy _plural suffix: use _one/_other)`),
+    ),
+  )
+  report[SOURCE] = {
+    missing: enEchoes,
+    extra: [],
+    placeholder: [],
+    sameAsEn: [],
+    total: 0,
+  }
   for (const locale of locales) {
     if (locale === SOURCE) continue
     const loc = loadLocale(locale)
-    const r = { missing: [], extra: [], placeholder: [], total: 0 }
+    const r = { missing: [], extra: [], placeholder: [], sameAsEn: [], total: 0 }
     for (const [ns, enKeys] of Object.entries(en)) {
       const have = loc[ns] ?? {}
       const { expected, pluralBases } = expectedKeys(enKeys, locale)
@@ -159,6 +189,9 @@ export function audit() {
         if (isKeyEcho(key, have[key])) {
           r.missing.push(`${ns}:${key} (value is the key name)`)
           continue
+        }
+        if (NON_LATIN.has(locale) && isSameAsEn(enKeys[enKey], have[key])) {
+          r.sameAsEn.push(`${ns}:${key} ${JSON.stringify(have[key])}`)
         }
         // Plural forms other than _one may legitimately drop {{count}}
         // when the en "one" form spells the number out; compare against
@@ -206,12 +239,14 @@ if (isMain) {
     for (const [locale, r] of Object.entries(report)) {
       console.log(
         `${locale.padEnd(8)} missing ${String(r.missing.length).padStart(4)} / ${r.total}` +
-          `  extra ${String(r.extra.length).padStart(3)}  placeholder-mismatch ${r.placeholder.length}`,
+          `  extra ${String(r.extra.length).padStart(3)}  placeholder-mismatch ${r.placeholder.length}` +
+          (NON_LATIN.has(locale) ? `  same-as-en ${r.sameAsEn.length}` : ""),
       )
       if (list) {
         for (const k of r.missing) console.log(`  - missing ${k}`)
         for (const k of r.extra) console.log(`  + extra   ${k}`)
         for (const k of r.placeholder) console.log(`  ! tokens  ${k}`)
+        for (const k of r.sameAsEn) console.log(`  ~ english ${k}`)
       }
     }
   }

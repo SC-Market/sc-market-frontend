@@ -4,6 +4,66 @@ import reactHooks from "eslint-plugin-react-hooks"
 import jsxA11y from "eslint-plugin-jsx-a11y"
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import tseslint from "typescript-eslint"
+import { isTranslatable } from "./scripts/i18n-hardcoded.mjs"
+
+// local/no-hardcoded-jsx-text: user-facing English written straight into JSX
+// (text children and aria-label / title / placeholder / alt / label /
+// helperText) instead of t(). Warn only; the same test drives the work list
+// in scripts/i18n-hardcoded.mjs. Proper nouns (aUEC, RSI, Citizen iD, ...)
+// and symbols pass. Silence a deliberate one with
+// `// eslint-disable-next-line local/no-hardcoded-jsx-text`.
+const I18N_ATTRS = new Set([
+  "aria-label",
+  "aria-description",
+  "title",
+  "placeholder",
+  "alt",
+  "label",
+  "helperText",
+  "primary",
+  "secondary",
+])
+const localPlugin = {
+  rules: {
+    "no-hardcoded-jsx-text": {
+      meta: {
+        type: "suggestion",
+        docs: { description: "User-facing JSX text must go through t()" },
+        messages: {
+          text: 'Hard-coded UI text "{{text}}": use t() with a key in src/locales/en/english.json.',
+        },
+        schema: [],
+      },
+      create(context) {
+        const report = (node, value) =>
+          context.report({
+            node,
+            messageId: "text",
+            data: { text: value.trim().replace(/\s+/g, " ").slice(0, 40) },
+          })
+        return {
+          JSXText(node) {
+            if (isTranslatable(node.value)) report(node, node.value)
+          },
+          JSXAttribute(node) {
+            const name =
+              typeof node.name.name === "string" ? node.name.name : ""
+            if (!I18N_ATTRS.has(name) || !node.value) return
+            let v = node.value
+            if (v.type === "JSXExpressionContainer") v = v.expression
+            const text =
+              v.type === "Literal" && typeof v.value === "string"
+                ? v.value
+                : v.type === "TemplateLiteral" && v.expressions.length === 0
+                  ? v.quasis[0].value.cooked
+                  : null
+            if (text != null && isTranslatable(text)) report(node, text)
+          },
+        }
+      },
+    },
+  },
+}
 
 // ── Guard rails (warn-only): keep pages on the component kit ──
 // See drafts/component-standard-audit.md §1.5. Start at warn with a baseline;
@@ -194,6 +254,22 @@ export default [
     rules: {
       "scm-style/no-hex-colors": "warn",
     },
+  },
+
+  // ── i18n: no new hard-coded UI text (warn; see scripts/i18n-hardcoded.mjs) ──
+  {
+    files: ["src/**/*.tsx"],
+    ignores: [
+      "**/*.test.tsx",
+      "**/*.spec.tsx",
+      "**/*.stories.tsx",
+      "**/__tests__/**",
+      "src/pages/admin/**",
+      "src/views/admin/**",
+      "src/features/admin/**",
+    ],
+    plugins: { local: localPlugin },
+    rules: { "local/no-hardcoded-jsx-text": "warn" },
   },
 
   {
