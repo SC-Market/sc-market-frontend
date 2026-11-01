@@ -60,8 +60,7 @@ import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { useCartDrawer } from "../hooks/AddToCartContext";
 import { AdCard } from "../../../components/ads/AdCard";
-import type { AdConfig } from "../../../components/ads/types";
-import { MARKET_ADS } from "../../../components/ads/adConfig";
+import { insertAds, type WithAds } from "../../../components/ads/adConfig";
 import { formatMarketUrl } from "../domain/urls";
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag";
@@ -831,23 +830,14 @@ export interface ListingGridProps {
   marketSidebarOpen: boolean;
 }
 
-type ListingOrAd = ListingSearchResult | { _isAd: true; ad: AdConfig };
+type ListingOrAd = WithAds<ListingSearchResult>;
 
 const ListingGridInner = React.forwardRef<HTMLDivElement, ListingGridProps>(
   ({ listings, loading, error, onRetry, gridBreakpoints, marketSidebarOpen }, ref) => {
-    const listingsWithAds = useMemo((): ListingOrAd[] => {
-      if (!listings.length || listings.length < 10) return listings;
-      const ads = MARKET_ADS || [];
-      if (ads.length === 0) return listings;
-      const result: ListingOrAd[] = [...listings];
-      const adFrequency = 24;
-      let adIndex = 0;
-      for (let i = 12; i < result.length; i += adFrequency + 1) {
-        result.splice(i, 0, { _isAd: true, ad: ads[adIndex % ads.length] });
-        adIndex++;
-      }
-      return result;
-    }, [listings]);
+    const listingsWithAds = useMemo(
+      (): ListingOrAd[] => insertAds(listings, (listing) => listing.listing_id),
+      [listings],
+    );
 
     // Only the first screen of cards in the commit that shows the results;
     // the rest right after (components/grid/firstScreen.tsx).
