@@ -990,6 +990,23 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Items V2"],
       }),
+      getPriceStats: build.query<GetPriceStatsApiResponse, GetPriceStatsApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/game-items/${queryArg.id}/price-stats`,
+          }),
+          providesTags: ["Game Items V2"],
+        },
+      ),
+      getAcquisition: build.query<
+        GetAcquisitionApiResponse,
+        GetAcquisitionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-items/${queryArg.id}/acquisition`,
+        }),
+        providesTags: ["Game Items V2"],
+      }),
       getCategories: build.query<GetCategoriesApiResponse, GetCategoriesApiArg>(
         {
           query: () => ({ url: `/game-items/categories` }),
@@ -2821,6 +2838,17 @@ export type SearchGameItemsApiArg = {
   query?: string
   /** Max results (default 50) */
   limit?: number
+}
+export type GetPriceStatsApiResponse = /** status 200 Ok */ PriceOracleItem
+export type GetPriceStatsApiArg = {
+  /** Game item UUID or short slug */
+  id: string
+}
+export type GetAcquisitionApiResponse =
+  /** status 200 Ok */ ItemAcquisitionDocument
+export type GetAcquisitionApiArg = {
+  /** Game item UUID or short slug */
+  id: string
 }
 export type GetCategoriesApiResponse = /** status 200 Ok */ GameItemCategory[]
 export type GetCategoriesApiArg = void
@@ -5401,6 +5429,281 @@ export type GameItemSearchResult = {
   name: string
   type: string
 }
+export type PublicFeedLicense = {
+  /** SPDX identifier, "CC-BY-4.0" */
+  license: string
+  /** Licence text */
+  url: string
+  /** The credit line to show when reusing the data */
+  attribution: string
+  /** Rights notice: game data, and SC Market's aggregation and price data */
+  notice: string
+}
+export type PublicFeedInfo = {
+  /** Dataset name, e.g. "prices" */
+  dataset: string
+  /** Schema version of the dataset; bumped only on a breaking change */
+  version: number
+  /** Usage terms in words: free, no key, CC BY 4.0 with attribution */
+  terms: string
+  license: PublicFeedLicense
+}
+export type PriceOracleItemRef = {
+  /** Game item UUID */
+  id: string
+  /** Short slug (`<8 hex>--<name>`), the feed's and the aggregate page's id */
+  slug: string
+  name: string
+  type: string | null
+}
+export type PriceOracleCurrent = {
+  /** Listings counted (after outlier trimming) */
+  ask_count: number
+  /** Distinct sellers counted (after outlier trimming) */
+  seller_count: number
+  /** Units available across the counted listings */
+  quantity_available: number
+  /** Lowest counted ask; null without any counted seller */
+  lowest_ask: number | null
+  /** Median of the sellers' lowest asks; null below the minimum seller count */
+  median_ask: number | null
+  /** Highest counted ask; null without any counted seller */
+  highest_ask: number | null
+  /** Sellers left out as outliers or placeholder prices */
+  outliers_excluded: number
+  /** Weight the numbers can bear: none (no listings), low (under 3 sellers: no
+    median, show the listings themselves), medium (3-5 sellers), high (6+) */
+  confidence: "none" | "low" | "medium" | "high"
+  /** The sample size in words, to show next to every number */
+  sample_note: string
+}
+export type PriceOracleDailyPoint = {
+  /** UTC day, YYYY-MM-DD */
+  date: string
+  median_ask: number | null
+  lowest_ask: number | null
+  ask_count: number
+  seller_count: number
+}
+export type PriceOracleTrend = {
+  /** Days in the window with a published daily median */
+  days_with_data: number
+  /** Median of the daily medians; null below the minimum number of days */
+  median_30d: number | null
+  /** % change, first to last daily median in the window; null below the minimum */
+  change_pct: number | null
+  /** Daily points, oldest first */
+  daily: PriceOracleDailyPoint[]
+}
+export type PriceOracleSales = {
+  /** Completed sales (order lines) in the window */
+  count: number
+  /** Median per-unit sale price; null below the minimum sale count */
+  median_price: number | null
+}
+export type PriceOracleRules = {
+  min_listing_age_hours: number
+  placeholder_price_max: number
+  min_sellers_for_trim: number
+  iqr_multiplier: number
+  min_sellers_for_median: number
+  min_sellers_for_high_confidence: number
+  min_days_for_trend: number
+  trend_window_days: number
+  min_sales_for_median: number
+}
+export type PriceOracleMethodology = {
+  /** Plain-text description of what is counted and how */
+  text: string
+  rules: PriceOracleRules
+}
+export type PriceOracleLinks = {
+  /** Human-readable aggregate page */
+  page: string
+  /** This document as the public JSON feed */
+  json: string
+  /** Index of every priced item */
+  index: string
+}
+export type PriceOracleItem = {
+  feed: PublicFeedInfo
+  item: PriceOracleItemRef
+  /** Always "aUEC" (in-game currency, not ISO 4217) */
+  currency: "aUEC"
+  /** What the unit of every price is, in words */
+  unit_note: string
+  /** When `current` was computed (ISO 8601) */
+  as_of: string
+  current: PriceOracleCurrent
+  trend_30d: PriceOracleTrend
+  sales_30d: PriceOracleSales
+  /** Plain-text statement of the current numbers, with sample size and confidence */
+  summary: string
+  methodology: PriceOracleMethodology
+  /** How to credit the data when citing or reusing it */
+  attribution: string
+  links: PriceOracleLinks
+}
+export type ItemAcquisitionFreshness = {
+  /** When this document was computed (ISO 8601); listings and current asks are as of then */
+  as_of: string
+  /** Game version of the mission, blueprint and resource data, e.g. "4.10.2-LIVE.12881860"; null without an active LIVE version */
+  game_version: string | null
+  /** When that game data was last imported (ISO 8601) */
+  game_data_updated_at: string | null
+  /** UTC day of this item's latest daily price snapshot (price.trend_30d); null when it has none */
+  price_snapshot_date: string | null
+}
+export type ItemAcquisitionPrice = {
+  /** Always "aUEC" (in-game currency, not ISO 4217) */
+  currency: "aUEC"
+  unit_note: string
+  current: PriceOracleCurrent
+  trend_30d: PriceOracleTrend
+  sales_30d: PriceOracleSales
+  /** Plain-text statement of the numbers, with sample size and confidence */
+  summary: string
+  /** links.json is the full price document, methodology included */
+  links: PriceOracleLinks
+}
+export type ItemAcquisitionMission = {
+  mission_id: string
+  mission_code: string
+  mission_name: string
+  /** "item": completing the mission awards the item itself.
+    "blueprint": the mission can award the blueprint that crafts the item. */
+  reward_kind: "item" | "blueprint"
+  /** The blueprint awarded (reward_kind "blueprint"), else null */
+  blueprint_id: string | null
+  /** Drop chance in percent (0-100); null when the game data gives none (item rewards) */
+  drop_probability: number | null
+  /** Guaranteed blueprint drop; null when the game data doesn't say (item rewards) */
+  is_guaranteed: boolean | null
+  category: string
+  /** Mission giver (organisation) */
+  mission_giver_org: string | null
+  faction: string | null
+  star_system: string | null
+  legal_status: ("LEGAL" | "ILLEGAL" | null) | null
+  credit_reward_max: number | null
+  /** Seasonal event the mission belongs to, if any */
+  associated_event: string | null
+}
+export type ItemAcquisitionMissions = {
+  /** Missions that reward the item or its blueprint (one per mission and kind) */
+  total: number
+  /** Up to 10: item rewards first, then by drop chance, then name */
+  top: ItemAcquisitionMission[]
+}
+export type ItemAcquisitionIngredient = {
+  game_item_id: string
+  /** Short slug of the ingredient's game item */
+  slug: string
+  name: string
+  quantity: number
+  /** Quantity in SCU, for resources measured in SCU */
+  quantity_scu: number | null
+  /** Minimum quality (0-1000), when the slot requires one */
+  min_quality: number | null
+  slot_display_name: string | null
+}
+export type ItemAcquisitionBlueprint = {
+  blueprint_id: string
+  blueprint_code: string
+  blueprint_name: string
+  output_quantity: number
+  tier: number | null
+  rarity: string | null
+  crafting_station_type: string | null
+  crafting_time_seconds: number | null
+  /** Missions that can award this blueprint */
+  mission_count: number
+  ingredients: ItemAcquisitionIngredient[]
+}
+export type ItemAcquisitionBlueprints = {
+  total: number
+  /** Up to 10, by name */
+  items: ItemAcquisitionBlueprint[]
+}
+export type ItemAcquisitionShop = {
+  name: string
+  location: string
+  /** Price the shop sells the item for, aUEC; null if it doesn't sell it */
+  buy_price: number | null
+  /** Price the shop pays for the item, aUEC; null if it doesn't buy it */
+  sell_price: number | null
+}
+export type ItemAcquisitionShops = {
+  total: number
+  /** Up to 20, cheapest buy price first */
+  shops: ItemAcquisitionShop[]
+}
+export type ItemAcquisitionResource = {
+  can_be_mined: boolean
+  can_be_purchased: boolean
+  can_be_salvaged: boolean
+  can_be_looted: boolean
+  /** Location group -> locations, as extracted; null when unknown */
+  mining_locations: {
+    [key: string]: string[]
+  } | null
+  purchase_locations: {
+    [key: string]: string[]
+  } | null
+}
+export type ItemAcquisitionLinks = {
+  /** Wiki item page */
+  wiki: string
+  /** Market page (all listings of the item) */
+  market: string
+  /** This document as the public JSON feed */
+  json: string
+}
+export type ItemAcquisitionListing = {
+  listing_id: string
+  /** Short slug of the listing page, /market/{slug} */
+  slug: string
+  title: string
+  /** Lowest per-unit asking price in the listing, aUEC; null for auctions without a price */
+  price: number | null
+  /** Units in stock */
+  quantity_available: number
+  sale_type: string
+}
+export type ItemAcquisitionListings = {
+  /** Active public listings of the item with stock (test accounts excluded) */
+  count: number
+  /** Distinct sellers (shops) of those listings */
+  seller_count: number
+  /** Units in stock across them */
+  quantity_available: number
+  /** Lowest fixed-price per-unit ask above the placeholder price, aUEC; null
+    without one. Unlike price.current.lowest_ask it includes listings younger
+    than 24 hours. */
+  lowest_ask: number | null
+  /** The item's market page (every listing) */
+  page: string
+  /** Up to 5 listings, cheapest real ask first (placeholder prices last) */
+  top: ItemAcquisitionListing[]
+}
+export type ItemAcquisitionDocument = {
+  feed: PublicFeedInfo
+  item: PriceOracleItemRef
+  /** When the document was computed (ISO 8601); same as freshness.as_of */
+  as_of: string
+  freshness: ItemAcquisitionFreshness
+  price: ItemAcquisitionPrice
+  missions: ItemAcquisitionMissions
+  blueprints: ItemAcquisitionBlueprints
+  /** In-game shops from the game files; total 0 when the data has none */
+  in_game_shops: ItemAcquisitionShops
+  /** Set when the item is a resource with acquisition data, else null */
+  resource: ItemAcquisitionResource | null
+  /** How to credit the data when citing or reusing it */
+  attribution: string
+  links: ItemAcquisitionLinks
+  listings: ItemAcquisitionListings
+}
 export type GameItemCategory = {
   category: string
   game_item_categories: string
@@ -6068,7 +6371,12 @@ export type SearchMissionsResponse = {
 }
 export type ItemReward = {
   name: string
+  /** Game-file record path of the item */
   ref: string
+  /** Resolved game item UUID, null when unresolved */
+  game_item_id: string | null
+  /** Short slug of the resolved game item (`<8 hex>--<name>`), null when unresolved */
+  game_item_slug: string | null
 }
 export type Mission = {
   mission_id: string
@@ -6175,6 +6483,10 @@ export type MissionBlueprintReward = {
   blueprint_name: string
   /** Output item name */
   output_item_name: string
+  /** Game item the blueprint crafts (game_items.id) */
+  output_game_item_id: string
+  /** Short slug of the output game item (`<8 hex>--<name>`) */
+  output_game_item_slug: string
   /** Output item icon URL */
   output_item_icon?: string
   /** Drop probability percentage (0-100) */
@@ -7798,6 +8110,8 @@ export const {
   useUploadImageMutation,
   useGetHealthQuery,
   useSearchGameItemsQuery,
+  useGetPriceStatsQuery,
+  useGetAcquisitionQuery,
   useGetCategoriesQuery,
   useGetListingsQuery,
   useSearchGameItemAggregatesQuery,
