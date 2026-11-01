@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom"
 import { Suspense } from "react"
 import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useCookies } from "react-cookie"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
 import { orgPageTitle } from "../../seo/entityHeads"
@@ -50,13 +51,25 @@ export function ViewOrg() {
 }
 
 export function MyOrg() {
-  const [contractor] = useCurrentOrg()
+  // The org selected in the sidebar (the `current_contractor` cookie), the
+  // same one OrgRoute gates /myorg on; its query is already cached by then.
+  // Not CurrentOrgContext: only /org/:contractor_id pages fill that, so
+  // opening /myorg directly showed the skeleton forever.
+  const [cookies] = useCookies(["current_contractor"])
+  const {
+    data: contractor,
+    isLoading,
+    error,
+  } = useGetContractorBySpectrumIDQuery(cookies.current_contractor, {
+    skip: !cookies.current_contractor,
+  })
   const { t } = useTranslation()
 
   return (
     <BannerPageLayout
       title={t("org.myOrgTitle")}
-      isLoading={!contractor}
+      isLoading={isLoading}
+      error={error}
       skeleton={<OrgInfoSkeleton />}
       sidebarOpen={true}
     >
