@@ -41,6 +41,9 @@ import { EmptyListings } from "../../../../components/empty-states"
 import { MarketListingRating } from "../../../../components/rating/ListingRating"
 import { isFungibleType } from "./fungibility"
 import { useFlip } from "./useFlip"
+import { AdCard } from "../../../../components/ads/AdCard"
+import { insertAds } from "../../../../components/ads/adConfig"
+import type { AdConfig } from "../../../../components/ads/types"
 import { ListingCardV2, type ListingGridProps } from "../ListingSearchV2"
 import {
   LISTING_CARD_HEIGHT,
@@ -150,6 +153,7 @@ function ListingFlagChips({ listing }: { listing: ListingSearchResult }) {
 type GridEntry =
   | { kind: "single"; key: string; listing: ListingSearchResult }
   | { kind: "group"; key: string; listings: ListingSearchResult[] }
+  | { kind: "ad"; key: string; ad: AdConfig }
 
 /** Group fungible listings sharing name+type, preserving incoming order. */
 function buildEntries(listings: ListingSearchResult[]): GridEntry[] {
@@ -207,7 +211,15 @@ const GroupedListingGridInner = React.forwardRef<
   // below the full-width panel, FLIP makes them slide instead of jumping.
   const { register } = useFlip(expanded)
 
-  const entries = useMemo(() => buildEntries(listings), [listings])
+  // The in-universe ads go between cards, as in the flat grid (insertAds).
+  const entries = useMemo(
+    (): GridEntry[] =>
+      insertAds(buildEntries(listings), (entry) => entry.key).map(
+        (entry, i): GridEntry =>
+          "_isAd" in entry ? { kind: "ad", key: `ad:${i}`, ad: entry.ad } : entry,
+      ),
+    [listings],
+  )
 
   // Reactively track which breakpoints are active (largest → smallest). Hooks
   // must run unconditionally, so query every key regardless of gridBreakpoints.
@@ -298,6 +310,10 @@ const GroupedListingGridInner = React.forwardRef<
               ) : (
                 <CardStub height={LISTING_CARD_HEIGHT} />
               )}
+            </Grid>
+          ) : entry.kind === "ad" ? (
+            <Grid item {...gridBreakpoints} key={entry.key} ref={register(entry.key)}>
+              <AdCard ad={entry.ad} index={index} noGridWrapper />
             </Grid>
           ) : entry.kind === "single" ? (
             <Grid item {...gridBreakpoints} key={entry.key} ref={register(entry.key)}>
