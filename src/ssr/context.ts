@@ -23,6 +23,12 @@ export interface SsrRequest {
   waitUntil: (promise: Promise<unknown>) => void
   /** Set by the loaders: the route's entity doesn't exist. */
   notFound: boolean
+  /**
+   * Set by the loaders: the page's primary query failed for another reason
+   * (429, 5xx, a timeout). The Function then fails open to the bridge, and
+   * nothing is cached: an error page must never be stored as the page.
+   */
+  failed?: string
 }
 
 export interface SsrLoadContext {

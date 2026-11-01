@@ -23,7 +23,10 @@ import {
   PRERENDERED_DATA_ELEMENT_ID,
   type PrerenderedData,
 } from "../store/hydration"
-import { fulfilledApiState } from "../server/prerenderData"
+import {
+  fulfilledApiState,
+  transientQueryFailures,
+} from "../server/prerenderData"
 import { createRenderCache, emotionStyleTags } from "../server/emotionStyles"
 import { bridgeHeadTags } from "../server/bridgeHead"
 import { applyTitleTemplate } from "../seo/pageHead"
@@ -33,7 +36,11 @@ import { I18nextProvider } from "react-i18next"
 import i18n, { loadLocale } from "../util/i18n"
 import { setServerRenderLanguage } from "../util/renderLanguage"
 import type { SsrRequest } from "./context"
-import { SSR_OUTCOME_HEADER } from "./protocol"
+import {
+  SSR_FAILURE_HEADER,
+  SSR_OUTCOME_HEADER,
+  SSR_PARTIAL_HEADER,
+} from "./protocol"
 
 /** Longest a render may wait for lazy page code / suspended parts. */
 const RENDER_TIMEOUT_MS = 3000
@@ -49,6 +56,17 @@ export async function renderSsrPage(
     return new Response(null, {
       status: 404,
       headers: { [SSR_OUTCOME_HEADER]: "not-found" },
+    })
+  }
+  if (ssr.failed) {
+    // The page's primary data failed (429, 5xx, timeout): fail open, cache
+    // nothing (loaders.ts).
+    return new Response(null, {
+      status: 503,
+      headers: {
+        [SSR_OUTCOME_HEADER]: "failed",
+        [SSR_FAILURE_HEADER]: ssr.failed,
+      },
     })
   }
   if (responseStatusCode !== 200) {
@@ -226,5 +244,18 @@ async function renderPageNow(
 
   responseHeaders.set("Content-Type", "text/html; charset=utf-8")
   responseHeaders.set(SSR_OUTCOME_HEADER, "page")
+  // Served, but not cached: some of its data failed transiently (a rate
+  // limit, a 5xx, a timeout), or the bridge's head couldn't be built (its
+  // API call failed), so the next request renders it again.
+  const partial = transientQueryFailures(ssr.store.getState())
+  if (bridge.kind === "none") partial.push(`head(${bridge.reason})`)
+  if (partial.length > 0) {
+    responseHeaders.set(SSR_PARTIAL_HEADER, headerValue(partial.join(", ")))
+  }
   return new Response(html, { status: 200, headers: responseHeaders })
+}
+
+/** A header-safe (printable ASCII, bounded) form of a diagnostic string. */
+function headerValue(value: string): string {
+  return value.replace(/[^\x20-\x7e]+/g, " ").slice(0, 300)
 }

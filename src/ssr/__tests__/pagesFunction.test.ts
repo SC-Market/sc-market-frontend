@@ -8,7 +8,10 @@ import {
   redirectResponse,
   ssrDecision,
   ssrSwitchedOn,
+  SSR_DEADLINE,
+  SSR_FALLBACK_HEADER,
   SSR_OFF_HEADER,
+  withDeadline,
 } from "../pagesFunction"
 
 vi.mock("../serverBuild", () => {
@@ -70,7 +73,9 @@ describe("ssrDecision", () => {
   })
   it("leaves hubs, other pages, filtered URLs and white-label hosts to the bridge", () => {
     expect(ssrDecision(req(`${PREVIEW}/market`), env).render).toBe(false)
-    expect(ssrDecision(req(`${PREVIEW}/wiki/manufacturers/x`), env).render).toBe(false)
+    expect(
+      ssrDecision(req(`${PREVIEW}/wiki/manufacturers/x`), env).render,
+    ).toBe(false)
     expect(ssrDecision(req(`${PREVIEW}/shops/foo?q=x`), env).render).toBe(false)
     expect(
       ssrDecision(req(`${PREVIEW}/shops/foo?utm_source=x`), env).render,
@@ -173,6 +178,39 @@ describe("onRequest", () => {
     // serves the plain shell): never an error page.
     expect(response.status).toBe(200)
     expect(response.headers.get("X-SCM-SSR")).toBeNull()
+    // ... and says why SSR didn't serve.
+    expect(response.headers.get(SSR_FALLBACK_HEADER)).toBe("error")
     vi.unstubAllGlobals()
+  })
+
+  it("marks the kill switch's bridge answers, not paths it never renders", async () => {
+    const shell = "<!doctype html><html><head></head><body></body></html>"
+    const env = {
+      ASSETS: {
+        fetch: async () =>
+          new Response(shell, { headers: { "Content-Type": "text/html" } }),
+      },
+    }
+    const context = (url: string, init?: RequestInit) => ({
+      request: req(url, init),
+      env,
+      next: async () => new Response(shell),
+      waitUntil: () => {},
+    })
+    const off = await onRequest(
+      context(`${PREVIEW}/market/abc`, { headers: { [SSR_OFF_HEADER]: "1" } }),
+    )
+    expect(off.headers.get(SSR_FALLBACK_HEADER)).toBe("off (header)")
+    const aggregate = await onRequest(context(`${PREVIEW}/market/aggregate/x`))
+    expect(aggregate.headers.get(SSR_FALLBACK_HEADER)).toBeNull()
+  })
+})
+
+describe("withDeadline", () => {
+  it("resolves to the value in time, SSR_DEADLINE after it", async () => {
+    await expect(withDeadline(Promise.resolve(1), 50)).resolves.toBe(1)
+    await expect(withDeadline(new Promise(() => {}), 5)).resolves.toBe(
+      SSR_DEADLINE,
+    )
   })
 })

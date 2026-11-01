@@ -44,6 +44,7 @@ export const PRERENDERABLE_ENDPOINTS: ReadonlySet<string> = new Set([
 interface QueryEntry {
   status?: string
   endpointName?: string
+  error?: unknown
 }
 
 interface ApiSliceState {
@@ -109,4 +110,37 @@ export function fulfilledEndpointNames(state: RootState): string[] {
     }
   }
   return [...names].sort()
+}
+
+/**
+ * A query error that says nothing about the page (it may succeed a moment
+ * later): rate limited, a 5xx, a network error or timeout. A 4xx other than
+ * 408/429 is a real answer ("doesn't exist", "not allowed").
+ */
+export function isTransientQueryError(error: unknown): boolean {
+  const status = (error as { status?: unknown } | undefined)?.status
+  if (typeof status === "number") {
+    return status === 408 || status === 429 || status >= 500
+  }
+  // fetchBaseQuery's FETCH_ERROR / TIMEOUT_ERROR / PARSING_ERROR.
+  return typeof status === "string"
+}
+
+/**
+ * The queries of a request-time render that failed transiently
+ * (`endpointName(status)`): the page is served, but not cached
+ * (src/ssr/render.tsx).
+ */
+export function transientQueryFailures(state: RootState): string[] {
+  const failures: string[] = []
+  for (const slice of Object.values(state)) {
+    const queries = (slice as ApiSliceState).queries ?? {}
+    for (const entry of Object.values(queries)) {
+      if (entry?.status === "rejected" && isTransientQueryError(entry.error)) {
+        const status = (entry.error as { status?: unknown }).status
+        failures.push(`${entry.endpointName ?? "query"}(${String(status)})`)
+      }
+    }
+  }
+  return failures
 }

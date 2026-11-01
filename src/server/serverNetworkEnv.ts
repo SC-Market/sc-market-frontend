@@ -11,9 +11,10 @@
 import type { NetworkEnv } from "../store/networkEnv"
 
 export function createServerNetworkEnv(
-  options: { fetchFn?: typeof fetch } = {},
+  options: { fetchFn?: typeof fetch; retry?: boolean } = {},
 ): NetworkEnv {
   return {
+    ...(options.retry === false ? { retry: false } : {}),
     ...(options.fetchFn
       ? { fetchFn: options.fetchFn }
       : { credentials: "omit" as const }),

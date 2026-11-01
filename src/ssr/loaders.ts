@@ -71,6 +71,12 @@ function ssrLoader(prefetch: DataPrefetchFn, primary: Primary) {
       ssr.notFound = true
       return null
     }
+    if (result.error) {
+      // Rate limited, a 5xx, a timeout: the page would render its error
+      // state, and that would be cached as the page. Fail open instead.
+      ssr.failed = `primary ${String(errorStatus(result) ?? "error")}`
+      return null
+    }
     await prefetch(dispatch, params)
     return null
   }

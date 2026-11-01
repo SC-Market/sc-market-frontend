@@ -88,6 +88,10 @@ export function createBaseQuery({
   return retry(
     async (args: string | FetchArgs, api, extraOptions) => {
       const result = await baseQueryWithReauth(args, api, extraOptions)
+      // A server render has no time for retries (NetworkEnv.retry).
+      if (result.error && getNetworkEnv(api.extra).retry === false) {
+        retry.fail(result.error)
+      }
       // Only retry transient network/5xx errors. Never retry 4xx client errors,
       // including 401 (already handled by reauth above) and 429 (rate limited)
       // — retrying a rate-limited request just amplifies the overload against

@@ -108,7 +108,22 @@ keeps the bridge; the prerendered hubs never invoke a Function.
 - **API JSON:** Cache API per URL, 60 s, shared by the loaders and the head
   (its own key namespace: the bridge caches the same URLs differently).
 - Response header `X-SCM-SSR: miss | hit | stale`; absent when the bridge
-  answered (`X-SCM-Bridge` instead).
+  answered (`X-SCM-Bridge` instead). When SSR would have rendered the path
+  but the bridge answered, `X-SCM-SSR-Fallback` says why (`deadline`,
+  `failed: primary 429`, `error`, `off (header)`, `kind off`, `query`,
+  `trailing slash`, ...); paths SSR never renders (aggregates, bundles,
+  hubs) carry neither header.
+- Never cached: a render whose primary query failed for a reason other
+  than "doesn't exist" (a 429, a 5xx, a timeout) fails open to the bridge
+  (`failed: primary <status>`), so an error page is never stored as the
+  page. A render whose other data failed the same way, or whose bridge head
+  couldn't be built, is served but not cached (`X-SCM-SSR-Partial:
+  getPriceHistory(429), ...`; logged `ssr partial`). On a stale hit, such a
+  background render leaves the cached page in place.
+- The first request for a path in a data center is always a miss, and the
+  `cache.put` lands a moment after the response (a request within ~1 s is
+  another miss). One pass over a random sample of sitemap URLs therefore
+  measures misses only; a second pass is the cache's hit rate.
 
 ## Switches and rollback
 
@@ -121,8 +136,12 @@ keeps the bridge; the prerendered hubs never invoke a Function.
 | Everything | Pages → Deployments → Rollback to the previous deployment | Instant |
 
 Failure modes all fail open: a render error, a timeout (2.5 s for loaders
-plus render), an unexpected status, or a missing build serve the bridge's
-page (which itself fails open to the plain shell). `passThroughOnException()`
+plus render), a failed primary query, an unexpected status, or a missing
+build serve the bridge's page (which itself fails open to the plain shell).
+Past the deadline the render keeps running under `waitUntil` and still
+fills the cache, so the next request is a hit. Server renders never retry
+an API call (`NetworkEnv.retry: false`): the base query's 3 retries with
+backoff on a 5xx or a 1.5 s timeout would always outlast the deadline. `passThroughOnException()`
 serves the static shell if the Function dies (exception or CPU limit).
 
 ## Cost guards

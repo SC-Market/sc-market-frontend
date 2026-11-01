@@ -8,8 +8,19 @@
 import type { ContentSource } from "../server/contentSource"
 import { toSupportedLocale } from "../util/locales"
 
-/** Header on entry.server's answer: "page" | "not-found" | "redirect" | "route-error". */
+/** Header on entry.server's answer: "page" | "not-found" | "redirect" | "route-error" | "failed". */
 export const SSR_OUTCOME_HEADER = "X-SCM-SSR-Outcome"
+
+/** Why entry.server answered "failed" (logged by the Function). */
+export const SSR_FAILURE_HEADER = "X-SCM-SSR-Failure"
+
+/**
+ * On a "page" answer: the render is complete but some of its data failed
+ * transiently (a 429, a 5xx, a timeout), so it is served but not cached. The
+ * value says which queries (logged, and sent to the visitor as
+ * `X-SCM-SSR-Partial`).
+ */
+export const SSR_PARTIAL_HEADER = "X-SCM-SSR-Partial"
 
 export interface RequestContextValue {
   /** Request hostname (white-label domains render a different shell). */

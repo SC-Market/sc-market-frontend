@@ -15,7 +15,12 @@ export function createSsrLoadContext(
     ssr: {
       ...options,
       store: makeStore({
-        networkEnv: createServerNetworkEnv({ fetchFn: options.api.fetch }),
+        // No retries: the render's 2.5 s budget can't hold them, and a
+        // failed primary query fails open at once (loaders.ts).
+        networkEnv: createServerNetworkEnv({
+          fetchFn: options.api.fetch,
+          retry: false,
+        }),
       }),
       notFound: false,
     },

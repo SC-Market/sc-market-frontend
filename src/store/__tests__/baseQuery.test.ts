@@ -147,6 +147,17 @@ describe("createBaseQuery — retry", () => {
     expect(result.data).toEqual({ ok: true })
   })
 
+  it("never retries when the store's NetworkEnv says retry: false (SSR)", async () => {
+    fetchMock.mockImplementation(() => Promise.resolve(jsonResponse(503)))
+    const env = makeEnv({ retry: false })
+    const baseQuery = createBaseQuery({ baseUrl: BASE_URL, retry: true })
+
+    const result = await baseQuery("/thing", makeApi(env), instantRetry)
+
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+    expect(result.error?.status).toBe(503)
+  })
+
   it("does not retry a 5xx when retry is off (serviceApi)", async () => {
     fetchMock.mockImplementation(() => Promise.resolve(jsonResponse(503)))
     const env = makeEnv()

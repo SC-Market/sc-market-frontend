@@ -26,7 +26,9 @@ import { hasPageQuery } from "../document/pageQuery"
 import { createApiFetch, type ApiFetch } from "./apiFetch"
 import {
   requestContextFrom,
+  SSR_FAILURE_HEADER,
   SSR_OUTCOME_HEADER,
+  SSR_PARTIAL_HEADER,
   variantKey,
   type SsrEntryModule,
 } from "./protocol"
@@ -91,6 +93,13 @@ export const GAME_DATA_KIND_SET: ReadonlySet<BridgePageKind> = new Set(
  * bridge's page.
  */
 export const SSR_OFF_HEADER = "X-SCM-SSR-Off"
+
+/**
+ * On a bridge answer for an SSR path: why the Function didn't serve its own
+ * render ("deadline", "failed: primary 429", "off", "query", ...), so a curl
+ * shows it without the Function's logs.
+ */
+export const SSR_FALLBACK_HEADER = "X-SCM-SSR-Fallback"
 
 /** Wall-clock budget for loaders + render; past it, the bridge answers. */
 export const SSR_DEADLINE_MS = 2500
@@ -334,7 +343,8 @@ async function planFor(
 }
 
 type Rendered =
-  | { kind: "page"; html: string }
+  /** `partial`: some data failed transiently; served, never cached. */
+  | { kind: "page"; html: string; partial?: string }
   | { kind: "notFound" }
   /** Not the canonical spelling: 301 (src/bridge/handler.ts canonicalRedirect). */
   | { kind: "redirect"; location: string }
@@ -367,9 +377,16 @@ async function render(
       await response.text(),
       (fileName) => inlineCss[`/${fileName}`],
     )
-    return { kind: "page", html }
+    const partial = response.headers.get(SSR_PARTIAL_HEADER) ?? undefined
+    return { kind: "page", html, partial }
   }
   if (outcome === "not-found") return { kind: "notFound" }
+  if (outcome === "failed") {
+    return {
+      kind: "failed",
+      reason: `failed: ${response.headers.get(SSR_FAILURE_HEADER) ?? "unknown"}`,
+    }
+  }
   const location = response.headers.get("Location")
   if (outcome === "redirect" && location) return { kind: "redirect", location }
   return {
@@ -378,12 +395,19 @@ async function render(
   }
 }
 
-function withDeadline<T>(promise: Promise<T>, ms: number): Promise<T> {
+/** What withDeadline resolves to when the time is up. */
+export const SSR_DEADLINE: unique symbol = Symbol("ssr deadline")
+
+/** The promise's value, or SSR_DEADLINE if it takes longer than `ms`. */
+export function withDeadline<T>(
+  promise: Promise<T>,
+  ms: number,
+): Promise<T | typeof SSR_DEADLINE> {
   let timer: ReturnType<typeof setTimeout> | undefined
   return Promise.race([
     promise,
-    new Promise<never>((_, reject) => {
-      timer = setTimeout(() => reject(new Error("ssr deadline")), ms)
+    new Promise<typeof SSR_DEADLINE>((resolve) => {
+      timer = setTimeout(() => resolve(SSR_DEADLINE), ms)
     }),
   ]).finally(() => clearTimeout(timer))
 }
@@ -394,6 +418,7 @@ function pageResponse(
   url: URL,
   cacheState: string,
   policy: CachePolicy,
+  partial?: string,
 ): Response {
   const headers = documentHeaders(url, "text/html; charset=utf-8")
   // Browsers always revalidate the HTML (it references hashed chunks: the
@@ -405,6 +430,7 @@ function pageResponse(
     `max-age=${policy.fresh}, stale-while-revalidate=${policy.stale}`,
   )
   headers.set("X-SCM-SSR", cacheState)
+  if (partial) headers.set("X-SCM-SSR-Partial", partial)
   return new Response(request.method === "HEAD" ? null : html, {
     status: 200,
     headers,
@@ -429,7 +455,10 @@ export function redirectResponse(location: URL, url: URL): Response {
 
 /**
  * Render and store in the edge cache. Concurrent requests for one key in
- * this isolate share one render.
+ * this isolate share one render. No deadline here: a request that stops
+ * waiting (SSR_DEADLINE_MS) leaves the render running under waitUntil, so a
+ * slow render still lands in the cache and the next request is a hit
+ * instead of another slow render.
  */
 function renderAndStore(
   context: PagesContext,
@@ -439,11 +468,13 @@ function renderAndStore(
   const running = inFlight.get(plan.key)
   if (running) return running
   const job = (async (): Promise<Rendered> => {
-    const rendered = await withDeadline(
-      render(context, url, plan.api),
-      SSR_DEADLINE_MS,
-    )
-    if (rendered.kind === "page" && plan.cacheable) {
+    const rendered = await render(context, url, plan.api)
+    if (rendered.kind === "page" && rendered.partial) {
+      console.warn(
+        `ssr partial ${url.pathname}: ${rendered.partial} (not cached)`,
+      )
+    }
+    if (rendered.kind === "page" && plan.cacheable && !rendered.partial) {
       const { fresh, stale, crawler } = plan.policy
       const entry = new Response(rendered.html, {
         headers: {
@@ -473,7 +504,11 @@ export async function onRequest(context: PagesContext): Promise<Response> {
   // serves the static file for the path: the SPA shell.
   context.passThroughOnException?.()
   const decision = ssrDecision(context.request, context.env)
-  if (!decision.render) return bridge(context)
+  if (!decision.render) {
+    // Paths this Function never renders (hubs, aggregates) say nothing.
+    if (decision.reason === "not an ssr page") return bridge(context)
+    return fallback(context, decision.reason)
+  }
 
   const url = new URL(context.request.url)
   try {
@@ -511,7 +546,14 @@ export async function onRequest(context: PagesContext): Promise<Response> {
       }
     }
 
-    const rendered = await renderAndStore(context, url, plan)
+    const job = renderAndStore(context, url, plan)
+    // Keep the render alive past the deadline (it still fills the cache).
+    context.waitUntil(job.catch(() => {}))
+    const rendered = await withDeadline(job, SSR_DEADLINE_MS)
+    if (rendered === SSR_DEADLINE) {
+      console.warn(`ssr fail-open ${url.pathname}: deadline`)
+      return fallback(context, "deadline")
+    }
     if (rendered.kind === "page") {
       return pageResponse(
         context.request,
@@ -519,6 +561,7 @@ export async function onRequest(context: PagesContext): Promise<Response> {
         url,
         "miss",
         plan.policy,
+        rendered.partial,
       )
     }
     if (rendered.kind === "redirect") {
@@ -526,10 +569,26 @@ export async function onRequest(context: PagesContext): Promise<Response> {
     }
     if (rendered.kind === "failed") {
       console.warn(`ssr fail-open ${url.pathname}: ${rendered.reason}`)
+      return fallback(context, rendered.reason)
     }
     // Not found: the bridge answers 404 + noindex (its own API cache).
+    return bridge(context)
   } catch (error) {
     console.error(`ssr fail-open ${url.pathname}:`, error)
+    return fallback(context, "error")
   }
-  return bridge(context)
+}
+
+/** The bridge's answer, marked with why SSR didn't serve (SSR_FALLBACK_HEADER). */
+async function fallback(
+  context: PagesContext,
+  reason: string,
+): Promise<Response> {
+  const response = await bridge(context)
+  const marked = new Response(response.body, response)
+  marked.headers.set(
+    SSR_FALLBACK_HEADER,
+    reason.replace(/[^\x20-\x7e]+/g, " ").slice(0, 200),
+  )
+  return marked
 }

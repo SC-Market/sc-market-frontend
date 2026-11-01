@@ -28,6 +28,13 @@ export interface NetworkEnv {
   /** Headers added to every API request. */
   headers: Record<string, string>
   /**
+   * False: never retry a failed request (the base query's transient-error
+   * retries are skipped). The SSR render sets it: it has a 2.5 s budget, and
+   * a retried call (backoff included) outlasts it, so the render would time
+   * out instead of failing open at once. Default: retry.
+   */
+  retry?: boolean
+  /**
    * Called when a request returns 401. Resolve true if the session was
    * refreshed and the request should be retried once.
    */
