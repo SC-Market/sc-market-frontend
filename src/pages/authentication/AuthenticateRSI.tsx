@@ -18,11 +18,12 @@ export function AuthenticateRSIPage() {
   const { isRSIConfirmed, identifier } = usePageAuthenticateRSI()
 
   if (isRSIConfirmed) {
-    const redirectTo = safeRedirectPath(searchParams.get("redirect"), "/dashboard")
+    const redirectTo = safeRedirectPath(
+      searchParams.get("redirect"),
+      "/dashboard",
+    )
     return <Navigate to={redirectTo} />
   }
-
-  const showSkeleton = identifier.isLoading || !identifier.data?.identifier
 
   return (
     <StandardPageLayout
@@ -31,7 +32,9 @@ export function AuthenticateRSIPage() {
       headerTitle={t("login.authenticateWithRSI")}
       maxWidth="xl"
       noSidebar
-      isLoading={showSkeleton}
+      // A failed identifier request is an error, not a skeleton forever.
+      isLoading={identifier.isLoading}
+      error={identifier.error}
       skeleton={
         <Grid item xs={12} lg={4}>
           <Grid
