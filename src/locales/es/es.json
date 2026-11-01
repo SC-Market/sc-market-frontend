@@ -5800,6 +5800,31 @@
       "membersAction": "Invitar miembros",
       "activity": "Un anuncio o un pedido en los últimos {{days}} días",
       "activityCounts": "Anuncios creados o actualizados: {{listings}}. Pedidos: {{orders}}."
-    }
+    },
+    "trust": {
+      "completed": "Pedidos completados",
+      "rating": "Valoración ({{n}} reseñas)",
+      "responseRate": "Completados en 24 h",
+      "members": "Miembros en SC Market",
+      "listings": "Anuncios activos",
+      "since": "En SC Market desde"
+    },
+    "featured": "Anuncios destacados",
+    "services": "Servicios",
+    "serviceQuote": "Precio a consultar",
+    "allReviews": "Todas las reseñas",
+    "reviews": "Reseñas",
+    "ourShops": "Nuestras tiendas",
+    "recruiting": {
+      "title": "Reclutando en SC Orgs",
+      "members": "Miembros en SC Orgs: {{n}}",
+      "join": "Unirse vía SC Orgs"
+    },
+    "cta": {
+      "shop": "Tienda",
+      "service": "Solicitar un servicio",
+      "market": "Explorar el mercado"
+    },
+    "runAnOrg": "¿Diriges una org? Dale un escaparate como este."
   }
 }

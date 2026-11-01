@@ -5833,6 +5833,31 @@
       "membersAction": "Запросити учасників",
       "activity": "Оголошення або замовлення за останні {{days}} днів",
       "activityCounts": "Створено або оновлено оголошень: {{listings}}. Замовлень: {{orders}}."
-    }
+    },
+    "trust": {
+      "completed": "Виконані замовлення",
+      "rating": "Оцінка ({{n}} відгуків)",
+      "responseRate": "Виконано за 24 год",
+      "members": "Учасники на SC Market",
+      "listings": "Активні оголошення",
+      "since": "На SC Market з"
+    },
+    "featured": "Рекомендовані оголошення",
+    "services": "Послуги",
+    "serviceQuote": "Ціна за запитом",
+    "allReviews": "Усі відгуки",
+    "reviews": "Відгуки",
+    "ourShops": "Наші магазини",
+    "recruiting": {
+      "title": "Набір на SC Orgs",
+      "members": "Учасники на SC Orgs: {{n}}",
+      "join": "Приєднатися через SC Orgs"
+    },
+    "cta": {
+      "shop": "Магазин",
+      "service": "Замовити послугу",
+      "market": "Переглянути ринок"
+    },
+    "runAnOrg": "Керуєте організацією? Дайте їй таку вітрину."
   }
 }

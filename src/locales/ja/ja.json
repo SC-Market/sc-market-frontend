@@ -5766,6 +5766,31 @@
       "membersAction": "メンバーを招待",
       "activity": "過去{{days}}日間に出品または注文が1件以上",
       "activityCounts": "作成・更新された出品：{{listings}}件。注文：{{orders}}件。"
-    }
+    },
+    "trust": {
+      "completed": "完了した注文",
+      "rating": "評価（{{n}}件のレビュー）",
+      "responseRate": "24時間以内に完了",
+      "members": "SC Market のメンバー",
+      "listings": "公開中の出品",
+      "since": "SC Market 参加年"
+    },
+    "featured": "注目の出品",
+    "services": "サービス",
+    "serviceQuote": "価格は要相談",
+    "allReviews": "すべてのレビュー",
+    "reviews": "レビュー",
+    "ourShops": "ショップ一覧",
+    "recruiting": {
+      "title": "SC Orgs でメンバー募集中",
+      "members": "SC Orgs のメンバー：{{n}}人",
+      "join": "SC Orgs から参加"
+    },
+    "cta": {
+      "shop": "ショップ",
+      "service": "サービスを依頼",
+      "market": "マーケットを見る"
+    },
+    "runAnOrg": "組織を運営していますか？このようなストアフロントを作りましょう。"
   }
 }

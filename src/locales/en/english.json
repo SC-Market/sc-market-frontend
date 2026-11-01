@@ -5767,6 +5767,31 @@
       "membersAction": "Invite members",
       "activity": "A listing or an order in the last {{days}} days",
       "activityCounts": "Listings created or updated: {{listings}}. Orders: {{orders}}."
-    }
+    },
+    "trust": {
+      "completed": "Completed orders",
+      "rating": "Rating ({{n}} reviews)",
+      "responseRate": "Completed within 24 h",
+      "members": "Members on SC Market",
+      "listings": "Active listings",
+      "since": "On SC Market since"
+    },
+    "featured": "Featured listings",
+    "services": "Services",
+    "serviceQuote": "Price on request",
+    "allReviews": "All reviews",
+    "reviews": "Reviews",
+    "ourShops": "Our shops",
+    "recruiting": {
+      "title": "Recruiting on SC Orgs",
+      "members": "Members on SC Orgs: {{n}}",
+      "join": "Join via SC Orgs"
+    },
+    "cta": {
+      "shop": "Shop",
+      "service": "Request a service",
+      "market": "Browse the market"
+    },
+    "runAnOrg": "Run an org? Give it a storefront like this one."
   }
 }

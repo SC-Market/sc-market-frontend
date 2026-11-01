@@ -5767,6 +5767,31 @@
       "membersAction": "Mitglieder einladen",
       "activity": "Ein Angebot oder eine Bestellung in den letzten {{days}} Tagen",
       "activityCounts": "Erstellte oder aktualisierte Angebote: {{listings}}. Bestellungen: {{orders}}."
-    }
+    },
+    "trust": {
+      "completed": "Abgeschlossene Bestellungen",
+      "rating": "Bewertung ({{n}} Bewertungen)",
+      "responseRate": "Innerhalb von 24 h erledigt",
+      "members": "Mitglieder auf SC Market",
+      "listings": "Aktive Angebote",
+      "since": "Auf SC Market seit"
+    },
+    "featured": "Ausgewählte Angebote",
+    "services": "Dienstleistungen",
+    "serviceQuote": "Preis auf Anfrage",
+    "allReviews": "Alle Bewertungen",
+    "reviews": "Bewertungen",
+    "ourShops": "Unsere Shops",
+    "recruiting": {
+      "title": "Rekrutierung auf SC Orgs",
+      "members": "Mitglieder auf SC Orgs: {{n}}",
+      "join": "Über SC Orgs beitreten"
+    },
+    "cta": {
+      "shop": "Shop",
+      "service": "Dienstleistung anfragen",
+      "market": "Markt durchsuchen"
+    },
+    "runAnOrg": "Leitest du eine Org? Gib ihr einen Storefront wie diesen."
   }
 }

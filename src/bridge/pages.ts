@@ -34,6 +34,7 @@ import type {
   SearchOresResponse,
   SearchResourcesResponse,
   SearchWikiItemsResponse,
+  OrgStorefront,
   ShopPublicResponse,
   WikiItemDetail,
   WikiManufacturerDetail,
@@ -51,6 +52,7 @@ import type {
 import {
   GAME_DATA_PATHS,
   MARKET_PATHS,
+  ORDER_PATHS,
   ORG_PATHS,
   PATHS,
   SHOP_PATHS,
@@ -177,6 +179,7 @@ import { englishT } from "./englishT"
 import { MAX_SUMMARY_LINKS } from "./render"
 import type { BridgePageKind } from "./routes"
 import { CONTENT_PAGES } from "./contentPages"
+import { storefrontFacts } from "../seo/storefrontText"
 
 /**
  * Visible summary block. Text is always inserted as escaped text; a "ul" is
@@ -2025,14 +2028,20 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
 
   // Title and canonical come from the page layout (BannerPageLayout → Page):
   // orgPageTitle and the current path.
-  org: page<GetContractorApiResponse, ShopPublicResponse[], { listings: SearchListingsResponse; scOrgs: { data?: { sid?: string } } }>({
+  org: page<GetContractorApiResponse, ShopPublicResponse[], { listings: SearchListingsResponse; scOrgs: { data?: { sid?: string } }; storefront: OrgStorefront }>({
     primary: (p) => v1(`/api/contractors/${enc(p.id)}`, ENTITY_TTL),
     // OrgMetaTags' useGetShopsByOwnerQuery, for the JSON-LD `owns` link.
     secondary: (p) =>
       v2(`/shops/by-owner?spectrum_id=${enc(p.id)}`, ENTITY_TTL),
     related: [
-      (_o, shops, _r, params) => ({
-        listings: arr(shops)[0]?.slug ? listingSearch({ shop_slug: arr(shops)[0].slug, page_size: 40 }) : null,
+      (o, shops, _r, params) => ({
+        // The org home page's featured listings, from every org shop
+        // (orgFeaturedListingsArgs), and more of them for crawlers.
+        listings: arr(shops).length > 0
+          ? listingSearch({ org: o.data?.spectrum_id ?? params.id, in_stock: "true", sort_by: "updated_at", page_size: 40 })
+          : null,
+        // Trust stats, services and the SC Orgs recruiting card (OrgStorefrontHome).
+        storefront: v2(`/contractors/${enc(o.data?.spectrum_id ?? params.id)}/storefront`, ENTITY_TTL),
         // The same org on SC Orgs, by RSI spectrum ID (its public API; 404
         // when it isn't there, which just leaves the link out).
         scOrgs: { origin: SC_ORGS_API, path: `/api/v1/orgs/${enc(params.id)}`, notFoundStatuses: [404], ttlSeconds: 6 * 60 * 60 },
@@ -2050,11 +2059,19 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
         summary: [
           { tag: "h1", text: contractor.name },
           ...paragraphs(contractor.description || headDescription(head)),
+          ...(ctx.related.storefront?.trust ? paragraphs(storefrontFacts(ctx.related.storefront)) : []),
           ...linkBlocks(
             "Shop",
             arr(shops).map((shop) => ({ href: SHOP_PATHS.profile(enc(shop.slug)), text: shop.name })),
           ),
-          ...linkBlocks("Listings", searchLinks(ctx.related.listings?.listings, new Set(), 40)),
+          ...linkBlocks("Featured listings", searchLinks(ctx.related.listings?.listings, new Set(), 40)),
+          ...linkBlocks(
+            "Services",
+            arr(ctx.related.storefront?.services).map((service) => ({
+              href: ORDER_PATHS.service(enc(service.service_id)),
+              text: service.service_name,
+            })),
+          ),
           ...scOrgsBlocks(contractor.name, ctx.related.scOrgs?.data?.sid),
         ],
       }

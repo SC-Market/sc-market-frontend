@@ -8,6 +8,7 @@ import { recruitingApi } from "../recruiting/api/recruitingApi"
 import { marketV2Api } from "../../store/api/v2/market"
 import { PrefetchDispatch, settleQuery } from "../../router/dataPrefetch"
 import { MEMBER_LIST_PAGE_SIZE } from "./domain/constants"
+import { orgFeaturedListingsArgs } from "../storefront/domain"
 
 /**
  * ViewOrg (usePageOrg) loads the org, then OrgInfo renders every tab panel
@@ -15,6 +16,7 @@ import { MEMBER_LIST_PAGE_SIZE } from "./domain/constants"
  * :tab. Children key their queries on the resolved spectrum_id:
  * - OrgInfo, RecruitingPostArea: recruiting post (+ its comments)
  * - OrgStoreView, OrgShopRedirect: shops by owner (same cache entry)
+ * - OrgStorefrontHome: the org's storefront and its featured listings
  * - MemberList: first page of members
  * - ContractorReviewSummary, OrgReviews: contractor reviews
  *
@@ -52,6 +54,16 @@ export async function prefetchOrgPage(
     recruiting,
     settleQuery(
       dispatch(marketV2Api.endpoints.getShopsByOwner.initiate({ spectrumId })),
+    ),
+    settleQuery(
+      dispatch(marketV2Api.endpoints.getOrgStorefront.initiate({ spectrumId })),
+    ),
+    settleQuery(
+      dispatch(
+        marketV2Api.endpoints.searchListings.initiate(
+          orgFeaturedListingsArgs(spectrumId),
+        ),
+      ),
     ),
     settleQuery(
       dispatch(

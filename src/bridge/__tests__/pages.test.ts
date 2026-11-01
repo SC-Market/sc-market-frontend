@@ -281,6 +281,39 @@ describe("documents", () => {
     expect(meta(user, "description")).toBe("Jacked Citizen — Star Citizen player on SC Market")
   })
 
+  it("org pages carry the storefront: trust stats, featured listings and services", () => {
+    const storefront = {
+      spectrum_id: "NARCO",
+      name: "Narco",
+      logo_url: null,
+      banner_url: null,
+      verified: true,
+      trust: {
+        completed_orders: 23,
+        avg_rating: 4.94,
+        rating_count: 12,
+        response_rate: 91.6,
+        avg_completion_hours: 5,
+        members: 8,
+        active_listings: 29,
+        active_services: 1,
+        on_sc_market_since: "2024-03-01T00:00:00.000Z",
+      },
+      shops: [],
+      services: [{ service_id: "svc-1", service_name: "Escort run", kind: null, cost: 0, payment_type: "one-time" }],
+      recruiting: null,
+    }
+    const doc = BRIDGE_PAGES.org.build(f.contractor() as never, [{ name: "Narco Shop", slug: "narco-shop" }] as never, {
+      ...ctx({ id: "NARCO" }, "/contractor/NARCO"),
+      related: { storefront, listings: { listings: [], total: 0 } },
+    })
+    const texts = doc.summary.map(text)
+    expect(texts).toContain(
+      "RSI-verified org. 23 completed orders. Rated 4.9/5 from 12 reviews. 92% of orders completed within 24 hours. 8 members on SC Market. 29 active listings. 1 service. On SC Market since 2024.",
+    )
+    expect(doc.summary).toContainEqual({ tag: "ul", links: [{ href: "/order/service/svc-1", text: "Escort run" }] })
+  })
+
   // Unlisted listings are link-only and private ones org-internal: a crawler
   // that follows a link to one must not index it.
   it("unlisted and private listings and bundles are noindex; public ones are not", () => {

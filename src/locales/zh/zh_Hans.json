@@ -5772,6 +5772,31 @@
       "membersAction": "邀请成员",
       "activity": "最近 {{days}} 天内有商品或订单",
       "activityCounts": "新建或更新的商品：{{listings}}。订单：{{orders}}。"
-    }
+    },
+    "trust": {
+      "completed": "已完成订单",
+      "rating": "评分（{{n}} 条评价）",
+      "responseRate": "24 小时内完成",
+      "members": "SC Market 成员",
+      "listings": "在售商品",
+      "since": "加入 SC Market 年份"
+    },
+    "featured": "精选商品",
+    "services": "服务",
+    "serviceQuote": "价格面议",
+    "allReviews": "全部评价",
+    "reviews": "评价",
+    "ourShops": "我们的店铺",
+    "recruiting": {
+      "title": "在 SC Orgs 招募中",
+      "members": "SC Orgs 成员：{{n}}",
+      "join": "通过 SC Orgs 加入"
+    },
+    "cta": {
+      "shop": "店铺",
+      "service": "申请服务",
+      "market": "浏览市场"
+    },
+    "runAnOrg": "在运营组织？为它打造这样的店面吧。"
   }
 }

@@ -5766,6 +5766,31 @@
       "membersAction": "邀請成員",
       "activity": "最近 {{days}} 天內有商品或訂單",
       "activityCounts": "新增或更新的商品：{{listings}}。訂單：{{orders}}。"
-    }
+    },
+    "trust": {
+      "completed": "已完成訂單",
+      "rating": "評分（{{n}} 則評價）",
+      "responseRate": "24 小時內完成",
+      "members": "SC Market 成員",
+      "listings": "上架中商品",
+      "since": "加入 SC Market 年份"
+    },
+    "featured": "精選商品",
+    "services": "服務",
+    "serviceQuote": "價格面議",
+    "allReviews": "全部評價",
+    "reviews": "評價",
+    "ourShops": "我們的店鋪",
+    "recruiting": {
+      "title": "在 SC Orgs 招募中",
+      "members": "SC Orgs 成員：{{n}}",
+      "join": "透過 SC Orgs 加入"
+    },
+    "cta": {
+      "shop": "店鋪",
+      "service": "申請服務",
+      "market": "瀏覽市場"
+    },
+    "runAnOrg": "在經營組織？為它打造這樣的店面吧。"
   }
 }

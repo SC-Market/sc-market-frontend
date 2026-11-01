@@ -14,6 +14,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
 import { OrgScOrgsCard } from "../../../components/sisterSites/ScOrgsCard"
+import { OrgStorefrontHome } from "../../storefront/components/OrgStorefrontHome"
 
 interface OrgTabContentProps {
   currentTab: number
@@ -27,7 +28,9 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
   return (
     <Container maxWidth="xl" sx={{ pt: 3 }}>
       <TabPanel value={currentTab} index={0} preload>
-        <OrgStoreView org={contractor.spectrum_id} />
+        <OrgStorefrontHome spectrumId={contractor.spectrum_id}>
+          <OrgStoreView org={contractor.spectrum_id} />
+        </OrgStorefrontHome>
       </TabPanel>
       <TabPanel value={currentTab} index={1} preload>
         <Grid
