@@ -52,6 +52,8 @@ export const PARAM_VALUES: Record<string, string> = {
 export const PATTERN_PARAM_OVERRIDES: Record<string, Record<string, string>> = {
   "/contractor/:id/:tab": { id: FIXTURE.orgId, tab: "about" },
   "/contractor/:id": { id: FIXTURE.orgId },
+  "/embed/org/:id": { id: FIXTURE.orgId },
+  "/embed/org/:id/listings": { id: FIXTURE.orgId },
   "/shops/:slug/:tab": { slug: FIXTURE.shopSlug, tab: "about" },
   "/shops/:slug": { slug: FIXTURE.shopSlug },
   "/user/:username/:tab": { tab: "store" },

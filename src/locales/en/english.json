@@ -5822,6 +5822,24 @@
       "assigned": "Assigned",
       "done": "Completed",
       "open": "Open"
+    },
+    "embedCode": {
+      "title": "Get embed code",
+      "intro": "Put your storefront on your own website. The widget is read-only: it shows your public listings and stats, and every link opens SC Market in a new tab.",
+      "widget": "Widget",
+      "card": "Storefront card",
+      "listings": "Listings",
+      "snippet": "HTML",
+      "copy": "Copy code",
+      "copied": "Copied",
+      "preview": "Preview"
+    },
+    "embed": {
+      "notFound": "This storefront isn't available.",
+      "completed": "{{n}} completed orders",
+      "rating": "{{rating}}★ ({{n}})",
+      "listings": "{{n}} listings",
+      "open": "Open the storefront on SC Market"
     }
   }
 }

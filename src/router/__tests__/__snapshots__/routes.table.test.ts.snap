@@ -896,6 +896,20 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/widget/orders",
   },
   {
+    "chain": "/embed/org/:id",
+    "errorBoundaryAt": null,
+    "guards": [],
+    "lazy": true,
+    "pattern": "/embed/org/:id",
+  },
+  {
+    "chain": "/embed/org/:id/listings",
+    "errorBoundaryAt": null,
+    "guards": [],
+    "lazy": true,
+    "pattern": "/embed/org/:id/listings",
+  },
+  {
     "chain": "(layout:AppLayout) > /",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

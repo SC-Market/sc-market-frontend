@@ -5855,6 +5855,24 @@
       "assigned": "Attribuées",
       "done": "Terminées",
       "open": "Ouvertes"
+    },
+    "embedCode": {
+      "title": "Code d'intégration",
+      "intro": "Affichez votre vitrine sur votre propre site. Le widget est en lecture seule : il montre vos annonces publiques et vos statistiques, et chaque lien ouvre SC Market dans un nouvel onglet.",
+      "widget": "Widget",
+      "card": "Carte de la vitrine",
+      "listings": "Annonces",
+      "snippet": "HTML",
+      "copy": "Copier le code",
+      "copied": "Copié",
+      "preview": "Aperçu"
+    },
+    "embed": {
+      "notFound": "Cette vitrine n'est pas disponible.",
+      "completed": "{{n}} commandes terminées",
+      "rating": "{{rating}}★ ({{n}})",
+      "listings": "{{n}} annonces",
+      "open": "Ouvrir la vitrine sur SC Market"
     }
   }
 }

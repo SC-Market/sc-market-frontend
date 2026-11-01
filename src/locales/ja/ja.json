@@ -5821,6 +5821,24 @@
       "assigned": "担当",
       "done": "完了",
       "open": "未完了"
+    },
+    "embedCode": {
+      "title": "埋め込みコードを取得",
+      "intro": "あなたのウェブサイトにストアフロントを掲載できます。ウィジェットは閲覧専用で、公開中の出品と統計を表示し、すべてのリンクは新しいタブで SC Market を開きます。",
+      "widget": "ウィジェット",
+      "card": "ストアフロントカード",
+      "listings": "出品",
+      "snippet": "HTML",
+      "copy": "コードをコピー",
+      "copied": "コピーしました",
+      "preview": "プレビュー"
+    },
+    "embed": {
+      "notFound": "このストアフロントは利用できません。",
+      "completed": "完了した注文 {{n}}件",
+      "rating": "{{rating}}★（{{n}}）",
+      "listings": "出品 {{n}}件",
+      "open": "SC Market でストアフロントを開く"
     }
   }
 }

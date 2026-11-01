@@ -5827,6 +5827,24 @@
       "assigned": "已分配",
       "done": "已完成",
       "open": "未完成"
+    },
+    "embedCode": {
+      "title": "获取嵌入代码",
+      "intro": "把你的店面放到你自己的网站上。小部件为只读：显示你的公开商品和统计数据，所有链接都会在新标签页打开 SC Market。",
+      "widget": "小部件",
+      "card": "店面卡片",
+      "listings": "商品",
+      "snippet": "HTML",
+      "copy": "复制代码",
+      "copied": "已复制",
+      "preview": "预览"
+    },
+    "embed": {
+      "notFound": "此店面不可用。",
+      "completed": "{{n}} 个已完成订单",
+      "rating": "{{rating}}★（{{n}}）",
+      "listings": "{{n}} 件商品",
+      "open": "在 SC Market 上打开店面"
     }
   }
 }

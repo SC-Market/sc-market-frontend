@@ -318,6 +318,14 @@ export const pages = {
     () => import("../pages/contracting/MyServices"),
     (m) => m.MyServicesPage,
   ),
+  EmbedOrg: pageEntry(
+    () => import("../pages/embed/EmbedOrg"),
+    (m) => m.EmbedOrg,
+  ),
+  EmbedOrgListings: pageEntry(
+    () => import("../pages/embed/EmbedOrg"),
+    (m) => m.EmbedOrgListings,
+  ),
   MyShops: pageEntry(
     () => import("../features/shops/components/MyShops"),
     (m) => m.MyShops,

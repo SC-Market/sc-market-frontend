@@ -5822,6 +5822,24 @@
       "assigned": "Zugewiesen",
       "done": "Abgeschlossen",
       "open": "Offen"
+    },
+    "embedCode": {
+      "title": "Einbettungscode",
+      "intro": "Zeig deinen Storefront auf deiner eigenen Website. Das Widget ist schreibgeschützt: Es zeigt deine öffentlichen Angebote und Statistiken, und jeder Link öffnet SC Market in einem neuen Tab.",
+      "widget": "Widget",
+      "card": "Storefront-Karte",
+      "listings": "Angebote",
+      "snippet": "HTML",
+      "copy": "Code kopieren",
+      "copied": "Kopiert",
+      "preview": "Vorschau"
+    },
+    "embed": {
+      "notFound": "Dieser Storefront ist nicht verfügbar.",
+      "completed": "{{n}} abgeschlossene Bestellungen",
+      "rating": "{{rating}}★ ({{n}})",
+      "listings": "{{n}} Angebote",
+      "open": "Storefront auf SC Market öffnen"
     }
   }
 }

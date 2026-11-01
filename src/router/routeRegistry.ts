@@ -136,6 +136,8 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
 
   // Widget routes
   "/widget/orders": () => import("../pages/widget/OrdersWidget"),
+  "/embed/org/:id": () => import("../pages/embed/EmbedOrg"),
+  "/embed/org/:id/listings": () => import("../pages/embed/EmbedOrg"),
 
   // Game Data routes
   "/missions": () => import("../pages/missions/MissionSearch"),

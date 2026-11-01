@@ -6,6 +6,17 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
 
+# The read-only org widgets (src/pages/embed/EmbedOrg.tsx) are made to be
+# iframed on orgs' own sites, so /embed/* (and only /embed/*) drops the
+# framing headers above. They have no sign-in, no forms and no actions, and
+# their API requests never send cookies (src/store/embedNetworkEnv.ts).
+# Not a Pages Function path (public/_routes.json), so these are its headers;
+# documentHeaders() in src/bridge/handler.ts mirrors it for Function responses.
+/embed/*
+  ! Content-Security-Policy
+  ! X-Frame-Options
+  X-Robots-Tag: noindex
+
 # HSTS on the main site only: white-label custom domains are served by this
 # same project and must not get it. No includeSubDomains (not every
 # *.sc-market.space host is confirmed to serve https) and no preload. The edge

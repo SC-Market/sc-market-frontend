@@ -19,6 +19,7 @@ import {
 import { clearEmergencyReloadBudget } from "./util/assetReloadGuard"
 import { makeStore } from "./store/store"
 import { browserNetworkEnv } from "./store/browserNetworkEnv"
+import { embedNetworkEnv, isEmbedPath } from "./store/embedNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
 import { applyTitleTemplate, applyWhiteLabelTitle } from "./seo/pageHead"
 import { resolveBrowserCustomDomain, getWhiteLabelConfig } from "./hooks/contractor/CustomDomain"
@@ -68,7 +69,11 @@ registerRouteModules()
 
 // The browser's single store. Browser-only side effects live here, not in
 // makeStore(), so a server render can create clean per-request stores.
-const store = makeStore({ networkEnv: browserNetworkEnv })
+// The /embed/* widgets run in other sites' iframes: never credentialed, no
+// session, no cached profile, no service worker (store/embedNetworkEnv.ts).
+const embed = isEmbedPath(window.location.pathname)
+const networkEnv = embed ? embedNetworkEnv : browserNetworkEnv
+const store = makeStore({ networkEnv })
 
 setupListeners(store.dispatch)
 
@@ -86,7 +91,7 @@ const serverState = prerenderedData ? store.getState() : undefined
 // Start the session check (GET /api/auth/session) before anything renders:
 // the profile query and every auth-only query wait on its answer instead of
 // probing with requests that 401 for anonymous visitors.
-const sessionChecked = browserNetworkEnv.checkSession()
+const sessionChecked = networkEnv.checkSession()
 
 // Signed-in chrome (badges, chats, shops, push status) and the cached
 // profile's refetch wait until the page has shown its content
@@ -96,7 +101,7 @@ armStartupDeferral()
 // Seed the profile from localStorage (no logged-out flash for returning
 // users). Its refetch (which also waits for the session check) reconciles
 // the copy once the startup gate opens.
-void seedCachedProfile(store, undefined, whenStartupGateOpen())
+if (!embed) void seedCachedProfile(store, undefined, whenStartupGateOpen())
 
 // The page's own data starts now, in parallel with its chunk and the session
 // check, not after the app's first commit (router/firstPageData.ts). After
@@ -282,7 +287,7 @@ void initialLocaleReady.then(async () => {
         .then(({ refreshShippedLiveData }) =>
           refreshShippedLiveData(
             store,
-            makeStore({ networkEnv: browserNetworkEnv }),
+            makeStore({ networkEnv }),
             shipped,
           ),
         )
@@ -308,6 +313,7 @@ void initialLocaleReady.then(async () => {
 // Delay initialization significantly to ensure app is fully loaded and Redux is set up
 // This is non-critical and won't block app startup
 setTimeout(() => {
+  if (embed) return
   try {
     initPWA()
   } catch (error) {

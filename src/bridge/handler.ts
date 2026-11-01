@@ -361,6 +361,12 @@ export function documentHeaders(url: URL, contentType: string): Headers {
     "X-Content-Type-Options": "nosniff",
     "Referrer-Policy": "strict-origin-when-cross-origin",
   })
+  // The `/embed/*` rule: the read-only widgets may be framed by any site.
+  if (pathname.startsWith("/embed/")) {
+    headers.delete("Content-Security-Policy")
+    headers.delete("X-Frame-Options")
+    headers.set("X-Robots-Tag", "noindex")
+  }
   // The `/` rule's Link header (agent/tooling entry points).
   if (pathname === "/") headers.set("Link", HOME_LINK_HEADER)
   if (

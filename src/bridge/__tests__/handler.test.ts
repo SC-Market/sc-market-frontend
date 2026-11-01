@@ -289,6 +289,8 @@ describe("handleBridgeRequest", () => {
     expect(fetchSpy.mock.calls.map((c) => c[0])).toEqual([
       `${API}/api/contractors/NARCO`,
       `${API}/api/v2/shops/by-owner?spectrum_id=NARCO`,
+      // Its storefront (trust stats, services) for the summary.
+      `${API}/api/v2/contractors/NARCO/storefront`,
       // The same org on SC Orgs (by spectrum ID), for a link to it.
       "https://api.sc-orgs.space/api/v1/orgs/NARCO",
     ])
@@ -458,5 +460,22 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
     const res = await run("/market/aggregate/1954c364--medal")
     expect(res.headers.get("X-SCM-Bridge")).toBe("page")
     expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/api/v2/game-items/1954c364--medal/listings`)
+  })
+})
+
+describe("documentHeaders framing (the /embed/* carve-out)", () => {
+  it("denies framing everywhere but the read-only /embed/* widgets", async () => {
+    const { documentHeaders } = await import("../handler")
+    const page = documentHeaders(new URL("https://sc-market.space/contractor/BIRDINC"), "text/html")
+    expect(page.get("Content-Security-Policy")).toBe("frame-ancestors 'self'")
+    expect(page.get("X-Frame-Options")).toBe("DENY")
+    const embed = documentHeaders(new URL("https://sc-market.space/embed/org/BIRDINC"), "text/html")
+    expect(embed.get("Content-Security-Policy")).toBeNull()
+    expect(embed.get("X-Frame-Options")).toBeNull()
+    expect(embed.get("X-Robots-Tag")).toBe("noindex")
+    // public/_headers: the same carve-out for the static /embed/* shell.
+    expect(headersFile).toContain("/embed/*\n  ! Content-Security-Policy\n  ! X-Frame-Options\n")
+    // Not a prefix match on "/embed" alone.
+    expect(documentHeaders(new URL("https://sc-market.space/embedded"), "text/html").get("X-Frame-Options")).toBe("DENY")
   })
 })

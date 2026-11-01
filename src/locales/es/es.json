@@ -5855,6 +5855,24 @@
       "assigned": "Asignados",
       "done": "Completados",
       "open": "Abiertos"
+    },
+    "embedCode": {
+      "title": "Obtener código para insertar",
+      "intro": "Pon tu escaparate en tu propia web. El widget es de solo lectura: muestra tus anuncios públicos y tus estadísticas, y cada enlace abre SC Market en una pestaña nueva.",
+      "widget": "Widget",
+      "card": "Tarjeta del escaparate",
+      "listings": "Anuncios",
+      "snippet": "HTML",
+      "copy": "Copiar código",
+      "copied": "Copiado",
+      "preview": "Vista previa"
+    },
+    "embed": {
+      "notFound": "Este escaparate no está disponible.",
+      "completed": "{{n}} pedidos completados",
+      "rating": "{{rating}}★ ({{n}})",
+      "listings": "{{n}} anuncios",
+      "open": "Abrir el escaparate en SC Market"
     }
   }
 }

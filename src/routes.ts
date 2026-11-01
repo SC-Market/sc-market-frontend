@@ -19,6 +19,18 @@ export default [
     path: "/widget/orders",
     file: "routes/pages/OrdersWidget.tsx",
   },
+  // Read-only widgets for other sites' iframes (pages/embed/EmbedOrg.tsx;
+  // public/_headers lets any site frame /embed/*).
+  {
+    id: "routes/pages/EmbedOrg",
+    path: "/embed/org/:id",
+    file: "routes/pages/EmbedOrg.tsx",
+  },
+  {
+    id: "routes/pages/EmbedOrgListings",
+    path: "/embed/org/:id/listings",
+    file: "routes/pages/EmbedOrgListings.tsx",
+  },
   {
     id: "routes/layouts/AppLayout",
     file: "routes/layouts/AppLayout.tsx",
