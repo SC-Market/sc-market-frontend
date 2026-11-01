@@ -27,7 +27,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { HapticButton } from "../../../components/haptic";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import {
@@ -616,15 +615,16 @@ export function AggregateRowV2(props: {
             <VisibilityRounded />
           </Button>
         ) : (
-          <HapticButton
+          <Button
             variant={"contained"}
             color={"primary"}
             size={"large"}
             onClick={addToCart}
             disabled={listing.variant_count > 1 && !selectedVariantId}
+            aria-label={t("MarketAggregateView.addToCart")}
           >
             <AddShoppingCartRounded />
-          </HapticButton>
+          </Button>
         )}
       </TableCell>
     </TableRow>

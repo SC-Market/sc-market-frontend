@@ -5,6 +5,42 @@ import jsxA11y from "eslint-plugin-jsx-a11y"
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import tseslint from "typescript-eslint"
 
+// ── Guard rails (warn-only): keep pages on the component kit ──
+// See drafts/component-standard-audit.md §1.5. Start at warn with a baseline;
+// switch a folder to error once it is clean.
+const RAW_MUI = {
+  Dialog: "use BottomSheet (components/mobile) or a shared dialog component",
+  Avatar: "use UserAvatar / ContractorAvatar (components/avatar), which set alt",
+  Drawer: "use BottomSheet (components/mobile) or the shared nav drawers",
+  Switch: "use a labelled FormControlLabel + Switch from a shared component",
+}
+const HEX = "#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})"
+const WHOLE_HEX = new RegExp(`^${HEX}$`, "i")
+const EMBEDDED_HEX = new RegExp(`(?:[(,]\\s*|solid\\s+)${HEX}\\b`, "i")
+const scmStyle = {
+  rules: {
+    "no-hex-colors": {
+      meta: {
+        type: "suggestion",
+        messages: {
+          hex: 'Hard-coded hex colour "{{value}}". Use a theme palette value (theme.palette.*) instead.',
+        },
+      },
+      create(context) {
+        const check = (node, value) => {
+          if (typeof value !== "string") return
+          const m = WHOLE_HEX.exec(value) ?? EMBEDDED_HEX.exec(value)
+          if (m) context.report({ node, messageId: "hex", data: { value: m[0].trim() } })
+        }
+        return {
+          Literal: (node) => check(node, node.value),
+          TemplateElement: (node) => check(node, node.value.cooked),
+        }
+      },
+    },
+  },
+}
+
 export default [
   js.configs.recommended,
   react.configs.flat.recommended,
@@ -112,6 +148,51 @@ export default [
           message: "Route modules load pages through definePage, not React.lazy.",
         },
       ],
+    },
+  },
+
+  // ── Guard rails: no raw MUI Dialog/Avatar/Drawer/Switch in page code (warn) ──
+  // Uses the @typescript-eslint variant so it doesn't replace the
+  // no-restricted-imports boundaries configured above.
+  {
+    files: ["src/pages/**/*.{ts,tsx}", "src/features/**/*.{ts,tsx}"],
+    ignores: ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**"],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": [
+        "warn",
+        {
+          paths: Object.entries(RAW_MUI).flatMap(([name, instead]) => [
+            {
+              name: "@mui/material",
+              importNames: [name],
+              message: `Raw MUI ${name} in page code: ${instead}.`,
+              allowTypeImports: true,
+            },
+            {
+              name: `@mui/material/${name}`,
+              message: `Raw MUI ${name} in page code: ${instead}.`,
+              allowTypeImports: true,
+            },
+          ]),
+        },
+      ],
+    },
+  },
+
+  // ── Guard rails: no hard-coded hex colours (warn) ──
+  // Theme files and the game-icon colour table are where hex values belong.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: [
+      "src/hooks/styles/**",
+      "src/util/gameIcons.ts",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/__tests__/**",
+    ],
+    plugins: { "scm-style": scmStyle },
+    rules: {
+      "scm-style/no-hex-colors": "warn",
     },
   },
 

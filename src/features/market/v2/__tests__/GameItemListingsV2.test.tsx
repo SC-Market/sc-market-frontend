@@ -20,7 +20,6 @@ import type { QualityHistogram } from "../../../../components/market/v2/QualityH
 import type { QualityBadge } from "../../../../components/market/v2/QualityBadge";
 import type { VariantSelector } from "../../../../components/market/v2/VariantSelector";
 import type { ListingNameAndRating } from "../../../../components/rating/ListingRating";
-import type { HapticButton } from "../../../../components/haptic";
 
 type QualityHistogramProps = React.ComponentProps<typeof QualityHistogram>;
 type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>;
@@ -28,7 +27,6 @@ type VariantSelectorProps = React.ComponentProps<typeof VariantSelector>;
 type ListingNameAndRatingProps = React.ComponentProps<
   typeof ListingNameAndRating
 >;
-type HapticButtonProps = React.ComponentProps<typeof HapticButton>;
 
 const testTheme = createTheme({
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
@@ -107,14 +105,6 @@ vi.mock("../../../../components/rating/ListingRating", () => ({
     <div data-testid="seller-rating">
       {shop?.name || user?.username || contractor?.name}
     </div>
-  ),
-}));
-
-vi.mock("../../../../components/haptic", () => ({
-  HapticButton: ({ children, onClick, disabled }: HapticButtonProps) => (
-    <button onClick={onClick} disabled={disabled} data-testid="add-to-cart-button">
-      {children}
-    </button>
   ),
 }));
 
@@ -396,7 +386,7 @@ describe("GameItemListingsV2", () => {
     it("should render add to cart button for each listing", () => {
       renderWithProviders(<GameItemListingsV2 />);
       
-      const addToCartButtons = screen.getAllByTestId("add-to-cart-button");
+      const addToCartButtons = screen.getAllByRole("button", { name: /addToCart/i });
       expect(addToCartButtons.length).toBe(3);
     });
 
@@ -405,7 +395,7 @@ describe("GameItemListingsV2", () => {
 
       // Each per-variant row exposes its own add-to-cart button (variant is
       // implicit per row, so buttons are not disabled).
-      const addToCartButtons = screen.getAllByTestId("add-to-cart-button");
+      const addToCartButtons = screen.getAllByRole("button", { name: /addToCart/i });
       addToCartButtons.forEach((button) => expect(button).not.toBeDisabled());
     });
 

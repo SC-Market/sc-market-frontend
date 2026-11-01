@@ -23,7 +23,6 @@ import type { QualityBadge } from "../../../../components/market/v2/QualityBadge
 import type { QualityFilter } from "../../../../components/market/v2/QualityFilter";
 import type { VariantSelector } from "../../../../components/market/v2/VariantSelector";
 import type { ListingNameAndRating } from "../../../../components/rating/ListingRating";
-import type { HapticButton } from "../../../../components/haptic";
 import type { CreateBuyOrderV2 } from "../components/CreateBuyOrderV2";
 
 import type {
@@ -47,7 +46,6 @@ type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>;
 type QualityFilterProps = React.ComponentProps<typeof QualityFilter>;
 type VariantSelectorProps = React.ComponentProps<typeof VariantSelector>;
 type ListingNameAndRatingProps = React.ComponentProps<typeof ListingNameAndRating>;
-type HapticButtonProps = React.ComponentProps<typeof HapticButton>;
 type CreateBuyOrderV2Props = React.ComponentProps<typeof CreateBuyOrderV2>;
 
 /**
@@ -223,14 +221,6 @@ vi.mock("../../../../components/rating/ListingRating", () => ({
     <div data-testid="seller-rating">
       {user?.username || contractor?.name || shop?.name}
     </div>
-  ),
-}));
-
-vi.mock("../../../../components/haptic", () => ({
-  HapticButton: ({ children, onClick, disabled }: HapticButtonProps) => (
-    <button onClick={onClick} disabled={disabled} data-testid="add-to-cart-button">
-      {children}
-    </button>
   ),
 }));
 

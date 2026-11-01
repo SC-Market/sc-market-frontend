@@ -36,7 +36,6 @@ import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
 import { PaginatedTable, HeadCell } from "../../../components/table/PaginatedTable";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
-import { HapticButton } from "../../../components/haptic";
 import { Cart } from "../../../datatypes/Cart";
 import { HeaderTitle } from "../../../components/typography/HeaderTitle";
 import { Section } from "../../../components/paper/Section";
@@ -657,14 +656,15 @@ function GameItemListingRow(props: {
               <VisibilityRounded />
             </Button>
           ) : (
-            <HapticButton
+            <Button
               variant="contained"
               color="primary"
               size="large"
               onClick={addToCart}
+              aria-label={t("MarketAggregateView.addToCart")}
             >
               <AddShoppingCartRounded />
-            </HapticButton>
+            </Button>
           )}
         </Stack>
       </TableCell>
