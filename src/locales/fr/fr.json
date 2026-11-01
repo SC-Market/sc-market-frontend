@@ -1628,7 +1628,16 @@
     "viewContractor": "Voir le contractant",
     "share": "Partager",
     "title": "Recrutement",
-    "scOrgsNote": "Vous recrutez ? SC Orgs propose les candidatures, un annuaire des orgs et des outils pour gérer les membres →"
+    "scOrgsNote": "Vous recrutez ? SC Orgs propose les candidatures, un annuaire des orgs et des outils pour gérer les membres →",
+    "scOrgsLfoNote": "Vous cherchez une org ? Publiez une annonce sur le tableau Looking for Org de SC Orgs, et les orgs viennent à vous →"
+  },
+  "scOrgs": {
+    "orgCardTitle": "Aussi sur SC Orgs",
+    "orgCardBody": "{{name}} a une page communauté sur SC Orgs, notre site partenaire : membres, événements et candidatures.",
+    "orgCardAction": "Ouvrir sur SC Orgs",
+    "verifiedTitle": "Inscrivez aussi votre org sur SC Orgs",
+    "verifiedBody": "SC Orgs, notre site partenaire pour gérer les orgs, offre à {{org}} les candidatures, les événements et des outils pour les membres. L’inscription prend environ deux minutes.",
+    "verifiedAction": "S’inscrire sur SC Orgs"
   },
   "contractor": {
     "fields": {

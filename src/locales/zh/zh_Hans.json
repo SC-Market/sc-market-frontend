@@ -1626,7 +1626,16 @@
     "viewContractor": "查看合约组织",
     "share": "分享",
     "title": "招募",
-    "scOrgsNote": "正在招募成员？SC Orgs 提供入会申请、组织目录和成员管理工具 →"
+    "scOrgsNote": "正在招募成员？SC Orgs 提供入会申请、组织目录和成员管理工具 →",
+    "scOrgsLfoNote": "在找组织？在 SC Orgs 的「Looking for Org」看板上发帖，让组织主动来找你 →"
+  },
+  "scOrgs": {
+    "orgCardTitle": "也在 SC Orgs 上",
+    "orgCardBody": "{{name}} 在我们的姊妹网站 SC Orgs 上有社区页面：成员、活动和入会申请。",
+    "orgCardAction": "在 SC Orgs 上打开",
+    "verifiedTitle": "也把你的组织登记到 SC Orgs",
+    "verifiedBody": "SC Orgs 是我们用于管理组织的姊妹网站，为 {{org}} 提供入会申请、活动和成员管理工具。登记大约只需两分钟。",
+    "verifiedAction": "在 SC Orgs 上登记"
   },
   "contractor": {
     "fields": {

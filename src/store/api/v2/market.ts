@@ -30,6 +30,7 @@ export const addTagTypes = [
   "Game Data - Blueprints",
   "Debug V2",
   "Dashboard V2",
+  "Contractors",
   "Cart V2",
   "Buy Orders V2",
   "Availability",
@@ -1682,6 +1683,15 @@ const injectedRtkApi = api
           body: queryArg.updateDashboardLayoutRequest,
         }),
         invalidatesTags: ["Dashboard V2"],
+      }),
+      getContractorSisterLinks: build.query<
+        GetContractorSisterLinksApiResponse,
+        GetContractorSisterLinksApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/contractors/${queryArg.spectrumId}/links`,
+        }),
+        providesTags: ["Contractors"],
       }),
       getContractAlerts: build.query<
         GetContractAlertsApiResponse,
@@ -3458,6 +3468,11 @@ export type GetLayoutApiArg = {
 export type SaveLayoutApiResponse = /** status 200 Ok */ DashboardLayout
 export type SaveLayoutApiArg = {
   updateDashboardLayoutRequest: UpdateDashboardLayoutRequest
+}
+export type GetContractorSisterLinksApiResponse =
+  /** status 200 Ok */ ContractorSisterLinksResponse
+export type GetContractorSisterLinksApiArg = {
+  spectrumId: string
 }
 export type GetContractAlertsApiResponse =
   /** status 200 Ok */ ContractAlertsResponse
@@ -7274,6 +7289,10 @@ export type UpdateDashboardLayoutRequest = {
   owner_id: string
   config: DashboardConfig
 }
+export type ContractorSisterLinksResponse = {
+  /** The org's SC Orgs community page (https://sc-orgs.space/communities/<SID>), or null. */
+  sc_orgs_url: string | null
+}
 export type ContractKind =
   | "Support"
   | "Escort"
@@ -8173,6 +8192,7 @@ export const {
   useSetFeatureFlagMutation,
   useGetLayoutQuery,
   useSaveLayoutMutation,
+  useGetContractorSisterLinksQuery,
   useGetContractAlertsQuery,
   useUpdateContractAlertMutation,
   useGetCartQuery,

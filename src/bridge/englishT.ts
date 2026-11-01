@@ -16,6 +16,7 @@ import {
   landing,
   mining,
   org,
+  recruiting,
   resources,
   seoAnswers,
   viewProfile,
@@ -32,6 +33,10 @@ const RESOURCES: Record<string, unknown> = {
   contractorsPage: { title: contractorsPage.title },
   mining: { title: mining.title },
   resources: { title: resources.title },
+  recruiting: {
+    scOrgsNote: recruiting.scOrgsNote,
+    scOrgsLfoNote: recruiting.scOrgsLfoNote,
+  },
   wiki: {
     hub: wiki.hub,
     locations: { title: wiki.locations.title },

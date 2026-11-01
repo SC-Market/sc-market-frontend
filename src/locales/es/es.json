@@ -1628,7 +1628,16 @@
     "viewContractor": "Ver contratista",
     "share": "Compartir",
     "title": "Reclutamiento",
-    "scOrgsNote": "¿Reclutando? SC Orgs tiene solicitudes, un directorio de organizaciones y herramientas para miembros →"
+    "scOrgsNote": "¿Reclutando? SC Orgs tiene solicitudes, un directorio de organizaciones y herramientas para miembros →",
+    "scOrgsLfoNote": "¿Buscas una organización? Publica en el tablón Looking for Org de SC Orgs y las organizaciones vendrán a ti →"
+  },
+  "scOrgs": {
+    "orgCardTitle": "También en SC Orgs",
+    "orgCardBody": "{{name}} tiene una página de comunidad en SC Orgs, nuestro sitio hermano: miembros, eventos y solicitudes de reclutamiento.",
+    "orgCardAction": "Abrir en SC Orgs",
+    "verifiedTitle": "Registra también tu organización en SC Orgs",
+    "verifiedBody": "SC Orgs, nuestro sitio hermano para gestionar organizaciones, ofrece a {{org}} solicitudes de reclutamiento, eventos y herramientas para miembros. El registro tarda unos dos minutos.",
+    "verifiedAction": "Registrarse en SC Orgs"
   },
   "contractor": {
     "fields": {

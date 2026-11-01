@@ -1624,7 +1624,16 @@
     "viewContractor": "契約者を見る",
     "share": "共有",
     "title": "採用",
-    "scOrgsNote": "メンバーを募集中ですか？SC Orgs には応募の管理、組織ディレクトリ、メンバー管理ツールがあります →"
+    "scOrgsNote": "メンバーを募集中ですか？SC Orgs には応募の管理、組織ディレクトリ、メンバー管理ツールがあります →",
+    "scOrgsLfoNote": "所属する組織をお探しですか？SC Orgs の「Looking for Org」掲示板に投稿すれば、組織のほうから声がかかります →"
+  },
+  "scOrgs": {
+    "orgCardTitle": "SC Orgs にも掲載中",
+    "orgCardBody": "{{name}} は姉妹サイト SC Orgs にコミュニティページがあります：メンバー、イベント、入団申請。",
+    "orgCardAction": "SC Orgs で開く",
+    "verifiedTitle": "SC Orgs にも組織を登録しましょう",
+    "verifiedBody": "組織運営のための姉妹サイト SC Orgs では、{{org}} の入団申請、イベント、メンバー管理ツールが使えます。登録は約2分で完了します。",
+    "verifiedAction": "SC Orgs に登録"
   },
   "contractor": {
     "fields": {

@@ -67,6 +67,8 @@ describe("englishT matches the SPA's i18next setup", () => {
   it("resolves the layout title labels", () => {
     expect(englishT("org.orgTitle")).toBe(t("org.orgTitle"))
     expect(englishT("viewProfile.store_tab")).toBe(t("viewProfile.store_tab"))
+    expect(englishT("recruiting.scOrgsNote")).toBe(t("recruiting.scOrgsNote"))
+    expect(englishT("recruiting.scOrgsLfoNote")).toBe(t("recruiting.scOrgsLfoNote"))
     expect(englishT("seoAnswers.faqTitle", "x")).toBe("Common questions")
     expect(englishT("missing.key", "Fallback {{n}}")).toBe("Fallback {{n}}")
     expect(englishT("missing.key", { defaultValue: "Hi {{n}}", n: 3 })).toBe("Hi 3")
@@ -410,6 +412,18 @@ describe("hub API requests", () => {
     for (const kind of ["aggregate", "bundle", "manufacturer"] as BridgePageKind[]) {
       expect(BRIDGE_PAGES[kind].primary!({ id: "x" }).notFoundStatuses).toEqual([404])
     }
+  })
+})
+
+describe("recruiting hub", () => {
+  it("points recruiters to SC Orgs and players to its Looking for Org board, like the SPA's ScOrgsNote", () => {
+    const doc = build("recruiting", { data: { items: [], total: 0 } }, {}, "/recruiting")
+    const external = doc.summary.filter((b) => b.tag === "external")
+    expect(external).toEqual([
+      { tag: "external", href: "https://sc-orgs.space/", text: englishT("recruiting.scOrgsNote") },
+      { tag: "external", href: "https://sc-orgs.space/lfo", text: englishT("recruiting.scOrgsLfoNote") },
+    ])
+    expect(external[1].tag === "external" && external[1].text).toMatch(/^Looking for an org\?/)
   })
 })
 

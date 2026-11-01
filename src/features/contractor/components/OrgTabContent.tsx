@@ -13,6 +13,7 @@ import { Contractor } from "../domain/types"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
+import { OrgScOrgsCard } from "../../../components/sisterSites/ScOrgsCard"
 
 interface OrgTabContentProps {
   currentTab: number
@@ -65,6 +66,12 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
               )}
             </Paper>
           </Grid>
+          <Grid item xs={12}>
+            <OrgScOrgsCard
+              spectrumId={contractor.spectrum_id}
+              name={contractor.name}
+            />
+          </Grid>
         </Grid>
       </TabPanel>
       <TabPanel value={currentTab} index={2} preload>
@@ -78,6 +85,12 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
       <TabPanel value={currentTab} index={4} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <RecruitingPostArea spectrum_id={contractor.spectrum_id} />
+          <Grid item xs={12}>
+            <OrgScOrgsCard
+              spectrumId={contractor.spectrum_id}
+              name={contractor.name}
+            />
+          </Grid>
         </Grid>
       </TabPanel>
       <TabPanel value={currentTab} index={5} preload>

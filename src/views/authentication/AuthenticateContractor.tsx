@@ -24,6 +24,10 @@ import { OrgLinkBackLine } from "../../components/authentication/OrgLinkBackLine
 import { AuthenticateContractorSkeleton } from "./AuthenticateContractor.skeleton"
 import { ErrorPageBody } from "../../pages/errors/ErrorPage"
 import { PATHS } from "../../routes/paths"
+import {
+  SC_ORGS_ORIGIN,
+  ScOrgsCard,
+} from "../../components/sisterSites/ScOrgsCard"
 
 export function AuthenticateContractor() {
   const identifier = useGetAuthenticatorIdentifier()
@@ -85,6 +89,18 @@ export function AuthenticateContractor() {
       <Section xs={12} lg={12}>
         <Grid item xs={12}>
           <OrgLinkBackLine spectrumId={verifiedOrg} context="verified" />
+        </Grid>
+        <Grid item xs={12}>
+          <ScOrgsCard
+            title={t("scOrgs.verifiedTitle", "Also list your org on SC Orgs")}
+            body={t("scOrgs.verifiedBody", {
+              org: verifiedOrg,
+              defaultValue:
+                "SC Orgs, our sister site for running orgs, gives {{org}} recruiting applications, events and member tools. Registering takes about two minutes.",
+            })}
+            href={`${SC_ORGS_ORIGIN}/communities/create`}
+            action={t("scOrgs.verifiedAction", "Register on SC Orgs")}
+          />
         </Grid>
         <Grid item xs={12}>
           <Box display={"flex"} justifyContent={"flex-end"}>

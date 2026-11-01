@@ -1624,7 +1624,16 @@
     "viewContractor": "Auftragnehmer anzeigen",
     "share": "Teilen",
     "title": "Rekrutierung",
-    "scOrgsNote": "Ihr rekrutiert? SC Orgs bietet Bewerbungen, ein Org-Verzeichnis und Tools für Mitglieder →"
+    "scOrgsNote": "Ihr rekrutiert? SC Orgs bietet Bewerbungen, ein Org-Verzeichnis und Tools für Mitglieder →",
+    "scOrgsLfoNote": "Du suchst eine Org? Erstelle einen Beitrag auf dem „Looking for Org“-Board von SC Orgs, und die Orgs kommen zu dir →"
+  },
+  "scOrgs": {
+    "orgCardTitle": "Auch auf SC Orgs",
+    "orgCardBody": "{{name}} hat eine Community-Seite auf SC Orgs, unserer Schwesterseite: Mitglieder, Events und Bewerbungen.",
+    "orgCardAction": "Auf SC Orgs öffnen",
+    "verifiedTitle": "Trage deine Org auch auf SC Orgs ein",
+    "verifiedBody": "SC Orgs, unsere Schwesterseite für die Org-Verwaltung, bietet {{org}} Bewerbungen, Events und Tools für Mitglieder. Die Registrierung dauert etwa zwei Minuten.",
+    "verifiedAction": "Auf SC Orgs registrieren"
   },
   "contractor": {
     "fields": {

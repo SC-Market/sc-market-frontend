@@ -1569,7 +1569,16 @@
     "viewContractor": "查看合約組織",
     "share": "分享",
     "title": "招募",
-    "scOrgsNote": "正在招募成員？SC Orgs 提供入會申請、組織目錄和成員管理工具 →"
+    "scOrgsNote": "正在招募成員？SC Orgs 提供入會申請、組織目錄和成員管理工具 →",
+    "scOrgsLfoNote": "在找組織？在 SC Orgs 的「Looking for Org」看板上發文，讓組織主動來找你 →"
+  },
+  "scOrgs": {
+    "orgCardTitle": "也在 SC Orgs 上",
+    "orgCardBody": "{{name}} 在我們的姊妹網站 SC Orgs 上有社群頁面：成員、活動和入會申請。",
+    "orgCardAction": "在 SC Orgs 上開啟",
+    "verifiedTitle": "也把你的組織登記到 SC Orgs",
+    "verifiedBody": "SC Orgs 是我們用於管理組織的姊妹網站，為 {{org}} 提供入會申請、活動和成員管理工具。登記大約只需兩分鐘。",
+    "verifiedAction": "在 SC Orgs 上登記"
   },
   "contractor": {
     "fields": {

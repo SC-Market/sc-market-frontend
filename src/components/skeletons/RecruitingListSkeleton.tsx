@@ -45,7 +45,7 @@ export function RecruitingListFrame(props: {
     <>
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
-          <ScOrgsNote sx={{ px: { xs: 1, md: 0 } }} />
+          <ScOrgsNote players sx={{ px: { xs: 1, md: 0 } }} />
         </Grid>
         {props.children}
       </Grid>

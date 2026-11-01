@@ -409,6 +409,8 @@ function hubDoc(
     intro?: (string | null | undefined)[]
     linksHeading?: string
     links?: SeoLink[]
+    /** Blocks after the links, e.g. a sister-site pointer. */
+    after?: SummaryBlock[]
   },
   ctx: PageContext,
 ): BridgeDocument {
@@ -425,6 +427,7 @@ function hubDoc(
       { tag: "h1", text: opts.name },
       ...paragraphs(opts.text.description, ...(opts.intro ?? [])),
       ...linkBlocks(opts.linksHeading ?? "Browse", links),
+      ...(opts.after ?? []),
     ],
   }
 }
@@ -1382,6 +1385,11 @@ const HUB_PAGES: Record<
             href: `/recruiting/post/${enc(post.post_id)}`,
             text: [post.title, post.contractor?.name].filter(Boolean).join(" — "),
           })),
+          // The SPA's ScOrgsNote: recruiters → SC Orgs, players → its Looking for Org board.
+          after: [
+            { tag: "external", href: `${SC_ORGS_SITE}/`, text: englishT("recruiting.scOrgsNote") },
+            { tag: "external", href: `${SC_ORGS_SITE}/lfo`, text: englishT("recruiting.scOrgsLfoNote") },
+          ],
         },
         ctx,
       ),

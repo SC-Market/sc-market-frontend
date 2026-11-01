@@ -6,10 +6,12 @@ import { useTranslation } from "react-i18next"
 export const SC_ORGS_URL = "https://sc-orgs.space"
 
 /**
- * One line pointing recruiters to SC Orgs, on the recruiting pages. Static
- * text, so the page and its skeletons render it identically (no shift).
+ * One line pointing recruiters to SC Orgs, on the recruiting pages. With
+ * `players` (the /recruiting list), a second line for players: SC Orgs'
+ * Looking for Org board. Static text, so the page and its skeletons render
+ * it identically (no shift).
  */
-export function ScOrgsNote(props: { sx?: SxProps<Theme> }) {
+export function ScOrgsNote(props: { sx?: SxProps<Theme>; players?: boolean }) {
   const { t } = useTranslation()
   return (
     <Typography variant="body2" color="text.secondary" sx={props.sx}>
@@ -25,6 +27,23 @@ export function ScOrgsNote(props: { sx?: SxProps<Theme> }) {
           "Recruiting? SC Orgs has applications, an org directory and member tools →",
         )}
       </Link>
+      {props.players && (
+        <>
+          <br />
+          <Link
+            href={`${SC_ORGS_URL}/lfo`}
+            target="_blank"
+            rel="noopener"
+            underline="hover"
+            color="primary"
+          >
+            {t(
+              "recruiting.scOrgsLfoNote",
+              "Looking for an org? Post on the Looking for Org board on SC Orgs, and orgs come to you →",
+            )}
+          </Link>
+        </>
+      )}
     </Typography>
   )
 }

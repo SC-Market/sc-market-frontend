@@ -3893,10 +3893,19 @@
   },
   "recruiting": {
     "scOrgsNote": "Recruiting? SC Orgs has applications, an org directory and member tools →",
+    "scOrgsLfoNote": "Looking for an org? Post on the Looking for Org board on SC Orgs, and orgs come to you →",
     "share": "Share",
     "title": "Recruiting",
     "viewContractor": "View Contractor",
     "viewDetails": "View Details"
+  },
+  "scOrgs": {
+    "orgCardTitle": "Also on SC Orgs",
+    "orgCardBody": "{{name}} has a community page on SC Orgs, our sister site: members, events and recruiting applications.",
+    "orgCardAction": "Open on SC Orgs",
+    "verifiedTitle": "Also list your org on SC Orgs",
+    "verifiedBody": "SC Orgs, our sister site for running orgs, gives {{org}} recruiting applications, events and member tools. Registering takes about two minutes.",
+    "verifiedAction": "Register on SC Orgs"
   },
   "recruiting_orgs": "Recruiting Orgs",
   "recruiting_post": {
