@@ -37,7 +37,6 @@ export {
   useGetContractorInvitesQuery,
   useGetContractorWebhooksQuery,
   useGetContractorReviewsQuery,
-  useGetContractorCustomersQuery,
   useRefetchContractorDetailsMutation,
   useCreateContractorRoleMutation,
   useUpdateContractorRoleMutation,

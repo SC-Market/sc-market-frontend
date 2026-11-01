@@ -1759,7 +1759,10 @@
     "customers": "顧客",
     "username": "ユーザー名",
     "orders": "注文",
-    "total_value": "合計金額"
+    "total_value": "合計金額",
+    "description": "この組織またはそのショップに注文したユーザー（メンバーを含む）。各行はその顧客自身の注文のみで、キャンセルされた注文は含まれません。",
+    "fulfilled": "完了",
+    "last_order": "最終注文"
   },
   "profileNavAvatar": {
     "profile": "プロフィール",

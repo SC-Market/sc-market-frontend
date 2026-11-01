@@ -1,7 +1,10 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { useParams } from "react-router-dom"
 import { CustomerList } from "../../views/people/Customers"
+import { MemberList } from "../../views/contractor/OrgMembers"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import {
   AdminDailyActivity,
   AdminMembershipAnalytics,
@@ -19,14 +22,27 @@ export function CustomerPage(props: {
 
   return (
     <StandardPageLayout
-      title={t("customerList.customers")}
+      title={
+        props.members ? t("manageMemberList.members") : t("customerList.customers")
+      }
       headerTitle={t("people.title")}
       maxWidth="xl"
       sidebarOpen={true}
     >
-      <CustomerList {...props} />
+      {props.members && <OrgMemberSection />}
+      <CustomerList />
     </StandardPageLayout>
   )
+}
+
+/** The org's members (the page is the sidebar's "Members"), above its customers. */
+function OrgMemberSection() {
+  const { contractor_id } = useParams<{ contractor_id: string }>()
+  const { data: contractor } = useGetContractorBySpectrumIDQuery(
+    contractor_id ?? "",
+    { skip: !contractor_id },
+  )
+  return contractor ? <MemberList contractor={contractor} /> : null
 }
 
 export function AdminUserListPage() {

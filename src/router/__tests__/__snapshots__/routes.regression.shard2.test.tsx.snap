@@ -358,9 +358,7 @@ exports[`routes (shard 2/4) > /buyorders 1`] = `
 
 exports[`routes (shard 2/4) > /contractor/:id 1`] = `
 {
-  "consoleErrors": [
-    "Encountered two children with the same key, \`username\`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and co",
-  ],
+  "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/contractor/TESTORG",
   "h1": [

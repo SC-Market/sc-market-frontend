@@ -1009,7 +1009,6 @@ exports[`routes (shard 4/4) > /org/:contractor_id/manage/roles 1`] = `
 {
   "consoleErrors": [
     "<tbody> cannot contain a nested <td>.",
-    "Encountered two children with the same key, \`username\`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and co",
     "In HTML, <td> cannot be a child of <tbody>.",
   ],
   "errorElementErrors": [],

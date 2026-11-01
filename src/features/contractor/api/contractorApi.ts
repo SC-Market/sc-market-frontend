@@ -7,7 +7,7 @@ import type {
   ContractorMember,
   AuditLogsResponse,
 } from "../domain/types"
-import { MinimalUser, User } from "../../../datatypes/User"
+import { MinimalUser } from "../../../datatypes/User"
 import type { OrderReview } from "../../orders/domain/types"
 import { serviceApi } from "../../../store/service"
 import { ContractorSearchState } from "../hooks/ContractorSearch"
@@ -149,10 +149,6 @@ export const contractorsApi = serviceApi.injectEndpoints({
       providesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg.spectrum_id },
       ],
-    }),
-    getContractorCustomers: builder.query<User[], string>({
-      query: (spectrum_id) => `/api/contractors/${spectrum_id}/customers`,
-      transformResponse: unwrapResponse,
     }),
     getContractorWebhooks: builder.query<OrderWebhook[], string>({
       query: (spectrum_id) => `/api/contractors/${spectrum_id}/webhooks`,
@@ -826,7 +822,6 @@ export const {
   useGetContractorReviewsQuery,
   useGetContractorBySpectrumIDQuery,
   useRefetchContractorDetailsMutation,
-  useGetContractorCustomersQuery,
   useGetContractorMembersQuery,
   useCheckContractorMembershipQuery,
   useCreateContractorRoleMutation,

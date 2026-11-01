@@ -1763,7 +1763,10 @@
     "customers": "Clientes",
     "username": "Nombre de usuario",
     "orders": "Pedidos",
-    "total_value": "Valor total"
+    "total_value": "Valor total",
+    "description": "Personas que han hecho pedidos a esta org o a sus tiendas, incluidos los miembros. Cada fila muestra solo los pedidos de ese cliente; los pedidos cancelados no cuentan.",
+    "fulfilled": "Completados",
+    "last_order": "Último pedido"
   },
   "profileNavAvatar": {
     "profile": "Perfil",

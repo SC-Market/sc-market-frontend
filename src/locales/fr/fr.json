@@ -1763,7 +1763,10 @@
     "customers": "Clients",
     "username": "Nom d'utilisateur",
     "orders": "Commandes",
-    "total_value": "Valeur totale"
+    "total_value": "Valeur totale",
+    "description": "Les personnes qui ont passé commande auprès de cette org ou de ses boutiques, membres compris. Chaque ligne ne compte que les commandes de ce client ; les commandes annulées ne sont pas comptées.",
+    "fulfilled": "Terminées",
+    "last_order": "Dernière commande"
   },
   "profileNavAvatar": {
     "profile": "Profil",

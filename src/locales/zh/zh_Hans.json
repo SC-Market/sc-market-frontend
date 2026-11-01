@@ -1761,7 +1761,10 @@
     "customers": "客户",
     "username": "用户名",
     "orders": "订单",
-    "total_value": "总价值"
+    "total_value": "总价值",
+    "description": "在本组织或其商店下过订单的人（包括成员）。每一行仅统计该客户自己的订单，已取消的订单不计入。",
+    "fulfilled": "已完成",
+    "last_order": "最近订单"
   },
   "profileNavAvatar": {
     "profile": "个人资料",

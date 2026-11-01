@@ -1440,7 +1440,10 @@
     "customers": "Customers",
     "orders": "Orders",
     "total_value": "Total Value",
-    "username": "Username"
+    "username": "Username",
+    "description": "People who have placed orders with this org or its shops, members included. Each row is that customer's own orders; cancelled orders are not counted.",
+    "fulfilled": "Fulfilled",
+    "last_order": "Last order"
   },
   "Damaged": "warning",
   "dashboard": {

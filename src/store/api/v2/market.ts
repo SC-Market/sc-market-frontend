@@ -2026,6 +2026,18 @@ const injectedRtkApi = api
         }),
         providesTags: ["Analytics V2"],
       }),
+      getOrgCustomers: build.query<
+        GetOrgCustomersApiResponse,
+        GetOrgCustomersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/analytics/org-customers`,
+          params: {
+            spectrum_id: queryArg.spectrumId,
+          },
+        }),
+        providesTags: ["Analytics V2"],
+      }),
       getPriceHistory: build.query<
         GetPriceHistoryApiResponse,
         GetPriceHistoryApiArg
@@ -3795,6 +3807,12 @@ export type PlaceBidApiArg = {
 }
 export type GetOrgStatsApiResponse = /** status 200 Ok */ GetOrgStatsResponse
 export type GetOrgStatsApiArg = {
+  /** The org's spectrum ID */
+  spectrumId: string
+}
+export type GetOrgCustomersApiResponse =
+  /** status 200 Ok */ GetOrgCustomersResponse
+export type GetOrgCustomersApiArg = {
   /** The org's spectrum ID */
   spectrumId: string
 }
@@ -8171,6 +8189,28 @@ export type GetOrgStatsResponse = {
   /** Open orders nobody has claimed yet; null without manage_orders. */
   unassigned_open_orders: number | null
 }
+export type OrgCustomer = {
+  user_id: string
+  username: string
+  display_name: string
+  avatar: string | null
+  /** The customer's orders with the org, cancelled ones excluded. */
+  orders: number
+  /** Of those, fulfilled. */
+  fulfilled_orders: number
+  /** Sum of those orders' totals (orders.cost is the order total), aUEC. */
+  total_value: number
+  /** When the customer last placed one of those orders. */
+  last_order_at: string | null
+}
+export type GetOrgCustomersResponse = {
+  spectrum_id: string
+  /** People who placed orders with the org (the org itself or any shop it
+    owns), biggest order value first. Stats are per customer and leave
+    cancelled orders out. Not the org's members (a member who ordered from
+    the org is listed like anyone else). */
+  customers: OrgCustomer[]
+}
 export type PriceDataPoint = {
   /** ISO 8601 timestamp for this data point */
   timestamp: string
@@ -8787,6 +8827,7 @@ export const {
   useGetAuctionDetailQuery,
   usePlaceBidMutation,
   useGetOrgStatsQuery,
+  useGetOrgCustomersQuery,
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,

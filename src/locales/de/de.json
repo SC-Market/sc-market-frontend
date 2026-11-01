@@ -1759,7 +1759,10 @@
     "customers": "Kunden",
     "username": "Benutzername",
     "orders": "Bestellungen",
-    "total_value": "Gesamtwert"
+    "total_value": "Gesamtwert",
+    "description": "Personen, die bei dieser Org oder ihren Shops bestellt haben, Mitglieder eingeschlossen. Jede Zeile zeigt nur die Bestellungen dieses Kunden; stornierte Bestellungen zählen nicht.",
+    "fulfilled": "Erfüllt",
+    "last_order": "Letzte Bestellung"
   },
   "profileNavAvatar": {
     "profile": "Profil",

@@ -6,57 +6,37 @@ import {
   Link as MaterialLink,
   TableCell,
   TableRow,
-  Theme,
   Typography,
 } from "@mui/material"
-import { User } from "../../datatypes/User"
 import { Link, useParams } from "react-router-dom"
-import { styled } from "@mui/material/styles"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
-import { useGetContractorCustomersQuery } from "../../features/contractor/api/contractorApi"
+import {
+  useGetOrgCustomersQuery,
+  type OrgCustomer,
+} from "../../store/api/v2/market"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { USER_PATHS } from "../../routes/paths"
 
-function PeopleRow(props: {
-  row: User
+/** One customer's row: their own orders with the org, never shared values. */
+export function CustomerRow(props: {
+  row: OrgCustomer
   index: number
   onClick?: MouseEventHandler
   isItemSelected: boolean
   labelId: string
 }): ReactElement {
-  const { row, onClick, isItemSelected, labelId } = props
+  const { row, onClick, labelId } = props
   const theme = useTheme<ExtendedTheme>()
+  const { i18n } = useTranslation()
   return (
-    <TableRow
-      hover
-      onClick={onClick}
-      role="checkbox"
-      aria-checked={isItemSelected}
-      tabIndex={-1}
-      key={row.username}
-      selected={isItemSelected}
-    >
-      {/*<TableCell padding="checkbox">*/}
-      {/*    <Checkbox*/}
-      {/*        color="primary"*/}
-      {/*        checked={isItemSelected}*/}
-      {/*        inputProps={{*/}
-      {/*            'aria-labelledby': labelId,*/}
-      {/*        }}*/}
-      {/*    />*/}
-      {/*</TableCell>*/}
-      <TableCell
-        component="th"
-        id={labelId}
-        scope="row"
-        // padding="none"
-      >
+    <TableRow hover onClick={onClick} tabIndex={-1} key={row.user_id}>
+      <TableCell component="th" id={labelId} scope="row">
         <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item>
-            <Avatar src={row.avatar} />
+            <Avatar src={row.avatar ?? undefined} />
           </Grid>
           <Grid item>
             <MaterialLink
@@ -78,30 +58,31 @@ function PeopleRow(props: {
       </TableCell>
       <TableCell align="right">
         <Typography variant={"subtitle1"}>
-          {/*{row.orders.toLocaleString('en-US')}*/}5
+          {row.orders.toLocaleString(i18n.language)}
+        </Typography>
+      </TableCell>
+      <TableCell align="right">
+        <Typography variant={"subtitle1"}>
+          {row.fulfilled_orders.toLocaleString(i18n.language)}
         </Typography>
       </TableCell>
       <TableCell align="right">
         <Typography variant={"subtitle1"} color={"primary"}>
-          {/*{row.spent.toLocaleString('en-US')}*/}
-          32 aUEC
+          {row.total_value.toLocaleString(i18n.language)} aUEC
+        </Typography>
+      </TableCell>
+      <TableCell align="right">
+        <Typography variant={"subtitle1"}>
+          {row.last_order_at
+            ? new Date(row.last_order_at).toLocaleDateString(i18n.language)
+            : "—"}
         </Typography>
       </TableCell>
     </TableRow>
   )
 }
 
-const SearchIconWrapper = styled("div")((args: { theme: Theme }) => ({
-  padding: args.theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}))
-
-const headCells: readonly HeadCell<User>[] = [
+const headCells: readonly HeadCell<OrgCustomer>[] = [
   {
     id: "username",
     numeric: false,
@@ -115,37 +96,60 @@ const headCells: readonly HeadCell<User>[] = [
     label: "customerList.orders",
   },
   {
-    id: "spent",
+    id: "fulfilled_orders",
+    numeric: true,
+    disablePadding: false,
+    label: "customerList.fulfilled",
+  },
+  {
+    id: "total_value",
     numeric: true,
     disablePadding: false,
     label: "customerList.total_value",
   },
+  {
+    id: "last_order_at",
+    numeric: true,
+    disablePadding: false,
+    label: "customerList.last_order",
+  },
 ]
 
-export function CustomerList(props: {
-  contractors?: boolean
-  members?: boolean
-  customers?: boolean
-}) {
+/**
+ * The org's customers: people who placed orders with the org or its shops
+ * (members who ordered included), each with their own stats. Not a member
+ * list.
+ */
+export function CustomerList() {
   const { contractor_id } = useParams<{ contractor_id: string }>()
   const { t } = useTranslation()
 
-  const { isLoading, data } = useGetContractorCustomersQuery(
-    contractor_id!,
+  const { isLoading, data } = useGetOrgCustomersQuery(
+    { spectrumId: contractor_id ?? "" },
     { skip: !contractor_id },
   )
 
   return (
-    <Section xs={12} title={t("customerList.customers")} disablePadding>
+    <Section
+      xs={12}
+      title={t("customerList.customers")}
+      subtitle={
+        <Typography variant="body2" color="text.primary">
+          {t("customerList.description")}
+        </Typography>
+      }
+      disablePadding
+    >
       {isLoading ? null : (
-        <PaginatedTable<User>
+        <PaginatedTable<OrgCustomer>
           // `data` is undefined when the request failed (e.g. 403/404) or was
           // skipped (no contractor_id on /customers); render an empty table
           // instead of crashing PaginatedTable on `rows.length`.
-          rows={data ?? []}
-          initialSort={"username"}
-          generateRow={PeopleRow}
-          keyAttr={"username"}
+          rows={data?.customers ?? []}
+          initialSort={"total_value"}
+          initialSortDirection={"desc"}
+          generateRow={CustomerRow}
+          keyAttr={"user_id"}
           headCells={headCells.map((cell) => ({
             ...cell,
             label: t(cell.label),

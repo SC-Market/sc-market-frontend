@@ -1704,7 +1704,10 @@
     "customers": "客戶",
     "username": "使用者名稱",
     "orders": "訂單",
-    "total_value": "總價值"
+    "total_value": "總價值",
+    "description": "在本組織或其商店下過訂單的人（包括成員）。每一列僅統計該客戶自己的訂單，已取消的訂單不計入。",
+    "fulfilled": "已完成",
+    "last_order": "最近訂單"
   },
   "profileNavAvatar": {
     "profile": "個人檔案",

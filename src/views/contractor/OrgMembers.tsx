@@ -312,9 +312,10 @@ export function MemberList(props: { contractor: Contractor }) {
         <Table>
           <TableHead>
             <TableRow>
-              {headCells.map((cell) => (
+              {headCells.map((cell, i) => (
                 <TableCell
-                  key={cell.id as string}
+                  // two head cells share the id "username"
+                  key={`${String(cell.id)}-${i}`}
                   align={cell.numeric ? "right" : "left"}
                   padding={cell.disablePadding ? "none" : "normal"}
                 >
@@ -442,9 +443,10 @@ export function ManageMemberList() {
         <Table>
           <TableHead>
             <TableRow>
-              {headCells.map((cell) => (
+              {headCells.map((cell, i) => (
                 <TableCell
-                  key={cell.id as string}
+                  // two head cells share the id "username"
+                  key={`${String(cell.id)}-${i}`}
                   align={cell.numeric ? "right" : "left"}
                   padding={cell.disablePadding ? "none" : "normal"}
                 >

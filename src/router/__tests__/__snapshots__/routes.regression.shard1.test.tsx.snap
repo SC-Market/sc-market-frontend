@@ -296,9 +296,7 @@ exports[`routes (shard 1/4) > /bulk 1`] = `
 
 exports[`routes (shard 1/4) > /contractor/:id/:tab 1`] = `
 {
-  "consoleErrors": [
-    "Encountered two children with the same key, \`username\`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and co",
-  ],
+  "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/contractor/TESTORG/about",
   "h1": [
@@ -1241,7 +1239,7 @@ exports[`routes (shard 1/4) > /org/:contractor_id/members 1`] = `
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Customers - SC Market",
+  "title": "Members - SC Market",
   "url": "/org/TESTORG/members",
 }
 `;
