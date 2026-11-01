@@ -19,8 +19,11 @@ export function formatPrice(amount: number | null | undefined): string {
  * the page's HTML says for crawlers (as the edge bridge's summary does).
  */
 export function formatExactPrice(amount: number | null | undefined): string | undefined {
-  if (amount == null || amount === 0 || !Number.isFinite(amount)) return undefined
-  return `${Math.round(amount).toLocaleString("en-US")} aUEC`
+  // The v2 API sends prices as numeric strings ("50000000") despite the
+  // generated type, so coerce before checking.
+  const value = Number(amount)
+  if (amount == null || !Number.isFinite(value) || value === 0) return undefined
+  return `${Math.round(value).toLocaleString("en-US")} aUEC`
 }
 
 /** Format a price range. Uses abbreviation for large numbers. */
