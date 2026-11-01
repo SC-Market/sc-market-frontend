@@ -22,10 +22,12 @@ export const ORG_MANAGE_TABS = [
   { value: "settings", anyOf: ["manage_org_details"] },
   // GET /contractors/:id/audit-logs.
   { value: "audit", anyOf: ["manage_org_details"] },
-  // The branded storefront status (what branding unlocks, what's missing).
+  // The branded storefront status (what branding unlocks, what's missing),
+  // the setup checklist and the embed code. Not Manage Theme alone: that
+  // only edits the theme, which shows once branding is unlocked.
   {
     value: "storefront",
-    anyOf: ["manage_org_details", "manage_theme", "manage_market"],
+    anyOf: ["manage_org_details", "manage_market"],
   },
   // The org's shops' analytics rolled up (orders per member only with
   // Manage Orders, decided by the backend).

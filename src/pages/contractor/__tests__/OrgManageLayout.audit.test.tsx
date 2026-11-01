@@ -10,6 +10,11 @@ import { OrgManageLayout } from "../OrgManageLayout"
 
 const h = vi.hoisted(() => ({ granted: new Set<string>() }))
 
+// The branding status query (needs a store); a white_label grant answers it.
+vi.mock("../../../features/storefront/hooks/useBrandingUnlocked", () => ({
+  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) => c?.premium_tier === "white_label",
+}))
+
 vi.mock("react-i18next", async (importOriginal) => ({
   ...(await importOriginal<typeof import("react-i18next")>()),
   useTranslation: () => ({

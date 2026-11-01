@@ -454,6 +454,8 @@ exports[`org manage nav: relative navigate(value) from the pathless OrgManageLay
   "PUSH /org/TESTORG/manage/discord",
   "PUSH /org/TESTORG/manage/settings",
   "PUSH /org/TESTORG/manage/audit",
+  "PUSH /org/TESTORG/manage/storefront",
+  "PUSH /org/TESTORG/manage/analytics",
 ]
 `;
 

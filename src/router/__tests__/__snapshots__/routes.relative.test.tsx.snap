@@ -2117,6 +2117,78 @@ exports[`relative link resolution (every leaf) > /email/verify/:token 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /embed/org/:id 1`] = `
+{
+  "links": {
+    "path:""": "/embed/org/TESTORG",
+    "path:"#frag"": "/embed/org/TESTORG#frag",
+    "path:"."": "/embed/org/TESTORG",
+    "path:".."": "/embed/org",
+    "path:"../.."": "/embed",
+    "path:"../sibling"": "/embed/org/sibling",
+    "path:"./"": "/embed/org/TESTORG/",
+    "path:"./child"": "/embed/org/TESTORG/child",
+    "path:"?tab=x"": "/embed/org/TESTORG?tab=x",
+    "path:"child"": "/embed/org/TESTORG/child",
+    "route:""": "/embed/org/TESTORG",
+    "route:"#frag"": "/embed/org/TESTORG#frag",
+    "route:"."": "/embed/org/TESTORG",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/embed/org/TESTORG/",
+    "route:"./child"": "/embed/org/TESTORG/child",
+    "route:"?tab=x"": "/embed/org/TESTORG?tab=x",
+    "route:"child"": "/embed/org/TESTORG/child",
+  },
+  "location": "/embed/org/TESTORG",
+  "params": {
+    "id": "TESTORG",
+  },
+  "probeChain": [
+    "/embed/org/:id",
+  ],
+  "resolvedDot": "/embed/org/TESTORG",
+  "url": "/embed/org/TESTORG",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /embed/org/:id/listings 1`] = `
+{
+  "links": {
+    "path:""": "/embed/org/TESTORG/listings",
+    "path:"#frag"": "/embed/org/TESTORG/listings#frag",
+    "path:"."": "/embed/org/TESTORG/listings",
+    "path:".."": "/embed/org/TESTORG",
+    "path:"../.."": "/embed/org",
+    "path:"../sibling"": "/embed/org/TESTORG/sibling",
+    "path:"./"": "/embed/org/TESTORG/listings/",
+    "path:"./child"": "/embed/org/TESTORG/listings/child",
+    "path:"?tab=x"": "/embed/org/TESTORG/listings?tab=x",
+    "path:"child"": "/embed/org/TESTORG/listings/child",
+    "route:""": "/embed/org/TESTORG/listings",
+    "route:"#frag"": "/embed/org/TESTORG/listings#frag",
+    "route:"."": "/embed/org/TESTORG/listings",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/embed/org/TESTORG/listings/",
+    "route:"./child"": "/embed/org/TESTORG/listings/child",
+    "route:"?tab=x"": "/embed/org/TESTORG/listings?tab=x",
+    "route:"child"": "/embed/org/TESTORG/listings/child",
+  },
+  "location": "/embed/org/TESTORG/listings",
+  "params": {
+    "id": "TESTORG",
+  },
+  "probeChain": [
+    "/embed/org/:id/listings",
+  ],
+  "resolvedDot": "/embed/org/TESTORG/listings",
+  "url": "/embed/org/TESTORG/listings",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /error 1`] = `
 {
   "links": {
@@ -4316,6 +4388,47 @@ exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/abou
 }
 `;
 
+exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/analytics 1`] = `
+{
+  "links": {
+    "path:""": "/org/TESTORG/manage/analytics",
+    "path:"#frag"": "/org/TESTORG/manage/analytics#frag",
+    "path:"."": "/org/TESTORG/manage/analytics",
+    "path:".."": "/org/TESTORG/manage",
+    "path:"../.."": "/org/TESTORG",
+    "path:"../sibling"": "/org/TESTORG/manage/sibling",
+    "path:"./"": "/org/TESTORG/manage/analytics/",
+    "path:"./child"": "/org/TESTORG/manage/analytics/child",
+    "path:"?tab=x"": "/org/TESTORG/manage/analytics?tab=x",
+    "path:"child"": "/org/TESTORG/manage/analytics/child",
+    "route:""": "/org/TESTORG/manage/analytics",
+    "route:"#frag"": "/org/TESTORG/manage/analytics#frag",
+    "route:"."": "/org/TESTORG/manage/analytics",
+    "route:".."": "/org/TESTORG/manage",
+    "route:"../.."": "/org/TESTORG",
+    "route:"../sibling"": "/org/TESTORG/manage/sibling",
+    "route:"./"": "/org/TESTORG/manage/analytics/",
+    "route:"./child"": "/org/TESTORG/manage/analytics/child",
+    "route:"?tab=x"": "/org/TESTORG/manage/analytics?tab=x",
+    "route:"child"": "/org/TESTORG/manage/analytics/child",
+  },
+  "location": "/org/TESTORG/manage/analytics",
+  "params": {
+    "contractor_id": "TESTORG",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "analytics",
+  ],
+  "resolvedDot": "/org/TESTORG/manage/analytics",
+  "url": "/org/TESTORG/manage/analytics",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/audit 1`] = `
 {
   "links": {
@@ -4518,6 +4631,47 @@ exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/sett
   ],
   "resolvedDot": "/org/TESTORG/manage/settings",
   "url": "/org/TESTORG/manage/settings",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /org/:contractor_id/manage/storefront 1`] = `
+{
+  "links": {
+    "path:""": "/org/TESTORG/manage/storefront",
+    "path:"#frag"": "/org/TESTORG/manage/storefront#frag",
+    "path:"."": "/org/TESTORG/manage/storefront",
+    "path:".."": "/org/TESTORG/manage",
+    "path:"../.."": "/org/TESTORG",
+    "path:"../sibling"": "/org/TESTORG/manage/sibling",
+    "path:"./"": "/org/TESTORG/manage/storefront/",
+    "path:"./child"": "/org/TESTORG/manage/storefront/child",
+    "path:"?tab=x"": "/org/TESTORG/manage/storefront?tab=x",
+    "path:"child"": "/org/TESTORG/manage/storefront/child",
+    "route:""": "/org/TESTORG/manage/storefront",
+    "route:"#frag"": "/org/TESTORG/manage/storefront#frag",
+    "route:"."": "/org/TESTORG/manage/storefront",
+    "route:".."": "/org/TESTORG/manage",
+    "route:"../.."": "/org/TESTORG",
+    "route:"../sibling"": "/org/TESTORG/manage/sibling",
+    "route:"./"": "/org/TESTORG/manage/storefront/",
+    "route:"./child"": "/org/TESTORG/manage/storefront/child",
+    "route:"?tab=x"": "/org/TESTORG/manage/storefront?tab=x",
+    "route:"child"": "/org/TESTORG/manage/storefront/child",
+  },
+  "location": "/org/TESTORG/manage/storefront",
+  "params": {
+    "contractor_id": "TESTORG",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/:contractor_id",
+    "manage",
+    "(layout:lazy)",
+    "storefront",
+  ],
+  "resolvedDot": "/org/TESTORG/manage/storefront",
+  "url": "/org/TESTORG/manage/storefront",
 }
 `;
 
@@ -6169,6 +6323,41 @@ exports[`relative link resolution (every leaf) > /signup 1`] = `
   ],
   "resolvedDot": "/signup",
   "url": "/signup",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /storefronts 1`] = `
+{
+  "links": {
+    "path:""": "/storefronts",
+    "path:"#frag"": "/storefronts#frag",
+    "path:"."": "/storefronts",
+    "path:".."": "/",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/sibling",
+    "path:"./"": "/storefronts/",
+    "path:"./child"": "/storefronts/child",
+    "path:"?tab=x"": "/storefronts?tab=x",
+    "path:"child"": "/storefronts/child",
+    "route:""": "/storefronts",
+    "route:"#frag"": "/storefronts#frag",
+    "route:"."": "/storefronts",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/storefronts/",
+    "route:"./child"": "/storefronts/child",
+    "route:"?tab=x"": "/storefronts?tab=x",
+    "route:"child"": "/storefronts/child",
+  },
+  "location": "/storefronts",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/storefronts",
+  ],
+  "resolvedDot": "/storefronts",
+  "url": "/storefronts",
 }
 `;
 

@@ -12,6 +12,11 @@ import { enumerateRoutes } from "../../../router/__tests__/regression/harness"
 import { OrgManageLayout } from "../OrgManageLayout"
 
 const navigateSpy = vi.hoisted(() => vi.fn())
+// The branding status query (needs a store); a white_label grant answers it.
+vi.mock("../../../features/storefront/hooks/useBrandingUnlocked", () => ({
+  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) => c?.premium_tier === "white_label",
+}))
+
 vi.mock("react-router-dom", async (importOriginal) => ({
   ...(await importOriginal<typeof import("react-router-dom")>()),
   useNavigate: () => navigateSpy,
