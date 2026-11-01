@@ -38,6 +38,8 @@ export const PATHS = {
   myFleet: "/myfleet",
   myFleetImport: "/myfleet/import",
   shoppingLists: "/shopping-lists",
+  /** Verified orgs' storefronts (prerendered hub). */
+  storefronts: "/storefronts",
 } as const
 
 export const AUTH_PATHS = {

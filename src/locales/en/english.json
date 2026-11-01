@@ -5840,6 +5840,20 @@
       "rating": "{{rating}}★ ({{n}})",
       "listings": "{{n}} listings",
       "open": "Open the storefront on SC Market"
+    },
+    "hub": {
+      "title": "Org storefronts",
+      "description": "Star Citizen org storefronts on SC Market: verified orgs' shops, services and recruiting, with their completed orders and reviews.",
+      "intro": "Shops, services and recruiting from verified Star Citizen orgs, each on one page. Orders go straight to the org.",
+      "filter": "Filter by focus",
+      "all": "All",
+      "empty": "No storefronts yet.",
+      "yourOrg": "Run an org? Verify it, open a shop and it can be listed here.",
+      "register": "Register your org"
+    },
+    "landing": {
+      "title": "Org storefronts",
+      "subtitle": "Verified orgs' shops, services and recruiting."
     }
   }
 }

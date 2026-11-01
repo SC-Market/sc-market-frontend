@@ -326,6 +326,10 @@ export const pages = {
     () => import("../pages/embed/EmbedOrg"),
     (m) => m.EmbedOrgListings,
   ),
+  StorefrontsHub: pageEntry(
+    () => import("../pages/storefronts/StorefrontsHub"),
+    (m) => m.StorefrontsHub,
+  ),
   MyShops: pageEntry(
     () => import("../features/shops/components/MyShops"),
     (m) => m.MyShops,

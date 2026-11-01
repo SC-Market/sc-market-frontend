@@ -26,6 +26,7 @@ The full design and its decisions are in `ssr-migration-design.md` (Phase 3).
 | `/missions` | First page of missions (`searchMissions`, events excluded: 40 mission links), game events | Other pages, filters, searches |
 | `/missions/givers`, `/missions/factions`, `/missions/types`, `/missions/systems` | Every hub of the kind with its mission count (`getMissionHubs`) | — |
 | `/missions/<kind>/<slug>` (one per hub, ~100) | The hub's intro, its first 100 missions, related hubs (`getMissionHub`) | `?page=N` (head and links from the bridge over the static file, like `/wiki/items`) |
+| `/storefronts` | Verified orgs' storefront cards (`getStorefronts`, the same list the homepage's "Org storefronts" row shows) | The list again on mount (`refetchOnMountOrArgChange`), the field filter |
 | `/guides`, `/guides/<category>`, `/guides/<category>/<slug>`, `/about` | The whole guide (from `content/`) | — |
 
 Personal UI (sign-in state, cart, notifications, theme and language

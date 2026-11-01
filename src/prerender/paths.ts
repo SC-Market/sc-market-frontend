@@ -27,6 +27,9 @@ import { SSR_PLACEHOLDER_SEGMENT } from "../ssr/routePlaceholders"
  */
 export const HOME_PATH = "/"
 
+/** The Storefronts hub: build-time list from the public storefronts API. */
+export const STOREFRONTS_HUB_PATH = "/storefronts"
+
 /** Game database hubs: build-time data from the public v2 game-data API. */
 export const GAME_DATA_HUB_PATHS = [
   "/wiki",

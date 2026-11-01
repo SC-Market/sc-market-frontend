@@ -30,6 +30,9 @@ export const PRERENDERABLE_ENDPOINTS: ReadonlySet<string> = new Set([
   "getRefiningMethods",
   "getResourceCategories",
   "getShips",
+  // The Storefronts hub's list (org storefronts change slowly; the hub
+  // revalidates it on mount) and the homepage row from the same query.
+  "getStorefronts",
   "searchBlueprints",
   "searchItems",
   "searchLocations",

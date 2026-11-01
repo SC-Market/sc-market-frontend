@@ -882,6 +882,11 @@ export default [
         file: "routes/pages/MiningLocationDetailGate.tsx",
       },
       {
+        id: "routes/pages/StorefrontsHub",
+        path: "/storefronts",
+        file: "routes/pages/StorefrontsHub.tsx",
+      },
+      {
         id: "routes/pages/WikiHub",
         path: "/wiki",
         file: "routes/pages/WikiHub.tsx",

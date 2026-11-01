@@ -135,6 +135,17 @@ export function contractorsSeoText(t: SeoTranslate): SeoText {
   return layoutText(t("contractorsPage.title", "Contractors"))
 }
 
+/** /storefronts (StorefrontsHub). */
+export function storefrontsSeoText(t: SeoTranslate): SeoText {
+  return {
+    title: t("storefront.hub.title", "Org storefronts"),
+    description: t(
+      "storefront.hub.description",
+      "Star Citizen org storefronts on SC Market: verified orgs' shops, services and recruiting, with their completed orders and reviews.",
+    ),
+  }
+}
+
 /** /mining and /mining/locations (MiningPage). */
 export function miningSeoText(t: SeoTranslate): SeoText {
   return layoutText(t("mining.title", "Mining Database"))

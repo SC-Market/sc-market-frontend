@@ -5873,6 +5873,20 @@
       "rating": "{{rating}}★ ({{n}})",
       "listings": "{{n}} annonces",
       "open": "Ouvrir la vitrine sur SC Market"
+    },
+    "hub": {
+      "title": "Vitrines d'orgs",
+      "description": "Les vitrines d'orgs Star Citizen sur SC Market : boutiques, services et recrutement d'orgs vérifiées, avec leurs commandes terminées et leurs avis.",
+      "intro": "Boutiques, services et recrutement d'orgs Star Citizen vérifiées, chacune sur une page. Les commandes vont directement à l'org.",
+      "filter": "Filtrer par activité",
+      "all": "Toutes",
+      "empty": "Pas encore de vitrines.",
+      "yourOrg": "Vous dirigez une org ? Vérifiez-la, ouvrez une boutique et elle pourra apparaître ici.",
+      "register": "Inscrire votre org"
+    },
+    "landing": {
+      "title": "Vitrines d'orgs",
+      "subtitle": "Boutiques, services et recrutement d'orgs vérifiées."
     }
   }
 }

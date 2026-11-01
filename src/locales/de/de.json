@@ -5840,6 +5840,20 @@
       "rating": "{{rating}}★ ({{n}})",
       "listings": "{{n}} Angebote",
       "open": "Storefront auf SC Market öffnen"
+    },
+    "hub": {
+      "title": "Org-Storefronts",
+      "description": "Storefronts von Star-Citizen-Orgs auf SC Market: Shops, Dienstleistungen und Rekrutierung verifizierter Orgs, mit abgeschlossenen Bestellungen und Bewertungen.",
+      "intro": "Shops, Dienstleistungen und Rekrutierung verifizierter Star-Citizen-Orgs, jeweils auf einer Seite. Bestellungen gehen direkt an die Org.",
+      "filter": "Nach Schwerpunkt filtern",
+      "all": "Alle",
+      "empty": "Noch keine Storefronts.",
+      "yourOrg": "Leitest du eine Org? Verifiziere sie, eröffne einen Shop, dann kann sie hier erscheinen.",
+      "register": "Org registrieren"
+    },
+    "landing": {
+      "title": "Org-Storefronts",
+      "subtitle": "Shops, Dienstleistungen und Rekrutierung verifizierter Orgs."
     }
   }
 }

@@ -5,6 +5,8 @@ interface LandingPageLayoutProps {
   hero: ReactNode
   latestListings: ReactNode
   topShops: ReactNode
+  /** Org storefronts (optional: the route skeleton leaves it out). */
+  storefronts?: ReactNode
   startSelling: ReactNode
   gameData: ReactNode
   trust: ReactNode
@@ -27,6 +29,7 @@ export function LandingPageLayout(props: LandingPageLayoutProps) {
         <Stack spacing={{ xs: 5, md: 6 }} sx={{ pt: { xs: 3, md: 3 } }}>
           {props.latestListings}
           {props.topShops}
+          {props.storefronts}
           {props.startSelling}
           {props.gameData}
           {/* Trust + supporters beside the FAQ from lg, stacked below. */}

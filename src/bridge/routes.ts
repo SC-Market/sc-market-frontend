@@ -53,6 +53,7 @@ export type BridgePageKind =
   | "resources"
   | "recruiting"
   | "contractors"
+  | "storefronts"
   // Help & Guides and About (static JSON from the content build, not the API)
   | "guidesHub"
   | "guideCategory"
@@ -85,6 +86,7 @@ export const PRERENDERED_KINDS: ReadonlySet<BridgePageKind> = new Set([
   "missionType",
   "missionSystem",
   "resources",
+  "storefronts",
   "guidesHub",
   "guideCategory",
   "guide",
@@ -158,6 +160,7 @@ export const BRIDGE_ROUTES: readonly BridgeRoute[] = [
   { path: "/resources", kind: "resources" },
   { path: "/recruiting", kind: "recruiting" },
   { path: "/contractors", kind: "contractors" },
+  { path: "/storefronts", kind: "storefronts" },
   { path: "/guides", kind: "guidesHub" },
   { path: "/about", kind: "about" },
 ]

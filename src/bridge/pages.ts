@@ -36,6 +36,7 @@ import type {
   SearchWikiItemsResponse,
   OrgStorefront,
   ShopPublicResponse,
+  StorefrontsResponse,
   WikiItemDetail,
   WikiManufacturerDetail,
   WikiManufacturerSearchResult,
@@ -143,6 +144,7 @@ import {
   buildHubHead,
   buildMarketSearchHead,
   contractorsSeoText,
+  storefrontsSeoText,
   type HubCrumb,
   manufacturersSeoText,
   MAX_HUB_LINKS,
@@ -1059,7 +1061,8 @@ const HUB_PAGES: Record<
   | "missions"
   | "resources"
   | "recruiting"
-  | "contractors",
+  | "contractors"
+  | "storefronts",
   BridgePage
 > = {
   home: staticPage((ctx) => {
@@ -1449,6 +1452,31 @@ const HUB_PAGES: Record<
           links: data.items.map((c) => ({
             href: ORG_PATHS.profile(enc(c.spectrum_id)),
             text: c.name,
+          })),
+        },
+        ctx,
+      ),
+  }),
+
+  // Prerendered (StorefrontsHub): verified orgs with listings.
+  storefronts: page<StorefrontsResponse>({
+    primary: () => v2List(`/contractors/storefronts`, ENTITY_LIST_TTL),
+    build: (data, _s, ctx) =>
+      hubDoc(
+        {
+          text: storefrontsSeoText(englishT),
+          path: PATHS.storefronts,
+          name: englishT("storefront.hub.title", "Org storefronts"),
+          intro: [
+            englishT(
+              "storefront.hub.intro",
+              "Shops, services and recruiting from verified Star Citizen orgs, each on one page. Orders go straight to the org.",
+            ),
+          ],
+          linksHeading: "Storefronts",
+          links: arr(data?.storefronts).map((s) => ({
+            href: ORG_PATHS.profile(enc(s.spectrum_id)),
+            text: s.tagline ? `${s.name} — ${s.tagline}` : s.name,
           })),
         },
         ctx,

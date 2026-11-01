@@ -5873,6 +5873,20 @@
       "rating": "{{rating}}★ ({{n}})",
       "listings": "{{n}} anuncios",
       "open": "Abrir el escaparate en SC Market"
+    },
+    "hub": {
+      "title": "Escaparates de orgs",
+      "description": "Escaparates de orgs de Star Citizen en SC Market: tiendas, servicios y reclutamiento de orgs verificadas, con sus pedidos completados y reseñas.",
+      "intro": "Tiendas, servicios y reclutamiento de orgs verificadas de Star Citizen, cada una en una página. Los pedidos van directos a la org.",
+      "filter": "Filtrar por enfoque",
+      "all": "Todas",
+      "empty": "Aún no hay escaparates.",
+      "yourOrg": "¿Diriges una org? Verifícala, abre una tienda y podrá aparecer aquí.",
+      "register": "Registrar tu org"
+    },
+    "landing": {
+      "title": "Escaparates de orgs",
+      "subtitle": "Tiendas, servicios y reclutamiento de orgs verificadas."
     }
   }
 }

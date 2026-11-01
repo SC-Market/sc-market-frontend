@@ -1,6 +1,6 @@
 import path from "node:path"
 import type { Config } from "@react-router/dev/config"
-import { GAME_DATA_HUB_PATHS, HOME_PATH } from "./src/prerender/paths"
+import { GAME_DATA_HUB_PATHS, HOME_PATH, STOREFRONTS_HUB_PATH } from "./src/prerender/paths"
 import { contentPathsFromDisk } from "./src/prerender/contentPaths.node"
 import { diskContentSource } from "./src/prerender/contentSource.node"
 import { registerBuildContentSource } from "./src/server/contentSource"
@@ -35,6 +35,7 @@ export default {
   prerender: async () => [
     HOME_PATH,
     ...GAME_DATA_HUB_PATHS,
+    STOREFRONTS_HUB_PATH,
     // Every mission hub of the LIVE version (the game data API, at build time).
     ...(await missionHubPathsFromApi(process.env.VITE_BACKEND_URL)),
     ...contentPathsFromDisk(path.resolve(import.meta.dirname, "content")),

@@ -36,6 +36,11 @@ const LatestListings = lazyWithRetry(() =>
     default: m.LatestListings,
   })),
 )
+const LandingStorefronts = lazyWithRetry(() =>
+  import("../../components/landing/LandingStorefronts").then((m) => ({
+    default: m.LandingStorefronts,
+  })),
+)
 const TopRatedShops = lazyWithRetry(() =>
   import("../../components/landing/TopRatedShops").then((m) => ({
     default: m.TopRatedShops,
@@ -91,6 +96,11 @@ export function LandingPage() {
         topShops={
           <Suspense fallback={<TopRatedShopsSkeleton />}>
             <TopRatedShops />
+          </Suspense>
+        }
+        storefronts={
+          <Suspense fallback={null}>
+            <LandingStorefronts />
           </Suspense>
         }
         startSelling={<StartSelling signedIn={signedIn} />}
