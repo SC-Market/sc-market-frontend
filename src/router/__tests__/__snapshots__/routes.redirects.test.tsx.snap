@@ -992,7 +992,9 @@ exports[`redirects and guards > shop index → listings 1`] = `
 {
   "cookies": {},
   "finalUrl": "/shop/test-shop/listings",
-  "h1": [],
+  "h1": [
+    "Manage Listings",
+  ],
   "historyAction": "REPLACE",
   "matches": [
     "(layout:AppLayout)",
@@ -1001,7 +1003,7 @@ exports[`redirects and guards > shop index → listings 1`] = `
     "listings",
   ],
   "session": "admin",
-  "title": "Listings - SC Market",
+  "title": "Manage Listings - SC Market",
   "url": "/shop/test-shop",
 }
 `;
