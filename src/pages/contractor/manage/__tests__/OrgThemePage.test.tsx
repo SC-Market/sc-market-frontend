@@ -20,6 +20,9 @@ vi.mock("../../../../store/api/contractors", () => ({
 vi.mock("../../../../components/theme-editor/ThemeEditor", () => ({
   ThemeEditor: () => <div>theme editor</div>,
 }))
+vi.mock("../../../../features/storefront/hooks/useBrandingUnlocked", () => ({
+  useBrandingUnlocked: (c: { premium_tier?: string } | undefined) => c?.premium_tier === "white_label",
+}))
 vi.mock("../../../../views/contractor/WhiteLabelSettings", () => ({
   WhiteLabelSettings: () => <div>white-label settings</div>,
 }))

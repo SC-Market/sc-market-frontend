@@ -766,6 +766,7 @@ const injectedRtkApi = api
             has_photos: queryArg.hasPhotos,
             bulk_discount: queryArg.bulkDiscount,
             include_unlisted: queryArg.includeUnlisted,
+            org: queryArg.org,
           },
         }),
         providesTags: ["Listings V2"],
@@ -1703,6 +1704,31 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Dashboard V2"],
       }),
+      getStorefronts: build.query<
+        GetStorefrontsApiResponse,
+        GetStorefrontsApiArg
+      >({
+        query: () => ({ url: `/contractors/storefronts` }),
+        providesTags: ["Contractors"],
+      }),
+      getOrgStorefront: build.query<
+        GetOrgStorefrontApiResponse,
+        GetOrgStorefrontApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/contractors/${queryArg.spectrumId}/storefront`,
+        }),
+        providesTags: ["Contractors"],
+      }),
+      getOrgStorefrontStatus: build.query<
+        GetOrgStorefrontStatusApiResponse,
+        GetOrgStorefrontStatusApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/contractors/${queryArg.spectrumId}/storefront/status`,
+        }),
+        providesTags: ["Contractors"],
+      }),
       getContractorSisterLinks: build.query<
         GetContractorSisterLinksApiResponse,
         GetContractorSisterLinksApiArg
@@ -1935,6 +1961,15 @@ const injectedRtkApi = api
           body: queryArg.placeBidRequest,
         }),
         invalidatesTags: ["Auctions V2"],
+      }),
+      getOrgStats: build.query<GetOrgStatsApiResponse, GetOrgStatsApiArg>({
+        query: (queryArg) => ({
+          url: `/analytics/org-stats`,
+          params: {
+            spectrum_id: queryArg.spectrumId,
+          },
+        }),
+        providesTags: ["Analytics V2"],
       }),
       getPriceHistory: build.query<
         GetPriceHistoryApiResponse,
@@ -2689,6 +2724,8 @@ export type SearchListingsApiArg = {
   bulkDiscount?: boolean
   /** Site admins only: also list unlisted (link-only) listings (the admin Market page, the admin "Show unlisted" toggle on shop pages). Ignored for everyone else. */
   includeUnlisted?: boolean
+  /** Only listings of the shops this org (spectrum ID) owns: an org's storefront, its embeds and its white-label market */
+  org?: string
 }
 export type GetMyListingsApiResponse =
   /** status 200 User's listings with pagination metadata */ GetMyListingsResponse
@@ -3502,6 +3539,17 @@ export type SaveLayoutApiResponse = /** status 200 Ok */ DashboardLayout
 export type SaveLayoutApiArg = {
   updateDashboardLayoutRequest: UpdateDashboardLayoutRequest
 }
+export type GetStorefrontsApiResponse = /** status 200 Ok */ StorefrontsResponse
+export type GetStorefrontsApiArg = void
+export type GetOrgStorefrontApiResponse = /** status 200 Ok */ OrgStorefront
+export type GetOrgStorefrontApiArg = {
+  spectrumId: string
+}
+export type GetOrgStorefrontStatusApiResponse =
+  /** status 200 Ok */ OrgStorefrontStatusResponse
+export type GetOrgStorefrontStatusApiArg = {
+  spectrumId: string
+}
 export type GetContractorSisterLinksApiResponse =
   /** status 200 Ok */ ContractorSisterLinksResponse
 export type GetContractorSisterLinksApiArg = {
@@ -3636,6 +3684,11 @@ export type PlaceBidApiResponse = /** status 200 Ok */ PlaceBidResponse
 export type PlaceBidApiArg = {
   listingId: string
   placeBidRequest: PlaceBidRequest
+}
+export type GetOrgStatsApiResponse = /** status 200 Ok */ GetOrgStatsResponse
+export type GetOrgStatsApiArg = {
+  /** The org's spectrum ID */
+  spectrumId: string
 }
 export type GetPriceHistoryApiResponse =
   /** status 200 Price history time-series data */ GetPriceHistoryResponse
@@ -7379,6 +7432,148 @@ export type UpdateDashboardLayoutRequest = {
   owner_id: string
   config: DashboardConfig
 }
+export type StorefrontCard = {
+  spectrum_id: string
+  name: string
+  logo_url: string | null
+  /** The org's tagline (its RSI headline, as imported at registration). */
+  tagline: string
+  /** The org's fields on SC Market (trading, freight, …). */
+  fields: string[]
+  active_listings: number
+  completed_orders: number
+  avg_rating: number | null
+  rating_count: number
+  /** A showcase org, listed first. */
+  showcase: boolean
+}
+export type StorefrontsResponse = {
+  /** Showcase orgs first, then by completed orders. At most 60. */
+  storefronts: StorefrontCard[]
+}
+export type StorefrontTrust = {
+  /** Fulfilled orders, all of the org's shops. */
+  completed_orders: number
+  /** Average review over all of the org's shops, 0–5; null without reviews. */
+  avg_rating: number | null
+  rating_count: number
+  /** Share of fulfilled orders completed within 24 h, percent; null without any. */
+  response_rate: number | null
+  /** Average hours from order to fulfilment; null without any. */
+  avg_completion_hours: number | null
+  /** Members on SC Market. */
+  members: number
+  active_listings: number
+  active_services: number
+  /** When the org's first shop opened (ISO 8601); null without shops. */
+  on_sc_market_since: string | null
+}
+export type StorefrontShop = {
+  slug: string
+  name: string
+  logo_url: string | null
+  /** Public, active listings. */
+  listing_count: number
+  /** Active services. */
+  service_count: number
+  /** Average review, 0–5; null without reviews. */
+  rating: number | null
+  rating_count: number
+  completed_orders: number
+}
+export type StorefrontService = {
+  service_id: string
+  service_name: string
+  kind: string | null
+  cost: number
+  payment_type: string
+}
+export type ScOrgsCommunity = {
+  /** https://sc-orgs.space/communities/<SID> */
+  url: string
+  headline: string | null
+  /** Members on SC Orgs (public ones). */
+  member_count: number | null
+  focus_tags: string[]
+  playstyle_tags: string[]
+  languages: string[]
+}
+export type OrgStorefront = {
+  spectrum_id: string
+  name: string
+  logo_url: string | null
+  banner_url: string | null
+  /** Registered through RSI (SC Market's org verification). */
+  verified: boolean
+  trust: StorefrontTrust
+  /** Active shops, oldest first (the first is the org's main shop). */
+  shops: StorefrontShop[]
+  /** Up to 6 active services, newest first. */
+  services: StorefrontService[]
+  /** The org's SC Orgs page (recruiting card), when SC Orgs has it. */
+  recruiting: ScOrgsCommunity | null
+}
+export type BrandingMembersCriterion = {
+  met: boolean
+  /** Members of the org on SC Market. */
+  count: number
+  required: number
+}
+export type BrandingActivityCriterion = {
+  met: boolean
+  /** The org's listings created or updated in the window. */
+  recent_listings: number
+  /** Orders placed with the org (or its shops) in the window. */
+  recent_orders: number
+  window_days: number
+}
+export type BrandingCriteria = {
+  /** Registered through RSI (not a "~" custom org, not a test org). */
+  rsi_verified: boolean
+  members: BrandingMembersCriterion
+  activity: BrandingActivityCriterion
+}
+export type BrandingCriterionKey = "rsi_verified" | "members" | "activity"
+export type OrgBrandingStatus = {
+  /** Branding can be used (theme, logo, title, site and sidebar settings). */
+  unlocked: boolean
+  /** Why it is unlocked: a staff grant or the criteria; null while locked. */
+  source: ("grant" | "criteria" | null) | null
+  /** The unlock criteria are met (independently of a staff grant). */
+  eligible: boolean
+  criteria: BrandingCriteria
+  /** Criteria not met yet, in display order. Empty when eligible. */
+  missing: BrandingCriterionKey[]
+  /** One English sentence saying why (for logs, support and the API docs). */
+  reason: string
+  /** The org's subdomain, when staff have provisioned one. */
+  custom_domain: string | null
+}
+export type OnboardingStepKey =
+  | "verify"
+  | "shop"
+  | "listing"
+  | "discord"
+  | "members"
+  | "branding"
+export type OnboardingStep = {
+  key: OnboardingStepKey
+  done: boolean
+}
+export type OnboardingChecklist = {
+  steps: OnboardingStep[]
+  done_count: number
+  total: number
+  /** The org's main (oldest active) shop, for the steps' links; null without one. */
+  shop_slug: string | null
+}
+export type OrgStorefrontStatusResponse = {
+  spectrum_id: string
+  /** Whether branding is unlocked, why, and what is still missing. */
+  branding: OrgBrandingStatus
+  /** The storefront onboarding checklist: verify, shop, listing, Discord, members, branding. */
+  onboarding: OnboardingChecklist
+}
 export type ContractorSisterLinksResponse = {
   /** The org's SC Orgs community page (https://sc-orgs.space/communities/<SID>), or null. */
   sc_orgs_url: string | null
@@ -7733,6 +7928,62 @@ export type PlaceBidResponse = {
 }
 export type PlaceBidRequest = {
   amount: number
+}
+export type OrgShopStats = {
+  shop_id: string
+  slug: string
+  name: string
+  views: number
+  unique_viewers: number
+  cart_adds: number
+  orders: number
+  sales: number
+  /** sales ÷ views, percent */
+  conversion_rate: number
+  /** Fulfilled orders (all kinds, from the shop's metrics). */
+  completed_orders: number
+  active_listings: number
+}
+export type OrgStatsTotals = {
+  views: number
+  unique_viewers: number
+  cart_adds: number
+  orders: number
+  sales: number
+  conversion_rate: number
+  completed_orders: number
+  active_listings: number
+}
+export type OrgTopListing = {
+  listing_id: string
+  title: string
+  shop_slug: string
+  views: number
+  sales: number
+}
+export type OrgMemberOrders = {
+  username: string
+  display_name: string
+  /** Orders assigned to the member (all time). */
+  assigned: number
+  /** Of those, fulfilled. */
+  completed: number
+  /** Of those, not started or in progress. */
+  open: number
+}
+export type GetOrgStatsResponse = {
+  spectrum_id: string
+  shops: OrgShopStats[]
+  totals: OrgStatsTotals
+  /** The org's 10 most viewed listings. */
+  top_listings: OrgTopListing[]
+  /** Whether the caller may see orders per member (manage_orders). */
+  orders_by_member_visible: boolean
+  /** Orders per member, sorted by name (never ranked); null without
+    manage_orders. Members with no assigned orders are left out. */
+  orders_by_member: OrgMemberOrders[] | null
+  /** Open orders nobody has claimed yet; null without manage_orders. */
+  unassigned_open_orders: number | null
 }
 export type PriceDataPoint = {
   /** ISO 8601 timestamp for this data point */
@@ -8284,6 +8535,9 @@ export const {
   useSetFeatureFlagMutation,
   useGetLayoutQuery,
   useSaveLayoutMutation,
+  useGetStorefrontsQuery,
+  useGetOrgStorefrontQuery,
+  useGetOrgStorefrontStatusQuery,
   useGetContractorSisterLinksQuery,
   useGetContractAlertsQuery,
   useUpdateContractAlertMutation,
@@ -8306,6 +8560,7 @@ export const {
   useGetNextAvailableQuery,
   useGetAuctionDetailQuery,
   usePlaceBidMutation,
+  useGetOrgStatsQuery,
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,

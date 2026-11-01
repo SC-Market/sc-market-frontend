@@ -10,13 +10,16 @@ import {
   useDeleteOrgThemeMutation,
 } from "../../../store/api/contractors"
 import { clearCachedOrgTheme } from "../../../hooks/styles/themeCache"
+import { useBrandingUnlocked } from "../../../features/storefront/hooks/useBrandingUnlocked"
+import { BrandingStatusCard } from "../../../features/storefront/components/BrandingStatusCard"
 
 export function OrgThemePage() {
   const { data } = usePageOrgManage()
   const contractor = data?.contractor
   const profile = data?.profile
   const spectrumId = contractor?.spectrum_id
-  const hasWhiteLabel = contractor?.premium_tier === "white_label"
+  // A staff white_label grant, or the unlock criteria (Storefront tab).
+  const hasWhiteLabel = useBrandingUnlocked(contractor)
   // Each section shows for the permission its save needs: the theme editor
   // saves with Manage Theme, Site Settings and Sidebar with Manage Org Details.
   const canEditTheme = has_permission(
@@ -39,7 +42,9 @@ export function OrgThemePage() {
     useUpdateOrgThemeMutation()
   const [deleteOrgTheme] = useDeleteOrgThemeMutation()
 
-  if (!hasWhiteLabel || !spectrumId) return null
+  if (!spectrumId) return null
+  // Opened directly while branding is locked: say what's missing.
+  if (!hasWhiteLabel) return <BrandingStatusCard spectrumId={spectrumId} />
 
   return (
     <>

@@ -17,6 +17,7 @@ import {
   HistoryRounded,
   PaletteRounded,
   PersonAddRounded,
+  StorefrontRounded,
 } from "@mui/icons-material"
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -25,6 +26,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageOrgManage } from "../../features/contractor/hooks/usePageOrgManage"
 import { visibleOrgManageTabs, type OrgManageTab } from "../../features/contractor/domain/manageTabs"
 import { OrgManageSkeleton } from "../../components/skeletons/OrgManageSkeleton"
+import { useBrandingUnlocked } from "../../features/storefront/hooks/useBrandingUnlocked"
 
 interface NavItem {
   label: string
@@ -41,6 +43,7 @@ export function OrgManageLayout() {
   const pageData = usePageOrgManage()
   const contractor = pageData.data?.contractor
   const profile = pageData.data?.profile
+  const brandingUnlocked = useBrandingUnlocked(contractor)
   // Which tabs show (and so who can do what) is decided in one place,
   // visibleOrgManageTabs; this only adds labels and icons.
   const navItems = useMemo<NavItem[]>(() => {
@@ -53,10 +56,11 @@ export function OrgManageLayout() {
       audit: { label: t("org.auditLogsTab"), icon: <HistoryRounded /> },
       // The theme page holds both the theme editor and the white-label
       // settings (OrgThemePage), so one item covers both.
+      storefront: { label: t("org.storefrontTab", "Storefront"), icon: <StorefrontRounded /> },
       theme: { label: t("org.themeWhiteLabelTab", "Theme & White Label"), icon: <PaletteRounded /> },
     }
-    return visibleOrgManageTabs(contractor, profile).map((value) => ({ value, ...meta[value] }))
-  }, [contractor, profile, t])
+    return visibleOrgManageTabs(contractor, profile, brandingUnlocked).map((value) => ({ value, ...meta[value] }))
+  }, [contractor, profile, brandingUnlocked, t])
 
   // Extract the active sub-route from the pathname
   const activeItem = useMemo(() => {

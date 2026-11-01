@@ -3228,7 +3228,8 @@
     },
     "themeTab": "主题",
     "themeWhiteLabelTab": "主题与白标",
-    "whiteLabelTab": "白标"
+    "whiteLabelTab": "白标",
+    "storefrontTab": "店面"
   },
   "dashboard": {
     "activityFeed": {
@@ -5746,5 +5747,31 @@
     "copy": "复制此行",
     "copied": "已复制",
     "continue": "继续"
+  },
+  "storefront": {
+    "enquire": "咨询品牌店面",
+    "status": {
+      "loadFailed": "无法加载店面状态，请稍后再试。",
+      "title": "品牌店面",
+      "unlocked": "已解锁",
+      "locked": "未解锁",
+      "byGrant": "SC Market 工作人员已为你的组织解锁品牌功能。",
+      "byCriteria": "你的组织满足全部三项条件，因此品牌功能已解锁。只要仍满足条件，就会保持解锁。",
+      "howToUnlock": "店面免费。你的组织满足以下三项条件后，品牌功能会自动解锁：",
+      "unlocksTitle": "品牌功能包括",
+      "unlocks": "在你的组织专属子域名（{{subdomain}}）上：你的主题和标志、带有组织名称的页面标题、只显示你的组织商品的市场、你自己的侧边栏链接，以及可选的仅限成员模式。你在 sc-market.space 上的店面始终保持公开。",
+      "domainLive": "你的子域名：",
+      "domainOnRequest": "子域名由工作人员按申请设置。"
+    },
+    "criteria": {
+      "verified": "经 RSI 验证的组织",
+      "verifiedMet": "已通过其 RSI 组织页面注册。",
+      "verifiedMissing": "通过 RSI 组织页面注册你的组织以完成验证。",
+      "verifyAction": "验证组织",
+      "members": "SC Market 上的成员：{{count}} / {{required}}",
+      "membersAction": "邀请成员",
+      "activity": "最近 {{days}} 天内有商品或订单",
+      "activityCounts": "新建或更新的商品：{{listings}}。订单：{{orders}}。"
+    }
   }
 }

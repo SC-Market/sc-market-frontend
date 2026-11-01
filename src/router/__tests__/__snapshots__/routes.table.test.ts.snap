@@ -2102,6 +2102,18 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/org/:contractor_id/manage/theme",
   },
   {
+    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > manage > (layout:lazy) > storefront",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+      "LoggedInRoute",
+      "OrgContextFromRoute",
+      "OrgAdminRoute",
+    ],
+    "lazy": true,
+    "pattern": "/org/:contractor_id/manage/storefront",
+  },
+  {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /org/:contractor_id > money > (index)",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

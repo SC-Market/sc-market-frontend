@@ -3215,7 +3215,8 @@
     "settingsTab": "設定",
     "themeTab": "テーマ",
     "themeWhiteLabelTab": "テーマとホワイトラベル",
-    "whiteLabelTab": "ホワイトラベル"
+    "whiteLabelTab": "ホワイトラベル",
+    "storefrontTab": "ストアフロント"
   },
   "dashboard": {
     "activityFeed": {
@@ -5740,5 +5741,31 @@
     "copy": "行をコピー",
     "copied": "コピーしました",
     "continue": "続ける"
+  },
+  "storefront": {
+    "enquire": "ブランドストアフロントについて問い合わせる",
+    "status": {
+      "loadFailed": "ストアフロントの状態を読み込めませんでした。しばらくしてからもう一度お試しください。",
+      "title": "ブランドストアフロント",
+      "unlocked": "解放済み",
+      "locked": "ロック中",
+      "byGrant": "SC Market のスタッフが、あなたの組織のブランディングを解放しました。",
+      "byCriteria": "あなたの組織は3つの条件をすべて満たしているため、ブランディングが解放されています。条件を満たしている間は解放されたままです。",
+      "howToUnlock": "ストアフロントは無料です。組織が次の3つの条件を満たすと、ブランディングが自動で解放されます。",
+      "unlocksTitle": "ブランディングで使えるもの",
+      "unlocks": "組織専用のサブドメイン（{{subdomain}}）で：テーマとロゴ、組織名入りのページタイトル、組織の出品だけを表示するマーケット、独自のサイドバーリンク、任意のメンバー限定モード。sc-market.space 上のストアフロントはどちらの場合も公開のままです。",
+      "domainLive": "あなたのサブドメイン：",
+      "domainOnRequest": "サブドメインはリクエストに応じてスタッフが設定します。"
+    },
+    "criteria": {
+      "verified": "RSI 認証済みの組織",
+      "verifiedMet": "RSI の組織ページで登録済みです。",
+      "verifiedMissing": "認証するには、RSI の組織ページから組織を登録してください。",
+      "verifyAction": "組織を認証する",
+      "members": "SC Market のメンバー：{{required}}人中{{count}}人",
+      "membersAction": "メンバーを招待",
+      "activity": "過去{{days}}日間に出品または注文が1件以上",
+      "activityCounts": "作成・更新された出品：{{listings}}件。注文：{{orders}}件。"
+    }
   }
 }

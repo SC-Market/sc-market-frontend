@@ -3645,7 +3645,8 @@
     "settingsTab": "Settings",
     "themeTab": "Theme",
     "themeWhiteLabelTab": "Theme & White Label",
-    "whiteLabelTab": "White Label"
+    "whiteLabelTab": "White Label",
+    "storefrontTab": "Storefront"
   },
   "orgAbout": {
     "appearanceSubtitle": "Logo and banner for your organization",
@@ -5741,5 +5742,31 @@
     "copy": "Copy line",
     "copied": "Copied",
     "continue": "Continue"
+  },
+  "storefront": {
+    "enquire": "Enquire about a branded storefront",
+    "status": {
+      "loadFailed": "The storefront status couldn't be loaded. Try again later.",
+      "title": "Branded storefront",
+      "unlocked": "Unlocked",
+      "locked": "Locked",
+      "byGrant": "SC Market staff unlocked branding for your org.",
+      "byCriteria": "Your org meets all three criteria, so branding is unlocked. It stays unlocked while it does.",
+      "howToUnlock": "Storefronts are free. Branding unlocks by itself once your org meets these three criteria:",
+      "unlocksTitle": "What branding unlocks",
+      "unlocks": "On your org's own subdomain ({{subdomain}}): your theme and logo, page titles with your org's name, a market that only shows your org's listings, your own sidebar links, and an optional members-only mode. Your storefront on sc-market.space stays public either way.",
+      "domainLive": "Your subdomain:",
+      "domainOnRequest": "Staff set up the subdomain on request."
+    },
+    "criteria": {
+      "verified": "RSI-verified org",
+      "verifiedMet": "Registered through its RSI org page.",
+      "verifiedMissing": "Register your org through its RSI org page to verify it.",
+      "verifyAction": "Verify an org",
+      "members": "Members on SC Market: {{count}} of {{required}}",
+      "membersAction": "Invite members",
+      "activity": "A listing or an order in the last {{days}} days",
+      "activityCounts": "Listings created or updated: {{listings}}. Orders: {{orders}}."
+    }
   }
 }

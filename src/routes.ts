@@ -687,6 +687,11 @@ export default [
                         path: "theme",
                         file: "routes/pages/OrgThemePage.tsx",
                       },
+                      {
+                        id: "routes/pages/OrgStorefrontPage",
+                        path: "storefront",
+                        file: "routes/pages/OrgStorefrontPage.tsx",
+                      },
                     ],
                   },
                 ],

@@ -3136,7 +3136,8 @@
     "settingsTab": "設定",
     "themeTab": "主題",
     "themeWhiteLabelTab": "主題與白牌",
-    "whiteLabelTab": "白牌"
+    "whiteLabelTab": "白牌",
+    "storefrontTab": "店面"
   },
   "dashboard": {
     "activityFeed": {
@@ -5740,5 +5741,31 @@
     "copy": "複製此行",
     "copied": "已複製",
     "continue": "繼續"
+  },
+  "storefront": {
+    "enquire": "洽詢品牌店面",
+    "status": {
+      "loadFailed": "無法載入店面狀態，請稍後再試。",
+      "title": "品牌店面",
+      "unlocked": "已解鎖",
+      "locked": "未解鎖",
+      "byGrant": "SC Market 工作人員已為你的組織解鎖品牌功能。",
+      "byCriteria": "你的組織符合全部三項條件，因此品牌功能已解鎖。只要仍符合條件，就會保持解鎖。",
+      "howToUnlock": "店面免費。你的組織符合以下三項條件後，品牌功能會自動解鎖：",
+      "unlocksTitle": "品牌功能包括",
+      "unlocks": "在你的組織專屬子網域（{{subdomain}}）上：你的主題和標誌、帶有組織名稱的頁面標題、只顯示你的組織商品的市場、你自己的側邊欄連結，以及可選的僅限成員模式。你在 sc-market.space 上的店面始終保持公開。",
+      "domainLive": "你的子網域：",
+      "domainOnRequest": "子網域由工作人員依申請設定。"
+    },
+    "criteria": {
+      "verified": "經 RSI 驗證的組織",
+      "verifiedMet": "已透過其 RSI 組織頁面註冊。",
+      "verifiedMissing": "透過 RSI 組織頁面註冊你的組織以完成驗證。",
+      "verifyAction": "驗證組織",
+      "members": "SC Market 上的成員：{{count}} / {{required}}",
+      "membersAction": "邀請成員",
+      "activity": "最近 {{days}} 天內有商品或訂單",
+      "activityCounts": "新增或更新的商品：{{listings}}。訂單：{{orders}}。"
+    }
   }
 }

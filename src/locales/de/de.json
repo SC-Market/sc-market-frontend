@@ -3215,7 +3215,8 @@
     "settingsTab": "Einstellungen",
     "themeTab": "Design",
     "themeWhiteLabelTab": "Design & White-Label",
-    "whiteLabelTab": "White-Label"
+    "whiteLabelTab": "White-Label",
+    "storefrontTab": "Storefront"
   },
   "dashboard": {
     "activityFeed": {
@@ -5741,5 +5742,31 @@
     "copy": "Zeile kopieren",
     "copied": "Kopiert",
     "continue": "Weiter"
+  },
+  "storefront": {
+    "enquire": "Anfrage für einen gebrandeten Storefront",
+    "status": {
+      "loadFailed": "Der Storefront-Status konnte nicht geladen werden. Versuche es später erneut.",
+      "title": "Gebrandeter Storefront",
+      "unlocked": "Freigeschaltet",
+      "locked": "Gesperrt",
+      "byGrant": "Das SC-Market-Team hat das Branding für deine Org freigeschaltet.",
+      "byCriteria": "Deine Org erfüllt alle drei Kriterien, daher ist das Branding freigeschaltet. Es bleibt freigeschaltet, solange das so ist.",
+      "howToUnlock": "Storefronts sind kostenlos. Das Branding wird automatisch freigeschaltet, sobald deine Org diese drei Kriterien erfüllt:",
+      "unlocksTitle": "Was das Branding freischaltet",
+      "unlocks": "Auf der eigenen Subdomain deiner Org ({{subdomain}}): dein Theme und Logo, Seitentitel mit dem Namen deiner Org, ein Markt, der nur die Angebote deiner Org zeigt, eigene Links in der Seitenleiste und ein optionaler Nur-Mitglieder-Modus. Dein Storefront auf sc-market.space bleibt in jedem Fall öffentlich.",
+      "domainLive": "Deine Subdomain:",
+      "domainOnRequest": "Das Team richtet die Subdomain auf Anfrage ein."
+    },
+    "criteria": {
+      "verified": "Über RSI verifizierte Org",
+      "verifiedMet": "Über ihre RSI-Org-Seite registriert.",
+      "verifiedMissing": "Registriere deine Org über ihre RSI-Org-Seite, um sie zu verifizieren.",
+      "verifyAction": "Org verifizieren",
+      "members": "Mitglieder auf SC Market: {{count}} von {{required}}",
+      "membersAction": "Mitglieder einladen",
+      "activity": "Ein Angebot oder eine Bestellung in den letzten {{days}} Tagen",
+      "activityCounts": "Erstellte oder aktualisierte Angebote: {{listings}}. Bestellungen: {{orders}}."
+    }
   }
 }

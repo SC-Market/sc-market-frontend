@@ -3229,7 +3229,8 @@
     "settingsTab": "Paramètres",
     "themeTab": "Thème",
     "themeWhiteLabelTab": "Thème et marque blanche",
-    "whiteLabelTab": "Marque blanche"
+    "whiteLabelTab": "Marque blanche",
+    "storefrontTab": "Vitrine"
   },
   "dashboard": {
     "activityFeed": {
@@ -5774,5 +5775,31 @@
     "copy": "Copier la ligne",
     "copied": "Copié",
     "continue": "Continuer"
+  },
+  "storefront": {
+    "enquire": "Se renseigner sur une vitrine à vos couleurs",
+    "status": {
+      "loadFailed": "Impossible de charger l'état de la vitrine. Réessayez plus tard.",
+      "title": "Vitrine à vos couleurs",
+      "unlocked": "Débloquée",
+      "locked": "Verrouillée",
+      "byGrant": "L'équipe SC Market a débloqué la personnalisation pour votre org.",
+      "byCriteria": "Votre org remplit les trois critères, la personnalisation est donc débloquée. Elle le reste tant que c'est le cas.",
+      "howToUnlock": "Les vitrines sont gratuites. La personnalisation se débloque toute seule dès que votre org remplit ces trois critères :",
+      "unlocksTitle": "Ce que la personnalisation débloque",
+      "unlocks": "Sur le sous-domaine de votre org ({{subdomain}}) : votre thème et votre logo, des titres de page au nom de votre org, un marché qui n'affiche que les annonces de votre org, vos propres liens dans la barre latérale et un mode réservé aux membres en option. Votre vitrine sur sc-market.space reste publique dans tous les cas.",
+      "domainLive": "Votre sous-domaine :",
+      "domainOnRequest": "L'équipe configure le sous-domaine sur demande."
+    },
+    "criteria": {
+      "verified": "Org vérifiée via RSI",
+      "verifiedMet": "Enregistrée via sa page d'org RSI.",
+      "verifiedMissing": "Enregistrez votre org via sa page d'org RSI pour la vérifier.",
+      "verifyAction": "Vérifier une org",
+      "members": "Membres sur SC Market : {{count}} sur {{required}}",
+      "membersAction": "Inviter des membres",
+      "activity": "Une annonce ou une commande au cours des {{days}} derniers jours",
+      "activityCounts": "Annonces créées ou mises à jour : {{listings}}. Commandes : {{orders}}."
+    }
   }
 }

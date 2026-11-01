@@ -3229,7 +3229,8 @@
     "settingsTab": "Configuración",
     "themeTab": "Tema",
     "themeWhiteLabelTab": "Tema y marca blanca",
-    "whiteLabelTab": "Marca blanca"
+    "whiteLabelTab": "Marca blanca",
+    "storefrontTab": "Escaparate"
   },
   "dashboard": {
     "activityFeed": {
@@ -5774,5 +5775,31 @@
     "copy": "Copiar línea",
     "copied": "Copiado",
     "continue": "Continuar"
+  },
+  "storefront": {
+    "enquire": "Consultar por un escaparate con tu marca",
+    "status": {
+      "loadFailed": "No se pudo cargar el estado del escaparate. Inténtalo de nuevo más tarde.",
+      "title": "Escaparate con tu marca",
+      "unlocked": "Desbloqueado",
+      "locked": "Bloqueado",
+      "byGrant": "El equipo de SC Market desbloqueó la marca para tu org.",
+      "byCriteria": "Tu org cumple los tres criterios, así que la marca está desbloqueada. Seguirá así mientras los cumpla.",
+      "howToUnlock": "Los escaparates son gratis. La marca se desbloquea sola cuando tu org cumple estos tres criterios:",
+      "unlocksTitle": "Qué desbloquea la marca",
+      "unlocks": "En el subdominio propio de tu org ({{subdomain}}): tu tema y logo, títulos de página con el nombre de tu org, un mercado que solo muestra los anuncios de tu org, tus propios enlaces en la barra lateral y un modo opcional solo para miembros. Tu escaparate en sc-market.space sigue siendo público en cualquier caso.",
+      "domainLive": "Tu subdominio:",
+      "domainOnRequest": "El equipo configura el subdominio cuando lo pides."
+    },
+    "criteria": {
+      "verified": "Org verificada por RSI",
+      "verifiedMet": "Registrada mediante su página de org de RSI.",
+      "verifiedMissing": "Registra tu org mediante su página de org de RSI para verificarla.",
+      "verifyAction": "Verificar una org",
+      "members": "Miembros en SC Market: {{count}} de {{required}}",
+      "membersAction": "Invitar miembros",
+      "activity": "Un anuncio o un pedido en los últimos {{days}} días",
+      "activityCounts": "Anuncios creados o actualizados: {{listings}}. Pedidos: {{orders}}."
+    }
   }
 }

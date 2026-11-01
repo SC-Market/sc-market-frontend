@@ -402,6 +402,10 @@ export const pages = {
     () => import("../pages/contractor/manage"),
     (m) => m.OrgSettingsPage,
   ),
+  OrgStorefrontPage: pageEntry(
+    () => import("../pages/contractor/manage"),
+    (m) => m.OrgStorefrontPage,
+  ),
   OrgThemePage: pageEntry(
     () => import("../pages/contractor/manage"),
     (m) => m.OrgThemePage,

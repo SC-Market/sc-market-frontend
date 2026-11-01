@@ -22,7 +22,13 @@ export const ORG_MANAGE_TABS = [
   { value: "settings", anyOf: ["manage_org_details"] },
   // GET /contractors/:id/audit-logs.
   { value: "audit", anyOf: ["manage_org_details"] },
-  // White-label orgs only: the theme editor (saved with Manage Theme) and
+  // The branded storefront status (what branding unlocks, what's missing).
+  {
+    value: "storefront",
+    anyOf: ["manage_org_details", "manage_theme", "manage_market"],
+  },
+  // Orgs whose branding is unlocked (a staff grant or the unlock criteria,
+  // useBrandingUnlocked): the theme editor (saved with Manage Theme) and
   // the site and sidebar settings (saved with Manage Org Details) share this
   // tab; each section shows for its own permission (OrgThemePage).
   {
@@ -42,13 +48,18 @@ type Member = Parameters<typeof has_permission>[1] & {
   contractors?: Parameters<typeof has_permission>[3]
 }
 
-/** The Manage Org tabs this member may use, in nav order. */
+/**
+ * The Manage Org tabs this member may use, in nav order. `brandingUnlocked`:
+ * the org's branding is unlocked by the criteria (useBrandingUnlocked); a
+ * staff white_label grant counts without it.
+ */
 export function visibleOrgManageTabs(
   contractor: Contractor | undefined | null,
   profile: Member | undefined | null,
+  brandingUnlocked = false,
 ): OrgManageTab[] {
   if (!contractor || !profile) return []
-  const isWhiteLabel = contractor.premium_tier === "white_label"
+  const isWhiteLabel = brandingUnlocked || contractor.premium_tier === "white_label"
   return ORG_MANAGE_TABS.filter(
     (tab) =>
       (!("whiteLabelOnly" in tab) || isWhiteLabel) &&
