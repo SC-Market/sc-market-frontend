@@ -11,7 +11,7 @@
  */
 
 import { useMemo, useState } from "react"
-import { Box, Button, Stack } from "@mui/material"
+import { Button, Grid, Stack } from "@mui/material"
 import { useBreakpointDown } from "../../hooks/layout/useBreakpoint"
 import EditIcon from "@mui/icons-material/Edit"
 import DoneIcon from "@mui/icons-material/Done"
@@ -119,7 +119,10 @@ export function CustomizableDashboard({
         sidebarOpen
         maxWidth="xl"
       >
-        <Box sx={{ width: "100%" }}>
+        {/* A Grid item, not a bare Box: StandardPageLayout's children sit in
+            a spacing Grid container, whose negative margins only its items'
+            padding cancels. A bare Box ran past the page's left gutter. */}
+        <Grid item xs={12}>
           {isLoading ? (
             <DashboardGridSkeleton config={defaultConfig()} stacked={isPhone} />
           ) : (
@@ -130,7 +133,7 @@ export function CustomizableDashboard({
               stacked={isPhone}
             />
           )}
-        </Box>
+        </Grid>
       </StandardPageLayout>
     </DashboardOwnerProvider>
   )
