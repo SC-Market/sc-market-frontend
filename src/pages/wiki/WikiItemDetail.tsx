@@ -1,8 +1,8 @@
 /**
  * Wiki Item Detail
  * 
- * Full stats, description, craftable from blueprints, rewarded by missions
- * Links to market listings with active listing count and price range
+ * Full stats and description, then "How to get it" (player listings,
+ * missions, blueprints, in-game shops, resource info: ItemAcquisitionSection)
  * Task 8.10.3
  */
 
@@ -16,7 +16,6 @@ import {
   Chip,
   Alert,
   Button,
-  Divider,
   Table,
   TableBody,
   TableCell,
@@ -32,8 +31,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetItemDetailQuery, useGetItemShopsQuery, useSearchListingsQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintReference } from "../../store/api/v2/market"
-import { ShoppingCart, Gavel, Storefront } from "@mui/icons-material"
+import { useGetItemDetailQuery, useGetAcquisitionQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintReference } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
@@ -41,7 +39,8 @@ import { formatQuantity } from "../../util/formatQuantity"
 import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHistoryChartV2"
 import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
-import { MARKET_PATHS, WIKI_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
+import { WIKI_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
+import { ItemAcquisitionSection } from "../../components/game-data/ItemAcquisitionSection"
 import { AnswerLead } from "../../components/game-data/AnswerSummary"
 import { buildItemSummary } from "../../util/answerContent"
 import { FRONTEND_URL } from "../../util/constants"
@@ -69,19 +68,9 @@ export function WikiItemDetail() {
   )
   const { openAddToCart } = useCartDrawer()
 
-  // Fetch related market listings for this item
-  const { data: listingsData } = useSearchListingsQuery(
-    { gameItemId: id!, pageSize: 6, sortBy: "price", sortOrder: "asc" },
-    { skip: !id },
-  )
-
-  // NPC shop availability. The route param may be a short slug; the shops
-  // endpoint takes the item's UUID, so wait for the detail to resolve it.
-  const { data: shopsData } = useGetItemShopsQuery(
-    { id: item?.id ?? "" },
-    { skip: !item?.id },
-  )
-  const shopAvailability = shopsData?.shops
+  // How to get it: player listings, missions, blueprints, in-game shops
+  // and resource info in one document (takes the UUID or the short slug).
+  const { data: acquisition } = useGetAcquisitionQuery({ id: id! }, { skip: !id })
 
   const [tab, setTab] = useState(TAB_OVERVIEW)
   const [disassemblyQty, setDisassemblyQty] = useState(1)
@@ -118,7 +107,7 @@ export function WikiItemDetail() {
     )
   }
 
-  const head = buildItemHead(item, FRONTEND_URL)
+  const head = buildItemHead(item, FRONTEND_URL, acquisition)
   const seoTitle = head.title
   const seoDescription = headDescription(head)
   // Built from the resolved item, not the raw path param: this page is reachable
@@ -145,7 +134,7 @@ export function WikiItemDetail() {
         <AnswerLead summary={answerSummary} />
         <Grid container spacing={3}>
           {/* Main Info */}
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12}>
             <Card>
               <CardContent>
                 <Stack direction="row" spacing={2} alignItems="flex-start">
@@ -178,38 +167,14 @@ export function WikiItemDetail() {
                         currentPrice={item.market_stats.min_price}
                       />
                     </Box>
-
-                    {/* Market Stats */}
-                    {item.market_stats.listing_count > 0 && (
-                      <Card variant="outlined" sx={{ mt: 2, p: 2 }}>
-                        <Typography variant="h6" gutterBottom>
-                          {t("wiki.itemDetail.marketAvailability", "Market Availability")}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {item.market_stats.listing_count} {t("wiki.itemDetail.activeListing", "active listing")}
-                          {item.market_stats.listing_count !== 1 ? "s" : ""}
-                        </Typography>
-                        {item.market_stats.min_price && item.market_stats.max_price && (
-                          <Typography variant="body2" color="text.secondary">
-                            {t("wiki.itemDetail.priceRange", "Price range")}: {item.market_stats.min_price.toLocaleString()} -{" "}
-                            {item.market_stats.max_price.toLocaleString()} aUEC
-                          </Typography>
-                        )}
-                        <Button
-                          variant="contained"
-                          size="small"
-                          startIcon={<ShoppingCart />}
-                          sx={{ mt: 2 }}
-                          onClick={() => navigate(MARKET_PATHS.aggregate(item.id, item.name))}
-                        >
-                          {t("wiki.itemDetail.viewOnMarket", "View on Market")}
-                        </Button>
-                      </Card>
-                    )}
                   </Box>
                 </Stack>
               </CardContent>
             </Card>
+
+            {acquisition && (
+              <ItemAcquisitionSection doc={acquisition} itemName={item.name} onAddToCart={openAddToCart} />
+            )}
 
             {/* Tabs */}
             <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 2, mb: 2 }}>
@@ -270,156 +235,6 @@ export function WikiItemDetail() {
               </CardContent>
             </Card>
 
-            {/* Related Market Listings */}
-            {listingsData && listingsData.listings.length > 0 && (
-              <Card sx={{ mt: 3 }}>
-                <CardContent>
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-                    <Typography variant="h6">
-                      {t("wiki.itemDetail.marketListings", "Market Listings")} ({listingsData.total})
-                    </Typography>
-                    <Button
-                      size="small"
-                      onClick={() => navigate(MARKET_PATHS.aggregate(id!))}
-                    >
-                      {t("wiki.itemDetail.viewAll", "View All")}
-                    </Button>
-                  </Stack>
-                  <TableContainer component={Paper} variant="outlined">
-                    <Table size="small">
-                      <TableBody>
-                        {listingsData.listings.map((listing) => (
-                          <TableRow
-                            key={listing.listing_id}
-                            hover
-                            sx={{ cursor: "pointer" }}
-                            onClick={() => navigate(MARKET_PATHS.listing(listing.listing_id))}
-                          >
-                            <TableCell>
-                              <Typography variant="body2" noWrap sx={{ maxWidth: 200 }}>
-                                {listing.title}
-                              </Typography>
-                              <Typography variant="caption" color="text.secondary">
-                                {listing.shop_name}
-                              </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                              <Typography variant="body2" fontWeight="bold" color="primary">
-                                {listing.price_min === listing.price_max
-                                  ? `${listing.price_min.toLocaleString()} aUEC`
-                                  : `${listing.price_min.toLocaleString()} – ${listing.price_max.toLocaleString()} aUEC`}
-                              </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                              <Typography variant="caption" color="text.secondary">
-                                {listing.quantity_available} {t("wiki.itemDetail.available", "avail.")}
-                              </Typography>
-                            </TableCell>
-                            <TableCell align="right">
-                              <Button
-                                size="small"
-                                variant="outlined"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  openAddToCart(listing.listing_id)
-                                }}
-                                disabled={listing.quantity_available === 0}
-                              >
-                                <ShoppingCart fontSize="small" />
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* In-Game Shop Availability. Only shown when a shop stocks the
-                item: the shop inventories are a separate import (not every
-                game version has one), so "no shops" doesn't mean "not sold". */}
-            {shopAvailability && shopAvailability.length > 0 && (
-              <Card sx={{ mt: 3 }}>
-                <CardContent>
-                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-                    <Storefront color="action" />
-                    <Typography variant="h6">{t("wiki.itemDetail.inGameShopAvailability", "In-Game Shop Availability")}</Typography>
-                  </Stack>
-                  <TableContainer component={Paper} variant="outlined">
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>{t("wiki.itemDetail.columnShop", "Shop")}</TableCell>
-                          <TableCell>{t("wiki.itemDetail.columnLocation", "Location")}</TableCell>
-                          <TableCell align="right">{t("wiki.itemDetail.columnBuyPrice", "Buy Price")}</TableCell>
-                          <TableCell align="right">{t("wiki.itemDetail.columnSellPrice", "Sell Price")}</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {[...shopAvailability]
-                          .sort((a, b) => {
-                            const aPrice = a.buy_price ?? Infinity
-                            const bPrice = b.buy_price ?? Infinity
-                            return aPrice - bPrice
-                          })
-                          .map((shop) => (
-                            <TableRow key={shop.shop_id}>
-                              <TableCell>
-                                <Typography variant="body2" fontWeight="medium">
-                                  {shop.shop_name}
-                                </Typography>
-                              </TableCell>
-                              <TableCell>
-                                <Chip
-                                  label={shop.shop_location}
-                                  size="small"
-                                  variant="outlined"
-                                  sx={{
-                                    borderColor: shop.shop_location.toLowerCase().includes("stanton")
-                                      ? "info.main"
-                                      : shop.shop_location.toLowerCase().includes("pyro")
-                                        ? "warning.main"
-                                        : "default",
-                                    color: shop.shop_location.toLowerCase().includes("stanton")
-                                      ? "info.main"
-                                      : shop.shop_location.toLowerCase().includes("pyro")
-                                        ? "warning.main"
-                                        : "text.secondary",
-                                  }}
-                                />
-                              </TableCell>
-                              <TableCell align="right">
-                                {shop.buy_price != null && shop.buy_price > 0 ? (
-                                  <Typography variant="body2" fontWeight="bold" color="primary">
-                                    {shop.buy_price.toLocaleString()} aUEC
-                                  </Typography>
-                                ) : (
-                                  <Typography variant="body2" color="text.disabled">
-                                    —
-                                  </Typography>
-                                )}
-                              </TableCell>
-                              <TableCell align="right">
-                                {shop.sell_price != null && shop.sell_price > 0 ? (
-                                  <Typography variant="body2" color="success.main">
-                                    {shop.sell_price.toLocaleString()} aUEC
-                                  </Typography>
-                                ) : (
-                                  <Typography variant="body2" color="text.disabled">
-                                    —
-                                  </Typography>
-                                )}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </CardContent>
-              </Card>
-            )}
               </>
             )}
 
@@ -548,71 +363,6 @@ export function WikiItemDetail() {
                       {t("wiki.itemDetail.noRecipeWarning", "No crafting recipe found for this item — disassembly components unknown.")}
                     </Alert>
                   )}
-                </CardContent>
-              </Card>
-            )}
-          </Grid>
-
-          {/* Sidebar */}
-          <Grid item xs={12} md={4}>
-            {/* Craftable From */}
-            {item.craftable_from.length > 0 && (
-              <Card sx={{ mb: 2 }}>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    {t("wiki.itemDetail.craftableFrom", "Craftable From")}
-                  </Typography>
-                  <Divider sx={{ mb: 2 }} />
-                  {item.craftable_from.map((blueprint) => (
-                    <Box key={blueprint.blueprint_id} sx={{ mb: 2 }}>
-                      <Typography variant="body2" fontWeight="bold">
-                        {blueprint.blueprint_name}
-                      </Typography>
-                      <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
-                        {blueprint.rarity && (
-                          <Chip label={blueprint.rarity} size="small" />
-                        )}
-                        {blueprint.tier && (
-                          <Chip label={`${t("wiki.itemDetail.tier", "Tier")} ${blueprint.tier}`} size="small" />
-                        )}
-                      </Stack>
-                      {blueprint.crafting_time_seconds && (
-                        <Typography variant="caption" color="text.secondary" display="block">
-                          {t("wiki.itemDetail.craftingTime", "Crafting time")}: {formatCraftingTime(blueprint.crafting_time_seconds)}
-                        </Typography>
-                      )}
-                    </Box>
-                  ))}
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Rewarded By Missions */}
-            {item.rewarded_by.length > 0 && (
-              <Card>
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    {t("wiki.itemDetail.rewardedByMissions", "Rewarded By Missions")}
-                  </Typography>
-                  <Divider sx={{ mb: 2 }} />
-                  {item.rewarded_by.map((mission) => (
-                    <Box key={`${mission.mission_id}-${mission.blueprint_id}`} sx={{ mb: 2 }}>
-                      <Typography variant="body2" fontWeight="bold">
-                        {mission.mission_name}
-                      </Typography>
-                      {mission.star_system && (
-                        <Typography variant="caption" color="text.secondary" display="block">
-                          {mission.star_system}
-                        </Typography>
-                      )}
-                      <Typography variant="caption" color="primary">
-                        {t("wiki.itemDetail.dropChance", "Drop chance")}: {mission.drop_probability.toFixed(1)}%
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary" display="block">
-                        {t("wiki.itemDetail.via", "via")} {mission.blueprint_name}
-                      </Typography>
-                    </Box>
-                  ))}
                 </CardContent>
               </Card>
             )}

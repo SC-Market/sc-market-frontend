@@ -157,6 +157,103 @@ describe("documents", () => {
     expect(mission.canonical).toBe(`${ORIGIN}/missions/PU_X`)
   })
 
+  it("item: how to get it, with links, attribution and an acquisition description", () => {
+    const doc = BRIDGE_PAGES.item.build(f.item, undefined, {
+      ...ctx({ id: "x" }),
+      related: { acquisition: f.acquisition() },
+    })
+    expect(doc.title).toBe("How to Get LifeCure Medsticks in Star Citizen | SC Market")
+    expect(meta(doc, "description")).toBe(
+      "How to get LifeCure Medsticks in Star Citizen: buy it from 3 player sellers from 450,000 aUEC, earn it from 2 missions or craft it from 1 blueprint. Stats and…",
+    )
+    const texts = doc.summary.map(text)
+    expect(texts).toContain("How to get LifeCure Medsticks")
+    expect(texts).toContain("Buy from players")
+    expect(texts).toContain("Missions that reward it")
+    expect(texts).toContain("Craft it")
+    expect(texts).not.toContain("In-game shops")
+    expect(texts).not.toContain("Mining, salvage and loot")
+    expect(texts).toContain("Showing 1 of 2 missions")
+    const facts = doc.summary.flatMap((b) => (b.tag === "ul-text" ? b.items : []))
+    expect(facts).toEqual(expect.arrayContaining(["Lowest ask: 450,000 aUEC", "Median ask: 650,000 aUEC", "Sellers: 3"]))
+    const links = doc.summary.flatMap((b) => (b.tag === "ul" ? b.links : []))
+    expect(links).toEqual(
+      expect.arrayContaining([
+        { href: "/market/5e2d1f98--siebe-helmet", text: "Siebe Helmet — 450,000 aUEC — 1 in stock" },
+        { href: "/market/aggregate/9bb3a108--siebe-helmet", text: "Compare all LifeCure Medsticks listings" },
+        {
+          href: "/missions/Rayari_Rank3_IrradiatedPearls",
+          text: "Additional Resources For Research — Blueprint reward — 3.6% drop chance — Giver: Rayari Incorporated",
+        },
+        {
+          href: "/blueprints/BP_CRAFT_clda_utility_heavy_helmet_03_01_01",
+          text: "LifeCure Medsticks blueprint — Crafting time: 6m 30s — Missions that award this blueprint: 1",
+        },
+        { href: "/wiki/items/51c80361--stileron", text: "Stileron — 0.08 SCU, Shell" },
+      ]),
+    )
+    expect(doc.summary).toEqual(
+      expect.arrayContaining([
+        { tag: "external", href: "https://api.sc-market.space/api/public/items/9bb3a108--siebe-helmet.json", text: "JSON data: LifeCure Medsticks" },
+        { tag: "external", href: "https://creativecommons.org/licenses/by/4.0/", text: "CC BY 4.0" },
+      ]),
+    )
+    expect(texts).toContain("Data: SC Market (sc-market.space), CC BY 4.0. Game data © Cloud Imperium Games.")
+    // No Offer/AggregateOffer: aUEC is not ISO 4217.
+    expect(JSON.stringify(doc.head.jsonLd)).not.toMatch(/Offer/)
+  })
+
+  it("item: a failed acquisition lookup leaves the section out; the description stays generic", () => {
+    const doc = build("item", f.item, { id: "x" })
+    expect(doc.summary.map(text)).not.toContain("How to get LifeCure Medsticks")
+    expect(meta(doc, "description")).toBe(
+      "How to get LifeCure Medsticks in Star Citizen: player listings, missions, crafting and stats for this Medical by CureLife.",
+    )
+  })
+
+  it("mission: item rewards and blueprint outputs link to the item page when the API resolved them", () => {
+    const data = {
+      ...f.mission,
+      mission: {
+        ...f.mission.mission,
+        item_rewards: [
+          { name: "Anvil F7 Hornet Mk Wikelo", ref: "x", game_item_id: "88cd66e1-cf5c-4a85-a464-eff8344d3695", game_item_slug: "88cd66e1--anvil-f7-hornet-mk-wikelo" },
+          { name: "Mystery Box", ref: "y", game_item_id: null, game_item_slug: null },
+        ],
+      },
+      blueprint_rewards: [
+        {
+          blueprints: [
+            {
+              blueprint_id: "b1",
+              blueprint_code: "c1",
+              blueprint_name: "BP_CRAFT_helmet",
+              output_item_name: "Siebe Helmet",
+              output_game_item_id: "9bb3a108-3556-4934-ae04-9a117e5432a2",
+              output_game_item_slug: "9bb3a108--siebe-helmet",
+              drop_probability: 3.57,
+              is_guaranteed: false,
+            },
+          ],
+        },
+      ],
+    } as unknown as typeof f.mission
+    const doc = build("mission", data, { slug: "PU_X" })
+    const links = doc.summary.flatMap((b) => (b.tag === "ul" ? b.links : []))
+    expect(links).toEqual(
+      expect.arrayContaining([
+        { href: "/wiki/items/88cd66e1--anvil-f7-hornet-mk-wikelo", text: "Anvil F7 Hornet Mk Wikelo: how to get it" },
+        { href: "/wiki/items/9bb3a108--siebe-helmet", text: "Siebe Helmet: how to get it" },
+        { href: "/market/aggregate/9bb3a108--siebe-helmet", text: "Siebe Helmet on the market" },
+      ]),
+    )
+    expect(doc.summary.flatMap((b) => (b.tag === "ul-text" ? b.items : []))).toContain("Mystery Box")
+    // The output item comes with the mission: no per-blueprint lookups.
+    const stages = BRIDGE_PAGES.mission.related ?? []
+    const requested = stages.flatMap((stage) => Object.keys(stage(data, undefined, {}, { slug: "PU_X" })))
+    expect(requested.some((key) => key.startsWith("blueprint"))).toBe(false)
+  })
+
   it("listing, shop, recruiting post", () => {
     const listing = build("listing", f.listing(), { id: "x" })
     expect(listing.title).toBe("Pristine Medal — 12,000 aUEC · Star Citizen | SC Market")

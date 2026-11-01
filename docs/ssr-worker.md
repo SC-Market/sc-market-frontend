@@ -41,9 +41,15 @@ keeps the bridge; the prerendered hubs never invoke a Function.
 - **Live data:** after hydrating, the page refetches the live queries it
   shipped on a scratch store and writes successful answers into the page
   (`src/store/refreshShippedData.ts`); a failed refresh changes nothing.
+- **Game items:** the "How to get <item>" section (player listings,
+  missions, blueprints and ingredients, in-game shops, resource info) from
+  `GET /api/v2/game-items/{id}/acquisition`, prefetched by the item loader;
+  the bridge renders the same facts and links from the same helpers
+  (`src/seo/itemAcquisition.ts`), so its head and link lists match.
 - **Missions:** readable placeholders, disambiguated titles, a quotable
   summary, every tab panel in the HTML, giver/faction/reputation rows,
-  chips, blueprint rewards and prerequisites as `<a href>`, the freshness
+  chips, blueprint rewards, their crafted items, item rewards and
+  prerequisites as `<a href>`, the freshness
   stamp ("Data from Star Citizen <build> LIVE, updated <date>, from game
   files") and JSON-LD `dateModified` (`src/seo/missionText.ts`, shared with
   the head and the bridge).
@@ -194,9 +200,4 @@ render, edge-cached 60 s): use the WAF rule and robots crawl-delay.
   `https://ssr-phase4.sc-market-frontend.pages.dev` (the preview's own API
   calls fail CORS until then, so browser checks after hydration are
   limited there).
-- Backend: mission rewards carry no game item id (`MissionBlueprintReward`
-  has no output item id, `ItemReward` only `name`/`ref`), so item rewards
-  can't link to `/wiki/items/<id>` or `/market/aggregate/<id>` yet. Needs
-  `output_game_item_id` / `game_item_id` in the v2 mission detail response
-  (TSOA, then codegen).
 - Delete the bridge's page kinds that SSR now covers once it has run clean.

@@ -3,6 +3,7 @@ import type {
   BlueprintDetailResponse,
   GetGameItemListingsResponse,
   GetListingDetailResponse,
+  ItemAcquisitionDocument,
   LocationDetailResponse,
   MissionDetailResponse,
   OreDetailResponse,
@@ -245,3 +246,109 @@ export const manufacturers = [
   { manufacturer: "cds", display_name: "Clark Defense Systems", item_count: 517 },
   { manufacturer: "rsi", display_name: null, item_count: 370 },
 ] as WikiManufacturerSearchResult[]
+
+/** The acquisition document of a crafted helmet with listings, a mission and a blueprint. */
+export function acquisition(): ItemAcquisitionDocument {
+  return {
+    feed: {
+      dataset: "items",
+      version: 1,
+      terms: "Free to use",
+      license: {
+        license: "CC-BY-4.0",
+        url: "https://creativecommons.org/licenses/by/4.0/",
+        attribution: "Data: SC Market (sc-market.space)",
+        notice: "Game data © Cloud Imperium Games; aggregation and price data by SC Market, CC BY 4.0.",
+      },
+    },
+    item: { id: "9bb3a108-3556-4934-ae04-9a117e5432a2", slug: "9bb3a108--siebe-helmet", name: "Siebe Helmet", type: "Helmet" },
+    as_of: "2026-11-01T02:47:24.741Z",
+    freshness: {
+      as_of: "2026-11-01T02:47:24.741Z",
+      game_version: "4.10.2-LIVE.12881860",
+      game_data_updated_at: "2026-10-24T07:55:26.639Z",
+      price_snapshot_date: "2026-11-01",
+    },
+    price: {
+      currency: "aUEC",
+      unit_note: "All prices are in aUEC.",
+      current: {
+        confidence: "medium",
+        sample_note: "Based on 3 listings from 3 sellers on SC Market.",
+        ask_count: 3,
+        seller_count: 3,
+        quantity_available: 4,
+        lowest_ask: 450000,
+        median_ask: 650000,
+        highest_ask: 1000000,
+        outliers_excluded: 0,
+      },
+      trend_30d: { days_with_data: 1, median_30d: null, change_pct: null, daily: [] },
+      sales_30d: { count: 0, median_price: null },
+      summary: "As of 2026-11-01, SC Market player listings for Siebe Helmet: lowest ask 450,000 aUEC, median ask 650,000 aUEC.",
+      links: {
+        page: "https://sc-market.space/market/aggregate/9bb3a108--siebe-helmet",
+        json: "https://api.sc-market.space/api/public/prices/9bb3a108--siebe-helmet.json",
+        index: "https://api.sc-market.space/api/public/prices/index.json",
+      },
+    },
+    listings: {
+      count: 3,
+      seller_count: 3,
+      quantity_available: 4,
+      lowest_ask: 450000,
+      page: "https://sc-market.space/market/aggregate/9bb3a108--siebe-helmet",
+      top: [
+        { listing_id: "5e2d1f98-5d8f-4d55-969a-e32b006684f4", slug: "5e2d1f98--siebe-helmet", title: "Siebe Helmet", price: 450000, quantity_available: 1, sale_type: "fixed" },
+      ],
+    },
+    missions: {
+      total: 2,
+      top: [
+        {
+          mission_id: "5216ebc5-933d-465f-a287-03dbfc6c3c3c",
+          mission_code: "Rayari_Rank3_IrradiatedPearls",
+          mission_name: "Additional Resources For Research",
+          reward_kind: "blueprint",
+          blueprint_id: "3696262b-4bd6-4f52-a319-0649704cdf0a",
+          drop_probability: 3.57,
+          is_guaranteed: false,
+          category: "collection",
+          mission_giver_org: "Rayari Incorporated",
+          faction: "Rayari Incorporated",
+          star_system: null,
+          legal_status: null,
+          credit_reward_max: null,
+          associated_event: null,
+        },
+      ],
+    },
+    blueprints: {
+      total: 1,
+      items: [
+        {
+          blueprint_id: "3696262b-4bd6-4f52-a319-0649704cdf0a",
+          blueprint_code: "f74b672f",
+          blueprint_name: "BP_CRAFT_clda_utility_heavy_helmet_03_01_01",
+          output_quantity: 1,
+          tier: null,
+          rarity: null,
+          crafting_station_type: null,
+          crafting_time_seconds: 390,
+          mission_count: 1,
+          ingredients: [
+            { game_item_id: "51c80361-1734-47ae-83ba-c3a6817f815a", slug: "51c80361--stileron", name: "Stileron", quantity: 0.08, quantity_scu: 0.08, min_quality: null, slot_display_name: "Shell" },
+          ],
+        },
+      ],
+    },
+    in_game_shops: { total: 0, shops: [] },
+    resource: null,
+    attribution: "Data: SC Market (https://sc-market.space).",
+    links: {
+      wiki: "https://sc-market.space/wiki/items/9bb3a108--siebe-helmet",
+      market: "https://sc-market.space/market/aggregate/9bb3a108--siebe-helmet",
+      json: "https://api.sc-market.space/api/public/items/9bb3a108--siebe-helmet.json",
+    },
+  }
+}

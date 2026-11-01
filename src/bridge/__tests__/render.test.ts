@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest"
 import {
   escapeAttribute,
   headMarkup,
+  isDataFeedHref,
   isSafeHref,
   MAX_SUMMARY_LINKS,
   relatedLinkBlocks,
@@ -149,6 +150,44 @@ describe("summary link lists", () => {
     const dom = parse("", `<div id="root">${assemble(summaryChunks([{ tag: "ul", links }]))}</div>`)
     expect(dom.querySelectorAll("a")).toHaveLength(MAX_SUMMARY_LINKS)
     expect(assemble(summaryChunks([{ tag: "ul", links: [{ href: "javascript:x", text: "x" }] }]))).not.toContain("<ul>")
+  })
+})
+
+describe("open-data paragraph links", () => {
+  it("allows one item's feed document and the licence, nothing else off-site", () => {
+    for (const ok of [
+      "https://api.sc-market.space/api/public/items/9bb3a108--siebe-helmet.json",
+      "https://api.sc-market.space/api/public/prices/9dac4963--parasite-replica-helmet.json",
+      "https://creativecommons.org/licenses/by/4.0/",
+    ]) {
+      expect(isDataFeedHref(ok), ok).toBe(true)
+    }
+    for (const bad of [
+      "https://api.sc-market.space/api/public/items/x.json?y=1",
+      "https://api.sc-market.space/api/public/items/../v1/x.json",
+      "https://api.sc-market.space/api/v2/game-items/x/acquisition",
+      "http://api.sc-market.space/api/public/items/x.json",
+      "https://evil.example/api/public/items/x.json",
+      "https://creativecommons.org/licenses/by-nc/4.0/",
+    ]) {
+      expect(isDataFeedHref(bad), bad).toBe(false)
+    }
+  })
+
+  it("renders the item page's JSON and licence links, with rel=license on the licence", () => {
+    const doc = BRIDGE_PAGES.item.build(f.item, undefined, {
+      params: { id: "x" },
+      origin: ORIGIN,
+      pathname: "/wiki/items/x",
+      pageNumber: 1,
+      related: { acquisition: f.acquisition() },
+    })
+    const dom = parse("", `<div id="root">${assemble(summaryChunks(doc.summary))}</div>`)
+    const hrefs = [...dom.querySelectorAll("a")].map((a) => [a.getAttribute("href"), a.getAttribute("rel")])
+    expect(hrefs).toContainEqual(["https://api.sc-market.space/api/public/items/9bb3a108--siebe-helmet.json", "noopener"])
+    expect(hrefs).toContainEqual(["https://creativecommons.org/licenses/by/4.0/", "license noopener"])
+    expect(hrefs).toContainEqual(["/missions/Rayari_Rank3_IrradiatedPearls", null])
+    expect(hrefs).toContainEqual(["/wiki/items/51c80361--stileron", null])
   })
 })
 

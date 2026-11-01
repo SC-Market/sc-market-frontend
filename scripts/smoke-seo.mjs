@@ -14,6 +14,8 @@
  * - a mission page's raw HTML has its summary line, a freshness stamp and at
  *   least 10 links (once the missions work is live: reported, not fatal,
  *   until then with --missions-optional);
+ * - a game item page's raw HTML has its "how to get" title and section
+ *   (missions and blueprints linked, the CC BY 4.0 line, no Offer);
  * - an unknown listing is a 404, a trailing slash a 301, /error noindex.
  * Exits 1 when any check fails.
  */
@@ -113,7 +115,22 @@ async function missionChecks() {
   check("mission HTML has at least 10 links", links >= 10, `${links} links`, MISSIONS_OPTIONAL)
 }
 
-for (const step of [sitemapChecks, robotsChecks, listingChecks, notFoundChecks, missionChecks]) {
+/** Siebe Helmet: crafted from a blueprint a Rayari mission awards (stable game data). */
+const ITEM_PATH = "/wiki/items/9bb3a108--siebe-helmet"
+
+async function itemChecks() {
+  const res = await get(`${SITE}${ITEM_PATH}`, { headers: { "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1)" } })
+  check(`item ${ITEM_PATH} returns 200`, res.status === 200, `status ${res.status}`)
+  const title = res.body.match(/<title>([^<]*)<\/title>/)?.[1] ?? ""
+  check("item <title> is the how-to-get query", /^How to Get .+ in Star Citizen \| SC Market$/.test(title), title)
+  check("item HTML has the how-to-get section", res.body.includes("<h2>How to get Siebe Helmet</h2>"))
+  check("item HTML links a mission that rewards it", /<a href="\/missions\/[^"]+">/.test(res.body))
+  check("item HTML links its blueprint", /<a href="\/blueprints\/[^"]+">/.test(res.body))
+  check("item HTML has the CC BY 4.0 attribution", res.body.includes("CC BY 4.0") && res.body.includes("/api/public/items/9bb3a108--siebe-helmet.json"))
+  check("item JSON-LD has no Offer", !/"@type":"(Aggregate)?Offer"/.test(res.body))
+}
+
+for (const step of [sitemapChecks, robotsChecks, listingChecks, itemChecks, notFoundChecks, missionChecks]) {
   try {
     await step()
   } catch (error) {

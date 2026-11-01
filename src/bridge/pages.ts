@@ -19,6 +19,7 @@ import type {
   GetGameItemListingsResponse,
   GetListingDetailResponse,
   GetShipsApiResponse,
+  ItemAcquisitionDocument,
   LocationDetailResponse,
   MissionDetailResponse,
   OreDetailResponse,
@@ -87,6 +88,20 @@ import {
 } from "../seo/entityHeads"
 import { pagedPath } from "../seo/queryIndexing"
 import {
+  acquisitionBlueprintPath,
+  acquisitionMissionPath,
+  acquisitionSections,
+  blueprintFacts,
+  blueprintLabel,
+  formatAmount,
+  hasAcquisitionInfo,
+  ingredientAmount,
+  ingredientPath,
+  locationLines,
+  missionLine,
+  resourceMethods,
+} from "../seo/itemAcquisition"
+import {
   dropPercent,
   formatPercent,
   freshnessStamp,
@@ -152,7 +167,7 @@ import { CONTENT_PAGES } from "./contentPages"
  */
 export type SummaryBlock =
   | { tag: "h1" | "h2" | "h3" | "p"; text: string }
-  /** One link to an allowlisted partner site (render.ts checks the origin). */
+  /** One link to an allowlisted off-site URL (render.ts checks it: SC Orgs, the open-data feed). */
   | { tag: "external"; href: string; text: string }
   | { tag: "ul"; links: SummaryLink[] }
   /** Plain-text list items (guide steps and bullet lists). */
@@ -608,13 +623,141 @@ function withDateModified(head: PageHead, version: GameVersion | null): PageHead
   return { ...head, jsonLd: [{ ...main, dateModified }, ...rest] }
 }
 
-/** Blueprint detail lookups per mission page (each is one cached API call). */
-const MAX_BLUEPRINT_LOOKUPS = 5
-
 interface MissionRelated extends Record<string, unknown> {
   versions: ActiveVersionsResponse
   giverMissions: SearchMissionsResponse
   similarMissions: SearchMissionsResponse
+}
+
+/**
+ * "How to get <item>" (the SPA's ItemAcquisitionSection, same helpers and
+ * strings): player listings, missions, blueprints and their ingredients,
+ * in-game shops and resource info, each with links, then the data's
+ * CC BY 4.0 attribution and its JSON. Empty subsections are left out; no
+ * document (the lookup failed) leaves the whole section out.
+ */
+function acquisitionBlocks(name: string, doc: ItemAcquisitionDocument | undefined): SummaryBlock[] {
+  if (!doc || typeof doc !== "object" || !doc.listings || !doc.missions) return []
+  const t = englishT
+  const sections = acquisitionSections(doc)
+  const price = (value: number) => t("itemAcquisition.priceUnit", { defaultValue: "{{price}} aUEC", price: formatAmount(value) })
+  const blocks: SummaryBlock[] = [
+    { tag: "h2", text: t("itemAcquisition.title", { defaultValue: "How to get {{name}}", name }) },
+  ]
+  if (!hasAcquisitionInfo(doc)) {
+    blocks.push({
+      tag: "p",
+      text: t("itemAcquisition.noSources", {
+        defaultValue: "No player listings, missions, blueprints or in-game shops for {{name}} yet.",
+        name,
+      }),
+    })
+    return blocks
+  }
+  if (sections.buy) {
+    const l = doc.listings
+    const current = doc.price.current
+    const median = current.confidence === "medium" || current.confidence === "high" ? current.median_ask : null
+    blocks.push(
+      { tag: "h3", text: t("itemAcquisition.buyTitle", "Buy from players") },
+      {
+        tag: "ul-text",
+        items: facts([
+          [t("itemAcquisition.lowestAsk", "Lowest ask"), typeof l.lowest_ask === "number" ? price(l.lowest_ask) : null],
+          [t("itemAcquisition.medianAsk", "Median ask"), typeof median === "number" ? price(median) : null],
+          [t("itemAcquisition.sellers", "Sellers"), formatAmount(l.seller_count)],
+          [t("itemAcquisition.listings", "Listings"), formatAmount(l.count)],
+          [t("itemAcquisition.inStock", "In stock"), formatAmount(l.quantity_available)],
+        ]),
+      },
+      ...paragraphs(typeof median === "number" ? doc.price.summary : null),
+      {
+        tag: "ul",
+        links: [
+          ...l.top.map((listing) => ({
+            href: MARKET_PATHS.listing(listing.listing_id, listing.title),
+            text: [
+              listing.title,
+              typeof listing.price === "number" ? price(listing.price) : null,
+              t("itemAcquisition.inStockCount", { defaultValue: "{{quantity}} in stock", quantity: formatAmount(listing.quantity_available) }),
+            ]
+              .filter(Boolean)
+              .join(" — "),
+          })),
+          {
+            href: MARKET_PATHS.aggregate(doc.item.id, doc.item.name),
+            text: t("itemAcquisition.compareAll", { defaultValue: "Compare all {{name}} listings", name }),
+          },
+        ],
+      },
+    )
+  }
+  if (sections.missions) {
+    blocks.push(
+      { tag: "h3", text: t("itemAcquisition.missionsTitle", "Missions that reward it") },
+      { tag: "ul", links: doc.missions.top.map((m) => ({ href: acquisitionMissionPath(m), text: missionLine(m, t) })) },
+      ...paragraphs(
+        doc.missions.total > doc.missions.top.length
+          ? t("itemAcquisition.showingMissions", {
+              defaultValue: "Showing {{shown}} of {{total}} missions",
+              shown: doc.missions.top.length,
+              total: doc.missions.total,
+            })
+          : null,
+      ),
+    )
+  }
+  if (sections.blueprints) {
+    blocks.push({ tag: "h3", text: t("itemAcquisition.craftTitle", "Craft it") })
+    for (const bp of doc.blueprints.items) {
+      blocks.push({
+        tag: "ul",
+        links: [
+          { href: acquisitionBlueprintPath(bp), text: [blueprintLabel(name, t), ...blueprintFacts(bp, t)].join(" — ") },
+          ...bp.ingredients.map((ing) => ({
+            href: ingredientPath(ing),
+            text: `${ing.name} — ${ingredientAmount(ing, t)}`,
+          })),
+        ],
+      })
+    }
+  }
+  if (sections.shops) {
+    blocks.push(
+      { tag: "h3", text: t("itemAcquisition.shopsTitle", "In-game shops") },
+      {
+        tag: "ul-text",
+        items: doc.in_game_shops.shops.map((shop) =>
+          [
+            [shop.name, shop.location].filter(Boolean).join(", "),
+            typeof shop.buy_price === "number" ? `${t("itemAcquisition.columnBuyPrice", "Buy price")}: ${price(shop.buy_price)}` : null,
+            typeof shop.sell_price === "number" ? `${t("itemAcquisition.columnSellPrice", "Sell price")}: ${price(shop.sell_price)}` : null,
+          ]
+            .filter(Boolean)
+            .join(" — "),
+        ),
+      },
+    )
+  }
+  if (sections.resource && doc.resource) {
+    const mining = locationLines(doc.resource.mining_locations)
+    const buying = locationLines(doc.resource.purchase_locations)
+    blocks.push(
+      { tag: "h3", text: t("itemAcquisition.resourceTitle", "Mining, salvage and loot") },
+      { tag: "ul-text", items: resourceMethods(doc, t) },
+      ...(mining.length ? [{ tag: "p" as const, text: t("itemAcquisition.miningLocations", "Where to mine it") }, { tag: "ul-text" as const, items: mining }] : []),
+      ...(buying.length ? [{ tag: "p" as const, text: t("itemAcquisition.purchaseLocations", "Where to buy it") }, { tag: "ul-text" as const, items: buying }] : []),
+    )
+  }
+  blocks.push(
+    {
+      tag: "p",
+      text: t("itemAcquisition.attribution", "Data: SC Market (sc-market.space), CC BY 4.0. Game data © Cloud Imperium Games."),
+    },
+    { tag: "external", href: doc.links.json, text: `${t("itemAcquisition.jsonData", "JSON data")}: ${name}` },
+    { tag: "external", href: doc.feed.license.url, text: t("itemAcquisition.license", "CC BY 4.0") },
+  )
+  return blocks
 }
 
 /** Every blueprint a mission can reward, de-duplicated, best chance first. */
@@ -644,8 +787,9 @@ function duration(seconds: number | null | undefined): string | null {
 /**
  * /missions/:slug: the one-line summary, then giver, place, rewards and
  * reputation, rules, hauling orders, blueprint drops (linked to the
- * blueprint, the item and its market page), item rewards, more missions
- * from the giver, and the data's freshness.
+ * blueprint, the crafted item and its market page), item rewards (linked to
+ * the item when the API resolved it), more missions from the giver, and
+ * the data's freshness.
  */
 function missionDoc(
   data: MissionDetailResponse,
@@ -664,26 +808,25 @@ function missionDoc(
   const legal = m.legal_status === "ILLEGAL" || m.is_illegal ? "Illegal" : m.legal_status === "LEGAL" || m.is_illegal === false ? "Legal" : null
 
   const blueprints = missionBlueprints(data)
-  const outputs = new Map<string, { id: string; name: string }>()
-  blueprints.slice(0, MAX_BLUEPRINT_LOOKUPS).forEach((bp, i) => {
-    const detail = ctx.related[`blueprint${i}`] as BlueprintDetailResponse | undefined
-    const item = detail?.output_item
-    if (item?.game_item_id && item.name) outputs.set(bp.blueprint_id, { id: item.game_item_id, name: item.name })
-  })
   const blueprintLinks: SeoLink[] = blueprints.flatMap((bp) => {
     const chance = bp.is_guaranteed ? "guaranteed" : `${formatPercent(dropPercent(bp.drop_probability))} drop chance`
     const label = bp.output_item_name || bp.blueprint_name
-    const out = outputs.get(bp.blueprint_id)
+    const name = bp.output_item_name
     return [
       { href: GAME_DATA_PATHS.blueprint(enc(bp.blueprint_name)), text: `${label} blueprint — ${chance}` },
-      ...(out
+      ...(bp.output_game_item_slug && name
         ? [
-            { href: WIKI_PATHS.item(out.id, out.name), text: `${out.name} in the game database` },
-            { href: MARKET_PATHS.aggregate(out.id, out.name), text: `${out.name} on the market` },
+            { href: WIKI_PATHS.item(bp.output_game_item_slug), text: `${name}: how to get it` },
+            { href: MARKET_PATHS.aggregate(bp.output_game_item_id, name), text: `${name} on the market` },
           ]
         : []),
     ]
   })
+  const itemRewards = arr(m.item_rewards)
+  const itemRewardLinks: SeoLink[] = itemRewards
+    .filter((r) => r.game_item_slug)
+    .map((r) => ({ href: WIKI_PATHS.item(r.game_item_slug!), text: `${r.name}: how to get it` }))
+  const unlinkedItemRewards = itemRewards.filter((r) => !r.game_item_slug).map((r) => r.name)
   const hauling = arr(data.hauling_orders).map(
     (h) => `${h.resource_name}: ${h.min_scu === h.max_scu ? h.min_scu : `${h.min_scu}–${h.max_scu}`} SCU`,
   )
@@ -731,9 +874,9 @@ function missionDoc(
     ...paragraphs(m.mission_description ? readableMissionText(m.mission_description, missionGiver(m)) : null),
     ...(hauling.length ? [{ tag: "h2" as const, text: "Hauling orders" }, { tag: "ul-text" as const, items: hauling }] : []),
     ...linkBlocks("Blueprint rewards", blueprintLinks),
-    ...(arr(m.item_rewards).length
-      ? [{ tag: "h2" as const, text: "Item rewards" }, { tag: "ul-text" as const, items: arr(m.item_rewards).map((r) => r.name) }]
-      : []),
+    ...(itemRewards.length ? [{ tag: "h2" as const, text: "Item rewards" }] : []),
+    ...(itemRewardLinks.length ? [{ tag: "ul" as const, links: itemRewardLinks }] : []),
+    ...(unlinkedItemRewards.length ? [{ tag: "ul-text" as const, items: unlinkedItemRewards }] : []),
     ...linkBlocks(giver ? `More missions from ${giver}` : "More missions", more),
     ...linkBlocks(`Similar ${missionType(m) ?? ""} missions${m.star_system ? ` in ${m.star_system}` : ""}`.replace(/\s+/g, " "), similar),
     ...linkBlocks("Browse", [
@@ -1439,11 +1582,13 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
     },
   }),
 
-  item: page<WikiItemDetail, never, { listings: SearchListingsResponse; similar: SearchWikiItemsResponse; versions: ActiveVersionsResponse }>({
+  item: page<WikiItemDetail, never, { acquisition: ItemAcquisitionDocument; similar: SearchWikiItemsResponse; versions: ActiveVersionsResponse }>({
     primary: (p) => v2(`/game-data/wiki/items/${enc(p.id)}`, MARKET_GAME_DATA_TTL),
     related: [
       (item) => ({
-        listings: listingSearch({ game_item_id: item.id, page_size: 20, sort_by: "price", sort_order: "asc" }, MARKET_GAME_DATA_TTL),
+        // How to get it (listings, missions, blueprints, shops): the SPA's
+        // useGetAcquisitionQuery document.
+        acquisition: v2(`/game-items/${enc(item.id)}/acquisition`, MARKET_GAME_DATA_TTL),
         similar: item.type
           ? v2List(`/game-data/wiki/items?page=1&page_size=21&type=${enc(item.type)}`, STATIC_GAME_DATA_TTL)
           : null,
@@ -1457,11 +1602,13 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
         .map(([k, v]) => `${k.replace(/_/g, " ")}: ${v}`)
       const maker = item.manufacturer_name || item.manufacturer
       const version = ctx.related.versions?.LIVE ?? null
+      const acquisition = ctx.related.acquisition
       return fromHead(
-        withDateModified(buildItemHead(item, ctx.origin), version),
+        withDateModified(buildItemHead(item, ctx.origin, acquisition), version),
         item.name,
         [
           ...paragraphs(buildItemSummary(item, englishT)),
+          ...acquisitionBlocks(item.name, acquisition),
           { tag: "h2", text: "Specifications" },
           {
             tag: "ul-text",
@@ -1476,19 +1623,6 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
               ...attributes,
             ],
           },
-          ...itemListingBlocks(item.name, item.id, ctx.related.listings),
-          ...linkBlocks(
-            "Crafting",
-            (item.craftable_from ?? []).map((bp) => ({
-              href: GAME_DATA_PATHS.blueprint(enc(bp.blueprint_name || bp.blueprint_id)),
-              text: `Blueprint: ${bp.blueprint_name}`,
-            })),
-          ),
-          ...paragraphs(
-            item.rewarded_by?.length
-              ? `Rewarded by: ${[...new Set(item.rewarded_by.map((m) => m.mission_name))].slice(0, 15).join(", ")}.`
-              : null,
-          ),
           ...linkBlocks(
             "Related",
             [
@@ -1652,16 +1786,11 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
     related: [
       (data) => {
         const giver = data.mission.mission_giver_org || data.mission.faction
-        const blueprints = missionBlueprints(data).slice(0, MAX_BLUEPRINT_LOOKUPS)
         return {
           versions: v2List(`/game-data/versions/active`, STATIC_GAME_DATA_TTL),
           giverMissions: giver
             ? v2List(`/game-data/missions/search?page=1&page_size=12&mission_giver_org=${enc(giver)}`, STATIC_GAME_DATA_TTL)
             : null,
-          // Each blueprint's output item, for its wiki and market links.
-          ...Object.fromEntries(
-            blueprints.map((bp, i) => [`blueprint${i}`, v2(`/game-data/blueprints/${enc(bp.blueprint_id)}`, STATIC_GAME_DATA_TTL)]),
-          ),
         }
       },
       // A giver with few missions: add same-type missions in the same system.

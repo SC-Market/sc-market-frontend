@@ -45,6 +45,8 @@ Each game item sold on SC Market has a price comparison page, /market/aggregate/
 - [Mining ores](https://sc-market.space/mining) and [mining locations](https://sc-market.space/mining/locations)
 - [Resources](https://sc-market.space/resources)
 
+An item page (/wiki/items/<id>--<name>) answers "how to get <item> in Star Citizen": the lowest player asking price and seller count with the cheapest listings, the missions that reward the item or its blueprint (with drop chance and giver), the blueprints that craft it and their ingredients, in-game shops, and mining, salvage or loot info. Examples: [Siebe Helmet](https://sc-market.space/wiki/items/9bb3a108--siebe-helmet) (craft it; blueprint from a Rayari mission), [Anvil F7 Hornet Mk Wikelo](https://sc-market.space/wiki/items/88cd66e1--anvil-f7-hornet-mk-wikelo) (a Wikelo mission reward), [Parasite Replica Helmet](https://sc-market.space/wiki/items/9dac4963--parasite-replica-helmet) (player listings).
+
 ## Missions and crafting
 
 - [Missions](https://sc-market.space/missions): the Star Citizen mission database, filterable by faction, giver, system, legality, rank and type, with rewards, reputation, hauling orders and blueprint drop chances
@@ -66,7 +68,8 @@ Each game item sold on SC Market has a price comparison page, /market/aggregate/
 - [SDK](https://github.com/SC-Market/sc-market-sdk): TypeScript and Python clients for the public API and the price feed
 - [OpenAPI description (site API)](https://api.sc-market.space/api/v2/openapi.json)
 - [API catalog (RFC 9727)](https://api.sc-market.space/.well-known/api-catalog)
-- Public game data feed (missions, blueprints, items): coming soon
+- [Items feed](https://api.sc-market.space/api/public/items/9bb3a108--siebe-helmet.json): `/api/public/items/{slug}.json`, how to get one game item (lowest ask and seller count, missions, blueprints and ingredients, in-game shops, resource info) as JSON; `{slug}` is the item page's `<id>--<name>`. No key needed, CC BY 4.0 with attribution ("Data: SC Market (sc-market.space)")
+- Public game data feed (missions, blueprints): coming soon
 
 ## Related
 

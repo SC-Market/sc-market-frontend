@@ -9,6 +9,7 @@ import type {
   BlueprintDetailResponse,
   GameVersion,
   BlueprintIngredient,
+  ItemAcquisitionDocument,
   LocationDetailResponse,
   MissionDetailResponse,
   OreDetailResponse,
@@ -20,6 +21,7 @@ import type {
 import { GAME_DATA_PATHS, WIKI_PATHS } from "../routes/paths"
 import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
 import { gameDataDateModified, missionGiver, missionSummaryLine, missionTitle, readableMissionText } from "./missionText"
+import { itemSeoDescription, itemSeoTitle } from "./itemAcquisition"
 
 /** "gold_ore" → "Gold Ore": mining pages' name before/without displayName. */
 export function friendlyMiningName(name: string): string {
@@ -125,10 +127,19 @@ export function buildResourceHead(
   }
 }
 
-/** /wiki/items/:id (WikiItemDetail). */
-export function buildItemHead(item: WikiItemDetail, origin: string): PageHead {
-  const title = `${item.name} — Star Citizen Item | SC Market`
-  const description = `${item.name} — ${item.type || "equipment"} item${item.manufacturer ? " by " + item.manufacturer : ""}. View stats, market price, crafting uses, and locations in Star Citizen.`.slice(0, 160)
+/**
+ * /wiki/items/:id (WikiItemDetail). Title and description answer "how to
+ * get <item>": with the acquisition document (`acquisition`, when loaded)
+ * the description names the ways and their numbers. JSON-LD: a Product
+ * without offers (aUEC is not an ISO 4217 currency) and the breadcrumbs.
+ */
+export function buildItemHead(
+  item: WikiItemDetail,
+  origin: string,
+  acquisition?: ItemAcquisitionDocument | null,
+): PageHead {
+  const title = itemSeoTitle(item.name)
+  const description = itemSeoDescription(item, acquisition)
   // Built from the resolved item, not the raw path param (UUID vs short slug).
   const canonical = `${origin}${WIKI_PATHS.item(item.id, item.name)}`
   const image = item.image_url || `${origin}/logo512.png`
@@ -155,10 +166,17 @@ export function buildItemHead(item: WikiItemDetail, origin: string): PageHead {
         description,
         ...(item.image_url && { image: item.image_url }),
         url: canonical,
+        ...(item.type && { category: item.type }),
         ...(item.manufacturer && {
           manufacturer: { "@type": "Organization", name: item.manufacturer },
         }),
       },
+      breadcrumbJsonLd([
+        { name: "SC Market", url: `${origin}/` },
+        { name: "Wiki", url: `${origin}${WIKI_PATHS.hub}` },
+        { name: "Items", url: `${origin}${WIKI_PATHS.items}` },
+        { name: item.name, url: canonical },
+      ]),
     ],
   }
 }

@@ -1,7 +1,8 @@
 /**
  * Minimal English-only `t()` for the edge bridge. Resolves the few
  * translation keys the bridge renders (answer text, layout labels, hub
- * titles, the landing FAQ) from src/locales/en/english.json and
+ * titles, the landing FAQ, an item's "how to get it" section) from
+ * src/locales/en/english.json and
  * interpolates `{{name}}` like the SPA's i18next setup
  * (`escapeValue: false`: values are inserted raw; the bridge escapes on
  * output). Unknown keys fall back to the caller's default, as i18next does.
@@ -11,6 +12,7 @@
  */
 import {
   contractorsPage,
+  itemAcquisition,
   landing,
   mining,
   org,
@@ -23,6 +25,7 @@ import type { AnswerTranslate } from "../util/answerContent"
 
 const RESOURCES: Record<string, unknown> = {
   seoAnswers,
+  itemAcquisition,
   org: { orgTitle: org.orgTitle },
   viewProfile: { store_tab: viewProfile.store_tab },
   landing,

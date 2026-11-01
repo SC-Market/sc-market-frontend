@@ -10,7 +10,9 @@
  * - JSON-LD: serializeJsonLd() (escapes < > & U+2028 U+2029), so content
  *   can't close the <script>.
  * - Summary links: href must be a site-relative path (isSafeHref) or one of
- *   the footer's fixed developer URLs (isDeveloperHref), and goes through
+ *   the footer's fixed developer URLs (isDeveloperHref); a paragraph link
+ *   ("external") only SC Orgs (isPartnerHref) or the open-data feed and
+ *   its licence (isDataFeedHref). Every href goes through
  *   escapeAttribute(); link text is `html: false` text. At most
  *   MAX_SUMMARY_LINKS per list (and per text list: guide steps/bullets).
  */
@@ -74,6 +76,17 @@ export function isSafeHref(href: string): boolean {
 /** Off-site links a summary may carry: SC Orgs pages only. */
 export function isPartnerHref(href: string): boolean {
   return /^https:\/\/sc-orgs\.space\/[A-Za-z0-9/_%-]*$/.test(href)
+}
+
+/**
+ * Open-data links a game item page cites: one item's public JSON feed
+ * document (items or prices, by short slug) and the CC BY 4.0 licence.
+ */
+export function isDataFeedHref(href: string): boolean {
+  return (
+    /^https:\/\/api\.sc-market\.space\/api\/public\/(?:items|prices)\/[a-z0-9-]{1,200}\.json$/.test(href) ||
+    href === "https://creativecommons.org/licenses/by/4.0/"
+  )
 }
 
 /** The footer's off-site developer links (exact URLs, components/footer/developerLinks.ts). */
@@ -151,9 +164,10 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
       continue
     }
     if (block.tag === "external") {
-      if (!isPartnerHref(block.href)) continue
+      if (!isPartnerHref(block.href) && !isDataFeedHref(block.href)) continue
+      const rel = block.href.startsWith("https://creativecommons.org/") ? "license noopener" : "noopener"
       chunks.push(
-        { content: `<p><a href="${escapeAttribute(block.href)}" rel="noopener">`, html: true },
+        { content: `<p><a href="${escapeAttribute(block.href)}" rel="${rel}">`, html: true },
         { content: block.text, html: false },
         { content: "</a></p>", html: true },
       )

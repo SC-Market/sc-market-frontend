@@ -27,12 +27,13 @@ import {
 } from "@mui/icons-material"
 import type { MissionDetailResponse, Mission, MissionRewardPool, MissionBlueprintReward, HaulingOrder } from "../../store/api/v2/market"
 import { Link as RouterLink } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName, MissionDescription } from "./MissionName"
 import { MissionRankCalculator } from "./MissionRankCalculator"
 import { MissionTypeDetails } from "./MissionTypeDetails"
-import { GAME_DATA_PATHS } from "../../routes/paths"
+import { GAME_DATA_PATHS, WIKI_PATHS } from "../../routes/paths"
 import { missionGiver, usableGiver } from "../../seo/missionText"
 
 // ============================================================================
@@ -171,6 +172,7 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
 // ============================================================================
 
 function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; onBlueprintClick?: (id: string) => void }) {
+  const { t } = useTranslation()
   const m = data.mission
 
   return (
@@ -265,6 +267,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                   <TableBody>
                     {(pool.blueprints || []).map((bp) => {
                       const pct = bp.drop_probability >= 1 ? bp.drop_probability : bp.drop_probability * 100
+                      const blueprintPath = GAME_DATA_PATHS.blueprint(encodeURIComponent(bp.blueprint_name || bp.blueprint_id))
                       return (
                         <TableRow
                           key={bp.blueprint_id} hover
@@ -273,20 +276,46 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                         >
                           <TableCell>
                             <Stack direction="row" spacing={0.75} alignItems="center">
-                              <BuildRounded sx={{ fontSize: 14, color: "success.main" }} />
-                              {/* A real link for crawlers; a click opens the blueprint in place. */}
-                              <Typography
-                                variant="body2"
-                                fontWeight={600}
+                              {/* Real links for crawlers. The icon is the blueprint (a click opens it
+                                  in place); the name is the crafted item's page when the API resolved
+                                  it, else the blueprint too. */}
+                              <Box
                                 component={RouterLink}
-                                to={GAME_DATA_PATHS.blueprint(encodeURIComponent(bp.blueprint_name || bp.blueprint_id))}
+                                to={blueprintPath}
+                                aria-label={t("itemAcquisition.viewBlueprint", "View blueprint")}
+                                title={t("itemAcquisition.viewBlueprint", "View blueprint")}
                                 onClick={(e: React.MouseEvent) => {
                                   if (onBlueprintClick) e.preventDefault()
                                 }}
-                                sx={{ color: "inherit", textDecoration: "none" }}
+                                sx={{ display: "inline-flex", color: "success.main" }}
                               >
-                                {bp.output_item_name || bp.blueprint_name}
-                              </Typography>
+                                <BuildRounded sx={{ fontSize: 14 }} />
+                              </Box>
+                              {bp.output_game_item_slug ? (
+                                <Typography
+                                  variant="body2"
+                                  fontWeight={600}
+                                  component={RouterLink}
+                                  to={WIKI_PATHS.item(bp.output_game_item_slug)}
+                                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                                  sx={{ color: "inherit", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                                >
+                                  {bp.output_item_name || bp.blueprint_name}
+                                </Typography>
+                              ) : (
+                                <Typography
+                                  variant="body2"
+                                  fontWeight={600}
+                                  component={RouterLink}
+                                  to={blueprintPath}
+                                  onClick={(e: React.MouseEvent) => {
+                                    if (onBlueprintClick) e.preventDefault()
+                                  }}
+                                  sx={{ color: "inherit", textDecoration: "none" }}
+                                >
+                                  {bp.output_item_name || bp.blueprint_name}
+                                </Typography>
+                              )}
                               {bp.user_owns && <CheckCircleOutline sx={{ fontSize: 14, color: "success.main" }} />}
                             </Stack>
                           </TableCell>
@@ -331,9 +360,21 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
           <Divider />
           <Typography variant="subtitle2">Item Rewards</Typography>
           <Stack spacing={0.25}>
-            {m.item_rewards!.map((item, i) => (
-              <Typography key={i} variant="body2">{item.name}</Typography>
-            ))}
+            {m.item_rewards!.map((item, i) =>
+              item.game_item_slug ? (
+                <Typography
+                  key={i}
+                  variant="body2"
+                  component={RouterLink}
+                  to={WIKI_PATHS.item(item.game_item_slug)}
+                  sx={{ color: "primary.main", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                >
+                  {item.name}
+                </Typography>
+              ) : (
+                <Typography key={i} variant="body2">{item.name}</Typography>
+              ),
+            )}
           </Stack>
         </>
       )}
