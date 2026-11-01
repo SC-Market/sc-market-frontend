@@ -31,6 +31,7 @@ const injectedRtkApi = api
         query: (queryArg) => ({
           url: `/api/email/unsubscribe/${queryArg.token}`,
           method: "POST",
+          params: { all: queryArg.all },
         }),
         invalidatesTags: ["Email"],
       }),
@@ -49,10 +50,22 @@ export type PatchApiEmailPreferencesApiResponse =
 export type PatchApiEmailPreferencesApiArg = {
   updateEmailPreferencesRequest: UpdateEmailPreferencesRequest
 }
-export type PostApiEmailUnsubscribeByTokenApiResponse = unknown
+export type PostApiEmailUnsubscribeByTokenApiResponse =
+  /** status 200 Unsubscribed */ {
+    data: {
+      success: boolean
+      /** Category turned off, or 'all' */
+      scope: string
+      /** What was turned off, in words */
+      label: string
+      message: string
+    }
+  }
 export type PostApiEmailUnsubscribeByTokenApiArg = {
-  /** Unsubscribe token */
+  /** Signed unsubscribe token from the email */
   token: string
+  /** Turn off every notification email that can be turned off */
+  all?: "true"
 }
 export type EmailPreference = {
   preference_id: string

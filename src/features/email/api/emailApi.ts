@@ -204,55 +204,6 @@ export const emailApi = serviceApi.injectEndpoints({
       },
       invalidatesTags: ["UserEmail" as const, "EmailPreferences" as const],
     }),
-
-    // Unsubscribe from email notifications via token
-    unsubscribe: builder.mutation<
-      { success: boolean; message: string; userId: string; email: string },
-      string
-    >({
-      query: (token) => ({
-        url: `${apiBase}/email/unsubscribe/${token}?json=true`,
-        method: "POST",
-      }),
-      transformResponse: (response: { data: { success?: boolean; message?: string; userId?: string; email?: string } }) => {
-        // Handle both wrapped and unwrapped responses
-        const data = unwrapResponse(response) as {
-          success?: boolean
-          message?: string
-          userId?: string
-          email?: string
-        }
-        // Ensure we return the expected shape
-        if (data && typeof data === "object") {
-          return {
-            success: data.success ?? true,
-            message:
-              data.message ||
-              "Successfully unsubscribed from email notifications",
-            userId: data.userId || "",
-            email: data.email || "",
-          }
-        }
-        return {
-          success: false,
-          message: "Invalid response format",
-          userId: "",
-          email: "",
-        }
-      },
-      // Handle errors that might come through as 200 responses
-      transformErrorResponse: (response: { status: number; data?: { error?: string }; error?: string }) => {
-        // If response has error structure, extract it
-        if (response?.data?.error) {
-          return response.data.error
-        }
-        if (response?.error) {
-          return response.error
-        }
-        return response
-      },
-      invalidatesTags: ["EmailPreferences" as const, "UserEmail" as const],
-    }),
   }),
 })
 
@@ -266,5 +217,4 @@ export const {
   useGetEmailPreferencesQuery,
   useUpdateEmailPreferencesMutation,
   useVerifyEmailMutation,
-  useUnsubscribeMutation,
 } = emailApi

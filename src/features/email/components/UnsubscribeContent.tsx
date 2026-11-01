@@ -1,12 +1,13 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
+import { Link as RouterLink } from "react-router-dom"
 import {
-  Box,
-  Typography,
   Alert,
-  CircularProgress,
+  Box,
   Button,
+  CircularProgress,
   Grid,
+  Stack,
+  Typography,
 } from "@mui/material"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
@@ -16,13 +17,29 @@ import { PATHS } from "../../../routes/paths"
 interface UnsubscribeContentProps {
   data: UnsubscribePageData
   isLoading: boolean
+  onUnsubscribeAll: () => void
+  isUnsubscribingAll: boolean
 }
+
+/** Settings → Notifications (asks to sign in when signed out). */
+const MANAGE_URL = `${PATHS.settings}?tab=notifications`
 
 export function UnsubscribeContent({
   data,
   isLoading,
+  onUnsubscribeAll,
+  isUnsubscribingAll,
 }: UnsubscribeContentProps) {
-  const navigate = useNavigate()
+  const manage = (
+    <Button
+      variant="outlined"
+      color="primary"
+      component={RouterLink}
+      to={MANAGE_URL}
+    >
+      Manage preferences
+    </Button>
+  )
 
   return (
     <Grid item xs={12}>
@@ -40,7 +57,7 @@ export function UnsubscribeContent({
           <>
             <CircularProgress size={60} sx={{ mb: 3 }} />
             <Typography variant="h6" gutterBottom>
-              Processing unsubscribe request...
+              Unsubscribing...
             </Typography>
           </>
         )}
@@ -51,56 +68,46 @@ export function UnsubscribeContent({
               sx={{ fontSize: 60, color: "success.main", mb: 2 }}
             />
             <Typography variant="h5" gutterBottom>
-              Unsubscribed Successfully
+              You're unsubscribed
             </Typography>
             <Alert severity="success" sx={{ mb: 3, maxWidth: 500 }}>
               {data.message}
             </Alert>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(`${PATHS.settings}?tab=email`)}
-            >
-              Manage Email Preferences
-            </Button>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              {!data.all && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={onUnsubscribeAll}
+                  disabled={isUnsubscribingAll}
+                >
+                  Turn off all emails
+                </Button>
+              )}
+              {manage}
+            </Stack>
           </>
         )}
 
-        {data.status === "error" && (
+        {(data.status === "error" || data.status === "invalid") && (
           <>
-            <ErrorIcon sx={{ fontSize: 60, color: "error.main", mb: 2 }} />
+            <ErrorIcon
+              sx={{
+                fontSize: 60,
+                color: data.status === "error" ? "error.main" : "warning.main",
+                mb: 2,
+              }}
+            />
             <Typography variant="h5" gutterBottom>
-              Unsubscribe Failed
+              Couldn't unsubscribe
             </Typography>
-            <Alert severity="error" sx={{ mb: 3, maxWidth: 500 }}>
+            <Alert
+              severity={data.status === "error" ? "error" : "warning"}
+              sx={{ mb: 3, maxWidth: 500 }}
+            >
               {data.message}
             </Alert>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(`${PATHS.settings}?tab=email`)}
-            >
-              Go to Email Settings
-            </Button>
-          </>
-        )}
-
-        {data.status === "invalid" && (
-          <>
-            <ErrorIcon sx={{ fontSize: 60, color: "warning.main", mb: 2 }} />
-            <Typography variant="h5" gutterBottom>
-              Invalid Request
-            </Typography>
-            <Alert severity="warning" sx={{ mb: 3, maxWidth: 500 }}>
-              {data.message}
-            </Alert>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(`${PATHS.settings}?tab=email`)}
-            >
-              Go to Email Settings
-            </Button>
+            {manage}
           </>
         )}
       </Box>

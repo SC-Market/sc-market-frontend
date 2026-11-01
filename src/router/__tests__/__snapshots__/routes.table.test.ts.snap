@@ -1246,6 +1246,24 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/user/:username",
   },
   {
+    "chain": "(layout:AppLayout) > /email/unsubscribe/:token",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/email/unsubscribe/:token",
+  },
+  {
+    "chain": "(layout:AppLayout) > /email/unsubscribe",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/email/unsubscribe",
+  },
+  {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /onboarding",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [
@@ -1604,26 +1622,6 @@ exports[`route table > lists every leaf route 2`] = `
     ],
     "lazy": true,
     "pattern": "/email/verify",
-  },
-  {
-    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /email/unsubscribe/:token",
-    "errorBoundaryAt": "(layout:AppLayout)",
-    "guards": [
-      "AppLayout",
-      "LoggedInRoute",
-    ],
-    "lazy": true,
-    "pattern": "/email/unsubscribe/:token",
-  },
-  {
-    "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /email/unsubscribe",
-    "errorBoundaryAt": "(layout:AppLayout)",
-    "guards": [
-      "AppLayout",
-      "LoggedInRoute",
-    ],
-    "lazy": true,
-    "pattern": "/email/unsubscribe",
   },
   {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /availability",

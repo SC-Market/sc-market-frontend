@@ -1,119 +1,90 @@
-import { useEffect, useState } from "react"
-import { useSearchParams, useParams } from "react-router-dom"
-import {
-  useUnsubscribeMutation,
-  useGetEmailPreferencesQuery,
-} from "../api/emailApi"
+import { useCallback, useEffect, useRef, useState } from "react"
+import { useParams, useSearchParams } from "react-router-dom"
+import { usePostApiEmailUnsubscribeByTokenMutation } from "../../../store/api/email"
 
 export interface UnsubscribePageData {
   status: "loading" | "success" | "error" | "invalid"
   message: string
+  /** What was turned off ("order updates", "all notification emails"). */
+  label?: string
+  /** True once everything that can be turned off is off. */
+  all?: boolean
 }
 
 export interface UsePageUnsubscribeResult {
-  data: UnsubscribePageData | undefined
+  data: UnsubscribePageData
   isLoading: boolean
-  isFetching: boolean
-  error: unknown
-  refetch: () => void
+  /** Turn off every notification email (same link, no login). */
+  unsubscribeAll: () => void
+  isUnsubscribingAll: boolean
+}
+
+function errorMessage(err: unknown): string {
+  const e = err as
+    | { data?: { error?: { message?: string }; message?: string } }
+    | undefined
+  return (
+    e?.data?.error?.message ||
+    e?.data?.message ||
+    "This unsubscribe link is not valid. You can change your emails in Settings."
+  )
 }
 
 /**
- * Page hook for email unsubscribe
- * Handles email unsubscribe via token from URL
+ * Email unsubscribe page: opening the link unsubscribes at once, with no
+ * login (the signed token in the link is the credential). The backend turns
+ * off the email category the link was sent for; "turn off all" uses the
+ * same link.
  */
 export function usePageUnsubscribe(): UsePageUnsubscribeResult {
-  const [searchParams] = useSearchParams()
   const params = useParams<{ token?: string }>()
-  const [pageData, setPageData] = useState<UnsubscribePageData>({
-    status: "loading",
-    message: "",
-  })
-
-  // Support both path parameter (/email/unsubscribe/:token) and query parameter (?token=...)
-  const token = params.token || searchParams.get("token")
-  const error = searchParams.get("error")
-  const success = searchParams.get("success")
-
-  // Use RTK Query mutation to unsubscribe
-  const [unsubscribe, { isLoading: isUnsubscribing }] = useUnsubscribeMutation()
-
-  // Refetch preferences after unsubscribe to ensure cache is updated
-  const { refetch: refetchPreferences } = useGetEmailPreferencesQuery(
-    undefined,
-    {
-      skip: true, // Don't auto-fetch, only refetch when needed
-    },
+  const [searchParams] = useSearchParams()
+  const token = params.token || searchParams.get("token") || ""
+  const [unsubscribe] = usePostApiEmailUnsubscribeByTokenMutation()
+  const [unsubscribeAllMutation, { isLoading: isUnsubscribingAll }] =
+    usePostApiEmailUnsubscribeByTokenMutation()
+  const [data, setData] = useState<UnsubscribePageData>(
+    token
+      ? { status: "loading", message: "" }
+      : { status: "invalid", message: "No unsubscribe link was given." },
   )
+  const started = useRef<string | null>(null)
 
   useEffect(() => {
-    // If redirected from backend with success/error params (legacy support)
-    if (success === "true") {
-      setPageData({
-        status: "success",
-        message:
-          "You have been successfully unsubscribed from all email notifications.",
-      })
-    } else if (error) {
-      let errorMessage = "An error occurred during unsubscribe."
-      if (error === "invalid_token") {
-        errorMessage = "Invalid unsubscribe token."
-      } else if (error === "already_used") {
-        errorMessage = "This unsubscribe link has already been used."
-      } else if (error === "unsubscribe_failed") {
-        errorMessage = "Unsubscribe failed. Please try again."
-      }
-      setPageData({
-        status: "error",
-        message: errorMessage,
-      })
-    } else if (token && !success && !error) {
-      // Trigger unsubscribe mutation when token is present
-      unsubscribe(token)
-        .unwrap()
-        .then(async (result) => {
-          // Refetch preferences to ensure cache is updated
-          await refetchPreferences()
-          setPageData({
-            status: "success",
-            message:
-              result?.message ||
-              "You have been successfully unsubscribed from all email notifications.",
-          })
-        })
-        .catch((err) => {
-          const errorMessage =
-            err?.data?.error?.message ||
-            err?.data?.message ||
-            err?.error?.message ||
-            err?.message ||
-            (typeof err === "string"
-              ? err
-              : "Unsubscribe failed. The token may be invalid or already used.")
-          setPageData({
-            status: "error",
-            message: errorMessage,
-          })
-        })
-    } else if (!token) {
-      setPageData({
-        status: "invalid",
-        message: "No unsubscribe token provided.",
-      })
-    }
-  }, [searchParams, token, error, success, unsubscribe, refetchPreferences])
+    if (!token || started.current === token) return
+    started.current = token
+    unsubscribe({ token })
+      .unwrap()
+      .then((res) =>
+        setData({
+          status: "success",
+          message: res.data.message,
+          label: res.data.label,
+          all: res.data.scope === "all",
+        }),
+      )
+      .catch((err) => setData({ status: "error", message: errorMessage(err) }))
+  }, [token, unsubscribe])
 
-  const refetch = () => {
-    if (token) {
-      unsubscribe(token)
-    }
-  }
+  const unsubscribeAll = useCallback(() => {
+    if (!token) return
+    unsubscribeAllMutation({ token, all: "true" })
+      .unwrap()
+      .then((res) =>
+        setData({
+          status: "success",
+          message: res.data.message,
+          label: res.data.label,
+          all: true,
+        }),
+      )
+      .catch((err) => setData({ status: "error", message: errorMessage(err) }))
+  }, [token, unsubscribeAllMutation])
 
   return {
-    data: pageData,
-    isLoading: pageData.status === "loading" || isUnsubscribing,
-    isFetching: isUnsubscribing,
-    error: pageData.status === "error" ? new Error(pageData.message) : null,
-    refetch,
+    data,
+    isLoading: data.status === "loading",
+    unsubscribeAll,
+    isUnsubscribingAll,
   }
 }

@@ -234,6 +234,18 @@ export default [
         path: "/user/:username",
         file: "routes/pages/Profile.ErrorBoundary.tsx",
       },
+      // One-click unsubscribe from an email: no login (the signed token in
+      // the link is the credential), so outside LoggedInRoute.
+      {
+        id: "routes/pages/UnsubscribePage",
+        path: "/email/unsubscribe/:token",
+        file: "routes/pages/UnsubscribePage.tsx",
+      },
+      {
+        id: "routes/pages/UnsubscribePage~2",
+        path: "/email/unsubscribe",
+        file: "routes/pages/UnsubscribePage.tsx",
+      },
       {
         id: "routes/layouts/LoggedInRoute~2",
         file: "routes/layouts/LoggedInRoute.tsx",
@@ -417,16 +429,6 @@ export default [
             id: "routes/pages/EmailVerificationPage~2",
             path: "/email/verify",
             file: "routes/pages/EmailVerificationPage.tsx",
-          },
-          {
-            id: "routes/pages/UnsubscribePage",
-            path: "/email/unsubscribe/:token",
-            file: "routes/pages/UnsubscribePage.tsx",
-          },
-          {
-            id: "routes/pages/UnsubscribePage~2",
-            path: "/email/unsubscribe",
-            file: "routes/pages/UnsubscribePage.tsx",
           },
           {
             id: "routes/pages/Availability",

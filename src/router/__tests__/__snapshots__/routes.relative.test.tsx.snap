@@ -1997,7 +1997,6 @@ exports[`relative link resolution (every leaf) > /email/unsubscribe 1`] = `
   "params": {},
   "probeChain": [
     "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
     "/email/unsubscribe",
   ],
   "resolvedDot": "/email/unsubscribe",
@@ -2035,7 +2034,6 @@ exports[`relative link resolution (every leaf) > /email/unsubscribe/:token 1`] =
   },
   "probeChain": [
     "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
     "/email/unsubscribe/:token",
   ],
   "resolvedDot": "/email/unsubscribe/token-1",

@@ -499,9 +499,7 @@ exports[`routes (shard 1/4) > /dashboard/overview 1`] = `
 
 exports[`routes (shard 1/4) > /email/unsubscribe/:token 1`] = `
 {
-  "consoleErrors": [
-    "[StandardPageLayout] Page error – showing error page {"path":"/email/unsubscribe/token-1","title":"Unsubscribe from Emails","error":{}}",
-  ],
+  "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/email/unsubscribe/token-1",
   "h1": [],
@@ -510,7 +508,6 @@ exports[`routes (shard 1/4) > /email/unsubscribe/:token 1`] = `
   "historyAction": "POP",
   "initialMatches": [
     "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
     "/email/unsubscribe/:token",
   ],
   "lazyPending": [],
@@ -521,18 +518,18 @@ exports[`routes (shard 1/4) > /email/unsubscribe/:token 1`] = `
     "/guides",
     "/guides/discord/api-tokens",
     "/privacy",
+    "/settings?tab=notifications",
     "/terms",
   ],
   "matches": [
     "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
     "/email/unsubscribe/:token",
   ],
   "pageReady": "true",
   "routeErrors": null,
-  "session": "admin",
+  "session": "anonymous",
   "stillLoading": false,
-  "title": "Error - SC Market",
+  "title": "Unsubscribe from Emails - SC Market",
   "url": "/email/unsubscribe/token-1",
 }
 `;

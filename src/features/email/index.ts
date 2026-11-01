@@ -12,7 +12,6 @@ export {
   useGetEmailPreferencesQuery,
   useUpdateEmailPreferencesMutation,
   useVerifyEmailMutation,
-  useUnsubscribeMutation,
 } from "./api/emailApi"
 
 // Domain exports
