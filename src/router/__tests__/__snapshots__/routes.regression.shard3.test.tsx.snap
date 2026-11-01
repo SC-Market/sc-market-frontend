@@ -877,6 +877,86 @@ exports[`routes (shard 3/4) > /mining/ores/:name 1`] = `
 }
 `;
 
+exports[`routes (shard 3/4) > /missions/systems 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/missions/systems",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/dashboard",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/*",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/missions/systems",
+}
+`;
+
+exports[`routes (shard 3/4) > /missions/systems/:slug 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/missions/systems/fixture-slug",
+  "h1": [
+    "Star systems",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/missions/systems/:slug",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/missions",
+    "/missions/factions",
+    "/missions/givers",
+    "/missions/systems",
+    "/missions/types",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/missions/systems/:slug",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Star systems - SC Market",
+  "url": "/missions/systems/fixture-slug",
+}
+`;
+
 exports[`routes (shard 3/4) > /my-orgs 1`] = `
 {
   "consoleErrors": [],

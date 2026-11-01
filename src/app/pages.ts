@@ -282,6 +282,14 @@ export const pages = {
     () => import("../pages/missions/MissionDetailGate"),
     (m) => m.MissionDetailGate,
   ),
+  MissionHubIndex: pageEntry(
+    () => import("../pages/missions/MissionHubIndex"),
+    (m) => m.MissionHubIndex,
+  ),
+  MissionHubPage: pageEntry(
+    () => import("../pages/missions/MissionHubPage"),
+    (m) => m.MissionHubPage,
+  ),
   MissionSearch: pageEntry(
     () => import("../pages/missions/MissionSearch"),
     (m) => m.MissionSearch,

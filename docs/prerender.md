@@ -24,6 +24,8 @@ The full design and its decisions are in `ssr-migration-design.md` (Phase 3).
 | `/resources` | Resources and categories | Filters |
 | `/blueprints` | First page of blueprints (`searchBlueprints` with `sourceable=true`: "Hide Unsourceable" is on by default, so 40 blueprint links), categories | Other pages, filters, searches; the list revalidates on mount (`refetchOnMountOrArgChange`, for `user_owns`) |
 | `/missions` | First page of missions (`searchMissions`, events excluded: 40 mission links), game events | Other pages, filters, searches |
+| `/missions/givers`, `/missions/factions`, `/missions/types`, `/missions/systems` | Every hub of the kind with its mission count (`getMissionHubs`) | — |
+| `/missions/<kind>/<slug>` (one per hub, ~100) | The hub's intro, its first 100 missions, related hubs (`getMissionHub`) | `?page=N` (head and links from the bridge over the static file, like `/wiki/items`) |
 | `/guides`, `/guides/<category>`, `/guides/<category>/<slug>`, `/about` | The whole guide (from `content/`) | — |
 
 Personal UI (sign-in state, cart, notifications, theme and language
@@ -49,6 +51,22 @@ A URL with a query string that changes the page (`/missions?category=…`,
 `lng`) gets the same prerendered file, rendered without it, so the app
 renders it from scratch instead of hydrating (`src/document/pageQuery.ts`,
 and document.html hides the HTML until then).
+
+### Mission hubs
+
+The hub pages are listed at build time from `GET /api/v2/game-data/missions/hubs`
+(`src/prerender/missionHubPaths.node.ts`): a deploy prerenders every hub of
+the active LIVE version (~105 pages with the indexes). With
+`VITE_BACKEND_URL` set, an API that keeps failing fails the build (the
+previous deployment stays live) rather than shipping without hub pages;
+without it (local builds) no hub page is prerendered. Each hub route also
+has a placeholder path (`MISSION_HUB_ROUTE_PLACEHOLDERS`) so its `loader`
+is legal when no hub is prerendered; `finalize.ts` deletes it. The
+`_headers` rules use one splat per hub kind (Pages allows 100 rules).
+`public/_routes.json` excludes the four index paths; the hub pages stay on
+`/missions/*`, whose bridge passes the clean URL through to the static
+file and serves `?page=N`. A hub that appears after a game-data import has
+no file until the next deploy: the SPA renders it in the browser.
 
 ## How fresh it is
 

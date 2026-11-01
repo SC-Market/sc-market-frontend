@@ -3244,6 +3244,294 @@ exports[`relative link resolution (every leaf) > /missions/:slug 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /missions/factions 1`] = `
+{
+  "links": {
+    "path:""": "/missions/factions",
+    "path:"#frag"": "/missions/factions#frag",
+    "path:"."": "/missions/factions",
+    "path:".."": "/missions",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/missions/sibling",
+    "path:"./"": "/missions/factions/",
+    "path:"./child"": "/missions/factions/child",
+    "path:"?tab=x"": "/missions/factions?tab=x",
+    "path:"child"": "/missions/factions/child",
+    "route:""": "/missions/factions",
+    "route:"#frag"": "/missions/factions#frag",
+    "route:"."": "/missions/factions",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/missions/factions/",
+    "route:"./child"": "/missions/factions/child",
+    "route:"?tab=x"": "/missions/factions?tab=x",
+    "route:"child"": "/missions/factions/child",
+  },
+  "location": "/missions/factions",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/missions/factions",
+  ],
+  "resolvedDot": "/missions/factions",
+  "url": "/missions/factions",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /missions/factions/:slug 1`] = `
+{
+  "links": {
+    "path:""": "/missions/factions/fixture-slug",
+    "path:"#frag"": "/missions/factions/fixture-slug#frag",
+    "path:"."": "/missions/factions/fixture-slug",
+    "path:".."": "/missions/factions",
+    "path:"../.."": "/missions",
+    "path:"../sibling"": "/missions/factions/sibling",
+    "path:"./"": "/missions/factions/fixture-slug/",
+    "path:"./child"": "/missions/factions/fixture-slug/child",
+    "path:"?tab=x"": "/missions/factions/fixture-slug?tab=x",
+    "path:"child"": "/missions/factions/fixture-slug/child",
+    "route:""": "/missions/factions/fixture-slug",
+    "route:"#frag"": "/missions/factions/fixture-slug#frag",
+    "route:"."": "/missions/factions/fixture-slug",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/missions/factions/fixture-slug/",
+    "route:"./child"": "/missions/factions/fixture-slug/child",
+    "route:"?tab=x"": "/missions/factions/fixture-slug?tab=x",
+    "route:"child"": "/missions/factions/fixture-slug/child",
+  },
+  "location": "/missions/factions/fixture-slug",
+  "params": {
+    "slug": "fixture-slug",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/missions/factions/:slug",
+  ],
+  "resolvedDot": "/missions/factions/fixture-slug",
+  "url": "/missions/factions/fixture-slug",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /missions/givers 1`] = `
+{
+  "links": {
+    "path:""": "/missions/givers",
+    "path:"#frag"": "/missions/givers#frag",
+    "path:"."": "/missions/givers",
+    "path:".."": "/missions",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/missions/sibling",
+    "path:"./"": "/missions/givers/",
+    "path:"./child"": "/missions/givers/child",
+    "path:"?tab=x"": "/missions/givers?tab=x",
+    "path:"child"": "/missions/givers/child",
+    "route:""": "/missions/givers",
+    "route:"#frag"": "/missions/givers#frag",
+    "route:"."": "/missions/givers",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/missions/givers/",
+    "route:"./child"": "/missions/givers/child",
+    "route:"?tab=x"": "/missions/givers?tab=x",
+    "route:"child"": "/missions/givers/child",
+  },
+  "location": "/missions/givers",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/missions/givers",
+  ],
+  "resolvedDot": "/missions/givers",
+  "url": "/missions/givers",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /missions/givers/:slug 1`] = `
+{
+  "links": {
+    "path:""": "/missions/givers/fixture-slug",
+    "path:"#frag"": "/missions/givers/fixture-slug#frag",
+    "path:"."": "/missions/givers/fixture-slug",
+    "path:".."": "/missions/givers",
+    "path:"../.."": "/missions",
+    "path:"../sibling"": "/missions/givers/sibling",
+    "path:"./"": "/missions/givers/fixture-slug/",
+    "path:"./child"": "/missions/givers/fixture-slug/child",
+    "path:"?tab=x"": "/missions/givers/fixture-slug?tab=x",
+    "path:"child"": "/missions/givers/fixture-slug/child",
+    "route:""": "/missions/givers/fixture-slug",
+    "route:"#frag"": "/missions/givers/fixture-slug#frag",
+    "route:"."": "/missions/givers/fixture-slug",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/missions/givers/fixture-slug/",
+    "route:"./child"": "/missions/givers/fixture-slug/child",
+    "route:"?tab=x"": "/missions/givers/fixture-slug?tab=x",
+    "route:"child"": "/missions/givers/fixture-slug/child",
+  },
+  "location": "/missions/givers/fixture-slug",
+  "params": {
+    "slug": "fixture-slug",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/missions/givers/:slug",
+  ],
+  "resolvedDot": "/missions/givers/fixture-slug",
+  "url": "/missions/givers/fixture-slug",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /missions/systems 1`] = `
+{
+  "links": {
+    "path:""": "/missions/systems",
+    "path:"#frag"": "/missions/systems#frag",
+    "path:"."": "/missions/systems",
+    "path:".."": "/missions",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/missions/sibling",
+    "path:"./"": "/missions/systems/",
+    "path:"./child"": "/missions/systems/child",
+    "path:"?tab=x"": "/missions/systems?tab=x",
+    "path:"child"": "/missions/systems/child",
+    "route:""": "/missions/systems",
+    "route:"#frag"": "/missions/systems#frag",
+    "route:"."": "/missions/systems",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/missions/systems/",
+    "route:"./child"": "/missions/systems/child",
+    "route:"?tab=x"": "/missions/systems?tab=x",
+    "route:"child"": "/missions/systems/child",
+  },
+  "location": "/missions/systems",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/missions/systems",
+  ],
+  "resolvedDot": "/missions/systems",
+  "url": "/missions/systems",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /missions/systems/:slug 1`] = `
+{
+  "links": {
+    "path:""": "/missions/systems/fixture-slug",
+    "path:"#frag"": "/missions/systems/fixture-slug#frag",
+    "path:"."": "/missions/systems/fixture-slug",
+    "path:".."": "/missions/systems",
+    "path:"../.."": "/missions",
+    "path:"../sibling"": "/missions/systems/sibling",
+    "path:"./"": "/missions/systems/fixture-slug/",
+    "path:"./child"": "/missions/systems/fixture-slug/child",
+    "path:"?tab=x"": "/missions/systems/fixture-slug?tab=x",
+    "path:"child"": "/missions/systems/fixture-slug/child",
+    "route:""": "/missions/systems/fixture-slug",
+    "route:"#frag"": "/missions/systems/fixture-slug#frag",
+    "route:"."": "/missions/systems/fixture-slug",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/missions/systems/fixture-slug/",
+    "route:"./child"": "/missions/systems/fixture-slug/child",
+    "route:"?tab=x"": "/missions/systems/fixture-slug?tab=x",
+    "route:"child"": "/missions/systems/fixture-slug/child",
+  },
+  "location": "/missions/systems/fixture-slug",
+  "params": {
+    "slug": "fixture-slug",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/missions/systems/:slug",
+  ],
+  "resolvedDot": "/missions/systems/fixture-slug",
+  "url": "/missions/systems/fixture-slug",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /missions/types 1`] = `
+{
+  "links": {
+    "path:""": "/missions/types",
+    "path:"#frag"": "/missions/types#frag",
+    "path:"."": "/missions/types",
+    "path:".."": "/missions",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/missions/sibling",
+    "path:"./"": "/missions/types/",
+    "path:"./child"": "/missions/types/child",
+    "path:"?tab=x"": "/missions/types?tab=x",
+    "path:"child"": "/missions/types/child",
+    "route:""": "/missions/types",
+    "route:"#frag"": "/missions/types#frag",
+    "route:"."": "/missions/types",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/missions/types/",
+    "route:"./child"": "/missions/types/child",
+    "route:"?tab=x"": "/missions/types?tab=x",
+    "route:"child"": "/missions/types/child",
+  },
+  "location": "/missions/types",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/missions/types",
+  ],
+  "resolvedDot": "/missions/types",
+  "url": "/missions/types",
+}
+`;
+
+exports[`relative link resolution (every leaf) > /missions/types/:slug 1`] = `
+{
+  "links": {
+    "path:""": "/missions/types/fixture-slug",
+    "path:"#frag"": "/missions/types/fixture-slug#frag",
+    "path:"."": "/missions/types/fixture-slug",
+    "path:".."": "/missions/types",
+    "path:"../.."": "/missions",
+    "path:"../sibling"": "/missions/types/sibling",
+    "path:"./"": "/missions/types/fixture-slug/",
+    "path:"./child"": "/missions/types/fixture-slug/child",
+    "path:"?tab=x"": "/missions/types/fixture-slug?tab=x",
+    "path:"child"": "/missions/types/fixture-slug/child",
+    "route:""": "/missions/types/fixture-slug",
+    "route:"#frag"": "/missions/types/fixture-slug#frag",
+    "route:"."": "/missions/types/fixture-slug",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/missions/types/fixture-slug/",
+    "route:"./child"": "/missions/types/fixture-slug/child",
+    "route:"?tab=x"": "/missions/types/fixture-slug?tab=x",
+    "route:"child"": "/missions/types/fixture-slug/child",
+  },
+  "location": "/missions/types/fixture-slug",
+  "params": {
+    "slug": "fixture-slug",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/missions/types/:slug",
+  ],
+  "resolvedDot": "/missions/types/fixture-slug",
+  "url": "/missions/types/fixture-slug",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /my-orgs 1`] = `
 {
   "links": {

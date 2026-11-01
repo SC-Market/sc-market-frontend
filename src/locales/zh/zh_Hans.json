@@ -4566,6 +4566,87 @@
       "title": "关于任务数据库"
     }
   },
+  "missionHubs": {
+    "missions": "任务",
+    "missionCount_other": "{{n}} 个任务",
+    "kinds": {
+      "givers": "任务发布者",
+      "factions": "阵营",
+      "types": "任务类型",
+      "systems": "星系"
+    },
+    "index": {
+      "givers": {
+        "title": "Star Citizen 任务发布者 ({{count}}) | SC Market",
+        "heading": "Star Citizen 任务发布者",
+        "description": "当前游戏文件中所有 Star Citizen 任务发布者，以及每个发布者提供的任务数量：{{top}} 等。"
+      },
+      "factions": {
+        "title": "Star Citizen 阵营与声望任务 ({{count}}) | SC Market",
+        "heading": "Star Citizen 阵营",
+        "description": "可通过任务获得声望的所有 Star Citizen 阵营，以及提升声望的任务数量：{{top}} 等。"
+      },
+      "types": {
+        "title": "Star Citizen 任务类型 ({{count}}) | SC Market",
+        "heading": "Star Citizen 任务类型",
+        "description": "所有 Star Citizen 任务类型，从赏金猎人、雇佣兵工作到货运、打捞和采矿，以及每种类型的任务数量：{{top}} 等。"
+      },
+      "systems": {
+        "title": "按星系划分的 Star Citizen 任务 | SC Market",
+        "heading": "按星系划分的 Star Citizen 任务",
+        "description": "各星系的 Star Citizen 任务：{{top}}。"
+      }
+    },
+    "hub": {
+      "givers": {
+        "title": "Star Citizen 中的 {{name}} 任务 ({{count}}) | SC Market",
+        "heading": "{{name}} 任务",
+        "lead": "{{name}} 在 Star Citizen 中提供 {{missions}}。"
+      },
+      "factions": {
+        "title": "Star Citizen 中的 {{name}} 声望任务 ({{count}}) | SC Market",
+        "heading": "{{name}} 声望任务",
+        "lead": "Star Citizen 中有 {{missions}}可以提升你在 {{name}} 的声望。"
+      },
+      "types": {
+        "title": "Star Citizen 中的 {{name}} 任务 ({{count}}) | SC Market",
+        "heading": "{{name}} 任务",
+        "lead": "Star Citizen 中有 {{missions}}属于 {{name}} 类型。"
+      },
+      "systems": {
+        "title": "Star Citizen 中 {{name}} 星系的任务 ({{count}}) | SC Market",
+        "heading": "{{name}} 星系的任务",
+        "lead": "Star Citizen 的 {{name}} 星系中有 {{missions}}。"
+      }
+    },
+    "where": "可在 {{systems}} 接取。",
+    "rewardRange": "报酬为 {{min}} 至 {{max}} aUEC。",
+    "rewardUpTo": "报酬最高 {{max}} aUEC。",
+    "allLegal": "全部为合法任务。",
+    "allIllegal": "全部为非法任务。",
+    "legalMix": "合法：{{legal}}，非法：{{illegal}}。",
+    "blueprints": "可能奖励制作蓝图的任务：{{count}}。",
+    "topRelated": "{{kind}}：{{list}}。",
+    "browseBy": "按分类浏览任务",
+    "related": "相关任务分类",
+    "missionList": "任务",
+    "pageOf": "第 {{page}} 页，共 {{pages}} 页",
+    "previous": "上一页",
+    "next": "下一页",
+    "notFound": "该任务分类不存在。分类会随游戏更新而变化：可在下方查看全部分类。",
+    "loadError": "无法加载该任务分类，请重试。",
+    "columns": {
+      "mission": "任务",
+      "system": "星系",
+      "type": "类型",
+      "giver": "发布者",
+      "legality": "合法性",
+      "reward": "报酬"
+    },
+    "legal": "合法",
+    "illegal": "非法",
+    "detailTitle": "浏览类似任务"
+  },
   "myListings": {
     "active": "启用",
     "archiveBody": "归档内容",

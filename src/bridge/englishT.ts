@@ -1,9 +1,11 @@
 /**
  * Minimal English-only `t()` for the edge bridge. Resolves the few
  * translation keys the bridge renders (answer text, layout labels, hub
- * titles, the landing FAQ, an item's "how to get it" section) from
+ * titles, the landing FAQ, an item's "how to get it" section, the mission
+ * hubs) from
  * src/locales/en/english.json and
- * interpolates `{{name}}` like the SPA's i18next setup
+ * interpolates `{{name}}` (and picks `_one`/`_other` plural keys for a
+ * numeric `count`) like the SPA's i18next setup
  * (`escapeValue: false`: values are inserted raw; the bridge escapes on
  * output). Unknown keys fall back to the caller's default, as i18next does.
  *
@@ -15,6 +17,7 @@ import {
   itemAcquisition,
   landing,
   mining,
+  missionHubs,
   org,
   recruiting,
   resources,
@@ -32,6 +35,7 @@ const RESOURCES: Record<string, unknown> = {
   landing,
   contractorsPage: { title: contractorsPage.title },
   mining: { title: mining.title },
+  missionHubs,
   resources: { title: resources.title },
   recruiting: {
     scOrgsNote: recruiting.scOrgsNote,
@@ -65,7 +69,10 @@ function translate(
 ): string {
   const values = typeof options === "object" && options !== null ? options : {}
   const fallback = typeof options === "string" ? options : values.defaultValue
-  const template = lookup(key) ?? fallback ?? key
+  // Plural keys like i18next (key_one / key_other) when a numeric count is given.
+  const plural =
+    typeof values.count === "number" ? lookup(`${key}_${new Intl.PluralRules("en").select(values.count)}`) : undefined
+  const template = plural ?? lookup(key) ?? fallback ?? key
   return interpolate(template, values)
 }
 

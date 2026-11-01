@@ -4508,6 +4508,87 @@
       "title": "ミッションデータベースについて"
     }
   },
+  "missionHubs": {
+    "missions": "ミッション",
+    "missionCount_other": "{{n}} 件のミッション",
+    "kinds": {
+      "givers": "ミッション依頼主",
+      "factions": "勢力",
+      "types": "ミッションの種類",
+      "systems": "星系"
+    },
+    "index": {
+      "givers": {
+        "title": "Star Citizen のミッション依頼主 ({{count}}) | SC Market",
+        "heading": "Star Citizen のミッション依頼主",
+        "description": "現在のゲームファイルにある Star Citizen のすべてのミッション依頼主と、それぞれのミッション数：{{top}} など。"
+      },
+      "factions": {
+        "title": "Star Citizen の勢力と評判ミッション ({{count}}) | SC Market",
+        "heading": "Star Citizen の勢力",
+        "description": "ミッションで評判を得られる Star Citizen のすべての勢力と、評判を上げるミッションの数：{{top}} など。"
+      },
+      "types": {
+        "title": "Star Citizen のミッションの種類 ({{count}}) | SC Market",
+        "heading": "Star Citizen のミッションの種類",
+        "description": "賞金稼ぎや傭兵の仕事から輸送、サルベージ、採掘まで、Star Citizen のすべてのミッションの種類とそれぞれのミッション数：{{top}} など。"
+      },
+      "systems": {
+        "title": "星系別の Star Citizen ミッション | SC Market",
+        "heading": "星系別の Star Citizen ミッション",
+        "description": "各星系の Star Citizen ミッション：{{top}}。"
+      }
+    },
+    "hub": {
+      "givers": {
+        "title": "Star Citizen の {{name}} のミッション ({{count}}) | SC Market",
+        "heading": "{{name}} のミッション",
+        "lead": "{{name}} は Star Citizen で {{missions}}を提供しています。"
+      },
+      "factions": {
+        "title": "Star Citizen の {{name}} の評判ミッション ({{count}}) | SC Market",
+        "heading": "{{name}} の評判ミッション",
+        "lead": "Star Citizen の {{missions}}で {{name}} からの評判が上がります。"
+      },
+      "types": {
+        "title": "Star Citizen の {{name}} ミッション ({{count}}) | SC Market",
+        "heading": "{{name}} ミッション",
+        "lead": "Star Citizen には {{name}} タイプの {{missions}}があります。"
+      },
+      "systems": {
+        "title": "Star Citizen の {{name}} のミッション ({{count}}) | SC Market",
+        "heading": "{{name}} のミッション",
+        "lead": "Star Citizen の {{name}} 星系には {{missions}}があります。"
+      }
+    },
+    "where": "{{systems}} で受けられます。",
+    "rewardRange": "報酬は {{min}}〜{{max}} aUEC です。",
+    "rewardUpTo": "報酬は最大 {{max}} aUEC です。",
+    "allLegal": "すべて合法です。",
+    "allIllegal": "すべて違法です。",
+    "legalMix": "合法：{{legal}}、違法：{{illegal}}。",
+    "blueprints": "クラフト設計図が報酬になりうるミッション：{{count}}。",
+    "topRelated": "{{kind}}：{{list}}。",
+    "browseBy": "ミッションを分類で見る",
+    "related": "関連するミッション一覧",
+    "missionList": "ミッション",
+    "pageOf": "{{pages}} ページ中 {{page}} ページ目",
+    "previous": "前のページ",
+    "next": "次のページ",
+    "notFound": "このミッション一覧は存在しません。一覧はゲームのアップデートで変わります。下からすべての一覧を見られます。",
+    "loadError": "このミッション一覧を読み込めませんでした。もう一度お試しください。",
+    "columns": {
+      "mission": "ミッション",
+      "system": "星系",
+      "type": "種類",
+      "giver": "依頼主",
+      "legality": "合法性",
+      "reward": "報酬"
+    },
+    "legal": "合法",
+    "illegal": "違法",
+    "detailTitle": "似たミッションを探す"
+  },
   "myListings": {
     "active": "有効",
     "archiveBody": "アーカイブ本文",

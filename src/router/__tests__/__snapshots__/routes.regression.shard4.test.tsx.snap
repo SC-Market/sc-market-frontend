@@ -798,6 +798,10 @@ exports[`routes (shard 4/4) > /missions 1`] = `
     "/developers",
     "/guides",
     "/guides/discord/api-tokens",
+    "/missions/factions",
+    "/missions/givers",
+    "/missions/systems",
+    "/missions/types",
     "/privacy",
     "/terms",
   ],
@@ -811,6 +815,86 @@ exports[`routes (shard 4/4) > /missions 1`] = `
   "stillLoading": false,
   "title": "All Missions — Star Citizen Mission Database | SC Market",
   "url": "/missions",
+}
+`;
+
+exports[`routes (shard 4/4) > /missions/givers 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/missions/givers",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/dashboard",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/*",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/missions/givers",
+}
+`;
+
+exports[`routes (shard 4/4) > /missions/givers/:slug 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/missions/givers/fixture-slug",
+  "h1": [
+    "Mission givers",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/missions/givers/:slug",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/missions",
+    "/missions/factions",
+    "/missions/givers",
+    "/missions/systems",
+    "/missions/types",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/missions/givers/:slug",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Mission givers - SC Market",
+  "url": "/missions/givers/fixture-slug",
 }
 `;
 

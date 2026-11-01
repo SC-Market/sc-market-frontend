@@ -5,6 +5,10 @@ import { contentPathsFromDisk } from "./src/prerender/contentPaths.node"
 import { diskContentSource } from "./src/prerender/contentSource.node"
 import { registerBuildContentSource } from "./src/server/contentSource"
 import { SSR_ROUTE_PLACEHOLDERS } from "./src/ssr/routePlaceholders"
+import {
+  MISSION_HUB_ROUTE_PLACEHOLDERS,
+  missionHubPathsFromApi,
+} from "./src/prerender/missionHubPaths.node"
 
 // The prerender reads the content build's JSON from disk (the server build
 // itself has no node:fs: it also runs on Cloudflare, docs/ssr-worker.md).
@@ -28,12 +32,15 @@ export default {
   appDirectory: "src",
   buildDirectory: "build",
   ssr: false,
-  prerender: () => [
+  prerender: async () => [
     HOME_PATH,
     ...GAME_DATA_HUB_PATHS,
+    // Every mission hub of the LIVE version (the game data API, at build time).
+    ...(await missionHubPathsFromApi(process.env.VITE_BACKEND_URL)),
     ...contentPathsFromDisk(path.resolve(import.meta.dirname, "content")),
     // Not pages: lets the server-rendered routes export a loader
     // (src/ssr/routePlaceholders.ts); finalize.ts deletes their files.
     ...SSR_ROUTE_PLACEHOLDERS,
+    ...MISSION_HUB_ROUTE_PLACEHOLDERS,
   ],
 } satisfies Config

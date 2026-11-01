@@ -60,6 +60,10 @@
     "/mining/locations",
     "/blueprints",
     "/missions",
+    "/missions/givers",
+    "/missions/factions",
+    "/missions/types",
+    "/missions/systems",
     "/resources",
     "/guides",
     "/about"

@@ -2563,6 +2563,78 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/help",
   },
   {
+    "chain": "(layout:AppLayout) > /missions/givers",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/missions/givers",
+  },
+  {
+    "chain": "(layout:AppLayout) > /missions/factions",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/missions/factions",
+  },
+  {
+    "chain": "(layout:AppLayout) > /missions/types",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/missions/types",
+  },
+  {
+    "chain": "(layout:AppLayout) > /missions/systems",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/missions/systems",
+  },
+  {
+    "chain": "(layout:AppLayout) > /missions/givers/:slug",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/missions/givers/:slug",
+  },
+  {
+    "chain": "(layout:AppLayout) > /missions/factions/:slug",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/missions/factions/:slug",
+  },
+  {
+    "chain": "(layout:AppLayout) > /missions/types/:slug",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/missions/types/:slug",
+  },
+  {
+    "chain": "(layout:AppLayout) > /missions/systems/:slug",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/missions/systems/:slug",
+  },
+  {
     "chain": "(layout:AppLayout) > /*",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

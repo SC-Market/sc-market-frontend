@@ -25,6 +25,8 @@ export const PRERENDERABLE_ENDPOINTS: ReadonlySet<string> = new Set([
   "getGameEvents",
   "getLocations",
   "getManufacturers",
+  "getMissionHub",
+  "getMissionHubs",
   "getRefiningMethods",
   "getResourceCategories",
   "getShips",

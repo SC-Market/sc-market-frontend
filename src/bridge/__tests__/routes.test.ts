@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest"
 import { matchRoutes } from "react-router-dom"
 import { BRIDGE_ROUTES, matchBridgeRoute, PRERENDERED_KINDS } from "../routes"
 import { BRIDGE_PAGES } from "../pages"
-import { PAGINATED_PATHS } from "../../seo/queryIndexing"
+import { PAGINATED_PATHS, PAGINATED_PATTERNS } from "../../seo/queryIndexing"
 import { GAME_DATA_HUB_PATHS, HOME_PATH } from "../../prerender/paths"
 import { STATIC_SIBLING_PATHS } from "../../router/staticSiblingPaths"
 import routesJson from "../../../public/_routes.json"
@@ -45,6 +45,15 @@ const PATHS = [
   "/blueprints/82cec6d6-7716-4318-bd49-39002e5dfa96",
   "/blueprints/inventory",
   "/missions/PU_Station_WasteDisposal_Lawful",
+  "/missions/givers",
+  "/missions/factions",
+  "/missions/types",
+  "/missions/systems",
+  "/missions/givers/headhunters",
+  "/missions/factions/covalex",
+  "/missions/types/bounty-hunter",
+  "/missions/systems/pyro",
+  "/missions/givers/a/b",
   "/resources/5db940a8--gold",
   "/market/71012eb4--une-unification-war-medal-pristine",
   "/market/cart",
@@ -263,7 +272,10 @@ describe("pagination: SPA and bridge agree", () => {
       .filter(([, page]) => page.paginated)
       .map(([kind]) => kind)
       .sort()
-    const kindsOfPaths = PAGINATED_PATHS.map((p) => matchBridgeRoute(p)!.route.kind).sort()
+    // The patterns' kinds, through one sample path each.
+    const patternSamples = ["/missions/givers/x", "/missions/factions/x", "/missions/types/x", "/missions/systems/x"]
+    for (const path of patternSamples) expect(PAGINATED_PATTERNS.some((p) => p.test(path)), path).toBe(true)
+    const kindsOfPaths = [...PAGINATED_PATHS, ...patternSamples].map((p) => matchBridgeRoute(p)!.route.kind).sort()
     expect(kindsOfPaths).toEqual(paginatedKinds)
   })
 })

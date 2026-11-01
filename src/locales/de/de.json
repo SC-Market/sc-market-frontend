@@ -4508,6 +4508,88 @@
       "title": "Über die Missionsdatenbank"
     }
   },
+  "missionHubs": {
+    "missions": "Missionen",
+    "missionCount_one": "{{n}} Mission",
+    "missionCount_other": "{{n}} Missionen",
+    "kinds": {
+      "givers": "Auftraggeber",
+      "factions": "Fraktionen",
+      "types": "Missionstypen",
+      "systems": "Sternensysteme"
+    },
+    "index": {
+      "givers": {
+        "title": "Star Citizen Auftraggeber ({{count}}) | SC Market",
+        "heading": "Star Citizen Auftraggeber",
+        "description": "Alle Star Citizen Auftraggeber aus den aktuellen Spieldateien und wie viele Missionen jeder anbietet: {{top}} und mehr."
+      },
+      "factions": {
+        "title": "Star Citizen Fraktionen und Rufmissionen ({{count}}) | SC Market",
+        "heading": "Star Citizen Fraktionen",
+        "description": "Alle Star Citizen Fraktionen, bei denen du durch Missionen Ruf verdienst, und wie viele Missionen ihn steigern: {{top}} und mehr."
+      },
+      "types": {
+        "title": "Star Citizen Missionstypen ({{count}}) | SC Market",
+        "heading": "Star Citizen Missionstypen",
+        "description": "Alle Star Citizen Missionstypen, von Kopfgeldjagd und Söldnerarbeit bis zu Fracht, Bergung und Bergbau, mit der Anzahl der Missionen je Typ: {{top}} und mehr."
+      },
+      "systems": {
+        "title": "Star Citizen Missionen nach Sternensystem | SC Market",
+        "heading": "Star Citizen Missionen nach Sternensystem",
+        "description": "Star Citizen Missionen in jedem Sternensystem: {{top}}."
+      }
+    },
+    "hub": {
+      "givers": {
+        "title": "{{name}} Missionen in Star Citizen ({{count}}) | SC Market",
+        "heading": "{{name}} Missionen",
+        "lead": "{{name}} bietet {{missions}} in Star Citizen an."
+      },
+      "factions": {
+        "title": "{{name}} Rufmissionen in Star Citizen ({{count}}) | SC Market",
+        "heading": "{{name}} Rufmissionen",
+        "lead": "{{missions}} in Star Citizen steigern deinen Ruf bei {{name}}."
+      },
+      "types": {
+        "title": "{{name}} Missionen in Star Citizen ({{count}}) | SC Market",
+        "heading": "{{name}} Missionen",
+        "lead": "Star Citizen hat {{missions}} vom Typ {{name}}."
+      },
+      "systems": {
+        "title": "{{name}} Missionen in Star Citizen ({{count}}) | SC Market",
+        "heading": "Missionen in {{name}}",
+        "lead": "Star Citizen hat {{missions}} im System {{name}}."
+      }
+    },
+    "where": "Sie werden in {{systems}} angeboten.",
+    "rewardRange": "Sie zahlen {{min}} bis {{max}} aUEC.",
+    "rewardUpTo": "Sie zahlen bis zu {{max}} aUEC.",
+    "allLegal": "Alle sind legal.",
+    "allIllegal": "Alle sind illegal.",
+    "legalMix": "Legal: {{legal}}, illegal: {{illegal}}.",
+    "blueprints": "Missionen, die eine Crafting-Blaupause belohnen können: {{count}}.",
+    "topRelated": "{{kind}}: {{list}}.",
+    "browseBy": "Missionen durchsuchen nach",
+    "related": "Verwandte Missionsübersichten",
+    "missionList": "Missionen",
+    "pageOf": "Seite {{page}} von {{pages}}",
+    "previous": "Vorherige Seite",
+    "next": "Nächste Seite",
+    "notFound": "Diese Missionsübersicht gibt es nicht. Übersichten ändern sich mit Spielupdates: alle findest du unten.",
+    "loadError": "Diese Missionsübersicht konnte nicht geladen werden. Bitte versuche es erneut.",
+    "columns": {
+      "mission": "Mission",
+      "system": "System",
+      "type": "Typ",
+      "giver": "Auftraggeber",
+      "legality": "Legalität",
+      "reward": "Belohnung"
+    },
+    "legal": "Legal",
+    "illegal": "Illegal",
+    "detailTitle": "Ähnliche Missionen durchsuchen"
+  },
   "myListings": {
     "active": "Aktiv",
     "archiveBody": "Archivtext",

@@ -35,6 +35,7 @@ import { MissionRankCalculator } from "./MissionRankCalculator"
 import { MissionTypeDetails } from "./MissionTypeDetails"
 import { GAME_DATA_PATHS, WIKI_PATHS } from "../../routes/paths"
 import { missionGiver, usableGiver } from "../../seo/missionText"
+import { missionHubText } from "../../seo/missionHubs"
 
 // ============================================================================
 // Helpers
@@ -116,6 +117,48 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
       {m.associated_event && <Chip label={m.associated_event} size="small" {...go({ show_events: "true", event: m.associated_event! })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
       {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" />}
     </Stack>
+  )
+}
+
+// ============================================================================
+// Mission hubs — the mission's giver, faction, type and star system pages
+// ============================================================================
+
+const HUB_LINKS = [
+  ["giver", "givers"],
+  ["faction", "factions"],
+  ["type", "types"],
+  ["system", "systems"],
+] as const
+
+/** Links to the hubs the mission is in (the API's `hubs`; LIVE missions only). */
+export function MissionHubLinks({ data }: { data: MissionDetailResponse }) {
+  const { t } = useTranslation()
+  const hubs = data.hubs
+  const links = HUB_LINKS.flatMap(([field, kind]) => {
+    const hub = hubs?.[field]
+    return hub ? [{ kind, hub }] : []
+  })
+  if (links.length === 0) return null
+  return (
+    <Box component="nav" aria-labelledby="mission-hub-links">
+      <Typography id="mission-hub-links" variant="subtitle2" sx={{ mb: 1 }}>
+        {t("missionHubs.detailTitle", "Browse similar missions")}
+      </Typography>
+      <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+        {links.map(({ kind, hub }) => (
+          <Chip
+            key={kind}
+            label={`${missionHubText({ kind, name: hub.name, mission_count: hub.mission_count }, t).heading} (${hub.mission_count})`}
+            component={RouterLink}
+            to={GAME_DATA_PATHS.missionHub(kind, hub.slug)}
+            clickable
+            size="small"
+            variant="outlined"
+          />
+        ))}
+      </Stack>
+    </Box>
   )
 }
 
@@ -232,6 +275,8 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
           </Stack>
         )}
       </Stack>
+
+      <MissionHubLinks data={data} />
 
       {/* Blueprint rewards — table format */}
       {data.blueprint_rewards?.length > 0 && (

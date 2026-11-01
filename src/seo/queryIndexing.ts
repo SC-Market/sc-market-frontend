@@ -45,6 +45,10 @@ export function pagedPath(path: string, pageNumber: number): string {
  */
 export const PAGINATED_PATHS: readonly string[] = ["/market", "/shops", "/wiki/items", "/wiki/ships", "/wiki/commodities"]
 
+/** Paginated hubs with a path parameter: the mission hubs (/missions/givers/<slug>, …). */
+export const PAGINATED_PATTERNS: readonly RegExp[] = [/^\/missions\/(?:givers|factions|types|systems)\/[^/]+$/]
+
 export function isPaginatedPath(pathname: string): boolean {
-  return PAGINATED_PATHS.includes(pathname.replace(/\/+$/, "") || "/")
+  const path = pathname.replace(/\/+$/, "") || "/"
+  return PAGINATED_PATHS.includes(path) || PAGINATED_PATTERNS.some((pattern) => pattern.test(path))
 }

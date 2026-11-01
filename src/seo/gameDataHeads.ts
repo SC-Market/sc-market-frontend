@@ -443,9 +443,16 @@ export function buildMissionHead(
       },
       breadcrumbJsonLd([
         { name: "SC Market", url: `${origin}/` },
-        // No giver/faction step until those hubs exist (a filter URL is a
-        // noindex variant, not a breadcrumb target).
         { name: "Missions", url: `${origin}${GAME_DATA_PATHS.missions}` },
+        // The giver's hub, when it has one (data.hubs: missions of the LIVE version).
+        ...(data.hubs?.giver
+          ? [
+              {
+                name: `${data.hubs.giver.name} missions`,
+                url: `${origin}${GAME_DATA_PATHS.missionHub("givers", data.hubs.giver.slug)}`,
+              },
+            ]
+          : []),
         { name, url: canonical },
       ]),
     ],

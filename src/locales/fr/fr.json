@@ -4539,6 +4539,89 @@
       "title": "À propos de la base de données des missions"
     }
   },
+  "missionHubs": {
+    "missions": "Missions",
+    "missionCount_one": "{{n}} mission",
+    "missionCount_many": "{{n}} missions",
+    "missionCount_other": "{{n}} missions",
+    "kinds": {
+      "givers": "Donneurs de missions",
+      "factions": "Factions",
+      "types": "Types de mission",
+      "systems": "Systèmes stellaires"
+    },
+    "index": {
+      "givers": {
+        "title": "Donneurs de missions de Star Citizen ({{count}}) | SC Market",
+        "heading": "Donneurs de missions de Star Citizen",
+        "description": "Tous les donneurs de missions de Star Citizen des fichiers de jeu actuels, et le nombre de missions que chacun propose : {{top}} et d'autres."
+      },
+      "factions": {
+        "title": "Factions et missions de réputation de Star Citizen ({{count}}) | SC Market",
+        "heading": "Factions de Star Citizen",
+        "description": "Toutes les factions de Star Citizen auprès desquelles les missions font gagner de la réputation, et le nombre de missions qui l'augmentent : {{top}} et d'autres."
+      },
+      "types": {
+        "title": "Types de mission de Star Citizen ({{count}}) | SC Market",
+        "heading": "Types de mission de Star Citizen",
+        "description": "Tous les types de mission de Star Citizen, de la chasse aux primes et du mercenariat au transport, à la récupération et au minage, avec le nombre de missions de chaque type : {{top}} et d'autres."
+      },
+      "systems": {
+        "title": "Missions de Star Citizen par système stellaire | SC Market",
+        "heading": "Missions de Star Citizen par système stellaire",
+        "description": "Les missions de Star Citizen dans chaque système stellaire : {{top}}."
+      }
+    },
+    "hub": {
+      "givers": {
+        "title": "Missions {{name}} dans Star Citizen ({{count}}) | SC Market",
+        "heading": "Missions {{name}}",
+        "lead": "{{name}} propose {{missions}} dans Star Citizen."
+      },
+      "factions": {
+        "title": "Missions de réputation {{name}} dans Star Citizen ({{count}}) | SC Market",
+        "heading": "Missions de réputation {{name}}",
+        "lead": "{{missions}} dans Star Citizen augmentent ta réputation auprès de {{name}}."
+      },
+      "types": {
+        "title": "Missions {{name}} dans Star Citizen ({{count}}) | SC Market",
+        "heading": "Missions {{name}}",
+        "lead": "Star Citizen compte {{missions}} de type {{name}}."
+      },
+      "systems": {
+        "title": "Missions dans {{name}} dans Star Citizen ({{count}}) | SC Market",
+        "heading": "Missions dans {{name}}",
+        "lead": "Star Citizen compte {{missions}} dans le système {{name}}."
+      }
+    },
+    "where": "Elles sont proposées dans {{systems}}.",
+    "rewardRange": "Elles rapportent de {{min}} à {{max}} aUEC.",
+    "rewardUpTo": "Elles rapportent jusqu'à {{max}} aUEC.",
+    "allLegal": "Toutes sont légales.",
+    "allIllegal": "Toutes sont illégales.",
+    "legalMix": "Légales : {{legal}}, illégales : {{illegal}}.",
+    "blueprints": "Missions qui peuvent rapporter un plan de fabrication : {{count}}.",
+    "topRelated": "{{kind}} : {{list}}.",
+    "browseBy": "Parcourir les missions par",
+    "related": "Catégories de missions liées",
+    "missionList": "Missions",
+    "pageOf": "Page {{page}} sur {{pages}}",
+    "previous": "Page précédente",
+    "next": "Page suivante",
+    "notFound": "Cette catégorie de missions n'existe pas. Les catégories changent avec les mises à jour du jeu : retrouve-les toutes ci-dessous.",
+    "loadError": "Impossible de charger cette catégorie de missions. Réessaie.",
+    "columns": {
+      "mission": "Mission",
+      "system": "Système",
+      "type": "Type",
+      "giver": "Donneur",
+      "legality": "Légalité",
+      "reward": "Récompense"
+    },
+    "legal": "Légale",
+    "illegal": "Illégale",
+    "detailTitle": "Parcourir des missions similaires"
+  },
   "myListings": {
     "active": "Actif",
     "archiveBody": "Corps de l'archivage",

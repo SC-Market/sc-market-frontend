@@ -16,6 +16,11 @@
  *   until then with --missions-optional);
  * - a game item page's raw HTML has its "how to get" title and section
  *   (missions and blueprints linked, the CC BY 4.0 line, no Offer);
+ * - mission hubs (3 of each kind: givers, factions, types, systems) and
+ *   their index pages: real HTML as Googlebot gets it, title with the
+ *   count, the generated intro, mission links, CollectionPage + ItemList +
+ *   BreadcrumbList JSON-LD with dateModified; /missions links the indexes,
+ *   ?page=2 of a big hub is self-canonical, and the sitemap lists the hubs;
  * - an unknown listing is a 404, a trailing slash a 301, /error noindex.
  * Exits 1 when any check fails.
  */
@@ -24,7 +29,7 @@ const API = (process.argv[3] && !process.argv[3].startsWith("--") ? process.argv
 const MISSIONS_OPTIONAL = process.argv.includes("--missions-optional")
 
 /** Sections the backend always builds (content and recruiting may be empty). */
-const EXPECTED_SECTIONS = ["static", "market", "contractors", "shops", "wiki", "users"]
+const EXPECTED_SECTIONS = ["static", "market", "contractors", "shops", "wiki", "missions-hubs", "users"]
 
 const results = []
 function check(name, ok, detail = "", optional = false) {
@@ -44,7 +49,7 @@ async function sitemapChecks() {
   for (const [label, base] of [["API", API], ["main host", SITE]]) {
     const res = await get(`${base}/sitemap.xml`)
     check(`${label} /sitemap.xml returns 200`, res.status === 200, `status ${res.status}`)
-    const sections = [...res.body.matchAll(/sitemap-([a-z]+)-\d+\.xml/g)].map((m) => m[1])
+    const sections = [...res.body.matchAll(/sitemap-([a-z]+(?:-[a-z]+)*)-\d+\.xml/g)].map((m) => m[1])
     const missing = EXPECTED_SECTIONS.filter((s) => !sections.includes(s))
     check(`${label} sitemap index has every section`, missing.length === 0, missing.length ? `missing: ${missing.join(", ")}` : [...new Set(sections)].join(", "))
     if (base === SITE) {
@@ -130,7 +135,64 @@ async function itemChecks() {
   check("item JSON-LD has no Offer", !/"@type":"(Aggregate)?Offer"/.test(res.body))
 }
 
-for (const step of [sitemapChecks, robotsChecks, listingChecks, itemChecks, notFoundChecks, missionChecks]) {
+const GOOGLEBOT = { headers: { "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" } }
+const HUB_KINDS = ["givers", "factions", "types", "systems"]
+const jsonLdTypes = (html) =>
+  [...html.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)].flatMap((m) => {
+    try {
+      const node = JSON.parse(m[1])
+      return [node["@type"], node.mainEntity?.["@type"]].filter(Boolean)
+    } catch {
+      return []
+    }
+  })
+
+async function missionHubChecks() {
+  const hubs = await (await fetch(`${API}/api/v2/game-data/missions/hubs`)).json()
+  for (const kind of HUB_KINDS) {
+    const list = hubs[kind] ?? []
+    check(`API has ${kind} hubs`, list.length > 0, `${list.length} hubs`)
+    const index = await get(`${SITE}/missions/${kind}`, GOOGLEBOT)
+    check(`/missions/${kind} returns 200`, index.status === 200, `status ${index.status}`)
+    const indexTitle = index.body.match(/<title>([^<]*)<\/title>/)?.[1] ?? ""
+    check(`/missions/${kind} <title>`, / \| SC Market$/.test(indexTitle) && /Star Citizen/.test(indexTitle), indexTitle)
+    const indexLinks = list.filter((h) => index.body.includes(`href="/missions/${kind}/${h.slug}"`)).length
+    check(`/missions/${kind} links every hub`, indexLinks === list.length, `${indexLinks}/${list.length}`)
+    for (const hub of list.slice(0, 3)) {
+      const path = `/missions/${kind}/${hub.slug}`
+      const res = await get(`${SITE}${path}`, GOOGLEBOT)
+      check(`${path} returns 200`, res.status === 200, `status ${res.status}`)
+      const html = res.body.replace(/&amp;/g, "&").replace(/&#x27;|&#39;/g, "'")
+      const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? ""
+      check(`${path} <title> has the count`, title.includes(`Missions in Star Citizen (${hub.mission_count}) | SC Market`), title)
+      check(`${path} canonical`, html.includes(`<link rel="canonical" href="${SITE}${path}">`))
+      check(`${path} HTML has the intro`, html.includes(`${hub.mission_count.toLocaleString("en-US")} missions`))
+      const missionLinks = new Set([...res.body.matchAll(/href="(\/missions\/[^"/?]+)"/g)].map((m) => m[1]).filter((h) => !HUB_KINDS.includes(h.split("/")[2])))
+      check(`${path} links its missions`, missionLinks.size >= Math.min(20, hub.mission_count), `${missionLinks.size} mission links`)
+      const types = jsonLdTypes(res.body)
+      check(`${path} JSON-LD CollectionPage + ItemList + BreadcrumbList`, ["CollectionPage", "ItemList", "BreadcrumbList"].every((t) => types.includes(t)), types.join(", "))
+      check(`${path} has dateModified and a freshness stamp`, /"dateModified":"\d{4}-/.test(res.body) && /Data from Star Citizen [^<]+ LIVE/.test(res.body))
+    }
+  }
+  const missions = await get(`${SITE}/missions`, GOOGLEBOT)
+  check("/missions links the hub indexes", HUB_KINDS.every((k) => missions.body.includes(`href="/missions/${k}"`)))
+  const big = [...(hubs.types ?? [])].sort((a, b) => b.mission_count - a.mission_count)[0]
+  if (big && big.mission_count > 100) {
+    const path = `/missions/types/${big.slug}?page=2`
+    const res = await get(`${SITE}${path}`, GOOGLEBOT)
+    check(`${path} is self-canonical`, res.status === 200 && res.body.includes(`<link rel="canonical" href="${SITE}${path}">`) && !res.body.includes('content="noindex"'), `status ${res.status}`)
+  }
+  const index = await get(`${SITE}/sitemap.xml`)
+  const loc = index.body.match(/<loc>([^<]*sitemap-missions-hubs-0\.xml)<\/loc>/)?.[1]
+  check("sitemap index lists the mission hubs section", !!loc, loc ?? "missing")
+  if (loc) {
+    const section = await get(loc)
+    const first = hubs.givers?.[0]
+    check("mission hubs sitemap lists the hubs", section.status === 200 && section.body.includes(`/missions/givers</loc>`) && (!first || section.body.includes(`/missions/givers/${first.slug}</loc>`)), `status ${section.status}`)
+  }
+}
+
+for (const step of [sitemapChecks, robotsChecks, listingChecks, itemChecks, notFoundChecks, missionChecks, missionHubChecks]) {
   try {
     await step()
   } catch (error) {

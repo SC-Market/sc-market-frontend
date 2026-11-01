@@ -4539,6 +4539,89 @@
       "title": "Acerca de la base de datos de misiones"
     }
   },
+  "missionHubs": {
+    "missions": "Misiones",
+    "missionCount_one": "{{n}} misión",
+    "missionCount_many": "{{n}} misiones",
+    "missionCount_other": "{{n}} misiones",
+    "kinds": {
+      "givers": "Contratistas",
+      "factions": "Facciones",
+      "types": "Tipos de misión",
+      "systems": "Sistemas estelares"
+    },
+    "index": {
+      "givers": {
+        "title": "Contratistas de misiones de Star Citizen ({{count}}) | SC Market",
+        "heading": "Contratistas de misiones de Star Citizen",
+        "description": "Todos los contratistas de misiones de Star Citizen en los archivos actuales del juego y cuántas misiones ofrece cada uno: {{top}} y más."
+      },
+      "factions": {
+        "title": "Facciones y misiones de reputación de Star Citizen ({{count}}) | SC Market",
+        "heading": "Facciones de Star Citizen",
+        "description": "Todas las facciones de Star Citizen con las que ganas reputación mediante misiones, y cuántas misiones la aumentan: {{top}} y más."
+      },
+      "types": {
+        "title": "Tipos de misión de Star Citizen ({{count}}) | SC Market",
+        "heading": "Tipos de misión de Star Citizen",
+        "description": "Todos los tipos de misión de Star Citizen, desde caza de recompensas y trabajos de mercenario hasta transporte, rescate y minería, con cuántas misiones hay de cada uno: {{top}} y más."
+      },
+      "systems": {
+        "title": "Misiones de Star Citizen por sistema estelar | SC Market",
+        "heading": "Misiones de Star Citizen por sistema estelar",
+        "description": "Misiones de Star Citizen en cada sistema estelar: {{top}}."
+      }
+    },
+    "hub": {
+      "givers": {
+        "title": "Misiones de {{name}} en Star Citizen ({{count}}) | SC Market",
+        "heading": "Misiones de {{name}}",
+        "lead": "{{name}} ofrece {{missions}} en Star Citizen."
+      },
+      "factions": {
+        "title": "Misiones de reputación de {{name}} en Star Citizen ({{count}}) | SC Market",
+        "heading": "Misiones de reputación de {{name}}",
+        "lead": "{{missions}} en Star Citizen aumentan tu reputación con {{name}}."
+      },
+      "types": {
+        "title": "Misiones de {{name}} en Star Citizen ({{count}}) | SC Market",
+        "heading": "Misiones de {{name}}",
+        "lead": "Star Citizen tiene {{missions}} del tipo {{name}}."
+      },
+      "systems": {
+        "title": "Misiones en {{name}} en Star Citizen ({{count}}) | SC Market",
+        "heading": "Misiones en {{name}}",
+        "lead": "Star Citizen tiene {{missions}} en el sistema {{name}}."
+      }
+    },
+    "where": "Se ofrecen en {{systems}}.",
+    "rewardRange": "Pagan de {{min}} a {{max}} aUEC.",
+    "rewardUpTo": "Pagan hasta {{max}} aUEC.",
+    "allLegal": "Todas son legales.",
+    "allIllegal": "Todas son ilegales.",
+    "legalMix": "Legales: {{legal}}, ilegales: {{illegal}}.",
+    "blueprints": "Misiones que pueden recompensar un plano de fabricación: {{count}}.",
+    "topRelated": "{{kind}}: {{list}}.",
+    "browseBy": "Explorar misiones por",
+    "related": "Categorías de misiones relacionadas",
+    "missionList": "Misiones",
+    "pageOf": "Página {{page}} de {{pages}}",
+    "previous": "Página anterior",
+    "next": "Página siguiente",
+    "notFound": "Esta categoría de misiones no existe. Las categorías cambian con las actualizaciones del juego: puedes verlas todas abajo.",
+    "loadError": "No se pudo cargar esta categoría de misiones. Inténtalo de nuevo.",
+    "columns": {
+      "mission": "Misión",
+      "system": "Sistema",
+      "type": "Tipo",
+      "giver": "Contratista",
+      "legality": "Legalidad",
+      "reward": "Recompensa"
+    },
+    "legal": "Legal",
+    "illegal": "Ilegal",
+    "detailTitle": "Explorar misiones similares"
+  },
   "myListings": {
     "active": "Activo",
     "archiveBody": "Cuerpo del archivo",

@@ -16,6 +16,7 @@ import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons
 import { FRONTEND_URL } from "../../util/constants"
 import { GAME_DATA_PATHS } from "../../routes/paths"
 import { buildMissionHead } from "../../seo/gameDataHeads"
+import { missionHubText } from "../../seo/missionHubs"
 import { headDescription } from "../../seo/pageHead"
 import { SeoHead } from "../../seo/SeoHead"
 
@@ -44,6 +45,15 @@ export function MissionDetail() {
       headerTitle={m ? missionTitle(m) : t("missions.detail.header", "Mission Detail")}
       breadcrumbs={[
         { label: "Missions", href: GAME_DATA_PATHS.missions },
+        // The giver's hub (as in the page's BreadcrumbList JSON-LD).
+        ...(data?.hubs?.giver
+          ? [
+              {
+                label: missionHubText({ kind: "givers", name: data.hubs.giver.name, mission_count: data.hubs.giver.mission_count }, t).heading,
+                href: GAME_DATA_PATHS.missionHub("givers", data.hubs.giver.slug),
+              },
+            ]
+          : []),
         { label: m ? readableMissionText(m.mission_name, missionGiver(m)) : "Detail" },
       ]}
       isLoading={isLoading}

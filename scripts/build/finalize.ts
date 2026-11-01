@@ -34,6 +34,7 @@ import {
 } from "../vite/inlineEntryCssPlugin"
 import { finalizePrerenderedPages } from "./prerendered"
 import { SSR_ROUTE_PLACEHOLDERS } from "../../src/ssr/routePlaceholders"
+import { MISSION_HUB_ROUTE_PLACEHOLDERS } from "../../src/prerender/paths"
 
 const ROOT = path.resolve(import.meta.dirname, "../..")
 const CLIENT_DIR = path.join(ROOT, "build/client")
@@ -64,11 +65,14 @@ rmSync(outDir, { recursive: true, force: true })
 cpSync(CLIENT_DIR, outDir, {
   recursive: true,
 })
-// Not pages (src/ssr/routePlaceholders.ts): React Router "prerendered" them
+// Not pages (src/ssr/routePlaceholders.ts, the mission hub routes'
+// placeholders in src/prerender/paths.ts): React Router "prerendered" them
 // only so those routes may have a server loader.
-for (const placeholder of SSR_ROUTE_PLACEHOLDERS) {
+const PLACEHOLDERS = [...SSR_ROUTE_PLACEHOLDERS, ...MISSION_HUB_ROUTE_PLACEHOLDERS]
+for (const placeholder of PLACEHOLDERS) {
   rmSync(path.join(outDir, placeholder), { recursive: true, force: true })
   rmSync(path.join(outDir, `${placeholder}.data`), { force: true })
+  rmSync(path.join(outDir, `${placeholder}.html`), { force: true })
 }
 for (const placeholder of SSR_ROUTE_PLACEHOLDERS) {
   // The first segment's directory, if nothing else is in it.

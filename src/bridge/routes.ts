@@ -18,6 +18,15 @@ export type BridgePageKind =
   | "miningLocation"
   | "blueprint"
   | "mission"
+  // Mission hubs: an index per hub kind and one page per hub (seo/missionHubs.ts)
+  | "missionGivers"
+  | "missionFactions"
+  | "missionTypes"
+  | "missionSystems"
+  | "missionGiver"
+  | "missionFaction"
+  | "missionType"
+  | "missionSystem"
   | "resource"
   | "listing"
   | "shop"
@@ -67,6 +76,14 @@ export const PRERENDERED_KINDS: ReadonlySet<BridgePageKind> = new Set([
   "miningLocations",
   "blueprints",
   "missions",
+  "missionGivers",
+  "missionFactions",
+  "missionTypes",
+  "missionSystems",
+  "missionGiver",
+  "missionFaction",
+  "missionType",
+  "missionSystem",
   "resources",
   "guidesHub",
   "guideCategory",
@@ -86,6 +103,15 @@ export const BRIDGE_ROUTES: readonly BridgeRoute[] = [
   { path: "/mining/ores/:name", kind: "ore" },
   { path: "/mining/locations/:name", kind: "miningLocation" },
   { path: "/blueprints/:slug", kind: "blueprint" },
+  // Static before /missions/:slug (react-router ranks them above it).
+  { path: "/missions/givers", kind: "missionGivers" },
+  { path: "/missions/factions", kind: "missionFactions" },
+  { path: "/missions/types", kind: "missionTypes" },
+  { path: "/missions/systems", kind: "missionSystems" },
+  { path: "/missions/givers/:slug", kind: "missionGiver" },
+  { path: "/missions/factions/:slug", kind: "missionFaction" },
+  { path: "/missions/types/:slug", kind: "missionType" },
+  { path: "/missions/systems/:slug", kind: "missionSystem" },
   { path: "/missions/:slug", kind: "mission" },
   { path: "/resources/:resource_id", kind: "resource" },
   { path: "/market/:id", kind: "listing" },

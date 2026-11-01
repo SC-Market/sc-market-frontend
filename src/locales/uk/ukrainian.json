@@ -4622,6 +4622,90 @@
       "title": "Про базу даних місій"
     }
   },
+  "missionHubs": {
+    "missions": "Місії",
+    "missionCount_one": "{{n}} місія",
+    "missionCount_few": "{{n}} місії",
+    "missionCount_many": "{{n}} місій",
+    "missionCount_other": "{{n}} місії",
+    "kinds": {
+      "givers": "Замовники місій",
+      "factions": "Фракції",
+      "types": "Типи місій",
+      "systems": "Зоряні системи"
+    },
+    "index": {
+      "givers": {
+        "title": "Замовники місій у Star Citizen ({{count}}) | SC Market",
+        "heading": "Замовники місій у Star Citizen",
+        "description": "Усі замовники місій у Star Citizen з поточних файлів гри і скільки місій пропонує кожен: {{top}} та інші."
+      },
+      "factions": {
+        "title": "Фракції та місії на репутацію у Star Citizen ({{count}}) | SC Market",
+        "heading": "Фракції Star Citizen",
+        "description": "Усі фракції Star Citizen, репутацію з якими дають місії, і скільки місій її підвищують: {{top}} та інші."
+      },
+      "types": {
+        "title": "Типи місій у Star Citizen ({{count}}) | SC Market",
+        "heading": "Типи місій у Star Citizen",
+        "description": "Усі типи місій у Star Citizen, від полювання за головами й найманства до перевезень, утилізації та видобутку, з кількістю місій кожного типу: {{top}} та інші."
+      },
+      "systems": {
+        "title": "Місії Star Citizen за зоряними системами | SC Market",
+        "heading": "Місії Star Citizen за зоряними системами",
+        "description": "Місії Star Citizen у кожній зоряній системі: {{top}}."
+      }
+    },
+    "hub": {
+      "givers": {
+        "title": "Місії {{name}} у Star Citizen ({{count}}) | SC Market",
+        "heading": "Місії {{name}}",
+        "lead": "{{name}} пропонує {{missions}} у Star Citizen."
+      },
+      "factions": {
+        "title": "Місії на репутацію {{name}} у Star Citizen ({{count}}) | SC Market",
+        "heading": "Місії на репутацію {{name}}",
+        "lead": "Місії у Star Citizen, що підвищують вашу репутацію з {{name}}: {{missions}}."
+      },
+      "types": {
+        "title": "Місії типу {{name}} у Star Citizen ({{count}}) | SC Market",
+        "heading": "Місії типу {{name}}",
+        "lead": "У Star Citizen є {{missions}} типу {{name}}."
+      },
+      "systems": {
+        "title": "Місії в системі {{name}} у Star Citizen ({{count}}) | SC Market",
+        "heading": "Місії в системі {{name}}",
+        "lead": "У Star Citizen є {{missions}} в системі {{name}}."
+      }
+    },
+    "where": "Їх пропонують у: {{systems}}.",
+    "rewardRange": "Вони платять від {{min}} до {{max}} aUEC.",
+    "rewardUpTo": "Вони платять до {{max}} aUEC.",
+    "allLegal": "Усі вони легальні.",
+    "allIllegal": "Усі вони нелегальні.",
+    "legalMix": "Легальні: {{legal}}, нелегальні: {{illegal}}.",
+    "blueprints": "Місії, що можуть дати креслення для крафту: {{count}}.",
+    "topRelated": "{{kind}}: {{list}}.",
+    "browseBy": "Переглянути місії за",
+    "related": "Пов'язані добірки місій",
+    "missionList": "Місії",
+    "pageOf": "Сторінка {{page}} з {{pages}}",
+    "previous": "Попередня сторінка",
+    "next": "Наступна сторінка",
+    "notFound": "Такої добірки місій немає. Добірки змінюються з оновленнями гри: усі вони нижче.",
+    "loadError": "Не вдалося завантажити цю добірку місій. Спробуйте ще раз.",
+    "columns": {
+      "mission": "Місія",
+      "system": "Система",
+      "type": "Тип",
+      "giver": "Замовник",
+      "legality": "Легальність",
+      "reward": "Нагорода"
+    },
+    "legal": "Легальна",
+    "illegal": "Нелегальна",
+    "detailTitle": "Схожі місії"
+  },
   "myListings": {
     "active": "Активне",
     "archiveBody": "Тіло архіву",

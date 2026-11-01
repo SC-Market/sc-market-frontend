@@ -158,6 +158,11 @@ export const WIKI_PATHS = {
 export const GAME_DATA_PATHS = {
   missions: "/missions",
   mission: (slug: string) => `/missions/${slug}`,
+  /** Mission hub index: /missions/givers, /missions/factions, /missions/types, /missions/systems. */
+  missionHubs: (kind: "givers" | "factions" | "types" | "systems") => `/missions/${kind}`,
+  /** One mission hub (slugs from GET /game-data/missions/hubs). */
+  missionHub: (kind: "givers" | "factions" | "types" | "systems", slug: string) =>
+    `/missions/${kind}/${encodeURIComponent(slug)}`,
   blueprints: "/blueprints",
   blueprint: (slug: string) => `/blueprints/${slug}`,
   blueprintInventory: "/blueprints/inventory",

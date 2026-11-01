@@ -72,12 +72,19 @@ export function finalizePrerenderedPages(outDir: string): string[] {
       )
     }
   }
-  // One splat rule for the data files and one for the changelog entries
-  // (a new page every week): Pages allows 100 header rules.
+  // One splat rule for the data files, one for the changelog entries (a new
+  // page every week) and one per mission hub kind: Pages allows 100 header
+  // rules.
   const changelogEntry = (p: string) => p.startsWith(`${CHANGELOG_PATHS.index}/`)
+  // The mission hubs (~100 pages): one splat rule per hub kind.
+  const missionHubPrefix = (p: string) => /^(\/missions\/(?:givers|factions|types|systems))\/[^/]+$/.exec(p)?.[1]
+  const missionHubPrefixes = [...new Set(paths.map(missionHubPrefix).filter((p): p is string => !!p))]
   const rules = [
-    ...paths.filter((p) => !changelogEntry(p)).map((p) => `${p}\n  Cache-Control: no-cache\n`),
+    ...paths
+      .filter((p) => !changelogEntry(p) && !missionHubPrefix(p))
+      .map((p) => `${p}\n  Cache-Control: no-cache\n`),
     ...(paths.some(changelogEntry) ? [`${CHANGELOG_PATHS.index}/*\n  Cache-Control: no-cache\n`] : []),
+    ...missionHubPrefixes.map((prefix) => `${prefix}/*\n  Cache-Control: no-cache\n`),
     `/*.data\n  Cache-Control: no-cache\n  Content-Type: text/x-script\n`,
   ].join("\n")
   writeFileSync(

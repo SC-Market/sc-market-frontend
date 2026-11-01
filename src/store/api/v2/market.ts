@@ -1349,6 +1349,25 @@ const injectedRtkApi = api
           providesTags: ["Game Data - Missions"],
         },
       ),
+      getMissionHubs: build.query<
+        GetMissionHubsApiResponse,
+        GetMissionHubsApiArg
+      >({
+        query: () => ({ url: `/game-data/missions/hubs` }),
+        providesTags: ["Game Data - Missions"],
+      }),
+      getMissionHub: build.query<GetMissionHubApiResponse, GetMissionHubApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/game-data/missions/hubs/${queryArg.kind}/${queryArg.slug}`,
+            params: {
+              page: queryArg.page,
+              page_size: queryArg.pageSize,
+            },
+          }),
+          providesTags: ["Game Data - Missions"],
+        },
+      ),
       getMissionDetail: build.query<
         GetMissionDetailApiResponse,
         GetMissionDetailApiArg
@@ -3162,6 +3181,20 @@ export type GetGameEventsApiResponse = /** status 200 Ok */ {
   events: GameEvent[]
 }
 export type GetGameEventsApiArg = void
+export type GetMissionHubsApiResponse = /** status 200 Ok */ MissionHubsResponse
+export type GetMissionHubsApiArg = void
+export type GetMissionHubApiResponse =
+  /** status 200 Ok */ MissionHubDetailResponse
+export type GetMissionHubApiArg = {
+  /** givers, factions, types or systems */
+  kind: MissionHubKind
+  /** The hub's slug (from GET /game-data/missions/hubs) */
+  slug: string
+  /** Page number (default: 1) */
+  page?: number
+  /** Missions per page (default: 100, max: 100) */
+  pageSize?: number
+}
 export type GetMissionDetailApiResponse =
   /** status 200 Complete mission details with reward pools */ MissionDetailResponse
 export type GetMissionDetailApiArg = {
@@ -6365,6 +6398,8 @@ export type MissionSearchResult = {
   reputation_reward?: number
   /** Reputation scope (e.g., headhunter, salvage) */
   reward_scope?: string
+  /** Faction whose reputation the mission pays */
+  reputation_reward_faction?: string
   /** Mission giver organization */
   mission_giver_org?: string
   /** Associated event name (e.g., "Nyx Mission Pack") */
@@ -6489,6 +6524,51 @@ export type GameEvent = {
   event_name: string
   mission_count: number
 }
+export type MissionHubSummary = {
+  /** URL slug ("headhunters", "bounty-hunter") */
+  slug: string
+  /** Display name ("Headhunters", "Bounty Hunter") */
+  name: string
+  /** Missions in the hub (in a related-hub list: missions shared with the hub being viewed) */
+  mission_count: number
+}
+export type MissionHubsResponse = {
+  version_id: string
+  /** Missions in the version */
+  total_missions: number
+  givers: MissionHubSummary[]
+  factions: MissionHubSummary[]
+  types: MissionHubSummary[]
+  systems: MissionHubSummary[]
+}
+export type MissionHubKind = "givers" | "factions" | "types" | "systems"
+export type MissionHubDetailResponse = {
+  kind: MissionHubKind
+  slug: string
+  name: string
+  version_id: string
+  /** Missions in the hub */
+  mission_count: number
+  /** Lowest positive aUEC reward among its missions */
+  reward_min?: number
+  /** Highest aUEC reward among its missions */
+  reward_max?: number
+  /** Legal missions (lawful, or not illegal) */
+  legal_count: number
+  /** Illegal missions */
+  illegal_count: number
+  /** Missions that can reward a blueprint */
+  blueprint_mission_count: number
+  /** Related hubs: the hub's missions by giver / faction / type / system (empty for the hub's own kind) */
+  givers: MissionHubSummary[]
+  factions: MissionHubSummary[]
+  types: MissionHubSummary[]
+  systems: MissionHubSummary[]
+  /** This page of the hub's missions, by name */
+  missions: MissionSearchResult[]
+  page: number
+  page_size: number
+}
 export type MissionBlueprintReward = {
   /** Blueprint UUID */
   blueprint_id: string
@@ -6556,6 +6636,12 @@ export type UserMissionRating = {
   /** Optional comment */
   rating_comment?: string
 }
+export type MissionHubLinks = {
+  giver?: MissionHubSummary
+  faction?: MissionHubSummary
+  type?: MissionHubSummary
+  system?: MissionHubSummary
+}
 export type MissionDetailResponse = {
   /** Complete mission data */
   mission: Mission
@@ -6575,6 +6661,10 @@ export type MissionDetailResponse = {
   user_completed?: boolean
   /** User's rating for this mission */
   user_rating?: UserMissionRating
+  /** The mission hubs this mission is in (its giver, faction, type and star
+    system pages). Only for missions of the active LIVE version; a value
+    with too few missions has no hub. */
+  hubs?: MissionHubLinks
 }
 export type BlueprintDetail = {
   /** Blueprint UUID */
@@ -8162,6 +8252,8 @@ export const {
   useGetMissionChainsQuery,
   useGetReputationRanksQuery,
   useGetGameEventsQuery,
+  useGetMissionHubsQuery,
+  useGetMissionHubQuery,
   useGetMissionDetailQuery,
   useGetMissionDetailByCodeQuery,
   useGetMissionBlueprintsQuery,

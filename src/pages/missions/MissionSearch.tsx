@@ -51,6 +51,7 @@ import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetail
 import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { GameDataFreshness } from "../../components/game-data/GameDataFreshness"
+import { MissionHubIndexLinks } from "./MissionHubIndexLinks"
 import { missionsCapabilityText } from "../../seo/missionText"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
@@ -447,6 +448,7 @@ export function MissionSearch() {
             {line}
           </Typography>
         ))}
+        <MissionHubIndexLinks />
         <GameDataFreshness />
       </Grid>
       <MissionDetailModal

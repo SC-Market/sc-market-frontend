@@ -2922,6 +2922,88 @@
       "header": "Mission Database"
     }
   },
+  "missionHubs": {
+    "missions": "Missions",
+    "missionCount_one": "{{n}} mission",
+    "missionCount_other": "{{n}} missions",
+    "kinds": {
+      "givers": "Mission givers",
+      "factions": "Factions",
+      "types": "Mission types",
+      "systems": "Star systems"
+    },
+    "index": {
+      "givers": {
+        "title": "Star Citizen Mission Givers ({{count}}) | SC Market",
+        "heading": "Star Citizen mission givers",
+        "description": "Every Star Citizen mission giver in the current game files and how many missions each one offers: {{top}} and more."
+      },
+      "factions": {
+        "title": "Star Citizen Factions and Reputation Missions ({{count}}) | SC Market",
+        "heading": "Star Citizen factions",
+        "description": "Every Star Citizen faction you earn reputation with through missions, and how many missions raise it: {{top}} and more."
+      },
+      "types": {
+        "title": "Star Citizen Mission Types ({{count}}) | SC Market",
+        "heading": "Star Citizen mission types",
+        "description": "Every Star Citizen mission type, from bounty hunting and mercenary work to hauling, salvage and mining, with how many missions of each: {{top}} and more."
+      },
+      "systems": {
+        "title": "Star Citizen Missions by Star System | SC Market",
+        "heading": "Star Citizen missions by star system",
+        "description": "Star Citizen missions in each star system: {{top}}."
+      }
+    },
+    "hub": {
+      "givers": {
+        "title": "{{name}} Missions in Star Citizen ({{count}}) | SC Market",
+        "heading": "{{name}} missions",
+        "lead": "{{name}} offers {{missions}} in Star Citizen."
+      },
+      "factions": {
+        "title": "{{name}} Reputation Missions in Star Citizen ({{count}}) | SC Market",
+        "heading": "{{name}} reputation missions",
+        "lead": "{{missions}} in Star Citizen raise your reputation with {{name}}."
+      },
+      "types": {
+        "title": "{{name}} Missions in Star Citizen ({{count}}) | SC Market",
+        "heading": "{{name}} missions",
+        "lead": "Star Citizen has {{missions}} of the {{name}} type."
+      },
+      "systems": {
+        "title": "{{name}} Missions in Star Citizen ({{count}}) | SC Market",
+        "heading": "Missions in {{name}}",
+        "lead": "Star Citizen has {{missions}} in the {{name}} system."
+      }
+    },
+    "where": "They are offered in {{systems}}.",
+    "rewardRange": "They pay {{min}} to {{max}} aUEC.",
+    "rewardUpTo": "They pay up to {{max}} aUEC.",
+    "allLegal": "All of them are legal.",
+    "allIllegal": "All of them are illegal.",
+    "legalMix": "Legal: {{legal}}, illegal: {{illegal}}.",
+    "blueprints": "Missions that can reward a crafting blueprint: {{count}}.",
+    "topRelated": "{{kind}}: {{list}}.",
+    "browseBy": "Browse missions by",
+    "related": "Related mission hubs",
+    "missionList": "Missions",
+    "pageOf": "Page {{page}} of {{pages}}",
+    "previous": "Previous page",
+    "next": "Next page",
+    "notFound": "This mission hub doesn't exist. Hubs change with game updates: browse them all below.",
+    "loadError": "Failed to load this mission hub. Please try again.",
+    "columns": {
+      "mission": "Mission",
+      "system": "System",
+      "type": "Type",
+      "giver": "Giver",
+      "legality": "Legality",
+      "reward": "Reward"
+    },
+    "legal": "Legal",
+    "illegal": "Illegal",
+    "detailTitle": "Browse similar missions"
+  },
   "myListings": {
     "active": "Active",
     "archiveBody": "Archive Body",

@@ -22,6 +22,9 @@ import type {
   ItemAcquisitionDocument,
   LocationDetailResponse,
   MissionDetailResponse,
+  MissionHubDetailResponse,
+  MissionHubKind,
+  MissionHubsResponse,
   OreDetailResponse,
   ResourceDetailResponse,
   SearchBlueprintsResponse,
@@ -156,6 +159,20 @@ import {
   wikiLocationsSeoText,
   wikiShipsSeoText,
 } from "../seo/hubHeads"
+import {
+  buildMissionHubHead,
+  buildMissionHubIndexHead,
+  MISSION_HUB_KINDS,
+  MISSION_HUB_PAGE_SIZE,
+  missionCountText,
+  missionHubCrumbs,
+  missionHubIndexText,
+  missionHubIntro,
+  missionHubKindLabel,
+  missionHubLink,
+  missionHubMissionLink,
+  missionHubText,
+} from "../seo/missionHubs"
 import { englishT } from "./englishT"
 import { MAX_SUMMARY_LINKS } from "./render"
 import type { BridgePageKind } from "./routes"
@@ -787,6 +804,23 @@ function duration(seconds: number | null | undefined): string | null {
   return `${Math.round(seconds)} s`
 }
 
+/** A mission's giver, faction, type and system hubs (the API's `hubs`). */
+function missionDetailHubLinks(data: MissionDetailResponse): SeoLink[] {
+  const hubs = data.hubs
+  if (!hubs) return []
+  const entries: [MissionHubKind, (typeof hubs)["giver"]][] = [
+    ["givers", hubs.giver],
+    ["factions", hubs.faction],
+    ["types", hubs.type],
+    ["systems", hubs.system],
+  ]
+  return entries.flatMap(([kind, hub]) =>
+    hub
+      ? [{ href: missionHubLink(kind, hub).href, text: missionHubText({ kind, name: hub.name, mission_count: hub.mission_count }, englishT).heading }]
+      : [],
+  )
+}
+
 /**
  * /missions/:slug: the one-line summary, then giver, place, rewards and
  * reputation, rules, hauling orders, blueprint drops (linked to the
@@ -880,6 +914,7 @@ function missionDoc(
     ...(itemRewards.length ? [{ tag: "h2" as const, text: "Item rewards" }] : []),
     ...(itemRewardLinks.length ? [{ tag: "ul" as const, links: itemRewardLinks }] : []),
     ...(unlinkedItemRewards.length ? [{ tag: "ul-text" as const, items: unlinkedItemRewards }] : []),
+    ...linkBlocks(englishT("missionHubs.detailTitle", "Browse similar missions"), missionDetailHubLinks(data)),
     ...linkBlocks(giver ? `More missions from ${giver}` : "More missions", more),
     ...linkBlocks(`Similar ${missionType(m) ?? ""} missions${m.star_system ? ` in ${m.star_system}` : ""}`.replace(/\s+/g, " "), similar),
     ...linkBlocks("Browse", [
@@ -1345,6 +1380,7 @@ const HUB_PAGES: Record<
             // category is a translation key ("missiontype.delivery").
             text: missionTitle(m),
           })),
+          after: linkBlocks(englishT("missionHubs.browseBy", "Browse missions by"), missionHubIndexLinks(null)),
         },
         ctx,
       ),
@@ -1502,6 +1538,126 @@ const MARKET_DETAIL_PAGES: Record<"aggregate" | "bundle" | "manufacturer", Bridg
   }),
 }
 
+
+/** The mission hub kind behind each hub bridge kind. */
+const MISSION_HUB_INDEX_KINDS = {
+  missionGivers: "givers",
+  missionFactions: "factions",
+  missionTypes: "types",
+  missionSystems: "systems",
+} as const satisfies Record<string, MissionHubKind>
+const MISSION_HUB_DETAIL_KINDS = {
+  missionGiver: "givers",
+  missionFaction: "factions",
+  missionType: "types",
+  missionSystem: "systems",
+} as const satisfies Record<string, MissionHubKind>
+
+/** Links to the other hub indexes ("Browse missions by"). */
+function missionHubIndexLinks(except: MissionHubKind | null): SeoLink[] {
+  return MISSION_HUB_KINDS.filter((k) => k !== except).map((k) => ({
+    href: GAME_DATA_PATHS.missionHubs(k),
+    text: missionHubKindLabel(k, englishT),
+  }))
+}
+
+interface MissionHubRelated extends Record<string, unknown> {
+  versions: ActiveVersionsResponse
+}
+
+/** /missions/<kind>: every hub of the kind with its mission count. */
+function missionHubIndexPage(kind: MissionHubKind): BridgePage {
+  return page<MissionHubsResponse, never, MissionHubRelated>({
+    primary: () => v2List(`/game-data/missions/hubs`, STATIC_GAME_DATA_TTL),
+    related: [() => ({ versions: v2List(`/game-data/versions/active`, STATIC_GAME_DATA_TTL) })],
+    build: (data, _s, ctx) => {
+      const version = ctx.related.versions?.LIVE ?? null
+      const head = buildMissionHubIndexHead(kind, data, ctx.origin, englishT, LANG, version)
+      const text = missionHubIndexText(kind, data[kind], englishT, LANG)
+      const stamp = freshnessStamp(version)
+      return fromHead(
+        head,
+        text.heading,
+        [
+          ...paragraphs(text.description),
+          ...linkBlocks(
+            missionHubKindLabel(kind, englishT),
+            data[kind].map((hub) => ({
+              href: GAME_DATA_PATHS.missionHub(kind, hub.slug),
+              text: `${hub.name} — ${missionCountText(hub.mission_count, englishT)}`,
+            })),
+          ),
+          ...linkBlocks(englishT("missionHubs.browseBy", "Browse missions by"), [
+            ...missionHubIndexLinks(kind),
+            { href: GAME_DATA_PATHS.missions, text: "All Star Citizen missions" },
+          ]),
+          ...paragraphs(stamp),
+        ],
+        ctx,
+      )
+    },
+  })
+}
+
+/**
+ * /missions/<kind>/<slug>: the data-driven intro, this page of the hub's
+ * missions (?page=N: 100 per page), the related hubs, freshness. An
+ * unknown hub is a 404.
+ */
+function missionHubPage(kind: MissionHubKind): BridgePage {
+  return page<MissionHubDetailResponse, never, MissionHubRelated>({
+    paginated: true,
+    primary: (p, n = 1) =>
+      v2(
+        `/game-data/missions/hubs/${kind}/${enc(p.slug)}?page=${n}&page_size=${MISSION_HUB_PAGE_SIZE}`,
+        STATIC_GAME_DATA_TTL,
+      ),
+    related: [() => ({ versions: v2List(`/game-data/versions/active`, STATIC_GAME_DATA_TTL) })],
+    build: (hub, _s, ctx) => {
+      const version = ctx.related.versions?.LIVE ?? null
+      const head = buildMissionHubHead(hub, ctx.origin, englishT, LANG, version)
+      const text = missionHubText(hub, englishT)
+      const path = GAME_DATA_PATHS.missionHub(kind, hub.slug)
+      const related = MISSION_HUB_KINDS.filter((k) => k !== kind).flatMap((k) =>
+        hub[k].slice(0, 12).map((other) => ({
+          href: GAME_DATA_PATHS.missionHub(k, other.slug),
+          text: `${missionHubKindLabel(k, englishT)}: ${other.name} (${other.mission_count})`,
+        })),
+      )
+      const doc = fromHead(
+        head,
+        text.heading,
+        [
+          ...paragraphs(...missionHubIntro(hub, englishT, LANG)),
+          ...linkBlocks(englishT("missionHubs.missionList", "Missions"), hub.missions.map(missionHubMissionLink)),
+          ...linkBlocks(englishT("missionHubs.related", "Related mission hubs"), related),
+          ...linkBlocks(englishT("missionHubs.browseBy", "Browse missions by"), [
+            ...missionHubCrumbs(kind, englishT).slice(1).map((c) => ({ href: c.path, text: c.name })),
+            ...missionHubIndexLinks(kind),
+            { href: GAME_DATA_PATHS.missions, text: "All Star Citizen missions" },
+          ]),
+          ...paragraphs(freshnessStamp(version)),
+        ],
+        ctx,
+      )
+      return paginate(doc, { path, total: hub.mission_count, pageSize: MISSION_HUB_PAGE_SIZE }, ctx)
+    },
+  })
+}
+
+const MISSION_HUB_PAGES: Record<
+  keyof typeof MISSION_HUB_INDEX_KINDS | keyof typeof MISSION_HUB_DETAIL_KINDS,
+  BridgePage
+> = {
+  missionGivers: missionHubIndexPage(MISSION_HUB_INDEX_KINDS.missionGivers),
+  missionFactions: missionHubIndexPage(MISSION_HUB_INDEX_KINDS.missionFactions),
+  missionTypes: missionHubIndexPage(MISSION_HUB_INDEX_KINDS.missionTypes),
+  missionSystems: missionHubIndexPage(MISSION_HUB_INDEX_KINDS.missionSystems),
+  missionGiver: missionHubPage(MISSION_HUB_DETAIL_KINDS.missionGiver),
+  missionFaction: missionHubPage(MISSION_HUB_DETAIL_KINDS.missionFaction),
+  missionType: missionHubPage(MISSION_HUB_DETAIL_KINDS.missionType),
+  missionSystem: missionHubPage(MISSION_HUB_DETAIL_KINDS.missionSystem),
+}
 
 export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
   commodity: page<ResourceDetailResponse, never, { listings: SearchListingsResponse; similar: GetCommoditiesApiResponse }>({
@@ -1953,6 +2109,7 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
   }),
 
   ...MARKET_DETAIL_PAGES,
+  ...MISSION_HUB_PAGES,
   ...HUB_PAGES,
   ...CONTENT_PAGES,
 }

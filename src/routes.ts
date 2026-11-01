@@ -949,6 +949,47 @@ export default [
         path: "/help",
         file: "routes/elements/Navigate.guides.tsx",
       },
+      // Mission hubs (before the splat, so existing leaves keep their order).
+      {
+        id: "routes/pages/MissionHubIndex.givers",
+        path: "/missions/givers",
+        file: "routes/pages/MissionHubIndex.givers.tsx",
+      },
+      {
+        id: "routes/pages/MissionHubIndex.factions",
+        path: "/missions/factions",
+        file: "routes/pages/MissionHubIndex.factions.tsx",
+      },
+      {
+        id: "routes/pages/MissionHubIndex.types",
+        path: "/missions/types",
+        file: "routes/pages/MissionHubIndex.types.tsx",
+      },
+      {
+        id: "routes/pages/MissionHubIndex.systems",
+        path: "/missions/systems",
+        file: "routes/pages/MissionHubIndex.systems.tsx",
+      },
+      {
+        id: "routes/pages/MissionHubPage.givers",
+        path: "/missions/givers/:slug",
+        file: "routes/pages/MissionHubPage.givers.tsx",
+      },
+      {
+        id: "routes/pages/MissionHubPage.factions",
+        path: "/missions/factions/:slug",
+        file: "routes/pages/MissionHubPage.factions.tsx",
+      },
+      {
+        id: "routes/pages/MissionHubPage.types",
+        path: "/missions/types/:slug",
+        file: "routes/pages/MissionHubPage.types.tsx",
+      },
+      {
+        id: "routes/pages/MissionHubPage.systems",
+        path: "/missions/systems/:slug",
+        file: "routes/pages/MissionHubPage.systems.tsx",
+      },
       {
         id: "routes/pages/Error404",
         path: "/*",
