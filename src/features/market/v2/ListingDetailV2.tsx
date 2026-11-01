@@ -1,3 +1,4 @@
+import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
 import React, { useMemo, useEffect, useState } from "react"
 import {
   Box,
@@ -284,6 +285,13 @@ export function ListingDetailV2() {
                               </Typography>
                             </Box>
                           </ListingDetailItem>
+
+                          {/* Seller activity: last seen, reply time, completed orders */}
+                          {seller.activity && (
+                            <Box sx={{ pl: 3.5 }}>
+                              <SellerStatusBadge activity={seller.activity} />
+                            </Box>
+                          )}
 
                           {/* Locations */}
                           {allLocations.length > 0 && (

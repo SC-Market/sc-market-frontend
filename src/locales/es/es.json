@@ -713,6 +713,10 @@
     "storefront_enquiry": {
       "created": "{{name}} ha pedido un escaparate con su marca: {{subdomain}}",
       "generic": "Nueva solicitud de escaparate con marca"
+    },
+    "listing_expiring": {
+      "one": "¿Sigues vendiendo «{{title}}»? Caduca en 3 días. Ábrelo para renovarlo con un clic.",
+      "many": "¿Sigues vendiendo? {{n}} anuncios de {{shop}} caducan en 3 días. Ábrelo para renovarlos con un clic."
     }
   },
   "onboarding": {
@@ -894,7 +898,8 @@
         "offer_accepted": "Oferta aceptada",
         "offer_rejected": "Oferta rechazada",
         "contract_offer_received": "Oferta en tu contrato",
-        "org_member_joined": "Nuevo miembro"
+        "org_member_joined": "Nuevo miembro",
+        "listing_expiring": "Anuncio a punto de caducar"
       },
       "tabs": {
         "orders": "Pedidos y ofertas",
@@ -922,7 +927,7 @@
         },
         "reminders": {
           "label": "Recordatorios",
-          "hint": "Un recordatorio cuando hay mensajes esperando desde hace un día."
+          "hint": "Un aviso cuando los mensajes de pedidos u ofertas llevan unas horas esperando."
         },
         "bids": {
           "label": "Pujas",
@@ -943,6 +948,10 @@
         "announcements": {
           "label": "Avisos",
           "hint": "Mensajes del equipo de SC Market. Siempre se entregan."
+        },
+        "listings": {
+          "label": "Anuncios",
+          "hint": "Un aviso 3 días antes de que caduque un anuncio, con renovación en un clic."
         }
       },
       "rows": {
@@ -1001,6 +1010,9 @@
         "member-joined": {
           "label": "Nuevo miembro",
           "hint": "Orgs en las que puedes gestionar invitaciones"
+        },
+        "listing-expiring": {
+          "label": "Anuncio a punto de caducar"
         }
       },
       "subtitle": "Elige dónde te llega cada tipo de notificación.",
@@ -1087,7 +1099,10 @@
       "unlinkProviderTitle": "Desvincular cuenta",
       "usernames": "Nombres de usuario:",
       "verifyAccount": "Verifica tu cuenta",
-      "verifyAccountDescription": "Necesitas verificar tu cuenta para acceder a todas las funciones. Elige uno de los siguientes métodos:"
+      "verifyAccountDescription": "Necesitas verificar tu cuenta para acceder a todas las funciones. Elige uno de los siguientes métodos:",
+      "hideOnlineStatus": "Ocultar mi estado de conexión",
+      "hideOnlineStatusHelp": "Los compradores ven aproximadamente cuándo estuviste activo por última vez (por ejemplo, «Activo hoy») en tus anuncios y tu tienda. Actívalo para ocultarlo.",
+      "hideOnlineStatusError": "No se pudo guardar tu ajuste de estado de conexión"
     },
     "priceAlerts": {
       "title": "Alertas de precio",
@@ -2689,7 +2704,14 @@
     "share": "Compartir",
     "updateError": "No se pudo actualizar el anuncio",
     "variants": "Variantes",
-    "views": "Vistas"
+    "views": "Vistas",
+    "paused": "En pausa",
+    "reactivateListing": "En pausa: renovar y reactivar",
+    "renewListing": "Caduca pronto: renovar un mes más",
+    "renewedFromLink_one": "Se renovó {{count}} anuncio un mes más",
+    "renewedFromLink_many": "Se renovaron {{count}} anuncios un mes más",
+    "renewedFromLink_other": "Se renovaron {{count}} anuncios un mes más",
+    "renewedFromLinkPartial": "Se renovaron {{ok}} de {{total}} anuncios. Renueva el resto abajo."
   },
   "itemMarket": {
     "toggleSidebar": "Alternar barra lateral del mercado"
@@ -6041,5 +6063,33 @@
       "title": "Escaparate con tu marca",
       "subtitle": "Pide un subdominio propio de sc-market.space para tu tienda y elige si aparece en el directorio de escaparates"
     }
+  },
+  "sellerActivity": {
+    "lastSeen": {
+      "today": "Activo hoy",
+      "this_week": "Activo esta semana",
+      "this_month": "Activo este mes",
+      "over_a_month": "Última actividad hace más de un mes"
+    },
+    "reply": {
+      "within_hour": "Suele responder en menos de una hora",
+      "within_hours": "Suele responder en pocas horas",
+      "within_day": "Suele responder en un día",
+      "within_days": "Suele responder en 3 días",
+      "slow": "Tarda en responder"
+    },
+    "replyShort": {
+      "within_hour": "Responde < 1 h",
+      "within_hours": "Responde < 6 h",
+      "within_day": "Responde < 1 día",
+      "within_days": "Responde < 3 días",
+      "slow": "Tarda en responder"
+    },
+    "replyTooltip_one": "Tiempo habitual hasta la primera respuesta en chats de pedidos y ofertas de los últimos 90 días, según {{count}} chat",
+    "replyTooltip_many": "Tiempo habitual hasta la primera respuesta en chats de pedidos y ofertas de los últimos 90 días, según {{count}} chats",
+    "replyTooltip_other": "Tiempo habitual hasta la primera respuesta en chats de pedidos y ofertas de los últimos 90 días, según {{count}} chats",
+    "completedOrders_one": "{{count}} pedido completado",
+    "completedOrders_many": "{{count}} pedidos completados",
+    "completedOrders_other": "{{count}} pedidos completados"
   }
 }

@@ -126,7 +126,7 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
       section(
         "reminders",
         "Reminders",
-        "A reminder when messages have been waiting for a day.",
+        "A reminder when order or offer messages have been waiting a few hours.",
         [
           row(
             "reminder",
@@ -146,6 +146,12 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
       section("bids", "Bids", "New bids on your auctions.", [
         row("bid", "New bid", ["market.bid"]),
       ]),
+      section(
+        "listings",
+        "Listings",
+        "A reminder 3 days before a listing expires, with a one-click renew.",
+        [row("listing-expiring", "Listing about to expire", ["listing.expiring"])],
+      ),
       section(
         "watchlist",
         "Price alerts",

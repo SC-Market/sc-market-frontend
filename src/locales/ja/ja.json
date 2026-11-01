@@ -711,6 +711,10 @@
     "storefront_enquiry": {
       "created": "{{name}} がブランドストアフロントをリクエストしました：{{subdomain}}",
       "generic": "ブランドストアフロントの新しい問い合わせ"
+    },
+    "listing_expiring": {
+      "one": "「{{title}}」はまだ販売中ですか？3日後に期限切れになります。開くとワンクリックで更新できます。",
+      "many": "まだ販売中ですか？{{shop}}の{{n}}件の出品が3日後に期限切れになります。開くとワンクリックで更新できます。"
     }
   },
   "onboarding": {
@@ -892,7 +896,8 @@
         "offer_accepted": "オファーの承認",
         "offer_rejected": "オファーの拒否",
         "contract_offer_received": "あなたの契約へのオファー",
-        "org_member_joined": "新しいメンバーの参加"
+        "org_member_joined": "新しいメンバーの参加",
+        "listing_expiring": "まもなく期限切れの出品"
       },
       "tabs": {
         "orders": "注文とオファー",
@@ -920,7 +925,7 @@
         },
         "reminders": {
           "label": "リマインダー",
-          "hint": "未読メッセージが1日経過したときにお知らせします。"
+          "hint": "注文やオファーのメッセージが数時間未読のときのリマインダー。"
         },
         "bids": {
           "label": "入札",
@@ -941,6 +946,10 @@
         "announcements": {
           "label": "お知らせ",
           "hint": "SC Marketチームからのメッセージです。常に配信されます。"
+        },
+        "listings": {
+          "label": "出品",
+          "hint": "出品の期限切れ3日前のリマインダー（ワンクリックで更新可能）。"
         }
       },
       "rows": {
@@ -999,6 +1008,9 @@
         "member-joined": {
           "label": "新しいメンバーの参加",
           "hint": "招待を管理できる組織"
+        },
+        "listing-expiring": {
+          "label": "まもなく期限切れの出品"
         }
       },
       "subtitle": "通知の種類ごとに受け取り方法を選択してください。",
@@ -1085,7 +1097,10 @@
       "unlinkTitle": "Star Citizenアカウントのリンクを解除",
       "usernames": "ユーザー名：",
       "verifyAccount": "アカウントを認証",
-      "verifyAccountDescription": "すべての機能を利用するにはアカウントの認証が必要です。次のいずれかの方法を選択してください："
+      "verifyAccountDescription": "すべての機能を利用するにはアカウントの認証が必要です。次のいずれかの方法を選択してください：",
+      "hideOnlineStatus": "オンライン状態を非表示にする",
+      "hideOnlineStatusHelp": "購入者には、出品やショップであなたが最後にアクティブだったおおよその時期（例：「今日アクティブ」）が表示されます。オンにすると非表示になります。",
+      "hideOnlineStatusError": "オンライン状態の設定を保存できませんでした"
     },
     "priceAlerts": {
       "title": "価格アラート",
@@ -2677,7 +2692,12 @@
     "share": "共有",
     "updateError": "出品の更新に失敗しました",
     "variants": "バリアント",
-    "views": "閲覧数"
+    "views": "閲覧数",
+    "paused": "一時停止中",
+    "reactivateListing": "一時停止中：更新して再開",
+    "renewListing": "まもなく期限切れ：さらに1か月更新",
+    "renewedFromLink_other": "{{count}}件の出品をさらに1か月更新しました",
+    "renewedFromLinkPartial": "{{total}}件中{{ok}}件の出品を更新しました。残りは下で更新してください。"
   },
   "itemMarket": {
     "toggleSidebar": "マーケットサイドバーを切り替え"
@@ -6007,5 +6027,29 @@
       "title": "ブランドストアフロント",
       "subtitle": "ショップ専用の sc-market.space サブドメインを依頼し、ストアフロント一覧に載せるかを選びます"
     }
+  },
+  "sellerActivity": {
+    "lastSeen": {
+      "today": "今日アクティブ",
+      "this_week": "今週アクティブ",
+      "this_month": "今月アクティブ",
+      "over_a_month": "最終アクティブは1か月以上前"
+    },
+    "reply": {
+      "within_hour": "通常1時間以内に返信",
+      "within_hours": "通常数時間以内に返信",
+      "within_day": "通常1日以内に返信",
+      "within_days": "通常3日以内に返信",
+      "slow": "返信が遅い"
+    },
+    "replyShort": {
+      "within_hour": "返信 1時間以内",
+      "within_hours": "返信 6時間以内",
+      "within_day": "返信 1日以内",
+      "within_days": "返信 3日以内",
+      "slow": "返信が遅い"
+    },
+    "replyTooltip_other": "過去90日間の注文・オファーチャットで最初の返信までにかかる一般的な時間（{{count}}件のチャットに基づく）",
+    "completedOrders_other": "完了した注文 {{count}}件"
   }
 }

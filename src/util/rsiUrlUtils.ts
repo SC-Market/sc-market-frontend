@@ -12,7 +12,7 @@ export function extractProfileIdFromUrl(url: string): string | null {
     const pathParts = urlObj.pathname.split("/").filter(Boolean)
 
     // Look for /citizens/ pattern (locale prefix is optional, e.g., /en/, /fr/, etc.)
-    const citizensIndex = pathParts.indexOf("citizens")
+    const citizensIndex = pathParts.findIndex((p) => p.toLowerCase() === "citizens")
     if (citizensIndex !== -1 && pathParts.length > citizensIndex + 1) {
       return pathParts[citizensIndex + 1]
     }
@@ -40,7 +40,7 @@ export function extractOrgIdFromUrl(url: string): string | null {
     const pathParts = urlObj.pathname.split("/").filter(Boolean)
 
     // Look for /orgs/ pattern (locale prefix is optional, e.g., /en/, /fr/, etc.)
-    const orgsIndex = pathParts.indexOf("orgs")
+    const orgsIndex = pathParts.findIndex((p) => p.toLowerCase() === "orgs")
     if (orgsIndex !== -1 && pathParts.length > orgsIndex + 1) {
       return pathParts[orgsIndex + 1]
     }

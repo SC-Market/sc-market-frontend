@@ -1,3 +1,4 @@
+import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
 import { Link, useParams } from "react-router-dom"
 import {
   Avatar,
@@ -258,6 +259,9 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
           )}
           <Chip size="small" label={`Since ${memberSince}`} color="default" />
         </Stack>
+
+        {/* Seller activity (sales are shown above) */}
+        <SellerStatusBadge activity={shop.activity} showCompletedOrders={false} />
       </Stack>
     </Stack>
   )

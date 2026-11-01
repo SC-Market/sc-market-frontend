@@ -1,3 +1,4 @@
+import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
 import React, { useMemo, useCallback, useRef } from "react";
 import {
   Box,
@@ -1128,6 +1129,7 @@ export function ListingCardV2({ listing, priority = false }: ListingCardV2Props)
                       showBadges={true}
                     />
                   </Box>
+                  <SellerStatusBadge activity={listing.shop_activity} compact />
                 </Box>
               </CardContent>
             </Card>

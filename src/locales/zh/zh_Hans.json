@@ -717,6 +717,10 @@
     "storefront_enquiry": {
       "created": "{{name}} 申请了品牌店面：{{subdomain}}",
       "generic": "新的品牌店面咨询"
+    },
+    "listing_expiring": {
+      "one": "还在出售“{{title}}”吗？它将在3天后到期。打开即可一键续期。",
+      "many": "还在出售吗？{{shop}} 中的 {{n}} 个商品将在3天后到期。打开即可一键续期。"
     }
   },
   "onboarding": {
@@ -898,7 +902,8 @@
         "offer_accepted": "报价已接受",
         "offer_rejected": "报价已拒绝",
         "contract_offer_received": "你的合同收到报价",
-        "org_member_joined": "新成员加入"
+        "org_member_joined": "新成员加入",
+        "listing_expiring": "商品即将到期"
       },
       "tabs": {
         "orders": "订单与报价",
@@ -926,7 +931,7 @@
         },
         "reminders": {
           "label": "提醒",
-          "hint": "消息等待超过一天时提醒你。"
+          "hint": "订单或报价消息等待数小时后的提醒。"
         },
         "bids": {
           "label": "出价",
@@ -947,6 +952,10 @@
         "announcements": {
           "label": "公告",
           "hint": "来自 SC Market 团队的消息。始终送达。"
+        },
+        "listings": {
+          "label": "商品",
+          "hint": "商品到期前3天提醒，可一键续期。"
         }
       },
       "rows": {
@@ -1005,6 +1014,9 @@
         "member-joined": {
           "label": "新成员加入",
           "hint": "你可管理邀请的组织"
+        },
+        "listing-expiring": {
+          "label": "商品即将到期"
         }
       },
       "subtitle": "选择每类通知的接收方式。",
@@ -1091,7 +1103,10 @@
       "unlinkTitle": "取消关联 Star Citizen 账户",
       "usernames": "用户名：",
       "verifyAccount": "验证您的账户",
-      "verifyAccountDescription": "您需要验证账户才能使用所有功能。请选择以下方式之一："
+      "verifyAccountDescription": "您需要验证账户才能使用所有功能。请选择以下方式之一：",
+      "hideOnlineStatus": "隐藏我的在线状态",
+      "hideOnlineStatusHelp": "买家会在你的商品和店铺上看到你大致的最后活跃时间（例如“今天活跃”）。开启此项即可隐藏。",
+      "hideOnlineStatusError": "无法保存你的在线状态设置"
     },
     "priceAlerts": {
       "title": "价格提醒",
@@ -2679,7 +2694,12 @@
     "rowNotFound": "未找到商品条目",
     "share": "分享",
     "updateError": "更新商品条目失败",
-    "variants": "变体"
+    "variants": "变体",
+    "paused": "已暂停",
+    "reactivateListing": "已暂停：续期并重新上架",
+    "renewListing": "即将到期：再续期一个月",
+    "renewedFromLink_other": "已将 {{count}} 个商品续期一个月",
+    "renewedFromLinkPartial": "已续期 {{ok}}/{{total}} 个商品。请在下方续期其余商品。"
   },
   "itemMarket": {
     "toggleSidebar": "切换市场侧边栏"
@@ -6013,5 +6033,29 @@
       "title": "品牌店面",
       "subtitle": "为你的店铺申请独立的 sc-market.space 子域名，并选择是否列入店面目录"
     }
+  },
+  "sellerActivity": {
+    "lastSeen": {
+      "today": "今天活跃",
+      "this_week": "本周活跃",
+      "this_month": "本月活跃",
+      "over_a_month": "上次活跃在一个多月前"
+    },
+    "reply": {
+      "within_hour": "通常一小时内回复",
+      "within_hours": "通常几小时内回复",
+      "within_day": "通常一天内回复",
+      "within_days": "通常3天内回复",
+      "slow": "回复较慢"
+    },
+    "replyShort": {
+      "within_hour": "回复 < 1小时",
+      "within_hours": "回复 < 6小时",
+      "within_day": "回复 < 1天",
+      "within_days": "回复 < 3天",
+      "slow": "回复较慢"
+    },
+    "replyTooltip_other": "过去90天订单和报价聊天中首次回复的典型时间（基于{{count}}个聊天）",
+    "completedOrders_other": "已完成 {{count}} 个订单"
   }
 }

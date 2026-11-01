@@ -713,6 +713,10 @@
     "storefront_enquiry": {
       "created": "{{name}} a demandé une vitrine à ses couleurs : {{subdomain}}",
       "generic": "Nouvelle demande de vitrine à vos couleurs"
+    },
+    "listing_expiring": {
+      "one": "Tu vends toujours « {{title}} » ? L'annonce expire dans 3 jours. Ouvre-la pour la renouveler en un clic.",
+      "many": "Tu vends toujours ? {{n}} annonces de {{shop}} expirent dans 3 jours. Ouvre pour les renouveler en un clic."
     }
   },
   "onboarding": {
@@ -894,7 +898,8 @@
         "offer_accepted": "Offre acceptée",
         "offer_rejected": "Offre refusée",
         "contract_offer_received": "Offre sur votre contrat",
-        "org_member_joined": "Nouveau membre"
+        "org_member_joined": "Nouveau membre",
+        "listing_expiring": "Annonce sur le point d'expirer"
       },
       "tabs": {
         "orders": "Commandes et offres",
@@ -922,7 +927,7 @@
         },
         "reminders": {
           "label": "Rappels",
-          "hint": "Un rappel quand des messages attendent depuis un jour."
+          "hint": "Un rappel quand des messages de commande ou d'offre attendent depuis quelques heures."
         },
         "bids": {
           "label": "Enchères",
@@ -943,6 +948,10 @@
         "announcements": {
           "label": "Annonces",
           "hint": "Messages de l'équipe SC Market. Toujours envoyés."
+        },
+        "listings": {
+          "label": "Annonces",
+          "hint": "Un rappel 3 jours avant l'expiration d'une annonce, avec renouvellement en un clic."
         }
       },
       "rows": {
@@ -1001,6 +1010,9 @@
         "member-joined": {
           "label": "Nouveau membre",
           "hint": "Orgs où vous pouvez gérer les invitations"
+        },
+        "listing-expiring": {
+          "label": "Annonce sur le point d'expirer"
         }
       },
       "subtitle": "Choisissez où chaque type de notification vous parvient.",
@@ -1087,7 +1099,10 @@
       "unlinkProviderTitle": "Dissocier le compte",
       "usernames": "Noms d'utilisateur :",
       "verifyAccount": "Vérifiez votre compte",
-      "verifyAccountDescription": "Vous devez vérifier votre compte pour accéder à toutes les fonctionnalités. Choisissez l'une des méthodes suivantes :"
+      "verifyAccountDescription": "Vous devez vérifier votre compte pour accéder à toutes les fonctionnalités. Choisissez l'une des méthodes suivantes :",
+      "hideOnlineStatus": "Masquer mon statut en ligne",
+      "hideOnlineStatusHelp": "Les acheteurs voient à peu près quand tu étais actif pour la dernière fois (par exemple « Actif aujourd'hui ») sur tes annonces et ta boutique. Active cette option pour le masquer.",
+      "hideOnlineStatusError": "Impossible d'enregistrer ton réglage de statut en ligne"
     },
     "priceAlerts": {
       "title": "Alertes de prix",
@@ -2689,7 +2704,14 @@
     "share": "Partager",
     "updateError": "Échec de la mise à jour de l'annonce",
     "variants": "Variantes",
-    "views": "Vues"
+    "views": "Vues",
+    "paused": "En pause",
+    "reactivateListing": "En pause : renouveler et réactiver",
+    "renewListing": "Expire bientôt : renouveler pour un mois",
+    "renewedFromLink_one": "{{count}} annonce renouvelée pour un mois",
+    "renewedFromLink_many": "{{count}} annonces renouvelées pour un mois",
+    "renewedFromLink_other": "{{count}} annonces renouvelées pour un mois",
+    "renewedFromLinkPartial": "{{ok}} annonces sur {{total}} renouvelées. Renouvelle les autres ci-dessous."
   },
   "itemMarket": {
     "toggleSidebar": "Afficher/masquer la barre latérale du marché"
@@ -6041,5 +6063,33 @@
       "title": "Vitrine à vos couleurs",
       "subtitle": "Demandez un sous-domaine sc-market.space pour votre boutique et choisissez si elle figure dans l'annuaire des vitrines"
     }
+  },
+  "sellerActivity": {
+    "lastSeen": {
+      "today": "Actif aujourd'hui",
+      "this_week": "Actif cette semaine",
+      "this_month": "Actif ce mois-ci",
+      "over_a_month": "Dernière activité il y a plus d'un mois"
+    },
+    "reply": {
+      "within_hour": "Répond généralement en moins d'une heure",
+      "within_hours": "Répond généralement en quelques heures",
+      "within_day": "Répond généralement en moins d'un jour",
+      "within_days": "Répond généralement sous 3 jours",
+      "slow": "Lent à répondre"
+    },
+    "replyShort": {
+      "within_hour": "Répond < 1 h",
+      "within_hours": "Répond < 6 h",
+      "within_day": "Répond < 1 jour",
+      "within_days": "Répond < 3 jours",
+      "slow": "Lent à répondre"
+    },
+    "replyTooltip_one": "Délai habituel avant une première réponse dans les discussions de commandes et d'offres des 90 derniers jours, sur {{count}} discussion",
+    "replyTooltip_many": "Délai habituel avant une première réponse dans les discussions de commandes et d'offres des 90 derniers jours, sur {{count}} discussions",
+    "replyTooltip_other": "Délai habituel avant une première réponse dans les discussions de commandes et d'offres des 90 derniers jours, sur {{count}} discussions",
+    "completedOrders_one": "{{count}} commande terminée",
+    "completedOrders_many": "{{count}} commandes terminées",
+    "completedOrders_other": "{{count}} commandes terminées"
   }
 }

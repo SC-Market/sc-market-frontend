@@ -9,6 +9,7 @@
  * can walk from hubs to detail pages. URLs and response types mirror the generated clients
  * in src/store/api/** (types only; nothing here imports RTK or the browser).
  */
+import { sellerActivityText } from "../util/sellerActivityText"
 import type {
   ActiveVersionsResponse,
   GameVersion,
@@ -1003,6 +1004,7 @@ function listingDoc(
           .join(" "),
         [
           `Sold by ${seller.name} (${rating}).`,
+          sellerActivityText(seller.activity),
           seller.languages?.length ? `Seller languages: ${seller.languages.join(", ")}.` : null,
           listing.pickup_method ? `Delivery: ${listing.pickup_method === "any" ? "delivery or pickup" : listing.pickup_method}.` : null,
           shortDate(listing.created_at) ? `Listed ${shortDate(listing.created_at)}.` : null,
@@ -2045,6 +2047,7 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
             ]
               .filter(Boolean)
               .join(". ") + ".",
+            sellerActivityText(shop.activity && { ...shop.activity, completed_orders: 0 }),
           ),
           ...linkBlocks(`Listings from ${shop.name}`, searchLinks(ctx.related.listings?.listings, new Set(), MAX_SUMMARY_LINKS)),
         ],

@@ -38,6 +38,7 @@ export const addTagTypes = [
   "Analytics V2",
   "Admin",
   "Admin Feature Flags",
+  "Account Privacy V2",
   "Accounts V2",
 ] as const
 const injectedRtkApi = api
@@ -2325,6 +2326,24 @@ const injectedRtkApi = api
         }),
         providesTags: ["Admin"],
       }),
+      getAccountPrivacy: build.query<
+        GetAccountPrivacyApiResponse,
+        GetAccountPrivacyApiArg
+      >({
+        query: () => ({ url: `/accounts/privacy` }),
+        providesTags: ["Account Privacy V2"],
+      }),
+      updateAccountPrivacy: build.mutation<
+        UpdateAccountPrivacyApiResponse,
+        UpdateAccountPrivacyApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/accounts/privacy`,
+          method: "PUT",
+          body: queryArg.updateAccountPrivacyRequest,
+        }),
+        invalidatesTags: ["Account Privacy V2"],
+      }),
       requestDeletion: build.mutation<
         RequestDeletionApiResponse,
         RequestDeletionApiArg
@@ -3978,6 +3997,14 @@ export type PreviewAdminAlertAudienceApiArg = {
   /** The org, when target_type is specific_org */
   targetSpectrumId?: string
 }
+export type GetAccountPrivacyApiResponse =
+  /** status 200 Ok */ AccountPrivacySettings
+export type GetAccountPrivacyApiArg = void
+export type UpdateAccountPrivacyApiResponse =
+  /** status 200 Ok */ AccountPrivacySettings
+export type UpdateAccountPrivacyApiArg = {
+  updateAccountPrivacyRequest: UpdateAccountPrivacyRequest
+}
 export type RequestDeletionApiResponse =
   /** status 200 Ok */ RequestDeletionResponse
 export type RequestDeletionApiArg = {
@@ -4322,6 +4349,27 @@ export type ShopMetricsResponse = {
   streak: number
   response_rate: number | null
 }
+export type LastSeenBucket =
+  | "today"
+  | "this_week"
+  | "this_month"
+  | "over_a_month"
+export type ReplyTimeBucket =
+  | "within_hour"
+  | "within_hours"
+  | "within_day"
+  | "within_days"
+  | "slow"
+export type SellerActivity = {
+  /** Coarse last-seen bucket; null if the seller hides it or has no activity yet. */
+  last_seen: LastSeenBucket | null
+  /** Typical reply time in order/offer chats; null below the minimum sample size. */
+  reply_time: ReplyTimeBucket | null
+  /** Number of chats the reply time is based on; null when reply_time is null. */
+  reply_sample_size: number | null
+  /** Orders this shop has completed. */
+  completed_orders: number
+}
 export type ShopPublicResponse = {
   shop_id: string
   slug: string
@@ -4348,6 +4396,8 @@ export type ShopPublicResponse = {
   total_sales?: number
   /** Metrics for reputation/badges (included in detail view) */
   metrics?: ShopMetricsResponse
+  /** Seller activity: coarse last seen, typical reply time, completed orders (detail view) */
+  activity?: SellerActivity
 }
 export type QuickCreateShopRequest = {
   owner_type: "user" | "contractor"
@@ -5139,7 +5189,6 @@ export type MinimalUser = {
   display_name: string
   rating: Rating
   badges?: BadgeData | null
-  last_seen?: string
   in_game?: boolean
 }
 export type MinimalContractor = {
@@ -5148,7 +5197,6 @@ export type MinimalContractor = {
   avatar: string
   rating: Rating
   badges?: BadgeData | null
-  last_seen?: string
   members_online?: number
 }
 export type OfferMarketListingV1 = {
@@ -5280,6 +5328,7 @@ export type NotificationEventKey =
   | "offer.countered"
   | "offer.message"
   | "market.bid"
+  | "listing.expiring"
   | "org.invite"
   | "org.member_joined"
   | "admin.alert"
@@ -5510,6 +5559,8 @@ export type ListingSearchResult = {
   shop_badge_ids: string[]
   /** Shop supported languages (ISO 639-1 codes) */
   shop_languages: string[]
+  /** Seller activity: coarse last seen, typical reply time, completed orders */
+  shop_activity?: SellerActivity
   /** Minimum price across all variants */
   price_min: number
   /** Maximum price across all variants */
@@ -5662,6 +5713,8 @@ export type SellerInfo = {
   logo_url?: string
   /** Shop supported languages (ISO 639-1 codes) */
   languages: string[]
+  /** Seller activity: coarse last seen, typical reply time, completed orders */
+  activity?: SellerActivity
 }
 export type GameItemInfo = {
   /** Game item UUID */
@@ -8616,6 +8669,15 @@ export type AdminAlertTargetType =
   | "org_owners"
   | "admins_only"
   | "specific_org"
+export type AccountPrivacySettings = {
+  /** Hide my online status: buyers never see when you were last active (on
+    your shops' listings, cards and shop page, or on an org's shop you help
+    run). */
+  hide_online_status: boolean
+}
+export type UpdateAccountPrivacyRequest = {
+  hide_online_status: boolean
+}
 export type RequestDeletionResponse = {
   scheduledAt: string
   message: string
@@ -8855,6 +8917,8 @@ export const {
   useExpireAllListingsMutation,
   useGetActiveListingCountQuery,
   usePreviewAdminAlertAudienceQuery,
+  useGetAccountPrivacyQuery,
+  useUpdateAccountPrivacyMutation,
   useRequestDeletionMutation,
   useCancelDeletionMutation,
   useGetDeletionStatusQuery,

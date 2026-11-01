@@ -2,7 +2,7 @@
  * StockManagerV2 — V2 equivalent of V1 ManageStock / DisplayStock with full feature parity.
  */
 
-import React, { useState, useCallback, useMemo, createContext, useContext } from "react"
+import React, { useState, useCallback, useMemo, createContext, useContext, useEffect, useRef } from "react"
 import {
   GridColDef,
   GridEventListener,
@@ -616,7 +616,11 @@ function DisplayStockV2({
               variant="subtitle2"
             >
               <RadioButtonCheckedRounded fontSize="small" style={{ marginRight: 1 }} />{" "}
-              {params.value === "active" ? t("ItemStock.active") : t("ItemStock.inactive")}
+              {params.value === "active"
+                ? t("ItemStock.active")
+                : params.value === "expired"
+                  ? t("ItemStock.paused", "Paused")
+                  : t("ItemStock.inactive")}
             </Typography>
           )
         },
@@ -630,12 +634,25 @@ function DisplayStockV2({
         renderCell: (params: GridRenderCellParams) => {
           const nr = newRows.find((r) => r.id === params.id)
           if (nr) return "—"
-          if (!params.value) return "—"
-          const d = new Date(params.value)
-          if (d > new Date()) return formatMostSignificantDiff(params.value)
+          const paused = params.row.status === "expired"
+          if (!params.value && !paused) return "—"
+          // Renewable: paused (expired) or within the 3-day notice window.
+          // Renew starts a new month and reactivates a paused listing.
+          const msLeft = params.value ? new Date(params.value).getTime() - Date.now() : 0
+          if (!paused && msLeft > RENEW_WINDOW_MS) return formatMostSignificantDiff(params.value)
+          // An active listing long past its date: a date migrated from V1
+          // that nothing enforces (listing expiry is off), not renewable.
+          if (!paused && msLeft < -RENEW_WINDOW_MS) return "—"
+          const label = paused
+            ? t("ItemStock.reactivateListing", "Paused: renew and reactivate")
+            : t("ItemStock.renewListing", "Expires soon: renew for another month")
           return (
-            <Tooltip title={t("ItemStock.refreshListing")}>
-              <IconButton sx={{ color: "error.main" }} onClick={(e) => { e.stopPropagation(); handleRefresh(params.row.listing_id) }}>
+            <Tooltip title={label}>
+              <IconButton
+                aria-label={label}
+                sx={{ color: paused || msLeft <= 0 ? "error.main" : "warning.main" }}
+                onClick={(e) => { e.stopPropagation(); handleRefresh(params.row.listing_id) }}
+              >
                 <RefreshOutlined />
               </IconButton>
             </Tooltip>
@@ -798,6 +815,57 @@ function DisplayStockV2({
   )
 }
 
+/** Listings can be renewed within this window before expiry (backend NOTICE_DAYS_BEFORE). */
+const RENEW_WINDOW_MS = 3 * 24 * 60 * 60 * 1000
+
+/**
+ * The "Still selling?" notice links here with ?renew=<id>,<id>: renew those
+ * listings once (a new month; paused ones are reactivated), say so, and drop
+ * the parameter.
+ */
+function RenewFromLink() {
+  const { t } = useTranslation()
+  const issueAlert = useAlertHook()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [refreshListing] = useRefreshListingMutation()
+  const done = useRef(false)
+  const ids = (searchParams.get("renew") || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => /^[0-9a-f-]{36}$/i.test(s))
+    .slice(0, 50)
+
+  useEffect(() => {
+    if (done.current || !ids.length) return
+    done.current = true
+    void (async () => {
+      const results = await Promise.allSettled(ids.map((id) => refreshListing({ id }).unwrap()))
+      const ok = results.filter((r) => r.status === "fulfilled").length
+      issueAlert(
+        ok === ids.length
+          ? {
+              message: t("ItemStock.renewedFromLink", "Renewed {{count}} listings for another month", { count: ok }),
+              severity: "success",
+            }
+          : {
+              message: t("ItemStock.renewedFromLinkPartial", "Renewed {{ok}} of {{total}} listings. Renew the rest below.", {
+                ok,
+                total: ids.length,
+              }),
+              severity: "warning",
+            },
+      )
+      const next = new URLSearchParams(searchParams)
+      next.delete("renew")
+      setSearchParams(next, { replace: true })
+    })()
+    // Runs once per page load.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  return null
+}
+
 /* ── Main Page Component (mirrors V1 ManageStock) ── */
 
 export function StockManagerV2() {
@@ -839,6 +907,7 @@ export function StockManagerV2() {
       isLoading={isLoading}
     >
       <StockSelectionContext.Provider value={[selectionModel, setSelectionModel]}>
+        <RenewFromLink />
         <Grid item xs={12}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             {/* Mobile bottom sheet sidebar */}

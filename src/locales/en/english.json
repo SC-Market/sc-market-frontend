@@ -2073,7 +2073,13 @@
     "updateError": "Failed to update listing",
     "variants": "Variants",
     "views": "Views",
-    "zero": "0"
+    "zero": "0",
+    "paused": "Paused",
+    "reactivateListing": "Paused: renew and reactivate",
+    "renewListing": "Expires soon: renew for another month",
+    "renewedFromLink_one": "Renewed {{count}} listing for another month",
+    "renewedFromLink_other": "Renewed {{count}} listings for another month",
+    "renewedFromLinkPartial": "Renewed {{ok}} of {{total}} listings. Renew the rest below."
   },
   "ItemStockRework": {
     "actions": "Actions",
@@ -3232,6 +3238,10 @@
     "storefront_enquiry": {
       "created": "{{name}} asked for a branded storefront: {{subdomain}}",
       "generic": "New branded storefront enquiry"
+    },
+    "listing_expiring": {
+      "one": "Still selling \"{{title}}\"? It expires in 3 days. Open to renew it in one click.",
+      "many": "Still selling? {{n}} listings in {{shop}} expire in 3 days. Open to renew them in one click."
     }
   },
   "Off Course": "warning",
@@ -4551,7 +4561,10 @@
       "usernames": "Usernames:",
       "verifyAccount": "Verify Your Account",
       "verifyAccountDescription": "You need to verify your account to access all features. Choose one of the following methods:",
-      "viewUserProfile": "View User Profile"
+      "viewUserProfile": "View User Profile",
+      "hideOnlineStatus": "Hide my online status",
+      "hideOnlineStatusHelp": "Buyers see roughly when you were last active (for example \"Active today\") on your listings and shop. Turn this on to hide it.",
+      "hideOnlineStatusError": "Couldn't save your online status setting"
     },
     "priceAlerts": {
       "title": "Price Alerts",
@@ -4723,7 +4736,8 @@
         "offer_accepted": "Offer accepted",
         "offer_rejected": "Offer rejected",
         "contract_offer_received": "Offer on your contract",
-        "org_member_joined": "New member joined"
+        "org_member_joined": "New member joined",
+        "listing_expiring": "Listing about to expire"
       },
       "tabs": {
         "orders": "Orders & offers",
@@ -4751,7 +4765,7 @@
         },
         "reminders": {
           "label": "Reminders",
-          "hint": "A reminder when messages have been waiting for a day."
+          "hint": "A reminder when order or offer messages have been waiting a few hours."
         },
         "bids": {
           "label": "Bids",
@@ -4772,6 +4786,10 @@
         "announcements": {
           "label": "Announcements",
           "hint": "Messages from the SC Market team. Always delivered."
+        },
+        "listings": {
+          "label": "Listings",
+          "hint": "A reminder 3 days before a listing expires, with a one-click renew."
         }
       },
       "rows": {
@@ -4830,6 +4848,9 @@
         "member-joined": {
           "label": "New member joined",
           "hint": "Orgs where you can manage invites"
+        },
+        "listing-expiring": {
+          "label": "Listing about to expire"
         }
       },
       "subtitle": "Choose where each kind of notification reaches you.",
@@ -6008,5 +6029,31 @@
       "title": "Branded storefront",
       "subtitle": "Ask for your shop's own sc-market.space subdomain, and choose whether it's in the storefront directory"
     }
+  },
+  "sellerActivity": {
+    "lastSeen": {
+      "today": "Active today",
+      "this_week": "Active this week",
+      "this_month": "Active this month",
+      "over_a_month": "Last active over a month ago"
+    },
+    "reply": {
+      "within_hour": "Usually replies within an hour",
+      "within_hours": "Usually replies within a few hours",
+      "within_day": "Usually replies within a day",
+      "within_days": "Usually replies within 3 days",
+      "slow": "Slow to reply"
+    },
+    "replyShort": {
+      "within_hour": "Replies < 1h",
+      "within_hours": "Replies < 6h",
+      "within_day": "Replies < 1 day",
+      "within_days": "Replies < 3 days",
+      "slow": "Slow to reply"
+    },
+    "replyTooltip_one": "Typical time to a first reply in order and offer chats over the last 90 days, from {{count}} chat",
+    "replyTooltip_other": "Typical time to a first reply in order and offer chats over the last 90 days, from {{count}} chats",
+    "completedOrders_one": "{{count}} completed order",
+    "completedOrders_other": "{{count}} completed orders"
   }
 }

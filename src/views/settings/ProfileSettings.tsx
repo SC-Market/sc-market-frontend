@@ -12,6 +12,7 @@ import { UnlinkProfile } from "./UnlinkProfile"
 import { AccountLinks } from "./AccountLinks"
 import { LanguageSettings } from "./LanguageSettings"
 import { InGameToggle } from "../../features/profile/components/InGameToggle"
+import { HideOnlineStatusToggle } from "../../features/profile/components/HideOnlineStatusToggle"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -85,6 +86,7 @@ export function ProfileSettings() {
           {t("settings.profile.presence", "Presence")}
         </Typography>
         <InGameToggle />
+        <HideOnlineStatusToggle />
       </Grid>
       <Grid item xs={12}>
         <AccountLinks />

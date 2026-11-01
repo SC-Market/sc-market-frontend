@@ -711,6 +711,10 @@
     "storefront_enquiry": {
       "created": "{{name}} hat eine gebrandete Storefront angefragt: {{subdomain}}",
       "generic": "Neue Anfrage für eine gebrandete Storefront"
+    },
+    "listing_expiring": {
+      "one": "Verkaufst du „{{title}}“ noch? Es läuft in 3 Tagen ab. Öffne dies, um es mit einem Klick zu verlängern.",
+      "many": "Verkaufst du noch? {{n}} Angebote in {{shop}} laufen in 3 Tagen ab. Öffne dies, um sie mit einem Klick zu verlängern."
     }
   },
   "onboarding": {
@@ -892,7 +896,8 @@
         "offer_accepted": "Angebot angenommen",
         "offer_rejected": "Angebot abgelehnt",
         "contract_offer_received": "Angebot für Ihren Auftrag",
-        "org_member_joined": "Neues Mitglied beigetreten"
+        "org_member_joined": "Neues Mitglied beigetreten",
+        "listing_expiring": "Angebot läuft bald ab"
       },
       "tabs": {
         "orders": "Bestellungen & Angebote",
@@ -920,7 +925,7 @@
         },
         "reminders": {
           "label": "Erinnerungen",
-          "hint": "Eine Erinnerung, wenn Nachrichten seit einem Tag warten."
+          "hint": "Eine Erinnerung, wenn Bestell- oder Angebotsnachrichten seit einigen Stunden warten."
         },
         "bids": {
           "label": "Gebote",
@@ -941,6 +946,10 @@
         "announcements": {
           "label": "Ankündigungen",
           "hint": "Nachrichten vom SC-Market-Team. Werden immer zugestellt."
+        },
+        "listings": {
+          "label": "Angebote",
+          "hint": "Eine Erinnerung 3 Tage bevor ein Angebot abläuft, mit Verlängerung per Klick."
         }
       },
       "rows": {
@@ -999,6 +1008,9 @@
         "member-joined": {
           "label": "Neues Mitglied beigetreten",
           "hint": "Orgs, in denen Sie Einladungen verwalten können"
+        },
+        "listing-expiring": {
+          "label": "Angebot läuft bald ab"
         }
       },
       "subtitle": "Legen Sie fest, wo Sie jede Art von Benachrichtigung erreicht.",
@@ -1085,7 +1097,10 @@
       "unlinkProviderTitle": "Kontoverknüpfung trennen",
       "usernames": "Benutzernamen:",
       "verifyAccount": "Konto bestätigen",
-      "verifyAccountDescription": "Sie müssen Ihr Konto bestätigen, um auf alle Funktionen zugreifen zu können. Wählen Sie eine der folgenden Methoden:"
+      "verifyAccountDescription": "Sie müssen Ihr Konto bestätigen, um auf alle Funktionen zugreifen zu können. Wählen Sie eine der folgenden Methoden:",
+      "hideOnlineStatus": "Meinen Online-Status verbergen",
+      "hideOnlineStatusHelp": "Käufer sehen ungefähr, wann du zuletzt aktiv warst (zum Beispiel „Heute aktiv“), auf deinen Angeboten und in deinem Shop. Aktiviere dies, um es zu verbergen.",
+      "hideOnlineStatusError": "Deine Einstellung zum Online-Status konnte nicht gespeichert werden"
     },
     "priceAlerts": {
       "title": "Preisalarme",
@@ -2677,7 +2692,13 @@
     "share": "Teilen",
     "updateError": "Angebot konnte nicht aktualisiert werden",
     "variants": "Varianten",
-    "views": "Aufrufe"
+    "views": "Aufrufe",
+    "paused": "Pausiert",
+    "reactivateListing": "Pausiert: verlängern und reaktivieren",
+    "renewListing": "Läuft bald ab: um einen Monat verlängern",
+    "renewedFromLink_one": "{{count}} Angebot um einen Monat verlängert",
+    "renewedFromLink_other": "{{count}} Angebote um einen Monat verlängert",
+    "renewedFromLinkPartial": "{{ok}} von {{total}} Angeboten verlängert. Verlängere die übrigen unten."
   },
   "itemMarket": {
     "toggleSidebar": "Markt-Seitenleiste umschalten"
@@ -6008,5 +6029,31 @@
       "title": "Gebrandete Storefront",
       "subtitle": "Frag nach einer eigenen sc-market.space-Subdomain für deinen Shop und wähle, ob er im Storefront-Verzeichnis steht"
     }
+  },
+  "sellerActivity": {
+    "lastSeen": {
+      "today": "Heute aktiv",
+      "this_week": "Diese Woche aktiv",
+      "this_month": "Diesen Monat aktiv",
+      "over_a_month": "Zuletzt vor über einem Monat aktiv"
+    },
+    "reply": {
+      "within_hour": "Antwortet meist innerhalb einer Stunde",
+      "within_hours": "Antwortet meist innerhalb weniger Stunden",
+      "within_day": "Antwortet meist innerhalb eines Tages",
+      "within_days": "Antwortet meist innerhalb von 3 Tagen",
+      "slow": "Antwortet langsam"
+    },
+    "replyShort": {
+      "within_hour": "Antwort < 1 Std.",
+      "within_hours": "Antwort < 6 Std.",
+      "within_day": "Antwort < 1 Tag",
+      "within_days": "Antwort < 3 Tage",
+      "slow": "Antwortet langsam"
+    },
+    "replyTooltip_one": "Übliche Zeit bis zur ersten Antwort in Bestell- und Angebotschats der letzten 90 Tage, aus {{count}} Chat",
+    "replyTooltip_other": "Übliche Zeit bis zur ersten Antwort in Bestell- und Angebotschats der letzten 90 Tage, aus {{count}} Chats",
+    "completedOrders_one": "{{count}} abgeschlossene Bestellung",
+    "completedOrders_other": "{{count}} abgeschlossene Bestellungen"
   }
 }

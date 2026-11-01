@@ -19,6 +19,7 @@ import { NotificationOrgMemberJoined } from "../types/NotificationOrgMemberJoine
 import { NotificationOfferDecision } from "../types/NotificationOfferDecision"
 import { NotificationAccountIdentity } from "../types/NotificationAccountIdentity"
 import { NotificationStorefrontEnquiry } from "../types/NotificationStorefrontEnquiry"
+import { NotificationListingExpiring } from "../types/NotificationListingExpiring"
 
 export function NotificationEntry(props: { notif: Notification }) {
   const { notif } = props
@@ -66,6 +67,8 @@ export function NotificationEntry(props: { notif: Notification }) {
       return <NotificationAccountIdentity notif={notif} />
     case "storefront_enquiry_created":
       return <NotificationStorefrontEnquiry notif={notif} />
+    case "listing_expiring":
+      return <NotificationListingExpiring notif={notif} />
     default:
       return null
   }
