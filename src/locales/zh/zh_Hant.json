@@ -254,6 +254,23 @@
     "success": "Submitted!",
     "failure": "Failed to submit! {{reason}}"
   },
+  "ads": {
+    "scOrgs": {
+      "disclaimer": "SC Market 的姊妹網站。粉絲自製，與 RSI 或 CIG 無關。",
+      "finder": {
+        "kicker": "招募船員",
+        "title": "找到你的組織",
+        "tagline": "瀏覽宇宙中的各個組織，看看誰在招人，然後送出申請。",
+        "cta": "開啟組織搜尋"
+      },
+      "demo": {
+        "kicker": "致組織領袖",
+        "title": "指揮你的行動",
+        "tagline": "活動、名冊和入會申請集中一處。免註冊試用線上展示。",
+        "cta": "試用展示"
+      }
+    }
+  },
   "auth": {
     "title": "註冊",
     "email": "郵箱",
@@ -329,6 +346,12 @@
     "privacy": "隱私",
     "accept_all": "接受",
     "accept_necessary": "僅必要"
+  },
+  "discordThread": {
+    "view": "查看討論串",
+    "create": "建立討論串",
+    "creating": "正在建立討論串…",
+    "delayed": "Discord 討論串的建立比平常慢，請稍後再來查看。"
   },
   "footer": {
     "developers": "開發者",
@@ -1877,9 +1900,6 @@
     "details": "詳細資料",
     "order": "訂單",
     "discord_thread": "Discord 討論串",
-    "thread_link": "討論串連結",
-    "created_thread": "已建立討論串",
-    "create_thread": "建立討論串",
     "update_status": "更新狀態",
     "cancel": "取消",
     "complete_order": "完成訂單",
@@ -2055,9 +2075,6 @@
     "details": "詳細資料",
     "offer": "報價",
     "discordThread": "Discord 討論串",
-    "threadLink": "討論串連結",
-    "createdThread": "已建立討論串",
-    "createThread": "建立討論串",
     "acceptOrDecline": "接受或拒絕",
     "accept": "接受",
     "counterOffer": "還價",

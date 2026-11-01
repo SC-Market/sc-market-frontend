@@ -254,6 +254,23 @@
     "success": "Envoyé !",
     "failure": "Échec de l'envoi ! {{reason}}"
   },
+  "ads": {
+    "scOrgs": {
+      "disclaimer": "Site frère de SC Market. Projet de fans, non affilié à RSI ni à CIG.",
+      "finder": {
+        "kicker": "Équipage recherché",
+        "title": "Trouvez votre org",
+        "tagline": "Parcourez les orgs du verse, voyez qui recrute et envoyez votre candidature.",
+        "cta": "Ouvrir l’annuaire des orgs"
+      },
+      "demo": {
+        "kicker": "Chefs d’org",
+        "title": "Pilotez vos opés",
+        "tagline": "Événements, effectifs et candidatures au même endroit. Essayez la démo en direct, sans inscription.",
+        "cta": "Essayer la démo"
+      }
+    }
+  },
   "auth": {
     "title": "Inscription",
     "email": "E-mail",
@@ -329,6 +346,12 @@
     "privacy": "Confidentialité",
     "accept_all": "Accepter",
     "accept_necessary": "Nécessaires uniquement"
+  },
+  "discordThread": {
+    "view": "Voir le fil",
+    "create": "Créer un fil",
+    "creating": "Création du fil…",
+    "delayed": "Le fil Discord met plus de temps que d’habitude. Revenez dans une minute."
   },
   "footer": {
     "developers": "Développeurs",
@@ -1936,9 +1959,6 @@
     "details": "Détails",
     "order": "Commande",
     "discord_thread": "Fil Discord",
-    "thread_link": "Lien du fil",
-    "created_thread": "Fil créé",
-    "create_thread": "Créer un fil",
     "update_status": "Mettre à jour le statut",
     "cancel": "Annuler",
     "complete_order": "Terminer la commande",
@@ -2117,9 +2137,6 @@
     "details": "Détails",
     "offer": "Offre",
     "discordThread": "Fil Discord",
-    "threadLink": "Lien du fil",
-    "createdThread": "Fil créé",
-    "createThread": "Créer un fil",
     "acceptOrDecline": "Accepter ou refuser",
     "accept": "Accepter",
     "counterOffer": "Contre-offre",

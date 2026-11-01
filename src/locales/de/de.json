@@ -254,6 +254,23 @@
     "success": "Übermittelt!",
     "failure": "Übermittlung fehlgeschlagen! {{reason}}"
   },
+  "ads": {
+    "scOrgs": {
+      "disclaimer": "Schwesterseite von SC Market. Fan-Projekt, nicht mit RSI oder CIG verbunden.",
+      "finder": {
+        "kicker": "Crew gesucht",
+        "title": "Finde deine Org",
+        "tagline": "Stöbere durch die Orgs im Verse, sieh, wer rekrutiert, und schick deine Bewerbung.",
+        "cta": "Zum Org-Finder"
+      },
+      "demo": {
+        "kicker": "Für Org-Leiter",
+        "title": "Plane deine Ops",
+        "tagline": "Events, Mitgliederlisten und Bewerbungen an einem Ort. Teste die Live-Demo, ohne Anmeldung.",
+        "cta": "Demo testen"
+      }
+    }
+  },
   "auth": {
     "title": "Registrierung",
     "email": "E-Mail",
@@ -329,6 +346,12 @@
     "privacy": "Datenschutz",
     "accept_all": "Akzeptieren",
     "accept_necessary": "Nur notwendige"
+  },
+  "discordThread": {
+    "view": "Thread ansehen",
+    "create": "Thread erstellen",
+    "creating": "Thread wird erstellt…",
+    "delayed": "Der Discord-Thread braucht länger als üblich. Schau in einer Minute noch einmal vorbei."
   },
   "footer": {
     "developers": "Entwickler",
@@ -1932,9 +1955,6 @@
     "details": "Details",
     "order": "Bestellung",
     "discord_thread": "Discord-Thread",
-    "thread_link": "Thread-Link",
-    "created_thread": "Thread erstellt",
-    "create_thread": "Thread erstellen",
     "update_status": "Status aktualisieren",
     "cancel": "Abbrechen",
     "complete_order": "Bestellung abschließen",
@@ -2110,9 +2130,6 @@
     "details": "Details",
     "offer": "Angebot",
     "discordThread": "Discord-Thread",
-    "threadLink": "Thread-Link",
-    "createdThread": "Thread erstellt",
-    "createThread": "Thread erstellen",
     "acceptOrDecline": "Annehmen oder ablehnen",
     "accept": "Annehmen",
     "counterOffer": "Gegenangebot",

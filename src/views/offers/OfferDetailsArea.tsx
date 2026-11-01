@@ -39,6 +39,7 @@ import {
 } from "../../features/notifications/api/notificationApi"
 import { MessagesBody } from "../../features/chats"
 import LoadingButton from "@mui/lab/LoadingButton"
+import { DiscordThreadControl } from "../../components/orders/DiscordThreadControl"
 import { Link } from "react-router-dom"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
@@ -120,7 +121,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
     statusKey, statusColor,
     showAccept, showCancel,
     isUpdatingStatus, updateStatusCallback,
-    createThread, createThreadLoading,
+    createThread, refetchOffer,
   } = useOfferDetails(session, props.selectedOfferIndex)
 
   const { data: shop } = useGetShopQuery(
@@ -544,37 +545,12 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                 </TableCell>
                 <TableCell align="right">
                   <Stack direction="row" justifyContent={"right"}>
-                    <Typography color={"text.secondary"} variant={"subtitle2"}>
-                      {session.discord_thread_id ? (
-                        <MaterialLink
-                          href={`https://discord.com/channels/${session.discord_server_id}/${session.discord_thread_id}`}
-                          variant={"subtitle1"}
-                          underline={"hover"}
-                          color={"text.secondary"}
-                        >
-                          {t("OfferDetailsArea.threadLink")}
-                        </MaterialLink>
-                      ) : (
-                        <LoadingButton
-                          loading={createThreadLoading}
-                          onClick={() => {
-                            createThread(session.session_id)
-                              .unwrap()
-                              .then((result) => {
-                                issueAlert({
-                                  message: t("OfferDetailsArea.createdThread"),
-                                  severity: "success",
-                                })
-                              })
-                              .catch((err) => {
-                                issueAlert(err)
-                              })
-                          }}
-                        >
-                          {t("OfferDetailsArea.createThread")}
-                        </LoadingButton>
-                      )}
-                    </Typography>
+                    <DiscordThreadControl
+                      serverId={session.discord_server_id}
+                      threadId={session.discord_thread_id}
+                      create={createThread}
+                      refetch={refetchOffer}
+                    />
                   </Stack>
                 </TableCell>
               </TableRow>

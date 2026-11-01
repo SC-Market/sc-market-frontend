@@ -254,6 +254,23 @@
     "success": "送信しました！",
     "failure": "送信に失敗しました！{{reason}}"
   },
+  "ads": {
+    "scOrgs": {
+      "disclaimer": "SC Market の姉妹サイト。ファン制作で、RSI・CIG とは関係ありません。",
+      "finder": {
+        "kicker": "クルー募集中",
+        "title": "組織を探そう",
+        "tagline": "ヴァースの組織を見て回り、募集中の組織を見つけて応募しよう。",
+        "cta": "組織ファインダーを開く"
+      },
+      "demo": {
+        "kicker": "組織リーダーへ",
+        "title": "作戦を指揮しよう",
+        "tagline": "イベント、名簿、応募をひとつの場所で。登録不要のライブデモを試そう。",
+        "cta": "デモを試す"
+      }
+    }
+  },
   "auth": {
     "title": "登録",
     "email": "メールアドレス",
@@ -329,6 +346,12 @@
     "privacy": "プライバシー",
     "accept_all": "許可",
     "accept_necessary": "必要なもののみ"
+  },
+  "discordThread": {
+    "view": "スレッドを見る",
+    "create": "スレッドを作成",
+    "creating": "スレッドを作成中…",
+    "delayed": "Discordスレッドの作成にいつもより時間がかかっています。少し経ってから確認してください。"
   },
   "footer": {
     "developers": "開発者向け",
@@ -1932,9 +1955,6 @@
     "details": "詳細",
     "order": "注文",
     "discord_thread": "Discordスレッド",
-    "thread_link": "スレッドリンク",
-    "created_thread": "スレッドを作成しました",
-    "create_thread": "スレッドを作成",
     "update_status": "ステータスを更新",
     "cancel": "キャンセル",
     "complete_order": "注文を完了",
@@ -2110,9 +2130,6 @@
     "details": "詳細",
     "offer": "オファー",
     "discordThread": "Discordスレッド",
-    "threadLink": "スレッドリンク",
-    "createdThread": "スレッドを作成しました",
-    "createThread": "スレッドを作成",
     "acceptOrDecline": "承認または辞退",
     "accept": "承認",
     "counterOffer": "カウンターオファー",

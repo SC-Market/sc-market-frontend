@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import throttle from "lodash/throttle"
-import type { GetOfferSessionV2Response } from "../../../store/api/v2/market"
+import { useGetOfferSessionQuery, type GetOfferSessionV2Response } from "../../../store/api/v2/market"
 import { normalizeOfferStatus, type OfferStatusKey } from "../domain/types"
 import {
   useUpdateOfferStatusMutation,
@@ -65,7 +65,14 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
   const [assignUser] = useAssignOfferMutation()
   const [unassignUser] = useUnassignOfferMutation()
   const [updateStatus, { isLoading: isUpdatingStatus }] = useUpdateOfferStatusMutation()
-  const [createThread, { isLoading: createThreadLoading }] = useCreateOfferThreadMutation()
+  const [createOfferThread] = useCreateOfferThreadMutation()
+  // The page's own offer query (same args, same cache entry): re-read while
+  // the bot creates the Discord thread.
+  const { refetch: refetchOffer } = useGetOfferSessionQuery({ sessionId: session.session_id })
+  const createThread = useCallback(
+    () => createOfferThread(session.session_id).unwrap(),
+    [createOfferThread, session.session_id],
+  )
 
   // Permissions
   const amContractorManager = useMemo(
@@ -168,7 +175,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     statusKey, statusColor,
     showAccept, showCancel,
     isUpdatingStatus, updateStatusCallback,
-    createThread, createThreadLoading,
+    createThread, refetchOffer,
   }
 }
 

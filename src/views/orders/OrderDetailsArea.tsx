@@ -29,6 +29,7 @@ import { useCurrentChat, useGetChatByOrderIDQuery } from "../../features/chats"
 import type { Order } from "../../features/orders/domain/types"
 import { MessagesBody } from "../../features/chats"
 import LoadingButton from "@mui/lab/LoadingButton"
+import { DiscordThreadControl } from "../../components/orders/DiscordThreadControl"
 import { statusColors, statusNames } from "../../features/orders/domain/constants"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
@@ -124,7 +125,7 @@ export function OrderDetailsArea(props: { order: Order }) {
     amCustomer, amAssigned, amContractor, amRelated, amContractorManager, canClaim,
     privateContractCustomer, publicContractCustomer, isComplete,
     server_id,
-    createThread, createThreadLoading,
+    createThread, refetchOrder,
   } = useOrderDetails(order)
 
   return (
@@ -457,37 +458,12 @@ export function OrderDetailsArea(props: { order: Order }) {
                 </TableCell>
                 <TableCell align="right">
                   <Stack direction="row" justifyContent={"right"}>
-                    <Typography color={"text.secondary"} variant={"subtitle2"}>
-                      {order.discord_thread_id ? (
-                        <MaterialLink
-                          href={`https://discord.com/channels/${server_id}/${order.discord_thread_id}`}
-                          variant={"subtitle1"}
-                          underline={"hover"}
-                          color={"text.secondary"}
-                        >
-                          {t("orderDetailsArea.thread_link")}
-                        </MaterialLink>
-                      ) : (
-                        <LoadingButton
-                          loading={createThreadLoading}
-                          onClick={() => {
-                            createThread(order.order_id)
-                              .unwrap()
-                              .then((result) => {
-                                issueAlert({
-                                  message: t("orderDetailsArea.created_thread"),
-                                  severity: "success",
-                                })
-                              })
-                              .catch((err) => {
-                                issueAlert(err)
-                              })
-                          }}
-                        >
-                          {t("orderDetailsArea.create_thread")}
-                        </LoadingButton>
-                      )}
-                    </Typography>
+                    <DiscordThreadControl
+                      serverId={server_id}
+                      threadId={order.discord_thread_id}
+                      create={createThread}
+                      refetch={refetchOrder}
+                    />
                   </Stack>
                 </TableCell>
               </TableRow>

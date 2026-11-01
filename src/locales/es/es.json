@@ -254,6 +254,23 @@
     "success": "¡Enviado!",
     "failure": "¡No se pudo enviar! {{reason}}"
   },
+  "ads": {
+    "scOrgs": {
+      "disclaimer": "Sitio hermano de SC Market. Hecho por fans, sin afiliación con RSI ni CIG.",
+      "finder": {
+        "kicker": "Se busca tripulación",
+        "title": "Encuentra tu org",
+        "tagline": "Explora las orgs del verso, mira quién recluta y envía tu solicitud.",
+        "cta": "Abrir el buscador de orgs"
+      },
+      "demo": {
+        "kicker": "Líderes de org",
+        "title": "Dirige tus ops",
+        "tagline": "Eventos, plantillas y solicitudes en un solo lugar. Prueba la demo en vivo, sin registro.",
+        "cta": "Probar la demo"
+      }
+    }
+  },
   "auth": {
     "title": "Registro",
     "email": "Correo electrónico",
@@ -329,6 +346,12 @@
     "privacy": "Privacidad",
     "accept_all": "Aceptar",
     "accept_necessary": "Solo necesarias"
+  },
+  "discordThread": {
+    "view": "Ver hilo",
+    "create": "Crear hilo",
+    "creating": "Creando hilo…",
+    "delayed": "El hilo de Discord está tardando más de lo normal. Vuelve a mirar en un minuto."
   },
   "footer": {
     "developers": "Desarrolladores",
@@ -1936,9 +1959,6 @@
     "details": "Detalles",
     "order": "Pedido",
     "discord_thread": "Hilo de Discord",
-    "thread_link": "Enlace del hilo",
-    "created_thread": "Hilo creado",
-    "create_thread": "Crear hilo",
     "update_status": "Actualizar estado",
     "cancel": "Cancelar",
     "complete_order": "Completar pedido",
@@ -2117,9 +2137,6 @@
     "details": "Detalles",
     "offer": "Oferta",
     "discordThread": "Hilo de Discord",
-    "threadLink": "Enlace del hilo",
-    "createdThread": "Hilo creado",
-    "createThread": "Crear hilo",
     "acceptOrDecline": "Aceptar o rechazar",
     "accept": "Aceptar",
     "counterOffer": "Contraoferta",

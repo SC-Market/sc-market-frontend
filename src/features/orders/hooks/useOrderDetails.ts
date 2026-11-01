@@ -7,6 +7,7 @@ import {
   useAssignOrderMutation,
   useUnassignOrderMutation,
   useCreateOrderThreadMutation,
+  useGetOrderByIdQuery,
 } from "../api/ordersApi"
 import { useGetOrderDetailQuery } from "../../../store/api/v2/market"
 import { useGetUserProfileQuery, useGetUserByUsernameQuery } from "../../profile/api/profileApi"
@@ -60,7 +61,14 @@ export function useOrderDetails(order: Order) {
   const [assignUser] = useAssignOrderMutation()
   const [unassignUser] = useUnassignOrderMutation()
   const [setOrderStatus] = useSetOrderStatusMutation()
-  const [createThread, { isLoading: createThreadLoading }] = useCreateOrderThreadMutation()
+  const [createOrderThread] = useCreateOrderThreadMutation()
+  // The page's own order query (same args, same cache entry): re-read while
+  // the bot creates the Discord thread.
+  const { refetch: refetchOrder } = useGetOrderByIdQuery(order.order_id)
+  const createThread = useCallback(
+    () => createOrderThread(order.order_id).unwrap(),
+    [createOrderThread, order.order_id],
+  )
 
   // Status display
   const statusColor = useMemo(() => statusColors.get(order.status), [order.status])
@@ -164,6 +172,6 @@ export function useOrderDetails(order: Order) {
     privateContractCustomer, publicContractCustomer, isComplete,
     server_id,
     // Thread
-    createThread, createThreadLoading,
+    createThread, refetchOrder,
   }
 }

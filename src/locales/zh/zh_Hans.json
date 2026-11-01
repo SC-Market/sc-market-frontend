@@ -260,6 +260,23 @@
     "success": "已提交！",
     "failure": "提交失败！{{reason}}"
   },
+  "ads": {
+    "scOrgs": {
+      "disclaimer": "SC Market 的姊妹站点。粉丝自制，与 RSI 或 CIG 无关。",
+      "finder": {
+        "kicker": "招募船员",
+        "title": "找到你的组织",
+        "tagline": "浏览宇宙中的各个组织，看看谁在招人，然后提交申请。",
+        "cta": "打开组织查找"
+      },
+      "demo": {
+        "kicker": "致组织领袖",
+        "title": "指挥你的行动",
+        "tagline": "活动、名册和入会申请集中一处。免注册试用在线演示。",
+        "cta": "试用演示"
+      }
+    }
+  },
   "auth": {
     "title": "注册",
     "email": "邮箱",
@@ -335,6 +352,12 @@
     "privacy": "隐私",
     "accept_all": "接受",
     "accept_necessary": "仅必要"
+  },
+  "discordThread": {
+    "view": "查看讨论帖",
+    "create": "创建讨论帖",
+    "creating": "正在创建讨论帖…",
+    "delayed": "Discord 讨论帖的创建比平时慢，请稍后再来查看。"
   },
   "footer": {
     "developers": "开发者",
@@ -1934,9 +1957,6 @@
     "details": "详情",
     "order": "订单",
     "discord_thread": "Discord 讨论帖",
-    "thread_link": "讨论帖链接",
-    "created_thread": "已创建讨论帖",
-    "create_thread": "创建讨论帖",
     "update_status": "更新状态",
     "cancel": "取消",
     "complete_order": "完成订单",
@@ -2112,9 +2132,6 @@
     "details": "详情",
     "offer": "报价",
     "discordThread": "Discord 讨论帖",
-    "threadLink": "讨论帖链接",
-    "createdThread": "已创建讨论帖",
-    "createThread": "创建讨论帖",
     "acceptOrDecline": "接受或拒绝",
     "accept": "接受",
     "counterOffer": "还价",
