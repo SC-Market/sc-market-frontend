@@ -6,6 +6,7 @@ import {
   Chip,
   CircularProgress,
   FormControlLabel,
+  Grid,
   Switch,
   Typography,
 } from "@mui/material"
@@ -37,8 +38,8 @@ export function ContractAlertSettings() {
     <FlatSection
       title={t("settings.contractAlerts.title", "New public contract alerts")}
     >
-      <Box sx={{ width: "100%" }}>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+      <Grid item xs={12}>
+        <Typography variant="body2" color="text.primary" sx={{ mb: 2 }}>
           {t(
             "settings.contractAlerts.description",
             "Get an in-app and push notification when someone posts a public contract. Off by default. Leave every kind unticked to hear about all of them.",
@@ -132,7 +133,7 @@ export function ContractAlertSettings() {
                 </Box>
               )
             })}
-      </Box>
+      </Grid>
     </FlatSection>
   )
 }

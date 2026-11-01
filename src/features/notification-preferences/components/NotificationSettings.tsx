@@ -35,7 +35,7 @@ export function NotificationSettings() {
         >
           {t("settings.notifications.title", "Notifications")}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+        <Typography variant="body2" color="text.primary" sx={{ mb: 1.5 }}>
           {t(
             "settings.notifications.subtitle",
             "Choose where each kind of notification reaches you.",

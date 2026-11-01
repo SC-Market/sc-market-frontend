@@ -6,6 +6,7 @@ import {
   Chip,
   CircularProgress,
   FormControl,
+  Grid,
   InputLabel,
   Link as MuiLink,
   MenuItem,
@@ -16,6 +17,7 @@ import {
   Typography,
 } from "@mui/material"
 import { Link } from "react-router-dom"
+import { ExpandMoreRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { FlatSection } from "../../../components/paper/Section"
 import {
@@ -166,6 +168,7 @@ export function NotificationPreferencesTabs() {
             aria-label={`${label}: ${channelLabel(channel)}`}
             data-testid={`notif-pill-${key}`}
             sx={{
+              height: { xs: 32, sm: 24 },
               ...(state === "mixed" && { borderStyle: "dashed" }),
               ...((rowCells[0]?.reason === "discord_not_linked" ||
                 rowCells[0]?.reason === "coming_soon") && {
@@ -199,11 +202,20 @@ export function NotificationPreferencesTabs() {
           }}
         >
           <Box sx={{ minWidth: 0 }}>
-            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontWeight: 500 }}
+            >
               {label}
             </Typography>
             {row.hint && (
-              <Typography variant="caption" color="text.secondary">
+              <Typography
+                variant="caption"
+                color="text.primary"
+                component="p"
+                sx={{ m: 0 }}
+              >
                 {t(row.hintKey!, row.hint)}
               </Typography>
             )}
@@ -227,12 +239,19 @@ export function NotificationPreferencesTabs() {
         {events.length > 1 && (
           <Button
             size="small"
-            sx={{ mt: 0.5, px: 0 }}
+            sx={{ mt: 0.5, px: 0, minWidth: 0 }}
             aria-expanded={!!open[row.id]}
+            endIcon={
+              <ExpandMoreRounded
+                sx={{
+                  transition: "transform 0.2s",
+                  transform: open[row.id] ? "rotate(180deg)" : "none",
+                }}
+              />
+            }
             onClick={() => setOpen((o) => ({ ...o, [row.id]: !o[row.id] }))}
           >
-            {t("settings.notifications.customise", "Customise")}{" "}
-            {open[row.id] ? "▾" : "▸"}
+            {t("settings.notifications.customise", "Customise")}
           </Button>
         )}
         {open[row.id] &&
@@ -248,14 +267,16 @@ export function NotificationPreferencesTabs() {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: 0.5,
                   pl: 2,
                   py: 0.5,
                 }}
               >
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="body2" color="text.primary">
                   {evLabel}
                 </Typography>
-                <Box sx={{ display: "flex", gap: 0.5 }}>
+                <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                   {CHANNELS.map((channel) => {
                     const cell = cells.get(event)?.get(channel)
                     return cell
@@ -347,7 +368,7 @@ export function NotificationPreferencesTabs() {
               ))}
             </Select>
           </FormControl>
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" color="text.primary">
             {t(
               "settings.notifications.scopeHint",
               "Org work has its own settings for each org.",
@@ -405,7 +426,7 @@ export function NotificationPreferencesTabs() {
               )}
             </Select>
           </FormControl>
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" color="text.primary">
             {data.mute.muted
               ? t("settings.notifications.mute.active", {
                   defaultValue:
@@ -432,10 +453,12 @@ export function NotificationPreferencesTabs() {
                 data-testid={`notif-section-${section.id}`}
               >
                 <FlatSection title={t(section.labelKey, section.label)}>
-                  <Box sx={{ width: "100%" }}>
+                  {/* a Grid item: FlatSection's content area is a Grid
+                      container, and a bare Box sat 12px left of the title */}
+                  <Grid item xs={12}>
                     <Typography
                       variant="body2"
-                      color="text.secondary"
+                      color="text.primary"
                       sx={{ mb: 1 }}
                     >
                       {t(section.hintKey, section.hint)}
@@ -453,7 +476,7 @@ export function NotificationPreferencesTabs() {
                         )}
                       </MuiLink>
                     )}
-                  </Box>
+                  </Grid>
                 </FlatSection>
                 {section.extra === "contract-alerts" && !scope && (
                   <Box sx={{ mt: 2 }}>
