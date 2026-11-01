@@ -14,8 +14,8 @@
 import type { BridgeContext } from "./handler"
 import { isMainSiteHostname } from "../util/mainSiteHost"
 
-/** /sitemap.xml or /sitemap-<section>-<n>.xml */
-export const SITEMAP_PATH = /^\/sitemap(-[a-z]+-[0-9]{1,3})?\.xml$/
+/** /sitemap.xml or /sitemap-<section>-<n>.xml (sections may be hyphenated: missions-hubs) */
+export const SITEMAP_PATH = /^\/sitemap(-[a-z]+(?:-[a-z]+)*-[0-9]{1,3})?\.xml$/
 
 /** Edge-cache lifetime of a proxied sitemap file. */
 export const SITEMAP_TTL_SECONDS = 60 * 60

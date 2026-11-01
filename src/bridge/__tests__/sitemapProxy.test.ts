@@ -60,6 +60,17 @@ describe("main-host sitemap proxy", () => {
     expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/sitemap-market-0.xml`)
   })
 
+  it("proxies hyphenated section names (missions-hubs)", async () => {
+    const section = `<?xml version="1.0"?><urlset><url><loc>https://sc-market.space/missions/givers</loc></url></urlset>`
+    const { run, fetchSpy, next } = setup(async () => new Response(section))
+    const res = await run("/sitemap-missions-hubs-0.xml")
+    expect(await res.text()).toBe(section)
+    expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/sitemap-missions-hubs-0.xml`)
+    await run("/sitemap--0.xml")
+    await run("/sitemap-missions--0.xml")
+    expect(next).toHaveBeenCalledTimes(2)
+  })
+
   it("an unknown section is a 404; an API failure a 503 with Retry-After, not cached", async () => {
     expect((await setup(async () => new Response("{}", { status: 404 })).run("/sitemap-nope-0.xml")).status).toBe(404)
     const failing = setup(async () => new Response("oops", { status: 500 }))
