@@ -11,6 +11,7 @@ import { MinimalUser } from "../../datatypes/User"
 import { OfferSession } from "../../features/offers/api/offerApi"
 import type { PublicContract } from "../../features/contracting/domain/types"
 import type { AccountIdentityNotice } from "../../features/notifications/types/NotificationAccountIdentity"
+import type { StorefrontEnquiryNotice } from "../../features/notifications/types/NotificationStorefrontEnquiry"
 
 export interface Notification {
   read: boolean
@@ -28,6 +29,7 @@ export interface Notification {
     | OfferSession
     | PublicContract
     | AccountIdentityNotice
+    | StorefrontEnquiryNotice
   timestamp: string
   actors: MinimalUser[]
   scope?: "individual" | "organization"

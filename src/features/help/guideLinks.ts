@@ -21,6 +21,7 @@ export const GUIDE_LINKS = {
   orgRoles: "/guides/orgs/roles-and-permissions",
   orgInvites: "/guides/orgs/invite-and-manage-members",
   orgAuditLogs: "/guides/orgs/audit-logs",
+  orgWhiteLabel: "/guides/org-storefront/white-label",
   orgWhiteLabelTheme: "/guides/org-storefront/white-label-theme",
   orgRecruiting: "/guides/org-storefront/recruiting",
   orgShop: "/guides/org-storefront/org-shop",

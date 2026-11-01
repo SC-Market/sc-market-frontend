@@ -31,11 +31,17 @@ Everything else, such as listings, orders and stock, works the same as on sc-mar
 
 Subdomains are `yourorg.sc-market.space`. Staff set them up:
 
-1. Choose **Enquire about a branded storefront** in the **Storefront** tab. It opens the SC Market Discord.
-2. Tell us your org's Spectrum ID.
-3. We set up the address with you.
+1. Fill in **Enquire about a branded storefront** in your org's **Storefront** tab (members with **Manage Org Details**), or in your shop's settings for a shop.
+2. Give the subdomain you'd like (usually your Spectrum ID), what you have in mind, and how we should reach you: the Discord account linked to your profile, or a message on SC Market.
+3. The form then shows your enquiry's status while we set up the address with you. One enquiry per org or shop is open at a time.
 
 Only `sc-market.space` subdomains are available for now, not domains of your own.
+
+## The storefront directory
+
+The [Storefronts](/storefronts) page and the home page list RSI-verified orgs with at least one public listing. **Show in the public storefront directory** in the **Storefront** tab (and in each shop's settings) takes your org or a shop out of it.
+
+Members-only storefronts are never listed: if your subdomain is set to members-only, the setting stays off. Your branded subdomain still works for your members, and members-only listings don't count as public listings.
 
 ## Put your storefront on your own site
 
@@ -59,7 +65,7 @@ For account safety, some actions are blocked on white-label addresses. Do them o
 
 ## Who can do what
 
-- Set up the subdomain: SC Market staff, on request.
+- Ask for a subdomain and change the directory setting: members with **Manage Org Details** (for a shop, its managers). SC Market staff set the subdomain up.
 - Edit the theme: members with **Manage Theme**. The Owner and Admin roles have it.
 - Change the site settings and sidebar tabs: members with **Manage Org Details**.
 

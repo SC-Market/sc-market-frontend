@@ -243,6 +243,24 @@
       "status": "Status",
       "tier": "Stufe",
       "title": "Premium-Verwaltung"
+    },
+    "storefrontEnquiries": {
+      "title": "Storefront-Anfragen",
+      "filter": "Anzeigen",
+      "all": "Alle",
+      "loadFailed": "Die Anfragen konnten nicht geladen werden.",
+      "empty": "Keine Anfragen.",
+      "org": "Org",
+      "shop": "Shop",
+      "test": "Test",
+      "subdomain": "Subdomain",
+      "from": "Von",
+      "viaDiscord": "Discord: {{handle}}",
+      "viaMessage": "Nachricht auf SC Market",
+      "status": "Status",
+      "note": "Team-Notiz",
+      "save": "Speichern",
+      "handledBy": "Zuletzt geändert von {{user}}, {{date}}"
     }
   },
   "adminExpressVerify": {
@@ -707,7 +725,11 @@
     "all_caught_up": "Alles erledigt",
     "empty_filtered": "Nichts für diesen Filter",
     "empty_filtered_description": "Sieh dir stattdessen alle Benachrichtigungen an.",
-    "show_all": "Alle anzeigen"
+    "show_all": "Alle anzeigen",
+    "storefront_enquiry": {
+      "created": "{{name}} hat eine gebrandete Storefront angefragt: {{subdomain}}",
+      "generic": "Neue Anfrage für eine gebrandete Storefront"
+    }
   },
   "onboarding": {
     "welcome": "Willkommen bei SC Market",
@@ -5837,7 +5859,7 @@
       "unlocksTitle": "Was das Branding freischaltet",
       "unlocks": "Auf der eigenen Subdomain deiner Org ({{subdomain}}): dein Theme und Logo, Seitentitel mit dem Namen deiner Org, ein Markt, der nur die Angebote deiner Org zeigt, eigene Links in der Seitenleiste und ein optionaler Nur-Mitglieder-Modus. Dein Storefront auf sc-market.space bleibt in jedem Fall öffentlich.",
       "domainLive": "Deine Subdomain:",
-      "domainOnRequest": "Das Team richtet die Subdomain auf Anfrage ein."
+      "domainByEnquiry": "Das Team richtet die Subdomain auf Anfrage ein: Sende unten eine Anfrage (Mitglieder mit „Org-Details verwalten“)."
     },
     "criteria": {
       "verified": "Über RSI verifizierte Org",
@@ -5952,6 +5974,55 @@
       "done": "Alles erledigt. Teile den Link zu deinem Storefront oder bau das Widget unten auf deiner Website ein.",
       "intro": "Jeder Schritt dauert nur ein paar Minuten: Ziel ist dein erstes Angebot innerhalb von 15.",
       "progress": "Fortschritt der Einrichtung"
+    },
+    "enquiry": {
+      "status": {
+        "open": "Gesendet",
+        "in_progress": "In Bearbeitung",
+        "completed": "Erledigt",
+        "declined": "Abgelehnt"
+      },
+      "loadFailed": "Deine Storefront-Anfrage konnte nicht geladen werden. Versuche es später erneut.",
+      "subdomainLength": "2 bis 63 Zeichen",
+      "subdomainChars": "Kleinbuchstaben, Ziffern und einzelne Bindestriche; kein Bindestrich am Anfang oder Ende",
+      "subdomainReserved": "Diese Subdomain ist reserviert",
+      "title": "Gebrandete Storefront anfragen",
+      "requested": "Du hast {{subdomain}} angefragt.",
+      "replyDiscord": "Das SC-Market-Team meldet sich bei dir auf Discord.",
+      "replyMessage": "Das SC-Market-Team schreibt dir auf SC Market.",
+      "sentBy": "Gesendet am {{date}} von {{user}}.",
+      "deletedUser": "Gelöschter Nutzer",
+      "intro": "Frag das SC-Market-Team nach einer gebrandeten Storefront auf einer eigenen sc-market.space-Subdomain. Wir antworten so, wie du es unten auswählst.",
+      "previous": "Deine letzte Anfrage ({{subdomain}}): {{status}}.",
+      "subdomain": "Gewünschte Subdomain",
+      "subdomainHelp": "Meist die Spectrum-ID deiner Org oder der Name deines Shops.",
+      "message": "Nachricht (optional)",
+      "messageHelp": "Was du dir vorstellst. Nur das SC-Market-Team sieht es. {{length}}/{{max}}",
+      "contact": "Wie sollen wir dich erreichen?",
+      "contactDiscord": "Discord ({{handle}}, aus deinem Profil)",
+      "contactDiscordNone": "Discord (verknüpfe zuerst Discord in deinen Einstellungen)",
+      "contactMessage": "Eine Nachricht auf SC Market",
+      "contactHelp": "Wir speichern keine Kontaktdaten: Wir nutzen das mit deinem Profil verknüpfte Discord-Konto.",
+      "failed": "Die Anfrage konnte nicht gesendet werden.",
+      "submit": "Anfrage senden"
+    },
+    "directory": {
+      "title": "Storefront-Verzeichnis",
+      "toggle": "Im öffentlichen Storefront-Verzeichnis anzeigen",
+      "listed": "Deine Org steht im Storefront-Verzeichnis.",
+      "shopListed": "Dieser Shop zählt zum Eintrag seiner Org im Storefront-Verzeichnis.",
+      "hidden": "Ausgeblendet: wird im Storefront-Verzeichnis nicht angezeigt.",
+      "membersOnly": "Storefronts nur für Mitglieder werden nie öffentlich gelistet. Deine gebrandete Subdomain funktioniert für deine Mitglieder weiterhin.",
+      "onlyPrivate": "Noch nicht gelistet: nur Angebote für Mitglieder ({{listings}}). Erscheint, sobald es ein öffentliches Angebot gibt.",
+      "noContent": "Noch nicht gelistet: erscheint, sobald es ein öffentliches Angebot gibt.",
+      "notVerified": "Nur RSI-verifizierte Orgs stehen im Storefront-Verzeichnis.",
+      "personalShop": "Das Storefront-Verzeichnis listet Orgs, persönliche Shops sind darin noch nicht enthalten.",
+      "orgNotListed": "Seine Org steht nicht im Storefront-Verzeichnis, dieser Shop also auch nicht.",
+      "saveFailed": "Die Einstellung konnte nicht gespeichert werden."
+    },
+    "shopSection": {
+      "title": "Gebrandete Storefront",
+      "subtitle": "Frag nach einer eigenen sc-market.space-Subdomain für deinen Shop und wähle, ob er im Storefront-Verzeichnis steht"
     }
   }
 }

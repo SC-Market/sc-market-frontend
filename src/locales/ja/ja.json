@@ -243,6 +243,24 @@
       "status": "ステータス",
       "tier": "ティア",
       "title": "プレミアム管理"
+    },
+    "storefrontEnquiries": {
+      "title": "ストアフロントの問い合わせ",
+      "filter": "表示",
+      "all": "すべて",
+      "loadFailed": "問い合わせを読み込めませんでした。",
+      "empty": "問い合わせはありません。",
+      "org": "組織",
+      "shop": "ショップ",
+      "test": "テスト",
+      "subdomain": "サブドメイン",
+      "from": "送信者",
+      "viaDiscord": "Discord：{{handle}}",
+      "viaMessage": "SC Market 上のメッセージ",
+      "status": "ステータス",
+      "note": "スタッフメモ",
+      "save": "保存",
+      "handledBy": "最終更新：{{user}}、{{date}}"
     }
   },
   "adminExpressVerify": {
@@ -707,7 +725,11 @@
     "all_caught_up": "すべて確認済みです",
     "empty_filtered": "このフィルターに該当する通知はありません",
     "empty_filtered_description": "すべての通知を表示してみてください。",
-    "show_all": "すべて表示"
+    "show_all": "すべて表示",
+    "storefront_enquiry": {
+      "created": "{{name}} がブランドストアフロントをリクエストしました：{{subdomain}}",
+      "generic": "ブランドストアフロントの新しい問い合わせ"
+    }
   },
   "onboarding": {
     "welcome": "SC Marketへようこそ",
@@ -5836,7 +5858,7 @@
       "unlocksTitle": "ブランディングで使えるもの",
       "unlocks": "組織専用のサブドメイン（{{subdomain}}）で：テーマとロゴ、組織名入りのページタイトル、組織の出品だけを表示するマーケット、独自のサイドバーリンク、任意のメンバー限定モード。sc-market.space 上のストアフロントはどちらの場合も公開のままです。",
       "domainLive": "あなたのサブドメイン：",
-      "domainOnRequest": "サブドメインはリクエストに応じてスタッフが設定します。"
+      "domainByEnquiry": "サブドメインはリクエストに応じてスタッフが設定します。下のフォームから問い合わせてください（組織詳細の管理権限を持つメンバー）。"
     },
     "criteria": {
       "verified": "RSI 認証済みの組織",
@@ -5951,6 +5973,55 @@
       "done": "準備完了です。ストアフロントのリンクを共有するか、下のウィジェットをサイトに設置しましょう。",
       "intro": "各ステップは数分で終わります。15分以内の最初の出品を目指しましょう。",
       "progress": "設定の進み具合"
+    },
+    "enquiry": {
+      "status": {
+        "open": "送信済み",
+        "in_progress": "対応中",
+        "completed": "完了",
+        "declined": "見送り"
+      },
+      "loadFailed": "ストアフロントの問い合わせを読み込めませんでした。後でもう一度お試しください。",
+      "subdomainLength": "2〜63文字",
+      "subdomainChars": "小文字・数字・単独のハイフンのみ。先頭と末尾にハイフンは使えません",
+      "subdomainReserved": "そのサブドメインは予約されています",
+      "title": "ブランドストアフロントについて問い合わせる",
+      "requested": "{{subdomain}} をリクエストしました。",
+      "replyDiscord": "SC Market のスタッフが Discord で連絡します。",
+      "replyMessage": "SC Market のスタッフが SC Market 上でメッセージを送ります。",
+      "sentBy": "{{date}} に {{user}} が送信しました。",
+      "deletedUser": "削除されたユーザー",
+      "intro": "専用の sc-market.space サブドメインでのブランドストアフロントを SC Market のスタッフに依頼できます。返信方法は下で選べます。",
+      "previous": "前回の問い合わせ（{{subdomain}}）：{{status}}。",
+      "subdomain": "希望するサブドメイン",
+      "subdomainHelp": "通常は組織の Spectrum ID かショップ名です。",
+      "message": "メッセージ（任意）",
+      "messageHelp": "ご希望の内容。SC Market のスタッフだけが見られます。{{length}}/{{max}}",
+      "contact": "連絡方法",
+      "contactDiscord": "Discord（{{handle}}、プロフィールより）",
+      "contactDiscordNone": "Discord（先に設定で Discord を連携してください）",
+      "contactMessage": "SC Market 上のメッセージ",
+      "contactHelp": "連絡先は保存しません。プロフィールに連携された Discord アカウントを使います。",
+      "failed": "問い合わせを送信できませんでした。",
+      "submit": "問い合わせを送信"
+    },
+    "directory": {
+      "title": "ストアフロント一覧",
+      "toggle": "公開ストアフロント一覧に表示する",
+      "listed": "あなたの組織はストアフロント一覧に掲載されています。",
+      "shopListed": "このショップは所属組織のストアフロント一覧の掲載に含まれます。",
+      "hidden": "非表示：ストアフロント一覧には表示されません。",
+      "membersOnly": "メンバー限定のストアフロントは公開一覧に掲載されません。ブランドサブドメインはメンバー向けに引き続き使えます。",
+      "onlyPrivate": "まだ掲載されていません：メンバー限定の出品のみです（{{listings}}）。公開出品があれば表示されます。",
+      "noContent": "まだ掲載されていません。公開出品があれば表示されます。",
+      "notVerified": "ストアフロント一覧には RSI 認証済みの組織だけが掲載されます。",
+      "personalShop": "ストアフロント一覧は組織を掲載するため、個人ショップはまだ含まれません。",
+      "orgNotListed": "所属組織がストアフロント一覧に掲載されていないため、このショップも掲載されません。",
+      "saveFailed": "設定を保存できませんでした。"
+    },
+    "shopSection": {
+      "title": "ブランドストアフロント",
+      "subtitle": "ショップ専用の sc-market.space サブドメインを依頼し、ストアフロント一覧に載せるかを選びます"
     }
   }
 }

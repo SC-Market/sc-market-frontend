@@ -52,6 +52,7 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => issueAlert,
 }))
 vi.mock("../ShopBlocklist", () => ({ ShopBlocklistSection: () => null }))
+vi.mock("../ShopStorefrontSection", () => ({ ShopStorefrontSection: () => null }))
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: (props: { children: React.ReactNode }) => <div>{props.children}</div>,
 }))

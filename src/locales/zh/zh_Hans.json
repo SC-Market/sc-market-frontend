@@ -249,6 +249,24 @@
       "status": "状态",
       "tier": "等级",
       "title": "高级会员管理"
+    },
+    "storefrontEnquiries": {
+      "title": "店面咨询",
+      "filter": "显示",
+      "all": "全部",
+      "loadFailed": "无法加载咨询。",
+      "empty": "没有咨询。",
+      "org": "组织",
+      "shop": "店铺",
+      "test": "测试",
+      "subdomain": "子域名",
+      "from": "来自",
+      "viaDiscord": "Discord：{{handle}}",
+      "viaMessage": "SC Market 站内消息",
+      "status": "状态",
+      "note": "工作人员备注",
+      "save": "保存",
+      "handledBy": "最后由 {{user}} 修改，{{date}}"
     }
   },
   "adminExpressVerify": {
@@ -713,7 +731,11 @@
     "all_caught_up": "已全部看完",
     "empty_filtered": "此筛选条件下没有通知",
     "empty_filtered_description": "试试查看全部通知。",
-    "show_all": "显示全部"
+    "show_all": "显示全部",
+    "storefront_enquiry": {
+      "created": "{{name}} 申请了品牌店面：{{subdomain}}",
+      "generic": "新的品牌店面咨询"
+    }
   },
   "onboarding": {
     "welcome": "欢迎来到 SC Market",
@@ -5842,7 +5864,7 @@
       "unlocksTitle": "品牌功能包括",
       "unlocks": "在你的组织专属子域名（{{subdomain}}）上：你的主题和标志、带有组织名称的页面标题、只显示你的组织商品的市场、你自己的侧边栏链接，以及可选的仅限成员模式。你在 sc-market.space 上的店面始终保持公开。",
       "domainLive": "你的子域名：",
-      "domainOnRequest": "子域名由工作人员按申请设置。"
+      "domainByEnquiry": "子域名由工作人员按申请设置：请在下方提交咨询（需要“管理组织详情”权限的成员）。"
     },
     "criteria": {
       "verified": "经 RSI 验证的组织",
@@ -5957,6 +5979,55 @@
       "done": "全部完成。分享你的店面链接，或把下面的小部件放到你的网站上。",
       "intro": "每一步只需几分钟：争取在 15 分钟内发布第一个商品。",
       "progress": "设置进度"
+    },
+    "enquiry": {
+      "status": {
+        "open": "已发送",
+        "in_progress": "处理中",
+        "completed": "已完成",
+        "declined": "已拒绝"
+      },
+      "loadFailed": "无法加载你的店面咨询，请稍后再试。",
+      "subdomainLength": "2 到 63 个字符",
+      "subdomainChars": "仅限小写字母、数字和单个连字符；开头和结尾不能是连字符",
+      "subdomainReserved": "该子域名已被保留",
+      "title": "咨询品牌店面",
+      "requested": "你申请了 {{subdomain}}。",
+      "replyDiscord": "SC Market 工作人员会通过 Discord 联系你。",
+      "replyMessage": "SC Market 工作人员会在 SC Market 上给你发消息。",
+      "sentBy": "由 {{user}} 于 {{date}} 发送。",
+      "deletedUser": "已删除的用户",
+      "intro": "向 SC Market 工作人员申请一个使用独立 sc-market.space 子域名的品牌店面。我们会按你在下方选择的方式回复。",
+      "previous": "你上次的咨询（{{subdomain}}）：{{status}}。",
+      "subdomain": "想要的子域名",
+      "subdomainHelp": "通常是你组织的 Spectrum ID 或店铺名称。",
+      "message": "留言（可选）",
+      "messageHelp": "你的想法。只有 SC Market 工作人员能看到。{{length}}/{{max}}",
+      "contact": "我们该如何联系你？",
+      "contactDiscord": "Discord（{{handle}}，来自你的个人资料）",
+      "contactDiscordNone": "Discord（请先在设置中关联 Discord）",
+      "contactMessage": "SC Market 站内消息",
+      "contactHelp": "我们不保存联系方式：我们使用关联到你个人资料的 Discord 账号。",
+      "failed": "咨询发送失败。",
+      "submit": "发送咨询"
+    },
+    "directory": {
+      "title": "店面目录",
+      "toggle": "在公开店面目录中显示",
+      "listed": "你的组织已列入店面目录。",
+      "shopListed": "此店铺计入其组织在店面目录中的条目。",
+      "hidden": "已隐藏：不会在店面目录中显示。",
+      "membersOnly": "仅限成员的店面永远不会公开列出。你的品牌子域名仍可供成员使用。",
+      "onlyPrivate": "尚未列出：只有仅限成员的商品（{{listings}}）。有公开商品后才会显示。",
+      "noContent": "尚未列出：有公开商品后才会显示。",
+      "notVerified": "只有经过 RSI 验证的组织才会列入店面目录。",
+      "personalShop": "店面目录列出的是组织，因此个人店铺暂不在其中。",
+      "orgNotListed": "其组织未列入店面目录，因此此店铺也不会列出。",
+      "saveFailed": "设置保存失败。"
+    },
+    "shopSection": {
+      "title": "品牌店面",
+      "subtitle": "为你的店铺申请独立的 sc-market.space 子域名，并选择是否列入店面目录"
     }
   }
 }

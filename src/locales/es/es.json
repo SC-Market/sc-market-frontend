@@ -243,6 +243,24 @@
       "status": "Estado",
       "tier": "Nivel",
       "title": "Gestión de Premium"
+    },
+    "storefrontEnquiries": {
+      "title": "Solicitudes de escaparate",
+      "filter": "Mostrar",
+      "all": "Todas",
+      "loadFailed": "No se pudieron cargar las solicitudes.",
+      "empty": "No hay solicitudes.",
+      "org": "Org",
+      "shop": "Tienda",
+      "test": "Prueba",
+      "subdomain": "Subdominio",
+      "from": "De",
+      "viaDiscord": "Discord: {{handle}}",
+      "viaMessage": "Mensaje en SC Market",
+      "status": "Estado",
+      "note": "Nota del equipo",
+      "save": "Guardar",
+      "handledBy": "Último cambio de {{user}}, {{date}}"
     }
   },
   "adminExpressVerify": {
@@ -710,7 +728,11 @@
     "all_caught_up": "Estás al día",
     "empty_filtered": "No hay nada con este filtro",
     "empty_filtered_description": "Prueba a ver todas las notificaciones.",
-    "show_all": "Mostrar todas"
+    "show_all": "Mostrar todas",
+    "storefront_enquiry": {
+      "created": "{{name}} ha pedido un escaparate con su marca: {{subdomain}}",
+      "generic": "Nueva solicitud de escaparate con marca"
+    }
   },
   "onboarding": {
     "welcome": "Bienvenido a SC Market",
@@ -5872,7 +5894,7 @@
       "unlocksTitle": "Qué desbloquea la marca",
       "unlocks": "En el subdominio propio de tu org ({{subdomain}}): tu tema y logo, títulos de página con el nombre de tu org, un mercado que solo muestra los anuncios de tu org, tus propios enlaces en la barra lateral y un modo opcional solo para miembros. Tu escaparate en sc-market.space sigue siendo público en cualquier caso.",
       "domainLive": "Tu subdominio:",
-      "domainOnRequest": "El equipo configura el subdominio cuando lo pides."
+      "domainByEnquiry": "El equipo configura el subdominio bajo petición: envía una solicitud abajo (miembros con Gestionar detalles de la org)."
     },
     "criteria": {
       "verified": "Org verificada por RSI",
@@ -5987,6 +6009,55 @@
       "done": "Todo listo. Comparte el enlace de tu escaparate o pon el widget de abajo en tu web.",
       "intro": "Cada paso lleva unos minutos: intenta tener tu primer anuncio en menos de 15.",
       "progress": "Progreso de la configuración"
+    },
+    "enquiry": {
+      "status": {
+        "open": "Enviada",
+        "in_progress": "En curso",
+        "completed": "Hecho",
+        "declined": "Rechazada"
+      },
+      "loadFailed": "No se pudo cargar tu solicitud de escaparate. Inténtalo más tarde.",
+      "subdomainLength": "De 2 a 63 caracteres",
+      "subdomainChars": "Minúsculas, dígitos y guiones sueltos; sin guion al principio ni al final",
+      "subdomainReserved": "Ese subdominio está reservado",
+      "title": "Solicitar un escaparate con tu marca",
+      "requested": "Has pedido {{subdomain}}.",
+      "replyDiscord": "El equipo de SC Market te contactará por Discord.",
+      "replyMessage": "El equipo de SC Market te escribirá en SC Market.",
+      "sentBy": "Enviada el {{date}} por {{user}}.",
+      "deletedUser": "Usuario eliminado",
+      "intro": "Pide al equipo de SC Market un escaparate con tu marca en su propio subdominio de sc-market.space. Te responderemos como elijas abajo.",
+      "previous": "Tu última solicitud ({{subdomain}}): {{status}}.",
+      "subdomain": "Subdominio que quieres",
+      "subdomainHelp": "Normalmente el Spectrum ID de tu org o el nombre de tu tienda.",
+      "message": "Mensaje (opcional)",
+      "messageHelp": "Lo que tienes en mente. Solo lo ve el equipo de SC Market. {{length}}/{{max}}",
+      "contact": "¿Cómo te contactamos?",
+      "contactDiscord": "Discord ({{handle}}, de tu perfil)",
+      "contactDiscordNone": "Discord (primero vincula Discord en tus ajustes)",
+      "contactMessage": "Un mensaje en SC Market",
+      "contactHelp": "No guardamos datos de contacto: usamos la cuenta de Discord vinculada a tu perfil.",
+      "failed": "No se pudo enviar la solicitud.",
+      "submit": "Enviar solicitud"
+    },
+    "directory": {
+      "title": "Directorio de escaparates",
+      "toggle": "Mostrar en el directorio público de escaparates",
+      "listed": "Tu org aparece en el directorio de escaparates.",
+      "shopListed": "Esta tienda cuenta para la ficha de su org en el directorio de escaparates.",
+      "hidden": "Oculto: no aparece en el directorio de escaparates.",
+      "membersOnly": "Los escaparates solo para miembros nunca se listan públicamente. Tu subdominio con tu marca sigue funcionando para tus miembros.",
+      "onlyPrivate": "Aún no aparece: solo anuncios para miembros ({{listings}}). Aparecerá cuando tenga un anuncio público.",
+      "noContent": "Aún no aparece: aparecerá cuando tenga un anuncio público.",
+      "notVerified": "Solo las orgs verificadas por RSI aparecen en el directorio de escaparates.",
+      "personalShop": "El directorio de escaparates lista orgs, así que las tiendas personales aún no aparecen.",
+      "orgNotListed": "Su org no aparece en el directorio de escaparates, así que esta tienda tampoco.",
+      "saveFailed": "No se pudo guardar el ajuste."
+    },
+    "shopSection": {
+      "title": "Escaparate con tu marca",
+      "subtitle": "Pide un subdominio propio de sc-market.space para tu tienda y elige si aparece en el directorio de escaparates"
     }
   }
 }

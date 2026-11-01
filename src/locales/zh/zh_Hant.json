@@ -243,6 +243,24 @@
       "status": "狀態",
       "tier": "方案等級",
       "title": "高級版管理"
+    },
+    "storefrontEnquiries": {
+      "title": "店面諮詢",
+      "filter": "顯示",
+      "all": "全部",
+      "loadFailed": "無法載入諮詢。",
+      "empty": "沒有諮詢。",
+      "org": "組織",
+      "shop": "商店",
+      "test": "測試",
+      "subdomain": "子網域",
+      "from": "來自",
+      "viaDiscord": "Discord：{{handle}}",
+      "viaMessage": "SC Market 站內訊息",
+      "status": "狀態",
+      "note": "工作人員備註",
+      "save": "儲存",
+      "handledBy": "最後由 {{user}} 修改，{{date}}"
     }
   },
   "adminExpressVerify": {
@@ -707,7 +725,11 @@
     "all_caught_up": "已全部看完",
     "empty_filtered": "此篩選條件下沒有通知",
     "empty_filtered_description": "試試查看全部通知。",
-    "show_all": "顯示全部"
+    "show_all": "顯示全部",
+    "storefront_enquiry": {
+      "created": "{{name}} 申請了品牌店面：{{subdomain}}",
+      "generic": "新的品牌店面諮詢"
+    }
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "爲此帖點贊"
@@ -5836,7 +5858,7 @@
       "unlocksTitle": "品牌功能包括",
       "unlocks": "在你的組織專屬子網域（{{subdomain}}）上：你的主題和標誌、帶有組織名稱的頁面標題、只顯示你的組織商品的市場、你自己的側邊欄連結，以及可選的僅限成員模式。你在 sc-market.space 上的店面始終保持公開。",
       "domainLive": "你的子網域：",
-      "domainOnRequest": "子網域由工作人員依申請設定。"
+      "domainByEnquiry": "子網域由工作人員依申請設定：請在下方提交諮詢（需要「管理組織詳情」權限的成員）。"
     },
     "criteria": {
       "verified": "經 RSI 驗證的組織",
@@ -5951,6 +5973,55 @@
       "done": "全部完成。分享你的店面連結，或把下面的小工具放到你的網站上。",
       "intro": "每一步只需幾分鐘：爭取在 15 分鐘內上架第一個商品。",
       "progress": "設定進度"
+    },
+    "enquiry": {
+      "status": {
+        "open": "已送出",
+        "in_progress": "處理中",
+        "completed": "已完成",
+        "declined": "已婉拒"
+      },
+      "loadFailed": "無法載入你的店面諮詢，請稍後再試。",
+      "subdomainLength": "2 到 63 個字元",
+      "subdomainChars": "僅限小寫字母、數字和單個連字號；開頭和結尾不能是連字號",
+      "subdomainReserved": "該子網域已被保留",
+      "title": "諮詢品牌店面",
+      "requested": "你申請了 {{subdomain}}。",
+      "replyDiscord": "SC Market 工作人員會透過 Discord 聯絡你。",
+      "replyMessage": "SC Market 工作人員會在 SC Market 上傳訊息給你。",
+      "sentBy": "由 {{user}} 於 {{date}} 送出。",
+      "deletedUser": "已刪除的使用者",
+      "intro": "向 SC Market 工作人員申請一個使用獨立 sc-market.space 子網域的品牌店面。我們會依你在下方選擇的方式回覆。",
+      "previous": "你上次的諮詢（{{subdomain}}）：{{status}}。",
+      "subdomain": "想要的子網域",
+      "subdomainHelp": "通常是你組織的 Spectrum ID 或商店名稱。",
+      "message": "留言（選填）",
+      "messageHelp": "你的想法。只有 SC Market 工作人員能看到。{{length}}/{{max}}",
+      "contact": "我們該如何聯絡你？",
+      "contactDiscord": "Discord（{{handle}}，來自你的個人資料）",
+      "contactDiscordNone": "Discord（請先在設定中連結 Discord）",
+      "contactMessage": "SC Market 站內訊息",
+      "contactHelp": "我們不儲存聯絡資料：我們使用連結到你個人資料的 Discord 帳號。",
+      "failed": "諮詢送出失敗。",
+      "submit": "送出諮詢"
+    },
+    "directory": {
+      "title": "店面目錄",
+      "toggle": "在公開店面目錄中顯示",
+      "listed": "你的組織已列入店面目錄。",
+      "shopListed": "此商店計入其組織在店面目錄中的條目。",
+      "hidden": "已隱藏：不會在店面目錄中顯示。",
+      "membersOnly": "僅限成員的店面永遠不會公開列出。你的品牌子網域仍可供成員使用。",
+      "onlyPrivate": "尚未列出：只有僅限成員的商品（{{listings}}）。有公開商品後才會顯示。",
+      "noContent": "尚未列出：有公開商品後才會顯示。",
+      "notVerified": "只有經過 RSI 驗證的組織才會列入店面目錄。",
+      "personalShop": "店面目錄列出的是組織，因此個人商店暫不在其中。",
+      "orgNotListed": "其組織未列入店面目錄，因此此商店也不會列出。",
+      "saveFailed": "設定儲存失敗。"
+    },
+    "shopSection": {
+      "title": "品牌店面",
+      "subtitle": "為你的商店申請獨立的 sc-market.space 子網域，並選擇是否列入店面目錄"
     }
   }
 }

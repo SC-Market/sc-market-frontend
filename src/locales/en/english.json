@@ -503,6 +503,24 @@
       "status": "Status",
       "tier": "Tier",
       "title": "Premium Management"
+    },
+    "storefrontEnquiries": {
+      "title": "Storefront enquiries",
+      "filter": "Show",
+      "all": "All",
+      "loadFailed": "The enquiries couldn't be loaded.",
+      "empty": "No enquiries.",
+      "org": "Org",
+      "shop": "Shop",
+      "test": "Test",
+      "subdomain": "Subdomain",
+      "from": "From",
+      "viaDiscord": "Discord: {{handle}}",
+      "viaMessage": "Message on SC Market",
+      "status": "Status",
+      "note": "Staff note",
+      "save": "Save",
+      "handledBy": "Last changed by {{user}}, {{date}}"
     }
   },
   "adminAuditLogs": {
@@ -3227,7 +3245,11 @@
     "all_caught_up": "You're all caught up",
     "empty_filtered": "Nothing here for this filter",
     "empty_filtered_description": "Try all notifications instead.",
-    "show_all": "Show all"
+    "show_all": "Show all",
+    "storefront_enquiry": {
+      "created": "{{name}} asked for a branded storefront: {{subdomain}}",
+      "generic": "New branded storefront enquiry"
+    }
   },
   "Off Course": "warning",
   "OfferDetailsArea": {
@@ -5837,7 +5859,7 @@
       "unlocksTitle": "What branding unlocks",
       "unlocks": "On your org's own subdomain ({{subdomain}}): your theme and logo, page titles with your org's name, a market that only shows your org's listings, your own sidebar links, and an optional members-only mode. Your storefront on sc-market.space stays public either way.",
       "domainLive": "Your subdomain:",
-      "domainOnRequest": "Staff set up the subdomain on request."
+      "domainByEnquiry": "Staff set up the subdomain on request: send an enquiry below (members with Manage Org Details)."
     },
     "criteria": {
       "verified": "RSI-verified org",
@@ -5952,6 +5974,55 @@
       "done": "All set. Share your storefront link, or put the widget below on your site.",
       "intro": "Each step takes a few minutes: aim for your first listing within 15.",
       "progress": "Setup progress"
+    },
+    "enquiry": {
+      "status": {
+        "open": "Sent",
+        "in_progress": "In progress",
+        "completed": "Done",
+        "declined": "Declined"
+      },
+      "loadFailed": "Your storefront enquiry couldn't be loaded. Try again later.",
+      "subdomainLength": "2 to 63 characters",
+      "subdomainChars": "Lower-case letters, digits and single hyphens; no hyphen at the start or end",
+      "subdomainReserved": "That subdomain is reserved",
+      "title": "Enquire about a branded storefront",
+      "requested": "You asked for {{subdomain}}.",
+      "replyDiscord": "SC Market staff will contact you on Discord.",
+      "replyMessage": "SC Market staff will message you on SC Market.",
+      "sentBy": "Sent {{date}} by {{user}}.",
+      "deletedUser": "Deleted user",
+      "intro": "Ask SC Market staff for a branded storefront on its own sc-market.space subdomain. We'll reply the way you choose below.",
+      "previous": "Your last enquiry ({{subdomain}}): {{status}}.",
+      "subdomain": "Subdomain you'd like",
+      "subdomainHelp": "Usually your org's Spectrum ID or your shop's name.",
+      "message": "Message (optional)",
+      "messageHelp": "What you have in mind. Only SC Market staff see it. {{length}}/{{max}}",
+      "contact": "How should we reach you?",
+      "contactDiscord": "Discord ({{handle}}, from your profile)",
+      "contactDiscordNone": "Discord (link Discord in your settings first)",
+      "contactMessage": "A message on SC Market",
+      "contactHelp": "We don't store contact details: we use the Discord account linked to your profile.",
+      "failed": "The enquiry couldn't be sent.",
+      "submit": "Send enquiry"
+    },
+    "directory": {
+      "title": "Storefront directory",
+      "toggle": "Show in the public storefront directory",
+      "listed": "Your org is listed in the storefront directory.",
+      "shopListed": "This shop counts towards its org's listing in the storefront directory.",
+      "hidden": "Hidden: it isn't shown in the storefront directory.",
+      "membersOnly": "Members-only storefronts are never listed publicly. Your branded subdomain still works for your members.",
+      "onlyPrivate": "Not listed yet: only members-only listings ({{listings}}). It shows once it has a public listing.",
+      "noContent": "Not listed yet: it shows once it has a public listing.",
+      "notVerified": "Only RSI-verified orgs are listed in the storefront directory.",
+      "personalShop": "The storefront directory lists orgs, so personal shops aren't in it yet.",
+      "orgNotListed": "Its org isn't listed in the storefront directory, so neither is this shop.",
+      "saveFailed": "The setting couldn't be saved."
+    },
+    "shopSection": {
+      "title": "Branded storefront",
+      "subtitle": "Ask for your shop's own sc-market.space subdomain, and choose whether it's in the storefront directory"
     }
   }
 }

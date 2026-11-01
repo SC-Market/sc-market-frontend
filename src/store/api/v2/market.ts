@@ -5,6 +5,7 @@ export const addTagTypes = [
   "Suppliers V2",
   "Stock Lots V2",
   "Shops",
+  "Contractors",
   "Requisitions V2",
   "Public API tokens",
   "Price Alerts",
@@ -30,7 +31,6 @@ export const addTagTypes = [
   "Game Data - Blueprints",
   "Debug V2",
   "Dashboard V2",
-  "Contractors",
   "Cart V2",
   "Buy Orders V2",
   "Availability",
@@ -409,6 +409,62 @@ const injectedRtkApi = api
         query: (queryArg) => ({
           url: `/shops/${queryArg.shopId}/order-settings/${queryArg.settingType}`,
           method: "DELETE",
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      getStorefronts: build.query<
+        GetStorefrontsApiResponse,
+        GetStorefrontsApiArg
+      >({
+        query: () => ({ url: `/contractors/storefronts` }),
+        providesTags: ["Contractors"],
+      }),
+      getOrgStorefront: build.query<
+        GetOrgStorefrontApiResponse,
+        GetOrgStorefrontApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/contractors/${queryArg.spectrumId}/storefront`,
+        }),
+        providesTags: ["Contractors"],
+      }),
+      getOrgStorefrontStatus: build.query<
+        GetOrgStorefrontStatusApiResponse,
+        GetOrgStorefrontStatusApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/contractors/${queryArg.spectrumId}/storefront/status`,
+        }),
+        providesTags: ["Contractors"],
+      }),
+      setOrgStorefrontDirectory: build.mutation<
+        SetOrgStorefrontDirectoryApiResponse,
+        SetOrgStorefrontDirectoryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/contractors/${queryArg.spectrumId}/storefront/directory`,
+          method: "PUT",
+          body: queryArg.storefrontDirectoryRequest,
+        }),
+        invalidatesTags: ["Contractors"],
+      }),
+      getShopStorefrontDirectory: build.query<
+        GetShopStorefrontDirectoryApiResponse,
+        GetShopStorefrontDirectoryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/storefront/directory`,
+        }),
+        providesTags: ["Shops"],
+      }),
+      setShopStorefrontDirectory: build.mutation<
+        SetShopStorefrontDirectoryApiResponse,
+        SetShopStorefrontDirectoryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/storefront/directory`,
+          method: "PUT",
+          body: queryArg.storefrontDirectoryRequest,
         }),
         invalidatesTags: ["Shops"],
       }),
@@ -1704,28 +1760,27 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Dashboard V2"],
       }),
-      getStorefronts: build.query<
-        GetStorefrontsApiResponse,
-        GetStorefrontsApiArg
-      >({
-        query: () => ({ url: `/contractors/storefronts` }),
-        providesTags: ["Contractors"],
-      }),
-      getOrgStorefront: build.query<
-        GetOrgStorefrontApiResponse,
-        GetOrgStorefrontApiArg
+      createStorefrontEnquiry: build.mutation<
+        CreateStorefrontEnquiryApiResponse,
+        CreateStorefrontEnquiryApiArg
       >({
         query: (queryArg) => ({
-          url: `/contractors/${queryArg.spectrumId}/storefront`,
+          url: `/storefront-enquiries`,
+          method: "POST",
+          body: queryArg.createStorefrontEnquiryRequest,
         }),
-        providesTags: ["Contractors"],
+        invalidatesTags: ["Contractors"],
       }),
-      getOrgStorefrontStatus: build.query<
-        GetOrgStorefrontStatusApiResponse,
-        GetOrgStorefrontStatusApiArg
+      getStorefrontEnquiry: build.query<
+        GetStorefrontEnquiryApiResponse,
+        GetStorefrontEnquiryApiArg
       >({
         query: (queryArg) => ({
-          url: `/contractors/${queryArg.spectrumId}/storefront/status`,
+          url: `/storefront-enquiries`,
+          params: {
+            target_type: queryArg.targetType,
+            target_id: queryArg.targetId,
+          },
         }),
         providesTags: ["Contractors"],
       }),
@@ -2106,6 +2161,31 @@ const injectedRtkApi = api
           },
         }),
         invalidatesTags: ["Admin Feature Flags"],
+      }),
+      listStorefrontEnquiries: build.query<
+        ListStorefrontEnquiriesApiResponse,
+        ListStorefrontEnquiriesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/storefront-enquiries`,
+          params: {
+            status: queryArg.status,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      updateStorefrontEnquiry: build.mutation<
+        UpdateStorefrontEnquiryApiResponse,
+        UpdateStorefrontEnquiryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/storefront-enquiries/${queryArg.enquiryId}`,
+          method: "PATCH",
+          body: queryArg.updateStorefrontEnquiryRequest,
+        }),
+        invalidatesTags: ["Admin"],
       }),
       searchIdentityUsers: build.query<
         SearchIdentityUsersApiResponse,
@@ -2499,6 +2579,34 @@ export type DeleteShopOrderSettingApiResponse = /** status 200 Ok */ {
 export type DeleteShopOrderSettingApiArg = {
   shopId: string
   settingType: string
+}
+export type GetStorefrontsApiResponse = /** status 200 Ok */ StorefrontsResponse
+export type GetStorefrontsApiArg = void
+export type GetOrgStorefrontApiResponse = /** status 200 Ok */ OrgStorefront
+export type GetOrgStorefrontApiArg = {
+  spectrumId: string
+}
+export type GetOrgStorefrontStatusApiResponse =
+  /** status 200 Ok */ OrgStorefrontStatusResponse
+export type GetOrgStorefrontStatusApiArg = {
+  spectrumId: string
+}
+export type SetOrgStorefrontDirectoryApiResponse =
+  /** status 200 Ok */ StorefrontDirectoryStatus
+export type SetOrgStorefrontDirectoryApiArg = {
+  spectrumId: string
+  storefrontDirectoryRequest: StorefrontDirectoryRequest
+}
+export type GetShopStorefrontDirectoryApiResponse =
+  /** status 200 Ok */ StorefrontDirectoryStatus
+export type GetShopStorefrontDirectoryApiArg = {
+  shopId: string
+}
+export type SetShopStorefrontDirectoryApiResponse =
+  /** status 200 Ok */ StorefrontDirectoryStatus
+export type SetShopStorefrontDirectoryApiArg = {
+  shopId: string
+  storefrontDirectoryRequest: StorefrontDirectoryRequest
 }
 export type CreateRequisitionApiResponse =
   /** status 200 Ok */ CreateRequisitionResponse
@@ -3539,16 +3647,16 @@ export type SaveLayoutApiResponse = /** status 200 Ok */ DashboardLayout
 export type SaveLayoutApiArg = {
   updateDashboardLayoutRequest: UpdateDashboardLayoutRequest
 }
-export type GetStorefrontsApiResponse = /** status 200 Ok */ StorefrontsResponse
-export type GetStorefrontsApiArg = void
-export type GetOrgStorefrontApiResponse = /** status 200 Ok */ OrgStorefront
-export type GetOrgStorefrontApiArg = {
-  spectrumId: string
+export type CreateStorefrontEnquiryApiResponse =
+  /** status 200 Ok */ StorefrontEnquiryResponse
+export type CreateStorefrontEnquiryApiArg = {
+  createStorefrontEnquiryRequest: CreateStorefrontEnquiryRequest
 }
-export type GetOrgStorefrontStatusApiResponse =
-  /** status 200 Ok */ OrgStorefrontStatusResponse
-export type GetOrgStorefrontStatusApiArg = {
-  spectrumId: string
+export type GetStorefrontEnquiryApiResponse =
+  /** status 200 Ok */ StorefrontEnquiryResponse
+export type GetStorefrontEnquiryApiArg = {
+  targetType: EnquiryTargetType
+  targetId: string
 }
 export type GetContractorSisterLinksApiResponse =
   /** status 200 Ok */ ContractorSisterLinksResponse
@@ -3767,6 +3875,19 @@ export type RemoveUserOverrideApiResponse = /** status 200 Ok */ {
 export type RemoveUserOverrideApiArg = {
   username: string
   flagName?: string
+}
+export type ListStorefrontEnquiriesApiResponse =
+  /** status 200 Ok */ AdminEnquiryPage
+export type ListStorefrontEnquiriesApiArg = {
+  status?: EnquiryStatus
+  page?: number
+  pageSize?: number
+}
+export type UpdateStorefrontEnquiryApiResponse =
+  /** status 200 Ok */ AdminStorefrontEnquiry
+export type UpdateStorefrontEnquiryApiArg = {
+  enquiryId: string
+  updateStorefrontEnquiryRequest: UpdateStorefrontEnquiryRequest
 }
 export type SearchIdentityUsersApiResponse =
   /** status 200 Ok */ IdentitySearchResponse
@@ -4393,6 +4514,179 @@ export type ShopOrderSettingResponse = {
 export type UpsertShopOrderSettingRequest = {
   message_content: string
   enabled: boolean
+}
+export type StorefrontCard = {
+  spectrum_id: string
+  name: string
+  logo_url: string | null
+  /** The org's tagline (its RSI headline, as imported at registration). */
+  tagline: string
+  /** The org's fields on SC Market (trading, freight, …). */
+  fields: string[]
+  active_listings: number
+  completed_orders: number
+  avg_rating: number | null
+  rating_count: number
+  /** A showcase org, listed first. */
+  showcase: boolean
+}
+export type StorefrontsResponse = {
+  /** Showcase orgs first, then by completed orders. At most 60. */
+  storefronts: StorefrontCard[]
+}
+export type StorefrontTrust = {
+  /** Fulfilled orders, all of the org's shops. */
+  completed_orders: number
+  /** Average review over all of the org's shops, 0–5; null without reviews. */
+  avg_rating: number | null
+  rating_count: number
+  /** Share of fulfilled orders completed within 24 h, percent; null without any. */
+  response_rate: number | null
+  /** Average hours from order to fulfilment; null without any. */
+  avg_completion_hours: number | null
+  /** Members on SC Market. */
+  members: number
+  active_listings: number
+  active_services: number
+  /** When the org's first shop opened (ISO 8601); null without shops. */
+  on_sc_market_since: string | null
+}
+export type StorefrontShop = {
+  slug: string
+  name: string
+  logo_url: string | null
+  /** Public, active listings. */
+  listing_count: number
+  /** Active services. */
+  service_count: number
+  /** Average review, 0–5; null without reviews. */
+  rating: number | null
+  rating_count: number
+  completed_orders: number
+}
+export type StorefrontService = {
+  service_id: string
+  service_name: string
+  kind: string | null
+  cost: number
+  payment_type: string
+}
+export type ScOrgsCommunity = {
+  /** https://sc-orgs.space/communities/<SID> */
+  url: string
+  headline: string | null
+  /** Members on SC Orgs (public ones). */
+  member_count: number | null
+  focus_tags: string[]
+  playstyle_tags: string[]
+  languages: string[]
+}
+export type OrgStorefront = {
+  spectrum_id: string
+  name: string
+  logo_url: string | null
+  banner_url: string | null
+  /** Registered through RSI (SC Market's org verification). */
+  verified: boolean
+  trust: StorefrontTrust
+  /** Active shops, oldest first (the first is the org's main shop). */
+  shops: StorefrontShop[]
+  /** Up to 6 active services, newest first. */
+  services: StorefrontService[]
+  /** The org's SC Orgs page (recruiting card), when SC Orgs has it. */
+  recruiting: ScOrgsCommunity | null
+}
+export type BrandingMembersCriterion = {
+  met: boolean
+  /** Members of the org on SC Market. */
+  count: number
+  required: number
+}
+export type BrandingActivityCriterion = {
+  met: boolean
+  /** The org's listings created or updated in the window. */
+  recent_listings: number
+  /** Orders placed with the org (or its shops) in the window. */
+  recent_orders: number
+  window_days: number
+}
+export type BrandingCriteria = {
+  /** Registered through RSI (not a "~" custom org, not a test org). */
+  rsi_verified: boolean
+  members: BrandingMembersCriterion
+  activity: BrandingActivityCriterion
+}
+export type BrandingCriterionKey = "rsi_verified" | "members" | "activity"
+export type OrgBrandingStatus = {
+  /** Branding can be used (theme, logo, title, site and sidebar settings). */
+  unlocked: boolean
+  /** Why it is unlocked: a staff grant or the criteria; null while locked. */
+  source: ("grant" | "criteria" | null) | null
+  /** The unlock criteria are met (independently of a staff grant). */
+  eligible: boolean
+  criteria: BrandingCriteria
+  /** Criteria not met yet, in display order. Empty when eligible. */
+  missing: BrandingCriterionKey[]
+  /** One English sentence saying why (for logs, support and the API docs). */
+  reason: string
+  /** The org's subdomain, when staff have provisioned one. */
+  custom_domain: string | null
+}
+export type OnboardingStepKey =
+  | "verify"
+  | "shop"
+  | "listing"
+  | "discord"
+  | "members"
+  | "branding"
+export type OnboardingStep = {
+  key: OnboardingStepKey
+  done: boolean
+}
+export type OnboardingChecklist = {
+  steps: OnboardingStep[]
+  done_count: number
+  total: number
+  /** The org's main (oldest active) shop, for the steps' links; null without one. */
+  shop_slug: string | null
+}
+export type DirectoryReason =
+  | "listed"
+  | "hidden_by_setting"
+  | "members_only"
+  | "no_public_content"
+  | "not_verified"
+  | "personal_shop"
+  | "org_not_listed"
+export type StorefrontDirectoryStatus = {
+  /** The setting: "Show in the public storefront directory". Default true. */
+  show_in_directory: boolean
+  /** Whether the setting can be changed now (false while members-only: forced off). */
+  can_change: boolean
+  /** Shown in the directory right now. */
+  listed: boolean
+  reason: DirectoryReason
+  /** Members-only: the org's white-label site is Internal with Require membership. */
+  members_only: boolean
+  /** Public, active listings (in the shops that are shown, for an org). */
+  public_listings: number
+  /** Members-only (private) active listings; they never count as public content. */
+  private_listings: number
+  /** Active services (in the shops that are shown, for an org). Informational: they don't list a storefront. */
+  active_services: number
+}
+export type OrgStorefrontStatusResponse = {
+  spectrum_id: string
+  /** Whether branding is unlocked, why, and what is still missing. */
+  branding: OrgBrandingStatus
+  /** The storefront onboarding checklist: verify, shop, listing, Discord, members, branding. */
+  onboarding: OnboardingChecklist
+  /** Whether the org is listed in the public storefront directory, and why. */
+  directory: StorefrontDirectoryStatus
+}
+export type StorefrontDirectoryRequest = {
+  /** "Show in the public storefront directory". */
+  show_in_directory: boolean
 }
 export type RequisitionLineItem = {
   requisition_item_id: string
@@ -7432,147 +7726,39 @@ export type UpdateDashboardLayoutRequest = {
   owner_id: string
   config: DashboardConfig
 }
-export type StorefrontCard = {
-  spectrum_id: string
-  name: string
-  logo_url: string | null
-  /** The org's tagline (its RSI headline, as imported at registration). */
-  tagline: string
-  /** The org's fields on SC Market (trading, freight, …). */
-  fields: string[]
-  active_listings: number
-  completed_orders: number
-  avg_rating: number | null
-  rating_count: number
-  /** A showcase org, listed first. */
-  showcase: boolean
+export type EnquiryTargetType = "org" | "shop"
+export type EnquiryContactMethod = "discord" | "site_message"
+export type EnquiryStatus = "open" | "in_progress" | "completed" | "declined"
+export type StorefrontEnquiry = {
+  enquiry_id: string
+  target_type: EnquiryTargetType
+  /** The org's spectrum ID or the shop's slug. */
+  target: string
+  requested_subdomain: string
+  message: string
+  contact_method: EnquiryContactMethod
+  status: EnquiryStatus
+  /** Who sent it; null once their account is deleted. */
+  submitted_by_username: string | null
+  created_at: string
+  updated_at: string
 }
-export type StorefrontsResponse = {
-  /** Showcase orgs first, then by completed orders. At most 60. */
-  storefronts: StorefrontCard[]
+export type StorefrontEnquiryResponse = {
+  /** The latest enquiry for the org or shop (any status), null if none. */
+  enquiry: StorefrontEnquiry | null
 }
-export type StorefrontTrust = {
-  /** Fulfilled orders, all of the org's shops. */
-  completed_orders: number
-  /** Average review over all of the org's shops, 0–5; null without reviews. */
-  avg_rating: number | null
-  rating_count: number
-  /** Share of fulfilled orders completed within 24 h, percent; null without any. */
-  response_rate: number | null
-  /** Average hours from order to fulfilment; null without any. */
-  avg_completion_hours: number | null
-  /** Members on SC Market. */
-  members: number
-  active_listings: number
-  active_services: number
-  /** When the org's first shop opened (ISO 8601); null without shops. */
-  on_sc_market_since: string | null
-}
-export type StorefrontShop = {
-  slug: string
-  name: string
-  logo_url: string | null
-  /** Public, active listings. */
-  listing_count: number
-  /** Active services. */
-  service_count: number
-  /** Average review, 0–5; null without reviews. */
-  rating: number | null
-  rating_count: number
-  completed_orders: number
-}
-export type StorefrontService = {
-  service_id: string
-  service_name: string
-  kind: string | null
-  cost: number
-  payment_type: string
-}
-export type ScOrgsCommunity = {
-  /** https://sc-orgs.space/communities/<SID> */
-  url: string
-  headline: string | null
-  /** Members on SC Orgs (public ones). */
-  member_count: number | null
-  focus_tags: string[]
-  playstyle_tags: string[]
-  languages: string[]
-}
-export type OrgStorefront = {
-  spectrum_id: string
-  name: string
-  logo_url: string | null
-  banner_url: string | null
-  /** Registered through RSI (SC Market's org verification). */
-  verified: boolean
-  trust: StorefrontTrust
-  /** Active shops, oldest first (the first is the org's main shop). */
-  shops: StorefrontShop[]
-  /** Up to 6 active services, newest first. */
-  services: StorefrontService[]
-  /** The org's SC Orgs page (recruiting card), when SC Orgs has it. */
-  recruiting: ScOrgsCommunity | null
-}
-export type BrandingMembersCriterion = {
-  met: boolean
-  /** Members of the org on SC Market. */
-  count: number
-  required: number
-}
-export type BrandingActivityCriterion = {
-  met: boolean
-  /** The org's listings created or updated in the window. */
-  recent_listings: number
-  /** Orders placed with the org (or its shops) in the window. */
-  recent_orders: number
-  window_days: number
-}
-export type BrandingCriteria = {
-  /** Registered through RSI (not a "~" custom org, not a test org). */
-  rsi_verified: boolean
-  members: BrandingMembersCriterion
-  activity: BrandingActivityCriterion
-}
-export type BrandingCriterionKey = "rsi_verified" | "members" | "activity"
-export type OrgBrandingStatus = {
-  /** Branding can be used (theme, logo, title, site and sidebar settings). */
-  unlocked: boolean
-  /** Why it is unlocked: a staff grant or the criteria; null while locked. */
-  source: ("grant" | "criteria" | null) | null
-  /** The unlock criteria are met (independently of a staff grant). */
-  eligible: boolean
-  criteria: BrandingCriteria
-  /** Criteria not met yet, in display order. Empty when eligible. */
-  missing: BrandingCriterionKey[]
-  /** One English sentence saying why (for logs, support and the API docs). */
-  reason: string
-  /** The org's subdomain, when staff have provisioned one. */
-  custom_domain: string | null
-}
-export type OnboardingStepKey =
-  | "verify"
-  | "shop"
-  | "listing"
-  | "discord"
-  | "members"
-  | "branding"
-export type OnboardingStep = {
-  key: OnboardingStepKey
-  done: boolean
-}
-export type OnboardingChecklist = {
-  steps: OnboardingStep[]
-  done_count: number
-  total: number
-  /** The org's main (oldest active) shop, for the steps' links; null without one. */
-  shop_slug: string | null
-}
-export type OrgStorefrontStatusResponse = {
-  spectrum_id: string
-  /** Whether branding is unlocked, why, and what is still missing. */
-  branding: OrgBrandingStatus
-  /** The storefront onboarding checklist: verify, shop, listing, Discord, members, branding. */
-  onboarding: OnboardingChecklist
+export type CreateStorefrontEnquiryRequest = {
+  /** "org" or "shop". */
+  target_type: EnquiryTargetType
+  /** The org's spectrum ID, or the shop's ID. */
+  target_id: string
+  /** The subdomain wanted: `<name>.sc-market.space` (the suffix may be left
+    out). One label: lower-case letters, digits and hyphens, 2–63 characters. */
+  requested_subdomain: string
+  /** What you'd like (staff only). Up to 1000 characters. */
+  message?: string
+  /** How staff should reach you: the Discord linked to your profile, or a message on SC Market. */
+  contact_method: EnquiryContactMethod
 }
 export type ContractorSisterLinksResponse = {
   /** The org's SC Orgs community page (https://sc-orgs.space/communities/<SID>), or null. */
@@ -8192,6 +8378,41 @@ export type SetUserOverrideRequest = {
   flag_name: string
   enabled: boolean
 }
+export type AdminStorefrontEnquiry = {
+  enquiry_id: string
+  target_type: EnquiryTargetType
+  /** The org's spectrum ID or the shop's slug. */
+  target: string
+  requested_subdomain: string
+  message: string
+  contact_method: EnquiryContactMethod
+  status: EnquiryStatus
+  /** Who sent it; null once their account is deleted. */
+  submitted_by_username: string | null
+  created_at: string
+  updated_at: string
+  target_name: string
+  /** A test org or shop (test accounts' enquiries notify nobody). */
+  is_test: boolean
+  submitted_by_user_id: string | null
+  /** The submitter's linked Discord username, when they chose Discord and have one. */
+  discord_username: string | null
+  /** The submitter's linked Discord user ID, when they chose Discord. */
+  discord_id: string | null
+  staff_note: string | null
+  handled_by_username: string | null
+}
+export type AdminEnquiryPage = {
+  enquiries: AdminStorefrontEnquiry[]
+  total: number
+  page: number
+  page_size: number
+}
+export type UpdateStorefrontEnquiryRequest = {
+  status?: EnquiryStatus
+  /** Staff-only note (never shown to the org or shop). Empty clears it. */
+  staff_note?: string | null
+}
 export type IdentitySearchRow = {
   user_id: string
   username: string
@@ -8411,6 +8632,12 @@ export const {
   useGetShopOrderSettingsQuery,
   useUpsertShopOrderSettingMutation,
   useDeleteShopOrderSettingMutation,
+  useGetStorefrontsQuery,
+  useGetOrgStorefrontQuery,
+  useGetOrgStorefrontStatusQuery,
+  useSetOrgStorefrontDirectoryMutation,
+  useGetShopStorefrontDirectoryQuery,
+  useSetShopStorefrontDirectoryMutation,
   useCreateRequisitionMutation,
   useGetRequisitionsQuery,
   useGetRequisitionQuery,
@@ -8535,9 +8762,8 @@ export const {
   useSetFeatureFlagMutation,
   useGetLayoutQuery,
   useSaveLayoutMutation,
-  useGetStorefrontsQuery,
-  useGetOrgStorefrontQuery,
-  useGetOrgStorefrontStatusQuery,
+  useCreateStorefrontEnquiryMutation,
+  useGetStorefrontEnquiryQuery,
   useGetContractorSisterLinksQuery,
   useGetContractAlertsQuery,
   useUpdateContractAlertMutation,
@@ -8573,6 +8799,8 @@ export const {
   useGetUserOverridesQuery,
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
+  useListStorefrontEnquiriesQuery,
+  useUpdateStorefrontEnquiryMutation,
   useSearchIdentityUsersQuery,
   useGetIdentityUserQuery,
   useReleaseIdentityUsernameMutation,

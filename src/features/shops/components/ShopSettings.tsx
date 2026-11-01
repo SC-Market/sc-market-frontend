@@ -59,6 +59,7 @@ import {
   BANNER_RESIZE,
 } from "../../../util/imageResize"
 import { ShopBlocklistSection } from "./ShopBlocklist"
+import { ShopStorefrontSection } from "./ShopStorefrontSection"
 import { ImageRounded, SwapHorizRounded } from "@mui/icons-material"
 import { SHOP_PATHS } from "../../../routes/paths"
 import type {
@@ -1076,6 +1077,9 @@ export function ShopSettings() {
 
           {/* Blocklist */}
           <ShopBlocklistSection shopId={shop.shop_id} />
+
+          {/* Branded storefront: enquiry and directory setting */}
+          <ShopStorefrontSection shop={shop} />
 
           {/* Transfer Ownership */}
           <ShopTransferSection shop={shop} />

@@ -243,6 +243,24 @@
       "status": "Statut",
       "tier": "Niveau",
       "title": "Gestion Premium"
+    },
+    "storefrontEnquiries": {
+      "title": "Demandes de vitrine",
+      "filter": "Afficher",
+      "all": "Toutes",
+      "loadFailed": "Impossible de charger les demandes.",
+      "empty": "Aucune demande.",
+      "org": "Org",
+      "shop": "Boutique",
+      "test": "Test",
+      "subdomain": "Sous-domaine",
+      "from": "De",
+      "viaDiscord": "Discord : {{handle}}",
+      "viaMessage": "Message sur SC Market",
+      "status": "Statut",
+      "note": "Note de l'équipe",
+      "save": "Enregistrer",
+      "handledBy": "Dernière modification par {{user}}, {{date}}"
     }
   },
   "adminExpressVerify": {
@@ -710,7 +728,11 @@
     "all_caught_up": "Vous êtes à jour",
     "empty_filtered": "Rien pour ce filtre",
     "empty_filtered_description": "Affichez plutôt toutes les notifications.",
-    "show_all": "Tout afficher"
+    "show_all": "Tout afficher",
+    "storefront_enquiry": {
+      "created": "{{name}} a demandé une vitrine à ses couleurs : {{subdomain}}",
+      "generic": "Nouvelle demande de vitrine à vos couleurs"
+    }
   },
   "onboarding": {
     "welcome": "Bienvenue sur SC Market",
@@ -5872,7 +5894,7 @@
       "unlocksTitle": "Ce que la personnalisation débloque",
       "unlocks": "Sur le sous-domaine de votre org ({{subdomain}}) : votre thème et votre logo, des titres de page au nom de votre org, un marché qui n'affiche que les annonces de votre org, vos propres liens dans la barre latérale et un mode réservé aux membres en option. Votre vitrine sur sc-market.space reste publique dans tous les cas.",
       "domainLive": "Votre sous-domaine :",
-      "domainOnRequest": "L'équipe configure le sous-domaine sur demande."
+      "domainByEnquiry": "L'équipe configure le sous-domaine sur demande : envoyez une demande ci-dessous (membres avec Gérer les détails de l'org)."
     },
     "criteria": {
       "verified": "Org vérifiée via RSI",
@@ -5987,6 +6009,55 @@
       "done": "Tout est prêt. Partagez le lien de votre vitrine ou intégrez le widget ci-dessous à votre site.",
       "intro": "Chaque étape prend quelques minutes : visez votre première annonce en moins de 15.",
       "progress": "Progression de la configuration"
+    },
+    "enquiry": {
+      "status": {
+        "open": "Envoyée",
+        "in_progress": "En cours",
+        "completed": "Terminée",
+        "declined": "Refusée"
+      },
+      "loadFailed": "Impossible de charger votre demande de vitrine. Réessayez plus tard.",
+      "subdomainLength": "De 2 à 63 caractères",
+      "subdomainChars": "Minuscules, chiffres et tirets simples ; pas de tiret au début ni à la fin",
+      "subdomainReserved": "Ce sous-domaine est réservé",
+      "title": "Demander une vitrine à vos couleurs",
+      "requested": "Vous avez demandé {{subdomain}}.",
+      "replyDiscord": "L'équipe SC Market vous contactera sur Discord.",
+      "replyMessage": "L'équipe SC Market vous écrira sur SC Market.",
+      "sentBy": "Envoyée le {{date}} par {{user}}.",
+      "deletedUser": "Utilisateur supprimé",
+      "intro": "Demandez à l'équipe SC Market une vitrine à vos couleurs sur son propre sous-domaine sc-market.space. Nous répondrons comme vous le choisissez ci-dessous.",
+      "previous": "Votre dernière demande ({{subdomain}}) : {{status}}.",
+      "subdomain": "Sous-domaine souhaité",
+      "subdomainHelp": "En général l'identifiant Spectrum de votre org ou le nom de votre boutique.",
+      "message": "Message (facultatif)",
+      "messageHelp": "Ce que vous avez en tête. Seule l'équipe SC Market le voit. {{length}}/{{max}}",
+      "contact": "Comment vous joindre ?",
+      "contactDiscord": "Discord ({{handle}}, depuis votre profil)",
+      "contactDiscordNone": "Discord (associez d'abord Discord dans vos paramètres)",
+      "contactMessage": "Un message sur SC Market",
+      "contactHelp": "Nous ne stockons aucune coordonnée : nous utilisons le compte Discord associé à votre profil.",
+      "failed": "Impossible d'envoyer la demande.",
+      "submit": "Envoyer la demande"
+    },
+    "directory": {
+      "title": "Annuaire des vitrines",
+      "toggle": "Afficher dans l'annuaire public des vitrines",
+      "listed": "Votre org figure dans l'annuaire des vitrines.",
+      "shopListed": "Cette boutique compte dans la fiche de son org dans l'annuaire des vitrines.",
+      "hidden": "Masquée : elle n'apparaît pas dans l'annuaire des vitrines.",
+      "membersOnly": "Les vitrines réservées aux membres ne sont jamais listées publiquement. Votre sous-domaine à vos couleurs fonctionne toujours pour vos membres.",
+      "onlyPrivate": "Pas encore listée : uniquement des annonces réservées aux membres ({{listings}}). Elle apparaîtra dès qu'il y aura une annonce publique.",
+      "noContent": "Pas encore listée : elle apparaîtra dès qu'il y aura une annonce publique.",
+      "notVerified": "Seules les orgs vérifiées par RSI figurent dans l'annuaire des vitrines.",
+      "personalShop": "L'annuaire des vitrines liste des orgs : les boutiques personnelles n'y figurent pas encore.",
+      "orgNotListed": "Son org ne figure pas dans l'annuaire des vitrines, cette boutique non plus.",
+      "saveFailed": "Impossible d'enregistrer le réglage."
+    },
+    "shopSection": {
+      "title": "Vitrine à vos couleurs",
+      "subtitle": "Demandez un sous-domaine sc-market.space pour votre boutique et choisissez si elle figure dans l'annuaire des vitrines"
     }
   }
 }
