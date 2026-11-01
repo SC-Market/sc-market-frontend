@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import i18next from "i18next"
 import en from "../../locales/en/english.json"
 import { BRIDGE_PAGES, type PageContext, type SummaryBlock } from "../pages"
@@ -257,6 +257,36 @@ describe("mission hub prerender paths", () => {
     for (const path of MISSION_HUB_ROUTE_PLACEHOLDERS) {
       expect(isSsrPlaceholderPath(path), path).toBe(true)
       expect(matchBridgeRoute(path)?.route.kind, path).toMatch(/^mission(Giver|Faction|Type|System)$/)
+    }
+  })
+})
+
+describe("mission hub list at build time", () => {
+  it("skips local and CI mock backends without fetching; only a Pages build fails on API errors", async () => {
+    const { isRealBackend, missionHubPathsFromApi } = await import("../../prerender/missionHubPaths.node")
+    expect(isRealBackend(undefined)).toBe(false)
+    expect(isRealBackend("http://localhost:4173")).toBe(false)
+    expect(isRealBackend("http://localhost")).toBe(false)
+    expect(isRealBackend("http://127.0.0.1:8080")).toBe(false)
+    expect(isRealBackend("https://api.sc-market.space")).toBe(true)
+
+    const fetchSpy = vi.spyOn(globalThis, "fetch")
+    expect(await missionHubPathsFromApi("http://localhost:4173", { CF_PAGES: "1" })).toEqual([])
+    expect(fetchSpy).not.toHaveBeenCalled()
+
+    vi.useFakeTimers()
+    try {
+      fetchSpy.mockRejectedValue(new TypeError("fetch failed"))
+      const ci = missionHubPathsFromApi("https://api.example", {})
+      await vi.runAllTimersAsync()
+      expect(await ci).toEqual([])
+      const pages = missionHubPathsFromApi("https://api.example", { CF_PAGES: "1" })
+      const rejected = expect(pages).rejects.toThrow(/could not fetch the mission hubs/)
+      await vi.runAllTimersAsync()
+      await rejected
+    } finally {
+      vi.useRealTimers()
+      fetchSpy.mockRestore()
     }
   })
 })

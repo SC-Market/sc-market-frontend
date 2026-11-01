@@ -57,10 +57,12 @@ and document.html hides the HTML until then).
 
 The hub pages are listed at build time from `GET /api/v2/game-data/missions/hubs`
 (`src/prerender/missionHubPaths.node.ts`): a deploy prerenders every hub of
-the active LIVE version (~105 pages with the indexes). With
-`VITE_BACKEND_URL` set, an API that keeps failing fails the build (the
-previous deployment stays live) rather than shipping without hub pages;
-without it (local builds) no hub page is prerendered. Each hub route also
+the active LIVE version (~105 pages with the indexes). On a Cloudflare
+Pages build (`CF_PAGES=1`), an API that keeps failing fails the build (the
+previous deployment stays live) rather than shipping without hub pages.
+Without a real backend (`VITE_BACKEND_URL` unset or on localhost: local,
+CI and E2E builds) no hub page is prerendered and nothing is fetched; any
+other non-Pages build logs a failed fetch and goes on without hub pages. Each hub route also
 has a placeholder path (`MISSION_HUB_ROUTE_PLACEHOLDERS`) so its `loader`
 is legal when no hub is prerendered; `finalize.ts` deletes it. The
 `_headers` rules use one splat per hub kind (Pages allows 100 rules).

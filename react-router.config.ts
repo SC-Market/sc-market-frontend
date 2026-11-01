@@ -1,14 +1,16 @@
 import path from "node:path"
 import type { Config } from "@react-router/dev/config"
-import { GAME_DATA_HUB_PATHS, HOME_PATH, STOREFRONTS_HUB_PATH } from "./src/prerender/paths"
+import {
+  GAME_DATA_HUB_PATHS,
+  HOME_PATH,
+  MISSION_HUB_ROUTE_PLACEHOLDERS,
+  STOREFRONTS_HUB_PATH,
+} from "./src/prerender/paths"
 import { contentPathsFromDisk } from "./src/prerender/contentPaths.node"
 import { diskContentSource } from "./src/prerender/contentSource.node"
 import { registerBuildContentSource } from "./src/server/contentSource"
 import { SSR_ROUTE_PLACEHOLDERS } from "./src/ssr/routePlaceholders"
-import {
-  MISSION_HUB_ROUTE_PLACEHOLDERS,
-  missionHubPathsFromApi,
-} from "./src/prerender/missionHubPaths.node"
+import { missionHubPathsFromApi } from "./src/prerender/missionHubPaths.node"
 
 // The prerender reads the content build's JSON from disk (the server build
 // itself has no node:fs: it also runs on Cloudflare, docs/ssr-worker.md).
