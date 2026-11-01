@@ -64,6 +64,7 @@ import { ClockAlert } from "mdi-material-ui"
 import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
 import { ReportButton } from "../../../components/button/ReportButton"
 import { buildListingHead } from "../../../seo/entityHeads"
+import { headDescription } from "../../../seo/pageHead"
 import { SeoHead } from "../../../seo/SeoHead"
 import { isSiteAdmin } from "../../../util/siteRole"
 import { ListingDetailContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton"
@@ -168,10 +169,15 @@ export function ListingDetailV2() {
   }, [profile, seller, listing, belongsToSellerOrg, sellerContractor])
 
   const canonicalPath = listing ? MARKET_PATHS.listing(listing.listing_id, listing.title) : undefined
+  // The head the bridge and SSR render (title, description): the layout's
+  // own title and description must be the same, or the page changes them
+  // after hydrating.
+  const head = listingData ? buildListingHead(listingData, FRONTEND_URL) : null
 
   return (
     <StandardPageLayout
-      title={listing?.title || "Listing Details"}
+      title={head?.title ?? (listing?.title || "Listing Details")}
+      description={head ? headDescription(head) : undefined}
       headerTitle={listing?.title}
       canonicalUrl={canonicalPath}
       breadcrumbs={breadcrumbs}
@@ -191,7 +197,7 @@ export function ListingDetailV2() {
                 <ImagePreviewPaper photos={photos} />
 
                 {/* SEO Metadata */}
-                <SeoHead head={buildListingHead(listingData, FRONTEND_URL)} />
+                {head && <SeoHead head={head} />}
               </Grid>
             </Grid>
           </Grid>

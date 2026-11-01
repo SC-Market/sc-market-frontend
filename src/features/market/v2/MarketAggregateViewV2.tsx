@@ -53,6 +53,7 @@ import {
 } from "../../../components/table/PaginatedTable";
 import { SeoHead } from "../../../seo/SeoHead";
 import { buildAggregateHead } from "../../../seo/entityHeads";
+import { headDescription } from "../../../seo/pageHead";
 import { ImagePreviewModal } from "../../../components/modal/ImagePreviewModal";
 import { ImageSearch } from "../components/ImageSearch";
 import { HeaderTitle } from "../../../components/typography/HeaderTitle";
@@ -277,10 +278,14 @@ export function MarketAggregateViewV2() {
   }), [listingsData, qualityData, priceData, buyOrdersData, gameItemId]);
 
   const { game_item } = complete;
+  // The bridge's head (title, description): the layout uses the same, so
+  // the page doesn't change them after hydrating.
+  const head = game_item.name ? buildAggregateHead(game_item, complete.listings.length, FRONTEND_URL) : null;
 
   return (
     <StandardPageLayout
-      title={game_item.name || "Market Item"}
+      title={head?.title ?? "Market Item"}
+      description={head ? headDescription(head) : undefined}
       headerTitle={game_item.name}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
@@ -293,7 +298,7 @@ export function MarketAggregateViewV2() {
       sidebarOpen={true}
       maxWidth="xl"
     >
-      <SeoHead head={buildAggregateHead(game_item, complete.listings.length, FRONTEND_URL)} />
+      {head && <SeoHead head={head} />}
       <MarketAggregateViewV2Admin complete={complete} gameItemId={gameItemId!} />
     </StandardPageLayout>
   );

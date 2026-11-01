@@ -6,6 +6,9 @@ import { LazySection } from "../../components/layout/LazySection"
 import { usePageRecruitingPost } from "../../features/recruiting/hooks/usePageRecruitingPost"
 import { RecruitingPostContentSkeleton } from "../../features/recruiting/components/RecruitingPostContent.skeleton"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
+import { buildRecruitingPostHead } from "../../seo/entityHeads"
+import { headDescription } from "../../seo/pageHead"
+import { FRONTEND_URL } from "../../util/constants"
 import {
   RECRUITING_POST_LOADING_LABEL,
   RecruitingPostTitleSkeleton,
@@ -21,10 +24,15 @@ export function RecruitingPostPage() {
   const { post_id } = useParams<{ post_id: string }>()
   const { t } = useTranslation()
   const pageData = usePageRecruitingPost(post_id!)
+  // The head the bridge renders (RecruitingPostContent's SeoHead): the
+  // layout's title and description match it, so hydrating changes nothing.
+  const post = pageData.data?.post
+  const head = post ? buildRecruitingPostHead(post, FRONTEND_URL) : null
 
   return (
     <DetailPageLayout
-      title={pageData.data?.post.title || t("recruiting.title", "Recruiting")}
+      title={head?.title ?? t("recruiting.title", "Recruiting")}
+      description={head ? headDescription(head) : undefined}
       breadcrumbs={[
         {
           label: t("recruiting.title", "Recruiting"),
