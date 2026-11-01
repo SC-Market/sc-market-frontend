@@ -104,10 +104,24 @@ export function listing(title = "Pristine Medal"): GetListingDetailResponse {
       title,
       description: `${title} in mint condition`,
       photos: ["https://cdn.example/medal.png"],
-      sale_type: "sale",
+      sale_type: "fixed",
+      status: "active",
+      visibility: "public",
+      quantity_unit: "unit",
+      created_at: "2026-10-30T15:14:45.905Z",
+      updated_at: "2026-10-30T15:14:45.905Z",
     },
     seller: { shop_id: "s1", name: "Hades", slug: "hades-svk-shop", rating: 5, languages: [] },
-    items: [],
+    items: [
+      {
+        item_id: "i1",
+        game_item: { id: "1954c364-aaaa-bbbb-cccc-000000000000", name: "Pristine Medal", type: "Other" },
+        pricing_mode: "unified",
+        // The API sends numeric columns as strings.
+        base_price: "12000",
+        variants: [{ variant_id: "v1", attributes: {}, display_name: "Standard", short_name: "Std", quantity: 3, price: "12000", locations: [] }],
+      },
+    ],
   } as unknown as GetListingDetailResponse
 }
 

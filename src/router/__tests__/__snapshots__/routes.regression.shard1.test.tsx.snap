@@ -53,6 +53,7 @@ exports[`routes (shard 1/4) > /admin/attribute-definitions 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -92,6 +93,7 @@ exports[`routes (shard 1/4) > /admin/audit-logs 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -131,6 +133,7 @@ exports[`routes (shard 1/4) > /admin/premium 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -202,6 +205,7 @@ exports[`routes (shard 1/4) > /admin/wipe 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -238,6 +242,7 @@ exports[`routes (shard 1/4) > /availability 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -272,6 +277,7 @@ exports[`routes (shard 1/4) > /buyorder/:id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -309,6 +315,7 @@ exports[`routes (shard 1/4) > /buyorder/create 1`] = `
   "mainLinks": [
     "/about",
     "/buyorders",
+    "/changelog",
     "/guides",
     "/guides/buying/buy-an-item#post-a-buy-order",
     "/market",
@@ -344,6 +351,7 @@ exports[`routes (shard 1/4) > /contract/:id/:tab 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -381,6 +389,7 @@ exports[`routes (shard 1/4) > /delivery/:delivery_id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/myfleet/import",
     "/privacy",
@@ -419,6 +428,7 @@ exports[`routes (shard 1/4) > /email/verify/:token 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -453,6 +463,7 @@ exports[`routes (shard 1/4) > /error 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -553,6 +564,7 @@ exports[`routes (shard 1/4) > /market/multiple/:id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -590,6 +602,7 @@ exports[`routes (shard 1/4) > /market_edit/:id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -658,6 +671,7 @@ exports[`routes (shard 1/4) > /mining/locations/:name 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -692,6 +706,7 @@ exports[`routes (shard 1/4) > /missions/:slug 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -726,6 +741,7 @@ exports[`routes (shard 1/4) > /offer/:id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -761,6 +777,7 @@ exports[`routes (shard 1/4) > /order/service/:service_id/edit 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -799,6 +816,7 @@ exports[`routes (shard 1/4) > /orders 1`] = `
   "mainLinks": [
     "/about",
     "/buyorders",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -835,6 +853,7 @@ exports[`routes (shard 1/4) > /org/:contractor_id/fleet 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -875,6 +894,7 @@ exports[`routes (shard 1/4) > /org/:contractor_id/manage/about 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -918,6 +938,7 @@ exports[`routes (shard 1/4) > /org/:contractor_id/manage/settings 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -959,6 +980,7 @@ exports[`routes (shard 1/4) > /org/:contractor_id/members 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -996,6 +1018,7 @@ exports[`routes (shard 1/4) > /org/manage 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/contractors",
     "/guides",
     "/my-orgs",
@@ -1035,6 +1058,7 @@ exports[`routes (shard 1/4) > /org/send 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/contractors",
     "/guides",
     "/my-orgs",
@@ -1073,6 +1097,7 @@ exports[`routes (shard 1/4) > /profile/:tab 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -1107,6 +1132,7 @@ exports[`routes (shard 1/4) > /recruiting/post/:post_id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -1141,6 +1167,7 @@ exports[`routes (shard 1/4) > /resources/:resource_id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1177,6 +1204,7 @@ exports[`routes (shard 1/4) > /sell 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1215,6 +1243,7 @@ exports[`routes (shard 1/4) > /shop/:shopSlug 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/market",
     "/market/me",
@@ -1257,6 +1286,7 @@ exports[`routes (shard 1/4) > /shop/:shopSlug/dashboard 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/guides/selling/handle-orders-as-a-seller",
     "/privacy",
@@ -1297,6 +1327,7 @@ exports[`routes (shard 1/4) > /shop/:shopSlug/listings 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/market",
     "/market/me",
@@ -1337,6 +1368,7 @@ exports[`routes (shard 1/4) > /shopping-lists 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1406,6 +1438,7 @@ exports[`routes (shard 1/4) > /user/:username/:tab 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -1439,6 +1472,7 @@ exports[`routes (shard 1/4) > /widget/orders 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/dashboard",
     "/guides",
     "/privacy",
@@ -1475,6 +1509,7 @@ exports[`routes (shard 1/4) > /wiki/locations 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",
@@ -1510,6 +1545,7 @@ exports[`routes (shard 1/4) > /wiki/ships/:id 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/changelog",
     "/guides",
     "/privacy",
     "/terms",

@@ -65,6 +65,11 @@ export function isSafeHref(href: string): boolean {
   return /^\/(?![/\\])[^\s\u0000-\u001f\u007f]*$/.test(href)
 }
 
+/** Off-site links a summary may carry: SC Orgs pages only. */
+export function isPartnerHref(href: string): boolean {
+  return /^https:\/\/sc-orgs\.space\/[A-Za-z0-9/_%-]*$/.test(href)
+}
+
 /**
  * Markup appended to <head>: the page's meta/canonical/JSON-LD, plus
  * robots noindex for unknown entities.
@@ -108,13 +113,23 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
       if (links.length === 0) continue
       chunks.push({ content: "<ul>", html: true })
       for (const link of links) {
+        const rel = link.rel === "prev" || link.rel === "next" ? ` rel="${link.rel}"` : ""
         chunks.push(
-          { content: `<li><a href="${escapeAttribute(link.href)}">`, html: true },
+          { content: `<li><a href="${escapeAttribute(link.href)}"${rel}>`, html: true },
           { content: link.text, html: false },
           { content: "</a></li>", html: true },
         )
       }
       chunks.push({ content: "</ul>", html: true })
+      continue
+    }
+    if (block.tag === "external") {
+      if (!isPartnerHref(block.href)) continue
+      chunks.push(
+        { content: `<p><a href="${escapeAttribute(block.href)}" rel="noopener">`, html: true },
+        { content: block.text, html: false },
+        { content: "</a></p>", html: true },
+      )
       continue
     }
     if ("items" in block) {
@@ -141,6 +156,42 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
   }
   chunks.push({ content: "</main>", html: true })
   return chunks
+}
+
+/**
+ * The summary's link lists (each with the heading right before it) and
+ * partner links: what a server-rendered page adds to its own body so its
+ * HTML links to everything the bridge's summary links to (seller, related
+ * and similar pages). Text-only blocks are dropped (the page says them).
+ */
+export function relatedLinkBlocks(blocks: SummaryBlock[]): SummaryBlock[] {
+  const kept: SummaryBlock[] = []
+  blocks.forEach((block, i) => {
+    if (block.tag !== "ul" && block.tag !== "external") return
+    const before = blocks[i - 1]
+    if (block.tag === "ul" && before && (before.tag === "h2" || before.tag === "h3")) kept.push(before)
+    kept.push(block)
+  })
+  return kept
+}
+
+function escapeText(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+}
+
+/**
+ * relatedLinkBlocks as one HTML string (same tags, link checks and escaping
+ * as the bridge's summary) for the end of a server-rendered #root. Marked
+ * like the summary, so the browser removes it before hydrating; "" when
+ * there are no links.
+ */
+export function relatedLinksHtml(blocks: SummaryBlock[]): string {
+  const related = relatedLinkBlocks(blocks)
+  // summaryChunks wraps the blocks in <main …>…</main>; keep only the inside.
+  const inner = summaryChunks(related).slice(1, -1)
+  if (!inner.some((chunk) => chunk.html && chunk.content.includes("<a "))) return ""
+  const body = inner.map((chunk) => (chunk.html ? chunk.content : escapeText(chunk.content))).join("")
+  return `<nav ${BRIDGE_SUMMARY_ATTRIBUTE} aria-label="Related pages" style="max-width:720px;margin:0 auto;padding:16px">${body}</nav>`
 }
 
 /** Keys (name= or property=) of the shell's <meta> tags the page replaces. */

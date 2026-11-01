@@ -56,7 +56,7 @@ describe("landing", () => {
 
   it("has the keyword title (deliberate change from 'SC Market')", () => {
     expect(homeSeoText(t).title).toBe(
-      "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+      "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
     )
   })
 })
@@ -84,7 +84,10 @@ describe("hub text matches the pages' previous inline strings", () => {
 
   it("market search", () => {
     expect(marketSearchSeoText({ total: 0 }).description).toBe(
-      "Browse  items for sale on SC Market. Compare prices from verified Star Citizen sellers.",
+      "Trade with other players: Star Citizen items, armor, weapons, ship components and commodities for sale in aUEC. Compare prices from rated sellers.",
+    )
+    expect(marketSearchSeoText({ itemType: "Armor", total: 3 }).description).toBe(
+      "Browse 3 Armor for sale on SC Market. Compare prices from verified Star Citizen sellers.",
     )
     expect(marketSearchSeoText({ text: "gold", itemType: "Metal" }).title).toBe(
       "gold Metal for Sale — Star Citizen | SC Market",

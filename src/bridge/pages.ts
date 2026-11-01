@@ -10,6 +10,9 @@
  * in src/store/api/** (types only; nothing here imports RTK or the browser).
  */
 import type {
+  ActiveVersionsResponse,
+  GameVersion,
+  MissionBlueprintReward,
   BlueprintDetailResponse,
   BrowseShopsApiResponse,
   GetCommoditiesApiResponse,
@@ -73,10 +76,29 @@ import {
   buildRecruitingPostHead,
   buildShopHead,
   buildUserHead,
+  formatAuecShort,
+  listingPriceLabel,
+  listingPriceRange,
+  listingQuantity,
   orgPageTitle,
+  sellerRatingLabel,
   shopSeoDescription,
   userPageTitle,
 } from "../seo/entityHeads"
+import { pagedPath } from "../seo/queryIndexing"
+import {
+  dropPercent,
+  formatPercent,
+  freshnessStamp,
+  gameDataDateModified,
+  missionGiver,
+  missionRewardRange,
+  missionsCapabilityText,
+  missionSummaryLine,
+  missionTitle,
+  missionType,
+  readableMissionText,
+} from "../seo/missionText"
 import {
   applyTitleTemplate,
   faqPageJsonLd,
@@ -120,6 +142,7 @@ import {
   wikiShipsSeoText,
 } from "../seo/hubHeads"
 import { englishT } from "./englishT"
+import { MAX_SUMMARY_LINKS } from "./render"
 import type { BridgePageKind } from "./routes"
 import { CONTENT_PAGES } from "./contentPages"
 
@@ -129,9 +152,14 @@ import { CONTENT_PAGES } from "./contentPages"
  */
 export type SummaryBlock =
   | { tag: "h1" | "h2" | "h3" | "p"; text: string }
-  | { tag: "ul"; links: SeoLink[] }
+  /** One link to an allowlisted partner site (render.ts checks the origin). */
+  | { tag: "external"; href: string; text: string }
+  | { tag: "ul"; links: SummaryLink[] }
   /** Plain-text list items (guide steps and bullet lists). */
   | { tag: "ol" | "ul-text"; items: string[] }
+
+/** A summary link; `rel` marks a hub's previous/next page. */
+export type SummaryLink = SeoLink & { rel?: "prev" | "next" }
 
 /** What the bridge injects into the shell for one page. */
 export interface BridgeDocument {
@@ -140,6 +168,13 @@ export interface BridgeDocument {
   canonical: string
   head: PageHead
   summary: SummaryBlock[]
+  /**
+   * The entity exists but isn't a page anyone should land on: 404 (sold,
+   * expired, inactive, an unknown tab, a hub page past the end) or 410
+   * (cancelled: the seller deleted it). Served like an unknown entity: the
+   * shell with robots noindex, no summary.
+   */
+  status?: 404 | 410
 }
 
 export interface PageContext {
@@ -148,21 +183,41 @@ export interface PageContext {
   origin: string
   /** Request path, for pages whose canonical is the current path. */
   pathname: string
+  /** `?page=N` of a paginated hub (1 when absent; only `paginated` pages see N > 1). */
+  pageNumber: number
+  /**
+   * The page's `related` lookups that succeeded, by key. Missing keys failed
+   * (timeout, 5xx, 404) or weren't requested: builders must work without them.
+   */
+  related: Record<string, unknown>
 }
 
 /** One API GET a page depends on. */
 export interface ApiRequest {
   /** Path on the API origin, already encoded. */
   path: string
+  /** Another public API's origin (related lookups only), e.g. SC Orgs. */
+  origin?: string
   /** Upstream statuses that mean "this entity doesn't exist". */
   notFoundStatuses: readonly number[]
   /** Edge-cache lifetime for the JSON, seconds. */
   ttlSeconds: number
 }
 
+/** Follow-up lookups that depend on earlier answers, by key (null/undefined: skip). */
+export type RelatedStage = (
+  primary: unknown,
+  secondary: unknown,
+  related: Record<string, unknown>,
+  params: Record<string, string>,
+) => Record<string, ApiRequest | null | undefined>
+
 export interface BridgePage {
-  /** The page's API call; omitted for static pages (build gets undefined). */
-  primary?: (params: Record<string, string>) => ApiRequest
+  /**
+   * The page's API call; omitted for static pages (build gets undefined).
+   * `pageNumber` is the hub page (always 1 unless `paginated`).
+   */
+  primary?: (params: Record<string, string>, pageNumber?: number) => ApiRequest
   /** Optional extra lookup; failures are ignored (value is undefined). */
   secondary?: (params: Record<string, string>) => ApiRequest
   /**
@@ -171,6 +226,15 @@ export interface BridgePage {
    * (params that can't name a file), means "doesn't exist".
    */
   asset?: (params: Record<string, string>) => string | null
+  /**
+   * Extra lookups (related listings, the seller's other listings...), run in
+   * order after primary/secondary; each stage sees the earlier answers. Every
+   * one is edge-cached and fails open: a failed lookup is just missing from
+   * ctx.related.
+   */
+  related?: RelatedStage[]
+  /** Serves `?page=N` (N >= 2) as its own self-canonical page. */
+  paginated?: boolean
   build: (primary: unknown, secondary: unknown, ctx: PageContext) => BridgeDocument
 }
 
@@ -247,16 +311,36 @@ function withFaqJsonLd(head: PageHead, answers: AnswerContent): PageHead {
  * Typed page definition. The API JSON is trusted to match the generated
  * response type, exactly as the SPA's RTK Query hooks trust it.
  */
-function page<P, S = never>(def: {
-  primary: (params: Record<string, string>) => ApiRequest
+function page<P, S = never, R extends Record<string, unknown> = Record<string, never>>(def: {
+  primary: (params: Record<string, string>, pageNumber?: number) => ApiRequest
   secondary?: (params: Record<string, string>) => ApiRequest
-  build: (primary: P, secondary: S | undefined, ctx: PageContext) => BridgeDocument
+  related?: ((
+    primary: P,
+    secondary: S | undefined,
+    related: Partial<R>,
+    params: Record<string, string>,
+  ) => { [K in keyof R]?: ApiRequest | null })[]
+  paginated?: boolean
+  build: (
+    primary: P,
+    secondary: S | undefined,
+    ctx: PageContext & { related: Partial<R> },
+  ) => BridgeDocument
 }): BridgePage {
   return {
     primary: def.primary,
     secondary: def.secondary,
+    paginated: def.paginated,
+    related: def.related?.map(
+      (stage): RelatedStage =>
+        (primary, secondary, related, params) =>
+          stage(primary as P, secondary as S | undefined, related as Partial<R>, params) as Record<
+            string,
+            ApiRequest | null | undefined
+          >,
+    ),
     build: (primary, secondary, ctx) =>
-      def.build(primary as P, secondary as S | undefined, ctx),
+      def.build(primary as P, secondary as S | undefined, ctx as PageContext & { related: Partial<R> }),
   }
 }
 
@@ -328,6 +412,446 @@ function hubDoc(
       ...linkBlocks(opts.linksHeading ?? "Browse", links),
     ],
   }
+}
+
+
+/** An API array, or [] when a lookup answered with something else. */
+function arr<T>(value: T[] | null | undefined): T[] {
+  return Array.isArray(value) ? value : []
+}
+
+/** Total pages of a hub list. */
+function hubPageCount(total: number, pageSize: number): number {
+  return Math.max(1, Math.ceil(Math.max(0, total) / pageSize))
+}
+
+/**
+ * Crawlable pagination for a hub: previous/next (rel), the first and last
+ * page, the pages around this one and a spread of the rest, so every page is
+ * a few hops from the hub.
+ */
+function paginationBlocks(path: string, pageNumber: number, totalPages: number): SummaryBlock[] {
+  if (totalPages <= 1) return []
+  const links: SummaryLink[] = []
+  if (pageNumber > 1) {
+    links.push({ href: pagedPath(path, pageNumber - 1), text: `Previous page (${pageNumber - 1})`, rel: "prev" })
+  }
+  if (pageNumber < totalPages) {
+    links.push({ href: pagedPath(path, pageNumber + 1), text: `Next page (${pageNumber + 1})`, rel: "next" })
+  }
+  const pages = new Set<number>([1, totalPages])
+  for (let n = pageNumber - 5; n <= pageNumber + 5; n++) {
+    if (n >= 1 && n <= totalPages) pages.add(n)
+  }
+  const step = Math.max(10, Math.ceil(totalPages / 20))
+  for (let n = step; n < totalPages; n += step) pages.add(n)
+  for (const n of [...pages].sort((a, b) => a - b)) {
+    if (n !== pageNumber) links.push({ href: pagedPath(path, n), text: `Page ${n}` })
+  }
+  return [{ tag: "h2", text: `Page ${pageNumber} of ${totalPages}` }, { tag: "ul", links }]
+}
+
+/** "Title | SC Market" → "Title — Page 3 | SC Market". */
+function pageTitle(title: string, pageNumber: number): string {
+  const suffix = ` — Page ${pageNumber}`
+  return / \| SC Market$/.test(title)
+    ? title.replace(/ \| SC Market$/, `${suffix} | SC Market`)
+    : `${title}${suffix}`
+}
+
+/**
+ * Page `ctx.pageNumber` of a paginated hub: page 1 is the hub as is (plus
+ * the page links); page N is self-canonical (`?page=N`) with "Page N" in its
+ * title; a page past the end is a 404.
+ */
+function paginate(
+  doc: BridgeDocument,
+  opts: { path: string; total: number; pageSize: number },
+  ctx: PageContext,
+): BridgeDocument {
+  const totalPages = hubPageCount(opts.total, opts.pageSize)
+  const n = ctx.pageNumber
+  if (n > totalPages) return { ...doc, status: 404 }
+  const summary = [...doc.summary, ...paginationBlocks(opts.path, n, totalPages)]
+  if (n === 1) return { ...doc, summary }
+  const oldCanonical = doc.canonical
+  const canonical = `${ctx.origin}${pagedPath(opts.path, n)}`
+  const title = pageTitle(doc.head.title ?? doc.title, n)
+  const meta = doc.head.meta.map((m) => {
+    const key = m.name ?? m.property
+    if (key === "og:url" || key === "twitter:url") return { ...m, content: canonical }
+    if (key === "og:title" || key === "twitter:title") return { ...m, content: pageTitle(m.content, n) }
+    if (key === "description" || key === "og:description" || key === "twitter:description") {
+      return { ...m, content: `${m.content} Page ${n} of ${totalPages}.` }
+    }
+    return m
+  })
+  const jsonLd = doc.head.jsonLd.map((data) =>
+    "url" in data && data.url === oldCanonical ? { ...data, url: canonical } : data,
+  )
+  return {
+    ...doc,
+    title: applyTitleTemplate(title),
+    canonical,
+    head: { ...doc.head, title, canonical, meta, jsonLd },
+    summary,
+  }
+}
+
+/** A listing link with its price and seller, for related/seller lists. */
+function listingLink(l: {
+  listing_id: string
+  title: string
+  price_min?: number | null
+  shop_name?: string | null
+}): SeoLink {
+  return {
+    href: MARKET_PATHS.listing(l.listing_id, l.title),
+    text: [l.title, aUEC(Number(l.price_min)), l.shop_name].filter(Boolean).join(" — "),
+  }
+}
+
+/** Listing links from a search answer, minus `exclude` (by listing id). */
+function searchLinks(
+  listings: SearchListingsResponse["listings"] | undefined,
+  exclude: ReadonlySet<string>,
+  max: number,
+): SeoLink[] {
+  return (Array.isArray(listings) ? listings : [])
+    .filter((l) => !exclude.has(l.listing_id))
+    .slice(0, max)
+    .map(listingLink)
+}
+
+/** Public listings search: active, in stock. */
+function listingSearch(params: Record<string, string | number>, ttl = ENTITY_LIST_TTL): ApiRequest {
+  const query = new URLSearchParams({ page: "1", quantity_min: "1" })
+  for (const [key, value] of Object.entries(params)) query.set(key, String(value))
+  return v2List(`/listings/search?${query.toString()}`, ttl)
+}
+
+/** "30 Oct 2026" (UTC), null for a missing or bad date. */
+function shortDate(value: string | null | undefined): string | null {
+  if (!value) return null
+  const date = new Date(value)
+  return Number.isNaN(date.getTime())
+    ? null
+    : date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })
+}
+
+/** "Key: value" facts, dropping empty values. */
+function facts(entries: [string, string | number | null | undefined][]): string[] {
+  return entries
+    .filter(([, v]) => v !== null && v !== undefined && String(v).trim() !== "")
+    .map(([k, v]) => `${k}: ${v}`)
+}
+
+/** Listings section of a game item's page (wiki item, ship, commodity). */
+function itemListingBlocks(name: string, gameItemId: string, listings: SearchListingsResponse | undefined): SummaryBlock[] {
+  const links = searchLinks(listings?.listings, new Set(), 20)
+  const total = listings?.total ?? 0
+  return [
+    { tag: "h2", text: `${name} for sale` },
+    {
+      tag: "p",
+      text:
+        total > 0
+          ? `${total} player listing${total === 1 ? "" : "s"} on SC Market right now.`
+          : `No player listings right now. Set a price alert or post a buy order on SC Market.`,
+    },
+    {
+      tag: "ul",
+      links: [
+        ...links,
+        { href: MARKET_PATHS.aggregate(gameItemId, name), text: `Compare all ${name} listings and prices` },
+      ],
+    },
+  ]
+}
+
+/** SC Orgs' public API and site (our sister site for org management). */
+const SC_ORGS_API = "https://api.sc-orgs.space"
+export const SC_ORGS_SITE = "https://sc-orgs.space"
+
+/**
+ * The org's SC Orgs page, when SC Orgs has it (matched by spectrum ID). An
+ * off-site link, so it's a paragraph's absolute URL rather than a summary
+ * link (those are site-relative only).
+ */
+function scOrgsBlocks(name: string, sid: string | undefined): SummaryBlock[] {
+  if (!sid || !/^[A-Za-z0-9_-]{1,32}$/.test(sid)) return []
+  return [{ tag: "external", href: `${SC_ORGS_SITE}/communities/${encodeURIComponent(sid)}`, text: `${name} on SC Orgs: members, events and recruiting` }]
+}
+
+/** Valid tab names per profile kind (the SPA's useShopTab/useOrgTab/useProfileTab). */
+const SHOP_TABS: ReadonlySet<string> = new Set(["listings", "services", "reviews", "about", "order"])
+const ORG_TABS: ReadonlySet<string> = new Set(["store", "about", "order", "members", "recruiting", "reviews"])
+const USER_TABS: ReadonlySet<string> = new Set(["store", "about", "order", "reviews"])
+
+/** An unknown `:tab` would render the default tab under another URL: a 404. */
+function unknownTab(params: Record<string, string>, tabs: ReadonlySet<string>): boolean {
+  return params.tab !== undefined && !tabs.has(params.tab.toLowerCase())
+}
+
+/** Page sizes of the SPA hubs that read ?page (so ?page=N shows the same entries). */
+const MARKET_PAGE_SIZE = 48
+const SHOPS_PAGE_SIZE = 24
+const WIKI_ITEMS_PAGE_SIZE = 24
+const WIKI_SHIPS_PAGE_SIZE = 24
+const WIKI_COMMODITIES_PAGE_SIZE = 50
+
+/** dateModified (the game data import) on a game-data page's main JSON-LD node. */
+function withDateModified(head: PageHead, version: GameVersion | null): PageHead {
+  const dateModified = gameDataDateModified(version)
+  if (!dateModified || head.jsonLd.length === 0) return head
+  const [main, ...rest] = head.jsonLd
+  return { ...head, jsonLd: [{ ...main, dateModified }, ...rest] }
+}
+
+/** Blueprint detail lookups per mission page (each is one cached API call). */
+const MAX_BLUEPRINT_LOOKUPS = 5
+
+interface MissionRelated extends Record<string, unknown> {
+  versions: ActiveVersionsResponse
+  giverMissions: SearchMissionsResponse
+  similarMissions: SearchMissionsResponse
+}
+
+/** Every blueprint a mission can reward, de-duplicated, best chance first. */
+function missionBlueprints(data: MissionDetailResponse): MissionBlueprintReward[] {
+  const byId = new Map<string, MissionBlueprintReward>()
+  for (const pool of data.blueprint_rewards ?? []) {
+    for (const bp of pool.blueprints ?? []) {
+      const seen = byId.get(bp.blueprint_id)
+      if (!seen || Number(bp.drop_probability) > Number(seen.drop_probability)) byId.set(bp.blueprint_id, bp)
+    }
+  }
+  return [...byId.values()].sort(
+    (a, b) => Number(b.is_guaranteed) - Number(a.is_guaranteed) || Number(b.drop_probability) - Number(a.drop_probability),
+  )
+}
+
+/** "1 h 30 min", "45 min", "30 s". */
+function duration(seconds: number | null | undefined): string | null {
+  if (typeof seconds !== "number" || !Number.isFinite(seconds) || seconds <= 0) return null
+  const h = Math.floor(seconds / 3600)
+  const m = Math.round((seconds % 3600) / 60)
+  if (h > 0) return m > 0 ? `${h} h ${m} min` : `${h} h`
+  if (m > 0) return `${m} min`
+  return `${Math.round(seconds)} s`
+}
+
+/**
+ * /missions/:slug: the one-line summary, then giver, place, rewards and
+ * reputation, rules, hauling orders, blueprint drops (linked to the
+ * blueprint, the item and its market page), item rewards, more missions
+ * from the giver, and the data's freshness.
+ */
+function missionDoc(
+  data: MissionDetailResponse,
+  ctx: PageContext & { related: Partial<MissionRelated> },
+): BridgeDocument {
+  const m = data.mission
+  const version = ctx.related.versions?.LIVE ?? null
+  const head = buildMissionHead(data, ctx.params.slug, ctx.origin, version)
+  const name = readableMissionText(m.mission_name, missionGiver(m)) || "Unknown mission"
+  const giver = m.mission_giver_org || m.faction
+  const place = [m.location_detail, m.planet_moon, m.star_system].filter(Boolean).join(", ")
+  const rep = typeof m.reputation_reward === "number" && m.reputation_reward !== 0
+    ? `${m.reputation_reward > 0 ? "+" : ""}${m.reputation_reward} reputation${m.reputation_reward_faction ? ` with ${m.reputation_reward_faction}` : ""}`
+    : null
+  const standing = [m.min_standing_display, m.max_standing_display].filter(Boolean)
+  const legal = m.legal_status === "ILLEGAL" || m.is_illegal ? "Illegal" : m.legal_status === "LEGAL" || m.is_illegal === false ? "Legal" : null
+
+  const blueprints = missionBlueprints(data)
+  const outputs = new Map<string, { id: string; name: string }>()
+  blueprints.slice(0, MAX_BLUEPRINT_LOOKUPS).forEach((bp, i) => {
+    const detail = ctx.related[`blueprint${i}`] as BlueprintDetailResponse | undefined
+    const item = detail?.output_item
+    if (item?.game_item_id && item.name) outputs.set(bp.blueprint_id, { id: item.game_item_id, name: item.name })
+  })
+  const blueprintLinks: SeoLink[] = blueprints.flatMap((bp) => {
+    const chance = bp.is_guaranteed ? "guaranteed" : `${formatPercent(dropPercent(bp.drop_probability))} drop chance`
+    const label = bp.output_item_name || bp.blueprint_name
+    const out = outputs.get(bp.blueprint_id)
+    return [
+      { href: GAME_DATA_PATHS.blueprint(enc(bp.blueprint_name)), text: `${label} blueprint — ${chance}` },
+      ...(out
+        ? [
+            { href: WIKI_PATHS.item(out.id, out.name), text: `${out.name} in the game database` },
+            { href: MARKET_PATHS.aggregate(out.id, out.name), text: `${out.name} on the market` },
+          ]
+        : []),
+    ]
+  })
+  const hauling = arr(data.hauling_orders).map(
+    (h) => `${h.resource_name}: ${h.min_scu === h.max_scu ? h.min_scu : `${h.min_scu}–${h.max_scu}`} SCU`,
+  )
+  const more = arr(ctx.related.giverMissions?.missions)
+    .filter((other) => other.mission_code !== m.mission_code)
+    .slice(0, 10)
+    .map((other) => ({
+      href: GAME_DATA_PATHS.mission(enc(other.mission_code)),
+      text: [readableMissionText(other.mission_name), missionRewardRange(other)].filter(Boolean).join(" — "),
+    }))
+  const seen = new Set([m.mission_code, ...arr(ctx.related.giverMissions?.missions).map((o) => o.mission_code)])
+  const similar = arr(ctx.related.similarMissions?.missions)
+    .filter((other) => !seen.has(other.mission_code))
+    .slice(0, Math.max(0, 10 - more.length))
+    .map((other) => ({
+      href: GAME_DATA_PATHS.mission(enc(other.mission_code)),
+      text: [missionTitle(other), missionRewardRange(other)].filter(Boolean).join(" — "),
+    }))
+  const stamp = freshnessStamp(version)
+
+  const body: SummaryBlock[] = [
+    { tag: "p", text: missionSummaryLine(m, data.blueprint_rewards) },
+    { tag: "h2", text: "Mission details" },
+    {
+      tag: "ul-text",
+      items: facts([
+        ["Mission giver", m.mission_giver_org],
+        ["Faction", m.faction && m.faction !== m.mission_giver_org ? m.faction : null],
+        ["Type", missionType(m)],
+        ["Location", place || null],
+        ["Pick up at", arr(m.accept_locations).slice(0, 8).join(", ") || null],
+        ["Destinations", arr(m.destinations).slice(0, 8).join(", ") || null],
+        ["Reward", missionRewardRange(m)],
+        ["Reputation", rep],
+        ["Required standing", standing.length ? standing.join(" to ") : null],
+        ["Legality", legal],
+        ["Max crimestat", typeof m.max_crimestat === "number" ? m.max_crimestat : null],
+        ["Time limit", duration(m.deadline_seconds)],
+        ["Cooldown", duration(m.personal_cooldown_time)],
+        ["Cooldown after abandoning", duration(m.abandoned_cooldown_time)],
+        ["Shareable", m.is_shareable ? "yes" : null],
+        ["Community difficulty", m.community_difficulty_count > 0 && m.community_difficulty_avg ? `${Number(m.community_difficulty_avg.toFixed(1))}/5 from ${m.community_difficulty_count} ratings` : null],
+      ]),
+    },
+    ...paragraphs(m.mission_description ? readableMissionText(m.mission_description, missionGiver(m)) : null),
+    ...(hauling.length ? [{ tag: "h2" as const, text: "Hauling orders" }, { tag: "ul-text" as const, items: hauling }] : []),
+    ...linkBlocks("Blueprint rewards", blueprintLinks),
+    ...(arr(m.item_rewards).length
+      ? [{ tag: "h2" as const, text: "Item rewards" }, { tag: "ul-text" as const, items: arr(m.item_rewards).map((r) => r.name) }]
+      : []),
+    ...linkBlocks(giver ? `More missions from ${giver}` : "More missions", more),
+    ...linkBlocks(`Similar ${missionType(m) ?? ""} missions${m.star_system ? ` in ${m.star_system}` : ""}`.replace(/\s+/g, " "), similar),
+    ...linkBlocks("Browse", [
+      { href: GAME_DATA_PATHS.missions, text: "All Star Citizen missions" },
+      { href: GAME_DATA_PATHS.blueprints, text: "Crafting blueprints" },
+      { href: MARKET_PATHS.search, text: "Player market" },
+    ]),
+    ...paragraphs(stamp),
+  ]
+  return fromHead(head, missionTitle(m), body, ctx)
+}
+
+interface ListingRelated extends Record<string, unknown> {
+  shop: ShopPublicResponse
+  sellerListings: SearchListingsResponse
+  sameItem: SearchListingsResponse
+  sameType: SearchListingsResponse
+}
+
+/** The game database page of a listing's item. */
+function gameItemWikiPath(item: { id: string; name: string; type: string }): string {
+  return item.type === "Ship for Sale/Rental" ? WIKI_PATHS.ship(item.id, item.name) : WIKI_PATHS.item(item.id, item.name)
+}
+
+/**
+ * /market/:id: price, stock, seller and rating, dates, the variants, then
+ * links to the item's price comparison and wiki page, the seller's shop and
+ * other listings, and related listings. A listing that is no longer for sale
+ * is a 404 (410 once the seller cancelled it).
+ */
+function listingDoc(
+  data: GetListingDetailResponse,
+  ctx: PageContext & { related: Partial<ListingRelated> },
+): BridgeDocument {
+  const { listing, seller } = data
+  const items = data.items ?? []
+  const head = buildListingHead(data, ctx.origin)
+  const range = listingPriceRange(data)
+  const quantity = listingQuantity(data)
+  const unit = listing.quantity_unit === "scu" ? "SCU" : "unit"
+  const shop = ctx.related.shop
+  const rating = sellerRatingLabel(shop?.rating ?? seller.rating, shop?.rating_count) ?? "no reviews yet"
+  const price = range
+    ? range.max > range.min
+      ? `${aUEC(range.min)} to ${aUEC(range.max)} per ${unit}, by variant`
+      : `${aUEC(range.min)} per ${unit}`
+    : null
+  const gameItem = items.length === 1 ? items[0].game_item : undefined
+  const variants = items.flatMap((item) =>
+    (item.variants ?? []).map((v) =>
+      [
+        items.length > 1 ? item.game_item?.name : null,
+        v.display_name,
+        aUEC(Number(v.price || item.base_price)),
+        Number(v.quantity) > 0 ? `${Number(v.quantity).toLocaleString("en-US")} available` : "out of stock",
+        v.locations?.length ? `at ${v.locations.join(", ")}` : null,
+      ]
+        .filter(Boolean)
+        .join(" — "),
+    ),
+  )
+  const exclude = new Set([listing.listing_id])
+  const fromSeller = searchLinks(ctx.related.sellerListings?.listings, exclude, 10)
+  for (const l of arr(ctx.related.sellerListings?.listings)) exclude.add(l.listing_id)
+  const otherSellers = arr(ctx.related.sameItem?.listings).filter((l) => l.shop_slug !== seller.slug)
+  const related = searchLinks(otherSellers, exclude, 10)
+  for (const l of arr(ctx.related.sameItem?.listings)) exclude.add(l.listing_id)
+  if (related.length < 10) related.push(...searchLinks(ctx.related.sameType?.listings, exclude, 10 - related.length))
+
+  const doc = fromHead(
+    head,
+    listing.title,
+    [
+      ...paragraphs(
+        [
+          price ? `Price: ${price}.` : null,
+          quantity > 0 ? `${quantity.toLocaleString("en-US")} ${unit === "SCU" ? "SCU" : quantity === 1 ? "unit" : "units"} available.` : "Out of stock.",
+          listing.sale_type === "auction" ? "Auction." : listing.sale_type === "negotiable" ? "Price negotiable: make an offer." : null,
+        ]
+          .filter(Boolean)
+          .join(" "),
+        [
+          `Sold by ${seller.name} (${rating}).`,
+          seller.languages?.length ? `Seller languages: ${seller.languages.join(", ")}.` : null,
+          listing.pickup_method ? `Delivery: ${listing.pickup_method === "any" ? "delivery or pickup" : listing.pickup_method}.` : null,
+          shortDate(listing.created_at) ? `Listed ${shortDate(listing.created_at)}.` : null,
+          listing.updated_at && listing.updated_at !== listing.created_at && shortDate(listing.updated_at)
+            ? `Updated ${shortDate(listing.updated_at)}.`
+            : null,
+          typeof listing.view_count === "number" && listing.view_count > 0 ? `${listing.view_count} views.` : null,
+        ]
+          .filter(Boolean)
+          .join(" "),
+        listing.description && listing.description !== listing.title ? listing.description : null,
+        "Prices are in aUEC, the Star Citizen in-game currency. Buy on SC Market to get order tracking, chat with the seller and a review after delivery.",
+      ),
+      ...(variants.length > 1 || items.length > 1 ? [{ tag: "h2" as const, text: "Variants" }, { tag: "ul-text" as const, items: variants }] : []),
+      ...linkBlocks("Price check and item info", [
+        ...items
+          .filter((item) => item.game_item?.id && item.game_item.name)
+          .slice(0, 5)
+          .flatMap((item) => [
+            { href: MARKET_PATHS.aggregate(item.game_item.id, item.game_item.name), text: `Compare all ${item.game_item.name} listings and prices` },
+            { href: gameItemWikiPath(item.game_item), text: `${item.game_item.name} in the Star Citizen game database` },
+          ]),
+        { href: SHOP_PATHS.profile(enc(seller.slug)), text: `${seller.name}: shop, reviews and all listings` },
+      ]),
+      ...linkBlocks(`More from ${seller.name}`, fromSeller),
+      ...linkBlocks(gameItem ? `More ${gameItem.name} and similar listings` : "Related listings", related),
+      ...linkBlocks("Browse", [
+        { href: MARKET_PATHS.search, text: "All Star Citizen market listings" },
+        { href: MARKET_PATHS.shops, text: "All shops" },
+      ]),
+    ],
+    ctx,
+  )
+  if (listing.status !== "active") return { ...doc, status: listing.status === "cancelled" ? 410 : 404 }
+  return doc
 }
 
 /** Pages with no API call: build gets `undefined`. */
@@ -410,53 +934,58 @@ const HUB_PAGES: Record<
     }
   }),
 
-  // ListingSearchV2's default query (page 1, quantity_min 1); its head is
-  // the shared builder's, so it matches the SPA's (incl. og:/twitter:).
+  // ListingSearchV2's default query (quantity_min 1, desktop page size); its
+  // head is the shared builder's, so it matches the SPA's (incl. og:/twitter:).
   market: page<SearchListingsResponse>({
-    primary: () =>
-      v2List(`/listings/search?page=1&page_size=${MAX_HUB_LINKS}&quantity_min=1`, ENTITY_LIST_TTL),
+    paginated: true,
+    primary: (_p, n = 1) =>
+      v2List(`/listings/search?page=${n}&page_size=${MARKET_PAGE_SIZE}&quantity_min=1`, ENTITY_LIST_TTL),
     build: (data, _s, ctx) => {
       const head = buildMarketSearchHead({ total: data.total }, ctx.origin)
-      const links = linkList(
-        data.listings.map((l) => ({
-          href: MARKET_PATHS.listing(l.listing_id, l.title),
-          text: [l.title, aUEC(l.price_min), l.shop_name].filter(Boolean).join(" — "),
-        })),
-      )
-      return {
-        title: applyTitleTemplate(head.title),
-        canonical: head.canonical ?? `${ctx.origin}${MARKET_PATHS.search}`,
-        head: {
-          ...head,
-          jsonLd: buildHubHead(
-            { text: { title: head.title ?? "", description: headDescription(head) }, path: MARKET_PATHS.search, name: "Market", links },
-            ctx.origin,
-          ).jsonLd,
+      const links = data.listings.slice(0, MAX_SUMMARY_LINKS).map(listingLink)
+      return paginate(
+        {
+          title: applyTitleTemplate(head.title),
+          canonical: head.canonical ?? `${ctx.origin}${MARKET_PATHS.search}`,
+          head: {
+            ...head,
+            jsonLd: buildHubHead(
+              { text: { title: head.title ?? "", description: headDescription(head) }, path: MARKET_PATHS.search, name: "Market", links },
+              ctx.origin,
+            ).jsonLd,
+          },
+          summary: [
+            { tag: "h1", text: "Star Citizen Marketplace" },
+            ...paragraphs(headDescription(head)),
+            ...linkBlocks(ctx.pageNumber > 1 ? "Listings" : "Latest listings", links),
+          ],
         },
-        summary: [
-          { tag: "h1", text: "Star Citizen Marketplace" },
-          ...paragraphs(headDescription(head)),
-          ...linkBlocks("Latest listings", links),
-        ],
-      }
+        { path: MARKET_PATHS.search, total: data.total, pageSize: MARKET_PAGE_SIZE },
+        ctx,
+      )
     },
   }),
 
   shops: page<BrowseShopsApiResponse>({
-    primary: () =>
-      v2List(`/shops?page=1&page_size=${MAX_HUB_LINKS}&sort_by=rating&sort_order=desc`, ENTITY_LIST_TTL),
+    paginated: true,
+    primary: (_p, n = 1) =>
+      v2List(`/shops?page=${n}&page_size=${SHOPS_PAGE_SIZE}&sort_by=rating&sort_order=desc`, ENTITY_LIST_TTL),
     build: (data, _s, ctx) =>
-      hubDoc(
-        {
-          text: shopDirectorySeoText(null, data.total),
-          path: MARKET_PATHS.shops,
-          name: "Browse Shops",
-          linksHeading: "Top rated shops",
-          links: data.shops.map((shop) => ({
-            href: SHOP_PATHS.profile(enc(shop.slug)),
-            text: shop.name,
-          })),
-        },
+      paginate(
+        hubDoc(
+          {
+            text: shopDirectorySeoText(null, data.total),
+            path: MARKET_PATHS.shops,
+            name: "Browse Shops",
+            linksHeading: ctx.pageNumber > 1 ? "Shops" : "Top rated shops",
+            links: data.shops.map((shop) => ({
+              href: SHOP_PATHS.profile(enc(shop.slug)),
+              text: shop.name,
+            })),
+          },
+          ctx,
+        ),
+        { path: MARKET_PATHS.shops, total: data.total, pageSize: SHOPS_PAGE_SIZE },
         ctx,
       ),
   }),
@@ -479,10 +1008,13 @@ const HUB_PAGES: Record<
   }),
 
   wikiItems: page<SearchWikiItemsResponse>({
-    primary: () =>
-      v2List(`/game-data/wiki/items?page=1&page_size=${MAX_HUB_LINKS}`, STATIC_GAME_DATA_TTL),
+    paginated: true,
+    primary: (_p, n = 1) =>
+      n > 1
+        ? v2List(`/game-data/wiki/items?page=${n}&page_size=${WIKI_ITEMS_PAGE_SIZE}`, STATIC_GAME_DATA_TTL)
+        : v2List(`/game-data/wiki/items?page=1&page_size=${MAX_HUB_LINKS}`, STATIC_GAME_DATA_TTL),
     build: (data, _s, ctx) =>
-      hubDoc(
+      paginate(hubDoc(
         {
           text: wikiItemsSeoText(null, data.total),
           path: WIKI_PATHS.items,
@@ -495,14 +1027,17 @@ const HUB_PAGES: Record<
           })),
         },
         ctx,
-      ),
+      ), { path: WIKI_PATHS.items, total: data.total, pageSize: WIKI_ITEMS_PAGE_SIZE }, ctx),
   }),
 
   wikiShips: page<GetShipsApiResponse>({
-    primary: () =>
-      v2List(`/game-data/wiki/ships?page=1&page_size=${MAX_HUB_LINKS}`, STATIC_GAME_DATA_TTL),
+    paginated: true,
+    primary: (_p, n = 1) =>
+      n > 1
+        ? v2List(`/game-data/wiki/ships?page=${n}&page_size=${WIKI_SHIPS_PAGE_SIZE}`, STATIC_GAME_DATA_TTL)
+        : v2List(`/game-data/wiki/ships?page=1&page_size=${MAX_HUB_LINKS}`, STATIC_GAME_DATA_TTL),
     build: (data, _s, ctx) =>
-      hubDoc(
+      paginate(hubDoc(
         {
           text: wikiShipsSeoText(null, data.total),
           path: WIKI_PATHS.ships,
@@ -516,14 +1051,15 @@ const HUB_PAGES: Record<
           })),
         },
         ctx,
-      ),
+      ), { path: WIKI_PATHS.ships, total: data.total, pageSize: WIKI_SHIPS_PAGE_SIZE }, ctx),
   }),
 
   wikiCommodities: page<GetCommoditiesApiResponse>({
-    primary: () =>
-      v2List(`/game-data/wiki/commodities?page=1&page_size=${MAX_HUB_LINKS}`, STATIC_GAME_DATA_TTL),
+    paginated: true,
+    primary: (_p, n = 1) =>
+      v2List(`/game-data/wiki/commodities?page=${n}&page_size=${WIKI_COMMODITIES_PAGE_SIZE}`, STATIC_GAME_DATA_TTL),
     build: (data, _s, ctx) =>
-      hubDoc(
+      paginate(hubDoc(
         {
           text: wikiCommoditiesSeoText(null, data.total),
           path: WIKI_PATHS.commodities,
@@ -536,7 +1072,7 @@ const HUB_PAGES: Record<
           })),
         },
         ctx,
-      ),
+      ), { path: WIKI_PATHS.commodities, total: data.total, pageSize: WIKI_COMMODITIES_PAGE_SIZE }, ctx),
   }),
 
   // The location tree is shown inline (no per-location wiki route), so this
@@ -656,11 +1192,12 @@ const HUB_PAGES: Record<
           text: missionsSeoText(null, data.total),
           path: GAME_DATA_PATHS.missions,
           name: "Missions",
+          intro: missionsCapabilityText(data.total),
           linksHeading: "Missions",
           links: data.missions.map((m) => ({
             href: GAME_DATA_PATHS.mission(enc(m.mission_code)),
             // category is a translation key ("missiontype.delivery").
-            text: m.mission_name,
+            text: missionTitle(m),
           })),
         },
         ctx,
@@ -816,15 +1353,73 @@ const MARKET_DETAIL_PAGES: Record<"aggregate" | "bundle" | "manufacturer", Bridg
 
 
 export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
-  commodity: page<ResourceDetailResponse>({
+  commodity: page<ResourceDetailResponse, never, { listings: SearchListingsResponse; similar: GetCommoditiesApiResponse }>({
     primary: (p) => v2(`/game-data/resources/${enc(p.id)}`, MARKET_GAME_DATA_TTL),
+    related: [
+      (data) => ({
+        listings: data.resource.game_item_id
+          ? listingSearch({ game_item_id: data.resource.game_item_id, page_size: 20, sort_by: "price", sort_order: "asc" }, MARKET_GAME_DATA_TTL)
+          : null,
+        similar: data.resource.resource_category
+          ? v2List(`/game-data/wiki/commodities?page=1&page_size=31&category=${enc(data.resource.resource_category)}`, STATIC_GAME_DATA_TTL)
+          : null,
+      }),
+    ],
     build: (data, _s, ctx) => {
+      const r = data.resource
       const answers = buildCommodityAnswers(data, englishT, LANG)
       const head = withFaqJsonLd(buildCommodityHead(data, ctx.origin), answers)
+      const place = (parts: (string | undefined)[]) => parts.filter(Boolean).join(", ")
+      const mining = (r.mining_locations ?? [])
+        .map((l) => [place([l.location_detail, l.planet_moon, l.star_system]), l.abundance].filter(Boolean).join(" — "))
+        .filter(Boolean)
+      const buying = (r.purchase_locations ?? [])
+        .map((l) => [place([l.station, l.planet_moon, l.star_system]), aUEC(l.average_price)].filter(Boolean).join(" — "))
+        .filter(Boolean)
       return fromHead(
         head,
-        data.resource.resource_name,
-        [...paragraphs(answers.summary), ...faqBlocks(answers)],
+        r.resource_name,
+        [
+          ...paragraphs(answers.summary),
+          { tag: "h2", text: "Facts" },
+          {
+            tag: "ul-text",
+            items: facts([
+              ["Category", [r.resource_category, r.resource_subcategory].filter(Boolean).join(" / ")],
+              ["Base value", aUEC(r.base_value)],
+              ["Average price", aUEC(data.market_price?.average_price)],
+              ["Price range", data.market_price?.min_price && data.market_price?.max_price ? `${aUEC(data.market_price.min_price)} to ${aUEC(data.market_price.max_price)}` : null],
+              ["Max stack", r.max_stack_size],
+              [
+                "How to get it",
+                [r.can_be_mined && "mining", r.can_be_purchased && "buying", r.can_be_salvaged && "salvage", r.can_be_looted && "loot"]
+                  .filter(Boolean)
+                  .join(", "),
+              ],
+            ]),
+          },
+          ...(mining.length > 0 ? [{ tag: "h2" as const, text: "Where to mine it" }, { tag: "ul-text" as const, items: mining }] : []),
+          ...(buying.length > 0 ? [{ tag: "h2" as const, text: "Where to buy it" }, { tag: "ul-text" as const, items: buying }] : []),
+          ...(r.game_item_id ? itemListingBlocks(r.resource_name, r.game_item_id, ctx.related.listings) : []),
+          ...linkBlocks(
+            "Used in crafting",
+            (data.blueprints_requiring ?? []).map((bp) => ({
+              href: GAME_DATA_PATHS.blueprint(enc(bp.blueprint_name || bp.blueprint_id)),
+              text: `Blueprint: ${bp.blueprint_name}`,
+            })),
+          ),
+          ...linkBlocks(
+            `Other ${r.resource_category || ""} commodities`.replace(/\s+/g, " "),
+            [
+              ...arr(ctx.related.similar?.commodities)
+                .filter((c) => c.resource_id !== r.resource_id)
+                .slice(0, 30)
+                .map((c) => ({ href: WIKI_PATHS.commodity(c.resource_id, c.name), text: c.name })),
+              { href: WIKI_PATHS.commodities, text: "All commodities" },
+            ],
+          ),
+          ...faqBlocks(answers),
+        ],
         ctx,
       )
     },
@@ -844,26 +1439,136 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
     },
   }),
 
-  item: page<WikiItemDetail>({
+  item: page<WikiItemDetail, never, { listings: SearchListingsResponse; similar: SearchWikiItemsResponse; versions: ActiveVersionsResponse }>({
     primary: (p) => v2(`/game-data/wiki/items/${enc(p.id)}`, MARKET_GAME_DATA_TTL),
-    build: (item, _s, ctx) =>
-      fromHead(
-        buildItemHead(item, ctx.origin),
+    related: [
+      (item) => ({
+        listings: listingSearch({ game_item_id: item.id, page_size: 20, sort_by: "price", sort_order: "asc" }, MARKET_GAME_DATA_TTL),
+        similar: item.type
+          ? v2List(`/game-data/wiki/items?page=1&page_size=21&type=${enc(item.type)}`, STATIC_GAME_DATA_TTL)
+          : null,
+        versions: v2List(`/game-data/versions/active`, STATIC_GAME_DATA_TTL),
+      }),
+    ],
+    build: (item, _s, ctx) => {
+      const attributes = Object.entries(item.attributes ?? {})
+        .filter(([, v]) => typeof v === "string" && v.trim() !== "" && v.length <= 80)
+        .slice(0, 20)
+        .map(([k, v]) => `${k.replace(/_/g, " ")}: ${v}`)
+      const maker = item.manufacturer_name || item.manufacturer
+      const version = ctx.related.versions?.LIVE ?? null
+      return fromHead(
+        withDateModified(buildItemHead(item, ctx.origin), version),
         item.name,
-        paragraphs(buildItemSummary(item, englishT)),
+        [
+          ...paragraphs(buildItemSummary(item, englishT)),
+          { tag: "h2", text: "Specifications" },
+          {
+            tag: "ul-text",
+            items: [
+              ...facts([
+                ["Type", item.type],
+                ["Sub-type", item.sub_type && item.sub_type !== "UNDEFINED" ? item.sub_type : null],
+                ["Size", item.size],
+                ["Grade", item.grade],
+                ["Manufacturer", maker],
+              ]),
+              ...attributes,
+            ],
+          },
+          ...itemListingBlocks(item.name, item.id, ctx.related.listings),
+          ...linkBlocks(
+            "Crafting",
+            (item.craftable_from ?? []).map((bp) => ({
+              href: GAME_DATA_PATHS.blueprint(enc(bp.blueprint_name || bp.blueprint_id)),
+              text: `Blueprint: ${bp.blueprint_name}`,
+            })),
+          ),
+          ...paragraphs(
+            item.rewarded_by?.length
+              ? `Rewarded by: ${[...new Set(item.rewarded_by.map((m) => m.mission_name))].slice(0, 15).join(", ")}.`
+              : null,
+          ),
+          ...linkBlocks(
+            "Related",
+            [
+              ...(item.manufacturer
+                ? [{ href: WIKI_PATHS.manufacturer(enc(item.manufacturer)), text: `${maker}: all products` }]
+                : []),
+              ...arr(ctx.related.similar?.items)
+                .filter((other) => other.id !== item.id)
+                .slice(0, 20)
+                .map((other) => ({
+                  href: WIKI_PATHS.item(other.id, other.name),
+                  text: [other.name, other.manufacturer_name].filter(Boolean).join(" — "),
+                })),
+              { href: WIKI_PATHS.items, text: "All game items" },
+            ],
+          ),
+          ...paragraphs(freshnessStamp(version)),
+        ],
         ctx,
-      ),
+      )
+    },
   }),
 
-  ship: page<WikiShipDetail>({
+  ship: page<WikiShipDetail, never, { listings: SearchListingsResponse; ships: GetShipsApiResponse }>({
     primary: (p) => v2(`/game-data/wiki/ships/${enc(p.id)}`, STATIC_GAME_DATA_TTL),
-    build: (ship, _s, ctx) =>
-      fromHead(
+    related: [
+      (ship) => ({
+        listings: listingSearch({ game_item_id: ship.id, page_size: 20, sort_by: "price", sort_order: "asc" }, MARKET_GAME_DATA_TTL),
+        // The ship browser's own list (all ships, cached for an hour).
+        ships: v2List(`/game-data/wiki/ships?pageSize=500`, STATIC_GAME_DATA_TTL),
+      }),
+    ],
+    build: (ship, _s, ctx) => {
+      const maker = ship.manufacturer_name || ship.manufacturer
+      const others = arr(ctx.related.ships?.ships).filter((s) => s.id !== ship.id)
+      const sameMaker = ship.manufacturer ? others.filter((s) => s.manufacturer === ship.manufacturer) : []
+      const sameCareer = ship.career ? others.filter((s) => s.career === ship.career && s.manufacturer !== ship.manufacturer) : []
+      const dims = [ship.length_m, ship.width_m, ship.height_m].every((d) => typeof d === "number" && d > 0)
+        ? `${ship.length_m} × ${ship.width_m} × ${ship.height_m} m`
+        : null
+      return fromHead(
         buildShipHead(ship, ctx.origin),
         ship.name,
-        paragraphs(buildShipSummary(ship, englishT), ship.description),
+        [
+          ...paragraphs(buildShipSummary(ship, englishT), ship.description),
+          { tag: "h2", text: "Specifications" },
+          {
+            tag: "ul-text",
+            items: facts([
+              ["Manufacturer", maker],
+              ["Focus", ship.focus],
+              ["Career", ship.career],
+              ["Role", ship.role],
+              ["Size", ship.size],
+              ["Crew", ship.crew_size],
+              ["Dimensions (L × W × H)", dims],
+              ["Movement", ship.movement_class],
+            ]),
+          },
+          ...itemListingBlocks(ship.name, ship.id, ctx.related.listings),
+          ...linkBlocks(
+            maker ? `More from ${maker}` : "Related ships",
+            [
+              ...(ship.manufacturer
+                ? [{ href: WIKI_PATHS.manufacturer(enc(ship.manufacturer)), text: `${maker}: all ships and products` }]
+                : []),
+              ...sameMaker.slice(0, 15).map((s) => ({ href: WIKI_PATHS.ship(s.id, s.name), text: s.name })),
+            ],
+          ),
+          ...linkBlocks(
+            ship.career ? `Other ${ship.career} ships` : "Other ships",
+            [
+              ...sameCareer.slice(0, 15).map((s) => ({ href: WIKI_PATHS.ship(s.id, s.name), text: s.name })),
+              { href: WIKI_PATHS.ships, text: "All ships and vehicles" },
+            ],
+          ),
+        ],
         ctx,
-      ),
+      )
+    },
   }),
 
   ore: page<OreDetailResponse>({
@@ -894,69 +1599,155 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
     },
   }),
 
-  blueprint: page<BlueprintDetailResponse>({
+  blueprint: page<BlueprintDetailResponse, never, { versions: ActiveVersionsResponse }>({
     primary: (p) => v2(`/game-data/blueprints/${enc(p.slug)}`, STATIC_GAME_DATA_TTL),
+    related: [() => ({ versions: v2List(`/game-data/versions/active`, STATIC_GAME_DATA_TTL) })],
     build: (data, _s, ctx) => {
-      const head = buildBlueprintHead(data, ctx.params.slug, ctx.origin)
+      const version = ctx.related.versions?.LIVE ?? null
+      const head = withDateModified(buildBlueprintHead(data, ctx.params.slug, ctx.origin), version)
       const ingredients = (data.ingredients || [])
         .map((ing) => ing.game_item?.name || ing.slot_name)
         .filter(Boolean)
+      const output = data.output_item
+      const missions = [...arr(data.missions_rewarding)]
+        .sort((a, b) => Number(b.drop_probability) - Number(a.drop_probability))
+        .slice(0, 20)
+        .map((m) => ({
+          href: GAME_DATA_PATHS.mission(enc(m.mission_id)),
+          text: [readableMissionText(m.mission_name), `${formatPercent(dropPercent(m.drop_probability))} drop chance`, m.star_system]
+            .filter(Boolean)
+            .join(" — "),
+        }))
       return fromHead(
         head,
         blueprintItemName(data),
-        paragraphs(
-          headDescription(head),
-          ingredients.length > 0 ? `Ingredients: ${ingredients.join(", ")}.` : null,
-        ),
+        [
+          ...paragraphs(
+            headDescription(head),
+            ingredients.length > 0 ? `Ingredients: ${ingredients.join(", ")}.` : null,
+          ),
+          ...linkBlocks(
+            "Crafted item",
+            output?.game_item_id && output.name
+              ? [
+                  { href: WIKI_PATHS.item(output.game_item_id, output.name), text: `${output.name} in the game database` },
+                  { href: MARKET_PATHS.aggregate(output.game_item_id, output.name), text: `${output.name} on the market` },
+                ]
+              : [],
+          ),
+          ...linkBlocks("Missions that reward this blueprint", missions),
+          ...linkBlocks("Browse", [
+            { href: GAME_DATA_PATHS.blueprints, text: "All crafting blueprints" },
+            { href: GAME_DATA_PATHS.missions, text: "Mission database" },
+          ]),
+          ...paragraphs(freshnessStamp(version)),
+        ],
         ctx,
       )
     },
   }),
 
-  mission: page<MissionDetailResponse>({
+  mission: page<MissionDetailResponse, never, MissionRelated>({
     primary: (p) => v2(`/game-data/missions/${enc(p.slug)}`, STATIC_GAME_DATA_TTL),
-    build: (data, _s, ctx) => {
-      const head = buildMissionHead(data, ctx.params.slug, ctx.origin)
-      return fromHead(
-        head,
-        data.mission.mission_name,
-        paragraphs(data.mission.mission_description || headDescription(head)),
-        ctx,
-      )
-    },
+    related: [
+      (data) => {
+        const giver = data.mission.mission_giver_org || data.mission.faction
+        const blueprints = missionBlueprints(data).slice(0, MAX_BLUEPRINT_LOOKUPS)
+        return {
+          versions: v2List(`/game-data/versions/active`, STATIC_GAME_DATA_TTL),
+          giverMissions: giver
+            ? v2List(`/game-data/missions/search?page=1&page_size=12&mission_giver_org=${enc(giver)}`, STATIC_GAME_DATA_TTL)
+            : null,
+          // Each blueprint's output item, for its wiki and market links.
+          ...Object.fromEntries(
+            blueprints.map((bp, i) => [`blueprint${i}`, v2(`/game-data/blueprints/${enc(bp.blueprint_id)}`, STATIC_GAME_DATA_TTL)]),
+          ),
+        }
+      },
+      // A giver with few missions: add same-type missions in the same system.
+      (data, _s, related) => {
+        const others = arr(related.giverMissions?.missions).filter((o) => o.mission_code !== data.mission.mission_code)
+        const m = data.mission
+        if (others.length >= 10 || !m.category) return {}
+        const query = new URLSearchParams({ page: "1", page_size: "15", category: m.category })
+        if (m.star_system) query.set("star_system", m.star_system)
+        return { similarMissions: v2List(`/game-data/missions/search?${query.toString()}`, STATIC_GAME_DATA_TTL) }
+      },
+    ],
+    build: (data, _s, ctx) => missionDoc(data, ctx),
   }),
 
-  listing: page<GetListingDetailResponse>({
+  listing: page<GetListingDetailResponse, never, ListingRelated>({
     primary: (p) => v2(`/listings/${enc(p.id)}`, ENTITY_TTL),
-    build: (data, _s, ctx) =>
-      fromHead(
-        buildListingHead(data, ctx.origin),
-        data.listing.title,
-        paragraphs(data.listing.description, `Sold by ${data.seller.name} on SC Market.`),
-        ctx,
-      ),
+    related: [
+      (data) => {
+        const gameItem = data.items?.[0]?.game_item
+        return {
+          shop: v2(`/shops/${enc(data.seller.slug)}`, ENTITY_TTL),
+          sellerListings: listingSearch({ shop_slug: data.seller.slug, page_size: 12 }),
+          sameItem: gameItem?.id
+            ? listingSearch({ game_item_id: gameItem.id, page_size: 12, sort_by: "price", sort_order: "asc" })
+            : null,
+        }
+      },
+      // Few other sellers of the exact item: widen to its category.
+      (data, _s, related) => {
+        const type = data.items?.[0]?.game_item?.type
+        const others = arr(related.sameItem?.listings).filter(
+          (l) => l.listing_id !== data.listing.listing_id && l.shop_slug !== data.seller.slug,
+        )
+        return { sameType: type && others.length < 6 ? listingSearch({ item_type: type, page_size: 12 }) : null }
+      },
+    ],
+    build: (data, _s, ctx) => listingDoc(data, ctx),
   }),
 
-  shop: page<ShopPublicResponse>({
+  shop: page<ShopPublicResponse, never, { listings: SearchListingsResponse }>({
     primary: (p) => v2(`/shops/${enc(p.slug)}`, ENTITY_TTL),
-    build: (shop, _s, ctx) =>
-      fromHead(
+    related: [(shop) => ({ listings: listingSearch({ shop_slug: shop.slug, page_size: MAX_SUMMARY_LINKS }) })],
+    build: (shop, _s, ctx) => {
+      const doc = fromHead(
         buildShopHead(shop, ctx.origin),
         shop.name,
-        paragraphs(shop.description || shopSeoDescription(shop)),
+        [
+          ...paragraphs(
+            shop.description || shopSeoDescription(shop),
+            [
+              sellerRatingLabel(shop.rating, shop.rating_count) ?? "No reviews yet",
+              typeof shop.listing_count === "number" ? `${shop.listing_count} active listings` : null,
+              typeof shop.total_sales === "number" && shop.total_sales > 0 ? `${shop.total_sales} sales` : null,
+              shop.supported_languages?.length ? `Languages: ${shop.supported_languages.join(", ")}` : null,
+              shortDate(shop.created_at) ? `On SC Market since ${shortDate(shop.created_at)}` : null,
+            ]
+              .filter(Boolean)
+              .join(". ") + ".",
+          ),
+          ...linkBlocks(`Listings from ${shop.name}`, searchLinks(ctx.related.listings?.listings, new Set(), MAX_SUMMARY_LINKS)),
+        ],
         ctx,
-      ),
+      )
+      return unknownTab(ctx.params, SHOP_TABS) ? { ...doc, status: 404 } : doc
+    },
   }),
 
   // Title and canonical come from the page layout (BannerPageLayout → Page):
   // orgPageTitle and the current path.
-  org: page<GetContractorApiResponse, ShopPublicResponse[]>({
+  org: page<GetContractorApiResponse, ShopPublicResponse[], { listings: SearchListingsResponse; scOrgs: { data?: { sid?: string } } }>({
     primary: (p) => v1(`/api/contractors/${enc(p.id)}`, ENTITY_TTL),
     // OrgMetaTags' useGetShopsByOwnerQuery, for the JSON-LD `owns` link.
     secondary: (p) =>
       v2(`/shops/by-owner?spectrum_id=${enc(p.id)}`, ENTITY_TTL),
+    related: [
+      (_o, shops, _r, params) => ({
+        listings: arr(shops)[0]?.slug ? listingSearch({ shop_slug: arr(shops)[0].slug, page_size: 40 }) : null,
+        // The same org on SC Orgs, by RSI spectrum ID (its public API; 404
+        // when it isn't there, which just leaves the link out).
+        scOrgs: { origin: SC_ORGS_API, path: `/api/v1/orgs/${enc(params.id)}`, notFoundStatuses: [404], ttlSeconds: 6 * 60 * 60 },
+      }),
+    ],
     build: ({ data: contractor }, shops, ctx) => {
       const head = buildOrgHead(contractor, shops?.[0], ctx.origin)
+      if (unknownTab(ctx.params, ORG_TABS)) return { title: "", canonical: "", head, summary: [], status: 404 }
       return {
         title: applyTitleTemplate(
           orgPageTitle(contractor.name, englishT("org.orgTitle")),
@@ -966,16 +1757,31 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
         summary: [
           { tag: "h1", text: contractor.name },
           ...paragraphs(contractor.description || headDescription(head)),
+          ...linkBlocks(
+            "Shop",
+            arr(shops).map((shop) => ({ href: SHOP_PATHS.profile(enc(shop.slug)), text: shop.name })),
+          ),
+          ...linkBlocks("Listings", searchLinks(ctx.related.listings?.listings, new Set(), 40)),
+          ...scOrgsBlocks(contractor.name, ctx.related.scOrgs?.data?.sid),
         ],
       }
     },
   }),
 
   // Same as org: title and canonical come from the layout.
-  user: page<User>({
+  user: page<User, never, { shops: ShopPublicResponse[]; listings: SearchListingsResponse }>({
     primary: (p) => v1(`/api/profile/user/${enc(p.username)}`, ENTITY_TTL),
+    related: [
+      (user) => ({ shops: v2(`/shops/by-owner?username=${enc(user.username)}`, ENTITY_TTL) }),
+      (_u, _s, related) => ({
+        listings: arr(related.shops)[0]?.slug
+          ? listingSearch({ shop_slug: arr(related.shops)[0].slug, page_size: 40 })
+          : null,
+      }),
+    ],
     build: (user, _s, ctx) => {
       const head = buildUserHead(user, ctx.origin)
+      if (unknownTab(ctx.params, USER_TABS)) return { title: "", canonical: "", head, summary: [], status: 404 }
       return {
         title: applyTitleTemplate(
           userPageTitle(user.display_name, englishT("viewProfile.store_tab")),
@@ -985,6 +1791,11 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
         summary: [
           { tag: "h1", text: user.display_name || user.username },
           ...paragraphs(user.profile_description || headDescription(head)),
+          ...linkBlocks(
+            "Shop",
+            arr(ctx.related.shops).map((shop) => ({ href: SHOP_PATHS.profile(enc(shop.slug)), text: shop.name })),
+          ),
+          ...linkBlocks("Listings", searchLinks(ctx.related.listings?.listings, new Set(), 40)),
         ],
       }
     },

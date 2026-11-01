@@ -1,12 +1,13 @@
 /**
- * Heads for Help & Guides and About, shared by the SPA pages and the edge
+ * Heads for Help & Guides, About and the changelog, shared by the SPA pages and the edge
  * bridge (src/bridge/pages.ts) so the two can't drift. Pure: no React, no
  * browser globals. English only, like the content itself.
  */
-import { HELP_PATHS } from "../routes/paths"
+import { CHANGELOG_PATHS, HELP_PATHS } from "../routes/paths"
 import type {
   AboutMeta,
   CategoryMeta,
+  ChangelogMeta,
   ContentIndex,
   GuideMeta,
 } from "../features/help/domain/types"
@@ -178,6 +179,91 @@ export function buildAboutHead(about: AboutMeta, origin: string): PageHead {
         inLanguage: "en",
         mainEntity: { "@id": ORGANIZATION_JSON_LD_ID },
         isPartOf: { "@id": WEBSITE_JSON_LD_ID },
+      },
+    ],
+  }
+}
+
+export const CHANGELOG_NAME = "Changelog"
+
+export const changelogSeoText: SeoText = {
+  title: "Changelog — What's New on SC Market",
+  description:
+    "What's new on SC Market, the Star Citizen marketplace: new features, improvements and fixes, week by week.",
+}
+
+/** "Oct 26, 2026" (dates are UTC calendar days; content is English). */
+export function formatChangelogDate(date: string): string {
+  return new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  })
+}
+
+/** Entry <title> (contains "SC Market", so the titleTemplate leaves it). */
+export function changelogEntryTitle(entry: ChangelogMeta): string {
+  return `${entry.title} — SC Market Changelog`
+}
+
+/**
+ * /changelog: BreadcrumbList and CollectionPage with an ItemList of the
+ * entries. Until an entry is published the page is an empty state: noindex.
+ */
+export function buildChangelogIndexHead(entries: readonly ChangelogMeta[], origin: string): PageHead {
+  const head = buildHubHead(
+    {
+      text: changelogSeoText,
+      path: CHANGELOG_PATHS.index,
+      name: CHANGELOG_NAME,
+      links: entries.map((e) => ({ href: CHANGELOG_PATHS.entry(e.slug), text: e.title })),
+    },
+    origin,
+  )
+  if (entries.length > 0) return head
+  return { ...head, meta: [{ name: "robots", content: "noindex" }, ...head.meta] }
+}
+
+/** /changelog/<date>: BreadcrumbList and BlogPosting. */
+export function buildChangelogEntryHead(entry: ChangelogMeta, origin: string): PageHead {
+  const title = changelogEntryTitle(entry)
+  const canonical = `${origin}${CHANGELOG_PATHS.entry(entry.slug)}`
+  return {
+    title,
+    canonical,
+    meta: [
+      { name: "description", content: entry.summary },
+      ...socialMeta({
+        title,
+        description: entry.summary,
+        url: canonical,
+        ogType: "article",
+        twitterCard: "summary",
+      }),
+      { property: "article:published_time", content: entry.date },
+    ],
+    jsonLd: [
+      breadcrumbJsonLd([
+        { name: "SC Market", url: `${origin}/` },
+        { name: CHANGELOG_NAME, url: `${origin}${CHANGELOG_PATHS.index}` },
+        { name: entry.title, url: canonical },
+      ]),
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: entry.title,
+        description: entry.summary,
+        url: canonical,
+        mainEntityOfPage: canonical,
+        datePublished: entry.date,
+        dateModified: entry.date,
+        inLanguage: "en",
+        author: { "@id": ORGANIZATION_JSON_LD_ID },
+        publisher: { "@id": ORGANIZATION_JSON_LD_ID },
+        isPartOf: { "@id": WEBSITE_JSON_LD_ID },
+        articleSection: CHANGELOG_NAME,
+        ...(entry.tags.length > 0 && { keywords: entry.tags.join(", ") }),
       },
     ],
   }

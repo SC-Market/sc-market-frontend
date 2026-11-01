@@ -348,7 +348,8 @@
     "acknowledgments": "Remerciements spéciaux à <ladyFleurLink>LadyFleur</ladyFleurLink> pour le logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> et <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> pour leurs APIs.",
     "apiDocs": "Documentation de l'API",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "Préférences de cookies"
+    "cookiePreferences": "Préférences de cookies",
+    "changelog": "Nouveautés"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "Note de 95 %+ et plus de 25 transactions",
@@ -3114,7 +3115,8 @@
     "message": "Message",
     "goBackToPage": "Retourner à la page",
     "returnToDashboard": "Retour au tableau de bord",
-    "pageTitle": "Une erreur est survenue"
+    "pageTitle": "Une erreur est survenue",
+    "retry": "Réessayer"
   },
   "help": {
     "learnHow": "En savoir plus",
@@ -4468,6 +4470,9 @@
     "noResults": "Aucun résultat trouvé. Essayez d'ajuster vos filtres.",
     "search": {
       "header": "Base de données des missions"
+    },
+    "about": {
+      "title": "À propos de la base de données des missions"
     }
   },
   "myListings": {
@@ -5441,7 +5446,8 @@
       "sectionHoverbikes": "Hoverbikes",
       "sectionShips": "Vaisseaux",
       "size": "Taille",
-      "sizeOption": "Taille {{size}}"
+      "sizeOption": "Taille {{size}}",
+      "allShips": "Tous les vaisseaux et véhicules"
     },
     "shipDetail": {
       "breadcrumbShips": "Vaisseaux et véhicules",
@@ -5621,5 +5627,22 @@
       "verified": "Vérifié RSI"
     },
     "title": "Identité du compte"
+  },
+  "changelog": {
+    "title": "Nouveautés",
+    "empty": "Aucune mise à jour publiée pour le moment. Revenez bientôt.",
+    "feed": "Flux Atom",
+    "allUpdates": "Toutes les mises à jour"
+  },
+  "orgLinkBack": {
+    "title": "Facultatif : un lien vers nous",
+    "manageTitle": "Un lien vers nous",
+    "line": "Retrouvez notre boutique sur SC Market : {{url}}",
+    "verifyHint": "Entièrement facultatif et inutile pour la vérification : si vous le souhaitez, ajoutez aussi cette ligne à la page de votre organisation sur RSI pour que les visiteurs trouvent votre boutique sur SC Market. Seul le code ci-dessus est vérifié.",
+    "verifiedHint": "Votre organisation est vérifiée ! Vous pouvez maintenant retirer le code de vérification sur RSI. Si vous le souhaitez, gardez cette ligne facultative sur la page de votre organisation pour que les visiteurs trouvent votre boutique. Seul le code peut être retiré ; la ligne peut rester.",
+    "manageHint": "Facultatif : ajoutez cette ligne à la page de votre organisation sur RSI pour que les visiteurs trouvent votre boutique sur SC Market. Elle n'a rien à voir avec la vérification et n'est jamais obligatoire.",
+    "copy": "Copier la ligne",
+    "copied": "Copié",
+    "continue": "Continuer"
   }
 }

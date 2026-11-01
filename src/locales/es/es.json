@@ -348,7 +348,8 @@
     "acknowledgments": "Agradecimientos especiales a <ladyFleurLink>LadyFleur</ladyFleurLink> por el logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> y <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> por sus APIs.",
     "apiDocs": "Documentación de la API",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "Preferencias de cookies"
+    "cookiePreferences": "Preferencias de cookies",
+    "changelog": "Novedades"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "Valoración superior al 95 % y más de 25 transacciones",
@@ -3114,7 +3115,8 @@
     "message": "Mensaje",
     "goBackToPage": "Volver a la página",
     "returnToDashboard": "Volver al panel",
-    "pageTitle": "Se produjo un error"
+    "pageTitle": "Se produjo un error",
+    "retry": "Reintentar"
   },
   "help": {
     "learnHow": "Descubre cómo",
@@ -4468,6 +4470,9 @@
     "noResults": "No se encontraron resultados. Prueba a ajustar los filtros.",
     "search": {
       "header": "Base de datos de misiones"
+    },
+    "about": {
+      "title": "Acerca de la base de datos de misiones"
     }
   },
   "myListings": {
@@ -5441,7 +5446,8 @@
       "sectionHoverbikes": "Motos flotantes",
       "sectionShips": "Naves",
       "size": "Tamaño",
-      "sizeOption": "Tamaño {{size}}"
+      "sizeOption": "Tamaño {{size}}",
+      "allShips": "Todas las naves y vehículos"
     },
     "shipDetail": {
       "breadcrumbShips": "Naves y vehículos",
@@ -5621,5 +5627,22 @@
       "verified": "Verificada en RSI"
     },
     "title": "Identidad de la cuenta"
+  },
+  "changelog": {
+    "title": "Novedades",
+    "empty": "Todavía no se ha publicado ninguna actualización. Vuelve pronto.",
+    "feed": "Feed Atom",
+    "allUpdates": "Todas las actualizaciones"
+  },
+  "orgLinkBack": {
+    "title": "Opcional: enlázanos",
+    "manageTitle": "Enlázanos",
+    "line": "Encuentra nuestra tienda en SC Market: {{url}}",
+    "verifyHint": "Totalmente opcional y no necesario para la verificación: si quieres, añade también esta línea a la página de tu organización en RSI para que los visitantes encuentren tu tienda en SC Market. Solo se comprueba el código de arriba.",
+    "verifiedHint": "¡Tu organización está verificada! Ya puedes quitar el código de verificación de RSI. Si quieres, deja esta línea opcional en la página de tu organización para que los visitantes encuentren tu tienda. Solo se puede quitar el código; la línea puede quedarse.",
+    "manageHint": "Opcional: añade esta línea a la página de tu organización en RSI para que los visitantes encuentren tu tienda en SC Market. No tiene nada que ver con la verificación y nunca es obligatoria.",
+    "copy": "Copiar línea",
+    "copied": "Copiado",
+    "continue": "Continuar"
   }
 }

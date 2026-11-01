@@ -16,7 +16,8 @@
  *   asset URLs); the API JSON is edge-cached per URL with the Cache API.
  */
 import { BRIDGE_PAGES, type ApiRequest, type BridgeDocument } from "./pages"
-import { matchBridgeRoute, PRERENDERED_KINDS } from "./routes"
+import { matchBridgeRoute, PRERENDERED_KINDS, type BridgeMatch, type BridgePageKind } from "./routes"
+import { queryIndexing } from "../seo/queryIndexing"
 import { rewriteShell, type HtmlRewriterConstructor } from "./render"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
 import { isMainSiteHostname } from "../util/mainSiteHost"
@@ -95,10 +96,7 @@ export async function fetchApi(
     })
     body = await response.text()
   } catch (error) {
-    return {
-      kind: "error",
-      reason: error instanceof Error ? error.name : "fetch failed",
-    }
+    return { kind: "error", reason: error instanceof Error ? error.name : "fetch failed" }
   } finally {
     clearTimeout(timer)
   }
@@ -142,27 +140,15 @@ export async function fetchApi(
  * ever catches it, index.html with a 200: anything that isn't JSON counts as
  * "doesn't exist".
  */
-export async function fetchAsset(
-  env: BridgeEnv,
-  base: URL,
-  path: string,
-): Promise<ApiResult> {
+export async function fetchAsset(env: BridgeEnv, base: URL, path: string): Promise<ApiResult> {
   let response: Response
   try {
-    response = await env.ASSETS.fetch(
-      new Request(new URL(path, base), { method: "GET" }),
-    )
+    response = await env.ASSETS.fetch(new Request(new URL(path, base), { method: "GET" }))
   } catch (error) {
-    return {
-      kind: "error",
-      reason: error instanceof Error ? error.name : "asset fetch failed",
-    }
+    return { kind: "error", reason: error instanceof Error ? error.name : "asset fetch failed" }
   }
   const type = response.headers.get("Content-Type") ?? ""
-  if (
-    response.status === 404 ||
-    (response.ok && !type.includes("application/json"))
-  ) {
+  if (response.status === 404 || (response.ok && !type.includes("application/json"))) {
     return { kind: "notFound" }
   }
   if (!response.ok) return { kind: "error", reason: `asset ${response.status}` }
@@ -175,22 +161,64 @@ export async function fetchAsset(
 
 export type PageOutcome =
   | { kind: "page"; doc: BridgeDocument }
-  | { kind: "notFound" }
+  | { kind: "notFound"; status?: 404 | 410 }
   | { kind: "passthrough"; reason: string }
 
-/** Resolve a request path to what the bridge should serve. Never throws. */
+/** Run a page's `related` stages: every lookup in a stage in parallel, failures dropped. */
+async function fetchRelated(
+  stages: NonNullable<(typeof BRIDGE_PAGES)[BridgePageKind]["related"]>,
+  apiBase: string,
+  primary: unknown,
+  secondary: unknown,
+  params: Record<string, string>,
+  runtime: BridgeRuntime,
+  waitUntil: (promise: Promise<unknown>) => void,
+): Promise<Record<string, unknown>> {
+  const related: Record<string, unknown> = {}
+  for (const stage of stages) {
+    let requests: Record<string, ApiRequest | null | undefined>
+    try {
+      requests = stage(primary, secondary, related, params)
+    } catch {
+      continue
+    }
+    const entries = Object.entries(requests).filter(
+      (entry): entry is [string, ApiRequest] => !!entry[1],
+    )
+    const results = await Promise.all(
+      entries.map(([, request]) =>
+        fetchApi(`${request.origin ?? apiBase}${request.path}`, request, runtime, waitUntil),
+      ),
+    )
+    entries.forEach(([key], i) => {
+      const result = results[i]
+      if (result.kind === "ok") related[key] = result.json
+    })
+  }
+  return related
+}
+
+/**
+ * Resolve a request path to what the bridge should serve. Never throws.
+ * `?page=N` reaches paginated hubs as ctx.pageNumber; other kinds always
+ * build page 1.
+ */
 export async function resolvePage(
   url: URL,
   env: BridgeEnv,
   runtime: BridgeRuntime,
   waitUntil: (promise: Promise<unknown>) => void,
+  matched?: BridgeMatch,
 ): Promise<PageOutcome> {
-  const match = matchBridgeRoute(url.pathname)
+  const match = matched ?? matchBridgeRoute(url.pathname)
   if (!match) return { kind: "passthrough", reason: "no route" }
 
   const page = BRIDGE_PAGES[match.route.kind]
-  const primaryRequest = page.primary?.(match.params)
+  const indexing = queryIndexing(url.searchParams)
+  const pageNumber = page.paginated && indexing.pageNumber ? indexing.pageNumber : 1
+  const primaryRequest = page.primary?.(match.params, pageNumber)
   const secondaryRequest = page.secondary?.(match.params)
+  const apiBase = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
 
   let primaryJson: unknown = undefined
   let secondaryJson: unknown = undefined
@@ -199,47 +227,38 @@ export async function resolvePage(
     if (assetPath === null) return { kind: "notFound" }
     const result = await fetchAsset(env, url, assetPath)
     if (result.kind === "notFound") return { kind: "notFound" }
-    if (result.kind === "error")
-      return { kind: "passthrough", reason: result.reason }
+    if (result.kind === "error") return { kind: "passthrough", reason: result.reason }
     primaryJson = result.json
   } else if (primaryRequest) {
-    const apiBase = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
-    if (!apiBase)
-      return { kind: "passthrough", reason: "VITE_BACKEND_URL not set" }
+    if (!apiBase) return { kind: "passthrough", reason: "VITE_BACKEND_URL not set" }
 
     const [primary, secondary] = await Promise.all([
-      fetchApi(
-        `${apiBase}${primaryRequest.path}`,
-        primaryRequest,
-        runtime,
-        waitUntil,
-      ),
+      fetchApi(`${apiBase}${primaryRequest.path}`, primaryRequest, runtime, waitUntil),
       secondaryRequest
-        ? fetchApi(
-            `${apiBase}${secondaryRequest.path}`,
-            secondaryRequest,
-            runtime,
-            waitUntil,
-          )
+        ? fetchApi(`${apiBase}${secondaryRequest.path}`, secondaryRequest, runtime, waitUntil)
         : undefined,
     ])
 
     if (primary.kind === "notFound") return { kind: "notFound" }
-    if (primary.kind === "error")
-      return { kind: "passthrough", reason: primary.reason }
+    if (primary.kind === "error") return { kind: "passthrough", reason: primary.reason }
     primaryJson = primary.json
     secondaryJson = secondary?.kind === "ok" ? secondary.json : undefined
   }
 
+  const related =
+    page.related && apiBase
+      ? await fetchRelated(page.related, apiBase, primaryJson, secondaryJson, match.params, runtime, waitUntil)
+      : {}
+
   try {
     const doc = page.build(primaryJson, secondaryJson, {
       params: match.params,
-      origin: (env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL).replace(
-        /\/+$/,
-        "",
-      ),
+      origin: (env.VITE_FRONTEND_URL || DEFAULT_FRONTEND_URL).replace(/\/+$/, ""),
       pathname: url.pathname,
+      pageNumber,
+      related,
     })
+    if (doc.status) return { kind: "notFound", status: doc.status }
     return { kind: "page", doc }
   } catch (error) {
     // Unexpected JSON shape: serve the plain shell rather than a broken page.
@@ -248,6 +267,52 @@ export async function resolvePage(
       reason: `build failed: ${error instanceof Error ? error.message : String(error)}`,
     }
   }
+}
+
+/**
+ * Kinds whose canonical is the entity's own URL (short-slug form): any other
+ * spelling of it (the bare UUID, a stale slug) 301s there, so Google sees one
+ * URL per entity. Pages whose canonical is the request path (orgs, users,
+ * aggregates, bundles) and shop tabs are left alone.
+ */
+const CANONICAL_REDIRECT_KINDS: ReadonlySet<BridgePageKind> = new Set([
+  "listing",
+  "item",
+  "ship",
+  "commodity",
+  "shop",
+])
+
+/** The canonical URL to 301 to, or null when the request already is it. */
+export function canonicalRedirect(url: URL, kind: BridgePageKind, params: Record<string, string>, doc: BridgeDocument): URL | null {
+  if (!CANONICAL_REDIRECT_KINDS.has(kind) || params.tab !== undefined) return null
+  let canonical: URL
+  try {
+    canonical = new URL(doc.canonical)
+  } catch {
+    return null
+  }
+  if (canonical.origin !== url.origin || canonical.pathname === url.pathname) return null
+  canonical.search = url.search
+  return canonical
+}
+
+/** A permanent redirect on the same host (trailing slash, canonical spelling). */
+function permanentRedirect(location: URL): Response {
+  return new Response(null, {
+    status: 301,
+    headers: {
+      Location: location.toString(),
+      "Cache-Control": "public, max-age=3600",
+      "X-SCM-Bridge": "redirect",
+    },
+  })
+}
+
+/** robots noindex added to a page's head (query-param variants of a page). */
+function withNoindex(doc: BridgeDocument): BridgeDocument {
+  const meta = doc.head.meta.filter((m) => m.name !== "robots")
+  return { ...doc, head: { ...doc.head, meta: [...meta, { name: "robots", content: "noindex" }] } }
 }
 
 /**
@@ -266,13 +331,10 @@ export const HSTS_HEADER = "max-age=31536000"
 
 function shellHeaders(
   shell: Response,
-  outcome: PageOutcome["kind"],
+  outcome: PageOutcome["kind"] | "noindex",
   url: URL,
 ): Headers {
-  const headers = documentHeaders(
-    url,
-    shell.headers.get("Content-Type") || "text/html; charset=utf-8",
-  )
+  const headers = documentHeaders(url, shell.headers.get("Content-Type") || "text/html; charset=utf-8")
   headers.set("X-SCM-Bridge", outcome)
   return headers
 }
@@ -297,8 +359,7 @@ export function documentHeaders(url: URL, contentType: string): Headers {
   if (pathname === "/") headers.set("Link", HOME_LINK_HEADER)
   if (
     url.protocol === "https:" &&
-    (url.hostname === "sc-market.space" ||
-      url.hostname === "www.sc-market.space")
+    (url.hostname === "sc-market.space" || url.hostname === "www.sc-market.space")
   ) {
     headers.set("Strict-Transport-Security", HSTS_HEADER)
   }
@@ -311,11 +372,7 @@ function guideRedirect(url: URL, target: string): Response {
   location.search = url.search
   return new Response(null, {
     status: 301,
-    headers: {
-      Location: location.toString(),
-      "Cache-Control": "public, max-age=86400",
-      "X-SCM-Bridge": "redirect",
-    },
+    headers: { Location: location.toString(), "Cache-Control": "public, max-age=86400", "X-SCM-Bridge": "redirect" },
   })
 }
 
@@ -333,14 +390,43 @@ export async function handleBridgeRequest(
   if (moved) return guideRedirect(url, moved)
   const route = matchBridgeRoute(url.pathname)
   if (!route) return ctx.next()
-  // Prerendered pages (src/prerender/paths.ts): the static file already has
-  // this head (built with these same builders) and the real page body.
-  // public/_routes.json keeps most of them from invoking the bridge at all;
-  // this covers the rest (guide pages, a trailing slash).
-  if (PRERENDERED_KINDS.has(route.route.kind)) return ctx.next()
   // White-label org domains are served by the same deployment; their pages
   // must never get SC Market's head or summary injected.
   if (!isMainSiteHostname(url.hostname)) return ctx.next()
+  // One URL per page: "/market/x/" → "/market/x" (canonicals and the
+  // sitemap never have the slash).
+  if (url.pathname.length > 1 && url.pathname.endsWith("/")) {
+    const location = new URL(url)
+    location.pathname = url.pathname.replace(/\/+$/, "") || "/"
+    return permanentRedirect(location)
+  }
+
+  const indexing = queryIndexing(url.searchParams)
+  const page = BRIDGE_PAGES[route.route.kind]
+  const paginated = !!page.paginated && indexing.pageNumber !== null
+
+  // Prerendered pages (src/prerender/paths.ts): the static file already has
+  // this head (built with these same builders) and the real page body. A
+  // clean URL is served as is; `?page=N` of a paginated hub gets that page's
+  // head and links over the static file; any other query (filters, search)
+  // gets robots noindex (the static file's canonical is the clean URL).
+  if (PRERENDERED_KINDS.has(route.route.kind)) {
+    if (!indexing.hasQuery) return ctx.next()
+    const file = await ctx.next()
+    if (!file.ok || !file.body || !(file.headers.get("Content-Type") ?? "").includes("text/html")) return file
+    if (!paginated) {
+      return htmlResponse(request, rewriteShell(file, { kind: "notFound" }, runtime.HTMLRewriter), 200, "noindex", url, file)
+    }
+    const outcome = await resolvePage(url, env, runtime, ctx.waitUntil, route)
+    if (outcome.kind === "page") {
+      return htmlResponse(request, rewriteShell(file, { kind: "page", doc: outcome.doc }, runtime.HTMLRewriter), 200, "page", url, file)
+    }
+    if (outcome.kind === "notFound") {
+      return htmlResponse(request, rewriteShell(file, { kind: "notFound" }, runtime.HTMLRewriter), outcome.status ?? 404, "notFound", url, file)
+    }
+    console.warn(`bridge fail-open for ${url.pathname}${url.search}: ${outcome.reason}`)
+    return htmlResponse(request, rewriteShell(file, { kind: "notFound" }, runtime.HTMLRewriter), 200, "noindex", url, file)
+  }
 
   // The pretty path: Pages redirects /index.html → /. A fresh Request so no
   // visitor conditional headers turn the shell into a bodiless 304.
@@ -349,26 +435,46 @@ export async function handleBridgeRequest(
   )
   if (!shell.ok || !shell.body) return ctx.next()
 
-  const outcome = await resolvePage(url, env, runtime, ctx.waitUntil)
+  const outcome = await resolvePage(url, env, runtime, ctx.waitUntil, route)
   if (outcome.kind === "passthrough" && outcome.reason !== "no route") {
     console.warn(`bridge fail-open for ${url.pathname}: ${outcome.reason}`)
   }
 
-  const headers = shellHeaders(shell, outcome.kind, url)
-  const status = outcome.kind === "notFound" ? 404 : 200
+  if (outcome.kind === "page") {
+    const redirect = canonicalRedirect(url, route.route.kind, route.params, outcome.doc)
+    if (redirect) return permanentRedirect(redirect)
+  }
+
+  // Query-param variants (search, filters, sort) are noindex; their
+  // canonical is already the clean URL. `?page=N` of a paginated hub is its
+  // own indexable page.
+  const doc =
+    outcome.kind === "page" && indexing.hasQuery && !paginated
+      ? withNoindex(outcome.doc)
+      : outcome.kind === "page"
+        ? outcome.doc
+        : null
+  const status = outcome.kind === "notFound" ? (outcome.status ?? 404) : 200
   const html =
     outcome.kind === "passthrough"
       ? shell
       : rewriteShell(
           shell,
-          outcome.kind === "page"
-            ? { kind: "page", doc: outcome.doc }
-            : { kind: "notFound" },
+          doc ? { kind: "page", doc } : { kind: "notFound" },
           runtime.HTMLRewriter,
         )
 
-  return new Response(request.method === "HEAD" ? null : html.body, {
-    status,
-    headers,
-  })
+  return htmlResponse(request, html, status, outcome.kind, url, shell)
+}
+
+function htmlResponse(
+  request: Request,
+  html: Response,
+  status: number,
+  outcome: PageOutcome["kind"] | "noindex",
+  url: URL,
+  source: Response,
+): Response {
+  const headers = shellHeaders(source, outcome, url)
+  return new Response(request.method === "HEAD" ? null : html.body, { status, headers })
 }

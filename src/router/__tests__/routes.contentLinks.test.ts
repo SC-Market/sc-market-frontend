@@ -1,5 +1,6 @@
 /**
- * Every site link in the Help & Guides content (/content/**) must resolve to
+ * Every site link in the Help & Guides and changelog content (/content/**,
+ * changelog drafts included) must resolve to
  * a real page: matched by src/App.tsx's route table (not the `/*` 404 splat,
  * not an admin route), and for /guides/... links, an existing guide. Also
  * compiles the real content, so a broken guide fails here as well as in the
@@ -28,9 +29,17 @@ const site = compileSite(files, {
   imageResolver: () => (src) => src,
 })
 
+// Changelog drafts too: their links must work the day they're published.
+const changelog = compileSite(files, {
+  today: new Date().toISOString().slice(0, 10),
+  includeDrafts: true,
+  imageResolver: () => (src) => src,
+}).changelog
+
 const pages = [
   ...site.guides.map((g) => ({ file: g.file, links: g.body.links })),
   { file: site.about.file, links: site.about.body.links },
+  ...changelog.map((e) => ({ file: e.file, links: e.body.links })),
 ]
 const guidePaths = new Set(site.guides.map((g) => HELP_PATHS.guide(g.meta.category, g.meta.slug)))
 const categoryPaths = new Set(site.categories.map((c) => HELP_PATHS.category(c.id)))

@@ -21,6 +21,7 @@ import {
 import path from "node:path"
 import { inlineStylesheets } from "../vite/inlineEntryCssPlugin"
 import { matchBridgeRoute, PRERENDERED_KINDS } from "../../src/bridge/routes"
+import { CHANGELOG_PATHS } from "../../src/routes/paths"
 
 /** Every `<dir>/index.html` below `outDir` except the root shell, as URL paths. */
 export function prerenderedPaths(outDir: string): string[] {
@@ -71,9 +72,12 @@ export function finalizePrerenderedPages(outDir: string): string[] {
       )
     }
   }
-  // One splat rule for the data files: Pages allows 100 header rules.
+  // One splat rule for the data files and one for the changelog entries
+  // (a new page every week): Pages allows 100 header rules.
+  const changelogEntry = (p: string) => p.startsWith(`${CHANGELOG_PATHS.index}/`)
   const rules = [
-    ...paths.map((p) => `${p}\n  Cache-Control: no-cache\n`),
+    ...paths.filter((p) => !changelogEntry(p)).map((p) => `${p}\n  Cache-Control: no-cache\n`),
+    ...(paths.some(changelogEntry) ? [`${CHANGELOG_PATHS.index}/*\n  Cache-Control: no-cache\n`] : []),
     `/*.data\n  Cache-Control: no-cache\n  Content-Type: text/x-script\n`,
   ].join("\n")
   writeFileSync(

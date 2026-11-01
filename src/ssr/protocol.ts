@@ -8,7 +8,7 @@
 import type { ContentSource } from "../server/contentSource"
 import { toSupportedLocale } from "../util/locales"
 
-/** Header on entry.server's answer: "page" | "not-found" | "route-error". */
+/** Header on entry.server's answer: "page" | "not-found" | "redirect" | "route-error". */
 export const SSR_OUTCOME_HEADER = "X-SCM-SSR-Outcome"
 
 export interface RequestContextValue {

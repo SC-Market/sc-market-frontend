@@ -1832,7 +1832,8 @@
     "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC",
     "unofficial": "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
     "wiki": "Wiki",
-    "cookiePreferences": "Cookie preferences"
+    "cookiePreferences": "Cookie preferences",
+    "changelog": "Changelog"
   },
   "frontendError": {
     "afterRefresh": "if you see this error after refreshing the page.",
@@ -1843,6 +1844,7 @@
     "page": "Error page",
     "pageTitle": "An Error Occurred",
     "reload": "Reload",
+    "retry": "Try again",
     "returnToDashboard": "Return to Dashboard",
     "subtitle": "Please let us know in",
     "title": "An Error Occurred Loading the Page"
@@ -2079,8 +2081,8 @@
     "sellStep3Title": "Meet in game",
     "sellText": "Open a shop on your own or as an org. Org members claim and fulfill orders together, with one shared storefront, stock and reputation.",
     "sellTitle": "Start selling",
-    "seoDescription": "SC Market is the Star Citizen marketplace where players buy, sell, and trade in-game items and hire orgs for services like hauling, escort, medical, and salvage — all in aUEC.",
-    "seoTitle": "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+    "seoDescription": "Trade with other Star Citizen players: buy and sell items, ship components and commodities for aUEC, post buy orders, and hire orgs for hauling, escort and salvage.",
+    "seoTitle": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
     "supporters": "supporters",
     "supportersThanks": "Thank you to all of our ",
     "supportersTitle": "Our Supporters",
@@ -2853,6 +2855,9 @@
     "title": "Mining Database"
   },
   "missions": {
+    "about": {
+      "title": "About the mission database"
+    },
     "detail": {
       "header": "Mission Detail"
     },
@@ -5383,6 +5388,7 @@
       "title": "Refining Methods"
     },
     "shipBrowser": {
+      "allShips": "All ships and vehicles",
       "allManufacturers": "All manufacturers",
       "allRoles": "All roles",
       "anySize": "Any size",
@@ -5589,5 +5595,22 @@
       "verified": "RSI verified"
     },
     "title": "Account identity"
+  },
+  "changelog": {
+    "title": "Changelog",
+    "empty": "No updates have been published yet. Check back soon.",
+    "feed": "Atom feed",
+    "allUpdates": "All updates"
+  },
+  "orgLinkBack": {
+    "title": "Optional: link back to us",
+    "manageTitle": "Link back to us",
+    "line": "Find our shop on SC Market: {{url}}",
+    "verifyHint": "Totally optional and not needed to verify: if you like, also add this line to your RSI org page so visitors can find your shop on SC Market. Only the code above is checked.",
+    "verifiedHint": "Your org is verified! You can now remove the verification code from RSI. If you like, keep this optional line on your org page so visitors can find your shop. Only the code can be removed; the line can stay.",
+    "manageHint": "Optional: add this line to your RSI org page so visitors can find your shop on SC Market. It has nothing to do with verification and is never required.",
+    "copy": "Copy line",
+    "copied": "Copied",
+    "continue": "Continue"
   }
 }

@@ -348,7 +348,8 @@
     "acknowledgments": "Vielen Dank an <ladyFleurLink>LadyFleur</ladyFleurLink> für das Logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> und <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> für ihre APIs.",
     "apiDocs": "API-Dokumentation",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "Cookie-Einstellungen"
+    "cookiePreferences": "Cookie-Einstellungen",
+    "changelog": "Änderungsprotokoll"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "95 %+ Bewertung und 25+ Transaktionen",
@@ -3100,7 +3101,8 @@
     "message": "Nachricht",
     "goBackToPage": "Zurück zur Seite",
     "returnToDashboard": "Zurück zum Dashboard",
-    "pageTitle": "Ein Fehler ist aufgetreten"
+    "pageTitle": "Ein Fehler ist aufgetreten",
+    "retry": "Erneut versuchen"
   },
   "help": {
     "learnHow": "So geht's",
@@ -4437,6 +4439,9 @@
     "noResults": "Keine Ergebnisse gefunden. Passen Sie Ihre Filter an.",
     "search": {
       "header": "Missions-Datenbank"
+    },
+    "about": {
+      "title": "Über die Missionsdatenbank"
     }
   },
   "myListings": {
@@ -5409,7 +5414,8 @@
       "sectionHoverbikes": "Hoverbikes",
       "sectionShips": "Schiffe",
       "size": "Größe",
-      "sizeOption": "Größe {{size}}"
+      "sizeOption": "Größe {{size}}",
+      "allShips": "Alle Schiffe und Fahrzeuge"
     },
     "shipDetail": {
       "breadcrumbShips": "Schiffe & Fahrzeuge",
@@ -5589,5 +5595,22 @@
       "verified": "RSI-verifiziert"
     },
     "title": "Kontoidentität"
+  },
+  "changelog": {
+    "title": "Änderungsprotokoll",
+    "empty": "Es wurden noch keine Updates veröffentlicht. Schau bald wieder vorbei.",
+    "feed": "Atom-Feed",
+    "allUpdates": "Alle Updates"
+  },
+  "orgLinkBack": {
+    "title": "Optional: verlinken Sie uns",
+    "manageTitle": "Verlinken Sie uns",
+    "line": "Findet unseren Shop auf SC Market: {{url}}",
+    "verifyHint": "Völlig optional und für die Verifizierung nicht nötig: Wenn Sie möchten, fügen Sie diese Zeile zusätzlich auf Ihrer RSI-Org-Seite ein, damit Besucher Ihren Shop auf SC Market finden. Geprüft wird nur der Code oben.",
+    "verifiedHint": "Ihre Organisation ist verifiziert! Sie können den Verifizierungscode jetzt bei RSI entfernen. Wenn Sie möchten, lassen Sie diese optionale Zeile auf Ihrer Org-Seite, damit Besucher Ihren Shop finden. Nur der Code kann entfernt werden; die Zeile darf bleiben.",
+    "manageHint": "Optional: Fügen Sie diese Zeile auf Ihrer RSI-Org-Seite ein, damit Besucher Ihren Shop auf SC Market finden. Sie hat nichts mit der Verifizierung zu tun und ist nie Pflicht.",
+    "copy": "Zeile kopieren",
+    "copied": "Kopiert",
+    "continue": "Weiter"
   }
 }

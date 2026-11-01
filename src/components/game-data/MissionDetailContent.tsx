@@ -26,7 +26,7 @@ import {
   BuildRounded,
 } from "@mui/icons-material"
 import type { MissionDetailResponse, Mission, MissionRewardPool, MissionBlueprintReward, HaulingOrder } from "../../store/api/v2/market"
-import { Link } from "react-router-dom"
+import { Link as RouterLink } from "react-router-dom"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName, MissionDescription } from "./MissionName"
@@ -87,31 +87,32 @@ function BoolChip({ value, label }: { value: boolean | undefined; label: string 
 // ============================================================================
 
 export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
-  // Real links (crawlable, open in a new tab), to the filtered mission list.
-  const to = (params: Record<string, string>) =>
-    `${GAME_DATA_PATHS.missions}?${new URLSearchParams(params).toString()}`
-  const link = (params: Record<string, string>) =>
-    ({ component: Link, to: to(params), clickable: true }) as const
+  // Real links (crawlable), to the mission list filtered by the chip.
+  const go = (params: Record<string, string>) => ({
+    clickable: true,
+    component: RouterLink,
+    to: `${GAME_DATA_PATHS.missions}?${new URLSearchParams(params).toString()}`,
+  })
   const giver = missionGiver(m)
 
   return (
     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-      {m.star_system && <Chip label={m.star_system} size="small" variant="outlined" {...link({ system: m.star_system })} />}
+      {m.star_system && <Chip label={m.star_system} size="small" variant="outlined" {...go({ system: m.star_system! })} />}
       {m.category && (
         <Chip
           label={getMissionTypeLabel(m.category)}
           size="small"
-          {...link({ category: m.category })}
+          {...go({ category: m.category })}
           icon={getMissionIcon(m.category) ? <img src={getMissionIcon(m.category)!} alt="" style={{ width: 16, height: 16 }} /> : undefined}
         />
       )}
-      {giver && <Chip label={giver} size="small" variant="outlined" {...link({ giver })} />}
-      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" {...link({ legal: "ILLEGAL" })} />}
+      {giver && <Chip label={giver} size="small" variant="outlined" {...go({ giver })} />}
+      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" {...go({ legal: "ILLEGAL" })} />}
       {m.is_unique_mission && <Chip label="Unique" size="small" color="warning" />}
-      {m.is_chain_starter && <Chip label="Starter" size="small" color="secondary" {...link({ chain: "true" })} />}
+      {m.is_chain_starter && <Chip label="Starter" size="small" color="secondary" {...go({ chain: "true" })} />}
       {m.is_chain_mission && !m.is_chain_starter && <Chip label="Chain" size="small" color="secondary" variant="outlined" />}
-      {m.is_shareable && <Chip label="Shareable" size="small" variant="outlined" {...link({ shareable: "true" })} />}
-      {m.associated_event && <Chip label={m.associated_event} size="small" {...link({ show_events: "true", event: m.associated_event })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
+      {m.is_shareable && <Chip label="Shareable" size="small" variant="outlined" {...go({ shareable: "true" })} />}
+      {m.associated_event && <Chip label={m.associated_event} size="small" {...go({ show_events: "true", event: m.associated_event! })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
       {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" />}
     </Stack>
   )
@@ -273,13 +274,16 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                           <TableCell>
                             <Stack direction="row" spacing={0.75} alignItems="center">
                               <BuildRounded sx={{ fontSize: 14, color: "success.main" }} />
+                              {/* A real link for crawlers; a click opens the blueprint in place. */}
                               <Typography
                                 variant="body2"
                                 fontWeight={600}
-                                component={Link}
-                                to={GAME_DATA_PATHS.blueprint(bp.blueprint_id)}
-                                onClick={(e: React.MouseEvent) => e.stopPropagation()}
-                                sx={{ color: "inherit", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                                component={RouterLink}
+                                to={GAME_DATA_PATHS.blueprint(encodeURIComponent(bp.blueprint_name || bp.blueprint_id))}
+                                onClick={(e: React.MouseEvent) => {
+                                  if (onBlueprintClick) e.preventDefault()
+                                }}
+                                sx={{ color: "inherit", textDecoration: "none" }}
                               >
                                 {bp.output_item_name || bp.blueprint_name}
                               </Typography>
@@ -497,9 +501,9 @@ function ChainTab({ data }: { data: MissionDetailResponse }) {
           <Stack spacing={0.5}>
             {data.prerequisite_missions!.map((pm) => (
               <Stack key={pm.mission_id} direction="row" spacing={1} alignItems="center">
-                <Link to={GAME_DATA_PATHS.mission(pm.mission_id)} style={{ color: "inherit" }}>
+                <RouterLink to={GAME_DATA_PATHS.mission(pm.mission_id)} style={{ color: "inherit" }}>
                   <MissionName name={pm.mission_name} variant="body2" component="span" />
-                </Link>
+                </RouterLink>
                 {pm.category && <Chip label={getMissionTypeLabel(pm.category)} size="small" variant="outlined" />}
               </Stack>
             ))}

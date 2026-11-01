@@ -533,6 +533,7 @@ export function SidebarV2() {
           <Button
             component={Link}
             to={PATHS.login}
+            rel="nofollow"
             fullWidth
             variant="contained"
             startIcon={<LoginRounded />}

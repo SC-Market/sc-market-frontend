@@ -24,8 +24,8 @@ describe("SeoHead", () => {
     expect(headTags).toContain(serializeJsonLd(pageHead.jsonLd[0]))
     // Hostile text stays inside attribute values / title text.
     const dom = new DOMParser().parseFromString(`<html><head>${headTags}</head></html>`, "text/html")
-    expect(dom.querySelectorAll("script")).toHaveLength(1)
+    expect(dom.querySelectorAll("script")).toHaveLength(2)
     expect(dom.querySelectorAll("img")).toHaveLength(0)
-    expect(dom.querySelector('meta[property="og:title"]')?.getAttribute("content")).toBe(f.EVIL)
+    expect(dom.querySelector('meta[property="og:title"]')?.getAttribute("content")).toBe(`${f.EVIL} — 12,000 aUEC`)
   })
 })

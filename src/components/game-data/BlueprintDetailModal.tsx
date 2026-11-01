@@ -24,7 +24,8 @@ import {
 } from "@mui/material"
 import { Close, BuildRounded, TimerRounded, RecyclingRounded, TrackChangesRounded, Bookmark, BookmarkBorder } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
+import { Link as RouterLink, useNavigate } from "react-router-dom"
+import { readableMissionText } from "../../seo/missionText"
 import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintIngredient, type SlotModifier, type MissionRewardingBlueprint } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { formatCategoryName } from "../../util/categoryDisplay"
@@ -228,8 +229,9 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   {(missionsExpanded ? data.missions_rewarding : data.missions_rewarding.slice(0, 8)).map((m: MissionRewardingBlueprint) => (
-                    <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ height: 22, cursor: "pointer" }}
-                      onClick={() => { onClose(); navigate(GAME_DATA_PATHS.mission(m.mission_id)) }} />
+                    <Chip key={m.mission_id} label={readableMissionText(m.mission_name)} size="small" sx={{ height: 22, cursor: "pointer" }}
+                      clickable component={RouterLink} to={GAME_DATA_PATHS.mission(m.mission_id)}
+                      onClick={() => onClose()} />
                   ))}
                   {data.missions_rewarding.length > 8 && (
                     <Chip

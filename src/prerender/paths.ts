@@ -2,7 +2,7 @@
  * The pages prerendered to static HTML at build time (Phase 3 of
  * docs/ssr-migration-design.md; freshness notes in docs/prerender.md).
  *
- * Only pages whose content is static (guides, about) or changes with the game
+ * Only pages whose content is static (guides, about, changelog) or changes with the game
  * data (the game database hubs), and only where the prerendered page is at
  * least as good for crawlers as the edge bridge's (links to the entries
  * included). /blueprints (40 links: "Hide Unsourceable", on by default, is
@@ -40,12 +40,17 @@ export const GAME_DATA_HUB_PATHS = [
   "/resources",
 ] as const
 
-/** Help & Guides and About: content from /content, no API data. */
+/**
+ * Help & Guides, About and the changelog: content from /content, no API
+ * data. The changelog is one route with an optional segment, so its route
+ * has a prerendered path (/changelog) even before an entry is published.
+ */
 export const CONTENT_ROUTE_PATTERNS = [
   "/guides",
   "/guides/:category",
   "/guides/:category/:slug",
   "/about",
+  "/changelog/:slug?",
 ] as const
 
 /** Content pages from the content build's manifest (dist/content/manifest.json). */

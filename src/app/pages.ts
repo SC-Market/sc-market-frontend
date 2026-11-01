@@ -122,6 +122,10 @@ export const pages = {
     () => import("../features/market/v2/BuyOrderDetailV2"),
     (m) => m.BuyOrderDetailV2,
   ),
+  ChangelogPage: pageEntry(
+    () => import("../pages/changelog/ChangelogPage"),
+    (m) => m.ChangelogPage,
+  ),
   Contractors: pageEntry(
     () => import("../pages/contractor/Contractors"),
     (m) => m.Contractors,

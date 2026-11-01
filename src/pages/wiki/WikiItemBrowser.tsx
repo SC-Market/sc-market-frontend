@@ -35,6 +35,7 @@ import {
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
 import { wikiItemsSeoText } from "../../seo/hubHeads"
+import { linkedPaginationItem } from "../../components/pagination/linkedPaginationItem"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
@@ -375,7 +376,7 @@ export function WikiItemBrowser() {
 
               {totalPages > 1 && (
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                  <Pagination count={totalPages} page={page} onChange={handlePageChange} color="primary" />
+                  <Pagination count={totalPages} page={page} onChange={handlePageChange} color="primary" renderItem={linkedPaginationItem("/wiki/items", searchParams)} />
                 </Box>
               )}
             </>

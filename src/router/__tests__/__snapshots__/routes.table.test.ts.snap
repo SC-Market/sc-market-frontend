@@ -2545,6 +2545,15 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/about",
   },
   {
+    "chain": "(layout:AppLayout) > /changelog/:slug?",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/changelog/:slug?",
+  },
+  {
     "chain": "(layout:AppLayout) > /help",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

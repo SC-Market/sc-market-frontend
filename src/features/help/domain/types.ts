@@ -66,6 +66,23 @@ export interface AboutMeta {
   author: string
 }
 
+/** A published changelog entry (content/changelog/<date>.md). */
+export interface ChangelogMeta {
+  /** URL segment and file name: the entry's date, "2026-11-02". */
+  slug: string
+  /** ISO date (YYYY-MM-DD), the same as `slug`. */
+  date: string
+  title: string
+  /** Meta/OG description and the index card text. */
+  summary: string
+  tags: string[]
+}
+
+/** Body key of a changelog entry (content.ts `bodies`). */
+export function changelogBodyKey(slug: string): string {
+  return `changelog/${slug}`
+}
+
 /** A compiled page body (one lazy chunk per page in the SPA). */
 export interface ContentBody {
   blocks: Block[]
@@ -78,6 +95,8 @@ export interface ContentIndex {
   categories: CategoryMeta[]
   guides: GuideMeta[]
   about: AboutMeta
+  /** Published changelog entries, newest first. */
+  changelog: ChangelogMeta[]
 }
 
 /** Every bridge asset carries the full directory (crawlable links). */

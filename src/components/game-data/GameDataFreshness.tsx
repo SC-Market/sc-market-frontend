@@ -1,24 +1,20 @@
 import React from "react"
-import { Typography } from "@mui/material"
+import { Typography, type TypographyProps } from "@mui/material"
 import { useGetActiveVersionsQuery } from "../../store/api/v2/market"
-import { gameDataFreshness } from "../../seo/missionText"
+import { freshnessStamp } from "../../seo/missionText"
 
 /**
- * "Data from Star Citizen 4.10.2 LIVE, updated 24 Oct 2026, from game
- * files" under a game-data page (the server render prefetches the active
- * versions, so it is in the HTML).
+ * "Data from Star Citizen 4.10.2 LIVE, updated 24 Oct 2026 (build …)." under
+ * game-data pages and hubs (missions, blueprints, items). The active
+ * versions query is shipped with prerendered pages, so the stamp is in their
+ * HTML. Renders nothing until the version is known.
  */
-export function GameDataFreshness() {
+export function GameDataFreshness(props: Omit<TypographyProps, "children">) {
   const { data } = useGetActiveVersionsQuery()
-  const text = gameDataFreshness(data?.LIVE)
+  const text = freshnessStamp(data?.LIVE)
   if (!text) return null
   return (
-    <Typography
-      variant="caption"
-      color="text.secondary"
-      component="p"
-      sx={{ mt: 2 }}
-    >
+    <Typography variant="caption" component="p" color="text.primary" sx={{ mt: 2, opacity: 0.8 }} {...props}>
       {text}
     </Typography>
   )

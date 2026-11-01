@@ -6,7 +6,7 @@
 import { use, useEffect, useState } from "react"
 import { bodies, index } from "virtual:help-content"
 import { retryDynamicImport } from "../../util/retryDynamicImport"
-import type { CategoryMeta, ContentBody, GuideMeta } from "./domain/types"
+import type { CategoryMeta, ChangelogMeta, ContentBody, GuideMeta } from "./domain/types"
 
 export const helpIndex = index
 
@@ -24,6 +24,13 @@ export function findGuide(category: string | undefined, slug: string | undefined
 
 export function findGuideById(id: string): GuideMeta | undefined {
   return index.guides.find((g) => g.id === id)
+}
+
+/** Published changelog entries, newest first. */
+export const changelogEntries: readonly ChangelogMeta[] = index.changelog
+
+export function findChangelogEntry(slug: string | undefined): ChangelogMeta | undefined {
+  return index.changelog.find((e) => e.slug === slug)
 }
 
 interface BodyEntry {

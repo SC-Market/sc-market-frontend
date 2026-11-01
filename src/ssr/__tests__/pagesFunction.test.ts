@@ -5,6 +5,7 @@ import {
   isCrawler,
   kindEnabled,
   onRequest,
+  redirectResponse,
   ssrDecision,
   ssrSwitchedOn,
   SSR_OFF_HEADER,
@@ -83,6 +84,12 @@ describe("ssrDecision", () => {
       ssrDecision(req(`${PREVIEW}/shops/foo`, { method: "POST" }), env).render,
     ).toBe(false)
   })
+  it("leaves trailing-slash spellings to the bridge (it 301s them)", () => {
+    expect(ssrDecision(req(`${PREVIEW}/market/abc/`), env)).toEqual({
+      render: false,
+      reason: "trailing slash",
+    })
+  })
   it("is off with the kill-switch header", () => {
     expect(
       ssrDecision(
@@ -93,6 +100,20 @@ describe("ssrDecision", () => {
   })
   it("is off in production by default", () => {
     expect(ssrDecision(req(`${PROD}/shops/foo`), env).render).toBe(false)
+  })
+})
+
+describe("redirectResponse", () => {
+  it("301s to the canonical URL, keeping the query", () => {
+    const response = redirectResponse(
+      new URL(`${PREVIEW}/market/abc-short-title`),
+      new URL(`${PREVIEW}/market/0f1e2d3c?utm_source=x`),
+    )
+    expect(response.status).toBe(301)
+    expect(response.headers.get("Location")).toBe(
+      `${PREVIEW}/market/abc-short-title?utm_source=x`,
+    )
+    expect(response.headers.get("X-SCM-SSR")).toBe("redirect")
   })
 })
 

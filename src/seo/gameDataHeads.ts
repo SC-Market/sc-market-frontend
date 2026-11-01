@@ -7,6 +7,7 @@
  */
 import type {
   BlueprintDetailResponse,
+  GameVersion,
   BlueprintIngredient,
   LocationDetailResponse,
   MissionDetailResponse,
@@ -16,14 +17,9 @@ import type {
   WikiManufacturerDetail,
   WikiShipDetail,
 } from "../store/api/v2/market"
-import {
-  missionDisplayTitle,
-  missionGiver,
-  missionSummary,
-  readableMissionText,
-} from "./missionText"
 import { GAME_DATA_PATHS, WIKI_PATHS } from "../routes/paths"
-import { PageHead, socialMeta } from "./pageHead"
+import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
+import { gameDataDateModified, missionGiver, missionSummaryLine, missionTitle, readableMissionText } from "./missionText"
 
 /** "gold_ore" → "Gold Ore": mining pages' name before/without displayName. */
 export function friendlyMiningName(name: string): string {
@@ -379,29 +375,34 @@ export function buildBlueprintHead(
   }
 }
 
-/** /missions/:slug (MissionDetail, the full-page variant). */
+/**
+ * /missions/:slug (MissionDetail, the full-page variant, and the bridge).
+ * Title: the readable name plus giver, rank and system, so same-named
+ * missions get distinct titles. Description: the one-line summary. JSON-LD:
+ * a WebPage about the mission (dateModified: the game data import) and the
+ * breadcrumbs; no HowTo (there are no steps to give).
+ */
 export function buildMissionHead(
   data: MissionDetailResponse,
   routeSlug: string,
   origin: string,
+  version?: GameVersion | null,
 ): PageHead {
   const m = data.mission
-  const name = readableMissionText(m.mission_name, missionGiver(m))
-  const title = `${missionDisplayTitle(m)} — Star Citizen Mission | SC Market`
-  const description = missionSummary(data).slice(0, 160)
+  const giver = missionGiver(m)
+  const name = readableMissionText(m.mission_name, giver) || "Unknown mission"
+  const title = `${missionTitle(m)} · Star Citizen Mission | SC Market`
+  const summary = missionSummaryLine(m, data.blueprint_rewards)
+  const description = summary.length > 160 ? `${summary.slice(0, 159).trimEnd()}…` : summary
   const canonical = `${origin}${GAME_DATA_PATHS.mission(routeSlug)}`
-
   return {
     title,
     canonical,
     meta: [
       { name: "description", content: description },
       ...socialMeta({
-        title,
+        title: missionTitle(m),
         description,
-        ogDescription:
-          readableMissionText(m.mission_description, missionGiver(m)).slice(0, 160) ||
-          description,
         url: canonical,
         ogType: "article",
         twitterCard: "summary",
@@ -410,23 +411,25 @@ export function buildMissionHead(
     jsonLd: [
       {
         "@context": "https://schema.org",
-        "@type": "HowTo",
-        name,
-        description:
-          readableMissionText(m.mission_description, missionGiver(m)) ||
-          description,
-        ...(m.updated_at && { dateModified: m.updated_at }),
-        ...(m.credit_reward_max && {
-          estimatedCost: {
-            "@type": "MonetaryAmount",
-            currency: "aUEC",
-            value: m.credit_reward_max,
-          },
-        }),
-        ...(m.star_system && {
-          location: { "@type": "Place", name: m.star_system },
-        }),
+        "@type": "WebPage",
+        name: missionTitle(m),
+        description: summary,
+        url: canonical,
+        ...(gameDataDateModified(version) && { dateModified: gameDataDateModified(version) }),
+        about: {
+          "@type": "Thing",
+          name,
+          ...(m.mission_description && { description: readableMissionText(m.mission_description, giver).slice(0, 500) }),
+        },
+        isPartOf: { "@type": "WebSite", name: "SC Market", url: `${origin}/` },
       },
+      breadcrumbJsonLd([
+        { name: "SC Market", url: `${origin}/` },
+        // No giver/faction step until those hubs exist (a filter URL is a
+        // noindex variant, not a breadcrumb target).
+        { name: "Missions", url: `${origin}${GAME_DATA_PATHS.missions}` },
+        { name, url: canonical },
+      ]),
     ],
   }
 }

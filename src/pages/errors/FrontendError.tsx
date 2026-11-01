@@ -1,4 +1,5 @@
 import React, { Suspense } from "react"
+import { Helmet } from "@unhead/react/helmet"
 import { Button, Grid, Link, Typography } from "@mui/material"
 import { PageFallback } from "../../components/metadata/Page"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -129,8 +130,11 @@ export function FrontendErrorBody() {
     )
   }
 
-  const target = searchParams.get("target")
-  const message = searchParams.get("message")
+  // A route error renders in place (Page.tsx): the failed page is the
+  // current URL. An old /error?message=…&target=… URL carries them in the
+  // query instead.
+  const target = routeError ? location.pathname : searchParams.get("target")
+  const message = routeError ? String(routeError) : searchParams.get("message")
 
   // An /error URL whose message is a stale chunk: offer the reload to target.
   if (!routeError && isChunkLoadError(message)) {
@@ -138,14 +142,19 @@ export function FrontendErrorBody() {
   }
 
   const handleGoBack = () => {
-    // Navigate back to the errored page if target is available
-    if (target) {
+    // In place: retry the page. From an /error URL: go back to its target.
+    if (routeError) {
+      window.location.reload()
+    } else if (target) {
       navigate(safeRedirectPath(target, "/"))
     }
   }
 
   return (
     <>
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <Grid item xs={12}>
         <Typography
           variant={"h3"}
@@ -192,7 +201,9 @@ export function FrontendErrorBody() {
                 startIcon={<ArrowBackRounded />}
                 onClick={handleGoBack}
               >
-                {t("frontendError.goBackToPage", "Go Back to Page")}
+                {routeError
+                ? t("frontendError.retry", "Try again")
+                : t("frontendError.goBackToPage", "Go Back to Page")}
               </Button>
             </Grid>
           )}

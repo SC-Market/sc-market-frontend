@@ -1,8 +1,9 @@
 # Cloudflare Pages SPA routing
 #
-# robots.txt and sitemap.xml are served directly from api.sc-market.space (see
-# the backend's sitemap.routes.ts); the frontend's public/robots.txt points
-# crawlers there. The only Functions are the route-scoped edge bridge
+# robots.txt is public/robots.txt. sitemap.xml and its sections are proxied
+# from api.sc-market.space (the backend's sitemap.routes.ts builds them) by
+# functions/[sitemap].ts, which public/_routes.json limits to /sitemap*.xml.
+# The other Functions are the route-scoped edge bridge
 # (functions/<prefix>/[[path]].ts, plus functions/index.ts for "/" only; see
 # src/bridge/handler.ts), limited to public page paths by public/_routes.json
 # ("/" is an exact rule, never "/*"). Never add a root _middleware.ts: it

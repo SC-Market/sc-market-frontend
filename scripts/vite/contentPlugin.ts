@@ -7,8 +7,10 @@
  *   chunks import it, so nothing reaches the main bundle.
  * - `/content/<page>.md?help-body`: one compiled body per page, a lazy chunk
  *   each. Screenshots become imports, so they get hashed /assets/ URLs.
- * - Build only: emits /content/manifest.json (backend sitemap) and the
- *   /content/bridge/*.json files the edge bridge renders for crawlers.
+ * - Build only: emits /content/manifest.json (backend sitemap), the
+ *   /content/bridge/*.json files the edge bridge renders for crawlers and
+ *   the changelog's Atom feed (/changelog.xml). Changelog drafts are dropped
+ *   by the compiler, so none of these ever holds one.
  *
  * Registered in both vite.config.ts and vitest.config.ts (vitest doesn't
  * inherit the Vite plugins). Content errors fail the build with the file name.
@@ -20,6 +22,7 @@ import {
   aboutAsset,
   ABOUT_FILE,
   categoryAsset,
+  changelogFeed,
   checkRedirects,
   compileSite,
   ContentError,
@@ -29,7 +32,9 @@ import {
   type CompiledSite,
 } from "../../src/features/help/build/compile"
 import { CONTENT_ASSET_PATHS } from "../../src/features/help/domain/assetPaths"
-import type { Block, ContentBody } from "../../src/features/help/domain/types"
+import { CHANGELOG_PATHS } from "../../src/routes/paths"
+import { DEFAULT_FRONTEND_URL } from "../../src/seo/constants"
+import { changelogBodyKey, type Block, type ContentBody } from "../../src/features/help/domain/types"
 
 export const HELP_CONTENT_ID = "virtual:help-content"
 const RESOLVED_HELP_CONTENT_ID = "\0" + HELP_CONTENT_ID
@@ -149,6 +154,7 @@ export function contentPlugin(): Plugin {
         const loaders = [
           ...compiled.guides.map((g) => [g.meta.id, bodyId(g.file)] as const),
           ["about", bodyId(ABOUT_FILE)] as const,
+          ...compiled.changelog.map((e) => [changelogBodyKey(e.meta.slug), bodyId(e.file)] as const),
         ]
         return [
           `export const index = ${JSON.stringify(contentIndex(compiled))}`,
@@ -171,7 +177,9 @@ export function contentPlugin(): Plugin {
       }
       this.addWatchFile(id.slice(0, -BODY_QUERY.length))
       const page =
-        file === ABOUT_FILE ? compiled.about : compiled.guides.find((g) => g.file === file)
+        file === ABOUT_FILE
+          ? compiled.about
+          : (compiled.guides.find((g) => g.file === file) ?? compiled.changelog.find((e) => e.file === file))
       if (!page) return this.error(`${file}: not a content page (draft or unknown)`)
 
       // Swap image placeholders for imports so they get hashed asset URLs.
@@ -205,6 +213,11 @@ export function contentPlugin(): Plugin {
       for (const category of compiled.categories) {
         emit(CONTENT_ASSET_PATHS.category(category.id), categoryAsset(compiled, category))
       }
+      this.emitFile({
+        type: "asset",
+        fileName: CHANGELOG_PATHS.feed.replace(/^\//, ""),
+        source: changelogFeed(compiled, { origin: DEFAULT_FRONTEND_URL, siteName: "SC Market", today: todayUtc() }),
+      })
       for (const guide of compiled.guides) {
         const asset = guideAsset(compiled, guide)
         emit(CONTENT_ASSET_PATHS.guide(guide.meta.category, guide.meta.slug), {

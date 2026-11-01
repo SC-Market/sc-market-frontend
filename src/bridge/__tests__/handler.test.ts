@@ -181,8 +181,11 @@ describe("handleBridgeRequest", () => {
   it("edge-caches API JSON (and unknown answers) per URL", async () => {
     const { run, fetchSpy } = setup(json(f.ship))
     await run("/wiki/ships/57e51d27--crusader-intrepid")
+    const firstRun = fetchSpy.mock.calls.length
     await run("/wiki/ships/57e51d27--crusader-intrepid")
-    expect(fetchSpy).toHaveBeenCalledTimes(1)
+    // The ship plus its related lookups (listings, other ships), each once.
+    expect(firstRun).toBe(3)
+    expect(fetchSpy).toHaveBeenCalledTimes(firstRun)
 
     const missing = setup(json({}, 404))
     expect((await missing.run("/wiki/ships/nope")).status).toBe(404)
@@ -215,9 +218,66 @@ describe("handleBridgeRequest", () => {
 
   it("answers HEAD without a body", async () => {
     const { run } = setup(json(f.listing()))
-    const res = await run("/market/abc--x", { method: "HEAD" })
+    const res = await run("/market/71012eb4--pristine-medal", { method: "HEAD" })
     expect(res.status).toBe(200)
     expect(res.body).toBeNull()
+  })
+
+  it("301s a trailing slash to the bare path, keeping the query", async () => {
+    const { run, fetchSpy } = setup(json(f.listing()))
+    const res = await run("/market/71012eb4--pristine-medal/?utm_source=x")
+    expect(res.status).toBe(301)
+    expect(res.headers.get("Location")).toBe("https://sc-market.space/market/71012eb4--pristine-medal?utm_source=x")
+    expect(fetchSpy).not.toHaveBeenCalled()
+  })
+
+  it.each(["/market/71012eb4-aaaa-bbbb-cccc-000000000000", "/market/71012eb4--old-title"])(
+    "301s %s (bare UUID, stale slug) to the canonical slug",
+    async (path) => {
+      const { run } = setup(json(f.listing()))
+      const res = await run(path)
+      expect(res.status).toBe(301)
+      expect(res.headers.get("Location")).toBe("https://sc-market.space/market/71012eb4--pristine-medal")
+    },
+  )
+
+  it.each([
+    ["sold", 404],
+    ["expired", 404],
+    ["inactive", 404],
+    ["cancelled", 410],
+  ])("a %s listing is a %i with noindex, never a soft 404", async (status, code) => {
+    const gone = f.listing()
+    gone.listing.status = status as typeof gone.listing.status
+    const { run } = setup(json(gone))
+    const res = await run("/market/71012eb4--pristine-medal")
+    expect(res.status).toBe(code)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("notFound")
+    expect(FakeRewriter.selectors).not.toContain("div#root")
+  })
+
+  it.each(["/user/JackedCitizen/market", "/user/JackedCitizen/services", "/shops/hades-svk-shop/bogus", "/contractor/NARCO/xyz"])(
+    "an unknown profile tab (%s) is a 404",
+    async (path) => {
+      const body = path.startsWith("/user") ? f.user() : path.startsWith("/shops") ? f.shop() : f.contractor()
+      const { run } = setup(json(body))
+      expect((await run(path)).status).toBe(404)
+    },
+  )
+
+  it("a search/filter query on a bridged page is noindex (canonical stays clean)", async () => {
+    const { run } = setup(json({ listings: [], total: 0, page: 1, page_size: 48 }))
+    const res = await run("/market?text=gold&sort_by=price")
+    expect(res.status).toBe(200)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+  })
+
+  it("serves ?page=N of a live hub from that API page; past the end is a 404", async () => {
+    const { run, fetchSpy } = setup(json({ listings: [{ listing_id: "l1", title: "L1", shop_name: "S", price_min: 5 }], total: 200, page: 3, page_size: 48 }))
+    const res = await run("/market?page=3")
+    expect(res.status).toBe(200)
+    expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/api/v2/listings/search?page=3&page_size=48&quantity_min=1`)
+    expect((await run("/market?page=9")).status).toBe(404)
   })
 
   it("fetches the org's shop alongside the org, ignoring its failure", async () => {
@@ -229,6 +289,8 @@ describe("handleBridgeRequest", () => {
     expect(fetchSpy.mock.calls.map((c) => c[0])).toEqual([
       `${API}/api/contractors/NARCO`,
       `${API}/api/v2/shops/by-owner?spectrum_id=NARCO`,
+      // The same org on SC Orgs (by spectrum ID), for a link to it.
+      "https://api.sc-orgs.space/api/v1/orgs/NARCO",
     ])
   })
 })
@@ -256,6 +318,27 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
       expect(assets).not.toHaveBeenCalled()
     },
   )
+
+  it("prerendered hub with ?page=N: that page's head and links over the static file", async () => {
+    const { run, fetchSpy, next } = setup(json({ ships: [{ id: "57e51d27-0000", name: "Intrepid" }], total: 216, page: 2, page_size: 24 }))
+    next.mockResolvedValueOnce(new Response(SHELL, { headers: { "Content-Type": "text/html" } }))
+    const res = await run("/wiki/ships?page=2")
+    expect(res.status).toBe(200)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+    expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/api/v2/game-data/wiki/ships?page=2&page_size=24`)
+    expect(FakeRewriter.selectors).toEqual(expect.arrayContaining(["title", "div#root"]))
+  })
+
+  it("prerendered hub with a filter query: the static file plus noindex, no API call", async () => {
+    const { run, fetchSpy, next } = setup(json({}))
+    next.mockResolvedValueOnce(new Response(SHELL, { headers: { "Content-Type": "text/html" } }))
+    const res = await run("/wiki/items?type=Armor")
+    expect(res.status).toBe(200)
+    expect(res.headers.get("X-SCM-Bridge")).toBe("noindex")
+    expect(fetchSpy).not.toHaveBeenCalled()
+    expect(FakeRewriter.selectors).toContain("head")
+    expect(FakeRewriter.selectors).not.toContain("div#root")
+  })
 
   it("keeps the homepage's Link header in public/_headers (a static file now)", () => {
     expect(headersFile).toContain(`/\n  Link: ${HOME_LINK_HEADER}`)

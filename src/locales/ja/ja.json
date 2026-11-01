@@ -348,7 +348,8 @@
     "acknowledgments": "サイトのロゴを提供してくれた <ladyFleurLink>LadyFleur</ladyFleurLink> さん、そしてAPIを提供してくれた <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink>、<starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> に特別な感謝を申し上げます。",
     "apiDocs": "API ドキュメント",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "クッキーの設定"
+    "cookiePreferences": "クッキーの設定",
+    "changelog": "更新履歴"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "評価95%以上かつ取引25件以上",
@@ -3100,7 +3101,8 @@
     "message": "メッセージ",
     "goBackToPage": "ページに戻る",
     "returnToDashboard": "ダッシュボードに戻る",
-    "pageTitle": "エラーが発生しました"
+    "pageTitle": "エラーが発生しました",
+    "retry": "再試行"
   },
   "help": {
     "learnHow": "詳しく見る",
@@ -4437,6 +4439,9 @@
     "noResults": "結果が見つかりません。フィルターを調整してみてください。",
     "search": {
       "header": "ミッションデータベース"
+    },
+    "about": {
+      "title": "ミッションデータベースについて"
     }
   },
   "myListings": {
@@ -5409,7 +5414,8 @@
       "sectionHoverbikes": "ホバーバイク",
       "sectionShips": "艦船",
       "size": "サイズ",
-      "sizeOption": "サイズ {{size}}"
+      "sizeOption": "サイズ {{size}}",
+      "allShips": "すべての艦船と車両"
     },
     "shipDetail": {
       "breadcrumbShips": "艦船と車両",
@@ -5589,5 +5595,22 @@
       "verified": "RSI 認証済み"
     },
     "title": "アカウントの ID"
+  },
+  "changelog": {
+    "title": "更新履歴",
+    "empty": "まだ公開された更新はありません。また後でご確認ください。",
+    "feed": "Atom フィード",
+    "allUpdates": "すべての更新"
+  },
+  "orgLinkBack": {
+    "title": "任意：SC Marketへのリンク",
+    "manageTitle": "SC Marketへのリンク",
+    "line": "SC Marketのショップはこちら: {{url}}",
+    "verifyHint": "完全に任意で、認証には不要です。よろしければ、訪問者がSC Marketであなたのショップを見つけられるよう、この行もRSIの組織ページに追加してください。確認されるのは上のコードだけです。",
+    "verifiedHint": "組織の認証が完了しました！RSIから認証コードを削除できます。よろしければ、訪問者がショップを見つけられるよう、この任意の行は組織ページに残しておいてください。削除できるのはコードだけで、この行は残して構いません。",
+    "manageHint": "任意：訪問者がSC Marketであなたのショップを見つけられるよう、この行をRSIの組織ページに追加できます。認証とは関係なく、必須ではありません。",
+    "copy": "行をコピー",
+    "copied": "コピーしました",
+    "continue": "続ける"
   }
 }

@@ -14,8 +14,17 @@ SPA shell. Design: `ssr-migration-design.md` §5, Phase 4. Prerendered pages:
 | `/wiki/items/<id>`, `/wiki/commodities/<id>` | item / commodity prefetch + LIVE version | per game version: 10 min / 6 h / 24 h (live prices) |
 | `/wiki/ships/<id>`, `/mining/ores/<name>`, `/mining/locations/<name>`, `/blueprints/<slug>`, `/missions/<slug>`, `/resources/<id>` | the detail query + LIVE version | per game version: 6 h / 7 days / 7 days |
 
-Unknown entities (v2 404, v1 400/404) answer from the bridge: 404 + noindex.
-Everything else on those prefixes (hubs, aggregates, bundles, manufacturers)
+Unknown entities (v2 404, v1 400/404), and pages the bridge's builders mark
+gone (a sold or expired listing, an unknown tab: 404; a cancelled listing:
+410), answer from the bridge: 404/410 + noindex. Another spelling of a page
+whose canonical is its own URL (a bare listing UUID, a stale slug: the
+bridge's `canonicalRedirect`) gets the same 301 as from the bridge, and a
+trailing slash or a query that changes the page (`hasPageQuery`) is left
+to the bridge (301 / robots noindex, `src/seo/queryIndexing.ts`). The
+bridge summary's link lists (seller, related and similar pages: the
+`related` lookups) are appended to `#root` as a `<nav data-bridge-summary>`
+the browser removes before hydrating, so the HTML links everywhere the
+bridge's page does. Everything else on those prefixes (hubs, aggregates, bundles, manufacturers)
 keeps the bridge; the prerendered hubs never invoke a Function.
 
 - **Detail gates** (ships, ores, mining locations, blueprints, missions):
@@ -190,6 +199,4 @@ render, edge-cached 60 s): use the WAF rule and robots crawl-delay.
   can't link to `/wiki/items/<id>` or `/market/aggregate/<id>` yet. Needs
   `output_game_item_id` / `game_item_id` in the v2 mission detail response
   (TSOA, then codegen).
-- Hub capability text and the bridge's mission summary: the SEO work on
-  main (`src/seo/`); reuse those builders here once merged.
 - Delete the bridge's page kinds that SSR now covers once it has run clean.

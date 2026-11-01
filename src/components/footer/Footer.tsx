@@ -12,8 +12,17 @@ import { Helmet } from "@unhead/react/helmet"
 import { serializeJsonLd } from "../../seo/pageHead"
 import { siteJsonLd } from "../../seo/siteHeads"
 import { Link as RouterLink } from "react-router-dom"
-import { HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
+import { CHANGELOG_PATHS, HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
+
+/** SC Orgs pages linked from the footer (sc-orgs.space's sitemap). */
+export const SC_ORGS_LINKS = [
+  { href: "https://sc-orgs.space/communities", key: "footer.scOrgsCommunities", label: "Org directory" },
+  { href: "https://sc-orgs.space/lfo", key: "footer.scOrgsLfo", label: "Looking for an org" },
+  { href: "https://sc-orgs.space/events", key: "footer.scOrgsEvents", label: "Org events" },
+  { href: "https://sc-orgs.space/guides/register-your-org", key: "footer.scOrgsRegister", label: "Register your org" },
+  { href: "https://sc-orgs.space/guides/join-an-org", key: "footer.scOrgsJoin", label: "Join an org" },
+] as const
 
 export function Footer() {
   const { t } = useTranslation()
@@ -92,6 +101,12 @@ export function Footer() {
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
+            <Link {...helpLink(CHANGELOG_PATHS.index)}>
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.changelog", "Changelog")}
+              </UnderlineLink>
+            </Link>
+            &nbsp;|&nbsp;
             <Link
               rel="noopener noreferrer"
               target="_blank"
@@ -106,7 +121,7 @@ export function Footer() {
             <Link
               rel="noopener noreferrer"
               target="_blank"
-              href={"https://github.com/henry232323/sc-market"}
+              href={"https://github.com/SC-Market"}
               aria-label={t("footer.github", "Github")}
             >
               <UnderlineLink color={"text.secondary"}>
@@ -114,8 +129,10 @@ export function Footer() {
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
+            {/* nofollow: on every page, these boilerplate links outnumbered
+                every content link in Search Console's internal links. */}
             <Link
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               target="_blank"
               href={LEGAL_PATHS.privacy}
               aria-label={t("footer.privacyPolicy", "Privacy Policy")}
@@ -126,7 +143,7 @@ export function Footer() {
             </Link>
             &nbsp;|&nbsp;
             <Link
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               target="_blank"
               href={LEGAL_PATHS.terms}
               aria-label={t("footer.termsOfService", "Terms of Service")}
@@ -160,7 +177,7 @@ export function Footer() {
             </Link>
             &nbsp;|&nbsp;
             <Link
-              rel="noopener noreferrer"
+              rel="noopener"
               target="_blank"
               href={"https://sc-orgs.space"}
               aria-label={t("footer.scOrgs", "SC Orgs")}
@@ -169,6 +186,17 @@ export function Footer() {
                 {t("footer.scOrgs", "SC Orgs")}
               </UnderlineLink>
             </Link>
+            {/* Deep links into SC Orgs (our sister site), not just its homepage. */}
+            {SC_ORGS_LINKS.map((link) => (
+              <React.Fragment key={link.href}>
+                &nbsp;·&nbsp;
+                <Link rel="noopener" target="_blank" href={link.href}>
+                  <UnderlineLink color={"text.secondary"}>
+                    {t(link.key, link.label)}
+                  </UnderlineLink>
+                </Link>
+              </React.Fragment>
+            ))}
             &nbsp;|&nbsp;
             <ReportButton />
           </Typography>

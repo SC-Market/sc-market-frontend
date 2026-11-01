@@ -14,7 +14,7 @@ import type {
 import { formatShortSlug } from "../features/market/domain/urls"
 import { MARKET_PATHS, ORG_PATHS, SHOP_PATHS, USER_PATHS } from "../routes/paths"
 import { FALLBACK_IMAGE_URL } from "./constants"
-import { PageHead, socialMeta } from "./pageHead"
+import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
 
 /** /market/:id (ListingDetailV2). */
 /**
@@ -30,26 +30,147 @@ function listingRobotsMeta(
     : []
 }
 
+/** A listing's lowest and highest price (aUEC) over its items and variants. */
+export function listingPriceRange(
+  data: Pick<GetListingDetailResponse, "items">,
+): { min: number; max: number } | null {
+  const prices: number[] = []
+  for (const item of data.items ?? []) {
+    // The API serializes numeric columns as strings ("50000000"): Number()
+    // reads both.
+    const base = Number(item.base_price)
+    if (item.pricing_mode === "unified" && Number.isFinite(base) && base > 0) {
+      prices.push(base)
+      continue
+    }
+    for (const variant of item.variants ?? []) {
+      const price = Number(variant.price)
+      if (Number.isFinite(price) && price > 0) prices.push(price)
+    }
+  }
+  if (prices.length === 0) return null
+  return { min: Math.min(...prices), max: Math.max(...prices) }
+}
+
+/** Units in stock over a listing's items and variants. */
+export function listingQuantity(data: Pick<GetListingDetailResponse, "items">): number {
+  let total = 0
+  for (const item of data.items ?? []) {
+    for (const variant of item.variants ?? []) {
+      const quantity = Number(variant.quantity)
+      if (Number.isFinite(quantity) && quantity > 0) total += quantity
+    }
+  }
+  return total
+}
+
+/**
+ * aUEC amount for titles: exact below 100k ("25,000"), compact above
+ * ("150K", "1.5M", "2B"), which keeps the price inside a search result title.
+ */
+export function formatAuecShort(value: number): string {
+  if (value < 100_000) return Math.round(value).toLocaleString("en-US")
+  const units: [number, string][] = [
+    [1_000_000_000, "B"],
+    [1_000_000, "M"],
+    [1_000, "K"],
+  ]
+  for (const [size, suffix] of units) {
+    if (value >= size) {
+      const scaled = value / size
+      const digits = scaled >= 100 ? 0 : scaled >= 10 ? 1 : 2
+      return `${Number(scaled.toFixed(digits))}${suffix}`
+    }
+  }
+  return String(Math.round(value))
+}
+
+/** "1.5M aUEC" or "from 1.5M aUEC" (several prices), null without a price. */
+export function listingPriceLabel(range: { min: number; max: number } | null): string | null {
+  if (!range) return null
+  const amount = `${formatAuecShort(range.min)} aUEC`
+  return range.max > range.min ? `from ${amount}` : amount
+}
+
+/** The seller's rating as text, null while unrated. */
+export function sellerRatingLabel(rating: number | null | undefined, count?: number | null): string | null {
+  if (typeof rating !== "number" || !Number.isFinite(rating) || rating <= 0) return null
+  const stars = `${Number(rating.toFixed(1))}/5`
+  return typeof count === "number" && count > 0
+    ? `rated ${stars} from ${count} review${count === 1 ? "" : "s"}`
+    : `rated ${stars}`
+}
+
+/**
+ * The listing's image: its first photo, else the game item's image, else the
+ * site fallback (the RSI placeholder, only when there's nothing else).
+ */
+export function listingImage(
+  data: Pick<GetListingDetailResponse, "listing" | "items">,
+): string {
+  return (
+    data.listing.photos?.find((photo) => !!photo) ||
+    data.items?.find((item) => !!item.game_item?.image_url)?.game_item.image_url ||
+    FALLBACK_IMAGE_URL
+  )
+}
+
+/**
+ * /market/:id (ListingDetailV2 and the edge bridge).
+ *
+ * Title: "{title} — {price} aUEC · Star Citizen | SC Market" (the price is
+ * what searchers compare). Description: price, seller, rating, stock, then
+ * the listing's own text.
+ *
+ * JSON-LD: a Product (name, description, image, the game item's category)
+ * and a BreadcrumbList, with no Offer. Google requires a valid ISO 4217
+ * `priceCurrency` on Offer/AggregateOffer, and aUEC is an in-game currency:
+ * an Offer with a made-up currency, or with none, or without a price, is an
+ * invalid Offer. So the price lives in the visible text, the title and the
+ * description (what crawlers and answer engines quote) and nothing claims a
+ * real-money price. The seller's rating stays off the Product (a seller's
+ * rating as product aggregateRating is a misattributed review); it's on the
+ * shop page's Store entity.
+ */
 export function buildListingHead(
-  data: Pick<GetListingDetailResponse, "listing" | "seller">,
+  data: Pick<GetListingDetailResponse, "listing" | "seller"> &
+    Partial<Pick<GetListingDetailResponse, "items">>,
   origin: string,
 ): PageHead {
   const { listing, seller } = data
-  const photos = listing.photos?.length ? listing.photos : [FALLBACK_IMAGE_URL]
+  const items = data.items ?? []
+  const range = listingPriceRange({ items })
+  const priceLabel = listingPriceLabel(range)
+  const quantity = listingQuantity({ items })
+  const image = listingImage({ listing, items })
   const canonical = `${origin}${MARKET_PATHS.listing(listing.listing_id, listing.title)}`
-  const description = listing.description?.slice(0, 160) || listing.title
+  const facts = [
+    priceLabel,
+    `sold by ${seller.name}`,
+    sellerRatingLabel(seller.rating),
+    quantity > 0 ? `${quantity.toLocaleString("en-US")} available` : null,
+  ].filter(Boolean)
+  const summary = `${facts.join(" · ")}.`
+  const text = listing.description?.replace(/\s+/g, " ").trim()
+  const descriptionFull =
+    text && text !== listing.title ? `${summary} ${text}` : `${listing.title}: ${summary}`
+  const description =
+    descriptionFull.length > 160 ? `${descriptionFull.slice(0, 159).trimEnd()}…` : descriptionFull
+  const title = priceLabel
+    ? `${listing.title} — ${priceLabel} · Star Citizen | SC Market`
+    : `${listing.title} · Star Citizen | SC Market`
 
   return {
-    title: `${listing.title} — SC Market`,
+    title,
     canonical,
     meta: [
       { name: "description", content: description },
       ...listingRobotsMeta(listing),
       ...socialMeta({
-        title: listing.title,
+        title: priceLabel ? `${listing.title} — ${priceLabel}` : listing.title,
         description,
         url: canonical,
-        image: photos[0],
+        image,
         ogType: "product",
         twitterCard: "summary_large_image",
       }),
@@ -59,24 +180,24 @@ export function buildListingHead(
         "@context": "https://schema.org",
         "@type": "Product",
         name: listing.title,
-        description: listing.description,
-        image: photos[0] !== FALLBACK_IMAGE_URL ? photos[0] : undefined,
+        description: listing.description || description,
+        image: image !== FALLBACK_IMAGE_URL ? image : undefined,
         url: canonical,
-        // NOTE: prices are in aUEC (an in-game currency, not an ISO 4217
-        // currency). schema.org/Offer requires a real currency and Google
-        // rejects/ignores non-ISO priceCurrency (and warns in Search
-        // Console), so we intentionally omit the monetary Offer and expose
-        // the aUEC price as on-page text instead.
-        offers: {
-          "@type": "Offer",
-          availability: "https://schema.org/InStock",
-          seller: {
-            "@type": "Organization",
-            name: seller.name,
-            url: `${origin}${SHOP_PATHS.profile(seller.slug)}`,
-          },
-        },
+        category: items[0]?.game_item?.type || undefined,
       },
+      breadcrumbJsonLd([
+        { name: "SC Market", url: `${origin}/` },
+        { name: "Market", url: `${origin}${MARKET_PATHS.search}` },
+        ...(items.length === 1 && items[0].game_item?.id && items[0].game_item.name
+          ? [
+              {
+                name: items[0].game_item.name,
+                url: `${origin}${MARKET_PATHS.aggregate(items[0].game_item.id, items[0].game_item.name)}`,
+              },
+            ]
+          : []),
+        { name: listing.title, url: canonical },
+      ]),
     ],
   }
 }
@@ -128,15 +249,9 @@ export function buildAggregateHead(
               description: fallback,
               image: image || undefined,
               url,
-              // NOTE: prices are in aUEC (in-game currency, not ISO 4217).
-              // Google ignores/rejects a non-ISO priceCurrency, so we omit the
-              // monetary AggregateOffer and keep offerCount only — the aUEC
-              // price range is exposed as on-page text instead.
-              offers: {
-                "@type": "AggregateOffer",
-                offerCount: listingCount,
-                availability: "https://schema.org/InStock",
-              },
+              // No AggregateOffer: Google requires lowPrice and an ISO 4217
+              // priceCurrency on it, and aUEC is an in-game currency. The
+              // aUEC price range is on-page text instead.
             },
           ]
         : [],

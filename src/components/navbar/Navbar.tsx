@@ -151,6 +151,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <Button
               component={RouterLink}
               to={PATHS.login}
+              rel="nofollow"
               variant="outlined"
               color="primary"
               size="small"
@@ -160,6 +161,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <Button
               component={RouterLink}
               to={PATHS.signup}
+              rel="nofollow"
               variant="contained"
               color="primary"
               size="small"
@@ -173,6 +175,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <Button
               component={RouterLink}
               to={PATHS.login}
+              rel="nofollow"
               variant="outlined"
               color="primary"
             >
@@ -181,6 +184,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <Button
               component={RouterLink}
               to={PATHS.signup}
+              rel="nofollow"
               variant="contained"
               color="primary"
             >

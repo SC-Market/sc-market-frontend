@@ -204,6 +204,10 @@ export function ssrDecision(request: Request, env: SsrEnv): SsrDecision {
   const url = new URL(request.url)
   // React Router data requests: the clientLoaders never make them.
   if (url.pathname.endsWith(".data")) return { render: false, reason: ".data" }
+  // "/market/x/": the bridge 301s it to the one URL without the slash.
+  if (url.pathname.length > 1 && url.pathname.endsWith("/")) {
+    return { render: false, reason: "trailing slash" }
+  }
   const match = matchBridgeRoute(url.pathname)
   if (!match || !SSR_KINDS.has(match.route.kind)) {
     return { render: false, reason: "not an ssr page" }
@@ -219,7 +223,8 @@ export function ssrDecision(request: Request, env: SsrEnv): SsrDecision {
   if (!isMainSiteHostname(url.hostname)) {
     return { render: false, reason: "white-label" }
   }
-  // A filtered URL renders from scratch in the browser anyway.
+  // A filtered URL renders from scratch in the browser anyway, and the
+  // bridge marks it noindex (src/seo/queryIndexing.ts).
   if (hasPageQuery(url.search)) return { render: false, reason: "query" }
   return { render: true, kind: match.route.kind }
 }
@@ -331,6 +336,8 @@ async function planFor(
 type Rendered =
   | { kind: "page"; html: string }
   | { kind: "notFound" }
+  /** Not the canonical spelling: 301 (src/bridge/handler.ts canonicalRedirect). */
+  | { kind: "redirect"; location: string }
   | { kind: "failed"; reason: string }
 
 async function render(
@@ -363,6 +370,8 @@ async function render(
     return { kind: "page", html }
   }
   if (outcome === "not-found") return { kind: "notFound" }
+  const location = response.headers.get("Location")
+  if (outcome === "redirect" && location) return { kind: "redirect", location }
   return {
     kind: "failed",
     reason: `${outcome ?? "no outcome"} (${response.status})`,
@@ -403,6 +412,22 @@ function pageResponse(
 }
 
 /**
+ * The bridge's 301 to a page's canonical URL (same host, the query kept),
+ * for a request that isn't its canonical spelling.
+ */
+export function redirectResponse(location: URL, url: URL): Response {
+  location.search = url.search
+  return new Response(null, {
+    status: 301,
+    headers: {
+      Location: location.toString(),
+      "Cache-Control": "public, max-age=3600",
+      "X-SCM-SSR": "redirect",
+    },
+  })
+}
+
+/**
  * Render and store in the edge cache. Concurrent requests for one key in
  * this isolate share one render.
  */
@@ -428,6 +453,14 @@ function renderAndStore(
         },
       })
       context.waitUntil(caches.default.put(plan.key, entry).catch(() => {}))
+    }
+    if (
+      (rendered.kind === "notFound" || rendered.kind === "redirect") &&
+      plan.cacheable
+    ) {
+      // Sold, cancelled, renamed since it was cached: drop the old page so
+      // no later request (a crawler's day-old hit) serves it.
+      context.waitUntil(caches.default.delete(plan.key).catch(() => false))
     }
     return rendered
   })().finally(() => inFlight.delete(plan.key))
@@ -487,6 +520,9 @@ export async function onRequest(context: PagesContext): Promise<Response> {
         "miss",
         plan.policy,
       )
+    }
+    if (rendered.kind === "redirect") {
+      return redirectResponse(new URL(rendered.location), url)
     }
     if (rendered.kind === "failed") {
       console.warn(`ssr fail-open ${url.pathname}: ${rendered.reason}`)

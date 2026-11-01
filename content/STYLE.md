@@ -13,6 +13,8 @@ into the pages under `/guides` and `/about`. A content error fails the build.
   fails if an old path is still a page or a new one isn't) and update the links.
 - `about.md`: the About page.
 - Screenshots: `guides/<category>/img/<name>.webp`, at most 3-4 per guide.
+- `changelog/<YYYY-MM-DD>.md`: one changelog entry (a release or a week),
+  at `/changelog/<YYYY-MM-DD>`. See "Changelog" below.
 
 ## Frontmatter
 
@@ -45,3 +47,24 @@ draft: true                      # optional: only shown by the dev server
   own paragraph.
 - Button: `[Label](/path "cta")` in its own paragraph.
 - No raw HTML, tables or `#` headings (the title is the page's only h1).
+
+## Changelog
+
+Each entry is written for users, not developers: what changed for them, in
+plain words. Leave out internal refactors, and never describe a security fix
+in a way that helps an attacker. Entry text is English only.
+
+```yaml
+title: Price alerts and a faster market  # required
+date: 2026-11-02                         # required; the file name, never in the future once published
+summary: One or two sentences…           # required, at most 160 characters (meta/OG, index card)
+tags: [market, orders]                   # optional
+status: draft                            # required: draft or published
+```
+
+Only `status: published` entries are built. A draft is dropped before
+anything reads its body: it is not in the bundle, the prerendered pages,
+the sitemap manifest or `/changelog.xml`, not even hidden (the dev server
+shows drafts so they can be previewed). To publish an entry, change its
+`status` to `published` and push. Until one is published, `/changelog`
+shows an empty state and is noindex.

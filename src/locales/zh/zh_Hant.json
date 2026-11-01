@@ -348,7 +348,8 @@
     "acknowledgments": "特別感謝 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供標誌，以及 <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink> 和 <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> 提供的 API。",
     "apiDocs": "API 文件",
     "scOrgs": "SC Orgs",
-    "cookiePreferences": "Cookie 偏好"
+    "cookiePreferences": "Cookie 偏好",
+    "changelog": "更新日誌"
   },
   "listing": {
     "95PercentRating25PlusTransactions": "95%+ 好評率和25+ 成交記錄",
@@ -3021,7 +3022,8 @@
     "message": "訊息",
     "goBackToPage": "返回頁面",
     "returnToDashboard": "返回儀表板",
-    "pageTitle": "發生錯誤"
+    "pageTitle": "發生錯誤",
+    "retry": "重試"
   },
   "help": {
     "learnHow": "瞭解做法",
@@ -4358,6 +4360,9 @@
     "noResults": "找不到結果。請嘗試調整篩選條件。",
     "search": {
       "header": "任務資料庫"
+    },
+    "about": {
+      "title": "關於任務資料庫"
     }
   },
   "myListings": {
@@ -5409,7 +5414,8 @@
       "sectionHoverbikes": "懸浮車",
       "sectionShips": "船艦",
       "size": "尺寸",
-      "sizeOption": "尺寸 {{size}}"
+      "sizeOption": "尺寸 {{size}}",
+      "allShips": "所有艦船和載具"
     },
     "shipDetail": {
       "breadcrumbShips": "船艦與載具",
@@ -5589,5 +5595,22 @@
       "verified": "已通過 RSI 驗證"
     },
     "title": "帳號身分"
+  },
+  "changelog": {
+    "title": "更新日誌",
+    "empty": "尚未發布任何更新，請稍後再來查看。",
+    "feed": "Atom 訂閱源",
+    "allUpdates": "全部更新"
+  },
+  "orgLinkBack": {
+    "title": "可選：連結到我們",
+    "manageTitle": "連結到我們",
+    "line": "在 SC Market 上找到我們的商店：{{url}}",
+    "verifyHint": "完全可選，驗證不需要它：如果願意，也可以把這一行加到您的 RSI 組織頁面，方便訪客在 SC Market 上找到您的商店。驗證只檢查上面的代碼。",
+    "verifiedHint": "您的組織已驗證！現在可以從 RSI 移除驗證代碼。如果願意，可以在組織頁面保留這一可選行，方便訪客找到您的商店。只有代碼可以移除；這一行可以保留。",
+    "manageHint": "可選：把這一行加到您的 RSI 組織頁面，方便訪客在 SC Market 上找到您的商店。它與驗證無關，從不是必需的。",
+    "copy": "複製此行",
+    "copied": "已複製",
+    "continue": "繼續"
   }
 }

@@ -169,6 +169,8 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/guides/:category": () => import("../pages/guides/GuideCategory"),
   "/guides/:category/:slug": () => import("../pages/guides/GuidePage"),
   "/about": () => import("../pages/about/AboutPage"),
+  "/changelog": () => import("../pages/changelog/ChangelogPage"),
+  "/changelog/:slug": () => import("../pages/changelog/ChangelogPage"),
 
   // Error routes
   "/error": () => import("../pages/errors/FrontendError"),

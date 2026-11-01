@@ -72,10 +72,20 @@ export async function renderSsrPage(
     fetch: ssr.api.fetch,
     waitUntil: ssr.waitUntil,
   })
+  // Gone (sold, cancelled) or an unknown tab: the bridge answers 404/410 +
+  // noindex, as for an unknown entity.
   if (bridge.kind === "notFound") {
     return new Response(null, {
-      status: 404,
+      status: bridge.status,
       headers: { [SSR_OUTCOME_HEADER]: "not-found" },
+    })
+  }
+  // Another spelling of the page (bare UUID, stale slug): 301 to the
+  // canonical URL, as the bridge does.
+  if (bridge.kind === "redirect") {
+    return new Response(null, {
+      status: 301,
+      headers: { [SSR_OUTCOME_HEADER]: "redirect", Location: bridge.location },
     })
   }
   // From here on, queries no loader started stay loading (apiFetch.ts).
@@ -194,7 +204,10 @@ async function renderPageNow(
   }
 
   const html = renderDocument(documentTemplate, {
-    appHtml,
+    // The bridge summary's link lists after the app (removed before
+    // hydrating, like the summary), so the HTML links everywhere the
+    // bridge's page does.
+    appHtml: bridge.kind === "page" ? appHtml + bridge.relatedHtml : appHtml,
     stylesheets,
     styleTags: emotionStyleTags(cache, appHtml),
     pageHeadTags,

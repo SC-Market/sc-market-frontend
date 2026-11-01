@@ -2,35 +2,70 @@
 
 > SC Market is the Star Citizen marketplace where players buy, sell and trade in-game items and hire orgs for services such as hauling, escort, medical rescue and salvage. All trades are in aUEC (in-game currency); no real money is involved. It is a fan-made community site, not affiliated with Cloud Imperium Games or Roberts Space Industries.
 
-Pages are rendered in the browser; the public pages below also serve a plain-HTML summary to clients that don't run JavaScript. Machine-readable data is available from the public REST API.
+Pages are rendered in the browser; the public pages below also serve a plain-HTML summary (price, seller, rating, stock, related links) to clients that don't run JavaScript. AI crawlers are welcome (see robots.txt). Machine-readable data is available from the public REST API.
+
+- [Sitemap](https://sc-market.space/sitemap.xml): every public listing, price comparison page, shop, org, game item, ship, commodity, mission and blueprint
 
 ## Marketplace
 
-- [Marketplace](https://sc-market.space/market): items for sale and buy orders from players and orgs
-- [Shops](https://sc-market.space/shops): player and org storefronts
+- [Marketplace](https://sc-market.space/market): items for sale from players and orgs, newest first; further pages at [?page=2](https://sc-market.space/market?page=2) and on
+- [Shops](https://sc-market.space/shops): player and org storefronts with ratings and reviews; [page 2](https://sc-market.space/shops?page=2)
+- [Buy orders](https://sc-market.space/buyorders): what players want to buy
+- [Bulk listings](https://sc-market.space/bulk): commodities and bulk stock
 - [Services](https://sc-market.space/market/services): services offered by players and orgs
 - [Contractors](https://sc-market.space/contractors): orgs and contractors and their ratings
 - [Recruiting](https://sc-market.space/recruiting): org recruiting posts
 
+A listing page (/market/<id>--<title>) states the price in aUEC, the quantity, the seller and their rating and when it was listed, and links to the item's price comparison page, its game database page, the seller's other listings and related listings.
+
+## Price comparison
+
+Each game item sold on SC Market has a price comparison page, /market/aggregate/<id>--<name>, listing every seller's price for it. Examples:
+
+- [Government Cartography Agency Medal (Pristine)](https://sc-market.space/market/aggregate/381a6442--government-cartography-agency-medal-pristine)
+- [Tevarin War Service Marker (Pristine)](https://sc-market.space/market/aggregate/04db230e--tevarin-war-service-marker-pristine)
+- [UNE Unification War Medal (Pristine)](https://sc-market.space/market/aggregate/00078da8--une-unification-war-medal-pristine)
+- [Parasite Replica Helmet](https://sc-market.space/market/aggregate/9dac4963--parasite-replica-helmet)
+- [NDB-30 Repeater](https://sc-market.space/market/aggregate/760c6bde--ndb-30-repeater)
+- [Wikelo Favor](https://sc-market.space/market/aggregate/fe004f8c--wikelo-favor)
+- [Novian Crossbow](https://sc-market.space/market/aggregate/95879a96--novian-crossbow)
+- [The Butcher Helmet](https://sc-market.space/market/aggregate/8c0f5a27--the-butcher-helmet)
+- [Fortifier Helmet Brimstone](https://sc-market.space/market/aggregate/a036d188--fortifier-helmet-brimstone)
+- [FR-66](https://sc-market.space/market/aggregate/d6b93d7e--fr-66)
+
 ## Game database
 
 - [Game database](https://sc-market.space/wiki): items, ships, commodities, locations and manufacturers
-- [Items](https://sc-market.space/wiki/items)
-- [Ships and vehicles](https://sc-market.space/wiki/ships)
-- [Commodities](https://sc-market.space/wiki/commodities)
+- [Items](https://sc-market.space/wiki/items): 11,000+ items with stats, crafting uses and player market prices; [page 2](https://sc-market.space/wiki/items?page=2)
+- [Ships and vehicles](https://sc-market.space/wiki/ships): every ship, ground vehicle and hoverbike, with specs and listings
+- [Commodities](https://sc-market.space/wiki/commodities): where to mine or buy each commodity, prices and crafting uses
 - [Star map and locations](https://sc-market.space/wiki/locations)
 - [Manufacturers](https://sc-market.space/wiki/manufacturers)
+- [Refinery](https://sc-market.space/wiki/refinery): refining methods
 - [Mining ores](https://sc-market.space/mining) and [mining locations](https://sc-market.space/mining/locations)
-- [Crafting blueprints](https://sc-market.space/blueprints)
-- [Missions](https://sc-market.space/missions)
+- [Resources](https://sc-market.space/resources)
+
+## Missions and crafting
+
+- [Missions](https://sc-market.space/missions): the Star Citizen mission database, filterable by faction, giver, system, legality, rank and type, with rewards, reputation, hauling orders and blueprint drop chances
+- [Crafting blueprints](https://sc-market.space/blueprints): blueprints, their ingredients and which missions drop them
+- [Crafting calculator](https://sc-market.space/crafting/calculator)
 
 ## Help
 
 - [Help & Guides](https://sc-market.space/guides): how buying, selling, orders, orgs and the Discord bot work
 - [About SC Market](https://sc-market.space/about)
+- [Changelog](https://sc-market.space/changelog): what's new on SC Market, week by week ([Atom feed](https://sc-market.space/changelog.xml))
 
-## API
+## Developers and API
 
+- [Developers](https://sc-market.space/developers): the public API, tokens and guides
+- [Public API OpenAPI spec](https://api.sc-market.space/api/public/v1/openapi.json): shops, listings, stock, orders and offers (needs an API token)
 - [API documentation](https://api.sc-market.space/docs)
-- [OpenAPI description](https://api.sc-market.space/api/v2/openapi.json)
+- [OpenAPI description (site API)](https://api.sc-market.space/api/v2/openapi.json)
 - [API catalog (RFC 9727)](https://api.sc-market.space/.well-known/api-catalog)
+- Public game data feed (missions, blueprints, items): coming soon
+
+## Related
+
+- [SC Orgs](https://sc-orgs.space): Star Citizen org directory, [looking for an org](https://sc-orgs.space/lfo) and [org events](https://sc-orgs.space/events)

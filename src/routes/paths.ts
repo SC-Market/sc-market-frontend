@@ -206,6 +206,18 @@ export const HELP_PATHS = {
 } as const
 
 /**
+ * Changelog: Markdown in /content/changelog, one file per release or week.
+ * Only `status: published` entries are built (src/features/help/build/compile.ts).
+ */
+export const CHANGELOG_PATHS = {
+  index: "/changelog",
+  /** `slug` is the entry's date (YYYY-MM-DD), its file name. */
+  entry: (slug: string) => `/changelog/${slug}`,
+  /** Atom feed, a static file the content build emits. */
+  feed: "/changelog.xml",
+} as const
+
+/**
  * Legal pages. Static HTML (public/terms.html, public/privacy.html) served by
  * Cloudflare Pages at these paths, not SPA routes: link with a plain `href`
  * (full page load), never a router `Link`. The old Termly paths 301 here (see

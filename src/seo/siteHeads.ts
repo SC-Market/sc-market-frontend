@@ -87,7 +87,7 @@ export function homeSeoText(t: SeoTranslate): { title: string; description: stri
   return {
     title: t(
       "landing.seoTitle",
-      "SC Market — Star Citizen Marketplace: Buy, Sell & Trade Items in aUEC",
+      "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
     ),
     description: t("landing.seoDescription", SITE_DESCRIPTION),
   }
