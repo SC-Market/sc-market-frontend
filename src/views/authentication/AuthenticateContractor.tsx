@@ -22,6 +22,7 @@ import {
 import { SentinelCode } from "../../components/authentication/SentinelCode"
 import { OrgLinkBackLine } from "../../components/authentication/OrgLinkBackLine"
 import { AuthenticateContractorSkeleton } from "./AuthenticateContractor.skeleton"
+import { ErrorPageBody } from "../../pages/errors/ErrorPage"
 import { PATHS } from "../../routes/paths"
 
 export function AuthenticateContractor() {
@@ -64,7 +65,16 @@ export function AuthenticateContractor() {
     [activateContractorLink, orgName, issueAlert],
   )
 
-  if (identifier.isLoading || !identifier.data?.identifier) {
+  // A failed identifier request is an error, not a skeleton forever. The
+  // error body stays inside this tab so "New Contractor" still works.
+  if (identifier.isError) {
+    return (
+      <Section xs={12} lg={12}>
+        <ErrorPageBody />
+      </Section>
+    )
+  }
+  if (!identifier.data) {
     return <AuthenticateContractorSkeleton />
   }
 
