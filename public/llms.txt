@@ -62,6 +62,8 @@ Each game item sold on SC Market has a price comparison page, /market/aggregate/
 - [Developers](https://sc-market.space/developers): the public API, tokens and guides
 - [Public API OpenAPI spec](https://api.sc-market.space/api/public/v1/openapi.json): shops, listings, stock, orders and offers (needs an API token)
 - [API documentation](https://api.sc-market.space/docs)
+- [Price feed](https://api.sc-market.space/api/public/prices/index.json): player-market asking prices per game item, no key needed (also .csv and .md)
+- [SDK](https://github.com/SC-Market/sc-market-sdk): TypeScript and Python clients for the public API and the price feed
 - [OpenAPI description (site API)](https://api.sc-market.space/api/v2/openapi.json)
 - [API catalog (RFC 9727)](https://api.sc-market.space/.well-known/api-catalog)
 - Public game data feed (missions, blueprints, items): coming soon

@@ -47,7 +47,8 @@ export function siteJsonLd(): object {
         url: SITE,
         logo: `${SITE}/scmarket-logo.png`,
         description: SITE_DESCRIPTION,
-        sameAs: ["https://discord.gg/scmarket", "https://github.com/SC-Market"],
+        // The SC Market Discord (util/constants DISCORD_INVITE; not imported: this module stays pure).
+        sameAs: ["https://discord.com/invite/N4Gy8py8J4", "https://github.com/SC-Market"],
       },
       {
         "@type": "WebSite",

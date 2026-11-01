@@ -331,6 +331,12 @@
     "accept_necessary": "必要なもののみ"
   },
   "footer": {
+    "developers": "開発者向け",
+    "developersOverview": "API概要",
+    "apiGuide": "APIガイド",
+    "openApiSpec": "OpenAPI仕様",
+    "priceFeed": "価格データフィード",
+    "sdk": "GitHubのSDK",
     "about": "概要",
     "support": "サポート",
     "discord": "Discord",
@@ -344,6 +350,7 @@
     "copyright": "Copyright ©",
     "trademark": "Star Citizen®、Squadron 42®、Roberts Space Industries®、および Cloud Imperium® は Cloud Imperium Rights LLC の登録商標です",
     "unofficial": "これは非公式の Star Citizen ファンサイトであり、Cloud Imperium グループ各社とは提携していません。当サイト上のコンテンツのうち、運営者またはユーザーが作成したものではないものは、すべてそれぞれの権利者に帰属します",
+    "officialSite": "Star Citizen 公式サイト：",
     "referralCode": "Use our referral code: {{code}}",
     "acknowledgments": "サイトのロゴを提供してくれた <ladyFleurLink>LadyFleur</ladyFleurLink> さん、そしてAPIを提供してくれた <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink>、<starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> に特別な感謝を申し上げます。",
     "apiDocs": "API ドキュメント",

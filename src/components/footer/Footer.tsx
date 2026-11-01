@@ -14,6 +14,7 @@ import { siteJsonLd } from "../../seo/siteHeads"
 import { Link as RouterLink } from "react-router-dom"
 import { CHANGELOG_PATHS, HELP_PATHS, LEGAL_PATHS } from "../../routes/paths"
 import { isOfficialSite, officialHelpUrl } from "../../features/help/links"
+import { DEVELOPER_LINKS, DEVELOPERS_HEADING } from "./developerLinks"
 
 /** SC Orgs pages linked from the footer (sc-orgs.space's sitemap). */
 export const SC_ORGS_LINKS = [
@@ -33,6 +34,14 @@ export function Footer() {
     isOfficialSite()
       ? { component: RouterLink, to: path }
       : { href: officialHelpUrl(path), target: "_blank", rel: "noopener" }
+  // Developer links: guides route in the SPA; /developers is a static page
+  // (public/developers.html) and the rest are off-site.
+  const developerLink = (href: string) =>
+    href.startsWith("https://")
+      ? { href, target: "_blank", rel: "noopener" }
+      : href.startsWith("/guides")
+        ? helpLink(href)
+        : { href: isOfficialSite() ? href : officialHelpUrl(href) }
 
   return (
     <Grid item xs={12} sx={{ marginTop: 2 }}>
@@ -176,6 +185,21 @@ export function Footer() {
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
+            {/* Developers: the public API, its spec, the price feed and the SDK (also in the bridge HTML). */}
+            <Typography component="span" variant="body2" color="text.secondary">
+              {t(DEVELOPERS_HEADING.key, DEVELOPERS_HEADING.label)}:
+            </Typography>
+            {DEVELOPER_LINKS.map((link, i) => (
+              <React.Fragment key={link.href}>
+                {i === 0 ? " " : <>&nbsp;·&nbsp;</>}
+                <Link {...developerLink(link.href)}>
+                  <UnderlineLink color={"text.secondary"}>
+                    {t(link.key, link.label)}
+                  </UnderlineLink>
+                </Link>
+              </React.Fragment>
+            ))}
+            &nbsp;|&nbsp;
             <Link
               rel="noopener"
               target="_blank"
@@ -219,6 +243,22 @@ export function Footer() {
               "footer.unofficial",
               "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
             )}
+            <br />
+            {/* RSI's fansite rules: the notice plus a link to the official site. */}
+            {t("footer.officialSite", "Official Star Citizen site:")}{" "}
+            <Link
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://robertsspaceindustries.com"
+            >
+              <UnderlineLink
+                component="span"
+                color="text.primary"
+                variant="body2"
+              >
+                robertsspaceindustries.com
+              </UnderlineLink>
+            </Link>
             <br />
             <Trans
               i18nKey="footer.acknowledgments"

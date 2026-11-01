@@ -331,6 +331,12 @@
     "accept_necessary": "Solo necesarias"
   },
   "footer": {
+    "developers": "Desarrolladores",
+    "developersOverview": "Resumen de la API",
+    "apiGuide": "Guía de la API",
+    "openApiSpec": "Especificación OpenAPI",
+    "priceFeed": "Feed de datos de precios",
+    "sdk": "SDK en GitHub",
     "about": "Acerca de",
     "support": "Soporte",
     "discord": "Discord",
@@ -344,6 +350,7 @@
     "copyright": "Copyright ©",
     "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries® y Cloud Imperium® son marcas registradas de Cloud Imperium Rights LLC",
     "unofficial": "Este es un sitio de fans no oficial de Star Citizen, sin afiliación con el grupo de empresas Cloud Imperium. Todo el contenido de este sitio no creado por su anfitrión o sus usuarios es propiedad de sus respectivos dueños",
+    "officialSite": "Sitio oficial de Star Citizen:",
     "referralCode": "Use our referral code: {{code}}",
     "acknowledgments": "Agradecimientos especiales a <ladyFleurLink>LadyFleur</ladyFleurLink> por el logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> y <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> por sus APIs.",
     "apiDocs": "Documentación de la API",

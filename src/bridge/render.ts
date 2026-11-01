@@ -9,13 +9,19 @@
  * - Attribute values of injected <meta>/<link>: escapeAttribute().
  * - JSON-LD: serializeJsonLd() (escapes < > & U+2028 U+2029), so content
  *   can't close the <script>.
- * - Summary links: href must be a site-relative path (isSafeHref) and goes
- *   through escapeAttribute(); link text is `html: false` text. At most
+ * - Summary links: href must be a site-relative path (isSafeHref) or one of
+ *   the footer's fixed developer URLs (isDeveloperHref), and goes through
+ *   escapeAttribute(); link text is `html: false` text. At most
  *   MAX_SUMMARY_LINKS per list (and per text list: guide steps/bullets).
  */
 import { PageHead, serializeJsonLd } from "../seo/pageHead"
 import type { BridgeDocument, SummaryBlock } from "./pages"
 import { BRIDGE_SUMMARY_ATTRIBUTE } from "../document/bridgeSummary"
+import {
+  DEVELOPER_EXTERNAL_HREFS,
+  DEVELOPER_LINKS,
+  DEVELOPERS_HEADING,
+} from "../components/footer/developerLinks"
 
 /** The slice of Cloudflare's HTMLRewriter API the bridge uses. */
 export interface RewriterContentOptions {
@@ -70,6 +76,20 @@ export function isPartnerHref(href: string): boolean {
   return /^https:\/\/sc-orgs\.space\/[A-Za-z0-9/_%-]*$/.test(href)
 }
 
+/** The footer's off-site developer links (exact URLs, components/footer/developerLinks.ts). */
+export function isDeveloperHref(href: string): boolean {
+  return DEVELOPER_EXTERNAL_HREFS.has(href)
+}
+
+/**
+ * The footer's "Developers" group, appended to every bridged page's summary
+ * so crawlers see the same API links as the SPA footer.
+ */
+export const DEVELOPER_SUMMARY_BLOCKS: SummaryBlock[] = [
+  { tag: "h2", text: DEVELOPERS_HEADING.label },
+  { tag: "ul", links: DEVELOPER_LINKS.map((l) => ({ href: l.href, text: l.label })) },
+]
+
 /**
  * Markup appended to <head>: the page's meta/canonical/JSON-LD, plus
  * robots noindex for unknown entities.
@@ -109,11 +129,18 @@ export function summaryChunks(blocks: SummaryBlock[]): HtmlChunk[] {
   ]
   for (const block of blocks) {
     if (block.tag === "ul") {
-      const links = block.links.filter((l) => isSafeHref(l.href)).slice(0, MAX_SUMMARY_LINKS)
+      const links = block.links
+        .filter((l) => isSafeHref(l.href) || isDeveloperHref(l.href))
+        .slice(0, MAX_SUMMARY_LINKS)
       if (links.length === 0) continue
       chunks.push({ content: "<ul>", html: true })
       for (const link of links) {
-        const rel = link.rel === "prev" || link.rel === "next" ? ` rel="${link.rel}"` : ""
+        const rel =
+          link.rel === "prev" || link.rel === "next"
+            ? ` rel="${link.rel}"`
+            : isDeveloperHref(link.href)
+              ? ` rel="noopener"`
+              : ""
         chunks.push(
           { content: `<li><a href="${escapeAttribute(link.href)}"${rel}>`, html: true },
           { content: link.text, html: false },
@@ -256,7 +283,7 @@ export function rewriteShell(
       })
       .on("div#root", {
         element(el) {
-          for (const chunk of summaryChunks(doc.summary)) {
+          for (const chunk of summaryChunks([...doc.summary, ...DEVELOPER_SUMMARY_BLOCKS])) {
             el.append(chunk.content, { html: chunk.html })
           }
         },
