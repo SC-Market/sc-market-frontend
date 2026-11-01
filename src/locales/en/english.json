@@ -5792,6 +5792,7 @@
       "service": "Request a service",
       "market": "Browse the market"
     },
-    "runAnOrg": "Run an org? Give it a storefront like this one."
+    "runAnOrg": "Run an org? Give it a storefront like this one.",
+    "onScMarket": "Storefront on SC Market"
   }
 }

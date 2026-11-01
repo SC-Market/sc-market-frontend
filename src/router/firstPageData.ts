@@ -29,6 +29,7 @@ import { ordersApi } from "../features/orders/api/ordersApi"
 import { offersApi } from "../features/offers/api/offerApi"
 import { userApi } from "../features/profile/api/profileApi"
 import { listingSearchArgs } from "../features/market/v2/listingSearchArgs"
+import { orgScopedListingArgs } from "../features/storefront/domain"
 import {
   LATEST_LISTINGS_ARGS,
   WANTED_NOW_ARGS,
@@ -43,6 +44,8 @@ export interface FirstPageDataEnv {
   isMobile: boolean
   /** The main site (not an org's white-label domain). */
   mainSite: boolean
+  /** On an org's white-label domain: its spectrum ID (market and services are scoped to it). */
+  customOrg?: string
   /** The session check (auth-only pages wait for "authenticated"). */
   session: Promise<SessionCheckResult>
 }
@@ -78,6 +81,7 @@ export async function prefetchFirstPageData(
             pageSize: SERVICE_LISTINGS_PAGE_SIZE,
             sortBy: "timestamp",
             sortOrder: "desc",
+            ...(env.customOrg ? { contractor: env.customOrg } : {}),
           }),
         ),
       ),
@@ -90,7 +94,10 @@ export async function prefetchFirstPageData(
       settleQuery(
         dispatch(
           marketV2Api.endpoints.searchListings.initiate(
-            listingSearchArgs(new URLSearchParams(url.search), env.isMobile),
+            orgScopedListingArgs(
+              listingSearchArgs(new URLSearchParams(url.search), env.isMobile),
+              env.customOrg,
+            ),
           ),
         ),
       ),

@@ -32,6 +32,24 @@ export function applyTitleTemplate(title: string | null | undefined): string {
 }
 
 /**
+ * The title on an org's white-label subdomain: "<Org> — <page>", without
+ * SC Market's suffix (the footer still says it's on SC Market). A title
+ * that already starts with the org's name is kept; no title is the org.
+ */
+export function applyWhiteLabelTitle(
+  orgName: string,
+  title: string | null | undefined,
+): string {
+  const page = (title ?? "")
+    .replace(/\s*[-|—–]\s*SC Market\s*$/i, "")
+    .replace(/^SC Market$/i, "")
+    .trim()
+  if (!page) return orgName
+  if (page.toLowerCase().startsWith(orgName.toLowerCase())) return page
+  return `${orgName} — ${page}`
+}
+
+/**
  * Serialize JSON-LD for inline <script> content. Escapes `<`, `>`, `&` and
  * U+2028/U+2029 as JSON unicode escapes so user content (e.g. a listing title
  * containing "</script>") can never close the script element. The output is

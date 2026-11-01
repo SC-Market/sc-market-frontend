@@ -24,6 +24,17 @@ export function orgFeaturedListingsArgs(
   }
 }
 
+/**
+ * The market's search args on an org's white-label domain: only the org's
+ * listings (every shop it owns). Unchanged on the main site.
+ */
+export function orgScopedListingArgs<T extends SearchListingsApiArg>(
+  args: T,
+  customOrg: string | undefined,
+): T {
+  return customOrg ? { ...args, org: customOrg } : args
+}
+
 /** "4.9" for a 0–5 average, null without reviews. */
 export function ratingLabel(avg: number | null | undefined): string | null {
   return typeof avg === "number" && Number.isFinite(avg) ? avg.toFixed(1) : null

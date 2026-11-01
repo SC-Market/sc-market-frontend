@@ -20,7 +20,8 @@ import { clearEmergencyReloadBudget } from "./util/assetReloadGuard"
 import { makeStore } from "./store/store"
 import { browserNetworkEnv } from "./store/browserNetworkEnv"
 import { seedCachedProfile } from "./features/profile/seedCachedProfile"
-import { applyTitleTemplate } from "./seo/pageHead"
+import { applyTitleTemplate, applyWhiteLabelTitle } from "./seo/pageHead"
+import { resolveBrowserCustomDomain, getWhiteLabelConfig } from "./hooks/contractor/CustomDomain"
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
 import i18n, { initialLocaleReady, toSupportedLocale } from "./util/i18n"
 import { renderedVariant } from "./ssr/requestContext"
@@ -103,6 +104,7 @@ void seedCachedProfile(store, undefined, whenStartupGateOpen())
 const pageData = prefetchFirstPageData(store, window.location, {
   isMobile: matchesMobile(),
   mainSite: isMainSiteHostname(window.location.hostname),
+  customOrg: resolveBrowserCustomDomain().customOrg,
   session: sessionChecked,
 })
 
@@ -126,10 +128,17 @@ installLinkIntentPrefetch()
 // Because this template owns the suffix, imperative writers must NOT append it
 // themselves — see Page.tsx and src/hooks/router/usePageTitle.ts, which now set
 // bare titles through Unhead (useHead) rather than writing document.title.
+// On an org's white-label subdomain: "<Org> — <page>" (the org's name from
+// the domain cache; the first visit, before it's cached, keeps SC Market's).
+const whiteLabelOrgName = isMainSiteHostname(window.location.hostname)
+  ? undefined
+  : getWhiteLabelConfig()?.name
 const head = createHead({
   init: [
     {
-      titleTemplate: applyTitleTemplate,
+      titleTemplate: whiteLabelOrgName
+        ? (title?: string | null) => applyWhiteLabelTitle(whiteLabelOrgName, title)
+        : applyTitleTemplate,
     },
   ],
 })

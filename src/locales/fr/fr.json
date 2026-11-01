@@ -5825,6 +5825,7 @@
       "service": "Demander un service",
       "market": "Parcourir le marché"
     },
-    "runAnOrg": "Vous dirigez une org ? Offrez-lui une vitrine comme celle-ci."
+    "runAnOrg": "Vous dirigez une org ? Offrez-lui une vitrine comme celle-ci.",
+    "onScMarket": "Vitrine sur SC Market"
   }
 }

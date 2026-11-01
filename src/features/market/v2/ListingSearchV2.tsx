@@ -77,6 +77,8 @@ import {
 import { MARKET_FILTER_PANEL_SX } from "../../../components/layout/MarketPageLayout";
 import { isAwaitingData } from "../../../util/queryLoading"
 import { listingSearchArgs } from "./listingSearchArgs"
+import { orgScopedListingArgs } from "../../storefront/domain"
+import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { useStartupGateOpen } from "../../../util/startupDeferral"
 import { CARD_CHIP_SX, cardChipStackSx } from "./cardChips"
 import { CardStub, firstScreenCards, useFirstScreenRender } from "../../../components/grid/firstScreen"
@@ -116,9 +118,11 @@ export function ListingSearchV2() {
   }
   
   // Parse URL params to API format (supports both V2 and V1 param names)
+  // On an org's white-label domain the market is the org's own listings.
+  const { customOrg } = useCustomDomain();
   const searchQuery = useMemo(
-    () => listingSearchArgs(searchParams, isMobile),
-    [searchParams, isMobile],
+    () => orgScopedListingArgs(listingSearchArgs(searchParams, isMobile), customOrg),
+    [searchParams, isMobile, customOrg],
   );
 
   // Fetch listings using RTK Query

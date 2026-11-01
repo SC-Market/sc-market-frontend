@@ -5825,6 +5825,7 @@
       "service": "Solicitar un servicio",
       "market": "Explorar el mercado"
     },
-    "runAnOrg": "¿Diriges una org? Dale un escaparate como este."
+    "runAnOrg": "¿Diriges una org? Dale un escaparate como este.",
+    "onScMarket": "Escaparate en SC Market"
   }
 }

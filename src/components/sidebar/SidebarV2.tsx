@@ -75,6 +75,7 @@ import { useIsAuthenticated, useSession } from "../../hooks/login/useSession"
 import { useStartupGateOpen } from "../../util/startupDeferral"
 import { useFeatureFlag } from "../../hooks/market"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
+import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { canOpenOrgManage } from "../../features/contractor/domain/manageTabs"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
@@ -166,6 +167,17 @@ export function SidebarV2() {
   const { flags } = useFeatureFlag()
   // On a white-label domain: the tabs the org hid and its own links.
   const whiteLabel = useWhiteLabelSidebar()
+  // On an org's white-label subdomain the header is the org's brand.
+  const { customOrg } = useCustomDomain()
+  const { data: customOrgData } = useGetContractorBySpectrumIDQuery(customOrg!, {
+    skip: !customOrg,
+  })
+  const whiteLabelBrand = customOrg
+    ? {
+        name: customOrgData?.name ?? getWhiteLabelConfig()?.name ?? customOrg,
+        logo: customOrgData?.avatar || undefined,
+      }
+    : null
   const shownOnWhiteLabel = (item: NavItem) =>
     !item.whiteLabelKey || !whiteLabel.hidden.has(item.whiteLabelKey)
   const unreadChatCount = useUnreadChatCount()
@@ -866,23 +878,49 @@ export function SidebarV2() {
         justifyContent="space-between"
         sx={{ px: 2, py: 1.5, minHeight: 64 }}
       >
-        <Box
-          component={Link}
-          to={PATHS.home}
-          sx={{ display: "flex", alignItems: "center", gap: 1, textDecoration: "none", color: "inherit" }}
-        >
-          {/* Decorative: the link's text says "SC Market". The hashed webp
-              (13 KB, also the home hero's logo) instead of the 512px PNG. */}
-          <Avatar
-            src={scMarketLogo}
-            alt=""
-            variant="rounded"
-            sx={{ width: 40, height: 40 }}
-          />
-          <Typography fontWeight={600} color="text.primary">
-            {t("sidebar.sc_market.title", "SC Market")}
-          </Typography>
-        </Box>
+        {whiteLabelBrand ? (
+          // An org's white-label subdomain: its logo and name, and that the
+          // storefront is on SC Market.
+          <Box
+            component={Link}
+            to={PATHS.home}
+            sx={{ display: "flex", alignItems: "center", gap: 1, textDecoration: "none", color: "inherit", minWidth: 0 }}
+            data-testid="sidebar-org-brand"
+          >
+            <Avatar
+              src={whiteLabelBrand.logo}
+              alt=""
+              variant="rounded"
+              sx={{ width: 40, height: 40 }}
+            />
+            <Box sx={{ minWidth: 0 }}>
+              <Typography fontWeight={600} color="text.secondary" noWrap>
+                {whiteLabelBrand.name}
+              </Typography>
+              <Typography variant="caption" color="text.primary" noWrap component="div">
+                {t("storefront.onScMarket", "Storefront on SC Market")}
+              </Typography>
+            </Box>
+          </Box>
+        ) : (
+          <Box
+            component={Link}
+            to={PATHS.home}
+            sx={{ display: "flex", alignItems: "center", gap: 1, textDecoration: "none", color: "inherit" }}
+          >
+            {/* Decorative: the link's text says "SC Market". The hashed webp
+                (13 KB, also the home hero's logo) instead of the 512px PNG. */}
+            <Avatar
+              src={scMarketLogo}
+              alt=""
+              variant="rounded"
+              sx={{ width: 40, height: 40 }}
+            />
+            <Typography fontWeight={600} color="text.primary">
+              {t("sidebar.sc_market.title", "SC Market")}
+            </Typography>
+          </Box>
+        )}
         <IconButton
           size="small"
           onClick={() => setDrawerOpen(false)}

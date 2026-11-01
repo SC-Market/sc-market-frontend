@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { usePageReady } from "./PageReady"
 import { isPaginatedPath, queryIndexing } from "../../seo/queryIndexing"
+import { ORG_PATHS } from "../../routes/paths"
 
 export function Page(
   props: PropsWithChildren<{
@@ -82,10 +83,21 @@ export function Page(
   // the message into the URL (every later refresh re-showed it) and gave
   // crawlers an /error URL to index. The error body is noindex.
 
+  // An org's white-label subdomain is a copy of sc-market.space pages:
+  // their canonical is the sc-market.space page (its home "/" is the org's
+  // page there), so link equity and indexing stay on the main site.
+  const whiteLabelCanonical =
+    props.canonUrl ||
+    (backupCanonUrl === "/" && customOrg ? ORG_PATHS.profile(customOrg) : backupCanonUrl)
+
   return customOrg && customOrgData ? (
     <>
       <Helmet>
         <link rel="icon" type="image/png" href={customOrgData.avatar} />
+        {(props.canonUrl || !props.dontUseDefaultCanonUrl) && (
+          <link rel="canonical" href={`${FRONTEND_URL}${whiteLabelCanonical}${pageSuffix}`} />
+        )}
+        {noindexQuery && <meta name="robots" content="noindex" />}
       </Helmet>
       {props.children}
     </>

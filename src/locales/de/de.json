@@ -5792,6 +5792,7 @@
       "service": "Dienstleistung anfragen",
       "market": "Markt durchsuchen"
     },
-    "runAnOrg": "Leitest du eine Org? Gib ihr einen Storefront wie diesen."
+    "runAnOrg": "Leitest du eine Org? Gib ihr einen Storefront wie diesen.",
+    "onScMarket": "Storefront auf SC Market"
   }
 }

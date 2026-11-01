@@ -49,6 +49,8 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
 
     if (contractor) params.contractor = contractor
     if (user) params.user = user
+    // On an org's white-label domain: the org's own services only.
+    if (!contractor && !user && customOrg) params.contractor = customOrg
     if (searchState.query) params.search = searchState.query
     if (searchState.kind) params.kind = searchState.kind
     if (searchState.minOffer) params.minCost = searchState.minOffer
@@ -59,7 +61,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     }
 
     return params
-  }, [page, perPage, searchState, contractor, user])
+  }, [page, perPage, searchState, contractor, user, customOrg])
 
   const {
     data: servicesResponse,
@@ -96,12 +98,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
 
   const displayedServices = useMemo(() => {
     if (!servicesResponse?.data) return []
-    if (contractor ?? user) return servicesResponse.data
-    if (customOrg) {
-      return servicesResponse.data.filter(
-        (service) => service.contractor?.spectrum_id === customOrg,
-      )
-    }
+    // Scoped by the query on a white-label domain (contractor above).
     return servicesResponse.data
   }, [servicesResponse?.data, contractor, user, customOrg])
 
