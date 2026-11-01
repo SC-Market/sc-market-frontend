@@ -138,7 +138,7 @@ async function itemChecks() {
 const GOOGLEBOT = { headers: { "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" } }
 const HUB_KINDS = ["givers", "factions", "types", "systems"]
 const jsonLdTypes = (html) =>
-  [...html.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)].flatMap((m) => {
+  [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([^<]*)<\/script>/g)].flatMap((m) => {
     try {
       const node = JSON.parse(m[1])
       return [node["@type"], node.mainEntity?.["@type"]].filter(Boolean)
