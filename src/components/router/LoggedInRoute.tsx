@@ -21,6 +21,24 @@ const MfaAdminGate = lazyWithRetry(() =>
   import("../../features/mfa/components/MfaAdminGate").then((m) => ({ default: m.MfaAdminGate })),
 )
 
+/**
+ * Links from emails (verify an address, unsubscribe) open before RSI
+ * verification or onboarding is done: the verification email arrives while the
+ * user is still in the onboarding stepper. They must work at once, not bounce
+ * to /settings or /onboarding and drop the token.
+ */
+export function isEmailLinkPath(pathname: string): boolean {
+  return /^\/email\/(verify|unsubscribe)(\/|$)/.test(pathname)
+}
+
+/** Pages onboarding itself sends users to (its Organization step registers an org). */
+export const ONBOARDING_EXEMPT_PATHS = [
+  "/settings",
+  "/accountlink",
+  "/onboarding",
+  "/org/register",
+]
+
 export function LoggedInRoute() {
   const session = useSession()
   const location = useLocation()
@@ -49,12 +67,14 @@ export function LoggedInRoute() {
     const { profile } = session
     if (
       !profile.rsi_confirmed &&
-      !["/settings", "/accountlink"].includes(location.pathname)
+      !["/settings", "/accountlink"].includes(location.pathname) &&
+      !isEmailLinkPath(location.pathname)
     ) {
       return <Navigate to={"/settings"} />
     } else if (
       !profile.onboarding_completed_at &&
-      !["/settings", "/accountlink", "/onboarding"].includes(location.pathname)
+      !ONBOARDING_EXEMPT_PATHS.includes(location.pathname) &&
+      !isEmailLinkPath(location.pathname)
     ) {
       return <Navigate to={"/onboarding"} />
     } else {
