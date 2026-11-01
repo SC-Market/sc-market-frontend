@@ -106,13 +106,22 @@ export function EmbedOrg(props: { variant?: "card" | "listings" }) {
   }, [])
 
   const org = storefront.data
+  const ready = !storefront.isLoading && !listings.isLoading
   const items = listings.data?.listings ?? []
   const orgPath = ORG_PATHS.profile(spectrum_id)
 
   return (
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
-      <Box component="main" sx={{ p: 1.5, minHeight: "100vh" }} data-testid="embed-org">
+      <Box
+        component="main"
+        sx={{ p: 1.5, minHeight: "100vh" }}
+        id="main-content"
+        data-testid="embed-org"
+        // The page-ready signal (docs/testing-with-mcp.md), outside the app layout's PageReady.
+        aria-busy={ready ? "false" : "true"}
+        data-ready={ready ? "true" : "false"}
+      >
         {storefront.isError ? (
           <Typography color="text.primary">
             {t("storefront.embed.notFound", "This storefront isn't available.")}
