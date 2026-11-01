@@ -682,7 +682,32 @@
       "spectrum_cleared": "Ein Admin hat die RSI-Verknüpfung von deinem Konto entfernt. Verifiziere dein RSI-Konto in den Einstellungen erneut.",
       "spectrum_set": "Ein Admin hat die RSI-Verknüpfung deines Kontos aktualisiert.",
       "username_released": "Ein Admin hat deinen Benutzernamen freigegeben. Dein Benutzername ist jetzt {{username}}. Nutze „Handle synchronisieren“ in den Einstellungen, um deinen aktuellen RSI-Handle zurückzubekommen."
-    }
+    },
+    "actions": "Aktionen für Benachrichtigung",
+    "unread": "Ungelesen",
+    "groups": {
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "week": "Diese Woche",
+      "older": "Älter"
+    },
+    "scope": {
+      "all": "Alle",
+      "personal": "Persönlich",
+      "shop": "Shop",
+      "label": "Benachrichtigungen anzeigen für"
+    },
+    "filter_by_shop": "Nach Shop filtern",
+    "all_shops": "Alle Shops",
+    "clear_all_confirm_title": "Alle Benachrichtigungen löschen?",
+    "clear_all_confirm_body": "Dadurch werden alle Benachrichtigungen gelöscht, ob gelesen oder nicht. Das lässt sich nicht rückgängig machen.",
+    "clear_all_confirm": "Alle löschen",
+    "unread_count_one": "{{count}} ungelesen",
+    "unread_count_other": "{{count}} ungelesen",
+    "all_caught_up": "Alles erledigt",
+    "empty_filtered": "Nichts für diesen Filter",
+    "empty_filtered_description": "Sieh dir stattdessen alle Benachrichtigungen an.",
+    "show_all": "Alle anzeigen"
   },
   "onboarding": {
     "welcome": "Willkommen bei SC Market",
@@ -1193,7 +1218,42 @@
       "totalDevices_plural": "{{count}} Geräte insgesamt",
       "unknownDevice": "Unbekanntes Gerät",
       "unsubscribe": "Abmelden",
-      "unsubscribed": "Push-Benachrichtigungen erfolgreich abbestellt"
+      "unsubscribed": "Push-Benachrichtigungen erfolgreich abbestellt",
+      "subscribeFailed": "Push-Benachrichtigungen konnten nicht aktiviert werden: {{reason}}",
+      "permissionDismissed": "Dein Browser hat Benachrichtigungen nicht aktiviert. Versuche es erneut und wähle „Zulassen“.",
+      "unsubscribeFailed": "Das Gerät konnte nicht entfernt werden. Versuche es erneut.",
+      "installAccepted": "SC Market wird installiert. Du kannst Push-Benachrichtigungen hier oder in der App aktivieren.",
+      "state": {
+        "checking": "Wird geprüft…",
+        "unavailable": "Nicht verfügbar",
+        "needsInstall": "App erforderlich",
+        "unsupported": "Nicht unterstützt",
+        "blocked": "Blockiert",
+        "off": "Auf diesem Gerät aus",
+        "on": "Auf diesem Gerät an"
+      },
+      "iosIntro": "Auf iPhone und iPad funktionieren Push-Benachrichtigungen nur in der SC-Market-App auf deinem Home-Bildschirm (ab iOS 16.4).",
+      "unsupportedHelp": "Dieser Browser kann keine Push-Benachrichtigungen empfangen. Probiere eine aktuelle Version von Chrome, Edge, Firefox oder Safari.",
+      "deniedIntro": "Benachrichtigungen von SC Market sind in diesem Browser blockiert.",
+      "offIntro": "Erhalte Hinweise zu Bestellungen, Angeboten und Nachrichten auf diesem Gerät, auch wenn SC Market nicht geöffnet ist.",
+      "onIntro": "Dieses Gerät erhält die Push-Benachrichtigungen, die du oben aktiviert hast.",
+      "thisDevice": "Dieses Gerät",
+      "appInstalled": "App installiert",
+      "iosStepsLabel": "So fügst du SC Market zum Home-Bildschirm hinzu",
+      "iosStep1": "Tippe in Safari auf die Teilen-Taste",
+      "iosStep2": "Scrolle nach unten und tippe auf „Zum Home-Bildschirm“",
+      "iosStep3": "Öffne SC Market über den Home-Bildschirm, komm auf diese Seite zurück und tippe auf „Push-Benachrichtigungen aktivieren“.",
+      "deniedTitle": "So aktivierst du sie wieder",
+      "deniedHelp": {
+        "ios": "Öffne die Einstellungen-App, gehe zu Mitteilungen, wähle SC Market und aktiviere „Mitteilungen erlauben“.",
+        "android": "Öffne in Chrome das Menü ⋮, dann Einstellungen, Website-Einstellungen, Benachrichtigungen, und erlaube sc-market.space. Bei der installierten App: Symbol lange drücken, App-Info, Benachrichtigungen.",
+        "safari": "Öffne in Safari die Einstellungen, dann Websites, Mitteilungen, und setze sc-market.space auf „Erlauben“.",
+        "firefox": "Klicke auf das Symbol links neben der Adressleiste, entferne die blockierte Benachrichtigungs-Berechtigung und lade die Seite neu.",
+        "chromium": "Klicke auf das Symbol links neben der Adressleiste, öffne die Website-Einstellungen, setze Benachrichtigungen auf „Zulassen“ und lade die Seite neu."
+      },
+      "installApp": "App installieren",
+      "otherDevicesTitle": "Weitere Geräte mit Push",
+      "removeDeviceNamed": "{{device}} entfernen"
     },
     "scmdb": {
       "connect": "SCMDB verbinden",
@@ -4697,7 +4757,10 @@
   },
   "navbar": {
     "cart": "Warenkorb",
-    "toggle_drawer": "Sidebar umschalten"
+    "toggle_drawer": "Sidebar umschalten",
+    "notifications": "Benachrichtigungen",
+    "notificationsUnread_one": "Benachrichtigungen, {{count}} ungelesen",
+    "notificationsUnread_other": "Benachrichtigungen, {{count}} ungelesen"
   },
   "Off Course": "warning",
   "offerTrend": {

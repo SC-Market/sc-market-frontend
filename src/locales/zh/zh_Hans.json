@@ -688,7 +688,32 @@
       "spectrum_cleared": "管理员移除了你账户的 RSI 关联。请在设置中重新验证你的 RSI 账户。",
       "spectrum_set": "管理员更新了你账户的 RSI 关联。",
       "username_released": "管理员释放了你的用户名。你现在的用户名是 {{username}}。在设置中使用“同步名称”可取回你当前的 RSI 名称。"
-    }
+    },
+    "actions": "通知操作",
+    "unread": "未读",
+    "groups": {
+      "today": "今天",
+      "yesterday": "昨天",
+      "week": "本周早些时候",
+      "older": "更早"
+    },
+    "scope": {
+      "all": "全部",
+      "personal": "个人",
+      "shop": "店铺",
+      "label": "显示以下通知"
+    },
+    "filter_by_shop": "按店铺筛选",
+    "all_shops": "所有店铺",
+    "clear_all_confirm_title": "清除所有通知？",
+    "clear_all_confirm_body": "这会删除所有通知（无论是否已读），且无法撤销。",
+    "clear_all_confirm": "全部清除",
+    "unread_count_one": "{{count}} 条未读",
+    "unread_count_other": "{{count}} 条未读",
+    "all_caught_up": "已全部看完",
+    "empty_filtered": "此筛选条件下没有通知",
+    "empty_filtered_description": "试试查看全部通知。",
+    "show_all": "显示全部"
   },
   "onboarding": {
     "welcome": "欢迎来到 SC Market",
@@ -1199,7 +1224,42 @@
       "totalDevices_plural": "共 {{count}} 台设备",
       "unknownDevice": "未知设备",
       "unsubscribe": "取消订阅",
-      "unsubscribed": "已成功取消订阅推送通知"
+      "unsubscribed": "已成功取消订阅推送通知",
+      "subscribeFailed": "无法开启推送通知：{{reason}}",
+      "permissionDismissed": "浏览器未开启通知。请重试并选择“允许”。",
+      "unsubscribeFailed": "无法移除该设备，请重试。",
+      "installAccepted": "正在安装 SC Market。你可以在这里或应用中开启推送通知。",
+      "state": {
+        "checking": "检查中…",
+        "unavailable": "不可用",
+        "needsInstall": "需要安装应用",
+        "unsupported": "不支持",
+        "blocked": "已阻止",
+        "off": "此设备已关闭",
+        "on": "此设备已开启"
+      },
+      "iosIntro": "在 iPhone 和 iPad 上，只有添加到主屏幕的 SC Market 应用才能接收推送通知（iOS 16.4 或更高版本）。",
+      "unsupportedHelp": "此浏览器无法接收推送通知。请试试最新版的 Chrome、Edge、Firefox 或 Safari。",
+      "deniedIntro": "此浏览器已阻止 SC Market 的通知。",
+      "offIntro": "即使没有打开 SC Market，也能在此设备上收到订单、报价和消息提醒。",
+      "onIntro": "此设备会收到你在上方开启的推送通知。",
+      "thisDevice": "此设备",
+      "appInstalled": "已安装应用",
+      "iosStepsLabel": "如何将 SC Market 添加到主屏幕",
+      "iosStep1": "在 Safari 中轻点“分享”按钮",
+      "iosStep2": "向下滚动并轻点“添加到主屏幕”",
+      "iosStep3": "从主屏幕打开 SC Market，回到此页面并轻点“启用推送通知”。",
+      "deniedTitle": "重新开启方法",
+      "deniedHelp": {
+        "ios": "打开“设置”App，进入“通知”，选择 SC Market 并开启“允许通知”。",
+        "android": "在 Chrome 中打开 ⋮ 菜单，依次进入“设置”、“网站设置”、“通知”，允许 sc-market.space。若是已安装的应用，长按图标，进入“应用信息”、“通知”。",
+        "safari": "在 Safari 中打开“设置”，进入“网站”、“通知”，将 sc-market.space 设为“允许”。",
+        "firefox": "点击地址栏左侧的图标，清除被阻止的通知权限，然后重新加载此页面。",
+        "chromium": "点击地址栏左侧的图标，打开“网站设置”，将通知设为“允许”，然后重新加载此页面。"
+      },
+      "installApp": "安装应用",
+      "otherDevicesTitle": "其他已开启推送的设备",
+      "removeDeviceNamed": "移除 {{device}}"
     },
     "scmdb": {
       "connect": "连接 SCMDB",
@@ -4754,7 +4814,10 @@
   },
   "navbar": {
     "cart": "购物车",
-    "toggle_drawer": "切换侧边栏"
+    "toggle_drawer": "切换侧边栏",
+    "notifications": "通知",
+    "notificationsUnread_one": "通知，{{count}} 条未读",
+    "notificationsUnread_other": "通知，{{count}} 条未读"
   },
   "Off Course": "warning",
   "offerTrend": {

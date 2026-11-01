@@ -6,7 +6,6 @@
  */
 import {
   Box,
-  Divider,
   Grid,
   List,
   ListItem,
@@ -20,6 +19,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
@@ -34,36 +34,41 @@ import { OrderDetailSkeleton } from "./OrderDetailSkeleton"
 // ── /notifications ─────────────────────────────────────────────────────────
 
 /** Height of one NotificationEntry row (icon, title + chips, time). */
-const NOTIFICATION_ROW_HEIGHT = 98
+const NOTIFICATION_ROW_HEIGHT = 88
 
-/** The notification list while a page of notifications loads. */
+/**
+ * The notification rows while a page of notifications loads: the same row
+ * frame as NotificationBase (icon, two text lines, the actions button).
+ */
 export function NotificationListSkeleton({ rows = 8 }: { rows?: number }) {
   const theme = useTheme<ExtendedTheme>()
   return (
     <List
+      disablePadding
       sx={{
-        "&>:first-of-type": {
-          borderTop: `1px solid ${theme.palette.outline.main}`,
+        "& > *:not(:last-child)": {
+          borderBottom: `1px solid ${theme.palette.outline.main}`,
         },
-        "&>:last-of-type": { borderBottom: "none" },
-        "& > *": { borderBottom: `1px solid ${theme.palette.outline.main}` },
-        padding: 0,
-        bgcolor: "background.paper",
-        borderRadius: 1,
-        overflow: "hidden",
       }}
     >
       {Array.from({ length: rows }).map((_, i) => (
         <ListItem
           key={i}
-          sx={{ height: NOTIFICATION_ROW_HEIGHT, gap: 2, alignItems: "center" }}
+          sx={{
+            height: NOTIFICATION_ROW_HEIGHT,
+            gap: { xs: 1.5, sm: 2 },
+            alignItems: "flex-start",
+            px: { xs: 1.5, sm: 2 },
+            py: { xs: 1.25, sm: 1.5 },
+          }}
         >
-          <Skeleton variant="circular" width={40} height={40} />
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Skeleton variant="text" width="55%" />
-            <Skeleton variant="text" width="30%" />
-          </Box>
           <Skeleton variant="circular" width={24} height={24} />
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Skeleton variant="text" width="60%" />
+            <Skeleton variant="rounded" width="35%" height={24} sx={{ my: 0.5 }} />
+            <Skeleton variant="text" width="20%" />
+          </Box>
+          <Skeleton variant="circular" width={28} height={28} />
         </ListItem>
       ))}
     </List>
@@ -71,47 +76,64 @@ export function NotificationListSkeleton({ rows = 8 }: { rows?: number }) {
 }
 
 /** NotificationsPage's scope tab labels. */
-const NOTIFICATION_SCOPE_TABS = ["All", "Personal", "Shop"]
+const NOTIFICATION_SCOPE_TABS: [string, string][] = [
+  ["notifications.scope.all", "All"],
+  ["notifications.scope.personal", "Personal"],
+  ["notifications.scope.shop", "Shop"],
+]
 
+/** /notifications: title row with the bulk actions, then the list card. */
 export function NotificationsPageSkeleton() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   return (
     <StandardPageLayout
       noFooter
       title={t("notifications.notifications")}
-      headerTitle={t("notifications.notifications")}
-      headerActions={
-        <Box sx={{ display: "flex" }}>
-          <Skeleton variant="circular" width={40} height={40} />
-          <Skeleton variant="circular" width={40} height={40} />
-        </Box>
-      }
       maxWidth="md"
     >
       <Grid item xs={12}>
-        <Divider sx={{ mb: 2 }} />
-      </Grid>
-      <Grid item xs={12}>
         <Box
           sx={{
-            mb: 2,
-            borderBottom: `1px solid ${theme.palette.outline.main}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 1,
           }}
         >
-          <Tabs value={0} variant="scrollable" sx={{ minHeight: 40 }}>
-            {NOTIFICATION_SCOPE_TABS.map((label) => (
-              <Tab
-                key={label}
-                label={label}
-                sx={{ minHeight: 40, fontSize: "0.875rem" }}
-              />
-            ))}
-          </Tabs>
+          <Box>
+            <Typography
+              variant="h4"
+              component="h1"
+              color="text.secondary"
+              sx={{ fontWeight: "bold" }}
+            >
+              {t("notifications.notifications")}
+            </Typography>
+            <Skeleton variant="text" width={110} sx={{ mt: 0.5 }} />
+          </Box>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Skeleton variant="circular" width={40} height={40} />
+            <Skeleton variant="circular" width={40} height={40} />
+          </Box>
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <NotificationListSkeleton />
+        <Paper sx={{ overflow: "hidden" }}>
+          <Box
+            sx={{
+              px: { xs: 1, sm: 2 },
+              borderBottom: 1,
+              borderColor: "outline.main",
+            }}
+          >
+            <Tabs value={0} variant="scrollable" sx={{ minHeight: 44 }}>
+              {NOTIFICATION_SCOPE_TABS.map(([key, fallback]) => (
+                <Tab key={key} label={t(key, fallback)} sx={{ minHeight: 44 }} />
+              ))}
+            </Tabs>
+          </Box>
+          <NotificationListSkeleton />
+        </Paper>
       </Grid>
     </StandardPageLayout>
   )

@@ -1,36 +1,25 @@
 import React, { useState, useCallback } from "react"
-import {
-  Box,
-  Grid,
-  Typography,
-  List,
-  Tabs,
-  Tab,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Chip,
-  IconButton,
-  Tooltip,
-  Divider,
-} from "@mui/material"
-import { HapticTablePagination } from "../../components/haptic"
-import { ClearAllRounded, MarkEmailReadRounded } from "@mui/icons-material"
-import { useTheme } from "@mui/material/styles"
+import { Box, Grid, Paper, Typography } from "@mui/material"
+import { NotificationsNoneOutlined } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { HapticTablePagination } from "../../components/haptic"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { NotificationListSkeleton } from "../../components/skeletons/AccountPageSkeletons"
 import { usePageNotifications } from "../../features/notifications/hooks/usePageNotifications"
-import { NotificationEntry } from "../../features/notifications/components/NotificationEntry"
-import { EmptyNotifications } from "../../components/empty-states"
+import { NotificationList } from "../../features/notifications/components/NotificationList"
+import { NotificationScopeFilter } from "../../features/notifications/components/NotificationScopeFilter"
+import { NotificationBulkActions } from "../../features/notifications/components/NotificationBulkActions"
+import { EmptyNotifications, EmptyState } from "../../components/empty-states"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import type { NotificationScope } from "../../features/notifications/domain/types"
-import type { Notification } from "../../hooks/login/UserProfile"
 
+/**
+ * /notifications: the page title row (title, unread count, bulk actions on
+ * one line at every width, like Messages), then one outlined card in the
+ * Orders page's pattern: scope tabs on top, the day-grouped list, and the
+ * pagination bar at the bottom of the card.
+ */
 export function NotificationsPage() {
-  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
@@ -47,11 +36,12 @@ export function NotificationsPage() {
   })
 
   const notifications = pageData.data?.notifications || []
-  const pagination = pageData.data?.pagination
-  const shopsData = pageData.data?.shops || []
-  const total = pagination?.total || 0
+  const total = pageData.data?.pagination?.total || 0
+  const unreadCount = pageData.data?.unreadCount || 0
+  const shops = pageData.data?.shops || []
+  const filtered = scopeFilter !== "all" || !!shopIdFilter
 
-  const handleChangePage = useCallback((event: unknown, newPage: number) => {
+  const handleChangePage = useCallback((_: unknown, newPage: number) => {
     setPage(newPage)
   }, [])
 
@@ -63,7 +53,7 @@ export function NotificationsPage() {
     [],
   )
 
-  const markAllReadCallback = useCallback(async () => {
+  const markAllRead = useCallback(async () => {
     try {
       const result = await pageData.markAllAsRead()
       issueAlert({
@@ -72,7 +62,7 @@ export function NotificationsPage() {
           count: result.affected_count,
         }),
       })
-    } catch (error) {
+    } catch {
       issueAlert({
         severity: "error",
         message: t("notifications.mark_all_read_failed"),
@@ -80,7 +70,7 @@ export function NotificationsPage() {
     }
   }, [pageData, issueAlert, t])
 
-  const deleteAllCallback = useCallback(async () => {
+  const clearAll = useCallback(async () => {
     try {
       const result = await pageData.deleteAll()
       issueAlert({
@@ -89,7 +79,7 @@ export function NotificationsPage() {
           count: result.affected_count,
         }),
       })
-    } catch (error) {
+    } catch {
       issueAlert({
         severity: "error",
         message: t("notifications.clear_all_failed"),
@@ -97,184 +87,137 @@ export function NotificationsPage() {
     }
   }, [pageData, issueAlert, t])
 
+  const showAll = () => {
+    setScopeFilter("all")
+    setShopIdFilter("")
+    setPage(0)
+  }
+
   return (
     <StandardPageLayout
       title={t("notifications.notifications")}
-      headerTitle={t("notifications.notifications")}
-      headerActions={
-        <Box>
-          <Tooltip title={t("notifications.clear_all")}>
-            <IconButton onClick={deleteAllCallback}>
-              <ClearAllRounded />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={t("notifications.mark_all_as_read")}>
-            <IconButton onClick={markAllReadCallback}>
-              <MarkEmailReadRounded />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      }
       maxWidth="md"
       isLoading={pageData.isLoading}
       error={pageData.error}
     >
       <Grid item xs={12}>
-        <Divider sx={{ mb: 2 }} />
-      </Grid>
-
-      {/* Filter Section */}
-      <Grid item xs={12}>
         <Box
           sx={{
-            mb: 2,
-            borderBottom: `1px solid ${theme.palette.outline.main}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 1,
           }}
         >
-          <Tabs
-            value={scopeFilter}
-            onChange={(_, newValue) => {
-              setScopeFilter(newValue)
-              setShopIdFilter("")
-              setPage(0)
-            }}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{ minHeight: 40 }}
-          >
-            <Tab
-              label="All"
-              value="all"
-              sx={{ minHeight: 40, fontSize: "0.875rem" }}
-            />
-            <Tab
-              label="Personal"
-              value="personal"
-              sx={{ minHeight: 40, fontSize: "0.875rem" }}
-            />
-            <Tab
-              label="Shop"
-              value="shop"
-              sx={{ minHeight: 40, fontSize: "0.875rem" }}
-            />
-          </Tabs>
-          {scopeFilter === "shop" &&
-            shopsData &&
-            shopsData.length > 0 && (
-              <FormControl fullWidth size="small" sx={{ mt: 1, mb: 1 }}>
-                <InputLabel id="shop-filter-label">
-                  Filter by Shop
-                </InputLabel>
-                <Select
-                  labelId="shop-filter-label"
-                  value={shopIdFilter}
-                  label="Filter by Shop"
-                  onChange={(e) => {
-                    setShopIdFilter(e.target.value)
-                    setPage(0)
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>All Shops</em>
-                  </MenuItem>
-                  {shopsData.map((shop) => (
-                    <MenuItem key={shop.shop_id} value={shop.shop_id}>
-                      {shop.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-          {(scopeFilter !== "all" || shopIdFilter) && (
-            <Box
-              sx={{ mt: 1, mb: 1, display: "flex", gap: 0.5, flexWrap: "wrap" }}
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              variant="h4"
+              component="h1"
+              color="text.secondary"
+              sx={{ fontWeight: "bold" }}
             >
-              {scopeFilter !== "all" && (
-                <Chip
-                  label={
-                    scopeFilter === "personal"
-                      ? "Personal"
-                      : "Shop"
-                  }
-                  size="small"
-                  onDelete={() => {
-                    setScopeFilter("all")
-                    setShopIdFilter("")
-                    setPage(0)
-                  }}
-                />
-              )}
-              {shopIdFilter && (
-                <Chip
-                  label={
-                    shopsData?.find(
-                      (s) => s.shop_id === shopIdFilter,
-                    )?.name || "Shop"
-                  }
-                  size="small"
-                  onDelete={() => {
-                    setShopIdFilter("")
-                    setPage(0)
-                  }}
-                />
-              )}
-            </Box>
-          )}
+              {t("notifications.notifications")}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.primary"
+              aria-live="polite"
+              sx={{ mt: 0.5, minHeight: "1.43em" }}
+            >
+              {pageData.isLoading
+                ? ""
+                : unreadCount > 0
+                  ? t("notifications.unread_count", {
+                      count: unreadCount,
+                      defaultValue: "{{count}} unread",
+                    })
+                  : t("notifications.all_caught_up", "You're all caught up")}
+            </Typography>
+          </Box>
+          <NotificationBulkActions
+            onMarkAllRead={markAllRead}
+            onClearAll={clearAll}
+            hasUnread={unreadCount > 0}
+            hasAny={total > 0}
+          />
         </Box>
       </Grid>
 
-      {/* Notifications List */}
-      <Grid item xs={12} sx={{ overflow: "hidden", minWidth: 0, maxWidth: "100%" }}>
-        {pageData.isLoading ? (
+      <Grid item xs={12} sx={{ minWidth: 0 }}>
+        <Paper sx={{ overflow: "hidden" }}>
+          <Box
+            sx={{
+              px: { xs: 1, sm: 2 },
+              borderBottom: 1,
+              borderColor: "outline.main",
+            }}
+          >
+            <NotificationScopeFilter
+              idPrefix="notifications-page"
+              scope={scopeFilter}
+              shopId={shopIdFilter}
+              shops={shops}
+              onScopeChange={(value) => {
+                setScopeFilter(value)
+                setShopIdFilter("")
+                setPage(0)
+              }}
+              onShopChange={(value) => {
+                setShopIdFilter(value)
+                setPage(0)
+              }}
+            />
+          </Box>
+
+          {pageData.isLoading ? (
             <NotificationListSkeleton />
           ) : notifications.length === 0 ? (
-            <EmptyNotifications sx={{ py: 4 }} />
+            filtered ? (
+              <EmptyState
+                icon={<NotificationsNoneOutlined />}
+                title={t(
+                  "notifications.empty_filtered",
+                  "Nothing here for this filter",
+                )}
+                description={t(
+                  "notifications.empty_filtered_description",
+                  "Try all notifications instead.",
+                )}
+                action={{
+                  label: t("notifications.show_all", "Show all"),
+                  onClick: showAll,
+                  variant: "outlined",
+                }}
+                sx={{ minHeight: { xs: 260, sm: 320 } }}
+              />
+            ) : (
+              <EmptyNotifications sx={{ minHeight: { xs: 260, sm: 320 } }} />
+            )
           ) : (
-            <List
-              sx={{
-                "&>:first-child": {
-                  borderTop: `1px solid ${theme.palette.outline.main}`,
-                },
-                "&>:last-child": {
-                  borderBottom: "none",
-                },
-                "& > *": {
-                  borderBottom: `1px solid ${theme.palette.outline.main}`,
-                },
-                padding: 0,
-                bgcolor: "background.paper",
-                borderRadius: 1,
-                overflow: "hidden",
-              }}
-            >
-              {notifications.map((notification: Notification, idx: number) => (
-                <NotificationEntry notif={notification} key={idx} />
-              ))}
-            </List>
+            <NotificationList notifications={notifications} grouped />
           )}
-      </Grid>
 
-      {/* Pagination */}
-      {total > 0 && (
-        <Grid item xs={12}>
-          <HapticTablePagination
-            labelRowsPerPage={t("rows_per_page")}
-            labelDisplayedRows={({ from, to, count }) =>
-              t("displayed_rows", { from, to, count })
-            }
-            rowsPerPageOptions={[10, 20, 50, 100]}
-            component="div"
-            count={total}
-            rowsPerPage={pageSize}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            color={"primary"}
-            nextIconButtonProps={{ color: "primary" }}
-            backIconButtonProps={{ color: "primary" }}
-          />
-        </Grid>
-      )}
+          {total > 0 && (
+            <HapticTablePagination
+              labelRowsPerPage={t("rows_per_page")}
+              labelDisplayedRows={({ from, to, count }) =>
+                t("displayed_rows", { from, to, count })
+              }
+              rowsPerPageOptions={[10, 20, 50, 100]}
+              component="div"
+              count={total}
+              rowsPerPage={pageSize}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              color={"primary"}
+              nextIconButtonProps={{ color: "primary" }}
+              backIconButtonProps={{ color: "primary" }}
+              sx={{ borderTop: 1, borderColor: "outline.main" }}
+            />
+          )}
+        </Paper>
+      </Grid>
     </StandardPageLayout>
   )
 }

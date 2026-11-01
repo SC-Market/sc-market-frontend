@@ -34,3 +34,52 @@ export function getNotificationIcon(action: string): string {
 
   return iconMap[action] || "notifications"
 }
+
+/** The inbox's day groups, newest first. */
+export type NotificationDayGroup = "today" | "yesterday" | "week" | "older"
+
+const DAY_GROUP_ORDER: NotificationDayGroup[] = [
+  "today",
+  "yesterday",
+  "week",
+  "older",
+]
+
+function startOfLocalDay(d: Date): number {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()
+}
+
+/** Which day group a notification's timestamp falls in, in local time. */
+export function notificationDayGroup(
+  timestamp: string | Date,
+  now: Date = new Date(),
+): NotificationDayGroup {
+  const day = startOfLocalDay(new Date(timestamp))
+  const today = startOfLocalDay(now)
+  const DAY = 24 * 60 * 60 * 1000
+  if (day >= today) return "today"
+  if (day >= today - DAY) return "yesterday"
+  if (day >= today - 6 * DAY) return "week"
+  return "older"
+}
+
+/**
+ * Splits a page of notifications (already newest first) into day groups,
+ * keeping their order and dropping empty groups.
+ */
+export function groupNotificationsByDay<T extends { timestamp: string }>(
+  items: T[],
+  now: Date = new Date(),
+): { group: NotificationDayGroup; items: T[] }[] {
+  const buckets = new Map<NotificationDayGroup, T[]>()
+  for (const item of items) {
+    const g = notificationDayGroup(item.timestamp, now)
+    const list = buckets.get(g)
+    if (list) list.push(item)
+    else buckets.set(g, [item])
+  }
+  return DAY_GROUP_ORDER.filter((g) => buckets.has(g)).map((g) => ({
+    group: g,
+    items: buckets.get(g)!,
+  }))
+}

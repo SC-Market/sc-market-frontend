@@ -682,7 +682,32 @@
       "spectrum_cleared": "管理員移除了你帳號的 RSI 連結。請在設定中重新驗證你的 RSI 帳號。",
       "spectrum_set": "管理員更新了你帳號的 RSI 連結。",
       "username_released": "管理員釋出了你的使用者名稱。你現在的使用者名稱是 {{username}}。在設定中使用「同步名稱」可取回你目前的 RSI 名稱。"
-    }
+    },
+    "actions": "通知操作",
+    "unread": "未讀",
+    "groups": {
+      "today": "今天",
+      "yesterday": "昨天",
+      "week": "本週稍早",
+      "older": "更早"
+    },
+    "scope": {
+      "all": "全部",
+      "personal": "個人",
+      "shop": "商店",
+      "label": "顯示以下通知"
+    },
+    "filter_by_shop": "依商店篩選",
+    "all_shops": "所有商店",
+    "clear_all_confirm_title": "清除所有通知？",
+    "clear_all_confirm_body": "這會刪除所有通知（無論是否已讀），且無法復原。",
+    "clear_all_confirm": "全部清除",
+    "unread_count_one": "{{count}} 則未讀",
+    "unread_count_other": "{{count}} 則未讀",
+    "all_caught_up": "已全部看完",
+    "empty_filtered": "此篩選條件下沒有通知",
+    "empty_filtered_description": "試試查看全部通知。",
+    "show_all": "顯示全部"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "爲此帖點贊"
@@ -1138,7 +1163,42 @@
       "totalDevices_plural": "共 {{count}} 部裝置",
       "unknownDevice": "未知裝置",
       "unsubscribe": "取消訂閱",
-      "unsubscribed": "已成功取消訂閱推播通知"
+      "unsubscribed": "已成功取消訂閱推播通知",
+      "subscribeFailed": "無法開啟推播通知：{{reason}}",
+      "permissionDismissed": "瀏覽器未開啟通知。請重試並選擇「允許」。",
+      "unsubscribeFailed": "無法移除該裝置，請重試。",
+      "installAccepted": "正在安裝 SC Market。你可以在這裡或 App 中開啟推播通知。",
+      "state": {
+        "checking": "檢查中…",
+        "unavailable": "無法使用",
+        "needsInstall": "需要安裝 App",
+        "unsupported": "不支援",
+        "blocked": "已封鎖",
+        "off": "此裝置已關閉",
+        "on": "此裝置已開啟"
+      },
+      "iosIntro": "在 iPhone 和 iPad 上，只有加入主畫面的 SC Market App 才能接收推播通知（iOS 16.4 或以上）。",
+      "unsupportedHelp": "此瀏覽器無法接收推播通知。請試試最新版的 Chrome、Edge、Firefox 或 Safari。",
+      "deniedIntro": "此瀏覽器已封鎖 SC Market 的通知。",
+      "offIntro": "即使沒有開啟 SC Market，也能在此裝置上收到訂單、報價和訊息提醒。",
+      "onIntro": "此裝置會收到你在上方開啟的推播通知。",
+      "thisDevice": "此裝置",
+      "appInstalled": "已安裝 App",
+      "iosStepsLabel": "如何將 SC Market 加入主畫面",
+      "iosStep1": "在 Safari 中點一下「分享」按鈕",
+      "iosStep2": "向下捲動並點一下「加入主畫面」",
+      "iosStep3": "從主畫面開啟 SC Market，回到此頁面並點一下「啟用推播通知」。",
+      "deniedTitle": "重新開啟方式",
+      "deniedHelp": {
+        "ios": "打開「設定」App，進入「通知」，選擇 SC Market 並開啟「允許通知」。",
+        "android": "在 Chrome 中開啟 ⋮ 選單，依序進入「設定」、「網站設定」、「通知」，允許 sc-market.space。若是已安裝的 App，長按圖示，進入「應用程式資訊」、「通知」。",
+        "safari": "在 Safari 中打開「設定」，進入「網站」、「通知」，將 sc-market.space 設為「允許」。",
+        "firefox": "點擊網址列左側的圖示，清除被封鎖的通知權限，然後重新載入此頁面。",
+        "chromium": "點擊網址列左側的圖示，開啟「網站設定」，將通知設為「允許」，然後重新載入此頁面。"
+      },
+      "installApp": "安裝 App",
+      "otherDevicesTitle": "其他已開啟推播的裝置",
+      "removeDeviceNamed": "移除 {{device}}"
     },
     "scmdb": {
       "connect": "連接 SCMDB",
@@ -4617,7 +4677,10 @@
   },
   "navbar": {
     "cart": "購物車",
-    "toggle_drawer": "切換側邊欄"
+    "toggle_drawer": "切換側邊欄",
+    "notifications": "通知",
+    "notificationsUnread_one": "通知，{{count}} 則未讀",
+    "notificationsUnread_other": "通知，{{count}} 則未讀"
   },
   "Off Course": "warning",
   "offerTrend": {

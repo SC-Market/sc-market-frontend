@@ -3138,7 +3138,10 @@
   },
   "navbar": {
     "cart": "Cart",
-    "toggle_drawer": "Toggle sidebar"
+    "toggle_drawer": "Toggle sidebar",
+    "notifications": "Notifications",
+    "notificationsUnread_one": "Notifications, {{count}} unread",
+    "notificationsUnread_other": "Notifications, {{count}} unread"
   },
   "navigation": {
     "goBack": "Go Back"
@@ -3199,7 +3202,32 @@
       "spectrum_cleared": "An admin removed the RSI link from your account. Verify your RSI account again in Settings.",
       "spectrum_set": "An admin updated the RSI link on your account.",
       "username_released": "An admin released your username. Your username is now {{username}}. Use Sync handle in Settings to get your current RSI handle back."
-    }
+    },
+    "actions": "Notification actions",
+    "unread": "Unread",
+    "groups": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "week": "Earlier this week",
+      "older": "Older"
+    },
+    "scope": {
+      "all": "All",
+      "personal": "Personal",
+      "shop": "Shop",
+      "label": "Show notifications for"
+    },
+    "filter_by_shop": "Filter by shop",
+    "all_shops": "All shops",
+    "clear_all_confirm_title": "Clear all notifications?",
+    "clear_all_confirm_body": "This deletes every notification, read or not. It can't be undone.",
+    "clear_all_confirm": "Clear all",
+    "unread_count_one": "{{count}} unread",
+    "unread_count_other": "{{count}} unread",
+    "all_caught_up": "You're all caught up",
+    "empty_filtered": "Nothing here for this filter",
+    "empty_filtered_description": "Try all notifications instead.",
+    "show_all": "Show all"
   },
   "Off Course": "warning",
   "OfferDetailsArea": {
@@ -4573,7 +4601,42 @@
       "totalDevices_plural": "{{count}} total devices",
       "unknownDevice": "Unknown Device",
       "unsubscribe": "Unsubscribe",
-      "unsubscribed": "Successfully unsubscribed from push notifications"
+      "unsubscribed": "Successfully unsubscribed from push notifications",
+      "subscribeFailed": "Couldn't turn on push notifications: {{reason}}",
+      "permissionDismissed": "Your browser didn't turn notifications on. Try again and choose Allow.",
+      "unsubscribeFailed": "Couldn't remove that device. Try again.",
+      "installAccepted": "Installing SC Market. You can turn on push notifications here or in the app.",
+      "state": {
+        "checking": "Checking…",
+        "unavailable": "Unavailable",
+        "needsInstall": "Needs the app",
+        "unsupported": "Not supported",
+        "blocked": "Blocked",
+        "off": "Off on this device",
+        "on": "On for this device"
+      },
+      "iosIntro": "On iPhone and iPad, push notifications only work in the SC Market app on your Home Screen (iOS 16.4 or later).",
+      "unsupportedHelp": "This browser can't receive push notifications. Try a current version of Chrome, Edge, Firefox or Safari.",
+      "deniedIntro": "Notifications from SC Market are blocked in this browser.",
+      "offIntro": "Get order, offer and message alerts on this device, even when SC Market isn't open.",
+      "onIntro": "This device gets the push notifications you've turned on above.",
+      "thisDevice": "This device",
+      "appInstalled": "App installed",
+      "iosStepsLabel": "How to add SC Market to your Home Screen",
+      "iosStep1": "In Safari, tap the Share button",
+      "iosStep2": "Scroll down and tap Add to Home Screen",
+      "iosStep3": "Open SC Market from your Home Screen, come back to this page and tap Enable push notifications.",
+      "deniedTitle": "To turn them back on",
+      "deniedHelp": {
+        "ios": "Open the Settings app, go to Notifications, choose SC Market and turn on Allow Notifications.",
+        "android": "In Chrome, open the ⋮ menu, then Settings, Site settings, Notifications, and allow sc-market.space. For the installed app, long-press its icon, then App info, Notifications.",
+        "safari": "In Safari, open Settings, then Websites, Notifications, and set sc-market.space to Allow.",
+        "firefox": "Click the icon left of the address bar, clear the blocked Notifications permission, then reload this page.",
+        "chromium": "Click the icon left of the address bar, open Site settings, set Notifications to Allow, then reload this page."
+      },
+      "installApp": "Install the app",
+      "otherDevicesTitle": "Other devices with push on",
+      "removeDeviceNamed": "Remove {{device}}"
     },
     "scmdb": {
       "connect": "Connect SCMDB",

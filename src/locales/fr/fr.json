@@ -684,7 +684,33 @@
       "spectrum_cleared": "Un admin a retiré le lien RSI de ton compte. Vérifie de nouveau ton compte RSI dans les paramètres.",
       "spectrum_set": "Un admin a mis à jour le lien RSI de ton compte.",
       "username_released": "Un admin a libéré ton nom d'utilisateur. Ton nom d'utilisateur est maintenant {{username}}. Utilise « Synchroniser le pseudo » dans les paramètres pour récupérer ton pseudo RSI actuel."
-    }
+    },
+    "actions": "Actions de la notification",
+    "unread": "Non lue",
+    "groups": {
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "week": "Cette semaine",
+      "older": "Plus anciennes"
+    },
+    "scope": {
+      "all": "Toutes",
+      "personal": "Personnelles",
+      "shop": "Boutique",
+      "label": "Afficher les notifications pour"
+    },
+    "filter_by_shop": "Filtrer par boutique",
+    "all_shops": "Toutes les boutiques",
+    "clear_all_confirm_title": "Effacer toutes les notifications ?",
+    "clear_all_confirm_body": "Toutes les notifications seront supprimées, lues ou non. Impossible d'annuler.",
+    "clear_all_confirm": "Tout effacer",
+    "unread_count_one": "{{count}} non lue",
+    "unread_count_many": "{{count}} non lues",
+    "unread_count_other": "{{count}} non lues",
+    "all_caught_up": "Vous êtes à jour",
+    "empty_filtered": "Rien pour ce filtre",
+    "empty_filtered_description": "Affichez plutôt toutes les notifications.",
+    "show_all": "Tout afficher"
   },
   "onboarding": {
     "welcome": "Bienvenue sur SC Market",
@@ -1197,7 +1223,42 @@
       "totalDevices_plural": "{{count}} appareils au total",
       "unknownDevice": "Appareil inconnu",
       "unsubscribe": "Se désabonner",
-      "unsubscribed": "Désabonnement des notifications push réussi"
+      "unsubscribed": "Désabonnement des notifications push réussi",
+      "subscribeFailed": "Impossible d'activer les notifications push : {{reason}}",
+      "permissionDismissed": "Votre navigateur n'a pas activé les notifications. Réessayez et choisissez Autoriser.",
+      "unsubscribeFailed": "Impossible de retirer cet appareil. Réessayez.",
+      "installAccepted": "Installation de SC Market. Vous pouvez activer les notifications push ici ou dans l'appli.",
+      "state": {
+        "checking": "Vérification…",
+        "unavailable": "Indisponible",
+        "needsInstall": "Appli requise",
+        "unsupported": "Non pris en charge",
+        "blocked": "Bloquées",
+        "off": "Désactivées sur cet appareil",
+        "on": "Activées sur cet appareil"
+      },
+      "iosIntro": "Sur iPhone et iPad, les notifications push ne fonctionnent que dans l'appli SC Market de votre écran d'accueil (iOS 16.4 ou ultérieur).",
+      "unsupportedHelp": "Ce navigateur ne peut pas recevoir de notifications push. Essayez une version récente de Chrome, Edge, Firefox ou Safari.",
+      "deniedIntro": "Les notifications de SC Market sont bloquées dans ce navigateur.",
+      "offIntro": "Recevez les alertes de commandes, d'offres et de messages sur cet appareil, même quand SC Market n'est pas ouvert.",
+      "onIntro": "Cet appareil reçoit les notifications push activées ci-dessus.",
+      "thisDevice": "Cet appareil",
+      "appInstalled": "Appli installée",
+      "iosStepsLabel": "Ajouter SC Market à l'écran d'accueil",
+      "iosStep1": "Dans Safari, touchez le bouton Partager",
+      "iosStep2": "Faites défiler et touchez Sur l'écran d'accueil",
+      "iosStep3": "Ouvrez SC Market depuis l'écran d'accueil, revenez sur cette page et touchez Activer les notifications push.",
+      "deniedTitle": "Pour les réactiver",
+      "deniedHelp": {
+        "ios": "Ouvrez l'app Réglages, allez dans Notifications, choisissez SC Market et activez Autoriser les notifications.",
+        "android": "Dans Chrome, ouvrez le menu ⋮, puis Paramètres, Paramètres des sites, Notifications, et autorisez sc-market.space. Pour l'appli installée, appuyez longuement sur son icône, puis Infos sur l'appli, Notifications.",
+        "safari": "Dans Safari, ouvrez Réglages, puis Sites web, Notifications, et réglez sc-market.space sur Autoriser.",
+        "firefox": "Cliquez sur l'icône à gauche de la barre d'adresse, retirez le blocage des notifications, puis rechargez cette page.",
+        "chromium": "Cliquez sur l'icône à gauche de la barre d'adresse, ouvrez Paramètres du site, réglez Notifications sur Autoriser, puis rechargez cette page."
+      },
+      "installApp": "Installer l'appli",
+      "otherDevicesTitle": "Autres appareils avec le push activé",
+      "removeDeviceNamed": "Retirer {{device}}"
     },
     "scmdb": {
       "connect": "Connecter SCMDB",
@@ -4729,7 +4790,11 @@
   },
   "navbar": {
     "cart": "Panier",
-    "toggle_drawer": "Basculer la barre latérale"
+    "toggle_drawer": "Basculer la barre latérale",
+    "notifications": "Notifications",
+    "notificationsUnread_one": "Notifications, {{count}} non lue",
+    "notificationsUnread_many": "Notifications, {{count}} non lues",
+    "notificationsUnread_other": "Notifications, {{count}} non lues"
   },
   "Off Course": "warning",
   "offerTrend": {
