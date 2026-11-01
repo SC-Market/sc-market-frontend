@@ -5887,6 +5887,24 @@
     "landing": {
       "title": "Escaparates de orgs",
       "subtitle": "Tiendas, servicios y reclutamiento de orgs verificadas."
+    },
+    "onboarding": {
+      "verify": "Verifica tu org con su página de RSI",
+      "verifyAction": "Verificar",
+      "shop": "Abre la tienda de la org",
+      "shopAction": "Abrir una tienda",
+      "listing": "Publica tu primer anuncio",
+      "listingAction": "Añadir un anuncio",
+      "discord": "Conecta Discord para que los pedidos lleguen a tu servidor",
+      "discordAction": "Configurar Discord",
+      "members": "Suma 3 o más miembros",
+      "membersAction": "Invitar miembros",
+      "branding": "Desbloquea la marca",
+      "brandingAction": "Ver qué falta",
+      "title": "Prepara tu escaparate",
+      "done": "Todo listo. Comparte el enlace de tu escaparate o pon el widget de abajo en tu web.",
+      "intro": "Cada paso lleva unos minutos: intenta tener tu primer anuncio en menos de 15.",
+      "progress": "Progreso de la configuración"
     }
   }
 }

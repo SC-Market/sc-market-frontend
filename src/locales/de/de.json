@@ -5854,6 +5854,24 @@
     "landing": {
       "title": "Org-Storefronts",
       "subtitle": "Shops, Dienstleistungen und Rekrutierung verifizierter Orgs."
+    },
+    "onboarding": {
+      "verify": "Verifiziere deine Org über ihre RSI-Seite",
+      "verifyAction": "Verifizieren",
+      "shop": "Eröffne den Shop der Org",
+      "shopAction": "Shop eröffnen",
+      "listing": "Erstelle dein erstes Angebot",
+      "listingAction": "Angebot erstellen",
+      "discord": "Verbinde Discord, damit Bestellungen auf deinem Server landen",
+      "discordAction": "Discord einrichten",
+      "members": "Hol dir 3 oder mehr Mitglieder",
+      "membersAction": "Mitglieder einladen",
+      "branding": "Branding freischalten",
+      "brandingAction": "Sehen, was fehlt",
+      "title": "Richte deinen Storefront ein",
+      "done": "Alles erledigt. Teile den Link zu deinem Storefront oder bau das Widget unten auf deiner Website ein.",
+      "intro": "Jeder Schritt dauert nur ein paar Minuten: Ziel ist dein erstes Angebot innerhalb von 15.",
+      "progress": "Fortschritt der Einrichtung"
     }
   }
 }

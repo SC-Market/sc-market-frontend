@@ -5854,6 +5854,24 @@
     "landing": {
       "title": "Org storefronts",
       "subtitle": "Verified orgs' shops, services and recruiting."
+    },
+    "onboarding": {
+      "verify": "Verify your org through its RSI page",
+      "verifyAction": "Verify",
+      "shop": "Open the org's shop",
+      "shopAction": "Open a shop",
+      "listing": "Add your first listing",
+      "listingAction": "Add a listing",
+      "discord": "Connect Discord, so orders land in your server",
+      "discordAction": "Set up Discord",
+      "members": "Bring in 3 or more members",
+      "membersAction": "Invite members",
+      "branding": "Unlock branding",
+      "brandingAction": "See what's missing",
+      "title": "Set up your storefront",
+      "done": "All set. Share your storefront link, or put the widget below on your site.",
+      "intro": "Each step takes a few minutes: aim for your first listing within 15.",
+      "progress": "Setup progress"
     }
   }
 }

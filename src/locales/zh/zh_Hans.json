@@ -5859,6 +5859,24 @@
     "landing": {
       "title": "组织店面",
       "subtitle": "已验证组织的店铺、服务和招募。"
+    },
+    "onboarding": {
+      "verify": "通过 RSI 页面验证你的组织",
+      "verifyAction": "验证",
+      "shop": "开设组织店铺",
+      "shopAction": "开设店铺",
+      "listing": "发布第一个商品",
+      "listingAction": "添加商品",
+      "discord": "连接 Discord，让订单直接进入你的服务器",
+      "discordAction": "设置 Discord",
+      "members": "拥有 3 名或更多成员",
+      "membersAction": "邀请成员",
+      "branding": "解锁品牌功能",
+      "brandingAction": "查看缺少什么",
+      "title": "设置你的店面",
+      "done": "全部完成。分享你的店面链接，或把下面的小部件放到你的网站上。",
+      "intro": "每一步只需几分钟：争取在 15 分钟内发布第一个商品。",
+      "progress": "设置进度"
     }
   }
 }

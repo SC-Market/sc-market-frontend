@@ -5887,6 +5887,24 @@
     "landing": {
       "title": "Vitrines d'orgs",
       "subtitle": "Boutiques, services et recrutement d'orgs vérifiées."
+    },
+    "onboarding": {
+      "verify": "Vérifiez votre org via sa page RSI",
+      "verifyAction": "Vérifier",
+      "shop": "Ouvrez la boutique de l'org",
+      "shopAction": "Ouvrir une boutique",
+      "listing": "Publiez votre première annonce",
+      "listingAction": "Ajouter une annonce",
+      "discord": "Connectez Discord pour recevoir les commandes sur votre serveur",
+      "discordAction": "Configurer Discord",
+      "members": "Réunissez 3 membres ou plus",
+      "membersAction": "Inviter des membres",
+      "branding": "Débloquez la personnalisation",
+      "brandingAction": "Voir ce qui manque",
+      "title": "Configurez votre vitrine",
+      "done": "Tout est prêt. Partagez le lien de votre vitrine ou intégrez le widget ci-dessous à votre site.",
+      "intro": "Chaque étape prend quelques minutes : visez votre première annonce en moins de 15.",
+      "progress": "Progression de la configuration"
     }
   }
 }

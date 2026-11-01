@@ -5853,6 +5853,24 @@
     "landing": {
       "title": "組織のストアフロント",
       "subtitle": "認証済み組織のショップ、サービス、メンバー募集。"
+    },
+    "onboarding": {
+      "verify": "RSI ページで組織を認証する",
+      "verifyAction": "認証する",
+      "shop": "組織のショップを開く",
+      "shopAction": "ショップを開く",
+      "listing": "最初の出品を追加する",
+      "listingAction": "出品を追加",
+      "discord": "Discord を連携して、注文をサーバーに届ける",
+      "discordAction": "Discord を設定",
+      "members": "メンバーを3人以上にする",
+      "membersAction": "メンバーを招待",
+      "branding": "ブランディングを解放する",
+      "brandingAction": "足りないものを見る",
+      "title": "ストアフロントを準備しましょう",
+      "done": "準備完了です。ストアフロントのリンクを共有するか、下のウィジェットをサイトに設置しましょう。",
+      "intro": "各ステップは数分で終わります。15分以内の最初の出品を目指しましょう。",
+      "progress": "設定の進み具合"
     }
   }
 }

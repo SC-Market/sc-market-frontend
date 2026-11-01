@@ -5853,6 +5853,24 @@
     "landing": {
       "title": "組織店面",
       "subtitle": "已驗證組織的店鋪、服務和招募。"
+    },
+    "onboarding": {
+      "verify": "透過 RSI 頁面驗證你的組織",
+      "verifyAction": "驗證",
+      "shop": "開設組織店鋪",
+      "shopAction": "開設店鋪",
+      "listing": "上架第一個商品",
+      "listingAction": "新增商品",
+      "discord": "連接 Discord，讓訂單直接進入你的伺服器",
+      "discordAction": "設定 Discord",
+      "members": "擁有 3 名或更多成員",
+      "membersAction": "邀請成員",
+      "branding": "解鎖品牌功能",
+      "brandingAction": "查看缺少什麼",
+      "title": "設定你的店面",
+      "done": "全部完成。分享你的店面連結，或把下面的小工具放到你的網站上。",
+      "intro": "每一步只需幾分鐘：爭取在 15 分鐘內上架第一個商品。",
+      "progress": "設定進度"
     }
   }
 }
