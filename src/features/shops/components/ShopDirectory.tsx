@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useSearchParams } from "react-router-dom"
 import { linkedPaginationItem } from "../../../components/pagination/linkedPaginationItem"
 import { MARKET_PATHS } from "../../../routes/paths"
@@ -38,13 +39,14 @@ interface SortConfig {
 }
 
 const SORT_OPTIONS: SortConfig[] = [
-  { label: "Top Rated", sortBy: "rating", sortOrder: "desc" },
-  { label: "Most Sales", sortBy: "total_sales", sortOrder: "desc" },
-  { label: "Newest", sortBy: "created_at", sortOrder: "desc" },
-  { label: "Name A-Z", sortBy: "name", sortOrder: "asc" },
+  { label: "shops.directory.sortTopRated", sortBy: "rating", sortOrder: "desc" },
+  { label: "shops.directory.sortMostSales", sortBy: "total_sales", sortOrder: "desc" },
+  { label: "shops.directory.sortNewest", sortBy: "created_at", sortOrder: "desc" },
+  { label: "shops.directory.sortNameAZ", sortBy: "name", sortOrder: "asc" },
 ]
 
 export function ShopDirectory() {
+  const { t } = useTranslation()
   const [search, setSearch] = useState("")
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [sortIndex, setSortIndex] = useState(0)
@@ -98,13 +100,13 @@ export function ShopDirectory() {
       </Helmet>
       {/* Header */}
       <Typography variant="h4" component="h1" fontWeight={700} sx={{ mb: 3 }}>
-        Browse Shops
+        {t("shops.directory.title")}
       </Typography>
 
       {/* Search + Sort */}
       <Box sx={{ display: "flex", gap: 2, mb: 2, flexWrap: "wrap" }}>
         <TextField
-          placeholder="Search shops..."
+          placeholder={t("shops.directory.search")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           InputProps={{
@@ -119,10 +121,10 @@ export function ShopDirectory() {
         <TextField
           select
           size="medium"
-          inputProps={{ "aria-label": "Sort shops" }}
+          inputProps={{ "aria-label": t("shops.directory.sortLabel") }}
           SelectProps={{
             SelectDisplayProps: {
-              "aria-label": "Sort shops",
+              "aria-label": t("shops.directory.sortLabel"),
               "aria-labelledby": undefined,
             },
           }}
@@ -132,7 +134,7 @@ export function ShopDirectory() {
         >
           {SORT_OPTIONS.map((option, idx) => (
             <MenuItem key={option.sortBy} value={idx}>
-              {option.label}
+              {t(option.label)}
             </MenuItem>
           ))}
         </TextField>
@@ -188,7 +190,7 @@ export function ShopDirectory() {
             sx={{ fontSize: 64, color: "text.secondary", opacity: 0.5 }}
           />
           <Typography variant="h6" color="text.secondary">
-            No shops found
+            {t("shops.directory.empty")}
           </Typography>
         </Box>
       )}

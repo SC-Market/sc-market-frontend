@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { SidebarV2 } from "../sidebar/SidebarV2"
 import { Box } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
@@ -100,6 +101,7 @@ function MainContent(props: {
   children: React.ReactNode
   floating: React.ReactNode
 }) {
+  const { t } = useTranslation()
   const bottomNavHeight = useBottomNavHeight()
   const readyAttributes = usePageReadyAttributes()
   return (
@@ -107,7 +109,7 @@ function MainContent(props: {
       component="main"
       id="main-content"
       role="main"
-      aria-label="Main content"
+      aria-label={t("ui.mainContent")}
       {...readyAttributes}
       sx={{
         display: "flex",

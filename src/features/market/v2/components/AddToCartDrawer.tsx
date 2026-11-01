@@ -141,14 +141,14 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
             >
               {variants.map((v) => (
                 <MenuItem key={v.variant_id} value={v.variant_id}>
-                  {v.display_name || "Standard"} — {Number(v.price).toLocaleString()} aUEC ({formatQuantity(v.quantity, listingData.listing.quantity_unit)} avail.)
+                  {v.display_name || t("marketV2.standardVariant")} — {Number(v.price).toLocaleString()} aUEC ({t("marketV2.availShort", { quantity: formatQuantity(v.quantity, listingData.listing.quantity_unit) })})
                 </MenuItem>
               ))}
             </TextField>
           ) : variants.length === 1 ? (
             <Box sx={{ p: 1.5, bgcolor: "action.hover", borderRadius: 1 }}>
               <Typography variant="body2">
-                {variants[0].display_name || "Standard"} — {Number(variants[0].price).toLocaleString()} aUEC
+                {variants[0].display_name || t("marketV2.standardVariant")} — {Number(variants[0].price).toLocaleString()} aUEC
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {formatQuantity(variants[0].quantity, listingData.listing.quantity_unit)} {t("cart.available", "available")}
@@ -213,7 +213,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
                     sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 1, bgcolor: "action.hover", borderRadius: 1 }}
                   >
                     <Box sx={{ minWidth: 0 }}>
-                      <Typography variant="body2" noWrap>{ci.variant?.display_name || "Standard"}</Typography>
+                      <Typography variant="body2" noWrap>{ci.variant?.display_name || t("marketV2.standardVariant")}</Typography>
                       <Typography variant="caption" color="text.secondary">
                         {ci.quantity} × {Number(ci.price_per_unit).toLocaleString()} aUEC = {Number(ci.quantity * ci.price_per_unit).toLocaleString()} aUEC
                       </Typography>
@@ -223,7 +223,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
                       onClick={() => handleRemoveCartItem(ci.cart_item_id)}
                       color="error"
                       aria-label={t("cart.removeItem", "Remove {{title}} from cart", {
-                        title: `${listingData.listing.title} (${ci.variant?.display_name || "Standard"})`,
+                        title: `${listingData.listing.title} (${ci.variant?.display_name || t("marketV2.standardVariant")})`,
                       })}
                     >
                       <DeleteOutline fontSize="small" />

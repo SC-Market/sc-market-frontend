@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React, { Component, ReactElement, Suspense } from "react"
 import { Grid, GridProps } from "@mui/material"
 
@@ -21,6 +22,11 @@ interface LazySectionProps<P extends Record<string, unknown> = Record<string, un
 interface ErrorBoundaryState {
   hasError: boolean
   error: Error | null
+}
+
+function SectionErrorText() {
+  const { t } = useTranslation()
+  return <>{t("ui.sectionLoadError")}</>
 }
 
 /**
@@ -61,7 +67,7 @@ class SectionErrorBoundary extends Component<
       return (
         <Grid item xs={12}>
           <div style={{ padding: "16px", color: "red" }}>
-            An error occurred while loading this section.
+            <SectionErrorText />
           </div>
         </Grid>
       )

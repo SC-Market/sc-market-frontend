@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React, { useState } from "react"
 import { FlatSection } from "../paper/Section"
 import {
@@ -53,6 +54,7 @@ export function OrganizationPreferenceSelector({
   type,
   isLoading = false,
 }: OrganizationPreferenceSelectorProps) {
+  const { t } = useTranslation()
   const [selectedOrgId, setSelectedOrgId] = useState<string>(
     organizations[0]?.contractor_id || "",
   )
@@ -67,17 +69,17 @@ export function OrganizationPreferenceSelector({
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <FlatSection title="Organization Notifications">
+        <FlatSection title={t("settingsUi.orgNotifications")}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <InputLabel id="org-select-label">
-                  Select Organization
+                  {t("settingsUi.selectOrg")}
                 </InputLabel>
                 <Select
                   labelId="org-select-label"
                   value={selectedOrgId}
-                  label="Select Organization"
+                  label={t("settingsUi.selectOrg")}
                   onChange={(e) => setSelectedOrgId(e.target.value)}
                 >
                   {organizations.map((org) => (
@@ -95,7 +97,7 @@ export function OrganizationPreferenceSelector({
       {selectedOrg && (
         <Grid item xs={12}>
           <PreferenceSection
-            title={`Notifications for ${selectedOrg.name}`}
+            title={t("settingsUi.notificationsFor", { name: selectedOrg.name })}
             preferences={selectedOrgPreferences}
             notificationTypes={notificationTypes}
             onPreferenceChange={(pref, enabled) =>

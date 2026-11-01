@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { Link as RouterLink } from "react-router-dom"
 import {
   Avatar,
@@ -16,6 +17,7 @@ import { ORG_PATHS, PATHS } from "../../routes/paths"
 import { usePageReady } from "../../components/metadata/PageReady"
 
 export function MyOrgs() {
+  const { t } = useTranslation()
   // No data of its own (the profile is already loaded): ready on mount.
   usePageReady(false)
   const { data: profile } = useGetUserProfileQuery()
@@ -24,24 +26,24 @@ export function MyOrgs() {
   return (
     <Container maxWidth="lg" sx={{ pt: 12, pb: 4 }}>
       <Typography variant="h4" fontWeight={700} sx={{ mb: 3 }}>
-        My Organizations
+        {t("orgsUi.myOrgs")}
       </Typography>
 
       {orgs.length === 0 ? (
         <Card sx={{ textAlign: "center", py: 6 }}>
           <Groups sx={{ fontSize: 64, color: "text.secondary", mb: 2 }} />
           <Typography variant="h6" color="text.secondary">
-            You're not a member of any organizations
+            {t("orgsUi.noOrgs")}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Join or create an organization to collaborate with others
+            {t("orgsUi.noOrgsBody")}
           </Typography>
           <Button
             variant="contained"
             component={RouterLink}
             to={PATHS.orgRegister}
           >
-            Create Organization
+            {t("orgsUi.createOrg")}
           </Button>
         </Card>
       ) : (
@@ -72,7 +74,7 @@ export function MyOrgs() {
                     component={RouterLink}
                     to={ORG_PATHS.profile(org.spectrum_id)}
                   >
-                    View
+                    {t("orgsUi.view")}
                   </Button>
                   <Button
                     size="small"
@@ -81,7 +83,7 @@ export function MyOrgs() {
                     component={RouterLink}
                     to={ORG_PATHS.manage(org.spectrum_id)}
                   >
-                    Manage
+                    {t("shops.mine.manage")}
                   </Button>
                 </CardActions>
               </Card>

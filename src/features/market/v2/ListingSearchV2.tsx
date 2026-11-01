@@ -212,7 +212,7 @@ export function ListingSearchV2() {
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                   <Box sx={{ flex: 1 }}>
                     <UnifiedSearchBar tokens={marketSearchTokens} onChange={handleMarketTokensChange}
-                      mode="market" placeholder="Search items, categories..." />
+                      mode="market" placeholder={t("marketV2.searchItems")} />
                   </Box>
                   <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                 </Box>
@@ -277,7 +277,7 @@ export function ListingSearchV2() {
                       tokens={marketSearchTokens}
                       onChange={handleMarketTokensChange}
                       mode="market"
-                      placeholder="Search items, categories, sellers..."
+                      placeholder={t("marketV2.searchItemsSellers")}
                     />
                   </Box>
                   <ViewModeToggle mode={viewMode} onChange={setViewMode} />
@@ -704,6 +704,7 @@ export function MarketSidebarV2() {
  * filter the mixed result set by quality tier.
  */
 function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
+  const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const [searchParams] = useSearchParams();
 
@@ -749,7 +750,7 @@ function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
           fontWeight="bold"
           sx={{ mb: theme.layoutSpacing?.text ?? 1 }}
         >
-          Quality Value
+          {t("CreateListingV2.qualityValue")}
         </Typography>
         {qualityBands && qualityBands.length > 0 ? (
           <Grid container spacing={theme.layoutSpacing?.layout ?? 1}>
@@ -758,7 +759,7 @@ function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
                 bands={qualityBands}
                 value={valueMin}
                 onChange={handleValueMinChange}
-                label="Min Value"
+                label={t("marketV2.minValue")}
                 allowAny
                 size="small"
                 fullWidth
@@ -769,7 +770,7 @@ function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
                 bands={qualityBands}
                 value={valueMax}
                 onChange={handleValueMaxChange}
-                label="Max Value"
+                label={t("marketV2.maxValue")}
                 allowAny
                 size="small"
                 fullWidth
@@ -783,7 +784,7 @@ function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
                 fullWidth
                 size="small"
                 color="secondary"
-                label="Min Value"
+                label={t("marketV2.minValue")}
                 {...filters.bindText("quality_value_min")}
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0, max: 1000 }}
               />
@@ -793,7 +794,7 @@ function QualityFilterWrapper({ filters }: { filters: AutoApplySearchParams }) {
                 fullWidth
                 size="small"
                 color="secondary"
-                label="Max Value"
+                label={t("marketV2.maxValue")}
                 {...filters.bindText("quality_value_max")}
                 inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0, max: 1000 }}
               />
@@ -1023,7 +1024,7 @@ export function ListingCardV2({ listing, priority = false }: ListingCardV2Props)
                     : { height: 180, aspectRatio: "16/9" }),
                   overflow: "hidden",
                 }}
-                alt={`Image of ${listing.title}`}
+                alt={t("marketV2.imageOf", { name: listing.title })}
               />
               <Box
                 sx={{

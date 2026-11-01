@@ -668,7 +668,6 @@
     "admin_alert": "管理者アラート",
     "clear_all_failed": "通知のクリアに失敗しました",
     "cleared_all": "{{count}} 件の通知をクリアしました",
-    "cleared_all_one": "notifications.cleared_all",
     "cleared_all_other": "{{count}}件の通知を消去しました",
     "click_to_open_link": "クリックしてリンクを開く",
     "delete": "削除",
@@ -676,7 +675,6 @@
     "markAsRead": "既読にする",
     "markAsUnread": "未読にする",
     "marked_all_read": "{{count}} 件の通知を既読にしました",
-    "marked_all_read_one": "notifications.marked_all_read",
     "marked_all_read_other": "{{count}}件の通知を既読にしました",
     "new_admin_alert": "新しい管理者アラートを受信しました",
     "new_offer_message_from": "新しいオファーメッセージの送信者",
@@ -770,7 +768,10 @@
       "description": "新しいメッセージ、注文、オファーの即時アラートをこのデバイスで受け取ります。",
       "prefsTitle": "プッシュ設定",
       "title": "プッシュ通知"
-    }
+    },
+    "setupFailed": "セットアップを完了できませんでした",
+    "availabilityFailed": "対応可能時間を保存できませんでした",
+    "emailFailed": "メールアドレスを追加できませんでした"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "この投稿を高く評価"
@@ -1217,9 +1218,7 @@
       "notRequested": "未リクエスト",
       "organizationPreferences": "組織設定",
       "otherDevices": "他{{count}}台のデバイス",
-      "otherDevices_one": "settings.pushNotifications.otherDevices",
       "otherDevices_other": "他のデバイス{{count}}台",
-      "otherDevices_plural": "他{{count}}台のデバイス",
       "permissionDeniedError": "権限が{{status}}です。ブラウザの設定で通知を有効にしてください。",
       "permissionDeniedMessage": "プッシュ通知を使用するには、ブラウザの設定で通知を有効にしてください。",
       "permissionGrantedMessage": "権限が付与されました！これでプッシュ通知を購読できます。",
@@ -1232,9 +1231,7 @@
       "subscribing": "購読中...",
       "title": "プッシュ通知",
       "totalDevices": "合計{{count}}台のデバイス",
-      "totalDevices_one": "settings.pushNotifications.totalDevices",
       "totalDevices_other": "合計{{count}}台のデバイス",
-      "totalDevices_plural": "合計{{count}}台のデバイス",
       "unknownDevice": "不明なデバイス",
       "unsubscribe": "購読を解除",
       "unsubscribed": "プッシュ通知の購読を解除しました",
@@ -2141,17 +2138,14 @@
     "has_service": "サービスあり",
     "merge_error": "オファーの統合に失敗しました",
     "merge_offers": "オファーを統合（{{count}}）",
-    "merge_offers_one": "OffersViewPaginated.merge_offers",
     "merge_offers_other": "オファーを統合（{{count}}）",
     "merge_offers_combined_cost": "合計費用：{{cost}} aUEC",
     "merge_offers_confirm_body": "{{count}} 件のオファーセッションを統合すると、新しい統合オファーセッションが作成され、選択したセッションは終了します。この操作は取り消せません。",
-    "merge_offers_confirm_body_one": "OffersViewPaginated.merge_offers_confirm_body",
     "merge_offers_confirm_body_other": "{{count}}件のオファーセッションを統合すると、新しい統合オファーセッションが作成され、選択したセッションはクローズされます。この操作は元に戻せません。",
     "merge_offers_confirm_button": "オファーを統合",
     "merge_offers_confirm_cancel": "キャンセル",
     "merge_offers_confirm_title": "オファーセッションを統合しますか？",
     "merge_offers_selected_count": "選択中：{{count}} 件のオファーセッション",
-    "merge_offers_selected_count_one": "OffersViewPaginated.merge_offers_selected_count",
     "merge_offers_selected_count_other": "選択中：{{count}}件のオファーセッション",
     "merge_offers_warning": "選択したすべてのオファーセッションが終了し、1 つの統合オファーセッションに置き換えられます。",
     "merge_success": "オファーを統合しました",
@@ -2295,12 +2289,11 @@
     "searchAndSelect": "ユーザーを検索・選択してグループチャットを作成します",
     "searchPlaceholder": "入力してユーザーを検索",
     "searchUsers": "ユーザーを検索...",
-    "selectedCount": "{{count}} 人のユーザーを選択中",
-    "selectedCount_plural": "{{count}} 人のユーザーを選択中",
     "selectedUsers": "選択したユーザー",
     "selectUsers": "ユーザーを選択してチャットを開始",
     "startNewChat": "新しいチャットを開始",
-    "typeToSearch": "検索するには 3 文字以上入力してください"
+    "typeToSearch": "検索するには 3 文字以上入力してください",
+    "selectedCount_other": "{{count}} 人のユーザーを選択中"
   },
   "MemberBalance": {
     "myBalance": "マイ残高",
@@ -2452,7 +2445,6 @@
     "activeOrders": "アクティブ注文",
     "previousOrders": "過去の注文",
     "anonymousReviewer": "匿名",
-    "inCarts_one": "MarketListingView.inCarts",
     "inCarts_other": "{{count}}人がこの商品をカートに入れています",
     "languages": "言語",
     "noReviewContent": "レビュー内容なし",
@@ -2461,7 +2453,6 @@
     "reviewBy": "投稿者",
     "sellerReviews": "{{seller}} のレビュー",
     "viewAllReviews": "{{count}} 件のレビューをすべて表示",
-    "viewAllReviews_one": "MarketListingView.viewAllReviews",
     "viewAllReviews_other": "{{count}}件のレビューをすべて表示",
     "viewInCart": "カート内で見る",
     "views": "閲覧数"
@@ -2599,7 +2590,6 @@
     "orLower": "以下",
     "orHigher": "以上",
     "addToCart": "カートに追加",
-    "ofAvailable_one": "MarketAggregateView.ofAvailable",
     "ofAvailable_other": "/ 在庫{{count}}個",
     "quantityRequested": "需要（希望価格 ≥ 価格）",
     "stockAvailable": "供給（在庫価格 ≤ 価格）",
@@ -2672,12 +2662,10 @@
     "editListing": "出品を編集",
     "archive": "アーカイブ",
     "bulkArchiveBody": "{{count}}件の出品をアーカイブしようとしています。アーカイブは購入者と公開検索に対して永続的です。アーカイブした出品は「自分の出品」で引き続き表示できます。",
-    "bulkArchiveBody_one": "ItemStock.bulkArchiveBody",
     "bulkArchiveBody_other": "{{count}}件の出品をアーカイブしようとしています。アーカイブすると、購入者や公開検索からは完全に表示されなくなります。アーカイブした出品は「マイ出品」で引き続き確認できます。",
     "bulkArchiveCancel": "キャンセル",
     "bulkArchiveConfirm": "完全にアーカイブ",
     "bulkArchivedSuccess": "{{count}}件の出品をアーカイブしました。",
-    "bulkArchivedSuccess_one": "ItemStock.bulkArchivedSuccess",
     "bulkArchivedSuccess_other": "{{count}}件の出品をアーカイブしました。",
     "bulkArchiveTitle": "選択した出品をアーカイブしますか？",
     "cannotReduceStock": "在庫を減らせません — 対象の在庫はアクティブな注文に確保されています",
@@ -3093,7 +3081,6 @@
     "added": "カートに追加しました",
     "adding": "追加中...",
     "addToCart": "カートに追加",
-    "alreadyInCart_one": "cart.alreadyInCart",
     "alreadyInCart_other": "カートに{{count}}個追加済み",
     "available": "在庫あり",
     "availableNow": "今すぐ入手可能",
@@ -3109,7 +3096,6 @@
     "invalidQty": "数量は 1 以上でなければなりません",
     "itemRemoved": "アイテムをカートから削除しました",
     "nextAvailable": "次回入荷",
-    "othersInCart_one": "cart.othersInCart",
     "othersInCart_other": "他に{{count}}人がこの商品をカートに入れています",
     "priceChanged": "価格が変更されました",
     "priceChangedFrom": "価格が {{old}} から {{new}} aUEC に変更されました",
@@ -3552,7 +3538,6 @@
     "createListingDescription": "出品作成ページに移動します",
     "createMarketListing": "新しいマーケット出品を作成",
     "dataTableDescription": "{{count}}行のデータテーブル",
-    "dataTableDescription_one": "accessibility.dataTableDescription",
     "dataTableDescription_other": "{{count}}行のデータテーブル",
     "decorativeImage": "",
     "defaultListingHelp": "この複数出品で表示するデフォルトの出品を選択してください",
@@ -3561,7 +3546,6 @@
     "delete": "削除",
     "downvoteComment": "このコメントに低評価",
     "downvoteCount": "低評価: {{count}}件",
-    "downvoteCount_one": "accessibility.downvoteCount",
     "downvoteCount_other": "低評価: {{count}}件",
     "edit": "編集",
     "editQuantityHelp": "この在庫アイテムの利用可能数量を編集します",
@@ -3654,7 +3638,6 @@
     "recipientSelector": "受取人セレクター",
     "recipientTypeHelp": "送金先をユーザーまたはコントラクターのどちらにするか選択します",
     "recruitmentUpvoteCount": "高評価: {{count}}件",
-    "recruitmentUpvoteCount_one": "accessibility.recruitmentUpvoteCount",
     "recruitmentUpvoteCount_other": "高評価: {{count}}件",
     "registerShip": "船を登録",
     "registerShipHelp": "選択した船をフリートに登録します",
@@ -3740,7 +3723,6 @@
     "updateAmountInput": "在庫を更新する数量を入力",
     "upvoteComment": "このコメントに高評価",
     "upvoteCount": "高評価: {{count}}件",
-    "upvoteCount_one": "accessibility.upvoteCount",
     "upvoteCount_other": "高評価: {{count}}件",
     "upvoteRecruitmentPost": "この募集投稿に高評価",
     "userAvatar": "{{username}}のアバター",
@@ -3858,7 +3840,6 @@
     "setMessage": "対応可否が設定されています。{{sellerName}}にオファーを送信できます。",
     "submitDisabled": "続行するには対応可否を設定してください"
   },
-  "awaiting-repair": "error",
   "BidAreaV2": {
     "amount": "金額",
     "auction": "オークション",
@@ -3875,7 +3856,6 @@
     "minBid": "最低入札額",
     "placeBid": "入札する",
     "time": "時刻",
-    "totalBids_one": "BidAreaV2.totalBids",
     "totalBids_other": "{{count}}件の入札",
     "yourBid": "あなたの入札額（aUEC）"
   },
@@ -3967,8 +3947,6 @@
     "wants": "要望",
     "yes": "はい"
   },
-  "Cancelled": "error",
-  "Completed": "success",
   "contract_actions": {
     "create_contract": "契約を作成"
   },
@@ -4184,10 +4162,7 @@
     "title": "在庫ロットを作成",
     "variantAttributes": "バリアント属性"
   },
-  "Damaged": "warning",
-  "displayed_rows_one": "{{from}}-{{to}} / {{count}}",
   "displayed_rows_other": "{{count}} 件中 {{from}}-{{to}}",
-  "displayed_rows_range_one": "displayed_rows_range",
   "displayed_rows_range_other": "{{from}}–{{to}} / {{count}}",
   "EditListingV2": {
     "about": "概要",
@@ -4381,14 +4356,11 @@
     "none": "なし",
     "selectMultiple": "選択..."
   },
-  "flight-ready": "success",
   "imageSearch": {
     "noImageSelected": "画像が選択されていません",
     "searchResultImage": "検索結果の画像 {{index}}",
     "selectedImagePreview": "URLから選択した画像のプレビュー：{{url}}"
   },
-  "in-concept": "info",
-  "in-repair": "warning",
   "inventory": {
     "actions": "操作",
     "addLot": "ロットを追加",
@@ -4484,7 +4456,6 @@
     "updateSuccess": "ロットを更新しました",
     "variantInfo": "バリアント情報"
   },
-  "Low Fuel": "warning",
   "ManageMarketRedesign": {
     "actor": "ストアフロント",
     "addLot": "在庫を追加",
@@ -4518,7 +4489,6 @@
     "subheading": "販売するすべてを一か所で。行を展開すると、その背後にある在庫を確認できます。",
     "title": "マーケット管理",
     "unspecified": "未指定",
-    "variants_one": "{{count}}オプション",
     "variants_other": "{{count}}オプション"
   },
   "marketAggregateView": {
@@ -4529,7 +4499,6 @@
     "addToCart": "カートに追加",
     "auction": "オークション",
     "availability": "{{count}}{{unit}}在庫あり",
-    "availability_one": "{{count}}{{unit}}在庫あり",
     "availability_other": "{{count}}{{unit}}在庫あり",
     "bidPreview": "入札プレビュー",
     "bundle": "バンドル",
@@ -4544,7 +4513,6 @@
     "makeOffer": "オファーを送る",
     "negotiable": "交渉可能",
     "ofAvailable": "{{count}}中",
-    "ofAvailable_one": "{{count}}中",
     "ofAvailable_other": "{{count}}中",
     "orderPlaced": "注文を確定しました",
     "placeBid": "入札する",
@@ -4561,13 +4529,10 @@
     "productImage": "{{title}}の商品画像"
   },
   "MarketRedesign": {
-    "acrossSellers_one": "{{count}}人の売り手にわたって",
     "acrossSellers_other": "{{count}}人の売り手にわたって",
     "addToCart": "追加",
-    "available_one": "{{count}}在庫あり",
     "available_other": "{{count}}在庫あり",
     "compare": "比較",
-    "compareSellers_one": "{{count}}人の売り手を比較",
     "compareSellers_other": "{{count}}人の売り手を比較",
     "forSale": "販売中",
     "fromPrice": "最低",
@@ -4576,15 +4541,11 @@
     "lowestPrice": "最安値",
     "negotiable": "交渉可能",
     "noSellers": "現在利用可能な売り手がいません。",
-    "seeAllCount_one": "{{count}}件の出品をすべて表示",
     "seeAllCount_other": "{{count}}件の出品をすべて表示",
-    "sellersCount_one": "{{count}}人の売り手",
     "sellersCount_other": "{{count}}人の売り手",
     "topBid": "最高入札",
     "topRated": "高評価の売り手",
-    "unitsAvailable_one": "{{count}}個在庫あり",
     "unitsAvailable_other": "{{count}}個在庫あり",
-    "wantedBy_one": "{{count}}人の買い手が希望",
     "wantedBy_other": "{{count}}人の買い手が希望"
   },
   "messages": {
@@ -4787,7 +4748,6 @@
     "toggle_drawer": "サイドバーを切り替え",
     "notifications": "通知"
   },
-  "Off Course": "warning",
   "offerTrend": {
     "accepted": "承認済み",
     "active": "有効",
@@ -4799,8 +4759,6 @@
     "rejected": "拒否済み",
     "total": "合計"
   },
-  "Offline": "error",
-  "OK": "success",
   "orderKinds": {
     "Construction": "建設",
     "Custom": "カスタム",
@@ -4957,7 +4915,6 @@
     "label": "組織メンバー",
     "placeholder": "メンバーを検索..."
   },
-  "owned": "true",
   "page": "1",
   "pages": {
     "admin": {
@@ -5091,7 +5048,6 @@
     "selectedPageThumbnail": "{{title}} の選択されたページのサムネイル",
     "wikiPageThumbnail": "{{title}} のサムネイル"
   },
-  "Pending": "warning",
   "profile": {
     "customOrdersMovedToShop": "カスタム注文はショップを通じて行われるようになりました。"
   },
@@ -5246,7 +5202,6 @@
     "reviewBy": "投稿者",
     "sellerReviews": "{{seller}} のレビュー",
     "viewAllReviews": "{{count}} 件のレビューをすべて表示",
-    "viewAllReviews_one": "serviceView.viewAllReviews",
     "viewAllReviews_other": "{{count}}件のレビューをすべて表示"
   },
   "ShopSelector": {
@@ -5434,10 +5389,16 @@
         "title": "画像を選択"
       }
     },
+    "goBack": "戻る",
     "linkCopied": "リンクをクリップボードにコピーしました",
+    "mainContent": "メインコンテンツ",
+    "pwaLater": "後で",
+    "pwaUpdate": "更新",
+    "pwaUpdateBody": "新しいバージョンがあります。今すぐ更新して最新機能を使いましょう。",
     "remove": "削除",
     "reset": "リセット",
     "save": "保存",
+    "sectionLoadError": "このセクションの読み込み中にエラーが発生しました。",
     "share": "共有",
     "yes": "はい"
   },
@@ -5449,7 +5410,6 @@
     "error": "ユーザーのブロック解除に失敗しました",
     "success": "{{username}}のブロックを解除しました"
   },
-  "Under Attack": "error",
   "userActions": {
     "adminOpenIdentity": "管理 -> ID 管理で開く",
     "blockForOrg": "{{orgName}}として{{username}}をブロック",
@@ -6051,5 +6011,156 @@
     },
     "replyTooltip_other": "過去90日間の注文・オファーチャットで最初の返信までにかかる一般的な時間（{{count}}件のチャットに基づく）",
     "completedOrders_other": "完了した注文 {{count}}件"
+  },
+  "shops": {
+    "blocklist": {
+      "block": "{{username}} をブロック",
+      "blocked": "{{username}} をブロックしました",
+      "blockedCount_other": "ブロック中のユーザー {{count}} 人",
+      "blockFailed": "ユーザーをブロックできませんでした",
+      "reason": "理由 (任意)",
+      "searchPlaceholder": "ブロックするユーザーを検索",
+      "subtitle": "ブロックしたユーザーはこのショップで注文やオファーができません",
+      "title": "ブロックリスト",
+      "unblocked": "{{username}} のブロックを解除しました",
+      "unblockFailed": "ブロックを解除できませんでした",
+      "unblockLabel": "{{name}} のブロックを解除"
+    },
+    "card": {
+      "byOwner": "運営: {{name}}"
+    },
+    "customers": {
+      "title": "顧客"
+    },
+    "directory": {
+      "empty": "ショップが見つかりません",
+      "search": "ショップを検索...",
+      "sortLabel": "ショップの並べ替え",
+      "sortMostSales": "販売数が多い順",
+      "sortNameAZ": "名前順 (A-Z)",
+      "sortNewest": "新しい順",
+      "sortTopRated": "評価が高い順",
+      "title": "ショップを探す"
+    },
+    "listingCount_other": "出品 {{count}} 件",
+    "mine": {
+      "active": "稼働中",
+      "activeShops": "稼働中のショップ",
+      "create": "ショップを作成",
+      "created": "作成: {{date}}",
+      "createFirst": "最初のショップを作成",
+      "customOrders": "カスタム注文",
+      "emptyBody": "ショップを作成して SC Market で販売を始めましょう。数分でストアを開設できます。",
+      "emptyTitle": "まだショップがありません",
+      "featureAnalytics": "販売・レビュー・分析を確認",
+      "featureBranding": "バナーとロゴで独自のブランディング",
+      "featureListings": "アイテム、サービス、セットを出品",
+      "languages": "言語",
+      "live": "公開中",
+      "manage": "管理",
+      "no": "いいえ",
+      "noTags": "タグはまだありません",
+      "organization": "組織",
+      "personal": "個人",
+      "status": "ステータス",
+      "subtitle": "ショップ、出品、注文を管理",
+      "tags": "タグ",
+      "title": "マイショップ",
+      "totalShops": "ショップ数",
+      "viewShop": "ショップを表示",
+      "yes": "はい"
+    },
+    "profile": {
+      "byOwner": "運営: <owner>{{name}}</owner>",
+      "headRating": "評価",
+      "headReview": "レビュー",
+      "loading": "読み込み中...",
+      "noDescription": "説明はありません",
+      "noListings": "公開中の出品はありません",
+      "noMatches": "検索に一致する出品はありません",
+      "noReviews": "まだレビューはありません",
+      "noReviewsBody": "注文が完了するとここにレビューが表示されます",
+      "notFound": "ショップが見つかりません",
+      "owner": "ショップのオーナー",
+      "searchListings": "出品を検索...",
+      "since": "{{date}} から",
+      "sortListings": "出品の並べ替え",
+      "sortMostStock": "在庫が多い順",
+      "sortNewest": "新しい順",
+      "sortOldest": "古い順",
+      "sortPriceHigh": "価格: 高い順",
+      "sortPriceLow": "価格: 安い順",
+      "tabAbout": "概要",
+      "tabListings": "出品",
+      "tabOrder": "注文",
+      "tabReviews": "レビュー",
+      "tabServices": "サービス",
+      "tabsLabel": "ショップのタブ"
+    },
+    "reviewCount_other": "レビュー {{count}} 件",
+    "saleCount_other": "販売 {{count}} 件",
+    "serviceCount_other": "サービス {{count}} 件"
+  },
+  "marketV2": {
+    "archive": "アーカイブ",
+    "availShort": "在庫 {{quantity}}",
+    "bestPrice": "最安",
+    "craftingShoppingList": "クラフト用買い物リスト",
+    "description": "説明",
+    "edit": "編集",
+    "gridView": "グリッド表示",
+    "imageOf": "{{name}} の画像",
+    "listingDetails": "出品の詳細",
+    "listView": "リスト表示",
+    "maxTier": "最大ティア",
+    "maxValue": "最大値",
+    "minTier": "最小ティア",
+    "minValue": "最小値",
+    "noVariants": "利用できるバリエーションはありません",
+    "outOfStockBadge": "在庫切れ",
+    "privateBadge": "非公開",
+    "qtyColon": "数量: {{quantity}}",
+    "qtyShort": "数量 {{quantity}}",
+    "quickEdit": "クイック編集",
+    "removeItemFailed": "アイテムを削除できませんでした",
+    "searchBuyOrders": "購入注文を検索...",
+    "searchItems": "アイテム・カテゴリを検索...",
+    "searchItemsSellers": "アイテム・カテゴリ・販売者を検索...",
+    "standardVariant": "標準",
+    "updateQuantityFailed": "数量を更新できませんでした",
+    "updateVariantFailed": "バリエーションを更新できませんでした"
+  },
+  "orgsUi": {
+    "avatarOf": "{{name}} のアバター",
+    "createOrg": "組織を作成",
+    "myOrgs": "所属組織",
+    "noOrgs": "どの組織にも所属していません",
+    "noOrgsBody": "組織に参加するか作成して、仲間と協力しましょう",
+    "userNoOrgs": "このユーザーはどの組織にも所属していません",
+    "view": "表示"
+  },
+  "settingsUi": {
+    "apiTokens": "API トークン",
+    "chooseTypesOrg": "この組織について受け取る通知の種類を選択してください。",
+    "chooseTypesPersonal": "個人として受け取る通知の種類を選択してください。",
+    "frequency": "頻度: {{frequency}}",
+    "frequencyAt": "頻度: {{frequency}} ({{time}})",
+    "itemsUnit": "個",
+    "notificationFallback": "通知",
+    "notificationsFor": "{{name}} の通知",
+    "orgNotifications": "組織の通知",
+    "preferencesUpdated_other": "通知設定を {{count}} 件更新しました",
+    "preferencesUpdateFailed": "設定を更新できませんでした",
+    "preferenceUpdated": "{{name}} の設定を更新しました",
+    "preferenceUpdateFailed": "設定を更新できませんでした",
+    "selectFont": "フォントを選択",
+    "selectOrg": "組織を選択",
+    "turnAllOff": "すべてオフ",
+    "turnAllOn": "すべてオン"
+  },
+  "messagesUi": {
+    "send": "送信",
+    "viewOffer": "オファーを表示",
+    "viewOrder": "注文を表示"
   }
 }

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React from "react"
 import { FlatSection } from "../paper/Section"
 import { Grid, Typography, CircularProgress, Button, Box } from "@mui/material"
@@ -43,6 +44,7 @@ export function PreferenceSection({
   contractorId,
   isLoading = false,
 }: PreferenceSectionProps) {
+  const { t } = useTranslation()
   if (isLoading) {
     return (
       <FlatSection title={title}>
@@ -228,8 +230,9 @@ export function PreferenceSection({
             }}
           >
             <Typography variant="body2" color="text.secondary">
-              Choose which types of notifications you want to receive
-              {contractorId ? " for this organization" : " individually"}.
+              {contractorId
+                ? t("settingsUi.chooseTypesOrg")
+                : t("settingsUi.chooseTypesPersonal")}
             </Typography>
             <Box sx={{ display: "flex", gap: 1 }}>
               {hasAnyEnabled && (
@@ -239,7 +242,7 @@ export function PreferenceSection({
                   color="error"
                   onClick={handleTurnAllOff}
                 >
-                  Turn All Off
+                  {t("settingsUi.turnAllOff")}
                 </Button>
               )}
               {hasAnyDisabled && (
@@ -249,7 +252,7 @@ export function PreferenceSection({
                   color="primary"
                   onClick={handleTurnAllOn}
                 >
-                  Turn All On
+                  {t("settingsUi.turnAllOn")}
                 </Button>
               )}
             </Box>

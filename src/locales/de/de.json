@@ -770,7 +770,10 @@
       "description": "Erhalten Sie sofortige Benachrichtigungen auf diesem Gerät für neue Nachrichten, Bestellungen und Angebote.",
       "prefsTitle": "Push-Einstellungen",
       "title": "Push-Benachrichtigungen"
-    }
+    },
+    "setupFailed": "Einrichtung konnte nicht abgeschlossen werden",
+    "availabilityFailed": "Verfügbarkeit konnte nicht gespeichert werden",
+    "emailFailed": "E-Mail konnte nicht hinzugefügt werden"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Diesen Beitrag hochstufen"
@@ -1219,7 +1222,6 @@
       "otherDevices": "{{count}} weiteres Gerät",
       "otherDevices_one": "{{count}} weiteres Gerät",
       "otherDevices_other": "{{count}} weitere Geräte",
-      "otherDevices_plural": "{{count}} weitere Geräte",
       "permissionDeniedError": "Berechtigung {{status}}. Bitte aktivieren Sie Benachrichtigungen in Ihren Browsereinstellungen.",
       "permissionDeniedMessage": "Bitte aktivieren Sie Benachrichtigungen in Ihren Browsereinstellungen, um Push-Benachrichtigungen zu verwenden.",
       "permissionGrantedMessage": "Berechtigung erteilt! Sie können jetzt Push-Benachrichtigungen abonnieren.",
@@ -1234,7 +1236,6 @@
       "totalDevices": "{{count}} Gerät insgesamt",
       "totalDevices_one": "{{count}} Gerät insgesamt",
       "totalDevices_other": "{{count}} Geräte insgesamt",
-      "totalDevices_plural": "{{count}} Geräte insgesamt",
       "unknownDevice": "Unbekanntes Gerät",
       "unsubscribe": "Abmelden",
       "unsubscribed": "Push-Benachrichtigungen erfolgreich abbestellt",
@@ -2295,12 +2296,12 @@
     "searchAndSelect": "Suchen und wählen Sie Nutzer aus, um einen Gruppenchat zu erstellen",
     "searchPlaceholder": "Tippen, um Nutzer zu suchen",
     "searchUsers": "Nutzer suchen...",
-    "selectedCount": "{{count}} Nutzer ausgewählt",
-    "selectedCount_plural": "{{count}} Nutzer ausgewählt",
     "selectedUsers": "Ausgewählte Nutzer",
     "selectUsers": "Wählen Sie Nutzer aus, um einen Chat zu beginnen",
     "startNewChat": "Neuen Chat beginnen",
-    "typeToSearch": "Geben Sie mindestens 3 Zeichen ein, um zu suchen"
+    "typeToSearch": "Geben Sie mindestens 3 Zeichen ein, um zu suchen",
+    "selectedCount_one": "{{count}} Nutzer ausgewählt",
+    "selectedCount_other": "{{count}} Nutzer ausgewählt"
   },
   "MemberBalance": {
     "myBalance": "Mein Guthaben",
@@ -3859,7 +3860,6 @@
     "setMessage": "Ihre Verfügbarkeit ist konfiguriert. Sie können {{sellerName}} Angebote unterbreiten.",
     "submitDisabled": "Verfügbarkeit festlegen, um fortzufahren"
   },
-  "awaiting-repair": "error",
   "BidAreaV2": {
     "amount": "Betrag",
     "auction": "Auktion",
@@ -3968,8 +3968,6 @@
     "wants": "Bedarf",
     "yes": "Ja"
   },
-  "Cancelled": "error",
-  "Completed": "success",
   "contract_actions": {
     "create_contract": "Auftrag erstellen"
   },
@@ -4185,7 +4183,6 @@
     "title": "Bestandslos erstellen",
     "variantAttributes": "Variantenattribute"
   },
-  "Damaged": "warning",
   "displayed_rows_one": "{{from}}-{{to}} von {{count}}",
   "displayed_rows_other": "{{from}}-{{to}} von {{count}}",
   "displayed_rows_range_one": "{{from}}–{{to}} von {{count}}",
@@ -4382,14 +4379,11 @@
     "none": "Keine",
     "selectMultiple": "Auswählen..."
   },
-  "flight-ready": "success",
   "imageSearch": {
     "noImageSelected": "Kein Bild ausgewählt",
     "searchResultImage": "Suchergebnisbild {{index}}",
     "selectedImagePreview": "Vorschau des ausgewählten Bildes von URL: {{url}}"
   },
-  "in-concept": "info",
-  "in-repair": "warning",
   "inventory": {
     "actions": "Aktionen",
     "addLot": "Posten hinzufügen",
@@ -4485,7 +4479,6 @@
     "updateSuccess": "Los erfolgreich aktualisiert",
     "variantInfo": "Varianteninformationen"
   },
-  "Low Fuel": "warning",
   "ManageMarketRedesign": {
     "actor": "Schaufenster",
     "addLot": "Bestand hinzufügen",
@@ -4789,7 +4782,6 @@
     "toggle_drawer": "Sidebar umschalten",
     "notifications": "Benachrichtigungen"
   },
-  "Off Course": "warning",
   "offerTrend": {
     "accepted": "Angenommen",
     "active": "Aktiv",
@@ -4801,8 +4793,6 @@
     "rejected": "Abgelehnt",
     "total": "Gesamt"
   },
-  "Offline": "error",
-  "OK": "success",
   "orderKinds": {
     "Construction": "Bau",
     "Custom": "Individuell",
@@ -4959,7 +4949,6 @@
     "label": "Organisationsmitglied",
     "placeholder": "Mitglieder suchen..."
   },
-  "owned": "true",
   "page": "1",
   "pages": {
     "admin": {
@@ -5093,7 +5082,6 @@
     "selectedPageThumbnail": "Ausgewähltes Seiten-Miniaturbild für {{title}}",
     "wikiPageThumbnail": "Miniaturbild für {{title}}"
   },
-  "Pending": "warning",
   "profile": {
     "customOrdersMovedToShop": "Individuelle Bestellungen werden jetzt über Shops aufgegeben."
   },
@@ -5436,10 +5424,16 @@
         "title": "Bild auswählen"
       }
     },
+    "goBack": "Zurück",
     "linkCopied": "Link in die Zwischenablage kopiert",
+    "mainContent": "Hauptinhalt",
+    "pwaLater": "Später",
+    "pwaUpdate": "Aktualisieren",
+    "pwaUpdateBody": "Eine neue Version ist verfügbar. Aktualisieren Sie jetzt, um die neuesten Funktionen zu erhalten.",
     "remove": "Entfernen",
     "reset": "Zurücksetzen",
     "save": "Speichern",
+    "sectionLoadError": "Beim Laden dieses Bereichs ist ein Fehler aufgetreten.",
     "share": "Teilen",
     "yes": "Ja"
   },
@@ -5451,7 +5445,6 @@
     "error": "Benutzer konnte nicht freigegeben werden",
     "success": "{{username}} erfolgreich freigegeben"
   },
-  "Under Attack": "error",
   "userActions": {
     "adminOpenIdentity": "In Admin -> Identität öffnen",
     "blockForOrg": "{{username}} für {{orgName}} blockieren",
@@ -6055,5 +6048,162 @@
     "replyTooltip_other": "Übliche Zeit bis zur ersten Antwort in Bestell- und Angebotschats der letzten 90 Tage, aus {{count}} Chats",
     "completedOrders_one": "{{count}} abgeschlossene Bestellung",
     "completedOrders_other": "{{count}} abgeschlossene Bestellungen"
+  },
+  "shops": {
+    "blocklist": {
+      "block": "{{username}} sperren",
+      "blocked": "{{username}} gesperrt",
+      "blockedCount_one": "{{count}} gesperrter Nutzer",
+      "blockedCount_other": "{{count}} gesperrte Nutzer",
+      "blockFailed": "Nutzer konnte nicht gesperrt werden",
+      "reason": "Grund (optional)",
+      "searchPlaceholder": "Nutzer zum Sperren suchen",
+      "subtitle": "Gesperrte Nutzer können in diesem Shop weder bestellen noch Angebote abgeben",
+      "title": "Sperrliste",
+      "unblocked": "Sperre für {{username}} aufgehoben",
+      "unblockFailed": "Sperre konnte nicht aufgehoben werden",
+      "unblockLabel": "Sperre für {{name}} aufheben"
+    },
+    "card": {
+      "byOwner": "von {{name}}"
+    },
+    "customers": {
+      "title": "Kunden"
+    },
+    "directory": {
+      "empty": "Keine Shops gefunden",
+      "search": "Shops suchen...",
+      "sortLabel": "Shops sortieren",
+      "sortMostSales": "Meiste Verkäufe",
+      "sortNameAZ": "Name A–Z",
+      "sortNewest": "Neueste",
+      "sortTopRated": "Beste Bewertung",
+      "title": "Shops durchsuchen"
+    },
+    "listingCount_one": "{{count}} Angebot",
+    "listingCount_other": "{{count}} Angebote",
+    "mine": {
+      "active": "Aktiv",
+      "activeShops": "Aktive Shops",
+      "create": "Shop erstellen",
+      "created": "Erstellt {{date}}",
+      "createFirst": "Ersten Shop erstellen",
+      "customOrders": "Individuelle Aufträge",
+      "emptyBody": "Erstellen Sie einen Shop, um auf SC Market zu verkaufen. Ihr Schaufenster steht in wenigen Minuten.",
+      "emptyTitle": "Sie haben noch keinen Shop",
+      "featureAnalytics": "Verfolgen Sie Verkäufe, Bewertungen und Statistiken",
+      "featureBranding": "Eigenes Branding mit Banner und Logo",
+      "featureListings": "Bieten Sie Gegenstände, Dienstleistungen und Bundles an",
+      "languages": "Sprachen",
+      "live": "Online",
+      "manage": "Verwalten",
+      "no": "Nein",
+      "noTags": "Noch keine Tags",
+      "organization": "Organisation",
+      "personal": "Persönlich",
+      "status": "Status",
+      "subtitle": "Verwalten Sie Ihre Shops, Angebote und Bestellungen",
+      "tags": "Tags",
+      "title": "Meine Shops",
+      "totalShops": "Shops gesamt",
+      "viewShop": "Shop anzeigen",
+      "yes": "Ja"
+    },
+    "profile": {
+      "byOwner": "von <owner>{{name}}</owner>",
+      "headRating": "Bewertung",
+      "headReview": "Rezension",
+      "loading": "Wird geladen...",
+      "noDescription": "Keine Beschreibung vorhanden",
+      "noListings": "Keine aktiven Angebote",
+      "noMatches": "Keine Angebote passen zu Ihrer Suche",
+      "noReviews": "Noch keine Bewertungen",
+      "noReviewsBody": "Bewertungen erscheinen hier, sobald Bestellungen abgeschlossen sind",
+      "notFound": "Shop nicht gefunden",
+      "owner": "Shop-Inhaber",
+      "searchListings": "Angebote durchsuchen...",
+      "since": "Seit {{date}}",
+      "sortListings": "Angebote sortieren",
+      "sortMostStock": "Größter Bestand",
+      "sortNewest": "Neueste",
+      "sortOldest": "Älteste",
+      "sortPriceHigh": "Preis: hoch",
+      "sortPriceLow": "Preis: niedrig",
+      "tabAbout": "Über",
+      "tabListings": "Angebote",
+      "tabOrder": "Bestellen",
+      "tabReviews": "Bewertungen",
+      "tabServices": "Dienstleistungen",
+      "tabsLabel": "Shop-Tabs"
+    },
+    "reviewCount_one": "{{count}} Bewertung",
+    "reviewCount_other": "{{count}} Bewertungen",
+    "saleCount_one": "{{count}} Verkauf",
+    "saleCount_other": "{{count}} Verkäufe",
+    "serviceCount_one": "{{count}} Dienstleistung",
+    "serviceCount_other": "{{count}} Dienstleistungen"
+  },
+  "marketV2": {
+    "archive": "Archivieren",
+    "availShort": "{{quantity}} verfügbar",
+    "bestPrice": "Bester",
+    "craftingShoppingList": "Crafting-Einkaufsliste",
+    "description": "Beschreibung",
+    "edit": "Bearbeiten",
+    "gridView": "Rasteransicht",
+    "imageOf": "Bild von {{name}}",
+    "listingDetails": "Angebotsdetails",
+    "listView": "Listenansicht",
+    "maxTier": "Max. Stufe",
+    "maxValue": "Max. Wert",
+    "minTier": "Min. Stufe",
+    "minValue": "Min. Wert",
+    "noVariants": "Keine Varianten verfügbar",
+    "outOfStockBadge": "AUSVERKAUFT",
+    "privateBadge": "PRIVAT",
+    "qtyColon": "Menge: {{quantity}}",
+    "qtyShort": "Menge {{quantity}}",
+    "quickEdit": "Schnell bearbeiten",
+    "removeItemFailed": "Artikel konnte nicht entfernt werden",
+    "searchBuyOrders": "Kaufaufträge suchen...",
+    "searchItems": "Gegenstände, Kategorien suchen...",
+    "searchItemsSellers": "Gegenstände, Kategorien, Verkäufer suchen...",
+    "standardVariant": "Standard",
+    "updateQuantityFailed": "Menge konnte nicht aktualisiert werden",
+    "updateVariantFailed": "Variante konnte nicht aktualisiert werden"
+  },
+  "orgsUi": {
+    "avatarOf": "Avatar von {{name}}",
+    "createOrg": "Organisation erstellen",
+    "myOrgs": "Meine Organisationen",
+    "noOrgs": "Sie sind in keiner Organisation Mitglied",
+    "noOrgsBody": "Treten Sie einer Organisation bei oder gründen Sie eine, um mit anderen zusammenzuarbeiten",
+    "userNoOrgs": "Dieser Nutzer gehört keiner Organisation an",
+    "view": "Ansehen"
+  },
+  "settingsUi": {
+    "apiTokens": "API-Token",
+    "chooseTypesOrg": "Wählen Sie, welche Benachrichtigungen Sie für diese Organisation erhalten möchten.",
+    "chooseTypesPersonal": "Wählen Sie, welche Benachrichtigungen Sie persönlich erhalten möchten.",
+    "frequency": "Häufigkeit: {{frequency}}",
+    "frequencyAt": "Häufigkeit: {{frequency}} um {{time}}",
+    "itemsUnit": "Artikel",
+    "notificationFallback": "Benachrichtigung",
+    "notificationsFor": "Benachrichtigungen für {{name}}",
+    "orgNotifications": "Organisationsbenachrichtigungen",
+    "preferencesUpdated_one": "{{count}} Benachrichtigungseinstellung aktualisiert",
+    "preferencesUpdated_other": "{{count}} Benachrichtigungseinstellungen aktualisiert",
+    "preferencesUpdateFailed": "Einstellungen konnten nicht aktualisiert werden",
+    "preferenceUpdated": "Einstellung für {{name}} aktualisiert",
+    "preferenceUpdateFailed": "Einstellung konnte nicht aktualisiert werden",
+    "selectFont": "Schriftart wählen",
+    "selectOrg": "Organisation auswählen",
+    "turnAllOff": "Alle ausschalten",
+    "turnAllOn": "Alle einschalten"
+  },
+  "messagesUi": {
+    "send": "Senden",
+    "viewOffer": "Angebot ansehen",
+    "viewOrder": "Bestellung ansehen"
   }
 }

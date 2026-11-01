@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React, { ReactElement, ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { Grid, IconButton } from "@mui/material"
@@ -21,6 +22,7 @@ export interface DetailPageLayoutProps extends StandardPageLayoutProps {
 }
 
 export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
@@ -50,7 +52,7 @@ export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
       {backButton && (
         <IconButton
           onClick={handleBackClick}
-          aria-label="Go back"
+          aria-label={t("ui.goBack")}
           size="large"
           sx={{ mr: 1, ml: -1 }}
         >

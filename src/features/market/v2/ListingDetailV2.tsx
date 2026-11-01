@@ -177,7 +177,7 @@ export function ListingDetailV2() {
 
   return (
     <StandardPageLayout
-      title={head?.title ?? (listing?.title || "Listing Details")}
+      title={head?.title ?? (listing?.title || t("marketV2.listingDetails"))}
       description={head ? headDescription(head) : undefined}
       headerTitle={listing?.title}
       canonicalUrl={canonicalPath}
@@ -253,7 +253,7 @@ export function ListingDetailV2() {
                             {gameItemId && (
                               <Chip
                                 icon={<MenuBookRounded sx={{ fontSize: 14 }} />}
-                                label="Wiki"
+                                label={t("footer.wiki")}
                                 size="small"
                                 variant="outlined"
                                 component={RouterLink}
@@ -371,7 +371,7 @@ export function ListingDetailV2() {
                               </Box>
                             ) : (
                               <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
-                                No variants available
+                                {t("marketV2.noVariants")}
                               </Typography>
                             ),
                           )}
@@ -397,10 +397,10 @@ export function ListingDetailV2() {
                             <Chip label={listing.status.toUpperCase()} color="default" size="small" sx={{ fontWeight: "bold" }} />
                           )}
                           {listing.visibility === "private" && (
-                            <Chip label="PRIVATE" color="warning" size="small" sx={{ fontWeight: "bold" }} />
+                            <Chip label={t("marketV2.privateBadge")} color="warning" size="small" sx={{ fontWeight: "bold" }} />
                           )}
                           {totalQuantity === 0 && (
-                            <Chip label="OUT OF STOCK" color="error" size="small" sx={{ fontWeight: "bold" }} />
+                            <Chip label={t("marketV2.outOfStockBadge")} color="error" size="small" sx={{ fontWeight: "bold" }} />
                           )}
                         </Box>
                       )}
@@ -418,7 +418,7 @@ export function ListingDetailV2() {
                       {listing.description && (
                         <Paper variant="outlined" sx={{ mt: 2, p: 2 }}>
                           <Typography variant="subtitle1" fontWeight="bold" color="text.secondary" gutterBottom>
-                            Description
+                            {t("marketV2.description")}
                           </Typography>
                           <MarkdownRender text={listing.description} />
                         </Paper>

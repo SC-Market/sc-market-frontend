@@ -772,7 +772,10 @@
       "description": "Recevez des alertes instantanées sur cet appareil pour les nouveaux messages, commandes et offres.",
       "prefsTitle": "Préférences push",
       "title": "Notifications push"
-    }
+    },
+    "setupFailed": "Impossible de terminer la configuration",
+    "availabilityFailed": "Impossible d'enregistrer la disponibilité",
+    "emailFailed": "Impossible d'ajouter l'e-mail"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Voter pour cette publication"
@@ -1222,7 +1225,6 @@
       "otherDevices_one": "{{count}} autre appareil",
       "otherDevices_many": "{{count}} autres appareils",
       "otherDevices_other": "{{count}} autres appareils",
-      "otherDevices_plural": "{{count}} autres appareils",
       "permissionDeniedError": "Permission {{status}}. Veuillez activer les notifications dans les paramètres de votre navigateur.",
       "permissionDeniedMessage": "Veuillez activer les notifications dans les paramètres de votre navigateur pour utiliser les notifications push.",
       "permissionGrantedMessage": "Permission accordée ! Vous pouvez maintenant vous abonner aux notifications push.",
@@ -1238,7 +1240,6 @@
       "totalDevices_one": "{{count}} appareil au total",
       "totalDevices_many": "{{count}} appareils au total",
       "totalDevices_other": "{{count}} appareils au total",
-      "totalDevices_plural": "{{count}} appareils au total",
       "unknownDevice": "Appareil inconnu",
       "unsubscribe": "Se désabonner",
       "unsubscribed": "Désabonnement des notifications push réussi",
@@ -2302,12 +2303,13 @@
     "searchAndSelect": "Recherchez et sélectionnez des utilisateurs pour créer une discussion de groupe",
     "searchPlaceholder": "Saisissez du texte pour rechercher des utilisateurs",
     "searchUsers": "Rechercher des utilisateurs...",
-    "selectedCount": "{{count}} utilisateur sélectionné",
-    "selectedCount_plural": "{{count}} utilisateurs sélectionnés",
     "selectedUsers": "Utilisateurs sélectionnés",
     "selectUsers": "Sélectionnez des utilisateurs pour démarrer une discussion",
     "startNewChat": "Démarrer une nouvelle discussion",
-    "typeToSearch": "Saisissez au moins 3 caractères pour rechercher"
+    "typeToSearch": "Saisissez au moins 3 caractères pour rechercher",
+    "selectedCount_many": "{{count}} utilisateurs sélectionnés",
+    "selectedCount_one": "{{count}} utilisateur sélectionné",
+    "selectedCount_other": "{{count}} utilisateurs sélectionnés"
   },
   "MemberBalance": {
     "myBalance": "Mon solde",
@@ -3878,7 +3880,6 @@
     "setMessage": "Votre disponibilité est configurée. Vous pouvez soumettre des offres à {{sellerName}}.",
     "submitDisabled": "Définissez votre disponibilité pour continuer"
   },
-  "awaiting-repair": "error",
   "BidAreaV2": {
     "amount": "Montant",
     "auction": "Enchère",
@@ -3988,8 +3989,6 @@
     "wants": "Demandes",
     "yes": "Oui"
   },
-  "Cancelled": "error",
-  "Completed": "success",
   "contract_actions": {
     "create_contract": "Créer un contrat"
   },
@@ -4205,7 +4204,6 @@
     "title": "Créer un lot de stock",
     "variantAttributes": "Attributs de la variante"
   },
-  "Damaged": "warning",
   "displayed_rows_one": "{{from}}-{{to}} sur {{count}}",
   "displayed_rows_many": "{{from}}-{{to}} sur {{count}}",
   "displayed_rows_other": "{{from}}-{{to}} sur {{count}}",
@@ -4404,14 +4402,11 @@
     "none": "Aucun",
     "selectMultiple": "Sélectionner..."
   },
-  "flight-ready": "success",
   "imageSearch": {
     "noImageSelected": "Aucune image sélectionnée",
     "searchResultImage": "Image du résultat de recherche {{index}}",
     "selectedImagePreview": "Aperçu de l'image sélectionnée depuis l'URL : {{url}}"
   },
-  "in-concept": "info",
-  "in-repair": "warning",
   "inventory": {
     "actions": "Actions",
     "addLot": "Ajouter un lot",
@@ -4507,7 +4502,6 @@
     "updateSuccess": "Lot mis à jour avec succès",
     "variantInfo": "Informations sur la variante"
   },
-  "Low Fuel": "warning",
   "ManageMarketRedesign": {
     "actor": "Boutique",
     "addLot": "Ajouter du stock",
@@ -4822,7 +4816,6 @@
     "toggle_drawer": "Basculer la barre latérale",
     "notifications": "Notifications"
   },
-  "Off Course": "warning",
   "offerTrend": {
     "accepted": "Acceptée",
     "active": "Actif",
@@ -4834,8 +4827,6 @@
     "rejected": "Rejetée",
     "total": "Total"
   },
-  "Offline": "error",
-  "OK": "success",
   "orderKinds": {
     "Construction": "Construction",
     "Custom": "Personnalisé",
@@ -4992,7 +4983,6 @@
     "label": "Membre de l'org",
     "placeholder": "Rechercher des membres..."
   },
-  "owned": "true",
   "page": "1",
   "pages": {
     "admin": {
@@ -5126,7 +5116,6 @@
     "selectedPageThumbnail": "Miniature de la page sélectionnée pour {{title}}",
     "wikiPageThumbnail": "Miniature pour {{title}}"
   },
-  "Pending": "warning",
   "profile": {
     "customOrdersMovedToShop": "Les commandes personnalisées sont désormais passées via les boutiques."
   },
@@ -5470,10 +5459,16 @@
         "title": "Sélectionner une image"
       }
     },
+    "goBack": "Retour",
     "linkCopied": "Lien copié dans le presse-papiers",
+    "mainContent": "Contenu principal",
+    "pwaLater": "Plus tard",
+    "pwaUpdate": "Mettre à jour",
+    "pwaUpdateBody": "Une nouvelle version est disponible. Mettez à jour pour profiter des dernières fonctionnalités.",
     "remove": "Supprimer",
     "reset": "Réinitialiser",
     "save": "Enregistrer",
+    "sectionLoadError": "Une erreur s'est produite lors du chargement de cette section.",
     "share": "Partager",
     "yes": "Oui"
   },
@@ -5485,7 +5480,6 @@
     "error": "Échec du déblocage de l'utilisateur",
     "success": "{{username}} débloqué avec succès"
   },
-  "Under Attack": "error",
   "userActions": {
     "adminOpenIdentity": "Ouvrir dans Admin -> Identité",
     "blockForOrg": "Bloquer {{username}} pour {{orgName}}",
@@ -6091,5 +6085,168 @@
     "completedOrders_one": "{{count}} commande terminée",
     "completedOrders_many": "{{count}} commandes terminées",
     "completedOrders_other": "{{count}} commandes terminées"
+  },
+  "shops": {
+    "blocklist": {
+      "block": "Bloquer {{username}}",
+      "blocked": "{{username}} bloqué",
+      "blockedCount_many": "{{count}} utilisateurs bloqués",
+      "blockedCount_one": "{{count}} utilisateur bloqué",
+      "blockedCount_other": "{{count}} utilisateurs bloqués",
+      "blockFailed": "Impossible de bloquer l'utilisateur",
+      "reason": "Raison (facultatif)",
+      "searchPlaceholder": "Rechercher un utilisateur à bloquer",
+      "subtitle": "Les utilisateurs bloqués ne peuvent ni commander ni faire d'offre dans cette boutique",
+      "title": "Liste de blocage",
+      "unblocked": "{{username}} débloqué",
+      "unblockFailed": "Impossible de débloquer l'utilisateur",
+      "unblockLabel": "Débloquer {{name}}"
+    },
+    "card": {
+      "byOwner": "par {{name}}"
+    },
+    "customers": {
+      "title": "Clients"
+    },
+    "directory": {
+      "empty": "Aucune boutique trouvée",
+      "search": "Rechercher des boutiques...",
+      "sortLabel": "Trier les boutiques",
+      "sortMostSales": "Plus de ventes",
+      "sortNameAZ": "Nom A-Z",
+      "sortNewest": "Plus récentes",
+      "sortTopRated": "Mieux notées",
+      "title": "Parcourir les boutiques"
+    },
+    "listingCount_many": "{{count}} annonces",
+    "listingCount_one": "{{count}} annonce",
+    "listingCount_other": "{{count}} annonces",
+    "mine": {
+      "active": "Active",
+      "activeShops": "Boutiques actives",
+      "create": "Créer une boutique",
+      "created": "Créée en {{date}}",
+      "createFirst": "Créez votre première boutique",
+      "customOrders": "Commandes sur mesure",
+      "emptyBody": "Créez une boutique pour commencer à vendre sur SC Market. Votre vitrine est prête en quelques minutes.",
+      "emptyTitle": "Vous n'avez pas encore de boutique",
+      "featureAnalytics": "Suivez vos ventes, avis et statistiques",
+      "featureBranding": "Votre identité avec bannière et logo",
+      "featureListings": "Proposez des objets, des services et des lots",
+      "languages": "Langues",
+      "live": "En ligne",
+      "manage": "Gérer",
+      "no": "Non",
+      "noTags": "Pas encore de tags",
+      "organization": "Organisation",
+      "personal": "Personnelle",
+      "status": "Statut",
+      "subtitle": "Gérez vos boutiques, annonces et commandes",
+      "tags": "Tags",
+      "title": "Mes boutiques",
+      "totalShops": "Boutiques au total",
+      "viewShop": "Voir la boutique",
+      "yes": "Oui"
+    },
+    "profile": {
+      "byOwner": "par <owner>{{name}}</owner>",
+      "headRating": "Note",
+      "headReview": "Avis",
+      "loading": "Chargement...",
+      "noDescription": "Aucune description",
+      "noListings": "Aucune annonce active",
+      "noMatches": "Aucune annonce ne correspond à votre recherche",
+      "noReviews": "Pas encore d'avis",
+      "noReviewsBody": "Les avis apparaîtront ici au fil des commandes terminées",
+      "notFound": "Boutique introuvable",
+      "owner": "Propriétaire de la boutique",
+      "searchListings": "Rechercher des annonces...",
+      "since": "Depuis {{date}}",
+      "sortListings": "Trier les annonces",
+      "sortMostStock": "Plus de stock",
+      "sortNewest": "Plus récentes",
+      "sortOldest": "Plus anciennes",
+      "sortPriceHigh": "Prix : décroissant",
+      "sortPriceLow": "Prix : croissant",
+      "tabAbout": "À propos",
+      "tabListings": "Annonces",
+      "tabOrder": "Commander",
+      "tabReviews": "Avis",
+      "tabServices": "Services",
+      "tabsLabel": "Onglets de la boutique"
+    },
+    "reviewCount_many": "{{count}} avis",
+    "reviewCount_one": "{{count}} avis",
+    "reviewCount_other": "{{count}} avis",
+    "saleCount_many": "{{count}} ventes",
+    "saleCount_one": "{{count}} vente",
+    "saleCount_other": "{{count}} ventes",
+    "serviceCount_many": "{{count}} services",
+    "serviceCount_one": "{{count}} service",
+    "serviceCount_other": "{{count}} services"
+  },
+  "marketV2": {
+    "archive": "Archiver",
+    "availShort": "{{quantity}} dispo.",
+    "bestPrice": "Meilleur",
+    "craftingShoppingList": "Liste de courses d'artisanat",
+    "description": "Description",
+    "edit": "Modifier",
+    "gridView": "Vue en grille",
+    "imageOf": "Image de {{name}}",
+    "listingDetails": "Détails de l'annonce",
+    "listView": "Vue en liste",
+    "maxTier": "Palier max.",
+    "maxValue": "Valeur max.",
+    "minTier": "Palier min.",
+    "minValue": "Valeur min.",
+    "noVariants": "Aucune variante disponible",
+    "outOfStockBadge": "RUPTURE DE STOCK",
+    "privateBadge": "PRIVÉ",
+    "qtyColon": "Qté : {{quantity}}",
+    "qtyShort": "Qté {{quantity}}",
+    "quickEdit": "Modification rapide",
+    "removeItemFailed": "Impossible de retirer l'article",
+    "searchBuyOrders": "Rechercher des ordres d'achat...",
+    "searchItems": "Rechercher des objets, catégories...",
+    "searchItemsSellers": "Rechercher des objets, catégories, vendeurs...",
+    "standardVariant": "Standard",
+    "updateQuantityFailed": "Impossible de mettre à jour la quantité",
+    "updateVariantFailed": "Impossible de mettre à jour la variante"
+  },
+  "orgsUi": {
+    "avatarOf": "Avatar de {{name}}",
+    "createOrg": "Créer une organisation",
+    "myOrgs": "Mes organisations",
+    "noOrgs": "Vous n'êtes membre d'aucune organisation",
+    "noOrgsBody": "Rejoignez ou créez une organisation pour collaborer avec d'autres joueurs",
+    "userNoOrgs": "Cet utilisateur ne fait partie d'aucune organisation",
+    "view": "Voir"
+  },
+  "settingsUi": {
+    "apiTokens": "Jetons d'API",
+    "chooseTypesOrg": "Choisissez les types de notifications que vous souhaitez recevoir pour cette organisation.",
+    "chooseTypesPersonal": "Choisissez les types de notifications que vous souhaitez recevoir à titre personnel.",
+    "frequency": "Fréquence : {{frequency}}",
+    "frequencyAt": "Fréquence : {{frequency}} à {{time}}",
+    "itemsUnit": "articles",
+    "notificationFallback": "notification",
+    "notificationsFor": "Notifications pour {{name}}",
+    "orgNotifications": "Notifications de l'organisation",
+    "preferencesUpdated_many": "{{count}} préférences de notification mises à jour",
+    "preferencesUpdated_one": "{{count}} préférence de notification mise à jour",
+    "preferencesUpdated_other": "{{count}} préférences de notification mises à jour",
+    "preferencesUpdateFailed": "Impossible de mettre à jour les préférences",
+    "preferenceUpdated": "Préférence mise à jour pour {{name}}",
+    "preferenceUpdateFailed": "Impossible de mettre à jour la préférence",
+    "selectFont": "Choisir une police",
+    "selectOrg": "Choisir une organisation",
+    "turnAllOff": "Tout désactiver",
+    "turnAllOn": "Tout activer"
+  },
+  "messagesUi": {
+    "send": "Envoyer",
+    "viewOffer": "Voir l'offre",
+    "viewOrder": "Voir la commande"
   }
 }

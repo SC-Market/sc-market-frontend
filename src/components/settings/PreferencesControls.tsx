@@ -293,7 +293,7 @@ export function PreferencesControls() {
                 getOptionLabel={(o) => o.label}
                 isOptionEqualToValue={(a, b) => a.value === b.value}
                 renderInput={(params) => (
-                  <TextField {...params} size="small" placeholder="Select font" />
+                  <TextField {...params} size="small" placeholder={t("settingsUi.selectFont")} />
                 )}
                 renderOption={(props, option) => (
                   <Box component="li" {...props} sx={{ fontFamily: option.value ? `"${option.value}", sans-serif` : undefined }}>

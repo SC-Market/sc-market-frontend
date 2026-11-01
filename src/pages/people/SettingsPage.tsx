@@ -288,7 +288,7 @@ export function SettingsPage() {
                 value={5}
               />
               <Tab
-                label="API Tokens"
+                label={t("settingsUi.apiTokens")}
                 icon={<SecurityRounded />}
                 {...a11yProps(6)}
                 value={6}

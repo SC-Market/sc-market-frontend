@@ -179,7 +179,7 @@ export function OnboardingPage() {
       dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
       navigate(PATHS.dashboard)
     } catch {
-      issueAlert({ severity: "error", message: "Failed to complete setup" })
+      issueAlert({ severity: "error", message: t("onboarding.setupFailed") })
     }
   }, [completeOnboarding, dispatch, navigate, issueAlert])
 
@@ -219,7 +219,7 @@ export function OnboardingPage() {
         })
         handleNext()
       } catch {
-        issueAlert({ severity: "error", message: "Failed to save availability" })
+        issueAlert({ severity: "error", message: t("onboarding.availabilityFailed") })
       }
     },
     [updateAvailability, issueAlert, handleNext, t],
@@ -238,7 +238,7 @@ export function OnboardingPage() {
         ),
       })
     } catch {
-      issueAlert({ severity: "error", message: "Failed to add email" })
+      issueAlert({ severity: "error", message: t("onboarding.emailFailed") })
     }
   }, [emailInput, addEmail, issueAlert, t])
 

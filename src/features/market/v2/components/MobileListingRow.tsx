@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 /**
  * MobileListingRow — compact list-style row for mobile manage pages.
  *
@@ -45,6 +46,7 @@ export function MobileListingRow({
   onEdit,
   onArchive,
 }: MobileListingRowProps) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
@@ -90,7 +92,7 @@ export function MobileListingRow({
           sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "secondary.main" }}
         >
           <EditRounded fontSize="small" />
-          <Typography variant="caption">Edit</Typography>
+          <Typography variant="caption">{t("marketV2.edit")}</Typography>
         </Box>
       }
       rightAction={
@@ -99,7 +101,7 @@ export function MobileListingRow({
             sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "error.main" }}
           >
             <ArchiveRounded fontSize="small" />
-            <Typography variant="caption">Archive</Typography>
+            <Typography variant="caption">{t("marketV2.archive")}</Typography>
           </Box>
         ) : undefined
       }
@@ -163,7 +165,7 @@ export function MobileListingRow({
             </Typography>
             <Typography variant="caption" color="text.disabled">·</Typography>
             <Typography variant="caption" color="text.secondary">
-              Qty {listing.quantity_available.toLocaleString()}
+              {t("marketV2.qtyShort", { quantity: listing.quantity_available.toLocaleString() })}
             </Typography>
             {listing.variant_count > 1 && (
               <>
@@ -197,7 +199,7 @@ export function MobileListingRow({
             <IconButton
               size="small"
               onClick={handleEditClick}
-              aria-label="Quick edit"
+              aria-label={t("marketV2.quickEdit")}
               sx={{
                 width: 36,
                 height: 36,

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React from "react"
 import { FormControlLabel, Switch, Typography, Box } from "@mui/material"
 
@@ -22,6 +23,7 @@ export function PreferenceToggle({
   digestTime,
   type,
 }: PreferenceToggleProps) {
+  const { t } = useTranslation()
   return (
     <FormControlLabel
       control={
@@ -36,8 +38,9 @@ export function PreferenceToggle({
           <Typography variant="body2">{actionName}</Typography>
           {type === "email" && frequency && (
             <Typography variant="caption" color="text.secondary">
-              Frequency: {frequency}
-              {digestTime && ` at ${digestTime}`}
+              {digestTime
+                ? t("settingsUi.frequencyAt", { frequency, time: digestTime })
+                : t("settingsUi.frequency", { frequency })}
             </Typography>
           )}
         </Box>

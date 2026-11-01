@@ -494,7 +494,7 @@ function GroupCard({
                   : { height: 180, aspectRatio: "16/9" }),
                 overflow: "hidden",
               }}
-              alt={`Image of ${cheapest.game_item_name}`}
+              alt={t("marketV2.imageOf", { name: cheapest.game_item_name })}
             />
             <Box
               sx={{
@@ -1000,6 +1000,7 @@ function VariantHighlightCard({
  * client-grouped per-LISTING rows without the per-variant fetch or add-to-cart.
  */
 function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] }) {
+  const { t } = useTranslation()
   return (
     <Stack divider={<Divider />}>
       {listings.map((s, i) => {
@@ -1021,7 +1022,7 @@ function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] })
             {qc && (
               <Chip label={qc.label} size="small" sx={{ height: 20, fontSize: "0.65rem", ...qualityChipSx(qc.color) }} />
             )}
-            {i === 0 && <Chip label="Best" size="small" color="primary" sx={{ height: 20 }} />}
+            {i === 0 && <Chip label={t("marketV2.bestPrice")} size="small" color="primary" sx={{ height: 20 }} />}
             <Typography variant="body2" sx={{ color: "primary.main", fontWeight: 700, width: 110, textAlign: "right" }}>
               {formatPrice(s.price_min)}
             </Typography>

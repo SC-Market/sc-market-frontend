@@ -345,7 +345,7 @@ describe("ListingDetailV2", () => {
     renderComponent();
 
     // Verify OUT OF STOCK chip is displayed
-    expect(screen.getByText("OUT OF STOCK")).toBeInTheDocument();
+    expect(screen.getByText("marketV2.outOfStockBadge")).toBeInTheDocument();
   });
 
   it("displays loading state", () => {

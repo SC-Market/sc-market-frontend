@@ -23,9 +23,11 @@ import { UserSearch } from "../../../components/search/UserSearch"
 import { Link } from "react-router-dom"
 import type { User } from "../../../datatypes/User"
 import { USER_PATHS } from "../../../routes/paths"
+import { useTranslation } from "react-i18next"
 
 export function ShopBlocklistSection({ shopId }: { shopId: string }) {
   const issueAlert = useAlertHook()
+  const { t } = useTranslation()
 
   const { data: blocklist = [] } = useGetShopBlocklistQuery({ shopId })
   const [blockUser] = useBlockUserFromShopMutation()
@@ -41,39 +43,39 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
         shopId,
         blockUserRequest: { username: selectedUser.username, reason },
       }).unwrap()
-      issueAlert({ severity: "success", message: `Blocked ${selectedUser.username}` })
+      issueAlert({ severity: "success", message: t("shops.blocklist.blocked", { username: selectedUser.username }) })
       setSelectedUser(null)
       setReason("")
     } catch (err: unknown) {
-      issueAlert({ severity: "error", message: String((err as { data?: { message?: string } })?.data?.message || "Failed to block user") })
+      issueAlert({ severity: "error", message: String((err as { data?: { message?: string } })?.data?.message || t("shops.blocklist.blockFailed")) })
     }
   }
 
   const handleUnblock = async (userId: string, username: string) => {
     try {
       await unblockUser({ shopId, blockedUserId: userId }).unwrap()
-      issueAlert({ severity: "success", message: `Unblocked ${username}` })
+      issueAlert({ severity: "success", message: t("shops.blocklist.unblocked", { username }) })
     } catch (err: unknown) {
-      issueAlert({ severity: "error", message: String((err as { data?: { message?: string } })?.data?.message || "Failed to unblock user") })
+      issueAlert({ severity: "error", message: String((err as { data?: { message?: string } })?.data?.message || t("shops.blocklist.unblockFailed")) })
     }
   }
 
   return (
     <FormPaper
-      title="Blocklist"
-      subtitle="Blocked users cannot place orders or offers at this shop"
+      title={t("shops.blocklist.title")}
+      subtitle={t("shops.blocklist.subtitle")}
     >
       <Grid item xs={12} sm={8}>
         <UserSearch
           onUserSelect={(user: User) => setSelectedUser({ username: user.username })}
-          placeholder="Search user to block"
+          placeholder={t("shops.blocklist.searchPlaceholder")}
         />
       </Grid>
       {selectedUser && (
         <>
           <Grid item xs={12}>
             <TextField
-              label="Reason (optional)"
+              label={t("shops.blocklist.reason")}
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               fullWidth
@@ -87,7 +89,7 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
               startIcon={<Block />}
               onClick={handleBlock}
             >
-              Block {selectedUser.username}
+              {t("shops.blocklist.block", { username: selectedUser.username })}
             </Button>
           </Grid>
         </>
@@ -95,7 +97,7 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
       {blocklist.length > 0 && (
         <Grid item xs={12}>
           <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 1, mb: 0.5 }}>
-            {blocklist.length} blocked user{blocklist.length !== 1 ? "s" : ""}
+            {t("shops.blocklist.blockedCount", { count: blocklist.length })}
           </Typography>
           <List disablePadding dense>
             {blocklist.map((entry) => (
@@ -117,7 +119,7 @@ export function ShopBlocklistSection({ shopId }: { shopId: string }) {
                   edge="end"
                   size="small"
                   color="error"
-                  aria-label={`Unblock ${entry.display_name || entry.username}`}
+                  aria-label={t("shops.blocklist.unblockLabel", { name: entry.display_name || entry.username })}
                   onClick={(e) => {
                     e.preventDefault()
                     e.stopPropagation()

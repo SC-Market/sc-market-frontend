@@ -94,8 +94,8 @@ export function ShopCustomers() {
 
   return (
     <StandardPageLayout
-      title="Customers"
-      headerTitle="Customers"
+      title={t("shops.customers.title")}
+      headerTitle={t("shops.customers.title")}
       sidebarOpen={true}
       maxWidth="lg"
     >

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { Box, Avatar, Stack, TextField, IconButton } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -16,6 +17,7 @@ export interface MessageThreadSkeletonProps {
 export function MessageThreadSkeleton({
   messageCount = 5,
 }: MessageThreadSkeletonProps) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
 
@@ -176,7 +178,7 @@ export function MessageThreadSkeleton({
           variant="outlined"
           size="small"
           disabled
-          placeholder="Loading..."
+          placeholder={t("shops.profile.loading")}
           sx={{
             "& .MuiInputBase-root": {
               bgcolor: theme.palette.action.disabledBackground,
@@ -184,7 +186,7 @@ export function MessageThreadSkeleton({
           }}
         />
         <IconButton
-          aria-label="Send"
+          aria-label={t("messagesUi.send")}
           disabled
           sx={{
             flexShrink: 0,

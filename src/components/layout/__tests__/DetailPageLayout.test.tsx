@@ -1,3 +1,4 @@
+import "../../../util/i18n"
 /**
  * Unit and Property-Based Tests for DetailPageLayout Component
  *

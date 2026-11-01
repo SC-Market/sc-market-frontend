@@ -1,4 +1,5 @@
 import { Link as RouterLink } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import {
   Box,
   Typography,
@@ -44,16 +45,17 @@ function getInitials(name: string): string {
 
 function SummaryStatsBar({ shops }: { shops: ShopResponse[] }) {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
   const totalShops = shops.length
   const activeShops = shops.filter((s) => s.status === "active").length
 
   return (
     <Grid container spacing={2} sx={{ mb: 3 }}>
       {[
-        { label: "Total Shops", value: totalShops.toString() },
-        { label: "Active Shops", value: activeShops.toString(), color: "success.main" },
-        { label: "Custom Orders", value: shops.filter((s) => s.accepts_custom_orders).length.toString() },
-        { label: "Languages", value: [...new Set(shops.flatMap((s) => s.supported_languages))].length.toString(), color: "secondary.main" },
+        { label: t("shops.mine.totalShops"), value: totalShops.toString() },
+        { label: t("shops.mine.activeShops"), value: activeShops.toString(), color: "success.main" },
+        { label: t("shops.mine.customOrders"), value: shops.filter((s) => s.accepts_custom_orders).length.toString() },
+        { label: t("shops.mine.languages"), value: [...new Set(shops.flatMap((s) => s.supported_languages))].length.toString(), color: "secondary.main" },
       ].map((stat) => (
         <Grid item xs={6} md={3} key={stat.label}>
           <Card
@@ -87,6 +89,7 @@ function SummaryStatsBar({ shops }: { shops: ShopResponse[] }) {
 
 function ShopManagementCard({ shop }: { shop: ShopResponse }) {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
   const isPersonal = !shop.is_org_owned
 
   return (
@@ -141,7 +144,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
                 {shop.name}
               </Typography>
               <Chip
-                label={shop.status === "active" ? "Active" : shop.status}
+                label={shop.status === "active" ? t("shops.mine.active") : shop.status}
                 size="small"
                 color={shop.status === "active" ? "success" : "default"}
                 variant="outlined"
@@ -159,7 +162,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
 
           <Chip
             icon={isPersonal ? <Person /> : <Groups />}
-            label={isPersonal ? "Personal" : "Organization"}
+            label={isPersonal ? t("shops.mine.personal") : t("shops.mine.organization")}
             size="small"
             variant="outlined"
             sx={{ flexShrink: 0 }}
@@ -185,7 +188,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
               {shop.tags.length}
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              Tags
+              {t("shops.mine.tags")}
             </Typography>
           </Box>
           <Box sx={{ textAlign: "center" }}>
@@ -193,23 +196,23 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
               {shop.supported_languages.length}
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              Languages
+              {t("shops.mine.languages")}
             </Typography>
           </Box>
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h6" fontWeight={700}>
-              {shop.accepts_custom_orders ? "Yes" : "No"}
+              {shop.accepts_custom_orders ? t("shops.mine.yes") : t("shops.mine.no")}
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              Custom Orders
+              {t("shops.mine.customOrders")}
             </Typography>
           </Box>
           <Box sx={{ textAlign: "center" }}>
             <Typography variant="h6" fontWeight={700}>
-              {shop.status === "active" ? "Live" : shop.status}
+              {shop.status === "active" ? t("shops.mine.live") : shop.status}
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              Status
+              {t("shops.mine.status")}
             </Typography>
           </Box>
         </Box>
@@ -223,7 +226,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             component={RouterLink}
             to={SHOP_PATHS.profile(shop.slug)}
           >
-            View Shop
+            {t("shops.mine.viewShop")}
           </Button>
           {shop.permissions?.can_manage && (
             <Button
@@ -233,7 +236,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
               component={RouterLink}
               to={SHOP_PATHS.settings(shop.slug)}
             >
-              Manage
+              {t("shops.mine.manage")}
             </Button>
           )}
         </Stack>
@@ -264,7 +267,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
               ))
             ) : (
               <Typography variant="caption" color="text.secondary" fontStyle="italic">
-                No tags yet
+                {t("shops.mine.noTags")}
               </Typography>
             )}
           </Stack>
@@ -272,7 +275,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           <Stack direction="row" alignItems="center" spacing={0.5}>
             <CalendarToday sx={{ fontSize: 14, color: "text.secondary" }} />
             <Typography variant="caption" color="text.secondary">
-              Created {formatDate(shop.created_at)}
+              {t("shops.mine.created", { date: formatDate(shop.created_at) })}
             </Typography>
           </Stack>
         </Box>
@@ -303,6 +306,7 @@ function LoadingSkeleton() {
 }
 
 function EmptyState({ onCreateClick, isCreating }: { onCreateClick: () => void; isCreating: boolean }) {
+  const { t } = useTranslation()
   return (
     <Box
       sx={{
@@ -332,18 +336,18 @@ function EmptyState({ onCreateClick, isCreating }: { onCreateClick: () => void; 
       </Box>
 
       <Typography variant="h5" fontWeight={600}>
-        You don&apos;t have any shops yet
+        {t("shops.mine.emptyTitle")}
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 400 }}>
-        Create a shop to start selling on SC Market. Set up your storefront in minutes.
+        {t("shops.mine.emptyBody")}
       </Typography>
 
       <Card variant="outlined" sx={{ p: 2, mt: 1, textAlign: "left" }}>
         <Stack spacing={1}>
           {[
-            "Custom branding with banner and logo",
-            "List items, services, and bundles",
-            "Track sales, reviews, and analytics",
+            t("shops.mine.featureBranding"),
+            t("shops.mine.featureListings"),
+            t("shops.mine.featureAnalytics"),
           ].map((feature) => (
             <Stack key={feature} direction="row" alignItems="center" spacing={1}>
               <Box
@@ -368,13 +372,14 @@ function EmptyState({ onCreateClick, isCreating }: { onCreateClick: () => void; 
         disabled={isCreating}
         sx={{ mt: 1 }}
       >
-        Create Your First Shop
+        {t("shops.mine.createFirst")}
       </Button>
     </Box>
   )
 }
 
 export function MyShops() {
+  const { t } = useTranslation()
   const { data: shops, isLoading } = useGetMyShopsQuery()
   usePageReady(isLoading)
   const [quickCreate, { isLoading: isCreating }] = useQuickCreateShopMutation()
@@ -393,10 +398,10 @@ export function MyShops() {
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 3, flexWrap: "wrap", gap: 2 }}>
         <Box>
           <Typography variant="h4" fontWeight={700} sx={{ textTransform: "uppercase", letterSpacing: "0.03em" }}>
-            My Shops
+            {t("shops.mine.title")}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Manage your shops, listings, and orders
+            {t("shops.mine.subtitle")}
           </Typography>
         </Box>
         <Button
@@ -405,7 +410,7 @@ export function MyShops() {
           onClick={handleQuickCreate}
           disabled={isCreating}
         >
-          Create Shop
+          {t("shops.mine.create")}
         </Button>
       </Box>
 

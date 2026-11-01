@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { useCallback, useState, useEffect } from "react"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import {
@@ -8,6 +9,7 @@ import type { EmailPreference } from "../domain/types"
 import type { PushPreference } from "../../push-notifications/domain/types"
 
 export function useEmailSettings() {
+  const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
@@ -51,7 +53,7 @@ export function useEmailSettings() {
           ],
         }).unwrap()
         issueAlert({
-          message: `Preference updated for ${preference.action_name || (preference as EmailPreference).action_name || "notification"}`,
+          message: t("settingsUi.preferenceUpdated", { name: preference.action_name || (preference as EmailPreference).action_name || t("settingsUi.notificationFallback") }),
           severity: "success",
         })
       } catch (error) {
@@ -60,12 +62,12 @@ export function useEmailSettings() {
           message:
             err?.data?.error?.message ||
             err?.message ||
-            "Failed to update preference",
+            t("settingsUi.preferenceUpdateFailed"),
           severity: "error",
         })
       }
     },
-    [updatePreferences, issueAlert],
+    [updatePreferences, issueAlert, t],
   )
 
   const handleBatchPreferenceChange = useCallback(
@@ -99,7 +101,7 @@ export function useEmailSettings() {
             preferences: emailPreferences,
           }).unwrap()
           issueAlert({
-            message: `Updated ${emailPreferences.length} notification preference${emailPreferences.length !== 1 ? "s" : ""}`,
+            message: t("settingsUi.preferencesUpdated", { count: emailPreferences.length }),
             severity: "success",
           })
         }
@@ -109,12 +111,12 @@ export function useEmailSettings() {
           message:
             err?.data?.error?.message ||
             err?.message ||
-            "Failed to update preferences",
+            t("settingsUi.preferencesUpdateFailed"),
           severity: "error",
         })
       }
     },
-    [updatePreferences, issueAlert],
+    [updatePreferences, issueAlert, t],
   )
 
   return {

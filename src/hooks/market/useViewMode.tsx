@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { ToggleButtonGroup, ToggleButton } from "@mui/material"
 import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
 import { useLocalStorageState } from "../storage/useLocalStorageState"
@@ -12,6 +13,7 @@ export function useViewMode(): [ViewMode, (mode: ViewMode) => void] {
 }
 
 export function ViewModeToggle({ mode, onChange }: { mode: ViewMode; onChange: (m: ViewMode) => void }) {
+  const { t } = useTranslation()
   return (
     <ToggleButtonGroup
       value={mode}
@@ -20,8 +22,8 @@ export function ViewModeToggle({ mode, onChange }: { mode: ViewMode; onChange: (
       size="small"
       color="secondary"
     >
-      <ToggleButton value="grid" aria-label="Grid view"><GridViewRounded fontSize="small" /></ToggleButton>
-      <ToggleButton value="list" aria-label="List view"><ViewListRounded fontSize="small" /></ToggleButton>
+      <ToggleButton value="grid" aria-label={t("marketV2.gridView")}><GridViewRounded fontSize="small" /></ToggleButton>
+      <ToggleButton value="list" aria-label={t("marketV2.listView")}><ViewListRounded fontSize="small" /></ToggleButton>
     </ToggleButtonGroup>
   )
 }

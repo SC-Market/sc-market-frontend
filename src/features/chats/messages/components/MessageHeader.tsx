@@ -234,7 +234,7 @@ export function MessageHeader(props: {
                     ) : chat!.order_id ? (
                       <Chip
                         icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
-                        label="View Order"
+                        label={t("messagesUi.viewOrder")}
                         size="small"
                         component={Link}
                         to={ORDER_PATHS.detail(chat!.order_id)}
@@ -251,7 +251,7 @@ export function MessageHeader(props: {
                     ) : chat!.session_id ? (
                       <Chip
                         icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
-                        label="View Offer"
+                        label={t("messagesUi.viewOffer")}
                         size="small"
                         component={Link}
                         to={ORDER_PATHS.offer(chat!.session_id)}

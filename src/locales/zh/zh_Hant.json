@@ -264,13 +264,13 @@
     }
   },
   "adminExpressVerify": {
-    "title": "Express Verify User",
-    "ownerDiscordId": "Owner Discord ID",
-    "ownerUsername": "Owner Username*",
-    "spectrumId": "Org Spectrum ID*",
-    "submit": "Submit",
-    "success": "Submitted!",
-    "failure": "Failed to submit! {{reason}}"
+    "title": "快速驗證使用者",
+    "ownerDiscordId": "擁有者 Discord ID",
+    "ownerUsername": "擁有者使用者名稱*",
+    "spectrumId": "組織 Spectrum ID*",
+    "submit": "提交",
+    "success": "已提交！",
+    "failure": "提交失敗！{{reason}}"
   },
   "ads": {
     "scOrgs": {
@@ -662,13 +662,12 @@
     "new_bid_placed_by": "新出價來自",
     "price_alert": "價格提醒：",
     "price_alert_hit_target": "的刊登價格已達到或低於您的目標價",
-    "for": "for",
+    "for": "於",
     "clear_all": "清除全部通知",
     "mark_all_as_read": "全部已讀",
     "admin_alert": "管理員警示",
     "clear_all_failed": "清除通知失敗",
     "cleared_all": "已清除 {{count}} 則通知",
-    "cleared_all_one": "notifications.cleared_all",
     "cleared_all_other": "已清除 {{count}} 則通知",
     "click_to_open_link": "點擊以開啟連結",
     "delete": "刪除",
@@ -676,7 +675,6 @@
     "markAsRead": "標示為已讀",
     "markAsUnread": "標示為未讀",
     "marked_all_read": "已將 {{count}} 則通知標示為已讀",
-    "marked_all_read_one": "notifications.marked_all_read",
     "marked_all_read_other": "已將 {{count}} 則通知標示為已讀",
     "new_admin_alert": "您收到一則新的管理員警示",
     "new_offer_message_from": "新報價訊息來自",
@@ -1162,9 +1160,7 @@
       "notRequested": "未要求",
       "organizationPreferences": "組織偏好設定",
       "otherDevices": "{{count}} 部其他裝置",
-      "otherDevices_one": "settings.pushNotifications.otherDevices",
       "otherDevices_other": "{{count}} 部其他裝置",
-      "otherDevices_plural": "{{count}} 部其他裝置",
       "permissionDeniedError": "權限{{status}}。請在瀏覽器設定中啟用通知。",
       "permissionDeniedMessage": "請在瀏覽器設定中啟用通知，以使用推播通知。",
       "permissionGrantedMessage": "已授予權限！您現在可以訂閱推播通知。",
@@ -1177,9 +1173,7 @@
       "subscribing": "訂閱中...",
       "title": "推播通知",
       "totalDevices": "共 {{count}} 部裝置",
-      "totalDevices_one": "settings.pushNotifications.totalDevices",
       "totalDevices_other": "共 {{count}} 部裝置",
-      "totalDevices_plural": "共 {{count}} 部裝置",
       "unknownDevice": "未知裝置",
       "unsubscribe": "取消訂閱",
       "unsubscribed": "已成功取消訂閱推播通知",
@@ -2086,17 +2080,14 @@
     "has_service": "有服務",
     "merge_error": "合併報價失敗",
     "merge_offers": "合併報價 ({{count}})",
-    "merge_offers_one": "OffersViewPaginated.merge_offers",
     "merge_offers_other": "合併報價（{{count}}）",
     "merge_offers_combined_cost": "合計費用：{{cost}} aUEC",
     "merge_offers_confirm_body": "合併 {{count}} 個報價工作階段將建立一個新的合併報價工作階段，並關閉所選的工作階段。此動作無法復原。",
-    "merge_offers_confirm_body_one": "OffersViewPaginated.merge_offers_confirm_body",
     "merge_offers_confirm_body_other": "合併 {{count}} 個報價工作階段將建立一個新的合併報價工作階段，並關閉所選的工作階段。此動作無法復原。",
     "merge_offers_confirm_button": "合併報價",
     "merge_offers_confirm_cancel": "取消",
     "merge_offers_confirm_title": "合併報價工作階段？",
     "merge_offers_selected_count": "已選擇：{{count}} 個報價工作階段",
-    "merge_offers_selected_count_one": "OffersViewPaginated.merge_offers_selected_count",
     "merge_offers_selected_count_other": "已選擇：{{count}} 個報價工作階段",
     "merge_offers_warning": "所有選取的報價工作階段將被關閉，並以單一合併報價工作階段取代。",
     "merge_success": "報價合併成功",
@@ -2240,12 +2231,11 @@
     "searchAndSelect": "搜尋並選擇使用者以建立羣組聊天",
     "searchPlaceholder": "輸入以搜尋使用者",
     "searchUsers": "搜尋使用者...",
-    "selectedCount": "已選擇 {{count}} 位使用者",
-    "selectedCount_plural": "已選擇 {{count}} 位使用者",
     "selectedUsers": "已選擇的使用者",
     "selectUsers": "選擇使用者以開始聊天",
     "startNewChat": "開始新的聊天",
-    "typeToSearch": "請輸入至少 3 個字元以搜尋"
+    "typeToSearch": "請輸入至少 3 個字元以搜尋",
+    "selectedCount_other": "已選擇 {{count}} 位使用者"
   },
   "MemberBalance": {
     "myBalance": "我的餘額",
@@ -2396,7 +2386,6 @@
     "activeOrders": "進行中的訂單",
     "previousOrders": "先前的訂單",
     "anonymousReviewer": "匿名",
-    "inCarts_one": "MarketListingView.inCarts",
     "inCarts_other": "{{count}} 人已將此商品加入購物車",
     "languages": "語言",
     "noReviewContent": "無評論內容",
@@ -2406,7 +2395,6 @@
     "reviewBy": "由",
     "sellerReviews": "{{seller}} 的評論",
     "viewAllReviews": "檢視全部 {{count}} 則評論",
-    "viewAllReviews_one": "MarketListingView.viewAllReviews",
     "viewAllReviews_other": "檢視全部 {{count}} 則評價",
     "viewInCart": "在購物車中檢視",
     "views": "瀏覽次數"
@@ -2473,18 +2461,18 @@
     "failedSubmit": "送出失敗！"
   },
   "MarketListingEditView": {
-    "deactivate": "Deactivate Listing",
-    "activate": "Activate Listing",
-    "archive": "Archive Listing",
-    "updateBtn": "Update",
+    "deactivate": "停用商品",
+    "activate": "啟用商品",
+    "archive": "封存商品",
+    "updateBtn": "更新",
     "updating": "更新中...",
-    "title": "Title",
-    "quantityAvailable": "Quantity Available",
-    "price": "Price",
-    "minBidIncrement": "Minimum Bid Increment",
-    "description": "Description",
-    "updated": "Updated!",
-    "updateError": "Error while updating!",
+    "title": "標題",
+    "quantityAvailable": "可售數量",
+    "price": "價格",
+    "minBidIncrement": "最低加價幅度",
+    "description": "描述",
+    "updated": "已更新！",
+    "updateError": "更新時發生錯誤！",
     "internalListing": "內部刊登",
     "publicListing": "公開刊登"
   },
@@ -2520,7 +2508,6 @@
     "orLower": "低",
     "orHigher": "高",
     "addToCart": "加入購物車",
-    "ofAvailable_one": "MarketAggregateView.ofAvailable",
     "ofAvailable_other": "，共 {{count}} 件可售",
     "quantityRequested": "需求（想要 ≥ 價格）",
     "stockAvailable": "供應（庫存 ≤ 價格）",
@@ -2593,12 +2580,10 @@
     "editListing": "編輯上架商品",
     "archive": "封存",
     "bulkArchiveBody": "您即將封存 {{count}} 則刊登。封存後對買家及公開搜尋而言是永久性的。您仍可在「我的刊登」下檢視已封存的刊登。",
-    "bulkArchiveBody_one": "ItemStock.bulkArchiveBody",
     "bulkArchiveBody_other": "您即將封存 {{count}} 則刊登。封存後，買家和公開搜尋將永久無法看到這些刊登。您仍可在「我的刊登」中檢視已封存的刊登。",
     "bulkArchiveCancel": "取消",
     "bulkArchiveConfirm": "永久封存",
     "bulkArchivedSuccess": "已封存 {{count}} 則刊登。",
-    "bulkArchivedSuccess_one": "ItemStock.bulkArchivedSuccess",
     "bulkArchivedSuccess_other": "已封存 {{count}} 則刊登。",
     "bulkArchiveTitle": "要封存所選刊登嗎？",
     "cannotReduceStock": "無法減少庫存 — 有單位已配置給進行中的訂單",
@@ -3014,7 +2999,6 @@
     "added": "已加入購物車",
     "adding": "正在加入...",
     "addToCart": "加入購物車",
-    "alreadyInCart_one": "cart.alreadyInCart",
     "alreadyInCart_other": "購物車中已有 {{count}} 件",
     "available": "可用",
     "availableNow": "現在可用",
@@ -3030,7 +3014,6 @@
     "invalidQty": "數量必須至少為 1",
     "itemRemoved": "物品已從購物車移除",
     "nextAvailable": "下次可用",
-    "othersInCart_one": "cart.othersInCart",
     "othersInCart_other": "另有 {{count}} 人已將此商品加入購物車",
     "priceChanged": "價格已變更",
     "priceChangedFrom": "價格已從 {{old}} 變更為 {{new}} aUEC",
@@ -3473,7 +3456,6 @@
     "createListingDescription": "前往建立商品頁面",
     "createMarketListing": "建立新的市集商品",
     "dataTableDescription": "包含 {{count}} 列的資料表",
-    "dataTableDescription_one": "accessibility.dataTableDescription",
     "dataTableDescription_other": "包含 {{count}} 列的資料表",
     "decorativeImage": "",
     "defaultListingHelp": "選擇此組合商品要顯示的預設商品",
@@ -3482,7 +3464,6 @@
     "delete": "刪除",
     "downvoteComment": "為此留言按倒讚",
     "downvoteCount": "倒讚：{{count}}",
-    "downvoteCount_one": "accessibility.downvoteCount",
     "downvoteCount_other": "倒讚：{{count}}",
     "edit": "編輯",
     "editQuantityHelp": "編輯此庫存項目的可用數量",
@@ -3575,7 +3556,6 @@
     "recipientSelector": "收件者選擇器",
     "recipientTypeHelp": "選擇要將款項傳送給使用者還是承包商",
     "recruitmentUpvoteCount": "讚：{{count}}",
-    "recruitmentUpvoteCount_one": "accessibility.recruitmentUpvoteCount",
     "recruitmentUpvoteCount_other": "讚：{{count}}",
     "registerShip": "註冊艦船",
     "registerShipHelp": "將所選艦船註冊至您的艦隊",
@@ -3661,7 +3641,6 @@
     "updateAmountInput": "輸入要更新庫存的數量",
     "upvoteComment": "為此留言按讚",
     "upvoteCount": "讚：{{count}}",
-    "upvoteCount_one": "accessibility.upvoteCount",
     "upvoteCount_other": "讚：{{count}}",
     "upvoteRecruitmentPost": "為此招募貼文按讚",
     "userAvatar": "{{username}} 的頭像",
@@ -3779,7 +3758,6 @@
     "setMessage": "您的可用時段已設定完成。您可以向 {{sellerName}} 提交報價。",
     "submitDisabled": "設定可用時段以繼續"
   },
-  "awaiting-repair": "error",
   "BidAreaV2": {
     "amount": "金額",
     "auction": "拍賣",
@@ -3796,7 +3774,6 @@
     "minBid": "最低出價",
     "placeBid": "出價",
     "time": "時間",
-    "totalBids_one": "BidAreaV2.totalBids",
     "totalBids_other": "{{count}} 次出價",
     "yourBid": "您的出價（aUEC）"
   },
@@ -3888,8 +3865,6 @@
     "wants": "需求",
     "yes": "是"
   },
-  "Cancelled": "error",
-  "Completed": "success",
   "contract_actions": {
     "create_contract": "建立合約"
   },
@@ -4105,10 +4080,7 @@
     "title": "建立庫存批次",
     "variantAttributes": "規格屬性"
   },
-  "Damaged": "warning",
-  "displayed_rows_one": "{{from}}-{{to}} 共 {{count}}",
   "displayed_rows_other": "{{from}}-{{to}} 共 {{count}}",
-  "displayed_rows_range_one": "displayed_rows_range",
   "displayed_rows_range_other": "{{from}}–{{to}} / 共 {{count}}",
   "EditListingV2": {
     "about": "關於",
@@ -4302,14 +4274,11 @@
     "none": "無",
     "selectMultiple": "選擇..."
   },
-  "flight-ready": "success",
   "imageSearch": {
     "noImageSelected": "未選擇圖片",
     "searchResultImage": "搜尋結果圖片 {{index}}",
     "selectedImagePreview": "來自 URL 的所選圖片預覽：{{url}}"
   },
-  "in-concept": "info",
-  "in-repair": "warning",
   "inventory": {
     "actions": "操作",
     "addLot": "新增批次",
@@ -4405,7 +4374,6 @@
     "updateSuccess": "批次更新成功",
     "variantInfo": "規格資訊"
   },
-  "Low Fuel": "warning",
   "ManageMarketRedesign": {
     "actor": "店面",
     "addLot": "新增庫存",
@@ -4439,7 +4407,6 @@
     "subheading": "您販售的一切都集中在一處。展開一列以查看其背後的庫存。",
     "title": "管理市場",
     "unspecified": "未指定",
-    "variants_one": "{{count}} 個選項",
     "variants_other": "{{count}} 個選項"
   },
   "marketAggregateView": {
@@ -4450,7 +4417,6 @@
     "addToCart": "加入購物車",
     "auction": "拍賣",
     "availability": "{{count}} {{unit}} 可用",
-    "availability_one": "{{count}} {{unit}} 可用",
     "availability_other": "{{count}} {{unit}} 可用",
     "bidPreview": "出價預覽",
     "bundle": "組合包",
@@ -4465,7 +4431,6 @@
     "makeOffer": "提出報價",
     "negotiable": "可議價",
     "ofAvailable": "共 {{count}}",
-    "ofAvailable_one": "共 {{count}}",
     "ofAvailable_other": "共 {{count}}",
     "orderPlaced": "訂單已送出",
     "placeBid": "出價",
@@ -4482,13 +4447,10 @@
     "productImage": "{{title}} 的產品圖片"
   },
   "MarketRedesign": {
-    "acrossSellers_one": "來自 {{count}} 位賣家",
     "acrossSellers_other": "來自 {{count}} 位賣家",
     "addToCart": "加入",
-    "available_one": "{{count}} 可用",
     "available_other": "{{count}} 可用",
     "compare": "比較",
-    "compareSellers_one": "比較 {{count}} 位賣家",
     "compareSellers_other": "比較 {{count}} 位賣家",
     "forSale": "出售中",
     "fromPrice": "起",
@@ -4497,15 +4459,11 @@
     "lowestPrice": "最低價格",
     "negotiable": "可議價",
     "noSellers": "目前沒有可用的賣家。",
-    "seeAllCount_one": "查看全部 {{count}} 個刊登",
     "seeAllCount_other": "查看全部 {{count}} 個刊登",
-    "sellersCount_one": "{{count}} 位賣家",
     "sellersCount_other": "{{count}} 位賣家",
     "topBid": "最高出價",
     "topRated": "評價最高的賣家",
-    "unitsAvailable_one": "{{count}} 個單位可用",
     "unitsAvailable_other": "{{count}} 個單位可用",
-    "wantedBy_one": "{{count}} 位買家想要",
     "wantedBy_other": "{{count}} 位買家想要"
   },
   "messages": {
@@ -4708,7 +4666,6 @@
     "toggle_drawer": "切換側邊欄",
     "notifications": "通知"
   },
-  "Off Course": "warning",
   "offerTrend": {
     "accepted": "已接受",
     "active": "進行中",
@@ -4720,13 +4677,12 @@
     "rejected": "已拒絕",
     "total": "總計"
   },
-  "Offline": "error",
-  "OK": "success",
   "onboarding": {
     "availability": {
       "description": "讓其他人知道您何時上線可進行交易。拖曳以選取時段。",
       "title": "設定您的可用時段"
     },
+    "availabilityFailed": "儲存可用時間失敗",
     "availabilitySaved": "可用時段已儲存",
     "complete": "完成設定",
     "continue": "繼續",
@@ -4741,6 +4697,7 @@
       "title": "新增您的電子郵件",
       "verify": "傳送驗證"
     },
+    "emailFailed": "新增電子郵件失敗",
     "emailNotifs": {
       "description": "選擇哪些事件會寄送電子郵件給您。您隨時可以在設定中變更。",
       "prefsTitle": "電子郵件偏好設定",
@@ -4763,6 +4720,7 @@
       "prefsTitle": "推播偏好設定",
       "title": "推播通知"
     },
+    "setupFailed": "無法完成設定",
     "skip": "略過",
     "skipAll": "略過設定，我要自行探索",
     "steps": {
@@ -4933,7 +4891,6 @@
     "label": "組織成員",
     "placeholder": "搜尋成員..."
   },
-  "owned": "true",
   "page": "1",
   "pages": {
     "admin": {
@@ -5067,7 +5024,6 @@
     "selectedPageThumbnail": "{{title}} 的所選頁面縮圖",
     "wikiPageThumbnail": "{{title}} 的縮圖"
   },
-  "Pending": "warning",
   "profile": {
     "customOrdersMovedToShop": "自訂訂單現在透過商店下單。"
   },
@@ -5246,7 +5202,6 @@
     "reviewBy": "由",
     "sellerReviews": "{{seller}} 的評論",
     "viewAllReviews": "檢視全部 {{count}} 則評論",
-    "viewAllReviews_one": "serviceView.viewAllReviews",
     "viewAllReviews_other": "檢視全部 {{count}} 則評價"
   },
   "ShopSelector": {
@@ -5434,10 +5389,16 @@
         "title": "選擇圖片"
       }
     },
+    "goBack": "返回",
     "linkCopied": "連結已複製到剪貼簿",
+    "mainContent": "主要內容",
+    "pwaLater": "稍後",
+    "pwaUpdate": "更新",
+    "pwaUpdateBody": "有新版本可用，立即更新以取得最新功能。",
     "remove": "移除",
     "reset": "重設",
     "save": "儲存",
+    "sectionLoadError": "載入此區塊時發生錯誤。",
     "share": "分享",
     "yes": "是"
   },
@@ -5449,7 +5410,6 @@
     "error": "解除封鎖使用者失敗",
     "success": "已成功解除封鎖 {{username}}"
   },
-  "Under Attack": "error",
   "userActions": {
     "adminOpenIdentity": "在 管理 -> 身分 中開啟",
     "blockForOrg": "為 {{orgName}} 封鎖 {{username}}",
@@ -6051,5 +6011,156 @@
     },
     "replyTooltip_other": "過去90天訂單和報價聊天中首次回覆的典型時間（基於{{count}}個聊天）",
     "completedOrders_other": "已完成 {{count}} 筆訂單"
+  },
+  "shops": {
+    "blocklist": {
+      "block": "封鎖 {{username}}",
+      "blocked": "已封鎖 {{username}}",
+      "blockedCount_other": "已封鎖 {{count}} 位使用者",
+      "blockFailed": "封鎖使用者失敗",
+      "reason": "原因（選填）",
+      "searchPlaceholder": "搜尋要封鎖的使用者",
+      "subtitle": "被封鎖的使用者無法在本店下單或報價",
+      "title": "封鎖名單",
+      "unblocked": "已解除封鎖 {{username}}",
+      "unblockFailed": "解除封鎖失敗",
+      "unblockLabel": "解除封鎖 {{name}}"
+    },
+    "card": {
+      "byOwner": "店主：{{name}}"
+    },
+    "customers": {
+      "title": "顧客"
+    },
+    "directory": {
+      "empty": "找不到商店",
+      "search": "搜尋商店...",
+      "sortLabel": "商店排序",
+      "sortMostSales": "銷量最多",
+      "sortNameAZ": "名稱 A-Z",
+      "sortNewest": "最新",
+      "sortTopRated": "評分最高",
+      "title": "瀏覽商店"
+    },
+    "listingCount_other": "{{count}} 個商品",
+    "mine": {
+      "active": "營業中",
+      "activeShops": "營業中商店",
+      "create": "建立商店",
+      "created": "建立於 {{date}}",
+      "createFirst": "建立你的第一間商店",
+      "customOrders": "客製訂單",
+      "emptyBody": "建立商店即可在 SC Market 開始販售，幾分鐘就能架好店面。",
+      "emptyTitle": "你還沒有商店",
+      "featureAnalytics": "追蹤銷量、評價和數據分析",
+      "featureBranding": "自訂橫幅與標誌",
+      "featureListings": "上架物品、服務和組合包",
+      "languages": "語言",
+      "live": "營業中",
+      "manage": "管理",
+      "no": "否",
+      "noTags": "尚無標籤",
+      "organization": "組織",
+      "personal": "個人",
+      "status": "狀態",
+      "subtitle": "管理你的商店、商品和訂單",
+      "tags": "標籤",
+      "title": "我的商店",
+      "totalShops": "商店總數",
+      "viewShop": "檢視商店",
+      "yes": "是"
+    },
+    "profile": {
+      "byOwner": "店主：<owner>{{name}}</owner>",
+      "headRating": "評分",
+      "headReview": "評價",
+      "loading": "載入中...",
+      "noDescription": "尚無簡介",
+      "noListings": "目前沒有上架商品",
+      "noMatches": "沒有符合搜尋條件的商品",
+      "noReviews": "尚無評價",
+      "noReviewsBody": "訂單完成後，評價會顯示在這裡",
+      "notFound": "找不到商店",
+      "owner": "店主",
+      "searchListings": "搜尋商品...",
+      "since": "始於 {{date}}",
+      "sortListings": "商品排序",
+      "sortMostStock": "庫存最多",
+      "sortNewest": "最新",
+      "sortOldest": "最早",
+      "sortPriceHigh": "價格：由高到低",
+      "sortPriceLow": "價格：由低到高",
+      "tabAbout": "簡介",
+      "tabListings": "商品",
+      "tabOrder": "下單",
+      "tabReviews": "評價",
+      "tabServices": "服務",
+      "tabsLabel": "商店分頁"
+    },
+    "reviewCount_other": "{{count}} 則評價",
+    "saleCount_other": "已售 {{count}} 筆",
+    "serviceCount_other": "{{count}} 項服務"
+  },
+  "marketV2": {
+    "archive": "封存",
+    "availShort": "庫存 {{quantity}}",
+    "bestPrice": "最低價",
+    "craftingShoppingList": "製作採購清單",
+    "description": "描述",
+    "edit": "編輯",
+    "gridView": "網格檢視",
+    "imageOf": "{{name}} 的圖片",
+    "listingDetails": "商品詳情",
+    "listView": "清單檢視",
+    "maxTier": "最高等級",
+    "maxValue": "最大值",
+    "minTier": "最低等級",
+    "minValue": "最小值",
+    "noVariants": "沒有可選款式",
+    "outOfStockBadge": "缺貨",
+    "privateBadge": "私人",
+    "qtyColon": "數量：{{quantity}}",
+    "qtyShort": "數量 {{quantity}}",
+    "quickEdit": "快速編輯",
+    "removeItemFailed": "移除商品失敗",
+    "searchBuyOrders": "搜尋收購單...",
+    "searchItems": "搜尋物品、分類...",
+    "searchItemsSellers": "搜尋物品、分類、賣家...",
+    "standardVariant": "標準",
+    "updateQuantityFailed": "更新數量失敗",
+    "updateVariantFailed": "更新款式失敗"
+  },
+  "orgsUi": {
+    "avatarOf": "{{name}} 的頭像",
+    "createOrg": "建立組織",
+    "myOrgs": "我的組織",
+    "noOrgs": "你尚未加入任何組織",
+    "noOrgsBody": "加入或建立組織，與他人協作",
+    "userNoOrgs": "此使用者未加入任何組織",
+    "view": "檢視"
+  },
+  "settingsUi": {
+    "apiTokens": "API 權杖",
+    "chooseTypesOrg": "選擇你想接收的該組織通知類型。",
+    "chooseTypesPersonal": "選擇你想個別接收的通知類型。",
+    "frequency": "頻率：{{frequency}}",
+    "frequencyAt": "頻率：{{frequency}}，{{time}}",
+    "itemsUnit": "件",
+    "notificationFallback": "通知",
+    "notificationsFor": "{{name}} 的通知",
+    "orgNotifications": "組織通知",
+    "preferencesUpdated_other": "已更新 {{count}} 項通知偏好",
+    "preferencesUpdateFailed": "更新偏好設定失敗",
+    "preferenceUpdated": "已更新 {{name}} 的偏好設定",
+    "preferenceUpdateFailed": "更新偏好設定失敗",
+    "selectFont": "選擇字型",
+    "selectOrg": "選擇組織",
+    "turnAllOff": "全部關閉",
+    "turnAllOn": "全部開啟"
+  },
+  "messagesUi": {
+    "send": "傳送",
+    "viewOffer": "檢視報價",
+    "viewOrder": "檢視訂單"
   }
 }

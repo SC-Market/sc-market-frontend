@@ -200,7 +200,7 @@ function MessageHeader(props: {
                     ? t("CreateMessageGroupBody.minChars") ||
                       "Type at least 3 characters"
                     : targetObject.length > 0
-                      ? `${targetObject.length} user${targetObject.length === 1 ? "" : "s"} selected`
+                      ? t("CreateMessageGroupBody.selectedCount", { count: targetObject.length })
                       : undefined
                 }
                 InputProps={{

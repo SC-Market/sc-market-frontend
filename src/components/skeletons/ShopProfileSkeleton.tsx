@@ -1,4 +1,5 @@
 import { Box, Container, Grid, Skeleton, Stack, Tabs } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import {
   BANNER_HEIGHT,
   BANNER_OVERLAP,
@@ -54,6 +55,7 @@ export function ShopListingsTabSkeleton() {
  * loads: banner, header block, tab strip and the store tab.
  */
 export function ShopProfileSkeleton() {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
   return (
@@ -141,7 +143,7 @@ export function ShopProfileSkeleton() {
 
           <Grid item xs={12}>
             <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
-              <Tabs value={0} aria-label="Shop tabs" variant="scrollable">
+              <Tabs value={0} aria-label={t("shops.profile.tabsLabel")} variant="scrollable">
                 <HapticTab
                   label={<Skeleton width={60} />}
                   icon={<StorefrontRounded />}

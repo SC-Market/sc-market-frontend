@@ -772,7 +772,10 @@
       "description": "Recibe alertas instantáneas en este dispositivo sobre nuevos mensajes, pedidos y ofertas.",
       "prefsTitle": "Preferencias de notificaciones push",
       "title": "Notificaciones push"
-    }
+    },
+    "setupFailed": "No se pudo completar la configuración",
+    "availabilityFailed": "No se pudo guardar la disponibilidad",
+    "emailFailed": "No se pudo añadir el correo"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Votar positivamente esta publicación"
@@ -1222,7 +1225,6 @@
       "otherDevices_one": "{{count}} dispositivo más",
       "otherDevices_many": "{{count}} dispositivos más",
       "otherDevices_other": "{{count}} dispositivos más",
-      "otherDevices_plural": "{{count}} dispositivos más",
       "permissionDeniedError": "Permiso {{status}}. Activa las notificaciones en la configuración de tu navegador.",
       "permissionDeniedMessage": "Activa las notificaciones en la configuración de tu navegador para usar las notificaciones push.",
       "permissionGrantedMessage": "¡Permiso concedido! Ahora puedes suscribirte a las notificaciones push.",
@@ -1238,7 +1240,6 @@
       "totalDevices_one": "{{count}} dispositivo en total",
       "totalDevices_many": "{{count}} dispositivos en total",
       "totalDevices_other": "{{count}} dispositivos en total",
-      "totalDevices_plural": "{{count}} dispositivos en total",
       "unknownDevice": "Dispositivo desconocido",
       "unsubscribe": "Cancelar suscripción",
       "unsubscribed": "Suscripción a notificaciones push cancelada correctamente",
@@ -2302,12 +2303,13 @@
     "searchAndSelect": "Busca y selecciona usuarios para crear un chat grupal",
     "searchPlaceholder": "Escribe para buscar usuarios",
     "searchUsers": "Buscar usuarios...",
-    "selectedCount": "{{count}} usuario seleccionado",
-    "selectedCount_plural": "{{count}} usuarios seleccionados",
     "selectedUsers": "Usuarios seleccionados",
     "selectUsers": "Selecciona usuarios para iniciar un chat",
     "startNewChat": "Iniciar un nuevo chat",
-    "typeToSearch": "Escribe al menos 3 caracteres para buscar"
+    "typeToSearch": "Escribe al menos 3 caracteres para buscar",
+    "selectedCount_many": "{{count}} usuarios seleccionados",
+    "selectedCount_one": "{{count}} usuario seleccionado",
+    "selectedCount_other": "{{count}} usuarios seleccionados"
   },
   "MemberBalance": {
     "myBalance": "Mi saldo",
@@ -3878,7 +3880,6 @@
     "setMessage": "Tu disponibilidad está configurada. Puedes enviar ofertas a {{sellerName}}.",
     "submitDisabled": "Configura la disponibilidad para continuar"
   },
-  "awaiting-repair": "error",
   "BidAreaV2": {
     "amount": "Cantidad",
     "auction": "Subasta",
@@ -3988,8 +3989,6 @@
     "wants": "Solicitudes",
     "yes": "Sí"
   },
-  "Cancelled": "error",
-  "Completed": "success",
   "contract_actions": {
     "create_contract": "Crear contrato"
   },
@@ -4205,7 +4204,6 @@
     "title": "Crear lote de stock",
     "variantAttributes": "Atributos de la variante"
   },
-  "Damaged": "warning",
   "displayed_rows_one": "{{from}}-{{to}} de {{count}}",
   "displayed_rows_many": "{{from}}-{{to}} de {{count}}",
   "displayed_rows_other": "{{from}}-{{to}} de {{count}}",
@@ -4404,14 +4402,11 @@
     "none": "Ninguno",
     "selectMultiple": "Seleccionar..."
   },
-  "flight-ready": "success",
   "imageSearch": {
     "noImageSelected": "No se ha seleccionado ninguna imagen",
     "searchResultImage": "Imagen de resultado de búsqueda {{index}}",
     "selectedImagePreview": "Vista previa de la imagen seleccionada desde la URL: {{url}}"
   },
-  "in-concept": "info",
-  "in-repair": "warning",
   "inventory": {
     "actions": "Acciones",
     "addLot": "Añadir lote",
@@ -4507,7 +4502,6 @@
     "updateSuccess": "Lote actualizado correctamente",
     "variantInfo": "Información de la variante"
   },
-  "Low Fuel": "warning",
   "ManageMarketRedesign": {
     "actor": "Escaparate",
     "addLot": "Añadir stock",
@@ -4822,7 +4816,6 @@
     "toggle_drawer": "Alternar barra lateral",
     "notifications": "Notificaciones"
   },
-  "Off Course": "warning",
   "offerTrend": {
     "accepted": "Aceptada",
     "active": "Activa",
@@ -4834,8 +4827,6 @@
     "rejected": "Rechazada",
     "total": "Total"
   },
-  "Offline": "error",
-  "OK": "success",
   "orderKinds": {
     "Construction": "Construcción",
     "Custom": "Personalizado",
@@ -4992,7 +4983,6 @@
     "label": "Miembro de la org.",
     "placeholder": "Buscar miembros..."
   },
-  "owned": "true",
   "page": "1",
   "pages": {
     "admin": {
@@ -5126,7 +5116,6 @@
     "selectedPageThumbnail": "Miniatura de la página seleccionada para {{title}}",
     "wikiPageThumbnail": "Miniatura de {{title}}"
   },
-  "Pending": "warning",
   "profile": {
     "customOrdersMovedToShop": "Los pedidos personalizados ahora se realizan a través de las tiendas."
   },
@@ -5470,10 +5459,16 @@
         "title": "Seleccionar imagen"
       }
     },
+    "goBack": "Volver",
     "linkCopied": "Enlace copiado al portapapeles",
+    "mainContent": "Contenido principal",
+    "pwaLater": "Más tarde",
+    "pwaUpdate": "Actualizar",
+    "pwaUpdateBody": "Hay una nueva versión disponible. Actualiza ahora para obtener las últimas funciones.",
     "remove": "Eliminar",
     "reset": "Restablecer",
     "save": "Guardar",
+    "sectionLoadError": "Se produjo un error al cargar esta sección.",
     "share": "Compartir",
     "yes": "Sí"
   },
@@ -5485,7 +5480,6 @@
     "error": "No se pudo desbloquear al usuario",
     "success": "Se desbloqueó correctamente a {{username}}"
   },
-  "Under Attack": "error",
   "userActions": {
     "adminOpenIdentity": "Abrir en Admin -> Identidad",
     "blockForOrg": "Bloquear a {{username}} para {{orgName}}",
@@ -6091,5 +6085,168 @@
     "completedOrders_one": "{{count}} pedido completado",
     "completedOrders_many": "{{count}} pedidos completados",
     "completedOrders_other": "{{count}} pedidos completados"
+  },
+  "shops": {
+    "blocklist": {
+      "block": "Bloquear a {{username}}",
+      "blocked": "{{username}} bloqueado",
+      "blockedCount_many": "{{count}} usuarios bloqueados",
+      "blockedCount_one": "{{count}} usuario bloqueado",
+      "blockedCount_other": "{{count}} usuarios bloqueados",
+      "blockFailed": "No se pudo bloquear al usuario",
+      "reason": "Motivo (opcional)",
+      "searchPlaceholder": "Buscar usuario para bloquear",
+      "subtitle": "Los usuarios bloqueados no pueden hacer pedidos ni ofertas en esta tienda",
+      "title": "Lista de bloqueo",
+      "unblocked": "{{username}} desbloqueado",
+      "unblockFailed": "No se pudo desbloquear al usuario",
+      "unblockLabel": "Desbloquear a {{name}}"
+    },
+    "card": {
+      "byOwner": "de {{name}}"
+    },
+    "customers": {
+      "title": "Clientes"
+    },
+    "directory": {
+      "empty": "No se encontraron tiendas",
+      "search": "Buscar tiendas...",
+      "sortLabel": "Ordenar tiendas",
+      "sortMostSales": "Más ventas",
+      "sortNameAZ": "Nombre A-Z",
+      "sortNewest": "Más recientes",
+      "sortTopRated": "Mejor valoradas",
+      "title": "Explorar tiendas"
+    },
+    "listingCount_many": "{{count}} anuncios",
+    "listingCount_one": "{{count}} anuncio",
+    "listingCount_other": "{{count}} anuncios",
+    "mine": {
+      "active": "Activa",
+      "activeShops": "Tiendas activas",
+      "create": "Crear tienda",
+      "created": "Creada en {{date}}",
+      "createFirst": "Crea tu primera tienda",
+      "customOrders": "Pedidos personalizados",
+      "emptyBody": "Crea una tienda para empezar a vender en SC Market. Configura tu escaparate en minutos.",
+      "emptyTitle": "Aún no tienes ninguna tienda",
+      "featureAnalytics": "Sigue ventas, reseñas y estadísticas",
+      "featureBranding": "Imagen propia con banner y logotipo",
+      "featureListings": "Publica objetos, servicios y lotes",
+      "languages": "Idiomas",
+      "live": "En línea",
+      "manage": "Gestionar",
+      "no": "No",
+      "noTags": "Aún sin etiquetas",
+      "organization": "Organización",
+      "personal": "Personal",
+      "status": "Estado",
+      "subtitle": "Gestiona tus tiendas, anuncios y pedidos",
+      "tags": "Etiquetas",
+      "title": "Mis tiendas",
+      "totalShops": "Tiendas totales",
+      "viewShop": "Ver tienda",
+      "yes": "Sí"
+    },
+    "profile": {
+      "byOwner": "de <owner>{{name}}</owner>",
+      "headRating": "Valoración",
+      "headReview": "Reseña",
+      "loading": "Cargando...",
+      "noDescription": "Sin descripción",
+      "noListings": "No hay anuncios activos",
+      "noMatches": "Ningún anuncio coincide con tu búsqueda",
+      "noReviews": "Aún no hay reseñas",
+      "noReviewsBody": "Las reseñas aparecerán aquí a medida que se completen pedidos",
+      "notFound": "Tienda no encontrada",
+      "owner": "Propietario de la tienda",
+      "searchListings": "Buscar anuncios...",
+      "since": "Desde {{date}}",
+      "sortListings": "Ordenar anuncios",
+      "sortMostStock": "Más stock",
+      "sortNewest": "Más recientes",
+      "sortOldest": "Más antiguos",
+      "sortPriceHigh": "Precio: mayor",
+      "sortPriceLow": "Precio: menor",
+      "tabAbout": "Acerca de",
+      "tabListings": "Anuncios",
+      "tabOrder": "Encargar",
+      "tabReviews": "Reseñas",
+      "tabServices": "Servicios",
+      "tabsLabel": "Pestañas de la tienda"
+    },
+    "reviewCount_many": "{{count}} reseñas",
+    "reviewCount_one": "{{count}} reseña",
+    "reviewCount_other": "{{count}} reseñas",
+    "saleCount_many": "{{count}} ventas",
+    "saleCount_one": "{{count}} venta",
+    "saleCount_other": "{{count}} ventas",
+    "serviceCount_many": "{{count}} servicios",
+    "serviceCount_one": "{{count}} servicio",
+    "serviceCount_other": "{{count}} servicios"
+  },
+  "marketV2": {
+    "archive": "Archivar",
+    "availShort": "{{quantity}} disp.",
+    "bestPrice": "Mejor",
+    "craftingShoppingList": "Lista de compras de fabricación",
+    "description": "Descripción",
+    "edit": "Editar",
+    "gridView": "Vista de cuadrícula",
+    "imageOf": "Imagen de {{name}}",
+    "listingDetails": "Detalles del anuncio",
+    "listView": "Vista de lista",
+    "maxTier": "Nivel máx.",
+    "maxValue": "Valor máx.",
+    "minTier": "Nivel mín.",
+    "minValue": "Valor mín.",
+    "noVariants": "No hay variantes disponibles",
+    "outOfStockBadge": "AGOTADO",
+    "privateBadge": "PRIVADO",
+    "qtyColon": "Cant.: {{quantity}}",
+    "qtyShort": "Cant. {{quantity}}",
+    "quickEdit": "Edición rápida",
+    "removeItemFailed": "No se pudo quitar el artículo",
+    "searchBuyOrders": "Buscar órdenes de compra...",
+    "searchItems": "Buscar objetos, categorías...",
+    "searchItemsSellers": "Buscar objetos, categorías, vendedores...",
+    "standardVariant": "Estándar",
+    "updateQuantityFailed": "No se pudo actualizar la cantidad",
+    "updateVariantFailed": "No se pudo actualizar la variante"
+  },
+  "orgsUi": {
+    "avatarOf": "Avatar de {{name}}",
+    "createOrg": "Crear organización",
+    "myOrgs": "Mis organizaciones",
+    "noOrgs": "No eres miembro de ninguna organización",
+    "noOrgsBody": "Únete a una organización o crea una para colaborar con otros",
+    "userNoOrgs": "Este usuario no pertenece a ninguna organización",
+    "view": "Ver"
+  },
+  "settingsUi": {
+    "apiTokens": "Tokens de API",
+    "chooseTypesOrg": "Elige qué tipos de notificaciones quieres recibir para esta organización.",
+    "chooseTypesPersonal": "Elige qué tipos de notificaciones quieres recibir de forma individual.",
+    "frequency": "Frecuencia: {{frequency}}",
+    "frequencyAt": "Frecuencia: {{frequency}} a las {{time}}",
+    "itemsUnit": "artículos",
+    "notificationFallback": "notificación",
+    "notificationsFor": "Notificaciones de {{name}}",
+    "orgNotifications": "Notificaciones de la organización",
+    "preferencesUpdated_many": "Se actualizaron {{count}} preferencias de notificación",
+    "preferencesUpdated_one": "Se actualizó {{count}} preferencia de notificación",
+    "preferencesUpdated_other": "Se actualizaron {{count}} preferencias de notificación",
+    "preferencesUpdateFailed": "No se pudieron actualizar las preferencias",
+    "preferenceUpdated": "Preferencia actualizada para {{name}}",
+    "preferenceUpdateFailed": "No se pudo actualizar la preferencia",
+    "selectFont": "Seleccionar fuente",
+    "selectOrg": "Seleccionar organización",
+    "turnAllOff": "Desactivar todo",
+    "turnAllOn": "Activar todo"
+  },
+  "messagesUi": {
+    "send": "Enviar",
+    "viewOffer": "Ver oferta",
+    "viewOrder": "Ver pedido"
   }
 }

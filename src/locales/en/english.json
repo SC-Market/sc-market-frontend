@@ -758,7 +758,6 @@
     "setMessage": "Your availability is configured. You can submit offers to {{sellerName}}.",
     "submitDisabled": "Set availability to continue"
   },
-  "awaiting-repair": "error",
   "BidAreaV2": {
     "amount": "Amount",
     "auction": "Auction",
@@ -917,7 +916,6 @@
     "wants": "Wants",
     "yes": "Yes"
   },
-  "Cancelled": "error",
   "cart": {
     "aboveMaxQty": "Maximum quantity: {{max}} (cart would have {{total}})",
     "added": "Added to cart",
@@ -1002,7 +1000,6 @@
     "viewDetails": "View Details",
     "viewShop": "View Shop"
   },
-  "Completed": "success",
   "ConfigureDiscord": {
     "integratedChannel": "Integrated Channel",
     "notConfigured": "Not configured",
@@ -1363,8 +1360,8 @@
     "searchAndSelect": "Search and select users to create a group chat",
     "searchPlaceholder": "Type to search users",
     "searchUsers": "Search users...",
-    "selectedCount": "{{count}} user selected",
-    "selectedCount_plural": "{{count}} users selected",
+    "selectedCount_one": "{{count}} user selected",
+    "selectedCount_other": "{{count}} users selected",
     "selectedUsers": "Selected Users",
     "selectUsers": "Select users to start a chat",
     "startNewChat": "Start a new chat",
@@ -1445,7 +1442,6 @@
     "fulfilled": "Fulfilled",
     "last_order": "Last order"
   },
-  "Damaged": "warning",
   "dashboard": {
     "activityFeed": {
       "all": "All activity",
@@ -1857,7 +1853,6 @@
     "importFleet": "Import Fleet",
     "myFleetTitle": "My Fleet"
   },
-  "flight-ready": "success",
   "footer": {
     "developers": "Developers",
     "developersOverview": "API overview",
@@ -1924,8 +1919,6 @@
     "searchResultImage": "Search result image {{index}}",
     "selectedImagePreview": "Preview of selected image from URL: {{url}}"
   },
-  "in-concept": "info",
-  "in-repair": "warning",
   "inventory": {
     "actions": "Actions",
     "addLot": "Add Lot",
@@ -2350,7 +2343,6 @@
     "updateSuccess": "Lot updated successfully",
     "variantInfo": "Variant Information"
   },
-  "Low Fuel": "warning",
   "manageListingsActions": {
     "activateListings": "Activate Listings",
     "activateTooltip": "Activate selected listings",
@@ -3244,7 +3236,6 @@
       "many": "Still selling? {{n}} listings in {{shop}} expire in 3 days. Open to renew them in one click."
     }
   },
-  "Off Course": "warning",
   "OfferDetailsArea": {
     "accept": "Accept",
     "accepted": "Accepted",
@@ -3380,13 +3371,12 @@
     "rejected": "Rejected",
     "total": "Total"
   },
-  "Offline": "error",
-  "OK": "success",
   "onboarding": {
     "availability": {
       "description": "Let others know when you're online for trades. Drag to select time slots.",
       "title": "Set your availability"
     },
+    "availabilityFailed": "Failed to save availability",
     "availabilitySaved": "Availability saved",
     "complete": "Complete Setup",
     "continue": "Continue",
@@ -3401,6 +3391,7 @@
       "title": "Add your email",
       "verify": "Send verification"
     },
+    "emailFailed": "Failed to add email",
     "emailNotifs": {
       "description": "Choose which events send you an email. You can change these anytime in Settings.",
       "prefsTitle": "Email preferences",
@@ -3423,6 +3414,7 @@
       "prefsTitle": "Push preferences",
       "title": "Push notifications"
     },
+    "setupFailed": "Failed to complete setup",
     "skip": "Skip",
     "skipAll": "Skip setup, I'll explore on my own",
     "steps": {
@@ -3824,7 +3816,6 @@
     "label": "Org Member",
     "placeholder": "Search members..."
   },
-  "owned": "true",
   "page": "1",
   "pages": {
     "admin": {
@@ -3977,7 +3968,6 @@
     "scu": "SCU",
     "unit": "Unit"
   },
-  "Pending": "warning",
   "people": {
     "title": "People"
   },
@@ -4602,7 +4592,6 @@
       "otherDevices": "{{count}} other device",
       "otherDevices_one": "{{count}} other device",
       "otherDevices_other": "{{count}} other devices",
-      "otherDevices_plural": "{{count}} other devices",
       "permissionDeniedError": "Permission {{status}}. Please enable notifications in your browser settings.",
       "permissionDeniedMessage": "Please enable notifications in your browser settings to use push notifications.",
       "permissionGrantedMessage": "Permission granted! You can now subscribe to push notifications.",
@@ -4617,7 +4606,6 @@
       "totalDevices": "{{count}} total device",
       "totalDevices_one": "{{count}} total device",
       "totalDevices_other": "{{count}} total devices",
-      "totalDevices_plural": "{{count}} total devices",
       "unknownDevice": "Unknown Device",
       "unsubscribe": "Unsubscribe",
       "unsubscribed": "Successfully unsubscribed from push notifications",
@@ -5405,10 +5393,16 @@
         "title": "Select Image"
       }
     },
+    "goBack": "Go back",
     "linkCopied": "Link copied to clipboard",
+    "mainContent": "Main content",
+    "pwaLater": "Later",
+    "pwaUpdate": "Update",
+    "pwaUpdateBody": "A new version is available. Update now to get the latest features.",
     "remove": "Remove",
     "reset": "Reset",
     "save": "Save",
+    "sectionLoadError": "An error occurred while loading this section.",
     "share": "Share",
     "yes": "Yes"
   },
@@ -5420,7 +5414,6 @@
     "error": "Failed to unblock user",
     "success": "Successfully unblocked {{username}}"
   },
-  "Under Attack": "error",
   "update_post": "Update Post",
   "userActions": {
     "adminOpenIdentity": "Open in Admin -> Identity",
@@ -6055,5 +6048,162 @@
     "replyTooltip_other": "Typical time to a first reply in order and offer chats over the last 90 days, from {{count}} chats",
     "completedOrders_one": "{{count}} completed order",
     "completedOrders_other": "{{count}} completed orders"
+  },
+  "shops": {
+    "blocklist": {
+      "block": "Block {{username}}",
+      "blocked": "Blocked {{username}}",
+      "blockedCount_one": "{{count}} blocked user",
+      "blockedCount_other": "{{count}} blocked users",
+      "blockFailed": "Failed to block user",
+      "reason": "Reason (optional)",
+      "searchPlaceholder": "Search user to block",
+      "subtitle": "Blocked users cannot place orders or offers at this shop",
+      "title": "Blocklist",
+      "unblocked": "Unblocked {{username}}",
+      "unblockFailed": "Failed to unblock user",
+      "unblockLabel": "Unblock {{name}}"
+    },
+    "card": {
+      "byOwner": "by {{name}}"
+    },
+    "customers": {
+      "title": "Customers"
+    },
+    "directory": {
+      "empty": "No shops found",
+      "search": "Search shops...",
+      "sortLabel": "Sort shops",
+      "sortMostSales": "Most Sales",
+      "sortNameAZ": "Name A-Z",
+      "sortNewest": "Newest",
+      "sortTopRated": "Top Rated",
+      "title": "Browse Shops"
+    },
+    "listingCount_one": "{{count}} listing",
+    "listingCount_other": "{{count}} listings",
+    "mine": {
+      "active": "Active",
+      "activeShops": "Active Shops",
+      "create": "Create Shop",
+      "created": "Created {{date}}",
+      "createFirst": "Create Your First Shop",
+      "customOrders": "Custom Orders",
+      "emptyBody": "Create a shop to start selling on SC Market. Set up your storefront in minutes.",
+      "emptyTitle": "You don't have any shops yet",
+      "featureAnalytics": "Track sales, reviews, and analytics",
+      "featureBranding": "Custom branding with banner and logo",
+      "featureListings": "List items, services, and bundles",
+      "languages": "Languages",
+      "live": "Live",
+      "manage": "Manage",
+      "no": "No",
+      "noTags": "No tags yet",
+      "organization": "Organization",
+      "personal": "Personal",
+      "status": "Status",
+      "subtitle": "Manage your shops, listings, and orders",
+      "tags": "Tags",
+      "title": "My Shops",
+      "totalShops": "Total Shops",
+      "viewShop": "View Shop",
+      "yes": "Yes"
+    },
+    "profile": {
+      "byOwner": "by <owner>{{name}}</owner>",
+      "headRating": "Rating",
+      "headReview": "Review",
+      "loading": "Loading...",
+      "noDescription": "No description provided",
+      "noListings": "No active listings",
+      "noMatches": "No listings match your search",
+      "noReviews": "No reviews yet",
+      "noReviewsBody": "Reviews will appear here as orders are completed",
+      "notFound": "Shop not found",
+      "owner": "Shop owner",
+      "searchListings": "Search listings...",
+      "since": "Since {{date}}",
+      "sortListings": "Sort listings",
+      "sortMostStock": "Most Stock",
+      "sortNewest": "Newest",
+      "sortOldest": "Oldest",
+      "sortPriceHigh": "Price: High",
+      "sortPriceLow": "Price: Low",
+      "tabAbout": "About",
+      "tabListings": "Listings",
+      "tabOrder": "Order",
+      "tabReviews": "Reviews",
+      "tabServices": "Services",
+      "tabsLabel": "Shop tabs"
+    },
+    "reviewCount_one": "{{count}} review",
+    "reviewCount_other": "{{count}} reviews",
+    "saleCount_one": "{{count}} sale",
+    "saleCount_other": "{{count}} sales",
+    "serviceCount_one": "{{count}} service",
+    "serviceCount_other": "{{count}} services"
+  },
+  "marketV2": {
+    "archive": "Archive",
+    "availShort": "{{quantity}} avail.",
+    "bestPrice": "Best",
+    "craftingShoppingList": "Crafting Shopping List",
+    "description": "Description",
+    "edit": "Edit",
+    "gridView": "Grid view",
+    "imageOf": "Image of {{name}}",
+    "listingDetails": "Listing Details",
+    "listView": "List view",
+    "maxTier": "Max Tier",
+    "maxValue": "Max Value",
+    "minTier": "Min Tier",
+    "minValue": "Min Value",
+    "noVariants": "No variants available",
+    "outOfStockBadge": "OUT OF STOCK",
+    "privateBadge": "PRIVATE",
+    "qtyColon": "Qty: {{quantity}}",
+    "qtyShort": "Qty {{quantity}}",
+    "quickEdit": "Quick edit",
+    "removeItemFailed": "Failed to remove item",
+    "searchBuyOrders": "Search buy orders...",
+    "searchItems": "Search items, categories...",
+    "searchItemsSellers": "Search items, categories, sellers...",
+    "standardVariant": "Standard",
+    "updateQuantityFailed": "Failed to update quantity",
+    "updateVariantFailed": "Failed to update variant"
+  },
+  "orgsUi": {
+    "avatarOf": "Avatar of {{name}}",
+    "createOrg": "Create Organization",
+    "myOrgs": "My Organizations",
+    "noOrgs": "You're not a member of any organizations",
+    "noOrgsBody": "Join or create an organization to collaborate with others",
+    "userNoOrgs": "This user is not a part of any organizations",
+    "view": "View"
+  },
+  "settingsUi": {
+    "apiTokens": "API Tokens",
+    "chooseTypesOrg": "Choose which types of notifications you want to receive for this organization.",
+    "chooseTypesPersonal": "Choose which types of notifications you want to receive individually.",
+    "frequency": "Frequency: {{frequency}}",
+    "frequencyAt": "Frequency: {{frequency}} at {{time}}",
+    "itemsUnit": "items",
+    "notificationFallback": "notification",
+    "notificationsFor": "Notifications for {{name}}",
+    "orgNotifications": "Organization Notifications",
+    "preferencesUpdated_one": "Updated {{count}} notification preference",
+    "preferencesUpdated_other": "Updated {{count}} notification preferences",
+    "preferencesUpdateFailed": "Failed to update preferences",
+    "preferenceUpdated": "Preference updated for {{name}}",
+    "preferenceUpdateFailed": "Failed to update preference",
+    "selectFont": "Select font",
+    "selectOrg": "Select Organization",
+    "turnAllOff": "Turn All Off",
+    "turnAllOn": "Turn All On"
+  },
+  "messagesUi": {
+    "send": "Send",
+    "viewOffer": "View Offer",
+    "viewOrder": "View Order"
   }
 }

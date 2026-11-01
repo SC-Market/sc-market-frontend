@@ -13,6 +13,7 @@ import {
 import { ListAltRounded, ShoppingBagRounded, DesignServicesRounded } from "@mui/icons-material"
 import type { ShopPublicResponse } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
+import { useTranslation } from "react-i18next"
 
 interface ShopCardProps {
   shop: ShopPublicResponse
@@ -26,6 +27,7 @@ interface ShopCardProps {
 }
 
 export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
+  const { t } = useTranslation()
   return (
     <Fade in timeout={400} style={{ transitionDelay: `${50 + 30 * index}ms` }}>
       <Card sx={{ height: "100%" }}>
@@ -54,7 +56,7 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
                       {shop.owner.name[0]}
                     </Avatar>
                     <Typography variant="caption" color="text.secondary" noWrap sx={{ minWidth: 0 }}>
-                      by {shop.owner.name}
+                      {t("shops.card.byOwner", { name: shop.owner.name })}
                     </Typography>
                   </Box>
                 )}
@@ -84,7 +86,7 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
                   <ListAltRounded sx={{ fontSize: 13, color: "text.disabled" }} />
                   <Typography variant="caption" color="text.secondary">
-                    {shop.listing_count} listings
+                    {t("shops.listingCount", { count: shop.listing_count })}
                   </Typography>
                 </Box>
               )}
@@ -92,7 +94,7 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
                   <DesignServicesRounded sx={{ fontSize: 13, color: "text.disabled" }} />
                   <Typography variant="caption" color="text.secondary">
-                    {shop.service_count} services
+                    {t("shops.serviceCount", { count: shop.service_count })}
                   </Typography>
                 </Box>
               )}
@@ -100,7 +102,7 @@ export function ShopCard({ shop, index = 0, compact = false }: ShopCardProps) {
                 <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
                   <ShoppingBagRounded sx={{ fontSize: 13, color: "text.disabled" }} />
                   <Typography variant="caption" color="text.secondary">
-                    {shop.total_sales} sales
+                    {t("shops.saleCount", { count: shop.total_sales })}
                   </Typography>
                 </Box>
               )}

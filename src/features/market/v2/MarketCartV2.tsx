@@ -91,7 +91,7 @@ export function CartItemEntryV2(props: {
         })
       } catch (error) {
         issueAlert({
-          message: error instanceof Error ? error.message : "Failed to update quantity",
+          message: error instanceof Error ? error.message : t("marketV2.updateQuantityFailed"),
           severity: "error",
         })
       }
@@ -114,7 +114,7 @@ export function CartItemEntryV2(props: {
         })
       } catch (error) {
         issueAlert({
-          message: error instanceof Error ? error.message : "Failed to update variant",
+          message: error instanceof Error ? error.message : t("marketV2.updateVariantFailed"),
           severity: "error",
         })
       }
@@ -369,7 +369,7 @@ export function MarketCartV2() {
         })
       } catch (error) {
         issueAlert({
-          message: error instanceof Error ? error.message : "Failed to remove item",
+          message: error instanceof Error ? error.message : t("marketV2.removeItemFailed"),
           severity: "error",
         })
       }
@@ -636,7 +636,7 @@ export function MarketCartV2() {
         <Divider sx={{ mb: 2 }} />
         <Typography variant="h6" sx={{ mb: 1.5 }}>
           <PlaylistAddRounded sx={{ fontSize: 20, mr: 0.5, verticalAlign: "text-bottom" }} />
-          Crafting Shopping List
+          {t("marketV2.craftingShoppingList")}
         </Typography>
         <ShoppingListPanel />
       </Box>

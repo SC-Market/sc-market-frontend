@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React, { useEffect, useState } from "react"
 import { Box, Snackbar, Alert, Button, Stack, Typography } from "@mui/material"
 import { RefreshRounded } from "@mui/icons-material"
@@ -9,6 +10,7 @@ import {
 import type { ServiceWorkerRegistrationState } from "../../util/pwa"
 
 export function UpdateNotification() {
+  const { t } = useTranslation()
   const [updateAvailable, setUpdateAvailable] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -69,16 +71,16 @@ export function UpdateNotification() {
               onClick={handleReload}
               startIcon={<RefreshRounded />}
             >
-              Update
+              {t("ui.pwaUpdate")}
             </Button>
             <Button color="inherit" size="small" onClick={handleClose}>
-              Later
+              {t("ui.pwaLater")}
             </Button>
           </Stack>
         }
       >
         <Typography variant="body2">
-          A new version is available. Update now to get the latest features.
+          {t("ui.pwaUpdateBody")}
         </Typography>
       </Alert>
     </Snackbar>

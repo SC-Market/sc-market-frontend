@@ -674,7 +674,6 @@
     "admin_alert": "管理员警报",
     "clear_all_failed": "清除通知失败",
     "cleared_all": "已清除 {{count}} 条通知",
-    "cleared_all_one": "notifications.cleared_all",
     "cleared_all_other": "已清除 {{count}} 条通知",
     "click_to_open_link": "点击以打开链接",
     "delete": "删除",
@@ -682,7 +681,6 @@
     "markAsRead": "标记为已读",
     "markAsUnread": "标记为未读",
     "marked_all_read": "已将 {{count}} 条通知标记为已读",
-    "marked_all_read_one": "notifications.marked_all_read",
     "marked_all_read_other": "已将 {{count}} 条通知标记为已读",
     "new_admin_alert": "你收到了一条新的管理员警报",
     "new_offer_message_from": "新报价消息来自",
@@ -776,7 +774,10 @@
       "description": "在此设备上即时接收新消息、订单和报价的提醒。",
       "prefsTitle": "推送偏好设置",
       "title": "推送通知"
-    }
+    },
+    "setupFailed": "无法完成设置",
+    "availabilityFailed": "保存可用时间失败",
+    "emailFailed": "添加邮箱失败"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "为此帖点赞"
@@ -1223,9 +1224,7 @@
       "notRequested": "未请求",
       "organizationPreferences": "组织偏好设置",
       "otherDevices": "{{count}} 台其他设备",
-      "otherDevices_one": "settings.pushNotifications.otherDevices",
       "otherDevices_other": "{{count}} 台其他设备",
-      "otherDevices_plural": "{{count}} 台其他设备",
       "permissionDeniedError": "权限{{status}}。请在浏览器设置中启用通知。",
       "permissionDeniedMessage": "请在浏览器设置中启用通知以使用推送通知。",
       "permissionGrantedMessage": "权限已授予！您现在可以订阅推送通知。",
@@ -1238,9 +1237,7 @@
       "subscribing": "订阅中...",
       "title": "推送通知",
       "totalDevices": "共 {{count}} 台设备",
-      "totalDevices_one": "settings.pushNotifications.totalDevices",
       "totalDevices_other": "共 {{count}} 台设备",
-      "totalDevices_plural": "共 {{count}} 台设备",
       "unknownDevice": "未知设备",
       "unsubscribe": "取消订阅",
       "unsubscribed": "已成功取消订阅推送通知",
@@ -2151,11 +2148,8 @@
     "filters": "筛选器",
     "has_market_listings": "含市场商品",
     "has_service": "含服务",
-    "merge_offers_one": "OffersViewPaginated.merge_offers",
     "merge_offers_other": "合并报价（{{count}}）",
-    "merge_offers_confirm_body_one": "OffersViewPaginated.merge_offers_confirm_body",
     "merge_offers_confirm_body_other": "合并 {{count}} 个报价会话将创建一个新的合并报价会话，并关闭所选会话。此操作无法撤销。",
-    "merge_offers_selected_count_one": "OffersViewPaginated.merge_offers_selected_count",
     "merge_offers_selected_count_other": "已选择：{{count}} 个报价会话",
     "seller": "卖家",
     "seller_username": "卖家用户名",
@@ -2297,12 +2291,11 @@
     "searchAndSelect": "搜索并选择用户以创建群聊",
     "searchPlaceholder": "输入以搜索用户",
     "searchUsers": "搜索用户……",
-    "selectedCount": "已选择 {{count}} 名用户",
-    "selectedCount_plural": "已选择 {{count}} 名用户",
     "selectedUsers": "已选用户",
     "selectUsers": "选择用户以开始聊天",
     "startNewChat": "开始新聊天",
-    "typeToSearch": "至少输入 3 个字符以搜索"
+    "typeToSearch": "至少输入 3 个字符以搜索",
+    "selectedCount_other": "已选择 {{count}} 名用户"
   },
   "MemberBalance": {
     "myBalance": "我的余额",
@@ -2454,7 +2447,6 @@
     "activeOrders": "活跃订单",
     "previousOrders": "历史订单",
     "anonymousReviewer": "匿名",
-    "inCarts_one": "MarketListingView.inCarts",
     "inCarts_other": "{{count}} 人已将此商品加入购物车",
     "languages": "语言",
     "noReviewContent": "无评价内容",
@@ -2463,7 +2455,6 @@
     "reviewBy": "评价者",
     "sellerReviews": "{{seller}} 的评价",
     "viewAllReviews": "查看全部 {{count}} 条评价",
-    "viewAllReviews_one": "MarketListingView.viewAllReviews",
     "viewAllReviews_other": "查看全部 {{count}} 条评价",
     "viewInCart": "在购物车中查看",
     "views": "浏览量"
@@ -2601,7 +2592,6 @@
     "orLower": "更低",
     "orHigher": "更高",
     "addToCart": "加入购物车",
-    "ofAvailable_one": "MarketAggregateView.ofAvailable",
     "ofAvailable_other": "，共 {{count}} 件可用",
     "quantityRequested": "需求（想要 ≥ 价格）",
     "stockAvailable": "供应（库存 ≤ 价格）",
@@ -2677,12 +2667,10 @@
     "views": "浏览量",
     "archive": "归档",
     "bulkArchiveBody": "您即将归档 {{count}} 个商品条目。归档对买家和公开搜索而言是永久性的。您仍可在“我的商品条目”下查看已归档的条目。",
-    "bulkArchiveBody_one": "ItemStock.bulkArchiveBody",
     "bulkArchiveBody_other": "你即将归档 {{count}} 个商品。归档后，买家和公开搜索将永久无法看到这些商品。你仍可在“我的商品”中查看已归档的商品。",
     "bulkArchiveCancel": "取消",
     "bulkArchiveConfirm": "永久归档",
     "bulkArchivedSuccess": "已归档 {{count}} 个商品条目。",
-    "bulkArchivedSuccess_one": "ItemStock.bulkArchivedSuccess",
     "bulkArchivedSuccess_other": "已归档 {{count}} 个商品。",
     "bulkArchiveTitle": "归档所选商品条目？",
     "cannotReduceStock": "无法减少库存 — 部分单位已被分配给活动订单",
@@ -3106,7 +3094,6 @@
     "added": "已加入购物车",
     "adding": "正在添加...",
     "addToCart": "加入购物车",
-    "alreadyInCart_one": "cart.alreadyInCart",
     "alreadyInCart_other": "购物车中已有 {{count}} 件",
     "available": "可用",
     "availableNow": "现在可用",
@@ -3122,7 +3109,6 @@
     "invalidQty": "数量至少为 1",
     "itemRemoved": "物品已从购物车移除",
     "nextAvailable": "下次可用",
-    "othersInCart_one": "cart.othersInCart",
     "othersInCart_other": "另有 {{count}} 人已将此商品加入购物车",
     "priceChanged": "价格已变动",
     "priceChangedFrom": "价格从 {{old}} 变为 {{new}} aUEC",
@@ -3555,7 +3541,13 @@
     "reset": "重置",
     "save": "保存",
     "share": "分享",
-    "yes": "是"
+    "yes": "是",
+    "goBack": "返回",
+    "mainContent": "主要内容",
+    "sectionLoadError": "加载此部分时出错。",
+    "pwaUpdate": "更新",
+    "pwaLater": "稍后",
+    "pwaUpdateBody": "有新版本可用，立即更新以获取最新功能。"
   },
   "common": {
     "cancel": "取消",
@@ -3614,7 +3606,6 @@
     "createListingDescription": "前往创建商品页面",
     "createMarketListing": "创建新的市场商品",
     "dataTableDescription": "包含 {{count}} 行的数据表",
-    "dataTableDescription_one": "accessibility.dataTableDescription",
     "dataTableDescription_other": "包含 {{count}} 行的数据表",
     "decorativeImage": "",
     "defaultListingHelp": "选择此组合商品要显示的默认商品",
@@ -3623,7 +3614,6 @@
     "delete": "删除",
     "downvoteComment": "为此评论点踩",
     "downvoteCount": "点踩数：{{count}}",
-    "downvoteCount_one": "accessibility.downvoteCount",
     "downvoteCount_other": "点踩数：{{count}}",
     "edit": "编辑",
     "endTimeHelp": "选择此次拍卖的结束时间",
@@ -3714,7 +3704,6 @@
     "recipientSelector": "收款人选择器",
     "recipientTypeHelp": "选择向用户还是承包商转账",
     "recruitmentUpvoteCount": "点赞数：{{count}}",
-    "recruitmentUpvoteCount_one": "accessibility.recruitmentUpvoteCount",
     "recruitmentUpvoteCount_other": "点赞数：{{count}}",
     "registerShip": "登记飞船",
     "registerShipHelp": "将所选飞船登记到你的舰队",
@@ -3796,7 +3785,6 @@
     "totalPriceHelp": "总价根据每单位价格和数量自动计算",
     "upvoteComment": "为此评论点赞",
     "upvoteCount": "点赞数：{{count}}",
-    "upvoteCount_one": "accessibility.upvoteCount",
     "upvoteCount_other": "点赞数：{{count}}",
     "upvoteRecruitmentPost": "为此招募帖点赞",
     "userAvatar": "{{username}} 的头像",
@@ -3912,7 +3900,6 @@
     "setMessage": "您的可用性已配置。您可以向 {{sellerName}} 提交报价。",
     "submitDisabled": "设置可用性以继续"
   },
-  "awaiting-repair": "error",
   "BidAreaV2": {
     "amount": "金额",
     "auction": "拍卖",
@@ -3929,7 +3916,6 @@
     "minBid": "最低出价",
     "placeBid": "出价",
     "time": "时间",
-    "totalBids_one": "BidAreaV2.totalBids",
     "totalBids_other": "{{count}} 次出价",
     "yourBid": "你的出价 (aUEC)"
   },
@@ -4021,8 +4007,6 @@
     "wants": "需求",
     "yes": "是"
   },
-  "Cancelled": "error",
-  "Completed": "success",
   "contract_actions": {
     "create_contract": "创建合同"
   },
@@ -4242,10 +4226,7 @@
     "title": "创建库存批次",
     "variantAttributes": "变体属性"
   },
-  "Damaged": "warning",
-  "displayed_rows_one": "{{from}}-{{to}}，共 {{count}}",
   "displayed_rows_other": "{{from}}-{{to}}，共 {{count}}",
-  "displayed_rows_range_one": "displayed_rows_range",
   "displayed_rows_range_other": "{{from}}–{{to}} / 共 {{count}}",
   "EditListingV2": {
     "about": "关于",
@@ -4439,14 +4420,11 @@
     "none": "无",
     "selectMultiple": "选择……"
   },
-  "flight-ready": "success",
   "imageSearch": {
     "noImageSelected": "未选择图片",
     "searchResultImage": "搜索结果图片 {{index}}",
     "selectedImagePreview": "所选图片预览，来自 URL：{{url}}"
   },
-  "in-concept": "info",
-  "in-repair": "warning",
   "inventory": {
     "actions": "操作",
     "addLot": "添加批次",
@@ -4542,7 +4520,6 @@
     "updateSuccess": "批次更新成功",
     "variantInfo": "变体信息"
   },
-  "Low Fuel": "warning",
   "ManageMarketRedesign": {
     "actor": "店面",
     "addLot": "添加库存",
@@ -4576,7 +4553,6 @@
     "subheading": "您出售的所有内容集中在一处。展开某一行可查看其背后的库存。",
     "title": "管理市场",
     "unspecified": "未指定",
-    "variants_one": "{{count}} 个选项",
     "variants_other": "{{count}} 个选项"
   },
   "marketAggregateView": {
@@ -4587,7 +4563,6 @@
     "addToCart": "加入购物车",
     "auction": "拍卖",
     "availability": "{{count}} {{unit}}可用",
-    "availability_one": "{{count}} {{unit}}可用",
     "availability_other": "{{count}} {{unit}}可用",
     "bidPreview": "出价预览",
     "bundle": "套装",
@@ -4602,7 +4577,6 @@
     "makeOffer": "发起报价",
     "negotiable": "可议价",
     "ofAvailable": "共 {{count}}",
-    "ofAvailable_one": "共 {{count}}",
     "ofAvailable_other": "共 {{count}}",
     "orderPlaced": "订单已下达",
     "placeBid": "出价",
@@ -4619,13 +4593,10 @@
     "productImage": "{{title}} 的产品图片"
   },
   "MarketRedesign": {
-    "acrossSellers_one": "来自 {{count}} 位卖家",
     "acrossSellers_other": "来自 {{count}} 位卖家",
     "addToCart": "添加",
-    "available_one": "{{count}} 件可用",
     "available_other": "{{count}} 件可用",
     "compare": "比较",
-    "compareSellers_one": "比较 {{count}} 位卖家",
     "compareSellers_other": "比较 {{count}} 位卖家",
     "forSale": "出售中",
     "fromPrice": "起",
@@ -4634,15 +4605,11 @@
     "lowestPrice": "价格最低",
     "negotiable": "可议价",
     "noSellers": "目前没有可用的卖家。",
-    "seeAllCount_one": "查看全部 {{count}} 个商品条目",
     "seeAllCount_other": "查看全部 {{count}} 个商品条目",
-    "sellersCount_one": "{{count}} 位卖家",
     "sellersCount_other": "{{count}} 位卖家",
     "topBid": "最高出价",
     "topRated": "评分最高的卖家",
-    "unitsAvailable_one": "{{count}} 件可用",
     "unitsAvailable_other": "{{count}} 件可用",
-    "wantedBy_one": "{{count}} 位买家想要",
     "wantedBy_other": "{{count}} 位买家想要"
   },
   "messages": {
@@ -4845,7 +4812,6 @@
     "toggle_drawer": "切换侧边栏",
     "notifications": "通知"
   },
-  "Off Course": "warning",
   "offerTrend": {
     "accepted": "已接受",
     "active": "活跃",
@@ -4857,8 +4823,6 @@
     "rejected": "已拒绝",
     "total": "总计"
   },
-  "Offline": "error",
-  "OK": "success",
   "orderKinds": {
     "Construction": "建造",
     "Custom": "自定义",
@@ -5015,7 +4979,6 @@
     "label": "组织成员",
     "placeholder": "搜索成员..."
   },
-  "owned": "true",
   "page": "1",
   "pages": {
     "admin": {
@@ -5149,7 +5112,6 @@
     "selectedPageThumbnail": "{{title}} 的所选页面缩略图",
     "wikiPageThumbnail": "{{title}} 的缩略图"
   },
-  "Pending": "warning",
   "profile": {
     "customOrdersMovedToShop": "自定义订单现在通过店铺下单。"
   },
@@ -5304,7 +5266,6 @@
     "reviewBy": "评价者",
     "sellerReviews": "{{seller}} 的评价",
     "viewAllReviews": "查看全部 {{count}} 条评价",
-    "viewAllReviews_one": "serviceView.viewAllReviews",
     "viewAllReviews_other": "查看全部 {{count}} 条评价"
   },
   "ShopSelector": {
@@ -5455,7 +5416,6 @@
     "error": "取消屏蔽用户失败",
     "success": "已成功取消屏蔽 {{username}}"
   },
-  "Under Attack": "error",
   "userActions": {
     "adminOpenIdentity": "在 管理 -> 身份 中打开",
     "blockForOrg": "以 {{orgName}} 的身份屏蔽 {{username}}",
@@ -6057,5 +6017,156 @@
     },
     "replyTooltip_other": "过去90天订单和报价聊天中首次回复的典型时间（基于{{count}}个聊天）",
     "completedOrders_other": "已完成 {{count}} 个订单"
+  },
+  "shops": {
+    "blocklist": {
+      "block": "拉黑 {{username}}",
+      "blocked": "已拉黑 {{username}}",
+      "blockedCount_other": "已拉黑 {{count}} 位用户",
+      "blockFailed": "拉黑用户失败",
+      "reason": "原因（可选）",
+      "searchPlaceholder": "搜索要拉黑的用户",
+      "subtitle": "被拉黑的用户无法在本店下单或报价",
+      "title": "黑名单",
+      "unblocked": "已将 {{username}} 移出黑名单",
+      "unblockFailed": "移出黑名单失败",
+      "unblockLabel": "将 {{name}} 移出黑名单"
+    },
+    "card": {
+      "byOwner": "店主：{{name}}"
+    },
+    "customers": {
+      "title": "客户"
+    },
+    "directory": {
+      "empty": "未找到店铺",
+      "search": "搜索店铺...",
+      "sortLabel": "店铺排序",
+      "sortMostSales": "销量最多",
+      "sortNameAZ": "名称 A-Z",
+      "sortNewest": "最新",
+      "sortTopRated": "评分最高",
+      "title": "浏览店铺"
+    },
+    "listingCount_other": "{{count}} 个商品",
+    "mine": {
+      "active": "活跃",
+      "activeShops": "活跃店铺",
+      "create": "创建店铺",
+      "created": "创建于 {{date}}",
+      "createFirst": "创建你的第一家店铺",
+      "customOrders": "定制订单",
+      "emptyBody": "创建店铺即可在 SC Market 开始出售，几分钟就能搭好店面。",
+      "emptyTitle": "你还没有店铺",
+      "featureAnalytics": "追踪销量、评价和数据分析",
+      "featureBranding": "自定义横幅和标志",
+      "featureListings": "上架物品、服务和组合包",
+      "languages": "语言",
+      "live": "营业中",
+      "manage": "管理",
+      "no": "否",
+      "noTags": "暂无标签",
+      "organization": "组织",
+      "personal": "个人",
+      "status": "状态",
+      "subtitle": "管理你的店铺、商品和订单",
+      "tags": "标签",
+      "title": "我的店铺",
+      "totalShops": "店铺总数",
+      "viewShop": "查看店铺",
+      "yes": "是"
+    },
+    "profile": {
+      "byOwner": "店主：<owner>{{name}}</owner>",
+      "headRating": "评分",
+      "headReview": "评价",
+      "loading": "加载中...",
+      "noDescription": "暂无简介",
+      "noListings": "暂无在售商品",
+      "noMatches": "没有符合搜索条件的商品",
+      "noReviews": "暂无评价",
+      "noReviewsBody": "订单完成后，评价会显示在这里",
+      "notFound": "未找到店铺",
+      "owner": "店主",
+      "searchListings": "搜索商品...",
+      "since": "始于 {{date}}",
+      "sortListings": "商品排序",
+      "sortMostStock": "库存最多",
+      "sortNewest": "最新",
+      "sortOldest": "最早",
+      "sortPriceHigh": "价格：从高到低",
+      "sortPriceLow": "价格：从低到高",
+      "tabAbout": "简介",
+      "tabListings": "商品",
+      "tabOrder": "下单",
+      "tabReviews": "评价",
+      "tabServices": "服务",
+      "tabsLabel": "店铺标签页"
+    },
+    "reviewCount_other": "{{count}} 条评价",
+    "saleCount_other": "已售 {{count}} 笔",
+    "serviceCount_other": "{{count}} 项服务"
+  },
+  "marketV2": {
+    "archive": "归档",
+    "availShort": "库存 {{quantity}}",
+    "bestPrice": "最低价",
+    "craftingShoppingList": "制作采购清单",
+    "description": "描述",
+    "edit": "编辑",
+    "gridView": "网格视图",
+    "imageOf": "{{name}} 的图片",
+    "listingDetails": "商品详情",
+    "listView": "列表视图",
+    "maxTier": "最高等级",
+    "maxValue": "最大值",
+    "minTier": "最低等级",
+    "minValue": "最小值",
+    "noVariants": "暂无可选款式",
+    "outOfStockBadge": "缺货",
+    "privateBadge": "私密",
+    "qtyColon": "数量：{{quantity}}",
+    "qtyShort": "数量 {{quantity}}",
+    "quickEdit": "快速编辑",
+    "removeItemFailed": "移除商品失败",
+    "searchBuyOrders": "搜索求购单...",
+    "searchItems": "搜索物品、分类...",
+    "searchItemsSellers": "搜索物品、分类、卖家...",
+    "standardVariant": "标准",
+    "updateQuantityFailed": "更新数量失败",
+    "updateVariantFailed": "更新款式失败"
+  },
+  "orgsUi": {
+    "avatarOf": "{{name}} 的头像",
+    "createOrg": "创建组织",
+    "myOrgs": "我的组织",
+    "noOrgs": "你还没有加入任何组织",
+    "noOrgsBody": "加入或创建组织，与他人协作",
+    "userNoOrgs": "该用户未加入任何组织",
+    "view": "查看"
+  },
+  "settingsUi": {
+    "apiTokens": "API 令牌",
+    "chooseTypesOrg": "选择你希望接收的该组织通知类型。",
+    "chooseTypesPersonal": "选择你希望单独接收的通知类型。",
+    "frequency": "频率：{{frequency}}",
+    "frequencyAt": "频率：{{frequency}}，{{time}}",
+    "itemsUnit": "件",
+    "notificationFallback": "通知",
+    "notificationsFor": "{{name}} 的通知",
+    "orgNotifications": "组织通知",
+    "preferencesUpdated_other": "已更新 {{count}} 项通知偏好",
+    "preferencesUpdateFailed": "更新偏好设置失败",
+    "preferenceUpdated": "已更新 {{name}} 的偏好设置",
+    "preferenceUpdateFailed": "更新偏好设置失败",
+    "selectFont": "选择字体",
+    "selectOrg": "选择组织",
+    "turnAllOff": "全部关闭",
+    "turnAllOn": "全部开启"
+  },
+  "messagesUi": {
+    "send": "发送",
+    "viewOffer": "查看报价",
+    "viewOrder": "查看订单"
   }
 }

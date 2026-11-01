@@ -1,3 +1,4 @@
+import "../../../util/i18n"
 import React, { lazy } from "react"
 import { render, screen, waitFor } from "@testing-library/react"
 import { describe, it, expect, vi, beforeAll, afterAll } from "vitest"

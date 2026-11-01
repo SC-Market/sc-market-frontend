@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { Contractor } from "../../features/contractor/domain/types"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import {
@@ -21,6 +22,7 @@ export function UserContractorList(props: {
     role_details?: { role_id: string; role_name: string; position: number }[]
   }[]
 }) {
+  const { t } = useTranslation()
   const { contractors } = props
 
   return (
@@ -35,7 +37,7 @@ export function UserContractorList(props: {
           variant={"subtitle2"}
           fontWeight={600}
         >
-          This user is not a part of any organizations
+          {t("orgsUi.userNoOrgs")}
         </Typography>
       )}
     </List>
@@ -50,6 +52,7 @@ export function UserContractorListItem(props: {
     role_details?: { role_id: string; role_name: string; position: number }[]
   }
 }) {
+  const { t } = useTranslation()
   const {
     membership: { spectrum_id, role_details },
   } = props
@@ -74,7 +77,7 @@ export function UserContractorListItem(props: {
           <Avatar
             variant={"rounded"}
             src={contractor?.avatar}
-            alt={`Avatar of ${contractor?.spectrum_id}`}
+            alt={t("orgsUi.avatarOf", { name: contractor?.spectrum_id })}
             sx={{
               maxHeight: 60,
               maxWidth: 60,

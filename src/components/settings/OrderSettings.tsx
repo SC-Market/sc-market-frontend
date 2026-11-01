@@ -359,7 +359,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                 disabled={saving || !minOrderSizeEnabled}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">items</InputAdornment>
+                    <InputAdornment position="end">{t("settingsUi.itemsUnit")}</InputAdornment>
                   ),
                 }}
                 helperText={t(
@@ -412,7 +412,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
                 disabled={saving || !maxOrderSizeEnabled}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">items</InputAdornment>
+                    <InputAdornment position="end">{t("settingsUi.itemsUnit")}</InputAdornment>
                   ),
                 }}
                 helperText={t(

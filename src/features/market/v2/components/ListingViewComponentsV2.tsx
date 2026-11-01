@@ -28,6 +28,7 @@ function ListingRow({
   listings: ListingSearchResult[]
   isLoading: boolean
 }) {
+  const { t } = useTranslation()
   if (isLoading) return (
     <Grid item xs={12}>
       <Box sx={{ width: "100%", overflowX: "auto" }}>
@@ -54,7 +55,7 @@ function ListingRow({
             endIcon={<ArrowForwardRounded />}
             sx={{ textTransform: "none" }}
           >
-            See all
+            {t("landing.seeAll")}
           </Button>
         </Box>
       </Grid>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React from "react";
 import {
   TextField,
@@ -47,6 +48,7 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
   label = "Select Variant",
   disabled = false,
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>();
 
   if (variants.length === 0) {
@@ -79,7 +81,7 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
             {variant.display_name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Qty: {variant.quantity}
+            {t("marketV2.qtyColon", { quantity: variant.quantity })}
           </Typography>
           <Typography variant="body2" color="primary" fontWeight="bold">
             {variant.price.toLocaleString()} aUEC
@@ -123,7 +125,7 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
               {variant.display_name}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Qty: {variant.quantity}
+              {t("marketV2.qtyColon", { quantity: variant.quantity })}
             </Typography>
             <Typography variant="body2" color="primary" fontWeight="bold">
               {variant.price.toLocaleString()} aUEC

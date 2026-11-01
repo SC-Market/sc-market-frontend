@@ -239,7 +239,7 @@ export function BuyOrdersRedesign() {
           tokens={marketSearchTokens}
           onChange={handleMarketTokensChange}
           mode="market"
-          placeholder="Search buy orders..."
+          placeholder={t("marketV2.searchBuyOrders")}
         />
       </Box>
       <ViewModeToggle mode={viewMode} onChange={setViewMode} />
@@ -390,7 +390,7 @@ export function BuyOrderCard({
               currentTarget.onerror = null
               currentTarget.src = FALLBACK_IMAGE_URL
             }}
-            alt={`Image of ${order.game_item_name}`}
+            alt={t("marketV2.imageOf", { name: order.game_item_name })}
           />
           <Box
             sx={{

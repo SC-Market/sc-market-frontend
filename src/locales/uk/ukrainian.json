@@ -79,8 +79,8 @@
       "channels": {
         "label": "Канали надсилання",
         "in_app": "У застосунку",
-        "push": "Push",
-        "email": "Email",
+        "push": "Push-сповіщення",
+        "email": "Ел. пошта",
         "discord_dm": "Особисті повідомлення Discord",
         "hint": "Вибрані канали спрацюють навіть для користувачів, які їх вимкнули. Інші канали не використовуються."
       },
@@ -774,7 +774,10 @@
       "description": "Отримуйте миттєві сповіщення на цьому пристрої про нові повідомлення, замовлення та пропозиції.",
       "prefsTitle": "Налаштування push-сповіщень",
       "title": "Push-сповіщення"
-    }
+    },
+    "setupFailed": "Не вдалося завершити налаштування",
+    "availabilityFailed": "Не вдалося зберегти доступність",
+    "emailFailed": "Не вдалося додати ел. пошту"
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Підтримати цю публікацію"
@@ -861,8 +864,8 @@
       "customise": "Налаштувати",
       "channels": {
         "in_app": "У застосунку",
-        "push": "Push",
-        "email": "Email",
+        "push": "Push-сповіщення",
+        "email": "Ел. пошта",
         "discord_dm": "Особисті повідомлення Discord"
       },
       "categories": {
@@ -1113,7 +1116,7 @@
       "siteHint": "З'являється у ваших сповіщеннях на SC Market.",
       "push": "Push-сповіщення",
       "pushHint": "На телефонах і в браузерах, де ви ввімкнули push-сповіщення.",
-      "email": "Email",
+      "email": "Ел. пошта",
       "emailHint": "Надсилається на вашу підтверджену адресу електронної пошти. Вимкнено, доки ви не ввімкнете.",
       "discord": "Особисті повідомлення Discord",
       "discordHint": "Особисте повідомлення від бота SC Market.",
@@ -1225,7 +1228,6 @@
       "otherDevices_few": "{{count}} інші пристрої",
       "otherDevices_many": "{{count}} інших пристроїв",
       "otherDevices_other": "{{count}} іншого пристрою",
-      "otherDevices_plural": "{{count}} інших пристроїв",
       "permissionDeniedError": "Дозвіл {{status}}. Увімкніть сповіщення в налаштуваннях браузера.",
       "permissionDeniedMessage": "Увімкніть сповіщення в налаштуваннях браузера, щоб використовувати push-сповіщення.",
       "permissionGrantedMessage": "Дозвіл надано! Тепер ви можете підписатися на push-сповіщення.",
@@ -1242,7 +1244,6 @@
       "totalDevices_few": "{{count}} пристрої загалом",
       "totalDevices_many": "{{count}} пристроїв загалом",
       "totalDevices_other": "{{count}} пристрою загалом",
-      "totalDevices_plural": "{{count}} пристроїв загалом",
       "unknownDevice": "Невідомий пристрій",
       "unsubscribe": "Відписатися",
       "unsubscribed": "Ви успішно відписалися від push-сповіщень",
@@ -2309,12 +2310,14 @@
     "searchAndSelect": "Знайдіть і виберіть користувачів, щоб створити груповий чат",
     "searchPlaceholder": "Введіть для пошуку користувачів",
     "searchUsers": "Пошук користувачів...",
-    "selectedCount": "Вибрано {{count}} користувача",
-    "selectedCount_plural": "Вибрано {{count}} користувачів",
     "selectedUsers": "Вибрані користувачі",
     "selectUsers": "Виберіть користувачів, щоб почати чат",
     "startNewChat": "Почати новий чат",
-    "typeToSearch": "Введіть щонайменше 3 символи для пошуку"
+    "typeToSearch": "Введіть щонайменше 3 символи для пошуку",
+    "selectedCount_few": "Вибрано {{count}} користувачів",
+    "selectedCount_many": "Вибрано {{count}} користувачів",
+    "selectedCount_one": "Вибрано {{count}} користувача",
+    "selectedCount_other": "Вибрано {{count}} користувача"
   },
   "MemberBalance": {
     "myBalance": "Мій баланс",
@@ -3313,7 +3316,7 @@
     "settingsTab": "Налаштування",
     "themeTab": "Тема",
     "themeWhiteLabelTab": "Тема та White Label",
-    "whiteLabelTab": "White Label",
+    "whiteLabelTab": "Власний бренд",
     "storefrontTab": "Вітрина",
     "analyticsTab": "Аналітика"
   },
@@ -3535,7 +3538,13 @@
     "reset": "Скинути",
     "save": "Зберегти",
     "share": "Поділитися",
-    "yes": "Так"
+    "yes": "Так",
+    "goBack": "Назад",
+    "mainContent": "Основний вміст",
+    "sectionLoadError": "Під час завантаження цього розділу сталася помилка.",
+    "pwaUpdate": "Оновити",
+    "pwaLater": "Пізніше",
+    "pwaUpdateBody": "Доступна нова версія. Оновіть зараз, щоб отримати нові функції."
   },
   "SelectPhotosArea": {
     "imageSearch": "Пошук зображень",
@@ -3949,7 +3958,6 @@
     "setMessage": "Вашу доступність налаштовано. Ви можете надсилати пропозиції {{sellerName}}.",
     "submitDisabled": "Встановіть доступність, щоб продовжити"
   },
-  "awaiting-repair": "error",
   "BidAreaV2": {
     "amount": "Сума",
     "auction": "Аукціон",
@@ -4060,8 +4068,6 @@
     "wants": "Потреби",
     "yes": "Так"
   },
-  "Cancelled": "error",
-  "Completed": "success",
   "contract_actions": {
     "create_contract": "Створити контракт"
   },
@@ -4277,7 +4283,6 @@
     "title": "Створити партію запасів",
     "variantAttributes": "Атрибути варіанта"
   },
-  "Damaged": "warning",
   "displayed_rows_one": "{{from}}-{{to}} з {{count}}",
   "displayed_rows_few": "{{from}}-{{to}} з {{count}}",
   "displayed_rows_many": "{{from}}-{{to}} з {{count}}",
@@ -4478,14 +4483,11 @@
     "none": "Немає",
     "selectMultiple": "Виберіть..."
   },
-  "flight-ready": "success",
   "imageSearch": {
     "noImageSelected": "Зображення не вибрано",
     "searchResultImage": "Зображення результату пошуку {{index}}",
     "selectedImagePreview": "Попередній перегляд вибраного зображення за URL: {{url}}"
   },
-  "in-concept": "info",
-  "in-repair": "warning",
   "inventory": {
     "actions": "Дії",
     "addLot": "Додати партію",
@@ -4581,7 +4583,6 @@
     "updateSuccess": "Партію успішно оновлено",
     "variantInfo": "Інформація про варіант"
   },
-  "Low Fuel": "warning",
   "ManageMarketRedesign": {
     "actor": "Вітрина",
     "addLot": "Додати запаси",
@@ -4907,7 +4908,6 @@
     "toggle_drawer": "Перемкнути бічну панель",
     "notifications": "Сповіщення"
   },
-  "Off Course": "warning",
   "offerTrend": {
     "accepted": "Прийнято",
     "active": "Активні",
@@ -4919,8 +4919,6 @@
     "rejected": "Відхилено",
     "total": "Усього"
   },
-  "Offline": "error",
-  "OK": "success",
   "orderKinds": {
     "Construction": "Будівництво",
     "Custom": "Індивідуальне",
@@ -5077,7 +5075,6 @@
     "label": "Учасник організації",
     "placeholder": "Пошук учасників..."
   },
-  "owned": "true",
   "page": "1",
   "pages": {
     "admin": {
@@ -5211,7 +5208,6 @@
     "selectedPageThumbnail": "Мініатюра вибраної сторінки для {{title}}",
     "wikiPageThumbnail": "Мініатюра для {{title}}"
   },
-  "Pending": "warning",
   "profile": {
     "customOrdersMovedToShop": "Індивідуальні замовлення тепер розміщуються через магазини."
   },
@@ -5519,7 +5515,6 @@
     "error": "Не вдалося розблокувати користувача",
     "success": "Успішно розблоковано {{username}}"
   },
-  "Under Attack": "error",
   "userActions": {
     "adminOpenIdentity": "Відкрити в Адмін -> Ідентичність",
     "blockForOrg": "Заблокувати {{username}} для {{orgName}}",
@@ -6127,5 +6122,174 @@
     "completedOrders_few": "{{count}} виконані замовлення",
     "completedOrders_many": "{{count}} виконаних замовлень",
     "completedOrders_other": "{{count}} виконаного замовлення"
+  },
+  "shops": {
+    "blocklist": {
+      "block": "Заблокувати {{username}}",
+      "blocked": "{{username}} заблоковано",
+      "blockedCount_few": "{{count}} заблоковані користувачі",
+      "blockedCount_many": "{{count}} заблокованих користувачів",
+      "blockedCount_one": "{{count}} заблокований користувач",
+      "blockedCount_other": "{{count}} заблокованого користувача",
+      "blockFailed": "Не вдалося заблокувати користувача",
+      "reason": "Причина (необов'язково)",
+      "searchPlaceholder": "Знайти користувача для блокування",
+      "subtitle": "Заблоковані користувачі не можуть робити замовлення чи пропозиції в цьому магазині",
+      "title": "Список блокування",
+      "unblocked": "{{username}} розблоковано",
+      "unblockFailed": "Не вдалося розблокувати користувача",
+      "unblockLabel": "Розблокувати {{name}}"
+    },
+    "card": {
+      "byOwner": "від {{name}}"
+    },
+    "customers": {
+      "title": "Клієнти"
+    },
+    "directory": {
+      "empty": "Магазинів не знайдено",
+      "search": "Пошук магазинів...",
+      "sortLabel": "Сортувати магазини",
+      "sortMostSales": "Найбільше продажів",
+      "sortNameAZ": "Назва А–Я",
+      "sortNewest": "Найновіші",
+      "sortTopRated": "Найвищий рейтинг",
+      "title": "Огляд магазинів"
+    },
+    "listingCount_few": "{{count}} оголошення",
+    "listingCount_many": "{{count}} оголошень",
+    "listingCount_one": "{{count}} оголошення",
+    "listingCount_other": "{{count}} оголошення",
+    "mine": {
+      "active": "Активний",
+      "activeShops": "Активні магазини",
+      "create": "Створити магазин",
+      "created": "Створено {{date}}",
+      "createFirst": "Створити перший магазин",
+      "customOrders": "Індивідуальні замовлення",
+      "emptyBody": "Створіть магазин, щоб почати продавати на SC Market. Вітрина налаштовується за кілька хвилин.",
+      "emptyTitle": "У вас ще немає магазинів",
+      "featureAnalytics": "Відстежуйте продажі, відгуки та аналітику",
+      "featureBranding": "Власний стиль із банером і логотипом",
+      "featureListings": "Розміщуйте предмети, послуги та набори",
+      "languages": "Мови",
+      "live": "Працює",
+      "manage": "Керувати",
+      "no": "Ні",
+      "noTags": "Тегів ще немає",
+      "organization": "Організація",
+      "personal": "Особистий",
+      "status": "Статус",
+      "subtitle": "Керуйте магазинами, оголошеннями та замовленнями",
+      "tags": "Теги",
+      "title": "Мої магазини",
+      "totalShops": "Усього магазинів",
+      "viewShop": "Переглянути магазин",
+      "yes": "Так"
+    },
+    "profile": {
+      "byOwner": "від <owner>{{name}}</owner>",
+      "headRating": "Оцінка",
+      "headReview": "Відгук",
+      "loading": "Завантаження...",
+      "noDescription": "Опис відсутній",
+      "noListings": "Немає активних оголошень",
+      "noMatches": "Жодне оголошення не відповідає пошуку",
+      "noReviews": "Відгуків ще немає",
+      "noReviewsBody": "Відгуки з'являться тут після виконання замовлень",
+      "notFound": "Магазин не знайдено",
+      "owner": "Власник магазину",
+      "searchListings": "Пошук оголошень...",
+      "since": "З {{date}}",
+      "sortListings": "Сортувати оголошення",
+      "sortMostStock": "Найбільший запас",
+      "sortNewest": "Найновіші",
+      "sortOldest": "Найстаріші",
+      "sortPriceHigh": "Ціна: від високої",
+      "sortPriceLow": "Ціна: від низької",
+      "tabAbout": "Про магазин",
+      "tabListings": "Оголошення",
+      "tabOrder": "Замовити",
+      "tabReviews": "Відгуки",
+      "tabServices": "Послуги",
+      "tabsLabel": "Вкладки магазину"
+    },
+    "reviewCount_few": "{{count}} відгуки",
+    "reviewCount_many": "{{count}} відгуків",
+    "reviewCount_one": "{{count}} відгук",
+    "reviewCount_other": "{{count}} відгуку",
+    "saleCount_few": "{{count}} продажі",
+    "saleCount_many": "{{count}} продажів",
+    "saleCount_one": "{{count}} продаж",
+    "saleCount_other": "{{count}} продажу",
+    "serviceCount_few": "{{count}} послуги",
+    "serviceCount_many": "{{count}} послуг",
+    "serviceCount_one": "{{count}} послуга",
+    "serviceCount_other": "{{count}} послуги"
+  },
+  "marketV2": {
+    "archive": "Архівувати",
+    "availShort": "{{quantity}} в наявності",
+    "bestPrice": "Найкраща",
+    "craftingShoppingList": "Список покупок для крафту",
+    "description": "Опис",
+    "edit": "Редагувати",
+    "gridView": "Сітка",
+    "imageOf": "Зображення: {{name}}",
+    "listingDetails": "Деталі оголошення",
+    "listView": "Список",
+    "maxTier": "Макс. рівень",
+    "maxValue": "Макс. значення",
+    "minTier": "Мін. рівень",
+    "minValue": "Мін. значення",
+    "noVariants": "Немає доступних варіантів",
+    "outOfStockBadge": "НЕМАЄ В НАЯВНОСТІ",
+    "privateBadge": "ПРИВАТНЕ",
+    "qtyColon": "К-сть: {{quantity}}",
+    "qtyShort": "К-сть {{quantity}}",
+    "quickEdit": "Швидке редагування",
+    "removeItemFailed": "Не вдалося вилучити товар",
+    "searchBuyOrders": "Пошук заявок на купівлю...",
+    "searchItems": "Пошук предметів, категорій...",
+    "searchItemsSellers": "Пошук предметів, категорій, продавців...",
+    "standardVariant": "Стандарт",
+    "updateQuantityFailed": "Не вдалося оновити кількість",
+    "updateVariantFailed": "Не вдалося оновити варіант"
+  },
+  "orgsUi": {
+    "avatarOf": "Аватар {{name}}",
+    "createOrg": "Створити організацію",
+    "myOrgs": "Мої організації",
+    "noOrgs": "Ви не є учасником жодної організації",
+    "noOrgsBody": "Приєднайтеся до організації або створіть власну, щоб співпрацювати з іншими",
+    "userNoOrgs": "Цей користувач не входить до жодної організації",
+    "view": "Переглянути"
+  },
+  "settingsUi": {
+    "apiTokens": "API-токени",
+    "chooseTypesOrg": "Оберіть, які сповіщення отримувати для цієї організації.",
+    "chooseTypesPersonal": "Оберіть, які сповіщення отримувати особисто.",
+    "frequency": "Частота: {{frequency}}",
+    "frequencyAt": "Частота: {{frequency}} о {{time}}",
+    "itemsUnit": "шт.",
+    "notificationFallback": "сповіщення",
+    "notificationsFor": "Сповіщення для {{name}}",
+    "orgNotifications": "Сповіщення організації",
+    "preferencesUpdated_few": "Оновлено {{count}} налаштування сповіщень",
+    "preferencesUpdated_many": "Оновлено {{count}} налаштувань сповіщень",
+    "preferencesUpdated_one": "Оновлено {{count}} налаштування сповіщень",
+    "preferencesUpdated_other": "Оновлено {{count}} налаштування сповіщень",
+    "preferencesUpdateFailed": "Не вдалося оновити налаштування",
+    "preferenceUpdated": "Налаштування для «{{name}}» оновлено",
+    "preferenceUpdateFailed": "Не вдалося оновити налаштування",
+    "selectFont": "Оберіть шрифт",
+    "selectOrg": "Оберіть організацію",
+    "turnAllOff": "Вимкнути всі",
+    "turnAllOn": "Увімкнути всі"
+  },
+  "messagesUi": {
+    "send": "Надіслати",
+    "viewOffer": "Переглянути пропозицію",
+    "viewOrder": "Переглянути замовлення"
   }
 }

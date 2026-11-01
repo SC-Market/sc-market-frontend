@@ -85,7 +85,7 @@ import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { isSiteAdmin } from "../../../util/siteRole"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -99,6 +99,7 @@ export function ShopProfile() {
     isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
   )
   const currentTab = useShopTab()
+  const { t } = useTranslation()
 
   if (isLoading) return <ShopProfileSkeleton />
 
@@ -106,7 +107,7 @@ export function ShopProfile() {
     return (
       <Container maxWidth="lg" sx={{ py: 8, textAlign: "center" }}>
         <StorefrontRounded sx={{ fontSize: 64, color: "text.secondary", mb: 2 }} />
-        <Typography variant="h5">Shop not found</Typography>
+        <Typography variant="h5">{t("shops.profile.notFound")}</Typography>
       </Container>
     )
   }
@@ -163,6 +164,7 @@ export function ShopProfile() {
 function ShopHeader(props: { shop: ShopPublicResponse }) {
   const { shop } = props
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
 
   const ownerLink = shop.owner
     ? shop.owner.type === "contractor"
@@ -214,16 +216,21 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
 
         {shop.owner && ownerLink && (
           <Typography variant="body2" color="text.secondary">
-            by{" "}
-            <Typography
-              component={Link}
-              to={ownerLink}
-              variant="body2"
-              color="primary"
-              sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
-            >
-              {shop.owner.name}
-            </Typography>
+            <Trans
+              i18nKey="shops.profile.byOwner"
+              values={{ name: shop.owner.name }}
+              components={{
+                owner: (
+                  <Typography
+                    component={Link}
+                    to={ownerLink}
+                    variant="body2"
+                    color="primary"
+                    sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                  />
+                ),
+              }}
+            />
           </Typography>
         )}
 
@@ -245,7 +252,7 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
           {shop.listing_count != null && (
             <Chip
               size="small"
-              label={`${shop.listing_count} listing${shop.listing_count !== 1 ? "s" : ""}`}
+              label={t("shops.listingCount", { count: shop.listing_count })}
               icon={<StorefrontRounded />}
               color="default"
             />
@@ -253,11 +260,11 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
           {shop.total_sales != null && (
             <Chip
               size="small"
-              label={`${shop.total_sales} sale${shop.total_sales !== 1 ? "s" : ""}`}
+              label={t("shops.saleCount", { count: shop.total_sales })}
               color="default"
             />
           )}
-          <Chip size="small" label={`Since ${memberSince}`} color="default" />
+          <Chip size="small" label={t("shops.profile.since", { date: memberSince })} color="default" />
         </Stack>
 
         {/* Seller activity (sales are shown above) */}
@@ -289,6 +296,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => {
 function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
   const { shop } = props
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
   const { data: reviewsData } = useGetShopReviewsQuery({
     shopId: shop.shop_id,
     pageSize: 200,
@@ -375,7 +383,7 @@ function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
           }
         />
         <Typography variant="body1" color="text.primary">
-          {shop.rating_count} review{shop.rating_count !== 1 ? "s" : ""}
+          {t("shops.reviewCount", { count: shop.rating_count })}
         </Typography>
         {shopBadges.length > 0 && (
           <Box sx={{ mt: 1, fontSize: "1.2rem" }}>
@@ -402,32 +410,33 @@ interface ShopPublicResponseWithMetrics extends ShopPublicResponse {
 }
 
 function ShopTabs(props: { slug: string; currentTab: number; shop: ShopPublicResponse }) {
+  const { t } = useTranslation()
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
-      <Tabs value={props.currentTab} variant="scrollable" aria-label="Shop tabs">
+      <Tabs value={props.currentTab} variant="scrollable" aria-label={t("shops.profile.tabsLabel")}>
         <HapticTab
-          label="Listings"
+          label={t("shops.profile.tabListings")}
           component={Link}
           to={SHOP_PATHS.profile(props.slug)}
           icon={<StorefrontRounded />}
           {...a11yProps(0)}
         />
         <HapticTab
-          label="Services"
+          label={t("shops.profile.tabServices")}
           component={Link}
           to={SHOP_PATHS.profileTab(props.slug, "services")}
           icon={<DesignServicesRounded />}
           {...a11yProps(1)}
         />
         <HapticTab
-          label="Reviews"
+          label={t("shops.profile.tabReviews")}
           component={Link}
           to={SHOP_PATHS.profileTab(props.slug, "reviews")}
           icon={<StarRounded />}
           {...a11yProps(2)}
         />
         <HapticTab
-          label="About"
+          label={t("shops.profile.tabAbout")}
           component={Link}
           to={SHOP_PATHS.profileTab(props.slug, "about")}
           icon={<InfoRounded />}
@@ -435,7 +444,7 @@ function ShopTabs(props: { slug: string; currentTab: number; shop: ShopPublicRes
         />
         {props.shop.accepts_custom_orders && (
           <HapticTab
-            label="Order"
+            label={t("shops.profile.tabOrder")}
             component={Link}
             to={SHOP_PATHS.profileTab(props.slug, "order")}
             icon={<CreateRounded />}
@@ -511,7 +520,7 @@ export function ShopListingsTab(props: { slug: string }) {
       <Stack direction={{ xs: "column", sm: "row" }} spacing={1} sx={{ mb: 2 }}>
         <TextField
           size="small"
-          placeholder="Search listings..."
+          placeholder={t("shops.profile.searchListings")}
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1) }}
           sx={{ flex: 1 }}
@@ -520,10 +529,10 @@ export function ShopListingsTab(props: { slug: string }) {
         <TextField
           select
           size="small"
-          inputProps={{ "aria-label": "Sort listings" }}
+          inputProps={{ "aria-label": t("shops.profile.sortListings") }}
           SelectProps={{
             SelectDisplayProps: {
-              "aria-label": "Sort listings",
+              "aria-label": t("shops.profile.sortListings"),
               "aria-labelledby": undefined,
             },
           }}
@@ -534,11 +543,11 @@ export function ShopListingsTab(props: { slug: string }) {
           }}
           sx={{ minWidth: 140 }}
         >
-          <MenuItem value="created_at-desc">Newest</MenuItem>
-          <MenuItem value="created_at-asc">Oldest</MenuItem>
-          <MenuItem value="price-asc">Price: Low</MenuItem>
-          <MenuItem value="price-desc">Price: High</MenuItem>
-          <MenuItem value="quantity-desc">Most Stock</MenuItem>
+          <MenuItem value="created_at-desc">{t("shops.profile.sortNewest")}</MenuItem>
+          <MenuItem value="created_at-asc">{t("shops.profile.sortOldest")}</MenuItem>
+          <MenuItem value="price-asc">{t("shops.profile.sortPriceLow")}</MenuItem>
+          <MenuItem value="price-desc">{t("shops.profile.sortPriceHigh")}</MenuItem>
+          <MenuItem value="quantity-desc">{t("shops.profile.sortMostStock")}</MenuItem>
         </TextField>
         {isAdmin && (
           <FormControlLabel
@@ -559,7 +568,7 @@ export function ShopListingsTab(props: { slug: string }) {
         <ShopListingsGridSkeleton />
       ) : !data?.listings.length ? (
         <Typography color="text.secondary" sx={{ textAlign: "center", py: 4 }}>
-          {search ? "No listings match your search" : "No active listings"}
+          {search ? t("shops.profile.noMatches") : t("shops.profile.noListings")}
         </Typography>
       ) : (
         <>
@@ -644,13 +653,13 @@ const shopReviewHeadCells: readonly HeadCell<ShopReviewRow>[] = [
     id: "rating",
     numeric: false,
     disablePadding: false,
-    label: "Rating",
+    label: "shops.profile.headRating",
   },
   {
     id: "comment",
     numeric: true,
     disablePadding: false,
-    label: "Review",
+    label: "shops.profile.headReview",
   },
 ]
 
@@ -745,6 +754,7 @@ function ShopReviewRow(props: {
 
 function ShopReviewsTab(props: { shop: ShopPublicResponse }) {
   const { shop } = props
+  const { t } = useTranslation()
   const { data: reviewsData, isLoading } = useGetShopReviewsQuery({
     shopId: shop.shop_id,
     pageSize: 200,
@@ -762,7 +772,7 @@ function ShopReviewsTab(props: { shop: ShopPublicResponse }) {
     return (
       <Box sx={{ p: 3 }}>
         <Typography variant="body2" color="text.secondary">
-          Loading...
+          {t("shops.profile.loading")}
         </Typography>
       </Box>
     )
@@ -773,8 +783,8 @@ function ShopReviewsTab(props: { shop: ShopPublicResponse }) {
       <Grid container>
         <Grid item xs={12}>
           <EmptyReviews
-            title="No reviews yet"
-            description="Reviews will appear here as orders are completed"
+            title={t("shops.profile.noReviews")}
+            description={t("shops.profile.noReviewsBody")}
           />
         </Grid>
       </Grid>
@@ -797,6 +807,7 @@ function ShopReviewsTab(props: { shop: ShopPublicResponse }) {
 function ShopAboutTab(props: { shop: ShopPublicResponse }) {
   const { shop } = props
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
 
   return (
     <Grid container spacing={theme.layoutSpacing.layout}>
@@ -804,7 +815,7 @@ function ShopAboutTab(props: { shop: ShopPublicResponse }) {
         {shop.description ? (
           <MarkdownRender text={shop.description} />
         ) : (
-          <Typography color="text.secondary">No description provided</Typography>
+          <Typography color="text.secondary">{t("shops.profile.noDescription")}</Typography>
         )}
       </Grid>
       {shop.owner && (
@@ -838,6 +849,7 @@ function ShopOrderTab(props: { shop: ShopPublicResponse }) {
 function OwnerCard(props: { owner: NonNullable<ShopPublicResponse["owner"]> }) {
   const { owner } = props
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
   const ownerLink =
     owner.type === "contractor"
       ? ORG_PATHS.profile(owner.slug)
@@ -853,7 +865,7 @@ function OwnerCard(props: { owner: NonNullable<ShopPublicResponse["owner"]> }) {
       }}
     >
       <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5 }}>
-        Shop owner
+        {t("shops.profile.owner")}
       </Typography>
       <Stack
         component={Link}

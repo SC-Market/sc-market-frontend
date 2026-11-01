@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React from "react";
 import {
   Box,
@@ -31,6 +32,7 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
   onMinTierChange,
   onMaxTierChange,
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>();
 
   const tierOptions = [
@@ -49,7 +51,7 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
         fontWeight="bold"
         sx={{ mb: theme.layoutSpacing?.text ?? 1 }}
       >
-        Quality Tier
+        {t("market.qualityTier")}
       </Typography>
       <Grid container spacing={theme.layoutSpacing?.layout ?? 1}>
         <Grid item xs={6}>
@@ -58,7 +60,7 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
             fullWidth
             size="small"
             color="secondary"
-            label="Min Tier"
+            label={t("marketV2.minTier")}
             value={minTier ?? ""}
             onChange={(e) => {
               const value = e.target.value;
@@ -84,7 +86,7 @@ export const QualityFilter: React.FC<QualityFilterProps> = ({
             fullWidth
             size="small"
             color="secondary"
-            label="Max Tier"
+            label={t("marketV2.maxTier")}
             value={maxTier ?? ""}
             onChange={(e) => {
               const value = e.target.value;

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import React, { ReactElement, ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { Grid, IconButton } from "@mui/material"
@@ -18,6 +19,7 @@ export interface FormPageLayoutProps extends StandardPageLayoutProps {
 }
 
 export function FormPageLayout(props: FormPageLayoutProps): ReactElement {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
@@ -48,7 +50,7 @@ export function FormPageLayout(props: FormPageLayoutProps): ReactElement {
         <Grid item>
           <IconButton
             onClick={handleBackClick}
-            aria-label="Go back"
+            aria-label={t("ui.goBack")}
             size="large"
           >
             <ArrowBackIcon />
