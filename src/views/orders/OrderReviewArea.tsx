@@ -8,11 +8,28 @@ import { Order, OrderStatus } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { useOrderReview } from "../../features/orders/hooks/useOrderReview"
 
-/** Reviews are accepted only once an order is finished (matches the backend gate). */
+/** Reviews are accepted once an order is finished (matches the backend gate). */
 export const REVIEWABLE_ORDER_STATUSES: readonly OrderStatus[] = [
   "fulfilled",
   "cancelled",
 ]
+
+/** An order still open this many days after it started is reviewable too. */
+export const REVIEW_OPEN_ORDER_AFTER_DAYS = 14
+
+/** Mirrors the backend's isOrderReviewable (orders.timestamp = start). */
+export function isOrderReviewable(
+  order: Pick<Order, "status" | "timestamp">,
+  now: Date = new Date(),
+): boolean {
+  if (REVIEWABLE_ORDER_STATUSES.includes(order.status)) return true
+  const started = new Date(order.timestamp).getTime()
+  if (Number.isNaN(started)) return false
+  return (
+    now.getTime() - started >=
+    REVIEW_OPEN_ORDER_AFTER_DAYS * 24 * 60 * 60 * 1000
+  )
+}
 
 export function OrderReviewArea(props: {
   asCustomer?: boolean
@@ -25,7 +42,7 @@ export function OrderReviewArea(props: {
   const role = props.asCustomer ? "customer" : "contractor"
   const { content, setContent, rating, setRating, submitReview } =
     useOrderReview(order.order_id, role)
-  const finished = REVIEWABLE_ORDER_STATUSES.includes(order.status)
+  const finished = isOrderReviewable(order)
 
   return (
     <>

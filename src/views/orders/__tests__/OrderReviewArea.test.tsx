@@ -1,6 +1,7 @@
 /**
  * The review form is disabled, with a hint, until the order is finished
- * (fulfilled or cancelled); the backend refuses earlier reviews with 409.
+ * (fulfilled or cancelled) or has been open 14 days; the backend refuses
+ * earlier reviews with 409.
  */
 import React from "react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
@@ -29,10 +30,14 @@ const theme = createTheme({
   layoutSpacing: { component: 2, layout: 3 },
 } as Parameters<typeof createTheme>[0])
 
-function renderFor(status: OrderStatus) {
+const DAY = 24 * 60 * 60 * 1000
+const daysAgo = (n: number) => new Date(Date.now() - n * DAY).toISOString()
+
+function renderFor(status: OrderStatus, timestamp: string = daysAgo(1)) {
   const order = {
     order_id: "o1",
     status,
+    timestamp,
     customer: "buyer",
     assigned_to: "seller",
     contractor: null,
@@ -69,4 +74,20 @@ describe("OrderReviewArea", () => {
       expect(submitReview).toHaveBeenCalledTimes(1)
     })
   }
+
+  for (const status of ["not-started", "in-progress"] as const) {
+    it(`allows a review of a ${status} order open 14+ days`, () => {
+      renderFor(status, daysAgo(15))
+      expect(button()).toHaveProperty("disabled", false)
+      expect(screen.queryByText("orderReviewArea.notFinishedHint")).toBeNull()
+      fireEvent.click(button())
+      expect(submitReview).toHaveBeenCalledTimes(1)
+    })
+  }
+
+  it("keeps an open order disabled at 13 days", () => {
+    renderFor("in-progress", daysAgo(13))
+    expect(button()).toHaveProperty("disabled", true)
+    expect(screen.getByText("orderReviewArea.notFinishedHint")).toBeTruthy()
+  })
 })

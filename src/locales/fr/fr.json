@@ -1930,7 +1930,7 @@
     "commentLabel": "Commentaire",
     "ratingLabel": "Note :",
     "leaveReviewButton": "Laisser un avis",
-    "notFinishedHint": "Vous pourrez laisser un avis une fois la commande terminée ou annulée.",
+    "notFinishedHint": "Vous pourrez laisser un avis une fois la commande terminée ou annulée, ou 14 jours après son début.",
     "alert": {
       "success": "Avis publié !",
       "error": "Échec de la publication de l'avis !"
