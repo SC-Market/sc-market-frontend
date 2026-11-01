@@ -41,11 +41,17 @@ describe("market ad rotation", () => {
   it("splices ads at the first position and then every AD_FREQUENCY listings", () => {
     const out = insertAds(listings(60), (l) => l.listing_id)
     const adAt = out.flatMap((item, i) => ("_isAd" in item ? [i] : []))
-    expect(adAt).toEqual([
-      AD_FIRST_POSITION,
-      AD_FIRST_POSITION + AD_FREQUENCY + 1,
-    ])
+    const expected: number[] = []
+    for (let i = AD_FIRST_POSITION; i < 60 + expected.length; i += AD_FREQUENCY + 1) {
+      expected.push(i)
+    }
+    expect(adAt).toEqual(expected)
     expect(out.filter((item) => !("_isAd" in item))).toHaveLength(60)
+  })
+
+  it("puts one ad in a default page of 12 listings", () => {
+    const out = insertAds(listings(12), (l) => l.listing_id)
+    expect(out.filter((item) => "_isAd" in item)).toHaveLength(1)
   })
 
   it("is deterministic per result page and varies between pages", () => {

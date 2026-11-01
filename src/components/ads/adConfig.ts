@@ -69,8 +69,12 @@ export const MARKET_ADS: AdConfig[] = [
 
 /** Listings between two ads. */
 export const AD_FREQUENCY = 24
-/** Index of the first ad in a page of listings. */
-export const AD_FIRST_POSITION = 12
+/**
+ * Index of the first ad in a page of listings. Below the market's default
+ * page size (12): at 12 the first slot was past the end of a default page,
+ * so no ad ever showed.
+ */
+export const AD_FIRST_POSITION = 8
 /** Fewer listings than this get no ads. */
 export const AD_MIN_LISTINGS = 10
 
