@@ -308,6 +308,10 @@ export function MobileBottomNav() {
         bottom: 0,
         left: 0,
         right: 0,
+        // Only the top border: the outlined Paper's full border made the
+        // bar 66px, 2px taller than the 64px <main> reserves for it
+        // (useBottomNavHeight), so it covered the composer's bottom edge.
+        border: 0,
         borderTop: `1px solid ${theme.palette.outline.main}`,
         borderRadius: 0,
         display: { xs: isKeyboardOpen ? "none" : "block", sm: "none" }, // Hide when keyboard is open
@@ -328,7 +332,7 @@ export function MobileBottomNav() {
           showLabels
           sx={{
             backgroundColor: theme.palette.background.paper,
-            height: 64, // Standard bottom nav height
+            height: 63, // 64 with the top border: useBottomNavHeight
             position: "relative",
             paddingLeft: 0,
             paddingRight: 0,
