@@ -1,97 +1,77 @@
 import { useEffect, useState, useCallback } from "react"
+import { isPWAInstalled } from "../../util/pwa-detection"
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>
 }
 
-// Global state to share the deferred prompt across components
+// Shared across every component using the hook. The listeners are attached
+// when this module loads (Root imports it through InstallPrompt), not when a
+// component mounts: Chrome fires `beforeinstallprompt` once, early, often
+// before React has rendered, and a later listener never sees it.
 let globalDeferredPrompt: BeforeInstallPromptEvent | null = null
-const globalPromptListeners: Set<() => void> = new Set()
+let globalInstalled = false
+const listeners: Set<() => void> = new Set()
+const notify = () => listeners.forEach((listener) => listener())
+
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (e: Event) => {
+    e.preventDefault()
+    globalDeferredPrompt = e as BeforeInstallPromptEvent
+    notify()
+  })
+  window.addEventListener("appinstalled", () => {
+    globalInstalled = true
+    globalDeferredPrompt = null
+    notify()
+  })
+}
 
 /**
- * Hook to manage PWA install prompt
- * Provides functionality to trigger the install prompt manually
+ * The PWA install prompt: `canInstall` when the browser offered a deferred
+ * `beforeinstallprompt` (Chromium browsers), `isInstalled` when running as
+ * the installed app or once the user installed it this session.
+ *
+ * Both start false and are read after mount, so a prerendered page and its
+ * hydration render agree.
  */
 export function usePWAInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null)
-  const [isInstalled, setIsInstalled] = useState(false)
+  const [, setTick] = useState(0)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    // Check if app is already installed
-    if (
-      window.matchMedia("(display-mode: standalone)").matches ||
-      (window.navigator as Navigator & { standalone?: boolean }).standalone === true
-    ) {
-      setIsInstalled(true)
-      return
-    }
-
-    // Listen for beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault()
-      const promptEvent = e as BeforeInstallPromptEvent
-      globalDeferredPrompt = promptEvent
-      setDeferredPrompt(promptEvent)
-      // Notify all listeners
-      globalPromptListeners.forEach((listener) => listener())
-    }
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
-
-    // Listen for app installed event
-    const handleAppInstalled = () => {
-      setIsInstalled(true)
-      globalDeferredPrompt = null
-      setDeferredPrompt(null)
-    }
-
-    window.addEventListener("appinstalled", handleAppInstalled)
-
-    // Check if we already have a deferred prompt
-    if (globalDeferredPrompt) {
-      setDeferredPrompt(globalDeferredPrompt)
-    }
-
+    setMounted(true)
+    const listener = () => setTick((n) => n + 1)
+    listeners.add(listener)
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt,
-      )
-      window.removeEventListener("appinstalled", handleAppInstalled)
+      listeners.delete(listener)
     }
   }, [])
 
+  const isInstalled = mounted && (globalInstalled || isPWAInstalled())
+
   const triggerInstall = useCallback(async () => {
-    const prompt = deferredPrompt || globalDeferredPrompt
+    const prompt = globalDeferredPrompt
     if (!prompt) {
       return false
     }
 
     try {
-      // Show the install prompt
       await prompt.prompt()
-
-      // Wait for user response
       const { outcome } = await prompt.userChoice
-
-      if (outcome === "accepted") {
-        setIsInstalled(true)
-        globalDeferredPrompt = null
-        setDeferredPrompt(null)
-        return true
-      } else {
-        return false
-      }
+      // A deferred prompt can only be shown once.
+      globalDeferredPrompt = null
+      if (outcome === "accepted") globalInstalled = true
+      notify()
+      return outcome === "accepted"
     } catch (error) {
       console.error("Failed to show install prompt:", error)
       return false
     }
-  }, [deferredPrompt])
+  }, [])
 
-  const canInstall =
-    !isInstalled && (deferredPrompt !== null || globalDeferredPrompt !== null)
+  const canInstall = mounted && !isInstalled && globalDeferredPrompt !== null
 
   return {
     canInstall,

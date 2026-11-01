@@ -27,6 +27,5 @@ export { usePushSubscription } from "./hooks/usePushSubscription"
 
 // Component exports
 export { PushNotificationSettings } from "./components/PushNotificationSettings"
-export { PushNotificationStatus } from "./components/PushNotificationStatus"
 export { PushNotificationSubscription } from "./components/PushNotificationSubscription"
-export { PushNotificationErrorStates } from "./components/PushNotificationErrorStates"
+export { PushSetupPanel } from "./components/PushSetupPanel"

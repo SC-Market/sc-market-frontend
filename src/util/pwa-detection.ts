@@ -1,72 +1,51 @@
 /**
- * PWA installation detection utilities
+ * PWA installation and platform detection. Browser-only: call these after
+ * mount (in an effect), never during a render that is prerendered.
  */
 
 /**
- * Check if the app is installed as a PWA
- * Works across iOS, Android, and desktop
+ * Whether the app is running installed (standalone display mode, or iOS's
+ * legacy `navigator.standalone`).
  */
 export function isPWAInstalled(): boolean {
-  // Check for standalone mode (iOS Safari, Android Chrome, desktop)
-  if (window.matchMedia("(display-mode: standalone)").matches) {
+  if (window.matchMedia?.("(display-mode: standalone)").matches) {
     return true
   }
-
-  // Check for iOS Safari standalone mode (legacy)
-  if (
+  return (
     (window.navigator as Navigator & { standalone?: boolean }).standalone ===
     true
-  ) {
-    return true
-  }
-
-  // Check if running in a TWA (Trusted Web Activity) on Android
-  // This is detected by checking if the referrer is empty and we're in standalone
-  if (
-    document.referrer === "" &&
-    window.matchMedia("(display-mode: standalone)").matches
-  ) {
-    return true
-  }
-
-  return false
-}
-
-/**
- * Check if the device is mobile (iOS or Android)
- */
-export function isMobileDevice(): boolean {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent,
   )
 }
 
 /**
- * Check if push notifications require PWA installation
- * On mobile devices, push notifications only work if the PWA is installed
+ * iPhone, iPod or iPad. iPadOS 13+ reports a Mac user agent, so a "Mac"
+ * with a touch screen counts as an iPad.
  */
-export function requiresPWAInstallationForPush(): boolean {
-  return isMobileDevice() && !isPWAInstalled()
+export function isIOSDevice(): boolean {
+  const ua = navigator.userAgent
+  if (/iPhone|iPad|iPod/i.test(ua)) return true
+  return /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1
 }
 
-/**
- * Get a user-friendly message about PWA installation requirement
- */
-export function getPWAInstallationMessage(): string {
-  if (!isMobileDevice()) {
-    return ""
+export function isAndroidDevice(): boolean {
+  return /Android/i.test(navigator.userAgent)
+}
+
+/** Where to send someone whose browser blocked notifications. */
+export type NotificationHelpPlatform =
+  | "ios-app"
+  | "android"
+  | "safari"
+  | "firefox"
+  | "chromium"
+
+export function notificationHelpPlatform(): NotificationHelpPlatform {
+  const ua = navigator.userAgent
+  if (isIOSDevice()) return "ios-app"
+  if (isAndroidDevice()) return "android"
+  if (/Firefox\//i.test(ua)) return "firefox"
+  if (/Safari\//i.test(ua) && !/Chrome\/|Chromium\/|Edg\//i.test(ua)) {
+    return "safari"
   }
-
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-  const isAndroid = /Android/i.test(navigator.userAgent)
-
-  if (isIOS) {
-    return "To receive push notifications on iOS, please install this app by tapping the Share button and selecting 'Add to Home Screen'."
-  }
-
-  if (isAndroid) {
-    return "To receive push notifications on Android, please install this app. Look for the install prompt or use the browser menu to 'Add to Home Screen'."
-  }
-
-  return "To receive push notifications on mobile, please install this app first."
+  return "chromium"
 }

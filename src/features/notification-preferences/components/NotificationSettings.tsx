@@ -27,7 +27,12 @@ export function NotificationSettings() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Typography variant="h5" component="h2">
+        <Typography
+          variant="h5"
+          component="h2"
+          color="text.secondary"
+          sx={{ fontWeight: "bold" }}
+        >
           {t("settings.notifications.title", "Notifications")}
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
@@ -93,7 +98,7 @@ export function NotificationSettings() {
         <NotificationPreferencesTabs />
       </Grid>
       <Grid item xs={12} id="notif-push">
-        <PushNotificationSettings showPreferences={false} />
+        <PushNotificationSettings />
       </Grid>
       <Grid item xs={12} id="notif-email">
         <EmailSettings showPreferences={false} />

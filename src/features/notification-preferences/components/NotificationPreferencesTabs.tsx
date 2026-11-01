@@ -319,12 +319,16 @@ export function NotificationPreferencesTabs() {
           }}
         >
           <FormControl size="small" sx={{ minWidth: 220 }}>
-            <InputLabel id="notif-scope">
+            {/* shrink + displayEmpty: Personal is the "" value, which MUI
+                otherwise treats as empty and renders as a blank field */}
+            <InputLabel id="notif-scope" shrink>
               {t("settings.notifications.scope", "Settings for")}
             </InputLabel>
             <Select
               labelId="notif-scope"
               label={t("settings.notifications.scope", "Settings for")}
+              displayEmpty
+              notched
               value={scope ?? ""}
               onChange={(e) =>
                 setScope(e.target.value ? String(e.target.value) : null)
