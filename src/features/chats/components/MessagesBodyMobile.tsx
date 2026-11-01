@@ -599,15 +599,6 @@ function MessageSendAreaMobile(props: {
           setTextEntry(event.target.value)
         }}
         onKeyPress={handleKeyPress}
-        onFocus={(e) => {
-          // With resizes-content mode, the browser will automatically resize the viewport
-          // We just need to ensure the input is visible - the resize event will handle positioning
-          const inputElement = e.target as HTMLElement
-          // Small delay to allow browser to resize viewport, then scroll if needed
-          setTimeout(() => {
-            inputElement.scrollIntoView({ behavior: "smooth", block: "end" })
-          }, 100)
-        }}
         placeholder={t("MessagesBody.typeMessage") || "Type a message..."}
       />
       <HapticIconButton
@@ -917,7 +908,6 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             <MessageSendAreaMobile
               onSend={onSend}
               isKeyboardOpen={isKeyboardOpen}
-              inputRef={inputAreaRef}
             />
           </Box>
 

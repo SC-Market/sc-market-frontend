@@ -50,7 +50,7 @@ export function MessagesList() {
                 style={{
                   flexGrow: 1,
                   overflow: "auto",
-                  height: "100vh",
+                  height: "100%",
                   display: "flex",
                   flexDirection: "column",
                 }}
@@ -76,7 +76,7 @@ export function MessagesList() {
                   style={{
                     flexGrow: 1,
                     overflow: "auto",
-                    height: "100vh",
+                    height: "100%",
                     display: "flex",
                     flexDirection: "column",
                     minWidth: 0,

@@ -13,6 +13,7 @@ import { MobileBottomNav } from "../navigation/MobileBottomNav"
 import { ContextAwareFAB } from "../mobile/ContextAwareFAB"
 import { useLocation } from "react-router-dom"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { useAppViewportHeight } from "../../hooks/layout/useAppViewportHeight"
 import { DebugPanel } from "../market/v2/DebugPanel"
 import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext"
 import { ParticleField } from "../effects/ParticleField"
@@ -32,6 +33,7 @@ export function Root(props: { children: React.ReactNode }) {
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
   const hydrated = useHydrated()
+  useAppViewportHeight()
 
   return (
     <Box
@@ -41,7 +43,14 @@ export function Root(props: { children: React.ReactNode }) {
         flexDirection: "row", // Horizontal layout for sidebar and main content
         background: "transparent",
         backgroundSize: "400px",
+        // The visible area, not the largest one: 100vh runs under a mobile
+        // URL bar (and under iOS's keyboard), so whatever sits at the bottom
+        // of <main>, like the message composer, was hidden there.
+        // --app-height: useAppViewportHeight.
         height: "100vh",
+        "@supports (height: 100dvh)": {
+          height: "var(--app-height, 100dvh)",
+        },
         overflow: "hidden", // Prevent root from scrolling
         // backgroundSize: 'cover',
       }}
@@ -108,7 +117,11 @@ function MainContent(props: {
         overflow: "hidden", // Prevent this container from scrolling
         position: "relative", // For absolute positioning of bottom nav
         // Add padding bottom to account for bottom nav (dynamically adjusts when keyboard opens)
-        paddingBottom: `${bottomNavHeight}px`,
+        // The bottom nav is 64px plus the home-indicator inset it pads itself
+        // with (MobileBottomNav), so clear both.
+        paddingBottom: bottomNavHeight
+          ? `calc(${bottomNavHeight}px + env(safe-area-inset-bottom))`
+          : 0,
       }}
     >
       <Box
