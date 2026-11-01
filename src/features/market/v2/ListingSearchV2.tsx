@@ -80,6 +80,7 @@ import { orgScopedListingArgs } from "../../storefront/domain"
 import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { useStartupGateOpen } from "../../../util/startupDeferral"
 import { CARD_CHIP_SX, cardChipStackSx } from "./cardChips"
+import { qualityChipSx, qualityRangeChip } from "../../../util/qualityColor"
 import { CardStub, firstScreenCards, useFirstScreenRender } from "../../../components/grid/firstScreen"
 
 /**
@@ -912,44 +913,6 @@ interface ListingCardV2Props {
   priority?: boolean;
 }
 
-/** Quality tier color: 1=grey, 2=green, 3=blue, 4=purple, 5=gold */
-function qualityColor(tier: number): string {
-  switch (tier) {
-    case 1: return "#757575"
-    case 2: return "#4caf50"
-    case 3: return "#2196f3"
-    case 4: return "#9c27b0"
-    case 5: return "#ff9800"
-    default: return "#757575"
-  }
-}
-
-/** Quality value (0-1000) to color */
-function qualityValueColor(value: number): string {
-  if (value >= 800) return "#ff9800"  // gold
-  if (value >= 600) return "#9c27b0"  // purple
-  if (value >= 400) return "#2196f3"  // blue
-  if (value >= 200) return "#4caf50"  // green
-  return "#757575"                     // grey
-}
-
-/** Format quality display — prefers value (0-1000) over tier (1-5) */
-function qualityChipProps(listing: ListingSearchResult): { label: string; color: string } | null {
-  if (listing.quality_value_min != null) {
-    const min = listing.quality_value_min
-    const max = listing.quality_value_max ?? min
-    const label = min === max ? `${min}` : `${min}–${max}`
-    return { label, color: qualityValueColor(max) }
-  }
-  if (listing.quality_tier_min != null) {
-    const min = listing.quality_tier_min
-    const max = listing.quality_tier_max ?? min
-    const label = min === max ? `Q${min}` : `Q${min}–${max}`
-    return { label, color: qualityColor(max) }
-  }
-  return null
-}
-
 export function ListingCardV2({ listing, priority = false }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { t, i18n } = useTranslation();
@@ -1002,7 +965,7 @@ export function ListingCardV2({ listing, priority = false }: ListingCardV2Props)
               </Box>
               <Box sx={cardChipStackSx("top-right")}>
                 {(() => {
-                  const qc = qualityChipProps(listing)
+                  const qc = qualityRangeChip(listing)
                   return (
                     qc && (
                       <Chip
@@ -1011,8 +974,7 @@ export function ListingCardV2({ listing, priority = false }: ListingCardV2Props)
                         sx={{
                           ...CARD_CHIP_SX,
                           textTransform: "none",
-                          bgcolor: qc.color,
-                          color: "#fff",
+                          ...qualityChipSx(qc.color),
                         }}
                       />
                     )

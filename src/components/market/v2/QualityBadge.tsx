@@ -1,6 +1,7 @@
 import React from "react";
 import { Chip } from "@mui/material";
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
+import { qualityChipSx, qualityTierColor } from "../../../util/qualityColor";
 
 interface QualityBadgeProps {
   tier: number | null | undefined;
@@ -10,15 +11,9 @@ interface QualityBadgeProps {
 
 /**
  * QualityBadge - Visual indicator for quality tier (1-5)
- * 
- * Displays quality tier with color-coded badge:
- * - Tier 1: Bronze (warning)
- * - Tier 2: Silver (default)
- * - Tier 3: Gold (info)
- * - Tier 4: Platinum (primary)
- * - Tier 5: Diamond (secondary)
- * 
- * Maintains visual consistency with V1 chip styling.
+ *
+ * Uses the site's one quality colour scheme (`util/qualityColor`): 1 grey,
+ * 2 green, 3 blue, 4 purple, 5 gold, each with AA-contrast text.
  */
 export const QualityBadge: React.FC<QualityBadgeProps> = ({
   tier,
@@ -31,31 +26,12 @@ export const QualityBadge: React.FC<QualityBadgeProps> = ({
     return null;
   }
 
-  // Map tier to color and label
-  const getTierConfig = (tier: number) => {
-    switch (tier) {
-      case 1:
-        return { label: "Tier 1", color: "warning" as const, name: "Bronze" };
-      case 2:
-        return { label: "Tier 2", color: "default" as const, name: "Silver" };
-      case 3:
-        return { label: "Tier 3", color: "info" as const, name: "Gold" };
-      case 4:
-        return { label: "Tier 4", color: "primary" as const, name: "Platinum" };
-      case 5:
-        return { label: "Tier 5", color: "secondary" as const, name: "Diamond" };
-      default:
-        return { label: `Tier ${tier}`, color: "default" as const, name: "" };
-    }
-  };
-
-  const config = getTierConfig(tier);
+  const color = qualityTierColor(tier);
   const displaySize = isMobile && size === "medium" ? "small" : size;
 
   return (
     <Chip
-      label={config.label}
-      color={config.color}
+      label={`Tier ${tier}`}
       size={displaySize}
       variant={variant}
       sx={{
@@ -63,6 +39,11 @@ export const QualityBadge: React.FC<QualityBadgeProps> = ({
         textTransform: "uppercase",
         fontSize: displaySize === "small" ? "0.65rem" : undefined,
         height: displaySize === "small" ? 18 : undefined,
+        // Outlined: the tier colour as the border only. As text on the dark
+        // paper the grey/purple steps would fall under 4.5:1.
+        ...(variant === "outlined"
+          ? { borderColor: color.bg, color: "text.secondary" }
+          : qualityChipSx(color)),
       }}
     />
   );

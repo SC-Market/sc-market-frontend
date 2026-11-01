@@ -17,7 +17,6 @@ Reusable components and hooks for smooth animations and visual enhancements.
 - **`PageTransition`** - Custom page transition component
 - **`ParallaxContainer`** - Performance-conscious parallax effect
 - **`ImageZoomPan`** - Image zoom/pan functionality
-- **`AnimatedButton`** - Button with micro-interactions
 - **`useMicroInteractions`** - Hook for press feedback
 
 ## Existing Patterns in Codebase
@@ -119,17 +118,6 @@ import { ImageZoomPan } from "../../components/animations"
 - Touch pinch zoom on mobile
 - Drag to pan when zoomed
 - Zoom controls (zoom in/out/reset)
-
-### AnimatedButton
-
-**NEW** - Button with micro-interaction feedback.
-
-```tsx
-import { AnimatedButton } from "../../components/animations"
-;<AnimatedButton variant="contained" onClick={handleClick}>
-  Click Me
-</AnimatedButton>
-```
 
 ## Hooks
 

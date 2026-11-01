@@ -20,7 +20,7 @@ export function DiscordLoginButton() {
       onClick={() => {
         window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signin&origin=${encodeURIComponent(window.location.origin)}`
       }}
-      color="secondary"
+      color="discord"
       variant="contained"
       startIcon={<Discord />}
       aria-label={t("auth.signInWithDiscord", "Sign in with Discord")}

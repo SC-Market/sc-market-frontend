@@ -10,9 +10,13 @@ export const themeBase: ExtendedThemeOptions = {
   layoutSpacing: defaultLayoutSpacing,
   borderRadius: defaultBorderRadius,
   palette: {
+    // The one Discord colour: official blurple. White text is 4.61:1 on
+    // main and 6.42:1 on the hover (dark) shade.
     discord: {
-      main: "#454FBF",
-      contrastText: "#010202",
+      main: "#5865F2",
+      light: "#7983F5",
+      dark: "#4752C4",
+      contrastText: "#FFFFFF",
     },
   },
   typography: {

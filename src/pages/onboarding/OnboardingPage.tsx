@@ -329,12 +329,9 @@ export function OnboardingPage() {
               <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
                 <Button
                   variant="contained"
+                  color="discord"
                   startIcon={<Discord />}
                   onClick={handleLinkDiscord}
-                  sx={{
-                    bgcolor: "#5865F2",
-                    "&:hover": { bgcolor: "#4752C4" },
-                  }}
                 >
                   {t("onboarding.discord.link", "Link Discord")}
                 </Button>

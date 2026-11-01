@@ -52,6 +52,13 @@ import {
   useFirstScreenRender,
 } from "../../../../components/grid/firstScreen"
 import { CARD_CHIP_SX, cardChipStackSx } from "../cardChips"
+import {
+  type QualityColor,
+  qualityChipSx,
+  qualityRangeChip,
+  qualityTierColor,
+  qualityValueColor,
+} from "../../../../util/qualityColor"
 
 /**
  * GroupedListingGrid — market_v2_redesign variant of the search grid.
@@ -71,46 +78,6 @@ import { CARD_CHIP_SX, cardChipStackSx } from "../cardChips"
  * cheapest-first; the page's own sort (via URL params) drives everything else.
  */
 
-/** Quality tier color: 1=grey, 2=green, 3=blue, 4=purple, 5=gold */
-function qualityColor(tier: number): string {
-  switch (tier) {
-    case 1: return "#757575"
-    case 2: return "#4caf50"
-    case 3: return "#2196f3"
-    case 4: return "#9c27b0"
-    case 5: return "#ff9800"
-    default: return "#757575"
-  }
-}
-
-/** Quality value (0-1000) to color */
-function qualityValueColor(value: number): string {
-  if (value >= 800) return "#ff9800"
-  if (value >= 600) return "#9c27b0"
-  if (value >= 400) return "#2196f3"
-  if (value >= 200) return "#4caf50"
-  return "#757575"
-}
-
-/** Format quality display — prefers value (0-1000) over tier (1-5) */
-function qualityChipProps(
-  listing: ListingSearchResult,
-): { label: string; color: string } | null {
-  if (listing.quality_value_min != null) {
-    const min = listing.quality_value_min
-    const max = listing.quality_value_max ?? min
-    const label = min === max ? `${min}` : `${min}–${max}`
-    return { label, color: qualityValueColor(max) }
-  }
-  if (listing.quality_tier_min != null) {
-    const min = listing.quality_tier_min
-    const max = listing.quality_tier_max ?? min
-    const label = min === max ? `Q${min}` : `Q${min}–${max}`
-    return { label, color: qualityColor(max) }
-  }
-  return null
-}
-
 /**
  * Quality RANGE across every seller in a group — this is the aggregate signal a
  * buyer wants while scanning (not the cheapest listing's quality alone): "does
@@ -119,7 +86,7 @@ function qualityChipProps(
  */
 function groupQualityChipProps(
   listings: ListingSearchResult[],
-): { label: string; color: string } | null {
+): { label: string; color: QualityColor } | null {
   const values = listings.flatMap((l) =>
     [l.quality_value_min, l.quality_value_max].filter(
       (v): v is number => v != null,
@@ -143,7 +110,7 @@ function groupQualityChipProps(
     const max = Math.max(...tiers)
     return {
       label: min === max ? `Q${min}` : `Q${min}–${max}`,
-      color: qualityColor(max),
+      color: qualityTierColor(max),
     }
   }
   return null
@@ -477,8 +444,7 @@ function GroupCard({
                   sx={{
                     ...CARD_CHIP_SX,
                     textTransform: "none",
-                    bgcolor: qc.color,
-                    color: "#fff",
+                    ...qualityChipSx(qc.color),
                   }}
                 />
               )}
@@ -885,12 +851,12 @@ function GroupSellers({
 /** Quality chip for a single per-variant row (single tier/value, not a range). */
 function variantQualityChip(
   v: GameItemListingResult,
-): { label: string; color: string } | null {
+): { label: string; color: QualityColor } | null {
   if (v.quality_value != null) {
     return { label: `${v.quality_value}`, color: qualityValueColor(v.quality_value) }
   }
   if (v.quality_tier != null) {
-    return { label: `Q${v.quality_tier}`, color: qualityColor(v.quality_tier) }
+    return { label: `Q${v.quality_tier}`, color: qualityTierColor(v.quality_tier) }
   }
   return null
 }
@@ -969,7 +935,7 @@ function VariantHighlightCard({
             <Chip
               label={qc.label}
               size="small"
-              sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }}
+              sx={{ height: 20, fontSize: "0.65rem", ...qualityChipSx(qc.color) }}
             />
           )}
         </Stack>
@@ -1021,7 +987,7 @@ function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] })
   return (
     <Stack divider={<Divider />}>
       {listings.map((s, i) => {
-        const qc = qualityChipProps(s)
+        const qc = qualityRangeChip(s)
         return (
           <Stack
             key={s.listing_id}
@@ -1037,7 +1003,7 @@ function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] })
             </Typography>
             <ListingFlagChips listing={s} />
             {qc && (
-              <Chip label={qc.label} size="small" sx={{ height: 20, fontSize: "0.65rem", bgcolor: qc.color, color: "#fff" }} />
+              <Chip label={qc.label} size="small" sx={{ height: 20, fontSize: "0.65rem", ...qualityChipSx(qc.color) }} />
             )}
             {i === 0 && <Chip label="Best" size="small" color="primary" sx={{ height: 20 }} />}
             <Typography variant="body2" sx={{ color: "primary.main", fontWeight: 700, width: 110, textAlign: "right" }}>
