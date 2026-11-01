@@ -65,8 +65,11 @@ is legal when no hub is prerendered; `finalize.ts` deletes it. The
 `_headers` rules use one splat per hub kind (Pages allows 100 rules).
 `public/_routes.json` excludes the four index paths; the hub pages stay on
 `/missions/*`, whose bridge passes the clean URL through to the static
-file and serves `?page=N`. A hub that appears after a game-data import has
-no file until the next deploy: the SPA renders it in the browser.
+file and serves `?page=N`. A hub path the build didn't prerender reaches
+Pages' SPA fallback; the bridge (`PRERENDERED_DYNAMIC_KINDS`, handler.ts)
+then looks the hub up in the API (edge-cached): a hub that appeared after
+a game-data import gets the bridge's head and summary over the shell, an
+unknown slug a 404 with noindex, and an API failure the plain shell.
 
 ## How fresh it is
 

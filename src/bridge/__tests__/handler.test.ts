@@ -340,6 +340,56 @@ describe("handleBridgeRequest: prerendered pages, static pages and hubs", () => 
     expect(FakeRewriter.selectors).not.toContain("div#root")
   })
 
+  describe("mission hub pages (prerendered per hub at build time)", () => {
+    const PRERENDERED = `<!doctype html><html><head><title>Headhunters Missions</title></head><body><div id="root" data-prerendered><h1>Headhunters missions</h1></div></body></html>`
+    const hub = {
+      kind: "givers", slug: "new-giver", name: "New Giver", version_id: "v", mission_count: 3,
+      legal_count: 3, illegal_count: 0, blueprint_mission_count: 0,
+      givers: [], factions: [], types: [], systems: [], missions: [], page: 1, page_size: 100,
+    }
+    const html = (body: string) => new Response(body, { headers: { "Content-Type": "text/html; charset=utf-8" } })
+
+    it("serves the prerendered file as is, no API call", async () => {
+      const { run, fetchSpy, next } = setup(json(hub))
+      next.mockResolvedValueOnce(html(PRERENDERED))
+      const res = await run("/missions/givers/headhunters")
+      expect(res.status).toBe(200)
+      expect(await res.text()).toBe(PRERENDERED)
+      expect(fetchSpy).not.toHaveBeenCalled()
+    })
+
+    it("a hub the build didn't prerender (the SPA fallback): the bridge's page from the API", async () => {
+      const { run, fetchSpy, next } = setup(async (url) =>
+        url.includes("/versions/active") ? json({})() : json(hub)(),
+      )
+      next.mockResolvedValueOnce(html(SHELL))
+      const res = await run("/missions/givers/new-giver")
+      expect(res.status).toBe(200)
+      expect(res.headers.get("X-SCM-Bridge")).toBe("page")
+      expect(fetchSpy.mock.calls.map((c) => c[0])).toContain(
+        `${API}/api/v2/game-data/missions/hubs/givers/new-giver?page=1&page_size=100`,
+      )
+      expect(FakeRewriter.selectors).toEqual(expect.arrayContaining(["title", "div#root"]))
+    })
+
+    it("an unknown hub: 404 with noindex, not the shell with a 200", async () => {
+      const { run, next } = setup(json({ error: "not found" }, 404))
+      next.mockResolvedValueOnce(html(SHELL))
+      const res = await run("/missions/types/no-such-type")
+      expect(res.status).toBe(404)
+      expect(res.headers.get("X-SCM-Bridge")).toBe("notFound")
+      expect(FakeRewriter.selectors).toContain("head")
+    })
+
+    it("an API failure serves the shell as is (fail open)", async () => {
+      const { run, next } = setup(json({}, 500))
+      next.mockResolvedValueOnce(html(SHELL))
+      const res = await run("/missions/systems/pyro")
+      expect(res.status).toBe(200)
+      expect(await res.text()).toBe(SHELL)
+    })
+  })
+
   it("keeps the homepage's Link header in public/_headers (a static file now)", () => {
     expect(headersFile).toContain(`/\n  Link: ${HOME_LINK_HEADER}`)
   })

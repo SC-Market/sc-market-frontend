@@ -16,7 +16,13 @@
  *   asset URLs); the API JSON is edge-cached per URL with the Cache API.
  */
 import { BRIDGE_PAGES, type ApiRequest, type BridgeDocument } from "./pages"
-import { matchBridgeRoute, PRERENDERED_KINDS, type BridgeMatch, type BridgePageKind } from "./routes"
+import {
+  matchBridgeRoute,
+  PRERENDERED_DYNAMIC_KINDS,
+  PRERENDERED_KINDS,
+  type BridgeMatch,
+  type BridgePageKind,
+} from "./routes"
 import { queryIndexing } from "../seo/queryIndexing"
 import { rewriteShell, type HtmlRewriterConstructor } from "./render"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
@@ -411,6 +417,9 @@ export async function handleBridgeRequest(
   // head and links over the static file; any other query (filters, search)
   // gets robots noindex (the static file's canonical is the clean URL).
   if (PRERENDERED_KINDS.has(route.route.kind)) {
+    if (!indexing.hasQuery && PRERENDERED_DYNAMIC_KINDS.has(route.route.kind)) {
+      return servePrerenderedOrBridge(ctx, runtime, url, route)
+    }
     if (!indexing.hasQuery) return ctx.next()
     const file = await ctx.next()
     if (!file.ok || !file.body || !(file.headers.get("Content-Type") ?? "").includes("text/html")) return file
@@ -465,6 +474,41 @@ export async function handleBridgeRequest(
         )
 
   return htmlResponse(request, html, status, outcome.kind, url, shell)
+}
+
+/** The marker renderDocument puts on a prerendered page's #root (the SPA shell has none). */
+const PRERENDERED_ROOT = '<div id="root" data-prerendered'
+
+/**
+ * A clean URL of a PRERENDERED_DYNAMIC_KINDS page: the prerendered file
+ * when the build made one; otherwise (Pages answered with the SPA fallback)
+ * the bridge's page from the API: its head and summary over the shell, or
+ * 404 + noindex for an unknown one (the API's 404, edge-cached like every
+ * bridge lookup). An API failure serves the shell as is (fail open).
+ */
+async function servePrerenderedOrBridge(
+  ctx: BridgeContext,
+  runtime: BridgeRuntime,
+  url: URL,
+  route: BridgeMatch,
+): Promise<Response> {
+  const { request, env } = ctx
+  const file = await ctx.next()
+  if (!file.ok || !(file.headers.get("Content-Type") ?? "").includes("text/html")) return file
+  const html = await file.text()
+  if (html.includes(PRERENDERED_ROOT)) {
+    return new Response(request.method === "HEAD" ? null : html, { status: file.status, headers: file.headers })
+  }
+  const shell = () => new Response(html, { status: 200, headers: file.headers })
+  const outcome = await resolvePage(url, env, runtime, ctx.waitUntil, route)
+  if (outcome.kind === "page") {
+    return htmlResponse(request, rewriteShell(shell(), { kind: "page", doc: outcome.doc }, runtime.HTMLRewriter), 200, "page", url, file)
+  }
+  if (outcome.kind === "notFound") {
+    return htmlResponse(request, rewriteShell(shell(), { kind: "notFound" }, runtime.HTMLRewriter), outcome.status ?? 404, "notFound", url, file)
+  }
+  console.warn(`bridge fail-open for ${url.pathname}: ${outcome.reason}`)
+  return new Response(request.method === "HEAD" ? null : html, { status: 200, headers: file.headers })
 }
 
 function htmlResponse(

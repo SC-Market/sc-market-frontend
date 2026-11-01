@@ -91,6 +91,20 @@ export const PRERENDERED_KINDS: ReadonlySet<BridgePageKind> = new Set([
   "about",
 ])
 
+/**
+ * Prerendered kinds with a path parameter, whose set of pages changes with
+ * the data (the mission hubs: listed from the API at build time). A path the
+ * build didn't prerender reaches Pages' SPA fallback instead of a file: the
+ * bridge then renders it from the API (or answers 404 + noindex for an
+ * unknown hub) rather than serve the bare shell with a 200 (handler.ts).
+ */
+export const PRERENDERED_DYNAMIC_KINDS: ReadonlySet<BridgePageKind> = new Set([
+  "missionGiver",
+  "missionFaction",
+  "missionType",
+  "missionSystem",
+])
+
 export interface BridgeRoute {
   path: string
   kind: BridgePageKind
