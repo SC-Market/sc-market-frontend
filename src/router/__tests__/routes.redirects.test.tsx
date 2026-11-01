@@ -211,7 +211,9 @@ describe("LoggedInRoute when logged out", () => {
     async () => {
       const before = window.location.href
       const app = mountApp(routes, "/dashboard/shops", { session: "anonymous" })
-      await app.settle()
+      // LoggedInRoute hands the browser to /login (a full page load), so the
+      // SPA page itself never loads: that is what this test checks.
+      await app.settle({ requireReady: false })
       const href = window.location.href
       const record = app.record()
       app.unmount()

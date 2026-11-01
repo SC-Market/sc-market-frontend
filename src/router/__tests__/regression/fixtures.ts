@@ -3,9 +3,9 @@
  *
  * Every request the app makes goes through `globalThis.fetch` (RTK Query's
  * fetchBaseQuery) — the harness replaces it with `createFakeApi()`, which
- * answers a handful of endpoints the route gates need (profile, the fixture
- * org, the fixture shop) and returns 404 for everything else. Nothing leaves
- * the process.
+ * answers a handful of endpoints the route gates need (profile, the RSI
+ * link identifier, the fixture org, the fixture shop) and returns 404 for
+ * everything else. Nothing leaves the process.
  */
 import type { UserProfileState } from "../../../hooks/login/UserProfile"
 import type {
@@ -226,6 +226,14 @@ export function createFakeApi(session: SessionKind) {
               401,
             )
           : json(fixtureProfile(session))
+      }
+      if (url.pathname === "/api/profile/auth/ident") {
+        return session === "anonymous"
+          ? json(
+              { error: { code: "UNAUTHORIZED", message: "Unauthorized" } },
+              401,
+            )
+          : json({ identifier: "SCM-FIXTURE-IDENT" })
       }
       if (url.pathname === `/api/contractors/${FIXTURE.orgId}`) {
         return json({ data: fixtureContractor })

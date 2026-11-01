@@ -195,7 +195,13 @@ export interface MountedApp {
   consoleErrors: string[]
   consoleWarnings: string[]
   container: HTMLElement
-  settle: () => Promise<void>
+  /**
+   * Wait for the page to finish loading (see settleApp). Throws
+   * PageNeverReadyError if it doesn't, so no snapshot is ever taken of a
+   * half-rendered page. Pass `{ requireReady: false }` only for a check
+   * about a page that never loads by design (a full-page redirect).
+   */
+  settle: (options?: { requireReady?: boolean }) => Promise<void>
   record: () => RouteRecord
   unmount: () => void
 }
@@ -268,9 +274,24 @@ function matchLabel(match: { route: RouteObject }): string {
   return routeLabel(match.route)
 }
 
+/** `data-ready` on <main> (the page-ready signal), or null without a <main>. */
+function mainReadyAttr(): string | null {
+  return (
+    document.querySelector("#main-content")?.getAttribute("data-ready") ?? null
+  )
+}
+
 /**
- * Wait until the router is idle and the rendered page stops changing (lazy
- * routes resolved, React.lazy/Suspense boundaries filled, queries settled).
+ * Wait until the router is idle, the page reports itself ready
+ * (`main[data-ready="true"]`, see components/metadata/pageReadyStore.ts) and
+ * the rendered page stops changing (lazy routes resolved, React.lazy/Suspense
+ * boundaries filled, queries settled).
+ *
+ * Readiness is required, not best-effort: a stable DOM alone is not "loaded"
+ * (the DOM can sit unchanged while vitest transforms a big chunk), and a
+ * snapshot taken then records a half-rendered page (empty h1, fallback
+ * title) that a later `vitest -u` would happily accept. Returns whether the
+ * page became ready before `maxMs`.
  */
 async function settleApp(
   router: ReturnType<typeof createMemoryRouter>,
@@ -292,6 +313,7 @@ async function settleApp(
       h1,
       skeletons,
       spinners,
+      mainReadyAttr(),
     ].join("::")
   }
   let last = ""
@@ -309,15 +331,28 @@ async function settleApp(
     // transforms a big module, so "unchanged" alone is not "settled".
     const busy =
       document.querySelector('.MuiSkeleton-root, [role="progressbar"]') !== null
-    if (sig === last && idle && (!busy || Date.now() - start > busyGraceMs)) {
+    // Skeletons/spinners get a grace period (some pages keep a secondary
+    // section loading forever against the fake API); the page-ready signal
+    // does not.
+    const ready = mainReadyAttr() === "true"
+    if (
+      sig === last &&
+      idle &&
+      ready &&
+      (!busy || Date.now() - start > busyGraceMs)
+    ) {
       stable++
-      if (stable >= stableTicks) return
+      if (stable >= stableTicks) return true
     } else {
       stable = 0
       last = sig
     }
   }
+  return false
 }
+
+/** Thrown by settle() when the page never reports ready. */
+export class PageNeverReadyError extends Error {}
 
 /**
  * Per-test timeout for suites that mount the app. Generous on purpose: the
@@ -388,9 +423,22 @@ export function mountApp(
     consoleErrors,
     consoleWarnings,
     container: result.container,
-    settle: async () => {
-      await settleApp(router, () => alive)
+    settle: async ({ requireReady = true } = {}) => {
+      const ready = await settleApp(router, () => alive)
       if (alive) routeErrorsSeen.push(...takeRouteErrors())
+      if (alive && requireReady && !ready) {
+        const s = router.state
+        const h1 = [...document.querySelectorAll("h1")]
+          .map((h) => (h.textContent ?? "").trim())
+          .join(" | ")
+        throw new PageNeverReadyError(
+          `${url}: page never became ready ` +
+            `(at ${s.location.pathname}${s.location.search}, ` +
+            `data-ready=${mainReadyAttr()}, ` +
+            `navigation=${s.navigation.state}, ` +
+            `title=${JSON.stringify(document.title)}, h1=${JSON.stringify(h1)})`,
+        )
+      }
     },
     record: () => {
       const s = router.state

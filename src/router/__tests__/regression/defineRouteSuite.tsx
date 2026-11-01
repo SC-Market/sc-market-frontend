@@ -47,6 +47,9 @@ export function defineRouteSuite(shard: number) {
           expect(record.routeErrors).toBeNull()
           expect(record.errorElementErrors).toEqual([])
         }
+        // Fully loaded (renderRoute's settle already waits for this and
+        // throws otherwise): never snapshot a half-rendered page.
+        expect(record.pageReady).toBe("true")
         // A stable identity marker: final location, matched route chain,
         // title and headings.
         expect(record).toMatchSnapshot()
