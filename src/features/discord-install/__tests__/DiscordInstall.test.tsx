@@ -253,7 +253,7 @@ describe("DiscordUserInstallCta", () => {
     )
 
   it("links the user install through the counted route, with the reason", () => {
-    reach({})
+    reach({ user_install_counts_as_dm: true })
     cta("panel")
     expect(
       screen.getByTestId("discord-user-install").getAttribute("href"),
@@ -262,6 +262,20 @@ describe("DiscordUserInstallCta", () => {
       screen.getByText(/even if you're not in a shared server/),
     ).toBeInTheDocument()
   })
+
+  it.each(["panel", "unreachable", "hint"] as const)(
+    "%s: doesn't promise DMs while a user install isn't confirmed to reach them",
+    (variant) => {
+      reach({ user_install_counts_as_dm: false })
+      cta(variant)
+      expect(
+        screen.getByText(/stay in a server with the bot for now/),
+      ).toBeInTheDocument()
+      expect(
+        screen.queryByText(/even if you're not in a shared server/),
+      ).toBeNull()
+    },
+  )
 
   it("hidden while User Install is off, once installed, or signed out", () => {
     reach({ user_install_available: false })

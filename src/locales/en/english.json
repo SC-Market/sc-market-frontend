@@ -8878,6 +8878,7 @@
     "cta": {
       "title": "Add SC Market to your Discord",
       "why": "So we can reach you about offers and orders even if you're not in a shared server.",
+      "whyNoDm": "You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now.",
       "unreachableTitle": "Buyers' offers can't reach you on Discord",
       "alsoLinks": "Adding it also links your Discord account to SC Market."
     },

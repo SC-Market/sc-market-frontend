@@ -8741,6 +8741,7 @@
     "cta": {
       "title": "SC Market をあなたの Discord に追加",
       "why": "共通のサーバーにいなくても、オファーや注文についてお知らせできるようにするためです。",
+      "whyNoDm": "SC Market のコマンドは Discord のどこでも使えます。オファーや注文の DM を受け取るには、当面はボットがいるサーバーに参加したままにしてください。",
       "unreachableTitle": "購入者からのオファーが Discord であなたに届きません",
       "alsoLinks": "追加すると、Discord アカウントも SC Market に連携されます。"
     },

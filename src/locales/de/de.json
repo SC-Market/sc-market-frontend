@@ -8878,6 +8878,7 @@
     "cta": {
       "title": "SC Market zu Ihrem Discord hinzufügen",
       "why": "Damit wir Sie zu Angeboten und Bestellungen erreichen können, auch ohne gemeinsamen Server.",
+      "whyNoDm": "Sie können SC Market-Befehle überall in Discord verwenden. Um DMs zu Angeboten und Bestellungen zu erhalten, bleiben Sie vorerst auf einem Server mit dem Bot.",
       "unreachableTitle": "Angebote von Käufern erreichen Sie nicht über Discord",
       "alsoLinks": "Dabei wird auch Ihr Discord-Konto mit SC Market verknüpft."
     },

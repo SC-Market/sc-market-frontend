@@ -8747,6 +8747,7 @@
     "cta": {
       "title": "将 SC Market 添加到你的 Discord",
       "why": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
+      "whyNoDm": "你可以在 Discord 的任何地方使用 SC Market 命令。若要接收有关报价和订单的私信，目前请留在有机器人的服务器中。",
       "unreachableTitle": "买家的报价无法通过 Discord 通知到你",
       "alsoLinks": "添加后，你的 Discord 账号也会关联到 SC Market。"
     },

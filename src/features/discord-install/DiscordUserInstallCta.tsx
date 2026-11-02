@@ -40,10 +40,17 @@ export function DiscordUserInstallCta(props: {
   if (props.variant === "unreachable" && reach.dm_reachable) return null
 
   const title = t("discordInstall.cta.title", "Add SC Market to your Discord")
-  const why = t(
-    "discordInstall.cta.why",
-    "So we can reach you about offers and orders even if you're not in a shared server.",
-  )
+  // Don't promise DMs from a user install until that's confirmed
+  // (USER_INSTALL_COUNTS_AS_DM_REACHABLE, reported as user_install_counts_as_dm).
+  const why = reach.user_install_counts_as_dm
+    ? t(
+        "discordInstall.cta.why",
+        "So we can reach you about offers and orders even if you're not in a shared server.",
+      )
+    : t(
+        "discordInstall.cta.whyNoDm",
+        "You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now.",
+      )
   const button = (
     <Button
       variant="contained"
