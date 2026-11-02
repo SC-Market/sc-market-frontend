@@ -261,6 +261,38 @@
       "note": "Team-Notiz",
       "save": "Speichern",
       "handledBy": "Zuletzt geändert von {{user}}, {{date}}"
+    },
+    "testAccounts": {
+      "title": "Testkonten",
+      "secretTitle": "Speichern Sie dieses Authenticator-Geheimnis jetzt",
+      "secretOnce": "Das Geheimnis wird nur dieses eine Mal angezeigt. Speichern Sie es in ~/.config/scmarket-test-accounts.json (chmod 600), niemals in einem Repository.",
+      "secretFor": "Geheimnis für {{username}}:",
+      "fileEntry": "Eintrag für die Geheimnisdatei:",
+      "download": "Zugangsdaten herunterladen",
+      "downloadAll_one": "Alle in dieser Sitzung erstellten herunterladen ({{count}})",
+      "downloadAll_other": "Alle in dieser Sitzung erstellten herunterladen ({{count}})",
+      "chmod": "Speichern Sie sie als ~/.config/scmarket-test-accounts.json und führen Sie chmod 600 darauf aus. Mehrere Downloads führen Sie mit jq -s add a.json b.json zusammen.",
+      "saved": "Gespeichert",
+      "intro": "Testkonten sind für automatisierte Browser-Agenten. Sie melden sich mit Benutzername und Authenticator-Code an, sehen oder erreichen nie echte Nutzer, und echte Nutzer sehen sie nie. Zum Erstellen oder Löschen ist ein frischer Zwei-Faktor-Code nötig.",
+      "loginOn": "Test-Login ist AN (TEST_LOGIN_ENABLED=true). Entfernen Sie die Variable, um den Test-Login auszuschalten.",
+      "loginOff": "Test-Login ist AUS. Konten können erstellt werden, aber niemand kann sich anmelden, bis TEST_LOGIN_ENABLED=true gesetzt ist.",
+      "create": "Testkonto erstellen",
+      "username": "Benutzername",
+      "usernameHelp": "„test“ + ein Name, z. B. test-buyer; gespeichert als ~test-buyer",
+      "displayName": "Anzeigename",
+      "createButton": "Erstellen",
+      "created": "Erstellt",
+      "lastLogin": "Letzte Anmeldung",
+      "failed24h": "Fehlgeschlagene Anmeldungen (24 h)",
+      "status": "Status",
+      "loading": "Wird geladen...",
+      "none": "Noch keine Testkonten.",
+      "disabled": "Deaktiviert",
+      "active": "Aktiv",
+      "noAuthenticator": "Kein Authenticator",
+      "delete": "Löschen",
+      "deleteTitle": "{{username}} löschen?",
+      "deleteBody": "Löscht das Testkonto mit seinen Test-Organisationen, Shops, Angeboten und Bestellungen. Entfernen Sie auch seinen Eintrag aus Ihrer Geheimnisdatei."
     }
   },
   "adminExpressVerify": {
@@ -334,7 +366,9 @@
     "signUpWithCitizenID": "Mit Citizen iD registrieren",
     "signUpWithDiscord": "Mit Discord registrieren",
     "legalAgreement": "Mit der Anmeldung stimmen Sie unseren <termsLink>Nutzungsbedingungen</termsLink> und unserer <privacyLink>Datenschutzerklärung</privacyLink> zu.",
-    "legalAgreementSignUp": "Mit der Registrierung stimmen Sie unseren <termsLink>Nutzungsbedingungen</termsLink> und unserer <privacyLink>Datenschutzerklärung</privacyLink> zu."
+    "legalAgreementSignUp": "Mit der Registrierung stimmen Sie unseren <termsLink>Nutzungsbedingungen</termsLink> und unserer <privacyLink>Datenschutzerklärung</privacyLink> zu.",
+    "google": "Google",
+    "discord": "Discord"
   },
   "availability": {
     "select_availability": "Verfügbarkeit auswählen",
@@ -634,7 +668,9 @@
     "visibilityPrivate": "Privat (nur Org-Mitglieder)",
     "visibilityPrivateHelp": "Nur für Organisationsmitglieder sichtbar",
     "visibilityPublic": "Öffentlich",
-    "visibilityPublicHelp": "Für alle Käufer sichtbar"
+    "visibilityPublicHelp": "Für alle Käufer sichtbar",
+    "removeBulkTier": "Stufe {{n}} entfernen",
+    "applySearchNow": "Suche jetzt anwenden"
   },
   "marketActions": {
     "createListing": "Angebot erstellen",
@@ -1373,7 +1409,8 @@
         "notice": "Alte Tokens funktionieren weiterhin auf den bisherigen API-Routen (/api/v1 und /api/v2), aber nicht auf der öffentlichen API. Erstelle für neue Tools oben ein Token.",
         "sunset": "Alte Tokens funktionieren ab dem {{date}} nicht mehr. Erstelle oben neue Tokens und stelle deine Tools vorher auf die öffentliche API um."
       }
-    }
+    },
+    "sectionsNav": "Einstellungsbereiche"
   },
   "sidebar": {
     "dashboard": {
@@ -1521,7 +1558,8 @@
       "ships": "Schiffe",
       "title": "Wiki",
       "vehicles": "Fahrzeuge"
-    }
+    },
+    "close": "Seitenleiste schließen"
   },
   "sidebar_actor_select": {
     "select_role": "Rolle auswählen",
@@ -1554,7 +1592,9 @@
     "how_to_get_notified": "So werden Sie benachrichtigt, wenn eine Bestellung aufgegeben wird",
     "how_to_get_notified_answer": "Fügen Sie den offiziellen [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) zu Ihrem Server hinzu, um automatisch Direktnachrichten zu erhalten, wenn eine Bestellung bei Ihnen aufgegeben oder Ihnen zugewiesen wird. Alternativ können Sie mit der untenstehenden Konfiguration Bestellungen über [SC Markets offiziellen Server]({{DISCORD_INVITE}}) abwickeln.",
     "how_to_communicate": "So kommunizieren Sie mit Käufern über Discord",
-    "how_to_communicate_answer": "Fügen Sie den offiziellen [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) zu Ihrem Server hinzu und wählen Sie einen Kanal für Bestell-Threads: Jede neue Bestellung oder jedes neue Angebot öffnet dort dann einen privaten Thread mit dem Käufer und dem zugewiesenen Verkäufer, und Käufer werden zu Ihrem Server eingeladen, damit Sie die Bestellung gemeinsam abwickeln können.\n\n1. Verknüpfen Sie Ihr Discord-Konto in Ihren SC Market-Einstellungen und fügen Sie dann [den Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) zu Ihrem Server hinzu.\n\n2. Führen Sie in dem Kanal, der die Bestell-Threads enthalten soll, `/setup threads` aus. Für die Bestellungen Ihrer Org geben Sie bei `org` deren Spectrum-ID an (zum Beispiel `/setup threads org:SCMARKET`); für Bestellungen bei Ihnen selbst lassen Sie das Feld leer.\n\n3. Optional: Führen Sie in einem Team-Kanal `/setup alerts` (mit derselben `org`) aus, um jede neue Bestellung und jedes neue Angebot mit einer Claim-Schaltfläche zu posten.\n\nSie benötigen die Berechtigung **Kanäle verwalten** auf dem Discord-Server. Für eine Org brauchen Sie auf SC Market außerdem die Berechtigung **Manage Webhooks** der Org für Threads oder **Manage Orders** für Alerts. Im Thread-Kanal benötigt der Bot die Berechtigungen Kanal ansehen, Private Threads erstellen, Nachrichten in Threads senden und Einladung erstellen. Mit `/setup status` sehen Sie, was ein Kanal erhält, und mit `/help` alle Befehle."
+    "how_to_communicate_answer": "Fügen Sie den offiziellen [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) zu Ihrem Server hinzu und wählen Sie einen Kanal für Bestell-Threads: Jede neue Bestellung oder jedes neue Angebot öffnet dort dann einen privaten Thread mit dem Käufer und dem zugewiesenen Verkäufer, und Käufer werden zu Ihrem Server eingeladen, damit Sie die Bestellung gemeinsam abwickeln können.\n\n1. Verknüpfen Sie Ihr Discord-Konto in Ihren SC Market-Einstellungen und fügen Sie dann [den Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) zu Ihrem Server hinzu.\n\n2. Führen Sie in dem Kanal, der die Bestell-Threads enthalten soll, `/setup threads` aus. Für die Bestellungen Ihrer Org geben Sie bei `org` deren Spectrum-ID an (zum Beispiel `/setup threads org:SCMARKET`); für Bestellungen bei Ihnen selbst lassen Sie das Feld leer.\n\n3. Optional: Führen Sie in einem Team-Kanal `/setup alerts` (mit derselben `org`) aus, um jede neue Bestellung und jedes neue Angebot mit einer Claim-Schaltfläche zu posten.\n\nSie benötigen die Berechtigung **Kanäle verwalten** auf dem Discord-Server. Für eine Org brauchen Sie auf SC Market außerdem die Berechtigung **Manage Webhooks** der Org für Threads oder **Manage Orders** für Alerts. Im Thread-Kanal benötigt der Bot die Berechtigungen Kanal ansehen, Private Threads erstellen, Nachrichten in Threads senden und Einladung erstellen. Mit `/setup status` sehen Sie, was ein Kanal erhält, und mit `/help` alle Befehle.",
+    "learn_connect": "Discord-Bot verbinden",
+    "learn_alerts": "Bestellbenachrichtigungen und Übernahme"
   },
   "preferences": {
     "page_settings": "Seiteneinstellungen",
@@ -1728,7 +1768,8 @@
     "share": "Teilen",
     "title": "Rekrutierung",
     "scOrgsNote": "Ihr rekrutiert? SC Orgs bietet Bewerbungen, ein Org-Verzeichnis und Tools für Mitglieder →",
-    "scOrgsLfoNote": "Du suchst eine Org? Erstelle einen Beitrag auf dem „Looking for Org“-Board von SC Orgs, und die Orgs kommen zu dir →"
+    "scOrgsLfoNote": "Du suchst eine Org? Erstelle einen Beitrag auf dem „Looking for Org“-Board von SC Orgs, und die Orgs kommen zu dir →",
+    "editPost": "Beitrag bearbeiten"
   },
   "scOrgs": {
     "orgCardTitle": "Auch auf SC Orgs",
@@ -2272,7 +2313,8 @@
     "group": "Gruppe",
     "search": "Suchen",
     "noMessages": "Keine Nachrichten",
-    "title": "Nachrichten"
+    "title": "Nachrichten",
+    "newMessage": "Neue Nachricht"
   },
   "MessagesBody": {
     "toggleSidebar": "Seitenleiste umschalten",
@@ -2414,7 +2456,9 @@
     "selectItem": "Artikel auswählen",
     "description": "Beschreibung",
     "activeOrders": "Aktive Bestellungen",
-    "previousOrders": "Frühere Bestellungen"
+    "previousOrders": "Frühere Bestellungen",
+    "zoomImage": "Bild vergrößern",
+    "editListing": "Angebot bearbeiten"
   },
   "MarketMultipleEditView": {
     "about": "Über",
@@ -2465,7 +2509,8 @@
     "viewAllReviews_one": "{{count}} Bewertung ansehen",
     "viewAllReviews_other": "Alle {{count}} Bewertungen ansehen",
     "viewInCart": "Im Warenkorb anzeigen",
-    "views": "Aufrufe"
+    "views": "Aufrufe",
+    "editListing": "Angebot bearbeiten"
   },
   "MarketListingForm": {
     "about": "Über",
@@ -2501,7 +2546,8 @@
     "dragAndDropHint": "Bilddateien hierher ziehen und ablegen",
     "dragAndDropArea": "Foto-Upload-Bereich - Bilddateien hierher ziehen und ablegen oder klicken zum Durchsuchen",
     "fileTooLarge": "Datei zu groß. Die maximale Größe beträgt 25 MB.",
-    "someFilesTooLarge": "Einige Dateien waren zu groß und wurden übersprungen. Die maximale Dateigröße beträgt 25 MB."
+    "someFilesTooLarge": "Einige Dateien waren zu groß und wurden übersprungen. Die maximale Dateigröße beträgt 25 MB.",
+    "uploadFailed": "Hochladen fehlgeschlagen"
   },
   "ReportButton": {
     "reportContent": "Inhalt melden",
@@ -2706,7 +2752,9 @@
     "item": "Artikel",
     "quantityUseStockPage": "Ändere die Menge dieses Angebots pro Los auf der Bestandsseite",
     "manageAccessNotice": "Du kannst die Angebote und den Bestand dieses Shops ansehen. Um sie zu erstellen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Markt verwalten“.",
-    "stockAccessNotice": "Du kannst den Bestand dieses Shops ansehen. Um Lose hinzuzufügen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Bestand verwalten“."
+    "stockAccessNotice": "Du kannst den Bestand dieses Shops ansehen. Um Lose hinzuzufügen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Bestand verwalten“.",
+    "increaseQuantity": "Menge erhöhen",
+    "decreaseQuantity": "Menge verringern"
   },
   "itemMarket": {
     "toggleSidebar": "Markt-Seitenleiste umschalten"
@@ -2756,7 +2804,19 @@
     },
     "suggested_price_optional": "Vorgeschlagener Preis (optional)",
     "totalPriceRange": "Gesamtpreisspanne",
-    "visibility": "Sichtbarkeit"
+    "visibility": "Sichtbarkeit",
+    "fulfillQuantityRange": "Die Menge muss zwischen 1 und {{max}} liegen",
+    "fulfilled": "Bestellung erstellt",
+    "fulfillFailedReason": "Der Kaufauftrag konnte nicht erfüllt werden: {{reason}}",
+    "fulfillFailed": "Der Kaufauftrag konnte nicht erfüllt werden",
+    "fulfillOptionsError": "Ihre Angebote konnten nicht geladen werden. Versuchen Sie es erneut.",
+    "noFulfillOptions": "Keiner Ihrer Shops hat ein aktives Angebot für {{item}} mit gelistetem Bestand.",
+    "createListingToFulfill": "Angebot erstellen",
+    "noUsableFulfillOptions": "Keines Ihrer Angebote kann diesen Kaufauftrag erfüllen. Der Grund steht unter jedem Angebot.",
+    "fulfillFromListing": "Wählen Sie das Angebot, aus dem erfüllt werden soll. Die Bestellung nutzt dessen Preis und wird von seinem gelisteten Bestand abgezogen.",
+    "fulfillOptionDetail": "{{price}} aUEC pro Stück · {{available}} gelistet · {{shop}}",
+    "fulfillQuantityHelper": "Bis zu {{max}} ({{remaining}} noch gesucht)",
+    "fulfillTotal": "Bestellsumme: {{total}} aUEC"
   },
   "bids": {
     "title": "Gebote",
@@ -2908,7 +2968,9 @@
     "kick_failed": "Entfernen fehlgeschlagen! {{reason}}",
     "cannotRemoveOwnerRole": "Die Besitzerrolle kann einem Mitglied nicht entzogen werden.",
     "cannotRemoveProtectedSelfRole": "Sie können sich diese Rolle nicht selbst entziehen (behalten Sie Ihre oberste Rolle sowie eine Rolle mit „Rollen verwalten“, wenn Ihre oberste Rolle diese nicht enthält).",
-    "kicked": "Entfernt"
+    "kicked": "Entfernt",
+    "kickMember": "{{username}} entfernen",
+    "rolesFor": "Rollen für {{username}}"
   },
   "orgDetailEdit": {
     "submitted": "Übermittelt!",
@@ -2923,7 +2985,11 @@
     "avatar_too_large": "Der Avatar muss kleiner als 1 MB sein",
     "avatar_uploaded": "Avatar erfolgreich hochgeladen",
     "banner_too_large": "Das Banner muss kleiner als 2,5 MB sein",
-    "banner_uploaded": "Banner erfolgreich hochgeladen"
+    "banner_uploaded": "Banner erfolgreich hochgeladen",
+    "descriptionEditor": "Organisationsbeschreibung",
+    "editName": "Name bearbeiten",
+    "editTags": "Tags bearbeiten",
+    "editDescription": "Beschreibung bearbeiten"
   },
   "orgInvite": {
     "invite_members": "Mitglieder einladen",
@@ -2958,7 +3024,9 @@
     "copied": "Kopiert!",
     "submit": "Absenden",
     "submitted": "Übermittelt!",
-    "failed_submit": "Übermittlung fehlgeschlagen! {{reason}}"
+    "failed_submit": "Übermittlung fehlgeschlagen! {{reason}}",
+    "copy": "Einladungslink {{code}} kopieren",
+    "delete": "Einladung {{code}} löschen"
   },
   "contractorSidebar": {
     "search": "Suchen",
@@ -3029,7 +3097,8 @@
     "copy_and_open": "Code kopieren und Profil öffnen",
     "instructions": "Um zu bestätigen, dass Ihnen das obige RSI-Profil gehört, kopieren Sie bitte den folgenden Code <sentinelCode>your code</sentinelCode> und fügen Sie ihn in die Kurzbiografie Ihres Benutzerprofils ein. Geben Sie anschließend oben Ihr RSI-Handle (nicht den Moniker) ein. Sie können diesen Code entfernen, sobald die Verifizierung abgeschlossen ist. Eine bebilderte Anleitung finden Sie <guideLink>hier</guideLink>. Klicken Sie auf Absenden, sobald der Code in Ihrem Profil sichtbar ist.",
     "click_to_copy": "Zum Kopieren klicken",
-    "tos": "Ich habe die <tosLink>Nutzungsbedingungen</tosLink> von SC Market gelesen und akzeptiert"
+    "tos": "Ich habe die <tosLink>Nutzungsbedingungen</tosLink> von SC Market gelesen und akzeptiert",
+    "acceptTos": "Nutzungsbedingungen akzeptieren"
   },
   "authenticateContractor": {
     "org_spectrum_id": "Org-Spectrum-ID",
@@ -3138,7 +3207,11 @@
     "listingFallback": "Angebot",
     "standardVariant": "Standard",
     "checkoutCount_one": "Zur Kasse ({{count}} Artikel)",
-    "checkoutCount_other": "Zur Kasse ({{count}} Artikel)"
+    "checkoutCount_other": "Zur Kasse ({{count}} Artikel)",
+    "closeDrawer": "Schließen",
+    "removeItem": "{{title}} aus dem Warenkorb entfernen",
+    "addItemToCart": "{{title}} in den Warenkorb legen",
+    "submitOfferTo": "Angebot an {{seller}} senden"
   },
   "landing": {
     "supportersTitle": "Unsere Unterstützer",
@@ -3318,7 +3391,10 @@
       "accepted": "Einladung angenommen!",
       "acceptFailed": "Beitritt fehlgeschlagen",
       "joining": "Beitritt läuft…",
-      "joinOrg": "Organisation beitreten"
+      "joinOrg": "Organisation beitreten",
+      "declined": "Einladung abgelehnt",
+      "declineFailed": "Die Einladung konnte nicht abgelehnt werden",
+      "decline": "Ablehnen"
     },
     "auditLogsTab": "Auditprotokolle",
     "blocklistTab": "Blockierte Benutzer",
@@ -3335,7 +3411,8 @@
     "themeWhiteLabelTab": "Design & White-Label",
     "whiteLabelTab": "White-Label",
     "storefrontTab": "Storefront",
-    "analyticsTab": "Statistiken"
+    "analyticsTab": "Statistiken",
+    "manageSectionsNav": "Bereiche der Organisationseinstellungen"
   },
   "dashboard": {
     "activityFeed": {
@@ -3533,7 +3610,8 @@
     "optional": "Optional",
     "save": "Speichern",
     "submit": "Absenden",
-    "viewShop": "Shop anzeigen"
+    "viewShop": "Shop anzeigen",
+    "close": "Schließen"
   },
   "accessibility": {
     "addToStock": "Zum Bestand hinzufügen",
@@ -3891,7 +3969,8 @@
     "time": "Zeit",
     "totalBids_one": "{{count}} Gebot",
     "totalBids_other": "{{count}} Gebote",
-    "yourBid": "Ihr Gebot (aUEC)"
+    "yourBid": "Ihr Gebot (aUEC)",
+    "howItWorks": "So funktioniert das Bieten"
   },
   "blocklist": {
     "addUser": "Benutzer blockieren",
@@ -4145,7 +4224,8 @@
       "variantPriceRequired": "Der Preis muss für Los {{index}} im Modus „Preis pro Variante“ größer als 0 sein",
       "auctionEndTimeRequired": "Die Endzeit der Auktion ist erforderlich"
     },
-    "descriptionOptional": "Beschreibung (optional)"
+    "descriptionOptional": "Beschreibung (optional)",
+    "auctionHelp": "So funktionieren Auktionen"
   },
   "CreateLotDialog": {
     "create": "Los erstellen",
@@ -4528,7 +4608,8 @@
     "title": "Markt verwalten",
     "unspecified": "Nicht angegeben",
     "variants_one": "{{count}} Option",
-    "variants_other": "{{count}} Optionen"
+    "variants_other": "{{count}} Optionen",
+    "toggleLots": "Lose für {{title}} anzeigen"
   },
   "marketAggregateView": {
     "productImage": "Produktbild für {{title}}"
@@ -4564,7 +4645,9 @@
     "unavailable": "Nicht verfügbar",
     "unit": "Einheiten",
     "unitScu": "cSCU",
-    "yourBid": "Ihr Gebot (aUEC)"
+    "yourBid": "Ihr Gebot (aUEC)",
+    "decreaseQuantity": "Menge verringern",
+    "increaseQuantity": "Menge erhöhen"
   },
   "marketMultipleView": {
     "productImage": "Produktbild für {{title}}"
@@ -4790,12 +4873,14 @@
     "stock": "Bestand",
     "switchContext": "Kontext wechseln",
     "unstar": "Lösen",
-    "adminIdentity": "Identität"
+    "adminIdentity": "Identität",
+    "groupLinks": "Links"
   },
   "navbar": {
     "cart": "Warenkorb",
     "toggle_drawer": "Sidebar umschalten",
-    "notifications": "Benachrichtigungen"
+    "notifications": "Benachrichtigungen",
+    "accountMenu": "Kontomenü"
   },
   "offerTrend": {
     "accepted": "Angenommen",
@@ -5098,7 +5183,9 @@
     "wikiPageThumbnail": "Miniaturbild für {{title}}"
   },
   "profile": {
-    "customOrdersMovedToShop": "Individuelle Bestellungen werden jetzt über Shops aufgegeben."
+    "customOrdersMovedToShop": "Individuelle Bestellungen werden jetzt über Shops aufgegeben.",
+    "editDescription": "Beschreibung bearbeiten",
+    "discordProfile": "Discord-Profil"
   },
   "quickEdit": {
     "activeDesc": "Für Käufer sichtbar",
@@ -5113,7 +5200,12 @@
     "saved": "Änderungen gespeichert",
     "status": "Angebotsstatus",
     "subtitle": "Schnellbearbeitung",
-    "variants": "Varianten"
+    "variants": "Varianten",
+    "uploadFailed": "Hochladen fehlgeschlagen",
+    "active": "Aktiv",
+    "photos": "Fotos hinzufügen",
+    "photosHelp": "Neue Fotos werden zu diesem Angebot hinzugefügt. Verwenden Sie den vollständigen Editor, um vorhandene Fotos zu entfernen oder neu anzuordnen.",
+    "uploading": "Fotos werden hochgeladen…"
   },
   "resources": {
     "acquisition": "Beschaffung",
@@ -5240,7 +5332,9 @@
     "unitType": "Einheitentyp",
     "unitUnit": "Einheiten",
     "visualOnly": "Benutzerdefinierte Artikel und Bundles werden in dieser Phase nur als Vorschau angezeigt – noch nicht gespeichert.",
-    "whatSelling": "Was verkaufen Sie?"
+    "whatSelling": "Was verkaufen Sie?",
+    "removeQualityRow": "Qualitätszeile entfernen",
+    "removeBundleItem": "Bundle-Artikel entfernen"
   },
   "serviceView": {
     "anonymousReviewer": "Anonym",
@@ -5252,7 +5346,8 @@
     "sellerReviews": "Bewertungen für {{seller}}",
     "viewAllReviews": "Alle {{count}} Bewertungen anzeigen",
     "viewAllReviews_one": "{{count}} Bewertung ansehen",
-    "viewAllReviews_other": "Alle {{count}} Bewertungen ansehen"
+    "viewAllReviews_other": "Alle {{count}} Bewertungen ansehen",
+    "edit": "Dienstleistung bearbeiten"
   },
   "ShopSelector": {
     "created": "Shop erstellt: {{name}}",
@@ -5450,7 +5545,13 @@
     "save": "Speichern",
     "sectionLoadError": "Beim Laden dieses Bereichs ist ein Fehler aufgetreten.",
     "share": "Teilen",
-    "yes": "Ja"
+    "yes": "Ja",
+    "close": "Schließen",
+    "edit": "Bearbeiten",
+    "viewMode": {
+      "grid": "Rasteransicht",
+      "list": "Listenansicht"
+    }
   },
   "unblockUser": {
     "button": "Benutzer freigeben",
@@ -8032,5 +8133,108 @@
       "source": "Quelle"
     },
     "selectItem": "{{title}} auswählen"
+  },
+  "gestures": {
+    "favorite": "Favorit",
+    "swipeLeftAction": "Löschen"
+  },
+  "photos": {
+    "removePhoto": "Foto entfernen",
+    "cancelUpload": "Hochladen abbrechen"
+  },
+  "mfa": {
+    "nav": {
+      "locked": "Zum Entsperren bestätigen"
+    },
+    "gate": {
+      "setupTitle": "Zwei-Faktor-Authentifizierung einrichten",
+      "setupExplain": "Admin-Funktionen erfordern eine Zwei-Faktor-Authentifizierung. Der Rest der Website funktioniert wie gewohnt."
+    },
+    "errors": {
+      "notConfigured": "Die Zwei-Faktor-Authentifizierung ist auf dem Server noch nicht konfiguriert.",
+      "invalidWithRemaining_one": "Dieser Code ist ungültig. Noch {{count}} Versuch bis zur vorübergehenden Sperre.",
+      "invalidWithRemaining_other": "Dieser Code ist ungültig. Noch {{count}} Versuche bis zur vorübergehenden Sperre.",
+      "invalid": "Dieser Code ist ungültig.",
+      "locked": "Zu viele Versuche, versuchen Sie es um {{time}} erneut.",
+      "sessionUnsupported": "Diese Anmeldesitzung ist zu alt für die Zwei-Faktor-Authentifizierung. Melden Sie sich ab und wieder an.",
+      "rateLimited": "Zu viele Versuche, versuchen Sie es später erneut.",
+      "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    },
+    "settings": {
+      "setup": "Authenticator einrichten",
+      "title": "Zwei-Faktor-Authentifizierung",
+      "on": "An",
+      "off": "Aus",
+      "unconfigured": "Die Admin-Zwei-Faktor-Authentifizierung ist aktiviert, aber der Server hat noch keinen Verschlüsselungsschlüssel (MFA_ENC_KEYS). Sie wird daher nicht erzwungen, und die Einrichtung ist nicht verfügbar.",
+      "required": "Admin-Funktionen erfordern eine Zwei-Faktor-Authentifizierung. Richten Sie sie ein, um sie freizuschalten; der Rest der Website funktioniert wie gewohnt.",
+      "added": "hinzugefügt am {{date}}",
+      "lastUsed": "zuletzt verwendet am {{date}}",
+      "codesLeft_one": "{{count}} Wiederherstellungscode übrig",
+      "codesLeft_other": "{{count}} Wiederherstellungscodes übrig",
+      "verifiedUntil": "Diese Sitzung ist bis {{date}} verifiziert",
+      "notVerified": "Diese Sitzung ist nicht verifiziert",
+      "explain": "Verwenden Sie eine Authenticator-App, um bei Admin-Funktionen zu bestätigen, dass Sie es sind.",
+      "replace": "Authenticator ersetzen",
+      "regenerate": "Neue Wiederherstellungscodes",
+      "remove": "Deaktivieren"
+    },
+    "challenge": {
+      "title": "Zwei-Faktor-Verifizierung",
+      "explain": "Admin-Funktionen erfordern eine verifizierte Sitzung. Die Verifizierung gilt 24 Stunden auf diesem Gerät.",
+      "recoveryPrompt": "Geben Sie einen Ihrer Wiederherstellungscodes ein. Jeder Code funktioniert nur einmal.",
+      "codePrompt": "Geben Sie den 6-stelligen Code aus Ihrer Authenticator-App ein.",
+      "recoveryLabel": "Wiederherstellungscode",
+      "codeLabel": "Authentifizierungscode",
+      "verify": "Verifizieren",
+      "useCode": "Stattdessen die Authenticator-App verwenden",
+      "useRecovery": "Wiederherstellungscode verwenden"
+    },
+    "stepUp": {
+      "title": "Bestätigen Sie, dass Sie es sind",
+      "confirm": "Bestätigen"
+    },
+    "common": {
+      "cancel": "Abbrechen",
+      "copied": "Kopiert",
+      "copy": "Kopieren",
+      "next": "Weiter",
+      "back": "Zurück",
+      "done": "Fertig"
+    },
+    "enroll": {
+      "stepScan": "Scannen",
+      "stepConfirm": "Bestätigen",
+      "stepSave": "Wiederherstellungscodes speichern",
+      "title": "Zwei-Faktor-Authentifizierung einrichten",
+      "scan": "Scannen Sie diesen QR-Code mit einer Authenticator-App (1Password, Bitwarden, Google Authenticator, Authy, ...).",
+      "qrAlt": "QR-Code für Ihre Authenticator-App",
+      "manual": "Oder geben Sie diesen Schlüssel manuell ein:",
+      "confirm": "Geben Sie den 6-stelligen Code ein, den Ihre App jetzt anzeigt.",
+      "activate": "Aktivieren"
+    },
+    "recovery": {
+      "title": "Ihre neuen Wiederherstellungscodes",
+      "warning": "Speichern Sie diese Wiederherstellungscodes jetzt. Sie werden nur einmal angezeigt. Mit jedem Code können Sie sich einmal anmelden, falls Sie Ihren Authenticator verlieren.",
+      "download": ".txt herunterladen",
+      "saved": "Ich habe diese Codes gespeichert"
+    },
+    "remove": {
+      "title": "Zwei-Faktor-Authentifizierung deaktivieren",
+      "explain": "Geben Sie zur Bestätigung einen aktuellen Code ein.",
+      "confirm": "Deaktivieren"
+    }
+  },
+  "orgBanner": {
+    "refetch": "Organisationsdaten von RSI aktualisieren"
+  },
+  "orgHeader": {
+    "rsiPage": "Auf RSI ansehen"
+  },
+  "comments": {
+    "reply": "Antworten",
+    "delete": "Kommentar löschen"
+  },
+  "notificationWebhooks": {
+    "delete": "Webhook {{name}} löschen"
   }
 }

@@ -130,7 +130,7 @@ const NON_LATIN = new Set(["ja", "uk", "zh-CN", "zh-TW"])
 // Words that stay in English/Latin script everywhere: product and game proper
 // nouns, units and protocol names.
 const KEEP_RE =
-  /https?:\/\/\S+|\{\{[^}]*\}\}|\b(SC Market|SC Orgs|Star Citizen|Citizen iD|RSI|Spectrum|Discord|DM|Github|GitHub|SCMDB|UEX|aUEC|UEC|[cm]?SCU|HTML|URL|ID|API|Webhook|Favicon|TOTP|2FA)\b/g
+  /https?:\/\/\S+|\{\{[^}]*\}\}|\b(SC Market|SC Orgs|Star Citizen|Citizen iD|RSI|Spectrum|Discord|DM|Github|GitHub|SCMDB|UEX|aUEC|UEC|[cm]?SCU|HTML|URL|ID|API|Webhook|Favicon|TOTP|2FA|Google)\b/g
 const isSameAsEn = (enValue, value) =>
   typeof value === "string" &&
   value === enValue &&

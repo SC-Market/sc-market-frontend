@@ -261,6 +261,37 @@
       "note": "工作人員備註",
       "save": "儲存",
       "handledBy": "最後由 {{user}} 修改，{{date}}"
+    },
+    "testAccounts": {
+      "title": "測試帳號",
+      "secretTitle": "請立即儲存此驗證器密鑰",
+      "secretOnce": "密鑰僅顯示這一次。請將其儲存在 ~/.config/scmarket-test-accounts.json（chmod 600）中，切勿放入程式碼儲存庫。",
+      "secretFor": "{{username}} 的密鑰：",
+      "fileEntry": "密鑰檔案項目：",
+      "download": "下載憑證",
+      "downloadAll_other": "下載本次工作階段建立的全部帳號（{{count}}）",
+      "chmod": "儲存為 ~/.config/scmarket-test-accounts.json 並對其執行 chmod 600。多個下載檔案可用 jq -s add a.json b.json 合併。",
+      "saved": "我已儲存",
+      "intro": "測試帳號供自動化瀏覽器代理使用。它們使用使用者名稱和驗證碼登入，看不到也接觸不到真實使用者，真實使用者也看不到它們。建立或刪除測試帳號需要新的雙重驗證碼。",
+      "loginOn": "測試登入已開啟（TEST_LOGIN_ENABLED=true）。取消設定即可關閉測試登入。",
+      "loginOff": "測試登入已關閉。可以建立帳號，但在設定 TEST_LOGIN_ENABLED=true 之前無人能登入。",
+      "create": "建立測試帳號",
+      "username": "使用者名稱",
+      "usernameHelp": "「test」+ 名稱，例如 test-buyer；儲存為 ~test-buyer",
+      "displayName": "顯示名稱",
+      "createButton": "建立",
+      "created": "建立時間",
+      "lastLogin": "上次登入",
+      "failed24h": "登入失敗（24 小時）",
+      "status": "狀態",
+      "loading": "載入中...",
+      "none": "尚無測試帳號。",
+      "disabled": "已停用",
+      "active": "有效",
+      "noAuthenticator": "無驗證器",
+      "delete": "刪除",
+      "deleteTitle": "刪除 {{username}}？",
+      "deleteBody": "刪除該測試帳號及其測試組織、商店、商品和訂單。也請從您的密鑰檔案中刪除其項目。"
     }
   },
   "adminExpressVerify": {
@@ -334,7 +365,9 @@
     "signUpWithCitizenID": "使用 Citizen iD 註冊",
     "signUpWithDiscord": "使用 Discord 註冊",
     "legalAgreement": "登入即表示您同意我們的<termsLink>服務條款</termsLink>和<privacyLink>隱私政策</privacyLink>。",
-    "legalAgreementSignUp": "註冊即表示您同意我們的<termsLink>服務條款</termsLink>和<privacyLink>隱私政策</privacyLink>。"
+    "legalAgreementSignUp": "註冊即表示您同意我們的<termsLink>服務條款</termsLink>和<privacyLink>隱私政策</privacyLink>。",
+    "google": "Google",
+    "discord": "Discord"
   },
   "availability": {
     "select_availability": "選擇在線時間段",
@@ -634,7 +667,9 @@
     "visibilityPrivate": "私人（僅限組織成員）",
     "visibilityPrivateHelp": "僅組織成員可見",
     "visibilityPublic": "公開",
-    "visibilityPublicHelp": "所有買家皆可見"
+    "visibilityPublicHelp": "所有買家皆可見",
+    "removeBulkTier": "移除第 {{n}} 級",
+    "applySearchNow": "立即套用搜尋"
   },
   "marketActions": {
     "createListing": "創建商品頁",
@@ -1311,7 +1346,8 @@
         "notice": "舊版權杖仍可在原有的 API 路由（/api/v1 和 /api/v2）上使用，但不能用於公開 API。新工具請在上方建立權杖。",
         "sunset": "舊版權杖將於 {{date}} 停止運作。請在此之前於上方建立新權杖，並將你的工具遷移到公開 API。"
       }
-    }
+    },
+    "sectionsNav": "設定區段"
   },
   "sidebar": {
     "dashboard": {
@@ -1459,7 +1495,8 @@
       "ships": "船艦",
       "title": "維基",
       "vehicles": "載具"
-    }
+    },
+    "close": "關閉側邊欄"
   },
   "sidebar_actor_select": {
     "select_role": "選擇身份",
@@ -1492,7 +1529,9 @@
     "how_to_get_notified": "如何在有訂單創建時收到提醒",
     "how_to_get_notified_answer": "將官方的[SC市集Discord機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入到您的服務器以在一條訂單被創建或被指派給您時收到自動私信。您也可以用下方設置去在[SC市集的官方服務器]({{DISCORD_INVITE}})裏完成訂單。",
     "how_to_communicate": "如何用Discord與買家交流",
-    "how_to_communicate_answer": "將官方的[SC市集Discord機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的伺服器，並選擇一個用於訂單討論串的頻道：之後每個新訂單或報價都會在該頻道中建立一個私密討論串，買家和指派的賣家都會被加入，買家也會收到您的伺服器邀請，方便你們一起完成訂單。\n\n1. 在SC市集設定中連結您的Discord帳號，然後把[機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的伺服器。\n\n2. 在用於存放訂單討論串的頻道中執行`/setup threads`。如果是組織的訂單，在`org`中填寫組織的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下給您個人的訂單，請留空。\n\n3. 可選：在員工頻道中執行`/setup alerts`（使用相同的`org`），每個新訂單和報價都會附帶一個Claim按鈕發佈出來。\n\n您需要在Discord伺服器中擁有**管理頻道**權限。對於組織，您還需要該組織在SC市集上的**Manage Webhooks**權限（討論串）或**Manage Orders**權限（提醒）。在討論串頻道中，機器人需要檢視頻道、建立私人討論串、在討論串中傳送訊息和建立邀請的權限。執行`/setup status`可查看一個頻道的設定，執行`/help`可查看所有指令。"
+    "how_to_communicate_answer": "將官方的[SC市集Discord機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的伺服器，並選擇一個用於訂單討論串的頻道：之後每個新訂單或報價都會在該頻道中建立一個私密討論串，買家和指派的賣家都會被加入，買家也會收到您的伺服器邀請，方便你們一起完成訂單。\n\n1. 在SC市集設定中連結您的Discord帳號，然後把[機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的伺服器。\n\n2. 在用於存放訂單討論串的頻道中執行`/setup threads`。如果是組織的訂單，在`org`中填寫組織的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下給您個人的訂單，請留空。\n\n3. 可選：在員工頻道中執行`/setup alerts`（使用相同的`org`），每個新訂單和報價都會附帶一個Claim按鈕發佈出來。\n\n您需要在Discord伺服器中擁有**管理頻道**權限。對於組織，您還需要該組織在SC市集上的**Manage Webhooks**權限（討論串）或**Manage Orders**權限（提醒）。在討論串頻道中，機器人需要檢視頻道、建立私人討論串、在討論串中傳送訊息和建立邀請的權限。執行`/setup status`可查看一個頻道的設定，執行`/help`可查看所有指令。",
+    "learn_connect": "連結 Discord 機器人",
+    "learn_alerts": "訂單提醒與認領"
   },
   "preferences": {
     "page_settings": "頁面設置",
@@ -1666,7 +1705,8 @@
     "share": "分享",
     "title": "招募",
     "scOrgsNote": "正在招募成員？SC Orgs 提供入會申請、組織目錄和成員管理工具 →",
-    "scOrgsLfoNote": "在找組織？在 SC Orgs 的「Looking for Org」看板上發文，讓組織主動來找你 →"
+    "scOrgsLfoNote": "在找組織？在 SC Orgs 的「Looking for Org」看板上發文，讓組織主動來找你 →",
+    "editPost": "編輯貼文"
   },
   "scOrgs": {
     "orgCardTitle": "也在 SC Orgs 上",
@@ -2207,7 +2247,8 @@
     "group": "群組",
     "search": "搜尋",
     "noMessages": "沒有訊息",
-    "title": "訊息"
+    "title": "訊息",
+    "newMessage": "新訊息"
   },
   "MessagesBody": {
     "toggleSidebar": "切換側邊欄",
@@ -2348,7 +2389,9 @@
     "selectItem": "選擇物品",
     "description": "說明",
     "activeOrders": "進行中的訂單",
-    "previousOrders": "先前的訂單"
+    "previousOrders": "先前的訂單",
+    "zoomImage": "放大圖片",
+    "editListing": "編輯商品"
   },
   "MarketMultipleEditView": {
     "about": "關於",
@@ -2397,7 +2440,8 @@
     "viewAllReviews": "檢視全部 {{count}} 則評論",
     "viewAllReviews_other": "檢視全部 {{count}} 則評價",
     "viewInCart": "在購物車中檢視",
-    "views": "瀏覽次數"
+    "views": "瀏覽次數",
+    "editListing": "編輯商品"
   },
   "MarketListingForm": {
     "about": "關於",
@@ -2433,7 +2477,8 @@
     "dragAndDropHint": "拖放圖片文件到這裡",
     "dragAndDropArea": "照片上傳區域 - 拖放圖片文件到這裡或點擊瀏覽",
     "fileTooLarge": "檔案過大。最大尺寸為 25MB。",
-    "someFilesTooLarge": "部分檔案過大而被略過。檔案最大尺寸為 25MB。"
+    "someFilesTooLarge": "部分檔案過大而被略過。檔案最大尺寸為 25MB。",
+    "uploadFailed": "上傳失敗"
   },
   "AggregateMarketListingForm": {
     "about": "關於",
@@ -2610,7 +2655,9 @@
     "item": "物品",
     "quantityUseStockPage": "請在庫存頁面按批次修改此刊登的數量",
     "manageAccessNotice": "你可以檢視此商店的刊登和庫存。如需建立或修改，請向組織管理員申請「管理市集」權限。",
-    "stockAccessNotice": "你可以檢視此商店的庫存。如需新增或修改批次，請向組織管理員申請「管理庫存」權限。"
+    "stockAccessNotice": "你可以檢視此商店的庫存。如需新增或修改批次，請向組織管理員申請「管理庫存」權限。",
+    "increaseQuantity": "增加數量",
+    "decreaseQuantity": "減少數量"
   },
   "itemMarket": {
     "toggleSidebar": "切換市集側邊欄"
@@ -2660,7 +2707,19 @@
     },
     "suggested_price_optional": "建議價格（選填）",
     "totalPriceRange": "總價格範圍",
-    "visibility": "可見度"
+    "visibility": "可見度",
+    "fulfillQuantityRange": "數量必須介於 1 到 {{max}} 之間",
+    "fulfilled": "訂單已建立",
+    "fulfillFailedReason": "無法完成收購單：{{reason}}",
+    "fulfillFailed": "無法完成收購單",
+    "fulfillOptionsError": "無法載入您的商品，請再試一次。",
+    "noFulfillOptions": "您的商店中沒有 {{item}} 的有效商品及上架庫存。",
+    "createListingToFulfill": "建立商品",
+    "noUsableFulfillOptions": "您的商品都無法滿足此收購單，原因顯示在每個商品下方。",
+    "fulfillFromListing": "選擇用於完成的商品。訂單將使用該商品的價格，並從其上架庫存中扣除。",
+    "fulfillOptionDetail": "每件 {{price}} aUEC · 上架 {{available}} · {{shop}}",
+    "fulfillQuantityHelper": "最多 {{max}}（仍需 {{remaining}}）",
+    "fulfillTotal": "訂單總額：{{total}} aUEC"
   },
   "bids": {
     "title": "出價",
@@ -2812,7 +2871,9 @@
     "kick_failed": "踢除失敗！{{reason}}",
     "cannotRemoveOwnerRole": "無法從成員移除擁有者角色。",
     "cannotRemoveProtectedSelfRole": "您無法從自己身上移除此角色（請保留您的最高角色，並在最高角色不含「管理角色」時保留一個具備「管理角色」的角色）。",
-    "kicked": "已踢除"
+    "kicked": "已踢除",
+    "kickMember": "踢出 {{username}}",
+    "rolesFor": "{{username}} 的角色"
   },
   "orgDetailEdit": {
     "submitted": "已提交！",
@@ -2827,7 +2888,11 @@
     "avatar_too_large": "頭像必須小於 1MB",
     "avatar_uploaded": "頭像上傳成功",
     "banner_too_large": "橫幅必須小於 2.5MB",
-    "banner_uploaded": "橫幅上傳成功"
+    "banner_uploaded": "橫幅上傳成功",
+    "descriptionEditor": "組織簡介",
+    "editName": "編輯名稱",
+    "editTags": "編輯標籤",
+    "editDescription": "編輯簡介"
   },
   "orgInvite": {
     "invite_members": "邀請成員",
@@ -2862,7 +2927,9 @@
     "copied": "已複製！",
     "submit": "提交",
     "submitted": "已提交！",
-    "failed_submit": "提交失敗！{{reason}}"
+    "failed_submit": "提交失敗！{{reason}}",
+    "copy": "複製邀請連結 {{code}}",
+    "delete": "刪除邀請 {{code}}"
   },
   "contractorSidebar": {
     "search": "搜尋",
@@ -2933,7 +3000,8 @@
     "copy_and_open": "複製代碼並開啟個人檔案",
     "instructions": "為了驗證您擁有上述 RSI 個人檔案，請複製以下代碼 <sentinelCode>your code</sentinelCode> 並將其加入您的使用者個人檔案簡短簡介中，然後在上方輸入您的 RSI 帳號名稱（非暱稱）。驗證完成後即可移除此代碼。請參閱 <guideLink>這裡</guideLink> 的螢幕截圖教學。當代碼顯示在您的個人檔案上後，請點擊送出。",
     "click_to_copy": "點擊以複製",
-    "tos": "我已閱讀並接受 SC Market 的 <tosLink>服務條款</tosLink>"
+    "tos": "我已閱讀並接受 SC Market 的 <tosLink>服務條款</tosLink>",
+    "acceptTos": "接受服務條款"
   },
   "authenticateContractor": {
     "org_spectrum_id": "組織 Spectrum ID",
@@ -3039,7 +3107,11 @@
     "viewCart": "查看購物車",
     "listingFallback": "商品",
     "standardVariant": "標準",
-    "checkoutCount_other": "結帳（{{count}} 件）"
+    "checkoutCount_other": "結帳（{{count}} 件）",
+    "closeDrawer": "關閉",
+    "removeItem": "從購物車移除 {{title}}",
+    "addItemToCart": "將 {{title}} 加入購物車",
+    "submitOfferTo": "向 {{seller}} 提交報價"
   },
   "landing": {
     "supportersTitle": "我們的支持者",
@@ -3219,7 +3291,10 @@
       "accepted": "已接受邀請！",
       "acceptFailed": "加入失敗",
       "joining": "加入中…",
-      "joinOrg": "加入組織"
+      "joinOrg": "加入組織",
+      "declined": "已拒絕邀請",
+      "declineFailed": "無法拒絕邀請",
+      "decline": "拒絕"
     },
     "auditLogsTab": "稽覈日誌",
     "blocklistTab": "已封鎖的使用者",
@@ -3236,7 +3311,8 @@
     "themeWhiteLabelTab": "主題與白牌",
     "whiteLabelTab": "白牌",
     "storefrontTab": "店面",
-    "analyticsTab": "分析"
+    "analyticsTab": "分析",
+    "manageSectionsNav": "組織設定區段"
   },
   "dashboard": {
     "activityFeed": {
@@ -3434,7 +3510,8 @@
     "optional": "選填",
     "save": "儲存",
     "submit": "提交",
-    "viewShop": "檢視商店"
+    "viewShop": "檢視商店",
+    "close": "關閉"
   },
   "accessibility": {
     "addToStock": "加入庫存",
@@ -3787,7 +3864,8 @@
     "placeBid": "出價",
     "time": "時間",
     "totalBids_other": "{{count}} 次出價",
-    "yourBid": "您的出價（aUEC）"
+    "yourBid": "您的出價（aUEC）",
+    "howItWorks": "出價如何運作"
   },
   "blocklist": {
     "addUser": "封鎖使用者",
@@ -4041,7 +4119,8 @@
       "variantPriceRequired": "在各款式定價模式下，批次 {{index}} 的價格必須大於 0",
       "auctionEndTimeRequired": "必須填寫拍賣結束時間"
     },
-    "descriptionOptional": "描述（選填）"
+    "descriptionOptional": "描述（選填）",
+    "auctionHelp": "拍賣如何運作"
   },
   "CreateLotDialog": {
     "create": "建立批次",
@@ -4421,7 +4500,8 @@
     "subheading": "您販售的一切都集中在一處。展開一列以查看其背後的庫存。",
     "title": "管理市場",
     "unspecified": "未指定",
-    "variants_other": "{{count}} 個選項"
+    "variants_other": "{{count}} 個選項",
+    "toggleLots": "顯示 {{title}} 的批次"
   },
   "marketAggregateView": {
     "productImage": "{{title}} 的產品圖片"
@@ -4455,7 +4535,9 @@
     "unavailable": "無法使用",
     "unit": "單位",
     "unitScu": "cSCU",
-    "yourBid": "您的出價（aUEC）"
+    "yourBid": "您的出價（aUEC）",
+    "decreaseQuantity": "減少數量",
+    "increaseQuantity": "增加數量"
   },
   "marketMultipleView": {
     "productImage": "{{title}} 的產品圖片"
@@ -4673,12 +4755,14 @@
     "stock": "庫存",
     "switchContext": "切換情境",
     "unstar": "取消釘選",
-    "adminIdentity": "身分"
+    "adminIdentity": "身分",
+    "groupLinks": "連結"
   },
   "navbar": {
     "cart": "購物車",
     "toggle_drawer": "切換側邊欄",
-    "notifications": "通知"
+    "notifications": "通知",
+    "accountMenu": "帳號選單"
   },
   "offerTrend": {
     "accepted": "已接受",
@@ -5039,7 +5123,9 @@
     "wikiPageThumbnail": "{{title}} 的縮圖"
   },
   "profile": {
-    "customOrdersMovedToShop": "自訂訂單現在透過商店下單。"
+    "customOrdersMovedToShop": "自訂訂單現在透過商店下單。",
+    "editDescription": "編輯簡介",
+    "discordProfile": "Discord 個人檔案"
   },
   "quickEdit": {
     "activeDesc": "對買家可見",
@@ -5054,7 +5140,12 @@
     "saved": "變更已儲存",
     "status": "刊登狀態",
     "subtitle": "快速編輯",
-    "variants": "款式"
+    "variants": "款式",
+    "uploadFailed": "上傳失敗",
+    "active": "有效",
+    "photos": "新增照片",
+    "photosHelp": "新照片會加入此商品。若要刪除或重新排序現有照片，請使用完整編輯器。",
+    "uploading": "正在上傳照片…"
   },
   "ReportButton": {
     "additionalDetails": "其他詳細資訊",
@@ -5205,7 +5296,9 @@
     "unitType": "單位類型",
     "unitUnit": "件",
     "visualOnly": "自訂物品與套裝組合在此階段僅供預覽 — 尚未儲存。",
-    "whatSelling": "您要販售什麼？"
+    "whatSelling": "您要販售什麼？",
+    "removeQualityRow": "移除品質列",
+    "removeBundleItem": "移除組合物品"
   },
   "serviceView": {
     "anonymousReviewer": "匿名",
@@ -5216,7 +5309,8 @@
     "reviewBy": "由",
     "sellerReviews": "{{seller}} 的評論",
     "viewAllReviews": "檢視全部 {{count}} 則評論",
-    "viewAllReviews_other": "檢視全部 {{count}} 則評價"
+    "viewAllReviews_other": "檢視全部 {{count}} 則評價",
+    "edit": "編輯服務"
   },
   "ShopSelector": {
     "created": "商店已建立：{{name}}",
@@ -5414,7 +5508,13 @@
     "save": "儲存",
     "sectionLoadError": "載入此區塊時發生錯誤。",
     "share": "分享",
-    "yes": "是"
+    "yes": "是",
+    "close": "關閉",
+    "edit": "編輯",
+    "viewMode": {
+      "grid": "格狀檢視",
+      "list": "清單檢視"
+    }
   },
   "unblockUser": {
     "button": "解除封鎖使用者",
@@ -7902,5 +8002,106 @@
       "source": "來源"
     },
     "selectItem": "選取 {{title}}"
+  },
+  "gestures": {
+    "favorite": "收藏",
+    "swipeLeftAction": "刪除"
+  },
+  "photos": {
+    "removePhoto": "移除照片",
+    "cancelUpload": "取消上傳"
+  },
+  "mfa": {
+    "nav": {
+      "locked": "驗證後解鎖"
+    },
+    "gate": {
+      "setupTitle": "設定雙重驗證",
+      "setupExplain": "管理功能需要雙重驗證。網站的其他功能照常可用。"
+    },
+    "errors": {
+      "notConfigured": "伺服器尚未設定雙重驗證。",
+      "invalidWithRemaining_other": "驗證碼無效。還剩 {{count}} 次嘗試機會，之後將暫時鎖定。",
+      "invalid": "驗證碼無效。",
+      "locked": "嘗試次數過多，請於 {{time}} 再試。",
+      "sessionUnsupported": "此登入工作階段過舊，無法使用雙重驗證。請登出後重新登入。",
+      "rateLimited": "嘗試次數過多，請稍後再試。",
+      "generic": "發生問題，請再試一次。"
+    },
+    "settings": {
+      "setup": "設定驗證器",
+      "title": "雙重驗證",
+      "on": "已開啟",
+      "off": "已關閉",
+      "unconfigured": "管理員雙重驗證已開啟，但伺服器尚無加密金鑰（MFA_ENC_KEYS），因此不會強制執行，也無法設定。",
+      "required": "管理功能需要雙重驗證。設定後即可解鎖；網站的其他功能照常可用。",
+      "added": "新增於 {{date}}",
+      "lastUsed": "上次使用於 {{date}}",
+      "codesLeft_other": "剩餘 {{count}} 組復原碼",
+      "verifiedUntil": "此工作階段的驗證有效期至 {{date}}",
+      "notVerified": "此工作階段未驗證",
+      "explain": "使用管理功能時，透過驗證器應用程式確認是您本人。",
+      "replace": "更換驗證器",
+      "regenerate": "新的復原碼",
+      "remove": "關閉"
+    },
+    "challenge": {
+      "title": "雙重驗證",
+      "explain": "管理功能需要已驗證的工作階段。驗證在此裝置上有效 24 小時。",
+      "recoveryPrompt": "輸入一組復原碼。每組復原碼只能使用一次。",
+      "codePrompt": "輸入驗證器應用程式中的 6 位數驗證碼。",
+      "recoveryLabel": "復原碼",
+      "codeLabel": "驗證碼",
+      "verify": "驗證",
+      "useCode": "改用驗證器應用程式",
+      "useRecovery": "使用復原碼"
+    },
+    "stepUp": {
+      "title": "確認是您本人",
+      "confirm": "確認"
+    },
+    "common": {
+      "cancel": "取消",
+      "copied": "已複製",
+      "copy": "複製",
+      "next": "下一步",
+      "back": "返回",
+      "done": "完成"
+    },
+    "enroll": {
+      "stepScan": "掃描",
+      "stepConfirm": "確認",
+      "stepSave": "儲存復原碼",
+      "title": "設定雙重驗證",
+      "scan": "使用驗證器應用程式（1Password、Bitwarden、Google Authenticator、Authy 等）掃描此 QR 碼。",
+      "qrAlt": "驗證器應用程式的 QR 碼",
+      "manual": "或手動輸入此金鑰：",
+      "confirm": "輸入應用程式目前顯示的 6 位數驗證碼。",
+      "activate": "啟用"
+    },
+    "recovery": {
+      "title": "您的新復原碼",
+      "warning": "請立即儲存這些復原碼，它們只會顯示一次。若遺失驗證器，每組復原碼可登入一次。",
+      "download": "下載 .txt",
+      "saved": "我已儲存這些復原碼"
+    },
+    "remove": {
+      "title": "關閉雙重驗證",
+      "explain": "輸入目前的驗證碼以確認。",
+      "confirm": "關閉"
+    }
+  },
+  "orgBanner": {
+    "refetch": "從 RSI 重新整理組織資訊"
+  },
+  "orgHeader": {
+    "rsiPage": "在 RSI 上查看"
+  },
+  "comments": {
+    "reply": "回覆",
+    "delete": "刪除留言"
+  },
+  "notificationWebhooks": {
+    "delete": "刪除 Webhook {{name}}"
   }
 }

@@ -261,6 +261,37 @@
       "note": "スタッフメモ",
       "save": "保存",
       "handledBy": "最終更新：{{user}}、{{date}}"
+    },
+    "testAccounts": {
+      "title": "テストアカウント",
+      "secretTitle": "この認証シークレットを今すぐ保存してください",
+      "secretOnce": "シークレットが表示されるのはこの 1 回だけです。~/.config/scmarket-test-accounts.json（chmod 600）に保存し、リポジトリには絶対に入れないでください。",
+      "secretFor": "{{username}} のシークレット：",
+      "fileEntry": "シークレットファイル用のエントリ：",
+      "download": "認証情報をダウンロード",
+      "downloadAll_other": "このセッションで作成したものをすべてダウンロード（{{count}}）",
+      "chmod": "~/.config/scmarket-test-accounts.json として保存し、chmod 600 を実行してください。複数のダウンロードは jq -s add a.json b.json で結合できます。",
+      "saved": "保存しました",
+      "intro": "テストアカウントは自動ブラウザエージェント用です。ユーザー名と認証コードでサインインし、実際のユーザーを見たり接触したりすることはなく、実際のユーザーからも見えません。作成・削除には新しい二要素認証コードが必要です。",
+      "loginOn": "テストログインはオンです（TEST_LOGIN_ENABLED=true）。オフにするにはこの設定を解除してください。",
+      "loginOff": "テストログインはオフです。アカウントは作成できますが、TEST_LOGIN_ENABLED=true を設定するまで誰もサインインできません。",
+      "create": "テストアカウントを作成",
+      "username": "ユーザー名",
+      "usernameHelp": "「test」+ 名前（例：test-buyer）。~test-buyer として保存されます",
+      "displayName": "表示名",
+      "createButton": "作成",
+      "created": "作成日",
+      "lastLogin": "最終ログイン",
+      "failed24h": "ログイン失敗（24 時間）",
+      "status": "ステータス",
+      "loading": "読み込み中...",
+      "none": "テストアカウントはまだありません。",
+      "disabled": "無効",
+      "active": "有効",
+      "noAuthenticator": "認証アプリなし",
+      "delete": "削除",
+      "deleteTitle": "{{username}} を削除しますか？",
+      "deleteBody": "テストアカウントと、そのテスト用の組織・ショップ・出品・注文を削除します。シークレットファイルからもエントリを削除してください。"
     }
   },
   "adminExpressVerify": {
@@ -334,7 +365,9 @@
     "signUpWithCitizenID": "Citizen iDで新規登録",
     "signUpWithDiscord": "Discordで新規登録",
     "legalAgreement": "サインインすると、<termsLink>利用規約</termsLink>と<privacyLink>プライバシーポリシー</privacyLink>に同意したものとみなされます。",
-    "legalAgreementSignUp": "登録すると、<termsLink>利用規約</termsLink>と<privacyLink>プライバシーポリシー</privacyLink>に同意したものとみなされます。"
+    "legalAgreementSignUp": "登録すると、<termsLink>利用規約</termsLink>と<privacyLink>プライバシーポリシー</privacyLink>に同意したものとみなされます。",
+    "google": "Google",
+    "discord": "Discord"
   },
   "availability": {
     "select_availability": "対応可能時間を選択",
@@ -634,7 +667,9 @@
     "visibilityPrivate": "非公開（組織メンバーのみ）",
     "visibilityPrivateHelp": "組織メンバーにのみ表示されます",
     "visibilityPublic": "公開",
-    "visibilityPublicHelp": "すべての購入者に表示されます"
+    "visibilityPublicHelp": "すべての購入者に表示されます",
+    "removeBulkTier": "ティア {{n}} を削除",
+    "applySearchNow": "今すぐ検索を適用"
   },
   "marketActions": {
     "createListing": "出品を作成",
@@ -1369,7 +1404,8 @@
         "notice": "旧トークンは従来のAPIルート（/api/v1 と /api/v2）では引き続き使えますが、公開APIでは使えません。新しいツールには上でトークンを作成してください。",
         "sunset": "旧トークンは{{date}}に使えなくなります。それまでに上で新しいトークンを作成し、ツールを公開APIに移行してください。"
       }
-    }
+    },
+    "sectionsNav": "設定のセクション"
   },
   "sidebar": {
     "dashboard": {
@@ -1517,7 +1553,8 @@
       "ships": "艦船",
       "title": "ウィキ",
       "vehicles": "車両"
-    }
+    },
+    "close": "サイドバーを閉じる"
   },
   "sidebar_actor_select": {
     "select_role": "ロールを選択",
@@ -1550,7 +1587,9 @@
     "how_to_get_notified": "注文が入ったときに通知を受け取る方法",
     "how_to_get_notified_answer": "公式の [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) をサーバーに追加すると、あなたに注文が入ったときやあなたに割り当てられたときに、自動的にダイレクトメッセージを受け取れます。または、[SC Market 公式サーバー]({{DISCORD_INVITE}}) 経由で注文を処理するには、以下の設定を使用してください。",
     "how_to_communicate": "Discordを通じて購入者とやり取りする方法",
-    "how_to_communicate_answer": "公式の [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) をサーバーに追加し、注文スレッド用のチャンネルを選びましょう。新しい注文やオファーが入るたびに、そのチャンネルに購入者と担当の出品者が参加するプライベートスレッドが作成され、購入者はあなたのサーバーに招待されるので、一緒に注文を進められます。\n\n1. SC Market の設定で Discord アカウントを連携してから、[Bot を追加](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)します。\n\n2. 注文スレッドを置くチャンネルで `/setup threads` を実行します。組織の注文の場合は `org` に組織の Spectrum ID を入力します（例: `/setup threads org:SCMARKET`）。あなた個人への注文の場合は空欄のままにします。\n\n3. 任意: スタッフ用チャンネルで `/setup alerts`（同じ `org`）を実行すると、新しい注文とオファーが Claim ボタン付きで投稿されます。\n\nDiscord サーバーでの **チャンネルの管理** 権限が必要です。組織の場合は、SC Market でその組織の **Manage Webhooks** 権限（スレッド）または **Manage Orders** 権限（アラート）も必要です。スレッド用チャンネルでは、Bot に「チャンネルを見る」「プライベートスレッドの作成」「スレッドでメッセージを送信」「招待を作成」の権限が必要です。`/setup status` でチャンネルの設定内容を、`/help` ですべてのコマンドを確認できます。"
+    "how_to_communicate_answer": "公式の [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) をサーバーに追加し、注文スレッド用のチャンネルを選びましょう。新しい注文やオファーが入るたびに、そのチャンネルに購入者と担当の出品者が参加するプライベートスレッドが作成され、購入者はあなたのサーバーに招待されるので、一緒に注文を進められます。\n\n1. SC Market の設定で Discord アカウントを連携してから、[Bot を追加](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)します。\n\n2. 注文スレッドを置くチャンネルで `/setup threads` を実行します。組織の注文の場合は `org` に組織の Spectrum ID を入力します（例: `/setup threads org:SCMARKET`）。あなた個人への注文の場合は空欄のままにします。\n\n3. 任意: スタッフ用チャンネルで `/setup alerts`（同じ `org`）を実行すると、新しい注文とオファーが Claim ボタン付きで投稿されます。\n\nDiscord サーバーでの **チャンネルの管理** 権限が必要です。組織の場合は、SC Market でその組織の **Manage Webhooks** 権限（スレッド）または **Manage Orders** 権限（アラート）も必要です。スレッド用チャンネルでは、Bot に「チャンネルを見る」「プライベートスレッドの作成」「スレッドでメッセージを送信」「招待を作成」の権限が必要です。`/setup status` でチャンネルの設定内容を、`/help` ですべてのコマンドを確認できます。",
+    "learn_connect": "Discord ボットを接続",
+    "learn_alerts": "注文通知と引き受け"
   },
   "preferences": {
     "page_settings": "ページ設定",
@@ -1724,7 +1763,8 @@
     "share": "共有",
     "title": "採用",
     "scOrgsNote": "メンバーを募集中ですか？SC Orgs には応募の管理、組織ディレクトリ、メンバー管理ツールがあります →",
-    "scOrgsLfoNote": "所属する組織をお探しですか？SC Orgs の「Looking for Org」掲示板に投稿すれば、組織のほうから声がかかります →"
+    "scOrgsLfoNote": "所属する組織をお探しですか？SC Orgs の「Looking for Org」掲示板に投稿すれば、組織のほうから声がかかります →",
+    "editPost": "投稿を編集"
   },
   "scOrgs": {
     "orgCardTitle": "SC Orgs にも掲載中",
@@ -2265,7 +2305,8 @@
     "group": "グループ",
     "search": "検索",
     "noMessages": "メッセージはありません",
-    "title": "メッセージ"
+    "title": "メッセージ",
+    "newMessage": "新しいメッセージ"
   },
   "MessagesBody": {
     "toggleSidebar": "サイドバーを切り替え",
@@ -2406,7 +2447,9 @@
     "selectItem": "アイテムを選択",
     "description": "説明",
     "activeOrders": "進行中の注文",
-    "previousOrders": "過去の注文"
+    "previousOrders": "過去の注文",
+    "zoomImage": "画像を拡大",
+    "editListing": "出品を編集"
   },
   "MarketMultipleEditView": {
     "about": "概要",
@@ -2455,7 +2498,8 @@
     "viewAllReviews": "{{count}} 件のレビューをすべて表示",
     "viewAllReviews_other": "{{count}}件のレビューをすべて表示",
     "viewInCart": "カート内で見る",
-    "views": "閲覧数"
+    "views": "閲覧数",
+    "editListing": "出品を編集"
   },
   "MarketListingForm": {
     "about": "概要",
@@ -2491,7 +2535,8 @@
     "dragAndDropHint": "画像ファイルをここにドラッグ＆ドロップ",
     "dragAndDropArea": "写真アップロードエリア - 画像ファイルをここにドラッグ＆ドロップするか、クリックして参照",
     "fileTooLarge": "ファイルが大きすぎます。最大サイズは25MBです。",
-    "someFilesTooLarge": "一部のファイルが大きすぎたためスキップされました。最大ファイルサイズは25MBです。"
+    "someFilesTooLarge": "一部のファイルが大きすぎたためスキップされました。最大ファイルサイズは25MBです。",
+    "uploadFailed": "アップロードに失敗しました"
   },
   "ReportButton": {
     "reportContent": "コンテンツを報告",
@@ -2692,7 +2737,9 @@
     "item": "アイテム",
     "quantityUseStockPage": "この出品の数量は在庫ページでロットごとに変更してください",
     "manageAccessNotice": "このショップの出品と在庫を閲覧できます。作成・変更するには、組織の管理者に「マーケットを管理」権限を依頼してください。",
-    "stockAccessNotice": "このショップの在庫を閲覧できます。ロットを追加・変更するには、組織の管理者に「在庫を管理」権限を依頼してください。"
+    "stockAccessNotice": "このショップの在庫を閲覧できます。ロットを追加・変更するには、組織の管理者に「在庫を管理」権限を依頼してください。",
+    "increaseQuantity": "数量を増やす",
+    "decreaseQuantity": "数量を減らす"
   },
   "itemMarket": {
     "toggleSidebar": "マーケットサイドバーを切り替え"
@@ -2742,7 +2789,19 @@
     },
     "suggested_price_optional": "希望価格（任意）",
     "totalPriceRange": "合計価格範囲",
-    "visibility": "公開範囲"
+    "visibility": "公開範囲",
+    "fulfillQuantityRange": "数量は 1〜{{max}} の範囲で指定してください",
+    "fulfilled": "注文を作成しました",
+    "fulfillFailedReason": "買い注文を履行できませんでした：{{reason}}",
+    "fulfillFailed": "買い注文を履行できませんでした",
+    "fulfillOptionsError": "出品を読み込めませんでした。もう一度お試しください。",
+    "noFulfillOptions": "{{item}} の在庫付きの有効な出品があるショップはありません。",
+    "createListingToFulfill": "出品を作成",
+    "noUsableFulfillOptions": "この買い注文を満たせる出品はありません。理由は各出品の下に表示されています。",
+    "fulfillFromListing": "履行に使う出品を選んでください。注文にはその出品の価格が使われ、掲載在庫から差し引かれます。",
+    "fulfillOptionDetail": "1 個 {{price}} aUEC · 掲載 {{available}} · {{shop}}",
+    "fulfillQuantityHelper": "最大 {{max}}（残り {{remaining}} 必要）",
+    "fulfillTotal": "注文合計：{{total}} aUEC"
   },
   "bids": {
     "title": "入札",
@@ -2894,7 +2953,9 @@
     "kick_failed": "除名に失敗しました！{{reason}}",
     "cannotRemoveOwnerRole": "オーナーの役割はメンバーから削除できません。",
     "cannotRemoveProtectedSelfRole": "自分自身からこの役割を削除することはできません（最上位の役割を保持し、最上位の役割に「役割の管理」が含まれない場合はその権限を持つ役割を保持してください）。",
-    "kicked": "追放しました"
+    "kicked": "追放しました",
+    "kickMember": "{{username}} を除名",
+    "rolesFor": "{{username}} のロール"
   },
   "orgDetailEdit": {
     "submitted": "送信しました！",
@@ -2909,7 +2970,11 @@
     "avatar_too_large": "アバターは 1MB 未満でなければなりません",
     "avatar_uploaded": "アバターをアップロードしました",
     "banner_too_large": "バナーは 2.5MB 未満でなければなりません",
-    "banner_uploaded": "バナーをアップロードしました"
+    "banner_uploaded": "バナーをアップロードしました",
+    "descriptionEditor": "組織の説明",
+    "editName": "名前を編集",
+    "editTags": "タグを編集",
+    "editDescription": "説明を編集"
   },
   "orgInvite": {
     "invite_members": "メンバーを招待",
@@ -2944,7 +3009,9 @@
     "copied": "コピーしました！",
     "submit": "送信",
     "submitted": "送信しました！",
-    "failed_submit": "送信に失敗しました！{{reason}}"
+    "failed_submit": "送信に失敗しました！{{reason}}",
+    "copy": "招待リンク {{code}} をコピー",
+    "delete": "招待 {{code}} を削除"
   },
   "contractorSidebar": {
     "search": "検索",
@@ -3015,7 +3082,8 @@
     "copy_and_open": "コードをコピーしてプロフィールを開く",
     "instructions": "上記のRSIプロフィールがご自身のものであることを確認するため、次のコード <sentinelCode>あなたのコード</sentinelCode> をコピーし、ユーザープロフィールの短い自己紹介欄に追加してから、上にRSIハンドル（モニカーではありません）を入力してください。認証が完了したら、このコードは削除して構いません。スクリーンショット付きのガイドは <guideLink>こちら</guideLink> をご覧ください。コードがプロフィールに表示されたら、送信をクリックしてください。",
     "click_to_copy": "クリックしてコピー",
-    "tos": "SC Market の<tosLink>利用規約</tosLink>を読み、同意しました"
+    "tos": "SC Market の<tosLink>利用規約</tosLink>を読み、同意しました",
+    "acceptTos": "利用規約に同意する"
   },
   "authenticateContractor": {
     "org_spectrum_id": "組織のSpectrum ID",
@@ -3121,7 +3189,11 @@
     "viewCart": "カートを見る",
     "listingFallback": "出品",
     "standardVariant": "標準",
-    "checkoutCount_other": "チェックアウト（{{count}}点）"
+    "checkoutCount_other": "チェックアウト（{{count}}点）",
+    "closeDrawer": "閉じる",
+    "removeItem": "{{title}} をカートから削除",
+    "addItemToCart": "{{title}} をカートに追加",
+    "submitOfferTo": "{{seller}} にオファーを送信"
   },
   "landing": {
     "supportersTitle": "サポーターの皆さま",
@@ -3301,7 +3373,10 @@
       "accepted": "招待を承認しました！",
       "acceptFailed": "参加に失敗しました",
       "joining": "参加中…",
-      "joinOrg": "組織に参加"
+      "joinOrg": "組織に参加",
+      "declined": "招待を辞退しました",
+      "declineFailed": "招待を辞退できませんでした",
+      "decline": "辞退"
     },
     "auditLogsTab": "監査ログ",
     "blocklistTab": "ブロック済みユーザー",
@@ -3318,7 +3393,8 @@
     "themeWhiteLabelTab": "テーマとホワイトラベル",
     "whiteLabelTab": "ホワイトラベル",
     "storefrontTab": "ストアフロント",
-    "analyticsTab": "分析"
+    "analyticsTab": "分析",
+    "manageSectionsNav": "組織設定のセクション"
   },
   "dashboard": {
     "activityFeed": {
@@ -3516,7 +3592,8 @@
     "optional": "任意",
     "save": "保存",
     "submit": "送信",
-    "viewShop": "ショップを表示"
+    "viewShop": "ショップを表示",
+    "close": "閉じる"
   },
   "accessibility": {
     "addToStock": "在庫に追加",
@@ -3869,7 +3946,8 @@
     "placeBid": "入札する",
     "time": "時刻",
     "totalBids_other": "{{count}}件の入札",
-    "yourBid": "あなたの入札額（aUEC）"
+    "yourBid": "あなたの入札額（aUEC）",
+    "howItWorks": "入札の仕組み"
   },
   "blocklist": {
     "addUser": "ユーザーをブロック",
@@ -4123,7 +4201,8 @@
       "variantPriceRequired": "バリアントごとの価格設定モードでは、ロット {{index}} の価格は 0 より大きくする必要があります",
       "auctionEndTimeRequired": "オークション終了時刻は必須です"
     },
-    "descriptionOptional": "説明（任意）"
+    "descriptionOptional": "説明（任意）",
+    "auctionHelp": "オークションの仕組み"
   },
   "CreateLotDialog": {
     "create": "ロットを作成",
@@ -4503,7 +4582,8 @@
     "subheading": "販売するすべてを一か所で。行を展開すると、その背後にある在庫を確認できます。",
     "title": "マーケット管理",
     "unspecified": "未指定",
-    "variants_other": "{{count}}オプション"
+    "variants_other": "{{count}}オプション",
+    "toggleLots": "{{title}} のロットを表示"
   },
   "marketAggregateView": {
     "productImage": "{{title}}の商品画像"
@@ -4537,7 +4617,9 @@
     "unavailable": "在庫なし",
     "unit": "個",
     "unitScu": "cSCU",
-    "yourBid": "あなたの入札額（aUEC）"
+    "yourBid": "あなたの入札額（aUEC）",
+    "decreaseQuantity": "数量を減らす",
+    "increaseQuantity": "数量を増やす"
   },
   "marketMultipleView": {
     "productImage": "{{title}}の商品画像"
@@ -4755,12 +4837,14 @@
     "stock": "在庫",
     "switchContext": "コンテキストを切り替え",
     "unstar": "ピン留めを解除",
-    "adminIdentity": "ID 管理"
+    "adminIdentity": "ID 管理",
+    "groupLinks": "リンク"
   },
   "navbar": {
     "cart": "カート",
     "toggle_drawer": "サイドバーを切り替え",
-    "notifications": "通知"
+    "notifications": "通知",
+    "accountMenu": "アカウントメニュー"
   },
   "offerTrend": {
     "accepted": "承認済み",
@@ -5063,7 +5147,9 @@
     "wikiPageThumbnail": "{{title}} のサムネイル"
   },
   "profile": {
-    "customOrdersMovedToShop": "カスタム注文はショップを通じて行われるようになりました。"
+    "customOrdersMovedToShop": "カスタム注文はショップを通じて行われるようになりました。",
+    "editDescription": "説明を編集",
+    "discordProfile": "Discord プロフィール"
   },
   "quickEdit": {
     "activeDesc": "買い手に表示",
@@ -5078,7 +5164,12 @@
     "saved": "変更を保存しました",
     "status": "出品ステータス",
     "subtitle": "クイック編集",
-    "variants": "バリエーション"
+    "variants": "バリエーション",
+    "uploadFailed": "アップロードに失敗しました",
+    "active": "有効",
+    "photos": "写真を追加",
+    "photosHelp": "新しい写真はこの出品に追加されます。既存の写真の削除や並べ替えはフルエディターで行ってください。",
+    "uploading": "写真をアップロード中…"
   },
   "resources": {
     "acquisition": "入手方法",
@@ -5205,7 +5296,9 @@
     "unitType": "単位タイプ",
     "unitUnit": "個",
     "visualOnly": "カスタムアイテムとバンドルはこのフェーズではプレビューのみで、まだ保存されません。",
-    "whatSelling": "何を販売しますか？"
+    "whatSelling": "何を販売しますか？",
+    "removeQualityRow": "品質行を削除",
+    "removeBundleItem": "バンドル品目を削除"
   },
   "serviceView": {
     "anonymousReviewer": "匿名",
@@ -5216,7 +5309,8 @@
     "reviewBy": "投稿者",
     "sellerReviews": "{{seller}} のレビュー",
     "viewAllReviews": "{{count}} 件のレビューをすべて表示",
-    "viewAllReviews_other": "{{count}}件のレビューをすべて表示"
+    "viewAllReviews_other": "{{count}}件のレビューをすべて表示",
+    "edit": "サービスを編集"
   },
   "ShopSelector": {
     "created": "ショップを作成しました：{{name}}",
@@ -5414,7 +5508,13 @@
     "save": "保存",
     "sectionLoadError": "このセクションの読み込み中にエラーが発生しました。",
     "share": "共有",
-    "yes": "はい"
+    "yes": "はい",
+    "close": "閉じる",
+    "edit": "編集",
+    "viewMode": {
+      "grid": "グリッド表示",
+      "list": "リスト表示"
+    }
   },
   "unblockUser": {
     "button": "ユーザーのブロックを解除",
@@ -7902,5 +8002,106 @@
       "source": "入手元"
     },
     "selectItem": "{{title}} を選択"
+  },
+  "gestures": {
+    "favorite": "お気に入り",
+    "swipeLeftAction": "削除"
+  },
+  "photos": {
+    "removePhoto": "写真を削除",
+    "cancelUpload": "アップロードをキャンセル"
+  },
+  "mfa": {
+    "nav": {
+      "locked": "確認してロックを解除"
+    },
+    "gate": {
+      "setupTitle": "二要素認証を設定",
+      "setupExplain": "管理機能には二要素認証が必要です。サイトのその他の機能は通常どおり使えます。"
+    },
+    "errors": {
+      "notConfigured": "サーバーで二要素認証がまだ設定されていません。",
+      "invalidWithRemaining_other": "そのコードは無効です。一時ロックまで残り {{count}} 回です。",
+      "invalid": "そのコードは無効です。",
+      "locked": "試行回数が多すぎます。{{time}} に再度お試しください。",
+      "sessionUnsupported": "このログインセッションは古いため、二要素認証に対応していません。ログアウトしてから再度ログインしてください。",
+      "rateLimited": "試行回数が多すぎます。しばらくしてから再度お試しください。",
+      "generic": "問題が発生しました。もう一度お試しください。"
+    },
+    "settings": {
+      "setup": "認証アプリを設定",
+      "title": "二要素認証",
+      "on": "オン",
+      "off": "オフ",
+      "unconfigured": "管理者向け二要素認証はオンですが、サーバーに暗号化キー（MFA_ENC_KEYS）がまだないため、適用されず、設定もできません。",
+      "required": "管理機能には二要素認証が必要です。設定するとロックが解除されます。サイトのその他の機能は通常どおり使えます。",
+      "added": "{{date}} に追加",
+      "lastUsed": "最終使用 {{date}}",
+      "codesLeft_other": "残りのリカバリーコード：{{count}} 個",
+      "verifiedUntil": "このセッションは {{date}} まで確認済みです",
+      "notVerified": "このセッションは未確認です",
+      "explain": "管理機能を使うときに、認証アプリで本人確認を行います。",
+      "replace": "認証アプリを置き換える",
+      "regenerate": "新しいリカバリーコード",
+      "remove": "オフにする"
+    },
+    "challenge": {
+      "title": "二要素認証による確認",
+      "explain": "管理機能には確認済みのセッションが必要です。確認はこの端末で 24 時間有効です。",
+      "recoveryPrompt": "リカバリーコードを 1 つ入力してください。各コードは 1 回のみ使えます。",
+      "codePrompt": "認証アプリに表示される 6 桁のコードを入力してください。",
+      "recoveryLabel": "リカバリーコード",
+      "codeLabel": "認証コード",
+      "verify": "確認",
+      "useCode": "代わりに認証アプリを使う",
+      "useRecovery": "リカバリーコードを使う"
+    },
+    "stepUp": {
+      "title": "本人確認",
+      "confirm": "確認"
+    },
+    "common": {
+      "cancel": "キャンセル",
+      "copied": "コピーしました",
+      "copy": "コピー",
+      "next": "次へ",
+      "back": "戻る",
+      "done": "完了"
+    },
+    "enroll": {
+      "stepScan": "スキャン",
+      "stepConfirm": "確認",
+      "stepSave": "リカバリーコードを保存",
+      "title": "二要素認証を設定",
+      "scan": "この QR コードを認証アプリ（1Password、Bitwarden、Google Authenticator、Authy など）でスキャンしてください。",
+      "qrAlt": "認証アプリ用の QR コード",
+      "manual": "または、このキーを手動で入力してください：",
+      "confirm": "アプリに現在表示されている 6 桁のコードを入力してください。",
+      "activate": "有効にする"
+    },
+    "recovery": {
+      "title": "新しいリカバリーコード",
+      "warning": "これらのリカバリーコードを今すぐ保存してください。表示されるのは一度だけです。認証アプリを紛失した場合、各コードで 1 回ログインできます。",
+      "download": ".txt をダウンロード",
+      "saved": "コードを保存しました"
+    },
+    "remove": {
+      "title": "二要素認証をオフにする",
+      "explain": "確認のため、現在のコードを入力してください。",
+      "confirm": "オフにする"
+    }
+  },
+  "orgBanner": {
+    "refetch": "RSI から組織情報を更新"
+  },
+  "orgHeader": {
+    "rsiPage": "RSI で見る"
+  },
+  "comments": {
+    "reply": "返信",
+    "delete": "コメントを削除"
+  },
+  "notificationWebhooks": {
+    "delete": "Webhook {{name}} を削除"
   }
 }

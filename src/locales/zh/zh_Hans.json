@@ -267,6 +267,37 @@
       "note": "工作人员备注",
       "save": "保存",
       "handledBy": "最后由 {{user}} 修改，{{date}}"
+    },
+    "testAccounts": {
+      "title": "测试账号",
+      "secretTitle": "请立即保存此验证器密钥",
+      "secretOnce": "密钥仅显示这一次。请将其保存在 ~/.config/scmarket-test-accounts.json（chmod 600）中，切勿放入代码仓库。",
+      "secretFor": "{{username}} 的密钥：",
+      "fileEntry": "密钥文件条目：",
+      "download": "下载凭据",
+      "downloadAll_other": "下载本次会话创建的全部账号（{{count}}）",
+      "chmod": "保存为 ~/.config/scmarket-test-accounts.json 并对其运行 chmod 600。多个下载文件可用 jq -s add a.json b.json 合并。",
+      "saved": "我已保存",
+      "intro": "测试账号供自动化浏览器代理使用。它们使用用户名和验证码登录，看不到也接触不到真实用户，真实用户也看不到它们。创建或删除测试账号需要新的双重验证码。",
+      "loginOn": "测试登录已开启（TEST_LOGIN_ENABLED=true）。取消设置即可关闭测试登录。",
+      "loginOff": "测试登录已关闭。可以创建账号，但在设置 TEST_LOGIN_ENABLED=true 之前无人能登录。",
+      "create": "创建测试账号",
+      "username": "用户名",
+      "usernameHelp": "“test” + 名称，例如 test-buyer；保存为 ~test-buyer",
+      "displayName": "显示名称",
+      "createButton": "创建",
+      "created": "创建时间",
+      "lastLogin": "上次登录",
+      "failed24h": "登录失败（24 小时）",
+      "status": "状态",
+      "loading": "加载中...",
+      "none": "尚无测试账号。",
+      "disabled": "已停用",
+      "active": "有效",
+      "noAuthenticator": "无验证器",
+      "delete": "删除",
+      "deleteTitle": "删除 {{username}}？",
+      "deleteBody": "删除该测试账号及其测试组织、店铺、商品和订单。也请从你的密钥文件中删除其条目。"
     }
   },
   "adminExpressVerify": {
@@ -340,7 +371,9 @@
     "signUpWithCitizenID": "使用 Citizen iD 注册",
     "signUpWithDiscord": "使用 Discord 注册",
     "legalAgreement": "登录即表示您同意我们的<termsLink>服务条款</termsLink>和<privacyLink>隐私政策</privacyLink>。",
-    "legalAgreementSignUp": "注册即表示您同意我们的<termsLink>服务条款</termsLink>和<privacyLink>隐私政策</privacyLink>。"
+    "legalAgreementSignUp": "注册即表示您同意我们的<termsLink>服务条款</termsLink>和<privacyLink>隐私政策</privacyLink>。",
+    "google": "Google",
+    "discord": "Discord"
   },
   "availability": {
     "select_availability": "选择在线时间段",
@@ -640,7 +673,9 @@
     "visibilityPrivate": "私有（仅限组织成员）",
     "visibilityPrivateHelp": "仅对组织成员可见",
     "visibilityPublic": "公开",
-    "visibilityPublicHelp": "对所有买家可见"
+    "visibilityPublicHelp": "对所有买家可见",
+    "removeBulkTier": "移除第 {{n}} 档",
+    "applySearchNow": "立即应用搜索"
   },
   "marketActions": {
     "createListing": "创建商品页",
@@ -1375,7 +1410,8 @@
         "notice": "旧版令牌仍可在原有的 API 路由（/api/v1 和 /api/v2）上使用，但不能用于公开 API。新工具请在上方创建令牌。",
         "sunset": "旧版令牌将于 {{date}} 停止工作。请在此之前于上方创建新令牌，并将你的工具迁移到公开 API。"
       }
-    }
+    },
+    "sectionsNav": "设置分区"
   },
   "sidebar": {
     "dashboard": {
@@ -1523,7 +1559,8 @@
       "ships": "飞船",
       "title": "百科",
       "vehicles": "载具"
-    }
+    },
+    "close": "关闭侧边栏"
   },
   "sidebar_actor_select": {
     "select_role": "选择身份",
@@ -1552,7 +1589,9 @@
     "how_to_get_notified": "如何在有订单创建时收到提醒",
     "how_to_get_notified_answer": "将官方的[SC市集Discord机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入到您的服务器以在一条订单被创建或被指派给您时收到自动私信。您也可以用下方设置去在[SC市集的官方服务器]({{DISCORD_INVITE}})里完成订单。",
     "how_to_communicate": "如何用Discord与买家交流",
-    "how_to_communicate_answer": "将官方的[SC市集Discord机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的服务器，并选择一个用于订单讨论串的频道：之后每个新订单或报价都会在该频道中创建一个私密讨论串，买家和指派的卖家都会被加入，买家也会收到您的服务器邀请，方便你们一起完成订单。\n\n1. 在SC市集设置中关联您的Discord账号，然后把[机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的服务器。\n\n2. 在用于存放订单讨论串的频道中运行`/setup threads`。如果是组织的订单，在`org`中填写组织的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下给您个人的订单，请留空。\n\n3. 可选：在员工频道中运行`/setup alerts`（使用相同的`org`），每个新订单和报价都会附带一个Claim按钮发布出来。\n\n您需要在Discord服务器中拥有**管理频道**权限。对于组织，您还需要该组织在SC市集上的**Manage Webhooks**权限（讨论串）或**Manage Orders**权限（提醒）。在讨论串频道中，机器人需要查看频道、创建私密子区、在子区中发送消息和创建邀请的权限。运行`/setup status`可查看一个频道的设置，运行`/help`可查看所有指令。"
+    "how_to_communicate_answer": "将官方的[SC市集Discord机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的服务器，并选择一个用于订单讨论串的频道：之后每个新订单或报价都会在该频道中创建一个私密讨论串，买家和指派的卖家都会被加入，买家也会收到您的服务器邀请，方便你们一起完成订单。\n\n1. 在SC市集设置中关联您的Discord账号，然后把[机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的服务器。\n\n2. 在用于存放订单讨论串的频道中运行`/setup threads`。如果是组织的订单，在`org`中填写组织的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下给您个人的订单，请留空。\n\n3. 可选：在员工频道中运行`/setup alerts`（使用相同的`org`），每个新订单和报价都会附带一个Claim按钮发布出来。\n\n您需要在Discord服务器中拥有**管理频道**权限。对于组织，您还需要该组织在SC市集上的**Manage Webhooks**权限（讨论串）或**Manage Orders**权限（提醒）。在讨论串频道中，机器人需要查看频道、创建私密子区、在子区中发送消息和创建邀请的权限。运行`/setup status`可查看一个频道的设置，运行`/help`可查看所有指令。",
+    "learn_connect": "连接 Discord 机器人",
+    "learn_alerts": "订单提醒与认领"
   },
   "preferences": {
     "page_settings": "页面设置",
@@ -1726,7 +1765,8 @@
     "share": "分享",
     "title": "招募",
     "scOrgsNote": "正在招募成员？SC Orgs 提供入会申请、组织目录和成员管理工具 →",
-    "scOrgsLfoNote": "在找组织？在 SC Orgs 的「Looking for Org」看板上发帖，让组织主动来找你 →"
+    "scOrgsLfoNote": "在找组织？在 SC Orgs 的「Looking for Org」看板上发帖，让组织主动来找你 →",
+    "editPost": "编辑帖子"
   },
   "scOrgs": {
     "orgCardTitle": "也在 SC Orgs 上",
@@ -2267,7 +2307,8 @@
     "group": "群组",
     "search": "搜索",
     "noMessages": "暂无消息",
-    "title": "消息"
+    "title": "消息",
+    "newMessage": "新消息"
   },
   "MessagesBody": {
     "toggleSidebar": "切换侧边栏",
@@ -2408,7 +2449,9 @@
     "selectItem": "选择物品",
     "description": "描述",
     "activeOrders": "进行中的订单",
-    "previousOrders": "以往订单"
+    "previousOrders": "以往订单",
+    "zoomImage": "放大图片",
+    "editListing": "编辑商品"
   },
   "MarketMultipleEditView": {
     "about": "关于",
@@ -2457,7 +2500,8 @@
     "viewAllReviews": "查看全部 {{count}} 条评价",
     "viewAllReviews_other": "查看全部 {{count}} 条评价",
     "viewInCart": "在购物车中查看",
-    "views": "浏览量"
+    "views": "浏览量",
+    "editListing": "编辑商品"
   },
   "MarketListingForm": {
     "about": "关于",
@@ -2493,7 +2537,8 @@
     "dragAndDropHint": "拖放图片文件到这里",
     "dragAndDropArea": "照片上传区域 - 拖放图片文件到这里或点击浏览",
     "fileTooLarge": "文件过大。最大大小为 25MB。",
-    "someFilesTooLarge": "部分文件过大已被跳过。最大文件大小为 25MB。"
+    "someFilesTooLarge": "部分文件过大已被跳过。最大文件大小为 25MB。",
+    "uploadFailed": "上传失败"
   },
   "ReportButton": {
     "reportContent": "举报内容",
@@ -2694,7 +2739,9 @@
     "item": "物品",
     "quantityUseStockPage": "请在库存页面按批次修改此挂单的数量",
     "manageAccessNotice": "你可以查看此商店的挂单和库存。如需创建或修改，请向组织管理员申请“管理市场”权限。",
-    "stockAccessNotice": "你可以查看此商店的库存。如需添加或修改批次，请向组织管理员申请“管理库存”权限。"
+    "stockAccessNotice": "你可以查看此商店的库存。如需添加或修改批次，请向组织管理员申请“管理库存”权限。",
+    "increaseQuantity": "增加数量",
+    "decreaseQuantity": "减少数量"
   },
   "itemMarket": {
     "toggleSidebar": "切换市场侧边栏"
@@ -2755,7 +2802,19 @@
     },
     "suggested_price_optional": "建议价格（可选）",
     "totalPriceRange": "总价范围",
-    "visibility": "可见性"
+    "visibility": "可见性",
+    "fulfillQuantityRange": "数量必须在 1 到 {{max}} 之间",
+    "fulfilled": "订单已创建",
+    "fulfillFailedReason": "无法完成求购单：{{reason}}",
+    "fulfillFailed": "无法完成求购单",
+    "fulfillOptionsError": "无法加载你的商品，请重试。",
+    "noFulfillOptions": "你的店铺中没有 {{item}} 的有效商品及上架库存。",
+    "createListingToFulfill": "创建商品",
+    "noUsableFulfillOptions": "你的商品都无法满足此求购单，原因显示在每个商品下方。",
+    "fulfillFromListing": "选择用于完成的商品。订单将使用该商品的价格，并从其上架库存中扣除。",
+    "fulfillOptionDetail": "每件 {{price}} aUEC · 上架 {{available}} · {{shop}}",
+    "fulfillQuantityHelper": "最多 {{max}}（仍需 {{remaining}}）",
+    "fulfillTotal": "订单总额：{{total}} aUEC"
   },
   "bids": {
     "title": "出价",
@@ -2907,7 +2966,9 @@
     "kick_failed": "移除失败！{{reason}}",
     "cannotRemoveOwnerRole": "无法从成员中移除所有者角色。",
     "cannotRemoveProtectedSelfRole": "你无法从自己身上移除此角色（保留你的最高角色，并在你的最高角色不包含“管理角色”权限时保留一个具有该权限的角色）。",
-    "kicked": "已踢出"
+    "kicked": "已踢出",
+    "kickMember": "踢出 {{username}}",
+    "rolesFor": "{{username}} 的角色"
   },
   "orgDetailEdit": {
     "submitted": "已提交！",
@@ -2922,7 +2983,11 @@
     "avatar_too_large": "头像必须小于 1MB",
     "avatar_uploaded": "头像上传成功",
     "banner_too_large": "横幅必须小于 2.5MB",
-    "banner_uploaded": "横幅上传成功"
+    "banner_uploaded": "横幅上传成功",
+    "descriptionEditor": "组织简介",
+    "editName": "编辑名称",
+    "editTags": "编辑标签",
+    "editDescription": "编辑简介"
   },
   "orgInvite": {
     "invite_members": "邀请成员",
@@ -2957,7 +3022,9 @@
     "copied": "已复制！",
     "submit": "提交",
     "submitted": "已提交！",
-    "failed_submit": "提交失败！{{reason}}"
+    "failed_submit": "提交失败！{{reason}}",
+    "copy": "复制邀请链接 {{code}}",
+    "delete": "删除邀请 {{code}}"
   },
   "contractorSidebar": {
     "search": "搜索",
@@ -3028,7 +3095,8 @@
     "copy_and_open": "复制代码并打开个人资料",
     "instructions": "为了验证你拥有上述 RSI 个人资料，请复制以下代码 <sentinelCode>your code</sentinelCode> 并将其添加到你的用户资料简介中，然后在上方输入你的 RSI 用户名（handle，而非昵称）。验证完成后即可移除该代码。查看<guideLink>此处</guideLink>的截图指南。当代码在你的资料页上可见后，点击提交。",
     "click_to_copy": "点击复制",
-    "tos": "我已阅读并接受 SC Market 的<tosLink>服务条款</tosLink>"
+    "tos": "我已阅读并接受 SC Market 的<tosLink>服务条款</tosLink>",
+    "acceptTos": "接受服务条款"
   },
   "authenticateContractor": {
     "org_spectrum_id": "组织 Spectrum ID",
@@ -3134,7 +3202,11 @@
     "viewCart": "查看购物车",
     "listingFallback": "商品",
     "standardVariant": "标准",
-    "checkoutCount_other": "结账（{{count}} 件）"
+    "checkoutCount_other": "结账（{{count}} 件）",
+    "closeDrawer": "关闭",
+    "removeItem": "从购物车移除 {{title}}",
+    "addItemToCart": "将 {{title}} 加入购物车",
+    "submitOfferTo": "向 {{seller}} 提交报价"
   },
   "landing": {
     "supportersTitle": "我们的支持者",
@@ -3314,7 +3386,10 @@
       "accepted": "已接受邀请！",
       "acceptFailed": "加入失败",
       "joining": "正在加入…",
-      "joinOrg": "加入组织"
+      "joinOrg": "加入组织",
+      "declined": "已拒绝邀请",
+      "declineFailed": "无法拒绝邀请",
+      "decline": "拒绝"
     },
     "settingsTab": "设置",
     "auditLogsTab": "审计日志",
@@ -3331,7 +3406,8 @@
     "themeWhiteLabelTab": "主题与白标",
     "whiteLabelTab": "白标",
     "storefrontTab": "店面",
-    "analyticsTab": "分析"
+    "analyticsTab": "分析",
+    "manageSectionsNav": "组织设置分区"
   },
   "dashboard": {
     "activityFeed": {
@@ -3557,7 +3633,13 @@
     "sectionLoadError": "加载此部分时出错。",
     "pwaUpdate": "更新",
     "pwaLater": "稍后",
-    "pwaUpdateBody": "有新版本可用，立即更新以获取最新功能。"
+    "pwaUpdateBody": "有新版本可用，立即更新以获取最新功能。",
+    "close": "关闭",
+    "edit": "编辑",
+    "viewMode": {
+      "grid": "网格视图",
+      "list": "列表视图"
+    }
   },
   "common": {
     "cancel": "取消",
@@ -3576,7 +3658,8 @@
     "optional": "可选",
     "save": "保存",
     "submit": "提交",
-    "viewShop": "查看店铺"
+    "viewShop": "查看店铺",
+    "close": "关闭"
   },
   "accessibility": {
     "updateAmountInput": "输入更新库存的数量",
@@ -3929,7 +4012,8 @@
     "placeBid": "出价",
     "time": "时间",
     "totalBids_other": "{{count}} 次出价",
-    "yourBid": "你的出价 (aUEC)"
+    "yourBid": "你的出价 (aUEC)",
+    "howItWorks": "出价如何运作"
   },
   "blocklist": {
     "addUser": "屏蔽用户",
@@ -4187,7 +4271,8 @@
       "variantPriceRequired": "在按变体定价模式下，批次 {{index}} 的价格必须大于 0",
       "auctionEndTimeRequired": "必须填写拍卖结束时间"
     },
-    "descriptionOptional": "描述（可选）"
+    "descriptionOptional": "描述（可选）",
+    "auctionHelp": "拍卖如何运作"
   },
   "CreateLotDialog": {
     "create": "创建批次",
@@ -4567,7 +4652,8 @@
     "subheading": "您出售的所有内容集中在一处。展开某一行可查看其背后的库存。",
     "title": "管理市场",
     "unspecified": "未指定",
-    "variants_other": "{{count}} 个选项"
+    "variants_other": "{{count}} 个选项",
+    "toggleLots": "显示 {{title}} 的批次"
   },
   "marketAggregateView": {
     "productImage": "{{title}} 的产品图片"
@@ -4601,7 +4687,9 @@
     "unavailable": "不可用",
     "unit": "件",
     "unitScu": "cSCU",
-    "yourBid": "您的出价（aUEC）"
+    "yourBid": "您的出价（aUEC）",
+    "decreaseQuantity": "减少数量",
+    "increaseQuantity": "增加数量"
   },
   "marketMultipleView": {
     "productImage": "{{title}} 的产品图片"
@@ -4819,12 +4907,14 @@
     "stock": "库存",
     "switchContext": "切换上下文",
     "unstar": "取消固定",
-    "adminIdentity": "身份"
+    "adminIdentity": "身份",
+    "groupLinks": "链接"
   },
   "navbar": {
     "cart": "购物车",
     "toggle_drawer": "切换侧边栏",
-    "notifications": "通知"
+    "notifications": "通知",
+    "accountMenu": "账号菜单"
   },
   "offerTrend": {
     "accepted": "已接受",
@@ -5127,7 +5217,9 @@
     "wikiPageThumbnail": "{{title}} 的缩略图"
   },
   "profile": {
-    "customOrdersMovedToShop": "自定义订单现在通过店铺下单。"
+    "customOrdersMovedToShop": "自定义订单现在通过店铺下单。",
+    "editDescription": "编辑简介",
+    "discordProfile": "Discord 个人资料"
   },
   "quickEdit": {
     "activeDesc": "对买家可见",
@@ -5142,7 +5234,12 @@
     "saved": "更改已保存",
     "status": "商品状态",
     "subtitle": "快速编辑",
-    "variants": "变体"
+    "variants": "变体",
+    "uploadFailed": "上传失败",
+    "active": "有效",
+    "photos": "添加照片",
+    "photosHelp": "新照片会添加到此商品。要删除或重新排序现有照片，请使用完整编辑器。",
+    "uploading": "正在上传照片…"
   },
   "resources": {
     "acquisition": "获取方式",
@@ -5269,7 +5366,9 @@
     "unitType": "单位类型",
     "unitUnit": "件",
     "visualOnly": "在此阶段，自定义物品和套装仅供预览 — 尚不会被保存。",
-    "whatSelling": "您要出售什么？"
+    "whatSelling": "您要出售什么？",
+    "removeQualityRow": "移除品质行",
+    "removeBundleItem": "移除套装物品"
   },
   "serviceView": {
     "anonymousReviewer": "匿名",
@@ -5280,7 +5379,8 @@
     "reviewBy": "评价者",
     "sellerReviews": "{{seller}} 的评价",
     "viewAllReviews": "查看全部 {{count}} 条评价",
-    "viewAllReviews_other": "查看全部 {{count}} 条评价"
+    "viewAllReviews_other": "查看全部 {{count}} 条评价",
+    "edit": "编辑服务"
   },
   "ShopSelector": {
     "created": "店铺已创建：{{name}}",
@@ -7908,5 +8008,106 @@
       "source": "来源"
     },
     "selectItem": "选择 {{title}}"
+  },
+  "gestures": {
+    "favorite": "收藏",
+    "swipeLeftAction": "删除"
+  },
+  "photos": {
+    "removePhoto": "移除照片",
+    "cancelUpload": "取消上传"
+  },
+  "mfa": {
+    "nav": {
+      "locked": "验证后解锁"
+    },
+    "gate": {
+      "setupTitle": "设置双重身份验证",
+      "setupExplain": "管理功能需要双重身份验证。网站的其他功能照常可用。"
+    },
+    "errors": {
+      "notConfigured": "服务器尚未配置双重身份验证。",
+      "invalidWithRemaining_other": "验证码无效。还剩 {{count}} 次尝试机会，之后将暂时锁定。",
+      "invalid": "验证码无效。",
+      "locked": "尝试次数过多，请在 {{time}} 再试。",
+      "sessionUnsupported": "此登录会话过旧，无法使用双重身份验证。请退出后重新登录。",
+      "rateLimited": "尝试次数过多，请稍后再试。",
+      "generic": "出了点问题，请重试。"
+    },
+    "settings": {
+      "setup": "设置验证器",
+      "title": "双重身份验证",
+      "on": "已开启",
+      "off": "已关闭",
+      "unconfigured": "管理员双重身份验证已开启，但服务器尚无加密密钥（MFA_ENC_KEYS），因此不会强制执行，也无法设置。",
+      "required": "管理功能需要双重身份验证。设置后即可解锁；网站的其他功能照常可用。",
+      "added": "添加于 {{date}}",
+      "lastUsed": "上次使用于 {{date}}",
+      "codesLeft_other": "剩余 {{count}} 个恢复码",
+      "verifiedUntil": "此会话的验证有效期至 {{date}}",
+      "notVerified": "此会话未验证",
+      "explain": "使用管理功能时，通过验证器应用确认是你本人。",
+      "replace": "更换验证器",
+      "regenerate": "新的恢复码",
+      "remove": "关闭"
+    },
+    "challenge": {
+      "title": "双重验证",
+      "explain": "管理功能需要已验证的会话。验证在此设备上有效 24 小时。",
+      "recoveryPrompt": "输入一个恢复码。每个恢复码只能使用一次。",
+      "codePrompt": "输入验证器应用中的 6 位验证码。",
+      "recoveryLabel": "恢复码",
+      "codeLabel": "验证码",
+      "verify": "验证",
+      "useCode": "改用验证器应用",
+      "useRecovery": "使用恢复码"
+    },
+    "stepUp": {
+      "title": "确认是你本人",
+      "confirm": "确认"
+    },
+    "common": {
+      "cancel": "取消",
+      "copied": "已复制",
+      "copy": "复制",
+      "next": "下一步",
+      "back": "返回",
+      "done": "完成"
+    },
+    "enroll": {
+      "stepScan": "扫描",
+      "stepConfirm": "确认",
+      "stepSave": "保存恢复码",
+      "title": "设置双重身份验证",
+      "scan": "使用验证器应用（1Password、Bitwarden、Google Authenticator、Authy 等）扫描此二维码。",
+      "qrAlt": "用于验证器应用的二维码",
+      "manual": "或手动输入此密钥：",
+      "confirm": "输入应用当前显示的 6 位验证码。",
+      "activate": "启用"
+    },
+    "recovery": {
+      "title": "你的新恢复码",
+      "warning": "请立即保存这些恢复码，它们只显示一次。如果丢失验证器，每个恢复码可登录一次。",
+      "download": "下载 .txt",
+      "saved": "我已保存这些恢复码"
+    },
+    "remove": {
+      "title": "关闭双重身份验证",
+      "explain": "输入当前验证码以确认。",
+      "confirm": "关闭"
+    }
+  },
+  "orgBanner": {
+    "refetch": "从 RSI 刷新组织信息"
+  },
+  "orgHeader": {
+    "rsiPage": "在 RSI 上查看"
+  },
+  "comments": {
+    "reply": "回复",
+    "delete": "删除评论"
+  },
+  "notificationWebhooks": {
+    "delete": "删除 Webhook {{name}}"
   }
 }

@@ -521,6 +521,38 @@
       "note": "Staff note",
       "save": "Save",
       "handledBy": "Last changed by {{user}}, {{date}}"
+    },
+    "testAccounts": {
+      "title": "Test accounts",
+      "secretTitle": "Save this authenticator secret now",
+      "secretOnce": "This is the only time the secret is shown. Store it in ~/.config/scmarket-test-accounts.json (chmod 600), never in a repository.",
+      "secretFor": "Secret for {{username}}:",
+      "fileEntry": "Entry for the secrets file:",
+      "download": "Download credentials",
+      "downloadAll_one": "Download all created this session ({{count}})",
+      "downloadAll_other": "Download all created this session ({{count}})",
+      "chmod": "Save it as ~/.config/scmarket-test-accounts.json and run chmod 600 on it. Merge several downloads with jq -s add a.json b.json.",
+      "saved": "I saved it",
+      "intro": "Test accounts are for automated browser agents. They sign in with a username and an authenticator code, never see or reach real users, and real users never see them. Creating or deleting one needs a fresh two-factor code.",
+      "loginOn": "Test login is ON (TEST_LOGIN_ENABLED=true). Unset it to switch test login off.",
+      "loginOff": "Test login is OFF. Accounts can be created, but nobody can sign into them until TEST_LOGIN_ENABLED=true is set.",
+      "create": "Create a test account",
+      "username": "Username",
+      "usernameHelp": "\"test\" + a name, e.g. test-buyer; saved as ~test-buyer",
+      "displayName": "Display name",
+      "createButton": "Create",
+      "created": "Created",
+      "lastLogin": "Last login",
+      "failed24h": "Failed logins (24 h)",
+      "status": "Status",
+      "loading": "Loading...",
+      "none": "No test accounts yet.",
+      "disabled": "Disabled",
+      "active": "Active",
+      "noAuthenticator": "No authenticator",
+      "delete": "Delete",
+      "deleteTitle": "Delete {{username}}?",
+      "deleteBody": "Deletes the test account with its test orgs, shops, listings and orders. Remove its entry from your secrets file too."
     }
   },
   "adminAuditLogs": {
@@ -718,7 +750,9 @@
     "submit": "Submit",
     "terms": "By clicking here, you agree to our Terms of Service",
     "title": "Registration",
-    "username": "Username"
+    "username": "Username",
+    "google": "Google",
+    "discord": "Discord"
   },
   "authenticateContractor": {
     "copy_and_open": "Copy Code and Open Org Page",
@@ -738,7 +772,8 @@
     "instructions": "In order to verify you own the above RSI profile, please copy the following code <sentinelCode>your code</sentinelCode> and add it to your user profile short bio, then enter your RSI handle (not monniker) above. You can remove this code once verification is complete. See <guideLink>here</guideLink> for a screenshot guide. Click submit once the code is visible on your profile.",
     "invalid_handle": "Invalid handle",
     "submit": "Submit",
-    "tos": "I have read and accepted SC Market's <tosLink>Terms of Service</tosLink>"
+    "tos": "I have read and accepted SC Market's <tosLink>Terms of Service</tosLink>",
+    "acceptTos": "Accept the terms of service"
   },
   "availability": {
     "availability_for": "Availability for",
@@ -778,7 +813,8 @@
     "time": "Time",
     "totalBids_one": "{{count}} bid",
     "totalBids_other": "{{count}} bids",
-    "yourBid": "Your Bid (aUEC)"
+    "yourBid": "Your Bid (aUEC)",
+    "howItWorks": "How bidding works"
   },
   "bids": {
     "bid": "Bid",
@@ -871,7 +907,19 @@
     "total_price": "Total Price",
     "totalPriceRange": "Total Price Range",
     "unknown_error": "Unknown error",
-    "visibility": "Visibility"
+    "visibility": "Visibility",
+    "fulfillQuantityRange": "Quantity must be between 1 and {{max}}",
+    "fulfilled": "Order created",
+    "fulfillFailedReason": "Could not fulfill the buy order: {{reason}}",
+    "fulfillFailed": "Could not fulfill the buy order",
+    "fulfillOptionsError": "Couldn't load your listings. Try again.",
+    "noFulfillOptions": "None of your shops has an active listing of {{item}} with listed stock.",
+    "createListingToFulfill": "Create a listing",
+    "noUsableFulfillOptions": "None of your listings can fill this buy order. The reason is shown under each one.",
+    "fulfillFromListing": "Pick the listing to fill it from. The order uses that listing's price and comes out of its listed stock.",
+    "fulfillOptionDetail": "{{price}} aUEC each · {{available}} listed · {{shop}}",
+    "fulfillQuantityHelper": "Up to {{max}} ({{remaining}} still wanted)",
+    "fulfillTotal": "Order total: {{total}} aUEC"
   },
   "buyOrderActions": {
     "createBuyOrder": "Create Buy Order",
@@ -975,7 +1023,11 @@
     "listingFallback": "Listing",
     "standardVariant": "Standard",
     "checkoutCount_one": "Checkout ({{count}} item)",
-    "checkoutCount_other": "Checkout ({{count}} items)"
+    "checkoutCount_other": "Checkout ({{count}} items)",
+    "closeDrawer": "Close",
+    "removeItem": "Remove {{title}} from cart",
+    "addItemToCart": "Add {{title}} to cart",
+    "submitOfferTo": "Submit offer to {{seller}}"
   },
   "commentTree": {
     "avatar_alt": "Avatar of {{username}}",
@@ -1004,7 +1056,8 @@
     "share": "Share",
     "submit": "Submit",
     "viewDetails": "View Details",
-    "viewShop": "View Shop"
+    "viewShop": "View Shop",
+    "close": "Close"
   },
   "ConfigureDiscord": {
     "integratedChannel": "Integrated Channel",
@@ -1306,7 +1359,8 @@
       "variantPriceRequired": "Price must be greater than 0 for lot {{index}} in per-variant pricing mode",
       "auctionEndTimeRequired": "Auction end time is required"
     },
-    "descriptionOptional": "Description (optional)"
+    "descriptionOptional": "Description (optional)",
+    "auctionHelp": "How auctions work"
   },
   "CreateLotDialog": {
     "create": "Create Lot",
@@ -1634,7 +1688,9 @@
     "how_to_communicate_answer": "Add the official [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server and pick a channel for order threads: each new order or offer then opens a private thread there with the buyer and the seller assigned to it, and buyers are invited to your server so you can work through the order together.\n\n1. Link your Discord account in your SC Market settings, then [add the bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server.\n\n2. In the channel that should hold the order threads, run `/setup threads`. For your org's orders, fill in `org` with its Spectrum ID (for example `/setup threads org:SCMARKET`); for orders placed with you, leave it empty.\n\n3. Optional: in a staff channel, run `/setup alerts` (with the same `org`) to post each new order and offer with a Claim button.\n\nYou need the **Manage Channels** permission in the Discord server. For an org, you also need the org's **Manage Webhooks** permission on SC Market for threads, or **Manage Orders** for alerts. In the thread channel, the bot needs View Channel, Create Private Threads, Send Messages in Threads and Create Invite. Run `/setup status` to see what a channel gets, and `/help` to see every command.",
     "how_to_get_notified": "How to get notified when an order is placed",
     "how_to_get_notified_answer": "Add the official [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server to automatically receive direct messages when an order is placed with you or assigned to you. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
-    "integrating_with_discord": "Integrating with Discord"
+    "integrating_with_discord": "Integrating with Discord",
+    "learn_connect": "Connect the Discord bot",
+    "learn_alerts": "Order alerts and claiming"
   },
   "discordThread": {
     "view": "View thread",
@@ -1972,7 +2028,9 @@
     "max_uses_helper": "The maximum number of uses of this invite. Set to 0 to make unlimited.",
     "submit": "Submit",
     "submitted": "Submitted!",
-    "used_times": "Used {{used}}/{{max}} times"
+    "used_times": "Used {{used}}/{{max}} times",
+    "copy": "Copy invite link {{code}}",
+    "delete": "Delete invite {{code}}"
   },
   "itemAcquisition": {
     "addToCart": "Add to cart",
@@ -2087,7 +2145,9 @@
     "item": "Item",
     "quantityUseStockPage": "Change this listing's quantity per lot on the Stock page",
     "manageAccessNotice": "You can view this shop's listings and stock. To create or change them, ask an org admin for the Manage Market permission.",
-    "stockAccessNotice": "You can view this shop's stock. To add or change lots, ask an org admin for the Manage Stock permission."
+    "stockAccessNotice": "You can view this shop's stock. To add or change lots, ask an org admin for the Manage Stock permission.",
+    "increaseQuantity": "Increase quantity",
+    "decreaseQuantity": "Decrease quantity"
   },
   "ItemStockRework": {
     "actions": "Actions",
@@ -2398,7 +2458,8 @@
     "title": "Manage Market",
     "unspecified": "Unspecified",
     "variants_one": "{{count}} option",
-    "variants_other": "{{count}} options"
+    "variants_other": "{{count}} options",
+    "toggleLots": "Show lots for {{title}}"
   },
   "manageMemberList": {
     "any": "Any",
@@ -2415,7 +2476,9 @@
     "search": "Search",
     "update_failed": "Failed to update! {{reason}}",
     "updated": "Updated!",
-    "username": "Username"
+    "username": "Username",
+    "kickMember": "Kick {{username}}",
+    "rolesFor": "Roles for {{username}}"
   },
   "manageRoles": {
     "add_role": "Add Role",
@@ -2606,7 +2669,9 @@
     "visibilityPrivate": "Private (org members only)",
     "visibilityPrivateHelp": "Only visible to organization members",
     "visibilityPublic": "Public",
-    "visibilityPublicHelp": "Visible to all buyers"
+    "visibilityPublicHelp": "Visible to all buyers",
+    "removeBulkTier": "Remove tier {{n}}",
+    "applySearchNow": "Apply search now"
   },
   "marketActions": {
     "createListing": "Create Listing",
@@ -2698,7 +2763,9 @@
     "unavailable": "Unavailable",
     "unit": "units",
     "unitScu": "cSCU",
-    "yourBid": "Your bid (aUEC)"
+    "yourBid": "Your bid (aUEC)",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity"
   },
   "MarketEditTemplate": {
     "configure": "Configure the comment template that will be added to new market orders that users can fill out to provide you additional details.",
@@ -2789,7 +2856,8 @@
     "viewAllReviews_one": "View {{count}} review",
     "viewAllReviews_other": "View all {{count}} reviews",
     "viewInCart": "View in Cart",
-    "views": "Views"
+    "views": "Views",
+    "editListing": "Edit listing"
   },
   "MarketMultipleEditView": {
     "about": "About",
@@ -2829,7 +2897,9 @@
     "previousOrders": "Previous Orders",
     "selectItem": "Select Item",
     "seller": "Seller",
-    "updated": "Updated"
+    "updated": "Updated",
+    "zoomImage": "Zoom image",
+    "editListing": "Edit listing"
   },
   "MarketOffers": {
     "offer": "Offer",
@@ -2955,7 +3025,8 @@
     "messages": "Messages",
     "noMessages": "No messages",
     "search": "Search",
-    "title": "Messages"
+    "title": "Messages",
+    "newMessage": "New message"
   },
   "mining": {
     "error": "Failed to load ores.",
@@ -3168,12 +3239,14 @@
     "stock": "Stock",
     "switchContext": "Switch context",
     "unstar": "Unpin",
-    "adminIdentity": "Identity"
+    "adminIdentity": "Identity",
+    "groupLinks": "Links"
   },
   "navbar": {
     "cart": "Cart",
     "toggle_drawer": "Toggle sidebar",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "accountMenu": "Account menu"
   },
   "navigation": {
     "goBack": "Go Back"
@@ -3693,7 +3766,10 @@
       "acceptInviteTitle": "Accept Invite",
       "invitedMessage": "You've been invited to",
       "joining": "Joining…",
-      "joinOrg": "Join Organization"
+      "joinOrg": "Join Organization",
+      "declined": "Invite declined",
+      "declineFailed": "Failed to decline the invite",
+      "decline": "Decline"
     },
     "invitesTab": "Invites",
     "loading": "Loading",
@@ -3715,7 +3791,8 @@
     "themeWhiteLabelTab": "Theme & White Label",
     "whiteLabelTab": "White Label",
     "storefrontTab": "Storefront",
-    "analyticsTab": "Analytics"
+    "analyticsTab": "Analytics",
+    "manageSectionsNav": "Organization settings sections"
   },
   "orgAbout": {
     "appearanceSubtitle": "Logo and banner for your organization",
@@ -3807,7 +3884,11 @@
     "org_tags": "Org Tags",
     "save": "Save",
     "set_banner": "Set new banner",
-    "submitted": "Submitted!"
+    "submitted": "Submitted!",
+    "descriptionEditor": "Organization description",
+    "editName": "Edit name",
+    "editTags": "Edit tags",
+    "editDescription": "Edit description"
   },
   "orgInfo": {
     "about": "About",
@@ -4015,7 +4096,9 @@
     "cookie_status_necessary": "Current choice: necessary only."
   },
   "profile": {
-    "customOrdersMovedToShop": "Custom orders are now placed through shops."
+    "customOrdersMovedToShop": "Custom orders are now placed through shops.",
+    "editDescription": "Edit description",
+    "discordProfile": "Discord profile"
   },
   "profileNavAvatar": {
     "logout": "Logout",
@@ -4036,7 +4119,12 @@
     "saved": "Changes saved",
     "status": "Listing Status",
     "subtitle": "Quick Edit",
-    "variants": "Variants"
+    "variants": "Variants",
+    "uploadFailed": "Upload failed",
+    "active": "Active",
+    "photos": "Add Photos",
+    "photosHelp": "New photos are added to this listing. Use the full editor to remove or reorder existing photos.",
+    "uploading": "Uploading photos…"
   },
   "recentOrders": {
     "title": "Recent Orders"
@@ -4047,7 +4135,8 @@
     "share": "Share",
     "title": "Recruiting",
     "viewContractor": "View Contractor",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "editPost": "Edit post"
   },
   "scOrgs": {
     "orgCardTitle": "Also on SC Orgs",
@@ -4237,7 +4326,8 @@
     "imageUrlHelp": "Enter a direct URL to an image (from Imgur, RSI, or starcitizen.tools)",
     "someFilesTooLarge": "Some files were too large and were skipped. Maximum file size is 25MB.",
     "upload": "Upload",
-    "urlModalTitle": "Add Image URL"
+    "urlModalTitle": "Add Image URL",
+    "uploadFailed": "Upload failed"
   },
   "SellFormRedesign": {
     "addBundleItem": "Add another item",
@@ -4283,7 +4373,9 @@
     "unitType": "Unit type",
     "unitUnit": "Units",
     "visualOnly": "Custom items and bundles are previewed only in this phase — not yet saved.",
-    "whatSelling": "What are you selling?"
+    "whatSelling": "What are you selling?",
+    "removeQualityRow": "Remove quality row",
+    "removeBundleItem": "Remove bundle item"
   },
   "sellMaterials": {
     "commodities": "Commodities",
@@ -4440,7 +4532,8 @@
     "sellerReviews": "Reviews for {{seller}}",
     "viewAllReviews": "View all {{count}} reviews",
     "viewAllReviews_one": "View {{count}} review",
-    "viewAllReviews_other": "View all {{count}} reviews"
+    "viewAllReviews_other": "View all {{count}} reviews",
+    "edit": "Edit service"
   },
   "settings": {
     "email": {
@@ -4966,7 +5059,8 @@
         "notice": "Legacy tokens still work on the old API routes (/api/v1 and /api/v2), but not on the public API. For new tools, create a token above.",
         "sunset": "Legacy tokens stop working on {{date}}. Create new tokens above and move your tools to the public API before then."
       }
-    }
+    },
+    "sectionsNav": "Settings sections"
   },
   "settingsManageContractors": {
     "actions": "Actions",
@@ -5193,7 +5287,8 @@
       "ships": "Ships",
       "title": "Wiki",
       "vehicles": "Vehicles"
-    }
+    },
+    "close": "Close sidebar"
   },
   "sidebar_actor_select": {
     "avatar_of": "Avatar of {{username}}",
@@ -5419,7 +5514,13 @@
     "save": "Save",
     "sectionLoadError": "An error occurred while loading this section.",
     "share": "Share",
-    "yes": "Yes"
+    "yes": "Yes",
+    "close": "Close",
+    "edit": "Edit",
+    "viewMode": {
+      "grid": "Grid view",
+      "list": "List view"
+    }
   },
   "unblockUser": {
     "button": "Unblock User",
@@ -8032,5 +8133,108 @@
       "source": "Source"
     },
     "selectItem": "Select {{title}}"
+  },
+  "gestures": {
+    "favorite": "Favorite",
+    "swipeLeftAction": "Delete"
+  },
+  "photos": {
+    "removePhoto": "Remove photo",
+    "cancelUpload": "Cancel upload"
+  },
+  "mfa": {
+    "nav": {
+      "locked": "Verify to unlock"
+    },
+    "gate": {
+      "setupTitle": "Set up two-factor authentication",
+      "setupExplain": "Admin features need two-factor authentication. The rest of the site works as usual."
+    },
+    "errors": {
+      "notConfigured": "Two-factor authentication is not configured on the server yet.",
+      "invalidWithRemaining_one": "That code is not valid. {{count}} attempt left before a temporary lock.",
+      "invalidWithRemaining_other": "That code is not valid. {{count}} attempts left before a temporary lock.",
+      "invalid": "That code is not valid.",
+      "locked": "Too many attempts, try again at {{time}}.",
+      "sessionUnsupported": "This login session is too old for two-factor authentication. Log out and log in again.",
+      "rateLimited": "Too many attempts, try again later.",
+      "generic": "Something went wrong. Try again."
+    },
+    "settings": {
+      "setup": "Set up authenticator",
+      "title": "Two-factor authentication",
+      "on": "On",
+      "off": "Off",
+      "unconfigured": "Admin two-factor is switched on but the server has no encryption key (MFA_ENC_KEYS) yet, so it is not enforced and setup is unavailable.",
+      "required": "Admin features need two-factor authentication. Set it up to unlock them; the rest of the site works as usual.",
+      "added": "added {{date}}",
+      "lastUsed": "last used {{date}}",
+      "codesLeft_one": "{{count}} recovery code left",
+      "codesLeft_other": "{{count}} recovery codes left",
+      "verifiedUntil": "This session is verified until {{date}}",
+      "notVerified": "This session is not verified",
+      "explain": "Use an authenticator app to confirm it's you when using admin features.",
+      "replace": "Replace authenticator",
+      "regenerate": "New recovery codes",
+      "remove": "Turn off"
+    },
+    "challenge": {
+      "title": "Two-factor verification",
+      "explain": "Admin features need a verified session. Verification lasts 24 hours on this device.",
+      "recoveryPrompt": "Enter one of your recovery codes. Each code works once.",
+      "codePrompt": "Enter the 6-digit code from your authenticator app.",
+      "recoveryLabel": "Recovery code",
+      "codeLabel": "Authentication code",
+      "verify": "Verify",
+      "useCode": "Use your authenticator app instead",
+      "useRecovery": "Use a recovery code"
+    },
+    "stepUp": {
+      "title": "Confirm it's you",
+      "confirm": "Confirm"
+    },
+    "common": {
+      "cancel": "Cancel",
+      "copied": "Copied",
+      "copy": "Copy",
+      "next": "Next",
+      "back": "Back",
+      "done": "Done"
+    },
+    "enroll": {
+      "stepScan": "Scan",
+      "stepConfirm": "Confirm",
+      "stepSave": "Save recovery codes",
+      "title": "Set up two-factor authentication",
+      "scan": "Scan this QR code with an authenticator app (1Password, Bitwarden, Google Authenticator, Authy, ...).",
+      "qrAlt": "QR code for your authenticator app",
+      "manual": "Or enter this key manually:",
+      "confirm": "Enter the 6-digit code your app shows now.",
+      "activate": "Turn on"
+    },
+    "recovery": {
+      "title": "Your new recovery codes",
+      "warning": "Save these recovery codes now. They are shown only once. Each one lets you in once if you lose your authenticator.",
+      "download": "Download .txt",
+      "saved": "I saved these codes"
+    },
+    "remove": {
+      "title": "Turn off two-factor authentication",
+      "explain": "Enter a current code to confirm.",
+      "confirm": "Turn off"
+    }
+  },
+  "orgBanner": {
+    "refetch": "Refresh org details from RSI"
+  },
+  "orgHeader": {
+    "rsiPage": "View on RSI"
+  },
+  "comments": {
+    "reply": "Reply",
+    "delete": "Delete comment"
+  },
+  "notificationWebhooks": {
+    "delete": "Delete webhook {{name}}"
   }
 }
