@@ -184,6 +184,9 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
       <Avatar
         src={shop.logo_url || undefined}
+        alt={t("accessibility.shopLogo", "Logo of {{name}}", {
+          name: shop.name,
+        })}
         variant="rounded"
         sx={{
           height: theme.spacing(12),
@@ -675,7 +678,7 @@ function ShopReviewRow(props: {
 }) {
   const { row, onClick, isItemSelected, labelId } = props
   const theme = useTheme<ExtendedTheme>()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   // The page's language (as rendered on the server), not the browser's.
   const locale = toSupportedLocale(i18n.language)
   const formatDate = useCallback(
@@ -702,7 +705,12 @@ function ShopReviewRow(props: {
         <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item>
             <Link to={USER_PATHS.profile(row.author.username)}>
-              <Avatar src={row.author.avatar || undefined} />
+              <Avatar
+                src={row.author.avatar || undefined}
+                alt={t("accessibility.userAvatar", "Avatar of {{username}}", {
+                  username: row.author.username,
+                })}
+              />
             </Link>
           </Grid>
           <Grid item>

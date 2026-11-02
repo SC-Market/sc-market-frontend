@@ -34,6 +34,16 @@ export function getBaseComponentOverrides(): Components<
         fontFamily: fontStack,
       },
     },
+    MuiAvatar: {
+      // Almost every avatar sits next to the name of the user, org or shop
+      // it pictures, so the image is decorative: alt="" (MUI leaves the
+      // attribute off unless alt is set, which fails accessibility audits).
+      // An avatar that stands for its owner (a page header, an avatar-only
+      // link) passes a named alt such as accessibility.userAvatar.
+      defaultProps: {
+        alt: "",
+      },
+    },
     MuiButton: {
       styleOverrides: {
         // Contrast rules (computed from the active palette, so every theme

@@ -36,6 +36,7 @@ export function ProfileHeader({
       <Grid item>
         <ProfileAvatar
           avatar={profile.avatar}
+          username={profile.username}
           isMyProfile={isMyProfile}
           isUploadingAvatar={isUploadingAvatar}
           onAvatarUpload={onAvatarUpload}

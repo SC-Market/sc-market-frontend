@@ -3890,6 +3890,7 @@
     "serviceStatusToggle": "Activer/désactiver le statut du service",
     "shipSelectionHelp": "Sélectionnez le vaisseau que vous souhaitez enregistrer dans votre flotte",
     "shipSelector": "Sélecteur de vaisseau",
+    "shopLogo": "Logo de {{name}}",
     "sidebarNavigation": "Navigation de la barre latérale",
     "signInWithCitizenIDDescription": "Se connecter à l'aide de votre compte Citizen iD",
     "signInWithDiscordDescription": "Se connecter à l'aide de votre compte Discord",

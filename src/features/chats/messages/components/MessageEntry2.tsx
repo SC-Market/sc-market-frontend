@@ -63,6 +63,9 @@ export function MessageEntry2(props: { message: Message }) {
               flexShrink: 0,
             }}
             src={author?.avatar || SCMarketLogo}
+            alt={t("accessibility.userAvatar", "Avatar of {{username}}", {
+              username: author?.username,
+            })}
           />
         </Link>
       ) : (

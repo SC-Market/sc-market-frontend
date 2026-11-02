@@ -3766,6 +3766,7 @@
     "serviceStatusToggle": "切換服務狀態",
     "shipSelectionHelp": "選擇您要註冊至艦隊的艦船",
     "shipSelector": "艦船選擇器",
+    "shopLogo": "{{name}} 的標誌",
     "sidebarNavigation": "側邊欄導覽",
     "signInWithCitizenIDDescription": "使用您的 Citizen iD 帳號登入",
     "signInWithDiscordDescription": "使用您的 Discord 帳號登入",

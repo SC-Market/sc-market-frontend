@@ -79,8 +79,8 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
               >
                 <Avatar
                   src={contractor.avatar}
-                  aria-label={t("recruiting_post.contractor", {
-                    defaultValue: "Contractor",
+                  alt={t("accessibility.contractorAvatar", "Avatar of {{name}}", {
+                    name: contractor.name,
                   })}
                   variant={"rounded"}
                   sx={{

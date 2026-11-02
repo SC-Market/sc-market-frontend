@@ -3890,6 +3890,7 @@
     "serviceStatusToggle": "Alternar estado del servicio",
     "shipSelectionHelp": "Selecciona la nave que quieres registrar en tu flota",
     "shipSelector": "Selector de nave",
+    "shopLogo": "Logotipo de {{name}}",
     "sidebarNavigation": "Navegación de la barra lateral",
     "signInWithCitizenIDDescription": "Inicia sesión con tu cuenta de Citizen iD",
     "signInWithDiscordDescription": "Inicia sesión con tu cuenta de Discord",

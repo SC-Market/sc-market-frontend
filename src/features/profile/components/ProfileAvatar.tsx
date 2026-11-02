@@ -3,9 +3,11 @@ import { Avatar, Box, IconButton } from "@mui/material"
 import { AddAPhotoRounded, SaveRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { useTranslation } from "react-i18next"
 
 interface ProfileAvatarProps {
   avatar: string
+  username: string
   isMyProfile: boolean
   isUploadingAvatar: boolean
   onAvatarUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -14,18 +16,24 @@ interface ProfileAvatarProps {
 
 export function ProfileAvatar({
   avatar,
+  username,
   isMyProfile,
   isUploadingAvatar,
   onAvatarUpload,
   setAvatarFileInputRef,
 }: ProfileAvatarProps) {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
+  const alt = t("accessibility.userAvatar", "Avatar of {{username}}", {
+    username,
+  })
   const [showAvatarButton, setShowAvatarButton] = useState(false)
 
   if (!isMyProfile) {
     return (
       <Avatar
         src={avatar}
+        alt={alt}
         sx={{
           height: 80,
           width: 80,
@@ -74,6 +82,7 @@ export function ProfileAvatar({
       </label>
       <Avatar
         src={avatar}
+        alt={alt}
         sx={{
           height: 80,
           width: 80,

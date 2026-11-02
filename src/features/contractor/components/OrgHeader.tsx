@@ -95,7 +95,9 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
       <Avatar
         src={contractor.avatar}
-        aria-label={t("contractors.contractor")}
+        alt={t("accessibility.contractorAvatar", "Avatar of {{name}}", {
+          name: contractor.name,
+        })}
         variant="rounded"
         sx={{
           height: theme.spacing(12),

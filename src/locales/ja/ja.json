@@ -3848,6 +3848,7 @@
     "serviceStatusToggle": "サービスステータスを切り替え",
     "shipSelectionHelp": "フリートに登録したい船を選択してください",
     "shipSelector": "船セレクター",
+    "shopLogo": "{{name}}のロゴ",
     "sidebarNavigation": "サイドバーナビゲーション",
     "signInWithCitizenIDDescription": "Citizen iDアカウントでサインインします",
     "signInWithDiscordDescription": "Discordアカウントでサインインします",

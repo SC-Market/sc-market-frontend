@@ -3743,6 +3743,7 @@
     "close": "关闭"
   },
   "accessibility": {
+    "shopLogo": "{{name}} 的徽标",
     "updateAmountInput": "输入更新库存的数量",
     "updateAmountHelp": "输入要为选定库存物品添加、减少或设置的数量",
     "addToStock": "增加库存",
