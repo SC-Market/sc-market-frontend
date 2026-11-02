@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { lightThemeOptions, mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { lightThemeOptions, mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const sakuraThemeOptions: ThemeOptions = {
   palette: {
@@ -22,4 +22,4 @@ export const sakuraThemeOptions: ThemeOptions = {
   },
 }
 
-export const SAKURA_theme = responsiveFontSizes(createTheme(themeBase, mainThemeOptions, lightThemeOptions, sakuraThemeOptions))
+export const SAKURA_theme = createAppTheme(themeBase, mainThemeOptions, lightThemeOptions, sakuraThemeOptions)

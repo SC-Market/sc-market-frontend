@@ -1,9 +1,10 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
+import { ThemeOptions } from "@mui/material"
 import {
   lightThemeOptions,
   mainThemeOptions,
   refTheme,
   themeBase,
+  createAppTheme,
 } from "../Theme"
 
 export const oceanThemeOptions: ThemeOptions = {
@@ -101,11 +102,9 @@ export const oceanThemeOptions: ThemeOptions = {
   },
 }
 
-export const OCEAN_theme = responsiveFontSizes(
-  createTheme(
-    themeBase,
-    mainThemeOptions,
-    lightThemeOptions,
-    oceanThemeOptions,
-  ),
+export const OCEAN_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  lightThemeOptions,
+  oceanThemeOptions,
 )

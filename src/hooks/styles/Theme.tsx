@@ -12,6 +12,7 @@ export {
   mainTheme,
   lightThemeOptions,
   lightTheme,
+  createAppTheme,
   MISSING_IMAGE_URL,
   cardFadeGradient,
   bannerFadeGradient,

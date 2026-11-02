@@ -1,9 +1,10 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
+import { ThemeOptions } from "@mui/material"
 import {
   lightThemeOptions,
   mainThemeOptions,
   refTheme,
   themeBase,
+  createAppTheme,
 } from "../Theme"
 
 export const medrunnerThemeOptions: ThemeOptions = {
@@ -65,11 +66,9 @@ export const medrunnerThemeOptions: ThemeOptions = {
   },
 }
 
-export const MEDRUNNER_theme = responsiveFontSizes(
-  createTheme(
-    themeBase,
-    mainThemeOptions,
-    lightThemeOptions,
-    medrunnerThemeOptions,
-  ),
+export const MEDRUNNER_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  lightThemeOptions,
+  medrunnerThemeOptions,
 )

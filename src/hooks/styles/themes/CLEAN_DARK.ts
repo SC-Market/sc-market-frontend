@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const cleanDarkThemeOptions: ThemeOptions = {
   palette: {
@@ -22,4 +22,4 @@ export const cleanDarkThemeOptions: ThemeOptions = {
   },
 }
 
-export const CLEAN_DARK_theme = responsiveFontSizes(createTheme(themeBase, mainThemeOptions, cleanDarkThemeOptions))
+export const CLEAN_DARK_theme = createAppTheme(themeBase, mainThemeOptions, cleanDarkThemeOptions)

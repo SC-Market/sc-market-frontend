@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const industrialThemeOptions: ThemeOptions = {
   palette: {
@@ -96,6 +96,4 @@ export const industrialThemeOptions: ThemeOptions = {
   },
 }
 
-export const INDUSTRIAL_theme = responsiveFontSizes(
-  createTheme(themeBase, mainThemeOptions, industrialThemeOptions),
-)
+export const INDUSTRIAL_theme = createAppTheme(themeBase, mainThemeOptions, industrialThemeOptions)

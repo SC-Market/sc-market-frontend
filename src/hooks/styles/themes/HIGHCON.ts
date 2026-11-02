@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const highconThemeOptions: ThemeOptions = {
   palette: {
@@ -22,4 +22,4 @@ export const highconThemeOptions: ThemeOptions = {
   },
 }
 
-export const HIGHCON_theme = responsiveFontSizes(createTheme(themeBase, mainThemeOptions, highconThemeOptions))
+export const HIGHCON_theme = createAppTheme(themeBase, mainThemeOptions, highconThemeOptions)

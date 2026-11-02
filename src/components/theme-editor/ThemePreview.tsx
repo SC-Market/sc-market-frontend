@@ -10,8 +10,6 @@ import {
   TextField,
   ThemeProvider,
   Typography,
-  createTheme,
-  responsiveFontSizes,
   useTheme,
   type ThemeOptions,
 } from "@mui/material"
@@ -19,6 +17,7 @@ import { alpha } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import {
   themeBase,
+  createAppTheme,
   mainThemeOptions,
   lightThemeOptions,
   navbarShadow,
@@ -418,11 +417,9 @@ export function ThemePreview({
 
   let previewTheme
   try {
-    previewTheme = responsiveFontSizes(createTheme(...base))
+    previewTheme = createAppTheme(...base)
   } catch {
-    previewTheme = responsiveFontSizes(
-      createTheme(themeBase, mainThemeOptions),
-    )
+    previewTheme = createAppTheme(themeBase, mainThemeOptions)
   }
 
   return (

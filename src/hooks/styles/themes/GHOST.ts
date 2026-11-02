@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const ghostThemeOptions: ThemeOptions = {
   palette: {
@@ -22,4 +22,4 @@ export const ghostThemeOptions: ThemeOptions = {
   },
 }
 
-export const GHOST_theme = responsiveFontSizes(createTheme(themeBase, mainThemeOptions, ghostThemeOptions))
+export const GHOST_theme = createAppTheme(themeBase, mainThemeOptions, ghostThemeOptions)

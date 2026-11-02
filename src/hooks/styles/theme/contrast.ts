@@ -212,8 +212,7 @@ export const selectedToggle = cached((theme: Theme, color: string) => {
   const hover = mix(paper, accent, 0.32)
   const ring = ensureContrast(accent, [paper, page], AA_UI)
   const text = ensureContrast(accent, [fill, hover], AA_TEXT)
-  // Unselected label: MUI uses action.active, which createTheme leaves at the
-  // light-mode rgba(0,0,0,0.54) in dark themes.
+  // Unselected label: text.primary at AA (MUI's default is action.active).
   const idle = ensureContrast(
     flatten(theme.palette.text.primary, paper),
     [paper, page],
@@ -221,3 +220,27 @@ export const selectedToggle = cached((theme: Theme, color: string) => {
   )
   return { fill, hover, ring, text, idle }
 })
+
+/**
+ * AA floors for the palette's disabled colours, applied to every built
+ * theme: action.disabled (disabled icons, IconButtons, checkbox and input
+ * outlines) reaches 3:1 and text.disabled (disabled input text and labels)
+ * 4.5:1, on both Paper and the page. Values that already pass are kept as
+ * they are; surfaces the maths can't read leave MUI's values alone.
+ */
+export function applyContrastFloors(theme: Theme): Theme {
+  try {
+    const { paper, page } = surfaces(theme)
+    const floor = (color: string, min: number) => {
+      const solid = flatten(color, paper)
+      return worst(solid, [paper, page]) >= min
+        ? color
+        : ensureContrast(solid, [paper, page], min)
+    }
+    theme.palette.action.disabled = floor(theme.palette.action.disabled, AA_UI)
+    theme.palette.text.disabled = floor(theme.palette.text.disabled, AA_TEXT)
+  } catch {
+    // unreadable surface colour (gradient, url(), CSS variable)
+  }
+  return theme
+}

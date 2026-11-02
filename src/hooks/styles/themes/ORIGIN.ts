@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { lightThemeOptions, mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { lightThemeOptions, mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const originThemeOptions: ThemeOptions = {
   palette: {
@@ -22,4 +22,4 @@ export const originThemeOptions: ThemeOptions = {
   },
 }
 
-export const ORIGIN_theme = responsiveFontSizes(createTheme(themeBase, mainThemeOptions, lightThemeOptions, originThemeOptions))
+export const ORIGIN_theme = createAppTheme(themeBase, mainThemeOptions, lightThemeOptions, originThemeOptions)

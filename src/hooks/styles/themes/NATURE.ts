@@ -1,9 +1,10 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
+import { ThemeOptions } from "@mui/material"
 import {
   lightThemeOptions,
   mainThemeOptions,
   refTheme,
   themeBase,
+  createAppTheme,
 } from "../Theme"
 
 export const natureThemeOptions: ThemeOptions = {
@@ -101,11 +102,9 @@ export const natureThemeOptions: ThemeOptions = {
   },
 }
 
-export const NATURE_theme = responsiveFontSizes(
-  createTheme(
-    themeBase,
-    mainThemeOptions,
-    lightThemeOptions,
-    natureThemeOptions,
-  ),
+export const NATURE_theme = createAppTheme(
+  themeBase,
+  mainThemeOptions,
+  lightThemeOptions,
+  natureThemeOptions,
 )

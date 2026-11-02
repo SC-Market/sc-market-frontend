@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const cyberpunkThemeOptions: ThemeOptions = {
   palette: {
@@ -91,6 +91,4 @@ export const cyberpunkThemeOptions: ThemeOptions = {
   },
 }
 
-export const CYBERPUNK_theme = responsiveFontSizes(
-  createTheme(themeBase, mainThemeOptions, cyberpunkThemeOptions),
-)
+export const CYBERPUNK_theme = createAppTheme(themeBase, mainThemeOptions, cyberpunkThemeOptions)

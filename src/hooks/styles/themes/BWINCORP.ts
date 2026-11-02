@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const bwinThemeOptions: ThemeOptions = {
   palette: {
@@ -42,6 +42,4 @@ export const bwinThemeOptions: ThemeOptions = {
   navKind: "outlined",
 }
 
-export const BWINCORP_theme = responsiveFontSizes(
-  createTheme(themeBase, mainThemeOptions, bwinThemeOptions),
-)
+export const BWINCORP_theme = createAppTheme(themeBase, mainThemeOptions, bwinThemeOptions)

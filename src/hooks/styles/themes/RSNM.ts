@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const rsnmThemeOptions: ThemeOptions = {
   palette: {
@@ -42,6 +42,4 @@ export const rsnmThemeOptions: ThemeOptions = {
   navKind: "outlined",
 }
 
-export const RSNM_theme = responsiveFontSizes(
-  createTheme(themeBase, mainThemeOptions, rsnmThemeOptions),
-)
+export const RSNM_theme = createAppTheme(themeBase, mainThemeOptions, rsnmThemeOptions)

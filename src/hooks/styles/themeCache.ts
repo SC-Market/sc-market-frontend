@@ -1,10 +1,10 @@
+import { type Theme, type ThemeOptions } from "@mui/material"
 import {
-  createTheme,
-  responsiveFontSizes,
-  type Theme,
-  type ThemeOptions,
-} from "@mui/material"
-import { themeBase, mainThemeOptions, lightThemeOptions } from "./Theme"
+  themeBase,
+  mainThemeOptions,
+  lightThemeOptions,
+  createAppTheme,
+} from "./Theme"
 
 const CACHE_PREFIX = "sc-market-org-theme-"
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000 // 7 days
@@ -42,7 +42,14 @@ export function getCachedOrgTheme(
 ): Theme | null {
   const cached = getCached(orgId)
   if (!cached) return null
-  return buildOrgTheme(cached.theme_data, mode)
+  try {
+    return buildOrgTheme(cached.theme_data, mode)
+  } catch {
+    // MUI rejects colours it can't parse once the palette is built from the
+    // org's options; drop the bad entry and use the site theme.
+    clearCachedOrgTheme(orgId)
+    return null
+  }
 }
 
 export function getCachedFaviconUrl(orgId: string): string | null {
@@ -82,7 +89,12 @@ export function buildOrgTheme(
 ): Theme {
   const orgOptions = mode === "light" ? themeData.light : themeData.dark
   // Sync divider with outline.main so all border colors are consistent
-  const palette = orgOptions?.palette as ThemeOptions["palette"] & { outline?: { main?: string }; divider?: string } | undefined
+  const palette = orgOptions?.palette as
+    | (ThemeOptions["palette"] & {
+        outline?: { main?: string }
+        divider?: string
+      })
+    | undefined
   const outlineMain = palette?.outline?.main
   if (outlineMain && !palette?.divider) {
     orgOptions.palette = { ...orgOptions?.palette, divider: outlineMain }
@@ -91,5 +103,5 @@ export function buildOrgTheme(
     mode === "light"
       ? [themeBase, mainThemeOptions, lightThemeOptions, orgOptions]
       : [themeBase, mainThemeOptions, orgOptions]
-  return responsiveFontSizes(createTheme(...base))
+  return createAppTheme(...base)
 }

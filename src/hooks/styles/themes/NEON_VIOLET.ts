@@ -1,5 +1,5 @@
-import { createTheme, responsiveFontSizes, ThemeOptions } from "@mui/material"
-import { mainThemeOptions, refTheme, themeBase } from "../Theme"
+import { ThemeOptions } from "@mui/material"
+import { mainThemeOptions, refTheme, themeBase, createAppTheme } from "../Theme"
 
 export const neonVioletThemeOptions: ThemeOptions = {
   palette: {
@@ -22,4 +22,4 @@ export const neonVioletThemeOptions: ThemeOptions = {
   },
 }
 
-export const NEON_VIOLET_theme = responsiveFontSizes(createTheme(themeBase, mainThemeOptions, neonVioletThemeOptions))
+export const NEON_VIOLET_theme = createAppTheme(themeBase, mainThemeOptions, neonVioletThemeOptions)

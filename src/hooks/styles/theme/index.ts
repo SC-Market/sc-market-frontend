@@ -25,3 +25,4 @@ export { getBaseComponentOverrides } from "./baseComponentOverrides"
 
 export { mainThemeOptions, mainTheme } from "./mainTheme"
 export { lightThemeOptions, lightTheme } from "./lightTheme"
+export { createAppTheme } from "./createAppTheme"

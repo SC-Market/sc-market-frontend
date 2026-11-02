@@ -1,6 +1,7 @@
-import { createTheme, responsiveFontSizes } from "@mui/material"
+import { responsiveFontSizes } from "@mui/material"
 import { refTheme } from "./constants"
 import { themeBase } from "./baseTheme"
+import { createAppTheme } from "./createAppTheme"
 import { ON_ACCENT_DARK } from "./contrast"
 import type { ExtendedThemeOptions } from "./constants"
 
@@ -112,6 +113,4 @@ export const lightThemeOptions: ExtendedThemeOptions = {
   },
 }
 
-export const lightTheme = responsiveFontSizes(
-  createTheme(themeBase, lightThemeOptions),
-)
+export const lightTheme = createAppTheme(themeBase, lightThemeOptions)

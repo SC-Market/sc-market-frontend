@@ -1,7 +1,8 @@
-import { createTheme, responsiveFontSizes } from "@mui/material"
+import { responsiveFontSizes } from "@mui/material"
 import { refTheme, mainOutline } from "./constants"
 import { ON_ACCENT_DARK } from "./contrast"
 import { themeBase } from "./baseTheme"
+import { createAppTheme } from "./createAppTheme"
 import type { ExtendedTheme } from "./utils"
 import type { ExtendedThemeOptions } from "./constants"
 
@@ -15,10 +16,9 @@ export const mainThemeOptions: ExtendedThemeOptions = {
         contrastText: "#111828",
       },
     }),
-    // createTheme merges these options after building the palette in light
-    // mode, so without them dark themes inherit the light-mode #d32f2f /
-    // #ed6c02 with white text (3.11:1 on orange). The dark-mode shades take
-    // dark text at AA (5.20:1 and 9.85:1) and read on Paper as text too.
+    // MUI's dark-mode shades, pinned with dark text: MUI would put white on
+    // the red (3.68:1). Dark text is 5.20:1 and 9.85:1. These layers also
+    // reach light themes, which set their own (lightThemeOptions).
     error: refTheme.palette.augmentColor({
       color: { main: "#f44336", contrastText: ON_ACCENT_DARK },
     }),
@@ -161,6 +161,4 @@ export const mainThemeOptions: ExtendedThemeOptions = {
   },
 }
 
-export const mainTheme = responsiveFontSizes(
-  createTheme(themeBase, mainThemeOptions),
-)
+export const mainTheme = createAppTheme(themeBase, mainThemeOptions)

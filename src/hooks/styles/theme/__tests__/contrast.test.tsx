@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest"
 import { render, screen } from "@testing-library/react"
-import { Button, Chip, ThemeProvider, ToggleButton } from "@mui/material"
+import {
+  Button,
+  Checkbox,
+  Chip,
+  IconButton,
+  TextField,
+  ThemeProvider,
+  ToggleButton,
+} from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Delete"
 import type { Theme } from "@mui/material"
 import { mainTheme } from "../mainTheme"
 import { lightTheme } from "../lightTheme"
@@ -26,6 +35,63 @@ const themes: [string, Theme][] = [
 
 describe.each(themes)("%s theme contrast", (_name, theme) => {
   const { paper, page } = surfaces(theme)
+
+  it("palette disabled colours meet their floors", () => {
+    const { action, text } = theme.palette
+    for (const bg of [paper, page]) {
+      // IconButton, Checkbox, input outlines
+      expect(
+        contrast(flatten(action.disabled, paper), bg),
+      ).toBeGreaterThanOrEqual(AA_UI)
+      // disabled TextField value and label
+      expect(
+        contrast(flatten(text.disabled, paper), bg),
+      ).toBeGreaterThanOrEqual(AA_TEXT)
+    }
+  })
+
+  it("derives the action palette for its own mode", () => {
+    const ink = theme.palette.mode === "dark" ? "255, 255, 255" : "0, 0, 0"
+    const { action } = theme.palette
+    expect(action.disabledBackground).toBe(`rgba(${ink}, 0.12)`)
+    expect(action.focus).toBe(`rgba(${ink}, 0.12)`)
+    expect(action.selected).toBe(
+      `rgba(${ink}, ${theme.palette.mode === "dark" ? 0.16 : 0.08})`,
+    )
+    expect(action.active).toBe(
+      theme.palette.mode === "dark" ? "#fff" : "rgba(0, 0, 0, 0.54)",
+    )
+  })
+
+  it("disabled IconButton, Checkbox and TextField use the floored colours", () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <IconButton disabled aria-label="remove">
+          <DeleteIcon />
+        </IconButton>
+        <Checkbox disabled inputProps={{ "aria-label": "agree" }} />
+        <TextField disabled label="Name" defaultValue="Ada" />
+      </ThemeProvider>,
+    )
+    const { action, text } = theme.palette
+    const css = (el: Element) => getComputedStyle(el)
+    expect(css(screen.getByRole("button", { name: "remove" })).color).toBe(
+      action.disabled,
+    )
+    expect(
+      css(screen.getByRole("checkbox", { name: "agree" }).parentElement!).color,
+    ).toBe(action.disabled)
+    const input = screen.getByRole("textbox", { name: "Name" })
+    // InputBase root carries the colour; the <input> inherits it
+    expect(css(input.parentElement!).color).toBe(text.disabled)
+    expect(css(screen.getByText("Name", { selector: "label" })).color).toBe(
+      text.disabled,
+    )
+    const outline = input.parentElement!.querySelector(
+      ".MuiOutlinedInput-notchedOutline",
+    )!
+    expect(css(outline).borderColor).toBe(action.disabled)
+  })
 
   it("disabled buttons read at AA", () => {
     const d = disabledButton(theme, "all")
