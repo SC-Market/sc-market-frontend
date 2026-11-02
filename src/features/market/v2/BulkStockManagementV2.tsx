@@ -12,6 +12,11 @@ import {
   Box,
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   IconButton,
   MenuItem,
@@ -28,6 +33,7 @@ import {
   Delete as DeleteIcon,
   Save as SaveIcon,
   Add as AddIcon,
+  EditOutlined as EditIcon,
 } from "@mui/icons-material"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import SearchIcon from "@mui/icons-material/Search"
@@ -69,6 +75,29 @@ import { QualityBandSelect } from "../../../components/game-data/QualityBandSele
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { HelpLink } from "../../help/components/HelpLink"
+import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
+import { selectOnFocus } from "../../../util/selectOnFocus"
+
+/**
+ * This page's shop: lots, listings and permissions are scoped to it (without
+ * a shop the lot list covered every shop you own).
+ */
+function useStockShop() {
+  const shop = useOptionalShopRouteContext()?.shop
+  return { shopId: shop?.shop_id, canManage: shop?.permissions?.can_manage === true }
+}
+
+/** Rows matching the lot search: item, variant, listing, location or notes. */
+export function matchesLotSearch(
+  row: { game_item_name: string | null; variant_display_name: string; listing_title: string; location_name: string | null; notes: string },
+  search: string,
+): boolean {
+  const q = search.trim().toLowerCase()
+  if (!q) return true
+  return [row.game_item_name, row.variant_display_name, row.listing_title, row.location_name, row.notes].some(
+    (v) => v?.toLowerCase().includes(q),
+  )
+}
 
 /* ── Local filter context (mirrors V1 StockSearchContext) ── */
 
@@ -120,14 +149,15 @@ export function BulkStockManagementV2() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const [sidebarOpen, setSidebarOpen] = useHydratedInitialState(!isMobile)
+  const { canManage } = useStockShop()
 
   return (
     <StandardPageLayout
-      title={t("sidebar.manage_stock", "Manage Inventory")}
+      title={t("sidebar.manage_stock", "Stock")}
       headerActions={<HelpLink guide="stockLots" />}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
-        { label: t("sidebar.manage_stock", "Manage Inventory") },
+        { label: t("sidebar.manage_stock", "Stock") },
       ]}
       sidebarOpen={true}
       maxWidth="xl"
@@ -148,9 +178,15 @@ export function BulkStockManagementV2() {
                     {t("market.filters", "Filters")}
                   </Button>
                 )}
-                <ManageListingsTabBar title={t("sidebar.manage_stock", "Manage Inventory")} />
+                <ManageListingsTabBar title={t("sidebar.manage_stock", "Stock")} />
               </Box>
             </Grid>
+
+            {!canManage && (
+              <Grid item xs={12}>
+                <ShopManageAccessNotice />
+              </Grid>
+            )}
 
             {/* Mobile bottom sheet */}
             {isMobile && (
@@ -198,9 +234,8 @@ export function BulkStockManagementV2() {
 function StockSearchAreaV2() {
   const { t } = useTranslation()
   const { filters, setSearch, setListingId, setLocationId } = useStockFilter()
-  const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
-  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId })
+  const { shopId } = useStockShop()
+  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", shopId })
   const listings = listingsData?.listings ?? []
 
   return (
@@ -247,18 +282,16 @@ function AllStockLotsGridV2() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const { filters } = useStockFilter()
-
-  const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
+  const { shopId, canManage } = useStockShop()
 
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,
     locationId: filters.locationId ?? undefined,
-    spectrumId,
+    shopId,
     pageSize: 100,
   })
 
-  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId })
+  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", shopId })
   const listings = listingsData?.listings ?? []
 
   const [createLot] = useCreateStockLotMutation()
@@ -266,6 +299,7 @@ function AllStockLotsGridV2() {
   const [deleteLot] = useDeleteStockLotMutation()
 
   const [addLotListingId, setAddLotListingId] = useState<string | null>(null)
+  const [pendingDelete, setPendingDelete] = useState<string | null>(null)
 
   // Fetch listing detail to determine game item type when a listing is filtered
   const { data: listingDetailData } = useGetListingDetailQuery(
@@ -390,13 +424,16 @@ function AllStockLotsGridV2() {
       notes: lot.notes ?? "",
     }))
 
-  const rows = allLots
+  const rows = allLots.filter((row) => matchesLotSearch(row, filters.search))
 
   const columns: GridColDef[] = [
     {
       field: "game_item_name",
       headerName: t("inventory.item", "Item"),
       flex: 1.5,
+      // Minimum widths: on a phone the grid scrolls sideways instead of
+      // squeezing every column to a few letters
+      minWidth: 140,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" fontWeight={600}>
           {params.value || "Custom Item"}
@@ -407,6 +444,7 @@ function AllStockLotsGridV2() {
       field: "variant_display_name",
       headerName: t("inventory.variant", "Variant"),
       flex: 1.5,
+      minWidth: 120,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2">{params.value || "—"}</Typography>
       ),
@@ -415,7 +453,8 @@ function AllStockLotsGridV2() {
       field: "quantity",
       headerName: t("inventory.quantity", "Qty"),
       flex: 0.7,
-      editable: true,
+      minWidth: 90,
+      editable: canManage,
       type: "number" as const,
       align: "right" as const,
       headerAlign: "right" as const,
@@ -428,6 +467,7 @@ function AllStockLotsGridV2() {
             size="small"
             fullWidth
             autoFocus
+            onFocus={selectOnFocus}
             value={params.value ?? 0}
             onChange={(e) => {
               const val = Math.max(0, Number(e.target.value) || 0)
@@ -438,16 +478,14 @@ function AllStockLotsGridV2() {
           />
         )
       },
-      renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2" fontWeight={600}>{params.value?.toLocaleString()}</Typography>
-      ),
+      renderCell: (params: GridRenderCellParams) => <EditableCell params={params} canEdit={canManage} />,
     },
     {
       field: "location_id",
       headerName: t("inventory.location", "Location"),
       flex: 1.2,
       minWidth: 160,
-      editable: true,
+      editable: canManage,
       renderEditCell: renderLocationEditCell,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" color="text.secondary">
@@ -459,6 +497,7 @@ function AllStockLotsGridV2() {
       field: "listing_title",
       headerName: t("inventory.listing", "Listing"),
       flex: 1.8,
+      minWidth: 160,
       renderCell: (params: GridRenderCellParams) => {
         const photo = params.row.listing_photo
         const listingId = params.row.listing_id
@@ -492,7 +531,8 @@ function AllStockLotsGridV2() {
       field: "listed",
       headerName: t("inventory.status", "Status"),
       flex: 0.8,
-      editable: true,
+      minWidth: 100,
+      editable: canManage,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
           label={params.value ? t("inventory.listed", "Listed") : t("inventory.personal", "Personal")}
@@ -502,25 +542,30 @@ function AllStockLotsGridV2() {
         />
       ),
     },
-    {
-      field: "actions",
-      headerName: "",
-      flex: 0.5,
-      sortable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <IconButton
-          size="small"
-          color="error"
-          onClick={() => handleDelete(params.row.lot_id)}
-          aria-label={t("AllStockLots.deleteLot", "Delete lot")}
-        >
-          <DeleteIcon fontSize="small" />
-        </IconButton>
-      ),
-    },
+    ...(canManage
+      ? [
+          {
+            field: "actions",
+            headerName: "",
+            flex: 0.5,
+            sortable: false,
+            renderCell: (params: GridRenderCellParams) => (
+              <IconButton
+                size="small"
+                color="error"
+                onClick={() => setPendingDelete(params.row.lot_id)}
+                aria-label={t("AllStockLots.deleteLot", "Delete lot")}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            ),
+          },
+        ]
+      : []),
   ]
 
   const handleDelete = async (lotId: string) => {
+    setPendingDelete(null)
     try {
       await deleteLot({ id: lotId }).unwrap()
       issueAlert({ message: t("AllStockLots.deleted", "Lot deleted"), severity: "success" })
@@ -619,20 +664,48 @@ function AllStockLotsGridV2() {
             />
           ),
           toolbar: () => (
-            <Box sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <Typography variant="h6">{t("AllStockLots.title", "All Stock Lots")}</Typography>
-                <Chip label={rows.length} size="small" color="primary" />
+            <Box sx={{ p: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Typography variant="h6">{t("AllStockLots.title", "All Stock Lots")}</Typography>
+                  <Chip label={rows.length} size="small" color="primary" />
+                </Box>
+                {canManage && (
+                  <Button size="small" variant="contained" startIcon={<AddIcon />} onClick={handleAddRow} disabled={listings.length === 0}>
+                    {t("AllStockLots.addLot", "Add Lot")}
+                  </Button>
+                )}
               </Box>
-              <Button size="small" variant="contained" startIcon={<AddIcon />} onClick={handleAddRow} disabled={listings.length === 0}>
-                {t("AllStockLots.addLot", "Add Lot")}
-              </Button>
+              {canManage && (
+                <Typography variant="caption" color="text.secondary">
+                  {t(
+                    "AllStockLots.editHint",
+                    "Double-click a quantity, location or status (or use the pencil) to edit it. Enter saves, Esc cancels.",
+                  )}
+                </Typography>
+              )}
             </Box>
           ),
         }}
         showToolbar
         sx={{ "& .MuiDataGrid-cell": { display: "flex", alignItems: "center" } }}
       />
+      <Dialog open={!!pendingDelete} onClose={() => setPendingDelete(null)}>
+        <DialogTitle>{t("AllStockLots.confirmDeleteTitle", "Delete lot?")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t("AllStockLots.confirmDeleteBody", "This lot will be permanently deleted and cannot be recovered.")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setPendingDelete(null)} color="inherit">
+            {t("common.cancel", "Cancel")}
+          </Button>
+          <Button onClick={() => pendingDelete && void handleDelete(pendingDelete)} color="error" variant="contained">
+            {t("common.delete", "Delete")}
+          </Button>
+        </DialogActions>
+      </Dialog>
       {addLotListingId && (
         <CreateLotDialogV2
           listings={listings}
@@ -651,13 +724,12 @@ function AllStockLotsGridV2() {
 function AllocatedStockGridV2() {
   const { t } = useTranslation()
   const { filters } = useStockFilter()
-  const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
+  const { shopId } = useStockShop()
 
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,
     locationId: filters.locationId ?? undefined,
-    spectrumId,
+    shopId,
     pageSize: 100,
   })
 
@@ -763,5 +835,32 @@ function AllocatedStockGridV2() {
         sx={{ "& .MuiDataGrid-cell": { display: "flex", alignItems: "center" } }}
       />
     </Paper>
+  )
+}
+
+/**
+ * A lot's quantity with a visible edit affordance: the pencil starts editing
+ * the cell (double-click does too).
+ */
+function EditableCell({ params, canEdit }: { params: GridRenderCellParams; canEdit: boolean }) {
+  const { t } = useTranslation()
+  const apiRef = useGridApiContext()
+  return (
+    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 0.5, width: "100%" }}>
+      <Typography variant="body2" fontWeight={600}>{params.value?.toLocaleString()}</Typography>
+      {canEdit && (
+        <IconButton
+          size="small"
+          aria-label={t("AllStockLots.editQuantity", "Edit quantity")}
+          onClick={(e) => {
+            e.stopPropagation()
+            apiRef.current.startCellEditMode({ id: params.id, field: params.field })
+          }}
+          sx={{ color: "text.secondary", p: 0.25 }}
+        >
+          <EditIcon sx={{ fontSize: 16 }} />
+        </IconButton>
+      )}
+    </Box>
   )
 }

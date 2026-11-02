@@ -25,13 +25,16 @@ import type { StockLotDetail } from "../../../../store/api/v2/market"
 import { serviceApi } from "../../../../store/service"
 
 // Mock the shop route context
+const shopAccess = vi.hoisted(() => ({ canManage: true }))
+const routeShop = () => ({
+  shop: {
+    shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z",
+    permissions: { can_manage: shopAccess.canManage, manage_market: shopAccess.canManage, manage_stock: false, manage_orders: false },
+  },
+})
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
-  useShopRouteContext: () => ({
-    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z" },
-  }),
-  useOptionalShopRouteContext: () => ({
-    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z" },
-  }),
+  useShopRouteContext: () => routeShop(),
+  useOptionalShopRouteContext: () => routeShop(),
 }))
 
 // Mock the alert hook
@@ -139,13 +142,14 @@ describe("BulkStockManagementV2", () => {
   beforeEach(() => {
     store = createMockStore()
     vi.clearAllMocks()
+    shopAccess.canManage = true
   })
 
   it("renders stock lots with variant information", async () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -170,7 +174,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -197,7 +201,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -225,7 +229,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -253,7 +257,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -277,7 +281,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -302,7 +306,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -326,7 +330,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -354,14 +358,14 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getMyListings",
-        { pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: undefined },
+        { pageSize: 100, sortBy: "updated_at", sortOrder: "desc", shopId: "shop-1" },
         {
           listings: [
             { listing_id: "listing-1", title: "Mock Listing" } as any,
@@ -396,7 +400,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -424,7 +428,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -475,7 +479,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: [], total: 0, page: 1, page_size: 20 },
       ),
     )
@@ -500,7 +504,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: [], total: 0, page: 1, page_size: 20 },
       ),
     )
@@ -524,7 +528,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -552,7 +556,7 @@ describe("BulkStockManagementV2", () => {
     store.dispatch(
       marketV2Api.util.upsertQueryData(
         "getStockLots",
-        { pageSize: 100 },
+        { pageSize: 100, shopId: "shop-1" },
         { lots: mockLots, total: 2, page: 1, page_size: 20 },
       ),
     )
@@ -574,5 +578,59 @@ describe("BulkStockManagementV2", () => {
     // Find inventory icon buttons (links to advanced management)
     const inventoryButtons = screen.getAllByRole("link")
     expect(inventoryButtons.length).toBeGreaterThan(0)
+  })
+
+  const renderWithLots = () => {
+    store.dispatch(
+      marketV2Api.util.upsertQueryData(
+        "getStockLots",
+        // Scoped to the page's shop: unscoped, the list held every shop's lots
+        { pageSize: 100, shopId: "shop-1" },
+        { lots: mockLots, total: 2, page: 1, page_size: 20 },
+      ),
+    )
+    return render(
+      <ThemeProvider theme={testTheme}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <BulkStockManagementV2 />
+          </BrowserRouter>
+        </Provider>
+      </ThemeProvider>,
+    )
+  }
+
+  // Regression: the "Search lots..." box did nothing.
+  it("filters lots by the search box", async () => {
+    renderWithLots()
+    await waitFor(() => expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument())
+    await userEvent.type(screen.getAllByPlaceholderText("Search lots...")[0], "lorville")
+    await waitFor(() => expect(screen.queryByText("Tier 5 (95.5%) - Crafted")).not.toBeInTheDocument())
+    expect(screen.getByText("Tier 3 (65.0%) - Store")).toBeInTheDocument()
+  })
+
+  // Regression: quantity editing was double-click only, with no sign it existed.
+  it("shows how to edit and a pencil on each quantity", async () => {
+    renderWithLots()
+    await waitFor(() => expect(screen.getAllByLabelText("Edit quantity").length).toBe(2))
+    expect(screen.getByText(/Double-click a quantity/)).toBeInTheDocument()
+  })
+
+  it("asks before deleting a lot", async () => {
+    renderWithLots()
+    await waitFor(() => expect(screen.getAllByLabelText("Delete lot").length).toBe(2))
+    await userEvent.click(screen.getAllByLabelText("Delete lot")[0])
+    expect(await screen.findByText("Delete lot?")).toBeInTheDocument()
+  })
+
+  // Regression: org members without manage_market got the editing UI and a 403 on save.
+  it("is read-only for members who can't manage the shop", async () => {
+    shopAccess.canManage = false
+    renderWithLots()
+    await waitFor(() => expect(screen.getByText("Tier 5 (95.5%) - Crafted")).toBeInTheDocument())
+    expect(screen.queryByText("Add Lot")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Edit quantity")).not.toBeInTheDocument()
+    expect(screen.queryByLabelText("Delete lot")).not.toBeInTheDocument()
+    expect(screen.getByText(/ask an org admin for the Manage Market permission/i)).toBeInTheDocument()
   })
 })
