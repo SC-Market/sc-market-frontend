@@ -79,6 +79,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api
 import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { canOpenOrgManage } from "../../features/contractor/domain/manageTabs"
+import { shopContextFromState } from "./shopContextState"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
 import {
   ADMIN_PATHS,
@@ -206,8 +207,12 @@ export function SidebarV2() {
     if (shopMatch) return { ctx: "shop", shopSlug: shopMatch[1], orgId: null }
     const orgMatch = path.match(/^\/org\/([^/]+)/)
     if (orgMatch) return { ctx: "org", shopSlug: null, orgId: orgMatch[1] }
+    // A listing page reached from a shop (after creating or editing one of
+    // its listings) stays in that shop's context.
+    const fromShop = shopContextFromState(location.state)
+    if (fromShop) return { ctx: "shop", shopSlug: fromShop, orgId: null }
     return { ctx: "browse", shopSlug: null, orgId: null }
-  }, [location.pathname])
+  }, [location.pathname, location.state])
 
   const [contextOverride, setContextOverride] = useState<{ ctx: NavContext; shopSlug: string | null; orgId: string | null } | null>(null)
   const context = contextOverride?.ctx ?? inferredContext.ctx
@@ -331,7 +336,7 @@ export function SidebarV2() {
         { label: t("nav.myOrders", "My Orders"), to: PATHS.myOrders, icon: <LocalShippingRounded />, badge: pendingOrderCount, group: personal },
         { label: t("nav.assignedOrders", "Assigned to Me"), to: PATHS.dashboard, icon: <DashboardRounded />, group: personal },
         { label: t("nav.messages", "Messages"), to: PATHS.messages, icon: <MessageRounded />, badge: unreadChatCount, group: personal },
-        { label: t("nav.inventory", "Inventory"), to: PATHS.inventory, icon: <InventoryRounded />, group: personal },
+        { label: t("nav.inventory", "My Stock"), to: PATHS.inventory, icon: <InventoryRounded />, group: personal },
         { label: t("nav.availability", "Availability"), to: PATHS.availability, icon: <DescriptionRounded />, group: personal },
       )
     }

@@ -29,6 +29,7 @@ import type { ShopResponse } from "../../../store/api/v2/market"
 import type { Contractor } from "../../../features/contractor/domain/types"
 import type { has_permission as HasPermission } from "../../../features/contractor/domain/permissions"
 import type { SidebarConfigItem } from "../../../store/api/contractors"
+import { withShopContext } from "../shopContextState"
 
 // ---- Mutable mock state -----------------------------------------------------
 let mockProfile: UserProfileState | undefined = undefined
@@ -181,7 +182,7 @@ const createStore = () =>
       getDefaultMiddleware().concat(marketV2Api.middleware, serviceApi.middleware),
   })
 
-const renderSidebar = (path = "/market") =>
+const renderSidebar = (path: string | { pathname: string; state: unknown } = "/market") =>
   render(
     <ThemeProvider theme={testTheme}>
       <Provider store={createStore()}>
@@ -273,7 +274,7 @@ describe("SidebarV2 — browse context (logged out)", () => {
     renderSidebar("/market")
     expect(screen.queryByText("My Orders")).not.toBeInTheDocument()
     expect(screen.queryByText("Messages")).not.toBeInTheDocument()
-    expect(screen.queryByText("Inventory")).not.toBeInTheDocument()
+    expect(screen.queryByText("My Stock")).not.toBeInTheDocument()
     expect(screen.queryByText("Availability")).not.toBeInTheDocument()
   })
 
@@ -364,7 +365,7 @@ describe("SidebarV2 — browse context (logged in)", () => {
     renderSidebar("/market")
     expect(screen.getByText("My Orders")).toBeInTheDocument()
     expect(screen.getByText("Messages")).toBeInTheDocument()
-    expect(screen.getByText("Inventory")).toBeInTheDocument()
+    expect(screen.getByText("My Stock")).toBeInTheDocument()
     expect(screen.getByText("Availability")).toBeInTheDocument()
   })
 
@@ -418,6 +419,21 @@ describe("SidebarV2 — shop context", () => {
     expect(screen.getByText("Stock")).toBeInTheDocument()
     // can_manage still off, so no Customers / Settings
     expect(screen.queryByText("Customers")).not.toBeInTheDocument()
+  })
+
+  // Regression: the sidebar switched to "Browsing" on a listing's page after
+  // creating or editing it from the shop.
+  it("keeps the shop's context on a listing page reached from that shop", () => {
+    mockShops = [shopWithPerms()]
+    renderSidebar({ pathname: "/market/abcd1234--gun", state: withShopContext("test-shop") })
+    expect(screen.getByText("Shop Page")).toBeInTheDocument()
+    expect(screen.queryByText("Browsing")).not.toBeInTheDocument()
+  })
+
+  it("browses on a listing page reached any other way", () => {
+    mockShops = [shopWithPerms()]
+    renderSidebar("/market/abcd1234--gun")
+    expect(screen.queryByText("Shop Page")).not.toBeInTheDocument()
   })
 
   it("shows can_manage items (Customers / Settings) with the permission", () => {

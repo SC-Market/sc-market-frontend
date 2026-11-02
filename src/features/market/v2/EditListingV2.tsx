@@ -31,6 +31,7 @@ import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import {
   useGetListingDetailQuery,
+  useGetMyShopsQuery,
   useGetStockLotsQuery,
   useUpdateListingMutation,
 } from "../../../store/api/v2/market";
@@ -38,7 +39,15 @@ import { useUploadImageMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
 import { SelectPhotosArea, UploadedImageStatus } from "../../../components/modal/SelectPhotosArea";
-import { MARKET_PATHS } from "../../../routes/paths";
+import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
+import { withShopContext } from "../../../components/sidebar/shopContextState";
+import {
+  focusListingField,
+  LISTING_FIELD_IDS,
+  listingApiError,
+  type ListingFormError,
+  type ListingFormField,
+} from "../domain/listingFormErrors";
 import type {
   UpdateListingRequest,
   VariantPriceUpdate,
@@ -90,11 +99,29 @@ export function EditListingV2() {
     error: loadError,
   } = useGetListingDetailQuery({ id: id! });
 
-  const { data: stockLotsData } = useGetStockLotsQuery({
-    listingId: id!,
-    listed: true,
-    pageSize: 100,
-  });
+  // Scoped to the listing's shop: without it the lookup only covers your own
+  // shops, so an org shop's lots were never found and quantity edits dropped.
+  const shopId = listingData?.listing.shop_id;
+  const { data: stockLotsData } = useGetStockLotsQuery(
+    { listingId: id!, listed: true, pageSize: 100, shopId },
+    { skip: !shopId },
+  );
+
+  // The listing's shop, if you manage it: saving and archiving stay in its context
+  const { data: myShops } = useGetMyShopsQuery();
+  const shopSlug = myShops?.find((s) => s.shop_id === shopId)?.slug;
+  const navState = shopSlug ? { state: withShopContext(shopSlug) } : undefined;
+
+  // The error being shown: next to its field, and above the submit button
+  const [formError, setFormError] = useState<ListingFormError | null>(null);
+  const fieldError = (field: ListingFormField) =>
+    formError?.field === field ? formError.message : undefined;
+  const clearError = (field: ListingFormField) =>
+    setFormError((prev) => (prev?.field === field ? null : prev));
+  const showError = (error: ListingFormError) => {
+    setFormError(error);
+    focusListingField(error.field);
+  };
 
   // Form state
   const [title, setTitle] = useState("");
@@ -183,52 +210,54 @@ export function EditListingV2() {
     []
   );
 
-  // Validate form
-  const validateForm = useCallback((): string | null => {
+  // Validate form. The description is optional.
+  const validateForm = (): ListingFormError | null => {
     if (!title.trim()) {
-      return t("EditListingV2.validation.titleRequired", "Title is required");
+      return { field: "title", message: t("EditListingV2.validation.titleRequired", "Title is required") };
     }
     if (title.length > 500) {
-      return t(
-        "EditListingV2.validation.titleTooLong",
-        "Title must be 500 characters or less"
-      );
-    }
-    if (!description.trim()) {
-      return t("EditListingV2.validation.descriptionRequired", "Description is required");
+      return {
+        field: "title",
+        message: t("EditListingV2.validation.titleTooLong", "Title must be 500 characters or less"),
+      };
     }
     if (pricingMode === "unified" && (!basePrice || basePrice <= 0)) {
-      return t(
-        "EditListingV2.validation.basePriceRequired",
-        "Base price must be greater than 0"
-      );
+      return {
+        field: "base_price",
+        message: t("EditListingV2.validation.basePriceRequired", "Base price must be greater than 0"),
+      };
     }
 
     // Validate each variant
     for (let i = 0; i < variants.length; i++) {
       const v = variants[i];
       if (v.quantity < 0) {
-        return t(
-          "EditListingV2.validation.quantityInvalid",
-          "Quantity must be 0 or greater for variant {{index}}",
-          { index: i + 1 }
-        );
+        return {
+          field: "form",
+          message: t(
+            "EditListingV2.validation.quantityInvalid",
+            "Quantity must be 0 or greater for variant {{index}}",
+            { index: i + 1 }
+          ),
+        };
       }
       if (pricingMode === "per_variant" && (!v.price || v.price <= 0)) {
-        return t(
-          "EditListingV2.validation.variantPriceRequired",
-          "Price must be greater than 0 for variant {{index}} in per-variant pricing mode",
-          { index: i + 1 }
-        );
+        return {
+          field: "form",
+          message: t(
+            "EditListingV2.validation.variantPriceRequired",
+            "Price must be greater than 0 for variant {{index}} in per-variant pricing mode",
+            { index: i + 1 }
+          ),
+        };
       }
     }
 
     return null;
-  }, [title, description, pricingMode, basePrice, variants, t]);
+  };
 
   // Submit form
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
       event.preventDefault();
 
       if (!canEdit) {
@@ -245,12 +274,14 @@ export function EditListingV2() {
       // Validate form
       const validationError = validateForm();
       if (validationError) {
+        showError(validationError);
         issueAlert({
-          message: validationError,
+          message: validationError.message,
           severity: "error",
         });
         return;
       }
+      setFormError(null);
 
       // Build update request
       const request: UpdateListingRequest = {};
@@ -331,17 +362,8 @@ export function EditListingV2() {
         request.photo_resource_ids = photoResourceIds;
       }
 
-      // Check if there are any changes
-      if (
-        !request.title &&
-        !request.description &&
-        !request.base_price &&
-        !request.variant_prices &&
-        !request.lot_updates &&
-        !request.photos &&
-        !request.photo_resource_ids &&
-        !request.external_photo_urls
-      ) {
+      // Check if there are any changes (an emptied description is one)
+      if (Object.keys(request).length === 0) {
         issueAlert({
           message: t("EditListingV2.noChanges", "No changes to save"),
           severity: "info",
@@ -361,34 +383,13 @@ export function EditListingV2() {
         });
 
         // Navigate back to listing detail page
-        navigate(MARKET_PATHS.listing(id!));
+        navigate(MARKET_PATHS.listing(id!), navState);
       } catch (error) {
-        const err = error as { data?: { message?: string } }
-        issueAlert({
-          message:
-            err?.data?.message ||
-            t("EditListingV2.error", "Failed to update listing"),
-          severity: "error",
-        });
+        const apiError = listingApiError(error, t("EditListingV2.error", "Failed to update listing"));
+        showError(apiError);
+        issueAlert({ message: apiError.message, severity: "error" });
       }
-    },
-    [
-      canEdit,
-      validateForm,
-      title,
-      description,
-      pricingMode,
-      basePrice,
-      variants,
-      photoResourceIds,
-      listingData,
-      updateListing,
-      id,
-      issueAlert,
-      navigate,
-      t,
-    ]
-  );
+  };
 
   // Two-phase upload: upload each file immediately and track status
   const handleFileUpload = useCallback((files: File[]) => {
@@ -498,7 +499,7 @@ export function EditListingV2() {
       )}
 
       <Grid item xs={12}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <Grid container spacing={theme.layoutSpacing.layout}>
           {/* Status Actions */}
           {listingData.listing.status !== "sold" && listingData.listing.status !== "cancelled" && (
@@ -540,7 +541,7 @@ export function EditListingV2() {
                     try {
                       await updateListing({ id: id!, updateListingRequest: { status: "cancelled" } }).unwrap()
                       issueAlert({ message: t("marketV2.archived"), severity: "success" })
-                      navigate(MARKET_PATHS.manage)
+                      navigate(shopSlug ? SHOP_PATHS.listings(shopSlug) : MARKET_PATHS.manage)
                     } catch { issueAlert({ message: t("marketV2.archiveFailed"), severity: "error" }) }
                   }}
                 >
@@ -574,34 +575,45 @@ export function EditListingV2() {
                 fullWidth
                 size="small"
                 autoFocus
+                id={LISTING_FIELD_IDS.title}
                 label={t("EditListingV2.title", "Title")}
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                  clearError("title");
+                  setTitle(e.target.value);
+                }}
                 color="secondary"
                 required
+                error={!!fieldError("title")}
                 disabled={!canEdit}
                 inputProps={{
                   maxLength: 500,
                   "aria-label": t("EditListingV2.titleAriaLabel", "Enter listing title"),
                 }}
-                helperText={title.length > 450 ? `${title.length}/500` : undefined}
+                helperText={fieldError("title") ?? (title.length > 450 ? `${title.length}/500` : undefined)}
               />
             </Grid>
 
             {/* Description */}
             <Grid item xs={12}>
               <MarkdownEditor
-                onChange={(value: string) => setDescription(value)}
+                onChange={(value: string) => {
+                  clearError("description");
+                  setDescription(value);
+                }}
                 value={description}
                 TextFieldProps={{
-                  label: t("EditListingV2.description", "Description"),
+                  id: LISTING_FIELD_IDS.description,
+                  label: t("CreateListingV2.descriptionOptional", "Description (optional)"),
+                  error: !!fieldError("description"),
                   helperText:
-                    description.length > 1900
+                    fieldError("description") ??
+                    (description.length > 1900
                       ? `${description.length}/2000`
                       : t(
                           "EditListingV2.descriptionHelp",
                           "Provide a detailed description (markdown supported)"
-                        ),
+                        )),
                   inputProps: { maxLength: 2000 },
                   disabled: !canEdit,
                 }}
@@ -725,8 +737,10 @@ export function EditListingV2() {
                   size="small"
                   fullWidth
                   onValueChange={(values) => {
+                    clearError("base_price");
                     setBasePrice(values.floatValue || 0);
                   }}
+                  id={LISTING_FIELD_IDS.base_price}
                   label={t("EditListingV2.basePrice", "Base Price")}
                   value={basePrice}
                   color="secondary"
@@ -736,6 +750,8 @@ export function EditListingV2() {
                     inputMode: "numeric",
                   }}
                   required
+                  error={!!fieldError("base_price")}
+                  helperText={fieldError("base_price")}
                   inputProps={{
                     "aria-label": t(
                       "EditListingV2.basePriceAriaLabel",
@@ -912,13 +928,21 @@ export function EditListingV2() {
           </FormPaper>
           )}
 
+          {formError && (
+            <Grid item xs={12}>
+              <Alert severity="error" role="alert">
+                {formError.message}
+              </Alert>
+            </Grid>
+          )}
+
           {/* Action Buttons */}
           <Grid item xs={12} container justifyContent="space-between">
             <Button
               size="large"
               variant="outlined"
               color="secondary"
-              onClick={() => navigate(MARKET_PATHS.listing(id!))}
+              onClick={() => navigate(MARKET_PATHS.listing(id!), navState)}
             >
               {t("EditListingV2.cancel", "Cancel")}
             </Button>

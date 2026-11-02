@@ -24,8 +24,10 @@ type GameItemSearchAutocompleteProps = React.ComponentProps<
 type SelectPhotosAreaProps = React.ComponentProps<typeof SelectPhotosArea>;
 
 // Mock dependencies
-const { mockIssueAlert, gameItem } = vi.hoisted(() => ({
+const { mockIssueAlert, gameItem, shopAccess, createListing } = vi.hoisted(() => ({
   mockIssueAlert: vi.fn(),
+  shopAccess: { canManage: true },
+  createListing: vi.fn(),
   // Mutable holder so each test can control the selected game item's type,
   // which drives whether the quality-tier or quality-value field renders.
   gameItem: { name: "Test Item", type: "Ranged Weapon", id: "test-item-id" },
@@ -64,16 +66,30 @@ vi.mock("../../components/GameItemSearchAutocomplete", () => ({
   GameItemSearchAutocomplete: ({
     onChange,
     label,
+    errorText,
   }: GameItemSearchAutocompleteProps) => (
-    <input
-      data-testid="game-item-search"
-      placeholder={label}
-      onChange={() => {
-        onChange(gameItem.name, gameItem.type, gameItem.id);
-      }}
-    />
+    <>
+      <input
+        data-testid="game-item-search"
+        placeholder={label}
+        onChange={() => {
+          onChange(gameItem.name, gameItem.type, gameItem.id);
+        }}
+      />
+      {errorText && <p data-testid="game-item-error">{errorText}</p>}
+    </>
   ),
 }));
+
+vi.mock("../../../../store/api/v2/market", async () => {
+  const actual = await vi.importActual<typeof import("../../../../store/api/v2/market")>(
+    "../../../../store/api/v2/market",
+  );
+  return {
+    ...actual,
+    useCreateListingMutation: () => [createListing, { isLoading: false }],
+  };
+});
 
 vi.mock("../../../../components/modal/SelectPhotosArea", () => ({
   SelectPhotosArea: ({ setPhotos }: SelectPhotosAreaProps) => (
@@ -105,6 +121,12 @@ vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
       banner: null,
       description: null,
       created_at: "2024-01-01T00:00:00Z",
+      permissions: {
+        can_manage: shopAccess.canManage,
+        manage_market: shopAccess.canManage,
+        manage_stock: false,
+        manage_orders: false,
+      },
     },
   }),
   useOptionalShopRouteContext: () => null,
@@ -149,6 +171,69 @@ const renderWithProviders = (component: React.ReactElement) => {
 describe("CreateListingV2", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    shopAccess.canManage = true;
+    createListing.mockReturnValue({ unwrap: () => Promise.resolve({ listing_id: "l-1" }) });
+  });
+
+  // Regression: the description was required (and not marked), so a
+  // listing without one failed; quick-add always sent none.
+  it("creates a listing without a description", async () => {
+    renderWithProviders(<CreateListingV2 />);
+    fireEvent.change(screen.getByTestId("game-item-search"), { target: { value: "Test Item" } });
+    fireEvent.change(screen.getByLabelText("Enter price"), { target: { value: "15000" } });
+    fireEvent.submit(screen.getByRole("button", { name: /Create Listing/i }).closest("form")!);
+
+    await waitFor(() => expect(createListing).toHaveBeenCalled());
+    const request = createListing.mock.calls[0][0].createListingRequest;
+    expect(request.description).toBeUndefined();
+    expect(request.title).toBe("Test Item");
+    expect(request.base_price).toBe(15000);
+  });
+
+  it("labels the description optional", () => {
+    renderWithProviders(<CreateListingV2 />);
+    expect(screen.getByPlaceholderText("Description (optional)")).toBeInTheDocument();
+  });
+
+  // Regression: errors only showed in a toast that disappears.
+  it("shows a validation error next to its field and above the submit button", async () => {
+    renderWithProviders(<CreateListingV2 />);
+    fireEvent.submit(screen.getByRole("button", { name: /Create Listing/i }).closest("form")!);
+
+    expect(await screen.findByTestId("game-item-error")).toHaveTextContent("Game item is required");
+    expect(screen.getByRole("alert")).toHaveTextContent("Game item is required");
+    expect(createListing).not.toHaveBeenCalled();
+  });
+
+  it("shows the API's field error next to the field", async () => {
+    createListing.mockReturnValue({
+      unwrap: () =>
+        Promise.reject({
+          status: 400,
+          data: {
+            error: {
+              code: "VALIDATION_ERROR",
+              message: "Validation failed",
+              validationErrors: [{ field: "title", message: "Title must be 500 characters or less" }],
+            },
+          },
+        }),
+    });
+    renderWithProviders(<CreateListingV2 />);
+    fireEvent.change(screen.getByTestId("game-item-search"), { target: { value: "Test Item" } });
+    fireEvent.change(screen.getByLabelText("Enter price"), { target: { value: "100" } });
+    fireEvent.submit(screen.getByRole("button", { name: /Create Listing/i }).closest("form")!);
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Title must be 500 characters or less");
+    expect(screen.getByLabelText("Enter listing title")).toHaveAttribute("aria-invalid", "true");
+  });
+
+  // Regression: org members without manage_market got the form, then a 403.
+  it("tells members who can't manage the shop to ask for access instead of showing the form", () => {
+    shopAccess.canManage = false;
+    renderWithProviders(<CreateListingV2 />);
+    expect(screen.getByText(/ask an org admin for the Manage Market permission/i)).toBeInTheDocument();
+    expect(screen.queryByTestId("game-item-search")).not.toBeInTheDocument();
   });
 
   it("renders the form with all required fields", () => {

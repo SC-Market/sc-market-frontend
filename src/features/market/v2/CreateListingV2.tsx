@@ -47,6 +47,15 @@ import type {
   VariantAttributes,
 } from "../../../store/api/v2/market";
 import { HelpLink } from "../../help/components/HelpLink"
+import { withShopContext } from "../../../components/sidebar/shopContextState"
+import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
+import {
+  focusListingField,
+  LISTING_FIELD_IDS,
+  listingApiError,
+  type ListingFormError,
+  type ListingFormField,
+} from "../domain/listingFormErrors"
 
 /**
  * Stock lot form data with variant attributes
@@ -101,6 +110,19 @@ export function CreateListingV2() {
 
   // Advanced section toggle
   const [showAdvanced, setShowAdvanced] = useState(false);
+
+  // The error being shown: next to its field, and above the submit button
+  const [formError, setFormError] = useState<ListingFormError | null>(null);
+  const fieldError = (field: ListingFormField) =>
+    formError?.field === field ? formError.message : undefined;
+  const clearError = (field: ListingFormField) =>
+    setFormError((prev) => (prev?.field === field ? null : prev));
+  const showError = (error: ListingFormError) => {
+    setFormError(error);
+    // The auction end time lives under "More options"
+    if (error.field === "auction_end_time") setShowAdvanced(true);
+    focusListingField(error.field);
+  };
 
   // Stock lots state
   const [stockLots, setStockLots] = useState<StockLotFormData[]>([
@@ -162,87 +184,106 @@ export function CreateListingV2() {
     []
   );
 
-  // Validate form
-  const validateForm = useCallback((): string | null => {
+  // Validate form. The description is optional.
+  const validateForm = (): ListingFormError | null => {
+    if (!gameItemId) {
+      return { field: "game_item_id", message: t("CreateListingV2.validation.gameItemRequired", "Game item is required") };
+    }
     if (!title.trim()) {
-      return t("CreateListingV2.validation.titleRequired", "Title is required");
+      return { field: "title", message: t("CreateListingV2.validation.titleRequired", "Title is required") };
     }
     if (title.length > 500) {
-      return t(
-        "CreateListingV2.validation.titleTooLong",
-        "Title must be 500 characters or less"
-      );
-    }
-    if (!description.trim()) {
-      return t("CreateListingV2.validation.descriptionRequired", "Description is required");
-    }
-    if (!gameItemId) {
-      return t("CreateListingV2.validation.gameItemRequired", "Game item is required");
+      return {
+        field: "title",
+        message: t("CreateListingV2.validation.titleTooLong", "Title must be 500 characters or less"),
+      };
     }
     if (pricingMode === "unified" && (!basePrice || basePrice <= 0)) {
-      return t(
-        "CreateListingV2.validation.basePriceRequired",
-        "Base price must be greater than 0"
-      );
+      return {
+        field: "base_price",
+        message: t("CreateListingV2.validation.basePriceRequired", "Base price must be greater than 0"),
+      };
     }
     if (stockLots.length === 0) {
-      return t(
-        "CreateListingV2.validation.stockLotRequired",
-        "At least one stock lot is required"
-      );
+      return {
+        field: "form",
+        message: t("CreateListingV2.validation.stockLotRequired", "At least one stock lot is required"),
+      };
     }
 
     for (let i = 0; i < stockLots.length; i++) {
       const lot = stockLots[i];
+      // The first lot's quantity is the Quantity field up top; the rest are under More options
+      const lotField: ListingFormField = i === 0 ? "quantity" : "form";
       if (!lot.quantity || lot.quantity <= 0) {
-        return t(
-          "CreateListingV2.validation.quantityRequired",
-          "Quantity must be greater than 0 for lot {{index}}",
-          { index: i + 1 }
-        );
+        return {
+          field: lotField,
+          message: t(
+            "CreateListingV2.validation.quantityRequired",
+            "Quantity must be greater than 0 for lot {{index}}",
+            { index: i + 1 }
+          ),
+        };
       }
       if (lot.quality_tier !== undefined && (lot.quality_tier < 1 || lot.quality_tier > 5)) {
-        return t(
-          "CreateListingV2.validation.qualityTierRange",
-          "Quality tier must be between 1 and 5 for lot {{index}}",
-          { index: i + 1 }
-        );
+        return {
+          field: "form",
+          message: t(
+            "CreateListingV2.validation.qualityTierRange",
+            "Quality tier must be between 1 and 5 for lot {{index}}",
+            { index: i + 1 }
+          ),
+        };
       }
       if (
         lot.quality_value !== undefined &&
         (lot.quality_value < 0 || lot.quality_value > 1000)
       ) {
-        return t(
-          "CreateListingV2.validation.qualityValueRange",
-          "Quality value must be between 0 and 1000 for lot {{index}}",
-          { index: i + 1 }
-        );
+        return {
+          field: "form",
+          message: t(
+            "CreateListingV2.validation.qualityValueRange",
+            "Quality value must be between 0 and 1000 for lot {{index}}",
+            { index: i + 1 }
+          ),
+        };
       }
       if (pricingMode === "per_variant" && (!lot.price || lot.price <= 0)) {
-        return t(
-          "CreateListingV2.validation.variantPriceRequired",
-          "Price must be greater than 0 for lot {{index}} in per-variant pricing mode",
-          { index: i + 1 }
-        );
+        return {
+          field: "form",
+          message: t(
+            "CreateListingV2.validation.variantPriceRequired",
+            "Price must be greater than 0 for lot {{index}} in per-variant pricing mode",
+            { index: i + 1 }
+          ),
+        };
       }
     }
 
+    if (saleType === "auction" && !auctionEndTime) {
+      return {
+        field: "auction_end_time",
+        message: t("CreateListingV2.validation.auctionEndTimeRequired", "Auction end time is required"),
+      };
+    }
+
     return null;
-  }, [title, description, gameItemId, pricingMode, basePrice, stockLots, t]);
+  };
 
   // Submit form
-  const handleSubmit = useCallback(
-    async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
       event.preventDefault();
 
       const validationError = validateForm();
       if (validationError) {
+        showError(validationError);
         issueAlert({
-          message: validationError,
+          message: validationError.message,
           severity: "error",
         });
         return;
       }
+      setFormError(null);
 
       const lots: StockLotInput[] = stockLots.map((lot) => {
         const variant_attributes: VariantAttributes = {};
@@ -266,7 +307,7 @@ export function CreateListingV2() {
 
       const request: CreateListingRequest = {
         title: title.trim(),
-        description: description.trim(),
+        description: description.trim() || undefined,
         game_item_id: gameItemId!,
         pricing_mode: pricingMode,
         base_price: pricingMode === "unified" ? basePrice : undefined,
@@ -299,35 +340,15 @@ export function CreateListingV2() {
           severity: "success",
         });
 
-        navigate(formatMarketUrl({ listing_id: result.listing_id, title }));
-      } catch (error) {
-        const err = error as { data?: { message?: string } }
-        issueAlert({
-          message:
-            err?.data?.message ||
-            t("CreateListingV2.error", "Failed to create listing"),
-          severity: "error",
+        navigate(formatMarketUrl({ listing_id: result.listing_id, title }), {
+          state: withShopContext(shop.slug),
         });
+      } catch (error) {
+        const apiError = listingApiError(error, t("CreateListingV2.error", "Failed to create listing"));
+        showError(apiError);
+        issueAlert({ message: apiError.message, severity: "error" });
       }
-    },
-    [
-      validateForm,
-      stockLots,
-      title,
-      description,
-      gameItemId,
-      pricingMode,
-      basePrice,
-      shop.shop_id,
-      shop.is_org_owned,
-      photoResourceIds,
-      photos,
-      createListing,
-      issueAlert,
-      navigate,
-      t,
-    ]
-  );
+  };
 
   // Two-phase upload: upload each file immediately and track status
   const handleFileUpload = useCallback((files: File[]) => {
@@ -374,6 +395,22 @@ export function CreateListingV2() {
     setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId));
   }, []);
 
+  // Org members without manage_market can't create listings: say so up
+  // front instead of letting the save fail with a 403
+  if (shop.permissions?.can_manage !== true) {
+    return (
+      <StandardPageLayout
+        title={t("CreateListingV2.pageTitle", "Create Listing")}
+        sidebarOpen={true}
+        maxWidth="lg"
+      >
+        <Grid item xs={12}>
+          <ShopManageAccessNotice />
+        </Grid>
+      </StandardPageLayout>
+    );
+  }
+
   return (
     <StandardPageLayout
       title={t("CreateListingV2.pageTitle", "Create Listing")}
@@ -387,7 +424,7 @@ export function CreateListingV2() {
       headerActions={<HelpLink guide="sellItems" />}
     >
       <Grid item xs={12}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <Grid container spacing={theme.layoutSpacing.layout}>
           {/* Verification Warning */}
           {profile && !isVerified && (
@@ -410,8 +447,11 @@ export function CreateListingV2() {
             <Grid item xs={12}>
               <GameItemSearchAutocomplete
                 autoFocus
+                required
+                errorText={fieldError("game_item_id")}
                 value={gameItemName}
                 onChange={(itemName, itemType, itemId) => {
+                  clearError("game_item_id");
                   setGameItemName(itemName);
                   setGameItemId(itemId);
                   setGameItemType(itemType);
@@ -428,34 +468,45 @@ export function CreateListingV2() {
               <TextField
                 fullWidth
                 size="small"
+                id={LISTING_FIELD_IDS.title}
                 label={t("CreateListingV2.title", "Title")}
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => {
+                  clearError("title");
+                  setTitle(e.target.value);
+                }}
                 color="secondary"
                 required
+                error={!!fieldError("title")}
                 inputProps={{
                   maxLength: 500,
                   "aria-label": t("CreateListingV2.titleAriaLabel", "Enter listing title"),
                 }}
                 helperText={
-                  title.length > 450 ? `${title.length}/500` : undefined
+                  fieldError("title") ?? (title.length > 450 ? `${title.length}/500` : undefined)
                 }
               />
             </Grid>
 
             <Grid item xs={12}>
               <MarkdownEditor
-                onChange={(value: string) => setDescription(value)}
+                onChange={(value: string) => {
+                  clearError("description");
+                  setDescription(value);
+                }}
                 value={description}
                 TextFieldProps={{
-                  label: t("CreateListingV2.description", "Description"),
+                  id: LISTING_FIELD_IDS.description,
+                  label: t("CreateListingV2.descriptionOptional", "Description (optional)"),
+                  error: !!fieldError("description"),
                   helperText:
-                    description.length > 1900
+                    fieldError("description") ??
+                    (description.length > 1900
                       ? `${description.length}/2000`
                       : t(
                           "CreateListingV2.descriptionHelp",
                           "Provide a detailed description (markdown supported)"
-                        ),
+                        )),
                   inputProps: { maxLength: 2000 },
                 }}
                 variant="vertical"
@@ -495,8 +546,10 @@ export function CreateListingV2() {
                 size="small"
                 fullWidth
                 onValueChange={(values) => {
+                  clearError("base_price");
                   setBasePrice(values.floatValue || 0);
                 }}
+                id={LISTING_FIELD_IDS.base_price}
                 label={t("CreateListingV2.basePrice", "Price")}
                 value={basePrice}
                 color="secondary"
@@ -505,6 +558,8 @@ export function CreateListingV2() {
                   inputMode: "numeric",
                 }}
                 required
+                error={!!fieldError("base_price")}
+                helperText={fieldError("base_price")}
                 inputProps={{
                   "aria-label": t(
                     "CreateListingV2.basePriceAriaLabel",
@@ -526,12 +581,16 @@ export function CreateListingV2() {
                 size="small"
                 fullWidth
                 onValueChange={(values) => {
+                  clearError("quantity");
                   handleUpdateStockLot(stockLots[0]?.id, "quantity", values.floatValue || 0);
                 }}
+                id={LISTING_FIELD_IDS.quantity}
                 label={t("CreateListingV2.quantity", "Quantity")}
                 value={stockLots[0]?.quantity ?? 1}
                 color="secondary"
                 required
+                error={!!fieldError("quantity")}
+                helperText={fieldError("quantity")}
                 inputProps={{
                   inputMode: "numeric",
                   "aria-label": t("CreateListingV2.quantityAriaLabel", "Enter quantity"),
@@ -675,12 +734,18 @@ export function CreateListingV2() {
                       <Grid item xs={12} sm={6}>
                         <TextField
                           fullWidth
+                          id={LISTING_FIELD_IDS.auction_end_time}
                           label={t("CreateListingV2.auctionEndTime", "Auction End Time")}
                           type="datetime-local"
                           value={auctionEndTime}
-                          onChange={(e) => setAuctionEndTime(e.target.value)}
+                          onChange={(e) => {
+                            clearError("auction_end_time");
+                            setAuctionEndTime(e.target.value);
+                          }}
                           InputLabelProps={{ shrink: true }}
                           required
+                          error={!!fieldError("auction_end_time")}
+                          helperText={fieldError("auction_end_time")}
                         />
                       </Grid>
                       <Grid item xs={12} sm={6}>
@@ -1055,6 +1120,14 @@ export function CreateListingV2() {
               </Grid>
             </Collapse>
           </Grid>
+
+          {formError && (
+            <Grid item xs={12}>
+              <Alert severity="error" role="alert">
+                {formError.message}
+              </Alert>
+            </Grid>
+          )}
 
           {/* Submit Button */}
           <Grid item xs={12} container justifyContent="flex-end">

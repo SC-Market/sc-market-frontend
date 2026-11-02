@@ -6,7 +6,14 @@ import { Provider } from "react-redux";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { EditListingV2 } from "../EditListingV2";
-import { marketV2Api, useGetListingDetailQuery, useUpdateListingMutation } from "../../../../store/api/v2/market";
+import {
+  marketV2Api,
+  useGetListingDetailQuery,
+  useGetMyShopsQuery,
+  useGetStockLotsQuery,
+  useUpdateListingMutation,
+} from "../../../../store/api/v2/market";
+import type { ShopResponse } from "../../../../store/api/v2/market";
 import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market";
 import {
   mockMutationHook,
@@ -34,6 +41,8 @@ vi.mock("../../../../store/api/v2/market", async () => {
     ...actual,
     useGetListingDetailQuery: vi.fn(),
     useUpdateListingMutation: vi.fn(),
+    useGetStockLotsQuery: vi.fn(),
+    useGetMyShopsQuery: vi.fn(),
   };
 });
 
@@ -196,8 +205,10 @@ const mockListingData: GetListingDetailApiResponse = {
 };
 
 describe("EditListingV2", () => {
+  let updateHook: ReturnType<typeof mockMutationHook<typeof marketV2Api.endpoints.updateListing>>;
   beforeEach(() => {
     vi.clearAllMocks();
+    updateHook = mockMutationHook<typeof marketV2Api.endpoints.updateListing>();
   });
 
   const renderComponent = () => {
@@ -210,8 +221,14 @@ describe("EditListingV2", () => {
       ),
     );
 
-    vi.mocked(useUpdateListingMutation).mockReturnValue(
-      mockMutationHook<typeof marketV2Api.endpoints.updateListing>(),
+    vi.mocked(useUpdateListingMutation).mockReturnValue(updateHook);
+    vi.mocked(useGetStockLotsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getStockLots>({ lots: [], total: 0, page: 1, page_size: 100 }),
+    );
+    vi.mocked(useGetMyShopsQuery).mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getMyShops>([
+        { shop_id: "shop-456", slug: "org-shop" } as ShopResponse,
+      ]),
     );
 
     return render(
@@ -349,8 +366,40 @@ describe("EditListingV2", () => {
     fireEvent.click(cancelButton);
     
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/market/listing-123");
+      expect(mockNavigate.mock.calls[0][0]).toBe("/market/listing-123");
     });
+  });
+
+  // Regression: the lot lookup wasn't scoped to the listing's shop, so for an
+  // org shop it found no lots and quantity edits were silently dropped.
+  it("looks the listing's lots up in its shop", () => {
+    renderComponent();
+    expect(vi.mocked(useGetStockLotsQuery)).toHaveBeenCalledWith(
+      expect.objectContaining({ listingId: "listing-123", shopId: "shop-456" }),
+      expect.objectContaining({ skip: false }),
+    );
+  });
+
+  // Regression: an emptied description counted as "No changes to save".
+  it("saves an emptied description", async () => {
+    renderComponent();
+    fireEvent.change(screen.getByTestId("markdown-editor"), { target: { value: "" } });
+    fireEvent.submit(screen.getByRole("button", { name: /Update Listing/i }).closest("form")!);
+    await waitFor(() => expect(updateHook[0]).toHaveBeenCalled());
+    expect(vi.mocked(updateHook[0]).mock.calls[0][0]).toMatchObject({
+      id: "listing-123",
+      updateListingRequest: { description: "" },
+    });
+  });
+
+  // Regression: after saving, the sidebar switched from the shop to "Browsing".
+  it("goes back to the listing in its shop's context after saving", async () => {
+    renderComponent();
+    fireEvent.change(screen.getByDisplayValue("Test Listing"), { target: { value: "Renamed" } });
+    fireEvent.submit(screen.getByRole("button", { name: /Update Listing/i }).closest("form")!);
+    await waitFor(() =>
+      expect(mockNavigate).toHaveBeenCalledWith("/market/listing-123", { state: { shopContext: "org-shop" } }),
+    );
   });
 
   it("prevents editing sold listings", () => {

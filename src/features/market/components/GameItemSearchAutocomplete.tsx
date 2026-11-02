@@ -22,6 +22,10 @@ interface GameItemSearchAutocompleteProps {
   size?: "small" | "medium"
   autoFocus?: boolean
   sx?: SxProps<Theme>
+  /** Marks the field required (asterisk on the label) */
+  required?: boolean
+  /** Error shown under the field */
+  errorText?: string
 }
 
 export function GameItemSearchAutocomplete({
@@ -31,6 +35,8 @@ export function GameItemSearchAutocomplete({
   size = "medium",
   autoFocus,
   sx,
+  required,
+  errorText,
 }: GameItemSearchAutocompleteProps) {
   const { t } = useTranslation()
   const [searchTrigger] = marketV2Api.endpoints.searchGameItems.useLazyQuery()
@@ -101,6 +107,9 @@ export function GameItemSearchAutocomplete({
         <TextField
           {...params}
           autoFocus={autoFocus}
+          required={required}
+          error={!!errorText}
+          helperText={errorText}
           label={label || t("market.search_query")}
           placeholder={t("market.searchItemPlaceholder", "Start typing an item name...")}
           InputProps={{
