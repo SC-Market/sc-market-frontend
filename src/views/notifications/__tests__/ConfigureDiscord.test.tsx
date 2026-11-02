@@ -81,7 +81,7 @@ describe("ConfigureDiscord", () => {
       "https://discord.com/channels/1003056231591727264/1072580369251041330",
     )
     expect(screen.queryByText("Not configured")).not.toBeInTheDocument()
-    expect(screen.getByText("To use your own Discord server, run /setup threads in the channel that should hold the order threads.")).toBeInTheDocument()
+    expect(screen.getByText("To use your own Discord server, add the bot from your org's Discord Integration tab or your shop's Settings › Discord and pick a channel there, or run /setup threads in the channel that should hold the order threads.")).toBeInTheDocument()
   })
 
   it("falls back to the IDs when the bot can't see the server", () => {
@@ -97,7 +97,7 @@ describe("ConfigureDiscord", () => {
     renderAt("/settings", false)
     expect(screen.getByText("Not configured")).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /#/ })).not.toBeInTheDocument()
-    expect(screen.getByText("To use your own Discord server, run /setup threads in the channel that should hold the order threads.")).toBeInTheDocument()
+    expect(screen.getByText("To use your own Discord server, add the bot from your org's Discord Integration tab or your shop's Settings › Discord and pick a channel there, or run /setup threads in the channel that should hold the order threads.")).toBeInTheDocument()
   })
 
   it("shows the org's channel on the org page and uses the org's official-server action", () => {
