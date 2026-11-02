@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { act, render, screen } from "@testing-library/react"
 import {
   Button,
   Checkbox,
@@ -23,6 +23,7 @@ import {
   contrast,
   disabledButton,
   flatten,
+  outlinedInput,
   selectedToggle,
   surfaces,
 } from "../contrast"
@@ -91,6 +92,35 @@ describe.each(themes)("%s theme contrast", (_name, theme) => {
       ".MuiOutlinedInput-notchedOutline",
     )!
     expect(css(outline).borderColor).toBe(action.disabled)
+  })
+
+  it.each(["primary", "secondary"])(
+    "%s outlined input border is 3:1 resting, never weaker on hover/focus",
+    (color) => {
+      const o = outlinedInput(theme, color)
+      const ratio = (c: string) =>
+        Math.min(contrast(c, paper), contrast(c, page))
+      expect(ratio(o.resting)).toBeGreaterThanOrEqual(AA_UI)
+      expect(ratio(o.hover)).toBeGreaterThanOrEqual(ratio(o.resting))
+      expect(ratio(o.focus)).toBeGreaterThanOrEqual(ratio(o.resting))
+    },
+  )
+
+  it("rendered outlined input uses the resting and focus borders", () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <TextField label="Search" />
+      </ThemeProvider>,
+    )
+    const input = screen.getByRole("textbox", { name: "Search" })
+    const outline = input.parentElement!.querySelector(
+      ".MuiOutlinedInput-notchedOutline",
+    )!
+    const o = outlinedInput(theme, "primary")
+    expect(getComputedStyle(outline).borderColor).toBe(o.resting)
+    act(() => input.focus())
+    expect(input.parentElement).toHaveClass("Mui-focused")
+    expect(getComputedStyle(outline).borderColor).toBe(o.focus)
   })
 
   it("disabled buttons read at AA", () => {

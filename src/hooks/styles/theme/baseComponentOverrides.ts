@@ -4,6 +4,7 @@ import {
   accentFill,
   disabledButton,
   isAccentFill,
+  outlinedInput,
   selectedToggle,
   withContrast,
 } from "./contrast"
@@ -104,7 +105,26 @@ export function getBaseComponentOverrides(): Components<
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: {},
+        // Border at 3:1 resting; hover and focus never weaker. Error and
+        // disabled keep MUI's colours (guarded by :not). See ./contrast.ts.
+        root: ({ theme, ownerState }) =>
+          withContrast(() => {
+            const o = outlinedInput(theme, ownerState.color ?? "primary")
+            const outline = ".MuiOutlinedInput-notchedOutline"
+            const idle = ":not(.Mui-error):not(.Mui-disabled)"
+            return {
+              [`& ${outline}`]: { borderColor: o.resting },
+              [`&:hover${idle}:not(.Mui-focused) ${outline}`]: {
+                borderColor: o.hover,
+              },
+              "@media (hover: none)": {
+                [`&:hover${idle}:not(.Mui-focused) ${outline}`]: {
+                  borderColor: o.resting,
+                },
+              },
+              [`&.Mui-focused${idle} ${outline}`]: { borderColor: o.focus },
+            }
+          }),
       },
     },
     MuiChip: {

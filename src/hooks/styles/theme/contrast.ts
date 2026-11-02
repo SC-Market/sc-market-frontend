@@ -244,3 +244,29 @@ export function applyContrastFloors(theme: Theme): Theme {
   }
   return theme
 }
+
+/**
+ * Outlined input borders. Resting: MUI's 23% ink, raised to 3:1 on Paper
+ * and the page. Hover (text.primary) and focus (the input's palette colour)
+ * are raised to at least the resting ratio, so neither is ever weaker.
+ */
+export const outlinedInput = cached((theme: Theme, color: string) => {
+  const { paper, page } = surfaces(theme)
+  const bgs = [paper, page]
+  const ink = theme.palette.mode === "dark" ? "255, 255, 255" : "0, 0, 0"
+  const restingRaw = flatten(`rgba(${ink}, 0.23)`, paper)
+  const resting = ensureContrast(restingRaw, bgs, AA_UI)
+  const floor = Math.max(AA_UI, worst(resting, bgs))
+  const entry = (theme.palette as unknown as Record<string, { main?: string }>)[
+    color
+  ]
+  const focusBase =
+    typeof entry?.main === "string" ? entry.main : theme.palette.primary.main
+  const hover = ensureContrast(
+    flatten(theme.palette.text.primary, paper),
+    bgs,
+    floor,
+  )
+  const focus = ensureContrast(flatten(focusBase, paper), bgs, floor)
+  return { resting, hover, focus }
+})
