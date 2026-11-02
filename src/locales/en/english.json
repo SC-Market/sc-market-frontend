@@ -971,7 +971,11 @@
     "variant": "Variant",
     "variantUpdated": "Variant updated",
     "viewCart": "View Cart",
-    "yourCart": "Your Cart"
+    "yourCart": "Your Cart",
+    "listingFallback": "Listing",
+    "standardVariant": "Standard",
+    "checkoutCount_one": "Checkout ({{count}} item)",
+    "checkoutCount_other": "Checkout ({{count}} items)"
   },
   "commentTree": {
     "avatar_alt": "Avatar of {{username}}",

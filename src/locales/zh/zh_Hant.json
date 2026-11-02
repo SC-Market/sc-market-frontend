@@ -3035,7 +3035,10 @@
     "unavailableMessage": "此款式已無法使用",
     "variant": "款式",
     "variantUpdated": "款式已更新",
-    "viewCart": "查看購物車"
+    "viewCart": "查看購物車",
+    "listingFallback": "商品",
+    "standardVariant": "標準",
+    "checkoutCount_other": "結帳（{{count}} 件）"
   },
   "landing": {
     "supportersTitle": "我們的支持者",

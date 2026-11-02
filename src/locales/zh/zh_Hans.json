@@ -3130,7 +3130,10 @@
     "unavailableMessage": "此变体已不再可用",
     "variant": "变体",
     "variantUpdated": "变体已更新",
-    "viewCart": "查看购物车"
+    "viewCart": "查看购物车",
+    "listingFallback": "商品",
+    "standardVariant": "标准",
+    "checkoutCount_other": "结账（{{count}} 件）"
   },
   "landing": {
     "supportersTitle": "我们的支持者",

@@ -102,10 +102,10 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                 <Box display="flex" justifyContent="space-between" alignItems="flex-start">
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Typography variant="body2" fontWeight="bold" noWrap>
-                      {item.listing?.title || "Listing"}
+                      {item.listing?.title || t("cart.listingFallback")}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {item.variant?.display_name || "Standard"}
+                      {item.variant?.display_name || t("cart.standardVariant")}
                     </Typography>
                     <Box display="flex" gap={1} alignItems="center" mt={0.5}>
                       <Typography variant="body2">
@@ -131,7 +131,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                       size="small"
                       onClick={() => handleRemove(item.cart_item_id)}
                       aria-label={t("cart.removeItem", "Remove {{title}} from cart", {
-                        title: item.listing?.title || "Listing",
+                        title: item.listing?.title || t("cart.listingFallback"),
                       })}
                     >
                       <DeleteOutlineRounded fontSize="small" />
@@ -159,7 +159,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
             startIcon={<ShoppingCartCheckoutRounded />}
             onClick={handleCheckout}
           >
-            {t("cart.checkout", "Checkout")} ({itemCount} {itemCount === 1 ? "item" : "items"})
+            {t("cart.checkoutCount", { count: itemCount })}
           </Button>
         </>
       )}

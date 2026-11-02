@@ -3117,7 +3117,10 @@
     "unavailableMessage": "このバリアントは現在入手できません",
     "variant": "バリアント",
     "variantUpdated": "バリアントを更新しました",
-    "viewCart": "カートを見る"
+    "viewCart": "カートを見る",
+    "listingFallback": "出品",
+    "standardVariant": "標準",
+    "checkoutCount_other": "チェックアウト（{{count}}点）"
   },
   "landing": {
     "supportersTitle": "サポーターの皆さま",

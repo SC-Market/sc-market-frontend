@@ -3149,7 +3149,12 @@
     "unavailableMessage": "Esta variante ya no está disponible",
     "variant": "Variante",
     "variantUpdated": "Variante actualizada",
-    "viewCart": "Ver carrito"
+    "viewCart": "Ver carrito",
+    "listingFallback": "Anuncio",
+    "standardVariant": "Estándar",
+    "checkoutCount_one": "Finalizar compra ({{count}} artículo)",
+    "checkoutCount_many": "Finalizar compra ({{count}} artículos)",
+    "checkoutCount_other": "Finalizar compra ({{count}} artículos)"
   },
   "landing": {
     "supportersTitle": "Nuestros colaboradores",

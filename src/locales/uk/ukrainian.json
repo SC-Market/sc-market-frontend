@@ -3127,7 +3127,13 @@
     "unavailableMessage": "Цей варіант більше недоступний",
     "variant": "Варіант",
     "variantUpdated": "Варіант оновлено",
-    "viewCart": "Переглянути кошик"
+    "viewCart": "Переглянути кошик",
+    "listingFallback": "Оголошення",
+    "standardVariant": "Стандарт",
+    "checkoutCount_one": "Оформити замовлення ({{count}} товар)",
+    "checkoutCount_few": "Оформити замовлення ({{count}} товари)",
+    "checkoutCount_many": "Оформити замовлення ({{count}} товарів)",
+    "checkoutCount_other": "Оформити замовлення ({{count}} товару)"
   },
   "landing": {
     "supportersTitle": "Наші підтримувачі",

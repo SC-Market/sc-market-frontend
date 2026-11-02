@@ -3133,7 +3133,11 @@
     "unavailableMessage": "Diese Variante ist nicht mehr verfügbar",
     "variant": "Variante",
     "variantUpdated": "Variante aktualisiert",
-    "viewCart": "Warenkorb anzeigen"
+    "viewCart": "Warenkorb anzeigen",
+    "listingFallback": "Angebot",
+    "standardVariant": "Standard",
+    "checkoutCount_one": "Zur Kasse ({{count}} Artikel)",
+    "checkoutCount_other": "Zur Kasse ({{count}} Artikel)"
   },
   "landing": {
     "supportersTitle": "Unsere Unterstützer",
