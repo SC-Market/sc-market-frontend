@@ -2,7 +2,7 @@
 title: Connect the SC Market Discord bot
 description: Add the bot to your server, then run /setup threads in a channel so every new offer and order gets its own Discord thread there.
 order: 10
-updated: 2026-10-26
+updated: 2026-11-02
 keywords: [discord, bot, setup, setup threads, thread, order thread, server, channel, forum]
 related: [discord/order-alerts-and-claiming, discord/webhooks, buying/how-orders-work]
 howto: true
@@ -50,6 +50,7 @@ Buyers are added to the thread only if their Discord account is linked to SC Mar
 - **Stop threads**: run `/setup remove` with `kind` set to **Order threads** in the thread channel, and `org` for an org. The member who set it up, or anyone with the org's **Manage Webhooks** permission, can remove it.
 - **Use the SC Market server**: **Use Official Server** under **Discord Integration** sends your threads to the SC Market Discord instead of your own.
 - **One shop elsewhere**: give a shop its own server and channel in Shop Settings › **Discord**. Leave both empty to use the org's or your own channel again.
+- **Find a server or channel ID**: in Discord, turn on **Developer Mode** (User Settings › Advanced). Then right-click the server icon and pick **Copy Server ID**, or right-click the channel and pick **Copy Channel ID**.
 
 ## What happens next
 

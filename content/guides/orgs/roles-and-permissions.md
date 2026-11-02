@@ -2,8 +2,8 @@
 title: Org roles and permissions
 description: Roles decide what each member of your org can do on SC Market. Create roles on the Roles and Members page, tick their permissions and rank them by position.
 order: 30
-updated: 2026-10-26
-keywords: [org, organization, roles, permissions, members, owner, admin, rank, position, kick]
+updated: 2026-11-02
+keywords: [org, organization, roles, permissions, members, owner, admin, rank, position, kick, manage stock, manage market, org shop]
 related: [orgs/invite-and-manage-members, selling/handle-orders-as-a-seller, discord/order-alerts-and-claiming]
 howto: true
 ---
@@ -35,7 +35,7 @@ Most orgs only need the built-in roles: give trusted officers **Admin** in their
 - **Manage Orders**: view, accept, reject and manage all of the org's orders and offers, and review customers.
 - **Manage Invites**: create and manage invite codes and links.
 - **Manage Market**: create, edit and remove the org's listings and stock lots, and manage the org's shops, including their [webhooks](/guides/discord/webhooks).
-- **Manage Stock**: shows **Stock** in an org shop's sidebar. Changing stock lots also needs **Manage Market**.
+- **Manage Stock**: add, edit and remove the stock lots of the org's shops on their **Stock** page, without access to the listings themselves.
 - **Manage Recruiting**: create and manage recruiting posts.
 - **Manage Webhooks**: send the org's [order threads](/guides/discord/connect-the-discord-bot) to a Discord channel with `/setup threads`, and set up its [order alerts](/guides/discord/order-alerts-and-claiming). Shop webhooks need **Manage Market** instead.
 - **Manage Blocklist**: block and unblock users for the org.
@@ -43,11 +43,27 @@ Most orgs only need the built-in roles: give trusted officers **Admin** in their
 - **Kick Members**: remove members ranked below you (not of the same rank).
 - **Manage Theme**: edit the theme of the org's [white-label](/guides/org-storefront/white-label) site. The checkbox only shows for white-label orgs.
 
-## The Owner role
+## Permissions for an org shop
+
+Three permissions decide who can work in the org's shops. Pick the smallest one that covers the job:
+
+- **Manage Market** runs a shop: its settings, its listings (create, edit, renew, archive, [import from UEX](/guides/selling/import-from-uex)) and its stock lots. It also covers the shop's orders.
+- **Manage Stock** is for members who keep the stock count right: they open the shop's **Stock** page and change its lots (quantities, locations, Listed or Personal), but can't create or edit listings or change the shop's settings.
+- **Manage Orders** handles the shop's orders and offers, without changing listings or stock.
+
+See [manage stock lots](/guides/selling/stock-lots-and-allocation) for how lots work.
+
+## Advanced
+
+### The Owner role
 
 The Owner role can't be deleted or removed from its member. To hand the org to someone else, the owner uses **Transfer Ownership** in [Settings](/settings) under **Contractors**. The new owner must already be a member, and you keep your other roles.
 
 You also can't remove your own top role, or the last role that gives you **Manage Roles**.
+
+### Ranking
+
+Lower positions rank higher. You can only edit, assign or remove roles ranked below your own top role, and only kick members ranked below you. Give your officers' roles positions between Admin (1) and Member (10).
 
 ## What happens next
 

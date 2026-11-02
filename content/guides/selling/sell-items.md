@@ -37,6 +37,7 @@ Choose **Auction** as the sale type and set an end time, a minimum bid increment
 
 - **Listings** in your shop's sidebar shows every listing. Use **Edit**, **Activate**, **Deactivate** or **Archive** to change one.
 - **Stock** shows **All Stock Lots**: item, variant, quantity, location and the listing each lot belongs to. Edit a lot's quantity there when your inventory changes. See [manage stock lots](/guides/selling/stock-lots-and-allocation).
+- **Import from UEX** on the **Listings** page copies your active UEXCorp sell listings into the shop. See [import your listings from UEX](/guides/selling/import-from-uex).
 
 ## Advanced: list and update many items at once
 

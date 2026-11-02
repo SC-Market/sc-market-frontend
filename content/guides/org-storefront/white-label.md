@@ -2,7 +2,7 @@
 title: Org storefronts and white-label
 description: Every org gets a free storefront on SC Market. Verified, active orgs unlock branding on their own sc-market.space subdomain.
 order: 30
-updated: 2026-11-01
+updated: 2026-11-02
 keywords: [white label, white-label, storefront, subdomain, org storefront, branding, theme, embed, widget]
 related: [org-storefront/white-label-theme, org-storefront/org-shop, orgs/manage-your-org]
 ---
@@ -37,16 +37,6 @@ Subdomains are `yourorg.sc-market.space`. Staff set them up:
 
 Only `sc-market.space` subdomains are available for now, not domains of your own.
 
-## The storefront directory
-
-The [Storefronts](/storefronts) page and the home page list RSI-verified orgs with at least one public listing. **Show in the public storefront directory** in the **Storefront** tab (and in each shop's settings) takes your org or a shop out of it.
-
-Members-only storefronts are never listed: if your subdomain is set to members-only, the setting stays off. Your branded subdomain still works for your members, and members-only listings don't count as public listings.
-
-## Put your storefront on your own site
-
-The **Storefront** tab has **Get embed code**: a small widget with your org's card or its listings, to paste into your org's website. It's read-only. It shows your public listings and stats, and every link opens SC Market in a new tab.
-
 ## What visitors see
 
 - Your theme and favicon. On sc-market.space your org's pages keep the standard SC Market look.
@@ -70,5 +60,17 @@ For account safety, some actions are blocked on white-label addresses. Do them o
 - Change the site settings and sidebar tabs: members with **Manage Org Details**.
 
 Each section of the tab only shows to members with the permission it needs, so a member with just one of the two sees only their part.
+
+## Advanced
+
+### The storefront directory
+
+The [Storefronts](/storefronts) page and the home page list RSI-verified orgs with at least one public listing. **Show in the public storefront directory** in the **Storefront** tab (and in each shop's settings) takes your org or a shop out of it.
+
+Members-only storefronts are never listed: if your subdomain is set to members-only, the setting stays off. Your branded subdomain still works for your members, and members-only listings don't count as public listings.
+
+### Put your storefront on your own site
+
+The **Storefront** tab has **Get embed code**: a small widget with your org's card or its listings, to paste into your org's website. It's read-only. It shows your public listings and stats, and every link opens SC Market in a new tab.
 
 [Customize your white-label theme](/guides/org-storefront/white-label-theme "cta")
