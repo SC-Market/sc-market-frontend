@@ -47,6 +47,7 @@ import {
   Group,
   Info,
 } from "@mui/icons-material"
+import { Trans, useTranslation } from "react-i18next"
 import { useUpdateWishlistMutation } from "../../store/api/v2/market"
 import type { Wishlist } from "../../store/api/v2/market"
 
@@ -67,6 +68,7 @@ export interface WishlistShareProps {
  * - Display current sharing status
  */
 export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
+  const { t } = useTranslation()
   // State
   const [isPublic, setIsPublic] = useState(wishlist.is_public)
   const [isCollaborative, setIsCollaborative] = useState(wishlist.is_collaborative)
@@ -98,7 +100,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
     try {
       await navigator.clipboard.writeText(shareUrl)
       setCopied(true)
-      setSuccess("Link copied to clipboard!")
+      setSuccess(t("wishlistsUi.share.linkCopied"))
       
       // Reset copied state after 3 seconds
       setTimeout(() => {
@@ -106,7 +108,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
         setSuccess(null)
       }, 3000)
     } catch (err) {
-      setError("Failed to copy link. Please copy manually.")
+      setError(t("wishlistsUi.share.copyFailed"))
     }
   }
 
@@ -126,12 +128,12 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
       setIsPublic(checked)
       setSuccess(
         checked
-          ? "Shopping list is now public. Anyone with the link can view it."
-          : "Shopping list is now private. Only you can view it."
+          ? t("wishlistsUi.share.nowPublic")
+          : t("wishlistsUi.share.nowPrivate")
       )
     } catch (err: unknown) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to update privacy settings."
+        err instanceof Error ? err.message : t("wishlistsUi.share.privacyError")
       setError(errorMessage)
       // Revert toggle on error
       setIsPublic(!checked)
@@ -154,12 +156,12 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
       setIsCollaborative(checked)
       setSuccess(
         checked
-          ? "Collaborative mode enabled. Organization members can edit this shopping list."
-          : "Collaborative mode disabled. Only you can edit this shopping list."
+          ? t("wishlistsUi.share.collabEnabled")
+          : t("wishlistsUi.share.collabDisabled")
       )
     } catch (err: unknown) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to update collaborative settings."
+        err instanceof Error ? err.message : t("wishlistsUi.share.collabError")
       setError(errorMessage)
       // Revert toggle on error
       setIsCollaborative(!checked)
@@ -179,7 +181,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
       <DialogTitle>
         <Box display="flex" alignItems="center" gap={1}>
           <Share />
-          Share Wishlist
+          {t("wishlistsUi.share.title")}
         </Box>
       </DialogTitle>
 
@@ -202,7 +204,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
           {/* Wishlist Name */}
           <Box>
             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Wishlist
+              {t("wishlistsUi.share.wishlistLabel")}
             </Typography>
             <Typography variant="h6">{wishlist.wishlist_name}</Typography>
           </Box>
@@ -212,7 +214,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
           {/* Privacy Settings (Requirement 28.5) */}
           <Box>
             <Typography variant="subtitle1" gutterBottom fontWeight="medium">
-              Privacy Settings
+              {t("wishlistsUi.share.privacySettings")}
             </Typography>
 
             <FormControlLabel
@@ -227,7 +229,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                 <Box display="flex" alignItems="center" gap={1}>
                   {isPublic ? <Public fontSize="small" /> : <Lock fontSize="small" />}
                   <Typography>
-                    {isPublic ? "Public" : "Private"}
+                    {isPublic ? t("wishlistsUi.public") : t("wishlistsUi.private")}
                   </Typography>
                 </Box>
               }
@@ -235,8 +237,8 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
             <Typography variant="caption" color="text.secondary" display="block" ml={4}>
               {isPublic
-                ? "Anyone with the link can view this shopping list"
-                : "Only you can view this shopping list"}
+                ? t("wishlistsUi.publicHelp")
+                : t("wishlistsUi.share.privateHelp")}
             </Typography>
           </Box>
 
@@ -244,10 +246,10 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
           {isPublic && shareUrl && (
             <Paper variant="outlined" sx={{ p: 2 }}>
               <Typography variant="subtitle2" gutterBottom>
-                Share Link
+                {t("wishlistsUi.share.shareLink")}
               </Typography>
               <Typography variant="caption" color="text.secondary" display="block" mb={1}>
-                Copy this link to share your wishlist with others
+                {t("wishlistsUi.share.shareLinkHelp")}
               </Typography>
               <Box display="flex" gap={1} alignItems="center">
                 <TextField
@@ -263,7 +265,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                     },
                   }}
                 />
-                <Tooltip title={copied ? "Copied!" : "Copy to clipboard"}>
+                <Tooltip title={copied ? t("wishlistsUi.share.copied") : t("wishlistsUi.share.copyToClipboard")}>
                   <IconButton
                     onClick={handleCopyLink}
                     color={copied ? "success" : "primary"}
@@ -279,7 +281,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
           {/* Private Wishlist Info */}
           {!isPublic && (
             <Alert severity="info" icon={<Info />}>
-              Enable public visibility to generate a shareable link
+              {t("wishlistsUi.share.enablePublicHint")}
             </Alert>
           )}
 
@@ -289,7 +291,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
           {wishlist.organization_id && (
             <Box>
               <Typography variant="subtitle1" gutterBottom fontWeight="medium">
-                Collaboration Settings
+                {t("wishlistsUi.share.collaborationSettings")}
               </Typography>
 
               <FormControlLabel
@@ -303,20 +305,19 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                 label={
                   <Box display="flex" alignItems="center" gap={1}>
                     <Group fontSize="small" />
-                    <Typography>Collaborative Mode</Typography>
+                    <Typography>{t("wishlistsUi.share.collaborativeMode")}</Typography>
                   </Box>
                 }
               />
 
               <Typography variant="caption" color="text.secondary" display="block" ml={4}>
                 {isCollaborative
-                  ? "Organization members can add and edit items in this shopping list"
-                  : "Only you can add and edit items in this shopping list"}
+                  ? t("wishlistsUi.share.collabOnHelp")
+                  : t("wishlistsUi.share.collabOffHelp")}
               </Typography>
 
               <Alert severity="info" icon={<Info />} sx={{ mt: 2 }}>
-                This wishlist is associated with your organization. Collaborative mode allows
-                other members to help manage the wishlist.
+                {t("wishlistsUi.share.orgAssociated")}
               </Alert>
             </Box>
           )}
@@ -324,15 +325,14 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
           {/* No Organization Info */}
           {!wishlist.organization_id && (
             <Alert severity="info" icon={<Info />}>
-              This wishlist is not associated with an organization. Collaborative mode is only
-              available for organization wishlists.
+              {t("wishlistsUi.share.noOrg")}
             </Alert>
           )}
 
           {/* Sharing Status Summary (Requirement 28.4) */}
           <Paper variant="outlined" sx={{ p: 2, bgcolor: "background.default" }}>
             <Typography variant="subtitle2" gutterBottom>
-              Current Sharing Status
+              {t("wishlistsUi.share.currentStatus")}
             </Typography>
             <Stack spacing={1}>
               <Box display="flex" alignItems="center" gap={1}>
@@ -342,19 +342,28 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
                   <Lock fontSize="small" color="action" />
                 )}
                 <Typography variant="body2">
-                  Visibility: <strong>{isPublic ? "Public" : "Private"}</strong>
+                  <Trans
+                    i18nKey={isPublic ? "wishlistsUi.share.visibilityPublic" : "wishlistsUi.share.visibilityPrivate"}
+                    components={{ strong: <strong /> }}
+                  />
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
                 <Group fontSize="small" color={isCollaborative ? "success" : "action"} />
                 <Typography variant="body2">
-                  Collaboration: <strong>{isCollaborative ? "Enabled" : "Disabled"}</strong>
+                  <Trans
+                    i18nKey={isCollaborative ? "wishlistsUi.share.collaborationEnabled" : "wishlistsUi.share.collaborationDisabled"}
+                    components={{ strong: <strong /> }}
+                  />
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
                 <Share fontSize="small" color={shareUrl ? "success" : "action"} />
                 <Typography variant="body2">
-                  Share Link: <strong>{shareUrl ? "Generated" : "Not Available"}</strong>
+                  <Trans
+                    i18nKey={shareUrl ? "wishlistsUi.share.shareLinkGenerated" : "wishlistsUi.share.shareLinkUnavailable"}
+                    components={{ strong: <strong /> }}
+                  />
                 </Typography>
               </Box>
             </Stack>
@@ -364,7 +373,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
       <DialogActions>
         <Button onClick={handleClose} disabled={isLoading}>
-          {isLoading ? <CircularProgress size={20} /> : "Close"}
+          {isLoading ? <CircularProgress size={20} /> : t("wishlistsUi.close")}
         </Button>
       </DialogActions>
     </Dialog>

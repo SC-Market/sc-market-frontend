@@ -155,13 +155,11 @@ export function ApiTokensSettings() {
 
       {isLoading ? (
         <Grid item xs={12}>
-          <Typography>Loading tokens...</Typography>
+          <Typography>{t("apiTokensUi.list.loading")}</Typography>
         </Grid>
       ) : error ? (
         <Grid item xs={12}>
-          <Alert severity="error">
-            Failed to load API tokens. Please try again later.
-          </Alert>
+          <Alert severity="error">{t("apiTokensUi.list.loadError")}</Alert>
         </Grid>
       ) : tokens && tokens.length === 0 ? (
         <Grid item xs={12}>
@@ -171,18 +169,17 @@ export function ApiTokensSettings() {
                 sx={{ fontSize: 64, color: "text.secondary", mb: 2 }}
               />
               <Typography variant="h6" color="text.secondary" gutterBottom>
-                No API tokens created
+                {t("apiTokensUi.list.emptyTitle")}
               </Typography>
               <Typography color="text.secondary" sx={{ mb: 3 }}>
-                Create your first API token to start integrating with
-                third-party applications.
+                {t("apiTokensUi.list.emptyBody")}
               </Typography>
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={handleCreateToken}
               >
-                Create Your First Token
+                {t("apiTokensUi.list.createFirst")}
               </Button>
             </CardContent>
           </Card>
@@ -212,7 +209,7 @@ export function ApiTokensSettings() {
                       )}
                     </Box>
                     <Box display="flex" gap={1}>
-                      <Tooltip title="View Details">
+                      <Tooltip title={t("common.viewDetails")}>
                         <IconButton
                           size="small"
                           onClick={() => handleViewToken(token)}
@@ -220,7 +217,7 @@ export function ApiTokensSettings() {
                           <VisibilityIcon />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Edit Token">
+                      <Tooltip title={t("apiTokensUi.list.editToken")}>
                         <IconButton
                           size="small"
                           onClick={() => handleEditToken(token)}
@@ -228,7 +225,7 @@ export function ApiTokensSettings() {
                           <EditIcon />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Delete Token">
+                      <Tooltip title={t("apiTokensUi.list.deleteToken")}>
                         <IconButton
                           size="small"
                           color="error"
@@ -246,7 +243,7 @@ export function ApiTokensSettings() {
                       color="text.secondary"
                       gutterBottom
                     >
-                      Scopes:
+                      {t("apiTokensUi.list.scopes")}
                     </Typography>
                     <Box display="flex" flexWrap="wrap" gap={0.5}>
                       {token.scopes.slice(0, 3).map((scope) => (
@@ -260,7 +257,9 @@ export function ApiTokensSettings() {
                       ))}
                       {token.scopes.length > 3 && (
                         <Chip
-                          label={`+${token.scopes.length - 3} more`}
+                          label={t("apiTokensUi.list.moreScopes", {
+                            count: token.scopes.length - 3,
+                          })}
                           size="small"
                           variant="outlined"
                         />
@@ -274,12 +273,14 @@ export function ApiTokensSettings() {
                       color="text.secondary"
                       gutterBottom
                     >
-                      Contractor Access:
+                      {t("apiTokensUi.list.contractorAccess")}
                     </Typography>
                     <Typography variant="body2">
                       {(token.contractor_spectrum_ids || []).length === 0
-                        ? "Unrestricted"
-                        : `${(token.contractor_spectrum_ids || []).length} organization(s)`}
+                        ? t("apiTokensUi.list.unrestricted")
+                        : t("apiTokensUi.list.orgCount", {
+                            count: (token.contractor_spectrum_ids || []).length,
+                          })}
                     </Typography>
                   </Box>
 
@@ -291,17 +292,19 @@ export function ApiTokensSettings() {
                     <Box display="flex" alignItems="center" gap={1}>
                       <ScheduleIcon fontSize="small" color="action" />
                       <Typography variant="body2" color="text.secondary">
-                        Created: {formatDate(token.created_at)}
+                        {t("apiTokensUi.list.createdOn", {
+                          date: formatDate(token.created_at),
+                        })}
                       </Typography>
                     </Box>
                     {token.expires_at && (
                       <Chip
                         label={
                           expiryStatus.status === "expired"
-                            ? "Expired"
+                            ? t("apiTokensUi.status.expired")
                             : expiryStatus.status === "soon"
-                              ? "Expires Soon"
-                              : "Active"
+                              ? t("apiTokensUi.status.expiresSoon")
+                              : t("apiTokensUi.status.active")
                         }
                         size="small"
                         color={expiryStatus.color}
@@ -320,7 +323,9 @@ export function ApiTokensSettings() {
                       color="text.secondary"
                       sx={{ mt: 1, display: "block" }}
                     >
-                      Last used: {formatDateTime(token.last_used_at)}
+                      {t("apiTokensUi.list.lastUsedOn", {
+                        date: formatDateTime(token.last_used_at),
+                      })}
                     </Typography>
                   )}
                 </CardContent>
@@ -355,22 +360,24 @@ export function ApiTokensSettings() {
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
       >
-        <DialogTitle>Delete API Token</DialogTitle>
+        <DialogTitle>{t("apiTokensUi.list.deleteTitle")}</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete the token &#34;{tokenToDelete?.name}
-            &#34;? This action cannot be undone and any applications using this
-            token will lose access.
+            {t("apiTokensUi.list.deleteBody", {
+              name: tokenToDelete?.name ?? "",
+            })}
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => setDeleteDialogOpen(false)}>
+            {t("common.cancel")}
+          </Button>
           <Button
             onClick={confirmDeleteToken}
             color="error"
             variant="contained"
           >
-            Delete
+            {t("common.delete")}
           </Button>
         </DialogActions>
       </Dialog>

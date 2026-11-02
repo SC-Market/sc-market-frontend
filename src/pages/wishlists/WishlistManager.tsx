@@ -46,7 +46,7 @@ import {
   useDeleteWishlistMutation,
 } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -216,7 +216,7 @@ export function WishlistManager() {
           onClick={handleCreateDialogOpen}
           size="large"
         >
-          Create Wishlist
+          {t("wishlistsUi.manager.createWishlist")}
         </Button>
       </Box>
 
@@ -226,17 +226,17 @@ export function WishlistManager() {
           <CardContent>
             <PlaylistAdd sx={{ fontSize: 64, color: "text.secondary", mb: 2 }} />
             <Typography variant="h6" color="text.secondary" gutterBottom>
-              No wishlists yet
+              {t("wishlistsUi.manager.emptyTitle")}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              Create your first wishlist to start tracking desired items and blueprints
+              {t("wishlistsUi.manager.emptyBody")}
             </Typography>
             <Button
               variant="contained"
               startIcon={<Add />}
               onClick={handleCreateDialogOpen}
             >
-              Create Your First Wishlist
+              {t("wishlistsUi.manager.createFirst")}
             </Button>
           </CardContent>
         </Card>
@@ -263,12 +263,12 @@ export function WishlistManager() {
                   </Typography>
                   <Stack direction="row" spacing={0.5}>
                     {wishlist.is_public ? (
-                      <Public fontSize="small" color="action" titleAccess="Public" />
+                      <Public fontSize="small" color="action" titleAccess={t("wishlistsUi.public")} />
                     ) : (
-                      <Lock fontSize="small" color="action" titleAccess="Private" />
+                      <Lock fontSize="small" color="action" titleAccess={t("wishlistsUi.private")} />
                     )}
                     {wishlist.is_collaborative && (
-                      <Share fontSize="small" color="action" titleAccess="Collaborative" />
+                      <Share fontSize="small" color="action" titleAccess={t("wishlistsUi.collaborative")} />
                     )}
                   </Stack>
                 </Box>
@@ -294,7 +294,7 @@ export function WishlistManager() {
                 {/* Item Count */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
                   <Typography variant="body2" color="text.secondary">
-                    {wishlist.item_count} {wishlist.item_count === 1 ? "item" : "items"}
+                    {t("wishlistsUi.manager.itemCount", { count: wishlist.item_count })}
                   </Typography>
                   {wishlist.completed_items > 0 && (
                     <>
@@ -303,7 +303,7 @@ export function WishlistManager() {
                       </Typography>
                       <Chip
                         icon={<CheckCircle />}
-                        label={`${wishlist.completed_items} acquired`}
+                        label={t("wishlistsUi.manager.acquiredCount", { count: wishlist.completed_items })}
                         size="small"
                         color="success"
                         variant="outlined"
@@ -317,7 +317,7 @@ export function WishlistManager() {
                   <Box sx={{ mb: 2 }}>
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
                       <Typography variant="caption" color="text.secondary">
-                        Progress
+                        {t("wishlists.progress")}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         {wishlist.progress_percentage}%
@@ -333,7 +333,9 @@ export function WishlistManager() {
 
                 {/* Created Date */}
                 <Typography variant="caption" color="text.secondary">
-                  Created {new Date(wishlist.created_at).toLocaleDateString()}
+                  {t("wishlistsUi.manager.createdOn", {
+                    date: new Date(wishlist.created_at).toLocaleDateString(),
+                  })}
                 </Typography>
               </CardContent>
 
@@ -342,7 +344,7 @@ export function WishlistManager() {
                   size="small"
                   onClick={(e) => handleDeleteClick(wishlist.wishlist_id, wishlist.wishlist_name, e)}
                   color="error"
-                  aria-label={t("wishlists.deleteNamed", "Delete {{name}}", { name: wishlist.wishlist_name })}
+                  aria-label={t("wishlistsUi.manager.deleteNamed", { name: wishlist.wishlist_name })}
                 >
                   <Delete fontSize="small" />
                 </IconButton>
@@ -359,29 +361,29 @@ export function WishlistManager() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Create New Shopping List</DialogTitle>
+        <DialogTitle>{t("wishlistsUi.manager.createDialog.title")}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
             {/* Wishlist Name */}
             <TextField size="small"
-              label="Shopping List Name"
+              label={t("wishlistsUi.manager.createDialog.name")}
               value={newWishlistName}
               onChange={(e) => setNewWishlistName(e.target.value)}
               fullWidth
               required
               autoFocus
-              placeholder="e.g., Ship Components, Armor Set, Mining Equipment"
+              placeholder={t("wishlistsUi.manager.createDialog.namePlaceholder")}
             />
 
             {/* Description */}
             <TextField size="small"
-              label="Description (Optional)"
+              label={t("wishlistsUi.manager.createDialog.description")}
               value={newWishlistDescription}
               onChange={(e) => setNewWishlistDescription(e.target.value)}
               fullWidth
               multiline
               rows={3}
-              placeholder="Add notes about this shopping list..."
+              placeholder={t("wishlistsUi.manager.createDialog.descriptionPlaceholder")}
             />
 
             {/* Public/Private Toggle */}
@@ -394,9 +396,9 @@ export function WishlistManager() {
               }
               label={
                 <Box>
-                  <Typography variant="body2">Make Public</Typography>
+                  <Typography variant="body2">{t("wishlistsUi.manager.createDialog.makePublic")}</Typography>
                   <Typography variant="caption" color="text.secondary">
-                    Anyone with the link can view this shopping list
+                    {t("wishlistsUi.publicHelp")}
                   </Typography>
                 </Box>
               }
@@ -414,12 +416,12 @@ export function WishlistManager() {
               label={
                 <Box>
                   <Typography variant="body2" color={!primaryContractor ? "text.disabled" : undefined}>
-                    Collaborative
+                    {t("wishlistsUi.collaborative")}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
                     {primaryContractor
-                      ? `Members of ${primaryContractor.name} can edit this shopping list`
-                      : "Join an organization to enable collaborative mode"}
+                      ? t("wishlistsUi.manager.createDialog.collaborativeHelp", { org: primaryContractor.name })
+                      : t("wishlistsUi.manager.createDialog.collaborativeNoOrg")}
                   </Typography>
                 </Box>
               }
@@ -427,21 +429,27 @@ export function WishlistManager() {
 
             {newWishlistIsCollaborative && primaryContractor && (
               <Alert severity="info" sx={{ mt: -1 }}>
-                This shopping list will be owned by <strong>{primaryContractor.name}</strong> and visible to its members.
+                <Trans
+                  i18nKey="wishlistsUi.manager.createDialog.ownedBy"
+                  values={{ org: primaryContractor.name }}
+                  components={{ strong: <strong /> }}
+                />
               </Alert>
             )}
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCreateDialogClose} disabled={isCreating}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             onClick={handleCreateWishlist}
             variant="contained"
             disabled={isCreating || !newWishlistName.trim()}
           >
-            {isCreating ? "Creating..." : "Create Shopping List"}
+            {isCreating
+              ? t("wishlistsUi.manager.createDialog.creating")
+              : t("wishlistsUi.manager.createDialog.submit")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -452,16 +460,19 @@ export function WishlistManager() {
         onClose={handleDeleteCancel}
         maxWidth="sm"
       >
-        <DialogTitle>Delete Shopping List?</DialogTitle>
+        <DialogTitle>{t("wishlistsUi.manager.deleteDialog.title")}</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete <strong>{wishlistToDelete?.name}</strong>?
-            This action cannot be undone and will remove all items in this wishlist.
+            <Trans
+              i18nKey="wishlistsUi.manager.deleteDialog.body"
+              values={{ name: wishlistToDelete?.name ?? "" }}
+              components={{ strong: <strong /> }}
+            />
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteCancel} disabled={isDeleting}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <Button
             onClick={handleDeleteConfirm}
@@ -469,7 +480,9 @@ export function WishlistManager() {
             color="error"
             disabled={isDeleting}
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting
+              ? t("wishlistsUi.manager.deleteDialog.deleting")
+              : t("common.delete")}
           </Button>
         </DialogActions>
       </Dialog>

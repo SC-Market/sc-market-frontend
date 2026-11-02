@@ -1,3 +1,4 @@
+import "../../../util/i18n"
 /**
  * Unit tests for WishlistDetail component
  * 
@@ -58,18 +59,6 @@ vi.mock("../../../store/api/v2/market", async () => {
     useRemoveWishlistItemMutation: (
       ...args: Parameters<MarketV2Module["useRemoveWishlistItemMutation"]>
     ) => actual.marketV2Api.endpoints.removeWishlistItem.useMutation(...args),
-  }
-})
-
-// Mock react-i18next so translation defaults render deterministically
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, def?: string) => def || key,
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
   }
 })
 

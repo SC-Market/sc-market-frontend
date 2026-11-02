@@ -17,7 +17,7 @@ import {
   Grid,
 } from "@mui/material"
 import { useIsMobile } from "../../../hooks/layout/useBreakpoint"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import {
   useCreateTokenMutation,
 } from "../api/tokensApi"
@@ -27,6 +27,10 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { isSiteAdmin } from "../../../util/siteRole"
+
+/** Catalog key for a scope's label: "market:read" -> "...labels.marketRead". */
+const scopeLabelKey = (value: string) =>
+  `apiTokensUi.scopes.labels.${value.replace(/:(\w)/g, (_, c: string) => c.toUpperCase())}`
 
 interface CreateTokenDialogProps {
   open: boolean
@@ -107,7 +111,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
     } catch (err) {
       const error = err as { data?: { error?: { message?: string } | string } }
       const errorMsg = typeof error.data?.error === 'string' ? error.data.error : error.data?.error?.message
-      setError(errorMsg || "Failed to create token")
+      setError(errorMsg || t("apiTokensUi.create.error"))
     }
   }
 
@@ -144,13 +148,12 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
       {showToken ? (
         <Box>
           <Alert severity="success" sx={{ mb: 2 }}>
-            Your API token has been created successfully. Make sure to copy it
-            now as it won&#39;t be shown again.
+            {t("apiTokensUi.create.successAlert")}
           </Alert>
 
           <TextField
             fullWidth
-            label="API Token"
+            label={t("apiTokensUi.create.tokenLabel")}
             value={createdToken}
             multiline
             rows={3}
@@ -162,13 +165,15 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
           />
 
           <Button variant="outlined" onClick={copyToken} sx={{ mb: 2 }} color={copied ? "success" : "primary"}>
-            {copied ? "Copied!" : "Copy Token"}
+            {copied ? t("apiTokensUi.create.copied") : t("apiTokensUi.create.copyToken")}
           </Button>
 
           <Alert severity="info" sx={{ mb: 2 }}>
             <Typography variant="body2" gutterBottom>
-              <strong>How to authenticate:</strong> Include the token in the{" "}
-              <code>Authorization</code> header of your API requests:
+              <Trans
+                i18nKey="apiTokensUi.create.howToAuth"
+                components={{ strong: <strong />, code: <code /> }}
+              />
             </Typography>
             <Box
               component="pre"
@@ -182,15 +187,17 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                 mt: 0.5,
               }}
             >
+              {/* i18n-ignore: HTTP header code sample */}
               Authorization: Bearer {createdToken?.slice(0, 12)}...
             </Box>
           </Alert>
 
           <Alert severity="warning">
             <Typography variant="body2">
-              <strong>Important:</strong> Store this token securely. It provides
-              access to your account with the permissions you&#39;ve granted. If
-              you lose this token, you&#39;ll need to create a new one.
+              <Trans
+                i18nKey="apiTokensUi.create.important"
+                components={{ strong: <strong /> }}
+              />
             </Typography>
           </Alert>
         </Box>
@@ -206,20 +213,20 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Token Name"
+                label={t("apiTokensUi.form.tokenName")}
                 value={formData.name}
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, name: e.target.value }))
                 }
                 required
-                helperText="A descriptive name for this token"
+                helperText={t("apiTokensUi.form.tokenNameHelp")}
               />
             </Grid>
 
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Description (Optional)"
+                label={t("apiTokensUi.form.description")}
                 value={formData.description}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -229,21 +236,20 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                 }
                 multiline
                 rows={2}
-                helperText="Optional description of what this token will be used for"
+                helperText={t("apiTokensUi.form.descriptionHelp")}
               />
             </Grid>
 
             <Grid item xs={12}>
               <Typography variant="h6" gutterBottom>
-                Permissions (Scopes)
+                {t("apiTokensUi.form.permissionsTitle")}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Select the permissions this token should have. Be conservative
-                and only grant what&#39;s necessary.
+                {t("apiTokensUi.form.permissionsHelp")}
               </Typography>
 
               {Object.entries(SCOPE_CATEGORIES).map(
-                ([category, { label, scopes }]) => {
+                ([category, { scopes }]) => {
                   // Filter scopes based on availability
                   const filteredScopes = scopes.filter((scope) =>
                     availableScopes.includes(scope.value),
@@ -255,12 +261,12 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                   return (
                     <Box key={category} sx={{ mb: 3 }}>
                       <Typography variant="subtitle1" gutterBottom>
-                        {label}
+                        {t(`apiTokensUi.scopes.categories.${category}`)}
                         {!isAdmin &&
                           (category === "admin" ||
                             category === "moderation") && (
                             <Chip
-                              label="Admin Only"
+                              label={t("apiTokensUi.form.adminOnly")}
                               size="small"
                               color="warning"
                               sx={{ ml: 1 }}
@@ -268,7 +274,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                           )}
                       </Typography>
                       <FormGroup>
-                        {filteredScopes.map(({ value, label: scopeLabel }) => (
+                        {filteredScopes.map(({ value }) => (
                           <FormControlLabel
                             key={value}
                             control={
@@ -279,7 +285,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                                 }
                               />
                             }
-                            label={scopeLabel}
+                            label={t(scopeLabelKey(value))}
                           />
                         ))}
                       </FormGroup>
@@ -292,13 +298,10 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
 
             <Grid item xs={12}>
               <Typography variant="h6" gutterBottom>
-                Organization Access
+                {t("apiTokensUi.form.orgAccessTitle")}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Choose the organizations this token may act for. Leave empty to
-                give it no organization access: it can then only use your
-                personal account. A token with the Full Access scope can act
-                for all of your organizations.
+                {t("apiTokensUi.create.orgAccessHelp")}
               </Typography>
 
               {contractors && contractors.length > 0 ? (
@@ -325,7 +328,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                 </FormGroup>
               ) : (
                 <Typography variant="body2" color="text.secondary">
-                  No contractors available
+                  {t("apiTokensUi.form.noContractors")}
                 </Typography>
               )}
             </Grid>
@@ -333,7 +336,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Expiration Date (Optional)"
+                label={t("apiTokensUi.form.expiration")}
                 type="datetime-local"
                 value={formData.expires_at}
                 onChange={(e) =>
@@ -345,7 +348,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                helperText="Leave empty for no expiration. Time is interpreted as UTC."
+                helperText={t("apiTokensUi.form.expirationHelp")}
               />
             </Grid>
           </Grid>
@@ -356,14 +359,18 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
 
   const dialogActions = (
     <>
-      <Button onClick={handleClose}>{showToken ? "Close" : "Cancel"}</Button>
+      <Button onClick={handleClose}>
+        {showToken ? t("apiTokensUi.close") : t("common.cancel")}
+      </Button>
       {!showToken && (
         <Button
           onClick={handleSubmit}
           variant="contained"
           disabled={!isFormValid || isLoading}
         >
-          {isLoading ? "Creating..." : "Create Token"}
+          {isLoading
+            ? t("apiTokensUi.create.creating")
+            : t("apiTokensUi.create.submit")}
         </Button>
       )}
     </>
@@ -375,7 +382,11 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
       <BottomSheet
         open={open}
         onClose={handleClose}
-        title={showToken ? "Token Created Successfully" : "Create API Token"}
+        title={
+          showToken
+            ? t("apiTokensUi.create.titleCreated")
+            : t("apiTokensUi.create.title")
+        }
         maxHeight="90vh"
       >
         {dialogContent}
@@ -392,7 +403,9 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>
-        {showToken ? "Token Created Successfully" : "Create API Token"}
+        {showToken
+          ? t("apiTokensUi.create.titleCreated")
+          : t("apiTokensUi.create.title")}
       </DialogTitle>
       <DialogContent>{dialogContent}</DialogContent>
       <DialogActions>{dialogActions}</DialogActions>

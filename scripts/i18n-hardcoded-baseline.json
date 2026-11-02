@@ -20,11 +20,6 @@
   "src/components/pwa/InstallPrompt.tsx": 6,
   "src/components/pwa/OfflineIndicator.tsx": 1,
   "src/components/theme-editor/ThemeEditor.tsx": 6,
-  "src/components/wishlists/WishlistShare.tsx": 29,
-  "src/features/api-tokens/components/ApiTokensSettings.tsx": 23,
-  "src/features/api-tokens/components/CreateTokenDialog.tsx": 30,
-  "src/features/api-tokens/components/EditTokenDialog.tsx": 18,
-  "src/features/api-tokens/components/TokenDetailsDialog.tsx": 30,
   "src/features/email/components/EmailVerificationContent.skeleton.tsx": 1,
   "src/features/email/components/EmailVerificationContent.tsx": 7,
   "src/features/email/components/UnsubscribeContent.skeleton.tsx": 1,
@@ -36,7 +31,6 @@
   "src/features/mfa/components/MfaEnrollDialog.tsx": 1,
   "src/features/mfa/components/RecoveryCodesPanel.tsx": 1,
   "src/features/money/components/SendMoneyDetailsSection.tsx": 1,
-  "src/features/wishlists/hooks/WishlistContext.tsx": 6,
   "src/pages/email/EmailVerificationPage.tsx": 1,
   "src/pages/email/UnsubscribePage.tsx": 1,
   "src/pages/inventory/InventoryPage.tsx": 1,
@@ -51,7 +45,5 @@
   "src/pages/wiki/WikiLocationBrowser.tsx": 2,
   "src/pages/wiki/WikiManufacturerPage.tsx": 1,
   "src/pages/wiki/WikiShipBrowser.tsx": 1,
-  "src/pages/wishlists/WishlistDetail.tsx": 5,
-  "src/pages/wishlists/WishlistManager.tsx": 30,
   "src/views/people/AllUsers.tsx": 9
 }

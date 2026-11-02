@@ -30,6 +30,10 @@ import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { isSiteAdmin } from "../../../util/siteRole"
 
+/** Catalog key for a scope's label: "market:read" -> "...labels.marketRead". */
+const scopeLabelKey = (value: string) =>
+  `apiTokensUi.scopes.labels.${value.replace(/:(\w)/g, (_, c: string) => c.toUpperCase())}`
+
 interface EditTokenDialogProps {
   open: boolean
   onClose: () => void
@@ -144,11 +148,14 @@ export function EditTokenDialog({
         },
       }).unwrap()
 
-      issueAlert({ message: "Token updated successfully", severity: "success" })
+      issueAlert({
+        message: t("apiTokensUi.edit.success"),
+        severity: "success",
+      })
       onClose()
     } catch (err) {
       const error = err as { data?: { error?: string } }
-      setError(error.data?.error || "Failed to update token")
+      setError(error.data?.error || t("apiTokensUi.edit.error"))
     }
   }
 
@@ -176,20 +183,20 @@ export function EditTokenDialog({
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Token Name"
+            label={t("apiTokensUi.form.tokenName")}
             value={formData.name}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, name: e.target.value }))
             }
             required
-            helperText="A descriptive name for this token"
+            helperText={t("apiTokensUi.form.tokenNameHelp")}
           />
         </Grid>
 
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Description (Optional)"
+            label={t("apiTokensUi.form.description")}
             value={formData.description}
             onChange={(e) =>
               setFormData((prev) => ({
@@ -199,21 +206,20 @@ export function EditTokenDialog({
             }
             multiline
             rows={2}
-            helperText="Optional description of what this token will be used for"
+            helperText={t("apiTokensUi.form.descriptionHelp")}
           />
         </Grid>
 
         <Grid item xs={12}>
           <Typography variant="h6" gutterBottom>
-            Permissions (Scopes)
+            {t("apiTokensUi.form.permissionsTitle")}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Select the permissions this token should have. Be conservative and
-            only grant what&#39;s necessary.
+            {t("apiTokensUi.form.permissionsHelp")}
           </Typography>
 
           {Object.entries(SCOPE_CATEGORIES).map(
-            ([category, { label, scopes }]) => {
+            ([category, { scopes }]) => {
               // Filter scopes based on availability only (no showing admin scopes to non-admins)
               const filteredScopes = scopes.filter((scope) =>
                 availableScopes.includes(scope.value),
@@ -225,11 +231,11 @@ export function EditTokenDialog({
               return (
                 <Box key={category} sx={{ mb: 3 }}>
                   <Typography variant="subtitle1" gutterBottom>
-                    {label}
+                    {t(`apiTokensUi.scopes.categories.${category}`)}
                     {!isAdmin &&
                       (category === "admin" || category === "moderation") && (
                         <Chip
-                          label="Admin Only"
+                          label={t("apiTokensUi.form.adminOnly")}
                           size="small"
                           color="warning"
                           sx={{ ml: 1 }}
@@ -237,7 +243,7 @@ export function EditTokenDialog({
                       )}
                   </Typography>
                   <FormGroup>
-                    {filteredScopes.map(({ value, label: scopeLabel }) => (
+                    {filteredScopes.map(({ value }) => (
                       <FormControlLabel
                         key={value}
                         control={
@@ -248,7 +254,7 @@ export function EditTokenDialog({
                             }
                           />
                         }
-                        label={scopeLabel}
+                        label={t(scopeLabelKey(value))}
                       />
                     ))}
                   </FormGroup>
@@ -261,11 +267,10 @@ export function EditTokenDialog({
 
         <Grid item xs={12}>
           <Typography variant="h6" gutterBottom>
-            Contractor Access
+            {t("apiTokensUi.edit.contractorAccessTitle")}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Restrict this token to specific contractors. Leave empty for access
-            to all contractors.
+            {t("apiTokensUi.edit.contractorAccessHelp")}
           </Typography>
 
           {contractors && contractors.length > 0 ? (
@@ -292,7 +297,7 @@ export function EditTokenDialog({
             </FormGroup>
           ) : (
             <Typography variant="body2" color="text.secondary">
-              No contractors available
+              {t("apiTokensUi.form.noContractors")}
             </Typography>
           )}
         </Grid>
@@ -300,7 +305,7 @@ export function EditTokenDialog({
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Expiration Date (Optional)"
+            label={t("apiTokensUi.form.expiration")}
             type="datetime-local"
             value={formData.expires_at}
             onChange={(e) =>
@@ -309,7 +314,7 @@ export function EditTokenDialog({
             InputLabelProps={{
               shrink: true,
             }}
-            helperText="Leave empty for no expiration. Time is interpreted as UTC."
+            helperText={t("apiTokensUi.form.expirationHelp")}
           />
         </Grid>
       </Grid>
@@ -318,13 +323,15 @@ export function EditTokenDialog({
 
   const dialogActions = (
     <>
-      <Button onClick={handleClose}>Cancel</Button>
+      <Button onClick={handleClose}>{t("common.cancel")}</Button>
       <Button
         onClick={handleSubmit}
         variant="contained"
         disabled={!isFormValid || isLoading}
       >
-        {isLoading ? "Updating..." : "Update Token"}
+        {isLoading
+          ? t("apiTokensUi.edit.updating")
+          : t("apiTokensUi.edit.submit")}
       </Button>
     </>
   )
@@ -335,7 +342,7 @@ export function EditTokenDialog({
       <BottomSheet
         open={open}
         onClose={handleClose}
-        title="Edit API Token"
+        title={t("apiTokensUi.edit.title")}
         maxHeight="90vh"
       >
         {dialogContent}
@@ -351,7 +358,7 @@ export function EditTokenDialog({
   // On desktop, use Dialog
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>Edit API Token</DialogTitle>
+      <DialogTitle>{t("apiTokensUi.edit.title")}</DialogTitle>
       <DialogContent>{dialogContent}</DialogContent>
       <DialogActions>{dialogActions}</DialogActions>
     </Dialog>

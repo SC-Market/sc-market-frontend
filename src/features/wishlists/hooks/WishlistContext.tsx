@@ -19,6 +19,7 @@ import {
   Stack,
 } from "@mui/material"
 import { PlaylistAddRounded } from "@mui/icons-material"
+import { useTranslation } from "react-i18next"
 import {
   useGetWishlistsQuery,
   useCreateWishlistMutation,
@@ -41,6 +42,7 @@ const ShoppingListCtx = createContext<ShoppingListContextValue>({
 export const useShoppingList = () => useContext(ShoppingListCtx)
 
 export function ShoppingListProvider({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [request, setRequest] = useState<ShoppingListRequest | null>(null)
   const [creating, setCreating] = useState(false)
@@ -94,11 +96,11 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
     <ShoppingListCtx.Provider value={{ addToShoppingList }}>
       {children}
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>Add to Shopping List</DialogTitle>
+        <DialogTitle>{t("wishlistsUi.quickAdd.title")}</DialogTitle>
         <DialogContent>
           {isLoading && <CircularProgress size={24} />}
           {!isLoading && !wishlists.length && !creating && (
-            <Alert severity="info" sx={{ mb: 1 }}>No shopping lists yet.</Alert>
+            <Alert severity="info" sx={{ mb: 1 }}>{t("wishlistsUi.quickAdd.noLists")}</Alert>
           )}
           {!creating && (
             <>
@@ -115,20 +117,20 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
                 onClick={() => setCreating(true)}
                 sx={{ mt: 1, textTransform: "none" }}
               >
-                New Shopping List
+                {t("wishlistsUi.quickAdd.newList")}
               </Button>
             </>
           )}
           {creating && (
             <Stack spacing={1} sx={{ mt: 1 }}>
               <TextField
-                size="small" fullWidth label="List Name" value={newName}
+                size="small" fullWidth label={t("wishlistsUi.quickAdd.listName")} value={newName}
                 onChange={(e) => setNewName(e.target.value)} autoFocus
                 onKeyDown={(e) => e.key === "Enter" && handleCreate()}
               />
               <Stack direction="row" spacing={1}>
-                <Button size="small" variant="contained" onClick={handleCreate} disabled={!newName.trim()}>Create & Add</Button>
-                <Button size="small" onClick={() => setCreating(false)}>Cancel</Button>
+                <Button size="small" variant="contained" onClick={handleCreate} disabled={!newName.trim()}>{t("wishlistsUi.quickAdd.createAndAdd")}</Button>
+                <Button size="small" onClick={() => setCreating(false)}>{t("common.cancel")}</Button>
               </Stack>
             </Stack>
           )}

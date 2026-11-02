@@ -223,8 +223,8 @@ export function WishlistDetail() {
       headerTitle={wishlist.wishlist_name}
       maxWidth="xl"
       breadcrumbs={[
-        { label: "Home", href: PATHS.home },
-        { label: "Shopping Lists", href: PATHS.shoppingLists },
+        { label: t("wishlistsUi.detail.breadcrumbHome"), href: PATHS.home },
+        { label: t("sidebar.gameData.shoppingLists"), href: PATHS.shoppingLists },
         { label: wishlist.wishlist_name },
       ]}
       headerActions={
@@ -249,7 +249,7 @@ export function WishlistDetail() {
           <Card sx={{ height: "100%" }}>
             <CardContent>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Description
+                {t("wishlistsUi.detail.description")}
               </Typography>
               <Typography variant="body1">
                 {wishlist.wishlist_description}
@@ -325,7 +325,7 @@ export function WishlistDetail() {
               <InputLabel id="wishlist-detail-sort-by-label">{t("wishlists.sortBy", "Sort By")}</InputLabel>
               <Select labelId="wishlist-detail-sort-by-label"
                 value={sortBy}
-                label="Sort By"
+                label={t("wishlists.sortBy", "Sort By")}
                 onChange={handleSortChange}
                 startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
               >
@@ -387,7 +387,7 @@ export function WishlistDetail() {
                           {item.is_acquired && (
                             <Chip
                               icon={<CheckCircle />}
-                              label="Acquired"
+                              label={t("wishlistsUi.detail.acquired")}
                               size="small"
                               color="success"
                               variant="outlined"
@@ -403,7 +403,7 @@ export function WishlistDetail() {
                       <IconButton
                         size="small"
                         onClick={(e) => handleItemMenuOpen(e, item)}
-                        aria-label={t("wishlists.itemActionsFor", "Actions for {{name}}", { name: item.game_item_name })}
+                        aria-label={t("wishlistsUi.detail.itemActionsFor", { name: item.game_item_name })}
                         aria-haspopup="menu"
                       >
                         <MoreVert />
@@ -466,7 +466,7 @@ export function WishlistDetail() {
                       {item.acquisition_mode === "craft" && item.blueprint_name ? (
                         <Chip
                           icon={<Build />}
-                          label={`Craft: ${item.blueprint_name}`}
+                          label={t("wishlistsUi.detail.craft", { name: item.blueprint_name })}
                           size="small"
                           color="info"
                           variant="outlined"
@@ -477,7 +477,7 @@ export function WishlistDetail() {
                       ) : item.crafting_available ? (
                         <Chip
                           icon={<ShoppingCart />}
-                          label="Buy from Market"
+                          label={t("wishlistsUi.detail.buyFromMarket")}
                           size="small"
                           color="primary"
                           variant="outlined"

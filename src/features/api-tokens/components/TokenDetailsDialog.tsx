@@ -21,7 +21,7 @@ import {
   Security as SecurityIcon,
   Business as BusinessIcon,
 } from "@mui/icons-material"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import {
   useGetTokenStatsQuery,
   ApiToken,
@@ -69,10 +69,14 @@ export function TokenDetailsDialog({
       return {
         status: "never",
         color: "default" as const,
-        text: "Never expires",
+        text: t("apiTokensUi.details.neverExpires"),
       }
     if (isExpired(expiresAt))
-      return { status: "expired", color: "error" as const, text: "Expired" }
+      return {
+        status: "expired",
+        color: "error" as const,
+        text: t("apiTokensUi.status.expired"),
+      }
 
     const daysUntilExpiry = Math.ceil(
       (new Date(expiresAt).getTime() - new Date().getTime()) /
@@ -83,12 +87,12 @@ export function TokenDetailsDialog({
       return {
         status: "soon",
         color: "warning" as const,
-        text: `Expires in ${daysUntilExpiry} days`,
+        text: t("apiTokensUi.details.expiresInDays", { count: daysUntilExpiry }),
       }
     return {
       status: "valid",
       color: "success" as const,
-      text: `Expires in ${daysUntilExpiry} days`,
+      text: t("apiTokensUi.details.expiresInDays", { count: daysUntilExpiry }),
     }
   }
 
@@ -120,7 +124,7 @@ export function TokenDetailsDialog({
           mb={1}
         >
           <Typography variant="h6">{token.name}</Typography>
-          <Tooltip title="Copy Token ID">
+          <Tooltip title={t("apiTokensUi.details.copyTokenId")}>
             <IconButton size="small" onClick={copyTokenId}>
               <CopyIcon />
             </IconButton>
@@ -139,12 +143,12 @@ export function TokenDetailsDialog({
 
       <Grid item xs={12}>
         <Typography variant="subtitle1" gutterBottom>
-          Token Information
+          {t("apiTokensUi.details.tokenInfo")}
         </Typography>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              Token ID:
+              {t("apiTokensUi.details.tokenId")}
             </Typography>
             <Typography
               variant="body2"
@@ -155,7 +159,7 @@ export function TokenDetailsDialog({
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              Created:
+              {t("apiTokensUi.details.created")}
             </Typography>
             <Typography variant="body2">
               {formatDateTime(token.created_at)}
@@ -163,7 +167,7 @@ export function TokenDetailsDialog({
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              Last Updated:
+              {t("apiTokensUi.details.lastUpdated")}
             </Typography>
             <Typography variant="body2">
               {formatDateTime(token.updated_at)}
@@ -171,12 +175,12 @@ export function TokenDetailsDialog({
           </Grid>
           <Grid item xs={6}>
             <Typography variant="body2" color="text.secondary">
-              Last Used:
+              {t("apiTokensUi.details.lastUsed")}
             </Typography>
             <Typography variant="body2">
               {token.last_used_at
                 ? formatDateTime(token.last_used_at)
-                : "Never"}
+                : t("apiTokensUi.details.never")}
             </Typography>
           </Grid>
         </Grid>
@@ -184,7 +188,7 @@ export function TokenDetailsDialog({
 
       <Grid item xs={12}>
         <Typography variant="subtitle1" gutterBottom>
-          Expiration Status
+          {t("apiTokensUi.details.expirationStatus")}
         </Typography>
         <Box display="flex" alignItems="center" gap={1}>
           <ScheduleIcon fontSize="small" />
@@ -197,14 +201,18 @@ export function TokenDetailsDialog({
         </Box>
         {token.expires_at && (
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Expires: {formatDateTime(token.expires_at)}
+            {t("apiTokensUi.details.expiresOn", {
+              date: formatDateTime(token.expires_at),
+            })}
           </Typography>
         )}
       </Grid>
 
       <Grid item xs={12}>
         <Typography variant="subtitle1" gutterBottom>
-          Permissions ({token.scopes.length} scopes)
+          {t("apiTokensUi.details.permissionsCount", {
+            count: token.scopes.length,
+          })}
         </Typography>
         <Box display="flex" flexWrap="wrap" gap={0.5}>
           {token.scopes.map((scope) => (
@@ -222,19 +230,21 @@ export function TokenDetailsDialog({
       <Grid item xs={12}>
         <Typography variant="subtitle1" gutterBottom>
           <BusinessIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-          Organization Access
+          {t("apiTokensUi.form.orgAccessTitle")}
         </Typography>
         <Typography variant="body2">
           {(token.contractor_spectrum_ids || []).length > 0
-            ? `Restricted to ${(token.contractor_spectrum_ids || []).length} organization(s)`
+            ? t("apiTokensUi.details.restrictedToOrgs", {
+                count: (token.contractor_spectrum_ids || []).length,
+              })
             : (token.scopes || []).some((s) => s === "full" || s === "admin")
-              ? "All your organizations (Full Access scope)"
-              : "None: this token can only use your personal account"}
+              ? t("apiTokensUi.details.allOrgs")
+              : t("apiTokensUi.details.noOrgs")}
         </Typography>
         {(token.contractor_spectrum_ids || []).length > 0 && (
           <Box sx={{ mt: 1 }}>
             <Typography variant="body2" color="text.secondary">
-              Organizations:
+              {t("apiTokensUi.details.organizations")}
             </Typography>
             <Box display="flex" flexWrap="wrap" gap={0.5} sx={{ mt: 0.5 }}>
               {(token.contractor_spectrum_ids || []).map((contractorId) => {
@@ -268,17 +278,17 @@ export function TokenDetailsDialog({
           </Grid>
           <Grid item xs={12}>
             <Typography variant="subtitle1" gutterBottom>
-              Usage Statistics
+              {t("apiTokensUi.details.usageStats")}
             </Typography>
             <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={6}>
                 <Typography variant="body2" color="text.secondary">
-                  Last Used:
+                  {t("apiTokensUi.details.lastUsed")}
                 </Typography>
                 <Typography variant="body2">
                   {stats.last_used_at
                     ? formatDateTime(stats.last_used_at)
-                    : "Never"}
+                    : t("apiTokensUi.details.never")}
                 </Typography>
               </Grid>
             </Grid>
@@ -289,8 +299,10 @@ export function TokenDetailsDialog({
       <Grid item xs={12}>
         <Alert severity="info">
           <Typography variant="body2" gutterBottom>
-            <strong>How to authenticate:</strong> Include the token in the{" "}
-            <code>Authorization</code> header:
+            <Trans
+              i18nKey="apiTokensUi.details.howToAuth"
+              components={{ strong: <strong />, code: <code /> }}
+            />
           </Typography>
           <Box
             component="pre"
@@ -304,7 +316,8 @@ export function TokenDetailsDialog({
               mt: 0.5,
             }}
           >
-            Authorization: Bearer {"<your_token>"}
+            {/* i18n-ignore: HTTP header code sample */}
+            Authorization: Bearer {t("apiTokensUi.details.yourTokenPlaceholder")}
           </Box>
         </Alert>
       </Grid>
@@ -312,9 +325,10 @@ export function TokenDetailsDialog({
       <Grid item xs={12}>
         <Alert severity="info">
           <Typography variant="body2">
-            <strong>Security Note:</strong> This token provides access to your
-            account with the permissions shown above. Keep it secure and only
-            share it with trusted applications.
+            <Trans
+              i18nKey="apiTokensUi.details.securityNote"
+              components={{ strong: <strong /> }}
+            />
           </Typography>
         </Alert>
       </Grid>
@@ -327,7 +341,7 @@ export function TokenDetailsDialog({
       <BottomSheet
         open={open}
         onClose={onClose}
-        title="Token Details"
+        title={t("apiTokensUi.details.title")}
         maxHeight="90vh"
       >
         <Box display="flex" alignItems="center" gap={1} mb={2}>
@@ -335,7 +349,7 @@ export function TokenDetailsDialog({
         </Box>
         {dialogContent}
         <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>{t("apiTokensUi.close")}</Button>
         </Box>
       </BottomSheet>
     )
@@ -347,12 +361,12 @@ export function TokenDetailsDialog({
       <DialogTitle>
         <Box display="flex" alignItems="center" gap={1}>
           <SecurityIcon />
-          Token Details
+          {t("apiTokensUi.details.title")}
         </Box>
       </DialogTitle>
       <DialogContent>{dialogContent}</DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Close</Button>
+        <Button onClick={onClose}>{t("apiTokensUi.close")}</Button>
       </DialogActions>
     </Dialog>
   )
