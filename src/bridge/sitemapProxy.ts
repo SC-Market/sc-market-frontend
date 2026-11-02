@@ -8,6 +8,8 @@
  * - Only these file names; anything else goes to Pages (ctx.next()).
  * - The index's section URLs are rewritten to this host.
  * - Edge-cached for an hour per URL (the API rebuilds every 6 hours).
+ * - The API's Last-Modified (the file's <lastmod>) is passed through; the
+ *   index's per-section <lastmod>s come through the host rewrite unchanged.
  * - An unknown section is a 404; an API failure is a 503 with Retry-After
  *   (never cached), so a crawler retries instead of dropping the sitemap.
  */
@@ -75,7 +77,11 @@ export async function handleSitemapRequest(ctx: BridgeContext, runtime: SitemapR
   // The index lists the sections on the API host: list them on this one.
   const xml =
     url.pathname === "/sitemap.xml" ? body.split(`${apiBase}/sitemap-`).join(`${url.origin}/sitemap-`) : body
-  const response = xmlResponse(xml, 200, { "Cache-Control": `public, max-age=${SITEMAP_TTL_SECONDS}` })
+  const lastModified = upstream.headers.get("Last-Modified")
+  const response = xmlResponse(xml, 200, {
+    "Cache-Control": `public, max-age=${SITEMAP_TTL_SECONDS}`,
+    ...(lastModified ? { "Last-Modified": lastModified } : {}),
+  })
   if (runtime.cache) ctx.waitUntil(runtime.cache.put(cacheKey, response.clone()))
   return request.method === "HEAD" ? new Response(null, { status: 200, headers: response.headers }) : response
 }

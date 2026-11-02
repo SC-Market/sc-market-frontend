@@ -21,10 +21,10 @@ function setup(upstream: (url: string) => Promise<Response>) {
   const cache = new MemoryCache()
   const pending: Promise<unknown>[] = []
   const next = vi.fn(async () => new Response("NEXT"))
-  const run = async (path: string, origin = "https://sc-market.space") => {
+  const run = async (path: string, origin = "https://sc-market.space", method = "GET") => {
     const res = await handleSitemapRequest(
       {
-        request: new Request(`${origin}${path}`),
+        request: new Request(`${origin}${path}`, { method }),
         env: { ASSETS: { fetch: async () => new Response("") }, VITE_BACKEND_URL: API },
         next,
         waitUntil: (p) => pending.push(p),
@@ -50,6 +50,25 @@ describe("main-host sitemap proxy", () => {
     await run("/sitemap.xml")
     expect(fetchSpy).toHaveBeenCalledOnce()
     expect(fetchSpy.mock.calls[0][0]).toBe(`${API}/sitemap.xml`)
+  })
+
+  it("keeps each section's <lastmod> through the host rewrite, and passes Last-Modified on", async () => {
+    const lastmod = "2026-10-29T12:30:00.000Z"
+    const index = INDEX.replace(
+      `<loc>${API}/sitemap-market-0.xml</loc>`,
+      `<loc>${API}/sitemap-market-0.xml</loc><lastmod>${lastmod}</lastmod>`,
+    )
+    const lastModified = "Thu, 29 Oct 2026 12:30:00 GMT"
+    const { run } = setup(async () => new Response(index, { headers: { "Last-Modified": lastModified } }))
+    const res = await run("/sitemap.xml")
+    expect(await res.text()).toContain(
+      `<loc>https://sc-market.space/sitemap-market-0.xml</loc><lastmod>${lastmod}</lastmod></sitemap>`,
+    )
+    expect(res.headers.get("Last-Modified")).toBe(lastModified)
+    // HEAD (served from the edge cache) carries the same headers.
+    const head = await run("/sitemap.xml", undefined, "HEAD")
+    expect(head.status).toBe(200)
+    expect(head.headers.get("Last-Modified")).toBe(lastModified)
   })
 
   it("proxies a section as is", async () => {
