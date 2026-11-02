@@ -7780,10 +7780,12 @@
           "settings_discord": "Einstellungen › Discord",
           "org_discord": "Org › Discord",
           "shop_dashboard": "Shop-Bestellungen",
+          "shop_settings": "Shop-Einstellungen › Discord",
           "shop_hint": "Tipp auf Shop-Seiten",
           "guide": "Anleitung",
           "faq": "Discord-FAQ",
           "footer": "Fußzeile",
+          "discord_app": "Discord-App-Seite",
           "other": "Sonstiges"
         }
       }

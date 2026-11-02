@@ -7666,10 +7666,12 @@
           "settings_discord": "設定 › Discord",
           "org_discord": "組織 › Discord",
           "shop_dashboard": "ショップの注文",
+          "shop_settings": "ショップ設定 › Discord",
           "shop_hint": "ショップページのヒント",
           "guide": "ガイド",
           "faq": "Discord の FAQ",
           "footer": "サイトフッター",
+          "discord_app": "Discord のアプリページ",
           "other": "その他"
         }
       }

@@ -216,6 +216,18 @@ describe("SellerReachabilityCard", () => {
       data: report(0, null, false, [
         { install_type: "user", src: "shop_hint", clicks_7d: 2, clicks_30d: 5 },
         { install_type: "server", src: "footer", clicks_7d: 0, clicks_30d: 1 },
+        {
+          install_type: "server",
+          src: "discord_app",
+          clicks_7d: 3,
+          clicks_30d: 4,
+        },
+        {
+          install_type: "server",
+          src: "shop_settings",
+          clicks_7d: 1,
+          clicks_30d: 1,
+        },
       ]),
     })
     render(<SellerReachabilityCard />)
@@ -223,6 +235,8 @@ describe("SellerReachabilityCard", () => {
     const rows = table.getAllByRole("row").map((r) => r.textContent)
     expect(rows[1]).toBe("Your accountShop pages tip25")
     expect(rows[2]).toBe("A serverSite footer01")
+    expect(rows[3]).toBe("A serverDiscord app page34")
+    expect(rows[4]).toBe("A serverShop Settings › Discord11")
   })
 
   it("shows an error with a working retry", () => {

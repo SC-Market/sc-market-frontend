@@ -7666,10 +7666,12 @@
           "settings_discord": "設定 › Discord",
           "org_discord": "組織 › Discord",
           "shop_dashboard": "商店訂單",
+          "shop_settings": "商店設定 › Discord",
           "shop_hint": "商店頁面提示",
           "guide": "指南",
           "faq": "Discord 常見問題",
           "footer": "網站頁尾",
+          "discord_app": "Discord 應用程式頁面",
           "other": "其他"
         }
       }

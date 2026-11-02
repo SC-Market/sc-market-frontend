@@ -7672,10 +7672,12 @@
           "settings_discord": "设置 › Discord",
           "org_discord": "组织 › Discord",
           "shop_dashboard": "店铺订单",
+          "shop_settings": "店铺设置 › Discord",
           "shop_hint": "店铺页面提示",
           "guide": "指南",
           "faq": "Discord 常见问题",
           "footer": "网站页脚",
+          "discord_app": "Discord 应用页面",
           "other": "其他"
         }
       }

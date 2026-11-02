@@ -8008,10 +8008,12 @@
           "settings_discord": "Налаштування › Discord",
           "org_discord": "Організація › Discord",
           "shop_dashboard": "Замовлення магазину",
+          "shop_settings": "Налаштування магазину › Discord",
           "shop_hint": "Підказка на сторінках магазину",
           "guide": "Посібник",
           "faq": "FAQ про Discord",
           "footer": "Нижній колонтитул",
+          "discord_app": "Сторінка застосунку в Discord",
           "other": "Інше"
         }
       }

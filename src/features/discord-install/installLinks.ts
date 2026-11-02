@@ -24,6 +24,9 @@ export const DISCORD_INSTALL_SOURCES = [
   "guide",
   "faq",
   "footer",
+  // The Developer Portal's custom install link (Installation › Install Link):
+  // https://sc-market.space/discord/install?src=discord_app
+  "discord_app",
   "other",
 ] as const
 export type DiscordInstallSource = (typeof DISCORD_INSTALL_SOURCES)[number]

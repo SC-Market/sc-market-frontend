@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, waitFor } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import * as marketApi from "../../../store/api/v2/market"
@@ -175,6 +175,41 @@ describe("/discord/install", () => {
     expect(screen.getByTestId("discord-install-choices")).toBeInTheDocument()
     expect(record).not.toHaveBeenCalled()
     expect(redirect.to).not.toHaveBeenCalled()
+  })
+
+  it("the Discord app's install link (no type, signed out): both choices, keeping the surface", () => {
+    vi.mocked(profileApi.useGetUserProfileQuery).mockReturnValue({
+      data: undefined,
+    } as never)
+    at("?src=discord_app")
+    expect(installSource("discord_app")).toBe("discord_app")
+    const choices = within(screen.getByTestId("discord-install-choices"))
+    expect(
+      choices
+        .getByRole("link", { name: "To a Discord server" })
+        .getAttribute("href"),
+    ).toBe("/discord/install?type=server&src=discord_app")
+    expect(
+      choices
+        .getByRole("link", { name: "To your Discord account" })
+        .getAttribute("href"),
+    ).toBe("/discord/install?type=user&src=discord_app")
+    expect(record).not.toHaveBeenCalled()
+  })
+
+  it("then counts discord_app and starts the flow signed out", async () => {
+    vi.mocked(profileApi.useGetUserProfileQuery).mockReturnValue({
+      data: undefined,
+    } as never)
+    at("?type=server&src=discord_app")
+    await waitFor(() =>
+      expect(redirect.to).toHaveBeenCalledWith(
+        `${BACKEND_URL}/auth/discord-install?type=server&src=discord_app`,
+      ),
+    )
+    expect(record).toHaveBeenCalledWith({
+      discordInstallClickRequest: { type: "server", src: "discord_app" },
+    })
   })
 })
 

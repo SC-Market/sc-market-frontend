@@ -7894,10 +7894,12 @@
           "settings_discord": "Ajustes › Discord",
           "org_discord": "Org › Discord",
           "shop_dashboard": "Pedidos de la tienda",
+          "shop_settings": "Ajustes de la tienda › Discord",
           "shop_hint": "Consejo en páginas de tienda",
           "guide": "Guía",
           "faq": "Preguntas sobre Discord",
           "footer": "Pie de página",
+          "discord_app": "Página de la app en Discord",
           "other": "Otro"
         }
       }
