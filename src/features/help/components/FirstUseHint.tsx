@@ -1,5 +1,12 @@
 import React, { useId } from "react"
-import { Box, IconButton, Paper, Typography, type SxProps, type Theme } from "@mui/material"
+import {
+  Box,
+  IconButton,
+  Paper,
+  Typography,
+  type SxProps,
+  type Theme,
+} from "@mui/material"
 import { CloseRounded, LightbulbOutlined } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { HelpLink } from "./HelpLink"
@@ -47,12 +54,27 @@ export function FirstUseHint(props: {
         ...(Array.isArray(props.sx) ? props.sx : props.sx ? [props.sx] : []),
       ]}
     >
-      <LightbulbOutlined color="primary" aria-hidden sx={{ mt: 0.25, flexShrink: 0 }} />
+      <LightbulbOutlined
+        color="primary"
+        aria-hidden
+        sx={{ mt: 0.25, flexShrink: 0 }}
+      />
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography id={titleId} variant="subtitle1" component="p" color="text.secondary" sx={{ fontWeight: 700 }}>
+        <Typography
+          id={titleId}
+          variant="subtitle1"
+          component="p"
+          color="text.secondary"
+          sx={{ fontWeight: 700 }}
+        >
           {props.title}
         </Typography>
-        <Typography variant="body2" component="div" color="text.primary" sx={{ mt: 0.5 }}>
+        <Typography
+          variant="body2"
+          component="div"
+          color="text.primary"
+          sx={{ mt: 0.5 }}
+        >
           {props.children}
         </Typography>
         <HelpLink guide={guide} sx={{ mt: 1 }}>

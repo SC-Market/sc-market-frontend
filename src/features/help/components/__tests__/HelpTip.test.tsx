@@ -11,7 +11,10 @@ import { GUIDE_LINKS } from "../../guideLinks"
 function renderTip() {
   render(
     <ThemeProvider theme={mainTheme}>
-      <HelpTip label="Allocation mode" title="How orders take stock from your lots." />
+      <HelpTip
+        label="Allocation mode"
+        title="How orders take stock from your lots."
+      />
       <button>elsewhere</button>
     </ThemeProvider>,
   )
@@ -23,7 +26,9 @@ describe("HelpTip", () => {
     const button = renderTip()
     expect(screen.queryByRole("tooltip")).toBeNull()
     fireEvent.click(button)
-    expect(await screen.findByRole("tooltip")).toHaveTextContent("How orders take stock from your lots.")
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(
+      "How orders take stock from your lots.",
+    )
     fireEvent.click(button)
     await waitFor(() => expect(screen.queryByRole("tooltip")).toBeNull())
   })
@@ -40,7 +45,9 @@ describe("HelpTip", () => {
     fireEvent.click(button)
     await screen.findByRole("tooltip")
     act(() => {
-      fireEvent.keyDown(document.activeElement ?? document.body, { key: "Escape" })
+      fireEvent.keyDown(document.activeElement ?? document.body, {
+        key: "Escape",
+      })
     })
     await waitFor(() => expect(screen.queryByRole("tooltip")).toBeNull())
   })
@@ -66,7 +73,10 @@ describe("EmptyState guide", () => {
         />
       </ThemeProvider>,
     )
-    expect(screen.getByRole("link", { name: /Learn more/ })).toHaveAttribute("href", GUIDE_LINKS.stockLots)
+    expect(screen.getByRole("link", { name: /Learn more/ })).toHaveAttribute(
+      "href",
+      GUIDE_LINKS.stockLots,
+    )
     expect(screen.getByRole("button", { name: "Add Lot" })).toBeInTheDocument()
   })
 })

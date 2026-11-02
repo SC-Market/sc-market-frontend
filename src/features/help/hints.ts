@@ -18,9 +18,15 @@ export const HINTS = {
   /** My Stock: your personal lots across shops. */
   myStock: { key: "my-stock.lots", guide: "myStock" },
   /** Org › Roles and Members: which permissions run an org shop. */
-  shopPermissions: { key: "roles.shop-permissions", guide: "orgShopPermissions" },
+  shopPermissions: {
+    key: "roles.shop-permissions",
+    guide: "orgShopPermissions",
+  },
   /** Discord Integration: order threads vs alerts. */
-  discordThreadsAlerts: { key: "discord.threads-alerts", guide: "connectDiscordBot" },
+  discordThreadsAlerts: {
+    key: "discord.threads-alerts",
+    guide: "connectDiscordBot",
+  },
   /** Shop › Listings › Import from UEX. */
   uexImport: { key: "uex.import", guide: "importFromUex" },
   /** Org › Storefront: free storefront, branding and the subdomain. */

@@ -26,7 +26,9 @@ export type RolePermission = (typeof ROLE_PERMISSIONS)[number]
  * The permissions the role editor offers for an org: Manage Theme only means
  * something (and only shows) for a white-label org.
  */
-export function editableRolePermissions(org: { premium_tier?: string | null } | null | undefined): RolePermission[] {
+export function editableRolePermissions(
+  org: { premium_tier?: string | null } | null | undefined,
+): RolePermission[] {
   const whiteLabel = org?.premium_tier === "white_label"
   return ROLE_PERMISSIONS.filter((p) => p !== "manage_theme" || whiteLabel)
 }

@@ -10,7 +10,9 @@ import { Provider } from "react-redux"
 import { ThemeProvider } from "@mui/material/styles"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-const session = vi.hoisted(() => ({ status: "unknown" as "unknown" | "anonymous" | "authenticated" }))
+const session = vi.hoisted(() => ({
+  status: "unknown" as "unknown" | "anonymous" | "authenticated",
+}))
 
 vi.mock("../../../../hooks/login/useSession", () => ({
   useSession: () =>
@@ -41,11 +43,17 @@ beforeEach(() => {
   localStorage.clear()
   originalFetch = globalThis.fetch
   globalThis.fetch = vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
-    const req = input instanceof Request ? input : new Request(String(input), init)
+    const req =
+      input instanceof Request ? input : new Request(String(input), init)
     const url = new URL(req.url)
     requests.push(`${req.method} ${url.pathname}`)
     const json = (body: unknown, status = 200) =>
-      Promise.resolve(new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } }))
+      Promise.resolve(
+        new Response(JSON.stringify(body), {
+          status,
+          headers: { "Content-Type": "application/json" },
+        }),
+      )
     if (req.method === "GET" && url.pathname === "/api/v2/hints/dismissed") {
       return json({ hint_keys: [...serverKeys] })
     }
@@ -53,7 +61,10 @@ beforeEach(() => {
     if (req.method === "PUT" && put) {
       if (failPut) return json({ error: "nope" }, 400)
       serverKeys.push(decodeURIComponent(put[1]))
-      return json({ hint_key: put[1], dismissed_at: "2026-11-02T00:00:00.000Z" })
+      return json({
+        hint_key: put[1],
+        dismissed_at: "2026-11-02T00:00:00.000Z",
+      })
     }
     return json({})
   }) as typeof fetch
@@ -77,7 +88,8 @@ function renderHint(store = makeStore({ networkEnv: browserNetworkEnv })) {
   return { ...result, store, ui }
 }
 
-const hint = () => screen.queryByRole("complementary", { name: "Stock is kept in lots" })
+const hint = () =>
+  screen.queryByRole("complementary", { name: "Stock is kept in lots" })
 
 describe("HINTS", () => {
   it("has unique keys the backend accepts, each with a guide", () => {
@@ -108,7 +120,9 @@ describe("FirstUseHint", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Dismiss this tip" }))
     expect(hint()).toBeNull()
-    expect(JSON.parse(localStorage.getItem(DISMISSED_HINTS_STORAGE_KEY) ?? "[]")).toEqual([HINTS.stockLots.key])
+    expect(
+      JSON.parse(localStorage.getItem(DISMISSED_HINTS_STORAGE_KEY) ?? "[]"),
+    ).toEqual([HINTS.stockLots.key])
     expect(requests).toEqual([])
 
     unmount()
@@ -125,7 +139,11 @@ describe("FirstUseHint", () => {
     fireEvent.click(screen.getByRole("button", { name: "Dismiss this tip" }))
     // Hidden at once, before the request finishes.
     expect(hint()).toBeNull()
-    await waitFor(() => expect(requests).toContain(`PUT /api/v2/hints/dismissed/${HINTS.stockLots.key}`))
+    await waitFor(() =>
+      expect(requests).toContain(
+        `PUT /api/v2/hints/dismissed/${HINTS.stockLots.key}`,
+      ),
+    )
     expect(serverKeys).toEqual([HINTS.stockLots.key])
     // Not written to this browser: another account here still sees it.
     expect(localStorage.getItem(DISMISSED_HINTS_STORAGE_KEY)).toBeNull()
@@ -133,7 +151,11 @@ describe("FirstUseHint", () => {
     // A reload (fresh store) reads the account's list: still hidden.
     unmount()
     renderHint()
-    await waitFor(() => expect(requests.filter((r) => r.startsWith("GET")).length).toBeGreaterThanOrEqual(2))
+    await waitFor(() =>
+      expect(
+        requests.filter((r) => r.startsWith("GET")).length,
+      ).toBeGreaterThanOrEqual(2),
+    )
     await act(() => new Promise((r) => setTimeout(r, 20)))
     expect(hint()).toBeNull()
   })
@@ -142,7 +164,9 @@ describe("FirstUseHint", () => {
     session.status = "authenticated"
     serverKeys = [HINTS.stockLots.key]
     renderHint()
-    await waitFor(() => expect(requests).toContain("GET /api/v2/hints/dismissed"))
+    await waitFor(() =>
+      expect(requests).toContain("GET /api/v2/hints/dismissed"),
+    )
     await act(() => new Promise((r) => setTimeout(r, 20)))
     expect(hint()).toBeNull()
   })

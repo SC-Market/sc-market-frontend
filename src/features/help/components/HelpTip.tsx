@@ -1,5 +1,11 @@
 import React, { useState } from "react"
-import { ClickAwayListener, IconButton, Tooltip, type SxProps, type Theme } from "@mui/material"
+import {
+  ClickAwayListener,
+  IconButton,
+  Tooltip,
+  type SxProps,
+  type Theme,
+} from "@mui/material"
 import { HelpOutlineRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 
@@ -35,11 +41,15 @@ export function HelpTip(props: {
         describeChild
         enterTouchDelay={0}
         leaveTouchDelay={6000}
-        slotProps={{ popper: { sx: { maxWidth: "min(320px, calc(100vw - 32px))" } } }}
+        slotProps={{
+          popper: { sx: { maxWidth: "min(320px, calc(100vw - 32px))" } },
+        }}
       >
         <IconButton
           size="small"
-          aria-label={t("help.tip.label", "Help: {{label}}", { label: props.label })}
+          aria-label={t("help.tip.label", "Help: {{label}}", {
+            label: props.label,
+          })}
           onClick={(e) => {
             e.preventDefault()
             e.stopPropagation()
@@ -47,7 +57,11 @@ export function HelpTip(props: {
           }}
           sx={[
             { p: 0.5, color: "text.primary", verticalAlign: "middle" },
-            ...(Array.isArray(props.sx) ? props.sx : props.sx ? [props.sx] : []),
+            ...(Array.isArray(props.sx)
+              ? props.sx
+              : props.sx
+                ? [props.sx]
+                : []),
           ]}
         >
           <HelpOutlineRounded sx={{ fontSize: "1.1rem" }} />

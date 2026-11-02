@@ -38,7 +38,11 @@ const role: ContractorRole = {
 function renderChecklist(premium_tier: string | null, setRole = vi.fn()) {
   render(
     <ThemeProvider theme={mainTheme}>
-      <RolePermissionChecklist org={{ premium_tier }} role={role} setRole={setRole} />
+      <RolePermissionChecklist
+        org={{ premium_tier }}
+        role={role}
+        setRole={setRole}
+      />
     </ThemeProvider>,
   )
   return setRole
@@ -49,7 +53,9 @@ describe("editableRolePermissions", () => {
     expect(editableRolePermissions({ premium_tier: null })).toEqual(
       ROLE_PERMISSIONS.filter((p) => p !== "manage_theme"),
     )
-    expect(editableRolePermissions({ premium_tier: "white_label" })).toEqual([...ROLE_PERMISSIONS])
+    expect(editableRolePermissions({ premium_tier: "white_label" })).toEqual([
+      ...ROLE_PERMISSIONS,
+    ])
     expect(editableRolePermissions(undefined)).not.toContain("manage_theme")
   })
 })
@@ -62,12 +68,16 @@ describe("RolePermissionChecklist", () => {
       ROLE_PERMISSIONS.filter((p) => p !== "manage_theme"),
     )
     expect(screen.getByRole("checkbox", { name: /Manage Stock/ })).toBeChecked()
-    expect(screen.getByRole("checkbox", { name: /Manage Market/ })).not.toBeChecked()
+    expect(
+      screen.getByRole("checkbox", { name: /Manage Market/ }),
+    ).not.toBeChecked()
   })
 
   it("adds Manage Theme for a white-label org", () => {
     renderChecklist("white_label")
-    expect(screen.getAllByRole("checkbox")).toHaveLength(ROLE_PERMISSIONS.length)
+    expect(screen.getAllByRole("checkbox")).toHaveLength(
+      ROLE_PERMISSIONS.length,
+    )
   })
 
   it("updates only the toggled permission", () => {

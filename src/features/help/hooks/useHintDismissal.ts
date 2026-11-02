@@ -55,9 +55,13 @@ export function useHintDismissal(hintKey: string): {
     }
     // Hide it now; undo if the account didn't take it.
     const patch = dispatch(
-      marketV2Api.util.updateQueryData("getDismissedHints", undefined, (draft) => {
-        if (!draft.hint_keys.includes(hintKey)) draft.hint_keys.push(hintKey)
-      }),
+      marketV2Api.util.updateQueryData(
+        "getDismissedHints",
+        undefined,
+        (draft) => {
+          if (!draft.hint_keys.includes(hintKey)) draft.hint_keys.push(hintKey)
+        },
+      ),
     )
     dismissOnAccount({ hintKey })
       .unwrap()

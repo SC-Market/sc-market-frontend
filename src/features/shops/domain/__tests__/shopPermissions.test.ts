@@ -1,8 +1,21 @@
 import { describe, expect, it } from "vitest"
 import { canEditShopListings, canEditShopStockLots } from "../shopPermissions"
 
-const perms = (p: Partial<{ can_manage: boolean; manage_market: boolean; manage_stock: boolean; manage_orders: boolean }>) => ({
-  permissions: { can_manage: false, manage_market: false, manage_stock: false, manage_orders: false, ...p },
+const perms = (
+  p: Partial<{
+    can_manage: boolean
+    manage_market: boolean
+    manage_stock: boolean
+    manage_orders: boolean
+  }>,
+) => ({
+  permissions: {
+    can_manage: false,
+    manage_market: false,
+    manage_stock: false,
+    manage_orders: false,
+    ...p,
+  },
 })
 
 describe("shop permission helpers", () => {

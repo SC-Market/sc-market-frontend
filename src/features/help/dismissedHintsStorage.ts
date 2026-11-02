@@ -15,7 +15,9 @@ function parse(raw: string | null): string[] {
   if (!raw) return []
   try {
     const value: unknown = JSON.parse(raw)
-    return Array.isArray(value) ? value.filter((k): k is string => typeof k === "string") : []
+    return Array.isArray(value)
+      ? value.filter((k): k is string => typeof k === "string")
+      : []
   } catch {
     return []
   }
@@ -44,7 +46,10 @@ export function addLocalDismissedHint(hintKey: string): void {
   const keys = readLocalDismissedHints()
   if (!keys.includes(hintKey)) {
     try {
-      localStorage.setItem(DISMISSED_HINTS_STORAGE_KEY, JSON.stringify([...keys, hintKey]))
+      localStorage.setItem(
+        DISMISSED_HINTS_STORAGE_KEY,
+        JSON.stringify([...keys, hintKey]),
+      )
     } catch {
       unpersisted.add(hintKey)
     }
