@@ -8109,5 +8109,82 @@
   },
   "notificationWebhooks": {
     "delete": "删除 Webhook {{name}}"
+  },
+  "notifPrefsUi": {
+    "actions": {
+      "unknown": "未知通知",
+      "orderCreate": "新订单已创建",
+      "orderAssigned": "分配给你的订单",
+      "orderStatusFulfilled": "订单已完成",
+      "orderStatusInProgress": "订单进行中",
+      "orderStatusNotStarted": "订单未开始",
+      "orderStatusCancelled": "订单已取消",
+      "orderComment": "订单评论",
+      "orderMessage": "订单消息",
+      "orderReview": "订单评价",
+      "orderReviewRevisionRequested": "评价修改请求",
+      "orderContractorApplied": "承包商申请了订单",
+      "marketItemBid": "市场商品出价",
+      "marketItemOffer": "市场商品报价",
+      "priceAlert": "价格提醒",
+      "marketOfferAccepted": "市场报价已接受",
+      "marketOfferDeclined": "市场报价已拒绝",
+      "offerCreate": "新报价",
+      "offerMessage": "报价消息",
+      "counterOfferCreate": "还价",
+      "contractorInvite": "承包商邀请",
+      "adminAlert": "管理员提醒"
+    },
+    "unsubscribe": {
+      "invalidLink": "此退订链接无效。你可以在设置中更改邮件偏好。",
+      "noLink": "未提供退订链接。"
+    }
+  },
+  "dashboardUi": {
+    "scope": {
+      "unavailableOrg": "不可用的组织",
+      "unavailableShop": "不可用的店铺",
+      "currentContextYou": "当前上下文（你）",
+      "unknown": "未知范围"
+    }
+  },
+  "messagesUi2": {
+    "createChat": {
+      "selectAtLeastOne": "请至少选择一位用户",
+      "failed": "创建聊天失败"
+    }
+  },
+  "sharedUi": {
+    "emailVerification": {
+      "verified": "你的邮箱地址已成功验证！",
+      "errorGeneric": "验证过程中出错。",
+      "invalidToken": "验证令牌无效或已过期。",
+      "failedTryAgain": "邮箱验证失败，请重试。",
+      "failedTokenInvalid": "验证失败。令牌可能无效或已过期。",
+      "noToken": "未提供验证令牌。"
+    },
+    "sendMoney": {
+      "enterRecipient": "请输入用户或承包商",
+      "invalidRecipient": "无效的用户或承包商"
+    },
+    "whiteLabel": {
+      "pathErrorHttps": "指向其他网站的链接必须使用 https://",
+      "pathErrorFormat": "请输入以 / 开头的路径或以 https:// 开头的链接",
+      "settingsSaved": "设置已保存",
+      "settingsSaveFailed": "保存设置失败",
+      "sidebarSaved": "侧边栏已保存",
+      "sidebarSaveFailed": "保存侧边栏失败"
+    },
+    "inlineEdit": {
+      "clickToEdit": "点击编辑",
+      "saveFailed": "保存失败"
+    },
+    "unknownUser": "未知用户",
+    "errors": {
+      "unknown": "未知错误",
+      "generic": "发生错误",
+      "component": "此组件出错了。你可以重试。",
+      "componentNamed": "{{componentName}} 组件出错了。你可以重试。"
+    }
   }
 }

@@ -4,7 +4,10 @@ import { useVerifyEmailMutation } from "../api/emailApi"
 
 export interface EmailVerificationPageData {
   status: "loading" | "success" | "error" | "invalid"
+  /** Server-provided message; shown when no messageKey is set. */
   message: string
+  /** i18n key for a message the app itself sets (translated where shown). */
+  messageKey?: string
 }
 
 export interface UsePageEmailVerificationResult {
@@ -40,44 +43,53 @@ export function usePageEmailVerification(): UsePageEmailVerificationResult {
     if (success === "true") {
       setPageData({
         status: "success",
-        message: "Your email address has been verified successfully!",
+        message: "",
+        messageKey: "sharedUi.emailVerification.verified",
       })
     } else if (error) {
-      let errorMessage = "An error occurred during verification."
+      let errorKey = "sharedUi.emailVerification.errorGeneric"
       if (error === "invalid_token") {
-        errorMessage = "Invalid or expired verification token."
+        errorKey = "sharedUi.emailVerification.invalidToken"
       } else if (error === "verification_failed") {
-        errorMessage = "Email verification failed. Please try again."
+        errorKey = "sharedUi.emailVerification.failedTryAgain"
       }
       setPageData({
         status: "error",
-        message: errorMessage,
+        message: "",
+        messageKey: errorKey,
       })
     } else if (token && !success && !error) {
       // Trigger verification mutation when token is present
       verifyEmail(token)
         .unwrap()
         .then((result) => {
-          setPageData({
-            status: "success",
-            message:
-              result.message ||
-              "Your email address has been verified successfully!",
-          })
+          setPageData(
+            result.message
+              ? { status: "success", message: result.message }
+              : {
+                  status: "success",
+                  message: "",
+                  messageKey: "sharedUi.emailVerification.verified",
+                },
+          )
         })
         .catch((err) => {
-          const errorMessage =
-            err?.data?.error?.message ||
-            "Verification failed. The token may be invalid or expired."
-          setPageData({
-            status: "error",
-            message: errorMessage,
-          })
+          const errorMessage: string | undefined = err?.data?.error?.message
+          setPageData(
+            errorMessage
+              ? { status: "error", message: errorMessage }
+              : {
+                  status: "error",
+                  message: "",
+                  messageKey: "sharedUi.emailVerification.failedTokenInvalid",
+                },
+          )
         })
     } else if (!token) {
       setPageData({
         status: "invalid",
-        message: "No verification token provided.",
+        message: "",
+        messageKey: "sharedUi.emailVerification.noToken",
       })
     }
   }, [searchParams, token, error, success, verifyEmail])
@@ -92,7 +104,10 @@ export function usePageEmailVerification(): UsePageEmailVerificationResult {
     data: pageData,
     isLoading: pageData.status === "loading" || isVerifying,
     isFetching: isVerifying,
-    error: pageData.status === "error" ? new Error(pageData.message) : null,
+    error:
+      pageData.status === "error"
+        ? new Error(pageData.message || pageData.messageKey)
+        : null,
     refetch,
   }
 }

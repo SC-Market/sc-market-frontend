@@ -4,7 +4,10 @@ import { usePostApiEmailUnsubscribeByTokenMutation } from "../../../store/api/em
 
 export interface UnsubscribePageData {
   status: "loading" | "success" | "error" | "invalid"
+  /** Server-provided message; shown when no messageKey is set. */
   message: string
+  /** i18n key for a message the app itself sets (translated where shown). */
+  messageKey?: string
   /** What was turned off ("order updates", "all notification emails"). */
   label?: string
   /** True once everything that can be turned off is off. */
@@ -19,15 +22,18 @@ export interface UsePageUnsubscribeResult {
   isUnsubscribingAll: boolean
 }
 
-function errorMessage(err: unknown): string {
+function errorData(err: unknown): UnsubscribePageData {
   const e = err as
     | { data?: { error?: { message?: string }; message?: string } }
     | undefined
-  return (
-    e?.data?.error?.message ||
-    e?.data?.message ||
-    "This unsubscribe link is not valid. You can change your emails in Settings."
-  )
+  const message = e?.data?.error?.message || e?.data?.message
+  return message
+    ? { status: "error", message }
+    : {
+        status: "error",
+        message: "",
+        messageKey: "notifPrefsUi.unsubscribe.invalidLink",
+      }
 }
 
 /**
@@ -46,7 +52,11 @@ export function usePageUnsubscribe(): UsePageUnsubscribeResult {
   const [data, setData] = useState<UnsubscribePageData>(
     token
       ? { status: "loading", message: "" }
-      : { status: "invalid", message: "No unsubscribe link was given." },
+      : {
+          status: "invalid",
+          message: "",
+          messageKey: "notifPrefsUi.unsubscribe.noLink",
+        },
   )
   const started = useRef<string | null>(null)
 
@@ -63,7 +73,7 @@ export function usePageUnsubscribe(): UsePageUnsubscribeResult {
           all: res.data.scope === "all",
         }),
       )
-      .catch((err) => setData({ status: "error", message: errorMessage(err) }))
+      .catch((err) => setData(errorData(err)))
   }, [token, unsubscribe])
 
   const unsubscribeAll = useCallback(() => {
@@ -78,7 +88,7 @@ export function usePageUnsubscribe(): UsePageUnsubscribeResult {
           all: true,
         }),
       )
-      .catch((err) => setData({ status: "error", message: errorMessage(err) }))
+      .catch((err) => setData(errorData(err)))
   }, [token, unsubscribeAllMutation])
 
   return {

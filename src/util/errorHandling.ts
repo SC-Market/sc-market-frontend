@@ -1,5 +1,6 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
+import i18n from "./i18n"
 
 /**
  * Determines if an error should result in a 404 redirect
@@ -85,5 +86,5 @@ export function getErrorMessage(
     return error.error
   }
 
-  return "An error occurred"
+  return i18n.t("sharedUi.errors.generic")
 }

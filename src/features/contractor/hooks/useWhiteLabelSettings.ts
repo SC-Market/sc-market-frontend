@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import {
   useGetWhitelabelConfigQuery,
@@ -49,17 +50,19 @@ function isExternal(path: string): boolean {
 
 /**
  * Same rule as the API (PUT whitelabel/sidebar): a site path starting with
- * "/" or an https:// link. Returns the problem, or null when it's fine.
+ * "/" or an https:// link. Returns the i18n key of the problem, or null when
+ * it's fine.
  */
 function customTabPathError(path: string): string | null {
   const p = path.trim()
   if (!p) return null
   if (p.startsWith("/") || p.startsWith("https://")) return null
-  if (p.startsWith("http://")) return "Links to other sites must use https://"
-  return "Enter a path starting with / or a link starting with https://"
+  if (p.startsWith("http://")) return "sharedUi.whiteLabel.pathErrorHttps"
+  return "sharedUi.whiteLabel.pathErrorFormat"
 }
 
 export function useWhiteLabelSettings() {
+  const { t } = useTranslation()
   const [contractor] = useCurrentOrg()
   const spectrumId = contractor?.spectrum_id
 
@@ -110,9 +113,9 @@ export function useWhiteLabelSettings() {
     try {
       // Membership only applies to an Internal (login required) site.
       await updateConfig({ spectrum_id: spectrumId, focus_mode: focusMode, homepage_path: homepagePath || null, require_membership: focusMode === "internal" && requireMembership }).unwrap()
-      setSnack("Settings saved")
-    } catch { setSnack("Failed to save settings") }
-  }, [spectrumId, focusMode, homepagePath, requireMembership, updateConfig])
+      setSnack(t("sharedUi.whiteLabel.settingsSaved"))
+    } catch { setSnack(t("sharedUi.whiteLabel.settingsSaveFailed")) }
+  }, [spectrumId, focusMode, homepagePath, requireMembership, updateConfig, t])
 
   const handleSaveSidebar = useCallback(async () => {
     if (!spectrumId) return
@@ -122,16 +125,16 @@ export function useWhiteLabelSettings() {
       for (const key of ALWAYS_ON_KEYS) {
         items.push({ standard_tab_key: key, custom_label: null, custom_path: null, custom_icon: null, is_external: false, enabled: true, sort_order: order++ })
       }
-      for (const t of TOGGLEABLE_TABS) {
-        items.push({ standard_tab_key: t.key, custom_label: null, custom_path: null, custom_icon: null, is_external: false, enabled: !disabledTabs.has(t.key), sort_order: order++ })
+      for (const tab of TOGGLEABLE_TABS) {
+        items.push({ standard_tab_key: tab.key, custom_label: null, custom_path: null, custom_icon: null, is_external: false, enabled: !disabledTabs.has(tab.key), sort_order: order++ })
       }
       for (const ct of customTabs) {
         items.push({ standard_tab_key: null, custom_label: ct.label, custom_path: ct.path, custom_icon: ct.icon, is_external: isExternal(ct.path), enabled: true, sort_order: order++ })
       }
       await updateSidebar({ spectrum_id: spectrumId, items }).unwrap()
-      setSnack("Sidebar saved")
-    } catch { setSnack("Failed to save sidebar") }
-  }, [spectrumId, disabledTabs, customTabs, updateSidebar])
+      setSnack(t("sharedUi.whiteLabel.sidebarSaved"))
+    } catch { setSnack(t("sharedUi.whiteLabel.sidebarSaveFailed")) }
+  }, [spectrumId, disabledTabs, customTabs, updateSidebar, t])
 
   const toggleTab = useCallback((key: string) => {
     setDisabledTabs((prev) => { const next = new Set(prev); if (next.has(key)) next.delete(key); else next.add(key); return next })
@@ -149,8 +152,10 @@ export function useWhiteLabelSettings() {
   }, [])
 
   const updateCustomTabIcon = useCallback((index: number, icon: string) => {
-    setCustomTabs((prev) => prev.map((t, i) => (i === index ? { ...t, icon } : t)))
+    setCustomTabs((prev) => prev.map((tab, i) => (i === index ? { ...tab, icon } : tab)))
   }, [])
+
+  const newPathErrorKey = customTabPathError(newPath)
 
   return {
     spectrumId, config,
@@ -159,7 +164,7 @@ export function useWhiteLabelSettings() {
     disabledTabs, toggleTab,
     customTabs, addCustomTab, removeCustomTab, updateCustomTabIcon,
     newLabel, setNewLabel, newPath, setNewPath, newIcon, setNewIcon,
-    newPathError: customTabPathError(newPath),
+    newPathError: newPathErrorKey ? t(newPathErrorKey) : null,
     sidebarSaving, handleSaveSidebar,
     snack, setSnack,
     TOGGLEABLE_TABS,

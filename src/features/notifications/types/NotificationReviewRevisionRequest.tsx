@@ -31,7 +31,7 @@ export function NotificationReviewRevisionRequest(props: {
       <Trans
         i18nKey="notifications.reviewRevisionRequested"
         values={{
-          requester: requester?.username || "Unknown user",
+          requester: requester?.username || t("sharedUi.unknownUser"),
           message: reviewEntity?.revision_message,
         }}
         components={{

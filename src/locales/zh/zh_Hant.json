@@ -8103,5 +8103,82 @@
   },
   "notificationWebhooks": {
     "delete": "刪除 Webhook {{name}}"
+  },
+  "notifPrefsUi": {
+    "actions": {
+      "unknown": "未知通知",
+      "orderCreate": "新訂單已建立",
+      "orderAssigned": "指派給你的訂單",
+      "orderStatusFulfilled": "訂單已完成",
+      "orderStatusInProgress": "訂單進行中",
+      "orderStatusNotStarted": "訂單未開始",
+      "orderStatusCancelled": "訂單已取消",
+      "orderComment": "訂單留言",
+      "orderMessage": "訂單訊息",
+      "orderReview": "訂單評價",
+      "orderReviewRevisionRequested": "評價修改要求",
+      "orderContractorApplied": "承包商已申請訂單",
+      "marketItemBid": "市場商品出價",
+      "marketItemOffer": "市場商品報價",
+      "priceAlert": "價格提醒",
+      "marketOfferAccepted": "市場報價已接受",
+      "marketOfferDeclined": "市場報價已拒絕",
+      "offerCreate": "新報價",
+      "offerMessage": "報價訊息",
+      "counterOfferCreate": "還價",
+      "contractorInvite": "承包商邀請",
+      "adminAlert": "管理員提醒"
+    },
+    "unsubscribe": {
+      "invalidLink": "此取消訂閱連結無效。你可以在設定中變更電子郵件偏好。",
+      "noLink": "未提供取消訂閱連結。"
+    }
+  },
+  "dashboardUi": {
+    "scope": {
+      "unavailableOrg": "無法使用的組織",
+      "unavailableShop": "無法使用的商店",
+      "currentContextYou": "目前情境（你）",
+      "unknown": "未知範圍"
+    }
+  },
+  "messagesUi2": {
+    "createChat": {
+      "selectAtLeastOne": "請至少選擇一位使用者",
+      "failed": "建立聊天失敗"
+    }
+  },
+  "sharedUi": {
+    "emailVerification": {
+      "verified": "你的電子郵件地址已成功驗證！",
+      "errorGeneric": "驗證過程中發生錯誤。",
+      "invalidToken": "驗證權杖無效或已過期。",
+      "failedTryAgain": "電子郵件驗證失敗，請再試一次。",
+      "failedTokenInvalid": "驗證失敗。權杖可能無效或已過期。",
+      "noToken": "未提供驗證權杖。"
+    },
+    "sendMoney": {
+      "enterRecipient": "請輸入使用者或承包商",
+      "invalidRecipient": "無效的使用者或承包商"
+    },
+    "whiteLabel": {
+      "pathErrorHttps": "連到其他網站的連結必須使用 https://",
+      "pathErrorFormat": "請輸入以 / 開頭的路徑或以 https:// 開頭的連結",
+      "settingsSaved": "設定已儲存",
+      "settingsSaveFailed": "儲存設定失敗",
+      "sidebarSaved": "側邊欄已儲存",
+      "sidebarSaveFailed": "儲存側邊欄失敗"
+    },
+    "inlineEdit": {
+      "clickToEdit": "點擊以編輯",
+      "saveFailed": "儲存失敗"
+    },
+    "unknownUser": "未知使用者",
+    "errors": {
+      "unknown": "未知錯誤",
+      "generic": "發生錯誤",
+      "component": "此元件發生錯誤。你可以再試一次。",
+      "componentNamed": "{{componentName}} 元件發生錯誤。你可以再試一次。"
+    }
   }
 }

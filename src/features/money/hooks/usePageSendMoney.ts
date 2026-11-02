@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { User } from "../../../datatypes/User"
 import type { Contractor } from "../../contractor/domain/types"
 import throttle from "lodash/throttle"
+import { useTranslation } from "react-i18next"
 import { useCreateTransaction } from "../api/transactionsApi"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useAppDispatch } from "../../../store/hooks"
@@ -15,6 +16,7 @@ export type RecipientType = "user" | "contractor"
  * Manages recipient search, form state, and transaction creation
  */
 export function usePageSendMoney(isOrgTransaction: boolean = false) {
+  const { t } = useTranslation()
   const dispatch = useAppDispatch()
   const [currentOrg] = useCurrentOrg()
   const [recipientType, setRecipientType] = useState<RecipientType>("user")
@@ -75,11 +77,11 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
   // Submit transaction
   const submitTransaction = useCallback(async () => {
     if (target === "") {
-      setError("Please enter a user or contractor")
+      setError(t("sharedUi.sendMoney.enterRecipient"))
       return
     }
     if (targetObject === null) {
-      setError("Invalid user or contractor")
+      setError(t("sharedUi.sendMoney.invalidRecipient"))
       return
     }
 
@@ -108,6 +110,7 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
     isOrgTransaction,
     currentOrg,
     createTransaction,
+    t,
   ])
 
   return {

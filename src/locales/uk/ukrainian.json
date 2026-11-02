@@ -8502,5 +8502,82 @@
   },
   "notificationWebhooks": {
     "delete": "Видалити вебхук {{name}}"
+  },
+  "notifPrefsUi": {
+    "actions": {
+      "unknown": "Невідоме сповіщення",
+      "orderCreate": "Створено нове замовлення",
+      "orderAssigned": "Замовлення, призначене вам",
+      "orderStatusFulfilled": "Замовлення виконано",
+      "orderStatusInProgress": "Замовлення виконується",
+      "orderStatusNotStarted": "Замовлення не розпочато",
+      "orderStatusCancelled": "Замовлення скасовано",
+      "orderComment": "Коментарі до замовлень",
+      "orderMessage": "Повідомлення в замовленнях",
+      "orderReview": "Відгуки на замовлення",
+      "orderReviewRevisionRequested": "Запит на зміну відгуку",
+      "orderContractorApplied": "Підрядник подав заявку на замовлення",
+      "marketItemBid": "Ставки на товари ринку",
+      "marketItemOffer": "Пропозиції щодо товарів ринку",
+      "priceAlert": "Цінові сповіщення",
+      "marketOfferAccepted": "Пропозицію на ринку прийнято",
+      "marketOfferDeclined": "Пропозицію на ринку відхилено",
+      "offerCreate": "Нові пропозиції",
+      "offerMessage": "Повідомлення в пропозиціях",
+      "counterOfferCreate": "Зустрічні пропозиції",
+      "contractorInvite": "Запрошення підрядникам",
+      "adminAlert": "Сповіщення адміністрації"
+    },
+    "unsubscribe": {
+      "invalidLink": "Це посилання для відписки недійсне. Змінити налаштування листів можна в Налаштуваннях.",
+      "noLink": "Посилання для відписки не надано."
+    }
+  },
+  "dashboardUi": {
+    "scope": {
+      "unavailableOrg": "Недоступна організація",
+      "unavailableShop": "Недоступний магазин",
+      "currentContextYou": "Поточний контекст (ви)",
+      "unknown": "Невідомий обсяг"
+    }
+  },
+  "messagesUi2": {
+    "createChat": {
+      "selectAtLeastOne": "Виберіть принаймні одного користувача",
+      "failed": "Не вдалося створити чат"
+    }
+  },
+  "sharedUi": {
+    "emailVerification": {
+      "verified": "Вашу адресу електронної пошти успішно підтверджено!",
+      "errorGeneric": "Під час підтвердження сталася помилка.",
+      "invalidToken": "Недійсний або прострочений токен підтвердження.",
+      "failedTryAgain": "Не вдалося підтвердити електронну пошту. Спробуйте ще раз.",
+      "failedTokenInvalid": "Не вдалося підтвердити. Можливо, токен недійсний або прострочений.",
+      "noToken": "Токен підтвердження не надано."
+    },
+    "sendMoney": {
+      "enterRecipient": "Введіть користувача або підрядника",
+      "invalidRecipient": "Недійсний користувач або підрядник"
+    },
+    "whiteLabel": {
+      "pathErrorHttps": "Посилання на інші сайти мають використовувати https://",
+      "pathErrorFormat": "Введіть шлях, що починається з /, або посилання, що починається з https://",
+      "settingsSaved": "Налаштування збережено",
+      "settingsSaveFailed": "Не вдалося зберегти налаштування",
+      "sidebarSaved": "Бічну панель збережено",
+      "sidebarSaveFailed": "Не вдалося зберегти бічну панель"
+    },
+    "inlineEdit": {
+      "clickToEdit": "Натисніть, щоб редагувати",
+      "saveFailed": "Не вдалося зберегти"
+    },
+    "unknownUser": "Невідомий користувач",
+    "errors": {
+      "unknown": "Невідома помилка",
+      "generic": "Сталася помилка",
+      "component": "У цьому компоненті сталася помилка. Можна спробувати ще раз.",
+      "componentNamed": "У компоненті {{componentName}} сталася помилка. Можна спробувати ще раз."
+    }
   }
 }

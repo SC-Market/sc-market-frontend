@@ -17,6 +17,7 @@
 
 import { useMemo } from "react"
 import { useLocation } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../profile/api/profileApi"
 import { useDashboardOwner } from "./DashboardOwnerContext"
@@ -51,6 +52,7 @@ export function useResolveScope(scope: WidgetScope): ResolvedScope {
   const { data: profile } = useGetUserProfileQuery()
   const { data: myShops } = useGetMyShopsQuery()
   const owner = useDashboardOwner()
+  const { t } = useTranslation()
 
   return useMemo<ResolvedScope>(() => {
     // On a shared org/shop dashboard, owner-relative bindings resolve to the
@@ -86,25 +88,30 @@ export function useResolveScope(scope: WidgetScope): ResolvedScope {
 
     switch (scope.kind) {
       case "me":
-        return { label: "You" }
+        return { label: t("dashboard.scope.me") }
 
       case "all_orgs":
-        return { aggregate: "all_orgs", label: "All organizations" }
+        return { aggregate: "all_orgs", label: t("dashboard.scope.allOrgs") }
 
       case "all_shops":
-        return { aggregate: "all_shops", label: "All shops" }
+        return { aggregate: "all_shops", label: t("dashboard.scope.allShops") }
 
       case "specific_org": {
         const org = profile?.contractors?.find(
           (c) => c.spectrum_id === scope.spectrumId,
         )
-        if (!org) return { unavailable: true, label: "Unavailable organization" }
+        if (!org)
+          return {
+            unavailable: true,
+            label: t("dashboardUi.scope.unavailableOrg"),
+          }
         return { spectrumId: org.spectrum_id, label: org.name || org.spectrum_id }
       }
 
       case "specific_shop": {
         const shop = myShops?.find((s) => s.shop_id === scope.shopId)
-        if (!shop) return { unavailable: true, label: "Unavailable shop" }
+        if (!shop)
+          return { unavailable: true, label: t("dashboardUi.scope.unavailableShop") }
         return { shopId: shop.shop_id, label: shop.name }
       }
 
@@ -123,11 +130,11 @@ export function useResolveScope(scope: WidgetScope): ResolvedScope {
             }
         }
         // Browsing / no context selected -> fall back to personal.
-        return { label: "Current context (you)" }
+        return { label: t("dashboardUi.scope.currentContextYou") }
       }
 
       default:
-        return { unavailable: true, label: "Unknown scope" }
+        return { unavailable: true, label: t("dashboardUi.scope.unknown") }
     }
-  }, [scope, pathname, profile?.contractors, myShops, owner])
+  }, [scope, pathname, profile?.contractors, myShops, owner, t])
 }

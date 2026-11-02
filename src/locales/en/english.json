@@ -8236,5 +8236,82 @@
   },
   "notificationWebhooks": {
     "delete": "Delete webhook {{name}}"
+  },
+  "notifPrefsUi": {
+    "actions": {
+      "unknown": "Unknown Notification",
+      "orderCreate": "New Order Created",
+      "orderAssigned": "Order Assigned to You",
+      "orderStatusFulfilled": "Order Fulfilled",
+      "orderStatusInProgress": "Order In Progress",
+      "orderStatusNotStarted": "Order Not Started",
+      "orderStatusCancelled": "Order Cancelled",
+      "orderComment": "Order Comments",
+      "orderMessage": "Order Messages",
+      "orderReview": "Order Reviews",
+      "orderReviewRevisionRequested": "Review Revision Requested",
+      "orderContractorApplied": "Contractor Applied to Order",
+      "marketItemBid": "Market Item Bids",
+      "marketItemOffer": "Market Item Offers",
+      "priceAlert": "Price Alerts",
+      "marketOfferAccepted": "Market Offer Accepted",
+      "marketOfferDeclined": "Market Offer Declined",
+      "offerCreate": "New Offers",
+      "offerMessage": "Offer Messages",
+      "counterOfferCreate": "Counter Offers",
+      "contractorInvite": "Contractor Invitations",
+      "adminAlert": "Admin Alerts"
+    },
+    "unsubscribe": {
+      "invalidLink": "This unsubscribe link is not valid. You can change your emails in Settings.",
+      "noLink": "No unsubscribe link was given."
+    }
+  },
+  "dashboardUi": {
+    "scope": {
+      "unavailableOrg": "Unavailable organization",
+      "unavailableShop": "Unavailable shop",
+      "currentContextYou": "Current context (you)",
+      "unknown": "Unknown scope"
+    }
+  },
+  "messagesUi2": {
+    "createChat": {
+      "selectAtLeastOne": "Please select at least one user",
+      "failed": "Failed to create chat"
+    }
+  },
+  "sharedUi": {
+    "emailVerification": {
+      "verified": "Your email address has been verified successfully!",
+      "errorGeneric": "An error occurred during verification.",
+      "invalidToken": "Invalid or expired verification token.",
+      "failedTryAgain": "Email verification failed. Please try again.",
+      "failedTokenInvalid": "Verification failed. The token may be invalid or expired.",
+      "noToken": "No verification token provided."
+    },
+    "sendMoney": {
+      "enterRecipient": "Please enter a user or contractor",
+      "invalidRecipient": "Invalid user or contractor"
+    },
+    "whiteLabel": {
+      "pathErrorHttps": "Links to other sites must use https://",
+      "pathErrorFormat": "Enter a path starting with / or a link starting with https://",
+      "settingsSaved": "Settings saved",
+      "settingsSaveFailed": "Failed to save settings",
+      "sidebarSaved": "Sidebar saved",
+      "sidebarSaveFailed": "Failed to save sidebar"
+    },
+    "inlineEdit": {
+      "clickToEdit": "Click to edit",
+      "saveFailed": "Failed to save"
+    },
+    "unknownUser": "Unknown user",
+    "errors": {
+      "unknown": "Unknown error",
+      "generic": "An error occurred",
+      "component": "This component encountered an error. You can try again.",
+      "componentNamed": "The {{componentName}} component encountered an error. You can try again."
+    }
   }
 }

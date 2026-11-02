@@ -8369,5 +8369,82 @@
   },
   "notificationWebhooks": {
     "delete": "Supprimer le webhook {{name}}"
+  },
+  "notifPrefsUi": {
+    "actions": {
+      "unknown": "Notification inconnue",
+      "orderCreate": "Nouvelle commande créée",
+      "orderAssigned": "Commande qui vous est assignée",
+      "orderStatusFulfilled": "Commande exécutée",
+      "orderStatusInProgress": "Commande en cours",
+      "orderStatusNotStarted": "Commande non commencée",
+      "orderStatusCancelled": "Commande annulée",
+      "orderComment": "Commentaires de commande",
+      "orderMessage": "Messages de commande",
+      "orderReview": "Avis sur les commandes",
+      "orderReviewRevisionRequested": "Révision d'avis demandée",
+      "orderContractorApplied": "Un prestataire a postulé à la commande",
+      "marketItemBid": "Enchères sur les articles du marché",
+      "marketItemOffer": "Offres sur les articles du marché",
+      "priceAlert": "Alertes de prix",
+      "marketOfferAccepted": "Offre du marché acceptée",
+      "marketOfferDeclined": "Offre du marché refusée",
+      "offerCreate": "Nouvelles offres",
+      "offerMessage": "Messages d'offre",
+      "counterOfferCreate": "Contre-offres",
+      "contractorInvite": "Invitations de prestataire",
+      "adminAlert": "Alertes d'administration"
+    },
+    "unsubscribe": {
+      "invalidLink": "Ce lien de désabonnement n'est pas valide. Vous pouvez modifier vos e-mails dans les Paramètres.",
+      "noLink": "Aucun lien de désabonnement n'a été fourni."
+    }
+  },
+  "dashboardUi": {
+    "scope": {
+      "unavailableOrg": "Organisation indisponible",
+      "unavailableShop": "Boutique indisponible",
+      "currentContextYou": "Contexte actuel (vous)",
+      "unknown": "Portée inconnue"
+    }
+  },
+  "messagesUi2": {
+    "createChat": {
+      "selectAtLeastOne": "Veuillez sélectionner au moins un utilisateur",
+      "failed": "Impossible de créer la discussion"
+    }
+  },
+  "sharedUi": {
+    "emailVerification": {
+      "verified": "Votre adresse e-mail a bien été vérifiée !",
+      "errorGeneric": "Une erreur s'est produite lors de la vérification.",
+      "invalidToken": "Jeton de vérification invalide ou expiré.",
+      "failedTryAgain": "La vérification de l'e-mail a échoué. Veuillez réessayer.",
+      "failedTokenInvalid": "La vérification a échoué. Le jeton est peut-être invalide ou expiré.",
+      "noToken": "Aucun jeton de vérification fourni."
+    },
+    "sendMoney": {
+      "enterRecipient": "Veuillez saisir un utilisateur ou un prestataire",
+      "invalidRecipient": "Utilisateur ou prestataire invalide"
+    },
+    "whiteLabel": {
+      "pathErrorHttps": "Les liens vers d'autres sites doivent utiliser https://",
+      "pathErrorFormat": "Saisissez un chemin commençant par / ou un lien commençant par https://",
+      "settingsSaved": "Paramètres enregistrés",
+      "settingsSaveFailed": "Impossible d'enregistrer les paramètres",
+      "sidebarSaved": "Barre latérale enregistrée",
+      "sidebarSaveFailed": "Impossible d'enregistrer la barre latérale"
+    },
+    "inlineEdit": {
+      "clickToEdit": "Cliquez pour modifier",
+      "saveFailed": "Échec de l'enregistrement"
+    },
+    "unknownUser": "Utilisateur inconnu",
+    "errors": {
+      "unknown": "Erreur inconnue",
+      "generic": "Une erreur s'est produite",
+      "component": "Ce composant a rencontré une erreur. Vous pouvez réessayer.",
+      "componentNamed": "Le composant {{componentName}} a rencontré une erreur. Vous pouvez réessayer."
+    }
   }
 }

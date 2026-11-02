@@ -35,7 +35,7 @@ export function CreateOrgInviteCode() {
           severity: "success",
         })
       } else {
-        let reason = "Unknown error"
+        let reason = t("sharedUi.errors.unknown")
         if (res.error && 'data' in res.error && res.error.data) {
           const errData = res.error.data as { error?: string; message?: string }
           reason = errData.error ?? errData.message ?? reason

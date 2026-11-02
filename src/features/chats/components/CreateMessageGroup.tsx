@@ -441,7 +441,7 @@ export function CreateMessageGroupBody() {
 
   const createChat = async () => {
     if (targetObject.length === 0) {
-      setError("Please select at least one user")
+      setError(t("messagesUi2.createChat.selectAtLeastOne"))
       return
     }
 
@@ -467,8 +467,8 @@ export function CreateMessageGroupBody() {
         setError(
           err && "data" in err && err.data
             ? (err.data as { error?: { message?: string } })?.error?.message ||
-                "Failed to create chat"
-            : "Failed to create chat",
+                t("messagesUi2.createChat.failed")
+            : t("messagesUi2.createChat.failed"),
         )
       })
   }

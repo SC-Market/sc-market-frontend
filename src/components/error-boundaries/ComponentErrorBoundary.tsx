@@ -2,6 +2,7 @@ import React, { ReactNode } from "react"
 import { ErrorBoundary, ErrorBoundaryProps } from "./ErrorBoundary"
 import { ErrorFallback } from "./ErrorFallback"
 import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
+import i18n from "../../util/i18n"
 
 export interface ComponentErrorBoundaryProps extends Omit<
   ErrorBoundaryProps,
@@ -95,8 +96,8 @@ export function ComponentErrorBoundary({
       message={
         message ||
         (componentName
-          ? `The ${componentName} component encountered an error. You can try again.`
-          : "This component encountered an error. You can try again.")
+          ? i18n.t("sharedUi.errors.componentNamed", { componentName })
+          : i18n.t("sharedUi.errors.component"))
       }
     />
   )

@@ -73,7 +73,7 @@ export function UnsubscribeContent({
               {t("emailUi.unsubscribe.successTitle")}
             </Typography>
             <Alert severity="success" sx={{ mb: 3, maxWidth: 500 }}>
-              {data.message}
+              {data.messageKey ? t(data.messageKey) : data.message}
             </Alert>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
               {!data.all && (
@@ -107,7 +107,7 @@ export function UnsubscribeContent({
               severity={data.status === "error" ? "error" : "warning"}
               sx={{ mb: 3, maxWidth: 500 }}
             >
-              {data.message}
+              {data.messageKey ? t(data.messageKey) : data.message}
             </Alert>
             {manage}
           </>

@@ -8369,5 +8369,82 @@
   },
   "notificationWebhooks": {
     "delete": "Eliminar webhook {{name}}"
+  },
+  "notifPrefsUi": {
+    "actions": {
+      "unknown": "Notificación desconocida",
+      "orderCreate": "Nuevo pedido creado",
+      "orderAssigned": "Pedido asignado a ti",
+      "orderStatusFulfilled": "Pedido completado",
+      "orderStatusInProgress": "Pedido en curso",
+      "orderStatusNotStarted": "Pedido sin iniciar",
+      "orderStatusCancelled": "Pedido cancelado",
+      "orderComment": "Comentarios de pedidos",
+      "orderMessage": "Mensajes de pedidos",
+      "orderReview": "Reseñas de pedidos",
+      "orderReviewRevisionRequested": "Revisión de reseña solicitada",
+      "orderContractorApplied": "Un contratista se postuló al pedido",
+      "marketItemBid": "Pujas en artículos del mercado",
+      "marketItemOffer": "Ofertas en artículos del mercado",
+      "priceAlert": "Alertas de precio",
+      "marketOfferAccepted": "Oferta del mercado aceptada",
+      "marketOfferDeclined": "Oferta del mercado rechazada",
+      "offerCreate": "Nuevas ofertas",
+      "offerMessage": "Mensajes de ofertas",
+      "counterOfferCreate": "Contraofertas",
+      "contractorInvite": "Invitaciones de contratista",
+      "adminAlert": "Alertas de administración"
+    },
+    "unsubscribe": {
+      "invalidLink": "Este enlace para darte de baja no es válido. Puedes cambiar tus correos en Configuración.",
+      "noLink": "No se proporcionó ningún enlace para darte de baja."
+    }
+  },
+  "dashboardUi": {
+    "scope": {
+      "unavailableOrg": "Organización no disponible",
+      "unavailableShop": "Tienda no disponible",
+      "currentContextYou": "Contexto actual (tú)",
+      "unknown": "Ámbito desconocido"
+    }
+  },
+  "messagesUi2": {
+    "createChat": {
+      "selectAtLeastOne": "Selecciona al menos un usuario",
+      "failed": "No se pudo crear el chat"
+    }
+  },
+  "sharedUi": {
+    "emailVerification": {
+      "verified": "¡Tu dirección de correo se ha verificado correctamente!",
+      "errorGeneric": "Se produjo un error durante la verificación.",
+      "invalidToken": "Token de verificación no válido o caducado.",
+      "failedTryAgain": "La verificación del correo falló. Inténtalo de nuevo.",
+      "failedTokenInvalid": "La verificación falló. Puede que el token no sea válido o haya caducado.",
+      "noToken": "No se proporcionó ningún token de verificación."
+    },
+    "sendMoney": {
+      "enterRecipient": "Introduce un usuario o contratista",
+      "invalidRecipient": "Usuario o contratista no válido"
+    },
+    "whiteLabel": {
+      "pathErrorHttps": "Los enlaces a otros sitios deben usar https://",
+      "pathErrorFormat": "Introduce una ruta que empiece por / o un enlace que empiece por https://",
+      "settingsSaved": "Configuración guardada",
+      "settingsSaveFailed": "No se pudo guardar la configuración",
+      "sidebarSaved": "Barra lateral guardada",
+      "sidebarSaveFailed": "No se pudo guardar la barra lateral"
+    },
+    "inlineEdit": {
+      "clickToEdit": "Haz clic para editar",
+      "saveFailed": "No se pudo guardar"
+    },
+    "unknownUser": "Usuario desconocido",
+    "errors": {
+      "unknown": "Error desconocido",
+      "generic": "Se produjo un error",
+      "component": "Este componente encontró un error. Puedes intentarlo de nuevo.",
+      "componentNamed": "El componente {{componentName}} encontró un error. Puedes intentarlo de nuevo."
+    }
   }
 }

@@ -8236,5 +8236,82 @@
   },
   "notificationWebhooks": {
     "delete": "Webhook {{name}} löschen"
+  },
+  "notifPrefsUi": {
+    "actions": {
+      "unknown": "Unbekannte Benachrichtigung",
+      "orderCreate": "Neue Bestellung erstellt",
+      "orderAssigned": "Ihnen zugewiesene Bestellung",
+      "orderStatusFulfilled": "Bestellung erfüllt",
+      "orderStatusInProgress": "Bestellung in Bearbeitung",
+      "orderStatusNotStarted": "Bestellung nicht begonnen",
+      "orderStatusCancelled": "Bestellung storniert",
+      "orderComment": "Bestellkommentare",
+      "orderMessage": "Bestellnachrichten",
+      "orderReview": "Bestellbewertungen",
+      "orderReviewRevisionRequested": "Überarbeitung der Bewertung angefordert",
+      "orderContractorApplied": "Auftragnehmer hat sich auf Bestellung beworben",
+      "marketItemBid": "Gebote auf Marktartikel",
+      "marketItemOffer": "Angebote für Marktartikel",
+      "priceAlert": "Preisalarme",
+      "marketOfferAccepted": "Marktangebot angenommen",
+      "marketOfferDeclined": "Marktangebot abgelehnt",
+      "offerCreate": "Neue Angebote",
+      "offerMessage": "Angebotsnachrichten",
+      "counterOfferCreate": "Gegenangebote",
+      "contractorInvite": "Auftragnehmer-Einladungen",
+      "adminAlert": "Admin-Benachrichtigungen"
+    },
+    "unsubscribe": {
+      "invalidLink": "Dieser Abmeldelink ist ungültig. Sie können Ihre E-Mails in den Einstellungen ändern.",
+      "noLink": "Es wurde kein Abmeldelink angegeben."
+    }
+  },
+  "dashboardUi": {
+    "scope": {
+      "unavailableOrg": "Nicht verfügbare Organisation",
+      "unavailableShop": "Nicht verfügbarer Shop",
+      "currentContextYou": "Aktueller Kontext (Sie)",
+      "unknown": "Unbekannter Bereich"
+    }
+  },
+  "messagesUi2": {
+    "createChat": {
+      "selectAtLeastOne": "Bitte wählen Sie mindestens einen Nutzer aus",
+      "failed": "Chat konnte nicht erstellt werden"
+    }
+  },
+  "sharedUi": {
+    "emailVerification": {
+      "verified": "Ihre E-Mail-Adresse wurde erfolgreich bestätigt!",
+      "errorGeneric": "Bei der Bestätigung ist ein Fehler aufgetreten.",
+      "invalidToken": "Ungültiger oder abgelaufener Bestätigungstoken.",
+      "failedTryAgain": "E-Mail-Bestätigung fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "failedTokenInvalid": "Bestätigung fehlgeschlagen. Der Token ist möglicherweise ungültig oder abgelaufen.",
+      "noToken": "Kein Bestätigungstoken angegeben."
+    },
+    "sendMoney": {
+      "enterRecipient": "Bitte geben Sie einen Benutzer oder Auftragnehmer ein",
+      "invalidRecipient": "Ungültiger Benutzer oder Auftragnehmer"
+    },
+    "whiteLabel": {
+      "pathErrorHttps": "Links zu anderen Websites müssen https:// verwenden",
+      "pathErrorFormat": "Geben Sie einen Pfad ein, der mit / beginnt, oder einen Link, der mit https:// beginnt",
+      "settingsSaved": "Einstellungen gespeichert",
+      "settingsSaveFailed": "Einstellungen konnten nicht gespeichert werden",
+      "sidebarSaved": "Seitenleiste gespeichert",
+      "sidebarSaveFailed": "Seitenleiste konnte nicht gespeichert werden"
+    },
+    "inlineEdit": {
+      "clickToEdit": "Zum Bearbeiten klicken",
+      "saveFailed": "Speichern fehlgeschlagen"
+    },
+    "unknownUser": "Unbekannter Benutzer",
+    "errors": {
+      "unknown": "Unbekannter Fehler",
+      "generic": "Ein Fehler ist aufgetreten",
+      "component": "In dieser Komponente ist ein Fehler aufgetreten. Sie können es erneut versuchen.",
+      "componentNamed": "In der Komponente {{componentName}} ist ein Fehler aufgetreten. Sie können es erneut versuchen."
+    }
   }
 }

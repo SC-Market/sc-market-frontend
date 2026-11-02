@@ -55,7 +55,7 @@ export function EmailVerificationContent({
               {t("emailUi.verification.successTitle")}
             </Typography>
             <Alert severity="success" sx={{ mb: 3, maxWidth: 500 }}>
-              {data.message}
+              {data.messageKey ? t(data.messageKey) : data.message}
             </Alert>
             <Button
               variant="contained"
@@ -74,7 +74,7 @@ export function EmailVerificationContent({
               {t("emailUi.verification.failedTitle")}
             </Typography>
             <Alert severity="error" sx={{ mb: 3, maxWidth: 500 }}>
-              {data.message}
+              {data.messageKey ? t(data.messageKey) : data.message}
             </Alert>
             <Button
               variant="contained"
@@ -93,7 +93,7 @@ export function EmailVerificationContent({
               {t("emailUi.verification.invalidTitle")}
             </Typography>
             <Alert severity="warning" sx={{ mb: 3, maxWidth: 500 }}>
-              {data.message}
+              {data.messageKey ? t(data.messageKey) : data.message}
             </Alert>
             <Button
               variant="contained"

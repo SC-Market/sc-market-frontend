@@ -8103,5 +8103,82 @@
   },
   "notificationWebhooks": {
     "delete": "Webhook {{name}} を削除"
+  },
+  "notifPrefsUi": {
+    "actions": {
+      "unknown": "不明な通知",
+      "orderCreate": "新しい注文が作成されました",
+      "orderAssigned": "あなたに割り当てられた注文",
+      "orderStatusFulfilled": "注文完了",
+      "orderStatusInProgress": "注文進行中",
+      "orderStatusNotStarted": "注文未着手",
+      "orderStatusCancelled": "注文キャンセル",
+      "orderComment": "注文コメント",
+      "orderMessage": "注文メッセージ",
+      "orderReview": "注文レビュー",
+      "orderReviewRevisionRequested": "レビューの修正依頼",
+      "orderContractorApplied": "コントラクターが注文に応募しました",
+      "marketItemBid": "マーケット商品への入札",
+      "marketItemOffer": "マーケット商品へのオファー",
+      "priceAlert": "価格アラート",
+      "marketOfferAccepted": "マーケットのオファーが承認されました",
+      "marketOfferDeclined": "マーケットのオファーが拒否されました",
+      "offerCreate": "新しいオファー",
+      "offerMessage": "オファーメッセージ",
+      "counterOfferCreate": "カウンターオファー",
+      "contractorInvite": "コントラクターへの招待",
+      "adminAlert": "管理者からのお知らせ"
+    },
+    "unsubscribe": {
+      "invalidLink": "この配信停止リンクは無効です。メールの設定は「設定」から変更できます。",
+      "noLink": "配信停止リンクが指定されていません。"
+    }
+  },
+  "dashboardUi": {
+    "scope": {
+      "unavailableOrg": "利用できない組織",
+      "unavailableShop": "利用できないショップ",
+      "currentContextYou": "現在のコンテキスト（あなた）",
+      "unknown": "不明な範囲"
+    }
+  },
+  "messagesUi2": {
+    "createChat": {
+      "selectAtLeastOne": "ユーザーを1人以上選択してください",
+      "failed": "チャットを作成できませんでした"
+    }
+  },
+  "sharedUi": {
+    "emailVerification": {
+      "verified": "メールアドレスの認証が完了しました！",
+      "errorGeneric": "認証中にエラーが発生しました。",
+      "invalidToken": "認証トークンが無効か、有効期限が切れています。",
+      "failedTryAgain": "メール認証に失敗しました。もう一度お試しください。",
+      "failedTokenInvalid": "認証に失敗しました。トークンが無効か、有効期限が切れている可能性があります。",
+      "noToken": "認証トークンが指定されていません。"
+    },
+    "sendMoney": {
+      "enterRecipient": "ユーザーまたはコントラクターを入力してください",
+      "invalidRecipient": "無効なユーザーまたはコントラクター"
+    },
+    "whiteLabel": {
+      "pathErrorHttps": "他のサイトへのリンクには https:// を使用してください",
+      "pathErrorFormat": "/ で始まるパス、または https:// で始まるリンクを入力してください",
+      "settingsSaved": "設定を保存しました",
+      "settingsSaveFailed": "設定を保存できませんでした",
+      "sidebarSaved": "サイドバーを保存しました",
+      "sidebarSaveFailed": "サイドバーを保存できませんでした"
+    },
+    "inlineEdit": {
+      "clickToEdit": "クリックして編集",
+      "saveFailed": "保存できませんでした"
+    },
+    "unknownUser": "不明なユーザー",
+    "errors": {
+      "unknown": "不明なエラー",
+      "generic": "エラーが発生しました",
+      "component": "このコンポーネントでエラーが発生しました。もう一度お試しください。",
+      "componentNamed": "{{componentName}} コンポーネントでエラーが発生しました。もう一度お試しください。"
+    }
   }
 }

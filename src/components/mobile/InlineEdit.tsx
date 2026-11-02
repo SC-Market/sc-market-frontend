@@ -35,7 +35,7 @@ export function InlineEdit({
   value,
   onSave,
   onCancel,
-  placeholder = "Click to edit",
+  placeholder: placeholderProp,
   multiline = false,
   variant = "standard",
   TextFieldProps,
@@ -44,6 +44,7 @@ export function InlineEdit({
   autoFocus = true,
 }: InlineEditProps) {
   const { t } = useTranslation()
+  const placeholder = placeholderProp ?? t("sharedUi.inlineEdit.clickToEdit")
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const [isEditing, setIsEditing] = useState(false)
@@ -84,7 +85,7 @@ export function InlineEdit({
       setIsEditing(false)
       setError(null)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save")
+      setError(err instanceof Error ? err.message : t("sharedUi.inlineEdit.saveFailed"))
     }
   }
 

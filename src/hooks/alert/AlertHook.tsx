@@ -1,6 +1,7 @@
 import React from "react"
 import { AlertInterface } from "../../datatypes/Alert"
 import type { StandardErrorResponse } from "../../store/api-types"
+import i18n from "../../util/i18n"
 
 export const AlertHookContext = React.createContext<
   | [
@@ -74,7 +75,9 @@ export function formatErrorAlert(
   // Legacy formats for backward compatibility
   const legacyError = error as UnwrappedErrorInterface
   let message =
-    legacyError.error?.message || legacyError.message || "An error occurred"
+    legacyError.error?.message ||
+    legacyError.message ||
+    i18n.t("sharedUi.errors.generic")
 
   if (legacyError.errors?.length) {
     message = message.concat(" ", legacyError.errors[0].message)

@@ -1,47 +1,52 @@
+import i18n from "../../../util/i18n"
+
+/** i18n keys for the notification action types the API sends. */
+const ACTION_LABEL_KEYS: Record<string, string> = {
+  // Order notifications
+  order_create: "notifPrefsUi.actions.orderCreate",
+  order_assigned: "notifPrefsUi.actions.orderAssigned",
+  order_status_fulfilled: "notifPrefsUi.actions.orderStatusFulfilled",
+  order_status_in_progress: "notifPrefsUi.actions.orderStatusInProgress",
+  order_status_not_started: "notifPrefsUi.actions.orderStatusNotStarted",
+  order_status_cancelled: "notifPrefsUi.actions.orderStatusCancelled",
+  order_comment: "notifPrefsUi.actions.orderComment",
+  order_message: "notifPrefsUi.actions.orderMessage",
+  order_review: "notifPrefsUi.actions.orderReview",
+  order_review_revision_requested:
+    "notifPrefsUi.actions.orderReviewRevisionRequested",
+  order_contractor_applied: "notifPrefsUi.actions.orderContractorApplied",
+
+  // Market notifications
+  market_item_bid: "notifPrefsUi.actions.marketItemBid",
+  market_item_offer: "notifPrefsUi.actions.marketItemOffer",
+  price_alert: "notifPrefsUi.actions.priceAlert",
+  market_offer_accepted: "notifPrefsUi.actions.marketOfferAccepted",
+  market_offer_declined: "notifPrefsUi.actions.marketOfferDeclined",
+
+  // Offer notifications
+  offer_create: "notifPrefsUi.actions.offerCreate",
+  offer_message: "notifPrefsUi.actions.offerMessage",
+  counter_offer_create: "notifPrefsUi.actions.counterOfferCreate",
+
+  // Contractor notifications
+  contractor_invite: "notifPrefsUi.actions.contractorInvite",
+
+  // Admin notifications
+  admin_alert: "notifPrefsUi.actions.adminAlert",
+}
+
 /**
- * Get user-friendly label for notification action type
+ * Get user-friendly label for notification action type.
+ * Called during render, so it follows the active language.
  */
 export function formatActionName(actionName: string): string {
-  if (!actionName) return "Unknown Notification"
+  if (!actionName) return i18n.t("notifPrefsUi.actions.unknown")
 
-  const actionLabels: Record<string, string> = {
-    // Order notifications
-    order_create: "New Order Created",
-    order_assigned: "Order Assigned to You",
-    order_status_fulfilled: "Order Fulfilled",
-    order_status_in_progress: "Order In Progress",
-    order_status_not_started: "Order Not Started",
-    order_status_cancelled: "Order Cancelled",
-    order_comment: "Order Comments",
-    order_message: "Order Messages",
-    order_review: "Order Reviews",
-    order_review_revision_requested: "Review Revision Requested",
-    order_contractor_applied: "Contractor Applied to Order",
+  const key = ACTION_LABEL_KEYS[actionName]
+  if (key) return i18n.t(key)
 
-    // Market notifications
-    market_item_bid: "Market Item Bids",
-    market_item_offer: "Market Item Offers",
-    price_alert: "Price Alerts",
-    market_offer_accepted: "Market Offer Accepted",
-    market_offer_declined: "Market Offer Declined",
-
-    // Offer notifications
-    offer_create: "New Offers",
-    offer_message: "Offer Messages",
-    counter_offer_create: "Counter Offers",
-
-    // Contractor notifications
-    contractor_invite: "Contractor Invitations",
-
-    // Admin notifications
-    admin_alert: "Admin Alerts",
-  }
-
-  return (
-    actionLabels[actionName] ||
-    actionName
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ")
-  )
+  return actionName
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")
 }
