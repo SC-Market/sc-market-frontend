@@ -1685,9 +1685,9 @@
   },
   "discord_bot": {
     "how_to_communicate": "How to communicate with buyers through Discord",
-    "how_to_communicate_answer": "Add the official [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server and pick a channel for order threads: each new order or offer then opens a private thread there with the buyer and the seller assigned to it, and buyers are invited to your server so you can work through the order together.\n\n1. Link your Discord account in your SC Market settings, then [add the bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server.\n\n2. In the channel that should hold the order threads, run `/setup threads`. For your org's orders, fill in `org` with its Spectrum ID (for example `/setup threads org:SCMARKET`); for orders placed with you, leave it empty.\n\n3. Optional: in a staff channel, run `/setup alerts` (with the same `org`) to post each new order and offer with a Claim button.\n\nYou need the **Manage Channels** permission in the Discord server. For an org, you also need the org's **Manage Webhooks** permission on SC Market for threads, or **Manage Orders** for alerts. In the thread channel, the bot needs View Channel, Create Private Threads, Send Messages in Threads and Create Invite. Run `/setup status` to see what a channel gets, and `/help` to see every command.",
+    "how_to_communicate_answer": "Add the official [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) to your server and pick a channel for order threads: each new order or offer then opens a private thread there with the buyer and the seller assigned to it, and buyers are invited to your server so you can work through the order together.\n\n1. Link your Discord account in your SC Market settings, then [add the bot]({{BOT_INSTALL_PATH}}) to your server.\n\n2. In the channel that should hold the order threads, run `/setup threads`. For your org's orders, fill in `org` with its Spectrum ID (for example `/setup threads org:SCMARKET`); for orders placed with you, leave it empty.\n\n3. Optional: in a staff channel, run `/setup alerts` (with the same `org`) to post each new order and offer with a Claim button.\n\nYou need the **Manage Channels** permission in the Discord server. For an org, you also need the org's **Manage Webhooks** permission on SC Market for threads, or **Manage Orders** for alerts. In the thread channel, the bot needs View Channel, Create Private Threads, Send Messages in Threads and Create Invite. Run `/setup status` to see what a channel gets, and `/help` to see every command.",
     "how_to_get_notified": "How to get notified when an order is placed",
-    "how_to_get_notified_answer": "Add the official [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server to automatically receive direct messages when an order is placed with you or assigned to you. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
+    "how_to_get_notified_answer": "Add the official [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) to your server to automatically receive direct messages when an order is placed with you or assigned to you. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
     "integrating_with_discord": "Integrating with Discord",
     "learn_connect": "Connect the Discord bot",
     "learn_alerts": "Order alerts and claiming"
@@ -3343,6 +3343,14 @@
     "listing_expiring": {
       "one": "Still selling \"{{title}}\"? It expires in 3 days. Open to renew it in one click.",
       "many": "Still selling? {{n}} listings in {{shop}} expire in 3 days. Open to renew them in one click."
+    },
+    "offer_reminder": {
+      "first_one": "An offer is waiting for your reply: \"{{title}}\"",
+      "first_many": "{{n}} offers are waiting for your reply",
+      "final_one": "Last reminder: an offer is waiting for your reply: \"{{title}}\"",
+      "final_many": "Last reminder: {{n}} offers are waiting for your reply",
+      "buyer_one": "\"{{title}}\" is still waiting for the seller. Keep waiting, message the seller, or withdraw it.",
+      "buyer_many": "{{n}} of your offers are still waiting for the seller"
     }
   },
   "OfferDetailsArea": {
@@ -3368,7 +3376,11 @@
     "status": "Status",
     "title": "Title",
     "waitingCustomer": "Your turn to respond",
-    "waitingSeller": "Awaiting confirmation"
+    "waitingSeller": "Awaiting confirmation",
+    "withdrawTitle": "Withdraw this offer?",
+    "withdrawBody": "The seller won't be able to accept it any more. To keep waiting instead, close this.",
+    "keepWaiting": "Keep waiting",
+    "withdraw": "Withdraw the offer"
   },
   "OfferDetailsEditArea": {
     "customer": "Customer",
@@ -4865,7 +4877,10 @@
         "org_member_joined": "New member joined",
         "listing_expiring": "Listing about to expire",
         "storefront_enquiry_accepted": "Storefront enquiry accepted",
-        "storefront_enquiry_declined": "Storefront enquiry declined"
+        "storefront_enquiry_declined": "Storefront enquiry declined",
+        "reminder_offer_pending": "Offer waiting for your reply",
+        "reminder_offer_pending_final": "Last reminder: offer waiting for your reply",
+        "reminder_offer_waiting_buyer": "Your offer is still waiting"
       },
       "tabs": {
         "orders": "Orders & offers",
@@ -4893,7 +4908,7 @@
         },
         "reminders": {
           "label": "Reminders",
-          "hint": "A reminder when order or offer messages have been waiting a few hours."
+          "hint": "A reminder when messages have been waiting a few hours, or an offer is waiting for a reply."
         },
         "bids": {
           "label": "Bids",
@@ -4986,6 +5001,14 @@
         },
         "storefront-enquiry": {
           "label": "Enquiry accepted or declined"
+        },
+        "offer-pending": {
+          "label": "Offer waiting for your reply",
+          "hint": "About 1 and 3 days after an offer arrives with no reply"
+        },
+        "offer-waiting": {
+          "label": "Your offer is still waiting",
+          "hint": "If the seller hasn't replied after the last reminder"
         }
       },
       "subtitle": "Choose where each kind of notification reaches you.",
@@ -7720,26 +7743,49 @@
         "discord_dm": "Discord DM",
         "discord_dm_confirmed": "DM delivered",
         "discord_dm_closed": "DM failed (closed)",
-        "discord_shared_server": "Shares a server with the bot",
         "email": "Email",
         "email_confirmed": "Email delivered",
         "push": "Push",
         "any": "Any channel",
-        "none": "None"
+        "none": "None",
+        "discord_server_or_app": "Shares a server or installed the app"
       },
       "notes": {
         "cells": "Each cell: sellers · their public listings.",
-        "discord": "Discord DM: Discord linked, and their last DM from SC Market (kept {{days}} days) didn't fail. Sellers never DMed in that time count, unconfirmed; \"DM delivered\" counts those whose last DM arrived.",
         "discordNoSignal": "Discord DM: Discord linked. No DM delivery results are recorded.",
-        "discordClosed": "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no server shared with the bot). For an org, this holds for everyone who can be contacted.",
-        "sharedServer": "Shares a server with the bot: Discord linked and a member of at least one server the SC Market bot is in. Checked about every 12 hours from the bot's member lists, without sending anything; last checked {{when}}. The bot can usually DM only these sellers. Not counted in Any channel or None.",
-        "sharedServerNever": "Shares a server with the bot: Discord linked and a member of at least one server the SC Market bot is in, checked about every 12 hours without sending anything. Not checked yet, so this column is 0. Not counted in Any channel or None.",
         "email": "Email: a verified address, not unsubscribed from announcement emails. Bounces aren't recorded, so a verified address may still bounce.",
         "emailChecked": "Email: a verified address that hasn't bounced or been reported as spam, not unsubscribed from announcement emails. Sellers not emailed in the last {{days}} days count, unconfirmed; \"Email delivered\" counts those with a delivery confirmed in that time.",
         "push": "Push: at least one push subscription. Expired ones are removed when a push fails, but no delivery result is recorded.",
         "pushChecked": "Push: at least one push subscription.",
         "anyNone": "Any channel: reachable by Discord DM, email or push. None: by none of them.",
-        "lastSeen": "Last seen counts every seller, including those who hide their online status from buyers."
+        "lastSeen": "Last seen counts every seller, including those who hide their online status from buyers.",
+        "discordRule": "Discord DM: Discord linked, their last DM from SC Market (kept {{days}} days) wasn't refused with error {{code}}, and they share a server with the bot. Sellers never DMed in that time count, unconfirmed; \"DM delivered\" counts those whose last DM arrived.",
+        "discordClosedInstall": "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no way for the bot to reach them). A refused DM also clears a recorded app install. For an org, this holds for everyone who can be contacted.",
+        "serverOrApp": "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours from the bot's member lists, without sending anything; last checked {{when}}), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None.",
+        "serverOrAppNever": "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours, without sending anything; not checked yet), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None.",
+        "installCounts": "Installing the app counts as reachable by Discord DM.",
+        "installNotCounted": "App installs are recorded but not counted as reachable by Discord DM until it's confirmed the bot can DM someone who shares no server with it."
+      },
+      "installClicks": {
+        "title": "\"Add SC Market to Discord\" clicks",
+        "none": "No clicks yet.",
+        "type": "Install to",
+        "src": "Where",
+        "days7": "Last 7 days",
+        "days30": "Last 30 days",
+        "user": "Your account",
+        "server": "A server",
+        "sources": {
+          "settings_notifications": "Settings › Notifications",
+          "settings_discord": "Settings › Discord",
+          "org_discord": "Org › Discord",
+          "shop_dashboard": "Shop orders",
+          "shop_hint": "Shop pages tip",
+          "guide": "Guide",
+          "faq": "Discord FAQ",
+          "footer": "Site footer",
+          "other": "Other"
+        }
       }
     }
   },
@@ -8754,6 +8800,24 @@
     "whiteLabel": {
       "title": "Your free storefront, and branding",
       "body": "Every org has a free storefront on SC Market. Once your org is RSI-verified and active, branding unlocks: your own theme and, on request, a yourorg.sc-market.space address."
+    }
+  },
+  "discordInstall": {
+    "pageTitle": "Add SC Market to Discord",
+    "opening": "Opening Discord…",
+    "fallback": "If nothing happens,",
+    "openManually": "open Discord's install page",
+    "choose": "How do you want to add SC Market?",
+    "user": "To your Discord account",
+    "userHint": "So we can reach you about offers and orders even if you're not in a shared server.",
+    "server": "To a Discord server",
+    "serverHint": "For order threads and alerts in your own server.",
+    "cta": {
+      "title": "Add SC Market to your Discord",
+      "why": "So we can reach you about offers and orders even if you're not in a shared server.",
+      "unreachableTitle": "Buyers' offers can't reach you on Discord",
+      "linkFirst": "Link your Discord account first, then add SC Market to your Discord, so we can reach you about offers and orders even if you're not in a shared server.",
+      "linkDiscord": "Link Discord"
     }
   }
 }

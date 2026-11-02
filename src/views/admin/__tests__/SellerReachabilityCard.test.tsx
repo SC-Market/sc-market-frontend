@@ -29,7 +29,7 @@ const bucket = (
   discord_dm: c(n, n * 2),
   discord_dm_confirmed: c(0, 0),
   discord_dm_closed: c(0, 0),
-  discord_shared_server: c(0, 0),
+  discord_server_or_app: c(0, 0),
   email: c(1, 1),
   email_confirmed: c(1, 1),
   push: c(0, 0),
@@ -40,6 +40,8 @@ const bucket = (
 const report = (
   unknown = 0,
   checkedAt: string | null = "2026-11-01T06:00:00.000Z",
+  installCounts = false,
+  clicks: SellerReachabilityReport["install_clicks"] = [],
 ): SellerReachabilityReport => ({
   generated_at: "2026-11-01T12:00:00.000Z",
   buckets: [
@@ -55,7 +57,7 @@ const report = (
     discord_dm: c(16, 32),
     discord_dm_confirmed: c(0, 0),
     discord_dm_closed: c(5, 7),
-    discord_shared_server: c(11, 21),
+    discord_server_or_app: c(11, 21),
     email: c(4, 4),
     email_confirmed: c(3, 3),
     push: c(0, 0),
@@ -68,11 +70,13 @@ const report = (
     discord_dm_closed_code: 50007,
     discord_shared_server_checked_at: checkedAt,
     discord_shared_server_fresh_days: 3,
+    discord_user_install_counts_as_dm: installCounts,
     email_delivery_results: true,
     email_delivered_window_days: 90,
     push_delivery_results: false,
   },
   email_category: "announcements",
+  install_clicks: clicks,
 })
 
 function state(s: Record<string, unknown>) {
@@ -128,7 +132,9 @@ describe("SellerReachabilityCard", () => {
     state({ data: report() })
     render(<SellerReachabilityCard />)
     expect(
-      screen.getByText(/last DM from SC Market \(kept 90 days\) didn't fail/),
+      screen.getByText(
+        /last DM from SC Market \(kept 90 days\) wasn't refused with error 50007, and they share a server with the bot/,
+      ),
     ).toBeInTheDocument()
     expect(
       screen.getByText(/hasn't bounced or been reported as spam/),
@@ -144,7 +150,7 @@ describe("SellerReachabilityCard", () => {
     ).toBeInTheDocument()
   })
 
-  it("shows DM failed (closed) and Shares a server with the bot next to DM delivered, and explains them", () => {
+  it("shows DM failed (closed) and Shares a server or installed the app next to DM delivered, and explains them", () => {
     state({ data: report() })
     render(<SellerReachabilityCard />)
     const headers = screen
@@ -154,18 +160,24 @@ describe("SellerReachabilityCard", () => {
     expect(headers.slice(i, i + 3)).toEqual([
       "DM delivered",
       "DM failed (closed)",
-      "Shares a server with the bot",
+      "Shares a server or installed the app",
     ])
     const total = within(screen.getByTestId("reachability-total"))
     expect(total.getByText("5 · 7")).toBeInTheDocument()
     expect(total.getByText("11 · 21")).toBeInTheDocument()
     expect(
-      screen.getByText(/Discord refused their last DM \(error 50007/),
+      screen.getByText(
+        /Discord refused their last DM \(error 50007.*A refused DM also clears a recorded app install/,
+      ),
     ).toBeInTheDocument()
-    expect(
-      screen.getByTestId("reachability-shared-server-note").textContent,
-    ).toMatch(
-      /without sending anything; last checked .+\. The bot can usually DM only these sellers/,
+    const note = screen.getByTestId(
+      "reachability-server-or-app-note",
+    ).textContent
+    expect(note).toMatch(
+      /without sending anything; last checked .+\), or seen using the bot through the app installed/,
+    )
+    expect(note).toMatch(
+      /App installs are recorded but not counted as reachable by Discord DM/,
     )
     expect(
       screen.getByText(/Any channel: reachable by Discord DM, email or push/),
@@ -179,8 +191,38 @@ describe("SellerReachabilityCard", () => {
     state({ data: report(0, null) })
     render(<SellerReachabilityCard />)
     expect(
-      screen.getByTestId("reachability-shared-server-note").textContent,
-    ).toMatch(/Not checked yet, so this column is 0/)
+      screen.getByTestId("reachability-server-or-app-note").textContent,
+    ).toMatch(/not checked yet/)
+  })
+
+  it("says app installs count once confirmed", () => {
+    state({ data: report(0, "2026-11-01T06:00:00.000Z", true) })
+    render(<SellerReachabilityCard />)
+    expect(
+      screen.getByTestId("reachability-server-or-app-note").textContent,
+    ).toMatch(/Installing the app counts as reachable by Discord DM/)
+  })
+
+  it("lists install link clicks per surface, or says there are none", () => {
+    state({ data: report() })
+    const { unmount } = render(<SellerReachabilityCard />)
+    expect(
+      within(screen.getByTestId("reachability-install-clicks")).getByText(
+        "No clicks yet.",
+      ),
+    ).toBeInTheDocument()
+    unmount()
+    state({
+      data: report(0, null, false, [
+        { install_type: "user", src: "shop_hint", clicks_7d: 2, clicks_30d: 5 },
+        { install_type: "server", src: "footer", clicks_7d: 0, clicks_30d: 1 },
+      ]),
+    })
+    render(<SellerReachabilityCard />)
+    const table = within(screen.getByTestId("reachability-install-clicks"))
+    const rows = table.getAllByRole("row").map((r) => r.textContent)
+    expect(rows[1]).toBe("Your accountShop pages tip25")
+    expect(rows[2]).toBe("A serverSite footer01")
   })
 
   it("shows an error with a working retry", () => {

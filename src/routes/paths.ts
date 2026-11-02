@@ -40,6 +40,8 @@ export const PATHS = {
   shoppingLists: "/shopping-lists",
   /** Verified orgs' storefronts (prerendered hub). */
   storefronts: "/storefronts",
+  /** Counts the click, then opens Discord's install page (features/discord-install). */
+  discordInstall: "/discord/install",
 } as const
 
 export const AUTH_PATHS = {

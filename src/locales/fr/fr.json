@@ -758,6 +758,14 @@
     "listing_expiring": {
       "one": "Tu vends toujours « {{title}} » ? L'annonce expire dans 3 jours. Ouvre-la pour la renouveler en un clic.",
       "many": "Tu vends toujours ? {{n}} annonces de {{shop}} expirent dans 3 jours. Ouvre pour les renouveler en un clic."
+    },
+    "offer_reminder": {
+      "first_one": "Une offre attend votre réponse : « {{title}} »",
+      "first_many": "{{n}} offres attendent votre réponse",
+      "final_one": "Dernier rappel : une offre attend votre réponse : « {{title}} »",
+      "final_many": "Dernier rappel : {{n}} offres attendent votre réponse",
+      "buyer_one": "« {{title}} » attend toujours le vendeur. Continuez d'attendre, écrivez au vendeur ou retirez l'offre.",
+      "buyer_many": "{{n}} de vos offres attendent toujours le vendeur"
     }
   },
   "onboarding": {
@@ -946,7 +954,10 @@
         "org_member_joined": "Nouveau membre",
         "listing_expiring": "Annonce sur le point d'expirer",
         "storefront_enquiry_accepted": "Demande de vitrine acceptée",
-        "storefront_enquiry_declined": "Demande de vitrine refusée"
+        "storefront_enquiry_declined": "Demande de vitrine refusée",
+        "reminder_offer_pending": "Offre en attente de votre réponse",
+        "reminder_offer_pending_final": "Dernier rappel : offre en attente de votre réponse",
+        "reminder_offer_waiting_buyer": "Votre offre est toujours en attente"
       },
       "tabs": {
         "orders": "Commandes et offres",
@@ -974,7 +985,7 @@
         },
         "reminders": {
           "label": "Rappels",
-          "hint": "Un rappel quand des messages de commande ou d'offre attendent depuis quelques heures."
+          "hint": "Un rappel quand des messages attendent depuis quelques heures, ou qu'une offre attend une réponse."
         },
         "bids": {
           "label": "Enchères",
@@ -1067,6 +1078,14 @@
         },
         "storefront-enquiry": {
           "label": "Demande acceptée ou refusée"
+        },
+        "offer-pending": {
+          "label": "Offre en attente de votre réponse",
+          "hint": "Environ 1 et 3 jours après l'arrivée d'une offre restée sans réponse"
+        },
+        "offer-waiting": {
+          "label": "Votre offre est toujours en attente",
+          "hint": "Si le vendeur n'a pas répondu après le dernier rappel"
         }
       },
       "subtitle": "Choisissez où chaque type de notification vous parvient.",
@@ -1627,9 +1646,9 @@
   "discord_bot": {
     "integrating_with_discord": "Intégration avec Discord",
     "how_to_get_notified": "Comment être notifié lorsqu'une commande est passée",
-    "how_to_get_notified_answer": "Ajoutez le [Bot Discord officiel de SC Market](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) à votre serveur pour recevoir automatiquement des messages privés lorsqu'une commande est passée avec vous ou vous est assignée. Vous pouvez aussi utiliser la configuration ci-dessous pour honorer les commandes via [le serveur officiel de SC Market]({{DISCORD_INVITE}}).",
+    "how_to_get_notified_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur pour recevoir automatiquement des messages privés lorsqu'une commande est passée avec vous ou vous est assignée. Vous pouvez aussi utiliser la configuration ci-dessous pour honorer les commandes via [le serveur officiel de SC Market]({{DISCORD_INVITE}}).",
     "how_to_communicate": "Comment communiquer avec les acheteurs via Discord",
-    "how_to_communicate_answer": "Ajoutez le [Bot Discord officiel de SC Market](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) à votre serveur et choisissez un salon pour les fils de commande : chaque nouvelle commande ou offre y ouvre alors un fil privé avec l'acheteur et le vendeur assigné, et les acheteurs sont invités sur votre serveur pour que vous puissiez traiter la commande ensemble.\n\n1. Liez votre compte Discord dans vos paramètres SC Market, puis [ajoutez le bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) à votre serveur.\n\n2. Dans le salon qui doit accueillir les fils de commande, exécutez `/setup threads`. Pour les commandes de votre org, renseignez `org` avec son Spectrum ID (par exemple `/setup threads org:SCMARKET`) ; pour les commandes passées avec vous, laissez-le vide.\n\n3. Facultatif : dans un salon de l'équipe, exécutez `/setup alerts` (avec le même `org`) pour publier chaque nouvelle commande et offre avec un bouton Claim.\n\nIl vous faut la permission **Gérer les salons** sur le serveur Discord. Pour une org, il vous faut aussi sur SC Market la permission **Manage Webhooks** de l'org pour les fils, ou **Manage Orders** pour les alertes. Dans le salon des fils, le bot a besoin de Voir le salon, Créer des fils privés, Envoyer des messages dans les fils et Créer une invitation. Exécutez `/setup status` pour voir ce que reçoit un salon, et `/help` pour voir toutes les commandes.",
+    "how_to_communicate_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur et choisissez un salon pour les fils de commande : chaque nouvelle commande ou offre y ouvre alors un fil privé avec l'acheteur et le vendeur assigné, et les acheteurs sont invités sur votre serveur pour que vous puissiez traiter la commande ensemble.\n\n1. Liez votre compte Discord dans vos paramètres SC Market, puis [ajoutez le bot]({{BOT_INSTALL_PATH}}) à votre serveur.\n\n2. Dans le salon qui doit accueillir les fils de commande, exécutez `/setup threads`. Pour les commandes de votre org, renseignez `org` avec son Spectrum ID (par exemple `/setup threads org:SCMARKET`) ; pour les commandes passées avec vous, laissez-le vide.\n\n3. Facultatif : dans un salon de l'équipe, exécutez `/setup alerts` (avec le même `org`) pour publier chaque nouvelle commande et offre avec un bouton Claim.\n\nIl vous faut la permission **Gérer les salons** sur le serveur Discord. Pour une org, il vous faut aussi sur SC Market la permission **Manage Webhooks** de l'org pour les fils, ou **Manage Orders** pour les alertes. Dans le salon des fils, le bot a besoin de Voir le salon, Créer des fils privés, Envoyer des messages dans les fils et Créer une invitation. Exécutez `/setup status` pour voir ce que reçoit un salon, et `/help` pour voir toutes les commandes.",
     "learn_connect": "Connecter le bot Discord",
     "learn_alerts": "Alertes de commande et prise en charge"
   },
@@ -2308,7 +2327,11 @@
     "accepted": "Acceptée",
     "discordServerInvite": "Invitation au serveur Discord",
     "joinServer": "Rejoindre le serveur",
-    "noOffer": "Aucun détail d'offre disponible"
+    "noOffer": "Aucun détail d'offre disponible",
+    "withdrawTitle": "Retirer cette offre ?",
+    "withdrawBody": "Le vendeur ne pourra plus l'accepter. Pour continuer d'attendre, fermez cette fenêtre.",
+    "keepWaiting": "Continuer d'attendre",
+    "withdraw": "Retirer l'offre"
   },
   "CounterOfferSubmitArea": {
     "submitCounterOffer": "Envoyer la contre-offre",
@@ -7834,26 +7857,49 @@
         "discord_dm": "MP Discord",
         "discord_dm_confirmed": "MP reçu",
         "discord_dm_closed": "MP échoué (fermés)",
-        "discord_shared_server": "Partage un serveur avec le bot",
         "email": "E-mail",
         "email_confirmed": "E-mail remis",
         "push": "Push",
         "any": "Au moins un canal",
-        "none": "Aucun"
+        "none": "Aucun",
+        "discord_server_or_app": "Serveur en commun ou application installée"
       },
       "notes": {
         "cells": "Chaque case : vendeurs · leurs annonces publiques.",
-        "discord": "MP Discord : Discord lié, et leur dernier MP de SC Market (conservé {{days}} jours) n'a pas échoué. Les vendeurs jamais contactés par MP sur cette période comptent, sans confirmation ; « MP reçu » compte ceux dont le dernier MP est arrivé.",
         "discordNoSignal": "MP Discord : Discord lié. Aucun résultat de remise des MP n'est enregistré.",
-        "discordClosed": "MP échoué (fermés) : injoignable par MP, car Discord a refusé leur dernier MP (erreur {{code}} : MP fermés, ou aucun serveur en commun avec le bot). Pour une organisation, c'est le cas de toutes les personnes joignables.",
-        "sharedServer": "Partage un serveur avec le bot : Discord lié et membre d'au moins un serveur où se trouve le bot SC Market. Vérifié environ toutes les 12 heures à partir des listes de membres du bot, sans rien envoyer ; dernière vérification : {{when}}. En général, le bot ne peut envoyer de MP qu'à ces vendeurs. Pas compté dans « Au moins un canal » ni dans « Aucun ».",
-        "sharedServerNever": "Partage un serveur avec le bot : Discord lié et membre d'au moins un serveur où se trouve le bot SC Market, vérifié environ toutes les 12 heures sans rien envoyer. Pas encore vérifié, donc cette colonne est à 0. Pas compté dans « Au moins un canal » ni dans « Aucun ».",
         "email": "E-mail : une adresse vérifiée, non désabonnée des e-mails d'annonces. Les rebonds ne sont pas enregistrés : une adresse vérifiée peut quand même rebondir.",
         "emailChecked": "E-mail : une adresse vérifiée qui n'a pas rejeté de message ni signalé de spam, sans désabonnement des e-mails d'annonces. Les vendeurs sans e-mail ces {{days}} derniers jours comptent, non confirmés ; « E-mail remis » compte ceux dont une remise a été confirmée sur cette période.",
         "push": "Push : au moins un abonnement push. Ceux qui ont expiré sont supprimés quand un push échoue, mais aucun résultat de remise n'est enregistré.",
         "pushChecked": "Push : au moins un abonnement push.",
         "anyNone": "Au moins un canal : joignable par MP Discord, e-mail ou push. Aucun : par aucun d'eux.",
-        "lastSeen": "La dernière connexion compte tous les vendeurs, y compris ceux qui masquent leur statut en ligne aux acheteurs."
+        "lastSeen": "La dernière connexion compte tous les vendeurs, y compris ceux qui masquent leur statut en ligne aux acheteurs.",
+        "discordRule": "DM Discord : Discord lié, leur dernier DM de SC Market (conservé {{days}} jours) n'a pas été refusé avec l'erreur {{code}}, et ils partagent un serveur avec le bot. Les vendeurs sans DM sur cette période comptent, non confirmés ; « DM reçu » compte ceux dont le dernier DM est arrivé.",
+        "discordClosedInstall": "DM échoué (fermé) : injoignable par DM car Discord a refusé leur dernier DM (erreur {{code}} : DM fermés, ou le bot ne peut pas les joindre). Un DM refusé efface aussi une installation de l'application enregistrée. Pour une org, cela vaut pour toutes les personnes à contacter.",
+        "serverOrApp": "Serveur en commun ou application installée : Discord lié, et soit membre d'au moins un serveur où se trouve le bot SC Market (vérifié environ toutes les 12 heures à partir des listes de membres du bot, sans rien envoyer ; dernière vérification {{when}}), soit vu utilisant le bot via l'application installée sur son propre compte Discord. Non compté dans N'importe quel canal ni Aucun.",
+        "serverOrAppNever": "Serveur en commun ou application installée : Discord lié, et soit membre d'au moins un serveur où se trouve le bot SC Market (vérifié environ toutes les 12 heures, sans rien envoyer ; pas encore vérifié), soit vu utilisant le bot via l'application installée sur son propre compte Discord. Non compté dans N'importe quel canal ni Aucun.",
+        "installCounts": "Installer l'application compte comme joignable par DM Discord.",
+        "installNotCounted": "Les installations de l'application sont enregistrées mais ne comptent pas comme joignables par DM Discord tant qu'il n'est pas confirmé que le bot peut écrire à quelqu'un sans serveur en commun."
+      },
+      "installClicks": {
+        "title": "Clics sur « Ajouter SC Market à Discord »",
+        "none": "Aucun clic pour l'instant.",
+        "type": "Installer sur",
+        "src": "Où",
+        "days7": "7 derniers jours",
+        "days30": "30 derniers jours",
+        "user": "Compte personnel",
+        "server": "Un serveur",
+        "sources": {
+          "settings_notifications": "Paramètres › Notifications",
+          "settings_discord": "Paramètres › Discord",
+          "org_discord": "Org › Discord",
+          "shop_dashboard": "Commandes de la boutique",
+          "shop_hint": "Astuce des pages boutique",
+          "guide": "Guide",
+          "faq": "FAQ Discord",
+          "footer": "Pied de page",
+          "other": "Autre"
+        }
       }
     }
   },
@@ -8889,6 +8935,24 @@
     "whiteLabel": {
       "title": "Votre vitrine gratuite, et votre image de marque",
       "body": "Chaque organisation a une vitrine gratuite sur SC Market. Dès que votre organisation est vérifiée sur RSI et active, l'image de marque se débloque : votre propre thème et, sur demande, une adresse yourorg.sc-market.space."
+    }
+  },
+  "discordInstall": {
+    "pageTitle": "Ajouter SC Market à Discord",
+    "opening": "Ouverture de Discord…",
+    "fallback": "Si rien ne se passe,",
+    "openManually": "ouvrez la page d'installation de Discord",
+    "choose": "Comment voulez-vous ajouter SC Market ?",
+    "user": "À votre compte Discord",
+    "userHint": "Pour pouvoir vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
+    "server": "À un serveur Discord",
+    "serverHint": "Pour les fils de commande et les alertes sur votre propre serveur.",
+    "cta": {
+      "title": "Ajoutez SC Market à votre Discord",
+      "why": "Pour pouvoir vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
+      "unreachableTitle": "Les offres des acheteurs ne vous parviennent pas sur Discord",
+      "linkFirst": "Liez d'abord votre compte Discord, puis ajoutez SC Market à votre Discord, pour que nous puissions vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
+      "linkDiscord": "Lier Discord"
     }
   }
 }

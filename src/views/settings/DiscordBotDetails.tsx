@@ -7,15 +7,24 @@ import { DISCORD_INVITE } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { HelpLink } from "../../features/help/components/HelpLink"
 import { FirstUseHint } from "../../features/help/components/FirstUseHint"
+import { discordInstallPath } from "../../features/discord-install/installLinks"
 
 export function DiscordBotDetails(props: { org?: boolean }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
+  // "Add the bot" links in the answers below: counted per surface.
+  const BOT_INSTALL_PATH = discordInstallPath(
+    "server",
+    props.org ? "org_discord" : "settings_discord",
+  )
 
   return (
     <>
       <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
-        <FirstUseHint hint="discordThreadsAlerts" title={t("hints.discordThreadsAlerts.title")}>
+        <FirstUseHint
+          hint="discordThreadsAlerts"
+          title={t("hints.discordThreadsAlerts.title")}
+        >
           {t("hints.discordThreadsAlerts.body")}
         </FirstUseHint>
       </Grid>
@@ -49,12 +58,15 @@ export function DiscordBotDetails(props: { org?: boolean }) {
             question={t("discord_bot.how_to_get_notified")}
             answer={t("discord_bot.how_to_get_notified_answer", {
               DISCORD_INVITE,
+              BOT_INSTALL_PATH,
             })}
             first
           />
           <FAQQuestion
             question={t("discord_bot.how_to_communicate")}
-            answer={t("discord_bot.how_to_communicate_answer")}
+            answer={t("discord_bot.how_to_communicate_answer", {
+              BOT_INSTALL_PATH,
+            })}
             last
           />
         </List>

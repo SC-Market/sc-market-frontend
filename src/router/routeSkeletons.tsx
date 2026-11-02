@@ -171,6 +171,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/email/verify/:token": PageSkeleton,
   "/email/unsubscribe": PageSkeleton,
   "/email/unsubscribe/:token": PageSkeleton,
+  "/discord/install": PageSkeleton,
 
   // Auth routes
   "/login": PageSkeleton,

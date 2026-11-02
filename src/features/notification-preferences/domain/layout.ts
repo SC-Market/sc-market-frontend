@@ -126,13 +126,25 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
       section(
         "reminders",
         "Reminders",
-        "A reminder when order or offer messages have been waiting a few hours.",
+        "A reminder when messages have been waiting a few hours, or an offer is waiting for a reply.",
         [
           row(
             "reminder",
             "Unread message reminder",
             ["reminder.unread_messages"],
             "At most once a day",
+          ),
+          row(
+            "offer-pending",
+            "Offer waiting for your reply",
+            ["reminder.offer_pending", "reminder.offer_pending_final"],
+            "About 1 and 3 days after an offer arrives with no reply",
+          ),
+          row(
+            "offer-waiting",
+            "Your offer is still waiting",
+            ["reminder.offer_waiting_buyer"],
+            "If the seller hasn't replied after the last reminder",
           ),
         ],
       ),

@@ -1264,6 +1264,15 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/email/unsubscribe",
   },
   {
+    "chain": "(layout:AppLayout) > /discord/install",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/discord/install",
+  },
+  {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /onboarding",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

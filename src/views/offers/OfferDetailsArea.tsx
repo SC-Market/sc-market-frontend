@@ -20,7 +20,7 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material"
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { format } from "../../util/time"
@@ -40,7 +40,7 @@ import {
 import { MessagesBody } from "../../features/chats"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { DiscordThreadControl } from "../../components/orders/DiscordThreadControl"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
@@ -130,6 +130,21 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
   )
 
   const isLatestOffer = (props.selectedOfferIndex ?? 0) === 0
+
+  // ?action=withdraw (the "Withdraw the offer" link in a still-waiting
+  // reminder): open the withdraw confirmation for the customer. Nothing is
+  // withdrawn until they confirm.
+  const [searchParams, setSearchParams] = useSearchParams()
+  const isCustomer = !!profile && profile.username === session.customer?.username
+  const canWithdraw = isCustomer && showCancel && isLatestOffer
+  const [withdrawOpen, setWithdrawOpen] = useState(false)
+  useEffect(() => {
+    if (searchParams.get("action") !== "withdraw" || !profile) return
+    if (canWithdraw) setWithdrawOpen(true)
+    const next = new URLSearchParams(searchParams)
+    next.delete("action")
+    setSearchParams(next, { replace: true })
+  }, [searchParams, setSearchParams, canWithdraw, profile])
 
   const v2SummaryItems = useMemo(() => {
     if (!currentOffer) return []
@@ -668,6 +683,40 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog
+        open={withdrawOpen}
+        onClose={() => setWithdrawOpen(false)}
+        aria-labelledby="withdraw-offer-title"
+      >
+        <DialogTitle id="withdraw-offer-title">
+          {t("OfferDetailsArea.withdrawTitle", "Withdraw this offer?")}
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="text.primary">
+            {t(
+              "OfferDetailsArea.withdrawBody",
+              "The seller won't be able to accept it any more. To keep waiting instead, close this.",
+            )}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setWithdrawOpen(false)}>
+            {t("OfferDetailsArea.keepWaiting", "Keep waiting")}
+          </Button>
+          <LoadingButton
+            color="error"
+            variant="contained"
+            loading={isUpdatingStatus}
+            data-testid="confirm-withdraw-offer"
+            onClick={() => {
+              setWithdrawOpen(false)
+              updateStatusCallback("cancelled")
+            }}
+          >
+            {t("OfferDetailsArea.withdraw", "Withdraw the offer")}
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </Grid>
   )
 }

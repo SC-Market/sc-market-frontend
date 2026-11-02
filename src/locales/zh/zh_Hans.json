@@ -758,6 +758,14 @@
     "listing_expiring": {
       "one": "还在出售“{{title}}”吗？它将在3天后到期。打开即可一键续期。",
       "many": "还在出售吗？{{shop}} 中的 {{n}} 个商品将在3天后到期。打开即可一键续期。"
+    },
+    "offer_reminder": {
+      "first_one": "有一个报价在等待你回复：“{{title}}”",
+      "first_many": "有 {{n}} 个报价在等待你回复",
+      "final_one": "最后提醒：有一个报价在等待你回复：“{{title}}”",
+      "final_many": "最后提醒：有 {{n}} 个报价在等待你回复",
+      "buyer_one": "“{{title}}”仍在等待卖家回复。你可以继续等待、给卖家发消息，或撤回报价。",
+      "buyer_many": "你有 {{n}} 个报价仍在等待卖家回复"
     }
   },
   "onboarding": {
@@ -946,7 +954,10 @@
         "org_member_joined": "新成员加入",
         "listing_expiring": "商品即将到期",
         "storefront_enquiry_accepted": "店面申请已接受",
-        "storefront_enquiry_declined": "店面申请已拒绝"
+        "storefront_enquiry_declined": "店面申请已拒绝",
+        "reminder_offer_pending": "等待你回复的报价",
+        "reminder_offer_pending_final": "最后提醒：等待你回复的报价",
+        "reminder_offer_waiting_buyer": "你的报价仍在等待"
       },
       "tabs": {
         "orders": "订单与报价",
@@ -974,7 +985,7 @@
         },
         "reminders": {
           "label": "提醒",
-          "hint": "订单或报价消息等待数小时后的提醒。"
+          "hint": "当消息已等待数小时，或报价正在等待回复时提醒你。"
         },
         "bids": {
           "label": "出价",
@@ -1067,6 +1078,14 @@
         },
         "storefront-enquiry": {
           "label": "申请被接受或拒绝"
+        },
+        "offer-pending": {
+          "label": "等待你回复的报价",
+          "hint": "收到报价且未回复后约 1 天和 3 天"
+        },
+        "offer-waiting": {
+          "label": "你的报价仍在等待",
+          "hint": "如果卖家在最后一次提醒后仍未回复"
         }
       },
       "subtitle": "选择每类通知的接收方式。",
@@ -1619,9 +1638,9 @@
   "discord_bot": {
     "integrating_with_discord": "集成进Discord",
     "how_to_get_notified": "如何在有订单创建时收到提醒",
-    "how_to_get_notified_answer": "将官方的[SC市集Discord机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入到您的服务器以在一条订单被创建或被指派给您时收到自动私信。您也可以用下方设置去在[SC市集的官方服务器]({{DISCORD_INVITE}})里完成订单。",
+    "how_to_get_notified_answer": "将官方的[SC市集Discord机器人]({{BOT_INSTALL_PATH}})加入到您的服务器以在一条订单被创建或被指派给您时收到自动私信。您也可以用下方设置去在[SC市集的官方服务器]({{DISCORD_INVITE}})里完成订单。",
     "how_to_communicate": "如何用Discord与买家交流",
-    "how_to_communicate_answer": "将官方的[SC市集Discord机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的服务器，并选择一个用于订单讨论串的频道：之后每个新订单或报价都会在该频道中创建一个私密讨论串，买家和指派的卖家都会被加入，买家也会收到您的服务器邀请，方便你们一起完成订单。\n\n1. 在SC市集设置中关联您的Discord账号，然后把[机器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的服务器。\n\n2. 在用于存放订单讨论串的频道中运行`/setup threads`。如果是组织的订单，在`org`中填写组织的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下给您个人的订单，请留空。\n\n3. 可选：在员工频道中运行`/setup alerts`（使用相同的`org`），每个新订单和报价都会附带一个Claim按钮发布出来。\n\n您需要在Discord服务器中拥有**管理频道**权限。对于组织，您还需要该组织在SC市集上的**Manage Webhooks**权限（讨论串）或**Manage Orders**权限（提醒）。在讨论串频道中，机器人需要查看频道、创建私密子区、在子区中发送消息和创建邀请的权限。运行`/setup status`可查看一个频道的设置，运行`/help`可查看所有指令。",
+    "how_to_communicate_answer": "将官方的[SC市集Discord机器人]({{BOT_INSTALL_PATH}})加入您的服务器，并选择一个用于订单讨论串的频道：之后每个新订单或报价都会在该频道中创建一个私密讨论串，买家和指派的卖家都会被加入，买家也会收到您的服务器邀请，方便你们一起完成订单。\n\n1. 在SC市集设置中关联您的Discord账号，然后把[机器人]({{BOT_INSTALL_PATH}})加入您的服务器。\n\n2. 在用于存放订单讨论串的频道中运行`/setup threads`。如果是组织的订单，在`org`中填写组织的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下给您个人的订单，请留空。\n\n3. 可选：在员工频道中运行`/setup alerts`（使用相同的`org`），每个新订单和报价都会附带一个Claim按钮发布出来。\n\n您需要在Discord服务器中拥有**管理频道**权限。对于组织，您还需要该组织在SC市集上的**Manage Webhooks**权限（讨论串）或**Manage Orders**权限（提醒）。在讨论串频道中，机器人需要查看频道、创建私密子区、在子区中发送消息和创建邀请的权限。运行`/setup status`可查看一个频道的设置，运行`/help`可查看所有指令。",
     "learn_connect": "连接 Discord 机器人",
     "learn_alerts": "订单提醒与认领"
   },
@@ -2294,7 +2313,11 @@
     "accepted": "已接受",
     "discordServerInvite": "Discord 服务器邀请",
     "joinServer": "加入服务器",
-    "noOffer": "没有可用的报价详情"
+    "noOffer": "没有可用的报价详情",
+    "withdrawTitle": "撤回此报价？",
+    "withdrawBody": "卖家将无法再接受它。如果想继续等待，请关闭此窗口。",
+    "keepWaiting": "继续等待",
+    "withdraw": "撤回报价"
   },
   "CounterOfferSubmitArea": {
     "submitCounterOffer": "提交还价",
@@ -7612,26 +7635,49 @@
         "discord_dm": "Discord 私信",
         "discord_dm_confirmed": "私信已送达",
         "discord_dm_closed": "私信失败（已关闭）",
-        "discord_shared_server": "与机器人同在服务器",
         "email": "电子邮件",
         "email_confirmed": "邮件已送达",
         "push": "推送",
         "any": "任一渠道",
-        "none": "无"
+        "none": "无",
+        "discord_server_or_app": "共享服务器或已安装应用"
       },
       "notes": {
         "cells": "每格：卖家 · 他们的公开商品。",
-        "discord": "Discord 私信：已关联 Discord，且 SC Market 发给他们的最近一条私信（保留 {{days}} 天）没有失败。这段时间内从未收到私信的卖家也计入，但未确认；“私信已送达”统计最近一条私信已送达的卖家。",
         "discordNoSignal": "Discord 私信：已关联 Discord。未记录私信送达结果。",
-        "discordClosed": "私信失败（已关闭）：无法通过私信联系，因为 Discord 拒绝了最近一条私信（错误 {{code}}：已关闭私信，或与机器人没有共同服务器）。对于组织，所有可联系的成员都是如此。",
-        "sharedServer": "与机器人同在服务器：已关联 Discord，且至少加入了一个 SC Market 机器人所在的服务器。约每 12 小时根据机器人的成员列表检查一次，不发送任何内容；最近检查：{{when}}。机器人通常只能给这些卖家发私信。不计入“任一渠道”或“无”。",
-        "sharedServerNever": "与机器人同在服务器：已关联 Discord，且至少加入了一个 SC Market 机器人所在的服务器，约每 12 小时检查一次，不发送任何内容。尚未检查，因此此列为 0。不计入“任一渠道”或“无”。",
         "email": "电子邮件：已验证的地址，且未退订公告邮件。退信不会被记录，因此已验证的地址仍可能退信。",
         "emailChecked": "邮件：已验证、未退信且未被举报为垃圾邮件的地址，且未退订公告邮件。过去 {{days}} 天内未收到邮件的卖家计入但未确认；“邮件已送达”统计这段时间内确认送达的卖家。",
         "push": "推送：至少有一个推送订阅。推送失败时会删除过期的订阅，但不记录送达结果。",
         "pushChecked": "推送：至少有一个推送订阅。",
         "anyNone": "任一渠道：可通过 Discord 私信、电子邮件或推送联系。无：以上都不行。",
-        "lastSeen": "最近上线统计所有卖家，包括对买家隐藏在线状态的卖家。"
+        "lastSeen": "最近上线统计所有卖家，包括对买家隐藏在线状态的卖家。",
+        "discordRule": "Discord 私信：已关联 Discord，SC Market 发给他们的最后一条私信（保留 {{days}} 天）没有被错误 {{code}} 拒绝，并且与机器人共享服务器。此期间未收到私信的卖家计入，但未确认；“私信已送达”统计最后一条私信已送达的卖家。",
+        "discordClosedInstall": "私信失败（已关闭）：Discord 拒绝了最后一条私信，无法通过私信联系（错误 {{code}}：私信已关闭，或机器人无法联系到对方）。被拒绝的私信也会清除已记录的应用安装。对于组织，这适用于所有可联系的成员。",
+        "serverOrApp": "共享服务器或已安装应用：已关联 Discord，并且要么是 SC Market 机器人所在的至少一个服务器的成员（约每 12 小时根据机器人的成员列表检查一次，不发送任何内容；上次检查 {{when}}），要么曾通过安装在自己 Discord 账号上的应用使用机器人。不计入“任一渠道”或“无”。",
+        "serverOrAppNever": "共享服务器或已安装应用：已关联 Discord，并且要么是 SC Market 机器人所在的至少一个服务器的成员（约每 12 小时检查一次，不发送任何内容；尚未检查），要么曾通过安装在自己 Discord 账号上的应用使用机器人。不计入“任一渠道”或“无”。",
+        "installCounts": "安装应用视为可通过 Discord 私信联系。",
+        "installNotCounted": "应用安装会被记录，但在确认机器人能私信与其不共享服务器的人之前，不计为可通过 Discord 私信联系。"
+      },
+      "installClicks": {
+        "title": "“将 SC Market 添加到 Discord”点击次数",
+        "none": "暂无点击。",
+        "type": "添加到",
+        "src": "位置",
+        "days7": "最近 7 天",
+        "days30": "最近 30 天",
+        "user": "个人账号",
+        "server": "服务器",
+        "sources": {
+          "settings_notifications": "设置 › 通知",
+          "settings_discord": "设置 › Discord",
+          "org_discord": "组织 › Discord",
+          "shop_dashboard": "店铺订单",
+          "shop_hint": "店铺页面提示",
+          "guide": "指南",
+          "faq": "Discord 常见问题",
+          "footer": "网站页脚",
+          "other": "其他"
+        }
       }
     }
   },
@@ -8625,6 +8671,24 @@
     "whiteLabel": {
       "title": "免费店面与品牌定制",
       "body": "每个组织在 SC Market 上都有免费店面。组织通过 RSI 验证且保持活跃后即可解锁品牌定制：自己的主题，以及可申请的 yourorg.sc-market.space 地址。"
+    }
+  },
+  "discordInstall": {
+    "pageTitle": "将 SC Market 添加到 Discord",
+    "opening": "正在打开 Discord…",
+    "fallback": "如果没有反应，",
+    "openManually": "请打开 Discord 的安装页面",
+    "choose": "你想如何添加 SC Market？",
+    "user": "添加到你的 Discord 账号",
+    "userHint": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
+    "server": "添加到 Discord 服务器",
+    "serverHint": "用于在你自己的服务器中使用订单讨论串和提醒。",
+    "cta": {
+      "title": "将 SC Market 添加到你的 Discord",
+      "why": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
+      "unreachableTitle": "买家的报价无法通过 Discord 通知到你",
+      "linkFirst": "请先关联你的 Discord 账号，然后将 SC Market 添加到你的 Discord，这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
+      "linkDiscord": "关联 Discord"
     }
   }
 }

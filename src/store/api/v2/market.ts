@@ -31,6 +31,7 @@ export const addTagTypes = [
   "Game Data - Crafting",
   "Game Data - Blueprints",
   "Email",
+  "Discord",
   "Debug V2",
   "Dashboard V2",
   "Cart V2",
@@ -719,6 +720,15 @@ const injectedRtkApi = api
           body: queryArg.updateNotificationOrgMuteRequest,
         }),
         invalidatesTags: ["Notifications"],
+      }),
+      getDiscordReachability: build.query<
+        GetDiscordReachabilityApiResponse,
+        GetDiscordReachabilityApiArg
+      >({
+        query: () => ({
+          url: `/notification-preferences/discord-reachability`,
+        }),
+        providesTags: ["Notifications"],
       }),
       getMfaStatus: build.query<GetMfaStatusApiResponse, GetMfaStatusApiArg>({
         query: () => ({ url: `/auth/mfa/status` }),
@@ -1765,6 +1775,17 @@ const injectedRtkApi = api
           method: "POST",
         }),
         invalidatesTags: ["Email"],
+      }),
+      recordDiscordInstallClick: build.mutation<
+        RecordDiscordInstallClickApiResponse,
+        RecordDiscordInstallClickApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/discord/install-clicks`,
+          method: "POST",
+          body: queryArg.discordInstallClickRequest,
+        }),
+        invalidatesTags: ["Discord"],
       }),
       getFeatureFlag: build.query<
         GetFeatureFlagApiResponse,
@@ -2832,6 +2853,9 @@ export type UpdateNotificationOrgMuteApiResponse =
 export type UpdateNotificationOrgMuteApiArg = {
   updateNotificationOrgMuteRequest: UpdateNotificationOrgMuteRequest
 }
+export type GetDiscordReachabilityApiResponse =
+  /** status 200 Ok */ DiscordReachabilityResponse
+export type GetDiscordReachabilityApiArg = void
 export type GetMfaStatusApiResponse = /** status 200 Ok */ MfaStatusResponse
 export type GetMfaStatusApiArg = void
 export type StartTotpEnrollmentApiResponse =
@@ -3717,6 +3741,10 @@ export type GetEmailDeliverabilityApiArg = void
 export type ReverifyEmailApiResponse =
   /** status 200 Ok */ EmailReverifyResponse
 export type ReverifyEmailApiArg = void
+export type RecordDiscordInstallClickApiResponse = unknown
+export type RecordDiscordInstallClickApiArg = {
+  discordInstallClickRequest: DiscordInstallClickRequest
+}
 export type GetFeatureFlagApiResponse =
   /** status 200 Current feature flag setting */ GetFeatureFlagResponse
 export type GetFeatureFlagApiArg = void
@@ -5406,6 +5434,9 @@ export type NotificationEventKey =
   | "contract.offer_received"
   | "storefront.enquiry_accepted"
   | "storefront.enquiry_declined"
+  | "reminder.offer_pending"
+  | "reminder.offer_pending_final"
+  | "reminder.offer_waiting_buyer"
 export type NotificationPreferenceCell = {
   channel: NotificationChannelId
   enabled: boolean
@@ -5462,6 +5493,21 @@ export type UpdateNotificationOrgMuteRequest = {
   muted: boolean
   /** ISO time the mute ends; omit or null for "until I turn it back on". */
   until?: string | null
+}
+export type DiscordReachabilityResponse = {
+  discord_linked: boolean
+  /** Reachable by Discord DM by the one rule (linked, last DM not refused with 50007, shares a server with the bot). */
+  dm_reachable: boolean
+  /** Shares a server with the SC Market bot (checked periodically). */
+  shares_server: boolean
+  /** Seen using the bot through the app installed on their own Discord account. */
+  user_installed: boolean
+  /** Whether a recorded user install counts towards dm_reachable yet (false until confirmed the bot can DM such users). */
+  user_install_counts_as_dm: boolean
+  /** Whether the app can be installed on a personal account (User Install enabled in the Discord Developer Portal). */
+  user_install_available: boolean
+  /** The install link (integration_type=1) while user_install_available; null otherwise. */
+  user_install_url: string | null
 }
 export type MfaFactorSummary = {
   id: string
@@ -7845,6 +7891,12 @@ export type EmailReverifyResponse = {
   /** When the next one can be requested (ISO 8601). */
   reverify_available_at: string
 }
+export type DiscordInstallClickRequest = {
+  /** user: install on your own Discord account; server: add the bot to a server. */
+  type: "user" | "server"
+  /** The surface the link was on; unknown values count as "other". */
+  src: string
+}
 export type RecordStringBoolean = {
   [key: string]: boolean
 }
@@ -8657,14 +8709,14 @@ export type SellerReachabilityBucket = {
   /** Sellers with at least one publicly listed listing. */
   sellers: number
   listings: number
-  /** Discord linked, and the last Discord DM attempt (if any, last 90 days) did not fail. */
+  /** Discord linked, the last Discord DM attempt (if any, last 90 days) did not fail with 50007, and they share a server with the bot (or installed the app on their account, once signals.discord_user_install_counts_as_dm). */
   discord_dm: ReachabilityCount
-  /** Discord linked, and the last Discord DM attempt was delivered (a subset of discord_dm). */
+  /** Reachable by Discord DM, and the last Discord DM attempt was delivered (a subset of discord_dm). */
   discord_dm_confirmed: ReachabilityCount
-  /** Not reachable by Discord DM: the last DM failed with Discord error 50007 (DMs closed or no shared server); an org: every contact with Discord linked. */
+  /** Not reachable by Discord DM: the last DM failed with Discord error 50007 (DMs closed, or no shared server and no user install); an org: every contact with Discord linked. */
   discord_dm_closed: ReachabilityCount
-  /** Discord linked, and the account shares at least one server with the SC Market bot (checked periodically, no DM sent). Not part of any / none. */
-  discord_shared_server: ReachabilityCount
+  /** Discord linked, and the account shares at least one server with the SC Market bot (checked periodically, no DM sent) or installed the SC Market app on their own Discord account (seen on their interactions with the bot; cleared by a later 50007). Not part of any / none. */
+  discord_server_or_app: ReachabilityCount
   /** A verified primary email that is not marked undeliverable (bounced or complained), not unsubscribed from announcement emails. */
   email: ReachabilityCount
   /** Reachable by email, and SES confirmed a delivery to the address in the last email_delivered_window_days (a subset of email). */
@@ -8681,14 +8733,14 @@ export type SellerReachabilityCounts = {
   /** Sellers with at least one publicly listed listing. */
   sellers: number
   listings: number
-  /** Discord linked, and the last Discord DM attempt (if any, last 90 days) did not fail. */
+  /** Discord linked, the last Discord DM attempt (if any, last 90 days) did not fail with 50007, and they share a server with the bot (or installed the app on their account, once signals.discord_user_install_counts_as_dm). */
   discord_dm: ReachabilityCount
-  /** Discord linked, and the last Discord DM attempt was delivered (a subset of discord_dm). */
+  /** Reachable by Discord DM, and the last Discord DM attempt was delivered (a subset of discord_dm). */
   discord_dm_confirmed: ReachabilityCount
-  /** Not reachable by Discord DM: the last DM failed with Discord error 50007 (DMs closed or no shared server); an org: every contact with Discord linked. */
+  /** Not reachable by Discord DM: the last DM failed with Discord error 50007 (DMs closed, or no shared server and no user install); an org: every contact with Discord linked. */
   discord_dm_closed: ReachabilityCount
-  /** Discord linked, and the account shares at least one server with the SC Market bot (checked periodically, no DM sent). Not part of any / none. */
-  discord_shared_server: ReachabilityCount
+  /** Discord linked, and the account shares at least one server with the SC Market bot (checked periodically, no DM sent) or installed the SC Market app on their own Discord account (seen on their interactions with the bot; cleared by a later 50007). Not part of any / none. */
+  discord_server_or_app: ReachabilityCount
   /** A verified primary email that is not marked undeliverable (bounced or complained), not unsubscribed from announcement emails. */
   email: ReachabilityCount
   /** Reachable by email, and SES confirmed a delivery to the address in the last email_delivered_window_days (a subset of email). */
@@ -8699,6 +8751,24 @@ export type SellerReachabilityCounts = {
   any: ReachabilityCount
   /** None of them. */
   none: ReachabilityCount
+}
+export type DiscordInstallSource =
+  | "settings_notifications"
+  | "settings_discord"
+  | "org_discord"
+  | "shop_dashboard"
+  | "shop_hint"
+  | "guide"
+  | "faq"
+  | "footer"
+  | "other"
+export type DiscordInstallClickCount = {
+  install_type: "user" | "server"
+  src: DiscordInstallSource
+  /** Clicks in the last 7 days (today included). */
+  clicks_7d: number
+  /** Clicks in the last 30 days (today included). */
+  clicks_30d: number
 }
 export type SellerReachabilityReport = {
   generated_at: string
@@ -8713,6 +8783,8 @@ export type SellerReachabilityReport = {
     email_delivered_window_days: number
     /** SES bounces, complaints and deliveries are recorded (bounced addresses are not reachable). */
     email_delivery_results: boolean
+    /** Whether installing the app on one's own Discord account counts as reachable by Discord DM (false until confirmed that the bot can DM such users without a shared server). */
+    discord_user_install_counts_as_dm: boolean
     /** A membership result older than this many days is not counted. */
     discord_shared_server_fresh_days: number
     /** When the bot's server membership was last checked (ISO time), or null if never. */
@@ -8726,6 +8798,8 @@ export type SellerReachabilityReport = {
   }
   /** The email category whose unsubscribes are checked. */
   email_category: "announcements"
+  /** Clicks on "Add SC Market to Discord" links per install type and surface (last 7 and 30 days), most clicked first. */
+  install_clicks: DiscordInstallClickCount[]
 }
 export type IdentitySearchRow = {
   user_id: string
@@ -8986,6 +9060,7 @@ export const {
   useGetNotificationPreferencesQuery,
   useUpdateNotificationPreferencesMutation,
   useUpdateNotificationOrgMuteMutation,
+  useGetDiscordReachabilityQuery,
   useGetMfaStatusQuery,
   useStartTotpEnrollmentMutation,
   useConfirmTotpEnrollmentMutation,
@@ -9086,6 +9161,7 @@ export const {
   useFindCraftableBlueprintsMutation,
   useGetEmailDeliverabilityQuery,
   useReverifyEmailMutation,
+  useRecordDiscordInstallClickMutation,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,
   useGetLayoutQuery,

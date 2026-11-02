@@ -18,7 +18,7 @@ Add the SC Market bot to your Discord server and run `/setup threads` in the cha
 
 ## Steps
 
-1. Add the bot with the **Discord Bot** link in the site footer and pick your server.
+1. [Add the bot](/discord/install?type=server&src=guide) (also the **Discord Bot** link in the site footer) and pick your server.
 2. In the channel where threads should go, run `/setup threads`. For an org, fill in `org` with its Spectrum ID; for yourself, leave it empty.
 3. Read the bot's reply. It confirms the setup, and warns you if the bot is missing a permission in that channel.
 4. Check the result in [Settings](/settings) under **Discord Integration** (for an org: the org's **Discord Integration** tab). **Integrated Channel** shows the server and channel.
@@ -44,6 +44,10 @@ You, each org and each shop have one thread channel. Running `/setup threads` in
 ## What buyers need
 
 Buyers are added to the thread only if their Discord account is linked to SC Market. If they aren't in your server, the bot sends them an invite by direct message, so they need DMs open. After checkout, SC Market also opens a server invite for them.
+
+## Get DMs without a shared server
+
+The bot can only send you direct messages (offer reminders, order updates) if Discord lets it reach you. Sharing a server with the bot does that. If you'd rather not join one, [add SC Market to your Discord account](/discord/install?type=user&src=guide) instead: Discord asks you to authorize the app for your own account, with no server and no permissions. Link your Discord account to SC Market first, and keep direct messages from apps allowed in Discord's privacy settings.
 
 ## Advanced
 

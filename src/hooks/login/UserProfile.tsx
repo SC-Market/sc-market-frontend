@@ -13,6 +13,7 @@ import type { PublicContract } from "../../features/contracting/domain/types"
 import type { AccountIdentityNotice } from "../../features/notifications/types/NotificationAccountIdentity"
 import type { StorefrontEnquiryNotice } from "../../features/notifications/types/NotificationStorefrontEnquiry"
 import type { ListingExpiryNotice } from "../../features/notifications/types/NotificationListingExpiring"
+import type { OfferReminderNotice } from "../../features/notifications/types/NotificationOfferReminder"
 
 export interface Notification {
   read: boolean
@@ -32,6 +33,7 @@ export interface Notification {
     | AccountIdentityNotice
     | StorefrontEnquiryNotice
     | ListingExpiryNotice
+    | OfferReminderNotice
   timestamp: string
   actors: MinimalUser[]
   scope?: "individual" | "organization"

@@ -752,6 +752,14 @@
     "listing_expiring": {
       "one": "還在出售「{{title}}」嗎？它將在3天後到期。打開即可一鍵續期。",
       "many": "還在出售嗎？{{shop}} 中的 {{n}} 個商品將在3天後到期。打開即可一鍵續期。"
+    },
+    "offer_reminder": {
+      "first_one": "有一個報價在等待你回覆：「{{title}}」",
+      "first_many": "有 {{n}} 個報價在等待你回覆",
+      "final_one": "最後提醒：有一個報價在等待你回覆：「{{title}}」",
+      "final_many": "最後提醒：有 {{n}} 個報價在等待你回覆",
+      "buyer_one": "「{{title}}」仍在等待賣家回覆。你可以繼續等待、給賣家傳訊息，或撤回報價。",
+      "buyer_many": "你有 {{n}} 個報價仍在等待賣家回覆"
     }
   },
   "recruitmentVotes": {
@@ -882,7 +890,10 @@
         "org_member_joined": "新成員加入",
         "listing_expiring": "商品即將到期",
         "storefront_enquiry_accepted": "店面申請已接受",
-        "storefront_enquiry_declined": "店面申請已拒絕"
+        "storefront_enquiry_declined": "店面申請已拒絕",
+        "reminder_offer_pending": "等待你回覆的報價",
+        "reminder_offer_pending_final": "最後提醒：等待你回覆的報價",
+        "reminder_offer_waiting_buyer": "你的報價仍在等待"
       },
       "tabs": {
         "orders": "訂單與報價",
@@ -910,7 +921,7 @@
         },
         "reminders": {
           "label": "提醒",
-          "hint": "訂單或報價訊息等待數小時後的提醒。"
+          "hint": "當訊息已等待數小時，或報價正在等待回覆時提醒你。"
         },
         "bids": {
           "label": "出價",
@@ -1003,6 +1014,14 @@
         },
         "storefront-enquiry": {
           "label": "申請被接受或拒絕"
+        },
+        "offer-pending": {
+          "label": "等待你回覆的報價",
+          "hint": "收到報價且未回覆後約 1 天和 3 天"
+        },
+        "offer-waiting": {
+          "label": "你的報價仍在等待",
+          "hint": "如果賣家在最後一次提醒後仍未回覆"
         }
       },
       "subtitle": "選擇每種通知的接收方式。",
@@ -1559,9 +1578,9 @@
   "discord_bot": {
     "integrating_with_discord": "集成進Discord",
     "how_to_get_notified": "如何在有訂單創建時收到提醒",
-    "how_to_get_notified_answer": "將官方的[SC市集Discord機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入到您的服務器以在一條訂單被創建或被指派給您時收到自動私信。您也可以用下方設置去在[SC市集的官方服務器]({{DISCORD_INVITE}})裏完成訂單。",
+    "how_to_get_notified_answer": "將官方的[SC市集Discord機器人]({{BOT_INSTALL_PATH}})加入到您的服務器以在一條訂單被創建或被指派給您時收到自動私信。您也可以用下方設置去在[SC市集的官方服務器]({{DISCORD_INVITE}})裏完成訂單。",
     "how_to_communicate": "如何用Discord與買家交流",
-    "how_to_communicate_answer": "將官方的[SC市集Discord機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的伺服器，並選擇一個用於訂單討論串的頻道：之後每個新訂單或報價都會在該頻道中建立一個私密討論串，買家和指派的賣家都會被加入，買家也會收到您的伺服器邀請，方便你們一起完成訂單。\n\n1. 在SC市集設定中連結您的Discord帳號，然後把[機器人](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)加入您的伺服器。\n\n2. 在用於存放訂單討論串的頻道中執行`/setup threads`。如果是組織的訂單，在`org`中填寫組織的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下給您個人的訂單，請留空。\n\n3. 可選：在員工頻道中執行`/setup alerts`（使用相同的`org`），每個新訂單和報價都會附帶一個Claim按鈕發佈出來。\n\n您需要在Discord伺服器中擁有**管理頻道**權限。對於組織，您還需要該組織在SC市集上的**Manage Webhooks**權限（討論串）或**Manage Orders**權限（提醒）。在討論串頻道中，機器人需要檢視頻道、建立私人討論串、在討論串中傳送訊息和建立邀請的權限。執行`/setup status`可查看一個頻道的設定，執行`/help`可查看所有指令。",
+    "how_to_communicate_answer": "將官方的[SC市集Discord機器人]({{BOT_INSTALL_PATH}})加入您的伺服器，並選擇一個用於訂單討論串的頻道：之後每個新訂單或報價都會在該頻道中建立一個私密討論串，買家和指派的賣家都會被加入，買家也會收到您的伺服器邀請，方便你們一起完成訂單。\n\n1. 在SC市集設定中連結您的Discord帳號，然後把[機器人]({{BOT_INSTALL_PATH}})加入您的伺服器。\n\n2. 在用於存放訂單討論串的頻道中執行`/setup threads`。如果是組織的訂單，在`org`中填寫組織的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下給您個人的訂單，請留空。\n\n3. 可選：在員工頻道中執行`/setup alerts`（使用相同的`org`），每個新訂單和報價都會附帶一個Claim按鈕發佈出來。\n\n您需要在Discord伺服器中擁有**管理頻道**權限。對於組織，您還需要該組織在SC市集上的**Manage Webhooks**權限（討論串）或**Manage Orders**權限（提醒）。在討論串頻道中，機器人需要檢視頻道、建立私人討論串、在討論串中傳送訊息和建立邀請的權限。執行`/setup status`可查看一個頻道的設定，執行`/help`可查看所有指令。",
     "learn_connect": "連結 Discord 機器人",
     "learn_alerts": "訂單提醒與認領"
   },
@@ -2234,7 +2253,11 @@
     "accepted": "已接受",
     "discordServerInvite": "Discord 伺服器邀請",
     "joinServer": "加入伺服器",
-    "noOffer": "沒有可用的報價詳細資訊"
+    "noOffer": "沒有可用的報價詳細資訊",
+    "withdrawTitle": "撤回此報價？",
+    "withdrawBody": "賣家將無法再接受它。如果想繼續等待，請關閉此視窗。",
+    "keepWaiting": "繼續等待",
+    "withdraw": "撤回報價"
   },
   "CounterOfferSubmitArea": {
     "submitCounterOffer": "送出還價",
@@ -7606,26 +7629,49 @@
         "discord_dm": "Discord 私訊",
         "discord_dm_confirmed": "私訊已送達",
         "discord_dm_closed": "私訊失敗（已關閉）",
-        "discord_shared_server": "與機器人同在伺服器",
         "email": "電子郵件",
         "email_confirmed": "郵件已送達",
         "push": "推播",
         "any": "任一管道",
-        "none": "無"
+        "none": "無",
+        "discord_server_or_app": "共享伺服器或已安裝應用程式"
       },
       "notes": {
         "cells": "每格：賣家 · 他們的公開商品。",
-        "discord": "Discord 私訊：已連結 Discord，且 SC Market 發給他們的最近一則私訊（保留 {{days}} 天）沒有失敗。這段期間內從未收到私訊的賣家也計入，但未確認；「私訊已送達」統計最近一則私訊已送達的賣家。",
         "discordNoSignal": "Discord 私訊：已連結 Discord。未記錄私訊送達結果。",
-        "discordClosed": "私訊失敗（已關閉）：無法透過私訊聯絡，因為 Discord 拒絕了最近一則私訊（錯誤 {{code}}：已關閉私訊，或與機器人沒有共同伺服器）。對於組織，所有可聯絡的成員都是如此。",
-        "sharedServer": "與機器人同在伺服器：已連結 Discord，且至少加入了一個 SC Market 機器人所在的伺服器。約每 12 小時根據機器人的成員清單檢查一次，不傳送任何內容；最近檢查：{{when}}。機器人通常只能傳私訊給這些賣家。不計入「任一管道」或「無」。",
-        "sharedServerNever": "與機器人同在伺服器：已連結 Discord，且至少加入了一個 SC Market 機器人所在的伺服器，約每 12 小時檢查一次，不傳送任何內容。尚未檢查，因此此欄為 0。不計入「任一管道」或「無」。",
         "email": "電子郵件：已驗證的地址，且未取消訂閱公告郵件。退信不會被記錄，因此已驗證的地址仍可能退信。",
         "emailChecked": "郵件：已驗證、未退信且未被檢舉為垃圾郵件的地址，且未取消訂閱公告郵件。過去 {{days}} 天內未收到郵件的賣家計入但未確認；「郵件已送達」統計這段時間內確認送達的賣家。",
         "push": "推播：至少有一個推播訂閱。推播失敗時會刪除過期的訂閱，但不記錄送達結果。",
         "pushChecked": "推播：至少有一個推播訂閱。",
         "anyNone": "任一管道：可透過 Discord 私訊、電子郵件或推播聯絡。無：以上皆不行。",
-        "lastSeen": "最近上線統計所有賣家，包括對買家隱藏上線狀態的賣家。"
+        "lastSeen": "最近上線統計所有賣家，包括對買家隱藏上線狀態的賣家。",
+        "discordRule": "Discord 私訊：已連結 Discord，SC Market 傳給他們的最後一則私訊（保留 {{days}} 天）沒有被錯誤 {{code}} 拒絕，並且與機器人共享伺服器。此期間未收到私訊的賣家計入，但未確認；「私訊已送達」統計最後一則私訊已送達的賣家。",
+        "discordClosedInstall": "私訊失敗（已關閉）：Discord 拒絕了最後一則私訊，無法透過私訊聯絡（錯誤 {{code}}：私訊已關閉，或機器人無法聯絡到對方）。被拒絕的私訊也會清除已記錄的應用程式安裝。對於組織，這適用於所有可聯絡的成員。",
+        "serverOrApp": "共享伺服器或已安裝應用程式：已連結 Discord，並且要麼是 SC Market 機器人所在的至少一個伺服器的成員（約每 12 小時根據機器人的成員清單檢查一次，不傳送任何內容；上次檢查 {{when}}），要麼曾透過安裝在自己 Discord 帳號上的應用程式使用機器人。不計入「任一管道」或「無」。",
+        "serverOrAppNever": "共享伺服器或已安裝應用程式：已連結 Discord，並且要麼是 SC Market 機器人所在的至少一個伺服器的成員（約每 12 小時檢查一次，不傳送任何內容；尚未檢查），要麼曾透過安裝在自己 Discord 帳號上的應用程式使用機器人。不計入「任一管道」或「無」。",
+        "installCounts": "安裝應用程式視為可透過 Discord 私訊聯絡。",
+        "installNotCounted": "應用程式安裝會被記錄，但在確認機器人能私訊與其不共享伺服器的人之前，不計為可透過 Discord 私訊聯絡。"
+      },
+      "installClicks": {
+        "title": "「將 SC Market 新增到 Discord」點擊次數",
+        "none": "尚無點擊。",
+        "type": "新增到",
+        "src": "位置",
+        "days7": "最近 7 天",
+        "days30": "最近 30 天",
+        "user": "個人帳號",
+        "server": "伺服器",
+        "sources": {
+          "settings_notifications": "設定 › 通知",
+          "settings_discord": "設定 › Discord",
+          "org_discord": "組織 › Discord",
+          "shop_dashboard": "商店訂單",
+          "shop_hint": "商店頁面提示",
+          "guide": "指南",
+          "faq": "Discord 常見問題",
+          "footer": "網站頁尾",
+          "other": "其他"
+        }
       }
     }
   },
@@ -8619,6 +8665,24 @@
     "whiteLabel": {
       "title": "免費店面與品牌自訂",
       "body": "每個組織在 SC Market 上都有免費店面。組織通過 RSI 驗證且保持活躍後即可解鎖品牌自訂：自己的主題，以及可申請的 yourorg.sc-market.space 網址。"
+    }
+  },
+  "discordInstall": {
+    "pageTitle": "將 SC Market 新增到 Discord",
+    "opening": "正在開啟 Discord…",
+    "fallback": "如果沒有反應，",
+    "openManually": "請開啟 Discord 的安裝頁面",
+    "choose": "你想如何新增 SC Market？",
+    "user": "新增到你的 Discord 帳號",
+    "userHint": "這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
+    "server": "新增到 Discord 伺服器",
+    "serverHint": "用於在你自己的伺服器中使用訂單討論串和提醒。",
+    "cta": {
+      "title": "將 SC Market 新增到你的 Discord",
+      "why": "這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
+      "unreachableTitle": "買家的報價無法透過 Discord 通知到你",
+      "linkFirst": "請先連結你的 Discord 帳號，然後將 SC Market 新增到你的 Discord，這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
+      "linkDiscord": "連結 Discord"
     }
   }
 }

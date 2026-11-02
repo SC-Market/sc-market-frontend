@@ -246,6 +246,13 @@ export default [
         path: "/email/unsubscribe",
         file: "routes/pages/UnsubscribePage.tsx",
       },
+      // "Add SC Market to Discord" links: count the click, then open
+      // Discord (pages/discord/DiscordInstallPage.tsx). No login.
+      {
+        id: "routes/pages/DiscordInstallPage",
+        path: "/discord/install",
+        file: "routes/pages/DiscordInstallPage.tsx",
+      },
       {
         id: "routes/layouts/LoggedInRoute~2",
         file: "routes/layouts/LoggedInRoute.tsx",

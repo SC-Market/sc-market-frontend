@@ -99,6 +99,7 @@ import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessN
 import { ImportFromUexDialog } from "./ImportFromUex"
 import { canEditShopListings } from "../../shops/domain/shopPermissions"
 import { FirstUseHint } from "../../help/components/FirstUseHint"
+import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallCta"
 import { selectOnFocus } from "../../../util/selectOnFocus"
 
 /* ── Types ── */
@@ -1011,6 +1012,12 @@ export function StockManagerV2() {
                 <FirstUseHint hint="listingQuantity" title={t("hints.listingQuantity.title")}>
                   {t("hints.listingQuantity.body")}
                 </FirstUseHint>
+              </Grid>
+            )}
+
+            {canManage && (
+              <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
+                <DiscordUserInstallCta src="shop_hint" variant="hint" />
               </Grid>
             )}
 

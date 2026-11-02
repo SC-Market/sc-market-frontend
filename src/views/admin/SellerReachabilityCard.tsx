@@ -18,6 +18,7 @@ import {
 import { useTranslation } from "react-i18next"
 import {
   useGetSellerReachabilityQuery,
+  type DiscordInstallClickCount,
   type ReachabilityBucket,
   type ReachabilityCount,
   type SellerReachabilityCounts,
@@ -29,7 +30,7 @@ const COLUMNS: Column[] = [
   "discord_dm",
   "discord_dm_confirmed",
   "discord_dm_closed",
-  "discord_shared_server",
+  "discord_server_or_app",
   "email",
   "email_confirmed",
   "push",
@@ -48,6 +49,85 @@ function CountCell({ count }: { count: ReachabilityCount }) {
         defaultValue: "{{sellers}} · {{listings}}",
       })}
     </TableCell>
+  )
+}
+
+/** Clicks on "Add SC Market to Discord" links, per install type and surface. */
+function InstallClicksTable({
+  clicks,
+}: {
+  clicks: DiscordInstallClickCount[]
+}) {
+  const { t } = useTranslation()
+  const typeLabel = (type: DiscordInstallClickCount["install_type"]) =>
+    type === "user"
+      ? t("adminUi.sellerReachability.installClicks.user", "Your account")
+      : t("adminUi.sellerReachability.installClicks.server", "A server")
+  return (
+    <Box sx={{ mt: 2 }} data-testid="reachability-install-clicks">
+      <Typography variant="subtitle2" component="h3" color="text.secondary">
+        {t(
+          "adminUi.sellerReachability.installClicks.title",
+          '"Add SC Market to Discord" clicks',
+        )}
+      </Typography>
+      {clicks.length === 0 ? (
+        <Typography variant="body2" color="text.primary">
+          {t("adminUi.sellerReachability.installClicks.none", "No clicks yet.")}
+        </Typography>
+      ) : (
+        <TableContainer>
+          <Table
+            size="small"
+            aria-label={t(
+              "adminUi.sellerReachability.installClicks.title",
+              '"Add SC Market to Discord" clicks',
+            )}
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  {t(
+                    "adminUi.sellerReachability.installClicks.type",
+                    "Install to",
+                  )}
+                </TableCell>
+                <TableCell>
+                  {t("adminUi.sellerReachability.installClicks.src", "Where")}
+                </TableCell>
+                <TableCell align="right">
+                  {t(
+                    "adminUi.sellerReachability.installClicks.days7",
+                    "Last 7 days",
+                  )}
+                </TableCell>
+                <TableCell align="right">
+                  {t(
+                    "adminUi.sellerReachability.installClicks.days30",
+                    "Last 30 days",
+                  )}
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {clicks.map((c) => (
+                <TableRow key={`${c.install_type}:${c.src}`}>
+                  <TableCell>{typeLabel(c.install_type)}</TableCell>
+                  <TableCell>
+                    {t(
+                      `adminUi.sellerReachability.installClicks.sources.${c.src}`,
+                      c.src,
+                    )}
+                  </TableCell>
+                  <TableCell align="right">{c.clicks_7d}</TableCell>
+                  <TableCell align="right">{c.clicks_30d}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </Box>
   )
 }
 
@@ -96,9 +176,9 @@ export function SellerReachabilityCard() {
         "adminUi.sellerReachability.columns.discord_dm_closed",
         "DM failed (closed)",
       ),
-      discord_shared_server: t(
-        "adminUi.sellerReachability.columns.discord_shared_server",
-        "Shares a server with the bot",
+      discord_server_or_app: t(
+        "adminUi.sellerReachability.columns.discord_server_or_app",
+        "Shares a server or installed the app",
       ),
       email: t("adminUi.sellerReachability.columns.email", "Email"),
       email_confirmed: t(
@@ -222,6 +302,8 @@ export function SellerReachabilityCard() {
               </Table>
             </TableContainer>
 
+            <InstallClicksTable clicks={data.install_clicks} />
+
             <Box component="ul" sx={{ mt: 2, mb: 0, pl: 2.5 }}>
               <Typography
                 component="li"
@@ -239,10 +321,11 @@ export function SellerReachabilityCard() {
                 color="text.secondary"
               >
                 {data.signals.discord_dm_delivery_results
-                  ? t("adminUi.sellerReachability.notes.discord", {
+                  ? t("adminUi.sellerReachability.notes.discordRule", {
                       days: data.signals.discord_dm_result_retention_days,
+                      code: data.signals.discord_dm_closed_code,
                       defaultValue:
-                        'Discord DM: Discord linked, and their last DM from SC Market (kept {{days}} days) didn\'t fail. Sellers never DMed in that time count, unconfirmed; "DM delivered" counts those whose last DM arrived.',
+                        'Discord DM: Discord linked, their last DM from SC Market (kept {{days}} days) wasn\'t refused with error {{code}}, and they share a server with the bot. Sellers never DMed in that time count, unconfirmed; "DM delivered" counts those whose last DM arrived.',
                     })
                   : t(
                       "adminUi.sellerReachability.notes.discordNoSignal",
@@ -254,29 +337,38 @@ export function SellerReachabilityCard() {
                 variant="caption"
                 color="text.secondary"
               >
-                {t("adminUi.sellerReachability.notes.discordClosed", {
+                {t("adminUi.sellerReachability.notes.discordClosedInstall", {
                   code: data.signals.discord_dm_closed_code,
                   defaultValue:
-                    "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no server shared with the bot). For an org, this holds for everyone who can be contacted.",
+                    "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no way for the bot to reach them). A refused DM also clears a recorded app install. For an org, this holds for everyone who can be contacted.",
                 })}
               </Typography>
               <Typography
                 component="li"
                 variant="caption"
                 color="text.secondary"
-                data-testid="reachability-shared-server-note"
+                data-testid="reachability-server-or-app-note"
               >
                 {data.signals.discord_shared_server_checked_at
-                  ? t("adminUi.sellerReachability.notes.sharedServer", {
+                  ? t("adminUi.sellerReachability.notes.serverOrApp", {
                       when: new Date(
                         data.signals.discord_shared_server_checked_at,
                       ).toLocaleString(i18n.language),
                       defaultValue:
-                        "Shares a server with the bot: Discord linked and a member of at least one server the SC Market bot is in. Checked about every 12 hours from the bot's member lists, without sending anything; last checked {{when}}. The bot can usually DM only these sellers. Not counted in Any channel or None.",
+                        "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours from the bot's member lists, without sending anything; last checked {{when}}), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None.",
                     })
                   : t(
-                      "adminUi.sellerReachability.notes.sharedServerNever",
-                      "Shares a server with the bot: Discord linked and a member of at least one server the SC Market bot is in, checked about every 12 hours without sending anything. Not checked yet, so this column is 0. Not counted in Any channel or None.",
+                      "adminUi.sellerReachability.notes.serverOrAppNever",
+                      "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours, without sending anything; not checked yet), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None.",
+                    )}{" "}
+                {data.signals.discord_user_install_counts_as_dm
+                  ? t(
+                      "adminUi.sellerReachability.notes.installCounts",
+                      "Installing the app counts as reachable by Discord DM.",
+                    )
+                  : t(
+                      "adminUi.sellerReachability.notes.installNotCounted",
+                      "App installs are recorded but not counted as reachable by Discord DM until it's confirmed the bot can DM someone who shares no server with it.",
                     )}
               </Typography>
               <Typography

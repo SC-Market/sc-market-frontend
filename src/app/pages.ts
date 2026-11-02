@@ -178,6 +178,10 @@ export const pages = {
     () => import("../pages/people/People"),
     (m) => m.CustomerPage,
   ),
+  DiscordInstallPage: pageEntry(
+    () => import("../pages/discord/DiscordInstallPage"),
+    (m) => m.DiscordInstallPage,
+  ),
   EditListingGate: pageEntry(
     () => import("../components/market/MarketRouter"),
     (m) => m.EditListingGate,

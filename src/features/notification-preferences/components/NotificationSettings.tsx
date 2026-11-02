@@ -8,6 +8,7 @@ import {
 } from "../../push-notifications"
 import { EmailSettings, useEmailSettings } from "../../email"
 import { NotificationPreferencesTabs } from "./NotificationPreferencesTabs"
+import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallCta"
 
 /**
  * Settings -> Notifications (replaces the Push and Email tabs): a status strip
@@ -93,6 +94,14 @@ export function NotificationSettings() {
             )}
           </MuiLink>
         </Box>
+      </Grid>
+      <Grid
+        item
+        xs={12}
+        id="notif-discord"
+        sx={{ "&:empty": { display: "none" } }}
+      >
+        <DiscordUserInstallCta src="settings_notifications" variant="panel" />
       </Grid>
       <Grid item xs={12}>
         <NotificationPreferencesTabs />

@@ -104,6 +104,7 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/email/verify/:token": () => import("../pages/email/EmailVerificationPage"),
   "/email/unsubscribe": () => import("../pages/email/UnsubscribePage"),
   "/email/unsubscribe/:token": () => import("../pages/email/UnsubscribePage"),
+  "/discord/install": () => import("../pages/discord/DiscordInstallPage"),
 
   // Other routes
   "/availability": () => import("../pages/availability/Availability"),

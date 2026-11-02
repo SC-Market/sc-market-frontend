@@ -15,6 +15,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
 import { SHOP_PATHS } from "../../routes/paths"
 import { HelpLink } from "../../features/help/components/HelpLink"
+import { DiscordUserInstallCta } from "../../features/discord-install/DiscordUserInstallCta"
 
 export function MemberDashboard() {
   const shopCtx = useOptionalShopRouteContext()
@@ -49,6 +50,11 @@ export function MemberDashboard() {
       sidebarOpen={true}
       maxWidth="xl"
     >
+      {shopCtx && (
+        <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
+          <DiscordUserInstallCta src="shop_dashboard" variant="unreachable" />
+        </Grid>
+      )}
       {xxl && (
         <>
           <Grid item xs={12} lg={2.5}>

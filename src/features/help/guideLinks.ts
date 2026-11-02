@@ -18,6 +18,7 @@ export const GUIDE_LINKS = {
   myStock: "/guides/selling/stock-lots-and-allocation#my-stock-your-personal-lots",
   importFromUex: "/guides/selling/import-from-uex",
   connectDiscordBot: "/guides/discord/connect-the-discord-bot",
+  discordUserInstall: "/guides/discord/connect-the-discord-bot#get-dms-without-a-shared-server",
   orderAlerts: "/guides/discord/order-alerts-and-claiming",
   webhooks: "/guides/discord/webhooks",
   apiTokens: "/guides/discord/api-tokens",

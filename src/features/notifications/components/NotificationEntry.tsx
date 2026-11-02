@@ -23,6 +23,7 @@ import {
   NotificationStorefrontEnquiryDecision,
 } from "../types/NotificationStorefrontEnquiry"
 import { NotificationListingExpiring } from "../types/NotificationListingExpiring"
+import { NotificationOfferReminder } from "../types/NotificationOfferReminder"
 
 export function NotificationEntry(props: { notif: Notification }) {
   const { notif } = props
@@ -75,6 +76,10 @@ export function NotificationEntry(props: { notif: Notification }) {
       return <NotificationStorefrontEnquiryDecision notif={notif} />
     case "listing_expiring":
       return <NotificationListingExpiring notif={notif} />
+    case "offer_pending_reminder":
+    case "offer_pending_final_reminder":
+    case "offer_waiting_buyer":
+      return <NotificationOfferReminder notif={notif} />
     default:
       return null
   }

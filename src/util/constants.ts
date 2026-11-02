@@ -20,9 +20,20 @@ export { FALLBACK_IMAGE_URL }
 
 export const DISCORD_INVITE = "https://discord.com/invite/N4Gy8py8J4"
 
-/** OAuth2 URL that adds the SC Market bot to a Discord server. */
-export const DISCORD_BOT_INVITE =
-  "https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot"
+/** The SC Market Discord application. */
+export const DISCORD_CLIENT_ID = "868709691469987860"
+
+/**
+ * Discord's authorize URLs. Link to them only through the /discord/install
+ * route (features/discord-install), which counts the click first.
+ * server: add the bot to a server (guild install).
+ * user: add the app to your own Discord account (user install), so the bot
+ * can reach you without a shared server.
+ */
+export const DISCORD_AUTHORIZE_URLS = {
+  server: `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&permissions=361314126849&integration_type=0&scope=bot`,
+  user: `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&integration_type=1&scope=applications.commands`,
+} as const
 
 export const PAYMENT_TYPES = [
   { value: "one-time", translationKey: "paymentTypes.one_time" },

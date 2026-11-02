@@ -752,6 +752,14 @@
     "listing_expiring": {
       "one": "「{{title}}」はまだ販売中ですか？3日後に期限切れになります。開くとワンクリックで更新できます。",
       "many": "まだ販売中ですか？{{shop}}の{{n}}件の出品が3日後に期限切れになります。開くとワンクリックで更新できます。"
+    },
+    "offer_reminder": {
+      "first_one": "オファーがあなたの返信を待っています：「{{title}}」",
+      "first_many": "{{n}} 件のオファーがあなたの返信を待っています",
+      "final_one": "最後のリマインダー：オファーがあなたの返信を待っています：「{{title}}」",
+      "final_many": "最後のリマインダー：{{n}} 件のオファーがあなたの返信を待っています",
+      "buyer_one": "「{{title}}」はまだ出品者の返信を待っています。待ち続けるか、出品者にメッセージを送るか、オファーを取り下げてください。",
+      "buyer_many": "あなたのオファーのうち {{n}} 件がまだ出品者の返信を待っています"
     }
   },
   "onboarding": {
@@ -940,7 +948,10 @@
         "org_member_joined": "新しいメンバーの参加",
         "listing_expiring": "まもなく期限切れの出品",
         "storefront_enquiry_accepted": "ストアフロントの問い合わせ承認",
-        "storefront_enquiry_declined": "ストアフロントの問い合わせ見送り"
+        "storefront_enquiry_declined": "ストアフロントの問い合わせ見送り",
+        "reminder_offer_pending": "返信待ちのオファー",
+        "reminder_offer_pending_final": "最後のリマインダー：返信待ちのオファー",
+        "reminder_offer_waiting_buyer": "あなたのオファーはまだ返信待ちです"
       },
       "tabs": {
         "orders": "注文とオファー",
@@ -968,7 +979,7 @@
         },
         "reminders": {
           "label": "リマインダー",
-          "hint": "注文やオファーのメッセージが数時間未読のときのリマインダー。"
+          "hint": "メッセージが数時間未読のとき、またはオファーが返信を待っているときのリマインダー。"
         },
         "bids": {
           "label": "入札",
@@ -1061,6 +1072,14 @@
         },
         "storefront-enquiry": {
           "label": "問い合わせの承認・見送り"
+        },
+        "offer-pending": {
+          "label": "返信待ちのオファー",
+          "hint": "返信のないオファーが届いてから約1日後と3日後"
+        },
+        "offer-waiting": {
+          "label": "あなたのオファーはまだ返信待ちです",
+          "hint": "最後のリマインダーの後も出品者が返信していない場合"
         }
       },
       "subtitle": "通知の種類ごとに受け取り方法を選択してください。",
@@ -1617,9 +1636,9 @@
   "discord_bot": {
     "integrating_with_discord": "Discordとの連携",
     "how_to_get_notified": "注文が入ったときに通知を受け取る方法",
-    "how_to_get_notified_answer": "公式の [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) をサーバーに追加すると、あなたに注文が入ったときやあなたに割り当てられたときに、自動的にダイレクトメッセージを受け取れます。または、[SC Market 公式サーバー]({{DISCORD_INVITE}}) 経由で注文を処理するには、以下の設定を使用してください。",
+    "how_to_get_notified_answer": "公式の [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) をサーバーに追加すると、あなたに注文が入ったときやあなたに割り当てられたときに、自動的にダイレクトメッセージを受け取れます。または、[SC Market 公式サーバー]({{DISCORD_INVITE}}) 経由で注文を処理するには、以下の設定を使用してください。",
     "how_to_communicate": "Discordを通じて購入者とやり取りする方法",
-    "how_to_communicate_answer": "公式の [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) をサーバーに追加し、注文スレッド用のチャンネルを選びましょう。新しい注文やオファーが入るたびに、そのチャンネルに購入者と担当の出品者が参加するプライベートスレッドが作成され、購入者はあなたのサーバーに招待されるので、一緒に注文を進められます。\n\n1. SC Market の設定で Discord アカウントを連携してから、[Bot を追加](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot)します。\n\n2. 注文スレッドを置くチャンネルで `/setup threads` を実行します。組織の注文の場合は `org` に組織の Spectrum ID を入力します（例: `/setup threads org:SCMARKET`）。あなた個人への注文の場合は空欄のままにします。\n\n3. 任意: スタッフ用チャンネルで `/setup alerts`（同じ `org`）を実行すると、新しい注文とオファーが Claim ボタン付きで投稿されます。\n\nDiscord サーバーでの **チャンネルの管理** 権限が必要です。組織の場合は、SC Market でその組織の **Manage Webhooks** 権限（スレッド）または **Manage Orders** 権限（アラート）も必要です。スレッド用チャンネルでは、Bot に「チャンネルを見る」「プライベートスレッドの作成」「スレッドでメッセージを送信」「招待を作成」の権限が必要です。`/setup status` でチャンネルの設定内容を、`/help` ですべてのコマンドを確認できます。",
+    "how_to_communicate_answer": "公式の [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) をサーバーに追加し、注文スレッド用のチャンネルを選びましょう。新しい注文やオファーが入るたびに、そのチャンネルに購入者と担当の出品者が参加するプライベートスレッドが作成され、購入者はあなたのサーバーに招待されるので、一緒に注文を進められます。\n\n1. SC Market の設定で Discord アカウントを連携してから、[Bot を追加]({{BOT_INSTALL_PATH}})します。\n\n2. 注文スレッドを置くチャンネルで `/setup threads` を実行します。組織の注文の場合は `org` に組織の Spectrum ID を入力します（例: `/setup threads org:SCMARKET`）。あなた個人への注文の場合は空欄のままにします。\n\n3. 任意: スタッフ用チャンネルで `/setup alerts`（同じ `org`）を実行すると、新しい注文とオファーが Claim ボタン付きで投稿されます。\n\nDiscord サーバーでの **チャンネルの管理** 権限が必要です。組織の場合は、SC Market でその組織の **Manage Webhooks** 権限（スレッド）または **Manage Orders** 権限（アラート）も必要です。スレッド用チャンネルでは、Bot に「チャンネルを見る」「プライベートスレッドの作成」「スレッドでメッセージを送信」「招待を作成」の権限が必要です。`/setup status` でチャンネルの設定内容を、`/help` ですべてのコマンドを確認できます。",
     "learn_connect": "Discord ボットを接続",
     "learn_alerts": "注文通知と引き受け"
   },
@@ -2292,7 +2311,11 @@
     "accepted": "承認済み",
     "discordServerInvite": "Discordサーバーへの招待",
     "joinServer": "サーバーに参加",
-    "noOffer": "オファーの詳細がありません"
+    "noOffer": "オファーの詳細がありません",
+    "withdrawTitle": "このオファーを取り下げますか？",
+    "withdrawBody": "出品者はこのオファーを承諾できなくなります。待ち続ける場合は、これを閉じてください。",
+    "keepWaiting": "待ち続ける",
+    "withdraw": "オファーを取り下げる"
   },
   "CounterOfferSubmitArea": {
     "submitCounterOffer": "カウンターオファーを送信",
@@ -7606,26 +7629,49 @@
         "discord_dm": "Discord DM",
         "discord_dm_confirmed": "DM 配信済み",
         "discord_dm_closed": "DM 失敗（受信拒否）",
-        "discord_shared_server": "ボットとサーバーを共有",
         "email": "メール",
         "email_confirmed": "メール配信済み",
         "push": "プッシュ",
         "any": "いずれかの方法",
-        "none": "なし"
+        "none": "なし",
+        "discord_server_or_app": "サーバー共有またはアプリ導入済み"
       },
       "notes": {
         "cells": "各セル：出品者数 · その公開出品数。",
-        "discord": "Discord DM：Discord が連携済みで、SC Market からの最後の DM（{{days}}日間保存）が失敗していない。この期間に DM を送っていない出品者も未確認として数えます。「DM 配信済み」は最後の DM が届いた出品者です。",
         "discordNoSignal": "Discord DM：Discord が連携済み。DM の配信結果は記録されていません。",
-        "discordClosed": "DM 失敗（受信拒否）：最後の DM が Discord に拒否されたため（エラー {{code}}：DM を受け付けていない、またはボットと共通のサーバーがない）、DM で連絡できない。組織の場合は、連絡できる全員がこれに当たります。",
-        "sharedServer": "ボットとサーバーを共有：Discord が連携済みで、SC Market のボットがいるサーバーに 1 つ以上参加している。ボットのメンバー一覧から約 12 時間ごとに確認し、何も送信しません。最終確認：{{when}}。ボットが DM を送れるのは通常この出品者だけです。「いずれかの方法」「なし」には含めません。",
-        "sharedServerNever": "ボットとサーバーを共有：Discord が連携済みで、SC Market のボットがいるサーバーに 1 つ以上参加している（約 12 時間ごとに確認、何も送信しません）。まだ確認していないため、この列は 0 です。「いずれかの方法」「なし」には含めません。",
         "email": "メール：確認済みのアドレスで、お知らせメールの配信停止をしていない。バウンスは記録されないため、確認済みのアドレスでも届かない場合があります。",
         "emailChecked": "メール：バウンスもスパム報告もされていない認証済みアドレスで、お知らせメールの配信を停止していないもの。過去{{days}}日間にメールを送っていない出品者は未確認として数え、「メール配信済み」はその期間に配信が確認された出品者を数えます。",
         "push": "プッシュ：プッシュ購読が 1 件以上ある。期限切れの購読はプッシュ失敗時に削除されますが、配信結果は記録されません。",
         "pushChecked": "プッシュ：プッシュ購読が 1 件以上ある。",
         "anyNone": "いずれかの方法：Discord DM、メール、プッシュのいずれかで連絡できる。なし：どれでも連絡できない。",
-        "lastSeen": "最終アクセスは、購入者にオンライン状態を非表示にしている出品者も含めて数えます。"
+        "lastSeen": "最終アクセスは、購入者にオンライン状態を非表示にしている出品者も含めて数えます。",
+        "discordRule": "Discord DM：Discord 連携済みで、SC Market からの最後の DM（{{days}} 日間保存）がエラー {{code}} で拒否されておらず、Bot とサーバーを共有している出品者。この期間に DM を送っていない出品者は未確認として数えます。「DM 配信済み」は最後の DM が届いた出品者です。",
+        "discordClosedInstall": "DM 失敗（クローズ）：Discord が最後の DM を拒否したため DM で連絡できません（エラー {{code}}：DM が閉じている、または Bot が届けられない）。拒否された DM は、記録済みのアプリ導入も取り消します。組織の場合は、連絡可能な全員に当てはまるときです。",
+        "serverOrApp": "サーバー共有またはアプリ導入済み：Discord 連携済みで、SC Market Bot がいるサーバーの少なくとも1つのメンバーである（Bot のメンバーリストから約12時間ごとに確認、何も送信しません。最終確認 {{when}}）、または自分の Discord アカウントに導入したアプリから Bot を使ったことがある出品者。「いずれかのチャネル」「なし」には含めません。",
+        "serverOrAppNever": "サーバー共有またはアプリ導入済み：Discord 連携済みで、SC Market Bot がいるサーバーの少なくとも1つのメンバーである（約12時間ごとに確認、何も送信しません。まだ確認していません）、または自分の Discord アカウントに導入したアプリから Bot を使ったことがある出品者。「いずれかのチャネル」「なし」には含めません。",
+        "installCounts": "アプリの導入は Discord DM で連絡可能として数えます。",
+        "installNotCounted": "アプリの導入は記録されますが、サーバーを共有していない相手に Bot が DM を送れると確認されるまでは、Discord DM で連絡可能としては数えません。"
+      },
+      "installClicks": {
+        "title": "「SC Market を Discord に追加」のクリック数",
+        "none": "まだクリックはありません。",
+        "type": "追加先",
+        "src": "場所",
+        "days7": "過去7日間",
+        "days30": "過去30日間",
+        "user": "自分のアカウント",
+        "server": "サーバー",
+        "sources": {
+          "settings_notifications": "設定 › 通知",
+          "settings_discord": "設定 › Discord",
+          "org_discord": "組織 › Discord",
+          "shop_dashboard": "ショップの注文",
+          "shop_hint": "ショップページのヒント",
+          "guide": "ガイド",
+          "faq": "Discord の FAQ",
+          "footer": "サイトフッター",
+          "other": "その他"
+        }
       }
     }
   },
@@ -8619,6 +8665,24 @@
     "whiteLabel": {
       "title": "無料のストアフロントとブランディング",
       "body": "すべての組織は SC Market に無料のストアフロントを持てます。組織が RSI 認証済みで活動中になると、ブランディングが解放されます。独自のテーマと、申請により yourorg.sc-market.space のアドレスが使えます。"
+    }
+  },
+  "discordInstall": {
+    "pageTitle": "SC Market を Discord に追加",
+    "opening": "Discord を開いています…",
+    "fallback": "何も起こらない場合は、",
+    "openManually": "Discord のインストールページを開いてください",
+    "choose": "SC Market をどのように追加しますか？",
+    "user": "あなたの Discord アカウントへ",
+    "userHint": "共通のサーバーにいなくても、オファーや注文についてお知らせできるようにするためです。",
+    "server": "Discord サーバーへ",
+    "serverHint": "自分のサーバーで注文スレッドとアラートを使うためです。",
+    "cta": {
+      "title": "SC Market をあなたの Discord に追加",
+      "why": "共通のサーバーにいなくても、オファーや注文についてお知らせできるようにするためです。",
+      "unreachableTitle": "購入者からのオファーが Discord であなたに届きません",
+      "linkFirst": "まず Discord アカウントを連携し、次に SC Market をあなたの Discord に追加してください。共通のサーバーにいなくても、オファーや注文についてお知らせできるようになります。",
+      "linkDiscord": "Discord を連携"
     }
   }
 }

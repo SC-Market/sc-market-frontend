@@ -31,6 +31,8 @@ export const HINTS = {
   uexImport: { key: "uex.import", guide: "importFromUex" },
   /** Org › Storefront: free storefront, branding and the subdomain. */
   whiteLabel: { key: "storefront.white-label", guide: "orgWhiteLabel" },
+  /** Seller's shop pages: add the SC Market app to your own Discord account. */
+  discordUserInstall: { key: "discord.user-install", guide: "discordUserInstall" },
 } as const satisfies Record<string, { key: string; guide: GuideLink }>
 
 export type HintId = keyof typeof HINTS

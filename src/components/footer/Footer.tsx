@@ -3,7 +3,8 @@ import { Divider, Grid, Link, Typography } from "@mui/material"
 import React from "react"
 import { useCookies } from "react-cookie"
 import { CONSENT_COOKIE } from "../../util/consent/analyticsConsent"
-import { DISCORD_BOT_INVITE, DISCORD_INVITE } from "../../util/constants"
+import { DISCORD_INVITE } from "../../util/constants"
+import { discordInstallPath } from "../../features/discord-install/installLinks"
 import { Trans, useTranslation } from "react-i18next"
 import { ReportButton } from "../button/ReportButton"
 import { useTheme } from "@mui/material/styles"
@@ -90,7 +91,7 @@ export function Footer() {
             <Link
               rel="noopener noreferrer"
               target="_blank"
-              href={DISCORD_BOT_INVITE}
+              href={discordInstallPath("server", "footer")}
               aria-label={t("footer.discordBot", "Discord Bot")}
             >
               <UnderlineLink color={"text.secondary"}>

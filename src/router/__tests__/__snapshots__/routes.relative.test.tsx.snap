@@ -1969,6 +1969,41 @@ exports[`relative link resolution (every leaf) > /delivery/:delivery_id 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /discord/install 1`] = `
+{
+  "links": {
+    "path:""": "/discord/install",
+    "path:"#frag"": "/discord/install#frag",
+    "path:"."": "/discord/install",
+    "path:".."": "/discord",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/discord/sibling",
+    "path:"./"": "/discord/install/",
+    "path:"./child"": "/discord/install/child",
+    "path:"?tab=x"": "/discord/install?tab=x",
+    "path:"child"": "/discord/install/child",
+    "route:""": "/discord/install",
+    "route:"#frag"": "/discord/install#frag",
+    "route:"."": "/discord/install",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/discord/install/",
+    "route:"./child"": "/discord/install/child",
+    "route:"?tab=x"": "/discord/install?tab=x",
+    "route:"child"": "/discord/install/child",
+  },
+  "location": "/discord/install",
+  "params": {},
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/discord/install",
+  ],
+  "resolvedDot": "/discord/install",
+  "url": "/discord/install",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /email/unsubscribe 1`] = `
 {
   "links": {
