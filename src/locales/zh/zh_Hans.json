@@ -7890,5 +7890,22 @@
       "thumbnailAlt": "YouTube 视频缩略图",
       "playVideo": "播放视频"
     }
+  },
+  "uexImportUi": {
+    "success_other": "已从 UEX 成功导入 {{count}} 个商品中的 <strong>{{imported}}</strong> 个。",
+    "importMore": "继续导入",
+    "intro": "从 UEXCorp 导入你的有效出售商品。输入你的 UEX 用户名以预览将要导入的内容。",
+    "username": "UEX 用户名",
+    "fetch": "获取商品",
+    "noneFound": "在 UEX 上未找到 <strong>{{username}}</strong> 的有效出售商品。请确认用户名是否正确。",
+    "selectedOf_other": "已选择 {{selected}}/{{count}}",
+    "importCount_other": "导入 {{count}} 个商品",
+    "columns": {
+      "title": "标题",
+      "price": "价格",
+      "quantity": "数量",
+      "source": "来源"
+    },
+    "selectItem": "选择 {{title}}"
   }
 }

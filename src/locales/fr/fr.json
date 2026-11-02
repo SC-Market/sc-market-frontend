@@ -8138,5 +8138,28 @@
       "thumbnailAlt": "Miniature de la vidéo YouTube",
       "playVideo": "Lire la vidéo"
     }
+  },
+  "uexImportUi": {
+    "success_one": "<strong>{{imported}}</strong> annonce sur {{count}} importée depuis UEX.",
+    "success_many": "<strong>{{imported}}</strong> annonces sur {{count}} importées depuis UEX.",
+    "success_other": "<strong>{{imported}}</strong> annonces sur {{count}} importées depuis UEX.",
+    "importMore": "Importer d’autres annonces",
+    "intro": "Importez vos annonces de vente actives depuis UEXCorp. Saisissez votre nom d’utilisateur UEX pour prévisualiser ce qui sera importé.",
+    "username": "Nom d’utilisateur UEX",
+    "fetch": "Récupérer les annonces",
+    "noneFound": "Aucune annonce de vente active trouvée pour <strong>{{username}}</strong> sur UEX. Vérifiez que le nom d’utilisateur est correct.",
+    "selectedOf_one": "Sélection : {{selected}} sur {{count}}",
+    "selectedOf_many": "Sélection : {{selected}} sur {{count}}",
+    "selectedOf_other": "Sélection : {{selected}} sur {{count}}",
+    "importCount_one": "Importer {{count}} annonce",
+    "importCount_many": "Importer {{count}} annonces",
+    "importCount_other": "Importer {{count}} annonces",
+    "columns": {
+      "title": "Titre",
+      "price": "Prix",
+      "quantity": "Qté",
+      "source": "Source"
+    },
+    "selectItem": "Sélectionner {{title}}"
   }
 }

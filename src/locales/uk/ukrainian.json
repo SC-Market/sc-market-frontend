@@ -8265,5 +8265,31 @@
       "thumbnailAlt": "Мініатюра відео YouTube",
       "playVideo": "Відтворити відео"
     }
+  },
+  "uexImportUi": {
+    "success_one": "Успішно імпортовано <strong>{{imported}}</strong> з {{count}} оголошення з UEX.",
+    "success_few": "Успішно імпортовано <strong>{{imported}}</strong> з {{count}} оголошень з UEX.",
+    "success_many": "Успішно імпортовано <strong>{{imported}}</strong> з {{count}} оголошень з UEX.",
+    "success_other": "Успішно імпортовано <strong>{{imported}}</strong> з {{count}} оголошення з UEX.",
+    "importMore": "Імпортувати ще",
+    "intro": "Імпортуйте свої активні оголошення про продаж з UEXCorp. Введіть ім’я користувача UEX, щоб переглянути, що буде імпортовано.",
+    "username": "Ім’я користувача UEX",
+    "fetch": "Отримати оголошення",
+    "noneFound": "Для <strong>{{username}}</strong> на UEX не знайдено активних оголошень про продаж. Перевірте, чи правильне ім’я користувача.",
+    "selectedOf_one": "Вибрано {{selected}} з {{count}}",
+    "selectedOf_few": "Вибрано {{selected}} з {{count}}",
+    "selectedOf_many": "Вибрано {{selected}} з {{count}}",
+    "selectedOf_other": "Вибрано {{selected}} з {{count}}",
+    "importCount_one": "Імпортувати {{count}} оголошення",
+    "importCount_few": "Імпортувати {{count}} оголошення",
+    "importCount_many": "Імпортувати {{count}} оголошень",
+    "importCount_other": "Імпортувати {{count}} оголошення",
+    "columns": {
+      "title": "Назва",
+      "price": "Ціна",
+      "quantity": "К-сть",
+      "source": "Джерело"
+    },
+    "selectItem": "Вибрати {{title}}"
   }
 }

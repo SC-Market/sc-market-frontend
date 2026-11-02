@@ -21,7 +21,7 @@ import {
 } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { CloudDownloadRounded, CheckCircleRounded } from "@mui/icons-material"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import {
   useImportFromUexMutation,
   type ImportFromUexApiResponse,
@@ -125,7 +125,12 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
           icon={<CheckCircleRounded />}
           sx={{ mb: 2 }}
         >
-          Successfully imported <strong>{importResult.imported}</strong> of {importResult.total} listings from UEX.
+          <Trans
+            i18nKey="uexImportUi.success"
+            count={importResult.total}
+            values={{ imported: importResult.imported }}
+            components={{ strong: <strong /> }}
+          />
         </Alert>
         <Button
           variant="outlined"
@@ -134,7 +139,7 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
             setUsername("")
           }}
         >
-          Import More
+          {t("uexImportUi.importMore")}
         </Button>
       </Box>
     )
@@ -143,8 +148,7 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
   return (
     <Box>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Import your active sell listings from UEXCorp. Enter your UEX username to preview what will
-        be imported.
+        {t("uexImportUi.intro")}
       </Typography>
 
       {error && (
@@ -155,7 +159,7 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
 
       <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
         <TextField
-          label="UEX Username"
+          label={t("uexImportUi.username")}
           size="small"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -170,14 +174,17 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
           onClick={handleFetchPreview}
           disabled={!username.trim()}
         >
-          Fetch Listings
+          {t("uexImportUi.fetch")}
         </LoadingButton>
       </Box>
 
       {preview !== null && preview.length === 0 && (
         <Alert severity="info">
-          No active sell listings found for <strong>{username}</strong> on UEX.
-          Make sure the username is correct.
+          <Trans
+            i18nKey="uexImportUi.noneFound"
+            values={{ username }}
+            components={{ strong: <strong /> }}
+          />
         </Alert>
       )}
 
@@ -192,7 +199,7 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
                   onChange={toggleAll}
                 />
               }
-              label={`${selectedIndices.size} of ${preview.length} selected`}
+              label={t("uexImportUi.selectedOf", { count: preview.length, selected: selectedIndices.size })}
             />
             <LoadingButton
               variant="contained"
@@ -201,7 +208,7 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
               disabled={selectedIndices.size === 0}
               onClick={handleConfirmImport}
             >
-              Import {selectedIndices.size} Listing{selectedIndices.size !== 1 ? "s" : ""}
+              {t("uexImportUi.importCount", { count: selectedIndices.size })}
             </LoadingButton>
           </Box>
 
@@ -210,10 +217,10 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
               <TableHead>
                 <TableRow>
                   <TableCell padding="checkbox" />
-                  <TableCell>Title</TableCell>
-                  <TableCell align="right">Price</TableCell>
-                  <TableCell align="right">Qty</TableCell>
-                  <TableCell>Source</TableCell>
+                  <TableCell>{t("uexImportUi.columns.title")}</TableCell>
+                  <TableCell align="right">{t("uexImportUi.columns.price")}</TableCell>
+                  <TableCell align="right">{t("uexImportUi.columns.quantity")}</TableCell>
+                  <TableCell>{t("uexImportUi.columns.source")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -227,7 +234,7 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
                     <TableCell padding="checkbox">
                       <Checkbox
                         checked={selectedIndices.has(index)}
-                        inputProps={{ "aria-label": `Select ${item.title}` }}
+                        inputProps={{ "aria-label": t("uexImportUi.selectItem", { title: item.title }) }}
                       />
                     </TableCell>
                     <TableCell>

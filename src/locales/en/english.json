@@ -8011,5 +8011,25 @@
       "thumbnailAlt": "YouTube video thumbnail",
       "playVideo": "Play video"
     }
+  },
+  "uexImportUi": {
+    "success_one": "Successfully imported <strong>{{imported}}</strong> of {{count}} listing from UEX.",
+    "success_other": "Successfully imported <strong>{{imported}}</strong> of {{count}} listings from UEX.",
+    "importMore": "Import More",
+    "intro": "Import your active sell listings from UEXCorp. Enter your UEX username to preview what will be imported.",
+    "username": "UEX Username",
+    "fetch": "Fetch Listings",
+    "noneFound": "No active sell listings found for <strong>{{username}}</strong> on UEX. Make sure the username is correct.",
+    "selectedOf_one": "{{selected}} of {{count}} selected",
+    "selectedOf_other": "{{selected}} of {{count}} selected",
+    "importCount_one": "Import {{count}} Listing",
+    "importCount_other": "Import {{count}} Listings",
+    "columns": {
+      "title": "Title",
+      "price": "Price",
+      "quantity": "Qty",
+      "source": "Source"
+    },
+    "selectItem": "Select {{title}}"
   }
 }

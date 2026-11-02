@@ -8138,5 +8138,28 @@
       "thumbnailAlt": "Miniatura del vídeo de YouTube",
       "playVideo": "Reproducir vídeo"
     }
+  },
+  "uexImportUi": {
+    "success_one": "Se importó <strong>{{imported}}</strong> de {{count}} anuncio desde UEX.",
+    "success_many": "Se importaron <strong>{{imported}}</strong> de {{count}} anuncios desde UEX.",
+    "success_other": "Se importaron <strong>{{imported}}</strong> de {{count}} anuncios desde UEX.",
+    "importMore": "Importar más",
+    "intro": "Importa tus anuncios de venta activos desde UEXCorp. Introduce tu nombre de usuario de UEX para ver una vista previa de lo que se importará.",
+    "username": "Usuario de UEX",
+    "fetch": "Obtener anuncios",
+    "noneFound": "No se encontraron anuncios de venta activos para <strong>{{username}}</strong> en UEX. Comprueba que el nombre de usuario sea correcto.",
+    "selectedOf_one": "{{selected}} de {{count}} seleccionado",
+    "selectedOf_many": "{{selected}} de {{count}} seleccionados",
+    "selectedOf_other": "{{selected}} de {{count}} seleccionados",
+    "importCount_one": "Importar {{count}} anuncio",
+    "importCount_many": "Importar {{count}} anuncios",
+    "importCount_other": "Importar {{count}} anuncios",
+    "columns": {
+      "title": "Título",
+      "price": "Precio",
+      "quantity": "Cant.",
+      "source": "Origen"
+    },
+    "selectItem": "Seleccionar {{title}}"
   }
 }
