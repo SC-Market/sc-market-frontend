@@ -172,6 +172,7 @@ const injectedRtkApi = api
             spectrum_id: queryArg.spectrumId,
             page: queryArg.page,
             page_size: queryArg.pageSize,
+            shop_id: queryArg.shopId,
           },
         }),
         providesTags: ["Stock Lots V2"],
@@ -2458,6 +2459,8 @@ export type GetStockLotsApiArg = {
   page?: number
   /** Number of results per page (default: 20, max: 100) */
   pageSize?: number
+  /** Only lots of this shop's listings (takes precedence over spectrum_id) */
+  shopId?: string
 }
 export type UpdateStockLotApiResponse =
   /** status 200 Updated stock lot */ UpdateStockLotResponse
@@ -5490,8 +5493,8 @@ export type BulkDiscountTier = {
 export type CreateListingRequest = {
   /** Listing title (max 500 chars) */
   title: string
-  /** Listing description (markdown supported) */
-  description: string
+  /** Optional listing description (markdown supported); defaults to empty */
+  description?: string
   /** Game item UUID being sold */
   game_item_id: string
   /** Pricing strategy: unified price for all variants or per-variant pricing */
