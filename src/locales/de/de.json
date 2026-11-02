@@ -7848,7 +7848,14 @@
         "title_other": "Feedback: {{count}} Antworten",
         "testTitle_one": "Von Testlinks (oben nicht gezählt): {{count}} Antwort",
         "testTitle_other": "Von Testlinks (oben nicht gezählt): {{count}} Antworten"
-      }
+      },
+      "sendTest": "Test-DM an mich senden",
+      "testConfirmTitle": "Eine Test-DM an sich selbst senden?",
+      "testConfirmBody": "Nur Sie erhalten sie, auf {{locale}}, mit Test-Buttons, die nichts ändern. Das funktioniert auch bei ausgeschaltetem Versand und zählt nicht als Ihre Kampagnen-DM. Höchstens {{limit}} pro Stunde.",
+      "testConfirmSend": "An mich senden",
+      "testSent": "Test-DM an Ihr Discord gesendet, mit Ihren eigenen Angebotszahlen.",
+      "testSentSample": "Test-DM an Ihr Discord gesendet, mit Beispielzahlen (Sie haben keine aktiven Angebote).",
+      "testFailed": "Die Test-DM konnte nicht gesendet werden."
     }
   },
   "apiTokensUi": {

@@ -13,6 +13,7 @@ vi.mock("../../../store/api/v2/market", () => ({
   useGetStillSellingCampaignQuery: vi.fn(),
   useSendStillSellingCampaignMutation: vi.fn(),
   useStopStillSellingCampaignMutation: vi.fn(),
+  useSendStillSellingTestDmMutation: vi.fn(),
 }))
 
 import { StillSellingCampaignCard } from "../StillSellingCampaignCard"
@@ -21,6 +22,7 @@ const mockQuery = vi.mocked(marketApi.useGetStillSellingCampaignQuery)
 const send = vi.fn()
 const stop = vi.fn()
 const refetch = vi.fn()
+const sendTest = vi.fn()
 
 const dryRun = (
   over: Partial<StillSellingDryRun> = {},
@@ -145,6 +147,12 @@ beforeEach(() => {
   ] as unknown as ReturnType<
     typeof marketApi.useSendStillSellingCampaignMutation
   >)
+  vi.mocked(marketApi.useSendStillSellingTestDmMutation).mockReturnValue([
+    sendTest,
+    { isLoading: false, isError: false, data: undefined },
+  ] as unknown as ReturnType<
+    typeof marketApi.useSendStillSellingTestDmMutation
+  >)
   vi.mocked(marketApi.useStopStillSellingCampaignMutation).mockReturnValue([
     stop,
     { isLoading: false },
@@ -260,5 +268,23 @@ describe("StillSellingCampaignCard", () => {
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled()
     fireEvent.click(screen.getByRole("button", { name: "Stop" }))
     expect(stop).toHaveBeenCalled()
+  })
+
+  it("Send test DM to me: works with the switch off, after a confirm step, in the picked language", () => {
+    state(dryRun({ enabled: false }))
+    render(<StillSellingCampaignCard />)
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled()
+    const testButton = screen.getByRole("button", {
+      name: "Send test DM to me",
+    })
+    expect(testButton).toBeEnabled()
+    fireEvent.click(testButton)
+    expect(sendTest).not.toHaveBeenCalled()
+    expect(screen.getByText("Send a test DM to yourself?")).toBeInTheDocument()
+    fireEvent.click(screen.getByRole("button", { name: "Send it to me" }))
+    expect(sendTest).toHaveBeenCalledWith({
+      stillSellingTestRequest: { locale: "en" },
+    })
+    expect(send).not.toHaveBeenCalled()
   })
 })

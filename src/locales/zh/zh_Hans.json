@@ -7738,7 +7738,14 @@
         "easier": "能让出售更方便的建议",
         "title_other": "反馈：{{count}} 条",
         "testTitle_other": "来自测试链接（未计入上方）：{{count}} 条"
-      }
+      },
+      "sendTest": "给我发送测试私信",
+      "testConfirmTitle": "给自己发送测试私信？",
+      "testConfirmBody": "只有你会收到（{{locale}}），按钮为测试按钮，不会更改任何内容。发送关闭时也可用，不计为你的活动私信。每小时最多 {{limit}} 次。",
+      "testConfirmSend": "发给我",
+      "testSent": "已向你的 Discord 发送测试私信，使用你自己的商品数量。",
+      "testSentSample": "已向你的 Discord 发送测试私信，使用示例数字（你没有在售商品）。",
+      "testFailed": "无法发送测试私信。"
     }
   },
   "apiTokensUi": {

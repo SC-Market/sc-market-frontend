@@ -7964,7 +7964,14 @@
         "testTitle_one": "Depuis des liens de test (non comptés ci-dessus) : {{count}} réponse",
         "testTitle_many": "Depuis des liens de test (non comptés ci-dessus) : {{count}} réponses",
         "testTitle_other": "Depuis des liens de test (non comptés ci-dessus) : {{count}} réponses"
-      }
+      },
+      "sendTest": "M'envoyer un MP de test",
+      "testConfirmTitle": "Vous envoyer un MP de test ?",
+      "testConfirmBody": "Vous seul le recevez, en {{locale}}, avec des boutons de test qui ne changent rien. Cela fonctionne même si l'envoi est désactivé et ne compte pas comme votre MP de campagne. Au plus {{limit}} par heure.",
+      "testConfirmSend": "Me l'envoyer",
+      "testSent": "MP de test envoyé sur votre Discord, avec vos propres chiffres d'annonces.",
+      "testSentSample": "MP de test envoyé sur votre Discord, avec des chiffres d'exemple (vous n'avez aucune annonce en ligne).",
+      "testFailed": "Le MP de test n'a pas pu être envoyé."
     }
   },
   "apiTokensUi": {

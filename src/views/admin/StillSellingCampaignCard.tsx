@@ -30,6 +30,7 @@ import {
   useGetStillSellingCampaignQuery,
   useSendStillSellingCampaignMutation,
   useStopStillSellingCampaignMutation,
+  useSendStillSellingTestDmMutation,
   type StillSellingFeedbackGroup,
   type StillSellingFeedbackSummary,
   type StillSellingLocale,
@@ -166,6 +167,18 @@ export function StillSellingCampaignCard() {
     )
   const [send, sendState] = useSendStillSellingCampaignMutation()
   const [stop, stopState] = useStopStillSellingCampaignMutation()
+  const [sendTest, testState] = useSendStillSellingTestDmMutation()
+  const [testConfirmOpen, setTestConfirmOpen] = useState(false)
+
+  const onSendTest = () => {
+    setTestConfirmOpen(false)
+    void sendTest({ stillSellingTestRequest: { locale } })
+  }
+
+  const testError = testState.isError
+    ? (apiErrorMessage(testState.error) ??
+      t("adminUi.stillSelling.testFailed", "The test DM couldn't be sent."))
+    : null
 
   React.useEffect(() => {
     setRunning(!!data?.run.running)
@@ -408,10 +421,31 @@ export function StillSellingCampaignCard() {
                   {t("adminUi.stillSelling.stop", "Stop")}
                 </Button>
               )}
+              <Button
+                variant="outlined"
+                onClick={() => setTestConfirmOpen(true)}
+                disabled={testState.isLoading}
+              >
+                {t("adminUi.stillSelling.sendTest", "Send test DM to me")}
+              </Button>
               <Button onClick={() => refetch()} disabled={isFetching}>
                 {t("adminUi.stillSelling.refresh", "Refresh")}
               </Button>
             </Stack>
+            {testError && <Alert severity="error">{testError}</Alert>}
+            {testState.data && !testState.isError && (
+              <Alert severity="success" data-testid="still-selling-test-sent">
+                {testState.data.sample
+                  ? t(
+                      "adminUi.stillSelling.testSentSample",
+                      "Test DM sent to your Discord, with sample numbers (you have no live listings).",
+                    )
+                  : t(
+                      "adminUi.stillSelling.testSent",
+                      "Test DM sent to your Discord, with your own listing numbers.",
+                    )}
+              </Alert>
+            )}
 
             <TableContainer>
               <Table size="small" data-testid="still-selling-progress">
@@ -489,6 +523,31 @@ export function StillSellingCampaignCard() {
           </Stack>
         )}
       </CardContent>
+
+      <Dialog open={testConfirmOpen} onClose={() => setTestConfirmOpen(false)}>
+        <DialogTitle>
+          {t(
+            "adminUi.stillSelling.testConfirmTitle",
+            "Send a test DM to yourself?",
+          )}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t("adminUi.stillSelling.testConfirmBody", {
+              locale,
+              limit: 5,
+            })}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setTestConfirmOpen(false)}>
+            {t("adminUi.stillSelling.cancel", "Cancel")}
+          </Button>
+          <Button variant="contained" onClick={onSendTest}>
+            {t("adminUi.stillSelling.testConfirmSend", "Send it to me")}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
         <DialogTitle>

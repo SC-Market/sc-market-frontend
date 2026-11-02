@@ -7732,7 +7732,14 @@
         "easier": "販売を楽にするアイデア",
         "title_other": "フィードバック：{{count}}件",
         "testTitle_other": "テストリンクから（上記には含まれません）：{{count}}件"
-      }
+      },
+      "sendTest": "自分にテストDMを送る",
+      "testConfirmTitle": "自分にテストDMを送りますか？",
+      "testConfirmBody": "受け取るのはあなただけです（{{locale}}）。ボタンはテスト用で、何も変更しません。送信が無効でも使え、キャンペーンDMとしては数えられません。1時間に最大{{limit}}回。",
+      "testConfirmSend": "自分に送る",
+      "testSent": "あなたの出品数でテストDMをDiscordに送りました。",
+      "testSentSample": "サンプルの数値でテストDMをDiscordに送りました（公開中の出品がありません）。",
+      "testFailed": "テストDMを送信できませんでした。"
     }
   },
   "apiTokensUi": {

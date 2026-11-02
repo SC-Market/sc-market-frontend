@@ -7732,7 +7732,14 @@
         "easier": "能讓出售更方便的建議",
         "title_other": "回饋：{{count}} 則",
         "testTitle_other": "來自測試連結（未計入上方）：{{count}} 則"
-      }
+      },
+      "sendTest": "傳送測試私訊給我",
+      "testConfirmTitle": "傳送測試私訊給自己？",
+      "testConfirmBody": "只有你會收到（{{locale}}），按鈕為測試按鈕，不會變更任何內容。傳送關閉時也可使用，不計為你的活動私訊。每小時最多 {{limit}} 次。",
+      "testConfirmSend": "傳給我",
+      "testSent": "已向你的 Discord 傳送測試私訊，使用你自己的商品數量。",
+      "testSentSample": "已向你的 Discord 傳送測試私訊，使用範例數字（你沒有上架中的商品）。",
+      "testFailed": "無法傳送測試私訊。"
     }
   },
   "apiTokensUi": {

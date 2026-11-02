@@ -7848,7 +7848,14 @@
         "title_other": "Feedback: {{count}} answers",
         "testTitle_one": "From test links (not counted above): {{count}} answer",
         "testTitle_other": "From test links (not counted above): {{count}} answers"
-      }
+      },
+      "sendTest": "Send test DM to me",
+      "testConfirmTitle": "Send a test DM to yourself?",
+      "testConfirmBody": "Only you get it, in {{locale}}, with test buttons that change nothing. It works while sending is off and doesn't count as your campaign DM. At most {{limit}} per hour.",
+      "testConfirmSend": "Send it to me",
+      "testSent": "Test DM sent to your Discord, with your own listing numbers.",
+      "testSentSample": "Test DM sent to your Discord, with sample numbers (you have no live listings).",
+      "testFailed": "The test DM couldn't be sent."
     }
   },
   "apiTokensUi": {

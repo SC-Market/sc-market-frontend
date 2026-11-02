@@ -2368,6 +2368,17 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Admin"],
       }),
+      sendStillSellingTestDm: build.mutation<
+        SendStillSellingTestDmApiResponse,
+        SendStillSellingTestDmApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/dm-campaigns/still-selling/test`,
+          method: "POST",
+          body: queryArg.stillSellingTestRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
       getSellerReachability: build.query<
         GetSellerReachabilityApiResponse,
         GetSellerReachabilityApiArg
@@ -4216,6 +4227,11 @@ export type SendStillSellingCampaignApiArg = {
 export type StopStillSellingCampaignApiResponse =
   /** status 200 Ok */ StillSellingSendResponse
 export type StopStillSellingCampaignApiArg = void
+export type SendStillSellingTestDmApiResponse =
+  /** status 200 Ok */ StillSellingTestResponse
+export type SendStillSellingTestDmApiArg = {
+  stillSellingTestRequest: StillSellingTestRequest
+}
 export type GetSellerReachabilityApiResponse =
   /** status 200 Ok */ SellerReachabilityReport
 export type GetSellerReachabilityApiArg = void
@@ -9145,6 +9161,15 @@ export type StillSellingSendRequest = {
   /** The recipient count the admin confirmed (from the dry run); the run sends to at most this many. */
   expected_recipients: number
 }
+export type StillSellingTestResponse = {
+  /** The admin has no live listings, so sample numbers were used. */
+  sample: boolean
+  message: StillSellingSampleMessage
+}
+export type StillSellingTestRequest = {
+  /** Language of the test DM (default: the admin's own). */
+  locale?: StillSellingLocale
+}
 export type ReachabilityCount = {
   /** Sellers (a user, or an org) in this bucket reachable this way. */
   sellers: number
@@ -9803,6 +9828,7 @@ export const {
   useGetStillSellingCampaignQuery,
   useSendStillSellingCampaignMutation,
   useStopStillSellingCampaignMutation,
+  useSendStillSellingTestDmMutation,
   useGetSellerReachabilityQuery,
   useListAdminOrdersQuery,
   useGetAdminOrderAnalyticsQuery,

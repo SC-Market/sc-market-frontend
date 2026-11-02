@@ -7964,7 +7964,14 @@
         "testTitle_one": "De enlaces de prueba (no contados arriba): {{count}} respuesta",
         "testTitle_many": "De enlaces de prueba (no contados arriba): {{count}} respuestas",
         "testTitle_other": "De enlaces de prueba (no contados arriba): {{count}} respuestas"
-      }
+      },
+      "sendTest": "Enviarme un MD de prueba",
+      "testConfirmTitle": "¿Enviarte un MD de prueba?",
+      "testConfirmBody": "Solo lo recibes tú, en {{locale}}, con botones de prueba que no cambian nada. Funciona con el envío desactivado y no cuenta como tu MD de la campaña. Como máximo {{limit}} por hora.",
+      "testConfirmSend": "Enviármelo",
+      "testSent": "MD de prueba enviado a tu Discord, con tus propios números de anuncios.",
+      "testSentSample": "MD de prueba enviado a tu Discord, con números de ejemplo (no tienes anuncios activos).",
+      "testFailed": "No se pudo enviar el MD de prueba."
     }
   },
   "apiTokensUi": {
