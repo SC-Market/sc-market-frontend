@@ -19,6 +19,7 @@ export const addTagTypes = [
   "Integrations - SCMDB",
   "Admin Imports",
   "Images V2",
+  "Hints",
   "Health",
   "Game Items V2",
   "Game Data - Wishlists",
@@ -1032,6 +1033,20 @@ const injectedRtkApi = api
       uploadImage: build.mutation<UploadImageApiResponse, UploadImageApiArg>({
         query: () => ({ url: `/images/upload`, method: "POST" }),
         invalidatesTags: ["Images V2"],
+      }),
+      getDismissedHints: build.query<
+        GetDismissedHintsApiResponse,
+        GetDismissedHintsApiArg
+      >({
+        query: () => ({ url: `/hints/dismissed` }),
+        providesTags: ["Hints"],
+      }),
+      dismissHint: build.mutation<DismissHintApiResponse, DismissHintApiArg>({
+        query: (queryArg) => ({
+          url: `/hints/dismissed/${queryArg.hintKey}`,
+          method: "PUT",
+        }),
+        invalidatesTags: ["Hints"],
       }),
       getHealth: build.query<GetHealthApiResponse, GetHealthApiArg>({
         query: () => ({ url: `/health` }),
@@ -3037,6 +3052,14 @@ export type ListJobsApiArg = void
 export type UploadImageApiResponse =
   /** status 200 The uploaded image resource_id and CDN URL */ ImageUploadResponse
 export type UploadImageApiArg = void
+export type GetDismissedHintsApiResponse =
+  /** status 200 Ok */ DismissedHintsResponse
+export type GetDismissedHintsApiArg = void
+export type DismissHintApiResponse = /** status 200 Ok */ DismissedHint
+export type DismissHintApiArg = {
+  /** Lower-case letters, digits, dots, dashes and underscores (at most 64) */
+  hintKey: string
+}
 export type GetHealthApiResponse = /** status 200 Ok */ HealthResponse
 export type GetHealthApiArg = void
 export type SearchGameItemsApiResponse =
@@ -4595,6 +4618,11 @@ export type StorefrontCard = {
   /** The org's fields on SC Market (trading, freight, …). */
   fields: string[]
   active_listings: number
+  /** Active services in the shown shops. An org with services and no listings is a service-only org (tagged "Services"). */
+  active_services: number
+  /** Slug of the shown shop with the most active services (its Services tab
+    is where a service-only org's card links); null without services. */
+  services_shop_slug: string | null
   completed_orders: number
   avg_rating: number | null
   rating_count: number
@@ -4732,7 +4760,7 @@ export type DirectoryReason =
 export type StorefrontDirectoryStatus = {
   /** The setting: "Show in the public storefront directory". Default true. */
   show_in_directory: boolean
-  /** Whether the setting can be changed now (false while members-only: forced off). */
+  /** Whether the setting can be changed now (false while members-only: forced off; false for personal shops: no setting). */
   can_change: boolean
   /** Shown in the directory right now. */
   listed: boolean
@@ -4743,7 +4771,7 @@ export type StorefrontDirectoryStatus = {
   public_listings: number
   /** Members-only (private) active listings; they never count as public content. */
   private_listings: number
-  /** Active services (in the shops that are shown, for an org). Informational: they don't list a storefront. */
+  /** Active services (in the shops that are shown, for an org). One lists a storefront like a public listing. */
   active_services: number
 }
 export type OrgStorefrontStatusResponse = {
@@ -5887,6 +5915,16 @@ export type ImportJob = {
 export type ImageUploadResponse = {
   resource_id: string
   url: string
+}
+export type DismissedHintsResponse = {
+  /** Keys of every hint this user has dismissed. */
+  hint_keys: string[]
+}
+export type DismissedHint = {
+  /** The dismissed hint's key, e.g. "stock.lots-vs-quantity". */
+  hint_key: string
+  /** When the user first dismissed it. */
+  dismissed_at: string
 }
 export type HealthResponse = {
   status: string
@@ -8800,6 +8838,8 @@ export const {
   useGetJobStatusQuery,
   useListJobsQuery,
   useUploadImageMutation,
+  useGetDismissedHintsQuery,
+  useDismissHintMutation,
   useGetHealthQuery,
   useSearchGameItemsQuery,
   useGetPriceStatsQuery,
