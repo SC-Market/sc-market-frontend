@@ -2,7 +2,7 @@
 title: Sell as an org with an org shop
 description: An org shop sells in your org's name. Members with Manage Market list items and edit shared stock; Manage Orders handles the orders.
 order: 10
-updated: 2026-10-26
+updated: 2026-11-02
 keywords: [org shop, org storefront, organization shop, team selling, shared stock, org orders, manage market, private listing, reviews]
 related: [selling/sell-items, selling/handle-orders-as-a-seller, orgs/roles-and-permissions]
 howto: true
@@ -27,6 +27,7 @@ To sell as an org, create a shop owned by the org. Buyers see the org as the sel
 - A **personal shop** belongs to you. Only you manage it, and its orders are yours.
 - An **org shop** belongs to the org. Its listings show the org as the seller, and it appears on the **Store** tab of your org's page. Members with the right roles share the work.
 - Org shops can make a listing **Private (org members only)**, for internal sales.
+- Once your org is RSI-verified, an org shop's public listings and services put the org in the [storefront directory](/guides/org-storefront/white-label#the-storefront-directory) on the **Storefronts** page, where players browse org shops. Private listings don't count. To keep a shop out, turn off **Show in the public storefront directory** in its **Branded storefront** settings.
 
 ## Who can do what
 

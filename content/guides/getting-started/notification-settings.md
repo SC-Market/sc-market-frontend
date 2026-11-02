@@ -12,7 +12,7 @@ SC Market tells you about orders, offers, messages, reminders, bids, reviews, in
 
 ## Before you start
 
-- **Push:** turn on push notifications for this browser or phone at the bottom of the same page. On iPhone, add SC Market to your Home Screen first.
+- **Push:** at the bottom of the same page, **This device** shows whether push is set up here (**On for this device**, **Off on this device**, **Needs the app** or **Blocked**). Click **Enable Push Notifications** and allow notifications when your browser asks. **Install the app** adds SC Market to your computer or phone. On iPhone and iPad, push only works in the app on your Home Screen, with iOS 16.4 or later: in Safari, tap **Share**, then **Add to Home Screen**, open SC Market from there and come back to this page.
 - **Email:** add and verify an email address at the bottom of the same page. If you don't pick email types, the key ones are turned on: order status changes, new offers and counter-offers, and the unread message reminder. Invites, announcements and storefront enquiry replies are emailed by default too. The rest, and organization email, stay off until you turn them on.
 - **Discord DM:** link your Discord account under **Settings › Discord Integration**. DMs are on by default for price alerts, the unread message reminder and **Offer waiting for your reply**, and off for everything else. The bot can only DM you while you share a Discord server with it.
 

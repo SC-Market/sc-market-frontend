@@ -2,7 +2,7 @@
 title: Register your org on SC Market
 description: Register your RSI org with a code on its RSI page, or create a group without one. Then add its logo, banner, description, tags and languages.
 order: 10
-updated: 2026-10-26
+updated: 2026-11-02
 keywords: [org, organization, register org, create org, rsi org, spectrum id, contractor, logo, banner, languages]
 related: [orgs/invite-and-manage-members, orgs/manage-your-org, org-storefront/org-shop]
 howto: true
@@ -48,7 +48,7 @@ For a group that has no RSI org, use the **New Contractor** tab instead:
 
 ## Connect Discord
 
-To get a Discord thread for each order and alerts your team can claim, connect the SC Market bot to your org's server. See [connect the Discord bot](/guides/discord/connect-the-discord-bot).
+To get a Discord thread for each order and alerts your team can claim, open your org's **Discord Integration** tab and press **Add the bot to a server**, then pick your server and the channels. It's also the **Connect Discord** step of the checklist in your org's **Storefront** tab. See [connect the Discord bot](/guides/discord/connect-the-discord-bot).
 
 ## What happens next
 

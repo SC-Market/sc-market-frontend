@@ -46,6 +46,7 @@ As a seller, you handle each sale in two parts: accept the buyer's offer, which 
 
 With the [SC Market bot](/guides/discord/connect-the-discord-bot) set up and your Discord account linked, you can do the same steps without opening the site.
 
+- **Order threads**: if an order has no Discord thread yet, click **Create thread** in the **Discord Thread** row. It shows **Creating thread…**, and within about a minute it turns into **View thread**. Each order gets one thread, so there's no need to click again.
 - **Claim**: if your org posts order alerts, members with **Claim Orders** click **Claim** on the alert to take a new order. See [order alerts and claiming](/guides/discord/order-alerts-and-claiming).
 - **Update the status**: run `/order status` and pick `newstatus`: **In Progress**, **Fulfilled** or **Cancelled**. Inside an order's thread it updates that order; anywhere else, pick the order in `order` (it suggests your open orders). The same rules apply as on the site, and the buyer and the order thread are notified.
 

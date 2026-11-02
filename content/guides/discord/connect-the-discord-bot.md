@@ -52,6 +52,18 @@ You can also [add SC Market to your Discord account](/discord/install?type=user&
 > [!NOTE]
 > Direct messages from the bot, such as reminders about offers waiting for your reply, still need you to share a server with the bot for now. Adding the app to your account doesn't replace that yet. Keep direct messages from server members allowed in Discord's privacy settings.
 
+## If adding the bot didn't work
+
+When you come back from Discord, SC Market shows what happened:
+
+- **Nothing was added**: you left Discord's page early. Click **Start again**.
+- **We couldn't finish adding SC Market**: the link expired or was already used. Click **Start again**.
+- **Sign in first**: sign in, then add the bot again from your shop's or org's Discord settings.
+- **The bot is in your server**: it was added, but not linked to a shop or org. Press **Add the bot to a server** in your shop's or org's Discord settings to link it, or use `/setup threads` (see Advanced).
+- **You can't manage this Discord integration**: linking a server needs **Manage Market** for a shop or **Manage Webhooks** for an org. Nothing was linked. Ask someone with that permission to add it.
+- **This Discord account is linked to another SC Market account**: nothing changed. Sign in with the SC Market account it belongs to, or use a different Discord account.
+- **Your SC Market account is linked to a different Discord account**: nothing changed. Unlink the current one under **Settings › Discord Integration**, then add SC Market again.
+
 ## Advanced
 
 - **Added the bot from Discord instead**: the bot can't tell which shop or org the server is for, so link your Discord account in [Settings](/settings), then run `/setup threads` in the channel where threads should go (fill in `org` with its Spectrum ID for an org; leave it empty for yourself). `/setup alerts` does the same for alerts. These commands need **Manage Channels** in the server. [Add the bot](/discord/install?type=server&src=guide) without linking it to anything here.

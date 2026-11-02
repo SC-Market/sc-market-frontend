@@ -13,7 +13,14 @@ White-label puts that storefront on your org's own address, `yourorg.sc-market.s
 
 ## Set up your storefront
 
-Open your org's manage area and the **Storefront** tab. Its checklist takes you through each step: verify the org through its RSI page, open the org's shop, add a first listing, connect Discord so orders land in your server, and invite members.
+Open your org's manage area and the **Storefront** tab. The **Set up your storefront** checklist has six steps, each with a button that takes you there:
+
+1. **Verify your org through its RSI page**.
+2. **Open the org's shop**.
+3. **Add your first listing**.
+4. **Connect Discord, so orders land in your server**.
+5. **Bring in 3 or more members**.
+6. **Unlock branding**: done once your org meets the criteria below. **See what's missing** shows what's left.
 
 ## What branding unlocks
 
@@ -80,6 +87,12 @@ Members-only storefronts are never listed: if your subdomain is set to members-o
 
 ### Put your storefront on your own site
 
-The **Storefront** tab has **Get embed code**: a small widget with your org's card or its listings, to paste into your org's website. It's read-only. It shows your public listings and stats, and every link opens SC Market in a new tab.
+Show your storefront on your org's own website:
+
+1. In the **Storefront** tab, open **Get embed code**.
+2. Under **Widget**, pick **Storefront card** (your org's name, rating and stats) or **Listings** (your public listings). **Preview** shows how it looks.
+3. Click **Copy code** and paste the code into your website.
+
+The widget is read-only and always shows your current public listings and stats. Every link in it opens SC Market in a new tab.
 
 [Customize your white-label theme](/guides/org-storefront/white-label-theme "cta")
