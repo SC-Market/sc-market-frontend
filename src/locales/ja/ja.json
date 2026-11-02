@@ -1638,7 +1638,7 @@
     "how_to_get_notified": "注文が入ったときに通知を受け取る方法",
     "how_to_get_notified_answer": "公式の [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) をサーバーに追加すると、あなたに注文が入ったときやあなたに割り当てられたときに、自動的にダイレクトメッセージを受け取れます。または、[SC Market 公式サーバー]({{DISCORD_INVITE}}) 経由で注文を処理するには、以下の設定を使用してください。",
     "how_to_communicate": "Discordを通じて購入者とやり取りする方法",
-    "how_to_communicate_answer": "公式の [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) をサーバーに追加し、注文スレッド用のチャンネルを選びましょう。新しい注文やオファーが入るたびに、そのチャンネルに購入者と担当の出品者が参加するプライベートスレッドが作成され、購入者はあなたのサーバーに招待されるので、一緒に注文を進められます。\n\n1. SC Market の設定で Discord アカウントを連携してから、[Bot を追加]({{BOT_INSTALL_PATH}})します。\n\n2. 注文スレッドを置くチャンネルで `/setup threads` を実行します。組織の注文の場合は `org` に組織の Spectrum ID を入力します（例: `/setup threads org:SCMARKET`）。あなた個人への注文の場合は空欄のままにします。\n\n3. 任意: スタッフ用チャンネルで `/setup alerts`（同じ `org`）を実行すると、新しい注文とオファーが Claim ボタン付きで投稿されます。\n\nDiscord サーバーでの **チャンネルの管理** 権限が必要です。組織の場合は、SC Market でその組織の **Manage Webhooks** 権限（スレッド）または **Manage Orders** 権限（アラート）も必要です。スレッド用チャンネルでは、Bot に「チャンネルを見る」「プライベートスレッドの作成」「スレッドでメッセージを送信」「招待を作成」の権限が必要です。`/setup status` でチャンネルの設定内容を、`/help` ですべてのコマンドを確認できます。",
+    "how_to_communicate_answer": "公式の SC Market Discord ボットをサーバーに追加し、注文スレッド用のチャンネルを選んでください。新しい注文やオファーごとに、購入者と担当の販売者が参加するプライベートスレッドがそこに作られ、購入者はあなたのサーバーに招待されるので、一緒に注文を進められます。\n\n1. ショップの **設定 › Discord**、または組織の **Discord 連携** タブで **[ボットをサーバーに追加]({{BOT_INSTALL_PATH}})** を押し、Discord でサーバーを選びます。サーバーが連携された状態で戻ってきます。\n\n2. 注文スレッドのチャンネルと、必要なら注文アラートのチャンネル（新しい注文やオファーごとに「Claim」ボタン付きの投稿）を選んで保存します。\n\nボットを Discord から追加した場合は、SC Market の設定で Discord アカウントを連携し、注文スレッドを置くチャンネルで `/setup threads` を実行してください。組織の注文の場合は `org` に Spectrum ID を入力します（例: `/setup threads org:SCMARKET`）。あなた個人への注文の場合は空欄のままにします。アラートは、スタッフ用チャンネルで `/setup alerts`（同じ `org`）を実行します。\n\nボットの追加には Discord サーバーの **サーバー管理** 権限が、`/setup threads`, `/setup alerts` コマンドには **チャンネルの管理** 権限が必要です。組織の場合は、SC Market での組織の **Manage Webhooks** 権限も必要です（`/setup alerts` で作るアラートは **Manage Orders** でも可）。スレッド用チャンネルでは、ボットに「チャンネルを見る」「プライベートスレッドを作成」「スレッドでメッセージを送信」「招待を作成」の権限が必要です。`/setup status` でチャンネルの設定内容を、`/help` で全コマンドを確認できます。",
     "learn_connect": "Discord ボットを接続",
     "learn_alerts": "注文通知と引き受け"
   },
@@ -2334,7 +2334,7 @@
     "orderManagement": "注文管理",
     "integratedChannel": "連携チャンネル",
     "notConfigured": "未設定",
-    "setUpWithBot": "自分の Discord サーバーを使うには、注文スレッドを置くチャンネルで /setup threads を実行してください。",
+    "setUpWithBot": "自分の Discord サーバーを使うには、組織の Discord 連携タブまたはショップの設定 › Discord からボットを追加してそこでチャンネルを選ぶか、注文スレッドを置くチャンネルで /setup threads を実行してください。",
     "useOfficial1": "公式の",
     "serverName": "SC Market サーバー",
     "useOfficial2": "を注文に使用します。これにより既存の連携設定が置き換えられます。",
@@ -7002,8 +7002,8 @@
       "marketOrderTemplate": "マーケット注文テンプレート",
       "marketOrderTemplateHelper": "購入者がカスタム注文をするときに表示されるテンプレート",
       "discordSubtitle": "このショップの注文・オファーのスレッドを作成する場所",
-      "discordInfoOrg": "このショップの注文・オファーのスレッドを専用チャンネルに送るには、Discord のサーバー ID とチャンネル ID を入力してください。両方を空欄にすると、組織のスレッドチャンネル（Discord で /setup threads を実行して設定）が使われます。SC Market ボットがそのサーバーに参加し、チャンネルを閲覧できる必要があります。",
-      "discordInfoPersonal": "このショップの注文・オファーのスレッドを専用チャンネルに送るには、Discord のサーバー ID とチャンネル ID を入力してください。両方を空欄にすると、あなたのスレッドチャンネル（Discord で /setup threads を実行して設定）が使われます。SC Market ボットがそのサーバーに参加し、チャンネルを閲覧できる必要があります。",
+      "discordInfoOrg": "このショップの注文・オファーのスレッドを専用のチャンネルに送るには、下でボットをサーバーに追加してチャンネルを選ぶか、Discord のサーバー ID とチャンネル ID を入力してください。両方を空欄にすると、組織の Discord 連携タブまたは Discord での /setup threads で設定した、組織のスレッドチャンネルを使います。SC Market のボットがそのサーバーにいて、チャンネルを閲覧できる必要があります。",
+      "discordInfoPersonal": "このショップの注文・オファーのスレッドを専用のチャンネルに送るには、下でボットをサーバーに追加してチャンネルを選ぶか、Discord のサーバー ID とチャンネル ID を入力してください。両方を空欄にすると、Discord で /setup threads を実行して設定したあなた自身のスレッドチャンネルを使います。SC Market のボットがそのサーバーにいて、チャンネルを閲覧できる必要があります。",
       "discordServerId": "Discord サーバー ID",
       "discordIdPlaceholder": "例: 123456789012345678",
       "discordServerIdHelper": "サーバー（ギルド）ID",
@@ -8723,8 +8723,51 @@
       "title": "SC Market をあなたの Discord に追加",
       "why": "共通のサーバーにいなくても、オファーや注文についてお知らせできるようにするためです。",
       "unreachableTitle": "購入者からのオファーが Discord であなたに届きません",
-      "linkFirst": "まず Discord アカウントを連携し、次に SC Market をあなたの Discord に追加してください。共通のサーバーにいなくても、オファーや注文についてお知らせできるようになります。",
-      "linkDiscord": "Discord を連携"
+      "alsoLinks": "追加すると、Discord アカウントも SC Market に連携されます。"
+    },
+    "result": {
+      "user_linked": {
+        "title": "SC Market があなたの Discord に追加されました",
+        "body": "Discord アカウントが SC Market に連携されました。オファーや注文についてお知らせできます。"
+      },
+      "user_installed": {
+        "title": "SC Market があなたの Discord に追加されました",
+        "body": "共通のサーバーにいなくても、オファーや注文についてお知らせできるようになりました。"
+      },
+      "user_sign_in": {
+        "title": "SC Market があなたの Discord に追加されました",
+        "body": "SC Market にサインインし、設定 › 通知からもう一度追加すると、Discord アカウントが連携されます。"
+      },
+      "user_linked_elsewhere": {
+        "title": "この Discord アカウントは別の SC Market アカウントに連携されています",
+        "body": "このアカウントには連携しませんでした。連携先のアカウントでサインインするか、別の Discord アカウントで SC Market を追加してください。"
+      },
+      "user_other_discord": {
+        "title": "あなたの SC Market アカウントは別の Discord アカウントに連携されています",
+        "body": "変更はしていません。この Discord アカウントを使うには、設定 › Discord で現在の連携を解除してから、もう一度 SC Market を追加してください。"
+      },
+      "server_added": {
+        "title": "ボットがサーバーに追加されました",
+        "body": "そのサーバーで注文スレッドやアラートを受け取るには、ショップまたは組織の Discord 設定からもう一度ボットを追加してください（サーバーが自動で連携されます）。または、チャンネルで /setup threads を実行してください。"
+      },
+      "server_sign_in": {
+        "title": "先にサインインしてください",
+        "body": "SC Market にサインインしてから、ショップまたは組織の Discord 設定でボットを追加してください。"
+      },
+      "server_forbidden": {
+        "title": "この Discord 連携を管理する権限がありません",
+        "body": "サーバーの連携には、ショップでは Manage Market、組織では Manage Webhooks の権限が必要です。何も連携されていません。ボットが追加された場合は、連携なしでサーバーにいます。"
+      },
+      "cancelled": {
+        "title": "何も追加されませんでした",
+        "body": "SC Market を追加せずに Discord のページを離れました。"
+      },
+      "failed": {
+        "title": "SC Market の追加を完了できませんでした",
+        "body": "リンクの有効期限が切れたか、すでに使われた可能性があります。もう一度やり直してください。"
+      },
+      "signIn": "サインイン",
+      "startAgain": "やり直す"
     }
   },
   "stillSellingPage": {
@@ -8746,5 +8789,19 @@
     "failed": "問題が発生しました。もう一度お試しください。",
     "retry": "再試行",
     "moreListings": "…ほか{{count}}件"
+  },
+  "linkedDiscord": {
+    "title": "あなたの Discord サーバー",
+    "saved": "保存しました。新しい注文とオファーは選んだチャンネルに届きます。",
+    "botGone": "SC Market のボットはこのサーバーにいません。もう一度追加するか、サーバーの連携を解除してください。",
+    "threadChannel": "注文スレッドのチャンネル",
+    "noThreads": "このサーバーでは注文スレッドを作らない",
+    "alertChannels": "注文アラートのチャンネル",
+    "channelHelp": "スレッド: 新しい注文やオファーごとに購入者とのプライベートスレッド（フォーラムチャンネルでは投稿）。アラート: 新しい注文やオファーごとに「Claim」ボタン付きの投稿。ボットが選んだチャンネルを閲覧し、投稿できる必要があります。",
+    "unlink": "サーバーの連携を解除",
+    "save": "チャンネルを保存",
+    "justLinked": "ボットがサーバーに追加され、サーバーが連携されました。下で注文スレッドとアラートのチャンネルを選んでください。",
+    "add": "ボットをサーバーに追加",
+    "addHelp": "Discord で追加先のサーバーを選びます（そのサーバーでサーバー管理の権限が必要です）。サーバーが連携された状態でここに戻り、チャンネルを選べます。"
   }
 }

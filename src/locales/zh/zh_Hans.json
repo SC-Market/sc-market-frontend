@@ -1640,7 +1640,7 @@
     "how_to_get_notified": "如何在有订单创建时收到提醒",
     "how_to_get_notified_answer": "将官方的[SC市集Discord机器人]({{BOT_INSTALL_PATH}})加入到您的服务器以在一条订单被创建或被指派给您时收到自动私信。您也可以用下方设置去在[SC市集的官方服务器]({{DISCORD_INVITE}})里完成订单。",
     "how_to_communicate": "如何用Discord与买家交流",
-    "how_to_communicate_answer": "将官方的[SC市集Discord机器人]({{BOT_INSTALL_PATH}})加入您的服务器，并选择一个用于订单讨论串的频道：之后每个新订单或报价都会在该频道中创建一个私密讨论串，买家和指派的卖家都会被加入，买家也会收到您的服务器邀请，方便你们一起完成订单。\n\n1. 在SC市集设置中关联您的Discord账号，然后把[机器人]({{BOT_INSTALL_PATH}})加入您的服务器。\n\n2. 在用于存放订单讨论串的频道中运行`/setup threads`。如果是组织的订单，在`org`中填写组织的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下给您个人的订单，请留空。\n\n3. 可选：在员工频道中运行`/setup alerts`（使用相同的`org`），每个新订单和报价都会附带一个Claim按钮发布出来。\n\n您需要在Discord服务器中拥有**管理频道**权限。对于组织，您还需要该组织在SC市集上的**Manage Webhooks**权限（讨论串）或**Manage Orders**权限（提醒）。在讨论串频道中，机器人需要查看频道、创建私密子区、在子区中发送消息和创建邀请的权限。运行`/setup status`可查看一个频道的设置，运行`/help`可查看所有指令。",
+    "how_to_communicate_answer": "将官方 SC Market Discord 机器人添加到你的服务器，并选择一个订单帖子频道：之后每个新订单或报价都会在那里开启一个包含买家和指派卖家的私密帖子，买家会被邀请加入你的服务器，方便你们一起处理订单。\n\n1. 在你商店的 **设置 › Discord** 或组织的 **Discord 集成** 标签页中，点击 **[将机器人添加到服务器]({{BOT_INSTALL_PATH}})**，然后在 Discord 中选择你的服务器。返回时服务器已关联。\n\n2. 选择订单帖子频道，并可选择订单提醒频道（为每个新订单和报价发布一条带“认领”按钮的消息），然后保存。\n\n如果你是从 Discord 添加的机器人，请先在 SC Market 设置中关联你的 Discord 账号，然后在用于存放订单帖子的频道中运行 `/setup threads`。对于组织的订单，在 `org` 中填写其 Spectrum ID（例如 `/setup threads org:SCMARKET`）；对于向你本人下的订单，请留空。如需提醒，请在员工频道中运行 `/setup alerts`（使用相同的 `org`）。\n\n添加机器人需要 Discord 服务器中的 **管理服务器** 权限，`/setup threads`, `/setup alerts` 命令需要 **管理频道** 权限。对于组织，你还需要在 SC Market 上拥有该组织的 **Manage Webhooks** 权限（或使用 `/setup alerts` 设置提醒时拥有 **Manage Orders** 权限）。在帖子频道中，机器人需要“查看频道”“创建私密子区”“在子区中发送消息”和“创建邀请”权限。运行 `/setup status` 可查看频道接收的内容，运行 `/help` 可查看所有命令。",
     "learn_connect": "连接 Discord 机器人",
     "learn_alerts": "订单提醒与认领"
   },
@@ -2336,7 +2336,7 @@
     "orderManagement": "订单管理",
     "integratedChannel": "集成频道",
     "notConfigured": "未配置",
-    "setUpWithBot": "如需使用您自己的Discord服务器，请在用于存放订单讨论串的频道中运行 /setup threads。",
+    "setUpWithBot": "要使用你自己的 Discord 服务器，请从组织的 Discord 集成标签页或商店的 设置 › Discord 中添加机器人并在那里选择频道，或在用于存放订单帖子的频道中运行 /setup threads。",
     "useOfficial1": "使用官方",
     "serverName": "SC Market 服务器",
     "useOfficial2": "用于订单。这将替换你现有的集成设置。",
@@ -7008,8 +7008,8 @@
       "marketOrderTemplate": "市场订单模板",
       "marketOrderTemplateHelper": "买家下定制订单时显示的模板",
       "discordSubtitle": "本店订单和报价帖子的创建位置",
-      "discordInfoOrg": "要把本店的订单和报价帖子发送到单独的频道，请输入该 Discord 服务器 ID 和频道 ID。两项都留空则使用你组织的帖子频道（在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并且能看到该频道。",
-      "discordInfoPersonal": "要把本店的订单和报价帖子发送到单独的频道，请输入该 Discord 服务器 ID 和频道 ID。两项都留空则使用你的帖子频道（在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并且能看到该频道。",
+      "discordInfoOrg": "要将此商店的订单和报价帖子发送到专属频道，请在下方将机器人添加到服务器并选择频道，或输入 Discord 服务器 ID 和频道 ID。两项都留空则使用你组织的帖子频道（在组织的 Discord 集成标签页或在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并能看到该频道。",
+      "discordInfoPersonal": "要将此商店的订单和报价帖子发送到专属频道，请在下方将机器人添加到服务器并选择频道，或输入 Discord 服务器 ID 和频道 ID。两项都留空则使用你自己的帖子频道（在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并能看到该频道。",
       "discordServerId": "Discord 服务器 ID",
       "discordIdPlaceholder": "例如 123456789012345678",
       "discordServerIdHelper": "服务器（公会）ID",
@@ -8729,8 +8729,51 @@
       "title": "将 SC Market 添加到你的 Discord",
       "why": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
       "unreachableTitle": "买家的报价无法通过 Discord 通知到你",
-      "linkFirst": "请先关联你的 Discord 账号，然后将 SC Market 添加到你的 Discord，这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
-      "linkDiscord": "关联 Discord"
+      "alsoLinks": "添加后，你的 Discord 账号也会关联到 SC Market。"
+    },
+    "result": {
+      "user_linked": {
+        "title": "SC Market 已添加到你的 Discord",
+        "body": "你的 Discord 账号现已关联到 SC Market，我们可以就报价和订单联系你。"
+      },
+      "user_installed": {
+        "title": "SC Market 已添加到你的 Discord",
+        "body": "即使没有共同的服务器，我们现在也能就报价和订单联系你。"
+      },
+      "user_sign_in": {
+        "title": "SC Market 已添加到你的 Discord",
+        "body": "请登录 SC Market，然后在 设置 › 通知 中再次添加，以关联你的 Discord 账号。"
+      },
+      "user_linked_elsewhere": {
+        "title": "此 Discord 账号已关联到另一个 SC Market 账号",
+        "body": "我们没有将它关联到此账号。请使用它所属的账号登录，或使用其他 Discord 账号添加 SC Market。"
+      },
+      "user_other_discord": {
+        "title": "你的 SC Market 账号已关联到另一个 Discord 账号",
+        "body": "我们没有更改。若要改用此 Discord 账号，请先在 设置 › Discord 中解除当前关联，然后再次添加 SC Market。"
+      },
+      "server_added": {
+        "title": "机器人已加入你的服务器",
+        "body": "要在那里接收订单帖子和提醒，请从你的商店或组织的 Discord 设置中再次添加机器人（会自动为你关联服务器），或在频道中运行 /setup threads。"
+      },
+      "server_sign_in": {
+        "title": "请先登录",
+        "body": "请登录 SC Market，然后从你的商店或组织的 Discord 设置中添加机器人。"
+      },
+      "server_forbidden": {
+        "title": "你无法管理此 Discord 集成",
+        "body": "关联服务器需要商店的 Manage Market 权限，或组织的 Manage Webhooks 权限。没有关联任何内容；如果机器人已添加，它会留在服务器中但未关联。"
+      },
+      "cancelled": {
+        "title": "没有添加任何内容",
+        "body": "你在未添加 SC Market 的情况下离开了 Discord 页面。"
+      },
+      "failed": {
+        "title": "无法完成添加 SC Market",
+        "body": "链接可能已过期或已被使用。请重新开始。"
+      },
+      "signIn": "登录",
+      "startAgain": "重新开始"
     }
   },
   "stillSellingPage": {
@@ -8752,5 +8795,19 @@
     "failed": "出了点问题，请重试。",
     "retry": "重试",
     "moreListings": "……还有 {{count}} 个"
+  },
+  "linkedDiscord": {
+    "title": "你的 Discord 服务器",
+    "saved": "已保存。新的订单和报价会发送到你选择的频道。",
+    "botGone": "SC Market 机器人已不在此服务器中。请重新添加，或解除该服务器的关联。",
+    "threadChannel": "订单帖子频道",
+    "noThreads": "此服务器不创建订单帖子",
+    "alertChannels": "订单提醒频道",
+    "channelHelp": "帖子：为每个新订单和报价与买家建立私密帖子（在论坛频道中为一篇帖子）。提醒：为每个新订单和报价发布一条带“认领”按钮的消息。机器人需要能查看所选频道并在其中发言。",
+    "unlink": "解除服务器关联",
+    "save": "保存频道",
+    "justLinked": "机器人已加入你的服务器，服务器已关联。请在下方选择订单帖子和提醒的频道。",
+    "add": "将机器人添加到服务器",
+    "addHelp": "Discord 会询问要添加到哪个服务器（你需要在该服务器拥有“管理服务器”权限）。完成后你会回到这里，服务器已关联，可以选择频道。"
   }
 }

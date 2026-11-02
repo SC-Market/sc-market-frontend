@@ -1800,6 +1800,44 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Email"],
       }),
+      getLinkedDiscordServers: build.query<
+        GetLinkedDiscordServersApiResponse,
+        GetLinkedDiscordServersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/discord/linked-servers`,
+          params: {
+            shop: queryArg.shop,
+            org: queryArg.org,
+          },
+        }),
+        providesTags: ["Discord", "Shops"],
+      }),
+      updateLinkedDiscordServer: build.mutation<
+        UpdateLinkedDiscordServerApiResponse,
+        UpdateLinkedDiscordServerApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/discord/linked-servers/${queryArg.guildId}`,
+          method: "PUT",
+          body: queryArg.updateLinkedDiscordServerRequest,
+        }),
+        invalidatesTags: ["Discord", "Shops"],
+      }),
+      unlinkDiscordServer: build.mutation<
+        UnlinkDiscordServerApiResponse,
+        UnlinkDiscordServerApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/discord/linked-servers/${queryArg.guildId}`,
+          method: "DELETE",
+          params: {
+            shop: queryArg.shop,
+            org: queryArg.org,
+          },
+        }),
+        invalidatesTags: ["Discord", "Shops"],
+      }),
       recordDiscordInstallClick: build.mutation<
         RecordDiscordInstallClickApiResponse,
         RecordDiscordInstallClickApiArg
@@ -3817,6 +3855,24 @@ export type GetEmailDeliverabilityApiArg = void
 export type ReverifyEmailApiResponse =
   /** status 200 Ok */ EmailReverifyResponse
 export type ReverifyEmailApiArg = void
+export type GetLinkedDiscordServersApiResponse =
+  /** status 200 Ok */ LinkedDiscordServersResponse
+export type GetLinkedDiscordServersApiArg = {
+  shop?: string
+  org?: string
+}
+export type UpdateLinkedDiscordServerApiResponse =
+  /** status 200 Ok */ LinkedDiscordServer
+export type UpdateLinkedDiscordServerApiArg = {
+  guildId: string
+  updateLinkedDiscordServerRequest: UpdateLinkedDiscordServerRequest
+}
+export type UnlinkDiscordServerApiResponse = unknown
+export type UnlinkDiscordServerApiArg = {
+  guildId: string
+  shop?: string
+  org?: string
+}
 export type RecordDiscordInstallClickApiResponse = unknown
 export type RecordDiscordInstallClickApiArg = {
   discordInstallClickRequest: DiscordInstallClickRequest
@@ -8018,6 +8074,39 @@ export type EmailReverifyResponse = {
   /** When the next one can be requested (ISO 8601). */
   reverify_available_at: string
 }
+export type LinkedDiscordChannel = {
+  channel_id: string
+  name: string
+  /** text: threads and alerts; forum: threads (as posts); announcement: alerts. */
+  kind: "text" | "forum" | "announcement"
+}
+export type LinkedDiscordServer = {
+  guild_id: string
+  /** null when the bot can't read the server (it was removed). */
+  name: string | null
+  icon_url: string | null
+  /** false when the bot is no longer in the server. */
+  bot_in_server: boolean
+  /** Channels that can get threads or alerts, by position. */
+  channels: LinkedDiscordChannel[]
+  /** The owner's order-thread channel, when it is in this server. */
+  thread_channel_id: string | null
+  /** The owner's order-alert channels in this server. */
+  alert_channel_ids: string[]
+}
+export type LinkedDiscordServersResponse = {
+  servers: LinkedDiscordServer[]
+}
+export type UpdateLinkedDiscordServerRequest = {
+  /** The shop (shop id) the server is linked to; give this or org. */
+  shop?: string
+  /** The org (Spectrum ID) the server is linked to; give this or shop. */
+  org?: string
+  /** The order-thread channel: a channel id, null to stop threads in this server, or omit to keep. */
+  thread_channel_id?: string | null
+  /** Exactly the alert channels in this server; omit to keep. */
+  alert_channel_ids?: string[]
+}
 export type DiscordInstallClickRequest = {
   /** user: install on your own Discord account; server: add the bot to a server. */
   type: "user" | "server"
@@ -8974,6 +9063,7 @@ export type DiscordInstallSource =
   | "settings_discord"
   | "org_discord"
   | "shop_dashboard"
+  | "shop_settings"
   | "shop_hint"
   | "guide"
   | "faq"
@@ -9380,6 +9470,9 @@ export const {
   useFindCraftableBlueprintsMutation,
   useGetEmailDeliverabilityQuery,
   useReverifyEmailMutation,
+  useGetLinkedDiscordServersQuery,
+  useUpdateLinkedDiscordServerMutation,
+  useUnlinkDiscordServerMutation,
   useRecordDiscordInstallClickMutation,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,

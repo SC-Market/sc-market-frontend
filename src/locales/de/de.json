@@ -1643,7 +1643,7 @@
     "how_to_get_notified": "So werden Sie benachrichtigt, wenn eine Bestellung aufgegeben wird",
     "how_to_get_notified_answer": "Fügen Sie den offiziellen [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) zu Ihrem Server hinzu, um automatisch Direktnachrichten zu erhalten, wenn eine Bestellung bei Ihnen aufgegeben oder Ihnen zugewiesen wird. Alternativ können Sie mit der untenstehenden Konfiguration Bestellungen über [SC Markets offiziellen Server]({{DISCORD_INVITE}}) abwickeln.",
     "how_to_communicate": "So kommunizieren Sie mit Käufern über Discord",
-    "how_to_communicate_answer": "Fügen Sie den offiziellen [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) zu Ihrem Server hinzu und wählen Sie einen Kanal für Bestell-Threads: Jede neue Bestellung oder jedes neue Angebot öffnet dort dann einen privaten Thread mit dem Käufer und dem zugewiesenen Verkäufer, und Käufer werden zu Ihrem Server eingeladen, damit Sie die Bestellung gemeinsam abwickeln können.\n\n1. Verknüpfen Sie Ihr Discord-Konto in Ihren SC Market-Einstellungen und fügen Sie dann [den Bot]({{BOT_INSTALL_PATH}}) zu Ihrem Server hinzu.\n\n2. Führen Sie in dem Kanal, der die Bestell-Threads enthalten soll, `/setup threads` aus. Für die Bestellungen Ihrer Org geben Sie bei `org` deren Spectrum-ID an (zum Beispiel `/setup threads org:SCMARKET`); für Bestellungen bei Ihnen selbst lassen Sie das Feld leer.\n\n3. Optional: Führen Sie in einem Team-Kanal `/setup alerts` (mit derselben `org`) aus, um jede neue Bestellung und jedes neue Angebot mit einer Claim-Schaltfläche zu posten.\n\nSie benötigen die Berechtigung **Kanäle verwalten** auf dem Discord-Server. Für eine Org brauchen Sie auf SC Market außerdem die Berechtigung **Manage Webhooks** der Org für Threads oder **Manage Orders** für Alerts. Im Thread-Kanal benötigt der Bot die Berechtigungen Kanal ansehen, Private Threads erstellen, Nachrichten in Threads senden und Einladung erstellen. Mit `/setup status` sehen Sie, was ein Kanal erhält, und mit `/help` alle Befehle.",
+    "how_to_communicate_answer": "Fügen Sie den offiziellen SC Market Discord Bot zu Ihrem Server hinzu und wählen Sie einen Kanal für Bestell-Threads: Jede neue Bestellung oder jedes neue Angebot öffnet dort dann einen privaten Thread mit dem Käufer und dem zugewiesenen Verkäufer, und Käufer werden zu Ihrem Server eingeladen, damit Sie die Bestellung gemeinsam abwickeln können.\n\n1. Klicken Sie in den **Einstellungen › Discord** Ihres Shops oder im Tab **Discord-Integration** Ihrer Org auf **[Bot zu einem Server hinzufügen]({{BOT_INSTALL_PATH}})** und wählen Sie in Discord Ihren Server. Sie kommen mit verknüpftem Server zurück.\n\n2. Wählen Sie den Kanal für Bestell-Threads und optional Kanäle für Bestell-Alerts (ein Beitrag für jede neue Bestellung und jedes neue Angebot mit einer Claim-Schaltfläche) und speichern Sie.\n\nSie haben den Bot stattdessen über Discord hinzugefügt? Verknüpfen Sie Ihr Discord-Konto in Ihren SC Market-Einstellungen und führen Sie dann `/setup threads` in dem Kanal aus, der die Bestell-Threads enthalten soll. Für die Bestellungen Ihrer Org geben Sie bei `org` deren Spectrum-ID an (zum Beispiel `/setup threads org:SCMARKET`); für Bestellungen bei Ihnen selbst lassen Sie das Feld leer. Für Alerts führen Sie `/setup alerts` (mit derselben `org`) in einem Team-Kanal aus.\n\nZum Hinzufügen des Bots brauchen Sie die Berechtigung **Server verwalten** auf dem Discord-Server, für die `/setup threads`, `/setup alerts`-Befehle **Kanäle verwalten**. Für eine Org brauchen Sie auf SC Market außerdem die Berechtigung **Manage Webhooks** der Org (oder **Manage Orders** für Alerts, die mit `/setup alerts` eingerichtet werden). Im Thread-Kanal benötigt der Bot die Berechtigungen Kanal ansehen, Private Threads erstellen, Nachrichten in Threads senden und Einladung erstellen. Mit `/setup status` sehen Sie, was ein Kanal erhält, und mit `/help` alle Befehle.",
     "learn_connect": "Discord-Bot verbinden",
     "learn_alerts": "Bestellbenachrichtigungen und Übernahme"
   },
@@ -2342,7 +2342,7 @@
     "orderManagement": "Bestellverwaltung",
     "integratedChannel": "Integrierter Kanal",
     "notConfigured": "Nicht konfiguriert",
-    "setUpWithBot": "Um Ihren eigenen Discord-Server zu verwenden, führen Sie /setup threads in dem Kanal aus, der die Bestell-Threads enthalten soll.",
+    "setUpWithBot": "Um Ihren eigenen Discord-Server zu verwenden, fügen Sie den Bot über den Tab Discord-Integration Ihrer Org oder die Einstellungen › Discord Ihres Shops hinzu und wählen Sie dort einen Kanal, oder führen Sie /setup threads in dem Kanal aus, der die Bestell-Threads enthalten soll.",
     "useOfficial1": "Verwenden Sie den offiziellen",
     "serverName": "SC Market Server",
     "useOfficial2": "für Bestellungen. Dies ersetzt Ihre bestehenden Integrationseinstellungen.",
@@ -7086,8 +7086,8 @@
       "marketOrderTemplate": "Vorlage für Marktaufträge",
       "marketOrderTemplateHelper": "Vorlage, die Käufern beim Aufgeben eines individuellen Auftrags angezeigt wird",
       "discordSubtitle": "Wo Auftrags- und Angebots-Threads für diesen Shop erstellt werden",
-      "discordInfoOrg": "Um die Auftrags- und Angebots-Threads dieses Shops in einen eigenen Kanal zu senden, geben Sie dessen Discord-Server-ID und Kanal-ID ein. Lassen Sie beide Felder leer, um den Thread-Kanal Ihrer Organisation zu verwenden, den Sie mit /setup threads in Discord festlegen. Der SC Market-Bot muss auf diesem Server sein und den Kanal sehen können.",
-      "discordInfoPersonal": "Um die Auftrags- und Angebots-Threads dieses Shops in einen eigenen Kanal zu senden, geben Sie dessen Discord-Server-ID und Kanal-ID ein. Lassen Sie beide Felder leer, um Ihren Thread-Kanal zu verwenden, den Sie mit /setup threads in Discord festlegen. Der SC Market-Bot muss auf diesem Server sein und den Kanal sehen können.",
+      "discordInfoOrg": "Um die Auftrags- und Angebots-Threads dieses Shops in einen eigenen Kanal zu senden, fügen Sie den Bot unten zu einem Server hinzu und wählen Sie einen Kanal, oder geben Sie eine Discord-Server-ID und Kanal-ID ein. Lassen Sie beide Felder leer, um den Thread-Kanal Ihrer Organisation zu verwenden, den Sie im Tab Discord-Integration der Org oder mit /setup threads in Discord festlegen. Der SC Market-Bot muss auf diesem Server sein und den Kanal sehen können.",
+      "discordInfoPersonal": "Um die Auftrags- und Angebots-Threads dieses Shops in einen eigenen Kanal zu senden, fügen Sie den Bot unten zu einem Server hinzu und wählen Sie einen Kanal, oder geben Sie eine Discord-Server-ID und Kanal-ID ein. Lassen Sie beide Felder leer, um Ihren eigenen Thread-Kanal zu verwenden, den Sie mit /setup threads in Discord festlegen. Der SC Market-Bot muss auf diesem Server sein und den Kanal sehen können.",
       "discordServerId": "Discord-Server-ID",
       "discordIdPlaceholder": "z. B. 123456789012345678",
       "discordServerIdHelper": "Server-ID (Guild)",
@@ -8858,8 +8858,51 @@
       "title": "SC Market zu Ihrem Discord hinzufügen",
       "why": "Damit wir Sie zu Angeboten und Bestellungen erreichen können, auch ohne gemeinsamen Server.",
       "unreachableTitle": "Angebote von Käufern erreichen Sie nicht über Discord",
-      "linkFirst": "Verknüpfen Sie zuerst Ihr Discord-Konto und fügen Sie dann SC Market zu Ihrem Discord hinzu, damit wir Sie zu Angeboten und Bestellungen erreichen können, auch ohne gemeinsamen Server.",
-      "linkDiscord": "Discord verknüpfen"
+      "alsoLinks": "Dabei wird auch Ihr Discord-Konto mit SC Market verknüpft."
+    },
+    "result": {
+      "user_linked": {
+        "title": "SC Market ist in Ihrem Discord",
+        "body": "Ihr Discord-Konto ist jetzt mit SC Market verknüpft, damit wir Sie zu Angeboten und Bestellungen erreichen können."
+      },
+      "user_installed": {
+        "title": "SC Market ist in Ihrem Discord",
+        "body": "Wir können Sie jetzt zu Angeboten und Bestellungen erreichen, auch ohne gemeinsamen Server."
+      },
+      "user_sign_in": {
+        "title": "SC Market ist in Ihrem Discord",
+        "body": "Melden Sie sich bei SC Market an und fügen Sie es dann unter Einstellungen › Benachrichtigungen erneut hinzu, um Ihr Discord-Konto zu verknüpfen."
+      },
+      "user_linked_elsewhere": {
+        "title": "Dieses Discord-Konto ist mit einem anderen SC Market-Konto verknüpft",
+        "body": "Wir haben es nicht mit diesem Konto verknüpft. Melden Sie sich mit dem Konto an, zu dem es gehört, oder fügen Sie SC Market mit einem anderen Discord-Konto hinzu."
+      },
+      "user_other_discord": {
+        "title": "Ihr SC Market-Konto ist mit einem anderen Discord-Konto verknüpft",
+        "body": "Wir haben nichts geändert. Um stattdessen dieses Discord-Konto zu verwenden, heben Sie die bestehende Verknüpfung unter Einstellungen › Discord auf und fügen Sie SC Market dann erneut hinzu."
+      },
+      "server_added": {
+        "title": "Der Bot ist auf Ihrem Server",
+        "body": "Für Bestell-Threads und Alerts dort fügen Sie den Bot erneut über die Discord-Einstellungen Ihres Shops oder Ihrer Org hinzu, die den Server für Sie verknüpfen, oder führen Sie /setup threads in einem Kanal aus."
+      },
+      "server_sign_in": {
+        "title": "Bitte zuerst anmelden",
+        "body": "Melden Sie sich bei SC Market an und fügen Sie den Bot dann über die Discord-Einstellungen Ihres Shops oder Ihrer Org hinzu."
+      },
+      "server_forbidden": {
+        "title": "Sie können diese Discord-Integration nicht verwalten",
+        "body": "Zum Verknüpfen eines Servers brauchen Sie bei einem Shop Manage Market, bei einer Org Manage Webhooks. Es wurde nichts verknüpft; falls der Bot hinzugefügt wurde, ist er ohne Verknüpfung auf dem Server."
+      },
+      "cancelled": {
+        "title": "Es wurde nichts hinzugefügt",
+        "body": "Sie haben die Discord-Seite verlassen, ohne SC Market hinzuzufügen."
+      },
+      "failed": {
+        "title": "SC Market konnte nicht fertig hinzugefügt werden",
+        "body": "Der Link ist möglicherweise abgelaufen oder wurde bereits verwendet. Bitte beginnen Sie erneut."
+      },
+      "signIn": "Anmelden",
+      "startAgain": "Erneut beginnen"
     }
   },
   "stillSellingPage": {
@@ -8885,5 +8928,19 @@
     "failed": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "retry": "Erneut versuchen",
     "moreListings": "…und {{count}} weitere"
+  },
+  "linkedDiscord": {
+    "title": "Ihre Discord-Server",
+    "saved": "Gespeichert. Neue Bestellungen und Angebote gehen an die gewählten Kanäle.",
+    "botGone": "Der SC Market-Bot ist nicht mehr auf diesem Server. Fügen Sie ihn erneut hinzu oder heben Sie die Verknüpfung auf.",
+    "threadChannel": "Kanal für Bestell-Threads",
+    "noThreads": "Keine Bestell-Threads auf diesem Server",
+    "alertChannels": "Kanäle für Bestell-Alerts",
+    "channelHelp": "Threads: ein privater Thread mit dem Käufer für jede neue Bestellung und jedes neue Angebot (in einem Forum-Kanal ein Beitrag). Alerts: ein Beitrag für jede neue Bestellung und jedes neue Angebot mit einer Claim-Schaltfläche. Der Bot muss die gewählten Kanäle sehen und darin posten können.",
+    "unlink": "Verknüpfung aufheben",
+    "save": "Kanäle speichern",
+    "justLinked": "Der Bot ist auf Ihrem Server und der Server ist verknüpft. Wählen Sie unten die Kanäle für Bestell-Threads und Alerts.",
+    "add": "Bot zu einem Server hinzufügen",
+    "addHelp": "Discord fragt, zu welchem Server er hinzugefügt werden soll (dort brauchen Sie Server verwalten). Danach kommen Sie mit verknüpftem Server hierher zurück und können die Kanäle wählen."
   }
 }

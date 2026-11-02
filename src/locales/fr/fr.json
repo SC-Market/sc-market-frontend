@@ -1648,7 +1648,7 @@
     "how_to_get_notified": "Comment être notifié lorsqu'une commande est passée",
     "how_to_get_notified_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur pour recevoir automatiquement des messages privés lorsqu'une commande est passée avec vous ou vous est assignée. Vous pouvez aussi utiliser la configuration ci-dessous pour honorer les commandes via [le serveur officiel de SC Market]({{DISCORD_INVITE}}).",
     "how_to_communicate": "Comment communiquer avec les acheteurs via Discord",
-    "how_to_communicate_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur et choisissez un salon pour les fils de commande : chaque nouvelle commande ou offre y ouvre alors un fil privé avec l'acheteur et le vendeur assigné, et les acheteurs sont invités sur votre serveur pour que vous puissiez traiter la commande ensemble.\n\n1. Liez votre compte Discord dans vos paramètres SC Market, puis [ajoutez le bot]({{BOT_INSTALL_PATH}}) à votre serveur.\n\n2. Dans le salon qui doit accueillir les fils de commande, exécutez `/setup threads`. Pour les commandes de votre org, renseignez `org` avec son Spectrum ID (par exemple `/setup threads org:SCMARKET`) ; pour les commandes passées avec vous, laissez-le vide.\n\n3. Facultatif : dans un salon de l'équipe, exécutez `/setup alerts` (avec le même `org`) pour publier chaque nouvelle commande et offre avec un bouton Claim.\n\nIl vous faut la permission **Gérer les salons** sur le serveur Discord. Pour une org, il vous faut aussi sur SC Market la permission **Manage Webhooks** de l'org pour les fils, ou **Manage Orders** pour les alertes. Dans le salon des fils, le bot a besoin de Voir le salon, Créer des fils privés, Envoyer des messages dans les fils et Créer une invitation. Exécutez `/setup status` pour voir ce que reçoit un salon, et `/help` pour voir toutes les commandes.",
+    "how_to_communicate_answer": "Ajoutez le bot Discord officiel de SC Market à votre serveur et choisissez un salon pour les fils de commande : chaque nouvelle commande ou offre y ouvre alors un fil privé avec l'acheteur et le vendeur assigné, et les acheteurs sont invités sur votre serveur pour traiter la commande ensemble.\n\n1. Dans **Paramètres › Discord** de votre boutique, ou dans l'onglet **Intégration Discord** de votre organisation, cliquez sur **[Ajouter le bot à un serveur]({{BOT_INSTALL_PATH}})** et choisissez votre serveur dans Discord. Vous revenez avec le serveur lié.\n\n2. Choisissez le salon des fils de commande et, si vous le souhaitez, des salons pour les alertes de commande (une publication pour chaque nouvelle commande et offre, avec un bouton Réclamer), puis enregistrez.\n\nVous avez ajouté le bot depuis Discord ? Liez votre compte Discord dans vos paramètres SC Market, puis lancez `/setup threads` dans le salon qui doit accueillir les fils de commande. Pour les commandes de votre organisation, renseignez `org` avec son Spectrum ID (par exemple `/setup threads org:SCMARKET`) ; pour les commandes passées auprès de vous, laissez-le vide. Pour les alertes, lancez `/setup alerts` (avec le même `org`) dans un salon d'équipe.\n\nAjouter le bot nécessite la permission **Gérer le serveur** sur le serveur Discord, et les commandes `/setup threads`, `/setup alerts` nécessitent **Gérer les salons**. Pour une organisation, il vous faut aussi sa permission **Manage Webhooks** sur SC Market (ou **Manage Orders** pour les alertes créées avec `/setup alerts`). Dans le salon des fils, le bot a besoin de Voir le salon, Créer des fils privés, Envoyer des messages dans les fils et Créer une invitation. Lancez `/setup status` pour voir ce que reçoit un salon, et `/help` pour voir toutes les commandes.",
     "learn_connect": "Connecter le bot Discord",
     "learn_alerts": "Alertes de commande et prise en charge"
   },
@@ -2350,7 +2350,7 @@
     "orderManagement": "Gestion des commandes",
     "integratedChannel": "Canal intégré",
     "notConfigured": "Non configuré",
-    "setUpWithBot": "Pour utiliser votre propre serveur Discord, exécutez /setup threads dans le salon qui doit accueillir les fils de commande.",
+    "setUpWithBot": "Pour utiliser votre propre serveur Discord, ajoutez le bot depuis l'onglet Intégration Discord de votre organisation ou depuis Paramètres › Discord de votre boutique et choisissez-y un salon, ou lancez /setup threads dans le salon qui doit accueillir les fils de commande.",
     "useOfficial1": "Utilisez l'officiel",
     "serverName": "Serveur SC Market",
     "useOfficial2": "pour les commandes. Cela remplacera vos paramètres d'intégration existants.",
@@ -7170,8 +7170,8 @@
       "marketOrderTemplate": "Modèle de commande du marché",
       "marketOrderTemplateHelper": "Modèle affiché aux acheteurs lorsqu'ils passent une commande sur mesure",
       "discordSubtitle": "Où sont créés les fils de commandes et d'offres de cette boutique",
-      "discordInfoOrg": "Pour envoyer les fils de commandes et d'offres de cette boutique dans leur propre salon, saisissez l'ID du serveur Discord et l'ID du salon. Laissez les deux vides pour utiliser le salon de fils de votre organisation, que vous définissez avec /setup threads dans Discord. Le bot SC Market doit être sur ce serveur et pouvoir voir le salon.",
-      "discordInfoPersonal": "Pour envoyer les fils de commandes et d'offres de cette boutique dans leur propre salon, saisissez l'ID du serveur Discord et l'ID du salon. Laissez les deux vides pour utiliser votre salon de fils, que vous définissez avec /setup threads dans Discord. Le bot SC Market doit être sur ce serveur et pouvoir voir le salon.",
+      "discordInfoOrg": "Pour envoyer les fils de commande et d'offre de cette boutique dans leur propre salon, ajoutez le bot à un serveur ci-dessous et choisissez un salon, ou saisissez un ID de serveur et un ID de salon Discord. Laissez les deux vides pour utiliser le salon des fils de votre organisation, défini dans son onglet Intégration Discord ou avec /setup threads dans Discord. Le bot SC Market doit être sur ce serveur et pouvoir voir le salon.",
+      "discordInfoPersonal": "Pour envoyer les fils de commande et d'offre de cette boutique dans leur propre salon, ajoutez le bot à un serveur ci-dessous et choisissez un salon, ou saisissez un ID de serveur et un ID de salon Discord. Laissez les deux vides pour utiliser votre propre salon des fils, défini avec /setup threads dans Discord. Le bot SC Market doit être sur ce serveur et pouvoir voir le salon.",
       "discordServerId": "ID du serveur Discord",
       "discordIdPlaceholder": "ex. 123456789012345678",
       "discordServerIdHelper": "ID du serveur (guild)",
@@ -8993,8 +8993,51 @@
       "title": "Ajoutez SC Market à votre Discord",
       "why": "Pour pouvoir vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
       "unreachableTitle": "Les offres des acheteurs ne vous parviennent pas sur Discord",
-      "linkFirst": "Liez d'abord votre compte Discord, puis ajoutez SC Market à votre Discord, pour que nous puissions vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
-      "linkDiscord": "Lier Discord"
+      "alsoLinks": "L'ajouter lie aussi votre compte Discord à SC Market."
+    },
+    "result": {
+      "user_linked": {
+        "title": "SC Market est sur votre Discord",
+        "body": "Votre compte Discord est maintenant lié à SC Market, pour que nous puissions vous joindre au sujet des offres et des commandes."
+      },
+      "user_installed": {
+        "title": "SC Market est sur votre Discord",
+        "body": "Nous pouvons maintenant vous joindre au sujet des offres et des commandes, même sans serveur en commun."
+      },
+      "user_sign_in": {
+        "title": "SC Market est sur votre Discord",
+        "body": "Connectez-vous à SC Market, puis ajoutez-le à nouveau depuis Paramètres › Notifications pour lier votre compte Discord."
+      },
+      "user_linked_elsewhere": {
+        "title": "Ce compte Discord est lié à un autre compte SC Market",
+        "body": "Nous ne l'avons pas lié à ce compte. Connectez-vous avec le compte auquel il appartient, ou ajoutez SC Market avec un autre compte Discord."
+      },
+      "user_other_discord": {
+        "title": "Votre compte SC Market est lié à un autre compte Discord",
+        "body": "Nous ne l'avons pas modifié. Pour utiliser ce compte Discord à la place, déliez l'actuel dans Paramètres › Discord, puis ajoutez à nouveau SC Market."
+      },
+      "server_added": {
+        "title": "Le bot est sur votre serveur",
+        "body": "Pour y recevoir les fils et les alertes de commande, ajoutez à nouveau le bot depuis les paramètres Discord de votre boutique ou de votre organisation, qui lient le serveur pour vous, ou lancez /setup threads dans un salon."
+      },
+      "server_sign_in": {
+        "title": "Connectez-vous d'abord",
+        "body": "Connectez-vous à SC Market, puis ajoutez le bot depuis les paramètres Discord de votre boutique ou de votre organisation."
+      },
+      "server_forbidden": {
+        "title": "Vous ne pouvez pas gérer cette intégration Discord",
+        "body": "Lier un serveur nécessite Manage Market pour une boutique, ou Manage Webhooks pour une organisation. Rien n'a été lié ; si le bot a été ajouté, il est sur le serveur sans lien."
+      },
+      "cancelled": {
+        "title": "Rien n'a été ajouté",
+        "body": "Vous avez quitté la page de Discord sans ajouter SC Market."
+      },
+      "failed": {
+        "title": "Nous n'avons pas pu terminer l'ajout de SC Market",
+        "body": "Le lien a peut-être expiré ou a déjà été utilisé. Veuillez recommencer."
+      },
+      "signIn": "Se connecter",
+      "startAgain": "Recommencer"
     }
   },
   "stillSellingPage": {
@@ -9024,5 +9067,19 @@
     "failed": "Une erreur s'est produite. Veuillez réessayer.",
     "retry": "Réessayer",
     "moreListings": "…et {{count}} de plus"
+  },
+  "linkedDiscord": {
+    "title": "Vos serveurs Discord",
+    "saved": "Enregistré. Les nouvelles commandes et offres iront dans les salons choisis.",
+    "botGone": "Le bot SC Market n'est plus sur ce serveur. Ajoutez-le à nouveau, ou déliez le serveur.",
+    "threadChannel": "Salon des fils de commande",
+    "noThreads": "Pas de fils de commande sur ce serveur",
+    "alertChannels": "Salons des alertes de commande",
+    "channelHelp": "Fils : un fil privé avec l'acheteur pour chaque nouvelle commande et offre (une publication dans un salon forum). Alertes : une publication pour chaque nouvelle commande et offre, avec un bouton Réclamer. Le bot doit pouvoir voir les salons choisis et y publier.",
+    "unlink": "Délier le serveur",
+    "save": "Enregistrer les salons",
+    "justLinked": "Le bot est sur votre serveur et le serveur est lié. Choisissez ci-dessous les salons des fils et des alertes de commande.",
+    "add": "Ajouter le bot à un serveur",
+    "addHelp": "Discord vous demande à quel serveur l'ajouter (il vous faut Gérer le serveur sur celui-ci). Vous revenez ici avec le serveur lié, prêt à choisir les salons."
   }
 }

@@ -5,6 +5,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FAQQuestion } from "../../components/landing/FAQQuestion"
 import { DISCORD_INVITE } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { useParams } from "react-router-dom"
 import { HelpLink } from "../../features/help/components/HelpLink"
 import { FirstUseHint } from "../../features/help/components/FirstUseHint"
 import { discordInstallPath } from "../../features/discord-install/installLinks"
@@ -13,9 +14,12 @@ export function DiscordBotDetails(props: { org?: boolean }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   // "Add the bot" links in the answers below: counted per surface.
+  // On an org's page the install links the server to that org.
+  const { contractor_id } = useParams<{ contractor_id: string }>()
   const BOT_INSTALL_PATH = discordInstallPath(
     "server",
     props.org ? "org_discord" : "settings_discord",
+    props.org && contractor_id ? { org: contractor_id } : undefined,
   )
 
   return (

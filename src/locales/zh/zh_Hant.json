@@ -1580,7 +1580,7 @@
     "how_to_get_notified": "如何在有訂單創建時收到提醒",
     "how_to_get_notified_answer": "將官方的[SC市集Discord機器人]({{BOT_INSTALL_PATH}})加入到您的服務器以在一條訂單被創建或被指派給您時收到自動私信。您也可以用下方設置去在[SC市集的官方服務器]({{DISCORD_INVITE}})裏完成訂單。",
     "how_to_communicate": "如何用Discord與買家交流",
-    "how_to_communicate_answer": "將官方的[SC市集Discord機器人]({{BOT_INSTALL_PATH}})加入您的伺服器，並選擇一個用於訂單討論串的頻道：之後每個新訂單或報價都會在該頻道中建立一個私密討論串，買家和指派的賣家都會被加入，買家也會收到您的伺服器邀請，方便你們一起完成訂單。\n\n1. 在SC市集設定中連結您的Discord帳號，然後把[機器人]({{BOT_INSTALL_PATH}})加入您的伺服器。\n\n2. 在用於存放訂單討論串的頻道中執行`/setup threads`。如果是組織的訂單，在`org`中填寫組織的Spectrum ID（例如`/setup threads org:SCMARKET`）；如果是下給您個人的訂單，請留空。\n\n3. 可選：在員工頻道中執行`/setup alerts`（使用相同的`org`），每個新訂單和報價都會附帶一個Claim按鈕發佈出來。\n\n您需要在Discord伺服器中擁有**管理頻道**權限。對於組織，您還需要該組織在SC市集上的**Manage Webhooks**權限（討論串）或**Manage Orders**權限（提醒）。在討論串頻道中，機器人需要檢視頻道、建立私人討論串、在討論串中傳送訊息和建立邀請的權限。執行`/setup status`可查看一個頻道的設定，執行`/help`可查看所有指令。",
+    "how_to_communicate_answer": "將官方 SC Market Discord 機器人加入你的伺服器，並選擇一個訂單討論串頻道：之後每個新訂單或報價都會在那裡開啟一個包含買家和指派賣家的私人討論串，買家會被邀請加入你的伺服器，方便你們一起處理訂單。\n\n1. 在你商店的 **設定 › Discord** 或組織的 **Discord 整合** 分頁中，點擊 **[將機器人加入伺服器]({{BOT_INSTALL_PATH}})**，然後在 Discord 中選擇你的伺服器。返回時伺服器已連結。\n\n2. 選擇訂單討論串頻道，並可選擇訂單提醒頻道（為每個新訂單和報價發布一則附「認領」按鈕的訊息），然後儲存。\n\n如果你是從 Discord 加入的機器人，請先在 SC Market 設定中連結你的 Discord 帳號，然後在用於存放訂單討論串的頻道中執行 `/setup threads`。對於組織的訂單，在 `org` 中填寫其 Spectrum ID（例如 `/setup threads org:SCMARKET`）；對於向你本人下的訂單，請留空。如需提醒，請在員工頻道中執行 `/setup alerts`（使用相同的 `org`）。\n\n加入機器人需要 Discord 伺服器中的 **管理伺服器** 權限，`/setup threads`, `/setup alerts` 指令需要 **管理頻道** 權限。對於組織，你還需要在 SC Market 上擁有該組織的 **Manage Webhooks** 權限（或使用 `/setup alerts` 設定提醒時擁有 **Manage Orders** 權限）。在討論串頻道中，機器人需要「檢視頻道」「建立私人討論串」「在討論串中傳送訊息」和「建立邀請」權限。執行 `/setup status` 可查看頻道接收的內容，執行 `/help` 可查看所有指令。",
     "learn_connect": "連結 Discord 機器人",
     "learn_alerts": "訂單提醒與認領"
   },
@@ -2276,7 +2276,7 @@
     "orderManagement": "訂單管理",
     "integratedChannel": "整合頻道",
     "notConfigured": "尚未設定",
-    "setUpWithBot": "如需使用您自己的Discord伺服器，請在用於存放訂單討論串的頻道中執行 /setup threads。",
+    "setUpWithBot": "要使用你自己的 Discord 伺服器，請從組織的 Discord 整合分頁或商店的 設定 › Discord 中加入機器人並在那裡選擇頻道，或在用於存放訂單討論串的頻道中執行 /setup threads。",
     "useOfficial1": "使用官方",
     "serverName": "SC Market 伺服器",
     "useOfficial2": "來處理訂單。這將取代你現有的整合設定。",
@@ -7002,8 +7002,8 @@
       "marketOrderTemplate": "市集訂單範本",
       "marketOrderTemplateHelper": "買家下客製訂單時顯示的範本",
       "discordSubtitle": "本店訂單和報價討論串的建立位置",
-      "discordInfoOrg": "要把本店的訂單和報價討論串傳送到專屬頻道，請輸入該 Discord 伺服器 ID 和頻道 ID。兩項都留空則使用你組織的討論串頻道（在 Discord 中執行 /setup threads 設定）。SC Market 機器人必須在該伺服器中並且能看到該頻道。",
-      "discordInfoPersonal": "要把本店的訂單和報價討論串傳送到專屬頻道，請輸入該 Discord 伺服器 ID 和頻道 ID。兩項都留空則使用你的討論串頻道（在 Discord 中執行 /setup threads 設定）。SC Market 機器人必須在該伺服器中並且能看到該頻道。",
+      "discordInfoOrg": "要將此商店的訂單和報價討論串傳送到專屬頻道，請在下方將機器人加入伺服器並選擇頻道，或輸入 Discord 伺服器 ID 和頻道 ID。兩項都留空則使用你組織的討論串頻道（在組織的 Discord 整合分頁或在 Discord 中執行 /setup threads 設定）。SC Market 機器人必須在該伺服器中並能看到該頻道。",
+      "discordInfoPersonal": "要將此商店的訂單和報價討論串傳送到專屬頻道，請在下方將機器人加入伺服器並選擇頻道，或輸入 Discord 伺服器 ID 和頻道 ID。兩項都留空則使用你自己的討論串頻道（在 Discord 中執行 /setup threads 設定）。SC Market 機器人必須在該伺服器中並能看到該頻道。",
       "discordServerId": "Discord 伺服器 ID",
       "discordIdPlaceholder": "例如 123456789012345678",
       "discordServerIdHelper": "伺服器（公會）ID",
@@ -8723,8 +8723,51 @@
       "title": "將 SC Market 新增到你的 Discord",
       "why": "這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
       "unreachableTitle": "買家的報價無法透過 Discord 通知到你",
-      "linkFirst": "請先連結你的 Discord 帳號，然後將 SC Market 新增到你的 Discord，這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
-      "linkDiscord": "連結 Discord"
+      "alsoLinks": "加入後，你的 Discord 帳號也會連結到 SC Market。"
+    },
+    "result": {
+      "user_linked": {
+        "title": "SC Market 已加入你的 Discord",
+        "body": "你的 Discord 帳號現已連結到 SC Market，我們可以就報價和訂單聯絡你。"
+      },
+      "user_installed": {
+        "title": "SC Market 已加入你的 Discord",
+        "body": "即使沒有共同的伺服器，我們現在也能就報價和訂單聯絡你。"
+      },
+      "user_sign_in": {
+        "title": "SC Market 已加入你的 Discord",
+        "body": "請登入 SC Market，然後在 設定 › 通知 中再次加入，以連結你的 Discord 帳號。"
+      },
+      "user_linked_elsewhere": {
+        "title": "此 Discord 帳號已連結到另一個 SC Market 帳號",
+        "body": "我們沒有將它連結到此帳號。請使用它所屬的帳號登入，或使用其他 Discord 帳號加入 SC Market。"
+      },
+      "user_other_discord": {
+        "title": "你的 SC Market 帳號已連結到另一個 Discord 帳號",
+        "body": "我們沒有變更。若要改用此 Discord 帳號，請先在 設定 › Discord 中解除目前的連結，然後再次加入 SC Market。"
+      },
+      "server_added": {
+        "title": "機器人已加入你的伺服器",
+        "body": "要在那裡接收訂單討論串和提醒，請從你的商店或組織的 Discord 設定中再次加入機器人（會自動為你連結伺服器），或在頻道中執行 /setup threads。"
+      },
+      "server_sign_in": {
+        "title": "請先登入",
+        "body": "請登入 SC Market，然後從你的商店或組織的 Discord 設定中加入機器人。"
+      },
+      "server_forbidden": {
+        "title": "你無法管理此 Discord 整合",
+        "body": "連結伺服器需要商店的 Manage Market 權限，或組織的 Manage Webhooks 權限。沒有連結任何內容；如果機器人已加入，它會留在伺服器中但未連結。"
+      },
+      "cancelled": {
+        "title": "沒有加入任何內容",
+        "body": "你在未加入 SC Market 的情況下離開了 Discord 頁面。"
+      },
+      "failed": {
+        "title": "無法完成加入 SC Market",
+        "body": "連結可能已過期或已被使用。請重新開始。"
+      },
+      "signIn": "登入",
+      "startAgain": "重新開始"
     }
   },
   "stillSellingPage": {
@@ -8746,5 +8789,19 @@
     "failed": "出了點問題，請重試。",
     "retry": "重試",
     "moreListings": "……還有 {{count}} 個"
+  },
+  "linkedDiscord": {
+    "title": "你的 Discord 伺服器",
+    "saved": "已儲存。新的訂單和報價會傳送到你選擇的頻道。",
+    "botGone": "SC Market 機器人已不在此伺服器中。請重新加入，或解除該伺服器的連結。",
+    "threadChannel": "訂單討論串頻道",
+    "noThreads": "此伺服器不建立訂單討論串",
+    "alertChannels": "訂單提醒頻道",
+    "channelHelp": "討論串：為每個新訂單和報價與買家建立私人討論串（在論壇頻道中為一篇貼文）。提醒：為每個新訂單和報價發布一則附「認領」按鈕的訊息。機器人需要能查看所選頻道並在其中發言。",
+    "unlink": "解除伺服器連結",
+    "save": "儲存頻道",
+    "justLinked": "機器人已加入你的伺服器，伺服器已連結。請在下方選擇訂單討論串和提醒的頻道。",
+    "add": "將機器人加入伺服器",
+    "addHelp": "Discord 會詢問要加入哪個伺服器（你需要在該伺服器擁有「管理伺服器」權限）。完成後你會回到這裡，伺服器已連結，可以選擇頻道。"
   }
 }

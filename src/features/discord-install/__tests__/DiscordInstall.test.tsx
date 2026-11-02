@@ -43,8 +43,12 @@ import {
   redirect,
 } from "../../../pages/discord/DiscordInstallPage"
 import { DiscordUserInstallCta } from "../DiscordUserInstallCta"
-import { discordInstallPath, installSource } from "../installLinks"
-import { DISCORD_AUTHORIZE_URLS } from "../../../util/constants"
+import {
+  discordInstallPath,
+  discordInstallStartUrl,
+  installSource,
+} from "../installLinks"
+import { BACKEND_URL } from "../../../util/constants"
 
 const record = vi.fn()
 const reach = (r: Partial<marketApi.DiscordReachabilityResponse> | undefined) =>
@@ -79,11 +83,20 @@ describe("install links", () => {
       "/discord/install?type=user&src=shop_hint",
     )
     expect(installSource("nope")).toBe("other")
-    expect(DISCORD_AUTHORIZE_URLS.user).toContain(
-      "integration_type=1&scope=applications.commands",
+  })
+
+  it("a server install can name the shop or org it links the server to", () => {
+    expect(discordInstallPath("server", "shop_settings", { shop: "s1" })).toBe(
+      "/discord/install?type=server&src=shop_settings&shop=s1",
     )
-    expect(DISCORD_AUTHORIZE_URLS.server).toContain(
-      "integration_type=0&scope=bot",
+    expect(
+      discordInstallStartUrl("server", "org_discord", { org: "SCMARKET" }),
+    ).toBe(
+      `${BACKEND_URL}/auth/discord-install?type=server&src=org_discord&org=SCMARKET`,
+    )
+    // A user install never carries an owner.
+    expect(discordInstallPath("user", "guide", { shop: "s1" })).toBe(
+      "/discord/install?type=user&src=guide",
     )
   })
 })
@@ -96,11 +109,13 @@ describe("/discord/install", () => {
       </MemoryRouter>,
     )
 
-  it("counts the click with its surface, then opens Discord's user install", async () => {
+  it("counts the click with its surface, then starts the backend's install flow", async () => {
     at("?type=user&src=shop_hint")
     expect(screen.getByTestId("discord-install-opening")).toBeInTheDocument()
     await waitFor(() =>
-      expect(redirect.to).toHaveBeenCalledWith(DISCORD_AUTHORIZE_URLS.user),
+      expect(redirect.to).toHaveBeenCalledWith(
+        `${BACKEND_URL}/auth/discord-install?type=user&src=shop_hint`,
+      ),
     )
     expect(record).toHaveBeenCalledWith({
       discordInstallClickRequest: { type: "user", src: "shop_hint" },
@@ -111,11 +126,48 @@ describe("/discord/install", () => {
     record.mockReturnValue({ unwrap: () => Promise.reject(new Error("429")) })
     at("?type=server&src=evil")
     await waitFor(() =>
-      expect(redirect.to).toHaveBeenCalledWith(DISCORD_AUTHORIZE_URLS.server),
+      expect(redirect.to).toHaveBeenCalledWith(
+        `${BACKEND_URL}/auth/discord-install?type=server&src=other`,
+      ),
     )
     expect(record).toHaveBeenCalledWith({
       discordInstallClickRequest: { type: "server", src: "other" },
     })
+  })
+
+  it("passes the shop a server install is for on to the backend", async () => {
+    at("?type=server&src=shop_settings&shop=s1")
+    await waitFor(() =>
+      expect(redirect.to).toHaveBeenCalledWith(
+        `${BACKEND_URL}/auth/discord-install?type=server&src=shop_settings&shop=s1`,
+      ),
+    )
+  })
+
+  it("shows how an install ended, without counting or redirecting", () => {
+    at("?result=user_linked_elsewhere&type=user")
+    expect(
+      screen.getByText(
+        "This Discord account is linked to another SC Market account",
+      ),
+    ).toBeInTheDocument()
+    expect(record).not.toHaveBeenCalled()
+    expect(redirect.to).not.toHaveBeenCalled()
+  })
+
+  it("asks a signed-out installer to sign in", () => {
+    at("?result=user_sign_in&type=user")
+    expect(
+      screen.getByTestId("discord-install-result-user_sign_in"),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("link", { name: "Sign in" }).getAttribute("href"),
+    ).toBe("/login?redirect=%2Fsettings%3Ftab%3Dnotifications")
+  })
+
+  it("an unknown result shows the choices", () => {
+    at("?result=evil")
+    expect(screen.getByTestId("discord-install-choices")).toBeInTheDocument()
   })
 
   it("without a valid type: offers both choices and counts nothing", () => {
@@ -164,7 +216,7 @@ describe("DiscordUserInstallCta", () => {
     expect(cta("panel").container).toBeEmptyDOMElement()
   })
 
-  it("unreachable: only when not DM-reachable; asks to link Discord first", () => {
+  it("unreachable: only when not DM-reachable; installing also links Discord", () => {
     reach({ dm_reachable: true })
     const a = cta("unreachable")
     expect(a.container).toBeEmptyDOMElement()
@@ -172,11 +224,11 @@ describe("DiscordUserInstallCta", () => {
     reach({ discord_linked: false })
     cta("unreachable")
     expect(
-      screen.getByTestId("discord-user-install-link-first"),
-    ).toBeInTheDocument()
+      screen.getByTestId("discord-user-install").getAttribute("href"),
+    ).toBe("/discord/install?type=user&src=settings_notifications")
     expect(
-      screen.getByRole("link", { name: "Link Discord" }).getAttribute("href"),
-    ).toBe("/settings?tab=discord")
+      screen.getByTestId("discord-user-install-also-links"),
+    ).toBeInTheDocument()
   })
 
   it("hint: a first-use hint with the install link", () => {

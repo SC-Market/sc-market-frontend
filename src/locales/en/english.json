@@ -1062,7 +1062,7 @@
   "ConfigureDiscord": {
     "integratedChannel": "Integrated Channel",
     "notConfigured": "Not configured",
-    "setUpWithBot": "To use your own Discord server, run /setup threads in the channel that should hold the order threads.",
+    "setUpWithBot": "To use your own Discord server, add the bot from your org's Discord Integration tab or your shop's Settings › Discord and pick a channel there, or run /setup threads in the channel that should hold the order threads.",
     "orderManagement": "Order Management",
     "serverName": "SC Market Server",
     "useOfficial1": "Use The Official",
@@ -1685,7 +1685,7 @@
   },
   "discord_bot": {
     "how_to_communicate": "How to communicate with buyers through Discord",
-    "how_to_communicate_answer": "Add the official [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) to your server and pick a channel for order threads: each new order or offer then opens a private thread there with the buyer and the seller assigned to it, and buyers are invited to your server so you can work through the order together.\n\n1. Link your Discord account in your SC Market settings, then [add the bot]({{BOT_INSTALL_PATH}}) to your server.\n\n2. In the channel that should hold the order threads, run `/setup threads`. For your org's orders, fill in `org` with its Spectrum ID (for example `/setup threads org:SCMARKET`); for orders placed with you, leave it empty.\n\n3. Optional: in a staff channel, run `/setup alerts` (with the same `org`) to post each new order and offer with a Claim button.\n\nYou need the **Manage Channels** permission in the Discord server. For an org, you also need the org's **Manage Webhooks** permission on SC Market for threads, or **Manage Orders** for alerts. In the thread channel, the bot needs View Channel, Create Private Threads, Send Messages in Threads and Create Invite. Run `/setup status` to see what a channel gets, and `/help` to see every command.",
+    "how_to_communicate_answer": "Add the official SC Market Discord Bot to your server and pick a channel for order threads: each new order or offer then opens a private thread there with the buyer and the seller assigned to it, and buyers are invited to your server so you can work through the order together.\n\n1. In your shop's **Settings › Discord**, or your org's **Discord Integration** tab, press **[Add the bot to a server]({{BOT_INSTALL_PATH}})** and pick your server in Discord. You come back with the server linked.\n\n2. Pick the channel for order threads and, optionally, channels for order alerts (a post for each new order and offer with a Claim button), then save.\n\nAdded the bot from Discord instead? Link your Discord account in your SC Market settings, then run `/setup threads` in the channel that should hold the order threads. For your org's orders, fill in `org` with its Spectrum ID (for example `/setup threads org:SCMARKET`); for orders placed with you, leave it empty. Run `/setup alerts` (with the same `org`) in a staff channel for alerts.\n\nAdding the bot needs the **Manage Server** permission in the Discord server, and `/setup threads` and `/setup alerts` need **Manage Channels**. For an org, you also need the org's **Manage Webhooks** permission on SC Market (or **Manage Orders** for `/setup alerts`). In the thread channel, the bot needs View Channel, Create Private Threads, Send Messages in Threads and Create Invite. Run `/setup status` to see what a channel gets, and `/help` to see every command.",
     "how_to_get_notified": "How to get notified when an order is placed",
     "how_to_get_notified_answer": "Add the official [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) to your server to automatically receive direct messages when an order is placed with you or assigned to you. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
     "integrating_with_discord": "Integrating with Discord",
@@ -7086,8 +7086,8 @@
       "marketOrderTemplate": "Market Order Template",
       "marketOrderTemplateHelper": "Template shown to buyers when placing a custom order",
       "discordSubtitle": "Where order and offer threads are created for this shop",
-      "discordInfoOrg": "To send this shop's order and offer threads to their own channel, enter its Discord server ID and channel ID. Leave both empty to use your org's thread channel, which you set by running /setup threads in Discord. The SC Market bot must be in that server and able to see the channel.",
-      "discordInfoPersonal": "To send this shop's order and offer threads to their own channel, enter its Discord server ID and channel ID. Leave both empty to use your thread channel, which you set by running /setup threads in Discord. The SC Market bot must be in that server and able to see the channel.",
+      "discordInfoOrg": "To send this shop's order and offer threads to their own channel, add the bot to a server below and pick a channel, or enter a Discord server ID and channel ID. Leave both empty to use your org's thread channel, which you set on its Discord Integration tab or by running /setup threads in Discord. The SC Market bot must be in that server and able to see the channel.",
+      "discordInfoPersonal": "To send this shop's order and offer threads to their own channel, add the bot to a server below and pick a channel, or enter a Discord server ID and channel ID. Leave both empty to use your thread channel, which you set by running /setup threads in Discord. The SC Market bot must be in that server and able to see the channel.",
       "discordServerId": "Discord Server ID",
       "discordIdPlaceholder": "e.g. 123456789012345678",
       "discordServerIdHelper": "Server (guild) ID",
@@ -8858,8 +8858,51 @@
       "title": "Add SC Market to your Discord",
       "why": "So we can reach you about offers and orders even if you're not in a shared server.",
       "unreachableTitle": "Buyers' offers can't reach you on Discord",
-      "linkFirst": "Link your Discord account first, then add SC Market to your Discord, so we can reach you about offers and orders even if you're not in a shared server.",
-      "linkDiscord": "Link Discord"
+      "alsoLinks": "Adding it also links your Discord account to SC Market."
+    },
+    "result": {
+      "user_linked": {
+        "title": "SC Market is on your Discord",
+        "body": "Your Discord account is now linked to SC Market, so we can reach you about offers and orders."
+      },
+      "user_installed": {
+        "title": "SC Market is on your Discord",
+        "body": "We can now reach you about offers and orders even if you're not in a shared server."
+      },
+      "user_sign_in": {
+        "title": "SC Market is on your Discord",
+        "body": "Sign in to SC Market, then add it again from Settings › Notifications to link your Discord account."
+      },
+      "user_linked_elsewhere": {
+        "title": "This Discord account is linked to another SC Market account",
+        "body": "We didn't link it to this account. Sign in with the account it belongs to, or add SC Market with a different Discord account."
+      },
+      "user_other_discord": {
+        "title": "Your SC Market account is linked to a different Discord account",
+        "body": "We didn't change it. To use this Discord account instead, unlink the current one in Settings › Discord, then add SC Market again."
+      },
+      "server_added": {
+        "title": "The bot is in your server",
+        "body": "To get order threads and alerts there, add the bot again from your shop's or org's Discord settings, which links the server for you, or run /setup threads in a channel."
+      },
+      "server_sign_in": {
+        "title": "Sign in first",
+        "body": "Sign in to SC Market, then add the bot from your shop's or org's Discord settings."
+      },
+      "server_forbidden": {
+        "title": "You can't manage this Discord integration",
+        "body": "Linking a server needs Manage Market for a shop, or Manage Webhooks for an org. Nothing was linked; if the bot was added, it is in the server without a link."
+      },
+      "cancelled": {
+        "title": "Nothing was added",
+        "body": "You left Discord's page without adding SC Market."
+      },
+      "failed": {
+        "title": "We couldn't finish adding SC Market",
+        "body": "The link may have expired or already been used. Please start again."
+      },
+      "signIn": "Sign in",
+      "startAgain": "Start again"
     }
   },
   "stillSellingPage": {
@@ -8885,5 +8928,19 @@
     "failed": "Something went wrong. Please try again.",
     "retry": "Try again",
     "moreListings": "…and {{count}} more"
+  },
+  "linkedDiscord": {
+    "title": "Your Discord servers",
+    "saved": "Saved. New orders and offers go to the channels you picked.",
+    "botGone": "The SC Market bot isn't in this server any more. Add it again, or unlink the server.",
+    "threadChannel": "Order threads channel",
+    "noThreads": "No order threads in this server",
+    "alertChannels": "Order alert channels",
+    "channelHelp": "Threads: a private thread with the buyer for each new order and offer (a post in a forum channel). Alerts: a post for each new order and offer with a Claim button. The bot needs to see and post in the channels you pick.",
+    "unlink": "Unlink server",
+    "save": "Save channels",
+    "justLinked": "The bot is in your server and the server is linked. Pick the channels for order threads and alerts below.",
+    "add": "Add the bot to a server",
+    "addHelp": "Discord asks which server to add it to (you need Manage Server there). You come back here with the server linked, ready to pick channels."
   }
 }

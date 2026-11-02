@@ -1,20 +1,10 @@
 import React from "react"
-import {
-  Alert,
-  Button,
-  Link as MuiLink,
-  Stack,
-  Typography,
-} from "@mui/material"
-import { Link } from "react-router-dom"
+import { Alert, Button, Stack, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useGetDiscordReachabilityQuery } from "../../store/api/v2/market"
 import { useGetUserProfileQuery } from "../profile/api/profileApi"
 import { FirstUseHint } from "../help/components/FirstUseHint"
 import { discordInstallPath, type DiscordInstallSource } from "./installLinks"
-
-/** Settings › Discord: where a Discord account is linked. */
-export const LINK_DISCORD_PATH = "/settings?tab=discord"
 
 /**
  * The signed-in user's Discord DM reachability (GET
@@ -35,7 +25,8 @@ export function useDiscordReachability() {
  *
  * - "panel": Settings › Notifications (always, until installed);
  * - "unreachable": only when SC Market can't reach them by DM (the shop
- *   dashboard); asks them to link Discord first if they haven't;
+ *   dashboard). Installing also links their Discord account if it isn't
+ *   yet (the backend's install flow);
  * - "hint": a dismissible first-use hint (the seller's shop pages).
  */
 export function DiscordUserInstallCta(props: {
@@ -75,28 +66,6 @@ export function DiscordUserInstallCta(props: {
     )
   }
 
-  if (props.variant === "unreachable" && !reach.discord_linked) {
-    return (
-      <Alert severity="info" data-testid="discord-user-install-link-first">
-        <Typography variant="body2" sx={{ fontWeight: 700 }}>
-          {t(
-            "discordInstall.cta.unreachableTitle",
-            "Buyers' offers can't reach you on Discord",
-          )}
-        </Typography>
-        <Typography variant="body2">
-          {t(
-            "discordInstall.cta.linkFirst",
-            "Link your Discord account first, then add SC Market to your Discord, so we can reach you about offers and orders even if you're not in a shared server.",
-          )}{" "}
-          <MuiLink component={Link} to={LINK_DISCORD_PATH}>
-            {t("discordInstall.cta.linkDiscord", "Link Discord")}
-          </MuiLink>
-        </Typography>
-      </Alert>
-    )
-  }
-
   return (
     <Alert
       severity="info"
@@ -113,6 +82,17 @@ export function DiscordUserInstallCta(props: {
           : title}
       </Typography>
       <Typography variant="body2">{why}</Typography>
+      {!reach.discord_linked && (
+        <Typography
+          variant="body2"
+          data-testid="discord-user-install-also-links"
+        >
+          {t(
+            "discordInstall.cta.alsoLinks",
+            "Adding it also links your Discord account to SC Market.",
+          )}
+        </Typography>
+      )}
     </Alert>
   )
 }

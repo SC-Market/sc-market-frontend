@@ -71,6 +71,7 @@ import type {
 import { ShopSlugField } from "./ShopSlugField"
 import { shopSlugConflictFromError } from "../shopSlugConflict"
 import { shopDiscordChannelError } from "../utils/discordChannel"
+import { LinkedDiscordServers } from "../../discord-install/LinkedDiscordServers"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -1061,6 +1062,12 @@ export function ShopSettings() {
           >
             <Grid item xs={12}>
               <HelpLink guide="connectDiscordBot" />
+            </Grid>
+            <Grid item xs={12}>
+              <LinkedDiscordServers
+                owner={{ shop: shop.shop_id }}
+                src="shop_settings"
+              />
             </Grid>
             <Grid item xs={12}>
               <Alert severity="info" sx={{ mb: 1 }}>
