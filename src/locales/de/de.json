@@ -8313,5 +8313,64 @@
       "component": "In dieser Komponente ist ein Fehler aufgetreten. Sie können es erneut versuchen.",
       "componentNamed": "In der Komponente {{componentName}} ist ein Fehler aufgetreten. Sie können es erneut versuchen."
     }
+  },
+  "marketUi2": {
+    "createBuyOrder": {
+      "failed": "Kaufauftrag konnte nicht erstellt werden"
+    },
+    "aggregate": {
+      "askSupply": "Angebot (Verkauf)",
+      "bidDemand": "Gebot (Nachfrage)"
+    }
+  },
+  "ordersUi2": {
+    "orderTrend": {
+      "valueAuec": "Wert (aUEC)"
+    },
+    "shopCustomers": {
+      "totalSpent": "Gesamtausgaben",
+      "lastOrder": "Letzte Bestellung"
+    }
+  },
+  "chromeUi": {
+    "fab": {
+      "viewContracts": "Verträge anzeigen",
+      "quickActions": "Schnellaktionen"
+    },
+    "fonts": {
+      "default": "Standard ({{font}})",
+      "scStyle": "{{font}} (SC-Stil)"
+    },
+    "themePreview": {
+      "listingTitle": "{{ship}} (Fahrzeug)"
+    },
+    "scOrgsLinks": {
+      "communities": "Org-Verzeichnis",
+      "lfo": "Auf der Suche nach einer Org",
+      "events": "Org-Events",
+      "register": "Registrieren Sie Ihre Org",
+      "join": "Einer Org beitreten"
+    },
+    "themeEditor": {
+      "primary": "Primär",
+      "primaryContrast": "Schaltflächentext",
+      "primaryDark": "Primär-Hover (gefüllte Schaltflächen)",
+      "usagePrimaryDark": "MUI verwendet dies beim Hover über gefüllte primäre Schaltflächen – nicht die Farbe „Menü- & Listen-Hover“.",
+      "secondary": "Sekundär",
+      "bgDefault": "Hintergrund",
+      "bgPaper": "Papier",
+      "bgSidebar": "Seitenleiste",
+      "usageSidebar": "Angebotsvorschaubilder und Fotoauswahlflächen (z. B. SelectPhotosArea) blenden im Dunkelmodus zu dieser Farbe über.",
+      "bgNavbar": "Navigationsleiste",
+      "textPrimary": "Text",
+      "textSecondary": "Sekundärer Text",
+      "outline": "Rahmenfarbe",
+      "actionHover": "Menü- & Listen-Hover",
+      "usageActionHover": "Zeilen der Seitenleiste, Menüs, Autovervollständigung – und die „Wellen“-Animation des Skeletts. Nicht gefüllte primäre Schaltflächen.",
+      "borderRadiusTopLevel": "Karten",
+      "borderRadiusButton": "Schaltflächen",
+      "borderRadiusChip": "Chips",
+      "borderRadiusImage": "Bilder"
+    }
   }
 }

@@ -8446,5 +8446,64 @@
       "component": "Este componente encontró un error. Puedes intentarlo de nuevo.",
       "componentNamed": "El componente {{componentName}} encontró un error. Puedes intentarlo de nuevo."
     }
+  },
+  "marketUi2": {
+    "createBuyOrder": {
+      "failed": "No se pudo crear la orden de compra"
+    },
+    "aggregate": {
+      "askSupply": "Oferta (venta)",
+      "bidDemand": "Puja (demanda)"
+    }
+  },
+  "ordersUi2": {
+    "orderTrend": {
+      "valueAuec": "Valor (aUEC)"
+    },
+    "shopCustomers": {
+      "totalSpent": "Total gastado",
+      "lastOrder": "Último pedido"
+    }
+  },
+  "chromeUi": {
+    "fab": {
+      "viewContracts": "Ver contratos",
+      "quickActions": "Acciones rápidas"
+    },
+    "fonts": {
+      "default": "Predeterminada ({{font}})",
+      "scStyle": "{{font}} (estilo SC)"
+    },
+    "themePreview": {
+      "listingTitle": "{{ship}} (vehículo)"
+    },
+    "scOrgsLinks": {
+      "communities": "Directorio de orgs",
+      "lfo": "Buscando una org",
+      "events": "Eventos de orgs",
+      "register": "Registra tu org",
+      "join": "Únete a una org"
+    },
+    "themeEditor": {
+      "primary": "Principal",
+      "primaryContrast": "Texto del botón",
+      "primaryDark": "Hover principal (botones rellenos)",
+      "usagePrimaryDark": "MUI lo usa al pasar el cursor sobre los botones principales rellenos; no es el color de “Hover de menús y listas”.",
+      "secondary": "Secundario",
+      "bgDefault": "Fondo",
+      "bgPaper": "Papel",
+      "bgSidebar": "Barra lateral",
+      "usageSidebar": "En modo oscuro, las miniaturas de anuncios y las superficies del selector de fotos (p. ej. SelectPhotosArea) se difuminan hacia este color.",
+      "bgNavbar": "Barra de navegación",
+      "textPrimary": "Texto",
+      "textSecondary": "Texto secundario",
+      "outline": "Color del borde",
+      "actionHover": "Hover de menús y listas",
+      "usageActionHover": "Filas de la barra lateral, menús, autocompletado y la “onda” del esqueleto. No los botones principales rellenos.",
+      "borderRadiusTopLevel": "Tarjetas",
+      "borderRadiusButton": "Botones",
+      "borderRadiusChip": "Chips",
+      "borderRadiusImage": "Imágenes"
+    }
   }
 }

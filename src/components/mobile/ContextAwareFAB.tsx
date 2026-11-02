@@ -21,6 +21,7 @@ import {
   DescriptionRounded,
 } from "@mui/icons-material"
 import { useLocation, useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { haptic } from "../../util/haptics"
@@ -33,6 +34,7 @@ interface Action {
 }
 
 export function ContextAwareFAB() {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const location = useLocation()
   const navigate = useNavigate()
@@ -46,35 +48,35 @@ export function ContextAwareFAB() {
   const allActions: Action[] = [
     {
       icon: <StoreRounded />,
-      name: "Create Listing",
+      name: t("market.createListing"),
       onClick: () => {
         navigate(MARKET_PATHS.manage)
       },
     },
     {
       icon: <MessageRounded />,
-      name: "New Message",
+      name: t("appUi.commandPalette.items.newMessage"),
       onClick: () => {
         navigate(PATHS.messages)
       },
     },
     {
       icon: <DesignServicesRounded />,
-      name: "Create Service",
+      name: t("services.createService"),
       onClick: () => {
         navigate(MARKET_PATHS.services)
       },
     },
     {
       icon: <InventoryRounded />,
-      name: "Manage Stock",
+      name: t("ItemStock.manageStock"),
       onClick: () => {
         navigate(MARKET_PATHS.manageStock)
       },
     },
     {
       icon: <DescriptionRounded />,
-      name: "View Contracts",
+      name: t("chromeUi.fab.viewContracts"),
       onClick: () => {
         navigate(PATHS.contracts)
       },
@@ -138,7 +140,7 @@ export function ContextAwareFAB() {
     <>
       {speedDialOpen ? (
         <SpeedDial
-          ariaLabel="Quick actions"
+          ariaLabel={t("chromeUi.fab.quickActions")}
           sx={{
             position: "fixed",
             bottom: bottomNavHeight + 16,

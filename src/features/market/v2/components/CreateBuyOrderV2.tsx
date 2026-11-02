@@ -98,7 +98,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
         .catch((err) => {
           const e = err as { data?: { error?: { message?: string; validationErrors?: { message: string }[] }; message?: string; validationErrors?: { message: string }[] } };
           const errBody = e?.data?.error || e?.data || {};
-          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || "Upload failed";
+          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || t("SelectPhotosArea.uploadFailed", "Upload failed");
           setUploadedImages((prev) =>
             prev.map((img) =>
               img.resource_id === tempId
@@ -211,7 +211,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
       setQualityTierMax(null);
     } catch (error) {
       const err = error as { data?: { message?: string; error?: string }; message?: string }
-      const message = err?.data?.message || err?.data?.error || err?.message || "Failed to create buy order"
+      const message = err?.data?.message || err?.data?.error || err?.message || t("marketUi2.createBuyOrder.failed")
       issueAlert({
         message,
         severity: "error",

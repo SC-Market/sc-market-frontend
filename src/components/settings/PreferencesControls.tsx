@@ -22,9 +22,11 @@ import {
 import { useEffect, useMemo, useCallback, useState } from "react"
 import { isSiteAdmin } from "../../util/siteRole"
 
-const FONT_OPTIONS = [
-  { label: "Default (Roboto)", value: "" },
-  { label: "Electrolize (SC-style)", value: "Electrolize", url: "https://fonts.googleapis.com/css2?family=Electrolize&display=swap" },
+// Font names are proper nouns; `labelKey` options add a translated descriptor
+// around the font name (passed as {{font}}).
+const FONT_OPTIONS: { label: string; value: string; url?: string; labelKey?: string }[] = [
+  { label: "Roboto", labelKey: "chromeUi.fonts.default", value: "" },
+  { label: "Electrolize", labelKey: "chromeUi.fonts.scStyle", value: "Electrolize", url: "https://fonts.googleapis.com/css2?family=Electrolize&display=swap" },
   { label: "Orbitron", value: "Orbitron", url: "https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" },
   { label: "Rajdhani", value: "Rajdhani", url: "https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap" },
   { label: "Exo 2", value: "Exo 2", url: "https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap" },
@@ -290,14 +292,14 @@ export function PreferencesControls() {
                 value={FONT_OPTIONS.find((f) => f.value === selectedFont) || FONT_OPTIONS[0]}
                 onChange={(_, v) => v && handleFontChange(v.value)}
                 options={FONT_OPTIONS}
-                getOptionLabel={(o) => o.label}
+                getOptionLabel={(o) => (o.labelKey ? t(o.labelKey, { font: o.label }) : o.label)}
                 isOptionEqualToValue={(a, b) => a.value === b.value}
                 renderInput={(params) => (
                   <TextField {...params} size="small" placeholder={t("settingsUi.selectFont")} />
                 )}
                 renderOption={(props, option) => (
                   <Box component="li" {...props} sx={{ fontFamily: option.value ? `"${option.value}", sans-serif` : undefined }}>
-                    {option.label}
+                    {option.labelKey ? t(option.labelKey, { font: option.label }) : option.label}
                   </Box>
                 )}
               />

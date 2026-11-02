@@ -18,11 +18,11 @@ import { DEVELOPER_LINKS, DEVELOPERS_HEADING } from "./developerLinks"
 
 /** SC Orgs pages linked from the footer (sc-orgs.space's sitemap). */
 export const SC_ORGS_LINKS = [
-  { href: "https://sc-orgs.space/communities", key: "footer.scOrgsCommunities", label: "Org directory" },
-  { href: "https://sc-orgs.space/lfo", key: "footer.scOrgsLfo", label: "Looking for an org" },
-  { href: "https://sc-orgs.space/events", key: "footer.scOrgsEvents", label: "Org events" },
-  { href: "https://sc-orgs.space/guides/register-your-org", key: "footer.scOrgsRegister", label: "Register your org" },
-  { href: "https://sc-orgs.space/guides/join-an-org", key: "footer.scOrgsJoin", label: "Join an org" },
+  { href: "https://sc-orgs.space/communities", key: "chromeUi.scOrgsLinks.communities", label: "Org directory" },
+  { href: "https://sc-orgs.space/lfo", key: "chromeUi.scOrgsLinks.lfo", label: "Looking for an org" },
+  { href: "https://sc-orgs.space/events", key: "chromeUi.scOrgsLinks.events", label: "Org events" },
+  { href: "https://sc-orgs.space/guides/register-your-org", key: "chromeUi.scOrgsLinks.register", label: "Register your org" },
+  { href: "https://sc-orgs.space/guides/join-an-org", key: "chromeUi.scOrgsLinks.join", label: "Join an org" },
 ] as const
 
 export function Footer() {

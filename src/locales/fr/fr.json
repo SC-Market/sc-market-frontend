@@ -8446,5 +8446,64 @@
       "component": "Ce composant a rencontré une erreur. Vous pouvez réessayer.",
       "componentNamed": "Le composant {{componentName}} a rencontré une erreur. Vous pouvez réessayer."
     }
+  },
+  "marketUi2": {
+    "createBuyOrder": {
+      "failed": "Impossible de créer l'ordre d'achat"
+    },
+    "aggregate": {
+      "askSupply": "Offre (vente)",
+      "bidDemand": "Enchère (demande)"
+    }
+  },
+  "ordersUi2": {
+    "orderTrend": {
+      "valueAuec": "Valeur (aUEC)"
+    },
+    "shopCustomers": {
+      "totalSpent": "Total dépensé",
+      "lastOrder": "Dernière commande"
+    }
+  },
+  "chromeUi": {
+    "fab": {
+      "viewContracts": "Voir les contrats",
+      "quickActions": "Actions rapides"
+    },
+    "fonts": {
+      "default": "Par défaut ({{font}})",
+      "scStyle": "{{font}} (style SC)"
+    },
+    "themePreview": {
+      "listingTitle": "{{ship}} (véhicule)"
+    },
+    "scOrgsLinks": {
+      "communities": "Annuaire des orgs",
+      "lfo": "À la recherche d'une org",
+      "events": "Événements d'orgs",
+      "register": "Enregistrez votre org",
+      "join": "Rejoindre une org"
+    },
+    "themeEditor": {
+      "primary": "Principal",
+      "primaryContrast": "Texte du bouton",
+      "primaryDark": "Survol principal (boutons remplis)",
+      "usagePrimaryDark": "MUI l'utilise au survol des boutons principaux remplis — ce n'est pas la couleur « Survol des menus et listes ».",
+      "secondary": "Secondaire",
+      "bgDefault": "Arrière-plan",
+      "bgPaper": "Papier",
+      "bgSidebar": "Barre latérale",
+      "usageSidebar": "En mode sombre, les miniatures d'annonces et les surfaces du sélecteur de photos (ex. SelectPhotosArea) se fondent vers cette couleur.",
+      "bgNavbar": "Barre de navigation",
+      "textPrimary": "Texte",
+      "textSecondary": "Texte secondaire",
+      "outline": "Couleur de bordure",
+      "actionHover": "Survol des menus et listes",
+      "usageActionHover": "Lignes de la barre latérale, menus, saisie semi-automatique — et l'effet « wave » du squelette. Pas les boutons principaux remplis.",
+      "borderRadiusTopLevel": "Cartes",
+      "borderRadiusButton": "Boutons",
+      "borderRadiusChip": "Puces",
+      "borderRadiusImage": "Images"
+    }
   }
 }

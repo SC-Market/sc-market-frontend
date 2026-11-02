@@ -20,15 +20,17 @@ export function AdminFeatureFlags() {
 }
 
 export function AdminFeatureFlagDetail() {
+  const { t } = useTranslation()
   const { flagName } = useParams<{ flagName: string }>()
+  // Flag identifiers (e.g. market_v2_redesign) are shown as-is, not translated.
   const label = (flagName || "").replace(/_/g, " ").replace(/\bv2\b/i, "V2")
   return (
     <StandardPageLayout
       title={label}
       headerTitle={label}
       breadcrumbs={[
-        { label: "Admin", href: "/admin" },
-        { label: "Feature Flags", href: "/admin/feature-flags" },
+        { label: t("nav.admin"), href: "/admin" },
+        { label: t("admin.featureFlags.title"), href: "/admin/feature-flags" },
         { label },
       ]}
       sidebarOpen={true}

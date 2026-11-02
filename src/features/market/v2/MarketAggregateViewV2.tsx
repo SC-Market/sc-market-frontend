@@ -113,7 +113,7 @@ const headCells: readonly HeadCell<AggregateListingV2Row>[] = [
     id: "quality_tier_min",
     numeric: false,
     disablePadding: false,
-    label: "Quality Tier",
+    label: "market.qualityTier",
   },
   {
     id: "price_min",
@@ -148,7 +148,7 @@ const buyOrderHeadCells: readonly HeadCell<BuyOrderV2Row>[] = [
     id: "quality_tier_min",
     numeric: false,
     disablePadding: false,
-    label: "Quality Tier",
+    label: "market.qualityTier",
   },
   {
     id: "price_per_unit",
@@ -1045,8 +1045,8 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2; 
     return (
       <MuiBarChart
         series={[
-          { name: "Ask (supply)", data: compactSellBars },
-          { name: "Bid (demand)", data: compactBuyBars },
+          { name: t("marketUi2.aggregate.askSupply"), data: compactSellBars },
+          { name: t("marketUi2.aggregate.bidDemand"), data: compactBuyBars },
         ]}
         height={200}
         xAxisType="category"

@@ -8579,5 +8579,64 @@
       "component": "У цьому компоненті сталася помилка. Можна спробувати ще раз.",
       "componentNamed": "У компоненті {{componentName}} сталася помилка. Можна спробувати ще раз."
     }
+  },
+  "marketUi2": {
+    "createBuyOrder": {
+      "failed": "Не вдалося створити замовлення на купівлю"
+    },
+    "aggregate": {
+      "askSupply": "Пропозиція (продаж)",
+      "bidDemand": "Ставка (попит)"
+    }
+  },
+  "ordersUi2": {
+    "orderTrend": {
+      "valueAuec": "Вартість (aUEC)"
+    },
+    "shopCustomers": {
+      "totalSpent": "Усього витрачено",
+      "lastOrder": "Останнє замовлення"
+    }
+  },
+  "chromeUi": {
+    "fab": {
+      "viewContracts": "Переглянути контракти",
+      "quickActions": "Швидкі дії"
+    },
+    "fonts": {
+      "default": "За замовчуванням ({{font}})",
+      "scStyle": "{{font}} (у стилі SC)"
+    },
+    "themePreview": {
+      "listingTitle": "{{ship}} (транспорт)"
+    },
+    "scOrgsLinks": {
+      "communities": "Каталог організацій",
+      "lfo": "Шукаю організацію",
+      "events": "Події організацій",
+      "register": "Зареєструйте свою організацію",
+      "join": "Приєднатися до організації"
+    },
+    "themeEditor": {
+      "primary": "Основний",
+      "primaryContrast": "Текст кнопки",
+      "primaryDark": "Основний при наведенні (заповнені кнопки)",
+      "usagePrimaryDark": "MUI використовує цей колір для заповнених основних кнопок при наведенні — це не колір «Наведення в меню та списках».",
+      "secondary": "Другорядний",
+      "bgDefault": "Фон",
+      "bgPaper": "Поверхня Paper",
+      "bgSidebar": "Бічна панель",
+      "usageSidebar": "У темному режимі мініатюри оголошень і поверхні вибору фото (наприклад, SelectPhotosArea) переходять у цей колір.",
+      "bgNavbar": "Панель навігації",
+      "textPrimary": "Текст",
+      "textSecondary": "Другорядний текст",
+      "outline": "Колір обведення",
+      "actionHover": "Наведення в меню та списках",
+      "usageActionHover": "Рядки бічної панелі, меню, автодоповнення — і «хвиля» скелетона. Не заповнені основні кнопки.",
+      "borderRadiusTopLevel": "Картки",
+      "borderRadiusButton": "Кнопки",
+      "borderRadiusChip": "Чипи",
+      "borderRadiusImage": "Зображення"
+    }
   }
 }

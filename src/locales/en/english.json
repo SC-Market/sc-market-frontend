@@ -8313,5 +8313,64 @@
       "component": "This component encountered an error. You can try again.",
       "componentNamed": "The {{componentName}} component encountered an error. You can try again."
     }
+  },
+  "marketUi2": {
+    "createBuyOrder": {
+      "failed": "Failed to create buy order"
+    },
+    "aggregate": {
+      "askSupply": "Ask (supply)",
+      "bidDemand": "Bid (demand)"
+    }
+  },
+  "ordersUi2": {
+    "orderTrend": {
+      "valueAuec": "Value (aUEC)"
+    },
+    "shopCustomers": {
+      "totalSpent": "Total Spent",
+      "lastOrder": "Last Order"
+    }
+  },
+  "chromeUi": {
+    "fab": {
+      "viewContracts": "View Contracts",
+      "quickActions": "Quick actions"
+    },
+    "fonts": {
+      "default": "Default ({{font}})",
+      "scStyle": "{{font}} (SC-style)"
+    },
+    "themePreview": {
+      "listingTitle": "{{ship}} (vehicle)"
+    },
+    "scOrgsLinks": {
+      "communities": "Org directory",
+      "lfo": "Looking for an org",
+      "events": "Org events",
+      "register": "Register your org",
+      "join": "Join an org"
+    },
+    "themeEditor": {
+      "primary": "Primary",
+      "primaryContrast": "Button Text",
+      "primaryDark": "Primary hover (filled buttons)",
+      "usagePrimaryDark": "MUI uses this for contained primary buttons on hover — not the “Menu & list hover” color.",
+      "secondary": "Secondary",
+      "bgDefault": "Background",
+      "bgPaper": "Paper",
+      "bgSidebar": "Sidebar",
+      "usageSidebar": "Dark-mode listing thumbnails and photo-picker surfaces (e.g. SelectPhotosArea) fade toward this color.",
+      "bgNavbar": "Navbar",
+      "textPrimary": "Text",
+      "textSecondary": "Text Secondary",
+      "outline": "Border Color",
+      "actionHover": "Menu & list hover",
+      "usageActionHover": "Sidebar rows, menus, autocomplete — and Skeleton “wave”. Not filled primary buttons.",
+      "borderRadiusTopLevel": "Cards",
+      "borderRadiusButton": "Buttons",
+      "borderRadiusChip": "Chips",
+      "borderRadiusImage": "Images"
+    }
   }
 }

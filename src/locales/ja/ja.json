@@ -8180,5 +8180,64 @@
       "component": "このコンポーネントでエラーが発生しました。もう一度お試しください。",
       "componentNamed": "{{componentName}} コンポーネントでエラーが発生しました。もう一度お試しください。"
     }
+  },
+  "marketUi2": {
+    "createBuyOrder": {
+      "failed": "買い注文を作成できませんでした"
+    },
+    "aggregate": {
+      "askSupply": "売り（供給）",
+      "bidDemand": "買い（需要）"
+    }
+  },
+  "ordersUi2": {
+    "orderTrend": {
+      "valueAuec": "金額（aUEC）"
+    },
+    "shopCustomers": {
+      "totalSpent": "合計支出",
+      "lastOrder": "最終注文"
+    }
+  },
+  "chromeUi": {
+    "fab": {
+      "viewContracts": "契約を表示",
+      "quickActions": "クイックアクション"
+    },
+    "fonts": {
+      "default": "デフォルト（{{font}}）",
+      "scStyle": "{{font}}（SC風）"
+    },
+    "themePreview": {
+      "listingTitle": "{{ship}}（車両）"
+    },
+    "scOrgsLinks": {
+      "communities": "組織ディレクトリ",
+      "lfo": "組織を探す",
+      "events": "組織イベント",
+      "register": "組織を登録する",
+      "join": "組織に参加する"
+    },
+    "themeEditor": {
+      "primary": "プライマリ",
+      "primaryContrast": "ボタンテキスト",
+      "primaryDark": "プライマリのホバー（塗りつぶしボタン）",
+      "usagePrimaryDark": "MUI は塗りつぶしのプライマリボタンのホバー時にこの色を使用します。「メニュー・リストのホバー」の色ではありません。",
+      "secondary": "セカンダリ",
+      "bgDefault": "背景",
+      "bgPaper": "ペーパー",
+      "bgSidebar": "サイドバー",
+      "usageSidebar": "ダークモードの出品サムネイルや写真選択エリア（例: SelectPhotosArea）はこの色に向かってフェードします。",
+      "bgNavbar": "ナビゲーションバー",
+      "textPrimary": "テキスト",
+      "textSecondary": "セカンダリテキスト",
+      "outline": "ボーダーの色",
+      "actionHover": "メニュー・リストのホバー",
+      "usageActionHover": "サイドバーの行、メニュー、オートコンプリート、スケルトンの「ウェーブ」に使われます。塗りつぶしのプライマリボタンには使われません。",
+      "borderRadiusTopLevel": "カード",
+      "borderRadiusButton": "ボタン",
+      "borderRadiusChip": "チップ",
+      "borderRadiusImage": "画像"
+    }
   }
 }

@@ -28,11 +28,11 @@ interface CustomerRow {
 }
 
 const headCells: readonly HeadCell<CustomerRow>[] = [
-  { id: "username", numeric: false, disablePadding: false, label: "Customer" },
-  { id: "order_count", numeric: true, disablePadding: false, label: "Orders" },
-  { id: "fulfilled_count", numeric: true, disablePadding: false, label: "Fulfilled" },
-  { id: "total_spent", numeric: true, disablePadding: false, label: "Total Spent" },
-  { id: "last_order_at", numeric: true, disablePadding: false, label: "Last Order" },
+  { id: "username", numeric: false, disablePadding: false, label: "orders.table.customer" },
+  { id: "order_count", numeric: true, disablePadding: false, label: "customerList.orders" },
+  { id: "fulfilled_count", numeric: true, disablePadding: false, label: "customerList.fulfilled" },
+  { id: "total_spent", numeric: true, disablePadding: false, label: "ordersUi2.shopCustomers.totalSpent" },
+  { id: "last_order_at", numeric: true, disablePadding: false, label: "ordersUi2.shopCustomers.lastOrder" },
 ]
 
 function CustomerRowComponent(props: {

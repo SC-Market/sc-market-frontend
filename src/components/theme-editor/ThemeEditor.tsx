@@ -52,49 +52,49 @@ interface ColorField {
 }
 
 const COLOR_FIELDS: ColorField[] = [
-  { key: "primary", labelKey: "theme.primary", fallback: "Primary", path: ["palette", "primary", "main"] },
-  { key: "primaryContrast", labelKey: "theme.primaryContrast", fallback: "Button Text", path: ["palette", "primary", "contrastText"] },
+  { key: "primary", labelKey: "chromeUi.themeEditor.primary", fallback: "Primary", path: ["palette", "primary", "main"] },
+  { key: "primaryContrast", labelKey: "chromeUi.themeEditor.primaryContrast", fallback: "Button Text", path: ["palette", "primary", "contrastText"] },
   {
     key: "primaryDark",
-    labelKey: "theme.primaryDark",
+    labelKey: "chromeUi.themeEditor.primaryDark",
     fallback: "Primary hover (filled buttons)",
     path: ["palette", "primary", "dark"],
-    usageNoteKey: "theme.usagePrimaryDark",
+    usageNoteKey: "chromeUi.themeEditor.usagePrimaryDark",
     usageNoteFallback:
       "MUI uses this for contained primary buttons on hover — not the “Menu & list hover” color.",
   },
-  { key: "secondary", labelKey: "theme.secondary", fallback: "Secondary", path: ["palette", "secondary", "main"] },
-  { key: "bgDefault", labelKey: "theme.bgDefault", fallback: "Background", path: ["palette", "background", "default"] },
-  { key: "bgPaper", labelKey: "theme.bgPaper", fallback: "Paper", path: ["palette", "background", "paper"] },
+  { key: "secondary", labelKey: "chromeUi.themeEditor.secondary", fallback: "Secondary", path: ["palette", "secondary", "main"] },
+  { key: "bgDefault", labelKey: "chromeUi.themeEditor.bgDefault", fallback: "Background", path: ["palette", "background", "default"] },
+  { key: "bgPaper", labelKey: "chromeUi.themeEditor.bgPaper", fallback: "Paper", path: ["palette", "background", "paper"] },
   {
     key: "bgSidebar",
-    labelKey: "theme.bgSidebar",
+    labelKey: "chromeUi.themeEditor.bgSidebar",
     fallback: "Sidebar",
     path: ["palette", "background", "sidebar"],
-    usageNoteKey: "theme.usageSidebar",
+    usageNoteKey: "chromeUi.themeEditor.usageSidebar",
     usageNoteFallback:
       "Dark-mode listing thumbnails and photo-picker surfaces (e.g. SelectPhotosArea) fade toward this color.",
   },
-  { key: "bgNavbar", labelKey: "theme.bgNavbar", fallback: "Navbar", path: ["palette", "background", "navbar"] },
-  { key: "textPrimary", labelKey: "theme.textPrimary", fallback: "Text", path: ["palette", "text", "primary"] },
-  { key: "textSecondary", labelKey: "theme.textSecondary", fallback: "Text Secondary", path: ["palette", "text", "secondary"] },
-  { key: "outline", labelKey: "theme.outline", fallback: "Border Color", path: ["palette", "outline", "main"] },
+  { key: "bgNavbar", labelKey: "chromeUi.themeEditor.bgNavbar", fallback: "Navbar", path: ["palette", "background", "navbar"] },
+  { key: "textPrimary", labelKey: "chromeUi.themeEditor.textPrimary", fallback: "Text", path: ["palette", "text", "primary"] },
+  { key: "textSecondary", labelKey: "chromeUi.themeEditor.textSecondary", fallback: "Text Secondary", path: ["palette", "text", "secondary"] },
+  { key: "outline", labelKey: "chromeUi.themeEditor.outline", fallback: "Border Color", path: ["palette", "outline", "main"] },
   {
     key: "actionHover",
-    labelKey: "theme.actionHover",
+    labelKey: "chromeUi.themeEditor.actionHover",
     fallback: "Menu & list hover",
     path: ["palette", "action", "hover"],
-    usageNoteKey: "theme.usageActionHover",
+    usageNoteKey: "chromeUi.themeEditor.usageActionHover",
     usageNoteFallback:
       "Sidebar rows, menus, autocomplete — and Skeleton “wave”. Not filled primary buttons.",
   },
 ]
 
 const BORDER_RADIUS_FIELDS = [
-  { key: "topLevel", labelKey: "theme.borderRadiusTopLevel", fallback: "Cards", path: ["borderRadius", "topLevel"] },
-  { key: "button", labelKey: "theme.borderRadiusButton", fallback: "Buttons", path: ["borderRadius", "button"] },
-  { key: "chip", labelKey: "theme.borderRadiusChip", fallback: "Chips", path: ["borderRadius", "chip"] },
-  { key: "image", labelKey: "theme.borderRadiusImage", fallback: "Images", path: ["borderRadius", "image"] },
+  { key: "topLevel", labelKey: "chromeUi.themeEditor.borderRadiusTopLevel", fallback: "Cards", path: ["borderRadius", "topLevel"] },
+  { key: "button", labelKey: "chromeUi.themeEditor.borderRadiusButton", fallback: "Buttons", path: ["borderRadius", "button"] },
+  { key: "chip", labelKey: "chromeUi.themeEditor.borderRadiusChip", fallback: "Chips", path: ["borderRadius", "chip"] },
+  { key: "image", labelKey: "chromeUi.themeEditor.borderRadiusImage", fallback: "Images", path: ["borderRadius", "image"] },
 ]
 
 function getNestedValue(obj: Record<string, unknown>, path: string[]): unknown {

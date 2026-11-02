@@ -28,7 +28,8 @@ import { FALLBACK_IMAGE_URL } from "../../util/constants"
 
 /** Sample listing strings — mirrors `ListingCard` layout, not real data. */
 const PREVIEW_LISTING_PRICE = "12,500 aUEC"
-const PREVIEW_LISTING_TITLE = "Aurora MR (vehicle)"
+/** Ship name (proper noun); the "(vehicle)" descriptor is translated at render. */
+const PREVIEW_LISTING_SHIP = "Aurora MR"
 
 // Validate that a string is a usable CSS color (MUI's getContrastText will not throw)
 function isValidColor(value: unknown): boolean {
@@ -357,7 +358,7 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
                     lineHeight: 1.3,
                   }}
                 >
-                  {PREVIEW_LISTING_TITLE}
+                  {t("chromeUi.themePreview.listingTitle", { ship: PREVIEW_LISTING_SHIP })}
                 </Typography>
               </CardContent>
             </Card>

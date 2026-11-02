@@ -45,10 +45,11 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
   variants,
   selectedVariantId,
   onVariantChange,
-  label = "Select Variant",
+  label: labelProp,
   disabled = false,
 }) => {
   const { t } = useTranslation()
+  const label = labelProp ?? t("marketV2.selectVariant")
   const theme = useTheme<ExtendedTheme>();
 
   if (variants.length === 0) {

@@ -4,6 +4,7 @@ import React, { useMemo } from "react"
 import { Grid, List, ListItem, Typography } from "@mui/material"
 import { MuiLineChart, MuiAreaChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
+import type { TFunction } from "i18next"
 import type { ContractorOrderData } from "../../features/orders/domain/types"
 import {
   useOrgOrderTrend,
@@ -73,7 +74,7 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
 
   const statusTrendsData = Object.entries(trend_data.status_trends).map(
     ([status, data]) => ({
-      name: status,
+      name: orderStatusLabel(t, status),
       data: data.map((item) => ({ x: item.date, y: item.count })),
     }),
   )
@@ -99,7 +100,7 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
           <MuiLineChart
             series={[
               {
-                name: "Value (aUEC)",
+                name: t("ordersUi2.orderTrend.valueAuec"),
                 data: dailyValueData,
               },
             ]}
@@ -265,6 +266,20 @@ export function UserOrderTrend(props: { spectrumId: string | undefined; shopId?:
 /** Which single trend chart to render. */
 export type OrderTrendMetric = "count" | "value" | "status"
 
+/** orderTrend.* label keys for the API's order status values. */
+const STATUS_LABEL_KEYS: Record<string, string> = {
+  "in-progress": "orderTrend.in_progress",
+  fulfilled: "orderTrend.fulfilled",
+  cancelled: "orderTrend.cancelled",
+  "not-started": "orderTrend.not_started",
+}
+
+/** Chart legend label for an order status; unknown statuses show as-is. */
+function orderStatusLabel(t: TFunction, status: string): string {
+  const key = STATUS_LABEL_KEYS[status]
+  return key ? t(key) : status
+}
+
 const STATUS_ORDER = [
   "in-progress",
   "fulfilled",
@@ -313,7 +328,7 @@ function OrderTrendChart(props: {
         : []
       return {
         title: t("orderTrend.order_value_daily"),
-        series: [{ name: "Value (aUEC)", data }],
+        series: [{ name: t("ordersUi2.orderTrend.valueAuec"), data }],
       }
     }
     // status
@@ -321,7 +336,7 @@ function OrderTrendChart(props: {
       return {
         title: t("orderTrend.status_trends"),
         series: STATUS_ORDER.map((status) => ({
-          name: status,
+          name: orderStatusLabel(t, status),
           data: trend.status_trends[status].map((d) => ({
             x: d.date,
             y: d.count,
@@ -332,7 +347,7 @@ function OrderTrendChart(props: {
     return {
       title: t("orderTrend.status_trends"),
       series: STATUS_ORDER.map((status) => ({
-        name: status,
+        name: orderStatusLabel(t, status),
         data: getTotalInInterval(
           (recent ?? []).filter((o) => o.status === status),
           86400 * 1000,

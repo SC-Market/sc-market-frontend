@@ -8180,5 +8180,64 @@
       "component": "此元件發生錯誤。你可以再試一次。",
       "componentNamed": "{{componentName}} 元件發生錯誤。你可以再試一次。"
     }
+  },
+  "marketUi2": {
+    "createBuyOrder": {
+      "failed": "建立購買訂單失敗"
+    },
+    "aggregate": {
+      "askSupply": "賣價（供應）",
+      "bidDemand": "買價（需求）"
+    }
+  },
+  "ordersUi2": {
+    "orderTrend": {
+      "valueAuec": "價值（aUEC）"
+    },
+    "shopCustomers": {
+      "totalSpent": "總消費",
+      "lastOrder": "最近訂單"
+    }
+  },
+  "chromeUi": {
+    "fab": {
+      "viewContracts": "查看合約",
+      "quickActions": "快速操作"
+    },
+    "fonts": {
+      "default": "預設（{{font}}）",
+      "scStyle": "{{font}}（SC 風格）"
+    },
+    "themePreview": {
+      "listingTitle": "{{ship}}（載具）"
+    },
+    "scOrgsLinks": {
+      "communities": "組織目錄",
+      "lfo": "尋找組織",
+      "events": "組織活動",
+      "register": "註冊你的組織",
+      "join": "加入組織"
+    },
+    "themeEditor": {
+      "primary": "主要",
+      "primaryContrast": "按鈕文字",
+      "primaryDark": "主要懸停（填色按鈕）",
+      "usagePrimaryDark": "MUI 在填色主要按鈕懸停時使用此顏色 — 不是「選單與清單懸停」顏色。",
+      "secondary": "次要",
+      "bgDefault": "背景",
+      "bgPaper": "紙張",
+      "bgSidebar": "側邊欄",
+      "usageSidebar": "深色模式下的商品縮圖與照片選擇區域（例如 SelectPhotosArea）會漸變為此顏色。",
+      "bgNavbar": "導覽列",
+      "textPrimary": "文字",
+      "textSecondary": "次要文字",
+      "outline": "外框顏色",
+      "actionHover": "選單與清單懸停",
+      "usageActionHover": "側邊欄列、選單、自動完成 — 以及骨架「波浪」。不用於填色主要按鈕。",
+      "borderRadiusTopLevel": "卡片",
+      "borderRadiusButton": "按鈕",
+      "borderRadiusChip": "標籤",
+      "borderRadiusImage": "圖片"
+    }
   }
 }

@@ -37,10 +37,11 @@ interface QualityHistogramProps {
  */
 export const QualityHistogram: React.FC<QualityHistogramProps> = ({
   distribution,
-  title = "Quality Distribution",
+  title: titleProp,
   showPrices = false,
 }) => {
   const { t } = useTranslation()
+  const title = titleProp ?? t("marketUi.aggregateAdmin.qualityDistribution")
   const theme = useTheme<ExtendedTheme>();
   const isMobile = useBreakpointDown("sm");
 

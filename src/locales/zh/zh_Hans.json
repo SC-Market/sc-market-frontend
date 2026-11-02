@@ -8186,5 +8186,64 @@
       "component": "此组件出错了。你可以重试。",
       "componentNamed": "{{componentName}} 组件出错了。你可以重试。"
     }
+  },
+  "marketUi2": {
+    "createBuyOrder": {
+      "failed": "创建购买订单失败"
+    },
+    "aggregate": {
+      "askSupply": "卖价（供应）",
+      "bidDemand": "买价（需求）"
+    }
+  },
+  "ordersUi2": {
+    "orderTrend": {
+      "valueAuec": "价值（aUEC）"
+    },
+    "shopCustomers": {
+      "totalSpent": "总消费",
+      "lastOrder": "最近订单"
+    }
+  },
+  "chromeUi": {
+    "fab": {
+      "viewContracts": "查看合同",
+      "quickActions": "快捷操作"
+    },
+    "fonts": {
+      "default": "默认（{{font}}）",
+      "scStyle": "{{font}}（SC 风格）"
+    },
+    "themePreview": {
+      "listingTitle": "{{ship}}（载具）"
+    },
+    "scOrgsLinks": {
+      "communities": "组织目录",
+      "lfo": "寻找组织",
+      "events": "组织活动",
+      "register": "注册你的组织",
+      "join": "加入组织"
+    },
+    "themeEditor": {
+      "primary": "主要",
+      "primaryContrast": "按钮文本",
+      "primaryDark": "主要悬停（填充按钮）",
+      "usagePrimaryDark": "MUI 在填充主要按钮悬停时使用此颜色 — 不是“菜单和列表悬停”颜色。",
+      "secondary": "次要",
+      "bgDefault": "背景",
+      "bgPaper": "纸张",
+      "bgSidebar": "侧边栏",
+      "usageSidebar": "深色模式下的商品缩略图和照片选择区域（例如 SelectPhotosArea）会渐变为此颜色。",
+      "bgNavbar": "导航栏",
+      "textPrimary": "文本",
+      "textSecondary": "次要文本",
+      "outline": "边框颜色",
+      "actionHover": "菜单和列表悬停",
+      "usageActionHover": "侧边栏行、菜单、自动补全 — 以及骨架屏“波浪”。不用于填充主要按钮。",
+      "borderRadiusTopLevel": "卡片",
+      "borderRadiusButton": "按钮",
+      "borderRadiusChip": "标签",
+      "borderRadiusImage": "图片"
+    }
   }
 }

@@ -378,7 +378,7 @@ export function CreateListingV2() {
         .catch((err) => {
           const e = err as { data?: { error?: { message?: string; validationErrors?: { message: string }[] }; message?: string; validationErrors?: { message: string }[] } };
           const errBody = e?.data?.error || e?.data || {};
-          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || "Upload failed";
+          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || t("SelectPhotosArea.uploadFailed", "Upload failed");
           setUploadedImages((prev) =>
             prev.map((img) =>
               img.resource_id === tempId
