@@ -138,7 +138,6 @@ function AddSupplierDialog({
                 ? t("suppliersUi.roster.userUuid")
                 : t("suppliersUi.roster.contractorUuid")
             }
-            // i18n-ignore: technical API field name, not prose
             placeholder={kind === "user" ? "user_id (UUID)" : "contractor_id (UUID)"}
             value={id}
             onChange={(e) => setId(e.target.value)}

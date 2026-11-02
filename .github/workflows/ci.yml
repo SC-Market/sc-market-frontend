@@ -38,13 +38,14 @@ jobs:
 
       - name: Locale catalogs complete
         # Every locale has every en key, with its own plural forms and the
-        # same {{placeholders}} / tags (scripts/check-i18n.mjs).
+        # same {{placeholders}} / tags, and ja/uk/zh carry no leftover English
+        # (scripts/check-i18n.mjs).
         run: npm run i18n:check
 
-      - name: No new hard-coded UI text (warn only)
-        # Annotates files that gained hard-coded English (JSX text, aria-label,
-        # placeholder, alerts) over scripts/i18n-hardcoded-baseline.json.
-        # Never fails the job.
+      - name: No hard-coded UI text
+        # Fails on any user-facing English outside t() (JSX text, aria-label,
+        # placeholder, alerts, ...) and on stale entries in the explicit
+        # ignore list scripts/i18n-hardcoded-ignore.json.
         run: node scripts/i18n-hardcoded.mjs --check
 
       - name: Build production bundle

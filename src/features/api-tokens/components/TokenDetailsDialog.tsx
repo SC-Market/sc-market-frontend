@@ -316,7 +316,6 @@ export function TokenDetailsDialog({
               mt: 0.5,
             }}
           >
-            {/* i18n-ignore: HTTP header code sample */}
             Authorization: Bearer {t("apiTokensUi.details.yourTokenPlaceholder")}
           </Box>
         </Alert>

@@ -1,0 +1,42 @@
+[
+  {
+    "file": "src/components/theme-editor/ThemeEditor.tsx",
+    "text": "px",
+    "reason": "CSS unit name in the font-size unit picker"
+  },
+  {
+    "file": "src/components/theme-editor/ThemeEditor.tsx",
+    "text": "rem",
+    "reason": "CSS unit name in the font-size unit picker"
+  },
+  {
+    "file": "src/components/theme-editor/ThemeEditor.tsx",
+    "text": "em",
+    "reason": "CSS unit name in the font-size unit picker"
+  },
+  {
+    "file": "src/components/error-boundaries/ErrorFallback.tsx",
+    "text": "Component Stack:",
+    "reason": "Debug output: only rendered when showDetails, which every caller sets to import.meta.env.DEV"
+  },
+  {
+    "file": "src/features/api-tokens/components/CreateTokenDialog.tsx",
+    "text": "Authorization: Bearer",
+    "reason": "HTTP header in a code sample; must stay verbatim"
+  },
+  {
+    "file": "src/features/api-tokens/components/TokenDetailsDialog.tsx",
+    "text": "Authorization: Bearer",
+    "reason": "HTTP header in a code sample; must stay verbatim"
+  },
+  {
+    "file": "src/pages/admin/AdminSupplierRoster.tsx",
+    "text": "user_id (UUID)",
+    "reason": "API field name shown as an input placeholder for an ID; technical, not prose"
+  },
+  {
+    "file": "src/pages/admin/AdminSupplierRoster.tsx",
+    "text": "contractor_id (UUID)",
+    "reason": "API field name shown as an input placeholder for an ID; technical, not prose"
+  }
+]

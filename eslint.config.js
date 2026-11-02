@@ -1,17 +1,19 @@
+import { relative, sep } from "node:path"
 import js from "@eslint/js"
 import react from "eslint-plugin-react"
 import reactHooks from "eslint-plugin-react-hooks"
 import jsxA11y from "eslint-plugin-jsx-a11y"
 import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 import tseslint from "typescript-eslint"
-import { isTranslatable } from "./scripts/i18n-hardcoded.mjs"
+import { isIgnored, isTranslatable } from "./scripts/i18n-hardcoded.mjs"
 
 // local/no-hardcoded-jsx-text: user-facing English written straight into JSX
 // (text children and aria-label / title / placeholder / alt / label /
-// helperText) instead of t(). Warn only; the same test drives the work list
-// in scripts/i18n-hardcoded.mjs. Proper nouns (aUEC, RSI, Citizen iD, ...)
-// and symbols pass. Silence a deliberate one with
-// `// eslint-disable-next-line local/no-hardcoded-jsx-text`.
+// helperText) instead of t(). An error, like the CI check in
+// scripts/i18n-hardcoded.mjs that shares its test. Proper nouns (aUEC, RSI,
+// Citizen iD, ...) and symbols pass. A string that is not user-facing (CSS
+// unit, code sample, API field name, dev-only debug text) goes on
+// scripts/i18n-hardcoded-ignore.json with a reason; there is no inline opt-out.
 const I18N_ATTRS = new Set([
   "aria-label",
   "aria-description",
@@ -35,7 +37,11 @@ const localPlugin = {
         schema: [],
       },
       create(context) {
+        const file = relative(import.meta.dirname, context.filename)
+          .split(sep)
+          .join("/")
         const report = (node, value) =>
+          !isIgnored(file, value) &&
           context.report({
             node,
             messageId: "text",
@@ -256,7 +262,7 @@ export default [
     },
   },
 
-  // ── i18n: no new hard-coded UI text (warn; see scripts/i18n-hardcoded.mjs) ──
+  // ── i18n: no hard-coded UI text, admin pages included (see scripts/i18n-hardcoded.mjs) ──
   {
     files: ["src/**/*.tsx"],
     ignores: [
@@ -264,12 +270,9 @@ export default [
       "**/*.spec.tsx",
       "**/*.stories.tsx",
       "**/__tests__/**",
-      "src/pages/admin/**",
-      "src/views/admin/**",
-      "src/features/admin/**",
     ],
     plugins: { local: localPlugin },
-    rules: { "local/no-hardcoded-jsx-text": "warn" },
+    rules: { "local/no-hardcoded-jsx-text": "error" },
   },
 
   {

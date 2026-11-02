@@ -15,15 +15,18 @@
 //
 // Usage: node scripts/i18n-hardcoded.mjs [--list] [--area <name>] [--json]
 //                                        [--files] [--max <n>]
-//        node scripts/i18n-hardcoded.mjs --check            (CI)
-//        node scripts/i18n-hardcoded.mjs --update-baseline
-//   --check compares per-file counts with scripts/i18n-hardcoded-baseline.json
-//   and prints a GitHub ::warning for each file that gained strings. It never
-//   exits non-zero: this is a work list and a nudge, not a gate. Run
-//   --update-baseline after moving strings into t() so the baseline keeps
-//   shrinking. The ESLint rule local/no-hardcoded-jsx-text (warn) flags the
-//   same JSX text in the editor.
-import { readFileSync, readdirSync, statSync, writeFileSync } from "node:fs"
+//        node scripts/i18n-hardcoded.mjs --check            (CI, strict)
+//   --check fails (exit 1, a GitHub ::error per string) on ANY hard-coded
+//   user-facing string, and on entries in scripts/i18n-hardcoded-ignore.json
+//   that no longer match anything (so the list cannot rot). The ESLint rule
+//   local/no-hardcoded-jsx-text (error) flags the same JSX text in the editor.
+//
+// Exceptions: scripts/i18n-hardcoded-ignore.json is the only ignore list
+// (inline comments are not honoured). Each entry is { file, text, reason }
+// for a string that is not user-facing prose: CSS units, code samples, API
+// field names, dev-only debug output. Keep it small; translate everything a
+// user can read.
+import { readFileSync, readdirSync, statSync } from "node:fs"
 import { dirname, join, relative, sep } from "node:path"
 import { fileURLToPath } from "node:url"
 import ts from "typescript"
@@ -153,6 +156,23 @@ export function isTranslatable(raw) {
   return true
 }
 
+// scripts/i18n-hardcoded-ignore.json: [{ file, text, reason }]. A string is
+// ignored only in that file and only with a reason. Shared with eslint.config.js.
+const IGNORE_FILE = join(ROOT, "scripts", "i18n-hardcoded-ignore.json")
+export const IGNORES = JSON.parse(readFileSync(IGNORE_FILE, "utf8"))
+for (const e of IGNORES) {
+  if (!e.file || !e.text || !(e.reason ?? "").trim())
+    throw new Error(`${IGNORE_FILE}: every entry needs file, text and reason: ${JSON.stringify(e)}`)
+}
+const usedIgnores = new Set()
+/** Is `text` (whitespace-collapsed) in `file` (repo-relative) on the ignore list? */
+export function isIgnored(file, text) {
+  const norm = text.replace(/\s+/g, " ").trim()
+  const i = IGNORES.findIndex((e) => e.file === file && e.text === norm)
+  if (i >= 0) usedIgnores.add(i)
+  return i >= 0
+}
+
 function scanFile(file) {
   const text = readFileSync(file, "utf8")
   const sf = ts.createSourceFile(
@@ -163,15 +183,13 @@ function scanFile(file) {
     file.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
   )
   const hits = []
-  const lines = text.split("\n")
-  const ignored = (line) =>
-    /i18n-ignore|no-hardcoded-jsx-text/.test(lines[line] ?? "") ||
-    /i18n-ignore|no-hardcoded-jsx-text/.test(lines[line - 1] ?? "")
+  const rel = relative(ROOT, file).split(sep).join("/")
   const add = (node, kind, value) => {
     if (!isTranslatable(value)) return
     const { line } = sf.getLineAndCharacterOfPosition(node.getStart(sf))
-    if (ignored(line)) return
-    hits.push({ line: line + 1, kind, text: value.replace(/\s+/g, " ").trim() })
+    const text = value.replace(/\s+/g, " ").trim()
+    if (isIgnored(rel, text)) return
+    hits.push({ line: line + 1, kind, text })
   }
   // The string(s) an expression can evaluate to: literals, both branches of
   // `a ? "x" : "y"`, the right side of `a && "x"` / `a || "x"`, and the
@@ -344,38 +362,25 @@ if (isMain) {
   const onlyArea = opt("--area")
   const max = Number(opt("--max") ?? 25)
   let results = scan()
-  const BASELINE = join(ROOT, "scripts", "i18n-hardcoded-baseline.json")
-  if (args.includes("--update-baseline")) {
-    const counts = Object.fromEntries(
-      results
-        .map((r) => [r.file, r.hits.length])
-        .sort(([a], [b]) => (a < b ? -1 : 1)),
-    )
-    writeFileSync(BASELINE, JSON.stringify(counts, null, 2) + "\n")
-    const total = results.reduce((n, r) => n + r.hits.length, 0)
-    console.log(`Baseline: ${total} strings in ${results.length} files`)
-    process.exit(0)
-  }
   if (args.includes("--check")) {
-    const base = JSON.parse(readFileSync(BASELINE, "utf8"))
-    let grew = 0
-    for (const r of results) {
-      if (r.hits.length <= (base[r.file] ?? 0)) continue
-      grew++
-      const added = r.hits.length - (base[r.file] ?? 0)
-      for (const h of r.hits)
+    let total = 0
+    for (const r of results)
+      for (const h of r.hits) {
+        total++
         console.log(
-          `::warning file=${r.file},line=${h.line}::Hard-coded UI text (${h.kind}) ${JSON.stringify(h.text)}: use t(). ` +
-            `${r.file} has ${added} more than scripts/i18n-hardcoded-baseline.json`,
+          `::error file=${r.file},line=${h.line}::Hard-coded UI text (${h.kind}) ${JSON.stringify(h.text)}: ` +
+            "use t() with a key in src/locales/en/english.json (or, if it is not user-facing, add it to scripts/i18n-hardcoded-ignore.json with a reason)",
         )
-    }
-    const total = results.reduce((n, r) => n + r.hits.length, 0)
-    const baseTotal = Object.values(base).reduce((n, c) => n + c, 0)
+      }
+    const stale = IGNORES.filter((_, i) => !usedIgnores.has(i))
+    for (const e of stale)
+      console.log(
+        `::error file=scripts/i18n-hardcoded-ignore.json::Stale ignore entry (no longer matches ${e.file}): ${JSON.stringify(e.text)}`,
+      )
     console.log(
-      `Hard-coded UI strings: ${total} (baseline ${baseTotal}); ${grew} file(s) gained strings.` +
-        (total < baseTotal ? " Run --update-baseline to lock in the drop." : ""),
+      `Hard-coded UI strings: ${total}; ignore list: ${IGNORES.length} entries, ${stale.length} stale.`,
     )
-    process.exit(0)
+    process.exit(total || stale.length ? 1 : 0)
   }
   if (onlyArea) results = results.filter((r) => r.area === onlyArea)
   if (args.includes("--json")) {

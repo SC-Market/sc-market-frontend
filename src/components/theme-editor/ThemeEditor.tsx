@@ -428,11 +428,8 @@ export function ThemeEditor({
                 label={t("theme.unit", "Unit")}
                 onChange={(e) => updateValue(["borderRadiusUnit"], e.target.value)}
               >
-                {/* i18n-ignore: CSS unit names */}
                 <MenuItem value="px">px</MenuItem>
-                {/* i18n-ignore: CSS unit names */}
                 <MenuItem value="rem">rem</MenuItem>
-                {/* i18n-ignore: CSS unit names */}
                 <MenuItem value="em">em</MenuItem>
                 <MenuItem value="%">%</MenuItem>
               </Select>

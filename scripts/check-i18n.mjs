@@ -12,11 +12,12 @@
 // (i18next would otherwise show English for most counts).
 //
 // Usage: node scripts/check-i18n.mjs [--json] [--list]
-//   exits 1 when any locale is missing keys or has placeholder mismatches.
+//   exits 1 when any locale is missing keys, has placeholder mismatches, or
+//   (ja, uk, zh) has values left in English.
 //   Extra keys (present in a locale, absent from en) are reported, not fatal.
 //   "same-as-en" counts values left in English in a locale that does not use
 //   the Latin alphabet (ja, uk, zh): almost always a missed translation. It is
-//   reported, not fatal. Latin-script locales are skipped there because
+//   fatal; proper nouns go in KEEP_RE. Latin-script locales are skipped there because
 //   cognates ("Total", "Description", "Transport") are legitimately equal.
 import { readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
@@ -251,7 +252,7 @@ if (isMain) {
     }
   }
   const failed = Object.values(report).some(
-    (r) => r.missing.length || r.placeholder.length,
+    (r) => r.missing.length || r.placeholder.length || r.sameAsEn.length,
   )
   if (failed && !json) {
     console.error(

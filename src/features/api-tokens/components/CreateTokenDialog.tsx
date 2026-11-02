@@ -187,7 +187,6 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                 mt: 0.5,
               }}
             >
-              {/* i18n-ignore: HTTP header code sample */}
               Authorization: Bearer {createdToken?.slice(0, 12)}...
             </Box>
           </Alert>
