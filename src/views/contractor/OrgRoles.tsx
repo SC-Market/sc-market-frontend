@@ -20,7 +20,6 @@ import {
   TableCell,
   TableRow,
   TextField,
-  Tooltip,
 } from "@mui/material"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
@@ -49,22 +48,29 @@ export {
   min_role,
 } from "../../features/contractor/domain/permissions"
 import { min_position } from "../../features/contractor/domain/permissions"
+import {
+  editableRolePermissions,
+  type RolePermission,
+} from "../../features/contractor/domain/rolePermissions"
+import { HelpTip } from "../../features/help/components/HelpTip"
 
 function RolePermissionCheck(props: {
-  permission_name: keyof ContractorRole
+  permission_name: RolePermission
   role: ContractorRole
   setRole: (a: ContractorRole) => void
 }) {
   const { permission_name, setRole, role } = props
   const { t } = useTranslation()
-  const tooltip = t(`manageRoles.permissionDescriptions.${permission_name}`, "")
+  const label = t(`manageRoles.permissions.${permission_name}`)
+  const description = t(`manageRoles.permissionDescriptions.${permission_name}`, "")
   return (
-    <Grid item xs={6}>
-      <Tooltip title={tooltip} placement="top" arrow disableHoverListener={!tooltip}>
+    <Grid item xs={12} sm={6}>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
         <FormControlLabel
+          sx={{ mr: 0.5 }}
           control={
             <Checkbox
-              checked={role[permission_name] as boolean}
+              checked={role[permission_name]}
               onChange={(event: React.ChangeEvent<{ checked: boolean }>) => {
                 setRole({ ...role, [permission_name]: event.target.checked })
               }}
@@ -72,16 +78,40 @@ function RolePermissionCheck(props: {
               name={permission_name}
               inputProps={{
                 "aria-label": t("orgAdminUi.roles.permissionForRole", {
-                  permission: t(`manageRoles.permissions.${permission_name}`),
+                  permission: label,
                   role: role.name || t("orgAdminUi.roles.newRole"),
                 }),
               }}
             />
           }
-          label={t(`manageRoles.permissions.${permission_name}`)}
+          label={label}
         />
-      </Tooltip>
+        {description && <HelpTip label={label} title={description} />}
+      </Box>
     </Grid>
+  )
+}
+
+/**
+ * One checkbox (with its "?" explanation) per permission the org's roles can
+ * grant, in ROLE_PERMISSIONS order.
+ */
+export function RolePermissionChecklist(props: {
+  org: { premium_tier?: string | null } | null | undefined
+  role: ContractorRole
+  setRole: (a: ContractorRole) => void
+}) {
+  return (
+    <>
+      {editableRolePermissions(props.org).map((permission) => (
+        <RolePermissionCheck
+          key={permission}
+          role={props.role}
+          setRole={props.setRole}
+          permission_name={permission}
+        />
+      ))}
+    </>
   )
 }
 
@@ -90,7 +120,6 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
   const [newRole, setNewRole] = useState(role)
   const { t } = useTranslation()
   const [contractor] = useCurrentOrg()
-  const isWhiteLabel = contractor?.premium_tier === "white_label"
 
   useEffect(() => {
     setNewRole(role)
@@ -191,68 +220,15 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                     />
                   </Grid>
 
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_org_details"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_roles"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_orders"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_invites"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_stock"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_market"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_recruiting"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_webhooks"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"manage_blocklist"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"claim_orders"}
-                  />
-                  <RolePermissionCheck
-                    role={newRole}
-                    setRole={setNewRole}
-                    permission_name={"kick_members"}
-                  />
-                  {isWhiteLabel && (
-                    <RolePermissionCheck
-                      role={newRole}
-                      setRole={setNewRole}
-                      permission_name={"manage_theme"}
-                    />
-                  )}
+                  <Grid item>
+                    <Grid container spacing={theme.layoutSpacing.compact}>
+                      <RolePermissionChecklist
+                        org={contractor}
+                        role={newRole}
+                        setRole={setNewRole}
+                      />
+                    </Grid>
+                  </Grid>
                   <Box display={"flex"} justifyContent={"center"}>
                     <Button
                       color={"primary"}
@@ -475,68 +451,11 @@ export function AddRole() {
           />
         </Grid>
 
-        <RolePermissionCheck
+        <RolePermissionChecklist
+          org={currentOrg}
           role={newRole}
           setRole={setNewRole}
-          permission_name={"manage_org_details"}
         />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"manage_roles"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"manage_orders"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"manage_invites"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"manage_stock"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"manage_market"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"manage_recruiting"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"manage_webhooks"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"manage_blocklist"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"claim_orders"}
-        />
-        <RolePermissionCheck
-          role={newRole}
-          setRole={setNewRole}
-          permission_name={"kick_members"}
-        />
-        {currentOrg?.premium_tier === "white_label" && (
-          <RolePermissionCheck
-            role={newRole}
-            setRole={setNewRole}
-            permission_name={"manage_theme"}
-          />
-        )}
 
         <Grid item display={"flex"} justifyContent={"center"} xs={12}>
           <Button
