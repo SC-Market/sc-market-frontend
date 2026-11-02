@@ -1,5 +1,9 @@
 /**
- * StockManagerV2 — V2 equivalent of V1 ManageStock / DisplayStock with full feature parity.
+ * StockManagerV2: the shop's Listings page (/shop/:slug/listings, "Manage
+ * Listings"). One row per listing, with quick edits of price, status and
+ * quantity. Not the Stock page: the shop's stock lots are managed in
+ * BulkStockManagementV2, your own lots across shops on My Stock
+ * (pages/inventory). The name is from V1's ManageStock.
  */
 
 import React, { useState, useCallback, useMemo, createContext, useContext, useEffect, useRef } from "react"
@@ -93,6 +97,7 @@ import { listingApiError } from "../domain/listingFormErrors"
 import { withShopContext } from "../../../components/sidebar/shopContextState"
 import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
 import { ImportFromUexDialog } from "./ImportFromUex"
+import { canEditShopListings } from "../../shops/domain/shopPermissions"
 import { selectOnFocus } from "../../../util/selectOnFocus"
 
 /* ── Types ── */
@@ -107,15 +112,15 @@ interface NewListingRowV2 {
   isNew: boolean
 }
 
-/* ── Selection context (mirrors V1 ItemStockContext) ── */
+/* ── Listing selection (bulk actions) ── */
 
-const StockSelectionContext = createContext<
+const ListingSelectionContext = createContext<
   [GridRowSelectionModel, React.Dispatch<React.SetStateAction<GridRowSelectionModel>>] | null
 >(null)
 
 /* ── Toolbar props ── */
 
-interface StockToolbarProps {
+interface ListingsToolbarProps {
   listings: MyListingItem[]
   setNewRows: React.Dispatch<React.SetStateAction<NewListingRowV2[]>>
   setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
@@ -136,9 +141,9 @@ declare module "@mui/x-data-grid" {
   }
 }
 
-/* ── Toolbar (mirrors V1 ItemStockToolbar) ── */
+/* ── Toolbar: bulk status/archive and quick add ── */
 
-function StockToolbarV2(props: StockToolbarProps) {
+function ListingsToolbarV2(props: ListingsToolbarProps) {
   const {
     listings,
     setNewRows,
@@ -147,7 +152,7 @@ function StockToolbarV2(props: StockToolbarProps) {
     onAddQuickListing,
     canManage,
   } = props
-  const ctx = useContext(StockSelectionContext)
+  const ctx = useContext(ListingSelectionContext)
   if (!ctx || !canManage) return <></>
   const [selectionModel] = ctx
   const { t } = useTranslation()
@@ -293,9 +298,9 @@ function StockToolbarV2(props: StockToolbarProps) {
 }
 
 
-/* ── DisplayStockV2 (mirrors V1 DisplayStock) ── */
+/* ── ShopListingsGridV2: the listings grid (cards on mobile) ── */
 
-function DisplayStockV2({
+function ShopListingsGridV2({
   listings,
   total,
   page,
@@ -325,7 +330,7 @@ function DisplayStockV2({
   const [createListing] = useCreateListingMutation()
   const [updateStockLot] = useUpdateStockLotMutation()
   const [fetchStockLots] = marketV2Api.endpoints.getStockLots.useLazyQuery()
-  const canManage = shop.permissions?.can_manage === true
+  const canManage = canEditShopListings(shop)
 
   const [newRows, setNewRows] = useState<NewListingRowV2[]>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
@@ -333,7 +338,7 @@ function DisplayStockV2({
   const [editTarget, setEditTarget] = useState<MyListingItem | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
 
-  const ctx = useContext(StockSelectionContext)
+  const ctx = useContext(ListingSelectionContext)
   if (!ctx) return null
   const [selectionModel, setSelectionModel] = ctx
 
@@ -765,7 +770,7 @@ function DisplayStockV2({
   if (isMobile) {
     return (
       <Box sx={{ width: "100%" }}>
-        <StockToolbarV2
+        <ListingsToolbarV2
           listings={listings}
           setNewRows={setNewRows}
           setRowModesModel={setRowModesModel}
@@ -827,7 +832,7 @@ function DisplayStockV2({
         onRowModesModelChange={setRowModesModel}
         initialState={{ sorting: { sortModel: [{ field: "title", sort: "asc" }] } }}
         slots={{
-          toolbar: StockToolbarV2,
+          toolbar: ListingsToolbarV2,
         }}
         slotProps={{
           toolbar: {
@@ -901,7 +906,7 @@ function RenewFromLink() {
   return null
 }
 
-/* ── Main Page Component (mirrors V1 ManageStock) ── */
+/* ── Main page component ── */
 
 export function StockManagerV2() {
   const { t } = useTranslation()
@@ -929,7 +934,7 @@ export function StockManagerV2() {
   })
 
   const listings = data?.listings ?? []
-  const canManage = shop.permissions?.can_manage === true
+  const canManage = canEditShopListings(shop)
   const [importOpen, setImportOpen] = useState(false)
 
   return (
@@ -943,7 +948,7 @@ export function StockManagerV2() {
       maxWidth="xl"
       isLoading={isLoading}
     >
-      <StockSelectionContext.Provider value={[selectionModel, setSelectionModel]}>
+      <ListingSelectionContext.Provider value={[selectionModel, setSelectionModel]}>
         <RenewFromLink />
         <Grid item xs={12}>
           <Grid container spacing={theme.layoutSpacing.layout}>
@@ -1011,7 +1016,7 @@ export function StockManagerV2() {
             <Grid item xs={12} md={isMobile ? 12 : 9}>
               <Grid container spacing={theme.layoutSpacing.layout}>
                 <Grid item xs={12}>
-                  <DisplayStockV2
+                  <ShopListingsGridV2
                     listings={listings}
                     total={data?.total ?? 0}
                     page={page}
@@ -1033,7 +1038,7 @@ export function StockManagerV2() {
             </Grid>
           </Grid>
         </Grid>
-      </StockSelectionContext.Provider>
+      </ListingSelectionContext.Provider>
       {canManage && (
         <ImportFromUexDialog shopId={shop.shop_id} open={importOpen} onClose={() => setImportOpen(false)} />
       )}

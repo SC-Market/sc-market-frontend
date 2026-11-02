@@ -49,6 +49,7 @@ import type {
 import { HelpLink } from "../../help/components/HelpLink"
 import { withShopContext } from "../../../components/sidebar/shopContextState"
 import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
+import { canEditShopListings } from "../../shops/domain/shopPermissions"
 import {
   focusListingField,
   LISTING_FIELD_IDS,
@@ -397,7 +398,7 @@ export function CreateListingV2() {
 
   // Org members without manage_market can't create listings: say so up
   // front instead of letting the save fail with a 403
-  if (shop.permissions?.can_manage !== true) {
+  if (!canEditShopListings(shop)) {
     return (
       <StandardPageLayout
         title={t("CreateListingV2.pageTitle", "Create Listing")}

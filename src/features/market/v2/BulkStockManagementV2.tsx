@@ -1,8 +1,11 @@
 /**
- * BulkStockManagementV2 — V2 equivalent of V1 ManageStockLots.tsx
+ * BulkStockManagementV2: the shop's Stock page (/shop/:slug/stock). Lists the
+ * shop's stock lots ("All Stock Lots", editable in place) and the lots with
+ * stock reserved for open orders ("Allocated Stock").
  *
- * Matches V1 layout: StandardPageLayout → ManageListingsTabBar → sidebar + two DataGrids.
- * Uses V2 RTK Query hooks exclusively.
+ * Naming: user-facing text says "Stock" for a shop's lots and "My Stock" for
+ * your own lots across shops (pages/inventory); in code a lot is a
+ * listing_item_lot, and "inventory" is the v2 API for your own lots.
  */
 
 import React, { useState, useCallback, useMemo, createContext, useContext, ReactNode } from "react"
@@ -76,18 +79,18 @@ import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { HelpLink } from "../../help/components/HelpLink"
 import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
+import { canEditShopStockLots } from "../../shops/domain/shopPermissions"
 import { selectOnFocus } from "../../../util/selectOnFocus"
 
 /**
  * This page's shop: lots, listings and permissions are scoped to it (without
- * a shop the lot list covered every shop you own). `canManage`: may write the
- * shop's lots, which Manage Stock allows as well as Manage Market (the backend's
- * canManageShopStock).
+ * a shop the lot list covered every shop you own). `canEditLots`: may add,
+ * edit and delete the shop's lots, which Manage Stock allows as well as
+ * Manage Market.
  */
 function useStockShop() {
   const shop = useOptionalShopRouteContext()?.shop
-  const perms = shop?.permissions
-  return { shopId: shop?.shop_id, canManage: perms?.can_manage === true || perms?.manage_stock === true }
+  return { shopId: shop?.shop_id, canEditLots: !!shop && canEditShopStockLots(shop) }
 }
 
 /** Rows matching the lot search: item, variant, listing, location or notes. */
@@ -152,7 +155,7 @@ export function BulkStockManagementV2() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const [sidebarOpen, setSidebarOpen] = useHydratedInitialState(!isMobile)
-  const { canManage } = useStockShop()
+  const { canEditLots } = useStockShop()
 
   return (
     <StandardPageLayout
@@ -185,7 +188,7 @@ export function BulkStockManagementV2() {
               </Box>
             </Grid>
 
-            {!canManage && (
+            {!canEditLots && (
               <Grid item xs={12}>
                 <ShopManageAccessNotice area="stock" />
               </Grid>
@@ -285,7 +288,7 @@ function AllStockLotsGridV2() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const { filters } = useStockFilter()
-  const { shopId, canManage } = useStockShop()
+  const { shopId, canEditLots } = useStockShop()
 
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,
@@ -457,7 +460,7 @@ function AllStockLotsGridV2() {
       headerName: t("inventory.quantity", "Qty"),
       flex: 0.7,
       minWidth: 90,
-      editable: canManage,
+      editable: canEditLots,
       type: "number" as const,
       align: "right" as const,
       headerAlign: "right" as const,
@@ -481,14 +484,14 @@ function AllStockLotsGridV2() {
           />
         )
       },
-      renderCell: (params: GridRenderCellParams) => <EditableCell params={params} canEdit={canManage} />,
+      renderCell: (params: GridRenderCellParams) => <EditableCell params={params} canEdit={canEditLots} />,
     },
     {
       field: "location_id",
       headerName: t("inventory.location", "Location"),
       flex: 1.2,
       minWidth: 160,
-      editable: canManage,
+      editable: canEditLots,
       renderEditCell: renderLocationEditCell,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" color="text.secondary">
@@ -535,7 +538,7 @@ function AllStockLotsGridV2() {
       headerName: t("inventory.status", "Status"),
       flex: 0.8,
       minWidth: 100,
-      editable: canManage,
+      editable: canEditLots,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
           label={params.value ? t("inventory.listed", "Listed") : t("inventory.personal", "Personal")}
@@ -545,7 +548,7 @@ function AllStockLotsGridV2() {
         />
       ),
     },
-    ...(canManage
+    ...(canEditLots
       ? [
           {
             field: "actions",
@@ -673,13 +676,13 @@ function AllStockLotsGridV2() {
                   <Typography variant="h6">{t("AllStockLots.title", "All Stock Lots")}</Typography>
                   <Chip label={rows.length} size="small" color="primary" />
                 </Box>
-                {canManage && (
+                {canEditLots && (
                   <Button size="small" variant="contained" startIcon={<AddIcon />} onClick={handleAddRow} disabled={listings.length === 0}>
                     {t("AllStockLots.addLot", "Add Lot")}
                   </Button>
                 )}
               </Box>
-              {canManage && (
+              {canEditLots && (
                 <Typography variant="caption" color="text.secondary">
                   {t(
                     "AllStockLots.editHint",
