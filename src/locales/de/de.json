@@ -1,6 +1,7 @@
 {
   "admin": {
     "orderStats": "Admin-Bestellstatistiken",
+    "showTestOrders": "Testbestellungen anzeigen",
     "moderation": {
       "button": {
         "handle": "Bearbeiten"
@@ -2083,6 +2084,7 @@
       "unclaimed": "Nicht beansprucht"
     },
     "orderLabel": "Bestellung",
+    "testChip": "Test",
     "items": "Artikel",
     "public": "Öffentlich",
     "orgOrdersTitle": "Org-Bestellungen",

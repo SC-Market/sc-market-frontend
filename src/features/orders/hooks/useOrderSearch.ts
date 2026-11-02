@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useSearchOrdersQuery } from "../api/ordersApi"
 import { useDebounce } from "../../../hooks/useDebounce"
-import type { OrderSearchSortMethod, OrderSearchStatus, OrderStatusFilter, OrderTotalCounts, OrderStub } from "../domain/types"
+import type { OrderSearchSortMethod, OrderStatusFilter, OrderTotalCounts, OrderStub } from "../domain/types"
 import { isAwaitingData } from "../../../util/queryLoading"
 
 export interface UseOrderSearchParams {
@@ -13,9 +13,39 @@ export interface UseOrderSearchParams {
   username?: string
 }
 
-export function useOrderSearch(params: UseOrderSearchParams) {
-  const { mine, assigned, unassigned, contractor, shop_id, username } = params
+/** Per-status counts as the order search endpoints return them. */
+export interface OrderItemCounts {
+  fulfilled?: number
+  "in-progress"?: number
+  "not-started"?: number
+  cancelled?: number
+  unassigned?: number
+}
 
+/** The status tabs' counts, from the per-status counts. */
+export function toTotalCounts(counts: OrderItemCounts | undefined): OrderTotalCounts {
+  const c = counts ?? {}
+  const fulfilled = c.fulfilled || 0
+  const inProgress = c["in-progress"] || 0
+  const notStarted = c["not-started"] || 0
+  const cancelled = c.cancelled || 0
+  return {
+    fulfilled,
+    "in-progress": inProgress,
+    "not-started": notStarted,
+    cancelled,
+    all: fulfilled + inProgress + notStarted + cancelled,
+    active: notStarted + inProgress,
+    past: cancelled + fulfilled,
+    unassigned: c.unassigned || 0,
+  }
+}
+
+/**
+ * The order list's filter, sort and page state, shared by the order search
+ * (useOrderSearch) and the admin orders list (useAdminOrderSearch).
+ */
+export function useOrderSearchState(unassigned?: boolean) {
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>(
     unassigned ? "unassigned" : "active"
   )
@@ -39,46 +69,6 @@ export function useOrderSearch(params: UseOrderSearchParams) {
     setPage(0)
   }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
 
-  const { data: orders, currentData, isLoading, isFetching } = useSearchOrdersQuery({
-    status: statusFilter === "all" ? undefined : statusFilter === "unassigned" ? "active" : statusFilter,
-    index: page,
-    page_size: pageSize,
-    customer: mine ? username : undefined,
-    assigned: assigned ? username : undefined,
-    unassigned: statusFilter === "unassigned" ? "true" : undefined,
-    contractor,
-    shop_id,
-    sort_method: orderBy as OrderSearchSortMethod,
-    reverse_sort: order === "desc",
-    buyer_username: !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
-    seller_username: mine && debouncedSellerUsername ? debouncedSellerUsername : undefined,
-    has_market_listings: hasMarketListings,
-    has_service: hasService,
-  })
-
-  const totalCounts: OrderTotalCounts = useMemo(() => {
-    if (!orders?.item_counts) {
-      return { all: 0, unassigned: 0, active: 0, past: 0, fulfilled: 0, "in-progress": 0, "not-started": 0, cancelled: 0 }
-    }
-    const counts = orders.item_counts
-    return {
-      ...counts,
-      all: (counts.fulfilled || 0) + (counts["in-progress"] || 0) + (counts["not-started"] || 0) + (counts.cancelled || 0),
-      active: (counts["not-started"] || 0) + (counts["in-progress"] || 0),
-      past: (counts.cancelled || 0) + (counts.fulfilled || 0),
-      unassigned: counts.unassigned || 0,
-    }
-  }, [orders])
-
-  // Auto-switch from "unassigned" to "active" on first load if there are 0 unclaimed items
-  const hasAutoSwitched = useRef(false)
-  useEffect(() => {
-    if (unassigned && !hasAutoSwitched.current && !isLoading && totalCounts.unassigned === 0 && statusFilter === "unassigned") {
-      hasAutoSwitched.current = true
-      setStatusFilter("active")
-    }
-  }, [unassigned, isLoading, totalCounts.unassigned, statusFilter])
-
   const activeFiltersCount = useMemo(() => {
     let count = 0
     if (debouncedBuyerUsername) count++
@@ -96,12 +86,6 @@ export function useOrderSearch(params: UseOrderSearchParams) {
   }
 
   return {
-    // Query results
-    orders,
-    isLoading,
-    isFetching,
-    /** No result for the current filters / page yet; false during background refetches. */
-    awaitingData: isAwaitingData({ isFetching, currentData }),
     // Pagination
     page, setPage,
     pageSize, setPageSize,
@@ -109,7 +93,6 @@ export function useOrderSearch(params: UseOrderSearchParams) {
     orderBy, setOrderBy,
     // Status filter
     statusFilter, setStatusFilter,
-    totalCounts,
     // Advanced filters
     filtersOpen, setFiltersOpen,
     buyerUsername, setBuyerUsername,
@@ -120,5 +103,60 @@ export function useOrderSearch(params: UseOrderSearchParams) {
     debouncedSellerUsername,
     activeFiltersCount,
     clearFilters,
+  }
+}
+
+export type OrderSearchState = ReturnType<typeof useOrderSearchState>
+
+/** What the order list view renders: the state plus a page of orders. */
+export interface OrderSearchResult extends OrderSearchState {
+  orders?: { items: Array<OrderStub & { is_test?: boolean }> }
+  isLoading: boolean
+  isFetching: boolean
+  /** No result for the current filters / page yet; false during background refetches. */
+  awaitingData: boolean
+  totalCounts: OrderTotalCounts
+}
+
+export function useOrderSearch(params: UseOrderSearchParams): OrderSearchResult {
+  const { mine, assigned, unassigned, contractor, shop_id, username } = params
+  const state = useOrderSearchState(unassigned)
+  const { statusFilter, setStatusFilter, page, pageSize, orderBy, order } = state
+
+  const { data: orders, currentData, isLoading, isFetching } = useSearchOrdersQuery({
+    status: statusFilter === "all" ? undefined : statusFilter === "unassigned" ? "active" : statusFilter,
+    index: page,
+    page_size: pageSize,
+    customer: mine ? username : undefined,
+    assigned: assigned ? username : undefined,
+    unassigned: statusFilter === "unassigned" ? "true" : undefined,
+    contractor,
+    shop_id,
+    sort_method: orderBy as OrderSearchSortMethod,
+    reverse_sort: order === "desc",
+    buyer_username: !mine && state.debouncedBuyerUsername ? state.debouncedBuyerUsername : undefined,
+    seller_username: mine && state.debouncedSellerUsername ? state.debouncedSellerUsername : undefined,
+    has_market_listings: state.hasMarketListings,
+    has_service: state.hasService,
+  })
+
+  const totalCounts = useMemo(() => toTotalCounts(orders?.item_counts), [orders])
+
+  // Auto-switch from "unassigned" to "active" on first load if there are 0 unclaimed items
+  const hasAutoSwitched = useRef(false)
+  useEffect(() => {
+    if (unassigned && !hasAutoSwitched.current && !isLoading && totalCounts.unassigned === 0 && statusFilter === "unassigned") {
+      hasAutoSwitched.current = true
+      setStatusFilter("active")
+    }
+  }, [unassigned, isLoading, totalCounts.unassigned, statusFilter, setStatusFilter])
+
+  return {
+    ...state,
+    orders,
+    isLoading,
+    isFetching,
+    awaitingData: isAwaitingData({ isFetching, currentData }),
+    totalCounts,
   }
 }

@@ -490,6 +490,7 @@
     },
     "offerAnalytics": "Offer Analytics",
     "orderStats": "Admin Order Stats",
+    "showTestOrders": "Show test orders",
     "premium": {
       "domain": "Custom Domain",
       "domainHelp": "The hostname for this org's white-label site. Configure DNS to point here.",
@@ -3655,6 +3656,7 @@
     "messages": "Messages",
     "offerShort": "Offer {{id}}",
     "orderLabel": "Order",
+    "testChip": "Test",
     "orderShort": "Order {{id}}",
     "ordersTitle": "Orders",
     "orderTitle": "Order",

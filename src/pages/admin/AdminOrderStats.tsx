@@ -2,6 +2,7 @@ import React, { Suspense } from "react"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageAdminOrderStats } from "../../features/admin/hooks/usePageAdminOrderStats"
+import { useShowTestOrders } from "../../features/admin/hooks/useShowTestOrders"
 import {
   AdminOrderStatsSkeleton,
   OrderAnalyticsSkeleton,
@@ -9,6 +10,7 @@ import {
 } from "../../features/admin/components/AdminOrderStatsSkeleton"
 import { useGetOfferAnalyticsQuery } from "../../features/admin/api/adminApi"
 import { Divider, Grid, Typography } from "@mui/material"
+import { LabeledSwitch } from "../../components/buttons/LabeledSwitch"
 import { lazyWithRetry } from "../../util/lazyWithRetry"
 
 const OrderAnalyticsCharts = lazyWithRetry(() =>
@@ -67,7 +69,12 @@ const OfferSummary = lazyWithRetry(() =>
 
 export function AdminOrderStats() {
   const { t } = useTranslation()
-  const { data: orderAnalytics, isLoading: ordersLoading, error: ordersError } = usePageAdminOrderStats()
+  // Orders involving test accounts, orgs or shops are left out of the stats
+  // and the list unless shown (?include_test=true).
+  const [showTestOrders, setShowTestOrders] = useShowTestOrders()
+  const { data: orderAnalytics, isLoading: ordersLoading, error: ordersError } = usePageAdminOrderStats({
+    includeTest: showTestOrders,
+  })
   const { data: offerAnalytics, isLoading: offersLoading } = useGetOfferAnalyticsQuery()
 
   const isLoading = ordersLoading && offersLoading
@@ -82,6 +89,13 @@ export function AdminOrderStats() {
       error={ordersError}
       skeleton={<AdminOrderStatsSkeleton />}
     >
+      <Grid item xs={12}>
+        <LabeledSwitch
+          label={t("admin.showTestOrders", "Show test orders")}
+          checked={showTestOrders}
+          onChange={setShowTestOrders}
+        />
+      </Grid>
       <Suspense fallback={<AdminOrderStatsSkeleton />}>
         {ordersLoading ? (
           <OrderAnalyticsSkeleton />
@@ -91,7 +105,7 @@ export function AdminOrderStats() {
             <TopShopsAnalytics analytics={orderAnalytics} />
             <TopUsersAnalytics analytics={orderAnalytics} />
             <OrderSummary analytics={orderAnalytics} />
-            <AdminRecentOrders />
+            <AdminRecentOrders includeTest={showTestOrders} />
           </>
         ) : null}
 

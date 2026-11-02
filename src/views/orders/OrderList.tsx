@@ -44,7 +44,7 @@ import { a11yProps } from "../../components/tabs/Tabs"
 import SCMarketLogo from "../../assets/scmarket-logo.webp"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
-import { useOrderSearch } from "../../features/orders/hooks/useOrderSearch"
+import { useOrderSearch, type OrderSearchResult } from "../../features/orders/hooks/useOrderSearch"
 import {
   ExpandLess,
   ExpandMore,
@@ -116,7 +116,8 @@ export const MyOrderHeadCells: readonly HeadCell<
 ]
 
 export function OrderRow(props: {
-  row: OrderStub & { mine?: boolean }
+  /** is_test: Admin › Orders with test orders shown; marks the row "Test". */
+  row: OrderStub & { mine?: boolean; is_test?: boolean }
   index: number
   onClick?: MouseEventHandler
   isItemSelected: boolean
@@ -332,6 +333,15 @@ export function OrderRow(props: {
             >
               {t("orders.orderLabel")}{" "}
               {row.order_id.substring(0, 8).toUpperCase()}
+              {row.is_test && (
+                <Chip
+                  label={t("orders.testChip", "Test")}
+                  size="small"
+                  color="warning"
+                  variant="outlined"
+                  sx={{ ml: 1, height: 18, fontSize: "0.7rem" }}
+                />
+              )}
             </Typography>
             <Typography
               variant={"body2"}
@@ -447,9 +457,25 @@ export function OrdersViewPaginated(props: {
   shop_id?: string
 }) {
   const { title, mine, assigned, unassigned, contractor, shop_id } = props
+  const { data: profile } = useGetUserProfileQuery()
+  const search = useOrderSearch({ mine, assigned, unassigned, contractor, shop_id, username: profile?.username })
+  return <OrdersTableView title={title} mine={mine} unassigned={unassigned} search={search} />
+}
+
+/**
+ * The order list (status tabs, filters, table) for a search's state and
+ * results: useOrderSearch (OrdersViewPaginated) or Admin › Orders'
+ * useAdminOrderSearch.
+ */
+export function OrdersTableView(props: {
+  title: string
+  mine?: boolean
+  unassigned?: boolean
+  search: OrderSearchResult
+}) {
+  const { title, mine, unassigned, search } = props
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
-  const { data: profile } = useGetUserProfileQuery()
   const { t } = useTranslation()
 
   const {
@@ -464,7 +490,7 @@ export function OrdersViewPaginated(props: {
     hasService, setHasService,
     debouncedBuyerUsername, debouncedSellerUsername,
     activeFiltersCount, clearFilters,
-  } = useOrderSearch({ mine, assigned, unassigned, contractor, shop_id, username: profile?.username })
+  } = search
   // Order lists are primary content on the orders and dashboard pages.
   usePageReady(awaitingData)
 

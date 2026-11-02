@@ -1,6 +1,7 @@
 {
   "admin": {
     "orderStats": "Statistiques des Commandes Admin",
+    "showTestOrders": "Afficher les commandes de test",
     "moderation": {
       "button": {
         "handle": "Traiter"
@@ -2088,6 +2089,7 @@
       "unclaimed": "Non réclamée"
     },
     "orderLabel": "Commande",
+    "testChip": "Test",
     "items": "articles",
     "public": "Public",
     "orgOrdersTitle": "Commandes de l'org",

@@ -1,6 +1,7 @@
 {
   "admin": {
     "orderStats": "管理员订单统计",
+    "showTestOrders": "显示测试订单",
     "moderation": {
       "button": {
         "handle": "处理"
@@ -2080,6 +2081,7 @@
       "unclaimed": "未认领"
     },
     "orderLabel": "订单",
+    "testChip": "测试",
     "items": "件物品",
     "public": "公开",
     "orgOrdersTitle": "组织订单",

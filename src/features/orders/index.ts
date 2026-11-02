@@ -21,7 +21,6 @@ export type {
   OrderSearchStatus,
   OrderSearchQuery,
   OrderTrendDatapoint,
-  OrderAnalytics,
   ContractorOrderMetrics,
   ContractorOrderData,
   OrderSetting,

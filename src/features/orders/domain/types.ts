@@ -237,51 +237,6 @@ export interface OrderTrendDatapoint {
   "In-Progress": number
 }
 
-export interface OrderAnalytics {
-  daily_totals: Array<{
-    date: string
-    total: number
-    in_progress: number
-    fulfilled: number
-    cancelled: number
-    not_started: number
-  }>
-  weekly_totals: Array<{
-    date: string
-    total: number
-    in_progress: number
-    fulfilled: number
-    cancelled: number
-    not_started: number
-  }>
-  monthly_totals: Array<{
-    date: string
-    total: number
-    in_progress: number
-    fulfilled: number
-    cancelled: number
-    not_started: number
-    average_fulfilled_value?: number
-  }>
-  top_shops: Array<{
-    name: string
-    slug: string
-    fulfilled_orders: number
-    total_orders: number
-  }>
-  top_users: Array<{
-    username: string
-    fulfilled_orders: number
-    total_orders: number
-  }>
-  summary: {
-    total_orders: number
-    active_orders: number
-    completed_orders: number
-    total_value: number
-  }
-}
-
 // ── Metrics ──
 
 export interface ContractorOrderMetrics {

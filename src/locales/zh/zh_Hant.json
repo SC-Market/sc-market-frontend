@@ -1,6 +1,7 @@
 {
   "admin": {
     "orderStats": "管理員訂單統計",
+    "showTestOrders": "顯示測試訂單",
     "moderation": {
       "button": {
         "handle": "處理"
@@ -2020,6 +2021,7 @@
       "unclaimed": "未認領"
     },
     "orderLabel": "訂單",
+    "testChip": "測試",
     "items": "項商品",
     "public": "公開",
     "orgOrdersTitle": "組織訂單",

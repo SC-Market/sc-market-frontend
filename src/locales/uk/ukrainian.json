@@ -1,6 +1,7 @@
 {
   "admin": {
     "orderStats": "Адмін Статистика Замовлень",
+    "showTestOrders": "Показати тестові замовлення",
     "moderation": {
       "button": {
         "handle": "Обробити"
@@ -2093,6 +2094,7 @@
       "unclaimed": "Не взяті"
     },
     "orderLabel": "Замовлення",
+    "testChip": "Тест",
     "items": "одиниць",
     "public": "Публічне",
     "orgOrdersTitle": "Замовлення організації",

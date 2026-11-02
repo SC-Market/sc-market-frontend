@@ -1,6 +1,7 @@
 {
   "admin": {
     "orderStats": "Estadísticas de Pedidos Admin",
+    "showTestOrders": "Mostrar pedidos de prueba",
     "moderation": {
       "button": {
         "handle": "Gestionar"
@@ -2088,6 +2089,7 @@
       "unclaimed": "Sin reclamar"
     },
     "orderLabel": "Pedido",
+    "testChip": "Prueba",
     "items": "artículos",
     "public": "Público",
     "orgOrdersTitle": "Pedidos de la org",

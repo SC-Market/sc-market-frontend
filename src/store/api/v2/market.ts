@@ -2375,6 +2375,40 @@ const injectedRtkApi = api
         query: () => ({ url: `/admin/seller-reachability` }),
         providesTags: ["Admin"],
       }),
+      listAdminOrders: build.query<
+        ListAdminOrdersApiResponse,
+        ListAdminOrdersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/orders`,
+          params: {
+            status: queryArg.status,
+            unassigned: queryArg.unassigned,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+            sort_method: queryArg.sortMethod,
+            reverse_sort: queryArg.reverseSort,
+            buyer_username: queryArg.buyerUsername,
+            seller_username: queryArg.sellerUsername,
+            has_market_listings: queryArg.hasMarketListings,
+            has_service: queryArg.hasService,
+            include_test: queryArg.includeTest,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      getAdminOrderAnalytics: build.query<
+        GetAdminOrderAnalyticsApiResponse,
+        GetAdminOrderAnalyticsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/orders/analytics`,
+          params: {
+            include_test: queryArg.includeTest,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
       searchIdentityUsers: build.query<
         SearchIdentityUsersApiResponse,
         SearchIdentityUsersApiArg
@@ -4178,6 +4212,32 @@ export type StopStillSellingCampaignApiArg = void
 export type GetSellerReachabilityApiResponse =
   /** status 200 Ok */ SellerReachabilityReport
 export type GetSellerReachabilityApiArg = void
+export type ListAdminOrdersApiResponse = /** status 200 Ok */ AdminOrdersPage
+export type ListAdminOrdersApiArg = {
+  /** active: not started or in progress; past: fulfilled or cancelled */
+  status?: AdminOrderSearchStatus
+  /** Only active orders with no assigned seller */
+  unassigned?: boolean
+  /** 1-based */
+  page?: number
+  pageSize?: number
+  sortMethod?: AdminOrderSortMethod
+  reverseSort?: boolean
+  /** Partial match on the buyer's username */
+  buyerUsername?: string
+  /** Partial match on the assigned seller's username or the org's Spectrum ID */
+  sellerUsername?: string
+  hasMarketListings?: boolean
+  hasService?: boolean
+  /** Also orders involving test accounts, orgs or shops */
+  includeTest?: boolean
+}
+export type GetAdminOrderAnalyticsApiResponse =
+  /** status 200 Ok */ AdminOrderAnalytics
+export type GetAdminOrderAnalyticsApiArg = {
+  /** Also count orders involving test accounts, orgs or shops */
+  includeTest?: boolean
+}
 export type SearchIdentityUsersApiResponse =
   /** status 200 Ok */ IdentitySearchResponse
 export type SearchIdentityUsersApiArg = {
@@ -9185,6 +9245,129 @@ export type SellerReachabilityReport = {
   /** Clicks on "Add SC Market to Discord" links per install type and surface (last 7 and 30 days), most clicked first. */
   install_clicks: DiscordInstallClickCount[]
 }
+export type AdminOrderCounts = {
+  fulfilled: number
+  "in-progress": number
+  "not-started": number
+  cancelled: number
+  /** Active orders with no assigned seller. */
+  unassigned: number
+}
+export type AdminOrderRating = {
+  avg_rating: number
+  rating_count: number
+  total_rating: number
+  streak: number
+  total_orders?: number
+  response_rate?: number
+  total_assignments?: number
+}
+export type AdminOrderContractor = {
+  spectrum_id: string
+  name: string
+  avatar: string
+  rating: AdminOrderRating
+}
+export type AdminOrderUser = {
+  username: string
+  display_name: string
+  avatar: string
+  rating: AdminOrderRating
+}
+export type AdminOrderShop = {
+  name: string
+  slug: string
+  avatar: string | null
+}
+export type AdminOrderStatus =
+  | "fulfilled"
+  | "in-progress"
+  | "not-started"
+  | "cancelled"
+export type AdminOrderStub = {
+  order_id: string
+  contractor: AdminOrderContractor | null
+  assigned_to: AdminOrderUser | null
+  customer: AdminOrderUser
+  shop: AdminOrderShop | null
+  status: AdminOrderStatus
+  /** ISO 8601 creation time. */
+  timestamp: string
+  service_name: string | null
+  /** aUEC, as a decimal string. */
+  cost: string
+  title: string
+  kind: string
+  payment_type: string
+  /** Market items on the order. */
+  count: number
+  /** The buyer, the assigned seller, the org or the shop is in the test realm. */
+  is_test: boolean
+}
+export type AdminOrdersPage = {
+  item_counts: AdminOrderCounts
+  items: AdminOrderStub[]
+}
+export type AdminOrderSearchStatus =
+  | "fulfilled"
+  | "in-progress"
+  | "not-started"
+  | "cancelled"
+  | "active"
+  | "past"
+export type AdminOrderSortMethod =
+  | "title"
+  | "customer_name"
+  | "status"
+  | "timestamp"
+  | "contractor_name"
+export type AdminOrderPeriodTotals = {
+  /** YYYY-MM-DD, the start of the day, week or month. */
+  date: string
+  total: number
+  in_progress: number
+  fulfilled: number
+  cancelled: number
+  not_started: number
+}
+export type AdminOrderMonthTotals = {
+  /** YYYY-MM-DD, the start of the day, week or month. */
+  date: string
+  total: number
+  in_progress: number
+  fulfilled: number
+  cancelled: number
+  not_started: number
+  average_fulfilled_value: number
+}
+export type AdminOrderTopShop = {
+  name: string
+  slug: string
+  fulfilled_orders: number
+  total_orders: number
+}
+export type AdminOrderTopUser = {
+  username: string
+  fulfilled_orders: number
+  total_orders: number
+}
+export type AdminOrderAnalytics = {
+  /** The last 30 days. */
+  daily_totals: AdminOrderPeriodTotals[]
+  /** The last 12 weeks. */
+  weekly_totals: AdminOrderPeriodTotals[]
+  /** The last 12 months. */
+  monthly_totals: AdminOrderMonthTotals[]
+  top_shops: AdminOrderTopShop[]
+  top_users: AdminOrderTopUser[]
+  summary: {
+    /** aUEC of fulfilled orders. */
+    total_value: number
+    completed_orders: number
+    active_orders: number
+    total_orders: number
+  }
+}
 export type IdentitySearchRow = {
   user_id: string
   username: string
@@ -9600,6 +9783,8 @@ export const {
   useSendStillSellingCampaignMutation,
   useStopStillSellingCampaignMutation,
   useGetSellerReachabilityQuery,
+  useListAdminOrdersQuery,
+  useGetAdminOrderAnalyticsQuery,
   useSearchIdentityUsersQuery,
   useGetIdentityUserQuery,
   useReleaseIdentityUsernameMutation,

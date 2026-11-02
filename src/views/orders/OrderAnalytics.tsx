@@ -5,13 +5,13 @@ import { MuiAreaChart, MuiLineChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
-import { OrderAnalytics } from "../../features/orders/domain/types"
+import type { AdminOrderAnalytics } from "../../store/api/v2/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { SHOP_PATHS, USER_PATHS } from "../../routes/paths"
 
 interface OrderAnalyticsProps {
-  analytics: OrderAnalytics
+  analytics: AdminOrderAnalytics
 }
 
 export function OrderAnalyticsCharts({ analytics }: OrderAnalyticsProps) {

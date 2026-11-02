@@ -1,6 +1,7 @@
 {
   "admin": {
     "orderStats": "管理者注文統計",
+    "showTestOrders": "テスト注文を表示",
     "moderation": {
       "button": {
         "handle": "対応"
@@ -2078,6 +2079,7 @@
       "unclaimed": "未担当"
     },
     "orderLabel": "注文",
+    "testChip": "テスト",
     "items": "アイテム",
     "public": "公開",
     "orgOrdersTitle": "組織の注文",
