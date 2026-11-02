@@ -39,7 +39,7 @@ import { useUploadImageMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute";
-import { Alert } from "@mui/material";
+import { Alert, InputAdornment } from "@mui/material";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
 import type {
   CreateListingRequest,
@@ -47,6 +47,7 @@ import type {
   VariantAttributes,
 } from "../../../store/api/v2/market";
 import { HelpLink } from "../../help/components/HelpLink"
+import { HelpTip } from "../../help/components/HelpTip"
 import { withShopContext } from "../../../components/sidebar/shopContextState"
 import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
 import { canEditShopListings } from "../../shops/domain/shopPermissions"
@@ -595,6 +596,16 @@ export function CreateListingV2() {
                 inputProps={{
                   inputMode: "numeric",
                   "aria-label": t("CreateListingV2.quantityAriaLabel", "Enter quantity"),
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <HelpTip
+                        label={t("CreateListingV2.quantity", "Quantity")}
+                        title={t("help.tips.listingQuantity")}
+                      />
+                    </InputAdornment>
+                  ),
                 }}
               />
             </Grid>

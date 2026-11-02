@@ -78,6 +78,7 @@ import { QualityBandSelect } from "../../../components/game-data/QualityBandSele
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { HelpLink } from "../../help/components/HelpLink"
+import { FirstUseHint } from "../../help/components/FirstUseHint"
 import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
 import { canEditShopStockLots } from "../../shops/domain/shopPermissions"
 import { selectOnFocus } from "../../../util/selectOnFocus"
@@ -193,6 +194,12 @@ export function BulkStockManagementV2() {
                 <ShopManageAccessNotice area="stock" />
               </Grid>
             )}
+
+            <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
+              <FirstUseHint hint="stockLots" title={t("hints.stockLots.title")}>
+                {t("hints.stockLots.body")}
+              </FirstUseHint>
+            </Grid>
 
             {/* Mobile bottom sheet */}
             {isMobile && (
@@ -665,7 +672,13 @@ function AllStockLotsGridV2() {
           noRowsOverlay: () => (
             <EmptyState
               title={t("stock.noLots", "No stock lots")}
-              description={t("stock.noLotsDesc", "Add stock lots to manage your inventory.")}
+              description={t("stock.noLotsDesc")}
+              guide="stockLots"
+              action={
+                canEditLots && listings.length > 0
+                  ? { label: t("AllStockLots.addLot", "Add Lot"), onClick: handleAddRow }
+                  : undefined
+              }
               sx={{ minHeight: 200, pb: 4 }}
             />
           ),

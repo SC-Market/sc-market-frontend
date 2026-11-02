@@ -6,6 +6,7 @@ import { FAQQuestion } from "../../components/landing/FAQQuestion"
 import { DISCORD_INVITE } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { HelpLink } from "../../features/help/components/HelpLink"
+import { FirstUseHint } from "../../features/help/components/FirstUseHint"
 
 export function DiscordBotDetails(props: { org?: boolean }) {
   const theme = useTheme<ExtendedTheme>()
@@ -13,6 +14,11 @@ export function DiscordBotDetails(props: { org?: boolean }) {
 
   return (
     <>
+      <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
+        <FirstUseHint hint="discordThreadsAlerts" title={t("hints.discordThreadsAlerts.title")}>
+          {t("hints.discordThreadsAlerts.body")}
+        </FirstUseHint>
+      </Grid>
       <Grid item xs={12} lg={4} md={4}>
         <Typography
           variant={"h3"}

@@ -1974,6 +1974,14 @@
     },
     "tip": {
       "label": "Help: {{label}}"
+    },
+    "tips": {
+      "listingQuantity": "How many you're selling. It becomes the listing's first stock lot. To sell from several lots (other locations or qualities), add them under More options › Stock Lots.",
+      "allocationMode": "How an order takes stock from your lots. Automatic (FIFO): from the listing's listed lots, oldest first. Manual selection: you pick the lots in each order's Stock Allocation tab. None (legacy): orders don't reserve stock.",
+      "discordServerId": "Turn on Developer Mode in Discord (User Settings › Advanced), then right-click the server icon and pick Copy Server ID.",
+      "threadChannelId": "Right-click the channel and pick Copy Channel ID. Fill in both IDs, or leave both empty to use your org's or your own thread channel.",
+      "uexUsername": "Your username on UEXCorp. Up to 100 of its active sell listings that aren't sold out are shown, and nothing is imported until you confirm.",
+      "requireMembership": "Visitors must be members of your org, not just signed in, to use your white-label site. Your org's pages on sc-market.space stay public."
     }
   },
   "image_search": {
@@ -2023,7 +2031,8 @@
     "unlinkError": "Failed to unlink lot",
     "unlisted": "Unlisted",
     "unspecified": "Unspecified",
-    "variant": "Variant"
+    "variant": "Variant",
+    "emptyDescription": "My Stock tracks the items you own, in lots with a quantity and an optional location. Add a lot for anything you have, whether or not you sell it."
   },
   "inviteCodes": {
     "copied": "Copied!",
@@ -2501,12 +2510,12 @@
       "kick_members": "Remove members from the organization",
       "manage_blocklist": "Block and unblock users from interacting with the organization",
       "manage_invites": "Create and manage invite codes and links for the organization",
-      "manage_market": "Create, edit, and remove market listings on behalf of the organization",
+      "manage_market": "Create, edit and remove the organization's listings, and run its shops: their settings, stock lots and orders",
       "manage_orders": "View, accept, reject, and manage all orders for the organization",
       "manage_org_details": "Edit the organization's name, description, avatar, banner and languages, read the audit log, and change white-label site and sidebar settings",
       "manage_recruiting": "Create and manage recruiting posts for the organization",
       "manage_roles": "Create, edit, and delete roles and assign them to members",
-      "manage_stock": "Add, edit, and remove stock lots",
+      "manage_stock": "Add, edit and remove the stock lots of the organization's shops, without editing their listings",
       "manage_theme": "Customize the organization's white-label theme, colors, and branding",
       "manage_webhooks": "Create, edit, and delete Discord and notification webhooks"
     },
@@ -5332,7 +5341,7 @@
     "noAllocations": "No allocated stock",
     "noAllocationsDesc": "Stock will appear here when orders are placed against your listings.",
     "noLots": "No stock lots",
-    "noLotsDesc": "Add stock lots to track your stock.",
+    "noLotsDesc": "Stock lots hold the quantities your listings sell from. Add a lot to start tracking this shop's stock.",
     "order": "Order",
     "quantity": "Quantity",
     "searchLots": "Search lots...",
@@ -8635,5 +8644,35 @@
     "manufacturerCount_other": "{{count}} manufacturers",
     "itemCount_one": "{{count}} item",
     "itemCount_other": "{{count}} items"
+  },
+  "hints": {
+    "stockLots": {
+      "title": "Stock is kept in lots",
+      "body": "A lot is a quantity of one item, with an optional location and quality. Listed lots are for sale; Personal lots are yours but aren't. For a listing with just one lot, change its quantity on the Listings page instead."
+    },
+    "listingQuantity": {
+      "title": "A listing's quantity comes from its stock lots",
+      "body": "The Quantity here is the total of the listing's listed lots, and editing it changes its first listed lot. To keep the same item at several locations or qualities, use the Stock page."
+    },
+    "myStock": {
+      "title": "My Stock is your own lots",
+      "body": "My Stock lists every stock lot you own, across all your shops. Lots you add here start unlisted, so they aren't for sale until they're on a listing."
+    },
+    "shopPermissions": {
+      "title": "Who can work in your org's shops",
+      "body": "Manage Market runs a shop: its settings, listings and stock. Manage Stock only changes stock lots, such as quantities and locations. Manage Orders handles the shop's orders and offers."
+    },
+    "discordThreadsAlerts": {
+      "title": "Order threads or order alerts?",
+      "body": "Run /setup threads in a channel to give every new offer and order its own thread there. Run /setup alerts to post new orders and offers in a channel, with a button to claim them. You can use both."
+    },
+    "uexImport": {
+      "title": "Copy your listings from UEX",
+      "body": "Your active UEX sell listings become active listings in this shop, each with one listed stock lot. Nothing changes on UEX, and importing the same listings twice creates duplicates."
+    },
+    "whiteLabel": {
+      "title": "Your free storefront, and branding",
+      "body": "Every org has a free storefront on SC Market. Once your org is RSI-verified and active, branding unlocks: your own theme and, on request, a yourorg.sc-market.space address."
+    }
   }
 }

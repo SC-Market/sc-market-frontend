@@ -7,6 +7,8 @@ import { EmbedCodeCard } from "../../../features/storefront/components/EmbedCode
 import { OnboardingChecklist } from "../../../features/storefront/components/OnboardingChecklist"
 import { StorefrontDirectoryCard } from "../../../features/storefront/components/StorefrontDirectoryCard"
 import { StorefrontEnquiryCard } from "../../../features/storefront/components/StorefrontEnquiryCard"
+import { FirstUseHint } from "../../../features/help/components/FirstUseHint"
+import { useTranslation } from "react-i18next"
 import {
   useGetOrgStorefrontStatusQuery,
   useSetOrgStorefrontDirectoryMutation,
@@ -39,6 +41,7 @@ function OrgDirectorySetting(props: { spectrumId: string }) {
  * and the embed code.
  */
 export function OrgStorefrontPage() {
+  const { t } = useTranslation()
   const { data } = usePageOrgManage()
   const spectrumId = data?.contractor?.spectrum_id
   if (!spectrumId || !data) return null
@@ -50,6 +53,9 @@ export function OrgStorefrontPage() {
   )
   return (
     <Stack spacing={2}>
+      <FirstUseHint hint="whiteLabel" title={t("hints.whiteLabel.title")}>
+        {t("hints.whiteLabel.body")}
+      </FirstUseHint>
       <OnboardingChecklist spectrumId={spectrumId} />
       <BrandingStatusCard spectrumId={spectrumId} />
       {canManageDetails && (

@@ -49,6 +49,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
 import { WEBHOOK_ACTIONS } from "../domain/webhookEvents"
 import { HelpLink } from "../../help/components/HelpLink"
+import { HelpTip } from "../../help/components/HelpTip"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { FormPaper } from "../../../components/paper/FormPaper"
@@ -451,7 +452,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
         <Grid item xs={12}>
           <Divider sx={{ my: 2 }} />
           <FormControl component="fieldset" disabled={saving}>
-            <FormLabel component="legend">{t("shopsUi.orderSettings.allocationMode")}</FormLabel>
+            <FormLabel component="legend" sx={{ display: "flex", alignItems: "center" }}>
+              {t("shopsUi.orderSettings.allocationMode")}
+              <HelpTip label={t("shopsUi.orderSettings.allocationMode")} title={t("help.tips.allocationMode")} />
+            </FormLabel>
             <RadioGroup value={allocationMode} onChange={(e) => setAllocationMode(e.target.value as typeof allocationMode)}>
               <FormControlLabel value="auto" control={<Radio />} label={t("shopsUi.orderSettings.allocationAuto")} />
               <FormControlLabel value="manual" control={<Radio />} label={t("shopsUi.orderSettings.allocationManual")} />
@@ -1069,6 +1073,13 @@ export function ShopSettings() {
                 placeholder={t("shopsUi.settings.discordIdPlaceholder")}
                 helperText={t("shopsUi.settings.discordServerIdHelper")}
                 error={!!discordError}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <HelpTip label={t("shopsUi.settings.discordServerId")} title={t("help.tips.discordServerId")} />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -1083,6 +1094,13 @@ export function ShopSettings() {
                   discordError ?? t("shopsUi.settings.threadChannelHelper")
                 }
                 error={!!discordError}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <HelpTip label={t("shopsUi.settings.threadChannelId")} title={t("help.tips.threadChannelId")} />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
           </FormPaper>

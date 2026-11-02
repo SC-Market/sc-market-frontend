@@ -2847,12 +2847,12 @@
       "kick_members": "從組織中移除成員",
       "manage_blocklist": "封鎖及解除封鎖與組織互動的使用者",
       "manage_invites": "為組織建立及管理邀請碼與連結",
-      "manage_market": "代表組織建立、編輯及移除市集刊登",
+      "manage_market": "建立、編輯和刪除組織的商品，並管理其商店：設定、庫存批次和訂單",
       "manage_orders": "檢視、接受、拒絕及管理組織的所有訂單",
       "manage_org_details": "編輯組織名稱、描述、頭像、橫幅及語言，查看稽核日誌，並變更白牌網站及側邊欄設定",
       "manage_recruiting": "為組織建立及管理招募貼文",
       "manage_roles": "建立、編輯及刪除角色並指派給成員",
-      "manage_stock": "新增、編輯及移除庫存批次",
+      "manage_stock": "新增、編輯和刪除組織商店的庫存批次，但不能編輯其商品",
       "manage_theme": "自訂組織的白牌主題、色彩及品牌形象",
       "manage_webhooks": "建立、編輯及刪除 Discord 與通知 Webhook"
     }
@@ -3275,6 +3275,14 @@
     },
     "tip": {
       "label": "說明：{{label}}"
+    },
+    "tips": {
+      "listingQuantity": "你要出售的數量。它會成為該商品的第一個庫存批次。若要從多個批次出售（不同地點或品質），請在「更多選項」›「庫存批次」中新增。",
+      "allocationMode": "訂單如何從你的批次中扣取庫存。自動（FIFO）：從商品的已刊登批次中按最早優先扣取。手動選擇：在每個訂單的「庫存分配」分頁中選擇批次。無（舊版）：訂單不預留庫存。",
+      "discordServerId": "在 Discord 中開啟開發者模式（使用者設定 › 進階），然後在伺服器圖示上按右鍵並選擇「複製伺服器 ID」。",
+      "threadChannelId": "在頻道上按右鍵並選擇「複製頻道 ID」。兩個 ID 都要填寫，或都留空以使用你組織或你自己的討論串頻道。",
+      "uexUsername": "你在 UEXCorp 上的使用者名稱。最多顯示 100 個未售罄的有效出售商品，確認之前不會匯入任何內容。",
+      "requireMembership": "訪客必須是你組織的成員（不只是已登入）才能使用你的白標網站。你組織在 sc-market.space 上的頁面仍然公開。"
     }
   },
   "org": {
@@ -4413,7 +4421,8 @@
     "unlinkError": "取消連結批次失敗",
     "unlisted": "未刊登",
     "unspecified": "未指定",
-    "variant": "款式"
+    "variant": "款式",
+    "emptyDescription": "「我的庫存」以批次形式記錄你擁有的物品，包含數量和可選地點。無論是否出售，都可以為你擁有的物品新增批次。"
   },
   "LocationSelector": {
     "createError": "建立地點失敗",
@@ -5370,7 +5379,7 @@
     "noAllocations": "無已分配庫存",
     "noAllocationsDesc": "當有人針對您的刊登下訂時，庫存將顯示於此。",
     "noLots": "無庫存批次",
-    "noLotsDesc": "新增庫存批次以管理您的庫存。",
+    "noLotsDesc": "庫存批次保存你的商品可出售的數量。新增一個批次，開始追蹤本店的庫存。",
     "order": "訂單",
     "quantity": "數量",
     "searchLots": "搜尋批次...",
@@ -8500,5 +8509,35 @@
     "unknown": "未知",
     "manufacturerCount_other": "{{count}} 家製造商",
     "itemCount_other": "{{count}} 件物品"
+  },
+  "hints": {
+    "stockLots": {
+      "title": "庫存按批次管理",
+      "body": "批次是某件物品的一定數量，可選填地點和品質。已刊登的批次可供出售；個人批次歸你所有但不出售。若商品只有一個批次，直接在「商品」頁面修改數量即可。"
+    },
+    "listingQuantity": {
+      "title": "商品數量來自其庫存批次",
+      "body": "這裡的數量是該商品已刊登批次的總和，修改它會改變第一個已刊登批次。若同一物品分佈在多個地點或品質，請使用「庫存」頁面。"
+    },
+    "myStock": {
+      "title": "我的庫存是你自己的批次",
+      "body": "「我的庫存」列出你在所有商店中擁有的每個庫存批次。在這裡新增的批次預設不刊登，加入商品之前不會出售。"
+    },
+    "shopPermissions": {
+      "title": "誰可以管理你組織的商店",
+      "body": "「管理市集」負責整個商店：設定、商品和庫存。「管理庫存」只能修改庫存批次，例如數量和地點。「管理訂單」處理商店的訂單和報價。"
+    },
+    "discordThreadsAlerts": {
+      "title": "訂單討論串還是訂單提醒？",
+      "body": "在頻道中執行 /setup threads，每個新報價和訂單都會在那裡有自己的討論串。執行 /setup alerts，新訂單和報價會發佈到頻道中，並附帶認領按鈕。兩者可以同時使用。"
+    },
+    "uexImport": {
+      "title": "從 UEX 複製你的商品",
+      "body": "你在 UEX 上的有效出售商品會成為本店的有效商品，每個帶一個已刊登庫存批次。UEX 上不會有任何變化，重複匯入相同商品會產生重複項。"
+    },
+    "whiteLabel": {
+      "title": "免費店面與品牌自訂",
+      "body": "每個組織在 SC Market 上都有免費店面。組織通過 RSI 驗證且保持活躍後即可解鎖品牌自訂：自己的主題，以及可申請的 yourorg.sc-market.space 網址。"
+    }
   }
 }

@@ -46,6 +46,8 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { GameItemSearchAutocomplete } from "../../features/market/components/GameItemSearchAutocomplete"
 import { LocationSelector } from "../../features/market/components/stock/LocationSelector"
 import { HelpLink } from "../../features/help/components/HelpLink"
+import { FirstUseHint } from "../../features/help/components/FirstUseHint"
+import { EmptyState } from "../../components/empty-states/EmptyState"
 
 /* ── Confirm delete dialog ── */
 function ConfirmDeleteDialog({ open, onClose, onConfirm, loading }: { open: boolean; onClose: () => void; onConfirm: () => void; loading: boolean }) {
@@ -173,6 +175,11 @@ export default function InventoryPage() {
       {/* minWidth 0: a flex item sizes to its content by default, so the
           wide table used to stretch the card past the page and clip the
           Actions column. The table now scrolls inside the card instead. */}
+      <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
+        <FirstUseHint hint="myStock" title={t("hints.myStock.title")}>
+          {t("hints.myStock.body")}
+        </FirstUseHint>
+      </Grid>
       <Grid item xs={12} sx={{ minWidth: 0 }}>
         <Paper sx={{ p: 2, minWidth: 0 }}>
           {/* Header */}
@@ -209,13 +216,21 @@ export default function InventoryPage() {
 
           {/* Table */}
           {filtered.length === 0 && !isLoading ? (
-            <Box sx={{ textAlign: "center", py: 6 }}>
-              <Typography color="text.secondary">
-                {search
-                  ? t("inventory.noResults", "No lots match your search")
-                  : t("inventory.empty", "No stock yet")}
-              </Typography>
-            </Box>
+            search ? (
+              <Box sx={{ textAlign: "center", py: 6 }}>
+                <Typography color="text.secondary">
+                  {t("inventory.noResults", "No lots match your search")}
+                </Typography>
+              </Box>
+            ) : (
+              <EmptyState
+                title={t("inventory.empty", "No stock yet")}
+                description={t("inventory.emptyDescription")}
+                guide="myStock"
+                action={{ label: t("inventory.addLot", "Add Lot"), onClick: () => setCreateOpen(true) }}
+                sx={{ minHeight: { xs: 240, sm: 300 } }}
+              />
+            )
           ) : (
             <TableContainer sx={{ overflowX: "auto" }}>
             <Table size="small">

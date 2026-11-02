@@ -2959,12 +2959,12 @@
       "kick_members": "Retirer des membres de l'organisation",
       "manage_blocklist": "Bloquer et débloquer des utilisateurs pour les interactions avec l'organisation",
       "manage_invites": "Créer et gérer les codes et liens d'invitation de l'organisation",
-      "manage_market": "Créer, modifier et supprimer des annonces sur le marché au nom de l'organisation",
+      "manage_market": "Créer, modifier et supprimer les annonces de l'organisation, et gérer ses boutiques : paramètres, lots de stock et commandes",
       "manage_orders": "Consulter, accepter, refuser et gérer toutes les commandes de l'organisation",
       "manage_org_details": "Modifier le nom, la description, l'avatar, la bannière et les langues de l'organisation, consulter le journal d'audit et modifier les paramètres du site et de la barre latérale en marque blanche",
       "manage_recruiting": "Créer et gérer les annonces de recrutement de l'organisation",
       "manage_roles": "Créer, modifier et supprimer des rôles et les attribuer aux membres",
-      "manage_stock": "Ajouter, modifier et supprimer des lots de stock",
+      "manage_stock": "Ajouter, modifier et supprimer les lots de stock des boutiques de l'organisation, sans modifier leurs annonces",
       "manage_theme": "Personnaliser le thème en marque blanche, les couleurs et l'image de marque de l'organisation",
       "manage_webhooks": "Créer, modifier et supprimer les webhooks Discord et de notification"
     }
@@ -3393,6 +3393,14 @@
     },
     "tip": {
       "label": "Aide : {{label}}"
+    },
+    "tips": {
+      "listingQuantity": "Combien vous en vendez. Cela devient le premier lot de stock de l'annonce. Pour vendre depuis plusieurs lots (autres emplacements ou qualités), ajoutez-les dans Plus d'options › Lots de stock.",
+      "allocationMode": "Comment une commande prend du stock dans vos lots. Automatique (FIFO) : dans les lots en vente de l'annonce, les plus anciens d'abord. Sélection manuelle : vous choisissez les lots dans l'onglet Allocation de stock de chaque commande. Aucun (ancien mode) : les commandes ne réservent pas de stock.",
+      "discordServerId": "Activez le mode développeur dans Discord (Paramètres utilisateur › Avancés), puis faites un clic droit sur l'icône du serveur et choisissez Copier l'identifiant du serveur.",
+      "threadChannelId": "Faites un clic droit sur le salon et choisissez Copier l'identifiant du salon. Remplissez les deux identifiants, ou laissez-les vides pour utiliser le salon de fils de votre organisation ou le vôtre.",
+      "uexUsername": "Votre nom d'utilisateur sur UEXCorp. Jusqu'à 100 de ses annonces de vente actives non épuisées s'affichent, et rien n'est importé avant votre confirmation.",
+      "requireMembership": "Les visiteurs doivent être membres de votre organisation, pas seulement connectés, pour utiliser votre site en marque blanche. Les pages de votre organisation sur sc-market.space restent publiques."
     }
   },
   "org": {
@@ -4545,7 +4553,8 @@
     "unlinkError": "Échec de la dissociation du lot",
     "unlisted": "Retiré de la vente",
     "unspecified": "Non spécifié",
-    "variant": "Variante"
+    "variant": "Variante",
+    "emptyDescription": "Mon stock suit les articles que vous possédez, en lots avec une quantité et un emplacement facultatif. Ajoutez un lot pour tout ce que vous avez, que vous le vendiez ou non."
   },
   "LocationSelector": {
     "createError": "Échec de la création de l'emplacement",
@@ -5444,7 +5453,7 @@
     "noAllocations": "Aucun stock alloué",
     "noAllocationsDesc": "Le stock apparaîtra ici lorsque des commandes seront passées sur vos annonces.",
     "noLots": "Aucun lot de stock",
-    "noLotsDesc": "Ajoutez des lots de stock pour gérer votre stock.",
+    "noLotsDesc": "Les lots de stock contiennent les quantités que vendent vos annonces. Ajoutez un lot pour commencer à suivre le stock de cette boutique.",
     "order": "Commande",
     "quantity": "Quantité",
     "searchLots": "Rechercher des lots...",
@@ -8770,5 +8779,35 @@
     "itemCount_one": "{{count}} objet",
     "itemCount_many": "{{count}} objets",
     "itemCount_other": "{{count}} objets"
+  },
+  "hints": {
+    "stockLots": {
+      "title": "Le stock est géré en lots",
+      "body": "Un lot est une quantité d'un article, avec un emplacement et une qualité facultatifs. Les lots en vente sont proposés aux acheteurs ; les lots personnels sont à vous mais ne sont pas en vente. Pour une annonce avec un seul lot, changez plutôt sa quantité sur la page Annonces."
+    },
+    "listingQuantity": {
+      "title": "La quantité d'une annonce vient de ses lots de stock",
+      "body": "La quantité affichée ici est le total des lots en vente de l'annonce ; la modifier change son premier lot en vente. Pour un même article à plusieurs emplacements ou qualités, utilisez la page Stock."
+    },
+    "myStock": {
+      "title": "Mon stock, ce sont vos propres lots",
+      "body": "Mon stock liste tous les lots qui vous appartiennent, dans toutes vos boutiques. Les lots ajoutés ici ne sont pas en vente au départ : ils le sont une fois sur une annonce."
+    },
+    "shopPermissions": {
+      "title": "Qui peut travailler dans les boutiques de votre organisation",
+      "body": "Gérer le marché fait tourner une boutique : ses paramètres, ses annonces et son stock. Gérer le stock ne modifie que les lots, comme les quantités et les emplacements. Gérer les commandes traite les commandes et les offres de la boutique."
+    },
+    "discordThreadsAlerts": {
+      "title": "Fils de commande ou alertes de commande ?",
+      "body": "Lancez /setup threads dans un salon pour que chaque nouvelle offre et commande y ait son propre fil. Lancez /setup alerts pour publier les nouvelles commandes et offres dans un salon, avec un bouton pour les prendre en charge. Vous pouvez utiliser les deux."
+    },
+    "uexImport": {
+      "title": "Copiez vos annonces depuis UEX",
+      "body": "Vos annonces de vente actives sur UEX deviennent des annonces actives de cette boutique, chacune avec un lot de stock en vente. Rien ne change sur UEX, et importer deux fois les mêmes annonces crée des doublons."
+    },
+    "whiteLabel": {
+      "title": "Votre vitrine gratuite, et votre image de marque",
+      "body": "Chaque organisation a une vitrine gratuite sur SC Market. Dès que votre organisation est vérifiée sur RSI et active, l'image de marque se débloque : votre propre thème et, sur demande, une adresse yourorg.sc-market.space."
+    }
   }
 }

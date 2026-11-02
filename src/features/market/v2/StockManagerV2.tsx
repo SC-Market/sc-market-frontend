@@ -98,6 +98,7 @@ import { withShopContext } from "../../../components/sidebar/shopContextState"
 import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
 import { ImportFromUexDialog } from "./ImportFromUex"
 import { canEditShopListings } from "../../shops/domain/shopPermissions"
+import { FirstUseHint } from "../../help/components/FirstUseHint"
 import { selectOnFocus } from "../../../util/selectOnFocus"
 
 /* ── Types ── */
@@ -1002,6 +1003,14 @@ export function StockManagerV2() {
             {!canManage && (
               <Grid item xs={12}>
                 <ShopManageAccessNotice />
+              </Grid>
+            )}
+
+            {canManage && (
+              <Grid item xs={12} sx={{ "&:empty": { display: "none" } }}>
+                <FirstUseHint hint="listingQuantity" title={t("hints.listingQuantity.title")}>
+                  {t("hints.listingQuantity.body")}
+                </FirstUseHint>
               </Grid>
             )}
 

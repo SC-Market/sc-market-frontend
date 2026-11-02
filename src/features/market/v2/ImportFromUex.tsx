@@ -18,6 +18,7 @@ import {
   Chip,
   Checkbox,
   FormControlLabel,
+  InputAdornment,
 } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { CloudDownloadRounded, CheckCircleRounded } from "@mui/icons-material"
@@ -27,6 +28,8 @@ import {
   type ImportFromUexApiResponse,
 } from "../../../store/api/v2/market"
 import { listingApiError } from "../domain/listingFormErrors"
+import { FirstUseHint } from "../../help/components/FirstUseHint"
+import { HelpTip } from "../../help/components/HelpTip"
 
 type UexImportPreviewItem = NonNullable<ImportFromUexApiResponse["preview"]>[number]
 
@@ -147,7 +150,10 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
 
   return (
     <Box>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+      <FirstUseHint hint="uexImport" title={t("hints.uexImport.title")} sx={{ mb: 2 }}>
+        {t("hints.uexImport.body")}
+      </FirstUseHint>
+      <Typography variant="body2" color="text.primary" sx={{ mb: 2 }}>
         {t("uexImportUi.intro")}
       </Typography>
 
@@ -157,7 +163,7 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
         </Alert>
       )}
 
-      <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
+      <Box sx={{ display: "flex", gap: 1, mb: 3, flexWrap: "wrap", alignItems: "center" }}>
         <TextField
           label={t("uexImportUi.username")}
           size="small"
@@ -165,7 +171,14 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleFetchPreview()}
           disabled={isLoading}
-          sx={{ flex: 1, maxWidth: 300 }}
+          sx={{ flex: "1 1 200px", maxWidth: 300 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <HelpTip label={t("uexImportUi.username")} title={t("help.tips.uexUsername")} />
+              </InputAdornment>
+            ),
+          }}
         />
         <LoadingButton
           variant="contained"

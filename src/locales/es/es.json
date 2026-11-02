@@ -2959,12 +2959,12 @@
       "kick_members": "Eliminar miembros de la organización",
       "manage_blocklist": "Bloquear y desbloquear usuarios para que interactúen con la organización",
       "manage_invites": "Crear y gestionar códigos y enlaces de invitación para la organización",
-      "manage_market": "Crear, editar y eliminar anuncios de mercado en nombre de la organización",
+      "manage_market": "Crear, editar y eliminar los anuncios de la organización y llevar sus tiendas: configuración, lotes de stock y pedidos",
       "manage_orders": "Ver, aceptar, rechazar y gestionar todos los pedidos de la organización",
       "manage_org_details": "Editar el nombre, la descripción, el avatar, el banner y los idiomas de la organización, leer el registro de auditoría y cambiar los ajustes del sitio y de la barra lateral de marca blanca",
       "manage_recruiting": "Crear y gestionar publicaciones de reclutamiento para la organización",
       "manage_roles": "Crear, editar y eliminar roles y asignarlos a los miembros",
-      "manage_stock": "Añadir, editar y eliminar lotes de inventario",
+      "manage_stock": "Añadir, editar y eliminar los lotes de stock de las tiendas de la organización, sin editar sus anuncios",
       "manage_theme": "Personalizar el tema de marca blanca, los colores y la identidad de la organización",
       "manage_webhooks": "Crear, editar y eliminar webhooks de Discord y de notificaciones"
     }
@@ -3393,6 +3393,14 @@
     },
     "tip": {
       "label": "Ayuda: {{label}}"
+    },
+    "tips": {
+      "listingQuantity": "Cuántos vendes. Se convierte en el primer lote de stock del anuncio. Para vender desde varios lotes (otras ubicaciones o calidades), añádelos en Más opciones › Lotes de stock.",
+      "allocationMode": "Cómo toma un pedido el stock de tus lotes. Automático (FIFO): de los lotes anunciados, primero los más antiguos. Selección manual: eliges los lotes en la pestaña Asignación de stock de cada pedido. Ninguno (heredado): los pedidos no reservan stock.",
+      "discordServerId": "Activa el Modo desarrollador en Discord (Ajustes de usuario › Avanzado), luego haz clic derecho en el icono del servidor y elige Copiar ID del servidor.",
+      "threadChannelId": "Haz clic derecho en el canal y elige Copiar ID del canal. Rellena ambos ID o deja los dos vacíos para usar el canal de hilos de tu organización o el tuyo.",
+      "uexUsername": "Tu nombre de usuario en UEXCorp. Se muestran hasta 100 de sus anuncios de venta activos que no estén agotados, y no se importa nada hasta que confirmes.",
+      "requireMembership": "Los visitantes deben ser miembros de tu organización, no solo haber iniciado sesión, para usar tu sitio de marca blanca. Las páginas de tu organización en sc-market.space siguen siendo públicas."
     }
   },
   "org": {
@@ -4545,7 +4553,8 @@
     "unlinkError": "No se pudo desvincular el lote",
     "unlisted": "No anunciado",
     "unspecified": "Sin especificar",
-    "variant": "Variante"
+    "variant": "Variante",
+    "emptyDescription": "Mi inventario lleva los artículos que tienes, en lotes con una cantidad y una ubicación opcional. Añade un lote para todo lo que tengas, lo vendas o no."
   },
   "LocationSelector": {
     "createError": "No se pudo crear la ubicación",
@@ -5444,7 +5453,7 @@
     "noAllocations": "No hay inventario asignado",
     "noAllocationsDesc": "El inventario aparecerá aquí cuando se realicen pedidos sobre tus anuncios.",
     "noLots": "No hay lotes de inventario",
-    "noLotsDesc": "Añade lotes de inventario para gestionar tus existencias.",
+    "noLotsDesc": "Los lotes de stock guardan las cantidades que venden tus anuncios. Añade un lote para empezar a llevar el stock de esta tienda.",
     "order": "Pedido",
     "quantity": "Cantidad",
     "searchLots": "Buscar lotes...",
@@ -8770,5 +8779,35 @@
     "itemCount_one": "{{count}} objeto",
     "itemCount_many": "{{count}} objetos",
     "itemCount_other": "{{count}} objetos"
+  },
+  "hints": {
+    "stockLots": {
+      "title": "El stock se guarda en lotes",
+      "body": "Un lote es una cantidad de un artículo, con ubicación y calidad opcionales. Los lotes anunciados están a la venta; los personales son tuyos pero no se venden. Si un anuncio tiene un solo lote, cambia su cantidad en la página Anuncios."
+    },
+    "listingQuantity": {
+      "title": "La cantidad de un anuncio sale de sus lotes de stock",
+      "body": "La cantidad de aquí es el total de los lotes anunciados, y al editarla cambias el primero de ellos. Para tener el mismo artículo en varias ubicaciones o calidades, usa la página Inventario."
+    },
+    "myStock": {
+      "title": "Mi inventario son tus propios lotes",
+      "body": "Mi inventario muestra todos los lotes de stock que te pertenecen, en todas tus tiendas. Los lotes que añades aquí empiezan sin anunciar, así que no están a la venta hasta que estén en un anuncio."
+    },
+    "shopPermissions": {
+      "title": "Quién puede trabajar en las tiendas de tu organización",
+      "body": "Gestionar mercado lleva una tienda: su configuración, anuncios y stock. Gestionar existencias solo cambia los lotes de stock, como cantidades y ubicaciones. Gestionar pedidos se ocupa de los pedidos y ofertas de la tienda."
+    },
+    "discordThreadsAlerts": {
+      "title": "¿Hilos de pedidos o alertas de pedidos?",
+      "body": "Ejecuta /setup threads en un canal para que cada nueva oferta y pedido tenga allí su propio hilo. Ejecuta /setup alerts para publicar nuevos pedidos y ofertas en un canal, con un botón para reclamarlos. Puedes usar ambos."
+    },
+    "uexImport": {
+      "title": "Copia tus anuncios desde UEX",
+      "body": "Tus anuncios de venta activos en UEX se convierten en anuncios activos de esta tienda, cada uno con un lote de stock anunciado. En UEX no cambia nada, e importar los mismos anuncios dos veces crea duplicados."
+    },
+    "whiteLabel": {
+      "title": "Tu escaparate gratuito y tu marca",
+      "body": "Toda organización tiene un escaparate gratuito en SC Market. Cuando tu organización está verificada en RSI y activa, se desbloquea la marca: tu propio tema y, si lo pides, una dirección yourorg.sc-market.space."
+    }
   }
 }

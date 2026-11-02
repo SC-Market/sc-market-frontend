@@ -31,6 +31,7 @@ import { WHITE_LABEL_TAB_ICONS as ICON_MAP, DEFAULT_TAB_ICON as DEFAULT_ICON } f
 import type { SidebarConfigItem } from "../../store/api/contractors"
 import { useWhiteLabelSettings, TOGGLEABLE_TABS, isExternal, type CustomTab } from "../../features/contractor/hooks/useWhiteLabelSettings"
 import { useTranslation } from "react-i18next"
+import { HelpTip } from "../../features/help/components/HelpTip"
 
 /** Catalog keys for the standard sidebar tab labels, by tab key. */
 const TAB_LABEL_KEYS: Record<string, string> = {
@@ -138,15 +139,22 @@ export function WhiteLabelSettings() {
         {/* Only an Internal (login required) site can also require membership. */}
         {focusMode === "internal" && (
           <Grid item xs={12}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={requireMembership}
-                  onChange={(e) => setRequireMembership(e.target.checked)}
-                />
-              }
-              label={t("orgAdminUi.whiteLabel.requireMembership")}
-            />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <FormControlLabel
+                sx={{ mr: 0.5 }}
+                control={
+                  <Checkbox
+                    checked={requireMembership}
+                    onChange={(e) => setRequireMembership(e.target.checked)}
+                  />
+                }
+                label={t("orgAdminUi.whiteLabel.requireMembership")}
+              />
+              <HelpTip
+                label={t("orgAdminUi.whiteLabel.requireMembership")}
+                title={t("help.tips.requireMembership")}
+              />
+            </Box>
           </Grid>
         )}
         <Grid item xs={12}>

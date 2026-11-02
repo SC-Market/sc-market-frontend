@@ -2942,12 +2942,12 @@
       "kick_members": "从组织中移除成员",
       "manage_blocklist": "屏蔽和取消屏蔽与组织互动的用户",
       "manage_invites": "为组织创建和管理邀请码及链接",
-      "manage_market": "代表组织创建、编辑和移除市场商品条目",
+      "manage_market": "创建、编辑和删除组织的商品，并管理其商店：设置、库存批次和订单",
       "manage_orders": "查看、接受、拒绝和管理组织的所有订单",
       "manage_org_details": "编辑组织名称、描述、头像、横幅和语言，查看审计日志，并更改白标站点和侧边栏设置",
       "manage_recruiting": "为组织创建和管理招募帖子",
       "manage_roles": "创建、编辑和删除角色并将其分配给成员",
-      "manage_stock": "添加、编辑和移除库存批次",
+      "manage_stock": "添加、编辑和删除组织商店的库存批次，但不能编辑其商品",
       "manage_theme": "自定义组织的白标主题、颜色和品牌形象",
       "manage_webhooks": "创建、编辑和删除 Discord 和通知 Webhook"
     }
@@ -3370,6 +3370,14 @@
     },
     "tip": {
       "label": "帮助：{{label}}"
+    },
+    "tips": {
+      "listingQuantity": "你要出售的数量。它会成为该商品的第一个库存批次。若要从多个批次出售（不同地点或品质），请在“更多选项”›“库存批次”中添加。",
+      "allocationMode": "订单如何从你的批次中扣取库存。自动（FIFO）：从商品的已上架批次中按最早优先扣取。手动选择：在每个订单的“库存分配”标签中选择批次。无（旧版）：订单不预留库存。",
+      "discordServerId": "在 Discord 中开启开发者模式（用户设置 › 高级），然后右键点击服务器图标并选择“复制服务器 ID”。",
+      "threadChannelId": "右键点击频道并选择“复制频道 ID”。两个 ID 都要填写，或都留空以使用你组织或你自己的帖子频道。",
+      "uexUsername": "你在 UEXCorp 上的用户名。最多显示 100 个未售罄的有效出售商品，确认之前不会导入任何内容。",
+      "requireMembership": "访客必须是你组织的成员（不只是已登录）才能使用你的白标网站。你组织在 sc-market.space 上的页面仍然公开。"
     }
   },
   "org": {
@@ -4565,7 +4573,8 @@
     "unlinkError": "取消关联批次失败",
     "unlisted": "未上架",
     "unspecified": "未指定",
-    "variant": "变体"
+    "variant": "变体",
+    "emptyDescription": "“我的库存”以批次形式记录你拥有的物品，包含数量和可选地点。无论是否出售，都可以为你拥有的物品添加批次。"
   },
   "LocationSelector": {
     "createError": "创建位置失败",
@@ -5429,7 +5438,7 @@
     "noAllocations": "没有已分配的库存",
     "noAllocationsDesc": "当有订单针对您的商品条目下单时，库存将显示在此处。",
     "noLots": "没有库存批次",
-    "noLotsDesc": "添加库存批次以管理您的库存。",
+    "noLotsDesc": "库存批次保存你的商品可出售的数量。添加一个批次，开始跟踪本店的库存。",
     "order": "订单",
     "quantity": "数量",
     "searchLots": "搜索批次...",
@@ -8506,5 +8515,35 @@
     "unknown": "未知",
     "manufacturerCount_other": "{{count}} 家制造商",
     "itemCount_other": "{{count}} 件物品"
+  },
+  "hints": {
+    "stockLots": {
+      "title": "库存按批次管理",
+      "body": "批次是某件物品的一定数量，可选填地点和品质。已上架的批次可供出售；个人批次归你所有但不出售。若商品只有一个批次，直接在“商品”页面修改数量即可。"
+    },
+    "listingQuantity": {
+      "title": "商品数量来自其库存批次",
+      "body": "这里的数量是该商品已上架批次的总和，修改它会改变第一个已上架批次。若同一物品分布在多个地点或品质，请使用“库存”页面。"
+    },
+    "myStock": {
+      "title": "我的库存是你自己的批次",
+      "body": "“我的库存”列出你在所有商店中拥有的每个库存批次。在这里添加的批次默认不上架，加入商品之前不会出售。"
+    },
+    "shopPermissions": {
+      "title": "谁可以管理你组织的商店",
+      "body": "“管理市场”负责整个商店：设置、商品和库存。“管理库存”只能修改库存批次，例如数量和地点。“管理订单”处理商店的订单和报价。"
+    },
+    "discordThreadsAlerts": {
+      "title": "订单帖子还是订单提醒？",
+      "body": "在频道中运行 /setup threads，每个新报价和订单都会在那里有自己的帖子。运行 /setup alerts，新订单和报价会发布到频道中，并附带认领按钮。两者可以同时使用。"
+    },
+    "uexImport": {
+      "title": "从 UEX 复制你的商品",
+      "body": "你在 UEX 上的有效出售商品会成为本店的有效商品，每个带一个已上架库存批次。UEX 上不会有任何变化，重复导入相同商品会产生重复项。"
+    },
+    "whiteLabel": {
+      "title": "免费店面与品牌定制",
+      "body": "每个组织在 SC Market 上都有免费店面。组织通过 RSI 验证且保持活跃后即可解锁品牌定制：自己的主题，以及可申请的 yourorg.sc-market.space 地址。"
+    }
   }
 }
