@@ -141,7 +141,7 @@ export function AdminAlertsView() {
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
-          label={params.value ? "Active" : "Inactive"}
+          label={params.value ? t("admin.alerts.active") : t("adminUi.alerts.inactive")}
           color={params.value ? "success" : "default"}
           size="small"
         />
@@ -159,7 +159,7 @@ export function AdminAlertsView() {
             size="small"
             onClick={() => handleOpenEditModal(params.row)}
             color="primary"
-            aria-label={t("admin.common.edit", "Edit")}
+            aria-label={t("accessibility.edit")}
           >
             <AdminIcons.Edit />
           </IconButton>
@@ -167,7 +167,7 @@ export function AdminAlertsView() {
             size="small"
             onClick={() => handleOpenDeleteModal(params.row)}
             color="error"
-            aria-label={t("admin.common.delete", "Delete")}
+            aria-label={t("accessibility.delete")}
           >
             <AdminIcons.Delete />
           </IconButton>
@@ -208,12 +208,12 @@ export function AdminAlertsView() {
               label={t("admin.alerts.targetTypeFilter", "Target Type")}
               onChange={(e) => setTargetTypeFilter(e.target.value as typeof targetTypeFilter)}
             >
-              <MenuItem value="">All Types</MenuItem>
-              <MenuItem value="all_users">All Users</MenuItem>
-              <MenuItem value="org_members">Org Members</MenuItem>
-              <MenuItem value="org_owners">Org Owners</MenuItem>
-              <MenuItem value="admins_only">Admins Only</MenuItem>
-              <MenuItem value="specific_org">Specific Org</MenuItem>
+              <MenuItem value="">{t("adminUi.alerts.allTypes")}</MenuItem>
+              <MenuItem value="all_users">{t("adminUi.alerts.targetTypes.allUsers")}</MenuItem>
+              <MenuItem value="org_members">{t("adminUi.alerts.targetTypes.orgMembers")}</MenuItem>
+              <MenuItem value="org_owners">{t("adminUi.alerts.targetTypes.orgOwners")}</MenuItem>
+              <MenuItem value="admins_only">{t("adminUi.alerts.targetTypes.adminsOnly")}</MenuItem>
+              <MenuItem value="specific_org">{t("adminUi.alerts.targetTypes.specificOrg")}</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -231,9 +231,9 @@ export function AdminAlertsView() {
                 )
               }
             >
-              <MenuItem value="">All Statuses</MenuItem>
-              <MenuItem value="true">Active</MenuItem>
-              <MenuItem value="false">Inactive</MenuItem>
+              <MenuItem value="">{t("adminUi.common.allStatuses")}</MenuItem>
+              <MenuItem value="true">{t("admin.alerts.active")}</MenuItem>
+              <MenuItem value="false">{t("adminUi.alerts.inactive")}</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -274,7 +274,7 @@ export function AdminAlertsView() {
       {error && (
         <Grid item xs={12}>
           <Typography variant="body1" color="error">
-            Error loading alerts: {JSON.stringify(error)}
+            {t("adminUi.alerts.loadError", { error: JSON.stringify(error) })}
           </Typography>
         </Grid>
       )}
@@ -324,11 +324,11 @@ export function AdminAlertsView() {
                 label={t("admin.alerts.targetType", "Target Type")}
                 onChange={(e) => handleTargetTypeChange(e.target.value)}
               >
-                <MenuItem value="all_users">All Users</MenuItem>
-                <MenuItem value="org_members">Org Members</MenuItem>
-                <MenuItem value="org_owners">Org Owners</MenuItem>
-                <MenuItem value="admins_only">Admins Only</MenuItem>
-                <MenuItem value="specific_org">Specific Org</MenuItem>
+                <MenuItem value="all_users">{t("adminUi.alerts.targetTypes.allUsers")}</MenuItem>
+                <MenuItem value="org_members">{t("adminUi.alerts.targetTypes.orgMembers")}</MenuItem>
+                <MenuItem value="org_owners">{t("adminUi.alerts.targetTypes.orgOwners")}</MenuItem>
+                <MenuItem value="admins_only">{t("adminUi.alerts.targetTypes.adminsOnly")}</MenuItem>
+                <MenuItem value="specific_org">{t("adminUi.alerts.targetTypes.specificOrg")}</MenuItem>
               </Select>
             </FormControl>
             {formData.target_type === "specific_org" && (
@@ -409,7 +409,7 @@ export function AdminAlertsView() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModals}>Cancel</Button>
+          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
           <Button
             onClick={() => handleCreateAlert()}
             variant="contained"
@@ -498,11 +498,11 @@ export function AdminAlertsView() {
                 label={t("admin.alerts.targetType", "Target Type")}
                 onChange={(e) => handleTargetTypeChange(e.target.value)}
               >
-                <MenuItem value="all_users">All Users</MenuItem>
-                <MenuItem value="org_members">Org Members</MenuItem>
-                <MenuItem value="org_owners">Org Owners</MenuItem>
-                <MenuItem value="admins_only">Admins Only</MenuItem>
-                <MenuItem value="specific_org">Specific Org</MenuItem>
+                <MenuItem value="all_users">{t("adminUi.alerts.targetTypes.allUsers")}</MenuItem>
+                <MenuItem value="org_members">{t("adminUi.alerts.targetTypes.orgMembers")}</MenuItem>
+                <MenuItem value="org_owners">{t("adminUi.alerts.targetTypes.orgOwners")}</MenuItem>
+                <MenuItem value="admins_only">{t("adminUi.alerts.targetTypes.adminsOnly")}</MenuItem>
+                <MenuItem value="specific_org">{t("adminUi.alerts.targetTypes.specificOrg")}</MenuItem>
               </Select>
             </FormControl>
             {formData.target_type === "specific_org" && (
@@ -609,7 +609,7 @@ export function AdminAlertsView() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModals}>Cancel</Button>
+          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
           <Button
             onClick={handleUpdateAlert}
             variant="contained"
@@ -660,7 +660,7 @@ export function AdminAlertsView() {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModals}>Cancel</Button>
+          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
           <Button
             onClick={handleDeleteAlert}
             variant="contained"

@@ -93,7 +93,7 @@ export function AdminModerationView() {
   const columns: GridColDef[] = [
     {
       field: "reporter",
-      headerName: "Reporter",
+      headerName: t("adminUi.moderation.reporter"),
       width: 200,
       display: "flex",
       flex: 1,
@@ -103,7 +103,7 @@ export function AdminModerationView() {
     },
     {
       field: "reported_url",
-      headerName: "Reported URL",
+      headerName: t("adminUi.moderation.reportedUrl"),
       width: 300,
       display: "flex",
       flex: 1,
@@ -116,13 +116,13 @@ export function AdminModerationView() {
             if (path) window.open(path, "_blank", "noopener")
           }}
         >
-          Link
+          {t("admin.alerts.field.link")}
         </Button>
       ),
     },
     {
       field: "report_reason",
-      headerName: "Reason",
+      headerName: t("adminUi.moderation.reason"),
       width: 150,
       display: "flex",
       flex: 1,
@@ -137,7 +137,7 @@ export function AdminModerationView() {
     },
     {
       field: "created_at",
-      headerName: "Created",
+      headerName: t("admin.alerts.createdAt"),
       width: 120,
       display: "flex",
       flex: 1,
@@ -149,7 +149,7 @@ export function AdminModerationView() {
     },
     {
       field: "status",
-      headerName: "Status",
+      headerName: t("admin.moderation.field.status"),
       width: 120,
       display: "flex",
       flex: 1,
@@ -218,11 +218,11 @@ export function AdminModerationView() {
               label={t("admin.moderation.filter.status", "Status Filter")}
               onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
             >
-              <MenuItem value="">All Statuses</MenuItem>
-              <MenuItem value="pending">Pending</MenuItem>
-              <MenuItem value="in_progress">In Progress</MenuItem>
-              <MenuItem value="resolved">Resolved</MenuItem>
-              <MenuItem value="dismissed">Dismissed</MenuItem>
+              <MenuItem value="">{t("adminUi.common.allStatuses")}</MenuItem>
+              <MenuItem value="pending">{t("adminUi.moderation.statuses.pending")}</MenuItem>
+              <MenuItem value="in_progress">{t("adminUi.moderation.statuses.inProgress")}</MenuItem>
+              <MenuItem value="resolved">{t("adminUi.moderation.statuses.resolved")}</MenuItem>
+              <MenuItem value="dismissed">{t("adminUi.moderation.statuses.dismissed")}</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -253,7 +253,7 @@ export function AdminModerationView() {
       {error && (
         <Grid item xs={12}>
           <Typography variant="body1" color="error">
-            Error loading moderation reports: {JSON.stringify(error)}
+            {t("adminUi.moderation.loadError", { error: JSON.stringify(error) })}
           </Typography>
         </Grid>
       )}
@@ -279,10 +279,10 @@ export function AdminModerationView() {
                 label={t("admin.moderation.field.status", "Status")}
                 onChange={(e) => setUpdateStatus(e.target.value)}
               >
-                <MenuItem value="pending">Pending</MenuItem>
-                <MenuItem value="in_progress">In Progress</MenuItem>
-                <MenuItem value="resolved">Resolved</MenuItem>
-                <MenuItem value="dismissed">Dismissed</MenuItem>
+                <MenuItem value="pending">{t("adminUi.moderation.statuses.pending")}</MenuItem>
+                <MenuItem value="in_progress">{t("adminUi.moderation.statuses.inProgress")}</MenuItem>
+                <MenuItem value="resolved">{t("adminUi.moderation.statuses.resolved")}</MenuItem>
+                <MenuItem value="dismissed">{t("adminUi.moderation.statuses.dismissed")}</MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -305,7 +305,7 @@ export function AdminModerationView() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal}>Cancel</Button>
+          <Button onClick={handleCloseModal}>{t("common.cancel")}</Button>
           <Button
             onClick={handleUpdateReport}
             variant="contained"

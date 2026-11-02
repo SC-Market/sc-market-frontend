@@ -7224,5 +7224,184 @@
       "wasQuantity": "（原为 {{quantity}}）",
       "newBadge": "新！"
     }
+  },
+  "adminUi": {
+    "common": {
+      "allStatuses": "所有状态"
+    },
+    "featureFlags": {
+      "configSaved": "配置已保存",
+      "failed": "失败",
+      "overrideSet": "已为 {{username}} 设置覆盖",
+      "userNotFound": "未找到用户",
+      "overrideRemoved": "覆盖已移除",
+      "configurationTitle": "{{label}} 配置",
+      "enabled": "已启用",
+      "disabled": "已禁用",
+      "enabledHint": "关闭时，所有用户都使用旧版体验",
+      "default": "默认",
+      "v1Off": "V1（关）",
+      "v2On": "V2（开）",
+      "rollout": "发布比例：{{percent}}%",
+      "notInEffect": "未生效——“已启用”处于关闭状态，因此无论此比例如何，所有用户都使用旧版体验。",
+      "turnOnEnabled": "打开“已启用”",
+      "rolloutPercentage": "发布比例",
+      "saving": "保存中...",
+      "perUserOverrides": "按用户覆盖",
+      "addOverride": "添加覆盖",
+      "username": "用户名",
+      "updated": "更新时间",
+      "on": "开",
+      "off": "关",
+      "noOverrides": "此开关没有覆盖设置。所有用户都遵循全局配置。",
+      "removeOverrideFor": "移除 {{username}} 的覆盖",
+      "addOverrideFor": "为 {{label}} 添加覆盖",
+      "searchByUsername": "按用户名搜索",
+      "enabledForUser": "对此用户启用",
+      "add": "添加",
+      "searchFlags": "搜索开关...",
+      "retry": "重试",
+      "loadFailed": "无法加载功能开关。",
+      "flagSummary_other": "默认：{{version}} · 发布比例：{{percent}}% · {{count}} 个覆盖",
+      "rolloutNotInEffect": "发布比例未生效——“已启用”处于关闭状态",
+      "noMatch": "没有符合搜索条件的开关",
+      "noneConfigured": "尚未配置功能开关"
+    },
+    "alerts": {
+      "allTypes": "所有类型",
+      "inactive": "停用",
+      "loadError": "加载提醒时出错：{{error}}",
+      "targetTypes": {
+        "allUsers": "所有用户",
+        "orgMembers": "组织成员",
+        "orgOwners": "组织所有者",
+        "adminsOnly": "仅管理员",
+        "specificOrg": "指定组织"
+      }
+    },
+    "gameDataImport": {
+      "summary": {
+        "matched_other": "已匹配 {{count}} 个物品",
+        "inserted_other": "已添加 {{count}} 个物品",
+        "missionsInserted_other": "{{count}} 个任务",
+        "missionsUpdated_other": "已更新 {{count}} 个任务",
+        "blueprintsInserted_other": "{{count}} 个蓝图",
+        "shopsImported_other": "已刷新 {{count}} 个店铺"
+      },
+      "noChanges": "无变化",
+      "warnings_other": "{{count}} 条警告",
+      "noDetails": "暂无详细信息",
+      "importSuccess": "游戏数据导入成功",
+      "importFailed": "导入失败",
+      "importStarted": "已开始导入",
+      "uploadFailed": "上传失败",
+      "intro": "上传从 Star Citizen 的 Data.p4k 中提取的 <code>game-data.zip</code>。",
+      "shopsNotice": "游戏内商店（维基物品页面上的“购买地点”）不会被导入：游戏文件中的商店数据已过时，不包含当前的商店库存和价格。ZIP 中的 <code>shop-inventories.json</code> 会被忽略（任务会注明）。",
+      "dropHint": "将 game-data.zip 拖放到此处，或点击浏览",
+      "channel": "渠道",
+      "gameVersion": "游戏版本",
+      "gameVersionPlaceholder": "例如 4.7.1",
+      "uploading": "上传中...",
+      "importRunning": "正在导入...",
+      "importButton": "导入游戏数据",
+      "history": "导入历史",
+      "started": "开始时间",
+      "duration": "耗时",
+      "summaryColumn": "摘要"
+    },
+    "orderStats": {
+      "orderCountDaily": "订单数（每日）",
+      "orderCountWeekly": "订单数（每周）",
+      "orderCountMonthly": "订单数（每月）",
+      "topShops": "热门店铺",
+      "topUsers": "热门用户",
+      "topShopsOffers": "热门店铺（报价）",
+      "topUsersOffers": "热门用户（报价）",
+      "offerSummary": "报价摘要"
+    },
+    "attributes": {
+      "loadError": "加载属性定义时出错：{{error}}",
+      "allowedValuesPlaceholder": "军用, 隐身, 工业, 民用",
+      "cascadeDelete": "同时删除游戏物品属性",
+      "types": {
+        "select": "单选（单个值）",
+        "multiselect": "多选（多个值）",
+        "range": "范围（最小/最大）",
+        "text": "文本（自由输入）"
+      }
+    },
+    "moderation": {
+      "reporter": "举报人",
+      "reportedUrl": "被举报的 URL",
+      "reason": "原因",
+      "loadError": "加载审核举报时出错：{{error}}",
+      "statuses": {
+        "pending": "待处理",
+        "inProgress": "处理中",
+        "resolved": "已解决",
+        "dismissed": "已驳回"
+      }
+    },
+    "allListings": {
+      "quantity": "数量：{{quantity}}",
+      "quantityWithVariants_other": "数量：{{quantity}} · {{count}} 个变体",
+      "tabs": {
+        "inactive": "停用",
+        "expired": "已过期",
+        "sold": "已售出",
+        "cancelled": "已取消"
+      },
+      "empty": {
+        "active": "没有启用的商品",
+        "inactive": "没有停用的商品",
+        "expired": "没有已过期的商品",
+        "sold": "没有已售出的商品",
+        "cancelled": "没有已取消的商品"
+      }
+    },
+    "expireListings": {
+      "expired_other": "已使 {{count}} 个商品过期",
+      "failed": "无法使商品过期",
+      "button": "使所有商品过期",
+      "dialogTitle": "使所有启用的商品过期？",
+      "confirmBody_other": "这会将 <strong>{{count}} 个有效商品</strong>设为已过期（暂停）。每位卖家可在店铺的“商品”页面重新启用仍在出售的商品。",
+      "confirmBodyLoading": "这会将 <strong>... 个有效商品</strong>设为已过期（暂停）。每位卖家可在店铺的“商品”页面重新启用仍在出售的商品。",
+      "note": "通常在游戏重置后执行。不会删除任何内容：卖家可以随时重新启用其商品。",
+      "confirmButton_other": "使 {{count}} 个商品过期",
+      "confirmButtonNoCount": "使商品过期"
+    },
+    "wipeListings": {
+      "title": "重置商品",
+      "description": "在游戏重置后将所有有效商品设为已过期。卖家会看到它们处于暂停状态，并可在店铺的“商品”页面恢复仍在出售的商品（点击续期按钮，或选中后点击“启用”）。不会删除任何内容。"
+    },
+    "importMonitoring": {
+      "started": "已开始 {{source}} 导入",
+      "startFailed": "无法开始导入",
+      "startImport": "开始导入",
+      "running": "运行中…",
+      "oneAtATime": "每个来源同一时间只能运行一个导入。状态会自动更新。",
+      "jobHistory": "任务历史",
+      "noJobs": "尚未运行任何导入任务。请在上方开始导入。",
+      "sources": {
+        "cstoneItems": "CStone 物品",
+        "uexItems": "UEX 物品",
+        "uexAttributes": "UEX 属性"
+      }
+    },
+    "gameItemAttributes": {
+      "loadError": "加载属性时出错：{{error}}",
+      "typeLabel": "类型：",
+      "applicableTo": "适用于：",
+      "noTypes": "无类型",
+      "importSuccess_other": "成功导入 {{count}} 个属性",
+      "importPartial_other": "导入完成但有错误。已导入 {{count}} 个属性",
+      "uuidPlaceholder": "输入游戏物品 UUID"
+    },
+    "premium": {
+      "revoked": "已撤销"
+    },
+    "notificationTest": {
+      "noneIndividual": "无（个人）"
+    }
   }
 }

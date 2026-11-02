@@ -60,8 +60,8 @@ export function AdminAttributeDefinitionsView() {
     { field: "actions", headerName: t("admin.attributes.actions", "Actions"), width: 150, display: "flex" as const, flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Box>
-          <IconButton size="small" onClick={() => handleOpenEditModal(params.row)} color="primary" aria-label={t("admin.common.edit", "Edit")}><AdminIcons.Edit /></IconButton>
-          <IconButton size="small" onClick={() => handleOpenDeleteModal(params.row)} color="error" aria-label={t("admin.common.delete", "Delete")}><AdminIcons.Delete /></IconButton>
+          <IconButton size="small" onClick={() => handleOpenEditModal(params.row)} color="primary" aria-label={t("accessibility.edit")}><AdminIcons.Edit /></IconButton>
+          <IconButton size="small" onClick={() => handleOpenDeleteModal(params.row)} color="error" aria-label={t("accessibility.delete")}><AdminIcons.Delete /></IconButton>
         </Box>
       ) },
   ]
@@ -105,7 +105,7 @@ export function AdminAttributeDefinitionsView() {
       {error && (
         <Grid item xs={12}>
           <Typography variant="body1" color="error">
-            Error loading attribute definitions: {JSON.stringify(error)}
+            {t("adminUi.attributes.loadError", { error: JSON.stringify(error) })}
           </Typography>
         </Grid>
       )}
@@ -168,12 +168,12 @@ export function AdminAttributeDefinitionsView() {
                   })
                 }
               >
-                <MenuItem value="select">Select (single value)</MenuItem>
+                <MenuItem value="select">{t("adminUi.attributes.types.select")}</MenuItem>
                 <MenuItem value="multiselect">
-                  Multiselect (multiple values)
+                  {t("adminUi.attributes.types.multiselect")}
                 </MenuItem>
-                <MenuItem value="range">Range (min/max)</MenuItem>
-                <MenuItem value="text">Text (free-form)</MenuItem>
+                <MenuItem value="range">{t("adminUi.attributes.types.range")}</MenuItem>
+                <MenuItem value="text">{t("adminUi.attributes.types.text")}</MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -186,7 +186,7 @@ export function AdminAttributeDefinitionsView() {
                 "admin.attributes.allowedValuesHelp",
                 "Comma-separated values (leave empty for any value)",
               )}
-              placeholder="Military, Stealth, Industrial, Civilian"
+              placeholder={t("adminUi.attributes.allowedValuesPlaceholder")}
             />
             <Autocomplete
               multiple
@@ -255,7 +255,7 @@ export function AdminAttributeDefinitionsView() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModals}>Cancel</Button>
+          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
           <Button
             onClick={handleCreateDefinition}
             variant="contained"
@@ -322,12 +322,12 @@ export function AdminAttributeDefinitionsView() {
                   })
                 }
               >
-                <MenuItem value="select">Select (single value)</MenuItem>
+                <MenuItem value="select">{t("adminUi.attributes.types.select")}</MenuItem>
                 <MenuItem value="multiselect">
-                  Multiselect (multiple values)
+                  {t("adminUi.attributes.types.multiselect")}
                 </MenuItem>
-                <MenuItem value="range">Range (min/max)</MenuItem>
-                <MenuItem value="text">Text (free-form)</MenuItem>
+                <MenuItem value="range">{t("adminUi.attributes.types.range")}</MenuItem>
+                <MenuItem value="text">{t("adminUi.attributes.types.text")}</MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -400,7 +400,7 @@ export function AdminAttributeDefinitionsView() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModals}>Cancel</Button>
+          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
           <Button
             onClick={handleUpdateDefinition}
             variant="contained"
@@ -461,8 +461,8 @@ export function AdminAttributeDefinitionsView() {
                 )}
               </Typography>
               <Select
-                inputProps={{ "aria-label": t("admin.attributes.cascadeDelete", "Also delete game item attributes") }}
-                SelectDisplayProps={{ "aria-label": t("admin.attributes.cascadeDelete", "Also delete game item attributes") }}
+                inputProps={{ "aria-label": t("adminUi.attributes.cascadeDelete") }}
+                SelectDisplayProps={{ "aria-label": t("adminUi.attributes.cascadeDelete") }}
                 value={cascadeDelete ? "yes" : "no"}
                 onChange={(e) => setCascadeDelete(e.target.value === "yes")}
                 size="small"
@@ -478,7 +478,7 @@ export function AdminAttributeDefinitionsView() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModals}>Cancel</Button>
+          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
           <Button
             onClick={handleDeleteDefinition}
             variant="contained"

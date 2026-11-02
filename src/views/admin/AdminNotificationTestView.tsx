@@ -224,7 +224,7 @@ export function AdminNotificationTestView() {
                 )}
               >
                 <MenuItem value="">
-                  <em>None (Individual)</em>
+                  <em>{t("adminUi.notificationTest.noneIndividual")}</em>
                 </MenuItem>
                 {organizationsData?.map((org) => (
                   <MenuItem key={org.contractor_id} value={org.contractor_id}>

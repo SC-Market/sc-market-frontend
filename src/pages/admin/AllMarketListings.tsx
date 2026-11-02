@@ -102,9 +102,14 @@ function AdminListingCard({ listing }: { listing: ListingSearchResult }) {
                   color="text.primary"
                   sx={{ mt: 0.5 }}
                 >
-                  Qty: {listing.quantity_available}
-                  {listing.variant_count > 1 &&
-                    ` · ${listing.variant_count} variants`}
+                  {listing.variant_count > 1
+                    ? t("adminUi.allListings.quantityWithVariants", {
+                        quantity: listing.quantity_available,
+                        count: listing.variant_count,
+                      })
+                    : t("adminUi.allListings.quantity", {
+                        quantity: listing.quantity_available,
+                      })}
                 </Typography>
               </CardContent>
             </Card>
@@ -128,6 +133,7 @@ function ListingsSkeleton() {
 }
 
 function AdminListingsSection({ status }: { status: ListingStatus }) {
+  const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(48)
 
@@ -147,7 +153,7 @@ function AdminListingsSection({ status }: { status: ListingStatus }) {
   if (!data?.listings?.length) {
     return (
       <Typography color="text.secondary" sx={{ py: 4, textAlign: "center" }}>
-        No {status} listings
+        {t(`adminUi.allListings.empty.${status}`)}
       </Typography>
     )
   }
@@ -194,11 +200,11 @@ export function AllMarketListings() {
           onChange={(_, v) => setTab(v)}
           sx={{ mb: 2 }}
         >
-          <Tab label="Active" value="active" />
-          <Tab label="Inactive" value="inactive" />
-          <Tab label="Expired" value="expired" />
-          <Tab label="Sold" value="sold" />
-          <Tab label="Cancelled" value="cancelled" />
+          <Tab label={t("admin.alerts.active")} value="active" />
+          <Tab label={t("adminUi.allListings.tabs.inactive")} value="inactive" />
+          <Tab label={t("adminUi.allListings.tabs.expired")} value="expired" />
+          <Tab label={t("adminUi.allListings.tabs.sold")} value="sold" />
+          <Tab label={t("adminUi.allListings.tabs.cancelled")} value="cancelled" />
         </Tabs>
         <Divider sx={{ mb: 2 }} />
       </Grid>

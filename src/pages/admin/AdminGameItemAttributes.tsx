@@ -39,7 +39,7 @@ export function AdminGameItemAttributes() {
                   handleSearch()
                 }
               }}
-              placeholder="Enter game item UUID"
+              placeholder={t("adminUi.gameItemAttributes.uuidPlaceholder")}
             />
             <Button
               variant="contained"

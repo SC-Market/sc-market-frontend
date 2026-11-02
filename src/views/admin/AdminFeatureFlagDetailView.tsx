@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
   Box,
   Button,
@@ -47,6 +48,7 @@ interface Props {
 }
 
 export function AdminFeatureFlagDetailView({ flagName }: Props) {
+  const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const label = flagName.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
 
@@ -73,10 +75,10 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
       if (localDefault !== null) updates.default_version = localDefault
       if (localRollout !== null) updates.rollout_percentage = localRollout
       await updateConfig({ updateConfigRequest: updates }).unwrap()
-      issueAlert({ message: "Config saved", severity: "success" })
+      issueAlert({ message: t("adminUi.featureFlags.configSaved"), severity: "success" })
       setLocalEnabled(null); setLocalDefault(null); setLocalRollout(null)
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed"
+      const message = err instanceof Error ? err.message : t("adminUi.featureFlags.failed")
       issueAlert({ message, severity: "error" })
     } finally { setSaving(false) }
   }
@@ -97,10 +99,10 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
       await setUserOverride({
         setUserOverrideRequest: { username: newUsername.trim(), flag_name: flagName, enabled: newEnabled },
       }).unwrap()
-      issueAlert({ message: `Override set for ${newUsername}`, severity: "success" })
+      issueAlert({ message: t("adminUi.featureFlags.overrideSet", { username: newUsername }), severity: "success" })
       setAddOpen(false); setNewUsername("")
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "User not found"
+      const message = err instanceof Error ? err.message : t("adminUi.featureFlags.userNotFound")
       issueAlert({ message, severity: "error" })
     }
   }
@@ -108,9 +110,9 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
   const handleRemove = async (username: string) => {
     try {
       await removeUserOverride({ username, flagName }).unwrap()
-      issueAlert({ message: `Override removed`, severity: "success" })
+      issueAlert({ message: t("adminUi.featureFlags.overrideRemoved"), severity: "success" })
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed"
+      const message = err instanceof Error ? err.message : t("adminUi.featureFlags.failed")
       issueAlert({ message, severity: "error" })
     }
   }
@@ -120,33 +122,32 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
       {/* Config */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Typography variant="h6" gutterBottom sx={{ textTransform: "capitalize" }}>{label} Configuration</Typography>
+          <Typography variant="h6" gutterBottom sx={{ textTransform: "capitalize" }}>{t("adminUi.featureFlags.configurationTitle", { label })}</Typography>
           <Grid container spacing={3} alignItems="center">
             <Grid item xs={12} sm={4}>
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Typography>Enabled</Typography>
-                <Switch checked={enabled} onChange={(e) => setLocalEnabled(e.target.checked)} inputProps={{ "aria-label": "Enabled" }} />
+                <Typography>{t("adminUi.featureFlags.enabled")}</Typography>
+                <Switch checked={enabled} onChange={(e) => setLocalEnabled(e.target.checked)} inputProps={{ "aria-label": t("adminUi.featureFlags.enabled") }} />
               </Stack>
               <Typography variant="caption" color="text.secondary">
-                When off, all users get the old experience
+                {t("adminUi.featureFlags.enabledHint")}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={4}>
               <FormControl fullWidth size="small">
-                <InputLabel id="admin-feature-flag-detail-view-default-label">Default</InputLabel>
-                <Select labelId="admin-feature-flag-detail-view-default-label" value={defaultVersion} label="Default" onChange={(e) => setLocalDefault(e.target.value as MarketVersion)}>
-                  <MenuItem value="V1">V1 (Off)</MenuItem>
-                  <MenuItem value="V2">V2 (On)</MenuItem>
+                <InputLabel id="admin-feature-flag-detail-view-default-label">{t("adminUi.featureFlags.default")}</InputLabel>
+                <Select labelId="admin-feature-flag-detail-view-default-label" value={defaultVersion} label={t("adminUi.featureFlags.default")} onChange={(e) => setLocalDefault(e.target.value as MarketVersion)}>
+                  <MenuItem value="V1">{t("adminUi.featureFlags.v1Off")}</MenuItem>
+                  <MenuItem value="V2">{t("adminUi.featureFlags.v2On")}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Typography variant="body2" gutterBottom>Rollout: {rollout}%</Typography>
+              <Typography variant="body2" gutterBottom>{t("adminUi.featureFlags.rollout", { percent: rollout })}</Typography>
               {!enabled && rollout > 0 && (
                 <Stack spacing={0.5} sx={{ mb: 1 }}>
                   <Typography variant="caption" color="warning.main">
-                    Not in effect — Enabled is off, so every user gets the old
-                    experience regardless of this percentage.
+                    {t("adminUi.featureFlags.notInEffect")}
                   </Typography>
                   <Button
                     size="small"
@@ -155,12 +156,12 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
                     sx={{ alignSelf: "flex-start" }}
                     onClick={() => setLocalEnabled(true)}
                   >
-                    Turn on Enabled
+                    {t("adminUi.featureFlags.turnOnEnabled")}
                   </Button>
                 </Stack>
               )}
               <Slider
-                aria-label="Rollout percentage"
+                aria-label={t("adminUi.featureFlags.rolloutPercentage")}
                 value={rollout} onChange={(_, v) => setLocalRollout(v as number)}
                 min={0} max={100} step={5} valueLabelDisplay="auto" size="small"
                 marks={[{ value: 0, label: "0%" }, { value: 50, label: "50%" }, { value: 100, label: "100%" }]}
@@ -169,7 +170,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
             {hasEdits && (
               <Grid item xs={12}>
                 <Button variant="contained" startIcon={<SaveRounded />} onClick={handleSave} disabled={saving}>
-                  {saving ? "Saving..." : "Save"}
+                  {saving ? t("adminUi.featureFlags.saving") : t("common.save")}
                 </Button>
               </Grid>
             )}
@@ -181,9 +182,9 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
 
       {/* Overrides */}
       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-        <Typography variant="h6">Per-User Overrides</Typography>
+        <Typography variant="h6">{t("adminUi.featureFlags.perUserOverrides")}</Typography>
         <Button variant="outlined" startIcon={<PersonAddRounded />} onClick={() => setAddOpen(true)} size="small">
-          Add Override
+          {t("adminUi.featureFlags.addOverride")}
         </Button>
       </Stack>
 
@@ -191,10 +192,10 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Username</TableCell>
-              <TableCell>Enabled</TableCell>
-              <TableCell>Updated</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>{t("adminUi.featureFlags.username")}</TableCell>
+              <TableCell>{t("adminUi.featureFlags.enabled")}</TableCell>
+              <TableCell>{t("adminUi.featureFlags.updated")}</TableCell>
+              <TableCell align="right">{t("admin.alerts.actions")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -202,7 +203,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
               <TableRow>
                 <TableCell colSpan={4} align="center">
                   <Typography color="text.secondary" sx={{ py: 2 }}>
-                    No overrides for this flag. All users follow global config.
+                    {t("adminUi.featureFlags.noOverrides")}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -210,10 +211,10 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
             {overrides.map((o) => (
               <TableRow key={o.user_id}>
                 <TableCell><Typography variant="body2" fontWeight="bold">{o.username}</Typography></TableCell>
-                <TableCell><Chip label={o.enabled ? "ON" : "OFF"} color={o.enabled ? "success" : "default"} size="small" /></TableCell>
+                <TableCell><Chip label={o.enabled ? t("adminUi.featureFlags.on") : t("adminUi.featureFlags.off")} color={o.enabled ? "success" : "default"} size="small" /></TableCell>
                 <TableCell>{new Date(o.updated_at).toLocaleString()}</TableCell>
                 <TableCell align="right">
-                  <IconButton size="small" onClick={() => handleRemove(o.username)} color="error" aria-label={`Remove override for ${o.username}`}>
+                  <IconButton size="small" onClick={() => handleRemove(o.username)} color="error" aria-label={t("adminUi.featureFlags.removeOverrideFor", { username: o.username })}>
                     <DeleteRounded fontSize="small" />
                   </IconButton>
                 </TableCell>
@@ -225,20 +226,20 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
 
       {/* Add dialog */}
       <Dialog open={addOpen} onClose={() => setAddOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>Add Override for {label}</DialogTitle>
+        <DialogTitle>{t("adminUi.featureFlags.addOverrideFor", { label })}</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
-            <UserSearch onUserSelect={(user) => setNewUsername(user.username)} placeholder="Search by username" />
+            <UserSearch onUserSelect={(user) => setNewUsername(user.username)} placeholder={t("adminUi.featureFlags.searchByUsername")} />
             {newUsername && <Chip label={newUsername} onDelete={() => setNewUsername("")} />}
             <Stack direction="row" alignItems="center" spacing={1}>
-              <Typography variant="body2">Enabled</Typography>
-              <Switch checked={newEnabled} onChange={(e) => setNewEnabled(e.target.checked)} inputProps={{ "aria-label": "Enabled for this user" }} />
+              <Typography variant="body2">{t("adminUi.featureFlags.enabled")}</Typography>
+              <Switch checked={newEnabled} onChange={(e) => setNewEnabled(e.target.checked)} inputProps={{ "aria-label": t("adminUi.featureFlags.enabledForUser") }} />
             </Stack>
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setAddOpen(false); setNewUsername("") }}>Cancel</Button>
-          <Button variant="contained" onClick={handleAdd} disabled={!newUsername.trim()}>Add</Button>
+          <Button onClick={() => { setAddOpen(false); setNewUsername("") }}>{t("common.cancel")}</Button>
+          <Button variant="contained" onClick={handleAdd} disabled={!newUsername.trim()}>{t("adminUi.featureFlags.add")}</Button>
         </DialogActions>
       </Dialog>
     </Box>

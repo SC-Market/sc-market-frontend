@@ -7416,5 +7416,212 @@
       "wasQuantity": "(antes {{quantity}})",
       "newBadge": "¡NUEVO!"
     }
+  },
+  "adminUi": {
+    "common": {
+      "allStatuses": "Todos los estados"
+    },
+    "featureFlags": {
+      "configSaved": "Configuración guardada",
+      "failed": "Error",
+      "overrideSet": "Anulación establecida para {{username}}",
+      "userNotFound": "Usuario no encontrado",
+      "overrideRemoved": "Anulación eliminada",
+      "configurationTitle": "Configuración de {{label}}",
+      "enabled": "Activado",
+      "disabled": "Desactivado",
+      "enabledHint": "Si está desactivado, todos los usuarios reciben la experiencia antigua",
+      "default": "Predeterminado",
+      "v1Off": "V1 (desactivado)",
+      "v2On": "V2 (activado)",
+      "rollout": "Despliegue: {{percent}} %",
+      "notInEffect": "Sin efecto: «Activado» está desactivado, así que todos los usuarios reciben la experiencia antigua sin importar este porcentaje.",
+      "turnOnEnabled": "Activar «Activado»",
+      "rolloutPercentage": "Porcentaje de despliegue",
+      "saving": "Guardando...",
+      "perUserOverrides": "Anulaciones por usuario",
+      "addOverride": "Añadir anulación",
+      "username": "Nombre de usuario",
+      "updated": "Actualizado",
+      "on": "SÍ",
+      "off": "NO",
+      "noOverrides": "No hay anulaciones para este indicador. Todos los usuarios siguen la configuración global.",
+      "removeOverrideFor": "Eliminar la anulación de {{username}}",
+      "addOverrideFor": "Añadir anulación para {{label}}",
+      "searchByUsername": "Buscar por nombre de usuario",
+      "enabledForUser": "Activado para este usuario",
+      "add": "Añadir",
+      "searchFlags": "Buscar indicadores...",
+      "retry": "Reintentar",
+      "loadFailed": "No se pudieron cargar los indicadores de funciones.",
+      "flagSummary_one": "Predeterminado: {{version}} · Despliegue: {{percent}} % · {{count}} anulación",
+      "flagSummary_many": "Predeterminado: {{version}} · Despliegue: {{percent}} % · {{count}} anulaciones",
+      "flagSummary_other": "Predeterminado: {{version}} · Despliegue: {{percent}} % · {{count}} anulaciones",
+      "rolloutNotInEffect": "Despliegue sin efecto: «Activado» está desactivado",
+      "noMatch": "Ningún indicador coincide con tu búsqueda",
+      "noneConfigured": "No hay indicadores de funciones configurados"
+    },
+    "alerts": {
+      "allTypes": "Todos los tipos",
+      "inactive": "Inactivo",
+      "loadError": "Error al cargar las alertas: {{error}}",
+      "targetTypes": {
+        "allUsers": "Todos los usuarios",
+        "orgMembers": "Miembros de la organización",
+        "orgOwners": "Propietarios de la organización",
+        "adminsOnly": "Solo administradores",
+        "specificOrg": "Organización específica"
+      }
+    },
+    "gameDataImport": {
+      "summary": {
+        "matched_one": "{{count}} objeto emparejado",
+        "matched_many": "{{count}} objetos emparejados",
+        "matched_other": "{{count}} objetos emparejados",
+        "inserted_one": "{{count}} objeto añadido",
+        "inserted_many": "{{count}} objetos añadidos",
+        "inserted_other": "{{count}} objetos añadidos",
+        "missionsInserted_one": "{{count}} misión",
+        "missionsInserted_many": "{{count}} misiones",
+        "missionsInserted_other": "{{count}} misiones",
+        "missionsUpdated_one": "{{count}} misión actualizada",
+        "missionsUpdated_many": "{{count}} misiones actualizadas",
+        "missionsUpdated_other": "{{count}} misiones actualizadas",
+        "blueprintsInserted_one": "{{count}} plano",
+        "blueprintsInserted_many": "{{count}} planos",
+        "blueprintsInserted_other": "{{count}} planos",
+        "shopsImported_one": "{{count}} tienda actualizada",
+        "shopsImported_many": "{{count}} tiendas actualizadas",
+        "shopsImported_other": "{{count}} tiendas actualizadas"
+      },
+      "noChanges": "Sin cambios",
+      "warnings_one": "{{count}} advertencia",
+      "warnings_many": "{{count}} advertencias",
+      "warnings_other": "{{count}} advertencias",
+      "noDetails": "No hay detalles disponibles",
+      "importSuccess": "Datos del juego importados correctamente",
+      "importFailed": "La importación falló",
+      "importStarted": "Importación iniciada",
+      "uploadFailed": "La subida falló",
+      "intro": "Sube un <code>game-data.zip</code> extraído del Data.p4k de Star Citizen.",
+      "shopsNotice": "Las tiendas del juego («dónde comprar» en las páginas de objetos de la wiki) no se importan: los datos de tiendas de los archivos del juego están desactualizados y no incluyen los inventarios ni los precios actuales. Si el ZIP contiene un <code>shop-inventories.json</code>, se ignora (el trabajo lo indica).",
+      "dropHint": "Suelta aquí game-data.zip o haz clic para buscarlo",
+      "channel": "Canal",
+      "gameVersion": "Versión del juego",
+      "gameVersionPlaceholder": "p. ej., 4.7.1",
+      "uploading": "Subiendo...",
+      "importRunning": "Importación en curso...",
+      "importButton": "Importar datos del juego",
+      "history": "Historial de importaciones",
+      "started": "Iniciado",
+      "duration": "Duración",
+      "summaryColumn": "Resumen"
+    },
+    "orderStats": {
+      "orderCountDaily": "Número de pedidos (diario)",
+      "orderCountWeekly": "Número de pedidos (semanal)",
+      "orderCountMonthly": "Número de pedidos (mensual)",
+      "topShops": "Tiendas principales",
+      "topUsers": "Usuarios principales",
+      "topShopsOffers": "Tiendas principales (ofertas)",
+      "topUsersOffers": "Usuarios principales (ofertas)",
+      "offerSummary": "Resumen de ofertas"
+    },
+    "attributes": {
+      "loadError": "Error al cargar las definiciones de atributos: {{error}}",
+      "allowedValuesPlaceholder": "Militar, Sigilo, Industrial, Civil",
+      "cascadeDelete": "Eliminar también los atributos de objetos del juego",
+      "types": {
+        "select": "Selección (un solo valor)",
+        "multiselect": "Selección múltiple (varios valores)",
+        "range": "Rango (mín./máx.)",
+        "text": "Texto (libre)"
+      }
+    },
+    "moderation": {
+      "reporter": "Denunciante",
+      "reportedUrl": "URL denunciada",
+      "reason": "Motivo",
+      "loadError": "Error al cargar las denuncias de moderación: {{error}}",
+      "statuses": {
+        "pending": "Pendiente",
+        "inProgress": "En curso",
+        "resolved": "Resuelto",
+        "dismissed": "Descartado"
+      }
+    },
+    "allListings": {
+      "quantity": "Cant.: {{quantity}}",
+      "quantityWithVariants_one": "Cant.: {{quantity}} · {{count}} variante",
+      "quantityWithVariants_many": "Cant.: {{quantity}} · {{count}} variantes",
+      "quantityWithVariants_other": "Cant.: {{quantity}} · {{count}} variantes",
+      "tabs": {
+        "inactive": "Inactivos",
+        "expired": "Expirados",
+        "sold": "Vendidos",
+        "cancelled": "Cancelados"
+      },
+      "empty": {
+        "active": "No hay anuncios activos",
+        "inactive": "No hay anuncios inactivos",
+        "expired": "No hay anuncios expirados",
+        "sold": "No hay anuncios vendidos",
+        "cancelled": "No hay anuncios cancelados"
+      }
+    },
+    "expireListings": {
+      "expired_one": "Se expiró {{count}} anuncio",
+      "expired_many": "Se expiraron {{count}} anuncios",
+      "expired_other": "Se expiraron {{count}} anuncios",
+      "failed": "No se pudieron expirar los anuncios",
+      "button": "Expirar todos los anuncios",
+      "dialogTitle": "¿Expirar todos los anuncios activos?",
+      "confirmBody_one": "Esto marcará <strong>{{count}} anuncio activo</strong> como caducado (en pausa). Cada vendedor reactiva los que siga vendiendo desde la página Anuncios de su tienda.",
+      "confirmBody_many": "Esto marcará <strong>{{count}} anuncios activos</strong> como caducados (en pausa). Cada vendedor reactiva los que siga vendiendo desde la página Anuncios de su tienda.",
+      "confirmBody_other": "Esto marcará <strong>{{count}} anuncios activos</strong> como caducados (en pausa). Cada vendedor reactiva los que siga vendiendo desde la página Anuncios de su tienda.",
+      "confirmBodyLoading": "Esto marcará <strong>... anuncios activos</strong> como caducados (en pausa). Cada vendedor reactiva los que siga vendiendo desde la página Anuncios de su tienda.",
+      "note": "Esto se suele hacer tras un wipe del juego. No se elimina nada: los vendedores pueden reactivar sus anuncios en cualquier momento.",
+      "confirmButton_one": "Expirar {{count}} anuncio",
+      "confirmButton_many": "Expirar {{count}} anuncios",
+      "confirmButton_other": "Expirar {{count}} anuncios",
+      "confirmButtonNoCount": "Expirar anuncios"
+    },
+    "wipeListings": {
+      "title": "Wipe de anuncios",
+      "description": "Haz que caduquen todos los anuncios activos tras un wipe del juego. Los vendedores los verán en pausa y podrán recuperar los que sigan vendiendo desde la página Anuncios de su tienda (con el botón de renovar, o seleccionándolos y pulsando Activar). No se elimina nada."
+    },
+    "importMonitoring": {
+      "started": "Importación {{source}} iniciada",
+      "startFailed": "No se pudo iniciar la importación",
+      "startImport": "Iniciar importación",
+      "running": "En curso…",
+      "oneAtATime": "Solo puede ejecutarse una importación a la vez por fuente. El estado se actualiza automáticamente.",
+      "jobHistory": "Historial de trabajos",
+      "noJobs": "Todavía no se ha ejecutado ningún trabajo de importación. Inicia una importación arriba.",
+      "sources": {
+        "cstoneItems": "Objetos de CStone",
+        "uexItems": "Objetos de UEX",
+        "uexAttributes": "Atributos de UEX"
+      }
+    },
+    "gameItemAttributes": {
+      "loadError": "Error al cargar los atributos: {{error}}",
+      "typeLabel": "Tipo:",
+      "applicableTo": "Aplicable a:",
+      "noTypes": "Ningún tipo",
+      "importSuccess_one": "Se importó {{count}} atributo correctamente",
+      "importSuccess_many": "Se importaron {{count}} atributos correctamente",
+      "importSuccess_other": "Se importaron {{count}} atributos correctamente",
+      "importPartial_one": "Importación completada con errores. Se importó {{count}} atributo",
+      "importPartial_many": "Importación completada con errores. Se importaron {{count}} atributos",
+      "importPartial_other": "Importación completada con errores. Se importaron {{count}} atributos",
+      "uuidPlaceholder": "Introduce el UUID del objeto del juego"
+    },
+    "premium": {
+      "revoked": "Revocado"
+    },
+    "notificationTest": {
+      "noneIndividual": "Ninguno (individual)"
+    }
   }
 }

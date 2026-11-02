@@ -7218,5 +7218,184 @@
       "wasQuantity": "（変更前：{{quantity}}）",
       "newBadge": "新規！"
     }
+  },
+  "adminUi": {
+    "common": {
+      "allStatuses": "すべてのステータス"
+    },
+    "featureFlags": {
+      "configSaved": "設定を保存しました",
+      "failed": "失敗しました",
+      "overrideSet": "{{username}} のオーバーライドを設定しました",
+      "userNotFound": "ユーザーが見つかりません",
+      "overrideRemoved": "オーバーライドを削除しました",
+      "configurationTitle": "{{label}} の設定",
+      "enabled": "有効",
+      "disabled": "無効",
+      "enabledHint": "オフの場合、すべてのユーザーに旧バージョンが表示されます",
+      "default": "デフォルト",
+      "v1Off": "V1（オフ）",
+      "v2On": "V2（オン）",
+      "rollout": "ロールアウト：{{percent}}%",
+      "notInEffect": "無効です。「有効」がオフのため、この割合に関係なくすべてのユーザーに旧バージョンが表示されます。",
+      "turnOnEnabled": "「有効」をオンにする",
+      "rolloutPercentage": "ロールアウト率",
+      "saving": "保存中...",
+      "perUserOverrides": "ユーザー別オーバーライド",
+      "addOverride": "オーバーライドを追加",
+      "username": "ユーザー名",
+      "updated": "更新日時",
+      "on": "オン",
+      "off": "オフ",
+      "noOverrides": "このフラグにはオーバーライドがありません。すべてのユーザーがグローバル設定に従います。",
+      "removeOverrideFor": "{{username}} のオーバーライドを削除",
+      "addOverrideFor": "{{label}} のオーバーライドを追加",
+      "searchByUsername": "ユーザー名で検索",
+      "enabledForUser": "このユーザーで有効",
+      "add": "追加",
+      "searchFlags": "フラグを検索...",
+      "retry": "再試行",
+      "loadFailed": "機能フラグを読み込めませんでした。",
+      "flagSummary_other": "デフォルト：{{version}} · ロールアウト：{{percent}}% · オーバーライド {{count}} 件",
+      "rolloutNotInEffect": "ロールアウトは無効です。「有効」がオフになっています",
+      "noMatch": "検索に一致するフラグはありません",
+      "noneConfigured": "機能フラグが設定されていません"
+    },
+    "alerts": {
+      "allTypes": "すべてのタイプ",
+      "inactive": "無効",
+      "loadError": "アラートの読み込み中にエラーが発生しました：{{error}}",
+      "targetTypes": {
+        "allUsers": "全ユーザー",
+        "orgMembers": "組織メンバー",
+        "orgOwners": "組織オーナー",
+        "adminsOnly": "管理者のみ",
+        "specificOrg": "特定の組織"
+      }
+    },
+    "gameDataImport": {
+      "summary": {
+        "matched_other": "{{count}} 件のアイテムを照合",
+        "inserted_other": "{{count}} 件のアイテムを追加",
+        "missionsInserted_other": "ミッション {{count}} 件",
+        "missionsUpdated_other": "{{count}} 件のミッションを更新",
+        "blueprintsInserted_other": "ブループリント {{count}} 件",
+        "shopsImported_other": "{{count}} 件のショップを更新"
+      },
+      "noChanges": "変更なし",
+      "warnings_other": "警告 {{count}} 件",
+      "noDetails": "詳細はありません",
+      "importSuccess": "ゲームデータをインポートしました",
+      "importFailed": "インポートに失敗しました",
+      "importStarted": "インポートを開始しました",
+      "uploadFailed": "アップロードに失敗しました",
+      "intro": "Star Citizen の Data.p4k から抽出した <code>game-data.zip</code> をアップロードしてください。",
+      "shopsNotice": "ゲーム内ショップ（Wiki のアイテムページの「購入場所」）はインポートされません。ゲームファイル内のショップデータは古く、現在のショップ在庫や価格は含まれていないためです。ZIP 内の <code>shop-inventories.json</code> は無視されます（ジョブに記録されます）。",
+      "dropHint": "game-data.zip をここにドロップするか、クリックして選択してください",
+      "channel": "チャンネル",
+      "gameVersion": "ゲームバージョン",
+      "gameVersionPlaceholder": "例：4.7.1",
+      "uploading": "アップロード中...",
+      "importRunning": "インポート実行中...",
+      "importButton": "ゲームデータをインポート",
+      "history": "インポート履歴",
+      "started": "開始日時",
+      "duration": "所要時間",
+      "summaryColumn": "概要"
+    },
+    "orderStats": {
+      "orderCountDaily": "注文数（日別）",
+      "orderCountWeekly": "注文数（週別）",
+      "orderCountMonthly": "注文数（月別）",
+      "topShops": "上位ショップ",
+      "topUsers": "上位ユーザー",
+      "topShopsOffers": "上位ショップ（オファー）",
+      "topUsersOffers": "上位ユーザー（オファー）",
+      "offerSummary": "オファー概要"
+    },
+    "attributes": {
+      "loadError": "属性定義の読み込み中にエラーが発生しました：{{error}}",
+      "allowedValuesPlaceholder": "軍用, ステルス, 産業用, 民間用",
+      "cascadeDelete": "ゲームアイテムの属性も削除する",
+      "types": {
+        "select": "選択（単一の値）",
+        "multiselect": "複数選択（複数の値）",
+        "range": "範囲（最小/最大）",
+        "text": "テキスト（自由入力）"
+      }
+    },
+    "moderation": {
+      "reporter": "報告者",
+      "reportedUrl": "報告された URL",
+      "reason": "理由",
+      "loadError": "モデレーション報告の読み込み中にエラーが発生しました：{{error}}",
+      "statuses": {
+        "pending": "保留中",
+        "inProgress": "対応中",
+        "resolved": "解決済み",
+        "dismissed": "却下"
+      }
+    },
+    "allListings": {
+      "quantity": "数量：{{quantity}}",
+      "quantityWithVariants_other": "数量：{{quantity}} · バリエーション {{count}} 件",
+      "tabs": {
+        "inactive": "無効",
+        "expired": "期限切れ",
+        "sold": "販売済み",
+        "cancelled": "キャンセル済み"
+      },
+      "empty": {
+        "active": "有効な出品はありません",
+        "inactive": "無効な出品はありません",
+        "expired": "期限切れの出品はありません",
+        "sold": "販売済みの出品はありません",
+        "cancelled": "キャンセル済みの出品はありません"
+      }
+    },
+    "expireListings": {
+      "expired_other": "{{count}} 件の出品を期限切れにしました",
+      "failed": "出品を期限切れにできませんでした",
+      "button": "すべての出品を期限切れにする",
+      "dialogTitle": "有効な出品をすべて期限切れにしますか？",
+      "confirmBody_other": "<strong>{{count}} 件の有効な出品</strong>を期限切れ（一時停止）にします。まだ販売している出品は、各出品者がショップの「出品」ページから再有効化します。",
+      "confirmBodyLoading": "<strong>... 件の有効な出品</strong>を期限切れ（一時停止）にします。まだ販売している出品は、各出品者がショップの「出品」ページから再有効化します。",
+      "note": "通常はゲームのワイプ後に実行します。何も削除されません。出品者はいつでも出品を再有効化できます。",
+      "confirmButton_other": "{{count}} 件の出品を期限切れにする",
+      "confirmButtonNoCount": "出品を期限切れにする"
+    },
+    "wipeListings": {
+      "title": "出品のワイプ",
+      "description": "ゲームのワイプ後に、すべての有効な出品を期限切れにします。出品者には一時停止中として表示され、まだ販売している出品はショップの「出品」ページから戻せます（更新ボタン、または選択して「有効化」）。何も削除されません。"
+    },
+    "importMonitoring": {
+      "started": "{{source}} のインポートを開始しました",
+      "startFailed": "インポートを開始できませんでした",
+      "startImport": "インポートを開始",
+      "running": "実行中…",
+      "oneAtATime": "インポートはソースごとに一度に 1 つしか実行できません。ステータスは自動的に更新されます。",
+      "jobHistory": "ジョブ履歴",
+      "noJobs": "まだインポートジョブは実行されていません。上からインポートを開始してください。",
+      "sources": {
+        "cstoneItems": "CStone アイテム",
+        "uexItems": "UEX アイテム",
+        "uexAttributes": "UEX 属性"
+      }
+    },
+    "gameItemAttributes": {
+      "loadError": "属性の読み込み中にエラーが発生しました：{{error}}",
+      "typeLabel": "タイプ：",
+      "applicableTo": "適用対象：",
+      "noTypes": "タイプなし",
+      "importSuccess_other": "{{count}} 件の属性をインポートしました",
+      "importPartial_other": "インポートはエラーありで完了しました。{{count}} 件の属性をインポートしました",
+      "uuidPlaceholder": "ゲームアイテムの UUID を入力"
+    },
+    "premium": {
+      "revoked": "取り消し済み"
+    },
+    "notificationTest": {
+      "noneIndividual": "なし（個人）"
+    }
   }
 }

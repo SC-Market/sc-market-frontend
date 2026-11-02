@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
   Alert,
   Box,
@@ -33,6 +34,7 @@ function FlagRowSkeleton() {
 }
 
 export function AdminFeatureFlagsView() {
+  const { t } = useTranslation()
   const { data: stats, isLoading, isError, refetch } = useGetStatsQuery()
   const [search, setSearch] = useState("")
 
@@ -45,11 +47,11 @@ export function AdminFeatureFlagsView() {
 
   return (
     <Box>
-      <Typography variant="h5" gutterBottom>Feature Flags</Typography>
+      <Typography variant="h5" gutterBottom>{t("admin.featureFlags.title")}</Typography>
       <TextField
         size="small"
         fullWidth
-        placeholder="Search flags..."
+        placeholder={t("adminUi.featureFlags.searchFlags")}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         sx={{ mb: 2 }}
@@ -60,11 +62,11 @@ export function AdminFeatureFlagsView() {
           sx={{ mb: 2 }}
           action={
             <Button color="inherit" size="small" onClick={() => refetch()}>
-              Retry
+              {t("adminUi.featureFlags.retry")}
             </Button>
           }
         >
-          Failed to load feature flags.
+          {t("adminUi.featureFlags.loadFailed")}
         </Alert>
       )}
       <List disablePadding aria-busy={isLoading}>
@@ -89,10 +91,14 @@ export function AdminFeatureFlagsView() {
                 }
                 secondary={
                   <>
-                    {`Default: ${flag.default_version} · Rollout: ${flag.rollout_percentage}% · ${flag.override_count} overrides`}
+                    {t("adminUi.featureFlags.flagSummary", {
+                      version: flag.default_version,
+                      percent: flag.rollout_percentage,
+                      count: flag.override_count,
+                    })}
                     {!flag.enabled && flag.rollout_percentage > 0 && (
                       <Typography variant="caption" color="warning.main" display="block">
-                        Rollout not in effect — Enabled is off
+                        {t("adminUi.featureFlags.rolloutNotInEffect")}
                       </Typography>
                     )}
                   </>
@@ -100,7 +106,7 @@ export function AdminFeatureFlagsView() {
               />
               <Stack direction="row" spacing={1} alignItems="center">
                 <Chip
-                  label={flag.enabled ? "Enabled" : "Disabled"}
+                  label={flag.enabled ? t("adminUi.featureFlags.enabled") : t("adminUi.featureFlags.disabled")}
                   color={flag.enabled ? "success" : "default"}
                   size="small"
                 />
@@ -110,7 +116,7 @@ export function AdminFeatureFlagsView() {
         })}
         {!isLoading && !isError && filtered.length === 0 && (
           <Typography color="text.secondary" sx={{ py: 3, textAlign: "center" }}>
-            {search ? "No flags match your search" : "No feature flags configured"}
+            {search ? t("adminUi.featureFlags.noMatch") : t("adminUi.featureFlags.noneConfigured")}
           </Typography>
         )}
       </List>

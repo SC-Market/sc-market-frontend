@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react"
+import { Trans, useTranslation } from "react-i18next"
 import {
   Typography,
   Button,
@@ -44,6 +45,7 @@ function statusColor(s: GameDataImportJob["status"]): "success" | "error" | "inf
 }
 
 function JobDetailRow({ job }: { job: GameDataImportJob }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
   return (
@@ -70,13 +72,19 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
         <TableCell>
           {job.result?.summary
             ? [
-                job.result.summary.matched && `${job.result.summary.matched} items matched`,
-                job.result.summary.inserted && `${job.result.summary.inserted} items added`,
-                job.result.summary.missionsInserted && `${job.result.summary.missionsInserted} missions`,
-                job.result.summary.missionsUpdated && `${job.result.summary.missionsUpdated} missions updated`,
-                job.result.summary.blueprintsInserted && `${job.result.summary.blueprintsInserted} blueprints`,
-                job.result.summary.shopsImported && `${job.result.summary.shopsImported} shops refreshed`,
-              ].filter(Boolean).join(", ") || "No changes"
+                job.result.summary.matched &&
+                  t("adminUi.gameDataImport.summary.matched", { count: job.result.summary.matched }),
+                job.result.summary.inserted &&
+                  t("adminUi.gameDataImport.summary.inserted", { count: job.result.summary.inserted }),
+                job.result.summary.missionsInserted &&
+                  t("adminUi.gameDataImport.summary.missionsInserted", { count: job.result.summary.missionsInserted }),
+                job.result.summary.missionsUpdated &&
+                  t("adminUi.gameDataImport.summary.missionsUpdated", { count: job.result.summary.missionsUpdated }),
+                job.result.summary.blueprintsInserted &&
+                  t("adminUi.gameDataImport.summary.blueprintsInserted", { count: job.result.summary.blueprintsInserted }),
+                job.result.summary.shopsImported &&
+                  t("adminUi.gameDataImport.summary.shopsImported", { count: job.result.summary.shopsImported }),
+              ].filter(Boolean).join(", ") || t("adminUi.gameDataImport.noChanges")
             : job.error
               ? job.error.slice(0, 60)
               : "—"}
@@ -113,7 +121,7 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
               )}
               {job.result?.errors && job.result.errors.length > 0 && (
                 <Alert severity="warning" sx={{ mt: 1 }}>
-                  {job.result.errors.length} warnings
+                  {t("adminUi.gameDataImport.warnings", { count: job.result.errors.length })}
                   <Box component="ul" sx={{ m: 0, pl: 2, maxHeight: 150, overflow: "auto" }}>
                     {job.result.errors.slice(0, 20).map((e, i) => (
                       <li key={i}><Typography variant="caption">{e}</Typography></li>
@@ -122,7 +130,7 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
                 </Alert>
               )}
               {!job.result?.summary && !job.error && (
-                <Typography variant="body2" color="text.secondary">No details available</Typography>
+                <Typography variant="body2" color="text.secondary">{t("adminUi.gameDataImport.noDetails")}</Typography>
               )}
             </Box>
           </Collapse>
@@ -133,6 +141,7 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
 }
 
 export function AdminGameDataImportView() {
+  const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
   const [gameVersion, setGameVersion] = useState("")
   const [gameChannel, setGameChannel] = useState<"LIVE" | "PTU" | "EPTU">("LIVE")
@@ -157,9 +166,9 @@ export function AdminGameDataImportView() {
       if ((j.status === "completed" || j.status === "failed") && !alertedRef.current.has(j.id)) {
         alertedRef.current.add(j.id)
         if (j.status === "completed") {
-          issueAlert({ message: "Game data imported successfully", severity: "success" })
+          issueAlert({ message: t("adminUi.gameDataImport.importSuccess"), severity: "success" })
         } else {
-          issueAlert({ message: j.error || "Import failed", severity: "error" })
+          issueAlert({ message: j.error || t("adminUi.gameDataImport.importFailed"), severity: "error" })
         }
       }
     }
@@ -180,24 +189,22 @@ export function AdminGameDataImportView() {
     if (!file) return
     try {
       await importGameData({ file, gameChannel, gameVersion: gameVersion || undefined }).unwrap()
-      issueAlert({ message: "Import started", severity: "info" })
+      issueAlert({ message: t("adminUi.gameDataImport.importStarted"), severity: "info" })
       refetch()
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Upload failed"
+      const message = err instanceof Error ? err.message : t("adminUi.gameDataImport.uploadFailed")
       issueAlert({ message, severity: "error" })
     }
   }
 
   return (
     <Box>
-      <HeaderTitle>Game Data Import</HeaderTitle>
+      <HeaderTitle>{t("nav.adminGameData")}</HeaderTitle>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-        Upload a <code>game-data.zip</code> extracted from Star Citizen's Data.p4k.
+        <Trans i18nKey="adminUi.gameDataImport.intro" components={{ code: <code /> }} />
       </Typography>
       <Alert severity="info" sx={{ mb: 3 }}>
-        In-game shops ("where to buy" on wiki item pages) are not imported: the shop data in the game
-        files is out of date, and current shop inventories and prices are not in them. A{" "}
-        <code>shop-inventories.json</code> in the ZIP is ignored (the job notes it).
+        <Trans i18nKey="adminUi.gameDataImport.shopsNotice" components={{ code: <code /> }} />
       </Alert>
 
       {/* Upload area */}
@@ -214,27 +221,31 @@ export function AdminGameDataImportView() {
       >
         <input id="game-data-file-input" type="file" accept=".zip" hidden onChange={handleFileSelect} />
         <CloudUploadRounded sx={{ fontSize: 48, color: "text.secondary", mb: 1 }} />
-        <Typography variant="h6">{file ? file.name : "Drop game-data.zip here or click to browse"}</Typography>
+        <Typography variant="h6">{file ? file.name : t("adminUi.gameDataImport.dropHint")}</Typography>
         {file && <Typography variant="body2" color="text.secondary">{(file.size / 1024).toFixed(0)} KB</Typography>}
       </Paper>
 
       <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
         <FormControl size="small" sx={{ minWidth: 120 }}>
-          <InputLabel id="admin-game-data-import-view-channel-label">Channel</InputLabel>
-          <Select labelId="admin-game-data-import-view-channel-label" value={gameChannel} label="Channel" onChange={(e) => setGameChannel(e.target.value as typeof gameChannel)}>
+          <InputLabel id="admin-game-data-import-view-channel-label">{t("adminUi.gameDataImport.channel")}</InputLabel>
+          <Select labelId="admin-game-data-import-view-channel-label" value={gameChannel} label={t("adminUi.gameDataImport.channel")} onChange={(e) => setGameChannel(e.target.value as typeof gameChannel)}>
             <MenuItem value="LIVE">LIVE</MenuItem>
             <MenuItem value="PTU">PTU</MenuItem>
             <MenuItem value="EPTU">EPTU</MenuItem>
           </Select>
         </FormControl>
-        <TextField size="small" label="Game Version" placeholder="e.g. 4.7.1" value={gameVersion} onChange={(e) => setGameVersion(e.target.value.slice(0, 50))} inputProps={{ maxLength: 50 }} />
+        <TextField size="small" label={t("adminUi.gameDataImport.gameVersion")} placeholder={t("adminUi.gameDataImport.gameVersionPlaceholder")} value={gameVersion} onChange={(e) => setGameVersion(e.target.value.slice(0, 50))} inputProps={{ maxLength: 50 }} />
         <Button
           variant="contained" size="large"
           disabled={!file || uploading || hasRunning}
           onClick={handleUpload}
           startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadRounded />}
         >
-          {uploading ? "Uploading..." : hasRunning ? "Import Running..." : "Import Game Data"}
+          {uploading
+            ? t("adminUi.gameDataImport.uploading")
+            : hasRunning
+              ? t("adminUi.gameDataImport.importRunning")
+              : t("adminUi.gameDataImport.importButton")}
         </Button>
       </Stack>
 
@@ -256,15 +267,15 @@ export function AdminGameDataImportView() {
       {/* Jobs table */}
       {jobs.length > 0 && (
         <Box sx={{ mt: 2 }}>
-          <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>Import History</Typography>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 1 }}>{t("adminUi.gameDataImport.history")}</Typography>
           <Paper>
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Status</TableCell>
-                  <TableCell>Started</TableCell>
-                  <TableCell>Duration</TableCell>
-                  <TableCell>Summary</TableCell>
+                  <TableCell>{t("admin.moderation.field.status")}</TableCell>
+                  <TableCell>{t("adminUi.gameDataImport.started")}</TableCell>
+                  <TableCell>{t("adminUi.gameDataImport.duration")}</TableCell>
+                  <TableCell>{t("adminUi.gameDataImport.summaryColumn")}</TableCell>
                   <TableCell />
                 </TableRow>
               </TableHead>

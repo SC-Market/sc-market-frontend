@@ -115,7 +115,7 @@ export function AdminPremiumManagementView() {
       width: 120,
       renderCell: (params: GridRenderCellParams<PremiumTier>) => (
         <Chip
-          label={params.value ? "Revoked" : "Active"}
+          label={params.value ? t("adminUi.premium.revoked") : t("admin.alerts.active")}
           color={params.value ? "default" : "success"}
           size="small"
         />
@@ -241,7 +241,7 @@ export function AdminPremiumManagementView() {
               label={t("admin.premium.tier", "Tier")}
               onChange={(e) => setSelectedTier(e.target.value)}
             >
-              <MenuItem value="white_label">White Label</MenuItem>
+              <MenuItem value="white_label">{t("org.whiteLabelTab")}</MenuItem>
             </Select>
           </FormControl>
           <TextField

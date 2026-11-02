@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
   Typography,
   Grid,
@@ -20,10 +21,11 @@ import {
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AdminIcons } from "../../components/icons"
 
-const SOURCES: { key: ImportSource; label: string; description: string }[] = [
-  { key: "cstone-items", label: "CStone Items", description: "Import game items from finder.cstone.space" },
-  { key: "uex-items", label: "UEX Items", description: "Import game items from UEXCorp API" },
-  { key: "uex-attributes", label: "UEX Attributes", description: "Import item attributes from UEXCorp API" },
+/** labelKey: i18n key for the button/job label, resolved with t() at render time. */
+const SOURCES: { key: ImportSource; labelKey: string }[] = [
+  { key: "cstone-items", labelKey: "adminUi.importMonitoring.sources.cstoneItems" },
+  { key: "uex-items", labelKey: "adminUi.importMonitoring.sources.uexItems" },
+  { key: "uex-attributes", labelKey: "adminUi.importMonitoring.sources.uexAttributes" },
 ]
 
 function statusColor(status: ImportJob["status"]): "info" | "success" | "error" {
@@ -33,6 +35,8 @@ function statusColor(status: ImportJob["status"]): "info" | "success" | "error" 
 }
 
 function JobCard({ job }: { job: ImportJob }) {
+  const { t } = useTranslation()
+  const source = SOURCES.find((s) => s.key === job.source)
   return (
     <Paper sx={{ p: 2, mb: 2 }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
@@ -44,7 +48,7 @@ function JobCard({ job }: { job: ImportJob }) {
           <AdminIcons.Error color="error" />
         )}
         <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-          {SOURCES.find((s) => s.key === job.source)?.label ?? job.source}
+          {source ? t(source.labelKey) : job.source}
         </Typography>
         <Chip label={job.status} color={statusColor(job.status)} size="small" />
         <Typography variant="caption" color="text.secondary" sx={{ ml: "auto" }}>
@@ -69,6 +73,7 @@ function JobCard({ job }: { job: ImportJob }) {
 }
 
 export function AdminImportMonitoringView() {
+  const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [startImport, { isLoading: starting }] = useStartImportMutation()
 
@@ -96,9 +101,9 @@ export function AdminImportMonitoringView() {
   const handleStart = async (source: ImportSource) => {
     try {
       await startImport({ source }).unwrap()
-      issueAlert({ message: `Started ${source} import`, severity: "info" })
+      issueAlert({ message: t("adminUi.importMonitoring.started", { source }), severity: "info" })
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed to start import"
+      const message = err instanceof Error ? err.message : t("adminUi.importMonitoring.startFailed")
       issueAlert({
         message,
         severity: "error",
@@ -109,13 +114,13 @@ export function AdminImportMonitoringView() {
   return (
     <>
       <Grid item xs={12} sx={{ mb: 2 }}>
-        <HeaderTitle xs={12}>Import Job Monitoring</HeaderTitle>
+        <HeaderTitle xs={12}>{t("admin.importMonitoring.title")}</HeaderTitle>
       </Grid>
 
       <Grid item xs={12}>
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2 }}>
-            Start Import
+            {t("adminUi.importMonitoring.startImport")}
           </Typography>
           <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
             {SOURCES.map((s) => (
@@ -132,24 +137,24 @@ export function AdminImportMonitoringView() {
                 onClick={() => handleStart(s.key)}
                 disabled={starting || !!runningSource}
               >
-                {runningSource === s.key ? "Running…" : s.label}
+                {runningSource === s.key ? t("adminUi.importMonitoring.running") : t(s.labelKey)}
               </Button>
             ))}
           </Box>
           <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
-            Only one import can run at a time per source. Status updates automatically.
+            {t("adminUi.importMonitoring.oneAtATime")}
           </Typography>
         </Paper>
       </Grid>
 
       <Grid item xs={12}>
         <Typography variant="h6" sx={{ mb: 2 }}>
-          Job History
+          {t("adminUi.importMonitoring.jobHistory")}
         </Typography>
         {isLoading && <LinearProgress sx={{ mb: 2 }} />}
         {jobs.length === 0 && !isLoading && (
           <Alert severity="info">
-            No import jobs have been run yet. Start an import above.
+            {t("adminUi.importMonitoring.noJobs")}
           </Alert>
         )}
         {jobs.map((job: ImportJob) => (

@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 import { Grid, Skeleton } from "@mui/material"
 import { Section } from "../../../components/paper/Section"
 
@@ -39,29 +40,31 @@ function SummarySkeleton({ title }: { title: string }) {
 }
 
 export function OrderAnalyticsSkeleton() {
+  const { t } = useTranslation()
   return (
     <>
-      <ChartSkeleton title="Order Count (Daily)" />
-      <ChartSkeleton title="Order Count (Weekly)" />
-      <ChartSkeleton title="Order Count (Monthly)" />
-      <ChartSkeleton title="Average Order Value (Monthly)" />
-      <ListSkeleton title="Top Shops" lg={3} />
-      <ListSkeleton title="Top Users" lg={3} />
-      <SummarySkeleton title="Order Summary" />
+      <ChartSkeleton title={t("adminUi.orderStats.orderCountDaily")} />
+      <ChartSkeleton title={t("adminUi.orderStats.orderCountWeekly")} />
+      <ChartSkeleton title={t("adminUi.orderStats.orderCountMonthly")} />
+      <ChartSkeleton title={t("orderTrend.average_order_value_monthly")} />
+      <ListSkeleton title={t("adminUi.orderStats.topShops")} lg={3} />
+      <ListSkeleton title={t("adminUi.orderStats.topUsers")} lg={3} />
+      <SummarySkeleton title={t("orderSummary.title")} />
     </>
   )
 }
 
 export function OfferAnalyticsSkeleton() {
+  const { t } = useTranslation()
   return (
     <>
-      <ChartSkeleton title="Offer Count (Daily)" />
-      <ChartSkeleton title="Offer Count (Weekly)" />
-      <ChartSkeleton title="Offer Count (Monthly)" />
-      <ChartSkeleton title="Average Accepted Offer Value (Monthly)" />
-      <ListSkeleton title="Top Shops (Offers)" lg={3} />
-      <ListSkeleton title="Top Users (Offers)" lg={3} />
-      <SummarySkeleton title="Offer Summary" />
+      <ChartSkeleton title={t("offerTrend.offer_count_daily")} />
+      <ChartSkeleton title={t("offerTrend.offer_count_weekly")} />
+      <ChartSkeleton title={t("offerTrend.offer_count_monthly")} />
+      <ChartSkeleton title={t("offerTrend.average_accepted_value_monthly")} />
+      <ListSkeleton title={t("adminUi.orderStats.topShopsOffers")} lg={3} />
+      <ListSkeleton title={t("adminUi.orderStats.topUsersOffers")} lg={3} />
+      <SummarySkeleton title={t("adminUi.orderStats.offerSummary")} />
     </>
   )
 }

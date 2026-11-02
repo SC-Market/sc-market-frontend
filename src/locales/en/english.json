@@ -7317,5 +7317,198 @@
       "wasQuantity": "(was {{quantity}})",
       "newBadge": "NEW!"
     }
+  },
+  "adminUi": {
+    "common": {
+      "allStatuses": "All Statuses"
+    },
+    "featureFlags": {
+      "configSaved": "Config saved",
+      "failed": "Failed",
+      "overrideSet": "Override set for {{username}}",
+      "userNotFound": "User not found",
+      "overrideRemoved": "Override removed",
+      "configurationTitle": "{{label}} Configuration",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "enabledHint": "When off, all users get the old experience",
+      "default": "Default",
+      "v1Off": "V1 (Off)",
+      "v2On": "V2 (On)",
+      "rollout": "Rollout: {{percent}}%",
+      "notInEffect": "Not in effect — Enabled is off, so every user gets the old experience regardless of this percentage.",
+      "turnOnEnabled": "Turn on Enabled",
+      "rolloutPercentage": "Rollout percentage",
+      "saving": "Saving...",
+      "perUserOverrides": "Per-User Overrides",
+      "addOverride": "Add Override",
+      "username": "Username",
+      "updated": "Updated",
+      "on": "ON",
+      "off": "OFF",
+      "noOverrides": "No overrides for this flag. All users follow global config.",
+      "removeOverrideFor": "Remove override for {{username}}",
+      "addOverrideFor": "Add Override for {{label}}",
+      "searchByUsername": "Search by username",
+      "enabledForUser": "Enabled for this user",
+      "add": "Add",
+      "searchFlags": "Search flags...",
+      "retry": "Retry",
+      "loadFailed": "Failed to load feature flags.",
+      "flagSummary_one": "Default: {{version}} · Rollout: {{percent}}% · {{count}} override",
+      "flagSummary_other": "Default: {{version}} · Rollout: {{percent}}% · {{count}} overrides",
+      "rolloutNotInEffect": "Rollout not in effect — Enabled is off",
+      "noMatch": "No flags match your search",
+      "noneConfigured": "No feature flags configured"
+    },
+    "alerts": {
+      "allTypes": "All Types",
+      "inactive": "Inactive",
+      "loadError": "Error loading alerts: {{error}}",
+      "targetTypes": {
+        "allUsers": "All Users",
+        "orgMembers": "Org Members",
+        "orgOwners": "Org Owners",
+        "adminsOnly": "Admins Only",
+        "specificOrg": "Specific Org"
+      }
+    },
+    "gameDataImport": {
+      "summary": {
+        "matched_one": "{{count}} item matched",
+        "matched_other": "{{count}} items matched",
+        "inserted_one": "{{count}} item added",
+        "inserted_other": "{{count}} items added",
+        "missionsInserted_one": "{{count}} mission",
+        "missionsInserted_other": "{{count}} missions",
+        "missionsUpdated_one": "{{count}} mission updated",
+        "missionsUpdated_other": "{{count}} missions updated",
+        "blueprintsInserted_one": "{{count}} blueprint",
+        "blueprintsInserted_other": "{{count}} blueprints",
+        "shopsImported_one": "{{count}} shop refreshed",
+        "shopsImported_other": "{{count}} shops refreshed"
+      },
+      "noChanges": "No changes",
+      "warnings_one": "{{count}} warning",
+      "warnings_other": "{{count}} warnings",
+      "noDetails": "No details available",
+      "importSuccess": "Game data imported successfully",
+      "importFailed": "Import failed",
+      "importStarted": "Import started",
+      "uploadFailed": "Upload failed",
+      "intro": "Upload a <code>game-data.zip</code> extracted from Star Citizen's Data.p4k.",
+      "shopsNotice": "In-game shops (\"where to buy\" on wiki item pages) are not imported: the shop data in the game files is out of date, and current shop inventories and prices are not in them. A <code>shop-inventories.json</code> in the ZIP is ignored (the job notes it).",
+      "dropHint": "Drop game-data.zip here or click to browse",
+      "channel": "Channel",
+      "gameVersion": "Game Version",
+      "gameVersionPlaceholder": "e.g. 4.7.1",
+      "uploading": "Uploading...",
+      "importRunning": "Import Running...",
+      "importButton": "Import Game Data",
+      "history": "Import History",
+      "started": "Started",
+      "duration": "Duration",
+      "summaryColumn": "Summary"
+    },
+    "orderStats": {
+      "orderCountDaily": "Order Count (Daily)",
+      "orderCountWeekly": "Order Count (Weekly)",
+      "orderCountMonthly": "Order Count (Monthly)",
+      "topShops": "Top Shops",
+      "topUsers": "Top Users",
+      "topShopsOffers": "Top Shops (Offers)",
+      "topUsersOffers": "Top Users (Offers)",
+      "offerSummary": "Offer Summary"
+    },
+    "attributes": {
+      "loadError": "Error loading attribute definitions: {{error}}",
+      "allowedValuesPlaceholder": "Military, Stealth, Industrial, Civilian",
+      "cascadeDelete": "Also delete game item attributes",
+      "types": {
+        "select": "Select (single value)",
+        "multiselect": "Multiselect (multiple values)",
+        "range": "Range (min/max)",
+        "text": "Text (free-form)"
+      }
+    },
+    "moderation": {
+      "reporter": "Reporter",
+      "reportedUrl": "Reported URL",
+      "reason": "Reason",
+      "loadError": "Error loading moderation reports: {{error}}",
+      "statuses": {
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "resolved": "Resolved",
+        "dismissed": "Dismissed"
+      }
+    },
+    "allListings": {
+      "quantity": "Qty: {{quantity}}",
+      "quantityWithVariants_one": "Qty: {{quantity}} · {{count}} variant",
+      "quantityWithVariants_other": "Qty: {{quantity}} · {{count}} variants",
+      "tabs": {
+        "inactive": "Inactive",
+        "expired": "Expired",
+        "sold": "Sold",
+        "cancelled": "Cancelled"
+      },
+      "empty": {
+        "active": "No active listings",
+        "inactive": "No inactive listings",
+        "expired": "No expired listings",
+        "sold": "No sold listings",
+        "cancelled": "No cancelled listings"
+      }
+    },
+    "expireListings": {
+      "expired_one": "Expired {{count}} listing",
+      "expired_other": "Expired {{count}} listings",
+      "failed": "Failed to expire listings",
+      "button": "Expire All Listings",
+      "dialogTitle": "Expire All Active Listings?",
+      "confirmBody_one": "This will set <strong>{{count}} active listing</strong> to expired (paused). Each seller reactivates the ones they still sell from their shop's Listings page.",
+      "confirmBody_other": "This will set <strong>{{count}} active listings</strong> to expired (paused). Each seller reactivates the ones they still sell from their shop's Listings page.",
+      "confirmBodyLoading": "This will set <strong>... active listings</strong> to expired (paused). Each seller reactivates the ones they still sell from their shop's Listings page.",
+      "note": "This is typically done after a game wipe. Nothing is deleted: sellers can reactivate their listings at any time.",
+      "confirmButton_one": "Expire {{count}} Listing",
+      "confirmButton_other": "Expire {{count}} Listings",
+      "confirmButtonNoCount": "Expire Listings"
+    },
+    "wipeListings": {
+      "title": "Wipe Listings",
+      "description": "Expire all active listings after a game wipe. Sellers see them as paused, and bring back the ones they still sell from their shop's Listings page (the renew button, or select them and Activate). Nothing is deleted."
+    },
+    "importMonitoring": {
+      "started": "Started {{source}} import",
+      "startFailed": "Failed to start import",
+      "startImport": "Start Import",
+      "running": "Running…",
+      "oneAtATime": "Only one import can run at a time per source. Status updates automatically.",
+      "jobHistory": "Job History",
+      "noJobs": "No import jobs have been run yet. Start an import above.",
+      "sources": {
+        "cstoneItems": "CStone Items",
+        "uexItems": "UEX Items",
+        "uexAttributes": "UEX Attributes"
+      }
+    },
+    "gameItemAttributes": {
+      "loadError": "Error loading attributes: {{error}}",
+      "typeLabel": "Type:",
+      "applicableTo": "Applicable to:",
+      "noTypes": "No types",
+      "importSuccess_one": "Successfully imported {{count}} attribute",
+      "importSuccess_other": "Successfully imported {{count}} attributes",
+      "importPartial_one": "Import completed with errors. Imported {{count}} attribute",
+      "importPartial_other": "Import completed with errors. Imported {{count}} attributes",
+      "uuidPlaceholder": "Enter game item UUID"
+    },
+    "premium": {
+      "revoked": "Revoked"
+    },
+    "notificationTest": {
+      "noneIndividual": "None (Individual)"
+    }
   }
 }

@@ -159,18 +159,16 @@ export function AdminGameItemAttributesView({
       .then((result) => {
         if (result.success) {
           issueAlert({
-            message: t(
-              "admin.gameItemAttributes.importSuccess",
-              `Successfully imported ${result.attributesImported} attributes`,
-            ),
+            message: t("adminUi.gameItemAttributes.importSuccess", {
+              count: result.attributesImported,
+            }),
             severity: "success",
           })
         } else {
           issueAlert({
-            message: t(
-              "admin.gameItemAttributes.importPartial",
-              `Import completed with errors. Imported ${result.attributesImported} attributes`,
-            ),
+            message: t("adminUi.gameItemAttributes.importPartial", {
+              count: result.attributesImported,
+            }),
             severity: "warning",
           })
         }
@@ -244,7 +242,7 @@ export function AdminGameItemAttributesView({
             size="small"
             onClick={() => handleOpenEditModal(params.row)}
             color="primary"
-            aria-label={t("admin.common.edit", "Edit")}
+            aria-label={t("accessibility.edit")}
           >
             <AdminIcons.Edit />
           </IconButton>
@@ -252,7 +250,7 @@ export function AdminGameItemAttributesView({
             size="small"
             onClick={() => handleOpenDeleteModal(params.row)}
             color="error"
-            aria-label={t("admin.common.delete", "Delete")}
+            aria-label={t("accessibility.delete")}
           >
             <AdminIcons.Delete />
           </IconButton>
@@ -330,7 +328,7 @@ export function AdminGameItemAttributesView({
       {error && (
         <Grid item xs={12}>
           <Typography variant="body1" color="error">
-            Error loading attributes: {JSON.stringify(error)}
+            {t("adminUi.gameItemAttributes.loadError", { error: JSON.stringify(error) })}
           </Typography>
         </Grid>
       )}
@@ -421,21 +419,22 @@ export function AdminGameItemAttributesView({
             {selectedDefinition && (
               <Alert severity="info" sx={{ mt: 2 }}>
                 <Typography variant="body2">
-                  <strong>Type:</strong> {selectedDefinition.attribute_type}
+                  <strong>{t("adminUi.gameItemAttributes.typeLabel")}</strong>{" "}
+                  {selectedDefinition.attribute_type}
                 </Typography>
                 <Typography variant="body2">
-                  <strong>Applicable to:</strong>{" "}
+                  <strong>{t("adminUi.gameItemAttributes.applicableTo")}</strong>{" "}
                   {selectedDefinition.applicable_item_types &&
                   selectedDefinition.applicable_item_types.length > 0
                     ? selectedDefinition.applicable_item_types.join(", ")
-                    : "No types"}
+                    : t("adminUi.gameItemAttributes.noTypes")}
                 </Typography>
               </Alert>
             )}
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModals}>Cancel</Button>
+          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
           <Button
             onClick={handleUpsertAttribute}
             variant="contained"
@@ -489,7 +488,7 @@ export function AdminGameItemAttributesView({
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModals}>Cancel</Button>
+          <Button onClick={handleCloseModals}>{t("common.cancel")}</Button>
           <Button
             onClick={handleDeleteAttribute}
             variant="contained"

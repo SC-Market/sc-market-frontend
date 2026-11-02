@@ -7218,5 +7218,184 @@
       "wasQuantity": "（原為 {{quantity}}）",
       "newBadge": "新！"
     }
+  },
+  "adminUi": {
+    "common": {
+      "allStatuses": "所有狀態"
+    },
+    "featureFlags": {
+      "configSaved": "設定已儲存",
+      "failed": "失敗",
+      "overrideSet": "已為 {{username}} 設定覆寫",
+      "userNotFound": "找不到使用者",
+      "overrideRemoved": "覆寫已移除",
+      "configurationTitle": "{{label}} 設定",
+      "enabled": "已啟用",
+      "disabled": "已停用",
+      "enabledHint": "關閉時，所有使用者都會使用舊版體驗",
+      "default": "預設",
+      "v1Off": "V1（關）",
+      "v2On": "V2（開）",
+      "rollout": "推出比例：{{percent}}%",
+      "notInEffect": "未生效——「已啟用」為關閉狀態，因此無論此比例為何，所有使用者都會使用舊版體驗。",
+      "turnOnEnabled": "開啟「已啟用」",
+      "rolloutPercentage": "推出比例",
+      "saving": "儲存中...",
+      "perUserOverrides": "個別使用者覆寫",
+      "addOverride": "新增覆寫",
+      "username": "使用者名稱",
+      "updated": "更新時間",
+      "on": "開",
+      "off": "關",
+      "noOverrides": "此旗標沒有覆寫設定。所有使用者都遵循全域設定。",
+      "removeOverrideFor": "移除 {{username}} 的覆寫",
+      "addOverrideFor": "為 {{label}} 新增覆寫",
+      "searchByUsername": "依使用者名稱搜尋",
+      "enabledForUser": "對此使用者啟用",
+      "add": "新增",
+      "searchFlags": "搜尋旗標...",
+      "retry": "重試",
+      "loadFailed": "無法載入功能旗標。",
+      "flagSummary_other": "預設：{{version}} · 推出比例：{{percent}}% · {{count}} 個覆寫",
+      "rolloutNotInEffect": "推出比例未生效——「已啟用」為關閉狀態",
+      "noMatch": "沒有符合搜尋條件的旗標",
+      "noneConfigured": "尚未設定任何功能旗標"
+    },
+    "alerts": {
+      "allTypes": "所有類型",
+      "inactive": "未啟用",
+      "loadError": "載入警示時發生錯誤：{{error}}",
+      "targetTypes": {
+        "allUsers": "所有使用者",
+        "orgMembers": "組織成員",
+        "orgOwners": "組織擁有者",
+        "adminsOnly": "僅限管理員",
+        "specificOrg": "指定組織"
+      }
+    },
+    "gameDataImport": {
+      "summary": {
+        "matched_other": "已比對 {{count}} 個物品",
+        "inserted_other": "已新增 {{count}} 個物品",
+        "missionsInserted_other": "{{count}} 個任務",
+        "missionsUpdated_other": "已更新 {{count}} 個任務",
+        "blueprintsInserted_other": "{{count}} 個藍圖",
+        "shopsImported_other": "已重新整理 {{count}} 間商店"
+      },
+      "noChanges": "沒有變更",
+      "warnings_other": "{{count}} 則警告",
+      "noDetails": "沒有詳細資訊",
+      "importSuccess": "遊戲資料匯入成功",
+      "importFailed": "匯入失敗",
+      "importStarted": "已開始匯入",
+      "uploadFailed": "上傳失敗",
+      "intro": "上傳從 Star Citizen 的 Data.p4k 擷取出的 <code>game-data.zip</code>。",
+      "shopsNotice": "遊戲內商店（Wiki 物品頁面上的「購買地點」）不會匯入：遊戲檔案中的商店資料已過時，也不包含目前的商店庫存與價格。ZIP 中的 <code>shop-inventories.json</code> 會被忽略（工作會加以註明）。",
+      "dropHint": "將 game-data.zip 拖放到這裡，或點擊以瀏覽",
+      "channel": "頻道",
+      "gameVersion": "遊戲版本",
+      "gameVersionPlaceholder": "例如 4.7.1",
+      "uploading": "上傳中...",
+      "importRunning": "匯入進行中...",
+      "importButton": "匯入遊戲資料",
+      "history": "匯入記錄",
+      "started": "開始時間",
+      "duration": "耗時",
+      "summaryColumn": "摘要"
+    },
+    "orderStats": {
+      "orderCountDaily": "訂單數（每日）",
+      "orderCountWeekly": "訂單數（每週）",
+      "orderCountMonthly": "訂單數（每月）",
+      "topShops": "熱門商店",
+      "topUsers": "熱門使用者",
+      "topShopsOffers": "熱門商店（報價）",
+      "topUsersOffers": "熱門使用者（報價）",
+      "offerSummary": "報價摘要"
+    },
+    "attributes": {
+      "loadError": "載入屬性定義時發生錯誤：{{error}}",
+      "allowedValuesPlaceholder": "軍用, 匿蹤, 工業, 民用",
+      "cascadeDelete": "同時刪除遊戲物品屬性",
+      "types": {
+        "select": "單選（單一值）",
+        "multiselect": "多選（多個值）",
+        "range": "範圍（最小/最大）",
+        "text": "文字（自由輸入）"
+      }
+    },
+    "moderation": {
+      "reporter": "檢舉人",
+      "reportedUrl": "被檢舉的 URL",
+      "reason": "原因",
+      "loadError": "載入審核檢舉時發生錯誤：{{error}}",
+      "statuses": {
+        "pending": "待處理",
+        "inProgress": "處理中",
+        "resolved": "已解決",
+        "dismissed": "已駁回"
+      }
+    },
+    "allListings": {
+      "quantity": "數量：{{quantity}}",
+      "quantityWithVariants_other": "數量：{{quantity}} · {{count}} 種款式",
+      "tabs": {
+        "inactive": "未啟用",
+        "expired": "已過期",
+        "sold": "已售出",
+        "cancelled": "已取消"
+      },
+      "empty": {
+        "active": "沒有啟用中的商品",
+        "inactive": "沒有未啟用的商品",
+        "expired": "沒有已過期的商品",
+        "sold": "沒有已售出的商品",
+        "cancelled": "沒有已取消的商品"
+      }
+    },
+    "expireListings": {
+      "expired_other": "已使 {{count}} 項商品過期",
+      "failed": "無法使商品過期",
+      "button": "使所有商品過期",
+      "dialogTitle": "要使所有啟用中的商品過期嗎？",
+      "confirmBody_other": "這會將 <strong>{{count}} 個有效商品</strong>設為已過期（暫停）。每位賣家可在商店的「商品」頁面重新啟用仍在販售的商品。",
+      "confirmBodyLoading": "這會將 <strong>... 個有效商品</strong>設為已過期（暫停）。每位賣家可在商店的「商品」頁面重新啟用仍在販售的商品。",
+      "note": "通常在遊戲重置後執行。不會刪除任何內容：賣家可以隨時重新啟用其商品。",
+      "confirmButton_other": "使 {{count}} 項商品過期",
+      "confirmButtonNoCount": "使商品過期"
+    },
+    "wipeListings": {
+      "title": "重置商品",
+      "description": "在遊戲重置後將所有有效商品設為已過期。賣家會看到它們處於暫停狀態，並可在商店的「商品」頁面恢復仍在販售的商品（點選續期按鈕，或選取後點選「啟用」）。不會刪除任何內容。"
+    },
+    "importMonitoring": {
+      "started": "已開始 {{source}} 匯入",
+      "startFailed": "無法開始匯入",
+      "startImport": "開始匯入",
+      "running": "執行中…",
+      "oneAtATime": "每個來源同一時間只能執行一項匯入。狀態會自動更新。",
+      "jobHistory": "工作記錄",
+      "noJobs": "尚未執行任何匯入工作。請在上方開始匯入。",
+      "sources": {
+        "cstoneItems": "CStone 物品",
+        "uexItems": "UEX 物品",
+        "uexAttributes": "UEX 屬性"
+      }
+    },
+    "gameItemAttributes": {
+      "loadError": "載入屬性時發生錯誤：{{error}}",
+      "typeLabel": "類型：",
+      "applicableTo": "適用於：",
+      "noTypes": "沒有類型",
+      "importSuccess_other": "成功匯入 {{count}} 個屬性",
+      "importPartial_other": "匯入完成但有錯誤。已匯入 {{count}} 個屬性",
+      "uuidPlaceholder": "輸入遊戲物品 UUID"
+    },
+    "premium": {
+      "revoked": "已撤銷"
+    },
+    "notificationTest": {
+      "noneIndividual": "無（個人）"
+    }
   }
 }

@@ -7317,5 +7317,198 @@
       "wasQuantity": "(vorher {{quantity}})",
       "newBadge": "NEU!"
     }
+  },
+  "adminUi": {
+    "common": {
+      "allStatuses": "Alle Status"
+    },
+    "featureFlags": {
+      "configSaved": "Konfiguration gespeichert",
+      "failed": "Fehlgeschlagen",
+      "overrideSet": "Überschreibung für {{username}} festgelegt",
+      "userNotFound": "Benutzer nicht gefunden",
+      "overrideRemoved": "Überschreibung entfernt",
+      "configurationTitle": "Konfiguration: {{label}}",
+      "enabled": "Aktiviert",
+      "disabled": "Deaktiviert",
+      "enabledHint": "Wenn deaktiviert, erhalten alle Benutzer die alte Version",
+      "default": "Standard",
+      "v1Off": "V1 (Aus)",
+      "v2On": "V2 (Ein)",
+      "rollout": "Rollout: {{percent}} %",
+      "notInEffect": "Nicht wirksam – „Aktiviert“ ist aus, daher erhält jeder Benutzer unabhängig von diesem Prozentsatz die alte Version.",
+      "turnOnEnabled": "„Aktiviert“ einschalten",
+      "rolloutPercentage": "Rollout-Prozentsatz",
+      "saving": "Wird gespeichert...",
+      "perUserOverrides": "Überschreibungen pro Benutzer",
+      "addOverride": "Überschreibung hinzufügen",
+      "username": "Benutzername",
+      "updated": "Aktualisiert",
+      "on": "EIN",
+      "off": "AUS",
+      "noOverrides": "Keine Überschreibungen für dieses Flag. Alle Benutzer folgen der globalen Konfiguration.",
+      "removeOverrideFor": "Überschreibung für {{username}} entfernen",
+      "addOverrideFor": "Überschreibung für {{label}} hinzufügen",
+      "searchByUsername": "Nach Benutzername suchen",
+      "enabledForUser": "Für diesen Benutzer aktiviert",
+      "add": "Hinzufügen",
+      "searchFlags": "Flags durchsuchen...",
+      "retry": "Erneut versuchen",
+      "loadFailed": "Feature-Flags konnten nicht geladen werden.",
+      "flagSummary_one": "Standard: {{version}} · Rollout: {{percent}} % · {{count}} Überschreibung",
+      "flagSummary_other": "Standard: {{version}} · Rollout: {{percent}} % · {{count}} Überschreibungen",
+      "rolloutNotInEffect": "Rollout nicht wirksam – „Aktiviert“ ist aus",
+      "noMatch": "Keine Flags entsprechen Ihrer Suche",
+      "noneConfigured": "Keine Feature-Flags konfiguriert"
+    },
+    "alerts": {
+      "allTypes": "Alle Typen",
+      "inactive": "Inaktiv",
+      "loadError": "Fehler beim Laden der Meldungen: {{error}}",
+      "targetTypes": {
+        "allUsers": "Alle Benutzer",
+        "orgMembers": "Org-Mitglieder",
+        "orgOwners": "Org-Inhaber",
+        "adminsOnly": "Nur Admins",
+        "specificOrg": "Bestimmte Org"
+      }
+    },
+    "gameDataImport": {
+      "summary": {
+        "matched_one": "{{count}} Gegenstand zugeordnet",
+        "matched_other": "{{count}} Gegenstände zugeordnet",
+        "inserted_one": "{{count}} Gegenstand hinzugefügt",
+        "inserted_other": "{{count}} Gegenstände hinzugefügt",
+        "missionsInserted_one": "{{count}} Mission",
+        "missionsInserted_other": "{{count}} Missionen",
+        "missionsUpdated_one": "{{count}} Mission aktualisiert",
+        "missionsUpdated_other": "{{count}} Missionen aktualisiert",
+        "blueprintsInserted_one": "{{count}} Blaupause",
+        "blueprintsInserted_other": "{{count}} Blaupausen",
+        "shopsImported_one": "{{count}} Shop aktualisiert",
+        "shopsImported_other": "{{count}} Shops aktualisiert"
+      },
+      "noChanges": "Keine Änderungen",
+      "warnings_one": "{{count}} Warnung",
+      "warnings_other": "{{count}} Warnungen",
+      "noDetails": "Keine Details verfügbar",
+      "importSuccess": "Spieldaten erfolgreich importiert",
+      "importFailed": "Import fehlgeschlagen",
+      "importStarted": "Import gestartet",
+      "uploadFailed": "Hochladen fehlgeschlagen",
+      "intro": "Laden Sie eine aus der Data.p4k von Star Citizen extrahierte <code>game-data.zip</code> hoch.",
+      "shopsNotice": "Shops im Spiel („Wo kaufen“ auf den Wiki-Gegenstandsseiten) werden nicht importiert: Die Shop-Daten in den Spieldateien sind veraltet und enthalten nicht die aktuellen Shop-Bestände und Preise. Eine <code>shop-inventories.json</code> in der ZIP-Datei wird ignoriert (der Auftrag vermerkt dies).",
+      "dropHint": "game-data.zip hier ablegen oder zum Durchsuchen klicken",
+      "channel": "Kanal",
+      "gameVersion": "Spielversion",
+      "gameVersionPlaceholder": "z. B. 4.7.1",
+      "uploading": "Wird hochgeladen...",
+      "importRunning": "Import läuft...",
+      "importButton": "Spieldaten importieren",
+      "history": "Importverlauf",
+      "started": "Gestartet",
+      "duration": "Dauer",
+      "summaryColumn": "Zusammenfassung"
+    },
+    "orderStats": {
+      "orderCountDaily": "Anzahl der Bestellungen (täglich)",
+      "orderCountWeekly": "Anzahl der Bestellungen (wöchentlich)",
+      "orderCountMonthly": "Anzahl der Bestellungen (monatlich)",
+      "topShops": "Top-Shops",
+      "topUsers": "Top-Benutzer",
+      "topShopsOffers": "Top-Shops (Angebote)",
+      "topUsersOffers": "Top-Benutzer (Angebote)",
+      "offerSummary": "Angebotsübersicht"
+    },
+    "attributes": {
+      "loadError": "Fehler beim Laden der Attributdefinitionen: {{error}}",
+      "allowedValuesPlaceholder": "Militär, Tarnung, Industrie, Zivil",
+      "cascadeDelete": "Auch Spielgegenstand-Attribute löschen",
+      "types": {
+        "select": "Auswahl (ein Wert)",
+        "multiselect": "Mehrfachauswahl (mehrere Werte)",
+        "range": "Bereich (Min./Max.)",
+        "text": "Text (Freitext)"
+      }
+    },
+    "moderation": {
+      "reporter": "Meldende Person",
+      "reportedUrl": "Gemeldete URL",
+      "reason": "Grund",
+      "loadError": "Fehler beim Laden der Moderationsmeldungen: {{error}}",
+      "statuses": {
+        "pending": "Ausstehend",
+        "inProgress": "In Bearbeitung",
+        "resolved": "Gelöst",
+        "dismissed": "Abgewiesen"
+      }
+    },
+    "allListings": {
+      "quantity": "Menge: {{quantity}}",
+      "quantityWithVariants_one": "Menge: {{quantity}} · {{count}} Variante",
+      "quantityWithVariants_other": "Menge: {{quantity}} · {{count}} Varianten",
+      "tabs": {
+        "inactive": "Inaktiv",
+        "expired": "Abgelaufen",
+        "sold": "Verkauft",
+        "cancelled": "Storniert"
+      },
+      "empty": {
+        "active": "Keine aktiven Angebote",
+        "inactive": "Keine inaktiven Angebote",
+        "expired": "Keine abgelaufenen Angebote",
+        "sold": "Keine verkauften Angebote",
+        "cancelled": "Keine stornierten Angebote"
+      }
+    },
+    "expireListings": {
+      "expired_one": "{{count}} Angebot auf „abgelaufen“ gesetzt",
+      "expired_other": "{{count}} Angebote auf „abgelaufen“ gesetzt",
+      "failed": "Angebote konnten nicht auf abgelaufen gesetzt werden",
+      "button": "Alle Angebote ablaufen lassen",
+      "dialogTitle": "Alle aktiven Angebote ablaufen lassen?",
+      "confirmBody_one": "Dadurch wird <strong>{{count}} aktives Angebot</strong> auf „abgelaufen“ (pausiert) gesetzt. Jeder Verkäufer reaktiviert die Angebote, die er noch verkauft, auf der Seite „Angebote“ seines Shops.",
+      "confirmBody_other": "Dadurch werden <strong>{{count}} aktive Angebote</strong> auf „abgelaufen“ (pausiert) gesetzt. Jeder Verkäufer reaktiviert die Angebote, die er noch verkauft, auf der Seite „Angebote“ seines Shops.",
+      "confirmBodyLoading": "Dadurch werden <strong>... aktive Angebote</strong> auf „abgelaufen“ (pausiert) gesetzt. Jeder Verkäufer reaktiviert die Angebote, die er noch verkauft, auf der Seite „Angebote“ seines Shops.",
+      "note": "Dies erfolgt üblicherweise nach einem Spiel-Wipe. Es wird nichts gelöscht: Verkäufer können ihre Angebote jederzeit reaktivieren.",
+      "confirmButton_one": "{{count}} Angebot ablaufen lassen",
+      "confirmButton_other": "{{count}} Angebote ablaufen lassen",
+      "confirmButtonNoCount": "Angebote ablaufen lassen"
+    },
+    "wipeListings": {
+      "title": "Angebote zurücksetzen",
+      "description": "Lassen Sie nach einem Spiel-Wipe alle aktiven Angebote ablaufen. Verkäufer sehen sie als pausiert und holen die Angebote, die sie noch verkaufen, auf der Seite „Angebote“ ihres Shops zurück (mit der Schaltfläche zum Erneuern oder per Auswahl und „Aktivieren“). Es wird nichts gelöscht."
+    },
+    "importMonitoring": {
+      "started": "Import {{source}} gestartet",
+      "startFailed": "Import konnte nicht gestartet werden",
+      "startImport": "Import starten",
+      "running": "Läuft…",
+      "oneAtATime": "Pro Quelle kann jeweils nur ein Import laufen. Der Status wird automatisch aktualisiert.",
+      "jobHistory": "Auftragsverlauf",
+      "noJobs": "Es wurden noch keine Importaufträge ausgeführt. Starten Sie oben einen Import.",
+      "sources": {
+        "cstoneItems": "CStone-Gegenstände",
+        "uexItems": "UEX-Gegenstände",
+        "uexAttributes": "UEX-Attribute"
+      }
+    },
+    "gameItemAttributes": {
+      "loadError": "Fehler beim Laden der Attribute: {{error}}",
+      "typeLabel": "Typ:",
+      "applicableTo": "Gilt für:",
+      "noTypes": "Keine Typen",
+      "importSuccess_one": "{{count}} Attribut erfolgreich importiert",
+      "importSuccess_other": "{{count}} Attribute erfolgreich importiert",
+      "importPartial_one": "Import mit Fehlern abgeschlossen. {{count}} Attribut importiert",
+      "importPartial_other": "Import mit Fehlern abgeschlossen. {{count}} Attribute importiert",
+      "uuidPlaceholder": "UUID des Spielgegenstands eingeben"
+    },
+    "premium": {
+      "revoked": "Widerrufen"
+    },
+    "notificationTest": {
+      "noneIndividual": "Keine (Einzelperson)"
+    }
   }
 }

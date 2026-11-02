@@ -7515,5 +7515,226 @@
       "wasQuantity": "(було {{quantity}})",
       "newBadge": "НОВЕ!"
     }
+  },
+  "adminUi": {
+    "common": {
+      "allStatuses": "Усі статуси"
+    },
+    "featureFlags": {
+      "configSaved": "Конфігурацію збережено",
+      "failed": "Помилка",
+      "overrideSet": "Перевизначення для {{username}} встановлено",
+      "userNotFound": "Користувача не знайдено",
+      "overrideRemoved": "Перевизначення видалено",
+      "configurationTitle": "Конфігурація: {{label}}",
+      "enabled": "Увімкнено",
+      "disabled": "Вимкнено",
+      "enabledHint": "Коли вимкнено, усі користувачі отримують стару версію",
+      "default": "За замовчуванням",
+      "v1Off": "V1 (вимк.)",
+      "v2On": "V2 (увімк.)",
+      "rollout": "Розгортання: {{percent}}%",
+      "notInEffect": "Не діє — «Увімкнено» вимкнено, тому кожен користувач отримує стару версію незалежно від цього відсотка.",
+      "turnOnEnabled": "Увімкнути «Увімкнено»",
+      "rolloutPercentage": "Відсоток розгортання",
+      "saving": "Збереження...",
+      "perUserOverrides": "Перевизначення для користувачів",
+      "addOverride": "Додати перевизначення",
+      "username": "Ім'я користувача",
+      "updated": "Оновлено",
+      "on": "УВІМК.",
+      "off": "ВИМК.",
+      "noOverrides": "Для цього прапорця немає перевизначень. Усі користувачі дотримуються глобальної конфігурації.",
+      "removeOverrideFor": "Видалити перевизначення для {{username}}",
+      "addOverrideFor": "Додати перевизначення для {{label}}",
+      "searchByUsername": "Пошук за ім'ям користувача",
+      "enabledForUser": "Увімкнено для цього користувача",
+      "add": "Додати",
+      "searchFlags": "Пошук прапорців...",
+      "retry": "Повторити",
+      "loadFailed": "Не вдалося завантажити функціональні прапорці.",
+      "flagSummary_one": "За замовчуванням: {{version}} · Розгортання: {{percent}}% · {{count}} перевизначення",
+      "flagSummary_few": "За замовчуванням: {{version}} · Розгортання: {{percent}}% · {{count}} перевизначення",
+      "flagSummary_many": "За замовчуванням: {{version}} · Розгортання: {{percent}}% · {{count}} перевизначень",
+      "flagSummary_other": "За замовчуванням: {{version}} · Розгортання: {{percent}}% · {{count}} перевизначення",
+      "rolloutNotInEffect": "Розгортання не діє — «Увімкнено» вимкнено",
+      "noMatch": "Жоден прапорець не відповідає вашому пошуку",
+      "noneConfigured": "Функціональні прапорці не налаштовано"
+    },
+    "alerts": {
+      "allTypes": "Усі типи",
+      "inactive": "Неактивний",
+      "loadError": "Помилка завантаження сповіщень: {{error}}",
+      "targetTypes": {
+        "allUsers": "Усі користувачі",
+        "orgMembers": "Учасники організації",
+        "orgOwners": "Власники організації",
+        "adminsOnly": "Лише адміністратори",
+        "specificOrg": "Конкретна організація"
+      }
+    },
+    "gameDataImport": {
+      "summary": {
+        "matched_one": "Зіставлено {{count}} предмет",
+        "matched_few": "Зіставлено {{count}} предмети",
+        "matched_many": "Зіставлено {{count}} предметів",
+        "matched_other": "Зіставлено {{count}} предмета",
+        "inserted_one": "Додано {{count}} предмет",
+        "inserted_few": "Додано {{count}} предмети",
+        "inserted_many": "Додано {{count}} предметів",
+        "inserted_other": "Додано {{count}} предмета",
+        "missionsInserted_one": "{{count}} місія",
+        "missionsInserted_few": "{{count}} місії",
+        "missionsInserted_many": "{{count}} місій",
+        "missionsInserted_other": "{{count}} місії",
+        "missionsUpdated_one": "Оновлено {{count}} місію",
+        "missionsUpdated_few": "Оновлено {{count}} місії",
+        "missionsUpdated_many": "Оновлено {{count}} місій",
+        "missionsUpdated_other": "Оновлено {{count}} місії",
+        "blueprintsInserted_one": "{{count}} креслення",
+        "blueprintsInserted_few": "{{count}} креслення",
+        "blueprintsInserted_many": "{{count}} креслень",
+        "blueprintsInserted_other": "{{count}} креслення",
+        "shopsImported_one": "Оновлено {{count}} магазин",
+        "shopsImported_few": "Оновлено {{count}} магазини",
+        "shopsImported_many": "Оновлено {{count}} магазинів",
+        "shopsImported_other": "Оновлено {{count}} магазину"
+      },
+      "noChanges": "Без змін",
+      "warnings_one": "{{count}} попередження",
+      "warnings_few": "{{count}} попередження",
+      "warnings_many": "{{count}} попереджень",
+      "warnings_other": "{{count}} попередження",
+      "noDetails": "Подробиці відсутні",
+      "importSuccess": "Ігрові дані успішно імпортовано",
+      "importFailed": "Не вдалося імпортувати",
+      "importStarted": "Імпорт розпочато",
+      "uploadFailed": "Не вдалося завантажити файл",
+      "intro": "Завантажте файл <code>game-data.zip</code>, видобутий із Data.p4k гри Star Citizen.",
+      "shopsNotice": "Ігрові магазини («де купити» на сторінках предметів у вікі) не імпортуються: дані магазинів в ігрових файлах застарілі й не містять актуальних асортиментів і цін. Файл <code>shop-inventories.json</code> в архіві ZIP ігнорується (завдання це зазначає).",
+      "dropHint": "Перетягніть сюди game-data.zip або натисніть, щоб вибрати файл",
+      "channel": "Канал",
+      "gameVersion": "Версія гри",
+      "gameVersionPlaceholder": "напр., 4.7.1",
+      "uploading": "Завантаження...",
+      "importRunning": "Триває імпорт...",
+      "importButton": "Імпортувати ігрові дані",
+      "history": "Історія імпорту",
+      "started": "Розпочато",
+      "duration": "Тривалість",
+      "summaryColumn": "Підсумок"
+    },
+    "orderStats": {
+      "orderCountDaily": "Кількість замовлень (щодня)",
+      "orderCountWeekly": "Кількість замовлень (щотижня)",
+      "orderCountMonthly": "Кількість замовлень (щомісяця)",
+      "topShops": "Найкращі магазини",
+      "topUsers": "Найактивніші користувачі",
+      "topShopsOffers": "Найкращі магазини (пропозиції)",
+      "topUsersOffers": "Найактивніші користувачі (пропозиції)",
+      "offerSummary": "Підсумок пропозицій"
+    },
+    "attributes": {
+      "loadError": "Помилка завантаження визначень атрибутів: {{error}}",
+      "allowedValuesPlaceholder": "Військовий, Стелс, Промисловий, Цивільний",
+      "cascadeDelete": "Також видалити атрибути ігрових предметів",
+      "types": {
+        "select": "Вибір (одне значення)",
+        "multiselect": "Множинний вибір (кілька значень)",
+        "range": "Діапазон (мін./макс.)",
+        "text": "Текст (довільний)"
+      }
+    },
+    "moderation": {
+      "reporter": "Автор скарги",
+      "reportedUrl": "URL зі скарги",
+      "reason": "Причина",
+      "loadError": "Помилка завантаження скарг для модерації: {{error}}",
+      "statuses": {
+        "pending": "Очікує",
+        "inProgress": "У роботі",
+        "resolved": "Вирішено",
+        "dismissed": "Відхилено"
+      }
+    },
+    "allListings": {
+      "quantity": "К-сть: {{quantity}}",
+      "quantityWithVariants_one": "К-сть: {{quantity}} · {{count}} варіант",
+      "quantityWithVariants_few": "К-сть: {{quantity}} · {{count}} варіанти",
+      "quantityWithVariants_many": "К-сть: {{quantity}} · {{count}} варіантів",
+      "quantityWithVariants_other": "К-сть: {{quantity}} · {{count}} варіанта",
+      "tabs": {
+        "inactive": "Неактивні",
+        "expired": "Прострочені",
+        "sold": "Продані",
+        "cancelled": "Скасовані"
+      },
+      "empty": {
+        "active": "Немає активних оголошень",
+        "inactive": "Немає неактивних оголошень",
+        "expired": "Немає прострочених оголошень",
+        "sold": "Немає проданих оголошень",
+        "cancelled": "Немає скасованих оголошень"
+      }
+    },
+    "expireListings": {
+      "expired_one": "Завершено {{count}} оголошення",
+      "expired_few": "Завершено {{count}} оголошення",
+      "expired_many": "Завершено {{count}} оголошень",
+      "expired_other": "Завершено {{count}} оголошення",
+      "failed": "Не вдалося завершити оголошення",
+      "button": "Завершити всі оголошення",
+      "dialogTitle": "Завершити всі активні оголошення?",
+      "confirmBody_one": "Це позначить <strong>{{count}} активне оголошення</strong> як прострочене (призупинене). Кожен продавець повторно активує ті, які ще продає, на сторінці «Оголошення» свого магазину.",
+      "confirmBody_few": "Це позначить <strong>{{count}} активні оголошення</strong> як прострочені (призупинені). Кожен продавець повторно активує ті, які ще продає, на сторінці «Оголошення» свого магазину.",
+      "confirmBody_many": "Це позначить <strong>{{count}} активних оголошень</strong> як прострочені (призупинені). Кожен продавець повторно активує ті, які ще продає, на сторінці «Оголошення» свого магазину.",
+      "confirmBody_other": "Це позначить <strong>{{count}} активного оголошення</strong> як прострочені (призупинені). Кожен продавець повторно активує ті, які ще продає, на сторінці «Оголошення» свого магазину.",
+      "confirmBodyLoading": "Це позначить <strong>... активних оголошень</strong> як прострочені (призупинені). Кожен продавець повторно активує ті, які ще продає, на сторінці «Оголошення» свого магазину.",
+      "note": "Зазвичай це роблять після вайпу гри. Нічого не видаляється: продавці можуть повторно активувати свої оголошення будь-коли.",
+      "confirmButton_one": "Завершити {{count}} оголошення",
+      "confirmButton_few": "Завершити {{count}} оголошення",
+      "confirmButton_many": "Завершити {{count}} оголошень",
+      "confirmButton_other": "Завершити {{count}} оголошення",
+      "confirmButtonNoCount": "Завершити оголошення"
+    },
+    "wipeListings": {
+      "title": "Вайп оголошень",
+      "description": "Позначте всі активні оголошення як прострочені після вайпу гри. Продавці бачитимуть їх як призупинені й повертатимуть ті, які ще продають, на сторінці «Оголошення» свого магазину (кнопкою оновлення або виділивши їх і натиснувши «Активувати»). Нічого не видаляється."
+    },
+    "importMonitoring": {
+      "started": "Імпорт {{source}} розпочато",
+      "startFailed": "Не вдалося розпочати імпорт",
+      "startImport": "Розпочати імпорт",
+      "running": "Виконується…",
+      "oneAtATime": "Для кожного джерела одночасно може виконуватися лише один імпорт. Статус оновлюється автоматично.",
+      "jobHistory": "Історія завдань",
+      "noJobs": "Ще не виконано жодного завдання імпорту. Розпочніть імпорт вище.",
+      "sources": {
+        "cstoneItems": "Предмети CStone",
+        "uexItems": "Предмети UEX",
+        "uexAttributes": "Атрибути UEX"
+      }
+    },
+    "gameItemAttributes": {
+      "loadError": "Помилка завантаження атрибутів: {{error}}",
+      "typeLabel": "Тип:",
+      "applicableTo": "Застосовується до:",
+      "noTypes": "Немає типів",
+      "importSuccess_one": "Успішно імпортовано {{count}} атрибут",
+      "importSuccess_few": "Успішно імпортовано {{count}} атрибути",
+      "importSuccess_many": "Успішно імпортовано {{count}} атрибутів",
+      "importSuccess_other": "Успішно імпортовано {{count}} атрибута",
+      "importPartial_one": "Імпорт завершено з помилками. Імпортовано {{count}} атрибут",
+      "importPartial_few": "Імпорт завершено з помилками. Імпортовано {{count}} атрибути",
+      "importPartial_many": "Імпорт завершено з помилками. Імпортовано {{count}} атрибутів",
+      "importPartial_other": "Імпорт завершено з помилками. Імпортовано {{count}} атрибута",
+      "uuidPlaceholder": "Введіть UUID ігрового предмета"
+    },
+    "premium": {
+      "revoked": "Відкликано"
+    },
+    "notificationTest": {
+      "noneIndividual": "Немає (індивідуально)"
+    }
   }
 }
