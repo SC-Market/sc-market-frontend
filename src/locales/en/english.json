@@ -7824,7 +7824,11 @@
       },
       "loadFailed": "The campaign couldn't be loaded.",
       "retry": "Retry",
-      "sendFailed": "The campaign couldn't be started."
+      "sendFailed": "The campaign couldn't be started.",
+      "breakdown": "{{sellers}} sellers. Listings not updated for 30–60 days: {{d30}}, 60–90 days: {{d60}}, 90+ days: {{d90}}.",
+      "cap": "At most {{cap}} recipients ({{env}}).",
+      "overCap": "{{recipients}} people are eligible, more than the cap of {{cap}} ({{env}}). Send is blocked: check who qualifies before raising the cap.",
+      "top": "Largest recipients (display name · listings)"
     }
   },
   "apiTokensUi": {

@@ -7824,7 +7824,11 @@
       },
       "loadFailed": "Die Kampagne konnte nicht geladen werden.",
       "retry": "Erneut versuchen",
-      "sendFailed": "Die Kampagne konnte nicht gestartet werden."
+      "sendFailed": "Die Kampagne konnte nicht gestartet werden.",
+      "breakdown": "{{sellers}} Verkäufer. Angebote ohne Aktualisierung seit 30–60 Tagen: {{d30}}, 60–90 Tagen: {{d60}}, 90+ Tagen: {{d90}}.",
+      "cap": "Höchstens {{cap}} Empfänger ({{env}}).",
+      "overCap": "{{recipients}} Personen kommen infrage, mehr als die Obergrenze von {{cap}} ({{env}}). Senden ist gesperrt: Prüfen Sie die Auswahl, bevor Sie die Grenze anheben.",
+      "top": "Größte Empfänger (Anzeigename · Angebote)"
     }
   },
   "apiTokensUi": {

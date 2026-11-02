@@ -7938,7 +7938,11 @@
       },
       "loadFailed": "No se pudo cargar la campaña.",
       "retry": "Reintentar",
-      "sendFailed": "No se pudo iniciar la campaña."
+      "sendFailed": "No se pudo iniciar la campaña.",
+      "breakdown": "{{sellers}} vendedores. Anuncios sin actualizar desde hace 30–60 días: {{d30}}, 60–90 días: {{d60}}, 90+ días: {{d90}}.",
+      "cap": "Como máximo {{cap}} destinatarios ({{env}}).",
+      "overCap": "Hay {{recipients}} personas elegibles, más que el límite de {{cap}} ({{env}}). El envío está bloqueado: revisa quién cumple los criterios antes de subir el límite.",
+      "top": "Mayores destinatarios (nombre visible · anuncios)"
     }
   },
   "apiTokensUi": {

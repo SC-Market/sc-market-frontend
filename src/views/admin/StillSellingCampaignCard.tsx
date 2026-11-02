@@ -165,13 +165,53 @@ export function StillSellingCampaignCard() {
                   listings: data.listings,
                 })}
               </Typography>
+              <Typography variant="body2" data-testid="still-selling-breakdown">
+                {t("adminUi.stillSelling.breakdown", {
+                  sellers: data.sellers,
+                  d30: data.listing_age.days_30_60,
+                  d60: data.listing_age.days_60_90,
+                  d90: data.listing_age.days_90_plus,
+                })}
+              </Typography>
               <Typography variant="caption" color="text.secondary">
                 {t("adminUi.stillSelling.throttle", {
                   batch: data.batch_size,
                   seconds: data.batch_pause_seconds,
+                })}{" "}
+                {t("adminUi.stillSelling.cap", {
+                  cap: data.max_recipients,
+                  env: data.max_recipients_env,
                 })}
               </Typography>
             </Box>
+
+            {data.over_cap && (
+              <Alert severity="error" data-testid="still-selling-over-cap">
+                {t("adminUi.stillSelling.overCap", {
+                  recipients: data.recipients,
+                  cap: data.max_recipients,
+                  env: data.max_recipients_env,
+                })}
+              </Alert>
+            )}
+
+            {data.top_recipients.length > 0 && (
+              <Box data-testid="still-selling-top">
+                <Typography variant="subtitle2">
+                  {t(
+                    "adminUi.stillSelling.top",
+                    "Largest recipients (display name · listings)",
+                  )}
+                </Typography>
+                <Box component="ol" sx={{ m: 0, pl: 3 }}>
+                  {data.top_recipients.map((r, i) => (
+                    <Typography component="li" variant="body2" key={i}>
+                      {r.display_name} · {r.listings}
+                    </Typography>
+                  ))}
+                </Box>
+              </Box>
+            )}
 
             <Paper variant="outlined" sx={{ p: 2 }}>
               <Stack
@@ -257,6 +297,7 @@ export function StillSellingCampaignCard() {
                   !data.enabled ||
                   data.run.running ||
                   data.recipients === 0 ||
+                  data.over_cap ||
                   sendState.isLoading
                 }
                 onClick={() => setConfirmOpen(true)}

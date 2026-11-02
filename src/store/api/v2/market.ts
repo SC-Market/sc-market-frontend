@@ -8800,6 +8800,15 @@ export type UpdateStorefrontEnquiryRequest = {
   /** Staff-only note (never shown to the org or shop). Empty clears it. */
   staff_note?: string | null
 }
+export type StillSellingListingAge = {
+  days_30_60: number
+  days_60_90: number
+  days_90_plus: number
+}
+export type StillSellingTopRecipient = {
+  display_name: string
+  listings: number
+}
 export type StillSellingLocale =
   | "en"
   | "de"
@@ -8852,8 +8861,19 @@ export type StillSellingDryRun = {
   enabled: boolean
   /** People the campaign would DM now (not contacted yet, DM-reachable). */
   recipients: number
-  /** Distinct stale listings their DMs would be about. */
+  /** Distinct sellers (users and orgs) behind those people. */
+  sellers: number
+  /** Distinct stale live listings their DMs would be about. */
   listings: number
+  /** Those listings by days since their last update. */
+  listing_age: StillSellingListingAge
+  /** Hard cap on recipients: above it, Send is refused even with the switch on. */
+  max_recipients: number
+  max_recipients_env: string
+  /** More people are eligible than max_recipients. */
+  over_cap: boolean
+  /** The 10 people with the most listings (display name and count only), for a sanity check. */
+  top_recipients: StillSellingTopRecipient[]
   /** A rendered DM with fake data (3 listings, 2 months) and placeholder links. */
   sample: StillSellingSampleMessage
   progress: StillSellingProgress

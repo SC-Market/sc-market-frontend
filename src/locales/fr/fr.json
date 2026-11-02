@@ -7938,7 +7938,11 @@
       },
       "loadFailed": "La campagne n'a pas pu être chargée.",
       "retry": "Réessayer",
-      "sendFailed": "La campagne n'a pas pu être lancée."
+      "sendFailed": "La campagne n'a pas pu être lancée.",
+      "breakdown": "{{sellers}} vendeurs. Annonces non mises à jour depuis 30–60 jours : {{d30}}, 60–90 jours : {{d60}}, 90+ jours : {{d90}}.",
+      "cap": "Au plus {{cap}} destinataires ({{env}}).",
+      "overCap": "{{recipients}} personnes sont éligibles, plus que la limite de {{cap}} ({{env}}). L'envoi est bloqué : vérifiez qui est concerné avant de relever la limite.",
+      "top": "Plus gros destinataires (nom affiché · annonces)"
     }
   },
   "apiTokensUi": {

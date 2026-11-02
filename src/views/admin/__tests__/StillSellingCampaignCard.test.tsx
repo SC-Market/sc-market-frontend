@@ -29,7 +29,16 @@ const dryRun = (
   kill_switch_env: "STILL_SELLING_CAMPAIGN_ENABLED",
   enabled: false,
   recipients: 42,
+  sellers: 40,
   listings: 130,
+  listing_age: { days_30_60: 50, days_60_90: 30, days_90_plus: 50 },
+  max_recipients: 150,
+  max_recipients_env: "STILL_SELLING_MAX_RECIPIENTS",
+  over_cap: false,
+  top_recipients: [
+    { display_name: "Big Seller", listings: 25 },
+    { display_name: "Small Seller", listings: 3 },
+  ],
   sample: {
     locale: "en",
     text: "You have 3 listings on SC Market that haven't been updated in 2 months. Still selling?",
@@ -121,6 +130,28 @@ describe("StillSellingCampaignCard", () => {
     expect(progress.getByText("2")).toBeInTheDocument() // failed (closed)
     expect(progress.getByText("4")).toBeInTheDocument() // clicked keep
     expect(progress.getByText("11 · 2")).toBeInTheDocument()
+  })
+
+  it("shows sellers, listings by age and the largest recipients", () => {
+    state(dryRun())
+    render(<StillSellingCampaignCard />)
+    expect(screen.getByTestId("still-selling-breakdown")).toHaveTextContent(
+      "40 sellers. Listings not updated for 30–60 days: 50, 60–90 days: 30, 90+ days: 50.",
+    )
+    const top = within(screen.getByTestId("still-selling-top"))
+    expect(top.getByText("Big Seller · 25")).toBeInTheDocument()
+    expect(
+      screen.queryByTestId("still-selling-over-cap"),
+    ).not.toBeInTheDocument()
+  })
+
+  it("over the cap: warns and Send is disabled even with the switch on", () => {
+    state(dryRun({ enabled: true, recipients: 900, over_cap: true }))
+    render(<StillSellingCampaignCard />)
+    expect(screen.getByTestId("still-selling-over-cap")).toHaveTextContent(
+      "900 people are eligible, more than the cap of 150",
+    )
+    expect(screen.getByRole("button", { name: "Send" })).toBeDisabled()
   })
 
   it("kill switch off: says so and Send is disabled", () => {
