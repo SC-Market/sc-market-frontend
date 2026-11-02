@@ -764,6 +764,7 @@ exports[`routes (shard 3/4) > /inventory 1`] = `
     "/guides",
     "/guides/discord/api-tokens",
     "/guides/selling/stock-lots-and-allocation",
+    "/guides/selling/stock-lots-and-allocation#my-stock-your-personal-lots",
     "/market",
     "/privacy",
     "/terms",
