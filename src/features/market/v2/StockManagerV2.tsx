@@ -82,12 +82,18 @@ import {
   useDeleteListingMutation,
   useCreateListingMutation,
   useUpdateStockLotMutation,
+  marketV2Api,
   type MyListingItem,
 } from "../../../store/api/v2/market"
 import { MobileListingRow } from "./components/MobileListingRow"
 import { formatMarketUrl } from "../domain/urls"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths"
+import { listingApiError } from "../domain/listingFormErrors"
+import { withShopContext } from "../../../components/sidebar/shopContextState"
+import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
+import { ImportFromUexDialog } from "./ImportFromUex"
+import { selectOnFocus } from "../../../util/selectOnFocus"
 
 /* ── Types ── */
 
@@ -115,6 +121,8 @@ interface StockToolbarProps {
   setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
   isMobile: boolean
   onAddQuickListing?: () => void
+  /** False for org members without manage_market: no bulk or create actions */
+  canManage: boolean
 }
 
 declare module "@mui/x-data-grid" {
@@ -124,6 +132,7 @@ declare module "@mui/x-data-grid" {
     setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
     isMobile: boolean
     onAddQuickListing?: () => void
+    canManage: boolean
   }
 }
 
@@ -136,9 +145,10 @@ function StockToolbarV2(props: StockToolbarProps) {
     setRowModesModel,
     isMobile,
     onAddQuickListing,
+    canManage,
   } = props
   const ctx = useContext(StockSelectionContext)
-  if (!ctx) return <></>
+  if (!ctx || !canManage) return <></>
   const [selectionModel] = ctx
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -314,6 +324,8 @@ function DisplayStockV2({
   const [deleteListing] = useDeleteListingMutation()
   const [createListing] = useCreateListingMutation()
   const [updateStockLot] = useUpdateStockLotMutation()
+  const [fetchStockLots] = marketV2Api.endpoints.getStockLots.useLazyQuery()
+  const canManage = shop.permissions?.can_manage === true
 
   const [newRows, setNewRows] = useState<NewListingRowV2[]>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
@@ -399,7 +411,6 @@ function DisplayStockV2({
         await createListing({
           createListingRequest: {
             title: editing.game_item_name || "New Listing",
-            description: "",
             game_item_id: editing.game_item_id,
             pricing_mode: "unified",
             base_price: editing.price || 1,
@@ -409,8 +420,8 @@ function DisplayStockV2({
         }).unwrap()
         issueAlert({ message: t("ItemStock.created"), severity: "success" })
         setNewRows((prev) => prev.filter((r) => r.id !== id))
-      } catch {
-        issueAlert({ message: t("ItemStock.createError"), severity: "error" })
+      } catch (e) {
+        issueAlert({ message: listingApiError(e, t("ItemStock.createError")).message, severity: "error" })
         return
       }
     } else if (existing) {
@@ -422,23 +433,36 @@ function DisplayStockV2({
           await updateListing({ id: existing.listing_id, updateListingRequest: req }).unwrap()
         }
 
-        // Handle quantity change: fetch first listed lot and update it
+        // Quantity change: apply the difference to the listing's newest listed
+        // lot. The lookup is scoped to this shop: unscoped it only searched
+        // your own shops, so an org shop's lots were never found and the edit
+        // was silently dropped.
         if (
           editing.quantity_available !== undefined &&
           editing.quantity_available !== existing.quantity_available
         ) {
-          const lotsRes = await fetch(
-            `/api/v2/stock-lots?listing_id=${existing.listing_id}&listed=true&page_size=1`,
-            { credentials: "include" },
-          )
-          const lotsData = await lotsRes.json()
-          const firstLot = lotsData?.lots?.[0]
-          if (firstLot) {
-            await updateStockLot({
-              id: firstLot.lot_id,
-              updateStockLotRequest: { quantity_total: editing.quantity_available },
-            }).unwrap()
+          const { lots } = await fetchStockLots({
+            listingId: existing.listing_id,
+            listed: true,
+            pageSize: 1,
+            shopId: shop.shop_id,
+          }).unwrap()
+          const firstLot = lots[0]
+          const delta = editing.quantity_available - existing.quantity_available
+          if (!firstLot || firstLot.quantity_total + delta < 0) {
+            issueAlert({
+              message: t(
+                "ItemStock.quantityUseStockPage",
+                "Change this listing's quantity per lot on the Stock page",
+              ),
+              severity: "error",
+            })
+            return
           }
+          await updateStockLot({
+            id: firstLot.lot_id,
+            updateStockLotRequest: { quantity_total: firstLot.quantity_total + delta },
+          }).unwrap()
         }
 
         issueAlert({ message: t("ItemStock.updated"), severity: "success" })
@@ -469,6 +493,9 @@ function DisplayStockV2({
             const editing = editingRows[params.id as string]
             return (
               <GameItemSearchAutocomplete
+                required
+                sx={{ minWidth: 220, width: "100%" }}
+                label={t("ItemStock.item", "Item")}
                 value={editing?.game_item_name ?? null}
                 onChange={(name, _type, itemId) => {
                   setEditingRows((prev) => ({
@@ -516,6 +543,7 @@ function DisplayStockV2({
                   }))
                 }}
                 size="small"
+                onFocus={selectOnFocus}
                 label={t("ItemStock.price")}
                 value={editing?.price ?? params.row.price_min ?? 1}
               />
@@ -548,6 +576,7 @@ function DisplayStockV2({
                   }))
                 }}
                 size="small"
+                onFocus={selectOnFocus}
                 label={t("ItemStock.qty")}
                 value={editing?.quantity_available ?? params.value ?? 0}
               />
@@ -636,6 +665,7 @@ function DisplayStockV2({
           if (nr) return "—"
           const paused = params.row.status === "expired"
           if (!params.value && !paused) return "—"
+          if (!canManage) return "—"
           // Renewable: paused (expired) or within the 3-day notice window.
           // Renew starts a new month and reactivates a paused listing.
           const msLeft = params.value ? new Date(params.value).getTime() - Date.now() : 0
@@ -697,9 +727,10 @@ function DisplayStockV2({
             )
           }
 
+          if (!canManage) return null
           return (
             <Tooltip title={t("ItemStock.editListing")}>
-              <Link to={MARKET_PATHS.edit(params.value)} style={{ color: "inherit" }}>
+              <Link to={MARKET_PATHS.edit(params.value)} state={withShopContext(shop.slug)} style={{ color: "inherit" }}>
                 <IconButton aria-label={t("ItemStock.editListing")}><CreateRounded /></IconButton>
               </Link>
             </Tooltip>
@@ -707,7 +738,7 @@ function DisplayStockV2({
         },
       },
     ],
-    [t, theme, newRows, rowModesModel, editingRows, handleRefresh, handleEditClick, handleCancelClick, handleSaveClick],
+    [t, theme, newRows, rowModesModel, editingRows, handleRefresh, handleEditClick, handleCancelClick, handleSaveClick, canManage, shop.slug],
   )
 
   // Combine existing + new rows
@@ -737,6 +768,7 @@ function DisplayStockV2({
           setNewRows={setNewRows}
           setRowModesModel={setRowModesModel}
           isMobile={true}
+          canManage={canManage}
           onAddQuickListing={() => {
             const id = `new-${Date.now()}`
             setNewRows((prev) => [
@@ -753,7 +785,7 @@ function DisplayStockV2({
               <MobileListingRow
                 key={row.id}
                 listing={row as MyListingItem}
-                onEdit={(l) => { setEditTarget(l); setSheetOpen(true) }}
+                onEdit={canManage ? (l) => { setEditTarget(l); setSheetOpen(true) } : undefined}
               />
             ))
           )}
@@ -785,7 +817,7 @@ function DisplayStockV2({
         columns={columns}
         getRowId={(row) => row.id}
         disableRowSelectionOnClick
-        checkboxSelection
+        checkboxSelection={canManage}
         onRowSelectionModelChange={setSelectionModel}
         rowSelectionModel={selectionModel}
         onRowEditStop={handleRowEditStop}
@@ -801,6 +833,7 @@ function DisplayStockV2({
             setNewRows,
             setRowModesModel,
             isMobile: false,
+            canManage,
           },
         }}
         showToolbar
@@ -894,6 +927,8 @@ export function StockManagerV2() {
   })
 
   const listings = data?.listings ?? []
+  const canManage = shop.permissions?.can_manage === true
+  const [importOpen, setImportOpen] = useState(false)
 
   return (
     <StandardPageLayout
@@ -940,15 +975,28 @@ export function StockManagerV2() {
                 <ManageListingsTabBar
                   title={t("sidebar.manage_listings", "Manage Listings")}
                   rightAction={
-                    <Link to={SHOP_PATHS.create(shop.slug)} style={{ textDecoration: "none" }}>
-                      <Button variant="contained" color="secondary" startIcon={<AddRounded />} size="large">
-                        {t("market.createListing", "Create Listing")}
-                      </Button>
-                    </Link>
+                    canManage ? (
+                      <Stack direction="row" spacing={1}>
+                        <Button variant="outlined" color="secondary" onClick={() => setImportOpen(true)}>
+                          {t("ItemStock.importFromUex", "Import from UEX")}
+                        </Button>
+                        <Link to={SHOP_PATHS.create(shop.slug)} style={{ textDecoration: "none" }}>
+                          <Button variant="contained" color="secondary" startIcon={<AddRounded />} size="large">
+                            {t("market.createListing", "Create Listing")}
+                          </Button>
+                        </Link>
+                      </Stack>
+                    ) : undefined
                   }
                 />
               </Box>
             </Grid>
+
+            {!canManage && (
+              <Grid item xs={12}>
+                <ShopManageAccessNotice />
+              </Grid>
+            )}
 
             {/* Desktop sidebar */}
             {!isMobile && (
@@ -984,6 +1032,9 @@ export function StockManagerV2() {
           </Grid>
         </Grid>
       </StockSelectionContext.Provider>
+      {canManage && (
+        <ImportFromUexDialog shopId={shop.shop_id} open={importOpen} onClose={() => setImportOpen(false)} />
+      )}
     </StandardPageLayout>
   )
 }

@@ -100,13 +100,25 @@ vi.mock("../../../../components/metadata/Page", () => ({
   shouldShowErrorPage: () => false,
 }));
 
+// Whether the viewer may manage the shop (an org member without
+// manage_market may not).
+const shopAccess = vi.hoisted(() => ({ canManage: true }));
+const routeShop = () => ({
+  shop: {
+    shop_id: "shop-1",
+    name: "Test Shop",
+    slug: "test-shop",
+    permissions: {
+      can_manage: shopAccess.canManage,
+      manage_market: shopAccess.canManage,
+      manage_stock: false,
+      manage_orders: false,
+    },
+  },
+});
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
-  useShopRouteContext: () => ({
-    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop" },
-  }),
-  useOptionalShopRouteContext: () => ({
-    shop: { shop_id: "shop-1", name: "Test Shop", slug: "test-shop" },
-  }),
+  useShopRouteContext: () => routeShop(),
+  useOptionalShopRouteContext: () => routeShop(),
 }));
 
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
@@ -184,6 +196,7 @@ const renderPage = () => {
 describe("StockManagerV2", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    shopAccess.canManage = true;
     myListingsReturn = querySuccess<MarketV2Endpoints["getMyListings"]>({
       listings: mockListings,
       total: 2,
@@ -241,5 +254,26 @@ describe("StockManagerV2", () => {
     await waitFor(() =>
       expect(screen.getByText("sidebar.archived_listings")).toBeInTheDocument(),
     );
+  });
+
+  it("offers the UEX import to people who manage the shop", async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getByText("Import from UEX")).toBeInTheDocument(),
+    );
+  });
+
+  // Regression: org members without manage_market saw every create and edit
+  // action, and only got a 403 when they saved.
+  it("hides create, import and edit actions from members who can't manage the shop", async () => {
+    shopAccess.canManage = false;
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getByText(/ask an org admin for the Manage Market permission/i)).toBeInTheDocument(),
+    );
+    expect(screen.queryByText("Create Listing")).not.toBeInTheDocument();
+    expect(screen.queryByText("Import from UEX")).not.toBeInTheDocument();
+    // The listings are still shown
+    expect(screen.getByText("High Quality Mining Tool")).toBeInTheDocument();
   });
 });

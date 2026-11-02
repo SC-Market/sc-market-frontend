@@ -1,6 +1,9 @@
 import React, { useState } from "react"
 import {
   Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
   Button,
   TextField,
   Typography,
@@ -15,31 +18,40 @@ import {
   Chip,
   Checkbox,
   FormControlLabel,
-  CircularProgress,
 } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { CloudDownloadRounded, CheckCircleRounded } from "@mui/icons-material"
-import { useImportFromUexMutation } from "../../../store/api/v2/market-overrides"
-import type { UexImportPreviewItem } from "../../../store/api/v2/market-overrides"
-import { ShopSelector } from "../../shops/components/ShopSelector"
+import { useTranslation } from "react-i18next"
+import {
+  useImportFromUexMutation,
+  type ImportFromUexApiResponse,
+} from "../../../store/api/v2/market"
+import { listingApiError } from "../domain/listingFormErrors"
 
-export function ImportFromUex() {
-  const [shopId, setShopId] = useState("")
+type UexImportPreviewItem = NonNullable<ImportFromUexApiResponse["preview"]>[number]
+
+/**
+ * Copies a seller's active UEXCorp sell listings into `shopId`. Titles that
+ * name exactly one game item are linked to it by the backend.
+ */
+export function ImportFromUex({ shopId }: { shopId: string }) {
+  const { t } = useTranslation()
   const [username, setUsername] = useState("")
   const [preview, setPreview] = useState<UexImportPreviewItem[] | null>(null)
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set())
   const [importResult, setImportResult] = useState<{ imported: number; total: number } | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const [importFromUex, { isLoading }] = useImportFromUexMutation()
 
   const handleFetchPreview = async () => {
     if (!username.trim()) return
     setImportResult(null)
+    setError(null)
 
     try {
       const result = await importFromUex({
-        uex_username: username.trim(),
-        shop_id: shopId,
+        body: { uex_username: username.trim(), shop_id: shopId },
       }).unwrap()
 
       if (result.preview) {
@@ -48,8 +60,9 @@ export function ImportFromUex() {
       } else {
         setPreview([])
       }
-    } catch {
-      setPreview([])
+    } catch (e) {
+      setPreview(null)
+      setError(listingApiError(e, t("ItemStock.importFromUexFetchError", "Couldn't fetch your UEX listings")).message)
     }
   }
 
@@ -67,18 +80,21 @@ export function ImportFromUex() {
         source: item.source,
       }))
 
+    setError(null)
     try {
       const result = await importFromUex({
-        uex_username: username.trim(),
-        shop_id: shopId,
-        listings: selectedListings,
-        confirm: true,
+        body: {
+          uex_username: username.trim(),
+          shop_id: shopId,
+          listings: selectedListings,
+          confirm: true,
+        },
       }).unwrap()
 
       setImportResult({ imported: result.imported || 0, total: result.total || 0 })
       setPreview(null)
-    } catch {
-      // Error handled by RTK Query
+    } catch (e) {
+      setError(listingApiError(e, t("ItemStock.importFromUexError", "The import failed")).message)
     }
   }
 
@@ -127,13 +143,15 @@ export function ImportFromUex() {
   return (
     <Box>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Import your active sell listings from UEXCorp. Select a shop, then enter your UEX username
-        to preview what will be imported.
+        Import your active sell listings from UEXCorp. Enter your UEX username to preview what will
+        be imported.
       </Typography>
 
-      <Box sx={{ mb: 2 }}>
-        <ShopSelector value={shopId} onChange={setShopId} />
-      </Box>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
         <TextField
@@ -142,7 +160,7 @@ export function ImportFromUex() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleFetchPreview()}
-          disabled={isLoading || !shopId}
+          disabled={isLoading}
           sx={{ flex: 1, maxWidth: 300 }}
         />
         <LoadingButton
@@ -235,5 +253,26 @@ export function ImportFromUex() {
         </>
       )}
     </Box>
+  )
+}
+
+/** The import, in a dialog opened from the shop's listings page. */
+export function ImportFromUexDialog({
+  shopId,
+  open,
+  onClose,
+}: {
+  shopId: string
+  open: boolean
+  onClose: () => void
+}) {
+  const { t } = useTranslation()
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+      <DialogTitle>{t("ItemStock.importFromUex", "Import from UEX")}</DialogTitle>
+      <DialogContent>
+        <ImportFromUex shopId={shopId} />
+      </DialogContent>
+    </Dialog>
   )
 }

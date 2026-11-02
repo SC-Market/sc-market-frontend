@@ -33,10 +33,12 @@ import { type MyListingItem } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { getRelativeTime } from "../../../../util/time"
 import { formatMarketUrl } from "../../domain/urls"
+import { listingStatusLabel } from "../../domain/listingStatus"
 
 interface MobileListingRowProps {
   listing: MyListingItem
-  onEdit: (listing: MyListingItem) => void
+  /** Quick edit; left out for people who can't edit the shop's listings */
+  onEdit?: (listing: MyListingItem) => void
   /** When provided, swipe-left reveals an Archive action */
   onArchive?: (listing: MyListingItem) => void
 }
@@ -58,7 +60,7 @@ export function MobileListingRow({
   const handleEditClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation()
-      onEdit(listing)
+      onEdit?.(listing)
     },
     [onEdit, listing],
   )
@@ -85,15 +87,17 @@ export function MobileListingRow({
 
   return (
     <SwipeableItem
-      onSwipeRight={() => onEdit(listing)}
+      onSwipeRight={onEdit ? () => onEdit(listing) : undefined}
       onSwipeLeft={onArchive ? () => onArchive(listing) : undefined}
       leftAction={
-        <Box
-          sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "secondary.main" }}
-        >
-          <EditRounded fontSize="small" />
-          <Typography variant="caption">{t("marketV2.edit")}</Typography>
-        </Box>
+        onEdit ? (
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 0.5, color: "secondary.main" }}
+          >
+            <EditRounded fontSize="small" />
+            <Typography variant="caption">{t("marketV2.edit")}</Typography>
+          </Box>
+        ) : undefined
       }
       rightAction={
         onArchive ? (
@@ -151,7 +155,7 @@ export function MobileListingRow({
               {listing.title}
             </Typography>
             <Chip
-              label={listing.status.toUpperCase()}
+              label={listingStatusLabel(listing.status, t).toUpperCase()}
               color={statusColor as "success" | "warning" | "default"}
               size="small"
               sx={{ flexShrink: 0, height: 18, fontSize: "0.65rem" }}
@@ -195,7 +199,7 @@ export function MobileListingRow({
             flexShrink: 0,
           }}
         >
-          {listing.status !== "cancelled" && (
+          {onEdit && listing.status !== "cancelled" && (
             <IconButton
               size="small"
               onClick={handleEditClick}

@@ -42,6 +42,8 @@ import {
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
+import { listingStatusLabel } from "../../domain/listingStatus"
+import { selectOnFocus } from "../../../../util/selectOnFocus"
 
 interface QuickEditListingSheetProps {
   listing: MyListingItem | null
@@ -259,7 +261,7 @@ export function QuickEditListingSheet({
           </Typography>
         </Box>
         <Chip
-          label={listing.status.toUpperCase()}
+          label={listingStatusLabel(listing.status, t).toUpperCase()}
           color={statusColor as "success" | "warning" | "default"}
           size="small"
         />
@@ -306,6 +308,7 @@ export function QuickEditListingSheet({
           size="small"
           fullWidth
           label={t("quickEdit.price", "Base Price")}
+          onFocus={selectOnFocus}
           value={price}
           onValueChange={(v) => setPrice(v.floatValue ?? 0)}
           color="secondary"
