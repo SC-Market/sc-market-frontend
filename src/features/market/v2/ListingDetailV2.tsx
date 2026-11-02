@@ -70,6 +70,7 @@ import { SeoHead } from "../../../seo/SeoHead"
 import { isSiteAdmin } from "../../../util/siteRole"
 import { ListingDetailContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton"
 import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton"
+import { listingStatusLabel } from "../domain/listingStatus"
 
 export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
@@ -394,7 +395,7 @@ export function ListingDetailV2() {
                       {(listing.status !== "active" || listing.visibility === "private" || totalQuantity === 0) && (
                         <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", my: 1 }}>
                           {listing.status !== "active" && (
-                            <Chip label={listing.status.toUpperCase()} color="default" size="small" sx={{ fontWeight: "bold" }} />
+                            <Chip label={listingStatusLabel(listing.status, t).toUpperCase()} color="default" size="small" sx={{ fontWeight: "bold" }} />
                           )}
                           {listing.visibility === "private" && (
                             <Chip label={t("marketV2.privateBadge")} color="warning" size="small" sx={{ fontWeight: "bold" }} />

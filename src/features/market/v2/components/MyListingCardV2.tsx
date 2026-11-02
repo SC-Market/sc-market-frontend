@@ -29,6 +29,7 @@ import { getRelativeTime } from "../../../../util/time"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
 import { MARKET_PATHS } from "../../../../routes/paths"
+import { listingStatusLabel } from "../../domain/listingStatus"
 
 interface MyListingCardV2Props {
   listing: MyListingItem
@@ -98,7 +99,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
                 <Chip
-                  label={listing.status.toUpperCase()}
+                  label={listingStatusLabel(listing.status, t).toUpperCase()}
                   color={statusColor(listing.status)}
                   size="small"
                 />
