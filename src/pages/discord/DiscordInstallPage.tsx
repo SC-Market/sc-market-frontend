@@ -3,6 +3,7 @@ import {
   Alert,
   AlertTitle,
   Button,
+  Grid,
   Link as MuiLink,
   Stack,
   Typography,
@@ -242,7 +243,10 @@ export function DiscordInstallPage() {
       title={t("discordInstall.pageTitle", "Add SC Market to Discord")}
       maxWidth="sm"
     >
-      {body}
+      {/* StandardPageLayout lays children out in a Grid container. */}
+      <Grid item xs={12}>
+        {body}
+      </Grid>
     </StandardPageLayout>
   )
 }
