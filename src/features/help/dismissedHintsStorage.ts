@@ -63,3 +63,14 @@ export function subscribeLocalDismissedHints(notify: () => void): () => void {
     listeners.delete(notify)
   }
 }
+
+/** Forget every locally dismissed hint, so all of them show again. */
+export function clearLocalDismissedHints(): void {
+  unpersisted.clear()
+  try {
+    localStorage.removeItem(DISMISSED_HINTS_STORAGE_KEY)
+  } catch {
+    // Nothing stored to clear.
+  }
+  listeners.forEach((notify) => notify())
+}

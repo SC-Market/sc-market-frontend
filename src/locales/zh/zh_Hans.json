@@ -1411,7 +1411,14 @@
         "sunset": "旧版令牌将于 {{date}} 停止工作。请在此之前于上方创建新令牌，并将你的工具迁移到公开 API。"
       }
     },
-    "sectionsNav": "设置分区"
+    "sectionsNav": "设置分区",
+    "tips": {
+      "title": "帮助提示",
+      "description": "已关闭的提示在所有设备上都保持隐藏。全部恢复即可再次看到它们。",
+      "showAgain": "重新显示提示",
+      "reset": "提示将再次显示",
+      "resetError": "无法重置提示，请重试。"
+    }
   },
   "sidebar": {
     "dashboard": {
@@ -8066,7 +8073,17 @@
       "quantity": "数量",
       "source": "来源"
     },
-    "selectItem": "选择 {{title}}"
+    "selectItem": "选择 {{title}}",
+    "someBlocked": "部分商品无法按原样导入。它们在下方以灰色显示并注明原因，其余商品仍可导入。",
+    "skippedTitle": "未导入",
+    "skipReasons": {
+      "no_price": "未设置价格",
+      "invalid_price": "价格无效",
+      "invalid_title": "标题缺失或过长",
+      "invalid_description": "描述过长",
+      "invalid_quantity": "数量无效",
+      "failed": "无法保存"
+    }
   },
   "gestures": {
     "favorite": "收藏",

@@ -1347,7 +1347,14 @@
         "sunset": "舊版權杖將於 {{date}} 停止運作。請在此之前於上方建立新權杖，並將你的工具遷移到公開 API。"
       }
     },
-    "sectionsNav": "設定區段"
+    "sectionsNav": "設定區段",
+    "tips": {
+      "title": "說明提示",
+      "description": "已關閉的提示在所有裝置上都會保持隱藏。全部恢復即可再次看到它們。",
+      "showAgain": "重新顯示提示",
+      "reset": "提示將再次顯示",
+      "resetError": "無法重設提示，請再試一次。"
+    }
   },
   "sidebar": {
     "dashboard": {
@@ -8060,7 +8067,17 @@
       "quantity": "數量",
       "source": "來源"
     },
-    "selectItem": "選取 {{title}}"
+    "selectItem": "選取 {{title}}",
+    "someBlocked": "部分商品無法依原樣匯入。它們在下方以灰色顯示並註明原因，其餘商品仍可匯入。",
+    "skippedTitle": "未匯入",
+    "skipReasons": {
+      "no_price": "未設定價格",
+      "invalid_price": "價格無效",
+      "invalid_title": "標題缺少或過長",
+      "invalid_description": "描述過長",
+      "invalid_quantity": "數量無效",
+      "failed": "無法儲存"
+    }
   },
   "gestures": {
     "favorite": "收藏",

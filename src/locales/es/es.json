@@ -1415,7 +1415,14 @@
         "sunset": "Los tokens antiguos dejarán de funcionar el {{date}}. Crea tokens nuevos arriba y pasa tus herramientas a la API pública antes de esa fecha."
       }
     },
-    "sectionsNav": "Secciones de ajustes"
+    "sectionsNav": "Secciones de ajustes",
+    "tips": {
+      "title": "Consejos de ayuda",
+      "description": "Los consejos que has descartado siguen ocultos en todos tus dispositivos. Recupéralos todos para volver a verlos.",
+      "showAgain": "Volver a mostrar consejos",
+      "reset": "Los consejos volverán a mostrarse",
+      "resetError": "No se pudieron restablecer tus consejos. Inténtalo de nuevo."
+    }
   },
   "sidebar": {
     "dashboard": {
@@ -8322,7 +8329,17 @@
       "quantity": "Cant.",
       "source": "Origen"
     },
-    "selectItem": "Seleccionar {{title}}"
+    "selectItem": "Seleccionar {{title}}",
+    "someBlocked": "Algunos anuncios no se pueden importar tal como están. Aparecen atenuados abajo con el motivo, y el resto se puede importar igualmente.",
+    "skippedTitle": "No importados",
+    "skipReasons": {
+      "no_price": "Sin precio",
+      "invalid_price": "Precio no válido",
+      "invalid_title": "Título vacío o demasiado largo",
+      "invalid_description": "Descripción demasiado larga",
+      "invalid_quantity": "Cantidad no válida",
+      "failed": "No se pudo guardar"
+    }
   },
   "gestures": {
     "favorite": "Favorito",

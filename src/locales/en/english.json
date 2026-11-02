@@ -5077,7 +5077,14 @@
         "sunset": "Legacy tokens stop working on {{date}}. Create new tokens above and move your tools to the public API before then."
       }
     },
-    "sectionsNav": "Settings sections"
+    "sectionsNav": "Settings sections",
+    "tips": {
+      "title": "Help tips",
+      "description": "Tips you've dismissed stay hidden on every device. Bring them all back to see them again.",
+      "showAgain": "Show tips again",
+      "reset": "Tips will show again",
+      "resetError": "Couldn't reset your tips. Try again."
+    }
   },
   "settingsManageContractors": {
     "actions": "Actions",
@@ -8191,7 +8198,17 @@
       "quantity": "Qty",
       "source": "Source"
     },
-    "selectItem": "Select {{title}}"
+    "selectItem": "Select {{title}}",
+    "someBlocked": "Some listings can't be imported as they are. They're greyed out below with the reason, and the rest can still be imported.",
+    "skippedTitle": "Not imported",
+    "skipReasons": {
+      "no_price": "No price set",
+      "invalid_price": "Invalid price",
+      "invalid_title": "Title missing or too long",
+      "invalid_description": "Description too long",
+      "invalid_quantity": "Invalid quantity",
+      "failed": "Couldn't be saved"
+    }
   },
   "gestures": {
     "favorite": "Favorite",

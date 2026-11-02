@@ -1405,7 +1405,14 @@
         "sunset": "旧トークンは{{date}}に使えなくなります。それまでに上で新しいトークンを作成し、ツールを公開APIに移行してください。"
       }
     },
-    "sectionsNav": "設定のセクション"
+    "sectionsNav": "設定のセクション",
+    "tips": {
+      "title": "ヘルプのヒント",
+      "description": "閉じたヒントはすべての端末で非表示のままです。すべて元に戻すと、もう一度表示されます。",
+      "showAgain": "ヒントを再表示",
+      "reset": "ヒントが再び表示されます",
+      "resetError": "ヒントをリセットできませんでした。もう一度お試しください。"
+    }
   },
   "sidebar": {
     "dashboard": {
@@ -8060,7 +8067,17 @@
       "quantity": "数量",
       "source": "入手元"
     },
-    "selectItem": "{{title}} を選択"
+    "selectItem": "{{title}} を選択",
+    "someBlocked": "そのままではインポートできない出品があります。下に理由とともにグレー表示されています。それ以外はインポートできます。",
+    "skippedTitle": "インポートされなかった出品",
+    "skipReasons": {
+      "no_price": "価格が未設定",
+      "invalid_price": "価格が無効",
+      "invalid_title": "タイトルがないか長すぎます",
+      "invalid_description": "説明が長すぎます",
+      "invalid_quantity": "数量が無効",
+      "failed": "保存できませんでした"
+    }
   },
   "gestures": {
     "favorite": "お気に入り",

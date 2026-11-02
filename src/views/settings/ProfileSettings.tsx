@@ -11,6 +11,7 @@ import { ReVerifyProfile } from "./ReVerifyProfile"
 import { UnlinkProfile } from "./UnlinkProfile"
 import { AccountLinks } from "./AccountLinks"
 import { LanguageSettings } from "./LanguageSettings"
+import { HelpTipsSettings } from "./HelpTipsSettings"
 import { InGameToggle } from "../../features/profile/components/InGameToggle"
 import { HideOnlineStatusToggle } from "../../features/profile/components/HideOnlineStatusToggle"
 import { isCitizenIdEnabled } from "../../util/constants"
@@ -74,6 +75,9 @@ export function ProfileSettings() {
             <AuthenticateRSI identifier={identifier.data.identifier} />
           )}
         </Grid>
+        <Grid item xs={12}>
+          <HelpTipsSettings />
+        </Grid>
       </Grid>
     )
   }
@@ -101,6 +105,9 @@ export function ProfileSettings() {
       )}
       <Grid item xs={12}>
         <LanguageSettings />
+      </Grid>
+      <Grid item xs={12}>
+        <HelpTipsSettings />
       </Grid>
     </Grid>
   )

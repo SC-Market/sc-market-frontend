@@ -1041,6 +1041,13 @@ const injectedRtkApi = api
         query: () => ({ url: `/hints/dismissed` }),
         providesTags: ["Hints"],
       }),
+      clearDismissedHints: build.mutation<
+        ClearDismissedHintsApiResponse,
+        ClearDismissedHintsApiArg
+      >({
+        query: () => ({ url: `/hints/dismissed`, method: "DELETE" }),
+        invalidatesTags: ["Hints"],
+      }),
       dismissHint: build.mutation<DismissHintApiResponse, DismissHintApiArg>({
         query: (queryArg) => ({
           url: `/hints/dismissed/${queryArg.hintKey}`,
@@ -2955,17 +2962,7 @@ export type UploadPhotosApiArg = {
   id: string
 }
 export type ImportFromUexApiResponse =
-  /** status 200 Preview of importable listings or import result */ {
-    total?: number
-    imported?: number
-    preview?: {
-      source?: string
-      quality?: number
-      quantity: number
-      price: number
-      title: string
-    }[]
-  }
+  /** status 200 Preview of importable listings or import result */ UexImportResponse
 export type ImportFromUexApiArg = {
   /** UEX username and optional org to import as */
   body: {
@@ -3055,6 +3052,9 @@ export type UploadImageApiArg = void
 export type GetDismissedHintsApiResponse =
   /** status 200 Ok */ DismissedHintsResponse
 export type GetDismissedHintsApiArg = void
+export type ClearDismissedHintsApiResponse =
+  /** status 200 Ok */ ClearDismissedHintsResponse
+export type ClearDismissedHintsApiArg = void
 export type DismissHintApiResponse = /** status 200 Ok */ DismissedHint
 export type DismissHintApiArg = {
   /** Lower-case letters, digits, dots, dashes and underscores (at most 64) */
@@ -5844,6 +5844,37 @@ export type UpdateListingRequest = {
   /** Listing visibility (null to keep unchanged). Only contractor listings can be 'private'. */
   visibility?: "public" | "private"
 }
+export type UexImportSkipReason =
+  | "no_price"
+  | "invalid_price"
+  | "invalid_title"
+  | "invalid_description"
+  | "invalid_quantity"
+  | "failed"
+export type UexImportPreviewItem = {
+  title: string
+  price: number
+  quantity: number
+  quality?: number
+  source?: string
+  /** Set when this listing can't be imported as it is. */
+  skip_reason?: UexImportSkipReason
+}
+export type UexImportItemResult = {
+  /** Position of the listing in the request's `listings`. */
+  index: number
+  title: string
+  status: "imported" | "skipped"
+  /** Set when `status` is "skipped". */
+  reason?: UexImportSkipReason
+}
+export type UexImportResponse = {
+  preview?: UexImportPreviewItem[]
+  imported?: number
+  skipped?: number
+  total?: number
+  results?: UexImportItemResult[]
+}
 export type InventoryLotDetail = {
   lot_id: string
   owner_id: string
@@ -5919,6 +5950,10 @@ export type ImageUploadResponse = {
 export type DismissedHintsResponse = {
   /** Keys of every hint this user has dismissed. */
   hint_keys: string[]
+}
+export type ClearDismissedHintsResponse = {
+  /** How many dismissals were removed. */
+  cleared: number
 }
 export type DismissedHint = {
   /** The dismissed hint's key, e.g. "stock.lots-vs-quantity". */
@@ -8839,6 +8874,7 @@ export const {
   useListJobsQuery,
   useUploadImageMutation,
   useGetDismissedHintsQuery,
+  useClearDismissedHintsMutation,
   useDismissHintMutation,
   useGetHealthQuery,
   useSearchGameItemsQuery,

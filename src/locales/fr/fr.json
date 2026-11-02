@@ -1415,7 +1415,14 @@
         "sunset": "Les anciens jetons ne fonctionneront plus à partir du {{date}}. Créez de nouveaux jetons ci-dessus et passez vos outils à l'API publique avant cette date."
       }
     },
-    "sectionsNav": "Sections des paramètres"
+    "sectionsNav": "Sections des paramètres",
+    "tips": {
+      "title": "Astuces d'aide",
+      "description": "Les astuces que vous avez masquées restent masquées sur tous vos appareils. Réaffichez-les toutes pour les revoir.",
+      "showAgain": "Réafficher les astuces",
+      "reset": "Les astuces s'afficheront de nouveau",
+      "resetError": "Impossible de réinitialiser vos astuces. Réessayez."
+    }
   },
   "sidebar": {
     "dashboard": {
@@ -8322,7 +8329,17 @@
       "quantity": "Qté",
       "source": "Source"
     },
-    "selectItem": "Sélectionner {{title}}"
+    "selectItem": "Sélectionner {{title}}",
+    "someBlocked": "Certaines annonces ne peuvent pas être importées en l'état. Elles sont grisées ci-dessous avec la raison ; les autres peuvent quand même être importées.",
+    "skippedTitle": "Non importées",
+    "skipReasons": {
+      "no_price": "Aucun prix défini",
+      "invalid_price": "Prix invalide",
+      "invalid_title": "Titre manquant ou trop long",
+      "invalid_description": "Description trop longue",
+      "invalid_quantity": "Quantité invalide",
+      "failed": "Impossible d'enregistrer"
+    }
   },
   "gestures": {
     "favorite": "Favori",

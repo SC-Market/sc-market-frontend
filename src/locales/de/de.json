@@ -1410,7 +1410,14 @@
         "sunset": "Alte Tokens funktionieren ab dem {{date}} nicht mehr. Erstelle oben neue Tokens und stelle deine Tools vorher auf die öffentliche API um."
       }
     },
-    "sectionsNav": "Einstellungsbereiche"
+    "sectionsNav": "Einstellungsbereiche",
+    "tips": {
+      "title": "Hilfetipps",
+      "description": "Ausgeblendete Tipps bleiben auf allen Geräten ausgeblendet. Hol sie alle zurück, um sie wieder zu sehen.",
+      "showAgain": "Tipps wieder anzeigen",
+      "reset": "Tipps werden wieder angezeigt",
+      "resetError": "Deine Tipps konnten nicht zurückgesetzt werden. Versuch es erneut."
+    }
   },
   "sidebar": {
     "dashboard": {
@@ -8191,7 +8198,17 @@
       "quantity": "Menge",
       "source": "Quelle"
     },
-    "selectItem": "{{title}} auswählen"
+    "selectItem": "{{title}} auswählen",
+    "someBlocked": "Einige Angebote können so nicht importiert werden. Sie sind unten mit dem Grund ausgegraut; die übrigen kannst du trotzdem importieren.",
+    "skippedTitle": "Nicht importiert",
+    "skipReasons": {
+      "no_price": "Kein Preis festgelegt",
+      "invalid_price": "Ungültiger Preis",
+      "invalid_title": "Titel fehlt oder ist zu lang",
+      "invalid_description": "Beschreibung zu lang",
+      "invalid_quantity": "Ungültige Menge",
+      "failed": "Konnte nicht gespeichert werden"
+    }
   },
   "gestures": {
     "favorite": "Favorit",
