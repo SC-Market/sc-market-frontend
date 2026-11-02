@@ -16,17 +16,13 @@ describe("shopDiscordChannelError", () => {
   })
 
   it("refuses only one of the two", () => {
-    expect(shopDiscordChannelError(SERVER, "")).toBe(
-      "Enter both the server ID and the channel ID, or leave both empty",
-    )
-    expect(shopDiscordChannelError("", CHANNEL)).toMatch(/both/)
+    expect(shopDiscordChannelError(SERVER, "")).toBe("bothRequired")
+    expect(shopDiscordChannelError("", CHANNEL)).toBe("bothRequired")
   })
 
   it("refuses anything that isn't a Discord ID", () => {
-    expect(shopDiscordChannelError(SERVER, "#orders")).toBe(
-      "Discord IDs are numbers, e.g. 123456789012345678",
-    )
-    expect(shopDiscordChannelError("https://discord.com/channels/1/2", CHANNEL)).toMatch(/numbers/)
-    expect(shopDiscordChannelError("123", CHANNEL)).toMatch(/numbers/)
+    expect(shopDiscordChannelError(SERVER, "#orders")).toBe("notNumeric")
+    expect(shopDiscordChannelError("https://discord.com/channels/1/2", CHANNEL)).toBe("notNumeric")
+    expect(shopDiscordChannelError("123", CHANNEL)).toBe("notNumeric")
   })
 })

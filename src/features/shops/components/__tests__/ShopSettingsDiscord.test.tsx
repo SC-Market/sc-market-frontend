@@ -1,3 +1,4 @@
+import "../../../../util/i18n"
 /**
  * Shop Settings › Discord: a shop's own order-thread channel (both IDs) or
  * none (use the owner's channel, set with /setup threads in Discord).

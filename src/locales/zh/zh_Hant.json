@@ -6744,5 +6744,208 @@
         "inNetwork": "在您的網路中"
       }
     }
+  },
+  "shopsUi": {
+    "tags": {
+      "weapons": "武器",
+      "armor": "護甲",
+      "components": "組件",
+      "cargo": "貨物",
+      "mining": "採礦",
+      "salvage": "打撈",
+      "medical": "醫療",
+      "vehicles": "載具",
+      "services": "服務"
+    },
+    "form": {
+      "general": "一般",
+      "shopName": "商店名稱",
+      "description": "描述",
+      "selectOrganization": "選擇組織...",
+      "addTag": "新增標籤",
+      "addLanguage": "新增語言",
+      "orders": "訂單",
+      "acceptCustomOrders": "接受客製訂單"
+    },
+    "create": {
+      "backToMyShops": "← 返回我的商店",
+      "intro": "在 SC Market 上開設你的店面。建立後可以再調整設定。",
+      "namePlaceholder": "我的超棒商店",
+      "descriptionPlaceholder": "告訴買家你的商店是做什麼的...",
+      "ownership": "所有權",
+      "personalShop": "個人商店",
+      "organizationShop": "組織商店",
+      "categoriesLanguages": "分類與語言",
+      "selectOrgError": "請選擇一個組織",
+      "created": "商店建立成功！"
+    },
+    "settings": {
+      "title": "商店設定",
+      "generalSubtitle": "商店基本資訊",
+      "appearanceSubtitle": "商店專屬的標誌和橫幅（獨立於你的組織）",
+      "uploadBanner": "上傳橫幅",
+      "categoriesTitle": "分類與標籤",
+      "categoriesSubtitle": "幫助買家找到你的商店",
+      "ordersSubtitle": "設定買家與商店的互動方式",
+      "marketOrderTemplate": "市集訂單範本",
+      "marketOrderTemplateHelper": "買家下客製訂單時顯示的範本",
+      "discordSubtitle": "本店訂單和報價討論串的建立位置",
+      "discordInfoOrg": "要把本店的訂單和報價討論串傳送到專屬頻道，請輸入該 Discord 伺服器 ID 和頻道 ID。兩項都留空則使用你組織的討論串頻道（在 Discord 中執行 /setup threads 設定）。SC Market 機器人必須在該伺服器中並且能看到該頻道。",
+      "discordInfoPersonal": "要把本店的訂單和報價討論串傳送到專屬頻道，請輸入該 Discord 伺服器 ID 和頻道 ID。兩項都留空則使用你的討論串頻道（在 Discord 中執行 /setup threads 設定）。SC Market 機器人必須在該伺服器中並且能看到該頻道。",
+      "discordServerId": "Discord 伺服器 ID",
+      "discordIdPlaceholder": "例如 123456789012345678",
+      "discordServerIdHelper": "伺服器（公會）ID",
+      "threadChannelId": "討論串頻道 ID",
+      "threadChannelHelper": "建立討論串的頻道",
+      "saved": "商店設定已儲存"
+    },
+    "webhooks": {
+      "subtitle": "本店發生事件時向某個 URL 傳送通知",
+      "deleteLabel": "刪除 Webhook {{name}}",
+      "add": "新增 Webhook",
+      "created": "Webhook 已建立",
+      "deleted": "Webhook 已刪除",
+      "actions": {
+        "orderCreate": {
+          "label": "訂單已建立",
+          "description": "本店的新訂單或報價"
+        },
+        "orderAssigned": {
+          "label": "訂單已指派",
+          "description": "訂單被指派給成員或被成員認領"
+        },
+        "orderStatusChange": {
+          "label": "訂單狀態變更",
+          "description": "訂單變為進行中、已完成、已取消或未開始"
+        },
+        "orderReview": {
+          "label": "訂單評價",
+          "description": "本店的某筆訂單收到了評價"
+        },
+        "marketItemBid": {
+          "label": "市集出價",
+          "description": "本店某個拍賣收到新出價"
+        },
+        "publicContractCreate": {
+          "label": "新的公開合約（全站）",
+          "description": "任何人在 SC Market 上發布的每一份新公開合約"
+        }
+      }
+    },
+    "orderSettings": {
+      "title": "訂單設定",
+      "messagesTitle": "訂單訊息",
+      "messagesSubtitle": "隨報價和訂單傳送的自動訊息",
+      "offerEnabled": "啟用報價訊息",
+      "offerMessage": "報價訊息",
+      "offerPlaceholder": "傳送報價時顯示的訊息",
+      "orderEnabled": "啟用訂單訊息",
+      "orderMessage": "訂單訊息",
+      "orderPlaceholder": "下單時顯示的訊息",
+      "requirementsTitle": "訂單要求",
+      "requirementsSubtitle": "下單前需滿足的要求",
+      "requireAvailability": "接受訂單前要求賣家可用時間",
+      "requireAvailabilityHelp": "啟用後，買家下單前必須查看你的可用時間。",
+      "stockTitle": "庫存管理",
+      "stockSubtitle": "設定何時從庫存中扣減",
+      "stockTiming": "庫存扣減時機",
+      "onAccepted": "訂單被接受時（預設）",
+      "onReceived": "訂單收到／完成時",
+      "dontSubtract": "不扣減庫存",
+      "allocationMode": "分配模式",
+      "allocationAuto": "自動（FIFO）",
+      "allocationManual": "手動選擇",
+      "allocationNone": "無（舊版）",
+      "limitsTitle": "訂單限制",
+      "limitsSubtitle": "設定訂單數量和金額的最小／最大限制",
+      "minSize": "最小訂單數量",
+      "maxSize": "最大訂單數量",
+      "minValue": "最低訂單金額",
+      "maxValue": "最高訂單金額",
+      "minSizeAria": "最小訂單數量（件）",
+      "maxSizeAria": "最大訂單數量（件）",
+      "minValueAria": "最低訂單金額（aUEC）",
+      "maxValueAria": "最高訂單金額（aUEC）",
+      "itemsUnit": "件",
+      "save": "儲存訂單設定",
+      "saved": "訂單設定已儲存"
+    },
+    "transfer": {
+      "subtitle": "將本店轉移給其他所有者。你無法自行復原此操作。",
+      "transferTo": "轉移給",
+      "myAccount": "我的帳戶",
+      "anOrganization": "某個組織",
+      "orgHelper": "你必須在目標組織中擁有「管理市集」權限。",
+      "confirmTitle": "轉移商店所有權？",
+      "confirmBodyUser": "你即將把 <strong>{{shop}}</strong> 轉移到<strong>你的個人帳戶</strong>。",
+      "confirmBodyOrg": "你即將把 <strong>{{shop}}</strong> 轉移給 <strong>{{org}}</strong>。",
+      "confirmBodySelectedOrg": "你即將把 <strong>{{shop}}</strong> 轉移給<strong>所選組織</strong>。",
+      "confirmWarning": "所有權將立即轉移。由已不再與新所有者相關的人員持有的進行中訂單和報價指派可能會被重設，以便新所有者重新認領。已完成的訂單不受影響。如果你無法管理新所有者，可能會失去對本店的存取權限。",
+      "confirm": "確認轉移",
+      "transferred": "商店所有權已轉移"
+    },
+    "discord": {
+      "bothRequired": "請同時填寫伺服器 ID 和頻道 ID，或兩者皆留空",
+      "notNumeric": "Discord ID 由數字組成，例如 123456789012345678"
+    }
+  },
+  "shoppingListUi": {
+    "backToWishlist": "返回願望清單",
+    "exportCsv": "匯出為 CSV",
+    "pageTitle": "{{name}} - 購物清單",
+    "headerTitle": "購物清單：{{name}}",
+    "totalMaterials": "材料總數",
+    "fullyStocked": "庫存充足",
+    "partiallyStocked": "部分有庫存",
+    "notStocked": "無庫存",
+    "estimatedTotalCost": "預估總成本",
+    "amountAuec": "{{amount}} aUEC",
+    "noMaterials": "無需材料",
+    "noMaterialsHint": "將可製作的物品加入願望清單即可產生購物清單",
+    "columns": {
+      "material": "材料",
+      "status": "狀態",
+      "totalNeeded": "總需求",
+      "inStock": "庫存",
+      "toAcquire": "待取得",
+      "quality": "品質",
+      "acquisition": "取得方式",
+      "details": "詳情"
+    },
+    "any": "任意",
+    "notAvailable": "不適用",
+    "usedBy": "用於：",
+    "mobileHint": "旋轉裝置或在桌面版查看，可取得品質、成本和取得方式等更多詳情。",
+    "acquisition": {
+      "purchase": "購買",
+      "mining": "採礦",
+      "salvage": "打撈"
+    },
+    "csv": {
+      "materialName": "材料名稱",
+      "totalNeeded": "總需求",
+      "inStock": "庫存",
+      "toAcquire": "待取得",
+      "unitPrice": "單價",
+      "totalCost": "總成本",
+      "acquisitionMethods": "取得方式",
+      "usedByItems": "使用該材料的物品"
+    },
+    "panel": {
+      "signIn": "登入後即可使用購物清單。",
+      "listsError": "無法載入購物清單。",
+      "noLists": "沒有購物清單。請從 Fabricator 新增藍圖。",
+      "listError": "無法載入購物清單。",
+      "materialsNeeded": "所需材料",
+      "removeNamed": "從購物清單中移除 {{name}}",
+      "removeItem": "從購物清單中移除物品",
+      "need": "還需 {{quantity}}",
+      "searchMarket": "在市集中搜尋 {{name}}",
+      "viewAggregate": "查看彙總商品",
+      "usedBy": "用於：{{items}}",
+      "listOption_other": "{{name}}（{{count}} 件物品）",
+      "materialsProgress_other": "材料 {{fulfilled}}/{{count}}",
+      "blueprintsCount_other": "藍圖（{{count}}）"
+    }
   }
 }

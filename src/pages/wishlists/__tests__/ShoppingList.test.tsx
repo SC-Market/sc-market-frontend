@@ -1,3 +1,4 @@
+import "../../../util/i18n"
 /**
  * ShoppingList Component Tests
  * 
@@ -48,18 +49,6 @@ vi.mock("../../../components/metadata/Page", async () => {
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }))
-
-// Mock react-i18next
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, def?: string) => def || key,
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
-  }
-})
 
 // Mock Footer to avoid AlertHookContext dependency
 vi.mock("../../../components/footer/Footer", async () => {

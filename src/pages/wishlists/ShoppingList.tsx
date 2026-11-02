@@ -126,15 +126,15 @@ export function ShoppingList() {
     if (!data) return
 
     const headers = [
-      "Material Name",
-      "Total Needed",
-      "In Stock",
-      "To Acquire",
-      "Quality Tier",
-      "Unit Price",
-      "Total Cost",
-      "Acquisition Methods",
-      "Used By Items",
+      t("shoppingListUi.csv.materialName"),
+      t("shoppingListUi.csv.totalNeeded"),
+      t("shoppingListUi.csv.inStock"),
+      t("shoppingListUi.csv.toAcquire"),
+      t("wishlists.qualityTier"),
+      t("shoppingListUi.csv.unitPrice"),
+      t("shoppingListUi.csv.totalCost"),
+      t("shoppingListUi.csv.acquisitionMethods"),
+      t("shoppingListUi.csv.usedByItems"),
     ]
 
     const rows = sortedMaterials.map((material) => [
@@ -142,10 +142,10 @@ export function ShoppingList() {
       material.total_quantity_needed.toString(),
       material.user_inventory_quantity.toString(),
       material.quantity_to_acquire.toString(),
-      material.desired_quality_tier?.toString() || "Any",
-      material.estimated_unit_price?.toLocaleString() || "N/A",
-      material.estimated_total_cost?.toLocaleString() || "N/A",
-      material.acquisition_methods.join("; "),
+      material.desired_quality_tier?.toString() || t("shoppingListUi.any"),
+      material.estimated_unit_price?.toLocaleString() || t("shoppingListUi.notAvailable"),
+      material.estimated_total_cost?.toLocaleString() || t("shoppingListUi.notAvailable"),
+      material.acquisition_methods.map(acquisitionLabel).join("; "),
       material.used_by_items.map((item) => `${item.item_name} (${item.quantity_for_this_item})`).join("; "),
     ])
 
@@ -165,6 +165,10 @@ export function ShoppingList() {
     document.body.removeChild(link)
   }
 
+  // Acquisition methods are API values; known ones get a translated label.
+  const acquisitionLabel = (method: string) =>
+    t(`shoppingListUi.acquisition.${method}`, { defaultValue: method })
+
   // Navigate back to wishlist detail (Requirement 9.6)
   const handleBackToWishlist = () => {
     navigate(`/shopping-lists/${wishlist_id}`)
@@ -173,11 +177,11 @@ export function ShoppingList() {
   // Get stock status icon and color
   const getStockStatus = (material: typeof sortedMaterials[0]) => {
     if (material.user_inventory_quantity >= material.total_quantity_needed) {
-      return { icon: <CheckCircle />, color: "success", label: "Fully Stocked" }
+      return { icon: <CheckCircle />, color: "success", label: t("shoppingListUi.fullyStocked") }
     } else if (material.user_inventory_quantity > 0) {
-      return { icon: <Warning />, color: "warning", label: "Partially Stocked" }
+      return { icon: <Warning />, color: "warning", label: t("shoppingListUi.partiallyStocked") }
     } else {
-      return { icon: <Cancel />, color: "error", label: "Not Stocked" }
+      return { icon: <Cancel />, color: "error", label: t("shoppingListUi.notStocked") }
     }
   }
 
@@ -214,7 +218,7 @@ export function ShoppingList() {
           </Alert>
           <Box sx={{ mt: 2 }}>
             <Button variant="outlined" startIcon={<ArrowBack />} onClick={handleBackToWishlist}>
-              Back to Wishlist
+              {t("shoppingListUi.backToWishlist")}
             </Button>
           </Box>
         </Grid>
@@ -224,8 +228,8 @@ export function ShoppingList() {
 
   return (
     <StandardPageLayout
-      title={`${data.wishlist_name} - Shopping List`}
-      headerTitle={`Shopping List: ${data.wishlist_name}`}
+      title={t("shoppingListUi.pageTitle", { name: data.wishlist_name })}
+      headerTitle={t("shoppingListUi.headerTitle", { name: data.wishlist_name })}
       sidebarOpen={true}
       maxWidth="xl"
     >
@@ -233,7 +237,7 @@ export function ShoppingList() {
         {/* Header Actions */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, flexWrap: "wrap", gap: 2 }}>
           <Button variant="outlined" startIcon={<ArrowBack />} onClick={handleBackToWishlist}>
-            Back to Wishlist
+            {t("shoppingListUi.backToWishlist")}
           </Button>
 
           <Button
@@ -242,7 +246,7 @@ export function ShoppingList() {
             onClick={handleExportCSV}
             disabled={sortedMaterials.length === 0}
           >
-            Export to CSV
+            {t("shoppingListUi.exportCsv")}
           </Button>
         </Box>
 
@@ -258,7 +262,7 @@ export function ShoppingList() {
                   <Box>
                     <Typography variant="h4">{sortedMaterials.length}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Total Materials
+                      {t("shoppingListUi.totalMaterials")}
                     </Typography>
                   </Box>
                 </Stack>
@@ -276,7 +280,7 @@ export function ShoppingList() {
                   <Box>
                     <Typography variant="h4">{data.materials_fully_stocked}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Fully Stocked
+                      {t("shoppingListUi.fullyStocked")}
                     </Typography>
                   </Box>
                 </Stack>
@@ -294,7 +298,7 @@ export function ShoppingList() {
                   <Box>
                     <Typography variant="h4">{data.materials_partially_stocked}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Partially Stocked
+                      {t("shoppingListUi.partiallyStocked")}
                     </Typography>
                   </Box>
                 </Stack>
@@ -312,7 +316,7 @@ export function ShoppingList() {
                   <Box>
                     <Typography variant="h4">{data.materials_not_stocked}</Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Not Stocked
+                      {t("shoppingListUi.notStocked")}
                     </Typography>
                   </Box>
                 </Stack>
@@ -326,9 +330,9 @@ export function ShoppingList() {
           <Card sx={{ mb: 3, bgcolor: theme.palette.mode === "dark" ? "grey.900" : "grey.50" }}>
             <CardContent>
               <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
-                <Typography variant="h6">Estimated Total Cost</Typography>
+                <Typography variant="h6">{t("shoppingListUi.estimatedTotalCost")}</Typography>
                 <Typography variant="h4" color="primary">
-                  {data.total_estimated_cost.toLocaleString()} aUEC
+                  {t("shoppingListUi.amountAuec", { amount: data.total_estimated_cost.toLocaleString() })}
                 </Typography>
               </Stack>
             </CardContent>
@@ -341,10 +345,10 @@ export function ShoppingList() {
             <CardContent sx={{ textAlign: "center", py: 8 }}>
               <ShoppingCart sx={{ fontSize: 64, color: "text.secondary", mb: 2 }} />
               <Typography variant="h6" color="text.secondary" gutterBottom>
-                No materials needed
+                {t("shoppingListUi.noMaterials")}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Add craftable items to your wishlist to generate a shopping list
+                {t("shoppingListUi.noMaterialsHint")}
               </Typography>
             </CardContent>
           </Card>
@@ -360,11 +364,11 @@ export function ShoppingList() {
                         direction={sortField === "name" ? sortOrder : "asc"}
                         onClick={() => handleSort("name")}
                       >
-                        Material
+                        {t("shoppingListUi.columns.material")}
                       </TableSortLabel>
                     </TableCell>
                     {!isMobile && (
-                      <TableCell align="center">Status</TableCell>
+                      <TableCell align="center">{t("shoppingListUi.columns.status")}</TableCell>
                     )}
                     <TableCell align="right">
                       <TableSortLabel
@@ -372,7 +376,7 @@ export function ShoppingList() {
                         direction={sortField === "quantity" ? sortOrder : "asc"}
                         onClick={() => handleSort("quantity")}
                       >
-                        Total Needed
+                        {t("shoppingListUi.columns.totalNeeded")}
                       </TableSortLabel>
                     </TableCell>
                     <TableCell align="right">
@@ -381,26 +385,26 @@ export function ShoppingList() {
                         direction={sortField === "stock" ? sortOrder : "asc"}
                         onClick={() => handleSort("stock")}
                       >
-                        In Stock
+                        {t("shoppingListUi.columns.inStock")}
                       </TableSortLabel>
                     </TableCell>
-                    <TableCell align="right">To Acquire</TableCell>
+                    <TableCell align="right">{t("shoppingListUi.columns.toAcquire")}</TableCell>
                     {!isMobile && (
                       <>
-                        <TableCell align="center">Quality</TableCell>
+                        <TableCell align="center">{t("shoppingListUi.columns.quality")}</TableCell>
                         <TableCell align="right">
                           <TableSortLabel
                             active={sortField === "cost"}
                             direction={sortField === "cost" ? sortOrder : "asc"}
                             onClick={() => handleSort("cost")}
                           >
-                            Est. Cost
+                            {t("wishlists.estCost")}
                           </TableSortLabel>
                         </TableCell>
-                        <TableCell>Acquisition</TableCell>
+                        <TableCell>{t("shoppingListUi.columns.acquisition")}</TableCell>
                       </>
                     )}
-                    <TableCell align="center">Details</TableCell>
+                    <TableCell align="center">{t("shoppingListUi.columns.details")}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -458,25 +462,25 @@ export function ShoppingList() {
                                 <Chip label={`T${material.desired_quality_tier}`} size="small" />
                               ) : (
                                 <Typography variant="body2" color="text.secondary">
-                                  Any
+                                  {t("shoppingListUi.any")}
                                 </Typography>
                               )}
                             </TableCell>
                             <TableCell align="right">
                               {material.estimated_total_cost ? (
                                 <Typography variant="body2">
-                                  {material.estimated_total_cost.toLocaleString()} aUEC
+                                  {t("shoppingListUi.amountAuec", { amount: material.estimated_total_cost.toLocaleString() })}
                                 </Typography>
                               ) : (
                                 <Typography variant="body2" color="text.secondary">
-                                  N/A
+                                  {t("shoppingListUi.notAvailable")}
                                 </Typography>
                               )}
                             </TableCell>
                             <TableCell>
                               <Stack direction="row" spacing={0.5} flexWrap="wrap">
                                 {material.acquisition_methods.map((method) => (
-                                  <Chip key={method} label={method} size="small" variant="outlined" />
+                                  <Chip key={method} label={acquisitionLabel(method)} size="small" variant="outlined" />
                                 ))}
                               </Stack>
                             </TableCell>
@@ -487,7 +491,7 @@ export function ShoppingList() {
                             title={
                               <Box>
                                 <Typography variant="caption" fontWeight="bold">
-                                  Used by:
+                                  {t("shoppingListUi.usedBy")}
                                 </Typography>
                                 {material.used_by_items.map((item) => (
                                   <Typography key={item.wishlist_item_id} variant="caption" display="block">
@@ -515,7 +519,7 @@ export function ShoppingList() {
         {isMobile && sortedMaterials.length > 0 && (
           <Alert severity="info" sx={{ mt: 2 }}>
             <Typography variant="caption">
-              Rotate your device or view on desktop for additional details including quality, cost, and acquisition methods.
+              {t("shoppingListUi.mobileHint")}
             </Typography>
           </Alert>
         )}

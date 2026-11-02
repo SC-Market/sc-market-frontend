@@ -6827,5 +6827,211 @@
         "inNetwork": "in your network"
       }
     }
+  },
+  "shopsUi": {
+    "tags": {
+      "weapons": "Weapons",
+      "armor": "Armor",
+      "components": "Components",
+      "cargo": "Cargo",
+      "mining": "Mining",
+      "salvage": "Salvage",
+      "medical": "Medical",
+      "vehicles": "Vehicles",
+      "services": "Services"
+    },
+    "form": {
+      "general": "General",
+      "shopName": "Shop Name",
+      "description": "Description",
+      "selectOrganization": "Select an organization...",
+      "addTag": "Add tag",
+      "addLanguage": "Add language",
+      "orders": "Orders",
+      "acceptCustomOrders": "Accept custom orders"
+    },
+    "create": {
+      "backToMyShops": "← Back to My Shops",
+      "intro": "Set up your storefront on SC Market. You can refine your settings after creation.",
+      "namePlaceholder": "My Awesome Shop",
+      "descriptionPlaceholder": "Tell buyers what your shop is about...",
+      "ownership": "Ownership",
+      "personalShop": "Personal shop",
+      "organizationShop": "Organization shop",
+      "categoriesLanguages": "Categories & Languages",
+      "selectOrgError": "Select an organization",
+      "created": "Shop created successfully!"
+    },
+    "settings": {
+      "title": "Shop Settings",
+      "generalSubtitle": "Basic shop information",
+      "appearanceSubtitle": "Custom logo and banner for your shop (independent of your org)",
+      "uploadBanner": "Upload Banner",
+      "categoriesTitle": "Categories & Tags",
+      "categoriesSubtitle": "Help buyers find your shop",
+      "ordersSubtitle": "Configure how buyers interact with your shop",
+      "marketOrderTemplate": "Market Order Template",
+      "marketOrderTemplateHelper": "Template shown to buyers when placing a custom order",
+      "discordSubtitle": "Where order and offer threads are created for this shop",
+      "discordInfoOrg": "To send this shop's order and offer threads to their own channel, enter its Discord server ID and channel ID. Leave both empty to use your org's thread channel, which you set by running /setup threads in Discord. The SC Market bot must be in that server and able to see the channel.",
+      "discordInfoPersonal": "To send this shop's order and offer threads to their own channel, enter its Discord server ID and channel ID. Leave both empty to use your thread channel, which you set by running /setup threads in Discord. The SC Market bot must be in that server and able to see the channel.",
+      "discordServerId": "Discord Server ID",
+      "discordIdPlaceholder": "e.g. 123456789012345678",
+      "discordServerIdHelper": "Server (guild) ID",
+      "threadChannelId": "Thread Channel ID",
+      "threadChannelHelper": "Channel where threads are created",
+      "saved": "Shop settings saved"
+    },
+    "webhooks": {
+      "subtitle": "Receive notifications at a URL when events happen in this shop",
+      "deleteLabel": "Delete webhook {{name}}",
+      "add": "Add Webhook",
+      "created": "Webhook created",
+      "deleted": "Webhook deleted",
+      "actions": {
+        "orderCreate": {
+          "label": "Order Created",
+          "description": "A new order or offer for this shop"
+        },
+        "orderAssigned": {
+          "label": "Order Assigned",
+          "description": "An order is assigned to or claimed by a member"
+        },
+        "orderStatusChange": {
+          "label": "Order Status Change",
+          "description": "An order moves to in progress, fulfilled, cancelled or not started"
+        },
+        "orderReview": {
+          "label": "Order Review",
+          "description": "A review is left on one of this shop's orders"
+        },
+        "marketItemBid": {
+          "label": "Market Bid",
+          "description": "A new bid on one of this shop's auctions"
+        },
+        "publicContractCreate": {
+          "label": "New public contracts (site-wide)",
+          "description": "Every new public contract posted on SC Market, by anyone"
+        }
+      }
+    },
+    "orderSettings": {
+      "title": "Order Settings",
+      "messagesTitle": "Order Messages",
+      "messagesSubtitle": "Automated messages sent with offers and orders",
+      "offerEnabled": "Offer message enabled",
+      "offerMessage": "Offer Message",
+      "offerPlaceholder": "Message shown when sending an offer",
+      "orderEnabled": "Order message enabled",
+      "orderMessage": "Order Message",
+      "orderPlaceholder": "Message shown when an order is placed",
+      "requirementsTitle": "Order Requirements",
+      "requirementsSubtitle": "Requirements before orders can be placed",
+      "requireAvailability": "Require seller availability before accepting orders",
+      "requireAvailabilityHelp": "When enabled, buyers must check your availability before placing an order.",
+      "stockTitle": "Stock Management",
+      "stockSubtitle": "Configure when stock is subtracted from inventory",
+      "stockTiming": "Stock subtraction timing",
+      "onAccepted": "On order accepted (default)",
+      "onReceived": "On order received/fulfilled",
+      "dontSubtract": "Don't subtract stock",
+      "allocationMode": "Allocation mode",
+      "allocationAuto": "Automatic (FIFO)",
+      "allocationManual": "Manual selection",
+      "allocationNone": "None (legacy)",
+      "limitsTitle": "Order Limits",
+      "limitsSubtitle": "Set min/max limits for order sizes and values",
+      "minSize": "Minimum order size",
+      "maxSize": "Maximum order size",
+      "minValue": "Minimum order value",
+      "maxValue": "Maximum order value",
+      "minSizeAria": "Minimum order size (items)",
+      "maxSizeAria": "Maximum order size (items)",
+      "minValueAria": "Minimum order value (aUEC)",
+      "maxValueAria": "Maximum order value (aUEC)",
+      "itemsUnit": "items",
+      "save": "Save Order Settings",
+      "saved": "Order settings saved"
+    },
+    "transfer": {
+      "subtitle": "Move this shop to another owner. This action cannot be undone by you.",
+      "transferTo": "Transfer to",
+      "myAccount": "My Account",
+      "anOrganization": "An Organization",
+      "orgHelper": "You must have Manage Market permission in the target org.",
+      "confirmTitle": "Transfer shop ownership?",
+      "confirmBodyUser": "You are about to transfer <strong>{{shop}}</strong> to <strong>your personal account</strong>.",
+      "confirmBodyOrg": "You are about to transfer <strong>{{shop}}</strong> to <strong>{{org}}</strong>.",
+      "confirmBodySelectedOrg": "You are about to transfer <strong>{{shop}}</strong> to <strong>the selected organization</strong>.",
+      "confirmWarning": "Ownership will transfer immediately. Active order and offer assignments held by people no longer associated with the new owner may be reset so the new owner can reclaim them. Completed orders are not affected. You may lose access to this shop if you cannot manage the new owner.",
+      "confirm": "Confirm Transfer",
+      "transferred": "Shop ownership transferred"
+    },
+    "discord": {
+      "bothRequired": "Enter both the server ID and the channel ID, or leave both empty",
+      "notNumeric": "Discord IDs are numbers, e.g. 123456789012345678"
+    }
+  },
+  "shoppingListUi": {
+    "backToWishlist": "Back to Wishlist",
+    "exportCsv": "Export to CSV",
+    "pageTitle": "{{name}} - Shopping List",
+    "headerTitle": "Shopping List: {{name}}",
+    "totalMaterials": "Total Materials",
+    "fullyStocked": "Fully Stocked",
+    "partiallyStocked": "Partially Stocked",
+    "notStocked": "Not Stocked",
+    "estimatedTotalCost": "Estimated Total Cost",
+    "amountAuec": "{{amount}} aUEC",
+    "noMaterials": "No materials needed",
+    "noMaterialsHint": "Add craftable items to your wishlist to generate a shopping list",
+    "columns": {
+      "material": "Material",
+      "status": "Status",
+      "totalNeeded": "Total Needed",
+      "inStock": "In Stock",
+      "toAcquire": "To Acquire",
+      "quality": "Quality",
+      "acquisition": "Acquisition",
+      "details": "Details"
+    },
+    "any": "Any",
+    "notAvailable": "N/A",
+    "usedBy": "Used by:",
+    "mobileHint": "Rotate your device or view on desktop for additional details including quality, cost, and acquisition methods.",
+    "acquisition": {
+      "purchase": "purchase",
+      "mining": "mining",
+      "salvage": "salvage"
+    },
+    "csv": {
+      "materialName": "Material Name",
+      "totalNeeded": "Total Needed",
+      "inStock": "In Stock",
+      "toAcquire": "To Acquire",
+      "unitPrice": "Unit Price",
+      "totalCost": "Total Cost",
+      "acquisitionMethods": "Acquisition Methods",
+      "usedByItems": "Used By Items"
+    },
+    "panel": {
+      "signIn": "Sign in to use shopping lists.",
+      "listsError": "Could not load shopping lists.",
+      "noLists": "No shopping lists. Add blueprints from the Fabricator.",
+      "listError": "Could not load shopping list.",
+      "materialsNeeded": "Materials Needed",
+      "removeNamed": "Remove {{name}} from shopping list",
+      "removeItem": "Remove item from shopping list",
+      "need": "Need {{quantity}}",
+      "searchMarket": "Search market for {{name}}",
+      "viewAggregate": "View aggregate listings",
+      "usedBy": "Used by: {{items}}",
+      "listOption_one": "{{name}} ({{count}} item)",
+      "listOption_other": "{{name}} ({{count}} items)",
+      "materialsProgress_one": "{{fulfilled}}/{{count}} material",
+      "materialsProgress_other": "{{fulfilled}}/{{count}} materials",
+      "blueprintsCount_one": "Blueprints ({{count}})",
+      "blueprintsCount_other": "Blueprints ({{count}})"
+    }
   }
 }

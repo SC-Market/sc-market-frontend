@@ -6910,5 +6910,214 @@
         "inNetwork": "en tu red"
       }
     }
+  },
+  "shopsUi": {
+    "tags": {
+      "weapons": "Armas",
+      "armor": "Armadura",
+      "components": "Componentes",
+      "cargo": "Carga",
+      "mining": "Minería",
+      "salvage": "Recuperación",
+      "medical": "Médico",
+      "vehicles": "Vehículos",
+      "services": "Servicios"
+    },
+    "form": {
+      "general": "General",
+      "shopName": "Nombre de la tienda",
+      "description": "Descripción",
+      "selectOrganization": "Selecciona una organización...",
+      "addTag": "Añadir etiqueta",
+      "addLanguage": "Añadir idioma",
+      "orders": "Pedidos",
+      "acceptCustomOrders": "Aceptar pedidos personalizados"
+    },
+    "create": {
+      "backToMyShops": "← Volver a Mis tiendas",
+      "intro": "Configura tu escaparate en SC Market. Podrás ajustar la configuración después de crearla.",
+      "namePlaceholder": "Mi tienda increíble",
+      "descriptionPlaceholder": "Cuéntales a los compradores de qué trata tu tienda...",
+      "ownership": "Propiedad",
+      "personalShop": "Tienda personal",
+      "organizationShop": "Tienda de organización",
+      "categoriesLanguages": "Categorías e idiomas",
+      "selectOrgError": "Selecciona una organización",
+      "created": "¡Tienda creada correctamente!"
+    },
+    "settings": {
+      "title": "Configuración de la tienda",
+      "generalSubtitle": "Información básica de la tienda",
+      "appearanceSubtitle": "Logotipo y banner propios para tu tienda (independientes de tu organización)",
+      "uploadBanner": "Subir banner",
+      "categoriesTitle": "Categorías y etiquetas",
+      "categoriesSubtitle": "Ayuda a los compradores a encontrar tu tienda",
+      "ordersSubtitle": "Configura cómo interactúan los compradores con tu tienda",
+      "marketOrderTemplate": "Plantilla de pedido del mercado",
+      "marketOrderTemplateHelper": "Plantilla que ven los compradores al hacer un pedido personalizado",
+      "discordSubtitle": "Dónde se crean los hilos de pedidos y ofertas de esta tienda",
+      "discordInfoOrg": "Para enviar los hilos de pedidos y ofertas de esta tienda a su propio canal, introduce el ID del servidor de Discord y el ID del canal. Deja ambos vacíos para usar el canal de hilos de tu organización, que configuras ejecutando /setup threads en Discord. El bot de SC Market debe estar en ese servidor y poder ver el canal.",
+      "discordInfoPersonal": "Para enviar los hilos de pedidos y ofertas de esta tienda a su propio canal, introduce el ID del servidor de Discord y el ID del canal. Deja ambos vacíos para usar tu canal de hilos, que configuras ejecutando /setup threads en Discord. El bot de SC Market debe estar en ese servidor y poder ver el canal.",
+      "discordServerId": "ID del servidor de Discord",
+      "discordIdPlaceholder": "p. ej. 123456789012345678",
+      "discordServerIdHelper": "ID del servidor (guild)",
+      "threadChannelId": "ID del canal de hilos",
+      "threadChannelHelper": "Canal donde se crean los hilos",
+      "saved": "Configuración de la tienda guardada"
+    },
+    "webhooks": {
+      "subtitle": "Recibe notificaciones en una URL cuando ocurran eventos en esta tienda",
+      "deleteLabel": "Eliminar webhook {{name}}",
+      "add": "Añadir webhook",
+      "created": "Webhook creado",
+      "deleted": "Webhook eliminado",
+      "actions": {
+        "orderCreate": {
+          "label": "Pedido creado",
+          "description": "Un nuevo pedido u oferta para esta tienda"
+        },
+        "orderAssigned": {
+          "label": "Pedido asignado",
+          "description": "Un pedido se asigna a un miembro o este lo reclama"
+        },
+        "orderStatusChange": {
+          "label": "Cambio de estado del pedido",
+          "description": "Un pedido pasa a en curso, completado, cancelado o no iniciado"
+        },
+        "orderReview": {
+          "label": "Reseña del pedido",
+          "description": "Se deja una reseña en uno de los pedidos de esta tienda"
+        },
+        "marketItemBid": {
+          "label": "Puja en el mercado",
+          "description": "Una nueva puja en una de las subastas de esta tienda"
+        },
+        "publicContractCreate": {
+          "label": "Nuevos contratos públicos (en todo el sitio)",
+          "description": "Cada nuevo contrato público publicado en SC Market, por cualquier persona"
+        }
+      }
+    },
+    "orderSettings": {
+      "title": "Configuración de pedidos",
+      "messagesTitle": "Mensajes de pedidos",
+      "messagesSubtitle": "Mensajes automáticos enviados con ofertas y pedidos",
+      "offerEnabled": "Mensaje de oferta activado",
+      "offerMessage": "Mensaje de oferta",
+      "offerPlaceholder": "Mensaje que se muestra al enviar una oferta",
+      "orderEnabled": "Mensaje de pedido activado",
+      "orderMessage": "Mensaje de pedido",
+      "orderPlaceholder": "Mensaje que se muestra al hacer un pedido",
+      "requirementsTitle": "Requisitos de pedido",
+      "requirementsSubtitle": "Requisitos antes de poder hacer pedidos",
+      "requireAvailability": "Exigir la disponibilidad del vendedor antes de aceptar pedidos",
+      "requireAvailabilityHelp": "Si está activado, los compradores deben consultar tu disponibilidad antes de hacer un pedido.",
+      "stockTitle": "Gestión de stock",
+      "stockSubtitle": "Configura cuándo se descuenta el stock del inventario",
+      "stockTiming": "Momento de descuento del stock",
+      "onAccepted": "Al aceptar el pedido (predeterminado)",
+      "onReceived": "Al recibir/completar el pedido",
+      "dontSubtract": "No descontar stock",
+      "allocationMode": "Modo de asignación",
+      "allocationAuto": "Automático (FIFO)",
+      "allocationManual": "Selección manual",
+      "allocationNone": "Ninguno (heredado)",
+      "limitsTitle": "Límites de pedido",
+      "limitsSubtitle": "Establece límites mínimos y máximos de tamaño y valor de los pedidos",
+      "minSize": "Tamaño mínimo del pedido",
+      "maxSize": "Tamaño máximo del pedido",
+      "minValue": "Valor mínimo del pedido",
+      "maxValue": "Valor máximo del pedido",
+      "minSizeAria": "Tamaño mínimo del pedido (artículos)",
+      "maxSizeAria": "Tamaño máximo del pedido (artículos)",
+      "minValueAria": "Valor mínimo del pedido (aUEC)",
+      "maxValueAria": "Valor máximo del pedido (aUEC)",
+      "itemsUnit": "artículos",
+      "save": "Guardar configuración de pedidos",
+      "saved": "Configuración de pedidos guardada"
+    },
+    "transfer": {
+      "subtitle": "Pasa esta tienda a otro propietario. No podrás deshacer esta acción tú mismo.",
+      "transferTo": "Transferir a",
+      "myAccount": "Mi cuenta",
+      "anOrganization": "Una organización",
+      "orgHelper": "Debes tener el permiso Gestionar mercado en la organización de destino.",
+      "confirmTitle": "¿Transferir la propiedad de la tienda?",
+      "confirmBodyUser": "Estás a punto de transferir <strong>{{shop}}</strong> a <strong>tu cuenta personal</strong>.",
+      "confirmBodyOrg": "Estás a punto de transferir <strong>{{shop}}</strong> a <strong>{{org}}</strong>.",
+      "confirmBodySelectedOrg": "Estás a punto de transferir <strong>{{shop}}</strong> a <strong>la organización seleccionada</strong>.",
+      "confirmWarning": "La propiedad se transferirá de inmediato. Las asignaciones de pedidos y ofertas activas de personas que ya no estén vinculadas al nuevo propietario pueden restablecerse para que el nuevo propietario pueda reclamarlas. Los pedidos completados no se ven afectados. Podrías perder el acceso a esta tienda si no puedes gestionar al nuevo propietario.",
+      "confirm": "Confirmar transferencia",
+      "transferred": "Propiedad de la tienda transferida"
+    },
+    "discord": {
+      "bothRequired": "Introduce tanto el ID del servidor como el ID del canal, o deja ambos vacíos",
+      "notNumeric": "Los ID de Discord son números, p. ej. 123456789012345678"
+    }
+  },
+  "shoppingListUi": {
+    "backToWishlist": "Volver a la lista de deseos",
+    "exportCsv": "Exportar a CSV",
+    "pageTitle": "{{name}} - Lista de compra",
+    "headerTitle": "Lista de compra: {{name}}",
+    "totalMaterials": "Materiales totales",
+    "fullyStocked": "Totalmente en stock",
+    "partiallyStocked": "Parcialmente en stock",
+    "notStocked": "Sin stock",
+    "estimatedTotalCost": "Coste total estimado",
+    "amountAuec": "{{amount}} aUEC",
+    "noMaterials": "No se necesitan materiales",
+    "noMaterialsHint": "Añade objetos fabricables a tu lista de deseos para generar una lista de compra",
+    "columns": {
+      "material": "Material",
+      "status": "Estado",
+      "totalNeeded": "Total necesario",
+      "inStock": "En stock",
+      "toAcquire": "Por conseguir",
+      "quality": "Calidad",
+      "acquisition": "Obtención",
+      "details": "Detalles"
+    },
+    "any": "Cualquiera",
+    "notAvailable": "N/D",
+    "usedBy": "Usado por:",
+    "mobileHint": "Gira tu dispositivo o usa un ordenador para ver más detalles, como la calidad, el coste y los métodos de obtención.",
+    "acquisition": {
+      "purchase": "compra",
+      "mining": "minería",
+      "salvage": "recuperación"
+    },
+    "csv": {
+      "materialName": "Nombre del material",
+      "totalNeeded": "Total necesario",
+      "inStock": "En stock",
+      "toAcquire": "Por conseguir",
+      "unitPrice": "Precio unitario",
+      "totalCost": "Coste total",
+      "acquisitionMethods": "Métodos de obtención",
+      "usedByItems": "Usado por los objetos"
+    },
+    "panel": {
+      "signIn": "Inicia sesión para usar listas de compra.",
+      "listsError": "No se pudieron cargar las listas de compra.",
+      "noLists": "No hay listas de compra. Añade planos desde el Fabricator.",
+      "listError": "No se pudo cargar la lista de compra.",
+      "materialsNeeded": "Materiales necesarios",
+      "removeNamed": "Quitar {{name}} de la lista de compra",
+      "removeItem": "Quitar el artículo de la lista de compra",
+      "need": "Faltan {{quantity}}",
+      "searchMarket": "Buscar {{name}} en el mercado",
+      "viewAggregate": "Ver anuncios agrupados",
+      "usedBy": "Usado por: {{items}}",
+      "listOption_one": "{{name}} ({{count}} artículo)",
+      "listOption_many": "{{name}} ({{count}} artículos)",
+      "listOption_other": "{{name}} ({{count}} artículos)",
+      "materialsProgress_one": "{{fulfilled}}/{{count}} material",
+      "materialsProgress_many": "{{fulfilled}}/{{count}} materiales",
+      "materialsProgress_other": "{{fulfilled}}/{{count}} materiales",
+      "blueprintsCount_one": "Planos ({{count}})",
+      "blueprintsCount_many": "Planos ({{count}})",
+      "blueprintsCount_other": "Planos ({{count}})"
+    }
   }
 }

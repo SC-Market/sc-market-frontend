@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { Navigate, useNavigate } from "react-router-dom"
+import { Trans, useTranslation } from "react-i18next"
 import {
   Alert,
   Autocomplete,
@@ -82,18 +83,22 @@ const AVAILABLE_TAGS = [
   "Services",
 ] as const
 
-const AVAILABLE_LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "fr", label: "French" },
-  { code: "de", label: "German" },
-  { code: "es", label: "Spanish" },
-  { code: "ja", label: "Japanese" },
-  { code: "uk", label: "Ukrainian" },
-  { code: "zh", label: "Chinese" },
-] as const
+// Language codes; labels come from the "languages" catalog namespace.
+const AVAILABLE_LANGUAGES = ["en", "fr", "de", "es", "ja", "uk", "zh"] as const
+
+// Catalog key for each webhook event's label and description.
+const WEBHOOK_ACTION_KEYS: Record<string, string> = {
+  order_create: "orderCreate",
+  order_assigned: "orderAssigned",
+  order_status_change: "orderStatusChange",
+  order_review: "orderReview",
+  market_item_bid: "marketItemBid",
+  public_contract_create: "publicContractCreate",
+}
 
 
 function ShopWebhookSection({ shopId }: { shopId: string }) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const issueAlert = useAlertHook()
 
@@ -114,22 +119,22 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
       setName("")
       setUrl("")
       setActions([])
-      issueAlert({ message: "Webhook created", severity: "success" })
+      issueAlert({ message: t("shopsUi.webhooks.created"), severity: "success" })
     } catch (err) {
       issueAlert(err as { status: number; data: { message?: string } })
     }
-  }, [shopId, name, url, actions, createWebhook, issueAlert])
+  }, [shopId, name, url, actions, createWebhook, issueAlert, t])
 
   const handleDelete = useCallback(
     async (webhookId: string) => {
       try {
         await deleteWebhook({ shopId, webhookId }).unwrap()
-        issueAlert({ message: "Webhook deleted", severity: "success" })
+        issueAlert({ message: t("shopsUi.webhooks.deleted"), severity: "success" })
       } catch (err) {
         issueAlert(err as { status: number; data: { message?: string } })
       }
     },
-    [shopId, deleteWebhook, issueAlert],
+    [shopId, deleteWebhook, issueAlert, t],
   )
 
   const toggleAction = (action_name: string, checked: boolean) => {
@@ -144,8 +149,8 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
 
   return (
     <FormPaper
-      title="Webhooks"
-      subtitle="Receive notifications at a URL when events happen in this shop"
+      title={t("Webhooks.title")}
+      subtitle={t("shopsUi.webhooks.subtitle")}
     >
       <Grid item xs={12}>
         <HelpLink guide="webhooks" />
@@ -175,7 +180,7 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
                 <IconButton
                   size="small"
                   onClick={() => handleDelete(w.webhook_id)}
-                  aria-label={`Delete webhook ${w.name}`}
+                  aria-label={t("shopsUi.webhooks.deleteLabel", { name: w.name })}
                 >
                   <DeleteRounded
                     fontSize="small"
@@ -195,14 +200,14 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
           color="text.secondary"
           fontWeight="bold"
         >
-          Add Webhook
+          {t("shopsUi.webhooks.add")}
         </Typography>
       </Grid>
       <Grid item xs={12} md={6}>
         <TextField
           fullWidth
           size="small"
-          label="Webhook Name"
+          label={t("AddNotificationWebhook.webhookName")}
           value={name}
           onChange={(e) => setName(e.target.value)}
           color="secondary"
@@ -212,19 +217,21 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
         <TextField
           fullWidth
           size="small"
-          label="Webhook URL"
+          label={t("AddNotificationWebhook.webhookUrl")}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           color="secondary"
           error={!!url && !url.match(URL_REGEX)}
           helperText={
-            !!url && !url.match(URL_REGEX) ? "Invalid URL" : undefined
+            !!url && !url.match(URL_REGEX)
+              ? t("AddNotificationWebhook.invalidUrl")
+              : undefined
           }
         />
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.compact} direction="column">
-          {WEBHOOK_ACTIONS.map(({ label, description, action_name }) => (
+          {WEBHOOK_ACTIONS.map(({ action_name }) => (
             <Grid item key={action_name}>
               <FormControlLabel
                 control={
@@ -237,9 +244,9 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
                 }
                 label={
                   <span>
-                    {label}
+                    {t(`shopsUi.webhooks.actions.${WEBHOOK_ACTION_KEYS[action_name]}.label`)}
                     <Typography component="span" variant="caption" color="text.secondary" sx={{ display: "block" }}>
-                      {description}
+                      {t(`shopsUi.webhooks.actions.${WEBHOOK_ACTION_KEYS[action_name]}.description`)}
                     </Typography>
                   </span>
                 }
@@ -255,7 +262,7 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
           disabled={!name.trim() || !url.trim() || !url.match(URL_REGEX) || actions.length === 0}
           onClick={handleCreate}
         >
-          Add Webhook
+          {t("shopsUi.webhooks.add")}
         </Button>
       </Grid>
     </FormPaper>
@@ -263,6 +270,7 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
 }
 
 function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
+  const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const { data: settings = [], isLoading } = useGetShopOrderSettingsQuery({ shopId })
   const [upsertSetting] = useUpsertShopOrderSettingMutation()
@@ -356,7 +364,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
       await saveLimitSetting("min_order_value", minOrderValue, minOrderValueEnabled)
       await saveLimitSetting("max_order_value", maxOrderValue, maxOrderValueEnabled)
 
-      issueAlert({ message: "Order settings saved", severity: "success" })
+      issueAlert({ message: t("shopsUi.orderSettings.saved"), severity: "success" })
     } catch (err) {
       issueAlert(err as { status: number; data: { message?: string } })
     } finally {
@@ -366,7 +374,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
 
   if (isLoading) {
     return (
-      <FormPaper title="Order Settings" subtitle="Loading...">
+      <FormPaper title={t("shopsUi.orderSettings.title")} subtitle={t("shops.profile.loading")}>
         <Grid item xs={12}>
           <Box display="flex" justifyContent="center" p={3}><CircularProgress /></Box>
         </Grid>
@@ -377,20 +385,20 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
   return (
     <>
       {/* Order Messages */}
-      <FormPaper title="Order Messages" subtitle="Automated messages sent with offers and orders">
+      <FormPaper title={t("shopsUi.orderSettings.messagesTitle")} subtitle={t("shopsUi.orderSettings.messagesSubtitle")}>
         <Grid item xs={12}>
           <Box mb={2}>
             <FormControlLabel
               control={<Switch checked={offerEnabled} onChange={(e) => setOfferEnabled(e.target.checked)} disabled={saving} />}
-              label="Offer message enabled"
+              label={t("shopsUi.orderSettings.offerEnabled")}
             />
             <TextField
               fullWidth multiline rows={3} size="small"
-              label="Offer Message"
+              label={t("shopsUi.orderSettings.offerMessage")}
               value={offerMessage}
               onChange={(e) => setOfferMessage(e.target.value)}
               disabled={saving || !offerEnabled}
-              placeholder="Message shown when sending an offer"
+              placeholder={t("shopsUi.orderSettings.offerPlaceholder")}
             />
           </Box>
         </Grid>
@@ -398,99 +406,99 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
           <Box mb={2}>
             <FormControlLabel
               control={<Switch checked={orderEnabled} onChange={(e) => setOrderEnabled(e.target.checked)} disabled={saving} />}
-              label="Order message enabled"
+              label={t("shopsUi.orderSettings.orderEnabled")}
             />
             <TextField
               fullWidth multiline rows={3} size="small"
-              label="Order Message"
+              label={t("shopsUi.orderSettings.orderMessage")}
               value={orderMessage}
               onChange={(e) => setOrderMessage(e.target.value)}
               disabled={saving || !orderEnabled}
-              placeholder="Message shown when an order is placed"
+              placeholder={t("shopsUi.orderSettings.orderPlaceholder")}
             />
           </Box>
         </Grid>
       </FormPaper>
 
       {/* Order Requirements */}
-      <FormPaper title="Order Requirements" subtitle="Requirements before orders can be placed">
+      <FormPaper title={t("shopsUi.orderSettings.requirementsTitle")} subtitle={t("shopsUi.orderSettings.requirementsSubtitle")}>
         <Grid item xs={12}>
           <FormControlLabel
             control={<Switch checked={requireAvailability} onChange={(e) => setRequireAvailability(e.target.checked)} disabled={saving} />}
-            label="Require seller availability before accepting orders"
+            label={t("shopsUi.orderSettings.requireAvailability")}
           />
           <Typography variant="body2" color="text.secondary">
-            When enabled, buyers must check your availability before placing an order.
+            {t("shopsUi.orderSettings.requireAvailabilityHelp")}
           </Typography>
         </Grid>
       </FormPaper>
 
       {/* Stock Management */}
-      <FormPaper title="Stock Management" subtitle="Configure when stock is subtracted from inventory">
+      <FormPaper title={t("shopsUi.orderSettings.stockTitle")} subtitle={t("shopsUi.orderSettings.stockSubtitle")}>
         <Grid item xs={12}>
           <HelpLink guide="stockLots" />
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset" disabled={saving}>
-            <FormLabel component="legend">Stock subtraction timing</FormLabel>
+            <FormLabel component="legend">{t("shopsUi.orderSettings.stockTiming")}</FormLabel>
             <RadioGroup value={stockTiming} onChange={(e) => setStockTiming(e.target.value as typeof stockTiming)}>
-              <FormControlLabel value="on_accepted" control={<Radio />} label="On order accepted (default)" />
-              <FormControlLabel value="on_received" control={<Radio />} label="On order received/fulfilled" />
-              <FormControlLabel value="dont_subtract" control={<Radio />} label="Don't subtract stock" />
+              <FormControlLabel value="on_accepted" control={<Radio />} label={t("shopsUi.orderSettings.onAccepted")} />
+              <FormControlLabel value="on_received" control={<Radio />} label={t("shopsUi.orderSettings.onReceived")} />
+              <FormControlLabel value="dont_subtract" control={<Radio />} label={t("shopsUi.orderSettings.dontSubtract")} />
             </RadioGroup>
           </FormControl>
         </Grid>
         <Grid item xs={12}>
           <Divider sx={{ my: 2 }} />
           <FormControl component="fieldset" disabled={saving}>
-            <FormLabel component="legend">Allocation mode</FormLabel>
+            <FormLabel component="legend">{t("shopsUi.orderSettings.allocationMode")}</FormLabel>
             <RadioGroup value={allocationMode} onChange={(e) => setAllocationMode(e.target.value as typeof allocationMode)}>
-              <FormControlLabel value="auto" control={<Radio />} label="Automatic (FIFO)" />
-              <FormControlLabel value="manual" control={<Radio />} label="Manual selection" />
-              <FormControlLabel value="none" control={<Radio />} label="None (legacy)" />
+              <FormControlLabel value="auto" control={<Radio />} label={t("shopsUi.orderSettings.allocationAuto")} />
+              <FormControlLabel value="manual" control={<Radio />} label={t("shopsUi.orderSettings.allocationManual")} />
+              <FormControlLabel value="none" control={<Radio />} label={t("shopsUi.orderSettings.allocationNone")} />
             </RadioGroup>
           </FormControl>
         </Grid>
       </FormPaper>
 
       {/* Order Limits */}
-      <FormPaper title="Order Limits" subtitle="Set min/max limits for order sizes and values">
+      <FormPaper title={t("shopsUi.orderSettings.limitsTitle")} subtitle={t("shopsUi.orderSettings.limitsSubtitle")}>
         <Grid item xs={12} md={6}>
           <FormControlLabel
             control={<Switch checked={minOrderSizeEnabled} onChange={(e) => setMinOrderSizeEnabled(e.target.checked)} disabled={saving} />}
-            label="Minimum order size"
+            label={t("shopsUi.orderSettings.minSize")}
           />
           <TextField
             fullWidth type="number" size="small"
-            inputProps={{ "aria-label": "Minimum order size (items)" }}
+            inputProps={{ "aria-label": t("shopsUi.orderSettings.minSizeAria") }}
             value={minOrderSize}
             onChange={(e) => setMinOrderSize(e.target.value)}
             disabled={saving || !minOrderSizeEnabled}
-            InputProps={{ endAdornment: <InputAdornment position="end">items</InputAdornment> }}
+            InputProps={{ endAdornment: <InputAdornment position="end">{t("shopsUi.orderSettings.itemsUnit")}</InputAdornment> }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControlLabel
             control={<Switch checked={maxOrderSizeEnabled} onChange={(e) => setMaxOrderSizeEnabled(e.target.checked)} disabled={saving} />}
-            label="Maximum order size"
+            label={t("shopsUi.orderSettings.maxSize")}
           />
           <TextField
             fullWidth type="number" size="small"
-            inputProps={{ "aria-label": "Maximum order size (items)" }}
+            inputProps={{ "aria-label": t("shopsUi.orderSettings.maxSizeAria") }}
             value={maxOrderSize}
             onChange={(e) => setMaxOrderSize(e.target.value)}
             disabled={saving || !maxOrderSizeEnabled}
-            InputProps={{ endAdornment: <InputAdornment position="end">items</InputAdornment> }}
+            InputProps={{ endAdornment: <InputAdornment position="end">{t("shopsUi.orderSettings.itemsUnit")}</InputAdornment> }}
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <FormControlLabel
             control={<Switch checked={minOrderValueEnabled} onChange={(e) => setMinOrderValueEnabled(e.target.checked)} disabled={saving} />}
-            label="Minimum order value"
+            label={t("shopsUi.orderSettings.minValue")}
           />
           <TextField
             fullWidth type="number" size="small"
-            inputProps={{ "aria-label": "Minimum order value (aUEC)" }}
+            inputProps={{ "aria-label": t("shopsUi.orderSettings.minValueAria") }}
             value={minOrderValue}
             onChange={(e) => setMinOrderValue(e.target.value)}
             disabled={saving || !minOrderValueEnabled}
@@ -500,11 +508,11 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
         <Grid item xs={12} md={6}>
           <FormControlLabel
             control={<Switch checked={maxOrderValueEnabled} onChange={(e) => setMaxOrderValueEnabled(e.target.checked)} disabled={saving} />}
-            label="Maximum order value"
+            label={t("shopsUi.orderSettings.maxValue")}
           />
           <TextField
             fullWidth type="number" size="small"
-            inputProps={{ "aria-label": "Maximum order value (aUEC)" }}
+            inputProps={{ "aria-label": t("shopsUi.orderSettings.maxValueAria") }}
             value={maxOrderValue}
             onChange={(e) => setMaxOrderValue(e.target.value)}
             disabled={saving || !maxOrderValueEnabled}
@@ -519,7 +527,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
             startIcon={<SaveRounded />}
             onClick={handleSave}
           >
-            Save Order Settings
+            {t("shopsUi.orderSettings.save")}
           </LoadingButton>
         </Grid>
       </FormPaper>
@@ -528,6 +536,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
 }
 
 function ShopTransferSection({ shop }: { shop: ShopResponse }) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const issueAlert = useAlertHook()
   const { data: profile } = useGetUserProfileQuery()
@@ -568,7 +577,7 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
 
       setConfirmOpen(false)
       issueAlert({
-        message: "Shop ownership transferred",
+        message: t("shopsUi.transfer.transferred"),
         severity: "success",
       })
       // Slug is preserved across transfers; navigate to the shop.
@@ -584,25 +593,29 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
       ? !!profile?.username
       : !!contractorSpectrumId
 
-  const targetLabel =
+  const targetOrgName = orgs.find(
+    (o) => o.spectrum_id === contractorSpectrumId,
+  )?.name
+  const confirmKey =
     targetType === "user"
-      ? "your personal account"
-      : orgs.find((o) => o.spectrum_id === contractorSpectrumId)?.name ??
-        "the selected organization"
+      ? "shopsUi.transfer.confirmBodyUser"
+      : targetOrgName
+        ? "shopsUi.transfer.confirmBodyOrg"
+        : "shopsUi.transfer.confirmBodySelectedOrg"
 
   if (!canTransfer) return null
 
   return (
     <FormPaper
-      title="Transfer Ownership"
-      subtitle="Move this shop to another owner. This action cannot be undone by you."
+      title={t("settingsManageContractors.transfer_ownership")}
+      subtitle={t("shopsUi.transfer.subtitle")}
     >
       <Grid item xs={12}>
         <TextField
           select
           fullWidth
           size="small"
-          label="Transfer to"
+          label={t("shopsUi.transfer.transferTo")}
           value={targetType}
           onChange={(e) => {
             setTargetType(e.target.value as "user" | "contractor")
@@ -610,9 +623,9 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
           }}
           color="secondary"
         >
-          <MenuItem value="user">My Account</MenuItem>
+          <MenuItem value="user">{t("shopsUi.transfer.myAccount")}</MenuItem>
           <MenuItem value="contractor" disabled={orgs.length === 0}>
-            An Organization
+            {t("shopsUi.transfer.anOrganization")}
           </MenuItem>
         </TextField>
       </Grid>
@@ -623,13 +636,13 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
             select
             fullWidth
             size="small"
-            label="Organization"
+            label={t("shops.mine.organization")}
             value={contractorSpectrumId}
             onChange={(e) => setContractorSpectrumId(e.target.value)}
             color="secondary"
-            helperText="You must have Manage Market permission in the target org."
+            helperText={t("shopsUi.transfer.orgHelper")}
           >
-            <MenuItem value="">Select an organization...</MenuItem>
+            <MenuItem value="">{t("shopsUi.form.selectOrganization")}</MenuItem>
             {orgs.map((org) => (
               <MenuItem key={org.spectrum_id} value={org.spectrum_id}>
                 {org.name}
@@ -647,28 +660,27 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
           disabled={!canSubmit || isLoading}
           onClick={() => setConfirmOpen(true)}
         >
-          Transfer Ownership
+          {t("settingsManageContractors.transfer_ownership")}
         </Button>
       </Grid>
 
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>Transfer shop ownership?</DialogTitle>
+        <DialogTitle>{t("shopsUi.transfer.confirmTitle")}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You are about to transfer <strong>{shop.name}</strong> to{" "}
-            <strong>{targetLabel}</strong>.
+            <Trans
+              i18nKey={confirmKey}
+              values={{ shop: shop.name, org: targetOrgName }}
+              components={{ strong: <strong /> }}
+            />
           </DialogContentText>
           <DialogContentText sx={{ mt: 2 }}>
-            Ownership will transfer immediately. Active order and offer
-            assignments held by people no longer associated with the new owner
-            may be reset so the new owner can reclaim them. Completed orders are
-            not affected. You may lose access to this shop if you cannot manage
-            the new owner.
+            {t("shopsUi.transfer.confirmWarning")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setConfirmOpen(false)} disabled={isLoading}>
-            Cancel
+            {t("common.cancel")}
           </Button>
           <LoadingButton
             variant="contained"
@@ -676,7 +688,7 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
             loading={isLoading}
             onClick={handleConfirm}
           >
-            Confirm Transfer
+            {t("shopsUi.transfer.confirm")}
           </LoadingButton>
         </DialogActions>
       </Dialog>
@@ -687,6 +699,12 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
 export function ShopSettings() {
   const { shop } = useShopRouteContext()
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
+  // Tags are stored in English; only their display label is translated.
+  const tagLabel = (tag: string) =>
+    t(`shopsUi.tags.${tag.toLowerCase()}`, { defaultValue: tag })
+  const languageLabel = (code: string) =>
+    t(`languages.${code}`, { defaultValue: code })
 
   // Redirect if user doesn't have manage_market permission
   if (!shop.permissions?.manage_market) {
@@ -759,10 +777,13 @@ export function ShopSettings() {
     }
   }
 
-  const discordError = shopDiscordChannelError(
+  const discordErrorReason = shopDiscordChannelError(
     officialServerId,
     discordThreadChannelId,
   )
+  const discordError = discordErrorReason
+    ? t(`shopsUi.discord.${discordErrorReason}`)
+    : null
 
   const handleSave = async () => {
     if (discordError) {
@@ -787,7 +808,7 @@ export function ShopSettings() {
         },
       }).unwrap()
 
-      issueAlert({ message: "Shop settings saved", severity: "success" })
+      issueAlert({ message: t("shopsUi.settings.saved"), severity: "success" })
     } catch (err) {
       // Taken or reserved: the slug field shows why, with free suggestions.
       setSlugConflict(shopSlugConflictFromError(err))
@@ -797,10 +818,10 @@ export function ShopSettings() {
 
   return (
     <StandardPageLayout
-      title="Shop Settings"
+      title={t("shopsUi.settings.title")}
       headerTitle={
         <Typography variant="h4" fontWeight="bold" color="text.secondary">
-          Shop Settings
+          {t("shopsUi.settings.title")}
         </Typography>
       }
       sidebarOpen={true}
@@ -809,10 +830,13 @@ export function ShopSettings() {
       <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.layout}>
           {/* General */}
-          <FormPaper title="General" subtitle="Basic shop information">
+          <FormPaper
+            title={t("shopsUi.form.general")}
+            subtitle={t("shopsUi.settings.generalSubtitle")}
+          >
             <Grid item xs={12}>
               <TextField
-                label="Shop Name"
+                label={t("shopsUi.form.shopName")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 fullWidth
@@ -833,7 +857,7 @@ export function ShopSettings() {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Description"
+                label={t("shopsUi.form.description")}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 fullWidth
@@ -846,12 +870,12 @@ export function ShopSettings() {
 
           {/* Appearance */}
           <FormPaper
-            title="Appearance"
-            subtitle="Custom logo and banner for your shop (independent of your org)"
+            title={t("orgAbout.appearanceTitle")}
+            subtitle={t("shopsUi.settings.appearanceSubtitle")}
           >
             <Grid item xs={12} sm={6}>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Logo
+                {t("orgAbout.logo")}
               </Typography>
               <Stack direction="row" spacing={2} alignItems="center">
                 <Avatar
@@ -867,7 +891,7 @@ export function ShopSettings() {
                   size="small"
                   disabled={isUploading}
                 >
-                  Upload Logo
+                  {t("orgAbout.uploadLogo")}
                   <input
                     type="file"
                     accept="image/*"
@@ -882,7 +906,7 @@ export function ShopSettings() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Banner
+                {t("orgAbout.banner")}
               </Typography>
               <Stack direction="row" spacing={2} alignItems="center">
                 <Box
@@ -908,7 +932,7 @@ export function ShopSettings() {
                   size="small"
                   disabled={isUploading}
                 >
-                  Upload Banner
+                  {t("shopsUi.settings.uploadBanner")}
                   <input
                     type="file"
                     accept="image/*"
@@ -925,13 +949,14 @@ export function ShopSettings() {
 
           {/* Categories & Tags */}
           <FormPaper
-            title="Categories & Tags"
-            subtitle="Help buyers find your shop"
+            title={t("shopsUi.settings.categoriesTitle")}
+            subtitle={t("shopsUi.settings.categoriesSubtitle")}
           >
             <Grid item xs={12}>
               <Autocomplete
                 multiple
                 options={AVAILABLE_TAGS.slice()}
+                getOptionLabel={tagLabel}
                 value={tags}
                 onChange={(_e, newValue) => setTags(newValue)}
                 renderTags={(value, getTagProps) =>
@@ -940,7 +965,7 @@ export function ShopSettings() {
                     return (
                       <Chip
                         key={key}
-                        label={option}
+                        label={tagLabel(option)}
                         size="small"
                         {...rest}
                       />
@@ -950,8 +975,8 @@ export function ShopSettings() {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Tags"
-                    placeholder="Add tag"
+                    label={t("shops.mine.tags")}
+                    placeholder={t("shopsUi.form.addTag")}
                     size="small"
                   />
                 )}
@@ -960,11 +985,8 @@ export function ShopSettings() {
             <Grid item xs={12}>
               <Autocomplete
                 multiple
-                options={AVAILABLE_LANGUAGES.map((l) => l.code)}
-                getOptionLabel={(code) =>
-                  AVAILABLE_LANGUAGES.find((l) => l.code === code)?.label ??
-                  code
-                }
+                options={AVAILABLE_LANGUAGES.slice()}
+                getOptionLabel={languageLabel}
                 value={supportedLanguages}
                 onChange={(_e, newValue) => setSupportedLanguages(newValue)}
                 renderTags={(value, getTagProps) =>
@@ -973,10 +995,7 @@ export function ShopSettings() {
                     return (
                       <Chip
                         key={key}
-                        label={
-                          AVAILABLE_LANGUAGES.find((l) => l.code === code)
-                            ?.label ?? code
-                        }
+                        label={languageLabel(code)}
                         size="small"
                         {...rest}
                       />
@@ -986,8 +1005,8 @@ export function ShopSettings() {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Supported Languages"
-                    placeholder="Add language"
+                    label={t("settings.languages.label")}
+                    placeholder={t("shopsUi.form.addLanguage")}
                     size="small"
                   />
                 )}
@@ -997,8 +1016,8 @@ export function ShopSettings() {
 
           {/* Orders */}
           <FormPaper
-            title="Orders"
-            subtitle="Configure how buyers interact with your shop"
+            title={t("shopsUi.form.orders")}
+            subtitle={t("shopsUi.settings.ordersSubtitle")}
           >
             <Grid item xs={12}>
               <FormControlLabel
@@ -1008,62 +1027,61 @@ export function ShopSettings() {
                     onChange={(e) => setAcceptsCustomOrders(e.target.checked)}
                   />
                 }
-                label="Accept custom orders"
+                label={t("shopsUi.form.acceptCustomOrders")}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Market Order Template"
+                label={t("shopsUi.settings.marketOrderTemplate")}
                 value={marketOrderTemplate}
                 onChange={(e) => setMarketOrderTemplate(e.target.value)}
                 fullWidth
                 size="small"
                 multiline
                 minRows={4}
-                helperText="Template shown to buyers when placing a custom order"
+                helperText={t("shopsUi.settings.marketOrderTemplateHelper")}
               />
             </Grid>
           </FormPaper>
 
           {/* Discord */}
           <FormPaper
-            title="Discord"
-            subtitle="Where order and offer threads are created for this shop"
+            title={t("footer.discord")}
+            subtitle={t("shopsUi.settings.discordSubtitle")}
           >
             <Grid item xs={12}>
               <HelpLink guide="connectDiscordBot" />
             </Grid>
             <Grid item xs={12}>
               <Alert severity="info" sx={{ mb: 1 }}>
-                To send this shop&apos;s order and offer threads to their own
-                channel, enter its Discord server ID and channel ID. Leave both
-                empty to use {shop.is_org_owned ? "your org's" : "your"} thread
-                channel, which you set by running /setup threads in Discord. The
-                SC Market bot must be in that server and able to see the
-                channel.
+                {shop.is_org_owned
+                  ? t("shopsUi.settings.discordInfoOrg")
+                  : t("shopsUi.settings.discordInfoPersonal")}
               </Alert>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
-                label="Discord Server ID"
+                label={t("shopsUi.settings.discordServerId")}
                 value={officialServerId}
                 onChange={(e) => setOfficialServerId(e.target.value)}
                 fullWidth
                 size="small"
-                placeholder="e.g. 123456789012345678"
-                helperText="Server (guild) ID"
+                placeholder={t("shopsUi.settings.discordIdPlaceholder")}
+                helperText={t("shopsUi.settings.discordServerIdHelper")}
                 error={!!discordError}
               />
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
-                label="Thread Channel ID"
+                label={t("shopsUi.settings.threadChannelId")}
                 value={discordThreadChannelId}
                 onChange={(e) => setDiscordThreadChannelId(e.target.value)}
                 fullWidth
                 size="small"
-                placeholder="e.g. 123456789012345678"
-                helperText={discordError ?? "Channel where threads are created"}
+                placeholder={t("shopsUi.settings.discordIdPlaceholder")}
+                helperText={
+                  discordError ?? t("shopsUi.settings.threadChannelHelper")
+                }
                 error={!!discordError}
               />
             </Grid>
@@ -1094,7 +1112,7 @@ export function ShopSettings() {
               onClick={handleSave}
               disabled={!name.trim()}
             >
-              Save Changes
+              {t("orgAbout.saveChanges")}
             </LoadingButton>
           </Grid>
         </Grid>

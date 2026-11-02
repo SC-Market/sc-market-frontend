@@ -18,6 +18,7 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton"
 import { StorefrontRounded } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import {
   useCreateShopMutation,
   type ShopSlugAvailabilityResponse,
@@ -42,15 +43,8 @@ const AVAILABLE_TAGS = [
   "Services",
 ] as const
 
-const AVAILABLE_LANGUAGES = [
-  { code: "en", label: "English" },
-  { code: "fr", label: "French" },
-  { code: "de", label: "German" },
-  { code: "es", label: "Spanish" },
-  { code: "ja", label: "Japanese" },
-  { code: "uk", label: "Ukrainian" },
-  { code: "zh", label: "Chinese" },
-] as const
+// Language codes; labels come from the "languages" catalog namespace.
+const AVAILABLE_LANGUAGES = ["en", "fr", "de", "es", "ja", "uk", "zh"] as const
 
 function generateSlug(name: string): string {
   return name
@@ -63,6 +57,12 @@ function generateSlug(name: string): string {
 
 export function CreateShop() {
   usePageReady(false)
+  const { t } = useTranslation()
+  // Tags are stored in English; only their display label is translated.
+  const tagLabel = (tag: string) =>
+    t(`shopsUi.tags.${tag.toLowerCase()}`, { defaultValue: tag })
+  const languageLabel = (code: string) =>
+    t(`languages.${code}`, { defaultValue: code })
   const navigate = useNavigate()
   const [createShop, { isLoading }] = useCreateShopMutation()
   const { data: profile } = useGetUserProfileQuery()
@@ -104,7 +104,7 @@ export function CreateShop() {
     // The slug field shows why a too-short slug can't be used.
     if (slug.length < SHOP_SLUG_MIN_LENGTH) return
     if (ownerType === "organization" && !selectedOrg) {
-      issueAlert({ severity: "error", message: "Select an organization" })
+      issueAlert({ severity: "error", message: t("shopsUi.create.selectOrgError") })
       return
     }
 
@@ -121,7 +121,7 @@ export function CreateShop() {
         },
       }).unwrap()
 
-      issueAlert({ message: "Shop created successfully!", severity: "success" })
+      issueAlert({ message: t("shopsUi.create.created"), severity: "success" })
       navigate(SHOP_PATHS.settings(result.slug))
     } catch (err) {
       // Taken or reserved: the slug field shows why, with free suggestions.
@@ -140,28 +140,27 @@ export function CreateShop() {
         underline="hover"
         sx={{ mb: 2, display: "inline-block" }}
       >
-        &larr; Back to My Shops
+        {t("shopsUi.create.backToMyShops")}
       </MuiLink>
 
       <Card>
         <CardContent sx={{ p: 4 }}>
           <Typography variant="h4" gutterBottom>
-            Create Shop
+            {t("shops.mine.create")}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-            Set up your storefront on SC Market. You can refine your settings
-            after creation.
+            {t("shopsUi.create.intro")}
           </Typography>
 
           <Stack spacing={4}>
             {/* General */}
             <Box>
               <Typography variant="h6" gutterBottom>
-                General
+                {t("shopsUi.form.general")}
               </Typography>
               <Stack spacing={2}>
                 <TextField
-                  label="Shop Name"
+                  label={t("shopsUi.form.shopName")}
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value)
@@ -172,7 +171,7 @@ export function CreateShop() {
                   }}
                   fullWidth
                   required
-                  placeholder="My Awesome Shop"
+                  placeholder={t("shopsUi.create.namePlaceholder")}
                 />
                 <ShopSlugField
                   value={slug}
@@ -189,13 +188,13 @@ export function CreateShop() {
                   urlPrefix="sc-market.space/shops/"
                 />
                 <TextField
-                  label="Description"
+                  label={t("shopsUi.form.description")}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   fullWidth
                   multiline
                   minRows={3}
-                  placeholder="Tell buyers what your shop is about..."
+                  placeholder={t("shopsUi.create.descriptionPlaceholder")}
                 />
               </Stack>
             </Box>
@@ -203,7 +202,7 @@ export function CreateShop() {
             {/* Ownership */}
             <Box>
               <Typography variant="h6" gutterBottom>
-                Ownership
+                {t("shopsUi.create.ownership")}
               </Typography>
               <RadioGroup
                 value={ownerType}
@@ -216,26 +215,26 @@ export function CreateShop() {
                 <FormControlLabel
                   value="personal"
                   control={<Radio />}
-                  label="Personal shop"
+                  label={t("shopsUi.create.personalShop")}
                 />
                 <FormControlLabel
                   value="organization"
                   control={<Radio />}
-                  label="Organization shop"
+                  label={t("shopsUi.create.organizationShop")}
                   disabled={orgs.length === 0}
                 />
               </RadioGroup>
               {ownerType === "organization" && orgs.length > 0 && (
                 <TextField
                   select
-                  label="Organization"
+                  label={t("shops.mine.organization")}
                   value={orgSpectrumId}
                   onChange={(e) => setOrgSpectrumId(e.target.value)}
                   fullWidth
                   sx={{ mt: 2 }}
                   SelectProps={{ native: true }}
                 >
-                  <option value="">Select an organization...</option>
+                  <option value="">{t("shopsUi.form.selectOrganization")}</option>
                   {orgs.map((org) => (
                     <option key={org.spectrum_id} value={org.spectrum_id}>
                       {org.name}
@@ -248,12 +247,13 @@ export function CreateShop() {
             {/* Categories & Languages */}
             <Box>
               <Typography variant="h6" gutterBottom>
-                Categories & Languages
+                {t("shopsUi.create.categoriesLanguages")}
               </Typography>
               <Stack spacing={2}>
                 <Autocomplete
                   multiple
                   options={AVAILABLE_TAGS.slice()}
+                  getOptionLabel={tagLabel}
                   value={tags}
                   onChange={(_e, newValue) => setTags(newValue)}
                   renderTags={(value, getTagProps) =>
@@ -262,7 +262,7 @@ export function CreateShop() {
                       return (
                         <Chip
                           key={key}
-                          label={option}
+                          label={tagLabel(option)}
                           size="small"
                           {...rest}
                         />
@@ -272,18 +272,15 @@ export function CreateShop() {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Tags"
-                      placeholder="Add tag"
+                      label={t("shops.mine.tags")}
+                      placeholder={t("shopsUi.form.addTag")}
                     />
                   )}
                 />
                 <Autocomplete
                   multiple
-                  options={AVAILABLE_LANGUAGES.map((l) => l.code)}
-                  getOptionLabel={(code) =>
-                    AVAILABLE_LANGUAGES.find((l) => l.code === code)?.label ??
-                    code
-                  }
+                  options={AVAILABLE_LANGUAGES.slice()}
+                  getOptionLabel={languageLabel}
                   value={supportedLanguages}
                   onChange={(_e, newValue) => setSupportedLanguages(newValue)}
                   renderTags={(value, getTagProps) =>
@@ -292,10 +289,7 @@ export function CreateShop() {
                       return (
                         <Chip
                           key={key}
-                          label={
-                            AVAILABLE_LANGUAGES.find((l) => l.code === code)
-                              ?.label ?? code
-                          }
+                          label={languageLabel(code)}
                           size="small"
                           {...rest}
                         />
@@ -305,8 +299,8 @@ export function CreateShop() {
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Supported Languages"
-                      placeholder="Add language"
+                      label={t("settings.languages.label")}
+                      placeholder={t("shopsUi.form.addLanguage")}
                     />
                   )}
                 />
@@ -316,7 +310,7 @@ export function CreateShop() {
             {/* Orders */}
             <Box>
               <Typography variant="h6" gutterBottom>
-                Orders
+                {t("shopsUi.form.orders")}
               </Typography>
               <FormControlLabel
                 control={
@@ -325,7 +319,7 @@ export function CreateShop() {
                     onChange={(e) => setAcceptsCustomOrders(e.target.checked)}
                   />
                 }
-                label="Accept custom orders"
+                label={t("shopsUi.form.acceptCustomOrders")}
               />
             </Box>
 
@@ -342,7 +336,7 @@ export function CreateShop() {
                 }
                 size="large"
               >
-                Create Shop
+                {t("shops.mine.create")}
               </LoadingButton>
             </Box>
           </Stack>

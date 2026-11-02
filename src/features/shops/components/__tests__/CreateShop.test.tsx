@@ -1,3 +1,4 @@
+import "../../../../util/i18n"
 /**
  * Creating an org shop sent the org's Spectrum ID as contractor_id (the API
  * wants the org's contractor_id UUID) and dropped the tags, languages and

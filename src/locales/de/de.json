@@ -6827,5 +6827,211 @@
         "inNetwork": "in Ihrem Netzwerk"
       }
     }
+  },
+  "shopsUi": {
+    "tags": {
+      "weapons": "Waffen",
+      "armor": "Rüstung",
+      "components": "Komponenten",
+      "cargo": "Fracht",
+      "mining": "Bergbau",
+      "salvage": "Bergung",
+      "medical": "Medizin",
+      "vehicles": "Fahrzeuge",
+      "services": "Dienstleistungen"
+    },
+    "form": {
+      "general": "Allgemein",
+      "shopName": "Shop-Name",
+      "description": "Beschreibung",
+      "selectOrganization": "Organisation auswählen...",
+      "addTag": "Tag hinzufügen",
+      "addLanguage": "Sprache hinzufügen",
+      "orders": "Aufträge",
+      "acceptCustomOrders": "Individuelle Aufträge annehmen"
+    },
+    "create": {
+      "backToMyShops": "← Zurück zu Meine Shops",
+      "intro": "Richten Sie Ihre Ladenfront auf SC Market ein. Ihre Einstellungen können Sie nach dem Erstellen anpassen.",
+      "namePlaceholder": "Mein toller Shop",
+      "descriptionPlaceholder": "Erzählen Sie Käufern, worum es in Ihrem Shop geht...",
+      "ownership": "Besitz",
+      "personalShop": "Persönlicher Shop",
+      "organizationShop": "Organisations-Shop",
+      "categoriesLanguages": "Kategorien & Sprachen",
+      "selectOrgError": "Wählen Sie eine Organisation aus",
+      "created": "Shop erfolgreich erstellt!"
+    },
+    "settings": {
+      "title": "Shop-Einstellungen",
+      "generalSubtitle": "Grundlegende Shop-Informationen",
+      "appearanceSubtitle": "Eigenes Logo und Banner für Ihren Shop (unabhängig von Ihrer Organisation)",
+      "uploadBanner": "Banner hochladen",
+      "categoriesTitle": "Kategorien & Tags",
+      "categoriesSubtitle": "Helfen Sie Käufern, Ihren Shop zu finden",
+      "ordersSubtitle": "Legen Sie fest, wie Käufer mit Ihrem Shop interagieren",
+      "marketOrderTemplate": "Vorlage für Marktaufträge",
+      "marketOrderTemplateHelper": "Vorlage, die Käufern beim Aufgeben eines individuellen Auftrags angezeigt wird",
+      "discordSubtitle": "Wo Auftrags- und Angebots-Threads für diesen Shop erstellt werden",
+      "discordInfoOrg": "Um die Auftrags- und Angebots-Threads dieses Shops in einen eigenen Kanal zu senden, geben Sie dessen Discord-Server-ID und Kanal-ID ein. Lassen Sie beide Felder leer, um den Thread-Kanal Ihrer Organisation zu verwenden, den Sie mit /setup threads in Discord festlegen. Der SC Market-Bot muss auf diesem Server sein und den Kanal sehen können.",
+      "discordInfoPersonal": "Um die Auftrags- und Angebots-Threads dieses Shops in einen eigenen Kanal zu senden, geben Sie dessen Discord-Server-ID und Kanal-ID ein. Lassen Sie beide Felder leer, um Ihren Thread-Kanal zu verwenden, den Sie mit /setup threads in Discord festlegen. Der SC Market-Bot muss auf diesem Server sein und den Kanal sehen können.",
+      "discordServerId": "Discord-Server-ID",
+      "discordIdPlaceholder": "z. B. 123456789012345678",
+      "discordServerIdHelper": "Server-ID (Guild)",
+      "threadChannelId": "Thread-Kanal-ID",
+      "threadChannelHelper": "Kanal, in dem Threads erstellt werden",
+      "saved": "Shop-Einstellungen gespeichert"
+    },
+    "webhooks": {
+      "subtitle": "Erhalten Sie Benachrichtigungen an eine URL, wenn in diesem Shop etwas passiert",
+      "deleteLabel": "Webhook {{name}} löschen",
+      "add": "Webhook hinzufügen",
+      "created": "Webhook erstellt",
+      "deleted": "Webhook gelöscht",
+      "actions": {
+        "orderCreate": {
+          "label": "Auftrag erstellt",
+          "description": "Ein neuer Auftrag oder ein neues Angebot für diesen Shop"
+        },
+        "orderAssigned": {
+          "label": "Auftrag zugewiesen",
+          "description": "Ein Auftrag wird einem Mitglied zugewiesen oder von ihm übernommen"
+        },
+        "orderStatusChange": {
+          "label": "Statusänderung des Auftrags",
+          "description": "Ein Auftrag wechselt zu „In Bearbeitung“, „Erfüllt“, „Storniert“ oder „Nicht begonnen“"
+        },
+        "orderReview": {
+          "label": "Auftragsbewertung",
+          "description": "Zu einem Auftrag dieses Shops wurde eine Bewertung abgegeben"
+        },
+        "marketItemBid": {
+          "label": "Marktgebot",
+          "description": "Ein neues Gebot auf eine Auktion dieses Shops"
+        },
+        "publicContractCreate": {
+          "label": "Neue öffentliche Verträge (seitenweit)",
+          "description": "Jeder neue öffentliche Vertrag, der auf SC Market veröffentlicht wird, egal von wem"
+        }
+      }
+    },
+    "orderSettings": {
+      "title": "Auftragseinstellungen",
+      "messagesTitle": "Auftragsnachrichten",
+      "messagesSubtitle": "Automatische Nachrichten, die mit Angeboten und Aufträgen gesendet werden",
+      "offerEnabled": "Angebotsnachricht aktiviert",
+      "offerMessage": "Angebotsnachricht",
+      "offerPlaceholder": "Nachricht, die beim Senden eines Angebots angezeigt wird",
+      "orderEnabled": "Auftragsnachricht aktiviert",
+      "orderMessage": "Auftragsnachricht",
+      "orderPlaceholder": "Nachricht, die beim Aufgeben eines Auftrags angezeigt wird",
+      "requirementsTitle": "Auftragsvoraussetzungen",
+      "requirementsSubtitle": "Voraussetzungen, bevor Aufträge aufgegeben werden können",
+      "requireAvailability": "Verfügbarkeit des Verkäufers vor der Annahme von Aufträgen verlangen",
+      "requireAvailabilityHelp": "Wenn aktiviert, müssen Käufer vor dem Bestellen Ihre Verfügbarkeit prüfen.",
+      "stockTitle": "Bestandsverwaltung",
+      "stockSubtitle": "Legen Sie fest, wann Bestand vom Inventar abgezogen wird",
+      "stockTiming": "Zeitpunkt des Bestandsabzugs",
+      "onAccepted": "Bei Annahme des Auftrags (Standard)",
+      "onReceived": "Bei Erhalt/Erfüllung des Auftrags",
+      "dontSubtract": "Bestand nicht abziehen",
+      "allocationMode": "Zuweisungsmodus",
+      "allocationAuto": "Automatisch (FIFO)",
+      "allocationManual": "Manuelle Auswahl",
+      "allocationNone": "Keine (veraltet)",
+      "limitsTitle": "Auftragslimits",
+      "limitsSubtitle": "Legen Sie Mindest- und Höchstgrenzen für Auftragsgröße und -wert fest",
+      "minSize": "Mindestauftragsgröße",
+      "maxSize": "Maximale Auftragsgröße",
+      "minValue": "Mindestauftragswert",
+      "maxValue": "Maximaler Auftragswert",
+      "minSizeAria": "Mindestauftragsgröße (Artikel)",
+      "maxSizeAria": "Maximale Auftragsgröße (Artikel)",
+      "minValueAria": "Mindestauftragswert (aUEC)",
+      "maxValueAria": "Maximaler Auftragswert (aUEC)",
+      "itemsUnit": "Artikel",
+      "save": "Auftragseinstellungen speichern",
+      "saved": "Auftragseinstellungen gespeichert"
+    },
+    "transfer": {
+      "subtitle": "Übertragen Sie diesen Shop an einen anderen Besitzer. Sie können diese Aktion nicht selbst rückgängig machen.",
+      "transferTo": "Übertragen an",
+      "myAccount": "Mein Konto",
+      "anOrganization": "Eine Organisation",
+      "orgHelper": "Sie benötigen in der Zielorganisation die Berechtigung „Markt verwalten“.",
+      "confirmTitle": "Besitz des Shops übertragen?",
+      "confirmBodyUser": "Sie sind dabei, <strong>{{shop}}</strong> an <strong>Ihr persönliches Konto</strong> zu übertragen.",
+      "confirmBodyOrg": "Sie sind dabei, <strong>{{shop}}</strong> an <strong>{{org}}</strong> zu übertragen.",
+      "confirmBodySelectedOrg": "Sie sind dabei, <strong>{{shop}}</strong> an <strong>die ausgewählte Organisation</strong> zu übertragen.",
+      "confirmWarning": "Der Besitz wird sofort übertragen. Aktive Auftrags- und Angebotszuweisungen von Personen, die nicht mehr mit dem neuen Besitzer verbunden sind, können zurückgesetzt werden, damit der neue Besitzer sie übernehmen kann. Abgeschlossene Aufträge sind nicht betroffen. Sie verlieren möglicherweise den Zugriff auf diesen Shop, wenn Sie den neuen Besitzer nicht verwalten können.",
+      "confirm": "Übertragung bestätigen",
+      "transferred": "Besitz des Shops übertragen"
+    },
+    "discord": {
+      "bothRequired": "Geben Sie sowohl die Server-ID als auch die Kanal-ID ein oder lassen Sie beide leer",
+      "notNumeric": "Discord-IDs bestehen aus Ziffern, z. B. 123456789012345678"
+    }
+  },
+  "shoppingListUi": {
+    "backToWishlist": "Zurück zur Wunschliste",
+    "exportCsv": "Als CSV exportieren",
+    "pageTitle": "{{name}} - Einkaufsliste",
+    "headerTitle": "Einkaufsliste: {{name}}",
+    "totalMaterials": "Materialien gesamt",
+    "fullyStocked": "Vollständig vorrätig",
+    "partiallyStocked": "Teilweise vorrätig",
+    "notStocked": "Nicht vorrätig",
+    "estimatedTotalCost": "Geschätzte Gesamtkosten",
+    "amountAuec": "{{amount}} aUEC",
+    "noMaterials": "Keine Materialien benötigt",
+    "noMaterialsHint": "Fügen Sie Ihrer Wunschliste herstellbare Gegenstände hinzu, um eine Einkaufsliste zu erstellen",
+    "columns": {
+      "material": "Material",
+      "status": "Status",
+      "totalNeeded": "Benötigt gesamt",
+      "inStock": "Vorrätig",
+      "toAcquire": "Zu beschaffen",
+      "quality": "Qualität",
+      "acquisition": "Beschaffung",
+      "details": "Details"
+    },
+    "any": "Beliebig",
+    "notAvailable": "k. A.",
+    "usedBy": "Verwendet von:",
+    "mobileHint": "Drehen Sie Ihr Gerät oder nutzen Sie einen Desktop, um weitere Details wie Qualität, Kosten und Beschaffungswege zu sehen.",
+    "acquisition": {
+      "purchase": "Kauf",
+      "mining": "Bergbau",
+      "salvage": "Bergung"
+    },
+    "csv": {
+      "materialName": "Materialname",
+      "totalNeeded": "Benötigt gesamt",
+      "inStock": "Vorrätig",
+      "toAcquire": "Zu beschaffen",
+      "unitPrice": "Stückpreis",
+      "totalCost": "Gesamtkosten",
+      "acquisitionMethods": "Beschaffungswege",
+      "usedByItems": "Verwendet von Gegenständen"
+    },
+    "panel": {
+      "signIn": "Melden Sie sich an, um Einkaufslisten zu nutzen.",
+      "listsError": "Einkaufslisten konnten nicht geladen werden.",
+      "noLists": "Keine Einkaufslisten. Fügen Sie Blaupausen aus dem Fabricator hinzu.",
+      "listError": "Einkaufsliste konnte nicht geladen werden.",
+      "materialsNeeded": "Benötigte Materialien",
+      "removeNamed": "{{name}} von der Einkaufsliste entfernen",
+      "removeItem": "Artikel von der Einkaufsliste entfernen",
+      "need": "Benötigt: {{quantity}}",
+      "searchMarket": "Markt nach {{name}} durchsuchen",
+      "viewAggregate": "Zusammengefasste Angebote ansehen",
+      "usedBy": "Verwendet von: {{items}}",
+      "listOption_one": "{{name}} ({{count}} Artikel)",
+      "listOption_other": "{{name}} ({{count}} Artikel)",
+      "materialsProgress_one": "{{fulfilled}}/{{count}} Material",
+      "materialsProgress_other": "{{fulfilled}}/{{count}} Materialien",
+      "blueprintsCount_one": "Blaupausen ({{count}})",
+      "blueprintsCount_other": "Blaupausen ({{count}})"
+    }
   }
 }

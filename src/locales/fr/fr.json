@@ -6910,5 +6910,214 @@
         "inNetwork": "dans votre réseau"
       }
     }
+  },
+  "shopsUi": {
+    "tags": {
+      "weapons": "Armes",
+      "armor": "Armures",
+      "components": "Composants",
+      "cargo": "Cargaison",
+      "mining": "Minage",
+      "salvage": "Récupération",
+      "medical": "Médical",
+      "vehicles": "Véhicules",
+      "services": "Services"
+    },
+    "form": {
+      "general": "Général",
+      "shopName": "Nom de la boutique",
+      "description": "Description",
+      "selectOrganization": "Sélectionnez une organisation...",
+      "addTag": "Ajouter un tag",
+      "addLanguage": "Ajouter une langue",
+      "orders": "Commandes",
+      "acceptCustomOrders": "Accepter les commandes sur mesure"
+    },
+    "create": {
+      "backToMyShops": "← Retour à Mes boutiques",
+      "intro": "Configurez votre vitrine sur SC Market. Vous pourrez affiner vos paramètres après la création.",
+      "namePlaceholder": "Ma super boutique",
+      "descriptionPlaceholder": "Expliquez aux acheteurs ce que propose votre boutique...",
+      "ownership": "Propriété",
+      "personalShop": "Boutique personnelle",
+      "organizationShop": "Boutique d'organisation",
+      "categoriesLanguages": "Catégories et langues",
+      "selectOrgError": "Sélectionnez une organisation",
+      "created": "Boutique créée avec succès !"
+    },
+    "settings": {
+      "title": "Paramètres de la boutique",
+      "generalSubtitle": "Informations de base de la boutique",
+      "appearanceSubtitle": "Logo et bannière personnalisés pour votre boutique (indépendants de votre organisation)",
+      "uploadBanner": "Téléverser une bannière",
+      "categoriesTitle": "Catégories et tags",
+      "categoriesSubtitle": "Aidez les acheteurs à trouver votre boutique",
+      "ordersSubtitle": "Configurez la façon dont les acheteurs interagissent avec votre boutique",
+      "marketOrderTemplate": "Modèle de commande du marché",
+      "marketOrderTemplateHelper": "Modèle affiché aux acheteurs lorsqu'ils passent une commande sur mesure",
+      "discordSubtitle": "Où sont créés les fils de commandes et d'offres de cette boutique",
+      "discordInfoOrg": "Pour envoyer les fils de commandes et d'offres de cette boutique dans leur propre salon, saisissez l'ID du serveur Discord et l'ID du salon. Laissez les deux vides pour utiliser le salon de fils de votre organisation, que vous définissez avec /setup threads dans Discord. Le bot SC Market doit être sur ce serveur et pouvoir voir le salon.",
+      "discordInfoPersonal": "Pour envoyer les fils de commandes et d'offres de cette boutique dans leur propre salon, saisissez l'ID du serveur Discord et l'ID du salon. Laissez les deux vides pour utiliser votre salon de fils, que vous définissez avec /setup threads dans Discord. Le bot SC Market doit être sur ce serveur et pouvoir voir le salon.",
+      "discordServerId": "ID du serveur Discord",
+      "discordIdPlaceholder": "ex. 123456789012345678",
+      "discordServerIdHelper": "ID du serveur (guild)",
+      "threadChannelId": "ID du salon de fils",
+      "threadChannelHelper": "Salon où les fils sont créés",
+      "saved": "Paramètres de la boutique enregistrés"
+    },
+    "webhooks": {
+      "subtitle": "Recevez des notifications sur une URL lorsque des événements se produisent dans cette boutique",
+      "deleteLabel": "Supprimer le webhook {{name}}",
+      "add": "Ajouter un webhook",
+      "created": "Webhook créé",
+      "deleted": "Webhook supprimé",
+      "actions": {
+        "orderCreate": {
+          "label": "Commande créée",
+          "description": "Une nouvelle commande ou offre pour cette boutique"
+        },
+        "orderAssigned": {
+          "label": "Commande attribuée",
+          "description": "Une commande est attribuée à un membre ou prise en charge par lui"
+        },
+        "orderStatusChange": {
+          "label": "Changement de statut de commande",
+          "description": "Une commande passe à en cours, honorée, annulée ou non commencée"
+        },
+        "orderReview": {
+          "label": "Avis sur la commande",
+          "description": "Un avis est laissé sur l'une des commandes de cette boutique"
+        },
+        "marketItemBid": {
+          "label": "Enchère sur le marché",
+          "description": "Une nouvelle enchère sur l'une des ventes aux enchères de cette boutique"
+        },
+        "publicContractCreate": {
+          "label": "Nouveaux contrats publics (tout le site)",
+          "description": "Chaque nouveau contrat public publié sur SC Market, par n'importe qui"
+        }
+      }
+    },
+    "orderSettings": {
+      "title": "Paramètres des commandes",
+      "messagesTitle": "Messages de commande",
+      "messagesSubtitle": "Messages automatiques envoyés avec les offres et les commandes",
+      "offerEnabled": "Message d'offre activé",
+      "offerMessage": "Message d'offre",
+      "offerPlaceholder": "Message affiché lors de l'envoi d'une offre",
+      "orderEnabled": "Message de commande activé",
+      "orderMessage": "Message de commande",
+      "orderPlaceholder": "Message affiché lorsqu'une commande est passée",
+      "requirementsTitle": "Conditions de commande",
+      "requirementsSubtitle": "Conditions à remplir avant de pouvoir passer commande",
+      "requireAvailability": "Exiger la disponibilité du vendeur avant d'accepter les commandes",
+      "requireAvailabilityHelp": "Lorsque cette option est activée, les acheteurs doivent vérifier votre disponibilité avant de passer commande.",
+      "stockTitle": "Gestion du stock",
+      "stockSubtitle": "Configurez le moment où le stock est déduit de l'inventaire",
+      "stockTiming": "Moment de déduction du stock",
+      "onAccepted": "À l'acceptation de la commande (par défaut)",
+      "onReceived": "À la réception/l'exécution de la commande",
+      "dontSubtract": "Ne pas déduire le stock",
+      "allocationMode": "Mode d'allocation",
+      "allocationAuto": "Automatique (FIFO)",
+      "allocationManual": "Sélection manuelle",
+      "allocationNone": "Aucun (ancien mode)",
+      "limitsTitle": "Limites de commande",
+      "limitsSubtitle": "Définissez des limites min/max pour la taille et la valeur des commandes",
+      "minSize": "Taille minimale de commande",
+      "maxSize": "Taille maximale de commande",
+      "minValue": "Valeur minimale de commande",
+      "maxValue": "Valeur maximale de commande",
+      "minSizeAria": "Taille minimale de commande (articles)",
+      "maxSizeAria": "Taille maximale de commande (articles)",
+      "minValueAria": "Valeur minimale de commande (aUEC)",
+      "maxValueAria": "Valeur maximale de commande (aUEC)",
+      "itemsUnit": "articles",
+      "save": "Enregistrer les paramètres des commandes",
+      "saved": "Paramètres des commandes enregistrés"
+    },
+    "transfer": {
+      "subtitle": "Transférez cette boutique à un autre propriétaire. Vous ne pourrez pas annuler cette action vous-même.",
+      "transferTo": "Transférer à",
+      "myAccount": "Mon compte",
+      "anOrganization": "Une organisation",
+      "orgHelper": "Vous devez disposer de l'autorisation « Gérer le marché » dans l'organisation cible.",
+      "confirmTitle": "Transférer la propriété de la boutique ?",
+      "confirmBodyUser": "Vous êtes sur le point de transférer <strong>{{shop}}</strong> vers <strong>votre compte personnel</strong>.",
+      "confirmBodyOrg": "Vous êtes sur le point de transférer <strong>{{shop}}</strong> à <strong>{{org}}</strong>.",
+      "confirmBodySelectedOrg": "Vous êtes sur le point de transférer <strong>{{shop}}</strong> à <strong>l'organisation sélectionnée</strong>.",
+      "confirmWarning": "La propriété sera transférée immédiatement. Les attributions de commandes et d'offres actives détenues par des personnes qui ne sont plus liées au nouveau propriétaire peuvent être réinitialisées afin que celui-ci puisse les reprendre. Les commandes terminées ne sont pas concernées. Vous pourriez perdre l'accès à cette boutique si vous ne pouvez pas gérer le nouveau propriétaire.",
+      "confirm": "Confirmer le transfert",
+      "transferred": "Propriété de la boutique transférée"
+    },
+    "discord": {
+      "bothRequired": "Saisissez l’ID du serveur et l’ID du salon, ou laissez les deux vides",
+      "notNumeric": "Les ID Discord sont des nombres, par ex. 123456789012345678"
+    }
+  },
+  "shoppingListUi": {
+    "backToWishlist": "Retour à la liste de souhaits",
+    "exportCsv": "Exporter en CSV",
+    "pageTitle": "{{name}} - Liste d'achats",
+    "headerTitle": "Liste d'achats : {{name}}",
+    "totalMaterials": "Total des matériaux",
+    "fullyStocked": "Entièrement en stock",
+    "partiallyStocked": "Partiellement en stock",
+    "notStocked": "Pas en stock",
+    "estimatedTotalCost": "Coût total estimé",
+    "amountAuec": "{{amount}} aUEC",
+    "noMaterials": "Aucun matériau nécessaire",
+    "noMaterialsHint": "Ajoutez des objets fabricables à votre liste de souhaits pour générer une liste d'achats",
+    "columns": {
+      "material": "Matériau",
+      "status": "Statut",
+      "totalNeeded": "Total requis",
+      "inStock": "En stock",
+      "toAcquire": "À acquérir",
+      "quality": "Qualité",
+      "acquisition": "Acquisition",
+      "details": "Détails"
+    },
+    "any": "Toutes",
+    "notAvailable": "N/D",
+    "usedBy": "Utilisé par :",
+    "mobileHint": "Faites pivoter votre appareil ou utilisez un ordinateur pour voir plus de détails, comme la qualité, le coût et les méthodes d'acquisition.",
+    "acquisition": {
+      "purchase": "achat",
+      "mining": "minage",
+      "salvage": "récupération"
+    },
+    "csv": {
+      "materialName": "Nom du matériau",
+      "totalNeeded": "Total requis",
+      "inStock": "En stock",
+      "toAcquire": "À acquérir",
+      "unitPrice": "Prix unitaire",
+      "totalCost": "Coût total",
+      "acquisitionMethods": "Méthodes d'acquisition",
+      "usedByItems": "Utilisé par les objets"
+    },
+    "panel": {
+      "signIn": "Connectez-vous pour utiliser les listes d'achats.",
+      "listsError": "Impossible de charger les listes d'achats.",
+      "noLists": "Aucune liste d'achats. Ajoutez des plans depuis le Fabricator.",
+      "listError": "Impossible de charger la liste d'achats.",
+      "materialsNeeded": "Matériaux nécessaires",
+      "removeNamed": "Retirer {{name}} de la liste d'achats",
+      "removeItem": "Retirer l'article de la liste d'achats",
+      "need": "Manque {{quantity}}",
+      "searchMarket": "Rechercher {{name}} sur le marché",
+      "viewAggregate": "Voir les annonces regroupées",
+      "usedBy": "Utilisé par : {{items}}",
+      "listOption_one": "{{name}} ({{count}} article)",
+      "listOption_many": "{{name}} ({{count}} articles)",
+      "listOption_other": "{{name}} ({{count}} articles)",
+      "materialsProgress_one": "{{fulfilled}}/{{count}} matériau",
+      "materialsProgress_many": "{{fulfilled}}/{{count}} matériaux",
+      "materialsProgress_other": "{{fulfilled}}/{{count}} matériaux",
+      "blueprintsCount_one": "Plans ({{count}})",
+      "blueprintsCount_many": "Plans ({{count}})",
+      "blueprintsCount_other": "Plans ({{count}})"
+    }
   }
 }

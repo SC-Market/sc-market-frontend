@@ -6750,5 +6750,208 @@
         "inNetwork": "在你的网络中"
       }
     }
+  },
+  "shopsUi": {
+    "tags": {
+      "weapons": "武器",
+      "armor": "护甲",
+      "components": "组件",
+      "cargo": "货物",
+      "mining": "采矿",
+      "salvage": "回收",
+      "medical": "医疗",
+      "vehicles": "载具",
+      "services": "服务"
+    },
+    "form": {
+      "general": "常规",
+      "shopName": "店铺名称",
+      "description": "描述",
+      "selectOrganization": "选择组织...",
+      "addTag": "添加标签",
+      "addLanguage": "添加语言",
+      "orders": "订单",
+      "acceptCustomOrders": "接受定制订单"
+    },
+    "create": {
+      "backToMyShops": "← 返回我的店铺",
+      "intro": "在 SC Market 上开设你的店面。创建后可以再调整设置。",
+      "namePlaceholder": "我的超棒店铺",
+      "descriptionPlaceholder": "告诉买家你的店铺是做什么的...",
+      "ownership": "所有权",
+      "personalShop": "个人店铺",
+      "organizationShop": "组织店铺",
+      "categoriesLanguages": "分类与语言",
+      "selectOrgError": "请选择一个组织",
+      "created": "店铺创建成功！"
+    },
+    "settings": {
+      "title": "店铺设置",
+      "generalSubtitle": "店铺基本信息",
+      "appearanceSubtitle": "店铺专属的徽标和横幅（独立于你的组织）",
+      "uploadBanner": "上传横幅",
+      "categoriesTitle": "分类与标签",
+      "categoriesSubtitle": "帮助买家找到你的店铺",
+      "ordersSubtitle": "配置买家与店铺的互动方式",
+      "marketOrderTemplate": "市场订单模板",
+      "marketOrderTemplateHelper": "买家下定制订单时显示的模板",
+      "discordSubtitle": "本店订单和报价帖子的创建位置",
+      "discordInfoOrg": "要把本店的订单和报价帖子发送到单独的频道，请输入该 Discord 服务器 ID 和频道 ID。两项都留空则使用你组织的帖子频道（在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并且能看到该频道。",
+      "discordInfoPersonal": "要把本店的订单和报价帖子发送到单独的频道，请输入该 Discord 服务器 ID 和频道 ID。两项都留空则使用你的帖子频道（在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并且能看到该频道。",
+      "discordServerId": "Discord 服务器 ID",
+      "discordIdPlaceholder": "例如 123456789012345678",
+      "discordServerIdHelper": "服务器（公会）ID",
+      "threadChannelId": "帖子频道 ID",
+      "threadChannelHelper": "创建帖子的频道",
+      "saved": "店铺设置已保存"
+    },
+    "webhooks": {
+      "subtitle": "本店发生事件时向某个 URL 发送通知",
+      "deleteLabel": "删除 Webhook {{name}}",
+      "add": "添加 Webhook",
+      "created": "Webhook 已创建",
+      "deleted": "Webhook 已删除",
+      "actions": {
+        "orderCreate": {
+          "label": "订单已创建",
+          "description": "本店的新订单或报价"
+        },
+        "orderAssigned": {
+          "label": "订单已分配",
+          "description": "订单被分配给成员或被成员认领"
+        },
+        "orderStatusChange": {
+          "label": "订单状态变更",
+          "description": "订单变为进行中、已完成、已取消或未开始"
+        },
+        "orderReview": {
+          "label": "订单评价",
+          "description": "本店的某个订单收到了评价"
+        },
+        "marketItemBid": {
+          "label": "市场出价",
+          "description": "本店某个拍卖收到新出价"
+        },
+        "publicContractCreate": {
+          "label": "新的公开合同（全站）",
+          "description": "任何人在 SC Market 上发布的每一个新公开合同"
+        }
+      }
+    },
+    "orderSettings": {
+      "title": "订单设置",
+      "messagesTitle": "订单消息",
+      "messagesSubtitle": "随报价和订单发送的自动消息",
+      "offerEnabled": "启用报价消息",
+      "offerMessage": "报价消息",
+      "offerPlaceholder": "发送报价时显示的消息",
+      "orderEnabled": "启用订单消息",
+      "orderMessage": "订单消息",
+      "orderPlaceholder": "下单时显示的消息",
+      "requirementsTitle": "订单要求",
+      "requirementsSubtitle": "下单前需满足的要求",
+      "requireAvailability": "接受订单前要求卖家可用时间",
+      "requireAvailabilityHelp": "启用后，买家下单前必须查看你的可用时间。",
+      "stockTitle": "库存管理",
+      "stockSubtitle": "配置何时从库存中扣减",
+      "stockTiming": "库存扣减时机",
+      "onAccepted": "订单被接受时（默认）",
+      "onReceived": "订单收到/完成时",
+      "dontSubtract": "不扣减库存",
+      "allocationMode": "分配模式",
+      "allocationAuto": "自动（FIFO）",
+      "allocationManual": "手动选择",
+      "allocationNone": "无（旧版）",
+      "limitsTitle": "订单限制",
+      "limitsSubtitle": "设置订单数量和金额的最小/最大限制",
+      "minSize": "最小订单数量",
+      "maxSize": "最大订单数量",
+      "minValue": "最低订单金额",
+      "maxValue": "最高订单金额",
+      "minSizeAria": "最小订单数量（件）",
+      "maxSizeAria": "最大订单数量（件）",
+      "minValueAria": "最低订单金额（aUEC）",
+      "maxValueAria": "最高订单金额（aUEC）",
+      "itemsUnit": "件",
+      "save": "保存订单设置",
+      "saved": "订单设置已保存"
+    },
+    "transfer": {
+      "subtitle": "将本店转移给其他所有者。你无法自行撤销此操作。",
+      "transferTo": "转移给",
+      "myAccount": "我的账户",
+      "anOrganization": "某个组织",
+      "orgHelper": "你必须在目标组织中拥有“管理市场”权限。",
+      "confirmTitle": "转移店铺所有权？",
+      "confirmBodyUser": "你即将把 <strong>{{shop}}</strong> 转移到<strong>你的个人账户</strong>。",
+      "confirmBodyOrg": "你即将把 <strong>{{shop}}</strong> 转移给 <strong>{{org}}</strong>。",
+      "confirmBodySelectedOrg": "你即将把 <strong>{{shop}}</strong> 转移给<strong>所选组织</strong>。",
+      "confirmWarning": "所有权将立即转移。由已不再与新所有者关联的人员持有的进行中订单和报价分配可能会被重置，以便新所有者重新认领。已完成的订单不受影响。如果你无法管理新所有者，可能会失去对本店的访问权限。",
+      "confirm": "确认转移",
+      "transferred": "店铺所有权已转移"
+    },
+    "discord": {
+      "bothRequired": "请同时填写服务器 ID 和频道 ID，或两者都留空",
+      "notNumeric": "Discord ID 由数字组成，例如 123456789012345678"
+    }
+  },
+  "shoppingListUi": {
+    "backToWishlist": "返回心愿单",
+    "exportCsv": "导出为 CSV",
+    "pageTitle": "{{name}} - 购物清单",
+    "headerTitle": "购物清单：{{name}}",
+    "totalMaterials": "材料总数",
+    "fullyStocked": "库存充足",
+    "partiallyStocked": "部分有库存",
+    "notStocked": "无库存",
+    "estimatedTotalCost": "预计总成本",
+    "amountAuec": "{{amount}} aUEC",
+    "noMaterials": "无需材料",
+    "noMaterialsHint": "将可制作的物品加入心愿单即可生成购物清单",
+    "columns": {
+      "material": "材料",
+      "status": "状态",
+      "totalNeeded": "总需求",
+      "inStock": "库存",
+      "toAcquire": "待获取",
+      "quality": "品质",
+      "acquisition": "获取方式",
+      "details": "详情"
+    },
+    "any": "任意",
+    "notAvailable": "不适用",
+    "usedBy": "用于：",
+    "mobileHint": "旋转设备或在桌面端查看，可获得品质、成本和获取方式等更多详情。",
+    "acquisition": {
+      "purchase": "购买",
+      "mining": "采矿",
+      "salvage": "回收"
+    },
+    "csv": {
+      "materialName": "材料名称",
+      "totalNeeded": "总需求",
+      "inStock": "库存",
+      "toAcquire": "待获取",
+      "unitPrice": "单价",
+      "totalCost": "总成本",
+      "acquisitionMethods": "获取方式",
+      "usedByItems": "使用该材料的物品"
+    },
+    "panel": {
+      "signIn": "登录后即可使用购物清单。",
+      "listsError": "无法加载购物清单。",
+      "noLists": "没有购物清单。请从 Fabricator 添加蓝图。",
+      "listError": "无法加载购物清单。",
+      "materialsNeeded": "所需材料",
+      "removeNamed": "从购物清单中移除 {{name}}",
+      "removeItem": "从购物清单中移除物品",
+      "need": "还需 {{quantity}}",
+      "searchMarket": "在市场中搜索 {{name}}",
+      "viewAggregate": "查看汇总商品",
+      "usedBy": "用于：{{items}}",
+      "listOption_other": "{{name}}（{{count}} 件物品）",
+      "materialsProgress_other": "材料 {{fulfilled}}/{{count}}",
+      "blueprintsCount_other": "蓝图（{{count}}）"
+    }
   }
 }

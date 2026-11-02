@@ -6744,5 +6744,208 @@
         "inNetwork": "あなたのネットワーク内"
       }
     }
+  },
+  "shopsUi": {
+    "tags": {
+      "weapons": "武器",
+      "armor": "アーマー",
+      "components": "コンポーネント",
+      "cargo": "貨物",
+      "mining": "採掘",
+      "salvage": "サルベージ",
+      "medical": "医療",
+      "vehicles": "車両",
+      "services": "サービス"
+    },
+    "form": {
+      "general": "一般",
+      "shopName": "ショップ名",
+      "description": "説明",
+      "selectOrganization": "組織を選択...",
+      "addTag": "タグを追加",
+      "addLanguage": "言語を追加",
+      "orders": "注文",
+      "acceptCustomOrders": "カスタム注文を受け付ける"
+    },
+    "create": {
+      "backToMyShops": "← マイショップに戻る",
+      "intro": "SC Market にストアフロントを開設しましょう。設定は作成後に調整できます。",
+      "namePlaceholder": "素敵なショップ",
+      "descriptionPlaceholder": "ショップの内容を購入者に紹介しましょう...",
+      "ownership": "所有者",
+      "personalShop": "個人ショップ",
+      "organizationShop": "組織ショップ",
+      "categoriesLanguages": "カテゴリーと言語",
+      "selectOrgError": "組織を選択してください",
+      "created": "ショップを作成しました！"
+    },
+    "settings": {
+      "title": "ショップ設定",
+      "generalSubtitle": "ショップの基本情報",
+      "appearanceSubtitle": "ショップ独自のロゴとバナー（組織とは別に設定）",
+      "uploadBanner": "バナーをアップロード",
+      "categoriesTitle": "カテゴリーとタグ",
+      "categoriesSubtitle": "購入者があなたのショップを見つけやすくします",
+      "ordersSubtitle": "購入者とショップのやり取りを設定します",
+      "marketOrderTemplate": "マーケット注文テンプレート",
+      "marketOrderTemplateHelper": "購入者がカスタム注文をするときに表示されるテンプレート",
+      "discordSubtitle": "このショップの注文・オファーのスレッドを作成する場所",
+      "discordInfoOrg": "このショップの注文・オファーのスレッドを専用チャンネルに送るには、Discord のサーバー ID とチャンネル ID を入力してください。両方を空欄にすると、組織のスレッドチャンネル（Discord で /setup threads を実行して設定）が使われます。SC Market ボットがそのサーバーに参加し、チャンネルを閲覧できる必要があります。",
+      "discordInfoPersonal": "このショップの注文・オファーのスレッドを専用チャンネルに送るには、Discord のサーバー ID とチャンネル ID を入力してください。両方を空欄にすると、あなたのスレッドチャンネル（Discord で /setup threads を実行して設定）が使われます。SC Market ボットがそのサーバーに参加し、チャンネルを閲覧できる必要があります。",
+      "discordServerId": "Discord サーバー ID",
+      "discordIdPlaceholder": "例: 123456789012345678",
+      "discordServerIdHelper": "サーバー（ギルド）ID",
+      "threadChannelId": "スレッドチャンネル ID",
+      "threadChannelHelper": "スレッドが作成されるチャンネル",
+      "saved": "ショップ設定を保存しました"
+    },
+    "webhooks": {
+      "subtitle": "このショップでイベントが発生したときに URL へ通知を送信します",
+      "deleteLabel": "Webhook「{{name}}」を削除",
+      "add": "Webhook を追加",
+      "created": "Webhook を作成しました",
+      "deleted": "Webhook を削除しました",
+      "actions": {
+        "orderCreate": {
+          "label": "注文の作成",
+          "description": "このショップへの新しい注文またはオファー"
+        },
+        "orderAssigned": {
+          "label": "注文の割り当て",
+          "description": "注文がメンバーに割り当てられた、またはメンバーが引き受けた"
+        },
+        "orderStatusChange": {
+          "label": "注文ステータスの変更",
+          "description": "注文が進行中、完了、キャンセル、未着手のいずれかに変わった"
+        },
+        "orderReview": {
+          "label": "注文レビュー",
+          "description": "このショップの注文にレビューが投稿された"
+        },
+        "marketItemBid": {
+          "label": "マーケット入札",
+          "description": "このショップのオークションへの新しい入札"
+        },
+        "publicContractCreate": {
+          "label": "新しい公開契約（サイト全体）",
+          "description": "誰が投稿したかを問わず、SC Market に投稿されたすべての新しい公開契約"
+        }
+      }
+    },
+    "orderSettings": {
+      "title": "注文設定",
+      "messagesTitle": "注文メッセージ",
+      "messagesSubtitle": "オファーや注文と一緒に送信される自動メッセージ",
+      "offerEnabled": "オファーメッセージを有効化",
+      "offerMessage": "オファーメッセージ",
+      "offerPlaceholder": "オファー送信時に表示されるメッセージ",
+      "orderEnabled": "注文メッセージを有効化",
+      "orderMessage": "注文メッセージ",
+      "orderPlaceholder": "注文時に表示されるメッセージ",
+      "requirementsTitle": "注文の条件",
+      "requirementsSubtitle": "注文を受け付ける前の条件",
+      "requireAvailability": "注文受付前に販売者の対応可能時間を必須にする",
+      "requireAvailabilityHelp": "有効にすると、購入者は注文前にあなたの対応可能時間を確認する必要があります。",
+      "stockTitle": "在庫管理",
+      "stockSubtitle": "在庫からいつ差し引くかを設定します",
+      "stockTiming": "在庫を差し引くタイミング",
+      "onAccepted": "注文の承認時（デフォルト）",
+      "onReceived": "注文の受領・完了時",
+      "dontSubtract": "在庫を差し引かない",
+      "allocationMode": "割り当てモード",
+      "allocationAuto": "自動（FIFO）",
+      "allocationManual": "手動選択",
+      "allocationNone": "なし（旧方式）",
+      "limitsTitle": "注文の制限",
+      "limitsSubtitle": "注文数量と金額の最小・最大を設定します",
+      "minSize": "最小注文数量",
+      "maxSize": "最大注文数量",
+      "minValue": "最小注文金額",
+      "maxValue": "最大注文金額",
+      "minSizeAria": "最小注文数量（個）",
+      "maxSizeAria": "最大注文数量（個）",
+      "minValueAria": "最小注文金額（aUEC）",
+      "maxValueAria": "最大注文金額（aUEC）",
+      "itemsUnit": "個",
+      "save": "注文設定を保存",
+      "saved": "注文設定を保存しました"
+    },
+    "transfer": {
+      "subtitle": "このショップを別の所有者に移します。この操作をあなたが取り消すことはできません。",
+      "transferTo": "譲渡先",
+      "myAccount": "自分のアカウント",
+      "anOrganization": "組織",
+      "orgHelper": "譲渡先の組織で「マーケット管理」権限が必要です。",
+      "confirmTitle": "ショップの所有権を譲渡しますか？",
+      "confirmBodyUser": "<strong>{{shop}}</strong> を<strong>あなたの個人アカウント</strong>に譲渡しようとしています。",
+      "confirmBodyOrg": "<strong>{{shop}}</strong> を <strong>{{org}}</strong> に譲渡しようとしています。",
+      "confirmBodySelectedOrg": "<strong>{{shop}}</strong> を<strong>選択した組織</strong>に譲渡しようとしています。",
+      "confirmWarning": "所有権はすぐに譲渡されます。新しい所有者と関係のなくなった人が担当している進行中の注文やオファーの割り当ては、新しい所有者が引き継げるようにリセットされることがあります。完了した注文には影響しません。新しい所有者を管理できない場合、このショップにアクセスできなくなる可能性があります。",
+      "confirm": "譲渡を確定",
+      "transferred": "ショップの所有権を譲渡しました"
+    },
+    "discord": {
+      "bothRequired": "サーバーIDとチャンネルIDの両方を入力するか、両方とも空欄にしてください",
+      "notNumeric": "Discord IDは数字です（例：123456789012345678）"
+    }
+  },
+  "shoppingListUi": {
+    "backToWishlist": "ウィッシュリストに戻る",
+    "exportCsv": "CSV にエクスポート",
+    "pageTitle": "{{name}} - ショッピングリスト",
+    "headerTitle": "ショッピングリスト: {{name}}",
+    "totalMaterials": "素材の合計",
+    "fullyStocked": "在庫十分",
+    "partiallyStocked": "在庫一部あり",
+    "notStocked": "在庫なし",
+    "estimatedTotalCost": "推定合計費用",
+    "amountAuec": "{{amount}} aUEC",
+    "noMaterials": "必要な素材はありません",
+    "noMaterialsHint": "クラフト可能なアイテムをウィッシュリストに追加すると、ショッピングリストが作成されます",
+    "columns": {
+      "material": "素材",
+      "status": "ステータス",
+      "totalNeeded": "必要数合計",
+      "inStock": "在庫",
+      "toAcquire": "要入手",
+      "quality": "品質",
+      "acquisition": "入手方法",
+      "details": "詳細"
+    },
+    "any": "指定なし",
+    "notAvailable": "該当なし",
+    "usedBy": "使用先:",
+    "mobileHint": "デバイスを横向きにするかデスクトップで表示すると、品質・費用・入手方法などの詳細を確認できます。",
+    "acquisition": {
+      "purchase": "購入",
+      "mining": "採掘",
+      "salvage": "サルベージ"
+    },
+    "csv": {
+      "materialName": "素材名",
+      "totalNeeded": "必要数合計",
+      "inStock": "在庫",
+      "toAcquire": "要入手",
+      "unitPrice": "単価",
+      "totalCost": "合計費用",
+      "acquisitionMethods": "入手方法",
+      "usedByItems": "使用するアイテム"
+    },
+    "panel": {
+      "signIn": "ショッピングリストを使うにはサインインしてください。",
+      "listsError": "ショッピングリストを読み込めませんでした。",
+      "noLists": "ショッピングリストがありません。Fabricator からブループリントを追加してください。",
+      "listError": "ショッピングリストを読み込めませんでした。",
+      "materialsNeeded": "必要な素材",
+      "removeNamed": "{{name}} をショッピングリストから削除",
+      "removeItem": "アイテムをショッピングリストから削除",
+      "need": "不足 {{quantity}}",
+      "searchMarket": "マーケットで {{name}} を検索",
+      "viewAggregate": "集約された出品を表示",
+      "usedBy": "使用先: {{items}}",
+      "listOption_other": "{{name}}（{{count}} 件）",
+      "materialsProgress_other": "素材 {{fulfilled}}/{{count}}",
+      "blueprintsCount_other": "ブループリント（{{count}}）"
+    }
   }
 }
