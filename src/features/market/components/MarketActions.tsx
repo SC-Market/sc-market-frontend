@@ -1,17 +1,9 @@
 import { Link } from "react-router-dom"
 import { Button, Grid } from "@mui/material"
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint"
-import {
-  CreateRounded,
-  RadioButtonCheckedRounded,
-  RadioButtonUncheckedRounded,
-} from "@mui/icons-material"
-import React, { useCallback, useContext } from "react"
+import { CreateRounded } from "@mui/icons-material"
+import React from "react"
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
-import { ItemStockContext, ManageStockArea } from "../stock"
-import { MarketListingUpdateBody, UniqueListing } from "../domain/types"
-import { useUpdateMarketListingMutation } from "../api/marketApi"
-import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
