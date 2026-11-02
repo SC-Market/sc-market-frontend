@@ -1688,7 +1688,7 @@
     "how_to_communicate": "How to communicate with buyers through Discord",
     "how_to_communicate_answer": "Add the official SC Market Discord Bot to your server and pick a channel for order threads: each new order or offer then opens a private thread there with the buyer and the seller assigned to it, and buyers are invited to your server so you can work through the order together.\n\n1. In your shop's **Settings › Discord**, or your org's **Discord Integration** tab, press **[Add the bot to a server]({{BOT_INSTALL_PATH}})** and pick your server in Discord. You come back with the server linked.\n\n2. Pick the channel for order threads and, optionally, channels for order alerts (a post for each new order and offer with a Claim button), then save.\n\nAdded the bot from Discord instead? Link your Discord account in your SC Market settings, then run `/setup threads` in the channel that should hold the order threads. For your org's orders, fill in `org` with its Spectrum ID (for example `/setup threads org:SCMARKET`); for orders placed with you, leave it empty. Run `/setup alerts` (with the same `org`) in a staff channel for alerts.\n\nAdding the bot needs the **Manage Server** permission in the Discord server, and `/setup threads` and `/setup alerts` need **Manage Channels**. For an org, you also need the org's **Manage Webhooks** permission on SC Market (or **Manage Orders** for `/setup alerts`). In the thread channel, the bot needs View Channel, Create Private Threads, Send Messages in Threads and Create Invite. Run `/setup status` to see what a channel gets, and `/help` to see every command.",
     "how_to_get_notified": "How to get notified when an order is placed",
-    "how_to_get_notified_answer": "Add the official [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) to your server to automatically receive direct messages when an order is placed with you or assigned to you. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
+    "how_to_get_notified_answer": "Add the official [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) to your server and pick an order alert channel: each new order and offer is posted there, and each one can get its own order thread. The bot can also send you direct messages, such as a reminder when an offer is waiting for your reply, once your Discord account is linked and you share a server with the bot. Choose what reaches you by DM in Settings › Notifications. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
     "integrating_with_discord": "Integrating with Discord",
     "learn_connect": "Connect the Discord bot",
     "learn_alerts": "Order alerts and claiming"
@@ -1944,7 +1944,9 @@
     "officialSite": "Official Star Citizen site:",
     "wiki": "Wiki",
     "cookiePreferences": "Cookie preferences",
-    "changelog": "Changelog"
+    "changelog": "Changelog",
+    "sdkNpm": "SDK on npm",
+    "orgsSdkNpm": "SC Orgs SDK on npm"
   },
   "frontendError": {
     "afterRefresh": "if you see this error after refreshing the page.",
@@ -2165,7 +2167,9 @@
     "manageAccessNotice": "You can view this shop's listings and stock. To create or change them, ask an org admin for the Manage Market permission.",
     "stockAccessNotice": "You can view this shop's stock. To add or change lots, ask an org admin for the Manage Stock permission.",
     "increaseQuantity": "Increase quantity",
-    "decreaseQuantity": "Decrease quantity"
+    "decreaseQuantity": "Decrease quantity",
+    "renewHelpLabel": "Renew",
+    "renewHelp": "Paused listings are hidden from buyers, for example after an auction ends with no bids. Click the renew button in this column to make a listing active again."
   },
   "ItemStockRework": {
     "actions": "Actions",
@@ -4973,7 +4977,8 @@
         },
         "reminder": {
           "label": "Unread message reminder",
-          "hint": "At most once a day"
+          "hint": "At most once a day",
+          "tip": "When a message in one of your order or offer chats has been unread for about 6 hours, we remind you so the other side isn't left waiting."
         },
         "bid": {
           "label": "New bid"
@@ -5006,11 +5011,13 @@
         },
         "offer-pending": {
           "label": "Offer waiting for your reply",
-          "hint": "About 1 and 3 days after an offer arrives with no reply"
+          "hint": "About 1 and 3 days after an offer arrives with no reply",
+          "tip": "When an offer to you, or to an org whose orders you handle, has no answer yet. Accept, counter or reject it to stop the reminders."
         },
         "offer-waiting": {
           "label": "Your offer is still waiting",
-          "hint": "If the seller hasn't replied after the last reminder"
+          "hint": "If the seller hasn't replied after the last reminder",
+          "tip": "For offers you made as a buyer: the seller still hasn't answered after being reminded. You can keep waiting, message the seller or withdraw the offer."
         }
       },
       "subtitle": "Choose where each kind of notification reaches you.",
@@ -6276,7 +6283,8 @@
     "replyTooltip_one": "Typical time to a first reply in order and offer chats over the last 90 days, from {{count}} chat",
     "replyTooltip_other": "Typical time to a first reply in order and offer chats over the last 90 days, from {{count}} chats",
     "completedOrders_one": "{{count}} completed order",
-    "completedOrders_other": "{{count}} completed orders"
+    "completedOrders_other": "{{count}} completed orders",
+    "whatTheseMean": "What these mean"
   },
   "shops": {
     "blocklist": {

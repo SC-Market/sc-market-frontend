@@ -13,13 +13,15 @@ describe("footer developer links", () => {
     }
   })
 
-  it("link the developers page, API guide, spec, price feed and SDK", () => {
+  it("link the developers page, API guide, spec, price feed and SDKs", () => {
     expect(DEVELOPER_LINKS.map((l) => l.href)).toEqual([
       "/developers",
       "/guides/discord/api-tokens",
       "https://api.sc-market.space/api/public/v1/openapi.json",
       "https://api.sc-market.space/api/public/prices/index.json",
       "https://github.com/SC-Market/sc-market-sdk",
+      "https://www.npmjs.com/package/@sc-market/sdk",
+      "https://www.npmjs.com/package/@sc-orgs/sdk",
     ])
   })
 
@@ -30,6 +32,8 @@ describe("footer developer links", () => {
     for (const link of DEVELOPER_LINKS) expect(html).toContain(`href="${link.href}"`)
     expect(html).toContain(`<a href="https://github.com/SC-Market/sc-market-sdk" rel="noopener">`)
     expect(isDeveloperHref("https://github.com/SC-Market/sc-market-sdk")).toBe(true)
+    expect(isDeveloperHref("https://www.npmjs.com/package/@sc-market/sdk")).toBe(true)
+    expect(isDeveloperHref("https://www.npmjs.com/package/@sc-orgs/sdk")).toBe(true)
     expect(isDeveloperHref("https://github.com/SC-Market/sc-market-sdk/../evil")).toBe(false)
     expect(isDeveloperHref("https://evil.example/")).toBe(false)
     const filtered = summaryChunks([{ tag: "ul", links: [{ href: "https://evil.example/", text: "x" }] }])

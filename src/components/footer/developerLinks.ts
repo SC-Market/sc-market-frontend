@@ -1,6 +1,7 @@
 /**
  * The footer's "Developers" group: the public API, its guide and spec, the
- * public price feed and the SDK. One list for the SPA footer (Footer.tsx,
+ * public price feed and the SDKs (GitHub, and the SC Market and SC Orgs
+ * packages on npm). One list for the SPA footer (Footer.tsx,
  * localized) and the edge bridge's HTML (src/bridge/render.ts, English
  * labels), so crawlers without JS see the same links.
  *
@@ -13,6 +14,8 @@ export const DEVELOPERS_PATH = "/developers"
 export const PUBLIC_API_SPEC_URL = "https://api.sc-market.space/api/public/v1/openapi.json"
 export const PRICE_FEED_INDEX_URL = "https://api.sc-market.space/api/public/prices/index.json"
 export const SDK_REPO_URL = "https://github.com/SC-Market/sc-market-sdk"
+export const SDK_NPM_URL = "https://www.npmjs.com/package/@sc-market/sdk"
+export const ORGS_SDK_NPM_URL = "https://www.npmjs.com/package/@sc-orgs/sdk"
 
 export interface DeveloperLink {
   href: string
@@ -28,6 +31,8 @@ export const DEVELOPER_LINKS: readonly DeveloperLink[] = [
   { href: PUBLIC_API_SPEC_URL, key: "footer.openApiSpec", label: "OpenAPI spec" },
   { href: PRICE_FEED_INDEX_URL, key: "footer.priceFeed", label: "Price data feed" },
   { href: SDK_REPO_URL, key: "footer.sdk", label: "SDK on GitHub" },
+  { href: SDK_NPM_URL, key: "footer.sdkNpm", label: "SDK on npm" },
+  { href: ORGS_SDK_NPM_URL, key: "footer.orgsSdkNpm", label: "SC Orgs SDK on npm" },
 ]
 
 /** The group's heading key and English text. */

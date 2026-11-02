@@ -433,7 +433,9 @@
     "apiDocs": "Documentación de la API",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Preferencias de cookies",
-    "changelog": "Novedades"
+    "changelog": "Novedades",
+    "sdkNpm": "SDK en npm",
+    "orgsSdkNpm": "SDK de SC Orgs en npm"
   },
   "itemAcquisition": {
     "addToCart": "Añadir al carrito",
@@ -1049,7 +1051,8 @@
         },
         "reminder": {
           "label": "Recordatorio de mensajes no leídos",
-          "hint": "Como máximo una vez al día"
+          "hint": "Como máximo una vez al día",
+          "tip": "Cuando un mensaje de uno de tus chats de pedidos u ofertas lleva unas 6 horas sin leer, te lo recordamos para que la otra parte no se quede esperando."
         },
         "bid": {
           "label": "Nueva puja"
@@ -1082,11 +1085,13 @@
         },
         "offer-pending": {
           "label": "Oferta esperando tu respuesta",
-          "hint": "Aproximadamente 1 y 3 días después de recibir una oferta sin respuesta"
+          "hint": "Aproximadamente 1 y 3 días después de recibir una oferta sin respuesta",
+          "tip": "Cuando una oferta para ti, o para una organización cuyos pedidos gestionas, aún no tiene respuesta. Acéptala, haz una contraoferta o recházala para dejar de recibir recordatorios."
         },
         "offer-waiting": {
           "label": "Tu oferta sigue esperando",
-          "hint": "Si el vendedor no ha respondido tras el último recordatorio"
+          "hint": "Si el vendedor no ha respondido tras el último recordatorio",
+          "tip": "Para ofertas que hiciste como comprador: el vendedor aún no ha respondido tras el recordatorio. Puedes seguir esperando, escribir al vendedor o retirar la oferta."
         }
       },
       "subtitle": "Elige dónde te llega cada tipo de notificación.",
@@ -1647,7 +1652,7 @@
   "discord_bot": {
     "integrating_with_discord": "Integración con Discord",
     "how_to_get_notified": "Cómo recibir notificaciones cuando se realiza un pedido",
-    "how_to_get_notified_answer": "Añade el [Bot de Discord oficial de SC Market]({{BOT_INSTALL_PATH}}) a tu servidor para recibir automáticamente mensajes directos cuando se realice un pedido contigo o se te asigne uno. Como alternativa, usa la configuración de abajo para gestionar pedidos a través del [servidor oficial de SC Market]({{DISCORD_INVITE}}).",
+    "how_to_get_notified_answer": "Añade el [Bot de Discord oficial de SC Market]({{BOT_INSTALL_PATH}}) a tu servidor y elige un canal de avisos de pedidos: cada pedido y oferta nuevos se publican allí, y cada uno puede tener su propio hilo de pedido. El bot también puede enviarte mensajes directos, como un recordatorio cuando una oferta espera tu respuesta, una vez que vinculas tu cuenta de Discord y compartes un servidor con el bot. Elige qué te llega por MD en Ajustes › Notificaciones. Como alternativa, usa la configuración de abajo para gestionar pedidos a través del [servidor oficial de SC Market]({{DISCORD_INVITE}}).",
     "how_to_communicate": "Cómo comunicarte con los compradores a través de Discord",
     "how_to_communicate_answer": "Añade el bot oficial de SC Market a tu servidor y elige un canal para los hilos de pedidos: cada pedido u oferta nuevos abrirá allí un hilo privado con el comprador y el vendedor asignado, y los compradores recibirán una invitación a tu servidor para gestionar el pedido juntos.\n\n1. En **Ajustes › Discord** de tu tienda, o en la pestaña **Integración con Discord** de tu organización, pulsa **[Añadir el bot a un servidor]({{BOT_INSTALL_PATH}})** y elige tu servidor en Discord. Volverás con el servidor vinculado.\n\n2. Elige el canal para los hilos de pedidos y, si quieres, canales para las alertas de pedidos (una publicación por cada pedido y oferta nuevos con un botón Reclamar), y guarda.\n\n¿Añadiste el bot desde Discord? Vincula tu cuenta de Discord en los ajustes de SC Market y ejecuta `/setup threads` en el canal que debe contener los hilos de pedidos. Para los pedidos de tu organización, rellena `org` con su Spectrum ID (por ejemplo `/setup threads org:SCMARKET`); para los pedidos hechos a ti, déjalo vacío. Para las alertas, ejecuta `/setup alerts` (con la misma `org`) en un canal del equipo.\n\nPara añadir el bot necesitas el permiso **Gestionar servidor** en el servidor de Discord, y los comandos `/setup threads`, `/setup alerts` necesitan **Gestionar canales**. Para una organización también necesitas su permiso **Manage Webhooks** en SC Market (o **Manage Orders** para las alertas creadas con `/setup alerts`). En el canal de hilos, el bot necesita Ver canal, Crear hilos privados, Enviar mensajes en hilos y Crear invitación. Ejecuta `/setup status` para ver qué recibe un canal y `/help` para ver todos los comandos.",
     "learn_connect": "Conectar el bot de Discord",
@@ -2827,7 +2832,9 @@
     "manageAccessNotice": "Puedes ver los anuncios y el inventario de esta tienda. Para crearlos o cambiarlos, pide a un administrador de la org el permiso «Gestionar mercado».",
     "stockAccessNotice": "Puedes ver el inventario de esta tienda. Para añadir o cambiar lotes, pide a un administrador de la org el permiso «Gestionar existencias».",
     "increaseQuantity": "Aumentar cantidad",
-    "decreaseQuantity": "Reducir cantidad"
+    "decreaseQuantity": "Reducir cantidad",
+    "renewHelpLabel": "Renovar",
+    "renewHelp": "Los anuncios en pausa no se muestran a los compradores, por ejemplo cuando una subasta termina sin pujas. Pulsa el botón de renovar en esta columna para volver a activar un anuncio."
   },
   "itemMarket": {
     "toggleSidebar": "Alternar barra lateral del mercado"
@@ -6315,7 +6322,8 @@
     "replyTooltip_other": "Tiempo habitual hasta la primera respuesta en chats de pedidos y ofertas de los últimos 90 días, según {{count}} chats",
     "completedOrders_one": "{{count}} pedido completado",
     "completedOrders_many": "{{count}} pedidos completados",
-    "completedOrders_other": "{{count}} pedidos completados"
+    "completedOrders_other": "{{count}} pedidos completados",
+    "whatTheseMean": "Qué significa"
   },
   "shops": {
     "blocklist": {

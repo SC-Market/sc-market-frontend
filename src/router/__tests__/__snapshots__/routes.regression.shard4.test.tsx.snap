@@ -1765,6 +1765,7 @@ exports[`routes (shard 4/4) > /storefronts 1`] = `
     "/guides",
     "/guides/discord/api-tokens",
     "/guides/org-storefront/white-label",
+    "/guides/org-storefront/white-label#the-storefront-directory",
     "/org/register",
     "/privacy",
     "/terms",

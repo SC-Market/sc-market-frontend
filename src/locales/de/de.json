@@ -432,7 +432,9 @@
     "apiDocs": "API-Dokumentation",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Cookie-Einstellungen",
-    "changelog": "Änderungsprotokoll"
+    "changelog": "Änderungsprotokoll",
+    "sdkNpm": "SDK auf npm",
+    "orgsSdkNpm": "SC Orgs SDK auf npm"
   },
   "itemAcquisition": {
     "addToCart": "In den Warenkorb",
@@ -1046,7 +1048,8 @@
         },
         "reminder": {
           "label": "Erinnerung an ungelesene Nachrichten",
-          "hint": "Höchstens einmal am Tag"
+          "hint": "Höchstens einmal am Tag",
+          "tip": "Wenn eine Nachricht in einem deiner Bestell- oder Angebotschats etwa 6 Stunden ungelesen ist, erinnern wir dich, damit die andere Seite nicht warten muss."
         },
         "bid": {
           "label": "Neues Gebot"
@@ -1079,11 +1082,13 @@
         },
         "offer-pending": {
           "label": "Angebot wartet auf Ihre Antwort",
-          "hint": "Etwa 1 und 3 Tage nach Eingang eines unbeantworteten Angebots"
+          "hint": "Etwa 1 und 3 Tage nach Eingang eines unbeantworteten Angebots",
+          "tip": "Wenn ein Angebot an dich oder an eine Organisation, deren Bestellungen du bearbeitest, noch unbeantwortet ist. Nimm es an, mache ein Gegenangebot oder lehne es ab, damit die Erinnerungen aufhören."
         },
         "offer-waiting": {
           "label": "Ihr Angebot wartet noch",
-          "hint": "Wenn der Verkäufer nach der letzten Erinnerung nicht geantwortet hat"
+          "hint": "Wenn der Verkäufer nach der letzten Erinnerung nicht geantwortet hat",
+          "tip": "Für Angebote, die du als Käufer gemacht hast: Der Verkäufer hat trotz Erinnerung noch nicht geantwortet. Du kannst weiter warten, dem Verkäufer schreiben oder das Angebot zurückziehen."
         }
       },
       "subtitle": "Legen Sie fest, wo Sie jede Art von Benachrichtigung erreicht.",
@@ -1642,7 +1647,7 @@
   "discord_bot": {
     "integrating_with_discord": "Integration mit Discord",
     "how_to_get_notified": "So werden Sie benachrichtigt, wenn eine Bestellung aufgegeben wird",
-    "how_to_get_notified_answer": "Fügen Sie den offiziellen [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) zu Ihrem Server hinzu, um automatisch Direktnachrichten zu erhalten, wenn eine Bestellung bei Ihnen aufgegeben oder Ihnen zugewiesen wird. Alternativ können Sie mit der untenstehenden Konfiguration Bestellungen über [SC Markets offiziellen Server]({{DISCORD_INVITE}}) abwickeln.",
+    "how_to_get_notified_answer": "Fügen Sie den offiziellen [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) zu Ihrem Server hinzu und wählen Sie einen Kanal für Bestellbenachrichtigungen: Jede neue Bestellung und jedes neue Angebot wird dort gepostet und kann einen eigenen Bestell-Thread bekommen. Der Bot kann Ihnen auch Direktnachrichten senden, etwa eine Erinnerung, wenn ein Angebot auf Ihre Antwort wartet, sobald Ihr Discord-Konto verknüpft ist und Sie einen Server mit dem Bot teilen. Was Sie per DM erhalten, legen Sie unter Einstellungen › Benachrichtigungen fest. Alternativ können Sie mit der untenstehenden Konfiguration Bestellungen über [SC Markets offiziellen Server]({{DISCORD_INVITE}}) abwickeln.",
     "how_to_communicate": "So kommunizieren Sie mit Käufern über Discord",
     "how_to_communicate_answer": "Fügen Sie den offiziellen SC Market Discord Bot zu Ihrem Server hinzu und wählen Sie einen Kanal für Bestell-Threads: Jede neue Bestellung oder jedes neue Angebot öffnet dort dann einen privaten Thread mit dem Käufer und dem zugewiesenen Verkäufer, und Käufer werden zu Ihrem Server eingeladen, damit Sie die Bestellung gemeinsam abwickeln können.\n\n1. Klicken Sie in den **Einstellungen › Discord** Ihres Shops oder im Tab **Discord-Integration** Ihrer Org auf **[Bot zu einem Server hinzufügen]({{BOT_INSTALL_PATH}})** und wählen Sie in Discord Ihren Server. Sie kommen mit verknüpftem Server zurück.\n\n2. Wählen Sie den Kanal für Bestell-Threads und optional Kanäle für Bestell-Alerts (ein Beitrag für jede neue Bestellung und jedes neue Angebot mit einer Claim-Schaltfläche) und speichern Sie.\n\nSie haben den Bot stattdessen über Discord hinzugefügt? Verknüpfen Sie Ihr Discord-Konto in Ihren SC Market-Einstellungen und führen Sie dann `/setup threads` in dem Kanal aus, der die Bestell-Threads enthalten soll. Für die Bestellungen Ihrer Org geben Sie bei `org` deren Spectrum-ID an (zum Beispiel `/setup threads org:SCMARKET`); für Bestellungen bei Ihnen selbst lassen Sie das Feld leer. Für Alerts führen Sie `/setup alerts` (mit derselben `org`) in einem Team-Kanal aus.\n\nZum Hinzufügen des Bots brauchen Sie die Berechtigung **Server verwalten** auf dem Discord-Server, für die `/setup threads`, `/setup alerts`-Befehle **Kanäle verwalten**. Für eine Org brauchen Sie auf SC Market außerdem die Berechtigung **Manage Webhooks** der Org (oder **Manage Orders** für Alerts, die mit `/setup alerts` eingerichtet werden). Im Thread-Kanal benötigt der Bot die Berechtigungen Kanal ansehen, Private Threads erstellen, Nachrichten in Threads senden und Einladung erstellen. Mit `/setup status` sehen Sie, was ein Kanal erhält, und mit `/help` alle Befehle.",
     "learn_connect": "Discord-Bot verbinden",
@@ -2812,7 +2817,9 @@
     "manageAccessNotice": "Du kannst die Angebote und den Bestand dieses Shops ansehen. Um sie zu erstellen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Markt verwalten“.",
     "stockAccessNotice": "Du kannst den Bestand dieses Shops ansehen. Um Lose hinzuzufügen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Bestand verwalten“.",
     "increaseQuantity": "Menge erhöhen",
-    "decreaseQuantity": "Menge verringern"
+    "decreaseQuantity": "Menge verringern",
+    "renewHelpLabel": "Verlängern",
+    "renewHelp": "Pausierte Angebote sind für Käufer ausgeblendet, zum Beispiel nach einer Auktion ohne Gebote. Klicke in dieser Spalte auf die Schaltfläche zum Verlängern, um ein Angebot wieder zu aktivieren."
   },
   "itemMarket": {
     "toggleSidebar": "Markt-Seitenleiste umschalten"
@@ -6276,7 +6283,8 @@
     "replyTooltip_one": "Übliche Zeit bis zur ersten Antwort in Bestell- und Angebotschats der letzten 90 Tage, aus {{count}} Chat",
     "replyTooltip_other": "Übliche Zeit bis zur ersten Antwort in Bestell- und Angebotschats der letzten 90 Tage, aus {{count}} Chats",
     "completedOrders_one": "{{count}} abgeschlossene Bestellung",
-    "completedOrders_other": "{{count}} abgeschlossene Bestellungen"
+    "completedOrders_other": "{{count}} abgeschlossene Bestellungen",
+    "whatTheseMean": "Was bedeutet das?"
   },
   "shops": {
     "blocklist": {

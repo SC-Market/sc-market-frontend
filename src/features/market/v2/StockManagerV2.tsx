@@ -99,6 +99,7 @@ import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessN
 import { ImportFromUexDialog } from "./ImportFromUex"
 import { canEditShopListings } from "../../shops/domain/shopPermissions"
 import { FirstUseHint } from "../../help/components/FirstUseHint"
+import { HelpTip } from "../../help/components/HelpTip"
 import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallCta"
 import { selectOnFocus } from "../../../util/selectOnFocus"
 
@@ -666,8 +667,19 @@ function ShopListingsGridV2({
       {
         field: "expires_at",
         headerName: t("ItemStock.expiration"),
-        renderHeader: () => <RefreshCircle />,
-        width: 50,
+        renderHeader: () => (
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <RefreshCircle aria-hidden />
+            <HelpTip
+              label={t("ItemStock.renewHelpLabel", "Renew")}
+              title={t(
+                "ItemStock.renewHelp",
+                "Paused listings are hidden from buyers, for example after an auction ends with no bids. Click the renew button in this column to make a listing active again.",
+              )}
+            />
+          </Box>
+        ),
+        width: 80,
         display: "flex" as const,
         renderCell: (params: GridRenderCellParams) => {
           const nr = newRows.find((r) => r.id === params.id)

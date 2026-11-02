@@ -431,7 +431,9 @@
     "apiDocs": "API 文件",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Cookie 偏好",
-    "changelog": "更新日誌"
+    "changelog": "更新日誌",
+    "sdkNpm": "npm 上的 SDK",
+    "orgsSdkNpm": "npm 上的 SC Orgs SDK"
   },
   "itemAcquisition": {
     "addToCart": "加入購物車",
@@ -985,7 +987,8 @@
         },
         "reminder": {
           "label": "未讀訊息提醒",
-          "hint": "每天最多一次"
+          "hint": "每天最多一次",
+          "tip": "當你的訂單或報價聊天中有訊息約 6 小時未讀時，我們會提醒你，以免對方一直等待。"
         },
         "bid": {
           "label": "新出價"
@@ -1018,11 +1021,13 @@
         },
         "offer-pending": {
           "label": "等待你回覆的報價",
-          "hint": "收到報價且未回覆後約 1 天和 3 天"
+          "hint": "收到報價且未回覆後約 1 天和 3 天",
+          "tip": "當發給你、或發給你負責處理訂單的組織的報價還沒有回覆時提醒你。接受、還價或拒絕後，提醒就會停止。"
         },
         "offer-waiting": {
           "label": "你的報價仍在等待",
-          "hint": "如果賣家在最後一次提醒後仍未回覆"
+          "hint": "如果賣家在最後一次提醒後仍未回覆",
+          "tip": "針對你作為買家發出的報價：提醒之後賣家仍未回覆。你可以繼續等待、給賣家發訊息或撤回報價。"
         }
       },
       "subtitle": "選擇每種通知的接收方式。",
@@ -1579,7 +1584,7 @@
   "discord_bot": {
     "integrating_with_discord": "集成進Discord",
     "how_to_get_notified": "如何在有訂單創建時收到提醒",
-    "how_to_get_notified_answer": "將官方的[SC市集Discord機器人]({{BOT_INSTALL_PATH}})加入到您的服務器以在一條訂單被創建或被指派給您時收到自動私信。您也可以用下方設置去在[SC市集的官方服務器]({{DISCORD_INVITE}})裏完成訂單。",
+    "how_to_get_notified_answer": "將官方的[SC市集Discord機器人]({{BOT_INSTALL_PATH}})加入到您的伺服器，並選擇一個訂單提醒頻道：每個新訂單和報價都會發布在那裡，並且都可以有自己的訂單討論串。連結 Discord 帳號並與機器人在同一伺服器後，機器人還可以給您發送私訊，例如有報價等待您回覆時的提醒。在 設定 › 通知 中選擇哪些內容透過私訊發送。您也可以用下方設置去在[SC市集的官方服務器]({{DISCORD_INVITE}})裏完成訂單。",
     "how_to_communicate": "如何用Discord與買家交流",
     "how_to_communicate_answer": "將官方 SC Market Discord 機器人加入你的伺服器，並選擇一個訂單討論串頻道：之後每個新訂單或報價都會在那裡開啟一個包含買家和指派賣家的私人討論串，買家會被邀請加入你的伺服器，方便你們一起處理訂單。\n\n1. 在你商店的 **設定 › Discord** 或組織的 **Discord 整合** 分頁中，點擊 **[將機器人加入伺服器]({{BOT_INSTALL_PATH}})**，然後在 Discord 中選擇你的伺服器。返回時伺服器已連結。\n\n2. 選擇訂單討論串頻道，並可選擇訂單提醒頻道（為每個新訂單和報價發布一則附「認領」按鈕的訊息），然後儲存。\n\n如果你是從 Discord 加入的機器人，請先在 SC Market 設定中連結你的 Discord 帳號，然後在用於存放訂單討論串的頻道中執行 `/setup threads`。對於組織的訂單，在 `org` 中填寫其 Spectrum ID（例如 `/setup threads org:SCMARKET`）；對於向你本人下的訂單，請留空。如需提醒，請在員工頻道中執行 `/setup alerts`（使用相同的 `org`）。\n\n加入機器人需要 Discord 伺服器中的 **管理伺服器** 權限，`/setup threads`, `/setup alerts` 指令需要 **管理頻道** 權限。對於組織，你還需要在 SC Market 上擁有該組織的 **Manage Webhooks** 權限（或使用 `/setup alerts` 設定提醒時擁有 **Manage Orders** 權限）。在討論串頻道中，機器人需要「檢視頻道」「建立私人討論串」「在討論串中傳送訊息」和「建立邀請」權限。執行 `/setup status` 可查看頻道接收的內容，執行 `/help` 可查看所有指令。",
     "learn_connect": "連結 Discord 機器人",
@@ -2715,7 +2720,9 @@
     "manageAccessNotice": "你可以檢視此商店的刊登和庫存。如需建立或修改，請向組織管理員申請「管理市集」權限。",
     "stockAccessNotice": "你可以檢視此商店的庫存。如需新增或修改批次，請向組織管理員申請「管理庫存」權限。",
     "increaseQuantity": "增加數量",
-    "decreaseQuantity": "減少數量"
+    "decreaseQuantity": "減少數量",
+    "renewHelpLabel": "續期",
+    "renewHelp": "已暫停的商品不會向買家顯示，例如無人出價就結束的拍賣。點擊此欄中的續期按鈕即可重新上架。"
   },
   "itemMarket": {
     "toggleSidebar": "切換市集側邊欄"
@@ -6237,7 +6244,8 @@
       "slow": "回覆較慢"
     },
     "replyTooltip_other": "過去90天訂單和報價聊天中首次回覆的典型時間（基於{{count}}個聊天）",
-    "completedOrders_other": "已完成 {{count}} 筆訂單"
+    "completedOrders_other": "已完成 {{count}} 筆訂單",
+    "whatTheseMean": "這些是什麼意思"
   },
   "shops": {
     "blocklist": {

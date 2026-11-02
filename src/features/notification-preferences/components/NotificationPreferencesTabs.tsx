@@ -30,6 +30,7 @@ import {
   type NotificationPreferenceUpdate,
 } from "../../../store/api/v2/market"
 import { ContractAlertSettings } from "./ContractAlertSettings"
+import { HelpTip } from "../../help/components/HelpTip"
 import { NOTIFICATION_TABS, type NotificationRow } from "../domain/layout"
 
 const CHANNELS: NotificationChannelId[] = [
@@ -208,6 +209,9 @@ export function NotificationPreferencesTabs() {
               sx={{ fontWeight: 500 }}
             >
               {label}
+              {row.tip && (
+                <HelpTip label={label} title={t(row.tipKey!, row.tip)} />
+              )}
             </Typography>
             {row.hint && (
               <Typography

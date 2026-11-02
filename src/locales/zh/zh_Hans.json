@@ -437,7 +437,9 @@
     "apiDocs": "API 文档",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Cookie 偏好",
-    "changelog": "更新日志"
+    "changelog": "更新日志",
+    "sdkNpm": "npm 上的 SDK",
+    "orgsSdkNpm": "npm 上的 SC Orgs SDK"
   },
   "itemAcquisition": {
     "addToCart": "加入购物车",
@@ -1049,7 +1051,8 @@
         },
         "reminder": {
           "label": "未读消息提醒",
-          "hint": "每天最多一次"
+          "hint": "每天最多一次",
+          "tip": "当你的订单或报价聊天中有消息约 6 小时未读时，我们会提醒你，以免对方一直等待。"
         },
         "bid": {
           "label": "新出价"
@@ -1082,11 +1085,13 @@
         },
         "offer-pending": {
           "label": "等待你回复的报价",
-          "hint": "收到报价且未回复后约 1 天和 3 天"
+          "hint": "收到报价且未回复后约 1 天和 3 天",
+          "tip": "当发给你、或发给你负责处理订单的组织的报价还没有回复时提醒你。接受、还价或拒绝后，提醒就会停止。"
         },
         "offer-waiting": {
           "label": "你的报价仍在等待",
-          "hint": "如果卖家在最后一次提醒后仍未回复"
+          "hint": "如果卖家在最后一次提醒后仍未回复",
+          "tip": "针对你作为买家发出的报价：提醒之后卖家仍未回复。你可以继续等待、给卖家发消息或撤回报价。"
         }
       },
       "subtitle": "选择每类通知的接收方式。",
@@ -1639,7 +1644,7 @@
   "discord_bot": {
     "integrating_with_discord": "集成进Discord",
     "how_to_get_notified": "如何在有订单创建时收到提醒",
-    "how_to_get_notified_answer": "将官方的[SC市集Discord机器人]({{BOT_INSTALL_PATH}})加入到您的服务器以在一条订单被创建或被指派给您时收到自动私信。您也可以用下方设置去在[SC市集的官方服务器]({{DISCORD_INVITE}})里完成订单。",
+    "how_to_get_notified_answer": "将官方的[SC市集Discord机器人]({{BOT_INSTALL_PATH}})加入到您的服务器，并选择一个订单提醒频道：每个新订单和报价都会发布在那里，并且都可以有自己的订单帖子。关联 Discord 账号并与机器人处于同一服务器后，机器人还可以给您发送私信，例如有报价等待您回复时的提醒。在 设置 › 通知 中选择哪些内容通过私信发送。您也可以用下方设置去在[SC市集的官方服务器]({{DISCORD_INVITE}})里完成订单。",
     "how_to_communicate": "如何用Discord与买家交流",
     "how_to_communicate_answer": "将官方 SC Market Discord 机器人添加到你的服务器，并选择一个订单帖子频道：之后每个新订单或报价都会在那里开启一个包含买家和指派卖家的私密帖子，买家会被邀请加入你的服务器，方便你们一起处理订单。\n\n1. 在你商店的 **设置 › Discord** 或组织的 **Discord 集成** 标签页中，点击 **[将机器人添加到服务器]({{BOT_INSTALL_PATH}})**，然后在 Discord 中选择你的服务器。返回时服务器已关联。\n\n2. 选择订单帖子频道，并可选择订单提醒频道（为每个新订单和报价发布一条带“认领”按钮的消息），然后保存。\n\n如果你是从 Discord 添加的机器人，请先在 SC Market 设置中关联你的 Discord 账号，然后在用于存放订单帖子的频道中运行 `/setup threads`。对于组织的订单，在 `org` 中填写其 Spectrum ID（例如 `/setup threads org:SCMARKET`）；对于向你本人下的订单，请留空。如需提醒，请在员工频道中运行 `/setup alerts`（使用相同的 `org`）。\n\n添加机器人需要 Discord 服务器中的 **管理服务器** 权限，`/setup threads`, `/setup alerts` 命令需要 **管理频道** 权限。对于组织，你还需要在 SC Market 上拥有该组织的 **Manage Webhooks** 权限（或使用 `/setup alerts` 设置提醒时拥有 **Manage Orders** 权限）。在帖子频道中，机器人需要“查看频道”“创建私密子区”“在子区中发送消息”和“创建邀请”权限。运行 `/setup status` 可查看频道接收的内容，运行 `/help` 可查看所有命令。",
     "learn_connect": "连接 Discord 机器人",
@@ -2799,7 +2804,9 @@
     "manageAccessNotice": "你可以查看此商店的挂单和库存。如需创建或修改，请向组织管理员申请“管理市场”权限。",
     "stockAccessNotice": "你可以查看此商店的库存。如需添加或修改批次，请向组织管理员申请“管理库存”权限。",
     "increaseQuantity": "增加数量",
-    "decreaseQuantity": "减少数量"
+    "decreaseQuantity": "减少数量",
+    "renewHelpLabel": "续期",
+    "renewHelp": "已暂停的商品不会向买家显示，例如无人出价就结束的拍卖。点击此列中的续期按钮即可重新上架。"
   },
   "itemMarket": {
     "toggleSidebar": "切换市场侧边栏"
@@ -6243,7 +6250,8 @@
       "slow": "回复较慢"
     },
     "replyTooltip_other": "过去90天订单和报价聊天中首次回复的典型时间（基于{{count}}个聊天）",
-    "completedOrders_other": "已完成 {{count}} 个订单"
+    "completedOrders_other": "已完成 {{count}} 个订单",
+    "whatTheseMean": "这些是什么意思"
   },
   "shops": {
     "blocklist": {

@@ -7,6 +7,9 @@ export interface NotificationRow {
   labelKey: string
   hint?: string
   hintKey?: string
+  /** A longer explanation behind a "?" next to the label. */
+  tip?: string
+  tipKey?: string
   events: NotificationEventKey[]
 }
 
@@ -35,11 +38,13 @@ const row = (
   label: string,
   events: NotificationEventKey[],
   hint?: string,
+  tip?: string,
 ): NotificationRow => ({
   id,
   label,
   labelKey: k(`rows.${id}.label`),
   ...(hint ? { hint, hintKey: k(`rows.${id}.hint`) } : {}),
+  ...(tip ? { tip, tipKey: k(`rows.${id}.tip`) } : {}),
   events,
 })
 
@@ -133,18 +138,21 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
             "Unread message reminder",
             ["reminder.unread_messages"],
             "At most once a day",
+            "When a message in one of your order or offer chats has been unread for about 6 hours, we remind you so the other side isn't left waiting.",
           ),
           row(
             "offer-pending",
             "Offer waiting for your reply",
             ["reminder.offer_pending", "reminder.offer_pending_final"],
             "About 1 and 3 days after an offer arrives with no reply",
+            "When an offer to you, or to an org whose orders you handle, has no answer yet. Accept, counter or reject it to stop the reminders.",
           ),
           row(
             "offer-waiting",
             "Your offer is still waiting",
             ["reminder.offer_waiting_buyer"],
             "If the seller hasn't replied after the last reminder",
+            "For offers you made as a buyer: the seller still hasn't answered after being reminded. You can keep waiting, message the seller or withdraw the offer.",
           ),
         ],
       ),

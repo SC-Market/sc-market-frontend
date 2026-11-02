@@ -3,6 +3,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded"
 import TaskAltRoundedIcon from "@mui/icons-material/TaskAltRounded"
 import { useTranslation } from "react-i18next"
+import { HelpLink } from "../../features/help/components/HelpLink"
 import type {
   LastSeenBucket,
   ReplyTimeBucket,
@@ -153,6 +154,9 @@ export function SellerStatusBadge({
           variant="outlined"
         />
       )}
+      <HelpLink guide="sellerActivity" sx={{ ml: 0.5 }}>
+        {t("sellerActivity.whatTheseMean", "What these mean")}
+      </HelpLink>
     </Box>
   )
 }

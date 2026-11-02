@@ -1634,7 +1634,7 @@ exports[`routes (shard 1/4) > /shop/:shopSlug/settings 1`] = `
     "/guides/discord/api-tokens",
     "/guides/discord/connect-the-discord-bot",
     "/guides/discord/webhooks",
-    "/guides/selling/stock-lots-and-allocation",
+    "/guides/selling/stock-lots-and-allocation#stock-settings",
     "/privacy",
     "/terms",
   ],

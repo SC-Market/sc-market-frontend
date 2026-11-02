@@ -433,7 +433,9 @@
     "apiDocs": "Documentation de l'API",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "Préférences de cookies",
-    "changelog": "Nouveautés"
+    "changelog": "Nouveautés",
+    "sdkNpm": "SDK sur npm",
+    "orgsSdkNpm": "SDK SC Orgs sur npm"
   },
   "itemAcquisition": {
     "addToCart": "Ajouter au panier",
@@ -1049,7 +1051,8 @@
         },
         "reminder": {
           "label": "Rappel de messages non lus",
-          "hint": "Au maximum une fois par jour"
+          "hint": "Au maximum une fois par jour",
+          "tip": "Quand un message d'une de vos discussions de commande ou d'offre n'est pas lu depuis environ 6 heures, nous vous le rappelons pour que l'autre partie n'attende pas."
         },
         "bid": {
           "label": "Nouvelle enchère"
@@ -1082,11 +1085,13 @@
         },
         "offer-pending": {
           "label": "Offre en attente de votre réponse",
-          "hint": "Environ 1 et 3 jours après l'arrivée d'une offre restée sans réponse"
+          "hint": "Environ 1 et 3 jours après l'arrivée d'une offre restée sans réponse",
+          "tip": "Quand une offre qui vous est adressée, ou adressée à une organisation dont vous gérez les commandes, est encore sans réponse. Acceptez-la, faites une contre-offre ou refusez-la pour arrêter les rappels."
         },
         "offer-waiting": {
           "label": "Votre offre est toujours en attente",
-          "hint": "Si le vendeur n'a pas répondu après le dernier rappel"
+          "hint": "Si le vendeur n'a pas répondu après le dernier rappel",
+          "tip": "Pour les offres que vous avez faites en tant qu'acheteur : le vendeur n'a toujours pas répondu malgré le rappel. Vous pouvez attendre encore, écrire au vendeur ou retirer l'offre."
         }
       },
       "subtitle": "Choisissez où chaque type de notification vous parvient.",
@@ -1647,7 +1652,7 @@
   "discord_bot": {
     "integrating_with_discord": "Intégration avec Discord",
     "how_to_get_notified": "Comment être notifié lorsqu'une commande est passée",
-    "how_to_get_notified_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur pour recevoir automatiquement des messages privés lorsqu'une commande est passée avec vous ou vous est assignée. Vous pouvez aussi utiliser la configuration ci-dessous pour honorer les commandes via [le serveur officiel de SC Market]({{DISCORD_INVITE}}).",
+    "how_to_get_notified_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur et choisissez un salon d'alertes de commande : chaque nouvelle commande et offre y est publiée, et chacune peut avoir son propre fil de commande. Le bot peut aussi vous envoyer des messages privés, par exemple un rappel quand une offre attend votre réponse, dès que votre compte Discord est lié et que vous partagez un serveur avec le bot. Choisissez ce que vous recevez en MP dans Paramètres › Notifications. Vous pouvez aussi utiliser la configuration ci-dessous pour honorer les commandes via [le serveur officiel de SC Market]({{DISCORD_INVITE}}).",
     "how_to_communicate": "Comment communiquer avec les acheteurs via Discord",
     "how_to_communicate_answer": "Ajoutez le bot Discord officiel de SC Market à votre serveur et choisissez un salon pour les fils de commande : chaque nouvelle commande ou offre y ouvre alors un fil privé avec l'acheteur et le vendeur assigné, et les acheteurs sont invités sur votre serveur pour traiter la commande ensemble.\n\n1. Dans **Paramètres › Discord** de votre boutique, ou dans l'onglet **Intégration Discord** de votre organisation, cliquez sur **[Ajouter le bot à un serveur]({{BOT_INSTALL_PATH}})** et choisissez votre serveur dans Discord. Vous revenez avec le serveur lié.\n\n2. Choisissez le salon des fils de commande et, si vous le souhaitez, des salons pour les alertes de commande (une publication pour chaque nouvelle commande et offre, avec un bouton Réclamer), puis enregistrez.\n\nVous avez ajouté le bot depuis Discord ? Liez votre compte Discord dans vos paramètres SC Market, puis lancez `/setup threads` dans le salon qui doit accueillir les fils de commande. Pour les commandes de votre organisation, renseignez `org` avec son Spectrum ID (par exemple `/setup threads org:SCMARKET`) ; pour les commandes passées auprès de vous, laissez-le vide. Pour les alertes, lancez `/setup alerts` (avec le même `org`) dans un salon d'équipe.\n\nAjouter le bot nécessite la permission **Gérer le serveur** sur le serveur Discord, et les commandes `/setup threads`, `/setup alerts` nécessitent **Gérer les salons**. Pour une organisation, il vous faut aussi sa permission **Manage Webhooks** sur SC Market (ou **Manage Orders** pour les alertes créées avec `/setup alerts`). Dans le salon des fils, le bot a besoin de Voir le salon, Créer des fils privés, Envoyer des messages dans les fils et Créer une invitation. Lancez `/setup status` pour voir ce que reçoit un salon, et `/help` pour voir toutes les commandes.",
     "learn_connect": "Connecter le bot Discord",
@@ -2827,7 +2832,9 @@
     "manageAccessNotice": "Vous pouvez voir les annonces et le stock de cette boutique. Pour les créer ou les modifier, demandez à un admin de l'org la permission « Gérer le marché ».",
     "stockAccessNotice": "Vous pouvez voir le stock de cette boutique. Pour ajouter ou modifier des lots, demandez à un admin de l'org la permission « Gérer le stock ».",
     "increaseQuantity": "Augmenter la quantité",
-    "decreaseQuantity": "Diminuer la quantité"
+    "decreaseQuantity": "Diminuer la quantité",
+    "renewHelpLabel": "Renouveler",
+    "renewHelp": "Les annonces en pause sont masquées aux acheteurs, par exemple après une enchère terminée sans offre. Cliquez sur le bouton de renouvellement dans cette colonne pour réactiver une annonce."
   },
   "itemMarket": {
     "toggleSidebar": "Afficher/masquer la barre latérale du marché"
@@ -6315,7 +6322,8 @@
     "replyTooltip_other": "Délai habituel avant une première réponse dans les discussions de commandes et d'offres des 90 derniers jours, sur {{count}} discussions",
     "completedOrders_one": "{{count}} commande terminée",
     "completedOrders_many": "{{count}} commandes terminées",
-    "completedOrders_other": "{{count}} commandes terminées"
+    "completedOrders_other": "{{count}} commandes terminées",
+    "whatTheseMean": "Ce que ça veut dire"
   },
   "shops": {
     "blocklist": {

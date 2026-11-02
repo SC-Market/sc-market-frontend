@@ -32,6 +32,8 @@ export const GUIDE_LINKS = {
   orgRecruiting: "/guides/org-storefront/recruiting",
   orgShop: "/guides/org-storefront/org-shop",
   tradeSafely: "/guides/getting-started/trade-safely",
+  sellerActivity: "/guides/getting-started/trade-safely#check-who-you-re-trading-with",
+  storefrontDirectory: "/guides/org-storefront/white-label#the-storefront-directory",
 } as const
 
 export type GuideLink = keyof typeof GUIDE_LINKS

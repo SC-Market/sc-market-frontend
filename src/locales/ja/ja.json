@@ -431,7 +431,9 @@
     "apiDocs": "API ドキュメント",
     "scOrgs": "SC Orgs",
     "cookiePreferences": "クッキーの設定",
-    "changelog": "更新履歴"
+    "changelog": "更新履歴",
+    "sdkNpm": "npmのSDK",
+    "orgsSdkNpm": "npmのSC Orgs SDK"
   },
   "itemAcquisition": {
     "addToCart": "カートに追加",
@@ -1043,7 +1045,8 @@
         },
         "reminder": {
           "label": "未読メッセージのリマインダー",
-          "hint": "最大1日1回"
+          "hint": "最大1日1回",
+          "tip": "注文やオファーのチャットのメッセージが約6時間未読のままだと、相手を待たせないようにお知らせします。"
         },
         "bid": {
           "label": "新しい入札"
@@ -1076,11 +1079,13 @@
         },
         "offer-pending": {
           "label": "返信待ちのオファー",
-          "hint": "返信のないオファーが届いてから約1日後と3日後"
+          "hint": "返信のないオファーが届いてから約1日後と3日後",
+          "tip": "あなた宛て、またはあなたが注文を担当する組織宛てのオファーにまだ返信がないときに届きます。承認・カウンターオファー・拒否のいずれかで返信すると、リマインダーは止まります。"
         },
         "offer-waiting": {
           "label": "あなたのオファーはまだ返信待ちです",
-          "hint": "最後のリマインダーの後も出品者が返信していない場合"
+          "hint": "最後のリマインダーの後も出品者が返信していない場合",
+          "tip": "購入者として出したオファー向け：リマインダー後も販売者から返信がない場合に届きます。そのまま待つ、販売者にメッセージを送る、オファーを取り下げる、のいずれかを選べます。"
         }
       },
       "subtitle": "通知の種類ごとに受け取り方法を選択してください。",
@@ -1637,7 +1642,7 @@
   "discord_bot": {
     "integrating_with_discord": "Discordとの連携",
     "how_to_get_notified": "注文が入ったときに通知を受け取る方法",
-    "how_to_get_notified_answer": "公式の [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) をサーバーに追加すると、あなたに注文が入ったときやあなたに割り当てられたときに、自動的にダイレクトメッセージを受け取れます。または、[SC Market 公式サーバー]({{DISCORD_INVITE}}) 経由で注文を処理するには、以下の設定を使用してください。",
+    "how_to_get_notified_answer": "公式の [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) をサーバーに追加し、注文通知チャンネルを選んでください。新しい注文やオファーはそこに投稿され、それぞれ専用の注文スレッドを作れます。Discord アカウントを連携し、ボットと同じサーバーに参加していれば、オファーが返信待ちのときのリマインダーなど、ボットからダイレクトメッセージも届きます。DM で受け取る内容は 設定 › 通知 で選べます。または、[SC Market 公式サーバー]({{DISCORD_INVITE}}) 経由で注文を処理するには、以下の設定を使用してください。",
     "how_to_communicate": "Discordを通じて購入者とやり取りする方法",
     "how_to_communicate_answer": "公式の SC Market Discord ボットをサーバーに追加し、注文スレッド用のチャンネルを選んでください。新しい注文やオファーごとに、購入者と担当の販売者が参加するプライベートスレッドがそこに作られ、購入者はあなたのサーバーに招待されるので、一緒に注文を進められます。\n\n1. ショップの **設定 › Discord**、または組織の **Discord 連携** タブで **[ボットをサーバーに追加]({{BOT_INSTALL_PATH}})** を押し、Discord でサーバーを選びます。サーバーが連携された状態で戻ってきます。\n\n2. 注文スレッドのチャンネルと、必要なら注文アラートのチャンネル（新しい注文やオファーごとに「Claim」ボタン付きの投稿）を選んで保存します。\n\nボットを Discord から追加した場合は、SC Market の設定で Discord アカウントを連携し、注文スレッドを置くチャンネルで `/setup threads` を実行してください。組織の注文の場合は `org` に Spectrum ID を入力します（例: `/setup threads org:SCMARKET`）。あなた個人への注文の場合は空欄のままにします。アラートは、スタッフ用チャンネルで `/setup alerts`（同じ `org`）を実行します。\n\nボットの追加には Discord サーバーの **サーバー管理** 権限が、`/setup threads`, `/setup alerts` コマンドには **チャンネルの管理** 権限が必要です。組織の場合は、SC Market での組織の **Manage Webhooks** 権限も必要です（`/setup alerts` で作るアラートは **Manage Orders** でも可）。スレッド用チャンネルでは、ボットに「チャンネルを見る」「プライベートスレッドを作成」「スレッドでメッセージを送信」「招待を作成」の権限が必要です。`/setup status` でチャンネルの設定内容を、`/help` で全コマンドを確認できます。",
     "learn_connect": "Discord ボットを接続",
@@ -2797,7 +2802,9 @@
     "manageAccessNotice": "このショップの出品と在庫を閲覧できます。作成・変更するには、組織の管理者に「マーケットを管理」権限を依頼してください。",
     "stockAccessNotice": "このショップの在庫を閲覧できます。ロットを追加・変更するには、組織の管理者に「在庫を管理」権限を依頼してください。",
     "increaseQuantity": "数量を増やす",
-    "decreaseQuantity": "数量を減らす"
+    "decreaseQuantity": "数量を減らす",
+    "renewHelpLabel": "更新",
+    "renewHelp": "一時停止中の出品は購入者に表示されません（例：入札がないまま終了したオークション）。この列の更新ボタンを押すと、出品が再び有効になります。"
   },
   "itemMarket": {
     "toggleSidebar": "マーケットサイドバーを切り替え"
@@ -6237,7 +6244,8 @@
       "slow": "返信が遅い"
     },
     "replyTooltip_other": "過去90日間の注文・オファーチャットで最初の返信までにかかる一般的な時間（{{count}}件のチャットに基づく）",
-    "completedOrders_other": "完了した注文 {{count}}件"
+    "completedOrders_other": "完了した注文 {{count}}件",
+    "whatTheseMean": "表示の意味"
   },
   "shops": {
     "blocklist": {

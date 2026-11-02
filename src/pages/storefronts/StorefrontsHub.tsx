@@ -15,6 +15,7 @@ import { linkedPaginationItem } from "../../components/pagination/linkedPaginati
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { FRONTEND_URL } from "../../util/constants"
+import { HelpLink } from "../../features/help/components/HelpLink"
 
 /**
  * /storefronts: verified orgs' storefronts (backend: RSI-verified, a public
@@ -112,6 +113,7 @@ export function StorefrontsHub() {
             <Typography color="text.primary">
               {t("storefront.hub.yourOrg", "Run an org? Verify it, open a shop and it can be listed here.")}
             </Typography>
+            <HelpLink guide="storefrontDirectory" />
             <Button component={Link} to={PATHS.orgRegister} variant="outlined" size="small">
               {t("storefront.hub.register", "Register your org")}
             </Button>
