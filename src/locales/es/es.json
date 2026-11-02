@@ -7915,7 +7915,7 @@
       "stop": "Detener",
       "refresh": "Actualizar",
       "confirmTitle": "¿Enviar la campaña?",
-      "confirmBody": "Se enviará un MD de Discord a hasta {{count}} personas, de {{batch}} en {{batch}} con una pausa de {{seconds}} segundos. Cada persona lo recibe una sola vez; no se puede deshacer.",
+      "confirmBody": "Se enviará un MD de Discord a hasta {{count}} personas, en tandas de {{batch}} con una pausa de {{seconds}} segundos. Cada persona lo recibe una sola vez; no se puede deshacer.",
       "confirmSend": "Enviar a {{count}} personas",
       "cancel": "Cancelar",
       "running": "Enviando: {{sent}} de hasta {{limit}} en esta ejecución.",

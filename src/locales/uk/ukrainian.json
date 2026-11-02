@@ -7973,7 +7973,7 @@
         "discord_dm_closed": "ПП не доставлено (закрито)",
         "email": "Ел. пошта",
         "email_confirmed": "Email доставлено",
-        "push": "Push",
+        "push": "Push-сповіщення",
         "any": "Будь-який канал",
         "none": "Жодного",
         "discord_server_or_app": "Спільний сервер або встановлено застосунок"
