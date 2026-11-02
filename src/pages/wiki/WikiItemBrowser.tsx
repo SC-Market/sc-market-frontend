@@ -34,6 +34,7 @@ import {
 } from "../../components/game-data/UnifiedSearchBar"
 import { WIKI_PATHS } from "../../routes/paths"
 import { useLocalStorageState } from "../../hooks/storage/useLocalStorageState"
+import { translateCategoryLabel } from "../../util/categoryDisplay"
 import { wikiItemsSeoText } from "../../seo/hubHeads"
 import { linkedPaginationItem } from "../../components/pagination/linkedPaginationItem"
 import { usePageReady } from "../../components/metadata/PageReady"
@@ -248,7 +249,7 @@ export function WikiItemBrowser() {
     <Stack spacing={2}>
       <FilterSection
         label={t("wiki.itemBrowser.filterType", "Type")}
-        options={ITEM_TYPES.map((it) => ({ value: it, label: it }))}
+        options={ITEM_TYPES.map((it) => ({ value: it, label: translateCategoryLabel(it, t) }))}
         selected={typeFilter}
         onChange={(v) => updateParam("type", v)}
       />
@@ -257,7 +258,7 @@ export function WikiItemBrowser() {
 
       <FilterSection
         label={t("wiki.itemBrowser.filterSize", "Size")}
-        options={SIZES.map((s) => ({ value: s, label: `${t("wiki.itemBrowser.sizeLabel", "Size")} ${s}` }))}
+        options={SIZES.map((s) => ({ value: s, label: t("gameTaxonomyUi.sizeN", { size: s }) }))}
         selected={sizeFilter}
         onChange={(v) => updateParam("size", v)}
       />
@@ -266,7 +267,7 @@ export function WikiItemBrowser() {
 
       <FilterSection
         label={t("wiki.itemBrowser.filterGrade", "Grade")}
-        options={GRADES.map((g) => ({ value: g, label: `${g} ${t("wiki.itemBrowser.gradeLabel", "Grade")}` }))}
+        options={GRADES.map((g) => ({ value: g, label: t("gameTaxonomyUi.gradeN", { grade: g }) }))}
         selected={gradeFilter}
         onChange={(v) => updateParam("grade", v)}
       />

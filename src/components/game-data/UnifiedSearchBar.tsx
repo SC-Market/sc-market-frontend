@@ -7,6 +7,8 @@ import React, { useState, useMemo, useCallback } from "react"
 import { Autocomplete, Chip, TextField, Box, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { getMissionTypeLabel } from "../../util/missionDisplay"
+import { formatShipCareer, formatShipRole } from "../../util/shipDisplay"
+import { translateCategoryLabel } from "../../util/categoryDisplay"
 
 export interface SearchToken {
   type: "query" | "system" | "category" | "giver" | "faction" | "tag" | "event" | "material" | "rarity" | "manufacturer"
@@ -171,6 +173,8 @@ const TOKEN_LABEL_KEYS: Record<string, string> = {
   "category:asteroidfield": "wikiUi.search.locationTypes.asteroidField",
 }
 
+const RARITY_KEYS = new Set(["common", "uncommon", "rare", "epic", "legendary"])
+
 const TOKEN_TYPE_KEYS: Record<SearchToken["type"], string> = {
   query: "wikiUi.search.types.query",
   system: "wikiUi.search.types.system",
@@ -188,13 +192,25 @@ export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placehol
   const { t } = useTranslation()
   const [inputValue, setInputValue] = useState("")
 
-  // Category tokens are only UI-defined in mining/location modes; elsewhere
-  // they carry game-data values.
+  // Category tokens are mining methods / location types in mining/location
+  // modes, mission types for missions, careers for ships and item types
+  // elsewhere. Game-data values (systems, givers, materials, ...) are shown as-is.
   const tokenLabel = useCallback((o: SearchToken): string => {
     if (o.type === "query") return o.label
-    if (o.type === "category" && mode !== "mining" && mode !== "locations") return o.label
+    if (o.type === "category" && mode !== "mining" && mode !== "locations") {
+      if (mode === "missions") return getMissionTypeLabel(o.value, t)
+      if (mode === "ships") return formatShipCareer(o.value, t)
+      return translateCategoryLabel(o.value, t)
+    }
+    if (o.type === "rarity" && RARITY_KEYS.has(o.value.toLowerCase())) {
+      return t(`gameTaxonomyUi.rarities.${o.value.toLowerCase()}`)
+    }
+    // Ships mode carries the role in a "faction" token and the size in a "tag".
+    if (mode === "ships" && o.type === "faction") return formatShipRole(o.value, t)
     const key = TOKEN_LABEL_KEYS[`${o.type}:${o.value}`]
-    return key ? t(key) : o.label
+    if (key) return t(key)
+    if (mode === "ships" && o.type === "tag") return t("gameTaxonomyUi.sizeN", { size: o.value })
+    return o.label
   }, [t, mode])
 
   const baseOptions = useMemo(() => {
@@ -482,30 +498,10 @@ export function shipsTokensToParams(tokens: SearchToken[]): Record<string, strin
 export function shipsParamsToTokens(sp: URLSearchParams): SearchToken[] {
   const tokens: SearchToken[] = []
   const q = sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
-  const career = sp.get("career"); if (career) {
-    const label = career.charAt(0).toUpperCase() + career.slice(1)
-    tokens.push({ type: "category", label, value: career })
-  }
+  const career = sp.get("career"); if (career) tokens.push({ type: "category", label: formatShipCareer(career), value: career })
   const mfr = sp.get("manufacturer"); if (mfr) tokens.push({ type: "manufacturer", label: mfr, value: mfr })
-  const role = sp.get("role"); if (role) {
-    const key = role.toLowerCase().replace(/[^a-z]/g, "")
-    const roleLabels: Record<string, string> = {
-      lightfighter: "Light Fighter", mediumfighter: "Medium Fighter", heavyfighter: "Heavy Fighter",
-      stealthfighter: "Stealth Fighter", stealthbomber: "Stealth Bomber", bomber: "Bomber",
-      interceptor: "Interceptor", gunship: "Gunship", dropship: "Dropship",
-      pathfinder: "Pathfinder", touring: "Touring", lightfreight: "Light Freight",
-      mediumfreight: "Medium Freight", heavyfreight: "Heavy Freight",
-      lightmining: "Light Mining", mediummining: "Medium Mining", heavymining: "Heavy Mining",
-      lightsalvage: "Light Salvage", mediumsalvage: "Medium Salvage", heavysalvage: "Heavy Salvage",
-      medical: "Medical", repair: "Repair", refueling: "Refueling",
-      racer: "Racer", racing: "Racing", snub: "Snub",
-      corvette: "Corvette", frigate: "Frigate", destroyer: "Destroyer", carrier: "Carrier",
-    }
-    tokens.push({ type: "faction", label: roleLabels[key] || role, value: role })
-  }
-  const size = sp.get("size"); if (size) {
-    const sizeLabels: Record<string, string> = { "1": "Small (1)", "2": "Medium (2)", "3": "Large (3)", "4": "Capital (4+)" }
-    tokens.push({ type: "tag", label: sizeLabels[size] || `Size ${size}`, value: size })
-  }
+  const role = sp.get("role"); if (role) tokens.push({ type: "faction", label: formatShipRole(role), value: role })
+  // Labels are resolved (translated) at render; see tokenLabel.
+  const size = sp.get("size"); if (size) tokens.push({ type: "tag", label: size, value: size })
   return tokens
 }

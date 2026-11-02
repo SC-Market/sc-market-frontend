@@ -76,8 +76,8 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Stack direction="row" spacing={0.5} sx={{ mb: 1.5 }} flexWrap="wrap" useFlexGap>
                   {ship.manufacturer && <Chip label={ship.manufacturer} color="primary" />}
-                  {ship.career && <Chip label={formatShipCareer(ship.career)} color="secondary" variant="outlined" />}
-                  {ship.role && <Chip label={formatShipRole(ship.role)} variant="outlined"
+                  {ship.career && <Chip label={formatShipCareer(ship.career, t)} color="secondary" variant="outlined" />}
+                  {ship.role && <Chip label={formatShipRole(ship.role, t)} variant="outlined"
                     sx={{ borderColor: shipColor, color: shipColor }} />}
                   {ship.focus && !ship.role && <Chip label={ship.focus} />}
                   {ship.size && <Chip label={t("wikiUi.shipModal.sizeChip", { size: ship.size })} />}

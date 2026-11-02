@@ -443,7 +443,7 @@ export function BlueprintBrowser() {
                           </TableCell>
                           <TableCell>
                             <Typography variant="caption" color="text.secondary" noWrap>
-                              {formatCategoryName(bp.item_category)}
+                              {formatCategoryName(bp.item_category, t)}
                             </Typography>
                           </TableCell>
                           <TableCell>

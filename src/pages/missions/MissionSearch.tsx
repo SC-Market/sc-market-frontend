@@ -331,7 +331,7 @@ export function MissionSearch() {
                           onClick={() => handleMissionClick(m.mission_code, m.mission_id)}
                         >
                           <TableCell sx={{ width: 40, py: 0.5 }}>
-                            <Tooltip title={getMissionTypeLabel(m.category)} arrow>
+                            <Tooltip title={getMissionTypeLabel(m.category, t)} arrow>
                             <Avatar
                               src={getMissionIcon(m.category) || undefined}
                               variant="rounded"
@@ -369,7 +369,7 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={0.25} flexWrap="wrap" useFlexGap>
-                              {m.category && <Tooltip title={getMissionTypeLabel(m.category)}><Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={microChip} /></Tooltip>}
+                              {m.category && <Tooltip title={getMissionTypeLabel(m.category, t)}><Chip label={getMissionTypeLabel(m.category, t)} size="small" color="primary" sx={microChip} /></Tooltip>}
                               {(m.is_illegal || m.legal_status === "ILLEGAL") && <Tooltip title={t("missionsUi.illegalMission")}><Chip label={t("missionsUi.illegal")} size="small" color="error" sx={microChip} /></Tooltip>}
                               {m.is_unique_mission && <Tooltip title={t("missionsUi.uniqueOneTime")}><Chip label={t("missionsUi.unique")} size="small" color="warning" sx={microChip} /></Tooltip>}
                               {m.is_chain_starter && <Tooltip title={t("missionsUi.chainStarter")}><Chip label={t("missionsUi.starter")} size="small" color="secondary" sx={microChip} /></Tooltip>}

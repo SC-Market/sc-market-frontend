@@ -177,7 +177,7 @@ export function BlueprintDetail() {
                 {data.user_owns && <Chip label={t("blueprintsUi.detail.ownedBadge")} size="small" color="success" />}
                 {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ bgcolor: "info.main", color: "#fff" }} />}
                 {bp.tier && <Chip label={t("blueprintsUi.tierN", { tier: bp.tier })} size="small" sx={{ bgcolor: "warning.main", color: "#fff" }} />}
-                {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" variant="outlined" />}
+                {bp.item_category && <Chip label={formatCategoryName(bp.item_category, t)} size="small" variant="outlined" />}
               </Stack>
             </Box>
             <IconButton
@@ -242,7 +242,7 @@ export function BlueprintDetail() {
                 const pctChange = (modifier - 1) * 100
                 return (
                   <Stack key={prop} direction="row" spacing={1} alignItems="center" sx={{ py: 0.25 }}>
-                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyLabel(prop)}</Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyLabel(prop, t)}</Typography>
                     <Typography variant="caption">×{baseVal.toFixed(2)}</Typography>
                     <Typography variant="caption" color="text.disabled">→</Typography>
                     <Typography variant="caption" fontWeight={600} color={isModifierPositive(prop, modifier) ? "success.main" : modifier === 1 ? "text.secondary" : "error.main"}>
@@ -294,7 +294,7 @@ export function BlueprintDetail() {
                   <Chip
                     key={prop}
                     size="small"
-                    label={`${propertyLabel(prop)}: ×${modifier.toFixed(3)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%)`}
+                    label={`${propertyLabel(prop, t)}: ×${modifier.toFixed(3)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%)`}
                     color={isModifierPositive(prop, modifier) ? "success" : modifier === 1 ? "default" : "error"}
                     variant="outlined"
                     sx={{ height: 22, fontSize: "0.7rem" }}
@@ -359,7 +359,7 @@ export function BlueprintDetail() {
                     return (
                       <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.5 }}>
                         <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>
-                          {propertyLabel(mod.property)}
+                          {propertyLabel(mod.property, t)}
                         </Typography>
                         <Typography variant="caption" fontWeight={600} color={isModifierPositive(mod.property, factor) ? "success.main" : factor === 1 ? "text.secondary" : "error.main"}>
                           ×{factor.toFixed(3)} {pctChange >= 0 ? "+" : ""}{pctChange.toFixed(2)}%

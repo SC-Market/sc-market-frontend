@@ -4,6 +4,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableRow, Paper, Box,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import type { TFunction } from "i18next"
 import { useGetRefiningMethodsQuery, type RefiningMethod } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
@@ -20,6 +21,21 @@ const qualityDesc: Record<string, { key: string; en: string }> = {
   Careful: { key: "wiki.refinery.qualityDesc.careful", en: "Highest yield — minimal material loss during refining" },
   Normal: { key: "wiki.refinery.qualityDesc.normal", en: "Balanced yield — moderate material loss" },
   Wasteful: { key: "wiki.refinery.qualityDesc.wasteful", en: "Lowest yield — significant material loss, but cheaper" },
+}
+
+// Speed/quality come from the API as English codes; translate the known ones.
+const SPEED_KEYS: Record<string, string> = {
+  Fast: "gameTaxonomyUi.refiningSpeeds.fast",
+  Normal: "gameTaxonomyUi.refiningSpeeds.normal",
+  Slow: "gameTaxonomyUi.refiningSpeeds.slow",
+}
+const QUALITY_KEYS: Record<string, string> = {
+  Careful: "gameTaxonomyUi.refiningQualities.careful",
+  Normal: "gameTaxonomyUi.refiningQualities.normal",
+  Wasteful: "gameTaxonomyUi.refiningQualities.wasteful",
+}
+function codeLabel(keys: Record<string, string>, code: string, t: TFunction): string {
+  return keys[code] ? t(keys[code]) : code
 }
 
 const bestForCopy: { speed: string; quality: string; key: string; en: string }[] = [
@@ -45,13 +61,13 @@ function MethodCard({ method }: { method: RefiningMethod }) {
         <Stack direction="row" spacing={1} sx={{ mb: 1.5 }}>
           <Chip
             icon={<Speed sx={{ fontSize: 14 }} />}
-            label={method.speed}
+            label={codeLabel(SPEED_KEYS, method.speed, t)}
             size="small"
             sx={{ bgcolor: speedColor[method.speed] + "22", color: speedColor[method.speed], fontWeight: 600, height: 24 }}
           />
           <Chip
             icon={<HighQuality sx={{ fontSize: 14 }} />}
-            label={method.quality}
+            label={codeLabel(QUALITY_KEYS, method.quality, t)}
             size="small"
             sx={{ bgcolor: qualityColor[method.quality] + "22", color: qualityColor[method.quality], fontWeight: 600, height: 24 }}
           />
@@ -122,10 +138,10 @@ export function WikiRefineryPage() {
                     <Typography variant="body2" fontWeight={600}>{m.name}</Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Chip label={m.speed} size="small" sx={{ bgcolor: speedColor[m.speed] + "22", color: speedColor[m.speed], fontWeight: 600, height: 22, fontSize: "0.75rem" }} />
+                    <Chip label={codeLabel(SPEED_KEYS, m.speed, t)} size="small" sx={{ bgcolor: speedColor[m.speed] + "22", color: speedColor[m.speed], fontWeight: 600, height: 22, fontSize: "0.75rem" }} />
                   </TableCell>
                   <TableCell align="center">
-                    <Chip label={m.quality} size="small" sx={{ bgcolor: qualityColor[m.quality] + "22", color: qualityColor[m.quality], fontWeight: 600, height: 22, fontSize: "0.75rem" }} />
+                    <Chip label={codeLabel(QUALITY_KEYS, m.quality, t)} size="small" sx={{ bgcolor: qualityColor[m.quality] + "22", color: qualityColor[m.quality], fontWeight: 600, height: 22, fontSize: "0.75rem" }} />
                   </TableCell>
                   <TableCell>
                     <Typography variant="caption" color="text.secondary">
@@ -147,8 +163,8 @@ export function WikiRefineryPage() {
           <React.Fragment key={speed}>
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mt: 2 }}>
-                <Chip label={speed} size="small" sx={{ bgcolor: speedColor[speed] + "22", color: speedColor[speed], fontWeight: 700, mr: 1 }} />
-                {t("wiki.refinery.processingHeader", "{{speed}} Processing", { speed })}
+                <Chip label={codeLabel(SPEED_KEYS, speed, t)} size="small" sx={{ bgcolor: speedColor[speed] + "22", color: speedColor[speed], fontWeight: 700, mr: 1 }} />
+                {t("wiki.refinery.processingHeader", "{{speed}} Processing", { speed: codeLabel(SPEED_KEYS, speed, t) })}
               </Typography>
             </Grid>
             {bySpeed[speed].map((m) => (

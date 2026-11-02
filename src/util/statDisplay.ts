@@ -2,38 +2,40 @@
  * Shared stat/property display utilities for blueprints and crafting.
  */
 
-/** Human-readable property names */
-const PROPERTY_LABELS: Record<string, string> = {
+import type { TFunction } from "i18next"
+
+/** property code -> [catalog key under gameTaxonomyUi.statProperties, English label] */
+const PROPERTY_LABELS: Record<string, [string, string]> = {
   // Armor
-  damagemitigation: "Damage Mitigation",
-  gpp_armor_damagemitigation: "Damage Mitigation",
-  mintemp: "Min Temperature",
-  gpp_armor_mintemp: "Min Temperature",
-  maxtemp: "Max Temperature",
-  gpp_armor_maxtemp: "Max Temperature",
-  emreduction: "EM Reduction",
-  irreduction: "IR Reduction",
-  durability: "Durability",
-  weight: "Weight",
+  damagemitigation: ["damageMitigation", "Damage Mitigation"],
+  gpp_armor_damagemitigation: ["damageMitigation", "Damage Mitigation"],
+  mintemp: ["minTemperature", "Min Temperature"],
+  gpp_armor_mintemp: ["minTemperature", "Min Temperature"],
+  maxtemp: ["maxTemperature", "Max Temperature"],
+  gpp_armor_maxtemp: ["maxTemperature", "Max Temperature"],
+  emreduction: ["emReduction", "EM Reduction"],
+  irreduction: ["irReduction", "IR Reduction"],
+  durability: ["durability", "Durability"],
+  weight: ["weight", "Weight"],
 
   // Weapons
-  weapon_damage: "Damage",
-  weapon_firerate: "Fire Rate",
-  weapon_recoil_handling: "Recoil Control",
-  weapon_recoil_kick: "Recoil Kick",
-  weapon_recoil_smoothness: "Recoil Smoothness",
-  weapon_spread: "Spread",
-  weapon_range: "Range",
-  weapon_velocity: "Projectile Velocity",
-  weapon_ammo_capacity: "Ammo Capacity",
+  weapon_damage: ["damage", "Damage"],
+  weapon_firerate: ["fireRate", "Fire Rate"],
+  weapon_recoil_handling: ["recoilControl", "Recoil Control"],
+  weapon_recoil_kick: ["recoilKick", "Recoil Kick"],
+  weapon_recoil_smoothness: ["recoilSmoothness", "Recoil Smoothness"],
+  weapon_spread: ["spread", "Spread"],
+  weapon_range: ["range", "Range"],
+  weapon_velocity: ["projectileVelocity", "Projectile Velocity"],
+  weapon_ammo_capacity: ["ammoCapacity", "Ammo Capacity"],
 
   // General
-  health: "Health",
-  speed: "Speed",
-  capacity: "Capacity",
-  power: "Power",
-  cooling: "Cooling",
-  shielding: "Shield Strength",
+  health: ["health", "Health"],
+  speed: ["speed", "Speed"],
+  capacity: ["capacity", "Capacity"],
+  power: ["power", "Power"],
+  cooling: ["cooling", "Cooling"],
+  shielding: ["shieldStrength", "Shield Strength"],
 }
 
 /** Properties where a lower modifier value is BETTER (e.g., less recoil) */
@@ -49,16 +51,17 @@ const LOWER_IS_BETTER = new Set([
   "gpp_weapon_spread",
 ])
 
-export function propertyLabel(prop: string): string {
+/**
+ * Human-readable property name. Pass `t` for the user's language; without it
+ * the English label is returned. Unknown codes are prettified as-is.
+ */
+export function propertyLabel(prop: string, t?: TFunction): string {
   const lower = prop.toLowerCase()
-  if (PROPERTY_LABELS[lower]) return PROPERTY_LABELS[lower]
   const stripped = lower.replace(/^gpp_armor_/, "").replace(/^gpp_/, "").replace(/^weapon_/, "")
-  if (PROPERTY_LABELS[stripped]) return PROPERTY_LABELS[stripped]
+  const known = PROPERTY_LABELS[lower] ?? PROPERTY_LABELS[stripped]
+  if (known) return t ? t(`gameTaxonomyUi.statProperties.${known[0]}`, known[1]) : known[1]
   // Fallback: capitalize and space
-  return lower
-    .replace(/^gpp_armor_/, "")
-    .replace(/^gpp_/, "")
-    .replace(/^weapon_/, "")
+  return stripped
     .replace(/_/g, " ")
     .replace(/\b\w/g, s => s.toUpperCase())
 }
@@ -166,7 +169,8 @@ export function buildPropertyDefMap(
 export function propertyDisplayName(
   prop: string,
   def?: { display_name: string | null } | null,
+  t?: TFunction,
 ): string {
   if (def?.display_name) return def.display_name
-  return propertyLabel(prop)
+  return propertyLabel(prop, t)
 }

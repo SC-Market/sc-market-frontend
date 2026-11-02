@@ -3,40 +3,49 @@
  * Formats mission types, descriptions, and credit rewards for display.
  */
 
-/** Map raw p4k mission type codes to human-readable display names */
-const MISSION_TYPE_LABELS: Record<string, string> = {
-  mercenary: "Mercenary",
-  bountyhunter: "Bounty Hunter",
-  "missiontype.delivery": "Delivery",
-  hauling: "Hauling",
-  hauling_planetary: "Planetary Hauling",
-  hauling_solar: "Solar Hauling",
-  hauling_local: "Local Hauling",
-  hauling_interstellar: "Interstellar Hauling",
-  investigation: "Investigation",
-  priority: "Priority",
-  race: "Race",
-  salvage: "Salvage",
-  maintenance: "Maintenance",
-  servicebeacon: "Service Beacon",
-  ecn: "Emergency",
-  mining: "Mining",
-  "missiontype.search": "Search",
-  "missiontype.job": "Job",
-  "missiontype.research": "Research",
-  appointment: "Appointment",
-  collector: "Collection",
-  courier: "Courier",
-  fpsmining: "FPS Mining",
-  groundmining: "Ground Mining",
-  shipmining: "Ship Mining",
-  pvpmission: "PvP",
+import type { TFunction } from "i18next"
+
+/** p4k mission type code -> [catalog key under gameTaxonomyUi.missionTypes, English label] */
+const MISSION_TYPE_LABELS: Record<string, [string, string]> = {
+  mercenary: ["mercenary", "Mercenary"],
+  bountyhunter: ["bountyHunter", "Bounty Hunter"],
+  "missiontype.delivery": ["delivery", "Delivery"],
+  delivery: ["delivery", "Delivery"],
+  hauling: ["hauling", "Hauling"],
+  hauling_planetary: ["planetaryHauling", "Planetary Hauling"],
+  hauling_solar: ["solarHauling", "Solar Hauling"],
+  hauling_local: ["localHauling", "Local Hauling"],
+  hauling_interstellar: ["interstellarHauling", "Interstellar Hauling"],
+  investigation: ["investigation", "Investigation"],
+  priority: ["priority", "Priority"],
+  race: ["race", "Race"],
+  salvage: ["salvage", "Salvage"],
+  maintenance: ["maintenance", "Maintenance"],
+  servicebeacon: ["serviceBeacon", "Service Beacon"],
+  ecn: ["emergency", "Emergency"],
+  mining: ["mining", "Mining"],
+  "missiontype.search": ["search", "Search"],
+  "missiontype.job": ["job", "Job"],
+  "missiontype.research": ["research", "Research"],
+  appointment: ["appointment", "Appointment"],
+  collector: ["collection", "Collection"],
+  courier: ["courier", "Courier"],
+  fpsmining: ["fpsMining", "FPS Mining"],
+  groundmining: ["groundMining", "Ground Mining"],
+  shipmining: ["shipMining", "Ship Mining"],
+  pvpmission: ["pvp", "PvP"],
 }
 
-/** Get a display-friendly mission type label */
-export function getMissionTypeLabel(type: string | null | undefined): string {
-  if (!type) return "Unknown"
-  return MISSION_TYPE_LABELS[type.toLowerCase()] || type.replace(/^missiontype\./, "").replace(/[_-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+/**
+ * Display-friendly mission type label. Pass `t` for the user's language;
+ * without it the English label is returned. Codes are matched case- and
+ * space-insensitively ("Bounty Hunter" and "bountyhunter" are the same type).
+ */
+export function getMissionTypeLabel(type: string | null | undefined, t?: TFunction): string {
+  if (!type) return t ? t("missionsUi.unknown") : "Unknown"
+  const known = MISSION_TYPE_LABELS[type.toLowerCase().replace(/\s+/g, "")]
+  if (known) return t ? t(`gameTaxonomyUi.missionTypes.${known[0]}`, known[1]) : known[1]
+  return type.replace(/^missiontype\./, "").replace(/[_-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 /**

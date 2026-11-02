@@ -29,7 +29,7 @@ vi.mock("react-i18next", async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, def?: string) => def || key,
+      t: (key: string, def?: unknown) => (typeof def === "string" ? def : key),
       i18n: { language: "en", changeLanguage: vi.fn() },
     }),
   }

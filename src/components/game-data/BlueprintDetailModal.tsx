@@ -161,7 +161,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             <Stack direction="row" spacing={0.5}>
               {bp?.rarity && <Chip label={bp.rarity} size="small" color="primary" />}
               {bp?.tier && <Chip label={t("blueprintsUi.tierN", { tier: bp.tier })} size="small" color="secondary" />}
-              {bp?.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" variant="outlined" />}
+              {bp?.item_category && <Chip label={formatCategoryName(bp.item_category, t)} size="small" variant="outlined" />}
             </Stack>
           </Box>
         </Stack>
@@ -209,7 +209,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                   const formattedMod = formatModifierValue(modifier, modifierType, def)
                   return (
                     <Stack key={prop} direction="row" spacing={1} alignItems="center" sx={{ py: 0.25 }}>
-                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyDisplayName(prop, def)}</Typography>
+                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyDisplayName(prop, def, t)}</Typography>
                       <Typography variant="caption">{baseVal.toFixed(2)}</Typography>
                       <Typography variant="caption" color="text.disabled">{"→"}</Typography>
                       <Typography variant="caption" fontWeight={600} color={isModifierPositive(prop, modifierType === "additive" ? 1 + modifier : modifier) ? "success.main" : modifier === (modifierType === "additive" ? 0 : 1) ? "text.secondary" : "error.main"}>{modified.toFixed(2)} ({formattedMod})</Typography>
@@ -281,7 +281,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                     <Chip
                       key={prop}
                       size="small"
-                      label={`${propertyDisplayName(prop, def)}: ${formatted}`}
+                      label={`${propertyDisplayName(prop, def, t)}: ${formatted}`}
                       color={isModifierPositive(prop, positiveCheck) ? "success" : modifier === neutralValue ? "default" : "error"}
                       variant="outlined"
                       sx={{ height: 22, fontSize: "0.7rem" }}
@@ -322,7 +322,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                     const neutralValue = mod.modifier_type === "additive" ? 0 : 1
                     return (
                       <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.25 }}>
-                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>{propertyDisplayName(mod.property, def)}</Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>{propertyDisplayName(mod.property, def, t)}</Typography>
                         <Typography variant="caption" fontWeight={600} color={isModifierPositive(mod.property, positiveCheck) ? "success.main" : factor === neutralValue ? "text.secondary" : "error.main"}>{currentFormatted}</Typography>
                         <Typography variant="caption" color="text.disabled">{t("blueprintsUi.detail.range", { start: startFormatted, end: endFormatted })}</Typography>
                       </Stack>

@@ -282,7 +282,7 @@ function VehicleCard({
         <Stack direction="row" spacing={0.4} flexWrap="wrap" useFlexGap sx={{ mb: 0.5 }}>
           {ship.career && (
             <Chip
-              label={formatShipCareer(ship.career)}
+              label={formatShipCareer(ship.career, t)}
               size="small"
               color={chipColor}
               variant="outlined"
@@ -291,7 +291,7 @@ function VehicleCard({
           )}
           {ship.role && (
             <Chip
-              label={formatShipRole(ship.role)}
+              label={formatShipRole(ship.role, t)}
               size="small"
               sx={{
                 height: 16,
@@ -465,19 +465,19 @@ export function WikiShipBrowser() {
       s.role?.toLowerCase().replace(/[^a-z]/g, "") === role.toLowerCase().replace(/[^a-z]/g, ""),
     )
     if (size) result = result.filter((s) => String(s.size) === size)
-    const textTokens = searchTokens.filter((t) => t.type === "query")
-    for (const t of textTokens) {
-      const q = t.value.toLowerCase()
+    const textTokens = searchTokens.filter((tok) => tok.type === "query")
+    for (const tok of textTokens) {
+      const q = tok.value.toLowerCase()
       result = result.filter(
         (s) =>
           s.name.toLowerCase().includes(q) ||
           s.manufacturer?.toLowerCase().includes(q) ||
           s.career?.toLowerCase().includes(q) ||
-          formatShipRole(s.role).toLowerCase().includes(q),
+          formatShipRole(s.role, t).toLowerCase().includes(q),
       )
     }
     return result
-  }, [allVehicles, category, manufacturer, career, role, size, searchTokens])
+  }, [allVehicles, category, manufacturer, career, role, size, searchTokens, t])
 
   const totalPages  = Math.ceil(filtered.length / PAGE_SIZE)
   const currentPage = Math.min(page, Math.max(1, totalPages))
@@ -517,9 +517,9 @@ export function WikiShipBrowser() {
   // Active filter chips to show above the grid
   const activeFilterChips = useMemo(() => {
     const chips: Array<{ label: string; key: string; value: string }> = []
-    if (career)      chips.push({ label: `${t("wiki.shipBrowser.career", "Career")}: ${formatShipCareer(career)}`, key: "career", value: "" })
+    if (career)      chips.push({ label: `${t("wiki.shipBrowser.career", "Career")}: ${formatShipCareer(career, t)}`, key: "career", value: "" })
     if (manufacturer) chips.push({ label: manufacturer, key: "manufacturer", value: "" })
-    if (role)        chips.push({ label: formatShipRole(role), key: "role", value: "" })
+    if (role)        chips.push({ label: formatShipRole(role, t), key: "role", value: "" })
     if (size)        chips.push({ label: `${t("wiki.shipBrowser.size", "Size")} ${size}`, key: "size", value: "" })
     return chips
   }, [career, manufacturer, role, size, t])
@@ -629,7 +629,7 @@ export function WikiShipBrowser() {
                   "&:hover": { bgcolor: alpha(color, 0.12) },
                 }}
               >
-                {formatShipCareer(c)}
+                {formatShipCareer(c, t)}
               </Box>
             )
           })}
@@ -669,7 +669,7 @@ export function WikiShipBrowser() {
           }}
         >
           <option value="">{t("wiki.shipBrowser.allRoles", "All roles")}</option>
-          {roles.map((r) => <option key={r} value={r}>{formatShipRole(r)}</option>)}
+          {roles.map((r) => <option key={r} value={r}>{formatShipRole(r, t)}</option>)}
         </Box>
       </Box>
 

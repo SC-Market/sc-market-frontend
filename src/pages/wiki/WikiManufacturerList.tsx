@@ -56,6 +56,21 @@ function getMfrMeta(name: string) {
   return MFR_META[name] ?? { color: "#546e7a", specialties: [] }
 }
 
+/** Specialty chip labels -> gameTaxonomyUi.manufacturerSpecialties keys */
+const SPECIALTY_KEYS: Record<string, string> = {
+  Ships: "ships",
+  Armor: "armor",
+  Weapons: "weapons",
+  Consumer: "consumer",
+  Components: "components",
+  Vehicles: "vehicles",
+  Tools: "tools",
+  Equipment: "equipment",
+  "Ship Weapons": "shipWeapons",
+  Turrets: "turrets",
+  Hoverbikes: "hoverbikes",
+}
+
 function getSpecialtyIcon(specialty: string) {
   if (specialty === "Ships") return <RocketLaunch sx={{ fontSize: 11 }} />
   if (specialty === "Vehicles" || specialty === "Hoverbikes") return <DirectionsCar sx={{ fontSize: 11 }} />
@@ -91,7 +106,7 @@ export function WikiManufacturerList() {
       <Grid item xs={12}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            {manufacturers ? `${manufacturers.length} ${t("wiki.manufacturerList.manufacturersCount", "manufacturers")}` : ""}
+            {manufacturers ? t("gameTaxonomyUi.manufacturerCount", { count: manufacturers.length }) : ""}
           </Typography>
           <ToggleButtonGroup
             size="small"
@@ -156,7 +171,7 @@ export function WikiManufacturerList() {
                             </Typography>
                           )}
                           <Chip
-                            label={`${m.item_count} ${t("wiki.manufacturerList.items", "items")}`}
+                            label={t("gameTaxonomyUi.itemCount", { count: m.item_count })}
                             size="small"
                             sx={{
                               mt: 0.75, height: 18, fontSize: "0.65rem",
@@ -171,7 +186,7 @@ export function WikiManufacturerList() {
                             <Chip
                               key={s}
                               icon={getSpecialtyIcon(s) || undefined}
-                              label={s}
+                              label={t(`gameTaxonomyUi.manufacturerSpecialties.${SPECIALTY_KEYS[s]}`)}
                               size="small"
                               variant="outlined"
                               sx={{ height: 18, fontSize: "0.6rem", "& .MuiChip-icon": { fontSize: 11 } }}
@@ -231,7 +246,7 @@ export function WikiManufacturerList() {
                       <TableCell>
                         <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
                           {meta.specialties.map((s) => (
-                            <Chip key={s} label={s} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.6rem" }} />
+                            <Chip key={s} label={t(`gameTaxonomyUi.manufacturerSpecialties.${SPECIALTY_KEYS[s]}`)} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.6rem" }} />
                           ))}
                         </Stack>
                       </TableCell>

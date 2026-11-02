@@ -19,6 +19,7 @@ import {
 } from "@mui/material"
 import { RestartAltRounded } from "@mui/icons-material"
 import { useGetGameEventsQuery } from "../../store/api/v2/market"
+import { getMissionTypeLabel } from "../../util/missionDisplay"
 
 export interface MissionFiltersProps {
   searchText: string
@@ -72,7 +73,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
         <InputLabel id="mission-filters-category-label">{t("missionsUi.category")}</InputLabel>
         <Select labelId="mission-filters-category-label" multiple value={props.category ? props.category.split(",") : []} label={t("missionsUi.category")}
           onChange={(e) => props.onCategoryChange((e.target.value as string[]).join(","))}
-          renderValue={(sel) => (sel as string[]).join(", ") || t("missionsUi.all")}>
+          renderValue={(sel) => (sel as string[]).map(c => getMissionTypeLabel(c, t)).join(", ") || t("missionsUi.all")}>
           {["Mercenary","Bounty Hunter","Delivery","Hauling","Investigation","Mining","Salvage","Maintenance","Race","Courier"].map(c =>
             <MenuItem key={c} value={c}>{t(`missionsUi.categories.${c.replace(/ /g, "")}`)}</MenuItem>
           )}

@@ -96,7 +96,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick
         <CardContent sx={{ p: 1.5, pb: 0 }}>
           {/* Header: Avatar + Title + Subtitle */}
           <Box sx={{ display: "flex", gap: 1, mb: 0.75 }}>
-            <Tooltip title={getMissionTypeLabel(mission.category)} arrow>
+            <Tooltip title={getMissionTypeLabel(mission.category, t)} arrow>
             <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: getMissionCategoryColor(mission.category), flexShrink: 0 }}
               src={missionIcon || undefined}
               variant="rounded"
@@ -116,7 +116,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick
           {/* Tags — right after header, full width */}
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: "4px", mb: 0.5 }}>
             {mission.star_system && <Chip label={mission.star_system} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?system=${mission.star_system}`) }} sx={microChip} />}
-            {mission.category && <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?category=${mission.category}`) }} sx={microChip} />}
+            {mission.category && <Chip label={getMissionTypeLabel(mission.category, t)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?category=${mission.category}`) }} sx={microChip} />}
             {(mission.is_illegal || mission.legal_status === "ILLEGAL") && <Chip label={t("missionsUi.illegal")} size="small" color="error" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?legal=ILLEGAL") }} sx={microChip} />}
             {mission.is_unique_mission && <Chip label={t("missionsUi.unique")} size="small" color="warning" sx={microChip} />}
             {mission.is_chain_starter && <Chip label={t("missionsUi.starter")} size="small" color="secondary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?chain=true") }} sx={microChip} />}

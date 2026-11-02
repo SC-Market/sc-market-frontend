@@ -28,6 +28,7 @@ import {
 import type { MissionDetailResponse, Mission, MissionRewardPool, MissionBlueprintReward, HaulingOrder } from "../../store/api/v2/market"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import type { TFunction } from "i18next"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName, MissionDescription } from "./MissionName"
@@ -41,31 +42,31 @@ import { missionHubText } from "../../seo/missionHubs"
 // Helpers
 // ============================================================================
 
-function formatDuration(seconds: number | undefined): string {
+function formatDuration(seconds: number | undefined, t: TFunction): string {
   if (!seconds) return "—"
-  if (seconds < 60) return `${seconds}s`
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}m`
+  if (seconds < 60) return t("gameTaxonomyUi.duration.seconds", { s: seconds })
+  if (seconds < 3600) return t("gameTaxonomyUi.duration.minutes", { m: Math.floor(seconds / 60) })
   const h = Math.floor(seconds / 3600)
   const m = Math.floor((seconds % 3600) / 60)
-  return m ? `${h}h ${m}m` : `${h}h`
+  return m ? t("gameTaxonomyUi.duration.hoursMinutes", { h, m }) : t("gameTaxonomyUi.duration.hours", { h })
 }
 
-/** Format raw scope codes to readable names */
-const SCOPE_LABELS: Record<string, string> = {
-  factionreputationscope: "Faction Reputation",
-  factionreputation: "Faction Reputation",
-  headhunter: "Headhunter",
-  salvage: "Salvage",
-  mercenary: "Mercenary",
-  bounty: "Bounty",
-  mining: "Mining",
-  hauling: "Hauling",
-  delivery: "Delivery",
-  investigation: "Investigation",
+/** Raw scope codes -> catalog keys under gameTaxonomyUi.missionScopes */
+const SCOPE_LABEL_KEYS: Record<string, string> = {
+  factionreputationscope: "factionReputation",
+  factionreputation: "factionReputation",
+  headhunter: "headhunter",
+  salvage: "salvage",
+  mercenary: "mercenary",
+  bounty: "bounty",
+  mining: "mining",
+  hauling: "hauling",
+  delivery: "delivery",
+  investigation: "investigation",
 }
-function formatScope(scope: string): string {
-  const lower = scope.toLowerCase()
-  if (SCOPE_LABELS[lower]) return SCOPE_LABELS[lower]
+function formatScope(scope: string, t: TFunction): string {
+  const key = SCOPE_LABEL_KEYS[scope.toLowerCase()]
+  if (key) return t(`gameTaxonomyUi.missionScopes.${key}`)
   return scope
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/_/g, " ")
@@ -103,7 +104,7 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
       {m.star_system && <Chip label={m.star_system} size="small" variant="outlined" {...go({ system: m.star_system! })} />}
       {m.category && (
         <Chip
-          label={getMissionTypeLabel(m.category)}
+          label={getMissionTypeLabel(m.category, t)}
           size="small"
           {...go({ category: m.category })}
           icon={getMissionIcon(m.category) ? <img src={getMissionIcon(m.category)!} alt="" style={{ width: 16, height: 16 }} /> : undefined}
@@ -168,6 +169,7 @@ export function MissionHubLinks({ data }: { data: MissionDetailResponse }) {
 // ============================================================================
 
 export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDetailResponse; onBlueprintClick?: (id: string) => void }) {
+  const { t } = useTranslation()
   const [tab, setTab] = useState(0)
   const m = data.mission
   const hasChain = !!(m.is_chain_starter || m.is_chain_mission || data.prerequisite_missions?.length)
@@ -175,19 +177,19 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
   const hasDetails = !!(data.ship_encounters?.length || data.npc_encounters?.length || data.entity_spawns?.length || data.hauling_orders?.length)
 
   const tabs: { label: string; id: string }[] = [
-    { label: "Overview", id: "overview" },
+    { label: t("gameTaxonomyUi.missionTabs.overview"), id: "overview" },
   ]
-  if (hasDetails) tabs.push({ label: "Details", id: "details" })
-  tabs.push({ label: "Requirements", id: "requirements" })
-  if (m.reward_scope) tabs.push({ label: "Rank Calculator", id: "calculator" })
-  if (hasChain) tabs.push({ label: "Chain Info", id: "chain" })
+  if (hasDetails) tabs.push({ label: t("gameTaxonomyUi.missionTabs.details"), id: "details" })
+  tabs.push({ label: t("gameTaxonomyUi.missionTabs.requirements"), id: "requirements" })
+  if (m.reward_scope) tabs.push({ label: t("gameTaxonomyUi.missionTabs.rankCalculator"), id: "calculator" })
+  if (hasChain) tabs.push({ label: t("gameTaxonomyUi.missionTabs.chainInfo"), id: "chain" })
 
   const activeTab = tabs[tab]?.id || "overview"
 
   return (
     <>
       <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="scrollable">
-        {tabs.map((t) => <Tab key={t.id} label={t.label} />)}
+        {tabs.map((tb) => <Tab key={tb.id} label={tb.label} />)}
       </Tabs>
       {/* Every panel is in the page (the inactive ones hidden), so the HTML
           has the whole mission: rewards, requirements, cooldowns, chain. */}
@@ -272,7 +274,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
         {m.reward_scope && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">{t("missionsUi.scope")}</Typography>
-            <Typography variant="body2">{formatScope(m.reward_scope)}</Typography>
+            <Typography variant="body2">{formatScope(m.reward_scope, t)}</Typography>
           </Stack>
         )}
       </Stack>
@@ -517,25 +519,25 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
         {m.time_to_complete != null && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />{t("missionsUi.timeToComplete")}</Typography>
-            <Typography variant="body2">{formatDuration(m.time_to_complete)}</Typography>
+            <Typography variant="body2">{formatDuration(m.time_to_complete, t)}</Typography>
           </Stack>
         )}
         {m.personal_cooldown_time != null && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />{t("missionsUi.cooldown")}</Typography>
-            <Typography variant="body2">{formatDuration(m.personal_cooldown_time)}</Typography>
+            <Typography variant="body2">{formatDuration(m.personal_cooldown_time, t)}</Typography>
           </Stack>
         )}
         {m.abandoned_cooldown_time != null && m.abandoned_cooldown_time !== m.personal_cooldown_time && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">{t("missionsUi.abandonCooldown")}</Typography>
-            <Typography variant="body2">{formatDuration(m.abandoned_cooldown_time)}</Typography>
+            <Typography variant="body2">{formatDuration(m.abandoned_cooldown_time, t)}</Typography>
           </Stack>
         )}
         {m.deadline_seconds != null && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">{t("missionsUi.deadline")}</Typography>
-            <Typography variant="body2">{formatDuration(m.deadline_seconds)}</Typography>
+            <Typography variant="body2">{formatDuration(m.deadline_seconds, t)}</Typography>
           </Stack>
         )}
       </Stack>
@@ -593,7 +595,7 @@ function ChainTab({ data }: { data: MissionDetailResponse }) {
                 <RouterLink to={GAME_DATA_PATHS.mission(pm.mission_id)} style={{ color: "inherit" }}>
                   <MissionName name={pm.mission_name} variant="body2" component="span" />
                 </RouterLink>
-                {pm.category && <Chip label={getMissionTypeLabel(pm.category)} size="small" variant="outlined" />}
+                {pm.category && <Chip label={getMissionTypeLabel(pm.category, t)} size="small" variant="outlined" />}
               </Stack>
             ))}
           </Stack>

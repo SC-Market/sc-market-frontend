@@ -144,7 +144,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                   {bp.output_item_name}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" noWrap display="block">
-                  {formatCategoryName(bp.item_category)}
+                  {formatCategoryName(bp.item_category, t)}
                 </Typography>
               </Box>
             </Box>
@@ -172,7 +172,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
             {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
             {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
-            {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?category=${bp.item_category}`) }} sx={microChip} />}
+            {bp.item_category && <Chip label={formatCategoryName(bp.item_category, t)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/blueprints?category=${bp.item_category}`) }} sx={microChip} />}
             {[...new Set((bp.modifier_properties || []).map((p) => modAbbr(p, t)))].map(tag => (
               <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
             ))}

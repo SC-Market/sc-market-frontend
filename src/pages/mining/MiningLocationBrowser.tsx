@@ -20,6 +20,7 @@ import {
   useParams,
 } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import type { TFunction } from "i18next"
 import { useSearchLocationsQuery, type LocationSearchResult } from "../../store/api/v2/market"
 import { MiningLocationDetailModal } from "./MiningLocationDetailModal"
 import { UnifiedSearchBar, locationTokensToParams, locationParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
@@ -39,12 +40,20 @@ import { RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
-function groupLabel(groupName: string): string {
-  const g = (groupName || "").toLowerCase()
-  if (g.includes("ship")) return "Ship Mining"
-  if (g.includes("ground")) return "Ground Vehicle"
-  if (g.includes("fps") || g.includes("hand")) return "Hand Mining"
-  return groupName || "Unknown"
+// The API sends English display names for mining groups and location types;
+// translate the known ones, show anything else as sent.
+const GROUP_NAME_KEYS: Record<string, string> = {
+  "Ship Mining": "wikiUi.search.methods.ship",
+  "Ground Vehicle Mining (ROC)": "gameTaxonomyUi.miningGroups.groundVehicle",
+  "Hand Mining (FPS)": "wikiUi.search.methods.fps",
+}
+const LOCATION_TYPE_KEYS: Record<string, string> = {
+  Surface: "wikiUi.search.locationTypes.surface",
+  "Asteroid Field": "wikiUi.search.locationTypes.asteroidField",
+}
+function apiLabel(keys: Record<string, string>, value: string, t: TFunction): string {
+  const key = keys[value]
+  return key ? t(key) : value
 }
 
 function GroupIcon({ groupName }: { groupName: string }) {
@@ -127,7 +136,7 @@ export function MiningLocationBrowser() {
       </Box>
 
       {isLoading && <CardGridSkeleton />}
-        {error && <Alert severity="error">{t("mining.error", "Failed to load locations.")}</Alert>}
+        {error && <Alert severity="error">{t("gameTaxonomyUi.locationsLoadFailed")}</Alert>}
         {data && (
           <>
             <Grid container spacing={1.5}>
@@ -207,13 +216,13 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
               <Chip label={systemDisplay} size="small"
                 sx={{ ...microChip, bgcolor: systemChipColor(systemDisplay) + "22", color: systemChipColor(systemDisplay), fontWeight: 600 }} />
             )}
-            {location.locationType && <Chip label={location.locationType} size="small" variant="outlined" sx={microChip} />}
+            {location.locationType && <Chip label={apiLabel(LOCATION_TYPE_KEYS, location.locationType, t)} size="small" variant="outlined" sx={microChip} />}
             {location.hasRefinery && <Chip label={t("miningUi.location.refinery")} size="small" color="success" sx={microChip} />}
           </Stack>
 
           {(location.groups || []).map((g) => (
             <Box key={g.groupName} sx={{ mb: 0.5 }}>
-              <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.65rem" }}><GroupIcon groupName={g.groupName} />{g.groupName}</Typography>
+              <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.65rem" }}><GroupIcon groupName={g.groupName} />{apiLabel(GROUP_NAME_KEYS, g.groupName, t)}</Typography>
               {(g.topOres || []).length > 0 ? (
                 <Box>
                   {g.topOres.slice(0, 3).map((name: string, i: number) => (

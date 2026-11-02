@@ -104,8 +104,8 @@ export function WikiShipDetail() {
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Stack direction="row" spacing={1} sx={{ mb: 1.5 }} flexWrap="wrap" useFlexGap>
                       {ship.manufacturer && <Chip label={ship.manufacturer} color="primary" />}
-                      {ship.career && <Chip label={formatShipCareer(ship.career)} color={chipColor} variant="outlined" />}
-                      {ship.role && <Chip label={formatShipRole(ship.role)} color={chipColor} />}
+                      {ship.career && <Chip label={formatShipCareer(ship.career, t)} color={chipColor} variant="outlined" />}
+                      {ship.role && <Chip label={formatShipRole(ship.role, t)} color={chipColor} />}
                       {ship.focus && !ship.role && <Chip label={ship.focus} />}
                       {ship.size && <Chip label={t("wiki.shipDetail.sizeChip", "Size {{size}}", { size: ship.size })} />}
                       {ship.movement_class && <Chip label={ship.movement_class} />}
