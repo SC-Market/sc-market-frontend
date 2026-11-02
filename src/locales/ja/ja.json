@@ -7673,6 +7673,44 @@
           "other": "その他"
         }
       }
+    },
+    "stillSelling": {
+      "title": "「まだ販売していますか？」DMキャンペーン",
+      "subtitle": "最終ログインが{{inactive}}日以上前で、公開中の出品が{{stale}}日間更新されていない出品者に、Botが送信できる場合に限り、Discord DMを1回だけ送ります。組織の出品は注文またはマーケットを管理するメンバーに送られ、1人につきDMは1通です。",
+      "switchOn": "送信は有効です（{{env}}=true）。",
+      "switchOff": "送信は無効です。サーバーで{{env}}=trueを設定するまで何も送信できません。",
+      "dryRun": "ドライラン：{{recipients}}人に{{listings}}件の出品についてDMを送ります。",
+      "throttle": "1回あたり{{batch}}通、各回の間に{{seconds}}秒。",
+      "sample": "DMのサンプル（ダミーデータ：出品3件、2か月）",
+      "sampleLocale": "言語",
+      "send": "送信",
+      "stop": "停止",
+      "refresh": "更新",
+      "confirmTitle": "キャンペーンを送信しますか？",
+      "confirmBody": "最大{{count}}人にDiscord DMを送ります。{{batch}}通ずつ、{{seconds}}秒の間隔を空けて送信します。各ユーザーへの送信は1回のみで、取り消せません。",
+      "confirmSend": "{{count}}人に送信",
+      "cancel": "キャンセル",
+      "running": "送信中：この実行で最大{{limit}}通中{{sent}}通。",
+      "lastRun": "前回の実行は{{when}}に終了しました（{{reason}}）。",
+      "reasons": {
+        "done": "全員に送信済み",
+        "limit": "確認した件数に到達",
+        "disabled": "送信が無効にされました",
+        "stopped": "停止しました",
+        "error": "エラー（ログを確認）"
+      },
+      "progress": {
+        "sent": "送信",
+        "delivered": "配信済み",
+        "failedClosed": "失敗（受信拒否）",
+        "failedOther": "失敗（その他）",
+        "clickedKeep": "公開継続をクリック",
+        "clickedPause": "一時停止をクリック",
+        "listings": "出品 継続・一時停止"
+      },
+      "loadFailed": "キャンペーンを読み込めませんでした。",
+      "retry": "再試行",
+      "sendFailed": "キャンペーンを開始できませんでした。"
     }
   },
   "apiTokensUi": {
@@ -8684,5 +8722,25 @@
       "linkFirst": "まず Discord アカウントを連携し、次に SC Market をあなたの Discord に追加してください。共通のサーバーにいなくても、オファーや注文についてお知らせできるようになります。",
       "linkDiscord": "Discord を連携"
     }
+  },
+  "stillSellingPage": {
+    "title": "まだ販売していますか？",
+    "keepTitle": "出品の公開を続けますか？",
+    "keepBody_other": "{{count}}件の出品を更新します。最近更新された出品として表示され、通常どおり表示順位に反映されます。一時停止中の出品は再公開されます。",
+    "keepConfirm": "公開を続ける",
+    "keepNothing": "更新する出品はありません。これらの出品は過去1日以内に更新済みか、すでに公開されていません。",
+    "keepDone_other": "完了：{{count}}件の出品を更新しました。",
+    "pauseTitle": "出品を一時停止しますか？",
+    "pauseBody_other": "{{count}}件の出品を一時停止します。マーケットには表示されなくなりますが、削除はされません。出品ページからいつでも再公開できます。",
+    "pauseConfirm": "一時停止する",
+    "pauseNothing": "一時停止する出品はありません。これらの出品はすでに一時停止中か、公開されていません。",
+    "pauseDone_other": "完了：{{count}}件の出品を一時停止しました。出品ページからいつでも再公開できます。",
+    "manage": "出品を管理",
+    "notNow": "今はしない",
+    "invalid": "このリンクは無効です。コピーが不完全な可能性があります。",
+    "expired": "このリンクは有効期限切れです。出品ページから引き続き出品の更新や一時停止ができます。",
+    "failed": "問題が発生しました。もう一度お試しください。",
+    "retry": "再試行",
+    "moreListings": "…ほか{{count}}件"
   }
 }

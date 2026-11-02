@@ -51,6 +51,8 @@ export const AUTH_PATHS = {
   emailVerifyToken: (token: string) => `/email/verify/${token}`,
   emailUnsubscribe: "/email/unsubscribe",
   emailUnsubscribeToken: (token: string) => `/email/unsubscribe/${token}`,
+  /** A "Still selling?" DM button (keep or pause; the token says which). */
+  stillSelling: (token: string) => `/still-selling/${token}`,
 } as const
 
 export const SHOP_PATHS = {

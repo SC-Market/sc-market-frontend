@@ -7679,6 +7679,44 @@
           "other": "其他"
         }
       }
+    },
+    "stillSelling": {
+      "title": "“还在出售吗？”私信活动",
+      "subtitle": "向超过 {{inactive}} 天未上线、且公开商品 {{stale}} 天未更新的卖家发送一次 Discord 私信（仅限机器人能私信到的用户）。组织的商品发给其管理订单或市场的成员，每人一条私信。",
+      "switchOn": "发送已开启（{{env}}=true）。",
+      "switchOff": "发送已关闭。在服务器上设置 {{env}}=true 之前不会发送任何内容。",
+      "dryRun": "试运行：将就 {{listings}} 个商品私信 {{recipients}} 人。",
+      "throttle": "每批 {{batch}} 条私信，批次之间间隔 {{seconds}} 秒。",
+      "sample": "私信示例（虚构数据：3 个商品，2 个月）",
+      "sampleLocale": "语言",
+      "send": "发送",
+      "stop": "停止",
+      "refresh": "刷新",
+      "confirmTitle": "发送此活动？",
+      "confirmBody": "将向最多 {{count}} 人发送 Discord 私信，每批 {{batch}} 条，间隔 {{seconds}} 秒。每人只会收到一次，发送后无法撤回。",
+      "confirmSend": "发送给 {{count}} 人",
+      "cancel": "取消",
+      "running": "发送中：本次运行最多 {{limit}} 条，已发送 {{sent}} 条。",
+      "lastRun": "上次运行于 {{when}} 结束（{{reason}}）。",
+      "reasons": {
+        "done": "已全部发送",
+        "limit": "已达到确认的数量",
+        "disabled": "发送已被关闭",
+        "stopped": "已停止",
+        "error": "出错，请查看日志"
+      },
+      "progress": {
+        "sent": "已发送",
+        "delivered": "已送达",
+        "failedClosed": "失败（已关闭）",
+        "failedOther": "失败（其他）",
+        "clickedKeep": "点击了继续上架",
+        "clickedPause": "点击了暂停",
+        "listings": "商品 继续 · 暂停"
+      },
+      "loadFailed": "无法加载此活动。",
+      "retry": "重试",
+      "sendFailed": "无法启动此活动。"
     }
   },
   "apiTokensUi": {
@@ -8690,5 +8728,25 @@
       "linkFirst": "请先关联你的 Discord 账号，然后将 SC Market 添加到你的 Discord，这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
       "linkDiscord": "关联 Discord"
     }
+  },
+  "stillSellingPage": {
+    "title": "还在出售吗？",
+    "keepTitle": "继续上架你的商品？",
+    "keepBody_other": "将刷新 {{count}} 个商品，使其显示为最近更新并恢复正常排名。已暂停的商品会重新上架。",
+    "keepConfirm": "继续上架",
+    "keepNothing": "没有需要刷新的商品：这些商品在过去一天内已刷新，或已不再上架。",
+    "keepDone_other": "完成：已刷新 {{count}} 个商品。",
+    "pauseTitle": "暂停你的商品？",
+    "pauseBody_other": "将暂停 {{count}} 个商品：它们会从市场中隐藏，不会被删除。你可以随时在商品页面重新上架。",
+    "pauseConfirm": "暂停",
+    "pauseNothing": "没有需要暂停的商品：这些商品已暂停或已不再上架。",
+    "pauseDone_other": "完成：已暂停 {{count}} 个商品。你可以随时在商品页面重新上架。",
+    "manage": "管理商品",
+    "notNow": "暂不",
+    "invalid": "此链接无效，可能复制不完整。",
+    "expired": "此链接已过期。你仍可以在商品页面刷新或暂停你的商品。",
+    "failed": "出了点问题，请重试。",
+    "retry": "重试",
+    "moreListings": "……还有 {{count}} 个"
   }
 }

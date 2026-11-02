@@ -7787,6 +7787,44 @@
           "other": "Other"
         }
       }
+    },
+    "stillSelling": {
+      "title": "\"Still selling?\" DM campaign",
+      "subtitle": "One Discord DM, once, to sellers last seen over {{inactive}} days ago whose public listings haven't been updated in {{stale}} days, if the bot can DM them. An org's listings go to its members who manage orders or the market, one DM per person.",
+      "switchOn": "Sending is on ({{env}}=true).",
+      "switchOff": "Sending is off. Nothing can be sent until {{env}}=true is set on the server.",
+      "dryRun": "Dry run: would DM {{recipients}} people about {{listings}} listings.",
+      "throttle": "{{batch}} DMs per batch, {{seconds}} seconds between batches.",
+      "sample": "Sample DM (fake data: 3 listings, 2 months)",
+      "sampleLocale": "Language",
+      "send": "Send",
+      "stop": "Stop",
+      "refresh": "Refresh",
+      "confirmTitle": "Send the campaign?",
+      "confirmBody": "This DMs up to {{count}} people on Discord, {{batch}} at a time with a {{seconds}}-second pause. Each person gets it once; it can't be unsent.",
+      "confirmSend": "Send to {{count}} people",
+      "cancel": "Cancel",
+      "running": "Sending: {{sent}} of up to {{limit}} this run.",
+      "lastRun": "Last run ended {{when}} ({{reason}}).",
+      "reasons": {
+        "done": "everyone sent",
+        "limit": "confirmed count reached",
+        "disabled": "sending was switched off",
+        "stopped": "stopped",
+        "error": "error, see logs"
+      },
+      "progress": {
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "failedClosed": "Failed (closed)",
+        "failedOther": "Failed (other)",
+        "clickedKeep": "Clicked keep",
+        "clickedPause": "Clicked pause",
+        "listings": "Listings kept · paused"
+      },
+      "loadFailed": "The campaign couldn't be loaded.",
+      "retry": "Retry",
+      "sendFailed": "The campaign couldn't be started."
     }
   },
   "apiTokensUi": {
@@ -8819,5 +8857,29 @@
       "linkFirst": "Link your Discord account first, then add SC Market to your Discord, so we can reach you about offers and orders even if you're not in a shared server.",
       "linkDiscord": "Link Discord"
     }
+  },
+  "stillSellingPage": {
+    "title": "Still selling?",
+    "keepTitle": "Keep your listings live?",
+    "keepBody_one": "This refreshes {{count}} listing so it shows as recently updated and ranks normally again. A paused one is relisted.",
+    "keepBody_other": "This refreshes {{count}} listings so they show as recently updated and rank normally again. Paused ones are relisted.",
+    "keepConfirm": "Keep them live",
+    "keepNothing": "Nothing to refresh: these listings were refreshed in the last day, or aren't listed any more.",
+    "keepDone_one": "Done: {{count}} listing refreshed.",
+    "keepDone_other": "Done: {{count}} listings refreshed.",
+    "pauseTitle": "Pause your listings?",
+    "pauseBody_one": "This pauses {{count}} listing: it's hidden from the market, not deleted. You can relist it any time from your listings page.",
+    "pauseBody_other": "This pauses {{count}} listings: they're hidden from the market, not deleted. You can relist them any time from your listings page.",
+    "pauseConfirm": "Pause them",
+    "pauseNothing": "Nothing to pause: these listings are already paused or aren't listed any more.",
+    "pauseDone_one": "Done: {{count}} listing paused. Relist it any time from your listings page.",
+    "pauseDone_other": "Done: {{count}} listings paused. Relist them any time from your listings page.",
+    "manage": "Manage listings",
+    "notNow": "Not now",
+    "invalid": "This link doesn't work. It may have been copied incompletely.",
+    "expired": "This link has expired. You can still refresh or pause your listings from your listings page.",
+    "failed": "Something went wrong. Please try again.",
+    "retry": "Try again",
+    "moreListings": "…and {{count}} more"
   }
 }

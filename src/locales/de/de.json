@@ -7787,6 +7787,44 @@
           "other": "Sonstiges"
         }
       }
+    },
+    "stillSelling": {
+      "title": "DM-Kampagne „Verkaufen Sie noch?“",
+      "subtitle": "Eine einmalige Discord-DM an Verkäufer, die seit über {{inactive}} Tagen nicht mehr gesehen wurden und deren öffentliche Angebote seit {{stale}} Tagen nicht aktualisiert wurden, sofern der Bot ihnen schreiben kann. Angebote einer Organisation gehen an ihre Mitglieder, die Bestellungen oder den Markt verwalten, eine DM pro Person.",
+      "switchOn": "Versand ist eingeschaltet ({{env}}=true).",
+      "switchOff": "Versand ist ausgeschaltet. Es kann nichts gesendet werden, bis {{env}}=true auf dem Server gesetzt ist.",
+      "dryRun": "Probelauf: würde {{recipients}} Personen zu {{listings}} Angeboten eine DM senden.",
+      "throttle": "{{batch}} DMs pro Durchgang, {{seconds}} Sekunden zwischen den Durchgängen.",
+      "sample": "Beispiel-DM (Testdaten: 3 Angebote, 2 Monate)",
+      "sampleLocale": "Sprache",
+      "send": "Senden",
+      "stop": "Anhalten",
+      "refresh": "Aktualisieren",
+      "confirmTitle": "Kampagne senden?",
+      "confirmBody": "Damit erhalten bis zu {{count}} Personen eine Discord-DM, jeweils {{batch}} mit {{seconds}} Sekunden Pause. Jede Person erhält sie nur einmal; das lässt sich nicht rückgängig machen.",
+      "confirmSend": "An {{count}} Personen senden",
+      "cancel": "Abbrechen",
+      "running": "Wird gesendet: {{sent}} von bis zu {{limit}} in diesem Lauf.",
+      "lastRun": "Letzter Lauf beendet {{when}} ({{reason}}).",
+      "reasons": {
+        "done": "alle gesendet",
+        "limit": "bestätigte Anzahl erreicht",
+        "disabled": "Versand wurde ausgeschaltet",
+        "stopped": "angehalten",
+        "error": "Fehler, siehe Logs"
+      },
+      "progress": {
+        "sent": "Gesendet",
+        "delivered": "Zugestellt",
+        "failedClosed": "Fehlgeschlagen (geschlossen)",
+        "failedOther": "Fehlgeschlagen (sonstige)",
+        "clickedKeep": "Aktiv lassen geklickt",
+        "clickedPause": "Pausieren geklickt",
+        "listings": "Angebote aktiv · pausiert"
+      },
+      "loadFailed": "Die Kampagne konnte nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "sendFailed": "Die Kampagne konnte nicht gestartet werden."
     }
   },
   "apiTokensUi": {
@@ -8819,5 +8857,29 @@
       "linkFirst": "Verknüpfen Sie zuerst Ihr Discord-Konto und fügen Sie dann SC Market zu Ihrem Discord hinzu, damit wir Sie zu Angeboten und Bestellungen erreichen können, auch ohne gemeinsamen Server.",
       "linkDiscord": "Discord verknüpfen"
     }
+  },
+  "stillSellingPage": {
+    "title": "Verkaufen Sie noch?",
+    "keepTitle": "Angebote aktiv lassen?",
+    "keepBody_one": "Damit wird {{count}} Angebot aufgefrischt: Es gilt wieder als kürzlich aktualisiert und wird normal gelistet. Ein pausiertes wird wieder eingestellt.",
+    "keepBody_other": "Damit werden {{count}} Angebote aufgefrischt: Sie gelten wieder als kürzlich aktualisiert und werden normal gelistet. Pausierte werden wieder eingestellt.",
+    "keepConfirm": "Aktiv lassen",
+    "keepNothing": "Nichts aufzufrischen: Diese Angebote wurden am letzten Tag aufgefrischt oder sind nicht mehr eingestellt.",
+    "keepDone_one": "Erledigt: {{count}} Angebot aufgefrischt.",
+    "keepDone_other": "Erledigt: {{count}} Angebote aufgefrischt.",
+    "pauseTitle": "Angebote pausieren?",
+    "pauseBody_one": "Damit wird {{count}} Angebot pausiert: Es wird im Markt ausgeblendet, nicht gelöscht. Sie können es jederzeit auf Ihrer Angebotsseite wieder einstellen.",
+    "pauseBody_other": "Damit werden {{count}} Angebote pausiert: Sie werden im Markt ausgeblendet, nicht gelöscht. Sie können sie jederzeit auf Ihrer Angebotsseite wieder einstellen.",
+    "pauseConfirm": "Pausieren",
+    "pauseNothing": "Nichts zu pausieren: Diese Angebote sind bereits pausiert oder nicht mehr eingestellt.",
+    "pauseDone_one": "Erledigt: {{count}} Angebot pausiert. Sie können es jederzeit auf Ihrer Angebotsseite wieder einstellen.",
+    "pauseDone_other": "Erledigt: {{count}} Angebote pausiert. Sie können sie jederzeit auf Ihrer Angebotsseite wieder einstellen.",
+    "manage": "Angebote verwalten",
+    "notNow": "Jetzt nicht",
+    "invalid": "Dieser Link funktioniert nicht. Er wurde möglicherweise unvollständig kopiert.",
+    "expired": "Dieser Link ist abgelaufen. Sie können Ihre Angebote weiterhin auf Ihrer Angebotsseite auffrischen oder pausieren.",
+    "failed": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "retry": "Erneut versuchen",
+    "moreListings": "…und {{count}} weitere"
   }
 }

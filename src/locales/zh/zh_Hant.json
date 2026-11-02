@@ -7673,6 +7673,44 @@
           "other": "其他"
         }
       }
+    },
+    "stillSelling": {
+      "title": "「還在出售嗎？」私訊活動",
+      "subtitle": "向超過 {{inactive}} 天未上線、且公開商品 {{stale}} 天未更新的賣家傳送一次 Discord 私訊（僅限機器人能私訊到的使用者）。組織的商品傳給其管理訂單或市場的成員，每人一則私訊。",
+      "switchOn": "傳送已開啟（{{env}}=true）。",
+      "switchOff": "傳送已關閉。在伺服器上設定 {{env}}=true 之前不會傳送任何內容。",
+      "dryRun": "試執行：將就 {{listings}} 個商品私訊 {{recipients}} 人。",
+      "throttle": "每批 {{batch}} 則私訊，批次之間間隔 {{seconds}} 秒。",
+      "sample": "私訊範例（虛構資料：3 個商品，2 個月）",
+      "sampleLocale": "語言",
+      "send": "傳送",
+      "stop": "停止",
+      "refresh": "重新整理",
+      "confirmTitle": "傳送此活動？",
+      "confirmBody": "將向最多 {{count}} 人傳送 Discord 私訊，每批 {{batch}} 則，間隔 {{seconds}} 秒。每人只會收到一次，傳送後無法收回。",
+      "confirmSend": "傳送給 {{count}} 人",
+      "cancel": "取消",
+      "running": "傳送中：本次執行最多 {{limit}} 則，已傳送 {{sent}} 則。",
+      "lastRun": "上次執行於 {{when}} 結束（{{reason}}）。",
+      "reasons": {
+        "done": "已全部傳送",
+        "limit": "已達到確認的數量",
+        "disabled": "傳送已被關閉",
+        "stopped": "已停止",
+        "error": "出錯，請查看日誌"
+      },
+      "progress": {
+        "sent": "已傳送",
+        "delivered": "已送達",
+        "failedClosed": "失敗（已關閉）",
+        "failedOther": "失敗（其他）",
+        "clickedKeep": "點擊了繼續上架",
+        "clickedPause": "點擊了暫停",
+        "listings": "商品 繼續 · 暫停"
+      },
+      "loadFailed": "無法載入此活動。",
+      "retry": "重試",
+      "sendFailed": "無法啟動此活動。"
     }
   },
   "apiTokensUi": {
@@ -8684,5 +8722,25 @@
       "linkFirst": "請先連結你的 Discord 帳號，然後將 SC Market 新增到你的 Discord，這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
       "linkDiscord": "連結 Discord"
     }
+  },
+  "stillSellingPage": {
+    "title": "還在出售嗎？",
+    "keepTitle": "繼續上架你的商品？",
+    "keepBody_other": "將重新整理 {{count}} 個商品，使其顯示為最近更新並恢復正常排名。已暫停的商品會重新上架。",
+    "keepConfirm": "繼續上架",
+    "keepNothing": "沒有需要重新整理的商品：這些商品在過去一天內已重新整理，或已不再上架。",
+    "keepDone_other": "完成：已重新整理 {{count}} 個商品。",
+    "pauseTitle": "暫停你的商品？",
+    "pauseBody_other": "將暫停 {{count}} 個商品：它們會從市場中隱藏，不會被刪除。你可以隨時在商品頁面重新上架。",
+    "pauseConfirm": "暫停",
+    "pauseNothing": "沒有需要暫停的商品：這些商品已暫停或已不再上架。",
+    "pauseDone_other": "完成：已暫停 {{count}} 個商品。你可以隨時在商品頁面重新上架。",
+    "manage": "管理商品",
+    "notNow": "暫不",
+    "invalid": "此連結無效，可能複製不完整。",
+    "expired": "此連結已過期。你仍可以在商品頁面重新整理或暫停你的商品。",
+    "failed": "出了點問題，請重試。",
+    "retry": "重試",
+    "moreListings": "……還有 {{count}} 個"
   }
 }

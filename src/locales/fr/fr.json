@@ -7901,6 +7901,44 @@
           "other": "Autre"
         }
       }
+    },
+    "stillSelling": {
+      "title": "Campagne de MP « Vous vendez toujours ? »",
+      "subtitle": "Un seul MP Discord aux vendeurs vus pour la dernière fois il y a plus de {{inactive}} jours dont les annonces publiques n'ont pas été mises à jour depuis {{stale}} jours, si le bot peut leur écrire. Les annonces d'une organisation vont à ses membres qui gèrent les commandes ou le marché, un MP par personne.",
+      "switchOn": "L'envoi est activé ({{env}}=true).",
+      "switchOff": "L'envoi est désactivé. Rien ne peut être envoyé tant que {{env}}=true n'est pas défini sur le serveur.",
+      "dryRun": "Simulation : enverrait un MP à {{recipients}} personnes pour {{listings}} annonces.",
+      "throttle": "{{batch}} MP par lot, {{seconds}} secondes entre les lots.",
+      "sample": "MP d'exemple (données fictives : 3 annonces, 2 mois)",
+      "sampleLocale": "Langue",
+      "send": "Envoyer",
+      "stop": "Arrêter",
+      "refresh": "Actualiser",
+      "confirmTitle": "Envoyer la campagne ?",
+      "confirmBody": "Jusqu'à {{count}} personnes recevront un MP Discord, {{batch}} à la fois avec une pause de {{seconds}} secondes. Chaque personne ne le reçoit qu'une fois ; impossible d'annuler l'envoi.",
+      "confirmSend": "Envoyer à {{count}} personnes",
+      "cancel": "Annuler",
+      "running": "Envoi en cours : {{sent}} sur {{limit}} maximum pour cette exécution.",
+      "lastRun": "Dernière exécution terminée {{when}} ({{reason}}).",
+      "reasons": {
+        "done": "tout le monde a reçu le MP",
+        "limit": "nombre confirmé atteint",
+        "disabled": "l'envoi a été désactivé",
+        "stopped": "arrêtée",
+        "error": "erreur, voir les logs"
+      },
+      "progress": {
+        "sent": "Envoyés",
+        "delivered": "Remis",
+        "failedClosed": "Échecs (fermés)",
+        "failedOther": "Échecs (autres)",
+        "clickedKeep": "Ont cliqué garder",
+        "clickedPause": "Ont cliqué pause",
+        "listings": "Annonces gardées · en pause"
+      },
+      "loadFailed": "La campagne n'a pas pu être chargée.",
+      "retry": "Réessayer",
+      "sendFailed": "La campagne n'a pas pu être lancée."
     }
   },
   "apiTokensUi": {
@@ -8954,5 +8992,33 @@
       "linkFirst": "Liez d'abord votre compte Discord, puis ajoutez SC Market à votre Discord, pour que nous puissions vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
       "linkDiscord": "Lier Discord"
     }
+  },
+  "stillSellingPage": {
+    "title": "Vous vendez toujours ?",
+    "keepTitle": "Garder vos annonces en ligne ?",
+    "keepBody_one": "{{count}} annonce sera rafraîchie : elle apparaîtra comme mise à jour récemment et sera classée normalement. Si elle est en pause, elle sera remise en ligne.",
+    "keepBody_many": "{{count}} annonces seront rafraîchies : elles apparaîtront comme mises à jour récemment et seront classées normalement. Celles en pause seront remises en ligne.",
+    "keepBody_other": "{{count}} annonces seront rafraîchies : elles apparaîtront comme mises à jour récemment et seront classées normalement. Celles en pause seront remises en ligne.",
+    "keepConfirm": "Les garder en ligne",
+    "keepNothing": "Rien à rafraîchir : ces annonces ont été rafraîchies dans la dernière journée ou ne sont plus en ligne.",
+    "keepDone_one": "C'est fait : {{count}} annonce rafraîchie.",
+    "keepDone_many": "C'est fait : {{count}} annonces rafraîchies.",
+    "keepDone_other": "C'est fait : {{count}} annonces rafraîchies.",
+    "pauseTitle": "Mettre vos annonces en pause ?",
+    "pauseBody_one": "{{count}} annonce sera mise en pause : elle sera masquée du marché, pas supprimée. Vous pourrez la remettre en ligne à tout moment depuis votre page d'annonces.",
+    "pauseBody_many": "{{count}} annonces seront mises en pause : elles seront masquées du marché, pas supprimées. Vous pourrez les remettre en ligne à tout moment depuis votre page d'annonces.",
+    "pauseBody_other": "{{count}} annonces seront mises en pause : elles seront masquées du marché, pas supprimées. Vous pourrez les remettre en ligne à tout moment depuis votre page d'annonces.",
+    "pauseConfirm": "Les mettre en pause",
+    "pauseNothing": "Rien à mettre en pause : ces annonces sont déjà en pause ou ne sont plus en ligne.",
+    "pauseDone_one": "C'est fait : {{count}} annonce en pause. Remettez-la en ligne à tout moment depuis votre page d'annonces.",
+    "pauseDone_many": "C'est fait : {{count}} annonces en pause. Remettez-les en ligne à tout moment depuis votre page d'annonces.",
+    "pauseDone_other": "C'est fait : {{count}} annonces en pause. Remettez-les en ligne à tout moment depuis votre page d'annonces.",
+    "manage": "Gérer les annonces",
+    "notNow": "Pas maintenant",
+    "invalid": "Ce lien ne fonctionne pas. Il a peut-être été copié de façon incomplète.",
+    "expired": "Ce lien a expiré. Vous pouvez toujours rafraîchir ou mettre en pause vos annonces depuis votre page d'annonces.",
+    "failed": "Une erreur s'est produite. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "moreListings": "…et {{count}} de plus"
   }
 }

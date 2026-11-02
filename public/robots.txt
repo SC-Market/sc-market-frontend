@@ -22,6 +22,8 @@ Disallow: /onboarding
 Disallow: /dashboard
 Disallow: /messaging
 Disallow: /send
+# One-user action links from Discord DMs (signed tokens).
+Disallow: /still-selling/
 # Error pages (the old route-error redirect put the error in the URL).
 Disallow: /error
 

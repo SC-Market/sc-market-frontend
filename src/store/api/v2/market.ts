@@ -795,6 +795,23 @@ const injectedRtkApi = api
           invalidatesTags: ["Two-factor auth"],
         },
       ),
+      getStillSellingAction: build.query<
+        GetStillSellingActionApiResponse,
+        GetStillSellingActionApiArg
+      >({
+        query: (queryArg) => ({ url: `/still-selling/${queryArg.token}` }),
+        providesTags: ["Listings V2"],
+      }),
+      confirmStillSellingAction: build.mutation<
+        ConfirmStillSellingActionApiResponse,
+        ConfirmStillSellingActionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/still-selling/${queryArg.token}`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
       createListing: build.mutation<
         CreateListingApiResponse,
         CreateListingApiArg
@@ -2262,6 +2279,39 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Admin"],
       }),
+      getStillSellingCampaign: build.query<
+        GetStillSellingCampaignApiResponse,
+        GetStillSellingCampaignApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/dm-campaigns/still-selling`,
+          params: {
+            locale: queryArg.locale,
+          },
+        }),
+        providesTags: ["Admin"],
+      }),
+      sendStillSellingCampaign: build.mutation<
+        SendStillSellingCampaignApiResponse,
+        SendStillSellingCampaignApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/dm-campaigns/still-selling/send`,
+          method: "POST",
+          body: queryArg.stillSellingSendRequest,
+        }),
+        invalidatesTags: ["Admin"],
+      }),
+      stopStillSellingCampaign: build.mutation<
+        StopStillSellingCampaignApiResponse,
+        StopStillSellingCampaignApiArg
+      >({
+        query: () => ({
+          url: `/admin/dm-campaigns/still-selling/stop`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Admin"],
+      }),
       getSellerReachability: build.query<
         GetSellerReachabilityApiResponse,
         GetSellerReachabilityApiArg
@@ -2886,6 +2936,18 @@ export type ResetUserMfaApiResponse = /** status 200 Ok */ MfaResetResponse
 export type ResetUserMfaApiArg = {
   username: string
   mfaResetRequest: MfaResetRequest
+}
+export type GetStillSellingActionApiResponse =
+  /** status 200 Ok */ StillSellingActionPreview
+export type GetStillSellingActionApiArg = {
+  /** The signed token from the DM's button */
+  token: string
+}
+export type ConfirmStillSellingActionApiResponse =
+  /** status 200 Ok */ StillSellingActionResult
+export type ConfirmStillSellingActionApiArg = {
+  /** The signed token from the DM's button */
+  token: string
 }
 export type CreateListingApiResponse =
   /** status 200 Created listing with listing_id */ CreateListingResponse
@@ -4011,6 +4073,20 @@ export type UpdateStorefrontEnquiryApiArg = {
   enquiryId: string
   updateStorefrontEnquiryRequest: UpdateStorefrontEnquiryRequest
 }
+export type GetStillSellingCampaignApiResponse =
+  /** status 200 Ok */ StillSellingDryRun
+export type GetStillSellingCampaignApiArg = {
+  /** Language of the sample DM (default English) */
+  locale?: StillSellingLocale
+}
+export type SendStillSellingCampaignApiResponse =
+  /** status 200 Ok */ StillSellingSendResponse
+export type SendStillSellingCampaignApiArg = {
+  stillSellingSendRequest: StillSellingSendRequest
+}
+export type StopStillSellingCampaignApiResponse =
+  /** status 200 Ok */ StillSellingSendResponse
+export type StopStillSellingCampaignApiArg = void
 export type GetSellerReachabilityApiResponse =
   /** status 200 Ok */ SellerReachabilityReport
 export type GetSellerReachabilityApiArg = void
@@ -5575,6 +5651,37 @@ export type MfaResetResponse = {
 }
 export type MfaResetRequest = {
   reason: string
+}
+export type StillSellingAction = "keep" | "pause"
+export type StillSellingActionListing = {
+  title: string
+  status: string
+}
+export type StillSellingActionPreview = {
+  valid: boolean
+  /** Why the link doesn't work: invalid (bad or unknown link) or expired. */
+  reason?: "invalid" | "expired"
+  action?: StillSellingAction
+  /** Listings of the DM the user may still manage. */
+  listings_total: number
+  /** Of those, how many the action would change now. */
+  listings_applicable: number
+  /** The listings it would change (titles, at most 20). */
+  listings: StillSellingActionListing[]
+  expires_at?: string
+  /** The seller's listings page (relative). */
+  manage_path?: string
+  /** When this action was first used from the link, if it was. */
+  used_at?: string | null
+}
+export type StillSellingActionResult = {
+  ok: boolean
+  reason?: "invalid" | "expired"
+  action?: StillSellingAction
+  /** Listings changed now. */
+  changed: number
+  listings_total: number
+  manage_path?: string
 }
 export type CreateListingResponse = {
   listing_id: string
@@ -8693,6 +8800,76 @@ export type UpdateStorefrontEnquiryRequest = {
   /** Staff-only note (never shown to the org or shop). Empty clears it. */
   staff_note?: string | null
 }
+export type StillSellingLocale =
+  | "en"
+  | "de"
+  | "es"
+  | "fr"
+  | "ja"
+  | "uk"
+  | "zh-CN"
+  | "zh-TW"
+export type StillSellingButton = {
+  label: string
+  url: string
+}
+export type StillSellingSampleMessage = {
+  locale: StillSellingLocale
+  text: string
+  buttons: StillSellingButton[]
+}
+export type StillSellingProgress = {
+  /** DMs attempted (claimed): delivered + failed + in_flight. */
+  sent: number
+  delivered: number
+  failed: number
+  /** Of failed: Discord error 50007 (DMs closed / no shared server). */
+  failed_closed: number
+  /** Claimed but with no result (in flight, or the process stopped mid-send; never retried). */
+  in_flight: number
+  /** Recipients who used "Keep them live". */
+  clicked_keep: number
+  /** Recipients who used "Pause them". */
+  clicked_pause: number
+  /** Listings refreshed through "Keep them live". */
+  kept_listings: number
+  /** Listings paused through "Pause them". */
+  paused_listings: number
+}
+export type StillSellingRunState = {
+  running: boolean
+  started_at: string | null
+  finished_at: string | null
+  finish_reason: string | null
+  /** The most this run may send (the count the admin confirmed). */
+  limit: number | null
+  sent_this_run: number
+}
+export type StillSellingDryRun = {
+  campaign: string
+  /** The kill switch: nothing is sent unless this env var is "true". */
+  kill_switch_env: string
+  enabled: boolean
+  /** People the campaign would DM now (not contacted yet, DM-reachable). */
+  recipients: number
+  /** Distinct stale listings their DMs would be about. */
+  listings: number
+  /** A rendered DM with fake data (3 listings, 2 months) and placeholder links. */
+  sample: StillSellingSampleMessage
+  progress: StillSellingProgress
+  run: StillSellingRunState
+  batch_size: number
+  batch_pause_seconds: number
+  stale_days: number
+  inactive_days: number
+}
+export type StillSellingSendResponse = {
+  run: StillSellingRunState
+}
+export type StillSellingSendRequest = {
+  /** The recipient count the admin confirmed (from the dry run); the run sends to at most this many. */
+  expected_recipients: number
+}
 export type ReachabilityCount = {
   /** Sellers (a user, or an org) in this bucket reachable this way. */
   sellers: number
@@ -9068,6 +9245,8 @@ export const {
   useRegenerateMfaRecoveryCodesMutation,
   useRemoveMfaFactorMutation,
   useResetUserMfaMutation,
+  useGetStillSellingActionQuery,
+  useConfirmStillSellingActionMutation,
   useCreateListingMutation,
   useSearchListingsQuery,
   useGetMyListingsQuery,
@@ -9206,6 +9385,9 @@ export const {
   useRemoveUserOverrideMutation,
   useListStorefrontEnquiriesQuery,
   useUpdateStorefrontEnquiryMutation,
+  useGetStillSellingCampaignQuery,
+  useSendStillSellingCampaignMutation,
+  useStopStillSellingCampaignMutation,
   useGetSellerReachabilityQuery,
   useSearchIdentityUsersQuery,
   useGetIdentityUserQuery,

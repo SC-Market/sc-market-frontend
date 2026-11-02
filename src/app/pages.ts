@@ -494,6 +494,10 @@ export const pages = {
     () => import("../pages/authentication/SignUpPage"),
     (m) => m.SignUpPage,
   ),
+  StillSellingPage: pageEntry(
+    () => import("../pages/listings/StillSellingPage"),
+    (m) => m.StillSellingPage,
+  ),
   UnsubscribePage: pageEntry(
     () => import("../pages/email/UnsubscribePage"),
     (m) => m.UnsubscribePage,

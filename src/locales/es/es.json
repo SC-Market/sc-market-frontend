@@ -7901,6 +7901,44 @@
           "other": "Otro"
         }
       }
+    },
+    "stillSelling": {
+      "title": "Campaña de MD «¿Sigues vendiendo?»",
+      "subtitle": "Un único MD de Discord a los vendedores vistos por última vez hace más de {{inactive}} días cuyos anuncios públicos no se han actualizado en {{stale}} días, si el bot puede escribirles. Los anuncios de una organización van a sus miembros que gestionan pedidos o el mercado, un MD por persona.",
+      "switchOn": "El envío está activado ({{env}}=true).",
+      "switchOff": "El envío está desactivado. No se puede enviar nada hasta que se configure {{env}}=true en el servidor.",
+      "dryRun": "Simulación: enviaría un MD a {{recipients}} personas sobre {{listings}} anuncios.",
+      "throttle": "{{batch}} MD por tanda, {{seconds}} segundos entre tandas.",
+      "sample": "MD de ejemplo (datos ficticios: 3 anuncios, 2 meses)",
+      "sampleLocale": "Idioma",
+      "send": "Enviar",
+      "stop": "Detener",
+      "refresh": "Actualizar",
+      "confirmTitle": "¿Enviar la campaña?",
+      "confirmBody": "Se enviará un MD de Discord a hasta {{count}} personas, de {{batch}} en {{batch}} con una pausa de {{seconds}} segundos. Cada persona lo recibe una sola vez; no se puede deshacer.",
+      "confirmSend": "Enviar a {{count}} personas",
+      "cancel": "Cancelar",
+      "running": "Enviando: {{sent}} de hasta {{limit}} en esta ejecución.",
+      "lastRun": "La última ejecución terminó {{when}} ({{reason}}).",
+      "reasons": {
+        "done": "enviado a todos",
+        "limit": "se alcanzó el número confirmado",
+        "disabled": "se desactivó el envío",
+        "stopped": "detenida",
+        "error": "error, ver los logs"
+      },
+      "progress": {
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "failedClosed": "Fallidos (cerrados)",
+        "failedOther": "Fallidos (otros)",
+        "clickedKeep": "Pulsaron mantener",
+        "clickedPause": "Pulsaron pausar",
+        "listings": "Anuncios mantenidos · pausados"
+      },
+      "loadFailed": "No se pudo cargar la campaña.",
+      "retry": "Reintentar",
+      "sendFailed": "No se pudo iniciar la campaña."
     }
   },
   "apiTokensUi": {
@@ -8954,5 +8992,33 @@
       "linkFirst": "Primero vincula tu cuenta de Discord y después añade SC Market a tu Discord, para poder avisarte de ofertas y pedidos aunque no compartamos un servidor.",
       "linkDiscord": "Vincular Discord"
     }
+  },
+  "stillSellingPage": {
+    "title": "¿Sigues vendiendo?",
+    "keepTitle": "¿Mantener tus anuncios activos?",
+    "keepBody_one": "Se actualizará {{count}} anuncio para que aparezca como actualizado recientemente y vuelva a posicionarse con normalidad. Si está en pausa, se vuelve a publicar.",
+    "keepBody_many": "Se actualizarán {{count}} anuncios para que aparezcan como actualizados recientemente y vuelvan a posicionarse con normalidad. Los que estén en pausa se vuelven a publicar.",
+    "keepBody_other": "Se actualizarán {{count}} anuncios para que aparezcan como actualizados recientemente y vuelvan a posicionarse con normalidad. Los que estén en pausa se vuelven a publicar.",
+    "keepConfirm": "Mantenerlos activos",
+    "keepNothing": "Nada que actualizar: estos anuncios se actualizaron en el último día o ya no están publicados.",
+    "keepDone_one": "Listo: se actualizó {{count}} anuncio.",
+    "keepDone_many": "Listo: se actualizaron {{count}} anuncios.",
+    "keepDone_other": "Listo: se actualizaron {{count}} anuncios.",
+    "pauseTitle": "¿Pausar tus anuncios?",
+    "pauseBody_one": "Se pausará {{count}} anuncio: se oculta del mercado, no se elimina. Puedes volver a publicarlo cuando quieras desde tu página de anuncios.",
+    "pauseBody_many": "Se pausarán {{count}} anuncios: se ocultan del mercado, no se eliminan. Puedes volver a publicarlos cuando quieras desde tu página de anuncios.",
+    "pauseBody_other": "Se pausarán {{count}} anuncios: se ocultan del mercado, no se eliminan. Puedes volver a publicarlos cuando quieras desde tu página de anuncios.",
+    "pauseConfirm": "Pausarlos",
+    "pauseNothing": "Nada que pausar: estos anuncios ya están en pausa o ya no están publicados.",
+    "pauseDone_one": "Listo: se pausó {{count}} anuncio. Vuelve a publicarlo cuando quieras desde tu página de anuncios.",
+    "pauseDone_many": "Listo: se pausaron {{count}} anuncios. Vuelve a publicarlos cuando quieras desde tu página de anuncios.",
+    "pauseDone_other": "Listo: se pausaron {{count}} anuncios. Vuelve a publicarlos cuando quieras desde tu página de anuncios.",
+    "manage": "Gestionar anuncios",
+    "notNow": "Ahora no",
+    "invalid": "Este enlace no funciona. Puede que se haya copiado incompleto.",
+    "expired": "Este enlace ha caducado. Puedes seguir actualizando o pausando tus anuncios desde tu página de anuncios.",
+    "failed": "Algo salió mal. Inténtalo de nuevo.",
+    "retry": "Reintentar",
+    "moreListings": "…y {{count}} más"
   }
 }

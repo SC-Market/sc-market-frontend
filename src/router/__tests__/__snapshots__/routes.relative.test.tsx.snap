@@ -6359,6 +6359,43 @@ exports[`relative link resolution (every leaf) > /signup 1`] = `
 }
 `;
 
+exports[`relative link resolution (every leaf) > /still-selling/:token 1`] = `
+{
+  "links": {
+    "path:""": "/still-selling/token-1",
+    "path:"#frag"": "/still-selling/token-1#frag",
+    "path:"."": "/still-selling/token-1",
+    "path:".."": "/still-selling",
+    "path:"../.."": "/",
+    "path:"../sibling"": "/still-selling/sibling",
+    "path:"./"": "/still-selling/token-1/",
+    "path:"./child"": "/still-selling/token-1/child",
+    "path:"?tab=x"": "/still-selling/token-1?tab=x",
+    "path:"child"": "/still-selling/token-1/child",
+    "route:""": "/still-selling/token-1",
+    "route:"#frag"": "/still-selling/token-1#frag",
+    "route:"."": "/still-selling/token-1",
+    "route:".."": "/",
+    "route:"../.."": "/",
+    "route:"../sibling"": "/sibling",
+    "route:"./"": "/still-selling/token-1/",
+    "route:"./child"": "/still-selling/token-1/child",
+    "route:"?tab=x"": "/still-selling/token-1?tab=x",
+    "route:"child"": "/still-selling/token-1/child",
+  },
+  "location": "/still-selling/token-1",
+  "params": {
+    "token": "token-1",
+  },
+  "probeChain": [
+    "(layout:AppLayout)",
+    "/still-selling/:token",
+  ],
+  "resolvedDot": "/still-selling/token-1",
+  "url": "/still-selling/token-1",
+}
+`;
+
 exports[`relative link resolution (every leaf) > /storefronts 1`] = `
 {
   "links": {

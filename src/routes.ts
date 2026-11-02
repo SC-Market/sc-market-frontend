@@ -253,6 +253,13 @@ export default [
         path: "/discord/install",
         file: "routes/pages/DiscordInstallPage.tsx",
       },
+      // "Keep them live" / "Pause them" from the "Still selling?" Discord
+      // DM: no login (the signed token in the link is the credential).
+      {
+        id: "routes/pages/StillSellingPage",
+        path: "/still-selling/:token",
+        file: "routes/pages/StillSellingPage.tsx",
+      },
       {
         id: "routes/layouts/LoggedInRoute~2",
         file: "routes/layouts/LoggedInRoute.tsx",

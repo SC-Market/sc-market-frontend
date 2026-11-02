@@ -1273,6 +1273,15 @@ exports[`route table > lists every leaf route 2`] = `
     "pattern": "/discord/install",
   },
   {
+    "chain": "(layout:AppLayout) > /still-selling/:token",
+    "errorBoundaryAt": "(layout:AppLayout)",
+    "guards": [
+      "AppLayout",
+    ],
+    "lazy": true,
+    "pattern": "/still-selling/:token",
+  },
+  {
     "chain": "(layout:AppLayout) > (layout:LoggedInRoute) > /onboarding",
     "errorBoundaryAt": "(layout:AppLayout)",
     "guards": [

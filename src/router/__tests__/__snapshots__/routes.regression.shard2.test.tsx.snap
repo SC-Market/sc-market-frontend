@@ -1344,6 +1344,43 @@ exports[`routes (shard 2/4) > /shops/:slug 1`] = `
 }
 `;
 
+exports[`routes (shard 2/4) > /still-selling/:token 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/still-selling/token-1",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "/still-selling/:token",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/developers",
+    "/discord/install?type=server&src=footer",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/still-selling/:token",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "anonymous",
+  "stillLoading": false,
+  "title": "Still selling? - SC Market",
+  "url": "/still-selling/token-1",
+}
+`;
+
 exports[`routes (shard 2/4) > /wiki/items 1`] = `
 {
   "consoleErrors": [],

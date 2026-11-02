@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExpireAllListingsButton } from "../../views/admin/ExpireAllListingsButton"
 import { SellerReachabilityCard } from "../../views/admin/SellerReachabilityCard"
+import { StillSellingCampaignCard } from "../../views/admin/StillSellingCampaignCard"
 import {
   useSearchListingsQuery,
   SearchListingsApiArg,
@@ -201,6 +202,10 @@ export function AllMarketListings() {
     >
       <Grid item xs={12}>
         <SellerReachabilityCard />
+      </Grid>
+
+      <Grid item xs={12}>
+        <StillSellingCampaignCard />
       </Grid>
 
       <Grid item xs={12}>
