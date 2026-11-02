@@ -81,15 +81,6 @@ const injectedRtkApi = api
         }),
         providesTags: ["Contractor", "Contractors", "Contractor Members"],
       }),
-      getContractorCustomers: build.query<
-        GetContractorCustomersApiResponse,
-        GetContractorCustomersApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/contractors/${queryArg.spectrumId}/customers`,
-        }),
-        providesTags: ["Contractor", "Contractors"],
-      }),
       getContractorReviews: build.query<
         GetContractorReviewsApiResponse,
         GetContractorReviewsApiArg
@@ -563,13 +554,6 @@ export type SearchContractorMembersApiArg = {
 export type GetContractorMembersCsvApiResponse =
   /** status 200 OK - Successful request with response body */ Blob
 export type GetContractorMembersCsvApiArg = {
-  spectrumId: string
-}
-export type GetContractorCustomersApiResponse =
-  /** status 200 OK - Successful request with response body */ {
-    data: MinimalUser[]
-  }
-export type GetContractorCustomersApiArg = {
   spectrumId: string
 }
 export type GetContractorReviewsApiResponse =
@@ -1272,7 +1256,6 @@ export const {
   useAcceptCodeInviteMutation,
   useSearchContractorMembersQuery,
   useGetContractorMembersCsvQuery,
-  useGetContractorCustomersQuery,
   useGetContractorReviewsQuery,
   useGetContractorAuditLogsQuery,
   useGetContractorQuery,
