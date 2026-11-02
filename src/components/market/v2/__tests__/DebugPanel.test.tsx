@@ -208,6 +208,29 @@ describe("DebugPanel", () => {
       localStorage.setItem("debug_panel_open", "true")
     })
 
+    /**
+     * Holds setFlag pending until the returned finish() is awaited, which
+     * resolves it and waits for the panel to leave the switching state.
+     * The switch handler must settle inside the test: a timer that resolved
+     * it later could fire after jsdom is torn down ("window is not defined").
+     */
+    const holdSetFlag = () => {
+      let resolve!: () => void
+      mockSetFlag.mockImplementationOnce(
+        () => new Promise<void>((r) => { resolve = r }),
+      )
+      const reloadSpy = vi.fn()
+      Object.defineProperty(window, "location", {
+        value: { ...window.location, reload: reloadSpy },
+        writable: true,
+      })
+      return async () => {
+        resolve()
+        await waitFor(() => expect(reloadSpy).toHaveBeenCalled())
+        expect(screen.queryByText(/Updating flag/i)).not.toBeInTheDocument()
+      }
+    }
+
     it("should call setFlag when a switch is toggled", async () => {
       // Mock window.location.reload
       const reloadSpy = vi.fn()
@@ -227,9 +250,7 @@ describe("DebugPanel", () => {
     })
 
     it("should show switching indicator while toggling", async () => {
-      mockSetFlag.mockImplementation(
-        () => new Promise((resolve) => setTimeout(resolve, 100))
-      )
+      const finish = holdSetFlag()
 
       renderWithTheme(<DebugPanel />)
 
@@ -239,12 +260,12 @@ describe("DebugPanel", () => {
       await waitFor(() => {
         expect(screen.getByText(/Updating flag/i)).toBeInTheDocument()
       })
+
+      await finish()
     })
 
     it("should disable switches while toggling", async () => {
-      mockSetFlag.mockImplementation(
-        () => new Promise((resolve) => setTimeout(resolve, 100))
-      )
+      const finish = holdSetFlag()
 
       renderWithTheme(<DebugPanel />)
 
@@ -254,6 +275,8 @@ describe("DebugPanel", () => {
       await waitFor(() => {
         switches.forEach((s) => expect(s).toBeDisabled())
       })
+
+      await finish()
     })
   })
 
