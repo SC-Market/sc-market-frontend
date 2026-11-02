@@ -9,11 +9,6 @@ import {
   Button,
   Alert,
   CircularProgress,
-  Divider,
-  RadioGroup,
-  Radio,
-  FormControl,
-  FormLabel,
   InputAdornment,
   Link,
 } from "@mui/material"
@@ -35,7 +30,6 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
     offerMessage, setOfferMessage, offerEnabled, setOfferEnabled,
     orderMessage, setOrderMessage, orderEnabled, setOrderEnabled,
     requireAvailabilityEnabled, setRequireAvailabilityEnabled,
-    stockSubtractionTiming, setStockSubtractionTiming,
     minOrderSize, setMinOrderSize, minOrderSizeEnabled, setMinOrderSizeEnabled,
     maxOrderSize, setMaxOrderSize, maxOrderSizeEnabled, setMaxOrderSizeEnabled,
     minOrderValue, setMinOrderValue, minOrderValueEnabled, setMinOrderValueEnabled,
@@ -235,49 +229,24 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
           </Typography>
         </Grid>
 
-        {/* Stock Subtraction Timing Setting */}
+        {/* Stock subtraction timing is a per-shop setting (Shop Settings ›
+            Stock Management); orders read the shop's value. */}
         <Grid item xs={12}>
           <Box mb={3}>
             <Typography variant="subtitle1" gutterBottom>
               {t("OrderSettings.stockSubtractionTiming")}
             </Typography>
-
-            <FormControl component="fieldset" disabled={saving} sx={{ mb: 1 }}>
-              <FormLabel component="legend">
-                {t("OrderSettings.stockSubtractionTimingLabel")}
-              </FormLabel>
-              <RadioGroup
-                value={stockSubtractionTiming}
-                onChange={(e) =>
-                  setStockSubtractionTiming(
-                    e.target.value as
-                      | "on_accepted"
-                      | "on_received"
-                      | "dont_subtract",
-                  )
-                }
-              >
-                <FormControlLabel
-                  value="on_accepted"
-                  control={<Radio />}
-                  label={t("OrderSettings.stockSubtractionOnAccepted")}
-                />
-                <FormControlLabel
-                  value="on_received"
-                  control={<Radio />}
-                  label={t("OrderSettings.stockSubtractionOnReceived")}
-                />
-                <FormControlLabel
-                  value="dont_subtract"
-                  control={<Radio />}
-                  label={t("OrderSettings.stockSubtractionDontSubtract")}
-                />
-              </RadioGroup>
-            </FormControl>
-
-            <Typography variant="body2" color="text.secondary">
-              {t("OrderSettings.stockSubtractionTimingDescription")}
-            </Typography>
+            <Alert severity="info">
+              <Typography variant="body2">
+                {t(
+                  "OrderSettings.stockSubtractionMoved",
+                  "Stock subtraction timing is set per shop: open your shop's Settings, under Stock Management › Stock subtraction timing.",
+                )}{" "}
+                <Link component={RouterLink} to={PATHS.dashboardShops}>
+                  {t("OrderSettings.allocationModeShops", "Your shops")}
+                </Link>
+              </Typography>
+            </Alert>
           </Box>
         </Grid>
 

@@ -306,7 +306,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
     const avail = find("require_availability")
     if (avail) setRequireAvailability(avail.enabled)
     const timing = find("stock_subtraction_timing")
-    if (timing) setStockTiming(timing.message_content as typeof stockTiming)
+    // A disabled or unknown row counts as the default, as on the server.
+    if (timing?.enabled && ["on_received", "dont_subtract"].includes(timing.message_content)) {
+      setStockTiming(timing.message_content as typeof stockTiming)
+    }
     const alloc = find("allocation_mode")
     if (alloc) setAllocationMode(alloc.message_content as typeof allocationMode)
     const mins = find("min_order_size")
@@ -441,7 +444,10 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset" disabled={saving}>
-            <FormLabel component="legend">{t("shopsUi.orderSettings.stockTiming")}</FormLabel>
+            <FormLabel component="legend" sx={{ display: "flex", alignItems: "center" }}>
+              {t("shopsUi.orderSettings.stockTiming")}
+              <HelpTip label={t("shopsUi.orderSettings.stockTiming")} title={t("help.tips.stockTiming")} />
+            </FormLabel>
             <RadioGroup value={stockTiming} onChange={(e) => setStockTiming(e.target.value as typeof stockTiming)}>
               <FormControlLabel value="on_accepted" control={<Radio />} label={t("shopsUi.orderSettings.onAccepted")} />
               <FormControlLabel value="on_received" control={<Radio />} label={t("shopsUi.orderSettings.onReceived")} />

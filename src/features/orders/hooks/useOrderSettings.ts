@@ -22,14 +22,9 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
   const [orderEnabled, setOrderEnabled] = useState(true)
   const [requireAvailabilityEnabled, setRequireAvailabilityEnabled] =
     useState(false)
-  const [stockSubtractionTiming, setStockSubtractionTiming] = useState<
-    "on_accepted" | "on_received" | "dont_subtract"
-  >("on_accepted")
   const [offerSettingId, setOfferSettingId] = useState<string | null>(null)
   const [orderSettingId, setOrderSettingId] = useState<string | null>(null)
   const [requireAvailabilitySettingId, setRequireAvailabilitySettingId] =
-    useState<string | null>(null)
-  const [stockSubtractionTimingSettingId, setStockSubtractionTimingSettingId] =
     useState<string | null>(null)
   const [minOrderSize, setMinOrderSize] = useState<string>("")
   const [maxOrderSize, setMaxOrderSize] = useState<string>("")
@@ -115,24 +110,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
       if (requireAvailabilitySetting) {
         setRequireAvailabilityEnabled(requireAvailabilitySetting.enabled)
         setRequireAvailabilitySettingId(requireAvailabilitySetting.id)
-      }
-
-      const stockSubtractionTimingSetting = settings.find(
-        (s) => s.setting_type === "stock_subtraction_timing",
-      )
-
-      if (stockSubtractionTimingSetting) {
-        // If setting exists, use its value (on_received or dont_subtract)
-        setStockSubtractionTiming(
-          (stockSubtractionTimingSetting.message_content as
-            | "on_received"
-            | "dont_subtract") || "on_received",
-        )
-        setStockSubtractionTimingSettingId(stockSubtractionTimingSetting.id)
-      } else {
-        // No setting = default to "on_accepted"
-        setStockSubtractionTiming("on_accepted")
-        setStockSubtractionTimingSettingId(null)
       }
 
       // Initialize order limits
@@ -404,120 +381,46 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
       }
     }
 
-    // Handle stock subtraction timing
-    if (stockSubtractionTiming === "on_accepted") {
-      // "on_accepted" is the default - delete setting if it exists
-      if (stockSubtractionTimingSettingId) {
-        if (entityType === "user") {
-          promise = promise
-            .then(() =>
-              deleteUserSetting(stockSubtractionTimingSettingId).unwrap(),
-            )
-            .then(() => {
-              setStockSubtractionTimingSettingId(null)
-            })
-        } else {
-          promise = promise
-            .then(() =>
-              deleteContractorSetting({
-                contractorId: entityId!,
-                id: stockSubtractionTimingSettingId,
-              }).unwrap(),
-            )
-            .then(() => {
-              setStockSubtractionTimingSettingId(null)
-            })
-        }
-      }
-      // If no setting exists, nothing to do (already at default)
-    } else {
-      // "on_received" or "dont_subtract" - create or update setting
-      const request: CreateOrderSettingRequest = {
-        setting_type: "stock_subtraction_timing",
-        message_content: stockSubtractionTiming,
-        enabled: true,
-      }
+    // Stock subtraction timing is a shop setting (Shop Settings › Stock
+    // Management); orders read the shop's. It is not saved here.
 
-      if (stockSubtractionTimingSettingId) {
-        // Update existing
-        if (entityType === "user") {
-          promise = promise.then(() =>
-            updateUserSetting({
-              id: stockSubtractionTimingSettingId,
-              message_content: stockSubtractionTiming,
-              enabled: true,
-            }).unwrap(),
-          )
-        } else {
-          promise = promise.then(() =>
-            updateContractorSetting({
-              contractorId: entityId!,
-              id: stockSubtractionTimingSettingId,
-              message_content: stockSubtractionTiming,
-              enabled: true,
-            }).unwrap(),
-          )
-        }
-      } else {
-        // Create new
-        if (entityType === "user") {
-          promise = promise
-            .then(() => createUserSetting(request).unwrap())
-            .then((result) => {
-              setStockSubtractionTimingSettingId(result.setting.id)
-            })
-        } else {
-          promise = promise
-            .then(() =>
-              createContractorSetting({
-                contractorId: entityId!,
-                ...request,
-              }).unwrap(),
-            )
-            .then((result) => {
-              setStockSubtractionTimingSettingId(result.setting.id)
-            })
-        }
-      }
-
-      // Handle order size limits
-      promise = promise.then(() =>
-        handleLimitSetting(
-          "min_order_size",
-          minOrderSize,
-          minOrderSizeEnabled,
-          minOrderSizeSettingId,
-          setMinOrderSizeSettingId,
-        ),
-      )
-      promise = promise.then(() =>
-        handleLimitSetting(
-          "max_order_size",
-          maxOrderSize,
-          maxOrderSizeEnabled,
-          maxOrderSizeSettingId,
-          setMaxOrderSizeSettingId,
-        ),
-      )
-      promise = promise.then(() =>
-        handleLimitSetting(
-          "min_order_value",
-          minOrderValue,
-          minOrderValueEnabled,
-          minOrderValueSettingId,
-          setMinOrderValueSettingId,
-        ),
-      )
-      promise = promise.then(() =>
-        handleLimitSetting(
-          "max_order_value",
-          maxOrderValue,
-          maxOrderValueEnabled,
-          maxOrderValueSettingId,
-          setMaxOrderValueSettingId,
-        ),
-      )
-    }
+    // Handle order size limits
+    promise = promise.then(() =>
+      handleLimitSetting(
+        "min_order_size",
+        minOrderSize,
+        minOrderSizeEnabled,
+        minOrderSizeSettingId,
+        setMinOrderSizeSettingId,
+      ),
+    )
+    promise = promise.then(() =>
+      handleLimitSetting(
+        "max_order_size",
+        maxOrderSize,
+        maxOrderSizeEnabled,
+        maxOrderSizeSettingId,
+        setMaxOrderSizeSettingId,
+      ),
+    )
+    promise = promise.then(() =>
+      handleLimitSetting(
+        "min_order_value",
+        minOrderValue,
+        minOrderValueEnabled,
+        minOrderValueSettingId,
+        setMinOrderValueSettingId,
+      ),
+    )
+    promise = promise.then(() =>
+      handleLimitSetting(
+        "max_order_value",
+        maxOrderValue,
+        maxOrderValueEnabled,
+        maxOrderValueSettingId,
+        setMaxOrderValueSettingId,
+      ),
+    )
 
     promise
       .then(() => {
@@ -564,7 +467,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
       | "offer_message"
       | "order_message"
       | "require_availability"
-      | "stock_subtraction_timing"
       | "min_order_size"
       | "max_order_size"
       | "min_order_value"
@@ -582,9 +484,7 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
           ? orderSettingId
           : settingType === "require_availability"
             ? requireAvailabilitySettingId
-            : settingType === "stock_subtraction_timing"
-              ? stockSubtractionTimingSettingId
-              : settingType === "min_order_size"
+            : settingType === "min_order_size"
                   ? minOrderSizeSettingId
                   : settingType === "max_order_size"
                     ? maxOrderSizeSettingId
@@ -619,9 +519,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
         } else if (settingType === "require_availability") {
           setRequireAvailabilityEnabled(false)
           setRequireAvailabilitySettingId(null)
-        } else if (settingType === "stock_subtraction_timing") {
-          setStockSubtractionTiming("on_accepted")
-          setStockSubtractionTimingSettingId(null)
         } else if (settingType === "min_order_size") {
           setMinOrderSize("")
           setMinOrderSizeEnabled(false)
@@ -684,7 +581,6 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
     offerMessage, setOfferMessage, offerEnabled, setOfferEnabled,
     orderMessage, setOrderMessage, orderEnabled, setOrderEnabled,
     requireAvailabilityEnabled, setRequireAvailabilityEnabled,
-    stockSubtractionTiming, setStockSubtractionTiming,
     minOrderSize, setMinOrderSize, minOrderSizeEnabled, setMinOrderSizeEnabled,
     maxOrderSize, setMaxOrderSize, maxOrderSizeEnabled, setMaxOrderSizeEnabled,
     minOrderValue, setMinOrderValue, minOrderValueEnabled, setMinOrderValueEnabled,
@@ -692,7 +588,7 @@ export function useOrderSettings(entityType: "user" | "contractor", entityId?: s
     saving, error, success,
     handleSave, handleDelete,
     offerSettingId, orderSettingId,
-    requireAvailabilitySettingId, stockSubtractionTimingSettingId,
+    requireAvailabilitySettingId,
     minOrderSizeSettingId, maxOrderSizeSettingId, minOrderValueSettingId, maxOrderValueSettingId,
   }
 }

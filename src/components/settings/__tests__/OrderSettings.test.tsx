@@ -1,7 +1,8 @@
 /**
- * Allocation mode is a shop setting (Shop Settings › Orders); the backend
- * reads only the shop's value. The org/user Order Settings form must not offer
- * its own allocation-mode choice, which orders would ignore.
+ * Allocation mode and stock subtraction timing are shop settings (Shop
+ * Settings › Stock Management); the backend reads only the shop's value. The
+ * org/user Order Settings form must not offer its own choice, which orders
+ * would ignore.
  */
 import React from "react"
 import { render, screen } from "@testing-library/react"
@@ -25,7 +26,6 @@ vi.mock("../../../features/orders/hooks/useOrderSettings", () => ({
     offerMessage: "", setOfferMessage: vi.fn(), offerEnabled: true, setOfferEnabled: vi.fn(),
     orderMessage: "", setOrderMessage: vi.fn(), orderEnabled: true, setOrderEnabled: vi.fn(),
     requireAvailabilityEnabled: false, setRequireAvailabilityEnabled: vi.fn(),
-    stockSubtractionTiming: "on_accepted", setStockSubtractionTiming: vi.fn(),
     minOrderSize: "", setMinOrderSize: vi.fn(), minOrderSizeEnabled: false, setMinOrderSizeEnabled: vi.fn(),
     maxOrderSize: "", setMaxOrderSize: vi.fn(), maxOrderSizeEnabled: false, setMaxOrderSizeEnabled: vi.fn(),
     minOrderValue: "", setMinOrderValue: vi.fn(), minOrderValueEnabled: false, setMinOrderValueEnabled: vi.fn(),
@@ -51,8 +51,24 @@ describe("OrderSettings", () => {
     )
 
     expect(screen.getByText(/Stock allocation mode is set per shop/)).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: "Your shops" })).toHaveAttribute("href", "/dashboard/shops")
+    for (const link of screen.getAllByRole("link", { name: "Your shops" })) {
+      expect(link).toHaveAttribute("href", "/dashboard/shops")
+    }
     expect(screen.queryByText("Automatic (Recommended)")).not.toBeInTheDocument()
     expect(screen.queryByText("None (Legacy)")).not.toBeInTheDocument()
+  })
+
+  it("points to the shop for stock subtraction timing instead of offering an org-level choice", () => {
+    render(
+      <ThemeProvider theme={createTheme()}>
+        <MemoryRouter>
+          <OrderSettings entityType="user" />
+        </MemoryRouter>
+      </ThemeProvider>,
+    )
+
+    expect(screen.getByText(/Stock subtraction timing is set per shop/)).toBeInTheDocument()
+    expect(screen.queryByRole("radio")).not.toBeInTheDocument()
+    expect(screen.getAllByRole("link", { name: "Your shops" })).toHaveLength(2)
   })
 })
