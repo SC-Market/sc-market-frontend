@@ -22,6 +22,8 @@ import { OrgContextFromRoute } from "../components/router/OrgContextFromRoute"
 import { RouteErrorFallback } from "../components/error-boundaries"
 import { ShopContextFromRoute } from "../components/router/ShopContextFromRoute"
 import {
+  OrgShopRedirectListings,
+  OrgShopRedirectStock,
   ShopRedirect,
   ShopRedirectListings,
   ShopRedirectStock,
@@ -36,6 +38,8 @@ export const shell = {
   OrgAdminRoute,
   OrgContextFromRoute,
   OrgRoute,
+  OrgShopRedirectListings,
+  OrgShopRedirectStock,
   RouteErrorFallback,
   ShopContextFromRoute,
   ShopRedirect,

@@ -230,10 +230,6 @@ export const pages = {
     () => import("../pages/authentication/LoginPage"),
     (m) => m.LoginPage,
   ),
-  ManageStock: pageEntry(
-    () => import("../pages/market/ManageStock"),
-    (m) => m.ManageStock,
-  ),
   ManageStockGate: pageEntry(
     () => import("../components/market/MarketRouter"),
     (m) => m.ManageStockGate,

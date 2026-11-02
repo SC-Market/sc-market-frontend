@@ -733,14 +733,14 @@ export default [
                 file: "routes/pages/CustomerPage.members.tsx",
               },
               {
-                id: "routes/pages/ManageStock",
+                id: "routes/elements/OrgShopRedirectListings",
                 path: "listings",
-                file: "routes/pages/ManageStock.tsx",
+                file: "routes/elements/OrgShopRedirectListings.tsx",
               },
               {
-                id: "routes/pages/ManageStockLots",
+                id: "routes/elements/OrgShopRedirectStock",
                 path: "manage-stock",
-                file: "routes/pages/ManageStockLots.tsx",
+                file: "routes/elements/OrgShopRedirectStock.tsx",
               },
               {
                 id: "routes/pages/MyServicesPage",

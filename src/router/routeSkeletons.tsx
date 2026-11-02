@@ -147,8 +147,6 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/org/:contractor_id/manage": FormPageSkeleton,
   "/org/:contractor_id/money": ListPageSkeleton,
   "/org/:contractor_id/members": ListPageSkeleton,
-  "/org/:contractor_id/listings": ListPageSkeleton,
-  "/org/:contractor_id/manage-stock": ListPageSkeleton,
   "/org/:contractor_id/services": ServicesListSkeleton,
 
   // Admin routes
