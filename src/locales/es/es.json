@@ -7836,6 +7836,8 @@
         "sellers": "Vendedores · anuncios",
         "discord_dm": "MD de Discord",
         "discord_dm_confirmed": "MD entregado",
+        "discord_dm_closed": "MD fallido (cerrado)",
+        "discord_shared_server": "Comparte un servidor con el bot",
         "email": "Correo",
         "email_confirmed": "Correo entregado",
         "push": "Push",
@@ -7843,12 +7845,17 @@
         "none": "Ninguno"
       },
       "notes": {
+        "cells": "Cada celda: vendedores · sus anuncios públicos.",
         "discord": "MD de Discord: Discord vinculado, y su último MD de SC Market (se guarda {{days}} días) no falló. Los vendedores sin MD en ese tiempo cuentan, sin confirmar; «MD entregado» cuenta a quienes recibieron su último MD.",
         "discordNoSignal": "MD de Discord: Discord vinculado. No se registran resultados de entrega de MD.",
+        "discordClosed": "MD fallido (cerrado): no se le puede contactar por MD porque Discord rechazó su último MD (error {{code}}: MD cerrados o ningún servidor en común con el bot). En una organización, esto se cumple para todas las personas a las que se puede contactar.",
+        "sharedServer": "Comparte un servidor con el bot: Discord vinculado y miembro de al menos un servidor en el que está el bot de SC Market. Se comprueba cada 12 horas aproximadamente con las listas de miembros del bot, sin enviar nada; última comprobación: {{when}}. Normalmente el bot solo puede enviar MD a estos vendedores. No cuenta en «Algún canal» ni en «Ninguno».",
+        "sharedServerNever": "Comparte un servidor con el bot: Discord vinculado y miembro de al menos un servidor en el que está el bot de SC Market, comprobado cada 12 horas aproximadamente sin enviar nada. Aún no se ha comprobado, así que esta columna está a 0. No cuenta en «Algún canal» ni en «Ninguno».",
         "email": "Correo: una dirección verificada, sin darse de baja de los correos de anuncios. Los rebotes no se registran, así que una dirección verificada aún puede rebotar.",
         "emailChecked": "Correo: una dirección verificada que no ha rebotado ni se ha denunciado como spam, sin darse de baja de los correos de anuncios. Los vendedores a los que no se ha enviado correo en los últimos {{days}} días cuentan sin confirmar; «Correo entregado» cuenta a los que tienen una entrega confirmada en ese tiempo.",
         "push": "Push: al menos una suscripción push. Las caducadas se eliminan cuando falla un push, pero no se registra ningún resultado de entrega.",
         "pushChecked": "Push: al menos una suscripción push.",
+        "anyNone": "Algún canal: se le puede contactar por MD de Discord, correo o push. Ninguno: por ninguno de ellos.",
         "lastSeen": "«Visto por última vez» cuenta a todos los vendedores, incluidos los que ocultan su estado en línea a los compradores."
       }
     }

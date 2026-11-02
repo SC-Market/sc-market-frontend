@@ -7722,6 +7722,8 @@
         "sellers": "Verkäufer · Angebote",
         "discord_dm": "Discord-DM",
         "discord_dm_confirmed": "DM zugestellt",
+        "discord_dm_closed": "DM fehlgeschlagen (geschlossen)",
+        "discord_shared_server": "Teilt einen Server mit dem Bot",
         "email": "E-Mail",
         "email_confirmed": "E-Mail zugestellt",
         "push": "Push",
@@ -7729,12 +7731,17 @@
         "none": "Keiner"
       },
       "notes": {
+        "cells": "Jede Zelle: Verkäufer · ihre öffentlichen Angebote.",
         "discord": "Discord-DM: Discord verknüpft, und die letzte DM von SC Market ({{days}} Tage gespeichert) ist nicht fehlgeschlagen. Verkäufer ohne DM in diesem Zeitraum zählen, unbestätigt; „DM zugestellt“ zählt die, deren letzte DM angekommen ist.",
         "discordNoSignal": "Discord-DM: Discord verknüpft. Es werden keine DM-Zustellergebnisse gespeichert.",
+        "discordClosed": "DM fehlgeschlagen (geschlossen): per DM nicht erreichbar, weil Discord ihre letzte DM abgelehnt hat (Fehler {{code}}: DMs geschlossen oder kein gemeinsamer Server mit dem Bot). Bei einer Organisation gilt das für alle, die kontaktiert werden können.",
+        "sharedServer": "Teilt einen Server mit dem Bot: Discord verknüpft und Mitglied auf mindestens einem Server, auf dem der SC-Market-Bot ist. Etwa alle 12 Stunden anhand der Mitgliederlisten des Bots geprüft, ohne etwas zu senden; zuletzt geprüft {{when}}. Der Bot kann in der Regel nur diesen Verkäufern DMs schicken. Zählt nicht zu „Mindestens ein Kanal“ oder „Keiner“.",
+        "sharedServerNever": "Teilt einen Server mit dem Bot: Discord verknüpft und Mitglied auf mindestens einem Server, auf dem der SC-Market-Bot ist, etwa alle 12 Stunden geprüft, ohne etwas zu senden. Noch nicht geprüft, daher steht diese Spalte auf 0. Zählt nicht zu „Mindestens ein Kanal“ oder „Keiner“.",
         "email": "E-Mail: eine bestätigte Adresse, nicht von Ankündigungs-E-Mails abgemeldet. Bounces werden nicht gespeichert, eine bestätigte Adresse kann also trotzdem bouncen.",
         "emailChecked": "E-Mail: eine bestätigte Adresse, die nicht unzustellbar war und nicht als Spam gemeldet wurde, ohne Abmeldung von Ankündigungs-E-Mails. Verkäufer, die in den letzten {{days}} Tagen keine E-Mail erhalten haben, zählen unbestätigt; „E-Mail zugestellt“ zählt die, deren Zustellung in dieser Zeit bestätigt wurde.",
         "push": "Push: mindestens ein Push-Abonnement. Abgelaufene werden entfernt, wenn ein Push fehlschlägt, aber es wird kein Zustellergebnis gespeichert.",
         "pushChecked": "Push: mindestens ein Push-Abonnement.",
+        "anyNone": "Mindestens ein Kanal: per Discord-DM, E-Mail oder Push erreichbar. Keiner: über keinen davon.",
         "lastSeen": "„Zuletzt gesehen“ zählt alle Verkäufer, auch die, die ihren Online-Status vor Käufern verbergen."
       }
     }

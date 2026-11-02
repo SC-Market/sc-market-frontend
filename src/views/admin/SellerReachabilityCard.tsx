@@ -28,6 +28,8 @@ type Column = Exclude<keyof SellerReachabilityCounts, "sellers" | "listings">
 const COLUMNS: Column[] = [
   "discord_dm",
   "discord_dm_confirmed",
+  "discord_dm_closed",
+  "discord_shared_server",
   "email",
   "email_confirmed",
   "push",
@@ -55,7 +57,7 @@ function CountCell({ count }: { count: ReachabilityCount }) {
  * Counts only; says which channels have a delivery-result signal.
  */
 export function SellerReachabilityCard() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { data, isLoading, isError, refetch, isFetching } =
     useGetSellerReachabilityQuery()
 
@@ -89,6 +91,14 @@ export function SellerReachabilityCard() {
       discord_dm_confirmed: t(
         "adminUi.sellerReachability.columns.discord_dm_confirmed",
         "DM delivered",
+      ),
+      discord_dm_closed: t(
+        "adminUi.sellerReachability.columns.discord_dm_closed",
+        "DM failed (closed)",
+      ),
+      discord_shared_server: t(
+        "adminUi.sellerReachability.columns.discord_shared_server",
+        "Shares a server with the bot",
       ),
       email: t("adminUi.sellerReachability.columns.email", "Email"),
       email_confirmed: t(
@@ -218,6 +228,16 @@ export function SellerReachabilityCard() {
                 variant="caption"
                 color="text.secondary"
               >
+                {t(
+                  "adminUi.sellerReachability.notes.cells",
+                  "Each cell: sellers · their public listings.",
+                )}
+              </Typography>
+              <Typography
+                component="li"
+                variant="caption"
+                color="text.secondary"
+              >
                 {data.signals.discord_dm_delivery_results
                   ? t("adminUi.sellerReachability.notes.discord", {
                       days: data.signals.discord_dm_result_retention_days,
@@ -227,6 +247,36 @@ export function SellerReachabilityCard() {
                   : t(
                       "adminUi.sellerReachability.notes.discordNoSignal",
                       "Discord DM: Discord linked. No DM delivery results are recorded.",
+                    )}
+              </Typography>
+              <Typography
+                component="li"
+                variant="caption"
+                color="text.secondary"
+              >
+                {t("adminUi.sellerReachability.notes.discordClosed", {
+                  code: data.signals.discord_dm_closed_code,
+                  defaultValue:
+                    "DM failed (closed): not reachable by DM because Discord refused their last DM (error {{code}}: DMs closed, or no server shared with the bot). For an org, this holds for everyone who can be contacted.",
+                })}
+              </Typography>
+              <Typography
+                component="li"
+                variant="caption"
+                color="text.secondary"
+                data-testid="reachability-shared-server-note"
+              >
+                {data.signals.discord_shared_server_checked_at
+                  ? t("adminUi.sellerReachability.notes.sharedServer", {
+                      when: new Date(
+                        data.signals.discord_shared_server_checked_at,
+                      ).toLocaleString(i18n.language),
+                      defaultValue:
+                        "Shares a server with the bot: Discord linked and a member of at least one server the SC Market bot is in. Checked about every 12 hours from the bot's member lists, without sending anything; last checked {{when}}. The bot can usually DM only these sellers. Not counted in Any channel or None.",
+                    })
+                  : t(
+                      "adminUi.sellerReachability.notes.sharedServerNever",
+                      "Shares a server with the bot: Discord linked and a member of at least one server the SC Market bot is in, checked about every 12 hours without sending anything. Not checked yet, so this column is 0. Not counted in Any channel or None.",
                     )}
               </Typography>
               <Typography
@@ -259,6 +309,16 @@ export function SellerReachabilityCard() {
                       "adminUi.sellerReachability.notes.push",
                       "Push: at least one push subscription. Expired ones are removed when a push fails, but no delivery result is recorded.",
                     )}
+              </Typography>
+              <Typography
+                component="li"
+                variant="caption"
+                color="text.secondary"
+              >
+                {t(
+                  "adminUi.sellerReachability.notes.anyNone",
+                  "Any channel: reachable by Discord DM, email or push. None: by none of them.",
+                )}
               </Typography>
               <Typography
                 component="li"

@@ -28,6 +28,8 @@ const bucket = (
   listings: n * 3,
   discord_dm: c(n, n * 2),
   discord_dm_confirmed: c(0, 0),
+  discord_dm_closed: c(0, 0),
+  discord_shared_server: c(0, 0),
   email: c(1, 1),
   email_confirmed: c(1, 1),
   push: c(0, 0),
@@ -35,7 +37,10 @@ const bucket = (
   none: c(0, n),
 })
 
-const report = (unknown = 0): SellerReachabilityReport => ({
+const report = (
+  unknown = 0,
+  checkedAt: string | null = "2026-11-01T06:00:00.000Z",
+): SellerReachabilityReport => ({
   generated_at: "2026-11-01T12:00:00.000Z",
   buckets: [
     bucket("today", 4),
@@ -49,6 +54,8 @@ const report = (unknown = 0): SellerReachabilityReport => ({
     listings: 48,
     discord_dm: c(16, 32),
     discord_dm_confirmed: c(0, 0),
+    discord_dm_closed: c(5, 7),
+    discord_shared_server: c(11, 21),
     email: c(4, 4),
     email_confirmed: c(3, 3),
     push: c(0, 0),
@@ -58,6 +65,9 @@ const report = (unknown = 0): SellerReachabilityReport => ({
   signals: {
     discord_dm_delivery_results: true,
     discord_dm_result_retention_days: 90,
+    discord_dm_closed_code: 50007,
+    discord_shared_server_checked_at: checkedAt,
+    discord_shared_server_fresh_days: 3,
     email_delivery_results: true,
     email_delivered_window_days: 90,
     push_delivery_results: false,
@@ -126,10 +136,51 @@ describe("SellerReachabilityCard", () => {
     expect(
       screen.getByText(/Sellers not emailed in the last 90 days count/),
     ).toBeInTheDocument()
-    expect(screen.queryByText(/Bounces aren't recorded/)).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(/Bounces aren't recorded/),
+    ).not.toBeInTheDocument()
     expect(
       screen.getByText(/no delivery result is recorded/),
     ).toBeInTheDocument()
+  })
+
+  it("shows DM failed (closed) and Shares a server with the bot next to DM delivered, and explains them", () => {
+    state({ data: report() })
+    render(<SellerReachabilityCard />)
+    const headers = screen
+      .getAllByRole("columnheader")
+      .map((h) => h.textContent)
+    const i = headers.indexOf("DM delivered")
+    expect(headers.slice(i, i + 3)).toEqual([
+      "DM delivered",
+      "DM failed (closed)",
+      "Shares a server with the bot",
+    ])
+    const total = within(screen.getByTestId("reachability-total"))
+    expect(total.getByText("5 · 7")).toBeInTheDocument()
+    expect(total.getByText("11 · 21")).toBeInTheDocument()
+    expect(
+      screen.getByText(/Discord refused their last DM \(error 50007/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByTestId("reachability-shared-server-note").textContent,
+    ).toMatch(
+      /without sending anything; last checked .+\. The bot can usually DM only these sellers/,
+    )
+    expect(
+      screen.getByText(/Any channel: reachable by Discord DM, email or push/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText("Each cell: sellers · their public listings."),
+    ).toBeInTheDocument()
+  })
+
+  it("says when server membership has not been checked yet", () => {
+    state({ data: report(0, null) })
+    render(<SellerReachabilityCard />)
+    expect(
+      screen.getByTestId("reachability-shared-server-note").textContent,
+    ).toMatch(/Not checked yet, so this column is 0/)
   })
 
   it("shows an error with a working retry", () => {

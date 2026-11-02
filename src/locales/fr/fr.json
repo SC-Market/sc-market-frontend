@@ -7836,6 +7836,8 @@
         "sellers": "Vendeurs · annonces",
         "discord_dm": "MP Discord",
         "discord_dm_confirmed": "MP reçu",
+        "discord_dm_closed": "MP échoué (fermés)",
+        "discord_shared_server": "Partage un serveur avec le bot",
         "email": "E-mail",
         "email_confirmed": "E-mail remis",
         "push": "Push",
@@ -7843,12 +7845,17 @@
         "none": "Aucun"
       },
       "notes": {
+        "cells": "Chaque case : vendeurs · leurs annonces publiques.",
         "discord": "MP Discord : Discord lié, et leur dernier MP de SC Market (conservé {{days}} jours) n'a pas échoué. Les vendeurs jamais contactés par MP sur cette période comptent, sans confirmation ; « MP reçu » compte ceux dont le dernier MP est arrivé.",
         "discordNoSignal": "MP Discord : Discord lié. Aucun résultat de remise des MP n'est enregistré.",
+        "discordClosed": "MP échoué (fermés) : injoignable par MP, car Discord a refusé leur dernier MP (erreur {{code}} : MP fermés, ou aucun serveur en commun avec le bot). Pour une organisation, c'est le cas de toutes les personnes joignables.",
+        "sharedServer": "Partage un serveur avec le bot : Discord lié et membre d'au moins un serveur où se trouve le bot SC Market. Vérifié environ toutes les 12 heures à partir des listes de membres du bot, sans rien envoyer ; dernière vérification : {{when}}. En général, le bot ne peut envoyer de MP qu'à ces vendeurs. Pas compté dans « Au moins un canal » ni dans « Aucun ».",
+        "sharedServerNever": "Partage un serveur avec le bot : Discord lié et membre d'au moins un serveur où se trouve le bot SC Market, vérifié environ toutes les 12 heures sans rien envoyer. Pas encore vérifié, donc cette colonne est à 0. Pas compté dans « Au moins un canal » ni dans « Aucun ».",
         "email": "E-mail : une adresse vérifiée, non désabonnée des e-mails d'annonces. Les rebonds ne sont pas enregistrés : une adresse vérifiée peut quand même rebondir.",
         "emailChecked": "E-mail : une adresse vérifiée qui n'a pas rejeté de message ni signalé de spam, sans désabonnement des e-mails d'annonces. Les vendeurs sans e-mail ces {{days}} derniers jours comptent, non confirmés ; « E-mail remis » compte ceux dont une remise a été confirmée sur cette période.",
         "push": "Push : au moins un abonnement push. Ceux qui ont expiré sont supprimés quand un push échoue, mais aucun résultat de remise n'est enregistré.",
         "pushChecked": "Push : au moins un abonnement push.",
+        "anyNone": "Au moins un canal : joignable par MP Discord, e-mail ou push. Aucun : par aucun d'eux.",
         "lastSeen": "La dernière connexion compte tous les vendeurs, y compris ceux qui masquent leur statut en ligne aux acheteurs."
       }
     }
