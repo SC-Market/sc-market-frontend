@@ -46,6 +46,8 @@ import {
   WarningAmberRounded,
 } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
+import { Trans, useTranslation } from "react-i18next"
+import type { TFunction } from "i18next"
 import {
   useGetMyBuyOrdersQuery,
   useSearchBuyOrdersQuery,
@@ -70,13 +72,15 @@ function formatAuec(value: number): string {
   return value.toLocaleString()
 }
 
-function timeAgo(isoDate: string): string {
+function timeAgo(t: TFunction, isoDate: string): string {
   const diff = Date.now() - new Date(isoDate).getTime()
   const mins = Math.floor(diff / 60_000)
-  if (mins < 60) return `${mins}m ago`
+  if (mins < 60) return t("suppliersUi.dashboard.timeAgo.minutes", { count: mins })
   const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}h ago`
-  return `${Math.floor(hours / 24)}d ago`
+  if (hours < 24) return t("suppliersUi.dashboard.timeAgo.hours", { count: hours })
+  return t("suppliersUi.dashboard.timeAgo.days", {
+    count: Math.floor(hours / 24),
+  })
 }
 
 function initials(name: string): string {
@@ -98,29 +102,29 @@ const VISIBILITY_CHIP: Record<
   string,
   { label: string; color: "primary" | "info" | "default" }
 > = {
-  private: { label: "Targeted", color: "primary" },
-  roster_only: { label: "Roster", color: "info" },
-  public: { label: "Public", color: "default" },
+  private: { label: "suppliersUi.dashboard.visibility.targeted", color: "primary" },
+  roster_only: { label: "suppliersUi.dashboard.visibility.roster", color: "info" },
+  public: { label: "suppliersUi.dashboard.visibility.public", color: "default" },
 }
 
 const ORDER_STATUS_CHIP: Record<
   string,
   { label: string; color: "warning" | "success" | "error" | "default" }
 > = {
-  "not-started": { label: "Not started", color: "warning" },
-  "in-progress": { label: "In progress", color: "warning" },
-  fulfilled: { label: "Fulfilled", color: "success" },
-  cancelled: { label: "Cancelled", color: "error" },
+  "not-started": { label: "suppliersUi.dashboard.orderStatus.notStarted", color: "warning" },
+  "in-progress": { label: "suppliersUi.dashboard.orderStatus.inProgress", color: "warning" },
+  fulfilled: { label: "suppliersUi.dashboard.orderStatus.fulfilled", color: "success" },
+  cancelled: { label: "suppliersUi.dashboard.orderStatus.cancelled", color: "error" },
 }
 
 const REQ_STATUS_CHIP: Record<
   string,
   { label: string; color: "warning" | "primary" | "success" | "error" | "default" }
 > = {
-  "not-started": { label: "Awaiting", color: "warning" },
-  "in-progress": { label: "In progress", color: "primary" },
-  fulfilled: { label: "Fulfilled", color: "success" },
-  cancelled: { label: "Cancelled", color: "error" },
+  "not-started": { label: "suppliersUi.dashboard.reqStatus.awaiting", color: "warning" },
+  "in-progress": { label: "suppliersUi.dashboard.reqStatus.inProgress", color: "primary" },
+  fulfilled: { label: "suppliersUi.dashboard.reqStatus.fulfilled", color: "success" },
+  cancelled: { label: "suppliersUi.dashboard.reqStatus.cancelled", color: "error" },
 }
 
 // ---------------------------------------------------------------------------
@@ -184,6 +188,7 @@ function StatCard({ icon, label, value, sub, accent, loading }: StatCardProps) {
 type BuyOrderTab = "all" | "targeted" | "roster" | "public"
 
 function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
+  const { t } = useTranslation()
   const [tab, setTab] = useState<BuyOrderTab>("all")
   const navigate = useNavigate()
 
@@ -211,11 +216,11 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
         <Stack direction="row" spacing={1} alignItems="center">
           <ShoppingCartRounded sx={{ fontSize: 18, color: "text.secondary" }} />
           <Typography variant="subtitle1" fontWeight={600}>
-            Incoming Buy Orders
+            {t("suppliersUi.dashboard.incomingBuyOrders")}
           </Typography>
         </Stack>
         <Chip
-          label={`${orders.length} active`}
+          label={t("suppliersUi.dashboard.activeCount", { count: orders.length })}
           size="small"
           color="primary"
           variant="outlined"
@@ -229,19 +234,31 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
         textColor="inherit"
         TabIndicatorProps={{ style: { backgroundColor: "#3b82f6" } }}
       >
-        <Tab label="All" value="all" sx={{ fontSize: 12 }} />
+        <Tab label={t("common.all")} value="all" sx={{ fontSize: 12 }} />
         <Tab
-          label={`Targeted ${countBy("private") ? `(${countBy("private")})` : ""}`}
+          label={
+            countBy("private")
+              ? t("suppliersUi.dashboard.tabs.targetedCount", { count: countBy("private") })
+              : t("suppliersUi.dashboard.tabs.targeted")
+          }
           value="targeted"
           sx={{ fontSize: 12 }}
         />
         <Tab
-          label={`Roster ${countBy("roster_only") ? `(${countBy("roster_only")})` : ""}`}
+          label={
+            countBy("roster_only")
+              ? t("suppliersUi.dashboard.tabs.rosterCount", { count: countBy("roster_only") })
+              : t("suppliersUi.dashboard.tabs.roster")
+          }
           value="roster"
           sx={{ fontSize: 12 }}
         />
         <Tab
-          label={`Public ${countBy("public") ? `(${countBy("public")})` : ""}`}
+          label={
+            countBy("public")
+              ? t("suppliersUi.dashboard.tabs.publicCount", { count: countBy("public") })
+              : t("suppliersUi.dashboard.tabs.public")
+          }
           value="public"
           sx={{ fontSize: 12 }}
         />
@@ -250,22 +267,28 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
       {filtered.length === 0 ? (
         <Box sx={{ p: 4, textAlign: "center" }}>
           <Typography variant="body2" color="text.secondary">
-            No buy orders in this category
+            {t("suppliersUi.dashboard.noBuyOrders")}
           </Typography>
         </Box>
       ) : (
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>Item</TableCell>
-              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>Visibility</TableCell>
-              <TableCell align="right" sx={{ color: "text.secondary", fontSize: 11 }}>
-                Price / unit
+              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
+                {t("suppliersUi.dashboard.columns.item")}
+              </TableCell>
+              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
+                {t("suppliersUi.dashboard.columns.visibility")}
               </TableCell>
               <TableCell align="right" sx={{ color: "text.secondary", fontSize: 11 }}>
-                Qty
+                {t("suppliersUi.dashboard.columns.pricePerUnit")}
               </TableCell>
-              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>Expires</TableCell>
+              <TableCell align="right" sx={{ color: "text.secondary", fontSize: 11 }}>
+                {t("suppliersUi.dashboard.columns.qty")}
+              </TableCell>
+              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
+                {t("suppliersUi.dashboard.columns.expires")}
+              </TableCell>
               <TableCell sx={{ color: "text.secondary", fontSize: 11 }} />
             </TableRow>
           </TableHead>
@@ -300,7 +323,7 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={vis.label}
+                      label={t(vis.label)}
                       size="small"
                       color={vis.color}
                       variant="outlined"
@@ -314,7 +337,9 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                       color="success.main"
                       fontWeight={600}
                     >
-                      {formatAuec(order.price_per_unit)} aUEC
+                      {t("suppliersUi.amountAuec", {
+                        amount: formatAuec(order.price_per_unit),
+                      })}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
@@ -327,11 +352,11 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                   </TableCell>
                   <TableCell>
                     <Typography variant="caption" color="text.secondary">
-                      {order.expires_at ? timeAgo(order.expires_at) : "—"}
+                      {order.expires_at ? timeAgo(t, order.expires_at) : "—"}
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Tooltip title="View order">
+                    <Tooltip title={t("suppliersUi.dashboard.viewOrder")}>
                       <IconButton size="small" onClick={(e) => { e.stopPropagation(); navigate(`/buy-orders/${order.buy_order_id}`) }}>
                         <OpenInNewRounded sx={{ fontSize: 14 }} />
                       </IconButton>
@@ -352,6 +377,7 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
 // ---------------------------------------------------------------------------
 
 function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const urgent = reqs.filter((r) => r.status === "not-started")
@@ -362,13 +388,15 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
         <Stack direction="row" spacing={1} alignItems="center">
           <AssignmentRounded sx={{ fontSize: 18, color: "text.secondary" }} />
           <Typography variant="subtitle1" fontWeight={600}>
-            Open Requisitions
+            {t("suppliersUi.dashboard.openRequisitions")}
           </Typography>
         </Stack>
         {urgent.length > 0 && (
           <Chip
             icon={<BoltRounded sx={{ fontSize: 14 }} />}
-            label={`${urgent.length} need response`}
+            label={t("suppliersUi.dashboard.needResponse", {
+              count: urgent.length,
+            })}
             size="small"
             color="warning"
           />
@@ -378,7 +406,7 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
       {reqs.length === 0 ? (
         <Box sx={{ px: 2, pb: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            No open requisitions
+            {t("suppliersUi.dashboard.noOpenRequisitions")}
           </Typography>
         </Box>
       ) : (
@@ -413,7 +441,7 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
                         {req.title}
                       </Typography>
                       <Chip
-                        label={sc.label}
+                        label={t(sc.label)}
                         size="small"
                         color={sc.color}
                         variant="outlined"
@@ -421,10 +449,12 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
                       />
                     </Stack>
                     <Typography variant="caption" color="text.secondary">
-                      from {req.buyer?.display_name ?? req.buyer?.username}
+                      {t("suppliersUi.dashboard.fromBuyer", {
+                        name: req.buyer?.display_name ?? req.buyer?.username,
+                      })}
                     </Typography>
                   </Box>
-                  <IconButton size="small" aria-label="Open requisition">
+                  <IconButton size="small" aria-label={t("suppliersUi.dashboard.openRequisition")}>
                     <OpenInNewRounded sx={{ fontSize: 14 }} />
                   </IconButton>
                 </Stack>
@@ -442,6 +472,7 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
 // ---------------------------------------------------------------------------
 
 function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   return (
@@ -450,11 +481,11 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
         <Stack direction="row" spacing={1} alignItems="center">
           <LocalShippingRounded sx={{ fontSize: 18, color: "text.secondary" }} />
           <Typography variant="subtitle1" fontWeight={600}>
-            Recent Orders
+            {t("recentOrders.title")}
           </Typography>
         </Stack>
         <Chip
-          label={`${orders.length} seller`}
+          label={t("suppliersUi.dashboard.sellerCount", { count: orders.length })}
           size="small"
           variant="outlined"
           sx={{ fontSize: 10 }}
@@ -464,25 +495,34 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
       {orders.length === 0 ? (
         <Box sx={{ px: 2, pb: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            No recent orders
+            {t("suppliersUi.dashboard.noRecentOrders")}
           </Typography>
         </Box>
       ) : (
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>Buyer</TableCell>
-              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>Order</TableCell>
-              <TableCell align="right" sx={{ color: "text.secondary", fontSize: 11 }}>
-                Total
+              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
+                {t("suppliersUi.dashboard.columns.buyer")}
               </TableCell>
-              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>Status</TableCell>
+              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
+                {t("suppliersUi.dashboard.columns.order")}
+              </TableCell>
+              <TableCell align="right" sx={{ color: "text.secondary", fontSize: 11 }}>
+                {t("suppliersUi.dashboard.columns.total")}
+              </TableCell>
+              <TableCell sx={{ color: "text.secondary", fontSize: 11 }}>
+                {t("suppliersUi.dashboard.columns.status")}
+              </TableCell>
               <TableCell sx={{ color: "text.secondary", fontSize: 11 }} />
             </TableRow>
           </TableHead>
           <TableBody>
             {orders.slice(0, 8).map((order) => {
-              const sc = ORDER_STATUS_CHIP[order.status] ?? { label: order.status, color: "default" as const }
+              const known = ORDER_STATUS_CHIP[order.status]
+              const sc = known
+                ? { label: t(known.label), color: known.color }
+                : { label: order.status, color: "default" as const }
               return (
                 <TableRow
                   key={order.order_id}
@@ -538,7 +578,7 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
                     />
                   </TableCell>
                   <TableCell>
-                    <IconButton size="small" aria-label="Open order" onClick={(e) => { e.stopPropagation(); navigate(`/orders/${order.order_id}`) }}>
+                    <IconButton size="small" aria-label={t("suppliersUi.dashboard.openOrder")} onClick={(e) => { e.stopPropagation(); navigate(`/orders/${order.order_id}`) }}>
                       <OpenInNewRounded sx={{ fontSize: 14 }} />
                     </IconButton>
                   </TableCell>
@@ -564,6 +604,7 @@ interface ActivityItem {
 }
 
 function buildActivityFeed(
+  t: TFunction,
   buyOrders: StandingBuyOrder[],
   reqs: RequisitionDetail[],
   orders: OrderPreview[],
@@ -579,11 +620,14 @@ function buildActivityFeed(
         icon: <ShoppingCartRounded sx={{ fontSize: 16, color: "primary.main" }} />,
         text: (
           <>
-            <b>{o.buyer_name}</b> sent a targeted buy order for{" "}
-            <b>{o.game_item_name}</b>
+            <Trans
+              i18nKey="suppliersUi.dashboard.activity.targetedBuyOrder"
+              values={{ buyer: o.buyer_name, item: o.game_item_name }}
+              components={{ b: <b /> }}
+            />
           </>
         ),
-        time: timeAgo(o.created_at),
+        time: timeAgo(t, o.created_at),
       })
     })
 
@@ -596,11 +640,17 @@ function buildActivityFeed(
         icon: <AssignmentRounded sx={{ fontSize: 16, color: "warning.main" }} />,
         text: (
           <>
-            New requisition <b>{r.title}</b> from{" "}
-            <b>{r.buyer?.display_name ?? r.buyer?.username}</b>
+            <Trans
+              i18nKey="suppliersUi.dashboard.activity.newRequisition"
+              values={{
+                title: r.title,
+                buyer: r.buyer?.display_name ?? r.buyer?.username,
+              }}
+              components={{ b: <b /> }}
+            />
           </>
         ),
-        time: timeAgo(r.created_at),
+        time: timeAgo(t, r.created_at),
       })
     })
 
@@ -613,10 +663,14 @@ function buildActivityFeed(
         icon: <PaymentsRounded sx={{ fontSize: 16, color: "success.main" }} />,
         text: (
           <>
-            Order <b>{o.title}</b> completed — <b>{formatAuec(o.total_price)} aUEC</b>
+            <Trans
+              i18nKey="suppliersUi.dashboard.activity.orderCompleted"
+              values={{ title: o.title, amount: formatAuec(o.total_price) }}
+              components={{ b: <b /> }}
+            />
           </>
         ),
-        time: timeAgo(o.updated_at),
+        time: timeAgo(t, o.updated_at),
       })
     })
 
@@ -624,11 +678,12 @@ function buildActivityFeed(
 }
 
 function ActivityFeed({ items }: { items: ActivityItem[] }) {
+  const { t } = useTranslation()
   if (items.length === 0) {
     return (
       <Box sx={{ px: 2, pb: 2 }}>
         <Typography variant="body2" color="text.secondary">
-          No recent activity
+          {t("suppliersUi.dashboard.noActivity")}
         </Typography>
       </Box>
     )
@@ -659,6 +714,7 @@ function ActivityFeed({ items }: { items: ActivityItem[] }) {
 // ---------------------------------------------------------------------------
 
 export function AdminSupplierDashboard() {
+  const { t } = useTranslation()
   const { data: buyOrdersData, isLoading: boLoading, refetch: boRefetch } =
     useSearchBuyOrdersQuery({ pageSize: 50 })
   const { data: myBuyOrders } = useGetMyBuyOrdersQuery({})
@@ -684,7 +740,7 @@ export function AdminSupplierDashboard() {
     .reduce((sum, o) => sum + o.total_price, 0)
   const supplierCount = suppliersData?.total ?? 0
 
-  const activityFeed = buildActivityFeed(activeBuyOrders, reqs, orders)
+  const activityFeed = buildActivityFeed(t, activeBuyOrders, reqs, orders)
 
   const isLoading = boLoading || reqLoading || ordersLoading
 
@@ -705,7 +761,7 @@ export function AdminSupplierDashboard() {
               fontWeight={700}
               fontFamily="'Space Grotesk', sans-serif"
             >
-              Supplier Dashboard
+              {t("suppliersUi.dashboard.title")}
             </Typography>
             <Box
               sx={{
@@ -723,10 +779,10 @@ export function AdminSupplierDashboard() {
             />
           </Stack>
           <Typography variant="body2" color="text.secondary" mt={0.25}>
-            Your buy orders, requisitions, and fulfillment activity at a glance
+            {t("suppliersUi.dashboard.subtitle")}
           </Typography>
         </Box>
-        <Tooltip title="Refresh all">
+        <Tooltip title={t("suppliersUi.dashboard.refreshAll")}>
           <IconButton onClick={() => boRefetch()} size="small">
             <RefreshRounded />
           </IconButton>
@@ -737,39 +793,49 @@ export function AdminSupplierDashboard() {
       <Stack direction="row" spacing={2} flexWrap="wrap" mb={3} useFlexGap>
         <StatCard
           icon={<ShoppingCartRounded sx={{ fontSize: 18 }} />}
-          label="Active Buy Orders"
+          label={t("suppliersUi.dashboard.stats.activeBuyOrders")}
           value={activeBuyOrders.length}
-          sub={`${activeBuyOrders.filter((o) => o.visibility === "private").length} targeted at me`}
+          sub={t("suppliersUi.dashboard.stats.targetedAtMe", {
+            count: activeBuyOrders.filter((o) => o.visibility === "private").length,
+          })}
           accent={activeBuyOrders.some((o) => o.visibility === "private")}
           loading={boLoading}
         />
         <StatCard
           icon={<AssignmentRounded sx={{ fontSize: 18 }} />}
-          label="Open Requisitions"
+          label={t("suppliersUi.dashboard.stats.openRequisitions")}
           value={reqs.filter((r) => r.status !== "fulfilled" && r.status !== "cancelled").length}
-          sub={pendingReqs.length ? `${pendingReqs.length} awaiting response` : undefined}
+          sub={
+            pendingReqs.length
+              ? t("suppliersUi.dashboard.stats.awaitingResponse", {
+                  count: pendingReqs.length,
+                })
+              : undefined
+          }
           accent={pendingReqs.length > 0}
           loading={reqLoading}
         />
         <StatCard
           icon={<PaymentsRounded sx={{ fontSize: 18 }} />}
-          label="Revenue (all time)"
-          value={`${formatAuec(recentRevenue)} aUEC`}
-          sub={`${orders.filter((o) => o.status === "fulfilled").length} orders completed`}
+          label={t("suppliersUi.dashboard.stats.revenue")}
+          value={t("suppliersUi.amountAuec", { amount: formatAuec(recentRevenue) })}
+          sub={t("suppliersUi.dashboard.stats.ordersCompleted", {
+            count: orders.filter((o) => o.status === "fulfilled").length,
+          })}
           loading={ordersLoading}
         />
         <StatCard
           icon={<CheckCircleOutlineRounded sx={{ fontSize: 18 }} />}
-          label="Fulfilled Orders"
+          label={t("suppliersUi.dashboard.stats.fulfilledOrders")}
           value={orders.filter((o) => o.status === "fulfilled").length}
-          sub={`of ${orders.length} total`}
+          sub={t("suppliersUi.dashboard.stats.ofTotal", { count: orders.length })}
           loading={ordersLoading}
         />
         <StatCard
           icon={<PersonRounded sx={{ fontSize: 18 }} />}
-          label="Roster Suppliers"
+          label={t("suppliersUi.dashboard.stats.rosterSuppliers")}
           value={supplierCount}
-          sub="in your network"
+          sub={t("suppliersUi.dashboard.stats.inNetwork")}
         />
       </Stack>
 
@@ -810,7 +876,7 @@ export function AdminSupplierDashboard() {
                 <Stack direction="row" spacing={1} alignItems="center">
                   <FiberManualRecordRounded sx={{ fontSize: 14, color: "success.main" }} />
                   <Typography variant="subtitle1" fontWeight={600}>
-                    Activity
+                    {t("suppliersUi.dashboard.activityTitle")}
                   </Typography>
                 </Stack>
               </Box>

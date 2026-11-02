@@ -6558,5 +6558,191 @@
     "craftableItems_other": "可製作物品（{{count}}）",
     "minutesShort": "{{minutes}} 分鐘",
     "noCraftable": "這些材料無法製作任何藍圖。"
+  },
+  "suppliersUi": {
+    "amountAuec": "{{amount}} aUEC",
+    "tiers": {
+      "preferred": "優先",
+      "approved": "已核准",
+      "restricted": "受限"
+    },
+    "kind": {
+      "user": "使用者",
+      "org": "組織",
+      "organisation": "組織"
+    },
+    "roster": {
+      "title": "供應商名單",
+      "subtitle": "管理您信任的供應商。優先供應商在指定收購訂單中享有優先曝光。",
+      "addSupplier": "新增供應商",
+      "supplierType": "供應商類型",
+      "userUuid": "使用者 UUID",
+      "contractorUuid": "組織 UUID",
+      "uuidHelper": "貼上使用者或組織個人檔案中的 UUID",
+      "tierOptional": "等級（選填）",
+      "notesOptional": "備註（選填）",
+      "addFailed": "新增供應商失敗",
+      "add": "新增",
+      "editSupplier": "編輯供應商",
+      "tier": "等級",
+      "status": "狀態",
+      "notes": "備註",
+      "statusOption": {
+        "active": "啟用中",
+        "suspended": "已暫停",
+        "removed": "已移除"
+      },
+      "statusChip": {
+        "active": "啟用中",
+        "suspended": "已暫停",
+        "removed": "已移除"
+      },
+      "updateFailed": "更新供應商失敗",
+      "edit": "編輯",
+      "remove": "移除",
+      "removeConfirm": "要將 {{name}} 從您的供應商名單中移除嗎？",
+      "mySuppliersTab_other": "我的供應商（{{count}}）",
+      "supplierForTab_other": "我供貨的對象（{{count}}）",
+      "empty": "尚無供應商。",
+      "addFirst": "新增您的第一位供應商",
+      "notOnRoster": "您尚未列入任何人的供應商名單。",
+      "columns": {
+        "supplier": "供應商",
+        "type": "類型",
+        "tier": "等級",
+        "status": "狀態",
+        "notes": "備註",
+        "added": "新增時間",
+        "actions": "操作",
+        "aggregator": "採購方",
+        "tierAssigned": "對方給您的等級",
+        "theirNotes": "對方備註",
+        "since": "起始時間"
+      }
+    },
+    "requisitions": {
+      "gameItem": "遊戲物品",
+      "searchByName": "依名稱搜尋…",
+      "createTitle": "建立採購申請",
+      "fieldTitle": "標題",
+      "descriptionOptional": "說明（選填）",
+      "targetSupplier": "目標供應商的使用者 UUID（選填）",
+      "targetPlaceholder": "貼上 user_id 以指定特定供應商",
+      "targetHelper": "留空則傳送給名單中的所有供應商",
+      "lineItems": "明細項目",
+      "addItem": "新增項目",
+      "qty": "數量",
+      "maxPricePerUnit": "最高單價",
+      "remove": "移除",
+      "totalWithAmount": "總計：<strong>{{amount}} aUEC</strong>",
+      "createFailed": "建立採購申請失敗",
+      "createdOn": "建立於 {{date}}",
+      "items": "物品",
+      "total": "總計",
+      "assignedSupplier": "指派的供應商",
+      "close": "關閉",
+      "pageTitle": "採購申請",
+      "subtitle": "以物品為準的供貨訂單。說明您的需求，由供應商選擇用哪個刊登來履約。",
+      "newRequisition": "新增採購申請",
+      "empty": "尚無採購申請。",
+      "createFirst": "建立您的第一筆採購申請",
+      "view": "檢視",
+      "statusChip": {
+        "notStarted": "未開始",
+        "inProgress": "進行中",
+        "fulfilled": "已完成",
+        "cancelled": "已取消"
+      },
+      "columns": {
+        "item": "物品",
+        "pricePerUnit": "單價",
+        "subtotal": "小計",
+        "filled": "已交付",
+        "title": "標題",
+        "status": "狀態",
+        "items": "物品",
+        "total": "總計",
+        "supplier": "供應商",
+        "created": "建立時間",
+        "actions": "操作"
+      }
+    },
+    "dashboard": {
+      "title": "供應商面板",
+      "subtitle": "一覽您的收購訂單、採購申請與履約動態",
+      "refreshAll": "全部重新整理",
+      "visibility": {
+        "targeted": "指定對象",
+        "roster": "名單",
+        "public": "公開"
+      },
+      "orderStatus": {
+        "notStarted": "未開始",
+        "inProgress": "進行中",
+        "fulfilled": "已完成",
+        "cancelled": "已取消"
+      },
+      "reqStatus": {
+        "awaiting": "待處理",
+        "inProgress": "進行中",
+        "fulfilled": "已完成",
+        "cancelled": "已取消"
+      },
+      "timeAgo": {
+        "minutes_other": "{{count}} 分鐘前",
+        "hours_other": "{{count}} 小時前",
+        "days_other": "{{count}} 天前"
+      },
+      "incomingBuyOrders": "收到的收購訂單",
+      "activeCount_other": "{{count}} 筆有效",
+      "tabs": {
+        "targeted": "指定對象",
+        "roster": "名單",
+        "public": "公開",
+        "targetedCount_other": "指定對象（{{count}}）",
+        "rosterCount_other": "名單（{{count}}）",
+        "publicCount_other": "公開（{{count}}）"
+      },
+      "noBuyOrders": "此類別中沒有收購訂單",
+      "columns": {
+        "item": "物品",
+        "visibility": "可見性",
+        "pricePerUnit": "單價",
+        "qty": "數量",
+        "expires": "到期",
+        "buyer": "買家",
+        "order": "訂單",
+        "total": "總計",
+        "status": "狀態"
+      },
+      "viewOrder": "檢視訂單",
+      "openRequisitions": "未完成的採購申請",
+      "needResponse_other": "{{count}} 筆待回覆",
+      "noOpenRequisitions": "沒有未完成的採購申請",
+      "fromBuyer": "來自 {{name}}",
+      "openRequisition": "開啟採購申請",
+      "sellerCount_other": "作為賣家 {{count}} 筆",
+      "noRecentOrders": "尚無近期訂單",
+      "openOrder": "開啟訂單",
+      "activity": {
+        "targetedBuyOrder": "<b>{{buyer}}</b> 傳送了 <b>{{item}}</b> 的指定收購訂單",
+        "newRequisition": "來自 <b>{{buyer}}</b> 的新採購申請 <b>{{title}}</b>",
+        "orderCompleted": "訂單 <b>{{title}}</b> 已完成 — <b>{{amount}} aUEC</b>"
+      },
+      "noActivity": "尚無近期動態",
+      "activityTitle": "動態",
+      "stats": {
+        "activeBuyOrders": "有效收購訂單",
+        "targetedAtMe_other": "其中 {{count}} 筆指定給我",
+        "openRequisitions": "未完成的採購申請",
+        "awaitingResponse_other": "{{count}} 筆待回覆",
+        "revenue": "收入（累計）",
+        "ordersCompleted_other": "已完成 {{count}} 筆訂單",
+        "fulfilledOrders": "已完成訂單",
+        "ofTotal_other": "共 {{count}} 筆",
+        "rosterSuppliers": "名單中的供應商",
+        "inNetwork": "在您的網路中"
+      }
+    }
   }
 }

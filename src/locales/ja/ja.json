@@ -6558,5 +6558,191 @@
     "craftableItems_other": "クラフト可能なアイテム（{{count}}）",
     "minutesShort": "{{minutes}}分",
     "noCraftable": "これらの素材でクラフトできる設計図はありません。"
+  },
+  "suppliersUi": {
+    "amountAuec": "{{amount}} aUEC",
+    "tiers": {
+      "preferred": "優先",
+      "approved": "承認済み",
+      "restricted": "制限付き"
+    },
+    "kind": {
+      "user": "ユーザー",
+      "org": "組織",
+      "organisation": "組織"
+    },
+    "roster": {
+      "title": "サプライヤー名簿",
+      "subtitle": "信頼できるサプライヤーを管理します。優先サプライヤーは指定買い注文で優先的に表示されます。",
+      "addSupplier": "サプライヤーを追加",
+      "supplierType": "サプライヤーの種類",
+      "userUuid": "ユーザーUUID",
+      "contractorUuid": "組織UUID",
+      "uuidHelper": "ユーザーまたは組織のプロフィールからUUIDを貼り付けてください",
+      "tierOptional": "ティア（任意）",
+      "notesOptional": "メモ（任意）",
+      "addFailed": "サプライヤーを追加できませんでした",
+      "add": "追加",
+      "editSupplier": "サプライヤーを編集",
+      "tier": "ティア",
+      "status": "ステータス",
+      "notes": "メモ",
+      "statusOption": {
+        "active": "有効",
+        "suspended": "停止中",
+        "removed": "削除済み"
+      },
+      "statusChip": {
+        "active": "有効",
+        "suspended": "停止中",
+        "removed": "削除済み"
+      },
+      "updateFailed": "サプライヤーを更新できませんでした",
+      "edit": "編集",
+      "remove": "削除",
+      "removeConfirm": "{{name}} を名簿から削除しますか？",
+      "mySuppliersTab_other": "マイサプライヤー（{{count}}）",
+      "supplierForTab_other": "供給先（{{count}}）",
+      "empty": "サプライヤーはまだいません。",
+      "addFirst": "最初のサプライヤーを追加",
+      "notOnRoster": "まだ誰のサプライヤー名簿にも登録されていません。",
+      "columns": {
+        "supplier": "サプライヤー",
+        "type": "種類",
+        "tier": "ティア",
+        "status": "ステータス",
+        "notes": "メモ",
+        "added": "追加日",
+        "actions": "操作",
+        "aggregator": "アグリゲーター",
+        "tierAssigned": "割り当てられたティア",
+        "theirNotes": "相手のメモ",
+        "since": "開始日"
+      }
+    },
+    "requisitions": {
+      "gameItem": "ゲームアイテム",
+      "searchByName": "名前で検索…",
+      "createTitle": "調達依頼を作成",
+      "fieldTitle": "タイトル",
+      "descriptionOptional": "説明（任意）",
+      "targetSupplier": "対象サプライヤーのユーザーUUID（任意）",
+      "targetPlaceholder": "特定のサプライヤー宛てにするには user_id を貼り付けてください",
+      "targetHelper": "空欄にすると名簿のすべてのサプライヤーに送信されます",
+      "lineItems": "明細",
+      "addItem": "明細を追加",
+      "qty": "数量",
+      "maxPricePerUnit": "上限単価",
+      "remove": "削除",
+      "totalWithAmount": "合計：<strong>{{amount}} aUEC</strong>",
+      "createFailed": "調達依頼を作成できませんでした",
+      "createdOn": "{{date}} に作成",
+      "items": "アイテム",
+      "total": "合計",
+      "assignedSupplier": "担当サプライヤー",
+      "close": "閉じる",
+      "pageTitle": "調達依頼",
+      "subtitle": "アイテム単位の調達注文です。必要なものを指定すると、サプライヤーがどの出品から対応するかを選びます。",
+      "newRequisition": "新しい調達依頼",
+      "empty": "調達依頼はまだありません。",
+      "createFirst": "最初の調達依頼を作成",
+      "view": "表示",
+      "statusChip": {
+        "notStarted": "未着手",
+        "inProgress": "進行中",
+        "fulfilled": "完了",
+        "cancelled": "キャンセル済み"
+      },
+      "columns": {
+        "item": "アイテム",
+        "pricePerUnit": "単価",
+        "subtotal": "小計",
+        "filled": "充足数",
+        "title": "タイトル",
+        "status": "ステータス",
+        "items": "アイテム",
+        "total": "合計",
+        "supplier": "サプライヤー",
+        "created": "作成日",
+        "actions": "操作"
+      }
+    },
+    "dashboard": {
+      "title": "サプライヤーダッシュボード",
+      "subtitle": "買い注文、調達依頼、納品状況をひと目で確認できます",
+      "refreshAll": "すべて更新",
+      "visibility": {
+        "targeted": "指定あり",
+        "roster": "名簿",
+        "public": "公開"
+      },
+      "orderStatus": {
+        "notStarted": "未着手",
+        "inProgress": "進行中",
+        "fulfilled": "完了",
+        "cancelled": "キャンセル済み"
+      },
+      "reqStatus": {
+        "awaiting": "対応待ち",
+        "inProgress": "進行中",
+        "fulfilled": "完了",
+        "cancelled": "キャンセル済み"
+      },
+      "timeAgo": {
+        "minutes_other": "{{count}}分前",
+        "hours_other": "{{count}}時間前",
+        "days_other": "{{count}}日前"
+      },
+      "incomingBuyOrders": "受信した買い注文",
+      "activeCount_other": "{{count}}件有効",
+      "tabs": {
+        "targeted": "指定あり",
+        "roster": "名簿",
+        "public": "公開",
+        "targetedCount_other": "指定あり（{{count}}）",
+        "rosterCount_other": "名簿（{{count}}）",
+        "publicCount_other": "公開（{{count}}）"
+      },
+      "noBuyOrders": "このカテゴリの買い注文はありません",
+      "columns": {
+        "item": "アイテム",
+        "visibility": "公開範囲",
+        "pricePerUnit": "単価",
+        "qty": "数量",
+        "expires": "期限",
+        "buyer": "購入者",
+        "order": "注文",
+        "total": "合計",
+        "status": "ステータス"
+      },
+      "viewOrder": "注文を表示",
+      "openRequisitions": "未完了の調達依頼",
+      "needResponse_other": "{{count}}件 要対応",
+      "noOpenRequisitions": "未完了の調達依頼はありません",
+      "fromBuyer": "{{name}} より",
+      "openRequisition": "調達依頼を開く",
+      "sellerCount_other": "販売者として{{count}}件",
+      "noRecentOrders": "最近の注文はありません",
+      "openOrder": "注文を開く",
+      "activity": {
+        "targetedBuyOrder": "<b>{{buyer}}</b> さんが <b>{{item}}</b> の指定買い注文を送信しました",
+        "newRequisition": "<b>{{buyer}}</b> さんからの新しい調達依頼 <b>{{title}}</b>",
+        "orderCompleted": "注文 <b>{{title}}</b> が完了しました — <b>{{amount}} aUEC</b>"
+      },
+      "noActivity": "最近のアクティビティはありません",
+      "activityTitle": "アクティビティ",
+      "stats": {
+        "activeBuyOrders": "有効な買い注文",
+        "targetedAtMe_other": "うち自分宛て {{count}}件",
+        "openRequisitions": "未完了の調達依頼",
+        "awaitingResponse_other": "{{count}}件 返答待ち",
+        "revenue": "売上（累計）",
+        "ordersCompleted_other": "{{count}}件の注文が完了",
+        "fulfilledOrders": "完了した注文",
+        "ofTotal_other": "全{{count}}件中",
+        "rosterSuppliers": "名簿のサプライヤー",
+        "inNetwork": "あなたのネットワーク内"
+      }
+    }
   }
 }

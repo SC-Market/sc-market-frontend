@@ -6626,5 +6626,206 @@
     "craftableItems_other": "Craftable Items ({{count}})",
     "minutesShort": "{{minutes}}m",
     "noCraftable": "No blueprints can be crafted with these materials."
+  },
+  "suppliersUi": {
+    "amountAuec": "{{amount}} aUEC",
+    "tiers": {
+      "preferred": "Preferred",
+      "approved": "Approved",
+      "restricted": "Restricted"
+    },
+    "kind": {
+      "user": "User",
+      "org": "Org",
+      "organisation": "Organisation"
+    },
+    "roster": {
+      "title": "Supplier Roster",
+      "subtitle": "Manage your trusted suppliers. Preferred suppliers get priority visibility on targeted buy orders.",
+      "addSupplier": "Add Supplier",
+      "supplierType": "Supplier type",
+      "userUuid": "User UUID",
+      "contractorUuid": "Contractor UUID",
+      "uuidHelper": "Paste the UUID from the user/org profile",
+      "tierOptional": "Tier (optional)",
+      "notesOptional": "Notes (optional)",
+      "addFailed": "Failed to add supplier",
+      "add": "Add",
+      "editSupplier": "Edit Supplier",
+      "tier": "Tier",
+      "status": "Status",
+      "notes": "Notes",
+      "statusOption": {
+        "active": "Active",
+        "suspended": "Suspended",
+        "removed": "Removed"
+      },
+      "statusChip": {
+        "active": "active",
+        "suspended": "suspended",
+        "removed": "removed"
+      },
+      "updateFailed": "Failed to update supplier",
+      "edit": "Edit",
+      "remove": "Remove",
+      "removeConfirm": "Remove {{name}} from your roster?",
+      "mySuppliersTab_one": "My Suppliers ({{count}})",
+      "mySuppliersTab_other": "My Suppliers ({{count}})",
+      "supplierForTab_one": "I'm a Supplier For ({{count}})",
+      "supplierForTab_other": "I'm a Supplier For ({{count}})",
+      "empty": "No suppliers yet.",
+      "addFirst": "Add your first supplier",
+      "notOnRoster": "You're not on anyone's supplier roster yet.",
+      "columns": {
+        "supplier": "Supplier",
+        "type": "Type",
+        "tier": "Tier",
+        "status": "Status",
+        "notes": "Notes",
+        "added": "Added",
+        "actions": "Actions",
+        "aggregator": "Aggregator",
+        "tierAssigned": "Tier they assigned you",
+        "theirNotes": "Their notes",
+        "since": "Since"
+      }
+    },
+    "requisitions": {
+      "gameItem": "Game item",
+      "searchByName": "Search by name…",
+      "createTitle": "Create Requisition",
+      "fieldTitle": "Title",
+      "descriptionOptional": "Description (optional)",
+      "targetSupplier": "Target supplier user UUID (optional)",
+      "targetPlaceholder": "Paste user_id to direct to a specific supplier",
+      "targetHelper": "Leave blank to send to all roster suppliers",
+      "lineItems": "Line Items",
+      "addItem": "Add Item",
+      "qty": "Qty",
+      "maxPricePerUnit": "Max price / unit",
+      "remove": "Remove",
+      "totalWithAmount": "Total: <strong>{{amount}} aUEC</strong>",
+      "createFailed": "Failed to create requisition",
+      "createdOn": "Created {{date}}",
+      "items": "Items",
+      "total": "Total",
+      "assignedSupplier": "Assigned Supplier",
+      "close": "Close",
+      "pageTitle": "Requisitions",
+      "subtitle": "Item-anchored supply orders. Specify what you need; suppliers choose which listing to fulfil from.",
+      "newRequisition": "New Requisition",
+      "empty": "No requisitions yet.",
+      "createFirst": "Create your first requisition",
+      "view": "View",
+      "statusChip": {
+        "notStarted": "not-started",
+        "inProgress": "in-progress",
+        "fulfilled": "fulfilled",
+        "cancelled": "cancelled"
+      },
+      "columns": {
+        "item": "Item",
+        "pricePerUnit": "Price / unit",
+        "subtotal": "Subtotal",
+        "filled": "Filled",
+        "title": "Title",
+        "status": "Status",
+        "items": "Items",
+        "total": "Total",
+        "supplier": "Supplier",
+        "created": "Created",
+        "actions": "Actions"
+      }
+    },
+    "dashboard": {
+      "title": "Supplier Dashboard",
+      "subtitle": "Your buy orders, requisitions, and fulfillment activity at a glance",
+      "refreshAll": "Refresh all",
+      "visibility": {
+        "targeted": "Targeted",
+        "roster": "Roster",
+        "public": "Public"
+      },
+      "orderStatus": {
+        "notStarted": "Not started",
+        "inProgress": "In progress",
+        "fulfilled": "Fulfilled",
+        "cancelled": "Cancelled"
+      },
+      "reqStatus": {
+        "awaiting": "Awaiting",
+        "inProgress": "In progress",
+        "fulfilled": "Fulfilled",
+        "cancelled": "Cancelled"
+      },
+      "timeAgo": {
+        "minutes_one": "{{count}}m ago",
+        "minutes_other": "{{count}}m ago",
+        "hours_one": "{{count}}h ago",
+        "hours_other": "{{count}}h ago",
+        "days_one": "{{count}}d ago",
+        "days_other": "{{count}}d ago"
+      },
+      "incomingBuyOrders": "Incoming Buy Orders",
+      "activeCount_one": "{{count}} active",
+      "activeCount_other": "{{count}} active",
+      "tabs": {
+        "targeted": "Targeted",
+        "roster": "Roster",
+        "public": "Public",
+        "targetedCount_one": "Targeted ({{count}})",
+        "targetedCount_other": "Targeted ({{count}})",
+        "rosterCount_one": "Roster ({{count}})",
+        "rosterCount_other": "Roster ({{count}})",
+        "publicCount_one": "Public ({{count}})",
+        "publicCount_other": "Public ({{count}})"
+      },
+      "noBuyOrders": "No buy orders in this category",
+      "columns": {
+        "item": "Item",
+        "visibility": "Visibility",
+        "pricePerUnit": "Price / unit",
+        "qty": "Qty",
+        "expires": "Expires",
+        "buyer": "Buyer",
+        "order": "Order",
+        "total": "Total",
+        "status": "Status"
+      },
+      "viewOrder": "View order",
+      "openRequisitions": "Open Requisitions",
+      "needResponse_one": "{{count}} needs response",
+      "needResponse_other": "{{count}} need response",
+      "noOpenRequisitions": "No open requisitions",
+      "fromBuyer": "from {{name}}",
+      "openRequisition": "Open requisition",
+      "sellerCount_one": "{{count}} seller",
+      "sellerCount_other": "{{count}} seller",
+      "noRecentOrders": "No recent orders",
+      "openOrder": "Open order",
+      "activity": {
+        "targetedBuyOrder": "<b>{{buyer}}</b> sent a targeted buy order for <b>{{item}}</b>",
+        "newRequisition": "New requisition <b>{{title}}</b> from <b>{{buyer}}</b>",
+        "orderCompleted": "Order <b>{{title}}</b> completed — <b>{{amount}} aUEC</b>"
+      },
+      "noActivity": "No recent activity",
+      "activityTitle": "Activity",
+      "stats": {
+        "activeBuyOrders": "Active Buy Orders",
+        "targetedAtMe_one": "{{count}} targeted at me",
+        "targetedAtMe_other": "{{count}} targeted at me",
+        "openRequisitions": "Open Requisitions",
+        "awaitingResponse_one": "{{count}} awaiting response",
+        "awaitingResponse_other": "{{count}} awaiting response",
+        "revenue": "Revenue (all time)",
+        "ordersCompleted_one": "{{count}} order completed",
+        "ordersCompleted_other": "{{count}} orders completed",
+        "fulfilledOrders": "Fulfilled Orders",
+        "ofTotal_one": "of {{count}} total",
+        "ofTotal_other": "of {{count}} total",
+        "rosterSuppliers": "Roster Suppliers",
+        "inNetwork": "in your network"
+      }
+    }
   }
 }

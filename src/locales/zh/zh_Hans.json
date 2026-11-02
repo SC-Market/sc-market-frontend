@@ -6564,5 +6564,191 @@
     "craftableItems_other": "可制作物品（{{count}}）",
     "minutesShort": "{{minutes}} 分钟",
     "noCraftable": "这些材料无法制作任何蓝图。"
+  },
+  "suppliersUi": {
+    "amountAuec": "{{amount}} aUEC",
+    "tiers": {
+      "preferred": "首选",
+      "approved": "已批准",
+      "restricted": "受限"
+    },
+    "kind": {
+      "user": "用户",
+      "org": "组织",
+      "organisation": "组织"
+    },
+    "roster": {
+      "title": "供应商名单",
+      "subtitle": "管理你信任的供应商。首选供应商在定向求购订单中享有优先曝光。",
+      "addSupplier": "添加供应商",
+      "supplierType": "供应商类型",
+      "userUuid": "用户 UUID",
+      "contractorUuid": "组织 UUID",
+      "uuidHelper": "粘贴用户或组织资料中的 UUID",
+      "tierOptional": "等级（可选）",
+      "notesOptional": "备注（可选）",
+      "addFailed": "添加供应商失败",
+      "add": "添加",
+      "editSupplier": "编辑供应商",
+      "tier": "等级",
+      "status": "状态",
+      "notes": "备注",
+      "statusOption": {
+        "active": "活跃",
+        "suspended": "已暂停",
+        "removed": "已移除"
+      },
+      "statusChip": {
+        "active": "活跃",
+        "suspended": "已暂停",
+        "removed": "已移除"
+      },
+      "updateFailed": "更新供应商失败",
+      "edit": "编辑",
+      "remove": "移除",
+      "removeConfirm": "要将 {{name}} 从你的供应商名单中移除吗？",
+      "mySuppliersTab_other": "我的供应商（{{count}}）",
+      "supplierForTab_other": "我供货的对象（{{count}}）",
+      "empty": "暂无供应商。",
+      "addFirst": "添加你的第一个供应商",
+      "notOnRoster": "你还未出现在任何人的供应商名单中。",
+      "columns": {
+        "supplier": "供应商",
+        "type": "类型",
+        "tier": "等级",
+        "status": "状态",
+        "notes": "备注",
+        "added": "添加时间",
+        "actions": "操作",
+        "aggregator": "采购方",
+        "tierAssigned": "对方给你的等级",
+        "theirNotes": "对方备注",
+        "since": "起始时间"
+      }
+    },
+    "requisitions": {
+      "gameItem": "游戏物品",
+      "searchByName": "按名称搜索…",
+      "createTitle": "创建采购申请",
+      "fieldTitle": "标题",
+      "descriptionOptional": "描述（可选）",
+      "targetSupplier": "目标供应商的用户 UUID（可选）",
+      "targetPlaceholder": "粘贴 user_id 以指定某个供应商",
+      "targetHelper": "留空则发送给名单中的所有供应商",
+      "lineItems": "明细项",
+      "addItem": "添加项目",
+      "qty": "数量",
+      "maxPricePerUnit": "最高单价",
+      "remove": "移除",
+      "totalWithAmount": "总计：<strong>{{amount}} aUEC</strong>",
+      "createFailed": "创建采购申请失败",
+      "createdOn": "创建于 {{date}}",
+      "items": "物品",
+      "total": "总计",
+      "assignedSupplier": "指定供应商",
+      "close": "关闭",
+      "pageTitle": "采购申请",
+      "subtitle": "以物品为准的供货订单。说明你的需求，由供应商选择用哪个商品来履约。",
+      "newRequisition": "新建采购申请",
+      "empty": "暂无采购申请。",
+      "createFirst": "创建你的第一个采购申请",
+      "view": "查看",
+      "statusChip": {
+        "notStarted": "未开始",
+        "inProgress": "进行中",
+        "fulfilled": "已完成",
+        "cancelled": "已取消"
+      },
+      "columns": {
+        "item": "物品",
+        "pricePerUnit": "单价",
+        "subtotal": "小计",
+        "filled": "已交付",
+        "title": "标题",
+        "status": "状态",
+        "items": "物品",
+        "total": "总计",
+        "supplier": "供应商",
+        "created": "创建时间",
+        "actions": "操作"
+      }
+    },
+    "dashboard": {
+      "title": "供应商面板",
+      "subtitle": "一览你的求购订单、采购申请和履约动态",
+      "refreshAll": "全部刷新",
+      "visibility": {
+        "targeted": "定向",
+        "roster": "名单",
+        "public": "公开"
+      },
+      "orderStatus": {
+        "notStarted": "未开始",
+        "inProgress": "进行中",
+        "fulfilled": "已完成",
+        "cancelled": "已取消"
+      },
+      "reqStatus": {
+        "awaiting": "待处理",
+        "inProgress": "进行中",
+        "fulfilled": "已完成",
+        "cancelled": "已取消"
+      },
+      "timeAgo": {
+        "minutes_other": "{{count}} 分钟前",
+        "hours_other": "{{count}} 小时前",
+        "days_other": "{{count}} 天前"
+      },
+      "incomingBuyOrders": "收到的求购订单",
+      "activeCount_other": "{{count}} 个有效",
+      "tabs": {
+        "targeted": "定向",
+        "roster": "名单",
+        "public": "公开",
+        "targetedCount_other": "定向（{{count}}）",
+        "rosterCount_other": "名单（{{count}}）",
+        "publicCount_other": "公开（{{count}}）"
+      },
+      "noBuyOrders": "此类别中没有求购订单",
+      "columns": {
+        "item": "物品",
+        "visibility": "可见性",
+        "pricePerUnit": "单价",
+        "qty": "数量",
+        "expires": "到期",
+        "buyer": "买家",
+        "order": "订单",
+        "total": "总计",
+        "status": "状态"
+      },
+      "viewOrder": "查看订单",
+      "openRequisitions": "未完成的采购申请",
+      "needResponse_other": "{{count}} 个待回复",
+      "noOpenRequisitions": "没有未完成的采购申请",
+      "fromBuyer": "来自 {{name}}",
+      "openRequisition": "打开采购申请",
+      "sellerCount_other": "作为卖家 {{count}} 个",
+      "noRecentOrders": "暂无近期订单",
+      "openOrder": "打开订单",
+      "activity": {
+        "targetedBuyOrder": "<b>{{buyer}}</b> 发送了 <b>{{item}}</b> 的定向求购订单",
+        "newRequisition": "来自 <b>{{buyer}}</b> 的新采购申请 <b>{{title}}</b>",
+        "orderCompleted": "订单 <b>{{title}}</b> 已完成 — <b>{{amount}} aUEC</b>"
+      },
+      "noActivity": "暂无近期动态",
+      "activityTitle": "动态",
+      "stats": {
+        "activeBuyOrders": "有效求购订单",
+        "targetedAtMe_other": "其中 {{count}} 个指定给我",
+        "openRequisitions": "未完成的采购申请",
+        "awaitingResponse_other": "{{count}} 个待回复",
+        "revenue": "收入（累计）",
+        "ordersCompleted_other": "已完成 {{count}} 个订单",
+        "fulfilledOrders": "已完成订单",
+        "ofTotal_other": "共 {{count}} 个",
+        "rosterSuppliers": "名单中的供应商",
+        "inNetwork": "在你的网络中"
+      }
+    }
   }
 }

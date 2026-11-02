@@ -44,6 +44,7 @@ import {
   useSearchGameItemsQuery,
 } from "../../store/api/v2/market"
 import type { RequisitionDetail, RequisitionLineItem, GameItemSearchResult } from "../../store/api/v2/market"
+import { Trans, useTranslation } from "react-i18next"
 import { usePageReady } from "../../components/metadata/PageReady"
 
 const STATUS_COLORS: Record<string, "default" | "warning" | "info" | "success" | "error"> = {
@@ -51,6 +52,12 @@ const STATUS_COLORS: Record<string, "default" | "warning" | "info" | "success" |
   "in-progress": "info",
   fulfilled: "success",
   cancelled: "error",
+}
+const STATUS_LABEL_KEYS: Record<string, string> = {
+  "not-started": "suppliersUi.requisitions.statusChip.notStarted",
+  "in-progress": "suppliersUi.requisitions.statusChip.inProgress",
+  fulfilled: "suppliersUi.requisitions.statusChip.fulfilled",
+  cancelled: "suppliersUi.requisitions.statusChip.cancelled",
 }
 
 // ---------------------------------------------------------------------------
@@ -64,6 +71,7 @@ function GameItemPicker({
   value: { id: string; name: string } | null
   onChange: (item: { id: string; name: string } | null) => void
 }) {
+  const { t } = useTranslation()
   const [query, setQuery] = useState("")
   const { data: results = [], isFetching } = useSearchGameItemsQuery({ query }, {
     skip: query.length < 2,
@@ -92,7 +100,11 @@ function GameItemPicker({
         if (reason !== "reset") setQuery(v)
       }}
       renderInput={(params) => (
-        <TextField {...params} label="Game item" placeholder="Search by name…" />
+        <TextField
+          {...params}
+          label={t("suppliersUi.requisitions.gameItem")}
+          placeholder={t("suppliersUi.requisitions.searchByName")}
+        />
       )}
     />
   )
@@ -116,6 +128,7 @@ function CreateRequisitionDialog({
   open: boolean
   onClose: () => void
 }) {
+  const { t } = useTranslation()
   const [create, { isLoading, error }] = useCreateRequisitionMutation()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -177,20 +190,20 @@ function CreateRequisitionDialog({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Create Requisition</DialogTitle>
+      <DialogTitle>{t("suppliersUi.requisitions.createTitle")}</DialogTitle>
       <DialogContent>
         <Stack spacing={2.5} sx={{ mt: 1 }}>
           {/* Header fields */}
           <TextField
             size="small"
-            label="Title"
+            label={t("suppliersUi.requisitions.fieldTitle")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             fullWidth
           />
           <TextField
             size="small"
-            label="Description (optional)"
+            label={t("suppliersUi.requisitions.descriptionOptional")}
             multiline
             rows={2}
             value={description}
@@ -199,21 +212,23 @@ function CreateRequisitionDialog({
           />
           <TextField
             size="small"
-            label="Target supplier user UUID (optional)"
-            placeholder="Paste user_id to direct to a specific supplier"
+            label={t("suppliersUi.requisitions.targetSupplier")}
+            placeholder={t("suppliersUi.requisitions.targetPlaceholder")}
             value={targetId}
             onChange={(e) => setTargetId(e.target.value)}
             fullWidth
-            helperText="Leave blank to send to all roster suppliers"
+            helperText={t("suppliersUi.requisitions.targetHelper")}
           />
 
           <Divider />
 
           {/* Line items */}
           <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="subtitle2">Line Items</Typography>
+            <Typography variant="subtitle2">
+              {t("suppliersUi.requisitions.lineItems")}
+            </Typography>
             <Button size="small" startIcon={<AddRounded />} onClick={addItem}>
-              Add Item
+              {t("suppliersUi.requisitions.addItem")}
             </Button>
           </Stack>
 
@@ -235,7 +250,7 @@ function CreateRequisitionDialog({
                 </Box>
                 <TextField
                   size="small"
-                  label="Qty"
+                  label={t("suppliersUi.requisitions.qty")}
                   type="number"
                   value={item.quantity}
                   onChange={(e) =>
@@ -248,7 +263,7 @@ function CreateRequisitionDialog({
                 />
                 <TextField
                   size="small"
-                  label="Max price / unit"
+                  label={t("suppliersUi.requisitions.maxPricePerUnit")}
                   type="number"
                   value={item.price_per_unit}
                   onChange={(e) =>
@@ -268,11 +283,14 @@ function CreateRequisitionDialog({
                 />
                 <Box sx={{ minWidth: 80, textAlign: "right" }}>
                   <Typography variant="caption" color="text.secondary">
-                    {(item.quantity * item.price_per_unit).toLocaleString()}{" "}
-                    aUEC
+                    {t("suppliersUi.amountAuec", {
+                      amount: (
+                        item.quantity * item.price_per_unit
+                      ).toLocaleString(),
+                    })}
                   </Typography>
                 </Box>
-                <Tooltip title="Remove">
+                <Tooltip title={t("suppliersUi.requisitions.remove")}>
                   <IconButton
                     size="small"
                     color="error"
@@ -288,33 +306,38 @@ function CreateRequisitionDialog({
 
           <Stack direction="row" justifyContent="flex-end">
             <Typography variant="body2" color="text.secondary">
-              Total:{" "}
-              <Typography
-                component="span"
-                variant="body2"
-                fontWeight="bold"
-                color="text.primary"
-              >
-                {totalPrice.toLocaleString()} aUEC
-              </Typography>
+              <Trans
+                i18nKey="suppliersUi.requisitions.totalWithAmount"
+                values={{ amount: totalPrice.toLocaleString() }}
+                components={{
+                  strong: (
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      fontWeight="bold"
+                      color="text.primary"
+                    />
+                  ),
+                }}
+              />
             </Typography>
           </Stack>
 
           {error && (
             <Alert severity="error">
-              {(error && "data" in error && (error.data as { message?: string })?.message) || "Failed to create requisition"}
+              {(error && "data" in error && (error.data as { message?: string })?.message) || t("suppliersUi.requisitions.createFailed")}
             </Alert>
           )}
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t("common.cancel")}</Button>
         <Button
           variant="contained"
           onClick={handleSubmit}
           disabled={!canSubmit || isLoading}
         >
-          Create
+          {t("common.create")}
         </Button>
       </DialogActions>
     </Dialog>
@@ -332,6 +355,7 @@ function RequisitionDetailDialog({
   orderId: string | null
   onClose: () => void
 }) {
+  const { t } = useTranslation()
   const { data: req } = useGetRequisitionQuery(
     { orderId: orderId! },
     { skip: !orderId },
@@ -361,12 +385,18 @@ function RequisitionDetailDialog({
         <Stack spacing={2}>
           <Stack direction="row" spacing={1}>
             <Chip
-              label={req.status}
+              label={
+                STATUS_LABEL_KEYS[req.status]
+                  ? t(STATUS_LABEL_KEYS[req.status])
+                  : req.status
+              }
               size="small"
               color={STATUS_COLORS[req.status] || "default"}
             />
             <Typography variant="caption" color="text.secondary" sx={{ my: "auto" }}>
-              Created {new Date(req.created_at).toLocaleDateString()}
+              {t("suppliersUi.requisitions.createdOn", {
+                date: new Date(req.created_at).toLocaleDateString(),
+              })}
             </Typography>
           </Stack>
 
@@ -378,15 +408,25 @@ function RequisitionDetailDialog({
 
           <Divider />
 
-          <Typography variant="subtitle2">Items</Typography>
+          <Typography variant="subtitle2">
+            {t("suppliersUi.requisitions.items")}
+          </Typography>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Item</TableCell>
-                <TableCell align="right">Qty</TableCell>
-                <TableCell align="right">Price / unit</TableCell>
-                <TableCell align="right">Subtotal</TableCell>
-                <TableCell align="right">Filled</TableCell>
+                <TableCell>{t("suppliersUi.requisitions.columns.item")}</TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.requisitions.qty")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.requisitions.columns.pricePerUnit")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.requisitions.columns.subtotal")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.requisitions.columns.filled")}
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -395,10 +435,16 @@ function RequisitionDetailDialog({
                   <TableCell>{item.game_item_name}</TableCell>
                   <TableCell align="right">{item.quantity.toLocaleString()}</TableCell>
                   <TableCell align="right">
-                    {item.price_per_unit.toLocaleString()} aUEC
+                    {t("suppliersUi.amountAuec", {
+                      amount: item.price_per_unit.toLocaleString(),
+                    })}
                   </TableCell>
                   <TableCell align="right">
-                    {(item.price_per_unit * item.quantity).toLocaleString()} aUEC
+                    {t("suppliersUi.amountAuec", {
+                      amount: (
+                        item.price_per_unit * item.quantity
+                      ).toLocaleString(),
+                    })}
                   </TableCell>
                   <TableCell align="right">
                     <Typography
@@ -417,12 +463,14 @@ function RequisitionDetailDialog({
               <TableRow>
                 <TableCell colSpan={3} align="right">
                   <Typography variant="body2" fontWeight="bold">
-                    Total
+                    {t("suppliersUi.requisitions.total")}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2" fontWeight="bold">
-                    {total.toLocaleString()} aUEC
+                    {t("suppliersUi.amountAuec", {
+                      amount: total.toLocaleString(),
+                    })}
                   </Typography>
                 </TableCell>
                 <TableCell />
@@ -433,7 +481,9 @@ function RequisitionDetailDialog({
           {req.supplier && (
             <>
               <Divider />
-              <Typography variant="subtitle2">Assigned Supplier</Typography>
+              <Typography variant="subtitle2">
+                {t("suppliersUi.requisitions.assignedSupplier")}
+              </Typography>
               <Stack direction="row" spacing={1} alignItems="center">
                 <Avatar sx={{ width: 28, height: 28 }}>
                   {req.supplier.display_name?.[0]}
@@ -450,7 +500,7 @@ function RequisitionDetailDialog({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Close</Button>
+        <Button onClick={onClose}>{t("suppliersUi.requisitions.close")}</Button>
       </DialogActions>
     </Dialog>
   )
@@ -461,6 +511,7 @@ function RequisitionDetailDialog({
 // ---------------------------------------------------------------------------
 
 export function AdminRequisitions() {
+  const { t } = useTranslation()
   const [createOpen, setCreateOpen] = useState(false)
   const [viewId, setViewId] = useState<string | null>(null)
 
@@ -478,11 +529,10 @@ export function AdminRequisitions() {
       >
         <Box>
           <Typography variant="h4" fontWeight="bold">
-            Requisitions
+            {t("suppliersUi.requisitions.pageTitle")}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            Item-anchored supply orders. Specify what you need; suppliers choose
-            which listing to fulfil from.
+            {t("suppliersUi.requisitions.subtitle")}
           </Typography>
         </Box>
         <Button
@@ -490,39 +540,47 @@ export function AdminRequisitions() {
           startIcon={<AddRounded />}
           onClick={() => setCreateOpen(true)}
         >
-          New Requisition
+          {t("suppliersUi.requisitions.newRequisition")}
         </Button>
       </Stack>
 
       <Paper>
         {isLoading ? (
           <Box sx={{ p: 4, textAlign: "center" }}>
-            <Typography color="text.secondary">Loading…</Typography>
+            <Typography color="text.secondary">
+              {t("marketV2.loadingEllipsis")}
+            </Typography>
           </Box>
         ) : requisitions.length === 0 ? (
           <Box sx={{ p: 4, textAlign: "center" }}>
             <Typography color="text.secondary" gutterBottom>
-              No requisitions yet.
+              {t("suppliersUi.requisitions.empty")}
             </Typography>
             <Button
               variant="outlined"
               startIcon={<AddRounded />}
               onClick={() => setCreateOpen(true)}
             >
-              Create your first requisition
+              {t("suppliersUi.requisitions.createFirst")}
             </Button>
           </Box>
         ) : (
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="right">Items</TableCell>
-                <TableCell align="right">Total</TableCell>
-                <TableCell>Supplier</TableCell>
-                <TableCell>Created</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell>{t("suppliersUi.requisitions.columns.title")}</TableCell>
+                <TableCell>{t("suppliersUi.requisitions.columns.status")}</TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.requisitions.columns.items")}
+                </TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.requisitions.columns.total")}
+                </TableCell>
+                <TableCell>{t("suppliersUi.requisitions.columns.supplier")}</TableCell>
+                <TableCell>{t("suppliersUi.requisitions.columns.created")}</TableCell>
+                <TableCell align="right">
+                  {t("suppliersUi.requisitions.columns.actions")}
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -559,7 +617,11 @@ export function AdminRequisitions() {
                     </TableCell>
                     <TableCell>
                       <Chip
-                        label={req.status}
+                        label={
+                STATUS_LABEL_KEYS[req.status]
+                  ? t(STATUS_LABEL_KEYS[req.status])
+                  : req.status
+              }
                         size="small"
                         color={STATUS_COLORS[req.status] || "default"}
                       />
@@ -569,7 +631,9 @@ export function AdminRequisitions() {
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body2" fontWeight={500}>
-                        {total.toLocaleString()} aUEC
+                        {t("suppliersUi.amountAuec", {
+                          amount: total.toLocaleString(),
+                        })}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -581,7 +645,7 @@ export function AdminRequisitions() {
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
-                      <Tooltip title="View">
+                      <Tooltip title={t("suppliersUi.requisitions.view")}>
                         <IconButton
                           size="small"
                           onClick={() => setViewId(req.order_id)}

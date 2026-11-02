@@ -6626,5 +6626,206 @@
     "craftableItems_other": "Herstellbare Gegenstände ({{count}})",
     "minutesShort": "{{minutes}} Min.",
     "noCraftable": "Mit diesen Materialien kann keine Blaupause hergestellt werden."
+  },
+  "suppliersUi": {
+    "amountAuec": "{{amount}} aUEC",
+    "tiers": {
+      "preferred": "Bevorzugt",
+      "approved": "Freigegeben",
+      "restricted": "Eingeschränkt"
+    },
+    "kind": {
+      "user": "Benutzer",
+      "org": "Org.",
+      "organisation": "Organisation"
+    },
+    "roster": {
+      "title": "Lieferantenliste",
+      "subtitle": "Verwalten Sie Ihre vertrauenswürdigen Lieferanten. Bevorzugte Lieferanten erhalten bei gezielten Kaufaufträgen vorrangige Sichtbarkeit.",
+      "addSupplier": "Lieferant hinzufügen",
+      "supplierType": "Lieferantentyp",
+      "userUuid": "Benutzer-UUID",
+      "contractorUuid": "Organisations-UUID",
+      "uuidHelper": "Fügen Sie die UUID aus dem Benutzer- bzw. Organisationsprofil ein",
+      "tierOptional": "Stufe (optional)",
+      "notesOptional": "Notizen (optional)",
+      "addFailed": "Lieferant konnte nicht hinzugefügt werden",
+      "add": "Hinzufügen",
+      "editSupplier": "Lieferant bearbeiten",
+      "tier": "Stufe",
+      "status": "Status",
+      "notes": "Notizen",
+      "statusOption": {
+        "active": "Aktiv",
+        "suspended": "Gesperrt",
+        "removed": "Entfernt"
+      },
+      "statusChip": {
+        "active": "aktiv",
+        "suspended": "gesperrt",
+        "removed": "entfernt"
+      },
+      "updateFailed": "Lieferant konnte nicht aktualisiert werden",
+      "edit": "Bearbeiten",
+      "remove": "Entfernen",
+      "removeConfirm": "{{name}} aus Ihrer Lieferantenliste entfernen?",
+      "mySuppliersTab_one": "Meine Lieferanten ({{count}})",
+      "mySuppliersTab_other": "Meine Lieferanten ({{count}})",
+      "supplierForTab_one": "Ich beliefere ({{count}})",
+      "supplierForTab_other": "Ich beliefere ({{count}})",
+      "empty": "Noch keine Lieferanten.",
+      "addFirst": "Ersten Lieferanten hinzufügen",
+      "notOnRoster": "Sie stehen noch auf keiner Lieferantenliste.",
+      "columns": {
+        "supplier": "Lieferant",
+        "type": "Typ",
+        "tier": "Stufe",
+        "status": "Status",
+        "notes": "Notizen",
+        "added": "Hinzugefügt",
+        "actions": "Aktionen",
+        "aggregator": "Abnehmer",
+        "tierAssigned": "Ihnen zugewiesene Stufe",
+        "theirNotes": "Deren Notizen",
+        "since": "Seit"
+      }
+    },
+    "requisitions": {
+      "gameItem": "Spielgegenstand",
+      "searchByName": "Nach Namen suchen…",
+      "createTitle": "Bedarfsanforderung erstellen",
+      "fieldTitle": "Titel",
+      "descriptionOptional": "Beschreibung (optional)",
+      "targetSupplier": "Benutzer-UUID des Ziellieferanten (optional)",
+      "targetPlaceholder": "user_id einfügen, um an einen bestimmten Lieferanten zu richten",
+      "targetHelper": "Leer lassen, um an alle Lieferanten der Liste zu senden",
+      "lineItems": "Positionen",
+      "addItem": "Position hinzufügen",
+      "qty": "Menge",
+      "maxPricePerUnit": "Höchstpreis / Einheit",
+      "remove": "Entfernen",
+      "totalWithAmount": "Gesamt: <strong>{{amount}} aUEC</strong>",
+      "createFailed": "Bedarfsanforderung konnte nicht erstellt werden",
+      "createdOn": "Erstellt am {{date}}",
+      "items": "Artikel",
+      "total": "Gesamt",
+      "assignedSupplier": "Zugewiesener Lieferant",
+      "close": "Schließen",
+      "pageTitle": "Bedarfsanforderungen",
+      "subtitle": "Artikelbezogene Beschaffungsaufträge. Geben Sie an, was Sie benötigen; Lieferanten wählen, aus welchem Angebot sie liefern.",
+      "newRequisition": "Neue Bedarfsanforderung",
+      "empty": "Noch keine Bedarfsanforderungen.",
+      "createFirst": "Erste Bedarfsanforderung erstellen",
+      "view": "Ansehen",
+      "statusChip": {
+        "notStarted": "nicht begonnen",
+        "inProgress": "in Bearbeitung",
+        "fulfilled": "erfüllt",
+        "cancelled": "storniert"
+      },
+      "columns": {
+        "item": "Artikel",
+        "pricePerUnit": "Preis / Einheit",
+        "subtotal": "Zwischensumme",
+        "filled": "Erfüllt",
+        "title": "Titel",
+        "status": "Status",
+        "items": "Artikel",
+        "total": "Gesamt",
+        "supplier": "Lieferant",
+        "created": "Erstellt",
+        "actions": "Aktionen"
+      }
+    },
+    "dashboard": {
+      "title": "Lieferanten-Dashboard",
+      "subtitle": "Ihre Kaufaufträge, Bedarfsanforderungen und Lieferaktivitäten auf einen Blick",
+      "refreshAll": "Alles aktualisieren",
+      "visibility": {
+        "targeted": "Gezielt",
+        "roster": "Liste",
+        "public": "Öffentlich"
+      },
+      "orderStatus": {
+        "notStarted": "Nicht begonnen",
+        "inProgress": "In Bearbeitung",
+        "fulfilled": "Erfüllt",
+        "cancelled": "Storniert"
+      },
+      "reqStatus": {
+        "awaiting": "Ausstehend",
+        "inProgress": "In Bearbeitung",
+        "fulfilled": "Erfüllt",
+        "cancelled": "Storniert"
+      },
+      "timeAgo": {
+        "minutes_one": "vor {{count}} Min.",
+        "minutes_other": "vor {{count}} Min.",
+        "hours_one": "vor {{count}} Std.",
+        "hours_other": "vor {{count}} Std.",
+        "days_one": "vor {{count}} Tag",
+        "days_other": "vor {{count}} Tagen"
+      },
+      "incomingBuyOrders": "Eingehende Kaufaufträge",
+      "activeCount_one": "{{count}} aktiv",
+      "activeCount_other": "{{count}} aktiv",
+      "tabs": {
+        "targeted": "Gezielt",
+        "roster": "Liste",
+        "public": "Öffentlich",
+        "targetedCount_one": "Gezielt ({{count}})",
+        "targetedCount_other": "Gezielt ({{count}})",
+        "rosterCount_one": "Liste ({{count}})",
+        "rosterCount_other": "Liste ({{count}})",
+        "publicCount_one": "Öffentlich ({{count}})",
+        "publicCount_other": "Öffentlich ({{count}})"
+      },
+      "noBuyOrders": "Keine Kaufaufträge in dieser Kategorie",
+      "columns": {
+        "item": "Artikel",
+        "visibility": "Sichtbarkeit",
+        "pricePerUnit": "Preis / Einheit",
+        "qty": "Menge",
+        "expires": "Läuft ab",
+        "buyer": "Käufer",
+        "order": "Bestellung",
+        "total": "Gesamt",
+        "status": "Status"
+      },
+      "viewOrder": "Auftrag ansehen",
+      "openRequisitions": "Offene Bedarfsanforderungen",
+      "needResponse_one": "{{count}} wartet auf Antwort",
+      "needResponse_other": "{{count}} warten auf Antwort",
+      "noOpenRequisitions": "Keine offenen Bedarfsanforderungen",
+      "fromBuyer": "von {{name}}",
+      "openRequisition": "Bedarfsanforderung öffnen",
+      "sellerCount_one": "{{count}} als Verkäufer",
+      "sellerCount_other": "{{count}} als Verkäufer",
+      "noRecentOrders": "Keine aktuellen Bestellungen",
+      "openOrder": "Bestellung öffnen",
+      "activity": {
+        "targetedBuyOrder": "<b>{{buyer}}</b> hat einen gezielten Kaufauftrag für <b>{{item}}</b> gesendet",
+        "newRequisition": "Neue Bedarfsanforderung <b>{{title}}</b> von <b>{{buyer}}</b>",
+        "orderCompleted": "Bestellung <b>{{title}}</b> abgeschlossen — <b>{{amount}} aUEC</b>"
+      },
+      "noActivity": "Keine aktuellen Aktivitäten",
+      "activityTitle": "Aktivität",
+      "stats": {
+        "activeBuyOrders": "Aktive Kaufaufträge",
+        "targetedAtMe_one": "{{count}} gezielt an mich",
+        "targetedAtMe_other": "{{count}} gezielt an mich",
+        "openRequisitions": "Offene Bedarfsanforderungen",
+        "awaitingResponse_one": "{{count}} wartet auf Antwort",
+        "awaitingResponse_other": "{{count}} warten auf Antwort",
+        "revenue": "Umsatz (gesamt)",
+        "ordersCompleted_one": "{{count}} Bestellung abgeschlossen",
+        "ordersCompleted_other": "{{count}} Bestellungen abgeschlossen",
+        "fulfilledOrders": "Erfüllte Bestellungen",
+        "ofTotal_one": "von insgesamt {{count}}",
+        "ofTotal_other": "von insgesamt {{count}}",
+        "rosterSuppliers": "Lieferanten in der Liste",
+        "inNetwork": "in Ihrem Netzwerk"
+      }
+    }
   }
 }
