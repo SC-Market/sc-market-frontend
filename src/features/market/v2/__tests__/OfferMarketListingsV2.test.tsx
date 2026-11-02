@@ -29,7 +29,8 @@ const testTheme = createTheme({
 // Mock translations
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string) => {
+    t: (key: string, opts?: { tier?: number }) => {
+      if (key === "marketV2.tierN") return `Tier ${opts?.tier}`
       const translations: Record<string, string> = {
         "OfferMarketListings.associatedMarketListings": "Associated Market Listings",
         "OfferMarketListings.product": "Product",

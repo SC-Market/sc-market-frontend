@@ -236,7 +236,7 @@ describe("MarketCartV2", () => {
       // Variant is rendered as separate chips: quality tier badge,
       // quality value, and crafted source.
       await waitFor(() => {
-        expect(screen.getAllByText("Tier 5").length).toBeGreaterThan(0)
+        expect(screen.getAllByText('marketV2.tierN_{"tier":5}').length).toBeGreaterThan(0)
         expect(screen.getByText("Crafted")).toBeInTheDocument()
       })
     })
