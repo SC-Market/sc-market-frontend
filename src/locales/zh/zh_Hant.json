@@ -2002,7 +2002,8 @@
     "service": "服務",
     "share": "分享",
     "title": "訂單",
-    "viewDetails": "檢視詳細資料"
+    "viewDetails": "檢視詳細資料",
+    "actions": "操作"
   },
   "orderDetailsArea": {
     "updated_status": "狀態已更新！",
@@ -5559,7 +5560,14 @@
       "headerTitle": "商品",
       "loadError": "載入商品失敗。",
       "noResults": "找不到商品。",
-      "searchPlaceholder": "搜尋商品..."
+      "searchPlaceholder": "搜尋商品...",
+      "acqFilter": {
+        "all": "全部",
+        "mined": "可開採",
+        "purchased": "可購買",
+        "salvaged": "可打撈",
+        "looted": "可拾取"
+      }
     },
     "commodityDetail": {
       "acqLoot": "拾取",
@@ -5590,7 +5598,18 @@
     "hub": {
       "description": "瀏覽完整的 Star Citizen 遊戲資料庫：物品、船艦、商品、地點、製造商、藍圖與採礦資源。",
       "header": "遊戲資料庫",
-      "title": "遊戲資料庫 — Star Citizen 物品、船艦與更多 | SC Market"
+      "title": "遊戲資料庫 — Star Citizen 物品、船艦與更多 | SC Market",
+      "sectionItems": "物品",
+      "sectionShips": "艦船與載具",
+      "sectionCommodities": "商品",
+      "sectionLocations": "地點",
+      "sectionManufacturers": "製造商",
+      "sectionRefinery": "精煉廠",
+      "sectionMissions": "任務",
+      "sectionBlueprints": "藍圖",
+      "sectionCraftingCalculator": "製作計算機",
+      "sectionResources": "資源",
+      "sectionMining": "採礦"
     },
     "itemBrowser": {
       "all": "全部",
@@ -5694,8 +5713,29 @@
       "colYield": "產出",
       "description": "精煉方式決定原礦的處理速度以及可獲得的精煉材料數量。快速方式可節省時間，但可能浪費材料。謹慎方式可最大化產出，但需要更長時間。",
       "headerTitle": "精煉方式",
-      "processingHeader": "{{speed}} 處理",
-      "title": "精煉方式"
+      "processingHeader": "處理速度：{{speed}}",
+      "title": "精煉方式",
+      "speedDesc": {
+        "fast": "處理時間最短 — 快速取得精煉材料",
+        "normal": "處理時間均衡",
+        "slow": "處理時間最長 — 但通常產出更高"
+      },
+      "qualityDesc": {
+        "careful": "產出最高 — 精煉時材料損失最小",
+        "normal": "產出均衡 — 材料損失適中",
+        "wasteful": "產出最低 — 材料損失較大，但更便宜"
+      },
+      "bestFor": {
+        "fastCareful": "綜合最佳 — 速度快且產出高",
+        "fastNormal": "周轉快，產出尚可",
+        "fastWasteful": "最快速度，接受材料損失",
+        "normalCareful": "熱門選擇 — 產出好，耗時合理",
+        "normalNormal": "各方面均衡",
+        "normalWasteful": "較快，但產出較低",
+        "slowCareful": "產出最高 — 昂貴礦石值得等待",
+        "slowNormal": "慢但穩定",
+        "slowWasteful": "又慢又浪費 — 一般應避免"
+      }
     },
     "shipBrowser": {
       "allManufacturers": "所有製造商",

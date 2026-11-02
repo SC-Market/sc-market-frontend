@@ -2070,7 +2070,8 @@
     "service": "Servicio",
     "share": "Compartir",
     "title": "Pedidos",
-    "viewDetails": "Ver detalles"
+    "viewDetails": "Ver detalles",
+    "actions": "Acciones"
   },
   "orderDetailsArea": {
     "updated_status": "¡Estado actualizado!",
@@ -5633,7 +5634,14 @@
       "headerTitle": "Materias primas",
       "loadError": "No se pudieron cargar las materias primas.",
       "noResults": "No se encontraron materias primas.",
-      "searchPlaceholder": "Buscar materias primas..."
+      "searchPlaceholder": "Buscar materias primas...",
+      "acqFilter": {
+        "all": "Todos",
+        "mined": "Minable",
+        "purchased": "Comprable",
+        "salvaged": "Recuperable",
+        "looted": "Saqueable"
+      }
     },
     "commodityDetail": {
       "acqLoot": "Botín",
@@ -5664,7 +5672,18 @@
     "hub": {
       "description": "Explora la base de datos completa del juego Star Citizen: objetos, naves, materias primas, ubicaciones, fabricantes, planos y recursos de minería.",
       "header": "Base de datos del juego",
-      "title": "Base de datos del juego — Objetos, naves y más de Star Citizen | SC Market"
+      "title": "Base de datos del juego — Objetos, naves y más de Star Citizen | SC Market",
+      "sectionItems": "Objetos",
+      "sectionShips": "Naves y vehículos",
+      "sectionCommodities": "Materias primas",
+      "sectionLocations": "Ubicaciones",
+      "sectionManufacturers": "Fabricantes",
+      "sectionRefinery": "Refinería",
+      "sectionMissions": "Misiones",
+      "sectionBlueprints": "Planos",
+      "sectionCraftingCalculator": "Calculadora de fabricación",
+      "sectionResources": "Recursos",
+      "sectionMining": "Minería"
     },
     "itemBrowser": {
       "all": "Todos",
@@ -5768,8 +5787,29 @@
       "colYield": "Rendimiento",
       "description": "Los métodos de refinado determinan la rapidez con la que se procesa tu mineral en bruto y cuánto material refinado recibes. Los métodos rápidos ahorran tiempo, pero pueden desperdiciar material. Los métodos cuidadosos maximizan el rendimiento, pero tardan más.",
       "headerTitle": "Métodos de refinado",
-      "processingHeader": "Procesamiento {{speed}}",
-      "title": "Métodos de refinado"
+      "processingHeader": "Procesamiento: {{speed}}",
+      "title": "Métodos de refinado",
+      "speedDesc": {
+        "fast": "Menor tiempo de procesamiento: obtén tus materiales refinados rápido",
+        "normal": "Tiempo de procesamiento equilibrado",
+        "slow": "Mayor tiempo de procesamiento, aunque suele dar mejor rendimiento"
+      },
+      "qualityDesc": {
+        "careful": "Máximo rendimiento: pérdida mínima de material al refinar",
+        "normal": "Rendimiento equilibrado: pérdida moderada de material",
+        "wasteful": "Mínimo rendimiento: pérdida notable de material, pero más barato"
+      },
+      "bestFor": {
+        "fastCareful": "La mejor opción: rápida y con alto rendimiento",
+        "fastNormal": "Rápido, con un rendimiento aceptable",
+        "fastWasteful": "Lo más rápido posible, aceptando pérdida de material",
+        "normalCareful": "Opción popular: buen rendimiento en un tiempo razonable",
+        "normalNormal": "Equilibrado en todo",
+        "normalWasteful": "Bastante rápido, con menor rendimiento",
+        "slowCareful": "Rendimiento máximo: vale la pena esperar con minerales caros",
+        "slowNormal": "Lento pero constante",
+        "slowWasteful": "Lento Y con pérdidas: mejor evitarlo"
+      }
     },
     "shipBrowser": {
       "allManufacturers": "Todos los fabricantes",

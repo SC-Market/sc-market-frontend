@@ -2065,7 +2065,8 @@
     "service": "Dienstleistung",
     "share": "Teilen",
     "title": "Bestellungen",
-    "viewDetails": "Details anzeigen"
+    "viewDetails": "Details anzeigen",
+    "actions": "Aktionen"
   },
   "orderDetailsArea": {
     "updated_status": "Status aktualisiert!",
@@ -5596,7 +5597,14 @@
       "headerTitle": "Handelswaren",
       "loadError": "Handelswaren konnten nicht geladen werden.",
       "noResults": "Keine Handelswaren gefunden.",
-      "searchPlaceholder": "Handelswaren suchen..."
+      "searchPlaceholder": "Handelswaren suchen...",
+      "acqFilter": {
+        "all": "Alle",
+        "mined": "Abbaubar",
+        "purchased": "Käuflich",
+        "salvaged": "Bergbar",
+        "looted": "Erbeutbar"
+      }
     },
     "commodityDetail": {
       "acqLoot": "Beute",
@@ -5627,7 +5635,18 @@
     "hub": {
       "description": "Durchsuchen Sie die vollständige Spieldatenbank von Star Citizen: Gegenstände, Schiffe, Handelswaren, Standorte, Hersteller, Blaupausen und Abbauressourcen.",
       "header": "Spieldatenbank",
-      "title": "Spieldatenbank — Star Citizen Gegenstände, Schiffe & mehr | SC Market"
+      "title": "Spieldatenbank — Star Citizen Gegenstände, Schiffe & mehr | SC Market",
+      "sectionItems": "Gegenstände",
+      "sectionShips": "Schiffe & Fahrzeuge",
+      "sectionCommodities": "Rohstoffe",
+      "sectionLocations": "Standorte",
+      "sectionManufacturers": "Hersteller",
+      "sectionRefinery": "Raffinerie",
+      "sectionMissions": "Missionen",
+      "sectionBlueprints": "Baupläne",
+      "sectionCraftingCalculator": "Herstellungsrechner",
+      "sectionResources": "Ressourcen",
+      "sectionMining": "Abbau"
     },
     "itemBrowser": {
       "all": "Alle",
@@ -5731,8 +5750,29 @@
       "colYield": "Ertrag",
       "description": "Raffinationsmethoden bestimmen, wie schnell Ihr Rohmaterial verarbeitet wird und wie viel raffiniertes Material Sie erhalten. Schnelle Methoden sparen Zeit, können aber Material verschwenden. Sorgfältige Methoden maximieren den Ertrag, dauern aber länger.",
       "headerTitle": "Raffinationsmethoden",
-      "processingHeader": "{{speed}} Verarbeitung",
-      "title": "Raffinationsmethoden"
+      "processingHeader": "Verarbeitung: {{speed}}",
+      "title": "Raffinationsmethoden",
+      "speedDesc": {
+        "fast": "Kürzeste Verarbeitungszeit – Sie erhalten Ihre raffinierten Materialien schnell",
+        "normal": "Ausgewogene Verarbeitungszeit",
+        "slow": "Längste Verarbeitungszeit – dafür oft mit besserer Ausbeute"
+      },
+      "qualityDesc": {
+        "careful": "Höchste Ausbeute – minimaler Materialverlust beim Raffinieren",
+        "normal": "Ausgewogene Ausbeute – mäßiger Materialverlust",
+        "wasteful": "Niedrigste Ausbeute – deutlicher Materialverlust, aber günstiger"
+      },
+      "bestFor": {
+        "fastCareful": "Insgesamt am besten – schnell und mit hoher Ausbeute",
+        "fastNormal": "Schnell fertig, ordentliche Ausbeute",
+        "fastWasteful": "So schnell wie möglich, Materialverlust in Kauf nehmen",
+        "normalCareful": "Beliebte Wahl – gute Ausbeute in angemessener Zeit",
+        "normalNormal": "Rundum ausgewogen",
+        "normalWasteful": "Recht schnell, aber mit geringerer Ausbeute",
+        "slowCareful": "Maximale Ausbeute – lohnt das Warten bei teuren Erzen",
+        "slowNormal": "Langsam, aber beständig",
+        "slowWasteful": "Langsam UND verlustreich – meist besser meiden"
+      }
     },
     "shipBrowser": {
       "allManufacturers": "Alle Hersteller",

@@ -2070,7 +2070,8 @@
     "service": "Service",
     "share": "Partager",
     "title": "Commandes",
-    "viewDetails": "Voir les détails"
+    "viewDetails": "Voir les détails",
+    "actions": "Actions"
   },
   "orderDetailsArea": {
     "updated_status": "Statut mis à jour !",
@@ -5633,7 +5634,14 @@
       "headerTitle": "Marchandises",
       "loadError": "Échec du chargement des marchandises.",
       "noResults": "Aucune marchandise trouvée.",
-      "searchPlaceholder": "Rechercher des marchandises..."
+      "searchPlaceholder": "Rechercher des marchandises...",
+      "acqFilter": {
+        "all": "Tous",
+        "mined": "Minable",
+        "purchased": "Achetable",
+        "salvaged": "Récupérable",
+        "looted": "Pillable"
+      }
     },
     "commodityDetail": {
       "acqLoot": "Butin",
@@ -5664,7 +5672,18 @@
     "hub": {
       "description": "Parcourez la base de données complète du jeu Star Citizen : objets, vaisseaux, marchandises, emplacements, fabricants, plans et ressources de minage.",
       "header": "Base de données du jeu",
-      "title": "Base de données du jeu — Objets, vaisseaux Star Citizen et plus | SC Market"
+      "title": "Base de données du jeu — Objets, vaisseaux Star Citizen et plus | SC Market",
+      "sectionItems": "Objets",
+      "sectionShips": "Vaisseaux et véhicules",
+      "sectionCommodities": "Marchandises",
+      "sectionLocations": "Emplacements",
+      "sectionManufacturers": "Fabricants",
+      "sectionRefinery": "Raffinerie",
+      "sectionMissions": "Missions",
+      "sectionBlueprints": "Plans",
+      "sectionCraftingCalculator": "Calculateur de fabrication",
+      "sectionResources": "Ressources",
+      "sectionMining": "Minage"
     },
     "itemBrowser": {
       "all": "Tous",
@@ -5768,8 +5787,29 @@
       "colYield": "Rendement",
       "description": "Les méthodes de raffinage déterminent la rapidité de traitement de votre minerai brut et la quantité de matériau raffiné que vous recevez. Les méthodes rapides font gagner du temps mais peuvent gaspiller du matériau. Les méthodes minutieuses maximisent le rendement mais prennent plus de temps.",
       "headerTitle": "Méthodes de raffinage",
-      "processingHeader": "Traitement {{speed}}",
-      "title": "Méthodes de raffinage"
+      "processingHeader": "Traitement : {{speed}}",
+      "title": "Méthodes de raffinage",
+      "speedDesc": {
+        "fast": "Temps de traitement le plus court : obtenez vos matériaux raffinés rapidement",
+        "normal": "Temps de traitement équilibré",
+        "slow": "Temps de traitement le plus long, mais souvent associé à un meilleur rendement"
+      },
+      "qualityDesc": {
+        "careful": "Rendement maximal : perte de matière minimale au raffinage",
+        "normal": "Rendement équilibré : perte de matière modérée",
+        "wasteful": "Rendement minimal : perte de matière importante, mais moins cher"
+      },
+      "bestFor": {
+        "fastCareful": "Le meilleur choix : rapide et à haut rendement",
+        "fastNormal": "Rapide, rendement correct",
+        "fastWasteful": "Le plus rapide possible, en acceptant une perte de matière",
+        "normalCareful": "Choix populaire : bon rendement, durée raisonnable",
+        "normalNormal": "Équilibré en tout point",
+        "normalWasteful": "Assez rapide, avec un rendement plus faible",
+        "slowCareful": "Rendement maximal : l’attente en vaut la peine pour les minerais chers",
+        "slowNormal": "Lent mais régulier",
+        "slowWasteful": "Lent ET gaspilleur : à éviter en général"
+      }
     },
     "shipBrowser": {
       "allManufacturers": "Tous les fabricants",

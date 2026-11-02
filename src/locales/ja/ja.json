@@ -2060,7 +2060,8 @@
     "service": "サービス",
     "share": "共有",
     "title": "注文",
-    "viewDetails": "詳細を見る"
+    "viewDetails": "詳細を見る",
+    "actions": "操作"
   },
   "orderDetailsArea": {
     "updated_status": "ステータスを更新しました！",
@@ -5559,7 +5560,14 @@
       "headerTitle": "商品",
       "loadError": "商品の読み込みに失敗しました。",
       "noResults": "商品が見つかりませんでした。",
-      "searchPlaceholder": "商品を検索..."
+      "searchPlaceholder": "商品を検索...",
+      "acqFilter": {
+        "all": "すべて",
+        "mined": "採掘可能",
+        "purchased": "購入可能",
+        "salvaged": "サルベージ可能",
+        "looted": "ルート可能"
+      }
     },
     "commodityDetail": {
       "acqLoot": "略奪",
@@ -5590,7 +5598,18 @@
     "hub": {
       "description": "Star Citizen のゲームデータベース全体を閲覧できます：アイテム、艦船、商品、場所、メーカー、ブループリント、採掘リソース。",
       "header": "ゲームデータベース",
-      "title": "ゲームデータベース — Star Citizen のアイテム・艦船ほか | SC Market"
+      "title": "ゲームデータベース — Star Citizen のアイテム・艦船ほか | SC Market",
+      "sectionItems": "アイテム",
+      "sectionShips": "艦船と車両",
+      "sectionCommodities": "商品",
+      "sectionLocations": "場所",
+      "sectionManufacturers": "メーカー",
+      "sectionRefinery": "精錬所",
+      "sectionMissions": "ミッション",
+      "sectionBlueprints": "設計図",
+      "sectionCraftingCalculator": "クラフト計算機",
+      "sectionResources": "リソース",
+      "sectionMining": "採掘"
     },
     "itemBrowser": {
       "all": "すべて",
@@ -5694,8 +5713,29 @@
       "colYield": "収量",
       "description": "精錬方法によって、原鉱石の処理速度と得られる精錬素材の量が決まります。高速な方法は時間を節約できますが、素材を無駄にする場合があります。慎重な方法は収量を最大化しますが、より時間がかかります。",
       "headerTitle": "精錬方法",
-      "processingHeader": "{{speed}} 処理",
-      "title": "精錬方法"
+      "processingHeader": "処理速度：{{speed}}",
+      "title": "精錬方法",
+      "speedDesc": {
+        "fast": "処理時間が最短 — 精製済み素材をすばやく入手できます",
+        "normal": "バランスの取れた処理時間",
+        "slow": "処理時間が最長 — ただし収率が良いことが多いです"
+      },
+      "qualityDesc": {
+        "careful": "収率が最高 — 精製時の素材ロスが最小限です",
+        "normal": "バランスの取れた収率 — 素材ロスは中程度です",
+        "wasteful": "収率が最低 — 素材ロスは大きいですが安価です"
+      },
+      "bestFor": {
+        "fastCareful": "総合的に最適 — 高速かつ高収率",
+        "fastNormal": "短時間で完了、収率もまずまず",
+        "fastWasteful": "最速、素材ロスは許容",
+        "normalCareful": "人気の選択肢 — 収率が良く、時間も妥当",
+        "normalNormal": "全体的にバランス型",
+        "normalWasteful": "やや速いが収率は低め",
+        "slowCareful": "収率が最大 — 高価な鉱石なら待つ価値あり",
+        "slowNormal": "遅いが安定",
+        "slowWasteful": "遅くてロスも大きい — 基本的に避けましょう"
+      }
     },
     "shipBrowser": {
       "allManufacturers": "すべてのメーカー",

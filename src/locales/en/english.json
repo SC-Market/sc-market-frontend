@@ -3660,7 +3660,8 @@
     },
     "title": "Orders",
     "viewDetails": "View Details",
-    "viewOrder": "View Order"
+    "viewOrder": "View Order",
+    "actions": "Actions"
   },
   "orderServiceArea": {
     "associated_services": "Associated Services",
@@ -5596,7 +5597,14 @@
       "headerTitle": "Commodities",
       "loadError": "Failed to load commodities.",
       "noResults": "No commodities found.",
-      "searchPlaceholder": "Search commodities..."
+      "searchPlaceholder": "Search commodities...",
+      "acqFilter": {
+        "all": "All",
+        "mined": "Minable",
+        "purchased": "Purchasable",
+        "salvaged": "Salvageable",
+        "looted": "Lootable"
+      }
     },
     "commodityDetail": {
       "acqLoot": "Loot",
@@ -5627,7 +5635,18 @@
     "hub": {
       "description": "Browse the complete Star Citizen game database: items, ships, commodities, locations, manufacturers, blueprints, and mining resources.",
       "header": "Game Database",
-      "title": "Game Database — Star Citizen Items, Ships & More | SC Market"
+      "title": "Game Database — Star Citizen Items, Ships & More | SC Market",
+      "sectionItems": "Items",
+      "sectionShips": "Ships & Vehicles",
+      "sectionCommodities": "Commodities",
+      "sectionLocations": "Locations",
+      "sectionManufacturers": "Manufacturers",
+      "sectionRefinery": "Refinery",
+      "sectionMissions": "Missions",
+      "sectionBlueprints": "Blueprints",
+      "sectionCraftingCalculator": "Crafting Calculator",
+      "sectionResources": "Resources",
+      "sectionMining": "Mining"
     },
     "itemBrowser": {
       "all": "All",
@@ -5732,7 +5751,28 @@
       "description": "Refining methods determine how quickly your raw ore is processed and how much refined material you receive. Fast methods save time but may waste material. Careful methods maximize yield but take longer.",
       "headerTitle": "Refining Methods",
       "processingHeader": "{{speed}} Processing",
-      "title": "Refining Methods"
+      "title": "Refining Methods",
+      "speedDesc": {
+        "fast": "Shortest processing time — get your refined materials quickly",
+        "normal": "Balanced processing time",
+        "slow": "Longest processing time — but often paired with better yield"
+      },
+      "qualityDesc": {
+        "careful": "Highest yield — minimal material loss during refining",
+        "normal": "Balanced yield — moderate material loss",
+        "wasteful": "Lowest yield — significant material loss, but cheaper"
+      },
+      "bestFor": {
+        "fastCareful": "Best overall — fast with high yield",
+        "fastNormal": "Quick turnaround, decent yield",
+        "fastWasteful": "Fastest possible, accept material loss",
+        "normalCareful": "Popular choice — good yield, reasonable time",
+        "normalNormal": "Balanced all-around",
+        "normalWasteful": "Quick-ish with lower yield",
+        "slowCareful": "Maximum yield — worth the wait for expensive ores",
+        "slowNormal": "Slow but steady",
+        "slowWasteful": "Slow AND wasteful — generally avoid"
+      }
     },
     "shipBrowser": {
       "allShips": "All ships and vehicles",
