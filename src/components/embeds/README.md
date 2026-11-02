@@ -30,35 +30,6 @@ function MyComponent() {
 - `videoId` (required): YouTube video ID
 - `title` (optional): Accessible title for the video
 
-### EmbedFacade
-
-A generic facade component for any heavy embed. Shows a placeholder with a loading message until the user clicks to activate.
-
-**Usage:**
-
-```tsx
-import { EmbedFacade } from "../embeds/EmbedFacade"
-
-function MyComponent() {
-  return (
-    <EmbedFacade
-      title="Interactive Map"
-      onActivate={() => {
-        // Load your heavy embed here
-      }}
-    >
-      {(isActive) => (isActive ? <HeavyMapComponent /> : null)}
-    </EmbedFacade>
-  )
-}
-```
-
-**Props:**
-
-- `title` (required): Display title for the embed
-- `onActivate` (optional): Callback when user activates the embed
-- `children`: Render function receiving `isActive` boolean
-
 ## Performance Impact
 
 Using embed facades can significantly improve Core Web Vitals:
@@ -81,38 +52,10 @@ The facade pattern follows these principles:
 To create a new facade for a different embed type:
 
 1. Create a new component file (e.g., `MapFacade.tsx`)
-2. Use `EmbedFacade` as a base or create a custom implementation
+2. Follow the `YouTubeFacade` pattern: a lightweight preview until activation
 3. Ensure the facade shows a meaningful preview
 4. Load the heavy embed only on user interaction
 5. Export from `index.ts`
-
-Example:
-
-```tsx
-import React, { useState } from "react"
-import { EmbedFacade } from "./EmbedFacade"
-
-export function MapFacade({ location }: { location: string }) {
-  const [isActive, setIsActive] = useState(false)
-
-  return (
-    <EmbedFacade
-      title={`Map of ${location}`}
-      onActivate={() => setIsActive(true)}
-    >
-      {(active) =>
-        active ? (
-          <iframe
-            src={`https://maps.example.com/embed?q=${location}`}
-            width="100%"
-            height="400"
-          />
-        ) : null
-      }
-    </EmbedFacade>
-  )
-}
-```
 
 ## Testing
 

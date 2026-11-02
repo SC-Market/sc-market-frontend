@@ -91,7 +91,7 @@ if (Bugsnag) {
 
 ### 4. Embed Facades
 
-**Implementation:** `YouTubeFacade.tsx`, `EmbedFacade.tsx`
+**Implementation:** `YouTubeFacade.tsx`
 
 Heavy embeds (YouTube videos, maps) use the facade pattern:
 
@@ -154,7 +154,6 @@ import { YouTubeFacade } from "../embeds/YouTubeFacade"
 - `src/util/scripts/delayedScriptLoader.ts` - Delayed loading implementation
 - `src/util/monitoring/bugsnagLoader.ts` - Optimized Bugsnag loader
 - `src/components/embeds/YouTubeFacade.tsx` - YouTube facade component
-- `src/components/embeds/EmbedFacade.tsx` - Generic embed facade
 - `src/components/embeds/index.ts` - Embed exports
 
 ### Modified Files

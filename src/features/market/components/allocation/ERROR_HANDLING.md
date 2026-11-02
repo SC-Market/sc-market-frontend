@@ -38,47 +38,6 @@ The error handling system provides clear, actionable feedback to users when stoc
 />
 ```
 
-### 2. ValidationErrorAlert
-
-**Purpose**: Displays validation errors with clear, consistent messaging.
-
-**Requirements**: 13.3, 2.4, 8.2
-
-**Error Types**:
-
-- **negative_quantity**: Prevents negative quantity values
-- **over_allocation**: Prevents allocating more than available
-- **character_limit**: Enforces character limits (notes: 1000 chars, location names: 255 chars)
-- **required_field**: Ensures required fields are filled
-- **invalid_format**: Validates data format
-- **generic**: Handles other error messages
-
-**Features**:
-
-- Consistent error message formatting
-- Helper functions for creating common validation errors
-- Dismissible alerts
-- Multiple error display support
-
-**Usage**:
-
-```tsx
-import { ValidationErrorAlert, createValidationError } from './ValidationErrorAlert'
-
-// Create validation errors
-const errors = [
-  createValidationError.negativeQuantity("Quantity"),
-  createValidationError.overAllocation(150, 100, "Total allocation"),
-  createValidationError.characterLimit("Notes", 1200, 1000),
-]
-
-// Display errors
-<ValidationErrorAlert
-  errors={errors}
-  onDismiss={() => setErrors([])}
-/>
-```
-
 ### 3. ConcurrentModificationDialog
 
 **Purpose**: Handles concurrent modification conflicts detected through optimistic locking.
@@ -111,7 +70,7 @@ const errors = [
 
 The ManualAllocationDialog integrates all error handling components:
 
-1. **Validation Errors**: Real-time validation with ValidationErrorAlert
+1. **Validation Errors**: Real-time validation in the allocation forms
 2. **Insufficient Stock**: Detects insufficient stock errors and shows InsufficientStockDialog
 3. **Loading States**: Shows CircularProgress during data fetching
 4. **Error Recovery**: Clears errors when user makes changes
@@ -172,8 +131,8 @@ if (error.status === 409 && error.data?.conflict) {
 | ----------------------------------------------- | ---------------------------- | ----------- |
 | 13.1 - Display available quantity and shortfall | InsufficientStockDialog      | ✅ Complete |
 | 13.2 - Offer resolution options                 | InsufficientStockDialog      | ✅ Complete |
-| 13.3 - Prevent negative quantities              | ValidationErrorAlert         | ✅ Complete |
-| 13.3 - Validate character limits                | ValidationErrorAlert         | ✅ Complete |
+| 13.3 - Prevent negative quantities              | (component removed, unused) | — |
+| 13.3 - Validate character limits                | (component removed, unused) | — |
 | 13.4 - Handle concurrent modifications          | ConcurrentModificationDialog | ✅ Complete |
 | 9.5 - Loading states                            | ManualAllocationDialog       | ✅ Complete |
 

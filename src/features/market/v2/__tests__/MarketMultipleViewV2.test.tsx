@@ -16,7 +16,6 @@ import type { StandardPageLayoutProps } from "../../../../components/layout/Stan
 import type { QualityBadge } from "../../../../components/market/v2/QualityBadge";
 import type { VariantSelector } from "../../../../components/market/v2/VariantSelector";
 import type { ListingNameAndRating } from "../../../../components/rating/ListingRating";
-import type { UserList } from "../../../../components/list/UserList";
 import type { OrderList } from "../../../../components/list/OrderList";
 import type { ImagePreviewModal } from "../../../../components/modal/ImagePreviewModal";
 import type { MarkdownRender } from "../../../../components/markdown/Markdown";
@@ -30,7 +29,6 @@ type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"];
 type QualityBadgeProps = React.ComponentProps<typeof QualityBadge>;
 type VariantSelectorProps = React.ComponentProps<typeof VariantSelector>;
 type ListingNameAndRatingProps = React.ComponentProps<typeof ListingNameAndRating>;
-type UserListProps = React.ComponentProps<typeof UserList>;
 type OrderListProps = React.ComponentProps<typeof OrderList>;
 type ImagePreviewModalProps = React.ComponentProps<typeof ImagePreviewModal>;
 type MarkdownRenderProps = React.ComponentProps<typeof MarkdownRender>;
@@ -157,19 +155,6 @@ vi.mock("../../../../components/rating/ListingRating", () => ({
   ListingNameAndRating: ({ user, contractor, shop }: ListingNameAndRatingProps) => (
     <div data-testid="seller-rating">
       {user?.username || contractor?.name || shop?.name}
-    </div>
-  ),
-}));
-
-vi.mock("../../../../components/list/UserList", () => ({
-  UserList: ({ users, title }: UserListProps) => (
-    <div data-testid="user-list">
-      <div>{title}</div>
-      {users.map((u, i) => (
-        <div key={i}>
-          {u && ("name" in u ? u.name : u.username)}
-        </div>
-      ))}
     </div>
   ),
 }));

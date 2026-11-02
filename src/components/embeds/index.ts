@@ -9,4 +9,3 @@
  */
 
 export { YouTubeFacade } from "./YouTubeFacade"
-export { EmbedFacade } from "./EmbedFacade"
