@@ -32,48 +32,6 @@ exports[`routes (shard 2/4) > /about 1`] = `
 }
 `;
 
-exports[`routes (shard 2/4) > /accountlink 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/dashboard",
-  "h1": [
-    "Dashboard",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "PUSH",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/accountlink",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/changelog",
-    "/dashboard",
-    "/developers",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/guides/selling/handle-orders-as-a-seller",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/dashboard",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "Dashboard - SC Market",
-  "url": "/accountlink",
-}
-`;
-
 exports[`routes (shard 2/4) > /admin/alerts 1`] = `
 {
   "consoleErrors": [],
@@ -401,44 +359,6 @@ exports[`routes (shard 2/4) > /contractor/:id 1`] = `
 }
 `;
 
-exports[`routes (shard 2/4) > /contractor_invite/:invite_id 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/404",
-  "h1": [],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "PUSH",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/contractor_invite/:invite_id",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/changelog",
-    "/dashboard",
-    "/developers",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "/*",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "404 - SC Market",
-  "url": "/contractor_invite/invite-1",
-}
-`;
-
 exports[`routes (shard 2/4) > /contracts 1`] = `
 {
   "consoleErrors": [],
@@ -516,6 +436,81 @@ exports[`routes (shard 2/4) > /crafting/calculator 1`] = `
 }
 `;
 
+exports[`routes (shard 2/4) > /dashboard 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/dashboard",
+  "h1": [
+    "Dashboard",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/dashboard",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/dashboard",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/guides/selling/handle-orders-as-a-seller",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/dashboard",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Dashboard - SC Market",
+  "url": "/dashboard",
+}
+`;
+
+exports[`routes (shard 2/4) > /dashboard/shops 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/dashboard/shops",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/dashboard/shops",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/shop/test-shop/settings",
+    "/shops/test-shop",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/dashboard/shops",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Shops - SC Market",
+  "url": "/dashboard/shops",
+}
+`;
+
 exports[`routes (shard 2/4) > /email/unsubscribe 1`] = `
 {
   "consoleErrors": [],
@@ -550,6 +545,44 @@ exports[`routes (shard 2/4) > /email/unsubscribe 1`] = `
   "stillLoading": false,
   "title": "Unsubscribe from Emails - SC Market",
   "url": "/email/unsubscribe",
+}
+`;
+
+exports[`routes (shard 2/4) > /email/verify 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/email/verify",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "POP",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/email/verify",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/email/verify",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Email Verification - SC Market",
+  "url": "/email/verify",
 }
 `;
 
@@ -653,44 +686,6 @@ exports[`routes (shard 2/4) > /market/aggregate/:id 1`] = `
 }
 `;
 
-exports[`routes (shard 2/4) > /market/cart 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/404",
-  "h1": [],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "PUSH",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/market/cart",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/changelog",
-    "/dashboard",
-    "/developers",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "/*",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "404 - SC Market",
-  "url": "/market/cart",
-}
-`;
-
 exports[`routes (shard 2/4) > /market/category/:name 1`] = `
 {
   "consoleErrors": [],
@@ -734,7 +729,7 @@ exports[`routes (shard 2/4) > /market/category/:name 1`] = `
 }
 `;
 
-exports[`routes (shard 2/4) > /market/manage 1`] = `
+exports[`routes (shard 2/4) > /market/create 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
@@ -746,7 +741,7 @@ exports[`routes (shard 2/4) > /market/manage 1`] = `
   "initialMatches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/market/manage",
+    "/market/create",
   ],
   "lazyPending": [],
   "mainLinks": [
@@ -763,41 +758,80 @@ exports[`routes (shard 2/4) > /market/manage 1`] = `
   "session": "admin",
   "stillLoading": false,
   "title": "Shops - SC Market",
-  "url": "/market/manage",
+  "url": "/market/create",
 }
 `;
 
-exports[`routes (shard 2/4) > /messaging 1`] = `
+exports[`routes (shard 2/4) > /market/multiple/:id/edit 1`] = `
 {
   "consoleErrors": [
-    "Invalid value for prop \`container\` on <div> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://react.dev/link/attribute-behavior",
+    "[StandardPageLayout] Page error – showing error page {"path":"/market/multiple/fixture-id/edit","title":"Edit Listing","error":"not_found"}",
   ],
   "errorElementErrors": [],
-  "finalUrl": "/messaging",
-  "h1": [
-    "Messages",
-  ],
+  "finalUrl": "/market/multiple/fixture-id/edit",
+  "h1": [],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
   "initialMatches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/messaging",
+    "/market/multiple/:id/edit",
   ],
   "lazyPending": [],
-  "mainLinks": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+  ],
   "matches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/messaging",
+    "/market/multiple/:id/edit",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Messages - SC Market",
-  "url": "/messaging",
+  "title": "Error - SC Market",
+  "url": "/market/multiple/fixture-id/edit",
+}
+`;
+
+exports[`routes (shard 2/4) > /market/stock/:listingId 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/dashboard/shops",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "REPLACE",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/market/stock/:listingId",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/shop/test-shop/settings",
+    "/shops/test-shop",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/dashboard/shops",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "Shops - SC Market",
+  "url": "/market/stock/listing-1",
 }
 `;
 
@@ -919,47 +953,6 @@ exports[`routes (shard 2/4) > /missions/factions/:slug 1`] = `
 }
 `;
 
-exports[`routes (shard 2/4) > /myfleet 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/myfleet",
-  "h1": [
-    "My Fleet",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/myfleet",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/changelog",
-    "/developers",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/myfleet/import",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/myfleet",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": true,
-  "title": "My Fleet - SC Market",
-  "url": "/myfleet",
-}
-`;
-
 exports[`routes (shard 2/4) > /myorg 1`] = `
 {
   "consoleErrors": [],
@@ -999,44 +992,6 @@ exports[`routes (shard 2/4) > /myorg 1`] = `
   "stillLoading": false,
   "title": "My Organization - SC Market",
   "url": "/myorg",
-}
-`;
-
-exports[`routes (shard 2/4) > /notifications 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/404",
-  "h1": [],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "PUSH",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/notifications",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/changelog",
-    "/dashboard",
-    "/developers",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "/*",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "404 - SC Market",
-  "url": "/notifications",
 }
 `;
 
@@ -1114,85 +1069,36 @@ exports[`routes (shard 2/4) > /order/service/:service_id 1`] = `
 }
 `;
 
-exports[`routes (shard 2/4) > /order/service/create 1`] = `
+exports[`routes (shard 2/4) > /order/services 1`] = `
 {
   "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/order/service/create",
-  "h1": [
-    "Create Service",
-  ],
-  "hasMainLandmark": true,
-  "hasMainNav": true,
-  "historyAction": "POP",
-  "initialMatches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/order/service/create",
-  ],
-  "lazyPending": [],
-  "mainLinks": [
-    "/about",
-    "/changelog",
-    "/developers",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/privacy",
-    "/terms",
-  ],
-  "matches": [
-    "(layout:AppLayout)",
-    "(layout:LoggedInRoute)",
-    "/order/service/create",
-  ],
-  "pageReady": "true",
-  "routeErrors": null,
-  "session": "admin",
-  "stillLoading": false,
-  "title": "Create Service - SC Market",
-  "url": "/order/service/create",
-}
-`;
-
-exports[`routes (shard 2/4) > /orders/assigned 1`] = `
-{
-  "consoleErrors": [],
-  "errorElementErrors": [],
-  "finalUrl": "/dashboard",
-  "h1": [
-    "Dashboard",
-  ],
+  "finalUrl": "/dashboard/shops",
+  "h1": [],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "REPLACE",
   "initialMatches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/orders/assigned",
+    "/order/services",
   ],
   "lazyPending": [],
   "mainLinks": [
-    "/about",
-    "/changelog",
-    "/dashboard",
-    "/developers",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/guides/selling/handle-orders-as-a-seller",
-    "/privacy",
-    "/terms",
+    "/shop/test-shop/settings",
+    "/shops/test-shop",
   ],
   "matches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/dashboard",
+    "/dashboard/shops",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Dashboard - SC Market",
-  "url": "/orders/assigned",
+  "title": "Shops - SC Market",
+  "url": "/order/services",
 }
 `;
 
@@ -1417,6 +1323,66 @@ exports[`routes (shard 2/4) > /org/:contractor_id/overview 1`] = `
 }
 `;
 
+exports[`routes (shard 2/4) > /org/members 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/",
+  "h1": [
+    "The player-to-player marketplace for Star Citizen",
+  ],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "REPLACE",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/org/members",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/blueprints",
+    "/buyorder/create",
+    "/buyorders",
+    "/changelog",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/market",
+    "/market/create",
+    "/market/services",
+    "/market?text=armor",
+    "/market?text=cargo",
+    "/market?text=components",
+    "/market?text=medical",
+    "/market?text=mining",
+    "/market?text=salvage",
+    "/market?text=vehicles",
+    "/market?text=weapons",
+    "/mining",
+    "/missions",
+    "/org/register",
+    "/privacy",
+    "/shops",
+    "/terms",
+    "/wiki",
+    "/wiki/items",
+    "/wiki/ships",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": true,
+  "title": "SC Market — Star Citizen Trading Marketplace: Buy, Sell & Trade Items for aUEC",
+  "url": "/org/members",
+}
+`;
+
 exports[`routes (shard 2/4) > /org/orders 1`] = `
 {
   "consoleErrors": [],
@@ -1456,6 +1422,44 @@ exports[`routes (shard 2/4) > /org/orders 1`] = `
   "stillLoading": false,
   "title": "Organization Orders - SC Market",
   "url": "/org/orders",
+}
+`;
+
+exports[`routes (shard 2/4) > /profile 1`] = `
+{
+  "consoleErrors": [],
+  "errorElementErrors": [],
+  "finalUrl": "/404",
+  "h1": [],
+  "hasMainLandmark": true,
+  "hasMainNav": true,
+  "historyAction": "PUSH",
+  "initialMatches": [
+    "(layout:AppLayout)",
+    "(layout:LoggedInRoute)",
+    "/profile",
+  ],
+  "lazyPending": [],
+  "mainLinks": [
+    "/about",
+    "/changelog",
+    "/dashboard",
+    "/developers",
+    "/guides",
+    "/guides/discord/api-tokens",
+    "/privacy",
+    "/terms",
+  ],
+  "matches": [
+    "(layout:AppLayout)",
+    "/*",
+  ],
+  "pageReady": "true",
+  "routeErrors": null,
+  "session": "admin",
+  "stillLoading": false,
+  "title": "404 - SC Market",
+  "url": "/profile",
 }
 `;
 
