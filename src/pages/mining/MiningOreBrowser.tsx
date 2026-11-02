@@ -109,7 +109,7 @@ export function MiningOreBrowser() {
           tokens={searchTokens}
           onChange={handleTokensChange}
           mode="mining"
-          placeholder="Search ores, systems, rarity..."
+          placeholder={t("miningUi.oreBrowser.searchPlaceholder")}
         />
         {data && (
           <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
@@ -158,6 +158,7 @@ export function MiningOreBrowser() {
 function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }) {
   const rarityColor = RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
   const displayName = ore.displayName || friendlyName(ore.name)
+  const { t } = useTranslation()
   const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/ores/:name", GAME_DATA_PATHS.miningOre(ore.name))
 
   return (
@@ -218,26 +219,26 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
           </Box>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mb: 0.5 }}>
             {ore.instability != null && (
-              <Chip label={`Inst: ${ore.instability.toFixed(0)}`} size="small" variant="outlined" sx={microChip} />
+              <Chip label={t("miningUi.location.instShort", { value: ore.instability.toFixed(0) })} size="small" variant="outlined" sx={microChip} />
             )}
             {ore.resistance != null && (
-              <Chip label={`Res: ${ore.resistance.toFixed(2)}`} size="small" variant="outlined" sx={microChip} />
+              <Chip label={t("miningUi.location.resShort", { value: ore.resistance.toFixed(2) })} size="small" variant="outlined" sx={microChip} />
             )}
             {ore.explosionMultiplier != null && (
-              <Chip label={`Exp: ${ore.explosionMultiplier.toFixed(0)}`} size="small" variant="outlined" sx={microChip} />
+              <Chip label={t("miningUi.oreBrowser.expShort", { value: ore.explosionMultiplier.toFixed(0) })} size="small" variant="outlined" sx={microChip} />
             )}
           </Stack>
           <Box sx={{ mt: "auto" }}>
           {ore.marketPrice != null && (
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="caption" color="text.secondary">Market Price</Typography>
+              <Typography variant="caption" color="text.secondary">{t("miningUi.oreBrowser.marketPrice")}</Typography>
               <Typography variant="caption" color="success.main" fontWeight={600}>
                 {ore.marketPrice.toLocaleString()} aUEC
               </Typography>
             </Box>
           )}
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="caption" color="text.secondary">Locations</Typography>
+            <Typography variant="caption" color="text.secondary">{t("miningUi.oreBrowser.locations")}</Typography>
             <Typography variant="caption">{ore.locationCount}</Typography>
           </Box>
           {(ore.topLocations?.length ?? 0) > 0 && (
@@ -257,10 +258,11 @@ const SYSTEM_COLORS: Record<string, string> = {
 }
 
 function OreLocationChips({ locations }: { locations: Array<{ name: string; system: string; probability: number }> }) {
+  const { t } = useTranslation()
   // Group by system
   const bySystem = new Map<string, Array<{ name: string; probability: number }>>()
   for (const loc of locations) {
-    const sys = loc.system || "Unknown"
+    const sys = loc.system || t("miningUi.oreBrowser.unknownSystem")
     const arr = bySystem.get(sys) || []
     arr.push({ name: loc.name, probability: loc.probability })
     bySystem.set(sys, arr)

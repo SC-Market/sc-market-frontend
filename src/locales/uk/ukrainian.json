@@ -7968,5 +7968,302 @@
       "buyFromMarket": "Купити на маркеті",
       "itemActionsFor": "Дії для {{name}}"
     }
+  },
+  "miningUi": {
+    "ore": {
+      "instability": "Нестабільність",
+      "resistance": "Опір",
+      "optimalWindowSize": "Розмір оптимального вікна",
+      "optimalWindowPosition": "Положення оптимального вікна",
+      "explosionRisk": "Ризик вибуху",
+      "clusterFactor": "Коефіцієнт скупчення",
+      "qualityDistribution": "Розподіл якості",
+      "qualityHint": "Якість 0–1000. Вища = краще виготовлення й вища ціна продажу.",
+      "noLocationsTitle": "Немає відомих розташувань",
+      "noLocationsDescription": "Для цієї руди в поточних ігрових даних немає записаних місць появи.",
+      "colLocation": "Розташування",
+      "colSystem": "Система",
+      "colType": "Тип",
+      "colMethod": "Спосіб",
+      "colProbability": "Імовірність",
+      "viewMarketListings": "Переглянути оголошення на маркеті",
+      "range": "Діапазон",
+      "mostLikely": "Найімовірніше"
+    },
+    "location": {
+      "refinery": "Переробний завод",
+      "amenities": "Зручності",
+      "groupWithWeight": "{{group}} (Вага: {{weight}})",
+      "colOre": "Руда",
+      "colRarity": "Рідкість",
+      "colProbability": "Імовірність",
+      "colPrice": "Ціна",
+      "colEstValue": "Орієнт. вартість",
+      "instShort": "Нестаб.: {{value}}",
+      "resShort": "Опір: {{value}}"
+    },
+    "oreBrowser": {
+      "expShort": "Вибух: {{value}}",
+      "searchPlaceholder": "Шукати руди, системи, рідкість...",
+      "marketPrice": "Ринкова ціна",
+      "locations": "Розташування",
+      "unknownSystem": "Невідомо"
+    },
+    "locationBrowser": {
+      "searchPlaceholder": "Шукати розташування, системи, типи...",
+      "moreOres_one": "+{{count}} ще",
+      "moreOres_few": "+{{count}} ще",
+      "moreOres_many": "+{{count}} ще",
+      "moreOres_other": "+{{count}} ще",
+      "oreCount_one": "{{count}} руда",
+      "oreCount_few": "{{count}} руди",
+      "oreCount_many": "{{count}} руд",
+      "oreCount_other": "{{count}} руди"
+    }
+  },
+  "wikiUi": {
+    "shipModal": {
+      "title": "Деталі корабля",
+      "loadError": "Не вдалося завантажити деталі корабля.",
+      "sizeChip": "Розмір {{size}}",
+      "crew": "Екіпаж:",
+      "dimensions": "Розміри:",
+      "specifications": "Характеристики"
+    },
+    "versionSelector": {
+      "unknown": "Невідомо",
+      "daysAgo_one": "{{count}} д. тому",
+      "daysAgo_few": "{{count}} д. тому",
+      "daysAgo_many": "{{count}} д. тому",
+      "daysAgo_other": "{{count}} д. тому",
+      "hoursAgo_one": "{{count}} год. тому",
+      "hoursAgo_few": "{{count}} год. тому",
+      "hoursAgo_many": "{{count}} год. тому",
+      "hoursAgo_other": "{{count}} год. тому",
+      "recently": "Нещодавно",
+      "ariaLabel": "Версія гри",
+      "label": "Версія гри",
+      "lastUpdated": "Останнє оновлення: {{time}}"
+    },
+    "resourceCard": {
+      "mined": "Видобуто",
+      "purchased": "Куплено",
+      "salvaged": "Утилізовано",
+      "looted": "Здобуто",
+      "qualityTiers_one": "{{count}} рівень якості",
+      "qualityTiers_few": "{{count}} рівні якості",
+      "qualityTiers_many": "{{count}} рівнів якості",
+      "qualityTiers_other": "{{count}} рівня якості",
+      "blueprints_one": "{{count}} креслення",
+      "blueprints_few": "{{count}} креслення",
+      "blueprints_many": "{{count}} креслень",
+      "blueprints_other": "{{count}} креслення"
+    },
+    "qualityBand": {
+      "label": "Якість",
+      "any": "Будь-яка"
+    },
+    "locationBrowser": {
+      "kmValue": "{{value}} км",
+      "typePlanets": "Планети",
+      "typeMoons": "Супутники",
+      "typeStations": "Станції",
+      "typeOutposts": "Аванпости"
+    },
+    "resultCount_one": "{{count}} результат",
+    "resultCount_few": "{{count}} результати",
+    "resultCount_many": "{{count}} результатів",
+    "resultCount_other": "{{count}} результату",
+    "manufacturer": {
+      "gradeChip": "Клас {{grade}}"
+    },
+    "resource": {
+      "tierValue": "Рівень {{tier}}"
+    },
+    "search": {
+      "placeholder": "Пошук...",
+      "ariaLabel": "Пошук",
+      "tags": {
+        "illegal": "Незаконна",
+        "shareable": "Можна поділитися",
+        "unique": "Унікальна",
+        "chainStarter": "Початок ланцюжка",
+        "hasBlueprints": "Має креслення",
+        "default": "За замовчуванням",
+        "missionReward": "Нагорода за місію",
+        "hasMissionSource": "Має джерело-місію",
+        "owned": "У власності",
+        "hasRefinery": "Є переробний завод",
+        "hasPhotos": "Є фото",
+        "inStock": "В наявності",
+        "bulkDiscount": "Оптова знижка",
+        "sizeSmall": "Малий (1)",
+        "sizeMedium": "Середній (2)",
+        "sizeLarge": "Великий (3)",
+        "sizeCapital": "Капітальний (4+)"
+      },
+      "methods": {
+        "ship": "Видобуток кораблем",
+        "ground": "Наземний транспорт (ROC)",
+        "fps": "Ручний видобуток (FPS)"
+      },
+      "locationTypes": {
+        "surface": "Поверхня",
+        "asteroidField": "Поле астероїдів"
+      },
+      "types": {
+        "query": "Запит",
+        "system": "Система",
+        "category": "Категорія",
+        "giver": "Замовник",
+        "faction": "Фракція",
+        "tag": "Тег",
+        "event": "Подія",
+        "material": "Матеріал",
+        "rarity": "Рідкість",
+        "manufacturer": "Виробник"
+      }
+    }
+  },
+  "emailUi": {
+    "verification": {
+      "pageTitle": "Підтвердження електронної пошти",
+      "verifying": "Підтверджуємо вашу адресу електронної пошти...",
+      "successTitle": "Електронну пошту підтверджено!",
+      "failedTitle": "Не вдалося підтвердити",
+      "invalidTitle": "Недійсний запит",
+      "goToSettings": "До налаштувань електронної пошти"
+    },
+    "unsubscribe": {
+      "pageTitle": "Відписатися від листів",
+      "managePreferences": "Керувати налаштуваннями",
+      "unsubscribing": "Відписуємо...",
+      "successTitle": "Ви відписалися",
+      "turnOffAll": "Вимкнути всі листи",
+      "failedTitle": "Не вдалося відписатися"
+    }
+  },
+  "appUi": {
+    "adminUsers": {
+      "banned": "Заблоковано",
+      "membershipLoading": "Завантаження аналітики учасників...",
+      "membershipError": "Помилка завантаження аналітики учасників: {{error}}",
+      "membershipEmpty": "Немає даних про учасників",
+      "totalMembers": "Усього учасників",
+      "rsiVerified": "Підтверджено в RSI",
+      "new30Days": "Нові (30 днів)",
+      "new7Days": "Нові (7 днів)",
+      "newMembers": "Нові учасники"
+    },
+    "ads": {
+      "imageAlt": "Реклама: {{title}}"
+    },
+    "attributeFilter": {
+      "filterAria": "Фільтр «{{name}}»",
+      "minimumAria": "{{name}}: мінімум",
+      "maximumAria": "{{name}}: максимум"
+    },
+    "charts": {
+      "loadingChart": "Завантаження графіка...",
+      "loadingPriceChart": "Завантаження графіка цін..."
+    },
+    "commandPalette": {
+      "placeholder": "Шукати сторінки, дії, оголошення...",
+      "noResults": "Немає результатів для «{{query}}»",
+      "hintNavigate": "перейти",
+      "hintSelect": "вибрати",
+      "hintClose": "закрити",
+      "categories": {
+        "navigation": "Перейти до",
+        "action": "Дії",
+        "content": "Оголошення"
+      },
+      "items": {
+        "market": "Маркет",
+        "services": "Послуги",
+        "contracts": "Контракти",
+        "buyOrders": "Замовлення на купівлю",
+        "shops": "Магазини",
+        "orgs": "Організації",
+        "recruiting": "Набір",
+        "missions": "Місії",
+        "blueprints": "Креслення",
+        "mining": "Видобуток",
+        "wiki": "Вікі",
+        "resources": "Ресурси",
+        "help": "Довідка та посібники",
+        "orders": "Мої замовлення",
+        "messages": "Повідомлення",
+        "dashboard": "Панель",
+        "settings": "Налаштування",
+        "priceAlerts": "Цінові сповіщення",
+        "priceAlertsDescription": "Ваш список відстеження та канали сповіщень",
+        "myOrgs": "Мої організації",
+        "shopOrders": "{{shop}} — Замовлення",
+        "createListing": "Створити оголошення",
+        "newMessage": "Нове повідомлення",
+        "toggleDarkMode": "Перемкнути темний режим"
+      }
+    },
+    "errorBoundary": {
+      "title": "Щось пішло не так",
+      "tryAgain": "Спробувати знову",
+      "featureTitle": "Помилка в {{feature}}",
+      "featureMessage": "У функції {{feature}} сталася помилка. Ви можете спробувати знову або продовжити користуватися іншими частинами застосунку.",
+      "errorStatus": "Помилка {{status}}",
+      "anErrorOccurred": "Сталася помилка"
+    },
+    "help": {
+      "allGuides": "Усі посібники",
+      "updatedStamp": "Оновлено <time>{{date}}</time> · {{author}}"
+    },
+    "imagePreview": {
+      "thumbnailAlt": "Мініатюра {{index}}"
+    },
+    "imageZoom": {
+      "zoomIn": "Збільшити",
+      "zoomOut": "Зменшити",
+      "resetZoom": "Скинути масштаб"
+    },
+    "markdown": {
+      "imageAlt": "Зображення з Markdown-вмісту",
+      "formatAs": "Форматувати як {{syntax}}",
+      "enabled": "Markdown увімкнено",
+      "textAria": "Текст Markdown"
+    },
+    "mfa": {
+      "authCodeAria": "код автентифікації",
+      "recoveryCodeAria": "код відновлення",
+      "recoveryCodesAria": "коди відновлення"
+    },
+    "nav": {
+      "mobileNavigation": "Мобільна навігація"
+    },
+    "pwa": {
+      "installTitle": "Встановити SC Market",
+      "installIntro": "Встановіть наш застосунок для зручнішої роботи:",
+      "benefitFaster": "Швидше завантаження",
+      "benefitOffline": "Доступ офлайн",
+      "benefitHomeScreen": "Значок на головному екрані",
+      "dismissInstall": "Закрити підказку встановлення",
+      "install": "Встановити",
+      "offline": "Ви офлайн. Деякі функції можуть бути обмежені."
+    },
+    "sendMoney": {
+      "avatarAlt": "Аватар {{name}}"
+    },
+    "themeEditor": {
+      "hexAria": "{{label}} (шістнадцятковий код)",
+      "imageRadiusPreview": "Попередній перегляд радіуса зображення",
+      "faviconAlt": "фавікон",
+      "paperElevation": "Рівень підняття поверхні",
+      "cardElevation": "Рівень підняття карток"
+    },
+    "youtube": {
+      "playerTitle": "Відеоплеєр YouTube",
+      "playVideoNamed": "Відтворити відео: {{title}}",
+      "thumbnailAlt": "Мініатюра відео YouTube",
+      "playVideo": "Відтворити відео"
+    }
   }
 }

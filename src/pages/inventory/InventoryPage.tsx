@@ -300,7 +300,7 @@ export default function InventoryPage() {
                             />
                           )}
                           <Chip
-                            label={lot.listing_title || "Listing"}
+                            label={lot.listing_title || t("inventory.listing")}
                             size="small"
                             sx={{ maxWidth: 240 }}
                             component={Link}

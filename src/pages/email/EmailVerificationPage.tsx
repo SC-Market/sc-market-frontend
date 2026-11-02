@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageEmailVerification } from "../../features/email/hooks/usePageEmailVerification"
 import { EmailVerificationContent } from "../../features/email/components/EmailVerificationContent"
@@ -9,11 +10,12 @@ import { EmailVerificationContentSkeleton } from "../../features/email/component
  * Handles email verification via token from URL
  */
 export function EmailVerificationPage() {
+  const { t } = useTranslation()
   const pageData = usePageEmailVerification()
 
   return (
     <StandardPageLayout
-      title="Email Verification"
+      title={t("emailUi.verification.pageTitle")}
       maxWidth="sm"
       noSidebar={true}
       isLoading={pageData.isLoading}

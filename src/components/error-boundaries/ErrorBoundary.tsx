@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from "react"
 import { notifyBugsnag } from "../../util/monitoring/bugsnagLoader"
+import i18n from "../../util/i18n"
 
 export interface ErrorBoundaryProps {
   /**
@@ -173,9 +174,11 @@ export class ErrorBoundary extends Component<
       // Default fallback - will be replaced by ErrorFallback component
       return (
         <div style={{ padding: "1rem", textAlign: "center" }}>
-          <h2>Something went wrong</h2>
+          <h2>{i18n.t("appUi.errorBoundary.title", "Something went wrong")}</h2>
           <p>{this.state.error.message}</p>
-          <button onClick={this.resetErrorBoundary}>Try again</button>
+          <button onClick={this.resetErrorBoundary}>
+            {i18n.t("appUi.errorBoundary.tryAgain", "Try again")}
+          </button>
         </div>
       )
     }

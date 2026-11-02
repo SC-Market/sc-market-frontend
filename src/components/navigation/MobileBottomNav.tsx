@@ -302,7 +302,7 @@ export function MobileBottomNav() {
   return (
     <Paper
       component="nav"
-      aria-label="Mobile navigation"
+      aria-label={t("appUi.nav.mobileNavigation")}
       sx={{
         position: "fixed", // Fixed at bottom, like navbar at top
         bottom: 0,

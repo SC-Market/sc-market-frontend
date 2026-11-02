@@ -240,7 +240,7 @@ export function ImagePreviewModal(props: {
                   <Box
                     component="img"
                     src={image}
-                    alt={`Thumbnail ${idx + 1}`}
+                    alt={t("appUi.imagePreview.thumbnailAlt", { index: idx + 1 })}
                     sx={{
                       width: "100%",
                       height: "100%",
@@ -455,7 +455,7 @@ export function ImagePreviewModal(props: {
                 <Box
                   component="img"
                   src={image}
-                  alt={`Thumbnail ${idx + 1}`}
+                  alt={t("appUi.imagePreview.thumbnailAlt", { index: idx + 1 })}
                   sx={{
                     width: "100%",
                     height: "100%",

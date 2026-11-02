@@ -117,7 +117,7 @@ export function MiningLocationBrowser() {
           tokens={searchTokens}
           onChange={handleTokensChange}
           mode="locations"
-          placeholder="Search locations, systems, types..."
+          placeholder={t("miningUi.locationBrowser.searchPlaceholder")}
         />
         {data && (
           <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
@@ -176,6 +176,7 @@ function systemChipColor(system: string): string {
 function LocationCard({ location, onClick }: { location: LocationSearchResult; onClick: () => void }) {
   const displayName = location.displayName || friendlyName(location.name)
   const systemDisplay = location.system || ""
+  const { t } = useTranslation()
   const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/locations/:name", GAME_DATA_PATHS.miningLocation(location.name))
 
   // topOres is string[] from the search endpoint
@@ -207,7 +208,7 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
                 sx={{ ...microChip, bgcolor: systemChipColor(systemDisplay) + "22", color: systemChipColor(systemDisplay), fontWeight: 600 }} />
             )}
             {location.locationType && <Chip label={location.locationType} size="small" variant="outlined" sx={microChip} />}
-            {location.hasRefinery && <Chip label="Refinery" size="small" color="success" sx={microChip} />}
+            {location.hasRefinery && <Chip label={t("miningUi.location.refinery")} size="small" color="success" sx={microChip} />}
           </Stack>
 
           {(location.groups || []).map((g) => (
@@ -219,11 +220,11 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
                     <Typography key={i} variant="caption" display="block" sx={{ fontSize: "0.7rem", pl: 0.5 }}>{name}</Typography>
                   ))}
                   {g.oreCount > 3 && (
-                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem", pl: 0.5 }}>+{g.oreCount - 3} more</Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem", pl: 0.5 }}>{t("miningUi.locationBrowser.moreOres", { count: g.oreCount - 3 })}</Typography>
                   )}
                 </Box>
               ) : (
-                <Typography variant="caption" color="text.secondary" sx={{ pl: 0.5 }}>{g.oreCount} ores</Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ pl: 0.5 }}>{t("miningUi.locationBrowser.oreCount", { count: g.oreCount })}</Typography>
               )}
             </Box>
           ))}

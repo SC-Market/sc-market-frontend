@@ -164,7 +164,7 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
                 inputProps={{
                   inputMode: "numeric",
                   pattern: "[0-9]*",
-                  "aria-label": "authentication code",
+                  "aria-label": t("appUi.mfa.authCodeAria"),
                   style: { letterSpacing: "0.3em", fontFamily: "monospace" },
                 }}
               />

@@ -1,8 +1,11 @@
 import React, { Suspense } from "react"
 import { Box, CircularProgress, Typography } from "@mui/material"
+import { useTranslation } from "react-i18next"
 
 // Loading component for charts
-const ChartLoadingFallback = ({ title }: { title?: string }) => (
+const ChartLoadingFallback = ({ label }: { label?: string }) => {
+  const { t } = useTranslation()
+  return (
   <Box
     display="flex"
     flexDirection="column"
@@ -13,10 +16,11 @@ const ChartLoadingFallback = ({ title }: { title?: string }) => (
   >
     <CircularProgress size={40} />
     <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-      {title ? `Loading ${title}...` : "Loading chart..."}
+      {label ?? t("appUi.charts.loadingChart")}
     </Typography>
   </Box>
-)
+  )
+}
 
 // Dynamic KlineCharts utilities
 export const useDynamicKlineCharts = () => {
@@ -62,6 +66,7 @@ export const DynamicKlineChart = ({
     loading: boolean,
   ) => React.ReactNode
 }) => {
+  const { t } = useTranslation()
   const { klineCharts, loadKlineCharts, loading } = useDynamicKlineCharts()
 
   React.useEffect(() => {
@@ -77,7 +82,7 @@ export const DynamicKlineChart = ({
   }, [loadKlineCharts, onInit, onDispose, klineCharts])
 
   if (loading || !klineCharts) {
-    return <ChartLoadingFallback title="price chart" />
+    return <ChartLoadingFallback label={t("appUi.charts.loadingPriceChart")} />
   }
 
   return children ? children(klineCharts, loading) : null

@@ -17,6 +17,7 @@ import {
   useTheme,
   Tooltip,
 } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import UpdateIcon from "@mui/icons-material/Update"
 import { useGetActiveVersionsQuery, useSelectVersionMutation, type GameVersion } from "../../store/api/v2/market"
@@ -49,6 +50,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
   compact = false,
   width = 300,
 }) => {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { data: activeVersions, isLoading } = useGetActiveVersionsQuery()
   const [selectVersion] = useSelectVersionMutation()
@@ -129,7 +131,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
 
   // Format last update timestamp
   const formatLastUpdate = (timestamp?: string): string => {
-    if (!timestamp) return "Unknown"
+    if (!timestamp) return t("wikiUi.versionSelector.unknown")
     const date = new Date(timestamp)
     const now = new Date()
     const diffMs = now.getTime() - date.getTime()
@@ -137,11 +139,11 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
     const diffDays = Math.floor(diffHours / 24)
 
     if (diffDays > 0) {
-      return `${diffDays}d ago`
+      return t("wikiUi.versionSelector.daysAgo", { count: diffDays })
     } else if (diffHours > 0) {
-      return `${diffHours}h ago`
+      return t("wikiUi.versionSelector.hoursAgo", { count: diffHours })
     } else {
-      return "Recently"
+      return t("wikiUi.versionSelector.recently")
     }
   }
 
@@ -149,7 +151,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
   // default aria-labelledby points at its own value text).
   const compactNameProps = compact
     ? ({
-        "aria-label": "Game version",
+        "aria-label": t("wikiUi.versionSelector.ariaLabel"),
         "aria-labelledby": undefined,
       } as React.HTMLAttributes<HTMLDivElement>)
     : undefined
@@ -162,12 +164,12 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           fullWidth
           size="small"
           color="secondary"
-          label={compact ? undefined : "Game Version"}
+          label={compact ? undefined : t("wikiUi.versionSelector.label")}
           disabled
           value=""
           SelectProps={{ SelectDisplayProps: compactNameProps }}
         >
-          <MenuItem value="">Loading...</MenuItem>
+          <MenuItem value="">{t("accessibility.loading")}</MenuItem>
         </TextField>
       </Box>
     )
@@ -190,7 +192,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
         fullWidth
         size="small"
         color="secondary"
-        label={compact ? undefined : "Game Version"}
+        label={compact ? undefined : t("wikiUi.versionSelector.label")}
         value={selectedVersionId}
         onChange={(e) => handleVersionChange(e.target.value)}
         SelectProps={{
@@ -250,7 +252,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
                   {formatVersion(version.data)}
                 </Typography>
               </Box>
-              <Tooltip title={`Last updated: ${formatLastUpdate(version.data!.last_data_update)}`}>
+              <Tooltip title={t("wikiUi.versionSelector.lastUpdated", { time: formatLastUpdate(version.data!.last_data_update) })}>
                 <Box
                   sx={{
                     display: "flex",
@@ -277,7 +279,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
           color="text.secondary"
           sx={{ mt: 0.5, display: "block" }}
         >
-          Last updated: {formatLastUpdate(selectedVersion.data!.last_data_update)}
+          {t("wikiUi.versionSelector.lastUpdated", { time: formatLastUpdate(selectedVersion.data!.last_data_update) })}
         </Typography>
       )}
     </Box>

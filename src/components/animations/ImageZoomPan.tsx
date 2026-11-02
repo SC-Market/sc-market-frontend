@@ -9,6 +9,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react"
 import { Box, IconButton, useTheme } from "@mui/material"
 import { useIsMobile } from "../../hooks/layout/useBreakpoint"
 import { ZoomIn, ZoomOut, FitScreen, Close } from "@mui/icons-material"
+import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface ImageZoomPanProps {
@@ -28,6 +29,7 @@ export function ImageZoomPan({
   onClose,
   sx,
 }: ImageZoomPanProps) {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -230,7 +232,7 @@ export function ImageZoomPan({
           onClick={handleZoomIn}
           disabled={zoom >= maxZoom}
           sx={{ color: theme.palette.common.white }}
-          aria-label="Zoom in"
+          aria-label={t("appUi.imageZoom.zoomIn")}
         >
           <ZoomIn />
         </IconButton>
@@ -239,7 +241,7 @@ export function ImageZoomPan({
           onClick={handleZoomOut}
           disabled={zoom <= minZoom}
           sx={{ color: theme.palette.common.white }}
-          aria-label="Zoom out"
+          aria-label={t("appUi.imageZoom.zoomOut")}
         >
           <ZoomOut />
         </IconButton>
@@ -248,7 +250,7 @@ export function ImageZoomPan({
           onClick={handleReset}
           disabled={zoom === 1}
           sx={{ color: theme.palette.common.white }}
-          aria-label="Reset zoom"
+          aria-label={t("appUi.imageZoom.resetZoom")}
         >
           <FitScreen />
         </IconButton>
@@ -257,7 +259,7 @@ export function ImageZoomPan({
             size="small"
             onClick={onClose}
             sx={{ color: theme.palette.common.white }}
-            aria-label="Close"
+            aria-label={t("accessibility.close")}
           >
             <Close />
           </IconButton>

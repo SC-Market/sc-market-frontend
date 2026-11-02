@@ -1,5 +1,6 @@
 import React from "react"
 import { Link as RouterLink } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import {
   Alert,
   Box,
@@ -30,6 +31,7 @@ export function UnsubscribeContent({
   onUnsubscribeAll,
   isUnsubscribingAll,
 }: UnsubscribeContentProps) {
+  const { t } = useTranslation()
   const manage = (
     <Button
       variant="outlined"
@@ -37,7 +39,7 @@ export function UnsubscribeContent({
       component={RouterLink}
       to={MANAGE_URL}
     >
-      Manage preferences
+      {t("emailUi.unsubscribe.managePreferences")}
     </Button>
   )
 
@@ -57,7 +59,7 @@ export function UnsubscribeContent({
           <>
             <CircularProgress size={60} sx={{ mb: 3 }} />
             <Typography variant="h6" gutterBottom>
-              Unsubscribing...
+              {t("emailUi.unsubscribe.unsubscribing")}
             </Typography>
           </>
         )}
@@ -68,7 +70,7 @@ export function UnsubscribeContent({
               sx={{ fontSize: 60, color: "success.main", mb: 2 }}
             />
             <Typography variant="h5" gutterBottom>
-              You're unsubscribed
+              {t("emailUi.unsubscribe.successTitle")}
             </Typography>
             <Alert severity="success" sx={{ mb: 3, maxWidth: 500 }}>
               {data.message}
@@ -81,7 +83,7 @@ export function UnsubscribeContent({
                   onClick={onUnsubscribeAll}
                   disabled={isUnsubscribingAll}
                 >
-                  Turn off all emails
+                  {t("emailUi.unsubscribe.turnOffAll")}
                 </Button>
               )}
               {manage}
@@ -99,7 +101,7 @@ export function UnsubscribeContent({
               }}
             />
             <Typography variant="h5" gutterBottom>
-              Couldn't unsubscribe
+              {t("emailUi.unsubscribe.failedTitle")}
             </Typography>
             <Alert
               severity={data.status === "error" ? "error" : "warning"}

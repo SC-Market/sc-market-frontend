@@ -227,6 +227,7 @@ export function ErrorFallback({
             {errorInfo?.componentStack && (
               <>
                 {"\n\n"}
+                {/* i18n-ignore: dev-only (rendered only when showDetails, which is import.meta.env.DEV) */}
                 <strong>Component Stack:</strong>
                 {"\n"}
                 {errorInfo.componentStack}

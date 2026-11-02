@@ -239,7 +239,7 @@ export function ResourceDetail() {
                       <TableCell>{bp.output_item_name || bp.blueprint_name}</TableCell>
                       <TableCell align="right">{bp.quantity_required}</TableCell>
                       <TableCell align="right">
-                        {bp.min_quality_tier ? `Tier ${bp.min_quality_tier}` : "—"}
+                        {bp.min_quality_tier ? t("wikiUi.resource.tierValue", { tier: bp.min_quality_tier }) : "—"}
                       </TableCell>
                     </TableRow>
                   ))}

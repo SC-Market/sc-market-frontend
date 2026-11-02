@@ -333,7 +333,7 @@ export function ThemeEditor({
                     <TextField
                       size="small"
                       inputProps={{
-                        "aria-label": `${t(field.labelKey, field.fallback)} (hex)`,
+                        "aria-label": t("appUi.themeEditor.hexAria", { label: t(field.labelKey, field.fallback) }),
                       }}
                       value={getNestedValue(currentMode, field.path) ?? ""}
                       onChange={(e) => updateValue(field.path, e.target.value)}
@@ -375,7 +375,7 @@ export function ThemeEditor({
               {paperVariant === "elevation" && (
                 <Box sx={{ mt: 1 }}>
                   <Typography variant="caption">{t("theme.elevationLevel", "Elevation Level")}</Typography>
-                  <Slider size="small" aria-label={t("theme.paperElevation", "Paper elevation level")} min={0} max={24} value={paperElevation} onChange={(_, v) => updateComponentElevation("MuiPaper", v as number)} valueLabelDisplay="auto" />
+                  <Slider size="small" aria-label={t("appUi.themeEditor.paperElevation")} min={0} max={24} value={paperElevation} onChange={(_, v) => updateComponentElevation("MuiPaper", v as number)} valueLabelDisplay="auto" />
                 </Box>
               )}
             </Grid>
@@ -395,7 +395,7 @@ export function ThemeEditor({
               {cardVariant === "elevation" && (
                 <Box sx={{ mt: 1 }}>
                   <Typography variant="caption">{t("theme.elevationLevel", "Elevation Level")}</Typography>
-                  <Slider size="small" aria-label={t("theme.cardElevation", "Card elevation level")} min={0} max={24} value={cardElevation} onChange={(_, v) => updateComponentElevation("MuiCard", v as number)} valueLabelDisplay="auto" />
+                  <Slider size="small" aria-label={t("appUi.themeEditor.cardElevation")} min={0} max={24} value={cardElevation} onChange={(_, v) => updateComponentElevation("MuiCard", v as number)} valueLabelDisplay="auto" />
                 </Box>
               )}
             </Grid>
@@ -428,8 +428,11 @@ export function ThemeEditor({
                 label={t("theme.unit", "Unit")}
                 onChange={(e) => updateValue(["borderRadiusUnit"], e.target.value)}
               >
+                {/* i18n-ignore: CSS unit names */}
                 <MenuItem value="px">px</MenuItem>
+                {/* i18n-ignore: CSS unit names */}
                 <MenuItem value="rem">rem</MenuItem>
+                {/* i18n-ignore: CSS unit names */}
                 <MenuItem value="em">em</MenuItem>
                 <MenuItem value="%">%</MenuItem>
               </Select>
@@ -456,7 +459,7 @@ export function ThemeEditor({
                   <Box
                     component="img"
                     src="https://media.starcitizen.tools/thumb/9/93/Placeholderv2.png/399px-Placeholderv2.png.webp"
-                    alt="Image radius preview"
+                    alt={t("appUi.themeEditor.imageRadiusPreview")}
                     sx={{
                       width: "100%",
                       height: 80,
@@ -478,7 +481,7 @@ export function ThemeEditor({
             {faviconUrl && (
               <img
                 src={faviconUrl}
-                alt="favicon"
+                alt={t("appUi.themeEditor.faviconAlt")}
                 style={{ width: 24, height: 24 }}
                 onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
               />

@@ -118,7 +118,7 @@ export function WikiManufacturerPage() {
                       <Chip label={`S${item.size}`} size="small" />
                     )}
                     {item.grade && (
-                      <Chip label={`Grade ${item.grade}`} size="small" />
+                      <Chip label={t("wikiUi.manufacturer.gradeChip", { grade: item.grade })} size="small" />
                     )}
                   </Stack>
                 </CardContent>

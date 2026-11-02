@@ -50,6 +50,7 @@ function PeopleRow(props: {
   labelId: string
 }): ReactElement {
   const { row, onClick, isItemSelected, labelId } = props
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   return (
     <TableRow
@@ -122,9 +123,9 @@ function PeopleRow(props: {
       </TableCell>
       <TableCell align="right">
         <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
-          {row.banned && <Chip label="Banned" color="error" size="small" />}
+          {row.banned && <Chip label={t("appUi.adminUsers.banned")} color="error" size="small" />}
           {!row.rsi_confirmed && (
-            <Chip label="Unverified" color="warning" size="small" />
+            <Chip label={t("adminUsers.unverified")} color="warning" size="small" />
           )}
         </Box>
       </TableCell>
@@ -414,7 +415,7 @@ export function AdminMembershipAnalytics() {
     return (
       <Section xs={12} title={t("adminUsers.membership_count")}>
         <Grid item xs={12}>
-          <div>Loading membership analytics...</div>
+          <div>{t("appUi.adminUsers.membershipLoading")}</div>
         </Grid>
       </Section>
     )
@@ -424,7 +425,7 @@ export function AdminMembershipAnalytics() {
     return (
       <Section xs={12} title={t("adminUsers.membership_count")}>
         <Grid item xs={12}>
-          <div>Error loading membership analytics: {JSON.stringify(error)}</div>
+          <div>{t("appUi.adminUsers.membershipError", { error: JSON.stringify(error) })}</div>
         </Grid>
       </Section>
     )
@@ -434,7 +435,7 @@ export function AdminMembershipAnalytics() {
     return (
       <Section xs={12} title={t("adminUsers.membership_count")}>
         <Grid item xs={12}>
-          <div>No membership data available</div>
+          <div>{t("appUi.adminUsers.membershipEmpty")}</div>
         </Grid>
       </Section>
     )
@@ -449,7 +450,7 @@ export function AdminMembershipAnalytics() {
             {data.summary?.total_members || "0"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Total Members
+            {t("appUi.adminUsers.totalMembers")}
           </Typography>
         </Box>
       </Grid>
@@ -459,7 +460,7 @@ export function AdminMembershipAnalytics() {
             {data.summary?.rsi_confirmed_members || "0"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            RSI Verified
+            {t("appUi.adminUsers.rsiVerified")}
           </Typography>
         </Box>
       </Grid>
@@ -469,7 +470,7 @@ export function AdminMembershipAnalytics() {
             {data.summary?.new_members_30d || "0"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            New (30 days)
+            {t("appUi.adminUsers.new30Days")}
           </Typography>
         </Box>
       </Grid>
@@ -479,7 +480,7 @@ export function AdminMembershipAnalytics() {
             {data.summary?.new_members_7d || "0"}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            New (7 days)
+            {t("appUi.adminUsers.new7Days")}
           </Typography>
         </Box>
       </Grid>
@@ -489,21 +490,21 @@ export function AdminMembershipAnalytics() {
         <MuiAreaChart
           series={[
             {
-              name: "Total Members",
+              name: t("appUi.adminUsers.totalMembers"),
               data: data.daily_totals.map((u) => ({
                 x: new Date(u.date).toISOString(),
                 y: parseInt(u.cumulative_members),
               })),
             },
             {
-              name: "RSI Verified",
+              name: t("appUi.adminUsers.rsiVerified"),
               data: data.daily_totals.map((u) => ({
                 x: new Date(u.date).toISOString(),
                 y: parseInt(u.cumulative_members_rsi_verified),
               })),
             },
             {
-              name: "New Members",
+              name: t("appUi.adminUsers.newMembers"),
               data: data.daily_totals.map((u) => ({
                 x: new Date(u.date).toISOString(),
                 y: parseInt(u.new_members),

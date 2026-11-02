@@ -34,6 +34,12 @@ const SYSTEM_COLORS: Record<string, string> = {
 }
 
 const TYPE_FILTERS = ["All", "Planet", "Moon", "Station", "Outpost"] as const
+const TYPE_FILTER_KEYS: Record<Exclude<(typeof TYPE_FILTERS)[number], "All">, string> = {
+  Planet: "wikiUi.locationBrowser.typePlanets",
+  Moon: "wikiUi.locationBrowser.typeMoons",
+  Station: "wikiUi.locationBrowser.typeStations",
+  Outpost: "wikiUi.locationBrowser.typeOutposts",
+}
 
 function getAmenityIcon(amenity: string) {
   const a = amenity.toLowerCase()
@@ -136,10 +142,10 @@ function LocationDetail({ node }: { node: WikiLocationNode }) {
       {(node.size != null || node.qtArrivalRadius != null || node.qtObstructionRadius != null) && (
         <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
           {node.size != null && (
-            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.size", "Size")}: {node.size.toLocaleString()} km</Typography>
+            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.size", "Size")}: {t("wikiUi.locationBrowser.kmValue", { value: node.size.toLocaleString() })}</Typography>
           )}
           {node.qtArrivalRadius != null && (
-            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.qtArrival", "QT Arrival")}: {node.qtArrivalRadius.toLocaleString()} km</Typography>
+            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.qtArrival", "QT Arrival")}: {t("wikiUi.locationBrowser.kmValue", { value: node.qtArrivalRadius.toLocaleString() })}</Typography>
           )}
         </Stack>
       )}
@@ -300,7 +306,7 @@ export function WikiLocationBrowser() {
         >
           {TYPE_FILTERS.map((f) => (
             <ToggleButton key={f} value={f} sx={{ justifyContent: "flex-start", textTransform: "none", fontSize: "0.8rem" }}>
-              {f === "All" ? t("wiki.locationBrowser.allTypes", "All Types") : `${f}s`}
+              {f === "All" ? t("wiki.locationBrowser.allTypes", "All Types") : t(TYPE_FILTER_KEYS[f])}
             </ToggleButton>
           ))}
         </ToggleButtonGroup>

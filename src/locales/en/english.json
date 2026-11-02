@@ -7728,5 +7728,288 @@
       "buyFromMarket": "Buy from Market",
       "itemActionsFor": "Actions for {{name}}"
     }
+  },
+  "miningUi": {
+    "ore": {
+      "instability": "Instability",
+      "resistance": "Resistance",
+      "optimalWindowSize": "Optimal Window Size",
+      "optimalWindowPosition": "Optimal Window Position",
+      "explosionRisk": "Explosion Risk",
+      "clusterFactor": "Cluster Factor",
+      "qualityDistribution": "Quality Distribution",
+      "qualityHint": "Quality 0–1000. Higher = better crafting & sell price.",
+      "noLocationsTitle": "No known locations",
+      "noLocationsDescription": "This ore has no recorded spawn locations in the current game data.",
+      "colLocation": "Location",
+      "colSystem": "System",
+      "colType": "Type",
+      "colMethod": "Method",
+      "colProbability": "Probability",
+      "viewMarketListings": "View Market Listings",
+      "range": "Range",
+      "mostLikely": "Most likely"
+    },
+    "location": {
+      "refinery": "Refinery",
+      "amenities": "Amenities",
+      "groupWithWeight": "{{group}} (Weight: {{weight}})",
+      "colOre": "Ore",
+      "colRarity": "Rarity",
+      "colProbability": "Probability",
+      "colPrice": "Price",
+      "colEstValue": "Est. Value",
+      "instShort": "Inst: {{value}}",
+      "resShort": "Res: {{value}}"
+    },
+    "oreBrowser": {
+      "expShort": "Exp: {{value}}",
+      "searchPlaceholder": "Search ores, systems, rarity...",
+      "marketPrice": "Market Price",
+      "locations": "Locations",
+      "unknownSystem": "Unknown"
+    },
+    "locationBrowser": {
+      "searchPlaceholder": "Search locations, systems, types...",
+      "moreOres_one": "+{{count}} more",
+      "moreOres_other": "+{{count}} more",
+      "oreCount_one": "{{count}} ore",
+      "oreCount_other": "{{count}} ores"
+    }
+  },
+  "wikiUi": {
+    "shipModal": {
+      "title": "Ship Details",
+      "loadError": "Failed to load ship details.",
+      "sizeChip": "Size {{size}}",
+      "crew": "Crew:",
+      "dimensions": "Dimensions:",
+      "specifications": "Specifications"
+    },
+    "versionSelector": {
+      "unknown": "Unknown",
+      "daysAgo_one": "{{count}}d ago",
+      "daysAgo_other": "{{count}}d ago",
+      "hoursAgo_one": "{{count}}h ago",
+      "hoursAgo_other": "{{count}}h ago",
+      "recently": "Recently",
+      "ariaLabel": "Game version",
+      "label": "Game Version",
+      "lastUpdated": "Last updated: {{time}}"
+    },
+    "resourceCard": {
+      "mined": "Mined",
+      "purchased": "Purchased",
+      "salvaged": "Salvaged",
+      "looted": "Looted",
+      "qualityTiers_one": "{{count}} quality tier",
+      "qualityTiers_other": "{{count}} quality tiers",
+      "blueprints_one": "{{count}} blueprint",
+      "blueprints_other": "{{count}} blueprints"
+    },
+    "qualityBand": {
+      "label": "Quality",
+      "any": "Any"
+    },
+    "locationBrowser": {
+      "kmValue": "{{value}} km",
+      "typePlanets": "Planets",
+      "typeMoons": "Moons",
+      "typeStations": "Stations",
+      "typeOutposts": "Outposts"
+    },
+    "resultCount_one": "{{count}} result",
+    "resultCount_other": "{{count}} results",
+    "manufacturer": {
+      "gradeChip": "Grade {{grade}}"
+    },
+    "resource": {
+      "tierValue": "Tier {{tier}}"
+    },
+    "search": {
+      "placeholder": "Search...",
+      "ariaLabel": "Search",
+      "tags": {
+        "illegal": "Illegal",
+        "shareable": "Shareable",
+        "unique": "Unique",
+        "chainStarter": "Chain Starter",
+        "hasBlueprints": "Has Blueprints",
+        "default": "Default",
+        "missionReward": "Mission Reward",
+        "hasMissionSource": "Has Mission Source",
+        "owned": "Owned",
+        "hasRefinery": "Has Refinery",
+        "hasPhotos": "Has Photos",
+        "inStock": "In Stock",
+        "bulkDiscount": "Bulk Discount",
+        "sizeSmall": "Small (1)",
+        "sizeMedium": "Medium (2)",
+        "sizeLarge": "Large (3)",
+        "sizeCapital": "Capital (4+)"
+      },
+      "methods": {
+        "ship": "Ship Mining",
+        "ground": "Ground Vehicle (ROC)",
+        "fps": "Hand Mining (FPS)"
+      },
+      "locationTypes": {
+        "surface": "Surface",
+        "asteroidField": "Asteroid Field"
+      },
+      "types": {
+        "query": "Query",
+        "system": "System",
+        "category": "Category",
+        "giver": "Giver",
+        "faction": "Faction",
+        "tag": "Tag",
+        "event": "Event",
+        "material": "Material",
+        "rarity": "Rarity",
+        "manufacturer": "Manufacturer"
+      }
+    }
+  },
+  "emailUi": {
+    "verification": {
+      "pageTitle": "Email Verification",
+      "verifying": "Verifying your email address...",
+      "successTitle": "Email Verified!",
+      "failedTitle": "Verification Failed",
+      "invalidTitle": "Invalid Request",
+      "goToSettings": "Go to Email Settings"
+    },
+    "unsubscribe": {
+      "pageTitle": "Unsubscribe from Emails",
+      "managePreferences": "Manage preferences",
+      "unsubscribing": "Unsubscribing...",
+      "successTitle": "You're unsubscribed",
+      "turnOffAll": "Turn off all emails",
+      "failedTitle": "Couldn't unsubscribe"
+    }
+  },
+  "appUi": {
+    "adminUsers": {
+      "banned": "Banned",
+      "membershipLoading": "Loading membership analytics...",
+      "membershipError": "Error loading membership analytics: {{error}}",
+      "membershipEmpty": "No membership data available",
+      "totalMembers": "Total Members",
+      "rsiVerified": "RSI Verified",
+      "new30Days": "New (30 days)",
+      "new7Days": "New (7 days)",
+      "newMembers": "New Members"
+    },
+    "ads": {
+      "imageAlt": "Ad: {{title}}"
+    },
+    "attributeFilter": {
+      "filterAria": "{{name}} filter",
+      "minimumAria": "{{name}} minimum",
+      "maximumAria": "{{name}} maximum"
+    },
+    "charts": {
+      "loadingChart": "Loading chart...",
+      "loadingPriceChart": "Loading price chart..."
+    },
+    "commandPalette": {
+      "placeholder": "Search pages, actions, listings...",
+      "noResults": "No results for \"{{query}}\"",
+      "hintNavigate": "navigate",
+      "hintSelect": "select",
+      "hintClose": "close",
+      "categories": {
+        "navigation": "Go to",
+        "action": "Actions",
+        "content": "Listings"
+      },
+      "items": {
+        "market": "Market",
+        "services": "Services",
+        "contracts": "Contracts",
+        "buyOrders": "Buy Orders",
+        "shops": "Shops",
+        "orgs": "Organizations",
+        "recruiting": "Recruiting",
+        "missions": "Missions",
+        "blueprints": "Blueprints",
+        "mining": "Mining",
+        "wiki": "Wiki",
+        "resources": "Resources",
+        "help": "Help & Guides",
+        "orders": "My Orders",
+        "messages": "Messages",
+        "dashboard": "Dashboard",
+        "settings": "Settings",
+        "priceAlerts": "Price alerts",
+        "priceAlertsDescription": "Your watchlist and alert channels",
+        "myOrgs": "My Organizations",
+        "shopOrders": "{{shop}} — Orders",
+        "createListing": "Create Listing",
+        "newMessage": "New Message",
+        "toggleDarkMode": "Toggle Dark Mode"
+      }
+    },
+    "errorBoundary": {
+      "title": "Something went wrong",
+      "tryAgain": "Try again",
+      "featureTitle": "Error in {{feature}}",
+      "featureMessage": "The {{feature}} feature encountered an error. You can try again or continue using other parts of the application.",
+      "errorStatus": "Error {{status}}",
+      "anErrorOccurred": "An error occurred"
+    },
+    "help": {
+      "allGuides": "All guides",
+      "updatedStamp": "Updated <time>{{date}}</time> · {{author}}"
+    },
+    "imagePreview": {
+      "thumbnailAlt": "Thumbnail {{index}}"
+    },
+    "imageZoom": {
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "resetZoom": "Reset zoom"
+    },
+    "markdown": {
+      "imageAlt": "Image from markdown content",
+      "formatAs": "Format as {{syntax}}",
+      "enabled": "Markdown enabled",
+      "textAria": "Markdown text"
+    },
+    "mfa": {
+      "authCodeAria": "authentication code",
+      "recoveryCodeAria": "recovery code",
+      "recoveryCodesAria": "recovery codes"
+    },
+    "nav": {
+      "mobileNavigation": "Mobile navigation"
+    },
+    "pwa": {
+      "installTitle": "Install SC Market",
+      "installIntro": "Install our app for a better experience:",
+      "benefitFaster": "Faster loading",
+      "benefitOffline": "Offline access",
+      "benefitHomeScreen": "Home screen icon",
+      "dismissInstall": "Dismiss install prompt",
+      "install": "Install",
+      "offline": "You're offline. Some features may be limited."
+    },
+    "sendMoney": {
+      "avatarAlt": "Avatar of {{name}}"
+    },
+    "themeEditor": {
+      "hexAria": "{{label}} (hex)",
+      "imageRadiusPreview": "Image radius preview",
+      "faviconAlt": "favicon",
+      "paperElevation": "Paper elevation level",
+      "cardElevation": "Card elevation level"
+    },
+    "youtube": {
+      "playerTitle": "YouTube video player",
+      "playVideoNamed": "Play video: {{title}}",
+      "thumbnailAlt": "YouTube video thumbnail",
+      "playVideo": "Play video"
+    }
   }
 }

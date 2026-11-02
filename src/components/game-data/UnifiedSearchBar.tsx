@@ -3,8 +3,9 @@
  * Combines free text search with structured filter suggestions.
  */
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useCallback } from "react"
 import { Autocomplete, Chip, TextField, Box, Typography } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import { getMissionTypeLabel } from "../../util/missionDisplay"
 
 export interface SearchToken {
@@ -143,8 +144,58 @@ const MARKET_TAGS: SearchToken[] = [
   { type: "tag", label: "Bulk Discount", value: "bulk_discount" },
 ]
 
+// UI-defined token labels (tags, methods, sizes) are translated at render
+// time; game-data values (systems, categories, materials, ...) are shown as-is.
+const TOKEN_LABEL_KEYS: Record<string, string> = {
+  "tag:ILLEGAL": "wikiUi.search.tags.illegal",
+  "tag:shareable": "wikiUi.search.tags.shareable",
+  "tag:unique": "wikiUi.search.tags.unique",
+  "tag:chain": "wikiUi.search.tags.chainStarter",
+  "tag:blueprints": "wikiUi.search.tags.hasBlueprints",
+  "tag:default": "wikiUi.search.tags.default",
+  "tag:mission_reward": "wikiUi.search.tags.missionReward",
+  "tag:has_missions": "wikiUi.search.tags.hasMissionSource",
+  "tag:owned": "wikiUi.search.tags.owned",
+  "tag:refinery": "wikiUi.search.tags.hasRefinery",
+  "tag:has_photos": "wikiUi.search.tags.hasPhotos",
+  "tag:in_stock": "wikiUi.search.tags.inStock",
+  "tag:bulk_discount": "wikiUi.search.tags.bulkDiscount",
+  "tag:1": "wikiUi.search.tags.sizeSmall",
+  "tag:2": "wikiUi.search.tags.sizeMedium",
+  "tag:3": "wikiUi.search.tags.sizeLarge",
+  "tag:4": "wikiUi.search.tags.sizeCapital",
+  "category:ship": "wikiUi.search.methods.ship",
+  "category:ground": "wikiUi.search.methods.ground",
+  "category:fps": "wikiUi.search.methods.fps",
+  "category:surface": "wikiUi.search.locationTypes.surface",
+  "category:asteroidfield": "wikiUi.search.locationTypes.asteroidField",
+}
+
+const TOKEN_TYPE_KEYS: Record<SearchToken["type"], string> = {
+  query: "wikiUi.search.types.query",
+  system: "wikiUi.search.types.system",
+  category: "wikiUi.search.types.category",
+  giver: "wikiUi.search.types.giver",
+  faction: "wikiUi.search.types.faction",
+  tag: "wikiUi.search.types.tag",
+  event: "wikiUi.search.types.event",
+  material: "wikiUi.search.types.material",
+  rarity: "wikiUi.search.types.rarity",
+  manufacturer: "wikiUi.search.types.manufacturer",
+}
+
 export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placeholder, mode = "missions" }: UnifiedSearchBarProps) {
+  const { t } = useTranslation()
   const [inputValue, setInputValue] = useState("")
+
+  // Category tokens are only UI-defined in mining/location modes; elsewhere
+  // they carry game-data values.
+  const tokenLabel = useCallback((o: SearchToken): string => {
+    if (o.type === "query") return o.label
+    if (o.type === "category" && mode !== "mining" && mode !== "locations") return o.label
+    const key = TOKEN_LABEL_KEYS[`${o.type}:${o.value}`]
+    return key ? t(key) : o.label
+  }, [t, mode])
 
   const baseOptions = useMemo(() => {
     if (mode === "blueprints") return [...BP_CATEGORIES, ...BP_MATERIALS, ...BP_RARITIES, ...BP_TAGS]
@@ -175,10 +226,11 @@ export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placehol
     const lower = inputValue.toLowerCase()
     return allOptions.filter(o =>
       o.label.toLowerCase().includes(lower) ||
+      tokenLabel(o).toLowerCase().includes(lower) ||
       o.value.toLowerCase().includes(lower) ||
       o.type.toLowerCase().includes(lower)
     ).slice(0, 15)
-  }, [inputValue, allOptions])
+  }, [inputValue, allOptions, tokenLabel])
 
   return (
     <Autocomplete
@@ -191,31 +243,31 @@ export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placehol
         onChange(newValue.map(v => typeof v === "string" ? { type: "query", label: v, value: v } : v))
         setInputValue("")
       }}
-      getOptionLabel={(o) => typeof o === "string" ? o : o.label}
+      getOptionLabel={(o) => typeof o === "string" ? o : tokenLabel(o)}
       isOptionEqualToValue={(a, b) => a.type === b.type && a.value === b.value}
       renderOption={(props, option) => (
         <li {...props} key={`${option.type}:${option.value}`}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Chip label={option.type.charAt(0).toUpperCase() + option.type.slice(1)} size="small"
+            <Chip label={t(TOKEN_TYPE_KEYS[option.type])} size="small"
               color={TYPE_COLORS[option.type] || "default"}
               sx={{ height: 20, fontSize: "0.6rem", fontWeight: "bold", textTransform: "uppercase", minWidth: 60 }} />
-            <Typography variant="body2">{option.label}</Typography>
+            <Typography variant="body2">{tokenLabel(option)}</Typography>
           </Box>
         </li>
       )}
       renderTags={(value, getTagProps) =>
         value.map((token, index) => (
           <Chip {...getTagProps({ index })} key={`${token.type}:${token.value}`}
-            label={token.label} size="small" color={TYPE_COLORS[token.type] || "default"}
+            label={tokenLabel(token)} size="small" color={TYPE_COLORS[token.type] || "default"}
             sx={{ height: 22, fontSize: "0.7rem", fontWeight: "bold" }} />
         ))
       }
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder={tokens.length ? "" : placeholder || "Search..."}
+          placeholder={tokens.length ? "" : placeholder || t("wikiUi.search.placeholder")}
           // A stable name: the placeholder disappears once tokens are added.
-          inputProps={{ ...params.inputProps, "aria-label": placeholder || "Search" }}
+          inputProps={{ ...params.inputProps, "aria-label": placeholder || t("wikiUi.search.ariaLabel") }}
         />
       )}
       sx={{ flex: 1, minWidth: 200 }}

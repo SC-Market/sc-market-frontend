@@ -1,6 +1,7 @@
 import React from "react"
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Box, CircularProgress } from "@mui/material"
 import { Close } from "@mui/icons-material"
+import { useTranslation } from "react-i18next"
 import { useGetLocationDetailQuery } from "../../store/api/v2/market"
 import { LocationDetailContent } from "./LocationDetailContent"
 
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export function MiningLocationDetailModal({ locationName, open, onClose }: Props) {
+  const { t } = useTranslation()
   const { data: loc, isLoading } = useGetLocationDetailQuery(
     { name: locationName! },
     { skip: !locationName },
@@ -26,7 +28,7 @@ export function MiningLocationDetailModal({ locationName, open, onClose }: Props
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6">{displayName}</Typography>
-        <IconButton onClick={onClose} size="small" aria-label="Close"><Close /></IconButton>
+        <IconButton onClick={onClose} size="small" aria-label={t("accessibility.close")}><Close /></IconButton>
       </DialogTitle>
       <DialogContent dividers>
         {isLoading && (

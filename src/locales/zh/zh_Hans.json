@@ -7614,5 +7614,281 @@
       "buyFromMarket": "从市集购买",
       "itemActionsFor": "{{name}} 的操作"
     }
+  },
+  "miningUi": {
+    "ore": {
+      "instability": "不稳定性",
+      "resistance": "抗性",
+      "optimalWindowSize": "最佳窗口大小",
+      "optimalWindowPosition": "最佳窗口位置",
+      "explosionRisk": "爆炸风险",
+      "clusterFactor": "聚簇系数",
+      "qualityDistribution": "品质分布",
+      "qualityHint": "品质范围 0–1000。越高，制作效果和售价越好。",
+      "noLocationsTitle": "暂无已知地点",
+      "noLocationsDescription": "当前游戏数据中没有该矿石的已记录刷新地点。",
+      "colLocation": "地点",
+      "colSystem": "星系",
+      "colType": "类型",
+      "colMethod": "方式",
+      "colProbability": "概率",
+      "viewMarketListings": "查看市集商品",
+      "range": "范围",
+      "mostLikely": "最可能"
+    },
+    "location": {
+      "refinery": "精炼厂",
+      "amenities": "设施",
+      "groupWithWeight": "{{group}}（权重：{{weight}}）",
+      "colOre": "矿石",
+      "colRarity": "稀有度",
+      "colProbability": "概率",
+      "colPrice": "价格",
+      "colEstValue": "估值",
+      "instShort": "不稳定：{{value}}",
+      "resShort": "抗性：{{value}}"
+    },
+    "oreBrowser": {
+      "expShort": "爆炸：{{value}}",
+      "searchPlaceholder": "搜索矿石、星系、稀有度...",
+      "marketPrice": "市场价格",
+      "locations": "地点",
+      "unknownSystem": "未知"
+    },
+    "locationBrowser": {
+      "searchPlaceholder": "搜索地点、星系、类型...",
+      "moreOres_other": "另外 {{count}} 种",
+      "oreCount_other": "{{count}} 种矿石"
+    }
+  },
+  "wikiUi": {
+    "shipModal": {
+      "title": "舰船详情",
+      "loadError": "无法加载舰船详情。",
+      "sizeChip": "尺寸 {{size}}",
+      "crew": "机组人数：",
+      "dimensions": "尺寸：",
+      "specifications": "规格"
+    },
+    "versionSelector": {
+      "unknown": "未知",
+      "daysAgo_other": "{{count}} 天前",
+      "hoursAgo_other": "{{count}} 小时前",
+      "recently": "最近",
+      "ariaLabel": "游戏版本",
+      "label": "游戏版本",
+      "lastUpdated": "最后更新：{{time}}"
+    },
+    "resourceCard": {
+      "mined": "开采",
+      "purchased": "购买",
+      "salvaged": "打捞",
+      "looted": "拾取",
+      "qualityTiers_other": "{{count}} 个品质等级",
+      "blueprints_other": "{{count}} 个蓝图"
+    },
+    "qualityBand": {
+      "label": "品质",
+      "any": "任意"
+    },
+    "locationBrowser": {
+      "kmValue": "{{value}} 公里",
+      "typePlanets": "行星",
+      "typeMoons": "卫星",
+      "typeStations": "空间站",
+      "typeOutposts": "前哨站"
+    },
+    "resultCount_other": "{{count}} 个结果",
+    "manufacturer": {
+      "gradeChip": "等级 {{grade}}"
+    },
+    "resource": {
+      "tierValue": "等级 {{tier}}"
+    },
+    "search": {
+      "placeholder": "搜索...",
+      "ariaLabel": "搜索",
+      "tags": {
+        "illegal": "非法",
+        "shareable": "可共享",
+        "unique": "唯一",
+        "chainStarter": "任务链起点",
+        "hasBlueprints": "含蓝图",
+        "default": "默认",
+        "missionReward": "任务奖励",
+        "hasMissionSource": "有任务来源",
+        "owned": "已拥有",
+        "hasRefinery": "有精炼厂",
+        "hasPhotos": "有图片",
+        "inStock": "有货",
+        "bulkDiscount": "批量折扣",
+        "sizeSmall": "小型 (1)",
+        "sizeMedium": "中型 (2)",
+        "sizeLarge": "大型 (3)",
+        "sizeCapital": "主力舰 (4+)"
+      },
+      "methods": {
+        "ship": "舰船采矿",
+        "ground": "地面载具 (ROC)",
+        "fps": "手持采矿 (FPS)"
+      },
+      "locationTypes": {
+        "surface": "地表",
+        "asteroidField": "小行星带"
+      },
+      "types": {
+        "query": "关键词",
+        "system": "星系",
+        "category": "类别",
+        "giver": "发布者",
+        "faction": "阵营",
+        "tag": "标签",
+        "event": "活动",
+        "material": "材料",
+        "rarity": "稀有度",
+        "manufacturer": "制造商"
+      }
+    }
+  },
+  "emailUi": {
+    "verification": {
+      "pageTitle": "邮箱验证",
+      "verifying": "正在验证你的邮箱地址...",
+      "successTitle": "邮箱已验证！",
+      "failedTitle": "验证失败",
+      "invalidTitle": "无效请求",
+      "goToSettings": "前往邮箱设置"
+    },
+    "unsubscribe": {
+      "pageTitle": "退订邮件",
+      "managePreferences": "管理偏好设置",
+      "unsubscribing": "正在退订...",
+      "successTitle": "你已退订",
+      "turnOffAll": "关闭所有邮件",
+      "failedTitle": "无法退订"
+    }
+  },
+  "appUi": {
+    "adminUsers": {
+      "banned": "已封禁",
+      "membershipLoading": "正在加载成员分析...",
+      "membershipError": "加载成员分析时出错：{{error}}",
+      "membershipEmpty": "暂无成员数据",
+      "totalMembers": "成员总数",
+      "rsiVerified": "RSI 已验证",
+      "new30Days": "新增（30 天）",
+      "new7Days": "新增（7 天）",
+      "newMembers": "新成员"
+    },
+    "ads": {
+      "imageAlt": "广告：{{title}}"
+    },
+    "attributeFilter": {
+      "filterAria": "{{name}}筛选",
+      "minimumAria": "{{name}}最小值",
+      "maximumAria": "{{name}}最大值"
+    },
+    "charts": {
+      "loadingChart": "正在加载图表...",
+      "loadingPriceChart": "正在加载价格图表..."
+    },
+    "commandPalette": {
+      "placeholder": "搜索页面、操作、商品...",
+      "noResults": "没有与“{{query}}”匹配的结果",
+      "hintNavigate": "导航",
+      "hintSelect": "选择",
+      "hintClose": "关闭",
+      "categories": {
+        "navigation": "前往",
+        "action": "操作",
+        "content": "商品"
+      },
+      "items": {
+        "market": "市集",
+        "services": "服务",
+        "contracts": "合同",
+        "buyOrders": "求购订单",
+        "shops": "店铺",
+        "orgs": "组织",
+        "recruiting": "招募",
+        "missions": "任务",
+        "blueprints": "蓝图",
+        "mining": "采矿",
+        "wiki": "维基",
+        "resources": "资源",
+        "help": "帮助与指南",
+        "orders": "我的订单",
+        "messages": "消息",
+        "dashboard": "仪表板",
+        "settings": "设置",
+        "priceAlerts": "价格提醒",
+        "priceAlertsDescription": "你的关注列表和提醒渠道",
+        "myOrgs": "我的组织",
+        "shopOrders": "{{shop}} — 订单",
+        "createListing": "创建商品",
+        "newMessage": "新消息",
+        "toggleDarkMode": "切换深色模式"
+      }
+    },
+    "errorBoundary": {
+      "title": "出了点问题",
+      "tryAgain": "重试",
+      "featureTitle": "{{feature}} 出错",
+      "featureMessage": "{{feature}} 功能出错。你可以重试，或继续使用应用的其他部分。",
+      "errorStatus": "错误 {{status}}",
+      "anErrorOccurred": "发生错误"
+    },
+    "help": {
+      "allGuides": "所有指南",
+      "updatedStamp": "更新于 <time>{{date}}</time> · {{author}}"
+    },
+    "imagePreview": {
+      "thumbnailAlt": "缩略图 {{index}}"
+    },
+    "imageZoom": {
+      "zoomIn": "放大",
+      "zoomOut": "缩小",
+      "resetZoom": "重置缩放"
+    },
+    "markdown": {
+      "imageAlt": "Markdown 内容中的图片",
+      "formatAs": "设置为 {{syntax}} 格式",
+      "enabled": "支持 Markdown",
+      "textAria": "Markdown 文本"
+    },
+    "mfa": {
+      "authCodeAria": "验证码",
+      "recoveryCodeAria": "恢复码",
+      "recoveryCodesAria": "恢复码列表"
+    },
+    "nav": {
+      "mobileNavigation": "移动端导航"
+    },
+    "pwa": {
+      "installTitle": "安装 SC Market",
+      "installIntro": "安装我们的应用，获得更好的体验：",
+      "benefitFaster": "加载更快",
+      "benefitOffline": "离线访问",
+      "benefitHomeScreen": "主屏幕图标",
+      "dismissInstall": "关闭安装提示",
+      "install": "安装",
+      "offline": "你已离线。部分功能可能受限。"
+    },
+    "sendMoney": {
+      "avatarAlt": "{{name}} 的头像"
+    },
+    "themeEditor": {
+      "hexAria": "{{label}}（十六进制）",
+      "imageRadiusPreview": "图片圆角预览",
+      "faviconAlt": "网站图标",
+      "paperElevation": "纸张阴影层级",
+      "cardElevation": "卡片阴影层级"
+    },
+    "youtube": {
+      "playerTitle": "YouTube 视频播放器",
+      "playVideoNamed": "播放视频：{{title}}",
+      "thumbnailAlt": "YouTube 视频缩略图",
+      "playVideo": "播放视频"
+    }
   }
 }

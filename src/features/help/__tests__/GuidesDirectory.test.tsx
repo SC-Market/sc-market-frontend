@@ -1,3 +1,4 @@
+import "../../../util/i18n"
 import React from "react"
 import { describe, expect, it } from "vitest"
 import { render, screen, within } from "@testing-library/react"

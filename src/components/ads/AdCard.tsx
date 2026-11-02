@@ -182,6 +182,7 @@ function PosterCreative(props: { ad: PosterAdConfig }) {
  */
 export function AdCard(props: AdCardProps) {
   const { ad, index, noGridWrapper = false } = props
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
   const handleClick = (e: React.MouseEvent) => {
@@ -225,7 +226,7 @@ export function AdCard(props: AdCardProps) {
           {ad.kind === "image" ? (
             <img
               src={ad.imageUrl}
-              alt={`Ad: ${ad.title}`}
+              alt={t("appUi.ads.imageAlt", { title: ad.title })}
               style={{
                 width: "100%",
                 height: "100%",

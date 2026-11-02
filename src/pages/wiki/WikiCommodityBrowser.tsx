@@ -229,7 +229,7 @@ export function WikiCommodityBrowser() {
             />
             {data && (
               <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
-                {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+                {t("wikiUi.resultCount", { count: filtered.length })}
               </Typography>
             )}
           </Box>

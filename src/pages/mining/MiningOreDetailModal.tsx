@@ -1,6 +1,7 @@
 import React from "react"
 import { Dialog, DialogTitle, DialogContent, IconButton, Typography, Stack, Box, CircularProgress } from "@mui/material"
 import { Close } from "@mui/icons-material"
+import { useTranslation } from "react-i18next"
 import { useGetOreDetailQuery } from "../../store/api/v2/market"
 import { OreDetailContent } from "./OreDetailContent"
 
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
+  const { t } = useTranslation()
   const { data: ore, isLoading } = useGetOreDetailQuery(
     { name: oreName! },
     { skip: !oreName },
@@ -26,7 +28,7 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6">{displayName}</Typography>
-        <IconButton onClick={onClose} size="small" aria-label="Close"><Close /></IconButton>
+        <IconButton onClick={onClose} size="small" aria-label={t("accessibility.close")}><Close /></IconButton>
       </DialogTitle>
       <DialogContent dividers>
         {isLoading && (

@@ -811,7 +811,7 @@ export function WikiShipBrowser() {
             />
             {data && (
               <Typography variant="body2" sx={{ whiteSpace: "nowrap", color: "text.disabled", fontSize: "0.78rem" }}>
-                {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+                {t("wikiUi.resultCount", { count: filtered.length })}
               </Typography>
             )}
           </Box>

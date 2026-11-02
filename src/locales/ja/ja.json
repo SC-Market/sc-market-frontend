@@ -7608,5 +7608,281 @@
       "buyFromMarket": "マーケットで購入",
       "itemActionsFor": "{{name}}の操作"
     }
+  },
+  "miningUi": {
+    "ore": {
+      "instability": "不安定性",
+      "resistance": "耐性",
+      "optimalWindowSize": "最適ウィンドウの幅",
+      "optimalWindowPosition": "最適ウィンドウの位置",
+      "explosionRisk": "爆発リスク",
+      "clusterFactor": "クラスター係数",
+      "qualityDistribution": "品質の分布",
+      "qualityHint": "品質は 0–1000。高いほどクラフトの結果と売値が良くなります。",
+      "noLocationsTitle": "既知の場所はありません",
+      "noLocationsDescription": "現在のゲームデータには、この鉱石の出現場所が記録されていません。",
+      "colLocation": "場所",
+      "colSystem": "星系",
+      "colType": "種類",
+      "colMethod": "方法",
+      "colProbability": "確率",
+      "viewMarketListings": "マーケットの出品を見る",
+      "range": "範囲",
+      "mostLikely": "最も可能性が高い"
+    },
+    "location": {
+      "refinery": "精錬所",
+      "amenities": "設備",
+      "groupWithWeight": "{{group}}（重み: {{weight}}）",
+      "colOre": "鉱石",
+      "colRarity": "レア度",
+      "colProbability": "確率",
+      "colPrice": "価格",
+      "colEstValue": "推定価値",
+      "instShort": "不安定: {{value}}",
+      "resShort": "耐性: {{value}}"
+    },
+    "oreBrowser": {
+      "expShort": "爆発: {{value}}",
+      "searchPlaceholder": "鉱石、星系、レア度で検索...",
+      "marketPrice": "市場価格",
+      "locations": "場所",
+      "unknownSystem": "不明"
+    },
+    "locationBrowser": {
+      "searchPlaceholder": "場所、星系、種類で検索...",
+      "moreOres_other": "他 {{count}} 件",
+      "oreCount_other": "鉱石 {{count}} 種"
+    }
+  },
+  "wikiUi": {
+    "shipModal": {
+      "title": "艦船の詳細",
+      "loadError": "艦船の詳細を読み込めませんでした。",
+      "sizeChip": "サイズ {{size}}",
+      "crew": "クルー:",
+      "dimensions": "寸法:",
+      "specifications": "仕様"
+    },
+    "versionSelector": {
+      "unknown": "不明",
+      "daysAgo_other": "{{count}}日前",
+      "hoursAgo_other": "{{count}}時間前",
+      "recently": "最近",
+      "ariaLabel": "ゲームバージョン",
+      "label": "ゲームバージョン",
+      "lastUpdated": "最終更新: {{time}}"
+    },
+    "resourceCard": {
+      "mined": "採掘",
+      "purchased": "購入",
+      "salvaged": "サルベージ",
+      "looted": "ルート",
+      "qualityTiers_other": "品質ティア {{count}} 段階",
+      "blueprints_other": "ブループリント {{count}} 件"
+    },
+    "qualityBand": {
+      "label": "品質",
+      "any": "指定なし"
+    },
+    "locationBrowser": {
+      "kmValue": "{{value}} km",
+      "typePlanets": "惑星",
+      "typeMoons": "衛星",
+      "typeStations": "ステーション",
+      "typeOutposts": "前哨基地"
+    },
+    "resultCount_other": "{{count}} 件",
+    "manufacturer": {
+      "gradeChip": "グレード {{grade}}"
+    },
+    "resource": {
+      "tierValue": "ティア {{tier}}"
+    },
+    "search": {
+      "placeholder": "検索...",
+      "ariaLabel": "検索",
+      "tags": {
+        "illegal": "違法",
+        "shareable": "共有可能",
+        "unique": "ユニーク",
+        "chainStarter": "チェーンの開始",
+        "hasBlueprints": "ブループリントあり",
+        "default": "デフォルト",
+        "missionReward": "ミッション報酬",
+        "hasMissionSource": "入手ミッションあり",
+        "owned": "所持済み",
+        "hasRefinery": "精錬所あり",
+        "hasPhotos": "写真あり",
+        "inStock": "在庫あり",
+        "bulkDiscount": "まとめ買い割引",
+        "sizeSmall": "小型 (1)",
+        "sizeMedium": "中型 (2)",
+        "sizeLarge": "大型 (3)",
+        "sizeCapital": "主力艦 (4+)"
+      },
+      "methods": {
+        "ship": "艦船採掘",
+        "ground": "地上車両 (ROC)",
+        "fps": "手掘り採掘 (FPS)"
+      },
+      "locationTypes": {
+        "surface": "地表",
+        "asteroidField": "小惑星帯"
+      },
+      "types": {
+        "query": "検索語",
+        "system": "星系",
+        "category": "カテゴリ",
+        "giver": "依頼主",
+        "faction": "勢力",
+        "tag": "タグ",
+        "event": "イベント",
+        "material": "素材",
+        "rarity": "レア度",
+        "manufacturer": "メーカー"
+      }
+    }
+  },
+  "emailUi": {
+    "verification": {
+      "pageTitle": "メール認証",
+      "verifying": "メールアドレスを確認しています...",
+      "successTitle": "メールアドレスを認証しました！",
+      "failedTitle": "認証に失敗しました",
+      "invalidTitle": "無効なリクエスト",
+      "goToSettings": "メール設定へ"
+    },
+    "unsubscribe": {
+      "pageTitle": "メールの配信停止",
+      "managePreferences": "設定を管理",
+      "unsubscribing": "配信を停止しています...",
+      "successTitle": "配信を停止しました",
+      "turnOffAll": "すべてのメールをオフにする",
+      "failedTitle": "配信を停止できませんでした"
+    }
+  },
+  "appUi": {
+    "adminUsers": {
+      "banned": "BAN済み",
+      "membershipLoading": "メンバー分析を読み込み中...",
+      "membershipError": "メンバー分析の読み込みエラー: {{error}}",
+      "membershipEmpty": "メンバーデータがありません",
+      "totalMembers": "メンバー総数",
+      "rsiVerified": "RSI 認証済み",
+      "new30Days": "新規（30日間）",
+      "new7Days": "新規（7日間）",
+      "newMembers": "新規メンバー"
+    },
+    "ads": {
+      "imageAlt": "広告: {{title}}"
+    },
+    "attributeFilter": {
+      "filterAria": "{{name}}のフィルター",
+      "minimumAria": "{{name}}の最小値",
+      "maximumAria": "{{name}}の最大値"
+    },
+    "charts": {
+      "loadingChart": "チャートを読み込み中...",
+      "loadingPriceChart": "価格チャートを読み込み中..."
+    },
+    "commandPalette": {
+      "placeholder": "ページ、アクション、出品を検索...",
+      "noResults": "「{{query}}」に一致する結果はありません",
+      "hintNavigate": "移動",
+      "hintSelect": "選択",
+      "hintClose": "閉じる",
+      "categories": {
+        "navigation": "移動先",
+        "action": "アクション",
+        "content": "出品"
+      },
+      "items": {
+        "market": "マーケット",
+        "services": "サービス",
+        "contracts": "契約",
+        "buyOrders": "買い注文",
+        "shops": "ショップ",
+        "orgs": "組織",
+        "recruiting": "募集",
+        "missions": "ミッション",
+        "blueprints": "ブループリント",
+        "mining": "採掘",
+        "wiki": "ウィキ",
+        "resources": "リソース",
+        "help": "ヘルプとガイド",
+        "orders": "マイ注文",
+        "messages": "メッセージ",
+        "dashboard": "ダッシュボード",
+        "settings": "設定",
+        "priceAlerts": "価格アラート",
+        "priceAlertsDescription": "ウォッチリストと通知チャンネル",
+        "myOrgs": "マイ組織",
+        "shopOrders": "{{shop}} — 注文",
+        "createListing": "出品の作成",
+        "newMessage": "新規メッセージ",
+        "toggleDarkMode": "ダークモードの切り替え"
+      }
+    },
+    "errorBoundary": {
+      "title": "問題が発生しました",
+      "tryAgain": "再試行",
+      "featureTitle": "{{feature}}でエラーが発生しました",
+      "featureMessage": "{{feature}} 機能でエラーが発生しました。再試行するか、アプリの他の部分を引き続きご利用ください。",
+      "errorStatus": "エラー {{status}}",
+      "anErrorOccurred": "エラーが発生しました"
+    },
+    "help": {
+      "allGuides": "すべてのガイド",
+      "updatedStamp": "更新日 <time>{{date}}</time> · {{author}}"
+    },
+    "imagePreview": {
+      "thumbnailAlt": "サムネイル {{index}}"
+    },
+    "imageZoom": {
+      "zoomIn": "拡大",
+      "zoomOut": "縮小",
+      "resetZoom": "ズームをリセット"
+    },
+    "markdown": {
+      "imageAlt": "Markdown コンテンツの画像",
+      "formatAs": "{{syntax}} で書式設定",
+      "enabled": "Markdown 対応",
+      "textAria": "Markdown テキスト"
+    },
+    "mfa": {
+      "authCodeAria": "認証コード",
+      "recoveryCodeAria": "リカバリーコード",
+      "recoveryCodesAria": "リカバリーコード一覧"
+    },
+    "nav": {
+      "mobileNavigation": "モバイルナビゲーション"
+    },
+    "pwa": {
+      "installTitle": "SC Market をインストール",
+      "installIntro": "より快適にご利用いただくため、アプリをインストールしてください:",
+      "benefitFaster": "高速な読み込み",
+      "benefitOffline": "オフラインでのアクセス",
+      "benefitHomeScreen": "ホーム画面アイコン",
+      "dismissInstall": "インストールの案内を閉じる",
+      "install": "インストール",
+      "offline": "オフラインです。一部の機能が制限される場合があります。"
+    },
+    "sendMoney": {
+      "avatarAlt": "{{name}} のアバター"
+    },
+    "themeEditor": {
+      "hexAria": "{{label}}（16進数）",
+      "imageRadiusPreview": "画像の角丸プレビュー",
+      "faviconAlt": "ファビコン",
+      "paperElevation": "ペーパーの影の高さ",
+      "cardElevation": "カードの影の高さ"
+    },
+    "youtube": {
+      "playerTitle": "YouTube 動画プレーヤー",
+      "playVideoNamed": "動画を再生: {{title}}",
+      "thumbnailAlt": "YouTube 動画のサムネイル",
+      "playVideo": "動画を再生"
+    }
   }
 }

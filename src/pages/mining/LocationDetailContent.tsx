@@ -5,6 +5,7 @@ import React from "react"
 import {
   Typography, Chip, Stack, Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, TableContainer,
 } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import { RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/icons-material"
 import type { LocationDetailResponse, LocationMiningGroup } from "../../store/api/v2/market"
 import { Section } from "../../components/paper/Section"
@@ -31,13 +32,14 @@ interface Props {
 }
 
 export function LocationDetailContent({ location }: Props) {
+  const { t } = useTranslation()
   return (
     <Stack spacing={2}>
       {/* Header chips */}
       <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center">
         <Chip label={location.system} size="small" color="primary" />
         <Chip label={location.locationType} size="small" variant="outlined" />
-        {location.hasRefinery && <Chip label="Refinery" size="small" color="success" />}
+        {location.hasRefinery && <Chip label={t("miningUi.location.refinery")} size="small" color="success" />}
       </Stack>
 
       {/* Mining groups */}
@@ -47,7 +49,7 @@ export function LocationDetailContent({ location }: Props) {
 
       {/* Amenities */}
       {(location.amenities || []).length > 0 && (
-        <Section title="Amenities">
+        <Section title={t("miningUi.location.amenities")}>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5} sx={{ pt: 1 }}>
             {location.amenities.map((a) => (
               <Chip key={a} label={a} size="small"
@@ -61,22 +63,23 @@ export function LocationDetailContent({ location }: Props) {
 }
 
 function MiningGroupTable({ group }: { group: LocationMiningGroup }) {
+  const { t } = useTranslation()
   const sorted = [...(group.ores || [])].sort((a, b) => b.relativeProbability - a.relativeProbability)
   return (
     <Paper>
       <Box sx={{ p: 2, pb: 1, display: "flex", alignItems: "center" }}>
         {groupIcon(group.groupName)}
-        <Typography variant="subtitle2">{group.groupName} (Weight: {group.groupProbability})</Typography>
+        <Typography variant="subtitle2">{t("miningUi.location.groupWithWeight", { group: group.groupName, weight: group.groupProbability })}</Typography>
       </Box>
       <TableContainer>
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Ore</TableCell>
-              <TableCell align="center">Rarity</TableCell>
-              <TableCell align="right">Probability</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">Est. Value</TableCell>
+              <TableCell>{t("miningUi.location.colOre")}</TableCell>
+              <TableCell align="center">{t("miningUi.location.colRarity")}</TableCell>
+              <TableCell align="right">{t("miningUi.location.colProbability")}</TableCell>
+              <TableCell align="right">{t("miningUi.location.colPrice")}</TableCell>
+              <TableCell align="right">{t("miningUi.location.colEstValue")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -89,7 +92,7 @@ function MiningGroupTable({ group }: { group: LocationMiningGroup }) {
                     <Typography variant="body2" fontWeight={600}>{name}</Typography>
                     {(ore.instability != null || ore.resistance != null) && (
                       <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
-                        {[ore.instability != null ? `Inst: ${ore.instability}` : null, ore.resistance != null ? `Res: ${(ore.resistance * 100).toFixed(0)}%` : null].filter(Boolean).join(" · ")}
+                        {[ore.instability != null ? t("miningUi.location.instShort", { value: ore.instability }) : null, ore.resistance != null ? t("miningUi.location.resShort", { value: `${(ore.resistance * 100).toFixed(0)}%` }) : null].filter(Boolean).join(" · ")}
                       </Typography>
                     )}
                   </TableCell>

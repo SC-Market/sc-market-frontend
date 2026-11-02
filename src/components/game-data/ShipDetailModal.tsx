@@ -6,6 +6,7 @@ import {
 } from "@mui/material"
 import { Close } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { useGetShipDetailQuery } from "../../store/api/v2/market"
 import { DetailPageSkeleton } from "./GameDataSkeletons"
 import { ShipSilhouette, getShipColor } from "../wiki/ShipSilhouette"
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function ShipDetailModal({ shipId, open, onClose }: Props) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { data: ship, isLoading, error } = useGetShipDetailQuery(
     { id: shipId! },
@@ -30,14 +32,14 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6" noWrap sx={{ flex: 1 }}>
-          {ship?.name || "Ship Details"}
+          {ship?.name || t("wikiUi.shipModal.title")}
         </Typography>
-        <IconButton onClick={onClose} size="small" aria-label="Close"><Close /></IconButton>
+        <IconButton onClick={onClose} size="small" aria-label={t("accessibility.close")}><Close /></IconButton>
       </DialogTitle>
 
       <DialogContent sx={{ minHeight: 400 }}>
         {isLoading && <DetailPageSkeleton />}
-        {error && <Alert severity="error">Failed to load ship details.</Alert>}
+        {error && <Alert severity="error">{t("wikiUi.shipModal.loadError")}</Alert>}
 
         {ship && (
           <Stack spacing={2}>
@@ -78,18 +80,18 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
                   {ship.role && <Chip label={formatShipRole(ship.role)} variant="outlined"
                     sx={{ borderColor: shipColor, color: shipColor }} />}
                   {ship.focus && !ship.role && <Chip label={ship.focus} />}
-                  {ship.size && <Chip label={`Size ${ship.size}`} />}
+                  {ship.size && <Chip label={t("wikiUi.shipModal.sizeChip", { size: ship.size })} />}
                 </Stack>
 
                 <Stack direction="row" spacing={3} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
                   {ship.crew_size != null && (
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Crew:</strong> {ship.crew_size}
+                      <strong>{t("wikiUi.shipModal.crew")}</strong> {ship.crew_size}
                     </Typography>
                   )}
                   {(ship.length_m != null || ship.width_m != null || ship.height_m != null) && (
                     <Typography variant="body2" color="text.secondary">
-                      <strong>Dimensions:</strong>{" "}
+                      <strong>{t("wikiUi.shipModal.dimensions")}</strong>{" "}
                       {[ship.length_m, ship.width_m, ship.height_m]
                         .filter(v => v != null)
                         .map(v => `${v}m`)
@@ -109,7 +111,7 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
             {Object.keys(ship.attributes).length > 0 && (
               <>
                 <Divider />
-                <Typography variant="subtitle2">Specifications</Typography>
+                <Typography variant="subtitle2">{t("wikiUi.shipModal.specifications")}</Typography>
                 <TableContainer component={Paper} variant="outlined">
                   <Table size="small">
                     <TableBody>

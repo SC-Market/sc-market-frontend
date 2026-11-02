@@ -1,5 +1,6 @@
 import React from "react"
 import { TextField, MenuItem } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { type QualityBand } from "../../store/api/v2/market"
 
@@ -18,19 +19,20 @@ export function QualityBandSelect({
   bands,
   value,
   onChange,
-  label = "Quality",
+  label,
   allowAny = true,
   size = "small",
   fullWidth = true,
   disabled = false,
 }: QualityBandSelectProps) {
+  const { t } = useTranslation()
   return (
     <TextField
       select
       fullWidth={fullWidth}
       size={size}
       color="secondary"
-      label={label}
+      label={label ?? t("wikiUi.qualityBand.label")}
       value={value ?? ""}
       onChange={(e) => {
         const v = e.target.value
@@ -39,7 +41,7 @@ export function QualityBandSelect({
       disabled={disabled}
       SelectProps={{ IconComponent: KeyboardArrowDownRoundedIcon }}
     >
-      {allowAny && <MenuItem value="">Any</MenuItem>}
+      {allowAny && <MenuItem value="">{t("wikiUi.qualityBand.any")}</MenuItem>}
       {bands.map((band) => (
         <MenuItem key={band.mappedValue} value={band.mappedValue}>
           {band.mappedValue} ({band.start}–{band.end})

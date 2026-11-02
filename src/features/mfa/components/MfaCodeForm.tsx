@@ -64,7 +64,7 @@ export function MfaCodeForm(props: {
           inputProps={{
             inputMode: useRecovery ? "text" : "numeric",
             pattern: useRecovery ? undefined : "[0-9]*",
-            "aria-label": useRecovery ? "recovery code" : "authentication code",
+            "aria-label": useRecovery ? t("appUi.mfa.recoveryCodeAria") : t("appUi.mfa.authCodeAria"),
             style: { letterSpacing: "0.3em", fontFamily: "monospace" },
           }}
           fullWidth

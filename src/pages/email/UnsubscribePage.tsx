@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageUnsubscribe } from "../../features/email/hooks/usePageUnsubscribe"
 import { UnsubscribeContent } from "../../features/email/components/UnsubscribeContent"
@@ -8,11 +9,12 @@ import { UnsubscribeContent } from "../../features/email/components/UnsubscribeC
  * email category off at once and confirms it here.
  */
 export function UnsubscribePage() {
+  const { t } = useTranslation()
   const page = usePageUnsubscribe()
 
   return (
     <StandardPageLayout
-      title="Unsubscribe from Emails"
+      title={t("emailUi.unsubscribe.pageTitle")}
       maxWidth="sm"
       noSidebar={true}
     >

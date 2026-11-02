@@ -7848,5 +7848,295 @@
       "buyFromMarket": "Acheter sur le marché",
       "itemActionsFor": "Actions pour {{name}}"
     }
+  },
+  "miningUi": {
+    "ore": {
+      "instability": "Instabilité",
+      "resistance": "Résistance",
+      "optimalWindowSize": "Taille de la fenêtre optimale",
+      "optimalWindowPosition": "Position de la fenêtre optimale",
+      "explosionRisk": "Risque d'explosion",
+      "clusterFactor": "Facteur de regroupement",
+      "qualityDistribution": "Distribution de la qualité",
+      "qualityHint": "Qualité 0–1000. Plus elle est élevée, meilleurs sont l'artisanat et le prix de vente.",
+      "noLocationsTitle": "Aucun emplacement connu",
+      "noLocationsDescription": "Ce minerai n'a aucun emplacement d'apparition enregistré dans les données de jeu actuelles.",
+      "colLocation": "Emplacement",
+      "colSystem": "Système",
+      "colType": "Type",
+      "colMethod": "Méthode",
+      "colProbability": "Probabilité",
+      "viewMarketListings": "Voir les annonces du marché",
+      "range": "Plage",
+      "mostLikely": "Le plus probable"
+    },
+    "location": {
+      "refinery": "Raffinerie",
+      "amenities": "Équipements",
+      "groupWithWeight": "{{group}} (Poids : {{weight}})",
+      "colOre": "Minerai",
+      "colRarity": "Rareté",
+      "colProbability": "Probabilité",
+      "colPrice": "Prix",
+      "colEstValue": "Valeur est.",
+      "instShort": "Inst. : {{value}}",
+      "resShort": "Rés. : {{value}}"
+    },
+    "oreBrowser": {
+      "expShort": "Expl. : {{value}}",
+      "searchPlaceholder": "Rechercher des minerais, systèmes, raretés...",
+      "marketPrice": "Prix du marché",
+      "locations": "Emplacements",
+      "unknownSystem": "Inconnu"
+    },
+    "locationBrowser": {
+      "searchPlaceholder": "Rechercher des emplacements, systèmes, types...",
+      "moreOres_one": "+{{count}} autre",
+      "moreOres_many": "+{{count}} autres",
+      "moreOres_other": "+{{count}} autres",
+      "oreCount_one": "{{count}} minerai",
+      "oreCount_many": "{{count}} de minerais",
+      "oreCount_other": "{{count}} minerais"
+    }
+  },
+  "wikiUi": {
+    "shipModal": {
+      "title": "Détails du vaisseau",
+      "loadError": "Impossible de charger les détails du vaisseau.",
+      "sizeChip": "Taille {{size}}",
+      "crew": "Équipage :",
+      "dimensions": "Dimensions :",
+      "specifications": "Caractéristiques"
+    },
+    "versionSelector": {
+      "unknown": "Inconnue",
+      "daysAgo_one": "il y a {{count}} j",
+      "daysAgo_many": "il y a {{count}} j",
+      "daysAgo_other": "il y a {{count}} j",
+      "hoursAgo_one": "il y a {{count}} h",
+      "hoursAgo_many": "il y a {{count}} h",
+      "hoursAgo_other": "il y a {{count}} h",
+      "recently": "Récemment",
+      "ariaLabel": "Version du jeu",
+      "label": "Version du jeu",
+      "lastUpdated": "Dernière mise à jour : {{time}}"
+    },
+    "resourceCard": {
+      "mined": "Miné",
+      "purchased": "Acheté",
+      "salvaged": "Récupéré",
+      "looted": "Pillé",
+      "qualityTiers_one": "{{count}} niveau de qualité",
+      "qualityTiers_many": "{{count}} de niveaux de qualité",
+      "qualityTiers_other": "{{count}} niveaux de qualité",
+      "blueprints_one": "{{count}} plan",
+      "blueprints_many": "{{count}} de plans",
+      "blueprints_other": "{{count}} plans"
+    },
+    "qualityBand": {
+      "label": "Qualité",
+      "any": "Toutes"
+    },
+    "locationBrowser": {
+      "kmValue": "{{value}} km",
+      "typePlanets": "Planètes",
+      "typeMoons": "Lunes",
+      "typeStations": "Stations",
+      "typeOutposts": "Avant-postes"
+    },
+    "resultCount_one": "{{count}} résultat",
+    "resultCount_many": "{{count}} de résultats",
+    "resultCount_other": "{{count}} résultats",
+    "manufacturer": {
+      "gradeChip": "Classe {{grade}}"
+    },
+    "resource": {
+      "tierValue": "Niveau {{tier}}"
+    },
+    "search": {
+      "placeholder": "Rechercher...",
+      "ariaLabel": "Rechercher",
+      "tags": {
+        "illegal": "Illégal",
+        "shareable": "Partageable",
+        "unique": "Unique",
+        "chainStarter": "Début de chaîne",
+        "hasBlueprints": "Avec plans",
+        "default": "Par défaut",
+        "missionReward": "Récompense de mission",
+        "hasMissionSource": "Avec mission source",
+        "owned": "Possédés",
+        "hasRefinery": "Avec raffinerie",
+        "hasPhotos": "Avec photos",
+        "inStock": "En stock",
+        "bulkDiscount": "Remise sur quantité",
+        "sizeSmall": "Petit (1)",
+        "sizeMedium": "Moyen (2)",
+        "sizeLarge": "Grand (3)",
+        "sizeCapital": "Capital (4+)"
+      },
+      "methods": {
+        "ship": "Minage en vaisseau",
+        "ground": "Véhicule terrestre (ROC)",
+        "fps": "Minage à la main (FPS)"
+      },
+      "locationTypes": {
+        "surface": "Surface",
+        "asteroidField": "Champ d'astéroïdes"
+      },
+      "types": {
+        "query": "Recherche",
+        "system": "Système",
+        "category": "Catégorie",
+        "giver": "Donneur",
+        "faction": "Faction",
+        "tag": "Étiquette",
+        "event": "Événement",
+        "material": "Matériau",
+        "rarity": "Rareté",
+        "manufacturer": "Fabricant"
+      }
+    }
+  },
+  "emailUi": {
+    "verification": {
+      "pageTitle": "Vérification de l'e-mail",
+      "verifying": "Vérification de votre adresse e-mail...",
+      "successTitle": "E-mail vérifié !",
+      "failedTitle": "Échec de la vérification",
+      "invalidTitle": "Requête invalide",
+      "goToSettings": "Accéder aux paramètres e-mail"
+    },
+    "unsubscribe": {
+      "pageTitle": "Se désabonner des e-mails",
+      "managePreferences": "Gérer les préférences",
+      "unsubscribing": "Désabonnement en cours...",
+      "successTitle": "Vous êtes désabonné",
+      "turnOffAll": "Désactiver tous les e-mails",
+      "failedTitle": "Impossible de se désabonner"
+    }
+  },
+  "appUi": {
+    "adminUsers": {
+      "banned": "Banni",
+      "membershipLoading": "Chargement des statistiques des membres...",
+      "membershipError": "Erreur lors du chargement des statistiques des membres : {{error}}",
+      "membershipEmpty": "Aucune donnée sur les membres disponible",
+      "totalMembers": "Membres au total",
+      "rsiVerified": "Vérifiés RSI",
+      "new30Days": "Nouveaux (30 jours)",
+      "new7Days": "Nouveaux (7 jours)",
+      "newMembers": "Nouveaux membres"
+    },
+    "ads": {
+      "imageAlt": "Publicité : {{title}}"
+    },
+    "attributeFilter": {
+      "filterAria": "Filtre {{name}}",
+      "minimumAria": "{{name}} minimum",
+      "maximumAria": "{{name}} maximum"
+    },
+    "charts": {
+      "loadingChart": "Chargement du graphique...",
+      "loadingPriceChart": "Chargement du graphique des prix..."
+    },
+    "commandPalette": {
+      "placeholder": "Rechercher des pages, actions, annonces...",
+      "noResults": "Aucun résultat pour « {{query}} »",
+      "hintNavigate": "naviguer",
+      "hintSelect": "sélectionner",
+      "hintClose": "fermer",
+      "categories": {
+        "navigation": "Aller à",
+        "action": "Actions",
+        "content": "Annonces"
+      },
+      "items": {
+        "market": "Marché",
+        "services": "Services",
+        "contracts": "Contrats",
+        "buyOrders": "Ordres d'achat",
+        "shops": "Boutiques",
+        "orgs": "Organisations",
+        "recruiting": "Recrutement",
+        "missions": "Missions",
+        "blueprints": "Plans",
+        "mining": "Minage",
+        "wiki": "Wiki",
+        "resources": "Ressources",
+        "help": "Aide et guides",
+        "orders": "Mes commandes",
+        "messages": "Messages",
+        "dashboard": "Tableau de bord",
+        "settings": "Paramètres",
+        "priceAlerts": "Alertes de prix",
+        "priceAlertsDescription": "Votre liste de suivi et vos canaux d'alerte",
+        "myOrgs": "Mes organisations",
+        "shopOrders": "{{shop}} — Commandes",
+        "createListing": "Créer une annonce",
+        "newMessage": "Nouveau message",
+        "toggleDarkMode": "Basculer le mode sombre"
+      }
+    },
+    "errorBoundary": {
+      "title": "Une erreur s'est produite",
+      "tryAgain": "Réessayer",
+      "featureTitle": "Erreur dans {{feature}}",
+      "featureMessage": "La fonctionnalité {{feature}} a rencontré une erreur. Vous pouvez réessayer ou continuer à utiliser d'autres parties de l'application.",
+      "errorStatus": "Erreur {{status}}",
+      "anErrorOccurred": "Une erreur s'est produite"
+    },
+    "help": {
+      "allGuides": "Tous les guides",
+      "updatedStamp": "Mis à jour le <time>{{date}}</time> · {{author}}"
+    },
+    "imagePreview": {
+      "thumbnailAlt": "Miniature {{index}}"
+    },
+    "imageZoom": {
+      "zoomIn": "Zoom avant",
+      "zoomOut": "Zoom arrière",
+      "resetZoom": "Réinitialiser le zoom"
+    },
+    "markdown": {
+      "imageAlt": "Image issue du contenu Markdown",
+      "formatAs": "Mettre en forme avec {{syntax}}",
+      "enabled": "Markdown activé",
+      "textAria": "Texte Markdown"
+    },
+    "mfa": {
+      "authCodeAria": "code d'authentification",
+      "recoveryCodeAria": "code de récupération",
+      "recoveryCodesAria": "codes de récupération"
+    },
+    "nav": {
+      "mobileNavigation": "Navigation mobile"
+    },
+    "pwa": {
+      "installTitle": "Installer SC Market",
+      "installIntro": "Installez notre application pour une meilleure expérience :",
+      "benefitFaster": "Chargement plus rapide",
+      "benefitOffline": "Accès hors ligne",
+      "benefitHomeScreen": "Icône sur l'écran d'accueil",
+      "dismissInstall": "Ignorer l'invitation à installer",
+      "install": "Installer",
+      "offline": "Vous êtes hors ligne. Certaines fonctionnalités peuvent être limitées."
+    },
+    "sendMoney": {
+      "avatarAlt": "Avatar de {{name}}"
+    },
+    "themeEditor": {
+      "hexAria": "{{label}} (hex)",
+      "imageRadiusPreview": "Aperçu de l'arrondi des images",
+      "faviconAlt": "favicon",
+      "paperElevation": "Niveau d'élévation du papier",
+      "cardElevation": "Niveau d'élévation des cartes"
+    },
+    "youtube": {
+      "playerTitle": "Lecteur vidéo YouTube",
+      "playVideoNamed": "Lire la vidéo : {{title}}",
+      "thumbnailAlt": "Miniature de la vidéo YouTube",
+      "playVideo": "Lire la vidéo"
+    }
   }
 }

@@ -52,22 +52,22 @@ export function OreDetailContent({ ore, onClose }: Props) {
         <Box sx={{ flex: { xs: 1, md: hasQuality ? "0 0 33.33%" : 1 }, minWidth: 0 }}>
           <Section title={t("mining.stats", "Mining Stats")}>
             <Stack spacing={1.5} sx={{ pt: 1, width: "100%" }}>
-              <StatBar label="Instability" value={ore.instability} max={1000} />
-              <StatBar label="Resistance" value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
-              <StatBar label="Optimal Window Size" value={ore.optimalWindowThinness} max={10} />
-              <StatBar label="Optimal Window Position" value={ore.optimalWindowMidpoint != null ? ore.optimalWindowMidpoint * 100 : null} max={100} suffix="%" />
-              <StatBar label="Explosion Risk" value={ore.explosionMultiplier} max={500} />
-              <StatBar label="Cluster Factor" value={ore.clusterFactor != null ? ore.clusterFactor * 100 : null} max={100} suffix="%" />
+              <StatBar label={t("miningUi.ore.instability")} value={ore.instability} max={1000} />
+              <StatBar label={t("miningUi.ore.resistance")} value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
+              <StatBar label={t("miningUi.ore.optimalWindowSize")} value={ore.optimalWindowThinness} max={10} />
+              <StatBar label={t("miningUi.ore.optimalWindowPosition")} value={ore.optimalWindowMidpoint != null ? ore.optimalWindowMidpoint * 100 : null} max={100} suffix="%" />
+              <StatBar label={t("miningUi.ore.explosionRisk")} value={ore.explosionMultiplier} max={500} />
+              <StatBar label={t("miningUi.ore.clusterFactor")} value={ore.clusterFactor != null ? ore.clusterFactor * 100 : null} max={100} suffix="%" />
             </Stack>
           </Section>
         </Box>
 
         {hasQuality && (
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Section title="Quality Distribution">
+            <Section title={t("miningUi.ore.qualityDistribution")}>
               <Box sx={{ pt: 1, width: "100%" }}>
                 <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
-                  Quality 0–1000. Higher = better crafting &amp; sell price.
+                  {t("miningUi.ore.qualityHint")}
                 </Typography>
                 {ore.qualityDistributions.map((qd: OreQualityDistribution, i: number) => (
                   <QualityDistBar key={i} qd={qd} />
@@ -81,17 +81,17 @@ export function OreDetailContent({ ore, onClose }: Props) {
       {/* Locations */}
       <Section title={t("mining.locations", "Locations")}>
         {(ore.locations?.length ?? 0) === 0 ? (
-          <EmptyState title="No known locations" description="This ore has no recorded spawn locations in the current game data." />
+          <EmptyState title={t("miningUi.ore.noLocationsTitle")} description={t("miningUi.ore.noLocationsDescription")} />
         ) : (
           <TableContainer>
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>Location</TableCell>
-                  <TableCell>System</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell>Method</TableCell>
-                  <TableCell align="right">Probability</TableCell>
+                  <TableCell>{t("miningUi.ore.colLocation")}</TableCell>
+                  <TableCell>{t("miningUi.ore.colSystem")}</TableCell>
+                  <TableCell>{t("miningUi.ore.colType")}</TableCell>
+                  <TableCell>{t("miningUi.ore.colMethod")}</TableCell>
+                  <TableCell align="right">{t("miningUi.ore.colProbability")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -116,7 +116,7 @@ export function OreDetailContent({ ore, onClose }: Props) {
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Button variant="outlined" size="small"
             onClick={() => { onClose?.(); window.location.href = `/market/aggregate/${ore.gameItemId}` }}>
-            View Market Listings
+            {t("miningUi.ore.viewMarketListings")}
           </Button>
         </Box>
       )}
@@ -140,19 +140,20 @@ function StatBar({ label, value, max, suffix = "" }: { label: string; value: num
 }
 
 function QualityDistBar({ qd }: { qd: OreQualityDistribution }) {
+  const { t } = useTranslation()
   if (qd.min == null || qd.max == null) return null
   return (
     <Box sx={{ mb: 1.5 }}>
       <Typography variant="caption" fontWeight={600}>{qd.miningType}</Typography>
       <Box sx={{ mt: 0.5 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.25 }}>
-          <Typography variant="caption" color="text.secondary">Range</Typography>
+          <Typography variant="caption" color="text.secondary">{t("miningUi.ore.range")}</Typography>
           <Typography variant="caption">{qd.min} – {qd.max}</Typography>
         </Box>
         {qd.mean != null && qd.stddev != null && (
           <>
             <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.25 }}>
-              <Typography variant="caption" color="text.secondary">Most likely</Typography>
+              <Typography variant="caption" color="text.secondary">{t("miningUi.ore.mostLikely")}</Typography>
               <Typography variant="caption" fontWeight={600}>
                 {Math.max(qd.min, Math.round(qd.mean - qd.stddev))} – {Math.min(qd.max, Math.round(qd.mean + qd.stddev))}
               </Typography>

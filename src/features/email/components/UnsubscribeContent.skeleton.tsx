@@ -1,7 +1,9 @@
 import React from "react"
 import { Box, CircularProgress, Typography, Grid } from "@mui/material"
+import { useTranslation } from "react-i18next"
 
 export function UnsubscribeContentSkeleton() {
+  const { t } = useTranslation()
   return (
     <Grid item xs={12}>
       <Box
@@ -16,7 +18,7 @@ export function UnsubscribeContentSkeleton() {
       >
         <CircularProgress size={60} sx={{ mb: 3 }} />
         <Typography variant="h6" gutterBottom>
-          Loading...
+          {t("accessibility.loading")}
         </Typography>
       </Box>
     </Grid>

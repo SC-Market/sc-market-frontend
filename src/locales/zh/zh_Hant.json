@@ -7608,5 +7608,281 @@
       "buyFromMarket": "從市集購買",
       "itemActionsFor": "{{name}} 的操作"
     }
+  },
+  "miningUi": {
+    "ore": {
+      "instability": "不穩定性",
+      "resistance": "抗性",
+      "optimalWindowSize": "最佳窗口大小",
+      "optimalWindowPosition": "最佳窗口位置",
+      "explosionRisk": "爆炸風險",
+      "clusterFactor": "聚簇係數",
+      "qualityDistribution": "品質分佈",
+      "qualityHint": "品質範圍 0–1000。越高，製作效果與售價越好。",
+      "noLocationsTitle": "沒有已知地點",
+      "noLocationsDescription": "目前的遊戲資料中沒有這種礦石的出現地點紀錄。",
+      "colLocation": "地點",
+      "colSystem": "星系",
+      "colType": "類型",
+      "colMethod": "方式",
+      "colProbability": "機率",
+      "viewMarketListings": "查看市集刊登",
+      "range": "範圍",
+      "mostLikely": "最可能"
+    },
+    "location": {
+      "refinery": "精煉廠",
+      "amenities": "設施",
+      "groupWithWeight": "{{group}}（權重：{{weight}}）",
+      "colOre": "礦石",
+      "colRarity": "稀有度",
+      "colProbability": "機率",
+      "colPrice": "價格",
+      "colEstValue": "估值",
+      "instShort": "不穩定：{{value}}",
+      "resShort": "抗性：{{value}}"
+    },
+    "oreBrowser": {
+      "expShort": "爆炸：{{value}}",
+      "searchPlaceholder": "搜尋礦石、星系、稀有度...",
+      "marketPrice": "市場價格",
+      "locations": "地點",
+      "unknownSystem": "未知"
+    },
+    "locationBrowser": {
+      "searchPlaceholder": "搜尋地點、星系、類型...",
+      "moreOres_other": "另外 {{count}} 種",
+      "oreCount_other": "{{count}} 種礦石"
+    }
+  },
+  "wikiUi": {
+    "shipModal": {
+      "title": "艦船詳情",
+      "loadError": "無法載入艦船詳情。",
+      "sizeChip": "尺寸 {{size}}",
+      "crew": "船員：",
+      "dimensions": "尺寸：",
+      "specifications": "規格"
+    },
+    "versionSelector": {
+      "unknown": "未知",
+      "daysAgo_other": "{{count}} 天前",
+      "hoursAgo_other": "{{count}} 小時前",
+      "recently": "最近",
+      "ariaLabel": "遊戲版本",
+      "label": "遊戲版本",
+      "lastUpdated": "最後更新：{{time}}"
+    },
+    "resourceCard": {
+      "mined": "採礦",
+      "purchased": "購買",
+      "salvaged": "打撈",
+      "looted": "拾取",
+      "qualityTiers_other": "{{count}} 個品質等級",
+      "blueprints_other": "{{count}} 個藍圖"
+    },
+    "qualityBand": {
+      "label": "品質",
+      "any": "任意"
+    },
+    "locationBrowser": {
+      "kmValue": "{{value}} 公里",
+      "typePlanets": "行星",
+      "typeMoons": "衛星",
+      "typeStations": "太空站",
+      "typeOutposts": "前哨站"
+    },
+    "resultCount_other": "{{count}} 個結果",
+    "manufacturer": {
+      "gradeChip": "等級 {{grade}}"
+    },
+    "resource": {
+      "tierValue": "等級 {{tier}}"
+    },
+    "search": {
+      "placeholder": "搜尋...",
+      "ariaLabel": "搜尋",
+      "tags": {
+        "illegal": "非法",
+        "shareable": "可共享",
+        "unique": "唯一",
+        "chainStarter": "任務鏈起點",
+        "hasBlueprints": "含藍圖",
+        "default": "預設",
+        "missionReward": "任務獎勵",
+        "hasMissionSource": "有任務來源",
+        "owned": "已擁有",
+        "hasRefinery": "有精煉廠",
+        "hasPhotos": "有照片",
+        "inStock": "有現貨",
+        "bulkDiscount": "大量折扣",
+        "sizeSmall": "小型 (1)",
+        "sizeMedium": "中型 (2)",
+        "sizeLarge": "大型 (3)",
+        "sizeCapital": "主力艦 (4+)"
+      },
+      "methods": {
+        "ship": "艦船採礦",
+        "ground": "地面載具 (ROC)",
+        "fps": "手持採礦 (FPS)"
+      },
+      "locationTypes": {
+        "surface": "地表",
+        "asteroidField": "小行星帶"
+      },
+      "types": {
+        "query": "關鍵字",
+        "system": "星系",
+        "category": "類別",
+        "giver": "發布者",
+        "faction": "陣營",
+        "tag": "標籤",
+        "event": "活動",
+        "material": "材料",
+        "rarity": "稀有度",
+        "manufacturer": "製造商"
+      }
+    }
+  },
+  "emailUi": {
+    "verification": {
+      "pageTitle": "電子郵件驗證",
+      "verifying": "正在驗證你的電子郵件地址...",
+      "successTitle": "電子郵件已驗證！",
+      "failedTitle": "驗證失敗",
+      "invalidTitle": "無效的請求",
+      "goToSettings": "前往電子郵件設定"
+    },
+    "unsubscribe": {
+      "pageTitle": "取消訂閱電子郵件",
+      "managePreferences": "管理偏好設定",
+      "unsubscribing": "正在取消訂閱...",
+      "successTitle": "你已取消訂閱",
+      "turnOffAll": "關閉所有電子郵件",
+      "failedTitle": "無法取消訂閱"
+    }
+  },
+  "appUi": {
+    "adminUsers": {
+      "banned": "已封鎖",
+      "membershipLoading": "正在載入成員分析...",
+      "membershipError": "載入成員分析時發生錯誤：{{error}}",
+      "membershipEmpty": "沒有可用的成員資料",
+      "totalMembers": "成員總數",
+      "rsiVerified": "RSI 已驗證",
+      "new30Days": "新增（30 天）",
+      "new7Days": "新增（7 天）",
+      "newMembers": "新成員"
+    },
+    "ads": {
+      "imageAlt": "廣告：{{title}}"
+    },
+    "attributeFilter": {
+      "filterAria": "{{name}}篩選",
+      "minimumAria": "{{name}}最小值",
+      "maximumAria": "{{name}}最大值"
+    },
+    "charts": {
+      "loadingChart": "正在載入圖表...",
+      "loadingPriceChart": "正在載入價格圖表..."
+    },
+    "commandPalette": {
+      "placeholder": "搜尋頁面、操作、刊登...",
+      "noResults": "沒有符合「{{query}}」的結果",
+      "hintNavigate": "導覽",
+      "hintSelect": "選擇",
+      "hintClose": "關閉",
+      "categories": {
+        "navigation": "前往",
+        "action": "操作",
+        "content": "刊登"
+      },
+      "items": {
+        "market": "市集",
+        "services": "服務",
+        "contracts": "合約",
+        "buyOrders": "收購訂單",
+        "shops": "商店",
+        "orgs": "組織",
+        "recruiting": "招募中",
+        "missions": "任務",
+        "blueprints": "藍圖",
+        "mining": "採礦",
+        "wiki": "維基",
+        "resources": "資源",
+        "help": "說明與指南",
+        "orders": "我的訂單",
+        "messages": "訊息",
+        "dashboard": "儀錶板",
+        "settings": "設定",
+        "priceAlerts": "價格提醒",
+        "priceAlertsDescription": "你的追蹤清單與提醒管道",
+        "myOrgs": "我的組織",
+        "shopOrders": "{{shop}} — 訂單",
+        "createListing": "建立刊登",
+        "newMessage": "新訊息",
+        "toggleDarkMode": "切換深色模式"
+      }
+    },
+    "errorBoundary": {
+      "title": "發生錯誤",
+      "tryAgain": "再試一次",
+      "featureTitle": "{{feature}} 發生錯誤",
+      "featureMessage": "{{feature}} 功能發生錯誤。你可以再試一次，或繼續使用應用程式的其他部分。",
+      "errorStatus": "錯誤 {{status}}",
+      "anErrorOccurred": "發生錯誤"
+    },
+    "help": {
+      "allGuides": "所有指南",
+      "updatedStamp": "更新於 <time>{{date}}</time> · {{author}}"
+    },
+    "imagePreview": {
+      "thumbnailAlt": "縮圖 {{index}}"
+    },
+    "imageZoom": {
+      "zoomIn": "放大",
+      "zoomOut": "縮小",
+      "resetZoom": "重設縮放"
+    },
+    "markdown": {
+      "imageAlt": "Markdown 內容中的圖片",
+      "formatAs": "設定為 {{syntax}} 格式",
+      "enabled": "支援 Markdown",
+      "textAria": "Markdown 文字"
+    },
+    "mfa": {
+      "authCodeAria": "驗證碼",
+      "recoveryCodeAria": "復原碼",
+      "recoveryCodesAria": "復原碼清單"
+    },
+    "nav": {
+      "mobileNavigation": "行動版導覽"
+    },
+    "pwa": {
+      "installTitle": "安裝 SC Market",
+      "installIntro": "安裝我們的應用程式，享受更好的體驗：",
+      "benefitFaster": "載入更快",
+      "benefitOffline": "離線存取",
+      "benefitHomeScreen": "主畫面圖示",
+      "dismissInstall": "關閉安裝提示",
+      "install": "安裝",
+      "offline": "你目前離線。部分功能可能受限。"
+    },
+    "sendMoney": {
+      "avatarAlt": "{{name}} 的頭像"
+    },
+    "themeEditor": {
+      "hexAria": "{{label}}（十六進位）",
+      "imageRadiusPreview": "圖片圓角預覽",
+      "faviconAlt": "網站圖示",
+      "paperElevation": "紙張陰影層級",
+      "cardElevation": "卡片陰影層級"
+    },
+    "youtube": {
+      "playerTitle": "YouTube 影片播放器",
+      "playVideoNamed": "播放影片：{{title}}",
+      "thumbnailAlt": "YouTube 影片縮圖",
+      "playVideo": "播放影片"
+    }
   }
 }

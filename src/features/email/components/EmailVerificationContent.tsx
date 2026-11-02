@@ -1,5 +1,6 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import {
   Box,
   Typography,
@@ -21,6 +22,7 @@ export function EmailVerificationContent({
   data,
   isLoading,
 }: EmailVerificationContentProps) {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   return (
@@ -39,7 +41,7 @@ export function EmailVerificationContent({
           <>
             <CircularProgress size={60} sx={{ mb: 3 }} />
             <Typography variant="h6" gutterBottom>
-              Verifying your email address...
+              {t("emailUi.verification.verifying")}
             </Typography>
           </>
         )}
@@ -50,7 +52,7 @@ export function EmailVerificationContent({
               sx={{ fontSize: 60, color: "success.main", mb: 2 }}
             />
             <Typography variant="h5" gutterBottom>
-              Email Verified!
+              {t("emailUi.verification.successTitle")}
             </Typography>
             <Alert severity="success" sx={{ mb: 3, maxWidth: 500 }}>
               {data.message}
@@ -60,7 +62,7 @@ export function EmailVerificationContent({
               color="primary"
               onClick={() => navigate("/settings?tab=email")}
             >
-              Go to Email Settings
+              {t("emailUi.verification.goToSettings")}
             </Button>
           </>
         )}
@@ -69,7 +71,7 @@ export function EmailVerificationContent({
           <>
             <ErrorIcon sx={{ fontSize: 60, color: "error.main", mb: 2 }} />
             <Typography variant="h5" gutterBottom>
-              Verification Failed
+              {t("emailUi.verification.failedTitle")}
             </Typography>
             <Alert severity="error" sx={{ mb: 3, maxWidth: 500 }}>
               {data.message}
@@ -79,7 +81,7 @@ export function EmailVerificationContent({
               color="primary"
               onClick={() => navigate("/settings?tab=email")}
             >
-              Go to Email Settings
+              {t("emailUi.verification.goToSettings")}
             </Button>
           </>
         )}
@@ -88,7 +90,7 @@ export function EmailVerificationContent({
           <>
             <ErrorIcon sx={{ fontSize: 60, color: "warning.main", mb: 2 }} />
             <Typography variant="h5" gutterBottom>
-              Invalid Request
+              {t("emailUi.verification.invalidTitle")}
             </Typography>
             <Alert severity="warning" sx={{ mb: 3, maxWidth: 500 }}>
               {data.message}
@@ -98,7 +100,7 @@ export function EmailVerificationContent({
               color="primary"
               onClick={() => navigate("/settings?tab=email")}
             >
-              Go to Email Settings
+              {t("emailUi.verification.goToSettings")}
             </Button>
           </>
         )}

@@ -10,6 +10,7 @@
 
 import React, { useState } from "react"
 import { Box, IconButton, styled } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import { PlayArrow } from "@mui/icons-material"
 
 interface YouTubeFacadeProps {
@@ -102,6 +103,7 @@ export function YouTubeFacade({
   width,
   height,
 }: YouTubeFacadeProps) {
+  const { t } = useTranslation()
   const [isActivated, setIsActivated] = useState(false)
 
   const handleActivate = () => {
@@ -120,7 +122,7 @@ export function YouTubeFacade({
             width="100%"
             height="100%"
             src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-            title={title || "YouTube video player"}
+            title={title || t("appUi.youtube.playerTitle")}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -137,7 +139,7 @@ export function YouTubeFacade({
       sx={{ width, height: height || undefined }}
       onClick={handleActivate}
       role="button"
-      aria-label={`Play video: ${title || videoId}`}
+      aria-label={t("appUi.youtube.playVideoNamed", { title: title || videoId })}
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -148,7 +150,7 @@ export function YouTubeFacade({
     >
       <ThumbnailImage
         src={thumbnailUrl}
-        alt={title || "YouTube video thumbnail"}
+        alt={title || t("appUi.youtube.thumbnailAlt")}
         loading="lazy"
         onError={(e) => {
           // Fallback to hqdefault if maxresdefault fails
@@ -159,7 +161,7 @@ export function YouTubeFacade({
         }}
       />
       <PlayButtonOverlay>
-        <PlayButton className="play-button" aria-label="Play video">
+        <PlayButton className="play-button" aria-label={t("appUi.youtube.playVideo")}>
           <PlayArrow />
         </PlayButton>
       </PlayButtonOverlay>

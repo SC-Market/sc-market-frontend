@@ -65,26 +65,26 @@ export function InstallPrompt() {
             <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
               <GetAppRounded color="primary" />
               <Typography variant="h6" component="div">
-                Install SC Market
+                {t("appUi.pwa.installTitle")}
               </Typography>
             </Stack>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Install our app for a better experience:
+              {t("appUi.pwa.installIntro")}
             </Typography>
             <Stack spacing={0.5}>
-              <Typography variant="body2" component="div">• Faster loading</Typography>
-              <Typography variant="body2" component="div">• Offline access</Typography>
-              <Typography variant="body2" component="div">• Home screen icon</Typography>
+              <Typography variant="body2" component="div">• {t("appUi.pwa.benefitFaster")}</Typography>
+              <Typography variant="body2" component="div">• {t("appUi.pwa.benefitOffline")}</Typography>
+              <Typography variant="body2" component="div">• {t("appUi.pwa.benefitHomeScreen")}</Typography>
             </Stack>
           </Box>
-          <IconButton aria-label={t("pwa.dismissInstall", "Dismiss install prompt")} size="small" onClick={handleDismiss} sx={{ alignSelf: "flex-start" }}>
+          <IconButton aria-label={t("appUi.pwa.dismissInstall")} size="small" onClick={handleDismiss} sx={{ alignSelf: "flex-start" }}>
             <CloseRounded />
           </IconButton>
         </Stack>
       </CardContent>
       <CardActions sx={{ px: 2, pb: 2 }}>
         <Button variant="contained" fullWidth startIcon={<GetAppRounded />} onClick={handleInstall}>
-          Install
+          {t("appUi.pwa.install")}
         </Button>
       </CardActions>
     </Card>

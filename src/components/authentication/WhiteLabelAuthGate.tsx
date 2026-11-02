@@ -48,7 +48,7 @@ export function WhiteLabelAuthGate({ children }: { children: React.ReactNode }) 
         gap={3}
         sx={{ p: 4, textAlign: "center" }}
       >
-        <Typography variant="h4">{config.name || "Organization"}</Typography>
+        <Typography variant="h4">{config.name || t("dashboard.organization")}</Typography>
         <Typography color="text.secondary">
           {t("whitelabel.loginRequired", "Sign in to access this workspace")}
         </Typography>
@@ -87,7 +87,7 @@ export function WhiteLabelAuthGate({ children }: { children: React.ReactNode }) 
           gap={2}
           sx={{ p: 4, textAlign: "center" }}
         >
-          <Typography variant="h5">{config.name || "Organization"}</Typography>
+          <Typography variant="h5">{config.name || t("dashboard.organization")}</Typography>
           <Typography color="text.secondary">
             {t("whitelabel.membershipRequired", "You must be a member of this organization to access this workspace.")}
           </Typography>

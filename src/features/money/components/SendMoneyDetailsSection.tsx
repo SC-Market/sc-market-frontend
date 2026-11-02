@@ -25,10 +25,11 @@ export function SendMoneyDetailsSection(props: SendMoneyDetailsSectionProps) {
           <Avatar
             src={props.targetObject?.avatar}
             sx={{ marginRight: 3, height: 64, width: 64 }}
-            alt={`Avatar of ${
-              (props.targetObject as MinimalUser)?.username ||
-              (props.targetObject as MinimalContractor)?.spectrum_id
-            }`}
+            alt={t("appUi.sendMoney.avatarAlt", {
+              name:
+                (props.targetObject as MinimalUser)?.username ||
+                (props.targetObject as MinimalContractor)?.spectrum_id,
+            })}
             variant={"rounded"}
           />
         </Grid>

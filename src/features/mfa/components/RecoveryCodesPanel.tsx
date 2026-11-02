@@ -29,7 +29,7 @@ export function RecoveryCodesPanel(props: { codes: string[]; onDone: () => void 
       </Alert>
       <Box
         component="ul"
-        aria-label="recovery codes"
+        aria-label={t("appUi.mfa.recoveryCodesAria")}
         sx={{
           m: 0,
           p: 2,

@@ -5,6 +5,7 @@
  * <a href>s; collapsed categories stay in the DOM.
  */
 import React, { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import {
   Box,
   Button,
@@ -26,6 +27,7 @@ import { guidesIn, helpIndex } from "../content"
 const itemSx = { borderRadius: 1, py: 0.25 }
 
 function DirectoryList({ onNavigate }: { onNavigate?: () => void }) {
+  const { t } = useTranslation()
   const { pathname } = useLocation()
   const current = pathname.replace(/\/+$/, "") || "/"
   const currentCategory = helpIndex.categories.find(
@@ -57,7 +59,7 @@ function DirectoryList({ onNavigate }: { onNavigate?: () => void }) {
   )
 
   return (
-    <List dense disablePadding component="nav" aria-label="All guides">
+    <List dense disablePadding component="nav" aria-label={t("appUi.help.allGuides")}>
       {link(HELP_PATHS.hub, HELP_HUB_NAME, 0, true)}
       {helpIndex.categories.map((category) => {
         const expanded = !!open[category.id]
@@ -107,6 +109,7 @@ export function GuidesDirectory() {
 
 /** "All guides" toggle for small screens. */
 export function GuidesDirectoryToggle() {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   return (
     <Box>
@@ -119,7 +122,7 @@ export function GuidesDirectoryToggle() {
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
-        All guides
+        {t("appUi.help.allGuides")}
       </Button>
       <Collapse in={open}>
         <Paper variant="outlined" sx={{ p: 1, mt: 1 }}>

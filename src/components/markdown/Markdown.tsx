@@ -3,6 +3,7 @@ import rehypeRaw from "rehype-raw"
 import rehypeSanitize from "rehype-sanitize"
 import ReactMarkdown, { Options } from "react-markdown"
 import React, { useCallback } from "react"
+import { useTranslation } from "react-i18next"
 import { UnderlineLink } from "../typography/UnderlineLink"
 import {
   AppBar,
@@ -95,6 +96,7 @@ export function MarkdownRender(props: {
   MarkdownProps?: Readonly<Options>
 }) {
   const { plainText, MarkdownProps } = props
+  const { t } = useTranslation()
 
   return (
     <ReactMarkdown
@@ -273,7 +275,7 @@ export function MarkdownRender(props: {
               {...props}
               style={{ maxWidth: "100%" }}
               loading="lazy"
-              alt={props.alt || "Image from markdown content"}
+              alt={props.alt || t("appUi.markdown.imageAlt")}
             />
           )
         },
@@ -297,6 +299,7 @@ export function MarkdownEditor(props: {
   const { value, onChange, variant, TextFieldProps, noPreview, sx, BarItems } =
     props
 
+  const { t } = useTranslation()
   const theme = useTheme()
   const inputRef = React.useRef<HTMLInputElement>(null)
 
@@ -430,7 +433,7 @@ export function MarkdownEditor(props: {
                   key={rep[0]}
                   sx={{ color: "text.primary", minWidth: 32 }}
                   onClick={() => wrapText(rep[0])}
-                  title={`Format as ${rep[0]}`}
+                  title={t("appUi.markdown.formatAs", { syntax: rep[0] })}
                 >
                   {rep[1]}
                 </Button>
@@ -446,7 +449,7 @@ export function MarkdownEditor(props: {
                   key={rep[0]}
                   sx={{ color: "text.primary", minWidth: 32 }}
                   onClick={() => wrapText(rep[0])}
-                  title={`Format as ${rep[0]}`}
+                  title={t("appUi.markdown.formatAs", { syntax: rep[0] })}
                 >
                   {rep[1]}
                 </Button>
@@ -462,7 +465,7 @@ export function MarkdownEditor(props: {
                   key={rep[0]}
                   sx={{ color: "text.primary", minWidth: 32 }}
                   onClick={() => wrapText(rep[0])}
-                  title={`Format as ${rep[0]}`}
+                  title={t("appUi.markdown.formatAs", { syntax: rep[0] })}
                 >
                   {rep[1]}
                 </Button>
@@ -487,11 +490,11 @@ export function MarkdownEditor(props: {
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
               onChange(event.target.value || "")
             }
-            helperText={"Markdown enabled"}
+            helperText={t("appUi.markdown.enabled")}
             inputRef={inputRef}
             // A name for the bare editor; pages override it via TextFieldProps
             // (label or inputProps) with what the text is for.
-            inputProps={{ "aria-label": "Markdown text" }}
+            inputProps={{ "aria-label": t("appUi.markdown.textAria") }}
             {...TextFieldProps}
           />
         </Box>

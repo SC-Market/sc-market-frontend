@@ -7,6 +7,7 @@ import React from "react"
 import { Box, Card, CardActionArea, CardContent, Chip, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { Link as RouterLink } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { type ResourceSearchResult } from "../../store/api/v2/market"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -17,12 +18,13 @@ interface ResourceCardProps {
 }
 
 export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClick }) => {
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const acquisitionMethods = [
-    resource.can_be_mined && "Mined",
-    resource.can_be_purchased && "Purchased",
-    resource.can_be_salvaged && "Salvaged",
-    resource.can_be_looted && "Looted",
+    resource.can_be_mined && t("wikiUi.resourceCard.mined"),
+    resource.can_be_purchased && t("wikiUi.resourceCard.purchased"),
+    resource.can_be_salvaged && t("wikiUi.resourceCard.salvaged"),
+    resource.can_be_looted && t("wikiUi.resourceCard.looted"),
   ].filter(Boolean) as string[]
 
   return (
@@ -47,7 +49,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClic
           {resource.quality_bands && resource.quality_bands.length > 0 && (
             <Box sx={{ mb: 1 }}>
               <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
-                {resource.quality_bands.length} quality tiers
+                {t("wikiUi.resourceCard.qualityTiers", { count: resource.quality_bands.length })}
               </Typography>
               <Box sx={{ display: "flex", gap: "2px", height: 6, borderRadius: 1, overflow: "hidden" }}>
                 {resource.quality_bands.map((band) => (
@@ -71,7 +73,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClic
             )}
             {resource.blueprint_count > 0 && (
               <Chip
-                label={`${resource.blueprint_count} blueprint${resource.blueprint_count > 1 ? "s" : ""}`}
+                label={t("wikiUi.resourceCard.blueprints", { count: resource.blueprint_count })}
                 size="small"
                 color="info"
               />

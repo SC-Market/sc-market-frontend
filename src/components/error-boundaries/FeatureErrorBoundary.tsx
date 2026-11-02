@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react"
 import { ErrorBoundary, ErrorBoundaryProps } from "./ErrorBoundary"
 import { ErrorFallback } from "./ErrorFallback"
+import { useTranslation } from "react-i18next"
 import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 
 export interface FeatureErrorBoundaryProps extends Omit<
@@ -42,6 +43,7 @@ export function FeatureErrorBoundary({
   onError,
   ...props
 }: FeatureErrorBoundaryProps) {
+  const { t } = useTranslation()
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     // Log feature-specific error
     if (import.meta.env.DEV) {
@@ -82,8 +84,12 @@ export function FeatureErrorBoundary({
       resetErrorBoundary={reset}
       isRouteError={false}
       showDetails={import.meta.env.DEV}
-      title={`Error in ${featureName}`}
-      message={`The ${featureName} feature encountered an error. You can try again or continue using other parts of the application.`}
+      title={t("appUi.errorBoundary.featureTitle", { feature: featureName, defaultValue: "Error in {{feature}}" })}
+      message={t("appUi.errorBoundary.featureMessage", {
+        feature: featureName,
+        defaultValue:
+          "The {{feature}} feature encountered an error. You can try again or continue using other parts of the application.",
+      })}
     />
   )
 

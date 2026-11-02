@@ -109,40 +109,40 @@ export function CommandPalette() {
   // Static navigation items
   const navItems = useMemo<CommandItem[]>(() => {
     const items: CommandItem[] = [
-      { id: "market", label: "Market", icon: <SearchRounded />, action: () => go("/market"), category: "navigation", keywords: ["browse", "listings", "buy", "shop"] },
-      { id: "services", label: "Services", icon: <DesignServicesRounded />, action: () => go("/market/services"), category: "navigation", keywords: ["hire", "contract"] },
-      { id: "contracts", label: "Contracts", icon: <DescriptionRounded />, action: () => go("/contracts"), category: "navigation", keywords: ["jobs", "work"] },
-      { id: "buy-orders", label: "Buy Orders", icon: <ShoppingCartRounded />, action: () => go("/buyorders"), category: "navigation", keywords: ["demand", "want"] },
-      { id: "shops", label: "Shops", icon: <StorefrontRounded />, action: () => go("/shops"), category: "navigation" },
-      { id: "orgs", label: "Organizations", icon: <BusinessRounded />, action: () => go("/contractors"), category: "navigation", keywords: ["contractor", "org"] },
-      { id: "recruiting", label: "Recruiting", icon: <PersonAddRounded />, action: () => go("/recruiting"), category: "navigation" },
-      { id: "missions", label: "Missions", icon: <DescriptionRounded />, action: () => go("/missions"), category: "navigation" },
-      { id: "blueprints", label: "Blueprints", icon: <ScienceRounded />, action: () => go("/blueprints"), category: "navigation", keywords: ["crafting"] },
-      { id: "mining", label: "Mining", icon: <InventoryRounded />, action: () => go("/mining"), category: "navigation", keywords: ["ore", "resource"] },
-      { id: "wiki", label: "Wiki", icon: <MenuBookRounded />, action: () => go("/wiki"), category: "navigation", keywords: ["items", "ships", "database"] },
-      { id: "resources", label: "Resources", icon: <InventoryRounded />, action: () => go("/resources"), category: "navigation" },
-      { id: "help", label: "Help & Guides", icon: <HelpOutlineRounded />, action: () => go(HELP_PATHS.hub), category: "navigation", keywords: ["help", "guide", "how", "faq", "about", "support"] },
+      { id: "market", label: t("appUi.commandPalette.items.market"), icon: <SearchRounded />, action: () => go("/market"), category: "navigation", keywords: ["browse", "listings", "buy", "shop"] },
+      { id: "services", label: t("appUi.commandPalette.items.services"), icon: <DesignServicesRounded />, action: () => go("/market/services"), category: "navigation", keywords: ["hire", "contract"] },
+      { id: "contracts", label: t("appUi.commandPalette.items.contracts"), icon: <DescriptionRounded />, action: () => go("/contracts"), category: "navigation", keywords: ["jobs", "work"] },
+      { id: "buy-orders", label: t("appUi.commandPalette.items.buyOrders"), icon: <ShoppingCartRounded />, action: () => go("/buyorders"), category: "navigation", keywords: ["demand", "want"] },
+      { id: "shops", label: t("appUi.commandPalette.items.shops"), icon: <StorefrontRounded />, action: () => go("/shops"), category: "navigation" },
+      { id: "orgs", label: t("appUi.commandPalette.items.orgs"), icon: <BusinessRounded />, action: () => go("/contractors"), category: "navigation", keywords: ["contractor", "org"] },
+      { id: "recruiting", label: t("appUi.commandPalette.items.recruiting"), icon: <PersonAddRounded />, action: () => go("/recruiting"), category: "navigation" },
+      { id: "missions", label: t("appUi.commandPalette.items.missions"), icon: <DescriptionRounded />, action: () => go("/missions"), category: "navigation" },
+      { id: "blueprints", label: t("appUi.commandPalette.items.blueprints"), icon: <ScienceRounded />, action: () => go("/blueprints"), category: "navigation", keywords: ["crafting"] },
+      { id: "mining", label: t("appUi.commandPalette.items.mining"), icon: <InventoryRounded />, action: () => go("/mining"), category: "navigation", keywords: ["ore", "resource"] },
+      { id: "wiki", label: t("appUi.commandPalette.items.wiki"), icon: <MenuBookRounded />, action: () => go("/wiki"), category: "navigation", keywords: ["items", "ships", "database"] },
+      { id: "resources", label: t("appUi.commandPalette.items.resources"), icon: <InventoryRounded />, action: () => go("/resources"), category: "navigation" },
+      { id: "help", label: t("appUi.commandPalette.items.help"), icon: <HelpOutlineRounded />, action: () => go(HELP_PATHS.hub), category: "navigation", keywords: ["help", "guide", "how", "faq", "about", "support"] },
     ]
 
     if (profile) {
       items.push(
-        { id: "orders", label: "My Orders", icon: <LocalShippingRounded />, action: () => go("/orders"), category: "navigation" },
-        { id: "messages", label: "Messages", icon: <MessageRounded />, action: () => go("/messages"), category: "navigation", keywords: ["chat", "dm"] },
-        { id: "dashboard", label: "Dashboard", icon: <DashboardRounded />, action: () => go("/dashboard"), category: "navigation" },
-        { id: "inventory", label: "My Stock", icon: <InventoryRounded />, action: () => go("/inventory"), category: "navigation" },
-        { id: "settings", label: "Settings", icon: <SettingsRounded />, action: () => go("/settings"), category: "navigation" },
-        { id: "price-alerts", label: "Price alerts", description: "Your watchlist and alert channels", icon: <PriceChangeRounded />, action: () => go(PATHS.priceAlerts), category: "navigation", keywords: ["watchlist", "watch price", "price alert", "notify", "target price"] },
-        { id: "my-orgs", label: "My Organizations", icon: <PeopleRounded />, action: () => go("/my-orgs"), category: "navigation" },
+        { id: "orders", label: t("appUi.commandPalette.items.orders"), icon: <LocalShippingRounded />, action: () => go("/orders"), category: "navigation" },
+        { id: "messages", label: t("appUi.commandPalette.items.messages"), icon: <MessageRounded />, action: () => go("/messages"), category: "navigation", keywords: ["chat", "dm"] },
+        { id: "dashboard", label: t("appUi.commandPalette.items.dashboard"), icon: <DashboardRounded />, action: () => go("/dashboard"), category: "navigation" },
+        { id: "inventory", label: t("nav.inventory"), icon: <InventoryRounded />, action: () => go("/inventory"), category: "navigation" },
+        { id: "settings", label: t("appUi.commandPalette.items.settings"), icon: <SettingsRounded />, action: () => go("/settings"), category: "navigation" },
+        { id: "price-alerts", label: t("appUi.commandPalette.items.priceAlerts"), description: t("appUi.commandPalette.items.priceAlertsDescription"), icon: <PriceChangeRounded />, action: () => go(PATHS.priceAlerts), category: "navigation", keywords: ["watchlist", "watch price", "price alert", "notify", "target price"] },
+        { id: "my-orgs", label: t("appUi.commandPalette.items.myOrgs"), icon: <PeopleRounded />, action: () => go("/my-orgs"), category: "navigation" },
       )
       for (const shop of shops) {
         items.push(
-          { id: `shop-${shop.slug}`, label: `${shop.name} — Orders`, icon: <StorefrontRounded />, action: () => go(SHOP_PATHS.orders(shop.slug)), category: "navigation", keywords: [shop.slug] },
+          { id: `shop-${shop.slug}`, label: t("appUi.commandPalette.items.shopOrders", { shop: shop.name }), icon: <StorefrontRounded />, action: () => go(SHOP_PATHS.orders(shop.slug)), category: "navigation", keywords: [shop.slug] },
         )
       }
     }
 
     return items
-  }, [profile, shops, go])
+  }, [profile, shops, go, t])
 
   // Action items
   const actionItems = useMemo<CommandItem[]>(() => {
@@ -153,7 +153,7 @@ export function CommandPalette() {
       if (primaryShop) {
         items.push({
           id: "create-listing",
-          label: "Create Listing",
+          label: t("appUi.commandPalette.items.createListing"),
           icon: <AddRounded />,
           action: () => go(SHOP_PATHS.create(primaryShop.slug)),
           category: "action",
@@ -162,7 +162,7 @@ export function CommandPalette() {
       }
       items.push({
         id: "new-message",
-        label: "New Message",
+        label: t("appUi.commandPalette.items.newMessage"),
         icon: <MessageRounded />,
         action: () => go("/messages"),
         category: "action",
@@ -172,7 +172,7 @@ export function CommandPalette() {
 
     items.push({
       id: "toggle-theme",
-      label: "Toggle Dark Mode",
+      label: t("appUi.commandPalette.items.toggleDarkMode"),
       icon: theme.palette.mode === "dark" ? <LightModeRounded /> : <DarkModeRounded />,
       action: () => {
         const event = new CustomEvent("toggle-theme")
@@ -184,7 +184,7 @@ export function CommandPalette() {
     })
 
     return items
-  }, [profile, shops, go, theme.palette.mode])
+  }, [profile, shops, go, theme.palette.mode, t])
 
   // Content results from search API
   const contentItems = useMemo<CommandItem[]>(() => {
@@ -250,9 +250,9 @@ export function CommandPalette() {
 
   const categoryLabel = (cat: string) => {
     switch (cat) {
-      case "navigation": return "Go to"
-      case "action": return "Actions"
-      case "content": return "Listings"
+      case "navigation": return t("appUi.commandPalette.categories.navigation")
+      case "action": return t("appUi.commandPalette.categories.action")
+      case "content": return t("appUi.commandPalette.categories.content")
       default: return cat
     }
   }
@@ -296,7 +296,7 @@ export function CommandPalette() {
         <SearchRounded sx={{ color: "text.secondary", mr: 1.5 }} />
         <InputBase
           inputRef={inputRef}
-          placeholder="Search pages, actions, listings..."
+          placeholder={t("appUi.commandPalette.placeholder")}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -311,7 +311,7 @@ export function CommandPalette() {
         {filteredItems.length === 0 && (
           <Box sx={{ py: 4, textAlign: "center" }}>
             <Typography color="text.secondary" variant="body2">
-              No results for "{query}"
+              {t("appUi.commandPalette.noResults", { query })}
             </Typography>
           </Box>
         )}
@@ -361,13 +361,13 @@ export function CommandPalette() {
 
       <Box sx={{ px: 2, py: 1, borderTop: `1px solid ${theme.palette.divider}`, display: "flex", gap: 2, justifyContent: "center" }}>
         <Typography variant="caption" color="text.secondary">
-          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>↑↓</kbd> navigate
+          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>↑↓</kbd> {t("appUi.commandPalette.hintNavigate")}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>↵</kbd> select
+          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>↵</kbd> {t("appUi.commandPalette.hintSelect")}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>esc</kbd> close
+          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>esc</kbd> {t("appUi.commandPalette.hintClose")}
         </Typography>
       </Box>
     </Dialog>

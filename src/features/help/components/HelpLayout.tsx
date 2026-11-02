@@ -5,6 +5,7 @@
  */
 import React, { ReactNode, useEffect } from "react"
 import { Box, Breadcrumbs, Grid, Link, Typography } from "@mui/material"
+import { Trans } from "react-i18next"
 import { Link as RouterLink, useLocation } from "react-router-dom"
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded"
 import {
@@ -101,7 +102,11 @@ export function UpdatedStamp({ updated, author }: { updated: string; author: str
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant="body2" color="text.secondary">
-        Updated <time dateTime={updated}>{date}</time> · {author}
+        <Trans
+          i18nKey="appUi.help.updatedStamp"
+          values={{ date, author }}
+          components={{ time: <time dateTime={updated} /> }}
+        />
       </Typography>
     </Box>
   )

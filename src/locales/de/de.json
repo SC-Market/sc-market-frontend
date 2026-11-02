@@ -7728,5 +7728,288 @@
       "buyFromMarket": "Auf dem Markt kaufen",
       "itemActionsFor": "Aktionen für {{name}}"
     }
+  },
+  "miningUi": {
+    "ore": {
+      "instability": "Instabilität",
+      "resistance": "Widerstand",
+      "optimalWindowSize": "Optimale Fenstergröße",
+      "optimalWindowPosition": "Optimale Fensterposition",
+      "explosionRisk": "Explosionsrisiko",
+      "clusterFactor": "Clusterfaktor",
+      "qualityDistribution": "Qualitätsverteilung",
+      "qualityHint": "Qualität 0–1000. Höher = besseres Crafting und höherer Verkaufspreis.",
+      "noLocationsTitle": "Keine bekannten Standorte",
+      "noLocationsDescription": "Für dieses Erz sind in den aktuellen Spieldaten keine Vorkommen verzeichnet.",
+      "colLocation": "Standort",
+      "colSystem": "System",
+      "colType": "Typ",
+      "colMethod": "Methode",
+      "colProbability": "Wahrscheinlichkeit",
+      "viewMarketListings": "Marktangebote ansehen",
+      "range": "Bereich",
+      "mostLikely": "Am wahrscheinlichsten"
+    },
+    "location": {
+      "refinery": "Raffinerie",
+      "amenities": "Einrichtungen",
+      "groupWithWeight": "{{group}} (Gewichtung: {{weight}})",
+      "colOre": "Erz",
+      "colRarity": "Seltenheit",
+      "colProbability": "Wahrscheinlichkeit",
+      "colPrice": "Preis",
+      "colEstValue": "Gesch. Wert",
+      "instShort": "Inst.: {{value}}",
+      "resShort": "Wid.: {{value}}"
+    },
+    "oreBrowser": {
+      "expShort": "Expl.: {{value}}",
+      "searchPlaceholder": "Erze, Systeme, Seltenheit suchen...",
+      "marketPrice": "Marktpreis",
+      "locations": "Standorte",
+      "unknownSystem": "Unbekannt"
+    },
+    "locationBrowser": {
+      "searchPlaceholder": "Standorte, Systeme, Typen suchen...",
+      "moreOres_one": "+{{count}} weiteres",
+      "moreOres_other": "+{{count}} weitere",
+      "oreCount_one": "{{count}} Erz",
+      "oreCount_other": "{{count}} Erze"
+    }
+  },
+  "wikiUi": {
+    "shipModal": {
+      "title": "Schiffsdetails",
+      "loadError": "Schiffsdetails konnten nicht geladen werden.",
+      "sizeChip": "Größe {{size}}",
+      "crew": "Besatzung:",
+      "dimensions": "Abmessungen:",
+      "specifications": "Spezifikationen"
+    },
+    "versionSelector": {
+      "unknown": "Unbekannt",
+      "daysAgo_one": "vor {{count}} Tag",
+      "daysAgo_other": "vor {{count}} Tagen",
+      "hoursAgo_one": "vor {{count}} Std.",
+      "hoursAgo_other": "vor {{count}} Std.",
+      "recently": "Kürzlich",
+      "ariaLabel": "Spielversion",
+      "label": "Spielversion",
+      "lastUpdated": "Zuletzt aktualisiert: {{time}}"
+    },
+    "resourceCard": {
+      "mined": "Abgebaut",
+      "purchased": "Gekauft",
+      "salvaged": "Geborgen",
+      "looted": "Erbeutet",
+      "qualityTiers_one": "{{count}} Qualitätsstufe",
+      "qualityTiers_other": "{{count}} Qualitätsstufen",
+      "blueprints_one": "{{count}} Blaupause",
+      "blueprints_other": "{{count}} Blaupausen"
+    },
+    "qualityBand": {
+      "label": "Qualität",
+      "any": "Beliebig"
+    },
+    "locationBrowser": {
+      "kmValue": "{{value}} km",
+      "typePlanets": "Planeten",
+      "typeMoons": "Monde",
+      "typeStations": "Stationen",
+      "typeOutposts": "Außenposten"
+    },
+    "resultCount_one": "{{count}} Ergebnis",
+    "resultCount_other": "{{count}} Ergebnisse",
+    "manufacturer": {
+      "gradeChip": "Klasse {{grade}}"
+    },
+    "resource": {
+      "tierValue": "Stufe {{tier}}"
+    },
+    "search": {
+      "placeholder": "Suchen...",
+      "ariaLabel": "Suchen",
+      "tags": {
+        "illegal": "Illegal",
+        "shareable": "Teilbar",
+        "unique": "Einzigartig",
+        "chainStarter": "Kettenstart",
+        "hasBlueprints": "Mit Blaupausen",
+        "default": "Standard",
+        "missionReward": "Missionsbelohnung",
+        "hasMissionSource": "Mit Missionsquelle",
+        "owned": "Im Besitz",
+        "hasRefinery": "Mit Raffinerie",
+        "hasPhotos": "Mit Fotos",
+        "inStock": "Auf Lager",
+        "bulkDiscount": "Mengenrabatt",
+        "sizeSmall": "Klein (1)",
+        "sizeMedium": "Mittel (2)",
+        "sizeLarge": "Groß (3)",
+        "sizeCapital": "Großkampfschiff (4+)"
+      },
+      "methods": {
+        "ship": "Schiffsbergbau",
+        "ground": "Bodenfahrzeug (ROC)",
+        "fps": "Handbergbau (FPS)"
+      },
+      "locationTypes": {
+        "surface": "Oberfläche",
+        "asteroidField": "Asteroidenfeld"
+      },
+      "types": {
+        "query": "Suche",
+        "system": "System",
+        "category": "Kategorie",
+        "giver": "Auftraggeber",
+        "faction": "Fraktion",
+        "tag": "Tag",
+        "event": "Event",
+        "material": "Material",
+        "rarity": "Seltenheit",
+        "manufacturer": "Hersteller"
+      }
+    }
+  },
+  "emailUi": {
+    "verification": {
+      "pageTitle": "E-Mail-Bestätigung",
+      "verifying": "Ihre E-Mail-Adresse wird bestätigt...",
+      "successTitle": "E-Mail bestätigt!",
+      "failedTitle": "Bestätigung fehlgeschlagen",
+      "invalidTitle": "Ungültige Anfrage",
+      "goToSettings": "Zu den E-Mail-Einstellungen"
+    },
+    "unsubscribe": {
+      "pageTitle": "E-Mails abbestellen",
+      "managePreferences": "Einstellungen verwalten",
+      "unsubscribing": "Wird abbestellt...",
+      "successTitle": "Sie haben sich abgemeldet",
+      "turnOffAll": "Alle E-Mails deaktivieren",
+      "failedTitle": "Abbestellen nicht möglich"
+    }
+  },
+  "appUi": {
+    "adminUsers": {
+      "banned": "Gesperrt",
+      "membershipLoading": "Mitgliederanalyse wird geladen...",
+      "membershipError": "Fehler beim Laden der Mitgliederanalyse: {{error}}",
+      "membershipEmpty": "Keine Mitgliederdaten verfügbar",
+      "totalMembers": "Mitglieder gesamt",
+      "rsiVerified": "RSI-verifiziert",
+      "new30Days": "Neu (30 Tage)",
+      "new7Days": "Neu (7 Tage)",
+      "newMembers": "Neue Mitglieder"
+    },
+    "ads": {
+      "imageAlt": "Anzeige: {{title}}"
+    },
+    "attributeFilter": {
+      "filterAria": "Filter: {{name}}",
+      "minimumAria": "{{name}} Minimum",
+      "maximumAria": "{{name}} Maximum"
+    },
+    "charts": {
+      "loadingChart": "Diagramm wird geladen...",
+      "loadingPriceChart": "Preisdiagramm wird geladen..."
+    },
+    "commandPalette": {
+      "placeholder": "Seiten, Aktionen, Angebote suchen...",
+      "noResults": "Keine Ergebnisse für „{{query}}“",
+      "hintNavigate": "navigieren",
+      "hintSelect": "auswählen",
+      "hintClose": "schließen",
+      "categories": {
+        "navigation": "Gehe zu",
+        "action": "Aktionen",
+        "content": "Angebote"
+      },
+      "items": {
+        "market": "Markt",
+        "services": "Dienste",
+        "contracts": "Aufträge",
+        "buyOrders": "Kaufaufträge",
+        "shops": "Shops",
+        "orgs": "Organisationen",
+        "recruiting": "Rekrutierung",
+        "missions": "Missionen",
+        "blueprints": "Blaupausen",
+        "mining": "Bergbau",
+        "wiki": "Wiki",
+        "resources": "Ressourcen",
+        "help": "Hilfe & Anleitungen",
+        "orders": "Meine Bestellungen",
+        "messages": "Nachrichten",
+        "dashboard": "Dashboard",
+        "settings": "Einstellungen",
+        "priceAlerts": "Preisalarme",
+        "priceAlertsDescription": "Ihre Beobachtungsliste und Benachrichtigungskanäle",
+        "myOrgs": "Meine Organisationen",
+        "shopOrders": "{{shop}} – Bestellungen",
+        "createListing": "Angebot erstellen",
+        "newMessage": "Neue Nachricht",
+        "toggleDarkMode": "Dunkelmodus umschalten"
+      }
+    },
+    "errorBoundary": {
+      "title": "Etwas ist schiefgelaufen",
+      "tryAgain": "Erneut versuchen",
+      "featureTitle": "Fehler in {{feature}}",
+      "featureMessage": "In der Funktion {{feature}} ist ein Fehler aufgetreten. Sie können es erneut versuchen oder andere Bereiche der Anwendung weiter nutzen.",
+      "errorStatus": "Fehler {{status}}",
+      "anErrorOccurred": "Ein Fehler ist aufgetreten"
+    },
+    "help": {
+      "allGuides": "Alle Anleitungen",
+      "updatedStamp": "Aktualisiert am <time>{{date}}</time> · {{author}}"
+    },
+    "imagePreview": {
+      "thumbnailAlt": "Vorschaubild {{index}}"
+    },
+    "imageZoom": {
+      "zoomIn": "Vergrößern",
+      "zoomOut": "Verkleinern",
+      "resetZoom": "Zoom zurücksetzen"
+    },
+    "markdown": {
+      "imageAlt": "Bild aus Markdown-Inhalt",
+      "formatAs": "Formatieren als {{syntax}}",
+      "enabled": "Markdown aktiviert",
+      "textAria": "Markdown-Text"
+    },
+    "mfa": {
+      "authCodeAria": "Authentifizierungscode",
+      "recoveryCodeAria": "Wiederherstellungscode",
+      "recoveryCodesAria": "Wiederherstellungscodes"
+    },
+    "nav": {
+      "mobileNavigation": "Mobile Navigation"
+    },
+    "pwa": {
+      "installTitle": "SC Market installieren",
+      "installIntro": "Installieren Sie unsere App für ein besseres Erlebnis:",
+      "benefitFaster": "Schnelleres Laden",
+      "benefitOffline": "Offline-Zugriff",
+      "benefitHomeScreen": "Symbol auf dem Startbildschirm",
+      "dismissInstall": "Installationshinweis schließen",
+      "install": "Installieren",
+      "offline": "Sie sind offline. Einige Funktionen sind möglicherweise eingeschränkt."
+    },
+    "sendMoney": {
+      "avatarAlt": "Avatar von {{name}}"
+    },
+    "themeEditor": {
+      "hexAria": "{{label}} (Hex)",
+      "imageRadiusPreview": "Vorschau des Bildradius",
+      "faviconAlt": "Favicon",
+      "paperElevation": "Erhöhungsstufe für Papier",
+      "cardElevation": "Erhöhungsstufe für Karten"
+    },
+    "youtube": {
+      "playerTitle": "YouTube-Videoplayer",
+      "playVideoNamed": "Video abspielen: {{title}}",
+      "thumbnailAlt": "YouTube-Video-Vorschaubild",
+      "playVideo": "Video abspielen"
+    }
   }
 }
