@@ -26,8 +26,23 @@ export function uniqueLeaves() {
   })
 }
 
+/**
+ * Which shard a route belongs to: a hash of its pattern (FNV-1a), not its
+ * position in the route table. Adding, removing or moving a route only
+ * touches that route's snapshot instead of re-filing every later route
+ * into a different shard's .snap file.
+ */
+export function shardOf(pattern: string): number {
+  let hash = 0x811c9dc5
+  for (let i = 0; i < pattern.length; i++) {
+    hash ^= pattern.charCodeAt(i)
+    hash = Math.imul(hash, 0x01000193) >>> 0
+  }
+  return hash % ROUTE_SHARDS
+}
+
 export function defineRouteSuite(shard: number) {
-  const leaves = uniqueLeaves().filter((_, i) => i % ROUTE_SHARDS === shard)
+  const leaves = uniqueLeaves().filter((leaf) => shardOf(leaf.pattern) === shard)
 
   describe(`routes (shard ${shard + 1}/${ROUTE_SHARDS})`, () => {
     it.each(leaves.map((leaf) => [leaf.pattern, leaf] as const))(
