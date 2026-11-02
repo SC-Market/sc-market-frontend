@@ -2693,7 +2693,8 @@
     "importFromUexError": "导入失败",
     "item": "物品",
     "quantityUseStockPage": "请在库存页面按批次修改此挂单的数量",
-    "manageAccessNotice": "你可以查看此商店的挂单和库存。如需创建或修改，请向组织管理员申请“管理市场”权限。"
+    "manageAccessNotice": "你可以查看此商店的挂单和库存。如需创建或修改，请向组织管理员申请“管理市场”权限。",
+    "stockAccessNotice": "你可以查看此商店的库存。如需添加或修改批次，请向组织管理员申请“管理库存”权限。"
   },
   "itemMarket": {
     "toggleSidebar": "切换市场侧边栏"

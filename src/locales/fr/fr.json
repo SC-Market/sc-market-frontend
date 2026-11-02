@@ -2719,7 +2719,8 @@
     "importFromUexError": "L'importation a échoué",
     "item": "Article",
     "quantityUseStockPage": "Modifiez la quantité de cette annonce lot par lot sur la page Stock",
-    "manageAccessNotice": "Vous pouvez voir les annonces et le stock de cette boutique. Pour les créer ou les modifier, demandez à un admin de l'org la permission « Gérer le marché »."
+    "manageAccessNotice": "Vous pouvez voir les annonces et le stock de cette boutique. Pour les créer ou les modifier, demandez à un admin de l'org la permission « Gérer le marché ».",
+    "stockAccessNotice": "Vous pouvez voir le stock de cette boutique. Pour ajouter ou modifier des lots, demandez à un admin de l'org la permission « Gérer le stock »."
   },
   "itemMarket": {
     "toggleSidebar": "Afficher/masquer la barre latérale du marché"

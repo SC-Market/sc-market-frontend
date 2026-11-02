@@ -2609,7 +2609,8 @@
     "importFromUexError": "匯入失敗",
     "item": "物品",
     "quantityUseStockPage": "請在庫存頁面按批次修改此刊登的數量",
-    "manageAccessNotice": "你可以檢視此商店的刊登和庫存。如需建立或修改，請向組織管理員申請「管理市集」權限。"
+    "manageAccessNotice": "你可以檢視此商店的刊登和庫存。如需建立或修改，請向組織管理員申請「管理市集」權限。",
+    "stockAccessNotice": "你可以檢視此商店的庫存。如需新增或修改批次，請向組織管理員申請「管理庫存」權限。"
   },
   "itemMarket": {
     "toggleSidebar": "切換市集側邊欄"

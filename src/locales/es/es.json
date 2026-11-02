@@ -2719,7 +2719,8 @@
     "importFromUexError": "La importación falló",
     "item": "Artículo",
     "quantityUseStockPage": "Cambia la cantidad de este anuncio por lote en la página de Inventario",
-    "manageAccessNotice": "Puedes ver los anuncios y el inventario de esta tienda. Para crearlos o cambiarlos, pide a un administrador de la org el permiso «Gestionar mercado»."
+    "manageAccessNotice": "Puedes ver los anuncios y el inventario de esta tienda. Para crearlos o cambiarlos, pide a un administrador de la org el permiso «Gestionar mercado».",
+    "stockAccessNotice": "Puedes ver el inventario de esta tienda. Para añadir o cambiar lotes, pide a un administrador de la org el permiso «Gestionar existencias»."
   },
   "itemMarket": {
     "toggleSidebar": "Alternar barra lateral del mercado"

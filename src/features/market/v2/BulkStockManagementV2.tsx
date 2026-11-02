@@ -80,11 +80,14 @@ import { selectOnFocus } from "../../../util/selectOnFocus"
 
 /**
  * This page's shop: lots, listings and permissions are scoped to it (without
- * a shop the lot list covered every shop you own).
+ * a shop the lot list covered every shop you own). `canManage`: may write the
+ * shop's lots, which Manage Stock allows as well as Manage Market (the backend's
+ * canManageShopStock).
  */
 function useStockShop() {
   const shop = useOptionalShopRouteContext()?.shop
-  return { shopId: shop?.shop_id, canManage: shop?.permissions?.can_manage === true }
+  const perms = shop?.permissions
+  return { shopId: shop?.shop_id, canManage: perms?.can_manage === true || perms?.manage_stock === true }
 }
 
 /** Rows matching the lot search: item, variant, listing, location or notes. */
@@ -184,7 +187,7 @@ export function BulkStockManagementV2() {
 
             {!canManage && (
               <Grid item xs={12}>
-                <ShopManageAccessNotice />
+                <ShopManageAccessNotice area="stock" />
               </Grid>
             )}
 

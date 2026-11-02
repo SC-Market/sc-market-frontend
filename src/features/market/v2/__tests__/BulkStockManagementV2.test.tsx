@@ -25,11 +25,11 @@ import type { StockLotDetail } from "../../../../store/api/v2/market"
 import { serviceApi } from "../../../../store/service"
 
 // Mock the shop route context
-const shopAccess = vi.hoisted(() => ({ canManage: true }))
+const shopAccess = vi.hoisted(() => ({ canManage: true, manageStock: false }))
 const routeShop = () => ({
   shop: {
     shop_id: "shop-1", name: "Test Shop", slug: "test-shop", owner_spectrum_id: "o1", is_org_owned: false, avatar: null, banner: null, description: null, created_at: "2024-01-01T00:00:00Z",
-    permissions: { can_manage: shopAccess.canManage, manage_market: shopAccess.canManage, manage_stock: false, manage_orders: false },
+    permissions: { can_manage: shopAccess.canManage, manage_market: shopAccess.canManage, manage_stock: shopAccess.manageStock, manage_orders: false },
   },
 })
 vi.mock("../../../../components/router/ShopContextFromRoute", () => ({
@@ -143,6 +143,7 @@ describe("BulkStockManagementV2", () => {
     store = createMockStore()
     vi.clearAllMocks()
     shopAccess.canManage = true
+    shopAccess.manageStock = false
   })
 
   it("renders stock lots with variant information", async () => {
@@ -631,6 +632,17 @@ describe("BulkStockManagementV2", () => {
     expect(screen.queryByText("Add Lot")).not.toBeInTheDocument()
     expect(screen.queryByLabelText("Edit quantity")).not.toBeInTheDocument()
     expect(screen.queryByLabelText("Delete lot")).not.toBeInTheDocument()
-    expect(screen.getByText(/ask an org admin for the Manage Market permission/i)).toBeInTheDocument()
+    expect(screen.getByText(/ask an org admin for the Manage Stock permission/i)).toBeInTheDocument()
+  })
+
+  // Regression: the sidebar showed Stock to Manage Stock members, but the page
+  // (and the API) only let Manage Market write lots.
+  it("lets a Manage Stock member without Manage Market edit lots", async () => {
+    shopAccess.canManage = false
+    shopAccess.manageStock = true
+    renderWithLots()
+    await waitFor(() => expect(screen.getAllByLabelText("Delete lot").length).toBe(2))
+    expect(screen.getByText("Add Lot")).toBeInTheDocument()
+    expect(screen.queryByText(/ask an org admin/i)).not.toBeInTheDocument()
   })
 })

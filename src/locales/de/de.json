@@ -2705,7 +2705,8 @@
     "importFromUexError": "Der Import ist fehlgeschlagen",
     "item": "Artikel",
     "quantityUseStockPage": "Ändere die Menge dieses Angebots pro Los auf der Bestandsseite",
-    "manageAccessNotice": "Du kannst die Angebote und den Bestand dieses Shops ansehen. Um sie zu erstellen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Markt verwalten“."
+    "manageAccessNotice": "Du kannst die Angebote und den Bestand dieses Shops ansehen. Um sie zu erstellen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Markt verwalten“.",
+    "stockAccessNotice": "Du kannst den Bestand dieses Shops ansehen. Um Lose hinzuzufügen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Bestand verwalten“."
   },
   "itemMarket": {
     "toggleSidebar": "Markt-Seitenleiste umschalten"
