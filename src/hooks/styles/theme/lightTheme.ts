@@ -1,6 +1,7 @@
 import { createTheme, responsiveFontSizes } from "@mui/material"
 import { refTheme } from "./constants"
 import { themeBase } from "./baseTheme"
+import { ON_ACCENT_DARK } from "./contrast"
 import type { ExtendedThemeOptions } from "./constants"
 
 export const lightThemeOptions: ExtendedThemeOptions = {
@@ -15,6 +16,12 @@ export const lightThemeOptions: ExtendedThemeOptions = {
       color: {
         main: "#4e36f5",
       },
+    }),
+    // Light-mode shades (mainThemeOptions sets the dark-mode ones). Orange
+    // takes dark text (6.15:1); white stays on red, where dark can't reach AA.
+    error: refTheme.palette.augmentColor({ color: { main: "#d32f2f" } }),
+    warning: refTheme.palette.augmentColor({
+      color: { main: "#ed6c02", contrastText: ON_ACCENT_DARK },
     }),
     outline: {
       main: "rgba(0, 0, 0, 0.12)",
