@@ -19,6 +19,7 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExpireAllListingsButton } from "../../views/admin/ExpireAllListingsButton"
+import { SellerReachabilityCard } from "../../views/admin/SellerReachabilityCard"
 import {
   useSearchListingsQuery,
   SearchListingsApiArg,
@@ -125,7 +126,11 @@ function ListingsSkeleton() {
     <Grid container spacing={1}>
       {Array.from({ length: 12 }).map((_, i) => (
         <Grid item xs={6} sm={4} md={3} lg={2} key={i}>
-          <Skeleton variant="rectangular" height={280} sx={{ borderRadius: 1 }} />
+          <Skeleton
+            variant="rectangular"
+            height={280}
+            sx={{ borderRadius: 1 }}
+          />
         </Grid>
       ))}
     </Grid>
@@ -195,16 +200,22 @@ export function AllMarketListings() {
       maxWidth="xl"
     >
       <Grid item xs={12}>
-        <Tabs
-          value={tab}
-          onChange={(_, v) => setTab(v)}
-          sx={{ mb: 2 }}
-        >
+        <SellerReachabilityCard />
+      </Grid>
+
+      <Grid item xs={12}>
+        <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }}>
           <Tab label={t("admin.alerts.active")} value="active" />
-          <Tab label={t("adminUi.allListings.tabs.inactive")} value="inactive" />
+          <Tab
+            label={t("adminUi.allListings.tabs.inactive")}
+            value="inactive"
+          />
           <Tab label={t("adminUi.allListings.tabs.expired")} value="expired" />
           <Tab label={t("adminUi.allListings.tabs.sold")} value="sold" />
-          <Tab label={t("adminUi.allListings.tabs.cancelled")} value="cancelled" />
+          <Tab
+            label={t("adminUi.allListings.tabs.cancelled")}
+            value="cancelled"
+          />
         </Tabs>
         <Divider sx={{ mb: 2 }} />
       </Grid>

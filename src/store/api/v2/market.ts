@@ -2223,6 +2223,13 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Admin"],
       }),
+      getSellerReachability: build.query<
+        GetSellerReachabilityApiResponse,
+        GetSellerReachabilityApiArg
+      >({
+        query: () => ({ url: `/admin/seller-reachability` }),
+        providesTags: ["Admin"],
+      }),
       searchIdentityUsers: build.query<
         SearchIdentityUsersApiResponse,
         SearchIdentityUsersApiArg
@@ -2869,7 +2876,7 @@ export type SearchListingsApiArg = {
   quantityMin?: number
   /** Only 'active' is served (the default); other statuses return no results, except to site admins */
   status?: "active" | "inactive" | "sold" | "expired" | "cancelled"
-  /** Sort field (default: created_at) */
+  /** Sort field. Without sort_by and sort_order: newest first, with listings of sellers inactive for 30+ days ranked lower (never hidden). Explicit sorts are kept as chosen; seller activity only breaks ties. */
   sortBy?:
     | "created_at"
     | "updated_at"
@@ -3952,6 +3959,9 @@ export type UpdateStorefrontEnquiryApiArg = {
   enquiryId: string
   updateStorefrontEnquiryRequest: UpdateStorefrontEnquiryRequest
 }
+export type GetSellerReachabilityApiResponse =
+  /** status 200 Ok */ SellerReachabilityReport
+export type GetSellerReachabilityApiArg = void
 export type SearchIdentityUsersApiResponse =
   /** status 200 Ok */ IdentitySearchResponse
 export type SearchIdentityUsersApiArg = {
@@ -5344,6 +5354,7 @@ export type NotificationCategoryId =
   | "announcements"
   | "reminders"
   | "contracts"
+  | "storefront"
 export type NotificationChannelId = "in_app" | "push" | "email" | "discord_dm"
 export type NotificationEventKey =
   | "order.created"
@@ -5369,6 +5380,8 @@ export type NotificationEventKey =
   | "offer.rejected"
   | "contract.public_created"
   | "contract.offer_received"
+  | "storefront.enquiry_accepted"
+  | "storefront.enquiry_declined"
 export type NotificationPreferenceCell = {
   channel: NotificationChannelId
   enabled: boolean
@@ -8582,6 +8595,72 @@ export type UpdateStorefrontEnquiryRequest = {
   /** Staff-only note (never shown to the org or shop). Empty clears it. */
   staff_note?: string | null
 }
+export type ReachabilityCount = {
+  /** Sellers (a user, or an org) in this bucket reachable this way. */
+  sellers: number
+  /** Their publicly listed listings. */
+  listings: number
+}
+export type ReachabilityBucket =
+  | "today"
+  | "this_week"
+  | "this_month"
+  | "over_a_month"
+  | "unknown"
+export type SellerReachabilityBucket = {
+  /** Sellers with at least one publicly listed listing. */
+  sellers: number
+  listings: number
+  /** Discord linked, and the last Discord DM attempt (if any, last 90 days) did not fail. */
+  discord_dm: ReachabilityCount
+  /** Discord linked, and the last Discord DM attempt was delivered (a subset of discord_dm). */
+  discord_dm_confirmed: ReachabilityCount
+  /** A verified primary email, not unsubscribed from announcement emails. No bounce data exists. */
+  email: ReachabilityCount
+  /** At least one push subscription. No per-delivery result exists. */
+  push: ReachabilityCount
+  /** At least one of Discord DM, email or push. */
+  any: ReachabilityCount
+  /** None of them. */
+  none: ReachabilityCount
+  bucket: ReachabilityBucket
+}
+export type SellerReachabilityCounts = {
+  /** Sellers with at least one publicly listed listing. */
+  sellers: number
+  listings: number
+  /** Discord linked, and the last Discord DM attempt (if any, last 90 days) did not fail. */
+  discord_dm: ReachabilityCount
+  /** Discord linked, and the last Discord DM attempt was delivered (a subset of discord_dm). */
+  discord_dm_confirmed: ReachabilityCount
+  /** A verified primary email, not unsubscribed from announcement emails. No bounce data exists. */
+  email: ReachabilityCount
+  /** At least one push subscription. No per-delivery result exists. */
+  push: ReachabilityCount
+  /** At least one of Discord DM, email or push. */
+  any: ReachabilityCount
+  /** None of them. */
+  none: ReachabilityCount
+}
+export type SellerReachabilityReport = {
+  generated_at: string
+  /** Every bucket, in order (today, this week, this month, over a month, unknown). */
+  buckets: SellerReachabilityBucket[]
+  totals: SellerReachabilityCounts
+  /** Which channels have a recorded delivery result, so the UI can say how far "reachable" is checked. */
+  signals: {
+    /** Push has no per-delivery result (dead subscriptions are deleted). */
+    push_delivery_results: boolean
+    /** Email bounces and complaints are not recorded. */
+    email_delivery_results: boolean
+    /** How long those results are kept. */
+    discord_dm_result_retention_days: number
+    /** Discord DMs sent through notify() record sent / failed per attempt. */
+    discord_dm_delivery_results: boolean
+  }
+  /** The email category whose unsubscribes are checked. */
+  email_category: "announcements"
+}
 export type IdentitySearchRow = {
   user_id: string
   username: string
@@ -8983,6 +9062,7 @@ export const {
   useRemoveUserOverrideMutation,
   useListStorefrontEnquiriesQuery,
   useUpdateStorefrontEnquiryMutation,
+  useGetSellerReachabilityQuery,
   useSearchIdentityUsersQuery,
   useGetIdentityUserQuery,
   useReleaseIdentityUsernameMutation,

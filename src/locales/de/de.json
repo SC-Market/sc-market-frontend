@@ -746,7 +746,11 @@
     "all_shops": "Alle Shops",
     "storefront_enquiry": {
       "created": "{{name}} hat eine gebrandete Storefront angefragt: {{subdomain}}",
-      "generic": "Neue Anfrage für eine gebrandete Storefront"
+      "generic": "Neue Anfrage für eine gebrandete Storefront",
+      "accepted": "Deine Anfrage für einen eigenen Storefront für {{name}} ({{subdomain}}) wurde angenommen",
+      "acceptedGeneric": "Deine Anfrage für einen eigenen Storefront wurde angenommen",
+      "declined": "Deine Anfrage für einen eigenen Storefront für {{name}} ({{subdomain}}) wurde abgelehnt",
+      "declinedGeneric": "Deine Anfrage für einen eigenen Storefront wurde abgelehnt"
     },
     "listing_expiring": {
       "one": "Verkaufst du „{{title}}“ noch? Es läuft in 3 Tagen ab. Öffne dies, um es mit einem Klick zu verlängern.",
@@ -911,7 +915,8 @@
         "org": "Organisationseinladungen",
         "announcements": "Ankündigungen",
         "reminders": "Erinnerungen an ungelesene Nachrichten",
-        "contracts": "Öffentliche Aufträge"
+        "contracts": "Öffentliche Aufträge",
+        "storefront": "Storefront-Anfragen"
       },
       "events": {
         "order_created": "Neue Bestellung",
@@ -936,7 +941,9 @@
         "offer_rejected": "Angebot abgelehnt",
         "contract_offer_received": "Angebot für Ihren Auftrag",
         "org_member_joined": "Neues Mitglied beigetreten",
-        "listing_expiring": "Angebot läuft bald ab"
+        "listing_expiring": "Angebot läuft bald ab",
+        "storefront_enquiry_accepted": "Storefront-Anfrage angenommen",
+        "storefront_enquiry_declined": "Storefront-Anfrage abgelehnt"
       },
       "tabs": {
         "orders": "Bestellungen & Angebote",
@@ -989,6 +996,10 @@
         "listings": {
           "label": "Angebote",
           "hint": "Eine Erinnerung 3 Tage bevor ein Angebot abläuft, mit Verlängerung per Klick."
+        },
+        "storefront": {
+          "label": "Storefront-Anfragen",
+          "hint": "Antworten auf eine Anfrage für einen eigenen Storefront, die du gesendet hast."
         }
       },
       "rows": {
@@ -1050,6 +1061,9 @@
         },
         "listing-expiring": {
           "label": "Angebot läuft bald ab"
+        },
+        "storefront-enquiry": {
+          "label": "Anfrage angenommen oder abgelehnt"
         }
       },
       "subtitle": "Legen Sie fest, wo Sie jede Art von Benachrichtigung erreicht.",
@@ -7677,6 +7691,40 @@
     },
     "notificationTest": {
       "noneIndividual": "Keine (Einzelperson)"
+    },
+    "sellerReachability": {
+      "title": "Erreichbarkeit der Verkäufer",
+      "subtitle": "Verkäufer mit öffentlichen Angeboten, nach letzter Aktivität, und wie viele von ihnen (und ihren Angeboten) SC Market erreichen kann. Eine Organisation zählt über ihre Mitglieder, die Bestellungen oder den Markt verwalten. Nur Zahlen.",
+      "count": "{{sellers}} · {{listings}}",
+      "retry": "Erneut versuchen",
+      "loadFailed": "Der Erreichbarkeitsbericht konnte nicht geladen werden.",
+      "total": "Gesamt",
+      "buckets": {
+        "today": "Heute gesehen",
+        "this_week": "Diese Woche gesehen",
+        "this_month": "Diesen Monat gesehen",
+        "over_a_month": "Seit über einem Monat nicht gesehen",
+        "unknown": "Niemand zu kontaktieren"
+      },
+      "columns": {
+        "lastSeen": "Zuletzt gesehen",
+        "sellers": "Verkäufer · Angebote",
+        "discord_dm": "Discord-DM",
+        "discord_dm_confirmed": "DM zugestellt",
+        "email": "E-Mail",
+        "push": "Push",
+        "any": "Mindestens ein Kanal",
+        "none": "Keiner"
+      },
+      "notes": {
+        "discord": "Discord-DM: Discord verknüpft, und die letzte DM von SC Market ({{days}} Tage gespeichert) ist nicht fehlgeschlagen. Verkäufer ohne DM in diesem Zeitraum zählen, unbestätigt; „DM zugestellt“ zählt die, deren letzte DM angekommen ist.",
+        "discordNoSignal": "Discord-DM: Discord verknüpft. Es werden keine DM-Zustellergebnisse gespeichert.",
+        "email": "E-Mail: eine bestätigte Adresse, nicht von Ankündigungs-E-Mails abgemeldet. Bounces werden nicht gespeichert, eine bestätigte Adresse kann also trotzdem bouncen.",
+        "emailChecked": "E-Mail: eine bestätigte Adresse, nicht von Ankündigungs-E-Mails abgemeldet.",
+        "push": "Push: mindestens ein Push-Abonnement. Abgelaufene werden entfernt, wenn ein Push fehlschlägt, aber es wird kein Zustellergebnis gespeichert.",
+        "pushChecked": "Push: mindestens ein Push-Abonnement.",
+        "lastSeen": "„Zuletzt gesehen“ zählt alle Verkäufer, auch die, die ihren Online-Status vor Käufern verbergen."
+      }
     }
   },
   "apiTokensUi": {

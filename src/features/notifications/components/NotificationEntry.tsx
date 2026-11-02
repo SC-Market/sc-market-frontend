@@ -18,7 +18,10 @@ import { NotificationPublicContract } from "../types/NotificationPublicContract"
 import { NotificationOrgMemberJoined } from "../types/NotificationOrgMemberJoined"
 import { NotificationOfferDecision } from "../types/NotificationOfferDecision"
 import { NotificationAccountIdentity } from "../types/NotificationAccountIdentity"
-import { NotificationStorefrontEnquiry } from "../types/NotificationStorefrontEnquiry"
+import {
+  NotificationStorefrontEnquiry,
+  NotificationStorefrontEnquiryDecision,
+} from "../types/NotificationStorefrontEnquiry"
 import { NotificationListingExpiring } from "../types/NotificationListingExpiring"
 
 export function NotificationEntry(props: { notif: Notification }) {
@@ -67,6 +70,9 @@ export function NotificationEntry(props: { notif: Notification }) {
       return <NotificationAccountIdentity notif={notif} />
     case "storefront_enquiry_created":
       return <NotificationStorefrontEnquiry notif={notif} />
+    case "storefront_enquiry_accepted":
+    case "storefront_enquiry_declined":
+      return <NotificationStorefrontEnquiryDecision notif={notif} />
     case "listing_expiring":
       return <NotificationListingExpiring notif={notif} />
     default:

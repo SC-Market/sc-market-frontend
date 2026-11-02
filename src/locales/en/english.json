@@ -3333,7 +3333,11 @@
     "all_shops": "All shops",
     "storefront_enquiry": {
       "created": "{{name}} asked for a branded storefront: {{subdomain}}",
-      "generic": "New branded storefront enquiry"
+      "generic": "New branded storefront enquiry",
+      "accepted": "Your branded storefront enquiry for {{name}} ({{subdomain}}) was accepted",
+      "acceptedGeneric": "Your branded storefront enquiry was accepted",
+      "declined": "Your branded storefront enquiry for {{name}} ({{subdomain}}) was declined",
+      "declinedGeneric": "Your branded storefront enquiry was declined"
     },
     "listing_expiring": {
       "one": "Still selling \"{{title}}\"? It expires in 3 days. Open to renew it in one click.",
@@ -4825,7 +4829,8 @@
         "org": "Organization invites",
         "announcements": "Announcements",
         "reminders": "Unread message reminders",
-        "contracts": "Public contracts"
+        "contracts": "Public contracts",
+        "storefront": "Storefront enquiries"
       },
       "events": {
         "order_created": "New order",
@@ -4850,7 +4855,9 @@
         "offer_rejected": "Offer rejected",
         "contract_offer_received": "Offer on your contract",
         "org_member_joined": "New member joined",
-        "listing_expiring": "Listing about to expire"
+        "listing_expiring": "Listing about to expire",
+        "storefront_enquiry_accepted": "Storefront enquiry accepted",
+        "storefront_enquiry_declined": "Storefront enquiry declined"
       },
       "tabs": {
         "orders": "Orders & offers",
@@ -4903,6 +4910,10 @@
         "listings": {
           "label": "Listings",
           "hint": "A reminder 3 days before a listing expires, with a one-click renew."
+        },
+        "storefront": {
+          "label": "Storefront enquiries",
+          "hint": "Replies to a branded storefront enquiry you sent."
         }
       },
       "rows": {
@@ -4964,6 +4975,9 @@
         },
         "listing-expiring": {
           "label": "Listing about to expire"
+        },
+        "storefront-enquiry": {
+          "label": "Enquiry accepted or declined"
         }
       },
       "subtitle": "Choose where each kind of notification reaches you.",
@@ -7677,6 +7691,40 @@
     },
     "notificationTest": {
       "noneIndividual": "None (Individual)"
+    },
+    "sellerReachability": {
+      "title": "Seller reachability",
+      "subtitle": "Sellers with public listings, by when they were last seen, and how many of them (and their listings) SC Market can reach. An org counts through its members who manage orders or the market. Counts only.",
+      "count": "{{sellers}} · {{listings}}",
+      "retry": "Retry",
+      "loadFailed": "The reachability report couldn't be loaded.",
+      "total": "Total",
+      "buckets": {
+        "today": "Seen today",
+        "this_week": "Seen this week",
+        "this_month": "Seen this month",
+        "over_a_month": "Not seen for over a month",
+        "unknown": "No one to contact"
+      },
+      "columns": {
+        "lastSeen": "Last seen",
+        "sellers": "Sellers · listings",
+        "discord_dm": "Discord DM",
+        "discord_dm_confirmed": "DM delivered",
+        "email": "Email",
+        "push": "Push",
+        "any": "Any channel",
+        "none": "None"
+      },
+      "notes": {
+        "discord": "Discord DM: Discord linked, and their last DM from SC Market (kept {{days}} days) didn't fail. Sellers never DMed in that time count, unconfirmed; \"DM delivered\" counts those whose last DM arrived.",
+        "discordNoSignal": "Discord DM: Discord linked. No DM delivery results are recorded.",
+        "email": "Email: a verified address, not unsubscribed from announcement emails. Bounces aren't recorded, so a verified address may still bounce.",
+        "emailChecked": "Email: a verified address, not unsubscribed from announcement emails.",
+        "push": "Push: at least one push subscription. Expired ones are removed when a push fails, but no delivery result is recorded.",
+        "pushChecked": "Push: at least one push subscription.",
+        "lastSeen": "Last seen counts every seller, including those who hide their online status from buyers."
+      }
     }
   },
   "apiTokensUi": {

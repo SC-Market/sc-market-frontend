@@ -743,7 +743,11 @@
     "all_shops": "所有商店",
     "storefront_enquiry": {
       "created": "{{name}} 申請了品牌店面：{{subdomain}}",
-      "generic": "新的品牌店面諮詢"
+      "generic": "新的品牌店面諮詢",
+      "accepted": "你為 {{name}}（{{subdomain}}）提交的品牌店面申請已被接受",
+      "acceptedGeneric": "你的品牌店面申請已被接受",
+      "declined": "你為 {{name}}（{{subdomain}}）提交的品牌店面申請已被拒絕",
+      "declinedGeneric": "你的品牌店面申請已被拒絕"
     },
     "listing_expiring": {
       "one": "還在出售「{{title}}」嗎？它將在3天後到期。打開即可一鍵續期。",
@@ -850,7 +854,8 @@
         "org": "組織邀請",
         "announcements": "公告",
         "reminders": "未讀訊息提醒",
-        "contracts": "公開合約"
+        "contracts": "公開合約",
+        "storefront": "店面申請"
       },
       "events": {
         "order_created": "新訂單",
@@ -875,7 +880,9 @@
         "offer_rejected": "報價已拒絕",
         "contract_offer_received": "您的合約收到報價",
         "org_member_joined": "新成員加入",
-        "listing_expiring": "商品即將到期"
+        "listing_expiring": "商品即將到期",
+        "storefront_enquiry_accepted": "店面申請已接受",
+        "storefront_enquiry_declined": "店面申請已拒絕"
       },
       "tabs": {
         "orders": "訂單與報價",
@@ -928,6 +935,10 @@
         "listings": {
           "label": "商品",
           "hint": "商品到期前3天提醒，可一鍵續期。"
+        },
+        "storefront": {
+          "label": "店面申請",
+          "hint": "對你提交的品牌店面申請的回覆。"
         }
       },
       "rows": {
@@ -989,6 +1000,9 @@
         },
         "listing-expiring": {
           "label": "商品即將到期"
+        },
+        "storefront-enquiry": {
+          "label": "申請被接受或拒絕"
         }
       },
       "subtitle": "選擇每種通知的接收方式。",
@@ -7563,6 +7577,40 @@
     },
     "notificationTest": {
       "noneIndividual": "無（個人）"
+    },
+    "sellerReachability": {
+      "title": "賣家可聯繫情況",
+      "subtitle": "擁有公開商品的賣家，依最近一次上線時間分組，以及 SC Market 能聯繫到其中多少人（及其商品）。組織透過其管理訂單或市場的成員計算。僅顯示數量。",
+      "count": "{{sellers}} · {{listings}}",
+      "retry": "重試",
+      "loadFailed": "無法載入可聯繫情況報告。",
+      "total": "合計",
+      "buckets": {
+        "today": "今天上線",
+        "this_week": "本週上線",
+        "this_month": "本月上線",
+        "over_a_month": "超過一個月未上線",
+        "unknown": "無可聯繫的人"
+      },
+      "columns": {
+        "lastSeen": "最近上線",
+        "sellers": "賣家 · 商品",
+        "discord_dm": "Discord 私訊",
+        "discord_dm_confirmed": "私訊已送達",
+        "email": "電子郵件",
+        "push": "推播",
+        "any": "任一管道",
+        "none": "無"
+      },
+      "notes": {
+        "discord": "Discord 私訊：已連結 Discord，且 SC Market 發給他們的最近一則私訊（保留 {{days}} 天）沒有失敗。這段期間內從未收到私訊的賣家也計入，但未確認；「私訊已送達」統計最近一則私訊已送達的賣家。",
+        "discordNoSignal": "Discord 私訊：已連結 Discord。未記錄私訊送達結果。",
+        "email": "電子郵件：已驗證的地址，且未取消訂閱公告郵件。退信不會被記錄，因此已驗證的地址仍可能退信。",
+        "emailChecked": "電子郵件：已驗證的地址，且未取消訂閱公告郵件。",
+        "push": "推播：至少有一個推播訂閱。推播失敗時會刪除過期的訂閱，但不記錄送達結果。",
+        "pushChecked": "推播：至少有一個推播訂閱。",
+        "lastSeen": "最近上線統計所有賣家，包括對買家隱藏上線狀態的賣家。"
+      }
     }
   },
   "apiTokensUi": {

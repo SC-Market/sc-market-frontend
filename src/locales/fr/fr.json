@@ -749,7 +749,11 @@
     "all_shops": "Toutes les boutiques",
     "storefront_enquiry": {
       "created": "{{name}} a demandé une vitrine à ses couleurs : {{subdomain}}",
-      "generic": "Nouvelle demande de vitrine à vos couleurs"
+      "generic": "Nouvelle demande de vitrine à vos couleurs",
+      "accepted": "Votre demande de vitrine personnalisée pour {{name}} ({{subdomain}}) a été acceptée",
+      "acceptedGeneric": "Votre demande de vitrine personnalisée a été acceptée",
+      "declined": "Votre demande de vitrine personnalisée pour {{name}} ({{subdomain}}) a été refusée",
+      "declinedGeneric": "Votre demande de vitrine personnalisée a été refusée"
     },
     "listing_expiring": {
       "one": "Tu vends toujours « {{title}} » ? L'annonce expire dans 3 jours. Ouvre-la pour la renouveler en un clic.",
@@ -914,7 +918,8 @@
         "org": "Invitations d'organisation",
         "announcements": "Annonces",
         "reminders": "Rappels de messages non lus",
-        "contracts": "Contrats publics"
+        "contracts": "Contrats publics",
+        "storefront": "Demandes de vitrine"
       },
       "events": {
         "order_created": "Nouvelle commande",
@@ -939,7 +944,9 @@
         "offer_rejected": "Offre refusée",
         "contract_offer_received": "Offre sur votre contrat",
         "org_member_joined": "Nouveau membre",
-        "listing_expiring": "Annonce sur le point d'expirer"
+        "listing_expiring": "Annonce sur le point d'expirer",
+        "storefront_enquiry_accepted": "Demande de vitrine acceptée",
+        "storefront_enquiry_declined": "Demande de vitrine refusée"
       },
       "tabs": {
         "orders": "Commandes et offres",
@@ -992,6 +999,10 @@
         "listings": {
           "label": "Annonces",
           "hint": "Un rappel 3 jours avant l'expiration d'une annonce, avec renouvellement en un clic."
+        },
+        "storefront": {
+          "label": "Demandes de vitrine",
+          "hint": "Les réponses à une demande de vitrine personnalisée que vous avez envoyée."
         }
       },
       "rows": {
@@ -1053,6 +1064,9 @@
         },
         "listing-expiring": {
           "label": "Annonce sur le point d'expirer"
+        },
+        "storefront-enquiry": {
+          "label": "Demande acceptée ou refusée"
         }
       },
       "subtitle": "Choisissez où chaque type de notification vous parvient.",
@@ -7791,6 +7805,40 @@
     },
     "notificationTest": {
       "noneIndividual": "Aucun (individuel)"
+    },
+    "sellerReachability": {
+      "title": "Joignabilité des vendeurs",
+      "subtitle": "Les vendeurs ayant des annonces publiques, selon leur dernière connexion, et combien d'entre eux (et de leurs annonces) SC Market peut joindre. Une organisation compte via ses membres qui gèrent les commandes ou le marché. Chiffres uniquement.",
+      "count": "{{sellers}} · {{listings}}",
+      "retry": "Réessayer",
+      "loadFailed": "Impossible de charger le rapport de joignabilité.",
+      "total": "Total",
+      "buckets": {
+        "today": "Vus aujourd'hui",
+        "this_week": "Vus cette semaine",
+        "this_month": "Vus ce mois-ci",
+        "over_a_month": "Pas vus depuis plus d'un mois",
+        "unknown": "Personne à contacter"
+      },
+      "columns": {
+        "lastSeen": "Dernière connexion",
+        "sellers": "Vendeurs · annonces",
+        "discord_dm": "MP Discord",
+        "discord_dm_confirmed": "MP reçu",
+        "email": "E-mail",
+        "push": "Push",
+        "any": "Au moins un canal",
+        "none": "Aucun"
+      },
+      "notes": {
+        "discord": "MP Discord : Discord lié, et leur dernier MP de SC Market (conservé {{days}} jours) n'a pas échoué. Les vendeurs jamais contactés par MP sur cette période comptent, sans confirmation ; « MP reçu » compte ceux dont le dernier MP est arrivé.",
+        "discordNoSignal": "MP Discord : Discord lié. Aucun résultat de remise des MP n'est enregistré.",
+        "email": "E-mail : une adresse vérifiée, non désabonnée des e-mails d'annonces. Les rebonds ne sont pas enregistrés : une adresse vérifiée peut quand même rebondir.",
+        "emailChecked": "E-mail : une adresse vérifiée, non désabonnée des e-mails d'annonces.",
+        "push": "Push : au moins un abonnement push. Ceux qui ont expiré sont supprimés quand un push échoue, mais aucun résultat de remise n'est enregistré.",
+        "pushChecked": "Push : au moins un abonnement push.",
+        "lastSeen": "La dernière connexion compte tous les vendeurs, y compris ceux qui masquent leur statut en ligne aux acheteurs."
+      }
     }
   },
   "apiTokensUi": {

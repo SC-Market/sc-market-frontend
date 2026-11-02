@@ -743,7 +743,11 @@
     "all_shops": "すべてのショップ",
     "storefront_enquiry": {
       "created": "{{name}} がブランドストアフロントをリクエストしました：{{subdomain}}",
-      "generic": "ブランドストアフロントの新しい問い合わせ"
+      "generic": "ブランドストアフロントの新しい問い合わせ",
+      "accepted": "{{name}}（{{subdomain}}）のブランドストアフロントの問い合わせが承認されました",
+      "acceptedGeneric": "ブランドストアフロントの問い合わせが承認されました",
+      "declined": "{{name}}（{{subdomain}}）のブランドストアフロントの問い合わせは見送られました",
+      "declinedGeneric": "ブランドストアフロントの問い合わせは見送られました"
     },
     "listing_expiring": {
       "one": "「{{title}}」はまだ販売中ですか？3日後に期限切れになります。開くとワンクリックで更新できます。",
@@ -908,7 +912,8 @@
         "org": "組織への招待",
         "announcements": "お知らせ",
         "reminders": "未読メッセージのリマインダー",
-        "contracts": "公開契約"
+        "contracts": "公開契約",
+        "storefront": "ストアフロントの問い合わせ"
       },
       "events": {
         "order_created": "新しい注文",
@@ -933,7 +938,9 @@
         "offer_rejected": "オファーの拒否",
         "contract_offer_received": "あなたの契約へのオファー",
         "org_member_joined": "新しいメンバーの参加",
-        "listing_expiring": "まもなく期限切れの出品"
+        "listing_expiring": "まもなく期限切れの出品",
+        "storefront_enquiry_accepted": "ストアフロントの問い合わせ承認",
+        "storefront_enquiry_declined": "ストアフロントの問い合わせ見送り"
       },
       "tabs": {
         "orders": "注文とオファー",
@@ -986,6 +993,10 @@
         "listings": {
           "label": "出品",
           "hint": "出品の期限切れ3日前のリマインダー（ワンクリックで更新可能）。"
+        },
+        "storefront": {
+          "label": "ストアフロントの問い合わせ",
+          "hint": "送信したブランドストアフロントの問い合わせへの返答。"
         }
       },
       "rows": {
@@ -1047,6 +1058,9 @@
         },
         "listing-expiring": {
           "label": "まもなく期限切れの出品"
+        },
+        "storefront-enquiry": {
+          "label": "問い合わせの承認・見送り"
         }
       },
       "subtitle": "通知の種類ごとに受け取り方法を選択してください。",
@@ -7563,6 +7577,40 @@
     },
     "notificationTest": {
       "noneIndividual": "なし（個人）"
+    },
+    "sellerReachability": {
+      "title": "出品者への到達性",
+      "subtitle": "公開出品のある出品者を最終アクセス時期で分け、SC Market が連絡できる出品者数（とその出品数）を示します。組織は注文またはマーケットを管理するメンバーを通じて数えます。件数のみ。",
+      "count": "{{sellers}} · {{listings}}",
+      "retry": "再試行",
+      "loadFailed": "到達性レポートを読み込めませんでした。",
+      "total": "合計",
+      "buckets": {
+        "today": "今日アクセス",
+        "this_week": "今週アクセス",
+        "this_month": "今月アクセス",
+        "over_a_month": "1か月以上アクセスなし",
+        "unknown": "連絡先なし"
+      },
+      "columns": {
+        "lastSeen": "最終アクセス",
+        "sellers": "出品者 · 出品",
+        "discord_dm": "Discord DM",
+        "discord_dm_confirmed": "DM 配信済み",
+        "email": "メール",
+        "push": "プッシュ",
+        "any": "いずれかの方法",
+        "none": "なし"
+      },
+      "notes": {
+        "discord": "Discord DM：Discord が連携済みで、SC Market からの最後の DM（{{days}}日間保存）が失敗していない。この期間に DM を送っていない出品者も未確認として数えます。「DM 配信済み」は最後の DM が届いた出品者です。",
+        "discordNoSignal": "Discord DM：Discord が連携済み。DM の配信結果は記録されていません。",
+        "email": "メール：確認済みのアドレスで、お知らせメールの配信停止をしていない。バウンスは記録されないため、確認済みのアドレスでも届かない場合があります。",
+        "emailChecked": "メール：確認済みのアドレスで、お知らせメールの配信停止をしていない。",
+        "push": "プッシュ：プッシュ購読が 1 件以上ある。期限切れの購読はプッシュ失敗時に削除されますが、配信結果は記録されません。",
+        "pushChecked": "プッシュ：プッシュ購読が 1 件以上ある。",
+        "lastSeen": "最終アクセスは、購入者にオンライン状態を非表示にしている出品者も含めて数えます。"
+      }
     }
   },
   "apiTokensUi": {

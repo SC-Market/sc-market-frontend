@@ -150,7 +150,11 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
         "listings",
         "Listings",
         "A reminder 3 days before a listing expires, with a one-click renew.",
-        [row("listing-expiring", "Listing about to expire", ["listing.expiring"])],
+        [
+          row("listing-expiring", "Listing about to expire", [
+            "listing.expiring",
+          ]),
+        ],
       ),
       section(
         "watchlist",
@@ -196,6 +200,17 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
           ),
         ],
         "contract-alerts",
+      ),
+      section(
+        "storefront",
+        "Storefront enquiries",
+        "Replies to a branded storefront enquiry you sent.",
+        [
+          row("storefront-enquiry", "Enquiry accepted or declined", [
+            "storefront.enquiry_accepted",
+            "storefront.enquiry_declined",
+          ]),
+        ],
       ),
     ],
   },

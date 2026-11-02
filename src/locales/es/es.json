@@ -749,7 +749,11 @@
     "all_shops": "Todas las tiendas",
     "storefront_enquiry": {
       "created": "{{name}} ha pedido un escaparate con su marca: {{subdomain}}",
-      "generic": "Nueva solicitud de escaparate con marca"
+      "generic": "Nueva solicitud de escaparate con marca",
+      "accepted": "Tu solicitud de tienda personalizada para {{name}} ({{subdomain}}) ha sido aceptada",
+      "acceptedGeneric": "Tu solicitud de tienda personalizada ha sido aceptada",
+      "declined": "Tu solicitud de tienda personalizada para {{name}} ({{subdomain}}) ha sido rechazada",
+      "declinedGeneric": "Tu solicitud de tienda personalizada ha sido rechazada"
     },
     "listing_expiring": {
       "one": "¿Sigues vendiendo «{{title}}»? Caduca en 3 días. Ábrelo para renovarlo con un clic.",
@@ -914,7 +918,8 @@
         "org": "Invitaciones de organizaciones",
         "announcements": "Avisos",
         "reminders": "Recordatorios de mensajes no leídos",
-        "contracts": "Contratos públicos"
+        "contracts": "Contratos públicos",
+        "storefront": "Solicitudes de tienda"
       },
       "events": {
         "order_created": "Nuevo pedido",
@@ -939,7 +944,9 @@
         "offer_rejected": "Oferta rechazada",
         "contract_offer_received": "Oferta en tu contrato",
         "org_member_joined": "Nuevo miembro",
-        "listing_expiring": "Anuncio a punto de caducar"
+        "listing_expiring": "Anuncio a punto de caducar",
+        "storefront_enquiry_accepted": "Solicitud de tienda aceptada",
+        "storefront_enquiry_declined": "Solicitud de tienda rechazada"
       },
       "tabs": {
         "orders": "Pedidos y ofertas",
@@ -992,6 +999,10 @@
         "listings": {
           "label": "Anuncios",
           "hint": "Un aviso 3 días antes de que caduque un anuncio, con renovación en un clic."
+        },
+        "storefront": {
+          "label": "Solicitudes de tienda",
+          "hint": "Respuestas a una solicitud de tienda personalizada que enviaste."
         }
       },
       "rows": {
@@ -1053,6 +1064,9 @@
         },
         "listing-expiring": {
           "label": "Anuncio a punto de caducar"
+        },
+        "storefront-enquiry": {
+          "label": "Solicitud aceptada o rechazada"
         }
       },
       "subtitle": "Elige dónde te llega cada tipo de notificación.",
@@ -7791,6 +7805,40 @@
     },
     "notificationTest": {
       "noneIndividual": "Ninguno (individual)"
+    },
+    "sellerReachability": {
+      "title": "Alcance de los vendedores",
+      "subtitle": "Vendedores con anuncios públicos, según cuándo se les vio por última vez, y a cuántos de ellos (y de sus anuncios) puede llegar SC Market. Una organización cuenta a través de sus miembros que gestionan pedidos o el mercado. Solo cifras.",
+      "count": "{{sellers}} · {{listings}}",
+      "retry": "Reintentar",
+      "loadFailed": "No se pudo cargar el informe de alcance.",
+      "total": "Total",
+      "buckets": {
+        "today": "Vistos hoy",
+        "this_week": "Vistos esta semana",
+        "this_month": "Vistos este mes",
+        "over_a_month": "Sin ver desde hace más de un mes",
+        "unknown": "Nadie a quien contactar"
+      },
+      "columns": {
+        "lastSeen": "Visto por última vez",
+        "sellers": "Vendedores · anuncios",
+        "discord_dm": "MD de Discord",
+        "discord_dm_confirmed": "MD entregado",
+        "email": "Correo",
+        "push": "Push",
+        "any": "Algún canal",
+        "none": "Ninguno"
+      },
+      "notes": {
+        "discord": "MD de Discord: Discord vinculado, y su último MD de SC Market (se guarda {{days}} días) no falló. Los vendedores sin MD en ese tiempo cuentan, sin confirmar; «MD entregado» cuenta a quienes recibieron su último MD.",
+        "discordNoSignal": "MD de Discord: Discord vinculado. No se registran resultados de entrega de MD.",
+        "email": "Correo: una dirección verificada, sin darse de baja de los correos de anuncios. Los rebotes no se registran, así que una dirección verificada aún puede rebotar.",
+        "emailChecked": "Correo: una dirección verificada, sin darse de baja de los correos de anuncios.",
+        "push": "Push: al menos una suscripción push. Las caducadas se eliminan cuando falla un push, pero no se registra ningún resultado de entrega.",
+        "pushChecked": "Push: al menos una suscripción push.",
+        "lastSeen": "«Visto por última vez» cuenta a todos los vendedores, incluidos los que ocultan su estado en línea a los compradores."
+      }
     }
   },
   "apiTokensUi": {
