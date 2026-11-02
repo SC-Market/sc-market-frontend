@@ -1490,9 +1490,9 @@
     "import_monitoring": {
       "text": "Attribut-Import-Überwachung"
     },
-    "inventory": "Mein Inventar",
+    "inventory": "Mein Bestand",
     "listings_short": "Angebote",
-    "manage_stock": "Inventar verwalten",
+    "manage_stock": "Bestand",
     "migration": "V2-Migration",
     "moderation": {
       "text": "Moderation"
@@ -2699,7 +2699,13 @@
     "renewListing": "Läuft bald ab: um einen Monat verlängern",
     "renewedFromLink_one": "{{count}} Angebot um einen Monat verlängert",
     "renewedFromLink_other": "{{count}} Angebote um einen Monat verlängert",
-    "renewedFromLinkPartial": "{{ok}} von {{total}} Angeboten verlängert. Verlängere die übrigen unten."
+    "renewedFromLinkPartial": "{{ok}} von {{total}} Angeboten verlängert. Verlängere die übrigen unten.",
+    "importFromUex": "Von UEX importieren",
+    "importFromUexFetchError": "Deine UEX-Angebote konnten nicht abgerufen werden",
+    "importFromUexError": "Der Import ist fehlgeschlagen",
+    "item": "Artikel",
+    "quantityUseStockPage": "Ändere die Menge dieses Angebots pro Los auf der Bestandsseite",
+    "manageAccessNotice": "Du kannst die Angebote und den Bestand dieses Shops ansehen. Um sie zu erstellen oder zu ändern, bitte einen Org-Admin um die Berechtigung „Markt verwalten“."
   },
   "itemMarket": {
     "toggleSidebar": "Markt-Seitenleiste umschalten"
@@ -2881,7 +2887,7 @@
       "manage_org_details": "Name, Beschreibung, Avatar, Banner und Sprachen der Organisation bearbeiten, das Audit-Log lesen und die White-Label-Website- und Seitenleisten-Einstellungen ändern",
       "manage_recruiting": "Rekrutierungsbeiträge für die Organisation erstellen und verwalten",
       "manage_roles": "Rollen erstellen, bearbeiten und löschen und Mitgliedern zuweisen",
-      "manage_stock": "Bestandslose hinzufügen, bearbeiten und entfernen sowie das Inventar verwalten",
+      "manage_stock": "Bestandslose hinzufügen, bearbeiten und entfernen",
       "manage_theme": "Das White-Label-Theme, die Farben und das Branding der Organisation anpassen",
       "manage_webhooks": "Discord- und Benachrichtigungs-Webhooks erstellen, bearbeiten und löschen"
     }
@@ -3840,7 +3846,9 @@
     "storeBought": "Im Shop gekauft",
     "title": "Alle Bestandslose",
     "unspecified": "Nicht angegeben",
-    "updated": "Los aktualisiert"
+    "updated": "Los aktualisiert",
+    "editQuantity": "Menge bearbeiten",
+    "editHint": "Doppelklicke auf eine Menge, einen Standort oder einen Status (oder nutze den Stift), um ihn zu bearbeiten. Enter speichert, Esc bricht ab."
   },
   "attributes": {
     "class": "Klasse",
@@ -4129,8 +4137,10 @@
       "stockLotRequired": "Mindestens ein Bestandslos ist erforderlich",
       "titleRequired": "Titel ist erforderlich",
       "titleTooLong": "Der Titel darf höchstens 500 Zeichen lang sein",
-      "variantPriceRequired": "Der Preis muss für Los {{index}} im Modus „Preis pro Variante“ größer als 0 sein"
-    }
+      "variantPriceRequired": "Der Preis muss für Los {{index}} im Modus „Preis pro Variante“ größer als 0 sein",
+      "auctionEndTimeRequired": "Die Endzeit der Auktion ist erforderlich"
+    },
+    "descriptionOptional": "Beschreibung (optional)"
   },
   "CreateLotDialog": {
     "create": "Los erstellen",
@@ -4391,13 +4401,13 @@
     "confirmDeleteTitle": "Posten löschen?",
     "created": "Posten erstellt",
     "createError": "Posten konnte nicht erstellt werden",
-    "createLot": "Inventarposten hinzufügen",
+    "createLot": "Bestandslos hinzufügen",
     "custom_item": "Benutzerdefinierter Artikel",
     "delete": "Posten löschen",
     "deleteConfirm": "Löschen",
     "deleted": "Posten gelöscht",
     "deleteError": "Posten konnte nicht gelöscht werden",
-    "empty": "Noch keine Inventarartikel",
+    "empty": "Noch kein Bestand",
     "gameItem": "Artikel (optional)",
     "item": "Artikel",
     "listed": "Gelistet",
@@ -4411,7 +4421,7 @@
     "quantity": "Menge",
     "search": "Suchen...",
     "status": "Status",
-    "title": "Inventar",
+    "title": "Mein Bestand",
     "unlink": "Verknüpfung mit Angebot trennen",
     "unlinked": "Verknüpfung des Postens mit dem Angebot getrennt",
     "unlinkError": "Verknüpfung des Postens konnte nicht getrennt werden",
@@ -4746,7 +4756,7 @@
     "groupMarketplace": "Marktplatz",
     "groupPersonal": "Persönlich",
     "helpGuides": "Hilfe & Anleitungen",
-    "inventory": "Inventar",
+    "inventory": "Mein Bestand",
     "listings": "Angebote",
     "market": "Markt",
     "members": "Mitglieder",
@@ -5268,7 +5278,7 @@
   "SimpleStockInput": {
     "advancedFeatureComingSoon": "Erweiterte Bestandsverwaltung folgt in Kürze",
     "available": "Verfügbar",
-    "manageStock": "Inventar verwalten",
+    "manageStock": "Bestand verwalten",
     "quantity": "Verfügbare Menge",
     "quantityHelp": "Geben Sie die Gesamtmenge der zum Verkauf verfügbaren Artikel ein",
     "quantityLabel": "Verfügbare Menge eingeben",
@@ -5289,7 +5299,7 @@
     "noAllocations": "Kein zugewiesener Bestand",
     "noAllocationsDesc": "Bestand wird hier angezeigt, wenn Bestellungen für Ihre Angebote aufgegeben werden.",
     "noLots": "Keine Bestandslose",
-    "noLotsDesc": "Fügen Sie Bestandslose hinzu, um Ihr Inventar zu verwalten.",
+    "noLotsDesc": "Füge Bestandslose hinzu, um deinen Bestand zu verwalten.",
     "order": "Bestellung",
     "quantity": "Menge",
     "searchLots": "Lose durchsuchen...",
@@ -6384,5 +6394,12 @@
     "unknown": "Unbekannt",
     "unknownMission": "Unbekannte Mission",
     "various": "Verschiedene"
+  },
+  "listingStatus": {
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "sold": "Verkauft",
+    "expired": "Pausiert",
+    "cancelled": "Archiviert"
   }
 }

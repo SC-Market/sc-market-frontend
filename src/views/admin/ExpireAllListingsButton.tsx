@@ -39,11 +39,11 @@ export function ExpireAllListingsButton() {
         <DialogTitle>Expire All Active Listings?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            This will set <strong>{countData?.count ?? "..."} active listings</strong> to expired status.
-            Sellers will need to manually refresh each listing they want to keep active.
+            This will set <strong>{countData?.count ?? "..."} active listings</strong> to expired (paused).
+            Each seller reactivates the ones they still sell from their shop&apos;s Listings page.
           </DialogContentText>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            This is typically done after a game wipe. This action is reversible — sellers can refresh their listings individually.
+            This is typically done after a game wipe. Nothing is deleted: sellers can reactivate their listings at any time.
           </Typography>
         </DialogContent>
         <DialogActions>

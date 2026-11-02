@@ -1497,7 +1497,7 @@
     },
     "inventory": "我的库存",
     "listings_short": "商品",
-    "manage_stock": "管理库存",
+    "manage_stock": "库存",
     "migration": "V2 迁移",
     "my_orgs": "我的组织",
     "my_shops": "我的商店",
@@ -2687,7 +2687,13 @@
     "reactivateListing": "已暂停：续期并重新上架",
     "renewListing": "即将到期：再续期一个月",
     "renewedFromLink_other": "已将 {{count}} 个商品续期一个月",
-    "renewedFromLinkPartial": "已续期 {{ok}}/{{total}} 个商品。请在下方续期其余商品。"
+    "renewedFromLinkPartial": "已续期 {{ok}}/{{total}} 个商品。请在下方续期其余商品。",
+    "importFromUex": "从 UEX 导入",
+    "importFromUexFetchError": "无法获取你的 UEX 挂单",
+    "importFromUexError": "导入失败",
+    "item": "物品",
+    "quantityUseStockPage": "请在库存页面按批次修改此挂单的数量",
+    "manageAccessNotice": "你可以查看此商店的挂单和库存。如需创建或修改，请向组织管理员申请“管理市场”权限。"
   },
   "itemMarket": {
     "toggleSidebar": "切换市场侧边栏"
@@ -2880,7 +2886,7 @@
       "manage_org_details": "编辑组织名称、描述、头像、横幅和语言，查看审计日志，并更改白标站点和侧边栏设置",
       "manage_recruiting": "为组织创建和管理招募帖子",
       "manage_roles": "创建、编辑和删除角色并将其分配给成员",
-      "manage_stock": "添加、编辑和移除库存批次并管理库存",
+      "manage_stock": "添加、编辑和移除库存批次",
       "manage_theme": "自定义组织的白标主题、颜色和品牌形象",
       "manage_webhooks": "创建、编辑和删除 Discord 和通知 Webhook"
     }
@@ -3880,7 +3886,9 @@
     "storeBought": "商店购买",
     "title": "所有库存批次",
     "unspecified": "未指定",
-    "updated": "批次已更新"
+    "updated": "批次已更新",
+    "editQuantity": "编辑数量",
+    "editHint": "双击数量、地点或状态（或点击铅笔图标）即可编辑。Enter 保存，Esc 取消。"
   },
   "attributes": {
     "class": "级别",
@@ -4172,8 +4180,10 @@
       "stockLotRequired": "至少需要一个库存批次",
       "titleRequired": "标题为必填项",
       "titleTooLong": "标题必须不超过 500 个字符",
-      "variantPriceRequired": "在按变体定价模式下，批次 {{index}} 的价格必须大于 0"
-    }
+      "variantPriceRequired": "在按变体定价模式下，批次 {{index}} 的价格必须大于 0",
+      "auctionEndTimeRequired": "必须填写拍卖结束时间"
+    },
+    "descriptionOptional": "描述（可选）"
   },
   "CreateLotDialog": {
     "create": "创建批次",
@@ -4438,7 +4448,7 @@
     "deleteConfirm": "删除",
     "deleted": "批次已删除",
     "deleteError": "删除批次失败",
-    "empty": "还没有库存物品",
+    "empty": "还没有库存",
     "gameItem": "物品（可选）",
     "item": "物品",
     "listed": "已上架",
@@ -4452,7 +4462,7 @@
     "quantity": "数量",
     "search": "搜索...",
     "status": "状态",
-    "title": "库存",
+    "title": "我的库存",
     "unlink": "从商品条目取消关联",
     "unlinked": "批次已从商品条目取消关联",
     "unlinkError": "取消关联批次失败",
@@ -4776,7 +4786,7 @@
     "groupMarketplace": "市场",
     "groupPersonal": "个人",
     "helpGuides": "帮助与指南",
-    "inventory": "库存",
+    "inventory": "我的库存",
     "listings": "商品",
     "market": "市场",
     "members": "成员",
@@ -6343,5 +6353,12 @@
     "unknown": "未知",
     "unknownMission": "未知任务",
     "various": "多个"
+  },
+  "listingStatus": {
+    "active": "有效",
+    "inactive": "未启用",
+    "sold": "已售出",
+    "expired": "已暂停",
+    "cancelled": "已归档"
   }
 }

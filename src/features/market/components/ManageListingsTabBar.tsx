@@ -72,9 +72,17 @@ export function ManageListingsTabBar({ title, rightAction }: ManageListingsTabBa
         >
           {title}
         </Typography>
-        <Tabs value={currentTab} onChange={handleTabChange} sx={{ minHeight: 0 }}>
+        {/* Scrollable, like the other tab bars: at phone widths the three
+            tabs ran off the screen */}
+        <Tabs
+          value={currentTab}
+          onChange={handleTabChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          sx={{ minHeight: 0, maxWidth: "100%" }}
+        >
           <Tab label={t("sidebar.manage_listings", "Manage Listings")} />
-          <Tab label={t("sidebar.manage_stock", "Manage Inventory")} />
+          <Tab label={t("sidebar.manage_stock", "Stock")} />
           <Tab label={t("sidebar.manage_services", "Manage Services")} />
         </Tabs>
       </Box>

@@ -1430,7 +1430,7 @@
     },
     "inventory": "我的庫存",
     "listings_short": "刊登",
-    "manage_stock": "管理庫存",
+    "manage_stock": "庫存",
     "migration": "V2 遷移",
     "moderation": {
       "text": "審核"
@@ -2603,7 +2603,13 @@
     "reactivateListing": "已暫停：續期並重新上架",
     "renewListing": "即將到期：再續期一個月",
     "renewedFromLink_other": "已將 {{count}} 個商品續期一個月",
-    "renewedFromLinkPartial": "已續期 {{ok}}/{{total}} 個商品。請在下方續期其餘商品。"
+    "renewedFromLinkPartial": "已續期 {{ok}}/{{total}} 個商品。請在下方續期其餘商品。",
+    "importFromUex": "從 UEX 匯入",
+    "importFromUexFetchError": "無法取得你的 UEX 刊登",
+    "importFromUexError": "匯入失敗",
+    "item": "物品",
+    "quantityUseStockPage": "請在庫存頁面按批次修改此刊登的數量",
+    "manageAccessNotice": "你可以檢視此商店的刊登和庫存。如需建立或修改，請向組織管理員申請「管理市集」權限。"
   },
   "itemMarket": {
     "toggleSidebar": "切換市集側邊欄"
@@ -2785,7 +2791,7 @@
       "manage_org_details": "編輯組織名稱、描述、頭像、橫幅及語言，查看稽核日誌，並變更白牌網站及側邊欄設定",
       "manage_recruiting": "為組織建立及管理招募貼文",
       "manage_roles": "建立、編輯及刪除角色並指派給成員",
-      "manage_stock": "新增、編輯及移除庫存批次並管理庫存",
+      "manage_stock": "新增、編輯及移除庫存批次",
       "manage_theme": "自訂組織的白牌主題、色彩及品牌形象",
       "manage_webhooks": "建立、編輯及刪除 Discord 與通知 Webhook"
     }
@@ -3738,7 +3744,9 @@
     "storeBought": "商店購買",
     "title": "所有庫存批次",
     "unspecified": "未指定",
-    "updated": "批次已更新"
+    "updated": "批次已更新",
+    "editQuantity": "編輯數量",
+    "editHint": "按兩下數量、地點或狀態（或點擊鉛筆圖示）即可編輯。Enter 儲存，Esc 取消。"
   },
   "attributes": {
     "class": "類別",
@@ -4026,8 +4034,10 @@
       "stockLotRequired": "至少需要一個庫存批次",
       "titleRequired": "標題為必填",
       "titleTooLong": "標題不得超過 500 個字元",
-      "variantPriceRequired": "在各款式定價模式下，批次 {{index}} 的價格必須大於 0"
-    }
+      "variantPriceRequired": "在各款式定價模式下，批次 {{index}} 的價格必須大於 0",
+      "auctionEndTimeRequired": "必須填寫拍賣結束時間"
+    },
+    "descriptionOptional": "描述（選填）"
   },
   "CreateLotDialog": {
     "create": "建立批次",
@@ -4292,7 +4302,7 @@
     "deleteConfirm": "刪除",
     "deleted": "批次已刪除",
     "deleteError": "刪除批次失敗",
-    "empty": "尚無庫存物品",
+    "empty": "尚無庫存",
     "gameItem": "物品（選填）",
     "item": "物品",
     "listed": "已刊登",
@@ -4306,7 +4316,7 @@
     "quantity": "數量",
     "search": "搜尋...",
     "status": "狀態",
-    "title": "庫存",
+    "title": "我的庫存",
     "unlink": "從刊登取消連結",
     "unlinked": "批次已從刊登取消連結",
     "unlinkError": "取消連結批次失敗",
@@ -4630,7 +4640,7 @@
     "groupMarketplace": "市集",
     "groupPersonal": "個人",
     "helpGuides": "說明與指南",
-    "inventory": "庫存",
+    "inventory": "我的庫存",
     "listings": "商品",
     "market": "市集",
     "members": "成員",
@@ -6337,5 +6347,12 @@
     "unknown": "未知",
     "unknownMission": "未知任務",
     "various": "多個"
+  },
+  "listingStatus": {
+    "active": "有效",
+    "inactive": "未啟用",
+    "sold": "已售出",
+    "expired": "已暫停",
+    "cancelled": "已封存"
   }
 }

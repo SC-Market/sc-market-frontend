@@ -1496,7 +1496,7 @@
     },
     "inventory": "Mi inventario",
     "listings_short": "Anuncios",
-    "manage_stock": "Gestionar inventario",
+    "manage_stock": "Inventario",
     "migration": "Migración V2",
     "moderation": {
       "text": "Moderación"
@@ -2713,7 +2713,13 @@
     "renewedFromLink_one": "Se renovó {{count}} anuncio un mes más",
     "renewedFromLink_many": "Se renovaron {{count}} anuncios un mes más",
     "renewedFromLink_other": "Se renovaron {{count}} anuncios un mes más",
-    "renewedFromLinkPartial": "Se renovaron {{ok}} de {{total}} anuncios. Renueva el resto abajo."
+    "renewedFromLinkPartial": "Se renovaron {{ok}} de {{total}} anuncios. Renueva el resto abajo.",
+    "importFromUex": "Importar desde UEX",
+    "importFromUexFetchError": "No se pudieron obtener tus anuncios de UEX",
+    "importFromUexError": "La importación falló",
+    "item": "Artículo",
+    "quantityUseStockPage": "Cambia la cantidad de este anuncio por lote en la página de Inventario",
+    "manageAccessNotice": "Puedes ver los anuncios y el inventario de esta tienda. Para crearlos o cambiarlos, pide a un administrador de la org el permiso «Gestionar mercado»."
   },
   "itemMarket": {
     "toggleSidebar": "Alternar barra lateral del mercado"
@@ -2895,7 +2901,7 @@
       "manage_org_details": "Editar el nombre, la descripción, el avatar, el banner y los idiomas de la organización, leer el registro de auditoría y cambiar los ajustes del sitio y de la barra lateral de marca blanca",
       "manage_recruiting": "Crear y gestionar publicaciones de reclutamiento para la organización",
       "manage_roles": "Crear, editar y eliminar roles y asignarlos a los miembros",
-      "manage_stock": "Añadir, editar y eliminar lotes de inventario y gestionar las existencias",
+      "manage_stock": "Añadir, editar y eliminar lotes de inventario",
       "manage_theme": "Personalizar el tema de marca blanca, los colores y la identidad de la organización",
       "manage_webhooks": "Crear, editar y eliminar webhooks de Discord y de notificaciones"
     }
@@ -3860,7 +3866,9 @@
     "storeBought": "Comprado en tienda",
     "title": "Todos los lotes de inventario",
     "unspecified": "Sin especificar",
-    "updated": "Lote actualizado"
+    "updated": "Lote actualizado",
+    "editQuantity": "Editar cantidad",
+    "editHint": "Haz doble clic en una cantidad, ubicación o estado (o usa el lápiz) para editarlo. Enter guarda, Esc cancela."
   },
   "attributes": {
     "class": "Clase",
@@ -4150,8 +4158,10 @@
       "stockLotRequired": "Se requiere al menos un lote de stock",
       "titleRequired": "El título es obligatorio",
       "titleTooLong": "El título debe tener 500 caracteres o menos",
-      "variantPriceRequired": "El precio debe ser mayor que 0 para el lote {{index}} en el modo de precio por variante"
-    }
+      "variantPriceRequired": "El precio debe ser mayor que 0 para el lote {{index}} en el modo de precio por variante",
+      "auctionEndTimeRequired": "La hora de finalización de la subasta es obligatoria"
+    },
+    "descriptionOptional": "Descripción (opcional)"
   },
   "CreateLotDialog": {
     "create": "Crear lote",
@@ -4434,7 +4444,7 @@
     "quantity": "Cantidad",
     "search": "Buscar...",
     "status": "Estado",
-    "title": "Inventario",
+    "title": "Mi inventario",
     "unlink": "Desvincular del anuncio",
     "unlinked": "Lote desvinculado del anuncio",
     "unlinkError": "No se pudo desvincular el lote",
@@ -4780,7 +4790,7 @@
     "groupMarketplace": "Mercado",
     "groupPersonal": "Personal",
     "helpGuides": "Ayuda y guías",
-    "inventory": "Inventario",
+    "inventory": "Mi inventario",
     "listings": "Anuncios",
     "market": "Mercado",
     "members": "Miembros",
@@ -6431,5 +6441,12 @@
     "unknown": "Desconocido",
     "unknownMission": "Misión desconocida",
     "various": "Varias"
+  },
+  "listingStatus": {
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "sold": "Vendido",
+    "expired": "En pausa",
+    "cancelled": "Archivado"
   }
 }

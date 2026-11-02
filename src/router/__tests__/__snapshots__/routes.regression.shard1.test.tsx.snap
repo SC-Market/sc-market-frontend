@@ -601,7 +601,7 @@ exports[`routes (shard 1/4) > /inventory 1`] = `
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "My Inventory - SC Market",
+  "title": "My Stock - SC Market",
   "url": "/inventory",
 }
 `;
@@ -688,7 +688,7 @@ exports[`routes (shard 1/4) > /market/me 1`] = `
   "errorElementErrors": [],
   "finalUrl": "/market/me",
   "h1": [
-    "My Market ListingsManage ListingsManage InventoryManage ServicesCreate Listing",
+    "My Market ListingsManage ListingsStockManage ServicesCreate Listing",
     "My Market Listings",
     "Inactive Listings",
     "Archived Listings",

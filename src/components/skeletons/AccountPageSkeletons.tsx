@@ -202,13 +202,13 @@ export function InventoryPageSkeleton() {
   return (
     <StandardPageLayout
       noFooter
-      title={t("sidebar.inventory", "My Inventory")}
+      title={t("sidebar.inventory", "My Stock")}
       breadcrumbs={[
         {
           label: t("sidebar.market_short", "Market"),
           href: MARKET_PATHS.search,
         },
-        { label: t("sidebar.inventory", "My Inventory") },
+        { label: t("sidebar.inventory", "My Stock") },
       ]}
       sidebarOpen={true}
       maxWidth="xl"

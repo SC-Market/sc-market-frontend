@@ -660,7 +660,9 @@
     "storeBought": "Store-Bought",
     "title": "All Stock Lots",
     "unspecified": "Unspecified",
-    "updated": "Lot updated"
+    "updated": "Lot updated",
+    "editQuantity": "Edit quantity",
+    "editHint": "Double-click a quantity, location or status (or use the pencil) to edit it. Enter saves, Esc cancels."
   },
   "attributes": {
     "class": "Class",
@@ -1273,7 +1275,7 @@
     "selectGameItem": "Select Game Item",
     "showMoreOptions": "More options",
     "stockLots": "Stock Lots",
-    "stockLotsSubtitle": "Add inventory with variant attributes (quality, source, location)",
+    "stockLotsSubtitle": "Add stock with variant attributes (quality, source, location)",
     "store": "Store",
     "submit": "Create Listing",
     "success": "Listing created successfully",
@@ -1297,8 +1299,10 @@
       "stockLotRequired": "At least one stock lot is required",
       "titleRequired": "Title is required",
       "titleTooLong": "Title must be 500 characters or less",
-      "variantPriceRequired": "Price must be greater than 0 for lot {{index}} in per-variant pricing mode"
-    }
+      "variantPriceRequired": "Price must be greater than 0 for lot {{index}} in per-variant pricing mode",
+      "auctionEndTimeRequired": "Auction end time is required"
+    },
+    "descriptionOptional": "Description (optional)"
   },
   "CreateLotDialog": {
     "create": "Create Lot",
@@ -1926,13 +1930,13 @@
     "confirmDeleteTitle": "Delete lot?",
     "created": "Lot created",
     "createError": "Failed to create lot",
-    "createLot": "Add Inventory Lot",
+    "createLot": "Add Stock Lot",
     "custom_item": "Custom Item",
     "delete": "Delete lot",
     "deleteConfirm": "Delete",
     "deleted": "Lot deleted",
     "deleteError": "Failed to delete lot",
-    "empty": "No inventory items yet",
+    "empty": "No stock yet",
     "gameItem": "Item (optional)",
     "item": "Item",
     "listed": "Listed",
@@ -1946,7 +1950,7 @@
     "quantity": "Quantity",
     "search": "Search...",
     "status": "Status",
-    "title": "Inventory",
+    "title": "My Stock",
     "unlink": "Unlink from listing",
     "unlinked": "Lot unlinked from listing",
     "unlinkError": "Failed to unlink lot",
@@ -2072,7 +2076,13 @@
     "renewListing": "Expires soon: renew for another month",
     "renewedFromLink_one": "Renewed {{count}} listing for another month",
     "renewedFromLink_other": "Renewed {{count}} listings for another month",
-    "renewedFromLinkPartial": "Renewed {{ok}} of {{total}} listings. Renew the rest below."
+    "renewedFromLinkPartial": "Renewed {{ok}} of {{total}} listings. Renew the rest below.",
+    "importFromUex": "Import from UEX",
+    "importFromUexFetchError": "Couldn't fetch your UEX listings",
+    "importFromUexError": "The import failed",
+    "item": "Item",
+    "quantityUseStockPage": "Change this listing's quantity per lot on the Stock page",
+    "manageAccessNotice": "You can view this shop's listings and stock. To create or change them, ask an org admin for the Manage Market permission."
   },
   "ItemStockRework": {
     "actions": "Actions",
@@ -2421,7 +2431,7 @@
       "manage_org_details": "Edit the organization's name, description, avatar, banner and languages, read the audit log, and change white-label site and sidebar settings",
       "manage_recruiting": "Create and manage recruiting posts for the organization",
       "manage_roles": "Create, edit, and delete roles and assign them to members",
-      "manage_stock": "Add, edit, and remove stock lots and manage inventory",
+      "manage_stock": "Add, edit, and remove stock lots",
       "manage_theme": "Customize the organization's white-label theme, colors, and branding",
       "manage_webhooks": "Create, edit, and delete Discord and notification webhooks"
     },
@@ -3124,7 +3134,7 @@
     "groupMarketplace": "Marketplace",
     "groupPersonal": "Personal",
     "helpGuides": "Help & Guides",
-    "inventory": "Inventory",
+    "inventory": "My Stock",
     "listings": "Listings",
     "market": "Market",
     "members": "Members",
@@ -5097,7 +5107,7 @@
     "import_monitoring": {
       "text": "Attribute Import Monitoring"
     },
-    "inventory": "My Inventory",
+    "inventory": "My Stock",
     "invoices": "Invoices",
     "listings_short": "Listings",
     "manage": {
@@ -5106,7 +5116,7 @@
     "manage_listings": "Manage Listings",
     "manage_market_listings": "Manage Market Listings",
     "manage_services": "Manage Services",
-    "manage_stock": "Manage Inventory",
+    "manage_stock": "Stock",
     "market": {
       "text": "Market",
       "title": "Market"
@@ -5191,7 +5201,7 @@
   "SimpleStockInput": {
     "advancedFeatureComingSoon": "Advanced stock management coming soon",
     "available": "Available",
-    "manageStock": "Manage Inventory",
+    "manageStock": "Manage stock",
     "quantity": "Quantity Available",
     "quantityHelp": "Enter the total quantity of items available for sale",
     "quantityLabel": "Enter quantity available",
@@ -5214,7 +5224,7 @@
     "noAllocations": "No allocated stock",
     "noAllocationsDesc": "Stock will appear here when orders are placed against your listings.",
     "noLots": "No stock lots",
-    "noLotsDesc": "Add stock lots to manage your inventory.",
+    "noLotsDesc": "Add stock lots to track your stock.",
     "order": "Order",
     "quantity": "Quantity",
     "searchLots": "Search lots...",
@@ -6384,5 +6394,12 @@
     "unknown": "Unknown",
     "unknownMission": "Unknown Mission",
     "various": "Various"
+  },
+  "listingStatus": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "sold": "Sold",
+    "expired": "Paused",
+    "cancelled": "Archived"
   }
 }

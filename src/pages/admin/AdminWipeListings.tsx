@@ -12,8 +12,10 @@ export function AdminWipeListings() {
     >
       <Grid item xs={12}>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-          Expire all active listings after a game wipe. Sellers can refresh
-          listings individually afterward.
+          Expire all active listings after a game wipe. Sellers see them as
+          paused, and bring back the ones they still sell from their shop&apos;s
+          Listings page (the renew button, or select them and Activate). Nothing
+          is deleted.
         </Typography>
         <ExpireAllListingsButton />
       </Grid>

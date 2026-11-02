@@ -1494,9 +1494,9 @@
     "import_monitoring": {
       "text": "Suivi de l'import des attributs"
     },
-    "inventory": "Mon inventaire",
+    "inventory": "Mon stock",
     "listings_short": "Annonces",
-    "manage_stock": "Gérer l'inventaire",
+    "manage_stock": "Stock",
     "migration": "Migration V2",
     "moderation": {
       "text": "Modération"
@@ -2713,7 +2713,13 @@
     "renewedFromLink_one": "{{count}} annonce renouvelée pour un mois",
     "renewedFromLink_many": "{{count}} annonces renouvelées pour un mois",
     "renewedFromLink_other": "{{count}} annonces renouvelées pour un mois",
-    "renewedFromLinkPartial": "{{ok}} annonces sur {{total}} renouvelées. Renouvelle les autres ci-dessous."
+    "renewedFromLinkPartial": "{{ok}} annonces sur {{total}} renouvelées. Renouvelle les autres ci-dessous.",
+    "importFromUex": "Importer depuis UEX",
+    "importFromUexFetchError": "Impossible de récupérer vos annonces UEX",
+    "importFromUexError": "L'importation a échoué",
+    "item": "Article",
+    "quantityUseStockPage": "Modifiez la quantité de cette annonce lot par lot sur la page Stock",
+    "manageAccessNotice": "Vous pouvez voir les annonces et le stock de cette boutique. Pour les créer ou les modifier, demandez à un admin de l'org la permission « Gérer le marché »."
   },
   "itemMarket": {
     "toggleSidebar": "Afficher/masquer la barre latérale du marché"
@@ -2895,7 +2901,7 @@
       "manage_org_details": "Modifier le nom, la description, l'avatar, la bannière et les langues de l'organisation, consulter le journal d'audit et modifier les paramètres du site et de la barre latérale en marque blanche",
       "manage_recruiting": "Créer et gérer les annonces de recrutement de l'organisation",
       "manage_roles": "Créer, modifier et supprimer des rôles et les attribuer aux membres",
-      "manage_stock": "Ajouter, modifier et supprimer des lots de stock et gérer l'inventaire",
+      "manage_stock": "Ajouter, modifier et supprimer des lots de stock",
       "manage_theme": "Personnaliser le thème en marque blanche, les couleurs et l'image de marque de l'organisation",
       "manage_webhooks": "Créer, modifier et supprimer les webhooks Discord et de notification"
     }
@@ -3860,7 +3866,9 @@
     "storeBought": "Acheté en magasin",
     "title": "Tous les lots de stock",
     "unspecified": "Non spécifié",
-    "updated": "Lot mis à jour"
+    "updated": "Lot mis à jour",
+    "editQuantity": "Modifier la quantité",
+    "editHint": "Double-cliquez sur une quantité, un emplacement ou un statut (ou utilisez le crayon) pour le modifier. Entrée enregistre, Échap annule."
   },
   "attributes": {
     "class": "Classe",
@@ -4126,7 +4134,7 @@
     "selectGameItem": "Sélectionner un objet du jeu",
     "showMoreOptions": "Plus d'options",
     "stockLots": "Lots de stock",
-    "stockLotsSubtitle": "Ajoutez de l'inventaire avec des attributs de variante (qualité, source, emplacement)",
+    "stockLotsSubtitle": "Ajoutez du stock avec des attributs de variante (qualité, source, emplacement)",
     "store": "Magasin",
     "submit": "Créer l'annonce",
     "success": "Annonce créée avec succès",
@@ -4150,8 +4158,10 @@
       "stockLotRequired": "Au moins un lot de stock est requis",
       "titleRequired": "Le titre est requis",
       "titleTooLong": "Le titre doit comporter 500 caractères ou moins",
-      "variantPriceRequired": "Le prix doit être supérieur à 0 pour le lot {{index}} en mode de tarification par variante"
-    }
+      "variantPriceRequired": "Le prix doit être supérieur à 0 pour le lot {{index}} en mode de tarification par variante",
+      "auctionEndTimeRequired": "L'heure de fin de l'enchère est obligatoire"
+    },
+    "descriptionOptional": "Description (facultatif)"
   },
   "CreateLotDialog": {
     "create": "Créer le lot",
@@ -4414,13 +4424,13 @@
     "confirmDeleteTitle": "Supprimer le lot ?",
     "created": "Lot créé",
     "createError": "Échec de la création du lot",
-    "createLot": "Ajouter un lot d'inventaire",
+    "createLot": "Ajouter un lot de stock",
     "custom_item": "Article personnalisé",
     "delete": "Supprimer le lot",
     "deleteConfirm": "Supprimer",
     "deleted": "Lot supprimé",
     "deleteError": "Échec de la suppression du lot",
-    "empty": "Aucun article d'inventaire pour l'instant",
+    "empty": "Aucun stock pour l'instant",
     "gameItem": "Article (facultatif)",
     "item": "Article",
     "listed": "En vente",
@@ -4434,7 +4444,7 @@
     "quantity": "Quantité",
     "search": "Rechercher...",
     "status": "Statut",
-    "title": "Inventaire",
+    "title": "Mon stock",
     "unlink": "Dissocier de l'annonce",
     "unlinked": "Lot dissocié de l'annonce",
     "unlinkError": "Échec de la dissociation du lot",
@@ -4780,7 +4790,7 @@
     "groupMarketplace": "Place de marché",
     "groupPersonal": "Personnel",
     "helpGuides": "Aide et guides",
-    "inventory": "Inventaire",
+    "inventory": "Mon stock",
     "listings": "Annonces",
     "market": "Marché",
     "members": "Membres",
@@ -5303,7 +5313,7 @@
   "SimpleStockInput": {
     "advancedFeatureComingSoon": "Gestion avancée des stocks bientôt disponible",
     "available": "Disponible",
-    "manageStock": "Gérer l'inventaire",
+    "manageStock": "Gérer le stock",
     "quantity": "Quantité disponible",
     "quantityHelp": "Saisissez la quantité totale d'articles disponibles à la vente",
     "quantityLabel": "Saisir la quantité disponible",
@@ -5324,7 +5334,7 @@
     "noAllocations": "Aucun stock alloué",
     "noAllocationsDesc": "Le stock apparaîtra ici lorsque des commandes seront passées sur vos annonces.",
     "noLots": "Aucun lot de stock",
-    "noLotsDesc": "Ajoutez des lots de stock pour gérer votre inventaire.",
+    "noLotsDesc": "Ajoutez des lots de stock pour gérer votre stock.",
     "order": "Commande",
     "quantity": "Quantité",
     "searchLots": "Rechercher des lots...",
@@ -6431,5 +6441,12 @@
     "unknown": "Inconnu",
     "unknownMission": "Mission inconnue",
     "various": "Divers"
+  },
+  "listingStatus": {
+    "active": "Actif",
+    "inactive": "Inactif",
+    "sold": "Vendu",
+    "expired": "En pause",
+    "cancelled": "Archivé"
   }
 }

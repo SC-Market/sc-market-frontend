@@ -1198,17 +1198,13 @@ exports[`routes (shard 2/4) > /orders/assigned 1`] = `
 
 exports[`routes (shard 2/4) > /org/:contractor_id/listings 1`] = `
 {
-  "consoleErrors": [
-    "MUI X: Usage of the \`rowCount\` prop with client side pagination (\`paginationMode="client"\`) has no effect.",
-  ],
+  "consoleErrors": [],
   "errorElementErrors": [],
-  "finalUrl": "/org/TESTORG/listings?quantityAvailable=0",
-  "h1": [
-    "Manage Listings",
-  ],
+  "finalUrl": "/dashboard/shops",
+  "h1": [],
   "hasMainLandmark": true,
   "hasMainNav": true,
-  "historyAction": "PUSH",
+  "historyAction": "REPLACE",
   "initialMatches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
@@ -1217,28 +1213,19 @@ exports[`routes (shard 2/4) > /org/:contractor_id/listings 1`] = `
   ],
   "lazyPending": [],
   "mainLinks": [
-    "/about",
-    "/changelog",
-    "/developers",
-    "/guides",
-    "/guides/discord/api-tokens",
-    "/market",
-    "/market/create",
-    "/market/me",
-    "/privacy",
-    "/terms",
+    "/shop/test-shop/settings",
+    "/shops/test-shop",
   ],
   "matches": [
     "(layout:AppLayout)",
     "(layout:LoggedInRoute)",
-    "/org/:contractor_id",
-    "listings",
+    "/dashboard/shops",
   ],
   "pageReady": "true",
   "routeErrors": null,
   "session": "admin",
   "stillLoading": false,
-  "title": "Manage Listings - SC Market",
+  "title": "Shops - SC Market",
   "url": "/org/TESTORG/listings",
 }
 `;

@@ -19,10 +19,10 @@ function LocationProbe() {
 }
 
 describe("ContextAwareFAB", () => {
-  // Regression: "Manage Inventory" used to navigate to the bare /market/stock,
+  // Regression: "Manage Stock" used to navigate to the bare /market/stock,
   // which matched /market/:id and rendered the listing page with id="stock"
   // (POST /api/v2/listings/stock/views -> 500).
-  it("Manage Inventory navigates to /market/manage-stock, not /market/stock", () => {
+  it("Manage Stock navigates to /market/manage-stock, not /market/stock", () => {
     render(
       <MemoryRouter initialEntries={["/market/stock/listing-1"]}>
         <Routes>
@@ -39,7 +39,7 @@ describe("ContextAwareFAB", () => {
       </MemoryRouter>,
     )
 
-    fireEvent.click(screen.getByRole("button", { name: "Manage Inventory" }))
+    fireEvent.click(screen.getByRole("button", { name: "Manage Stock" }))
 
     expect(screen.getByTestId("location").textContent).toBe(
       "/market/manage-stock",

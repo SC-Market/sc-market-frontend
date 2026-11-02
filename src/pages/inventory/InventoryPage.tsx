@@ -161,10 +161,10 @@ export default function InventoryPage() {
   return (
     <StandardPageLayout
       headerActions={<HelpLink guide="stockLots" />}
-      title={t("sidebar.inventory", "My Inventory")}
+      title={t("sidebar.inventory", "My Stock")}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: MARKET_PATHS.search },
-        { label: t("sidebar.inventory", "My Inventory") },
+        { label: t("sidebar.inventory", "My Stock") },
       ]}
       sidebarOpen={true}
       maxWidth="xl"
@@ -186,7 +186,7 @@ export default function InventoryPage() {
             sx={{ mb: 2 }}
           >
             <Typography variant="h5" fontWeight="bold" color="text.secondary">
-              {t("inventory.title", "Inventory")}
+              {t("inventory.title", "My Stock")}
             </Typography>
             <Stack direction="row" spacing={1}>
               <TextField
@@ -213,7 +213,7 @@ export default function InventoryPage() {
               <Typography color="text.secondary">
                 {search
                   ? t("inventory.noResults", "No lots match your search")
-                  : t("inventory.empty", "No inventory items yet")}
+                  : t("inventory.empty", "No stock yet")}
               </Typography>
             </Box>
           ) : (
@@ -373,7 +373,7 @@ export default function InventoryPage() {
         <DialogTitle>
           <Stack direction="row" alignItems="center" spacing={1}>
             <WarehouseRounded />
-            <span>{t("inventory.createLot", "Add Inventory Lot")}</span>
+            <span>{t("inventory.createLot", "Add Stock Lot")}</span>
           </Stack>
         </DialogTitle>
         <DialogContent>

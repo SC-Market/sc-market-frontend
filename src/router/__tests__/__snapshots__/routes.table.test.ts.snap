@@ -2168,7 +2168,7 @@ exports[`route table > lists every leaf route 2`] = `
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
-    "lazy": true,
+    "lazy": false,
     "pattern": "/org/:contractor_id/listings",
   },
   {
@@ -2179,7 +2179,7 @@ exports[`route table > lists every leaf route 2`] = `
       "LoggedInRoute",
       "OrgContextFromRoute",
     ],
-    "lazy": true,
+    "lazy": false,
     "pattern": "/org/:contractor_id/manage-stock",
   },
   {
