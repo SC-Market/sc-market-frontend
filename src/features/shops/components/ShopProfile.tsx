@@ -86,6 +86,7 @@ import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { isSiteAdmin } from "../../../util/siteRole"
 import { Trans, useTranslation } from "react-i18next"
+import { toSupportedLocale } from "../../../util/locales"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -164,7 +165,7 @@ export function ShopProfile() {
 function ShopHeader(props: { shop: ShopPublicResponse }) {
   const { shop } = props
   const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const ownerLink = shop.owner
     ? shop.owner.type === "contractor"
@@ -172,10 +173,12 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
       : USER_PATHS.profile(shop.owner.slug)
     : null
 
-  const memberSince = new Date(shop.created_at).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-  })
+  // In the page's language, not the browser's: a server render formats it
+  // the same way (the runtime's default locale differs).
+  const memberSince = new Date(shop.created_at).toLocaleDateString(
+    toSupportedLocale(i18n.language),
+    { year: "numeric", month: "short" },
+  )
 
   return (
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
@@ -672,15 +675,17 @@ function ShopReviewRow(props: {
 }) {
   const { row, onClick, isItemSelected, labelId } = props
   const theme = useTheme<ExtendedTheme>()
-
+  const { i18n } = useTranslation()
+  // The page's language (as rendered on the server), not the browser's.
+  const locale = toSupportedLocale(i18n.language)
   const formatDate = useCallback(
     (date: number) =>
-      Intl.DateTimeFormat("default", {
+      Intl.DateTimeFormat(locale, {
         year: "numeric",
         month: "long",
         day: "numeric",
       }).format(new Date(date)),
-    [],
+    [locale],
   )
 
   return (

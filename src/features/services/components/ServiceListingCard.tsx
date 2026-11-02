@@ -11,6 +11,7 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { toSupportedLocale } from "../../../util/locales"
 import { useTheme } from "@mui/material/styles"
 import { Stack } from "@mui/system"
 import type { Service } from "../../orders/domain/types"
@@ -33,7 +34,7 @@ export const ServiceListingBase = React.memo(
     priority?: boolean
   }) {
     const { service, priority = false } = props
-    const { t } = useTranslation()
+    const { t, i18n } = useTranslation()
     const theme = useTheme<ExtendedTheme>()
     const key = PAYMENT_TYPE_MAP.get(service.payment_type) || ""
 
@@ -105,8 +106,10 @@ export const ServiceListingBase = React.memo(
                     contractor={service.contractor}
                   />
                   <Typography color={"primary"} variant={"subtitle2"}>
-                    {service.cost.toLocaleString(undefined)} aUEC{" "}
-                    {key ? t(key) : ""}
+                    {service.cost.toLocaleString(
+                      toSupportedLocale(i18n.language),
+                    )}{" "}
+                    aUEC {key ? t(key) : ""}
                   </Typography>
                 </Box>
               }

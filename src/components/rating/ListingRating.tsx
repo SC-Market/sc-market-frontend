@@ -25,6 +25,7 @@ import { StaticRatingStars } from "./StaticRatingStars"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
+import { toSupportedLocale } from "../../util/locales"
 import {
   prioritizeBadges,
   calculateBadgesFromRating,
@@ -272,7 +273,7 @@ export function SellerRatingCount(props: {
   shopRating?: ShopRatingProps
   display_limit?: number // Default: unlimited for profiles
 }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { user, contractor, shopRating, display_limit } = props
   const rating = useMemo(
@@ -310,7 +311,7 @@ export function SellerRatingCount(props: {
 
   return (
     <>
-      ({displayCount.toLocaleString(undefined)}){" "}
+      ({displayCount.toLocaleString(toSupportedLocale(i18n.language))}){" "}
       <BadgeDisplay badges={badges} />
     </>
   )
@@ -322,6 +323,7 @@ export function MarketRatingCount(props: {
   iconSize?: string | number
 }) {
   const { rating, badges = [], iconSize } = props
+  const { i18n } = useTranslation()
 
   return (
     <Box
@@ -331,7 +333,7 @@ export function MarketRatingCount(props: {
       sx={{ lineHeight: 1, margin: 0, padding: 0 }}
     >
       <Box component="span" sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
-        ({rating.rating_count.toLocaleString(undefined)})
+        ({rating.rating_count.toLocaleString(toSupportedLocale(i18n.language))})
       </Box>
       {badges.length > 0 && (
         <BadgeDisplay badges={badges} iconSize={iconSize} />

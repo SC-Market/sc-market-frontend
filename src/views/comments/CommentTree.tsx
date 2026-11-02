@@ -79,7 +79,7 @@ export function CommentTree(props: {
               {comment.author?.display_name || t("commentTree.deleted")}
             </UnderlineLink>
           </MaterialLink>
-          <Typography>
+          <Typography component="div">
             <MarkdownRender text={comment.content} plainText />
           </Typography>
         </Box>

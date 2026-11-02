@@ -208,6 +208,7 @@ export const ContractorListItem = React.memo(
                           // whiteSpace: "pre-line"
                         }}
                         variant={"body2"}
+                        component="div"
                       >
                         <MarkdownRender text={contractor.description} />
                       </Typography>

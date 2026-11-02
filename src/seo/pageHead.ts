@@ -50,6 +50,23 @@ export function applyWhiteLabelTitle(
 }
 
 /**
+ * Server-rendered head tags (the bridge's `<title>` and meta) with the
+ * title in the white-label form (applyWhiteLabelTitle), for a page rendered
+ * on the org's own host. The title text is HTML-escaped in the tags.
+ */
+export function whiteLabelHeadTitle(headTags: string, orgName: string): string {
+  const unescape = (v: string) =>
+    v.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
+  const escape = (v: string) =>
+    v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  return headTags.replace(
+    /<title>([\s\S]*?)<\/title>/,
+    (_match, title: string) =>
+      `<title>${escape(applyWhiteLabelTitle(orgName, unescape(title)))}</title>`,
+  )
+}
+
+/**
  * Serialize JSON-LD for inline <script> content. Escapes `<`, `>`, `&` and
  * U+2028/U+2029 as JSON unicode escapes so user content (e.g. a listing title
  * containing "</script>") can never close the script element. The output is
@@ -137,6 +154,24 @@ export function layoutDescription(
   description: string | undefined,
 ): string {
   return description || `${title || "SC Market"} - SC Market, the Star Citizen marketplace`
+}
+
+/**
+ * Unhead key of a page's BreadcrumbList JSON-LD (rendered as `data-hid` by
+ * the bridge and the server renders). A page's own head (SeoHead, the
+ * bridge's builders) and the layout's breadcrumbs (PageBreadcrumbs) both
+ * describe the page's trail; with one key the page head's wins and the
+ * page has a single BreadcrumbList, before and after hydrating.
+ */
+export const BREADCRUMB_JSONLD_KEY = "breadcrumb-ld"
+
+/** Whether a JSON-LD object is a BreadcrumbList. */
+export function isBreadcrumbJsonLd(data: unknown): boolean {
+  return (
+    typeof data === "object" &&
+    data !== null &&
+    (data as { "@type"?: unknown })["@type"] === "BreadcrumbList"
+  )
 }
 
 /** BreadcrumbList structured data; `url` is absolute. */

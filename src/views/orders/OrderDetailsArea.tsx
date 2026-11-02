@@ -395,6 +395,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                   <Typography
                     color={"text.secondary"}
                     variant={"subtitle2"}
+                    component="div"
                     sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
                   >
                     <MarkdownRender text={order.description} />

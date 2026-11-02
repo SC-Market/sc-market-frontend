@@ -749,7 +749,7 @@ export function SidebarV2() {
             <>
               <Divider sx={{ mx: 2, my: 0.5 }} />
               <Typography variant="body2" sx={sectionHeaderSx}>
-                {getWhiteLabelConfig()?.name || t("nav.groupLinks", "Links")}
+                {whiteLabelBrand?.name || t("nav.groupLinks", "Links")}
               </Typography>
               <List dense sx={{ px: 1 }}>
                 {whiteLabel.customTabs.map((tab) => {

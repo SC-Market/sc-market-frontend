@@ -11,6 +11,7 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded"
 import { Helmet } from "@unhead/react/helmet"
 import { FRONTEND_URL } from "../../util/constants"
+import { BREADCRUMB_JSONLD_KEY, serializeJsonLd } from "../../seo/pageHead"
 
 interface BreadcrumbItem {
   label: string
@@ -21,6 +22,27 @@ interface BreadcrumbItem {
 interface PageBreadcrumbsProps {
   items: BreadcrumbItem[]
   MuiBreadcrumbsProps?: BreadcrumbsProps
+}
+
+/**
+ * The trail as BreadcrumbList JSON-LD, at low priority under the shared
+ * key: a page whose own head has a BreadcrumbList (SeoHead, the bridge and
+ * server renders) keeps that one, so there is only ever one per page.
+ */
+function BreadcrumbJsonLd({ schema }: { schema: object }) {
+  return (
+    <Helmet
+      script={[
+        {
+          key: BREADCRUMB_JSONLD_KEY,
+          tagPriority: "low",
+          tagDuplicateStrategy: "replace",
+          type: "application/ld+json",
+          innerHTML: serializeJsonLd(schema),
+        },
+      ]}
+    />
+  )
 }
 
 export function PageBreadcrumbs({
@@ -44,11 +66,7 @@ export function PageBreadcrumbs({
 
   return (
     <>
-    <Helmet>
-      <script type="application/ld+json">
-        {JSON.stringify(breadcrumbSchema)}
-      </script>
-    </Helmet>
+    <BreadcrumbJsonLd schema={breadcrumbSchema} />
     <Breadcrumbs
       {...MuiBreadcrumbsProps}
       separator={<NavigateNextRoundedIcon fontSize="small" />}

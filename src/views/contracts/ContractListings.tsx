@@ -207,6 +207,7 @@ export function ContractListing(props: {
                       textOverflow: "ellipsis",
                       // whiteSpace: "pre-line"
                     }}
+                    component="div"
                   >
                     {/* Local boundary so the markdown chunk can't suspend
                         the whole list; the box height is fixed at 120px. */}

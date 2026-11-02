@@ -19,6 +19,7 @@ import { TransparentHeaderCell } from "./TransparentHeaderCell"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useOnScreen } from "../../hooks/useOnScreen"
 import { useTranslation } from "react-i18next"
+import { toSupportedLocale } from "../../util/locales"
 import { MOBILE_WRAP_PAGINATION_SX } from "./paginationSx"
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -208,7 +209,7 @@ export function PaginatedTable<T>(props: {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -381,8 +382,8 @@ export function PaginatedTable<T>(props: {
         labelRowsPerPage={t("rows_per_page")}
         labelDisplayedRows={({ from, to, count }) =>
           t("displayed_rows", {
-            from: from.toLocaleString(undefined),
-            to: to.toLocaleString(undefined),
+            from: from.toLocaleString(toSupportedLocale(i18n.language)),
+            to: to.toLocaleString(toSupportedLocale(i18n.language)),
             count: count,
           })
         }

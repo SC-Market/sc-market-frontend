@@ -16,7 +16,12 @@
  *   escapeAttribute(); link text is `html: false` text. At most
  *   MAX_SUMMARY_LINKS per list (and per text list: guide steps/bullets).
  */
-import { PageHead, serializeJsonLd } from "../seo/pageHead"
+import {
+  BREADCRUMB_JSONLD_KEY,
+  isBreadcrumbJsonLd,
+  PageHead,
+  serializeJsonLd,
+} from "../seo/pageHead"
 import type { BridgeDocument, SummaryBlock } from "./pages"
 import { BRIDGE_SUMMARY_ATTRIBUTE } from "../document/bridgeSummary"
 import {
@@ -121,7 +126,10 @@ export function headMarkup(head: PageHead | null, canonical: string | null, noin
     )
   }
   for (const data of head?.jsonLd ?? []) {
-    parts.push(`<script type="application/ld+json">${serializeJsonLd(data)}</script>`)
+    // The BreadcrumbList carries its Unhead key, so the browser adopts it
+    // instead of adding the layout's own (pageHead.ts BREADCRUMB_JSONLD_KEY).
+    const hid = isBreadcrumbJsonLd(data) ? ` data-hid="${BREADCRUMB_JSONLD_KEY}"` : ""
+    parts.push(`<script type="application/ld+json"${hid}>${serializeJsonLd(data)}</script>`)
   }
   return parts.join("")
 }

@@ -10,7 +10,9 @@ export function formatPrice(amount: number | null | undefined): string {
   if (Math.abs(amount) >= 1_000_000_000) return `${(amount / 1_000_000_000).toFixed(1).replace(/\.0$/, "")}B aUEC`
   if (Math.abs(amount) >= 1_000_000) return `${(amount / 1_000_000).toFixed(1).replace(/\.0$/, "")}M aUEC`
   if (Math.abs(amount) >= 100_000) return `${(amount / 1_000).toFixed(0)}K aUEC`
-  return `${amount.toLocaleString()} aUEC`
+  // en-US digits, like the abbreviations above and formatExactPrice: the
+  // browser's own locale would differ from the server render's.
+  return `${amount.toLocaleString("en-US")} aUEC`
 }
 
 /**

@@ -82,6 +82,9 @@ describe.each(Object.entries(evilDocs))("hostile %s content", (_name, doc) => {
     scripts.forEach((s, i) => {
       expect(s.getAttribute("type")).toBe("application/ld+json")
       expect(JSON.parse(s.textContent || "")).toEqual(JSON.parse(JSON.stringify(doc.head.jsonLd[i])))
+      // The BreadcrumbList carries its Unhead key (one per page after hydrating).
+      const breadcrumb = (doc.head.jsonLd[i] as { "@type"?: string })["@type"] === "BreadcrumbList"
+      expect(s.getAttribute("data-hid")).toBe(breadcrumb ? "breadcrumb-ld" : null)
     })
   })
 

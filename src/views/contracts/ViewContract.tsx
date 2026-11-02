@@ -92,7 +92,7 @@ export function ViewContract(props: { listing: Order }) {
         />
         <CardContent sx={{ width: "auto", minHeight: 120, paddingTop: 0 }}>
           {
-            <Typography>
+            <Typography component="div">
               <MarkdownRender text={listing.description} />
             </Typography>
           }

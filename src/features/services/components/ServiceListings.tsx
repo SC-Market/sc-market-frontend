@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { toSupportedLocale } from "../../../util/locales"
 import { Divider, Grid } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { HapticTablePagination } from "../../../components/haptic"
@@ -36,7 +37,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   const theme = useTheme<ExtendedTheme>()
 
   const ref = useRef<HTMLDivElement>(null)
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { customOrg } = useCustomDomain()
 
   const queryParams: ServicesQueryParams = useMemo(() => {
@@ -196,8 +197,8 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
           labelDisplayedRows={({ from, to, count }) => (
             <>
               {t("displayed_rows", {
-                from: from.toLocaleString(undefined),
-                to: to.toLocaleString(undefined),
+                from: from.toLocaleString(toSupportedLocale(i18n.language)),
+                to: to.toLocaleString(toSupportedLocale(i18n.language)),
                 count: count,
               })}
             </>

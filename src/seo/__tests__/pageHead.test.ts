@@ -5,6 +5,7 @@ import {
   faqPageJsonLd,
   headDescription,
   serializeJsonLd,
+  whiteLabelHeadTitle,
 } from "../pageHead"
 
 describe("serializeJsonLd", () => {
@@ -78,5 +79,21 @@ describe("applyWhiteLabelTitle (an org's white-label subdomain)", () => {
     expect(applyWhiteLabelTitle("Blackwell Inc.", "")).toBe("Blackwell Inc.")
     expect(applyWhiteLabelTitle("Blackwell Inc.", "SC Market")).toBe("Blackwell Inc.")
     expect(applyWhiteLabelTitle("Blackwell Inc.", null)).toBe("Blackwell Inc.")
+  })
+})
+
+describe("whiteLabelHeadTitle", () => {
+  it("rewrites only the <title>, escaped, in the org's form", () => {
+    const tags =
+      '<title>Med &amp; Kits — 1M aUEC · Star Citizen | SC Market</title><meta property="og:title" content="Med &amp; Kits">'
+    expect(whiteLabelHeadTitle(tags, "Medrunner <Ops>")).toBe(
+      '<title>Medrunner &lt;Ops&gt; — Med &amp; Kits — 1M aUEC · Star Citizen</title><meta property="og:title" content="Med &amp; Kits">',
+    )
+    expect(
+      whiteLabelHeadTitle(
+        "<title>MEDRUNNER SERVICES - Org - SC Market</title>",
+        "MEDRUNNER SERVICES",
+      ),
+    ).toBe("<title>MEDRUNNER SERVICES - Org</title>")
   })
 })

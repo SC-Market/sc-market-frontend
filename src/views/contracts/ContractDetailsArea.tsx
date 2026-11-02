@@ -93,7 +93,11 @@ export function ContractDetailsArea(props: { contract: PublicContract }) {
               <TableCell colSpan={2}>
                 <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                   {t("contractDetailsArea.details")}
-                  <Typography color={"text.secondary"} variant={"subtitle2"}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    component="div"
+                  >
                     <MarkdownRender text={contract.description} />
                   </Typography>
                 </Stack>

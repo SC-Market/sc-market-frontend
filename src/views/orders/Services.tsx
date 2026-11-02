@@ -124,6 +124,7 @@ export function ServiceDetailsRow(props: { open: boolean; service: Service }) {
                       "-webkit-line-clamp": "10",
                     }}
                     variant={"body2"}
+                    component="div"
                   >
                     {/* Added translation key for no_description */}
                     <MarkdownRender

@@ -90,6 +90,38 @@ const sanitizeSchema = {
   },
 }
 
+/** A YouTube watch link: rendered as a video (a block), not a link. */
+function youTubeVideoId(href: unknown): string | null {
+  if (typeof href !== "string") return null
+  try {
+    const url = new URL(href)
+    return url.origin.includes("youtube.com") ? url.searchParams.get("v") : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Whether a paragraph holds a block (a YouTube video): it is then a <div>,
+ * since a <div> inside a <p> closes the paragraph when the HTML is parsed,
+ * and a server-rendered page would no longer match the app's tree.
+ */
+function paragraphHasBlock(node: unknown): boolean {
+  const children = (node as { children?: unknown[] } | undefined)?.children
+  return (children ?? []).some((child) => {
+    const element = child as {
+      type?: string
+      tagName?: string
+      properties?: { href?: unknown }
+    }
+    return (
+      element.type === "element" &&
+      element.tagName === "a" &&
+      youTubeVideoId(element.properties?.href) !== null
+    )
+  })
+}
+
 export function MarkdownRender(props: {
   text: string
   plainText?: boolean
@@ -105,11 +137,11 @@ export function MarkdownRender(props: {
       rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
       components={{
         // Fix paragraph spacing
-        p({ children }) {
+        p({ node, children }) {
           return (
             <Typography
               variant="body2"
-              component="p"
+              component={!plainText && paragraphHasBlock(node) ? "div" : "p"}
               sx={{
                 margin: 0,
                 marginBottom: 0.5,
@@ -120,12 +152,13 @@ export function MarkdownRender(props: {
             </Typography>
           )
         },
-        // Fix heading spacing
+        // Fix heading spacing. User content is never the page's title: its
+        // headings are one level down (# -> h2), so a page keeps one h1.
         h1({ children }) {
           return (
             <Typography
               variant="h5"
-              component="h1"
+              component="h2"
               sx={{
                 margin: 0,
                 marginBottom: 1,
@@ -141,7 +174,7 @@ export function MarkdownRender(props: {
           return (
             <Typography
               variant="h6"
-              component="h2"
+              component="h3"
               sx={{
                 margin: 0,
                 marginBottom: 0.75,
@@ -157,7 +190,7 @@ export function MarkdownRender(props: {
           return (
             <Typography
               variant="subtitle1"
-              component="h3"
+              component="h4"
               sx={{
                 margin: 0,
                 marginBottom: 0.5,
@@ -225,18 +258,9 @@ export function MarkdownRender(props: {
 
         a({ node, className, children, ...props }) {
           const href = props.href
-          if (href) {
-            try {
-              const url = new URL(href)
-              if (url.origin.includes("youtube.com") && !plainText) {
-                const videoId = url.searchParams.get("v")
-                if (videoId) {
-                  return <YouTubeFacade videoId={videoId} />
-                }
-              }
-            } catch (e) {
-              console.error(e)
-            }
+          const videoId = plainText ? null : youTubeVideoId(href)
+          if (videoId) {
+            return <YouTubeFacade videoId={videoId} />
           }
 
           return (
@@ -246,7 +270,12 @@ export function MarkdownRender(props: {
               href={href}
               sx={{ display: "inline" }}
             >
-              <UnderlineLink color={"secondary"}>{children}</UnderlineLink>
+              {/* A span: the link sits inside a paragraph, and a <p> in a
+                  <p> splits it when the HTML is parsed (server-rendered
+                  pages then fail to hydrate). */}
+              <UnderlineLink color={"secondary"} component="span">
+                {children}
+              </UnderlineLink>
             </Link>
           )
         },

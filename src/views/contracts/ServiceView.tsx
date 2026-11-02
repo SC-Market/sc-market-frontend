@@ -692,7 +692,7 @@ export function ServiceView(props: {
             />
             <CardContent sx={{ width: "auto", minHeight: 120, paddingTop: 0 }}>
               {
-                <Typography>
+                <Typography component="div">
                   <MarkdownRender text={service.service_description} />
                 </Typography>
               }

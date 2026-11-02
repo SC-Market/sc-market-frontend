@@ -627,7 +627,7 @@ export function MarketMultipleViewV2() {
                         >
                           {t("MarketMultipleView.description")}
                         </Typography>
-                        <Typography variant={"body2"}>
+                        <Typography variant={"body2"} component="div">
                           <MarkdownRender text={complete.description} />
                         </Typography>
                       </Box>

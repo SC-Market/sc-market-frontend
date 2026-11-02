@@ -169,7 +169,7 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
             >
               <b>{post.title}</b>
             </Typography>
-            <Typography variant={"body2"}>
+            <Typography variant={"body2"} component="div">
               <MarkdownRender text={post.body} />
             </Typography>
           </CardContent>
