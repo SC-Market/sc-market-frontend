@@ -9,6 +9,7 @@ import {
 import { EmailSettings, useEmailSettings } from "../../email"
 import { NotificationPreferencesTabs } from "./NotificationPreferencesTabs"
 import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallCta"
+import { HelpLink } from "../../help/components/HelpLink"
 
 /**
  * Settings -> Notifications (replaces the Push and Email tabs): a status strip
@@ -40,7 +41,8 @@ export function NotificationSettings() {
           {t(
             "settings.notifications.subtitle",
             "Choose where each kind of notification reaches you.",
-          )}
+          )}{" "}
+          <HelpLink guide="notificationSettings" />
         </Typography>
         <Box
           sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}

@@ -441,7 +441,7 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
       {/* Stock Management */}
       <FormPaper title={t("shopsUi.orderSettings.stockTitle")} subtitle={t("shopsUi.orderSettings.stockSubtitle")}>
         <Grid item xs={12}>
-          <HelpLink guide="stockLots" />
+          <HelpLink guide="stockModes" />
         </Grid>
         <Grid item xs={12}>
           <FormControl component="fieldset" disabled={saving}>

@@ -8848,7 +8848,7 @@
     },
     "listingQuantity": {
       "title": "A listing's quantity comes from its stock lots",
-      "body": "The Quantity here is the total of the listing's listed lots, and editing it changes its first listed lot. To keep the same item at several locations or qualities, use the Stock page."
+      "body": "The Quantity here is the total of the listing's listed lots. Editing it adds the difference to the newest listed lot, or takes it from there. To keep the same item at several locations or qualities, use the Stock page."
     },
     "myStock": {
       "title": "My Stock is your own lots",
@@ -8860,7 +8860,7 @@
     },
     "discordThreadsAlerts": {
       "title": "Order threads or order alerts?",
-      "body": "Run /setup threads in a channel to give every new offer and order its own thread there. Run /setup alerts to post new orders and offers in a channel, with a button to claim them. You can use both."
+      "body": "Order threads give each new order and offer a private thread with the buyer. Order alerts post each one in a channel, with a Claim button for org members. Add the bot from your shop's or org's Discord settings and pick the channels there; for orders placed with you personally, run /setup threads or /setup alerts in Discord."
     },
     "uexImport": {
       "title": "Copy your listings from UEX",

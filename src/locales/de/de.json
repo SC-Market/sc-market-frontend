@@ -8848,7 +8848,7 @@
     },
     "listingQuantity": {
       "title": "Die Menge eines Angebots kommt aus seinen Bestandslosen",
-      "body": "Die Menge hier ist die Summe der gelisteten Lose des Angebots; wenn du sie änderst, ändert sich sein erstes gelistetes Los. Für denselben Artikel an mehreren Orten oder in mehreren Qualitäten nutze die Seite „Bestand“."
+      "body": "Die Menge hier ist die Summe der gelisteten Lose des Angebots. Wenn du sie änderst, wird die Differenz zum neuesten gelisteten Los hinzugefügt oder davon abgezogen. Für denselben Artikel an mehreren Orten oder in mehreren Qualitäten nutze die Seite „Bestand“."
     },
     "myStock": {
       "title": "„Mein Bestand“ sind deine eigenen Lose",
@@ -8860,7 +8860,7 @@
     },
     "discordThreadsAlerts": {
       "title": "Bestell-Threads oder Bestellbenachrichtigungen?",
-      "body": "Führe /setup threads in einem Kanal aus, damit jedes neue Angebot und jede neue Bestellung dort einen eigenen Thread bekommt. Mit /setup alerts werden neue Bestellungen und Angebote in einem Kanal gepostet, mit einem Button zum Übernehmen. Du kannst beides nutzen."
+      "body": "Bestell-Threads geben jeder neuen Bestellung und jedem neuen Angebot einen privaten Thread mit dem Käufer. Bestell-Alerts posten jede davon in einem Kanal, mit einem Button zum Übernehmen für Org-Mitglieder. Füge den Bot in den Discord-Einstellungen deines Shops oder deiner Org hinzu und wähle dort die Kanäle; für Bestellungen direkt bei dir führe in Discord /setup threads oder /setup alerts aus."
     },
     "uexImport": {
       "title": "Übernimm deine Angebote von UEX",

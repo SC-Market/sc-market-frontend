@@ -8985,7 +8985,7 @@
     },
     "listingQuantity": {
       "title": "La cantidad de un anuncio sale de sus lotes de stock",
-      "body": "La cantidad de aquí es el total de los lotes anunciados, y al editarla cambias el primero de ellos. Para tener el mismo artículo en varias ubicaciones o calidades, usa la página Inventario."
+      "body": "La cantidad de aquí es el total de los lotes anunciados. Al editarla, la diferencia se suma al lote anunciado más reciente o se resta de él. Para tener el mismo artículo en varias ubicaciones o calidades, usa la página Inventario."
     },
     "myStock": {
       "title": "Mi inventario son tus propios lotes",
@@ -8997,7 +8997,7 @@
     },
     "discordThreadsAlerts": {
       "title": "¿Hilos de pedidos o alertas de pedidos?",
-      "body": "Ejecuta /setup threads en un canal para que cada nueva oferta y pedido tenga allí su propio hilo. Ejecuta /setup alerts para publicar nuevos pedidos y ofertas en un canal, con un botón para reclamarlos. Puedes usar ambos."
+      "body": "Los hilos de pedidos dan a cada nuevo pedido y oferta un hilo privado con el comprador. Las alertas de pedidos publican cada uno en un canal, con un botón para que los miembros de la org lo reclamen. Añade el bot desde los ajustes de Discord de tu tienda o tu org y elige allí los canales; para los pedidos hechos a ti personalmente, ejecuta /setup threads o /setup alerts en Discord."
     },
     "uexImport": {
       "title": "Copia tus anuncios desde UEX",

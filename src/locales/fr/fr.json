@@ -8985,7 +8985,7 @@
     },
     "listingQuantity": {
       "title": "La quantité d'une annonce vient de ses lots de stock",
-      "body": "La quantité affichée ici est le total des lots en vente de l'annonce ; la modifier change son premier lot en vente. Pour un même article à plusieurs emplacements ou qualités, utilisez la page Stock."
+      "body": "La quantité affichée ici est le total des lots en vente de l'annonce. La modifier ajoute la différence au lot en vente le plus récent, ou la lui retire. Pour un même article à plusieurs emplacements ou qualités, utilisez la page Stock."
     },
     "myStock": {
       "title": "Mon stock, ce sont vos propres lots",
@@ -8997,7 +8997,7 @@
     },
     "discordThreadsAlerts": {
       "title": "Fils de commande ou alertes de commande ?",
-      "body": "Lancez /setup threads dans un salon pour que chaque nouvelle offre et commande y ait son propre fil. Lancez /setup alerts pour publier les nouvelles commandes et offres dans un salon, avec un bouton pour les prendre en charge. Vous pouvez utiliser les deux."
+      "body": "Les fils de commande donnent à chaque nouvelle commande et offre un fil privé avec l'acheteur. Les alertes de commande publient chacune dans un salon, avec un bouton de prise en charge pour les membres de l'org. Ajoutez le bot depuis les réglages Discord de votre boutique ou de votre org et choisissez-y les salons ; pour les commandes passées avec vous personnellement, lancez /setup threads ou /setup alerts dans Discord."
     },
     "uexImport": {
       "title": "Copiez vos annonces depuis UEX",
