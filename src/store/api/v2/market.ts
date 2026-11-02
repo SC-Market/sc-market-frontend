@@ -30,6 +30,7 @@ export const addTagTypes = [
   "Game Data - Mining",
   "Game Data - Crafting",
   "Game Data - Blueprints",
+  "Email",
   "Debug V2",
   "Dashboard V2",
   "Cart V2",
@@ -1747,6 +1748,23 @@ const injectedRtkApi = api
           body: queryArg.body,
         }),
         invalidatesTags: ["Game Data - Blueprints"],
+      }),
+      getEmailDeliverability: build.query<
+        GetEmailDeliverabilityApiResponse,
+        GetEmailDeliverabilityApiArg
+      >({
+        query: () => ({ url: `/email/deliverability` }),
+        providesTags: ["Email"],
+      }),
+      reverifyEmail: build.mutation<
+        ReverifyEmailApiResponse,
+        ReverifyEmailApiArg
+      >({
+        query: () => ({
+          url: `/email/deliverability/reverify`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Email"],
       }),
       getFeatureFlag: build.query<
         GetFeatureFlagApiResponse,
@@ -3693,6 +3711,12 @@ export type FindCraftableBlueprintsApiArg = {
     }[]
   }
 }
+export type GetEmailDeliverabilityApiResponse =
+  /** status 200 Ok */ EmailDeliverabilityResponse
+export type GetEmailDeliverabilityApiArg = void
+export type ReverifyEmailApiResponse =
+  /** status 200 Ok */ EmailReverifyResponse
+export type ReverifyEmailApiArg = void
 export type GetFeatureFlagApiResponse =
   /** status 200 Current feature flag setting */ GetFeatureFlagResponse
 export type GetFeatureFlagApiArg = void
@@ -7799,6 +7823,28 @@ export type CraftableBlueprintResult = {
     game_item_id: string
   }[]
 }
+export type EmailBounceKind = "hard" | "soft" | "complaint"
+export type EmailDeliverabilityResponse = {
+  /** The user has a primary email address. */
+  has_email: boolean
+  /** It is verified. */
+  email_verified: boolean
+  /** Marked undeliverable: nothing is emailed to it until it is re-verified. */
+  undeliverable: boolean
+  /** When it was marked undeliverable (ISO 8601), or null. */
+  bounced_at: string | null
+  bounce_type: EmailBounceKind | null
+  /** The last delivery SES confirmed (ISO 8601), or null if none was recorded. */
+  last_delivered_at: string | null
+  /** A re-verification email can't be requested before this (ISO 8601); null: now. */
+  reverify_available_at: string | null
+}
+export type EmailReverifyResponse = {
+  /** A verification email was sent to the address. */
+  sent: boolean
+  /** When the next one can be requested (ISO 8601). */
+  reverify_available_at: string
+}
 export type RecordStringBoolean = {
   [key: string]: boolean
 }
@@ -8615,8 +8661,10 @@ export type SellerReachabilityBucket = {
   discord_dm: ReachabilityCount
   /** Discord linked, and the last Discord DM attempt was delivered (a subset of discord_dm). */
   discord_dm_confirmed: ReachabilityCount
-  /** A verified primary email, not unsubscribed from announcement emails. No bounce data exists. */
+  /** A verified primary email that is not marked undeliverable (bounced or complained), not unsubscribed from announcement emails. */
   email: ReachabilityCount
+  /** Reachable by email, and SES confirmed a delivery to the address in the last email_delivered_window_days (a subset of email). */
+  email_confirmed: ReachabilityCount
   /** At least one push subscription. No per-delivery result exists. */
   push: ReachabilityCount
   /** At least one of Discord DM, email or push. */
@@ -8633,8 +8681,10 @@ export type SellerReachabilityCounts = {
   discord_dm: ReachabilityCount
   /** Discord linked, and the last Discord DM attempt was delivered (a subset of discord_dm). */
   discord_dm_confirmed: ReachabilityCount
-  /** A verified primary email, not unsubscribed from announcement emails. No bounce data exists. */
+  /** A verified primary email that is not marked undeliverable (bounced or complained), not unsubscribed from announcement emails. */
   email: ReachabilityCount
+  /** Reachable by email, and SES confirmed a delivery to the address in the last email_delivered_window_days (a subset of email). */
+  email_confirmed: ReachabilityCount
   /** At least one push subscription. No per-delivery result exists. */
   push: ReachabilityCount
   /** At least one of Discord DM, email or push. */
@@ -8651,7 +8701,9 @@ export type SellerReachabilityReport = {
   signals: {
     /** Push has no per-delivery result (dead subscriptions are deleted). */
     push_delivery_results: boolean
-    /** Email bounces and complaints are not recorded. */
+    /** How recent an email delivery counts for email_confirmed. */
+    email_delivered_window_days: number
+    /** SES bounces, complaints and deliveries are recorded (bounced addresses are not reachable). */
     email_delivery_results: boolean
     /** How long those results are kept. */
     discord_dm_result_retention_days: number
@@ -9018,6 +9070,8 @@ export const {
   useRemoveBlueprintFromInventoryMutation,
   useGetOrgBlueprintOwnersQuery,
   useFindCraftableBlueprintsMutation,
+  useGetEmailDeliverabilityQuery,
+  useReverifyEmailMutation,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,
   useGetLayoutQuery,

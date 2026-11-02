@@ -1148,7 +1148,18 @@
       "updateSuccess": "電子郵件更新成功！",
       "verificationError": "傳送驗證電子郵件失敗",
       "verificationSent": "已傳送驗證電子郵件！",
-      "verified": "已驗證"
+      "verified": "已驗證",
+      "bounce": {
+        "title": "你的郵件被退回了，請更新電子郵件。",
+        "hard": "寄往 {{email}} 的郵件於 {{date}} 被退回：該地址不接收郵件，因此 SC Market 已停止寄送。請更新你的地址；若它已恢復正常，也可以重新驗證。",
+        "soft": "寄往 {{email}} 的郵件多次被退回（信箱可能已滿或暫時無法使用），因此 SC Market 已於 {{date}} 停止寄送。請更新你的地址，或在它恢復正常後重新驗證。",
+        "complaint": "寄往 {{email}} 的一封郵件於 {{date}} 被檢舉為垃圾郵件，因此 SC Market 已停止寄送。若這是誤操作，請重新驗證該地址以再次接收郵件，或更新地址。",
+        "update": "更新電子郵件",
+        "reverify": "重新驗證",
+        "reverifySent": "驗證郵件已寄出。點擊其中的連結即可重新接收郵件。",
+        "reverifyFailed": "無法寄送驗證郵件，請稍後再試。",
+        "reverifyWait": "你可以在 {{time}} 後再次要求驗證郵件。"
+      }
     },
     "groups": {
       "account": "帳號",
@@ -7598,6 +7609,7 @@
         "discord_dm": "Discord 私訊",
         "discord_dm_confirmed": "私訊已送達",
         "email": "電子郵件",
+        "email_confirmed": "郵件已送達",
         "push": "推播",
         "any": "任一管道",
         "none": "無"
@@ -7606,7 +7618,7 @@
         "discord": "Discord 私訊：已連結 Discord，且 SC Market 發給他們的最近一則私訊（保留 {{days}} 天）沒有失敗。這段期間內從未收到私訊的賣家也計入，但未確認；「私訊已送達」統計最近一則私訊已送達的賣家。",
         "discordNoSignal": "Discord 私訊：已連結 Discord。未記錄私訊送達結果。",
         "email": "電子郵件：已驗證的地址，且未取消訂閱公告郵件。退信不會被記錄，因此已驗證的地址仍可能退信。",
-        "emailChecked": "電子郵件：已驗證的地址，且未取消訂閱公告郵件。",
+        "emailChecked": "郵件：已驗證、未退信且未被檢舉為垃圾郵件的地址，且未取消訂閱公告郵件。過去 {{days}} 天內未收到郵件的賣家計入但未確認；「郵件已送達」統計這段時間內確認送達的賣家。",
         "push": "推播：至少有一個推播訂閱。推播失敗時會刪除過期的訂閱，但不記錄送達結果。",
         "pushChecked": "推播：至少有一個推播訂閱。",
         "lastSeen": "最近上線統計所有賣家，包括對買家隱藏上線狀態的賣家。"

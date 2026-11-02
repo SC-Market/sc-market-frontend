@@ -29,6 +29,7 @@ const bucket = (
   discord_dm: c(n, n * 2),
   discord_dm_confirmed: c(0, 0),
   email: c(1, 1),
+  email_confirmed: c(1, 1),
   push: c(0, 0),
   any: c(n, n * 2),
   none: c(0, n),
@@ -49,6 +50,7 @@ const report = (unknown = 0): SellerReachabilityReport => ({
     discord_dm: c(16, 32),
     discord_dm_confirmed: c(0, 0),
     email: c(4, 4),
+    email_confirmed: c(3, 3),
     push: c(0, 0),
     any: c(16, 32),
     none: c(0, 16),
@@ -56,7 +58,8 @@ const report = (unknown = 0): SellerReachabilityReport => ({
   signals: {
     discord_dm_delivery_results: true,
     discord_dm_result_retention_days: 90,
-    email_delivery_results: false,
+    email_delivery_results: true,
+    email_delivered_window_days: 90,
     push_delivery_results: false,
   },
   email_category: "announcements",
@@ -91,6 +94,10 @@ describe("SellerReachabilityCard", () => {
     ).toBeInTheDocument()
     expect(screen.getByText("Any channel")).toBeInTheDocument()
     expect(screen.getByText("DM delivered")).toBeInTheDocument()
+    expect(screen.getByText("Email delivered")).toBeInTheDocument()
+    expect(
+      within(screen.getByTestId("reachability-total")).getByText("3 · 3"),
+    ).toBeInTheDocument()
   })
 
   it("hides the 'no one to contact' row when it is empty, shows it otherwise", () => {
@@ -107,13 +114,19 @@ describe("SellerReachabilityCard", () => {
     ).toBeInTheDocument()
   })
 
-  it("says how reliable each channel is: DM results kept, no email bounces, no push results", () => {
+  it("says how reliable each channel is: DM results kept, email bounces and deliveries recorded, no push results", () => {
     state({ data: report() })
     render(<SellerReachabilityCard />)
     expect(
       screen.getByText(/last DM from SC Market \(kept 90 days\) didn't fail/),
     ).toBeInTheDocument()
-    expect(screen.getByText(/Bounces aren't recorded/)).toBeInTheDocument()
+    expect(
+      screen.getByText(/hasn't bounced or been reported as spam/),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(/Sellers not emailed in the last 90 days count/),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/Bounces aren't recorded/)).not.toBeInTheDocument()
     expect(
       screen.getByText(/no delivery result is recorded/),
     ).toBeInTheDocument()

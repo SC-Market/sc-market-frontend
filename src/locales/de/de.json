@@ -1209,7 +1209,18 @@
       "updateSuccess": "E-Mail erfolgreich aktualisiert!",
       "verificationError": "Bestätigungs-E-Mail konnte nicht gesendet werden",
       "verificationSent": "Bestätigungs-E-Mail gesendet!",
-      "verified": "Bestätigt"
+      "verified": "Bestätigt",
+      "bounce": {
+        "title": "Deine E-Mail ist unzustellbar. Bitte aktualisiere sie.",
+        "hard": "Eine E-Mail an {{email}} kam am {{date}} zurück: Die Adresse nimmt keine Mails an, deshalb sendet SC Market nichts mehr an sie. Aktualisiere deine Adresse oder bestätige sie erneut, wenn sie wieder funktioniert.",
+        "soft": "E-Mails an {{email}} kamen wiederholt zurück (das Postfach ist vielleicht voll oder nicht erreichbar), deshalb sendet SC Market seit dem {{date}} nichts mehr an sie. Aktualisiere deine Adresse oder bestätige sie erneut, sobald sie wieder funktioniert.",
+        "complaint": "Eine E-Mail an {{email}} wurde am {{date}} als Spam gemeldet, deshalb sendet SC Market nichts mehr an sie. War das ein Versehen, bestätige die Adresse erneut, um wieder E-Mails zu erhalten, oder aktualisiere sie.",
+        "update": "E-Mail aktualisieren",
+        "reverify": "Erneut bestätigen",
+        "reverifySent": "Bestätigungs-E-Mail gesendet. Folge dem Link darin, um wieder E-Mails zu erhalten.",
+        "reverifyFailed": "Die Bestätigungs-E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut.",
+        "reverifyWait": "Du kannst um {{time}} eine weitere Bestätigungs-E-Mail anfordern."
+      }
     },
     "groups": {
       "account": "Konto",
@@ -7712,6 +7723,7 @@
         "discord_dm": "Discord-DM",
         "discord_dm_confirmed": "DM zugestellt",
         "email": "E-Mail",
+        "email_confirmed": "E-Mail zugestellt",
         "push": "Push",
         "any": "Mindestens ein Kanal",
         "none": "Keiner"
@@ -7720,7 +7732,7 @@
         "discord": "Discord-DM: Discord verknüpft, und die letzte DM von SC Market ({{days}} Tage gespeichert) ist nicht fehlgeschlagen. Verkäufer ohne DM in diesem Zeitraum zählen, unbestätigt; „DM zugestellt“ zählt die, deren letzte DM angekommen ist.",
         "discordNoSignal": "Discord-DM: Discord verknüpft. Es werden keine DM-Zustellergebnisse gespeichert.",
         "email": "E-Mail: eine bestätigte Adresse, nicht von Ankündigungs-E-Mails abgemeldet. Bounces werden nicht gespeichert, eine bestätigte Adresse kann also trotzdem bouncen.",
-        "emailChecked": "E-Mail: eine bestätigte Adresse, nicht von Ankündigungs-E-Mails abgemeldet.",
+        "emailChecked": "E-Mail: eine bestätigte Adresse, die nicht unzustellbar war und nicht als Spam gemeldet wurde, ohne Abmeldung von Ankündigungs-E-Mails. Verkäufer, die in den letzten {{days}} Tagen keine E-Mail erhalten haben, zählen unbestätigt; „E-Mail zugestellt“ zählt die, deren Zustellung in dieser Zeit bestätigt wurde.",
         "push": "Push: mindestens ein Push-Abonnement. Abgelaufene werden entfernt, wenn ein Push fehlschlägt, aber es wird kein Zustellergebnis gespeichert.",
         "pushChecked": "Push: mindestens ein Push-Abonnement.",
         "lastSeen": "„Zuletzt gesehen“ zählt alle Verkäufer, auch die, die ihren Online-Status vor Käufern verbergen."

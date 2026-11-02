@@ -29,6 +29,7 @@ const COLUMNS: Column[] = [
   "discord_dm",
   "discord_dm_confirmed",
   "email",
+  "email_confirmed",
   "push",
   "any",
   "none",
@@ -90,6 +91,10 @@ export function SellerReachabilityCard() {
         "DM delivered",
       ),
       email: t("adminUi.sellerReachability.columns.email", "Email"),
+      email_confirmed: t(
+        "adminUi.sellerReachability.columns.email_confirmed",
+        "Email delivered",
+      ),
       push: t("adminUi.sellerReachability.columns.push", "Push"),
       any: t("adminUi.sellerReachability.columns.any", "Any channel"),
       none: t("adminUi.sellerReachability.columns.none", "None"),
@@ -230,10 +235,11 @@ export function SellerReachabilityCard() {
                 color="text.secondary"
               >
                 {data.signals.email_delivery_results
-                  ? t(
-                      "adminUi.sellerReachability.notes.emailChecked",
-                      "Email: a verified address, not unsubscribed from announcement emails.",
-                    )
+                  ? t("adminUi.sellerReachability.notes.emailChecked", {
+                      days: data.signals.email_delivered_window_days,
+                      defaultValue:
+                        'Email: a verified address that hasn\'t bounced or been reported as spam, not unsubscribed from announcement emails. Sellers not emailed in the last {{days}} days count, unconfirmed; "Email delivered" counts those with a delivery confirmed in that time.',
+                    })
                   : t(
                       "adminUi.sellerReachability.notes.email",
                       "Email: a verified address, not unsubscribed from announcement emails. Bounces aren't recorded, so a verified address may still bounce.",

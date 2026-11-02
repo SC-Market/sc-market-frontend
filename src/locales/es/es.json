@@ -1212,7 +1212,18 @@
       "updateSuccess": "¡Correo actualizado correctamente!",
       "verificationError": "No se pudo enviar el correo de verificación",
       "verificationSent": "¡Correo de verificación enviado!",
-      "verified": "Verificado"
+      "verified": "Verificado",
+      "bounce": {
+        "title": "Tu correo ha rebotado. Actualízalo, por favor.",
+        "hard": "Un correo a {{email}} rebotó el {{date}}: la dirección no acepta correo, así que SC Market ha dejado de enviarle mensajes. Actualiza tu dirección o vuelve a verificarla si vuelve a funcionar.",
+        "soft": "Los correos a {{email}} siguen rebotando (puede que el buzón esté lleno o no disponible), así que SC Market dejó de enviarle mensajes el {{date}}. Actualiza tu dirección o vuelve a verificarla cuando funcione de nuevo.",
+        "complaint": "Un correo a {{email}} se denunció como spam el {{date}}, así que SC Market ha dejado de enviarle mensajes. Si fue un error, vuelve a verificar la dirección para recibir correo de nuevo, o actualízala.",
+        "update": "Actualizar correo",
+        "reverify": "Volver a verificar",
+        "reverifySent": "Correo de verificación enviado. Sigue su enlace para volver a recibir correo.",
+        "reverifyFailed": "No se pudo enviar el correo de verificación. Inténtalo de nuevo más tarde.",
+        "reverifyWait": "Podrás solicitar otro correo de verificación a las {{time}}."
+      }
     },
     "groups": {
       "account": "Cuenta",
@@ -7826,6 +7837,7 @@
         "discord_dm": "MD de Discord",
         "discord_dm_confirmed": "MD entregado",
         "email": "Correo",
+        "email_confirmed": "Correo entregado",
         "push": "Push",
         "any": "Algún canal",
         "none": "Ninguno"
@@ -7834,7 +7846,7 @@
         "discord": "MD de Discord: Discord vinculado, y su último MD de SC Market (se guarda {{days}} días) no falló. Los vendedores sin MD en ese tiempo cuentan, sin confirmar; «MD entregado» cuenta a quienes recibieron su último MD.",
         "discordNoSignal": "MD de Discord: Discord vinculado. No se registran resultados de entrega de MD.",
         "email": "Correo: una dirección verificada, sin darse de baja de los correos de anuncios. Los rebotes no se registran, así que una dirección verificada aún puede rebotar.",
-        "emailChecked": "Correo: una dirección verificada, sin darse de baja de los correos de anuncios.",
+        "emailChecked": "Correo: una dirección verificada que no ha rebotado ni se ha denunciado como spam, sin darse de baja de los correos de anuncios. Los vendedores a los que no se ha enviado correo en los últimos {{days}} días cuentan sin confirmar; «Correo entregado» cuenta a los que tienen una entrega confirmada en ese tiempo.",
         "push": "Push: al menos una suscripción push. Las caducadas se eliminan cuando falla un push, pero no se registra ningún resultado de entrega.",
         "pushChecked": "Push: al menos una suscripción push.",
         "lastSeen": "«Visto por última vez» cuenta a todos los vendedores, incluidos los que ocultan su estado en línea a los compradores."

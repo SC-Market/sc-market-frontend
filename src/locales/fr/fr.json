@@ -1212,7 +1212,18 @@
       "updateSuccess": "E-mail mis à jour avec succès !",
       "verificationError": "Échec de l'envoi de l'e-mail de vérification",
       "verificationSent": "E-mail de vérification envoyé !",
-      "verified": "Vérifié"
+      "verified": "Vérifié",
+      "bounce": {
+        "title": "Votre e-mail est revenu en erreur. Merci de le mettre à jour.",
+        "hard": "Un e-mail envoyé à {{email}} est revenu en erreur le {{date}} : l'adresse n'accepte pas de messages, SC Market a donc cessé d'y écrire. Mettez votre adresse à jour, ou vérifiez-la à nouveau si elle fonctionne de nouveau.",
+        "soft": "Les e-mails envoyés à {{email}} reviennent sans cesse en erreur (la boîte est peut-être pleine ou indisponible), SC Market a donc cessé d'y écrire le {{date}}. Mettez votre adresse à jour, ou vérifiez-la à nouveau quand elle fonctionnera.",
+        "complaint": "Un e-mail envoyé à {{email}} a été signalé comme spam le {{date}}, SC Market a donc cessé d'y écrire. Si c'était une erreur, vérifiez à nouveau l'adresse pour recevoir de nouveau des e-mails, ou mettez-la à jour.",
+        "update": "Mettre à jour l'e-mail",
+        "reverify": "Vérifier à nouveau",
+        "reverifySent": "E-mail de vérification envoyé. Suivez son lien pour recevoir de nouveau des e-mails.",
+        "reverifyFailed": "L'e-mail de vérification n'a pas pu être envoyé. Réessayez plus tard.",
+        "reverifyWait": "Vous pourrez demander un autre e-mail de vérification à {{time}}."
+      }
     },
     "groups": {
       "account": "Compte",
@@ -7826,6 +7837,7 @@
         "discord_dm": "MP Discord",
         "discord_dm_confirmed": "MP reçu",
         "email": "E-mail",
+        "email_confirmed": "E-mail remis",
         "push": "Push",
         "any": "Au moins un canal",
         "none": "Aucun"
@@ -7834,7 +7846,7 @@
         "discord": "MP Discord : Discord lié, et leur dernier MP de SC Market (conservé {{days}} jours) n'a pas échoué. Les vendeurs jamais contactés par MP sur cette période comptent, sans confirmation ; « MP reçu » compte ceux dont le dernier MP est arrivé.",
         "discordNoSignal": "MP Discord : Discord lié. Aucun résultat de remise des MP n'est enregistré.",
         "email": "E-mail : une adresse vérifiée, non désabonnée des e-mails d'annonces. Les rebonds ne sont pas enregistrés : une adresse vérifiée peut quand même rebondir.",
-        "emailChecked": "E-mail : une adresse vérifiée, non désabonnée des e-mails d'annonces.",
+        "emailChecked": "E-mail : une adresse vérifiée qui n'a pas rejeté de message ni signalé de spam, sans désabonnement des e-mails d'annonces. Les vendeurs sans e-mail ces {{days}} derniers jours comptent, non confirmés ; « E-mail remis » compte ceux dont une remise a été confirmée sur cette période.",
         "push": "Push : au moins un abonnement push. Ceux qui ont expiré sont supprimés quand un push échoue, mais aucun résultat de remise n'est enregistré.",
         "pushChecked": "Push : au moins un abonnement push.",
         "lastSeen": "La dernière connexion compte tous les vendeurs, y compris ceux qui masquent leur statut en ligne aux acheteurs."

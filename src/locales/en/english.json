@@ -4597,7 +4597,18 @@
       "updateSuccess": "Email updated successfully!",
       "verificationError": "Failed to send verification email",
       "verificationSent": "Verification email sent!",
-      "verified": "Verified"
+      "verified": "Verified",
+      "bounce": {
+        "title": "Your email bounced. Please update it.",
+        "hard": "Email to {{email}} bounced on {{date}}: the address doesn't accept mail, so SC Market stopped sending to it. Update your address, or re-verify it if it works again.",
+        "soft": "Email to {{email}} kept bouncing (the mailbox may be full or unavailable), so SC Market stopped sending to it on {{date}}. Update your address, or re-verify it once it works again.",
+        "complaint": "An email to {{email}} was reported as spam on {{date}}, so SC Market stopped sending to it. If that was a mistake, re-verify the address to get email again, or update it.",
+        "update": "Update email",
+        "reverify": "Re-verify",
+        "reverifySent": "Verification email sent. Follow its link to start getting email again.",
+        "reverifyFailed": "The verification email couldn't be sent. Please try again later.",
+        "reverifyWait": "You can request another verification email at {{time}}."
+      }
     },
     "groups": {
       "account": "Account",
@@ -7712,6 +7723,7 @@
         "discord_dm": "Discord DM",
         "discord_dm_confirmed": "DM delivered",
         "email": "Email",
+        "email_confirmed": "Email delivered",
         "push": "Push",
         "any": "Any channel",
         "none": "None"
@@ -7720,7 +7732,7 @@
         "discord": "Discord DM: Discord linked, and their last DM from SC Market (kept {{days}} days) didn't fail. Sellers never DMed in that time count, unconfirmed; \"DM delivered\" counts those whose last DM arrived.",
         "discordNoSignal": "Discord DM: Discord linked. No DM delivery results are recorded.",
         "email": "Email: a verified address, not unsubscribed from announcement emails. Bounces aren't recorded, so a verified address may still bounce.",
-        "emailChecked": "Email: a verified address, not unsubscribed from announcement emails.",
+        "emailChecked": "Email: a verified address that hasn't bounced or been reported as spam, not unsubscribed from announcement emails. Sellers not emailed in the last {{days}} days count, unconfirmed; \"Email delivered\" counts those with a delivery confirmed in that time.",
         "push": "Push: at least one push subscription. Expired ones are removed when a push fails, but no delivery result is recorded.",
         "pushChecked": "Push: at least one push subscription.",
         "lastSeen": "Last seen counts every seller, including those who hide their online status from buyers."

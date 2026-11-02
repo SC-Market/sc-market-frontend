@@ -1216,7 +1216,18 @@
       "updateSuccess": "邮箱更新成功！",
       "verificationError": "发送验证邮件失败",
       "verificationSent": "验证邮件已发送！",
-      "verified": "已验证"
+      "verified": "已验证",
+      "bounce": {
+        "title": "你的邮件被退回了，请更新邮箱。",
+        "hard": "发往 {{email}} 的邮件于 {{date}} 被退回：该地址不接收邮件，因此 SC Market 已停止向其发送。请更新你的地址；如果它已恢复正常，也可以重新验证。",
+        "soft": "发往 {{email}} 的邮件多次被退回（邮箱可能已满或暂时不可用），因此 SC Market 已于 {{date}} 停止向其发送。请更新你的地址，或在它恢复正常后重新验证。",
+        "complaint": "发往 {{email}} 的一封邮件于 {{date}} 被举报为垃圾邮件，因此 SC Market 已停止向其发送。如果这是误操作，请重新验证该地址以再次接收邮件，或更新地址。",
+        "update": "更新邮箱",
+        "reverify": "重新验证",
+        "reverifySent": "验证邮件已发送。点击其中的链接即可重新接收邮件。",
+        "reverifyFailed": "无法发送验证邮件，请稍后再试。",
+        "reverifyWait": "你可以在 {{time}} 后再次请求验证邮件。"
+      }
     },
     "groups": {
       "account": "账户",
@@ -7604,6 +7615,7 @@
         "discord_dm": "Discord 私信",
         "discord_dm_confirmed": "私信已送达",
         "email": "电子邮件",
+        "email_confirmed": "邮件已送达",
         "push": "推送",
         "any": "任一渠道",
         "none": "无"
@@ -7612,7 +7624,7 @@
         "discord": "Discord 私信：已关联 Discord，且 SC Market 发给他们的最近一条私信（保留 {{days}} 天）没有失败。这段时间内从未收到私信的卖家也计入，但未确认；“私信已送达”统计最近一条私信已送达的卖家。",
         "discordNoSignal": "Discord 私信：已关联 Discord。未记录私信送达结果。",
         "email": "电子邮件：已验证的地址，且未退订公告邮件。退信不会被记录，因此已验证的地址仍可能退信。",
-        "emailChecked": "电子邮件：已验证的地址，且未退订公告邮件。",
+        "emailChecked": "邮件：已验证、未退信且未被举报为垃圾邮件的地址，且未退订公告邮件。过去 {{days}} 天内未收到邮件的卖家计入但未确认；“邮件已送达”统计这段时间内确认送达的卖家。",
         "push": "推送：至少有一个推送订阅。推送失败时会删除过期的订阅，但不记录送达结果。",
         "pushChecked": "推送：至少有一个推送订阅。",
         "lastSeen": "最近上线统计所有卖家，包括对买家隐藏在线状态的卖家。"

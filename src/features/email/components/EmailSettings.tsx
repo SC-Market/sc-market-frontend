@@ -12,6 +12,7 @@ import { formatActionName } from "../domain/formatters"
 import type { EmailPreference } from "../domain/types"
 import type { PushPreference } from "../../push-notifications/domain/types"
 import { EmailStatus } from "./EmailStatus"
+import { EmailBounceNotice } from "./EmailBounceNotice"
 import { AddEmailDialog } from "./AddEmailDialog"
 import { EditEmailDialog } from "./EditEmailDialog"
 import { DeleteEmailDialog } from "./DeleteEmailDialog"
@@ -143,6 +144,13 @@ export function EmailSettings({
       <Grid item xs={12}>
         <FlatSection title={t("settings.email.emailAddress")}>
           <Grid item xs={12}>
+            <EmailBounceNotice
+              email={userEmail}
+              onEditEmail={() => {
+                setNewEmail(userEmail || "")
+                setEditEmailDialogOpen(true)
+              }}
+            />
             <EmailStatus
               email={userEmail}
               emailVerified={emailVerified}
