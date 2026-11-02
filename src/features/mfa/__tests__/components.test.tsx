@@ -33,6 +33,13 @@ vi.mock("../../../store/api/v2/market", () => {
 })
 vi.mock("../../../store/hooks", () => ({ useAppDispatch: () => vi.fn() }))
 vi.mock("../../../hooks/login/useSession", () => ({ useSession: () => api.session }))
+// ContainerGrid is the page layout that adds the top-bar spacer; the gate must
+// render inside it so it doesn't sit under the fixed top bar.
+vi.mock("../../../components/layout/ContainerGrid", () => ({
+  ContainerGrid: ({ children }: { children: React.ReactNode }) => (
+    <main data-testid="container-grid">{children}</main>
+  ),
+}))
 
 import { MfaEnrollDialog } from "../components/MfaEnrollDialog"
 import { MfaCodeForm } from "../components/MfaCodeForm"
@@ -138,7 +145,8 @@ describe("SiteAdminRoute", () => {
     api.session = { status: "authenticated", profile: { role: "user", admin_locked: "mfa_required" } }
     api.status = { enrolled: true, enforcement: "enforce" }
     renderAt()
-    expect(await screen.findByText("Two-factor verification")).toBeInTheDocument()
+    const title = await screen.findByText("Two-factor verification")
+    expect(screen.getByTestId("container-grid")).toContainElement(title)
     expect(screen.queryByText("ADMIN PAGE")).toBeNull()
   })
 
@@ -146,7 +154,8 @@ describe("SiteAdminRoute", () => {
     api.session = { status: "authenticated", profile: { role: "user", admin_locked: "mfa_enrollment" } }
     api.status = { enrolled: false, enforcement: "enforce" }
     renderAt()
-    expect(await screen.findByText("Set up two-factor authentication")).toBeInTheDocument()
+    const title = await screen.findByText("Set up two-factor authentication")
+    expect(screen.getByTestId("container-grid")).toContainElement(title)
   })
 
   it("still 404s regular users and custom-domain admin locks", () => {
