@@ -3350,7 +3350,14 @@
     "loadFailed": "ガイドを読み込めませんでした。ページを再読み込みしてもう一度お試しください。",
     "moreIn": "{{category}}の他の記事",
     "newHere": "SC Marketは初めてですか？",
-    "nextSteps": "次のステップ"
+    "nextSteps": "次のステップ",
+    "hint": {
+      "learnMore": "詳しく見る",
+      "dismiss": "このヒントを閉じる"
+    },
+    "tip": {
+      "label": "ヘルプ: {{label}}"
+    }
   },
   "org": {
     "orgTitle": "組織",

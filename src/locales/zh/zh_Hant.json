@@ -3268,7 +3268,14 @@
     "loadFailed": "此指南載入失敗。請重新整理頁面再試一次。",
     "moreIn": "更多{{category}}內容",
     "newHere": "第一次使用 SC Market？",
-    "nextSteps": "後續步驟"
+    "nextSteps": "後續步驟",
+    "hint": {
+      "learnMore": "了解更多",
+      "dismiss": "關閉此提示"
+    },
+    "tip": {
+      "label": "說明：{{label}}"
+    }
   },
   "org": {
     "orgTitle": "組織",

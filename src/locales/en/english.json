@@ -1967,7 +1967,14 @@
     "loadFailed": "This guide failed to load. Refresh the page to try again.",
     "moreIn": "More in {{category}}",
     "newHere": "New to SC Market?",
-    "nextSteps": "Next steps"
+    "nextSteps": "Next steps",
+    "hint": {
+      "learnMore": "Learn more",
+      "dismiss": "Dismiss this tip"
+    },
+    "tip": {
+      "label": "Help: {{label}}"
+    }
   },
   "image_search": {
     "cancel": "Cancel",

@@ -3386,7 +3386,14 @@
     "loadFailed": "No se pudo cargar esta guía. Actualiza la página para volver a intentarlo.",
     "moreIn": "Más en {{category}}",
     "newHere": "¿Eres nuevo en SC Market?",
-    "nextSteps": "Próximos pasos"
+    "nextSteps": "Próximos pasos",
+    "hint": {
+      "learnMore": "Más información",
+      "dismiss": "Ocultar este consejo"
+    },
+    "tip": {
+      "label": "Ayuda: {{label}}"
+    }
   },
   "org": {
     "orgTitle": "Org",

@@ -3368,7 +3368,14 @@
     "loadFailed": "Diese Anleitung konnte nicht geladen werden. Aktualisieren Sie die Seite, um es erneut zu versuchen.",
     "moreIn": "Mehr in {{category}}",
     "newHere": "Neu bei SC Market?",
-    "nextSteps": "Nächste Schritte"
+    "nextSteps": "Nächste Schritte",
+    "hint": {
+      "learnMore": "Mehr erfahren",
+      "dismiss": "Diesen Tipp ausblenden"
+    },
+    "tip": {
+      "label": "Hilfe: {{label}}"
+    }
   },
   "org": {
     "orgTitle": "Org",

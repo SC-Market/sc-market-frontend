@@ -1,6 +1,9 @@
 import React from "react"
 import { Box, Typography, Button, Stack, useTheme } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useTranslation } from "react-i18next"
+import { HelpLink } from "../../features/help/components/HelpLink"
+import type { GuideLink } from "../../features/help/guideLinks"
 
 export interface EmptyStateProps {
   /**
@@ -39,6 +42,11 @@ export interface EmptyStateProps {
    */
   children?: React.ReactNode
   /**
+   * A guide that explains the feature: shown as "Learn more" under the
+   * description, so an empty page also teaches what the feature is for.
+   */
+  guide?: GuideLink
+  /**
    * Custom styling
    */
   sx?: object
@@ -62,9 +70,11 @@ export function EmptyState({
   secondaryAction,
   illustration,
   children,
+  guide,
   sx,
 }: EmptyStateProps) {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
 
   return (
     <Box
@@ -101,7 +111,8 @@ export function EmptyState({
         sx={{
           marginBottom: description ? 1 : 3,
           fontWeight: 600,
-          color: "text.primary",
+          // text.secondary is this theme's bright text (the names are inverted)
+          color: "text.secondary",
         }}
       >
         {title}
@@ -112,13 +123,22 @@ export function EmptyState({
         <Typography
           variant="body1"
           sx={{
-            marginBottom: action || secondaryAction || children ? 3 : 0,
-            color: "text.secondary",
+            marginBottom: action || secondaryAction || children || guide ? 3 : 0,
+            color: "text.primary",
             maxWidth: 500,
           }}
         >
           {description}
         </Typography>
+      )}
+
+      {guide && (
+        <HelpLink
+          guide={guide}
+          sx={{ marginBottom: action || secondaryAction || children ? 3 : 0 }}
+        >
+          {t("help.hint.learnMore", "Learn more")}
+        </HelpLink>
       )}
 
       {/* Additional content */}
