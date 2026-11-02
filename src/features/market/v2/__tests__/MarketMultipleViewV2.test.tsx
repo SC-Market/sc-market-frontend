@@ -97,31 +97,9 @@ vi.mock("../../../../components/layout/StandardPageLayout", () => ({
   ),
 }));
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next");
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (
-        key: string,
-        defaultValue?: string,
-        options?: Record<string, string | number>,
-      ) => {
-        if (options) {
-          return (
-            defaultValue?.replace(/\{\{(\w+)\}\}/g, (_, k: string) =>
-              String(options[k]),
-            ) || key
-          );
-        }
-        return defaultValue || key;
-      },
-      i18n: {
-        language: "en",
-      },
-    }),
-  };
-});
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock components
 vi.mock("../../../../components/market/v2/QualityBadge", () => ({
@@ -443,7 +421,7 @@ describe("MarketMultipleViewV2", () => {
     it("should display breadcrumbs navigation", () => {
       renderWithProviders(<MarketMultipleViewV2 />);
       
-      expect(screen.getByText("MarketMultipleView.market")).toBeInTheDocument();
+      expect(screen.getByText("Market")).toBeInTheDocument();
       expect(screen.getByText("Weapon")).toBeInTheDocument();
     });
 
@@ -457,9 +435,9 @@ describe("MarketMultipleViewV2", () => {
     it("should display listing timestamps", () => {
       renderWithProviders(<MarketMultipleViewV2 />);
       
-      expect(screen.getByText(/MarketMultipleView.listed/)).toBeInTheDocument();
-      expect(screen.getByText(/MarketMultipleView.updated/)).toBeInTheDocument();
-      expect(screen.getByText(/MarketMultipleView.expires/)).toBeInTheDocument();
+      expect(screen.getByText(/Listed/)).toBeInTheDocument();
+      expect(screen.getByText(/Updated/)).toBeInTheDocument();
+      expect(screen.getByText(/Expires/)).toBeInTheDocument();
     });
   });
 

@@ -121,15 +121,9 @@ vi.mock("@mui/material/styles", async () => {
   }
 });
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string) => defaultValue || key,
-    }),
-  }
-});
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock navigate
 const mockNavigate = vi.fn();

@@ -14,20 +14,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { BrowserRouter } from "react-router-dom"
 
 // Mock translation
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, params?: any) => {
-        if (params) {
-          return `${key}_${JSON.stringify(params)}`
-        }
-        return key
-      },
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock data
 const mockSession = {
@@ -261,7 +250,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     expect(
-      screen.getByText(/associatedMarketListings/i)
+      screen.getByText(/Associated Market Listings/i)
     ).toBeInTheDocument()
   })
 
@@ -269,8 +258,8 @@ describe("OfferMarketListingsEditAreaV2", () => {
     renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     // Should show add listing controls
-    expect(screen.getByText(/addMarketListing/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/selectListing/i)).toBeInTheDocument()
+    expect(screen.getByText(/Add Market Listing/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Select Listing/i)).toBeInTheDocument()
   })
 
   it("displays existing listings with variant selectors", () => {
@@ -288,7 +277,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
 
     // Component renders with listings in counter offer body
     // Listings display requires API data which is mocked
-    expect(screen.getByText(/associatedMarketListings/i)).toBeInTheDocument()
+    expect(screen.getByText(/Associated Market Listings/i)).toBeInTheDocument()
   })
 
   it("allows selecting a listing from autocomplete", async () => {
@@ -296,7 +285,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     // Find the autocomplete input
-    const autocomplete = screen.getByLabelText(/selectListing/i)
+    const autocomplete = screen.getByLabelText(/Select Listing/i)
     expect(autocomplete).toBeInTheDocument()
     
     // Autocomplete options are rendered by MUI, not directly testable without full interaction
@@ -356,18 +345,18 @@ describe("OfferMarketListingsEditAreaV2", () => {
 
     // Component renders with listing
     // Remove functionality requires listing to be displayed which needs API data
-    expect(screen.getByText(/associatedMarketListings/i)).toBeInTheDocument()
+    expect(screen.getByText(/Associated Market Listings/i)).toBeInTheDocument()
   })
 
   it("maintains visual parity with V1 component", () => {
     renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     // Check for Typography with correct variant
-    const title = screen.getByText(/associatedMarketListings/i)
+    const title = screen.getByText(/Associated Market Listings/i)
     expect(title).toHaveClass("MuiTypography-h5")
     
     // Check for Paper component structure
-    const paper = screen.getByText(/associatedMarketListings/i).closest("div")
+    const paper = screen.getByText(/Associated Market Listings/i).closest("div")
     expect(paper).toBeInTheDocument()
   })
 
@@ -387,7 +376,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     // Autocomplete filters options using:
     // listings.filter(o => !body.market_listings.find(l => l.listing_id === o.listing_id))
     // This ensures already added listings don't appear in the dropdown
-    expect(screen.getByLabelText(/selectListing/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Select Listing/i)).toBeInTheDocument()
   })
 
   it("validates quantity against variant availability", async () => {
@@ -406,7 +395,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     // Component should render with listing
     // Quantity validation happens in the NumericFormat component
     // The component caps quantity at variant availability
-    expect(screen.getByText(/associatedMarketListings/i)).toBeInTheDocument()
+    expect(screen.getByText(/Associated Market Listings/i)).toBeInTheDocument()
   })
 
   it("updates total when variant selection changes", async () => {

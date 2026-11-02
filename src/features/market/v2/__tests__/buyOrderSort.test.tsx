@@ -22,16 +22,9 @@ vi.mock("../../../../store/api/v2/market", async () => {
   }
 })
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, def?: string | Record<string, unknown>) =>
-        typeof def === "string" ? def : key,
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const theme = createTheme({
   palette: { outline: { main: "#e0e0e0" } },

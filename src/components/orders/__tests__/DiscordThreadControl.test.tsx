@@ -4,9 +4,9 @@ import { act, fireEvent, render, screen } from "@testing-library/react"
 
 const alert = vi.hoisted(() => vi.fn())
 vi.mock("../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => alert }))
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const {
   DiscordThreadControl,
@@ -38,7 +38,7 @@ describe("DiscordThreadControl", () => {
         refetch={vi.fn()}
       />,
     )
-    const link = screen.getByRole("link", { name: "discordThread.view" })
+    const link = screen.getByRole("link", { name: "View thread" })
     expect(link.getAttribute("href")).toBe("https://discord.com/channels/s1/t1")
   })
 
@@ -54,12 +54,12 @@ describe("DiscordThreadControl", () => {
       />,
     )
     fireEvent.click(
-      screen.getByRole("button", { name: "discordThread.create" }),
+      screen.getByRole("button", { name: "Create thread" }),
     )
     await flush()
     expect(create).toHaveBeenCalledTimes(1)
     expect(screen.getByRole("status").textContent).toContain(
-      "discordThread.creating",
+      "Creating thread…",
     )
     // No button while pending: a second click can't queue a second thread.
     expect(screen.queryByRole("button")).toBeNull()
@@ -76,7 +76,7 @@ describe("DiscordThreadControl", () => {
       />,
     )
     expect(
-      screen.getByRole("link", { name: "discordThread.view" }),
+      screen.getByRole("link", { name: "View thread" }),
     ).toBeTruthy()
     act(() => vi.advanceTimersByTime(THREAD_POLL_INTERVAL_MS * 4))
     expect(refetch).toHaveBeenCalledTimes(3)
@@ -93,16 +93,16 @@ describe("DiscordThreadControl", () => {
       />,
     )
     fireEvent.click(
-      screen.getByRole("button", { name: "discordThread.create" }),
+      screen.getByRole("button", { name: "Create thread" }),
     )
     await flush()
     act(() => vi.advanceTimersByTime(THREAD_POLL_TIMEOUT_MS))
     expect(alert).toHaveBeenCalledWith({
-      message: "discordThread.delayed",
+      message: "The Discord thread is taking longer than usual. Check back in a minute.",
       severity: "info",
     })
     expect(
-      screen.getByRole("button", { name: "discordThread.create" }),
+      screen.getByRole("button", { name: "Create thread" }),
     ).toBeTruthy()
     const calls = refetch.mock.calls.length
     act(() => vi.advanceTimersByTime(THREAD_POLL_INTERVAL_MS * 3))
@@ -120,7 +120,7 @@ describe("DiscordThreadControl", () => {
       />,
     )
     fireEvent.click(
-      screen.getByRole("button", { name: "discordThread.create" }),
+      screen.getByRole("button", { name: "Create thread" }),
     )
     await flush()
     expect(alert).toHaveBeenCalledWith(error)

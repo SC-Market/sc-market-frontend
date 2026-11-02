@@ -67,22 +67,10 @@ vi.mock("../../../../util/time", () => ({
   getRelativeTime: () => "2 days ago",
 }));
 
-// react-i18next mock — return a string when a default value is provided either as
-// a plain string or inside an options object ({ defaultValue }).
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next");
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string | { defaultValue?: string }) => {
-        if (typeof defaultValue === "object" && defaultValue !== null) {
-          return defaultValue.defaultValue ?? key;
-        }
-        return (defaultValue as string) || key;
-      },
-    }),
-  };
-});
+// English catalog t() (src/test/mocks/reactI18next).
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const createMockStore = () =>
   configureStore({
@@ -159,11 +147,11 @@ describe("MyListingsV2", () => {
     await waitFor(() =>
       expect(screen.getAllByText("High Quality Mining Tool").length).toBeGreaterThan(0),
     );
-    expect(screen.getAllByText("marketV2.variantCount").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("3 variants").length).toBeGreaterThan(0);
     expect(screen.getAllByText("50").length).toBeGreaterThan(0);
 
     expect(screen.getAllByText("Standard Ship Components").length).toBeGreaterThan(0);
-    expect(screen.getAllByText("marketV2.variantCount").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("1 variant").length).toBeGreaterThan(0);
     expect(screen.getAllByText("100").length).toBeGreaterThan(0);
   });
 

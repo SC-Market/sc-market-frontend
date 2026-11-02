@@ -19,12 +19,9 @@ const h = vi.hoisted(() => {
   return state
 })
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: unknown) =>
-      typeof defaultValue === "string" ? defaultValue : key,
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 vi.mock("../../../profile/api/profileApi", () => ({
   useGetUserProfileQuery: () => ({

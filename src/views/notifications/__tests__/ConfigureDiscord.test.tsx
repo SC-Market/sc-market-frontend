@@ -21,9 +21,9 @@ const state: {
 const useUserOfficial = vi.fn()
 const useOrgOfficial = vi.fn()
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 vi.mock("../../../features/profile/api/profileApi", () => ({
   useProfileGetDiscordSettingsQuery: (_: unknown, opts: { skip?: boolean }) => ({
     data: opts?.skip ? undefined : state.user,
@@ -80,8 +80,8 @@ describe("ConfigureDiscord", () => {
       "href",
       "https://discord.com/channels/1003056231591727264/1072580369251041330",
     )
-    expect(screen.queryByText("ConfigureDiscord.notConfigured")).not.toBeInTheDocument()
-    expect(screen.getByText("ConfigureDiscord.setUpWithBot")).toBeInTheDocument()
+    expect(screen.queryByText("Not configured")).not.toBeInTheDocument()
+    expect(screen.getByText("To use your own Discord server, run /setup threads in the channel that should hold the order threads.")).toBeInTheDocument()
   })
 
   it("falls back to the IDs when the bot can't see the server", () => {
@@ -95,9 +95,9 @@ describe("ConfigureDiscord", () => {
   it("says not configured, without a dead link, and how to set it up", () => {
     state.user = { guild_id: null, channel_id: null, guild_name: null, guild_avatar: null, channel_name: null }
     renderAt("/settings", false)
-    expect(screen.getByText("ConfigureDiscord.notConfigured")).toBeInTheDocument()
+    expect(screen.getByText("Not configured")).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /#/ })).not.toBeInTheDocument()
-    expect(screen.getByText("ConfigureDiscord.setUpWithBot")).toBeInTheDocument()
+    expect(screen.getByText("To use your own Discord server, run /setup threads in the channel that should hold the order threads.")).toBeInTheDocument()
   })
 
   it("shows the org's channel on the org page and uses the org's official-server action", () => {
@@ -108,7 +108,7 @@ describe("ConfigureDiscord", () => {
     expect(state.orgSkip).toBe(false)
     expect(screen.getByRole("link", { name: /SC Market: #org-orders/ })).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole("button", { name: "ConfigureDiscord.useOfficialServer" }))
+    fireEvent.click(screen.getByRole("button", { name: "Use Official Server" }))
     expect(useOrgOfficial).toHaveBeenCalledWith("SCMARKET")
     expect(useUserOfficial).not.toHaveBeenCalled()
   })
@@ -116,7 +116,7 @@ describe("ConfigureDiscord", () => {
   it("uses your own official-server action in your settings", () => {
     renderAt("/settings", false)
     expect(state.orgSkip).toBe(true)
-    fireEvent.click(screen.getByRole("button", { name: "ConfigureDiscord.useOfficialServer" }))
+    fireEvent.click(screen.getByRole("button", { name: "Use Official Server" }))
     expect(useUserOfficial).toHaveBeenCalledTimes(1)
     expect(useOrgOfficial).not.toHaveBeenCalled()
   })

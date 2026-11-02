@@ -43,16 +43,9 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 }))
 
 // Mock translation
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string) => defaultValue || key,
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock data
 const mockLots: StockLotDetail[] = [

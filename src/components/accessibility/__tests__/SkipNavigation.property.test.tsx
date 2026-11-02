@@ -13,11 +13,9 @@ import fc from "fast-check"
 import { SkipNavigation, SkipLink } from "../SkipNavigation"
 
 // Mock i18next
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue: string) => defaultValue,
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 /**
  * Arbitrary generator for a single skip link with guaranteed unique values

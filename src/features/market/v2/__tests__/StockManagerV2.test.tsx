@@ -125,21 +125,9 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
   useAlertHook: () => vi.fn(),
 }));
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next");
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string | { defaultValue?: string }) => {
-        if (typeof defaultValue === "object" && defaultValue !== null) {
-          return defaultValue.defaultValue ?? key;
-        }
-        return (defaultValue as string) || key;
-      },
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
-  };
-});
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const createMockStore = () =>
   configureStore({
@@ -252,7 +240,7 @@ describe("StockManagerV2", () => {
   it("links to the archived listings view", async () => {
     renderPage();
     await waitFor(() =>
-      expect(screen.getByText("sidebar.archived_listings")).toBeInTheDocument(),
+      expect(screen.getByText("Archived Listings")).toBeInTheDocument(),
     );
   });
 

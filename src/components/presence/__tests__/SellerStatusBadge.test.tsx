@@ -2,14 +2,9 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (_k: string, a?: string | ({ defaultValue?: string } & Record<string, unknown>), b?: Record<string, unknown>) => {
-      const o = typeof a === "string" ? { defaultValue: a, ...(b ?? {}) } : (a ?? {})
-      return String(o.defaultValue ?? _k).replace(/\{\{(\w+)\}\}/g, (_m, n) => String((o as Record<string, unknown>)[n] ?? ""))
-    },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 import { SellerStatusBadge } from "../SellerStatusBadge"
 

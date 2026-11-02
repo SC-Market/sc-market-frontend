@@ -5,15 +5,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { describe, expect, it, vi } from "vitest"
 import { Contracts } from "../Contracts"
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, def?: string) => (typeof def === "string" ? def : key),
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 vi.mock("../../../components/metadata/Page", () => ({
   Page: ({ children }: { children: React.ReactNode }) => <>{children}</>,

@@ -4,12 +4,10 @@ import { render, screen, fireEvent } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { DiscordLoginButton } from "../DiscordLoginButton"
 
-// Mock i18n hook to return the key fallback
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, fallback?: string) => fallback || key,
-  }),
-}))
+// English catalog t() (src/test/mocks/reactI18next).
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock constants to avoid import.meta.env in tests
 vi.mock("../../../util/constants", () => ({

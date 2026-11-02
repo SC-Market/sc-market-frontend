@@ -48,26 +48,9 @@ vi.mock("../../../features/contractor/api/contractorApi", () => ({
 }))
 
 // Mock i18next
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string | Record<string, unknown>) => {
-      // Handle both string and object default values
-      if (typeof defaultValue === "string") {
-        return defaultValue
-      }
-      return key
-    },
-    i18n: {
-      language: "en",
-      changeLanguage: vi.fn(),
-    },
-  }),
-  Trans: ({ children }: { children: React.ReactNode }) => children,
-  initReactI18next: {
-    type: "3rdParty",
-    init: vi.fn(),
-  },
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock the Page component
 vi.mock("../../../components/metadata/Page", () => ({

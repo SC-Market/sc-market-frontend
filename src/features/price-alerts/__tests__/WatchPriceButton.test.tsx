@@ -10,19 +10,9 @@ const h = vi.hoisted(() => ({
   add: vi.fn(),
 }))
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string, opts?: Record<string, unknown>) =>
-        (defaultValue || key).replace(/\{\{(\w+)\}\}/g, (_m, k) =>
-          String(opts?.[k] ?? ""),
-        ),
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 vi.mock("../../../hooks/login/useSession", () => ({
   useSession: () => h.session,
 }))

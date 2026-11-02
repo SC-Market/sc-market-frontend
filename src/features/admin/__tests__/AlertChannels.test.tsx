@@ -8,19 +8,9 @@ import {
 } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (
-      k: string,
-      d?: string | ({ defaultValue?: string } & Record<string, unknown>),
-    ) => {
-      const o = typeof d === "string" ? { defaultValue: d } : (d ?? {})
-      return String(o.defaultValue ?? k).replace(/\{\{(\w+)\}\}/g, (_m, n) =>
-        String(o[n] ?? ""),
-      )
-    },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const preview = vi.fn()
 vi.mock("../../../store/api/v2/market", () => ({

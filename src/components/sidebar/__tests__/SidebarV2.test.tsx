@@ -147,20 +147,10 @@ vi.mock("react-cookie", () => ({
   useCookies: () => [mockCookies, mockSetCookie, vi.fn()],
 }))
 
-// i18n — return the provided default string (matches project test convention).
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, def?: string | { defaultValue?: string }) => {
-        if (typeof def === "object" && def !== null) return def.defaultValue ?? key
-        return (def as string) || key
-      },
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
-  }
-})
+// English catalog t() (src/test/mocks/reactI18next).
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Import AFTER mocks are declared.
 import { SidebarV2 } from "../SidebarV2"

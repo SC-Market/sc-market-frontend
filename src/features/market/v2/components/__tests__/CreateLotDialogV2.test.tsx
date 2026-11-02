@@ -17,17 +17,9 @@ import type { GetListingDetailApiResponse } from "../../../../../store/api/v2/ma
 type MarketV2Module = typeof import("../../../../../store/api/v2/market")
 type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"]
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string, opts?: Record<string, string>) =>
-        (defaultValue || key).replace(/\{\{(\w+)\}\}/g, (_m, k) => opts?.[k] ?? ""),
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const issueAlert = vi.fn()
 vi.mock("../../../../../hooks/alert/AlertHook", () => ({

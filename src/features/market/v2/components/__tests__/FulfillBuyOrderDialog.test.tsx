@@ -17,13 +17,9 @@ import type { BuyOrderFulfillmentOption } from "../../../../../store/api/v2/mark
 type MarketV2Module = typeof import("../../../../../store/api/v2/market")
 type MarketV2Endpoints = MarketV2Module["marketV2Api"]["endpoints"]
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, fallback?: string, opts?: Record<string, unknown>) =>
-      (fallback ?? key).replace(/\{\{(\w+)\}\}/g, (_m, k) => String(opts?.[k] ?? "")),
-    i18n: { language: "en" },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const issueAlert = vi.fn()
 vi.mock("../../../../../hooks/alert/AlertHook", () => ({ useAlertHook: () => issueAlert }))

@@ -28,31 +28,9 @@ vi.mock("../../../../../components/charts/MuiCharts", () => ({
 }))
 
 // Mock translation
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string, options?: any) => {
-        if (key === "market.tierN") {
-          return `Tier ${options?.tier}`
-        }
-        if (key === "market.allTiers") return "All Tiers"
-        if (key === "market.qualityTier") return "Quality Tier"
-        if (key === "market.tier1") return "Tier 1"
-        if (key === "market.tier2") return "Tier 2"
-        if (key === "market.tier3") return "Tier 3"
-        if (key === "market.tier4") return "Tier 4"
-        if (key === "market.tier5") return "Tier 5"
-        if (key === "market.loadingPriceHistory") return "Loading price history..."
-        if (key === "market.errorLoadingPriceHistory")
-          return "Error loading price history"
-        if (key === "market.noPriceHistory") return "No price history available"
-        return defaultValue || key
-      },
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Sample price history data
 const mockPriceHistoryData = {

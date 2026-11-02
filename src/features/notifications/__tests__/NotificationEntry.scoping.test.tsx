@@ -3,18 +3,9 @@ import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { describe, it, expect, vi } from "vitest"
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (
-      _k: string,
-      o: { defaultValue?: string } & Record<string, string> = {},
-    ) =>
-      (o.defaultValue ?? _k).replace(/\{\{(\w+)\}\}/g, (_m, n) => o[n] ?? ""),
-  }),
-  Trans: () => null,
-  // src/util/i18n (imported by AlertHook) registers this plugin at load.
-  initReactI18next: { type: "3rdParty", init: () => {} },
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 vi.mock("../components/NotificationBase", () => ({
   NotificationBase: ({

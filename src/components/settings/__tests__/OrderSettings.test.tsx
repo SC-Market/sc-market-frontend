@@ -9,9 +9,9 @@ import { describe, it, expect, vi } from "vitest"
 import { MemoryRouter } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key: string, fallback?: string) => fallback ?? key }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 vi.mock("../../paper/Section", () => ({
   FlatSection: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,

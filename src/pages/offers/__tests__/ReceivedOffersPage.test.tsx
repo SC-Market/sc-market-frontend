@@ -26,20 +26,9 @@ vi.mock("../../../components/button/ReportButton", () => ({
 }))
 
 // Mock i18next
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string) => key, // Return the key as a string
-    i18n: {
-      language: "en",
-      changeLanguage: vi.fn(),
-    },
-  }),
-  Trans: ({ children }: { children: React.ReactNode }) => children,
-  initReactI18next: {
-    type: "3rdParty",
-    init: vi.fn(),
-  },
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock react-router-dom navigation
 vi.mock("react-router-dom", async () => {

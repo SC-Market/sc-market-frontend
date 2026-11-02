@@ -43,18 +43,9 @@ vi.mock("../../../hooks/alert/AlertHook", () => ({
 }))
 
 // Mock i18next
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: {
-      language: "en",
-    },
-  }),
-  initReactI18next: {
-    type: "3rdParty",
-    init: vi.fn(),
-  },
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock Page component
 vi.mock("../../../components/metadata/Page", () => ({

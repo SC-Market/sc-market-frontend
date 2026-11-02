@@ -1,23 +1,12 @@
 import { vi, describe, it, expect, beforeEach } from "vitest"
 import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
-import english from "../../../locales/en/english.json"
 import { OrgLinkBackLine, orgLinkBackUrl } from "../OrgLinkBackLine"
 
-// Real English strings with {{var}} interpolation
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, vars?: Record<string, string>) => {
-      const value = key
-        .split(".")
-        .reduce<unknown>(
-          (node, part) => (node as Record<string, unknown>)?.[part],
-          english,
-        )
-      return String(value).replace(/{{(\w+)}}/g, (_, k) => vars?.[k] ?? "")
-    },
-  }),
-}))
+// English catalog t() (src/test/mocks/reactI18next).
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const LINE =
   "Find our shop on SC Market: https://sc-market.space/contractor/TESTORG"

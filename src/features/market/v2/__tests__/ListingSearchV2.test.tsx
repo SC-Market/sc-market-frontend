@@ -98,25 +98,9 @@ vi.mock("../../../../hooks/layout/useBottomNavHeight", () => ({
 }));
 
 // Mock translation
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next");
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValueOrOptions?: string | Record<string, unknown>) => {
-        if (typeof defaultValueOrOptions === "string") return defaultValueOrOptions
-        if (defaultValueOrOptions && typeof defaultValueOrOptions === "object" && "defaultValue" in defaultValueOrOptions) {
-          return defaultValueOrOptions.defaultValue as string
-        }
-        return key
-      },
-    }),
-    initReactI18next: {
-      type: "3rdParty",
-      init: vi.fn(),
-    },
-  };
-});
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock QualityFilter component
 vi.mock("../../../../components/market/v2/QualityFilter", () => ({
@@ -396,8 +380,8 @@ describe("ListingSearchV2", () => {
     );
 
     // Price filters should be present
-    expect(screen.getByLabelText(/Min Price/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Max Price/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Minimum Cost/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Maximum Cost/i)).toBeInTheDocument();
   });
 
   it("displays text search input", async () => {

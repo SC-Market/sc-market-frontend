@@ -5,15 +5,10 @@ import { describe, expect, it, vi } from "vitest"
 import { ItemAcquisitionSection } from "../ItemAcquisitionSection"
 import { acquisition } from "../../../bridge/__tests__/fixtures"
 
-// The English catalog, exactly as the bridge renders it.
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  const { englishT } = await import("../../../bridge/englishT")
-  return {
-    ...actual,
-    useTranslation: () => ({ t: englishT, i18n: { language: "en-US" } }),
-  }
-})
+// English catalog t() (src/test/mocks/reactI18next).
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 function renderSection(doc = acquisition(), onAddToCart?: (id: string) => void) {
   return render(

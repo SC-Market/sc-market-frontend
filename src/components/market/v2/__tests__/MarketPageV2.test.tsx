@@ -5,15 +5,9 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { describe, expect, it, vi } from "vitest"
 import { MarketPageV2 } from "../MarketPageV2"
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, def?: string) => (typeof def === "string" ? def : key),
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Records the document (tab) title the page asks for
 vi.mock("../../../../components/metadata/Page", () => ({

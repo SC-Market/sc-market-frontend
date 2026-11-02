@@ -9,9 +9,9 @@ import { render, screen, fireEvent } from "@testing-library/react"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import type { Order, OrderStatus } from "../../../features/orders/domain/types"
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const submitReview = vi.fn()
 vi.mock("../../../features/orders/hooks/useOrderReview", () => ({
@@ -50,7 +50,7 @@ function renderFor(status: OrderStatus, timestamp: string = daysAgo(1)) {
 }
 
 const button = () =>
-  screen.getByRole("button", { name: /orderReviewArea.leaveReviewButton/ })
+  screen.getByRole("button", { name: "Leave Review" })
 
 beforeEach(() => submitReview.mockClear())
 
@@ -59,7 +59,7 @@ describe("OrderReviewArea", () => {
     it(`disables the review and shows a hint while the order is ${status}`, () => {
       renderFor(status)
       expect(button()).toHaveProperty("disabled", true)
-      expect(screen.getByText("orderReviewArea.notFinishedHint")).toBeTruthy()
+      expect(screen.getByText("You can review once the order is completed or cancelled, or 14 days after it started.")).toBeTruthy()
       fireEvent.click(button())
       expect(submitReview).not.toHaveBeenCalled()
     })
@@ -69,7 +69,7 @@ describe("OrderReviewArea", () => {
     it(`allows a review once the order is ${status}`, () => {
       renderFor(status)
       expect(button()).toHaveProperty("disabled", false)
-      expect(screen.queryByText("orderReviewArea.notFinishedHint")).toBeNull()
+      expect(screen.queryByText("You can review once the order is completed or cancelled, or 14 days after it started.")).toBeNull()
       fireEvent.click(button())
       expect(submitReview).toHaveBeenCalledTimes(1)
     })
@@ -79,7 +79,7 @@ describe("OrderReviewArea", () => {
     it(`allows a review of a ${status} order open 14+ days`, () => {
       renderFor(status, daysAgo(15))
       expect(button()).toHaveProperty("disabled", false)
-      expect(screen.queryByText("orderReviewArea.notFinishedHint")).toBeNull()
+      expect(screen.queryByText("You can review once the order is completed or cancelled, or 14 days after it started.")).toBeNull()
       fireEvent.click(button())
       expect(submitReview).toHaveBeenCalledTimes(1)
     })
@@ -88,6 +88,6 @@ describe("OrderReviewArea", () => {
   it("keeps an open order disabled at 13 days", () => {
     renderFor("in-progress", daysAgo(13))
     expect(button()).toHaveProperty("disabled", true)
-    expect(screen.getByText("orderReviewArea.notFinishedHint")).toBeTruthy()
+    expect(screen.getByText("You can review once the order is completed or cancelled, or 14 days after it started.")).toBeTruthy()
   })
 })

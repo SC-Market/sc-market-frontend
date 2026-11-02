@@ -66,11 +66,9 @@ vi.mock("../../../../../components/paper/Section", () => ({
 }))
 
 // Mock i18next
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock MUI theme
 vi.mock("@mui/material", async () => {

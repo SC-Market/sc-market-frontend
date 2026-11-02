@@ -15,14 +15,9 @@ vi.mock("../../../features/storefront/hooks/useBrandingUnlocked", () => ({
   useBrandingUnlocked: (c: { premium_tier?: string } | undefined) => c?.premium_tier === "white_label",
 }))
 
-vi.mock("react-i18next", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("react-i18next")>()),
-  useTranslation: () => ({
-    t: (key: string, fallback?: string) =>
-      typeof fallback === "string" ? fallback : key,
-    i18n: { language: "en", changeLanguage: vi.fn() },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
@@ -59,12 +54,12 @@ describe("OrgManageLayout audit log item", () => {
   it("is hidden from members without Manage Org Details", () => {
     h.granted = new Set(["manage_invites"])
     const labels = navLabels()
-    expect(labels).toContain("org.invitesTab")
-    expect(labels).not.toContain("org.auditLogsTab")
+    expect(labels).toContain("Invites")
+    expect(labels).not.toContain("Audit Logs")
   })
 
   it("is shown to Manage Org Details holders", () => {
     h.granted = new Set(["manage_org_details"])
-    expect(navLabels()).toContain("org.auditLogsTab")
+    expect(navLabels()).toContain("Audit Logs")
   })
 })

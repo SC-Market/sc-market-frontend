@@ -22,14 +22,9 @@ vi.mock("react-router-dom", async (importOriginal) => ({
   useNavigate: () => navigateSpy,
 }))
 
-vi.mock("react-i18next", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("react-i18next")>()),
-  useTranslation: () => ({
-    t: (key: string, fallback?: string) =>
-      typeof fallback === "string" ? fallback : key,
-    i18n: { language: "en", changeLanguage: vi.fn() },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({ children }: { children: React.ReactNode }) => (
@@ -108,20 +103,20 @@ describe("OrgManageLayout nav", () => {
 
   it("has no Market, Blocked Users or Customers tabs (those live on each shop)", () => {
     const labels = navLabels(OWNER)
-    expect(labels).not.toContain("org.marketTab")
-    expect(labels).not.toContain("org.blocklistTab")
+    expect(labels).not.toContain("Market")
+    expect(labels).not.toContain("Blocked Users")
     expect(labels).not.toContain("Customers")
     for (const tab of ["market", "blocklist", "customers"]) expect(manageTabs.has(tab)).toBe(false)
   })
 
   it("shows Discord Integration with Manage Webhooks, not Manage Invites", () => {
-    expect(navLabels(memberWith("manage_invites"))).toEqual(["org.invitesTab"])
-    expect(navLabels(memberWith("manage_webhooks"))).toEqual(["org.discordTab"])
+    expect(navLabels(memberWith("manage_invites"))).toEqual(["Invites"])
+    expect(navLabels(memberWith("manage_webhooks"))).toEqual(["Discord Integration"])
   })
 
   it("hides Audit Logs from members without Manage Org Details", () => {
-    expect(navLabels(memberWith("manage_invites"))).not.toContain("org.auditLogsTab")
-    expect(navLabels(memberWith("manage_org_details"))).toContain("org.auditLogsTab")
+    expect(navLabels(memberWith("manage_invites"))).not.toContain("Audit Logs")
+    expect(navLabels(memberWith("manage_org_details"))).toContain("Audit Logs")
   })
 
   it("only offers items that have a manage/<tab> route (white-label org owner)", () => {

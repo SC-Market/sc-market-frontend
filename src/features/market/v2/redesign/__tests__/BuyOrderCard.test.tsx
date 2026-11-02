@@ -13,15 +13,9 @@ import { describe, expect, it, vi } from "vitest"
 import type { StandingBuyOrder } from "../../../../../store/api/v2/market"
 import { BuyOrderCard } from "../BuyOrdersRedesign"
 
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual<typeof import("react-i18next")>("react-i18next")
-  const t = (key: string, def?: string | Record<string, unknown>, opts?: Record<string, unknown>) => {
-    const text = typeof def === "string" ? def : key
-    const vars = (typeof def === "object" ? def : opts) ?? {}
-    return text.replace(/{{(\w+)}}/g, (_, name: string) => String(vars[name] ?? ""))
-  }
-  return { ...actual, useTranslation: () => ({ t, i18n: { language: "en" } }) }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const theme = createTheme({
   layoutSpacing: { layout: 2, component: 1, text: 1, compact: 0.5 },

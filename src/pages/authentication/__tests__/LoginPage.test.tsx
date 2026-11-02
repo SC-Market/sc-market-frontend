@@ -35,20 +35,9 @@ vi.mock("../../../components/metadata/Page", () => ({
 }))
 
 // Mock i18next
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
-    i18n: {
-      language: "en",
-      changeLanguage: vi.fn(),
-    },
-  }),
-  Trans: ({ children }: { children: React.ReactNode }) => children,
-  initReactI18next: {
-    type: "3rdParty",
-    init: vi.fn(),
-  },
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock Footer to avoid rendering issues
 vi.mock("../../../components/footer/Footer", () => ({

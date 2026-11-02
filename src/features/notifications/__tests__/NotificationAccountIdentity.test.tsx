@@ -2,17 +2,9 @@ import React from "react"
 import { render, screen } from "@testing-library/react"
 import { describe, it, expect, vi } from "vitest"
 
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (_k: string, a?: string | ({ defaultValue?: string } & Record<string, string>)) => {
-      const o = typeof a === "string" ? { defaultValue: a } : (a ?? {})
-      return (o.defaultValue ?? _k).replace(/\{\{(\w+)\}\}/g, (_m, n) => (o as Record<string, string>)[n] ?? "")
-    },
-  }),
-  Trans: () => null,
-  // src/util/i18n (imported by AlertHook) registers this plugin at load.
-  initReactI18next: { type: "3rdParty", init: () => {} },
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 vi.mock("../components/NotificationBase", () => ({
   NotificationBase: ({ to, children }: { to?: string; children: React.ReactNode }) => (

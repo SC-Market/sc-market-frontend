@@ -11,28 +11,9 @@ import { generatedApiV2 } from "../../../../../store/generatedApiV2"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 
 // Mock translation
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string | { tz?: string }) => {
-        if (typeof defaultValue === "object") {
-          return key
-        }
-        return defaultValue || key
-      },
-      i18n: {
-        language: "en",
-        changeLanguage: vi.fn(),
-      },
-    }),
-    initReactI18next: {
-      type: "3rdParty",
-      init: vi.fn(),
-    },
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock dependencies
 vi.mock("../../../api/marketApi", () => ({

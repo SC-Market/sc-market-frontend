@@ -47,13 +47,9 @@ vi.mock("../../../store/api/v2/market", () => ({
   },
 }))
 
-vi.mock("react-i18next", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("react-i18next")>()),
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: { language: "en-US", changeLanguage: vi.fn() },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const { CustomerList } = await import("../Customers")
 

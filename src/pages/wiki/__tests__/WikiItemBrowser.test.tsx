@@ -24,16 +24,9 @@ vi.mock("../../../components/layout/StandardPageLayout", () => ({
 }))
 
 // Mock react-i18next
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, def?: unknown) => (typeof def === "string" ? def : key),
-      i18n: { language: "en", changeLanguage: vi.fn() },
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock store setup
 const createMockStore = () => {

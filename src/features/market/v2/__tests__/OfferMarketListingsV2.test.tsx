@@ -27,22 +27,9 @@ const testTheme = createTheme({
 } as any)
 
 // Mock translations
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, opts?: { tier?: number }) => {
-      if (key === "marketV2.tierN") return `Tier ${opts?.tier}`
-      const translations: Record<string, string> = {
-        "OfferMarketListings.associatedMarketListings": "Associated Market Listings",
-        "OfferMarketListings.product": "Product",
-        "OfferMarketListings.qty": "Qty",
-        "OfferMarketListings.unitPrice": "Unit Price",
-        "OfferMarketListings.total": "Total",
-        "OfferMarketListings.noAssociatedListings": "No associated listings",
-      }
-      return translations[key] || key
-    },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const mockOrderItems: OrderItemDetail[] = [
   {

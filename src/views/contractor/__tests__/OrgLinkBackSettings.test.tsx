@@ -13,9 +13,9 @@ vi.mock("../../../components/authentication/OrgLinkBackLine", () => ({
     <div>line for {props.spectrumId}</div>
   ),
 }))
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({ t: (key: string) => key }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 import { OrgLinkBackSettings } from "../OrgLinkBackSettings"
 
@@ -31,7 +31,7 @@ describe("OrgLinkBackSettings", () => {
   it("offers the line to orgs verified against an RSI org", () => {
     spectrumId = "TESTORG"
     renderIt()
-    expect(screen.getByText("orgLinkBack.manageTitle")).toBeTruthy()
+    expect(screen.getByText("Link back to us")).toBeTruthy()
     expect(screen.getByText("line for TESTORG")).toBeTruthy()
   })
 

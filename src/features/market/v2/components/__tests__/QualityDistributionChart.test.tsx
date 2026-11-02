@@ -41,30 +41,9 @@ vi.mock("@mui/x-charts/BarChart", () => ({
 }))
 
 // Mock translation
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string) => {
-        if (key === "market.tierBronze") return "Bronze"
-        if (key === "market.tierSilver") return "Silver"
-        if (key === "market.tierGold") return "Gold"
-        if (key === "market.tierPlatinum") return "Platinum"
-        if (key === "market.tierDiamond") return "Diamond"
-        if (key === "market.quantityAvailable") return "Quantity Available"
-        if (key === "market.quantity") return "Quantity"
-        if (key === "market.loadingQualityDistribution")
-          return "Loading quality distribution..."
-        if (key === "market.errorLoadingQualityDistribution")
-          return "Error loading quality distribution"
-        if (key === "market.noQualityDistribution")
-          return "No quality distribution data available"
-        return defaultValue || key
-      },
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 describe("QualityDistributionChart", () => {
   const mockGameItemId = "test-game-item-id"

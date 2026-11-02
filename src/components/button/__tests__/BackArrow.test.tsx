@@ -4,11 +4,9 @@ import { render, screen, fireEvent } from "@testing-library/react"
 import { BackArrow } from "../BackArrow"
 
 // Mock i18n
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (_: string, fallback?: string) => fallback || "",
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const mockNavigate = vi.fn()
 vi.mock("react-router-dom", async () => {

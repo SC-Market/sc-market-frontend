@@ -6,14 +6,9 @@ const query = vi.hoisted(() => vi.fn())
 vi.mock("../../../store/api/v2/market", () => ({
   useGetContractorSisterLinksQuery: query,
 }))
-vi.mock("react-i18next", () => ({
-  useTranslation: () => ({
-    t: (key: string, opts?: string | { defaultValue?: string; name?: string }) => {
-      const text = typeof opts === "string" ? opts : (opts?.defaultValue ?? key)
-      return typeof opts === "object" && opts.name ? text.replace("{{name}}", opts.name) : text
-    },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const { OrgScOrgsCard } = await import("../ScOrgsCard")
 

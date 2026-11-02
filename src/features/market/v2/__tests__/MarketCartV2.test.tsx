@@ -30,20 +30,9 @@ vi.mock("../../../../hooks/alert/AlertHook", () => ({
 }))
 
 // Mock translation
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, params?: any) => {
-        if (params) {
-          return `${key}_${JSON.stringify(params)}`
-        }
-        return key
-      },
-    }),
-  }
-})
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock StandardPageLayout to avoid serviceApi dependency
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
@@ -236,7 +225,7 @@ describe("MarketCartV2", () => {
       // Variant is rendered as separate chips: quality tier badge,
       // quality value, and crafted source.
       await waitFor(() => {
-        expect(screen.getAllByText('marketV2.tierN_{"tier":5}').length).toBeGreaterThan(0)
+        expect(screen.getAllByText("Tier 5").length).toBeGreaterThan(0)
         expect(screen.getByText("Crafted")).toBeInTheDocument()
       })
     })
@@ -296,7 +285,7 @@ describe("MarketCartV2", () => {
       renderWithProviders(<MarketCartV2 />, { store })
 
       await waitFor(() => {
-        const alerts = screen.getAllByText(/cart.pricesChanged/)
+        const alerts = screen.getAllByText(/Prices Have Changed/)
         expect(alerts.length).toBeGreaterThan(0)
       })
     })
@@ -323,7 +312,7 @@ describe("MarketCartV2", () => {
       renderWithProviders(<MarketCartV2 />, { store })
 
       await waitFor(() => {
-        const warnings = screen.getAllByText(/cart.unavailable/)
+        const warnings = screen.getAllByText(/Unavailable/)
         expect(warnings.length).toBeGreaterThan(0)
       })
     })
@@ -349,7 +338,7 @@ describe("MarketCartV2", () => {
 
       await waitFor(() => {
         const checkoutButton = screen.getByRole("button", {
-          name: /cart.submitOffer/i,
+          name: /Submit offer/i,
         })
         expect(checkoutButton).toBeDisabled()
       })

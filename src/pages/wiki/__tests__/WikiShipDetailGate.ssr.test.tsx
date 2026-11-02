@@ -48,14 +48,9 @@ vi.mock("../WikiShipBrowser", () => ({
   WikiShipBrowser: () => <div>ship browser with detail modal</div>,
 }))
 
-vi.mock("react-i18next", async (importOriginal) => ({
-  ...(await importOriginal<Record<string, unknown>>()),
-  useTranslation: () => ({
-    t: (key: string, def?: string | Record<string, unknown>) =>
-      typeof def === "string" ? def : key,
-    i18n: { language: "en" },
-  }),
-}))
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 const app = (
   <ThemeProvider theme={mainTheme}>

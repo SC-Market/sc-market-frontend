@@ -49,24 +49,10 @@ const h = vi.hoisted(() => ({
 vi.mock("../../../hooks/login/useSession", () => ({
   useSession: () => h.session,
 }))
-// The real English strings (the test setup has no i18n instance).
-vi.mock("react-i18next", async () => {
-  const actual =
-    await vi.importActual<typeof import("react-i18next")>("react-i18next")
-  const { default: catalog } = await import("../../../locales/en/english.json")
-  const t = (key: string, options?: Record<string, unknown>) => {
-    const value =
-      key.split(".").reduce<unknown>((node, part) => {
-        return node && typeof node === "object"
-          ? (node as Record<string, unknown>)[part]
-          : undefined
-      }, catalog) ?? key
-    return String(value).replace(/\{\{(\w+)\}\}/g, (_, name) =>
-      String(options?.[name] ?? ""),
-    )
-  }
-  return { ...actual, useTranslation: () => ({ t, i18n: { language: "en" } }) }
-})
+// English catalog t() (src/test/mocks/reactI18next).
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 vi.mock("../../../features/market/api/marketApi", () => ({
   useGetMarketStatsQuery: () => h.stats,
 }))

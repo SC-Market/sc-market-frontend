@@ -111,20 +111,9 @@ vi.mock("../../../../components/typography/UnderlineLink", () => ({
 }));
 
 // Mock translation
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string | { defaultValue: string; count?: number }) => {
-        if (typeof defaultValue === "object") {
-          return defaultValue.defaultValue.replace("{{count}}", String(defaultValue.count || 0));
-        }
-        return defaultValue || key;
-      },
-    }),
-  }
-});
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../../test/mocks/reactI18next")).mockReactI18next(importOriginal),
+)
 
 // Mock lazy Markdown to avoid Suspense with no boundary
 vi.mock("../../../../components/markdown/Markdown.lazy", () => ({
@@ -345,7 +334,7 @@ describe("ListingDetailV2", () => {
     renderComponent();
 
     // Verify OUT OF STOCK chip is displayed
-    expect(screen.getByText("marketV2.outOfStockBadge")).toBeInTheDocument();
+    expect(screen.getByText("OUT OF STOCK")).toBeInTheDocument();
   });
 
   it("displays loading state", () => {
