@@ -2,19 +2,19 @@
 title: Choose your notifications
 description: Pick where each kind of notification reaches you (in-app, push, email, Discord DM), per organization, and opt in to alerts for new public contracts.
 order: 30
-updated: 2026-10-27
-keywords: [notifications, push, email, discord, discord dm, settings, unsubscribe, public contracts, contract alerts, webhook, notification settings, mute organization, new member]
+updated: 2026-11-02
+keywords: [notifications, push, email, discord, discord dm, settings, unsubscribe, reminders, offer reminder, unread messages, email bounced, public contracts, contract alerts, webhook, notification settings, mute organization, new member]
 related: [buying/price-alerts-watchlist, discord/order-alerts-and-claiming, discord/webhooks]
 howto: true
 ---
 
-SC Market tells you about orders, offers, messages, bids, reviews, invites, price alerts and announcements. In **Settings › Notifications** you choose where each one reaches you: on the site (in-app), as a push notification, by email, or as a Discord DM.
+SC Market tells you about orders, offers, messages, reminders, bids, reviews, invites, price alerts and announcements. In **Settings › Notifications** you choose where each one reaches you: on the site (in-app), as a push notification, by email, or as a Discord DM.
 
 ## Before you start
 
 - **Push:** turn on push notifications for this browser or phone at the bottom of the same page. On iPhone, add SC Market to your Home Screen first.
-- **Email:** add and verify an email address at the bottom of the same page. Email is off until you turn it on, except for organization invites (on unless you turn it off) and announcements (always sent).
-- **Discord DM:** link your Discord account under **Settings › Discord**. DMs are off by default, except for price alerts.
+- **Email:** add and verify an email address at the bottom of the same page. If you don't pick email types, the key ones are turned on: order status changes, new offers and counter-offers, and the unread message reminder. Invites, announcements and storefront enquiry replies are emailed by default too. The rest, and organization email, stay off until you turn them on.
+- **Discord DM:** link your Discord account under **Settings › Discord Integration**. DMs are on by default for price alerts, the unread message reminder and **Offer waiting for your reply**, and off for everything else. The bot can only DM you while you share a Discord server with it.
 
 ## Steps
 
@@ -25,8 +25,16 @@ SC Market tells you about orders, offers, messages, bids, reviews, invites, pric
 
 Some pills can't be changed:
 - **In-app** is always on, except for price alerts.
-- **Announcements** from the SC Market team are always delivered: in-app, by push and by email.
+- **Announcements** from the SC Market team are always delivered on the site, by push and by Discord DM. You can turn their emails off.
 - **Discord DM** is greyed out until you link Discord. For some order, offer and message notifications it isn't available yet.
+
+## Reminders
+
+The **Reminders** section on the **Messages** tab nudges you when something is waiting:
+
+- **Unread message reminder**: an order or offer chat message has been unread for about 6 hours. At most once a day.
+- **Offer waiting for your reply**: an offer to you, or to an org whose orders you handle, has had no answer for about a day, and again after about 3 days.
+- **Your offer is still waiting**: as the buyer, about a day after the seller's last reminder, so you can keep waiting, message the seller or withdraw the offer.
 
 ## Organization notifications
 
@@ -47,4 +55,6 @@ Orders, offers, messages, bids, reviews, new members and public contracts that y
 
 - **A channel feed in Discord:** in a Discord server, run `/setup contracts` (fill in `org` for your organization) to post every new public contract in that channel with its kind, payment, cost and a link. `/setup remove` turns it off. It needs the same permissions as [order alerts](/guides/discord/order-alerts-and-claiming).
 - **A webhook:** in your shop's or organization's webhook settings, tick **New public contracts (site-wide)** to post them to a Discord webhook. See [webhooks](/guides/discord/webhooks).
-- **Unsubscribing from email:** every notification email has an unsubscribe link, and **Manage preferences** in the email opens this page.
+- **Storefront enquiries:** when SC Market staff accept or decline a [branded storefront](/guides/org-storefront/white-label) enquiry you sent, you're told under **Orgs & contracts** › **Enquiry accepted or declined**, by email too unless you turn it off.
+- **Unsubscribing from email:** every notification email has an unsubscribe link that works without signing in. It turns off that kind of email at once (personal, or for that organization) and says what it turned off. **Turn off all emails** stops the rest.
+- **"Your email bounced":** if mail to your address bounces or is reported as spam, SC Market stops emailing it and this page says **Your email bounced. Please update it.** Click **Update email**, or **Re-verify** once the address works again.

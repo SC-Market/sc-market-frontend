@@ -2,7 +2,7 @@
 title: Your org's manage pages
 description: The Manage Org area holds your org's profile, roles, invites, Discord, settings, audit log and theme. Each tab shows only if your roles allow it.
 order: 40
-updated: 2026-10-26
+updated: 2026-11-02
 keywords: [manage org, org settings, org admin, about, roles, invites, discord integration, audit logs, transfer ownership, archive org]
 related: [orgs/register-an-org, orgs/roles-and-permissions, orgs/invite-and-manage-members]
 ---
@@ -27,7 +27,7 @@ Invite players by username and create invite links. Needs **Manage Invites**. Se
 
 ## Discord Integration
 
-Shows the org's **Integrated Channel** for order threads, and a **Use Official Server** button to run order threads in the SC Market Discord instead of your own. To use your own server, run `/setup threads` with `org` set to your Spectrum ID in the channel that should hold them. The tab and both actions need **Manage Webhooks**. See [connect the Discord bot](/guides/discord/connect-the-discord-bot).
+Links your own Discord servers to the org. Press **Add the bot to a server**, pick the server in Discord, and you come back with it listed under **Your Discord servers**. For each server, pick the **Order threads channel** (or **No order threads in this server**) and up to 10 **Order alert channels**, then press **Save channels**. **Unlink server** removes one from the list. The tab also shows the org's **Integrated Channel**, and **Use Official Server** runs order threads in the SC Market Discord instead. If you added the bot from Discord directly, run `/setup threads` with `org` set to your Spectrum ID in the channel instead. The tab and its actions need **Manage Webhooks**. See [connect the Discord bot](/guides/discord/connect-the-discord-bot).
 
 ## Settings
 

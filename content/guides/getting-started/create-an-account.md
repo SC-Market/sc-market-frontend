@@ -2,7 +2,7 @@
 title: Create an account and get verified
 description: Sign up with Citizen iD or Discord, then verify your RSI handle. A verified account can buy, sell and take orders on SC Market.
 order: 10
-updated: 2026-10-25
+updated: 2026-11-02
 keywords: [sign up, register, log in, verify, rsi handle, citizen id, discord]
 related: [buying/buy-an-item, selling/sell-items]
 howto: true
@@ -31,6 +31,6 @@ Sign up with Citizen iD or Discord, then verify that you own your RSI handle. An
 
 Until your account is verified, every signed-in page sends you back to Settings. After that you can use the whole site: browse the [market](/market), fill your [cart](/market/cart), and open a shop to sell.
 
-You can change your profile, notifications, Discord integration and blocked users at any time in [Settings](/settings).
+You can change your profile, notifications, Discord integration and blocked users at any time in [Settings](/settings). Dismissed a tip card and want it back? **Show tips again** under **Settings** › **Profile** › **Help tips** brings back every tip you've closed.
 
 [Find something to buy](/guides/buying/buy-an-item "cta")

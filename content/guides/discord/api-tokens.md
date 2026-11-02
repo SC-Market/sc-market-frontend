@@ -2,7 +2,7 @@
 title: Use the SC Market API with a token
 description: Create an API token in Settings and call the SC Market public API, so your bot or script can read your shops, stock and orders and answer offers.
 order: 40
-updated: 2026-10-29
+updated: 2026-11-02
 keywords: [api, public api, api token, token, bearer, developer, bot, script, integration, automation, stock sync, scmp_live, scm_live, legacy token, revoke]
 related: [discord/webhooks, selling/stock-lots-and-allocation, selling/handle-orders-as-a-seller]
 howto: true
@@ -53,7 +53,7 @@ Every call needs the scope shown in brackets; the presets above bundle them. `{s
 
 - **The token itself**: `GET /me` (any token).
 - **Your shops**: `GET /shops` lists your personal shop and the shops of the orgs the token has, with your permissions in each; `GET /shops/{shop}` (shops:read).
-- **Listings**: `GET /shops/{shop}/listings?status=active` lists every listing of the shop, private and unlisted ones included; `GET /listings/{id}` (listings:read).
+- **Listings**: `GET /shops/{shop}/listings?status=active` lists every listing of the shop, private and unlisted ones included; `GET /listings/{id}` (listings:read). A listing's `seller.activity` gives the same coarse seller activity buyers see: `last_seen` (`today`, `this_week`, `this_month`, `over_a_month`, or `null` when hidden), `reply_time` (`within_hour` … `slow`, or `null` below 5 chats), `reply_sample_size` and `completed_orders`. The API never returns an exact last-seen time.
 - **Stock**: `GET /listings/{id}/stock` lists the listing's stock lots, with quantities and locations (stock:read).
 - **Orders**: `GET /orders?role=seller&status=not-started`, also with `shop` and `updated_since`; `GET /orders/{id}` (orders:read).
 - **Move an order on**: `POST /orders/{id}/status` with `{"status": "in-progress"}`, `"fulfilled"` or `"cancelled"` (orders:write). The same rules and notifications apply as on the site: the seller side moves an order forward, and the customer may cancel.
@@ -63,6 +63,19 @@ Every call needs the scope shown in brackets; the presets above bundle them. `{s
 Write calls send JSON: add `-H "Content-Type: application/json"` and the body with `-d`. The full list, with every parameter and answer, is in the [API docs](https://api.sc-market.space/docs) and the [OpenAPI spec](https://api.sc-market.space/api/public/v1/openapi.json).
 
 Game data and the public market (search, shop pages, listing pages) need no token at all and aren't part of the public API.
+
+### Use the SDK
+
+For TypeScript and JavaScript, the typed client is on npm: `npm install @sc-market/sdk`. It runs on Node 18 or later, or anywhere with `fetch`.
+
+```ts
+import { ScMarketClient } from "@sc-market/sdk"
+
+const sc = new ScMarketClient({ token: process.env.SC_MARKET_TOKEN! })
+const me = await sc.getMe()
+```
+
+Each call above has a method, such as `listOrders()`, `changeOrderStatus(id, { status })` or `acceptOffer(id)`, and the list calls have `iterate…` versions that page for you. A failed call throws an `ApiError` with the error code. `PricesFeed` reads the public price feed without a token. A Python client is in the [SDK repository](https://github.com/SC-Market/sc-market-sdk), not on PyPI yet.
 
 ### Orgs
 

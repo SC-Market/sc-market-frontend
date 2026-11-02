@@ -37,7 +37,7 @@ Most orgs only need the built-in roles: give trusted officers **Admin** in their
 - **Manage Market**: create, edit and remove the org's listings and stock lots, and manage the org's shops, including their [webhooks](/guides/discord/webhooks).
 - **Manage Stock**: add, edit and remove the stock lots of the org's shops on their **Stock** page, without access to the listings themselves.
 - **Manage Recruiting**: create and manage recruiting posts.
-- **Manage Webhooks**: send the org's [order threads](/guides/discord/connect-the-discord-bot) to a Discord channel with `/setup threads`, and set up its [order alerts](/guides/discord/order-alerts-and-claiming). Shop webhooks need **Manage Market** instead.
+- **Manage Webhooks**: link Discord servers on the org's **Discord Integration** tab and pick their channels for [order threads](/guides/discord/connect-the-discord-bot) and [order alerts](/guides/discord/order-alerts-and-claiming), or set them up with `/setup threads` and `/setup alerts`. Shop webhooks need **Manage Market** instead.
 - **Manage Blocklist**: block and unblock users for the org.
 - **Claim Orders**: claim open orders and offers from [Discord alerts](/guides/discord/order-alerts-and-claiming).
 - **Kick Members**: remove members ranked below you (not of the same rank).

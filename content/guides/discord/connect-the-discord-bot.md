@@ -45,9 +45,12 @@ You, each org and each shop have one thread channel. Picking another channel, or
 
 Buyers are added to the thread only if their Discord account is linked to SC Market. If they aren't in your server, the bot sends them an invite by direct message, so they need DMs open. After checkout, SC Market also opens a server invite for them.
 
-## Get DMs without a shared server
+## Add SC Market to your Discord account
 
-The bot can only send you direct messages (offer reminders, order updates) if Discord lets it reach you. Sharing a server with the bot does that. If you'd rather not join one, [add SC Market to your Discord account](/discord/install?type=user&src=guide) instead: Discord asks you to authorize the app for your own account, with no server and no permissions. If you're signed in to SC Market, this also links your Discord account (unless it's already linked to another SC Market account). Keep direct messages from apps allowed in Discord's privacy settings.
+You can also [add SC Market to your Discord account](/discord/install?type=user&src=guide) instead of a server: Discord asks you to authorize the app for your own account, with no server and no permissions. You can then use SC Market's commands anywhere in Discord. If you're signed in to SC Market, this also links your Discord account, unless that Discord account is already linked to another SC Market account.
+
+> [!NOTE]
+> Direct messages from the bot, such as reminders about offers waiting for your reply, still need you to share a server with the bot for now. Adding the app to your account doesn't replace that yet. Keep direct messages from server members allowed in Discord's privacy settings.
 
 ## Advanced
 

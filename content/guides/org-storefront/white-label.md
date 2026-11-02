@@ -17,7 +17,13 @@ Open your org's manage area and the **Storefront** tab. Its checklist takes you 
 
 ## What branding unlocks
 
-Branding unlocks by itself once your org is RSI-verified and active on SC Market. The **Storefront** tab shows whether it's unlocked and, if not, what's still missing. It adds:
+Branding unlocks by itself once your org meets three criteria, and stays unlocked while it does:
+
+- **RSI-verified org**: registered through its RSI org page.
+- At least 3 members on SC Market.
+- A listing or an order in the last 30 days.
+
+The **Storefront** tab shows each one and what's still missing. SC Market staff can also unlock branding for an org. It adds:
 
 - **Your theme**: colors for dark and light mode, card and nav styles, corner rounding and a favicon. See [customize your white-label theme](/guides/org-storefront/white-label-theme).
 - **On your subdomain**: your logo and name in the sidebar, page titles with your org's name, and a market that only shows your org's listings.
@@ -34,6 +40,7 @@ Subdomains are `yourorg.sc-market.space`. Staff set them up:
 1. Fill in **Enquire about a branded storefront** in your org's **Storefront** tab (members with **Manage Org Details**), or in your shop's settings for a shop.
 2. Give the subdomain you'd like (usually your Spectrum ID), what you have in mind, and how we should reach you: the Discord account linked to your profile, or a message on SC Market.
 3. The form then shows your enquiry's status while we set up the address with you. One enquiry per org or shop is open at a time.
+4. When staff accept or decline it, you get a notification, and an email unless you turned **Enquiry accepted or declined** off in your [notification settings](/guides/getting-started/notification-settings).
 
 Only `sc-market.space` subdomains are available for now, not domains of your own.
 
@@ -65,7 +72,9 @@ Each section of the tab only shows to members with the permission it needs, so a
 
 ### The storefront directory
 
-The [Storefronts](/storefronts) page and the home page list RSI-verified orgs with at least one public listing. **Show in the public storefront directory** in the **Storefront** tab (and in each shop's settings) takes your org or a shop out of it.
+The [Storefronts](/storefronts) page and the home page list RSI-verified orgs with at least one public listing or an active service. Orgs that only offer services get a **Services** tag. Orgs whose listings, services and managers have all gone quiet are listed last, not hidden.
+
+**Show in the public storefront directory** in the **Storefront** tab takes your org out of it, and the same switch in an org shop's **Branded storefront** settings takes that shop out. The directory lists orgs, so personal shops aren't in it.
 
 Members-only storefronts are never listed: if your subdomain is set to members-only, the setting stays off. Your branded subdomain still works for your members, and members-only listings don't count as public listings.
 

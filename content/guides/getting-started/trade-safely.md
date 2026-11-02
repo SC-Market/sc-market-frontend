@@ -2,8 +2,8 @@
 title: Trade safely on SC Market
 description: SC Market never holds aUEC, so trades are between players. Check ratings and badges, keep the deal in the order chat, and block or report bad actors.
 order: 20
-updated: 2026-10-25
-keywords: [safe, safety, scam, trust, reviews, ratings, badges, block, report, real money]
+updated: 2026-11-02
+keywords: [safe, safety, scam, trust, reviews, ratings, badges, seller activity, last active, reply time, block, report, real money]
 related: [buying/how-orders-work, buying/buy-an-item]
 ---
 
@@ -14,6 +14,7 @@ SC Market is a meeting place, not a middleman: no aUEC passes through it, so it 
 - **Ratings and reviews.** Buyers and sellers review each other after their orders, with a 1-5 rating and a comment. A shop's rating comes from its customers' reviews.
 - **Badges.** Shown next to a seller's rating. For example, "99.9%+ rating and 25+ transactions", "1000+ orders completed", "Responds to 90% of orders within 24 hours" and "Active seller for 1+ year". Hover over a badge to see what it means.
 - **Order history.** Look at how many orders a seller has completed before you agree to a large trade.
+- **Seller activity.** The listing page, search results and the shop page show roughly when the seller was last active (**Active today**, **Active this week**, **Active this month** or **Last active over a month ago**), how fast they usually reply (for example **Usually replies within a few hours**, once they've had 5 chats) and their completed orders. It's never an exact time, and sellers can hide the last-active part.
 
 ## Keep a record
 
