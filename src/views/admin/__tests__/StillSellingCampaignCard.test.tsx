@@ -35,6 +35,48 @@ const dryRun = (
   max_recipients: 150,
   max_recipients_env: "STILL_SELLING_MAX_RECIPIENTS",
   over_cap: false,
+  feedback: {
+    real: {
+      responses: 2,
+      reasons: {
+        ...{
+          not_playing: 0,
+          waiting_patch: 0,
+          not_enough_buyers: 0,
+          selling_elsewhere: 0,
+          too_much_work: 0,
+          about_sc_market: 0,
+          other: 0,
+        },
+        not_enough_buyers: 2,
+      },
+      texts: [
+        {
+          created_at: "2026-11-03T10:00:00.000Z",
+          display_name: "Trader Joe",
+          action: "keep",
+          field: "easier",
+          text: "Bulk edit please",
+        },
+      ],
+    },
+    test: {
+      responses: 1,
+      reasons: {
+        ...{
+          not_playing: 0,
+          waiting_patch: 0,
+          not_enough_buyers: 0,
+          selling_elsewhere: 0,
+          too_much_work: 0,
+          about_sc_market: 0,
+          other: 0,
+        },
+        other: 1,
+      },
+      texts: [],
+    },
+  },
   top_recipients: [
     { display_name: "Big Seller", listings: 25 },
     { display_name: "Small Seller", listings: 3 },
@@ -152,6 +194,20 @@ describe("StillSellingCampaignCard", () => {
       "900 people are eligible, more than the cap of 150",
     )
     expect(screen.getByRole("button", { name: "Send" })).toBeDisabled()
+  })
+
+  it("shows feedback counts and text; test answers apart", () => {
+    state(dryRun())
+    render(<StillSellingCampaignCard />)
+    expect(screen.getByText("Feedback: 2 answers")).toBeInTheDocument()
+    const real = within(screen.getByTestId("still-selling-feedback-real"))
+    expect(real.getByText("Not enough buyers")).toBeInTheDocument()
+    expect(real.getByText(/Trader Joe/)).toHaveTextContent(
+      "Would make selling easier: Bulk edit please",
+    )
+    expect(
+      screen.getByText("From test links (not counted above): 1 answer"),
+    ).toBeInTheDocument()
   })
 
   it("kill switch off: says so and Send is disabled", () => {

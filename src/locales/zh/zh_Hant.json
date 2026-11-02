@@ -7716,7 +7716,12 @@
       "breakdown": "{{sellers}} 位賣家。未更新的商品：30–60 天 {{d30}} 個，60–90 天 {{d60}} 個，90 天以上 {{d90}} 個。",
       "cap": "最多 {{cap}} 位收件人（{{env}}）。",
       "overCap": "符合條件的有 {{recipients}} 人，超過上限 {{cap}}（{{env}}）。傳送已被封鎖：提高上限前請先核實符合條件的使用者。",
-      "top": "商品最多的收件人（顯示名稱 · 商品數）"
+      "top": "商品最多的收件人（顯示名稱 · 商品數）",
+      "feedback": {
+        "easier": "能讓出售更方便的建議",
+        "title_other": "回饋：{{count}} 則",
+        "testTitle_other": "來自測試連結（未計入上方）：{{count}} 則"
+      }
     }
   },
   "apiTokensUi": {
@@ -8790,7 +8795,31 @@
     "expired": "此連結已過期。你仍可以在商品頁面重新整理或暫停你的商品。",
     "failed": "出了點問題，請重試。",
     "retry": "重試",
-    "moreListings": "……還有 {{count}} 個"
+    "moreListings": "……還有 {{count}} 個",
+    "testDone": "測試模式：沒有變更任何商品。",
+    "testPreview": "測試模式：確認不會變更任何商品。",
+    "feedback": {
+      "pauseQuestion": "能告訴我們原因嗎？",
+      "pauseHint": "可選。可複選。",
+      "keepQuestion": "有什麼能讓在這裡出售更方便嗎？",
+      "keepHint": "可選。",
+      "aboutLabel": "關於 SC Market 的哪方面？（可選）",
+      "otherLabel": "其他（可選）",
+      "easierLabel": "你的想法（可選）",
+      "submit": "提交",
+      "noThanks": "不用了",
+      "thanks": "感謝你的回饋。",
+      "failed": "提交失敗，請重試。",
+      "reasons": {
+        "not_playing": "現在沒在玩 Star Citizen",
+        "waiting_patch": "在等下一個修補程式或清檔",
+        "not_enough_buyers": "買家太少",
+        "selling_elsewhere": "在別處出售（Discord、其他網站）",
+        "too_much_work": "保持商品更新太費事",
+        "about_sc_market": "關於 SC Market 的問題",
+        "other": "其他"
+      }
+    }
   },
   "linkedDiscord": {
     "title": "你的 Discord 伺服器",

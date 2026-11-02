@@ -7944,7 +7944,16 @@
       "breakdown": "{{sellers}} vendedores. Anuncios sin actualizar desde hace 30–60 días: {{d30}}, 60–90 días: {{d60}}, 90+ días: {{d90}}.",
       "cap": "Como máximo {{cap}} destinatarios ({{env}}).",
       "overCap": "Hay {{recipients}} personas elegibles, más que el límite de {{cap}} ({{env}}). El envío está bloqueado: revisa quién cumple los criterios antes de subir el límite.",
-      "top": "Mayores destinatarios (nombre visible · anuncios)"
+      "top": "Mayores destinatarios (nombre visible · anuncios)",
+      "feedback": {
+        "easier": "Facilitaría vender",
+        "title_one": "Comentarios: {{count}} respuesta",
+        "title_many": "Comentarios: {{count}} respuestas",
+        "title_other": "Comentarios: {{count}} respuestas",
+        "testTitle_one": "De enlaces de prueba (no contados arriba): {{count}} respuesta",
+        "testTitle_many": "De enlaces de prueba (no contados arriba): {{count}} respuestas",
+        "testTitle_other": "De enlaces de prueba (no contados arriba): {{count}} respuestas"
+      }
     }
   },
   "apiTokensUi": {
@@ -9068,7 +9077,31 @@
     "expired": "Este enlace ha caducado. Puedes seguir actualizando o pausando tus anuncios desde tu página de anuncios.",
     "failed": "Algo salió mal. Inténtalo de nuevo.",
     "retry": "Reintentar",
-    "moreListings": "…y {{count}} más"
+    "moreListings": "…y {{count}} más",
+    "testDone": "Modo de prueba: no se cambió ningún anuncio.",
+    "testPreview": "Modo de prueba: confirmar no cambiará ningún anuncio.",
+    "feedback": {
+      "pauseQuestion": "¿Nos cuentas por qué?",
+      "pauseHint": "Opcional. Elige todas las que apliquen.",
+      "keepQuestion": "¿Hay algo que haría más fácil vender aquí?",
+      "keepHint": "Opcional.",
+      "aboutLabel": "¿Qué de SC Market? (opcional)",
+      "otherLabel": "Otro (opcional)",
+      "easierLabel": "Tu idea (opcional)",
+      "submit": "Enviar",
+      "noThanks": "No, gracias",
+      "thanks": "Gracias por contárnoslo.",
+      "failed": "No se pudo enviar. Inténtalo de nuevo.",
+      "reasons": {
+        "not_playing": "Ahora mismo no juego a Star Citizen",
+        "waiting_patch": "Esperando el próximo parche o wipe",
+        "not_enough_buyers": "No hay suficientes compradores",
+        "selling_elsewhere": "Vendo en otro sitio (Discord, otra web)",
+        "too_much_work": "Mantener los anuncios al día es demasiado trabajo",
+        "about_sc_market": "Algo de SC Market",
+        "other": "Otro"
+      }
+    }
   },
   "linkedDiscord": {
     "title": "Tus servidores de Discord",

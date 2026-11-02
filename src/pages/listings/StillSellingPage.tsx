@@ -19,6 +19,7 @@ import {
   type StillSellingActionResult,
 } from "../../store/api/v2/market"
 import { PATHS } from "../../routes/paths"
+import { StillSellingFeedback } from "./StillSellingFeedback"
 
 /** Where "Manage listings" goes when the link doesn't say (needs login). */
 const FALLBACK_MANAGE = PATHS.dashboardShops
@@ -119,17 +120,40 @@ function Preview({
   )
 }
 
-function Done({ result }: { result: StillSellingActionResult }) {
+function Done({
+  result,
+  token,
+  feedbackSubmitted,
+}: {
+  result: StillSellingActionResult
+  token: string
+  feedbackSubmitted?: boolean
+}) {
   const { t } = useTranslation()
   const count = result.changed
   return (
     <Stack spacing={3} alignItems="center">
+      {result.test && (
+        <Alert severity="info" data-testid="still-selling-test-done">
+          {t(
+            "stillSellingPage.testDone",
+            "Test mode: no listings were changed.",
+          )}
+        </Alert>
+      )}
       <CheckCircleIcon sx={{ fontSize: 60, color: "success.main" }} />
       <Alert severity="success" sx={{ maxWidth: 520 }}>
         {result.action === "keep"
           ? t("stillSellingPage.keepDone", { count })
           : t("stillSellingPage.pauseDone", { count })}
       </Alert>
+      {result.action && (
+        <StillSellingFeedback
+          token={token}
+          action={result.action}
+          alreadySubmitted={feedbackSubmitted}
+        />
+      )}
       <ManageButton path={result.manage_path} />
     </Stack>
   )
@@ -178,7 +202,13 @@ export function StillSellingPage() {
       </Stack>
     )
   } else if (result?.ok) {
-    body = <Done result={result} />
+    body = (
+      <Done
+        result={result}
+        token={token}
+        feedbackSubmitted={preview.data?.feedback_submitted}
+      />
+    )
   } else if (preview.isError || !preview.data) {
     body = (
       <Alert
@@ -207,6 +237,14 @@ export function StillSellingPage() {
             {t(
               "stillSellingPage.failed",
               "Something went wrong. Please try again.",
+            )}
+          </Alert>
+        )}
+        {preview.data.test && (
+          <Alert severity="info" data-testid="still-selling-test-preview">
+            {t(
+              "stillSellingPage.testPreview",
+              "Test mode: confirming won't change any listings.",
             )}
           </Alert>
         )}

@@ -7830,7 +7830,14 @@
       "breakdown": "{{sellers}} Verkäufer. Angebote ohne Aktualisierung seit 30–60 Tagen: {{d30}}, 60–90 Tagen: {{d60}}, 90+ Tagen: {{d90}}.",
       "cap": "Höchstens {{cap}} Empfänger ({{env}}).",
       "overCap": "{{recipients}} Personen kommen infrage, mehr als die Obergrenze von {{cap}} ({{env}}). Senden ist gesperrt: Prüfen Sie die Auswahl, bevor Sie die Grenze anheben.",
-      "top": "Größte Empfänger (Anzeigename · Angebote)"
+      "top": "Größte Empfänger (Anzeigename · Angebote)",
+      "feedback": {
+        "easier": "Würde das Verkaufen erleichtern",
+        "title_one": "Feedback: {{count}} Antwort",
+        "title_other": "Feedback: {{count}} Antworten",
+        "testTitle_one": "Von Testlinks (oben nicht gezählt): {{count}} Antwort",
+        "testTitle_other": "Von Testlinks (oben nicht gezählt): {{count}} Antworten"
+      }
     }
   },
   "apiTokensUi": {
@@ -8929,7 +8936,31 @@
     "expired": "Dieser Link ist abgelaufen. Sie können Ihre Angebote weiterhin auf Ihrer Angebotsseite auffrischen oder pausieren.",
     "failed": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     "retry": "Erneut versuchen",
-    "moreListings": "…und {{count}} weitere"
+    "moreListings": "…und {{count}} weitere",
+    "testDone": "Testmodus: Es wurden keine Angebote geändert.",
+    "testPreview": "Testmodus: Das Bestätigen ändert keine Angebote.",
+    "feedback": {
+      "pauseQuestion": "Verraten Sie uns, warum?",
+      "pauseHint": "Optional. Wählen Sie alles Zutreffende.",
+      "keepQuestion": "Was würde das Verkaufen hier einfacher machen?",
+      "keepHint": "Optional.",
+      "aboutLabel": "Was an SC Market? (optional)",
+      "otherLabel": "Sonstiges (optional)",
+      "easierLabel": "Ihre Idee (optional)",
+      "submit": "Senden",
+      "noThanks": "Nein danke",
+      "thanks": "Danke für Ihr Feedback.",
+      "failed": "Das hat nicht geklappt. Bitte versuchen Sie es erneut.",
+      "reasons": {
+        "not_playing": "Spiele gerade kein Star Citizen",
+        "waiting_patch": "Warte auf den nächsten Patch oder Wipe",
+        "not_enough_buyers": "Zu wenige Käufer",
+        "selling_elsewhere": "Verkaufe woanders (Discord, andere Website)",
+        "too_much_work": "Zu viel Aufwand, Angebote aktuell zu halten",
+        "about_sc_market": "Etwas an SC Market",
+        "other": "Sonstiges"
+      }
+    }
   },
   "linkedDiscord": {
     "title": "Ihre Discord-Server",

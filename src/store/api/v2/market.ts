@@ -819,6 +819,17 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Listings V2"],
       }),
+      sendStillSellingFeedback: build.mutation<
+        SendStillSellingFeedbackApiResponse,
+        SendStillSellingFeedbackApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/still-selling/${queryArg.token}/feedback`,
+          method: "POST",
+          body: queryArg.stillSellingFeedbackRequest,
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
       createListing: build.mutation<
         CreateListingApiResponse,
         CreateListingApiArg
@@ -3000,6 +3011,13 @@ export type ConfirmStillSellingActionApiResponse =
 export type ConfirmStillSellingActionApiArg = {
   /** The signed token from the DM's button */
   token: string
+}
+export type SendStillSellingFeedbackApiResponse =
+  /** status 200 Ok */ StillSellingFeedbackResult
+export type SendStillSellingFeedbackApiArg = {
+  /** The signed token from the DM's button */
+  token: string
+  stillSellingFeedbackRequest: StillSellingFeedbackRequest
 }
 export type CreateListingApiResponse =
   /** status 200 Created listing with listing_id */ CreateListingResponse
@@ -5749,15 +5767,45 @@ export type StillSellingActionPreview = {
   manage_path?: string
   /** When this action was first used from the link, if it was. */
   used_at?: string | null
+  /** A test link (admin's test DM): the flow runs, nothing is changed. */
+  test?: boolean
+  /** Feedback was already sent from this link. */
+  feedback_submitted?: boolean
 }
 export type StillSellingActionResult = {
   ok: boolean
   reason?: "invalid" | "expired"
   action?: StillSellingAction
-  /** Listings changed now. */
+  /** Listings changed now (a test link: how many would have been; none were). */
   changed: number
   listings_total: number
   manage_path?: string
+  /** A test link: no listing was changed. */
+  test?: boolean
+}
+export type StillSellingFeedbackResult = {
+  ok: boolean
+  /** invalid / expired link, already answered, nothing filled in, or a bad request. */
+  reason?: "invalid" | "expired" | "already" | "empty" | "bad_request"
+  test?: boolean
+}
+export type StillSellingPauseReason =
+  | "not_playing"
+  | "waiting_patch"
+  | "not_enough_buyers"
+  | "selling_elsewhere"
+  | "too_much_work"
+  | "about_sc_market"
+  | "other"
+export type StillSellingFeedbackRequest = {
+  /** After "Pause them". */
+  reasons?: StillSellingPauseReason[]
+  /** After "Pause them", with the about_sc_market reason. */
+  about_sc_market?: string
+  /** After "Pause them", with the other reason. */
+  other_text?: string
+  /** After "Keep them live": what would make selling here easier. */
+  easier_text?: string
 }
 export type CreateListingResponse = {
   listing_id: string
@@ -8914,6 +8962,32 @@ export type StillSellingListingAge = {
   days_60_90: number
   days_90_plus: number
 }
+export type StillSellingFeedbackReasonCounts = {
+  not_playing: number
+  waiting_patch: number
+  not_enough_buyers: number
+  selling_elsewhere: number
+  too_much_work: number
+  about_sc_market: number
+  other: number
+}
+export type StillSellingFeedbackText = {
+  created_at: string
+  display_name: string
+  action: StillSellingAction
+  field: "about_sc_market" | "other" | "easier"
+  text: string
+}
+export type StillSellingFeedbackGroup = {
+  responses: number
+  reasons: StillSellingFeedbackReasonCounts
+  /** Newest first, at most 200. */
+  texts: StillSellingFeedbackText[]
+}
+export type StillSellingFeedbackSummary = {
+  real: StillSellingFeedbackGroup
+  test: StillSellingFeedbackGroup
+}
 export type StillSellingTopRecipient = {
   display_name: string
   listings: number
@@ -8981,6 +9055,8 @@ export type StillSellingDryRun = {
   max_recipients_env: string
   /** More people are eligible than max_recipients. */
   over_cap: boolean
+  /** Optional feedback from the landing page. */
+  feedback: StillSellingFeedbackSummary
   /** The 10 people with the most listings (display name and count only), for a sanity check. */
   top_recipients: StillSellingTopRecipient[]
   /** A rendered DM with fake data (3 listings, 2 months) and placeholder links. */
@@ -9378,6 +9454,7 @@ export const {
   useResetUserMfaMutation,
   useGetStillSellingActionQuery,
   useConfirmStillSellingActionMutation,
+  useSendStillSellingFeedbackMutation,
   useCreateListingMutation,
   useSearchListingsQuery,
   useGetMyListingsQuery,

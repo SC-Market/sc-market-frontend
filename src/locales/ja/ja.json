@@ -7716,7 +7716,12 @@
       "breakdown": "出品者{{sellers}}人。更新されていない期間別の出品数：30〜60日 {{d30}}件、60〜90日 {{d60}}件、90日以上 {{d90}}件。",
       "cap": "送信先は最大{{cap}}人（{{env}}）。",
       "overCap": "対象者が{{recipients}}人で、上限の{{cap}}人（{{env}}）を超えています。送信はブロックされています。上限を上げる前に対象者を確認してください。",
-      "top": "出品数の多い送信先（表示名・出品数）"
+      "top": "出品数の多い送信先（表示名・出品数）",
+      "feedback": {
+        "easier": "販売を楽にするアイデア",
+        "title_other": "フィードバック：{{count}}件",
+        "testTitle_other": "テストリンクから（上記には含まれません）：{{count}}件"
+      }
     }
   },
   "apiTokensUi": {
@@ -8790,7 +8795,31 @@
     "expired": "このリンクは有効期限切れです。出品ページから引き続き出品の更新や一時停止ができます。",
     "failed": "問題が発生しました。もう一度お試しください。",
     "retry": "再試行",
-    "moreListings": "…ほか{{count}}件"
+    "moreListings": "…ほか{{count}}件",
+    "testDone": "テストモード：出品は変更されていません。",
+    "testPreview": "テストモード：確定しても出品は変更されません。",
+    "feedback": {
+      "pauseQuestion": "よろしければ理由を教えてください。",
+      "pauseHint": "任意。当てはまるものをすべて選んでください。",
+      "keepQuestion": "ここでの販売がもっと楽になることはありますか？",
+      "keepHint": "任意。",
+      "aboutLabel": "SC Marketのどんな点ですか？（任意）",
+      "otherLabel": "その他（任意）",
+      "easierLabel": "あなたのアイデア（任意）",
+      "submit": "送信",
+      "noThanks": "結構です",
+      "thanks": "教えていただきありがとうございます。",
+      "failed": "送信できませんでした。もう一度お試しください。",
+      "reasons": {
+        "not_playing": "今はStar Citizenをプレイしていない",
+        "waiting_patch": "次のパッチやワイプを待っている",
+        "not_enough_buyers": "買い手が少ない",
+        "selling_elsewhere": "別の場所で販売している（Discord、他のサイト）",
+        "too_much_work": "出品を最新に保つのが大変",
+        "about_sc_market": "SC Marketについて",
+        "other": "その他"
+      }
+    }
   },
   "linkedDiscord": {
     "title": "あなたの Discord サーバー",

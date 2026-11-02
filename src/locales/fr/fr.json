@@ -7944,7 +7944,16 @@
       "breakdown": "{{sellers}} vendeurs. Annonces non mises à jour depuis 30–60 jours : {{d30}}, 60–90 jours : {{d60}}, 90+ jours : {{d90}}.",
       "cap": "Au plus {{cap}} destinataires ({{env}}).",
       "overCap": "{{recipients}} personnes sont éligibles, plus que la limite de {{cap}} ({{env}}). L'envoi est bloqué : vérifiez qui est concerné avant de relever la limite.",
-      "top": "Plus gros destinataires (nom affiché · annonces)"
+      "top": "Plus gros destinataires (nom affiché · annonces)",
+      "feedback": {
+        "easier": "Rendrait la vente plus facile",
+        "title_one": "Retours : {{count}} réponse",
+        "title_many": "Retours : {{count}} réponses",
+        "title_other": "Retours : {{count}} réponses",
+        "testTitle_one": "Depuis des liens de test (non comptés ci-dessus) : {{count}} réponse",
+        "testTitle_many": "Depuis des liens de test (non comptés ci-dessus) : {{count}} réponses",
+        "testTitle_other": "Depuis des liens de test (non comptés ci-dessus) : {{count}} réponses"
+      }
     }
   },
   "apiTokensUi": {
@@ -9068,7 +9077,31 @@
     "expired": "Ce lien a expiré. Vous pouvez toujours rafraîchir ou mettre en pause vos annonces depuis votre page d'annonces.",
     "failed": "Une erreur s'est produite. Veuillez réessayer.",
     "retry": "Réessayer",
-    "moreListings": "…et {{count}} de plus"
+    "moreListings": "…et {{count}} de plus",
+    "testDone": "Mode test : aucune annonce n'a été modifiée.",
+    "testPreview": "Mode test : confirmer ne modifiera aucune annonce.",
+    "feedback": {
+      "pauseQuestion": "Vous voulez bien nous dire pourquoi ?",
+      "pauseHint": "Facultatif. Choisissez tout ce qui s'applique.",
+      "keepQuestion": "Qu'est-ce qui rendrait la vente plus facile ici ?",
+      "keepHint": "Facultatif.",
+      "aboutLabel": "Quoi concernant SC Market ? (facultatif)",
+      "otherLabel": "Autre (facultatif)",
+      "easierLabel": "Votre idée (facultatif)",
+      "submit": "Envoyer",
+      "noThanks": "Non merci",
+      "thanks": "Merci de nous l'avoir dit.",
+      "failed": "L'envoi a échoué. Veuillez réessayer.",
+      "reasons": {
+        "not_playing": "Je ne joue pas à Star Citizen en ce moment",
+        "waiting_patch": "J'attends le prochain patch ou wipe",
+        "not_enough_buyers": "Pas assez d'acheteurs",
+        "selling_elsewhere": "Je vends ailleurs (Discord, un autre site)",
+        "too_much_work": "Trop de travail pour garder les annonces à jour",
+        "about_sc_market": "Quelque chose concernant SC Market",
+        "other": "Autre"
+      }
+    }
   },
   "linkedDiscord": {
     "title": "Vos serveurs Discord",

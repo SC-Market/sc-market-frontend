@@ -7830,7 +7830,14 @@
       "breakdown": "{{sellers}} sellers. Listings not updated for 30–60 days: {{d30}}, 60–90 days: {{d60}}, 90+ days: {{d90}}.",
       "cap": "At most {{cap}} recipients ({{env}}).",
       "overCap": "{{recipients}} people are eligible, more than the cap of {{cap}} ({{env}}). Send is blocked: check who qualifies before raising the cap.",
-      "top": "Largest recipients (display name · listings)"
+      "top": "Largest recipients (display name · listings)",
+      "feedback": {
+        "easier": "Would make selling easier",
+        "title_one": "Feedback: {{count}} answer",
+        "title_other": "Feedback: {{count}} answers",
+        "testTitle_one": "From test links (not counted above): {{count}} answer",
+        "testTitle_other": "From test links (not counted above): {{count}} answers"
+      }
     }
   },
   "apiTokensUi": {
@@ -8929,7 +8936,31 @@
     "expired": "This link has expired. You can still refresh or pause your listings from your listings page.",
     "failed": "Something went wrong. Please try again.",
     "retry": "Try again",
-    "moreListings": "…and {{count}} more"
+    "moreListings": "…and {{count}} more",
+    "testDone": "Test mode: no listings were changed.",
+    "testPreview": "Test mode: confirming won't change any listings.",
+    "feedback": {
+      "pauseQuestion": "Mind telling us why?",
+      "pauseHint": "Optional. Pick any that apply.",
+      "keepQuestion": "Anything that would make selling here easier?",
+      "keepHint": "Optional.",
+      "aboutLabel": "What about SC Market? (optional)",
+      "otherLabel": "Other (optional)",
+      "easierLabel": "Your idea (optional)",
+      "submit": "Submit",
+      "noThanks": "No thanks",
+      "thanks": "Thanks for telling us.",
+      "failed": "That didn't go through. Please try again.",
+      "reasons": {
+        "not_playing": "Not playing Star Citizen right now",
+        "waiting_patch": "Waiting for the next patch or wipe",
+        "not_enough_buyers": "Not enough buyers",
+        "selling_elsewhere": "Selling somewhere else (Discord, another site)",
+        "too_much_work": "Too much work keeping listings up to date",
+        "about_sc_market": "Something about SC Market",
+        "other": "Other"
+      }
+    }
   },
   "linkedDiscord": {
     "title": "Your Discord servers",

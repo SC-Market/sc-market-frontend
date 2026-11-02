@@ -16,6 +16,7 @@ vi.mock("react-i18next", async (importOriginal) =>
 vi.mock("../../../store/api/v2/market", () => ({
   useGetStillSellingActionQuery: vi.fn(),
   useConfirmStillSellingActionMutation: vi.fn(),
+  useSendStillSellingFeedbackMutation: vi.fn(),
 }))
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
   StandardPageLayout: ({
@@ -35,6 +36,7 @@ vi.mock("../../../components/layout/StandardPageLayout", () => ({
 import { StillSellingPage } from "../StillSellingPage"
 
 const confirm = vi.fn()
+const sendFeedback = vi.fn()
 
 function setup(
   preview: StillSellingActionPreview | undefined,
@@ -51,6 +53,12 @@ function setup(
     { data: result, isLoading: false, isError: false },
   ] as unknown as ReturnType<
     typeof marketApi.useConfirmStillSellingActionMutation
+  >)
+  vi.mocked(marketApi.useSendStillSellingFeedbackMutation).mockReturnValue([
+    sendFeedback,
+    { data: undefined, isLoading: false, isError: false },
+  ] as unknown as ReturnType<
+    typeof marketApi.useSendStillSellingFeedbackMutation
   >)
   render(
     <MemoryRouter initialEntries={["/still-selling/tok123"]}>
@@ -145,5 +153,82 @@ describe("StillSellingPage", () => {
   it("nothing left to do", () => {
     setup({ ...keepPreview, listings_applicable: 0, listings: [] })
     expect(screen.getByText(/Nothing to refresh/)).toBeInTheDocument()
+  })
+})
+
+describe("StillSellingPage feedback", () => {
+  const pausedResult: StillSellingActionResult = {
+    ok: true,
+    action: "pause",
+    changed: 2,
+    listings_total: 3,
+    manage_path: "/shop/my-shop/listings",
+  }
+
+  it("after pausing: optional reasons as chips, submitted with the picked ones", () => {
+    setup({ ...keepPreview, action: "pause" }, pausedResult)
+    expect(screen.getByText("Mind telling us why?")).toBeInTheDocument()
+    const submit = screen.getByRole("button", { name: "Submit" })
+    expect(submit).toBeDisabled()
+    fireEvent.click(screen.getByRole("button", { name: "Not enough buyers" }))
+    fireEvent.click(
+      screen.getByRole("button", { name: "Something about SC Market" }),
+    )
+    fireEvent.change(
+      screen.getByLabelText("What about SC Market? (optional)"),
+      {
+        target: { value: "Fees" },
+      },
+    )
+    fireEvent.click(submit)
+    expect(sendFeedback).toHaveBeenCalledWith({
+      token: "tok123",
+      stillSellingFeedbackRequest: {
+        reasons: ["not_enough_buyers", "about_sc_market"],
+        about_sc_market: "Fees",
+      },
+    })
+  })
+
+  it("after keeping: one free-text question, capped at 500", () => {
+    setup(keepPreview, { ...pausedResult, action: "keep" })
+    expect(
+      screen.getByText("Anything that would make selling here easier?"),
+    ).toBeInTheDocument()
+    const box = screen.getByLabelText("Your idea (optional)")
+    fireEvent.change(box, { target: { value: "x".repeat(700) } })
+    expect((box as HTMLTextAreaElement).value).toHaveLength(500)
+  })
+
+  it("No thanks hides it; never required", () => {
+    setup({ ...keepPreview, action: "pause" }, pausedResult)
+    fireEvent.click(screen.getByRole("button", { name: "No thanks" }))
+    expect(
+      screen.queryByTestId("still-selling-feedback"),
+    ).not.toBeInTheDocument()
+    expect(sendFeedback).not.toHaveBeenCalled()
+    expect(screen.getByText(/Done: 2 listings paused/)).toBeInTheDocument()
+  })
+
+  it("already answered from this link: thanks instead of the form", () => {
+    setup(
+      { ...keepPreview, action: "pause", feedback_submitted: true },
+      pausedResult,
+    )
+    expect(screen.getByText("Thanks for telling us.")).toBeInTheDocument()
+  })
+
+  it("test links: banners say nothing is changed", () => {
+    setup({ ...keepPreview, test: true })
+    expect(screen.getByTestId("still-selling-test-preview")).toHaveTextContent(
+      "Test mode: confirming won't change any listings.",
+    )
+  })
+
+  it("test link result: no listings were changed", () => {
+    setup({ ...keepPreview, test: true }, { ...pausedResult, test: true })
+    expect(screen.getByTestId("still-selling-test-done")).toHaveTextContent(
+      "Test mode: no listings were changed.",
+    )
   })
 })
