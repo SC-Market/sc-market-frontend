@@ -9000,6 +9000,7 @@
     "choose": "Comment voulez-vous ajouter SC Market ?",
     "user": "À votre compte Discord",
     "userHint": "Pour pouvoir vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
+    "userHintNoDm": "Pour utiliser les commandes SC Market partout dans Discord.",
     "server": "À un serveur Discord",
     "serverHint": "Pour les fils de commande et les alertes sur votre propre serveur.",
     "cta": {
@@ -9011,11 +9012,13 @@
     "result": {
       "user_linked": {
         "title": "SC Market est sur votre Discord",
-        "body": "Votre compte Discord est maintenant lié à SC Market, pour que nous puissions vous joindre au sujet des offres et des commandes."
+        "body": "Votre compte Discord est maintenant lié à SC Market, pour que nous puissions vous joindre au sujet des offres et des commandes.",
+        "bodyNoDm": "Votre compte Discord est maintenant lié à SC Market. Vous pouvez utiliser les commandes SC Market partout dans Discord. Pour recevoir des MP au sujet des offres et des commandes, restez pour l'instant sur un serveur avec le bot."
       },
       "user_installed": {
         "title": "SC Market est sur votre Discord",
-        "body": "Nous pouvons maintenant vous joindre au sujet des offres et des commandes, même sans serveur en commun."
+        "body": "Nous pouvons maintenant vous joindre au sujet des offres et des commandes, même sans serveur en commun.",
+        "bodyNoDm": "Vous pouvez utiliser les commandes SC Market partout dans Discord. Pour recevoir des MP au sujet des offres et des commandes, restez pour l'instant sur un serveur avec le bot."
       },
       "user_sign_in": {
         "title": "SC Market est sur votre Discord",

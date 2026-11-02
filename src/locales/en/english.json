@@ -8863,6 +8863,7 @@
     "choose": "How do you want to add SC Market?",
     "user": "To your Discord account",
     "userHint": "So we can reach you about offers and orders even if you're not in a shared server.",
+    "userHintNoDm": "So you can use SC Market commands anywhere in Discord.",
     "server": "To a Discord server",
     "serverHint": "For order threads and alerts in your own server.",
     "cta": {
@@ -8874,11 +8875,13 @@
     "result": {
       "user_linked": {
         "title": "SC Market is on your Discord",
-        "body": "Your Discord account is now linked to SC Market, so we can reach you about offers and orders."
+        "body": "Your Discord account is now linked to SC Market, so we can reach you about offers and orders.",
+        "bodyNoDm": "Your Discord account is now linked to SC Market. You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now."
       },
       "user_installed": {
         "title": "SC Market is on your Discord",
-        "body": "We can now reach you about offers and orders even if you're not in a shared server."
+        "body": "We can now reach you about offers and orders even if you're not in a shared server.",
+        "bodyNoDm": "You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now."
       },
       "user_sign_in": {
         "title": "SC Market is on your Discord",

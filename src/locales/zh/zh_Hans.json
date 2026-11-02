@@ -8732,6 +8732,7 @@
     "choose": "你想如何添加 SC Market？",
     "user": "添加到你的 Discord 账号",
     "userHint": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
+    "userHintNoDm": "让你可以在 Discord 的任何地方使用 SC Market 命令。",
     "server": "添加到 Discord 服务器",
     "serverHint": "用于在你自己的服务器中使用订单讨论串和提醒。",
     "cta": {
@@ -8743,11 +8744,13 @@
     "result": {
       "user_linked": {
         "title": "SC Market 已添加到你的 Discord",
-        "body": "你的 Discord 账号现已关联到 SC Market，我们可以就报价和订单联系你。"
+        "body": "你的 Discord 账号现已关联到 SC Market，我们可以就报价和订单联系你。",
+        "bodyNoDm": "你的 Discord 账号现已关联到 SC Market。你可以在 Discord 的任何地方使用 SC Market 命令。若要接收有关报价和订单的私信，目前请留在有机器人的服务器中。"
       },
       "user_installed": {
         "title": "SC Market 已添加到你的 Discord",
-        "body": "即使没有共同的服务器，我们现在也能就报价和订单联系你。"
+        "body": "即使没有共同的服务器，我们现在也能就报价和订单联系你。",
+        "bodyNoDm": "你可以在 Discord 的任何地方使用 SC Market 命令。若要接收有关报价和订单的私信，目前请留在有机器人的服务器中。"
       },
       "user_sign_in": {
         "title": "SC Market 已添加到你的 Discord",

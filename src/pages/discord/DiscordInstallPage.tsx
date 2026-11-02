@@ -23,6 +23,7 @@ import {
   isInstallType,
 } from "../../features/discord-install/installLinks"
 import { PATHS } from "../../routes/paths"
+import { useDiscordReachability } from "../../features/discord-install/DiscordUserInstallCta"
 
 /** How long the click count may hold up the redirect. */
 export const CLICK_WAIT_MS = 1000
@@ -47,6 +48,23 @@ const RESULT_SEVERITY: Record<
   server_forbidden: "error",
   cancelled: "info",
   failed: "error",
+}
+
+/**
+ * Results that would say a user install lets the bot DM you. That isn't
+ * confirmed (the backend's USER_INSTALL_COUNTS_AS_DM_REACHABLE, reported as
+ * user_install_counts_as_dm); until it is, they say how to get DMs instead.
+ */
+const NO_DM_BODY: Partial<Record<DiscordInstallResult, string>> = {
+  user_linked:
+    "Your Discord account is now linked to SC Market. You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now.",
+  user_installed:
+    "You can use SC Market commands anywhere in Discord. To get DMs about offers and orders, stay in a server with the bot for now.",
+}
+
+/** Whether a user install counts as reachable by DM (false while signed out or unknown). */
+function useInstallReachesDms(): boolean {
+  return useDiscordReachability()?.user_install_counts_as_dm === true
 }
 
 /** The English text of each result (the keys are discordInstall.result.<result>.title/body). */
@@ -103,6 +121,8 @@ function InstallResultView(props: {
   const { t } = useTranslation()
   const { result } = props
   const text = RESULT_TEXT[result]
+  const reachesDms = useInstallReachesDms()
+  const noDmBody = reachesDms ? undefined : NO_DM_BODY[result]
   const signIn = result === "user_sign_in" || result === "server_sign_in"
   const retry = result === "failed" || result === "cancelled"
   return (
@@ -111,7 +131,9 @@ function InstallResultView(props: {
         <AlertTitle>
           {t(`discordInstall.result.${result}.title`, text.title)}
         </AlertTitle>
-        {t(`discordInstall.result.${result}.body`, text.body)}
+        {noDmBody
+          ? t(`discordInstall.result.${result}.bodyNoDm`, noDmBody)
+          : t(`discordInstall.result.${result}.body`, text.body)}
       </Alert>
       {signIn && (
         <Button variant="contained" href={SIGN_IN_PATH}>
@@ -146,6 +168,7 @@ export function DiscordInstallPage() {
   const result = installResult(params.get("result"))
   const [recordClick] = useRecordDiscordInstallClickMutation()
   const started = useRef(false)
+  const reachesDms = useInstallReachesDms()
 
   useHead({ meta: [{ name: "robots", content: "noindex" }] })
 
@@ -191,10 +214,15 @@ export function DiscordInstallPage() {
           {t("discordInstall.user", "To your Discord account")}
         </Button>
         <Typography variant="body2" color="text.primary">
-          {t(
-            "discordInstall.userHint",
-            "So we can reach you about offers and orders even if you're not in a shared server.",
-          )}
+          {reachesDms
+            ? t(
+                "discordInstall.userHint",
+                "So we can reach you about offers and orders even if you're not in a shared server.",
+              )
+            : t(
+                "discordInstall.userHintNoDm",
+                "So you can use SC Market commands anywhere in Discord.",
+              )}
         </Typography>
         <Button variant="outlined" href={discordInstallPath("server", src)}>
           {t("discordInstall.server", "To a Discord server")}
@@ -213,7 +241,6 @@ export function DiscordInstallPage() {
     <StandardPageLayout
       title={t("discordInstall.pageTitle", "Add SC Market to Discord")}
       maxWidth="sm"
-      noSidebar={true}
     >
       {body}
     </StandardPageLayout>

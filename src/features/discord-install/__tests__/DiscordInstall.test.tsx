@@ -75,6 +75,7 @@ beforeEach(() => {
     data: { username: "lara" },
   } as never)
   vi.spyOn(redirect, "to").mockImplementation(() => undefined)
+  reach(undefined)
 })
 
 describe("install links", () => {
@@ -153,6 +154,33 @@ describe("/discord/install", () => {
     ).toBeInTheDocument()
     expect(record).not.toHaveBeenCalled()
     expect(redirect.to).not.toHaveBeenCalled()
+  })
+
+  it("doesn't promise DMs from a user install until that's confirmed", () => {
+    reach({ user_install_counts_as_dm: false })
+    const a = at("?result=user_installed&type=user")
+    expect(
+      screen.getByText(/stay in a server with the bot for now/),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(/even if you're not in a shared server/),
+    ).toBeNull()
+    a.unmount()
+    reach({ user_install_counts_as_dm: true })
+    at("?result=user_installed&type=user")
+    expect(
+      screen.getByText(/even if you're not in a shared server/),
+    ).toBeInTheDocument()
+  })
+
+  it("signed out (flag unknown): the choices don't promise DMs either", () => {
+    reach(undefined)
+    at("?src=discord_app")
+    expect(
+      screen.getByText(
+        "So you can use SC Market commands anywhere in Discord.",
+      ),
+    ).toBeInTheDocument()
   })
 
   it("asks a signed-out installer to sign in", () => {

@@ -8726,6 +8726,7 @@
     "choose": "你想如何新增 SC Market？",
     "user": "新增到你的 Discord 帳號",
     "userHint": "這樣即使我們不在同一個伺服器中，也能就報價和訂單聯絡你。",
+    "userHintNoDm": "讓你可以在 Discord 的任何地方使用 SC Market 指令。",
     "server": "新增到 Discord 伺服器",
     "serverHint": "用於在你自己的伺服器中使用訂單討論串和提醒。",
     "cta": {
@@ -8737,11 +8738,13 @@
     "result": {
       "user_linked": {
         "title": "SC Market 已加入你的 Discord",
-        "body": "你的 Discord 帳號現已連結到 SC Market，我們可以就報價和訂單聯絡你。"
+        "body": "你的 Discord 帳號現已連結到 SC Market，我們可以就報價和訂單聯絡你。",
+        "bodyNoDm": "你的 Discord 帳號現已連結到 SC Market。你可以在 Discord 的任何地方使用 SC Market 指令。若要接收有關報價和訂單的私訊，目前請留在有機器人的伺服器中。"
       },
       "user_installed": {
         "title": "SC Market 已加入你的 Discord",
-        "body": "即使沒有共同的伺服器，我們現在也能就報價和訂單聯絡你。"
+        "body": "即使沒有共同的伺服器，我們現在也能就報價和訂單聯絡你。",
+        "bodyNoDm": "你可以在 Discord 的任何地方使用 SC Market 指令。若要接收有關報價和訂單的私訊，目前請留在有機器人的伺服器中。"
       },
       "user_sign_in": {
         "title": "SC Market 已加入你的 Discord",

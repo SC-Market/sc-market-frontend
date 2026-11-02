@@ -8726,6 +8726,7 @@
     "choose": "SC Market をどのように追加しますか？",
     "user": "あなたの Discord アカウントへ",
     "userHint": "共通のサーバーにいなくても、オファーや注文についてお知らせできるようにするためです。",
+    "userHintNoDm": "Discord のどこでも SC Market のコマンドを使えるようにします。",
     "server": "Discord サーバーへ",
     "serverHint": "自分のサーバーで注文スレッドとアラートを使うためです。",
     "cta": {
@@ -8737,11 +8738,13 @@
     "result": {
       "user_linked": {
         "title": "SC Market があなたの Discord に追加されました",
-        "body": "Discord アカウントが SC Market に連携されました。オファーや注文についてお知らせできます。"
+        "body": "Discord アカウントが SC Market に連携されました。オファーや注文についてお知らせできます。",
+        "bodyNoDm": "Discord アカウントが SC Market に連携されました。SC Market のコマンドは Discord のどこでも使えます。オファーや注文の DM を受け取るには、当面はボットがいるサーバーに参加したままにしてください。"
       },
       "user_installed": {
         "title": "SC Market があなたの Discord に追加されました",
-        "body": "共通のサーバーにいなくても、オファーや注文についてお知らせできるようになりました。"
+        "body": "共通のサーバーにいなくても、オファーや注文についてお知らせできるようになりました。",
+        "bodyNoDm": "SC Market のコマンドは Discord のどこでも使えます。オファーや注文の DM を受け取るには、当面はボットがいるサーバーに参加したままにしてください。"
       },
       "user_sign_in": {
         "title": "SC Market があなたの Discord に追加されました",
