@@ -383,7 +383,9 @@ export function EditListingV2() {
         });
 
         // Navigate back to listing detail page
-        navigate(MARKET_PATHS.listing(id!), navState);
+        // The slug URL: /market/<id> is redirected to it, which drops the
+        // router state that keeps the shop context
+        navigate(MARKET_PATHS.listing(id!, title.trim()), navState);
       } catch (error) {
         const apiError = listingApiError(error, t("EditListingV2.error", "Failed to update listing"));
         showError(apiError);
@@ -942,7 +944,7 @@ export function EditListingV2() {
               size="large"
               variant="outlined"
               color="secondary"
-              onClick={() => navigate(MARKET_PATHS.listing(id!), navState)}
+              onClick={() => navigate(MARKET_PATHS.listing(id!, listingData?.listing.title), navState)}
             >
               {t("EditListingV2.cancel", "Cancel")}
             </Button>

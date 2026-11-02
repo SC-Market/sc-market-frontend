@@ -486,6 +486,8 @@ function DisplayStockV2({
         field: "title",
         headerName: t("ItemStock.title"),
         flex: 1,
+        // Room for the quick-add row's item search (it was 42 px wide)
+        minWidth: 240,
         display: "flex" as const,
         renderCell: (params: GridRenderCellParams) => {
           const nr = newRows.find((r) => r.id === params.id)
@@ -494,7 +496,7 @@ function DisplayStockV2({
             return (
               <GameItemSearchAutocomplete
                 required
-                sx={{ minWidth: 220, width: "100%" }}
+                sx={{ width: "100%" }}
                 label={t("ItemStock.item", "Item")}
                 value={editing?.game_item_name ?? null}
                 onChange={(name, _type, itemId) => {

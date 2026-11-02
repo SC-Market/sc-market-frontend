@@ -366,7 +366,7 @@ describe("EditListingV2", () => {
     fireEvent.click(cancelButton);
     
     await waitFor(() => {
-      expect(mockNavigate.mock.calls[0][0]).toBe("/market/listing-123");
+      expect(mockNavigate.mock.calls[0][0]).toBe("/market/listing1--test-listing");
     });
   });
 
@@ -398,7 +398,7 @@ describe("EditListingV2", () => {
     fireEvent.change(screen.getByDisplayValue("Test Listing"), { target: { value: "Renamed" } });
     fireEvent.submit(screen.getByRole("button", { name: /Update Listing/i }).closest("form")!);
     await waitFor(() =>
-      expect(mockNavigate).toHaveBeenCalledWith("/market/listing-123", { state: { shopContext: "org-shop" } }),
+      expect(mockNavigate).toHaveBeenCalledWith("/market/listing1--renamed", { state: { shopContext: "org-shop" } }),
     );
   });
 
