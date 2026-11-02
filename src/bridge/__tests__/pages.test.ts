@@ -26,6 +26,8 @@ import {
   wikiLocationsSeoText,
 } from "../../seo/hubHeads"
 
+import { STOREFRONTS_PAGE_SIZE } from "../../features/storefront/domain"
+
 const ORIGIN = "https://sc-market.space"
 
 function ctx(params: Record<string, string>, pathname = "/x"): PageContext {
@@ -415,6 +417,7 @@ describe("hub API requests", () => {
   const cases: [BridgePageKind, string][] = [
     ["market", "/api/v2/listings/search?page=1&page_size=48&quantity_min=1"],
     ["shops", "/api/v2/shops?page=1&page_size=24&sort_by=rating&sort_order=desc"],
+    ["storefronts", "/api/v2/contractors/storefronts?page=1&page_size=24"],
     ["wikiItems", "/api/v2/game-data/wiki/items?page=1&page_size=50"],
     ["wikiShips", "/api/v2/game-data/wiki/ships?page=1&page_size=50"],
     ["wikiCommodities", "/api/v2/game-data/wiki/commodities?page=1&page_size=50"],
@@ -544,6 +547,48 @@ describe("homepage", () => {
 })
 
 describe("hub documents", () => {
+  describe("storefronts, a page at a time (the SPA's storefrontsHubArgs pages)", () => {
+    const cards = (from: number, n: number) =>
+      Array.from({ length: n }, (_, i) => ({ spectrum_id: `ORG${from + i}`, name: `Org ${from + i}`, tagline: "" }))
+    const atPage = (pageNumber: number, data: unknown) =>
+      BRIDGE_PAGES.storefronts.build(data, undefined, { ...ctx({}, "/storefronts"), pageNumber })
+
+    it("asks the API for page N with the SPA's page size", () => {
+      expect(BRIDGE_PAGES.storefronts.paginated).toBe(true)
+      expect(BRIDGE_PAGES.storefronts.primary!({}, 3).path).toBe(
+        `/api/v2/contractors/storefronts?page=3&page_size=${STOREFRONTS_PAGE_SIZE}`,
+      )
+    })
+
+    it("page 1 is the clean hub with links to the other pages", () => {
+      const doc = atPage(1, { storefronts: cards(0, 24), total: 60, page: 1, page_size: 24, fields: [] })
+      expect(doc.canonical).toBe(`${ORIGIN}/storefronts`)
+      expect(doc.title).toBe("Org storefronts - SC Market")
+      expect(linksOf(doc)).toHaveLength(24)
+      const pageLinks = doc.summary.flatMap((b) => (b.tag === "ul" ? b.links : [])).filter((l) => l.href.includes("?page="))
+      expect(pageLinks).toContainEqual({ href: "/storefronts?page=2", text: "Next page (2)", rel: "next" })
+      expect(pageLinks.map((l) => l.href)).toContain("/storefronts?page=3")
+    })
+
+    it("page 2 is self-canonical, says its page, and links its own orgs", () => {
+      const doc = atPage(2, { storefronts: cards(24, 24), total: 60, page: 2, page_size: 24, fields: [] })
+      expect(doc.canonical).toBe(`${ORIGIN}/storefronts?page=2`)
+      expect(meta(doc, "og:url")).toBe(`${ORIGIN}/storefronts?page=2`)
+      expect(doc.title).toBe("Org storefronts — Page 2 - SC Market")
+      expect(meta(doc, "description")).toMatch(/ Page 2 of 3\.$/)
+      expect(linksOf(doc)[0]).toEqual({ href: "/contractor/ORG24", text: "Org 24" })
+      const rels = doc.summary.flatMap((b) => (b.tag === "ul" ? b.links : [])).filter((l) => l.rel)
+      expect(rels).toEqual([
+        { href: "/storefronts", text: "Previous page (1)", rel: "prev" },
+        { href: "/storefronts?page=3", text: "Next page (3)", rel: "next" },
+      ])
+    })
+
+    it("a page past the end is a 404", () => {
+      expect(atPage(4, { storefronts: [], total: 60, page: 4, page_size: 24, fields: [] }).status).toBe(404)
+    })
+  })
+
   it("wiki items: SPA title/description, canonical, breadcrumbs, bounded ItemList", () => {
     const doc = build("wikiItems", f.wikiItems(200), {}, "/wiki/items")
     expect(doc.title).toBe("All Items — Star Citizen Game Database | SC Market")

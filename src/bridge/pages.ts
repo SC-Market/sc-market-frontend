@@ -183,6 +183,7 @@ import { MAX_SUMMARY_LINKS } from "./render"
 import type { BridgePageKind } from "./routes"
 import { CONTENT_PAGES } from "./contentPages"
 import { storefrontFacts } from "../seo/storefrontText"
+import { STOREFRONTS_PAGE_SIZE } from "../features/storefront/domain"
 
 /**
  * Visible summary block. Text is always inserted as escaped text; a "ul" is
@@ -1460,11 +1461,15 @@ const HUB_PAGES: Record<
       ),
   }),
 
-  // Prerendered (StorefrontsHub): verified orgs with listings.
+  // Prerendered (StorefrontsHub): verified orgs with listings, a page at a
+  // time (the SPA's storefrontsHubArgs). Page 1 is the static file; ?page=N
+  // is built here when the bridge serves the path.
   storefronts: page<StorefrontsResponse>({
-    primary: () => v2List(`/contractors/storefronts`, ENTITY_LIST_TTL),
+    paginated: true,
+    primary: (_p, n = 1) =>
+      v2List(`/contractors/storefronts?page=${n}&page_size=${STOREFRONTS_PAGE_SIZE}`, ENTITY_LIST_TTL),
     build: (data, _s, ctx) =>
-      hubDoc(
+      paginate(hubDoc(
         {
           text: storefrontsSeoText(englishT),
           path: PATHS.storefronts,
@@ -1482,7 +1487,7 @@ const HUB_PAGES: Record<
           })),
         },
         ctx,
-      ),
+      ), { path: PATHS.storefronts, total: data?.total ?? 0, pageSize: STOREFRONTS_PAGE_SIZE }, ctx),
   }),
 }
 

@@ -43,7 +43,14 @@ export function pagedPath(path: string, pageNumber: number): string {
  * Hubs whose `?page=N` is its own page, in the SPA and the bridge (the
  * bridge kinds with `paginated: true`; a test keeps the two in sync).
  */
-export const PAGINATED_PATHS: readonly string[] = ["/market", "/shops", "/wiki/items", "/wiki/ships", "/wiki/commodities"]
+export const PAGINATED_PATHS: readonly string[] = [
+  "/market",
+  "/shops",
+  "/storefronts",
+  "/wiki/items",
+  "/wiki/ships",
+  "/wiki/commodities",
+]
 
 /** Paginated hubs with a path parameter: the mission hubs (/missions/givers/<slug>, …). */
 export const PAGINATED_PATTERNS: readonly RegExp[] = [/^\/missions\/(?:givers|factions|types|systems)\/[^/]+$/]

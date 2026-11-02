@@ -194,6 +194,16 @@ describe("public/_routes.json", () => {
     }
   })
 
+  // /storefronts is a paginated hub (?page=N, PAGINATED_PATHS) but stays a
+  // plain static file: no Function invocations for it (Free plan quota).
+  // Its ?page=N gets the prerendered page-1 file, which the SPA renders
+  // fresh (a query skips hydration) with that page's canonical and links.
+  it("leaves /storefronts and its ?page=N to the static file (no Function)", () => {
+    expect(invokes("/storefronts")).toBe(false)
+    expect(BRIDGE_PAGES[matchBridgeRoute("/storefronts")!.route.kind].paginated).toBe(true)
+    expect(PAGINATED_PATHS).toContain("/storefronts")
+  })
+
   it("invokes it for the main-host sitemap proxy only", () => {
     expect(invokes("/sitemap.xml")).toBe(true)
     expect(invokes("/sitemap-market-0.xml")).toBe(true)

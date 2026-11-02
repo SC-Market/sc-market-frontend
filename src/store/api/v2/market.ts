@@ -421,7 +421,14 @@ const injectedRtkApi = api
         GetStorefrontsApiResponse,
         GetStorefrontsApiArg
       >({
-        query: () => ({ url: `/contractors/storefronts` }),
+        query: (queryArg) => ({
+          url: `/contractors/storefronts`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+            field: queryArg.field,
+          },
+        }),
         providesTags: ["Contractors"],
       }),
       getOrgStorefront: build.query<
@@ -2733,7 +2740,14 @@ export type DeleteShopOrderSettingApiArg = {
   settingType: string
 }
 export type GetStorefrontsApiResponse = /** status 200 Ok */ StorefrontsResponse
-export type GetStorefrontsApiArg = void
+export type GetStorefrontsApiArg = {
+  /** Page number, from 1. */
+  page?: number
+  /** Cards per page (default 24, at most 60). */
+  pageSize?: number
+  /** Only orgs with this field (one of `fields`). */
+  field?: string
+}
 export type GetOrgStorefrontApiResponse = /** status 200 Ok */ OrgStorefront
 export type GetOrgStorefrontApiArg = {
   spectrumId: string
@@ -4768,8 +4782,14 @@ export type StorefrontCard = {
   showcase: boolean
 }
 export type StorefrontsResponse = {
-  /** Showcase orgs first, then by completed orders. At most 60. */
+  /** This page: showcase orgs first, stale orgs last, then by completed orders. */
   storefronts: StorefrontCard[]
+  /** Every listed org (with `field`: every one with that field). */
+  total: number
+  page: number
+  page_size: number
+  /** Focus chips: the most common fields among all listed orgs, most common first (at most 10). */
+  fields: string[]
 }
 export type StorefrontTrust = {
   /** Fulfilled orders, all of the org's shops. */

@@ -26,7 +26,7 @@ The full design and its decisions are in `ssr-migration-design.md` (Phase 3).
 | `/missions` | First page of missions (`searchMissions`, events excluded: 40 mission links), game events | Other pages, filters, searches |
 | `/missions/givers`, `/missions/factions`, `/missions/types`, `/missions/systems` | Every hub of the kind with its mission count (`getMissionHubs`) | — |
 | `/missions/<kind>/<slug>` (one per hub, ~100) | The hub's intro, its first 100 missions, related hubs (`getMissionHub`) | `?page=N` (head and links from the bridge over the static file, like `/wiki/items`) |
-| `/storefronts` | Verified orgs' storefront cards (`getStorefronts`, the same list the homepage's "Org storefronts" row shows) | The list again on mount (`refetchOnMountOrArgChange`), the field filter |
+| `/storefronts` | Page 1 of the verified orgs' storefront cards (`getStorefronts` with `storefrontsHubArgs()`: 24 cards, the same query the homepage's "Org storefronts" row reads its 6 from) | The list again on mount (`refetchOnMountOrArgChange`), `?page=N` and the `?field=` filter. `/storefronts` is not in `public/_routes.json` (no Function invocations), so `?page=N` gets this file and the SPA renders that page fresh, with its own canonical and rel prev/next (the bridge's `storefronts` page is paginated too, should the path ever be bridged) |
 | `/guides`, `/guides/<category>`, `/guides/<category>/<slug>`, `/about` | The whole guide (from `content/`) | — |
 
 Personal UI (sign-in state, cart, notifications, theme and language

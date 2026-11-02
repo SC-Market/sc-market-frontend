@@ -6,13 +6,14 @@ import { useGetStorefrontsQuery } from "../../store/api/v2/market"
 import { LandingSection, LandingSectionHeader } from "./LandingSection"
 import { StorefrontCard, STOREFRONT_CARD_HEIGHT } from "../../features/storefront/components/StorefrontCard"
 import { PATHS } from "../../routes/paths"
+import { storefrontsHubArgs } from "../../features/storefront/domain"
 
-/** The homepage's "Org storefronts" row: up to 6 from the Storefronts hub (same query). */
+/** The homepage's "Org storefronts" row: the first 6 of the Storefronts hub's page 1 (same query). */
 export const LANDING_STOREFRONTS = 6
 
 export function LandingStorefronts() {
   const { t } = useTranslation()
-  const { data, isLoading } = useGetStorefrontsQuery()
+  const { data, isLoading } = useGetStorefrontsQuery(storefrontsHubArgs())
   const storefronts = (data?.storefronts ?? []).slice(0, LANDING_STOREFRONTS)
   if (!isLoading && storefronts.length === 0) return null
   return (
