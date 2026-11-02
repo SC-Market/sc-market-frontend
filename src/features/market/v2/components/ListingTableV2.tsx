@@ -31,11 +31,11 @@ export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Title</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell>Qty</TableCell>
-            <TableCell>Seller</TableCell>
-            <TableCell>Rating</TableCell>
+            <TableCell>{t("marketUi.tables.title")}</TableCell>
+            <TableCell>{t("marketUi.tables.price")}</TableCell>
+            <TableCell>{t("marketUi.tables.qty")}</TableCell>
+            <TableCell>{t("marketUi.tables.seller")}</TableCell>
+            <TableCell>{t("marketUi.tables.rating")}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

@@ -65,10 +65,10 @@ function BulkSearchArea() {
             value={searchParams.get("sort_by") || "quantity"}
             onChange={(e) => updateParam("sort_by", e.target.value)}
           >
-            <MenuItem value="quantity">Quantity</MenuItem>
-            <MenuItem value="price">Lowest Price</MenuItem>
-            <MenuItem value="name">Name</MenuItem>
-            <MenuItem value="shop_count">Most Shops</MenuItem>
+            <MenuItem value="quantity">{t("marketUi.bulkItems.sortQuantity")}</MenuItem>
+            <MenuItem value="price">{t("marketUi.bulkItems.sortLowestPrice")}</MenuItem>
+            <MenuItem value="name">{t("marketUi.bulkItems.sortName")}</MenuItem>
+            <MenuItem value="shop_count">{t("marketUi.bulkItems.sortMostShops")}</MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={12}>
@@ -77,8 +77,8 @@ function BulkSearchArea() {
             value={searchParams.get("sort_order") || "desc"}
             onChange={(e) => updateParam("sort_order", e.target.value)}
           >
-            <MenuItem value="asc">Ascending</MenuItem>
-            <MenuItem value="desc">Descending</MenuItem>
+            <MenuItem value="asc">{t("marketUi.bulkItems.ascending")}</MenuItem>
+            <MenuItem value="desc">{t("marketUi.bulkItems.descending")}</MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={6}>
@@ -118,7 +118,7 @@ function BulkSearchArea() {
             label={t("bulk.itemType", "Item Type")}
             value={searchParams.get("item_type") || ""}
             onChange={(e) => updateParam("item_type", e.target.value)}
-            placeholder="e.g. Commodity"
+            placeholder={t("marketUi.bulkItems.itemTypePlaceholder")}
           />
         </Grid>
       </Grid>
@@ -140,6 +140,7 @@ function BulkMobileSidebar() {
 
 function AggregateCard({ item }: { item: GameItemAggregate }) {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
 
   return (
     <Card sx={{
@@ -169,8 +170,8 @@ function AggregateCard({ item }: { item: GameItemAggregate }) {
           </Typography>
 
           <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
-            <Chip label={`${item.total_quantity.toLocaleString()} avail.`} size="small" variant="outlined" />
-            <Chip label={`${item.shop_count} seller${item.shop_count !== 1 ? "s" : ""}`} size="small" variant="outlined" />
+            <Chip label={t("marketUi.bulkItems.availableShort", { quantity: item.total_quantity.toLocaleString() })} size="small" variant="outlined" />
+            <Chip label={t("marketUi.bulkItems.sellerCount", { count: item.shop_count })} size="small" variant="outlined" />
           </Stack>
 
           {(item.quality_tier_min || item.quality_tier_max) && (

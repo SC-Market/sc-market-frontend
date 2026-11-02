@@ -20,6 +20,7 @@ import {
   Divider,
 } from "@mui/material"
 import { WarningRounded } from "@mui/icons-material"
+import { useTranslation } from "react-i18next"
 
 interface InsufficientStockDialogProps {
   open: boolean
@@ -42,12 +43,13 @@ export function InsufficientStockDialog({
   onAllocateUnlisted,
   onReduceOrder,
 }: InsufficientStockDialogProps) {
+  const { t } = useTranslation()
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
         <Stack direction="row" spacing={1} alignItems="center">
           <WarningRounded color="warning" />
-          <Typography variant="h6">Insufficient Stock</Typography>
+          <Typography variant="h6">{t("allocationUi.insufficient.title")}</Typography>
         </Stack>
       </DialogTitle>
       <DialogContent>
@@ -55,23 +57,27 @@ export function InsufficientStockDialog({
           {/* Problem Summary */}
           <Alert severity="warning">
             <Typography variant="body2" gutterBottom>
-              <strong>Cannot allocate full order quantity</strong>
+              <strong>{t("allocationUi.insufficient.cannotAllocate")}</strong>
             </Typography>
             <Typography variant="body2">
-              The order requires {orderQuantity} units, but only{" "}
-              {availableQuantity} units are available.
+              {t("allocationUi.insufficient.summary", {
+                count: orderQuantity,
+                availableText: t("allocationUi.insufficient.availableUnits", {
+                  count: availableQuantity,
+                }),
+              })}
             </Typography>
           </Alert>
 
           {/* Detailed Breakdown */}
           <Box>
             <Typography variant="subtitle2" gutterBottom>
-              Stock Breakdown
+              {t("allocationUi.insufficient.breakdown")}
             </Typography>
             <Stack spacing={1}>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body2" color="text.secondary">
-                  Order Quantity:
+                  {t("allocationUi.insufficient.orderQuantity")}
                 </Typography>
                 <Typography variant="body2" fontWeight="medium">
                   {orderQuantity}
@@ -79,7 +85,7 @@ export function InsufficientStockDialog({
               </Stack>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body2" color="text.secondary">
-                  Available Stock:
+                  {t("allocationUi.insufficient.availableStock")}
                 </Typography>
                 <Typography variant="body2" fontWeight="medium">
                   {availableQuantity}
@@ -88,7 +94,7 @@ export function InsufficientStockDialog({
               <Divider />
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body2" color="error" fontWeight="medium">
-                  Shortfall:
+                  {t("allocationUi.insufficient.shortfall")}
                 </Typography>
                 <Typography variant="body2" color="error" fontWeight="medium">
                   {shortfall}
@@ -100,7 +106,7 @@ export function InsufficientStockDialog({
           {/* Resolution Options */}
           <Box>
             <Typography variant="subtitle2" gutterBottom>
-              What would you like to do?
+              {t("allocationUi.insufficient.whatToDo")}
             </Typography>
             <Stack spacing={1.5} sx={{ mt: 1.5 }}>
               {onAddStock && (
@@ -115,10 +121,10 @@ export function InsufficientStockDialog({
                 >
                   <Stack spacing={0.5} alignItems="flex-start">
                     <Typography variant="body2" fontWeight="medium">
-                      Add More Stock
+                      {t("allocationUi.insufficient.addStock")}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      Create new stock lots to fulfill this order
+                      {t("allocationUi.insufficient.addStockHint")}
                     </Typography>
                   </Stack>
                 </Button>
@@ -136,10 +142,10 @@ export function InsufficientStockDialog({
                 >
                   <Stack spacing={0.5} alignItems="flex-start">
                     <Typography variant="body2" fontWeight="medium">
-                      Use Unlisted Stock
+                      {t("allocationUi.insufficient.useUnlisted")}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      Allocate from unlisted stock lots if available
+                      {t("allocationUi.insufficient.useUnlistedHint")}
                     </Typography>
                   </Stack>
                 </Button>
@@ -157,11 +163,12 @@ export function InsufficientStockDialog({
                 >
                   <Stack spacing={0.5} alignItems="flex-start">
                     <Typography variant="body2" fontWeight="medium">
-                      Reduce Order Quantity
+                      {t("allocationUi.insufficient.reduceOrder")}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      Adjust order to match available stock ({availableQuantity}{" "}
-                      units)
+                      {t("allocationUi.insufficient.reduceOrderHint", {
+                        count: availableQuantity,
+                      })}
                     </Typography>
                   </Stack>
                 </Button>
@@ -171,7 +178,7 @@ export function InsufficientStockDialog({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{t("common.cancel")}</Button>
       </DialogActions>
     </Dialog>
   )

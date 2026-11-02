@@ -14,6 +14,7 @@ import {
 import type { GameItemAggregate } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
+import { useTranslation } from "react-i18next"
 
 function formatPrice(min: number, max: number) {
   if (min === max) return `${min.toLocaleString()} aUEC`
@@ -21,17 +22,18 @@ function formatPrice(min: number, max: number) {
 }
 
 export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
+  const { t } = useTranslation()
   return (
     <TableContainer>
       <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>Name</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>Price Range</TableCell>
-            <TableCell align="right">Available</TableCell>
-            <TableCell align="right">Sellers</TableCell>
+            <TableCell>{t("marketUi.tables.name")}</TableCell>
+            <TableCell>{t("marketUi.tables.type")}</TableCell>
+            <TableCell>{t("marketUi.tables.priceRange")}</TableCell>
+            <TableCell align="right">{t("marketUi.tables.available")}</TableCell>
+            <TableCell align="right">{t("marketUi.tables.sellers")}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

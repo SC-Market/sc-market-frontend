@@ -375,7 +375,7 @@ function AllStockLotsGridV2() {
       >
         <option value="">—</option>
         {[1, 2, 3, 4, 5].map((tier) => (
-          <option key={tier} value={tier}>Tier {tier}</option>
+          <option key={tier} value={tier}>{t("marketUi.bulkStock.tierOption", { tier })}</option>
         ))}
       </TextField>
     )
@@ -436,7 +436,7 @@ function AllStockLotsGridV2() {
       minWidth: 140,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" fontWeight={600}>
-          {params.value || "Custom Item"}
+          {params.value || t("marketUi.bulkStock.customItem")}
         </Typography>
       ),
     },
@@ -489,7 +489,7 @@ function AllStockLotsGridV2() {
       renderEditCell: renderLocationEditCell,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" color="text.secondary">
-          {locations.find((l) => l.location_id === params.value)?.name ?? "Unspecified"}
+          {locations.find((l) => l.location_id === params.value)?.name ?? t("marketUi.bulkStock.unspecified")}
         </Typography>
       ),
     },
@@ -570,7 +570,7 @@ function AllStockLotsGridV2() {
       await deleteLot({ id: lotId }).unwrap()
       issueAlert({ message: t("AllStockLots.deleted", "Lot deleted"), severity: "success" })
     } catch (err) {
-      issueAlert({ message: (err as Error)?.message || "Operation failed", severity: "error" })
+      issueAlert({ message: (err as Error)?.message || t("marketUi.bulkStock.operationFailed"), severity: "error" })
     }
   }
 
@@ -633,7 +633,7 @@ function AllStockLotsGridV2() {
         notes: lot.notes ?? "",
       }
     } catch (err) {
-      issueAlert({ message: (err as Error)?.message || "Operation failed", severity: "error" })
+      issueAlert({ message: (err as Error)?.message || t("marketUi.bulkStock.operationFailed"), severity: "error" })
       return oldRow
     }
   }
@@ -737,16 +737,16 @@ function AllocatedStockGridV2() {
     () => (lotsData?.lots ?? []).filter((lot) => lot.quantity_allocated > 0).map((lot) => ({
       id: lot.lot_id,
       lot_id: lot.lot_id,
-      game_item_name: lot.game_item_name || "Custom Item",
+      game_item_name: lot.game_item_name || t("marketUi.bulkStock.customItem"),
       variant_display_name: lot.variant.display_name || "—",
       quantity_allocated: lot.quantity_allocated,
       quantity_total: lot.quantity_total,
-      location_name: lot.location?.name ?? "Unspecified",
+      location_name: lot.location?.name ?? t("marketUi.bulkStock.unspecified"),
       listing_id: lot.listing_id,
       listing_title: lot.listing_title,
       listing_photo: lot.listing_photo,
     })),
-    [lotsData],
+    [lotsData, t],
   )
 
   const columns: GridColDef[] = [

@@ -12,6 +12,7 @@ import {
 } from "@mui/material"
 import type { StandingBuyOrder } from "../../../../store/api/v2/market"
 import { MARKET_PATHS } from "../../../../routes/paths"
+import { useTranslation } from "react-i18next"
 
 interface BuyOrderAggregate {
   item_id: string
@@ -20,15 +21,16 @@ interface BuyOrderAggregate {
 }
 
 export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate[] }) {
+  const { t } = useTranslation()
   return (
     <TableContainer>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Item</TableCell>
-            <TableCell>Price Range</TableCell>
-            <TableCell align="right">Total Qty</TableCell>
-            <TableCell align="right">Orders</TableCell>
+            <TableCell>{t("marketUi.tables.item")}</TableCell>
+            <TableCell>{t("marketUi.tables.priceRange")}</TableCell>
+            <TableCell align="right">{t("marketUi.tables.totalQty")}</TableCell>
+            <TableCell align="right">{t("marketUi.tables.orders")}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

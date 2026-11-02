@@ -39,6 +39,8 @@ import {
   KeyboardArrowRight,
 } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
+import { useTranslation } from "react-i18next"
+import type { TFunction } from "i18next"
 import {
   useAutoAllocateOrderStockMutation,
   useGetOrderAllocationsQuery,
@@ -64,8 +66,24 @@ function apiErrorMessage(error: unknown, fallback: string): string {
   return fallback
 }
 
-function lotLocation(lot: OrderAllocationLot | null) {
-  return lot?.location?.name || "Unknown"
+function lotLocation(lot: OrderAllocationLot | null, t: TFunction) {
+  return lot?.location?.name || t("allocationUi.unknownLocation")
+}
+
+/** Label for a non-editable (terminal) order status. */
+function orderStatusLabel(status: string, t: TFunction) {
+  if (status === "fulfilled") return t("allocationUi.orderStatus.fulfilled")
+  if (status === "cancelled") return t("allocationUi.orderStatus.cancelled")
+  return status
+}
+
+function allocationModeLabel(
+  mode: "auto" | "manual" | "none",
+  t: TFunction,
+) {
+  if (mode === "auto") return t("allocationUi.mode.auto")
+  if (mode === "manual") return t("allocationUi.mode.manual")
+  return t("allocationUi.mode.none")
 }
 
 function LotOwner({ lot }: { lot: OrderAllocationLot | null }) {
@@ -90,6 +108,7 @@ function LotOwner({ lot }: { lot: OrderAllocationLot | null }) {
 }
 
 export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
+  const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const { data, isLoading, error } = useGetOrderAllocationsQuery({ orderId })
   const [manualAllocate] = useManualAllocateOrderStockMutation()
@@ -118,7 +137,7 @@ export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
     } catch (e) {
       issueAlert({
         severity: "error",
-        message: apiErrorMessage(e, "Failed to update the allocation"),
+        message: apiErrorMessage(e, t("allocationUi.updateFailed")),
       })
     }
   }
@@ -129,12 +148,15 @@ export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
       issueAlert({
         severity:
           res.total_allocated < res.total_requested ? "warning" : "success",
-        message: `${res.total_allocated} of ${res.total_requested} units allocated`,
+        message: t("allocationUi.unitsAllocated", {
+          allocated: res.total_allocated,
+          count: res.total_requested,
+        }),
       })
     } catch (e) {
       issueAlert({
         severity: "error",
-        message: apiErrorMessage(e, "Failed to allocate stock"),
+        message: apiErrorMessage(e, t("allocationUi.allocateFailed")),
       })
     }
   }
@@ -144,12 +166,12 @@ export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
       await release({ orderId, releaseOrderAllocationsRequest: {} }).unwrap()
       issueAlert({
         severity: "success",
-        message: "Allocated stock returned to its lots",
+        message: t("allocationUi.releasedSuccess"),
       })
     } catch (e) {
       issueAlert({
         severity: "error",
-        message: apiErrorMessage(e, "Failed to release stock"),
+        message: apiErrorMessage(e, t("allocationUi.releaseFailed")),
       })
     }
   }
@@ -157,14 +179,14 @@ export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
   if (isLoading) {
     return (
       <Box display="flex" justifyContent="center" p={4}>
-        <CircularProgress aria-label="Loading stock allocations" />
+        <CircularProgress aria-label={t("allocationUi.loading")} />
       </Box>
     )
   }
   if (error || !data) {
     return (
       <Alert severity="error">
-        {apiErrorMessage(error, "Failed to load stock allocations")}
+        {apiErrorMessage(error, t("allocationUi.loadFailed"))}
       </Alert>
     )
   }
@@ -182,14 +204,16 @@ export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
           mb={2}
         >
           <Stack direction="row" spacing={1} alignItems="center">
-            <Typography variant="h6">Stock Allocation</Typography>
+            <Typography variant="h6">{t("allocationUi.title")}</Typography>
             <Chip
               label={`${data.total_allocated} / ${data.total_requested}`}
               color={fullyAllocated ? "success" : "warning"}
               size="small"
             />
             <Chip
-              label={`Mode: ${data.allocation_mode}`}
+              label={t("allocationUi.modeLabel", {
+                mode: allocationModeLabel(data.allocation_mode, t),
+              })}
               size="small"
               variant="outlined"
             />
@@ -203,7 +227,7 @@ export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
                 disabled={fullyAllocated}
                 onClick={handleAutoAllocate}
               >
-                Auto-allocate
+                {t("allocationUi.autoAllocate")}
               </LoadingButton>
               <LoadingButton
                 variant="outlined"
@@ -212,7 +236,7 @@ export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
                 disabled={data.total_allocated === 0}
                 onClick={handleReleaseAll}
               >
-                Release all
+                {t("allocationUi.releaseAll")}
               </LoadingButton>
             </Stack>
           )}
@@ -220,13 +244,14 @@ export function SplitAllocationView({ orderId }: SplitAllocationViewProps) {
 
         {!data.editable && (
           <Alert severity="info" sx={{ mb: 2 }}>
-            This order is {data.order_status}; its allocations can no longer
-            change.
+            {t("allocationUi.locked", {
+              status: orderStatusLabel(data.order_status, t),
+            })}
           </Alert>
         )}
         {data.lines.length === 0 && (
           <Typography color="text.secondary">
-            This order has no items to allocate stock for.
+            {t("allocationUi.noItems")}
           </Typography>
         )}
 
@@ -259,6 +284,7 @@ function LineAllocation({
     success: string,
   ) => Promise<void>
 }) {
+  const { t } = useTranslation()
   const remaining = line.quantity - line.quantity_allocated
   const heldByLot = new Map<string, number>()
   for (const a of line.allocations)
@@ -295,7 +321,7 @@ function LineAllocation({
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Typography variant="subtitle2" gutterBottom>
-            Available Stock
+            {t("allocationUi.availableStock")}
           </Typography>
           <AvailableLots
             line={line}
@@ -306,14 +332,14 @@ function LineAllocation({
                 line,
                 lotId,
                 (heldByLot.get(lotId) ?? 0) + qty,
-                "Stock allocated",
+                t("allocationUi.stockAllocated"),
               )
             }
           />
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography variant="subtitle2" gutterBottom>
-            Allocated
+            {t("allocationUi.allocated")}
           </Typography>
           <AllocatedLots
             allocations={line.allocations}
@@ -324,7 +350,7 @@ function LineAllocation({
                   line,
                   alloc.lot_id,
                   alloc.quantity - qty,
-                  "Allocation updated",
+                  t("allocationUi.allocationUpdated"),
                 )
             }}
           />
@@ -345,12 +371,13 @@ function AvailableLots({
   editable: boolean
   onAllocate: (lotId: string, quantity: number) => Promise<void>
 }) {
+  const { t } = useTranslation()
   const [qtys, setQtys] = useState<Record<string, number>>({})
 
   if (line.available_lots.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
-        No free stock of this variant.
+        {t("allocationUi.noFreeStock")}
       </Typography>
     )
   }
@@ -359,9 +386,9 @@ function AvailableLots({
     <Table size="small">
       <TableHead>
         <TableRow>
-          <TableCell>Location</TableCell>
-          <TableCell>User</TableCell>
-          <TableCell width={130}>Quantity</TableCell>
+          <TableCell>{t("allocationUi.colLocation")}</TableCell>
+          <TableCell>{t("allocationUi.colUser")}</TableCell>
+          <TableCell width={130}>{t("allocationUi.colQuantity")}</TableCell>
           <TableCell width={50} />
         </TableRow>
       </TableHead>
@@ -373,10 +400,10 @@ function AvailableLots({
           return (
             <TableRow key={lot.lot_id}>
               <TableCell>
-                {lotLocation(lot)}
+                {lotLocation(lot, t)}
                 {!lot.listed && (
                   <Chip
-                    label="Unlisted"
+                    label={t("allocationUi.unlisted")}
                     size="small"
                     variant="outlined"
                     sx={{ ml: 1 }}
@@ -394,10 +421,14 @@ function AvailableLots({
                   disabled={disabled}
                   error={wouldExceed}
                   helperText={
-                    wouldExceed ? `Line needs ${remaining} more` : undefined
+                    wouldExceed
+                      ? t("allocationUi.lineNeedsMore", { count: remaining })
+                      : undefined
                   }
                   inputProps={{
-                    "aria-label": `Quantity to allocate from ${lotLocation(lot)}`,
+                    "aria-label": t("allocationUi.quantityToAllocateFrom", {
+                      location: lotLocation(lot, t),
+                    }),
                   }}
                   onChange={(e) =>
                     setQtys({
@@ -435,7 +466,9 @@ function AvailableLots({
               <TableCell>
                 <IconButton
                   size="small"
-                  aria-label={`Allocate from ${lotLocation(lot)}`}
+                  aria-label={t("allocationUi.allocateFrom", {
+                    location: lotLocation(lot, t),
+                  })}
                   disabled={disabled || qty === 0 || wouldExceed}
                   onClick={async () => {
                     await onAllocate(lot.lot_id, qty)
@@ -462,12 +495,13 @@ function AllocatedLots({
   editable: boolean
   onDeallocate: (allocation: OrderAllocation, quantity: number) => Promise<void>
 }) {
+  const { t } = useTranslation()
   const [qtys, setQtys] = useState<Record<string, number>>({})
 
   if (allocations.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
-        Nothing allocated yet.
+        {t("allocationUi.nothingAllocated")}
       </Typography>
     )
   }
@@ -477,9 +511,9 @@ function AllocatedLots({
       <TableHead>
         <TableRow>
           <TableCell width={50} />
-          <TableCell width={130}>Quantity</TableCell>
-          <TableCell>Location</TableCell>
-          <TableCell>User</TableCell>
+          <TableCell width={130}>{t("allocationUi.colQuantity")}</TableCell>
+          <TableCell>{t("allocationUi.colLocation")}</TableCell>
+          <TableCell>{t("allocationUi.colUser")}</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -492,7 +526,9 @@ function AllocatedLots({
               <TableCell>
                 <IconButton
                   size="small"
-                  aria-label={`Return units to ${lotLocation(alloc.lot)}`}
+                  aria-label={t("allocationUi.returnUnitsTo", {
+                    location: lotLocation(alloc.lot, t),
+                  })}
                   disabled={disabled || qty === 0}
                   onClick={async () => {
                     await onDeallocate(alloc, qty)
@@ -509,7 +545,9 @@ function AllocatedLots({
                   value={qty || ""}
                   disabled={disabled}
                   inputProps={{
-                    "aria-label": `Quantity to return to ${lotLocation(alloc.lot)}`,
+                    "aria-label": t("allocationUi.quantityToReturnTo", {
+                      location: lotLocation(alloc.lot, t),
+                    }),
                   }}
                   onChange={(e) =>
                     setQtys({
@@ -538,7 +576,9 @@ function AllocatedLots({
                 />
               </TableCell>
               <TableCell>
-                {alloc.lot ? lotLocation(alloc.lot) : "Deleted lot"}
+                {alloc.lot
+                  ? lotLocation(alloc.lot, t)
+                  : t("allocationUi.deletedLot")}
               </TableCell>
               <TableCell>
                 <LotOwner lot={alloc.lot} />

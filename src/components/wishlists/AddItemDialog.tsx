@@ -22,6 +22,7 @@ import {
 import { debounce } from "lodash"
 import { Link } from "react-router-dom"
 import { GAME_DATA_PATHS } from "../../routes/paths"
+import { useTranslation } from "react-i18next"
 
 export interface AddItemDialogProps {
   open: boolean
@@ -36,6 +37,7 @@ interface GameItemOption {
 }
 
 export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps) {
+  const { t } = useTranslation()
   const [selectedItem, setSelectedItem] = useState<GameItemOption | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [quantity, setQuantity] = useState<number>(1)
@@ -102,9 +104,9 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
   }
 
   const handleSubmit = async () => {
-    if (!selectedItem) { setError("Please select an item"); return }
-    if (quantity < 1) { setError("Quantity must be at least 1"); return }
-    if (acquisitionMode === "craft" && !selectedBlueprintId) { setError("Please select a blueprint for crafting"); return }
+    if (!selectedItem) { setError(t("marketUi.addItemDialog.selectItemError")); return }
+    if (quantity < 1) { setError(t("marketUi.addItemDialog.quantityMinError")); return }
+    if (acquisitionMode === "craft" && !selectedBlueprintId) { setError(t("marketUi.addItemDialog.selectBlueprintError")); return }
 
     setError(null)
     try {
@@ -122,14 +124,14 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
       }).unwrap()
       handleClose()
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed to add item."
+      const message = err instanceof Error ? err.message : t("marketUi.addItemDialog.addFailed")
       setError(message)
     }
   }
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Add Item to Shopping List</DialogTitle>
+      <DialogTitle>{t("marketUi.addItemDialog.title")}</DialogTitle>
       <DialogContent>
         <Stack spacing={2.5} mt={1}>
           {error && <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>}
@@ -146,7 +148,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
             filterOptions={(x) => x}
             isOptionEqualToValue={(a, b) => a.id === b.id}
             renderInput={(params) => (
-              <TextField {...params} label="Search Item *" placeholder="Type to search..."
+              <TextField {...params} label={t("marketUi.addItemDialog.searchItem")} placeholder={t("marketUi.addItemDialog.searchPlaceholder")}
                 InputProps={{ ...params.InputProps, endAdornment: (<>{isSearching ? <CircularProgress size={20} /> : null}{params.InputProps.endAdornment}</>) }}
               />
             )}
@@ -158,13 +160,13 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
                 </Box>
               </li>
             )}
-            noOptionsText={searchQuery.length < 2 ? "Type at least 2 characters" : "No items found"}
+            noOptionsText={searchQuery.length < 2 ? t("marketUi.addItemDialog.minChars", { count: 2 }) : t("marketUi.addItemDialog.noItemsFound")}
           />
 
           {/* Acquisition Mode — only show when item has blueprints */}
           {selectedItem && hasCraftingOption && (
             <Box>
-              <Typography variant="subtitle2" gutterBottom>How do you want to get this item?</Typography>
+              <Typography variant="subtitle2" gutterBottom>{t("marketUi.addItemDialog.howToGet")}</Typography>
               <ToggleButtonGroup
                 value={acquisitionMode}
                 exclusive
@@ -174,18 +176,18 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
               >
                 <ToggleButton value="buy">
                   <ShoppingCart sx={{ mr: 1 }} fontSize="small" />
-                  Buy from Market
+                  {t("marketUi.addItemDialog.buyFromMarket")}
                 </ToggleButton>
                 <ToggleButton value="craft">
                   <Build sx={{ mr: 1 }} fontSize="small" />
-                  Craft (add ingredients)
+                  {t("marketUi.addItemDialog.craftAddIngredients")}
                 </ToggleButton>
               </ToggleButtonGroup>
 
               {acquisitionMode === "craft" && (
                 <Box sx={{ mt: 1.5 }}>
                   <Typography variant="caption" color="text.secondary" display="block" mb={1}>
-                    Select a blueprint — its ingredients will be tracked in your shopping list
+                    {t("marketUi.addItemDialog.selectBlueprintHint")}
                   </Typography>
                   {itemBlueprints.length === 1 ? (
                     <Chip
@@ -199,10 +201,10 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
                     />
                   ) : (
                     <FormControl fullWidth size="small">
-                      <InputLabel id="add-item-dialog-blueprint-label">Blueprint *</InputLabel>
+                      <InputLabel id="add-item-dialog-blueprint-label">{t("marketUi.addItemDialog.blueprintRequired")}</InputLabel>
                       <Select labelId="add-item-dialog-blueprint-label"
                         value={selectedBlueprintId || ""}
-                        label="Blueprint *"
+                        label={t("marketUi.addItemDialog.blueprintRequired")}
                         onChange={(e) => setSelectedBlueprintId(e.target.value || null)}
                       >
                         {itemBlueprints.map((bp) => (
@@ -225,14 +227,14 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
 
           {/* Quantity */}
           <TextField
-            size="small" value={quantity} type="number" fullWidth label="Quantity *"
+            size="small" value={quantity} type="number" fullWidth label={t("marketUi.addItemDialog.quantityRequired")}
             onChange={(e) => { const v = parseInt(e.target.value, 10); if (!isNaN(v) && v >= 0) setQuantity(v) }}
             inputProps={{ min: 1, step: 1 }}
           />
 
           {/* Quality Tier */}
           <Box>
-            <Typography variant="subtitle2" gutterBottom>Quality Tier (Optional)</Typography>
+            <Typography variant="subtitle2" gutterBottom>{t("marketUi.addItemDialog.qualityTierOptional")}</Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               {[1, 2, 3, 4, 5].map((tier) => (
                 <Box key={tier} onClick={() => setQualityTier(qualityTier === tier ? null : tier)}
@@ -240,16 +242,16 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
                   {qualityTier && tier <= qualityTier ? <Star fontSize="large" color="primary" /> : <StarBorder fontSize="large" color="action" />}
                 </Box>
               ))}
-              {qualityTier && <Button size="small" onClick={() => setQualityTier(null)}>Clear</Button>}
+              {qualityTier && <Button size="small" onClick={() => setQualityTier(null)}>{t("marketUi.addItemDialog.clear")}</Button>}
             </Box>
           </Box>
 
           {/* Priority */}
           <Box>
-            <Typography variant="subtitle2" gutterBottom>Priority: {priority}</Typography>
-            <Slider aria-label="Priority" value={priority} onChange={(_, v) => setPriority(v as number)}
+            <Typography variant="subtitle2" gutterBottom>{t("marketUi.addItemDialog.priorityValue", { priority })}</Typography>
+            <Slider aria-label={t("marketUi.addItemDialog.priority")} value={priority} onChange={(_, v) => setPriority(v as number)}
               min={1} max={5} step={1}
-              marks={[{ value: 1, label: "Low" }, { value: 3, label: "Medium" }, { value: 5, label: "Critical" }]}
+              marks={[{ value: 1, label: t("marketUi.addItemDialog.priorityLow") }, { value: 3, label: t("marketUi.addItemDialog.priorityMedium") }, { value: 5, label: t("marketUi.addItemDialog.priorityCritical") }]}
               valueLabelDisplay="auto"
             />
           </Box>
@@ -257,17 +259,17 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
           {/* Notes */}
           <TextField
             size="small" value={notes} onChange={(e) => setNotes(e.target.value)}
-            multiline rows={2} fullWidth label="Notes (Optional)"
-            placeholder="Add any notes..." inputProps={{ maxLength: 500 }}
+            multiline rows={2} fullWidth label={t("marketUi.addItemDialog.notesOptional")}
+            placeholder={t("marketUi.addItemDialog.notesPlaceholder")} inputProps={{ maxLength: 500 }}
             helperText={`${notes.length}/500`}
           />
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} disabled={isAdding}>Cancel</Button>
+        <Button onClick={handleClose} disabled={isAdding}>{t("common.cancel")}</Button>
         <Button onClick={handleSubmit} variant="contained"
           disabled={isAdding || !selectedItem || quantity < 1 || (acquisitionMode === "craft" && !selectedBlueprintId)}>
-          {isAdding ? <CircularProgress size={20} /> : acquisitionMode === "craft" ? "Add Ingredients" : "Add Item"}
+          {isAdding ? <CircularProgress size={20} /> : acquisitionMode === "craft" ? t("marketUi.addItemDialog.addIngredients") : t("marketUi.addItemDialog.addItem")}
         </Button>
       </DialogActions>
     </Dialog>

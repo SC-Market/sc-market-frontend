@@ -1,3 +1,4 @@
+import "../../../../../util/i18n"
 import "../../../v2/components/__tests__/setup"
 /**
  * The order page's Stock Allocation tab reads and changes allocations only

@@ -88,6 +88,7 @@ function StatStrip({
   complete: GameItemAggregateV2;
   selectedTier: number | null;
 }) {
+  const { t } = useTranslation();
   const { listings, buy_orders } = complete;
 
   const filtered = useMemo(
@@ -131,39 +132,44 @@ function StatStrip({
     color?: string;
   }> = [
     {
-      label: "Best Ask",
+      label: t("marketUi.aggregateAdmin.bestAsk"),
       value: bestAsk != null ? bestAsk.toLocaleString() : "—",
-      sub: "aUEC / unit",
+      sub: t("marketUi.aggregateAdmin.auecPerUnit"),
       color: "success.main",
     },
     {
-      label: "Best Bid",
+      label: t("marketUi.aggregateAdmin.bestBid"),
       value: bestBid != null ? bestBid.toLocaleString() : "—",
-      sub: "aUEC / unit",
+      sub: t("marketUi.aggregateAdmin.auecPerUnit"),
       color: "warning.main",
     },
     {
-      label: "Spread",
+      label: t("marketUi.aggregateAdmin.spread"),
       value: spread != null ? formatAuec(spread) : "—",
       sub:
         spread != null && bestAsk
-          ? `${((spread / bestAsk) * 100).toFixed(1)}% mid`
+          ? t("marketUi.aggregateAdmin.spreadPercentMid", {
+              percent: ((spread / bestAsk) * 100).toFixed(1),
+            })
           : undefined,
     },
     {
-      label: "Listings",
+      label: t("marketUi.aggregateAdmin.listings"),
       value: filtered.length.toString(),
-      sub: `${sellerCount} ${sellerCount === 1 ? "seller" : "sellers"}`,
+      sub: t("marketUi.aggregateAdmin.sellerCount", { count: sellerCount }),
     },
     {
-      label: "Buy Orders",
+      label: t("marketUi.aggregateAdmin.buyOrders"),
       value: activeBuys.length.toString(),
-      sub: `${totalWanted.toLocaleString()} units wanted`,
+      sub: t("marketUi.aggregateAdmin.unitsWanted", {
+        count: totalWanted,
+        formatted: totalWanted.toLocaleString(),
+      }),
     },
     {
-      label: "Total Stock",
+      label: t("marketUi.aggregateAdmin.totalStock"),
       value: formatAuec(totalStock),
-      sub: "units available",
+      sub: t("marketUi.aggregateAdmin.unitsAvailable"),
     },
   ];
 
@@ -231,6 +237,7 @@ function QualityTabs({
   selectedTier: number | null;
   onSelect: (tier: number | null) => void;
 }) {
+  const { t } = useTranslation();
   if (distribution.length === 0) return null;
 
   return (
@@ -250,7 +257,7 @@ function QualityTabs({
               fontWeight={700}
               sx={{ textTransform: "uppercase", letterSpacing: "0.05em" }}
             >
-              All
+              {t("marketUi.aggregateAdmin.all")}
             </Typography>
           }
           sx={{ minHeight: 48, py: 1 }}
@@ -270,7 +277,9 @@ function QualityTabs({
                   {d.min_price.toLocaleString()}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ fontSize: "10px" }}>
-                  {d.listing_count} listings
+                  {t("marketUi.aggregateAdmin.listingCount", {
+                    count: d.listing_count,
+                  })}
                 </Typography>
               </Stack>
             }
@@ -295,6 +304,7 @@ function DepthChart({
   listings: AggregateListingV2Row[];
   buyOrders: StandingBuyOrder[];
 }) {
+  const { t } = useTranslation();
   const { bidBars, askBars, midPrice, bestBid, bestAsk, spread } =
     useMemo(() => {
       const activeBuys = buyOrders.filter(
@@ -371,7 +381,7 @@ function DepthChart({
             color: "text.secondary",
           }}
         >
-          Market Depth
+          {t("marketUi.aggregateAdmin.marketDepth")}
         </Typography>
         {spread != null && midPrice != null && (
           <Typography
@@ -379,7 +389,7 @@ function DepthChart({
             color="text.secondary"
             sx={{ fontFamily: "monospace" }}
           >
-            Spread{" "}
+            {t("marketUi.aggregateAdmin.spread")}{" "}
             <Typography
               component="span"
               variant="caption"
@@ -388,7 +398,8 @@ function DepthChart({
             >
               {formatAuec(spread)} aUEC
             </Typography>
-            {" · "}Mid{" "}
+            {" · "}
+            {t("marketUi.aggregateAdmin.mid")}{" "}
             <Typography
               component="span"
               variant="caption"
@@ -445,7 +456,7 @@ function DepthChart({
             color="text.secondary"
             sx={{ fontFamily: "monospace", fontSize: "9px" }}
           >
-            mid
+            {t("marketUi.aggregateAdmin.midLower")}
           </Typography>
           <Typography
             sx={{
@@ -592,12 +603,14 @@ function BuyDialog({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle sx={{ fontWeight: 700 }}>
-        Buy from {listing.shop_name}
+        {t("marketUi.aggregateAdmin.buyFrom", { shop: listing.shop_name })}
       </DialogTitle>
       <DialogContent sx={{ pt: "12px !important" }}>
         <Typography variant="body2" color="text.secondary" mb={2}>
-          {listing.price_min.toLocaleString()} aUEC / unit ·{" "}
-          {listing.quantity_available.toLocaleString()} available
+          {t("marketUi.aggregateAdmin.priceAndAvailable", {
+            price: listing.price_min.toLocaleString(),
+            available: listing.quantity_available.toLocaleString(),
+          })}
         </Typography>
         <NumericFormat
           decimalScale={0}
@@ -611,7 +624,9 @@ function BuyDialog({
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                of {listing.quantity_available.toLocaleString()}
+                {t("marketUi.aggregateAdmin.ofMax", {
+                  max: listing.quantity_available.toLocaleString(),
+                })}
               </InputAdornment>
             ),
           }}
@@ -626,7 +641,9 @@ function BuyDialog({
           color="primary"
           sx={{ fontFamily: "monospace" }}
         >
-          Total: {(listing.price_min * quantity).toLocaleString()} aUEC
+          {t("marketUi.aggregateAdmin.totalAuec", {
+            total: (listing.price_min * quantity).toLocaleString(),
+          })}
         </Typography>
       </DialogContent>
       <DialogActions>
@@ -650,6 +667,7 @@ function SellOrdersPanel({
   listings: AggregateListingV2Row[];
   totalCount: number;
 }) {
+  const { t } = useTranslation();
   const [buyTarget, setBuyTarget] = useState<AggregateListingV2Row | null>(
     null
   );
@@ -676,7 +694,13 @@ function SellOrdersPanel({
           borderColor: "divider",
         }}
       >
-        {["Seller", "Quality", "Price / unit", "Stock", ""].map((h, i) => (
+        {[
+          t("marketUi.aggregateAdmin.colSeller"),
+          t("marketUi.aggregateAdmin.colQuality"),
+          t("marketUi.aggregateAdmin.colPricePerUnit"),
+          t("marketUi.aggregateAdmin.colStock"),
+          "",
+        ].map((h, i) => (
           <Typography
             key={i}
             variant="caption"
@@ -696,7 +720,7 @@ function SellOrdersPanel({
       {sorted.length === 0 ? (
         <Box sx={{ px: 3, py: 3 }}>
           <Typography variant="body2" color="text.secondary">
-            No sell orders for this quality tier
+            {t("marketUi.aggregateAdmin.noSellOrders")}
           </Typography>
         </Box>
       ) : (
@@ -749,7 +773,7 @@ function SellOrdersPanel({
                   </>
                 ) : (
                   <Typography variant="caption" color="text.secondary">
-                    Any
+                    {t("marketUi.aggregateAdmin.anyQuality")}
                   </Typography>
                 )}
               </Box>
@@ -772,7 +796,7 @@ function SellOrdersPanel({
                     color="text.secondary"
                     sx={{ fontFamily: "monospace", fontSize: "10px" }}
                   >
-                    best ask
+                    {t("marketUi.aggregateAdmin.bestAskLower")}
                   </Typography>
                 )}
               </Stack>
@@ -810,7 +834,7 @@ function SellOrdersPanel({
                     letterSpacing: "0.05em",
                   }}
                 >
-                  Buy
+                  {t("marketUi.aggregateAdmin.buy")}
                 </Button>
               </Box>
             </Box>
@@ -831,10 +855,13 @@ function SellOrdersPanel({
           }}
         >
           <Typography variant="caption" color="text.secondary">
-            Showing 10 of {totalCount}
+            {t("marketUi.aggregateAdmin.showingOf", {
+              shown: 10,
+              total: totalCount,
+            })}
           </Typography>
           <Button size="small" color="inherit" sx={{ fontSize: "11px" }}>
-            Load more
+            {t("marketUi.aggregateAdmin.loadMore")}
           </Button>
         </Box>
       )}
@@ -892,7 +919,9 @@ function FulfillDialog({
     }
     if (fulfillQty < 1 || fulfillQty > remaining) {
       issueAlert({
-        message: `Quantity must be 1–${remaining}`,
+        message: t("marketUi.aggregateAdmin.quantityRange", {
+          max: remaining,
+        }),
         severity: "error",
       });
       return;
@@ -916,7 +945,8 @@ function FulfillDialog({
       })
       .catch((err) =>
         issueAlert({
-          message: err?.data?.message || "Failed to fulfill",
+          message:
+            err?.data?.message || t("marketUi.aggregateAdmin.fulfillFailed"),
           severity: "error",
         })
       );
@@ -982,10 +1012,12 @@ function FulfillDialog({
             color="primary"
             sx={{ fontFamily: "monospace" }}
           >
-            Total:{" "}
-            {buyOrder.negotiable && agreedPrice > 0
-              ? `${(agreedPrice * fulfillQty).toLocaleString()} aUEC`
-              : `${(buyOrder.price_per_unit * fulfillQty).toLocaleString()} aUEC`}
+            {t("marketUi.aggregateAdmin.totalAuec", {
+              total:
+                buyOrder.negotiable && agreedPrice > 0
+                  ? (agreedPrice * fulfillQty).toLocaleString()
+                  : (buyOrder.price_per_unit * fulfillQty).toLocaleString(),
+            })}
           </Typography>
         )}
       </DialogContent>
@@ -1037,7 +1069,8 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
         )
         .catch((err) =>
           issueAlert({
-            message: err?.data?.message || "Cancel failed",
+            message:
+              err?.data?.message || t("marketUi.aggregateAdmin.cancelFailed"),
             severity: "error",
           })
         );
@@ -1059,7 +1092,14 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
           borderColor: "divider",
         }}
       >
-        {["Buyer", "Quality", "Bid / unit", "Qty", "Total", ""].map((h, i) => (
+        {[
+          t("marketUi.aggregateAdmin.colBuyer"),
+          t("marketUi.aggregateAdmin.colQuality"),
+          t("marketUi.aggregateAdmin.colBidPerUnit"),
+          t("marketUi.aggregateAdmin.colQty"),
+          t("marketUi.aggregateAdmin.colTotal"),
+          "",
+        ].map((h, i) => (
           <Typography
             key={i}
             variant="caption"
@@ -1079,7 +1119,7 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
       {active.length === 0 ? (
         <Box sx={{ px: 2.5, py: 3 }}>
           <Typography variant="body2" color="text.secondary">
-            No active buy orders
+            {t("marketUi.aggregateAdmin.noActiveBuyOrders")}
           </Typography>
         </Box>
       ) : (
@@ -1146,7 +1186,7 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
                   </>
                 ) : (
                   <Typography variant="caption" color="text.secondary">
-                    Any
+                    {t("marketUi.aggregateAdmin.anyQuality")}
                   </Typography>
                 )}
               </Box>
@@ -1180,7 +1220,7 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
                     color="text.secondary"
                     sx={{ fontFamily: "monospace", fontSize: "10px" }}
                   >
-                    best bid
+                    {t("marketUi.aggregateAdmin.bestBidLower")}
                   </Typography>
                 )}
               </Stack>
@@ -1290,6 +1330,7 @@ function AnalyticsCard({
   selectedTier: number | null;
   onTierSelect: (tier: number | null) => void;
 }) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"price" | "depth">("price");
   const { quality_distribution } = complete;
   const hasMultiTier = quality_distribution.length > 1;
@@ -1316,7 +1357,7 @@ function AnalyticsCard({
             color: "text.secondary",
           }}
         >
-          Analytics
+          {t("marketUi.aggregateAdmin.analytics")}
         </Typography>
 
         {hasMultiTier && (
@@ -1343,7 +1384,7 @@ function AnalyticsCard({
                   textTransform: "uppercase",
                 }}
               >
-                All
+                {t("marketUi.aggregateAdmin.all")}
               </Typography>
             </Box>
             {quality_distribution.map((d) => (
@@ -1383,12 +1424,12 @@ function AnalyticsCard({
       >
         <Tab
           value="price"
-          label="Price History"
+          label={t("marketUi.aggregateAdmin.priceHistory")}
           sx={{ minHeight: 40, py: 0.5, fontSize: "12px", fontWeight: 600 }}
         />
         <Tab
           value="depth"
-          label="Order Depth"
+          label={t("marketUi.aggregateAdmin.orderDepth")}
           sx={{ minHeight: 40, py: 0.5, fontSize: "12px", fontWeight: 600 }}
         />
       </Tabs>
@@ -1508,7 +1549,7 @@ export function MarketAggregateViewV2Admin({
                 size="small"
                 sx={{ fontWeight: 600 }}
               >
-                + Create Listing
+                {t("marketUi.aggregateAdmin.createListing")}
               </Button>
               <Button
                 component={Link}
@@ -1518,7 +1559,7 @@ export function MarketAggregateViewV2Admin({
                 size="small"
                 sx={{ fontWeight: 600 }}
               >
-                + Buy Order
+                {t("marketUi.aggregateAdmin.createBuyOrder")}
               </Button>
             </Stack>
             <Divider />
@@ -1547,11 +1588,11 @@ export function MarketAggregateViewV2Admin({
             <Grid item xs={12} lg={6}>
               <QualityHistogram
                 distribution={histogramData}
-                title="Quality Distribution"
+                title={t("marketUi.aggregateAdmin.qualityDistribution")}
                 showPrices
               />
             </Grid>
-            <Section xs={12} lg={6} title="Price by Quality Tier">
+            <Section xs={12} lg={6} title={t("marketUi.aggregateAdmin.priceByQualityTier")}>
               <Grid item xs={12}>
                 <PriceComparisonTable distribution={quality_distribution} />
               </Grid>
@@ -1602,7 +1643,7 @@ export function MarketAggregateViewV2Admin({
                 color: "text.secondary",
               }}
             >
-              Order Depth
+              {t("marketUi.aggregateAdmin.orderDepth")}
             </Typography>
             <AggregateBuySellWallV2 aggregate={complete} compact />
           </Paper>

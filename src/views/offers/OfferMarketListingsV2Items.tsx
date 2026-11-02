@@ -19,6 +19,7 @@ import {
 } from "@mui/material"
 import { InventoryRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { formatPrice } from "../../util/formatPrice"
 import { Section } from "../../components/paper/Section"
 import { QualityBadge } from "../../components/market/v2/QualityBadge"
@@ -27,6 +28,7 @@ import type { OfferMarketListingV2, OrderMarketListingV2 } from "../../store/api
 import { MARKET_PATHS } from "../../routes/paths"
 
 export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListingV2 | OrderMarketListingV2)[] }) {
+  const { t } = useTranslation()
   if (!items.length) return null
 
   const total = items.reduce(
@@ -35,16 +37,16 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
   )
 
   return (
-    <Section xs={12} title="Order Items">
+    <Section xs={12} title={t("marketUi.offerItems.title")}>
       <Grid item xs={12}>
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Item</TableCell>
-              <TableCell>Variant</TableCell>
-              <TableCell align="right">Qty</TableCell>
-              <TableCell align="right">Price/Unit</TableCell>
-              <TableCell align="right">Subtotal</TableCell>
+              <TableCell>{t("marketUi.offerItems.colItem")}</TableCell>
+              <TableCell>{t("marketUi.offerItems.colVariant")}</TableCell>
+              <TableCell align="right">{t("marketUi.offerItems.colQty")}</TableCell>
+              <TableCell align="right">{t("marketUi.offerItems.colPricePerUnit")}</TableCell>
+              <TableCell align="right">{t("marketUi.offerItems.colSubtotal")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -87,7 +89,7 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                         />
                       )}
                       {v.attributes.quality_tier == null && v.attributes.quality_value == null && !hasDisplayableSource(v.attributes.crafted_source) && (
-                        <Typography variant="caption" color="text.secondary">{v.display_name || "Standard"}</Typography>
+                        <Typography variant="caption" color="text.secondary">{v.display_name || t("marketUi.offerItems.standardVariant")}</Typography>
                       )}
                     </Box>
                   </TableCell>
@@ -103,7 +105,7 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
             )}
             <TableRow>
               <TableCell colSpan={4} align="right">
-                <Typography variant="subtitle2">Total</Typography>
+                <Typography variant="subtitle2">{t("marketUi.offerItems.total")}</Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography variant="h6" color="primary" fontWeight={700}>

@@ -64,10 +64,10 @@ export function MatchingBuyOrdersArea({
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Item</TableCell>
-              <TableCell>Buyer</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">Qty Remaining</TableCell>
+              <TableCell>{t("marketUi.tables.item")}</TableCell>
+              <TableCell>{t("marketUi.tables.buyer")}</TableCell>
+              <TableCell align="right">{t("marketUi.tables.price")}</TableCell>
+              <TableCell align="right">{t("marketUi.tables.qtyRemaining")}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

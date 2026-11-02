@@ -14,6 +14,7 @@ import { useTheme } from "@mui/material/styles"
 import SettingsIcon from "@mui/icons-material/Settings"
 import CloseIcon from "@mui/icons-material/Close"
 import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
+import { useTranslation } from "react-i18next"
 
 /** Flags fully rolled out + cleaned up — hidden from the toggle menu even if the
  * backend still returns their config rows. */
@@ -29,6 +30,7 @@ const RETIRED_FLAGS = new Set(["market_v2", "crafting", "nav_v2", "wiki"])
  * The panel is only visible in Vite dev mode or for site admins (see useFeatureFlag).
  */
 export function DebugPanel() {
+  const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useIsMobile()
   const { isDeveloper, hasOverride, flags, overriddenFlags, setFlag } = useFeatureFlag()
@@ -101,13 +103,13 @@ export function DebugPanel() {
             <Box display="flex" alignItems="center" gap={1}>
               <SettingsIcon color="primary" />
               <Typography variant="h6" component="h2">
-                Debug Panel
+                {t("marketUi.debugPanel.title")}
               </Typography>
             </Box>
             <IconButton
               size="small"
               onClick={handleTogglePanel}
-              aria-label="Close debug panel"
+              aria-label={t("marketUi.debugPanel.close")}
             >
               <CloseIcon />
             </IconButton>
@@ -118,7 +120,7 @@ export function DebugPanel() {
           {/* Current version display */}
           <Box mb={2}>
             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Feature Flags
+              {t("marketUi.debugPanel.featureFlags")}
             </Typography>
           </Box>
 
@@ -138,7 +140,7 @@ export function DebugPanel() {
                       {label}
                     </Typography>
                     {isOverridden && (
-                      <Typography variant="caption" color="primary">Override</Typography>
+                      <Typography variant="caption" color="primary">{t("marketUi.debugPanel.override")}</Typography>
                     )}
                   </Box>
                   <Switch
@@ -163,7 +165,7 @@ export function DebugPanel() {
           {isSwitching && (
             <Box mt={2}>
               <Typography variant="caption" color="primary">
-                Updating flag... Page will reload.
+                {t("marketUi.debugPanel.updating")}
               </Typography>
             </Box>
           )}
@@ -171,7 +173,7 @@ export function DebugPanel() {
           {/* Developer notice */}
           <Box mt={2} pt={2} borderTop={`1px solid ${theme.palette.divider}`}>
             <Typography variant="caption" color="text.secondary">
-              This panel is only visible to developers. Changes will reload the page.
+              {t("marketUi.debugPanel.notice")}
             </Typography>
           </Box>
         </Paper>
@@ -190,7 +192,7 @@ export function DebugPanel() {
             },
             boxShadow: theme.shadows[4],
           }}
-          aria-label="Open debug panel"
+          aria-label={t("marketUi.debugPanel.open")}
         >
           <SettingsIcon />
         </IconButton>
