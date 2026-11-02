@@ -18,7 +18,7 @@ import {
   Divider,
 } from "@mui/material"
 import { Add, Delete } from "@mui/icons-material"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -63,6 +63,7 @@ function MaterialQualityInput({
   value: number
   onChange: (val: number) => void
 }) {
+  const { t } = useTranslation()
   const { data: resourceData } = useSearchResourcesQuery(
     { text: materialName, pageSize: 5 },
     { skip: !materialName },
@@ -81,13 +82,13 @@ function MaterialQualityInput({
     return (
       <Stack direction="row" spacing={2} alignItems="center">
         <Typography variant="caption" color="text.secondary" sx={{ minWidth: 50 }}>
-          Quality
+          {t("crafting.quality")}
         </Typography>
         <QualityBandSelect
           bands={bands}
           value={value}
           onChange={(val) => onChange(val ?? 500)}
-          label="Quality"
+          label={t("crafting.quality")}
           allowAny={false}
           size="small"
           fullWidth
@@ -100,10 +101,10 @@ function MaterialQualityInput({
   return (
     <Stack direction="row" spacing={2} alignItems="center">
       <Typography variant="caption" color="text.secondary" sx={{ minWidth: 50 }}>
-        Quality
+        {t("crafting.quality")}
       </Typography>
       <Slider
-        aria-label="Quality"
+        aria-label={t("crafting.quality")}
         value={value}
         onChange={(_, val) => onChange(val as number)}
         min={0} max={1000} step={1}
@@ -246,10 +247,10 @@ export function CraftingCalculator() {
         <Grid item xs={12}>
           <Stack direction="row" spacing={1} alignItems="center">
             <Button variant={mode === "craft" ? "contained" : "outlined"} size="small" onClick={() => setMode("craft")}>
-              Craft Calculator
+              {t("craftingUi.craftCalculator")}
             </Button>
             <Button variant={mode === "discover" ? "contained" : "outlined"} size="small" onClick={() => setMode("discover")}>
-              What Can I Craft?
+              {t("craftingUi.whatCanICraft")}
             </Button>
           </Stack>
         </Grid>
@@ -258,7 +259,7 @@ export function CraftingCalculator() {
         {mode === "craft" && (
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle2" gutterBottom>What do you want to craft?</Typography>
+            <Typography variant="subtitle2" gutterBottom>{t("craftingUi.whatToCraft")}</Typography>
             <Autocomplete
               size="small"
               options={bpOptions}
@@ -279,7 +280,7 @@ export function CraftingCalculator() {
                 </li>
               )}
               renderInput={(params) => (
-                <TextField {...params} label="Search by item name" placeholder="e.g. Behringer LMG" />
+                <TextField {...params} label={t("craftingUi.searchByItemName")} placeholder={t("craftingUi.searchByItemPlaceholder")} />
               )}
             />
           </Paper>
@@ -290,10 +291,10 @@ export function CraftingCalculator() {
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-              <Typography variant="subtitle2">Materials</Typography>
+              <Typography variant="subtitle2">{t("craftingUi.materials")}</Typography>
               <Button size="small" variant="outlined" onClick={importFromInventory}
                 disabled={!inventoryData?.materials?.length}>
-                Import from Inventory{spectrumId ? " (+ Org)" : ""}
+                {spectrumId ? t("craftingUi.importFromInventoryOrg") : t("craftingUi.importFromInventory")}
               </Button>
             </Stack>
 
@@ -310,7 +311,7 @@ export function CraftingCalculator() {
               value={null}
               blurOnSelect
               renderInput={(params) => (
-                <TextField {...params} label="Add material" placeholder="Search resources..." />
+                <TextField {...params} label={t("craftingUi.addMaterial")} placeholder={t("craftingUi.searchResources")} />
               )}
               sx={{ mb: 2 }}
             />
@@ -318,7 +319,7 @@ export function CraftingCalculator() {
             {/* Material rows */}
             {materials.length === 0 && (
               <Typography variant="body2" color="text.secondary">
-                Search and add materials above
+                {t("craftingUi.noMaterials")}
               </Typography>
             )}
 
@@ -336,12 +337,12 @@ export function CraftingCalculator() {
                       </Typography>
                       <Stack direction="row" spacing={1} alignItems="center">
                         <TextField
-                          size="small" type="number" label="Qty"
+                          size="small" type="number" label={t("crafting.quantity")}
                           value={mat.quantity} sx={{ width: 65 }}
                           onChange={e => updateMaterial(mat.id, "quantity", Math.max(1, +e.target.value || 1))}
                           inputProps={{ min: 1 }}
                         />
-                        <IconButton size="small" onClick={() => removeMaterial(mat.id)} aria-label="Remove material">
+                        <IconButton size="small" onClick={() => removeMaterial(mat.id)} aria-label={t("craftingUi.removeMaterial")}>
                           <Delete fontSize="small" />
                         </IconButton>
                       </Stack>
@@ -358,14 +359,14 @@ export function CraftingCalculator() {
                     {contrib && (
                       <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 1 }}>
                         <Typography variant="caption" color="text.secondary">
-                          Weight: {(contrib.weight * 100).toFixed(0)}%
+                          {t("craftingUi.weight", { percent: (contrib.weight * 100).toFixed(0) })}
                         </Typography>
                         <Typography
                           variant="caption"
                           fontWeight="bold"
                           color={contrib.quality_value >= result!.output_quality_value ? "success.main" : "error.main"}
                         >
-                          Contribution: {contrib.contribution.toFixed(1)}
+                          {t("craftingUi.contribution", { value: contrib.contribution.toFixed(1) })}
                           {contrib.quality_value >= result!.output_quality_value ? " ↑" : " ↓"}
                         </Typography>
                       </Stack>
@@ -386,7 +387,7 @@ export function CraftingCalculator() {
               disabled={calculating || !selectedBlueprint || !materials.length}
               startIcon={calculating ? <CircularProgress size={20} /> : undefined}
             >
-              Calculate Output Quality
+              {t("craftingUi.calculate")}
             </Button>
           ) : (
             <Stack direction="row" spacing={2} alignItems="center">
@@ -396,11 +397,11 @@ export function CraftingCalculator() {
                 disabled={discovering || !materials.length}
                 startIcon={discovering ? <CircularProgress size={20} /> : undefined}
               >
-                Find Craftable Items
+                {t("craftingUi.findCraftable")}
               </Button>
               <FormControlLabel
                 control={<Checkbox size="small" checked={ownedOnly} onChange={(e) => setOwnedOnly(e.target.checked)} />}
-                label={<Typography variant="body2">Owned BPs only</Typography>}
+                label={<Typography variant="body2">{t("craftingUi.ownedOnly")}</Typography>}
                 sx={{ ml: 0 }}
               />
             </Stack>
@@ -409,26 +410,26 @@ export function CraftingCalculator() {
 
         {error && (
           <Grid item xs={12}>
-            <Alert severity="error">Calculation failed. Check your inputs.</Alert>
+            <Alert severity="error">{t("craftingUi.calculationFailed")}</Alert>
           </Grid>
         )}
 
         {result && (
           <Grid item xs={12}>
             <Paper sx={{ p: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>Estimated Output</Typography>
+              <Typography variant="subtitle2" gutterBottom>{t("craftingUi.estimatedOutput")}</Typography>
               <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" sx={{ mb: 2 }}>
                 <Chip
-                  label={`Tier ${result.output_quality_tier}`}
+                  label={t("craftingUi.tierN", { tier: result.output_quality_tier })}
                   color={TIER_COLORS[result.output_quality_tier] || "default"}
                 />
-                <Typography>Quality: <strong>{result.output_quality_value.toFixed(0)}</strong> / 1000</Typography>
+                <Typography><Trans i18nKey="craftingUi.resultQuality" values={{ quality: result.output_quality_value.toFixed(0) }} components={{ strong: <strong /> }} /></Typography>
                 {result.output_quantity > 1 && (
-                  <Typography>Output: <strong>{result.output_quantity}×</strong></Typography>
+                  <Typography><Trans i18nKey="craftingUi.resultOutput" values={{ quantity: result.output_quantity }} components={{ strong: <strong /> }} /></Typography>
                 )}
-                <Typography>Success: <strong>{result.success_probability.toFixed(1)}%</strong></Typography>
+                <Typography><Trans i18nKey="craftingUi.resultSuccess" values={{ percent: result.success_probability.toFixed(1) }} components={{ strong: <strong /> }} /></Typography>
                 {result.critical_success_chance > 0 && (
-                  <Typography color="warning.main">Crit: <strong>{result.critical_success_chance.toFixed(1)}%</strong></Typography>
+                  <Typography color="warning.main"><Trans i18nKey="craftingUi.resultCrit" values={{ percent: result.critical_success_chance.toFixed(1) }} components={{ strong: <strong /> }} /></Typography>
                 )}
               </Stack>
 
@@ -444,7 +445,7 @@ export function CraftingCalculator() {
               {result.calculation_breakdown?.quality_contributions?.length > 0 && (
                 <>
                   <Divider sx={{ my: 1 }} />
-                  <Typography variant="subtitle2" gutterBottom>Quality Impact by Material</Typography>
+                  <Typography variant="subtitle2" gutterBottom>{t("craftingUi.qualityImpact")}</Typography>
                   <Stack spacing={0.5}>
                     {result.calculation_breakdown.quality_contributions.map((c, i) => {
                       const avgQuality = result.output_quality_value
@@ -456,7 +457,7 @@ export function CraftingCalculator() {
                             {c.material_name}
                           </Typography>
                           <Typography variant="caption" color="text.secondary">
-                            Q{c.quality_value.toFixed(0)} × {(c.weight * 100).toFixed(0)}%
+                            {t("craftingUi.qualityWeight", { quality: c.quality_value.toFixed(0), percent: (c.weight * 100).toFixed(0) })}
                           </Typography>
                           <Typography
                             variant="body2"
@@ -478,15 +479,15 @@ export function CraftingCalculator() {
                   <Divider sx={{ my: 1 }} />
                   <Stack direction="row" spacing={2} flexWrap="wrap">
                     <Typography variant="body2">
-                      Materials: <strong>{result.estimated_cost.material_cost.toLocaleString()} aUEC</strong>
+                      <Trans i18nKey="craftingUi.costMaterials" values={{ amount: result.estimated_cost.material_cost.toLocaleString() }} components={{ strong: <strong /> }} />
                     </Typography>
                     {result.estimated_cost.crafting_station_fee ? (
                       <Typography variant="body2">
-                        Station fee: <strong>{result.estimated_cost.crafting_station_fee.toLocaleString()} aUEC</strong>
+                        <Trans i18nKey="craftingUi.costStationFee" values={{ amount: result.estimated_cost.crafting_station_fee.toLocaleString() }} components={{ strong: <strong /> }} />
                       </Typography>
                     ) : null}
                     <Typography variant="body2" fontWeight="bold">
-                      Total: {result.estimated_cost.total_cost.toLocaleString()} aUEC
+                      {t("craftingUi.costTotal", { amount: result.estimated_cost.total_cost.toLocaleString() })}
                     </Typography>
                   </Stack>
                 </>
@@ -499,7 +500,7 @@ export function CraftingCalculator() {
           <Grid item xs={12}>
             <Paper sx={{ p: 2 }}>
               <Typography variant="subtitle2" gutterBottom>
-                Craftable Items ({craftableResults.length})
+                {t("craftingUi.craftableItems", { count: craftableResults.length })}
               </Typography>
               <Stack spacing={1}>
                 {craftableResults.map((bp) => (
@@ -510,7 +511,7 @@ export function CraftingCalculator() {
                       <Box sx={{ flex: 1 }}>
                         <Typography variant="body2" fontWeight={600}>{bp.output_item_name}</Typography>
                         <Typography variant="caption" color="text.secondary">
-                          {bp.item_category}{bp.crafting_time_seconds ? ` · ${Math.round(bp.crafting_time_seconds / 60)}m` : ""}
+                          {bp.item_category}{bp.crafting_time_seconds ? ` · ${t("craftingUi.minutesShort", { minutes: Math.round(bp.crafting_time_seconds / 60) })}` : ""}
                         </Typography>
                       </Box>
                       <Chip label={`×${bp.max_craftable}`} size="small" color="success" sx={{ fontWeight: 700 }} />
@@ -532,7 +533,7 @@ export function CraftingCalculator() {
 
         {mode === "discover" && craftableResults && craftableResults.length === 0 && !discovering && (
           <Grid item xs={12}>
-            <Alert severity="info">No blueprints can be crafted with these materials.</Alert>
+            <Alert severity="info">{t("craftingUi.noCraftable")}</Alert>
           </Grid>
         )}
 

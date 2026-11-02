@@ -77,13 +77,14 @@ type ViewMode = "grid" | "list"
 const VIEW_MODES: readonly ViewMode[] = ["grid", "list"]
 
 function CollectionProgressCard() {
+  const { t } = useTranslation()
   const { data } = useGetUserBlueprintInventoryQuery({ page: 1, pageSize: 1 })
   const stats = data?.statistics
   if (!stats) return null
   return (
     <Card sx={{ mb: 2 }}>
       <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
-        <Typography variant="subtitle2" gutterBottom>Collection Progress</Typography>
+        <Typography variant="subtitle2" gutterBottom>{t("blueprintsUi.browser.collectionProgress")}</Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 0.5 }}>
           <Box sx={{ flex: 1 }}>
             <LinearProgress variant="determinate" value={stats.completion_percentage} sx={{ height: 8, borderRadius: 4 }} />
@@ -93,10 +94,10 @@ function CollectionProgressCard() {
           </Typography>
         </Box>
         <Typography variant="caption" color="text.secondary">
-          {stats.total_owned} of {stats.total_available} obtainable blueprints
+          {t("blueprintsUi.browser.collectionCount", { owned: stats.total_owned, count: stats.total_available })}
         </Typography>
         {stats.recently_acquired_count > 0 && (
-          <Chip label={`${stats.recently_acquired_count} new this week`} size="small" color="primary" sx={{ ml: 1, height: 18, fontSize: "0.65rem" }} />
+          <Chip label={t("blueprintsUi.browser.newThisWeek", { count: stats.recently_acquired_count })} size="small" color="primary" sx={{ ml: 1, height: 18, fontSize: "0.65rem" }} />
         )}
       </CardContent>
     </Card>
@@ -276,53 +277,53 @@ export function BlueprintBrowser() {
 
   const filtersContent = (
     <Stack spacing={1.5}>
-      <TextField fullWidth size="small" label="Search" value={searchText}
-        onChange={(e) => setSearchText(e.target.value)} placeholder="Item or blueprint name..." />
+      <TextField fullWidth size="small" label={t("blueprintsUi.browser.search")} value={searchText}
+        onChange={(e) => setSearchText(e.target.value)} placeholder={t("blueprintsUi.browser.searchPlaceholder")} />
       <FormControl fullWidth size="small">
-        <InputLabel id="blueprint-browser-category-label">Category</InputLabel>
-        <Select labelId="blueprint-browser-category-label" value={category} label="Category" onChange={(e) => { setCategory(e.target.value); setSubcategory("") }}>
-          <MenuItem value="">All</MenuItem>
+        <InputLabel id="blueprint-browser-category-label">{t("blueprintsUi.browser.category")}</InputLabel>
+        <Select labelId="blueprint-browser-category-label" value={category} label={t("blueprintsUi.browser.category")} onChange={(e) => { setCategory(e.target.value); setSubcategory("") }}>
+          <MenuItem value="">{t("common.all")}</MenuItem>
           {uniqueCategories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
         </Select>
       </FormControl>
       {subcategoriesForCategory.length > 0 && (
         <FormControl fullWidth size="small">
-          <InputLabel id="blueprint-browser-subcategory-label">Subcategory</InputLabel>
-          <Select labelId="blueprint-browser-subcategory-label" value={subcategory} label="Subcategory" onChange={(e) => setSubcategory(e.target.value)}>
-            <MenuItem value="">All</MenuItem>
+          <InputLabel id="blueprint-browser-subcategory-label">{t("blueprintsUi.browser.subcategory")}</InputLabel>
+          <Select labelId="blueprint-browser-subcategory-label" value={subcategory} label={t("blueprintsUi.browser.subcategory")} onChange={(e) => setSubcategory(e.target.value)}>
+            <MenuItem value="">{t("common.all")}</MenuItem>
             {subcategoriesForCategory.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
           </Select>
         </FormControl>
       )}
       <FormControl fullWidth size="small">
-        <InputLabel id="blueprint-browser-tier-label">Tier</InputLabel>
-        <Select labelId="blueprint-browser-tier-label" value={tier} label="Tier" onChange={(e) => setTier(e.target.value === "" ? "" : Number(e.target.value))}>
-          <MenuItem value="">All</MenuItem>
-          {[1,2,3,4,5].map(t => <MenuItem key={t} value={t}>Tier {t}</MenuItem>)}
+        <InputLabel id="blueprint-browser-tier-label">{t("blueprintsUi.browser.tier")}</InputLabel>
+        <Select labelId="blueprint-browser-tier-label" value={tier} label={t("blueprintsUi.browser.tier")} onChange={(e) => setTier(e.target.value === "" ? "" : Number(e.target.value))}>
+          <MenuItem value="">{t("common.all")}</MenuItem>
+          {[1,2,3,4,5].map(n => <MenuItem key={n} value={n}>{t("blueprintsUi.tierN", { tier: n })}</MenuItem>)}
         </Select>
       </FormControl>
       {isLoggedIn && (
       <FormControlLabel control={<Checkbox checked={ownedOnly} onChange={(e) => setOwnedOnly(e.target.checked)} size="small" />}
-        label={<Typography variant="body2">Owned Only</Typography>} sx={{ ml: 0 }} />
+        label={<Typography variant="body2">{t("blueprintsUi.browser.ownedOnly")}</Typography>} sx={{ ml: 0 }} />
       )}
       <FormControlLabel control={<Checkbox checked={hasMissionSource} onChange={(e) => setHasMissionSource(e.target.checked)} size="small" />}
-        label={<Typography variant="body2">Has Mission Source</Typography>} sx={{ ml: 0 }} />
+        label={<Typography variant="body2">{t("blueprintsUi.browser.hasMissionSource")}</Typography>} sx={{ ml: 0 }} />
       <FormControlLabel control={<Checkbox checked={hideUnsourceable} onChange={(e) => setHideUnsourceable(e.target.checked)} size="small" />}
-        label={<Typography variant="body2">Hide Unsourceable</Typography>} sx={{ ml: 0 }} />
+        label={<Typography variant="body2">{t("blueprintsUi.browser.hideUnsourceable")}</Typography>} sx={{ ml: 0 }} />
       <FormControl fullWidth size="small">
-        <InputLabel id="blueprint-browser-source-label">Source</InputLabel>
-        <Select labelId="blueprint-browser-source-label" value={source} label="Source" onChange={(e) => setSource(e.target.value)}>
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="default">Default (all players)</MenuItem>
-          <MenuItem value="mission_reward">Mission Reward</MenuItem>
+        <InputLabel id="blueprint-browser-source-label">{t("blueprintsUi.browser.source")}</InputLabel>
+        <Select labelId="blueprint-browser-source-label" value={source} label={t("blueprintsUi.browser.source")} onChange={(e) => setSource(e.target.value)}>
+          <MenuItem value="">{t("common.all")}</MenuItem>
+          <MenuItem value="default">{t("blueprintsUi.browser.sourceDefault")}</MenuItem>
+          <MenuItem value="mission_reward">{t("blueprintsUi.browser.sourceMissionReward")}</MenuItem>
         </Select>
       </FormControl>
-      <TextField fullWidth size="small" label="Manufacturer" value={manufacturer}
-        onChange={(e) => setManufacturer(e.target.value)} placeholder="e.g. Behring" />
-      <TextField fullWidth size="small" label="Ingredient" value={ingredientName}
-        onChange={(e) => setIngredientName(e.target.value)} placeholder="e.g. Hephaestanite" />
+      <TextField fullWidth size="small" label={t("blueprintsUi.browser.manufacturer")} value={manufacturer}
+        onChange={(e) => setManufacturer(e.target.value)} placeholder={t("blueprintsUi.browser.manufacturerPlaceholder")} />
+      <TextField fullWidth size="small" label={t("blueprintsUi.browser.ingredient")} value={ingredientName}
+        onChange={(e) => setIngredientName(e.target.value)} placeholder={t("blueprintsUi.browser.ingredientPlaceholder")} />
       <Button size="small" startIcon={<RestartAltRounded />} onClick={handleResetFilters} sx={{ textTransform: "none" }}>
-        Reset Filters
+        {t("blueprintsUi.browser.resetFilters")}
       </Button>
     </Stack>
   )
@@ -339,13 +340,13 @@ export function BlueprintBrowser() {
       <Grid item xs={12}>
         {/* Collection progress — shown on inventory page */}
         {isLoggedIn && searchParams.get("inventory") === "true" && <CollectionProgressCard />}
-        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
+        <FilterSidebarLayout filters={filtersContent} filterTitle={t("blueprintsUi.browser.filters")}>
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
             <UnifiedSearchBar
               tokens={searchTokens}
               onChange={handleTokensChange}
               mode="blueprints"
-              placeholder="Search blueprints, materials, categories..."
+              placeholder={t("blueprintsUi.browser.searchBarPlaceholder")}
             />
             <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
               {data ? data.total : ""}
@@ -363,7 +364,7 @@ export function BlueprintBrowser() {
           {/* Error State */}
           {error && (
             <Alert severity="error" sx={{ mb: 2 }}>
-              Failed to load blueprints. Please try again.
+              {t("blueprintsUi.browser.loadError")}
             </Alert>
           )}
 
@@ -395,12 +396,12 @@ export function BlueprintBrowser() {
                     <TableHead>
                       <TableRow>
                         <TableCell />
-                        <TableCell>Item</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Tags</TableCell>
-                        <TableCell>Ingredients</TableCell>
-                        <TableCell align="center">Mission Sources</TableCell>
-                        <TableCell align="right">Craft Time</TableCell>
+                        <TableCell>{t("blueprintsUi.browser.columnItem")}</TableCell>
+                        <TableCell>{t("blueprintsUi.browser.category")}</TableCell>
+                        <TableCell>{t("blueprintsUi.browser.columnTags")}</TableCell>
+                        <TableCell>{t("blueprintsUi.browser.columnIngredients")}</TableCell>
+                        <TableCell align="center">{t("blueprintsUi.browser.columnMissionSources")}</TableCell>
+                        <TableCell align="right">{t("blueprintsUi.browser.columnCraftTime")}</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -447,8 +448,8 @@ export function BlueprintBrowser() {
                           </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={0.5} flexWrap="nowrap">
-                              {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={microChip} />}
-                              {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={microChip} />}
+                              {bp.user_owns && <Chip label={t("blueprintsUi.owned")} size="small" color="success" sx={microChip} />}
+                              {bp.source === "default" && <Chip label={t("blueprintsUi.default")} size="small" variant="outlined" sx={microChip} />}
                               {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }} />}
                               {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
                             </Stack>
@@ -493,7 +494,7 @@ export function BlueprintBrowser() {
               {shownBlueprints.length === 0 && !isFetching && (
                 <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
                   <Typography color="text.secondary">
-                    No blueprints found. Try adjusting your filters.
+                    {t("blueprintsUi.browser.noResults")}
                   </Typography>
                 </Box>
               )}

@@ -58,7 +58,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   )
   const bp = data?.blueprint
   const outputItem = data?.output_item
-  const itemName = outputItem?.name || bp?.blueprint_name || "Blueprint"
+  const itemName = outputItem?.name || bp?.blueprint_name || t("crafting.blueprint")
   const ingredients = data?.ingredients || []
   const slotModifiers = data?.slot_modifiers || []
   const itemAttrs = data?.item_attributes || {}
@@ -160,7 +160,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             <Typography variant="h6" noWrap>{itemName}</Typography>
             <Stack direction="row" spacing={0.5}>
               {bp?.rarity && <Chip label={bp.rarity} size="small" color="primary" />}
-              {bp?.tier && <Chip label={`Tier ${bp.tier}`} size="small" color="secondary" />}
+              {bp?.tier && <Chip label={t("blueprintsUi.tierN", { tier: bp.tier })} size="small" color="secondary" />}
               {bp?.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" variant="outlined" />}
             </Stack>
           </Box>
@@ -170,7 +170,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             size="small"
             onClick={handleToggleOwned}
             color={userOwns ? "primary" : "default"}
-            title={userOwns ? "Remove from inventory" : "Mark as owned"}
+            title={userOwns ? t("blueprintsUi.removeFromInventory") : t("blueprintsUi.detail.markAsOwned")}
           >
             {userOwns ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
           </IconButton>
@@ -179,14 +179,14 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
       </DialogTitle>
 
       <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2 }}>
-        <Tab label="Craft" />
-        <Tab label="Disassemble" />
-        {spectrumId && <Tab label="Org Owners" />}
+        <Tab label={t("blueprintsUi.detail.craft")} />
+        <Tab label={t("blueprintsUi.detail.disassemble")} />
+        {spectrumId && <Tab label={t("blueprintsUi.detail.orgOwners")} />}
       </Tabs>
 
       <DialogContent sx={{ minHeight: 300 }}>
         {isLoading && <DetailPageSkeleton />}
-        {error && <Alert severity="error">Failed to load blueprint.</Alert>}
+        {error && <Alert severity="error">{t("blueprintsUi.detail.loadError")}</Alert>}
 
         {data && tab === 0 && (
           <Stack spacing={2}>
@@ -200,7 +200,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               if (!stats.length) return null
               return (
               <Box>
-                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Product Stats</Typography>
+                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>{t("blueprintsUi.detail.productStats")}</Typography>
                 {stats.map(([prop, { value: modifier, modifierType }]) => {
                   const def = propDefMap.get(prop)
                   const baseKey = Object.keys(itemAttrs).find(k => k.toLowerCase().includes(prop.replace(/^gpp_armor_/, "").toLowerCase()))!
@@ -225,7 +225,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             {data.missions_rewarding?.length > 0 && (
               <Box>
                 <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                  <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />Missions ({data.missions_rewarding.length})
+                  <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />{t("blueprintsUi.detail.missionsCount", { count: data.missions_rewarding.length })}
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                   {(missionsExpanded ? data.missions_rewarding : data.missions_rewarding.slice(0, 8)).map((m: MissionRewardingBlueprint) => (
@@ -235,7 +235,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                   ))}
                   {data.missions_rewarding.length > 8 && (
                     <Chip
-                      label={missionsExpanded ? "Show less" : `+${data.missions_rewarding.length - 8}`}
+                      label={missionsExpanded ? t("blueprintsUi.detail.showLess") : `+${data.missions_rewarding.length - 8}`}
                       size="small" variant="outlined" sx={{ height: 22, cursor: "pointer" }}
                       onClick={() => setMissionsExpanded(!missionsExpanded)}
                     />
@@ -249,24 +249,24 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             {/* Craft quantity + Quality Presets on same row */}
             <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
               <Box>
-                <Typography variant="caption" color="text.secondary">Quantity</Typography>
+                <Typography variant="caption" color="text.secondary">{t("blueprintsUi.detail.quantity")}</Typography>
                 <TextField size="small" type="number" value={craftQty} sx={{ width: 60, display: "block", "& input": { py: 0.5, fontSize: "0.8rem" } }}
                   onChange={e => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">Quality Presets</Typography>
+                <Typography variant="caption" color="text.secondary">{t("blueprintsUi.detail.qualityPresets")}</Typography>
                 <ButtonGroup size="small" variant="outlined" sx={{ display: "block" }}>
-                  <Button onClick={() => setAllQualities("min")}>Min</Button>
-                  <Button onClick={() => setAllQualities("mid")}>Base</Button>
-                  <Button onClick={() => setAllQualities("max")}>Max</Button>
+                  <Button onClick={() => setAllQualities("min")}>{t("blueprintsUi.detail.presetMin")}</Button>
+                  <Button onClick={() => setAllQualities("mid")}>{t("blueprintsUi.detail.presetBase")}</Button>
+                  <Button onClick={() => setAllQualities("max")}>{t("blueprintsUi.detail.presetMax")}</Button>
                 </ButtonGroup>
               </Box>
               <Box sx={{ flex: 1 }} />
-              <Chip label={`Output: ${outputQuality}`} color={outputQuality >= 800 ? "success" : outputQuality >= 400 ? "primary" : "default"} size="small" />
+              <Chip label={t("blueprintsUi.detail.outputQuality", { quality: outputQuality })} color={outputQuality >= 800 ? "success" : outputQuality >= 400 ? "primary" : "default"} size="small" />
             </Stack>
 
             {/* Ingredients */}
-            <Typography variant="subtitle2"><BuildRounded sx={{ fontSize: 16, mr: 0.5 }} />Craft</Typography>
+            <Typography variant="subtitle2"><BuildRounded sx={{ fontSize: 16, mr: 0.5 }} />{t("blueprintsUi.detail.craft")}</Typography>
 
             {/* Scaling attributes summary */}
             {combinedModifiers.size > 0 && (
@@ -305,10 +305,10 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                   <Stack direction="row" spacing={1} alignItems="center">
                     <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={24} />
                     <Box sx={{ minWidth: 100 }}>
-                      <Typography variant="body2" fontWeight={600} lineHeight={1.2}>{ing.game_item?.name || "Unknown"}</Typography>
-                      <Typography variant="caption" color="text.secondary" lineHeight={1}>{formatQty(parseFloat(String(ing.quantity_required)) * craftQty)}{craftQty > 1 && ` (${formatQty(ing.quantity_required)} ea)`}{ing.min_quality_tier ? ` · min T${ing.min_quality_tier}` : ""}</Typography>
+                      <Typography variant="body2" fontWeight={600} lineHeight={1.2}>{ing.game_item?.name || t("blueprintsUi.detail.unknown")}</Typography>
+                      <Typography variant="caption" color="text.secondary" lineHeight={1}>{formatQty(parseFloat(String(ing.quantity_required)) * craftQty)}{craftQty > 1 && ` ${t("blueprintsUi.detail.perEach", { qty: formatQty(ing.quantity_required) })}`}{ing.min_quality_tier ? ` · ${t("blueprintsUi.detail.minTier", { tier: ing.min_quality_tier })}` : ""}</Typography>
                     </Box>
-                    <Slider size="small" min={qr.min} max={qr.max} value={qv} onChange={(_, v) => setQuality(idx, v as number)} aria-label={`Quality of ${ing.game_item?.name || "ingredient"}`} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 12, height: 12 } }} />
+                    <Slider size="small" min={qr.min} max={qr.max} value={qv} onChange={(_, v) => setQuality(idx, v as number)} aria-label={ing.game_item?.name ? t("blueprintsUi.detail.qualityOf", { name: ing.game_item.name }) : t("blueprintsUi.detail.qualityOfIngredient")} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 12, height: 12 } }} />
                     <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: qr.min, max: qr.max }} sx={{ width: 70, "& input": { py: 0.5, fontSize: "0.8rem" } }} />
                   </Stack>
                   {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: SlotModifier, mi: number) => {
@@ -324,7 +324,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                       <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.25 }}>
                         <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>{propertyDisplayName(mod.property, def)}</Typography>
                         <Typography variant="caption" fontWeight={600} color={isModifierPositive(mod.property, positiveCheck) ? "success.main" : factor === neutralValue ? "text.secondary" : "error.main"}>{currentFormatted}</Typography>
-                        <Typography variant="caption" color="text.disabled">Range: {startFormatted} {"→"} {endFormatted}</Typography>
+                        <Typography variant="caption" color="text.disabled">{t("blueprintsUi.detail.range", { start: startFormatted, end: endFormatted })}</Typography>
                       </Stack>
                     )
                   })}
@@ -334,7 +334,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             </Stack>
 
             {bp?.crafting_time_seconds && (
-              <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatCraftingTime(bp.crafting_time_seconds * craftQty)}{craftQty > 1 && ` (${formatCraftingTime(bp.crafting_time_seconds)} each)`}</Typography>
+              <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />{t("blueprintsUi.detail.craftTime", { time: formatCraftingTime(bp.crafting_time_seconds * craftQty) })}{craftQty > 1 && ` ${t("blueprintsUi.detail.craftTimeEach", { time: formatCraftingTime(bp.crafting_time_seconds) })}`}</Typography>
             )}
           </Stack>
         )}
@@ -344,34 +344,34 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
           <Stack spacing={2}>
             <Stack direction="row" spacing={2} alignItems="center">
               <Box>
-                <Typography variant="caption" color="text.secondary">Efficiency</Typography>
+                <Typography variant="caption" color="text.secondary">{t("blueprintsUi.detail.efficiency")}</Typography>
                 <Typography variant="body1" fontWeight={600}>50%</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">Time per item</Typography>
-                <Typography variant="body1" fontWeight={600}><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />15s</Typography>
+                <Typography variant="caption" color="text.secondary">{t("blueprintsUi.detail.timePerItem")}</Typography>
+                <Typography variant="body1" fontWeight={600}><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />{t("blueprintsUi.detail.secondsShort", { seconds: 15 })}</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">Quantity</Typography>
+                <Typography variant="caption" color="text.secondary">{t("blueprintsUi.detail.quantity")}</Typography>
                 <TextField size="small" type="number" value={craftQty} sx={{ width: 60, "& input": { py: 0.5, fontSize: "0.8rem" } }}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
               </Box>
               {craftQty > 1 && (
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Total time</Typography>
+                  <Typography variant="caption" color="text.secondary">{t("blueprintsUi.detail.totalTime")}</Typography>
                   <Typography variant="body1" fontWeight={600}>{formatCraftingTime((bp?.crafting_time_seconds || 0) * craftQty)}</Typography>
                 </Box>
               )}
             </Stack>
             <Divider />
-            <Typography variant="subtitle2">Recovered Materials{craftQty > 1 && ` (×${craftQty})`}</Typography>
+            <Typography variant="subtitle2">{craftQty > 1 ? t("blueprintsUi.detail.recoveredMaterialsTimes", { qty: craftQty }) : t("blueprintsUi.detail.recoveredMaterials")}</Typography>
             <Stack spacing={0.75}>
               {ingredients.map((ing: BlueprintIngredient, i: number) => {
                 const recovered = parseFloat(String(ing.quantity_required)) * 0.5 * craftQty
                 return (
                   <Stack key={i} direction="row" spacing={1} alignItems="center">
                     <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
-                    <Typography variant="body2" sx={{ flex: 1 }}>{ing.game_item?.name || "Unknown"}</Typography>
+                    <Typography variant="body2" sx={{ flex: 1 }}>{ing.game_item?.name || t("blueprintsUi.detail.unknown")}</Typography>
                     <Typography variant="body2" fontWeight={600}>{recovered.toFixed(2)} SCU</Typography>
                   </Stack>
                 )
@@ -383,7 +383,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
         {/* Org Owners tab */}
         {tab === 2 && spectrumId && (
           <Box>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>Org members who own this blueprint</Typography>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>{t("blueprintsUi.detail.orgOwnersTitle")}</Typography>
             {orgOwners?.members.length ? (
               <Stack spacing={0.75}>
                 {orgOwners.members.map((m) => (
@@ -397,7 +397,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                 ))}
               </Stack>
             ) : (
-              <Typography variant="body2" color="text.secondary">No org members have marked this blueprint as owned yet.</Typography>
+              <Typography variant="body2" color="text.secondary">{t("blueprintsUi.detail.noOrgOwners")}</Typography>
             )}
           </Box>
         )}
