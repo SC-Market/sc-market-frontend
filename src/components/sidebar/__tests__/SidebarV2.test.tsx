@@ -534,6 +534,42 @@ describe("SidebarV2 — admin context", () => {
     expect(screen.getByText("Feature Flags")).toBeInTheDocument()
   })
 
+  it("gives every admin item its own icon", () => {
+    mockProfile = { ...loggedInProfile, role: "admin" }
+    renderSidebar("/admin/orders")
+    const labels = [
+      "Orders",
+      "Users",
+      "Market",
+      "Expire Listings",
+      "Premium",
+      "Alerts",
+      "Moderation",
+      "Supplier Dashboard",
+      "Supplier Roster",
+      "Requisitions",
+      "Feature Flags",
+      "Game Data Import",
+      "Attributes",
+      "Game Item Attributes",
+      "Import Monitoring",
+      "Identity",
+      "Test Accounts",
+      "Audit Logs",
+      "Notification Test",
+      "Two-factor",
+    ]
+    const icons = labels.map((label) => {
+      const item = screen.getByText(label).closest("a")
+      const icon = item
+        ?.querySelector("svg[data-testid]")
+        ?.getAttribute("data-testid")
+      expect(icon, label).toBeTruthy()
+      return icon
+    })
+    expect(new Set(icons).size).toBe(labels.length)
+  })
+
   it("exposes the Admin switcher entry only when role is admin", async () => {
     const user = userEvent.setup()
     mockProfile = { ...loggedInProfile, role: "admin" }
