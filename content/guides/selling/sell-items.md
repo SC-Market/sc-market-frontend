@@ -2,8 +2,8 @@
 title: "Sell items: open a shop, list items and manage stock"
 description: Every listing belongs to a shop. Create your shop, list an item with a price in aUEC and a quantity, then keep your stock lots up to date.
 order: 10
-updated: 2026-10-26
-keywords: [sell, listing, create listing, shop, stock, inventory, auction, price]
+updated: 2026-11-02
+keywords: [sell, listing, create listing, shop, stock, inventory, auction, price, paused, renew, reactivate]
 related: [selling/stock-lots-and-allocation, selling/auctions, buying/how-orders-work]
 howto: true
 ---
@@ -18,7 +18,7 @@ To sell on SC Market you list items from a shop: create the shop once, then crea
 
 1. Open [My Shops](/dashboard/shops) and click **Create Shop**. SC Market creates a personal shop named after you. Click **Manage** to rename it and fill in its settings.
 2. Switch the sidebar to your shop and open **Create Listing**.
-3. Under **About**, pick the game item with **Select Game Item**, then enter a **Title** and **Description**. You can add photos.
+3. Under **About**, pick the game item with **Select Game Item**, then enter a **Title**. A **Description** and photos are optional.
 4. Under **Pricing & Quantity**, enter the **Price** in aUEC and the **Quantity** you have.
 5. Click **Create Listing**. An **Active** listing is visible to buyers right away.
 
@@ -36,7 +36,9 @@ Choose **Auction** as the sale type and set an end time, a minimum bid increment
 ## Manage listings and stock
 
 - **Listings** in your shop's sidebar shows every listing. Use **Edit**, **Activate**, **Deactivate** or **Archive** to change one.
+- A **Paused** listing is hidden from the market but not deleted, for example after a game wipe or an auction that ended unsold. Click its renew icon (**Paused: renew and reactivate**) to put it back on the market, or tick it and click **Activate**.
 - **Stock** shows **All Stock Lots**: item, variant, quantity, location and the listing each lot belongs to. Edit a lot's quantity there when your inventory changes. See [manage stock lots](/guides/selling/stock-lots-and-allocation).
+- Buyers see roughly when you were last active (for example **Active today**) and how fast you usually reply on your listings and shop. To hide the last-active part, turn on **Hide my online status** in [Settings](/settings) › **Profile**. Hiding it never lowers your listings in search, but sellers inactive for over a month are listed lower by default.
 - **Import from UEX** on the **Listings** page copies your active UEXCorp sell listings into the shop. See [import your listings from UEX](/guides/selling/import-from-uex).
 
 ## Advanced: list and update many items at once

@@ -21,8 +21,8 @@ If you already sell on UEXCorp, you can copy your active sell listings into an S
 1. Switch the sidebar to your shop and open **Listings**.
 2. Click **Import from UEX**.
 3. Enter your **UEX Username** and click **Fetch Listings**. The list shows your active UEX sell listings that aren't sold out, with their **Price**, **Qty** and **Source**.
-4. Untick any you don't want. All of them start ticked.
-5. Click **Import** (it shows how many are ticked). The dialog says how many were imported.
+4. Untick any you don't want. Every listing that can be imported starts ticked. A listing that can't, for example one with no price on UEX, is greyed out with the reason and can't be ticked.
+5. Click **Import** (it shows how many are ticked, for example **Import 12 Listings**). The dialog says how many were imported, and lists any that weren't under **Not imported**, each with its reason.
 
 ## What gets imported
 
@@ -40,6 +40,7 @@ Nothing changes on UEX: your listings there stay as they are, and stock you sell
 
 - **At most 100 per import**: the list shows up to 100 of your active sell listings. Create any others with **Create Listing**.
 - **Fix up after importing**: add photos or a longer description with **Edit** on each listing. To split a quantity over several locations, add lots with **Add Lot** on the shop's **Stock** page.
+- **Some weren't imported**: each listing is checked on its own, so one bad row never stops the rest. The reasons are **No price set**, **Invalid price**, **Title missing or too long**, **Description too long**, **Invalid quantity** and **Couldn't be saved**. Fix the listing on UEX and fetch again, or create it with **Create Listing**.
 - **Nothing found**: check the username is the one on your UEX profile, and that the listings are sell listings that aren't sold out.
 - **Unlinked items**: a title that doesn't name exactly one game item imports without one, and a listing's game item can't be changed later. To link it, create the listing again with **Create Listing**, pick the item with **Select Game Item**, and archive the imported one.
 

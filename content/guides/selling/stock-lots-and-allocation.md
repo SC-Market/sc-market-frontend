@@ -1,9 +1,9 @@
 ---
 title: Manage stock lots
-description: Your stock is kept in lots. Change a listing's quantity on your shop's Listings page, or edit the lots on its Stock page. Sold stock comes out on accept.
+description: Your stock is kept in lots. Change a listing's quantity on your shop's Listings page, or edit the lots on its Stock page. Sold stock comes out when you accept.
 order: 20
 updated: 2026-11-02
-keywords: [stock, stock lots, inventory, my stock, quantity, location, allocation, allocated, listed, personal, manage stock]
+keywords: [stock, stock lots, inventory, my stock, quantity, location, allocation, allocated, listed, personal, manage stock, stock subtraction timing, unlimited supply]
 related: [selling/sell-items, selling/handle-orders-as-a-seller, selling/import-from-uex]
 howto: true
 ---
@@ -26,7 +26,7 @@ The quick way, for a listing with one lot: change the listing's quantity.
 
 1. Switch the sidebar to your shop and open **Listings**.
 2. Click the edit icon (**Edit**) on the listing's row.
-3. Change the **Quantity** and click the save icon (**Save**). The new quantity goes to the listing's first listed lot.
+3. Change the **Quantity** and click the save icon (**Save**). The difference is added to or taken from the listing's newest listed lot. If that lot can't cover a decrease, change the lots on the **Stock** page instead.
 
 ## Advanced: work with the lots
 
@@ -47,15 +47,23 @@ Each lot's **Status** is **Listed** or **Personal**. Listed stock counts toward 
 
 ## What happens when you sell
 
-When you accept an offer, the ordered quantity comes out of a listed lot, so buyers can't order stock you've already sold. If the order is cancelled, the quantity goes back to the lot. **Allocated Stock** on the Stock page lists lots that have stock reserved for open orders.
+By default, when you accept an offer the ordered quantity comes out of a listed lot, so buyers can't order stock you've already sold. **Buy now** purchases and filled buy orders take it at once. If the order is cancelled, the quantity goes back to the lot. **Allocated Stock** on the Stock page lists lots that have stock reserved for open orders. Your shop's stock settings, below, can change when this happens.
 
 ## Stock settings
 
-Your shop's **Settings** › **Stock Management** › **Allocation mode** decides how an order takes stock from your lots:
+Your shop's **Settings** › **Stock Management** has two settings. **Stock subtraction timing** decides when an order takes units out of your listed stock:
+
+- **When you accept the order (default)**: a cart order takes its units when you accept it. **Buy now** and buy-order sales take them at once.
+- **As soon as the order arrives, before you accept it**: a cart order holds its units while you decide. They go back if you reject it or the buyer withdraws it, and a counter offer holds the new quantity instead.
+- **Never (unlimited supply)**: listed quantities never go down. A single order still can't be for more than you list.
+
+**Allocation mode** decides which lots an order takes stock from:
 
 - **Automatic (FIFO)**, the default: an order takes its quantity from the listing's listed lots, oldest lot first.
 - **Manual selection**: nothing is taken by itself. You pick the lots for each order in its **Stock Allocation** tab.
 - **None (legacy)**: orders don't reserve stock from your lots.
+
+The timing only takes stock by itself with **Automatic (FIFO)**. With **Manual selection**, you still pick the lots for each order.
 
 ## My Stock: your personal lots
 

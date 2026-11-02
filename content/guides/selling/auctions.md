@@ -2,7 +2,7 @@
 title: Run and bid on auctions
 description: Sellers set an end time, a minimum bid increment and an optional reserve price. When the auction ends, the highest bidder gets an offer at their bid.
 order: 30
-updated: 2026-10-25
+updated: 2026-11-02
 keywords: [auction, bid, bidding, reserve price, increment, highest bid, end time]
 related: [buying/buy-an-item, buying/how-orders-work]
 howto: true
@@ -40,6 +40,6 @@ A new bid replaces your previous one, so you only ever have one bid on an auctio
 SC Market checks for ended auctions every few minutes.
 
 - If the highest bid meets the reserve price, the winner gets an offer named "Auction Won" for that amount, and the listing is marked sold. The seller then accepts the offer, and the trade continues as in [how orders work](/guides/buying/how-orders-work).
-- If nobody bid, or the reserve price wasn't met, the listing expires.
+- If nobody bid, or the reserve price wasn't met, the listing ends unsold and shows as **Paused** in your shop's **Listings**. It's hidden from the market, not deleted. To run the auction again, create a new auction listing.
 
 [How orders work](/guides/buying/how-orders-work "cta")

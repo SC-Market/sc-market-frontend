@@ -28,7 +28,7 @@ To buy an item, add it to your cart and submit an offer to the seller. When the 
 
 ## Bid on an auction
 
-Auction listings have a bid panel showing the **Current Bid** and when it **Ends In**. Enter **Your Bid (aUEC)**, at least the **Min Bid** shown, and click **Place Bid**. When the auction ends, the highest bid wins and SC Market creates an offer for the winner at that price. If nobody bids, or the seller's reserve price isn't met, the listing expires.
+Auction listings have a bid panel showing the **Current Bid** and when it **Ends In**. Enter **Your Bid (aUEC)**, at least the **Min Bid** shown, and click **Place Bid**. When the auction ends, the highest bid wins and SC Market creates an offer for the winner at that price. If nobody bids, or the seller's reserve price isn't met, the auction ends unsold.
 
 ## Post a buy order
 

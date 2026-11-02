@@ -2,8 +2,8 @@
 title: How orders work
 description: Checkout sends the seller an offer. Once the offer is accepted it becomes an order, which moves from Queued to Being fulfilled to Fulfilled.
 order: 30
-updated: 2026-10-25
-keywords: [order, offer, counter offer, status, queued, fulfilled, cancel, review, discord thread]
+updated: 2026-11-02
+keywords: [order, offer, counter offer, status, queued, fulfilled, cancel, review, discord thread, reminder, waiting for seller]
 related: [buying/buy-an-item, selling/sell-items]
 ---
 
@@ -17,7 +17,7 @@ When you check out, or win an auction, the seller gets an offer. On the offer pa
 - **Counter Offer** sends back changed terms, and then it's the other side's turn.
 - **Reject** closes the offer.
 
-While you wait for the other side, you can still **Cancel Order**.
+While you wait for the other side, you can still **Cancel Order**. If the seller doesn't answer, SC Market reminds them after about a day and again after about 3 days. If they still haven't replied a day later, you get **Your offer is still waiting**, so you can keep waiting, message the seller or withdraw the offer. See [reminders](/guides/getting-started/notification-settings#reminders).
 
 > [!NOTE]
 > When a seller fills your [buy order](/buyorders), there's no offer step: the order is created directly.
@@ -33,14 +33,14 @@ Only the seller side moves an order forward: the seller, or for an org, the assi
 
 ## Finish the trade in game
 
-Use the order's messages to agree on a time and place, meet in game, and exchange the item and the aUEC. If the seller has set up the SC Market Discord bot, the order also gets a **Discord Thread**: use **Join Server** to join the seller's server and chat there.
+Use the order's messages to agree on a time and place, meet in game, and exchange the item and the aUEC. If the seller has set up the SC Market Discord bot, the order also gets a Discord thread: open it with **View thread** in the **Discord Thread** row. If you aren't in the seller's server yet, use **Join Server** in the **Discord Server Invite** row first.
 
 > [!WARNING]
 > SC Market never holds aUEC, so it can't refund or guarantee a trade. Check the other player's reviews first, and never trade real money: it's against CIG's Terms of Service.
 
 ## Reviews
 
-The buyer and the seller can each leave one review per order: a **Rating** from 1 to 5 and a **Comment**. If a review about you looks wrong, click **Request Review Revision** to ask the reviewer to edit it.
+The buyer and the seller can each leave one review per order: a **Rating** from 1 to 5 and a **Comment**. The review form opens once the order is **Fulfilled** or **Cancelled**, so a buyer can still review a seller who never showed up. An order that's still open 14 days after it started can be reviewed too, so nobody can block a review by leaving an order open. If a review about you looks wrong, click **Request Review Revision** to ask the reviewer to edit it.
 
 ## Where to find your orders
 

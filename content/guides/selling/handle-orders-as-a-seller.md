@@ -2,7 +2,7 @@
 title: Handle orders as a seller or org team
 description: Incoming offers and orders for your shop are on its Orders page. Accept the offer, then move the order through Begin Work and Complete Order.
 order: 50
-updated: 2026-10-26
+updated: 2026-11-02
 keywords: [seller, orders, offers, accept, assign, claim, begin work, complete order, org orders, team]
 related: [buying/how-orders-work, orgs/roles-and-permissions, discord/order-alerts-and-claiming]
 howto: true
@@ -23,6 +23,9 @@ As a seller, you handle each sale in two parts: accept the buyer's offer, which 
 4. When you start, click **Begin Work**. The order moves to **Being fulfilled** and is assigned to you.
 5. Agree on the hand-off in the order chat, meet in game and trade.
 6. Click **Complete Order**. The order is **Fulfilled** and closed.
+
+> [!TIP]
+> Answer offers quickly: an offer with no reply gets you a reminder after about a day and again after about 3 days, and then the buyer is told it's still waiting. See [reminders](/guides/getting-started/notification-settings#reminders).
 
 > [!NOTE]
 > Each status change posts a message in the order chat and notifies the buyer. **Cancel** is available to you and to the buyer until the order is complete.
