@@ -91,8 +91,9 @@ export function OfferAnalyticsCharts({ analytics }: OfferAnalyticsProps) {
 }
 
 export function OfferTopShopsAnalytics({ analytics }: OfferAnalyticsProps) {
+  const { t } = useTranslation()
   return (
-    <Section title={"Top Shops (Offers)"} xs={12} lg={3}>
+    <Section title={t("contractsUi.topShopsOffers")} xs={12} lg={3}>
       <ol>
         {(analytics.top_shops || []).map((s) => (
           <li key={s.slug}>
@@ -108,8 +109,9 @@ export function OfferTopShopsAnalytics({ analytics }: OfferAnalyticsProps) {
 }
 
 export function OfferTopUsersAnalytics({ analytics }: OfferAnalyticsProps) {
+  const { t } = useTranslation()
   return (
-    <Section title={"Top Users (Offers)"} xs={12} lg={3}>
+    <Section title={t("contractsUi.topUsersOffers")} xs={12} lg={3}>
       <List sx={{ maxHeight: 400, overflowY: "scroll" }}>
         {analytics.top_users.map((c, i) => (
           <ListItem key={c.username}>
@@ -127,29 +129,30 @@ export function OfferTopUsersAnalytics({ analytics }: OfferAnalyticsProps) {
 
 export function OfferSummary({ analytics }: OfferAnalyticsProps) {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
   return (
-    <Section title={"Offer Summary"} xs={12} lg={6}>
+    <Section title={t("contractsUi.offerSummary")} xs={12} lg={6}>
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={6}>
-          <strong>Total Offers:</strong> {analytics.summary.total_offers}
+          <strong>{t("contractsUi.totalOffers")}</strong> {analytics.summary.total_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>Active Offers:</strong> {analytics.summary.active_offers}
+          <strong>{t("contractsUi.activeOffers")}</strong> {analytics.summary.active_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>Waiting for Buyer:</strong> {analytics.summary.waiting_for_buyer}
+          <strong>{t("contractsUi.waitingForBuyer")}</strong> {analytics.summary.waiting_for_buyer}
         </Grid>
         <Grid item xs={6}>
-          <strong>Waiting for Seller:</strong> {analytics.summary.waiting_for_seller}
+          <strong>{t("contractsUi.waitingForSeller")}</strong> {analytics.summary.waiting_for_seller}
         </Grid>
         <Grid item xs={6}>
-          <strong>Accepted Offers:</strong> {analytics.summary.accepted_offers}
+          <strong>{t("contractsUi.acceptedOffers")}</strong> {analytics.summary.accepted_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>Rejected Offers:</strong> {analytics.summary.rejected_offers}
+          <strong>{t("contractsUi.rejectedOffers")}</strong> {analytics.summary.rejected_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>Total Value:</strong> {analytics.summary.total_value.toLocaleString()} aUEC
+          <strong>{t("contractsUi.totalValue")}</strong> {analytics.summary.total_value.toLocaleString()} aUEC
         </Grid>
       </Grid>
     </Section>

@@ -18,6 +18,7 @@ import {
   Alert,
   Slider,
 } from "@mui/material"
+import { Trans, useTranslation } from "react-i18next"
 import { useGetReputationRanksQuery } from "../../store/api/v2/market"
 
 interface Props {
@@ -30,6 +31,7 @@ interface Props {
 }
 
 export function MissionRankCalculator({ reputationReward, rewardScope, rewardFaction, requiredRank, minStanding, isShareable }: Props) {
+  const { t } = useTranslation()
   const [crewSize, setCrewSize] = useState(1)
 
   const { data, isLoading } = useGetReputationRanksQuery(
@@ -67,24 +69,25 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
     return idx >= 0 ? idx : 0
   }, [minStanding, requiredRank, displayRanks, isNegativeRep])
 
-  if (isLoading) return <Typography variant="body2" color="text.secondary">Loading ranks...</Typography>
-  if (!ranks.length) return <Alert severity="info">No rank data available for {scopeDisplayName}</Alert>
+  if (isLoading) return <Typography variant="body2" color="text.secondary">{t("missionToolsUi.loadingRanks")}</Typography>
+  if (!ranks.length) return <Alert severity="info">{t("missionToolsUi.noRankData", { scope: scopeDisplayName })}</Alert>
 
   return (
     <Box>
       {isNegativeRep && (
         <Alert severity="warning" sx={{ mb: 2 }}>
-          This mission <strong>decreases</strong> your standing with this faction. Completing it will push you toward lower ranks.
+          <Trans i18nKey="missionToolsUi.negativeRepWarning" components={{ strong: <strong /> }} />
         </Alert>
       )}
       {/* Crew size slider */}
       {isShareable && (
         <Box sx={{ mb: 2 }}>
           <Typography variant="body2" gutterBottom>
-            Crew size: <strong>{crewSize}</strong> {crewSize > 1 && `(${xpPerRun} XP each)`}
+            <Trans i18nKey="missionToolsUi.crewSizeValue" values={{ size: crewSize }} components={{ strong: <strong /> }} />{" "}
+            {crewSize > 1 && t("missionToolsUi.xpEach", { xp: xpPerRun })}
           </Typography>
           <Slider
-            aria-label="Crew size"
+            aria-label={t("missionToolsUi.crewSize")}
             value={crewSize}
             onChange={(_, v) => setCrewSize(v as number)}
             min={1}
@@ -98,7 +101,7 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
       )}
 
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-        <strong>{xpPerRun}</strong> XP per run towards{" "}
+        <Trans i18nKey="missionToolsUi.xpPerRunTowards" values={{ xp: xpPerRun }} components={{ strong: <strong /> }} />{" "}
         {rewardFaction && <Chip label={rewardFaction} size="small" color="secondary" sx={{ height: 20, fontSize: "0.7rem", mr: 0.5 }} />}
         <Chip label={scopeDisplayName} size="small" color="primary" sx={{ height: 20, fontSize: "0.7rem" }} />
       </Typography>
@@ -106,10 +109,10 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
       <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
         <TableHead>
           <TableRow>
-            <TableCell>Rank</TableCell>
-            <TableCell align="right">XP Needed</TableCell>
-            <TableCell align="right">Runs to Reach</TableCell>
-            <TableCell align="right">Total XP at Rank</TableCell>
+            <TableCell>{t("missionToolsUi.rank")}</TableCell>
+            <TableCell align="right">{t("missionToolsUi.xpNeeded")}</TableCell>
+            <TableCell align="right">{t("missionToolsUi.runsToReach")}</TableCell>
+            <TableCell align="right">{t("missionToolsUi.totalXpAtRank")}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -138,10 +141,10 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
                       {rank.standing_display_name}
                     </Typography>
                     {isBelowMin && (
-                      <Chip label="Locked" size="small" variant="outlined" sx={{ height: 16, fontSize: "0.6rem" }} />
+                      <Chip label={t("missionToolsUi.locked")} size="small" variant="outlined" sx={{ height: 16, fontSize: "0.6rem" }} />
                     )}
                     {i === minRankIndex && (
-                      <Chip label="MIN" size="small" color="warning" sx={{ height: 16, fontSize: "0.6rem" }} />
+                      <Chip label={t("missionToolsUi.minBadge")} size="small" color="warning" sx={{ height: 16, fontSize: "0.6rem" }} />
                     )}
                   </Stack>
                 </TableCell>

@@ -174,8 +174,8 @@ export function ViewOrder() {
         order?.title
           ? order.title
           : order?.order_id
-            ? `Order ${order.order_id.substring(0, 8).toUpperCase()}`
-            : "Order"
+            ? t("orders.orderShort", { id: order.order_id.substring(0, 8).toUpperCase() })
+            : t("orders.orderLabel")
       }
       breadcrumbs={[
         { label: t("dashboard.title", "Dashboard"), href: PATHS.dashboard },
@@ -190,11 +190,11 @@ export function ViewOrder() {
             ]
           : []),
         {
-          label: order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`,
+          label: order?.title || t("orders.orderShort", { id: id?.substring(0, 8).toUpperCase() }),
         },
       ]}
       showOrgInBreadcrumbs={true}
-      entityTitle={order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`}
+      entityTitle={order?.title || t("orders.orderShort", { id: id?.substring(0, 8).toUpperCase() })}
       isLoading={pageData.isLoading}
       error={pageData.error}
       skeleton={<OrderPageBodySkeleton />}

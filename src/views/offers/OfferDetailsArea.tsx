@@ -279,7 +279,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                         onClick={() => setIsEditingAssigned(!isEditingAssigned)}
                         sx={{ textTransform: "none", fontSize: "0.75rem" }}
                       >
-                        {isEditingAssigned ? "Cancel" : "Assign"}
+                        {isEditingAssigned ? t("common.cancel") : t("memberAssignArea.assign")}
                       </Button>
                     )}
                 </Stack>
@@ -531,7 +531,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                     </Typography>
                   </Typography>
                   {offerChanges?.costChanged && (
-                    <Chip label="NEW!" size="small" color="primary" />
+                    <Chip label={t("contractsUi.newBadge")} size="small" color="primary" />
                   )}
                 </Stack>
               </TableCell>

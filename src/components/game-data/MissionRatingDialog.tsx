@@ -30,6 +30,7 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import { useRateMissionMutation } from "../../store/api/v2/market"
 
 export interface MissionRatingDialogProps {
@@ -61,6 +62,7 @@ export function MissionRatingDialog({
   missionName,
   existingRating,
 }: MissionRatingDialogProps) {
+  const { t } = useTranslation()
   // Form state
   const [difficultyRating, setDifficultyRating] = useState<number | null>(
     existingRating?.difficulty_rating || null
@@ -101,18 +103,18 @@ export function MissionRatingDialog({
   const handleSubmit = async () => {
     // Validate ratings (Requirement 49.1, 49.2)
     if (!difficultyRating || difficultyRating < 1 || difficultyRating > 5) {
-      setError("Please provide a difficulty rating between 1 and 5 stars")
+      setError(t("missionToolsUi.errorDifficultyRequired"))
       return
     }
 
     if (!satisfactionRating || satisfactionRating < 1 || satisfactionRating > 5) {
-      setError("Please provide a satisfaction rating between 1 and 5 stars")
+      setError(t("missionToolsUi.errorSatisfactionRequired"))
       return
     }
 
     // Validate comment length (Requirement 49.6, 49.7)
     if (comment.length > 1000) {
-      setError("Comment must be 1000 characters or less")
+      setError(t("missionToolsUi.errorCommentTooLong"))
       return
     }
 
@@ -134,7 +136,7 @@ export function MissionRatingDialog({
     } catch (err: unknown) {
       // Handle error
       const errorMessage =
-        (err instanceof Error ? err.message : undefined) || "Failed to submit rating. Please try again."
+        (err instanceof Error ? err.message : undefined) || t("missionToolsUi.errorSubmitFailed")
       setError(errorMessage)
     }
   }
@@ -142,7 +144,7 @@ export function MissionRatingDialog({
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>
-        {existingRating ? "Update Rating" : "Rate Mission"}
+        {existingRating ? t("missionToolsUi.updateRating") : t("missionToolsUi.rateMission")}
       </DialogTitle>
 
       <DialogContent>
@@ -150,7 +152,7 @@ export function MissionRatingDialog({
           {/* Mission Name */}
           <Box>
             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Mission
+              {t("missionToolsUi.mission")}
             </Typography>
             <Typography variant="body1" fontWeight="medium">
               {missionName}
@@ -167,10 +169,10 @@ export function MissionRatingDialog({
           {/* Difficulty Rating (Requirement 49.1) */}
           <Box>
             <Typography variant="subtitle2" gutterBottom>
-              Difficulty Rating *
+              {t("missionToolsUi.difficultyRatingRequired")}
             </Typography>
             <Typography variant="caption" color="text.secondary" display="block" mb={1}>
-              How difficult was this mission?
+              {t("missionToolsUi.difficultyQuestion")}
             </Typography>
             <Rating
               value={difficultyRating}
@@ -181,7 +183,7 @@ export function MissionRatingDialog({
             />
             {difficultyRating && (
               <Typography variant="caption" color="text.secondary" display="block" mt={0.5}>
-                {difficultyRating} / 5 stars
+                {t("missionToolsUi.starsOutOf5", { value: difficultyRating })}
               </Typography>
             )}
           </Box>
@@ -189,10 +191,10 @@ export function MissionRatingDialog({
           {/* Satisfaction Rating (Requirement 49.2) */}
           <Box>
             <Typography variant="subtitle2" gutterBottom>
-              Satisfaction Rating *
+              {t("missionToolsUi.satisfactionRatingRequired")}
             </Typography>
             <Typography variant="caption" color="text.secondary" display="block" mb={1}>
-              How satisfied were you with this mission?
+              {t("missionToolsUi.satisfactionQuestion")}
             </Typography>
             <Rating
               value={satisfactionRating}
@@ -203,7 +205,7 @@ export function MissionRatingDialog({
             />
             {satisfactionRating && (
               <Typography variant="caption" color="text.secondary" display="block" mt={0.5}>
-                {satisfactionRating} / 5 stars
+                {t("missionToolsUi.starsOutOf5", { value: satisfactionRating })}
               </Typography>
             )}
           </Box>
@@ -215,16 +217,16 @@ export function MissionRatingDialog({
             multiline
             rows={4}
             fullWidth
-            label="Comment (Optional)"
-            placeholder="Share your experience with this mission..."
+            label={t("missionToolsUi.commentOptional")}
+            placeholder={t("missionToolsUi.commentPlaceholder")}
             inputProps={{ maxLength: 1000 }}
-            helperText={`${comment.length}/1000 characters`}
+            helperText={t("missionToolsUi.commentCharCount", { length: comment.length, max: 1000 })}
           />
 
           {/* Update Notice (Requirement 49.8) */}
           {existingRating && (
             <Alert severity="info">
-              You have already rated this mission. Submitting will update your existing rating.
+              {t("missionToolsUi.alreadyRated")}
             </Alert>
           )}
         </Stack>
@@ -232,7 +234,7 @@ export function MissionRatingDialog({
 
       <DialogActions>
         <Button onClick={handleClose} disabled={isLoading}>
-          Cancel
+          {t("common.cancel")}
         </Button>
         <Button
           onClick={handleSubmit}
@@ -242,9 +244,9 @@ export function MissionRatingDialog({
           {isLoading ? (
             <CircularProgress size={20} />
           ) : existingRating ? (
-            "Update Rating"
+            t("missionToolsUi.updateRating")
           ) : (
-            "Submit Rating"
+            t("missionToolsUi.submitRating")
           )}
         </Button>
       </DialogActions>

@@ -47,7 +47,7 @@ export function ViewOfferPage() {
       breadcrumbs={[
         { label: t("offers.dashboard", "Dashboard"), href: PATHS.dashboard },
         {
-          label: `${t("offers.offer", "Offer")} ${(id || "").substring(0, 8).toUpperCase()}`,
+          label: t("orders.offerShort", { id: (id || "").substring(0, 8).toUpperCase() }),
           href: ORDER_PATHS.offer(id!),
         },
       ]}
@@ -75,16 +75,16 @@ export function ViewOfferPage() {
             </Tabs>
             {session.offers.length > 1 && (
               <FormControl size="small" sx={{ minWidth: 160, ml: 2 }}>
-                <InputLabel id="offer-version-label">Version</InputLabel>
+                <InputLabel id="offer-version-label">{t("contractsUi.version")}</InputLabel>
                 <Select
                   labelId="offer-version-label"
                   value={selectedOfferIndex}
-                  label="Version"
+                  label={t("contractsUi.version")}
                   onChange={(e) => setSelectedOfferIndex(Number(e.target.value))}
                 >
                   {session.offers.map((_, index) => (
                     <MenuItem key={index} value={index}>
-                      {index === 0 ? "Most Recent" : `Offer ${session.offers.length - index}`}
+                      {index === 0 ? t("contractsUi.mostRecent") : t("orders.offerShort", { id: session.offers.length - index })}
                     </MenuItem>
                   ))}
                 </Select>

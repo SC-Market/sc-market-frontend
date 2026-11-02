@@ -446,9 +446,11 @@ export function RelatedServicesByCategory(props: {
                               wordBreak: "break-word",
                             }}
                           >
-                            by{" "}
-                            {service.user?.display_name ||
-                              service.contractor?.name}
+                            {t("contractsUi.byName", {
+                              name:
+                                service.user?.display_name ||
+                                service.contractor?.name,
+                            })}
                           </Typography>
                         </Box>
                       }

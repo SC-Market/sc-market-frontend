@@ -41,7 +41,7 @@ export function useContractOfferForm(contract: PublicContract) {
       })
       .catch((error: UnwrappedErrorInterface) => {
         if (error?.error?.code === "ORDER_LIMIT_VIOLATION") {
-          issueAlert({ message: error.error.message || "Order does not meet size or value requirements", severity: "error" })
+          issueAlert({ message: error.error.message || t("contractsUi.orderLimitViolation"), severity: "error" })
         } else { issueAlert(error) }
       })
   }, [collateral, cost, createContractOffer, description, issueAlert, kind, navigate, paymentType, title, t, primaryContractorId, contract.id])
