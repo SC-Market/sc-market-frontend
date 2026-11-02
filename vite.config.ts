@@ -151,7 +151,10 @@ export default defineConfig(({ command, isSsrBuild }) => ({
   // bundle every dependency into it instead of importing them from
   // node_modules, where some only resolve through a bundler (e.g.
   // "date-fns/locale", a directory import). The dev server's module runner
-  // can't evaluate bundled CommonJS, so dev keeps Vite's default.
+  // can't evaluate bundled CommonJS, so dev externalizes dependencies except
+  // MUI: its ESM uses directory imports (@mui/icons-material ->
+  // "@mui/material/utils") that Node can't resolve, so dev SSR crashed on
+  // every page until Vite transformed it.
   //
   // The same server build also runs on Cloudflare (the SSR Pages Function,
   // docs/ssr-worker.md), so it is built for workers: web-standard package
@@ -163,7 +166,7 @@ export default defineConfig(({ command, isSsrBuild }) => ({
           noExternal: true,
           target: "webworker",
         }
-      : {},
+      : { noExternal: [/^@mui\//] },
   optimizeDeps: {
     include: [
       "react",
