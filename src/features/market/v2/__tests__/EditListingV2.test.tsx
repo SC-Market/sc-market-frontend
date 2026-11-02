@@ -13,7 +13,7 @@ import {
   useGetStockLotsQuery,
   useUpdateListingMutation,
 } from "../../../../store/api/v2/market";
-import type { ShopResponse } from "../../../../store/api/v2/market";
+import type { ShopResponse, StockLotDetail } from "../../../../store/api/v2/market";
 import type { GetListingDetailApiResponse } from "../../../../store/api/v2/market";
 import {
   mockMutationHook,
@@ -211,7 +211,7 @@ describe("EditListingV2", () => {
     updateHook = mockMutationHook<typeof marketV2Api.endpoints.updateListing>();
   });
 
-  const renderComponent = () => {
+  const renderComponent = (lots: StockLotDetail[] = []) => {
     const store = createMockStore();
     
     // Mock the hooks
@@ -223,7 +223,7 @@ describe("EditListingV2", () => {
 
     vi.mocked(useUpdateListingMutation).mockReturnValue(updateHook);
     vi.mocked(useGetStockLotsQuery).mockReturnValue(
-      querySuccess<typeof marketV2Api.endpoints.getStockLots>({ lots: [], total: 0, page: 1, page_size: 100 }),
+      querySuccess<typeof marketV2Api.endpoints.getStockLots>({ lots, total: lots.length, page: 1, page_size: 100 }),
     );
     vi.mocked(useGetMyShopsQuery).mockReturnValue(
       querySuccess<typeof marketV2Api.endpoints.getMyShops>([
@@ -378,6 +378,33 @@ describe("EditListingV2", () => {
       expect.objectContaining({ listingId: "listing-123", shopId: "shop-456" }),
       expect.objectContaining({ skip: false }),
     );
+  });
+
+  // Regression: with variant-1's 10 units spread over two lots (6 newest, then
+  // 4), saving sent the whole total into the first lot, making it 16 units.
+  // Only the change is sent now.
+  describe("quantity change on a variant spread over several lots", () => {
+    const lot = (lot_id: string, quantity_total: number) =>
+      ({ lot_id, quantity_total, variant: { variant_id: "variant-1" } }) as StockLotDetail;
+    const lots = [lot("lot-new", 6), lot("lot-old", 4)];
+    const save = async (quantity: string) => {
+      renderComponent(lots);
+      fireEvent.change(screen.getByLabelText(/Quantity/i), { target: { value: quantity } });
+      fireEvent.submit(screen.getByRole("button", { name: /Update Listing/i }).closest("form")!);
+      await waitFor(() => expect(updateHook[0]).toHaveBeenCalled());
+      return vi.mocked(updateHook[0]).mock.calls[0][0].updateListingRequest.lot_updates;
+    };
+
+    it("adds an increase to the newest lot", async () => {
+      expect(await save("13")).toEqual([{ lot_id: "lot-new", quantity_total: 9 }]);
+    });
+
+    it("takes a decrease from the lots in order", async () => {
+      expect(await save("3")).toEqual([
+        { lot_id: "lot-new", quantity_total: 0 },
+        { lot_id: "lot-old", quantity_total: 3 },
+      ]);
+    });
   });
 
   // Regression: an emptied description counted as "No changes to save".

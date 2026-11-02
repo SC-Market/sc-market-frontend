@@ -48,6 +48,7 @@ import {
   type ListingFormError,
   type ListingFormField,
 } from "../domain/listingFormErrors";
+import { lotUpdatesForQuantityChange, type LotQuantity } from "../domain/lotQuantityUpdates";
 import type {
   UpdateListingRequest,
   VariantPriceUpdate,
@@ -59,7 +60,10 @@ import type {
  */
 interface VariantFormData {
   variant_id: string;
-  lot_id?: string; // Primary lot ID for this variant (for updates)
+  /** The variant's listed lots, newest first: a quantity change is applied to them */
+  lots: LotQuantity[];
+  /** The quantity as loaded: saving sends only the change from it */
+  originalQuantity: number;
   quantity: number;
   quality_tier?: number;
   quality_value?: number;
@@ -172,17 +176,19 @@ export function EditListingV2() {
       setBulkDiscountTiers((firstItem as { bulk_discount_tiers?: { min_quantity: number; discount_percent: number }[] }).bulk_discount_tiers || []);
 
       // Build variant form data from listing detail variants
-      // Map lot IDs from stock lots so we can send lot_updates on save
-      const lotsByVariant = new Map<string, string>();
+      // Each variant's listed lots (newest first, as the API returns them), so
+      // a quantity change can be sent as lot_updates on save
+      const lotsByVariant = new Map<string, LotQuantity[]>();
       for (const lot of stockLotsData?.lots || []) {
-        if (!lotsByVariant.has(lot.variant.variant_id)) {
-          lotsByVariant.set(lot.variant.variant_id, lot.lot_id);
-        }
+        const lots = lotsByVariant.get(lot.variant.variant_id) ?? [];
+        lots.push({ lot_id: lot.lot_id, quantity_total: lot.quantity_total });
+        lotsByVariant.set(lot.variant.variant_id, lots);
       }
 
       const variantData: VariantFormData[] = firstItem.variants.map((v) => ({
         variant_id: v.variant_id,
-        lot_id: lotsByVariant.get(v.variant_id),
+        lots: lotsByVariant.get(v.variant_id) ?? [],
+        originalQuantity: v.quantity,
         quantity: v.quantity,
         quality_tier: v.attributes.quality_tier,
         quality_value: v.attributes.quality_value,
@@ -345,13 +351,25 @@ export function EditListingV2() {
         }
       }
 
-      // Handle quantity updates via lot_updates (variant → lot mapping)
-      const lotUpdates: LotUpdate[] = variants
-        .filter((v) => v.isModified && v.lot_id)
-        .map((v) => ({
-          lot_id: v.lot_id!,
-          quantity_total: v.quantity,
-        }));
+      // Quantity changes go to the variant's lots as lot_updates. Only the
+      // change is sent: writing the variant's total into its first lot
+      // multiplied the stock when the variant was spread over several lots.
+      const lotUpdates: LotUpdate[] = [];
+      for (const v of variants) {
+        if (!v.isModified) continue;
+        const updates = lotUpdatesForQuantityChange(v.lots, v.quantity - v.originalQuantity);
+        if (!updates) {
+          issueAlert({
+            message: t(
+              "ItemStock.quantityUseStockPage",
+              "Change this listing's quantity per lot on the Stock page",
+            ),
+            severity: "error",
+          });
+          return;
+        }
+        lotUpdates.push(...updates);
+      }
 
       if (lotUpdates.length > 0) {
         request.lot_updates = lotUpdates;
