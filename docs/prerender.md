@@ -110,7 +110,8 @@ on a prerendered page is fetched in the browser until it is added there.
 - White-label domains, the light theme and other languages render from
   scratch instead of hydrating (`renderFresh` in `entry.client.tsx`;
   `document.html` hides the prerendered HTML for them until the app's
-  first render).
+  first render). Server-rendered entity pages do get these variants
+  (ssr-worker.md, "Variants"); prerendered files can't (below).
 - `scripts/build/prerendered.ts` (run by `finalize.ts`) inlines the entry
   CSS, adds `Cache-Control: no-cache` for each page to `_headers`, and
   checks the bridge leaves every prerendered path alone.
@@ -143,7 +144,13 @@ on a prerendered page is fetched in the browser until it is added there.
    `[hydration] recoverable error` in the console and no layout shift
    after the first paint. Anything that differs between the server and the
    browser's first render (window size, cookies, storage) must be CSS
-   (`sx` breakpoints) or wait for `useHydrated()`.
+   (`sx` breakpoints) or wait for `useHydrated()`. Dates and numbers are
+   formatted in the page's language (`toSupportedLocale(i18n.language)`)
+   or with fixed `en-US` digits, never the browser's own locale
+   (`toLocaleString()` with no locale, `Intl.DateTimeFormat("default")`):
+   the server's default locale is en-US. HTML the parser rewrites breaks
+   hydration too: no `<p>` or `<div>` inside a `<p>` (a `Typography`
+   around block content needs `component="div"`).
    The first-screen card staging (`components/grid/firstScreen.tsx`,
    used by the market, services and shop grids) renders every card on the
    server and only the first screen in the browser's first render, so a

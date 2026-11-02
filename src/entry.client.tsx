@@ -26,6 +26,7 @@ import { resolveBrowserCustomDomain, getWhiteLabelConfig } from "./hooks/contrac
 import { initLazyImagePlaceholders } from "./util/lazyImagePlaceholder"
 import i18n, { initialLocaleReady, toSupportedLocale } from "./util/i18n"
 import { renderedVariant } from "./ssr/requestContext"
+import { seedRenderedWhiteLabel } from "./ssr/whiteLabel"
 import { installLinkIntentPrefetch } from "./router/routePrefetch"
 import {
   loadMatchedPages,
@@ -86,6 +87,10 @@ const prerenderedData = takePrerenderedData()
 if (prerenderedData) {
   store.dispatch(hydratePrerenderedData(prerenderedData.api))
 }
+// A white-label page the SSR Function rendered for this host: the domain
+// and theme caches get the server's answer before anything reads them, so
+// the first render has the same branding (src/ssr/whiteLabel.ts).
+const whiteLabelRendered = seedRenderedWhiteLabel(prerenderedData?.whiteLabel)
 const serverState = prerenderedData ? store.getState() : undefined
 
 // Start the session check (GET /api/auth/session) before anything renders:
@@ -205,17 +210,22 @@ const app = (
 // with a filter in the URL (hasPageQuery) the app renders from scratch
 // instead of hydrating it (document.html keeps it hidden until the root
 // route's first effect).
-// A server-rendered page may be in the visitor's language and light theme
-// already (the SSR Function marks the variant on <html>): it hydrates when
-// the variant it has is the one the visitor gets.
+// A server-rendered page may be in the visitor's language and light theme,
+// and on the org's white-label host, already (the SSR Function marks the
+// variant on <html>): it hydrates when the variant it has is the one the
+// visitor gets.
 const renderFresh = () => {
   if (!container.hasAttribute("data-prerendered")) return false
   const rendered = renderedVariant()
   const visitorLight =
     // Set by document.html's pre-theme script.
     document.documentElement.getAttribute("data-pre-theme") === "light"
+  const hostname = window.location.hostname
   return (
-    !isMainSiteHostname(window.location.hostname) ||
+    // A white-label host hydrates only HTML rendered for it (data-ssr-host,
+    // and its domain answer seeded above).
+    (!isMainSiteHostname(hostname) &&
+      !(whiteLabelRendered && rendered.host === hostname.toLowerCase())) ||
     hasPageQuery(window.location.search) ||
     toSupportedLocale(i18n.language) !== rendered.lng ||
     visitorLight !== (rendered.theme === "light")

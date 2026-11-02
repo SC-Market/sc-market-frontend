@@ -55,6 +55,25 @@ describe("renderDocument", () => {
     expect(html).toContain("<p>$& $1 $$</p>")
   })
 
+  it("marks a server render's variant and white-label host on <html>", () => {
+    const html = renderDocument(documentTemplate, {
+      appHtml: "<p>x</p>",
+      stylesheets: [],
+      variant: { lng: "de", theme: "light", host: "medrunner.sc-market.space" },
+    })
+    expect(html).toContain(
+      '<html lang="de" data-ssr-lng="de" data-ssr-theme="light" data-ssr-host="medrunner.sc-market.space">',
+    )
+    const mainSite = renderDocument(documentTemplate, {
+      appHtml: "<p>x</p>",
+      stylesheets: [],
+      variant: { lng: "fr", theme: "system" },
+    })
+    expect(mainSite).toContain(
+      '<html lang="fr" data-ssr-lng="fr" data-ssr-theme="dark">',
+    )
+  })
+
   it("refuses a template without markers", () => {
     expect(() =>
       renderDocument("<html></html>", { appHtml: "", stylesheets: [] }),

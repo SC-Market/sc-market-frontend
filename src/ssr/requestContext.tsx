@@ -33,29 +33,45 @@ const BUILD_TIME: RequestContextValue = {
   lng: "en",
   theme: "system",
   url: "",
+  whiteLabel: null,
 }
 
 /**
  * The variant the server HTML was rendered in, as the SSR Function marks it
  * on <html> (renderDocument): prerendered pages and the SPA shell carry no
- * marks, which means the default (English, "system").
+ * marks, which means the default (main site, English, "system"). `host` is
+ * the white-label hostname it was rendered for ("" for the main site).
  */
-export function renderedVariant(): Pick<RequestContextValue, "lng" | "theme"> {
+export function renderedVariant(): Pick<
+  RequestContextValue,
+  "lng" | "theme"
+> & {
+  host: string
+} {
   const html = document.documentElement
   return {
     lng: html.getAttribute("data-ssr-lng") || "en",
     theme: html.getAttribute("data-ssr-theme") === "light" ? "light" : "system",
+    host: html.getAttribute("data-ssr-host") || "",
   }
 }
 
-/** The rendering request (server) or the current page (browser). */
+/**
+ * The rendering request (server) or the current page (browser). In the
+ * browser `whiteLabel` is null: the org's domain and theme come from their
+ * caches, which entry.client seeded from the server's answer
+ * (src/ssr/whiteLabel.ts).
+ */
 export function useRequestContext(): RequestContextValue {
   const value = useContext(RequestContext)
   if (value) return value
   if (typeof window === "undefined") return BUILD_TIME
+  const { lng, theme } = renderedVariant()
   return {
     host: window.location.hostname,
-    ...renderedVariant(),
+    lng,
+    theme,
     url: window.location.href,
+    whiteLabel: null,
   }
 }

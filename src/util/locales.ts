@@ -28,6 +28,10 @@ export const SUPPORTED_LOCALES = languages.map((l) => l.code)
  */
 export function toSupportedLocale(tag: string): string {
   if (SUPPORTED_LOCALES.includes(tag)) return tag
-  const base = tag.split("-")[0]
+  const lower = tag.toLowerCase()
+  // Traditional Chinese: Taiwan, Hong Kong, Macau and the script subtag
+  // (same mapping as document.html's pre-theme script).
+  if (/^zh-(tw|hk|mo|hant)\b/.test(lower)) return "zh-TW"
+  const base = lower.split("-")[0]
   return SUPPORTED_LOCALES.find((l) => l.split("-")[0] === base) || "en"
 }

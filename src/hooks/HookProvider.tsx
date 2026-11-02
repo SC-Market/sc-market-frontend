@@ -50,11 +50,12 @@ import { isCitizenIdEnabled, BACKEND_URL } from "../util/constants"
 import { useGetUserProfileQuery } from "../features/profile/api/profileApi"
 import { startProactiveRefresh } from "../store/proactiveRefresh"
 
-import { getMuiLocales } from "../util/i18n"
+import { getMuiLocales, muiCoreLocale } from "../util/i18n"
 import { useTranslation } from "react-i18next"
 import { isSiteAdmin } from "../util/siteRole"
 import { AdminMfaHost } from "../features/mfa/components/AdminMfaHost"
 import { useRequestContext } from "../ssr/requestContext"
+import { customDomainFromRequest, whiteLabelOrgTheme } from "../ssr/whiteLabel"
 
 function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
@@ -69,7 +70,8 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   // HTML has (useRequestContext: the request on the server, the HTML's mark
   // in the browser).
   const hydrated = useHydrated()
-  const renderedTheme = useRequestContext().theme
+  const { theme: renderedTheme, whiteLabel: requestWhiteLabel } =
+    useRequestContext()
   const [useLightTheme, setUseLightTheme] = useHydratedInitialState<ThemeChoice>(
     hydrated ? cookies.theme || "system" : renderedTheme,
   )
@@ -115,13 +117,18 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     // Dynamic org theme (fetched from API)
     if (dynamicOrgTheme) return dynamicOrgTheme
 
-    // Cached org theme from localStorage
+    // Cached org theme from localStorage; on a server render, the theme the
+    // SSR Function resolved for the host (the browser's cache is seeded with
+    // the same one before hydrating: src/ssr/whiteLabel.ts)
     if (customOrg) {
-      const cached = getCachedOrgTheme(customOrg, resolvedMode)
+      const cached =
+        typeof window === "undefined"
+          ? whiteLabelOrgTheme(requestWhiteLabel, resolvedMode)
+          : getCachedOrgTheme(customOrg, resolvedMode)
       if (cached) return cached
     }
     return actualTheme === "light" ? CLEAN_theme : mainTheme
-  }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode, customOrg])
+  }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode, customOrg, requestWhiteLabel])
 
   // Start proactive JWT refresh (every 13 min + on tab visibility change)
   useEffect(() => { startProactiveRefresh() }, [])
@@ -168,9 +175,12 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     resolveAndFetchTheme()
   }, [resolvedMode, dispatch, isCustomDomain])
 
-  // Build a localized theme when language changes
+  // Build a localized theme when language changes. The first render already
+  // has MUI's own strings (pagination, ...) in the page's language: a server
+  // render does too, and parts of the page that hydrate after the effect
+  // below would otherwise render other text than the server's HTML.
   const [localizedTheme, setLocalizedTheme] = useState(() =>
-    responsiveFontSizes(createTheme(baseTheme)),
+    responsiveFontSizes(createTheme(baseTheme, muiCoreLocale(i18n.language))),
   )
 
   useEffect(() => {
@@ -330,7 +340,15 @@ export function HookProvider(props: { children: React.ReactElement }) {
     }
   }, [searchParams, setSearchParams, issueAlert, t, isCitizenIdEnabled])
 
-  const [customDomain] = useState(resolveBrowserCustomDomain)
+  // The white-label domain: resolved from the request on a server render
+  // (the SSR Function's `host` variant), from the page and its cache in the
+  // browser.
+  const requestWhiteLabel = useRequestContext().whiteLabel
+  const [customDomain] = useState(() =>
+    typeof window === "undefined"
+      ? customDomainFromRequest(requestWhiteLabel)
+      : resolveBrowserCustomDomain(),
+  )
 
   return (
     <CustomDomainContext.Provider value={customDomain}>

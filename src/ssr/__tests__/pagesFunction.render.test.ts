@@ -13,11 +13,24 @@ import {
 
 const answer = vi.hoisted(() => ({
   next: (): Promise<Response> => Promise.reject(new Error("unset")),
+  /** The options of the last createSsrLoadContext call (the render's input). */
+  lastOptions: null as null | { requestContext: Record<string, unknown> },
 }))
 
 vi.mock("../buildVersion", () => ({ SSR_BUILD_VERSION: "test" }))
 vi.mock("../serverBuild", () => ({
-  serverBuild: { entry: { module: { createSsrLoadContext: () => ({}) } } },
+  serverBuild: {
+    entry: {
+      module: {
+        createSsrLoadContext: (options: {
+          requestContext: Record<string, unknown>
+        }) => {
+          answer.lastOptions = options
+          return {}
+        },
+      },
+    },
+  },
   inlineStylesheetsByHref: {},
 }))
 vi.mock("react-router", () => ({
@@ -134,4 +147,210 @@ describe("onRequest around a render", () => {
     await Promise.all(pending)
     expect(puts).toEqual([expect.stringContaining("/market/slow")])
   })
+})
+
+/** The page cache's keys (not the API JSON cache's). */
+const pageKeys = () => puts.filter((key) => key.includes("ssr-cache"))
+
+function visitor(
+  url: string,
+  headers: Record<string, string>,
+  env: Record<string, string> = {},
+) {
+  return {
+    ...context("/"),
+    request: new Request(url, {
+      headers: { "User-Agent": "Mozilla/5.0 Chrome/130", ...headers },
+    }),
+    env: { ...context("/").env, ...env },
+  }
+}
+
+describe("variants", () => {
+  it("renders and caches each visitor variant under its own key", async () => {
+    answer.next = async () => page()
+    const url = `${PREVIEW}/user/bob`
+    const variants: Record<string, string>[] = [
+      {},
+      { Cookie: "theme=light" },
+      { Cookie: "i18next=de" },
+      { "Accept-Language": "fr-FR,fr;q=0.9" },
+      { Cookie: "theme=light; i18next=ja" },
+    ]
+    for (const headers of variants) {
+      await onRequest(visitor(url, headers))
+    }
+    await Promise.all(pending)
+    expect(pageKeys().map((k) => k.slice(k.indexOf("/user/")))).toEqual([
+      "/user/bob",
+      "/user/bob~theme=light",
+      "/user/bob~lng=de",
+      "/user/bob~lng=fr",
+      "/user/bob~theme=light~lng=ja",
+    ])
+  })
+
+  it("gives crawlers the default page, whatever cookies they send", async () => {
+    answer.next = async () => page()
+    await onRequest(
+      visitor(`${PREVIEW}/user/bob`, {
+        "User-Agent": "Googlebot/2.1",
+        Cookie: "theme=light; i18next=de",
+        "Accept-Language": "de",
+      }),
+    )
+    await Promise.all(pending)
+    expect(pageKeys()).toEqual([expect.stringMatching(/\/user\/bob$/)])
+    expect(answer.lastOptions?.requestContext).toMatchObject({
+      lng: "en",
+      theme: "system",
+    })
+  })
+
+  it("renders only the variants SSR_VARIANTS lists", async () => {
+    answer.next = async () => page()
+    const response = await onRequest(
+      visitor(
+        `${PREVIEW}/user/bob`,
+        { Cookie: "theme=light; i18next=de" },
+        { SSR_VARIANTS: "locale" },
+      ),
+    )
+    await Promise.all(pending)
+    expect(response.headers.get("Vary")).toBe("Accept-Language, Cookie")
+    expect(pageKeys()).toEqual([expect.stringMatching(/\/user\/bob~lng=de$/)])
+  })
+})
+
+describe("white-label hosts", () => {
+  const HOST = "https://medrunner.sc-market.space"
+  const ENV = {
+    SSR_ENABLED: "true",
+    SSR_VARIANTS: "host",
+    VITE_BACKEND_URL: "https://api.test",
+  }
+  const domain = (overrides: Record<string, unknown> = {}) => ({
+    data: {
+      spectrum_id: "MEDRUNNER",
+      contractor_id: "c1",
+      name: "Medrunner",
+      focus_mode: "public",
+      homepage_path: null,
+      require_membership: false,
+      ...overrides,
+    },
+  })
+  const THEME = {
+    data: {
+      theme_data: { light: {}, dark: { palette: {} } },
+      favicon_url: null,
+      updated_at: "2026-11-01T00:00:00Z",
+    },
+  }
+
+  function api(routes: Record<string, [number, unknown]>) {
+    const calls: string[] = []
+    vi.stubGlobal("fetch", async (input: string, init?: RequestInit) => {
+      calls.push(String(input))
+      // Anonymous GETs only: no cookies or credentials are ever forwarded.
+      expect(init?.method).toBe("GET")
+      expect(new Headers(init?.headers).get("Cookie")).toBeNull()
+      const route = Object.keys(routes).find((path) =>
+        String(input).endsWith(path),
+      )
+      const [status, body] = route ? routes[route] : [500, {}]
+      return new Response(JSON.stringify(body), {
+        status,
+        headers: { "Content-Type": "application/json" },
+      })
+    })
+    return calls
+  }
+
+  it("renders a public storefront host with its domain and theme, keyed by host", async () => {
+    api({
+      "/api/domain/medrunner.sc-market.space": [200, domain()],
+      "/api/contractors/MEDRUNNER/theme": [200, THEME],
+    })
+    answer.next = async () => page()
+    const response = await onRequest(
+      visitor(
+        `${HOST}/contractor/MEDRUNNER`,
+        { Cookie: "scmarket.sid=secret; theme=light" },
+        { ...ENV, SSR_VARIANTS: "host,theme" },
+      ),
+    )
+    await Promise.all(pending)
+    expect(response.headers.get("X-SCM-SSR")).toBe("miss")
+    expect(answer.lastOptions?.requestContext.whiteLabel).toMatchObject({
+      hostname: "medrunner.sc-market.space",
+      domain: { spectrum_id: "MEDRUNNER", name: "Medrunner" },
+      theme: THEME.data,
+    })
+    expect(pageKeys()).toEqual([
+      expect.stringMatching(
+        /\/contractor\/MEDRUNNER~host=medrunner\.sc-market\.space~theme=light$/,
+      ),
+    ])
+  })
+
+  it("renders with the site theme when the org has none", async () => {
+    api({
+      "/api/domain/medrunner.sc-market.space": [200, domain()],
+      "/api/contractors/MEDRUNNER/theme": [404, {}],
+    })
+    answer.next = async () => page()
+    await onRequest(visitor(`${HOST}/contractor/MEDRUNNER`, {}, ENV))
+    expect(answer.lastOptions?.requestContext.whiteLabel).toMatchObject({
+      theme: null,
+    })
+  })
+
+  it.each([
+    [
+      "an unknown host",
+      { "/api/domain/medrunner.sc-market.space": [404, {}] },
+      "white-label: unknown host",
+    ],
+    [
+      "a members-only host",
+      {
+        "/api/domain/medrunner.sc-market.space": [
+          200,
+          domain({ require_membership: true }),
+        ],
+      },
+      "white-label: members only",
+    ],
+    [
+      "an internal workspace",
+      {
+        "/api/domain/medrunner.sc-market.space": [
+          200,
+          domain({ focus_mode: "internal" }),
+        ],
+      },
+      "white-label: members only",
+    ],
+    [
+      "a failing domain lookup",
+      { "/api/domain/medrunner.sc-market.space": [503, {}] },
+      "white-label: domain 503",
+    ],
+  ] as const)(
+    "leaves %s to the static shell",
+    async (_name, routes, reason) => {
+      api(routes as unknown as Record<string, [number, unknown]>)
+      answer.lastOptions = null
+      answer.next = async () => page()
+      const response = await onRequest(
+        visitor(`${HOST}/contractor/MEDRUNNER`, {}, ENV),
+      )
+      await Promise.all(pending)
+      expect(response.headers.get("X-SCM-SSR")).toBeNull()
+      expect(response.headers.get(SSR_FALLBACK_HEADER)).toBe(reason)
+      expect(answer.lastOptions).toBeNull()
+      expect(pageKeys()).toEqual([])
+    },
+  )
 })

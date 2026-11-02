@@ -29,12 +29,13 @@ import {
 } from "../server/prerenderData"
 import { createRenderCache, emotionStyleTags } from "../server/emotionStyles"
 import { bridgeHeadTags } from "../server/bridgeHead"
-import { applyTitleTemplate } from "../seo/pageHead"
+import { applyTitleTemplate, whiteLabelHeadTitle } from "../seo/pageHead"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
 import { RequestContextProvider } from "./requestContext"
 import { I18nextProvider } from "react-i18next"
 import i18n, { loadLocale } from "../util/i18n"
 import { setServerRenderLanguage } from "../util/renderLanguage"
+import { setServerRenderWhiteLabel } from "../util/renderHost"
 import type { SsrRequest } from "./context"
 import {
   SSR_FAILURE_HEADER,
@@ -151,6 +152,7 @@ async function renderPage(
   variant: Variant,
 ): Promise<Response> {
   setServerRenderLanguage(variant.lng)
+  setServerRenderWhiteLabel(ssr.requestContext.whiteLabel !== null)
   try {
     return await renderPageNow(
       request,
@@ -162,6 +164,7 @@ async function renderPage(
     )
   } finally {
     setServerRenderLanguage(null)
+    setServerRenderWhiteLabel(false)
   }
 }
 
@@ -209,11 +212,18 @@ async function renderPageNow(
   const stylesheets = Object.values(routerContext.manifest.routes).flatMap(
     (route) => route?.css ?? [],
   )
-  const pageHeadTags =
+  const headTags =
     bridge.kind === "page"
       ? bridge.tags
       : renderSSRHead(head as unknown as Parameters<typeof renderSSRHead>[0])
           .headTags
+  const { whiteLabel } = ssr.requestContext
+  // On the org's white-label host: "<Org> — <page>", as the browser's title
+  // template makes it (entry.client.tsx). The canonical, og:url and JSON-LD
+  // stay on sc-market.space (the bridge's builders): one indexed URL per page.
+  const pageHeadTags = whiteLabel
+    ? whiteLabelHeadTitle(headTags, whiteLabel.domain.name)
+    : headTags
 
   if (ssr.api.unprefetched.length > 0) {
     console.log(
@@ -230,14 +240,19 @@ async function renderPageNow(
     styleTags: emotionStyleTags(cache, appHtml),
     pageHeadTags,
     variant:
-      variant.lng !== "en" || variant.theme === "light"
-        ? { lng: variant.lng, theme: variant.theme }
+      variant.lng !== "en" || variant.theme === "light" || whiteLabel
+        ? {
+            lng: variant.lng,
+            theme: variant.theme,
+            host: whiteLabel?.hostname,
+          }
         : undefined,
     data: {
       elementId: PRERENDERED_DATA_ELEMENT_ID,
       value: {
         api: fulfilledApiState(ssr.store.getState()),
         contentBodies: [],
+        ...(whiteLabel ? { whiteLabel } : {}),
       } satisfies PrerenderedData,
     },
   })

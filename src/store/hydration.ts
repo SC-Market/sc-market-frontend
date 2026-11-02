@@ -41,6 +41,13 @@ export interface PrerenderedData {
    * before hydrating, like the page's chunk.
    */
   contentBodies: string[]
+  /**
+   * A white-label page rendered by the SSR Function: the org's domain
+   * answer and theme it was rendered with (src/ssr/whiteLabel.ts). The
+   * browser seeds its domain and theme caches with them before the first
+   * render, so it hydrates with the same branding.
+   */
+  whiteLabel?: import("../ssr/protocol").SsrWhiteLabel
 }
 
 /** Read and remove the data script (before hydration). */

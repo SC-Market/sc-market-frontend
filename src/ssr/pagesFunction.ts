@@ -12,9 +12,10 @@
  * prerendered hubs, assets or other static files).
  *
  * Every render is anonymous: the visitor's cookies and headers are never
- * forwarded (src/ssr/apiFetch.ts); the theme cookie is only read to pick
- * the page variant (requestContext.ts), and today every visitor gets the
- * same default variant.
+ * forwarded (src/ssr/apiFetch.ts). The theme and language cookies and
+ * Accept-Language are only read to pick the page variant (protocol.ts
+ * requestContextFrom), among the variants SSR_VARIANTS switches on; each
+ * variant has its own cache entry (variantKey).
  */
 import { createRequestHandler, type ServerBuild } from "react-router"
 import { onRequest as bridge } from "../bridge/pagesFunction"
@@ -25,12 +26,16 @@ import { isMainSiteHostname } from "../util/mainSiteHost"
 import { hasPageQuery } from "../document/pageQuery"
 import { createApiFetch, type ApiFetch } from "./apiFetch"
 import {
+  ALL_SSR_VARIANTS,
   requestContextFrom,
   SSR_FAILURE_HEADER,
   SSR_OUTCOME_HEADER,
   SSR_PARTIAL_HEADER,
   variantKey,
+  type RequestContextValue,
   type SsrEntryModule,
+  type SsrVariant,
+  type SsrWhiteLabel,
 } from "./protocol"
 import { SSR_BUILD_VERSION } from "./buildVersion"
 
@@ -47,6 +52,15 @@ export interface SsrEnv extends BridgeEnv {
    * per-prefix rollback without a code change. Unset: all of them.
    */
   SSR_KINDS?: string
+  /**
+   * Comma-separated page variants to render besides the default (main
+   * site, dark, English): `theme` (light), `locale` (the visitor's
+   * language), `host` (orgs' white-label domains); "none" for none. Unset:
+   * all of them on preview deployments and localhost, none in production
+   * (see ssrVariants). A visitor whose variant is off gets the default
+   * HTML, which the browser renders from scratch instead of hydrating.
+   */
+  SSR_VARIANTS?: string
 }
 
 interface PagesContext {
@@ -201,6 +215,29 @@ export function kindEnabled(env: SsrEnv, kind: BridgePageKind): boolean {
     .includes(kind)
 }
 
+/** The page variants this request may get (env SSR_VARIANTS); pure (tested). */
+export function ssrVariants(env: SsrEnv, hostname: string): Set<SsrVariant> {
+  const list = env.SSR_VARIANTS?.trim().toLowerCase()
+  if (list === undefined || list === "") {
+    // Unset: only where nobody depends on it, like SSR_ENABLED.
+    const preview =
+      hostname === "localhost" ||
+      hostname.endsWith(".localhost") ||
+      hostname.endsWith(".sc-market-frontend.pages.dev")
+    return new Set(preview ? ALL_SSR_VARIANTS : [])
+  }
+  const named = list.split(",").map((v) => v.trim())
+  return new Set(ALL_SSR_VARIANTS.filter((variant) => named.includes(variant)))
+}
+
+/** A hostname we may look up as a white-label domain (no ports, IPs, junk). */
+const HOSTNAME =
+  /^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/
+
+export function isWhiteLabelCandidate(hostname: string): boolean {
+  return !isMainSiteHostname(hostname) && HOSTNAME.test(hostname)
+}
+
 export type SsrDecision =
   | { render: true; kind: BridgePageKind }
   | { render: false; reason: string }
@@ -228,9 +265,16 @@ export function ssrDecision(request: Request, env: SsrEnv): SsrDecision {
   if (!kindEnabled(env, match.route.kind)) {
     return { render: false, reason: "kind off" }
   }
-  // White-label domains: their own shell (the bridge passes them through).
+  // White-label domains: rendered only with the `host` variant on (the
+  // domain itself is checked against the API in planFor); otherwise their
+  // own shell (the bridge passes them through).
   if (!isMainSiteHostname(url.hostname)) {
-    return { render: false, reason: "white-label" }
+    if (
+      !ssrVariants(env, url.hostname).has("host") ||
+      !isWhiteLabelCandidate(url.hostname.toLowerCase())
+    ) {
+      return { render: false, reason: "white-label" }
+    }
   }
   // A filtered URL renders from scratch in the browser anyway, and the
   // bridge marks it noindex (src/seo/queryIndexing.ts).
@@ -271,12 +315,19 @@ async function loadHandler() {
   return handler!
 }
 
-function cacheKey(url: URL, variant: string, gameVersion: string): string {
+export function cacheKey(
+  url: URL,
+  variant: string,
+  gameVersion: string,
+): string {
   // One anonymous HTML per path and rendered variant (variantKey: empty for
   // the default, so most visitors and crawlers share one entry), plus the
   // LIVE game version for game-data pages; the deploy's asset version keeps
   // a new deploy from serving HTML that references the previous chunks.
-  return `https://ssr-cache.sc-market.internal/${SSR_BUILD_VERSION}${url.pathname.toLowerCase()}${variant}${gameVersion}`
+  // The path as requested, case included: "/user/Bob" and "/user/bob" are
+  // separate renders (each ships its own query args, and one may be a 404),
+  // never one spelling's HTML served for the other.
+  return `https://ssr-cache.sc-market.internal/${SSR_BUILD_VERSION}${url.pathname}${variant}${gameVersion}`
 }
 
 /** The LIVE game version as a cache-key part ("" when unknown). */
@@ -299,13 +350,73 @@ async function liveGameVersionKey(api: ApiFetch, env: SsrEnv): Promise<string> {
   }
 }
 
-/** One request's cache plan: its key, policy and API fetch. */
+/** One request's cache plan: its key, policy, variant and API fetch. */
 interface Plan {
   key: string
   /** False when the game version couldn't be read: render, don't cache. */
   cacheable: boolean
   policy: CachePolicy
   api: ApiFetch
+  /** The variant rendered (and keyed) for this request. */
+  requestContext: RequestContextValue
+}
+
+/** Why a white-label host isn't rendered (planFor falls back to the bridge). */
+class WhiteLabelUnavailable extends Error {}
+
+/**
+ * The org whose white-label domain `hostname` is, as the browser resolves
+ * it (HookProvider: GET /api/domain/:hostname, then the org's theme). Only
+ * public storefronts: a members-only or internal domain shows a sign-in
+ * gate, which is the browser's to render. Anonymous GETs of public
+ * endpoints only (apiFetch), so nothing about the visitor is involved.
+ */
+async function resolveWhiteLabel(
+  hostname: string,
+  api: ApiFetch,
+  env: SsrEnv,
+): Promise<SsrWhiteLabel> {
+  const base = env.VITE_BACKEND_URL?.replace(/\/+$/, "")
+  if (!base) throw new WhiteLabelUnavailable("white-label: no backend")
+  const domain = await api.fetch(
+    `${base}/api/domain/${encodeURIComponent(hostname)}`,
+  )
+  if (domain.status === 404) {
+    throw new WhiteLabelUnavailable("white-label: unknown host")
+  }
+  if (!domain.ok) {
+    throw new WhiteLabelUnavailable(`white-label: domain ${domain.status}`)
+  }
+  const data = (
+    (await domain.json()) as { data?: Partial<SsrWhiteLabel["domain"]> }
+  ).data
+  if (!data?.spectrum_id || !data.contractor_id) {
+    throw new WhiteLabelUnavailable("white-label: unknown host")
+  }
+  if ((data.focus_mode ?? "public") !== "public" || data.require_membership) {
+    throw new WhiteLabelUnavailable("white-label: members only")
+  }
+  const theme = await api.fetch(
+    `${base}/api/contractors/${encodeURIComponent(data.spectrum_id)}/theme`,
+  )
+  if (!theme.ok && theme.status !== 404) {
+    throw new WhiteLabelUnavailable(`white-label: theme ${theme.status}`)
+  }
+  return {
+    hostname,
+    domain: {
+      spectrum_id: data.spectrum_id,
+      contractor_id: data.contractor_id,
+      name: data.name || data.spectrum_id,
+      focus_mode: "public",
+      homepage_path: data.homepage_path ?? null,
+      require_membership: false,
+    },
+    theme: theme.ok
+      ? ((await theme.json()) as { data: NonNullable<SsrWhiteLabel["theme"]> })
+          .data
+      : null,
+  }
 }
 
 function newApiFetch(context: PagesContext): ApiFetch {
@@ -324,13 +435,25 @@ async function planFor(
   kind: BridgePageKind,
 ): Promise<Plan> {
   const api = newApiFetch(context)
-  const variant = variantKey(requestContextFrom(context.request))
+  const requestContext = requestContextFrom(context.request, {
+    enabled: ssrVariants(context.env, url.hostname),
+    crawler: isCrawler(context.request.headers.get("User-Agent")),
+  })
+  if (!isMainSiteHostname(url.hostname)) {
+    requestContext.whiteLabel = await resolveWhiteLabel(
+      requestContext.host,
+      api,
+      context.env,
+    )
+  }
+  const variant = variantKey(requestContext)
   if (!GAME_DATA_KIND_SET.has(kind)) {
     return {
       key: cacheKey(url, variant, ""),
       cacheable: true,
       policy: cachePolicy(kind),
       api,
+      requestContext,
     }
   }
   const version = await liveGameVersionKey(api, context.env)
@@ -339,6 +462,7 @@ async function planFor(
     cacheable: version !== "",
     policy: cachePolicy(kind),
     api,
+    requestContext,
   }
 }
 
@@ -353,12 +477,12 @@ type Rendered =
 async function render(
   context: PagesContext,
   url: URL,
-  api: ApiFetch,
+  plan: Plan,
 ): Promise<Rendered> {
   const requestHandler = await loadHandler()
   const loadContext = entryModule!.createSsrLoadContext({
-    requestContext: requestContextFrom(context.request),
-    api,
+    requestContext: plan.requestContext,
+    api: plan.api,
     assets: context.env.ASSETS,
     env: {
       VITE_BACKEND_URL: context.env.VITE_BACKEND_URL,
@@ -431,6 +555,9 @@ function pageResponse(
   )
   headers.set("X-SCM-SSR", cacheState)
   if (partial) headers.set("X-SCM-SSR-Partial", partial)
+  // The HTML depends on the theme and language cookies and Accept-Language
+  // (the visitor's variant; crawlers always get the default one).
+  headers.set("Vary", "Accept-Language, Cookie")
   return new Response(request.method === "HEAD" ? null : html, {
     status: 200,
     headers,
@@ -468,7 +595,7 @@ function renderAndStore(
   const running = inFlight.get(plan.key)
   if (running) return running
   const job = (async (): Promise<Rendered> => {
-    const rendered = await render(context, url, plan.api)
+    const rendered = await render(context, url, plan)
     if (rendered.kind === "page" && rendered.partial) {
       console.warn(
         `ssr partial ${url.pathname}: ${rendered.partial} (not cached)`,
@@ -511,8 +638,17 @@ export async function onRequest(context: PagesContext): Promise<Response> {
   }
 
   const url = new URL(context.request.url)
+  let plan: Plan
   try {
-    const plan = await planFor(context, url, decision.kind)
+    plan = await planFor(context, url, decision.kind)
+  } catch (error) {
+    if (error instanceof WhiteLabelUnavailable) {
+      return fallback(context, error.message)
+    }
+    console.error(`ssr fail-open ${url.pathname}:`, error)
+    return fallback(context, "error")
+  }
+  try {
     // A cache hit never loads the app (no render, ~1 ms CPU).
     const cached = plan.cacheable
       ? await caches.default.match(plan.key)

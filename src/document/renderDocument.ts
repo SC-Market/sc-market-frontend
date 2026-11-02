@@ -28,10 +28,11 @@ export interface DocumentParts {
   /**
    * A server-rendered page's variant (src/ssr/render.tsx): its language and
    * theme, marked on <html> so the browser knows what it may hydrate
-   * (entry.client.tsx, document.html's pre-theme script). Omitted: the
-   * default (English, dark).
+   * (entry.client.tsx, document.html's pre-theme script), and the
+   * white-label host it was rendered for (`data-ssr-host`). Omitted: the
+   * default (main site, English, dark).
    */
-  variant?: { lng: string; theme: "light" | "system" }
+  variant?: { lng: string; theme: "light" | "system"; host?: string }
 }
 
 /** JSON that can't close its <script> (or start a comment) early. */
@@ -80,14 +81,14 @@ export function renderDocument(template: string, parts: DocumentParts): string {
     )
   if (parts.pageHeadTags) html = applyPageHead(html, parts.pageHeadTags)
   if (parts.variant) {
-    const { lng, theme } = parts.variant
+    const { lng, theme, host } = parts.variant
     if (!html.includes('<html lang="en">')) {
       throw new Error('document.html must start with <html lang="en">')
     }
     html = html.replace(
       '<html lang="en">',
       () =>
-        `<html lang="${escapeAttribute(lng)}" data-ssr-lng="${escapeAttribute(lng)}" data-ssr-theme="${theme === "light" ? "light" : "dark"}">`,
+        `<html lang="${escapeAttribute(lng)}" data-ssr-lng="${escapeAttribute(lng)}" data-ssr-theme="${theme === "light" ? "light" : "dark"}"${host ? ` data-ssr-host="${escapeAttribute(host)}"` : ""}>`,
     )
   }
   return addCfasyncFalse(html)

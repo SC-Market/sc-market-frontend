@@ -98,6 +98,16 @@
             "data-pre-theme",
             light ? "light" : "dark",
           )
+          // A theme that follows the OS: remember the OS scheme in a cookie,
+          // so the SSR Function renders the next page in it
+          // (src/ssr/protocol.ts themeFromCookies).
+          if (v === "system") {
+            var scheme = light ? "light" : "dark"
+            if (!new RegExp("(?:^|; )scm_scheme=" + scheme + "(?:;|$)").test(document.cookie)) {
+              document.cookie =
+                "scm_scheme=" + scheme + "; path=/; max-age=31536000; SameSite=Lax"
+            }
+          }
           // The cookie bar is in a prerendered page's HTML; hide it if the
           // visitor already chose (src/components/alert/CookieConsent.tsx).
           if (/(?:^|; )cookie_consent=/.test(document.cookie)) {
@@ -118,6 +128,11 @@
             h === "www.sc-market.space" ||
             /\.localhost$/.test(h) ||
             /\.sc-market-frontend\.pages\.dev$/.test(h)
+          // ...or the org's white-label host the SSR Function rendered this
+          // page for (data-ssr-host; entry.client checks its domain answer).
+          if (document.documentElement.getAttribute("data-ssr-host") === h.toLowerCase()) {
+            mainSite = true
+          }
           var c = document.cookie.match(/(?:^|; )i18next=([^;]*)/)
           var lng =
             new URLSearchParams(location.search).get("lng") ||

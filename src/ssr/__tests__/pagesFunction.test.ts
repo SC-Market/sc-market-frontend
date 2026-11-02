@@ -1,8 +1,10 @@
 // @vitest-environment node
 import { describe, it, expect, vi } from "vitest"
 import {
+  cacheKey,
   cacheUse,
   isCrawler,
+  isWhiteLabelCandidate,
   kindEnabled,
   onRequest,
   redirectResponse,
@@ -11,6 +13,7 @@ import {
   SSR_DEADLINE,
   SSR_FALLBACK_HEADER,
   SSR_OFF_HEADER,
+  ssrVariants,
   withDeadline,
 } from "../pagesFunction"
 
@@ -212,5 +215,79 @@ describe("withDeadline", () => {
     await expect(withDeadline(new Promise(() => {}), 5)).resolves.toBe(
       SSR_DEADLINE,
     )
+  })
+})
+
+describe("ssrVariants (SSR_VARIANTS)", () => {
+  it("is every variant on previews and localhost, none in production, when unset", () => {
+    expect([
+      ...ssrVariants({} as never, "ssr-phase4.sc-market-frontend.pages.dev"),
+    ]).toEqual(["theme", "locale", "host"])
+    expect([...ssrVariants({} as never, "localhost")]).toHaveLength(3)
+    expect([...ssrVariants({} as never, "sc-market.space")]).toEqual([])
+    expect([...ssrVariants({} as never, "medrunner.sc-market.space")]).toEqual(
+      [],
+    )
+  })
+  it("is exactly the listed variants when set", () => {
+    const env = (SSR_VARIANTS: string) => ({ SSR_VARIANTS }) as never
+    expect([...ssrVariants(env("theme"), "sc-market.space")]).toEqual(["theme"])
+    expect([
+      ...ssrVariants(env(" Locale , theme,bogus"), "sc-market.space"),
+    ]).toEqual(["theme", "locale"])
+    expect([
+      ...ssrVariants(env("none"), "ssr-phase4.sc-market-frontend.pages.dev"),
+    ]).toEqual([])
+  })
+})
+
+describe("white-label hosts", () => {
+  it("only looks up plausible hostnames", () => {
+    expect(isWhiteLabelCandidate("medrunner.sc-market.space")).toBe(true)
+    expect(isWhiteLabelCandidate("shop.example.co.uk")).toBe(true)
+    expect(isWhiteLabelCandidate("sc-market.space")).toBe(false)
+    expect(isWhiteLabelCandidate("www.sc-market.space")).toBe(false)
+    expect(isWhiteLabelCandidate("localhost")).toBe(false)
+    expect(isWhiteLabelCandidate("127.0.0.1")).toBe(false)
+    expect(isWhiteLabelCandidate("intranet")).toBe(false)
+    expect(isWhiteLabelCandidate("a_b.example.com")).toBe(false)
+  })
+  it("renders a white-label host's entity pages only with the host variant on", () => {
+    const on = { SSR_ENABLED: "true", SSR_VARIANTS: "host" } as never
+    const off = { SSR_ENABLED: "true", SSR_VARIANTS: "theme,locale" } as never
+    const url = "https://medrunner.sc-market.space/contractor/MEDRUNNER"
+    expect(ssrDecision(req(url), on)).toEqual({ render: true, kind: "org" })
+    expect(ssrDecision(req(url), off)).toEqual({
+      render: false,
+      reason: "white-label",
+    })
+    // Hubs and other pages stay the bridge's (static) on every host.
+    expect(
+      ssrDecision(req("https://medrunner.sc-market.space/market"), on).render,
+    ).toBe(false)
+    // The main site is unaffected by the host variant.
+    expect(ssrDecision(req(`${PROD}/contractor/MEDRUNNER`), off).render).toBe(
+      true,
+    )
+  })
+})
+
+describe("cacheKey", () => {
+  it("keeps the path's case: each spelling is its own render", () => {
+    const a = cacheKey(new URL(`${PROD}/user/Bob`), "", "")
+    const b = cacheKey(new URL(`${PROD}/user/bob`), "", "")
+    expect(a).not.toBe(b)
+    expect(a).toContain("/user/Bob")
+  })
+  it("separates variants and game versions", () => {
+    const url = new URL(`${PROD}/wiki/items/x`)
+    const keys = new Set([
+      cacheKey(url, "", ""),
+      cacheKey(url, "~theme=light", ""),
+      cacheKey(url, "~lng=de", ""),
+      cacheKey(url, "~host=a.sc-market.space", ""),
+      cacheKey(url, "", "@v1:t"),
+    ])
+    expect(keys.size).toBe(5)
   })
 })

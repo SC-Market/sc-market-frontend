@@ -6,10 +6,15 @@
  */
 import { DEFAULT_FRONTEND_URL } from "../../seo/constants"
 import { isMainSiteHostname } from "../../util/mainSiteHost"
+import { isServerRenderWhiteLabel } from "../../util/renderHost"
 
-/** True on sc-market.space (and local dev); false on org custom domains. */
+/**
+ * True on sc-market.space (and local dev); false on org custom domains,
+ * including a server render for one (util/renderHost.ts).
+ */
 export function isOfficialSite(): boolean {
-  return typeof window === "undefined" || isMainSiteHostname(window.location.hostname)
+  if (typeof window === "undefined") return !isServerRenderWhiteLabel()
+  return isMainSiteHostname(window.location.hostname)
 }
 
 /** The same help path on the official site, e.g. https://sc-market.space/guides. */

@@ -69,6 +69,20 @@ export async function preloadLocales(locales: string[]): Promise<void> {
   await Promise.all(locales.map((locale) => loadLocale(locale)))
 }
 
+/** MUI's own strings (pagination, breadcrumbs, ...) for a language. */
+export function muiCoreLocale(languageCode: string): typeof coreEnUS {
+  const coreByLocale: Record<string, typeof coreEnUS> = {
+    de: coreDeDE,
+    es: coreEsES,
+    fr: coreFrFR,
+    ja: coreJaJP,
+    uk: coreUkUA,
+    "zh-CN": coreZhCN,
+    "zh-TW": coreZhTW,
+  }
+  return coreByLocale[toSupportedLocale(languageCode)] ?? coreEnUS
+}
+
 export async function getMuiLocales(languageCode: string) {
   const pickers = await import("@mui/x-date-pickers/locales").then((m) => {
     switch (languageCode) {
@@ -91,18 +105,7 @@ export async function getMuiLocales(languageCode: string) {
     }
   })
 
-  const coreByLocale: Record<string, typeof coreEnUS> = {
-    de: coreDeDE,
-    es: coreEsES,
-    fr: coreFrFR,
-    ja: coreJaJP,
-    uk: coreUkUA,
-    "zh-CN": coreZhCN,
-    "zh-TW": coreZhTW,
-  }
-  const core = coreByLocale[languageCode] ?? coreEnUS
-
-  return { core, pickers }
+  return { core: muiCoreLocale(languageCode), pickers }
 }
 
 export async function getMuiDataGridLocale(languageCode: string) {
@@ -142,7 +145,12 @@ i18n
       cookieOptions: { path: "/", sameSite: "lax" },
       cookieMinutes: 60 * 24 * 365,
     },
-    supportedLngs: ["en", "de", "es", "fr", "ja", "uk", "zh-CN", "zh-TW"],
+    // "zh" too: with nonExplicitSupportedLngs i18next checks a regional tag
+    // by its language part, so without it "zh-TW" and "zh-CN" (a saved
+    // choice, or the browser's language) were rejected and the visitor got
+    // their next language instead (usually English) on every load. A bare
+    // or other "zh-*" tag becomes a shipped one in initialLocaleReady.
+    supportedLngs: ["en", "de", "es", "fr", "ja", "uk", "zh", "zh-CN", "zh-TW"],
     fallbackLng: "en",
     nonExplicitSupportedLngs: true,
     interpolation: {

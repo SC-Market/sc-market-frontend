@@ -52,3 +52,45 @@ describe("listingLoader", () => {
     },
   )
 })
+
+describe("white-label frame data", () => {
+  function request(whiteLabel: unknown) {
+    const urls: string[] = []
+    const fetchFn = vi.fn(async (input: RequestInfo | URL) => {
+      urls.push(input instanceof Request ? input.url : String(input))
+      return new Response(JSON.stringify({ data: {} }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      })
+    })
+    const ssr = {
+      store: makeStore({
+        networkEnv: createServerNetworkEnv({ fetchFn, retry: false }),
+      }),
+      notFound: false,
+      requestContext: { whiteLabel },
+    } as unknown as SsrRequest
+    return { ssr, urls }
+  }
+
+  it("loads the org and its sidebar settings on its white-label host", async () => {
+    const { ssr, urls } = request({
+      hostname: "medrunner.sc-market.space",
+      domain: { spectrum_id: "MEDRUNNER" },
+      theme: null,
+    })
+    await run(ssr)
+    expect(
+      urls.some((u) => u.includes("/contractors/MEDRUNNER/whitelabel/sidebar")),
+    ).toBe(true)
+    expect(urls.some((u) => /\/contractors\/MEDRUNNER(\?|$)/.test(u))).toBe(
+      true,
+    )
+  })
+
+  it("loads neither on the main site", async () => {
+    const { ssr, urls } = request(null)
+    await run(ssr)
+    expect(urls.some((u) => u.includes("whitelabel"))).toBe(false)
+  })
+})

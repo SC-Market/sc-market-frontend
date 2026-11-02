@@ -31,6 +31,7 @@ import { prefetchOrgPage } from "../features/contractor/prefetch"
 import { prefetchUserProfilePage } from "../features/profile/prefetch"
 import { marketV2Api } from "../store/api/v2/market"
 import { contractorsApi } from "../features/contractor/api/contractorApi"
+import { contractorsApi as whiteLabelApi } from "../store/api/contractors"
 import { userApi } from "../features/profile/api/profileApi"
 import {
   prefetchWikiCommodityPage,
@@ -77,9 +78,39 @@ function ssrLoader(prefetch: DataPrefetchFn, primary: Primary) {
       ssr.failed = `primary ${String(errorStatus(result) ?? "error")}`
       return null
     }
-    await prefetch(dispatch, params)
+    const whiteLabel = ssr.requestContext.whiteLabel
+    await Promise.all([
+      prefetch(dispatch, params),
+      whiteLabel
+        ? prefetchWhiteLabelChrome(dispatch, whiteLabel.domain.spectrum_id)
+        : undefined,
+    ])
     return null
   }
+}
+
+/**
+ * On an org's white-label host (the SSR `host` variant): what the app's
+ * frame reads for the org on every page, the org itself (the sidebar's
+ * brand, Page's favicon) and its sidebar settings (useWhiteLabelSidebar),
+ * so the server render and the hydrating render show the same frame.
+ */
+export async function prefetchWhiteLabelChrome(
+  dispatch: PrefetchDispatch,
+  spectrumId: string,
+): Promise<void> {
+  await Promise.all([
+    settleQuery(
+      dispatch(
+        contractorsApi.endpoints.getContractorBySpectrumID.initiate(spectrumId),
+      ),
+    ),
+    settleQuery(
+      dispatch(
+        whiteLabelApi.endpoints.getWhitelabelSidebar.initiate(spectrumId),
+      ),
+    ),
+  ])
 }
 
 export const listingLoader = ssrLoader(prefetchListingPage, {
