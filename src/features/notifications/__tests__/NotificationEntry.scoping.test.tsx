@@ -12,6 +12,8 @@ vi.mock("react-i18next", () => ({
       (o.defaultValue ?? _k).replace(/\{\{(\w+)\}\}/g, (_m, n) => o[n] ?? ""),
   }),
   Trans: () => null,
+  // src/util/i18n (imported by AlertHook) registers this plugin at load.
+  initReactI18next: { type: "3rdParty", init: () => {} },
 }))
 
 vi.mock("../components/NotificationBase", () => ({
