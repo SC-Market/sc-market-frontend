@@ -157,8 +157,9 @@ export function OrderAnalyticsCharts({ analytics }: OrderAnalyticsProps) {
 }
 
 export function TopShopsAnalytics({ analytics }: OrderAnalyticsProps) {
+  const { t } = useTranslation()
   return (
-    <Section title={"Top Shops"} xs={12} lg={3}>
+    <Section title={t("ordersUi.analytics.topShops")} xs={12} lg={3}>
       <ol>
         {(analytics.top_shops || []).map((s) => (
           <li key={s.slug}>
@@ -178,8 +179,9 @@ export function TopShopsAnalytics({ analytics }: OrderAnalyticsProps) {
 }
 
 export function TopUsersAnalytics({ analytics }: OrderAnalyticsProps) {
+  const { t } = useTranslation()
   return (
-    <Section title={"Top Users"} xs={12} lg={3}>
+    <Section title={t("ordersUi.analytics.topUsers")} xs={12} lg={3}>
       <List sx={{ maxHeight: 400, overflowY: "scroll" }}>
         {analytics.top_users.map((c, i) => (
           <ListItem key={c.username}>
@@ -201,21 +203,24 @@ export function TopUsersAnalytics({ analytics }: OrderAnalyticsProps) {
 
 export function OrderSummary({ analytics }: OrderAnalyticsProps) {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
   return (
-    <Section title={"Order Summary"} xs={12} lg={6}>
+    <Section title={t("orderSummary.title")} xs={12} lg={6}>
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={6}>
-          <strong>Total Orders:</strong> {analytics.summary.total_orders}
+          <strong>{t("ordersUi.analytics.totalOrdersLabel")}</strong>{" "}
+          {analytics.summary.total_orders}
         </Grid>
         <Grid item xs={6}>
-          <strong>Active Orders:</strong> {analytics.summary.active_orders}
+          <strong>{t("ordersUi.analytics.activeOrdersLabel")}</strong>{" "}
+          {analytics.summary.active_orders}
         </Grid>
         <Grid item xs={6}>
-          <strong>Completed Orders:</strong>{" "}
+          <strong>{t("ordersUi.analytics.completedOrdersLabel")}</strong>{" "}
           {analytics.summary.completed_orders}
         </Grid>
         <Grid item xs={6}>
-          <strong>Total Value:</strong>{" "}
+          <strong>{t("ordersUi.analytics.totalValueLabel")}</strong>{" "}
           {analytics.summary.total_value.toLocaleString()} aUEC
         </Grid>
       </Grid>

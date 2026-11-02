@@ -355,11 +355,13 @@ export function OrderPageSkeleton() {
   const { t } = useTranslation()
   const { pathname } = useLocation()
   const id = pathname.split("/")[2] ?? ""
-  const fallbackTitle = `Order ${id.substring(0, 8).toUpperCase()}`
+  const fallbackTitle = t("orders.orderShort", {
+    id: id.substring(0, 8).toUpperCase(),
+  })
   return (
     <DetailPageLayout
       noFooter
-      title="Order"
+      title={t("orders.orderLabel")}
       breadcrumbs={[
         { label: t("dashboard.title", "Dashboard"), href: PATHS.dashboard },
         { label: fallbackTitle },

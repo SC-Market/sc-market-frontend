@@ -30,6 +30,16 @@ import { Section } from "../../components/paper/Section"
 import { WHITE_LABEL_TAB_ICONS as ICON_MAP, DEFAULT_TAB_ICON as DEFAULT_ICON } from "../../features/contractor/components/whiteLabelIcons"
 import type { SidebarConfigItem } from "../../store/api/contractors"
 import { useWhiteLabelSettings, TOGGLEABLE_TABS, isExternal, type CustomTab } from "../../features/contractor/hooks/useWhiteLabelSettings"
+import { useTranslation } from "react-i18next"
+
+/** Catalog keys for the standard sidebar tab labels, by tab key. */
+const TAB_LABEL_KEYS: Record<string, string> = {
+  market: "sidebar.player_market",
+  services: "sidebar.services_short",
+  contracts: "sidebar.contracts_short",
+  recruiting: "sidebar.recruiting",
+  contractors: "sidebar.organizations.title",
+}
 
 
 function IconPicker({
@@ -40,10 +50,11 @@ function IconPicker({
   onChange: (icon: string) => void
 }) {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const { t } = useTranslation()
 
   return (
     <>
-      <Tooltip title="Choose icon">
+      <Tooltip title={t("orgAdminUi.whiteLabel.chooseIcon")}>
         <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} size="small">
           {ICON_MAP[value] || ICON_MAP[DEFAULT_ICON]}
         </IconButton>
@@ -98,16 +109,17 @@ export function WhiteLabelSettings() {
     sidebarSaving, handleSaveSidebar,
     snack, setSnack,
   } = useWhiteLabelSettings()
+  const { t } = useTranslation()
 
   return (
     <Grid container spacing={2}>
-      <Section title="Site Settings" xs={12}>
+      <Section title={t("orgAdminUi.whiteLabel.siteSettings")} xs={12}>
         <Grid item xs={12}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            Controls who can access your white-label site.
+            {t("orgAdminUi.whiteLabel.siteAccessHint")}
           </Typography>
           <Select
-            inputProps={{ "aria-label": "Site access" }}
+            inputProps={{ "aria-label": t("orgAdminUi.whiteLabel.siteAccess") }}
             size="small"
             value={focusMode}
             onChange={(e) =>
@@ -115,8 +127,12 @@ export function WhiteLabelSettings() {
             }
             fullWidth
           >
-            <MenuItem value="public">Public — anyone can browse</MenuItem>
-            <MenuItem value="internal">Internal — login required</MenuItem>
+            <MenuItem value="public">
+              {t("orgAdminUi.whiteLabel.accessPublic")}
+            </MenuItem>
+            <MenuItem value="internal">
+              {t("orgAdminUi.whiteLabel.accessInternal")}
+            </MenuItem>
           </Select>
         </Grid>
         {/* Only an Internal (login required) site can also require membership. */}
@@ -129,19 +145,19 @@ export function WhiteLabelSettings() {
                   onChange={(e) => setRequireMembership(e.target.checked)}
                 />
               }
-              label="Require org membership to access"
+              label={t("orgAdminUi.whiteLabel.requireMembership")}
             />
           </Grid>
         )}
         <Grid item xs={12}>
           <TextField
-            label="Homepage path"
+            label={t("orgAdminUi.whiteLabel.homepagePath")}
             placeholder="/market"
             size="small"
             fullWidth
             value={homepagePath}
             onChange={(e) => setHomepagePath(e.target.value)}
-            helperText="Custom landing page path. Leave blank for default."
+            helperText={t("orgAdminUi.whiteLabel.homepagePathHelper")}
           />
         </Grid>
         <Grid item xs={12}>
@@ -150,15 +166,17 @@ export function WhiteLabelSettings() {
             onClick={handleSaveConfig}
             disabled={configSaving}
           >
-            {configSaving ? "Saving…" : "Save Settings"}
+            {configSaving
+              ? t("orgAdminUi.whiteLabel.saving")
+              : t("orgAdminUi.whiteLabel.saveSettings")}
           </Button>
         </Grid>
       </Section>
 
-      <Section title="Sidebar Tabs" xs={12}>
+      <Section title={t("orgAdminUi.whiteLabel.sidebarTabs")} xs={12}>
         <Grid item xs={12}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            Toggle which public-facing tabs appear in the sidebar.
+            {t("orgAdminUi.whiteLabel.sidebarTabsHint")}
           </Typography>
           <List dense disablePadding>
             {TOGGLEABLE_TABS.map((tab) => (
@@ -175,7 +193,9 @@ export function WhiteLabelSettings() {
                 }
               >
                 <ListItemText
-                  primary={tab.label}
+                  primary={
+                    TAB_LABEL_KEYS[tab.key] ? t(TAB_LABEL_KEYS[tab.key]) : tab.label
+                  }
                   sx={{ opacity: disabledTabs.has(tab.key) ? 0.5 : 1 }}
                 />
               </ListItem>
@@ -189,7 +209,7 @@ export function WhiteLabelSettings() {
             color="text.secondary"
             sx={{ mt: 1, mb: 1 }}
           >
-            Custom Tabs
+            {t("orgAdminUi.whiteLabel.customTabs")}
           </Typography>
           {customTabs.length > 0 && (
             <List dense disablePadding>
@@ -197,7 +217,9 @@ export function WhiteLabelSettings() {
                 <ListItem
                   key={i}
                   secondaryAction={
-                    <IconButton aria-label={`Remove tab ${ct.label || i + 1}`} edge="end" onClick={() => removeCustomTab(i)}>
+                    <IconButton aria-label={t("orgAdminUi.whiteLabel.removeTab", {
+                        name: ct.label || i + 1,
+                      })} edge="end" onClick={() => removeCustomTab(i)}>
                       <Delete />
                     </IconButton>
                   }
@@ -221,7 +243,7 @@ export function WhiteLabelSettings() {
                         {isExternal(ct.path) && (
                           <Chip
                             icon={<OpenInNew sx={{ fontSize: 14 }} />}
-                            label="Opens in new tab"
+                            label={t("orgAdminUi.whiteLabel.opensInNewTab")}
                             size="small"
                             variant="outlined"
                           />
@@ -244,23 +266,23 @@ export function WhiteLabelSettings() {
           >
             <IconPicker value={newIcon} onChange={setNewIcon} />
             <TextField
-              label="Label"
+              label={t("orgAdminUi.whiteLabel.tabLabel")}
               size="small"
               value={newLabel}
               onChange={(e) => setNewLabel(e.target.value)}
               sx={{ flex: 1 }}
             />
             <TextField
-              label="Path or URL"
+              label={t("orgAdminUi.whiteLabel.pathOrUrl")}
               size="small"
-              placeholder="/custom-page or https://..."
+              placeholder={t("orgAdminUi.whiteLabel.pathOrUrlPlaceholder")}
               value={newPath}
               onChange={(e) => setNewPath(e.target.value)}
               error={!!newPathError}
               helperText={
                 newPathError ??
                 (newPath && isExternal(newPath)
-                  ? "Will open in a new tab"
+                  ? t("orgAdminUi.whiteLabel.willOpenInNewTab")
                   : undefined)
               }
               sx={{ flex: 2 }}
@@ -272,7 +294,7 @@ export function WhiteLabelSettings() {
               startIcon={<Add />}
               sx={{ whiteSpace: "nowrap", mt: "4px" }}
             >
-              Add
+              {t("orgAdminUi.whiteLabel.add")}
             </Button>
           </Box>
         </Grid>
@@ -283,7 +305,9 @@ export function WhiteLabelSettings() {
             onClick={handleSaveSidebar}
             disabled={sidebarSaving}
           >
-            {sidebarSaving ? "Saving…" : "Save Sidebar"}
+            {sidebarSaving
+              ? t("orgAdminUi.whiteLabel.saving")
+              : t("orgAdminUi.whiteLabel.saveSidebar")}
           </Button>
         </Grid>
       </Section>

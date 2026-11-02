@@ -1970,7 +1970,7 @@
   "orders": {
     "status": {
       "fulfilled": "Completado",
-      "inProgress": "In Progress",
+      "inProgress": "En proceso",
       "cancelled": "Cancelado",
       "notStarted": "Not Started",
       "active": "Activo",
@@ -7328,6 +7328,93 @@
       "reduceOrderHint_one": "Ajusta el pedido al stock disponible ({{count}} unidad)",
       "reduceOrderHint_many": "Ajusta el pedido al stock disponible ({{count}} unidades)",
       "reduceOrderHint_other": "Ajusta el pedido al stock disponible ({{count}} unidades)"
+    }
+  },
+  "orgAdminUi": {
+    "roles": {
+      "saveRole": "Guardar rol {{role}}",
+      "deleteRole": "Eliminar rol {{role}}",
+      "editRole": "Editar rol {{role}}",
+      "permissionForRole": "{{permission}} para {{role}}",
+      "newRole": "nuevo rol"
+    },
+    "webhooksMoved": "Los webhooks ahora se gestionan desde la página de ajustes de tu tienda.",
+    "whiteLabel": {
+      "chooseIcon": "Elegir icono",
+      "siteSettings": "Ajustes del sitio",
+      "siteAccessHint": "Controla quién puede acceder a tu sitio de marca blanca.",
+      "siteAccess": "Acceso al sitio",
+      "accessPublic": "Público: cualquiera puede navegar",
+      "accessInternal": "Interno: requiere iniciar sesión",
+      "requireMembership": "Exigir ser miembro de la organización para acceder",
+      "homepagePath": "Ruta de la página de inicio",
+      "homepagePathHelper": "Ruta personalizada de la página de inicio. Déjala en blanco para usar la predeterminada.",
+      "saving": "Guardando…",
+      "saveSettings": "Guardar ajustes",
+      "sidebarTabs": "Pestañas de la barra lateral",
+      "sidebarTabsHint": "Elige qué pestañas públicas aparecen en la barra lateral.",
+      "customTabs": "Pestañas personalizadas",
+      "removeTab": "Quitar la pestaña {{name}}",
+      "opensInNewTab": "Se abre en una pestaña nueva",
+      "tabLabel": "Etiqueta",
+      "pathOrUrl": "Ruta o URL",
+      "pathOrUrlPlaceholder": "/pagina-personalizada o https://...",
+      "willOpenInNewTab": "Se abrirá en una pestaña nueva",
+      "add": "Añadir",
+      "saveSidebar": "Guardar barra lateral"
+    }
+  },
+  "accountUi": {
+    "webhooksMoved": "Los webhooks ahora se gestionan desde la página de ajustes de tu tienda.",
+    "unknownError": "Se ha producido un error desconocido",
+    "noShopsYet": "Aún no hay tiendas",
+    "profileTabs": "Pestañas del perfil"
+  },
+  "ordersUi": {
+    "limits": {
+      "sizeLabel": "Tamaño:",
+      "valueLabel": "Valor:",
+      "minValue": "Mín. {{amount}} aUEC",
+      "maxValue": "Máx. {{amount}} aUEC",
+      "sizeBelowMin": "El tamaño actual ({{current}}) está por debajo del mínimo ({{min}})",
+      "sizeAboveMax": "El tamaño actual ({{current}}) supera el máximo ({{max}})",
+      "sizeNearLimit": "El tamaño actual ({{current}}) está cerca del límite",
+      "sizeOk": "El tamaño cumple los requisitos",
+      "valueBelowMin": "El valor actual ({{current}}) está por debajo del mínimo ({{min}})",
+      "valueAboveMax": "El valor actual ({{current}}) supera el máximo ({{max}})",
+      "valueNearLimit": "El valor actual ({{current}}) está cerca del límite",
+      "valueOk": "El valor cumple los requisitos",
+      "minItems_one": "Mín. {{amount}} artículo",
+      "minItems_many": "Mín. {{amount}} artículos",
+      "minItems_other": "Mín. {{amount}} artículos",
+      "maxItems_one": "Máx. {{amount}} artículo",
+      "maxItems_many": "Máx. {{amount}} artículos",
+      "maxItems_other": "Máx. {{amount}} artículos"
+    },
+    "analytics": {
+      "topShops": "Tiendas destacadas",
+      "topUsers": "Usuarios destacados",
+      "totalOrdersLabel": "Pedidos totales:",
+      "activeOrdersLabel": "Pedidos activos:",
+      "completedOrdersLabel": "Pedidos completados:",
+      "totalValueLabel": "Valor total:"
+    },
+    "trend": {
+      "noData": "No hay datos de tendencia disponibles",
+      "topContractors": "Contratistas destacados",
+      "topUsersWeekly": "Usuarios destacados (semanal)",
+      "topUsersMonthly": "Usuarios destacados (mensual)"
+    },
+    "widget": {
+      "noRecentOrders": "No hay pedidos recientes",
+      "untitledOrder": "Pedido sin título",
+      "orderCount_one": "{{count}} pedido",
+      "orderCount_many": "{{count}} pedidos",
+      "orderCount_other": "{{count}} pedidos"
+    },
+    "summary": {
+      "wasQuantity": "(antes {{quantity}})",
+      "newBadge": "¡NUEVO!"
     }
   }
 }

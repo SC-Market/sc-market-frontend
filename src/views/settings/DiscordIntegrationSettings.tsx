@@ -4,9 +4,11 @@ import { DiscordBotDetails } from "./DiscordBotDetails"
 import { ConfigureDiscord } from "../notifications/ConfigureDiscord"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useTranslation } from "react-i18next"
 
 export function DiscordIntegrationSettings() {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
   return (
     <Grid
       container
@@ -17,7 +19,7 @@ export function DiscordIntegrationSettings() {
       <ConfigureDiscord />
       <Grid item xs={12}>
         <Alert severity="info">
-          Webhooks are now managed from your shop's settings page.
+          {t("accountUi.webhooksMoved")}
         </Alert>
       </Grid>
     </Grid>

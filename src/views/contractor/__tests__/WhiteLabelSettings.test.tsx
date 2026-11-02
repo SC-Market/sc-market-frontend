@@ -1,3 +1,4 @@
+import "../../../util/i18n"
 /**
  * White-label settings that disagreed with the API:
  * - "Require org membership" showed in Public mode, where it does nothing;

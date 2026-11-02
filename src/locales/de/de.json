@@ -1966,7 +1966,7 @@
   "orders": {
     "status": {
       "fulfilled": "Erfüllt",
-      "inProgress": "In Progress",
+      "inProgress": "Wird ausgeführt",
       "cancelled": "Storniert",
       "notStarted": "Not Started",
       "active": "Aktiv",
@@ -7232,6 +7232,90 @@
       "reduceOrder": "Bestellmenge reduzieren",
       "reduceOrderHint_one": "Bestellung an den verfügbaren Bestand anpassen ({{count}} Stück)",
       "reduceOrderHint_other": "Bestellung an den verfügbaren Bestand anpassen ({{count}} Stück)"
+    }
+  },
+  "orgAdminUi": {
+    "roles": {
+      "saveRole": "Rolle {{role}} speichern",
+      "deleteRole": "Rolle {{role}} löschen",
+      "editRole": "Rolle {{role}} bearbeiten",
+      "permissionForRole": "{{permission}} für {{role}}",
+      "newRole": "neue Rolle"
+    },
+    "webhooksMoved": "Webhooks werden jetzt auf der Einstellungsseite Ihres Shops verwaltet.",
+    "whiteLabel": {
+      "chooseIcon": "Symbol auswählen",
+      "siteSettings": "Website-Einstellungen",
+      "siteAccessHint": "Legt fest, wer auf Ihre White-Label-Website zugreifen kann.",
+      "siteAccess": "Website-Zugriff",
+      "accessPublic": "Öffentlich – jeder kann stöbern",
+      "accessInternal": "Intern – Anmeldung erforderlich",
+      "requireMembership": "Für den Zugriff Mitgliedschaft in der Organisation verlangen",
+      "homepagePath": "Pfad der Startseite",
+      "homepagePathHelper": "Eigener Pfad für die Startseite. Leer lassen für die Standardseite.",
+      "saving": "Wird gespeichert…",
+      "saveSettings": "Einstellungen speichern",
+      "sidebarTabs": "Tabs der Seitenleiste",
+      "sidebarTabsHint": "Legen Sie fest, welche öffentlichen Tabs in der Seitenleiste erscheinen.",
+      "customTabs": "Eigene Tabs",
+      "removeTab": "Tab {{name}} entfernen",
+      "opensInNewTab": "Öffnet in neuem Tab",
+      "tabLabel": "Bezeichnung",
+      "pathOrUrl": "Pfad oder URL",
+      "pathOrUrlPlaceholder": "/eigene-seite oder https://...",
+      "willOpenInNewTab": "Wird in einem neuen Tab geöffnet",
+      "add": "Hinzufügen",
+      "saveSidebar": "Seitenleiste speichern"
+    }
+  },
+  "accountUi": {
+    "webhooksMoved": "Webhooks werden jetzt auf der Einstellungsseite Ihres Shops verwaltet.",
+    "unknownError": "Ein unbekannter Fehler ist aufgetreten",
+    "noShopsYet": "Noch keine Shops",
+    "profileTabs": "Profil-Tabs"
+  },
+  "ordersUi": {
+    "limits": {
+      "sizeLabel": "Größe:",
+      "valueLabel": "Wert:",
+      "minValue": "Min. {{amount}} aUEC",
+      "maxValue": "Max. {{amount}} aUEC",
+      "sizeBelowMin": "Aktuelle Größe ({{current}}) liegt unter dem Minimum ({{min}})",
+      "sizeAboveMax": "Aktuelle Größe ({{current}}) überschreitet das Maximum ({{max}})",
+      "sizeNearLimit": "Aktuelle Größe ({{current}}) liegt nahe am Limit",
+      "sizeOk": "Größe erfüllt die Anforderungen",
+      "valueBelowMin": "Aktueller Wert ({{current}}) liegt unter dem Minimum ({{min}})",
+      "valueAboveMax": "Aktueller Wert ({{current}}) überschreitet das Maximum ({{max}})",
+      "valueNearLimit": "Aktueller Wert ({{current}}) liegt nahe am Limit",
+      "valueOk": "Wert erfüllt die Anforderungen",
+      "minItems_one": "Min. {{amount}} Artikel",
+      "minItems_other": "Min. {{amount}} Artikel",
+      "maxItems_one": "Max. {{amount}} Artikel",
+      "maxItems_other": "Max. {{amount}} Artikel"
+    },
+    "analytics": {
+      "topShops": "Top-Shops",
+      "topUsers": "Top-Nutzer",
+      "totalOrdersLabel": "Bestellungen gesamt:",
+      "activeOrdersLabel": "Aktive Bestellungen:",
+      "completedOrdersLabel": "Abgeschlossene Bestellungen:",
+      "totalValueLabel": "Gesamtwert:"
+    },
+    "trend": {
+      "noData": "Keine Trenddaten verfügbar",
+      "topContractors": "Top-Auftragnehmer",
+      "topUsersWeekly": "Top-Nutzer (wöchentlich)",
+      "topUsersMonthly": "Top-Nutzer (monatlich)"
+    },
+    "widget": {
+      "noRecentOrders": "Keine aktuellen Bestellungen",
+      "untitledOrder": "Unbenannte Bestellung",
+      "orderCount_one": "{{count}} Bestellung",
+      "orderCount_other": "{{count}} Bestellungen"
+    },
+    "summary": {
+      "wasQuantity": "(vorher {{quantity}})",
+      "newBadge": "NEU!"
     }
   }
 }

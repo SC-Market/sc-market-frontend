@@ -18,9 +18,11 @@ import {
 } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { useTranslation } from "react-i18next"
 
 export function ProfileSkeleton() {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
 
   return (
       <Box sx={{ position: "relative" }}>
@@ -104,7 +106,7 @@ export function ProfileSkeleton() {
               <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
                 <Tabs
                   value={0}
-                  aria-label="Profile tabs"
+                  aria-label={t("accountUi.profileTabs")}
                   variant="scrollable"
                   textColor="secondary"
                   indicatorColor="secondary"

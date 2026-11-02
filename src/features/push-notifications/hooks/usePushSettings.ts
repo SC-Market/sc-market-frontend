@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect } from "react"
+import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import {
   useGetPushPreferencesQuery,
@@ -9,6 +10,7 @@ import type { EmailPreference } from "../../email/domain/types"
 
 export function usePushSettings() {
   const issueAlert = useAlertHook()
+  const { t } = useTranslation()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
@@ -38,7 +40,7 @@ export function usePushSettings() {
           contractor_id: contractorId ?? null,
         }).unwrap()
         issueAlert({
-          message: `Preference updated for ${action}`,
+          message: t("settingsUi.preferenceUpdated", { name: action }),
           severity: "success",
         })
       } catch (error) {
@@ -46,12 +48,12 @@ export function usePushSettings() {
           message:
             error instanceof Error
               ? error.message
-              : "Failed to update preference",
+              : t("settingsUi.preferenceUpdateFailed"),
           severity: "error",
         })
       }
     },
-    [updatePreference, issueAlert],
+    [updatePreference, issueAlert, t],
   )
 
   // Handle batch preference update
@@ -86,7 +88,9 @@ export function usePushSettings() {
             preferences: pushPreferences,
           }).unwrap()
           issueAlert({
-            message: `Updated ${pushPreferences.length} notification preference${pushPreferences.length !== 1 ? "s" : ""}`,
+            message: t("settingsUi.preferencesUpdated", {
+              count: pushPreferences.length,
+            }),
             severity: "success",
           })
         }
@@ -95,12 +99,12 @@ export function usePushSettings() {
           message:
             error instanceof Error
               ? error.message
-              : "Failed to update preferences",
+              : t("settingsUi.preferencesUpdateFailed"),
           severity: "error",
         })
       }
     },
-    [updatePreference, issueAlert],
+    [updatePreference, issueAlert, t],
   )
 
   // Clear messages after 5 seconds

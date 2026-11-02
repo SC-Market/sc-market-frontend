@@ -1,5 +1,6 @@
 import React from "react"
 import { Grid, Typography } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
 import { ShopCard } from "../../shops/components/ShopCard"
 import {
@@ -16,6 +17,7 @@ export function OrgStoreView(props: { org: string }) {
 }
 
 function ShopList(props: { username?: string; spectrumId?: string }) {
+  const { t } = useTranslation()
   const { data: shops, isLoading } = useGetShopsByOwnerQuery({
     username: props.username,
     spectrumId: props.spectrumId,
@@ -28,7 +30,7 @@ function ShopList(props: { username?: string; spectrumId?: string }) {
   if (!shops || shops.length === 0) {
     return (
       <Typography color="text.secondary" sx={{ py: 4, textAlign: "center" }}>
-        No shops yet
+        {t("accountUi.noShopsYet")}
       </Typography>
     )
   }

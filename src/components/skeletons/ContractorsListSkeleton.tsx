@@ -5,6 +5,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ContractorSkeleton } from "./ContractorSkeleton"
 import { StandardPageLayout } from "../layout/StandardPageLayout"
 import { SidebarPageMobileBody } from "../layout/SidebarPageLayout"
+import { useTranslation } from "react-i18next"
 
 /** Cards the /contractors page shows while a page of orgs loads. */
 export const CONTRACTORS_LOADING_CARD_COUNT = 10
@@ -34,12 +35,17 @@ export function ContractorCardsSkeleton(props: { count?: number }) {
 export function ContractorsListSkeleton() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
+  const { t } = useTranslation()
 
   if (isMobile) {
     // The page's mobile layout: the inline search field (ContractorSidebar),
     // a divider, then the loading cards and the pagination row.
     return (
-      <StandardPageLayout title="Contractors" headerTitle="Contractors" maxWidth="xxl">
+      <StandardPageLayout
+        title={t("contractorsPage.title")}
+        headerTitle={t("contractorsPage.title")}
+        maxWidth="xxl"
+      >
         <SidebarPageMobileBody
           sidebar={
             <Grid item xs={12}>
@@ -56,7 +62,11 @@ export function ContractorsListSkeleton() {
   }
 
   return (
-    <StandardPageLayout title="Contractors" headerTitle="Contractors" maxWidth="xxl">
+    <StandardPageLayout
+        title={t("contractorsPage.title")}
+        headerTitle={t("contractorsPage.title")}
+        maxWidth="xxl"
+      >
       <Container maxWidth="xxl" sx={{ padding: 0, paddingTop: { xs: 2, sm: 4 } }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Stack

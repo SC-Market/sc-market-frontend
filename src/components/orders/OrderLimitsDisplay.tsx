@@ -6,6 +6,7 @@ import {
   CheckCircle,
   Error as ErrorIcon,
 } from "@mui/icons-material"
+import { useTranslation } from "react-i18next"
 import type { OrderLimits } from "../../features/orders/domain/types"
 
 interface OrderLimitsDisplayProps {
@@ -89,6 +90,7 @@ export function OrderLimitsDisplay({
   currentValue,
   showValidation = false,
 }: OrderLimitsDisplayProps) {
+  const { t } = useTranslation()
   // Check if any limits are set
   const hasLimits =
     limits.min_order_size ||
@@ -123,20 +125,30 @@ export function OrderLimitsDisplay({
   return (
     <Alert severity={severity} icon={<Info />}>
       <Typography variant="body2" sx={{ fontWeight: "bold", mb: 1 }}>
-        Order Requirements
+        {t("OrderSettings.requirementsTitle")}
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
         {/* Size limits */}
         {(limits.min_order_size || limits.max_order_size) && (
           <Box>
             <Typography variant="body2" component="span">
-              <strong>Size:</strong>{" "}
+              <strong>{t("ordersUi.limits.sizeLabel")}</strong>{" "}
               {limits.min_order_size && (
-                <span>Min {formatCurrency(limits.min_order_size)} items</span>
+                <span>
+                  {t("ordersUi.limits.minItems", {
+                    count: parseInt(limits.min_order_size, 10),
+                    amount: formatCurrency(limits.min_order_size),
+                  })}
+                </span>
               )}
               {limits.min_order_size && limits.max_order_size && " • "}
               {limits.max_order_size && (
-                <span>Max {formatCurrency(limits.max_order_size)} items</span>
+                <span>
+                  {t("ordersUi.limits.maxItems", {
+                    count: parseInt(limits.max_order_size, 10),
+                    amount: formatCurrency(limits.max_order_size),
+                  })}
+                </span>
               )}
             </Typography>
             {showValidation && currentSize !== undefined && (
@@ -148,13 +160,16 @@ export function OrderLimitsDisplay({
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
                     <ErrorIcon fontSize="small" />
-                    Current size ({currentSize}){" "}
                     {limits.min_order_size &&
-                      currentSize < parseInt(limits.min_order_size, 10) &&
-                      `is below minimum (${formatCurrency(limits.min_order_size)})`}
-                    {limits.max_order_size &&
-                      currentSize > parseInt(limits.max_order_size, 10) &&
-                      `exceeds maximum (${formatCurrency(limits.max_order_size)})`}
+                    currentSize < parseInt(limits.min_order_size, 10)
+                      ? t("ordersUi.limits.sizeBelowMin", {
+                          current: currentSize,
+                          min: formatCurrency(limits.min_order_size),
+                        })
+                      : t("ordersUi.limits.sizeAboveMax", {
+                          current: currentSize,
+                          max: formatCurrency(limits.max_order_size ?? 0),
+                        })}
                   </Typography>
                 )}
                 {sizeState === "warning" && (
@@ -164,7 +179,7 @@ export function OrderLimitsDisplay({
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
                     <Warning fontSize="small" />
-                    Current size ({currentSize}) is close to limit
+                    {t("ordersUi.limits.sizeNearLimit", { current: currentSize })}
                   </Typography>
                 )}
                 {sizeState === "success" && (
@@ -174,7 +189,7 @@ export function OrderLimitsDisplay({
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
                     <CheckCircle fontSize="small" />
-                    Size meets requirements
+                    {t("ordersUi.limits.sizeOk")}
                   </Typography>
                 )}
               </Box>
@@ -186,13 +201,21 @@ export function OrderLimitsDisplay({
         {(limits.min_order_value || limits.max_order_value) && (
           <Box>
             <Typography variant="body2" component="span">
-              <strong>Value:</strong>{" "}
+              <strong>{t("ordersUi.limits.valueLabel")}</strong>{" "}
               {limits.min_order_value && (
-                <span>Min {formatCurrency(limits.min_order_value)} aUEC</span>
+                <span>
+                  {t("ordersUi.limits.minValue", {
+                    amount: formatCurrency(limits.min_order_value),
+                  })}
+                </span>
               )}
               {limits.min_order_value && limits.max_order_value && " • "}
               {limits.max_order_value && (
-                <span>Max {formatCurrency(limits.max_order_value)} aUEC</span>
+                <span>
+                  {t("ordersUi.limits.maxValue", {
+                    amount: formatCurrency(limits.max_order_value),
+                  })}
+                </span>
               )}
             </Typography>
             {showValidation && currentValue !== undefined && (
@@ -204,13 +227,16 @@ export function OrderLimitsDisplay({
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
                     <ErrorIcon fontSize="small" />
-                    Current value ({formatCurrency(currentValue)}){" "}
                     {limits.min_order_value &&
-                      currentValue < parseInt(limits.min_order_value, 10) &&
-                      `is below minimum (${formatCurrency(limits.min_order_value)})`}
-                    {limits.max_order_value &&
-                      currentValue > parseInt(limits.max_order_value, 10) &&
-                      `exceeds maximum (${formatCurrency(limits.max_order_value)})`}
+                    currentValue < parseInt(limits.min_order_value, 10)
+                      ? t("ordersUi.limits.valueBelowMin", {
+                          current: formatCurrency(currentValue),
+                          min: formatCurrency(limits.min_order_value),
+                        })
+                      : t("ordersUi.limits.valueAboveMax", {
+                          current: formatCurrency(currentValue),
+                          max: formatCurrency(limits.max_order_value ?? 0),
+                        })}
                   </Typography>
                 )}
                 {valueState === "warning" && (
@@ -220,8 +246,9 @@ export function OrderLimitsDisplay({
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
                     <Warning fontSize="small" />
-                    Current value ({formatCurrency(currentValue)}) is close to
-                    limit
+                    {t("ordersUi.limits.valueNearLimit", {
+                      current: formatCurrency(currentValue),
+                    })}
                   </Typography>
                 )}
                 {valueState === "success" && (
@@ -231,7 +258,7 @@ export function OrderLimitsDisplay({
                     sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                   >
                     <CheckCircle fontSize="small" />
-                    Value meets requirements
+                    {t("ordersUi.limits.valueOk")}
                   </Typography>
                 )}
               </Box>

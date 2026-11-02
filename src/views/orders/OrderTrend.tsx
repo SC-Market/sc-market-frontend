@@ -55,7 +55,7 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
   const { t } = useTranslation()
 
   if (!data.metrics.trend_data) {
-    return <div>No trend data available</div>
+    return <div>{t("ordersUi.trend.noData")}</div>
   }
 
   const { trend_data } = data.metrics
@@ -371,6 +371,7 @@ export function OrgOrderTrendChart(props: {
 
 export function TopContractors(props: { orders: OrderStub[] }) {
   const { orders } = props
+  const { t } = useTranslation()
   const topTen = useMemo(() => {
     const orderCounts = orders.reduce((old, order) => {
       if (!order.contractor) {
@@ -397,7 +398,7 @@ export function TopContractors(props: { orders: OrderStub[] }) {
   }, [orders])
 
   return (
-    <Section title={"Top Contractors"} xs={12} lg={3}>
+    <Section title={t("ordersUi.trend.topContractors")} xs={12} lg={3}>
       <ol>
         {topTen.map((c) => (
           <li key={c.name}>
@@ -418,6 +419,7 @@ export function TopContractors(props: { orders: OrderStub[] }) {
 
 export function TopUsers(props: { orders: OrderStub[] }) {
   const { orders } = props
+  const { t } = useTranslation()
   const topTen = useMemo(() => {
     const orderCounts = orders.reduce((old, order) => {
       if (!order.assigned_to || order.contractor) {
@@ -444,7 +446,7 @@ export function TopUsers(props: { orders: OrderStub[] }) {
   }, [orders])
 
   return (
-    <Section title={"Top Users"} xs={12} lg={3}>
+    <Section title={t("ordersUi.analytics.topUsers")} xs={12} lg={3}>
       <List sx={{ maxHeight: 400, overflowY: "scroll" }}>
         {topTen.map((c, i) => (
           <ListItem key={c.name}>
@@ -466,6 +468,7 @@ export function TopUsers(props: { orders: OrderStub[] }) {
 
 export function TopUsersThisWeek(props: { orders: OrderStub[] }) {
   const { orders } = props
+  const { t } = useTranslation()
   const topTen = useMemo(() => {
     const orderCounts = orders
       .filter((o) => +o.timestamp > Date.now() - 604800000)
@@ -494,7 +497,7 @@ export function TopUsersThisWeek(props: { orders: OrderStub[] }) {
   }, [orders])
 
   return (
-    <Section title={"Top Users (Weekly)"} xs={12} lg={3}>
+    <Section title={t("ordersUi.trend.topUsersWeekly")} xs={12} lg={3}>
       <List sx={{ maxHeight: 400, overflowY: "scroll" }}>
         {topTen.map((c, i) => (
           <ListItem key={c.name}>
@@ -516,6 +519,7 @@ export function TopUsersThisWeek(props: { orders: OrderStub[] }) {
 
 export function TopUsersThisMonth(props: { orders: OrderStub[] }) {
   const { orders } = props
+  const { t } = useTranslation()
   const topTen = useMemo(() => {
     const orderCounts = orders
       .filter((o) => +o.timestamp > Date.now() - 2.628e9)
@@ -544,7 +548,7 @@ export function TopUsersThisMonth(props: { orders: OrderStub[] }) {
   }, [orders])
 
   return (
-    <Section title={"Top Users (Monthly)"} xs={12} lg={3}>
+    <Section title={t("ordersUi.trend.topUsersMonthly")} xs={12} lg={3}>
       <List sx={{ maxHeight: 400, overflowY: "scroll" }}>
         {topTen.map((c, i) => (
           <ListItem key={i}>

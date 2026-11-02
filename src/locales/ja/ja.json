@@ -1962,7 +1962,7 @@
   "orders": {
     "status": {
       "fulfilled": "完了",
-      "inProgress": "In Progress",
+      "inProgress": "対応中",
       "cancelled": "キャンセル済み",
       "notStarted": "Not Started",
       "active": "進行中",
@@ -7136,6 +7136,87 @@
       "useUnlistedHint": "未出品の在庫ロットがあれば、そこから割り当てます",
       "reduceOrder": "注文数量を減らす",
       "reduceOrderHint_other": "注文を利用可能な在庫数に合わせます（{{count}} 個）"
+    }
+  },
+  "orgAdminUi": {
+    "roles": {
+      "saveRole": "ロール「{{role}}」を保存",
+      "deleteRole": "ロール「{{role}}」を削除",
+      "editRole": "ロール「{{role}}」を編集",
+      "permissionForRole": "{{role}} の {{permission}}",
+      "newRole": "新しいロール"
+    },
+    "webhooksMoved": "Webhookはショップの設定ページで管理するようになりました。",
+    "whiteLabel": {
+      "chooseIcon": "アイコンを選択",
+      "siteSettings": "サイト設定",
+      "siteAccessHint": "ホワイトラベルサイトにアクセスできるユーザーを設定します。",
+      "siteAccess": "サイトへのアクセス",
+      "accessPublic": "公開 — 誰でも閲覧できます",
+      "accessInternal": "内部 — ログインが必要です",
+      "requireMembership": "アクセスに組織メンバーシップを必須にする",
+      "homepagePath": "ホームページのパス",
+      "homepagePathHelper": "カスタムのランディングページのパスです。既定のページを使う場合は空欄のままにしてください。",
+      "saving": "保存中…",
+      "saveSettings": "設定を保存",
+      "sidebarTabs": "サイドバーのタブ",
+      "sidebarTabsHint": "サイドバーに表示する公開タブを切り替えます。",
+      "customTabs": "カスタムタブ",
+      "removeTab": "タブ「{{name}}」を削除",
+      "opensInNewTab": "新しいタブで開く",
+      "tabLabel": "ラベル",
+      "pathOrUrl": "パスまたはURL",
+      "pathOrUrlPlaceholder": "/custom-page または https://...",
+      "willOpenInNewTab": "新しいタブで開きます",
+      "add": "追加",
+      "saveSidebar": "サイドバーを保存"
+    }
+  },
+  "accountUi": {
+    "webhooksMoved": "Webhookはショップの設定ページで管理するようになりました。",
+    "unknownError": "不明なエラーが発生しました",
+    "noShopsYet": "まだショップがありません",
+    "profileTabs": "プロフィールのタブ"
+  },
+  "ordersUi": {
+    "limits": {
+      "sizeLabel": "サイズ：",
+      "valueLabel": "金額：",
+      "minValue": "最小 {{amount}} aUEC",
+      "maxValue": "最大 {{amount}} aUEC",
+      "sizeBelowMin": "現在のサイズ（{{current}}）が最小値（{{min}}）を下回っています",
+      "sizeAboveMax": "現在のサイズ（{{current}}）が最大値（{{max}}）を超えています",
+      "sizeNearLimit": "現在のサイズ（{{current}}）が上限・下限に近づいています",
+      "sizeOk": "サイズは要件を満たしています",
+      "valueBelowMin": "現在の金額（{{current}}）が最小値（{{min}}）を下回っています",
+      "valueAboveMax": "現在の金額（{{current}}）が最大値（{{max}}）を超えています",
+      "valueNearLimit": "現在の金額（{{current}}）が上限・下限に近づいています",
+      "valueOk": "金額は要件を満たしています",
+      "minItems_other": "最小 {{amount}} 個",
+      "maxItems_other": "最大 {{amount}} 個"
+    },
+    "analytics": {
+      "topShops": "トップショップ",
+      "topUsers": "トップユーザー",
+      "totalOrdersLabel": "注文総数：",
+      "activeOrdersLabel": "アクティブな注文：",
+      "completedOrdersLabel": "完了した注文：",
+      "totalValueLabel": "合計金額："
+    },
+    "trend": {
+      "noData": "トレンドデータがありません",
+      "topContractors": "トップコントラクター",
+      "topUsersWeekly": "トップユーザー（週間）",
+      "topUsersMonthly": "トップユーザー（月間）"
+    },
+    "widget": {
+      "noRecentOrders": "最近の注文はありません",
+      "untitledOrder": "無題の注文",
+      "orderCount_other": "{{count}} 件の注文"
+    },
+    "summary": {
+      "wasQuantity": "（変更前：{{quantity}}）",
+      "newBadge": "新規！"
     }
   }
 }

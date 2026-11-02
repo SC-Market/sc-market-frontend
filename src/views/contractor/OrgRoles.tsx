@@ -51,12 +51,11 @@ export {
 import { min_position } from "../../features/contractor/domain/permissions"
 
 function RolePermissionCheck(props: {
-  label: string
   permission_name: keyof ContractorRole
   role: ContractorRole
   setRole: (a: ContractorRole) => void
 }) {
-  const { permission_name, setRole, label, role } = props
+  const { permission_name, setRole, role } = props
   const { t } = useTranslation()
   const tooltip = t(`manageRoles.permissionDescriptions.${permission_name}`, "")
   return (
@@ -70,12 +69,11 @@ function RolePermissionCheck(props: {
                 setRole({ ...role, [permission_name]: event.target.checked })
               }}
               color={"secondary"}
-              name={label}
+              name={permission_name}
               inputProps={{
-                "aria-label": t("manageRoles.permissionForRole", {
-                  defaultValue: "{{permission}} for {{role}}",
+                "aria-label": t("orgAdminUi.roles.permissionForRole", {
                   permission: t(`manageRoles.permissions.${permission_name}`),
-                  role: role.name || t("manageRoles.newRole", "new role"),
+                  role: role.name || t("orgAdminUi.roles.newRole"),
                 }),
               }}
             />
@@ -196,74 +194,62 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Org Details"}
                     permission_name={"manage_org_details"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Roles"}
                     permission_name={"manage_roles"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Orders"}
                     permission_name={"manage_orders"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Invites"}
                     permission_name={"manage_invites"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Stock"}
                     permission_name={"manage_stock"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Market"}
                     permission_name={"manage_market"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Recruiting"}
                     permission_name={"manage_recruiting"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Webhooks"}
                     permission_name={"manage_webhooks"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Manage Blocklist"}
                     permission_name={"manage_blocklist"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Claim Orders"}
                     permission_name={"claim_orders"}
                   />
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
-                    label={"Kick Members"}
                     permission_name={"kick_members"}
                   />
                   {isWhiteLabel && (
                     <RolePermissionCheck
                       role={newRole}
                       setRole={setNewRole}
-                      label={"Manage Theme"}
                       permission_name={"manage_theme"}
                     />
                   )}
@@ -273,8 +259,7 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                       onClick={submitUpdate}
                       variant={"contained"}
                       sx={{ marginRight: 1 }}
-                      aria-label={t("manageRoles.saveRole", {
-                        defaultValue: "Save role {{role}}",
+                      aria-label={t("orgAdminUi.roles.saveRole", {
                         role: role.name,
                       })}
                     >
@@ -285,8 +270,7 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                         color={"error"}
                         variant={"contained"}
                         onClick={deleteRoleCallback}
-                        aria-label={t("manageRoles.deleteRole", {
-                          defaultValue: "Delete role {{role}}",
+                        aria-label={t("orgAdminUi.roles.deleteRole", {
                           role: role.name,
                         })}
                       >
@@ -366,8 +350,7 @@ function RoleRow(props: {
                 setOpen((o) => !o)
                 event.stopPropagation()
               }}
-              aria-label={t("manageRoles.editRole", {
-                defaultValue: "Edit role {{role}}",
+              aria-label={t("orgAdminUi.roles.editRole", {
                 role: row.name,
               })}
               aria-expanded={open}
@@ -495,74 +478,62 @@ export function AddRole() {
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Org Details"}
           permission_name={"manage_org_details"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Roles"}
           permission_name={"manage_roles"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Orders"}
           permission_name={"manage_orders"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Invites"}
           permission_name={"manage_invites"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Stock"}
           permission_name={"manage_stock"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Market"}
           permission_name={"manage_market"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Recruiting"}
           permission_name={"manage_recruiting"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Webhooks"}
           permission_name={"manage_webhooks"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Manage Blocklist"}
           permission_name={"manage_blocklist"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Claim Orders"}
           permission_name={"claim_orders"}
         />
         <RolePermissionCheck
           role={newRole}
           setRole={setNewRole}
-          label={"Kick Members"}
           permission_name={"kick_members"}
         />
         {currentOrg?.premium_tier === "white_label" && (
           <RolePermissionCheck
             role={newRole}
             setRole={setNewRole}
-            label={"Manage Theme"}
             permission_name={"manage_theme"}
           />
         )}

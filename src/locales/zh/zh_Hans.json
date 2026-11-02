@@ -1964,7 +1964,7 @@
   "orders": {
     "status": {
       "fulfilled": "已完成",
-      "inProgress": "In Progress",
+      "inProgress": "处理中",
       "cancelled": "已取消",
       "notStarted": "Not Started",
       "active": "生效中",
@@ -7142,6 +7142,87 @@
       "useUnlistedHint": "如有未上架的库存批次，则从中分配",
       "reduceOrder": "减少订单数量",
       "reduceOrderHint_other": "调整订单以匹配可用库存（{{count}} 件）"
+    }
+  },
+  "orgAdminUi": {
+    "roles": {
+      "saveRole": "保存角色 {{role}}",
+      "deleteRole": "删除角色 {{role}}",
+      "editRole": "编辑角色 {{role}}",
+      "permissionForRole": "{{role}} 的 {{permission}}",
+      "newRole": "新角色"
+    },
+    "webhooksMoved": "Webhook 现在在你的店铺设置页面中管理。",
+    "whiteLabel": {
+      "chooseIcon": "选择图标",
+      "siteSettings": "站点设置",
+      "siteAccessHint": "控制谁可以访问你的白标站点。",
+      "siteAccess": "站点访问权限",
+      "accessPublic": "公开 — 任何人都可浏览",
+      "accessInternal": "内部 — 需要登录",
+      "requireMembership": "访问需要组织成员身份",
+      "homepagePath": "首页路径",
+      "homepagePathHelper": "自定义落地页路径。留空则使用默认页面。",
+      "saving": "正在保存…",
+      "saveSettings": "保存设置",
+      "sidebarTabs": "侧边栏标签页",
+      "sidebarTabsHint": "切换侧边栏中显示哪些公开标签页。",
+      "customTabs": "自定义标签页",
+      "removeTab": "移除标签页 {{name}}",
+      "opensInNewTab": "在新标签页中打开",
+      "tabLabel": "标签",
+      "pathOrUrl": "路径或网址",
+      "pathOrUrlPlaceholder": "/custom-page 或 https://...",
+      "willOpenInNewTab": "将在新标签页中打开",
+      "add": "添加",
+      "saveSidebar": "保存侧边栏"
+    }
+  },
+  "accountUi": {
+    "webhooksMoved": "Webhook 现在在你的店铺设置页面中管理。",
+    "unknownError": "发生未知错误",
+    "noShopsYet": "暂无店铺",
+    "profileTabs": "个人资料标签页"
+  },
+  "ordersUi": {
+    "limits": {
+      "sizeLabel": "数量：",
+      "valueLabel": "金额：",
+      "minValue": "最低 {{amount}} aUEC",
+      "maxValue": "最高 {{amount}} aUEC",
+      "sizeBelowMin": "当前数量（{{current}}）低于最低要求（{{min}}）",
+      "sizeAboveMax": "当前数量（{{current}}）超过上限（{{max}}）",
+      "sizeNearLimit": "当前数量（{{current}}）接近限制",
+      "sizeOk": "数量符合要求",
+      "valueBelowMin": "当前金额（{{current}}）低于最低要求（{{min}}）",
+      "valueAboveMax": "当前金额（{{current}}）超过上限（{{max}}）",
+      "valueNearLimit": "当前金额（{{current}}）接近限制",
+      "valueOk": "金额符合要求",
+      "minItems_other": "最少 {{amount}} 件",
+      "maxItems_other": "最多 {{amount}} 件"
+    },
+    "analytics": {
+      "topShops": "热门店铺",
+      "topUsers": "热门用户",
+      "totalOrdersLabel": "订单总数：",
+      "activeOrdersLabel": "活跃订单：",
+      "completedOrdersLabel": "已完成订单：",
+      "totalValueLabel": "总金额："
+    },
+    "trend": {
+      "noData": "暂无趋势数据",
+      "topContractors": "热门承包商",
+      "topUsersWeekly": "热门用户（每周）",
+      "topUsersMonthly": "热门用户（每月）"
+    },
+    "widget": {
+      "noRecentOrders": "暂无近期订单",
+      "untitledOrder": "未命名订单",
+      "orderCount_other": "{{count}} 个订单"
+    },
+    "summary": {
+      "wasQuantity": "（原为 {{quantity}}）",
+      "newBadge": "新！"
     }
   }
 }

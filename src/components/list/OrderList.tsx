@@ -10,9 +10,11 @@ import React, { useMemo } from "react"
 import { Link } from "react-router-dom"
 import { Order } from "../../features/orders/domain/types"
 import { ORDER_PATHS } from "../../routes/paths"
+import { useTranslation } from "react-i18next"
 
 export function OrderListItem(props: { order: Order }) {
   const { order } = props
+  const { t } = useTranslation()
   // Use customer_minimal data from the order instead of making a separate API call
   const customer = (
     order as Order & {
@@ -26,7 +28,7 @@ export function OrderListItem(props: { order: Order }) {
         <Avatar
           variant={"rounded"}
           src={customer?.avatar}
-          alt={`Avatar of ${customer?.username}`}
+          alt={t("orgsUi.avatarOf", { name: customer?.username })}
         />
       </ListItemAvatar>
       <ListItemText>{order.title}</ListItemText>

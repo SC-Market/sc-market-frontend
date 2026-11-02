@@ -7425,5 +7425,95 @@
       "reduceOrderHint_many": "Скоригувати замовлення відповідно до доступних запасів ({{count}} одиниць)",
       "reduceOrderHint_other": "Скоригувати замовлення відповідно до доступних запасів ({{count}} одиниці)"
     }
+  },
+  "orgAdminUi": {
+    "roles": {
+      "saveRole": "Зберегти роль {{role}}",
+      "deleteRole": "Видалити роль {{role}}",
+      "editRole": "Редагувати роль {{role}}",
+      "permissionForRole": "{{permission}} для {{role}}",
+      "newRole": "нова роль"
+    },
+    "webhooksMoved": "Вебхуки тепер керуються на сторінці налаштувань вашого магазину.",
+    "whiteLabel": {
+      "chooseIcon": "Вибрати значок",
+      "siteSettings": "Налаштування сайту",
+      "siteAccessHint": "Визначає, хто має доступ до вашого сайту white-label.",
+      "siteAccess": "Доступ до сайту",
+      "accessPublic": "Публічний — переглядати може будь-хто",
+      "accessInternal": "Внутрішній — потрібен вхід",
+      "requireMembership": "Вимагати членство в організації для доступу",
+      "homepagePath": "Шлях до головної сторінки",
+      "homepagePathHelper": "Власний шлях до стартової сторінки. Залиште порожнім, щоб використати типову.",
+      "saving": "Збереження…",
+      "saveSettings": "Зберегти налаштування",
+      "sidebarTabs": "Вкладки бічної панелі",
+      "sidebarTabsHint": "Виберіть, які публічні вкладки показувати на бічній панелі.",
+      "customTabs": "Власні вкладки",
+      "removeTab": "Видалити вкладку {{name}}",
+      "opensInNewTab": "Відкривається в новій вкладці",
+      "tabLabel": "Назва",
+      "pathOrUrl": "Шлях або URL",
+      "pathOrUrlPlaceholder": "/custom-page або https://...",
+      "willOpenInNewTab": "Відкриється в новій вкладці",
+      "add": "Додати",
+      "saveSidebar": "Зберегти бічну панель"
+    }
+  },
+  "accountUi": {
+    "webhooksMoved": "Вебхуки тепер керуються на сторінці налаштувань вашого магазину.",
+    "unknownError": "Сталася невідома помилка",
+    "noShopsYet": "Магазинів поки немає",
+    "profileTabs": "Вкладки профілю"
+  },
+  "ordersUi": {
+    "limits": {
+      "sizeLabel": "Розмір:",
+      "valueLabel": "Вартість:",
+      "minValue": "Мін. {{amount}} aUEC",
+      "maxValue": "Макс. {{amount}} aUEC",
+      "sizeBelowMin": "Поточний розмір ({{current}}) менший за мінімальний ({{min}})",
+      "sizeAboveMax": "Поточний розмір ({{current}}) перевищує максимальний ({{max}})",
+      "sizeNearLimit": "Поточний розмір ({{current}}) близький до ліміту",
+      "sizeOk": "Розмір відповідає вимогам",
+      "valueBelowMin": "Поточна вартість ({{current}}) менша за мінімальну ({{min}})",
+      "valueAboveMax": "Поточна вартість ({{current}}) перевищує максимальну ({{max}})",
+      "valueNearLimit": "Поточна вартість ({{current}}) близька до ліміту",
+      "valueOk": "Вартість відповідає вимогам",
+      "minItems_one": "Мін. {{amount}} товар",
+      "minItems_few": "Мін. {{amount}} товари",
+      "minItems_many": "Мін. {{amount}} товарів",
+      "minItems_other": "Мін. {{amount}} товару",
+      "maxItems_one": "Макс. {{amount}} товар",
+      "maxItems_few": "Макс. {{amount}} товари",
+      "maxItems_many": "Макс. {{amount}} товарів",
+      "maxItems_other": "Макс. {{amount}} товару"
+    },
+    "analytics": {
+      "topShops": "Найкращі магазини",
+      "topUsers": "Найкращі користувачі",
+      "totalOrdersLabel": "Усього замовлень:",
+      "activeOrdersLabel": "Активні замовлення:",
+      "completedOrdersLabel": "Виконані замовлення:",
+      "totalValueLabel": "Загальна вартість:"
+    },
+    "trend": {
+      "noData": "Немає даних про тенденції",
+      "topContractors": "Найкращі підрядники",
+      "topUsersWeekly": "Найкращі користувачі (за тиждень)",
+      "topUsersMonthly": "Найкращі користувачі (за місяць)"
+    },
+    "widget": {
+      "noRecentOrders": "Немає нещодавніх замовлень",
+      "untitledOrder": "Замовлення без назви",
+      "orderCount_one": "{{count}} замовлення",
+      "orderCount_few": "{{count}} замовлення",
+      "orderCount_many": "{{count}} замовлень",
+      "orderCount_other": "{{count}} замовлення"
+    },
+    "summary": {
+      "wasQuantity": "(було {{quantity}})",
+      "newBadge": "НОВЕ!"
+    }
   }
 }

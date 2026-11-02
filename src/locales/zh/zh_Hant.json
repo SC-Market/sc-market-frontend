@@ -7137,5 +7137,86 @@
       "reduceOrder": "減少訂單數量",
       "reduceOrderHint_other": "調整訂單以符合可用庫存（{{count}} 件）"
     }
+  },
+  "orgAdminUi": {
+    "roles": {
+      "saveRole": "儲存角色 {{role}}",
+      "deleteRole": "刪除角色 {{role}}",
+      "editRole": "編輯角色 {{role}}",
+      "permissionForRole": "{{role}} 的 {{permission}}",
+      "newRole": "新角色"
+    },
+    "webhooksMoved": "Webhook 現在改由你的商店設定頁面管理。",
+    "whiteLabel": {
+      "chooseIcon": "選擇圖示",
+      "siteSettings": "網站設定",
+      "siteAccessHint": "控制誰可以存取你的白牌網站。",
+      "siteAccess": "網站存取權限",
+      "accessPublic": "公開 — 任何人都能瀏覽",
+      "accessInternal": "內部 — 需要登入",
+      "requireMembership": "存取時需要組織成員資格",
+      "homepagePath": "首頁路徑",
+      "homepagePathHelper": "自訂登陸頁面路徑。留空則使用預設頁面。",
+      "saving": "儲存中…",
+      "saveSettings": "儲存設定",
+      "sidebarTabs": "側邊欄分頁",
+      "sidebarTabsHint": "切換側邊欄中要顯示的公開分頁。",
+      "customTabs": "自訂分頁",
+      "removeTab": "移除分頁 {{name}}",
+      "opensInNewTab": "在新分頁中開啟",
+      "tabLabel": "標籤",
+      "pathOrUrl": "路徑或網址",
+      "pathOrUrlPlaceholder": "/custom-page 或 https://...",
+      "willOpenInNewTab": "將在新分頁中開啟",
+      "add": "新增",
+      "saveSidebar": "儲存側邊欄"
+    }
+  },
+  "accountUi": {
+    "webhooksMoved": "Webhook 現在改由你的商店設定頁面管理。",
+    "unknownError": "發生未知錯誤",
+    "noShopsYet": "尚無商店",
+    "profileTabs": "個人檔案分頁"
+  },
+  "ordersUi": {
+    "limits": {
+      "sizeLabel": "數量：",
+      "valueLabel": "金額：",
+      "minValue": "最低 {{amount}} aUEC",
+      "maxValue": "最高 {{amount}} aUEC",
+      "sizeBelowMin": "目前數量（{{current}}）低於最低要求（{{min}}）",
+      "sizeAboveMax": "目前數量（{{current}}）超過上限（{{max}}）",
+      "sizeNearLimit": "目前數量（{{current}}）接近限制",
+      "sizeOk": "數量符合要求",
+      "valueBelowMin": "目前金額（{{current}}）低於最低要求（{{min}}）",
+      "valueAboveMax": "目前金額（{{current}}）超過上限（{{max}}）",
+      "valueNearLimit": "目前金額（{{current}}）接近限制",
+      "valueOk": "金額符合要求",
+      "minItems_other": "最少 {{amount}} 件",
+      "maxItems_other": "最多 {{amount}} 件"
+    },
+    "analytics": {
+      "topShops": "熱門商店",
+      "topUsers": "熱門使用者",
+      "totalOrdersLabel": "訂單總數：",
+      "activeOrdersLabel": "活躍訂單：",
+      "completedOrdersLabel": "已完成訂單：",
+      "totalValueLabel": "總金額："
+    },
+    "trend": {
+      "noData": "尚無趨勢資料",
+      "topContractors": "熱門承包商",
+      "topUsersWeekly": "熱門使用者（每週）",
+      "topUsersMonthly": "熱門使用者（每月）"
+    },
+    "widget": {
+      "noRecentOrders": "尚無近期訂單",
+      "untitledOrder": "未命名訂單",
+      "orderCount_other": "{{count}} 筆訂單"
+    },
+    "summary": {
+      "wasQuantity": "（原為 {{quantity}}）",
+      "newBadge": "新！"
+    }
   }
 }

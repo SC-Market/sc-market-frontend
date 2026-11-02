@@ -9,6 +9,8 @@ import { HookProvider } from "../../hooks/HookProvider"
 import { lightTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ORDER_PATHS } from "../../routes/paths"
+import { statusNames } from "../../features/orders/domain/constants"
+import { useTranslation } from "react-i18next"
 
 /**
  * Widget view for recent orders
@@ -17,6 +19,7 @@ import { ORDER_PATHS } from "../../routes/paths"
  */
 function OrdersWidgetContent() {
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
   const { data, isLoading, error, refetch } = useGetUserOrderDataQuery({
     include_trends: false,
   })
@@ -103,7 +106,7 @@ function OrdersWidgetContent() {
 
   return (
     <StandardPageLayout
-      title="Recent Orders"
+      title={t("recentOrders.title")}
       noFooter
       noSidebar
       noMobilePadding
@@ -113,16 +116,16 @@ function OrdersWidgetContent() {
     >
       <Box sx={widgetStyles.header}>
         <Typography variant="h6" fontWeight={600}>
-          Recent Orders
+          {t("recentOrders.title")}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          {recentOrders.length} {recentOrders.length === 1 ? "order" : "orders"}
+          {t("ordersUi.widget.orderCount", { count: recentOrders.length })}
         </Typography>
       </Box>
 
       {recentOrders.length === 0 ? (
         <Typography color="text.secondary" textAlign="center" sx={{ mt: 4 }}>
-          No recent orders
+          {t("ordersUi.widget.noRecentOrders")}
         </Typography>
       ) : (
         <Box>
@@ -135,7 +138,7 @@ function OrdersWidgetContent() {
               <Box sx={widgetStyles.orderItem}>
                 <Box sx={widgetStyles.orderHeader}>
                   <Typography sx={widgetStyles.orderTitle}>
-                    {order.title || "Untitled Order"}
+                    {order.title || t("ordersUi.widget.untitledOrder")}
                   </Typography>
                   <Box
                     sx={{
@@ -146,7 +149,12 @@ function OrdersWidgetContent() {
                       ),
                     }}
                   >
-                    {order.status}
+                    {(() => {
+                      const key = statusNames.get(
+                        order.status as Parameters<typeof statusNames.get>[0],
+                      )
+                      return key ? t(key) : order.status
+                    })()}
                   </Box>
                 </Box>
                 <Box sx={widgetStyles.orderDetails}>

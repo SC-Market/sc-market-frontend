@@ -7329,5 +7329,92 @@
       "reduceOrderHint_many": "Ajuster la commande au stock disponible ({{count}} unités)",
       "reduceOrderHint_other": "Ajuster la commande au stock disponible ({{count}} unités)"
     }
+  },
+  "orgAdminUi": {
+    "roles": {
+      "saveRole": "Enregistrer le rôle {{role}}",
+      "deleteRole": "Supprimer le rôle {{role}}",
+      "editRole": "Modifier le rôle {{role}}",
+      "permissionForRole": "{{permission}} pour {{role}}",
+      "newRole": "nouveau rôle"
+    },
+    "webhooksMoved": "Les Webhooks se gèrent désormais depuis la page des paramètres de votre boutique.",
+    "whiteLabel": {
+      "chooseIcon": "Choisir une icône",
+      "siteSettings": "Paramètres du site",
+      "siteAccessHint": "Détermine qui peut accéder à votre site en marque blanche.",
+      "siteAccess": "Accès au site",
+      "accessPublic": "Public — tout le monde peut parcourir le site",
+      "accessInternal": "Interne — connexion requise",
+      "requireMembership": "Exiger l'adhésion à l'organisation pour accéder au site",
+      "homepagePath": "Chemin de la page d'accueil",
+      "homepagePathHelper": "Chemin personnalisé de la page d'accueil. Laissez vide pour utiliser la page par défaut.",
+      "saving": "Enregistrement…",
+      "saveSettings": "Enregistrer les paramètres",
+      "sidebarTabs": "Onglets de la barre latérale",
+      "sidebarTabsHint": "Choisissez les onglets publics qui apparaissent dans la barre latérale.",
+      "customTabs": "Onglets personnalisés",
+      "removeTab": "Supprimer l'onglet {{name}}",
+      "opensInNewTab": "S'ouvre dans un nouvel onglet",
+      "tabLabel": "Libellé",
+      "pathOrUrl": "Chemin ou URL",
+      "pathOrUrlPlaceholder": "/page-personnalisee ou https://...",
+      "willOpenInNewTab": "S'ouvrira dans un nouvel onglet",
+      "add": "Ajouter",
+      "saveSidebar": "Enregistrer la barre latérale"
+    }
+  },
+  "accountUi": {
+    "webhooksMoved": "Les Webhooks se gèrent désormais depuis la page des paramètres de votre boutique.",
+    "unknownError": "Une erreur inconnue s'est produite",
+    "noShopsYet": "Aucune boutique pour le moment",
+    "profileTabs": "Onglets du profil"
+  },
+  "ordersUi": {
+    "limits": {
+      "sizeLabel": "Taille :",
+      "valueLabel": "Valeur :",
+      "minValue": "Min. {{amount}} aUEC",
+      "maxValue": "Max. {{amount}} aUEC",
+      "sizeBelowMin": "La taille actuelle ({{current}}) est inférieure au minimum ({{min}})",
+      "sizeAboveMax": "La taille actuelle ({{current}}) dépasse le maximum ({{max}})",
+      "sizeNearLimit": "La taille actuelle ({{current}}) est proche de la limite",
+      "sizeOk": "La taille respecte les exigences",
+      "valueBelowMin": "La valeur actuelle ({{current}}) est inférieure au minimum ({{min}})",
+      "valueAboveMax": "La valeur actuelle ({{current}}) dépasse le maximum ({{max}})",
+      "valueNearLimit": "La valeur actuelle ({{current}}) est proche de la limite",
+      "valueOk": "La valeur respecte les exigences",
+      "minItems_one": "Min. {{amount}} article",
+      "minItems_many": "Min. {{amount}} articles",
+      "minItems_other": "Min. {{amount}} articles",
+      "maxItems_one": "Max. {{amount}} article",
+      "maxItems_many": "Max. {{amount}} articles",
+      "maxItems_other": "Max. {{amount}} articles"
+    },
+    "analytics": {
+      "topShops": "Meilleures boutiques",
+      "topUsers": "Meilleurs utilisateurs",
+      "totalOrdersLabel": "Total des commandes :",
+      "activeOrdersLabel": "Commandes actives :",
+      "completedOrdersLabel": "Commandes terminées :",
+      "totalValueLabel": "Valeur totale :"
+    },
+    "trend": {
+      "noData": "Aucune donnée de tendance disponible",
+      "topContractors": "Meilleurs prestataires",
+      "topUsersWeekly": "Meilleurs utilisateurs (hebdomadaire)",
+      "topUsersMonthly": "Meilleurs utilisateurs (mensuel)"
+    },
+    "widget": {
+      "noRecentOrders": "Aucune commande récente",
+      "untitledOrder": "Commande sans titre",
+      "orderCount_one": "{{count}} commande",
+      "orderCount_many": "{{count}} commandes",
+      "orderCount_other": "{{count}} commandes"
+    },
+    "summary": {
+      "wasQuantity": "(avant : {{quantity}})",
+      "newBadge": "NOUVEAU !"
+    }
   }
 }

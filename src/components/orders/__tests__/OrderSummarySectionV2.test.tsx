@@ -1,19 +1,9 @@
+import "../../../util/i18n"
 import { render, screen } from "@testing-library/react"
-import { describe, it, expect, vi } from "vitest"
+import { describe, it, expect } from "vitest"
 import { OrderSummarySectionV2 } from "../OrderSummarySectionV2"
 import { OrderItemDetail } from "../../../store/api/v2/market"
 import { OfferChanges } from "../../../util/offerChanges"
-
-// Mock i18next
-vi.mock("react-i18next", async () => {
-  const actual = await vi.importActual("react-i18next")
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, defaultValue?: string) => defaultValue || key,
-    }),
-  }
-})
 
 describe("OrderSummarySectionV2", () => {
   const mockItems: OrderItemDetail[] = [

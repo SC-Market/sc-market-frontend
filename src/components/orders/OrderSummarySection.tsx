@@ -64,13 +64,19 @@ export function OrderSummarySection({
                         color="primary"
                         sx={{ ml: 0.5 }}
                       >
-                        (was {quantityChange.old})
+                        {t("ordersUi.summary.wasQuantity", {
+                          quantity: quantityChange.old,
+                        })}
                       </Typography>
                     )}
                   </Typography>
                 </Box>
                 {(isNew || quantityChange) && (
-                  <Chip label="NEW!" size="small" color="primary" />
+                  <Chip
+                    label={t("ordersUi.summary.newBadge")}
+                    size="small"
+                    color="primary"
+                  />
                 )}
               </Box>
               <Typography variant="body1" fontWeight="medium">

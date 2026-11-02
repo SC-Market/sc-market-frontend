@@ -87,7 +87,7 @@ function BlockedUserList(props: {
                 <Avatar
                   variant={"rounded"}
                   src={user?.avatar}
-                  alt={`Avatar of ${user.username}`}
+                  alt={t("orgsUi.avatarOf", { name: user.username })}
                 />
               </ListItemAvatar>
               <ListItemText>

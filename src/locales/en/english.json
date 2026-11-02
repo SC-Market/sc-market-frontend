@@ -7233,5 +7233,89 @@
       "reduceOrderHint_one": "Adjust order to match available stock ({{count}} unit)",
       "reduceOrderHint_other": "Adjust order to match available stock ({{count}} units)"
     }
+  },
+  "orgAdminUi": {
+    "roles": {
+      "saveRole": "Save role {{role}}",
+      "deleteRole": "Delete role {{role}}",
+      "editRole": "Edit role {{role}}",
+      "permissionForRole": "{{permission}} for {{role}}",
+      "newRole": "new role"
+    },
+    "webhooksMoved": "Webhooks are now managed from your shop's settings page.",
+    "whiteLabel": {
+      "chooseIcon": "Choose icon",
+      "siteSettings": "Site Settings",
+      "siteAccessHint": "Controls who can access your white-label site.",
+      "siteAccess": "Site access",
+      "accessPublic": "Public — anyone can browse",
+      "accessInternal": "Internal — login required",
+      "requireMembership": "Require org membership to access",
+      "homepagePath": "Homepage path",
+      "homepagePathHelper": "Custom landing page path. Leave blank for default.",
+      "saving": "Saving…",
+      "saveSettings": "Save Settings",
+      "sidebarTabs": "Sidebar Tabs",
+      "sidebarTabsHint": "Toggle which public-facing tabs appear in the sidebar.",
+      "customTabs": "Custom Tabs",
+      "removeTab": "Remove tab {{name}}",
+      "opensInNewTab": "Opens in new tab",
+      "tabLabel": "Label",
+      "pathOrUrl": "Path or URL",
+      "pathOrUrlPlaceholder": "/custom-page or https://...",
+      "willOpenInNewTab": "Will open in a new tab",
+      "add": "Add",
+      "saveSidebar": "Save Sidebar"
+    }
+  },
+  "accountUi": {
+    "webhooksMoved": "Webhooks are now managed from your shop's settings page.",
+    "unknownError": "Unknown error occurred",
+    "noShopsYet": "No shops yet",
+    "profileTabs": "Profile tabs"
+  },
+  "ordersUi": {
+    "limits": {
+      "sizeLabel": "Size:",
+      "valueLabel": "Value:",
+      "minValue": "Min {{amount}} aUEC",
+      "maxValue": "Max {{amount}} aUEC",
+      "sizeBelowMin": "Current size ({{current}}) is below minimum ({{min}})",
+      "sizeAboveMax": "Current size ({{current}}) exceeds maximum ({{max}})",
+      "sizeNearLimit": "Current size ({{current}}) is close to limit",
+      "sizeOk": "Size meets requirements",
+      "valueBelowMin": "Current value ({{current}}) is below minimum ({{min}})",
+      "valueAboveMax": "Current value ({{current}}) exceeds maximum ({{max}})",
+      "valueNearLimit": "Current value ({{current}}) is close to limit",
+      "valueOk": "Value meets requirements",
+      "minItems_one": "Min {{amount}} item",
+      "minItems_other": "Min {{amount}} items",
+      "maxItems_one": "Max {{amount}} item",
+      "maxItems_other": "Max {{amount}} items"
+    },
+    "analytics": {
+      "topShops": "Top Shops",
+      "topUsers": "Top Users",
+      "totalOrdersLabel": "Total Orders:",
+      "activeOrdersLabel": "Active Orders:",
+      "completedOrdersLabel": "Completed Orders:",
+      "totalValueLabel": "Total Value:"
+    },
+    "trend": {
+      "noData": "No trend data available",
+      "topContractors": "Top Contractors",
+      "topUsersWeekly": "Top Users (Weekly)",
+      "topUsersMonthly": "Top Users (Monthly)"
+    },
+    "widget": {
+      "noRecentOrders": "No recent orders",
+      "untitledOrder": "Untitled Order",
+      "orderCount_one": "{{count}} order",
+      "orderCount_other": "{{count}} orders"
+    },
+    "summary": {
+      "wasQuantity": "(was {{quantity}})",
+      "newBadge": "NEW!"
+    }
   }
 }

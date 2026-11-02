@@ -77,7 +77,7 @@ export function UnlinkProfile() {
                   error.data &&
                   "message" in error.data
                     ? String(error.data.message)
-                    : "Unknown error occurred"}
+                    : t("accountUi.unknownError")}
                 </Typography>
               )}
             </Alert>

@@ -207,7 +207,9 @@ export function OrderDetailsArea(props: { order: Order }) {
                           }
                           sx={{ textTransform: "none", fontSize: "0.75rem" }}
                         >
-                          {isEditingAssigned ? "Cancel" : "Assign"}
+                          {isEditingAssigned
+                            ? t("common.cancel")
+                            : t("memberAssignArea.assign")}
                         </Button>
                       )}
                   </Stack>
