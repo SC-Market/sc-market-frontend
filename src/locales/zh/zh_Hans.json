@@ -7521,7 +7521,16 @@
       "history": "导入历史",
       "started": "开始时间",
       "duration": "耗时",
-      "summaryColumn": "摘要"
+      "summaryColumn": "摘要",
+      "deployHook": {
+        "title": "预渲染页面重新构建",
+        "explainer": "每次导入成功后，网站都会重新构建预渲染的游戏数据页面（最多每 30 分钟一次；期间的多次导入会合并为一次重新构建）。",
+        "notConfigured": "导入后不会重新构建预渲染页面：后端未设置 <code>CF_PAGES_DEPLOY_HOOK_URL</code>。在下一次前端部署之前，这些页面会保留之前的数据。",
+        "never": "自后端启动以来尚未触发重新构建。",
+        "lastOk": "上次重新构建触发于 {{time}}。",
+        "lastFailed": "上次重新构建触发失败（{{time}}）：{{error}}",
+        "pending": "下一次重新构建计划于 {{time}}。"
+      }
     },
     "orderStats": {
       "orderCountDaily": "订单数（每日）",

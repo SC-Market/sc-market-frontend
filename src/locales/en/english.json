@@ -7623,7 +7623,16 @@
       "history": "Import History",
       "started": "Started",
       "duration": "Duration",
-      "summaryColumn": "Summary"
+      "summaryColumn": "Summary",
+      "deployHook": {
+        "title": "Prerendered pages rebuild",
+        "explainer": "After each successful import the site rebuilds its prerendered game-data pages (at most once every 30 minutes; imports in between are combined into one rebuild).",
+        "notConfigured": "Prerendered pages are not rebuilt after imports: <code>CF_PAGES_DEPLOY_HOOK_URL</code> is not set on the backend. They keep the previous data until the next frontend deploy.",
+        "never": "No rebuild triggered since the backend started.",
+        "lastOk": "Last rebuild triggered {{time}}.",
+        "lastFailed": "Last rebuild trigger failed {{time}}: {{error}}",
+        "pending": "Next rebuild queued for {{time}}."
+      }
     },
     "orderStats": {
       "orderCountDaily": "Order Count (Daily)",

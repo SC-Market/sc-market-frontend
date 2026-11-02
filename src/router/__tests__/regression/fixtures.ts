@@ -13,6 +13,8 @@ import type {
   ContractorRole,
 } from "../../../features/contractor/domain/types"
 import type {
+  SearchBlueprintsResponse,
+  SearchMissionsResponse,
   ShopPublicResponse,
   ShopResponse,
 } from "../../../store/api/v2/market"
@@ -188,6 +190,51 @@ export const fixtureShopPublic: ShopPublicResponse = {
   rating_count: 0,
 }
 
+/**
+ * One blueprint and one mission for the /blueprints and /missions hubs, so
+ * their snapshots list the cards' links (each card is an `<a href>` to its
+ * detail page: prerendered, crawlable).
+ */
+export const fixtureBlueprintSearch: SearchBlueprintsResponse = {
+  blueprints: [
+    {
+      blueprint_id: "00000000-0000-4000-8000-0000000000b1",
+      blueprint_code: "fixture-blueprint-code",
+      blueprint_name: "BP_CRAFT_fixture_rifle",
+      output_item_name: "Fixture Rifle",
+      item_category: "Weapons",
+      source: "mission_reward",
+      ingredient_count: 1,
+      ingredients: [{ name: "Agricium", quantity_required: 1 }],
+      mission_count: 1,
+    },
+  ],
+  total: 1,
+  page: 1,
+  page_size: 40,
+}
+
+export const fixtureMissionSearch: SearchMissionsResponse = {
+  missions: [
+    {
+      mission_id: "00000000-0000-4000-8000-0000000000c1",
+      mission_code: "PU_Fixture_Delivery",
+      mission_name: "Fixture Delivery",
+      category: "missiontype.delivery",
+      star_system: "Stanton",
+      blueprint_reward_count: 0,
+      is_chain_starter: false,
+      is_chain_mission: false,
+      is_shareable: true,
+      is_unique_mission: false,
+      ship_encounter_count: 0,
+    },
+  ],
+  total: 1,
+  page: 1,
+  page_size: 40,
+}
+
 export interface FakeApiRequest {
   method: string
   /** pathname + search, without the backend origin */
@@ -250,6 +297,12 @@ export function createFakeApi(session: SessionKind) {
       }
       if (url.pathname === `/api/v2/shops/${FIXTURE.shopSlug}`) {
         return json(fixtureShopPublic)
+      }
+      if (url.pathname === "/api/v2/game-data/blueprints/search") {
+        return json(fixtureBlueprintSearch)
+      }
+      if (url.pathname === "/api/v2/game-data/missions/search") {
+        return json(fixtureMissionSearch)
       }
     }
     return json({ error: { code: "NOT_FOUND", message: "Not found" } }, 404)

@@ -7731,7 +7731,16 @@
       "history": "Historial de importaciones",
       "started": "Iniciado",
       "duration": "Duración",
-      "summaryColumn": "Resumen"
+      "summaryColumn": "Resumen",
+      "deployHook": {
+        "title": "Reconstrucción de las páginas prerenderizadas",
+        "explainer": "Tras cada importación correcta, el sitio reconstruye sus páginas prerenderizadas de datos del juego (como máximo una vez cada 30 minutos; las importaciones intermedias se combinan en una sola reconstrucción).",
+        "notConfigured": "Las páginas prerenderizadas no se reconstruyen tras las importaciones: <code>CF_PAGES_DEPLOY_HOOK_URL</code> no está configurada en el backend. Conservan los datos anteriores hasta el próximo despliegue del frontend.",
+        "never": "No se ha lanzado ninguna reconstrucción desde que se inició el backend.",
+        "lastOk": "Última reconstrucción lanzada el {{time}}.",
+        "lastFailed": "Falló el lanzamiento de la última reconstrucción el {{time}}: {{error}}",
+        "pending": "Próxima reconstrucción programada para el {{time}}."
+      }
     },
     "orderStats": {
       "orderCountDaily": "Número de pedidos (diario)",

@@ -77,9 +77,10 @@ unknown slug a 404 with noindex, and an API failure the plain shell.
 ## How fresh it is
 
 - **Game data** is a snapshot taken by the build. After a game-data
-  import, the hubs show the previous patch's data until the next frontend
-  deploy: the browser doesn't refetch the shipped data (searches, filters
-  and other pages of a list are fetched live).
+  import, the hubs show the previous patch's data until the rebuild the
+  import triggers (the deploy hook below, within 30 minutes plus the build)
+  or the next frontend deploy: the browser doesn't refetch the shipped data
+  (searches, filters and other pages of a list are fetched live).
 - **Guides and About** are the `content/` markdown of the deployed commit.
 - **Live data** (listings, buy orders, shops, prices, stats, anything
   per-user) is never shipped. The build renders it in its loading state
@@ -175,22 +176,57 @@ on a prerendered page is fetched in the browser until it is added there.
   API is down during a build, a page renders its loading state and the
   browser fetches the data (the build doesn't fail).
 
-## Follow-up: refresh after a game-data import (needs owner setup)
+## Refresh after a game-data import
 
-After a game-data import the prerendered hubs keep the previous patch's
-data until the next frontend deploy. Options, none built yet:
+The backend POSTs a Cloudflare Pages deploy hook after every successful
+game-data import (sc-market-backend
+`src/services/game-data/pages-deploy-hook.ts`), so a rebuild re-runs the
+prerender with the new patch's data:
 
-- **Cloudflare Pages deploy hook** (preferred): create a deploy hook for
-  the production branch in the Pages project settings and have the
-  backend's import job `POST` to it when an import finishes. A rebuild
-  re-runs the prerender with the new data. Needs the owner to create the
-  hook and store its URL as a backend secret; it counts against the
-  monthly build quota (one build per import).
-- **Scheduled rebuild**: a GitHub Actions cron calling the same hook (for
-  example daily). Simpler, but up to a day stale and builds even when
-  nothing changed.
-- **Client refetch of shipped data** after hydration (no setup): the hubs
-  would update in place when the data changed, at the cost of an extra
-  request per visit and a possible content change after first paint; the
-  crawler HTML would still be stale until a deploy.
+- The hook URL is the backend's `CF_PAGES_DEPLOY_HOOK_URL` (a deploy hook
+  for the production branch, Pages project settings → Builds → Deploy
+  hooks). A secret: never logged, stripped from errors. Unset: imports
+  don't rebuild (one warning at startup).
+- At most one POST per 30 minutes: the first import after a quiet period
+  triggers at once, later ones within 30 minutes are coalesced into one
+  more POST at the end of the interval. Each POST is one build against the
+  monthly build quota.
+- A failed POST is logged and reported (Bugsnag); the import still
+  succeeds. Admin › Game Data shows the last trigger, its result and any
+  queued one (`GET /api/v2/admin/pages-deploy-hook`). The state is in the
+  backend's memory, like the import jobs.
 
+## Blueprint and mission detail pages (not prerendered)
+
+`/blueprints/<name>` and `/missions/<code>` stay on the edge bridge, which
+already answers crawlers with the page's title, description, canonical,
+JSON-LD, h1, the detail text (rewards, giver, location, description,
+ingredients) and its related links. Prerendering them was measured on
+2026-11-02 and isn't reasonable on the Pages build:
+
+| | Pages | Measured (local, Apple Silicon, real API) |
+| --- | --- | --- |
+| Today's prerender | ~230 pages | full build 3 min, 4,038 files |
+| Blueprints (search API) | 1,471 | ~0.45 s per page, serial |
+| Missions (search API, unique URL-safe codes) | ~3,030 | ~0.45 s per page, serial |
+| Both | ~4,500 | +34 min serial (+12 min CPU at best), +9,000 files |
+
+React Router prerenders one path at a time; `prerender.concurrency` would
+overlap the API waits, but entry.server's content-body collector
+(`takeRenderedContentBodies`) is module state, so concurrent renders aren't
+safe today, and even fully overlapped the CPU alone is ~12 min locally
+(Pages build machines are slower; the build limit is 20 min). Each page
+also costs the API 2-3 requests per build.
+
+If they are prerendered later (a subset, or with concurrency made safe):
+the detail gates render the standalone detail page on the server and keep
+it when they hydrate (`useShowDetailPage`), but on desktop (`lg` and up) the
+UX is the hub with the detail modal over it, which a static file can't
+contain (the modal is a Portal, closed on the server). Those pages would
+then have to render from scratch on desktop (`renderFresh` in
+entry.client.tsx plus document.html's pre-paint check, like the light
+theme) and hydrate only below `lg`, so neither viewport swaps the page
+after the first paint. The kinds would go in `PRERENDERED_KINDS` and
+`PRERENDERED_DYNAMIC_KINDS` (`src/bridge/routes.ts`) so a page the build
+didn't make still gets the bridge, and `getBlueprintDetail` /
+`getMissionDetail` in `PRERENDERABLE_ENDPOINTS`.

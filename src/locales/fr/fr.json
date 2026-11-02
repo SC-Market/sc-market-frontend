@@ -7731,7 +7731,16 @@
       "history": "Historique des importations",
       "started": "Démarré",
       "duration": "Durée",
-      "summaryColumn": "Résumé"
+      "summaryColumn": "Résumé",
+      "deployHook": {
+        "title": "Reconstruction des pages pré-rendues",
+        "explainer": "Après chaque import réussi, le site reconstruit ses pages de données du jeu pré-rendues (au plus une fois toutes les 30 minutes ; les imports entre-temps sont regroupés en une seule reconstruction).",
+        "notConfigured": "Les pages pré-rendues ne sont pas reconstruites après les imports : <code>CF_PAGES_DEPLOY_HOOK_URL</code> n'est pas définie sur le backend. Elles gardent les données précédentes jusqu'au prochain déploiement du frontend.",
+        "never": "Aucune reconstruction déclenchée depuis le démarrage du backend.",
+        "lastOk": "Dernière reconstruction déclenchée le {{time}}.",
+        "lastFailed": "Échec du déclenchement de la dernière reconstruction le {{time}} : {{error}}",
+        "pending": "Prochaine reconstruction prévue le {{time}}."
+      }
     },
     "orderStats": {
       "orderCountDaily": "Nombre de commandes (quotidien)",

@@ -7515,7 +7515,16 @@
       "history": "インポート履歴",
       "started": "開始日時",
       "duration": "所要時間",
-      "summaryColumn": "概要"
+      "summaryColumn": "概要",
+      "deployHook": {
+        "title": "プリレンダリング済みページの再ビルド",
+        "explainer": "インポートが成功するたびに、サイトはプリレンダリング済みのゲームデータページを再ビルドします（最大 30 分に 1 回。その間のインポートは 1 回の再ビルドにまとめられます）。",
+        "notConfigured": "インポート後にプリレンダリング済みページは再ビルドされません：バックエンドに <code>CF_PAGES_DEPLOY_HOOK_URL</code> が設定されていません。次のフロントエンドのデプロイまで以前のデータのままです。",
+        "never": "バックエンドの起動以降、再ビルドは実行されていません。",
+        "lastOk": "最後の再ビルド実行：{{time}}。",
+        "lastFailed": "最後の再ビルドの実行に失敗しました（{{time}}）：{{error}}",
+        "pending": "次の再ビルド予定：{{time}}。"
+      }
     },
     "orderStats": {
       "orderCountDaily": "注文数（日別）",

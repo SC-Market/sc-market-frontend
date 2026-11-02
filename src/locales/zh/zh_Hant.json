@@ -7515,7 +7515,16 @@
       "history": "匯入記錄",
       "started": "開始時間",
       "duration": "耗時",
-      "summaryColumn": "摘要"
+      "summaryColumn": "摘要",
+      "deployHook": {
+        "title": "預先轉譯頁面重新建置",
+        "explainer": "每次匯入成功後，網站都會重新建置預先轉譯的遊戲資料頁面（最多每 30 分鐘一次；期間的多次匯入會合併為一次重新建置）。",
+        "notConfigured": "匯入後不會重新建置預先轉譯頁面：後端未設定 <code>CF_PAGES_DEPLOY_HOOK_URL</code>。在下一次前端部署之前，這些頁面會保留先前的資料。",
+        "never": "自後端啟動以來尚未觸發重新建置。",
+        "lastOk": "上次重新建置觸發於 {{time}}。",
+        "lastFailed": "上次重新建置觸發失敗（{{time}}）：{{error}}",
+        "pending": "下一次重新建置排定於 {{time}}。"
+      }
     },
     "orderStats": {
       "orderCountDaily": "訂單數（每日）",

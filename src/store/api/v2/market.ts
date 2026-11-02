@@ -2508,6 +2508,13 @@ const injectedRtkApi = api
         }),
         providesTags: ["Admin"],
       }),
+      getPagesDeployHookStatus: build.query<
+        GetPagesDeployHookStatusApiResponse,
+        GetPagesDeployHookStatusApiArg
+      >({
+        query: () => ({ url: `/admin/pages-deploy-hook` }),
+        providesTags: ["Admin"],
+      }),
       expireAllListings: build.mutation<
         ExpireAllListingsApiResponse,
         ExpireAllListingsApiArg
@@ -4294,6 +4301,9 @@ export type GetImportJobStatusApiResponse = /** status 200 Ok */ {
 export type GetImportJobStatusApiArg = {
   jobId: string
 }
+export type GetPagesDeployHookStatusApiResponse =
+  /** status 200 Ok */ PagesDeployHookStatus
+export type GetPagesDeployHookStatusApiArg = void
 export type ExpireAllListingsApiResponse = /** status 200 Ok */ {
   affected: number
 }
@@ -9517,6 +9527,17 @@ export type GameDataImportJob = {
   error: string | null
   details: string | null
 }
+export type PagesDeployHookStatus = {
+  /** CF_PAGES_DEPLOY_HOOK_URL is set. */
+  configured: boolean
+  /** When the hook was last POSTed (ISO), whatever the result. */
+  last_triggered_at: string | null
+  last_result: ("ok" | "failed" | null) | null
+  /** Why the last POST failed (never contains the hook URL). */
+  last_error: string | null
+  /** When a coalesced POST is due (ISO), if one is pending. */
+  next_trigger_at: string | null
+}
 export type AdminAlertAudiencePreview = {
   /** Users the alert would reach (the posting admin excluded). */
   recipients: number
@@ -9795,6 +9816,7 @@ export const {
   useImportGameDataMutation,
   useListGameDataImportJobsQuery,
   useGetImportJobStatusQuery,
+  useGetPagesDeployHookStatusQuery,
   useExpireAllListingsMutation,
   useGetActiveListingCountQuery,
   usePreviewAdminAlertAudienceQuery,

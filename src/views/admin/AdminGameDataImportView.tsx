@@ -36,12 +36,62 @@ import {
   useListGameDataImportJobsQuery,
   GameDataImportJob,
 } from "../../store/api/admin"
+import { useGetPagesDeployHookStatusQuery } from "../../store/api/v2/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 function statusColor(s: GameDataImportJob["status"]): "success" | "error" | "info" | "warning" {
   if (s === "completed") return "success"
   if (s === "failed") return "error"
   return "info"
+}
+
+/**
+ * The frontend rebuild a successful import triggers (backend
+ * services/game-data/pages-deploy-hook.ts: the Cloudflare Pages deploy hook,
+ * at most once per 30 minutes), so the prerendered game-data pages get the
+ * new data.
+ */
+function DeployHookStatus({ pollFast }: { pollFast: boolean }) {
+  const { t } = useTranslation()
+  const { data } = useGetPagesDeployHookStatusQuery(undefined, {
+    pollingInterval: pollFast ? 5000 : 60000,
+  })
+  if (!data) return null
+  const time = (iso: string) => new Date(iso).toLocaleString()
+  if (!data.configured) {
+    return (
+      <Alert severity="warning" sx={{ mb: 3 }}>
+        <Trans i18nKey="adminUi.gameDataImport.deployHook.notConfigured" components={{ code: <code /> }} />
+      </Alert>
+    )
+  }
+  const lines: string[] = []
+  if (!data.last_triggered_at) lines.push(t("adminUi.gameDataImport.deployHook.never"))
+  else if (data.last_result === "failed")
+    lines.push(
+      t("adminUi.gameDataImport.deployHook.lastFailed", {
+        time: time(data.last_triggered_at),
+        error: data.last_error ?? "",
+      }),
+    )
+  else lines.push(t("adminUi.gameDataImport.deployHook.lastOk", { time: time(data.last_triggered_at) }))
+  if (data.next_trigger_at)
+    lines.push(t("adminUi.gameDataImport.deployHook.pending", { time: time(data.next_trigger_at) }))
+  return (
+    <Alert severity={data.last_result === "failed" ? "error" : "info"} sx={{ mb: 3 }}>
+      <Typography variant="subtitle2" component="p">
+        {t("adminUi.gameDataImport.deployHook.title")}
+      </Typography>
+      <Typography variant="body2" component="p">
+        {t("adminUi.gameDataImport.deployHook.explainer")}
+      </Typography>
+      {lines.map((line) => (
+        <Typography key={line} variant="body2" component="p">
+          {line}
+        </Typography>
+      ))}
+    </Alert>
+  )
 }
 
 function JobDetailRow({ job }: { job: GameDataImportJob }) {
@@ -206,6 +256,7 @@ export function AdminGameDataImportView() {
       <Alert severity="info" sx={{ mb: 3 }}>
         <Trans i18nKey="adminUi.gameDataImport.shopsNotice" components={{ code: <code /> }} />
       </Alert>
+      <DeployHookStatus pollFast={hasRunning} />
 
       {/* Upload area */}
       <Paper

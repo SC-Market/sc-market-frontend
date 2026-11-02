@@ -371,6 +371,7 @@ exports[`routes (shard 3/4) > /blueprints 1`] = `
   "lazyPending": [],
   "mainLinks": [
     "/about",
+    "/blueprints/BP_CRAFT_fixture_rifle",
     "/changelog",
     "/developers",
     "/discord/install?type=server&src=footer",

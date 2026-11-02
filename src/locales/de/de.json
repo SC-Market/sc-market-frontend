@@ -7623,7 +7623,16 @@
       "history": "Importverlauf",
       "started": "Gestartet",
       "duration": "Dauer",
-      "summaryColumn": "Zusammenfassung"
+      "summaryColumn": "Zusammenfassung",
+      "deployHook": {
+        "title": "Neuaufbau der vorgerenderten Seiten",
+        "explainer": "Nach jedem erfolgreichen Import baut die Website ihre vorgerenderten Spieldaten-Seiten neu auf (höchstens einmal alle 30 Minuten; Importe dazwischen werden zu einem Neuaufbau zusammengefasst).",
+        "notConfigured": "Vorgerenderte Seiten werden nach Importen nicht neu aufgebaut: <code>CF_PAGES_DEPLOY_HOOK_URL</code> ist im Backend nicht gesetzt. Sie behalten die bisherigen Daten bis zum nächsten Frontend-Deploy.",
+        "never": "Seit dem Start des Backends wurde kein Neuaufbau ausgelöst.",
+        "lastOk": "Letzter Neuaufbau ausgelöst am {{time}}.",
+        "lastFailed": "Auslösen des letzten Neuaufbaus fehlgeschlagen am {{time}}: {{error}}",
+        "pending": "Nächster Neuaufbau geplant für {{time}}."
+      }
     },
     "orderStats": {
       "orderCountDaily": "Anzahl der Bestellungen (täglich)",
