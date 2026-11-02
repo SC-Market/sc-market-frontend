@@ -207,7 +207,7 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
       section(
         "announcements",
         "Announcements",
-        "Messages from the SC Market team. Always delivered.",
+        "Messages from the SC Market team. Always delivered on the site, push and Discord; you can turn the emails off.",
         [row("admin", "Announcement", ["admin.alert"])],
       ),
     ],

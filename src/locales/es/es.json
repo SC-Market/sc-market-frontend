@@ -82,7 +82,7 @@
         "push": "Push",
         "email": "Correo electrónico",
         "discord_dm": "MD de Discord",
-        "hint": "Los canales elegidos se entregan incluso a los usuarios que los desactivaron. Los demás no se usan."
+        "hint": "Los canales elegidos se entregan incluso a los usuarios que los desactivaron, salvo el correo: quienes desactivaron los correos de anuncios o se dieron de baja no lo reciben. Los demás no se usan."
       },
       "preview": {
         "recipients": "~{{count}} destinatarios",
@@ -93,7 +93,7 @@
       },
       "confirmEmail": {
         "title": "¿Enviar un correo a todos los usuarios?",
-        "body": "Esta alerta se enviará por correo a todos los usuarios con una dirección verificada, incluidos los que desactivaron los correos de avisos.",
+        "body": "Este aviso se enviará por correo a todos los usuarios con una dirección verificada que no hayan desactivado los correos de anuncios.",
         "cancel": "Volver",
         "confirm": "Enviar el correo"
       }
@@ -987,7 +987,7 @@
         },
         "announcements": {
           "label": "Avisos",
-          "hint": "Mensajes del equipo de SC Market. Siempre se entregan."
+          "hint": "Mensajes del equipo de SC Market. Siempre se entregan en el sitio, por push y en Discord; puedes desactivar los correos."
         },
         "listings": {
           "label": "Anuncios",
@@ -6132,7 +6132,8 @@
       "completed": "{{n}} pedidos completados",
       "rating": "{{rating}}★ ({{n}})",
       "listings": "{{n}} anuncios",
-      "open": "Abrir el escaparate en SC Market"
+      "open": "Abrir el escaparate en SC Market",
+      "services": "{{n}} servicios"
     },
     "hub": {
       "title": "Escaparates de orgs",
@@ -6142,7 +6143,8 @@
       "all": "Todas",
       "empty": "Aún no hay escaparates.",
       "yourOrg": "¿Diriges una org? Verifícala, abre una tienda y podrá aparecer aquí.",
-      "register": "Registrar tu org"
+      "register": "Registrar tu org",
+      "servicesTag": "Servicios"
     },
     "landing": {
       "title": "Escaparates de orgs",
@@ -6204,8 +6206,8 @@
       "shopListed": "Esta tienda cuenta para la ficha de su org en el directorio de escaparates.",
       "hidden": "Oculto: no aparece en el directorio de escaparates.",
       "membersOnly": "Los escaparates solo para miembros nunca se listan públicamente. Tu subdominio con tu marca sigue funcionando para tus miembros.",
-      "onlyPrivate": "Aún no aparece: solo anuncios para miembros ({{listings}}). Aparecerá cuando tenga un anuncio público.",
-      "noContent": "Aún no aparece: aparecerá cuando tenga un anuncio público.",
+      "onlyPrivate": "Aún no aparece: solo tiene anuncios para miembros ({{listings}}). Aparecerá cuando tenga un anuncio público o un servicio.",
+      "noContent": "Aún no aparece: aparecerá cuando tenga un anuncio público o un servicio.",
       "notVerified": "Solo las orgs verificadas por RSI aparecen en el directorio de escaparates.",
       "personalShop": "El directorio de escaparates lista orgs, así que las tiendas personales aún no aparecen.",
       "orgNotListed": "Su org no aparece en el directorio de escaparates, así que esta tienda tampoco.",
@@ -6213,7 +6215,8 @@
     },
     "shopSection": {
       "title": "Escaparate con tu marca",
-      "subtitle": "Pide un subdominio propio de sc-market.space para tu tienda y elige si aparece en el directorio de escaparates"
+      "subtitle": "Pide un subdominio propio de sc-market.space para tu tienda y elige si aparece en el directorio de escaparates",
+      "subtitlePersonal": "Solicita un subdominio propio de sc-market.space para tu tienda"
     }
   },
   "sellerActivity": {

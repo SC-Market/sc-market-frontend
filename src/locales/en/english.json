@@ -305,7 +305,7 @@
         "push": "Push",
         "email": "Email",
         "discord_dm": "Discord DM",
-        "hint": "Chosen channels are delivered even to users who turned them off. Others are not used."
+        "hint": "Chosen channels are delivered even to users who turned them off, except email: users who turned announcement emails off or unsubscribed don't get it. Others are not used."
       },
       "preview": {
         "recipients": "~{{count}} recipients",
@@ -316,7 +316,7 @@
       },
       "confirmEmail": {
         "title": "Email every user?",
-        "body": "This alert will be emailed to every user with a verified address, including those who turned announcement emails off.",
+        "body": "This alert will be emailed to every user with a verified address who hasn't turned announcement emails off.",
         "cancel": "Go back",
         "confirm": "Send the email"
       }
@@ -4882,7 +4882,7 @@
         },
         "announcements": {
           "label": "Announcements",
-          "hint": "Messages from the SC Market team. Always delivered."
+          "hint": "Messages from the SC Market team. Always delivered on the site, push and Discord; you can turn the emails off."
         },
         "listings": {
           "label": "Listings",
@@ -6095,7 +6095,8 @@
       "completed": "{{n}} completed orders",
       "rating": "{{rating}}★ ({{n}})",
       "listings": "{{n}} listings",
-      "open": "Open the storefront on SC Market"
+      "open": "Open the storefront on SC Market",
+      "services": "{{n}} services"
     },
     "hub": {
       "title": "Org storefronts",
@@ -6105,7 +6106,8 @@
       "all": "All",
       "empty": "No storefronts yet.",
       "yourOrg": "Run an org? Verify it, open a shop and it can be listed here.",
-      "register": "Register your org"
+      "register": "Register your org",
+      "servicesTag": "Services"
     },
     "landing": {
       "title": "Org storefronts",
@@ -6167,8 +6169,8 @@
       "shopListed": "This shop counts towards its org's listing in the storefront directory.",
       "hidden": "Hidden: it isn't shown in the storefront directory.",
       "membersOnly": "Members-only storefronts are never listed publicly. Your branded subdomain still works for your members.",
-      "onlyPrivate": "Not listed yet: only members-only listings ({{listings}}). It shows once it has a public listing.",
-      "noContent": "Not listed yet: it shows once it has a public listing.",
+      "onlyPrivate": "Not listed yet: only members-only listings ({{listings}}). It shows once it has a public listing or a service.",
+      "noContent": "Not listed yet: it shows once it has a public listing or a service.",
       "notVerified": "Only RSI-verified orgs are listed in the storefront directory.",
       "personalShop": "The storefront directory lists orgs, so personal shops aren't in it yet.",
       "orgNotListed": "Its org isn't listed in the storefront directory, so neither is this shop.",
@@ -6176,7 +6178,8 @@
     },
     "shopSection": {
       "title": "Branded storefront",
-      "subtitle": "Ask for your shop's own sc-market.space subdomain, and choose whether it's in the storefront directory"
+      "subtitle": "Ask for your shop's own sc-market.space subdomain, and choose whether it's in the storefront directory",
+      "subtitlePersonal": "Ask for your shop's own sc-market.space subdomain"
     }
   },
   "sellerActivity": {

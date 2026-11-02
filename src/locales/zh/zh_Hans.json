@@ -88,7 +88,7 @@
         "push": "推送",
         "email": "邮件",
         "discord_dm": "Discord 私信",
-        "hint": "所选渠道即使用户已关闭也会送达，未选的渠道不会使用。"
+        "hint": "所选渠道即使用户已关闭也会送达，但邮件除外：关闭了公告邮件或已退订的用户不会收到。未选的渠道不会使用。"
       },
       "preview": {
         "recipients": "约 {{count}} 位接收者",
@@ -99,7 +99,7 @@
       },
       "confirmEmail": {
         "title": "向所有用户发送邮件？",
-        "body": "此提醒将通过邮件发送给每位拥有已验证地址的用户，包括已关闭公告邮件的用户。",
+        "body": "此提醒将通过邮件发送给所有拥有已验证邮箱且未关闭公告邮件的用户。",
         "cancel": "返回",
         "confirm": "发送邮件"
       }
@@ -987,7 +987,7 @@
         },
         "announcements": {
           "label": "公告",
-          "hint": "来自 SC Market 团队的消息。始终送达。"
+          "hint": "来自 SC Market 团队的消息。网站、推送和 Discord 上始终送达；邮件可以关闭。"
         },
         "listings": {
           "label": "商品",
@@ -6064,7 +6064,8 @@
       "completed": "{{n}} 个已完成订单",
       "rating": "{{rating}}★（{{n}}）",
       "listings": "{{n}} 件商品",
-      "open": "在 SC Market 上打开店面"
+      "open": "在 SC Market 上打开店面",
+      "services": "{{n}} 项服务"
     },
     "hub": {
       "title": "组织店面",
@@ -6074,7 +6075,8 @@
       "all": "全部",
       "empty": "还没有店面。",
       "yourOrg": "在运营组织？验证组织并开设店铺后即可在此展示。",
-      "register": "注册你的组织"
+      "register": "注册你的组织",
+      "servicesTag": "服务"
     },
     "landing": {
       "title": "组织店面",
@@ -6136,8 +6138,8 @@
       "shopListed": "此店铺计入其组织在店面目录中的条目。",
       "hidden": "已隐藏：不会在店面目录中显示。",
       "membersOnly": "仅限成员的店面永远不会公开列出。你的品牌子域名仍可供成员使用。",
-      "onlyPrivate": "尚未列出：只有仅限成员的商品（{{listings}}）。有公开商品后才会显示。",
-      "noContent": "尚未列出：有公开商品后才会显示。",
+      "onlyPrivate": "尚未列出：只有仅限成员的商品（{{listings}}）。有公开商品或服务后才会显示。",
+      "noContent": "尚未列出：有公开商品或服务后才会显示。",
       "notVerified": "只有经过 RSI 验证的组织才会列入店面目录。",
       "personalShop": "店面目录列出的是组织，因此个人店铺暂不在其中。",
       "orgNotListed": "其组织未列入店面目录，因此此店铺也不会列出。",
@@ -6145,7 +6147,8 @@
     },
     "shopSection": {
       "title": "品牌店面",
-      "subtitle": "为你的店铺申请独立的 sc-market.space 子域名，并选择是否列入店面目录"
+      "subtitle": "为你的店铺申请独立的 sc-market.space 子域名，并选择是否列入店面目录",
+      "subtitlePersonal": "为你的店铺申请专属的 sc-market.space 子域名"
     }
   },
   "sellerActivity": {

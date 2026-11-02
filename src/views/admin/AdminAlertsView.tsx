@@ -435,7 +435,7 @@ export function AdminAlertsView() {
           <Typography variant="body2">
             {t(
               "admin.alerts.confirmEmail.body",
-              "This alert will be emailed to every user with a verified address, including those who turned announcement emails off.",
+              "This alert will be emailed to every user with a verified address who hasn't turned announcement emails off.",
             )}
           </Typography>
         </DialogContent>

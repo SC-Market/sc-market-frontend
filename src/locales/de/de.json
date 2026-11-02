@@ -82,7 +82,7 @@
         "push": "Push",
         "email": "E-Mail",
         "discord_dm": "Discord-DM",
-        "hint": "Die gewählten Kanäle werden auch an Nutzer zugestellt, die sie deaktiviert haben. Andere werden nicht verwendet."
+        "hint": "Die gewählten Kanäle werden auch an Nutzer zugestellt, die sie deaktiviert haben, außer E-Mail: Wer Ankündigungs-E-Mails deaktiviert oder abbestellt hat, bekommt sie nicht. Andere werden nicht verwendet."
       },
       "preview": {
         "recipients": "~{{count}} Empfänger",
@@ -93,7 +93,7 @@
       },
       "confirmEmail": {
         "title": "E-Mail an alle Nutzer senden?",
-        "body": "Diese Meldung wird per E-Mail an alle Nutzer mit bestätigter Adresse gesendet – auch an diejenigen, die Ankündigungs-E-Mails deaktiviert haben.",
+        "body": "Diese Meldung wird per E-Mail an alle Nutzer mit bestätigter Adresse gesendet, die Ankündigungs-E-Mails nicht deaktiviert haben.",
         "cancel": "Zurück",
         "confirm": "E-Mail senden"
       }
@@ -984,7 +984,7 @@
         },
         "announcements": {
           "label": "Ankündigungen",
-          "hint": "Nachrichten vom SC-Market-Team. Werden immer zugestellt."
+          "hint": "Nachrichten vom SC-Market-Team. Werden auf der Website, per Push und auf Discord immer zugestellt; die E-Mails kannst du deaktivieren."
         },
         "listings": {
           "label": "Angebote",
@@ -6095,7 +6095,8 @@
       "completed": "{{n}} abgeschlossene Bestellungen",
       "rating": "{{rating}}★ ({{n}})",
       "listings": "{{n}} Angebote",
-      "open": "Storefront auf SC Market öffnen"
+      "open": "Storefront auf SC Market öffnen",
+      "services": "{{n}} Dienstleistungen"
     },
     "hub": {
       "title": "Org-Storefronts",
@@ -6105,7 +6106,8 @@
       "all": "Alle",
       "empty": "Noch keine Storefronts.",
       "yourOrg": "Leitest du eine Org? Verifiziere sie, eröffne einen Shop, dann kann sie hier erscheinen.",
-      "register": "Org registrieren"
+      "register": "Org registrieren",
+      "servicesTag": "Dienstleistungen"
     },
     "landing": {
       "title": "Org-Storefronts",
@@ -6167,8 +6169,8 @@
       "shopListed": "Dieser Shop zählt zum Eintrag seiner Org im Storefront-Verzeichnis.",
       "hidden": "Ausgeblendet: wird im Storefront-Verzeichnis nicht angezeigt.",
       "membersOnly": "Storefronts nur für Mitglieder werden nie öffentlich gelistet. Deine gebrandete Subdomain funktioniert für deine Mitglieder weiterhin.",
-      "onlyPrivate": "Noch nicht gelistet: nur Angebote für Mitglieder ({{listings}}). Erscheint, sobald es ein öffentliches Angebot gibt.",
-      "noContent": "Noch nicht gelistet: erscheint, sobald es ein öffentliches Angebot gibt.",
+      "onlyPrivate": "Noch nicht gelistet: nur Angebote nur für Mitglieder ({{listings}}). Erscheint, sobald es ein öffentliches Angebot oder eine Dienstleistung gibt.",
+      "noContent": "Noch nicht gelistet: erscheint, sobald es ein öffentliches Angebot oder eine Dienstleistung gibt.",
       "notVerified": "Nur RSI-verifizierte Orgs stehen im Storefront-Verzeichnis.",
       "personalShop": "Das Storefront-Verzeichnis listet Orgs, persönliche Shops sind darin noch nicht enthalten.",
       "orgNotListed": "Seine Org steht nicht im Storefront-Verzeichnis, dieser Shop also auch nicht.",
@@ -6176,7 +6178,8 @@
     },
     "shopSection": {
       "title": "Gebrandete Storefront",
-      "subtitle": "Frag nach einer eigenen sc-market.space-Subdomain für deinen Shop und wähle, ob er im Storefront-Verzeichnis steht"
+      "subtitle": "Frag nach einer eigenen sc-market.space-Subdomain für deinen Shop und wähle, ob er im Storefront-Verzeichnis steht",
+      "subtitlePersonal": "Fordere eine eigene sc-market.space-Subdomain für deinen Shop an"
     }
   },
   "sellerActivity": {

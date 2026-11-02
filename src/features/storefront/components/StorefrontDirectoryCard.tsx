@@ -40,9 +40,10 @@ export function StorefrontDirectoryCard(props: {
         return status.private_listings > 0
           ? t("storefront.directory.onlyPrivate", {
               listings: status.private_listings,
-              defaultValue: "Not listed yet: only members-only listings ({{listings}}). It shows once it has a public listing.",
+              defaultValue:
+                "Not listed yet: only members-only listings ({{listings}}). It shows once it has a public listing or a service.",
             })
-          : t("storefront.directory.noContent", "Not listed yet: it shows once it has a public listing.")
+          : t("storefront.directory.noContent", "Not listed yet: it shows once it has a public listing or a service.")
       case "not_verified":
         return t("storefront.directory.notVerified", "Only RSI-verified orgs are listed in the storefront directory.")
       case "personal_shop":

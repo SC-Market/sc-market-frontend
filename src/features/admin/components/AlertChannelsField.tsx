@@ -102,7 +102,7 @@ export function AlertChannelsField(props: {
       <Typography variant="caption" color="text.secondary" component="p">
         {t(
           "admin.alerts.channels.hint",
-          "Chosen channels are delivered even to users who turned them off. Others are not used.",
+          "Chosen channels are delivered even to users who turned them off, except email: users who turned announcement emails off or unsubscribed don't get it. Others are not used.",
         )}
       </Typography>
       <Typography variant="body2" sx={{ mt: 0.5 }} data-testid="alert-audience">

@@ -82,7 +82,7 @@
         "push": "Push",
         "email": "E-mail",
         "discord_dm": "MP Discord",
-        "hint": "Les canaux choisis sont utilisés même pour les utilisateurs qui les ont désactivés. Les autres ne sont pas utilisés."
+        "hint": "Les canaux choisis sont utilisés même pour les utilisateurs qui les ont désactivés, sauf l'e-mail : ceux qui ont désactivé les e-mails d'annonces ou se sont désabonnés ne le reçoivent pas. Les autres ne sont pas utilisés."
       },
       "preview": {
         "recipients": "~{{count}} destinataires",
@@ -93,7 +93,7 @@
       },
       "confirmEmail": {
         "title": "Envoyer un e-mail à tous les utilisateurs ?",
-        "body": "Cette alerte sera envoyée par e-mail à tous les utilisateurs ayant une adresse vérifiée, y compris ceux qui ont désactivé les e-mails d'annonces.",
+        "body": "Cette alerte sera envoyée par e-mail à tous les utilisateurs ayant une adresse vérifiée qui n'ont pas désactivé les e-mails d'annonces.",
         "cancel": "Retour",
         "confirm": "Envoyer l'e-mail"
       }
@@ -987,7 +987,7 @@
         },
         "announcements": {
           "label": "Annonces",
-          "hint": "Messages de l'équipe SC Market. Toujours envoyés."
+          "hint": "Messages de l'équipe SC Market. Toujours envoyés sur le site, en push et sur Discord ; vous pouvez désactiver les e-mails."
         },
         "listings": {
           "label": "Annonces",
@@ -6132,7 +6132,8 @@
       "completed": "{{n}} commandes terminées",
       "rating": "{{rating}}★ ({{n}})",
       "listings": "{{n}} annonces",
-      "open": "Ouvrir la vitrine sur SC Market"
+      "open": "Ouvrir la vitrine sur SC Market",
+      "services": "{{n}} services"
     },
     "hub": {
       "title": "Vitrines d'orgs",
@@ -6142,7 +6143,8 @@
       "all": "Toutes",
       "empty": "Pas encore de vitrines.",
       "yourOrg": "Vous dirigez une org ? Vérifiez-la, ouvrez une boutique et elle pourra apparaître ici.",
-      "register": "Inscrire votre org"
+      "register": "Inscrire votre org",
+      "servicesTag": "Services"
     },
     "landing": {
       "title": "Vitrines d'orgs",
@@ -6204,8 +6206,8 @@
       "shopListed": "Cette boutique compte dans la fiche de son org dans l'annuaire des vitrines.",
       "hidden": "Masquée : elle n'apparaît pas dans l'annuaire des vitrines.",
       "membersOnly": "Les vitrines réservées aux membres ne sont jamais listées publiquement. Votre sous-domaine à vos couleurs fonctionne toujours pour vos membres.",
-      "onlyPrivate": "Pas encore listée : uniquement des annonces réservées aux membres ({{listings}}). Elle apparaîtra dès qu'il y aura une annonce publique.",
-      "noContent": "Pas encore listée : elle apparaîtra dès qu'il y aura une annonce publique.",
+      "onlyPrivate": "Pas encore listée : seulement des annonces réservées aux membres ({{listings}}). Elle apparaîtra dès qu'il y aura une annonce publique ou un service.",
+      "noContent": "Pas encore listée : elle apparaîtra dès qu'il y aura une annonce publique ou un service.",
       "notVerified": "Seules les orgs vérifiées par RSI figurent dans l'annuaire des vitrines.",
       "personalShop": "L'annuaire des vitrines liste des orgs : les boutiques personnelles n'y figurent pas encore.",
       "orgNotListed": "Son org ne figure pas dans l'annuaire des vitrines, cette boutique non plus.",
@@ -6213,7 +6215,8 @@
     },
     "shopSection": {
       "title": "Vitrine à vos couleurs",
-      "subtitle": "Demandez un sous-domaine sc-market.space pour votre boutique et choisissez si elle figure dans l'annuaire des vitrines"
+      "subtitle": "Demandez un sous-domaine sc-market.space pour votre boutique et choisissez si elle figure dans l'annuaire des vitrines",
+      "subtitlePersonal": "Demandez un sous-domaine sc-market.space dédié à votre boutique"
     }
   },
   "sellerActivity": {
