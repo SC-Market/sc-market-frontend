@@ -3,7 +3,7 @@
  * guides/about route chunks: the index is metadata only, each body is its own
  * lazy chunk (see scripts/vite/contentPlugin.ts).
  */
-import { use, useEffect, useState } from "react"
+import { createContext, use, useContext, useEffect, useState } from "react"
 import { bodies, index } from "virtual:help-content"
 import { retryDynamicImport } from "../../util/retryDynamicImport"
 import type { CategoryMeta, ChangelogMeta, ContentBody, GuideMeta } from "./domain/types"
@@ -64,18 +64,16 @@ function bodyEntry(key: string): BodyEntry | undefined {
   return entry
 }
 
-/** The bodies a server render showed (see takeRenderedContentBodies). */
-const renderedBodies = new Set<string>()
-
 /**
- * The bodies rendered since the last call (server only): a prerendered page
- * lists them so the browser loads them before hydrating (preloadContentBodies).
+ * The bodies one server render shows: entry.server.tsx (prerender) and
+ * src/ssr/render.tsx (the SSR Function) provide a fresh Set per final
+ * render and ship its keys with the page, so the browser loads them before
+ * hydrating (preloadContentBodies). Per render, never module state: the
+ * prerender renders several pages at once (react-router.config.ts
+ * `concurrency`), and one page must not list another's bodies. No provider
+ * (the browser, a data pass): nothing is recorded.
  */
-export function takeRenderedContentBodies(): string[] {
-  const keys = [...renderedBodies]
-  renderedBodies.clear()
-  return keys
-}
+export const RenderedContentBodies = createContext<Set<string> | null>(null)
 
 /**
  * Load these bodies (settled either way). A body still loading while its
@@ -96,7 +94,7 @@ export function useSuspenseContentBody(key: string): {
   body: ContentBody | undefined
   error: unknown
 } {
-  if (typeof window === "undefined") renderedBodies.add(key)
+  useContext(RenderedContentBodies)?.add(key)
   const entry = bodyEntry(key)
   if (!entry) return { body: undefined, error: undefined }
   if (entry.body === undefined && entry.error === undefined) use(entry.promise)

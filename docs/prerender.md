@@ -97,7 +97,15 @@ on a prerendered page is fetched in the browser until it is added there.
   queries the render starts (RTK Query's server-side hooks,
   `src/server/rtkQueryReactServer.ts`), and renders again until nothing new
   starts. It then keeps only the shippable data, renders the final HTML
-  from that, and writes the data next to `#root` as JSON.
+  from that, and writes the data next to `#root` as JSON, with the guide
+  bodies that final render showed (`RenderedContentBodies`, a fresh Set per
+  render in `src/features/help/content.ts`).
+- Four pages render at a time (`prerender.concurrency` in
+  `react-router.config.ts`). Everything a render collects is its own (store,
+  head, Emotion cache, guide bodies); nothing on the render path may keep
+  per-page state in a module. Measured 2026-11-02 (local, real API): the
+  prerender step went from 55 s to 22 s (the whole `react-router build`
+  152 s to 116 s), with byte-identical pages and data files.
 - The page's `<head>` (title, description, canonical, Open Graph, JSON-LD)
   comes from the bridge's builders (`src/server/bridgeHead.ts`), so a
   prerendered page and a bridged page get the same head.
@@ -218,14 +226,12 @@ ingredients) and its related links. Prerendering them was measured on
 | Missions (search API, unique URL-safe codes) | ~3,030 | ~0.45 s per page, serial |
 | Both | ~4,500 | +34 min serial (+12 min CPU at best), +9,000 files |
 
-React Router prerenders one path at a time; `prerender.concurrency` would
-overlap the API waits, but entry.server's content-body collector
-(`takeRenderedContentBodies`) is module state, so concurrent renders aren't
-safe today, and even fully overlapped the CPU alone is ~12 min locally
+The prerender now renders 4 pages at a time (above), which overlaps the
+API waits, but even fully overlapped the CPU alone is ~12 min locally
 (Pages build machines are slower; the build limit is 20 min). Each page
 also costs the API 2-3 requests per build.
 
-If they are prerendered later (a subset, or with concurrency made safe):
+If they are prerendered later (a subset, or a higher concurrency):
 the detail gates render the standalone detail page on the server and keep
 it when they hydrate (`useShowDetailPage`), but on desktop (`lg` and up) the
 UX is the hub with the detail modal over it, which a static file can't

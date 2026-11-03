@@ -31,7 +31,7 @@ import {
   PRERENDERED_DATA_ELEMENT_ID,
   type PrerenderedData,
 } from "./store/hydration"
-import { takeRenderedContentBodies } from "./features/help/content"
+import { RenderedContentBodies } from "./features/help/content"
 import {
   fulfilledEndpointNames,
   prerenderableApiState,
@@ -157,12 +157,15 @@ export default async function handleRequest(
   const render = (
     head: ReturnType<typeof newHead>,
     context: EntryContext = dataPassContext,
+    contentBodies: Set<string> | null = null,
   ) =>
     renderToHtml(
       <Provider store={store}>
-        <UnheadProvider value={head}>
-          <ServerRouter context={context} url={request.url} />
-        </UnheadProvider>
+        <RenderedContentBodies value={contentBodies}>
+          <UnheadProvider value={head}>
+            <ServerRouter context={context} url={request.url} />
+          </UnheadProvider>
+        </RenderedContentBodies>
       </Provider>,
     )
   const newHead = () =>
@@ -189,9 +192,15 @@ export default async function handleRequest(
   for (const api of API_SLICES) store.dispatch(api.util.resetApiState())
   store.dispatch(hydratePrerenderedData(shipped))
   const head = newHead()
-  takeRenderedContentBodies()
-  const { appHtml, styleTags } = await render(head, routerContext)
-  const contentBodies = takeRenderedContentBodies()
+  // The guide bodies this page shows (this render's own: other pages render
+  // at the same time, react-router.config.ts `concurrency`).
+  const renderedBodies = new Set<string>()
+  const { appHtml, styleTags } = await render(
+    head,
+    routerContext,
+    renderedBodies,
+  )
+  const contentBodies = [...renderedBodies]
 
   const url = new URL(request.url)
   const assets = buildContentSource()

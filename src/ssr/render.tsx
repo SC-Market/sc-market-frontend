@@ -31,6 +31,7 @@ import { createRenderCache, emotionStyleTags } from "../server/emotionStyles"
 import { bridgeHeadTags } from "../server/bridgeHead"
 import { applyTitleTemplate, whiteLabelHeadTitle } from "../seo/pageHead"
 import { DEFAULT_FRONTEND_URL } from "../seo/constants"
+import { RenderedContentBodies } from "../features/help/content"
 import { RequestContextProvider } from "./requestContext"
 import { I18nextProvider } from "react-i18next"
 import i18n, { loadLocale } from "../util/i18n"
@@ -182,17 +183,21 @@ async function renderPageNow(
     init: [{ titleTemplate: applyTitleTemplate }],
   })
   const cache = createRenderCache()
+  // The guide bodies this render shows (per render, like the prerender's).
+  const renderedBodies = new Set<string>()
   let renderError: unknown
   const stream = await renderToReadableStream(
     <CacheProvider value={cache}>
       <Provider store={ssr.store}>
-        <RequestContextProvider value={ssr.requestContext}>
-          <I18nextProvider i18n={variant.i18nInstance}>
-            <UnheadProvider value={head}>
-              <ServerRouter context={routerContext} url={request.url} />
-            </UnheadProvider>
-          </I18nextProvider>
-        </RequestContextProvider>
+        <RenderedContentBodies value={renderedBodies}>
+          <RequestContextProvider value={ssr.requestContext}>
+            <I18nextProvider i18n={variant.i18nInstance}>
+              <UnheadProvider value={head}>
+                <ServerRouter context={routerContext} url={request.url} />
+              </UnheadProvider>
+            </I18nextProvider>
+          </RequestContextProvider>
+        </RenderedContentBodies>
       </Provider>
     </CacheProvider>,
     {
@@ -251,7 +256,7 @@ async function renderPageNow(
       elementId: PRERENDERED_DATA_ELEMENT_ID,
       value: {
         api: fulfilledApiState(ssr.store.getState()),
-        contentBodies: [],
+        contentBodies: [...renderedBodies],
         ...(whiteLabel ? { whiteLabel } : {}),
       } satisfies PrerenderedData,
     },

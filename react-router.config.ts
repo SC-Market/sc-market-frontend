@@ -34,16 +34,23 @@ export default {
   appDirectory: "src",
   buildDirectory: "build",
   ssr: false,
-  prerender: async () => [
-    HOME_PATH,
-    ...GAME_DATA_HUB_PATHS,
-    STOREFRONTS_HUB_PATH,
-    // Every mission hub of the LIVE version (the game data API, at build time).
-    ...(await missionHubPathsFromApi(process.env.VITE_BACKEND_URL)),
-    ...contentPathsFromDisk(path.resolve(import.meta.dirname, "content")),
-    // Not pages: lets the server-rendered routes export a loader
-    // (src/ssr/routePlaceholders.ts); finalize.ts deletes their files.
-    ...SSR_ROUTE_PLACEHOLDERS,
-    ...MISSION_HUB_ROUTE_PLACEHOLDERS,
-  ],
+  prerender: {
+    paths: async () => [
+      HOME_PATH,
+      ...GAME_DATA_HUB_PATHS,
+      STOREFRONTS_HUB_PATH,
+      // Every mission hub of the LIVE version (the game data API, at build time).
+      ...(await missionHubPathsFromApi(process.env.VITE_BACKEND_URL)),
+      ...contentPathsFromDisk(path.resolve(import.meta.dirname, "content")),
+      // Not pages: lets the server-rendered routes export a loader
+      // (src/ssr/routePlaceholders.ts); finalize.ts deletes their files.
+      ...SSR_ROUTE_PLACEHOLDERS,
+      ...MISSION_HUB_ROUTE_PLACEHOLDERS,
+    ],
+    // Pages at a time. Safe: each render keeps its own state (store, head,
+    // styles, and the guide bodies it lists: RenderedContentBodies in
+    // src/features/help/content.ts). Pages build VMs are small, so 4
+    // (prerender 55 s -> 22 s locally, docs/prerender.md).
+    concurrency: 4,
+  },
 } satisfies Config
