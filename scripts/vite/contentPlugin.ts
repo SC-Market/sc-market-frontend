@@ -44,6 +44,11 @@ const IMAGE_PLACEHOLDER = "__HELP_IMG__"
 function listFiles(dir: string, base = dir): string[] {
   const out: string[] = []
   for (const name of readdirSync(dir)) {
+    // Skip dotfiles: on exFAT/network drives macOS writes "._<name>.md"
+    // AppleDouble files next to every edited file. They aren't Markdown, so
+    // compiling them failed the whole content module (every guide, About and
+    // Changelog page then never became ready). Same rule as import.meta.glob.
+    if (name.startsWith(".")) continue
     const full = path.join(dir, name)
     if (statSync(full).isDirectory()) out.push(...listFiles(full, base))
     else if (name.endsWith(".md") || name.endsWith(".json")) {
