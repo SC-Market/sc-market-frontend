@@ -1010,10 +1010,6 @@
           "label": "Avisos",
           "hint": "Mensajes del equipo de SC Market. Siempre se entregan en el sitio, por push y en Discord; puedes desactivar los correos."
         },
-        "listings": {
-          "label": "Anuncios",
-          "hint": "Un aviso 3 días antes de que caduque un anuncio, con renovación en un clic."
-        },
         "storefront": {
           "label": "Solicitudes de tienda",
           "hint": "Respuestas a una solicitud de tienda personalizada que enviaste."
@@ -1076,9 +1072,6 @@
         "member-joined": {
           "label": "Nuevo miembro",
           "hint": "Orgs en las que puedes gestionar invitaciones"
-        },
-        "listing-expiring": {
-          "label": "Anuncio a punto de caducar"
         },
         "storefront-enquiry": {
           "label": "Solicitud aceptada o rechazada"
@@ -9056,7 +9049,7 @@
       },
       "user_other_discord": {
         "title": "Tu cuenta de SC Market está vinculada a otra cuenta de Discord",
-        "body": "No la hemos cambiado. Para usar esta cuenta de Discord, desvincula la actual en Ajustes › Discord y vuelve a añadir SC Market."
+        "body": "No la hemos cambiado. Para usar esta cuenta de Discord, desvincula la actual en Ajustes › Integración con Discord y vuelve a añadir SC Market."
       },
       "server_added": {
         "title": "El bot está en tu servidor",

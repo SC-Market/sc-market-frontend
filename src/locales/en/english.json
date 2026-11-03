@@ -4937,10 +4937,6 @@
           "label": "Announcements",
           "hint": "Messages from the SC Market team. Always delivered on the site, push and Discord; you can turn the emails off."
         },
-        "listings": {
-          "label": "Listings",
-          "hint": "A reminder 3 days before a listing expires, with a one-click renew."
-        },
         "storefront": {
           "label": "Storefront enquiries",
           "hint": "Replies to a branded storefront enquiry you sent."
@@ -5003,9 +4999,6 @@
         "member-joined": {
           "label": "New member joined",
           "hint": "Orgs where you can manage invites"
-        },
-        "listing-expiring": {
-          "label": "Listing about to expire"
         },
         "storefront-enquiry": {
           "label": "Enquiry accepted or declined"
@@ -8919,7 +8912,7 @@
       },
       "user_other_discord": {
         "title": "Your SC Market account is linked to a different Discord account",
-        "body": "We didn't change it. To use this Discord account instead, unlink the current one in Settings › Discord, then add SC Market again."
+        "body": "We didn't change it. To use this Discord account instead, unlink the current one in Settings › Discord Integration, then add SC Market again."
       },
       "server_added": {
         "title": "The bot is in your server",

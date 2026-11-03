@@ -166,16 +166,9 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
       section("bids", "Bids", "New bids on your auctions.", [
         row("bid", "New bid", ["market.bid"]),
       ]),
-      section(
-        "listings",
-        "Listings",
-        "A reminder 3 days before a listing expires, with a one-click renew.",
-        [
-          row("listing-expiring", "Listing about to expire", [
-            "listing.expiring",
-          ]),
-        ],
-      ),
+      // No "Listings" section: listings don't expire (LISTING_EXPIRY_ENABLED is
+      // off on the backend and not exposed here), so there is no expiry
+      // reminder to set. Add it back when expiry is turned on.
       section(
         "watchlist",
         "Price alerts",

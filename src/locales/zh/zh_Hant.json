@@ -946,10 +946,6 @@
           "label": "公告",
           "hint": "來自 SC Market 團隊的訊息。網站、推播和 Discord 上一律送達；電子郵件可以關閉。"
         },
-        "listings": {
-          "label": "商品",
-          "hint": "商品到期前3天提醒，可一鍵續期。"
-        },
         "storefront": {
           "label": "店面申請",
           "hint": "對你提交的品牌店面申請的回覆。"
@@ -1012,9 +1008,6 @@
         "member-joined": {
           "label": "新成員加入",
           "hint": "您可管理邀請的組織"
-        },
-        "listing-expiring": {
-          "label": "商品即將到期"
         },
         "storefront-enquiry": {
           "label": "申請被接受或拒絕"
@@ -8782,7 +8775,7 @@
       },
       "user_other_discord": {
         "title": "你的 SC Market 帳號已連結到另一個 Discord 帳號",
-        "body": "我們沒有變更。若要改用此 Discord 帳號，請先在 設定 › Discord 中解除目前的連結，然後再次加入 SC Market。"
+        "body": "我們沒有變更。若要改用此 Discord 帳號，請先在 設定 › Discord集成 中解除目前的連結，然後再次加入 SC Market。"
       },
       "server_added": {
         "title": "機器人已加入你的伺服器",

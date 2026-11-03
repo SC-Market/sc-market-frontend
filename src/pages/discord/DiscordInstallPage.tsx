@@ -84,7 +84,7 @@ const RESULT_TEXT: Record<
   },
   user_other_discord: {
     title: "Your SC Market account is linked to a different Discord account",
-    body: "We didn't change it. To use this Discord account instead, unlink the current one in Settings › Discord, then add SC Market again.",
+    body: "We didn't change it. To use this Discord account instead, unlink the current one in Settings › Discord Integration, then add SC Market again.",
   },
   server_added: {
     title: "The bot is in your server",

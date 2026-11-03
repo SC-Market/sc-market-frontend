@@ -1004,10 +1004,6 @@
           "label": "お知らせ",
           "hint": "SC Marketチームからのメッセージです。サイト、プッシュ、Discordには常に配信されます。メールはオフにできます。"
         },
-        "listings": {
-          "label": "出品",
-          "hint": "出品の期限切れ3日前のリマインダー（ワンクリックで更新可能）。"
-        },
         "storefront": {
           "label": "ストアフロントの問い合わせ",
           "hint": "送信したブランドストアフロントの問い合わせへの返答。"
@@ -1070,9 +1066,6 @@
         "member-joined": {
           "label": "新しいメンバーの参加",
           "hint": "招待を管理できる組織"
-        },
-        "listing-expiring": {
-          "label": "まもなく期限切れの出品"
         },
         "storefront-enquiry": {
           "label": "問い合わせの承認・見送り"
@@ -8782,7 +8775,7 @@
       },
       "user_other_discord": {
         "title": "あなたの SC Market アカウントは別の Discord アカウントに連携されています",
-        "body": "変更はしていません。この Discord アカウントを使うには、設定 › Discord で現在の連携を解除してから、もう一度 SC Market を追加してください。"
+        "body": "変更はしていません。この Discord アカウントを使うには、設定 › Discord連携 で現在の連携を解除してから、もう一度 SC Market を追加してください。"
       },
       "server_added": {
         "title": "ボットがサーバーに追加されました",

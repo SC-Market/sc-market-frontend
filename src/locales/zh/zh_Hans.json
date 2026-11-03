@@ -1010,10 +1010,6 @@
           "label": "公告",
           "hint": "来自 SC Market 团队的消息。网站、推送和 Discord 上始终送达；邮件可以关闭。"
         },
-        "listings": {
-          "label": "商品",
-          "hint": "商品到期前3天提醒，可一键续期。"
-        },
         "storefront": {
           "label": "店面申请",
           "hint": "对你提交的品牌店面申请的回复。"
@@ -1076,9 +1072,6 @@
         "member-joined": {
           "label": "新成员加入",
           "hint": "你可管理邀请的组织"
-        },
-        "listing-expiring": {
-          "label": "商品即将到期"
         },
         "storefront-enquiry": {
           "label": "申请被接受或拒绝"
@@ -8788,7 +8781,7 @@
       },
       "user_other_discord": {
         "title": "你的 SC Market 账号已关联到另一个 Discord 账号",
-        "body": "我们没有更改。若要改用此 Discord 账号，请先在 设置 › Discord 中解除当前关联，然后再次添加 SC Market。"
+        "body": "我们没有更改。若要改用此 Discord 账号，请先在 设置 › Discord集成 中解除当前关联，然后再次添加 SC Market。"
       },
       "server_added": {
         "title": "机器人已加入你的服务器",
