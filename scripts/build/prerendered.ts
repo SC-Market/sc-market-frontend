@@ -50,11 +50,49 @@ export function prerenderedPaths(outDir: string): string[] {
   return found.sort()
 }
 
+/**
+ * The canonical URLs that end in a slash (except the homepage's). A
+ * prerendered page's canonical is its clean path, as the bridge's and the
+ * sitemap's are. On React Router 8 the prerender requests the hubs with a
+ * trailing slash, and a head the app built from that URL said
+ * `/blueprints/`: a duplicate for crawlers. This check fails that build.
+ */
+export function trailingSlashCanonicals(html: string): string[] {
+  return [
+    ...html.matchAll(/<link\b[^>]*\brel="canonical"[^>]*>/g),
+  ].flatMap(([tag]) => {
+    const href = /\bhref="([^"]*)"/.exec(tag)?.[1]
+    if (!href) return []
+    try {
+      const { pathname } = new URL(href)
+      return pathname !== "/" && pathname.endsWith("/") ? [href] : []
+    } catch {
+      return []
+    }
+  })
+}
+
+/**
+ * The page data file React Router wrote for `/`: `/_root.data` on v7,
+ * `/_.data` on v8 (and with v7's `v8_trailingSlashAwareDataRequests`).
+ */
+export function rootDataFile(outDir: string): string {
+  const names = ["/_root.data", "/_.data"]
+  return names.find((name) => existsSync(path.join(outDir, name))) ?? names[0]
+}
+
 export function finalizePrerenderedPages(outDir: string): string[] {
   const paths = prerenderedPaths(outDir)
   for (const urlPath of paths) {
     const file = path.join(outDir, urlPath === "/" ? "" : urlPath, "index.html")
-    const html = inlineStylesheets(readFileSync(file, "utf8"), (fileName) => {
+    const page = readFileSync(file, "utf8")
+    const slashed = trailingSlashCanonicals(page)
+    if (slashed.length > 0) {
+      throw new Error(
+        `${urlPath}: canonical URL with a trailing slash (${slashed.join(", ")})`,
+      )
+    }
+    const html = inlineStylesheets(page, (fileName) => {
       const css = path.join(outDir, fileName)
       return existsSync(css) ? readFileSync(css, "utf8") : undefined
     })
@@ -62,9 +100,9 @@ export function finalizePrerenderedPages(outDir: string): string[] {
   }
 
   const headersFile = path.join(outDir, "_headers")
-  // Each page's single-fetch data (React Router's `<path>.data`, `_root.data`
-  // for /): turbo-stream, never cached across deploys.
-  const dataFiles = paths.map((p) => (p === "/" ? "/_root.data" : `${p}.data`))
+  // Each page's single-fetch data (React Router's `<path>.data`; for /,
+  // rootDataFile): turbo-stream, never cached across deploys.
+  const dataFiles = paths.map((p) => (p === "/" ? rootDataFile(outDir) : `${p}.data`))
   for (const file of dataFiles) {
     if (!existsSync(path.join(outDir, file))) {
       throw new Error(
