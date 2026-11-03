@@ -117,7 +117,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
     target, setTarget, targetObject, setTargetObject,
     options, members,
     handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOffer,
-    amContractor, amContractorManager,
+    actions,
     statusKey, statusColor,
     showAccept, showCancel,
     isUpdatingStatus, updateStatusCallback,
@@ -285,8 +285,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
               <TableCell component="th" scope="row">
                 <Stack direction="row" alignItems="center" spacing={1}>
                   {t("orderDetailsArea.assigned", "Assigned")}
-                  {amContractorManager &&
-                    !["accepted", "rejected"].includes(session.status) && (
+                  {actions.canAssign && (
                       <Button
                         size="small"
                         variant="text"
@@ -310,7 +309,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                       <Typography variant="body2" color="text.secondary">
                         {t("orderDetailsArea.none", "None")}
                       </Typography>
-                      {amContractor && !["accepted", "rejected"].includes(session.status) && (
+                      {actions.canClaim && (
                         <Button
                           size="small"
                           variant="outlined"

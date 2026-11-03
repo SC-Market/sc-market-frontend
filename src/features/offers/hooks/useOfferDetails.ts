@@ -14,7 +14,8 @@ import { useGetContractorBySpectrumIDQuery, useGetContractorMembersQuery, contra
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { has_permission } from "../../contractor/domain/permissions"
+import { availableOfferActions } from "../domain/status"
+import { useOrderViewerRoles } from "../../orders/hooks/useOrderViewerRoles"
 import { detectOfferChanges } from "../../../util/offerChanges"
 import { useAppDispatch } from "../../../store/hooks"
 import type { MinimalUser } from "../../../datatypes/User"
@@ -75,9 +76,21 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
   )
 
   // Permissions
-  const amContractorManager = useMemo(
-    () => !!session.contractor && !!profile?.contractors?.some(c => c.spectrum_id === session.contractor!.spectrum_id) && !!contractorData && has_permission(contractorData, profile, "manage_orders", profile?.contractors),
-    [contractorData, profile, session],
+  const roles = useOrderViewerRoles({
+    customer: session.customer?.username,
+    assignedTo: session.assigned_to?.username,
+    contractor: session.contractor?.spectrum_id,
+  })
+  const actions = useMemo(
+    () => availableOfferActions(
+      {
+        status: session.status,
+        assignedTo: session.assigned_to?.username,
+        contractor: session.contractor?.spectrum_id,
+      },
+      roles,
+    ),
+    [session.status, session.assigned_to?.username, session.contractor?.spectrum_id, roles],
   )
 
   const statusKey: OfferStatusKey = useMemo(
@@ -149,11 +162,6 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     }
   }, [unassignUser, session.session_id, issueAlert, t])
 
-  const amContractor = useMemo(
-    () => !!session.contractor && !!profile?.contractors?.some(c => c.spectrum_id === session.contractor!.spectrum_id),
-    [profile?.contractors, session.contractor],
-  )
-
   const handleClaimOffer = useCallback(async () => {
     if (!profile?.username) return
     try {
@@ -171,7 +179,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     target, setTarget, targetObject, setTargetObject,
     options, members,
     handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOffer,
-    amContractor, amContractorManager,
+    roles, actions,
     statusKey, statusColor,
     showAccept, showCancel,
     isUpdatingStatus, updateStatusCallback,

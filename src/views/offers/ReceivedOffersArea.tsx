@@ -58,7 +58,7 @@ import { EmptyOrders } from "../../components/empty-states"
 import { useLongPress } from "../../components/gestures"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
+import { useOrderViewerRoles } from "../../features/orders/hooks/useOrderViewerRoles"
 import { OrderSearchSortMethod } from "../../features/orders/domain/types"
 import { UserAvatar } from "../../components/avatar/UserAvatar"
 import { useTranslation } from "react-i18next"
@@ -67,7 +67,7 @@ import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { OfferRowSkeleton } from "../../components/skeletons"
 import { useAssignOfferMutation } from "../../features/offers/api/offerApi"
-import { has_permission } from "../contractor/OrgRoles"
+import { canClaimOffer } from "../../features/offers/domain/status"
 import { useOfferSearch } from "../../features/offers/hooks/useOfferSearch"
 import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
 
@@ -152,20 +152,15 @@ export function OfferRow(props: {
 
   const isBuyerView = props.viewAs === "buyer"
 
-  const belongsToOfferOrg = useMemo(
-    () => !!row.contractor && profile?.contractors?.some(c => c.spectrum_id === row.contractor!.spectrum_id),
-    [row.contractor, profile?.contractors],
+  const roles = useOrderViewerRoles({
+    customer: row.customer?.username,
+    assignedTo: row.assigned_to?.username,
+    contractor: row.contractor?.spectrum_id,
+  })
+  const canClaim = canClaimOffer(
+    { status: row.status, assignedTo: row.assigned_to?.username, contractor: row.contractor?.spectrum_id },
+    roles,
   )
-  const { data: offerContractor } = useGetContractorBySpectrumIDQuery(
-    row.contractor?.spectrum_id!, { skip: !row.contractor?.spectrum_id || !belongsToOfferOrg },
-  )
-
-  const canClaim = useMemo(() => {
-    if (row.assigned_to || !offerContractor || !profile) return false
-    const normalized = normalizeOfferStatus(row.status)
-    if (normalized !== "waitingSeller" && normalized !== "waitingCustomer") return false
-    return has_permission(offerContractor, profile, "claim_orders", profile.contractors)
-  }, [row.assigned_to, row.status, offerContractor, profile])
 
   // Key for translation and colour
   const statusKey = normalizeOfferStatus(row.status)
