@@ -5676,6 +5676,7 @@ export type NotificationCategoryId =
   | "reminders"
   | "contracts"
   | "storefront"
+  | "threads"
 export type NotificationChannelId = "in_app" | "push" | "email" | "discord_dm"
 export type NotificationEventKey =
   | "order.created"
@@ -5707,6 +5708,7 @@ export type NotificationEventKey =
   | "reminder.offer_pending"
   | "reminder.offer_pending_final"
   | "reminder.offer_waiting_buyer"
+  | "order.thread_invite"
 export type NotificationPreferenceCell = {
   channel: NotificationChannelId
   enabled: boolean

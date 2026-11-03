@@ -766,7 +766,9 @@
       "final_many": "Letzte Erinnerung: {{n}} Angebote warten auf Ihre Antwort",
       "buyer_one": "„{{title}}“ wartet noch auf den Verkäufer. Warten Sie weiter, schreiben Sie dem Verkäufer oder ziehen Sie das Angebot zurück.",
       "buyer_many": "{{n}} Ihrer Angebote warten noch auf den Verkäufer"
-    }
+    },
+    "buy_order_match": "Treffer für Kaufauftrag:",
+    "buy_order_match_listed": "passt zu einem deiner Kaufaufträge"
   },
   "onboarding": {
     "welcome": "Willkommen bei SC Market",
@@ -1015,6 +1017,10 @@
         "storefront": {
           "label": "Storefront-Anfragen",
           "hint": "Antworten auf eine Anfrage für einen eigenen Storefront, die du gesendet hast."
+        },
+        "threads": {
+          "label": "Discord-Threads",
+          "hint": "Deine Bestell- und Angebots-Threads auf dem Discord-Server eines Verkäufers."
         }
       },
       "rows": {
@@ -1090,6 +1096,11 @@
           "label": "Ihr Angebot wartet noch",
           "hint": "Wenn der Verkäufer nach der letzten Erinnerung nicht geantwortet hat",
           "tip": "Für Angebote, die du als Käufer gemacht hast: Der Verkäufer hat trotz Erinnerung noch nicht geantwortet. Du kannst weiter warten, dem Verkäufer schreiben oder das Angebot zurückziehen."
+        },
+        "thread-invite": {
+          "label": "Einladung zum Discord-Server",
+          "hint": "Wenn der Bot dich nicht zu einem Bestell- oder Angebots-Thread hinzufügen kann",
+          "tip": "Der Bot eröffnet für jede Bestellung und jedes Angebot einen privaten Thread auf dem Discord-Server des Verkäufers. Kann er dich nicht hinzufügen (meist, weil du noch nicht auf dem Server bist), schickt er dir per DM eine Einladung zum Server."
         }
       },
       "subtitle": "Legen Sie fest, wo Sie jede Art von Benachrichtigung erreicht.",
@@ -7832,7 +7843,7 @@
     },
     "stillSelling": {
       "title": "DM-Kampagne „Verkaufen Sie noch?“",
-      "subtitle": "Eine einmalige Discord-DM an Verkäufer, die seit über {{inactive}} Tagen nicht mehr gesehen wurden und deren öffentliche Angebote seit {{stale}} Tagen nicht aktualisiert wurden, sofern der Bot ihnen schreiben kann. Angebote einer Organisation gehen an ihre Mitglieder, die Bestellungen oder den Markt verwalten, eine DM pro Person.",
+      "subtitle": "Eine einmalige Discord-DM an Verkäufer, die seit über {{inactive}} Tagen nicht mehr gesehen wurden und deren öffentliche Angebote seit {{stale}} Tagen nicht aktualisiert wurden, sofern der Bot ihnen schreiben kann. Angebote einer Organisation gehen an ihre Mitglieder, die Bestellungen oder den Markt verwalten, eine DM pro Person. Wer Discord-DMs für den Markt in den Benachrichtigungseinstellungen ausgeschaltet hat, wird übersprungen.",
       "switchOn": "Versand ist eingeschaltet ({{env}}=true).",
       "switchOff": "Versand ist ausgeschaltet. Es kann nichts gesendet werden, bis {{env}}=true auf dem Server gesetzt ist.",
       "dryRun": "Probelauf: würde {{recipients}} Personen zu {{listings}} Angeboten eine DM senden.",

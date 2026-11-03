@@ -769,7 +769,9 @@
       "final_many": "Último recordatorio: {{n}} ofertas esperan tu respuesta",
       "buyer_one": "«{{title}}» sigue esperando al vendedor. Sigue esperando, escribe al vendedor o retira la oferta.",
       "buyer_many": "{{n}} de tus ofertas siguen esperando al vendedor"
-    }
+    },
+    "buy_order_match": "Coincidencia con orden de compra:",
+    "buy_order_match_listed": "coincide con una de tus órdenes de compra"
   },
   "onboarding": {
     "welcome": "Bienvenido a SC Market",
@@ -1018,6 +1020,10 @@
         "storefront": {
           "label": "Solicitudes de tienda",
           "hint": "Respuestas a una solicitud de tienda personalizada que enviaste."
+        },
+        "threads": {
+          "label": "Hilos de Discord",
+          "hint": "Tus hilos de pedidos y ofertas en el servidor de Discord de un vendedor."
         }
       },
       "rows": {
@@ -1093,6 +1099,11 @@
           "label": "Tu oferta sigue esperando",
           "hint": "Si el vendedor no ha respondido tras el último recordatorio",
           "tip": "Para ofertas que hiciste como comprador: el vendedor aún no ha respondido tras el recordatorio. Puedes seguir esperando, escribir al vendedor o retirar la oferta."
+        },
+        "thread-invite": {
+          "label": "Invitación al servidor de Discord",
+          "hint": "Cuando el bot no puede añadirte a un hilo de pedido u oferta",
+          "tip": "El bot abre un hilo privado para cada pedido u oferta en el servidor de Discord del vendedor. Si no puede añadirte (normalmente porque aún no estás en ese servidor), te envía por MD una invitación al servidor."
         }
       },
       "subtitle": "Elige dónde te llega cada tipo de notificación.",
@@ -7946,7 +7957,7 @@
     },
     "stillSelling": {
       "title": "Campaña de MD «¿Sigues vendiendo?»",
-      "subtitle": "Un único MD de Discord a los vendedores vistos por última vez hace más de {{inactive}} días cuyos anuncios públicos no se han actualizado en {{stale}} días, si el bot puede escribirles. Los anuncios de una organización van a sus miembros que gestionan pedidos o el mercado, un MD por persona.",
+      "subtitle": "Un único MD de Discord a los vendedores vistos por última vez hace más de {{inactive}} días cuyos anuncios públicos no se han actualizado en {{stale}} días, si el bot puede escribirles. Los anuncios de una organización van a sus miembros que gestionan pedidos o el mercado, un MD por persona. Se omite a quienes desactivaron los MD de Discord del mercado en sus ajustes de notificaciones.",
       "switchOn": "El envío está activado ({{env}}=true).",
       "switchOff": "El envío está desactivado. No se puede enviar nada hasta que se configure {{env}}=true en el servidor.",
       "dryRun": "Simulación: enviaría un MD a {{recipients}} personas sobre {{listings}} anuncios.",

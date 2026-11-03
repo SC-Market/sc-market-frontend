@@ -117,6 +117,20 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
           "order.review_revision_requested",
         ]),
       ]),
+      section(
+        "threads",
+        "Discord threads",
+        "Your order and offer threads on a seller's Discord server.",
+        [
+          row(
+            "thread-invite",
+            "Invite to the Discord server",
+            ["order.thread_invite"],
+            "When the bot can't add you to an order or offer thread",
+            "The bot opens a private thread for each order or offer on the seller's Discord server. If it can't add you (usually because you're not in that server yet), it DMs you an invite to the server.",
+          ),
+        ],
+      ),
     ],
   },
   {

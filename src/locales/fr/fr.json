@@ -769,7 +769,9 @@
       "final_many": "Dernier rappel : {{n}} offres attendent votre réponse",
       "buyer_one": "« {{title}} » attend toujours le vendeur. Continuez d'attendre, écrivez au vendeur ou retirez l'offre.",
       "buyer_many": "{{n}} de vos offres attendent toujours le vendeur"
-    }
+    },
+    "buy_order_match": "Correspondance d'ordre d'achat :",
+    "buy_order_match_listed": "correspond à l'un de tes ordres d'achat"
   },
   "onboarding": {
     "welcome": "Bienvenue sur SC Market",
@@ -1018,6 +1020,10 @@
         "storefront": {
           "label": "Demandes de vitrine",
           "hint": "Les réponses à une demande de vitrine personnalisée que vous avez envoyée."
+        },
+        "threads": {
+          "label": "Fils Discord",
+          "hint": "Tes fils de commandes et d'offres sur le serveur Discord d'un vendeur."
         }
       },
       "rows": {
@@ -1093,6 +1099,11 @@
           "label": "Votre offre est toujours en attente",
           "hint": "Si le vendeur n'a pas répondu après le dernier rappel",
           "tip": "Pour les offres que vous avez faites en tant qu'acheteur : le vendeur n'a toujours pas répondu malgré le rappel. Vous pouvez attendre encore, écrire au vendeur ou retirer l'offre."
+        },
+        "thread-invite": {
+          "label": "Invitation au serveur Discord",
+          "hint": "Quand le bot ne peut pas t'ajouter à un fil de commande ou d'offre",
+          "tip": "Le bot ouvre un fil privé pour chaque commande ou offre sur le serveur Discord du vendeur. S'il ne peut pas t'ajouter (souvent parce que tu n'es pas encore sur ce serveur), il t'envoie en MP une invitation au serveur."
         }
       },
       "subtitle": "Choisissez où chaque type de notification vous parvient.",
@@ -7946,7 +7957,7 @@
     },
     "stillSelling": {
       "title": "Campagne de MP « Vous vendez toujours ? »",
-      "subtitle": "Un seul MP Discord aux vendeurs vus pour la dernière fois il y a plus de {{inactive}} jours dont les annonces publiques n'ont pas été mises à jour depuis {{stale}} jours, si le bot peut leur écrire. Les annonces d'une organisation vont à ses membres qui gèrent les commandes ou le marché, un MP par personne.",
+      "subtitle": "Un seul MP Discord aux vendeurs vus pour la dernière fois il y a plus de {{inactive}} jours dont les annonces publiques n'ont pas été mises à jour depuis {{stale}} jours, si le bot peut leur écrire. Les annonces d'une organisation vont à ses membres qui gèrent les commandes ou le marché, un MP par personne. Les personnes qui ont désactivé les MP Discord du marché dans leurs paramètres de notification sont ignorées.",
       "switchOn": "L'envoi est activé ({{env}}=true).",
       "switchOff": "L'envoi est désactivé. Rien ne peut être envoyé tant que {{env}}=true n'est pas défini sur le serveur.",
       "dryRun": "Simulation : enverrait un MP à {{recipients}} personnes pour {{listings}} annonces.",
