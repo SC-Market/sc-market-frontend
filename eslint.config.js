@@ -107,7 +107,60 @@ const scmStyle = {
   },
 }
 
+// ── no-restricted-syntax selector sets (combined per block below) ──
+const LINT_TEST_AND_ROUTE_IGNORES = [
+  "src/routes/elements/**",
+  "src/routes/paths.ts",
+  "**/*.test.ts",
+  "**/*.test.tsx",
+  "**/*.spec.ts",
+  "**/*.spec.tsx",
+  "**/__tests__/**",
+]
+const ROUTE_STRING_SELECTORS = [
+  {
+    selector:
+      "JSXAttribute[name.name=/^(to|href)$/] > Literal[value=/^\\/[A-Za-z]/]",
+    message:
+      "Use a helper from src/routes/paths.ts instead of a hardcoded route string.",
+  },
+  {
+    selector:
+      "CallExpression[callee.name='navigate'] > Literal[value=/^\\/[A-Za-z]/]",
+    message:
+      "Use a helper from src/routes/paths.ts instead of a hardcoded route string.",
+  },
+]
+// See drafts/view-logic-refactor-audit-2026-11.md §9.
+const FORMAT_SELECTORS = [
+  {
+    selector:
+      "CallExpression[callee.property.name=/^toLocale(String|DateString|TimeString)$/][arguments.length=0]",
+    message:
+      "toLocale*() without a locale formats in the machine's language, so server and browser disagree. Pass the render language (util/time.ts language()).",
+  },
+  {
+    selector: "NewExpression[callee.name='Date'][arguments.length=0]",
+    message:
+      "new Date() during render differs between server and browser. Take `now` as a parameter in domain functions.",
+  },
+]
+const RENDER_LAYER_SELECTORS = [
+  {
+    selector: "CallExpression[callee.name=/^use\\w+Mutation$/]",
+    message:
+      "Mutations belong in a feature hook (features/<f>/hooks). Components render and call hooks.",
+  },
+  {
+    selector: "CallExpression[callee.name='has_permission']",
+    message:
+      "Use a named rule from features/<f>/domain (e.g. canOpenShopSettings) instead of has_permission in a component.",
+  },
+]
+
 export default [
+  // macOS AppleDouble files (._*) on exFAT drives are not source.
+  { ignores: ["**/._*"] },
   js.configs.recommended,
   react.configs.flat.recommended,
   jsxA11y.flatConfigs.recommended,
@@ -167,31 +220,54 @@ export default [
   // of hardcoding leading-slash paths in `to=` / `href=` props or navigate().
   {
     files: ["src/**/*.ts", "src/**/*.tsx"],
-    ignores: [
-      "src/routes/elements/**",
-      "src/routes/paths.ts",
-      "**/*.test.ts",
-      "**/*.test.tsx",
-      "**/*.spec.ts",
-      "**/*.spec.tsx",
-      "**/__tests__/**",
-    ],
+    ignores: LINT_TEST_AND_ROUTE_IGNORES,
+    rules: {
+      "no-restricted-syntax": ["warn", ...ROUTE_STRING_SELECTORS],
+    },
+  },
+
+  // ── Ratchet (warn): server and browser must format the same ──
+  // Flat config replaces no-restricted-syntax per matching block, so each
+  // block below repeats the route-string selectors. These blocks stay above
+  // the route-module block, which must keep the last word on its files.
+  // The warning count may only go down: scripts/lint-ratchet.mjs (CI).
+  {
+    files: ["src/**/*.tsx"],
+    ignores: LINT_TEST_AND_ROUTE_IGNORES,
     rules: {
       "no-restricted-syntax": [
         "warn",
-        {
-          selector:
-            "JSXAttribute[name.name=/^(to|href)$/] > Literal[value=/^\\/[A-Za-z]/]",
-          message:
-            "Use a helper from src/routes/paths.ts instead of a hardcoded route string.",
-        },
-        {
-          selector:
-            "CallExpression[callee.name='navigate'] > Literal[value=/^\\/[A-Za-z]/]",
-          message:
-            "Use a helper from src/routes/paths.ts instead of a hardcoded route string.",
-        },
+        ...ROUTE_STRING_SELECTORS,
+        ...FORMAT_SELECTORS,
       ],
+    },
+  },
+
+  // ── Ratchet (warn): components and views render; hooks call the API ──
+  {
+    files: [
+      "src/features/*/components/**/*.tsx",
+      "src/components/**/*.tsx",
+      "src/views/**/*.tsx",
+      "src/features/market/v2/**/*.tsx",
+    ],
+    ignores: LINT_TEST_AND_ROUTE_IGNORES,
+    rules: {
+      "no-restricted-syntax": [
+        "warn",
+        ...ROUTE_STRING_SELECTORS,
+        ...FORMAT_SELECTORS,
+        ...RENDER_LAYER_SELECTORS,
+      ],
+    },
+  },
+
+  // ── Ratchet (warn): big files are a smell, not an error ──
+  {
+    files: ["src/**/*.tsx"],
+    ignores: LINT_TEST_AND_ROUTE_IGNORES,
+    rules: {
+      "max-lines": ["warn", { max: 400, skipBlankLines: true, skipComments: true }],
     },
   },
 

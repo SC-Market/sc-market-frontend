@@ -1,0 +1,29 @@
+{
+  "warnings": 1572,
+  "errors": 130,
+  "byRule": {
+    "(eslint)": 2,
+    "@typescript-eslint/ban-ts-comment": 3,
+    "@typescript-eslint/no-empty-object-type": 36,
+    "@typescript-eslint/no-explicit-any": 46,
+    "@typescript-eslint/no-non-null-asserted-optional-chain": 24,
+    "@typescript-eslint/no-restricted-imports": 99,
+    "@typescript-eslint/no-unused-vars": 689,
+    "jsx-a11y/anchor-is-valid": 1,
+    "jsx-a11y/click-events-have-key-events": 1,
+    "jsx-a11y/mouse-events-have-key-events": 1,
+    "jsx-a11y/no-autofocus": 15,
+    "jsx-a11y/no-static-element-interactions": 1,
+    "local/no-hardcoded-jsx-text": 3,
+    "max-lines": 74,
+    "no-control-regex": 1,
+    "no-empty": 14,
+    "no-restricted-imports": 46,
+    "no-restricted-syntax": 434,
+    "no-useless-escape": 2,
+    "react-hooks/exhaustive-deps": 79,
+    "react/display-name": 1,
+    "react/jsx-key": 1,
+    "scm-style/no-hex-colors": 129
+  }
+}

@@ -4,6 +4,15 @@ This document defines the layered architecture for the SC Market frontend. The g
 
 The canonical example is `features/email/`. When in doubt, look there.
 
+## Where does this code go?
+
+- A rule, calculation, mapping or validation, i.e. anything you could test without rendering, goes in `domain/` as a pure function with a unit test. Pass `now` and the language in; return codes, not translated text.
+- Calling the API, chaining mutations, alerts and `t()` go in a hook in the feature's `hooks/`. One hook per job.
+- Components and pages render. They call hooks and domain functions, and never RTK mutations, `has_permission` or `toLocaleString()` directly.
+- A form edits a draft. Create it from server data once, keyed by the entity id, and turn it into a request with a domain function. Never copy server data into `useState` with a `useEffect` (see `features/shops/domain/shopSettingsForm.ts`).
+- Numbers, prices and dates are formatted in the render language (`util/time.ts` `language()`), never with a bare `toLocale*()`, and "now" is passed in, so server and browser agree.
+- If you are about to write the same `if` a second time, it belongs in `domain/`.
+
 ---
 
 ## Directory Roles
@@ -92,6 +101,8 @@ Shared type definitions. New types go in `features/<name>/domain/types.ts`. Type
 | Pages are thin shells | Code review |
 | Feature components receive data via props, not queries | Code review |
 | No `any`, `unknown`, or `Record<string, unknown>` as a substitute for real types | Code review + `@typescript-eslint/no-explicit-any` |
+| Hooks are called unconditionally, before any early return | ESLint `react-hooks/rules-of-hooks` (error) |
+| Components and views don't call mutations or `has_permission`; no `toLocale*()` without a locale or `new Date()` in tsx; tsx files stay under 400 lines | ESLint warnings, ratcheted: `npm run lint:ratchet` (CI) fails if the warning or error count rises above `scripts/lint-baseline.json`. Lower the baseline with `--update` when you fix some. |
 
 ---
 

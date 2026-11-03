@@ -33,6 +33,11 @@ jobs:
       - name: Type-check Pages Functions
         run: npx tsc --noEmit -p functions
 
+      - name: Lint ratchet
+        # ESLint warnings and errors (formatting aside) may only go down from
+        # scripts/lint-baseline.json; rules-of-hooks stays at zero.
+        run: npm run lint:ratchet
+
       - name: Run tests
         run: npm test
 

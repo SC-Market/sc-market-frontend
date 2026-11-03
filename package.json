@@ -106,6 +106,7 @@
     "serve": "vite preview --config vite.preview.config.ts --outDir dist",
     "format": "prettier --write .",
     "check": "tsc --noEmit",
+    "lint:ratchet": "node scripts/lint-ratchet.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
