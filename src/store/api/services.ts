@@ -110,7 +110,9 @@ const injectedRtkApi = api
   })
 export { injectedRtkApi as servicesApi }
 export type CreateServiceApiResponse =
-  /** status 201 Created - Resource successfully created */ {}
+  /** status 200 OK - Service created */ {
+    data: { service_id: string }
+  }
 export type CreateServiceApiArg = {
   serviceBody: ServiceBody
 }
@@ -171,7 +173,9 @@ export type GetServicesByContractorApiArg = {
   spectrumId: string
 }
 export type UpdateServiceApiResponse =
-  /** status 204 Updated - Resource successfully updated */ {}
+  /** status 200 OK - Service updated */ {
+    data: { result: string }
+  }
 export type UpdateServiceApiArg = {
   serviceId: string
   serviceBody: ServiceBody

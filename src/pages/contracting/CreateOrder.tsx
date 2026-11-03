@@ -10,7 +10,7 @@ import { BuyOrdersViewPaginated } from "../../features/market/views/DashBuyOrder
 import { useTranslation } from "react-i18next"
 import { usePageServiceOrder } from "../../features/contracting/hooks/usePageServiceOrder"
 
-export function CreateOrder(props: {}) {
+export function CreateOrder() {
   const { t } = useTranslation()
   return (
     <StandardPageLayout

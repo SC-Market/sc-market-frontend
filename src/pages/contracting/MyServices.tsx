@@ -10,7 +10,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageMyServices } from "../../features/contracting/hooks/usePageMyServices"
 import { ManageListingsTabBar } from "../../features/market/components/ManageListingsTabBar"
 
-export function MyServicesPage(props: {}) {
+export function MyServicesPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const pageData = usePageMyServices()

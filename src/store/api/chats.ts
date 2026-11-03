@@ -64,7 +64,7 @@ export type GetChatByOfferSessionIdApiArg = {
 }
 export type SendMessageApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type SendMessageApiArg = {
   /** ID of chat */
@@ -73,7 +73,7 @@ export type SendMessageApiArg = {
 }
 export type CreateChatApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type CreateChatApiArg = {
   chatBody: ChatBody

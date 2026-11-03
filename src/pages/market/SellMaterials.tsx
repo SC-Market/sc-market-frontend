@@ -4,7 +4,7 @@ import { Grid } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
-export function SellMaterials(props: {}) {
+export function SellMaterials() {
   const { t } = useTranslation()
 
   return (
@@ -24,7 +24,7 @@ export function SellMaterials(props: {}) {
       maxWidth="lg"
     >
       <Grid item container xs={12} lg={12}>
-        <SellMaterialsList {...props} />
+        <SellMaterialsList />
       </Grid>
     </StandardPageLayout>
   )

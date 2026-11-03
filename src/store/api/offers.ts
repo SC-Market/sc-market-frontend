@@ -73,7 +73,7 @@ const injectedRtkApi = api
 export { injectedRtkApi as offersApi }
 export type CreateOfferThreadApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type CreateOfferThreadApiArg = {
   /** The ID of the offer */
@@ -151,7 +151,7 @@ export type GetOfferByIdApiArg = {
 }
 export type UpdateAnOfferApiResponse =
   /** status 200 OK - Resource successfully updated */ {
-    data: {}
+    data: { result: string } | { order_id: string } | { status: string }
   }
 export type UpdateAnOfferApiArg = {
   sessionId: string

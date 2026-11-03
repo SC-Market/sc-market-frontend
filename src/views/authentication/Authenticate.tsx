@@ -14,7 +14,7 @@ import { Google } from "@mui/icons-material"
 import { Discord } from "../../components/icon/DiscordIcon"
 import { useTranslation } from "react-i18next"
 
-export function Authenticate(props: {}) {
+export function Authenticate() {
   const { t } = useTranslation()
 
   return (

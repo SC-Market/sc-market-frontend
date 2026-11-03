@@ -8,6 +8,9 @@ const config: ConfigFile = {
   apiImport: "generatedApiV2",
   hooks: true,
   tag: true,
+  // A free-form schema (TSOA's Record<string, unknown>) becomes `unknown`,
+  // not `any`, so it can't be used without narrowing.
+  useUnknown: true,
   outputFiles: {
     "./src/store/api/v2/market.ts": {
       exportName: "marketV2Api",

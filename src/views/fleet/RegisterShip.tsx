@@ -5,7 +5,7 @@ import { shipList, ShipName } from "../../datatypes/Ship"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useTranslation } from "react-i18next" // Translation hook
 
-export function RegisterShip(props: {}) {
+export function RegisterShip() {
   const [ship, setShip] = useState<ShipName | null>(null)
   const { t } = useTranslation()
 

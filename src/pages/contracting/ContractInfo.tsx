@@ -20,7 +20,7 @@ const ContractApp = lazyWithRetry(() =>
   })),
 )
 
-export function ContractInfo(props: {}) {
+export function ContractInfo() {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
   const [appOpen, setAppOpen] = useState(false)

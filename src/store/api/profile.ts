@@ -137,14 +137,16 @@ export type SyncRsiHandleApiResponse =
     data: GetCurrentUserProfileSuccess
   }
 export type SyncRsiHandleApiArg = {
-  body: {}
+  /** The endpoint reads no request body. */
+  body: Record<string, never>
 }
 export type UnlinkStarCitizenAccountApiResponse =
   /** status 200 Star Citizen account successfully unlinked */ {
     data: GetCurrentUserProfileSuccess
   }
 export type UnlinkStarCitizenAccountApiArg = {
-  body: {}
+  /** The endpoint reads no request body. */
+  body: Record<string, never>
 }
 export type UpdateProfileApiResponse =
   /** status 200 OK - Profile successfully updated */ {

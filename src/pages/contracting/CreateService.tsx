@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom"
 import { useGetServiceByIdQuery } from "../../features/services/api/servicesApi"
 import { useTranslation } from "react-i18next"
 
-export function CreateService(props: {}) {
+export function CreateService() {
   const { t } = useTranslation()
   return (
     <FormPageLayout

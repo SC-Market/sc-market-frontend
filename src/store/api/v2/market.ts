@@ -6347,7 +6347,7 @@ export type ScmdbConnectResponse = {
 export type ImportSource = "cstone-items" | "uex-items" | "uex-attributes"
 export type JobStatus = "running" | "completed" | "failed"
 export type RecordStringUnknown = {
-  [key: string]: any
+  [key: string]: unknown
 }
 export type ImportJob = {
   id: string

@@ -4,7 +4,7 @@ import { Button, Grid, TextField, Typography } from "@mui/material"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 
-export function ContractApp(props: {}) {
+export function ContractApp() {
   const { data: profile } = useGetUserProfileQuery()
   const { t } = useTranslation()
 

@@ -188,7 +188,7 @@ function onlyUnique<T>(value: T, index: number, self: T[]) {
   return self.indexOf(value) === index
 }
 
-export function SellMaterialsList(props: {}): ReactElement {
+export function SellMaterialsList(): ReactElement {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [kind, setKind] = useState<string>("Any")

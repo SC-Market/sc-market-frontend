@@ -506,7 +506,9 @@ const injectedRtkApi = api
 export { injectedRtkApi as contractorsApi }
 export type AuthLinkApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    // The backend means to send ContractorDetails but serialises an
+    // un-awaited Promise, so the body is an empty object.
+    data: Record<string, never>
   }
 export type AuthLinkApiArg = {
   body: {
@@ -515,7 +517,7 @@ export type AuthLinkApiArg = {
 }
 export type CreateContractorApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type CreateContractorApiArg = {
   contractorBody: ContractorBody
@@ -538,7 +540,7 @@ export type GetInviteCodeApiArg = {
 }
 export type AcceptCodeInviteApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type AcceptCodeInviteApiArg = {
   inviteId: string
@@ -607,7 +609,7 @@ export type ArchiveContractorApiArg = {
 }
 export type UpdateContractorApiResponse =
   /** status 201 Updated - Resource successfully updated */ {
-    data: {}
+    data: { result: string }
   }
 export type UpdateContractorApiArg = {
   spectrumId: string
@@ -630,7 +632,7 @@ export type CheckContractorMembershipApiArg = {
 }
 export type KickContractorMemberApiResponse =
   /** status 204 Deleted - Resource successfully deleted */ {
-    data: {}
+    data: { result: string }
   }
 export type KickContractorMemberApiArg = {
   spectrumId: string
@@ -677,7 +679,7 @@ export type ContractorInviteMembersApiArg = {
 }
 export type CreateContractorRoleApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type CreateContractorRoleApiArg = {
   spectrumId: string
@@ -685,7 +687,7 @@ export type CreateContractorRoleApiArg = {
 }
 export type UpdateContractorRoleApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type UpdateContractorRoleApiArg = {
   spectrumId: string
@@ -693,16 +695,14 @@ export type UpdateContractorRoleApiArg = {
   contractorRoleUpdateBody: ContractorRoleUpdateBody
 }
 export type DeleteContractorRoleApiResponse =
-  /** status 204 Deleted - Resource successfully deleted */ {
-    data: {}
-  }
+  /** status 204 Deleted - Resource successfully deleted */ void
 export type DeleteContractorRoleApiArg = {
   spectrumId: string
   roleId: string
 }
 export type GiveContractorRoleApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type GiveContractorRoleApiArg = {
   spectrumId: string
@@ -711,7 +711,7 @@ export type GiveContractorRoleApiArg = {
 }
 export type RemoveContractorRoleApiResponse =
   /** status 204 Deleted - Resource successfully deleted */ {
-    data: {}
+    data: { result: string }
   }
 export type RemoveContractorRoleApiArg = {
   spectrumId: string
@@ -755,7 +755,7 @@ export type UploadOrganizationBannerApiArg = {
 }
 export type CreateContractorWebhookApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type CreateContractorWebhookApiArg = {
   spectrumId: string
@@ -770,7 +770,7 @@ export type GetContractorWebhooksApiArg = {
 }
 export type DeleteContractorWebhookApiResponse =
   /** status 204 Deleted - Resource successfully deleted */ {
-    data: {}
+    data: { result: string }
   }
 export type DeleteContractorWebhookApiArg = {
   spectrumId: string
@@ -803,15 +803,13 @@ export type GetContractorInviteByIdApiArg = {
 }
 export type AcceptContractorInviteApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type AcceptContractorInviteApiArg = {
   spectrumId: string
 }
 export type DeclineContractorInviteApiResponse =
-  /** status 201 Created - Resource successfully created */ {
-    data: {}
-  }
+  /** status 201 Created - Resource successfully created */ { result: string }
 export type DeclineContractorInviteApiArg = {
   spectrumId: string
 }
@@ -890,14 +888,14 @@ export type GetContractorDiscordSettingsApiArg = {
 }
 export type UseOfficialDiscordContractorApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type UseOfficialDiscordContractorApiArg = {
   spectrumId: string
 }
 export type LeaveContractorApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type LeaveContractorApiArg = {
   spectrumId: string

@@ -377,7 +377,7 @@ export type GetUserOrderDataApiArg = {
 }
 export type PostReviewApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type PostReviewApiArg = {
   orderId: string
@@ -422,7 +422,7 @@ export type UpdateOrderReviewApiArg = {
 }
 export type UpdateOrderApiResponse =
   /** status 200 OK - Resource successfully updated */ {
-    data: {}
+    data: { result: string }
   }
 export type UpdateOrderApiArg = {
   orderId: string
@@ -439,7 +439,7 @@ export type GetOrderByIdApiArg = {
 }
 export type CreateOrderThreadApiResponse =
   /** status 201 Created - Resource successfully created */ {
-    data: {}
+    data: { result: string }
   }
 export type CreateOrderThreadApiArg = {
   orderId: string
