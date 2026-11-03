@@ -337,9 +337,9 @@
     "signIn": "登录",
     "terms": "点此同意服务条款",
     "submit": "提交",
-    "loginWithDiscord": "用Discord登录",
-    "accountLink": "账户链接",
-    "authenticateWithRSI": "用RSI验证",
+    "loginWithDiscord": "使用 Discord 登录",
+    "accountLink": "账户关联",
+    "authenticateWithRSI": "通过 RSI 验证",
     "aria": {
       "outlinedGroup": "描边按钮组"
     },
@@ -1155,7 +1155,7 @@
     },
     "profile": {
       "updateAndVerify": "更新用户名并重新验证账户",
-      "authenticateWithRSI": "用RSI验证",
+      "authenticateWithRSI": "通过 RSI 验证",
       "viewUserProfile": "查看用户资料",
       "reVerifyTitle": "重新验证资料",
       "reVerifyDescription": "更新你的资料用户名，使其与你当前的 Spectrum 名称一致。这只会更新你的用户名。",
@@ -1530,7 +1530,7 @@
     "components": "组件",
     "bulk_items": "批量物品",
     "buy_orders": "求购单",
-    "contractor_services": "合约服务",
+    "contractor_services": "承包商服务",
     "services_short": "服务",
     "my_org_listings": "我的组织的商品",
     "sell_materials": "出售材料",
@@ -1648,7 +1648,7 @@
   "select_all": "全选",
   "rows_per_page": "每页行数",
   "no_listings": "无可用的商品",
-  "displayed_rows": "{{from}}–{{to}}页，全{{count}}页",
+  "displayed_rows": "{{from}}–{{to}} / 共 {{count}} 条",
   "displayed_rows_range": "{{from}}–{{to}} / 共{{count}}",
   "displayed_rows_range_more": "{{from}}–{{to}} / 超过{{to}}",
   "all": "全部",
@@ -1729,15 +1729,15 @@
   "transactions": {
     "recent_transactions": "最近交易记录",
     "date": "日期",
-    "details": "细节",
+    "details": "详情",
     "amount": "金额",
     "from": "付款方",
     "to": "收款方",
     "yesterday": "昨天",
     "status": {
       "title": "状态",
-      "completed": "完成",
-      "pending": "进行中",
+      "completed": "已完成",
+      "pending": "待处理",
       "cancelled": "已取消"
     },
     "kind": {
@@ -1797,9 +1797,9 @@
     "payment_types": {
       "any": "任意",
       "one_time": "一次性",
-      "hourly": "时结",
-      "daily": "日结",
-      "unit": "计件",
+      "hourly": "按小时",
+      "daily": "按天",
+      "unit": "按件",
       "box": "按箱数",
       "scu": "按SCU数",
       "cscu": "按cSCU数",
@@ -1957,7 +1957,7 @@
     "in_progress": "进行中",
     "fulfilled": "已完成",
     "cancelled": "已取消",
-    "not_started": "未开始"
+    "not_started": "排队中"
   },
   "orderServiceArea": {
     "associated_services": "关联服务",
@@ -2056,7 +2056,7 @@
     "valueLast7Days": "过去7天价值",
     "valueLast30Days": "过去30天价值",
     "statusBreakdown": "状态分布",
-    "notStarted": "未开始",
+    "notStarted": "排队中",
     "inProgress": "进行中",
     "fulfilled": "已完成",
     "cancelled": "已取消",
@@ -2607,7 +2607,7 @@
     "imageSearch": "图片搜索",
     "upload": "上传",
     "addUrl": "添加URL",
-    "enterImageUrl": "输入图片URL:",
+    "enterImageUrl": "输入图片 URL：",
     "urlModalTitle": "添加图片URL",
     "imageUrl": "图片URL",
     "imageUrlHelp": "输入图片的直接URL（来自Imgur、RSI或starcitizen.tools）",
