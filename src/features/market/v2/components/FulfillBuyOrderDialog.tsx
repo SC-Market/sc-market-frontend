@@ -38,6 +38,11 @@ import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { extractErrorMessage } from "../../../../store/api-utils"
 import { MARKET_PATHS, ORDER_PATHS } from "../../../../routes/paths"
 import { remainingQuantity } from "../../domain/buyOrders"
+import {
+  fulfilMaxQuantity,
+  usableFulfilOptions,
+  validateFulfil,
+} from "../../domain/fulfilBuyOrder"
 
 export interface FulfillBuyOrderDialogProps {
   buyOrder: Pick<
@@ -64,9 +69,9 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
   const options = useMemo(() => data?.options ?? [], [data])
 
   const [selectedKey, setSelectedKey] = useState("")
-  const usable = useMemo(() => options.filter((o) => o.problem == null), [options])
+  const usable = useMemo(() => usableFulfilOptions(options), [options])
   const selected = usable.find((o) => optionKey(o) === selectedKey)
-  const maxQuantity = selected ? Math.min(remaining, selected.available) : remaining
+  const maxQuantity = fulfilMaxQuantity(buyOrder, selected)
   const [quantity, setQuantity] = useState(remaining)
 
   // Preselect the best (cheapest) usable option when the list arrives
@@ -83,7 +88,8 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
 
   const submit = async () => {
     if (!selected) return
-    if (quantity < 1 || quantity > maxQuantity) {
+    const error = validateFulfil({ buyOrder, option: selected, quantity })
+    if (error === "quantity_range") {
       issueAlert({
         message: t("buyorder.fulfillQuantityRange", "Quantity must be between 1 and {{max}}", {
           max: maxQuantity,
@@ -92,6 +98,7 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
       })
       return
     }
+    if (error) return
     try {
       const result = await fulfill({
         id: buyOrder.buy_order_id,

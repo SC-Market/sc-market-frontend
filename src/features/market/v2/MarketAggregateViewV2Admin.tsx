@@ -43,12 +43,11 @@ import {
 import { Section } from "../../../components/paper/Section";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { NumericFormat } from "react-number-format";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useCookies } from "react-cookie";
 import {
-  useFulfillBuyOrderMutation,
   useCancelBuyOrderMutation,
   type StandingBuyOrder,
 } from "../../../store/api/v2/market";
@@ -57,6 +56,7 @@ import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
 import type { Cart } from "../../../datatypes/Cart";
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
+import { FulfillBuyOrderDialog } from "./components/FulfillBuyOrderDialog";
 import {
   AggregateChartV2,
   AggregateBuySellWallV2,
@@ -65,7 +65,7 @@ import {
   type GameItemAggregateV2,
 } from "./MarketAggregateViewV2";
 import { QualityHistogram } from "../../../components/market/v2/QualityHistogram";
-import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths";
+import { MARKET_PATHS } from "../../../routes/paths";
 import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton";
 import { remainingQuantity, totalRemainingQuantity } from "../domain/buyOrders";
 
@@ -875,167 +875,6 @@ function SellOrdersPanel({
 }
 
 // ---------------------------------------------------------------------------
-// Fulfill dialog (buy orders)
-// ---------------------------------------------------------------------------
-
-function FulfillDialog({
-  buyOrder,
-  open,
-  onClose,
-}: {
-  buyOrder: StandingBuyOrder | null;
-  open: boolean;
-  onClose: () => void;
-}) {
-  const { t } = useTranslation();
-  const issueAlert = useAlertHook();
-  const navigate = useNavigate();
-  const [fulfillBuyOrderMut, { isLoading }] = useFulfillBuyOrderMutation();
-  const [agreedPrice, setAgreedPrice] = useState(0);
-  const remaining = buyOrder
-    ? buyOrder.quantity - (buyOrder.quantity_fulfilled || 0)
-    : 0;
-  const [fulfillQty, setFulfillQty] = useState(remaining);
-
-  React.useEffect(() => {
-    if (buyOrder) {
-      setAgreedPrice(0);
-      setFulfillQty(buyOrder.quantity - (buyOrder.quantity_fulfilled || 0));
-    }
-  }, [buyOrder]);
-
-  const doFulfill = useCallback(() => {
-    if (!buyOrder) return;
-    if (buyOrder.negotiable && agreedPrice < 1) {
-      issueAlert({
-        message: t(
-          "buyorder.agreedPriceRequired",
-          "Please enter an agreed price per unit."
-        ),
-        severity: "error",
-      });
-      return;
-    }
-    if (fulfillQty < 1 || fulfillQty > remaining) {
-      issueAlert({
-        message: t("marketUi.aggregateAdmin.quantityRange", {
-          max: remaining,
-        }),
-        severity: "error",
-      });
-      return;
-    }
-    fulfillBuyOrderMut({
-      id: buyOrder.buy_order_id,
-      fulfillBuyOrderRequest: {
-        variant_id: "",
-        listing_id: "",
-        quantity: fulfillQty < remaining ? fulfillQty : undefined,
-      },
-    })
-      .unwrap()
-      .then((result) => {
-        issueAlert({
-          message: t("MarketAggregateView.submitted"),
-          severity: "success",
-        });
-        if (result.order_id) navigate(ORDER_PATHS.detail(result.order_id));
-        onClose();
-      })
-      .catch((err) =>
-        issueAlert({
-          message:
-            err?.data?.message || t("marketUi.aggregateAdmin.fulfillFailed"),
-          severity: "error",
-        })
-      );
-  }, [
-    buyOrder,
-    agreedPrice,
-    fulfillQty,
-    remaining,
-    fulfillBuyOrderMut,
-    issueAlert,
-    navigate,
-    t,
-    onClose,
-  ]);
-
-  if (!buyOrder) return null;
-
-  return (
-    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
-      <DialogTitle fontWeight={700}>
-        {t("buyorder.fulfillTitle", "Fulfill Buy Order")}
-      </DialogTitle>
-      <DialogContent
-        sx={{ display: "flex", flexDirection: "column", gap: 2, pt: "12px !important" }}
-      >
-        {buyOrder.negotiable && (
-          <NumericFormat
-            decimalScale={0}
-            allowNegative={false}
-            customInput={TextField}
-            thousandSeparator
-            fullWidth
-            label={t("buyorder.price_per_unit", "Agreed price per unit (aUEC)")}
-            value={agreedPrice}
-            onValueChange={(v) => setAgreedPrice(v.floatValue ?? 0)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">aUEC</InputAdornment>
-              ),
-            }}
-          />
-        )}
-        <NumericFormat
-          decimalScale={0}
-          allowNegative={false}
-          customInput={TextField}
-          thousandSeparator
-          fullWidth
-          label={t("buyorder.fulfillQuantity", "Quantity to fulfill")}
-          value={fulfillQty}
-          onValueChange={(v) => setFulfillQty(v.floatValue ?? remaining)}
-          helperText={`${remaining.toLocaleString()} ${t(
-            "buyorder.remaining",
-            "remaining"
-          )}`}
-          isAllowed={({ floatValue }) =>
-            !floatValue || (floatValue >= 1 && floatValue <= remaining)
-          }
-        />
-        {buyOrder.price_per_unit > 0 && (
-          <Typography
-            variant="body2"
-            color="primary"
-            sx={{ fontFamily: "monospace" }}
-          >
-            {t("marketUi.aggregateAdmin.totalAuec", {
-              total:
-                buyOrder.negotiable && agreedPrice > 0
-                  ? (agreedPrice * fulfillQty).toLocaleString()
-                  : (buyOrder.price_per_unit * fulfillQty).toLocaleString(),
-            })}
-          </Typography>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>{t("common.cancel", "Cancel")}</Button>
-        <Button
-          variant="contained"
-          color="warning"
-          onClick={doFulfill}
-          disabled={isLoading}
-        >
-          {t("MarketAggregateView.fulfill", "Fulfill")}
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Buy orders panel
 // ---------------------------------------------------------------------------
 
@@ -1306,11 +1145,13 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
         })
       )}
 
-      <FulfillDialog
-        buyOrder={fulfillTarget}
-        open={!!fulfillTarget}
-        onClose={() => setFulfillTarget(null)}
-      />
+      {fulfillTarget && (
+        <FulfillBuyOrderDialog
+          buyOrder={fulfillTarget}
+          open
+          onClose={() => setFulfillTarget(null)}
+        />
+      )}
     </Box>
   );
 }
