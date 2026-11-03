@@ -37,6 +37,7 @@ import {
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { extractErrorMessage } from "../../../../store/api-utils"
 import { MARKET_PATHS, ORDER_PATHS } from "../../../../routes/paths"
+import { remainingQuantity } from "../../domain/buyOrders"
 
 export interface FulfillBuyOrderDialogProps {
   buyOrder: Pick<
@@ -54,7 +55,7 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
   const { t, i18n } = useTranslation()
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
-  const remaining = buyOrder.quantity - (buyOrder.quantity_fulfilled || 0)
+  const remaining = remainingQuantity(buyOrder)
 
   const { data, isLoading, isError } = useGetFulfillmentOptionsQuery(
     { id: buyOrder.buy_order_id },

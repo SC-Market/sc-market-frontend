@@ -61,6 +61,7 @@ import type {
   OrderPreview,
 } from "../../store/api/v2/market"
 import { usePageReady } from "../../components/metadata/PageReady"
+import { remainingQuantity } from "../../features/market/domain/buyOrders"
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -347,7 +348,7 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                       variant="body2"
                       fontFamily="'JetBrains Mono', monospace"
                     >
-                      {(order.quantity - order.quantity_fulfilled).toLocaleString()}
+                      {remainingQuantity(order).toLocaleString()}
                     </Typography>
                   </TableCell>
                   <TableCell>

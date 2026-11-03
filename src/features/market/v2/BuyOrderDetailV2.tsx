@@ -42,6 +42,7 @@ import { MARKET_PATHS, PATHS, USER_PATHS } from "../../../routes/paths"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { FulfillBuyOrderDialog } from "./components/FulfillBuyOrderDialog"
 import { HelpLink } from "../../help/components/HelpLink"
+import { remainingQuantity } from "../domain/buyOrders"
 
 const STATUS_COLORS: Record<string, "success" | "warning" | "error" | "default"> = {
   active: "success",
@@ -67,7 +68,7 @@ export function BuyOrderDetailV2() {
     return [FALLBACK_IMAGE_URL]
   }, [buyOrder])
 
-  const remaining = (buyOrder?.quantity ?? 0) - (buyOrder?.quantity_fulfilled ?? 0)
+  const remaining = remainingQuantity(buyOrder ?? {})
   const progress = buyOrder?.quantity ? ((buyOrder.quantity_fulfilled ?? 0) / buyOrder.quantity) * 100 : 0
 
   const breadcrumbs = useMemo(() => {

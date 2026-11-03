@@ -20,6 +20,7 @@ import {
   useGetMatchesForSellerQuery,
   type StandingBuyOrder,
 } from "../../../store/api/v2/market"
+import { remainingQuantity } from "../domain/buyOrders"
 
 export function MatchingBuyOrdersArea({
   showEmpty,
@@ -72,7 +73,7 @@ export function MatchingBuyOrdersArea({
           </TableHead>
           <TableBody>
             {orders.map((order) => {
-              const remaining = order.quantity - (order.quantity_fulfilled || 0)
+              const remaining = remainingQuantity(order)
               return (
                 <TableRow key={order.buy_order_id} hover>
                   <TableCell>

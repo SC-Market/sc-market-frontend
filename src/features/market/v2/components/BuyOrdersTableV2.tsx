@@ -13,6 +13,7 @@ import {
 import type { StandingBuyOrder } from "../../../../store/api/v2/market"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { useTranslation } from "react-i18next"
+import { totalRemainingQuantity } from "../../domain/buyOrders"
 
 interface BuyOrderAggregate {
   item_id: string
@@ -38,7 +39,7 @@ export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate
             const prices = agg.orders.map((o) => o.price_per_unit)
             const min = Math.min(...prices)
             const max = Math.max(...prices)
-            const totalQty = agg.orders.reduce((sum, o) => sum + (o.quantity - (o.quantity_fulfilled || 0)), 0)
+            const totalQty = totalRemainingQuantity(agg.orders)
             return (
               <TableRow
                 key={agg.item_id}

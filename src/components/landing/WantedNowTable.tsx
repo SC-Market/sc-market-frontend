@@ -22,6 +22,7 @@ import { formatPrice } from "../../util/formatPrice"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { LandingImg } from "./LandingImage"
 import { WANTED_NOW_COUNT } from "./landingLinks"
+import { remainingQuantity } from "../../features/market/domain/buyOrders"
 
 /** Every body row's height (px), loaded, loading or filler. */
 const ROW_HEIGHT = 52
@@ -67,7 +68,7 @@ const ITEM_SX = {
 function BuyOrderRow({ order }: { order: StandingBuyOrder }) {
   const { t, i18n } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const remaining = order.quantity - (order.quantity_fulfilled || 0)
+  const remaining = remainingQuantity(order)
   return (
     <TableRow
       hover

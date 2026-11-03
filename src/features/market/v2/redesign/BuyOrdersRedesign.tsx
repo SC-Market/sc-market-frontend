@@ -60,6 +60,7 @@ import {
 import { isAwaitingData } from "../../../../util/queryLoading"
 import { usePageReady } from "../../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
+import { remainingQuantity } from "../../domain/buyOrders"
 
 /**
  * BuyOrdersRedesign — Phase 0 of the Market redesign (behind the
@@ -326,10 +327,7 @@ export function BuyOrderCard({
   const theme = useTheme<ExtendedTheme>()
   const { t, i18n } = useTranslation()
 
-  const remaining = Math.max(
-    0,
-    (order.quantity ?? 0) - (order.quantity_fulfilled ?? 0),
-  )
+  const remaining = remainingQuantity(order)
   const imageUrl = order.photos?.[0]?.url || FALLBACK_IMAGE_URL
   const isDark = theme.palette.mode === "dark"
 

@@ -70,6 +70,7 @@ import { FulfillBuyOrderDialog } from "./components/FulfillBuyOrderDialog";
 import { MarketAggregateViewV2Admin } from "./MarketAggregateViewV2Admin";
 import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, useCancelBuyOrderMutation, type StandingBuyOrder } from "../../../store/api/v2/market";
 import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
+import { remainingQuantity } from "../domain/buyOrders";
 
 /**
  * MarketAggregateViewV2 Component
@@ -647,7 +648,7 @@ export function BuyOrderRowV2(props: {
   const { row: buy_order, index } = props;
   const issueAlert = useAlertHook();
   const [fulfillDialogOpen, setFulfillDialogOpen] = useState(false);
-  const remaining = buy_order.quantity - (buy_order.quantity_fulfilled || 0);
+  const remaining = remainingQuantity(buy_order);
   const navigate = useNavigate();
   const { data: profile } = useGetUserProfileQuery();
   const isOwnBuyOrder = !!profile && buy_order.buyer_name === profile.username;

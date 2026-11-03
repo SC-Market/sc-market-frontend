@@ -67,6 +67,7 @@ import {
 import { QualityHistogram } from "../../../components/market/v2/QualityHistogram";
 import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths";
 import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton";
+import { remainingQuantity, totalRemainingQuantity } from "../domain/buyOrders";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -119,10 +120,7 @@ function StatStrip({
     : null;
   const spread =
     bestAsk != null && bestBid != null ? bestAsk - bestBid : null;
-  const totalWanted = activeBuys.reduce(
-    (s, o) => s + (o.quantity - o.quantity_fulfilled),
-    0
-  );
+  const totalWanted = totalRemainingQuantity(activeBuys);
   const totalStock = filtered.reduce((s, l) => s + l.quantity_available, 0);
   const sellerCount = new Set(filtered.map((l) => l.shop_id)).size;
 
@@ -1125,7 +1123,7 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
         </Box>
       ) : (
         active.slice(0, 10).map((order) => {
-          const remaining = order.quantity - (order.quantity_fulfilled || 0);
+          const remaining = remainingQuantity(order);
           const total = order.negotiable
             ? null
             : order.price_per_unit * remaining;

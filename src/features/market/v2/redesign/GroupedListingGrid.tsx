@@ -62,6 +62,7 @@ import {
   qualityTierColor,
   qualityValueColor,
 } from "../../../../util/qualityColor"
+import { remainingQuantity } from "../../domain/buyOrders"
 
 /**
  * GroupedListingGrid — market_v2_redesign variant of the search grid.
@@ -694,7 +695,7 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
                 <Chip label={t("MarketRedesign.negotiable", "Negotiable")} size="small" variant="outlined" sx={{ height: 20 }} />
               )}
               <Typography variant="body2" sx={{ color: "text.primary", width: 90, textAlign: "right" }}>
-                {(o.quantity - o.quantity_fulfilled).toLocaleString()}
+                {remainingQuantity(o).toLocaleString()}
               </Typography>
               <Typography variant="body2" sx={{ color: "secondary.main", fontWeight: 700, width: 120, textAlign: "right" }}>
                 {formatPrice(o.price_per_unit)}

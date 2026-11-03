@@ -16,6 +16,7 @@ import type { StandingBuyOrder } from "../../../store/api/v2/market"
 import { ListingWrapper } from "../components/listings/ListingWrapper"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS } from "../../../routes/paths"
+import { totalRemainingQuantity } from "../domain/buyOrders"
 
 /** A game item with its active buy orders (one card on /buyorders). */
 export interface BuyOrderAggregate {
@@ -74,10 +75,7 @@ export function BuyOrderAggregateCard({
   )
   const totalQty = useMemo(
     () =>
-      aggregate.orders.reduce(
-        (sum, o) => sum + (o.quantity - (o.quantity_fulfilled || 0)),
-        0,
-      ),
+      totalRemainingQuantity(aggregate.orders),
     [aggregate.orders],
   )
   const imageUrl = useMemo(
