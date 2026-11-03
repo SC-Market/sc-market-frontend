@@ -176,6 +176,12 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
         [row("price-alert", "Price alert", ["watchlist.price_alert"])],
         "price-alerts",
       ),
+      section(
+        "buy-orders",
+        "Buy orders",
+        "A new public listing matches one of your buy orders.",
+        [row("buy-order-match", "Buy-order match", ["buy_order.match"])],
+      ),
     ],
   },
   {

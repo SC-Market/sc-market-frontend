@@ -950,6 +950,7 @@
         "admin_alert": "Annonce",
         "reminder_unread_messages": "Rappel de messages non lus",
         "watchlist_price_alert": "Alerte de prix",
+        "buy_order_match": "Correspondance d'ordre d'achat",
         "contract_public_created": "Nouveau contrat public",
         "offer_accepted": "Offre acceptée",
         "offer_rejected": "Offre refusée",
@@ -997,6 +998,10 @@
         "watchlist": {
           "label": "Alertes de prix",
           "hint": "Une annonce publique a atteint le prix cible de votre watchlist."
+        },
+        "buy-orders": {
+          "label": "Ordres d'achat",
+          "hint": "Une nouvelle annonce publique correspond à l'un de vos ordres d'achat."
         },
         "org": {
           "label": "Organisations",
@@ -1055,6 +1060,9 @@
         },
         "price-alert": {
           "label": "Alerte de prix"
+        },
+        "buy-order-match": {
+          "label": "Correspondance d'ordre d'achat"
         },
         "invite": {
           "label": "Invitation d'organisation"

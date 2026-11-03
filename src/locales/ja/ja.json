@@ -944,6 +944,7 @@
         "admin_alert": "お知らせ",
         "reminder_unread_messages": "未読メッセージのリマインダー",
         "watchlist_price_alert": "価格アラート",
+        "buy_order_match": "買い注文の一致",
         "contract_public_created": "新しい公開契約",
         "offer_accepted": "オファーの承認",
         "offer_rejected": "オファーの拒否",
@@ -991,6 +992,10 @@
         "watchlist": {
           "label": "価格アラート",
           "hint": "ウォッチリストの目標価格に達した公開出品。"
+        },
+        "buy-orders": {
+          "label": "買い注文",
+          "hint": "新しい公開出品があなたの買い注文に一致しました。"
         },
         "org": {
           "label": "組織",
@@ -1049,6 +1054,9 @@
         },
         "price-alert": {
           "label": "価格アラート"
+        },
+        "buy-order-match": {
+          "label": "買い注文の一致"
         },
         "invite": {
           "label": "組織への招待"

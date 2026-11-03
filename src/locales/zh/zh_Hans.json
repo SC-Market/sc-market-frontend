@@ -950,6 +950,7 @@
         "admin_alert": "公告",
         "reminder_unread_messages": "未读消息提醒",
         "watchlist_price_alert": "价格提醒",
+        "buy_order_match": "求购订单匹配",
         "contract_public_created": "新的公共合同",
         "offer_accepted": "报价已接受",
         "offer_rejected": "报价已拒绝",
@@ -997,6 +998,10 @@
         "watchlist": {
           "label": "价格提醒",
           "hint": "关注列表中的物品有公开商品达到目标价。"
+        },
+        "buy-orders": {
+          "label": "求购订单",
+          "hint": "有新的公开商品符合你的求购订单。"
         },
         "org": {
           "label": "组织",
@@ -1055,6 +1060,9 @@
         },
         "price-alert": {
           "label": "价格提醒"
+        },
+        "buy-order-match": {
+          "label": "求购订单匹配"
         },
         "invite": {
           "label": "组织邀请"

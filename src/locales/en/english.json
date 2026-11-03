@@ -4875,6 +4875,7 @@
         "admin_alert": "Announcement",
         "reminder_unread_messages": "Unread message reminder",
         "watchlist_price_alert": "Price alert",
+        "buy_order_match": "Buy-order match",
         "contract_public_created": "New public contract",
         "offer_accepted": "Offer accepted",
         "offer_rejected": "Offer rejected",
@@ -4922,6 +4923,10 @@
         "watchlist": {
           "label": "Price alerts",
           "hint": "A public listing reached the target price on your watchlist."
+        },
+        "buy-orders": {
+          "label": "Buy orders",
+          "hint": "A new public listing matches one of your buy orders."
         },
         "org": {
           "label": "Organizations",
@@ -4980,6 +4985,9 @@
         },
         "price-alert": {
           "label": "Price alert"
+        },
+        "buy-order-match": {
+          "label": "Buy-order match"
         },
         "invite": {
           "label": "Organization invite"

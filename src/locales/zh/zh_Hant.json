@@ -886,6 +886,7 @@
         "admin_alert": "公告",
         "reminder_unread_messages": "未讀訊息提醒",
         "watchlist_price_alert": "價格提醒",
+        "buy_order_match": "收購訂單相符",
         "contract_public_created": "新的公開合約",
         "offer_accepted": "報價已接受",
         "offer_rejected": "報價已拒絕",
@@ -933,6 +934,10 @@
         "watchlist": {
           "label": "價格提醒",
           "hint": "追蹤清單中的物品有公開刊登達到目標價。"
+        },
+        "buy-orders": {
+          "label": "收購訂單",
+          "hint": "有新的公開刊登符合你的收購訂單。"
         },
         "org": {
           "label": "組織",
@@ -991,6 +996,9 @@
         },
         "price-alert": {
           "label": "價格提醒"
+        },
+        "buy-order-match": {
+          "label": "收購訂單相符"
         },
         "invite": {
           "label": "組織邀請"
