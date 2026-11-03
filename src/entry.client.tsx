@@ -43,6 +43,7 @@ import { hydratePrerenderedData, takePrerenderedData } from "./store/hydration"
 import { retryDynamicImport } from "./util/retryDynamicImport"
 import { matchesMobile, prefetchFirstPageData } from "./router/firstPageData"
 import { armStartupDeferral, whenStartupGateOpen } from "./util/startupDeferral"
+import { RenderTimeProvider } from "./util/format/renderTime"
 
 // The entry chunk has loaded: from here on, chunk failures are handled by the
 // app (retryDynamicImport), not by document.html's bootstrap guard.
@@ -196,11 +197,14 @@ removeBridgeSummary(container)
 const app = (
   <StrictMode>
     <Provider store={store} serverState={serverState}>
-      <UnheadProvider head={head}>
-        <ErrorBoundary>
-          <HydratedRouter />
-        </ErrorBoundary>
-      </UnheadProvider>
+      {/* The server render's "now" while hydrating its HTML (useNow). */}
+      <RenderTimeProvider now={prerenderedData?.renderedAt ?? null}>
+        <UnheadProvider head={head}>
+          <ErrorBoundary>
+            <HydratedRouter />
+          </ErrorBoundary>
+        </UnheadProvider>
+      </RenderTimeProvider>
     </Provider>
   </StrictMode>
 )

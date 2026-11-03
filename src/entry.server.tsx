@@ -49,6 +49,7 @@ import { provideShell } from "./routes/shell"
 import { providePages } from "./routes/definePage"
 import { shell } from "./app/shell"
 import { pages } from "./app/pages"
+import { RenderTimeProvider } from "./util/format/renderTime"
 
 provideShell(shell)
 providePages(pages)
@@ -154,6 +155,8 @@ export default async function handleRequest(
     ...routerContext,
     serverHandoffStream: undefined,
   }
+  // Every pass renders at the same "now", which ships with the page.
+  const renderedAt = Date.now()
   const render = (
     head: ReturnType<typeof newHead>,
     context: EntryContext = dataPassContext,
@@ -161,11 +164,13 @@ export default async function handleRequest(
   ) =>
     renderToHtml(
       <Provider store={store}>
-        <RenderedContentBodies value={contentBodies}>
-          <UnheadProvider value={head}>
-            <ServerRouter context={context} url={request.url} />
-          </UnheadProvider>
-        </RenderedContentBodies>
+        <RenderTimeProvider now={renderedAt}>
+          <RenderedContentBodies value={contentBodies}>
+            <UnheadProvider value={head}>
+              <ServerRouter context={context} url={request.url} />
+            </UnheadProvider>
+          </RenderedContentBodies>
+        </RenderTimeProvider>
       </Provider>,
     )
   const newHead = () =>
@@ -236,7 +241,7 @@ export default async function handleRequest(
     pageHeadTags,
     data: {
       elementId: PRERENDERED_DATA_ELEMENT_ID,
-      value: { api: shipped, contentBodies } satisfies PrerenderedData,
+      value: { api: shipped, contentBodies, renderedAt } satisfies PrerenderedData,
     },
   })
 

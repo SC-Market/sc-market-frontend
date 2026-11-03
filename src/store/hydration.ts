@@ -48,6 +48,12 @@ export interface PrerenderedData {
    * render, so it hydrates with the same branding.
    */
   whiteLabel?: import("../ssr/protocol").SsrWhiteLabel
+  /**
+   * When the server rendered the page (ms since epoch): useNow() during
+   * hydration, so relative times and "New" badges match the HTML however
+   * long it was cached (util/format/renderTime.tsx).
+   */
+  renderedAt?: number
 }
 
 /** Read and remove the data script (before hydration). */

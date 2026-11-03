@@ -37,6 +37,7 @@ import { I18nextProvider } from "react-i18next"
 import i18n, { loadLocale } from "../util/i18n"
 import { setServerRenderLanguage } from "../util/renderLanguage"
 import { setServerRenderWhiteLabel } from "../util/renderHost"
+import { RenderTimeProvider } from "../util/format/renderTime"
 import type { SsrRequest } from "./context"
 import {
   SSR_FAILURE_HEADER,
@@ -185,17 +186,21 @@ async function renderPageNow(
   const cache = createRenderCache()
   // The guide bodies this render shows (per render, like the prerender's).
   const renderedBodies = new Set<string>()
+  // Ships with the page: the browser hydrates at this "now" (useNow).
+  const renderedAt = Date.now()
   let renderError: unknown
   const stream = await renderToReadableStream(
     <CacheProvider value={cache}>
       <Provider store={ssr.store}>
         <RenderedContentBodies value={renderedBodies}>
           <RequestContextProvider value={ssr.requestContext}>
-            <I18nextProvider i18n={variant.i18nInstance}>
-              <UnheadProvider value={head}>
-                <ServerRouter context={routerContext} url={request.url} />
-              </UnheadProvider>
-            </I18nextProvider>
+            <RenderTimeProvider now={renderedAt}>
+              <I18nextProvider i18n={variant.i18nInstance}>
+                <UnheadProvider value={head}>
+                  <ServerRouter context={routerContext} url={request.url} />
+                </UnheadProvider>
+              </I18nextProvider>
+            </RenderTimeProvider>
           </RequestContextProvider>
         </RenderedContentBodies>
       </Provider>
@@ -257,6 +262,7 @@ async function renderPageNow(
       value: {
         api: fulfilledApiState(ssr.store.getState()),
         contentBodies: [...renderedBodies],
+        renderedAt,
         ...(whiteLabel ? { whiteLabel } : {}),
       } satisfies PrerenderedData,
     },
