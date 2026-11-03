@@ -19,7 +19,6 @@ import {
 import { HapticTablePagination } from "../../components/haptic"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
-import { getRelativeTime } from "../../util/time"
 import {
   PublicContract,
   useGetPublicContractsQuery,
@@ -36,6 +35,7 @@ import { ORDER_PATHS, USER_PATHS } from "../../routes/paths"
 import { isAwaitingData } from "../../util/queryLoading"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
+import { useFormatters, useNow } from "../../util/format"
 
 /**
  * "<author> - <time ago> - <price> <payment type>" line on an open contract card.
@@ -46,6 +46,8 @@ import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
  * the time ago and the price never break internally.
  */
 export function ContractListingMeta(props: { contract: PublicContract }) {
+  const fmt = useFormatters()
+  const now = useNow()
   const { contract } = props
   const { t } = useTranslation()
   const key = PAYMENT_TYPE_MAP.get(contract.payment_type) || ""
@@ -101,7 +103,7 @@ export function ContractListingMeta(props: { contract: PublicContract }) {
         variant={"subtitle2"}
         sx={{ flexShrink: 0, whiteSpace: "nowrap" }}
       >
-        {getRelativeTime(new Date(contract.timestamp))} -
+        {fmt.relative(new Date(contract.timestamp), now)} -
       </Typography>
       <Typography
         component={"span"}
@@ -109,7 +111,7 @@ export function ContractListingMeta(props: { contract: PublicContract }) {
         variant={"subtitle2"}
         sx={{ flexShrink: 0, whiteSpace: "nowrap" }}
       >
-        {(+contract.cost).toLocaleString(undefined)} aUEC
+        {fmt.number(+contract.cost)} aUEC
         {key ? ` ${t(key)}` : ""}
       </Typography>
     </Box>

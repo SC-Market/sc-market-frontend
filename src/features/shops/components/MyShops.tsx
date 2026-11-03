@@ -28,11 +28,7 @@ import { useGetMyShopsQuery, useQuickCreateShopMutation } from "../../../store/a
 import type { ShopResponse } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
 import { usePageReady } from "../../../components/metadata/PageReady"
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  return date.toLocaleDateString(undefined, { month: "short", year: "numeric" })
-}
+import { useFormatters } from "../../../util/format"
 
 function getInitials(name: string): string {
   return name
@@ -88,6 +84,7 @@ function SummaryStatsBar({ shops }: { shops: ShopResponse[] }) {
 }
 
 function ShopManagementCard({ shop }: { shop: ShopResponse }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const isPersonal = !shop.is_org_owned
@@ -275,7 +272,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           <Stack direction="row" alignItems="center" spacing={0.5}>
             <CalendarToday sx={{ fontSize: 14, color: "text.secondary" }} />
             <Typography variant="caption" color="text.secondary">
-              {t("shops.mine.created", { date: formatDate(shop.created_at) })}
+              {t("shops.mine.created", { date: fmt.date(shop.created_at, { month: "short", year: "numeric" }) })}
             </Typography>
           </Stack>
         </Box>

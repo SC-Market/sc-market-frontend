@@ -43,6 +43,7 @@ import {
   usableFulfilOptions,
   validateFulfil,
 } from "../../domain/fulfilBuyOrder"
+import { useFormatters } from "../../../../util/format"
 
 export interface FulfillBuyOrderDialogProps {
   buyOrder: Pick<
@@ -57,7 +58,8 @@ const optionKey = (o: { listing_id: string; variant_id: string }) =>
   `${o.listing_id}:${o.variant_id}`
 
 export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrderDialogProps) {
-  const { t, i18n } = useTranslation()
+  const fmt = useFormatters()
+  const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
   const remaining = remainingQuantity(buyOrder)
@@ -84,7 +86,6 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
 
   const [fulfill, { isLoading: submitting }] = useFulfillBuyOrderMutation()
 
-  const fmt = (n: number) => n.toLocaleString(i18n.language)
 
   const submit = async () => {
     if (!selected) return
@@ -179,8 +180,8 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         {t("buyorder.fulfillOptionDetail", "{{price}} aUEC each · {{available}} listed · {{shop}}", {
-                          price: fmt(o.price_per_unit),
-                          available: fmt(o.available),
+                          price: fmt.number(o.price_per_unit),
+                          available: fmt.number(o.available),
                           shop: o.shop_name,
                         })}
                       </Typography>
@@ -204,14 +205,14 @@ export function FulfillBuyOrderDialog({ buyOrder, open, onClose }: FulfillBuyOrd
               value={quantity}
               onValueChange={(values) => setQuantity(values.floatValue ?? 0)}
               helperText={t("buyorder.fulfillQuantityHelper", "Up to {{max}} ({{remaining}} still wanted)", {
-                max: fmt(maxQuantity),
-                remaining: fmt(remaining),
+                max: fmt.number(maxQuantity),
+                remaining: fmt.number(remaining),
               })}
             />
             {selected && (
               <Typography variant="subtitle2">
                 {t("buyorder.fulfillTotal", "Order total: {{total}} aUEC", {
-                  total: fmt(selected.price_per_unit * quantity),
+                  total: fmt.number(selected.price_per_unit * quantity),
                 })}
               </Typography>
             )}

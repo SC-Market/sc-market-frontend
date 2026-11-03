@@ -14,6 +14,7 @@ import type { StandingBuyOrder } from "../../../../store/api/v2/market"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { useTranslation } from "react-i18next"
 import { totalRemainingQuantity } from "../../domain/buyOrders"
+import { useFormatters } from "../../../../util/format"
 
 interface BuyOrderAggregate {
   item_id: string
@@ -22,6 +23,7 @@ interface BuyOrderAggregate {
 }
 
 export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate[] }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   return (
     <TableContainer>
@@ -55,12 +57,12 @@ export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate
                 <TableCell sx={{ whiteSpace: "nowrap" }}>
                   <Typography variant="body2" color="primary" fontWeight="bold">
                     {min === max
-                      ? `${min.toLocaleString()} aUEC`
-                      : `${min.toLocaleString()} – ${max.toLocaleString()} aUEC`}
+                      ? `${fmt.number(min)} aUEC`
+                      : `${fmt.number(min)} – ${fmt.number(max)} aUEC`}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="body2">{totalQty.toLocaleString()}</Typography>
+                  <Typography variant="body2">{fmt.number(totalQty)}</Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2">{agg.orders.length}</Typography>

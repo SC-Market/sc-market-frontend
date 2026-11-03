@@ -36,7 +36,7 @@ import {
 } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { formatCraftedSource, hasDisplayableSource } from "../../../util/variantDisplay"
-import { formatPrice } from "../../../util/formatPrice"
+import { useFormatters } from "../../../util/format"
 
 /** A single variant item in the counteroffer */
 interface V2Item {
@@ -58,6 +58,7 @@ interface DisplayItem extends V2Item {
  * Supports multiple variants per listing with rich attribute chips.
  */
 export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV2Response }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { session } = props
@@ -273,11 +274,11 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                       />
                     </TableCell>
                     <TableCell align="right">
-                      {formatPrice(item.price_per_unit)}
+                      {fmt.price(item.price_per_unit)}
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="body2" fontWeight={600}>
-                        {formatPrice(item.price_per_unit * item.quantity)}
+                        {fmt.price(item.price_per_unit * item.quantity)}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -299,7 +300,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="h6" color="primary" fontWeight={700}>
-                      {formatPrice(total)}
+                      {fmt.price(total)}
                     </Typography>
                   </TableCell>
                   <TableCell />
@@ -360,7 +361,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                         {t("marketV2.qtyColon", { quantity: v.quantity })}
                       </Typography>
                       <Typography variant="body2" color="primary" fontWeight="bold">
-                        {formatPrice(v.price)}
+                        {fmt.price(v.price)}
                       </Typography>
                     </Box>
                   </MenuItem>

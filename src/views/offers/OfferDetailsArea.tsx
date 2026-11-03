@@ -51,6 +51,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useOfferDetails } from "../../features/offers/hooks/useOfferDetails"
 import { SHOP_PATHS, ORDER_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 export function OfferMessagesArea(props: { session: GetOfferSessionV2Response }) {
   const { session } = props
@@ -105,9 +106,10 @@ export function OfferMessagesArea(props: { session: GetOfferSessionV2Response })
 }
 
 export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; selectedOfferIndex?: number }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useBreakpointDown("sm")
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { session } = props
 
   const {
@@ -528,7 +530,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                       textAlign: "right",
                     }}
                   >
-                    {(+currentOffer.cost).toLocaleString(undefined)}{" "}
+                    {fmt.number(+currentOffer.cost)}{" "}
                     <Typography
                       color={"text.primary"}
                       variant={"subtitle2"}

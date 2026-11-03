@@ -15,6 +15,7 @@ import { ControlledTable, HeadCell } from "../../../components/table/PaginatedTa
 import { Link } from "react-router-dom"
 import { Stack } from "@mui/system"
 import { USER_PATHS } from "../../../routes/paths"
+import { useFormatters } from "../../../util/format"
 
 interface CustomerRow {
   user_id: string
@@ -41,6 +42,7 @@ function CustomerRowComponent(props: {
   isItemSelected: boolean
   labelId: string
 }) {
+  const fmt = useFormatters()
   const { row } = props
 
   return (
@@ -68,10 +70,10 @@ function CustomerRowComponent(props: {
       </TableCell>
       <TableCell align="right">{row.order_count}</TableCell>
       <TableCell align="right">{row.fulfilled_count}</TableCell>
-      <TableCell align="right">{row.total_spent.toLocaleString()} aUEC</TableCell>
+      <TableCell align="right">{fmt.number(row.total_spent)} aUEC</TableCell>
       <TableCell align="right">
         {row.last_order_at
-          ? new Date(row.last_order_at).toLocaleDateString()
+          ? fmt.date(new Date(row.last_order_at))
           : "—"}
       </TableCell>
     </TableRow>

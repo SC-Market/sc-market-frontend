@@ -30,7 +30,6 @@ import {
   ZoomInRounded,
 } from "@mui/icons-material";
 import { ClockAlert } from "mdi-material-ui";
-import { getRelativeTime } from "../../../util/time";
 import { Section } from "../../../components/paper/Section";
 import { OrderList } from "../../../components/list/OrderList";
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy";
@@ -50,6 +49,8 @@ import { isOrderOpen } from "../../orders/domain/status"
 import { useListingPermissions } from "../hooks/useListingPermissions"
 import { useGetListingDetailQuery } from "../../../store/api/v2/market";
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
+import { isSiteAdmin } from "../../../util/siteRole"
+import { useFormatters, useNow } from "../../../util/format"
 
 /**
  * MarketMultipleViewV2 Component
@@ -169,6 +170,8 @@ function ShopSellerLink(props: {
 }
 
 export function MarketMultipleViewV2() {
+  const fmt = useFormatters()
+  const now = useNow()
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const theme = useTheme<ExtendedTheme>();
@@ -471,15 +474,15 @@ export function MarketMultipleViewV2() {
                           </ListingDetailItem>
                           <ListingDetailItem icon={<CreateRounded fontSize={"inherit"} />}>
                             {t("MarketMultipleView.listed")}{" "}
-                            {getRelativeTime(new Date(complete.created_at))}
+                            {fmt.relative(new Date(complete.created_at), now)}
                           </ListingDetailItem>
                           <ListingDetailItem icon={<RefreshRounded fontSize={"inherit"} />}>
                             {t("MarketMultipleView.updated")}{" "}
-                            {getRelativeTime(subDays(new Date(complete.expires_at), 30))}
+                            {fmt.relative(subDays(new Date(complete.expires_at), 30), now)}
                           </ListingDetailItem>
                           <ListingDetailItem icon={<ClockAlert fontSize={"inherit"} />}>
                             {t("MarketMultipleView.expires")}{" "}
-                            {getRelativeTime(new Date(complete.expires_at))}
+                            {fmt.relative(new Date(complete.expires_at), now)}
                           </ListingDetailItem>
                         </Stack>
                       }
@@ -681,7 +684,8 @@ function BundlePurchaseArea({
   bundleTotal: number;
   allVariantsSelected: boolean;
 }) {
-  const { t, i18n } = useTranslation();
+  const fmt = useFormatters()
+  const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
 
   return (
@@ -722,7 +726,7 @@ function BundlePurchaseArea({
                   </Box>
                   <Typography variant="body2" color="primary" fontWeight="bold">
                     {variant
-                      ? `${variant.price.toLocaleString(i18n.language)} aUEC`
+                      ? `${fmt.number(variant.price)} aUEC`
                       : t("market.selectVariant", "Select Variant")}
                   </Typography>
                 </Box>
@@ -747,7 +751,7 @@ function BundlePurchaseArea({
             </Typography>
             <Typography variant="h5" color="primary" fontWeight="bold">
               {allVariantsSelected
-                ? `${bundleTotal.toLocaleString(i18n.language)} aUEC`
+                ? `${fmt.number(bundleTotal)} aUEC`
                 : t("market.selectAllVariants", "Select all variants")}
             </Typography>
           </Box>
@@ -795,7 +799,8 @@ function VariantDetailsTable({
     price: number;
   }>;
 }) {
-  const { t, i18n } = useTranslation();
+  const fmt = useFormatters()
+  const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
 
   return (
@@ -842,12 +847,12 @@ function VariantDetailsTable({
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2">
-                  {variant.quantity.toLocaleString(i18n.language)}
+                  {fmt.number(variant.quantity)}
                 </Typography>
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2" color="primary">
-                  {variant.price.toLocaleString(i18n.language)} aUEC
+                  {fmt.number(variant.price)} aUEC
                 </Typography>
               </td>
             </tr>

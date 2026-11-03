@@ -20,14 +20,15 @@ import {
 import { InventoryRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { formatPrice } from "../../util/formatPrice"
 import { Section } from "../../components/paper/Section"
 import { QualityBadge } from "../../components/market/v2/QualityBadge"
 import { formatCraftedSource, hasDisplayableSource } from "../../util/variantDisplay"
 import type { OfferMarketListingV2, OrderMarketListingV2 } from "../../store/api/v2/market"
 import { MARKET_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListingV2 | OrderMarketListingV2)[] }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   if (!items.length) return null
 
@@ -94,10 +95,10 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                     </Box>
                   </TableCell>
                   <TableCell align="right">{v.quantity}</TableCell>
-                  <TableCell align="right">{formatPrice(v.price_per_unit)}</TableCell>
+                  <TableCell align="right">{fmt.price(v.price_per_unit)}</TableCell>
                   <TableCell align="right">
                     <Typography variant="body2" fontWeight={600}>
-                      {formatPrice(v.price_per_unit * v.quantity)}
+                      {fmt.price(v.price_per_unit * v.quantity)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -109,7 +110,7 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
               </TableCell>
               <TableCell align="right">
                 <Typography variant="h6" color="primary" fontWeight={700}>
-                  {formatPrice(total)}
+                  {fmt.price(total)}
                 </Typography>
               </TableCell>
             </TableRow>

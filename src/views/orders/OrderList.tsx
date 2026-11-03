@@ -66,6 +66,7 @@ import {
 } from "../../features/orders/domain/constants"
 import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
 import { usePageReady } from "../../components/metadata/PageReady"
+import { useFormatters } from "../../util/format"
 
 export { statusColors, statusNames }
 
@@ -124,6 +125,7 @@ export function OrderRow(props: {
   labelId: string
   hasSelectedItems?: boolean
 }) {
+  const fmt = useFormatters()
   const { row, index, isItemSelected, hasSelectedItems = false } = props // TODO: Add `assigned_to` column
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme<ExtendedTheme>()
@@ -304,7 +306,7 @@ export function OrderRow(props: {
                 color={"text.secondary"}
                 sx={{ fontSize: { xs: "0.625rem", sm: "0.875rem" } }}
               >
-                {date.toLocaleString("default", { month: "short" })}
+                {fmt.date(date, { month: "short" })}
               </Typography>
               <Typography
                 variant={"h5"}
@@ -349,11 +351,11 @@ export function OrderRow(props: {
               }}
             >
               {row.count
-                ? `${row.count.toLocaleString(undefined)} ${t("orders.items")} • `
+                ? `${fmt.number(row.count)} ${t("orders.items")} • `
                 : row.service_name
                   ? `${row.service_name} • `
                   : ""}
-              {(+row.cost).toLocaleString(undefined)} aUEC
+              {fmt.number(+row.cost)} aUEC
             </Typography>
           </Stack>
         </Stack>
@@ -427,11 +429,6 @@ export function OrderRow(props: {
           )}
         </Stack>
       </TableCell>
-      {/*<TableCell align="right">*/}
-      {/*  <Typography variant={"subtitle1"} color={"text.primary"}>*/}
-      {/*    {(+row.cost).toLocaleString("en-US")} aUEC*/}
-      {/*  </Typography>*/}
-      {/*</TableCell>*/}
 
       {/*<TableCell align={'right'}>*/}
       {/*    <Button color={'primary'} variant={'outlined'} onClick={handleAcceptBid}>*/}

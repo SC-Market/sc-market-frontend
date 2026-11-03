@@ -33,6 +33,7 @@ import {
 import { listingApiError } from "../domain/listingFormErrors"
 import { FirstUseHint } from "../../help/components/FirstUseHint"
 import { HelpTip } from "../../help/components/HelpTip"
+import { useFormatters } from "../../../util/format"
 
 type TFn = ReturnType<typeof useTranslation>["t"]
 
@@ -68,6 +69,7 @@ function importableIndices(preview: UexImportPreviewItem[]): number[] {
  * backend still skips are listed with their reason after the import.
  */
 export function ImportFromUex({ shopId }: { shopId: string }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const [username, setUsername] = useState("")
   const [preview, setPreview] = useState<UexImportPreviewItem[] | null>(null)
@@ -386,7 +388,7 @@ export function ImportFromUex({ shopId }: { shopId: string }) {
                         )}
                       </TableCell>
                       <TableCell align="right">
-                        {item.price.toLocaleString()} aUEC
+                        {fmt.number(item.price)} aUEC
                       </TableCell>
                       <TableCell align="right">{item.quantity}</TableCell>
                       <TableCell>{item.source || "—"}</TableCell>

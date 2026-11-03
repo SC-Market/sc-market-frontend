@@ -25,6 +25,7 @@ import {
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
+import { useFormatters } from "../../../../util/format"
 
 export interface TransferLotDialogV2Props {
   open: boolean
@@ -44,6 +45,7 @@ export function TransferLotDialogV2({
   lot,
   locations,
 }: TransferLotDialogV2Props) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
@@ -108,7 +110,7 @@ export function TransferLotDialogV2({
 
           <Typography variant="body2">
             <strong>{t("TransferLotDialogV2.quantity", "Quantity")}:</strong>{" "}
-            {lot.quantity_total.toLocaleString()}
+            {fmt.number(lot.quantity_total)}
           </Typography>
 
           <Typography variant="body2">

@@ -27,7 +27,6 @@ import {
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
-import { getRelativeTime } from "../../../util/time"
 import { useTranslation } from "react-i18next"
 import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
 import {
@@ -43,6 +42,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { FulfillBuyOrderDialog } from "./components/FulfillBuyOrderDialog"
 import { HelpLink } from "../../help/components/HelpLink"
 import { remainingQuantity } from "../domain/buyOrders"
+import { useFormatters, useNow } from "../../../util/format"
 
 const STATUS_COLORS: Record<string, "success" | "warning" | "error" | "default"> = {
   active: "success",
@@ -52,6 +52,8 @@ const STATUS_COLORS: Record<string, "success" | "warning" | "error" | "default">
 }
 
 export function BuyOrderDetailV2() {
+  const fmt = useFormatters()
+  const now = useNow()
   const { id } = useParams<{ id: string }>()
   const theme = useTheme<ExtendedTheme>()
   const { t, i18n } = useTranslation()
@@ -85,11 +87,11 @@ export function BuyOrderDetailV2() {
     if (!buyOrder) return ""
     if (buyOrder.negotiable) {
       return buyOrder.price_per_unit >= 1
-        ? `Negotiable (~${buyOrder.price_per_unit.toLocaleString(i18n.language)} aUEC)`
+        ? `Negotiable (~${fmt.number(buyOrder.price_per_unit)} aUEC)`
         : "Negotiable"
     }
-    return `${buyOrder.price_per_unit.toLocaleString(i18n.language)} aUEC per unit`
-  }, [buyOrder, i18n.language])
+    return `${fmt.number(buyOrder.price_per_unit)} aUEC per unit`
+  }, [buyOrder, i18n.language, fmt])
 
   return (
     <StandardPageLayout
@@ -197,13 +199,13 @@ export function BuyOrderDetailV2() {
 
                             {/* Created */}
                             <ListingDetailItem icon={<AccessTimeRounded fontSize="small" />}>
-                              {t("marketV2.posted", { time: getRelativeTime(new Date(buyOrder.created_at)) })}
+                              {t("marketV2.posted", { time: fmt.relative(new Date(buyOrder.created_at), now) })}
                             </ListingDetailItem>
 
                             {/* Expires */}
                             {buyOrder.expires_at && (
                               <ListingDetailItem icon={<ClockAlert fontSize="small" />}>
-                                {t("marketV2.expires", { time: getRelativeTime(new Date(buyOrder.expires_at)) })}
+                                {t("marketV2.expires", { time: fmt.relative(new Date(buyOrder.expires_at), now) })}
                               </ListingDetailItem>
                             )}
                           </Stack>
@@ -231,7 +233,7 @@ export function BuyOrderDetailV2() {
                             </Typography>
                             {!buyOrder.negotiable && buyOrder.quantity > 1 && (
                               <Typography variant="body2" color="text.secondary">
-                                {t("marketV2.totalForRemaining", { total: (buyOrder.price_per_unit * remaining).toLocaleString(i18n.language) })}
+                                {t("marketV2.totalForRemaining", { total: fmt.number(buyOrder.price_per_unit * remaining) })}
                               </Typography>
                             )}
                           </Paper>
@@ -243,10 +245,10 @@ export function BuyOrderDetailV2() {
                                 {t("marketV2.quantity")}
                               </Typography>
                               <Typography variant="subtitle2" fontWeight="bold">
-                                {t("marketV2.remaining", { n: remaining.toLocaleString(i18n.language) })}
+                                {t("marketV2.remaining", { n: fmt.number(remaining) })}
                                 {buyOrder.quantity_fulfilled > 0 && (
                                   <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 0.5 }}>
-                                    {t("marketV2.ofRequested", { n: buyOrder.quantity.toLocaleString(i18n.language) })}
+                                    {t("marketV2.ofRequested", { n: fmt.number(buyOrder.quantity) })}
                                   </Typography>
                                 )}
                               </Typography>

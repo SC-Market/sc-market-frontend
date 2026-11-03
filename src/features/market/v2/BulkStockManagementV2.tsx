@@ -82,6 +82,7 @@ import { FirstUseHint } from "../../help/components/FirstUseHint"
 import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
 import { canEditShopStockLots } from "../../shops/domain/shopPermissions"
 import { selectOnFocus } from "../../../util/selectOnFocus"
+import { useFormatters } from "../../../util/format"
 
 /**
  * This page's shop: lots, listings and permissions are scoped to it (without
@@ -743,6 +744,7 @@ function AllStockLotsGridV2() {
 /* ── Allocated Stock Grid ── */
 
 function AllocatedStockGridV2() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { filters } = useStockFilter()
   const { shopId } = useStockShop()
@@ -792,7 +794,7 @@ function AllocatedStockGridV2() {
       headerAlign: "right" as const,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" fontWeight={600}>
-          {params.value?.toLocaleString()} / {params.row.quantity_total?.toLocaleString()}
+          {fmt.number(params.value)} / {fmt.number(params.row.quantity_total)}
         </Typography>
       ),
     },
@@ -864,11 +866,12 @@ function AllocatedStockGridV2() {
  * the cell (double-click does too).
  */
 function EditableCell({ params, canEdit }: { params: GridRenderCellParams; canEdit: boolean }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const apiRef = useGridApiContext()
   return (
     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 0.5, width: "100%" }}>
-      <Typography variant="body2" fontWeight={600}>{params.value?.toLocaleString()}</Typography>
+      <Typography variant="body2" fontWeight={600}>{fmt.number(params.value)}</Typography>
       {canEdit && (
         <IconButton
           size="small"

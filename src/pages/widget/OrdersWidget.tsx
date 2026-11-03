@@ -4,13 +4,13 @@ import { useGetUserOrderDataQuery } from "../../features/orders/api/ordersApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Link } from "react-router-dom"
-import { getRelativeTime } from "../../util/time"
 import { HookProvider } from "../../hooks/HookProvider"
 import { lightTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ORDER_PATHS } from "../../routes/paths"
 import { statusNames } from "../../features/orders/domain/constants"
 import { useTranslation } from "react-i18next"
+import { useFormatters, useNow } from "../../util/format"
 
 /**
  * Widget view for recent orders
@@ -18,6 +18,8 @@ import { useTranslation } from "react-i18next"
  * Uses existing backend API and frontend components
  */
 function OrdersWidgetContent() {
+  const fmt = useFormatters()
+  const now = useNow()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { data, isLoading, error, refetch } = useGetUserOrderDataQuery({
@@ -93,13 +95,7 @@ function OrdersWidgetContent() {
     return statusColors[status] || theme.palette.text.secondary
   }
 
-  const formatCost = (cost: number | string) => {
-    const numCost = typeof cost === "string" ? parseFloat(cost) : cost
-    return new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(numCost)
-  }
+  const formatCost = (cost: number | string) => fmt.integer(cost)
 
   const recentOrders = data?.recent_orders || []
   const maxOrders = 5
@@ -162,7 +158,7 @@ function OrdersWidgetContent() {
                     {formatCost(order.cost)} aUEC
                   </Typography>
                   <Typography component="span">
-                    {getRelativeTime(new Date(order.timestamp))}
+                    {fmt.relative(new Date(order.timestamp), now)}
                   </Typography>
                 </Box>
               </Box>

@@ -21,6 +21,7 @@ import {
   type StandingBuyOrder,
 } from "../../../store/api/v2/market"
 import { remainingQuantity } from "../domain/buyOrders"
+import { useFormatters } from "../../../util/format"
 
 export function MatchingBuyOrdersArea({
   showEmpty,
@@ -32,7 +33,8 @@ export function MatchingBuyOrdersArea({
    */
   showEmpty?: boolean
 } = {}) {
-  const { t, i18n } = useTranslation()
+  const fmt = useFormatters()
+  const { t } = useTranslation()
   const { data, isLoading } = useGetMatchesForSellerQuery({ page: 1, pageSize: 5 })
   const orders = data?.buy_orders || []
 
@@ -95,12 +97,12 @@ export function MatchingBuyOrdersArea({
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="body2" color="primary" fontWeight="bold">
-                      {order.price_per_unit.toLocaleString(i18n.language)} aUEC
+                      {fmt.number(order.price_per_unit)} aUEC
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="body2">
-                      {remaining.toLocaleString(i18n.language)}
+                      {fmt.number(remaining)}
                     </Typography>
                   </TableCell>
                 </TableRow>

@@ -33,6 +33,7 @@ import { ListingSkeleton } from "../../../components/skeletons"
 import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BulkItemsTableV2 } from "./components/BulkItemsTableV2"
 import { MARKET_PATHS } from "../../../routes/paths"
+import { useFormatters } from "../../../util/format"
 
 // ── Sidebar Filter ─────────────────────────────────────────────────────
 
@@ -139,6 +140,7 @@ function BulkMobileSidebar() {
 // ── Aggregate Card ─────────────────────────────────────────────────────
 
 function AggregateCard({ item }: { item: GameItemAggregate }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
@@ -165,12 +167,12 @@ function AggregateCard({ item }: { item: GameItemAggregate }) {
 
           <Typography variant="subtitle2" color="primary" fontWeight="bold" sx={{ mt: 0.5 }}>
             {item.min_price === item.max_price
-              ? `${item.min_price.toLocaleString()} aUEC`
-              : `${item.min_price.toLocaleString()} – ${item.max_price.toLocaleString()} aUEC`}
+              ? `${fmt.number(item.min_price)} aUEC`
+              : `${fmt.number(item.min_price)} – ${fmt.number(item.max_price)} aUEC`}
           </Typography>
 
           <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
-            <Chip label={t("marketUi.bulkItems.availableShort", { quantity: item.total_quantity.toLocaleString() })} size="small" variant="outlined" />
+            <Chip label={t("marketUi.bulkItems.availableShort", { quantity: fmt.number(item.total_quantity) })} size="small" variant="outlined" />
             <Chip label={t("marketUi.bulkItems.sellerCount", { count: item.shop_count })} size="small" variant="outlined" />
           </Stack>
 

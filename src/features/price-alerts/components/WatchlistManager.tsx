@@ -35,11 +35,11 @@ import {
   type GameItemChoice,
 } from "../../dashboard/GameItemPicker"
 import { WatchPriceDialog } from "./WatchPriceDialog"
-import { formatAuec, parseTargetPrice } from "../domain/price"
+import { parseTargetPrice } from "../domain/price"
 import { getErrorMessage } from "../../../util/errorHandling"
-import { getRelativeTime } from "../../../util/time"
 import { MARKET_PATHS, WIKI_PATHS } from "../../../routes/paths"
 import { usePageReady } from "../../../components/metadata/PageReady"
+import { useFormatters, useNow } from "../../../util/format"
 
 function itemLabel(item: WatchlistItem): string {
   return item.item_name ?? item.query
@@ -52,6 +52,8 @@ function itemLabel(item: WatchlistItem): string {
  * Discord's /watchlist commands manage.
  */
 export function WatchlistManager() {
+  const fmt = useFormatters()
+  const now = useNow()
   const { t } = useTranslation()
   const { data, isLoading, isError } = useGetWatchlistQuery()
   usePageReady(isLoading)
@@ -185,7 +187,7 @@ export function WatchlistManager() {
                         "priceAlerts.manager.targetValue",
                         "Alert at ≤ {{price}}",
                         {
-                          price: formatAuec(item.max_price),
+                          price: fmt.auec(item.max_price),
                         },
                       )}
                       {item.min_quality_tier != null &&
@@ -229,15 +231,15 @@ export function WatchlistManager() {
                             : "inherit"
                         }
                       >
-                        {formatAuec(item.current_lowest)}
+                        {fmt.auec(item.current_lowest)}
                       </Link>
                     ) : (
-                      formatAuec(item.current_lowest)
+                      fmt.auec(item.current_lowest)
                     )}
                     {" · "}
                     {t("priceAlerts.manager.lastAlerted", "Last alerted")}:{" "}
                     {item.last_notified_at
-                      ? getRelativeTime(new Date(item.last_notified_at))
+                      ? fmt.relative(new Date(item.last_notified_at), now)
                       : t("priceAlerts.manager.never", "Never")}
                   </Typography>
                 </Box>

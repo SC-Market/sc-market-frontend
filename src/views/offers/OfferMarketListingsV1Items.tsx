@@ -15,11 +15,12 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { formatPrice } from "../../util/formatPrice"
 import { Section } from "../../components/paper/Section"
 import type { OfferMarketListingV1 } from "../../store/api/v2/market"
+import { useFormatters } from "../../util/format"
 
 export function OfferMarketListingsV1Items({ items }: { items: OfferMarketListingV1[] }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   if (!items.length) return null
 
@@ -52,10 +53,10 @@ export function OfferMarketListingsV1Items({ items }: { items: OfferMarketListin
                   </Typography>
                 </TableCell>
                 <TableCell align="right">{item.quantity}</TableCell>
-                <TableCell align="right">{formatPrice(item.price)}</TableCell>
+                <TableCell align="right">{fmt.price(item.price)}</TableCell>
                 <TableCell align="right">
                   <Typography variant="body2" fontWeight={600}>
-                    {formatPrice(item.price * item.quantity)}
+                    {fmt.price(item.price * item.quantity)}
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -66,7 +67,7 @@ export function OfferMarketListingsV1Items({ items }: { items: OfferMarketListin
               </TableCell>
               <TableCell align="right">
                 <Typography variant="h6" color="primary" fontWeight={700}>
-                  {formatPrice(total)}
+                  {fmt.price(total)}
                 </Typography>
               </TableCell>
             </TableRow>

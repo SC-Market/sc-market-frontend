@@ -28,7 +28,6 @@ import { Link as RouterLink } from "react-router-dom"
 import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
-import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
 import {
   useGetMyShopsQuery,
   useGetMyListingsQuery,
@@ -39,6 +38,7 @@ import type {
   StockLotDetail,
 } from "../../../../store/api/v2/market"
 import { MARKET_PATHS } from "../../../../routes/paths"
+import { useFormatters } from "../../../../util/format"
 
 /**
  * ManageMarketRedesign — Phase 0 of the Market redesign (behind the
@@ -212,6 +212,7 @@ function ListingRow({
   showShop: boolean
   shopName: string
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -275,10 +276,10 @@ function ListingRow({
           </TableCell>
         )}
         <TableCell align="right" sx={{ color: "primary.main", fontWeight: 700 }}>
-          {formatPriceRange(listing.price_min, listing.price_max)}
+          {fmt.priceRange(listing.price_min, listing.price_max)}
         </TableCell>
         <TableCell align="right" sx={{ color: "text.primary" }}>
-          {listing.quantity_available?.toLocaleString() ?? "—"}
+          {fmt.number(listing.quantity_available) ?? "—"}
         </TableCell>
         <TableCell>
           <Chip
@@ -316,6 +317,7 @@ function ListingRow({
 }
 
 function LotBreakdown({ listingId }: { listingId: string }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { data, isLoading } = useGetStockLotsQuery({ listingId, pageSize: 100 })
   const lots: StockLotDetail[] = data?.lots ?? []
@@ -365,10 +367,10 @@ function LotBreakdown({ listingId }: { listingId: string }) {
                   </Stack>
                 </TableCell>
                 <TableCell align="right" sx={{ color: "text.primary" }}>
-                  {lot.quantity_total?.toLocaleString()}
+                  {fmt.number(lot.quantity_total)}
                 </TableCell>
                 <TableCell align="right" sx={{ color: "text.primary" }}>
-                  {lot.quantity_allocated?.toLocaleString() ?? 0}
+                  {fmt.number(lot.quantity_allocated) ?? 0}
                 </TableCell>
                 <TableCell>
                   <Chip

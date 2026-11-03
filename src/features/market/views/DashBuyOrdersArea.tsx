@@ -28,6 +28,7 @@ import { EmptyState } from "../../../components/empty-states"
 import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
+import { useFormatters } from "../../../util/format"
 
 /** Row shape for the buy orders table (flattened from aggregate + buy_order) */
 export interface BuyOrderDashboardRow {
@@ -190,6 +191,7 @@ export function BuyOrderRow(props: {
   isItemSelected: boolean
   labelId: string
 }) {
+  const fmt = useFormatters()
   const { row } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
@@ -256,7 +258,7 @@ export function BuyOrderRow(props: {
                 color="text.secondary"
                 sx={{ fontSize: { xs: "0.625rem", sm: "0.875rem" } }}
               >
-                {date.toLocaleString("default", { month: "short" })}
+                {fmt.date(date, { month: "short" })}
               </Typography>
               <Typography
                 variant="h5"
@@ -290,7 +292,7 @@ export function BuyOrderRow(props: {
                 whiteSpace: "nowrap",
               }}
             >
-              {row.quantity.toLocaleString(undefined)} {t("market.unit", "ea")}{" "}
+              {fmt.number(row.quantity)} {t("market.unit", "ea")}{" "}
               •{" "}
               {row.negotiable || row.price == null
                 ? row.price != null && row.price >= 1
@@ -298,24 +300,24 @@ export function BuyOrderRow(props: {
                       "buyorder.negotiableSuggested",
                       "Negotiable (~{{price}} aUEC)",
                       {
-                        price: (+row.price).toLocaleString(undefined),
+                        price: fmt.number(+row.price),
                       },
                     )
                   : t("buyorder.status.negotiable", "Negotiable")
-                : `${(+row.price).toLocaleString(undefined)} aUEC`}
+                : `${fmt.number(+row.price)} aUEC`}
             </Typography>
           </Stack>
         </Stack>
       </TableCell>
       <TableCell align="right" sx={{ width: { xs: "25%", sm: "auto" } }}>
         <Typography variant="body2">
-          {row.quantity.toLocaleString(undefined)}
+          {fmt.number(row.quantity)}
         </Typography>
       </TableCell>
       <TableCell align="right" sx={{ width: { xs: "30%", sm: "auto" } }}>
         <Typography variant="body2">
           {row.price != null
-            ? `${row.negotiable ? "~" : ""}${(row.price * row.quantity).toLocaleString(undefined)} aUEC`
+            ? `${row.negotiable ? "~" : ""}${fmt.number(row.price * row.quantity)} aUEC`
             : t("buyorder.status.negotiable", "Negotiable")}
         </Typography>
       </TableCell>

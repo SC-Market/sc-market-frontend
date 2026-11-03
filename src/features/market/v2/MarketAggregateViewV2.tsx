@@ -71,6 +71,7 @@ import { MarketAggregateViewV2Admin } from "./MarketAggregateViewV2Admin";
 import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, useCancelBuyOrderMutation, type StandingBuyOrder } from "../../../store/api/v2/market";
 import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
 import { remainingQuantity } from "../domain/buyOrders";
+import { useFormatters } from "../../../util/format"
 
 /**
  * MarketAggregateViewV2 Component
@@ -322,7 +323,8 @@ export function PriceComparisonTable({
     shop_count: number;
   }>;
 }) {
-  const { t, i18n } = useTranslation();
+  const fmt = useFormatters()
+  const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
 
   if (distribution.length === 0) {
@@ -381,22 +383,22 @@ export function PriceComparisonTable({
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2" color="primary">
-                  {item.min_price.toLocaleString(i18n.language)} aUEC
+                  {fmt.number(item.min_price)} aUEC
                 </Typography>
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2">
-                  {item.avg_price.toLocaleString(i18n.language)} aUEC
+                  {fmt.number(item.avg_price)} aUEC
                 </Typography>
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2">
-                  {item.max_price.toLocaleString(i18n.language)} aUEC
+                  {fmt.number(item.max_price)} aUEC
                 </Typography>
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2">
-                  {item.total_quantity.toLocaleString(i18n.language)}
+                  {fmt.number(item.total_quantity)}
                 </Typography>
               </td>
             </tr>
@@ -419,7 +421,8 @@ export function AggregateRowV2(props: {
   isItemSelected: boolean;
   labelId: string;
 }) {
-  const { t, i18n } = useTranslation();
+  const fmt = useFormatters()
+  const { t } = useTranslation();
   const { row: listing, index } = props;
   const [quantity, setQuantity] = useState(1);
   const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
@@ -548,11 +551,11 @@ export function AggregateRowV2(props: {
       >
         <Box>
           <Typography variant={"subtitle2"} color={"primary"}>
-            {listing.price_min.toLocaleString(i18n.language)} aUEC
+            {fmt.number(listing.price_min)} aUEC
           </Typography>
           {listing.price_min !== listing.price_max && (
             <Typography variant="caption" color="text.secondary">
-              - {listing.price_max.toLocaleString(i18n.language)} aUEC
+              - {fmt.number(listing.price_max)} aUEC
             </Typography>
           )}
         </Box>
@@ -644,6 +647,7 @@ export function BuyOrderRowV2(props: {
   isItemSelected: boolean;
   labelId: string;
 }) {
+  const fmt = useFormatters()
   const { t, i18n } = useTranslation();
   const { row: buy_order, index } = props;
   const issueAlert = useAlertHook();
@@ -685,12 +689,12 @@ export function BuyOrderRowV2(props: {
     if (buy_order.negotiable) {
       return buy_order.price_per_unit >= 1
         ? t("buyorder.negotiableSuggested", "Negotiable (~{{price}} aUEC)", {
-            price: buy_order.price_per_unit.toLocaleString(i18n.language),
+            price: fmt.number(buy_order.price_per_unit),
           })
         : t("buyorder.status.negotiable", "Negotiable");
     }
-    return `${buy_order.price_per_unit.toLocaleString(i18n.language)} aUEC`;
-  }, [buy_order, t, i18n.language]);
+    return `${fmt.number(buy_order.price_per_unit)} aUEC`;
+  }, [buy_order, t, i18n.language, fmt]);
 
   return (
     <TableRow
@@ -771,8 +775,8 @@ export function BuyOrderRowV2(props: {
       >
         <Typography variant={"subtitle2"} color={"primary"}>
           {buy_order.quantity_fulfilled
-            ? `${remaining.toLocaleString(i18n.language)}/${buy_order.quantity.toLocaleString(i18n.language)}`
-            : buy_order.quantity.toLocaleString(i18n.language)}
+            ? `${fmt.number(remaining)}/${fmt.number(buy_order.quantity)}`
+            : fmt.number(buy_order.quantity)}
         </Typography>
       </TableCell>
 
@@ -785,7 +789,7 @@ export function BuyOrderRowV2(props: {
       >
         <Typography variant={"subtitle2"} color={"primary"}>
           {buy_order.total != null
-            ? `${buy_order.negotiable ? "~" : ""}${buy_order.total.toLocaleString(i18n.language)} aUEC`
+            ? `${buy_order.negotiable ? "~" : ""}${fmt.number(buy_order.total)} aUEC`
             : t("buyorder.status.negotiable", "Negotiable")}
         </Typography>
       </TableCell>
@@ -912,6 +916,7 @@ export function AggregateChartV2(props: { aggregate: GameItemAggregateV2; qualit
  * Requirements: 41.4
  */
 export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2; compact?: boolean; qualityTier?: number | null }) {
+  const fmt = useFormatters()
   const { t } = useTranslation();
   const { aggregate: rawAggregate, compact, qualityTier } = props;
 
@@ -1056,13 +1061,8 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2; 
     );
   }
 
-  // Format price bucket values as "1.2k aUEC" etc.
-  const formatPrice = (v: Date | number | string) => {
-    const n = Number(v);
-    if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-    if (n >= 1_000) return `${(n / 1_000).toFixed(n >= 10_000 ? 0 : 1)}k`;
-    return Math.round(n).toLocaleString();
-  };
+  // Price bucket values in the locale's short form ("1.2K", "1,2 Tsd.").
+  const formatPrice = (v: Date | number | string) => fmt.compact(Number(v));
 
   return (
     <Section xs={12} disablePadding>

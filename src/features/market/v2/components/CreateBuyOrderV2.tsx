@@ -27,6 +27,7 @@ import { MARKET_PATHS } from "../../../../routes/paths";
 
 import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
 import { QualityBandSelect } from "../../../../components/game-data/QualityBandSelect";
+import { useFormatters } from "../../../../util/format"
 
 /**
  * CreateBuyOrderV2 Component
@@ -38,6 +39,7 @@ interface CreateBuyOrderV2Props {
 }
 
 export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
+  const fmt = useFormatters()
   const { id: gameItemId, name: gameItemName, type: gameItemType } = gameItem;
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
@@ -394,7 +396,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
                 variant="standard"
                 fullWidth
                 label={t("buyorder.totalPriceRange", "Total Price Range")}
-                value={`${Math.ceil(totalMin).toLocaleString()} - ${Math.ceil(totalMax).toLocaleString()}`}
+                value={`${fmt.number(Math.ceil(totalMin))} - ${fmt.number(Math.ceil(totalMax))}`}
                 InputProps={{
                   readOnly: true,
                   endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,

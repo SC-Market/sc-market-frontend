@@ -9,6 +9,7 @@ import {
 import { useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { QualityBadge } from "./QualityBadge";
+import { useFormatters } from "../../../util/format"
 
 interface QualityDistribution {
   tier: number;
@@ -40,6 +41,7 @@ export const QualityHistogram: React.FC<QualityHistogramProps> = ({
   title: titleProp,
   showPrices = false,
 }) => {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const title = titleProp ?? t("marketUi.aggregateAdmin.qualityDistribution")
   const theme = useTheme<ExtendedTheme>();
@@ -125,7 +127,7 @@ export const QualityHistogram: React.FC<QualityHistogramProps> = ({
                 color="text.secondary"
                 sx={{ mt: 0.5, display: "block" }}
               >
-                {t("marketV2.avgPrice", { price: item.averagePrice.toLocaleString() })}
+                {t("marketV2.avgPrice", { price: fmt.number(item.averagePrice) })}
               </Typography>
             )}
           </Box>

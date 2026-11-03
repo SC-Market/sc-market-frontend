@@ -51,6 +51,7 @@ import { ShoppingListPanel } from "../../../components/game-data/ShoppingListPan
 import { VariantSelector } from "../../../components/market/v2/VariantSelector"
 import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths"
 import { HelpLink } from "../../help/components/HelpLink"
+import { useFormatters } from "../../../util/format"
 
 /**
  * CartItemEntryV2 - Individual cart item with variant details
@@ -67,6 +68,7 @@ export function CartItemEntryV2(props: {
   item: CartItemDetail
   onRemove: (cartItemId: string) => void
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { item, onRemove } = props
@@ -221,12 +223,12 @@ export function CartItemEntryV2(props: {
               <Typography variant="body2">
                 {priceDifference > 0
                   ? t("cart.priceIncreased", {
-                      old: item.price_per_unit.toLocaleString(),
-                      new: item.current_price!.toLocaleString(),
+                      old: fmt.number(item.price_per_unit),
+                      new: fmt.number(item.current_price!),
                     })
                   : t("cart.priceDecreased", {
-                      old: item.price_per_unit.toLocaleString(),
-                      new: item.current_price!.toLocaleString(),
+                      old: fmt.number(item.price_per_unit),
+                      new: fmt.number(item.current_price!),
                     })}
               </Typography>
             </Alert>
@@ -253,7 +255,7 @@ export function CartItemEntryV2(props: {
                 endAdornment: (
                   <InputAdornment position="start">
                     {t("cart.ofAvailable", {
-                      available: (item.quantity_available ?? 0).toLocaleString(),
+                      available: fmt.number(item.quantity_available ?? 0),
                     })}
                   </InputAdornment>
                 ),
@@ -277,11 +279,11 @@ export function CartItemEntryV2(props: {
             </Box>
             <Box sx={{ width: 120 }}>
               <Typography sx={{ textAlign: "right" }}>
-                {(priceChanged ? item.current_price! : item.price_per_unit).toLocaleString()}{" "}
+                {fmt.number(priceChanged ? item.current_price! : item.price_per_unit)}{" "}
                 aUEC
               </Typography>
               <Typography sx={{ textAlign: "right" }}>
-                x {item.quantity.toLocaleString()}
+                x {fmt.number(item.quantity)}
               </Typography>
             </Box>
           </Box>
@@ -292,7 +294,7 @@ export function CartItemEntryV2(props: {
             </Box>
             <Box sx={{ width: 120 }}>
               <Typography sx={{ textAlign: "right" }}>
-                {item.subtotal.toLocaleString()} aUEC
+                {fmt.number(item.subtotal)} aUEC
               </Typography>
             </Box>
           </Box>
@@ -338,6 +340,7 @@ export function CartItemEntryV2(props: {
  * - Maintain visual parity with V1 MarketCart component
  */
 export function MarketCartV2() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
@@ -539,7 +542,7 @@ export function MarketCartV2() {
                   {t("cart.total")}
                 </Typography>
                 <Typography variant="h5" color="text.secondary">
-                  {group.total.toLocaleString()} aUEC
+                  {fmt.number(group.total)} aUEC
                 </Typography>
               </Box>
             </Grid>
@@ -666,15 +669,15 @@ export function MarketCartV2() {
                   </Typography>
                 </Box>
                 <Typography variant="body2">
-                  {((item.price_changed ? item.current_price! : item.price_per_unit) * item.quantity).toLocaleString()} aUEC
+                  {fmt.number((item.price_changed ? item.current_price! : item.price_per_unit) * item.quantity)} aUEC
                 </Typography>
               </Box>
               {item.price_changed && (
                 <Alert severity="warning" sx={{ mt: 0.5, py: 0 }} icon={<Warning fontSize="small" />}>
                   <Typography variant="caption">
                     {t("cart.priceChangedFrom", "Price changed from {{old}} to {{new}} aUEC", {
-                      old: item.price_per_unit.toLocaleString(),
-                      new: item.current_price!.toLocaleString(),
+                      old: fmt.number(item.price_per_unit),
+                      new: fmt.number(item.current_price!),
                     })}
                   </Typography>
                 </Alert>
@@ -685,7 +688,7 @@ export function MarketCartV2() {
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6">{t("cart.total")}</Typography>
             <Typography variant="h6">
-              {(cartData?.items.filter(i => i.listing.shop_id === checkoutSellerId).reduce((s, i) => s + i.subtotal, 0) ?? 0).toLocaleString()} aUEC
+              {fmt.number(cartData?.items.filter(i => i.listing.shop_id === checkoutSellerId).reduce((s, i) => s + i.subtotal, 0) ?? 0)} aUEC
             </Typography>
           </Box>
           {hasPriceChanges && (

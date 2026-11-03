@@ -31,9 +31,9 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { SwipeableItem } from "../../../../components/gestures"
 import { type MyListingItem } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
-import { getRelativeTime } from "../../../../util/time"
 import { formatMarketUrl } from "../../domain/urls"
 import { listingStatusLabel } from "../../domain/listingStatus"
+import { useFormatters, useNow } from "../../../../util/format"
 
 interface MobileListingRowProps {
   listing: MyListingItem
@@ -48,6 +48,8 @@ export function MobileListingRow({
   onEdit,
   onArchive,
 }: MobileListingRowProps) {
+  const fmt = useFormatters()
+  const now = useNow()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
@@ -67,8 +69,8 @@ export function MobileListingRow({
 
   const priceLabel =
     listing.price_min === listing.price_max
-      ? `${listing.price_min.toLocaleString()} aUEC`
-      : `${listing.price_min.toLocaleString()}–${listing.price_max.toLocaleString()} aUEC`
+      ? `${fmt.number(listing.price_min)} aUEC`
+      : `${fmt.number(listing.price_min)}–${fmt.number(listing.price_max)} aUEC`
 
   const statusColor =
     listing.status === "active"
@@ -169,7 +171,7 @@ export function MobileListingRow({
             </Typography>
             <Typography variant="caption" color="text.disabled">·</Typography>
             <Typography variant="caption" color="text.secondary">
-              {t("marketV2.qtyShort", { quantity: listing.quantity_available.toLocaleString() })}
+              {t("marketV2.qtyShort", { quantity: fmt.number(listing.quantity_available) })}
             </Typography>
             {listing.variant_count > 1 && (
               <>
@@ -184,7 +186,7 @@ export function MobileListingRow({
               color="text.disabled"
               sx={{ ml: "auto", flexShrink: 0 }}
             >
-              {getRelativeTime(new Date(listing.updated_at))}
+              {fmt.relative(new Date(listing.updated_at), now)}
             </Typography>
           </Box>
         </Box>

@@ -34,6 +34,7 @@ import {
   subdomainProblem,
   suggestedSubdomain,
 } from "../enquiry"
+import { useFormatters } from "../../../util/format"
 
 /** "Open", "In progress", … for an enquiry status. */
 export function useEnquiryStatusLabel() {
@@ -62,6 +63,7 @@ export function StorefrontEnquiryCard(props: {
   /** Without its own paper and title (inside a settings section that has them). */
   bare?: boolean
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const statusLabel = useEnquiryStatusLabel()
   const { data, isLoading, isError } = useGetStorefrontEnquiryQuery({
@@ -143,7 +145,7 @@ export function StorefrontEnquiryCard(props: {
           </Typography>
           <Typography variant="caption" color="text.primary">
             {t("storefront.enquiry.sentBy", {
-              date: new Date(latest.created_at).toLocaleDateString(),
+              date: fmt.date(new Date(latest.created_at)),
               user: latest.submitted_by_username ?? t("storefront.enquiry.deletedUser", "Deleted user"),
               defaultValue: "Sent {{date}} by {{user}}.",
             })}

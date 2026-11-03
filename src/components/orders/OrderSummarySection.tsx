@@ -3,6 +3,7 @@ import { OfferMarketListing } from "../../features/offers/api/offerApi"
 import { useTranslation } from "react-i18next"
 import { OfferChanges } from "../../util/offerChanges"
 import { formatMarketUrl } from "../../features/market/domain/urls"
+import { useFormatters } from "../../util/format"
 
 interface OrderSummarySectionProps {
   market_listings?: OfferMarketListing[]
@@ -15,6 +16,7 @@ export function OrderSummarySection({
   total_cost,
   offerChanges,
 }: OrderSummarySectionProps) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
 
   if (!market_listings || market_listings.length === 0) {
@@ -56,7 +58,7 @@ export function OrderSummarySection({
                     {listing.details.title}
                   </Link>
                   <Typography variant="body2" color="text.secondary">
-                    {(+listing.listing.price).toLocaleString()} aUEC × {quantity}
+                    {fmt.number(+listing.listing.price)} aUEC × {quantity}
                     {quantityChange && (
                       <Typography
                         component="span"
@@ -80,7 +82,7 @@ export function OrderSummarySection({
                 )}
               </Box>
               <Typography variant="body1" fontWeight="medium">
-                {subtotal.toLocaleString()} aUEC
+                {fmt.number(subtotal)} aUEC
               </Typography>
             </Box>
           )
@@ -97,7 +99,7 @@ export function OrderSummarySection({
             {t("orderSummary.total", "Total")}
           </Typography>
           <Typography variant="subtitle2" color="text.secondary" fontWeight="bold">
-            {listingsTotal.toLocaleString()}{" "}
+            {fmt.number(listingsTotal)}{" "}
             <Typography
               variant="subtitle2"
               color="text.primary"

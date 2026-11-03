@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import { OfferChanges } from "../../util/offerChanges"
 import { OrderItemDetail } from "../../store/api/v2/market"
 import { formatMarketUrl } from "../../features/market/domain/urls"
+import { useFormatters } from "../../util/format"
 
 /**
  * OrderSummarySectionV2 Props
@@ -58,6 +59,7 @@ export function OrderSummarySectionV2({
   total_cost,
   offerChanges,
 }: OrderSummarySectionV2Props) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
 
   // Return null if no items (maintains V1 behavior)
@@ -102,7 +104,7 @@ export function OrderSummarySectionV2({
                   
                   {/* Price and quantity details */}
                   <Typography variant="body2" color="text.secondary">
-                    {item.price_per_unit.toLocaleString()} aUEC × {item.quantity}
+                    {fmt.number(item.price_per_unit)} aUEC × {item.quantity}
                     {quantityChange && (
                       <Typography
                         component="span"
@@ -130,7 +132,7 @@ export function OrderSummarySectionV2({
               
               {/* Subtotal */}
               <Typography variant="body1" fontWeight="medium">
-                {subtotal.toLocaleString()} aUEC
+                {fmt.number(subtotal)} aUEC
               </Typography>
             </Box>
           )
@@ -149,7 +151,7 @@ export function OrderSummarySectionV2({
             {t("orderSummary.total", "Total")}
           </Typography>
           <Typography variant="subtitle2" color="text.secondary" fontWeight="bold">
-            {itemsTotal.toLocaleString()}{" "}
+            {fmt.number(itemsTotal)}{" "}
             <Box
               component="span"
               sx={{ color: "text.primary", fontWeight: "bold" }}

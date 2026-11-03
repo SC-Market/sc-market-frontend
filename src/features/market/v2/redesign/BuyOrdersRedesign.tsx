@@ -27,7 +27,6 @@ import { Helmet } from "@unhead/react/helmet"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
-import { formatPrice } from "../../../../util/formatPrice"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import {
   useSearchBuyOrdersQuery,
@@ -61,6 +60,7 @@ import { isAwaitingData } from "../../../../util/queryLoading"
 import { usePageReady } from "../../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
 import { remainingQuantity } from "../../domain/buyOrders"
+import { useFormatters } from "../../../../util/format"
 
 /**
  * BuyOrdersRedesign — Phase 0 of the Market redesign (behind the
@@ -324,8 +324,9 @@ export function BuyOrderCard({
   order: StandingBuyOrder
   index: number
 }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const remaining = remainingQuantity(order)
   const imageUrl = order.photos?.[0]?.url || FALLBACK_IMAGE_URL
@@ -335,7 +336,7 @@ export function BuyOrderCard({
   // the buyer takes offers instead of naming one.
   const priceLabel =
     order.price_per_unit > 0
-      ? formatPrice(order.price_per_unit)
+      ? fmt.price(order.price_per_unit)
       : order.negotiable
         ? t("BuyOrdersRedesign.priceNegotiable", "Make an offer")
         : t("BuyOrdersRedesign.priceUnset", "No price set")
@@ -346,8 +347,8 @@ export function BuyOrderCard({
     {
       item: order.game_item_name,
       price: priceLabel,
-      remaining: remaining.toLocaleString(i18n.language),
-      quantity: (order.quantity ?? 0).toLocaleString(i18n.language),
+      remaining: fmt.number(remaining),
+      quantity: fmt.number(order.quantity ?? 0),
     },
   )
 
@@ -458,8 +459,8 @@ export function BuyOrderCard({
               color="text.secondary"
               sx={{ fontSize: "0.7rem", lineHeight: 1, display: "block" }}
             >
-              {remaining.toLocaleString(i18n.language)} /{" "}
-              {(order.quantity ?? 0).toLocaleString(i18n.language)}{" "}
+              {fmt.number(remaining)} /{" "}
+              {fmt.number(order.quantity ?? 0)}{" "}
               {t("market.requested", "requested")}
             </Typography>
             {/* Fulfilment is not wired in Phase 0. Rather than show a disabled

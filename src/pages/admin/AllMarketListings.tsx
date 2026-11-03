@@ -26,14 +26,15 @@ import {
   SearchListingsApiArg,
   ListingSearchResult,
 } from "../../store/api/v2/market"
-import { formatPrice } from "../../util/formatPrice"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { ListingPagination } from "../../features/market/components/listings/ListingPagination"
+import { useFormatters } from "../../util/format"
 
 type ListingStatus = "active" | "inactive" | "expired" | "sold" | "cancelled"
 
 function AdminListingCard({ listing }: { listing: ListingSearchResult }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
@@ -75,8 +76,8 @@ function AdminListingCard({ listing }: { listing: ListingSearchResult }) {
                   sx={{ fontSize: "0.95rem", mb: 0.5 }}
                 >
                   {listing.price_min === listing.price_max
-                    ? formatPrice(listing.price_min)
-                    : `${formatPrice(listing.price_min)} - ${formatPrice(listing.price_max)}`}
+                    ? fmt.price(listing.price_min)
+                    : `${fmt.price(listing.price_min)} - ${fmt.price(listing.price_max)}`}
                 </Typography>
                 <Typography
                   variant="body2"

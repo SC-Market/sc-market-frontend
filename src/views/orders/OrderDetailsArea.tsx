@@ -53,6 +53,8 @@ import {
 } from "../../features/notifications/api/notificationApi"
 import { useOrderDetails } from "../../features/orders/hooks/useOrderDetails"
 import { SHOP_PATHS } from "../../routes/paths"
+import { isSiteAdmin } from "../../util/siteRole"
+import { useFormatters } from "../../util/format"
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
@@ -106,6 +108,7 @@ export function OrderMessagesArea(props: { order: Order }) {
 }
 
 export function OrderDetailsArea(props: { order: Order }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useBreakpointDown("sm")
   const { order } = props
@@ -433,7 +436,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                       textAlign: "right",
                     }}
                   >
-                    {(+order.cost).toLocaleString(undefined)}{" "}
+                    {fmt.number(+order.cost)}{" "}
                     <Typography
                       color={"text.primary"}
                       variant={"subtitle2"}

@@ -29,7 +29,6 @@ import {
   USER_PATHS,
 } from "../../routes/paths"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
-import { getRelativeTime } from "../../util/time"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import {
   CreateRounded,
@@ -53,11 +52,14 @@ import {
   useGetPublicServicesQuery,
 } from "../../features/services/api/servicesApi"
 import type { OrderReview } from "../../features/orders/domain/types"
+import { useFormatters, useNow } from "../../util/format"
 
 export function ServiceSellerReviews(props: {
   userSeller?: { username: string } | null
   contractorSeller?: { spectrum_id: string } | null
 }) {
+  const fmt = useFormatters()
+  const now = useNow()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { userSeller, contractorSeller } = props
@@ -158,7 +160,7 @@ export function ServiceSellerReviews(props: {
                     icon={<StarRounded fontSize="inherit" />}
                   />
                   <Typography variant="caption" color="text.secondary">
-                    {getRelativeTime(new Date(review.timestamp))}
+                    {fmt.relative(new Date(review.timestamp), now)}
                   </Typography>
                 </Box>
                 <Typography
@@ -198,6 +200,7 @@ export function ServiceSellerOtherServices(props: {
   contractorSeller?: { spectrum_id: string } | null
   currentServiceId: string
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { userSeller, contractorSeller, currentServiceId } = props
 
@@ -303,7 +306,7 @@ export function ServiceSellerOtherServices(props: {
                             whiteSpace: "nowrap",
                           }}
                         >
-                          {service.cost.toLocaleString()} aUEC
+                          {fmt.number(service.cost)} aUEC
                         </Typography>
                       }
                     />
@@ -341,6 +344,7 @@ export function RelatedServicesByCategory(props: {
   serviceKind: string
   currentServiceId: string
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { serviceKind, currentServiceId } = props
 
@@ -432,7 +436,7 @@ export function RelatedServicesByCategory(props: {
                       subheader={
                         <Box>
                           <Typography variant="body2" color="primary">
-                            {service.cost.toLocaleString()} aUEC
+                            {fmt.number(service.cost)} aUEC
                           </Typography>
                           <Typography
                             variant="caption"
@@ -489,6 +493,8 @@ export function ServiceView(props: {
   service: Service
   orderFormRef?: React.RefObject<HTMLDivElement | null>
 }) {
+  const fmt = useFormatters()
+  const now = useNow()
   const { service } = props
   const theme = useTheme<ExtendedTheme>()
   const { data: profile } = useGetUserProfileQuery()
@@ -657,7 +663,7 @@ export function ServiceView(props: {
                     color={"text.primary"}
                     variant={"subtitle2"}
                   >
-                    &nbsp;- {getRelativeTime(new Date(service.timestamp))}{" "}
+                    &nbsp;- {fmt.relative(new Date(service.timestamp), now)}{" "}
                     -&nbsp;
                   </Typography>
                   <Typography
@@ -665,7 +671,7 @@ export function ServiceView(props: {
                     color={"primary"}
                     variant={"subtitle2"}
                   >
-                    {service.cost.toLocaleString(undefined)} aUEC{" "}
+                    {fmt.number(service.cost)} aUEC{" "}
                     {paymentType ? t(paymentType) : ""}
                   </Typography>
                   <Typography display={"inline"} variant={"subtitle2"}>

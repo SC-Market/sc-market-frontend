@@ -15,13 +15,15 @@ import type { GameItemAggregate } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { useTranslation } from "react-i18next"
+import { useFormatters, type Formatters } from "../../../../util/format"
 
-function formatPrice(min: number, max: number) {
-  if (min === max) return `${min.toLocaleString()} aUEC`
-  return `${min.toLocaleString()} – ${max.toLocaleString()} aUEC`
+function formatPrice(fmt: Formatters, min: number, max: number) {
+  if (min === max) return `${fmt.number(min)} aUEC`
+  return `${fmt.number(min)} – ${fmt.number(max)} aUEC`
 }
 
 export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   return (
     <TableContainer>
@@ -56,10 +58,10 @@ export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
                 <Typography variant="caption" color="text.secondary">{item.type}</Typography>
               </TableCell>
               <TableCell sx={{ whiteSpace: "nowrap" }}>
-                <Typography variant="body2" color="primary" fontWeight="bold">{formatPrice(item.min_price, item.max_price)}</Typography>
+                <Typography variant="body2" color="primary" fontWeight="bold">{formatPrice(fmt, item.min_price, item.max_price)}</Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography variant="body2">{item.total_quantity.toLocaleString()}</Typography>
+                <Typography variant="body2">{fmt.number(item.total_quantity)}</Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography variant="body2">{item.shop_count}</Typography>

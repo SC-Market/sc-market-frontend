@@ -6,6 +6,7 @@ import type { ContractorOrderMetrics } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useFormatters } from "../../util/format"
 
 export function MetricSection(props: {
   title: string
@@ -49,8 +50,9 @@ export function MetricSection(props: {
 export function ContractorOrderMetricsDisplay(props: {
   metrics: ContractorOrderMetrics
 }) {
+  const fmt = useFormatters()
   const { metrics } = props
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
   const activeOrders =
@@ -72,7 +74,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"success.main"}>
-            {activeOrders.toLocaleString(i18n.language)}
+            {fmt.number(activeOrders)}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -93,7 +95,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"}>
-            {metrics.total_orders.toLocaleString(i18n.language)}
+            {fmt.number(metrics.total_orders)}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -114,7 +116,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"text.secondary"}>
-            {metrics.active_value.toLocaleString(i18n.language)} aUEC
+            {fmt.number(metrics.active_value)} aUEC
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -135,7 +137,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"text.secondary"}>
-            {metrics.completed_value.toLocaleString(i18n.language)} aUEC
+            {fmt.number(metrics.completed_value)} aUEC
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -156,9 +158,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"primary.main"}>
-            {metrics.recent_activity.orders_last_7_days.toLocaleString(
-              i18n.language,
-            )}
+            {fmt.number(metrics.recent_activity.orders_last_7_days)}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -179,9 +179,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"primary.main"}>
-            {metrics.recent_activity.orders_last_30_days.toLocaleString(
-              i18n.language,
-            )}
+            {fmt.number(metrics.recent_activity.orders_last_30_days)}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -202,9 +200,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"success.main"}>
-            {metrics.recent_activity.value_last_7_days.toLocaleString(
-              i18n.language,
-            )}{" "}
+            {fmt.number(metrics.recent_activity.value_last_7_days)}{" "}
             aUEC
           </Typography>
         </Grid>
@@ -226,9 +222,7 @@ export function ContractorOrderMetricsDisplay(props: {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"h6"} color={"success.main"}>
-            {metrics.recent_activity.value_last_30_days.toLocaleString(
-              i18n.language,
-            )}{" "}
+            {fmt.number(metrics.recent_activity.value_last_30_days)}{" "}
             aUEC
           </Typography>
         </Grid>
@@ -268,7 +262,7 @@ export function ContractorOrderMetricsDisplay(props: {
                         {customer.order_count} {t("orderMetrics.orders")}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {customer.total_value.toLocaleString(i18n.language)}{" "}
+                        {fmt.number(customer.total_value)}{" "}
                         aUEC
                       </Typography>
                     </Box>

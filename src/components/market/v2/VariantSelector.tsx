@@ -10,6 +10,7 @@ import {
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { QualityBadge } from "./QualityBadge";
+import { useFormatters } from "../../../util/format"
 
 interface Variant {
   variant_id: string;
@@ -48,6 +49,7 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
   label: labelProp,
   disabled = false,
 }) => {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const label = labelProp ?? t("marketV2.selectVariant")
   const theme = useTheme<ExtendedTheme>();
@@ -85,7 +87,7 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
             {t("marketV2.qtyColon", { quantity: variant.quantity })}
           </Typography>
           <Typography variant="body2" color="primary" fontWeight="bold">
-            {variant.price.toLocaleString()} aUEC
+            {fmt.number(variant.price)} aUEC
           </Typography>
         </Box>
       </Box>
@@ -129,7 +131,7 @@ export const VariantSelector: React.FC<VariantSelectorProps> = ({
               {t("marketV2.qtyColon", { quantity: variant.quantity })}
             </Typography>
             <Typography variant="body2" color="primary" fontWeight="bold">
-              {variant.price.toLocaleString()} aUEC
+              {fmt.number(variant.price)} aUEC
             </Typography>
           </Box>
         </MenuItem>

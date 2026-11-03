@@ -32,9 +32,9 @@ import {
 } from "../../store/api/v2/market"
 import { FRONTEND_URL } from "../../util/constants"
 import { MARKET_PATHS, ORG_PATHS } from "../../routes/paths"
-import { formatPrice } from "../../util/formatPrice"
 import { orgFeaturedListingsArgs, ratingLabel } from "../../features/storefront/domain"
 import { markRouterReady } from "../../routes/definePage"
+import { useFormatters } from "../../util/format"
 
 /** An sc-market.space URL, opened outside the frame. */
 function Out(props: { to: string; children: React.ReactNode; sx?: object }) {
@@ -53,6 +53,7 @@ function Out(props: { to: string; children: React.ReactNode; sx?: object }) {
 }
 
 function ListingTile(props: { listing: ListingSearchResult }) {
+  const fmt = useFormatters()
   const { listing } = props
   return (
     <Out to={MARKET_PATHS.listing(listing.listing_id, listing.title)} sx={{ display: "block", minWidth: 0 }}>
@@ -77,7 +78,7 @@ function ListingTile(props: { listing: ListingSearchResult }) {
             {listing.title}
           </Typography>
           <Typography variant="caption" color="text.primary">
-            {formatPrice(Number(listing.price_min))}
+            {fmt.price(Number(listing.price_min))}
           </Typography>
         </Box>
       </Box>

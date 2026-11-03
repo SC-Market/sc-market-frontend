@@ -53,6 +53,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useGetCommoditiesQuery } from "../api/commoditiesApi"
 import LocalOfferIcon from "@mui/icons-material/LocalOffer"
+import { useFormatters } from "../../../util/format"
 
 export const kindIcons: { [key: string]: [ReactElement, string] } = {
   Agricultural: [<AgricultureIcon key={"Agricultural"} />, green[500]],
@@ -78,7 +79,8 @@ function SellItemRow(props: {
   isItemSelected: boolean
   labelId: string
 }): ReactElement {
-  const { t, i18n } = useTranslation()
+  const fmt = useFormatters()
+  const { t } = useTranslation()
   const { row, onClick, isItemSelected, labelId } = props
   const bgColor = useMemo(
     () => (kindIcons[row.kind] ? kindIcons[row.kind][1] : "#FFF"),
@@ -120,7 +122,7 @@ function SellItemRow(props: {
 
       <TableCell align="right">
         <Typography variant={"subtitle1"} color={"secondary"}>
-          {(row.trade_price_sell * 0.9).toLocaleString(i18n.language)} aUEC
+          {fmt.number(row.trade_price_sell * 0.9)} aUEC
         </Typography>
       </TableCell>
 

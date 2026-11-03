@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
 import TrendingDownIcon from "@mui/icons-material/TrendingDown"
 import { useGetListingsQuery } from "../../../store/api/v2/market"
+import { useFormatters } from "../../../util/format"
 
 interface PriceComparisonAlertProps {
   gameItemId: string | null
@@ -14,6 +15,7 @@ export function PriceComparisonAlert({
   gameItemId,
   currentPrice,
 }: PriceComparisonAlertProps) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { data } = useGetListingsQuery(
     { id: gameItemId!, sortBy: "price", sortOrder: "asc", pageSize: 100 },
@@ -61,12 +63,12 @@ export function PriceComparisonAlert({
               <TrendingUpIcon />
             )
           }
-          label={t("marketV2.vsAvg", { pct: `${priceComparison.percentVsAvg > 0 ? "+" : ""}${priceComparison.percentVsAvg.toFixed(1)}`, avg: priceComparison.avgPrice.toLocaleString() })}
+          label={t("marketV2.vsAvg", { pct: `${priceComparison.percentVsAvg > 0 ? "+" : ""}${priceComparison.percentVsAvg.toFixed(1)}`, avg: fmt.number(priceComparison.avgPrice) })}
           color={priceComparison.isBelowAvg ? "success" : "default"}
           size="small"
         />
         <Chip
-          label={t("marketV2.lowest", { price: priceComparison.minPrice.toLocaleString() })}
+          label={t("marketV2.lowest", { price: fmt.number(priceComparison.minPrice) })}
           color={priceComparison.isLowest ? "success" : "default"}
           size="small"
         />

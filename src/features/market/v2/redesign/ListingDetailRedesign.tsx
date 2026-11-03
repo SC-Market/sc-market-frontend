@@ -33,7 +33,6 @@ import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
-import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
 import {
   useGetListingDetailQuery,
   useAddToCartMutation,
@@ -44,6 +43,7 @@ import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { SHOP_PATHS } from "../../../../routes/paths"
 import { usePageReady } from "../../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore"
+import { useFormatters } from "../../../../util/format"
 
 /**
  * ListingDetailRedesign — Phase 0 of the Market redesign (behind the
@@ -59,6 +59,7 @@ import { isPrimaryLoading } from "../../../../components/metadata/pageReadyStore
  */
 
 export function ListingDetailRedesign() {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
@@ -334,10 +335,10 @@ export function ListingDetailRedesign() {
             <Box>
               <Typography variant="h3" sx={{ color: "primary.main", fontWeight: 700 }}>
                 {isBundle
-                  ? formatPrice(unitPrice)
+                  ? fmt.price(unitPrice)
                   : priceRange
-                    ? formatPriceRange(priceRange.min, priceRange.max)
-                    : formatPrice(unitPrice)}
+                    ? fmt.priceRange(priceRange.min, priceRange.max)
+                    : fmt.price(unitPrice)}
               </Typography>
               <Typography variant="body2" sx={{ color: "text.primary" }}>
                 {t("MarketDetailRedesign.availability", "{{count}} {{unit}} available", {
@@ -366,7 +367,7 @@ export function ListingDetailRedesign() {
                           {it.game_item?.name}
                         </Typography>
                         <Typography variant="body2" sx={{ color: "text.primary" }}>
-                          {formatPrice(it.base_price ?? it.variants[0]?.price)}
+                          {fmt.price(it.base_price ?? it.variants[0]?.price)}
                         </Typography>
                       </Stack>
                     ))}
@@ -392,7 +393,7 @@ export function ListingDetailRedesign() {
                   .sort((a, b) => a.price - b.price)
                   .map((v) => (
                     <option key={v.variant_id} value={v.variant_id}>
-                      {v.display_name} — {formatPrice(v.price)} ({v.quantity})
+                      {v.display_name} — {fmt.price(v.price)} ({v.quantity})
                     </option>
                   ))}
               </TextField>
@@ -450,7 +451,7 @@ export function ListingDetailRedesign() {
                         {t("MarketDetailRedesign.subtotal", "Subtotal")}
                       </Typography>
                       <Typography variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>
-                        {formatPrice(subtotal)}
+                        {fmt.price(subtotal)}
                       </Typography>
                     </Stack>
 

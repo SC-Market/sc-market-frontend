@@ -12,7 +12,6 @@ import { Section } from "../../components/paper/Section"
 import { StarRounded } from "@mui/icons-material"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
-import { getRelativeTime } from "../../util/time"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { Order, OrderReview } from "../../features/orders/domain/types"
@@ -24,6 +23,7 @@ import { UserProfileState } from "../../hooks/login/UserProfile"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { has_permission } from "../contractor/OrgRoles"
 import { Contractor } from "../../features/contractor/domain/types"
+import { useFormatters, useNow } from "../../util/format"
 
 // Helper function to determine if current user can request revision
 function canRequestRevision(
@@ -99,6 +99,8 @@ export function OrderReviewView(props: {
   contractor?: boolean
   order: Order
 }) {
+  const fmt = useFormatters()
+  const now = useNow()
   const { order } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -147,7 +149,7 @@ export function OrderReviewView(props: {
               color="text.secondary"
               component="div"
             >
-              {getRelativeTime(new Date(review.timestamp!))}
+              {fmt.relative(new Date(review.timestamp!), now)}
             </Typography>
           </Box>
         </Grid>

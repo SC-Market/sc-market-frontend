@@ -14,15 +14,17 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
-import { getRelativeTime } from "../../util/time"
 import React from "react"
 import { useContractAppOpen } from "../../features/contracting/hooks/ContractApp"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { dateDiffInDays } from "../../util/dateDiff"
 import { useTranslation } from "react-i18next" //  i18n
 import { USER_PATHS } from "../../routes/paths"
+import { useFormatters, useNow } from "../../util/format"
 
 export function ViewContract(props: { listing: Order }) {
+  const fmt = useFormatters()
+  const now = useNow()
   const { listing } = props
   const [appOpen, setAppOpen] = useContractAppOpen()
   const { t } = useTranslation()
@@ -85,7 +87,7 @@ export function ViewContract(props: { listing: Order }) {
                 color={"text.primary"}
                 variant={"subtitle2"}
               >
-                &nbsp; - {getRelativeTime(new Date(listing.timestamp))}
+                &nbsp; - {fmt.relative(new Date(listing.timestamp), now)}
               </Typography>
             </Box>
           }

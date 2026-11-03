@@ -34,6 +34,7 @@ import {
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
+import { useFormatters } from "../../../../util/format"
 
 export interface LotListItemV2Props {
   lot: StockLotDetail
@@ -52,6 +53,7 @@ export function LotListItemV2({
   locations,
   onTransfer,
 }: LotListItemV2Props) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
@@ -188,16 +190,16 @@ export function LotListItemV2({
           ) : (
             <Box>
               <Typography variant="h6" fontWeight="medium">
-                {lot.quantity_total.toLocaleString()}
+                {fmt.number(lot.quantity_total)}
               </Typography>
               <Stack direction="row" spacing={0.5} alignItems="center">
                 {/* Allocated units are already out of quantity_total */}
                 <Typography variant="caption" color="success.main">
-                  {lot.quantity_total.toLocaleString()} {t("LotListItemV2.available", "available")}
+                  {fmt.number(lot.quantity_total)} {t("LotListItemV2.available", "available")}
                 </Typography>
                 {(lot.quantity_allocated || 0) > 0 && (
                   <Typography variant="caption" color="warning.main">
-                    · {lot.quantity_allocated.toLocaleString()} {t("LotListItemV2.reserved", "reserved")}
+                    · {fmt.number(lot.quantity_allocated)} {t("LotListItemV2.reserved", "reserved")}
                   </Typography>
                 )}
               </Stack>
@@ -349,7 +351,7 @@ export function LotListItemV2({
             <strong>{t("LotListItemV2.craftedBy", "Crafted By")}:</strong>{" "}
             {lot.crafted_by}
             {lot.crafted_at && (
-              <> ({new Date(lot.crafted_at).toLocaleDateString()})</>
+              <> ({fmt.date(new Date(lot.crafted_at))})</>
             )}
           </Typography>
         )}
@@ -385,7 +387,7 @@ export function LotListItemV2({
         {/* Timestamps */}
         <Typography variant="caption" color="text.secondary">
           {t("LotListItemV2.created", "Created")}:{" "}
-          {new Date(lot.created_at).toLocaleString()}
+          {fmt.dateTime(new Date(lot.created_at))}
         </Typography>
       </Stack>
     </Box>

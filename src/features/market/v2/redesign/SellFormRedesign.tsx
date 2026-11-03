@@ -25,7 +25,6 @@ import DeleteOutlineRounded from "@mui/icons-material/DeleteOutlineRounded"
 import { useNavigate } from "react-router-dom"
 import { Helmet } from "@unhead/react/helmet"
 import { useTranslation } from "react-i18next"
-import { formatPrice } from "../../../../util/formatPrice"
 import {
   useSearchGameItemsQuery,
   useGetMyShopsQuery,
@@ -37,6 +36,7 @@ import type {
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { MARKET_PATHS } from "../../../../routes/paths"
+import { useFormatters } from "../../../../util/format"
 
 /**
  * SellFormRedesign — Phase 0 of the Market redesign (behind the
@@ -70,6 +70,7 @@ let rowSeq = 0
 const nextId = () => `row-${rowSeq++}`
 
 export function SellFormRedesign() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const issueAlert = useAlertHook()
@@ -586,7 +587,7 @@ export function SellFormRedesign() {
                   {t("SellFormRedesign.estimatedTotal", "Estimated total value")}
                 </Typography>
                 <Typography variant="h6" sx={{ color: "primary.main" }}>
-                  {formatPrice(estimatedTotal)}
+                  {fmt.price(estimatedTotal)}
                 </Typography>
               </Box>
               <Button

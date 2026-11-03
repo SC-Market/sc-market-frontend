@@ -17,6 +17,7 @@ import { ListingWrapper } from "../components/listings/ListingWrapper"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { totalRemainingQuantity } from "../domain/buyOrders"
+import { useFormatters } from "../../../util/format"
 
 /** A game item with its active buy orders (one card on /buyorders). */
 export interface BuyOrderAggregate {
@@ -66,8 +67,9 @@ export function BuyOrderAggregateCard({
   aggregate: BuyOrderAggregate
   index: number
 }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const priceRange = useMemo(
     () => buyOrderPriceRange(aggregate.orders),
@@ -89,8 +91,8 @@ export function BuyOrderAggregateCard({
   const priceDisplay = !priceRange
     ? t("BuyOrdersRedesign.priceNegotiable", "Make an offer")
     : priceRange.min === priceRange.max
-      ? `${priceRange.max.toLocaleString(i18n.language)} aUEC`
-      : `${priceRange.min.toLocaleString(i18n.language)} – ${priceRange.max.toLocaleString(i18n.language)} aUEC`
+      ? `${fmt.number(priceRange.max)} aUEC`
+      : `${fmt.number(priceRange.min)} – ${fmt.number(priceRange.max)} aUEC`
 
   const isDark = theme.palette.mode === "dark"
 
@@ -180,7 +182,7 @@ export function BuyOrderAggregateCard({
                   color="text.secondary"
                   sx={{ fontSize: "0.7rem", lineHeight: 1 }}
                 >
-                  {totalQty.toLocaleString(i18n.language)}{" "}
+                  {fmt.number(totalQty)}{" "}
                   {t("market.requested", "requested")}
                   {" · "}
                   {aggregate.orders.length} {t("market.buyOrders", "buy orders")}

@@ -78,7 +78,6 @@ import { LongPressMenu, useLongPress } from "../../../components/gestures"
 import { EmptyListings } from "../../../components/empty-states"
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { formatMostSignificantDiff } from "../../../util/time"
 import {
   useGetMyListingsQuery,
   useUpdateListingMutation,
@@ -102,6 +101,7 @@ import { FirstUseHint } from "../../help/components/FirstUseHint"
 import { HelpTip } from "../../help/components/HelpTip"
 import { DiscordUserInstallCta } from "../../discord-install/DiscordUserInstallCta"
 import { selectOnFocus } from "../../../util/selectOnFocus"
+import { useFormatters } from "../../../util/format"
 
 /* ── Types ── */
 
@@ -329,6 +329,7 @@ function ShopListingsGridV2({
   onRefreshAll: () => void
   isLoading: boolean
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
@@ -566,8 +567,8 @@ function ShopListingsGridV2({
           }
           const min = params.row.price_min
           const max = params.row.price_max
-          if (min === max) return `${min?.toLocaleString()} aUEC`
-          return `${min?.toLocaleString()}–${max?.toLocaleString()} aUEC`
+          if (min === max) return `${fmt.number(min)} aUEC`
+          return `${fmt.number(min)}–${fmt.number(max)} aUEC`
         },
       },
       {
@@ -695,7 +696,7 @@ function ShopListingsGridV2({
           // Renewable: paused (expired) or within the 3-day notice window.
           // Renew starts a new month and reactivates a paused listing.
           const msLeft = params.value ? new Date(params.value).getTime() - Date.now() : 0
-          if (!paused && msLeft > RENEW_WINDOW_MS) return formatMostSignificantDiff(params.value)
+          if (!paused && msLeft > RENEW_WINDOW_MS) return fmt.timeUntil(params.value, Date.now())
           // An active listing long past its date: a date migrated from V1
           // that nothing enforces (listing expiry is off), not renewable.
           if (!paused && msLeft < -RENEW_WINDOW_MS) return "—"
@@ -764,7 +765,7 @@ function ShopListingsGridV2({
         },
       },
     ],
-    [t, theme, newRows, rowModesModel, editingRows, handleRefresh, handleEditClick, handleCancelClick, handleSaveClick, canManage, shop.slug],
+    [t, fmt, theme, newRows, rowModesModel, editingRows, handleRefresh, handleEditClick, handleCancelClick, handleSaveClick, canManage, shop.slug],
   )
 
   // Combine existing + new rows

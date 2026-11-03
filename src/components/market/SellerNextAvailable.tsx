@@ -2,6 +2,7 @@ import React from "react"
 import { Chip } from "@mui/material"
 import { AccessTimeRounded, CheckCircleRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
+import { useFormatters } from "../../util/format"
 
 /**
  * Displays when a seller is next available in the user's local timezone.
@@ -11,7 +12,8 @@ import { useTranslation } from "react-i18next"
 export function SellerNextAvailable(props: {
   nextAvailable?: string | null
 }) {
-  const { t, i18n } = useTranslation()
+  const fmt = useFormatters()
+  const { t } = useTranslation()
   const { nextAvailable } = props
 
   if (nextAvailable === undefined) return null
@@ -29,7 +31,7 @@ export function SellerNextAvailable(props: {
   }
 
   const date = new Date(nextAvailable)
-  const formatted = date.toLocaleString(i18n.language, {
+  const formatted = fmt.dateTime(date, {
     weekday: "short",
     hour: "numeric",
     minute: "2-digit",

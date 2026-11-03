@@ -9,6 +9,7 @@ import type { AdminOrderAnalytics } from "../../store/api/v2/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { SHOP_PATHS, USER_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 interface OrderAnalyticsProps {
   analytics: AdminOrderAnalytics
@@ -202,6 +203,7 @@ export function TopUsersAnalytics({ analytics }: OrderAnalyticsProps) {
 }
 
 export function OrderSummary({ analytics }: OrderAnalyticsProps) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   return (
@@ -221,7 +223,7 @@ export function OrderSummary({ analytics }: OrderAnalyticsProps) {
         </Grid>
         <Grid item xs={6}>
           <strong>{t("ordersUi.analytics.totalValueLabel")}</strong>{" "}
-          {analytics.summary.total_value.toLocaleString()} aUEC
+          {fmt.number(analytics.summary.total_value)} aUEC
         </Grid>
       </Grid>
     </Section>

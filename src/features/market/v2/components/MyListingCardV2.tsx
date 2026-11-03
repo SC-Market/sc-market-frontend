@@ -25,11 +25,11 @@ import { useTranslation } from "react-i18next"
 import { EditRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import type { MyListingItem } from "../../../../store/api/v2/market"
-import { getRelativeTime } from "../../../../util/time"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { listingStatusLabel } from "../../domain/listingStatus"
+import { useFormatters, useNow } from "../../../../util/format"
 
 interface MyListingCardV2Props {
   listing: MyListingItem
@@ -37,16 +37,18 @@ interface MyListingCardV2Props {
 }
 
 export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
+  const fmt = useFormatters()
+  const now = useNow()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const navigate = useNavigate()
 
   const priceRange = useMemo(() => {
     if (listing.price_min === listing.price_max) {
-      return `${listing.price_min.toLocaleString()} aUEC`
+      return `${fmt.number(listing.price_min)} aUEC`
     }
-    return `${listing.price_min.toLocaleString()} - ${listing.price_max.toLocaleString()} aUEC`
-  }, [listing.price_min, listing.price_max])
+    return `${fmt.number(listing.price_min)} - ${fmt.number(listing.price_max)} aUEC`
+  }, [listing.price_min, listing.price_max, fmt])
 
   const qualityRange = useMemo(() => {
     if (!listing.quality_tier_min || !listing.quality_tier_max) return null
@@ -160,7 +162,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
                 {t("myListings.quantity", "Total Quantity")}
               </Typography>
               <Typography variant="body1" fontWeight="medium">
-                {listing.quantity_available.toLocaleString()}
+                {fmt.number(listing.quantity_available)}
               </Typography>
             </Box>
 
@@ -189,7 +191,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
                 {t("myListings.created", "Created")}
               </Typography>
               <Typography variant="body2">
-                {getRelativeTime(new Date(listing.created_at))}
+                {fmt.relative(new Date(listing.created_at), now)}
               </Typography>
             </Box>
 
@@ -198,7 +200,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
                 {t("myListings.updated", "Last Updated")}
               </Typography>
               <Typography variant="body2">
-                {getRelativeTime(new Date(listing.updated_at))}
+                {fmt.relative(new Date(listing.updated_at), now)}
               </Typography>
             </Box>
           </Stack>

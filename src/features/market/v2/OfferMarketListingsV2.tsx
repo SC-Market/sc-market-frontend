@@ -16,6 +16,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { OrderItemDetail } from "../../../store/api/v2/market"
+import { useFormatters } from "../../../util/format"
 
 /**
  * ListingRowItemV2 - Extended row item with variant details
@@ -51,6 +52,7 @@ export function OfferListingRowItemV2(props: {
   row: ListingRowItemV2
   index: number
 }) {
+  const fmt = useFormatters()
   const { row, index } = props
 
   return (
@@ -82,11 +84,11 @@ export function OfferListingRowItemV2(props: {
             </Box>
           </Box>
         </TableCell>
-        <TableCell align={"right"}>{row.quantity.toLocaleString()}</TableCell>
+        <TableCell align={"right"}>{fmt.number(row.quantity)}</TableCell>
         <TableCell align={"right"}>
-          {row.unit_price.toLocaleString()} aUEC
+          {fmt.number(row.unit_price)} aUEC
         </TableCell>
-        <TableCell align={"right"}>{row.total.toLocaleString()} aUEC</TableCell>
+        <TableCell align={"right"}>{fmt.number(row.total)} aUEC</TableCell>
       </TableRow>
     </Fade>
   )
@@ -170,6 +172,7 @@ interface OfferMarketListingsV2Props {
  * ```
  */
 export function OfferMarketListingsV2(props: OfferMarketListingsV2Props) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { items, title } = props
@@ -229,7 +232,7 @@ export function OfferMarketListingsV2(props: OfferMarketListingsV2Props) {
                   <TableRow>
                     <TableCell>{t("OfferMarketListings.total")}</TableCell>
                     <TableCell align={"right"}>
-                      {totalPrice.toLocaleString()} aUEC
+                      {fmt.number(totalPrice)} aUEC
                     </TableCell>
                   </TableRow>
                 </Table>

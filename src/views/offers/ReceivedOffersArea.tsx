@@ -74,6 +74,7 @@ import { ORDER_PATHS, SHOP_PATHS } from "../../routes/paths"
 // Map for all statuses
 import { normalizeOfferStatus } from "../../features/offers/domain/types"
 import { usePageReady } from "../../components/metadata/PageReady"
+import { useFormatters } from "../../util/format"
 
 // Status icon mapping for offer rows
 
@@ -133,6 +134,7 @@ export function OfferRow(props: {
   hasSelectedItems?: boolean
   viewAs?: "buyer" | "shop"
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const {
     row,
@@ -303,7 +305,7 @@ export function OfferRow(props: {
                 color={"text.secondary"}
                 sx={{ fontSize: { xs: "0.625rem", sm: "0.875rem" } }}
               >
-                {date.toLocaleString("default", { month: "short" })}
+                {fmt.date(date, { month: "short" })}
               </Typography>
               <Typography
                 variant={"h5"}
@@ -344,13 +346,11 @@ export function OfferRow(props: {
                 }}
               >
                 {row.most_recent_offer.count
-                  ? `${row.most_recent_offer.count.toLocaleString(
-                      undefined,
-                    )} ${t("OffersViewPaginated.items")} • `
+                  ? `${fmt.number(row.most_recent_offer.count)} ${t("OffersViewPaginated.items")} • `
                   : row.most_recent_offer.service_name
                     ? `${row.most_recent_offer.service_name} • `
                     : ""}
-                {(+row.most_recent_offer.cost).toLocaleString(undefined)} aUEC
+                {fmt.number(+row.most_recent_offer.cost)} aUEC
               </Typography>
               {row.shop && !isBuyerView && (
                 <Typography
@@ -431,11 +431,6 @@ export function OfferRow(props: {
           )}
         </Stack>
       </TableCell>
-      {/*<TableCell align="right">*/}
-      {/*  <Typography variant={"subtitle1"} color={"text.primary"}>*/}
-      {/*    {(+row.cost).toLocaleString("en-US")} aUEC*/}
-      {/*  </Typography>*/}
-      {/*</TableCell>*/}
 
       {/*<TableCell align={'right'}>*/}
       {/*    <Button color={'primary'} variant={'outlined'} onClick={handleAcceptBid}>*/}
@@ -470,6 +465,7 @@ export function OffersViewPaginated(props: {
   contractor?: string
   shop_id?: string
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { mine, assigned, unassigned, contractor, shop_id } = props
@@ -831,7 +827,7 @@ export function OffersViewPaginated(props: {
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
               {t("OffersViewPaginated.merge_offers_combined_cost", {
-                cost: totalCost.toLocaleString(),
+                cost: fmt.number(totalCost),
               })}
             </Typography>
             <DialogContentText variant="body2" color="warning.main">

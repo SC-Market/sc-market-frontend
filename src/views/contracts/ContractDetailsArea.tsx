@@ -18,11 +18,13 @@ import { PublicContract } from "../../features/contracting/api/publicContractsAp
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useFormatters } from "../../util/format"
 
 export function ContractDetailsArea(props: { contract: PublicContract }) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { contract } = props
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const paymentType = PAYMENT_TYPE_MAP.get(contract.payment_type) || ""
 
   return (
@@ -113,7 +115,7 @@ export function ContractDetailsArea(props: { contract: PublicContract }) {
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
                   <Typography color={"text.secondary"} variant={"subtitle2"}>
-                    {(+contract.cost).toLocaleString(undefined)}{" "}
+                    {fmt.number(+contract.cost)}{" "}
                     <Typography
                       color={"text.primary"}
                       variant={"subtitle2"}

@@ -63,8 +63,10 @@ vi.mock("../../../../hooks/layout/Drawer", () => ({
   useDrawerOpen: () => [false, vi.fn()],
 }));
 
-vi.mock("../../../../util/time", () => ({
-  getRelativeTime: () => "2 days ago",
+// "Now" two days after the first listing was created.
+vi.mock("../../../../util/format", async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useNow: () => Date.parse("2024-01-17T10:00:00Z"),
 }));
 
 // English catalog t() (src/test/mocks/reactI18next).

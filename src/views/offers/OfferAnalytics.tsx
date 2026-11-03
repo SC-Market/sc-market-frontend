@@ -9,6 +9,7 @@ import { OfferAnalytics } from "../../features/offers/domain/types"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { SHOP_PATHS, USER_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 interface OfferAnalyticsProps {
   analytics: OfferAnalytics
@@ -128,6 +129,7 @@ export function OfferTopUsersAnalytics({ analytics }: OfferAnalyticsProps) {
 }
 
 export function OfferSummary({ analytics }: OfferAnalyticsProps) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   return (
@@ -152,7 +154,7 @@ export function OfferSummary({ analytics }: OfferAnalyticsProps) {
           <strong>{t("contractsUi.rejectedOffers")}</strong> {analytics.summary.rejected_offers}
         </Grid>
         <Grid item xs={6}>
-          <strong>{t("contractsUi.totalValue")}</strong> {analytics.summary.total_value.toLocaleString()} aUEC
+          <strong>{t("contractsUi.totalValue")}</strong> {fmt.number(analytics.summary.total_value)} aUEC
         </Grid>
       </Grid>
     </Section>

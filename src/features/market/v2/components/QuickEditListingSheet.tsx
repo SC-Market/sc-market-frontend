@@ -44,6 +44,7 @@ import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { listingStatusLabel } from "../../domain/listingStatus"
 import { selectOnFocus } from "../../../../util/selectOnFocus"
+import { useFormatters } from "../../../../util/format"
 
 interface QuickEditListingSheetProps {
   listing: MyListingItem | null
@@ -56,6 +57,7 @@ export function QuickEditListingSheet({
   open,
   onClose,
 }: QuickEditListingSheetProps) {
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -213,8 +215,8 @@ export function QuickEditListingSheet({
 
   const priceHelp =
     listing.price_min === listing.price_max
-      ? `${listing.price_min.toLocaleString()} aUEC`
-      : `${listing.price_min.toLocaleString()}–${listing.price_max.toLocaleString()} aUEC`
+      ? `${fmt.number(listing.price_min)} aUEC`
+      : `${fmt.number(listing.price_min)}–${fmt.number(listing.price_max)} aUEC`
 
   const tileSx = {
     flex: 1,
@@ -351,7 +353,7 @@ export function QuickEditListingSheet({
               {t("quickEdit.quantity", "Quantity")}
             </Typography>
             <Typography variant="body2" fontWeight={500}>
-              {listing.quantity_available.toLocaleString()}
+              {fmt.number(listing.quantity_available)}
             </Typography>
           </Box>
           {qualityLabel && (

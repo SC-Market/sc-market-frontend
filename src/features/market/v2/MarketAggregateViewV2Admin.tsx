@@ -68,16 +68,12 @@ import { QualityHistogram } from "../../../components/market/v2/QualityHistogram
 import { MARKET_PATHS } from "../../../routes/paths";
 import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton";
 import { remainingQuantity, totalRemainingQuantity } from "../domain/buyOrders";
+import { useFormatters } from "../../../util/format"
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function formatAuec(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${Math.round(n / 1_000)}k`;
-  return n.toLocaleString();
-}
 
 // ---------------------------------------------------------------------------
 // Stats strip
@@ -90,6 +86,7 @@ function StatStrip({
   complete: GameItemAggregateV2;
   selectedTier: number | null;
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation();
   const { listings, buy_orders } = complete;
 
@@ -132,19 +129,19 @@ function StatStrip({
   }> = [
     {
       label: t("marketUi.aggregateAdmin.bestAsk"),
-      value: bestAsk != null ? bestAsk.toLocaleString() : "—",
+      value: bestAsk != null ? fmt.number(bestAsk) : "—",
       sub: t("marketUi.aggregateAdmin.auecPerUnit"),
       color: "success.main",
     },
     {
       label: t("marketUi.aggregateAdmin.bestBid"),
-      value: bestBid != null ? bestBid.toLocaleString() : "—",
+      value: bestBid != null ? fmt.number(bestBid) : "—",
       sub: t("marketUi.aggregateAdmin.auecPerUnit"),
       color: "warning.main",
     },
     {
       label: t("marketUi.aggregateAdmin.spread"),
-      value: spread != null ? formatAuec(spread) : "—",
+      value: spread != null ? fmt.compact(spread) : "—",
       sub:
         spread != null && bestAsk
           ? t("marketUi.aggregateAdmin.spreadPercentMid", {
@@ -162,12 +159,12 @@ function StatStrip({
       value: activeBuys.length.toString(),
       sub: t("marketUi.aggregateAdmin.unitsWanted", {
         count: totalWanted,
-        formatted: totalWanted.toLocaleString(),
+        formatted: fmt.number(totalWanted),
       }),
     },
     {
       label: t("marketUi.aggregateAdmin.totalStock"),
-      value: formatAuec(totalStock),
+      value: fmt.compact(totalStock),
       sub: t("marketUi.aggregateAdmin.unitsAvailable"),
     },
   ];
@@ -236,6 +233,7 @@ function QualityTabs({
   selectedTier: number | null;
   onSelect: (tier: number | null) => void;
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation();
   if (distribution.length === 0) return null;
 
@@ -273,7 +271,7 @@ function QualityTabs({
                   color="success.main"
                   sx={{ fontFamily: "monospace", fontSize: "11px" }}
                 >
-                  {d.min_price.toLocaleString()}
+                  {fmt.number(d.min_price)}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ fontSize: "10px" }}>
                   {t("marketUi.aggregateAdmin.listingCount", {
@@ -303,6 +301,7 @@ function DepthChart({
   listings: AggregateListingV2Row[];
   buyOrders: StandingBuyOrder[];
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation();
   const { bidBars, askBars, midPrice, bestBid, bestAsk, spread } =
     useMemo(() => {
@@ -395,7 +394,7 @@ function DepthChart({
               color="text.primary"
               sx={{ fontFamily: "monospace" }}
             >
-              {formatAuec(spread)} aUEC
+              {fmt.compact(spread)} aUEC
             </Typography>
             {" · "}
             {t("marketUi.aggregateAdmin.mid")}{" "}
@@ -405,7 +404,7 @@ function DepthChart({
               color="text.primary"
               sx={{ fontFamily: "monospace" }}
             >
-              {formatAuec(midPrice)}
+              {fmt.compact(midPrice)}
             </Typography>
           </Typography>
         )}
@@ -465,7 +464,7 @@ function DepthChart({
               whiteSpace: "nowrap",
             }}
           >
-            {midPrice ? formatAuec(midPrice) : "—"}
+            {midPrice ? fmt.compact(midPrice) : "—"}
           </Typography>
           <Box
             sx={{ width: 1, height: 10, bgcolor: "divider", mt: 0.25 }}
@@ -514,7 +513,7 @@ function DepthChart({
                 color="text.secondary"
                 sx={{ fontFamily: "monospace", fontSize: "9px" }}
               >
-                {formatAuec(bestBid * f)}
+                {fmt.compact(bestBid * f)}
               </Typography>
             ))}
         </Stack>
@@ -528,7 +527,7 @@ function DepthChart({
                 color="text.secondary"
                 sx={{ fontFamily: "monospace", fontSize: "9px" }}
               >
-                {formatAuec(bestAsk * f)}
+                {fmt.compact(bestAsk * f)}
               </Typography>
             ))}
         </Stack>
@@ -550,6 +549,7 @@ function BuyDialog({
   open: boolean;
   onClose: () => void;
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation();
   const issueAlert = useAlertHook();
   const [cookies, setCookie] = useCookies(["market_cart"]);
@@ -607,8 +607,8 @@ function BuyDialog({
       <DialogContent sx={{ pt: "12px !important" }}>
         <Typography variant="body2" color="text.secondary" mb={2}>
           {t("marketUi.aggregateAdmin.priceAndAvailable", {
-            price: listing.price_min.toLocaleString(),
-            available: listing.quantity_available.toLocaleString(),
+            price: fmt.number(listing.price_min),
+            available: fmt.number(listing.quantity_available),
           })}
         </Typography>
         <NumericFormat
@@ -624,7 +624,7 @@ function BuyDialog({
             endAdornment: (
               <InputAdornment position="end">
                 {t("marketUi.aggregateAdmin.ofMax", {
-                  max: listing.quantity_available.toLocaleString(),
+                  max: fmt.number(listing.quantity_available),
                 })}
               </InputAdornment>
             ),
@@ -641,7 +641,7 @@ function BuyDialog({
           sx={{ fontFamily: "monospace" }}
         >
           {t("marketUi.aggregateAdmin.totalAuec", {
-            total: (listing.price_min * quantity).toLocaleString(),
+            total: fmt.number(listing.price_min * quantity),
           })}
         </Typography>
       </DialogContent>
@@ -666,6 +666,7 @@ function SellOrdersPanel({
   listings: AggregateListingV2Row[];
   totalCount: number;
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation();
   const [buyTarget, setBuyTarget] = useState<AggregateListingV2Row | null>(
     null
@@ -787,7 +788,7 @@ function SellOrdersPanel({
                     color: "success.main",
                   }}
                 >
-                  {listing.price_min.toLocaleString()}
+                  {fmt.number(listing.price_min)}
                 </Typography>
                 {isBest && (
                   <Typography
@@ -809,7 +810,7 @@ function SellOrdersPanel({
                   alignSelf: "center",
                 }}
               >
-                {listing.quantity_available.toLocaleString()}
+                {fmt.number(listing.quantity_available)}
               </Typography>
 
               {/* Action */}
@@ -879,6 +880,7 @@ function SellOrdersPanel({
 // ---------------------------------------------------------------------------
 
 function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
+  const fmt = useFormatters()
   const { data: profile } = useGetUserProfileQuery();
   const [cancelBuyOrderMut] = useCancelBuyOrderMutation();
   const issueAlert = useAlertHook();
@@ -1041,7 +1043,7 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
                 >
                   {order.negotiable && !order.price_per_unit
                     ? t("buyorder.status.negotiable", "Negotiable")
-                    : order.price_per_unit.toLocaleString()}
+                    : fmt.number(order.price_per_unit)}
                 </Typography>
                 {order.negotiable && (
                   <Chip
@@ -1072,7 +1074,7 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
                   alignSelf: "center",
                 }}
               >
-                {remaining.toLocaleString()}
+                {fmt.number(remaining)}
               </Typography>
 
               {/* Total */}
@@ -1085,7 +1087,7 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
                   color: "warning.main",
                 }}
               >
-                {total != null ? formatAuec(total) : "—"}
+                {total != null ? fmt.compact(total) : "—"}
               </Typography>
 
               {/* Actions */}
