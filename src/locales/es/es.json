@@ -1,6 +1,6 @@
 {
   "admin": {
-    "orderStats": "Estadísticas de Pedidos Admin",
+    "orderStats": "Estadísticas de pedidos (admin)",
     "showTestOrders": "Mostrar pedidos de prueba",
     "moderation": {
       "button": {
@@ -10,7 +10,7 @@
         "actions": "Acciones"
       },
       "dialog": {
-        "handleReport": "Gestionar reporte"
+        "handleReport": "Gestionar denuncia"
       },
       "field": {
         "status": "Estado"
@@ -26,17 +26,17 @@
       "updateReport": "Actualizar reporte",
       "updating": "Actualizando..."
     },
-    "moderation.title": "Panel de Moderación",
-    "moderation.description": "Esta página contendrá herramientas de moderación y reportes.",
-    "moderation.handleReport": "Manejar Reporte",
+    "moderation.title": "Panel de moderación",
+    "moderation.description": "Esta página contendrá herramientas de moderación y denuncias.",
+    "moderation.handleReport": "Gestionar denuncia",
     "moderation.status": "Estado",
     "moderation.notes": "Notas",
-    "moderation.notesPlaceholder": "Ingrese notas de moderación o acción tomada...",
+    "moderation.notesPlaceholder": "Introduce notas de moderación o la medida tomada...",
     "moderation.notesHelperText": "Notas opcionales sobre la acción de moderación (máx. 2000 caracteres)",
-    "moderation.updateReport": "Actualizar Reporte",
+    "moderation.updateReport": "Actualizar denuncia",
     "moderation.updating": "Actualizando...",
-    "moderation.reportUpdated": "Reporte actualizado exitosamente",
-    "moderation.updateFailed": "Error al actualizar el reporte",
+    "moderation.reportUpdated": "Denuncia actualizada correctamente",
+    "moderation.updateFailed": "No se pudo actualizar la denuncia",
     "moderation.actions": "Acciones",
     "alerts": {
       "actions": "Acciones",
@@ -209,9 +209,9 @@
       "value": "Valor"
     },
     "importMonitoring": {
-      "title": "Monitoreo de trabajos de importación"
+      "title": "Supervisión de trabajos de importación"
     },
-    "moderation.pageTitle": "Moderación de administración",
+    "moderation.pageTitle": "Moderación (administración)",
     "notificationTest": {
       "contractor": "Contratista (opcional - para pruebas con alcance de organización)",
       "description": "Prueba cualquier tipo de notificación usando datos reales de la base de datos. El sistema encontrará la primera entidad disponible y activará la notificación, que se creará y enviará (mediante notificaciones push y correo electrónico) al usuario seleccionado.",
@@ -428,7 +428,7 @@
     "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries® y Cloud Imperium® son marcas registradas de Cloud Imperium Rights LLC",
     "unofficial": "Este es un sitio de fans no oficial de Star Citizen, sin afiliación con el grupo de empresas Cloud Imperium. Todo el contenido de este sitio no creado por su anfitrión o sus usuarios es propiedad de sus respectivos dueños",
     "officialSite": "Sitio oficial de Star Citizen:",
-    "referralCode": "Use our referral code: {{code}}",
+    "referralCode": "Código de referido: {{code}}",
     "acknowledgments": "Agradecimientos especiales a <ladyFleurLink>LadyFleur</ladyFleurLink> por el logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> y <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> por sus APIs.",
     "apiDocs": "Documentación de la API",
     "scOrgs": "SC Orgs",
@@ -475,7 +475,7 @@
     "purchaseLocations": "Dónde comprarlo",
     "resourceTitle": "Minería, chatarrería y botín",
     "rewardBlueprint": "Recompensa: plano",
-    "rewardItem": "Recompensa: objeto",
+    "rewardItem": "Recompensa: artículo",
     "sellers": "Vendedores",
     "shopsTitle": "Tiendas del juego",
     "showingBlueprints": "{{shown}} de {{total}} planos",
@@ -488,7 +488,7 @@
   "listing": {
     "95PercentRating25PlusTransactions": "Valoración superior al 95 % y más de 25 transacciones",
     "90PercentRating25PlusTransactions": "Valoración superior al 90 % y más de 25 transacciones",
-    "responsiveBadge": "Responde al 90% de las órdenes dentro de 24 horas",
+    "responsiveBadge": "Responde al 90 % de los pedidos en menos de 24 horas",
     "tenPlusFiveStarStreak": "Racha de más de 10 valoraciones de 5 estrellas",
     "fivePlusFiveStarStreak": "Racha de más de 5 valoraciones de 5 estrellas",
     "1000PlusOrdersCompleted": "Más de 1000 pedidos completados",
@@ -553,7 +553,7 @@
     "item_type": "Tipo de artículo",
     "item_name": "Nombre del artículo",
     "other_category": "Otro",
-    "allListings": "All Market Listings",
+    "allListings": "Todos los anuncios",
     "toggleSidebar": "alternar barra lateral del mercado",
     "activeListings": "Anuncios activos",
     "inactiveListings": "Anuncios inactivos",
@@ -581,8 +581,8 @@
     "expiration": "Vencimiento: {{time}}",
     "unit": "u.",
     "available": "{{count}} disponibles",
-    "internalListing": "Listado Interno",
-    "unlistedListing": "No listado",
+    "internalListing": "Anuncio interno",
+    "unlistedListing": "No anunciado",
     "showUnlistedAdmin": "Mostrar no listados (admin)",
     "addDiscountTier": "Añadir nivel",
     "allListingsTitle": "Todos los anuncios de mercado",
@@ -680,7 +680,7 @@
     "createListing": "Crear anuncio",
     "createListingTooltip": "Crear un nuevo anuncio",
     "myCart": "Mi carrito",
-    "myCartTooltip": "Ver tu carrito de compra"
+    "myCartTooltip": "Ver tu carrito"
   },
   "navigation": {
     "goBack": "Volver"
@@ -688,8 +688,8 @@
   "notifications": {
     "notifications": "Notificaciones",
     "delete_notification": "Eliminar notificación",
-    "new_review_by": "Nueva reseña dejada por",
-    "new_order_comment_by": "Nuevo comentario de pedido dejado por",
+    "new_review_by": "Nueva reseña de",
+    "new_order_comment_by": "Nuevo comentario en un pedido de",
     "new_order_message_by": "Nuevo mensaje de pedido de",
     "new_order_placed_by": "Nuevo pedido realizado por",
     "new_offer_received_from": "Nueva oferta recibida de",
@@ -737,11 +737,11 @@
       "account_deactivated": "Un admin desactivó tu cuenta.",
       "account_reactivated": "Un admin reactivó tu cuenta.",
       "discord_link_skipped": "Tu cuenta de Discord ya está vinculada a otra cuenta de SC Market, así que no se vinculó a esta. Si ambas cuentas son tuyas, contacta con el soporte de SC Market.",
-      "discord_unlinked": "Un admin desvinculó Discord de tu cuenta. Puedes vincular de nuevo una cuenta de Discord en Ajustes.",
+      "discord_unlinked": "Un admin desvinculó Discord de tu cuenta. Puedes vincular de nuevo una cuenta de Discord en Configuración.",
       "generic": "Un admin cambió tu cuenta.",
-      "spectrum_cleared": "Un admin quitó el vínculo de RSI de tu cuenta. Vuelve a verificar tu cuenta de RSI en Ajustes.",
+      "spectrum_cleared": "Un admin quitó el vínculo de RSI de tu cuenta. Vuelve a verificar tu cuenta de RSI en Configuración.",
       "spectrum_set": "Un admin actualizó el vínculo de RSI de tu cuenta.",
-      "username_released": "Un admin liberó tu nombre de usuario. Ahora tu nombre de usuario es {{username}}. Usa «Sincronizar handle» en Ajustes para recuperar tu handle actual de RSI."
+      "username_released": "Un admin liberó tu nombre de usuario. Ahora tu nombre de usuario es {{username}}. Usa «Sincronizar handle» en Configuración para recuperar tu handle actual de RSI."
     },
     "scope": {
       "all": "Todas",
@@ -751,16 +751,16 @@
     "filter_by_shop": "Filtrar por tienda",
     "all_shops": "Todas las tiendas",
     "storefront_enquiry": {
-      "created": "{{name}} ha pedido un escaparate con su marca: {{subdomain}}",
-      "generic": "Nueva solicitud de escaparate con marca",
-      "accepted": "Tu solicitud de tienda personalizada para {{name}} ({{subdomain}}) ha sido aceptada",
-      "acceptedGeneric": "Tu solicitud de tienda personalizada ha sido aceptada",
-      "declined": "Tu solicitud de tienda personalizada para {{name}} ({{subdomain}}) ha sido rechazada",
-      "declinedGeneric": "Tu solicitud de tienda personalizada ha sido rechazada"
+      "created": "{{name}} ha pedido un escaparate personalizado: {{subdomain}}",
+      "generic": "Nueva solicitud de escaparate personalizado",
+      "accepted": "Tu solicitud de escaparate personalizado para {{name}} ({{subdomain}}) ha sido aceptada",
+      "acceptedGeneric": "Tu solicitud de escaparate personalizado ha sido aceptada",
+      "declined": "Tu solicitud de escaparate personalizado para {{name}} ({{subdomain}}) ha sido rechazada",
+      "declinedGeneric": "Tu solicitud de escaparate personalizado ha sido rechazada"
     },
     "listing_expiring": {
       "one": "¿Sigues vendiendo «{{title}}»? Caduca en 3 días. Ábrelo para renovarlo con un clic.",
-      "many": "¿Sigues vendiendo? {{n}} anuncios de {{shop}} caducan en 3 días. Ábrelo para renovarlos con un clic."
+      "many": "¿Sigues vendiendo? {{n}} anuncios de {{shop}} caducan en 3 días. Ábrela para renovarlos con un clic."
     },
     "offer_reminder": {
       "first_one": "Una oferta espera tu respuesta: «{{title}}»",
@@ -802,16 +802,16 @@
       "description": "Indica a otros cuándo estás disponible para intercambios. Arrastra para seleccionar franjas horarias."
     },
     "email": {
-      "title": "Agrega tu correo electrónico",
+      "title": "Añade tu correo electrónico",
       "description": "Recibe notificaciones de nuevos mensajes y ofertas cuando no estés.",
       "verify": "Enviar verificación",
       "sent": "¡Correo de verificación enviado! Puedes verificarlo más tarde."
     },
     "notifications": {
       "title": "Preferencias de notificación",
-      "description": "Elige cómo te gustaría recibir recordatorios de mensajes no leídos.",
-      "dmReminders": "Enviarme correos sobre mensajes no leídos",
-      "dmRemindersHelp": "Te enviaremos un recordatorio si tienes mensajes esperando por más de 24 horas. Puedes cambiar esto en cualquier momento en Configuración."
+      "description": "Elige cómo quieres que te recordemos los mensajes no leídos.",
+      "dmReminders": "Avisarme por correo de los mensajes no leídos",
+      "dmRemindersHelp": "Te enviaremos un recordatorio si tienes mensajes sin leer desde hace más de 24 horas. Puedes cambiarlo cuando quieras en Configuración."
     },
     "emailNotifs": {
       "description": "Elige qué eventos te envían un correo electrónico. Puedes cambiarlo en cualquier momento en Configuración.",
@@ -874,7 +874,7 @@
       "faqBuyQ": "¿Dónde comprar {{name}} en Star Citizen?",
       "faqMineA": "{{name}} se puede minar en {{locations}}.",
       "faqMineQ": "¿Dónde minar {{name}} en Star Citizen?",
-      "faqUsesA": "{{name}} es un ingrediente de fabricación para objetos como {{items}}.",
+      "faqUsesA": "{{name}} es un ingrediente de fabricación para artículos como {{items}}.",
       "faqUsesQ": "¿Para qué sirve {{name}} en Star Citizen?",
       "intro": "{{name}} es una mercancía de Star Citizen (categoría: {{category}}).",
       "methods": "Se puede obtener mediante {{methods}}.",
@@ -883,7 +883,7 @@
     },
     "faqTitle": "Preguntas frecuentes",
     "item": {
-      "intro": "{{name}} es un objeto de Star Citizen.",
+      "intro": "{{name}} es un artículo de Star Citizen.",
       "listings": "Los jugadores lo venden en SC Market por {{min}} a {{max}} (anuncios activos: {{total}}).",
       "type": "Tipo: {{type}}."
     },
@@ -933,7 +933,7 @@
         "announcements": "Avisos",
         "reminders": "Recordatorios de mensajes no leídos",
         "contracts": "Contratos públicos",
-        "storefront": "Solicitudes de tienda"
+        "storefront": "Solicitudes de escaparate"
       },
       "events": {
         "order_created": "Nuevo pedido",
@@ -960,8 +960,8 @@
         "contract_offer_received": "Oferta en tu contrato",
         "org_member_joined": "Nuevo miembro",
         "listing_expiring": "Anuncio a punto de caducar",
-        "storefront_enquiry_accepted": "Solicitud de tienda aceptada",
-        "storefront_enquiry_declined": "Solicitud de tienda rechazada",
+        "storefront_enquiry_accepted": "Solicitud de escaparate aceptada",
+        "storefront_enquiry_declined": "Solicitud de escaparate rechazada",
         "reminder_offer_pending": "Oferta esperando tu respuesta",
         "reminder_offer_pending_final": "Último recordatorio: oferta esperando tu respuesta",
         "reminder_offer_waiting_buyer": "Tu oferta sigue esperando"
@@ -1019,8 +1019,8 @@
           "hint": "Mensajes del equipo de SC Market. Siempre se entregan en el sitio, por push y en Discord; puedes desactivar los correos."
         },
         "storefront": {
-          "label": "Solicitudes de tienda",
-          "hint": "Respuestas a una solicitud de tienda personalizada que enviaste."
+          "label": "Solicitudes de escaparate",
+          "hint": "Respuestas a una solicitud de escaparate personalizado que enviaste."
         },
         "threads": {
           "label": "Hilos de Discord",
@@ -1157,18 +1157,18 @@
       "updateAndVerify": "Actualizar nombre de usuario y volver a verificar la cuenta",
       "authenticateWithRSI": "Autenticarse con RSI",
       "viewUserProfile": "Ver perfil de usuario",
-      "reVerifyTitle": "Re-verificar perfil",
-      "reVerifyDescription": "Actualice el nombre de usuario de su perfil para que coincida con su handle actual de Spectrum. Esto solo actualizará su nombre de usuario.",
-      "reVerifyButton": "Re-verificar perfil",
-      "reVerifySuccess": "¡Perfil re-verificado exitosamente! Su nombre de usuario ha sido actualizado.",
-      "reVerifyError": "Error al re-verificar el perfil. Por favor, inténtelo de nuevo más tarde.",
+      "reVerifyTitle": "Volver a verificar el perfil",
+      "reVerifyDescription": "Actualiza el nombre de usuario de tu perfil para que coincida con tu handle actual de Spectrum. Solo se actualizará tu nombre de usuario.",
+      "reVerifyButton": "Volver a verificar el perfil",
+      "reVerifySuccess": "¡Perfil verificado de nuevo! Tu nombre de usuario se ha actualizado.",
+      "reVerifyError": "No se pudo volver a verificar el perfil. Inténtalo de nuevo más tarde.",
       "unlinkTitle": "Desvincular cuenta de Star Citizen",
-      "unlinkDescription": "Desvincule su cuenta de Star Citizen para volver al estado no verificado. Su nombre de usuario se restablecerá al formato predeterminado basado en su ID de Discord.",
+      "unlinkDescription": "Desvincula tu cuenta de Star Citizen para volver al estado no verificado. Tu nombre de usuario se restablecerá al formato predeterminado basado en tu ID de Discord.",
       "unlinkButton": "Desvincular cuenta",
-      "unlinkSuccess": "¡Cuenta de Star Citizen desvinculada exitosamente! Su perfil ha sido restablecido al estado no verificado.",
-      "unlinkError": "Error al desvincular la cuenta de Star Citizen. Por favor, inténtelo de nuevo más tarde.",
+      "unlinkSuccess": "¡Cuenta de Star Citizen desvinculada! Tu perfil ha vuelto al estado no verificado.",
+      "unlinkError": "No se pudo desvincular la cuenta de Star Citizen. Inténtalo de nuevo más tarde.",
       "unlinkDialogTitle": "Confirmar desvinculación de cuenta",
-      "unlinkDialogDescription": "¿Está seguro de que desea desvincular su cuenta de Star Citizen? Esto restablecerá su perfil al estado no verificado y cambiará su nombre de usuario de vuelta al formato predeterminado. Puede volver a vincular su cuenta en cualquier momento.",
+      "unlinkDialogDescription": "¿Seguro que quieres desvincular tu cuenta de Star Citizen? Tu perfil volverá al estado no verificado y tu nombre de usuario recuperará el formato predeterminado. Puedes volver a vincular tu cuenta cuando quieras.",
       "unlinkDialogCancel": "Cancelar",
       "unlinkDialogConfirm": "Desvincular cuenta",
       "accountAlreadyCitizenId": "Tu cuenta de SC Market ({{username}}) ya tiene un Citizen iD vinculado. Desvincúlalo primero antes de vincular uno nuevo.",
@@ -1198,7 +1198,7 @@
       "verifyAccountDescription": "Necesitas verificar tu cuenta para acceder a todas las funciones. Elige uno de los siguientes métodos:",
       "hideOnlineStatus": "Ocultar mi estado de conexión",
       "hideOnlineStatusHelp": "Los compradores ven aproximadamente cuándo estuviste activo por última vez (por ejemplo, «Activo hoy») en tus anuncios y tu tienda. Actívalo para ocultarlo.",
-      "hideOnlineStatusError": "No se pudo guardar tu ajuste de estado de conexión"
+      "hideOnlineStatusError": "No se pudo guardar la configuración de tu estado de conexión"
     },
     "priceAlerts": {
       "title": "Alertas de precio",
@@ -1210,7 +1210,7 @@
       "deliveryTitle": "Dónde llegan las alertas",
       "deliveredTo": "Las alertas llegan por: {{channels}}.",
       "deliveredNowhere": "Todos los canales están desactivados, así que tus seguimientos no pueden avisarte.",
-      "openNotifications": "Abrir ajustes de notificaciones"
+      "openNotifications": "Abrir la configuración de notificaciones"
     },
     "email": {
       "addEmail": "Añadir dirección de correo",
@@ -1385,10 +1385,10 @@
       "connect": "Conectar SCMDB",
       "connected": "Conectado",
       "connectPrompt": "Genera un token de sincronización para conectar tu cuenta de SCMDB. Obtendrás una URL para pegar en la configuración de Sync Sinks de SCMDB.",
-      "description": "Conecta tu cuenta de SCMDB para sincronizar automáticamente la propiedad de blueprints con SC Market. Cuando marques un blueprint como propio en SCMDB, se reflejará aquí.",
+      "description": "Conecta tu cuenta de SCMDB para sincronizar automáticamente con SC Market los planos que tienes. Cuando marques un plano como tuyo en SCMDB, se reflejará aquí.",
       "disconnect": "Desconectar",
       "disconnectTitle": "¿Desconectar SCMDB?",
-      "disconnectWarning": "SCMDB ya no podrá sincronizar blueprints con SC Market. Tu inventario actual de blueprints no se verá afectado.",
+      "disconnectWarning": "SCMDB ya no podrá sincronizar planos con SC Market. Tus planos actuales no se verán afectados.",
       "ingestUrl": "Pega esta URL en SCMDB → Profile → Sync Sinks:",
       "lastEvent": "Último evento recibido:",
       "noEvents": "Aún no se han recibido eventos. Añade la URL a SCMDB para empezar a sincronizar.",
@@ -1396,7 +1396,7 @@
       "regenerate": "Regenerar token",
       "regenerateTitle": "¿Regenerar token?",
       "regenerateWarning": "Esto invalidará tu URL actual. Tendrás que actualizarla en SCMDB.",
-      "snapshotWarning": "Conectar SCMDB con el evento de snapshot activado reemplazará tu seguimiento actual de blueprints en SC Market con los datos de SCMDB. Los blueprints rastreados solo en SC Market se marcarán como no poseídos.",
+      "snapshotWarning": "Conectar SCMDB con el evento de snapshot activado reemplazará tu seguimiento actual de planos en SC Market por los datos de SCMDB. Los planos registrados solo en SC Market se marcarán como no obtenidos.",
       "title": "Sincronización de SCMDB",
       "tokenActive": "Hay un token de sincronización activo. Su URL solo se muestra al crearlo; regenera el token para obtener una URL nueva.",
       "tokenHint": "El token de sincronización que termina en …{{hint}} está activo. Su URL solo se muestra al crearlo; regenera el token para obtener una URL nueva.",
@@ -1452,7 +1452,7 @@
       "presets": {
         "shop_sync": {
           "name": "Sincronizar tienda",
-          "description": "Leer tus tiendas, anuncios y existencias."
+          "description": "Leer tus tiendas, anuncios y stock."
         },
         "order_desk": {
           "name": "Gestión de pedidos",
@@ -1460,13 +1460,13 @@
         },
         "read_only": {
           "name": "Solo lectura",
-          "description": "Leer tus tiendas, anuncios, existencias, pedidos y ofertas. No cambia nada."
+          "description": "Leer tus tiendas, anuncios, stock, pedidos y ofertas. No cambia nada."
         }
       },
       "scopes": {
         "shops_read": "Leer tiendas",
         "listings_read": "Leer anuncios",
-        "stock_read": "Leer existencias",
+        "stock_read": "Leer stock",
         "orders_read": "Leer pedidos",
         "orders_write": "Cambiar el estado de pedidos",
         "offers_read": "Leer ofertas",
@@ -1480,7 +1480,7 @@
         "sunset": "Los tokens antiguos dejarán de funcionar el {{date}}. Crea tokens nuevos arriba y pasa tus herramientas a la API pública antes de esa fecha."
       }
     },
-    "sectionsNav": "Secciones de ajustes",
+    "sectionsNav": "Secciones de configuración",
     "tips": {
       "title": "Consejos de ayuda",
       "description": "Los consejos que has descartado siguen ocultos en todos tus dispositivos. Recupéralos todos para volver a verlos.",
@@ -1507,7 +1507,7 @@
       "text": "Pedidos"
     },
     "my_org": "Mi org",
-    "org_public_page": "Página de org",
+    "org_public_page": "Página de la org",
     "manage": {
       "title": "Gestionar"
     },
@@ -1544,7 +1544,7 @@
     "my_orders": "Mis pedidos",
     "orders_ive_placed": "Mis pedidos",
     "orders_assigned_to_me": "Asignados a mí",
-    "org_orders": "Pedidos org",
+    "org_orders": "Pedidos de la org",
     "contractors": "Contratistas",
     "open_contracts": "Contratos abiertos",
     "organizations": {
@@ -1564,7 +1564,7 @@
       "title": "SC Market"
     },
     "sc_market_home": "Inicio de SC Market",
-    "toggle_drawer": "Alternar cajón",
+    "toggle_drawer": "Mostrar u ocultar el menú",
     "alerts": {
       "text": "Alertas"
     },
@@ -1587,7 +1587,7 @@
       "text": "Importación de datos del juego"
     },
     "game_item_attributes": {
-      "text": "Atributos de objetos del juego"
+      "text": "Atributos de artículos del juego"
     },
     "gameData": {
       "blueprintInventory": "Mis planos",
@@ -1606,7 +1606,7 @@
     },
     "inventory": "Mi inventario",
     "listings_short": "Anuncios",
-    "manage_stock": "Inventario",
+    "manage_stock": "Stock",
     "migration": "Migración V2",
     "moderation": {
       "text": "Moderación"
@@ -1624,11 +1624,11 @@
     "shop_blocklist": "Lista de bloqueo",
     "shop_customers": "Clientes",
     "shop_orders": "Pedidos de la tienda",
-    "starred": "Destacados",
-    "stock_short": "Existencias",
+    "starred": "Favoritos",
+    "stock_short": "Stock",
     "wiki": {
       "commodities": "Materias primas",
-      "items": "Objetos",
+      "items": "Artículos",
       "locations": "Ubicaciones",
       "manufacturers": "Fabricantes",
       "refinery": "Refinería",
@@ -1652,7 +1652,7 @@
   "select_all": "seleccionar todo",
   "rows_per_page": "Filas por página",
   "no_listings": "No hay anuncios para mostrar",
-  "displayed_rows": "{{from}}–{{to}} of {{count}}",
+  "displayed_rows": "{{from}}–{{to}} de {{count}}",
   "displayed_rows_range": "{{from}}–{{to}} de {{count}}",
   "displayed_rows_range_more": "{{from}}–{{to}} de más de {{to}}",
   "all": "Todos",
@@ -1667,9 +1667,9 @@
   "discord_bot": {
     "integrating_with_discord": "Integración con Discord",
     "how_to_get_notified": "Cómo recibir notificaciones cuando se realiza un pedido",
-    "how_to_get_notified_answer": "Añade el [Bot de Discord oficial de SC Market]({{BOT_INSTALL_PATH}}) a tu servidor y elige un canal de avisos de pedidos: cada pedido y oferta nuevos se publican allí, y cada uno puede tener su propio hilo de pedido. El bot también puede enviarte mensajes directos, como un recordatorio cuando una oferta espera tu respuesta, una vez que vinculas tu cuenta de Discord y compartes un servidor con el bot. Elige qué te llega por MD en Ajustes › Notificaciones. Como alternativa, usa la configuración de abajo para gestionar pedidos a través del [servidor oficial de SC Market]({{DISCORD_INVITE}}).",
+    "how_to_get_notified_answer": "Añade el [Bot de Discord oficial de SC Market]({{BOT_INSTALL_PATH}}) a tu servidor y elige un canal de avisos de pedidos: cada pedido y oferta nuevos se publican allí, y cada uno puede tener su propio hilo de pedido. El bot también puede enviarte mensajes directos, como un recordatorio cuando una oferta espera tu respuesta, una vez que vinculas tu cuenta de Discord y compartes un servidor con el bot. Elige qué te llega por MD en Configuración › Notificaciones. Como alternativa, usa la configuración de abajo para gestionar pedidos a través del [servidor oficial de SC Market]({{DISCORD_INVITE}}).",
     "how_to_communicate": "Cómo comunicarte con los compradores a través de Discord",
-    "how_to_communicate_answer": "Añade el bot oficial de SC Market a tu servidor y elige un canal para los hilos de pedidos: cada pedido u oferta nuevos abrirá allí un hilo privado con el comprador y el vendedor asignado, y los compradores recibirán una invitación a tu servidor para gestionar el pedido juntos.\n\n1. En **Ajustes › Discord** de tu tienda, o en la pestaña **Integración con Discord** de tu organización, pulsa **[Añadir el bot a un servidor]({{BOT_INSTALL_PATH}})** y elige tu servidor en Discord. Volverás con el servidor vinculado.\n\n2. Elige el canal para los hilos de pedidos y, si quieres, canales para las alertas de pedidos (una publicación por cada pedido y oferta nuevos con un botón Reclamar), y guarda.\n\n¿Añadiste el bot desde Discord? Vincula tu cuenta de Discord en los ajustes de SC Market y ejecuta `/setup threads` en el canal que debe contener los hilos de pedidos. Para los pedidos de tu organización, rellena `org` con su Spectrum ID (por ejemplo `/setup threads org:SCMARKET`); para los pedidos hechos a ti, déjalo vacío. Para las alertas, ejecuta `/setup alerts` (con la misma `org`) en un canal del equipo.\n\nPara añadir el bot necesitas el permiso **Gestionar servidor** en el servidor de Discord, y los comandos `/setup threads`, `/setup alerts` necesitan **Gestionar canales**. Para una organización también necesitas su permiso **Manage Webhooks** en SC Market (o **Manage Orders** para las alertas creadas con `/setup alerts`). En el canal de hilos, el bot necesita Ver canal, Crear hilos privados, Enviar mensajes en hilos y Crear invitación. Ejecuta `/setup status` para ver qué recibe un canal y `/help` para ver todos los comandos.",
+    "how_to_communicate_answer": "Añade el bot oficial de SC Market a tu servidor y elige un canal para los hilos de pedidos: cada pedido u oferta nuevos abrirá allí un hilo privado con el comprador y el vendedor asignado, y los compradores recibirán una invitación a tu servidor para gestionar el pedido juntos.\n\n1. En **Configuración › Discord** de tu tienda, o en la pestaña **Integración con Discord** de tu organización, pulsa **[Añadir el bot a un servidor]({{BOT_INSTALL_PATH}})** y elige tu servidor en Discord. Volverás con el servidor vinculado.\n\n2. Elige el canal para los hilos de pedidos y, si quieres, canales para las alertas de pedidos (una publicación por cada pedido y oferta nuevos con un botón Reclamar), y guarda.\n\n¿Añadiste el bot desde Discord? Vincula tu cuenta de Discord en la configuración de SC Market y ejecuta `/setup threads` en el canal que debe contener los hilos de pedidos. Para los pedidos de tu organización, rellena `org` con su Spectrum ID (por ejemplo `/setup threads org:SCMARKET`); para los pedidos hechos a ti, déjalo vacío. Para las alertas, ejecuta `/setup alerts` (con la misma `org`) en un canal del equipo.\n\nPara añadir el bot necesitas el permiso **Gestionar servidor** en el servidor de Discord, y los comandos `/setup threads`, `/setup alerts` necesitan **Gestionar canales**. Para una organización también necesitas su permiso **Gestionar webhooks** en SC Market (o **Gestionar pedidos** para las alertas creadas con `/setup alerts`). En el canal de hilos, el bot necesita Ver canal, Crear hilos privados, Enviar mensajes en hilos y Crear invitación. Ejecuta `/setup status` para ver qué recibe un canal y `/help` para ver todos los comandos.",
     "learn_connect": "Conectar el bot de Discord",
     "learn_alerts": "Avisos de pedidos y reclamación"
   },
@@ -1917,7 +1917,7 @@
     "about_tab": "Acerca de",
     "services_tab": "Servicios",
     "market_tab": "Mercado",
-    "order_tab": "Order",
+    "order_tab": "Pedidos personalizados",
     "reviews_tab": "Reseñas",
     "store_market": "Mercado",
     "store_services": "Servicios",
@@ -1952,20 +1952,20 @@
     "title": "Pedidos recientes"
   },
   "orderTrend": {
-    "order_count_daily": "Recuento de Pedidos Diario",
-    "order_count_weekly": "Recuento de Pedidos Semanal",
-    "order_count_monthly": "Recuento de Pedidos Mensual",
-    "average_order_value_monthly": "Valor Promedio de Pedidos (Mensual)",
-    "average_order_value": "Valor Promedio de Pedidos",
-    "order_value_daily": "Valor de Pedidos Diario",
-    "orders_daily": "Pedidos Diarios",
-    "orders_weekly": "Pedidos Semanales",
-    "orders_monthly": "Pedidos Mensuales",
-    "status_trends": "Tendencias de Estado",
-    "in_progress": "En Progreso",
-    "fulfilled": "Cumplido",
+    "order_count_daily": "Número de pedidos diario",
+    "order_count_weekly": "Número de pedidos semanal",
+    "order_count_monthly": "Número de pedidos mensual",
+    "average_order_value_monthly": "Valor medio de los pedidos (mensual)",
+    "average_order_value": "Valor medio de los pedidos",
+    "order_value_daily": "Valor de pedidos diario",
+    "orders_daily": "Pedidos diarios",
+    "orders_weekly": "Pedidos semanales",
+    "orders_monthly": "Pedidos mensuales",
+    "status_trends": "Tendencias de estado",
+    "in_progress": "En curso",
+    "fulfilled": "Completado",
     "cancelled": "Cancelado",
-    "not_started": "No Iniciado"
+    "not_started": "En cola"
   },
   "orderServiceArea": {
     "associated_services": "Servicios asociados",
@@ -2052,26 +2052,26 @@
     }
   },
   "orderMetrics": {
-    "activeOrders": "Órdenes Activas",
-    "allOrders": "Todas las Órdenes",
-    "activeOrderValue": "Valor de Órdenes Activas",
-    "completedOrderValue": "Valor de Órdenes Completadas",
-    "completedOrders": "Órdenes Completadas",
-    "totalValue": "Valor Total",
-    "recentActivity": "Actividad Reciente",
-    "ordersLast7Days": "Órdenes Últimos 7 Días",
-    "ordersLast30Days": "Órdenes Últimos 30 Días",
-    "valueLast7Days": "Valor Últimos 7 Días",
-    "valueLast30Days": "Valor Últimos 30 Días",
-    "statusBreakdown": "Desglose de Estado",
-    "notStarted": "No Iniciado",
-    "inProgress": "En Progreso",
-    "fulfilled": "Cumplido",
+    "activeOrders": "Pedidos activos",
+    "allOrders": "Todos los pedidos",
+    "activeOrderValue": "Valor de pedidos activos",
+    "completedOrderValue": "Valor de pedidos completados",
+    "completedOrders": "Pedidos completados",
+    "totalValue": "Valor total",
+    "recentActivity": "Actividad reciente",
+    "ordersLast7Days": "Pedidos (últimos 7 días)",
+    "ordersLast30Days": "Pedidos (últimos 30 días)",
+    "valueLast7Days": "Valor (últimos 7 días)",
+    "valueLast30Days": "Valor (últimos 30 días)",
+    "statusBreakdown": "Desglose por estado",
+    "notStarted": "En cola",
+    "inProgress": "En curso",
+    "fulfilled": "Completado",
     "cancelled": "Cancelado",
-    "topCustomers": "Mejores Clientes",
+    "topCustomers": "Mejores clientes",
     "orders": "Órdenes",
-    "failedToLoad": "Error al Cargar",
-    "noData": "Sin Datos"
+    "failedToLoad": "Error al cargar",
+    "noData": "Sin datos"
   },
   "marketListings": {
     "associatedListings": "Anuncios de mercado asociados",
@@ -2084,9 +2084,9 @@
   "orders": {
     "status": {
       "fulfilled": "Completado",
-      "inProgress": "En proceso",
+      "inProgress": "En curso",
       "cancelled": "Cancelado",
-      "notStarted": "Not Started",
+      "notStarted": "En cola",
       "active": "Activo",
       "inactive": "Inactivo"
     },
@@ -2103,8 +2103,8 @@
       "active": "Activo",
       "past": "Pasados",
       "fulfilled": "Completado",
-      "inProgress": "In Progress",
-      "notStarted": "Not Started",
+      "inProgress": "En curso",
+      "notStarted": "En cola",
       "cancelled": "Cancelado",
       "unclaimed": "Sin reclamar"
     },
@@ -2135,7 +2135,7 @@
     "filters": "Filtros",
     "has_market_listings": "Tiene anuncios de mercado",
     "has_service": "Tiene servicio",
-    "marketListings": "Objetos",
+    "marketListings": "Artículos",
     "messages": "Mensajes",
     "seller": "Vendedor",
     "seller_username": "Nombre de usuario del vendedor",
@@ -2163,7 +2163,7 @@
     "cancel": "Cancelar",
     "complete_order": "Completar pedido",
     "begin_work": "Comenzar trabajo",
-    "not_started": "Not Started",
+    "not_started": "En cola",
     "claim": "Reclamar",
     "claimed": "Pedido reclamado",
     "claimFailed": "No se pudo reclamar el pedido",
@@ -2247,8 +2247,8 @@
     "offer": "Oferta",
     "user": "Usuario",
     "status": "Estado",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "Esperando confirmación",
+    "waitingCustomer": "Te toca responder",
     "accepted": "Aceptada",
     "rejected": "Rechazada",
     "items": "artículos",
@@ -2265,7 +2265,7 @@
     "merge_offers_one": "Fusionar ofertas ({{count}})",
     "merge_offers_many": "Fusionar ofertas ({{count}})",
     "merge_offers_other": "Fusionar ofertas ({{count}})",
-    "merge_offers_combined_cost": "Costo combinado: {{cost}} aUEC",
+    "merge_offers_combined_cost": "Coste combinado: {{cost}} aUEC",
     "merge_offers_confirm_body": "Al fusionar {{count}} sesiones de oferta se creará una nueva sesión de oferta fusionada y se cerrarán las sesiones seleccionadas. Esta acción no se puede deshacer.",
     "merge_offers_confirm_body_one": "Al fusionar {{count}} sesión de oferta se creará una nueva sesión de oferta fusionada y se cerrará la sesión seleccionada. Esta acción no se puede deshacer.",
     "merge_offers_confirm_body_many": "Al fusionar {{count}} sesiones de oferta se creará una nueva sesión de oferta fusionada y se cerrarán las sesiones seleccionadas. Esta acción no se puede deshacer.",
@@ -2343,8 +2343,8 @@
     "reject": "Rechazar",
     "cancelOrder": "Cancelar pedido",
     "cancel": "Cancelar",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "Esperando confirmación",
+    "waitingCustomer": "Te toca responder",
     "rejected": "Rechazada",
     "accepted": "Aceptada",
     "discordServerInvite": "Invitación al servidor de Discord",
@@ -2372,9 +2372,9 @@
     "orderManagement": "Gestión de pedidos",
     "integratedChannel": "Canal integrado",
     "notConfigured": "Sin configurar",
-    "setUpWithBot": "Para usar tu propio servidor de Discord, añade el bot desde la pestaña Integración con Discord de tu organización o desde Ajustes › Discord de tu tienda y elige allí un canal, o ejecuta /setup threads en el canal que debe contener los hilos de pedidos.",
+    "setUpWithBot": "Para usar tu propio servidor de Discord, añade el bot desde la pestaña Integración con Discord de tu organización o desde Configuración › Discord de tu tienda y elige allí un canal, o ejecuta /setup threads en el canal que debe contener los hilos de pedidos.",
     "useOfficial1": "Usa el servidor oficial",
-    "serverName": "SC Market Server",
+    "serverName": "Servidor de SC Market",
     "useOfficial2": "para los pedidos. Esto reemplazará tu configuración de integración existente.",
     "useOfficialServer": "Usar servidor oficial"
   },
@@ -2416,7 +2416,7 @@
   "CreateMessageGroupBody": {
     "toggleSidebar": "Alternar barra lateral",
     "usernames": "Nombres de usuario",
-    "create": "Create",
+    "create": "Crear chat",
     "close": "Cerrar",
     "creating": "Creando...",
     "minChars": "Escribe al menos 3 caracteres",
@@ -2581,8 +2581,8 @@
     "expires": "Vence",
     "description": "Descripción",
     "orders": "Pedidos",
-    "activeOrders": "Pedidos Activos",
-    "previousOrders": "Pedidos Anteriores",
+    "activeOrders": "Pedidos activos",
+    "previousOrders": "Pedidos anteriores",
     "anonymousReviewer": "Anónimo",
     "inCarts_one": "{{count}} persona tiene esto en su carrito",
     "inCarts_many": "{{count}} personas tienen esto en su carrito",
@@ -2620,17 +2620,17 @@
     "submit": "Enviar",
     "submitted": "¡Enviado!",
     "failedSubmit": "¡No se pudo enviar!",
-    "photosUploaded": "¡Fotos subidas exitosamente!",
-    "photoUploadFailed": "Error al subir algunas fotos"
+    "photosUploaded": "¡Fotos subidas correctamente!",
+    "photoUploadFailed": "No se pudieron subir algunas fotos"
   },
   "SelectPhotosArea": {
     "imageSearch": "Búsqueda de imágenes",
     "upload": "Subir",
-    "addUrl": "Agregar URL",
-    "enterImageUrl": "Ingresa la URL de la imagen:",
-    "urlModalTitle": "Agregar URL de imagen",
+    "addUrl": "Añadir URL",
+    "enterImageUrl": "Introduce la URL de la imagen:",
+    "urlModalTitle": "Añadir URL de imagen",
     "imageUrl": "URL de imagen",
-    "imageUrlHelp": "Ingresa una URL directa a una imagen (desde Imgur, RSI o starcitizen.tools)",
+    "imageUrlHelp": "Introduce una URL directa a una imagen (de Imgur, RSI o starcitizen.tools)",
     "dropHere": "Soltar aquí",
     "dragAndDropHint": "Arrastra y suelta archivos de imagen aquí",
     "dragAndDropArea": "Área de carga de fotos - arrastra y suelta archivos de imagen aquí o haz clic para explorar",
@@ -2639,24 +2639,24 @@
     "uploadFailed": "Error al subir"
   },
   "ReportButton": {
-    "reportContent": "Reportar contenido",
-    "reportDescription": "Ayúdanos a mantener la comunidad segura reportando contenido que viola nuestras pautas.",
-    "reportingUrl": "URL reportada",
+    "reportContent": "Denunciar contenido",
+    "reportDescription": "Ayúdanos a mantener la comunidad segura denunciando el contenido que incumple nuestras normas.",
+    "reportingUrl": "URL denunciada",
     "reason": "Motivo",
     "additionalDetails": "Detalles adicionales",
-    "detailsPlaceholder": "Por favor proporciona cualquier contexto adicional o detalles sobre este reporte...",
-    "detailsHelperText": "Opcional: Proporciona más contexto para ayudar a los moderadores a entender el problema (máx. 1000 caracteres)",
+    "detailsPlaceholder": "Añade cualquier contexto o detalle sobre esta denuncia...",
+    "detailsHelperText": "Opcional: añade contexto para que los moderadores entiendan el problema (máx. 1000 caracteres)",
     "cancel": "Cancelar",
-    "submit": "Enviar reporte",
+    "submit": "Enviar denuncia",
     "submitting": "Enviando...",
-    "pleaseSelectReason": "Por favor selecciona un motivo para el reporte",
-    "reportSubmitted": "Reporte enviado exitosamente. Gracias por ayudarnos a mantener nuestra comunidad segura.",
-    "reportFailed": "No se pudo enviar el reporte. Por favor intenta de nuevo.",
+    "pleaseSelectReason": "Selecciona un motivo para la denuncia",
+    "reportSubmitted": "Denuncia enviada. Gracias por ayudarnos a mantener la comunidad segura.",
+    "reportFailed": "No se pudo enviar la denuncia. Inténtalo de nuevo.",
     "reasons": {
       "inappropriateContent": "Contenido inapropiado",
       "spam": "Spam",
       "harassment": "Acoso",
-      "fakeListing": "Listado falso",
+      "fakeListing": "Anuncio falso",
       "scam": "Estafa",
       "copyrightViolation": "Violación de derechos de autor",
       "other": "Otro"
@@ -2698,8 +2698,8 @@
     "price": "Precio",
     "minBidIncrement": "Incremento mínimo de puja",
     "description": "Descripción",
-    "internalListing": "Listado Interno",
-    "publicListing": "Listado Público",
+    "internalListing": "Anuncio interno",
+    "publicListing": "Anuncio público",
     "updated": "¡Actualizado!",
     "updateError": "¡Error al actualizar!"
   },
@@ -2714,7 +2714,7 @@
     "sellerRating": "Valoración del vendedor",
     "price": "Precio",
     "quantityAvailable": "Cantidad disponible",
-    "buyer": "Buyer",
+    "buyer": "Vendedor",
     "quantity": "Cantidad",
     "total": "Total",
     "description": "Descripción",
@@ -2724,7 +2724,7 @@
     "addedToCart": "¡Añadido al carrito!",
     "quantityToBuy": "Cantidad a comprar",
     "ofAvailable": "de {{count}} disponibles",
-    "fulfill": "Cumplir",
+    "fulfill": "Completar",
     "cancel": "Cancelar",
     "submitted": "¡Enviado!",
     "failedSubmit": "¡No se pudo enviar!",
@@ -2777,7 +2777,7 @@
     "edit": "Editar",
     "delete": "Eliminar",
     "listed": "Publicado",
-    "toggleListed": "Alternar si las existencias están publicadas",
+    "toggleListed": "Alternar si el stock está publicado",
     "addRow": "Añadir fila"
   },
   "ItemStock": {
@@ -2843,9 +2843,9 @@
     "importFromUexFetchError": "No se pudieron obtener tus anuncios de UEX",
     "importFromUexError": "La importación falló",
     "item": "Artículo",
-    "quantityUseStockPage": "Cambia la cantidad de este anuncio por lote en la página de Inventario",
-    "manageAccessNotice": "Puedes ver los anuncios y el inventario de esta tienda. Para crearlos o cambiarlos, pide a un administrador de la org el permiso «Gestionar mercado».",
-    "stockAccessNotice": "Puedes ver el inventario de esta tienda. Para añadir o cambiar lotes, pide a un administrador de la org el permiso «Gestionar existencias».",
+    "quantityUseStockPage": "Cambia la cantidad de este anuncio por lote en la página Stock",
+    "manageAccessNotice": "Puedes ver los anuncios y el stock de esta tienda. Para crearlos o cambiarlos, pide a un administrador de la org el permiso «Gestionar mercado».",
+    "stockAccessNotice": "Puedes ver el stock de esta tienda. Para añadir o cambiar lotes, pide a un administrador de la org el permiso «Gestionar stock».",
     "increaseQuantity": "Aumentar cantidad",
     "decreaseQuantity": "Reducir cantidad",
     "renewHelpLabel": "Renovar",
@@ -2874,11 +2874,11 @@
     "failed": "¡No se pudo enviar! {{error}}",
     "unknown_error": "Error desconocido",
     "agreedPriceRequired": "Introduce un precio acordado por unidad (al menos 1 aUEC).",
-    "agreePriceDescription": "Esta orden de compra es negociable. Introduce el precio acordado por unidad en aUEC para cumplirla.",
+    "agreePriceDescription": "Esta orden de compra es negociable. Introduce el precio acordado por unidad en aUEC para completarla.",
     "agreePriceTitle": "Precio acordado por unidad",
     "created": "Orden de compra creada correctamente",
-    "fulfillQuantity": "Cantidad a cumplir",
-    "fulfillTitle": "Cumplir orden de compra",
+    "fulfillQuantity": "Cantidad a entregar",
+    "fulfillTitle": "Completar orden de compra",
     "imageHint": "Añade fotos de referencia (opcional, las imágenes grandes se optimizan automáticamente)",
     "negotiable": "Negociable",
     "negotiableSuggested": "Negociable (~{{price}} aUEC)",
@@ -3020,7 +3020,7 @@
       "manage_roles": "Gestionar roles",
       "manage_orders": "Gestionar pedidos",
       "manage_invites": "Gestionar invitaciones",
-      "manage_stock": "Gestionar existencias",
+      "manage_stock": "Gestionar stock",
       "manage_market": "Gestionar mercado",
       "manage_recruiting": "Gestionar reclutamiento",
       "manage_webhooks": "Gestionar webhooks",
@@ -3040,7 +3040,7 @@
       "manage_invites": "Crear y gestionar códigos y enlaces de invitación para la organización",
       "manage_market": "Crear, editar y eliminar los anuncios de la organización y llevar sus tiendas: configuración, lotes de stock y pedidos",
       "manage_orders": "Ver, aceptar, rechazar y gestionar todos los pedidos de la organización",
-      "manage_org_details": "Editar el nombre, la descripción, el avatar, el banner y los idiomas de la organización, leer el registro de auditoría y cambiar los ajustes del sitio y de la barra lateral de marca blanca",
+      "manage_org_details": "Editar el nombre, la descripción, el avatar, el banner y los idiomas de la organización, leer el registro de auditoría y cambiar la configuración del sitio y de la barra lateral de marca blanca",
       "manage_recruiting": "Crear y gestionar publicaciones de reclutamiento para la organización",
       "manage_roles": "Crear, editar y eliminar roles y asignarlos a los miembros",
       "manage_stock": "Añadir, editar y eliminar los lotes de stock de las tiendas de la organización, sin editar sus anuncios",
@@ -3099,7 +3099,7 @@
     "store": "Tienda",
     "services": "Servicios",
     "market": "Mercado",
-    "order": "Order",
+    "order": "Pedidos personalizados",
     "members": "Miembros",
     "recruiting": "Reclutamiento",
     "reviews": "Reseñas"
@@ -3254,7 +3254,7 @@
     "seller": "Vendedor - ",
     "total": "Total",
     "note": "Nota",
-    "submitOfferDesc": "Envía la oferta para enviar tu propuesta y negociar y coordinar con el vendedor.",
+    "submitOfferDesc": "Pulsa Enviar oferta para mandar tu propuesta y negociar y coordinarte con el vendedor.",
     "payTotal": "Pagar total: {{total}} aUEC",
     "offerOptional": "Oferta (opcional)",
     "submitOffer": "Enviar oferta",
@@ -3281,7 +3281,7 @@
     "exceedsStockWithCart": "Solo hay {{available}} disponibles, el carrito tendría {{total}}",
     "inCart": "En tu carrito",
     "invalidQty": "La cantidad debe ser al menos 1",
-    "itemRemoved": "Objeto eliminado del carrito",
+    "itemRemoved": "Artículo eliminado del carrito",
     "nextAvailable": "Próxima disponibilidad",
     "othersInCart_one": "Otra persona tiene esto en su carrito",
     "othersInCart_many": "Otras {{count}} personas tienen esto en su carrito",
@@ -3291,12 +3291,12 @@
     "priceDecreased": "Precio reducido",
     "priceIncreased": "Precio aumentado",
     "pricesChanged": "Los precios han cambiado",
-    "pricesChangedMessage": "Algunos precios de objetos han cambiado desde que los añadiste a tu carrito. Revísalos antes de finalizar la compra.",
+    "pricesChangedMessage": "Algunos precios de artículos han cambiado desde que los añadiste a tu carrito. Revísalos antes de finalizar la compra.",
     "quantityUpdated": "Cantidad actualizada",
     "title": "Carrito",
     "unavailable": "No disponible",
-    "unavailableItems": "Objetos no disponibles",
-    "unavailableItemsMessage": "Algunos objetos de tu carrito ya no están disponibles. Elimínalos antes de finalizar la compra.",
+    "unavailableItems": "Artículos no disponibles",
+    "unavailableItemsMessage": "Algunos artículos de tu carrito ya no están disponibles. Elimínalos antes de finalizar la compra.",
     "unavailableMessage": "Esta variante ya no está disponible",
     "variant": "Variante",
     "variantUpdated": "Variante actualizada",
@@ -3317,15 +3317,15 @@
     "supporters": "colaboradores",
     "faqTitle": "Tus preguntas, respondidas",
     "faqSellItemsQ": "¿Cómo vendo artículos?",
-    "faqSellItemsA": "Crea anuncios de mercado para los artículos que quieras vender. Los compradores pueden añadir los artículos que desean a su carrito y luego realizarte un pedido de esos artículos. A partir de ahí, depende de ti y del comprador acordar una hora y un lugar para intercambiar los aUEC y las mercancías.",
+    "faqSellItemsA": "Crea un anuncio para cada artículo. Los compradores añaden artículos a su carrito y te hacen un pedido; después, tú y el comprador acordáis una hora y un lugar en el juego para intercambiar la mercancía y los aUEC.",
     "faqSafeQ": "¿Es seguro usar SC Market?",
-    "faqSafeA": "Como nosotros no manejamos ninguna de las mercancías ni los aUEC, no podemos ofrecer ninguna garantía. Sin embargo, sí proporcionamos formas para que compradores y vendedores se valoren mutuamente, de modo que puedas asegurarte de que otros han tenido experiencias positivas con un vendedor si te preocupa que te estafen.",
+    "faqSafeA": "Las transacciones son entre jugadores, así que no podemos garantizarlas, pero compradores y vendedores se valoran mutuamente tras cada pedido. Consulta las valoraciones y el historial de pedidos de un vendedor antes de comerciar.",
     "faqListThingsQ": "¿Qué tipo de cosas puedo publicar en SC Market?",
-    "faqListThingsA": "Puedes publicar cualquier artículo o servicio siempre que aceptes aUEC a cambio. Los artículos y servicios deben estar relacionados en general con Star Citizen y los servicios pueden prestarse dentro o fuera del propio juego.",
+    "faqListThingsA": "Cualquier artículo o servicio de Star Citizen que intercambies por aUEC: armas, armaduras, componentes, materias primas, carga de naves y servicios como transporte, escolta, minería o rescate médico. Los servicios pueden prestarse dentro o fuera del juego.",
     "faqFeeQ": "¿SC Market cobra comisión?",
-    "faqFeeA": "No, no lo hacemos. Todos los servicios se ofrecen aquí de forma gratuita y ningún aUEC pasa por nosotros.",
+    "faqFeeA": "No. SC Market es gratuito y ningún aUEC pasa por nosotros. Los compradores pagan a los vendedores directamente en el juego.",
     "faqRealMoneyQ": "¿Puedo publicar artículos por dinero real?",
-    "faqRealMoneyA": "No. Todas las transacciones en SC Market deben realizarse en aUEC.",
+    "faqRealMoneyA": "No. Todas las transacciones en SC Market son en aUEC. No se permite comerciar con dinero real, conforme a los Términos de servicio de CIG.",
     "seeAll": "Ver todo",
     "heroTitle": "El mercado entre jugadores de Star Citizen",
     "heroText": "Compra y vende artículos y contrata servicios, con pago en aUEC dentro del juego. No cobramos comisión.",
@@ -3371,15 +3371,15 @@
     "topShopsEmpty": "Aún no hay tiendas.",
     "topShopsError": "No se pudieron cargar las tiendas.",
     "sellTitle": "Empieza a vender",
-    "seoDescription": "SC Market es el mercado de Star Citizen donde los jugadores compran, venden e intercambian objetos del juego y contratan orgs para servicios como transporte, escolta, asistencia médica y salvamento, todo en aUEC.",
-    "seoTitle": "SC Market — Mercado de Star Citizen: compra, vende e intercambia objetos en aUEC",
-    "sellText": "Abre una tienda por tu cuenta o como org. Los miembros de la org aceptan y completan pedidos juntos, con una tienda, un inventario y una reputación compartidos.",
+    "seoDescription": "Comercia con otros jugadores de Star Citizen: compra y vende artículos, componentes de naves y materias primas por aUEC, publica órdenes de compra y contrata orgs para transporte, escolta y salvamento.",
+    "seoTitle": "SC Market — Mercado de Star Citizen: compra, vende e intercambia artículos por aUEC",
+    "sellText": "Abre una tienda por tu cuenta o como org. Los miembros de la org reclaman y completan pedidos juntos, con un escaparate, un stock y una reputación compartidos.",
     "sellStep1Title": "Publícalo",
     "sellStep1Text": "Cualquier artículo o servicio, en cualquier cantidad, con precio en aUEC.",
     "sellStep2Title": "Recibe un aviso en Discord",
     "sellStep2Text": "El bot te avisa y abre un hilo para cada pedido.",
-    "sellStep3Title": "Quedad en el juego",
-    "sellStep3Text": "Entregad la mercancía y los aUEC, y después valoraos mutuamente.",
+    "sellStep3Title": "Queda en el juego",
+    "sellStep3Text": "Entrega la mercancía, cobra los aUEC y después os valoráis mutuamente.",
     "sellRegisterOrg": "Registra tu org",
     "alertImageLabel": "Ilustración de un aviso de pedido en Discord",
     "alertTitle": "Nuevo pedido: {{item}}",
@@ -3391,7 +3391,7 @@
     "alertNote": "Ilustración de un aviso de pedido",
     "gameDataHeading": "Datos del juego",
     "gameDataOpenWiki": "Abrir la wiki",
-    "gameDataItems": "Objetos",
+    "gameDataItems": "Artículos",
     "gameDataItemsText": "Estadísticas y variantes",
     "gameDataShips": "Naves",
     "gameDataShipsText": "Especificaciones y equipamiento",
@@ -3409,13 +3409,13 @@
     "trustAlertsTitle": "Alertas de precio",
     "trustAlertsText": "Sigue el precio de un artículo desde la página de su anuncio.",
     "trustOrgsTitle": "Pensado para orgs",
-    "trustOrgsText": "Tiendas compartidas, pedidos completados por los miembros y una opción de marca blanca.",
+    "trustOrgsText": "Escaparates compartidos, pedidos completados por los miembros y una opción de marca blanca.",
     "faqBuyQ": "¿Cómo compro artículos de Star Citizen a otros jugadores?",
     "faqBuyA": "Busca el artículo en el mercado, añádelo al carrito y realiza el pedido. El vendedor recibe un aviso en Discord y quedáis en el juego para pagar en aUEC y recoger el artículo.",
     "faqOfficialQ": "¿SC Market está afiliado a Cloud Imperium Games?",
     "faqOfficialA": "No. SC Market es un sitio comunitario creado por fans y no está respaldado por Cloud Imperium Games ni por Roberts Space Industries, ni afiliado a ellos.",
     "faqOrgsQ": "¿Puede mi org vender en SC Market?",
-    "faqOrgsA": "Sí. Las orgs tienen una tienda compartida, y los miembros pueden aceptar y completar pedidos en nombre de la org. Después, los clientes valoran a la org en su conjunto.",
+    "faqOrgsA": "Sí. Las orgs tienen un escaparate compartido, y los miembros pueden reclamar y completar pedidos en nombre de la org. Después, los clientes valoran a la org en su conjunto.",
     "wantedNowItem": "Artículo",
     "wantedNowBuyer": "Comprador",
     "wantedNowPrice": "Paga",
@@ -3526,7 +3526,7 @@
     "whiteLabelTab": "Marca blanca",
     "storefrontTab": "Escaparate",
     "analyticsTab": "Estadísticas",
-    "manageSectionsNav": "Secciones de ajustes de la organización"
+    "manageSectionsNav": "Secciones de configuración de la organización"
   },
   "dashboard": {
     "activityFeed": {
@@ -3546,7 +3546,7 @@
     "category": {
       "activity": "Actividad",
       "market": "Mercado y anuncios",
-      "orders": "Pedidos y cumplimiento",
+      "orders": "Pedidos y entregas",
       "personal": "Personal"
     },
     "customize": "Personalizar",
@@ -3577,7 +3577,7 @@
     "mapImportedWidgetsHint": "Estos widgets estaban fijados a las organizaciones o tiendas del autor. Elige una de las tuyas para cada uno o descártalo.",
     "marketOverviewEmpty": "No hay anuncios para mostrar.",
     "marketOverviewError": "No se pudieron cargar los datos del mercado.",
-    "matchingBuyOrders": "Órdenes de compra que puedes cumplir",
+    "matchingBuyOrders": "Órdenes de compra que puedes completar",
     "matchingBuyOrdersEmpty": "Ninguna orden de compra abierta coincide con tu inventario ahora mismo.",
     "noBuyOrders": "Sin órdenes de compra",
     "noBuyOrdersDescription": "Tus órdenes de compra activas aparecerán aquí.",
@@ -3633,7 +3633,7 @@
         "title": "Resumen del mercado"
       },
       "matchingBuyOrders": {
-        "description": "Órdenes de compra abiertas que tu inventario puede cumplir.",
+        "description": "Órdenes de compra abiertas que tu stock puede completar.",
         "title": "Órdenes de compra coincidentes"
       },
       "notifications": {
@@ -3678,7 +3678,7 @@
         "title": "Estadísticas del vendedor"
       },
       "wishlist": {
-        "description": "Tus listas de compra y qué tan cerca está cada una de completarse.",
+        "description": "Tus listas de compra y lo cerca que está cada una de completarse.",
         "title": "Listas de compra"
       }
     },
@@ -3728,8 +3728,8 @@
     "close": "Cerrar"
   },
   "accessibility": {
-    "addToStock": "Agregar al inventario",
-    "addToStockHelp": "Agrega la cantidad especificada a los artículos de inventario seleccionados",
+    "addToStock": "Añadir al stock",
+    "addToStockHelp": "Añade la cantidad especificada a los artículos en stock seleccionados",
     "amountHelp": "Introduce la cantidad de dinero que quieres enviar (obligatorio)",
     "avatarUrlHelp": "Introduce la URL de la imagen de avatar de tu organización",
     "avatarUrlInput": "Introduce la URL de la imagen de avatar",
@@ -3771,7 +3771,7 @@
     "downvoteCount_many": "Votos negativos: {{count}}",
     "downvoteCount_other": "Votos negativos: {{count}}",
     "edit": "Editar",
-    "editQuantityHelp": "Edita la cantidad disponible de este artículo de inventario",
+    "editQuantityHelp": "Edita la cantidad disponible de este artículo en stock",
     "editQuantityInput": "Editar cantidad disponible",
     "endTimeHelp": "Selecciona cuándo debe finalizar esta subasta",
     "endTimeInput": "Selecciona la hora de finalización de la subasta",
@@ -3867,7 +3867,7 @@
     "registerShip": "Registrar nave",
     "registerShipHelp": "Registra la nave seleccionada en tu flota",
     "reportContent": "Denunciar este contenido",
-    "reportContentDescription": "Abre el diálogo de denuncia para reportar contenido inapropiado",
+    "reportContentDescription": "Abre el diálogo de denuncia para denunciar contenido inapropiado",
     "rushOrderHelp": "Marca esta casilla si necesitas que este pedido se complete con urgencia",
     "rushOrderToggle": "Alternar pedido urgente",
     "save": "Guardar",
@@ -3920,7 +3920,7 @@
     "skipToSearch": "Saltar a la búsqueda",
     "sortByColumn": "Ordenar por {{column}}",
     "sortColumn": "Ordenar por {{column}}",
-    "stockManagementImage": "Función de gestión de inventario",
+    "stockManagementImage": "Función de gestión de stock",
     "submit": "Enviar",
     "submitBuyOrder": "Enviar orden de compra",
     "submitBuyOrderHelp": "Envía tu orden de compra con el precio y la cantidad especificados",
@@ -3936,8 +3936,8 @@
     "submitService": "Publicar servicio",
     "submitServiceHelp": "Publica tu servicio con los detalles y precios especificados",
     "submittingReport": "Enviando denuncia, espera un momento",
-    "subtractFromStock": "Restar del inventario",
-    "subtractFromStockHelp": "Resta la cantidad especificada de los artículos de inventario seleccionados",
+    "subtractFromStock": "Restar del stock",
+    "subtractFromStockHelp": "Resta la cantidad especificada de los artículos en stock seleccionados",
     "success": "Éxito",
     "supporterLogo": "Logotipo de {{name}}",
     "tablePagination": "Controles de paginación de la tabla",
@@ -3945,8 +3945,8 @@
     "toggleSidebar": "Alternar menú de la barra lateral",
     "totalPriceDisplay": "Cálculo del precio total",
     "totalPriceHelp": "El precio total se calcula automáticamente en función del precio por unidad y la cantidad",
-    "updateAmountHelp": "Introduce la cantidad a añadir, restar o establecer para los artículos de inventario seleccionados",
-    "updateAmountInput": "Introduce la cantidad para actualizar el inventario",
+    "updateAmountHelp": "Introduce la cantidad a añadir, restar o establecer para los artículos en stock seleccionados",
+    "updateAmountInput": "Introduce la cantidad para actualizar el stock",
     "upvoteComment": "Votar positivamente este comentario",
     "upvoteCount": "Votos positivos: {{count}}",
     "upvoteCount_one": "Votos positivos: {{count}}",
@@ -3955,13 +3955,13 @@
     "upvoteRecruitmentPost": "Votar positivamente esta publicación de reclutamiento",
     "userAvatar": "Avatar de {{username}}",
     "view": "Ver",
-    "viewCartDescription": "Ir a tu carrito de compras",
+    "viewCartDescription": "Ir a tu carrito",
     "viewContractorProfile": "Ver el perfil de {{name}}",
-    "viewShoppingCart": "Ver tu carrito de compras",
+    "viewShoppingCart": "Ver tu carrito",
     "viewSupporterWebsite": "Visitar el sitio web de {{name}}",
     "viewUserProfile": "Ver el perfil de {{username}}",
-    "zeroStock": "Poner el inventario a cero",
-    "zeroStockHelp": "Establece la cantidad de los artículos de inventario seleccionados a cero",
+    "zeroStock": "Poner el stock a cero",
+    "zeroStockHelp": "Establece la cantidad de los artículos en stock seleccionados a cero",
     "zoomImage": "Ampliar imagen"
   },
   "account_deletion": {
@@ -4011,7 +4011,7 @@
     "no_contractor": "N/D",
     "no_logs": "No se encontraron registros de auditoría",
     "subject": "Sujeto",
-    "summary": "Mostrando {{pageSize}} de {{total}} entradas totales (Página {{page}})",
+    "summary": "Mostrando {{pageSize}} de {{total}} entradas totales (página {{page}})",
     "system": "Sistema",
     "timestamp": "Marca de tiempo",
     "title": "Registros de auditoría de administración"
@@ -4046,7 +4046,7 @@
     "selectLocation": "Selecciona una ubicación...",
     "source": "Origen",
     "storeBought": "Comprado en tienda",
-    "title": "Todos los lotes de inventario",
+    "title": "Todos los lotes de stock",
     "unspecified": "Sin especificar",
     "updated": "Lote actualizado",
     "editQuantity": "Editar cantidad",
@@ -4125,7 +4125,7 @@
   },
   "blueprints": {
     "browser": {
-      "header": "Explorador de blueprints"
+      "header": "Explorador de planos"
     }
   },
   "bulk": {
@@ -4149,9 +4149,9 @@
     "createBuyOrder": "Crear orden de compra",
     "empty": "No hay órdenes de compra abiertas en este momento.",
     "error": "No se pudieron cargar las órdenes de compra.",
-    "fulfil": "Cumplir desde el stock",
+    "fulfil": "Completar desde el stock",
     "heading": "Órdenes de compra",
-    "itemSearch": "Objeto",
+    "itemSearch": "Artículo",
     "loading": "Cargando órdenes de compra…",
     "maxPrice": "Paga hasta",
     "maxPriceLabel": "Precio máx. / unidad",
@@ -4169,7 +4169,7 @@
     "quantityLabel": "Cantidad",
     "rosterOnly": "Solo lista de miembros",
     "selected": "Seleccionado: {{name}}",
-    "subheading": "Lo que quieren los compradores. Publica la tuya o cumple una solicitud abierta desde tu stock.",
+    "subheading": "Lo que quieren los compradores. Publica la tuya o completa una solicitud abierta desde tu stock.",
     "targeted": "Dirigida",
     "targetedNote": "Las órdenes dirigidas necesitan un proveedor específico — elige uno de la lista de proveedores (próximamente).",
     "tierN": "Nivel {{n}}",
@@ -4222,10 +4222,10 @@
     "missingMats": "Materiales faltantes",
     "next": "Siguiente",
     "noBlueprints": "Todavía no tienes ningún plano. Completa misiones o compra planos para empezar a fabricar.",
-    "noCraftableItems": "No se puede fabricar ningún artículo con tu inventario actual. Consigue más materiales o cambia los filtros.",
+    "noCraftableItems": "No se puede fabricar ningún artículo con tu stock actual. Consigue más materiales o cambia los filtros.",
     "pageInfo": "Página {{page}} de {{total}}",
     "previous": "Anterior",
-    "qualityRange": "Rango de calidad en inventario",
+    "qualityRange": "Rango de calidad en stock",
     "rare": "Raro",
     "rarity": "Rareza",
     "tier": "Nivel",
@@ -4257,7 +4257,7 @@
     "basePriceAriaLabel": "Introducir precio",
     "crafted": "Fabricado",
     "craftedSource": "Origen",
-    "craftedSourceHelp": "Opcional: cómo se obtuvo el objeto",
+    "craftedSourceHelp": "Opcional: cómo se obtuvo el artículo",
     "delivery": "Entrega (el vendedor entrega)",
     "description": "Descripción",
     "descriptionHelp": "Proporciona una descripción detallada (compatible con markdown)",
@@ -4296,7 +4296,7 @@
     "perVariantPricingHelp": "Establece precios diferentes para cada variante",
     "pickup": "Recogida (el comprador recoge)",
     "pickupMethod": "Método de recogida",
-    "pickupMethodHelper": "¿Cómo recibirá el comprador el objeto?",
+    "pickupMethodHelper": "¿Cómo recibirá el comprador el artículo?",
     "price": "Precio",
     "priceAriaLabel": "Introducir precio para esta variante",
     "pricing": "Precio y cantidad",
@@ -4314,10 +4314,10 @@
     "reservePriceHelp": "La subasta no se venderá por debajo de este precio",
     "saleType": "Tipo de venta",
     "scuHelp": "Cantidades medidas en cSCU (100 cSCU = 1 SCU)",
-    "selectGameItem": "Seleccionar objeto del juego",
+    "selectGameItem": "Seleccionar artículo del juego",
     "showMoreOptions": "Más opciones",
     "stockLots": "Lotes de stock",
-    "stockLotsSubtitle": "Añade inventario con atributos de variante (calidad, origen, ubicación)",
+    "stockLotsSubtitle": "Añade stock con atributos de variante (calidad, origen, ubicación)",
     "store": "Tienda",
     "submit": "Crear anuncio",
     "success": "Anuncio creado correctamente",
@@ -4326,15 +4326,15 @@
     "titleAriaLabel": "Introducir título del anuncio",
     "unifiedPricing": "Precio unificado",
     "unifiedPricingHelp": "Todas las variantes tendrán el mismo precio",
-    "unitDiscrete": "Unidades (objetos individuales)",
-    "unitHelp": "Objetos individuales (armas, armaduras, componentes)",
+    "unitDiscrete": "Unidades (artículos individuales)",
+    "unitHelp": "Artículos individuales (armas, armaduras, componentes)",
     "unitSCU": "SCU (carga / materias primas)",
     "unknown": "Desconocido",
     "uploadingPhotos": "Subiendo fotos...",
     "validation": {
       "basePriceRequired": "El precio base debe ser mayor que 0",
       "descriptionRequired": "La descripción es obligatoria",
-      "gameItemRequired": "El objeto del juego es obligatorio",
+      "gameItemRequired": "El artículo del juego es obligatorio",
       "qualityTierRange": "El nivel de calidad debe estar entre 1 y 5 para el lote {{index}}",
       "qualityValueRange": "El valor de calidad debe estar entre 0 y 1000 para el lote {{index}}",
       "quantityRequired": "La cantidad debe ser mayor que 0 para el lote {{index}}",
@@ -4372,18 +4372,18 @@
     "create": "Crear lote",
     "createError": "No se pudo crear el lote",
     "createErrorReason": "No se pudo crear el lote: {{reason}}",
-    "createSuccess": "Lote creado correctamente",
+    "createSuccess": "Lote creado",
     "invalidQualityTier": "El nivel de calidad debe estar entre 1 y 5",
     "invalidQualityValue": "El valor de calidad debe estar entre 0 y 1000",
     "invalidQuantity": "La cantidad debe ser mayor que 0",
-    "item": "Objeto",
-    "itemRequired": "Elige el anuncio (y el objeto) al que añadir este lote",
+    "item": "Artículo",
+    "itemRequired": "Elige el anuncio (y el artículo) al que añadir este lote",
     "listed": "Publicado",
     "listedHelper": "El stock publicado aparece en los anuncios públicos",
     "listing": "Anuncio",
     "location": "Ubicación (opcional)",
     "locationOwnership": "Ubicación y propiedad",
-    "noItems": "Este anuncio no tiene ningún objeto al que añadir stock",
+    "noItems": "Este anuncio no tiene ningún artículo al que añadir stock",
     "none": "Ninguno",
     "notes": "Notas (opcional)",
     "notesPlaceholder": "Añade cualquier nota sobre este lote...",
@@ -4459,7 +4459,7 @@
   "emptyStates": {
     "cart": {
       "browseMarket": "Explorar el mercado",
-      "description": "Explora el mercado para encontrar objetos y añadirlos a tu carrito",
+      "description": "Explora el mercado para encontrar artículos y añadirlos a tu carrito",
       "errorDescription": "Se produjo un error al cargar tu carrito. Inténtalo de nuevo.",
       "errorTitle": "No se pudo cargar el carrito",
       "retry": "Reintentar",
@@ -4489,7 +4489,7 @@
       "errorDescription": "Se produjo un error al cargar los anuncios. Inténtalo de nuevo.",
       "errorTitle": "No se pudieron cargar los anuncios",
       "noListings": "Aún no hay anuncios",
-      "noListingsDescription": "Crea tu primer anuncio para empezar a vender objetos en el mercado",
+      "noListingsDescription": "Crea tu primer anuncio para empezar a vender artículos en el mercado",
       "noSearchResults": "No se encontraron anuncios",
       "noSearchResultsDescription": "Intenta ajustar tu búsqueda o filtros",
       "retry": "Reintentar"
@@ -4528,17 +4528,17 @@
       "browseServices": "Explorar servicios",
       "createMarketListing": "Crear anuncio de mercado",
       "createServiceListing": "Crear anuncio de servicio",
-      "noMyOrdersDescription": "Explora el mercado y los servicios para encontrar objetos y servicios que pedir",
+      "noMyOrdersDescription": "Explora el mercado y los servicios para encontrar artículos y servicios que pedir",
       "noOffers": "Aún no hay ofertas",
       "noOrders": "Aún no hay pedidos",
       "noReceivedOffersDescription": "Crea anuncios de mercado o de servicios para empezar a recibir ofertas de clientes",
-      "noSentOffersDescription": "Explora el mercado y los servicios para encontrar objetos y servicios que comprar"
+      "noSentOffersDescription": "Explora el mercado y los servicios para encontrar artículos y servicios que comprar"
     },
     "profile": {
       "noContent": "Aún no hay anuncios ni servicios",
       "noContentDescription": "Este usuario aún no ha creado ningún anuncio ni servicio",
       "noListings": "Aún no hay anuncios",
-      "noListingsDescription": "Crea tu primer anuncio para empezar a vender objetos en el mercado",
+      "noListingsDescription": "Crea tu primer anuncio para empezar a vender artículos en el mercado",
       "noServices": "Aún no hay servicios",
       "noServicesDescription": "Crea tu primer servicio para empezar a ofrecer tu experiencia"
     },
@@ -4608,13 +4608,13 @@
     "confirmDeleteTitle": "¿Eliminar lote?",
     "created": "Lote creado",
     "createError": "No se pudo crear el lote",
-    "createLot": "Añadir lote de inventario",
+    "createLot": "Añadir lote de stock",
     "custom_item": "Artículo personalizado",
     "delete": "Eliminar lote",
     "deleteConfirm": "Eliminar",
     "deleted": "Lote eliminado",
     "deleteError": "No se pudo eliminar el lote",
-    "empty": "Aún no hay artículos en el inventario",
+    "empty": "Aún no tienes stock",
     "gameItem": "Artículo (opcional)",
     "item": "Artículo",
     "listed": "Anunciado",
@@ -4797,7 +4797,7 @@
     "lowestPrice": "Precio más bajo",
     "negotiable": "Negociable",
     "noSellers": "No hay vendedores disponibles en este momento.",
-    "seeAllCount_one": "Ver los {{count}} anuncio",
+    "seeAllCount_one": "Ver {{count}} anuncio",
     "seeAllCount_many": "Ver los {{count}} anuncios",
     "seeAllCount_other": "Ver los {{count}} anuncios",
     "sellersCount_one": "{{count}} vendedor",
@@ -4953,7 +4953,7 @@
     "adminModeration": "Moderación",
     "adminNotificationTest": "Prueba de notificaciones",
     "groupAdminSecurity": "Seguridad y pruebas",
-    "adminWipe": "Expirar anuncios",
+    "adminWipe": "Caducar anuncios",
     "adminSupplierDashboard": "Panel de proveedores",
     "adminSupplierRoster": "Lista de proveedores",
     "adminRequisitions": "Requisiciones",
@@ -4968,7 +4968,7 @@
     "buyOrders": "Órdenes de compra",
     "clearSearch": "Borrar búsqueda",
     "contracts": "Contratos",
-    "dashboard": "Panel de control",
+    "dashboard": "Panel",
     "createListing": "Crear anuncio",
     "customers": "Clientes",
     "groupAdminData": "Datos y configuración",
@@ -4987,11 +4987,11 @@
     "noResults": "No hay páginas coincidentes",
     "orders": "Pedidos",
     "orgAbout": "Acerca de",
-    "orgDashboard": "Panel de control",
+    "orgDashboard": "Panel",
     "orgInvites": "Invitaciones",
     "orgManage": "Gestionar",
-    "orgOrders": "Pedidos de la org.",
-    "orgPage": "Página de la org.",
+    "orgOrders": "Pedidos de la org",
+    "orgPage": "Página de la org",
     "orgRoles": "Roles",
     "orgs": "Organizaciones",
     "orgSettings": "Configuración",
@@ -5004,7 +5004,7 @@
     "shops": "Tiendas",
     "shopSettings": "Configuración de la tienda",
     "star": "Fijar",
-    "stock": "Inventario",
+    "stock": "Stock",
     "switchContext": "Cambiar de contexto",
     "unstar": "Dejar de fijar",
     "adminIdentity": "Identidad",
@@ -5149,7 +5149,7 @@
     "loading": "Cargando registros de auditoría...",
     "metadata": "Metadatos",
     "no_logs": "No se encontraron registros de auditoría",
-    "summary": "Mostrando {{pageSize}} de {{total}} entradas en total (Página {{page}})",
+    "summary": "Mostrando {{pageSize}} de {{total}} entradas en total (página {{page}})",
     "system": "Sistema",
     "timestamp": "Marca de tiempo",
     "title": "Registros de auditoría"
@@ -5192,7 +5192,7 @@
         "title": "Administración - Registros de auditoría"
       },
       "gameItemAttributes": {
-        "title": "Administración - Atributos de objetos del juego"
+        "title": "Administración - Atributos de artículos del juego"
       },
       "importMonitoring": {
         "title": "Administración - Supervisión de importación"
@@ -5214,7 +5214,7 @@
       "title": "Disponibilidad"
     },
     "bulkItems": {
-      "title": "Objetos a granel"
+      "title": "Artículos a granel"
     },
     "buyOrders": {
       "title": "Órdenes de compra"
@@ -5507,29 +5507,29 @@
     }
   },
   "SimpleStockInput": {
-    "advancedFeatureComingSoon": "Gestión avanzada de inventario próximamente",
+    "advancedFeatureComingSoon": "Gestión avanzada de stock próximamente",
     "available": "Disponible",
-    "manageStock": "Gestionar inventario",
+    "manageStock": "Gestionar stock",
     "quantity": "Cantidad disponible",
     "quantityHelp": "Introduce la cantidad total de artículos disponibles para la venta",
     "quantityLabel": "Introduce la cantidad disponible",
     "reserved": "Reservado",
-    "updateError": "No se pudo actualizar la cantidad de inventario",
+    "updateError": "No se pudo actualizar la cantidad de stock",
     "viewBreakdown": "Ver desglose"
   },
   "stock": {
     "allocated": "Asignado",
     "allocatedAt": "Asignado",
-    "allocatedStock": "Inventario asignado",
+    "allocatedStock": "Stock asignado",
     "available": "Disponible",
     "filters": "Filtros",
     "listing": "Anuncio",
     "location": "Ubicación",
     "maxQuantity": "Cant. máx.",
     "minQuantity": "Cant. mín.",
-    "noAllocations": "No hay inventario asignado",
-    "noAllocationsDesc": "El inventario aparecerá aquí cuando se realicen pedidos sobre tus anuncios.",
-    "noLots": "No hay lotes de inventario",
+    "noAllocations": "No hay stock asignado",
+    "noAllocationsDesc": "El stock aparecerá aquí cuando se realicen pedidos sobre tus anuncios.",
+    "noLots": "No hay lotes de stock",
     "noLotsDesc": "Los lotes de stock guardan las cantidades que venden tus anuncios. Añade un lote para empezar a llevar el stock de esta tienda.",
     "order": "Pedido",
     "quantity": "Cantidad",
@@ -5763,10 +5763,10 @@
       "viewOnMarket": "Ver en el mercado"
     },
     "hub": {
-      "description": "Explora la base de datos completa del juego Star Citizen: objetos, naves, materias primas, ubicaciones, fabricantes, planos y recursos de minería.",
+      "description": "Explora la base de datos completa del juego Star Citizen: artículos, naves, materias primas, ubicaciones, fabricantes, planos y recursos de minería.",
       "header": "Base de datos del juego",
-      "title": "Base de datos del juego — Objetos, naves y más de Star Citizen | SC Market",
-      "sectionItems": "Objetos",
+      "title": "Base de datos del juego — Artículos, naves y más de Star Citizen | SC Market",
+      "sectionItems": "Artículos",
       "sectionShips": "Naves y vehículos",
       "sectionCommodities": "Materias primas",
       "sectionLocations": "Ubicaciones",
@@ -5791,33 +5791,33 @@
       "filterSize": "Tamaño",
       "filterType": "Tipo",
       "gradeLabel": "Grado",
-      "loadError": "No se pudieron cargar los objetos.",
+      "loadError": "No se pudieron cargar los artículos.",
       "noResults": "No se encontraron resultados. Intenta ajustar tu búsqueda.",
-      "searchPlaceholder": "Buscar objetos, tipos, fabricantes...",
+      "searchPlaceholder": "Buscar artículos, tipos, fabricantes...",
       "sizeLabel": "Tamaño"
     },
     "itemDetail": {
-      "breadcrumbItems": "Objetos",
+      "breadcrumbItems": "Artículos",
       "breadcrumbWiki": "Wiki",
-      "cannotBeCrafted": "Este objeto no se puede fabricar.",
+      "cannotBeCrafted": "Este artículo no se puede fabricar.",
       "columnComponent": "Componente",
       "columnRecipeQty": "Cant. de receta",
-      "columnRecoveredPerItem": "Recuperado por objeto",
+      "columnRecoveredPerItem": "Recuperado por artículo",
       "columnTotal": "Total",
       "craftingRecipes": "Recetas de fabricación",
       "disassemblyCalculator": "Calculadora de desmontaje",
-      "disassemblyInfo": "El desmontaje devuelve el {{efficiency}}% de los componentes de fabricación a {{seconds}} segundos por objeto. Los materiales raros (Quantanium, Stileron, Savrilium, Lindinium, Riccite, Ouratite, Saldynium, Janalite) no se pueden recuperar.",
+      "disassemblyInfo": "El desmontaje devuelve el {{efficiency}}% de los componentes de fabricación a {{seconds}} segundos por artículo. Los materiales raros (Quantanium, Stileron, Savrilium, Lindinium, Riccite, Ouratite, Saldynium, Janalite) no se pueden recuperar.",
       "from": "Desde",
       "grade": "Grado",
-      "itemAttributes": "Atributos del objeto",
-      "loadError": "No se pudieron cargar los detalles del objeto. Inténtalo de nuevo.",
+      "itemAttributes": "Atributos del artículo",
+      "loadError": "No se pudieron cargar los detalles del artículo. Inténtalo de nuevo.",
       "markOwned": "Marcar como en propiedad",
-      "noRecipeWarning": "No se encontró ninguna receta de fabricación para este objeto — componentes de desmontaje desconocidos.",
+      "noRecipeWarning": "No se encontró ninguna receta de fabricación para este artículo — componentes de desmontaje desconocidos.",
       "notSoldNpc": "No se vende en ninguna tienda de NPC",
       "openInCalculator": "Abrir en la calculadora",
       "owned": "En propiedad ✓",
       "perCraft": "por fabricación",
-      "perItem": "por objeto",
+      "perItem": "por artículo",
       "priceHistory": "Historial de precios",
       "qualityDistribution": "Distribución de calidad",
       "quantityToDisassemble": "Cantidad a desmontar",
@@ -5827,13 +5827,13 @@
       "tabDisassembly": "Desmontaje",
       "tabOverview": "Resumen",
       "tier": "Nivel",
-      "title": "Detalles del objeto",
+      "title": "Detalles del artículo",
       "total": "total",
       "viewBlueprint": "Ver plano",
       "viewBlueprintFullList": "Ver el plano para la lista completa de ingredientes"
     },
     "items": {
-      "title": "Base de datos de objetos del juego"
+      "title": "Base de datos de artículos del juego"
     },
     "locationBrowser": {
       "allSystems": "Todos",
@@ -5856,16 +5856,16 @@
       "breadcrumbDetail": "Detalle",
       "breadcrumbManufacturers": "Fabricantes",
       "breadcrumbWiki": "Wiki",
-      "items": "objetos",
+      "items": "artículos",
       "noItems": "No se encontraron resultados. Intenta ajustar tus filtros.",
       "products": "Productos",
       "title": "Detalles del fabricante"
     },
     "manufacturerList": {
-      "colItems": "Objetos",
+      "colItems": "Artículos",
       "colManufacturer": "Fabricante",
       "colSpecialties": "Especialidades",
-      "items": "objetos",
+      "items": "artículos",
       "manufacturersCount": "fabricantes"
     },
     "manufacturers": {
@@ -6003,7 +6003,7 @@
       "saved": "Siguiendo {{name}} a ≤ {{price}}",
       "removed": "Dejaste de seguir {{name}}",
       "quality": "Calidad mínima",
-      "qualityHint": "Solo avisan los anuncios con existencias de esta calidad o superior, a su precio.",
+      "qualityHint": "Solo avisan los anuncios con stock de esta calidad o superior, a su precio.",
       "anyQuality": "Cualquier calidad",
       "tierOrBetter": "Nivel {{tier}} o superior",
       "watchingEdit": "Siguiendo · Editar",
@@ -6011,10 +6011,10 @@
     },
     "manager": {
       "title": "Lista de seguimiento",
-      "description": "Sigue un objeto y recibe una alerta cuando un anuncio público esté a tu precio objetivo o por debajo. Usa Seguir precio en la página de un objeto o anuncio, añade uno aquí o usa /watchlist add en Discord.",
-      "full": "Tu lista de seguimiento está llena ({{max}} objetos). Quita uno para añadir otro.",
+      "description": "Sigue un artículo y recibe una alerta cuando un anuncio público esté a tu precio objetivo o por debajo. Usa Seguir precio en la página de un artículo o anuncio, añade uno aquí o usa /watchlist add en Discord.",
+      "full": "Tu lista de seguimiento está llena ({{max}} artículos). Quita uno para añadir otro.",
       "loadError": "No se pudo cargar tu lista de seguimiento.",
-      "removeError": "No se pudo quitar ese objeto.",
+      "removeError": "No se pudo quitar ese artículo.",
       "empty": "Todavía no sigues nada.",
       "lowest": "Más bajo actual",
       "lastAlerted": "Última alerta",
@@ -6025,8 +6025,8 @@
       "editAria": "Editar {{name}}",
       "remove": "Dejar de seguir",
       "removeAria": "Dejar de seguir {{name}}",
-      "count": "{{count}} de {{max}} objetos",
-      "add": "Añadir objeto",
+      "count": "{{count}} de {{max}} artículos",
+      "add": "Añadir artículo",
       "targetValue": "Alerta a ≤ {{price}}",
       "pauseError": "No se pudo pausar ni reanudar esa alerta.",
       "qualityValue": "Nivel {{tier}}+",
@@ -6307,7 +6307,7 @@
       "messageHelp": "Lo que tienes en mente. Solo lo ve el equipo de SC Market. {{length}}/{{max}}",
       "contact": "¿Cómo te contactamos?",
       "contactDiscord": "Discord ({{handle}}, de tu perfil)",
-      "contactDiscordNone": "Discord (primero vincula Discord en tus ajustes)",
+      "contactDiscordNone": "Discord (primero vincula Discord en tu configuración)",
       "contactMessage": "Un mensaje en SC Market",
       "contactHelp": "No guardamos datos de contacto: usamos la cuenta de Discord vinculada a tu perfil.",
       "failed": "No se pudo enviar la solicitud.",
@@ -6408,7 +6408,7 @@
       "emptyTitle": "Aún no tienes ninguna tienda",
       "featureAnalytics": "Sigue ventas, reseñas y estadísticas",
       "featureBranding": "Imagen propia con banner y logotipo",
-      "featureListings": "Publica objetos, servicios y lotes",
+      "featureListings": "Publica artículos, servicios y lotes",
       "languages": "Idiomas",
       "live": "En línea",
       "manage": "Gestionar",
@@ -6491,8 +6491,8 @@
     "fulfillOrder": "Completar orden",
     "gridView": "Vista de cuadrícula",
     "imageOf": "Imagen de {{name}}",
-    "isLookingFor": "busca este objeto",
-    "item": "Objeto",
+    "isLookingFor": "busca este artículo",
+    "item": "Artículo",
     "listingDetails": "Detalles del anuncio",
     "listView": "Vista de lista",
     "loadingEllipsis": "Cargando…",
@@ -6532,10 +6532,10 @@
     "removeItemFailed": "No se pudo quitar el artículo",
     "rosterOnly": "Solo miembros",
     "searchBuyOrders": "Buscar órdenes de compra...",
-    "searchItems": "Buscar objetos, categorías...",
-    "searchItemsSellers": "Buscar objetos, categorías, vendedores...",
+    "searchItems": "Buscar artículos, categorías...",
+    "searchItemsSellers": "Buscar artículos, categorías, vendedores...",
     "selectVariant": "Seleccionar variante",
-    "settingsMoved": "Los ajustes del mercado ahora se gestionan por tienda. Ve a la página de ajustes de tu tienda.",
+    "settingsMoved": "La configuración del mercado ahora se gestiona por tienda. Ve a la página de configuración de tu tienda.",
     "standardVariant": "Estándar",
     "status": "Estado",
     "subtotal": "Subtotal",
@@ -6649,7 +6649,7 @@
     "haulingOrders": "Órdenes de transporte",
     "illegal": "Ilegal",
     "illegalMission": "Misión ilegal",
-    "itemRewards": "Recompensas de objetos",
+    "itemRewards": "Recompensas de artículos",
     "lawful": "Lícita",
     "legal": "Legal",
     "listLoadFailed": "No se pudieron cargar las misiones. Inténtalo de nuevo.",
@@ -6745,9 +6745,9 @@
     "bpCount_other": "{{count}} planos",
     "noCombatData": "No hay datos de combate disponibles.",
     "noEncounterData": "No hay datos de encuentros disponibles.",
-    "wreckCount_one": "{{count}} restos",
-    "wreckCount_many": "{{count}} restos",
-    "wreckCount_other": "{{count}} restos",
+    "wreckCount_one": "{{count}} pecio",
+    "wreckCount_many": "{{count}} de pecios",
+    "wreckCount_other": "{{count}} pecios",
     "buyInRequired": "Se requiere inversión inicial",
     "destinationCount_one": "{{count}} destino",
     "destinationCount_many": "{{count}} destinos",
@@ -6829,7 +6829,7 @@
     "moreCount_other": "+{{count}} más",
     "removeFromInventory": "Quitar del inventario",
     "addToInventory": "Añadir al inventario",
-    "addToShoppingList": "Añadir a la lista de compras",
+    "addToShoppingList": "Añadir a la lista de compra",
     "card": {
       "craftTime": "Tiempo de fabricación",
       "missionSources_one": "{{count}} misión de origen",
@@ -6851,7 +6851,7 @@
       "newThisWeek_many": "{{count}} nuevos esta semana",
       "newThisWeek_other": "{{count}} nuevos esta semana",
       "search": "Buscar",
-      "searchPlaceholder": "Nombre del objeto o del plano...",
+      "searchPlaceholder": "Nombre del artículo o del plano...",
       "category": "Categoría",
       "subcategory": "Subcategoría",
       "tier": "Nivel",
@@ -6869,7 +6869,7 @@
       "filters": "Filtros",
       "searchBarPlaceholder": "Busca planos, materiales, categorías...",
       "loadError": "No se pudieron cargar los planos. Inténtalo de nuevo.",
-      "columnItem": "Objeto",
+      "columnItem": "Artículo",
       "columnTags": "Etiquetas",
       "columnIngredients": "Ingredientes",
       "columnMissionSources": "Misiones de origen",
@@ -6906,12 +6906,12 @@
       "craftTimeEach": "({{time}} cada uno)",
       "range": "Rango: {{start}} → {{end}}",
       "efficiency": "Eficiencia",
-      "timePerItem": "Tiempo por objeto",
+      "timePerItem": "Tiempo por artículo",
       "secondsShort": "{{seconds}} s",
       "totalTime": "Tiempo total",
       "recoveredMaterials": "Materiales recuperados",
       "recoveredMaterialsTimes": "Materiales recuperados (×{{qty}})",
-      "noRecoverable": "No se pueden recuperar materiales de este objeto.",
+      "noRecoverable": "No se pueden recuperar materiales de este artículo.",
       "notRecovered": "No recuperados (raros)",
       "lost": "Perdido",
       "orgOwnersTitle": "Miembros de la org que tienen este plano",
@@ -6924,7 +6924,7 @@
     "craftCalculator": "Calculadora de fabricación",
     "whatCanICraft": "¿Qué puedo fabricar?",
     "whatToCraft": "¿Qué quieres fabricar?",
-    "searchByItemName": "Buscar por nombre del objeto",
+    "searchByItemName": "Buscar por nombre del artículo",
     "searchByItemPlaceholder": "p. ej., Behringer LMG",
     "materials": "Materiales",
     "importFromInventory": "Importar del inventario",
@@ -6936,7 +6936,7 @@
     "weight": "Peso: {{percent}} %",
     "contribution": "Aporte: {{value}}",
     "calculate": "Calcular calidad del resultado",
-    "findCraftable": "Buscar objetos fabricables",
+    "findCraftable": "Buscar artículos fabricables",
     "ownedOnly": "Solo planos obtenidos",
     "calculationFailed": "El cálculo falló. Revisa los datos introducidos.",
     "estimatedOutput": "Resultado estimado",
@@ -6950,9 +6950,9 @@
     "costMaterials": "Materiales: <strong>{{amount}} aUEC</strong>",
     "costStationFee": "Tarifa de estación: <strong>{{amount}} aUEC</strong>",
     "costTotal": "Total: {{amount}} aUEC",
-    "craftableItems_one": "Objetos fabricables ({{count}})",
-    "craftableItems_many": "Objetos fabricables ({{count}})",
-    "craftableItems_other": "Objetos fabricables ({{count}})",
+    "craftableItems_one": "Artículos fabricables ({{count}})",
+    "craftableItems_many": "Artículos fabricables ({{count}})",
+    "craftableItems_other": "Artículos fabricables ({{count}})",
     "minutesShort": "{{minutes}} min",
     "noCraftable": "No se puede fabricar ningún plano con estos materiales."
   },
@@ -7022,7 +7022,7 @@
       }
     },
     "requisitions": {
-      "gameItem": "Objeto del juego",
+      "gameItem": "Artículo del juego",
       "searchByName": "Buscar por nombre…",
       "createTitle": "Crear requisición",
       "fieldTitle": "Título",
@@ -7043,7 +7043,7 @@
       "assignedSupplier": "Proveedor asignado",
       "close": "Cerrar",
       "pageTitle": "Requisiciones",
-      "subtitle": "Pedidos de suministro basados en artículos. Indica lo que necesitas; los proveedores eligen desde qué anuncio cumplirlos.",
+      "subtitle": "Pedidos de suministro basados en artículos. Indica lo que necesitas; los proveedores eligen desde qué anuncio completarlos.",
       "newRequisition": "Nueva requisición",
       "empty": "Aún no hay requisiciones.",
       "createFirst": "Crea tu primera requisición",
@@ -7070,7 +7070,7 @@
     },
     "dashboard": {
       "title": "Panel de proveedores",
-      "subtitle": "Tus órdenes de compra, requisiciones y actividad de cumplimiento de un vistazo",
+      "subtitle": "Tus órdenes de compra, requisiciones y entregas de un vistazo",
       "refreshAll": "Actualizar todo",
       "visibility": {
         "targeted": "Dirigida",
@@ -7328,7 +7328,7 @@
     "estimatedTotalCost": "Coste total estimado",
     "amountAuec": "{{amount}} aUEC",
     "noMaterials": "No se necesitan materiales",
-    "noMaterialsHint": "Añade objetos fabricables a tu lista de deseos para generar una lista de compra",
+    "noMaterialsHint": "Añade artículos fabricables a tu lista de deseos para generar una lista de compra",
     "columns": {
       "material": "Material",
       "status": "Estado",
@@ -7356,7 +7356,7 @@
       "unitPrice": "Precio unitario",
       "totalCost": "Coste total",
       "acquisitionMethods": "Métodos de obtención",
-      "usedByItems": "Usado por los objetos"
+      "usedByItems": "Usado por los artículos"
     },
     "panel": {
       "signIn": "Inicia sesión para usar listas de compra.",
@@ -7439,7 +7439,7 @@
     "addItemDialog": {
       "selectItemError": "Selecciona un artículo",
       "quantityMinError": "La cantidad debe ser al menos 1",
-      "selectBlueprintError": "Selecciona un blueprint para fabricar",
+      "selectBlueprintError": "Selecciona un plano para fabricar",
       "addFailed": "No se pudo añadir el artículo.",
       "title": "Añadir artículo a la lista de compra",
       "searchItem": "Buscar artículo *",
@@ -7451,8 +7451,8 @@
       "howToGet": "¿Cómo quieres conseguir este artículo?",
       "buyFromMarket": "Comprar en el mercado",
       "craftAddIngredients": "Fabricar (añadir ingredientes)",
-      "selectBlueprintHint": "Selecciona un blueprint: sus ingredientes se registrarán en tu lista de compra",
-      "blueprintRequired": "Blueprint *",
+      "selectBlueprintHint": "Selecciona un plano: sus ingredientes se registrarán en tu lista de compra",
+      "blueprintRequired": "Plano *",
       "quantityRequired": "Cantidad *",
       "qualityTierOptional": "Nivel de calidad (opcional)",
       "clear": "Borrar",
@@ -7599,10 +7599,10 @@
       "permissionForRole": "{{permission}} para {{role}}",
       "newRole": "nuevo rol"
     },
-    "webhooksMoved": "Los webhooks ahora se gestionan desde la página de ajustes de tu tienda.",
+    "webhooksMoved": "Los webhooks ahora se gestionan desde la página de configuración de tu tienda.",
     "whiteLabel": {
       "chooseIcon": "Elegir icono",
-      "siteSettings": "Ajustes del sitio",
+      "siteSettings": "Configuración del sitio",
       "siteAccessHint": "Controla quién puede acceder a tu sitio de marca blanca.",
       "siteAccess": "Acceso al sitio",
       "accessPublic": "Público: cualquiera puede navegar",
@@ -7611,7 +7611,7 @@
       "homepagePath": "Ruta de la página de inicio",
       "homepagePathHelper": "Ruta personalizada de la página de inicio. Déjala en blanco para usar la predeterminada.",
       "saving": "Guardando…",
-      "saveSettings": "Guardar ajustes",
+      "saveSettings": "Guardar configuración",
       "sidebarTabs": "Pestañas de la barra lateral",
       "sidebarTabsHint": "Elige qué pestañas públicas aparecen en la barra lateral.",
       "customTabs": "Pestañas personalizadas",
@@ -7626,7 +7626,7 @@
     }
   },
   "accountUi": {
-    "webhooksMoved": "Los webhooks ahora se gestionan desde la página de ajustes de tu tienda.",
+    "webhooksMoved": "Los webhooks ahora se gestionan desde la página de configuración de tu tienda.",
     "unknownError": "Se ha producido un error desconocido",
     "noShopsYet": "Aún no hay tiendas",
     "profileTabs": "Pestañas del perfil"
@@ -7736,12 +7736,12 @@
     },
     "gameDataImport": {
       "summary": {
-        "matched_one": "{{count}} objeto emparejado",
-        "matched_many": "{{count}} objetos emparejados",
-        "matched_other": "{{count}} objetos emparejados",
-        "inserted_one": "{{count}} objeto añadido",
-        "inserted_many": "{{count}} objetos añadidos",
-        "inserted_other": "{{count}} objetos añadidos",
+        "matched_one": "{{count}} artículo emparejado",
+        "matched_many": "{{count}} artículos emparejados",
+        "matched_other": "{{count}} artículos emparejados",
+        "inserted_one": "{{count}} artículo añadido",
+        "inserted_many": "{{count}} artículos añadidos",
+        "inserted_other": "{{count}} artículos añadidos",
         "missionsInserted_one": "{{count}} misión",
         "missionsInserted_many": "{{count}} misiones",
         "missionsInserted_other": "{{count}} misiones",
@@ -7765,7 +7765,7 @@
       "importStarted": "Importación iniciada",
       "uploadFailed": "La subida falló",
       "intro": "Sube un <code>game-data.zip</code> extraído del Data.p4k de Star Citizen.",
-      "shopsNotice": "Las tiendas del juego («dónde comprar» en las páginas de objetos de la wiki) no se importan: los datos de tiendas de los archivos del juego están desactualizados y no incluyen los inventarios ni los precios actuales. Si el ZIP contiene un <code>shop-inventories.json</code>, se ignora (el trabajo lo indica).",
+      "shopsNotice": "Las tiendas del juego («dónde comprar» en las páginas de artículos de la wiki) no se importan: los datos de tiendas de los archivos del juego están desactualizados y no incluyen los inventarios ni los precios actuales. Si el ZIP contiene un <code>shop-inventories.json</code>, se ignora (el trabajo lo indica).",
       "dropHint": "Suelta aquí game-data.zip o haz clic para buscarlo",
       "channel": "Canal",
       "gameVersion": "Versión del juego",
@@ -7800,7 +7800,7 @@
     "attributes": {
       "loadError": "Error al cargar las definiciones de atributos: {{error}}",
       "allowedValuesPlaceholder": "Militar, Sigilo, Industrial, Civil",
-      "cascadeDelete": "Eliminar también los atributos de objetos del juego",
+      "cascadeDelete": "Eliminar también los atributos de artículos del juego",
       "types": {
         "select": "Selección (un solo valor)",
         "multiselect": "Selección múltiple (varios valores)",
@@ -7869,8 +7869,8 @@
       "jobHistory": "Historial de trabajos",
       "noJobs": "Todavía no se ha ejecutado ningún trabajo de importación. Inicia una importación arriba.",
       "sources": {
-        "cstoneItems": "Objetos de CStone",
-        "uexItems": "Objetos de UEX",
+        "cstoneItems": "Artículos de CStone",
+        "uexItems": "Artículos de UEX",
         "uexAttributes": "Atributos de UEX"
       }
     },
@@ -7885,7 +7885,7 @@
       "importPartial_one": "Importación completada con errores. Se importó {{count}} atributo",
       "importPartial_many": "Importación completada con errores. Se importaron {{count}} atributos",
       "importPartial_other": "Importación completada con errores. Se importaron {{count}} atributos",
-      "uuidPlaceholder": "Introduce el UUID del objeto del juego"
+      "uuidPlaceholder": "Introduce el UUID del artículo del juego"
     },
     "premium": {
       "revoked": "Revocado"
@@ -7929,12 +7929,12 @@
         "pushChecked": "Push: al menos una suscripción push.",
         "anyNone": "Algún canal: se le puede contactar por MD de Discord, correo o push. Ninguno: por ninguno de ellos.",
         "lastSeen": "«Visto por última vez» cuenta a todos los vendedores, incluidos los que ocultan su estado en línea a los compradores.",
-        "discordRule": "DM de Discord: Discord vinculado, su último DM de SC Market (se guarda {{days}} días) no fue rechazado con el error {{code}} y comparten un servidor con el bot. Los vendedores sin DM en ese tiempo cuentan, sin confirmar; «DM entregado» cuenta a quienes recibieron su último DM.",
-        "discordClosedInstall": "DM fallido (cerrado): no se le puede escribir por DM porque Discord rechazó su último DM (error {{code}}: DM cerrados o el bot no puede contactarle). Un DM rechazado también borra una instalación de la app registrada. En una org, esto se cumple para todas las personas de contacto.",
+        "discordRule": "MD de Discord: Discord vinculado, su último MD de SC Market (se guarda {{days}} días) no fue rechazado con el error {{code}} y comparten un servidor con el bot. Los vendedores sin MD en ese tiempo cuentan, sin confirmar; «MD entregado» cuenta a quienes recibieron su último MD.",
+        "discordClosedInstall": "MD fallido (cerrado): no se le puede escribir por MD porque Discord rechazó su último MD (error {{code}}: MD cerrados o el bot no puede contactarle). Un MD rechazado también borra una instalación de la app registrada. En una org, esto se cumple para todas las personas de contacto.",
         "serverOrApp": "Comparte un servidor o instaló la app: Discord vinculado y, o bien miembro de al menos un servidor donde está el bot de SC Market (se comprueba cada 12 horas aprox. con las listas de miembros del bot, sin enviar nada; última comprobación {{when}}), o bien visto usando el bot con la app instalada en su propia cuenta de Discord. No cuenta en Cualquier canal ni en Ninguno.",
         "serverOrAppNever": "Comparte un servidor o instaló la app: Discord vinculado y, o bien miembro de al menos un servidor donde está el bot de SC Market (se comprueba cada 12 horas aprox., sin enviar nada; aún no se ha comprobado), o bien visto usando el bot con la app instalada en su propia cuenta de Discord. No cuenta en Cualquier canal ni en Ninguno.",
-        "installCounts": "Instalar la app cuenta como localizable por DM de Discord.",
-        "installNotCounted": "Las instalaciones de la app se registran, pero no cuentan como localizables por DM de Discord hasta confirmar que el bot puede escribir a alguien que no comparte servidor con él."
+        "installCounts": "Instalar la app cuenta como localizable por MD de Discord.",
+        "installNotCounted": "Las instalaciones de la app se registran, pero no cuentan como localizables por MD de Discord hasta confirmar que el bot puede escribir a alguien que no comparte servidor con él."
       },
       "installClicks": {
         "title": "Clics en «Añadir SC Market a Discord»",
@@ -7946,11 +7946,11 @@
         "user": "Cuenta propia",
         "server": "Un servidor",
         "sources": {
-          "settings_notifications": "Ajustes › Notificaciones",
-          "settings_discord": "Ajustes › Discord",
+          "settings_notifications": "Configuración › Notificaciones",
+          "settings_discord": "Configuración › Discord",
           "org_discord": "Org › Discord",
           "shop_dashboard": "Pedidos de la tienda",
-          "shop_settings": "Ajustes de la tienda › Discord",
+          "shop_settings": "Configuración de la tienda › Discord",
           "shop_hint": "Consejo en páginas de tienda",
           "guide": "Guía",
           "faq": "Preguntas sobre Discord",
@@ -7962,7 +7962,7 @@
     },
     "stillSelling": {
       "title": "Campaña de MD «¿Sigues vendiendo?»",
-      "subtitle": "Un único MD de Discord a los vendedores vistos por última vez hace más de {{inactive}} días cuyos anuncios públicos no se han actualizado en {{stale}} días, si el bot puede escribirles. Los anuncios de una organización van a sus miembros que gestionan pedidos o el mercado, un MD por persona. Se omite a quienes desactivaron los MD de Discord del mercado en sus ajustes de notificaciones.",
+      "subtitle": "Un único MD de Discord a los vendedores vistos por última vez hace más de {{inactive}} días cuyos anuncios públicos no se han actualizado en {{stale}} días, si el bot puede escribirles. Los anuncios de una organización van a sus miembros que gestionan pedidos o el mercado, un MD por persona. Se omite a quienes desactivaron los MD de Discord del mercado en su configuración de notificaciones.",
       "switchOn": "El envío está activado ({{env}}=true).",
       "switchOff": "El envío está desactivado. No se puede enviar nada hasta que se configure {{env}}=true en el servidor.",
       "dryRun": "Simulación: enviaría un MD a {{recipients}} personas sobre {{listings}} anuncios.",
@@ -8150,8 +8150,8 @@
         "recruitingWrite": "Editar publicaciones de reclutamiento",
         "commentsRead": "Leer comentarios",
         "commentsWrite": "Escribir comentarios",
-        "moderationRead": "Leer reportes",
-        "moderationWrite": "Enviar reportes",
+        "moderationRead": "Leer denuncias",
+        "moderationWrite": "Enviar denuncias",
         "admin": "Acceso de administrador total",
         "readonly": "Solo lectura (todos los ámbitos de lectura)",
         "full": "Acceso total (todos los ámbitos)"
@@ -8167,7 +8167,7 @@
     "manager": {
       "createWishlist": "Crear lista de deseos",
       "emptyTitle": "Aún no tienes listas de deseos",
-      "emptyBody": "Crea tu primera lista de deseos para empezar a seguir los objetos y planos que quieres",
+      "emptyBody": "Crea tu primera lista de deseos para empezar a seguir los artículos y planos que quieres",
       "createFirst": "Crea tu primera lista de deseos",
       "itemCount_one": "{{count}} artículo",
       "itemCount_many": "{{count}} artículos",
@@ -8891,7 +8891,7 @@
       "shield": "Escudo",
       "powerPlant": "Planta de energía",
       "cooler": "Refrigerador",
-      "quantumDrive": "Motor cuántico",
+      "quantumDrive": "Quantum Drive",
       "helmet": "Casco",
       "torsoArmor": "Armadura de torso",
       "armArmor": "Armadura de brazos",
@@ -9019,9 +9019,9 @@
     "manufacturerCount_one": "{{count}} fabricante",
     "manufacturerCount_many": "{{count}} fabricantes",
     "manufacturerCount_other": "{{count}} fabricantes",
-    "itemCount_one": "{{count}} objeto",
-    "itemCount_many": "{{count}} objetos",
-    "itemCount_other": "{{count}} objetos"
+    "itemCount_one": "{{count}} artículo",
+    "itemCount_many": "{{count}} artículos",
+    "itemCount_other": "{{count}} artículos"
   },
   "hints": {
     "stockLots": {
@@ -9030,7 +9030,7 @@
     },
     "listingQuantity": {
       "title": "La cantidad de un anuncio sale de sus lotes de stock",
-      "body": "La cantidad de aquí es el total de los lotes anunciados. Al editarla, la diferencia se suma al lote anunciado más reciente o se resta de él. Para tener el mismo artículo en varias ubicaciones o calidades, usa la página Inventario."
+      "body": "La cantidad de aquí es el total de los lotes anunciados. Al editarla, la diferencia se suma al lote anunciado más reciente o se resta de él. Para tener el mismo artículo en varias ubicaciones o calidades, usa la página Stock."
     },
     "myStock": {
       "title": "Mi inventario son tus propios lotes",
@@ -9038,11 +9038,11 @@
     },
     "shopPermissions": {
       "title": "Quién puede trabajar en las tiendas de tu organización",
-      "body": "Gestionar mercado lleva una tienda: su configuración, anuncios y stock. Gestionar existencias solo cambia los lotes de stock, como cantidades y ubicaciones. Gestionar pedidos se ocupa de los pedidos y ofertas de la tienda."
+      "body": "Gestionar mercado lleva una tienda: su configuración, anuncios y stock. Gestionar stock solo cambia los lotes de stock, como cantidades y ubicaciones. Gestionar pedidos se ocupa de los pedidos y ofertas de la tienda."
     },
     "discordThreadsAlerts": {
       "title": "¿Hilos de pedidos o alertas de pedidos?",
-      "body": "Los hilos de pedidos dan a cada nuevo pedido y oferta un hilo privado con el comprador. Las alertas de pedidos publican cada uno en un canal, con un botón para que los miembros de la org lo reclamen. Añade el bot desde los ajustes de Discord de tu tienda o tu org y elige allí los canales; para los pedidos hechos a ti personalmente, ejecuta /setup threads o /setup alerts en Discord."
+      "body": "Los hilos de pedidos dan a cada nuevo pedido y oferta un hilo privado con el comprador. Las alertas de pedidos publican cada uno en un canal, con un botón para que los miembros de la org lo reclamen. Añade el bot desde la configuración de Discord de tu tienda o tu org y elige allí los canales; para los pedidos hechos a ti personalmente, ejecuta /setup threads o /setup alerts en Discord."
     },
     "uexImport": {
       "title": "Copia tus anuncios desde UEX",
@@ -9088,7 +9088,7 @@
       },
       "user_sign_in": {
         "title": "SC Market está en tu Discord",
-        "body": "Inicia sesión en SC Market y vuelve a añadirlo desde Ajustes › Notificaciones para vincular tu cuenta de Discord."
+        "body": "Inicia sesión en SC Market y vuelve a añadirlo desde Configuración › Notificaciones para vincular tu cuenta de Discord."
       },
       "user_linked_elsewhere": {
         "title": "Esta cuenta de Discord está vinculada a otra cuenta de SC Market",
@@ -9096,19 +9096,19 @@
       },
       "user_other_discord": {
         "title": "Tu cuenta de SC Market está vinculada a otra cuenta de Discord",
-        "body": "No la hemos cambiado. Para usar esta cuenta de Discord, desvincula la actual en Ajustes › Integración con Discord y vuelve a añadir SC Market."
+        "body": "No la hemos cambiado. Para usar esta cuenta de Discord, desvincula la actual en Configuración › Integración con Discord y vuelve a añadir SC Market."
       },
       "server_added": {
         "title": "El bot está en tu servidor",
-        "body": "Para recibir hilos y alertas de pedidos allí, vuelve a añadir el bot desde los ajustes de Discord de tu tienda u organización, que vinculan el servidor por ti, o ejecuta /setup threads en un canal."
+        "body": "Para recibir hilos y alertas de pedidos allí, vuelve a añadir el bot desde la configuración de Discord de tu tienda u organización, que vinculan el servidor por ti, o ejecuta /setup threads en un canal."
       },
       "server_sign_in": {
         "title": "Inicia sesión primero",
-        "body": "Inicia sesión en SC Market y añade el bot desde los ajustes de Discord de tu tienda u organización."
+        "body": "Inicia sesión en SC Market y añade el bot desde la configuración de Discord de tu tienda u organización."
       },
       "server_forbidden": {
         "title": "No puedes gestionar esta integración de Discord",
-        "body": "Para vincular un servidor necesitas Manage Market en una tienda o Manage Webhooks en una organización. No se ha vinculado nada; si el bot se añadió, está en el servidor sin vincular."
+        "body": "Para vincular un servidor necesitas «Gestionar mercado» en una tienda o «Gestionar webhooks» en una organización. No se ha vinculado nada; si el bot se añadió, está en el servidor sin vincular."
       },
       "cancelled": {
         "title": "No se ha añadido nada",
