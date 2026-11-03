@@ -771,7 +771,8 @@
       "buyer_many": "{{n}} de tus ofertas siguen esperando al vendedor"
     },
     "buy_order_match": "Coincidencia con orden de compra:",
-    "buy_order_match_listed": "coincide con una de tus órdenes de compra"
+    "buy_order_match_listed": "coincide con una de tus órdenes de compra",
+    "buy_order_filled_by": "Tu orden de compra fue completada por"
   },
   "onboarding": {
     "welcome": "Bienvenido a SC Market",
@@ -1003,7 +1004,7 @@
         },
         "buy-orders": {
           "label": "Órdenes de compra",
-          "hint": "Un nuevo anuncio público coincide con una de tus órdenes de compra."
+          "hint": "Un nuevo anuncio público coincide con una de tus órdenes de compra, o un vendedor completa una."
         },
         "org": {
           "label": "Organizaciones",
@@ -1069,6 +1070,10 @@
         },
         "buy-order-match": {
           "label": "Coincidencia con orden de compra"
+        },
+        "buy-order-filled": {
+          "label": "Orden de compra completada",
+          "hint": "Un vendedor completó tu orden de compra y se creó un pedido"
         },
         "invite": {
           "label": "Invitación de organización"

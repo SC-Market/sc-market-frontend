@@ -771,7 +771,8 @@
       "buyer_many": "{{n}} de vos offres attendent toujours le vendeur"
     },
     "buy_order_match": "Correspondance d'ordre d'achat :",
-    "buy_order_match_listed": "correspond à l'un de tes ordres d'achat"
+    "buy_order_match_listed": "correspond à l'un de tes ordres d'achat",
+    "buy_order_filled_by": "Ton ordre d'achat a été rempli par"
   },
   "onboarding": {
     "welcome": "Bienvenue sur SC Market",
@@ -1003,7 +1004,7 @@
         },
         "buy-orders": {
           "label": "Ordres d'achat",
-          "hint": "Une nouvelle annonce publique correspond à l'un de vos ordres d'achat."
+          "hint": "Une nouvelle annonce publique correspond à l'un de vos ordres d'achat, ou un vendeur en remplit un."
         },
         "org": {
           "label": "Organisations",
@@ -1069,6 +1070,10 @@
         },
         "buy-order-match": {
           "label": "Correspondance d'ordre d'achat"
+        },
+        "buy-order-filled": {
+          "label": "Ordre d'achat rempli",
+          "hint": "Un vendeur a rempli votre ordre d'achat et une commande a été créée"
         },
         "invite": {
           "label": "Invitation d'organisation"

@@ -5699,6 +5699,7 @@ export type NotificationEventKey =
   | "reminder.unread_messages"
   | "watchlist.price_alert"
   | "buy_order.match"
+  | "buy_order.filled"
   | "offer.accepted"
   | "offer.rejected"
   | "contract.public_created"

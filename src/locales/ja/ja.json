@@ -765,7 +765,8 @@
       "buyer_many": "あなたのオファーのうち {{n}} 件がまだ出品者の返信を待っています"
     },
     "buy_order_match": "買い注文の一致：",
-    "buy_order_match_listed": "があなたの買い注文に一致しました"
+    "buy_order_match_listed": "があなたの買い注文に一致しました",
+    "buy_order_filled_by": "買い注文が成立しました。販売者："
   },
   "onboarding": {
     "welcome": "SC Marketへようこそ",
@@ -997,7 +998,7 @@
         },
         "buy-orders": {
           "label": "買い注文",
-          "hint": "新しい公開出品があなたの買い注文に一致しました。"
+          "hint": "新しい公開出品があなたの買い注文に一致したとき、または販売者が買い注文に応じたとき。"
         },
         "org": {
           "label": "組織",
@@ -1063,6 +1064,10 @@
         },
         "buy-order-match": {
           "label": "買い注文の一致"
+        },
+        "buy-order-filled": {
+          "label": "買い注文の成立",
+          "hint": "販売者があなたの買い注文に応じ、注文が作成されました"
         },
         "invite": {
           "label": "組織への招待"

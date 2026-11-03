@@ -15,6 +15,7 @@ import {
 import { NotificationBidV2 } from "../types/NotificationBidV2"
 import { NotificationPriceAlert } from "../types/NotificationPriceAlert"
 import { NotificationBuyOrderMatch } from "../types/NotificationBuyOrderMatch"
+import { NotificationBuyOrderFilled } from "../types/NotificationBuyOrderFilled"
 import { NotificationPublicContract } from "../types/NotificationPublicContract"
 import { NotificationOrgMemberJoined } from "../types/NotificationOrgMemberJoined"
 import { NotificationOfferDecision } from "../types/NotificationOfferDecision"
@@ -58,6 +59,8 @@ export function NotificationEntry(props: { notif: Notification }) {
       return <NotificationPriceAlert notif={notif} />
     case "buy_order_match":
       return <NotificationBuyOrderMatch notif={notif} />
+    case "buy_order_filled":
+      return <NotificationBuyOrderFilled notif={notif} />
     case "public_contract_create":
       return <NotificationPublicContract notif={notif} />
     case "admin_alert":

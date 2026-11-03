@@ -771,7 +771,8 @@
       "buyer_many": "你有 {{n}} 个报价仍在等待卖家回复"
     },
     "buy_order_match": "求购订单匹配：",
-    "buy_order_match_listed": "与你的一个求购订单匹配"
+    "buy_order_match_listed": "与你的一个求购订单匹配",
+    "buy_order_filled_by": "你的求购订单已成交，卖家："
   },
   "onboarding": {
     "welcome": "欢迎来到 SC Market",
@@ -1003,7 +1004,7 @@
         },
         "buy-orders": {
           "label": "求购订单",
-          "hint": "有新的公开商品符合你的求购订单。"
+          "hint": "有新的公开商品符合你的求购订单，或有卖家响应了你的求购订单。"
         },
         "org": {
           "label": "组织",
@@ -1069,6 +1070,10 @@
         },
         "buy-order-match": {
           "label": "求购订单匹配"
+        },
+        "buy-order-filled": {
+          "label": "求购订单已成交",
+          "hint": "有卖家响应了你的求购订单，并已创建订单"
         },
         "invite": {
           "label": "组织邀请"

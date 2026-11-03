@@ -768,7 +768,8 @@
       "buyer_many": "{{n}} Ihrer Angebote warten noch auf den Verkäufer"
     },
     "buy_order_match": "Treffer für Kaufauftrag:",
-    "buy_order_match_listed": "passt zu einem deiner Kaufaufträge"
+    "buy_order_match_listed": "passt zu einem deiner Kaufaufträge",
+    "buy_order_filled_by": "Dein Kaufauftrag wurde erfüllt von"
   },
   "onboarding": {
     "welcome": "Willkommen bei SC Market",
@@ -1000,7 +1001,7 @@
         },
         "buy-orders": {
           "label": "Kaufaufträge",
-          "hint": "Ein neues öffentliches Angebot passt zu einem Ihrer Kaufaufträge."
+          "hint": "Ein neues öffentliches Angebot passt zu einem Ihrer Kaufaufträge, oder ein Verkäufer erfüllt einen."
         },
         "org": {
           "label": "Organisationen",
@@ -1066,6 +1067,10 @@
         },
         "buy-order-match": {
           "label": "Treffer für Kaufauftrag"
+        },
+        "buy-order-filled": {
+          "label": "Kaufauftrag erfüllt",
+          "hint": "Ein Verkäufer hat Ihren Kaufauftrag erfüllt und eine Bestellung wurde erstellt"
         },
         "invite": {
           "label": "Organisationseinladung"

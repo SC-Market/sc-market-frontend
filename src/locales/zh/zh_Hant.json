@@ -765,7 +765,8 @@
       "buyer_many": "你有 {{n}} 個報價仍在等待賣家回覆"
     },
     "buy_order_match": "收購訂單相符：",
-    "buy_order_match_listed": "與你的一筆收購訂單相符"
+    "buy_order_match_listed": "與你的一筆收購訂單相符",
+    "buy_order_filled_by": "你的收購訂單已成交，賣家："
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "爲此帖點贊"
@@ -939,7 +940,7 @@
         },
         "buy-orders": {
           "label": "收購訂單",
-          "hint": "有新的公開刊登符合你的收購訂單。"
+          "hint": "有新的公開刊登符合你的收購訂單，或有賣家回應了你的收購訂單。"
         },
         "org": {
           "label": "組織",
@@ -1005,6 +1006,10 @@
         },
         "buy-order-match": {
           "label": "收購訂單相符"
+        },
+        "buy-order-filled": {
+          "label": "收購訂單已成交",
+          "hint": "有賣家回應了你的收購訂單，並已建立訂單"
         },
         "invite": {
           "label": "組織邀請"

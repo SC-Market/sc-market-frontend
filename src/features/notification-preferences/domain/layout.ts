@@ -193,8 +193,16 @@ export const NOTIFICATION_TABS: NotificationTab[] = [
       section(
         "buy-orders",
         "Buy orders",
-        "A new public listing matches one of your buy orders.",
-        [row("buy-order-match", "Buy-order match", ["buy_order.match"])],
+        "A new public listing matches one of your buy orders, or a seller fills one.",
+        [
+          row("buy-order-match", "Buy-order match", ["buy_order.match"]),
+          row(
+            "buy-order-filled",
+            "Buy order filled",
+            ["buy_order.filled"],
+            "A seller filled your buy order and an order was created",
+          ),
+        ],
       ),
     ],
   },
