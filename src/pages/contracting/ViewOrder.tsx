@@ -16,8 +16,7 @@ import {
   useGetOrderDetailQuery,
 } from "../../store/api/v2/market"
 import { canManageOrderStock } from "../../features/market/components/allocation/canManageOrderStock"
-import { has_permission } from "../../views/contractor/OrgRoles"
-import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
+import { useOrderViewerRoles } from "../../features/orders/hooks/useOrderViewerRoles"
 import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageOrder } from "../../features/contracting"
@@ -82,44 +81,17 @@ export function ViewOrder() {
   const { data: orderDetailV2, isLoading: orderDetailV2Loading } = useGetOrderDetailQuery({ orderId: id! }, { skip: !id })
   const { data: profile } = useGetUserProfileQuery()
 
-  const belongsToOrderOrg = useMemo(
-    () => !!order?.contractor && !!profile?.contractors?.some(c => c.spectrum_id === order.contractor),
-    [order?.contractor, profile?.contractors],
-  )
-  const { data: orderContractor } = useGetContractorBySpectrumIDQuery(
-    order?.contractor!,
-    { skip: !order?.contractor || !belongsToOrderOrg },
-  )
-
-  const amCustomer = useMemo(
-    () => !!profile && order?.customer === profile?.username,
-    [order, profile],
-  )
-  const amAssigned = useMemo(
-    () => order && order.assigned_to === profile?.username,
-    [order, profile],
-  )
-  const amContractor = useMemo(
-    () => belongsToOrderOrg,
-    [belongsToOrderOrg],
-  )
-  const amRelated = useMemo(
-    () => amCustomer || amAssigned || amContractor,
-    [amCustomer, amAssigned, amContractor],
-  )
-
-  const amContractorManager = useMemo(
-    () =>
-      amContractor &&
-      !!orderContractor &&
-      has_permission(
-        orderContractor,
-        profile,
-        "manage_orders",
-        profile?.contractors,
-      ),
-    [orderContractor, profile, amContractor],
-  )
+  const roles = useOrderViewerRoles({
+    customer: order?.customer,
+    assignedTo: order?.assigned_to,
+    contractor: order?.contractor,
+  })
+  const {
+    customer: amCustomer,
+    assigned: amAssigned,
+    related: amRelated,
+    orgManager: amContractorManager,
+  } = roles
 
   const { data: myShops } = useGetMyShopsQuery(undefined, { skip: !profile })
   const canManageStock = useMemo(
@@ -127,7 +99,7 @@ export function ViewOrder() {
       canManageOrderStock({
         hasV2Items: !!orderDetailV2?.items?.length,
         orgOrderManager: amContractorManager,
-        assigned: !!amAssigned,
+        assigned: amAssigned,
         shopId: orderDetailV2?.seller?.shop_id,
         myShops,
       }),

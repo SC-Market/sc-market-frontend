@@ -55,8 +55,8 @@ import {
 import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
 import { LongPressMenu, useLongPress } from "../../components/gestures"
-import { has_permission } from "../contractor/OrgRoles"
-import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
+import { useOrderViewerRoles } from "../../features/orders/hooks/useOrderViewerRoles"
+import { canClaimOrder } from "../../features/orders/domain/orderRoles"
 import { useAssignOrderMutation } from "../../features/orders/api/ordersApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
@@ -134,19 +134,15 @@ export function OrderRow(props: {
   const [assignOrder] = useAssignOrderMutation()
   const issueAlert = useAlertHook()
 
-  const belongsToRowOrg = useMemo(
-    () => !!row.contractor && profile?.contractors?.some(c => c.spectrum_id === row.contractor!.spectrum_id),
-    [row.contractor, profile?.contractors],
+  const roles = useOrderViewerRoles({
+    customer: row.customer?.username,
+    assignedTo: row.assigned_to?.username,
+    contractor: row.contractor?.spectrum_id,
+  })
+  const canClaim = canClaimOrder(
+    { status: row.status, assignedTo: row.assigned_to?.username, contractor: row.contractor?.spectrum_id },
+    roles,
   )
-  const { data: rowContractor } = useGetContractorBySpectrumIDQuery(
-    row.contractor?.spectrum_id!, { skip: !row.contractor?.spectrum_id || !belongsToRowOrg },
-  )
-
-  const canClaim = useMemo(() => {
-    if (row.assigned_to || !rowContractor || !profile) return false
-    if (row.status === "fulfilled" || row.status === "cancelled") return false
-    return has_permission(rowContractor, profile, "claim_orders", profile.contractors)
-  }, [row.assigned_to, row.status, rowContractor, profile])
 
   // When in selection mode (hasSelectedItems) on mobile, single tap should select
   const isInSelectionMode = isMobile && hasSelectedItems

@@ -14,7 +14,8 @@ import { useGetUserProfileQuery, useGetUserByUsernameQuery } from "../../profile
 import { useGetContractorBySpectrumIDQuery, useGetContractorMembersQuery, contractorsApi } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
-import { has_permission } from "../../contractor/domain/permissions"
+import { availableOrderActions } from "../domain/orderActions"
+import { useOrderViewerRoles } from "./useOrderViewerRoles"
 import { useAppDispatch } from "../../../store/hooks"
 import type { MinimalUser } from "../../../datatypes/User"
 
@@ -116,31 +117,18 @@ export function useOrderDetails(order: Order) {
   const { data: customer, isLoading: customerLoading } = useGetUserByUsernameQuery(order.customer!, { skip: !order.customer })
 
   // Permission checks
-  const amCustomer = useMemo(() => order.customer === profile?.username, [order, profile])
-  const amAssigned = useMemo(() => order.assigned_to === profile?.username, [order, profile])
-  const amContractor = useMemo(
-    () => !!order.contractor && !!profile?.contractors?.some(c => c.spectrum_id === order.contractor),
-    [order.contractor, profile?.contractors],
+  const roles = useOrderViewerRoles({
+    customer: order.customer,
+    assignedTo: order.assigned_to,
+    contractor: order.contractor,
+  })
+  const actions = useMemo(
+    () => availableOrderActions(
+      { status: order.status, assignedTo: order.assigned_to, contractor: order.contractor },
+      roles,
+    ),
+    [order.status, order.assigned_to, order.contractor, roles],
   )
-  const amRelated = useMemo(() => amCustomer || amAssigned || amContractor, [amCustomer, amAssigned, amContractor])
-  const amContractorManager = useMemo(
-    () => amContractor && has_permission(contractor, profile, "manage_orders", profile?.contractors),
-    [contractor, profile, amContractor],
-  )
-  const canClaim = useMemo(
-    () => amContractorManager || (amContractor && has_permission(contractor, profile, "claim_orders", profile?.contractors)),
-    [contractor, profile, amContractor, amContractorManager],
-  )
-
-  const privateContractCustomer = useMemo(
-    () => amCustomer && !(amContractorManager || amAssigned) && (order.contractor || order.assigned_to),
-    [order.contractor, order.assigned_to, amAssigned, amContractorManager, amCustomer],
-  )
-  const publicContractCustomer = useMemo(
-    () => amCustomer && !order.assigned_to && !order.contractor,
-    [amCustomer, order],
-  )
-  const isComplete = useMemo(() => ["cancelled", "fulfilled"].includes(order.status), [order.status])
   const server_id = order.discord_server_id
 
   const handleClaimOrder = useCallback(async () => {
@@ -168,8 +156,7 @@ export function useOrderDetails(order: Order) {
     contractor, assigned, customer,
     contractorLoading, assignedLoading, customerLoading,
     // Permissions
-    amCustomer, amAssigned, amContractor, amRelated, amContractorManager, canClaim,
-    privateContractCustomer, publicContractCustomer, isComplete,
+    roles, actions,
     server_id,
     // Thread
     createThread, refetchOrder,

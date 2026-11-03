@@ -53,7 +53,6 @@ import {
 } from "../../features/notifications/api/notificationApi"
 import { useOrderDetails } from "../../features/orders/hooks/useOrderDetails"
 import { SHOP_PATHS } from "../../routes/paths"
-import { isSiteAdmin } from "../../util/siteRole"
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
@@ -113,7 +112,7 @@ export function OrderDetailsArea(props: { order: Order }) {
   const { t } = useTranslation()
 
   const {
-    profile, issueAlert,
+    issueAlert,
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,
     options, members,
@@ -122,8 +121,7 @@ export function OrderDetailsArea(props: { order: Order }) {
     statusColor, status, updateOrderStatus,
     contractor, assigned, customer,
     contractorLoading, assignedLoading, customerLoading,
-    amCustomer, amAssigned, amContractor, amRelated, amContractorManager, canClaim,
-    privateContractCustomer, publicContractCustomer, isComplete,
+    roles, actions,
     server_id,
     createThread, refetchOrder,
   } = useOrderDetails(order)
@@ -189,15 +187,14 @@ export function OrderDetailsArea(props: { order: Order }) {
             )}
             {/* While the user loads the row holds a same-size placeholder, so
                 it doesn't appear or grow when the user arrives. */}
-            {(assigned || assignedLoading || amContractor) && (
+            {(assigned || assignedLoading || roles.orgMember) && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   <Stack direction="row" alignItems="center" spacing={1}>
                     {t("orderDetailsArea.assigned")}
-                    {amContractorManager &&
-                      !["cancelled", "fulfilled"].includes(order.status) && (
+                    {actions.canAssign && (
                         <Button
                           size="small"
                           variant="text"
@@ -225,7 +222,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                         <Typography variant="body2" color="text.secondary">
                           {t("orderDetailsArea.none", "None")}
                         </Typography>
-                        {canClaim && !["cancelled", "fulfilled"].includes(order.status) && (
+                        {actions.canClaim && (
                           <Button
                             size="small"
                             variant="outlined"
@@ -514,7 +511,8 @@ export function OrderDetailsArea(props: { order: Order }) {
                   spacing={theme.layoutSpacing.compact}
                   sx={{ gap: theme.layoutSpacing.compact }}
                 >
-                  {privateContractCustomer && !isComplete && (
+                  {/* The customer (not working on it) may only cancel */}
+                  {actions.canCancel && !actions.canSetStatus && (
                     <LoadingButton
                       variant={"contained"}
                       color={"error"}
@@ -525,29 +523,14 @@ export function OrderDetailsArea(props: { order: Order }) {
                       {t("orderDetailsArea.cancel")}
                     </LoadingButton>
                   )}
-                  {publicContractCustomer && !isComplete && (
-                    <LoadingButton
-                      variant={"contained"}
-                      color={"error"}
-                      startIcon={<CancelRounded />}
-                      onClick={() => updateOrderStatus("cancelled")}
-                      fullWidth={isMobile}
-                    >
-                      {t("orderDetailsArea.cancel")}
-                    </LoadingButton>
-                  )}
-                  {(isSiteAdmin(profile) ||
-                    amContractorManager ||
-                    amAssigned) &&
+                  {actions.canSetStatus &&
                     (isMobile ? (
                       <Stack
                         direction="column"
                         spacing={theme.layoutSpacing.compact}
                         sx={{ width: "100%" }}
                       >
-                        {(isSiteAdmin(profile) ||
-                          order.status === "not-started" ||
-                          order.status === "in-progress") && (
+                        {actions.canComplete && (
                           <LoadingButton
                             variant={"contained"}
                             color={"success"}
@@ -558,8 +541,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.complete_order")}
                           </LoadingButton>
                         )}
-                        {(isSiteAdmin(profile) ||
-                          order.status === "not-started") && (
+                        {actions.canStart && (
                           <LoadingButton
                             variant={"contained"}
                             color={"warning"}
@@ -570,7 +552,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.begin_work")}
                           </LoadingButton>
                         )}
-                        {isSiteAdmin(profile) && (
+                        {actions.canResetToNotStarted && (
                           <LoadingButton
                             variant={"contained"}
                             color={"info"}
@@ -581,7 +563,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.not_started")}
                           </LoadingButton>
                         )}
-                        {(isSiteAdmin(profile) || !isComplete) && (
+                        {actions.canCancel && (
                           <LoadingButton
                             variant={"contained"}
                             color={"error"}
@@ -598,9 +580,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                         variant="contained"
                         aria-label={t("orderDetailsArea.update_status")}
                       >
-                        {(isSiteAdmin(profile) ||
-                          order.status === "not-started" ||
-                          order.status === "in-progress") && (
+                        {actions.canComplete && (
                           <LoadingButton
                             variant={"contained"}
                             color={"success"}
@@ -610,8 +590,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.complete_order")}
                           </LoadingButton>
                         )}
-                        {(isSiteAdmin(profile) ||
-                          order.status === "not-started") && (
+                        {actions.canStart && (
                           <LoadingButton
                             variant={"contained"}
                             color={"warning"}
@@ -621,7 +600,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.begin_work")}
                           </LoadingButton>
                         )}
-                        {isSiteAdmin(profile) && (
+                        {actions.canResetToNotStarted && (
                           <LoadingButton
                             variant={"contained"}
                             color={"info"}
@@ -631,7 +610,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                             {t("orderDetailsArea.not_started")}
                           </LoadingButton>
                         )}
-                        {(isSiteAdmin(profile) || !isComplete) && (
+                        {actions.canCancel && (
                           <LoadingButton
                             variant={"contained"}
                             color={"error"}
