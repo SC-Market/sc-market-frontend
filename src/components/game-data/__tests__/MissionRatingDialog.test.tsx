@@ -19,6 +19,13 @@ import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { MissionRatingDialog } from "../MissionRatingDialog"
 import { marketV2Api } from "../../../store/api/v2/market"
+import {
+  mockMutationTrigger,
+  mutationIdle,
+  mutationLoading,
+} from "../../../__tests__/rtkQueryMocks"
+
+type RateMission = typeof marketV2Api.endpoints.rateMission
 
 // Mock store setup
 const createMockStore = () => {
@@ -57,9 +64,9 @@ describe("MissionRatingDialog", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(useRateMissionMutation).mockReturnValue([
-      vi.fn().mockResolvedValue({ data: { success: true, rating_id: "test-rating-id" } }),
-      { isLoading: false },
-    ] as any)
+      mockMutationTrigger<RateMission>({ success: true, rating_id: "test-rating-id" }),
+      mutationIdle<RateMission>(),
+    ])
   })
 
   it("renders dialog with mission name", () => {
@@ -201,10 +208,11 @@ describe("MissionRatingDialog", () => {
   })
 
   it("submits rating successfully", async () => {
-    const mockRateMission = vi.fn().mockResolvedValue({
-      unwrap: vi.fn().mockResolvedValue({ success: true, rating_id: "test-rating-id" }),
+    const mockRateMission = mockMutationTrigger<RateMission>({
+      success: true,
+      rating_id: "test-rating-id",
     })
-    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, { isLoading: false }] as any)
+    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, mutationIdle<RateMission>()])
 
     const store = createMockStore()
     const { container } = render(
@@ -235,12 +243,15 @@ describe("MissionRatingDialog", () => {
   })
 
   it("displays error message on submission failure", async () => {
-    const mockRateMission = vi.fn().mockRejectedValue({
+    const mockRateMission = mockMutationTrigger<RateMission>()
+    mockRateMission.mockReturnValue({
       unwrap: vi.fn().mockRejectedValue({
         data: { message: "Failed to submit rating" },
       }),
+      reset: vi.fn(),
+      abort: vi.fn(),
     })
-    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, { isLoading: false }] as any)
+    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, mutationIdle<RateMission>()])
 
     const store = createMockStore()
     render(
@@ -255,12 +266,15 @@ describe("MissionRatingDialog", () => {
   })
 
   it("shows loading state during submission", async () => {
-    const mockRateMission = vi.fn().mockReturnValue({
+    const mockRateMission = mockMutationTrigger<RateMission>()
+    mockRateMission.mockReturnValue({
       unwrap: vi.fn().mockImplementation(
         () => new Promise((resolve) => setTimeout(resolve, 1000))
       ),
+      reset: vi.fn(),
+      abort: vi.fn(),
     })
-    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, { isLoading: true }] as any)
+    vi.mocked(useRateMissionMutation).mockReturnValue([mockRateMission, mutationLoading<RateMission>()])
 
     const store = createMockStore()
     render(

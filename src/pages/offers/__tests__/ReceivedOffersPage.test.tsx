@@ -52,7 +52,7 @@ const mockTheme = createTheme({
     component: 2,
     layout: 3,
   },
-} as any)
+})
 
 const renderWithProviders = (ui: React.ReactElement) => {
   function Wrapper({ children }: { children: React.ReactNode }) {

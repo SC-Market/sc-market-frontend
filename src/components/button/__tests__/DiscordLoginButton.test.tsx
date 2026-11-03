@@ -22,12 +22,9 @@ vi.mock("../../icon/DiscordIcon", () => ({
 describe("DiscordLoginButton", () => {
   const installHrefSpy = () => {
     const hrefSet = vi.fn()
-    delete (window as any).location
-    ;(window as any).location = {
-      href: "",
-      origin: "http://localhost:3000",
-    }
-    Object.defineProperty(window.location, "href", {
+    const fakeLocation = { href: "", origin: "http://localhost:3000" }
+    vi.stubGlobal("location", fakeLocation)
+    Object.defineProperty(fakeLocation, "href", {
       set(v: string) {
         hrefSet(v)
       },

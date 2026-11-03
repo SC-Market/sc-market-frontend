@@ -41,7 +41,7 @@ vi.mock("../../../store/api/v2/market", () => ({
 
 // Mock lodash debounce
 vi.mock("lodash", () => ({
-  debounce: (fn: any) => fn,
+  debounce: <F,>(fn: F) => fn,
 }))
 
 describe("AddItemDialog", () => {

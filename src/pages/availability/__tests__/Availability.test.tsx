@@ -15,7 +15,7 @@ const mockTheme = createTheme({
     component: 2,
     layout: 3,
   },
-} as any)
+})
 
 // Mock the hooks
 vi.mock("../../../hooks/login/CurrentOrg", () => ({

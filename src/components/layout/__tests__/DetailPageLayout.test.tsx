@@ -25,7 +25,7 @@ const mockTheme = createTheme({
     component: 2,
     layout: 3,
   },
-} as any)
+})
 
 // Mock the Page component
 vi.mock("../../metadata/Page", async () => {

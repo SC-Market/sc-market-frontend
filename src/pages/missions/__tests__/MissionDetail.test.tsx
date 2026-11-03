@@ -20,6 +20,13 @@ import { configureStore } from "@reduxjs/toolkit"
 import { vi, beforeEach, describe, it, expect } from "vitest"
 import { MissionDetail } from "../MissionDetail"
 import { marketV2Api, useGetMissionDetailQuery } from "../../../store/api/v2/market"
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+} from "../../../__tests__/rtkQueryMocks"
+
+type MissionDetailEndpoint = typeof marketV2Api.endpoints.getMissionDetail
 import { serviceApi } from "../../../store/service"
 
 // Mock the market API module to control useGetMissionDetailQuery
@@ -94,6 +101,9 @@ const mockMissionDetail = {
       blueprints: [
         {
           blueprint_id: "bp-1",
+          blueprint_code: "BP-1",
+          output_game_item_id: "item-1",
+          output_game_item_slug: "item-1",
           blueprint_name: "Test Blueprint 1",
           output_item_name: "Test Item 1",
           output_item_icon: "https://example.com/icon1.png",
@@ -105,6 +115,9 @@ const mockMissionDetail = {
         },
         {
           blueprint_id: "bp-2",
+          blueprint_code: "BP-2",
+          output_game_item_id: "item-2",
+          output_game_item_slug: "item-2",
           blueprint_name: "Test Blueprint 2",
           output_item_name: "Test Item 2",
           output_item_icon: "https://example.com/icon2.png",
@@ -116,6 +129,9 @@ const mockMissionDetail = {
         },
         {
           blueprint_id: "bp-3",
+          blueprint_code: "BP-3",
+          output_game_item_id: "item-3",
+          output_game_item_slug: "item-3",
           blueprint_name: "Test Blueprint 3",
           output_item_name: "Test Item 3",
           output_item_icon: undefined,
@@ -208,19 +224,15 @@ describe("MissionDetail", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     // Default: return fulfilled data
-    ;(useGetMissionDetailQuery as any).mockReturnValue({
-      data: mockMissionDetail,
-      isLoading: false,
-      error: undefined,
-    })
+    vi.mocked(useGetMissionDetailQuery).mockReturnValue(
+      querySuccess<MissionDetailEndpoint>(mockMissionDetail),
+    )
   })
 
   it("renders loading state", () => {
-    ;(useGetMissionDetailQuery as any).mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      error: undefined,
-    })
+    vi.mocked(useGetMissionDetailQuery).mockReturnValue(
+      queryLoading<MissionDetailEndpoint>(),
+    )
 
     const { container } = renderWithProviders()
 
@@ -231,11 +243,9 @@ describe("MissionDetail", () => {
   })
 
   it("renders error state", () => {
-    ;(useGetMissionDetailQuery as any).mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      error: { message: "Failed to load" },
-    })
+    vi.mocked(useGetMissionDetailQuery).mockReturnValue(
+      queryError<MissionDetailEndpoint>({ message: "Failed to load" }),
+    )
 
     renderWithProviders()
 
@@ -368,11 +378,9 @@ describe("MissionDetail", () => {
       user_rating: undefined,
     }
 
-    ;(useGetMissionDetailQuery as any).mockReturnValue({
-      data: minimalMissionDetail,
-      isLoading: false,
-      error: undefined,
-    })
+    vi.mocked(useGetMissionDetailQuery).mockReturnValue(
+      querySuccess<MissionDetailEndpoint>(minimalMissionDetail),
+    )
 
     renderWithProviders()
 

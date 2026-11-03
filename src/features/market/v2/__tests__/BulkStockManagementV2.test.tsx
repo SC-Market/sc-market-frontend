@@ -19,7 +19,7 @@ const testTheme = createTheme({
   palette: { outline: { main: "#e0e0e0" } },
   layoutSpacing: { layout: 1, component: 1.5, text: 1, compact: 0.5 },
   borderRadius: { topLevel: 0.375, image: 0.375, button: 1, input: 0.5, chip: 0.5, minimal: 0 },
-} as any)
+})
 import { marketV2Api } from "../../../../store/api/v2/market"
 import type { StockLotDetail } from "../../../../store/api/v2/market"
 import { serviceApi } from "../../../../store/service"
@@ -113,7 +113,9 @@ const mockLots: StockLotDetail[] = [
 
 // Mock StandardPageLayout to avoid useRouteError
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children }: any) => <div>{children}</div>,
+  StandardPageLayout: ({ children }: { children?: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }))
 
 // Create mock store
@@ -362,12 +364,22 @@ describe("BulkStockManagementV2", () => {
         { pageSize: 100, sortBy: "updated_at", sortOrder: "desc", shopId: "shop-1" },
         {
           listings: [
-            { listing_id: "listing-1", title: "Mock Listing" } as any,
+            {
+              listing_id: "listing-1",
+              title: "Mock Listing",
+              status: "active",
+              created_at: "2024-01-01T00:00:00Z",
+              updated_at: "2024-01-01T00:00:00Z",
+              variant_count: 1,
+              quantity_available: 10,
+              price_min: 100,
+              price_max: 100,
+            },
           ],
           total: 1,
           page: 1,
           page_size: 100,
-        } as any,
+        },
       ),
     )
 

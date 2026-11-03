@@ -10,6 +10,7 @@ import { CounterOfferBody } from "../../../offers/api/offerApi"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { marketV2Api } from "../../../../store/api/v2/market"
+import { querySuccess } from "../../../../__tests__/rtkQueryMocks"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { BrowserRouter } from "react-router-dom"
 
@@ -73,8 +74,13 @@ const mockListingSearchResults = {
     {
       listing_id: "listing-1",
       title: "Test Listing 1",
-      seller_name: "test-seller",
-      seller_rating: 4.5,
+      shop_id: "shop-1",
+      shop_name: "Test Shop",
+      shop_slug: "test-shop",
+      shop_rating: 4.5,
+      shop_rating_count: 10,
+      shop_badge_ids: [],
+      shop_languages: [],
       price_min: 100,
       price_max: 150,
       quantity_available: 10,
@@ -82,12 +88,22 @@ const mockListingSearchResults = {
       quality_tier_max: 5,
       variant_count: 2,
       created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z",
+      game_item_id: "game-item-1",
+      game_item_name: "Test Item",
+      game_item_type: "weapon",
+      quantity_unit: "unit" as const,
     },
     {
       listing_id: "listing-2",
       title: "Test Listing 2",
-      seller_name: "test-seller",
-      seller_rating: 4.8,
+      shop_id: "shop-1",
+      shop_name: "Test Shop",
+      shop_slug: "test-shop",
+      shop_rating: 4.8,
+      shop_rating_count: 10,
+      shop_badge_ids: [],
+      shop_languages: [],
       price_min: 200,
       price_max: 250,
       quantity_available: 5,
@@ -95,6 +111,11 @@ const mockListingSearchResults = {
       quality_tier_max: 5,
       variant_count: 1,
       created_at: "2024-01-01T00:00:00Z",
+      updated_at: "2024-01-01T00:00:00Z",
+      game_item_id: "game-item-2",
+      game_item_name: "Test Item 2",
+      game_item_type: "weapon",
+      quantity_unit: "unit" as const,
     },
   ],
   total: 2,
@@ -107,6 +128,8 @@ const mockListingDetail = {
     listing_id: "listing-1",
     seller_id: "seller-id",
     seller_type: "user" as const,
+    shop_id: "shop-1",
+    quantity_unit: "unit" as const,
     title: "Test Listing 1",
     description: "Test description",
     status: "active" as const,
@@ -121,6 +144,9 @@ const mockListingDetail = {
     name: "test-seller",
     type: "user" as const,
     rating: 4.5,
+    shop_id: "shop-1",
+    slug: "test-shop",
+    languages: [],
   },
   items: [
     {
@@ -205,26 +231,22 @@ const renderWithProviders = (
       input: 0.5,
       topLevel: 1,
     },
-  } as any)
+  })
 
   // Mock API endpoints
-  vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue({
-    data: mockListingSearchResults,
-    isLoading: false,
-    isError: false,
-    error: undefined,
-    refetch: vi.fn(),
-  } as any)
+  vi.spyOn(marketV2Api.endpoints.searchListings, "useQuery").mockReturnValue(
+    querySuccess<typeof marketV2Api.endpoints.searchListings>(
+      mockListingSearchResults,
+    ),
+  )
 
   vi
     .spyOn(marketV2Api.endpoints.getListingDetail, "useQuery")
-    .mockReturnValue({
-      data: mockListingDetail,
-      isLoading: false,
-      isError: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
+    .mockReturnValue(
+      querySuccess<typeof marketV2Api.endpoints.getListingDetail>(
+        mockListingDetail,
+      ),
+    )
 
   return render(
     <Provider store={store}>

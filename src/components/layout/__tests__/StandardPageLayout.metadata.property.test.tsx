@@ -23,7 +23,7 @@ const mockTheme = createTheme({
     component: 2,
     layout: 3,
   },
-} as any)
+})
 
 // Mock the Page component to track title and canonical URL props
 let capturedTitle: string | null | undefined = undefined

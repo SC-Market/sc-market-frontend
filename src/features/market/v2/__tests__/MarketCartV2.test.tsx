@@ -36,7 +36,13 @@ vi.mock("react-i18next", async (importOriginal) =>
 
 // Mock StandardPageLayout to avoid serviceApi dependency
 vi.mock("../../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, title }: any) => (
+  StandardPageLayout: ({
+    children,
+    title,
+  }: {
+    children?: React.ReactNode
+    title?: React.ReactNode
+  }) => (
     <div data-testid="standard-page-layout">
       {title && <h1>{title}</h1>}
       {children}
@@ -86,7 +92,7 @@ const renderWithProviders = (
       image: 1,
       input: 0.5,
     },
-  } as any)
+  })
 
   const mockOrgState: [Contractor | null, React.Dispatch<React.SetStateAction<Contractor | null>>] = [
     null,

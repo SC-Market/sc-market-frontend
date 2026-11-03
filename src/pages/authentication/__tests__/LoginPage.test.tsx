@@ -10,6 +10,7 @@ import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 import { AlertHookContext } from "../../../hooks/alert/AlertHook"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
 import type { Contractor } from "../../../features/contractor/domain/types"
+import type { AlertInterface } from "../../../datatypes/Alert"
 
 // Mock the hooks
 vi.mock("../../../features/authentication/hooks/usePageLogin", () => ({
@@ -50,7 +51,7 @@ const mockTheme = createTheme({
     component: 2,
     layout: 3,
   },
-} as any)
+})
 
 // Create a minimal store
 const createMockStore = () =>
@@ -64,8 +65,7 @@ const createMockStore = () =>
 function TestWrapper({ children }: { children: React.ReactNode }) {
   const store = createMockStore()
   const drawerState = React.useState(false)
-  const alertState = React.useState<any>(null)
-  const mockAlertContext: any = [alertState[0], alertState[1]]
+  const mockAlertContext = React.useState<AlertInterface | null>(null)
   const currentOrgState = React.useState<Contractor | null>(null)
 
   return (

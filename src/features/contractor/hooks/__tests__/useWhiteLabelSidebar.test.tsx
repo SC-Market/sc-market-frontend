@@ -23,11 +23,14 @@ query.mockImplementation((_id: string, { skip }: { skip: boolean }) => (skip ? {
 import { useWhiteLabelSidebar } from "../useWhiteLabelSidebar"
 
 function onDomain(customOrg: string | undefined) {
-  return ({ children }: { children: React.ReactNode }) => (
-    <CustomDomainContext.Provider value={{ isCustomDomain: !!customOrg, customOrg }}>
-      {children}
-    </CustomDomainContext.Provider>
-  )
+  function DomainWrapper({ children }: { children: React.ReactNode }) {
+    return (
+      <CustomDomainContext.Provider value={{ isCustomDomain: !!customOrg, customOrg }}>
+        {children}
+      </CustomDomainContext.Provider>
+    )
+  }
+  return DomainWrapper
 }
 
 describe("useWhiteLabelSidebar", () => {

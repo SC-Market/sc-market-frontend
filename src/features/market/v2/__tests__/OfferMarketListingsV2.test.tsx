@@ -24,7 +24,7 @@ const testTheme = createTheme({
     topLevel: 1,
   },
   spacing: (factor: number) => `${8 * factor}px`,
-} as any)
+})
 
 // Mock translations
 vi.mock("react-i18next", async (importOriginal) =>

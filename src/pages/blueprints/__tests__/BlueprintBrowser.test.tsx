@@ -18,7 +18,13 @@ import { marketV2Api } from "../../../store/api/v2/market"
 // Mock StandardPageLayout to avoid pulling in serviceApi/profileApi dependencies.
 // Render headerTitle since the page title ("Blueprint Browser") is passed via that prop.
 vi.mock("../../../components/layout/StandardPageLayout", () => ({
-  StandardPageLayout: ({ children, headerTitle }: any) => (
+  StandardPageLayout: ({
+    children,
+    headerTitle,
+  }: {
+    children?: React.ReactNode
+    headerTitle?: React.ReactNode
+  }) => (
     <div>
       <h1>{headerTitle}</h1>
       {children}
@@ -40,7 +46,7 @@ beforeEach(() => {
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
-      }) as any,
+      }) as MediaQueryList,
   )
 })
 

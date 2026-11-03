@@ -8,6 +8,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { CounterOfferPage } from "../CounterOfferPage"
 import * as offerHooks from "../../../features/offers/hooks/usePageCounterOffer"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
+import type { GetOfferSessionV2Response } from "../../../store/api/v2/market"
 
 // Mock the page hook
 vi.mock("../../../features/offers/hooks/usePageCounterOffer")
@@ -75,7 +76,7 @@ const mockTheme = createTheme({
     component: 2,
     layout: 3,
   },
-} as any)
+})
 
 const renderWithProviders = (ui: React.ReactElement) => {
   function Wrapper({ children }: { children: React.ReactNode }) {
@@ -122,25 +123,32 @@ describe("CounterOfferPage", () => {
   })
 
   it("renders with data", async () => {
+    const rating = { avg_rating: 0, rating_count: 0, total_rating: 0, streak: 0 }
     const mockSession = {
-      id: "test-session-id",
+      session_id: "test-session-id",
+      status: "counteroffered",
+      created_at: "2024-01-01T00:00:00Z",
       offers: [
         {
-          cost: "1000",
+          offer_id: "test-offer-id",
+          cost: 1000,
           description: "Test description",
           kind: "Delivery",
           payment_type: "one-time",
           title: "Test Offer",
+          status: "counteroffered",
+          created_at: "2024-01-01T00:00:00Z",
+          actor_username: "test-customer",
           market_listings: [],
+          market_listings_v2: [],
           service: null,
-          timestamp: "2024-01-01T00:00:00Z",
         },
       ],
-      customer: { username: "test-customer" },
+      customer: { username: "test-customer", display_name: "", avatar: "", rating },
       contractor: null,
-      assigned_to: { username: "test-seller" },
+      assigned_to: { username: "test-seller", display_name: "", avatar: "", rating },
       contract_id: null,
-    }
+    } satisfies GetOfferSessionV2Response
 
     const mockCounterOffer = {
       cost: "1000",
@@ -156,7 +164,7 @@ describe("CounterOfferPage", () => {
 
     vi.mocked(offerHooks.usePageCounterOffer).mockReturnValue({
       data: {
-        session: mockSession as any,
+        session: mockSession,
         counterOffer: mockCounterOffer,
         setCounterOffer: vi.fn(),
       },

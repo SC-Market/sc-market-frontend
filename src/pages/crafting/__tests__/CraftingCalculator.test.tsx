@@ -23,6 +23,7 @@ import { serviceApi } from "../../../store/service"
 
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
+import type { Contractor } from "../../../features/contractor/domain/types"
 
 // Create a real MUI theme with custom properties
 const mockTheme = createTheme({
@@ -30,7 +31,7 @@ const mockTheme = createTheme({
     component: 2,
     layout: 3,
   },
-} as any)
+})
 
 // Mock the Page component
 vi.mock("../../../components/metadata/Page", async () => {
@@ -119,7 +120,7 @@ function renderWithProviders(component: React.ReactElement) {
 
   function TestWrapper({ children }: { children: React.ReactNode }) {
     const drawerState = React.useState(false)
-    const currentOrgState = React.useState(null) as any
+    const currentOrgState = React.useState<Contractor | null>(null)
 
     return (
       <Provider store={store}>

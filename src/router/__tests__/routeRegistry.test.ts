@@ -1,9 +1,10 @@
 import { vi } from "vitest"
 import { describe, it, expect } from "vitest"
+import type { RouteImportFunction } from "../routeRegistry"
 
 // Mock the module before importing
 vi.mock("../routeRegistry", () => {
-  const mockRegistry: Record<string, () => Promise<any>> = {
+  const mockRegistry: Record<string, RouteImportFunction> = {
     "/": vi.fn(() => Promise.resolve({ default: {} })),
     "/login": vi.fn(() => Promise.resolve({ default: {} })),
     "/signup": vi.fn(() => Promise.resolve({ default: {} })),

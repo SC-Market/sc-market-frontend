@@ -4,7 +4,7 @@ import type { Reducer } from "@reduxjs/toolkit"
 import type { AppStore } from "../store"
 
 // Mock reducer
-const mockReducer: Reducer = (state = {}, action: any) => state
+const mockReducer: Reducer = (state = {}) => state
 
 // Type for lazy reducer
 type LazyReducer = () => Promise<{ default: Reducer }>
@@ -19,11 +19,11 @@ const mockLazyReducers: Record<string, LazyReducer> = {
 
 // We need to mock the module before importing
 vi.mock("../reducerInjection", () => {
-  const lazyReducerRegistry: Record<string, any> = {}
-  const loadedReducers: Record<string, any> = {}
+  const lazyReducerRegistry: Record<string, LazyReducer> = {}
+  const loadedReducers: Record<string, Reducer> = {}
 
   return {
-    registerLazyReducer: (key: string, lazyReducer: any) => {
+    registerLazyReducer: (key: string, lazyReducer: LazyReducer) => {
       lazyReducerRegistry[key] = lazyReducer
     },
     injectReducer: async (_store: unknown, key: string) => {

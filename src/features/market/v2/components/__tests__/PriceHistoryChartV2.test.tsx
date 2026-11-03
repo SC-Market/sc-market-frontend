@@ -8,6 +8,15 @@ import { configureStore } from "@reduxjs/toolkit"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { PriceHistoryChartV2 } from "../PriceHistoryChartV2"
 import { marketV2Api } from "../../../../../store/api/v2/market"
+import {
+  queryError,
+  queryLoading,
+  querySuccess,
+  queryUninitialized,
+  type QueryDataOf,
+} from "../../../../../__tests__/rtkQueryMocks"
+
+type PriceHistory = typeof marketV2Api.endpoints.getPriceHistory
 
 // Mock the MuiLineChart component
 vi.mock("../../../../../components/charts/MuiCharts", () => ({
@@ -17,7 +26,7 @@ vi.mock("../../../../../components/charts/MuiCharts", () => ({
       <div data-testid="chart-width">{width}</div>
       <div data-testid="chart-xaxis-type">{xAxisType}</div>
       <div data-testid="chart-series-count">{series.length}</div>
-      {series.map((s: any, idx: number) => (
+      {series.map((s: { name: string; data: { y: number }[] }, idx: number) => (
         <div key={idx} data-testid={`series-${idx}`}>
           <div data-testid={`series-${idx}-name`}>{s.name}</div>
           <div data-testid={`series-${idx}-data-count`}>{s.data.length}</div>
@@ -85,6 +94,8 @@ const mockPriceHistoryData = {
     },
   ],
   game_item_id: "test-item-id",
+      game_item_name: "Test Item",
+      interval: "day",
   start_date: "2024-01-01T00:00:00Z",
   end_date: "2024-01-02T00:00:00Z",
 }
@@ -104,7 +115,11 @@ const createExtendedTheme = () => {
 }
 
 // Helper to create test store with mocked API
-function createTestStore(mockData: any, isLoading = false, isError = false) {
+function createTestStore(
+  mockData: QueryDataOf<PriceHistory> | null,
+  isLoading = false,
+  isError = false,
+) {
   const store = configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
@@ -114,20 +129,24 @@ function createTestStore(mockData: any, isLoading = false, isError = false) {
   })
 
   // Mock the API query
-  vi.spyOn(marketV2Api, "useGetPriceHistoryQuery").mockReturnValue({
-    data: mockData,
-    isLoading,
-    isError,
-    isSuccess: !isLoading && !isError,
-    isFetching: isLoading,
-    refetch: vi.fn(),
-  } as any)
+  vi.spyOn(marketV2Api, "useGetPriceHistoryQuery").mockReturnValue(
+    isLoading
+      ? queryLoading<PriceHistory>()
+      : isError
+        ? queryError<PriceHistory>({ status: 500, data: "error" })
+        : mockData === null
+          ? queryUninitialized<PriceHistory>()
+          : querySuccess<PriceHistory>(mockData),
+  )
 
   return store
 }
 
 // Helper to render with providers
-const renderWithProviders = (component: React.ReactElement, store: any) => {
+const renderWithProviders = (
+  component: React.ReactElement,
+  store: ReturnType<typeof createTestStore>,
+) => {
   const theme = createExtendedTheme()
   return render(
     <Provider store={store}>
@@ -164,7 +183,14 @@ describe("PriceHistoryChartV2", () => {
   })
 
   it("renders empty state when no data", () => {
-    const store = createTestStore({ data: [] }, false, false)
+    const store = createTestStore(
+      {
+        ...mockPriceHistoryData,
+        data: [],
+      },
+      false,
+      false,
+    )
 
     renderWithProviders(
       <PriceHistoryChartV2 gameItemId="test-item-id" />,
@@ -311,7 +337,7 @@ describe("PriceHistoryChartV2", () => {
       data: [
         {
           timestamp: "2024-01-01T00:00:00Z",
-          quality_tier: null,
+          quality_tier: undefined,
           avg_price: 1500,
           min_price: 1400,
           max_price: 1600,
@@ -319,7 +345,7 @@ describe("PriceHistoryChartV2", () => {
         },
         {
           timestamp: "2024-01-02T00:00:00Z",
-          quality_tier: null,
+          quality_tier: undefined,
           avg_price: 1550,
           min_price: 1450,
           max_price: 1650,
@@ -327,6 +353,8 @@ describe("PriceHistoryChartV2", () => {
         },
       ],
       game_item_id: "test-item-id",
+      game_item_name: "Test Item",
+      interval: "day",
       start_date: "2024-01-01T00:00:00Z",
       end_date: "2024-01-02T00:00:00Z",
     }
@@ -364,7 +392,7 @@ describe("PriceHistoryChartV2", () => {
         },
         {
           timestamp: "2024-01-01T00:00:00Z",
-          quality_tier: null,
+          quality_tier: undefined,
           avg_price: 2500,
           min_price: 2000,
           max_price: 3000,
@@ -380,6 +408,8 @@ describe("PriceHistoryChartV2", () => {
         },
       ],
       game_item_id: "test-item-id",
+      game_item_name: "Test Item",
+      interval: "day",
       start_date: "2024-01-01T00:00:00Z",
       end_date: "2024-01-01T00:00:00Z",
     }
