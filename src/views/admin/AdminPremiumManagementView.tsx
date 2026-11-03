@@ -27,8 +27,10 @@ import {
 import { useSearchContractorsQuery } from "../../store/api/contractors"
 import { useTranslation } from "react-i18next"
 import type { MinimalContractor } from "../../store/api/contractors"
+import { useFormatters } from "../../util/format"
 
 export function AdminPremiumManagementView() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [grantDialogOpen, setGrantDialogOpen] = useState(false)
@@ -107,7 +109,7 @@ export function AdminPremiumManagementView() {
       headerName: t("admin.premium.grantedAt", "Granted"),
       width: 180,
       valueFormatter: (value: string) =>
-        value ? new Date(value).toLocaleDateString() : "",
+        value ? fmt.date(value) : "",
     },
     {
       field: "revoked_at",

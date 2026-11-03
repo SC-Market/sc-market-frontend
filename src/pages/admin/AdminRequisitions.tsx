@@ -46,6 +46,7 @@ import {
 import type { RequisitionDetail, RequisitionLineItem, GameItemSearchResult } from "../../store/api/v2/market"
 import { Trans, useTranslation } from "react-i18next"
 import { usePageReady } from "../../components/metadata/PageReady"
+import { useFormatters } from "../../util/format"
 
 const STATUS_COLORS: Record<string, "default" | "warning" | "info" | "success" | "error"> = {
   "not-started": "warning",
@@ -129,6 +130,7 @@ function CreateRequisitionDialog({
   onClose: () => void
 }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const [create, { isLoading, error }] = useCreateRequisitionMutation()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -284,9 +286,7 @@ function CreateRequisitionDialog({
                 <Box sx={{ minWidth: 80, textAlign: "right" }}>
                   <Typography variant="caption" color="text.secondary">
                     {t("suppliersUi.amountAuec", {
-                      amount: (
-                        item.quantity * item.price_per_unit
-                      ).toLocaleString(),
+                      amount: fmt.number(item.quantity * item.price_per_unit),
                     })}
                   </Typography>
                 </Box>
@@ -308,7 +308,7 @@ function CreateRequisitionDialog({
             <Typography variant="body2" color="text.secondary">
               <Trans
                 i18nKey="suppliersUi.requisitions.totalWithAmount"
-                values={{ amount: totalPrice.toLocaleString() }}
+                values={{ amount: fmt.number(totalPrice) }}
                 components={{
                   strong: (
                     <Typography
@@ -356,6 +356,7 @@ function RequisitionDetailDialog({
   onClose: () => void
 }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data: req } = useGetRequisitionQuery(
     { orderId: orderId! },
     { skip: !orderId },
@@ -395,7 +396,7 @@ function RequisitionDetailDialog({
             />
             <Typography variant="caption" color="text.secondary" sx={{ my: "auto" }}>
               {t("suppliersUi.requisitions.createdOn", {
-                date: new Date(req.created_at).toLocaleDateString(),
+                date: fmt.date(req.created_at),
               })}
             </Typography>
           </Stack>
@@ -433,17 +434,15 @@ function RequisitionDetailDialog({
               {req.items.map((item: RequisitionLineItem) => (
                 <TableRow key={item.requisition_item_id}>
                   <TableCell>{item.game_item_name}</TableCell>
-                  <TableCell align="right">{item.quantity.toLocaleString()}</TableCell>
+                  <TableCell align="right">{fmt.number(item.quantity)}</TableCell>
                   <TableCell align="right">
                     {t("suppliersUi.amountAuec", {
-                      amount: item.price_per_unit.toLocaleString(),
+                      amount: fmt.number(item.price_per_unit),
                     })}
                   </TableCell>
                   <TableCell align="right">
                     {t("suppliersUi.amountAuec", {
-                      amount: (
-                        item.price_per_unit * item.quantity
-                      ).toLocaleString(),
+                      amount: fmt.number(item.price_per_unit * item.quantity),
                     })}
                   </TableCell>
                   <TableCell align="right">
@@ -469,7 +468,7 @@ function RequisitionDetailDialog({
                 <TableCell align="right">
                   <Typography variant="body2" fontWeight="bold">
                     {t("suppliersUi.amountAuec", {
-                      amount: total.toLocaleString(),
+                      amount: fmt.number(total),
                     })}
                   </Typography>
                 </TableCell>
@@ -516,6 +515,7 @@ export function AdminRequisitions() {
   const [viewId, setViewId] = useState<string | null>(null)
 
   const { data, isLoading } = useGetRequisitionsQuery({})
+  const fmt = useFormatters()
   usePageReady(isLoading)
   const requisitions: RequisitionDetail[] = data?.requisitions || []
 
@@ -632,7 +632,7 @@ export function AdminRequisitions() {
                     <TableCell align="right">
                       <Typography variant="body2" fontWeight={500}>
                         {t("suppliersUi.amountAuec", {
-                          amount: total.toLocaleString(),
+                          amount: fmt.number(total),
                         })}
                       </Typography>
                     </TableCell>
@@ -641,7 +641,7 @@ export function AdminRequisitions() {
                     </TableCell>
                     <TableCell>
                       <Typography variant="caption" color="text.secondary">
-                        {new Date(req.created_at).toLocaleDateString()}
+                        {fmt.date(req.created_at)}
                       </Typography>
                     </TableCell>
                     <TableCell align="right">

@@ -19,6 +19,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetCraftingHistoryQuery } from "../../store/api/v2/market"
+import { useFormatters } from "../../util/format"
 
 const TIER_COLORS: Record<number, "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"> = {
   1: "default",
@@ -29,6 +30,7 @@ const TIER_COLORS: Record<number, "default" | "primary" | "secondary" | "error" 
 }
 
 export function CraftingHistory() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [page, setPage] = useState(0)
@@ -68,7 +70,7 @@ export function CraftingHistory() {
                   {data.history.map((row) => (
                     <TableRow key={row.session_id}>
                       <TableCell>
-                        {new Date(row.crafting_date).toLocaleDateString()}
+                        {fmt.date(row.crafting_date)}
                       </TableCell>
                       <TableCell>{row.blueprint_name}</TableCell>
                       <TableCell>{row.output_item_name}</TableCell>
@@ -88,7 +90,7 @@ export function CraftingHistory() {
                       </TableCell>
                       <TableCell align="right">
                         {row.total_material_cost != null
-                          ? row.total_material_cost.toLocaleString()
+                          ? fmt.number(row.total_material_cost)
                           : "—"}
                       </TableCell>
                     </TableRow>

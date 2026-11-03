@@ -16,6 +16,7 @@ import { SeoHead } from "../../../seo/SeoHead"
 import { headDescription, type PageHead } from "../../../seo/pageHead"
 import { isOfficialSite, officialHelpUrl } from "../links"
 import { GuidesDirectory, GuidesDirectoryToggle } from "./GuidesDirectory"
+import { useFormatters } from "../../../util/format"
 
 export function HelpLayout(props: {
   head: PageHead | null
@@ -93,7 +94,9 @@ export function HelpLayout(props: {
 
 /** "Updated Oct 25, 2026 · Khuzdul" (dates are UTC calendar days). */
 export function UpdatedStamp({ updated, author }: { updated: string; author: string }) {
-  const date = new Date(`${updated}T00:00:00Z`).toLocaleDateString("en-US", {
+  const fmt = useFormatters()
+  // A calendar day: UTC on the server and in the browser alike.
+  const date = fmt.date(`${updated}T00:00:00Z`, {
     timeZone: "UTC",
     year: "numeric",
     month: "short",

@@ -38,9 +38,11 @@ import {
   LegacyTokensNotice,
   PublicApiTokensSettings,
 } from "./PublicApiTokensSettings"
+import { useFormatters } from "../../../util/format"
 
 export function ApiTokensSettings() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data: tokens, isLoading, error } = useGetTokensQuery()
   const [deleteToken] = useDeleteTokenMutation()
 
@@ -82,13 +84,8 @@ export function ApiTokensSettings() {
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString()
-  }
-
-  const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString()
-  }
+  const formatDate = (dateString: string) => fmt.date(dateString)
+  const formatDateTime = (dateString: string) => fmt.dateTime(dateString)
 
   const isExpired = (expiresAt?: string) => {
     if (!expiresAt) return false

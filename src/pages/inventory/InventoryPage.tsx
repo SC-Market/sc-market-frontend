@@ -48,6 +48,7 @@ import { LocationSelector } from "../../features/market/components/stock/Locatio
 import { HelpLink } from "../../features/help/components/HelpLink"
 import { FirstUseHint } from "../../features/help/components/FirstUseHint"
 import { EmptyState } from "../../components/empty-states/EmptyState"
+import { useFormatters } from "../../util/format"
 
 /* ── Confirm delete dialog ── */
 function ConfirmDeleteDialog({ open, onClose, onConfirm, loading }: { open: boolean; onClose: () => void; onConfirm: () => void; loading: boolean }) {
@@ -71,6 +72,7 @@ function ConfirmDeleteDialog({ open, onClose, onConfirm, loading }: { open: bool
 }
 
 export default function InventoryPage() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [page, setPage] = useState(1)
@@ -296,7 +298,7 @@ export default function InventoryPage() {
                     <TableCell>{lot.variant_display_name || "—"}</TableCell>
                     <TableCell align="right">
                       <Typography variant="body2" fontWeight={600}>
-                        {lot.quantity_total.toLocaleString()}
+                        {fmt.number(lot.quantity_total)}
                       </Typography>
                     </TableCell>
                     <TableCell>

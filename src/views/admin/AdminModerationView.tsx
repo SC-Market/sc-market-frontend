@@ -26,8 +26,10 @@ import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { safeRedirectPath } from "../../util/safeRedirect"
+import { useFormatters } from "../../util/format"
 
 export function AdminModerationView() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
@@ -143,7 +145,7 @@ export function AdminModerationView() {
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2">
-          {new Date(params.value).toLocaleDateString()}
+          {fmt.date(params.value)}
         </Typography>
       ),
     },

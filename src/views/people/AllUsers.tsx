@@ -41,6 +41,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { USER_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 function PeopleRow(props: {
   row: AdminUser
@@ -49,6 +50,7 @@ function PeopleRow(props: {
   isItemSelected: boolean
   labelId: string
 }): ReactElement {
+  const fmt = useFormatters()
   const { row, onClick, isItemSelected, labelId } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -107,7 +109,7 @@ function PeopleRow(props: {
         align={"right"}
       >
         <Typography variant={"subtitle2"}>
-          {new Date(row.created_at).toLocaleDateString()}
+          {fmt.date(row.created_at)}
         </Typography>
       </TableCell>
       <TableCell align="right">

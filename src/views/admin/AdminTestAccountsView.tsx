@@ -32,6 +32,7 @@ import {
   downloadJson,
   type TestAccountCredential,
 } from "../../util/testAccountCredentials"
+import { useFormatters } from "../../util/format"
 
 const USERNAME_RE = /^~?test[a-z0-9_-]{2,36}$/i
 
@@ -148,6 +149,7 @@ function SecretDialog(props: {
 }
 
 export function AdminTestAccountsView() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { data, error, isLoading } = useListTestAccountsQuery()
   const [create, createState] = useCreateTestAccountMutation()
@@ -261,8 +263,8 @@ export function AdminTestAccountsView() {
                 <TableRow key={a.user_id}>
                   <TableCell sx={{ fontFamily: "monospace" }}>{a.username}</TableCell>
                   <TableCell>{a.display_name}</TableCell>
-                  <TableCell>{new Date(a.created_at).toLocaleString()}</TableCell>
-                  <TableCell>{a.last_login_at ? new Date(a.last_login_at).toLocaleString() : "-"}</TableCell>
+                  <TableCell>{fmt.dateTime(a.created_at)}</TableCell>
+                  <TableCell>{a.last_login_at ? fmt.dateTime(a.last_login_at) : "-"}</TableCell>
                   <TableCell>{a.failed_logins_24h}</TableCell>
                   <TableCell>
                     {a.banned ? (

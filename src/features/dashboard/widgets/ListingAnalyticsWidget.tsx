@@ -21,6 +21,7 @@ import type { TFunction } from "i18next"
 import { useGetListingStatsQuery } from "../../../store/api/v2/market"
 import type { ResolvedScope } from "../useResolveScope"
 import type { DashboardWidget } from "../types"
+import { useFormatters } from "../../../util/format"
 
 function readLimit(settings: DashboardWidget["settings"]): number {
   const value = settings?.limit
@@ -49,6 +50,7 @@ export function ListingAnalyticsWidget({
   settings?: DashboardWidget["settings"]
   t: TFunction
 }) {
+  const fmt = useFormatters()
   const { data, isLoading, isError } = useGetListingStatsQuery(
     { shopId: scope.shopId, limit: readLimit(settings) },
     { skip: !scope.shopId },
@@ -97,19 +99,19 @@ export function ListingAnalyticsWidget({
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3 }}>
         <Metric
           label={t("dashboard.listingAnalytics.views", "Views")}
-          value={data.totals.views.toLocaleString()}
+          value={fmt.number(data.totals.views)}
         />
         <Metric
           label={t("dashboard.listingAnalytics.cartAdds", "Cart adds")}
-          value={data.totals.cart_adds.toLocaleString()}
+          value={fmt.number(data.totals.cart_adds)}
         />
         <Metric
           label={t("dashboard.listingAnalytics.orders", "Orders")}
-          value={data.totals.orders.toLocaleString()}
+          value={fmt.number(data.totals.orders)}
         />
         <Metric
           label={t("dashboard.listingAnalytics.sales", "Sales")}
-          value={data.totals.sales.toLocaleString()}
+          value={fmt.number(data.totals.sales)}
         />
         <Metric
           label={t("dashboard.listingAnalytics.conversion", "Conversion")}
@@ -156,16 +158,16 @@ export function ListingAnalyticsWidget({
                   {row.title}
                 </TableCell>
                 <TableCell align="right">
-                  {row.views.toLocaleString()}
+                  {fmt.number(row.views)}
                 </TableCell>
                 <TableCell align="right">
-                  {row.cart_adds.toLocaleString()}
+                  {fmt.number(row.cart_adds)}
                 </TableCell>
                 <TableCell align="right">
-                  {row.orders.toLocaleString()}
+                  {fmt.number(row.orders)}
                 </TableCell>
                 <TableCell align="right">
-                  {row.sales.toLocaleString()}
+                  {fmt.number(row.sales)}
                 </TableCell>
                 <TableCell align="right">{row.conversion_rate}%</TableCell>
               </TableRow>

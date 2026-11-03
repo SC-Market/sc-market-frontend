@@ -59,6 +59,7 @@ import {
 } from "../../store/api/v2/market"
 import { AddItemDialog } from "../../components/wishlists"
 import { PATHS, GAME_DATA_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 type SortOption = "priority" | "name" | "status" | "quality"
 
@@ -77,6 +78,7 @@ type SortOption = "priority" | "name" | "status" | "quality"
  * - Actions: add, edit, remove, mark acquired
  */
 export function WishlistDetail() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { wishlist_id } = useParams<{ wishlist_id: string }>()
@@ -305,7 +307,7 @@ export function WishlistDetail() {
                       <Typography variant="caption" color="text.secondary">
                         {t("wishlists.estimatedCost", "Estimated Cost")}
                       </Typography>
-                      <Typography variant="h6">{statistics.total_estimated_cost.toLocaleString()} aUEC</Typography>
+                      <Typography variant="h6">{fmt.number(statistics.total_estimated_cost)} aUEC</Typography>
                     </Box>
                   )}
                 </Box>
@@ -491,7 +493,7 @@ export function WishlistDetail() {
                             {t("wishlists.estCost", "Est. Cost")}
                           </Typography>
                           <Typography variant="body2">
-                            {item.estimated_cost.toLocaleString()} aUEC
+                            {fmt.number(item.estimated_cost)} aUEC
                           </Typography>
                         </Box>
                       )}

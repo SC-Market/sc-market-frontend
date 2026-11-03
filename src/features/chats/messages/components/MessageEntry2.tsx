@@ -11,7 +11,6 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import ContentCopyRounded from "@mui/icons-material/ContentCopyRounded"
 import { Link } from "react-router-dom"
 import { useGetUserByUsernameQuery } from "../../../profile/api/profileApi"
-import { getRelativeTime } from "../../../../util/time"
 import { MarkdownRender } from "../../../../components/markdown/Markdown.lazy"
 import { LongPressMenu } from "../../../../components/gestures"
 import SCMarketLogo from "../../../../assets/scmarket-logo.webp"
@@ -20,9 +19,12 @@ import { useMemo } from "react"
 import type { Message } from "../../domain/types"
 import { replaceDiscordTimestamps } from "../utils/timestampFormatter"
 import { USER_PATHS } from "../../../../routes/paths"
+import { useFormatters, useNow } from "../../../../util/format"
 
 export function MessageEntry2(props: { message: Message }) {
   const { message } = props
+  const fmt = useFormatters()
+  const now = useNow()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const { t } = useTranslation()
@@ -30,8 +32,8 @@ export function MessageEntry2(props: { message: Message }) {
     skip: !message.author,
   })
   const convertedContent = useMemo(
-    () => replaceDiscordTimestamps(message.content),
-    [message.content],
+    () => replaceDiscordTimestamps(message.content, fmt, now),
+    [message.content, fmt, now],
   )
 
   const longPressActions = useMemo(() => {
@@ -110,7 +112,7 @@ export function MessageEntry2(props: { message: Message }) {
               lineHeight: 1.66,
             }}
           >
-            {getRelativeTime(new Date(message.timestamp))}
+            {fmt.relative(message.timestamp, now)}
           </Typography>
         </Stack>
         <Box

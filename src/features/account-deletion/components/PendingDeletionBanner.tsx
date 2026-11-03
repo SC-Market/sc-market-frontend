@@ -3,6 +3,7 @@ import { Alert, Button, CircularProgress } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useAccountCancelDeletionMutation } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useFormatters } from "../../../util/format"
 
 interface PendingDeletionBannerProps {
   scheduledAt: string
@@ -12,6 +13,7 @@ export function PendingDeletionBanner({
   scheduledAt,
 }: PendingDeletionBannerProps) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const [cancelDeletion, { isLoading }] = useAccountCancelDeletionMutation()
   const issueAlert = useAlertHook()
 
@@ -29,7 +31,7 @@ export function PendingDeletionBanner({
     }
   }
 
-  const formattedDate = new Date(scheduledAt).toLocaleDateString(undefined, {
+  const formattedDate = fmt.date(scheduledAt, {
     year: "numeric",
     month: "long",
     day: "numeric",

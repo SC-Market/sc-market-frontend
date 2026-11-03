@@ -7,6 +7,7 @@ import { ScrollableTable } from "../../components/table/ScrollableTable"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import type { TFunction } from "i18next"
+import { useFormatters } from "../../util/format"
 
 const statusColors = new Map<
   "Completed" | "Pending" | "Cancelled",
@@ -74,7 +75,8 @@ export function TransactionTableRow(props: {
   labelId: string
 }) {
   const { row, index, isItemSelected } = props
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
 
   const { data: profile } = useGetUserProfileQuery()
   const userRec = useMemo(
@@ -135,12 +137,12 @@ export function TransactionTableRow(props: {
           {row.status === "Cancelled" ? (
             <Typography sx={{ textDecoration: "line-through" }}>
               {receiving ? "" : "-"}
-              {row.amount.toLocaleString(i18n.language)} aUEC
+              {fmt.number(row.amount)} aUEC
             </Typography>
           ) : (
             <Typography color={receiving ? "success.light" : "error.dark"}>
               {receiving ? "" : "-"}
-              {row.amount.toLocaleString(i18n.language)} aUEC
+              {fmt.number(row.amount)} aUEC
             </Typography>
           )}
         </TableCell>

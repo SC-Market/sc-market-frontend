@@ -37,6 +37,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { GAME_DATA_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 const TIER_COLORS: Record<number, "default" | "success" | "info" | "secondary" | "warning"> = {
   1: "default", 2: "success", 3: "info", 4: "secondary", 5: "warning",
@@ -123,6 +124,7 @@ function MaterialQualityInput({
 }
 
 export function CraftingCalculator() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [searchParams] = useSearchParams()
@@ -479,15 +481,15 @@ export function CraftingCalculator() {
                   <Divider sx={{ my: 1 }} />
                   <Stack direction="row" spacing={2} flexWrap="wrap">
                     <Typography variant="body2">
-                      <Trans i18nKey="craftingUi.costMaterials" values={{ amount: result.estimated_cost.material_cost.toLocaleString() }} components={{ strong: <strong /> }} />
+                      <Trans i18nKey="craftingUi.costMaterials" values={{ amount: fmt.number(result.estimated_cost.material_cost) }} components={{ strong: <strong /> }} />
                     </Typography>
                     {result.estimated_cost.crafting_station_fee ? (
                       <Typography variant="body2">
-                        <Trans i18nKey="craftingUi.costStationFee" values={{ amount: result.estimated_cost.crafting_station_fee.toLocaleString() }} components={{ strong: <strong /> }} />
+                        <Trans i18nKey="craftingUi.costStationFee" values={{ amount: fmt.number(result.estimated_cost.crafting_station_fee) }} components={{ strong: <strong /> }} />
                       </Typography>
                     ) : null}
                     <Typography variant="body2" fontWeight="bold">
-                      {t("craftingUi.costTotal", { amount: result.estimated_cost.total_cost.toLocaleString() })}
+                      {t("craftingUi.costTotal", { amount: fmt.number(result.estimated_cost.total_cost) })}
                     </Typography>
                   </Stack>
                 </>

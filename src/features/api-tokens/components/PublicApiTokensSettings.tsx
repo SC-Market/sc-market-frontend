@@ -43,6 +43,7 @@ import {
   type PublicTokenPreset,
 } from "../../../store/api/v2/market"
 import { HelpLink } from "../../help/components/HelpLink"
+import { useFormatters } from "../../../util/format"
 
 const PUBLIC_API_DOCS_URL = "https://api.sc-market.space/docs"
 const EXPIRY_CHOICES = [30, 90, 180, 365]
@@ -68,13 +69,6 @@ function serverMessage(error: unknown): string | undefined {
   return typeof inner.message === "string" ? inner.message : undefined
 }
 
-function formatDate(value: string) {
-  return new Date(value).toLocaleDateString()
-}
-
-function formatDateTime(value: string) {
-  return new Date(value).toLocaleString()
-}
 
 function StatusChip({ status }: { status: PublicApiTokenSummary["status"] }) {
   const { t } = useTranslation()
@@ -102,6 +96,7 @@ function TokenCard({
   onRevoke: (token: PublicApiTokenSummary) => void
 }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const active = token.status === "active"
   return (
     <Card variant="outlined" sx={{ height: "100%" }}>
@@ -166,20 +161,20 @@ function TokenCard({
         <Typography variant="body2" color="text.primary">
           {token.status === "revoked" && token.revoked_at
             ? t("settings.publicApi.revokedOn", {
-                date: formatDate(token.revoked_at),
+                date: fmt.date(token.revoked_at),
               })
             : token.status === "expired"
               ? t("settings.publicApi.expiredOn", {
-                  date: formatDate(token.expires_at),
+                  date: fmt.date(token.expires_at),
                 })
               : t("settings.publicApi.expiresOn", {
-                  date: formatDate(token.expires_at),
+                  date: fmt.date(token.expires_at),
                 })}
         </Typography>
         <Typography variant="body2" color="text.primary">
           {token.last_used_at
             ? t("settings.publicApi.lastUsed", {
-                date: formatDateTime(token.last_used_at),
+                date: fmt.dateTime(token.last_used_at),
               })
             : t("settings.publicApi.neverUsed")}
           {" · "}
@@ -547,12 +542,13 @@ export function PublicApiTokensSettings() {
 /** Notice above the legacy token list; names the sunset date once one is set. */
 export function LegacyTokensNotice() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data: options } = useGetPublicApiTokenOptionsQuery()
   const sunset = options?.legacy_sunset_at
   return (
     <Alert severity={sunset ? "warning" : "info"}>
       {sunset
-        ? t("settings.publicApi.legacy.sunset", { date: formatDate(sunset) })
+        ? t("settings.publicApi.legacy.sunset", { date: fmt.date(sunset) })
         : t("settings.publicApi.legacy.notice")}
     </Alert>
   )

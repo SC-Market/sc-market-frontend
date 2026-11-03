@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { USER_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 /** One customer's row: their own orders with the org, never shared values. */
 export function CustomerRow(props: {
@@ -30,7 +31,7 @@ export function CustomerRow(props: {
 }): ReactElement {
   const { row, onClick, labelId } = props
   const theme = useTheme<ExtendedTheme>()
-  const { i18n } = useTranslation()
+  const fmt = useFormatters()
   return (
     <TableRow hover onClick={onClick} tabIndex={-1} key={row.user_id}>
       <TableCell component="th" id={labelId} scope="row">
@@ -58,23 +59,23 @@ export function CustomerRow(props: {
       </TableCell>
       <TableCell align="right">
         <Typography variant={"subtitle1"}>
-          {row.orders.toLocaleString(i18n.language)}
+          {fmt.number(row.orders)}
         </Typography>
       </TableCell>
       <TableCell align="right">
         <Typography variant={"subtitle1"}>
-          {row.fulfilled_orders.toLocaleString(i18n.language)}
+          {fmt.number(row.fulfilled_orders)}
         </Typography>
       </TableCell>
       <TableCell align="right">
         <Typography variant={"subtitle1"} color={"primary"}>
-          {row.total_value.toLocaleString(i18n.language)} aUEC
+          {fmt.number(row.total_value)} aUEC
         </Typography>
       </TableCell>
       <TableCell align="right">
         <Typography variant={"subtitle1"}>
           {row.last_order_at
-            ? new Date(row.last_order_at).toLocaleDateString(i18n.language)
+            ? fmt.date(row.last_order_at)
             : "—"}
         </Typography>
       </TableCell>

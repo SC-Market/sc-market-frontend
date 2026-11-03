@@ -4,10 +4,12 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
+import { useFormatters } from "../../util/format"
 
 export function MemberBalance() {
   const profile = useGetUserProfileQuery()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
 
   return (
     <Section xs={12} lg={12}>
@@ -32,7 +34,7 @@ export function MemberBalance() {
           sx={{ fontWeight: "bold", transition: "0.3s" }}
         >
           {profile.data?.balance &&
-            profile.data?.balance.toLocaleString(i18n.language)}{" "}
+            fmt.number(profile.data?.balance)}{" "}
           aUEC
         </Typography>
       </Grid>

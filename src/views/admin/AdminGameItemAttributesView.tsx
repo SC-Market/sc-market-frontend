@@ -35,6 +35,7 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AdminIcons } from "../../components/icons"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useFormatters } from "../../util/format"
 
 interface AdminGameItemAttributesViewProps {
   gameItemId: string
@@ -45,6 +46,7 @@ export function AdminGameItemAttributesView({
   gameItemId,
   gameItemName,
 }: AdminGameItemAttributesViewProps) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -226,7 +228,7 @@ export function AdminGameItemAttributesView({
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2">
-          {new Date(params.value).toLocaleString()}
+          {fmt.dateTime(params.value)}
         </Typography>
       ),
     },

@@ -51,6 +51,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useFormatters } from "../../util/format"
 
 /**
  * WishlistManager Component
@@ -67,6 +68,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
  * - Authentication required
  */
 export function WishlistManager() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { data: userProfile } = useGetUserProfileQuery()
@@ -334,7 +336,7 @@ export function WishlistManager() {
                 {/* Created Date */}
                 <Typography variant="caption" color="text.secondary">
                   {t("wishlistsUi.manager.createdOn", {
-                    date: new Date(wishlist.created_at).toLocaleDateString(),
+                    date: fmt.date(wishlist.created_at),
                   })}
                 </Typography>
               </CardContent>

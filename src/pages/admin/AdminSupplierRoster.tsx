@@ -55,6 +55,7 @@ import type {
 } from "../../store/api/v2/market"
 import { useTranslation } from "react-i18next"
 import { usePageReady } from "../../components/metadata/PageReady"
+import { useFormatters } from "../../util/format"
 
 const TIER_COLORS: Record<string, "success" | "primary" | "warning" | "default"> = {
   preferred: "success",
@@ -318,6 +319,7 @@ function SupplierRow({
   onEdit: (r: SupplierRelationship) => void
   onRemove: (r: SupplierRelationship) => void
 }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { supplier } = rel
   return (
@@ -394,7 +396,7 @@ function SupplierRow({
       </TableCell>
       <TableCell>
         <Typography variant="caption" color="text.secondary">
-          {new Date(rel.created_at).toLocaleDateString()}
+          {fmt.date(rel.created_at)}
         </Typography>
       </TableCell>
       <TableCell align="right">
@@ -424,6 +426,7 @@ function SupplierRow({
 // ---------------------------------------------------------------------------
 
 export function AdminSupplierRoster() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const [tab, setTab] = useState(0)
   const [addOpen, setAddOpen] = useState(false)
@@ -630,7 +633,7 @@ export function AdminSupplierRoster() {
                     </TableCell>
                     <TableCell>
                       <Typography variant="caption" color="text.secondary">
-                        {new Date(rel.created_at).toLocaleDateString()}
+                        {fmt.date(rel.created_at)}
                       </Typography>
                     </TableCell>
                     <TableCell />

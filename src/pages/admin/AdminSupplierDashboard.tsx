@@ -62,15 +62,18 @@ import type {
 } from "../../store/api/v2/market"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { remainingQuantity } from "../../features/market/domain/buyOrders"
+import { formatNumber, useFormatters } from "../../util/format"
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function formatAuec(value: number): string {
-  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`
-  if (value >= 1_000) return `${(value / 1_000).toFixed(0)}k`
-  return value.toLocaleString()
+/** An aUEC amount, abbreviated from 1,000 up in the locale's short form ("15K", "1.5M"). */
+function formatAuec(value: number, locale: string): string {
+  return formatNumber(value, locale, {
+    notation: value >= 1_000 ? "compact" : "standard",
+    maximumFractionDigits: value >= 1_000_000 ? 1 : 0,
+  })
 }
 
 function timeAgo(t: TFunction, isoDate: string): string {
@@ -189,6 +192,7 @@ function StatCard({ icon, label, value, sub, accent, loading }: StatCardProps) {
 type BuyOrderTab = "all" | "targeted" | "roster" | "public"
 
 function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const [tab, setTab] = useState<BuyOrderTab>("all")
   const navigate = useNavigate()
@@ -339,7 +343,7 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                       fontWeight={600}
                     >
                       {t("suppliersUi.amountAuec", {
-                        amount: formatAuec(order.price_per_unit),
+                        amount: formatAuec(order.price_per_unit, fmt.locale),
                       })}
                     </Typography>
                   </TableCell>
@@ -348,7 +352,7 @@ function BuyOrdersPanel({ orders }: { orders: StandingBuyOrder[] }) {
                       variant="body2"
                       fontFamily="'JetBrains Mono', monospace"
                     >
-                      {remainingQuantity(order).toLocaleString()}
+                      {fmt.number(remainingQuantity(order))}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -473,6 +477,7 @@ function RequisitionsPanel({ reqs }: { reqs: RequisitionDetail[] }) {
 // ---------------------------------------------------------------------------
 
 function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -566,7 +571,7 @@ function RecentOrdersPanel({ orders }: { orders: OrderPreview[] }) {
                       color="success.main"
                       fontWeight={600}
                     >
-                      {formatAuec(order.total_price)}
+                      {formatAuec(order.total_price, fmt.locale)}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -609,6 +614,7 @@ function buildActivityFeed(
   buyOrders: StandingBuyOrder[],
   reqs: RequisitionDetail[],
   orders: OrderPreview[],
+  locale: string,
 ): ActivityItem[] {
   const items: ActivityItem[] = []
 
@@ -666,7 +672,7 @@ function buildActivityFeed(
           <>
             <Trans
               i18nKey="suppliersUi.dashboard.activity.orderCompleted"
-              values={{ title: o.title, amount: formatAuec(o.total_price) }}
+              values={{ title: o.title, amount: formatAuec(o.total_price, locale) }}
               components={{ b: <b /> }}
             />
           </>
@@ -715,6 +721,7 @@ function ActivityFeed({ items }: { items: ActivityItem[] }) {
 // ---------------------------------------------------------------------------
 
 export function AdminSupplierDashboard() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { data: buyOrdersData, isLoading: boLoading, refetch: boRefetch } =
     useSearchBuyOrdersQuery({ pageSize: 50 })
@@ -741,7 +748,7 @@ export function AdminSupplierDashboard() {
     .reduce((sum, o) => sum + o.total_price, 0)
   const supplierCount = suppliersData?.total ?? 0
 
-  const activityFeed = buildActivityFeed(t, activeBuyOrders, reqs, orders)
+  const activityFeed = buildActivityFeed(t, activeBuyOrders, reqs, orders, fmt.locale)
 
   const isLoading = boLoading || reqLoading || ordersLoading
 
@@ -819,7 +826,7 @@ export function AdminSupplierDashboard() {
         <StatCard
           icon={<PaymentsRounded sx={{ fontSize: 18 }} />}
           label={t("suppliersUi.dashboard.stats.revenue")}
-          value={t("suppliersUi.amountAuec", { amount: formatAuec(recentRevenue) })}
+          value={t("suppliersUi.amountAuec", { amount: formatAuec(recentRevenue, fmt.locale) })}
           sub={t("suppliersUi.dashboard.stats.ordersCompleted", {
             count: orders.filter((o) => o.status === "fulfilled").length,
           })}

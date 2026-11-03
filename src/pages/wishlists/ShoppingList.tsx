@@ -49,6 +49,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { useFormatters } from "../../util/format"
 
 type SortField = "name" | "quantity" | "cost" | "stock"
 type SortOrder = "asc" | "desc"
@@ -68,6 +69,7 @@ type SortOrder = "asc" | "desc"
  * - Responsive design for mobile devices
  */
 export function ShoppingList() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
@@ -143,8 +145,8 @@ export function ShoppingList() {
       material.user_inventory_quantity.toString(),
       material.quantity_to_acquire.toString(),
       material.desired_quality_tier?.toString() || t("shoppingListUi.any"),
-      material.estimated_unit_price?.toLocaleString() || t("shoppingListUi.notAvailable"),
-      material.estimated_total_cost?.toLocaleString() || t("shoppingListUi.notAvailable"),
+      fmt.number(material.estimated_unit_price) || t("shoppingListUi.notAvailable"),
+      fmt.number(material.estimated_total_cost) || t("shoppingListUi.notAvailable"),
       material.acquisition_methods.map(acquisitionLabel).join("; "),
       material.used_by_items.map((item) => `${item.item_name} (${item.quantity_for_this_item})`).join("; "),
     ])
@@ -332,7 +334,7 @@ export function ShoppingList() {
               <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                 <Typography variant="h6">{t("shoppingListUi.estimatedTotalCost")}</Typography>
                 <Typography variant="h4" color="primary">
-                  {t("shoppingListUi.amountAuec", { amount: data.total_estimated_cost.toLocaleString() })}
+                  {t("shoppingListUi.amountAuec", { amount: fmt.number(data.total_estimated_cost) })}
                 </Typography>
               </Stack>
             </CardContent>
@@ -442,17 +444,17 @@ export function ShoppingList() {
                         )}
                         <TableCell align="right">
                           <Typography variant="body2" fontWeight="medium">
-                            {material.total_quantity_needed.toLocaleString()}
+                            {fmt.number(material.total_quantity_needed)}
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
                           <Typography variant="body2" color={material.user_inventory_quantity > 0 ? "success.main" : "text.secondary"}>
-                            {material.user_inventory_quantity.toLocaleString()}
+                            {fmt.number(material.user_inventory_quantity)}
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
                           <Typography variant="body2" fontWeight="medium" color={material.quantity_to_acquire > 0 ? "error.main" : "success.main"}>
-                            {material.quantity_to_acquire.toLocaleString()}
+                            {fmt.number(material.quantity_to_acquire)}
                           </Typography>
                         </TableCell>
                         {!isMobile && (
@@ -469,7 +471,7 @@ export function ShoppingList() {
                             <TableCell align="right">
                               {material.estimated_total_cost ? (
                                 <Typography variant="body2">
-                                  {t("shoppingListUi.amountAuec", { amount: material.estimated_total_cost.toLocaleString() })}
+                                  {t("shoppingListUi.amountAuec", { amount: fmt.number(material.estimated_total_cost) })}
                                 </Typography>
                               ) : (
                                 <Typography variant="body2" color="text.secondary">

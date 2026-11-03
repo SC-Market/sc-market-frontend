@@ -42,12 +42,14 @@ import {
   type MarketVersion,
 } from "../../store/api/v2/market"
 import { UserSearch } from "../../components/search/UserSearch"
+import { useFormatters } from "../../util/format"
 
 interface Props {
   flagName: string
 }
 
 export function AdminFeatureFlagDetailView({ flagName }: Props) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const label = flagName.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
@@ -212,7 +214,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
               <TableRow key={o.user_id}>
                 <TableCell><Typography variant="body2" fontWeight="bold">{o.username}</Typography></TableCell>
                 <TableCell><Chip label={o.enabled ? t("adminUi.featureFlags.on") : t("adminUi.featureFlags.off")} color={o.enabled ? "success" : "default"} size="small" /></TableCell>
-                <TableCell>{new Date(o.updated_at).toLocaleString()}</TableCell>
+                <TableCell>{fmt.dateTime(o.updated_at)}</TableCell>
                 <TableCell align="right">
                   <IconButton size="small" onClick={() => handleRemove(o.username)} color="error" aria-label={t("adminUi.featureFlags.removeOverrideFor", { username: o.username })}>
                     <DeleteRounded fontSize="small" />

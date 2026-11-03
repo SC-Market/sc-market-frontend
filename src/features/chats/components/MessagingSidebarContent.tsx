@@ -41,12 +41,12 @@ import {
   EmptyMessages,
   EmptySearchResults,
 } from "../../../components/empty-states"
-import { getRelativeTime } from "../../../util/time"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
+import { useFormatters, useNow } from "../../../util/format"
 
 // Single chat entry in the chat list
 function ChatEntry(props: {
@@ -63,6 +63,8 @@ function ChatEntry(props: {
 
   const [, setCreatingMessageGroup] = useMessageGroupCreate()
   const { t } = useTranslation()
+  const fmt = useFormatters()
+  const now = useNow()
 
   const isSelected =
     chat_id === props.chat.chat_id || currentChatID === props.chat.chat_id
@@ -205,7 +207,7 @@ function ChatEntry(props: {
           >
             {props.chat.messages.length > 0 ? (
               <MarkdownRender
-                text={`**${props.chat.messages[props.chat.messages.length - 1].author || t("MessagesBody.system")}**: ${props.chat.messages[props.chat.messages.length - 1].content} *${getRelativeTime(new Date(props.chat.messages[props.chat.messages.length - 1].timestamp))}*`}
+                text={`**${props.chat.messages[props.chat.messages.length - 1].author || t("MessagesBody.system")}**: ${props.chat.messages[props.chat.messages.length - 1].content} *${fmt.relative(props.chat.messages[props.chat.messages.length - 1].timestamp, now)}*`}
                 plainText
               />
             ) : (

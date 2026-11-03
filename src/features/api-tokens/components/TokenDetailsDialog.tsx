@@ -30,6 +30,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
+import { useFormatters } from "../../../util/format"
 
 interface TokenDetailsDialogProps {
   open: boolean
@@ -43,6 +44,7 @@ export function TokenDetailsDialog({
   token,
 }: TokenDetailsDialogProps) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const { data: stats } = useGetTokenStatsQuery(token?.id || "", {
@@ -51,13 +53,7 @@ export function TokenDetailsDialog({
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString()
-  }
-
-  const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString()
-  }
+  const formatDateTime = (dateString: string) => fmt.dateTime(dateString)
 
   const isExpired = (expiresAt?: string) => {
     if (!expiresAt) return false

@@ -25,13 +25,14 @@ import { safeRedirectPath } from "../../../util/safeRedirect"
 import { describeMfaError } from "../errors"
 import { MfaEnrollDialog } from "./MfaEnrollDialog"
 import { RecoveryCodesPanel } from "./RecoveryCodesPanel"
-
-const fmt = (iso: string | null | undefined) =>
-  iso ? new Date(iso).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : null
+import { useFormatters } from "../../../util/format"
 
 /** "Two-factor authentication" settings card (site admins only for now). */
 export function MfaSettings() {
   const { t } = useTranslation()
+  const formatters = useFormatters()
+  const fmt = (iso: string | null | undefined) =>
+    iso ? formatters.dateTime(iso, { dateStyle: "medium", timeStyle: "short" }) : null
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [params, setParams] = useSearchParams()

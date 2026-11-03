@@ -38,6 +38,7 @@ import {
 } from "../../store/api/admin"
 import { useGetPagesDeployHookStatusQuery } from "../../store/api/v2/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useFormatters } from "../../util/format"
 
 function statusColor(s: GameDataImportJob["status"]): "success" | "error" | "info" | "warning" {
   if (s === "completed") return "success"
@@ -52,12 +53,13 @@ function statusColor(s: GameDataImportJob["status"]): "success" | "error" | "inf
  * new data.
  */
 function DeployHookStatus({ pollFast }: { pollFast: boolean }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { data } = useGetPagesDeployHookStatusQuery(undefined, {
     pollingInterval: pollFast ? 5000 : 60000,
   })
   if (!data) return null
-  const time = (iso: string) => new Date(iso).toLocaleString()
+  const time = (iso: string) => fmt.dateTime(iso)
   if (!data.configured) {
     return (
       <Alert severity="warning" sx={{ mb: 3 }}>
@@ -95,6 +97,7 @@ function DeployHookStatus({ pollFast }: { pollFast: boolean }) {
 }
 
 function JobDetailRow({ job }: { job: GameDataImportJob }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -113,7 +116,7 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
             <Chip label={job.status} size="small" color={statusColor(job.status)} />
           </Box>
         </TableCell>
-        <TableCell>{new Date(job.startedAt).toLocaleString()}</TableCell>
+        <TableCell>{fmt.dateTime(job.startedAt)}</TableCell>
         <TableCell>
           {job.completedAt
             ? `${Math.round((new Date(job.completedAt).getTime() - new Date(job.startedAt).getTime()) / 1000)}s`
@@ -162,7 +165,7 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
                           {k.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}
                         </TableCell>
                         <TableCell sx={{ border: "none", py: 0.5 }}>
-                          {typeof v === "number" ? v.toLocaleString() : String(v)}
+                          {typeof v === "number" ? fmt.number(v) : String(v)}
                         </TableCell>
                       </TableRow>
                     ))}

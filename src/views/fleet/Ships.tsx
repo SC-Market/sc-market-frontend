@@ -4,7 +4,6 @@ import React, { MouseEventHandler } from "react"
 import { Ship } from "../../datatypes/Ship"
 import { ScrollableTable } from "../../components/table/ScrollableTable"
 import { HeadCell } from "../../components/table/PaginatedTable"
-import { getRelativeTime } from "../../util/time"
 import { useGetMyShips } from "../../features/fleet/api/shipsApi"
 import { useTranslation } from "react-i18next" // Import translation hook
 
@@ -62,9 +61,6 @@ export function ShipTableRow(props: {
             })}
           />
         </TableCell>
-        {/*<TableCell align="right">*/}
-        {/*    {getRelativeTime(new Date(row.checkin_timestamp))}*/}
-        {/*</TableCell>*/}
       </TableRow>
     </Fade>
   )

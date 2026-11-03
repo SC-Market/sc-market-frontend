@@ -38,7 +38,7 @@ import {
   useGetUserByUsernameQuery,
   useGetUserProfileQuery,
 } from "../../profile/api/profileApi"
-import { getRelativeTime } from "../../../util/time"
+import { replaceDiscordTimestamps } from "../messages/utils/timestampFormatter"
 import { useMessagingSidebar } from "../hooks/MessagingSidebar"
 import { useCurrentChat } from "../hooks/CurrentChat"
 import {
@@ -64,93 +64,12 @@ import {
   ORG_PATHS,
   ORDER_PATHS,
 } from "../../../routes/paths"
-
-// Replace Discord-like timestamp tags in messages with human-readable strings
-function replaceDiscordTimestamps(input: string) {
-  return input.replace(
-    /<t:(\d+):([dDtTfFR])>/g,
-    (match, timestamp, formatChar) => {
-      const date = new Date(parseInt(timestamp, 10) * 1000)
-
-      let options
-
-      switch (formatChar.toLowerCase()) {
-        case "t": // short time
-          options = { hour: "2-digit", minute: "2-digit" } as const
-          break
-        case "T": // long time
-          options = {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          } as const
-          break
-        case "d": // short date
-          options = {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-          } as const
-          break
-        case "D": // long date
-          options = { year: "numeric", month: "long", day: "numeric" } as const
-          break
-        case "f": // short date/time
-          options = {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          } as const
-          break
-        case "F": // long date/time
-          options = {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          } as const
-          break
-        case "R": {
-          // Relative time
-          const now = new Date()
-          const diff = (+date - +now) / 1000
-          const rtf = new Intl.RelativeTimeFormat(undefined, {
-            numeric: "auto",
-          })
-
-          const ranges = [
-            ["year", 60 * 60 * 24 * 365],
-            ["month", 60 * 60 * 24 * 30],
-            ["week", 60 * 60 * 24 * 7],
-            ["day", 60 * 60 * 24],
-            ["hour", 60 * 60],
-            ["minute", 60],
-            ["second", 1],
-          ] as const
-
-          for (const [unit, secondsInUnit] of ranges) {
-            const delta = Math.round(diff / secondsInUnit)
-            if (Math.abs(delta) >= 1) {
-              return rtf.format(delta, unit)
-            }
-          }
-          return rtf.format(0, "second")
-        }
-        default:
-          return match // fallback: return original
-      }
-
-      return date.toLocaleString(undefined, options)
-    },
-  )
-}
+import { useFormatters, useNow } from "../../../util/format"
 
 function MessageEntryMobile(props: { message: Message }) {
   const { message } = props
+  const fmt = useFormatters()
+  const now = useNow()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
@@ -158,8 +77,8 @@ function MessageEntryMobile(props: { message: Message }) {
     skip: !message.author,
   })
   const convertedContent = useMemo(
-    () => replaceDiscordTimestamps(message.content),
-    [message.content],
+    () => replaceDiscordTimestamps(message.content, fmt, now),
+    [message.content, fmt, now],
   )
 
   // Long-press menu actions for messages
@@ -223,7 +142,7 @@ function MessageEntryMobile(props: { message: Message }) {
               fontSize: "0.7em",
             }}
           >
-            {getRelativeTime(new Date(message.timestamp))}
+            {fmt.relative(message.timestamp, now)}
           </Typography>
         </Stack>
         <Box

@@ -5,10 +5,12 @@ import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { ORG_PATHS } from "../../routes/paths"
+import { useFormatters } from "../../util/format"
 
 export function OrgBalance() {
   const [contractor] = useCurrentOrg()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
 
   return (
     <Section>
@@ -34,7 +36,7 @@ export function OrgBalance() {
         >
           {contractor &&
             contractor?.balance &&
-            contractor?.balance.toLocaleString(i18n.language)}{" "}
+            fmt.number(contractor?.balance)}{" "}
           aUEC
         </Typography>
       </Grid>

@@ -48,6 +48,7 @@ import {
 } from "../../store/api/v2/market"
 import { describeMfaError } from "../../features/mfa/errors"
 import { isSiteAdmin } from "../../util/siteRole"
+import { useFormatters, type Formatters } from "../../util/format"
 
 export const REASON_MIN = 5
 export const REASON_MAX = 500
@@ -55,8 +56,8 @@ const SPECTRUM_ID_RE = /^[0-9]{1,20}$/
 
 type ActionId = "release" | "unlinkDiscord" | "spectrum" | "deactivate" | "reactivate"
 
-function formatDate(value: string | null | undefined): string {
-  return value ? new Date(value).toLocaleString() : "-"
+function formatDate(value: string | null | undefined, fmt: Formatters): string {
+  return value ? fmt.dateTime(value) : "-"
 }
 
 export function kindLabel(kind: IdentityActionKind, t: TFunction): string {
@@ -283,6 +284,7 @@ function ActionDialog(props: { action: ActionId | null; user: IdentityDetail; on
 }
 
 function UserPanel(props: { userId: string }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const { data: user, error, isLoading } = useGetIdentityUserQuery({ userId: props.userId })
   const [action, setAction] = useState<ActionId | null>(null)
@@ -336,9 +338,9 @@ function UserPanel(props: { userId: string }) {
                 : (user.discord_id_column ?? "-")
             }
           />
-          <Field label={t("adminIdentity.detail.created", "Created")} value={formatDate(user.created_at)} />
-          <Field label={t("adminIdentity.detail.deletedAt", "Deletion requested")} value={formatDate(user.deleted_at)} />
-          <Field label={t("adminIdentity.detail.deletionScheduled", "Deletion scheduled")} value={formatDate(user.deletion_scheduled_at)} />
+          <Field label={t("adminIdentity.detail.created", "Created")} value={formatDate(user.created_at, fmt)} />
+          <Field label={t("adminIdentity.detail.deletedAt", "Deletion requested")} value={formatDate(user.deleted_at, fmt)} />
+          <Field label={t("adminIdentity.detail.deletionScheduled", "Deletion scheduled")} value={formatDate(user.deletion_scheduled_at, fmt)} />
         </Box>
 
         {user.username_twins.length > 0 && (
@@ -398,8 +400,8 @@ function UserPanel(props: { userId: string }) {
                   </TableCell>
                   <TableCell sx={{ fontFamily: "monospace" }}>{p.provider_id}</TableCell>
                   <TableCell>{p.provider_username ?? "-"}</TableCell>
-                  <TableCell>{formatDate(p.linked_at)}</TableCell>
-                  <TableCell>{formatDate(p.last_used_at)}</TableCell>
+                  <TableCell>{formatDate(p.linked_at, fmt)}</TableCell>
+                  <TableCell>{formatDate(p.last_used_at, fmt)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -426,8 +428,8 @@ function UserPanel(props: { userId: string }) {
               <TableBody>
                 {user.sessions.map((s) => (
                   <TableRow key={`${s.refreshed_at}-${s.expires_at}`}>
-                    <TableCell>{formatDate(s.refreshed_at)}</TableCell>
-                    <TableCell>{formatDate(s.expires_at)}</TableCell>
+                    <TableCell>{formatDate(s.refreshed_at, fmt)}</TableCell>
+                    <TableCell>{formatDate(s.expires_at, fmt)}</TableCell>
                     <TableCell sx={{ wordBreak: "break-all" }}>{s.user_agent ?? "-"}</TableCell>
                   </TableRow>
                 ))}
@@ -457,7 +459,7 @@ function UserPanel(props: { userId: string }) {
               <TableBody>
                 {user.recent_actions.map((a) => (
                   <TableRow key={a.audit_log_id}>
-                    <TableCell>{formatDate(a.created_at)}</TableCell>
+                    <TableCell>{formatDate(a.created_at, fmt)}</TableCell>
                     <TableCell>{kindLabel(a.kind, t)}</TableCell>
                     <TableCell>{a.actor_username ?? "-"}</TableCell>
                     <TableCell sx={{ whiteSpace: "pre-wrap" }}>{a.reason ?? "-"}</TableCell>

@@ -26,11 +26,11 @@ import {
   ControlledTable,
   HeadCell,
 } from "../../components/table/PaginatedTable"
+import { useFormatters, type Formatters } from "../../util/format"
 
 // Date formatting helper
-function formatDate(dateString: string): string {
-  const date = new Date(dateString)
-  return date.toLocaleString(undefined, {
+function formatDate(dateString: string, fmt: Formatters): string {
+  return fmt.dateTime(dateString, {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -140,6 +140,7 @@ const headCells: readonly HeadCell<AuditLogEntry & { expanded?: boolean }>[] = [
 ]
 
 export function OrgAuditLogs() {
+  const fmt = useFormatters()
   const [contractor] = useCurrentOrg()
   const { t } = useTranslation()
   const [page, setPage] = useState(0)
@@ -406,7 +407,7 @@ export function OrgAuditLogs() {
                       </TableCell>
                       <TableCell>
                         <Typography variant="body2">
-                          {formatDate(entry.created_at)}
+                          {formatDate(entry.created_at, fmt)}
                         </Typography>
                       </TableCell>
                     </TableRow>

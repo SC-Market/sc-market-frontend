@@ -28,11 +28,13 @@ import { ORG_PATHS, SHOP_PATHS, USER_PATHS } from "../../routes/paths"
 import { getErrorMessage } from "../../util/errorHandling"
 import { useEnquiryStatusLabel } from "../../features/storefront/components/StorefrontEnquiryCard"
 import { enquiryStatusColor } from "../../features/storefront/enquiry"
+import { useFormatters } from "../../util/format"
 
 const STATUSES: EnquiryStatus[] = ["open", "in_progress", "completed", "declined"]
 const PAGE_SIZE = 20
 
 function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
+  const fmt = useFormatters()
   const { enquiry: e } = props
   const { t } = useTranslation()
   const statusLabel = useEnquiryStatusLabel()
@@ -62,7 +64,7 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
           {e.is_test && <Chip size="small" color="warning" label={t("admin.storefrontEnquiries.test", "Test")} />}
           <Chip size="small" color={enquiryStatusColor(e.status)} label={statusLabel(e.status)} />
           <Typography variant="body2" color="text.primary">
-            {new Date(e.created_at).toLocaleString()}
+            {fmt.dateTime(e.created_at)}
           </Typography>
         </Stack>
         <Typography variant="body2" color="text.primary">
@@ -135,7 +137,7 @@ function EnquiryRow(props: { enquiry: AdminStorefrontEnquiry }) {
           <Typography variant="caption" color="text.primary">
             {t("admin.storefrontEnquiries.handledBy", {
               user: e.handled_by_username,
-              date: new Date(e.updated_at).toLocaleString(),
+              date: fmt.dateTime(e.updated_at),
               defaultValue: "Last changed by {{user}}, {{date}}",
             })}
           </Typography>

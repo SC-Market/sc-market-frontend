@@ -34,8 +34,10 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useAdminAlerts } from "../../features/admin/hooks/useAdminAlerts"
 import { safeRedirectPath } from "../../util/safeRedirect"
 import { AlertChannelsField } from "../../features/admin/components/AlertChannelsField"
+import { useFormatters } from "../../util/format"
 
 export function AdminAlertsView() {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
@@ -129,7 +131,7 @@ export function AdminAlertsView() {
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2">
-          {new Date(params.value).toLocaleDateString()}
+          {fmt.date(params.value)}
         </Typography>
       ),
     },

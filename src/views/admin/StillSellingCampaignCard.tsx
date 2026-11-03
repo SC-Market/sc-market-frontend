@@ -35,6 +35,7 @@ import {
   type StillSellingFeedbackSummary,
   type StillSellingLocale,
 } from "../../store/api/v2/market"
+import { useFormatters } from "../../util/format"
 
 const LOCALES: StillSellingLocale[] = [
   "en",
@@ -74,7 +75,8 @@ function FeedbackGroup({
   group: StillSellingFeedbackGroup
   testid: string
 }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const fieldLabel = (f: string) =>
     ({
       about_sc_market: t(
@@ -105,7 +107,7 @@ function FeedbackGroup({
         <Box component="ul" sx={{ mt: 1, mb: 0, pl: 2.5 }}>
           {group.texts.map((x, i) => (
             <Typography component="li" variant="body2" key={i}>
-              {new Date(x.created_at).toLocaleDateString(i18n.language)} ·{" "}
+              {fmt.date(x.created_at)} ·{" "}
               {x.display_name} · {fieldLabel(x.field)}: {x.text}
             </Typography>
           ))}
@@ -156,7 +158,8 @@ function FeedbackSection({
  * server's kill switch is on, after a confirm step) and live progress.
  */
 export function StillSellingCampaignCard() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const [locale, setLocale] = useState<StillSellingLocale>("en")
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [running, setRunning] = useState(false)
@@ -387,9 +390,7 @@ export function StillSellingCampaignCard() {
             ) : data.run.finished_at && data.run.finish_reason ? (
               <Typography variant="body2" color="text.secondary">
                 {t("adminUi.stillSelling.lastRun", {
-                  when: new Date(data.run.finished_at).toLocaleString(
-                    i18n.language,
-                  ),
+                  when: fmt.dateTime(data.run.finished_at),
                   reason: reasonLabel(data.run.finish_reason),
                 })}
               </Typography>

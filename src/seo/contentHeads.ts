@@ -15,6 +15,7 @@ import { buildHubHead, type HubCrumb, type SeoText } from "./hubHeads"
 import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
 import { WEBSITE_JSON_LD_ID, type SeoLink } from "./siteHeads"
 import { DEFAULT_FRONTEND_URL } from "./constants"
+import { formatDate } from "../util/format/format"
 
 /** @id of the site's Organization node (siteJsonLd). */
 const ORGANIZATION_JSON_LD_ID = `${DEFAULT_FRONTEND_URL}/#organization`
@@ -194,7 +195,8 @@ export const changelogSeoText: SeoText = {
 
 /** "Oct 26, 2026" (dates are UTC calendar days; content is English). */
 export function formatChangelogDate(date: string): string {
-  return new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", {
+  // English, like the changelog's content.
+  return formatDate(`${date}T00:00:00Z`, "en", {
     timeZone: "UTC",
     year: "numeric",
     month: "short",

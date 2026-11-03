@@ -4,9 +4,11 @@
  * Framework-free: the bridge runs on Cloudflare.
  */
 import type { OrgStorefront } from "../store/api/v2/market"
+import { formatNumber } from "../util/format/format"
 
+// English crawler text: English digits too.
 function plural(n: number, one: string, many: string): string {
-  return `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`
+  return `${formatNumber(n, "en")} ${n === 1 ? one : many}`
 }
 
 /** "RSI-verified org. 23 completed orders. Rated 4.9/5 from 12 reviews. …" */

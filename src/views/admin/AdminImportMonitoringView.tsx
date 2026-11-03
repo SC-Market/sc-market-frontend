@@ -20,6 +20,7 @@ import {
 } from "../../store/api/v2/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AdminIcons } from "../../components/icons"
+import { useFormatters } from "../../util/format"
 
 /** labelKey: i18n key for the button/job label, resolved with t() at render time. */
 const SOURCES: { key: ImportSource; labelKey: string }[] = [
@@ -35,6 +36,7 @@ function statusColor(status: ImportJob["status"]): "info" | "success" | "error" 
 }
 
 function JobCard({ job }: { job: ImportJob }) {
+  const fmt = useFormatters()
   const { t } = useTranslation()
   const source = SOURCES.find((s) => s.key === job.source)
   return (
@@ -52,7 +54,7 @@ function JobCard({ job }: { job: ImportJob }) {
         </Typography>
         <Chip label={job.status} color={statusColor(job.status)} size="small" />
         <Typography variant="caption" color="text.secondary" sx={{ ml: "auto" }}>
-          {new Date(job.startedAt).toLocaleString()}
+          {fmt.dateTime(job.startedAt)}
         </Typography>
       </Box>
       {job.status === "running" && <LinearProgress sx={{ mb: 1 }} />}

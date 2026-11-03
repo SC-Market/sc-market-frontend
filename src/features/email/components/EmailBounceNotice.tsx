@@ -6,6 +6,7 @@ import {
   useReverifyEmailMutation,
   type EmailBounceKind,
 } from "../../../store/api/v2/market"
+import { useFormatters } from "../../../util/format"
 
 interface EmailBounceNoticeProps {
   /** The address shown in Settings › Email; a change refetches the status. */
@@ -21,7 +22,8 @@ interface EmailBounceNoticeProps {
  * clears the bounce) or changes it.
  */
 export function EmailBounceNotice({ email, onEditEmail }: EmailBounceNoticeProps) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data, refetch } = useGetEmailDeliverabilityQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
@@ -41,13 +43,9 @@ export function EmailBounceNotice({ email, onEditEmail }: EmailBounceNoticeProps
 
   if (!data?.undeliverable || !email) return null
 
-  const formatDate = (iso: string | null) =>
-    iso ? new Date(iso).toLocaleDateString(i18n.language) : ""
+  const formatDate = (iso: string | null) => fmt.date(iso)
   const formatTime = (iso: string) =>
-    new Date(iso).toLocaleTimeString(i18n.language, {
-      hour: "2-digit",
-      minute: "2-digit",
-    })
+    fmt.time(iso, { hour: "2-digit", minute: "2-digit" })
 
   const values = { email, date: formatDate(data.bounced_at) }
   const reasons: Record<EmailBounceKind, string> = {

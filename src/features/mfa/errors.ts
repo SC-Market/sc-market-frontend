@@ -1,4 +1,5 @@
 import type { TFunction } from "i18next"
+import { formatTime, pageLocale } from "../../util/format"
 
 interface MfaErrorBody {
   error?: {
@@ -20,7 +21,8 @@ export function describeMfaError(error: unknown, t: TFunction): string {
     }
     case "MFA_LOCKED": {
       const until = body.details?.locked_until
-      const time = until ? new Date(until).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""
+      // Shown after a failed request (outside render): the page's language.
+      const time = formatTime(until, pageLocale(), { hour: "2-digit", minute: "2-digit" })
       return t("mfa.errors.locked", "Too many attempts, try again at {{time}}.", { time })
     }
     case "MFA_SESSION_UNSUPPORTED":

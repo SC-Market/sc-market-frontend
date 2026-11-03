@@ -1,4 +1,5 @@
 import type { SellerActivity } from "../store/api/v2/market"
+import { formatNumber } from "./format/format"
 
 /**
  * Seller activity as one plain English sentence for crawlable HTML (the
@@ -28,7 +29,8 @@ export function sellerActivityText(activity: SellerActivity | null | undefined):
         }`
       : null,
     activity.completed_orders > 0
-      ? `${activity.completed_orders.toLocaleString("en-US")} completed order${activity.completed_orders === 1 ? "" : "s"}`
+      ? // English crawler text: English digits too.
+        `${formatNumber(activity.completed_orders, "en")} completed order${activity.completed_orders === 1 ? "" : "s"}`
       : null,
   ].filter(Boolean)
   if (!parts.length) return null

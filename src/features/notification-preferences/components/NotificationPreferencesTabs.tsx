@@ -33,6 +33,7 @@ import {
 import { ContractAlertSettings } from "./ContractAlertSettings"
 import { HelpTip } from "../../help/components/HelpTip"
 import { NOTIFICATION_TABS, type NotificationRow } from "../domain/layout"
+import { useFormatters } from "../../../util/format"
 
 const CHANNELS: NotificationChannelId[] = [
   "in_app",
@@ -59,6 +60,7 @@ function rowState(cells: NotificationPreferenceCell[]): "on" | "off" | "mixed" {
  */
 export function NotificationPreferencesTabs() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   // ?group=<tab id> opens that tab (e.g. Price Alerts links to "market").
   const [searchParams] = useSearchParams()
   const [tab, setTab] = React.useState(() => {
@@ -433,7 +435,7 @@ export function NotificationPreferencesTabs() {
                 <MenuItem value="timed" disabled>
                   {t("settings.notifications.mute.until", {
                     defaultValue: "Muted until {{time}}",
-                    time: new Date(data.mute.until).toLocaleString(),
+                    time: fmt.dateTime(data.mute.until),
                   })}
                 </MenuItem>
               )}

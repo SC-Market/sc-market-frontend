@@ -15,8 +15,10 @@ import {
   useGetUserByUsernameQuery,
 } from "../../profile/api/profileApi"
 import { MarketListingRating } from "../../../components/rating/ListingRating"
+import { useFormatters } from "../../../util/format"
 
 export function ReputationWidget({ t }: { t: TFunction }) {
+  const fmt = useFormatters()
   const { data: profile } = useGetUserProfileQuery()
   const { data: user, isLoading } = useGetUserByUsernameQuery(
     profile?.username ?? "",
@@ -63,15 +65,15 @@ export function ReputationWidget({ t }: { t: TFunction }) {
       <Stack direction="row" spacing={3}>
         <Stat
           label={t("dashboard.reputationOrders", "Orders")}
-          value={(rating.total_orders ?? 0).toLocaleString()}
+          value={fmt.number(rating.total_orders ?? 0)}
         />
         <Stat
           label={t("dashboard.reputationReviews", "Reviews")}
-          value={rating.rating_count.toLocaleString()}
+          value={fmt.number(rating.rating_count)}
         />
         <Stat
           label={t("dashboard.reputationStreak", "5★ streak")}
-          value={rating.streak.toLocaleString()}
+          value={fmt.number(rating.streak)}
         />
       </Stack>
     </Stack>

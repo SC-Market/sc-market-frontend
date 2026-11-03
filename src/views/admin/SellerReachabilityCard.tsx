@@ -23,6 +23,7 @@ import {
   type ReachabilityCount,
   type SellerReachabilityCounts,
 } from "../../store/api/v2/market"
+import { useFormatters } from "../../util/format"
 
 type Column = Exclude<keyof SellerReachabilityCounts, "sellers" | "listings">
 
@@ -137,7 +138,8 @@ function InstallClicksTable({
  * Counts only; says which channels have a delivery-result signal.
  */
 export function SellerReachabilityCard() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data, isLoading, isError, refetch, isFetching } =
     useGetSellerReachabilityQuery()
 
@@ -351,9 +353,9 @@ export function SellerReachabilityCard() {
               >
                 {data.signals.discord_shared_server_checked_at
                   ? t("adminUi.sellerReachability.notes.serverOrApp", {
-                      when: new Date(
+                      when: fmt.dateTime(
                         data.signals.discord_shared_server_checked_at,
-                      ).toLocaleString(i18n.language),
+                      ),
                       defaultValue:
                         "Shares a server or installed the app: Discord linked, and either a member of at least one server the SC Market bot is in (checked about every 12 hours from the bot's member lists, without sending anything; last checked {{when}}), or seen using the bot through the app installed on their own Discord account. Not counted in Any channel or None.",
                     })

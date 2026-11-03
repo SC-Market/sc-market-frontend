@@ -32,9 +32,11 @@ import {
   useRegenerateScmdbMutation,
   useDisconnectScmdbMutation,
 } from "../api/scmdbApi"
+import { useFormatters } from "../../../util/format"
 
 export function ScmdbSyncSettings() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data: status, isLoading } = useGetScmdbStatusQuery()
   const [connect, { isLoading: isConnecting }] = useConnectScmdbMutation()
   const [regenerate, { isLoading: isRegenerating }] = useRegenerateScmdbMutation()
@@ -169,7 +171,7 @@ export function ScmdbSyncSettings() {
                 {status.last_event_at && (
                   <Typography variant="body2" color="text.secondary">
                     {t("settings.scmdb.lastEvent", "Last event received:")}{" "}
-                    {new Date(status.last_event_at).toLocaleString()}
+                    {fmt.dateTime(status.last_event_at)}
                   </Typography>
                 )}
 
