@@ -289,6 +289,7 @@ export default [
       "react/jsx-no-target-blank": "off",
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
+      "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
       "no-empty-pattern": "off",
       "@typescript-eslint/no-empty-object-type": "error",

@@ -121,6 +121,13 @@ const ListingSelectionContext = createContext<
   [GridRowSelectionModel, React.Dispatch<React.SetStateAction<GridRowSelectionModel>>] | null
 >(null)
 
+/** The selection state from StockManagerV2. Both consumers render inside its provider. */
+function useListingSelection() {
+  const ctx = useContext(ListingSelectionContext)
+  if (!ctx) throw new Error("useListingSelection must be used inside ListingSelectionContext")
+  return ctx
+}
+
 /* ── Toolbar props ── */
 
 interface ListingsToolbarProps {
@@ -155,9 +162,7 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
     onAddQuickListing,
     canManage,
   } = props
-  const ctx = useContext(ListingSelectionContext)
-  if (!ctx || !canManage) return <></>
-  const [selectionModel] = ctx
+  const [selectionModel] = useListingSelection()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const issueAlert = useAlertHook()
@@ -253,6 +258,8 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
     </Dialog>
   )
 
+  if (!canManage) return <></>
+
   if (isMobile) {
     return (
       <>
@@ -341,9 +348,7 @@ function ShopListingsGridV2({
   const [editTarget, setEditTarget] = useState<MyListingItem | null>(null)
   const [sheetOpen, setSheetOpen] = useState(false)
 
-  const ctx = useContext(ListingSelectionContext)
-  if (!ctx) return null
-  const [selectionModel, setSelectionModel] = ctx
+  const [selectionModel, setSelectionModel] = useListingSelection()
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {

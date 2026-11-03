@@ -21,14 +21,14 @@ export function MemberDashboard() {
   const shopCtx = useOptionalShopRouteContext()
   const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
 
-  if (shopCtx && spectrumId && shopCtx.shop.permissions?.manage_orders === false) {
-    return <Navigate to={SHOP_PATHS.profile(shopCtx.shop.slug)} replace />
-  }
-
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const lg = useBreakpointUp("lg")
   const xxl = useBreakpointUp("xxl")
+
+  if (shopCtx && spectrumId && shopCtx.shop.permissions?.manage_orders === false) {
+    return <Navigate to={SHOP_PATHS.profile(shopCtx.shop.slug)} replace />
+  }
 
   const pageTitle = shopCtx
     ? t("orders.title", "Orders")

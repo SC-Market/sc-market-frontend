@@ -48,11 +48,12 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
   }, [reputationReward, crewSize])
 
   // Detect inverse scopes (Affinity: Exalted=0 → Hated=max, higher XP = worse)
-  const isNegativeRep = xpPerRun < 0 || useMemo(() => {
+  const ranksDescend = useMemo(() => {
     if (ranks.length < 2) return false
     const firstName = ranks[0]?.standing_display_name?.toLowerCase() || ""
     return /exalted|ally|best|loved/.test(firstName)
   }, [ranks])
+  const isNegativeRep = xpPerRun < 0 || ranksDescend
 
   const displayRanks = useMemo(() => isNegativeRep ? [...ranks].reverse() : ranks, [ranks, isNegativeRep])
 

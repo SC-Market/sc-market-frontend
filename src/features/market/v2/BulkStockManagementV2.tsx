@@ -291,6 +291,26 @@ function StockSearchAreaV2() {
 
 /* ── All Stock Lots Grid ── */
 
+function QuantityEditCell(params: GridRenderEditCellParams) {
+  const apiRef = useGridApiContext()
+  return (
+    <TextField
+      type="number"
+      size="small"
+      fullWidth
+      autoFocus
+      onFocus={selectOnFocus}
+      value={params.value ?? 0}
+      onChange={(e) => {
+        const val = Math.max(0, Number(e.target.value) || 0)
+        apiRef.current.setEditCellValue({ id: params.id, field: params.field, value: val })
+      }}
+      inputProps={{ min: 0, step: 1 }}
+      sx={{ "& input": { textAlign: "right" } }}
+    />
+  )
+}
+
 function AllStockLotsGridV2() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
@@ -472,25 +492,7 @@ function AllStockLotsGridV2() {
       align: "right" as const,
       headerAlign: "right" as const,
       valueParser: (value: string) => Math.max(0, Number(value) || 0),
-      renderEditCell: (params: GridRenderEditCellParams) => {
-        const apiRef = useGridApiContext()
-        return (
-          <TextField
-            type="number"
-            size="small"
-            fullWidth
-            autoFocus
-            onFocus={selectOnFocus}
-            value={params.value ?? 0}
-            onChange={(e) => {
-              const val = Math.max(0, Number(e.target.value) || 0)
-              apiRef.current.setEditCellValue({ id: params.id, field: params.field, value: val })
-            }}
-            inputProps={{ min: 0, step: 1 }}
-            sx={{ "& input": { textAlign: "right" } }}
-          />
-        )
-      },
+      renderEditCell: (params: GridRenderEditCellParams) => <QuantityEditCell {...params} />,
       renderCell: (params: GridRenderCellParams) => <EditableCell params={params} canEdit={canEditLots} />,
     },
     {
