@@ -32,17 +32,16 @@ export function NotificationReviewRevisionRequest(props: {
         i18nKey="notifications.reviewRevisionRequested"
         values={{
           requester: requester?.username || t("sharedUi.unknownUser"),
-          message: reviewEntity?.revision_message,
         }}
         components={{
           strong: <strong />,
-          message: (
-            <div style={{ fontStyle: "italic", marginTop: "4px" }}>
-              reviewEntity?.revision_message
-            </div>
-          ),
         }}
       />
+      {reviewEntity?.revision_message && (
+        <div style={{ fontStyle: "italic", marginTop: "4px" }}>
+          {reviewEntity.revision_message}
+        </div>
+      )}
     </NotificationBase>
   )
 }

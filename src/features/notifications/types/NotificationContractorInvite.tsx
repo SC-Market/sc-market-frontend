@@ -71,7 +71,7 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
                   color: theme.palette.secondary.main,
                 }}
               >
-                <UnderlineLink>Placeholder</UnderlineLink>
+                <UnderlineLink />
               </Link>
             ),
           }}

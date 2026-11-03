@@ -75,7 +75,12 @@ export const MAX_SUMMARY_LINKS = 50
  * (javascript:, https:) or whitespace/control characters.
  */
 export function isSafeHref(href: string): boolean {
-  return /^\/(?![/\\])[^\s\u0000-\u001f\u007f]*$/.test(href)
+  if (!/^\/(?![/\\])/.test(href) || /\s/.test(href)) return false
+  for (let i = 0; i < href.length; i++) {
+    const code = href.charCodeAt(i)
+    if (code <= 0x1f || code === 0x7f) return false
+  }
+  return true
 }
 
 /** Off-site links a summary may carry: SC Orgs pages only. */

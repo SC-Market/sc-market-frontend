@@ -12,4 +12,4 @@
  * "domain.com.evil.com" can't slip through the path character class.
  */
 export const external_resource_regex =
-  /^https?:\/\/(www\.)?(((media|cdn)\.)?robertsspaceindustries\.com|(media\.)?starcitizen\.tools|i\.imgur\.com|cstone\.space)([\/?#][-a-zA-Z0-9()@:%_+.~#?&\/=]*)?$/
+  /^https?:\/\/(www\.)?(((media|cdn)\.)?robertsspaceindustries\.com|(media\.)?starcitizen\.tools|i\.imgur\.com|cstone\.space)([/?#][-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
