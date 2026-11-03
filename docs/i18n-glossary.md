@@ -19,7 +19,7 @@ wording.
 
 | Locale | SC Market | SC Orgs | Notes |
 |---|---|---|---|
-| de | **Sie** | **du** | Each catalog kept the register it already mostly used. Do not mix them inside one site. In SC Orgs, "eure Community" is fine for the reader's org as a group. |
+| de | **du** | **du** | Both sites and every email use du. Write du, dich, dir, dein in lower case (capitalised only at the start of a sentence). Never Sie or Ihr for "you". "Sie" for "they" or "it" is fine. "eure Community/Org" is fine for the reader's org as a group. |
 | es | **tú** | (no es) | Spain Spanish (añadir, coste, ordenador). Avoid LatAm forms (costo, exitosamente, ingresa). |
 | fr | **vous** | **vous** | |
 | ja | です/ます | です/ます | Sentences are polite. Buttons, labels and chips use noun or plain forms (保存, 注文する). |
@@ -33,6 +33,20 @@ Pyro Gate, Lithium, Quantum Drive, ...). Also aUEC, UEC, SCU, Star Citizen,
 RSI, Spectrum, Discord, SC Market, SC Orgs, Citizen Record, and Wikelo.
 Field labels in non-Latin locales may wrap RSI terms ("Нікнейм RSI",
 "RSI 名称"), because the guard rejects a value identical to English.
+
+**Exception: Star Citizen in zh SEO text.** Chinese players search for
+星际公民 / 星際公民, so SEO strings use the Chinese name: page titles, meta
+descriptions, hero headings and bodies, SEO intros and leads, and FAQ
+questions and answers (SC Market: `landing.seo*`, `landing.hero*`,
+`seoAnswers.*`, `missionHubs.*`, `wiki.hub.*`, `storefront.hub.*`; SC Orgs:
+`homeHero`, `orgHero`, `eventHero`, `lfo`, `*.metaTitle`, `*.metaDescription`,
+the org page title). Write 星际公民 (Star Citizen) (zh-Hant 星際公民 (Star Citizen)) at
+the first mention in a title, description, hero, intro or lead, and plain
+星际公民 in section headings under a glossed title, FAQ entries and any later
+mention in the same string. No 《》. Ordinary
+UI text (settings, account linking, admin, onboarding) and the footer keep
+"Star Citizen". Ship, item, place and other game names stay in English
+everywhere, SEO text included.
 
 ## Chinese script and region
 

@@ -871,19 +871,19 @@
     "commodity": {
       "cheapest": "已知最便宜的购买地点是{{location}}，约{{price}}。",
       "faqBuyA": "可以在{{locations}}购买{{name}}。",
-      "faqBuyQ": "在 Star Citizen 中哪里可以买到{{name}}？",
+      "faqBuyQ": "在星际公民中哪里可以买到{{name}}？",
       "faqMineA": "可以在{{locations}}开采{{name}}。",
-      "faqMineQ": "在 Star Citizen 中哪里可以开采{{name}}？",
+      "faqMineQ": "在星际公民中哪里可以开采{{name}}？",
       "faqUsesA": "{{name}}是{{items}}等物品的制作材料。",
-      "faqUsesQ": "{{name}}在 Star Citizen 中有什么用？",
-      "intro": "{{name}}是 Star Citizen 中的大宗商品（类别：{{category}}）。",
+      "faqUsesQ": "{{name}}在星际公民中有什么用？",
+      "intro": "{{name}}是星际公民 (Star Citizen) 中的大宗商品（类别：{{category}}）。",
       "methods": "获取方式：{{methods}}。",
       "mined": "已知采矿地点包括{{locations}}。",
       "price": "当前市场价格为{{min}}至{{max}}。"
     },
     "faqTitle": "常见问题",
     "item": {
-      "intro": "{{name}}是 Star Citizen 中的物品。",
+      "intro": "{{name}}是星际公民 (Star Citizen) 中的物品。",
       "listings": "玩家在 SC Market 上以{{min}}至{{max}}出售（在售数量：{{total}}）。",
       "type": "类型：{{type}}。"
     },
@@ -896,12 +896,12 @@
     "ore": {
       "best": "已知地点包括{{locations}}。",
       "faqWhereA": "可以在{{locations}}等地点找到{{name}}。",
-      "faqWhereQ": "在 Star Citizen 中哪里可以开采{{name}}？",
-      "intro": "{{name}}是 Star Citizen 中可开采的矿石（稀有度：{{rarity}}）。"
+      "faqWhereQ": "在星际公民中哪里可以开采{{name}}？",
+      "intro": "{{name}}是星际公民 (Star Citizen) 中可开采的矿石（稀有度：{{rarity}}）。"
     },
     "ship": {
       "crew": "最大船员数：{{crew}}。",
-      "intro": "{{name}}是 Star Citizen 中的一艘舰船。",
+      "intro": "{{name}}是星际公民 (Star Citizen) 中的一艘舰船。",
       "length": "长度：{{length}} 米。",
       "role": "定位：{{role}}。"
     }
@@ -3298,13 +3298,13 @@
     "faqSafeQ": "SC Market 使用起来安全吗？",
     "faqSafeA": "交易在玩家之间进行，所以我们无法担保，但每笔订单完成后买卖双方都会互相评价。交易前请先查看卖家的评分和订单记录。",
     "faqListThingsQ": "我可以在 SC Market 上架哪些东西？",
-    "faqListThingsA": "任何你愿意用 aUEC 交易的 Star Citizen 物品或服务：武器、护甲、组件、大宗商品、舰船货物，以及运输、护航、采矿或医疗救援等服务。服务可以在游戏内或游戏外进行。",
+    "faqListThingsA": "任何你愿意用 aUEC 交易的星际公民物品或服务：武器、护甲、组件、大宗商品、舰船货物，以及运输、护航、采矿或医疗救援等服务。服务可以在游戏内或游戏外进行。",
     "faqFeeQ": "SC Market 会收取费用吗？",
     "faqFeeA": "不收。SC Market 免费使用，也没有任何 aUEC 经过我们。买家在游戏内直接向卖家付款。",
     "faqRealMoneyQ": "我可以用真实货币出售物品吗？",
     "faqRealMoneyA": "不可以。SC Market 上的所有交易都使用 aUEC。根据 CIG 的服务条款，禁止真钱交易。",
     "seeAll": "查看全部",
-    "heroTitle": "Star Citizen 玩家对玩家交易市场",
+    "heroTitle": "星际公民 (Star Citizen) 玩家对玩家交易市场",
     "heroText": "买卖物品、雇佣服务，在游戏内以 aUEC 支付。我们不抽取任何佣金。",
     "heroOrdersLabel": "笔订单",
     "heroValueLabel": "aUEC 订单总额",
@@ -3348,8 +3348,8 @@
     "topShopsEmpty": "暂无店铺。",
     "topShopsError": "无法加载店铺。",
     "sellTitle": "开始出售",
-    "seoDescription": "SC Market 是 Star Citizen 交易市场，玩家可以买卖、交易游戏内物品，并雇佣组织提供运输、护航、医疗、打捞等服务——全部以 aUEC 结算。",
-    "seoTitle": "SC Market — Star Citizen 交易市场：用 aUEC 买卖和交易物品",
+    "seoDescription": "SC Market 是星际公民 (Star Citizen) 交易市场，玩家可以买卖、交易游戏内物品，并雇佣组织提供运输、护航、医疗、打捞等服务——全部以 aUEC 结算。",
+    "seoTitle": "SC Market — 星际公民 (Star Citizen) 交易市场：用 aUEC 买卖和交易物品",
     "sellText": "以个人或组织身份开设店铺。组织成员可以共同认领并完成订单，共享同一个店面、库存和信誉。",
     "sellStep1Title": "上架",
     "sellStep1Text": "任何物品或服务，任意数量，以 aUEC 定价。",
@@ -3387,7 +3387,7 @@
     "trustAlertsText": "在商品面关注物品的价格。",
     "trustOrgsTitle": "为组织打造",
     "trustOrgsText": "共享店面、成员协作完成订单，还支持白标。",
-    "faqBuyQ": "如何在 Star Citizen 中向其他玩家购买物品？",
+    "faqBuyQ": "如何在星际公民中向其他玩家购买物品？",
     "faqBuyA": "在市场中搜索物品，加入购物车并下单。卖家会收到 Discord 提醒，然后你们在游戏内见面，用 aUEC 付款并取货。",
     "faqOfficialQ": "SC Market 与 Cloud Imperium Games 有关联吗？",
     "faqOfficialA": "没有。SC Market 是由粉丝创建的社区网站，未获得 Cloud Imperium Games 或 Roberts Space Industries 的认可，也与其无关联。",
@@ -4851,46 +4851,46 @@
     },
     "index": {
       "givers": {
-        "title": "Star Citizen 任务发布者 ({{count}}) | SC Market",
-        "heading": "Star Citizen 任务发布者",
-        "description": "当前游戏文件中所有 Star Citizen 任务发布者，以及每个发布者提供的任务数量：{{top}} 等。"
+        "title": "星际公民 (Star Citizen) 任务发布者 ({{count}}) | SC Market",
+        "heading": "星际公民任务发布者",
+        "description": "当前游戏文件中所有星际公民 (Star Citizen) 任务发布者，以及每个发布者提供的任务数量：{{top}} 等。"
       },
       "factions": {
-        "title": "Star Citizen 阵营与声望任务 ({{count}}) | SC Market",
-        "heading": "Star Citizen 阵营",
-        "description": "可通过任务获得声望的所有 Star Citizen 阵营，以及提升声望的任务数量：{{top}} 等。"
+        "title": "星际公民 (Star Citizen) 阵营与声望任务 ({{count}}) | SC Market",
+        "heading": "星际公民阵营",
+        "description": "可通过任务获得声望的所有星际公民 (Star Citizen) 阵营，以及提升声望的任务数量：{{top}} 等。"
       },
       "types": {
-        "title": "Star Citizen 任务类型 ({{count}}) | SC Market",
-        "heading": "Star Citizen 任务类型",
-        "description": "所有 Star Citizen 任务类型，从赏金猎人、雇佣兵工作到货运、打捞和采矿，以及每种类型的任务数量：{{top}} 等。"
+        "title": "星际公民 (Star Citizen) 任务类型 ({{count}}) | SC Market",
+        "heading": "星际公民任务类型",
+        "description": "所有星际公民 (Star Citizen) 任务类型，从赏金猎人、雇佣兵工作到货运、打捞和采矿，以及每种类型的任务数量：{{top}} 等。"
       },
       "systems": {
-        "title": "按星系划分的 Star Citizen 任务 | SC Market",
-        "heading": "按星系划分的 Star Citizen 任务",
-        "description": "各星系的 Star Citizen 任务：{{top}}。"
+        "title": "按星系划分的星际公民 (Star Citizen) 任务 | SC Market",
+        "heading": "按星系划分的星际公民任务",
+        "description": "各星系的星际公民 (Star Citizen) 任务：{{top}}。"
       }
     },
     "hub": {
       "givers": {
-        "title": "Star Citizen 中的 {{name}} 任务 ({{count}}) | SC Market",
+        "title": "星际公民 (Star Citizen) 中的 {{name}} 任务 ({{count}}) | SC Market",
         "heading": "{{name}} 任务",
-        "lead": "{{name}} 在 Star Citizen 中提供 {{missions}}。"
+        "lead": "{{name}} 在星际公民 (Star Citizen) 中提供 {{missions}}。"
       },
       "factions": {
-        "title": "Star Citizen 中的 {{name}} 声望任务 ({{count}}) | SC Market",
+        "title": "星际公民 (Star Citizen) 中的 {{name}} 声望任务 ({{count}}) | SC Market",
         "heading": "{{name}} 声望任务",
-        "lead": "Star Citizen 中有 {{missions}}可以提升你在 {{name}} 的声望。"
+        "lead": "星际公民 (Star Citizen) 中有 {{missions}}可以提升你在 {{name}} 的声望。"
       },
       "types": {
-        "title": "Star Citizen 中的 {{name}} 任务 ({{count}}) | SC Market",
+        "title": "星际公民 (Star Citizen) 中的 {{name}} 任务 ({{count}}) | SC Market",
         "heading": "{{name}} 任务",
-        "lead": "Star Citizen 中有 {{missions}} 属于 {{name}} 类型。"
+        "lead": "星际公民 (Star Citizen) 中有 {{missions}} 属于 {{name}} 类型。"
       },
       "systems": {
-        "title": "Star Citizen 中 {{name}} 星系的任务 ({{count}}) | SC Market",
+        "title": "星际公民 (Star Citizen) 中 {{name}} 星系的任务 ({{count}}) | SC Market",
         "heading": "{{name}} 星系的任务",
-        "lead": "Star Citizen 的 {{name}} 星系中有 {{missions}}。"
+        "lead": "星际公民 (Star Citizen) 的 {{name}} 星系中有 {{missions}}。"
       }
     },
     "where": "可在 {{systems}} 接取。",
@@ -5695,9 +5695,9 @@
       "viewOnMarket": "在市场查看"
     },
     "hub": {
-      "description": "浏览完整的 Star Citizen 游戏数据库：物品、舰船、大宗商品、地点、制造商、蓝图和采矿资源。",
+      "description": "浏览完整的星际公民 (Star Citizen) 游戏数据库：物品、舰船、大宗商品、地点、制造商、蓝图和采矿资源。",
       "header": "游戏数据库",
-      "title": "游戏数据库 — Star Citizen 物品、舰船及更多 | SC Market",
+      "title": "游戏数据库 — 星际公民 (Star Citizen) 物品、舰船及更多 | SC Market",
       "sectionItems": "物品",
       "sectionShips": "舰船与载具",
       "sectionCommodities": "大宗商品",
@@ -6183,8 +6183,8 @@
     },
     "hub": {
       "title": "组织店面",
-      "description": "SC Market 上的 Star Citizen 组织店面：已验证组织的店铺、服务和招募，附带已完成订单和评价。",
-      "intro": "已验证的 Star Citizen 组织的店铺、服务和招募，每个组织一页。订单直接发给组织。",
+      "description": "SC Market 上的星际公民 (Star Citizen) 组织店面：已验证组织的店铺、服务和招募，附带已完成订单和评价。",
+      "intro": "已验证的星际公民 (Star Citizen) 组织的店铺、服务和招募，每个组织一页。订单直接发给组织。",
       "filter": "按方向筛选",
       "all": "全部",
       "empty": "还没有店面。",
