@@ -23,7 +23,6 @@ import {
 import React, { useEffect, useMemo, useState } from "react"
 import { UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
-import { format } from "../../util/time"
 import {
   Announcement,
   Cancel,
@@ -399,10 +398,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {format(
-                    new Date(currentOffer.created_at),
-                    "MMMM do yyyy, h:mm:ss a",
-                  )}
+                  {fmt.dateTime(currentOffer.created_at, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" })}
                 </Stack>
               </TableCell>
             </TableRow>

@@ -15,7 +15,6 @@ import {
 import React from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
-import { format } from "../../util/time"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { orderIcons } from "../../features/orders/components/orderIcons"
 import { PAYMENT_TYPES } from "../../util/constants"
@@ -26,8 +25,10 @@ import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
+import { useFormatters } from "../../util/format"
 export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { session } = props
   const [body, setBody] = useCounterOffer()
@@ -78,10 +79,7 @@ export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {format(
-                    new Date(session.offers[0].created_at),
-                    "MMMM do yyyy, h:mm:ss a",
-                  )}
+                  {fmt.dateTime(session.offers[0].created_at, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" })}
                 </Stack>
               </TableCell>
             </TableRow>

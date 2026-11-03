@@ -30,7 +30,7 @@ export type {
 } from "./domain/types"
 
 export { statusColors, statusNames } from "./domain/constants"
-export { romanize, makeOrderTrend, formatCurrency } from "./domain/formatters"
+export { romanize, makeOrderTrend } from "./domain/formatters"
 
 // ── API hooks ──
 

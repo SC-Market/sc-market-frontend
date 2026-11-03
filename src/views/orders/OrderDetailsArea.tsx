@@ -23,7 +23,6 @@ import React, { useEffect } from "react"
 import { Link as RouterLink } from "react-router-dom"
 import { OrgDetails, UserDetails, UserDetailsSkeleton } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
-import { format } from "../../util/time"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOrderIDQuery } from "../../features/chats"
 import type { Order } from "../../features/orders/domain/types"
@@ -314,7 +313,7 @@ export function OrderDetailsArea(props: { order: Order }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {format(new Date(order.timestamp), "MMMM do yyyy, h:mm:ss a")}
+                  {fmt.dateTime(order.timestamp, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" })}
                 </Stack>
               </TableCell>
             </TableRow>

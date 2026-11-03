@@ -8,8 +8,6 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Section } from "../paper/Section"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
-import { addHours, startOfDay } from "date-fns"
-import { format } from "../../util/time"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
@@ -204,7 +202,7 @@ export function AvailabilitySelector(props: {
                       }}
                       draggable={"false"}
                     >
-                      {format(addHours(startOfDay(new Date()), i), "HH:mm")}
+                      {`${String(i).padStart(2, "0")}:00`}
                     </div>
                   </td>
                 </tr>
@@ -314,7 +312,7 @@ export function AvailabilityDisplay(
                     }}
                     draggable={"false"}
                   >
-                    {format(addHours(startOfDay(new Date()), i), "HH:mm")}
+                    {`${String(i).padStart(2, "0")}:00`}
                   </div>
                 </td>
               </tr>

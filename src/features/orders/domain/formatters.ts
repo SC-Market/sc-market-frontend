@@ -31,8 +31,3 @@ export function romanize(num: number): string {
   }
   return Array(+digits.join("") + 1).join("M") + roman
 }
-
-export function formatCurrency(value: number | string): string {
-  const num = typeof value === "string" ? parseInt(value, 10) : value
-  return num.toLocaleString("en-US")
-}
