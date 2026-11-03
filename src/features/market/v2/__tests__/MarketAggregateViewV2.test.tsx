@@ -225,6 +225,10 @@ vi.mock("../../../../components/rating/ListingRating", () => ({
   ),
 }));
 
+vi.mock("../../../price-alerts/components/WatchPriceButton", () => ({
+  WatchPriceButton: () => <button type="button">Watch price</button>,
+}))
+
 vi.mock("../components/CreateBuyOrderV2", () => ({
   CreateBuyOrderV2: ({ gameItem }: CreateBuyOrderV2Props) => (
     <div data-testid="create-buy-order-v2">

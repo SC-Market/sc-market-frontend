@@ -165,6 +165,7 @@ export function WikiItemDetail() {
                         gameItemId={item.id}
                         itemName={item.name}
                         currentPrice={item.market_stats.min_price}
+                        qualityRelevant={item.craftable_from.length > 0}
                       />
                     </Box>
                   </Box>

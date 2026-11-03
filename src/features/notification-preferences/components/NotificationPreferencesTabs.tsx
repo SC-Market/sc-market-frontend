@@ -16,10 +16,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { ExpandMoreRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { FlatSection } from "../../../components/paper/Section"
+import { PATHS } from "../../../routes/paths"
 import {
   useGetNotificationPreferencesQuery,
   useUpdateNotificationPreferencesMutation,
@@ -58,7 +59,15 @@ function rowState(cells: NotificationPreferenceCell[]): "on" | "off" | "mixed" {
  */
 export function NotificationPreferencesTabs() {
   const { t } = useTranslation()
-  const [tab, setTab] = React.useState(NOTIFICATION_TABS[0].id)
+  // ?group=<tab id> opens that tab (e.g. Price Alerts links to "market").
+  const [searchParams] = useSearchParams()
+  const [tab, setTab] = React.useState(() => {
+    const group = searchParams.get("group")
+    return (
+      NOTIFICATION_TABS.find((x) => x.id === group)?.id ??
+      NOTIFICATION_TABS[0].id
+    )
+  })
   const [scope, setScope] = React.useState<string | null>(null)
   const [open, setOpen] = React.useState<Record<string, boolean>>({})
   const { data, isLoading, isError, isFetching } =
@@ -471,7 +480,7 @@ export function NotificationPreferencesTabs() {
                     {section.extra === "price-alerts" && (
                       <MuiLink
                         component={Link}
-                        to="/settings?tab=price-alerts"
+                        to={PATHS.priceAlerts}
                         variant="body2"
                       >
                         {t(

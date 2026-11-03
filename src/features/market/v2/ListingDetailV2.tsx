@@ -387,6 +387,7 @@ export function ListingDetailV2() {
                             gameItemId={gameItemId}
                             itemName={gameItemName}
                             currentPrice={priceRange?.min}
+                            qualityRelevant={qualityTierRange != null}
                           />
                         </Box>
                       )}

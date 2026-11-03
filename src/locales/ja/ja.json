@@ -1172,17 +1172,15 @@
     },
     "priceAlerts": {
       "title": "価格アラート",
-      "description": "公開出品が目標価格に達すると、ここでオンにしたチャネルでお知らせします。",
+      "description": "チャネルは「通知」の「マーケットとウォッチリスト › 価格アラート」で選べます。初期設定ではサイト内通知、プッシュ通知、Discord DMが届き、メールはオンにするまで届きません。",
       "site": "サイト内通知",
-      "siteHint": "SC Marketの通知に表示されます。",
       "push": "プッシュ通知",
-      "pushHint": "プッシュ通知を有効にしたスマートフォンやブラウザに届きます。",
       "email": "メール",
-      "emailHint": "確認済みのメールアドレスに送信されます。オンにするまでは無効です。",
       "discord": "Discord DM",
-      "discordHint": "SC Marketボットからのダイレクトメッセージです。",
-      "error": "価格アラートの設定を読み込みまたは保存できませんでした。",
-      "channelsTitle": "アラートの通知チャネル"
+      "deliveryTitle": "アラートの届け先",
+      "deliveredTo": "アラートの届け先：{{channels}}",
+      "deliveredNowhere": "すべてのチャネルがオフのため、ウォッチのアラートは届きません。",
+      "openNotifications": "通知設定を開く"
     },
     "email": {
       "addEmail": "メールアドレスを追加",
@@ -5906,7 +5904,12 @@
       "add": "価格をウォッチ",
       "saved": "{{name}}を{{price}}以下でウォッチ中",
       "removed": "{{name}}のウォッチを解除しました",
-      "watching": "{{price}}以下でウォッチ中"
+      "quality": "最低品質",
+      "qualityHint": "この品質以上の在庫がある出品だけが、その価格でアラートの対象になります。",
+      "anyQuality": "品質を問わない",
+      "tierOrBetter": "ティア{{tier}}以上",
+      "watchingEdit": "ウォッチ中 · 編集",
+      "pausedEdit": "一時停止中 · 編集"
     },
     "manager": {
       "title": "ウォッチリスト",
@@ -5920,13 +5923,29 @@
       "textMatch": "出品タイトルに一致",
       "none": "出品なし",
       "never": "なし",
-      "edit": "目標価格を編集",
+      "edit": "価格アラートを編集",
       "editAria": "{{name}}を編集",
       "remove": "ウォッチを解除",
       "removeAria": "{{name}}のウォッチを解除",
       "count": "{{count}} / {{max}}件",
       "add": "アイテムを追加",
-      "targetValue": "{{price}}以下でアラート"
+      "targetValue": "{{price}}以下でアラート",
+      "pauseError": "このアラートを一時停止または再開できませんでした。",
+      "qualityValue": "ティア{{tier}}以上",
+      "paused": "一時停止中",
+      "active": "有効",
+      "pause": "アラートを一時停止",
+      "resume": "アラートを再開",
+      "pauseAria": "{{name}}のアラートを一時停止",
+      "resumeAria": "{{name}}のアラートを再開",
+      "emptyBody": "買いたいアイテムを見つけて「価格をウォッチ」を押してください。誰かが目標価格以下で出品するとアラートが届くので、マーケットを何度も確認する必要はありません。",
+      "browseItems": "アイテムを見る",
+      "browseMarket": "マーケットを見る"
+    },
+    "signIn": {
+      "title": "価格をウォッチするにはサインイン",
+      "body": "{{name}}の目標価格を設定すると、誰かがその価格以下で出品したときにアラートが届きます。価格アラートにはSC Marketのアカウントが必要です。",
+      "action": "サインイン"
     }
   },
   "adminIdentity": {
@@ -8734,6 +8753,10 @@
     "whiteLabel": {
       "title": "無料のストアフロントとブランディング",
       "body": "すべての組織は SC Market に無料のストアフロントを持てます。組織が RSI 認証済みで活動中になると、ブランディングが解放されます。独自のテーマと、申請により yourorg.sc-market.space のアドレスが使えます。"
+    },
+    "priceAlerts": {
+      "title": "価格が下がったらアラートでお知らせ",
+      "body": "目標価格を決めてアイテムをウォッチしましょう。公開出品がその価格以下になると、出品へのリンク付きでアラートが届きます。通知を止めたいだけなら、アラートを一時停止すれば設定は残ります。"
     }
   },
   "discordInstall": {

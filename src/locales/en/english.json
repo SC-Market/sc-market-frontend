@@ -4714,17 +4714,15 @@
     },
     "priceAlerts": {
       "title": "Price Alerts",
-      "description": "When a public listing hits your target price, you're alerted on the channels you turn on here.",
+      "description": "Choose the channels in Notifications, under Market & watchlist › Price alert. By default you get a site notification, a push notification and a Discord DM; email is off until you turn it on.",
       "site": "Site notification",
-      "siteHint": "Shows in your notifications on SC Market.",
       "push": "Push notification",
-      "pushHint": "On phones and browsers where you enabled push notifications.",
       "email": "Email",
-      "emailHint": "Sent to your verified email address. Off until you turn it on.",
       "discord": "Discord DM",
-      "discordHint": "A direct message from the SC Market bot.",
-      "error": "Couldn't load or save your price alert settings.",
-      "channelsTitle": "Alert channels"
+      "deliveryTitle": "Where alerts arrive",
+      "deliveredTo": "Alerts go to: {{channels}}.",
+      "deliveredNowhere": "Every channel is off, so your watches can't alert you.",
+      "openNotifications": "Open Notification settings"
     },
     "pushNotifications": {
       "androidPWARequired": "Push notifications on Android require the app to be installed as a Progressive Web App (PWA).",
@@ -5943,7 +5941,12 @@
       "add": "Watch price",
       "saved": "Watching {{name}} at ≤ {{price}}",
       "removed": "Stopped watching {{name}}",
-      "watching": "Watching ≤ {{price}}"
+      "quality": "Minimum quality",
+      "qualityHint": "Only listings with stock of this quality or better alert, at their price.",
+      "anyQuality": "Any quality",
+      "tierOrBetter": "Tier {{tier}} or better",
+      "watchingEdit": "Watching · Edit",
+      "pausedEdit": "Paused · Edit"
     },
     "manager": {
       "title": "Watchlist",
@@ -5957,13 +5960,29 @@
       "textMatch": "Matches listing titles",
       "none": "None listed",
       "never": "Never",
-      "edit": "Edit target price",
+      "edit": "Edit price alert",
       "editAria": "Edit {{name}}",
       "remove": "Stop watching",
       "removeAria": "Stop watching {{name}}",
       "count": "{{count}} of {{max}} items",
       "add": "Add item",
-      "targetValue": "Alert at ≤ {{price}}"
+      "targetValue": "Alert at ≤ {{price}}",
+      "pauseError": "Couldn't pause or resume that alert.",
+      "qualityValue": "Tier {{tier}}+",
+      "paused": "Paused",
+      "active": "Active",
+      "pause": "Pause alerts",
+      "resume": "Resume alerts",
+      "pauseAria": "Pause alerts for {{name}}",
+      "resumeAria": "Resume alerts for {{name}}",
+      "emptyBody": "Find an item you want to buy and press Watch price. When someone lists it at or below your target price, you get an alert, so you don't have to keep checking the market.",
+      "browseItems": "Browse items",
+      "browseMarket": "Browse the market"
+    },
+    "signIn": {
+      "title": "Sign in to watch prices",
+      "body": "Set a target price for {{name}} and get an alert when someone lists it at or below that price. Price alerts need an SC Market account.",
+      "action": "Sign in"
     }
   },
   "adminIdentity": {
@@ -8871,6 +8890,10 @@
     "whiteLabel": {
       "title": "Your free storefront, and branding",
       "body": "Every org has a free storefront on SC Market. Once your org is RSI-verified and active, branding unlocks: your own theme and, on request, a yourorg.sc-market.space address."
+    },
+    "priceAlerts": {
+      "title": "Get an alert when the price is right",
+      "body": "Watch an item with a target price. When a public listing is at or below it, you get an alert with a link to the listing. Pause an alert to keep it without being notified."
     }
   },
   "discordInstall": {

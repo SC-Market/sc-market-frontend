@@ -1114,17 +1114,15 @@
     },
     "priceAlerts": {
       "title": "價格提醒",
-      "description": "當公開刊登達到您的目標價時，您會透過此處開啟的管道收到提醒。",
+      "description": "在「通知」的「市集與追蹤清單 › 價格提醒」中選擇管道。預設會收到站內通知、推播通知和 Discord 私訊；電子郵件在你開啟前處於關閉狀態。",
       "site": "站內通知",
-      "siteHint": "顯示在您的 SC Market 通知中。",
       "push": "推播通知",
-      "pushHint": "在您已啟用推播通知的手機和瀏覽器上。",
       "email": "電子郵件",
-      "emailHint": "寄送至您已驗證的電子郵件地址。需手動開啟。",
       "discord": "Discord 私訊",
-      "discordHint": "來自 SC Market 機器人的私訊。",
-      "error": "無法載入或儲存您的價格提醒設定。",
-      "channelsTitle": "提醒管道"
+      "deliveryTitle": "提醒傳送到哪裡",
+      "deliveredTo": "提醒傳送到：{{channels}}。",
+      "deliveredNowhere": "所有管道都已關閉，你的追蹤無法提醒你。",
+      "openNotifications": "開啟通知設定"
     },
     "email": {
       "addEmail": "新增電子郵件地址",
@@ -5906,7 +5904,12 @@
       "add": "追蹤價格",
       "saved": "正在追蹤 {{name}}，目標價 ≤ {{price}}",
       "removed": "已停止追蹤 {{name}}",
-      "watching": "追蹤中 ≤ {{price}}"
+      "quality": "最低品質",
+      "qualityHint": "只有庫存達到此品質或更高的上架才會提醒，按其價格計算。",
+      "anyQuality": "任意品質",
+      "tierOrBetter": "{{tier}} 級或更高",
+      "watchingEdit": "追蹤中 · 編輯",
+      "pausedEdit": "已暫停 · 編輯"
     },
     "manager": {
       "title": "追蹤清單",
@@ -5920,13 +5923,29 @@
       "textMatch": "比對刊登標題",
       "none": "尚無刊登",
       "never": "從未",
-      "edit": "編輯目標價",
+      "edit": "編輯價格提醒",
       "editAria": "編輯 {{name}}",
       "remove": "停止追蹤",
       "removeAria": "停止追蹤 {{name}}",
       "count": "{{count}} / {{max}} 項",
       "add": "新增物品",
-      "targetValue": "≤ {{price}} 時提醒"
+      "targetValue": "≤ {{price}} 時提醒",
+      "pauseError": "無法暫停或恢復該提醒。",
+      "qualityValue": "{{tier}} 級以上",
+      "paused": "已暫停",
+      "active": "生效中",
+      "pause": "暫停提醒",
+      "resume": "恢復提醒",
+      "pauseAria": "暫停 {{name}} 的提醒",
+      "resumeAria": "恢復 {{name}} 的提醒",
+      "emptyBody": "找到想買的物品並點選「追蹤價格」。當有人以你的目標價格或更低價格上架時，你會收到提醒，無需一直盯著市集。",
+      "browseItems": "瀏覽物品",
+      "browseMarket": "瀏覽市集"
+    },
+    "signIn": {
+      "title": "登入以追蹤價格",
+      "body": "為 {{name}} 設定目標價格，當有人以該價格或更低價格上架時就會收到提醒。價格提醒需要 SC Market 帳戶。",
+      "action": "登入"
     }
   },
   "adminIdentity": {
@@ -8734,6 +8753,10 @@
     "whiteLabel": {
       "title": "免費店面與品牌自訂",
       "body": "每個組織在 SC Market 上都有免費店面。組織通過 RSI 驗證且保持活躍後即可解鎖品牌自訂：自己的主題，以及可申請的 yourorg.sc-market.space 網址。"
+    },
+    "priceAlerts": {
+      "title": "價格合適時提醒你",
+      "body": "為物品設定目標價格並追蹤。當公開上架達到或低於該價格時，你會收到附帶上架連結的提醒。暫停提醒可保留設定而不接收通知。"
     }
   },
   "discordInstall": {

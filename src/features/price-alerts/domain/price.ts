@@ -18,3 +18,6 @@ export function parseTargetPrice(value: string): number | null {
     return null
   return price
 }
+
+/** Quality tiers a watch can require (item_variants quality_tier 1-5). */
+export const QUALITY_TIERS = [1, 2, 3, 4, 5] as const

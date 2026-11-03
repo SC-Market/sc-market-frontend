@@ -1178,17 +1178,15 @@
     },
     "priceAlerts": {
       "title": "价格提醒",
-      "description": "当公开商品达到你的目标价时，你将通过此处开启的渠道收到提醒。",
+      "description": "在“通知”的“市场与关注列表 › 价格提醒”中选择渠道。默认会收到站内通知、推送通知和 Discord 私信；邮件在你开启前处于关闭状态。",
       "site": "站内通知",
-      "siteHint": "显示在你的 SC Market 通知中。",
       "push": "推送通知",
-      "pushHint": "在你已启用推送通知的手机和浏览器上。",
       "email": "邮件",
-      "emailHint": "发送至你已验证的邮箱地址。需手动开启。",
       "discord": "Discord 私信",
-      "discordHint": "来自 SC Market 机器人的私信。",
-      "error": "无法加载或保存你的价格提醒设置。",
-      "channelsTitle": "提醒渠道"
+      "deliveryTitle": "提醒发送到哪里",
+      "deliveredTo": "提醒发送到：{{channels}}。",
+      "deliveredNowhere": "所有渠道都已关闭，你的关注无法提醒你。",
+      "openNotifications": "打开通知设置"
     },
     "locale": {
       "title": "组织语言",
@@ -5912,7 +5910,12 @@
       "add": "关注价格",
       "saved": "正在关注 {{name}}，目标价 ≤ {{price}}",
       "removed": "已取消关注 {{name}}",
-      "watching": "关注中 ≤ {{price}}"
+      "quality": "最低品质",
+      "qualityHint": "只有库存达到此品质或更高的上架才会提醒，按其价格计算。",
+      "anyQuality": "任意品质",
+      "tierOrBetter": "{{tier}} 级或更高",
+      "watchingEdit": "关注中 · 编辑",
+      "pausedEdit": "已暂停 · 编辑"
     },
     "manager": {
       "title": "关注列表",
@@ -5926,13 +5929,29 @@
       "textMatch": "匹配商品标题",
       "none": "暂无上架",
       "never": "从未",
-      "edit": "编辑目标价",
+      "edit": "编辑价格提醒",
       "editAria": "编辑 {{name}}",
       "remove": "取消关注",
       "removeAria": "取消关注 {{name}}",
       "count": "{{count}} / {{max}} 件",
       "add": "添加物品",
-      "targetValue": "≤ {{price}} 时提醒"
+      "targetValue": "≤ {{price}} 时提醒",
+      "pauseError": "无法暂停或恢复该提醒。",
+      "qualityValue": "{{tier}} 级以上",
+      "paused": "已暂停",
+      "active": "生效中",
+      "pause": "暂停提醒",
+      "resume": "恢复提醒",
+      "pauseAria": "暂停 {{name}} 的提醒",
+      "resumeAria": "恢复 {{name}} 的提醒",
+      "emptyBody": "找到想买的物品并点击“关注价格”。当有人以你的目标价格或更低价格上架时，你会收到提醒，无需一直盯着市场。",
+      "browseItems": "浏览物品",
+      "browseMarket": "浏览市场"
+    },
+    "signIn": {
+      "title": "登录以关注价格",
+      "body": "为 {{name}} 设置目标价格，当有人以该价格或更低价格上架时就会收到提醒。价格提醒需要 SC Market 账户。",
+      "action": "登录"
     }
   },
   "adminIdentity": {
@@ -8740,6 +8759,10 @@
     "whiteLabel": {
       "title": "免费店面与品牌定制",
       "body": "每个组织在 SC Market 上都有免费店面。组织通过 RSI 验证且保持活跃后即可解锁品牌定制：自己的主题，以及可申请的 yourorg.sc-market.space 地址。"
+    },
+    "priceAlerts": {
+      "title": "价格合适时提醒你",
+      "body": "为物品设置目标价格并关注。当公开上架达到或低于该价格时，你会收到附带上架链接的提醒。暂停提醒可保留设置而不接收通知。"
     }
   },
   "discordInstall": {

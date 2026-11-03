@@ -66,6 +66,7 @@ import {
 } from "./MarketAggregateViewV2";
 import { QualityHistogram } from "../../../components/market/v2/QualityHistogram";
 import { MARKET_PATHS, ORDER_PATHS } from "../../../routes/paths";
+import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -1486,6 +1487,12 @@ export function MarketAggregateViewV2Admin({
     );
   }, [listings, selectedTier]);
 
+  // Lowest listed price: prefills a new price alert's target.
+  const lowestPrice = useMemo(() => {
+    const prices = listings.map((l) => l.price_min).filter((p) => p > 1);
+    return prices.length ? Math.min(...prices) : null;
+  }, [listings]);
+
   const createListingUrl = [
     MARKET_PATHS.create,
     `?game_item_id=${encodeURIComponent(gameItemId)}`,
@@ -1541,6 +1548,15 @@ export function MarketAggregateViewV2Admin({
               spacing={1}
               sx={{ px: 2, pt: 1.5, pb: 1 }}
             >
+              {/* game_item.id is the UUID; the route param may be a short slug */}
+              {game_item.id && game_item.name && (
+                <WatchPriceButton
+                  gameItemId={game_item.id}
+                  itemName={game_item.name}
+                  currentPrice={lowestPrice}
+                  qualityRelevant={quality_distribution.length > 0}
+                />
+              )}
               <Button
                 component={Link}
                 to={createListingUrl}

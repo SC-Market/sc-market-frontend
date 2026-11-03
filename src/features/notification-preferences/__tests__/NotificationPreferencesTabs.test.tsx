@@ -120,6 +120,19 @@ describe("NotificationPreferencesTabs", () => {
     query.mockClear()
   })
 
+  it("opens the tab named by ?group= (Price Alerts links to Market & watchlist)", () => {
+    render(
+      <MemoryRouter
+        initialEntries={["/settings?tab=notifications&group=market"]}
+      >
+        <NotificationPreferencesTabs />
+      </MemoryRouter>,
+    )
+    expect(
+      screen.getByTestId("notif-tab-market").getAttribute("aria-selected"),
+    ).toBe("true")
+  })
+
   it("shows the Orders & offers tab with a pill per channel; locked cells are disabled", () => {
     renderTabs()
     const row = screen.getByTestId("notif-row-new-order")

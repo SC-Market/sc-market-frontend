@@ -76,12 +76,14 @@ beforeEach(() => {
 })
 
 describe("WatchPriceButton", () => {
-  it("sends a logged-out visitor to log in, then back to the page", () => {
+  it("asks a logged-out visitor to sign in, then brings them back to the page", () => {
     h.session = { status: "anonymous" }
     renderButton()
     fireEvent.click(
       screen.getByRole("button", { name: /Watch price|Watching/ }),
     )
+    const prompt = screen.getByRole("dialog", { name: "Sign in to watch prices" })
+    fireEvent.click(within(prompt).getByRole("button", { name: "Sign in" }))
     expect(screen.getByTestId("login-page").textContent).toBe(
       "?redirect=%2Fwiki%2Fitems%2Fmedical-supplies",
     )
@@ -118,7 +120,38 @@ describe("WatchPriceButton", () => {
     expect(screen.getByText("Enter a whole number above 1 aUEC.")).toBeTruthy()
   })
 
-  it("shows the target when the item is already watched", () => {
+  it("offers a minimum quality for items with quality tiers", () => {
+    render(
+      <MemoryRouter>
+        <WatchPriceButton
+          gameItemId={ITEM}
+          itemName="Medical Supplies"
+          currentPrice={21500}
+          qualityRelevant
+        />
+      </MemoryRouter>,
+    )
+    fireEvent.click(screen.getByRole("button", { name: "Watch price" }))
+    fireEvent.mouseDown(screen.getByRole("combobox", { name: "Minimum quality" }))
+    fireEvent.click(screen.getByRole("option", { name: "Tier 3 or better" }))
+    const dialog = screen.getByRole("dialog", { name: "Watch price" })
+    fireEvent.click(within(dialog).getByRole("button", { name: "Watch price" }))
+    expect(h.add).toHaveBeenCalledWith({
+      addWatchlistItemRequest: {
+        game_item_id: ITEM,
+        max_price: 21500,
+        min_quality_tier: 3,
+      },
+    })
+  })
+
+  it("hides the quality choice for items without quality tiers", () => {
+    renderButton()
+    fireEvent.click(screen.getByRole("button", { name: "Watch price" }))
+    expect(screen.queryByRole("combobox", { name: "Minimum quality" })).toBeNull()
+  })
+
+  it("reads Paused · Edit for a paused watch", () => {
     h.watchlist = {
       max_items: 50,
       items: [
@@ -127,6 +160,27 @@ describe("WatchPriceButton", () => {
           game_item_id: ITEM,
           query: "Medical Supplies",
           max_price: 25000,
+          min_quality_tier: null,
+          paused: true,
+          current_lowest: 21500,
+        },
+      ],
+    }
+    renderButton()
+    expect(screen.getByRole("button", { name: "Paused · Edit" })).toBeTruthy()
+  })
+
+  it("shows Watching · Edit when the item is already watched", () => {
+    h.watchlist = {
+      max_items: 50,
+      items: [
+        {
+          id: "w1",
+          game_item_id: ITEM,
+          query: "Medical Supplies",
+          max_price: 25000,
+          min_quality_tier: null,
+          paused: false,
           current_lowest: 21500,
         },
       ],
@@ -134,7 +188,7 @@ describe("WatchPriceButton", () => {
     renderButton()
     expect(
       screen.getByRole("button", { name: /Watch price|Watching/ }).textContent,
-    ).toContain("Watching ≤ 25,000 aUEC")
+    ).toContain("Watching · Edit")
     fireEvent.click(
       screen.getByRole("button", { name: /Watch price|Watching/ }),
     )

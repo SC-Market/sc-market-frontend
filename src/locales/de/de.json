@@ -1175,17 +1175,15 @@
     },
     "priceAlerts": {
       "title": "Preisalarme",
-      "description": "Wenn ein öffentliches Angebot Ihren Zielpreis erreicht, werden Sie über die hier aktivierten Kanäle benachrichtigt.",
+      "description": "Wählen Sie die Kanäle unter Benachrichtigungen › Markt & Beobachtungsliste › Preisalarm. Standardmäßig erhalten Sie eine Website-Benachrichtigung, eine Push-Benachrichtigung und eine Discord-DM; E-Mail ist aus, bis Sie sie einschalten.",
       "site": "Website-Benachrichtigung",
-      "siteHint": "Erscheint in Ihren Benachrichtigungen auf SC Market.",
       "push": "Push-Benachrichtigung",
-      "pushHint": "Auf Smartphones und in Browsern, auf denen Sie Push-Benachrichtigungen aktiviert haben.",
       "email": "E-Mail",
-      "emailHint": "Wird an Ihre bestätigte E-Mail-Adresse gesendet. Deaktiviert, bis Sie es einschalten.",
       "discord": "Discord-DM",
-      "discordHint": "Eine Direktnachricht vom SC Market Bot.",
-      "error": "Ihre Preisalarm-Einstellungen konnten nicht geladen oder gespeichert werden.",
-      "channelsTitle": "Benachrichtigungskanäle"
+      "deliveryTitle": "Wo Alarme ankommen",
+      "deliveredTo": "Alarme gehen an: {{channels}}.",
+      "deliveredNowhere": "Alle Kanäle sind aus, daher können Ihre Beobachtungen Sie nicht benachrichtigen.",
+      "openNotifications": "Benachrichtigungseinstellungen öffnen"
     },
     "email": {
       "addEmail": "E-Mail-Adresse hinzufügen",
@@ -5943,7 +5941,12 @@
       "add": "Preis beobachten",
       "saved": "{{name}} wird bei ≤ {{price}} beobachtet",
       "removed": "{{name}} wird nicht mehr beobachtet",
-      "watching": "Beobachtet ≤ {{price}}"
+      "quality": "Mindestqualität",
+      "qualityHint": "Nur Angebote mit Bestand dieser Qualität oder besser lösen einen Alarm aus, zu deren Preis.",
+      "anyQuality": "Jede Qualität",
+      "tierOrBetter": "Stufe {{tier}} oder besser",
+      "watchingEdit": "Beobachtet · Bearbeiten",
+      "pausedEdit": "Pausiert · Bearbeiten"
     },
     "manager": {
       "title": "Beobachtungsliste",
@@ -5957,13 +5960,29 @@
       "textMatch": "Passt auf Angebotstitel",
       "none": "Keine Angebote",
       "never": "Nie",
-      "edit": "Zielpreis bearbeiten",
+      "edit": "Preisalarm bearbeiten",
       "editAria": "{{name}} bearbeiten",
       "remove": "Nicht mehr beobachten",
       "removeAria": "{{name}} nicht mehr beobachten",
       "count": "{{count}} von {{max}} Gegenständen",
       "add": "Gegenstand hinzufügen",
-      "targetValue": "Alarm bei ≤ {{price}}"
+      "targetValue": "Alarm bei ≤ {{price}}",
+      "pauseError": "Dieser Alarm konnte nicht pausiert oder fortgesetzt werden.",
+      "qualityValue": "Stufe {{tier}}+",
+      "paused": "Pausiert",
+      "active": "Aktiv",
+      "pause": "Alarme pausieren",
+      "resume": "Alarme fortsetzen",
+      "pauseAria": "Alarme für {{name}} pausieren",
+      "resumeAria": "Alarme für {{name}} fortsetzen",
+      "emptyBody": "Suchen Sie einen Gegenstand, den Sie kaufen möchten, und drücken Sie „Preis beobachten“. Wenn ihn jemand zu Ihrem Zielpreis oder günstiger anbietet, erhalten Sie einen Alarm – so müssen Sie den Markt nicht ständig prüfen.",
+      "browseItems": "Gegenstände durchsuchen",
+      "browseMarket": "Markt durchsuchen"
+    },
+    "signIn": {
+      "title": "Melden Sie sich an, um Preise zu beobachten",
+      "body": "Legen Sie einen Zielpreis für {{name}} fest und erhalten Sie einen Alarm, wenn jemand es zu diesem Preis oder günstiger anbietet. Preisalarme benötigen ein SC-Market-Konto.",
+      "action": "Anmelden"
     }
   },
   "adminIdentity": {
@@ -8871,6 +8890,10 @@
     "whiteLabel": {
       "title": "Deine kostenlose Storefront und dein Branding",
       "body": "Jede Organisation hat eine kostenlose Storefront auf SC Market. Sobald deine Organisation bei RSI verifiziert und aktiv ist, wird Branding freigeschaltet: dein eigenes Theme und auf Anfrage eine Adresse wie yourorg.sc-market.space."
+    },
+    "priceAlerts": {
+      "title": "Ein Alarm, wenn der Preis stimmt",
+      "body": "Beobachten Sie einen Gegenstand mit einem Zielpreis. Liegt ein öffentliches Angebot bei oder unter diesem Preis, erhalten Sie einen Alarm mit Link zum Angebot. Pausieren Sie einen Alarm, um ihn ohne Benachrichtigungen zu behalten."
     }
   },
   "discordInstall": {

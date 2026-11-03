@@ -18,8 +18,10 @@ export const PATHS = {
   onboarding: "/onboarding",
   profile: "/profile",
   settings: "/settings",
-  /** Settings -> Price Alerts: the watchlist and its alert channels. */
+  /** Settings -> Price Alerts: the watchlist. */
   priceAlerts: "/settings?tab=price-alerts",
+  /** Settings -> Notifications, on its Market & watchlist tab (price alert channels). */
+  notificationSettingsMarket: "/settings?tab=notifications&group=market",
   notifications: "/notifications",
   dashboard: "/dashboard",
   dashboardOverview: "/dashboard/overview",

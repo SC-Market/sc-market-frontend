@@ -33,6 +33,8 @@ export const HINTS = {
   whiteLabel: { key: "storefront.white-label", guide: "orgWhiteLabel" },
   /** Seller's shop pages: add the SC Market app to your own Discord account. */
   discordUserInstall: { key: "discord.user-install", guide: "discordUserInstall" },
+  /** Settings › Price Alerts: what a watch does, pausing. */
+  priceAlerts: { key: "price-alerts.watchlist", guide: "priceAlerts" },
 } as const satisfies Record<string, { key: string; guide: GuideLink }>
 
 export type HintId = keyof typeof HINTS

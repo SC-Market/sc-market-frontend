@@ -1,8 +1,17 @@
 import React from "react"
-import { Button, Skeleton } from "@mui/material"
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Skeleton,
+  Typography,
+} from "@mui/material"
 import {
   NotificationsActiveRounded,
   NotificationAddRounded,
+  NotificationsPausedRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -10,25 +19,27 @@ import { useSession } from "../../../hooks/login/useSession"
 import { useGetWatchlistQuery } from "../../../store/api/v2/market"
 import { PATHS } from "../../../routes/paths"
 import { WatchPriceDialog } from "./WatchPriceDialog"
-import { formatAuec } from "../domain/price"
 
 export interface WatchPriceButtonProps {
   gameItemId: string
   itemName: string
   /** Current lowest price; prefills the target price. */
   currentPrice?: number | null
+  /** The item comes in quality tiers: the dialog offers a minimum quality. */
+  qualityRelevant?: boolean
   size?: "small" | "medium"
 }
 
 /**
  * "Watch price" for a game item: opens a dialog to set a target price. When
- * the item is already watched it shows "Watching ≤ X aUEC" and edits that
- * watch. Logged-out visitors are sent to log in first.
+ * the item is already watched it reads "Watching · Edit" (or "Paused · Edit")
+ * and edits that watch. Signed-out visitors are asked to sign in first.
  */
 export function WatchPriceButton({
   gameItemId,
   itemName,
   currentPrice,
+  qualityRelevant,
   size = "small",
 }: WatchPriceButtonProps) {
   const { t } = useTranslation()
@@ -36,6 +47,7 @@ export function WatchPriceButton({
   const navigate = useNavigate()
   const location = useLocation()
   const [open, setOpen] = React.useState(false)
+  const [signInOpen, setSignInOpen] = React.useState(false)
   const loggedIn = session.status === "authenticated"
   const { data, isLoading } = useGetWatchlistQuery(undefined, {
     skip: !loggedIn,
@@ -53,33 +65,35 @@ export function WatchPriceButton({
     )
   }
 
-  const onClick = () => {
-    if (!loggedIn) {
-      const back = `${location.pathname}${location.search}`
-      navigate(`${PATHS.login}?redirect=${encodeURIComponent(back)}`)
-      return
-    }
-    setOpen(true)
+  const signIn = () => {
+    const back = `${location.pathname}${location.search}`
+    navigate(`${PATHS.login}?redirect=${encodeURIComponent(back)}`)
   }
+
+  const icon = !existing ? (
+    <NotificationAddRounded />
+  ) : existing.paused ? (
+    <NotificationsPausedRounded />
+  ) : (
+    <NotificationsActiveRounded />
+  )
 
   return (
     <>
       <Button
         size={size}
         variant={existing ? "contained" : "outlined"}
-        color={existing ? "success" : "primary"}
-        startIcon={
-          existing ? <NotificationsActiveRounded /> : <NotificationAddRounded />
-        }
-        onClick={onClick}
+        color={existing && !existing.paused ? "success" : "primary"}
+        startIcon={icon}
+        onClick={() => (loggedIn ? setOpen(true) : setSignInOpen(true))}
       >
-        {existing
-          ? t("priceAlerts.watch.watching", "Watching ≤ {{price}}", {
-              price: formatAuec(existing.max_price),
-            })
-          : t("priceAlerts.watch.button", "Watch price")}
+        {!existing
+          ? t("priceAlerts.watch.button", "Watch price")
+          : existing.paused
+            ? t("priceAlerts.watch.pausedEdit", "Paused · Edit")
+            : t("priceAlerts.watch.watchingEdit", "Watching · Edit")}
       </Button>
-      {loggedIn && (
+      {loggedIn ? (
         <WatchPriceDialog
           open={open}
           onClose={() => setOpen(false)}
@@ -87,7 +101,37 @@ export function WatchPriceButton({
           itemName={itemName}
           currentPrice={existing?.current_lowest ?? currentPrice}
           existing={existing}
+          qualityRelevant={qualityRelevant}
         />
+      ) : (
+        <Dialog
+          open={signInOpen}
+          onClose={() => setSignInOpen(false)}
+          maxWidth="xs"
+          fullWidth
+          aria-labelledby="watch-price-sign-in-title"
+        >
+          <DialogTitle id="watch-price-sign-in-title">
+            {t("priceAlerts.signIn.title", "Sign in to watch prices")}
+          </DialogTitle>
+          <DialogContent>
+            <Typography variant="body2" color="text.secondary">
+              {t(
+                "priceAlerts.signIn.body",
+                "Set a target price for {{name}} and get an alert when someone lists it at or below that price. Price alerts need an SC Market account.",
+                { name: itemName },
+              )}
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setSignInOpen(false)}>
+              {t("ui.cancel", "Cancel")}
+            </Button>
+            <Button variant="contained" onClick={signIn}>
+              {t("priceAlerts.signIn.action", "Sign in")}
+            </Button>
+          </DialogActions>
+        </Dialog>
       )}
     </>
   )

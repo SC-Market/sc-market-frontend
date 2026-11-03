@@ -4,6 +4,7 @@ import {
   Avatar,
   Box,
   Button,
+  Chip,
   IconButton,
   InputAdornment,
   Link,
@@ -17,6 +18,8 @@ import {
   DeleteOutlineRounded,
   EditRounded,
   NotificationAddRounded,
+  PauseRounded,
+  PlayArrowRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Link as RouterLink } from "react-router-dom"
@@ -24,6 +27,7 @@ import {
   useAddWatchlistItemMutation,
   useGetWatchlistQuery,
   useRemoveWatchlistItemMutation,
+  useUpdateWatchlistItemMutation,
   type WatchlistItem,
 } from "../../../store/api/v2/market"
 import {
@@ -43,14 +47,16 @@ function itemLabel(item: WatchlistItem): string {
 
 /**
  * The user's watchlist on Settings -> Price Alerts: every watched item with
- * its target price, current lowest price and last alert, plus "Add item".
- * The same list Discord's /watchlist commands manage.
+ * its target price, minimum quality, current lowest price, status and last
+ * alert, with edit, pause/resume and remove, plus "Add item". The same list
+ * Discord's /watchlist commands manage.
  */
 export function WatchlistManager() {
   const { t } = useTranslation()
   const { data, isLoading, isError } = useGetWatchlistQuery()
   usePageReady(isLoading)
   const [remove, removeState] = useRemoveWatchlistItemMutation()
+  const [update, updateState] = useUpdateWatchlistItemMutation()
   const [editing, setEditing] = React.useState<WatchlistItem | null>(null)
 
   const items = data?.items ?? []
@@ -89,6 +95,15 @@ export function WatchlistManager() {
             t("priceAlerts.manager.removeError", "Couldn't remove that item.")}
         </Alert>
       )}
+      {updateState.error && (
+        <Alert severity="error">
+          {getErrorMessage(updateState.error) ??
+            t(
+              "priceAlerts.manager.pauseError",
+              "Couldn't pause or resume that alert.",
+            )}
+        </Alert>
+      )}
 
       {isLoading ? (
         <Stack spacing={1} data-testid="watchlist-loading">
@@ -97,9 +112,7 @@ export function WatchlistManager() {
           ))}
         </Stack>
       ) : data && items.length === 0 ? (
-        <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
-          {t("priceAlerts.manager.empty", "You aren't watching anything yet.")}
-        </Typography>
+        <WatchlistEmptyState />
       ) : data ? (
         <Box>
           <Box
@@ -160,15 +173,40 @@ export function WatchlistManager() {
                       </Typography>
                     </Typography>
                   )}
-                  <Typography variant="body2" color="primary.main">
-                    {t(
-                      "priceAlerts.manager.targetValue",
-                      "Alert at ≤ {{price}}",
-                      {
-                        price: formatAuec(item.max_price),
-                      },
-                    )}
-                  </Typography>
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    alignItems="center"
+                    flexWrap="wrap"
+                    useFlexGap
+                  >
+                    <Typography variant="body2" color="primary.main">
+                      {t(
+                        "priceAlerts.manager.targetValue",
+                        "Alert at ≤ {{price}}",
+                        {
+                          price: formatAuec(item.max_price),
+                        },
+                      )}
+                      {item.min_quality_tier != null &&
+                        ` · ${t(
+                          "priceAlerts.manager.qualityValue",
+                          "Tier {{tier}}+",
+                          { tier: item.min_quality_tier },
+                        )}`}
+                    </Typography>
+                    <Chip
+                      size="small"
+                      variant="outlined"
+                      color={item.paused ? "default" : "success"}
+                      label={
+                        item.paused
+                          ? t("priceAlerts.manager.paused", "Paused")
+                          : t("priceAlerts.manager.active", "Active")
+                      }
+                      data-testid="watchlist-status"
+                    />
+                  </Stack>
                   <Typography
                     variant="caption"
                     color="text.secondary"
@@ -205,7 +243,48 @@ export function WatchlistManager() {
                 </Box>
                 <Stack direction="row" spacing={0.5} sx={{ flexShrink: 0 }}>
                   <Tooltip
-                    title={t("priceAlerts.manager.edit", "Edit target price")}
+                    title={
+                      item.paused
+                        ? t("priceAlerts.manager.resume", "Resume alerts")
+                        : t("priceAlerts.manager.pause", "Pause alerts")
+                    }
+                  >
+                    <IconButton
+                      size="small"
+                      disabled={updateState.isLoading}
+                      onClick={() =>
+                        update({
+                          watchlistId: item.id,
+                          updateWatchlistItemRequest: { paused: !item.paused },
+                        })
+                      }
+                      aria-label={
+                        item.paused
+                          ? t(
+                              "priceAlerts.manager.resumeAria",
+                              "Resume alerts for {{name}}",
+                              {
+                                name: itemLabel(item),
+                              },
+                            )
+                          : t(
+                              "priceAlerts.manager.pauseAria",
+                              "Pause alerts for {{name}}",
+                              {
+                                name: itemLabel(item),
+                              },
+                            )
+                      }
+                    >
+                      {item.paused ? (
+                        <PlayArrowRounded fontSize="small" />
+                      ) : (
+                        <PauseRounded fontSize="small" />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip
+                    title={t("priceAlerts.manager.edit", "Edit price alert")}
                   >
                     <IconButton
                       size="small"
@@ -264,9 +343,68 @@ export function WatchlistManager() {
           itemName={itemLabel(editing)}
           currentPrice={editing.current_lowest}
           existing={editing}
+          qualityRelevant={editing.game_item_id != null}
         />
       )}
     </Stack>
+  )
+}
+
+/** No watches yet: what price alerts do and where to start one. */
+function WatchlistEmptyState() {
+  const { t } = useTranslation()
+  return (
+    <Box
+      data-testid="watchlist-empty"
+      sx={{
+        py: 3,
+        px: 2,
+        textAlign: "center",
+        border: 1,
+        borderColor: "divider",
+        borderStyle: "dashed",
+        borderRadius: 2,
+      }}
+    >
+      <NotificationAddRounded color="primary" sx={{ fontSize: 36, mb: 1 }} />
+      <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+        {t("priceAlerts.manager.empty", "You aren't watching anything yet.")}
+      </Typography>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ mt: 0.5, mb: 2, maxWidth: 420, mx: "auto" }}
+      >
+        {t(
+          "priceAlerts.manager.emptyBody",
+          "Find an item you want to buy and press Watch price. When someone lists it at or below your target price, you get an alert, so you don't have to keep checking the market.",
+        )}
+      </Typography>
+      <Stack
+        direction="row"
+        spacing={1}
+        justifyContent="center"
+        flexWrap="wrap"
+        useFlexGap
+      >
+        <Button
+          component={RouterLink}
+          to={WIKI_PATHS.items}
+          variant="outlined"
+          size="small"
+        >
+          {t("priceAlerts.manager.browseItems", "Browse items")}
+        </Button>
+        <Button
+          component={RouterLink}
+          to={MARKET_PATHS.search}
+          variant="outlined"
+          size="small"
+        >
+          {t("priceAlerts.manager.browseMarket", "Browse the market")}
+        </Button>
+      </Stack>
+    </Box>
   )
 }
 

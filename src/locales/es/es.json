@@ -1178,17 +1178,15 @@
     },
     "priceAlerts": {
       "title": "Alertas de precio",
-      "description": "Cuando un anuncio público alcanza tu precio objetivo, te avisamos por los canales que actives aquí.",
+      "description": "Elige los canales en Notificaciones, en Mercado y seguimiento › Alerta de precio. Por defecto recibes una notificación en el sitio, una notificación push y un MD de Discord; el correo está desactivado hasta que lo actives.",
       "site": "Notificación en el sitio",
-      "siteHint": "Aparece en tus notificaciones de SC Market.",
       "push": "Notificación push",
-      "pushHint": "En los teléfonos y navegadores donde activaste las notificaciones push.",
       "email": "Correo electrónico",
-      "emailHint": "Se envía a tu dirección de correo verificada. Desactivado hasta que lo actives.",
       "discord": "MD de Discord",
-      "discordHint": "Un mensaje directo del bot de SC Market.",
-      "error": "No se pudo cargar ni guardar tu configuración de alertas de precio.",
-      "channelsTitle": "Canales de alerta"
+      "deliveryTitle": "Dónde llegan las alertas",
+      "deliveredTo": "Las alertas llegan por: {{channels}}.",
+      "deliveredNowhere": "Todos los canales están desactivados, así que tus seguimientos no pueden avisarte.",
+      "openNotifications": "Abrir ajustes de notificaciones"
     },
     "email": {
       "addEmail": "Añadir dirección de correo",
@@ -5980,7 +5978,12 @@
       "add": "Seguir precio",
       "saved": "Siguiendo {{name}} a ≤ {{price}}",
       "removed": "Dejaste de seguir {{name}}",
-      "watching": "Siguiendo ≤ {{price}}"
+      "quality": "Calidad mínima",
+      "qualityHint": "Solo avisan los anuncios con existencias de esta calidad o superior, a su precio.",
+      "anyQuality": "Cualquier calidad",
+      "tierOrBetter": "Nivel {{tier}} o superior",
+      "watchingEdit": "Siguiendo · Editar",
+      "pausedEdit": "En pausa · Editar"
     },
     "manager": {
       "title": "Lista de seguimiento",
@@ -5994,13 +5997,29 @@
       "textMatch": "Coincide con títulos de anuncios",
       "none": "Ninguno anunciado",
       "never": "Nunca",
-      "edit": "Editar precio objetivo",
+      "edit": "Editar alerta de precio",
       "editAria": "Editar {{name}}",
       "remove": "Dejar de seguir",
       "removeAria": "Dejar de seguir {{name}}",
       "count": "{{count}} de {{max}} objetos",
       "add": "Añadir objeto",
-      "targetValue": "Alerta a ≤ {{price}}"
+      "targetValue": "Alerta a ≤ {{price}}",
+      "pauseError": "No se pudo pausar ni reanudar esa alerta.",
+      "qualityValue": "Nivel {{tier}}+",
+      "paused": "En pausa",
+      "active": "Activa",
+      "pause": "Pausar alertas",
+      "resume": "Reanudar alertas",
+      "pauseAria": "Pausar alertas de {{name}}",
+      "resumeAria": "Reanudar alertas de {{name}}",
+      "emptyBody": "Busca un artículo que quieras comprar y pulsa Seguir precio. Cuando alguien lo publique a tu precio objetivo o menos, recibirás una alerta, así no tendrás que revisar el mercado una y otra vez.",
+      "browseItems": "Explorar artículos",
+      "browseMarket": "Explorar el mercado"
+    },
+    "signIn": {
+      "title": "Inicia sesión para seguir precios",
+      "body": "Fija un precio objetivo para {{name}} y recibe una alerta cuando alguien lo publique a ese precio o menos. Las alertas de precio necesitan una cuenta de SC Market.",
+      "action": "Iniciar sesión"
     }
   },
   "adminIdentity": {
@@ -9008,6 +9027,10 @@
     "whiteLabel": {
       "title": "Tu escaparate gratuito y tu marca",
       "body": "Toda organización tiene un escaparate gratuito en SC Market. Cuando tu organización está verificada en RSI y activa, se desbloquea la marca: tu propio tema y, si lo pides, una dirección yourorg.sc-market.space."
+    },
+    "priceAlerts": {
+      "title": "Recibe una alerta cuando el precio sea el adecuado",
+      "body": "Sigue un artículo con un precio objetivo. Cuando un anuncio público esté a ese precio o menos, recibirás una alerta con un enlace al anuncio. Pausa una alerta para conservarla sin recibir avisos."
     }
   },
   "discordInstall": {

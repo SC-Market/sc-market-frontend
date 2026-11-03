@@ -1,53 +1,98 @@
 import React from "react"
-import { fireEvent, render, screen } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
+import { MemoryRouter } from "react-router-dom"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
-const update = vi.fn()
-const prefs = { site: true, push: true, email: false, discord: false }
+const h = vi.hoisted(() => ({
+  prefs: { site: true, push: true, email: false, discord: true } as Record<
+    string,
+    boolean
+  >,
+}))
 
+vi.mock("react-i18next", async (importOriginal) =>
+  (await import("../../../test/mocks/reactI18next")).mockReactI18next(
+    importOriginal,
+  ),
+)
 vi.mock("../../../store/api/v2/market", () => ({
   useGetPriceAlertPreferencesQuery: () => ({
-    data: prefs,
+    data: h.prefs,
     isLoading: false,
     isError: false,
   }),
-  useUpdatePriceAlertPreferencesMutation: () => [
-    update,
-    { isLoading: false, isError: false },
-  ],
 }))
 vi.mock("../components/WatchlistManager", () => ({
   WatchlistManager: () => <div data-testid="watchlist-manager" />,
 }))
+vi.mock("../../help/components/FirstUseHint", () => ({
+  FirstUseHint: ({ title }: { title: string }) => (
+    <aside data-testid="first-use-hint">{title}</aside>
+  ),
+}))
 vi.mock("../../../components/paper/Section", () => ({
-  FlatSection: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
+  FlatSection: ({
+    title,
+    children,
+  }: {
+    title: string
+    children: React.ReactNode
+  }) => (
+    <section>
+      <h2>{title}</h2>
+      {children}
+    </section>
   ),
 }))
 
 import { PriceAlertSettings } from "../components/PriceAlertSettings"
 
-describe("PriceAlertSettings", () => {
-  beforeEach(() => update.mockClear())
+function renderTab() {
+  return render(
+    <MemoryRouter>
+      <PriceAlertSettings />
+    </MemoryRouter>,
+  )
+}
 
-  it("shows one toggle per channel with the saved state", () => {
-    render(<PriceAlertSettings />)
-    const toggles = screen.getAllByRole("checkbox") as HTMLInputElement[]
-    expect(toggles.map((t) => t.checked)).toEqual([true, true, false, false])
-    expect(screen.getByText("Email")).toBeTruthy()
-    expect(screen.getByText("Discord DM")).toBeTruthy()
+describe("PriceAlertSettings", () => {
+  beforeEach(() => {
+    h.prefs = { site: true, push: true, email: false, discord: true }
   })
 
-  it("shows the watchlist on the same tab", () => {
-    render(<PriceAlertSettings />)
+  it("shows the first-use hint and the watchlist", () => {
+    renderTab()
+    expect(screen.getByTestId("first-use-hint")).toBeTruthy()
     expect(screen.getByTestId("watchlist-manager")).toBeTruthy()
   })
 
-  it("saves only the channel that was toggled", () => {
-    render(<PriceAlertSettings />)
-    fireEvent.click(screen.getAllByRole("checkbox")[2])
-    expect(update).toHaveBeenCalledWith({
-      updatePriceAlertPreferencesRequest: { email: true },
+  it("summarises the channels that are on, without its own toggles", () => {
+    renderTab()
+    expect(
+      screen.getByText(
+        "Alerts go to: Site notification, Push notification, Discord DM.",
+      ),
+    ).toBeTruthy()
+    expect(screen.queryByRole("checkbox")).toBeNull()
+  })
+
+  it("warns when every channel is off", () => {
+    h.prefs = { site: false, push: false, email: false, discord: false }
+    renderTab()
+    expect(
+      screen.getByText(
+        "Every channel is off, so your watches can't alert you.",
+      ),
+    ).toBeTruthy()
+  })
+
+  it("links to Notification settings on the Market & watchlist tab", () => {
+    renderTab()
+    const link = screen.getByRole("link", {
+      name: "Open Notification settings",
     })
+    expect(link.getAttribute("href")).toBe(
+      "/settings?tab=notifications&group=market",
+    )
   })
 })

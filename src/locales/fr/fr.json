@@ -1178,17 +1178,15 @@
     },
     "priceAlerts": {
       "title": "Alertes de prix",
-      "description": "Quand une annonce publique atteint votre prix cible, vous êtes alerté sur les canaux que vous activez ici.",
+      "description": "Choisissez les canaux dans Notifications, sous Marché et watchlist › Alerte de prix. Par défaut, vous recevez une notification sur le site, une notification push et un DM Discord ; l'e-mail est désactivé tant que vous ne l'activez pas.",
       "site": "Notification sur le site",
-      "siteHint": "S'affiche dans vos notifications sur SC Market.",
       "push": "Notification push",
-      "pushHint": "Sur les téléphones et navigateurs où vous avez activé les notifications push.",
       "email": "E-mail",
-      "emailHint": "Envoyé à votre adresse e-mail vérifiée. Désactivé tant que vous ne l'activez pas.",
       "discord": "MP Discord",
-      "discordHint": "Un message privé du bot SC Market.",
-      "error": "Impossible de charger ou d'enregistrer vos paramètres d'alertes de prix.",
-      "channelsTitle": "Canaux d'alerte"
+      "deliveryTitle": "Où arrivent les alertes",
+      "deliveredTo": "Les alertes arrivent par : {{channels}}.",
+      "deliveredNowhere": "Tous les canaux sont désactivés : vos surveillances ne peuvent pas vous alerter.",
+      "openNotifications": "Ouvrir les paramètres de notification"
     },
     "email": {
       "addEmail": "Ajouter une adresse e-mail",
@@ -5980,7 +5978,12 @@
       "add": "Surveiller le prix",
       "saved": "{{name}} surveillé à ≤ {{price}}",
       "removed": "{{name}} n'est plus surveillé",
-      "watching": "Surveillé à ≤ {{price}}"
+      "quality": "Qualité minimale",
+      "qualityHint": "Seules les annonces avec du stock de cette qualité ou mieux déclenchent une alerte, à leur prix.",
+      "anyQuality": "Toute qualité",
+      "tierOrBetter": "Niveau {{tier}} ou mieux",
+      "watchingEdit": "Surveillé · Modifier",
+      "pausedEdit": "En pause · Modifier"
     },
     "manager": {
       "title": "Watchlist",
@@ -5994,13 +5997,29 @@
       "textMatch": "Correspond aux titres d'annonces",
       "none": "Aucune annonce",
       "never": "Jamais",
-      "edit": "Modifier le prix cible",
+      "edit": "Modifier l'alerte de prix",
       "editAria": "Modifier {{name}}",
       "remove": "Ne plus surveiller",
       "removeAria": "Ne plus surveiller {{name}}",
       "count": "{{count}} sur {{max}} articles",
       "add": "Ajouter un article",
-      "targetValue": "Alerte à ≤ {{price}}"
+      "targetValue": "Alerte à ≤ {{price}}",
+      "pauseError": "Impossible de mettre en pause ou de reprendre cette alerte.",
+      "qualityValue": "Niveau {{tier}}+",
+      "paused": "En pause",
+      "active": "Active",
+      "pause": "Mettre les alertes en pause",
+      "resume": "Reprendre les alertes",
+      "pauseAria": "Mettre en pause les alertes pour {{name}}",
+      "resumeAria": "Reprendre les alertes pour {{name}}",
+      "emptyBody": "Trouvez un article que vous voulez acheter et appuyez sur Surveiller le prix. Quand quelqu'un le met en vente à votre prix cible ou moins, vous recevez une alerte : plus besoin de surveiller le marché.",
+      "browseItems": "Parcourir les articles",
+      "browseMarket": "Parcourir le marché"
+    },
+    "signIn": {
+      "title": "Connectez-vous pour surveiller les prix",
+      "body": "Fixez un prix cible pour {{name}} et recevez une alerte quand quelqu'un le met en vente à ce prix ou moins. Les alertes de prix nécessitent un compte SC Market.",
+      "action": "Se connecter"
     }
   },
   "adminIdentity": {
@@ -9008,6 +9027,10 @@
     "whiteLabel": {
       "title": "Votre vitrine gratuite, et votre image de marque",
       "body": "Chaque organisation a une vitrine gratuite sur SC Market. Dès que votre organisation est vérifiée sur RSI et active, l'image de marque se débloque : votre propre thème et, sur demande, une adresse yourorg.sc-market.space."
+    },
+    "priceAlerts": {
+      "title": "Recevez une alerte au bon prix",
+      "body": "Surveillez un article avec un prix cible. Quand une annonce publique est à ce prix ou moins, vous recevez une alerte avec un lien vers l'annonce. Mettez une alerte en pause pour la garder sans être notifié."
     }
   },
   "discordInstall": {

@@ -8,6 +8,7 @@ export const GUIDE_LINKS = {
   createAccount: "/guides/getting-started/create-an-account",
   buyAnItem: "/guides/buying/buy-an-item",
   postBuyOrder: "/guides/buying/buy-an-item#post-a-buy-order",
+  priceAlerts: "/guides/buying/price-alerts-watchlist",
   howOrdersWork: "/guides/buying/how-orders-work",
   handleOrders: "/guides/selling/handle-orders-as-a-seller",
   sellItems: "/guides/selling/sell-items",

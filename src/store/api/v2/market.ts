@@ -4372,6 +4372,13 @@ export type WatchlistItem = {
   item_image_url: string | null
   /** Alert when a public listing is at or below this price (aUEC). */
   max_price: number
+  /** Item watches only: alerts only for listed lots of at least this quality
+    tier (1-5), at their price. null: any quality. */
+  min_quality_tier: number | null
+  /** Paused watches never alert, until resumed. */
+  paused: boolean
+  /** When the watch was paused; null while it is active. */
+  paused_at: string | null
   /** Lowest public, in-stock price this watch would alert on now; null if none. */
   current_lowest: number | null
   /** When the last alert for this item was sent; alerts have a 1 hour cooldown. */
@@ -4391,10 +4398,16 @@ export type AddWatchlistItemRequest = {
   /** Target price in aUEC: a whole number above 1 (1 aUEC listings are
     placeholders and never alert). */
   max_price: number
+  /** Item watches only: lowest quality tier that alerts; omit or null for any. */
+  min_quality_tier?: number | null
 }
 export type UpdateWatchlistItemRequest = {
   /** New target price in aUEC. */
-  max_price: number
+  max_price?: number
+  /** Item watches only: lowest quality tier that alerts; null for any quality. */
+  min_quality_tier?: number | null
+  /** true pauses the watch (no alerts), false resumes it. */
+  paused?: boolean
 }
 export type VariantType = {
   /** Unique identifier for the variant type */

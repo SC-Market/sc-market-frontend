@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogTitle,
   InputAdornment,
+  MenuItem,
   Stack,
   TextField,
   Typography,
@@ -20,7 +21,7 @@ import {
 } from "../../../store/api/v2/market"
 import { getErrorMessage } from "../../../util/errorHandling"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { formatAuec, parseTargetPrice } from "../domain/price"
+import { formatAuec, parseTargetPrice, QUALITY_TIERS } from "../domain/price"
 
 export interface WatchPriceDialogProps {
   open: boolean
@@ -32,11 +33,18 @@ export interface WatchPriceDialogProps {
   currentPrice?: number | null
   /** The existing watch for this item: the dialog edits or removes it. */
   existing?: WatchlistItem
+  /**
+   * Offer a minimum quality: the item comes in quality tiers (crafted items).
+   * Always shown when the existing watch already has one.
+   */
+  qualityRelevant?: boolean
 }
 
 /**
- * Set (or change) the target price of a watched game item. A watch alerts
- * when a public listing of the item is at or below the target price.
+ * Set (or change) the target price of a watched game item, and for items
+ * that come in quality tiers an optional minimum quality. A watch alerts when
+ * a public listing of the item (of at least that quality) is at or below the
+ * target price.
  */
 export function WatchPriceDialog({
   open,
@@ -45,6 +53,7 @@ export function WatchPriceDialog({
   itemName,
   currentPrice,
   existing,
+  qualityRelevant = false,
 }: WatchPriceDialogProps) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
@@ -54,10 +63,15 @@ export function WatchPriceDialog({
   const [value, setValue] = React.useState(
     initial != null ? String(initial) : "",
   )
+  const initialTier = existing?.min_quality_tier ?? null
+  const [tier, setTier] = React.useState<number | null>(initialTier)
+  const showQuality = qualityRelevant || initialTier != null
 
   React.useEffect(() => {
-    if (open) setValue(initial != null ? String(initial) : "")
-    // Reset the field each time the dialog opens.
+    if (!open) return
+    setValue(initial != null ? String(initial) : "")
+    setTier(initialTier)
+    // Reset the fields each time the dialog opens.
   }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const [add, addState] = useAddWatchlistItemMutation()
@@ -76,13 +90,17 @@ export function WatchPriceDialog({
       if (existing) {
         await update({
           watchlistId: existing.id,
-          updateWatchlistItemRequest: { max_price: price },
+          updateWatchlistItemRequest: {
+            max_price: price,
+            ...(showQuality ? { min_quality_tier: tier } : {}),
+          },
         }).unwrap()
       } else {
         await add({
           addWatchlistItemRequest: {
             game_item_id: gameItemId,
             max_price: price,
+            ...(tier != null ? { min_quality_tier: tier } : {}),
           },
         }).unwrap()
       }
@@ -177,6 +195,37 @@ export function WatchPriceDialog({
                     )
             }
           />
+          {showQuality && (
+            <TextField
+              select
+              label={t("priceAlerts.watch.quality", "Minimum quality")}
+              value={tier ?? ""}
+              onChange={(e) =>
+                setTier(e.target.value === "" ? null : Number(e.target.value))
+              }
+              SelectProps={{ displayEmpty: true }}
+              InputLabelProps={{ shrink: true }}
+              helperText={t(
+                "priceAlerts.watch.qualityHint",
+                "Only listings with stock of this quality or better alert, at their price.",
+              )}
+            >
+              <MenuItem value="">
+                {t("priceAlerts.watch.anyQuality", "Any quality")}
+              </MenuItem>
+              {QUALITY_TIERS.map((q) => (
+                <MenuItem key={q} value={q}>
+                  {t(
+                    "priceAlerts.watch.tierOrBetter",
+                    "Tier {{tier}} or better",
+                    {
+                      tier: q,
+                    },
+                  )}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
           {failure && (
             <Alert severity="error">
               {getErrorMessage(failure) ??
