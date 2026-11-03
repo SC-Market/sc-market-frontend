@@ -3335,7 +3335,7 @@
     "intentHireAction": "Знайти послуги",
     "intentWantedTitle": "Шукаю",
     "intentWantedText": "Опублікуйте, що вам потрібно",
-    "intentWantedAction": "Створити замовлення на купівлю",
+    "intentWantedAction": "Створити замовлення",
     "intentSellTitle": "Продати",
     "intentSellText": "Безкоштовно, без комісії",
     "intentSellAction": "Створити оголошення",
