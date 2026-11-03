@@ -23,8 +23,6 @@ import { useParams } from "react-router-dom";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
 import { ListingDetailContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
-import { useGetUserProfileQuery } from "../../profile/api/profileApi";
-import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi";
 import {
   CreateRounded,
   PersonRounded,
@@ -40,7 +38,6 @@ import { SeoHead } from "../../../seo/SeoHead";
 import { buildBundleHead } from "../../../seo/entityHeads";
 import { FRONTEND_URL } from "../../../util/constants";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
-import { has_permission } from "../../../views/contractor/OrgRoles";
 import { ImagePreviewModal } from "../../../components/modal/ImagePreviewModal";
 import { ListingDetailItem } from "../listing-view/components/ListingDetailItem";
 import { dateDiffInDays } from "../../../util/dateDiff";
@@ -49,9 +46,10 @@ import { useTranslation } from "react-i18next";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import type { Order } from "../../orders/domain/types"
+import { isOrderOpen } from "../../orders/domain/status"
+import { useListingPermissions } from "../hooks/useListingPermissions"
 import { useGetListingDetailQuery } from "../../../store/api/v2/market";
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
-import { isSiteAdmin } from "../../../util/siteRole"
 
 /**
  * MarketMultipleViewV2 Component
@@ -174,7 +172,6 @@ export function MarketMultipleViewV2() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const theme = useTheme<ExtendedTheme>();
-  const { data: profile } = useGetUserProfileQuery();
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
@@ -228,34 +225,8 @@ export function MarketMultipleViewV2() {
   }, [listingDetail]);
   const currentItem = complete?.items[selectedItemIndex];
 
-  // Permission checks
-  const belongsToSellerOrg = useMemo(
-    () => profile?.contractors?.some(c => c.spectrum_id === complete?.seller.slug),
-    [profile?.contractors, complete?.seller.slug]
-  );
-  const { data: sellerContractor } = useGetContractorBySpectrumIDQuery(
-    complete?.seller.slug!, { skip: !complete?.seller.slug || !belongsToSellerOrg }
-  );
-
-  const amContractor = useMemo(() => !!belongsToSellerOrg, [belongsToSellerOrg]);
-
-  const amSeller = useMemo(
-    () =>
-      profile?.username === complete?.seller.slug && !belongsToSellerOrg,
-    [belongsToSellerOrg, complete?.seller.slug, profile?.username]
-  );
-
-  const amContractorManager = useMemo(
-    () =>
-      amContractor && !!sellerContractor &&
-      has_permission(sellerContractor, profile, "manage_market", profile?.contractors),
-    [sellerContractor, profile, amContractor]
-  );
-
-  const amRelated = useMemo(
-    () => amSeller || amContractorManager || isSiteAdmin(profile),
-    [amSeller, amContractorManager, profile?.role]
-  );
+  // Edit button and People section: viewers who manage the listing's shop
+  const { canManage } = useListingPermissions(listingDetail?.seller.shop_id);
 
   // Calculate bundle total based on selected variants
   const bundleTotal = useMemo(() => {
@@ -364,7 +335,7 @@ export function MarketMultipleViewV2() {
               </Grid>
 
               {/* People Section */}
-              {amRelated && (
+              {canManage && (
                 <Grid item lg={12} xs={12}>
                   <Grid container spacing={theme.layoutSpacing.component}>
                     <Section
@@ -513,7 +484,7 @@ export function MarketMultipleViewV2() {
                         </Stack>
                       }
                       action={
-                        amRelated ? (
+                        canManage ? (
                           <Link to={MARKET_PATHS.multipleEdit(complete.listing_id)}>
                             <IconButton aria-label={t("MarketMultipleView.editListing", "Edit listing")}>
                               <CreateRounded
@@ -637,7 +608,7 @@ export function MarketMultipleViewV2() {
               </Grid>
 
               {/* Active Orders Section */}
-              {amRelated && !!complete.orders?.length && (
+              {canManage && !!complete.orders?.length && (
                 <Section
                   disablePadding
                   xs={12}
@@ -654,16 +625,14 @@ export function MarketMultipleViewV2() {
                     }}
                   >
                     <OrderList
-                      orders={complete.orders.filter(
-                        (o) => !["cancelled", "fulfilled"].includes(o.status)
-                      )}
+                      orders={complete.orders.filter((o) => isOrderOpen(o.status))}
                     />
                   </Grid>
                 </Section>
               )}
 
               {/* Previous Orders Section */}
-              {amRelated && !!complete.orders?.length && (
+              {canManage && !!complete.orders?.length && (
                 <Section
                   disablePadding
                   xs={12}
@@ -680,9 +649,7 @@ export function MarketMultipleViewV2() {
                     }}
                   >
                     <OrderList
-                      orders={complete.orders.filter((o) =>
-                        ["cancelled", "fulfilled"].includes(o.status)
-                      )}
+                      orders={complete.orders.filter((o) => !isOrderOpen(o.status))}
                     />
                   </Grid>
                 </Section>

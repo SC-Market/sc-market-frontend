@@ -268,6 +268,8 @@ vi.mock("../../../../store/api/v2/market", () => {
   return {
     useGetListingDetailQuery: () =>
       querySuccess<MarketV2Endpoints["getListingDetail"]>(listingDetail),
+    // The viewer manages no shops (no Edit button)
+    useGetMyShopsQuery: () => querySuccess<MarketV2Endpoints["getMyShops"]>([]),
   };
 });
 

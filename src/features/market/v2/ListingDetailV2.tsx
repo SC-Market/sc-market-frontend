@@ -35,6 +35,7 @@ import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { SellerReviews } from "../listing-view/components/SellerReviews"
 import { SellerOtherListingsV2, RelatedListingsV2, AggregateMarketDataV2 } from "./components/ListingViewComponentsV2"
 import { ListingOrdersSection } from "./components/ListingOrdersSection"
+import { useListingPermissions } from "../hooks/useListingPermissions"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS, WIKI_PATHS, SHOP_PATHS } from "../../../routes/paths"
 import { getLanguageName } from "../../../constants/languages"
@@ -42,8 +43,6 @@ import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { has_permission } from "../../../views/contractor/OrgRoles"
-import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
 import { useCartDrawer } from "../hooks/AddToCartContext"
@@ -67,7 +66,6 @@ import { ReportButton } from "../../../components/button/ReportButton"
 import { buildListingHead } from "../../../seo/entityHeads"
 import { headDescription } from "../../../seo/pageHead"
 import { SeoHead } from "../../../seo/SeoHead"
-import { isSiteAdmin } from "../../../util/siteRole"
 import { ListingDetailContentSkeleton } from "../../../components/skeletons/MarketListingDetailSkeleton"
 import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton"
 import { listingStatusLabel } from "../domain/listingStatus"
@@ -156,19 +154,7 @@ export function ListingDetailV2() {
   }, [listing, gameItemType, gameItemId, gameItemName, t])
 
   const belongsToSellerOrg = profile?.contractors?.some(c => c.spectrum_id === seller?.slug)
-  const { data: sellerContractor } = useGetContractorBySpectrumIDQuery(
-    seller?.slug!, { skip: !seller?.slug || !belongsToSellerOrg }
-  )
-
-  const canEdit = useMemo(() => {
-    if (!profile || !seller || !listing) return false
-    if (isSiteAdmin(profile)) return true
-    if (seller.slug === profile.username) return true
-    if (belongsToSellerOrg && sellerContractor) {
-      return has_permission(sellerContractor, profile, "manage_market", profile.contractors)
-    }
-    return false
-  }, [profile, seller, listing, belongsToSellerOrg, sellerContractor])
+  const { canManage: canEdit } = useListingPermissions(seller?.shop_id)
 
   const canonicalPath = listing ? MARKET_PATHS.listing(listing.listing_id, listing.title) : undefined
   // The head the bridge and SSR render (title, description): the layout's
