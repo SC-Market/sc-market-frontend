@@ -27,16 +27,16 @@
       "updating": "更新中..."
     },
     "moderation.title": "モデレーションダッシュボード",
-    "moderation.description": "このページにはモデレーションツールとレポートが含まれます。",
-    "moderation.handleReport": "レポートを処理",
+    "moderation.description": "このページにはモデレーションツールと報告が表示されます。",
+    "moderation.handleReport": "報告に対応",
     "moderation.status": "ステータス",
     "moderation.notes": "メモ",
-    "moderation.notesPlaceholder": "モデレーションメモまたは実行されたアクションを入力...",
-    "moderation.notesHelperText": "モデレーションアクションに関するオプションメモ（最大2000文字）",
-    "moderation.updateReport": "レポートを更新",
+    "moderation.notesPlaceholder": "モデレーションのメモや実施した対応を入力...",
+    "moderation.notesHelperText": "モデレーション対応に関するメモ（任意、最大2000文字）",
+    "moderation.updateReport": "報告を更新",
     "moderation.updating": "更新中...",
-    "moderation.reportUpdated": "レポートが正常に更新されました",
-    "moderation.updateFailed": "レポートの更新に失敗しました",
+    "moderation.reportUpdated": "報告を更新しました",
+    "moderation.updateFailed": "報告の更新に失敗しました",
     "moderation.actions": "アクション",
     "alerts": {
       "actions": "操作",
@@ -273,9 +273,9 @@
       "downloadAll_other": "このセッションで作成したものをすべてダウンロード（{{count}}）",
       "chmod": "~/.config/scmarket-test-accounts.json として保存し、chmod 600 を実行してください。複数のダウンロードは jq -s add a.json b.json で結合できます。",
       "saved": "保存しました",
-      "intro": "テストアカウントは自動ブラウザエージェント用です。ユーザー名と認証コードでサインインし、実際のユーザーを見たり接触したりすることはなく、実際のユーザーからも見えません。作成・削除には新しい二要素認証コードが必要です。",
+      "intro": "テストアカウントは自動ブラウザエージェント用です。ユーザー名と認証コードでログインし、実際のユーザーを見たり接触したりすることはなく、実際のユーザーからも見えません。作成・削除には新しい二要素認証コードが必要です。",
       "loginOn": "テストログインはオンです（TEST_LOGIN_ENABLED=true）。オフにするにはこの設定を解除してください。",
-      "loginOff": "テストログインはオフです。アカウントは作成できますが、TEST_LOGIN_ENABLED=true を設定するまで誰もサインインできません。",
+      "loginOff": "テストログインはオフです。アカウントは作成できますが、TEST_LOGIN_ENABLED=true を設定するまで誰もログインできません。",
       "create": "テストアカウントを作成",
       "username": "ユーザー名",
       "usernameHelp": "「test」+ 名前（例：test-buyer）。~test-buyer として保存されます",
@@ -328,19 +328,19 @@
     "password": "パスワード",
     "repeatPassword": "パスワードの再入力",
     "loginWith": "ログイン方法",
-    "signIn": "サインイン",
+    "signIn": "ログイン",
     "terms": "ここをクリックすると、利用規約に同意したものとみなされます",
     "submit": "送信",
     "loginWithDiscord": "Discordでログイン",
     "accountLink": "アカウント連携",
     "authenticateWithRSI": "RSIで認証",
     "accessibility": {
-      "signInWithCitizenIDDescription": "Citizen iDアカウントでサインインします",
-      "signInWithDiscordDescription": "Discordアカウントでサインインします",
+      "signInWithCitizenIDDescription": "Citizen iDアカウントでログインします",
+      "signInWithDiscordDescription": "Discordアカウントでログインします",
       "signUpWithCitizenIDDescription": "Citizen iDアカウントで新規アカウントを作成します",
       "signUpWithDiscordDescription": "Discordアカウントで新規アカウントを作成します"
     },
-    "accountAlreadyExists": "アカウントはすでに存在します。代わりにサインインしてください。",
+    "accountAlreadyExists": "アカウントはすでに存在します。代わりにログインしてください。",
     "accountNotFound": "アカウントが見つかりません。まず登録してください。",
     "aria": {
       "outlinedGroup": "アウトラインボタングループ"
@@ -348,24 +348,24 @@
     "authFailed": "認証に失敗しました。もう一度お試しください。",
     "authTabs": "認証タブ",
     "citizenidAccountNotVerified": "登録またはログインするには、Citizen iDアカウントの認証が必要です。",
-    "citizenIdBlurb": "RSIアカウントでサインインして認証すると、アイデンティティフェデレーションによってStar Citizenのコミュニティツール全体でのアカウント管理が簡単になります。",
+    "citizenIdBlurb": "RSIアカウントでログインして認証すると、アイデンティティフェデレーションによってStar Citizenのコミュニティツール全体でのアカウント管理が簡単になります。",
     "genericAuthError": "認証エラーが発生しました。もう一度お試しいただくか、問題が解決しない場合はサポートにお問い合わせください。",
     "genericError": "エラーが発生しました。もう一度お試しください。",
     "linkCitizenID": "Citizen iDを連携",
-    "loginFailed": "サインインに失敗しました。もう一度お試しください。",
-    "loginWithCitizenID": "Citizen iDでサインイン",
+    "loginFailed": "ログインに失敗しました。もう一度お試しください。",
+    "loginWithCitizenID": "Citizen iDでログイン",
     "oauthError": "認証中にエラーが発生しました。もう一度お試しください。",
-    "signInBlurb": "無料で参加できます — RSI アカウント（<citizenIdLink>Citizen iD</citizenIdLink>）または Discord アカウントでサインインしてください。",
-    "signInTab": "サインインタブ",
-    "signInTitle": "SC Marketにサインイン",
-    "signInWithCitizenID": "Citizen iDでサインイン",
-    "signInWithDiscord": "Discordでサインイン",
+    "signInBlurb": "無料で参加できます — RSI アカウント（<citizenIdLink>Citizen iD</citizenIdLink>）または Discord アカウントでログインしてください。",
+    "signInTab": "ログインタブ",
+    "signInTitle": "SC Marketにログイン",
+    "signInWithCitizenID": "Citizen iDでログイン",
+    "signInWithDiscord": "Discordでログイン",
     "signUp": "新規登録",
     "signUpTab": "新規登録タブ",
     "signUpTitle": "SC Marketに新規登録",
     "signUpWithCitizenID": "Citizen iDで新規登録",
     "signUpWithDiscord": "Discordで新規登録",
-    "legalAgreement": "サインインすると、<termsLink>利用規約</termsLink>と<privacyLink>プライバシーポリシー</privacyLink>に同意したものとみなされます。",
+    "legalAgreement": "ログインすると、<termsLink>利用規約</termsLink>と<privacyLink>プライバシーポリシー</privacyLink>に同意したものとみなされます。",
     "legalAgreementSignUp": "登録すると、<termsLink>利用規約</termsLink>と<privacyLink>プライバシーポリシー</privacyLink>に同意したものとみなされます。",
     "google": "Google",
     "discord": "Discord"
@@ -394,7 +394,7 @@
   },
   "cookie_consent": {
     "title": "クッキーの同意",
-    "description": "サインインのためにクッキーを使用します。アクセス解析は同意した場合のみです。",
+    "description": "ログインのためにクッキーを使用します。アクセス解析は同意した場合のみです。",
     "privacy": "プライバシー",
     "accept_all": "許可",
     "accept_necessary": "必要なもののみ"
@@ -426,7 +426,7 @@
     "trademark": "Star Citizen®、Squadron 42®、Roberts Space Industries®、および Cloud Imperium® は Cloud Imperium Rights LLC の登録商標です",
     "unofficial": "これは非公式の Star Citizen ファンサイトであり、Cloud Imperium グループ各社とは提携していません。当サイト上のコンテンツのうち、運営者またはユーザーが作成したものではないものは、すべてそれぞれの権利者に帰属します",
     "officialSite": "Star Citizen 公式サイト：",
-    "referralCode": "Use our referral code: {{code}}",
+    "referralCode": "紹介コード：{{code}}",
     "acknowledgments": "サイトのロゴを提供してくれた <ladyFleurLink>LadyFleur</ladyFleurLink> さん、そしてAPIを提供してくれた <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink>、<starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> に特別な感謝を申し上げます。",
     "apiDocs": "API ドキュメント",
     "scOrgs": "SC Orgs",
@@ -502,10 +502,10 @@
     "5PlusOrdersLast30Days": "過去30日間で5件以上の注文",
     "99_9PercentRating25PlusTransactions": "99.9%以上の評価かつ25件以上の取引",
     "99PercentRating25PlusTransactions": "99%以上の評価かつ25件以上の取引",
-    "activeSellerFor1PlusYear": "1年以上の活動中の販売者",
-    "activeSellerFor2PlusYears": "2年以上の活動中の販売者",
-    "activeSellerFor3PlusYears": "3年以上の活動中の販売者",
-    "activeSellerFor6PlusMonths": "6か月以上の活動中の販売者",
+    "activeSellerFor1PlusYear": "1年以上活動している販売者",
+    "activeSellerFor2PlusYears": "2年以上活動している販売者",
+    "activeSellerFor3PlusYears": "3年以上活動している販売者",
+    "activeSellerFor6PlusMonths": "6か月以上活動している販売者",
     "avgCompletionTimeLessThan12Hours": "平均完了時間 12時間未満",
     "avgCompletionTimeLessThan24Hours": "平均完了時間 24時間未満",
     "avgCompletionTimeLessThan3Hours": "平均完了時間 3時間未満",
@@ -551,7 +551,7 @@
     "item_type": "アイテムタイプ",
     "item_name": "アイテム名",
     "other_category": "その他",
-    "allListings": "All Market Listings",
+    "allListings": "すべての出品",
     "toggleSidebar": "マーケットサイドバーを切り替え",
     "activeListings": "有効な出品",
     "inactiveListings": "無効な出品",
@@ -579,7 +579,7 @@
     "expiration": "有効期限：{{time}}",
     "unit": "個",
     "available": "在庫 {{count}} 個",
-    "internalListing": "内部リスト",
+    "internalListing": "内部出品",
     "unlistedListing": "限定公開",
     "showUnlistedAdmin": "限定公開を表示（管理者）",
     "addDiscountTier": "ティアを追加",
@@ -725,7 +725,7 @@
     "someone": "誰か",
     "org_member_joined": "{{who}}さんが{{org}}に参加しました",
     "offer_accepted": "{{who}}さんがあなたのオファーを承認しました",
-    "offer_rejected": "{{who}}さんがあなたのオファーを拒否しました",
+    "offer_rejected": "{{who}}さんがあなたのオファーを却下しました",
     "contract_offer_received": "{{who}}さんがあなたの契約にオファーを送りました",
     "account_identity": {
       "account_deactivated": "管理者があなたのアカウントを無効化しました。",
@@ -761,8 +761,8 @@
       "first_many": "{{n}} 件のオファーがあなたの返信を待っています",
       "final_one": "最後のリマインダー：オファーがあなたの返信を待っています：「{{title}}」",
       "final_many": "最後のリマインダー：{{n}} 件のオファーがあなたの返信を待っています",
-      "buyer_one": "「{{title}}」はまだ出品者の返信を待っています。待ち続けるか、出品者にメッセージを送るか、オファーを取り下げてください。",
-      "buyer_many": "あなたのオファーのうち {{n}} 件がまだ出品者の返信を待っています"
+      "buyer_one": "「{{title}}」はまだ販売者の返信を待っています。待ち続けるか、販売者にメッセージを送るか、オファーを取り下げてください。",
+      "buyer_many": "あなたのオファーのうち {{n}} 件がまだ販売者の返信を待っています"
     },
     "buy_order_match": "買い注文の一致：",
     "buy_order_match_listed": "があなたの買い注文に一致しました",
@@ -771,15 +771,15 @@
   "onboarding": {
     "welcome": "SC Marketへようこそ",
     "subtitle": "取引を始めるためにアカウントを設定しましょう。",
-    "skipAll": "セットアップをスキップして自分で探索する",
+    "skipAll": "セットアップをスキップして自分で見て回る",
     "skip": "スキップ",
     "continue": "続ける",
     "complete": "セットアップ完了",
-    "availabilitySaved": "利用可能時間を保存しました",
-    "emailVerificationSent": "確認メールを送信しました！受信トレイを確認してください。",
+    "availabilitySaved": "対応可能時間を保存しました",
+    "emailVerificationSent": "確認メールを送信しました！受信トレイをご確認ください。",
     "steps": {
       "discord": "Discord連携",
-      "availability": "利用可能時間",
+      "availability": "対応可能時間",
       "email": "メール",
       "notifications": "通知",
       "emailNotifs": "メールアラート",
@@ -788,11 +788,11 @@
     },
     "discord": {
       "title": "Discordアカウントを連携する",
-      "description": "Discordを接続して取引通知を受け取り、買い手と直接コミュニケーションしましょう。",
+      "description": "Discord を連携して取引の通知を受け取り、購入者と直接やり取りしましょう。",
       "link": "Discordを連携"
     },
     "availability": {
-      "title": "利用可能時間を設定する",
+      "title": "対応可能時間を設定する",
       "description": "取引可能な時間を他のユーザーに知らせましょう。ドラッグして時間枠を選択してください。"
     },
     "email": {
@@ -802,7 +802,7 @@
       "sent": "確認メールを送信しました！後で確認できます。"
     },
     "notifications": {
-      "title": "通知設定",
+      "title": "通知の設定",
       "description": "未読メッセージのリマインダー方法を選択してください。",
       "dmReminders": "未読メッセージについてメールで通知する",
       "dmRemindersHelp": "24時間以上未読のメッセージがある場合にリマインダーを送信します。設定からいつでも変更できます。"
@@ -882,7 +882,7 @@
       "type": "種類：{{type}}。"
     },
     "methods": {
-      "looting": "略奪",
+      "looting": "ルート",
       "mining": "採掘",
       "purchasing": "購入",
       "salvaging": "サルベージ"
@@ -950,7 +950,7 @@
         "buy_order_match": "買い注文の一致",
         "contract_public_created": "新しい公開契約",
         "offer_accepted": "オファーの承認",
-        "offer_rejected": "オファーの拒否",
+        "offer_rejected": "オファーの却下",
         "contract_offer_received": "あなたの契約へのオファー",
         "org_member_joined": "新しいメンバーの参加",
         "listing_expiring": "まもなく期限切れの出品",
@@ -1037,7 +1037,7 @@
           "label": "自分への割り当て"
         },
         "decisions": {
-          "label": "オファーの承認・拒否"
+          "label": "オファーの承認・却下"
         },
         "review": {
           "label": "新しいレビュー"
@@ -1092,17 +1092,17 @@
         "offer-pending": {
           "label": "返信待ちのオファー",
           "hint": "返信のないオファーが届いてから約1日後と3日後",
-          "tip": "あなた宛て、またはあなたが注文を担当する組織宛てのオファーにまだ返信がないときに届きます。承認・カウンターオファー・拒否のいずれかで返信すると、リマインダーは止まります。"
+          "tip": "あなた宛て、またはあなたが注文を担当する組織宛てのオファーにまだ返信がないときに届きます。承認・カウンターオファー・却下のいずれかで返信すると、リマインダーは止まります。"
         },
         "offer-waiting": {
           "label": "あなたのオファーはまだ返信待ちです",
-          "hint": "最後のリマインダーの後も出品者が返信していない場合",
+          "hint": "最後のリマインダーの後も販売者が返信していない場合",
           "tip": "購入者として出したオファー向け：リマインダー後も販売者から返信がない場合に届きます。そのまま待つ、販売者にメッセージを送る、オファーを取り下げる、のいずれかを選べます。"
         },
         "thread-invite": {
           "label": "Discord サーバーへの招待",
-          "hint": "Bot があなたを注文・オファーのスレッドに追加できないとき",
-          "tip": "Bot は注文やオファーごとに、販売者の Discord サーバーに非公開スレッドを作成します。あなたを追加できない場合（多くはまだそのサーバーに参加していないため）、サーバーへの招待を DM で送ります。"
+          "hint": "ボット があなたを注文・オファーのスレッドに追加できないとき",
+          "tip": "ボット は注文やオファーごとに、販売者の Discord サーバーに非公開スレッドを作成します。あなたを追加できない場合（多くはまだそのサーバーに参加していないため）、サーバーへの招待を DM で送ります。"
         }
       },
       "subtitle": "通知の種類ごとに受け取り方法を選択してください。",
@@ -1156,37 +1156,37 @@
       "reVerifyButton": "プロフィールを再認証",
       "reVerifySuccess": "プロフィールの再認証が成功しました！ユーザー名が更新されました。",
       "reVerifyError": "プロフィールの再認証に失敗しました。後でもう一度お試しください。",
-      "accountAlreadyCitizenId": "お使いのSC Marketアカウント（{{username}}）にはすでにCitizen iDがリンクされています。新しいものをリンクする前に、まずリンクを解除してください。",
-      "accountAlreadyDiscord": "お使いのSC MarketアカウントにはすでにDiscordがリンクされています。まずリンクを解除してください。",
-      "accountLinks": "リンク済みアカウント",
-      "accountLinksDescription": "リンク済みの認証アカウントを管理します。複数のアカウントをリンクし、ログインに使用するものを選択できます。",
-      "accountNotVerified": "Citizen iDアカウントをリンクするには、まず認証が必要です。Citizen iDでアカウントを認証してから、もう一度お試しください。",
+      "accountAlreadyCitizenId": "お使いのSC Marketアカウント（{{username}}）にはすでにCitizen iDが連携されています。新しいものを連携する前に、まず連携を解除してください。",
+      "accountAlreadyDiscord": "お使いのSC MarketアカウントにはすでにDiscordが連携されています。まず連携を解除してください。",
+      "accountLinks": "連携済みアカウント",
+      "accountLinksDescription": "連携済みの認証アカウントを管理します。複数のアカウントを連携し、ログインに使用するものを選択できます。",
+      "accountNotVerified": "Citizen iDアカウントを連携するには、まず認証が必要です。Citizen iDでアカウントを認証してから、もう一度お試しください。",
       "accountUsername": "アカウントのユーザー名",
-      "allAccountsLinked": "利用可能なすべてのアカウントがリンクされています。",
-      "citizenIdAlreadyLinked": "このCitizen iDアカウントはすでに別のSC Marketアカウント（{{username}}）にリンクされています。まずリンクを解除するか、別のアカウントをご利用ください。",
+      "allAccountsLinked": "利用可能なすべてのアカウントが連携されています。",
+      "citizenIdAlreadyLinked": "このCitizen iDアカウントはすでに別のSC Marketアカウント（{{username}}）に連携されています。まず連携を解除するか、別のアカウントをご利用ください。",
       "citizenIDUsername": "Citizen iDのユーザー名",
-      "discordAlreadyLinked": "このDiscordアカウントはすでに別のSC Marketアカウント（{{username}}）にリンクされています。まずリンクを解除してください。",
+      "discordAlreadyLinked": "このDiscordアカウントはすでに別のSC Marketアカウント（{{username}}）に連携されています。まず連携を解除してください。",
       "inGame": "ゲーム内",
-      "linkingError": "アカウントのリンク中にエラーが発生しました：{{error}}",
-      "linkNewAccount": "新しいアカウントをリンク",
+      "linkingError": "アカウントの連携中にエラーが発生しました：{{error}}",
+      "linkNewAccount": "新しいアカウントを連携",
       "manualVerification": "手動認証",
       "or": "または",
       "presence": "プレゼンス",
       "primary": "プライマリ",
       "setPrimary": "プライマリに設定",
       "showAsInGame": "ゲーム内として表示",
-      "unlink": "リンク解除",
-      "unlinkButton": "アカウントのリンクを解除",
-      "unlinkDescription": "Star Citizenアカウントのリンクを解除して未認証状態に戻します。ユーザー名はDiscord IDに基づくデフォルト形式にリセットされます。",
+      "unlink": "連携解除",
+      "unlinkButton": "アカウントの連携を解除",
+      "unlinkDescription": "Star Citizenアカウントの連携を解除して未認証状態に戻します。ユーザー名はDiscord IDに基づくデフォルト形式にリセットされます。",
       "unlinkDialogCancel": "キャンセル",
-      "unlinkDialogConfirm": "アカウントのリンクを解除",
-      "unlinkDialogDescription": "Star Citizenアカウントのリンクを解除してもよろしいですか？プロフィールが未認証状態にリセットされ、ユーザー名がデフォルト形式に戻ります。アカウントはいつでも再リンクできます。",
-      "unlinkDialogTitle": "アカウントのリンク解除の確認",
-      "unlinkError": "Star Citizenアカウントのリンク解除に失敗しました。後でもう一度お試しください。",
-      "unlinkProviderDescription": "このアカウントのリンクを解除してもよろしいですか？この方法ではログインできなくなります。",
-      "unlinkProviderTitle": "アカウントのリンクを解除",
-      "unlinkSuccess": "Star Citizenアカウントのリンクを解除しました！プロフィールが未認証状態にリセットされました。",
-      "unlinkTitle": "Star Citizenアカウントのリンクを解除",
+      "unlinkDialogConfirm": "アカウントの連携を解除",
+      "unlinkDialogDescription": "Star Citizenアカウントの連携を解除してもよろしいですか？プロフィールが未認証状態にリセットされ、ユーザー名がデフォルト形式に戻ります。アカウントはいつでも再連携できます。",
+      "unlinkDialogTitle": "アカウントの連携解除の確認",
+      "unlinkError": "Star Citizenアカウントの連携解除に失敗しました。後でもう一度お試しください。",
+      "unlinkProviderDescription": "このアカウントの連携を解除してもよろしいですか？この方法ではログインできなくなります。",
+      "unlinkProviderTitle": "アカウントの連携を解除",
+      "unlinkSuccess": "Star Citizenアカウントの連携を解除しました！プロフィールが未認証状態にリセットされました。",
+      "unlinkTitle": "Star Citizenアカウントの連携を解除",
       "usernames": "ユーザー名：",
       "verifyAccount": "アカウントを認証",
       "verifyAccountDescription": "すべての機能を利用するにはアカウントの認証が必要です。次のいずれかの方法を選択してください：",
@@ -1375,10 +1375,10 @@
       "connect": "SCMDBを接続",
       "connected": "接続済み",
       "connectPrompt": "SCMDBアカウントを接続するための同期トークンを生成します。SCMDBのSync Sinks設定に貼り付けるURLが取得できます。",
-      "description": "SCMDBアカウントを接続すると、ブループリントの所有状況が自動的にSC Marketに同期されます。SCMDBでブループリントを所有済みとしてマークすると、ここに反映されます。",
+      "description": "SCMDBアカウントを接続すると、設計図の所有状況が自動的にSC Marketに同期されます。SCMDBで設計図を所有済みとしてマークすると、ここに反映されます。",
       "disconnect": "接続解除",
       "disconnectTitle": "SCMDBの接続を解除しますか？",
-      "disconnectWarning": "SCMDBはSC Marketへのブループリントの同期ができなくなります。現在のブループリントインベントリには影響しません。",
+      "disconnectWarning": "SCMDBはSC Marketへの設計図の同期ができなくなります。現在の設計図インベントリには影響しません。",
       "ingestUrl": "このURLをSCMDBの プロフィール → Sync Sinks に貼り付けてください：",
       "lastEvent": "最後に受信したイベント：",
       "noEvents": "まだイベントを受信していません。同期を開始するにはSCMDBにURLを追加してください。",
@@ -1386,7 +1386,7 @@
       "regenerate": "トークンを再生成",
       "regenerateTitle": "トークンを再生成しますか？",
       "regenerateWarning": "現在のURLが無効になります。SCMDBで更新する必要があります。",
-      "snapshotWarning": "スナップショットイベントを有効にしてSCMDBを接続すると、SC Marketの現在のブループリントトラッキングがSCMDBのデータで置き換えられます。SC Marketでのみトラッキングされているブループリントは未所有としてマークされます。",
+      "snapshotWarning": "スナップショットイベントを有効にしてSCMDBを接続すると、SC Marketの現在の設計図トラッキングがSCMDBのデータで置き換えられます。SC Marketでのみトラッキングされている設計図は未所有としてマークされます。",
       "title": "SCMDB同期",
       "tokenActive": "同期トークンが有効です。URLはトークン作成時にのみ表示されます。新しいURLを取得するにはトークンを再生成してください。",
       "tokenHint": "末尾が…{{hint}}の同期トークンが有効です。URLはトークン作成時にのみ表示されます。新しいURLを取得するにはトークンを再生成してください。",
@@ -1446,7 +1446,7 @@
         },
         "order_desk": {
           "name": "注文デスク",
-          "description": "ショップと注文を読み取り、注文を進め、オファーを承認または拒否します。"
+          "description": "ショップと注文を読み取り、注文を進め、オファーを承認または却下します。"
         },
         "read_only": {
           "name": "読み取り専用",
@@ -1460,7 +1460,7 @@
         "orders_read": "注文の読み取り",
         "orders_write": "注文ステータスの変更",
         "offers_read": "オファーの読み取り",
-        "offers_write": "オファーの承認・拒否"
+        "offers_write": "オファーの承認・却下"
       },
       "legacy": {
         "title": "旧トークン",
@@ -1580,8 +1580,8 @@
       "text": "ゲームアイテム属性"
     },
     "gameData": {
-      "blueprintInventory": "マイブループリント",
-      "blueprints": "ブループリント",
+      "blueprintInventory": "マイ設計図",
+      "blueprints": "設計図",
       "crafting": "クラフト",
       "craftingCalculator": "クラフト計算機",
       "mining": "採掘",
@@ -1609,7 +1609,7 @@
     "premium": {
       "text": "プレミアム"
     },
-    "recruiting_short": "採用",
+    "recruiting_short": "募集",
     "search": "検索",
     "shop_blocklist": "ブロックリスト",
     "shop_customers": "顧客",
@@ -1657,7 +1657,7 @@
   "discord_bot": {
     "integrating_with_discord": "Discordとの連携",
     "how_to_get_notified": "注文が入ったときに通知を受け取る方法",
-    "how_to_get_notified_answer": "公式の [SC Market Discord Bot]({{BOT_INSTALL_PATH}}) をサーバーに追加し、注文通知チャンネルを選んでください。新しい注文やオファーはそこに投稿され、それぞれ専用の注文スレッドを作れます。Discord アカウントを連携し、ボットと同じサーバーに参加していれば、オファーが返信待ちのときのリマインダーなど、ボットからダイレクトメッセージも届きます。DM で受け取る内容は 設定 › 通知 で選べます。または、[SC Market 公式サーバー]({{DISCORD_INVITE}}) 経由で注文を処理するには、以下の設定を使用してください。",
+    "how_to_get_notified_answer": "公式の [SC Market Discord ボット]({{BOT_INSTALL_PATH}}) をサーバーに追加し、注文通知チャンネルを選んでください。新しい注文やオファーはそこに投稿され、それぞれ専用の注文スレッドを作れます。Discord アカウントを連携し、ボットと同じサーバーに参加していれば、オファーが返信待ちのときのリマインダーなど、ボットからダイレクトメッセージも届きます。DM で受け取る内容は 設定 › 通知 で選べます。または、[SC Market 公式サーバー]({{DISCORD_INVITE}}) 経由で注文を処理するには、以下の設定を使用してください。",
     "how_to_communicate": "Discordを通じて購入者とやり取りする方法",
     "how_to_communicate_answer": "公式の SC Market Discord ボットをサーバーに追加し、注文スレッド用のチャンネルを選んでください。新しい注文やオファーごとに、購入者と担当の販売者が参加するプライベートスレッドがそこに作られ、購入者はあなたのサーバーに招待されるので、一緒に注文を進められます。\n\n1. ショップの **設定 › Discord**、または組織の **Discord 連携** タブで **[ボットをサーバーに追加]({{BOT_INSTALL_PATH}})** を押し、Discord でサーバーを選びます。サーバーが連携された状態で戻ってきます。\n\n2. 注文スレッドのチャンネルと、必要なら注文アラートのチャンネル（新しい注文やオファーごとに「Claim」ボタン付きの投稿）を選んで保存します。\n\nボットを Discord から追加した場合は、SC Market の設定で Discord アカウントを連携し、注文スレッドを置くチャンネルで `/setup threads` を実行してください。組織の注文の場合は `org` に Spectrum ID を入力します（例: `/setup threads org:SCMARKET`）。あなた個人への注文の場合は空欄のままにします。アラートは、スタッフ用チャンネルで `/setup alerts`（同じ `org`）を実行します。\n\nボットの追加には Discord サーバーの **サーバー管理** 権限が、`/setup threads`, `/setup alerts` コマンドには **チャンネルの管理** 権限が必要です。組織の場合は、SC Market での組織の **Manage Webhooks** 権限も必要です（`/setup alerts` で作るアラートは **Manage Orders** でも可）。スレッド用チャンネルでは、ボットに「チャンネルを見る」「プライベートスレッドを作成」「スレッドでメッセージを送信」「招待を作成」の権限が必要です。`/setup status` でチャンネルの設定内容を、`/help` で全コマンドを確認できます。",
     "learn_connect": "Discord ボットを接続",
@@ -1711,7 +1711,7 @@
   "privacy_settings": {
     "title": "プライバシー",
     "public_discord": "Discordプロフィールを公開する",
-    "share_discord_with_sellers": "Discordプロフィールを出品者と共有する",
+    "share_discord_with_sellers": "Discordプロフィールを販売者と共有する",
     "request_data_title": "自分のデータをリクエスト",
     "request_data_description": "当サイトに関連するあなたのデータをリクエストします。この機能は現在開発中であり、あなたのすべてのデータを表すものではありません。可能な限り完全なものにするよう取り組んでいますが、現時点ではあなたのユーザーアカウントに関連する情報のほとんどが含まれます。",
     "request_data_button": "データをリクエスト",
@@ -1720,7 +1720,7 @@
     "delete_account_description": "アカウントと関連するすべての個人データを完全に削除します。この操作は30日間の猶予期間後には取り消せません。",
     "updated": "設定を更新しました",
     "cookie_title": "クッキーの設定",
-    "cookie_description": "サインイン用クッキーと匿名のエラーレポートは常に有効です。アクセス解析（Google Analytics と表示速度の計測）は許可した場合のみ動作します。",
+    "cookie_description": "ログイン用クッキーと匿名のエラーレポートは常に有効です。アクセス解析（Google Analytics と表示速度の計測）は許可した場合のみ動作します。",
     "cookie_status_all": "現在の選択：アクセス解析を許可",
     "cookie_status_necessary": "現在の選択：必要なもののみ"
   },
@@ -1833,7 +1833,7 @@
     "viewDetails": "詳細を見る",
     "viewContractor": "契約者を見る",
     "share": "共有",
-    "title": "採用",
+    "title": "募集",
     "scOrgsNote": "メンバーを募集中ですか？SC Orgs には応募の管理、組織ディレクトリ、メンバー管理ツールがあります →",
     "scOrgsLfoNote": "所属する組織をお探しですか？SC Orgs の「Looking for Org」掲示板に投稿すれば、組織のほうから声がかかります →",
     "editPost": "投稿を編集"
@@ -1907,7 +1907,7 @@
     "about_tab": "概要",
     "services_tab": "サービス",
     "market_tab": "マーケット",
-    "order_tab": "Order",
+    "order_tab": "カスタム注文",
     "reviews_tab": "レビュー",
     "store_market": "マーケット",
     "store_services": "サービス",
@@ -1934,7 +1934,7 @@
     "Medical": "医療",
     "Misc": "その他",
     "Rental": "レンタル",
-    "Resource Acquisition": "資源獲得",
+    "Resource Acquisition": "リソース獲得",
     "Support": "サポート",
     "Transport": "輸送"
   },
@@ -1955,7 +1955,7 @@
     "in_progress": "進行中",
     "fulfilled": "完了",
     "cancelled": "キャンセル",
-    "not_started": "未開始"
+    "not_started": "待機中"
   },
   "orderServiceArea": {
     "associated_services": "関連サービス",
@@ -2054,7 +2054,7 @@
     "valueLast7Days": "過去7日間の価値",
     "valueLast30Days": "過去30日間の価値",
     "statusBreakdown": "ステータス内訳",
-    "notStarted": "未開始",
+    "notStarted": "待機中",
     "inProgress": "進行中",
     "fulfilled": "完了",
     "cancelled": "キャンセル",
@@ -2074,9 +2074,9 @@
   "orders": {
     "status": {
       "fulfilled": "完了",
-      "inProgress": "対応中",
+      "inProgress": "進行中",
       "cancelled": "キャンセル済み",
-      "notStarted": "Not Started",
+      "notStarted": "待機中",
       "active": "進行中",
       "inactive": "無効"
     },
@@ -2093,8 +2093,8 @@
       "active": "進行中",
       "past": "過去",
       "fulfilled": "完了",
-      "inProgress": "In Progress",
-      "notStarted": "Not Started",
+      "inProgress": "進行中",
+      "notStarted": "待機中",
       "cancelled": "キャンセル済み",
       "unclaimed": "未担当"
     },
@@ -2113,7 +2113,7 @@
     "aria": {
       "orderTabs": "注文タブ"
     },
-    "availability": "入手可否",
+    "availability": "対応可能時間",
     "buyer": "購入者",
     "buyer_username": "購入者のユーザー名",
     "buyer_username_placeholder": "購入者のユーザー名を入力",
@@ -2127,9 +2127,9 @@
     "has_service": "サービスあり",
     "marketListings": "アイテム",
     "messages": "メッセージ",
-    "seller": "出品者",
-    "seller_username": "出品者のユーザー名",
-    "seller_username_placeholder": "出品者のユーザー名または Spectrum ID を入力",
+    "seller": "販売者",
+    "seller_username": "販売者のユーザー名",
+    "seller_username_placeholder": "販売者のユーザー名または Spectrum ID を入力",
     "service": "サービス",
     "share": "共有",
     "title": "注文",
@@ -2140,7 +2140,7 @@
     "updated_status": "ステータスを更新しました！",
     "details_table": "詳細テーブル",
     "customer": "顧客",
-    "seller": "出品者",
+    "seller": "販売者",
     "assigned": "担当者",
     "date": "日付",
     "status": "ステータス",
@@ -2153,7 +2153,7 @@
     "cancel": "キャンセル",
     "complete_order": "注文を完了",
     "begin_work": "作業を開始",
-    "not_started": "Not Started",
+    "not_started": "待機中",
     "claim": "担当する",
     "claimed": "注文を担当しました",
     "claimFailed": "注文の担当に失敗しました",
@@ -2237,8 +2237,8 @@
     "offer": "オファー",
     "user": "ユーザー",
     "status": "ステータス",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "確認待ち",
+    "waitingCustomer": "あなたの返答待ち",
     "accepted": "承認済み",
     "rejected": "却下済み",
     "items": "アイテム",
@@ -2255,7 +2255,7 @@
     "merge_offers_other": "オファーを統合（{{count}}）",
     "merge_offers_combined_cost": "合計費用：{{cost}} aUEC",
     "merge_offers_confirm_body": "{{count}} 件のオファーセッションを統合すると、新しい統合オファーセッションが作成され、選択したセッションは終了します。この操作は取り消せません。",
-    "merge_offers_confirm_body_other": "{{count}}件のオファーセッションを統合すると、新しい統合オファーセッションが作成され、選択したセッションはクローズされます。この操作は元に戻せません。",
+    "merge_offers_confirm_body_other": "{{count}}件のオファーセッションを統合すると、新しい統合オファーセッションが作成され、選択したセッションは終了します。この操作は取り消せません。",
     "merge_offers_confirm_button": "オファーを統合",
     "merge_offers_confirm_cancel": "キャンセル",
     "merge_offers_confirm_title": "オファーセッションを統合しますか？",
@@ -2263,12 +2263,12 @@
     "merge_offers_selected_count_other": "選択中：{{count}}件のオファーセッション",
     "merge_offers_warning": "選択したすべてのオファーセッションが終了し、1 つの統合オファーセッションに置き換えられます。",
     "merge_success": "オファーを統合しました",
-    "seller": "出品者",
-    "seller_username": "出品者のユーザー名",
-    "seller_username_placeholder": "出品者のユーザー名または Spectrum ID を入力",
+    "seller": "販売者",
+    "seller_username": "販売者のユーザー名",
+    "seller_username_placeholder": "販売者のユーザー名または Spectrum ID を入力",
     "unclaimed": "未担当",
-    "waitingForBuyer": "購入者を待機中",
-    "waitingForSeller": "出品者を待機中",
+    "waitingForBuyer": "購入者の返答待ち",
+    "waitingForSeller": "販売者の返答待ち",
     "yourTurn": "あなたの番です"
   },
   "OfferServiceEditArea": {
@@ -2301,7 +2301,7 @@
   },
   "OfferDetailsEditArea": {
     "customer": "顧客",
-    "seller": "出品者",
+    "seller": "販売者",
     "date": "日付",
     "title": "タイトル",
     "kind": "種類",
@@ -2313,7 +2313,7 @@
   "OfferDetailsArea": {
     "customer": "顧客",
     "associatedContract": "関連する契約",
-    "seller": "出品者",
+    "seller": "販売者",
     "date": "日付",
     "status": "ステータス",
     "title": "タイトル",
@@ -2321,21 +2321,21 @@
     "details": "詳細",
     "offer": "オファー",
     "discordThread": "Discordスレッド",
-    "acceptOrDecline": "承認または辞退",
+    "acceptOrDecline": "承認または却下",
     "accept": "承認",
     "counterOffer": "カウンターオファー",
     "reject": "却下",
     "cancelOrder": "注文をキャンセル",
     "cancel": "キャンセル",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "確認待ち",
+    "waitingCustomer": "あなたの返答待ち",
     "rejected": "却下済み",
     "accepted": "承認済み",
     "discordServerInvite": "Discordサーバーへの招待",
     "joinServer": "サーバーに参加",
     "noOffer": "オファーの詳細がありません",
     "withdrawTitle": "このオファーを取り下げますか？",
-    "withdrawBody": "出品者はこのオファーを承諾できなくなります。待ち続ける場合は、これを閉じてください。",
+    "withdrawBody": "販売者はこのオファーを承認できなくなります。待ち続ける場合は、このダイアログを閉じてください。",
     "keepWaiting": "待ち続ける",
     "withdraw": "オファーを取り下げる"
   },
@@ -2400,7 +2400,7 @@
   "CreateMessageGroupBody": {
     "toggleSidebar": "サイドバーを切り替え",
     "usernames": "ユーザー名",
-    "create": "Create",
+    "create": "チャットを作成",
     "close": "閉じる",
     "creating": "作成中...",
     "minChars": "3 文字以上入力してください",
@@ -2482,7 +2482,7 @@
     "filtering": "絞り込み",
     "quantityAvailable": "在庫数",
     "listingStatus": "出品ステータス",
-    "either": "どちらも",
+    "either": "どちらでも",
     "active": "有効",
     "inactive": "無効",
     "saleType": "販売タイプ",
@@ -2517,7 +2517,7 @@
   "MarketMultipleView": {
     "market": "マーケット",
     "people": "ユーザー",
-    "seller": "出品者",
+    "seller": "販売者",
     "new": "新着",
     "listed": "出品日",
     "updated": "更新日",
@@ -2553,7 +2553,7 @@
     "bid": "入札",
     "placeBid": "入札する",
     "people": "ユーザー",
-    "seller": "出品者",
+    "seller": "販売者",
     "market": "マーケット",
     "new": "新着",
     "ended": "終了",
@@ -2689,10 +2689,10 @@
   },
   "MarketAggregateView": {
     "market": "マーケット",
-    "sellerRating": "出品者評価",
+    "sellerRating": "販売者評価",
     "price": "価格",
     "quantityAvailable": "在庫数",
-    "buyer": "Buyer",
+    "buyer": "販売者",
     "quantity": "数量",
     "total": "合計",
     "description": "説明",
@@ -2889,9 +2889,9 @@
     "bid": "入札額"
   },
   "ships": {
-    "section_title": "船",
+    "section_title": "艦船",
     "table": {
-      "ship": "船",
+      "ship": "艦船",
       "manufacturer": "メーカー",
       "kind": "種類",
       "condition": "状態",
@@ -2905,8 +2905,8 @@
     },
     "report_condition": "状態を報告",
     "register": {
-      "title": "船を登録",
-      "ship_label": "船",
+      "title": "艦船を登録",
+      "ship_label": "艦船",
       "submit": "送信"
     },
     "import": {
@@ -3001,7 +3001,7 @@
     },
     "headCells": {
       "name": "名前",
-      "position": "順位"
+      "position": "順序"
     },
     "permissionDescriptions": {
       "claim_orders": "Discord連携を通じて受付中の注文を引き受ける",
@@ -3009,7 +3009,7 @@
       "manage_blocklist": "組織との交流からユーザーをブロック・ブロック解除する",
       "manage_invites": "組織の招待コードとリンクを作成・管理する",
       "manage_market": "組織の出品を作成・編集・削除し、ショップの設定・在庫ロット・注文を管理します",
-      "manage_orders": "組織のすべての注文を表示・承認・拒否・管理する",
+      "manage_orders": "組織のすべての注文を表示・承認・却下・管理する",
       "manage_org_details": "組織名、説明、アバター、バナー、言語を編集し、監査ログを閲覧し、ホワイトラベルのサイトとサイドバーの設定を変更する",
       "manage_recruiting": "組織の募集投稿を作成・管理する",
       "manage_roles": "ロールを作成・編集・削除し、メンバーに割り当てる",
@@ -3031,8 +3031,8 @@
     "update_failed": "更新に失敗しました！{{reason}}",
     "member_kicked": "メンバーを除名しました！",
     "kick_failed": "除名に失敗しました！{{reason}}",
-    "cannotRemoveOwnerRole": "オーナーの役割はメンバーから削除できません。",
-    "cannotRemoveProtectedSelfRole": "自分自身からこの役割を削除することはできません（最上位の役割を保持し、最上位の役割に「役割の管理」が含まれない場合はその権限を持つ役割を保持してください）。",
+    "cannotRemoveOwnerRole": "オーナーのロールはメンバーから外せません。",
+    "cannotRemoveProtectedSelfRole": "自分自身からこのロールを削除することはできません（最上位のロールを保持し、最上位のロールに「ロールの管理」が含まれない場合はその権限を持つロールを保持してください）。",
     "kicked": "追放しました",
     "kickMember": "{{username}} を除名",
     "rolesFor": "{{username}} のロール"
@@ -3069,7 +3069,7 @@
     "store": "ストア",
     "services": "サービス",
     "market": "マーケット",
-    "order": "Order",
+    "order": "カスタム注文",
     "members": "メンバー",
     "recruiting": "募集",
     "reviews": "レビュー"
@@ -3185,7 +3185,7 @@
     "aria": {
       "offerTabs": "オファータブ"
     },
-    "availability": "対応可否",
+    "availability": "対応可能時間",
     "details": "詳細",
     "details_table": "詳細テーブル",
     "marketListings": "アイテム",
@@ -3212,8 +3212,8 @@
   },
   "sellMaterials": {
     "commodities": "商品",
-    "title": "資源を買い取ります！",
-    "subtitle": "資源をまとめて私たちに売りましょう！精製の手間を省いて、好条件で私たちに売却できます！"
+    "title": "リソースを買い取ります！",
+    "subtitle": "リソースをまとめて私たちに売りましょう！精製の手間を省いて、好条件で私たちに売却できます！"
   },
   "cart": {
     "ofAvailable": "/ 在庫 {{available}} 個",
@@ -3221,10 +3221,10 @@
     "price": "価格：",
     "subtotal": "小計",
     "remove": "削除",
-    "seller": "出品者 - ",
+    "seller": "販売者 - ",
     "total": "合計",
     "note": "メモ",
-    "submitOfferDesc": "オファーを送信すると、あなたのオファーが送られ、出品者と交渉・調整できます。",
+    "submitOfferDesc": "「オファーを送信」でオファーを送り、販売者と交渉・調整できます。",
     "payTotal": "支払い合計：{{total}} aUEC",
     "offerOptional": "オファー（任意）",
     "submitOffer": "オファーを送信",
@@ -3248,7 +3248,7 @@
     "confirmPriceChanges": "一部の価格が変更されました。確定すると、更新後の価格に同意したことになります。",
     "exceedsStockWithCart": "在庫は {{available}} のみです。カートは {{total}} になります",
     "inCart": "カートに入っています",
-    "invalidQty": "数量は 1 以上でなければなりません",
+    "invalidQty": "数量は 1 以上にしてください",
     "itemRemoved": "アイテムをカートから削除しました",
     "nextAvailable": "次回入荷",
     "othersInCart_other": "他に{{count}}人がこの商品をカートに入れています",
@@ -3277,19 +3277,19 @@
   },
   "landing": {
     "supportersTitle": "サポーターの皆さま",
-    "supportersThanks": "すべての皆さまに感謝します：",
-    "supporters": "サポーター",
+    "supportersThanks": "すべての",
+    "supporters": "サポーターの皆さまに感謝します。",
     "faqTitle": "よくある質問",
     "faqSellItemsQ": "アイテムを売るにはどうすればよいですか？",
-    "faqSellItemsA": "売りたいアイテムのマーケット出品を作成します。購入者は欲しいアイテムをカートに追加し、そのアイテムについてあなたに注文できます。その後は、aUECと商品を交換する時間と場所を、あなたと購入者で調整します。",
+    "faqSellItemsA": "アイテムごとに出品を作成します。購入者はアイテムをカートに入れてあなたに注文し、その後あなたと購入者でゲーム内の待ち合わせ時間と場所を決めて、商品と aUEC を交換します。",
     "faqSafeQ": "SC Market は安全に使えますか？",
-    "faqSafeA": "私たちは商品もaUECも一切取り扱わないため、いかなる保証もできません。ただし、買い手と売り手が互いをレビューできる仕組みを提供しているので、詐欺を警戒している場合でも、他の人がその出品者と良い取引をしたかどうかを確認できます。",
+    "faqSafeA": "取引はプレイヤー同士で行われるため、私たちが保証することはできません。ただし、注文のたびに購入者と販売者がお互いをレビューします。取引の前に、販売者の評価と注文履歴を確認してください。",
     "faqListThingsQ": "SC Market にはどのようなものを出品できますか？",
-    "faqListThingsA": "aUECと引き換えであれば、どんなアイテムやサービスでも出品できます。アイテムやサービスは基本的に Star Citizen に関連するものであるべきで、サービスはゲーム内外を問わず提供できます。",
+    "faqListThingsA": "aUEC で取引する Star Citizen のアイテムやサービスなら何でも出品できます：武器、アーマー、コンポーネント、商品、艦船の積荷、さらに輸送・護衛・採掘・医療救助などのサービス。サービスはゲーム内でもゲーム外でも構いません。",
     "faqFeeQ": "SC Market は手数料を取りますか？",
-    "faqFeeA": "いいえ、取りません。ここで提供されるすべてのサービスは無料であり、aUECが私たちを介して受け渡されることはありません。",
+    "faqFeeA": "いいえ。SC Market は無料で使え、aUEC が私たちを経由することもありません。購入者はゲーム内で販売者に直接支払います。",
     "faqRealMoneyQ": "実際のお金でアイテムを出品できますか？",
-    "faqRealMoneyA": "いいえ。SC Market 上のすべての取引はaUECで行う必要があります。",
+    "faqRealMoneyA": "いいえ。SC Market での取引はすべて aUEC で行います。CIG の利用規約に従い、リアルマネー取引は禁止されています。",
     "seeAll": "すべて表示",
     "heroTitle": "Star Citizen のプレイヤー同士のマーケットプレイス",
     "heroText": "アイテムの売買やサービスの依頼ができ、支払いはゲーム内の aUEC で行います。手数料はいただきません。",
@@ -3298,7 +3298,7 @@
     "heroWeekOrdersLabel": "今週の注文件数",
     "heroWeekValueLabel": "今週の aUEC 注文額",
     "heroSearchLabel": "マーケットを検索",
-    "heroSearchPlaceholder": "武器、アーマー、コモディティ...",
+    "heroSearchPlaceholder": "武器、アーマー、商品...",
     "heroSearchSubmit": "検索",
     "heroListingsLabel": "件の出品中",
     "categoriesLabel": "人気のカテゴリー",
@@ -3335,8 +3335,8 @@
     "topShopsEmpty": "まだショップはありません。",
     "topShopsError": "ショップを読み込めませんでした。",
     "sellTitle": "出品を始める",
-    "seoDescription": "SC Marketは、プレイヤーがゲーム内アイテムを売買・トレードし、輸送・護衛・医療・サルベージなどのサービスを組織に依頼できるStar Citizenのマーケットプレイスです。取引はすべてaUECで行われます。",
-    "seoTitle": "SC Market — Star Citizenマーケットプレイス：aUECでアイテムを売買・トレード",
+    "seoDescription": "Star Citizen のプレイヤーと取引しましょう：アイテム、艦船コンポーネント、商品を aUEC で売買し、買い注文を出し、輸送・護衛・サルベージを組織に依頼できます。",
+    "seoTitle": "SC Market — Star Citizen トレードマーケットプレイス：aUEC でアイテムを売買・トレード",
     "sellText": "個人でも組織でもショップを開けます。組織のメンバーは、共有のストアフロント・在庫・評価のもとで、一緒に注文を引き受けて処理できます。",
     "sellStep1Title": "出品する",
     "sellStep1Text": "どんなアイテムやサービスも、好きな数量で、aUEC の価格で。",
@@ -3354,12 +3354,12 @@
     "alertStatusValue": "対応待ち",
     "alertNote": "注文通知のイラスト",
     "gameDataHeading": "ゲームデータ",
-    "gameDataOpenWiki": "Wiki を開く",
+    "gameDataOpenWiki": "ウィキを開く",
     "gameDataItems": "アイテム",
     "gameDataItemsText": "ステータスとバリエーション",
     "gameDataShips": "艦船",
     "gameDataShipsText": "スペックとロードアウト",
-    "gameDataBlueprints": "ブループリント",
+    "gameDataBlueprints": "設計図",
     "gameDataBlueprintsText": "クラフトレシピ",
     "gameDataMining": "採掘",
     "gameDataMiningText": "鉱石と採掘場所",
@@ -3372,14 +3372,14 @@
     "trustFeesText": "aUEC が私たちを経由することはありません。購入者はゲーム内で販売者に直接支払います。",
     "trustAlertsTitle": "価格アラート",
     "trustAlertsText": "出品ページからアイテムの価格をウォッチできます。",
-    "trustOrgsTitle": "組織のために",
+    "trustOrgsTitle": "組織にも対応",
     "trustOrgsText": "共有ストアフロント、メンバーによる注文処理、ホワイトラベルにも対応。",
     "faqBuyQ": "Star Citizen のアイテムを他のプレイヤーから買うには？",
     "faqBuyA": "マーケットでアイテムを検索し、カートに入れて注文します。販売者に Discord で通知が届き、ゲーム内で会って aUEC で支払い、アイテムを受け取ります。",
     "faqOfficialQ": "SC Market は Cloud Imperium Games と提携していますか？",
     "faqOfficialA": "いいえ。SC Market はファンが運営するコミュニティサイトで、Cloud Imperium Games や Roberts Space Industries の公認・提携を受けていません。",
     "faqOrgsQ": "組織で SC Market に出品できますか？",
-    "faqOrgsA": "はい。組織は共有のストアフロントを持て、メンバーが組織に代わって注文を引き受け、処理できます。顧客は組織全体を評価します。",
+    "faqOrgsA": "はい。組織は共有のストアフロントを持つことができ、メンバーが組織に代わって注文を引き受けて対応します。顧客は組織全体を評価します。",
     "wantedNowItem": "アイテム",
     "wantedNowBuyer": "購入者",
     "wantedNowPrice": "支払額",
@@ -3391,7 +3391,7 @@
     "fleetTitle": "フリート",
     "importFleet": "フリートをインポート",
     "myFleetTitle": "マイフリート",
-    "addShips": "船を追加",
+    "addShips": "艦船を追加",
     "createDelivery": "配送を作成"
   },
   "error404": {
@@ -3440,7 +3440,7 @@
     "tips": {
       "listingQuantity": "販売する数量です。これが出品の最初の在庫ロットになります。複数のロット（別の場所や品質）から販売するには、「その他のオプション」›「在庫ロット」で追加してください。",
       "allocationMode": "注文がロットから在庫を取る方法です。自動（FIFO）：出品中ロットから古い順に。手動選択：各注文の「在庫の割り当て」タブでロットを選びます。なし（旧方式）：注文は在庫を確保しません。",
-      "stockTiming": "注文が出品中の在庫からいつ数量を差し引くか（自動割り当て時）。承認時（デフォルト）：カートからの注文は承認したときに差し引き、今すぐ購入と購入注文への販売はその場で差し引きます。届いた時点：カートからの注文は検討中も数量を確保し、拒否したり購入者が取り下げたりすると戻ります。差し引かない：出品数量は減りません（在庫無制限向け）。ただし1件の注文で出品数量を超えることはできません。",
+      "stockTiming": "注文が出品中の在庫からいつ数量を差し引くか（自動割り当て時）。承認時（デフォルト）：カートからの注文は承認したときに差し引き、今すぐ購入と買い注文への販売はその場で差し引きます。届いた時点：カートからの注文は検討中も数量を確保し、却下したり購入者が取り下げたりすると戻ります。差し引かない：出品数量は減りません（在庫無制限向け）。ただし1件の注文で出品数量を超えることはできません。",
       "discordServerId": "Discord で開発者モードをオンにし（ユーザー設定 › 詳細設定）、サーバーアイコンを右クリックして「サーバーIDをコピー」を選びます。",
       "threadChannelId": "チャンネルを右クリックして「チャンネルIDをコピー」を選びます。両方のIDを入力するか、両方空欄にすると組織またはあなた自身のスレッドチャンネルが使われます。",
       "uexUsername": "UEXCorp のユーザー名です。売り切れていない有効な販売出品が最大100件表示され、確定するまで何もインポートされません。",
@@ -3605,7 +3605,7 @@
         "title": "通知"
       },
       "offers": {
-        "description": "受信したオファー。請求、統合、返信ができます。",
+        "description": "受信したオファー。担当・統合・返信ができます。",
         "title": "受信オファー"
       },
       "orderCountTrend": {
@@ -3822,8 +3822,8 @@
     "recipientTypeHelp": "送金先をユーザーまたはコントラクターのどちらにするか選択します",
     "recruitmentUpvoteCount": "高評価: {{count}}件",
     "recruitmentUpvoteCount_other": "高評価: {{count}}件",
-    "registerShip": "船を登録",
-    "registerShipHelp": "選択した船をフリートに登録します",
+    "registerShip": "艦船を登録",
+    "registerShipHelp": "選択した艦船をフリートに登録します",
     "reportContent": "このコンテンツを報告",
     "reportContentDescription": "不適切なコンテンツを報告するダイアログを開きます",
     "rushOrderHelp": "この注文を急ぎで完了する必要がある場合はこのチェックボックスをオンにしてください",
@@ -3851,7 +3851,7 @@
     "selectRowsPerPage": "1ページあたりの行数を選択",
     "selectService": "サービスを選択",
     "selectServiceHelp": "この注文のベースにするサービスを選択するか、サービスなしを選択してください",
-    "selectShip": "登録する船を選択",
+    "selectShip": "登録する艦船を選択",
     "sendMoney": "送金する",
     "sendMoneyHelp": "選択した受取人への送金を完了します",
     "serviceDescriptionHelp": "サービスの詳しい説明を入力してください",
@@ -3861,12 +3861,12 @@
     "serviceNameInput": "サービス名を入力",
     "serviceStatusHelp": "サービスを有効または無効に切り替えます",
     "serviceStatusToggle": "サービスステータスを切り替え",
-    "shipSelectionHelp": "フリートに登録したい船を選択してください",
-    "shipSelector": "船セレクター",
+    "shipSelectionHelp": "フリートに登録したい艦船を選択してください",
+    "shipSelector": "艦船セレクター",
     "shopLogo": "{{name}}のロゴ",
     "sidebarNavigation": "サイドバーナビゲーション",
-    "signInWithCitizenIDDescription": "Citizen iDアカウントでサインインします",
-    "signInWithDiscordDescription": "Discordアカウントでサインインします",
+    "signInWithCitizenIDDescription": "Citizen iDアカウントでログインします",
+    "signInWithDiscordDescription": "Discordアカウントでログインします",
     "signUpWithCitizenIDDescription": "Citizen iDアカウントで新規アカウントを作成します",
     "signUpWithDiscordDescription": "Discordアカウントで新規アカウントを作成します",
     "skipLinks": "スキップリンク",
@@ -3942,7 +3942,7 @@
     "action_member_removed": "メンバーを削除",
     "action_member_role_assigned": "メンバーにロールを割り当て",
     "action_member_role_removed": "メンバーからロールを削除",
-    "action_offer_rejected": "オファーを拒否",
+    "action_offer_rejected": "オファーを却下",
     "action_order_cancelled": "注文をキャンセル",
     "action_org_archived": "組織をアーカイブ",
     "action_org_created": "組織を作成",
@@ -3981,7 +3981,7 @@
     "bulkUnlisted": "ロットの出品を取り消しました",
     "confirmDeleteBody": "このロットは完全に削除され、復元できません。",
     "confirmDeleteTitle": "ロットを削除しますか？",
-    "crafted": "制作済み",
+    "crafted": "クラフト済み",
     "created": "ロットを作成しました",
     "deleted": "ロットを削除しました",
     "deleteLot": "ロットを削除",
@@ -3990,7 +3990,7 @@
     "listedHelp": "公開出品に表示する",
     "listing": "出品",
     "location": "場所",
-    "looted": "入手（略奪）",
+    "looted": "入手（ルート）",
     "notes": "メモ",
     "owner": "所有者",
     "qtyRequired": "数量は0より大きくする必要があります",
@@ -4018,13 +4018,13 @@
     "size": "サイズ"
   },
   "AvailabilityRequirement": {
-    "apiError": "このオファーを送信するには対応可否の設定が必要です。まず対応可否を設定してください。",
-    "required": "対応可否の設定が必要",
-    "requiredMessage": "{{sellerName}}は、オファーを送信する前に対応可否を設定することを求めています。",
-    "set": "対応可否を設定済み",
-    "setAvailability": "対応可否を設定",
-    "setMessage": "対応可否が設定されています。{{sellerName}}にオファーを送信できます。",
-    "submitDisabled": "続行するには対応可否を設定してください"
+    "apiError": "このオファーを送信するには対応可能時間の設定が必要です。まず対応可能時間を設定してください。",
+    "required": "対応可能時間の設定が必要",
+    "requiredMessage": "{{sellerName}}は、オファーを送信する前に対応可能時間を設定することを求めています。",
+    "set": "対応可能時間を設定済み",
+    "setAvailability": "対応可能時間を設定",
+    "setMessage": "対応可能時間が設定されています。{{sellerName}}にオファーを送信できます。",
+    "submitDisabled": "続行するには対応可能時間を設定してください"
   },
   "BidAreaV2": {
     "amount": "金額",
@@ -4079,7 +4079,7 @@
   },
   "blueprints": {
     "browser": {
-      "header": "ブループリントブラウザー"
+      "header": "設計図ブラウザー"
     }
   },
   "bulk": {
@@ -4158,25 +4158,25 @@
     "allItems": "すべてのアイテム",
     "armor": "アーマー",
     "availability": "在庫状況",
-    "blueprintsOwned": "所有ブループリント",
+    "blueprintsOwned": "所有設計図",
     "calculate": "計算",
-    "canCraft": "制作可能",
+    "canCraft": "クラフト可能",
     "category": "カテゴリ",
     "common": "コモン",
     "components": "コンポーネント",
     "consumables": "消耗品",
-    "craftableNow": "今すぐ制作可能",
-    "craftableOnly": "制作可能のみ",
+    "craftableNow": "今すぐクラフト可能",
+    "craftableOnly": "クラフト可能のみ",
     "epic": "エピック",
-    "errorLoading": "制作可能アイテムの読み込みに失敗しました",
+    "errorLoading": "クラフト可能アイテムの読み込みに失敗しました",
     "legendary": "レジェンダリー",
     "materials": "素材",
     "maxCraftable": "最大",
     "missingMaterials": "不足している素材",
     "missingMats": "不足している素材",
     "next": "次へ",
-    "noBlueprints": "まだブループリントを所有していません。ミッションを完了するかブループリントを購入して制作を始めてください。",
-    "noCraftableItems": "現在の在庫で制作できるアイテムはありません。素材を追加で入手するか、フィルターを変更してください。",
+    "noBlueprints": "まだ設計図を所有していません。ミッションを完了するか設計図を購入してクラフトを始めてください。",
+    "noCraftableItems": "現在の在庫でクラフトできるアイテムはありません。素材を追加で入手するか、フィルターを変更してください。",
     "pageInfo": "{{page}} / {{total}} ページ",
     "previous": "前へ",
     "qualityRange": "在庫の品質範囲",
@@ -4184,12 +4184,12 @@
     "rarity": "レアリティ",
     "tier": "ティア",
     "tierN": "ティア {{tier}}",
-    "title": "制作可能アイテム",
+    "title": "クラフト可能アイテム",
     "uncommon": "アンコモン",
     "weapons": "武器"
   },
   "crafting": {
-    "blueprint": "ブループリント",
+    "blueprint": "設計図",
     "calculator_title": "クラフト計算機",
     "cost": "コスト",
     "critical": "クリティカル",
@@ -4212,7 +4212,7 @@
     "crafted": "クラフト品",
     "craftedSource": "入手元",
     "craftedSourceHelp": "任意：アイテムの入手方法",
-    "delivery": "配送（出品者が配送）",
+    "delivery": "配送（販売者が配送）",
     "description": "説明",
     "descriptionHelp": "詳細な説明を入力してください（Markdown 対応）",
     "duped": "複製品",
@@ -4229,7 +4229,7 @@
     "listingOptions": "出品オプション",
     "listingStatus": "出品ステータス",
     "location": "場所",
-    "looted": "略奪品",
+    "looted": "ルート品",
     "lot": "ロット",
     "maxQuantity": "最大数量",
     "maxQuantityHelp": "任意",
@@ -4319,8 +4319,8 @@
     "title": "在庫ロットを作成"
   },
   "CreateLotDialogV2": {
-    "blueprintTier": "ブループリントのティア",
-    "blueprintTierHelper": "任意：ブループリントの品質ティア（1〜5）",
+    "blueprintTier": "設計図のティア",
+    "blueprintTierHelper": "任意：設計図の品質ティア（1〜5）",
     "cancel": "キャンセル",
     "craftedSource": "入手元",
     "create": "ロットを作成",
@@ -4494,9 +4494,9 @@
     },
     "recruiting": {
       "createPost": "投稿を作成",
-      "noPosts": "採用投稿はまだありません",
-      "noPostsDescription": "最初に採用の募集を投稿しましょう",
-      "noSearchResults": "採用投稿が見つかりませんでした",
+      "noPosts": "募集投稿はまだありません",
+      "noPostsDescription": "最初のメンバー募集を投稿しましょう",
+      "noSearchResults": "募集投稿が見つかりませんでした",
       "noSearchResultsDescription": "検索フィルターを調整してください"
     },
     "reviews": {
@@ -4623,9 +4623,9 @@
   },
   "LotListItemV2": {
     "available": "在庫あり",
-    "blueprint": "ブループリント",
+    "blueprint": "設計図",
     "cancel": "キャンセル",
-    "cannotReduceStock": "在庫を減らせません — 有効な注文に単位が割り当てられています",
+    "cannotReduceStock": "在庫を減らせません — 進行中の注文に割り当て済みの数量があります",
     "craftedBy": "クラフト者",
     "created": "作成日",
     "edit": "編集",
@@ -4680,7 +4680,7 @@
     "subheading": "販売するすべてを一か所で。行を展開すると、その背後にある在庫を確認できます。",
     "title": "マーケット管理",
     "unspecified": "未指定",
-    "variants_other": "{{count}}オプション",
+    "variants_other": "{{count}}件のオプション",
     "toggleLots": "{{title}} のロットを表示"
   },
   "marketAggregateView": {
@@ -4690,22 +4690,22 @@
     "addedToCart": "カートに追加しました",
     "addToCart": "カートに追加",
     "auction": "オークション",
-    "availability": "{{count}}{{unit}}在庫あり",
-    "availability_other": "{{count}}{{unit}}在庫あり",
+    "availability": "在庫 {{count}}{{unit}}",
+    "availability_other": "在庫 {{count}}{{unit}}",
     "bidPreview": "入札プレビュー",
     "bundle": "バンドル",
     "buyNow": "今すぐ購入",
     "chooseOption": "オプションを選択",
     "contactComingSoon": "連絡機能は近日公開",
-    "contactSeller": "売り手に連絡",
+    "contactSeller": "販売者に連絡",
     "description": "説明",
     "error": "この出品の読み込みに失敗しました。",
     "includedInSet": "各セットに含まれるもの",
     "loading": "出品を読み込み中…",
     "makeOffer": "オファーを送る",
     "negotiable": "交渉可能",
-    "ofAvailable": "{{count}}中",
-    "ofAvailable_other": "{{count}}中",
+    "ofAvailable": "/ {{count}}",
+    "ofAvailable_other": "/ {{count}}",
     "orderPlaced": "注文を確定しました",
     "placeBid": "入札する",
     "quantityLabel": "数量",
@@ -4723,24 +4723,24 @@
     "productImage": "{{title}}の商品画像"
   },
   "MarketRedesign": {
-    "acrossSellers_other": "{{count}}人の売り手にわたって",
+    "acrossSellers_other": "{{count}}人の販売者から",
     "addToCart": "追加",
-    "available_other": "{{count}}在庫あり",
+    "available_other": "在庫 {{count}} 個",
     "compare": "比較",
-    "compareSellers_other": "{{count}}人の売り手を比較",
+    "compareSellers_other": "{{count}}人の販売者を比較",
     "forSale": "販売中",
     "fromPrice": "最低",
     "hide": "非表示",
     "highestQuality": "最高品質",
     "lowestPrice": "最安値",
     "negotiable": "交渉可能",
-    "noSellers": "現在利用可能な売り手がいません。",
+    "noSellers": "現在出品している販売者はいません。",
     "seeAllCount_other": "{{count}}件の出品をすべて表示",
-    "sellersCount_other": "{{count}}人の売り手",
+    "sellersCount_other": "{{count}}人の販売者",
     "topBid": "最高入札",
-    "topRated": "高評価の売り手",
-    "unitsAvailable_other": "{{count}}個在庫あり",
-    "wantedBy_other": "{{count}}人の買い手が希望"
+    "topRated": "高評価の販売者",
+    "unitsAvailable_other": "在庫 {{count}} 個",
+    "wantedBy_other": "{{count}}人の購入者が希望"
   },
   "messages": {
     "chatCreated": "チャットを作成しました",
@@ -4873,7 +4873,7 @@
     "adminAlerts": "アラート",
     "adminAttributes": "属性",
     "adminAuditLogs": "監査ログ",
-    "adminFeatureFlags": "フィーチャーフラグ",
+    "adminFeatureFlags": "機能フラグ",
     "adminGameData": "ゲームデータインポート",
     "adminGameItemAttrs": "ゲームアイテム属性",
     "adminImportMonitoring": "インポート監視",
@@ -4891,7 +4891,7 @@
     "adminPremium": "プレミアム",
     "adminUsers": "ユーザー",
     "assignedOrders": "自分に割り当て済み",
-    "availability": "対応可能状況",
+    "availability": "対応可能時間",
     "browsing": "閲覧",
     "buyOrders": "買い注文",
     "clearSearch": "検索をクリア",
@@ -4952,7 +4952,7 @@
     "offer_count_daily": "オファー数（日次）",
     "offer_count_monthly": "オファー数（月次）",
     "offer_count_weekly": "オファー数（週次）",
-    "rejected": "拒否済み",
+    "rejected": "却下済み",
     "total": "合計"
   },
   "orderKinds": {
@@ -4979,15 +4979,15 @@
     "allocationModeShops": "あなたのショップ",
     "allocationModeNone": "なし（従来方式）",
     "allocationModeNoneDescription": "物理的な割り当てなし - 在庫は出品レベルでのみ追跡されます",
-    "allocationModeNote": "注意：この設定は注文への在庫の物理的な割り当て方法を制御します。上記の在庫減算タイミング設定（買い手に在庫が表示されるタイミングを制御）とは独立しています。",
-    "availabilityRequirement": "対応可否の要件",
+    "allocationModeNote": "注意：この設定は注文への在庫の物理的な割り当て方法を制御します。上記の在庫減算タイミング設定（購入者に在庫が表示されるタイミングを制御）とは独立しています。",
+    "availabilityRequirement": "対応可能時間の要件",
     "confirmDelete": "この設定を削除してもよろしいですか？",
     "delete": "削除",
     "deletedSuccessfully": "設定を削除しました！",
     "deleteError": "設定の削除に失敗しました。もう一度お試しください。",
     "description": "オファーが作成されたとき、またはオファーが注文に変わったときに自動送信されるカスタムメッセージを設定します。",
     "enabled": "有効",
-    "limitsDescription": "注文サイズと金額の最小・最大の制限を設定します。あなたが売り手の場合にのみ適用されます。",
+    "limitsDescription": "注文サイズと金額の最小・最大の制限を設定します。あなたが販売者の場合にのみ適用されます。",
     "limitsTitle": "注文の制限",
     "loadError": "設定の読み込みに失敗しました。ページを再読み込みしてください。",
     "maxLessThanMin": "最大値は最小値以上である必要があります",
@@ -5013,16 +5013,16 @@
     "orderSizeLimitsDescription": "最小・最大の注文サイズ（アイテムの合計数量）を設定します。",
     "orderValueLimits": "注文金額の制限",
     "orderValueLimitsDescription": "最小・最大の注文金額（aUEC）を設定します。",
-    "requireAvailabilityDescription": "有効にすると、買い手はあなたにオファーを送信する前に対応可否を設定する必要があります。",
-    "requireAvailabilityLabel": "オファー送信前に買い手に対応可否の設定を要求する",
+    "requireAvailabilityDescription": "有効にすると、購入者はあなたにオファーを送信する前に対応可能時間を設定する必要があります。",
+    "requireAvailabilityLabel": "オファー送信前に購入者に対応可能時間の設定を要求する",
     "requirementsDescription": "注文を行う前に満たす必要がある要件を設定します。",
     "requirementsTitle": "注文の要件",
     "save": "設定を保存",
     "savedSuccessfully": "設定を保存しました！",
     "saveError": "設定の保存に失敗しました。もう一度お試しください。",
     "saving": "保存中...",
-    "stockDescription": "在庫がインベントリから減算されるタイミングを設定します。",
-    "stockSubtractionTiming": "在庫減算のタイミング",
+    "stockDescription": "在庫を差し引くタイミングを設定します。",
+    "stockSubtractionTiming": "在庫を差し引くタイミング",
     "stockSubtractionMoved": "在庫を差し引くタイミングはショップごとに設定します。ショップの設定を開き、「在庫管理 › 在庫を差し引くタイミング」から変更してください。",
     "stockTitle": "在庫管理",
     "title": "注文メッセージ"
@@ -5053,16 +5053,16 @@
     "action_invite_deleted": "招待を削除",
     "action_member_added": "メンバーを追加",
     "action_member_removed": "メンバーを削除",
-    "action_member_role_assigned": "メンバーに役割を割り当て",
-    "action_member_role_removed": "メンバーから役割を削除",
-    "action_offer_rejected": "オファーを拒否",
+    "action_member_role_assigned": "メンバーにロールを割り当て",
+    "action_member_role_removed": "メンバーからロールを削除",
+    "action_offer_rejected": "オファーを却下",
     "action_order_cancelled": "注文をキャンセル",
     "action_org_archived": "組織をアーカイブ",
     "action_org_created": "組織を作成",
     "action_org_updated": "組織を更新",
-    "action_role_created": "役割を作成",
-    "action_role_deleted": "役割を削除",
-    "action_role_updated": "役割を更新",
+    "action_role_created": "ロールを作成",
+    "action_role_deleted": "ロールを削除",
+    "action_role_updated": "ロールを更新",
     "action_settings_updated": "設定を更新",
     "action_shop_transferred": "ショップ譲渡",
     "actor": "実行者",
@@ -5163,7 +5163,7 @@
       "title": "出品を作成"
     },
     "createRecruitingPost": {
-      "title": "採用投稿を作成"
+      "title": "募集投稿を作成"
     },
     "dashboard": {
       "title": "ダッシュボード"
@@ -5223,7 +5223,7 @@
       "title": "プロフィール"
     },
     "recruiting": {
-      "title": "採用"
+      "title": "募集"
     },
     "services": {
       "title": "サービス"
@@ -5246,10 +5246,10 @@
     "discordProfile": "Discord プロフィール"
   },
   "quickEdit": {
-    "activeDesc": "買い手に表示",
+    "activeDesc": "購入者に表示",
     "error": "変更の保存に失敗しました",
     "fullEditor": "フルエディターを開く",
-    "inactiveDesc": "買い手から非表示",
+    "inactiveDesc": "購入者から非表示",
     "price": "基本価格",
     "priceHelp": "現在",
     "quality": "品質",
@@ -5274,7 +5274,7 @@
     "detail": "リソースの詳細",
     "details": "詳細",
     "error": "リソースの読み込みに失敗しました。",
-    "looted": "略奪",
+    "looted": "ルート",
     "mappedValue": "実効品質",
     "marketPrice": "市場価格",
     "maxPrice": "最大",
@@ -5293,7 +5293,7 @@
     "salvaged": "サルベージ",
     "search": "リソースを検索...",
     "title": "リソース",
-    "usedIn": "使用されるブループリント",
+    "usedIn": "使用される設計図",
     "viewOnMarket": "マーケットで表示"
   },
   "reviewRevision": {
@@ -5313,7 +5313,7 @@
     },
     "info": {
       "editInstructions": "受け取ったフィードバックに基づいてレビューを更新してください。公平で正確な評価を提供するようにしてください。",
-      "revisionRequested": "このレビューに対して修正が依頼されています。フィードバックに対応するために編集できます。売り手からのメッセージ：{{message}}"
+      "revisionRequested": "このレビューに対して修正が依頼されています。フィードバックに対応するために編集できます。販売者からのメッセージ：{{message}}"
     },
     "label": {
       "characters": "文字",
@@ -5341,7 +5341,7 @@
   },
   "search": {
     "languageFilter": {
-      "helperText": "これらのいずれかの言語に対応している売り手の結果を表示します",
+      "helperText": "これらのいずれかの言語に対応している販売者の結果を表示します",
       "label": "言語で絞り込み",
       "placeholder": "言語を選択..."
     }
@@ -5364,7 +5364,7 @@
     "heading": "アイテムを販売",
     "listingTitle": "出品タイトル",
     "location": "場所（任意）",
-    "locationHelp": "買い手が受け取れる場所 — 例：Area18、Everus Harbor。",
+    "locationHelp": "購入者が受け取れる場所 — 例：Area18、Everus Harbor。",
     "needShop": "販売するにはショップが必要です。まずプロフィールから作成してください。",
     "negotiableType": "交渉可能",
     "noShops": "利用可能なショップがありません",
@@ -5632,16 +5632,16 @@
   },
   "whitelabel": {
     "backToMain": "SC Marketに戻る",
-    "loginRequired": "このワークスペースにアクセスするにはサインインしてください",
+    "loginRequired": "このワークスペースにアクセスするにはログインしてください",
     "membershipRequired": "このワークスペースにアクセスするには、この組織のメンバーである必要があります。",
-    "signInCitizenId": "Citizen IDでサインイン",
-    "signInDiscord": "Discordでサインイン"
+    "signInCitizenId": "Citizen IDでログイン",
+    "signInDiscord": "Discordでログイン"
   },
   "wiki": {
     "commodityBrowser": {
       "acqChip": {
         "buy": "購入",
-        "loot": "略奪",
+        "loot": "ルート",
         "mine": "採掘",
         "salvage": "サルベージ"
       },
@@ -5663,7 +5663,7 @@
       }
     },
     "commodityDetail": {
-      "acqLoot": "略奪",
+      "acqLoot": "ルート",
       "acqMining": "採掘",
       "acqPurchase": "購入",
       "acqSalvage": "サルベージ",
@@ -5685,11 +5685,11 @@
       "resistance": "耐性",
       "stackLabel": "スタック",
       "unknown": "不明",
-      "usedInBlueprints": "使用されるブループリント",
+      "usedInBlueprints": "使用される設計図",
       "viewOnMarket": "マーケットで見る"
     },
     "hub": {
-      "description": "Star Citizen のゲームデータベース全体を閲覧できます：アイテム、艦船、商品、場所、メーカー、ブループリント、採掘リソース。",
+      "description": "Star Citizen のゲームデータベース全体を閲覧できます：アイテム、艦船、商品、場所、メーカー、設計図、採掘リソース。",
       "header": "ゲームデータベース",
       "title": "ゲームデータベース — Star Citizen のアイテム・艦船ほか | SC Market",
       "sectionItems": "アイテム",
@@ -5755,8 +5755,8 @@
       "tier": "ティア",
       "title": "アイテムの詳細",
       "total": "合計",
-      "viewBlueprint": "ブループリントを見る",
-      "viewBlueprintFullList": "材料の全リストはブループリントを参照してください"
+      "viewBlueprint": "設計図を見る",
+      "viewBlueprintFullList": "材料の全リストは設計図を参照してください"
     },
     "items": {
       "title": "ゲームアイテムデータベース"
@@ -5875,25 +5875,25 @@
   "wishlists": {
     "addFirstItem": "最初のアイテムを追加",
     "addItem": "アイテムを追加",
-    "backToList": "ショッピングリストに戻る",
+    "backToList": "買い物リストに戻る",
     "completed": "完了",
-    "detail": "ショッピングリストの詳細",
+    "detail": "買い物リストの詳細",
     "editItem": "アイテムを編集",
     "estCost": "推定コスト",
     "estimatedCost": "推定コスト",
     "items": "アイテム",
-    "loadError": "ショッピングリストの読み込みに失敗しました。存在しないか、表示する権限がない可能性があります。",
+    "loadError": "買い物リストの読み込みに失敗しました。存在しないか、表示する権限がない可能性があります。",
     "manager": {
-      "description": "欲しいアイテムやブループリントのショッピングリストを作成・管理します",
-      "error": "ショッピングリストの読み込みに失敗しました。ログインしていることを確認してください。",
-      "header": "自分のショッピングリスト",
-      "title": "自分のショッピングリスト"
+      "description": "欲しいアイテムや設計図の買い物リストを作成・管理します",
+      "error": "買い物リストの読み込みに失敗しました。ログインしていることを確認してください。",
+      "header": "自分の買い物リスト",
+      "title": "自分の買い物リスト"
     },
     "markAcquired": "入手済みにする",
     "markNeeded": "必要にする",
-    "noItems": "このショッピングリストにはアイテムがありません",
-    "noItemsHint": "入手または制作したいものの追跡を始めるにはアイテムを追加してください",
-    "notFound": "ショッピングリストが見つかりません",
+    "noItems": "この買い物リストにはアイテムがありません",
+    "noItemsHint": "アイテムを追加して、入手またはクラフトしたいものを管理しましょう",
+    "notFound": "買い物リストが見つかりません",
     "priority": "優先度",
     "progress": "進捗",
     "qualityTier": "品質ティア",
@@ -5901,11 +5901,11 @@
     "remaining": "残り",
     "removeItem": "アイテムを削除",
     "shopping": {
-      "error": "ショッピングリストの読み込みに失敗しました。もう一度お試しください。",
-      "header": "ショッピングリスト",
-      "title": "ショッピングリスト"
+      "error": "買い物リストの読み込みに失敗しました。もう一度お試しください。",
+      "header": "買い物リスト",
+      "title": "買い物リスト"
     },
-    "shoppingList": "ショッピングリスト",
+    "shoppingList": "買い物リスト",
     "sortBy": "並べ替え",
     "sortName": "名前",
     "sortPriority": "優先度",
@@ -5967,9 +5967,9 @@
       "browseMarket": "マーケットを見る"
     },
     "signIn": {
-      "title": "価格をウォッチするにはサインイン",
+      "title": "価格をウォッチするにはログイン",
       "body": "{{name}}の目標価格を設定すると、誰かがその価格以下で出品したときにアラートが届きます。価格アラートにはSC Marketのアカウントが必要です。",
-      "action": "サインイン"
+      "action": "ログイン"
     }
   },
   "adminIdentity": {
@@ -6389,10 +6389,10 @@
     "bestPrice": "最安",
     "bundleListing": "セット出品",
     "buyer": "購入者",
-    "buyOrder": "購入注文",
+    "buyOrder": "買い注文",
     "cancelFailed": "キャンセルできませんでした",
     "canYouSupply": "供給できますか？",
-    "canYouSupplyBody": "{{item}} の在庫があれば、この購入注文に直接応じられます。",
+    "canYouSupplyBody": "{{item}} の在庫があれば、この買い注文に直接応じられます。",
     "craftingShoppingList": "クラフト用買い物リスト",
     "deactivate": "無効にする",
     "deactivated": "出品を無効にしました",
@@ -6443,7 +6443,7 @@
     "remaining": "残り {{n}}",
     "removeItemFailed": "アイテムを削除できませんでした",
     "rosterOnly": "メンバーのみ",
-    "searchBuyOrders": "購入注文を検索...",
+    "searchBuyOrders": "買い注文を検索...",
     "searchItems": "アイテム・カテゴリを検索...",
     "searchItemsSellers": "アイテム・カテゴリ・販売者を検索...",
     "selectVariant": "バリエーションを選択",
@@ -6636,7 +6636,7 @@
     "destinationCount_other": "目的地 {{count}} 件",
     "destinations": "目的地",
     "scuCargo": "貨物 {{amount}} SCU",
-    "resourceCount_other": "資源 {{count}} 種類",
+    "resourceCount_other": "リソース {{count}} 種類",
     "haulingDetailsUnavailable": "テンプレート組み込みの契約では、輸送貨物の詳細はまだ利用できません。",
     "scuOre": "鉱石 {{amount}} SCU",
     "noMiningData": "採掘オーダーのデータはありません。",
@@ -6688,7 +6688,7 @@
     "waitingForBuyer": "購入者の対応待ち:",
     "waitingForSeller": "販売者の対応待ち:",
     "acceptedOffers": "承認済みオファー:",
-    "rejectedOffers": "拒否済みオファー:",
+    "rejectedOffers": "却下済みオファー:",
     "totalValue": "合計金額:",
     "version": "バージョン",
     "mostRecent": "最新",
@@ -6708,7 +6708,7 @@
       "craftTime": "クラフト時間",
       "missionSources_other": "入手ミッション {{count}} 件",
       "noMissionSources": "入手ミッションなし",
-      "missionsShort_other": "{{count}} ミッション",
+      "missionsShort_other": "ミッション{{count}}件",
       "modDamageReduction": "ダメ軽減",
       "modTemperature": "温度"
     },
@@ -6794,7 +6794,7 @@
     "importFromInventory": "インベントリから読み込む",
     "importFromInventoryOrg": "インベントリから読み込む（＋組織）",
     "addMaterial": "素材を追加",
-    "searchResources": "資源を検索...",
+    "searchResources": "リソースを検索...",
     "noMaterials": "上で素材を検索して追加してください",
     "removeMaterial": "素材を削除",
     "weight": "比重: {{percent}}%",
@@ -6980,7 +6980,7 @@
       "noOpenRequisitions": "未完了の調達依頼はありません",
       "fromBuyer": "{{name}} より",
       "openRequisition": "調達依頼を開く",
-      "sellerCount_other": "販売者として{{count}}件",
+      "sellerCount_other": "販売者 {{count}} 人",
       "noRecentOrders": "最近の注文はありません",
       "openOrder": "注文を開く",
       "activity": {
@@ -7151,8 +7151,8 @@
   "shoppingListUi": {
     "backToWishlist": "ウィッシュリストに戻る",
     "exportCsv": "CSV にエクスポート",
-    "pageTitle": "{{name}} - ショッピングリスト",
-    "headerTitle": "ショッピングリスト: {{name}}",
+    "pageTitle": "{{name}} - 買い物リスト",
+    "headerTitle": "買い物リスト: {{name}}",
     "totalMaterials": "素材の合計",
     "fullyStocked": "在庫十分",
     "partiallyStocked": "在庫一部あり",
@@ -7160,7 +7160,7 @@
     "estimatedTotalCost": "推定合計費用",
     "amountAuec": "{{amount}} aUEC",
     "noMaterials": "必要な素材はありません",
-    "noMaterialsHint": "クラフト可能なアイテムをウィッシュリストに追加すると、ショッピングリストが作成されます",
+    "noMaterialsHint": "クラフト可能なアイテムをウィッシュリストに追加すると、買い物リストが作成されます",
     "columns": {
       "material": "素材",
       "status": "ステータス",
@@ -7191,20 +7191,20 @@
       "usedByItems": "使用するアイテム"
     },
     "panel": {
-      "signIn": "ショッピングリストを使うにはサインインしてください。",
-      "listsError": "ショッピングリストを読み込めませんでした。",
-      "noLists": "ショッピングリストがありません。Fabricator からブループリントを追加してください。",
-      "listError": "ショッピングリストを読み込めませんでした。",
+      "signIn": "買い物リストを使うにはログインしてください。",
+      "listsError": "買い物リストを読み込めませんでした。",
+      "noLists": "買い物リストがありません。Fabricator から設計図を追加してください。",
+      "listError": "買い物リストを読み込めませんでした。",
       "materialsNeeded": "必要な素材",
-      "removeNamed": "{{name}} をショッピングリストから削除",
-      "removeItem": "アイテムをショッピングリストから削除",
+      "removeNamed": "{{name}} を買い物リストから削除",
+      "removeItem": "アイテムを買い物リストから削除",
       "need": "不足 {{quantity}}",
       "searchMarket": "マーケットで {{name}} を検索",
       "viewAggregate": "集約された出品を表示",
       "usedBy": "使用先: {{items}}",
       "listOption_other": "{{name}}（{{count}} 件）",
       "materialsProgress_other": "素材 {{fulfilled}}/{{count}}",
-      "blueprintsCount_other": "ブループリント（{{count}}）"
+      "blueprintsCount_other": "設計図（{{count}}）"
     }
   },
   "marketUi": {
@@ -7259,7 +7259,7 @@
     "addItemDialog": {
       "selectItemError": "アイテムを選択してください",
       "quantityMinError": "数量は 1 以上にしてください",
-      "selectBlueprintError": "製作に使うブループリントを選択してください",
+      "selectBlueprintError": "クラフトに使う設計図を選択してください",
       "addFailed": "アイテムを追加できませんでした。",
       "title": "買い物リストにアイテムを追加",
       "searchItem": "アイテムを検索 *",
@@ -7268,9 +7268,9 @@
       "noItemsFound": "アイテムが見つかりません",
       "howToGet": "このアイテムをどのように入手しますか？",
       "buyFromMarket": "マーケットで購入",
-      "craftAddIngredients": "製作（素材を追加）",
-      "selectBlueprintHint": "ブループリントを選択してください。その素材が買い物リストで管理されます",
-      "blueprintRequired": "ブループリント *",
+      "craftAddIngredients": "クラフト（素材を追加）",
+      "selectBlueprintHint": "設計図を選択してください。その素材が買い物リストで管理されます",
+      "blueprintRequired": "設計図 *",
       "quantityRequired": "数量 *",
       "qualityTierOptional": "品質ティア（任意）",
       "clear": "クリア",
@@ -7538,7 +7538,7 @@
         "inserted_other": "{{count}} 件のアイテムを追加",
         "missionsInserted_other": "ミッション {{count}} 件",
         "missionsUpdated_other": "{{count}} 件のミッションを更新",
-        "blueprintsInserted_other": "ブループリント {{count}} 件",
+        "blueprintsInserted_other": "設計図 {{count}} 件",
         "shopsImported_other": "{{count}} 件のショップを更新"
       },
       "noChanges": "変更なし",
@@ -7549,7 +7549,7 @@
       "importStarted": "インポートを開始しました",
       "uploadFailed": "アップロードに失敗しました",
       "intro": "Star Citizen の Data.p4k から抽出した <code>game-data.zip</code> をアップロードしてください。",
-      "shopsNotice": "ゲーム内ショップ（Wiki のアイテムページの「購入場所」）はインポートされません。ゲームファイル内のショップデータは古く、現在のショップ在庫や価格は含まれていないためです。ZIP 内の <code>shop-inventories.json</code> は無視されます（ジョブに記録されます）。",
+      "shopsNotice": "ゲーム内ショップ（ウィキ のアイテムページの「購入場所」）はインポートされません。ゲームファイル内のショップデータは古く、現在のショップ在庫や価格は含まれていないためです。ZIP 内の <code>shop-inventories.json</code> は無視されます（ジョブに記録されます）。",
       "dropHint": "game-data.zip をここにドロップするか、クリックして選択してください",
       "channel": "チャンネル",
       "gameVersion": "ゲームバージョン",
@@ -7626,15 +7626,15 @@
       "failed": "出品を期限切れにできませんでした",
       "button": "すべての出品を期限切れにする",
       "dialogTitle": "有効な出品をすべて期限切れにしますか？",
-      "confirmBody_other": "<strong>{{count}} 件の有効な出品</strong>を期限切れ（一時停止）にします。まだ販売している出品は、各出品者がショップの「出品」ページから再有効化します。",
-      "confirmBodyLoading": "<strong>... 件の有効な出品</strong>を期限切れ（一時停止）にします。まだ販売している出品は、各出品者がショップの「出品」ページから再有効化します。",
-      "note": "通常はゲームのワイプ後に実行します。何も削除されません。出品者はいつでも出品を再有効化できます。",
+      "confirmBody_other": "<strong>{{count}} 件の有効な出品</strong>を期限切れ（一時停止）にします。まだ販売している出品は、各販売者がショップの「出品」ページから再有効化します。",
+      "confirmBodyLoading": "<strong>... 件の有効な出品</strong>を期限切れ（一時停止）にします。まだ販売している出品は、各販売者がショップの「出品」ページから再有効化します。",
+      "note": "通常はゲームのワイプ後に実行します。何も削除されません。販売者はいつでも出品を再有効化できます。",
       "confirmButton_other": "{{count}} 件の出品を期限切れにする",
       "confirmButtonNoCount": "出品を期限切れにする"
     },
     "wipeListings": {
       "title": "出品のワイプ",
-      "description": "ゲームのワイプ後に、すべての有効な出品を期限切れにします。出品者には一時停止中として表示され、まだ販売している出品はショップの「出品」ページから戻せます（更新ボタン、または選択して「有効化」）。何も削除されません。"
+      "description": "ゲームのワイプ後に、すべての有効な出品を期限切れにします。販売者には一時停止中として表示され、まだ販売している出品はショップの「出品」ページから戻せます（更新ボタン、または選択して「有効化」）。何も削除されません。"
     },
     "importMonitoring": {
       "started": "{{source}} のインポートを開始しました",
@@ -7666,8 +7666,8 @@
       "noneIndividual": "なし（個人）"
     },
     "sellerReachability": {
-      "title": "出品者への到達性",
-      "subtitle": "公開出品のある出品者を最終アクセス時期で分け、SC Market が連絡できる出品者数（とその出品数）を示します。組織は注文またはマーケットを管理するメンバーを通じて数えます。件数のみ。",
+      "title": "販売者への到達性",
+      "subtitle": "公開出品のある販売者を最終アクセス時期で分け、SC Market が連絡できる販売者数（とその出品数）を示します。組織は注文またはマーケットを管理するメンバーを通じて数えます。件数のみ。",
       "count": "{{sellers}} · {{listings}}",
       "retry": "再試行",
       "loadFailed": "到達性レポートを読み込めませんでした。",
@@ -7681,7 +7681,7 @@
       },
       "columns": {
         "lastSeen": "最終アクセス",
-        "sellers": "出品者 · 出品",
+        "sellers": "販売者 · 出品",
         "discord_dm": "Discord DM",
         "discord_dm_confirmed": "DM 配信済み",
         "discord_dm_closed": "DM 失敗（受信拒否）",
@@ -7693,20 +7693,20 @@
         "discord_server_or_app": "サーバー共有またはアプリ導入済み"
       },
       "notes": {
-        "cells": "各セル：出品者数 · その公開出品数。",
+        "cells": "各セル：販売者数 · その公開出品数。",
         "discordNoSignal": "Discord DM：Discord が連携済み。DM の配信結果は記録されていません。",
         "email": "メール：確認済みのアドレスで、お知らせメールの配信停止をしていない。バウンスは記録されないため、確認済みのアドレスでも届かない場合があります。",
-        "emailChecked": "メール：バウンスもスパム報告もされていない認証済みアドレスで、お知らせメールの配信を停止していないもの。過去{{days}}日間にメールを送っていない出品者は未確認として数え、「メール配信済み」はその期間に配信が確認された出品者を数えます。",
+        "emailChecked": "メール：バウンスもスパム報告もされていない認証済みアドレスで、お知らせメールの配信を停止していないもの。過去{{days}}日間にメールを送っていない販売者は未確認として数え、「メール配信済み」はその期間に配信が確認された販売者を数えます。",
         "push": "プッシュ：プッシュ購読が 1 件以上ある。期限切れの購読はプッシュ失敗時に削除されますが、配信結果は記録されません。",
         "pushChecked": "プッシュ：プッシュ購読が 1 件以上ある。",
         "anyNone": "いずれかの方法：Discord DM、メール、プッシュのいずれかで連絡できる。なし：どれでも連絡できない。",
-        "lastSeen": "最終アクセスは、購入者にオンライン状態を非表示にしている出品者も含めて数えます。",
-        "discordRule": "Discord DM：Discord 連携済みで、SC Market からの最後の DM（{{days}} 日間保存）がエラー {{code}} で拒否されておらず、Bot とサーバーを共有している出品者。この期間に DM を送っていない出品者は未確認として数えます。「DM 配信済み」は最後の DM が届いた出品者です。",
-        "discordClosedInstall": "DM 失敗（クローズ）：Discord が最後の DM を拒否したため DM で連絡できません（エラー {{code}}：DM が閉じている、または Bot が届けられない）。拒否された DM は、記録済みのアプリ導入も取り消します。組織の場合は、連絡可能な全員に当てはまるときです。",
-        "serverOrApp": "サーバー共有またはアプリ導入済み：Discord 連携済みで、SC Market Bot がいるサーバーの少なくとも1つのメンバーである（Bot のメンバーリストから約12時間ごとに確認、何も送信しません。最終確認 {{when}}）、または自分の Discord アカウントに導入したアプリから Bot を使ったことがある出品者。「いずれかのチャネル」「なし」には含めません。",
-        "serverOrAppNever": "サーバー共有またはアプリ導入済み：Discord 連携済みで、SC Market Bot がいるサーバーの少なくとも1つのメンバーである（約12時間ごとに確認、何も送信しません。まだ確認していません）、または自分の Discord アカウントに導入したアプリから Bot を使ったことがある出品者。「いずれかのチャネル」「なし」には含めません。",
+        "lastSeen": "最終アクセスは、購入者にオンライン状態を非表示にしている販売者も含めて数えます。",
+        "discordRule": "Discord DM：Discord 連携済みで、SC Market からの最後の DM（{{days}} 日間保存）がエラー {{code}} で拒否されておらず、ボット とサーバーを共有している販売者。この期間に DM を送っていない販売者は未確認として数えます。「DM 配信済み」は最後の DM が届いた販売者です。",
+        "discordClosedInstall": "DM 失敗（クローズ）：Discord が最後の DM を拒否したため DM で連絡できません（エラー {{code}}：DM が閉じている、または ボット が届けられない）。拒否された DM は、記録済みのアプリ導入も取り消します。組織の場合は、連絡可能な全員に当てはまるときです。",
+        "serverOrApp": "サーバー共有またはアプリ導入済み：Discord 連携済みで、SC Market ボット がいるサーバーの少なくとも1つのメンバーである（ボット のメンバーリストから約12時間ごとに確認、何も送信しません。最終確認 {{when}}）、または自分の Discord アカウントに導入したアプリから ボット を使ったことがある販売者。「いずれかのチャネル」「なし」には含めません。",
+        "serverOrAppNever": "サーバー共有またはアプリ導入済み：Discord 連携済みで、SC Market ボット がいるサーバーの少なくとも1つのメンバーである（約12時間ごとに確認、何も送信しません。まだ確認していません）、または自分の Discord アカウントに導入したアプリから ボット を使ったことがある販売者。「いずれかのチャネル」「なし」には含めません。",
         "installCounts": "アプリの導入は Discord DM で連絡可能として数えます。",
-        "installNotCounted": "アプリの導入は記録されますが、サーバーを共有していない相手に Bot が DM を送れると確認されるまでは、Discord DM で連絡可能としては数えません。"
+        "installNotCounted": "アプリの導入は記録されますが、サーバーを共有していない相手に ボット が DM を送れると確認されるまでは、Discord DM で連絡可能としては数えません。"
       },
       "installClicks": {
         "title": "「SC Market を Discord に追加」のクリック数",
@@ -7734,7 +7734,7 @@
     },
     "stillSelling": {
       "title": "「まだ販売していますか？」DMキャンペーン",
-      "subtitle": "最終ログインが{{inactive}}日以上前で、公開中の出品が{{stale}}日間更新されていない出品者に、Botが送信できる場合に限り、Discord DMを1回だけ送ります。組織の出品は注文またはマーケットを管理するメンバーに送られ、1人につきDMは1通です。通知設定でマーケットの Discord DM をオフにしている人には送りません。",
+      "subtitle": "最終ログインが{{inactive}}日以上前で、公開中の出品が{{stale}}日間更新されていない販売者に、ボットが送信できる場合に限り、Discord DMを1回だけ送ります。組織の出品は注文またはマーケットを管理するメンバーに送られ、1人につきDMは1通です。通知設定でマーケットの Discord DM をオフにしている人には送りません。",
       "switchOn": "送信は有効です（{{env}}=true）。",
       "switchOff": "送信は無効です。サーバーで{{env}}=trueを設定するまで何も送信できません。",
       "dryRun": "ドライラン：{{recipients}}人に{{listings}}件の出品についてDMを送ります。",
@@ -7769,7 +7769,7 @@
       "loadFailed": "キャンペーンを読み込めませんでした。",
       "retry": "再試行",
       "sendFailed": "キャンペーンを開始できませんでした。",
-      "breakdown": "出品者{{sellers}}人。更新されていない期間別の出品数：30〜60日 {{d30}}件、60〜90日 {{d60}}件、90日以上 {{d90}}件。",
+      "breakdown": "販売者{{sellers}}人。更新されていない期間別の出品数：30〜60日 {{d30}}件、60〜90日 {{d60}}件、90日以上 {{d90}}件。",
       "cap": "送信先は最大{{cap}}人（{{env}}）。",
       "overCap": "対象者が{{recipients}}人で、上限の{{cap}}人（{{env}}）を超えています。送信はブロックされています。上限を上げる前に対象者を確認してください。",
       "top": "出品数の多い送信先（表示名・出品数）",
@@ -7908,8 +7908,8 @@
         "recruitingWrite": "募集投稿の書き込み",
         "commentsRead": "コメントの読み取り",
         "commentsWrite": "コメントの書き込み",
-        "moderationRead": "通報の読み取り",
-        "moderationWrite": "通報の送信",
+        "moderationRead": "報告の読み取り",
+        "moderationWrite": "報告の送信",
         "admin": "管理者のフルアクセス",
         "readonly": "読み取り専用（すべての読み取りスコープ）",
         "full": "フルアクセス（すべてのスコープ）"
@@ -7921,7 +7921,7 @@
     "public": "公開",
     "private": "非公開",
     "collaborative": "共同編集",
-    "publicHelp": "リンクを知っている人は誰でもこのショッピングリストを閲覧できます",
+    "publicHelp": "リンクを知っている人は誰でもこの買い物リストを閲覧できます",
     "manager": {
       "createWishlist": "ウィッシュリストを作成",
       "emptyTitle": "ウィッシュリストはまだありません",
@@ -7932,20 +7932,20 @@
       "createdOn": "{{date}}に作成",
       "deleteNamed": "{{name}}を削除",
       "createDialog": {
-        "title": "新しいショッピングリストを作成",
-        "name": "ショッピングリスト名",
+        "title": "新しい買い物リストを作成",
+        "name": "買い物リスト名",
         "namePlaceholder": "例：艦船コンポーネント、アーマーセット、採掘装備",
         "description": "説明（任意）",
-        "descriptionPlaceholder": "このショッピングリストのメモを追加...",
+        "descriptionPlaceholder": "この買い物リストのメモを追加...",
         "makePublic": "公開する",
-        "collaborativeHelp": "{{org}} のメンバーがこのショッピングリストを編集できます",
+        "collaborativeHelp": "{{org}} のメンバーがこの買い物リストを編集できます",
         "collaborativeNoOrg": "共同編集モードを使うには組織に参加してください",
-        "ownedBy": "このショッピングリストは <strong>{{org}}</strong> の所有となり、そのメンバーに表示されます。",
+        "ownedBy": "この買い物リストは <strong>{{org}}</strong> の所有となり、そのメンバーに表示されます。",
         "creating": "作成中...",
-        "submit": "ショッピングリストを作成"
+        "submit": "買い物リストを作成"
       },
       "deleteDialog": {
-        "title": "ショッピングリストを削除しますか？",
+        "title": "買い物リストを削除しますか？",
         "body": "<strong>{{name}}</strong> を削除してもよろしいですか？この操作は元に戻せず、このウィッシュリスト内のすべてのアイテムが削除されます。",
         "deleting": "削除中..."
       }
@@ -7954,24 +7954,24 @@
       "title": "ウィッシュリストを共有",
       "wishlistLabel": "ウィッシュリスト",
       "privacySettings": "プライバシー設定",
-      "privateHelp": "このショッピングリストを閲覧できるのはあなただけです",
+      "privateHelp": "この買い物リストを閲覧できるのはあなただけです",
       "shareLink": "共有リンク",
       "shareLinkHelp": "このリンクをコピーしてウィッシュリストを共有しましょう",
       "copied": "コピーしました！",
       "copyToClipboard": "クリップボードにコピー",
       "linkCopied": "リンクをクリップボードにコピーしました！",
       "copyFailed": "リンクをコピーできませんでした。手動でコピーしてください。",
-      "nowPublic": "ショッピングリストを公開しました。リンクを知っている人は誰でも閲覧できます。",
-      "nowPrivate": "ショッピングリストを非公開にしました。閲覧できるのはあなただけです。",
+      "nowPublic": "買い物リストを公開しました。リンクを知っている人は誰でも閲覧できます。",
+      "nowPrivate": "買い物リストを非公開にしました。閲覧できるのはあなただけです。",
       "privacyError": "プライバシー設定を更新できませんでした。",
-      "collabEnabled": "共同編集モードを有効にしました。組織のメンバーがこのショッピングリストを編集できます。",
-      "collabDisabled": "共同編集モードを無効にしました。このショッピングリストを編集できるのはあなただけです。",
+      "collabEnabled": "共同編集モードを有効にしました。組織のメンバーがこの買い物リストを編集できます。",
+      "collabDisabled": "共同編集モードを無効にしました。この買い物リストを編集できるのはあなただけです。",
       "collabError": "共同編集の設定を更新できませんでした。",
       "enablePublicHint": "共有リンクを生成するには公開設定を有効にしてください",
       "collaborationSettings": "共同編集の設定",
       "collaborativeMode": "共同編集モード",
-      "collabOnHelp": "組織のメンバーがこのショッピングリストのアイテムを追加・編集できます",
-      "collabOffHelp": "このショッピングリストのアイテムを追加・編集できるのはあなただけです",
+      "collabOnHelp": "組織のメンバーがこの買い物リストのアイテムを追加・編集できます",
+      "collabOffHelp": "この買い物リストのアイテムを追加・編集できるのはあなただけです",
       "orgAssociated": "このウィッシュリストはあなたの組織に関連付けられています。共同編集モードでは、他のメンバーもウィッシュリストの管理を手伝えます。",
       "noOrg": "このウィッシュリストは組織に関連付けられていません。共同編集モードは組織のウィッシュリストでのみ利用できます。",
       "currentStatus": "現在の共有状況",
@@ -7983,9 +7983,9 @@
       "shareLinkUnavailable": "共有リンク：<strong>利用不可</strong>"
     },
     "quickAdd": {
-      "title": "ショッピングリストに追加",
-      "noLists": "ショッピングリストはまだありません。",
-      "newList": "新しいショッピングリスト",
+      "title": "買い物リストに追加",
+      "noLists": "買い物リストはまだありません。",
+      "newList": "新しい買い物リスト",
       "listName": "リスト名",
       "createAndAdd": "作成して追加"
     },
@@ -8068,7 +8068,7 @@
       "salvaged": "サルベージ",
       "looted": "ルート",
       "qualityTiers_other": "品質ティア {{count}} 段階",
-      "blueprints_other": "ブループリント {{count}} 件"
+      "blueprints_other": "設計図 {{count}} 件"
     },
     "qualityBand": {
       "label": "品質",
@@ -8096,7 +8096,7 @@
         "shareable": "共有可能",
         "unique": "ユニーク",
         "chainStarter": "チェーンの開始",
-        "hasBlueprints": "ブループリントあり",
+        "hasBlueprints": "設計図あり",
         "default": "デフォルト",
         "missionReward": "ミッション報酬",
         "hasMissionSource": "入手ミッションあり",
@@ -8195,7 +8195,7 @@
         "orgs": "組織",
         "recruiting": "募集",
         "missions": "ミッション",
-        "blueprints": "ブループリント",
+        "blueprints": "設計図",
         "mining": "採掘",
         "wiki": "ウィキ",
         "resources": "リソース",
@@ -8419,8 +8419,8 @@
       "marketItemBid": "マーケット商品への入札",
       "marketItemOffer": "マーケット商品へのオファー",
       "priceAlert": "価格アラート",
-      "marketOfferAccepted": "マーケットのオファーが承認されました",
-      "marketOfferDeclined": "マーケットのオファーが拒否されました",
+      "marketOfferAccepted": "マーケットのオファー承認",
+      "marketOfferDeclined": "マーケットのオファー却下",
       "offerCreate": "新しいオファー",
       "offerMessage": "オファーメッセージ",
       "counterOfferCreate": "カウンターオファー",
@@ -8768,7 +8768,7 @@
     },
     "discordThreadsAlerts": {
       "title": "注文スレッドと注文アラート、どちらを使う？",
-      "body": "注文スレッドでは、新しい注文とオファーごとに購入者との非公開スレッドが作られます。注文アラートでは、それぞれがチャンネルに投稿され、組織メンバー用の受注ボタンが付きます。ショップまたは組織の Discord 設定からボットを追加し、そこでチャンネルを選んでください。あなた個人への注文には、Discord で /setup threads または /setup alerts を実行します。"
+      "body": "注文スレッドでは、新しい注文とオファーごとに購入者との非公開スレッドが作られます。注文アラートでは、それぞれがチャンネルに投稿され、組織メンバー用の「担当する」ボタンが付きます。ショップまたは組織の Discord 設定からボットを追加し、そこでチャンネルを選んでください。あなた個人への注文には、Discord で /setup threads または /setup alerts を実行します。"
     },
     "uexImport": {
       "title": "UEX から出品をコピー",
@@ -8814,11 +8814,11 @@
       },
       "user_sign_in": {
         "title": "SC Market があなたの Discord に追加されました",
-        "body": "SC Market にサインインし、設定 › 通知からもう一度追加すると、Discord アカウントが連携されます。"
+        "body": "SC Market にログインし、設定 › 通知からもう一度追加すると、Discord アカウントが連携されます。"
       },
       "user_linked_elsewhere": {
         "title": "この Discord アカウントは別の SC Market アカウントに連携されています",
-        "body": "このアカウントには連携しませんでした。連携先のアカウントでサインインするか、別の Discord アカウントで SC Market を追加してください。"
+        "body": "このアカウントには連携しませんでした。連携先のアカウントでログインするか、別の Discord アカウントで SC Market を追加してください。"
       },
       "user_other_discord": {
         "title": "あなたの SC Market アカウントは別の Discord アカウントに連携されています",
@@ -8829,8 +8829,8 @@
         "body": "そのサーバーで注文スレッドやアラートを受け取るには、ショップまたは組織の Discord 設定からもう一度ボットを追加してください（サーバーが自動で連携されます）。または、チャンネルで /setup threads を実行してください。"
       },
       "server_sign_in": {
-        "title": "先にサインインしてください",
-        "body": "SC Market にサインインしてから、ショップまたは組織の Discord 設定でボットを追加してください。"
+        "title": "先にログインしてください",
+        "body": "SC Market にログインしてから、ショップまたは組織の Discord 設定でボットを追加してください。"
       },
       "server_forbidden": {
         "title": "この Discord 連携を管理する権限がありません",
@@ -8844,7 +8844,7 @@
         "title": "SC Market の追加を完了できませんでした",
         "body": "リンクの有効期限が切れたか、すでに使われた可能性があります。もう一度やり直してください。"
       },
-      "signIn": "サインイン",
+      "signIn": "ログイン",
       "startAgain": "やり直す"
     }
   },
@@ -8884,7 +8884,7 @@
       "reasons": {
         "not_playing": "今はStar Citizenをプレイしていない",
         "waiting_patch": "次のパッチやワイプを待っている",
-        "not_enough_buyers": "買い手が少ない",
+        "not_enough_buyers": "購入者が少ない",
         "selling_elsewhere": "別の場所で販売している（Discord、他のサイト）",
         "too_much_work": "出品を最新に保つのが大変",
         "about_sc_market": "SC Marketについて",
