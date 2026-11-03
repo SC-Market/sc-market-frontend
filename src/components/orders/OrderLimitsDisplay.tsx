@@ -9,6 +9,7 @@ import {
 import { useTranslation } from "react-i18next"
 import type { OrderLimits } from "../../features/orders/domain/types"
 
+import { useFormatters } from "../../util/format"
 interface OrderLimitsDisplayProps {
   limits: OrderLimits
   currentSize?: number // Current order size (sum of quantities)
@@ -18,7 +19,6 @@ interface OrderLimitsDisplayProps {
 
 type ValidationState = "info" | "warning" | "error" | "success"
 
-import { formatCurrency } from "../../features/orders/domain/formatters"
 
 function getSizeValidationState(
   limits: OrderLimits,
@@ -91,6 +91,7 @@ export function OrderLimitsDisplay({
   showValidation = false,
 }: OrderLimitsDisplayProps) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   // Check if any limits are set
   const hasLimits =
     limits.min_order_size ||
@@ -137,7 +138,7 @@ export function OrderLimitsDisplay({
                 <span>
                   {t("ordersUi.limits.minItems", {
                     count: parseInt(limits.min_order_size, 10),
-                    amount: formatCurrency(limits.min_order_size),
+                    amount: fmt.integer(limits.min_order_size),
                   })}
                 </span>
               )}
@@ -146,7 +147,7 @@ export function OrderLimitsDisplay({
                 <span>
                   {t("ordersUi.limits.maxItems", {
                     count: parseInt(limits.max_order_size, 10),
-                    amount: formatCurrency(limits.max_order_size),
+                    amount: fmt.integer(limits.max_order_size),
                   })}
                 </span>
               )}
@@ -164,11 +165,11 @@ export function OrderLimitsDisplay({
                     currentSize < parseInt(limits.min_order_size, 10)
                       ? t("ordersUi.limits.sizeBelowMin", {
                           current: currentSize,
-                          min: formatCurrency(limits.min_order_size),
+                          min: fmt.integer(limits.min_order_size),
                         })
                       : t("ordersUi.limits.sizeAboveMax", {
                           current: currentSize,
-                          max: formatCurrency(limits.max_order_size ?? 0),
+                          max: fmt.integer(limits.max_order_size ?? 0),
                         })}
                   </Typography>
                 )}
@@ -205,7 +206,7 @@ export function OrderLimitsDisplay({
               {limits.min_order_value && (
                 <span>
                   {t("ordersUi.limits.minValue", {
-                    amount: formatCurrency(limits.min_order_value),
+                    amount: fmt.integer(limits.min_order_value),
                   })}
                 </span>
               )}
@@ -213,7 +214,7 @@ export function OrderLimitsDisplay({
               {limits.max_order_value && (
                 <span>
                   {t("ordersUi.limits.maxValue", {
-                    amount: formatCurrency(limits.max_order_value),
+                    amount: fmt.integer(limits.max_order_value),
                   })}
                 </span>
               )}
@@ -230,12 +231,12 @@ export function OrderLimitsDisplay({
                     {limits.min_order_value &&
                     currentValue < parseInt(limits.min_order_value, 10)
                       ? t("ordersUi.limits.valueBelowMin", {
-                          current: formatCurrency(currentValue),
-                          min: formatCurrency(limits.min_order_value),
+                          current: fmt.integer(currentValue),
+                          min: fmt.integer(limits.min_order_value),
                         })
                       : t("ordersUi.limits.valueAboveMax", {
-                          current: formatCurrency(currentValue),
-                          max: formatCurrency(limits.max_order_value ?? 0),
+                          current: fmt.integer(currentValue),
+                          max: fmt.integer(limits.max_order_value ?? 0),
                         })}
                   </Typography>
                 )}
@@ -247,7 +248,7 @@ export function OrderLimitsDisplay({
                   >
                     <Warning fontSize="small" />
                     {t("ordersUi.limits.valueNearLimit", {
-                      current: formatCurrency(currentValue),
+                      current: fmt.integer(currentValue),
                     })}
                   </Typography>
                 )}

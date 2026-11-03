@@ -7,8 +7,8 @@
  * Pure: no React, no browser globals.
  *
  * Text comes from the `missionHubs` locale keys (the SPA's t, the bridge's
- * englishT); numbers and aUEC amounts are formatted like the mission pages
- * (en-US).
+ * englishT); numbers in the same language (`lang`: the page's, "en" for the
+ * bridge and the prerender).
  */
 import type {
   GameVersion,
@@ -24,6 +24,7 @@ import { gameDataDateModified, missionTitle } from "./missionText"
 import type { PageHead } from "./pageHead"
 import type { SeoLink } from "./siteHeads"
 
+import { formatInteger } from "../util/format/format"
 /** i18next's t (and the bridge's englishT): defaults and interpolation values. */
 export interface HubTranslate {
   (key: string, options: { defaultValue: string } & Record<string, unknown>): string
@@ -99,18 +100,18 @@ const HUB_TEXT: Record<MissionHubKind, { title: string; heading: string; lead: s
   },
 }
 
-/** "1,234". */
-function num(value: number): string {
-  return Math.round(value).toLocaleString("en-US")
+/** "1,234" ("1.234" in de). */
+function num(value: number, lang: string): string {
+  return formatInteger(value, lang)
 }
 
 /** "1,318 missions" (plural-aware: missionHubs.missionCount_one/_other). */
-export function missionCountText(count: number, t: HubTranslate): string {
+export function missionCountText(count: number, t: HubTranslate, lang: string): string {
   // `count` picks the plural form; `n` is the formatted number ("1,318").
   return t("missionHubs.missionCount", {
     defaultValue: count === 1 ? "{{n}} mission" : "{{n}} missions",
     count,
-    n: num(count),
+    n: num(count, lang),
   })
 }
 
@@ -153,7 +154,7 @@ export function missionHubText(
 
 /** "Mercenary (308), Bounty Hunter (46) and Investigation (40)". */
 function topHubs(hubs: readonly MissionHubSummary[], lang: string, max = 3): string {
-  return listText(hubs.slice(0, max).map((h) => `${h.name} (${num(h.mission_count)})`), lang)
+  return listText(hubs.slice(0, max).map((h) => `${h.name} (${num(h.mission_count, lang)})`), lang)
 }
 
 /** The related kinds a hub's intro names, in order. */
@@ -177,7 +178,7 @@ export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, 
     t(`missionHubs.hub.${hub.kind}.lead`, {
       defaultValue: text.lead,
       name: hub.name,
-      missions: missionCountText(hub.mission_count, t),
+      missions: missionCountText(hub.mission_count, t, lang),
     }),
   ]
   if (hub.kind !== "systems" && hub.systems.length > 0) {
@@ -193,8 +194,8 @@ export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, 
   if (typeof max === "number" && max > 0) {
     lines.push(
       typeof min === "number" && min > 0 && min < max
-        ? t("missionHubs.rewardRange", { defaultValue: "They pay {{min}} to {{max}} aUEC.", min: num(min), max: num(max) })
-        : t("missionHubs.rewardUpTo", { defaultValue: "They pay up to {{max}} aUEC.", max: num(max) }),
+        ? t("missionHubs.rewardRange", { defaultValue: "They pay {{min}} to {{max}} aUEC.", min: num(min, lang), max: num(max, lang) })
+        : t("missionHubs.rewardUpTo", { defaultValue: "They pay up to {{max}} aUEC.", max: num(max, lang) }),
     )
   }
   const known = hub.legal_count + hub.illegal_count
@@ -206,8 +207,8 @@ export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, 
           ? t("missionHubs.allIllegal", { defaultValue: "All of them are illegal." })
           : t("missionHubs.legalMix", {
               defaultValue: "Legal: {{legal}}, illegal: {{illegal}}.",
-              legal: num(hub.legal_count),
-              illegal: num(hub.illegal_count),
+              legal: num(hub.legal_count, lang),
+              illegal: num(hub.illegal_count, lang),
             }),
     )
   }
@@ -215,7 +216,7 @@ export function missionHubIntro(hub: MissionHubDetailResponse, t: HubTranslate, 
     lines.push(
       t("missionHubs.blueprints", {
         defaultValue: "Missions that can reward a crafting blueprint: {{count}}.",
-        count: num(hub.blueprint_mission_count),
+        count: num(hub.blueprint_mission_count, lang),
       }),
     )
   }

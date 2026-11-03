@@ -16,6 +16,7 @@ import { MARKET_PATHS, ORG_PATHS, SHOP_PATHS, USER_PATHS } from "../routes/paths
 import { FALLBACK_IMAGE_URL } from "./constants"
 import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
 
+import { formatInteger, formatNumber } from "../util/format/format"
 /** /market/:id (ListingDetailV2). */
 /**
  * Robots tag for a listing that isn't public: an unlisted listing is
@@ -69,7 +70,7 @@ export function listingQuantity(data: Pick<GetListingDetailResponse, "items">): 
  * ("150K", "1.5M", "2B"), which keeps the price inside a search result title.
  */
 export function formatAuecShort(value: number): string {
-  if (value < 100_000) return Math.round(value).toLocaleString("en-US")
+  if (value < 100_000) return formatInteger(value, "en") // English head text
   const units: [number, string][] = [
     [1_000_000_000, "B"],
     [1_000_000, "M"],
@@ -148,7 +149,7 @@ export function buildListingHead(
     priceLabel,
     `sold by ${seller.name}`,
     sellerRatingLabel(seller.rating),
-    quantity > 0 ? `${quantity.toLocaleString("en-US")} available` : null,
+    quantity > 0 ? `${formatNumber(quantity, "en")} available` : null,
   ].filter(Boolean)
   const summary = `${facts.join(" · ")}.`
   const text = listing.description?.replace(/\s+/g, " ").trim()

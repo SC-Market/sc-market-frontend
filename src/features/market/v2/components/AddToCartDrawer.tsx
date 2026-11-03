@@ -25,9 +25,9 @@ import {
   useRemoveCartItemMutation,
 } from "../../../../store/api/v2/market"
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../../hooks/alert/AlertHook"
-import { formatQuantity } from "../../../../util/formatQuantity"
 import { MARKET_PATHS } from "../../../../routes/paths"
 
+import { useFormatters } from "../../../../util/format"
 interface AddToCartDrawerProps {
   open: boolean
   onClose: () => void
@@ -36,6 +36,7 @@ interface AddToCartDrawerProps {
 
 export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerProps) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const isMobile = useIsMobile()
   const issueAlert = useAlertHook()
 
@@ -141,17 +142,17 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
             >
               {variants.map((v) => (
                 <MenuItem key={v.variant_id} value={v.variant_id}>
-                  {v.display_name || t("marketV2.standardVariant")} — {Number(v.price).toLocaleString()} aUEC ({t("marketV2.availShort", { quantity: formatQuantity(v.quantity, listingData.listing.quantity_unit) })})
+                  {v.display_name || t("marketV2.standardVariant")} — {fmt.number(v.price)} aUEC ({t("marketV2.availShort", { quantity: fmt.quantity(v.quantity, listingData.listing.quantity_unit) })})
                 </MenuItem>
               ))}
             </TextField>
           ) : variants.length === 1 ? (
             <Box sx={{ p: 1.5, bgcolor: "action.hover", borderRadius: 1 }}>
               <Typography variant="body2">
-                {variants[0].display_name || t("marketV2.standardVariant")} — {Number(variants[0].price).toLocaleString()} aUEC
+                {variants[0].display_name || t("marketV2.standardVariant")} — {fmt.number(variants[0].price)} aUEC
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                {formatQuantity(variants[0].quantity, listingData.listing.quantity_unit)} {t("cart.available", "available")}
+                {fmt.quantity(variants[0].quantity, listingData.listing.quantity_unit)} {t("cart.available", "available")}
               </Typography>
             </Box>
           ) : null}
@@ -182,7 +183,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
           {/* Subtotal */}
           {selectedVariant && (
             <Typography variant="body1" fontWeight="bold" color="primary">
-              {t("cart.subtotal", "Subtotal")}: {Number(subtotal).toLocaleString()} aUEC
+              {t("cart.subtotal", "Subtotal")}: {fmt.number(subtotal)} aUEC
             </Typography>
           )}
 
@@ -215,7 +216,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
                     <Box sx={{ minWidth: 0 }}>
                       <Typography variant="body2" noWrap>{ci.variant?.display_name || t("marketV2.standardVariant")}</Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {ci.quantity} × {Number(ci.price_per_unit).toLocaleString()} aUEC = {Number(ci.quantity * ci.price_per_unit).toLocaleString()} aUEC
+                        {ci.quantity} × {fmt.number(ci.price_per_unit)} aUEC = {fmt.number(ci.quantity * ci.price_per_unit)} aUEC
                       </Typography>
                     </Box>
                     <IconButton

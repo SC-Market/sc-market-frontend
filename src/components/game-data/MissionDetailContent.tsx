@@ -38,6 +38,7 @@ import { GAME_DATA_PATHS, WIKI_PATHS } from "../../routes/paths"
 import { missionGiver, usableGiver } from "../../seo/missionText"
 import { missionHubText } from "../../seo/missionHubs"
 
+import { useFormatters } from "../../util/format"
 // ============================================================================
 // Helpers
 // ============================================================================
@@ -219,6 +220,7 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
 
 function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; onBlueprintClick?: (id: string) => void }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const m = data.mission
 
   return (
@@ -239,10 +241,10 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
               <Typography variant="body2" color="text.secondary">{isFee ? t("missionsUi.feeLabel") : "UEC"}</Typography>
               <Typography variant="body2" color={isFee ? "error.main" : "success.main"} fontWeight={600}>
                 {isFee
-                  ? formatCredits(Math.abs(m.credit_reward_min!))
+                  ? formatCredits(Math.abs(m.credit_reward_min!), fmt.locale)
                   : m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
-                    ? formatCredits(m.credit_reward_min)
-                    : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
+                    ? formatCredits(m.credit_reward_min, fmt.locale)
+                    : `${formatCredits(m.credit_reward_min, fmt.locale)} – ${formatCredits(m.credit_reward_max, fmt.locale)}`}
               </Typography>
             </Stack>
           )
@@ -250,7 +252,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
         {m.reputation_reward != null && m.reputation_reward > 0 && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">{t("missionsUi.repPerMission")}</Typography>
-            <Typography variant="body2">{m.reputation_reward.toLocaleString()} XP</Typography>
+            <Typography variant="body2">{fmt.number(m.reputation_reward)} XP</Typography>
           </Stack>
         )}
         {usableGiver(m.mission_giver_org) && (
@@ -467,6 +469,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
 
 function RequirementsTab({ data }: { data: MissionDetailResponse }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const m = data.mission
   return (
     <Stack spacing={2}>
@@ -507,7 +510,7 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
           <Divider />
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">{t("missionsUi.requiredReputation")}</Typography>
-            <Typography variant="body2">{m.required_reputation.toLocaleString()} XP</Typography>
+            <Typography variant="body2">{fmt.number(m.required_reputation)} XP</Typography>
           </Stack>
         </>
       )}

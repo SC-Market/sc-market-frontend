@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { formatAuec, parseTargetPrice } from "../domain/price"
+import { parseTargetPrice } from "../domain/price"
 
 describe("parseTargetPrice", () => {
   it.each([
@@ -16,10 +16,4 @@ describe("parseTargetPrice", () => {
       expect(parseTargetPrice(input)).toBeNull()
     },
   )
-})
-
-describe("formatAuec", () => {
-  it("formats exact amounts", () => {
-    expect(formatAuec(25000)).toBe("25,000 aUEC")
-  })
 })

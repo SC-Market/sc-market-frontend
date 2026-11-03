@@ -40,6 +40,7 @@ import { linkedPaginationItem } from "../../components/pagination/linkedPaginati
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
+import { useFormatters } from "../../util/format"
 const VIEW_MODES = ["grid", "list"] as const
 const CARD_HEIGHT = 280
 const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
@@ -183,6 +184,7 @@ function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: (
 
 export function WikiItemBrowser() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -320,7 +322,7 @@ export function WikiItemBrowser() {
             />
             {data && (
               <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
-                {data.total.toLocaleString()}
+                {fmt.number(data.total)}
               </Typography>
             )}
             <ToggleButtonGroup

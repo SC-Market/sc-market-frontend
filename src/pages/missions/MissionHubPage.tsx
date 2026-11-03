@@ -187,7 +187,7 @@ function HubBody({ hub, page, lang }: { hub: MissionHubDetailResponse; page: num
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="body2" color="success.main" fontWeight={600} noWrap>
-                      {missionRewardRange(m) ?? "—"}
+                      {missionRewardRange(m, lang) ?? "—"}
                     </Typography>
                   </TableCell>
                 </TableRow>

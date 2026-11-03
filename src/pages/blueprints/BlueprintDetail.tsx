@@ -44,8 +44,10 @@ import { GAME_DATA_PATHS, USER_PATHS } from "../../routes/paths"
 import { blueprintItemName, blueprintSeoText, buildBlueprintHead } from "../../seo/gameDataHeads"
 import { SeoHead } from "../../seo/SeoHead"
 
+import { useFormatters } from "../../util/format"
 export function BlueprintDetail() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
   const { data, isLoading, error } = useGetBlueprintDetailQuery(
@@ -467,7 +469,7 @@ export function BlueprintDetail() {
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
                           @{m.username}
-                          {m.acquisition_date && ` · ${t("blueprintsUi.detail.acquired", { date: new Date(m.acquisition_date).toLocaleDateString() })}`}
+                          {m.acquisition_date && ` · ${t("blueprintsUi.detail.acquired", { date: fmt.date(m.acquisition_date) })}`}
                         </Typography>
                       </Box>
                     </Stack>

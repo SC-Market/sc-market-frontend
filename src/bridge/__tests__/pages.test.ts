@@ -63,7 +63,7 @@ describe("englishT matches the SPA's i18next setup", () => {
     )
     expect(buildOreAnswers(f.ore, englishT, "en")).toEqual(buildOreAnswers(f.ore, t, "en"))
     expect(buildShipSummary(f.ship, englishT)).toBe(buildShipSummary(f.ship, t))
-    expect(buildItemSummary(f.item, englishT)).toBe(buildItemSummary(f.item, t))
+    expect(buildItemSummary(f.item, englishT, "en")).toBe(buildItemSummary(f.item, t, "en"))
   })
 
   it("resolves the layout title labels", () => {

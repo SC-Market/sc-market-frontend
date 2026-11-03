@@ -33,8 +33,10 @@ import { buildResourceHead } from "../../seo/gameDataHeads"
 import { headDescription } from "../../seo/pageHead"
 import { SeoHead } from "../../seo/SeoHead"
 
+import { useFormatters } from "../../util/format"
 export function ResourceDetail() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { resource_id } = useParams<{ resource_id: string }>()
   const navigate = useNavigate()
@@ -107,13 +109,13 @@ export function ResourceDetail() {
             {resource.base_value != null && (
               <Typography variant="body2">
                 <strong>{t("resources.baseValue", "Base Value")}:</strong>{" "}
-                {resource.base_value.toLocaleString()} aUEC
+                {fmt.number(resource.base_value)} aUEC
               </Typography>
             )}
             {resource.max_stack_size != null && (
               <Typography variant="body2">
                 <strong>{t("resources.maxStack", "Max Stack")}:</strong>{" "}
-                {resource.max_stack_size.toLocaleString()}
+                {fmt.number(resource.max_stack_size)}
               </Typography>
             )}
             <Box>
@@ -141,19 +143,19 @@ export function ResourceDetail() {
               {market_price.min_price != null && (
                 <Typography variant="body2">
                   <strong>{t("resources.minPrice", "Min")}:</strong>{" "}
-                  {market_price.min_price.toLocaleString()} aUEC
+                  {fmt.number(market_price.min_price)} aUEC
                 </Typography>
               )}
               {market_price.max_price != null && (
                 <Typography variant="body2">
                   <strong>{t("resources.maxPrice", "Max")}:</strong>{" "}
-                  {market_price.max_price.toLocaleString()} aUEC
+                  {fmt.number(market_price.max_price)} aUEC
                 </Typography>
               )}
               {market_price.average_price != null && (
                 <Typography variant="body2">
                   <strong>{t("resources.avgPrice", "Average")}:</strong>{" "}
-                  {market_price.average_price.toLocaleString()} aUEC
+                  {fmt.number(market_price.average_price)} aUEC
                 </Typography>
               )}
             </Stack>

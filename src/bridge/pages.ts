@@ -184,6 +184,7 @@ import type { BridgePageKind } from "./routes"
 import { CONTENT_PAGES } from "./contentPages"
 import { storefrontFacts } from "../seo/storefrontText"
 import { STOREFRONTS_PAGE_SIZE } from "../features/storefront/domain"
+import { formatAuec, formatDate, formatNumber } from "../util/format/format"
 
 /**
  * Visible summary block. Text is always inserted as escaped text; a "ul" is
@@ -417,9 +418,11 @@ function linkBlocks(heading: string, links: SeoLink[]): SummaryBlock[] {
   return links.length > 0 ? [{ tag: "h2", text: heading }, { tag: "ul", links }] : []
 }
 
+// The crawler summary is always English (docs/ssr-worker.md), so its
+// numbers and dates are formatted in English too, never the visitor's locale.
 function aUEC(value: number | null | undefined): string | null {
   return typeof value === "number" && Number.isFinite(value)
-    ? `${Math.round(value).toLocaleString("en-US")} aUEC`
+    ? formatAuec(value, "en")
     : null
 }
 
@@ -574,11 +577,7 @@ function listingSearch(params: Record<string, string | number>, ttl = ENTITY_LIS
 
 /** "30 Oct 2026" (UTC), null for a missing or bad date. */
 function shortDate(value: string | null | undefined): string | null {
-  if (!value) return null
-  const date = new Date(value)
-  return Number.isNaN(date.getTime())
-    ? null
-    : date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })
+  return formatDate(value, "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }) || null
 }
 
 /** "Key: value" facts, dropping empty values. */
@@ -667,7 +666,7 @@ function acquisitionBlocks(name: string, doc: ItemAcquisitionDocument | undefine
   if (!doc || typeof doc !== "object" || !doc.listings || !doc.missions) return []
   const t = englishT
   const sections = acquisitionSections(doc)
-  const price = (value: number) => t("itemAcquisition.priceUnit", { defaultValue: "{{price}} aUEC", price: formatAmount(value) })
+  const price = (value: number) => t("itemAcquisition.priceUnit", { defaultValue: "{{price}} aUEC", price: formatAmount(value, "en") })
   const blocks: SummaryBlock[] = [
     { tag: "h2", text: t("itemAcquisition.title", { defaultValue: "How to get {{name}}", name }) },
   ]
@@ -692,9 +691,9 @@ function acquisitionBlocks(name: string, doc: ItemAcquisitionDocument | undefine
         items: facts([
           [t("itemAcquisition.lowestAsk", "Lowest ask"), typeof l.lowest_ask === "number" ? price(l.lowest_ask) : null],
           [t("itemAcquisition.medianAsk", "Median ask"), typeof median === "number" ? price(median) : null],
-          [t("itemAcquisition.sellers", "Sellers"), formatAmount(l.seller_count)],
-          [t("itemAcquisition.listings", "Listings"), formatAmount(l.count)],
-          [t("itemAcquisition.inStock", "In stock"), formatAmount(l.quantity_available)],
+          [t("itemAcquisition.sellers", "Sellers"), formatAmount(l.seller_count, "en")],
+          [t("itemAcquisition.listings", "Listings"), formatAmount(l.count, "en")],
+          [t("itemAcquisition.inStock", "In stock"), formatAmount(l.quantity_available, "en")],
         ]),
       },
       ...paragraphs(typeof median === "number" ? doc.price.summary : null),
@@ -706,7 +705,7 @@ function acquisitionBlocks(name: string, doc: ItemAcquisitionDocument | undefine
             text: [
               listing.title,
               typeof listing.price === "number" ? price(listing.price) : null,
-              t("itemAcquisition.inStockCount", { defaultValue: "{{quantity}} in stock", quantity: formatAmount(listing.quantity_available) }),
+              t("itemAcquisition.inStockCount", { defaultValue: "{{quantity}} in stock", quantity: formatAmount(listing.quantity_available, "en") }),
             ]
               .filter(Boolean)
               .join(" — "),
@@ -743,7 +742,7 @@ function acquisitionBlocks(name: string, doc: ItemAcquisitionDocument | undefine
           { href: acquisitionBlueprintPath(bp), text: [blueprintLabel(name, t), ...blueprintFacts(bp, t)].join(" — ") },
           ...bp.ingredients.map((ing) => ({
             href: ingredientPath(ing),
-            text: `${ing.name} — ${ingredientAmount(ing, t)}`,
+            text: `${ing.name} — ${ingredientAmount(ing, t, "en")}`,
           })),
         ],
       })
@@ -879,7 +878,7 @@ function missionDoc(
     .slice(0, 10)
     .map((other) => ({
       href: GAME_DATA_PATHS.mission(enc(other.mission_code)),
-      text: [readableMissionText(other.mission_name), missionRewardRange(other)].filter(Boolean).join(" — "),
+      text: [readableMissionText(other.mission_name), missionRewardRange(other, "en")].filter(Boolean).join(" — "),
     }))
   const seen = new Set([m.mission_code, ...arr(ctx.related.giverMissions?.missions).map((o) => o.mission_code)])
   const similar = arr(ctx.related.similarMissions?.missions)
@@ -887,7 +886,7 @@ function missionDoc(
     .slice(0, Math.max(0, 10 - more.length))
     .map((other) => ({
       href: GAME_DATA_PATHS.mission(enc(other.mission_code)),
-      text: [missionTitle(other), missionRewardRange(other)].filter(Boolean).join(" — "),
+      text: [missionTitle(other), missionRewardRange(other, "en")].filter(Boolean).join(" — "),
     }))
   const stamp = freshnessStamp(version)
 
@@ -903,7 +902,7 @@ function missionDoc(
         ["Location", place || null],
         ["Pick up at", arr(m.accept_locations).slice(0, 8).join(", ") || null],
         ["Destinations", arr(m.destinations).slice(0, 8).join(", ") || null],
-        ["Reward", missionRewardRange(m)],
+        ["Reward", missionRewardRange(m, "en")],
         ["Reputation", rep],
         ["Required standing", standing.length ? standing.join(" to ") : null],
         ["Legality", legal],
@@ -976,7 +975,7 @@ function listingDoc(
         items.length > 1 ? item.game_item?.name : null,
         v.display_name,
         aUEC(Number(v.price || item.base_price)),
-        Number(v.quantity) > 0 ? `${Number(v.quantity).toLocaleString("en-US")} available` : "out of stock",
+        Number(v.quantity) > 0 ? `${formatNumber(Number(v.quantity), "en")} available` : "out of stock",
         v.locations?.length ? `at ${v.locations.join(", ")}` : null,
       ]
         .filter(Boolean)
@@ -998,7 +997,7 @@ function listingDoc(
       ...paragraphs(
         [
           price ? `Price: ${price}.` : null,
-          quantity > 0 ? `${quantity.toLocaleString("en-US")} ${unit === "SCU" ? "SCU" : quantity === 1 ? "unit" : "units"} available.` : "Out of stock.",
+          quantity > 0 ? `${formatNumber(quantity, "en")} ${unit === "SCU" ? "SCU" : quantity === 1 ? "unit" : "units"} available.` : "Out of stock.",
           listing.sale_type === "auction" ? "Auction." : listing.sale_type === "negotiable" ? "Price negotiable: make an offer." : null,
         ]
           .filter(Boolean)
@@ -1622,7 +1621,7 @@ function missionHubIndexPage(kind: MissionHubKind): BridgePage {
             missionHubKindLabel(kind, englishT),
             data[kind].map((hub) => ({
               href: GAME_DATA_PATHS.missionHub(kind, hub.slug),
-              text: `${hub.name} — ${missionCountText(hub.mission_count, englishT)}`,
+              text: `${hub.name} — ${missionCountText(hub.mission_count, englishT, "en")}`,
             })),
           ),
           ...linkBlocks(englishT("missionHubs.browseBy", "Browse missions by"), [
@@ -1809,7 +1808,7 @@ export const BRIDGE_PAGES: Record<BridgePageKind, BridgePage> = {
         withDateModified(buildItemHead(item, ctx.origin, acquisition), version),
         item.name,
         [
-          ...paragraphs(buildItemSummary(item, englishT)),
+          ...paragraphs(buildItemSummary(item, englishT, "en")),
           ...acquisitionBlocks(item.name, acquisition),
           { tag: "h2", text: "Specifications" },
           {

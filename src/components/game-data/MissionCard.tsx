@@ -25,6 +25,7 @@ import { MissionName } from "./MissionName"
 import { Tooltip } from "@mui/material"
 import { ShieldRounded, BuildRounded } from "@mui/icons-material"
 
+import { useFormatters } from "../../util/format"
 export interface MissionCardProps {
   mission: {
     mission_id: string
@@ -75,16 +76,17 @@ function abbrResource(name: string): string {
 
 export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick }) => {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const nav = useNavigate()
   const giver = mission.mission_giver_org || mission.faction
   const displayGiver = giver?.includes("~mission") ? "Various" : giver
   const missionIcon = getMissionIcon(mission.category) || getFactionIcon(mission.faction)
   const isFee = (mission.credit_reward_min ?? 0) < 0
   const reward = isFee
-    ? t("missionsUi.fee", { amount: formatCredits(Math.abs(mission.credit_reward_min!)) })
+    ? t("missionsUi.fee", { amount: formatCredits(Math.abs(mission.credit_reward_min!), fmt.locale) })
     : mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
-      ? formatCredits(mission.credit_reward_min)
-      : `${formatCredits(mission.credit_reward_min)} – ${formatCredits(mission.credit_reward_max)}`
+      ? formatCredits(mission.credit_reward_min, fmt.locale)
+      : `${formatCredits(mission.credit_reward_min, fmt.locale)} – ${formatCredits(mission.credit_reward_max, fmt.locale)}`
 
   return (
     <Card sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column" }} data-testid="mission-card" data-id={mission.mission_id}>
@@ -148,7 +150,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, href, onClick
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="caption" color="text.secondary">{t("missionsUi.baseXp")}</Typography>
             <Typography variant="caption" color={mission.reputation_reward ? "text.primary" : "text.secondary"}>
-              {mission.reputation_reward ? `${mission.reputation_reward.toLocaleString()}` : "—"}
+              {mission.reputation_reward ? `${fmt.number(mission.reputation_reward)}` : "—"}
             </Typography>
           </Box>
         </Box>

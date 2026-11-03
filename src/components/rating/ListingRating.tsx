@@ -25,7 +25,6 @@ import { StaticRatingStars } from "./StaticRatingStars"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
-import { toSupportedLocale } from "../../util/locales"
 import {
   prioritizeBadges,
   calculateBadgesFromRating,
@@ -62,6 +61,7 @@ import {
   type ShopMetricsForBadges,
 } from "../../util/badges"
 
+import { useFormatters } from "../../util/format"
 /**
  * Minimal shop rating data that can be passed to rating components
  * in place of user/contractor ratings. Allows V2 callers to gradually
@@ -273,7 +273,8 @@ export function SellerRatingCount(props: {
   shopRating?: ShopRatingProps
   display_limit?: number // Default: unlimited for profiles
 }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { user, contractor, shopRating, display_limit } = props
   const rating = useMemo(
@@ -311,7 +312,7 @@ export function SellerRatingCount(props: {
 
   return (
     <>
-      ({displayCount.toLocaleString(toSupportedLocale(i18n.language))}){" "}
+      ({fmt.number(displayCount)}){" "}
       <BadgeDisplay badges={badges} />
     </>
   )
@@ -323,7 +324,7 @@ export function MarketRatingCount(props: {
   iconSize?: string | number
 }) {
   const { rating, badges = [], iconSize } = props
-  const { i18n } = useTranslation()
+  const fmt = useFormatters()
 
   return (
     <Box
@@ -333,7 +334,7 @@ export function MarketRatingCount(props: {
       sx={{ lineHeight: 1, margin: 0, padding: 0 }}
     >
       <Box component="span" sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
-        ({rating.rating_count.toLocaleString(toSupportedLocale(i18n.language))})
+        ({fmt.number(rating.rating_count)})
       </Box>
       {badges.length > 0 && (
         <BadgeDisplay badges={badges} iconSize={iconSize} />

@@ -23,6 +23,7 @@ import {
   getCurrentPushSubscription,
 } from "../../../util/push-subscription"
 
+import { useFormatters } from "../../../util/format"
 interface PushNotificationSubscriptionProps {
   onSubscribe: () => Promise<void>
   isSubscribing: boolean
@@ -39,6 +40,7 @@ export function PushNotificationSubscription({
   requiresPWAInstall,
 }: PushNotificationSubscriptionProps) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data: subscriptions, isLoading: subscriptionsLoading } =
     useGetPushSubscriptionsQuery()
   const [unsubscribePush] = useUnsubscribePushMutation()
@@ -186,9 +188,7 @@ export function PushNotificationSubscription({
                     t("settings.pushNotifications.unknownDevice")
                   }
                   secondary={t("settings.pushNotifications.subscribedOn", {
-                    date: new Date(
-                      subscription.created_at,
-                    ).toLocaleDateString(),
+                    date: fmt.date(subscription.created_at),
                   })}
                 />
                 <ListItemSecondaryAction>

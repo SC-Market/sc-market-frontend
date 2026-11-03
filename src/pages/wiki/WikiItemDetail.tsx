@@ -52,12 +52,14 @@ import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { WatchPriceButton } from "../../features/price-alerts/components/WatchPriceButton"
 
+import { useFormatters } from "../../util/format"
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
 const TAB_DISASSEMBLY = 2
 
 export function WikiItemDetail() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -113,7 +115,7 @@ export function WikiItemDetail() {
   // Built from the resolved item, not the raw path param: this page is reachable
   // by full UUID or short slug, and the sitemap only lists the slug form.
   const canonicalPath = WIKI_PATHS.item(item.id, item.name)
-  const answerSummary = buildItemSummary(item, t)
+  const answerSummary = buildItemSummary(item, t, fmt.locale)
 
   return (
     <StandardPageLayout

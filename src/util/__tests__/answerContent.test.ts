@@ -137,10 +137,10 @@ describe("buildItemSummary", () => {
       type: "Weapon",
       market_stats: { listing_count: 0, total_quantity: 0 },
     } as unknown as WikiItemDetail
-    expect(buildItemSummary(item, t)).toBe("Arclight is an item in Star Citizen. Type: Weapon.")
+    expect(buildItemSummary(item, t, "en")).toBe("Arclight is an item in Star Citizen. Type: Weapon.")
 
     item.market_stats = { listing_count: 4, min_price: 1000, max_price: 2500, total_quantity: 9 }
-    expect(buildItemSummary(item, t)).toContain(
+    expect(buildItemSummary(item, t, "en")).toContain(
       "Players sell it on SC Market for 1,000 aUEC to 2,500 aUEC (active listings: 4).",
     )
   })

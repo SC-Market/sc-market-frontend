@@ -23,6 +23,8 @@ import { breadcrumbJsonLd, PageHead, socialMeta } from "./pageHead"
 import { gameDataDateModified, missionGiver, missionSummaryLine, missionTitle, readableMissionText } from "./missionText"
 import { itemSeoDescription, itemSeoTitle } from "./itemAcquisition"
 
+// English, like the rest of the head text.
+import { formatNumber } from "../util/format/format"
 /** "gold_ore" → "Gold Ore": mining pages' name before/without displayName. */
 export function friendlyMiningName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
@@ -94,7 +96,7 @@ export function buildResourceHead(
 ): PageHead {
   const resource = data.resource
   const title = `${resource.resource_name} — Star Citizen Resource | SC Market`
-  const description = `${resource.resource_name} — ${resource.resource_category} resource. Base value: ${resource.base_value ? resource.base_value.toLocaleString() + " aUEC" : "N/A"}. Quality tiers and market availability.`.slice(0, 160)
+  const description = `${resource.resource_name} — ${resource.resource_category} resource. Base value: ${resource.base_value ? formatNumber(resource.base_value, "en") + " aUEC" : "N/A"}. Quality tiers and market availability.`.slice(0, 160)
   // /resources/:id and /wiki/commodities/:id render the same entity, so this
   // page deliberately points its canonical at the wiki route.
   const canonical = `${origin}${WIKI_PATHS.commodity(resource.resource_id, resource.resource_name)}`

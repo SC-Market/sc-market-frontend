@@ -19,6 +19,7 @@ import { formatCraftingTime } from "../constants/crafting"
 import { formatPercent, readableMissionText, usableGiver } from "./missionText"
 import type { AnswerTranslate } from "../util/answerContent"
 
+import { formatInteger, formatNumber } from "../util/format/format"
 /** Which subsections have anything to show (empty ones are hidden). */
 export interface AcquisitionSections {
   buy: boolean
@@ -44,9 +45,9 @@ export function hasAcquisitionInfo(doc: ItemAcquisitionDocument): boolean {
   return Object.values(acquisitionSections(doc)).some(Boolean)
 }
 
-/** "450,000" (aUEC amounts and counts; `locale` is the page language). */
-export function formatAmount(value: number, locale = "en-US"): string {
-  return Math.round(value).toLocaleString(locale)
+/** "450,000" (aUEC amounts and counts; `locale` is the page language, "en" for the bridge). */
+export function formatAmount(value: number, locale: string): string {
+  return formatInteger(value, locale)
 }
 
 /** The mission's page (missions are linked by code everywhere else). */
@@ -132,11 +133,11 @@ export function blueprintFacts(bp: ItemAcquisitionBlueprint, t: AnswerTranslate)
 }
 
 /** "0.08 SCU" or "×2", plus the slot and minimum quality. */
-export function ingredientAmount(ing: ItemAcquisitionIngredient, t: AnswerTranslate, locale = "en-US"): string {
+export function ingredientAmount(ing: ItemAcquisitionIngredient, t: AnswerTranslate, locale: string): string {
   const amount =
     typeof ing.quantity_scu === "number"
-      ? `${ing.quantity_scu.toLocaleString(locale, { maximumFractionDigits: 3 })} SCU`
-      : `×${ing.quantity.toLocaleString(locale, { maximumFractionDigits: 3 })}`
+      ? `${formatNumber(ing.quantity_scu, locale, { maximumFractionDigits: 3 })} SCU`
+      : `×${formatNumber(ing.quantity, locale, { maximumFractionDigits: 3 })}`
   return [
     amount,
     ing.slot_display_name || null,
@@ -170,8 +171,9 @@ export function resourceMethods(doc: ItemAcquisitionDocument, t: AnswerTranslate
   ].filter((v): v is string => !!v)
 }
 
+// English sentences (the answer text below), so English digits.
 function plural(n: number, one: string, many: string): string {
-  return `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`
+  return `${formatNumber(n, "en")} ${n === 1 ? one : many}`
 }
 
 /** The page <title> (English, like every head): the "how to get" query. */
@@ -194,7 +196,7 @@ export function itemSeoDescription(
     if (l.count > 0) {
       ways.push(
         `buy it from ${plural(l.seller_count, "player seller", "player sellers")}` +
-          (typeof l.lowest_ask === "number" ? ` from ${formatAmount(l.lowest_ask)} aUEC` : ""),
+          (typeof l.lowest_ask === "number" ? ` from ${formatAmount(l.lowest_ask, "en")} aUEC` : ""),
       )
     }
     if (doc.missions.total > 0) ways.push(`earn it from ${plural(doc.missions.total, "mission", "missions")}`)

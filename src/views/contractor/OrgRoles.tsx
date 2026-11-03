@@ -54,6 +54,7 @@ import {
 } from "../../features/contractor/domain/rolePermissions"
 import { HelpTip } from "../../features/help/components/HelpTip"
 
+import { useFormatters } from "../../util/format"
 function RolePermissionCheck(props: {
   permission_name: RolePermission
   role: ContractorRole
@@ -274,6 +275,7 @@ function RoleRow(props: {
 }): ReactElement {
   const { row, index, onClick, isItemSelected, labelId } = props
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const [open, setOpen] = useState(false)
 
   const [currentOrg] = useCurrentOrg()
@@ -309,7 +311,7 @@ function RoleRow(props: {
         <BorderlessCell align={"left"}>{row.name}</BorderlessCell>
 
         <BorderlessCell align={"right"}>
-          {row.position.toLocaleString(undefined)}
+          {fmt.number(row.position)}
         </BorderlessCell>
 
         <BorderlessCell

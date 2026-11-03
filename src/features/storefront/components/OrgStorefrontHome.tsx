@@ -25,11 +25,11 @@ import { useGetContractorReviewsQuery } from "../../contractor/api/contractorApi
 import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
 import { LISTING_CARD_HEIGHT } from "../../market/v2/marketSearchLayout"
 import { MARKET_PATHS, ORDER_PATHS, ORG_PATHS, SHOP_PATHS } from "../../../routes/paths"
-import { formatPrice } from "../../../util/formatPrice"
 import { useCustomDomain } from "../../../hooks/contractor/CustomDomain"
 import { orgFeaturedListingsArgs, ratingLabel, sinceYear } from "../domain"
 import { EnquireBrandedStorefront } from "./EnquireBrandedStorefront"
 
+import { useFormatters } from "../../../util/format"
 function SectionTitle(props: { children: React.ReactNode; action?: React.ReactNode }) {
   return (
     <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }} spacing={1}>
@@ -118,6 +118,7 @@ function FeaturedListings(props: { spectrumId: string }) {
 
 function Services(props: { storefront: OrgStorefront }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { services } = props.storefront
   if (services.length === 0) return null
   return (
@@ -140,7 +141,7 @@ function Services(props: { storefront: OrgStorefront }) {
                 </Typography>
               </Stack>
               <Typography variant="body2" color="text.primary" sx={{ mt: 0.5 }}>
-                {service.cost > 0 ? formatPrice(service.cost) : t("storefront.serviceQuote", "Price on request")}
+                {service.cost > 0 ? fmt.price(service.cost) : t("storefront.serviceQuote", "Price on request")}
                 {service.kind ? ` · ${service.kind}` : ""}
               </Typography>
             </Paper>

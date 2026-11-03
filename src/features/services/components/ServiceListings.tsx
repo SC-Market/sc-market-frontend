@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { toSupportedLocale } from "../../../util/locales"
 import { Divider, Grid } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { HapticTablePagination } from "../../../components/haptic"
@@ -29,6 +28,7 @@ import { isAwaitingData } from "../../../util/queryLoading"
 import { usePageReady } from "../../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 
+import { useFormatters } from "../../../util/format"
 export function ServiceListings(props: { user?: string; contractor?: string }) {
   const [page, setPage] = useState(0)
   const [perPage, setPerPage] = useState(SERVICE_LISTINGS_PAGE_SIZE)
@@ -37,7 +37,8 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   const theme = useTheme<ExtendedTheme>()
 
   const ref = useRef<HTMLDivElement>(null)
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const { customOrg } = useCustomDomain()
 
   const queryParams: ServicesQueryParams = useMemo(() => {
@@ -197,8 +198,8 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
           labelDisplayedRows={({ from, to, count }) => (
             <>
               {t("displayed_rows", {
-                from: from.toLocaleString(toSupportedLocale(i18n.language)),
-                to: to.toLocaleString(toSupportedLocale(i18n.language)),
+                from: fmt.number(from),
+                to: fmt.number(to),
                 count: count,
               })}
             </>

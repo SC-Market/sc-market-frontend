@@ -13,6 +13,7 @@ import { format } from "../../util/time"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
+import { useFormatters } from "../../util/format"
 function AvailabilityItem(props: {
   day: number
   slot: number
@@ -81,7 +82,8 @@ export function AvailabilitySelector(props: {
   onSave: (selections: boolean[]) => void
   initialSelections?: boolean[]
 }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const { onSave, initialSelections } = props
 
   const [clicked, setClicked] = useState(false)
@@ -104,19 +106,15 @@ export function AvailabilitySelector(props: {
     )
   }, [initialSelections])
 
-  // Days of the week always with current locality
+  // Sunday first, in the page's language. A fixed UTC week, so the names
+  // don't depend on the clock or the time zone (server and browser agree).
   const daysOfWeek = useMemo(
     () =>
-      [...Array(7).keys()].map((i) => {
-        const date = new Date()
-        const startOfWeek = new Date(
-          date.setDate(date.getDate() - date.getDay()),
-        )
-        const dayDate = new Date(startOfWeek)
-        dayDate.setDate(startOfWeek.getDate() + i)
-        return dayDate.toLocaleDateString(i18n.language, { weekday: "short" })
-      }),
-    [i18n.language],
+      [...Array(7).keys()].map((i) =>
+        // 2024-01-07 is a Sunday
+        fmt.date(Date.UTC(2024, 0, 7 + i), { weekday: "short", timeZone: "UTC" }),
+      ),
+    [fmt],
   )
 
   const setClickCallback = useCallback(
@@ -253,24 +251,21 @@ export function AvailabilityDisplay(
   props: { value: boolean[]; name: string } & GridProps,
 ) {
   const theme = useTheme<ExtendedTheme>()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const { value, name, ...gridprops } = props
   const availability = useMemo(() => arrayRotate(value, tzOffset), [value])
   const { data: profile } = useGetUserProfileQuery()
 
-  // Days of the week always with current locality
+  // Sunday first, in the page's language. A fixed UTC week, so the names
+  // don't depend on the clock or the time zone (server and browser agree).
   const daysOfWeek = useMemo(
     () =>
-      [...Array(7).keys()].map((i) => {
-        const date = new Date()
-        const startOfWeek = new Date(
-          date.setDate(date.getDate() - date.getDay()),
-        )
-        const dayDate = new Date(startOfWeek)
-        dayDate.setDate(startOfWeek.getDate() + i)
-        return dayDate.toLocaleDateString(i18n.language, { weekday: "short" })
-      }),
-    [i18n.language],
+      [...Array(7).keys()].map((i) =>
+        // 2024-01-07 is a Sunday
+        fmt.date(Date.UTC(2024, 0, 7 + i), { weekday: "short", timeZone: "UTC" }),
+      ),
+    [fmt],
   )
 
   return (

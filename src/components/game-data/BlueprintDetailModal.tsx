@@ -43,6 +43,7 @@ import { isModifierPositive, interpolateModifier, formatModifierValue, buildProp
 import { DetailPageSkeleton } from "./GameDataSkeletons"
 import { GAME_DATA_PATHS, USER_PATHS } from "../../routes/paths"
 
+import { useFormatters } from "../../util/format"
 interface Props {
   blueprintId: string | null
   open: boolean
@@ -51,6 +52,7 @@ interface Props {
 
 export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const navigate = useNavigate()
   const { data, isLoading, error } = useGetBlueprintDetailQuery(
     { blueprintId: blueprintId! },
@@ -391,7 +393,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                     <Avatar src={m.avatar} sx={{ width: 32, height: 32, fontSize: "0.65rem" }}>{m.display_name.slice(0, 2).toUpperCase()}</Avatar>
                     <Box>
                       <Typography variant="body2" fontWeight={600} color="primary">{m.display_name}</Typography>
-                      <Typography variant="caption" color="text.secondary">@{m.username}{m.acquisition_date && ` · ${new Date(m.acquisition_date).toLocaleDateString()}`}</Typography>
+                      <Typography variant="caption" color="text.secondary">@{m.username}{m.acquisition_date && ` · ${fmt.date(m.acquisition_date)}`}</Typography>
                     </Box>
                   </Stack>
                 ))}

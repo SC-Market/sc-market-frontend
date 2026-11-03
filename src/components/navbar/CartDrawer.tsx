@@ -26,10 +26,10 @@ import {
   type GetCartResponse,
   type CartItemDetail,
 } from "../../store/api/v2/market"
-import { formatQuantity } from "../../util/formatQuantity"
 import { EmptyCart } from "../empty-states"
 import { MARKET_PATHS } from "../../routes/paths"
 
+import { useFormatters } from "../../util/format"
 interface CartDrawerProps {
   open: boolean
   onClose: () => void
@@ -37,6 +37,7 @@ interface CartDrawerProps {
 
 export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const navigate = useNavigate()
   const isMobile = useIsMobile()
 
@@ -109,7 +110,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                     </Typography>
                     <Box display="flex" gap={1} alignItems="center" mt={0.5}>
                       <Typography variant="body2">
-                        {item.quantity} × {Number(item.price_per_unit || 0).toLocaleString()} aUEC
+                        {item.quantity} × {fmt.number(item.price_per_unit || 0)} aUEC
                       </Typography>
                     </Box>
                     {item.price_changed && (
@@ -125,7 +126,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                   </Box>
                   <Box display="flex" flexDirection="column" alignItems="flex-end">
                     <Typography variant="body2" fontWeight="bold" color="primary">
-                      {Number(item.subtotal || 0).toLocaleString()} aUEC
+                      {fmt.number(item.subtotal || 0)} aUEC
                     </Typography>
                     <IconButton
                       size="small"
@@ -149,7 +150,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
               {t("cart.total", "Total")}
             </Typography>
             <Typography variant="h6" fontWeight="bold" color="primary">
-              {Number(totalPrice).toLocaleString()} aUEC
+              {fmt.number(totalPrice)} aUEC
             </Typography>
           </Box>
 

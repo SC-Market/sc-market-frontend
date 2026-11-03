@@ -46,6 +46,7 @@ import { useGetMyShopsQuery } from "../../store/api/v2/market"
 import { useIsAuthenticated } from "../../hooks/login/useSession"
 import { useStartupGateOpen } from "../../util/startupDeferral"
 
+import { useFormatters } from "../../util/format"
 interface CommandItem {
   id: string
   label: string
@@ -63,6 +64,7 @@ export function CommandPalette() {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data: profile } = useGetUserProfileQuery()
   const isAuthenticated = useIsAuthenticated()
   // Only needed once the palette opens: waits for the startup gate
@@ -192,7 +194,7 @@ export function CommandPalette() {
     return searchResults.listings.slice(0, 5).map((listing) => ({
       id: `listing-${listing.listing_id}`,
       label: listing.title,
-      description: `${listing.shop_name} · ${listing.price_min?.toLocaleString()} aUEC`,
+      description: `${listing.shop_name} · ${fmt.number(listing.price_min)} aUEC`,
       icon: <StorefrontRounded />,
       action: () => go(`/market/${listing.listing_id}`),
       category: "content" as const,

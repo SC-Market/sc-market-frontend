@@ -31,6 +31,7 @@ import { MINING_ORE_PAGE_SIZE } from "./constants"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
+import { useFormatters } from "../../util/format"
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e",
   uncommon: "#4caf50",
@@ -159,6 +160,7 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
   const rarityColor = RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
   const displayName = ore.displayName || friendlyName(ore.name)
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/ores/:name", GAME_DATA_PATHS.miningOre(ore.name))
 
   return (
@@ -233,7 +235,7 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="caption" color="text.secondary">{t("miningUi.oreBrowser.marketPrice")}</Typography>
               <Typography variant="caption" color="success.main" fontWeight={600}>
-                {ore.marketPrice.toLocaleString()} aUEC
+                {fmt.number(ore.marketPrice)} aUEC
               </Typography>
             </Box>
           )}

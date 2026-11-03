@@ -18,13 +18,11 @@ import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatMarketUrl } from "../../domain/urls"
 import { SHOP_PATHS } from "../../../../routes/paths"
 
-function formatPrice(min: number, max: number) {
-  if (min === max) return `${min.toLocaleString()} aUEC`
-  return `${min.toLocaleString()} – ${max.toLocaleString()} aUEC`
-}
 
+import { useFormatters } from "../../../../util/format"
 export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   return (
     <TableContainer>
       <Table size="small">
@@ -58,10 +56,10 @@ export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }
                 )}
               </TableCell>
               <TableCell sx={{ whiteSpace: "nowrap" }}>
-                <Typography variant="body2" color="primary" fontWeight="bold">{formatPrice(l.price_min, l.price_max)}</Typography>
+                <Typography variant="body2" color="primary" fontWeight="bold">{l.price_min === l.price_max ? `${fmt.number(l.price_min)} aUEC` : `${fmt.number(l.price_min)} – ${fmt.number(l.price_max)} aUEC`}</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="body2">{l.quantity_available.toLocaleString()}</Typography>
+                <Typography variant="body2">{fmt.number(l.quantity_available)}</Typography>
               </TableCell>
               <TableCell>
                 <MuiLink component={RouterLink} to={SHOP_PATHS.profile(l.shop_slug)} underline="hover" color="text.secondary" variant="caption">

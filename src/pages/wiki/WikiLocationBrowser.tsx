@@ -27,6 +27,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { wikiLocationsSeoText } from "../../seo/hubHeads"
 
+import { useFormatters } from "../../util/format"
 const SYSTEM_COLORS: Record<string, string> = {
   Stanton: "#00bcd4",
   Pyro: "#ff9800",
@@ -109,6 +110,7 @@ function MiningLocationSummary({ locationCode }: { locationCode: string }) {
 
 function LocationDetail({ node }: { node: WikiLocationNode }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const isMineableType = ["planet", "moon"].includes(node.type?.toLowerCase() || "")
   const miningCode = node.id?.includes(".") ? node.id.split(".").pop() : null
   const systemColor = node.jurisdiction ? SYSTEM_COLORS[node.jurisdiction] : undefined
@@ -142,10 +144,10 @@ function LocationDetail({ node }: { node: WikiLocationNode }) {
       {(node.size != null || node.qtArrivalRadius != null || node.qtObstructionRadius != null) && (
         <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
           {node.size != null && (
-            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.size", "Size")}: {t("wikiUi.locationBrowser.kmValue", { value: node.size.toLocaleString() })}</Typography>
+            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.size", "Size")}: {t("wikiUi.locationBrowser.kmValue", { value: fmt.number(node.size) })}</Typography>
           )}
           {node.qtArrivalRadius != null && (
-            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.qtArrival", "QT Arrival")}: {t("wikiUi.locationBrowser.kmValue", { value: node.qtArrivalRadius.toLocaleString() })}</Typography>
+            <Typography variant="caption" color="text.secondary">{t("wiki.locationBrowser.qtArrival", "QT Arrival")}: {t("wikiUi.locationBrowser.kmValue", { value: fmt.number(node.qtArrivalRadius) })}</Typography>
           )}
         </Stack>
       )}

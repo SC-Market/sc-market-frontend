@@ -5,6 +5,7 @@ import { BarChart } from "@mui/x-charts/BarChart"
 import { marketV2Api } from "../../../../store/api/v2/market"
 import type { ExtendedTheme } from "../../../../hooks/styles/Theme"
 
+import { useFormatters } from "../../../../util/format"
 interface QualityDistributionChartProps {
   /** Game item UUID to fetch quality distribution for */
   gameItemId: string
@@ -48,6 +49,7 @@ export function QualityDistributionChart({
   onTierClick,
 }: QualityDistributionChartProps) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
 
   // Fetch quality distribution data from V2 API
@@ -127,12 +129,12 @@ export function QualityDistributionChart({
 
     return [
       `${tierName}`,
-      `Quantity: ${tierData.quantity.toLocaleString()}`,
+      `Quantity: ${fmt.number(tierData.quantity)}`,
       tierData.quantity > 0
-        ? `Price: ${tierData.minPrice.toLocaleString()} - ${tierData.maxPrice.toLocaleString()} aUEC`
+        ? `Price: ${fmt.number(tierData.minPrice)} - ${fmt.number(tierData.maxPrice)} aUEC`
         : "",
       tierData.quantity > 0
-        ? `Avg: ${Math.round(tierData.avgPrice).toLocaleString()} aUEC`
+        ? `Avg: ${fmt.integer(tierData.avgPrice)} aUEC`
         : "",
       tierData.quantity > 0
         ? `Sellers: ${tierData.sellerCount}`
@@ -195,7 +197,7 @@ export function QualityDistributionChart({
         yAxis={[
           {
             label: t("market.quantityAvailable", "Quantity Available"),
-            valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+            valueFormatter: (value: number) => fmt.integer(value),
           },
         ]}
         series={[
@@ -203,7 +205,7 @@ export function QualityDistributionChart({
             data: chartData.map((d) => d.quantity),
             label: t("market.quantity", "Quantity"),
             valueFormatter: (value: number | null) =>
-              value !== null ? value.toLocaleString() : "",
+              value !== null ? fmt.number(value) : "",
           },
         ]}
         height={height}

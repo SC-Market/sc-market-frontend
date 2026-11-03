@@ -14,12 +14,13 @@ import { Grid, Typography, Chip, Table, TableBody, TableCell, TableHead, TableRo
 import { Link } from "react-router-dom"
 import { useGetOrdersByListingQuery, type ListingOrderSummary, type ListingOfferSummary } from "../../../../store/api/v2/market"
 import { Section } from "../../../../components/paper/Section"
-import { formatPrice } from "../../../../util/formatPrice"
 import { ORDER_PATHS } from "../../../../routes/paths"
 import { useListingPermissions } from "../../hooks/useListingPermissions"
 
+import { useFormatters } from "../../../../util/format"
 export function ListingOrdersSection({ listingId, shopId }: { listingId: string; shopId: string }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { canManage } = useListingPermissions(shopId)
   const { data, error } = useGetOrdersByListingQuery({ listingId }, { skip: !listingId || !canManage })
 
@@ -47,7 +48,7 @@ export function ListingOrdersSection({ listingId, shopId }: { listingId: string;
                   <TableCell>{o.buyer_name}</TableCell>
                   <TableCell><Chip label={o.status} size="small" sx={{ height: 20, fontSize: "0.65rem" }} /></TableCell>
                   <TableCell align="right">{o.quantity}</TableCell>
-                  <TableCell align="right">{formatPrice(o.price_per_unit)}</TableCell>
+                  <TableCell align="right">{fmt.price(o.price_per_unit)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -74,7 +75,7 @@ export function ListingOrdersSection({ listingId, shopId }: { listingId: string;
                   <TableCell>{o.buyer_name}</TableCell>
                   <TableCell><Chip label={o.status} size="small" sx={{ height: 20, fontSize: "0.65rem" }} /></TableCell>
                   <TableCell align="right">{o.quantity}</TableCell>
-                  <TableCell align="right">{formatPrice(o.price_per_unit)}</TableCell>
+                  <TableCell align="right">{fmt.price(o.price_per_unit)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

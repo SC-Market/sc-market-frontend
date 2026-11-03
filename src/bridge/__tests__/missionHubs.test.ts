@@ -104,9 +104,9 @@ describe("mission hub text", () => {
     expect(missionHubIntro(HUB, englishT, "en")).toEqual(missionHubIntro(HUB, t, "en"))
     expect(missionHubText(HUB, englishT)).toEqual(missionHubText(HUB, t))
     expect(missionHubIndexText("givers", HUBS.givers, englishT, "en")).toEqual(missionHubIndexText("givers", HUBS.givers, t, "en"))
-    expect(missionCountText(1, englishT)).toBe("1 mission")
-    expect(missionCountText(1, t)).toBe("1 mission")
-    expect(missionCountText(2, englishT)).toBe("2 missions")
+    expect(missionCountText(1, englishT, "en")).toBe("1 mission")
+    expect(missionCountText(1, t, "en")).toBe("1 mission")
+    expect(missionCountText(2, englishT, "en")).toBe("2 missions")
   })
 
   it("intro: count, systems, reward range, legal mix, blueprints and top types", () => {

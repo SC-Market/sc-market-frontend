@@ -1,10 +1,6 @@
 /** Highest target price the backend stores (int4). */
 export const MAX_TARGET_PRICE = 2_147_483_647
 
-/** An exact aUEC amount, e.g. "25,000 aUEC" (target prices aren't abbreviated). */
-export function formatAuec(amount: number): string {
-  return `${amount.toLocaleString("en-US")} aUEC`
-}
 
 /**
  * A typed target price, or null when it isn't a whole number above 1 aUEC

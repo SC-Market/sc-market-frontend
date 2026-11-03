@@ -8,6 +8,7 @@ import { TablePagination, Pagination, Box } from "@mui/material"
 import { useIsMobile } from "../../../../hooks/layout/useBreakpoint"
 import { useTranslation } from "react-i18next"
 
+import { useFormatters } from "../../../../util/format"
 export interface ListingPaginationProps {
   count: number
   page: number
@@ -21,6 +22,7 @@ const ROWS_PER_PAGE_OPTIONS = [12, 24, 48, 96]
 export function ListingPagination(props: ListingPaginationProps) {
   const { count, page, rowsPerPage, onPageChange, onRowsPerPageChange } = props
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const isMobile = useIsMobile()
 
   const totalPages = Math.ceil(count / rowsPerPage)
@@ -45,8 +47,8 @@ export function ListingPagination(props: ListingPaginationProps) {
       labelRowsPerPage={t("rows_per_page")}
       labelDisplayedRows={({ from, to, count: c }) =>
         t("displayed_rows", {
-          from: from.toLocaleString(undefined),
-          to: to.toLocaleString(undefined),
+          from: fmt.number(from),
+          to: fmt.number(to),
           count: c,
         })
       }

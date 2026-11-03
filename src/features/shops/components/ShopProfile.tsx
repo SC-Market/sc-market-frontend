@@ -63,7 +63,7 @@ import { MarkdownRender } from "../../../components/markdown/Markdown"
 import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTable"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { amber } from "@mui/material/colors"
-import { useCallback, useMemo, useState, MouseEventHandler } from "react"
+import { useMemo, useState, MouseEventHandler } from "react"
 import { useDebounce } from "../../../hooks/useDebounce"
 import { FRONTEND_URL } from "../../../util/constants"
 import { EmptyReviews } from "../../../components/empty-states"
@@ -86,8 +86,8 @@ import { isPrimaryLoading } from "../../../components/metadata/pageReadyStore"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { isSiteAdmin } from "../../../util/siteRole"
 import { Trans, useTranslation } from "react-i18next"
-import { toSupportedLocale } from "../../../util/locales"
 
+import { useFormatters } from "../../../util/format"
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
   const theme = useTheme<ExtendedTheme>()
@@ -165,7 +165,8 @@ export function ShopProfile() {
 function ShopHeader(props: { shop: ShopPublicResponse }) {
   const { shop } = props
   const theme = useTheme<ExtendedTheme>()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
 
   const ownerLink = shop.owner
     ? shop.owner.type === "contractor"
@@ -173,12 +174,7 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
       : USER_PATHS.profile(shop.owner.slug)
     : null
 
-  // In the page's language, not the browser's: a server render formats it
-  // the same way (the runtime's default locale differs).
-  const memberSince = new Date(shop.created_at).toLocaleDateString(
-    toSupportedLocale(i18n.language),
-    { year: "numeric", month: "short" },
-  )
+  const memberSince = fmt.date(shop.created_at, { year: "numeric", month: "short" })
 
   return (
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
@@ -678,18 +674,8 @@ function ShopReviewRow(props: {
 }) {
   const { row, onClick, isItemSelected, labelId } = props
   const theme = useTheme<ExtendedTheme>()
-  const { t, i18n } = useTranslation()
-  // The page's language (as rendered on the server), not the browser's.
-  const locale = toSupportedLocale(i18n.language)
-  const formatDate = useCallback(
-    (date: number) =>
-      Intl.DateTimeFormat(locale, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }).format(new Date(date)),
-    [locale],
-  )
+  const { t } = useTranslation()
+  const fmt = useFormatters()
 
   return (
     <TableRow
@@ -756,7 +742,7 @@ function ShopReviewRow(props: {
           }}
         >
           <Typography variant="subtitle2" color="text.secondary">
-            {formatDate(row.timestamp)}
+            {fmt.date(row.timestamp, { year: "numeric", month: "long", day: "numeric" })}
           </Typography>
           <Typography variant="subtitle1">{row.comment}</Typography>
         </Box>

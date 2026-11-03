@@ -39,9 +39,8 @@ import { useListingPermissions } from "../hooks/useListingPermissions"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS, WIKI_PATHS, SHOP_PATHS } from "../../../routes/paths"
 import { getLanguageName } from "../../../constants/languages"
-import { getRelativeTime } from "../../../util/time"
+import { useFormatters, useNow } from "../../../util/format"
 import { isListingNew } from "../domain/listingBadges"
-import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
@@ -74,6 +73,8 @@ export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
+  const fmt = useFormatters()
+  const now = useNow()
   const isMobile = useBreakpointDown("sm")
 
   const {
@@ -136,7 +137,7 @@ export function ListingDetailV2() {
     return [...locs]
   }, [items])
 
-  const isNew = listing ? isListingNew(listing.created_at, new Date()) : false
+  const isNew = listing ? isListingNew(listing.created_at, new Date(now)) : false
 
   // Breadcrumbs
   const breadcrumbs = useMemo(() => {
@@ -289,13 +290,13 @@ export function ListingDetailV2() {
 
                           {/* Listed date */}
                           <ListingDetailItem icon={<CreateRounded fontSize="small" />}>
-                            {t("MarketListingView.listed", "Listed")} {getRelativeTime(new Date(listing.created_at))}
+                            {t("MarketListingView.listed", "Listed")} {fmt.relative(listing.created_at, now)}
                           </ListingDetailItem>
 
                           {/* Updated date */}
                           {listing.updated_at !== listing.created_at && (
                             <ListingDetailItem icon={<RefreshRounded fontSize="small" />}>
-                              {t("MarketListingView.updated", "Updated")} {getRelativeTime(new Date(listing.updated_at))}
+                              {t("MarketListingView.updated", "Updated")} {fmt.relative(listing.updated_at, now)}
                             </ListingDetailItem>
                           )}
                           </Stack>
@@ -304,7 +305,7 @@ export function ListingDetailV2() {
                           {/* Expires */}
                           {listing.expires_at && (
                             <ListingDetailItem icon={<ClockAlert style={{ fontSize: "1.25rem" }} />}>
-                              {t("MarketListingView.expires", "Expires")} {getRelativeTime(new Date(listing.expires_at))}
+                              {t("MarketListingView.expires", "Expires")} {fmt.relative(listing.expires_at, now)}
                             </ListingDetailItem>
                           )}
 

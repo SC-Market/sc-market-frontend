@@ -11,7 +11,7 @@ import type {
   WikiItemDetail,
   WikiShipDetail,
 } from "../store/api/v2/market"
-import { formatPrice } from "./formatPrice"
+import { formatPrice } from "./format/format"
 
 /**
  * The subset of i18next's `t()` these builders call: a key plus either a
@@ -91,7 +91,7 @@ export function buildCommodityAnswers(
         defaultValue:
           "The cheapest known place to buy it is {{location}}, at about {{price}}.",
         location: cheapest.station || cheapest.planet_moon,
-        price: formatPrice(cheapest.average_price),
+        price: formatPrice(cheapest.average_price, lang),
       }),
     )
     faqs.push({
@@ -107,7 +107,7 @@ export function buildCommodityAnswers(
             .slice(0, MAX_LISTED)
             .map(
               (l) =>
-                `${l.station || l.planet_moon} (${formatPrice(l.average_price)})`,
+                `${l.station || l.planet_moon} (${formatPrice(l.average_price, lang)})`,
             ),
           lang,
         ),
@@ -144,8 +144,8 @@ export function buildCommodityAnswers(
     sentences.push(
       t("seoAnswers.commodity.price", {
         defaultValue: "Market prices currently range from {{min}} to {{max}}.",
-        min: formatPrice(price.min_price),
-        max: formatPrice(price.max_price),
+        min: formatPrice(price.min_price, lang),
+        max: formatPrice(price.max_price, lang),
       }),
     )
   }
@@ -245,7 +245,7 @@ export function buildShipSummary(ship: WikiShipDetail, t: AnswerTranslate): stri
   return sentences.join(" ")
 }
 
-export function buildItemSummary(item: WikiItemDetail, t: AnswerTranslate): string {
+export function buildItemSummary(item: WikiItemDetail, t: AnswerTranslate, lang: string): string {
   const sentences: string[] = [
     t("seoAnswers.item.intro", {
       defaultValue: "{{name}} is an item in Star Citizen.",
@@ -264,8 +264,8 @@ export function buildItemSummary(item: WikiItemDetail, t: AnswerTranslate): stri
       t("seoAnswers.item.listings", {
         defaultValue:
           "Players sell it on SC Market for {{min}} to {{max}} (active listings: {{total}}).",
-        min: formatPrice(stats.min_price),
-        max: formatPrice(stats.max_price),
+        min: formatPrice(stats.min_price, lang),
+        max: formatPrice(stats.max_price, lang),
         total: stats.listing_count,
       }),
     )

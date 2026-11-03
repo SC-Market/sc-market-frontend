@@ -65,12 +65,14 @@ import { missionsSeoText } from "../../seo/hubHeads"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 
+import { useFormatters } from "../../util/format"
 const VIEW_MODES = ["list", "grid"] as const
 
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 
 export function MissionSearch() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const navigate = useNavigate()
   
   // Search and filter state — synced with URL search params
@@ -397,16 +399,16 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell align="right">
                             <Typography variant="caption" color={m.reputation_reward ? "text.primary" : "text.secondary"}>
-                              {m.reputation_reward ? `${m.reputation_reward.toLocaleString()} XP` : "—"}
+                              {m.reputation_reward ? `${fmt.number(m.reputation_reward)} XP` : "—"}
                             </Typography>
                           </TableCell>
                           <TableCell align="right">
                             <Typography variant="body2" color={(m.credit_reward_min ?? 0) < 0 ? "error.main" : "success.main"} fontWeight={600} noWrap>
                               {(m.credit_reward_min ?? 0) < 0
-                                ? t("missionsUi.fee", { amount: formatCredits(Math.abs(m.credit_reward_min!)) })
+                                ? t("missionsUi.fee", { amount: formatCredits(Math.abs(m.credit_reward_min!), fmt.locale) })
                                 : m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
-                                  ? formatCredits(m.credit_reward_min)
-                                  : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
+                                  ? formatCredits(m.credit_reward_min, fmt.locale)
+                                  : `${formatCredits(m.credit_reward_min, fmt.locale)} – ${formatCredits(m.credit_reward_max, fmt.locale)}`}
                             </Typography>
                           </TableCell>
                         </TableRow>

@@ -47,6 +47,7 @@ import type {
   EntitySpawn,
 } from "../../store/api/v2/market"
 
+import { useFormatters } from "../../util/format"
 // ============================================================================
 // Dispatcher
 // ============================================================================
@@ -294,13 +295,14 @@ function BountyHunterDetails({ data }: { data: MissionDetailResponse }) {
 /** Salvage — entity spawns (wrecks), ship encounters, hauling orders */
 function SalvageDetails({ data }: { data: MissionDetailResponse }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const m = data.mission
   const isFee = (m.credit_reward_min ?? 0) < 0
   const hauling = data.hauling_orders || []
   const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
   const entityCount = (data.entity_spawns || []).reduce((s, e) => s + e.count, 0)
   const chips = [
-    ...(isFee ? [{ label: t("missionsUi.fee", { amount: `${Math.abs(m.credit_reward_min!).toLocaleString()} aUEC` }), color: "warning" as const }] : []),
+    ...(isFee ? [{ label: t("missionsUi.fee", { amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC` }), color: "warning" as const }] : []),
     ...(totalScu > 0 ? [{ label: `${totalScu} SCU`, color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
     ...(entityCount > 0 ? [{ label: t("missionToolsUi.wreckCount", { count: entityCount }), color: "secondary" as const, icon: <RecyclingRounded sx={{ fontSize: 14 }} /> }] : []),
     ...shipChips(data, t),
@@ -311,7 +313,7 @@ function SalvageDetails({ data }: { data: MissionDetailResponse }) {
       {isFee && (
         <Paper variant="outlined" sx={{ p: 1.5, borderColor: "warning.main" }}>
           <Typography variant="subtitle2" color="warning.main">{t("missionToolsUi.buyInRequired")}</Typography>
-          <Typography variant="body2">{t("missionsUi.fee", { amount: `${Math.abs(m.credit_reward_min!).toLocaleString()} aUEC` })}</Typography>
+          <Typography variant="body2">{t("missionsUi.fee", { amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC` })}</Typography>
         </Paper>
       )}
       <HaulingOrdersSection orders={data.hauling_orders || []} />
@@ -434,10 +436,11 @@ function InvestigationDetails({ data }: { data: MissionDetailResponse }) {
 /** Race — buy-in fee, route info */
 function RaceDetails({ data }: { data: MissionDetailResponse }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const m = data.mission
   const isFee = (m.credit_reward_min ?? 0) < 0
   const chips = [
-    ...(isFee ? [{ label: t("missionToolsUi.entryAmount", { amount: `${Math.abs(m.credit_reward_min!).toLocaleString()} aUEC` }), color: "warning" as const, icon: <SportsScoreRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(isFee ? [{ label: t("missionToolsUi.entryAmount", { amount: `${fmt.number(Math.abs(m.credit_reward_min!))} aUEC` }), color: "warning" as const, icon: <SportsScoreRounded sx={{ fontSize: 14 }} /> }] : []),
   ]
   return (
     <Stack spacing={1.5}>
@@ -448,7 +451,7 @@ function RaceDetails({ data }: { data: MissionDetailResponse }) {
             <SportsScoreRounded sx={{ fontSize: 20, color: "warning.main" }} />
             <Box>
               <Typography variant="subtitle2" color="warning.main">{t("missionToolsUi.entryFee")}</Typography>
-              <Typography variant="body2">{Math.abs(m.credit_reward_min!).toLocaleString()} aUEC</Typography>
+              <Typography variant="body2">{fmt.number(Math.abs(m.credit_reward_min!))} aUEC</Typography>
             </Box>
           </Stack>
         </Paper>

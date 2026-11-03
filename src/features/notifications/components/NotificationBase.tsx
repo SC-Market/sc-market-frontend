@@ -18,7 +18,6 @@ import {
 } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { Notification } from "../../../hooks/login/UserProfile"
-import { getRelativeTime } from "../../../util/time"
 import {
   useNotificationDeleteMutation,
   useNotificationUpdateMutation,
@@ -27,6 +26,7 @@ import { useTranslation } from "react-i18next"
 import { useCallback, useMemo } from "react"
 import { LongPressMenu } from "../../../components/gestures"
 
+import { useFormatters, useNow } from "../../../util/format"
 export function NotificationBase(props: {
   icon: React.ReactNode
   to?: string
@@ -38,6 +38,8 @@ export function NotificationBase(props: {
   const { icon, to, notif, onClick } = props
   const isMobile = useIsMobile()
   const { t } = useTranslation()
+  const fmt = useFormatters()
+  const now = useNow()
 
   const [updateNotification] = useNotificationUpdateMutation()
   const [deleteNotification] = useNotificationDeleteMutation()
@@ -145,7 +147,7 @@ export function NotificationBase(props: {
           {props.children}
         </Typography>
         <Typography variant={"subtitle2"} color={"text.primary"}>
-          {getRelativeTime(new Date(notif.timestamp))}
+          {fmt.relative(notif.timestamp, now)}
         </Typography>
       </ListItemText>
       <NotificationDeleteButton notif={notif} />

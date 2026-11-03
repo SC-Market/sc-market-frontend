@@ -21,8 +21,8 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { LocationOnRounded } from "@mui/icons-material";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { QualityBadge } from "./QualityBadge";
-import { formatExactPrice, formatPrice } from "../../../util/formatPrice";
 
+import { useFormatters } from "../../../util/format";
 interface Variant {
   variant_id: string;
   display_name: string;
@@ -60,6 +60,7 @@ function hasDisplayableAttributes(variant: Variant): boolean {
 
 function VariantInfo({ variant }: { variant: Variant }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   if (!hasDisplayableAttributes(variant)) return null;
   const { quality_tier, quality_value, crafted_source } = variant.attributes;
   return (
@@ -89,6 +90,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
   showActions = true,
 }) => {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>();
   const isMobile = useBreakpointDown("sm");
 
@@ -124,10 +126,10 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
 
               <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Typography variant="body2" color="text.secondary">
-                  {t("marketV2.qtyColon", { quantity: variant.quantity.toLocaleString() })}
+                  {t("marketV2.qtyColon", { quantity: fmt.number(variant.quantity) })}
                 </Typography>
-                <Typography variant="h6" color="primary" fontWeight="bold" title={formatExactPrice(variant.price)}>
-                  {formatPrice(variant.price)}
+                <Typography variant="h6" color="primary" fontWeight="bold" title={fmt.exactPrice(variant.price)}>
+                  {fmt.price(variant.price)}
                 </Typography>
               </Box>
 
@@ -180,12 +182,12 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
               )}
               <TableCell align="right">
                 <Typography variant="body2">
-                  {variant.quantity.toLocaleString()}
+                  {fmt.number(variant.quantity)}
                 </Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography variant="body2" color="primary" fontWeight="bold" title={formatExactPrice(variant.price)}>
-                  {formatPrice(variant.price)}
+                <Typography variant="body2" color="primary" fontWeight="bold" title={fmt.exactPrice(variant.price)}>
+                  {fmt.price(variant.price)}
                 </Typography>
               </TableCell>
               <TableCell>

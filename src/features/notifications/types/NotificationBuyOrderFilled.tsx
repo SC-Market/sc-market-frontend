@@ -8,9 +8,9 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { NotificationBase } from "../components/NotificationBase"
-import { formatPrice } from "../../../util/formatPrice"
 import { ORDER_PATHS, USER_PATHS } from "../../../routes/paths"
 
+import { useFormatters } from "../../../util/format"
 interface OrderEntity {
   order_id: string
   cost?: string | number
@@ -24,6 +24,7 @@ export function NotificationBuyOrderFilled(props: { notif: Notification }) {
   const { notif } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const order = useMemo(
     () => (notif.entity ?? {}) as OrderEntity,
     [notif.entity],
@@ -58,7 +59,7 @@ export function NotificationBuyOrderFilled(props: { notif: Notification }) {
           sx={{ mt: 0.5, flexWrap: "wrap", gap: 0.5 }}
         >
           <Chip
-            label={formatPrice(Number(order.cost))}
+            label={fmt.price(Number(order.cost))}
             size="small"
             color="primary"
             variant="outlined"

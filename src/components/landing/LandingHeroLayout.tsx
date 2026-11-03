@@ -17,12 +17,12 @@ import logo from "../../assets/scmarket-logo.webp"
 import logo96 from "../../assets/scmarket-logo-96.webp"
 import { LandingImg } from "./LandingImage"
 import { MARKET_PATHS } from "../../routes/paths"
-import { formatCompactAmount } from "../../util/formatCompactAmount"
 import type { StandingBuyOrder } from "../../store/api/v2/market"
 import { LANDING_CATEGORIES } from "./landingLinks"
 import { LandingIntents } from "./LandingIntents"
 import { WantedNowTable } from "./WantedNowTable"
 
+import { useFormatters } from "../../util/format"
 /**
  * Totals from the market stats endpoint: undefined while loading (same-size
  * skeletons), null when the request failed (the cells stay empty, the row
@@ -258,10 +258,10 @@ export function LandingHeroLayout(props: {
   buyOrders: StandingBuyOrder[] | null | undefined
   signedIn: boolean
 }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const { stats, liveListings } = props
   const showWeekly = showWeeklyStats(stats)
-  const number = (n: number) => new Intl.NumberFormat(i18n.language).format(n)
 
   return (
     <Box
@@ -364,7 +364,7 @@ export function LandingHeroLayout(props: {
                 testId="landing-total-orders"
                 minEm={3.4}
                 hidden={stats === null}
-                value={stats ? number(stats.totalOrders) : undefined}
+                value={stats ? fmt.number(stats.totalOrders) : undefined}
                 label={t("landing.heroOrdersLabel")}
               />
               <HeroStat
@@ -373,7 +373,7 @@ export function LandingHeroLayout(props: {
                 hidden={stats === null}
                 value={
                   stats
-                    ? formatCompactAmount(stats.totalOrderValue, i18n.language)
+                    ? fmt.compact(stats.totalOrderValue, { display: "long" })
                     : undefined
                 }
                 label={t("landing.heroValueLabel")}
@@ -384,7 +384,7 @@ export function LandingHeroLayout(props: {
                 hidden={liveListings === null}
                 value={
                   typeof liveListings === "number"
-                    ? number(liveListings)
+                    ? fmt.number(liveListings)
                     : undefined
                 }
                 label={t("landing.heroListingsLabel")}
@@ -394,7 +394,7 @@ export function LandingHeroLayout(props: {
                 minEm={3.4}
                 hidden={!showWeekly}
                 collapse
-                value={stats && showWeekly ? number(stats.weekOrders) : "0"}
+                value={stats && showWeekly ? fmt.number(stats.weekOrders) : "0"}
                 label={t("landing.heroWeekOrdersLabel")}
               />
               <HeroStat
@@ -404,7 +404,7 @@ export function LandingHeroLayout(props: {
                 collapse
                 value={
                   stats && showWeekly
-                    ? formatCompactAmount(stats.weekOrderValue, i18n.language)
+                    ? fmt.compact(stats.weekOrderValue, { display: "long" })
                     : "0"
                 }
                 label={t("landing.heroWeekValueLabel")}

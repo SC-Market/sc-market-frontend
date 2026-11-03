@@ -11,7 +11,6 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { toSupportedLocale } from "../../../util/locales"
 import { useTheme } from "@mui/material/styles"
 import { Stack } from "@mui/system"
 import type { Service } from "../../orders/domain/types"
@@ -23,6 +22,7 @@ import { PAYMENT_TYPE_MAP } from "../../../util/constants"
 import { formatServiceUrl } from "../../../util/urls"
 import { ServiceChips } from "./ServiceChips"
 
+import { useFormatters, useNow } from "../../../util/format"
 /** A service card's height (the card under its link), at every width. */
 export const SERVICE_CARD_HEIGHT = 321
 
@@ -34,7 +34,9 @@ export const ServiceListingBase = React.memo(
     priority?: boolean
   }) {
     const { service, priority = false } = props
-    const { t, i18n } = useTranslation()
+    const { t } = useTranslation()
+    const fmt = useFormatters()
+    const now = useNow()
     const theme = useTheme<ExtendedTheme>()
     const key = PAYMENT_TYPE_MAP.get(service.payment_type) || ""
 
@@ -75,7 +77,7 @@ export const ServiceListingBase = React.memo(
               }}
               title={
                 <Box display={"flex"} alignItems={"center"}>
-                  {dateDiffInDays(new Date(), new Date(service.timestamp)) <=
+                  {dateDiffInDays(new Date(now), new Date(service.timestamp)) <=
                     1 && (
                     <Chip
                       color={"secondary"}
@@ -106,9 +108,7 @@ export const ServiceListingBase = React.memo(
                     contractor={service.contractor}
                   />
                   <Typography color={"primary"} variant={"subtitle2"}>
-                    {service.cost.toLocaleString(
-                      toSupportedLocale(i18n.language),
-                    )}{" "}
+                    {fmt.number(service.cost)}{" "}
                     aUEC {key ? t(key) : ""}
                   </Typography>
                 </Box>

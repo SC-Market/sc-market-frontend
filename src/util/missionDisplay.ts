@@ -5,6 +5,7 @@
 
 import type { TFunction } from "i18next"
 
+import { formatNumber } from "./format/format"
 /** p4k mission type code -> [catalog key under gameTaxonomyUi.missionTypes, English label] */
 const MISSION_TYPE_LABELS: Record<string, [string, string]> = {
   mercenary: ["mercenary", "Mercenary"],
@@ -83,10 +84,14 @@ export function formatMissionDescription(text: string | null | undefined): strin
     .replace(/<\/?em\d*>/gi, "")
 }
 
-/** Format credit amount with locale-aware commas */
-export function formatCredits(amount: number | null | undefined): string {
+/**
+ * A mission's credit reward: "—" for none, abbreviated from 1,000 up in the
+ * locale's short form ("1.5K aUEC", "10K aUEC", "1.5M aUEC" in English).
+ */
+export function formatCredits(amount: number | null | undefined, locale: string): string {
   if (amount === null || amount === undefined || amount === 0) return "—"
-  if (amount >= 1_000_000) return `${(amount / 1_000_000).toFixed(1).replace(/\.0$/, "")}M aUEC`
-  if (amount >= 1_000) return `${(amount / 1_000).toFixed(1).replace(/\.0$/, "")}K aUEC`
-  return `${amount.toLocaleString()} aUEC`
+  if (amount >= 1_000) {
+    return `${formatNumber(amount, locale, { notation: "compact", maximumFractionDigits: 1 })} aUEC`
+  }
+  return `${formatNumber(amount, locale)} aUEC`
 }

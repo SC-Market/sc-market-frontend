@@ -8,9 +8,9 @@ import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
-import { formatPrice } from "../../../util/formatPrice"
 import { ORDER_PATHS, USER_PATHS } from "../../../routes/paths"
 
+import { useFormatters } from "../../../util/format"
 interface OrderEntity {
   order_id: string
   customer: string
@@ -25,6 +25,7 @@ export function NotificationOrderCreate(props: { notif: Notification }) {
   const theme = useTheme<ExtendedTheme>()
   const order = useMemo(() => notif.entity as OrderEntity, [notif.entity])
   const { t } = useTranslation()
+  const fmt = useFormatters()
 
   return (
     <NotificationBase
@@ -45,7 +46,7 @@ export function NotificationOrderCreate(props: { notif: Notification }) {
       <Stack direction="row" spacing={0.5} sx={{ mt: 0.5, flexWrap: "wrap", gap: 0.5 }}>
         {order.cost && (
           <Chip
-            label={formatPrice(Number(order.cost))}
+            label={fmt.price(Number(order.cost))}
             size="small"
             color="primary"
             variant="outlined"

@@ -2,6 +2,7 @@ import React from "react"
 import { LineChart } from "@mui/x-charts/LineChart"
 import { BarChart } from "@mui/x-charts/BarChart"
 
+import { useFormatters } from "../../util/format"
 interface DataPoint {
   x: string | Date | number
   y: number
@@ -32,6 +33,7 @@ export function MuiLineChart({
   smooth = true,
   yScaleType = "linear",
 }: MuiLineChartProps) {
+  const fmt = useFormatters()
   const xData = series[0]?.data.map((d) =>
     xAxisType === "time" ? new Date(d.x) : d.x,
   )
@@ -52,14 +54,14 @@ export function MuiLineChart({
           valueFormatter:
             xAxisType === "time"
               ? (value: Date | number | string) =>
-                  new Date(value).toLocaleDateString()
-              : (value: Date | number | string) => Math.round(Number(value)).toLocaleString(),
+                  fmt.date(value)
+              : (value: Date | number | string) => fmt.integer(Number(value)),
         },
       ]}
       yAxis={[
         {
           scaleType: yScaleType,
-          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+          valueFormatter: (value: number) => fmt.integer(value),
         },
       ]}
       series={seriesData}
@@ -95,6 +97,7 @@ export function MuiAreaChart({
   xTickInterval,
   xValueFormatter,
 }: MuiAreaChartProps) {
+  const fmt = useFormatters()
   const xData = series[0]?.data.map((d) =>
     xAxisType === "time" ? new Date(d.x) : d.x,
   )
@@ -112,22 +115,22 @@ export function MuiAreaChart({
     ? [
         {
           id: "leftAxis",
-          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+          valueFormatter: (value: number) => fmt.integer(value),
         },
         {
           id: "rightAxis",
-          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+          valueFormatter: (value: number) => fmt.integer(value),
         },
       ]
     : [
         {
-          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+          valueFormatter: (value: number) => fmt.integer(value),
         },
       ]
 
   const defaultXFormatter =
     xAxisType === "time"
-      ? (value: Date | number | string) => new Date(value).toLocaleDateString()
+      ? (value: Date | number | string) => fmt.date(value)
       : (value: Date | number | string) => String(value)  // category labels are already formatted strings
 
   return (
@@ -176,6 +179,7 @@ export function MuiBarChart({
   colors,
   xValueFormatter,
 }: MuiBarChartProps) {
+  const fmt = useFormatters()
   const xData = series[0]?.data.map((d) =>
     xAxisType === "time" ? new Date(d.x) : d.x,
   )
@@ -190,7 +194,7 @@ export function MuiBarChart({
   const xFormatter =
     xValueFormatter ??
     (xAxisType === "time"
-      ? (value: Date | number | string) => new Date(value).toLocaleDateString()
+      ? (value: Date | number | string) => fmt.date(value)
       : undefined)
 
   return (
@@ -204,7 +208,7 @@ export function MuiBarChart({
       ]}
       yAxis={[
         {
-          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+          valueFormatter: (value: number) => fmt.integer(value),
         },
       ]}
       series={seriesData}

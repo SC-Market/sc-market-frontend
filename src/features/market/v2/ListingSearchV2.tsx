@@ -35,7 +35,7 @@ import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
 import { useGetCategoriesQuery, useSearchListingsQuery, useSearchResourcesQuery } from "../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../store/api/v2/market";
-import { formatPriceRange } from "../../../util/formatPrice";
+import { useFormatters, useNow } from "../../../util/format";
 import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar";
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect";
@@ -909,13 +909,15 @@ interface ListingCardV2Props {
 
 export function ListingCardV2({ listing, priority = false }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { openAddToCart } = useCartDrawer();
+  const fmt = useFormatters();
+  const now = useNow();
 
-  const priceDisplay = formatPriceRange(listing.price_min, listing.price_max);
+  const priceDisplay = fmt.priceRange(listing.price_min, listing.price_max);
 
-  const isNew = isListingNew(listing.created_at, new Date());
+  const isNew = isListingNew(listing.created_at, new Date(now));
 
   // No fade-in: the cards replace their skeletons in place; a fade from
   // opacity 0 blanked the grid between skeleton and content.

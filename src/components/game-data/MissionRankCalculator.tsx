@@ -21,6 +21,7 @@ import {
 import { Trans, useTranslation } from "react-i18next"
 import { useGetReputationRanksQuery } from "../../store/api/v2/market"
 
+import { useFormatters } from "../../util/format"
 interface Props {
   reputationReward: number
   rewardScope: string
@@ -32,6 +33,7 @@ interface Props {
 
 export function MissionRankCalculator({ reputationReward, rewardScope, rewardFaction, requiredRank, minStanding, isShareable }: Props) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const [crewSize, setCrewSize] = useState(1)
 
   const { data, isLoading } = useGetReputationRanksQuery(
@@ -151,7 +153,7 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="body2" color={isBelowMin ? "text.secondary" : "text.primary"}>
-                    {isBelowMin ? "—" : xpFromMin.toLocaleString()}
+                    {isBelowMin ? "—" : fmt.number(xpFromMin)}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
@@ -161,7 +163,7 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="caption" color="text.secondary">
-                    {rank.threshold.toLocaleString()}
+                    {fmt.number(rank.threshold)}
                   </Typography>
                 </TableCell>
               </TableRow>

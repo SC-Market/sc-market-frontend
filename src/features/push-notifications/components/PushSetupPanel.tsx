@@ -38,6 +38,7 @@ import {
 } from "../api/pushApi"
 import { usePushSubscription } from "../hooks/usePushSubscription"
 
+import { useFormatters } from "../../../util/format"
 /** This device's push state, most blocking first. */
 export type PushDeviceState =
   | "checking"
@@ -114,6 +115,7 @@ const DENIED_HELP: Record<NotificationHelpPlatform, [string, string]> = {
  */
 export function PushSetupPanel() {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const push = usePushSubscription()
   const install = usePWAInstallPrompt()
   const { data: subscriptions, isLoading: subscriptionsLoading } =
@@ -490,9 +492,7 @@ export function PushSetupPanel() {
                   <ListItemText
                     primary={device}
                     secondary={t("settings.pushNotifications.subscribedOn", {
-                      date: new Date(
-                        subscription.created_at,
-                      ).toLocaleDateString(),
+                      date: fmt.date(subscription.created_at),
                     })}
                     primaryTypographyProps={{
                       color: "text.secondary",

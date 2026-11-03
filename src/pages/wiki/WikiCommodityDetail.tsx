@@ -15,7 +15,6 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { getCommodityColor } from "../../util/gameIcons"
-import { formatPrice } from "../../util/formatPrice"
 import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded, ShoppingCart } from "@mui/icons-material"
 import { useSearchOresQuery } from "../../store/api/v2/market"
 import { FRONTEND_URL } from "../../util/constants"
@@ -26,6 +25,7 @@ import { buildCommodityHead } from "../../seo/gameDataHeads"
 import { headDescription } from "../../seo/pageHead"
 import { SeoHead } from "../../seo/SeoHead"
 
+import { useFormatters } from "../../util/format"
 function BoolChip({ value, label }: { value: boolean; label: string }) {
   return (
     <Chip
@@ -40,7 +40,8 @@ function BoolChip({ value, label }: { value: boolean; label: string }) {
 }
 
 export function WikiCommodityDetail() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data, isLoading, error } = useGetResourceQuery({ resourceId: id! }, { skip: !id })
@@ -48,7 +49,7 @@ export function WikiCommodityDetail() {
   const r = data?.resource
   const bps = data?.blueprints_requiring || []
   const price = data?.market_price
-  const answers = data ? buildCommodityAnswers(data, t, i18n.language) : null
+  const answers = data ? buildCommodityAnswers(data, t, fmt.locale) : null
 
   const head = data?.resource ? buildCommodityHead(data, FRONTEND_URL) : null
   const seoTitle = head?.title ?? "Commodity Detail | SC Market"
@@ -118,9 +119,9 @@ export function WikiCommodityDetail() {
               <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
                 <Typography variant="subtitle2" gutterBottom>{t("wiki.commodityDetail.marketPrice", "Market Price")}</Typography>
                 <Stack direction="row" spacing={3} alignItems="center">
-                  {price.min_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceMin", "Min")}</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.min_price)}</Typography></Box>}
-                  {price.average_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceAvg", "Avg")}</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.average_price)}</Typography></Box>}
-                  {price.max_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceMax", "Max")}</Typography><Typography variant="body1" fontWeight={600}>{formatPrice(price.max_price)}</Typography></Box>}
+                  {price.min_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceMin", "Min")}</Typography><Typography variant="body1" fontWeight={600}>{fmt.price(price.min_price)}</Typography></Box>}
+                  {price.average_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceAvg", "Avg")}</Typography><Typography variant="body1" fontWeight={600}>{fmt.price(price.average_price)}</Typography></Box>}
+                  {price.max_price != null && <Box><Typography variant="caption" color="text.secondary">{t("wiki.commodityDetail.priceMax", "Max")}</Typography><Typography variant="body1" fontWeight={600}>{fmt.price(price.max_price)}</Typography></Box>}
                   <Box sx={{ flex: 1 }} />
                   <Button
                     size="small"
@@ -180,7 +181,7 @@ export function WikiCommodityDetail() {
                           <TableRow key={i}>
                             <TableCell>{loc.station || loc.planet_moon || t("wiki.commodityDetail.unknown", "Unknown")}</TableCell>
                             <TableCell align="right">
-                              {loc.average_price != null && <Typography variant="caption">{formatPrice(loc.average_price)}</Typography>}
+                              {loc.average_price != null && <Typography variant="caption">{fmt.price(loc.average_price)}</Typography>}
                             </TableCell>
                           </TableRow>
                         ))}

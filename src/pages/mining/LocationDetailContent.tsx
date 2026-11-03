@@ -10,6 +10,7 @@ import { RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/
 import type { LocationDetailResponse, LocationMiningGroup } from "../../store/api/v2/market"
 import { Section } from "../../components/paper/Section"
 
+import { useFormatters } from "../../util/format"
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e", uncommon: "#4caf50", rare: "#2196f3", epic: "#9c27b0", legendary: "#ff9800",
 }
@@ -64,6 +65,7 @@ export function LocationDetailContent({ location }: Props) {
 
 function MiningGroupTable({ group }: { group: LocationMiningGroup }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const sorted = [...(group.ores || [])].sort((a, b) => b.relativeProbability - a.relativeProbability)
   return (
     <Paper>
@@ -101,8 +103,8 @@ function MiningGroupTable({ group }: { group: LocationMiningGroup }) {
                       sx={{ bgcolor: (RARITY_COLORS[rarity] || "#9e9e9e") + "22", color: RARITY_COLORS[rarity] || "#9e9e9e", fontWeight: 600, height: 20, fontSize: "0.7rem" }} />
                   </TableCell>
                   <TableCell align="right">{ore.relativeProbability.toFixed(1)}%</TableCell>
-                  <TableCell align="right">{ore.marketPrice != null ? ore.marketPrice.toLocaleString() : "—"}</TableCell>
-                  <TableCell align="right">{ore.estimatedValue != null ? ore.estimatedValue.toLocaleString() : "—"}</TableCell>
+                  <TableCell align="right">{ore.marketPrice != null ? fmt.number(ore.marketPrice) : "—"}</TableCell>
+                  <TableCell align="right">{ore.estimatedValue != null ? fmt.number(ore.estimatedValue) : "—"}</TableCell>
                 </TableRow>
               )
             })}

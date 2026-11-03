@@ -32,6 +32,7 @@ import { useTranslation } from "react-i18next"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { ORDER_PATHS } from "../../routes/paths"
 
+import { useFormatters } from "../../util/format"
 export interface ServiceRowProps {
   row: Service
   index: number
@@ -63,7 +64,7 @@ export const BorderlessCell = styled(TableCell)({
 export function ServiceDetailsRow(props: { open: boolean; service: Service }) {
   const theme = useTheme<ExtendedTheme>()
   const { open, service } = props
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   return (
     <TableRow
@@ -152,7 +153,8 @@ const getPaymentTypeTranslationKey = (paymentType: PaymentType): string => {
 export function MobileServiceRow(props: ServiceRowProps) {
   const { row, index, isItemSelected } = props
   const [open, setOpen] = useState(false)
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
 
   const key = getPaymentTypeTranslationKey(row.payment_type)
   const paymentType = key ? t(key) : ""
@@ -195,7 +197,7 @@ export function MobileServiceRow(props: ServiceRowProps) {
             </span>
           </Box>
           <Typography variant={"subtitle2"} color={"primary"}>
-            {row.cost.toLocaleString(i18n.language)} aUEC {paymentType}
+            {fmt.number(row.cost)} aUEC {paymentType}
           </Typography>
         </BorderlessCell>
 

@@ -21,8 +21,9 @@ import {
 } from "../../../store/api/v2/market"
 import { getErrorMessage } from "../../../util/errorHandling"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { formatAuec, parseTargetPrice, QUALITY_TIERS } from "../domain/price"
+import { parseTargetPrice, QUALITY_TIERS } from "../domain/price"
 
+import { useFormatters } from "../../../util/format"
 export interface WatchPriceDialogProps {
   open: boolean
   onClose: () => void
@@ -56,6 +57,7 @@ export function WatchPriceDialog({
   qualityRelevant = false,
 }: WatchPriceDialogProps) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const issueAlert = useAlertHook()
   const initial =
     existing?.max_price ??
@@ -110,7 +112,7 @@ export function WatchPriceDialog({
           "Watching {{name}} at ≤ {{price}}",
           {
             name: itemName,
-            price: formatAuec(price),
+            price: fmt.auec(price),
           },
         ),
         severity: "success",
@@ -186,7 +188,7 @@ export function WatchPriceDialog({
                       "priceAlerts.watch.currentLowest",
                       "Current lowest: {{price}}",
                       {
-                        price: formatAuec(currentPrice),
+                        price: fmt.auec(currentPrice),
                       },
                     )
                   : t(

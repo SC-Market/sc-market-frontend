@@ -7,6 +7,7 @@
  */
 import type { GameVersion, Mission, MissionRewardPool } from "../store/api/v2/market"
 
+import { formatAuec, formatDate, formatInteger } from "../util/format/format"
 /** Game placeholder words → readable ones ([TARGET NAME] → "Target"). */
 const PLACEHOLDER_WORDS: Record<string, string> = {
   "TARGET NAME": "Target",
@@ -110,17 +111,16 @@ export function missionTitle(m: MissionNameFields): string {
   return extra ? `${name} — ${extra}` : name
 }
 
-function aUEC(value: number): string {
-  return `${Math.round(value).toLocaleString("en-US")} aUEC`
-}
-
-/** "12,000–25,000 aUEC", "12,000 aUEC" or null. */
-export function missionRewardRange(m: Pick<Mission, "credit_reward_min" | "credit_reward_max">): string | null {
+/** "12,000–25,000 aUEC", "12,000 aUEC" or null; `locale` is the page language ("en" in the bridge). */
+export function missionRewardRange(
+  m: Pick<Mission, "credit_reward_min" | "credit_reward_max">,
+  locale: string,
+): string | null {
   const min = m.credit_reward_min ?? null
   const max = m.credit_reward_max ?? null
-  if (min && max && max > min) return `${Math.round(min).toLocaleString("en-US")}–${aUEC(max)}`
+  if (min && max && max > min) return `${formatInteger(min, locale)}–${formatAuec(max, locale)}`
   const one = max || min
-  return one ? aUEC(one) : null
+  return one ? formatAuec(one, locale) : null
 }
 
 /** The blueprint with the best drop chance, over every reward pool. */
@@ -186,7 +186,7 @@ export function missionSummaryLine(
   const name = readableMissionText(m.mission_name, giver) || "This mission"
   const kind = [legality(m), missionType(m)].filter(Boolean).join(" ")
   const where = m.star_system || m.planet_moon
-  const reward = missionRewardRange(m)
+  const reward = missionRewardRange(m, "en") // an English sentence
   const drop = bestBlueprintDrop(pools)
   const article = /^[aeiou]/i.test(kind || "mission") ? "an" : "a"
   let line = `${name} is ${article} ${kind ? `${kind} ` : ""}Star Citizen mission`
@@ -225,7 +225,7 @@ export function freshnessStamp(v: GameVersion | null | undefined): string | null
   const date = v.last_data_update ? new Date(v.last_data_update) : null
   const updated =
     date && !Number.isNaN(date.getTime())
-      ? `, updated ${date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })}`
+      ? `, updated ${formatDate(date, "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })}`
       : ""
   return `Data from Star Citizen ${number} ${type}${updated}${build ? ` (build ${build})` : ""}.`
 }
@@ -242,7 +242,8 @@ export function gameDataDateModified(v: GameVersion | null | undefined): string 
  * so answer engines can describe it). `missionCount` from the search total.
  */
 export function missionsCapabilityText(missionCount?: number): string[] {
-  const count = missionCount ? `${missionCount.toLocaleString("en-US")} ` : ""
+  // English sentences, so English digits.
+  const count = missionCount ? `${formatInteger(missionCount, "en")} ` : ""
   return [
     `SC Market's mission database lists ${count}Star Citizen missions from the current game files.`,
     "Filter missions by faction, mission giver, star system, legality, required rank and type (bounty hunting, hauling, mercenary, salvage, delivery and more).",

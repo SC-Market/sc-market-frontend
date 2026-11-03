@@ -12,6 +12,7 @@ import type { OreDetailResponse, OreQualityDistribution } from "../../store/api/
 import { Section } from "../../components/paper/Section"
 import { EmptyState } from "../../components/empty-states/EmptyState"
 
+import { useFormatters } from "../../util/format"
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e", uncommon: "#4caf50", rare: "#2196f3", epic: "#9c27b0", legendary: "#ff9800",
 }
@@ -31,6 +32,7 @@ interface Props {
 
 export function OreDetailContent({ ore, onClose }: Props) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme()
   const hasQuality = (ore.qualityDistributions?.length ?? 0) > 0
 
@@ -43,7 +45,7 @@ export function OreDetailContent({ ore, onClose }: Props) {
             sx={{ bgcolor: RARITY_COLORS[ore.rarity.toLowerCase()] || "#757575", color: "#fff" }} />
         )}
         {ore.marketPrice != null && (
-          <Chip label={`${ore.marketPrice.toLocaleString()} aUEC`} size="small" color="success" />
+          <Chip label={`${fmt.number(ore.marketPrice)} aUEC`} size="small" color="success" />
         )}
       </Stack>
 

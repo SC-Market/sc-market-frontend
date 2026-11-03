@@ -25,7 +25,6 @@ import { useTranslation } from "react-i18next"
 import { isListingNew } from "../../domain/listingBadges"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
-import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
 import { formatMarketUrl, formatShortSlug } from "../../domain/urls"
 import type {
   ListingSearchResult,
@@ -64,6 +63,7 @@ import {
 } from "../../../../util/qualityColor"
 import { remainingQuantity } from "../../domain/buyOrders"
 
+import { useFormatters, useNow } from "../../../../util/format"
 /**
  * GroupedListingGrid — market_v2_redesign variant of the search grid.
  *
@@ -127,7 +127,8 @@ function groupQualityChipProps(
  */
 function ListingFlagChips({ listing }: { listing: ListingSearchResult }) {
   const { t } = useTranslation()
-  const isNew = isListingNew(listing.created_at, new Date())
+  const now = useNow()
+  const isNew = isListingNew(listing.created_at, new Date(now))
   const outOfStock = (listing.quantity_available ?? 0) === 0
   const chipSx = {
     height: 18,
@@ -377,6 +378,7 @@ function GroupCard({
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
+  const fmt = useFormatters()
 
   const cheapest = listings[0]
   // "N sellers" = distinct SHOPS, not listing rows. One shop can have several
@@ -530,7 +532,7 @@ function GroupCard({
                 noWrap
                 sx={{ fontSize: "0.95rem", mb: 0.5 }}
               >
-                {t("MarketRedesign.fromPrice", "from")} {formatPrice(priceMin)}
+                {t("MarketRedesign.fromPrice", "from")} {fmt.price(priceMin)}
               </Typography>
               <Typography
                 variant="body2"
@@ -602,7 +604,7 @@ function GroupCard({
         <Collapse in={open} timeout="auto" unmountOnExit>
           <Box sx={{ p: 1.5 }}>
             <Typography variant="body2" sx={{ color: "text.secondary", mb: 1.5 }}>
-              {formatPriceRange(priceMin, priceMax)} {"·"}{" "}
+              {fmt.priceRange(priceMin, priceMax)} {"·"}{" "}
               {t("MarketRedesign.sellersCount", "{{count}} sellers", {
                 count: sellerCount,
               })}{" "}
@@ -655,6 +657,7 @@ function GroupCard({
  */
 function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const { data, isLoading } = useSearchBuyOrdersQuery({
     gameItemId,
     sortBy: "price_per_unit",
@@ -695,10 +698,10 @@ function GroupBuyOrders({ gameItemId }: { gameItemId: string }) {
                 <Chip label={t("MarketRedesign.negotiable", "Negotiable")} size="small" variant="outlined" sx={{ height: 20 }} />
               )}
               <Typography variant="body2" sx={{ color: "text.primary", width: 90, textAlign: "right" }}>
-                {remainingQuantity(o).toLocaleString()}
+                {fmt.number(remainingQuantity(o))}
               </Typography>
               <Typography variant="body2" sx={{ color: "secondary.main", fontWeight: 700, width: 120, textAlign: "right" }}>
-                {formatPrice(o.price_per_unit)}
+                {fmt.price(o.price_per_unit)}
               </Typography>
             </Stack>
           ))}
@@ -924,6 +927,7 @@ function VariantHighlightCard({
   tags: HighlightTag[]
 }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const qc = variantQualityChip(variant)
   const label = variantLabel(variant)
   return (
@@ -977,7 +981,7 @@ function VariantHighlightCard({
         />
 
         <Typography variant="h6" sx={{ color: "primary.main", mt: 1 }}>
-          {formatPrice(variant.price)}
+          {fmt.price(variant.price)}
         </Typography>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 0.5 }}>
@@ -1002,6 +1006,7 @@ function VariantHighlightCard({
  */
 function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   return (
     <Stack divider={<Divider />}>
       {listings.map((s, i) => {
@@ -1025,7 +1030,7 @@ function GroupSellersFallback({ listings }: { listings: ListingSearchResult[] })
             )}
             {i === 0 && <Chip label={t("marketV2.bestPrice")} size="small" color="primary" sx={{ height: 20 }} />}
             <Typography variant="body2" sx={{ color: "primary.main", fontWeight: 700, width: 110, textAlign: "right" }}>
-              {formatPrice(s.price_min)}
+              {fmt.price(s.price_min)}
             </Typography>
           </Stack>
         )

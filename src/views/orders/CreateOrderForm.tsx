@@ -471,18 +471,6 @@ const CreateOrderFormComponent = React.forwardRef<
             </div>
           </Grid>
 
-          {/*<Grid item xs={12}>*/}
-          {/*    <TextField multiline disabled fullWidth={true} label={"Estimated Cost"}*/}
-          {/*               id="estimated-cost"*/}
-          {/*               value={*/}
-          {/*                   `${((state.estimate + state.collateral * 0.05) * (state.rush ? 1.3 : 1)).toLocaleString(*/}
-          {/*                       undefined*/}
-          {/*                   )} aUEC`*/}
-          {/*               }*/}
-          {/*               variant={'filled'}*/}
-          {/*    />*/}
-          {/*</Grid>*/}
-
           <Grid item xs={12}>
             <NumericFormat
               decimalScale={0}

@@ -8,9 +8,9 @@ import { Notification } from "../../../hooks/login/UserProfile"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
-import { formatPrice } from "../../../util/formatPrice"
 import { ORDER_PATHS, USER_PATHS } from "../../../routes/paths"
 
+import { useFormatters } from "../../../util/format"
 interface OfferEntity {
   id?: string
   session_id?: string
@@ -30,6 +30,7 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
   const theme = useTheme<ExtendedTheme>()
   const offer = useMemo(() => notif.entity as OfferEntity, [notif.entity])
   const { t } = useTranslation()
+  const fmt = useFormatters()
 
   const sessionId = offer.session_id || offer.id
   const latestOffer = offer.offers?.[0]
@@ -90,7 +91,7 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
       {latestOffer && (
         <Stack direction="row" spacing={0.5} sx={{ mt: 0.5, flexWrap: "wrap", gap: 0.5 }}>
           <Chip
-            label={formatPrice(Number(latestOffer.cost))}
+            label={fmt.price(Number(latestOffer.cost))}
             size="small"
             color="primary"
             variant="outlined"

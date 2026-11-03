@@ -13,15 +13,17 @@ import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { useGetShopReviewsQuery } from "../../../../store/api/v2/market"
 import type { ShopReviewResponse } from "../../../../store/api/v2/market"
-import { getRelativeTime } from "../../../../util/time"
 import { SHOP_PATHS } from "../../../../routes/paths"
 
+import { useFormatters, useNow } from "../../../../util/format"
 export function SellerReviews(props: {
   shopId?: string | null
   shopSlug?: string | null
   shopName?: string | null
 }) {
   const { t } = useTranslation()
+  const fmt = useFormatters()
+  const now = useNow()
   const theme = useTheme<ExtendedTheme>()
   const { shopId, shopSlug, shopName } = props
 
@@ -102,7 +104,7 @@ export function SellerReviews(props: {
                     icon={<StarRounded fontSize="inherit" />}
                   />
                   <Typography variant="caption" color="text.secondary">
-                    {getRelativeTime(new Date(review.created_at))}
+                    {fmt.relative(review.created_at, now)}
                   </Typography>
                 </Box>
                 <Typography

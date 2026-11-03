@@ -18,12 +18,12 @@ import { Link } from "react-router-dom"
 import type { StandingBuyOrder } from "../../store/api/v2/market"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MARKET_PATHS } from "../../routes/paths"
-import { formatPrice } from "../../util/formatPrice"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { LandingImg } from "./LandingImage"
 import { WANTED_NOW_COUNT } from "./landingLinks"
 import { remainingQuantity } from "../../features/market/domain/buyOrders"
 
+import { useFormatters } from "../../util/format"
 /** Every body row's height (px), loaded, loading or filler. */
 const ROW_HEIGHT = 52
 
@@ -66,7 +66,8 @@ const ITEM_SX = {
 } as const
 
 function BuyOrderRow({ order }: { order: StandingBuyOrder }) {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const remaining = remainingQuantity(order)
   return (
@@ -119,7 +120,7 @@ function BuyOrderRow({ order }: { order: StandingBuyOrder }) {
           sx={{ display: "block", fontSize: "0.875rem", lineHeight: 1.3 }}
         >
           {order.price_per_unit > 0
-            ? formatPrice(order.price_per_unit)
+            ? fmt.price(order.price_per_unit)
             : t("BuyOrdersRedesign.priceNegotiable", "Make an offer")}
         </Typography>
         <Typography
@@ -128,7 +129,7 @@ function BuyOrderRow({ order }: { order: StandingBuyOrder }) {
           sx={{ display: "block", fontSize: "0.7rem", lineHeight: 1.1 }}
         >
           {t("landing.wantedNowQuantity", {
-            quantity: remaining.toLocaleString(i18n.language),
+            quantity: fmt.number(remaining),
           })}
         </Typography>
       </TableCell>

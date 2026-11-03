@@ -89,7 +89,7 @@ export function MissionHubIndex({ kind }: { kind: MissionHubKind }) {
                   >
                     {hub.name}
                   </Link>
-                  <Chip size="small" variant="outlined" label={missionCountText(hub.mission_count, t)} />
+                  <Chip size="small" variant="outlined" label={missionCountText(hub.mission_count, t, lang)} />
                 </Box>
               ))}
             </Box>

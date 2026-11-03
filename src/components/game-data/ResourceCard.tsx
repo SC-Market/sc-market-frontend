@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import { type ResourceSearchResult } from "../../store/api/v2/market"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
+import { useFormatters } from "../../util/format"
 interface ResourceCardProps {
   resource: ResourceSearchResult
   to?: string
@@ -19,6 +20,7 @@ interface ResourceCardProps {
 
 export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClick }) => {
   const { t } = useTranslation()
+  const fmt = useFormatters()
   const theme = useTheme<ExtendedTheme>()
   const acquisitionMethods = [
     resource.can_be_mined && t("wikiUi.resourceCard.mined"),
@@ -68,7 +70,7 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClic
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             {resource.base_value != null && (
               <Typography variant="caption" color="text.secondary">
-                {resource.base_value.toLocaleString()} aUEC
+                {fmt.number(resource.base_value)} aUEC
               </Typography>
             )}
             {resource.blueprint_count > 0 && (
