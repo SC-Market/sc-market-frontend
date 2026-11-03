@@ -40,7 +40,7 @@ import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { MARKET_PATHS, WIKI_PATHS, SHOP_PATHS } from "../../../routes/paths"
 import { getLanguageName } from "../../../constants/languages"
 import { getRelativeTime } from "../../../util/time"
-import { dateDiffInDays } from "../../../util/dateDiff"
+import { isListingNew } from "../domain/listingBadges"
 import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
@@ -136,7 +136,7 @@ export function ListingDetailV2() {
     return [...locs]
   }, [items])
 
-  const isNew = listing ? dateDiffInDays(new Date(listing.created_at), new Date()) <= 1 : false
+  const isNew = listing ? isListingNew(listing.created_at, new Date()) : false
 
   // Breadcrumbs
   const breadcrumbs = useMemo(() => {

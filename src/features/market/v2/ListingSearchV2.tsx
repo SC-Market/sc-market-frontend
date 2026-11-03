@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { useIsMobile, useBreakpointDown } from "../../../hooks/layout/useBreakpoint";
 import { useTheme } from "@mui/material/styles";
-import { isAfter, subDays } from "date-fns";
+import { isListingNew } from "../domain/listingBadges";
 import { useNavigate, useSearchParams, Link as RouterLink, useLocation } from "react-router-dom";
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme";
 import { FALLBACK_IMAGE_URL, FRONTEND_URL } from "../../../util/constants";
@@ -915,7 +915,7 @@ export function ListingCardV2({ listing, priority = false }: ListingCardV2Props)
 
   const priceDisplay = formatPriceRange(listing.price_min, listing.price_max);
 
-  const isNew = isAfter(new Date(listing.created_at), subDays(new Date(), 3));
+  const isNew = isListingNew(listing.created_at, new Date());
 
   // No fade-in: the cards replace their skeletons in place; a fade from
   // opacity 0 blanked the grid between skeleton and content.

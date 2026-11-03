@@ -22,7 +22,7 @@ import ExpandMoreRounded from "@mui/icons-material/ExpandMoreRounded"
 import GroupsRounded from "@mui/icons-material/GroupsRounded"
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { isAfter, subDays } from "date-fns"
+import { isListingNew } from "../../domain/listingBadges"
 import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
@@ -127,7 +127,7 @@ function groupQualityChipProps(
  */
 function ListingFlagChips({ listing }: { listing: ListingSearchResult }) {
   const { t } = useTranslation()
-  const isNew = isAfter(new Date(listing.created_at), subDays(new Date(), 3))
+  const isNew = isListingNew(listing.created_at, new Date())
   const outOfStock = (listing.quantity_available ?? 0) === 0
   const chipSx = {
     height: 18,
