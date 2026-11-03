@@ -1,6 +1,6 @@
 {
   "admin": {
-    "orderStats": "Statistiques des Commandes Admin",
+    "orderStats": "Statistiques admin des commandes",
     "showTestOrders": "Afficher les commandes de test",
     "moderation": {
       "button": {
@@ -26,14 +26,14 @@
       "updateReport": "Mettre à jour le signalement",
       "updating": "Mise à jour..."
     },
-    "moderation.title": "Tableau de Bord de Modération",
+    "moderation.title": "Tableau de bord de modération",
     "moderation.description": "Cette page contiendra des outils de modération et des rapports.",
-    "moderation.handleReport": "Traiter le Rapport",
+    "moderation.handleReport": "Traiter le rapport",
     "moderation.status": "Statut",
     "moderation.notes": "Notes",
     "moderation.notesPlaceholder": "Entrez des notes de modération ou l'action effectuée...",
-    "moderation.notesHelperText": "Notes optionnelles sur l'action de modération (max 2000 caractères)",
-    "moderation.updateReport": "Mettre à Jour le Rapport",
+    "moderation.notesHelperText": "Notes facultatives sur l'action de modération (max 2000 caractères)",
+    "moderation.updateReport": "Mettre à jour le rapport",
     "moderation.updating": "Mise à jour...",
     "moderation.reportUpdated": "Rapport mis à jour avec succès",
     "moderation.updateFailed": "Échec de la mise à jour du rapport",
@@ -83,7 +83,7 @@
         "push": "Push",
         "email": "E-mail",
         "discord_dm": "MP Discord",
-        "hint": "Les canaux choisis sont utilisés même pour les utilisateurs qui les ont désactivés, sauf l'e-mail : ceux qui ont désactivé les e-mails d'annonces ou se sont désabonnés ne le reçoivent pas. Les autres ne sont pas utilisés."
+        "hint": "Les canaux choisis sont utilisés même pour les utilisateurs qui les ont désactivés, sauf l'e-mail : ceux qui ont désactivé les e-mails de communiqués ou se sont désabonnés ne le reçoivent pas. Les autres ne sont pas utilisés."
       },
       "preview": {
         "recipients": "~{{count}} destinataires",
@@ -94,7 +94,7 @@
       },
       "confirmEmail": {
         "title": "Envoyer un e-mail à tous les utilisateurs ?",
-        "body": "Cette alerte sera envoyée par e-mail à tous les utilisateurs ayant une adresse vérifiée qui n'ont pas désactivé les e-mails d'annonces.",
+        "body": "Cette alerte sera envoyée par e-mail à tous les utilisateurs ayant une adresse vérifiée qui n'ont pas désactivé les e-mails de communiqués.",
         "cancel": "Retour",
         "confirm": "Envoyer l'e-mail"
       }
@@ -104,8 +104,8 @@
     "alerts.activeFilter": "Statut actif",
     "alerts.content": "Contenu",
     "alerts.contentPlaceholder": "Saisissez le contenu de l'alerte au format Markdown...",
-    "alerts.contractorPlaceholder": "Saisissez pour rechercher des contractants...",
-    "alerts.contractorRequired": "Veuillez sélectionner un contractant",
+    "alerts.contractorPlaceholder": "Saisissez pour rechercher des prestataires...",
+    "alerts.contractorRequired": "Veuillez sélectionner un prestataire",
     "alerts.create": "Créer",
     "alerts.createAlert": "Créer une alerte",
     "alerts.created": "Alerte créée avec succès",
@@ -120,12 +120,12 @@
     "alerts.invalidUrl": "Veuillez saisir une URL valide (http:// ou https://)",
     "alerts.link": "Lien",
     "alerts.linkPlaceholder": "https://exemple.com",
-    "alerts.noContractorsFound": "Aucun contractant trouvé",
+    "alerts.noContractorsFound": "Aucun prestataire trouvé",
     "alerts.noLink": "Aucun lien",
     "alerts.openLink": "Ouvrir le lien",
     "alerts.pageTitle": "Alertes d'administration",
     "alerts.searching": "Recherche...",
-    "alerts.selectContractor": "Sélectionner un contractant",
+    "alerts.selectContractor": "Sélectionner un prestataire",
     "alerts.targetType": "Type de cible",
     "alerts.targetTypeFilter": "Type de cible",
     "alerts.title": "Titre",
@@ -298,7 +298,7 @@
     }
   },
   "adminExpressVerify": {
-    "title": "Vérifier un utilisateur en express",
+    "title": "Vérification express d'un utilisateur",
     "ownerDiscordId": "ID Discord du propriétaire",
     "ownerUsername": "Nom d'utilisateur du propriétaire*",
     "spectrumId": "ID Spectrum de l'org*",
@@ -345,7 +345,7 @@
     "accountAlreadyExists": "Un compte existe déjà. Veuillez plutôt vous connecter.",
     "accountNotFound": "Aucun compte trouvé. Veuillez d'abord vous inscrire.",
     "aria": {
-      "outlinedGroup": "groupe de boutons à contour"
+      "outlinedGroup": "groupe de boutons"
     },
     "authFailed": "Échec de l'authentification. Veuillez réessayer.",
     "authTabs": "Onglets d'authentification",
@@ -428,7 +428,7 @@
     "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries® et Cloud Imperium® sont des marques déposées de Cloud Imperium Rights LLC",
     "unofficial": "Ceci est un site de fans non officiel de Star Citizen, non affilié au groupe d'entreprises Cloud Imperium. Tout le contenu de ce site non rédigé par son hébergeur ou ses utilisateurs est la propriété de leurs détenteurs respectifs",
     "officialSite": "Site officiel de Star Citizen :",
-    "referralCode": "Use our referral code: {{code}}",
+    "referralCode": "Code de parrainage : {{code}}",
     "acknowledgments": "Remerciements spéciaux à <ladyFleurLink>LadyFleur</ladyFleurLink> pour le logo, <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink> et <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> pour leurs APIs.",
     "apiDocs": "Documentation de l'API",
     "scOrgs": "SC Orgs",
@@ -486,24 +486,24 @@
     "viewBlueprint": "Voir le plan"
   },
   "listing": {
-    "95PercentRating25PlusTransactions": "Note de 95 %+ et plus de 25 transactions",
-    "90PercentRating25PlusTransactions": "Note de 90 %+ et plus de 25 transactions",
-    "responsiveBadge": "Répond à 90% des commandes dans les 24 heures",
-    "tenPlusFiveStarStreak": "Série de 10+ notes 5 étoiles",
-    "fivePlusFiveStarStreak": "Série de 5+ notes 5 étoiles",
-    "1000PlusOrdersCompleted": "Plus de 1000 commandes réalisées",
-    "100PlusOrdersCompleted": "Plus de 100 commandes réalisées",
-    "10PlusOrdersLast30Days": "Plus de 10 commandes ces 30 derniers jours",
-    "15PlusFiveStarStreak": "Série de plus de 15 avis 5 étoiles",
-    "20PlusOrdersLast30Days": "Plus de 20 commandes ces 30 derniers jours",
-    "25PlusFiveStarStreak": "Série de plus de 25 avis 5 étoiles",
-    "5000PlusOrdersCompleted": "Plus de 5000 commandes réalisées",
-    "500PlusOrdersCompleted": "Plus de 500 commandes réalisées",
-    "50PlusFiveStarStreak": "Série de plus de 50 avis 5 étoiles",
-    "5PlusFiveStarStreak": "Série de plus de 5 avis 5 étoiles",
-    "5PlusOrdersLast30Days": "Plus de 5 commandes ces 30 derniers jours",
-    "99_9PercentRating25PlusTransactions": "Note de plus de 99,9 % et plus de 25 transactions",
-    "99PercentRating25PlusTransactions": "Note de plus de 99 % et plus de 25 transactions",
+    "95PercentRating25PlusTransactions": "Note de 95 %+ et 25+ transactions",
+    "90PercentRating25PlusTransactions": "Note de 90 %+ et 25+ transactions",
+    "responsiveBadge": "Répond à 90 % des commandes en moins de 24 heures",
+    "tenPlusFiveStarStreak": "Série de 10+ avis 5 étoiles",
+    "fivePlusFiveStarStreak": "Série de 5+ avis 5 étoiles",
+    "1000PlusOrdersCompleted": "1 000+ commandes réalisées",
+    "100PlusOrdersCompleted": "100+ commandes réalisées",
+    "10PlusOrdersLast30Days": "10+ commandes ces 30 derniers jours",
+    "15PlusFiveStarStreak": "Série de 15+ avis 5 étoiles",
+    "20PlusOrdersLast30Days": "20+ commandes ces 30 derniers jours",
+    "25PlusFiveStarStreak": "Série de 25+ avis 5 étoiles",
+    "5000PlusOrdersCompleted": "5 000+ commandes réalisées",
+    "500PlusOrdersCompleted": "500+ commandes réalisées",
+    "50PlusFiveStarStreak": "Série de 50+ avis 5 étoiles",
+    "5PlusFiveStarStreak": "Série de 5+ avis 5 étoiles",
+    "5PlusOrdersLast30Days": "5+ commandes ces 30 derniers jours",
+    "99_9PercentRating25PlusTransactions": "Note de 99,9 %+ et 25+ transactions",
+    "99PercentRating25PlusTransactions": "Note de 99 %+ et 25+ transactions",
     "activeSellerFor1PlusYear": "Vendeur actif depuis plus d'un an",
     "activeSellerFor2PlusYears": "Vendeur actif depuis plus de 2 ans",
     "activeSellerFor3PlusYears": "Vendeur actif depuis plus de 3 ans",
@@ -538,8 +538,8 @@
     "price_high_to_low": "Prix (décroissant)",
     "quantity_low_to_high": "Quantité disponible (croissante)",
     "quantity_high_to_low": "Quantité disponible (décroissante)",
-    "date_old_to_new": "Date de publication (du plus ancien au plus récent)",
-    "date_new_to_old": "Date de publication (du plus récent au plus ancien)",
+    "date_old_to_new": "Date de publication (plus anciennes d'abord)",
+    "date_new_to_old": "Date de publication (plus récentes d'abord)",
     "recent_activity": "Activité récente",
     "rating_high_to_low": "Note (décroissante)",
     "quantity_available": "Quantité disponible",
@@ -553,7 +553,7 @@
     "item_type": "Type d'article",
     "item_name": "Nom de l'article",
     "other_category": "Autre",
-    "allListings": "All Market Listings",
+    "allListings": "Toutes les annonces",
     "toggleSidebar": "afficher/masquer la barre latérale du marché",
     "activeListings": "Annonces actives",
     "inactiveListings": "Annonces inactives",
@@ -579,9 +579,9 @@
     "ended": "Terminée",
     "ending_in": "Se termine {{time}}",
     "expiration": "Expiration : {{time}}",
-    "unit": "unité",
+    "unit": "l'unité",
     "available": "{{count}} disponible(s)",
-    "internalListing": "Annonce Interne",
+    "internalListing": "Annonce interne",
     "unlistedListing": "Non répertorié",
     "showUnlistedAdmin": "Afficher les non répertoriés (admin)",
     "addDiscountTier": "Ajouter un palier",
@@ -689,12 +689,12 @@
     "notifications": "Notifications",
     "delete_notification": "Supprimer la notification",
     "new_review_by": "Nouvel avis laissé par",
-    "new_order_comment_by": "Nouveau commentaire de commande laissé par",
+    "new_order_comment_by": "Nouveau commentaire sur une commande de",
     "new_order_message_by": "Nouveau message de commande de",
     "new_order_placed_by": "Nouvelle commande passée par",
     "new_offer_received_from": "Nouvelle offre reçue de",
     "counter_offer_received_from": "Contre-offre reçue de",
-    "order_status_updated_to": "Statut de la commande mis à jour vers {{status}} par",
+    "order_status_updated_to": "Statut de la commande passé à {{status}} par",
     "contractor_invite_from": "Invitation de prestataire de <contractorLink>{{spectrum_id}}</contractorLink>",
     "submitted": "Envoyé !",
     "accept": "Accepter",
@@ -734,14 +734,14 @@
     "offer_rejected": "{{who}} a refusé votre offre",
     "contract_offer_received": "{{who}} a fait une offre sur votre contrat",
     "account_identity": {
-      "account_deactivated": "Un admin a désactivé ton compte.",
-      "account_reactivated": "Un admin a réactivé ton compte.",
-      "discord_link_skipped": "Ton compte Discord est déjà associé à un autre compte SC Market, il n'a donc pas été associé à celui-ci. Si les deux comptes sont à toi, contacte le support SC Market.",
-      "discord_unlinked": "Un admin a dissocié Discord de ton compte. Tu peux associer de nouveau un compte Discord dans les paramètres.",
-      "generic": "Un admin a modifié ton compte.",
-      "spectrum_cleared": "Un admin a retiré le lien RSI de ton compte. Vérifie de nouveau ton compte RSI dans les paramètres.",
-      "spectrum_set": "Un admin a mis à jour le lien RSI de ton compte.",
-      "username_released": "Un admin a libéré ton nom d'utilisateur. Ton nom d'utilisateur est maintenant {{username}}. Utilise « Synchroniser le pseudo » dans les paramètres pour récupérer ton pseudo RSI actuel."
+      "account_deactivated": "Un admin a désactivé votre compte.",
+      "account_reactivated": "Un admin a réactivé votre compte.",
+      "discord_link_skipped": "Votre compte Discord est déjà associé à un autre compte SC Market, il n'a donc pas été associé à celui-ci. Si les deux comptes sont à vous, contactez le support SC Market.",
+      "discord_unlinked": "Un admin a dissocié Discord de votre compte. Vous pouvez associer de nouveau un compte Discord dans les paramètres.",
+      "generic": "Un admin a modifié votre compte.",
+      "spectrum_cleared": "Un admin a retiré le lien RSI de votre compte. Vérifiez de nouveau votre compte RSI dans les paramètres.",
+      "spectrum_set": "Un admin a mis à jour le lien RSI de votre compte.",
+      "username_released": "Un admin a libéré votre nom d'utilisateur. Votre nom d'utilisateur est maintenant {{username}}. Utilisez « Synchroniser le pseudo » dans les paramètres pour récupérer votre pseudo RSI actuel."
     },
     "scope": {
       "all": "Toutes",
@@ -753,14 +753,14 @@
     "storefront_enquiry": {
       "created": "{{name}} a demandé une vitrine à ses couleurs : {{subdomain}}",
       "generic": "Nouvelle demande de vitrine à vos couleurs",
-      "accepted": "Votre demande de vitrine personnalisée pour {{name}} ({{subdomain}}) a été acceptée",
-      "acceptedGeneric": "Votre demande de vitrine personnalisée a été acceptée",
-      "declined": "Votre demande de vitrine personnalisée pour {{name}} ({{subdomain}}) a été refusée",
-      "declinedGeneric": "Votre demande de vitrine personnalisée a été refusée"
+      "accepted": "Votre demande de vitrine à vos couleurs pour {{name}} ({{subdomain}}) a été acceptée",
+      "acceptedGeneric": "Votre demande de vitrine à vos couleurs a été acceptée",
+      "declined": "Votre demande de vitrine à vos couleurs pour {{name}} ({{subdomain}}) a été refusée",
+      "declinedGeneric": "Votre demande de vitrine à vos couleurs a été refusée"
     },
     "listing_expiring": {
-      "one": "Tu vends toujours « {{title}} » ? L'annonce expire dans 3 jours. Ouvre-la pour la renouveler en un clic.",
-      "many": "Tu vends toujours ? {{n}} annonces de {{shop}} expirent dans 3 jours. Ouvre pour les renouveler en un clic."
+      "one": "Vous vendez toujours « {{title}} » ? L'annonce expire dans 3 jours. Ouvrez-la pour la renouveler en un clic.",
+      "many": "Vous vendez toujours ? {{n}} annonces de {{shop}} expirent dans 3 jours. Ouvrez-les pour les renouveler en un clic."
     },
     "offer_reminder": {
       "first_one": "Une offre attend votre réponse : « {{title}} »",
@@ -770,14 +770,14 @@
       "buyer_one": "« {{title}} » attend toujours le vendeur. Continuez d'attendre, écrivez au vendeur ou retirez l'offre.",
       "buyer_many": "{{n}} de vos offres attendent toujours le vendeur"
     },
-    "buy_order_match": "Correspondance d'ordre d'achat :",
-    "buy_order_match_listed": "correspond à l'un de tes ordres d'achat",
-    "buy_order_filled_by": "Ton ordre d'achat a été rempli par"
+    "buy_order_match": "Ordre d'achat correspondant :",
+    "buy_order_match_listed": "correspond à l'un de vos ordres d'achat",
+    "buy_order_filled_by": "Votre ordre d'achat a été honoré par"
   },
   "onboarding": {
     "welcome": "Bienvenue sur SC Market",
-    "subtitle": "Configurons votre compte pour que vous puissiez commencer à trader.",
-    "skipAll": "Passer la configuration, je vais explorer seul",
+    "subtitle": "Configurons votre compte pour que vous puissiez commencer à échanger.",
+    "skipAll": "Passer la configuration, j'explorerai par moi-même",
     "skip": "Passer",
     "continue": "Continuer",
     "complete": "Terminer la configuration",
@@ -794,12 +794,12 @@
     },
     "discord": {
       "title": "Liez votre compte Discord",
-      "description": "Connectez Discord pour recevoir des notifications de trades et communiquer directement avec les acheteurs.",
+      "description": "Connectez Discord pour recevoir les notifications d'échanges et communiquer directement avec les acheteurs.",
       "link": "Lier Discord"
     },
     "availability": {
       "title": "Définir votre disponibilité",
-      "description": "Indiquez aux autres quand vous êtes en ligne pour les trades. Glissez pour sélectionner les créneaux."
+      "description": "Indiquez aux autres quand vous êtes en ligne pour échanger. Faites glisser pour sélectionner des créneaux."
     },
     "email": {
       "title": "Ajouter votre e-mail",
@@ -809,7 +809,7 @@
     },
     "notifications": {
       "title": "Préférences de notification",
-      "description": "Choisissez comment vous souhaitez être rappelé des messages non lus.",
+      "description": "Choisissez comment recevoir des rappels pour les messages non lus.",
       "dmReminders": "M'envoyer un e-mail pour les messages non lus",
       "dmRemindersHelp": "Nous vous enverrons un rappel si vous avez des messages en attente depuis plus de 24 heures. Vous pouvez modifier ceci à tout moment dans les Paramètres."
     },
@@ -874,7 +874,7 @@
       "faqBuyQ": "Où acheter {{name}} dans Star Citizen ?",
       "faqMineA": "{{name}} se mine à {{locations}}.",
       "faqMineQ": "Où miner {{name}} dans Star Citizen ?",
-      "faqUsesA": "{{name}} est un ingrédient d'artisanat pour des objets comme {{items}}.",
+      "faqUsesA": "{{name}} est un ingrédient de fabrication pour des objets comme {{items}}.",
       "faqUsesQ": "À quoi sert {{name}} dans Star Citizen ?",
       "intro": "{{name}} est une marchandise de Star Citizen (catégorie : {{category}}).",
       "methods": "On peut l'obtenir par {{methods}}.",
@@ -930,7 +930,7 @@
         "reviews": "Avis",
         "watchlist": "Alertes de prix",
         "org": "Invitations d'organisation",
-        "announcements": "Annonces",
+        "announcements": "Communiqués",
         "reminders": "Rappels de messages non lus",
         "contracts": "Contrats publics",
         "storefront": "Demandes de vitrine"
@@ -940,7 +940,7 @@
         "order_assigned": "Commande qui vous est assignée",
         "order_status_not_started": "Commande non commencée",
         "order_status_in_progress": "Commande en cours",
-        "order_status_fulfilled": "Commande terminée",
+        "order_status_fulfilled": "Commande honorée",
         "order_status_cancelled": "Commande annulée",
         "order_message": "Message de commande",
         "order_review": "Nouvel avis",
@@ -950,10 +950,10 @@
         "offer_message": "Message d'offre",
         "market_bid": "Nouvelle enchère",
         "org_invite": "Invitation d'organisation",
-        "admin_alert": "Annonce",
+        "admin_alert": "Communiqué",
         "reminder_unread_messages": "Rappel de messages non lus",
         "watchlist_price_alert": "Alerte de prix",
-        "buy_order_match": "Correspondance d'ordre d'achat",
+        "buy_order_match": "Ordre d'achat correspondant",
         "contract_public_created": "Nouveau contrat public",
         "offer_accepted": "Offre acceptée",
         "offer_rejected": "Offre refusée",
@@ -969,7 +969,7 @@
       "tabs": {
         "orders": "Commandes et offres",
         "messages": "Messages",
-        "market": "Marché et watchlist",
+        "market": "Marché et liste de suivi",
         "orgs": "Orgs et contrats",
         "account": "Compte"
       },
@@ -1000,11 +1000,11 @@
         },
         "watchlist": {
           "label": "Alertes de prix",
-          "hint": "Une annonce publique a atteint le prix cible de votre watchlist."
+          "hint": "Une annonce publique a atteint le prix cible de votre liste de suivi."
         },
         "buy-orders": {
           "label": "Ordres d'achat",
-          "hint": "Une nouvelle annonce publique correspond à l'un de vos ordres d'achat, ou un vendeur en remplit un."
+          "hint": "Une nouvelle annonce publique correspond à l'un de vos ordres d'achat, ou un vendeur en honore un."
         },
         "org": {
           "label": "Organisations",
@@ -1015,16 +1015,16 @@
           "hint": "Offres sur vos contrats publics, et nouveaux contrats publics si vous les activez ci-dessous."
         },
         "announcements": {
-          "label": "Annonces",
+          "label": "Communiqués",
           "hint": "Messages de l'équipe SC Market. Toujours envoyés sur le site, en push et sur Discord ; vous pouvez désactiver les e-mails."
         },
         "storefront": {
           "label": "Demandes de vitrine",
-          "hint": "Les réponses à une demande de vitrine personnalisée que vous avez envoyée."
+          "hint": "Les réponses à une demande de vitrine à vos couleurs que vous avez envoyée."
         },
         "threads": {
           "label": "Fils Discord",
-          "hint": "Tes fils de commandes et d'offres sur le serveur Discord d'un vendeur."
+          "hint": "Vos fils de commandes et d'offres sur le serveur Discord d'un vendeur."
         }
       },
       "rows": {
@@ -1037,7 +1037,7 @@
         },
         "status": {
           "label": "Changements de statut",
-          "hint": "En cours, terminée, annulée"
+          "hint": "En cours, honorée, annulée"
         },
         "assigned": {
           "label": "Assignée à vous"
@@ -1069,11 +1069,11 @@
           "label": "Alerte de prix"
         },
         "buy-order-match": {
-          "label": "Correspondance d'ordre d'achat"
+          "label": "Ordre d'achat correspondant"
         },
         "buy-order-filled": {
-          "label": "Ordre d'achat rempli",
-          "hint": "Un vendeur a rempli votre ordre d'achat et une commande a été créée"
+          "label": "Ordre d'achat honoré",
+          "hint": "Un vendeur a honoré votre ordre d'achat et une commande a été créée"
         },
         "invite": {
           "label": "Invitation d'organisation"
@@ -1086,7 +1086,7 @@
           "hint": "Uniquement si vous activez les alertes ci-dessous"
         },
         "admin": {
-          "label": "Annonce"
+          "label": "Communiqué"
         },
         "member-joined": {
           "label": "Nouveau membre",
@@ -1107,8 +1107,8 @@
         },
         "thread-invite": {
           "label": "Invitation au serveur Discord",
-          "hint": "Quand le bot ne peut pas t'ajouter à un fil de commande ou d'offre",
-          "tip": "Le bot ouvre un fil privé pour chaque commande ou offre sur le serveur Discord du vendeur. S'il ne peut pas t'ajouter (souvent parce que tu n'es pas encore sur ce serveur), il t'envoie en MP une invitation au serveur."
+          "hint": "Quand le bot ne peut pas vous ajouter à un fil de commande ou d'offre",
+          "tip": "Le bot ouvre un fil privé pour chaque commande ou offre sur le serveur Discord du vendeur. S'il ne peut pas vous ajouter (souvent parce que vous n'êtes pas encore sur ce serveur), il vous envoie en MP une invitation au serveur."
         }
       },
       "subtitle": "Choisissez où chaque type de notification vous parvient.",
@@ -1118,7 +1118,7 @@
       "linkDiscord": "Liez Discord pour recevoir des MP",
       "personalOnly": "Réglé une seule fois dans Personnel pour toutes vos notifications",
       "comingSoon": "Pas encore disponible pour cette notification",
-      "manageWatchlist": "Gérer votre watchlist",
+      "manageWatchlist": "Gérer votre liste de suivi",
       "status": {
         "pushOn": "Push : activé sur cet appareil",
         "pushOff": "Push : non configuré sur cet appareil",
@@ -1135,7 +1135,7 @@
         "on": "Jusqu'à ce que je la réactive",
         "until": "En sourdine jusqu'à {{time}}",
         "active": "Aucun push, e-mail ou MP Discord de {{org}}. Tout reste visible dans vos notifications.",
-        "hint": "Coupe les push, e-mails et MP Discord de cette org. Les notifications dans l'app et les annonces arrivent toujours."
+        "hint": "Coupe les push, e-mails et MP Discord de cette org. Les notifications dans l'app et les communiqués arrivent toujours."
       }
     },
     "contractAlerts": {
@@ -1158,7 +1158,7 @@
       "authenticateWithRSI": "S'authentifier avec RSI",
       "viewUserProfile": "Voir le profil utilisateur",
       "reVerifyTitle": "Re-vérifier le profil",
-      "reVerifyDescription": "Mettez à jour le nom d'utilisateur de votre profil pour qu'il corresponde à votre handle Spectrum actuel. Cela ne mettra à jour que votre nom d'utilisateur.",
+      "reVerifyDescription": "Mettez à jour le nom d'utilisateur de votre profil pour qu'il corresponde à votre pseudo Spectrum actuel. Cela ne mettra à jour que votre nom d'utilisateur.",
       "reVerifyButton": "Re-vérifier le profil",
       "reVerifySuccess": "Profil re-vérifié avec succès ! Votre nom d'utilisateur a été mis à jour.",
       "reVerifyError": "Échec de la re-vérification du profil. Veuillez réessayer plus tard.",
@@ -1197,12 +1197,12 @@
       "verifyAccount": "Vérifiez votre compte",
       "verifyAccountDescription": "Vous devez vérifier votre compte pour accéder à toutes les fonctionnalités. Choisissez l'une des méthodes suivantes :",
       "hideOnlineStatus": "Masquer mon statut en ligne",
-      "hideOnlineStatusHelp": "Les acheteurs voient à peu près quand tu étais actif pour la dernière fois (par exemple « Actif aujourd'hui ») sur tes annonces et ta boutique. Active cette option pour le masquer.",
-      "hideOnlineStatusError": "Impossible d'enregistrer ton réglage de statut en ligne"
+      "hideOnlineStatusHelp": "Les acheteurs voient à peu près quand vous étiez actif pour la dernière fois (par exemple « Actif aujourd'hui ») sur vos annonces et votre boutique. Activez cette option pour le masquer.",
+      "hideOnlineStatusError": "Impossible d'enregistrer votre réglage de statut en ligne"
     },
     "priceAlerts": {
       "title": "Alertes de prix",
-      "description": "Choisissez les canaux dans Notifications, sous Marché et watchlist › Alerte de prix. Par défaut, vous recevez une notification sur le site, une notification push et un DM Discord ; l'e-mail est désactivé tant que vous ne l'activez pas.",
+      "description": "Choisissez les canaux dans Notifications, sous Marché et liste de suivi › Alerte de prix. Par défaut, vous recevez une notification sur le site, une notification push et un MP Discord ; l'e-mail est désactivé tant que vous ne l'activez pas.",
       "site": "Notification sur le site",
       "push": "Notification push",
       "email": "E-mail",
@@ -1507,7 +1507,7 @@
       "text": "Commandes"
     },
     "my_org": "Mon org",
-    "org_public_page": "Page org",
+    "org_public_page": "Page de l'org",
     "manage": {
       "title": "Gérer"
     },
@@ -1532,26 +1532,26 @@
     "weapons": "Armes",
     "armor": "Armure",
     "components": "Composants",
-    "bulk_items": "Articles en vrac",
+    "bulk_items": "Articles en gros",
     "buy_orders": "Ordres d'achat",
-    "contractor_services": "Services du prestataire",
+    "contractor_services": "Services de prestataires",
     "services_short": "Services",
     "my_org_listings": "Les annonces de mon org",
     "sell_materials": "Vendre des matériaux",
     "contracting": {
-      "title": "Contractualisation"
+      "title": "Contrats"
     },
     "my_orders": "Mes commandes",
     "orders_ive_placed": "Mes commandes",
-    "orders_assigned_to_me": "Qui m'ont été assignées",
-    "org_orders": "Commandes org",
+    "orders_assigned_to_me": "Assignées à moi",
+    "org_orders": "Commandes de l'org",
     "contractors": "Prestataires",
     "open_contracts": "Contrats ouverts",
     "organizations": {
       "title": "Organisations"
     },
     "recruiting": "Recrutement",
-    "register": "Enregistrer",
+    "register": "Enregistrer une org",
     "admin": {
       "title": "Admin",
       "game_data": "Données du jeu",
@@ -1564,7 +1564,7 @@
       "title": "SC Market"
     },
     "sc_market_home": "Accueil SC Market",
-    "toggle_drawer": "Afficher/masquer le tiroir",
+    "toggle_drawer": "Afficher/masquer le menu",
     "alerts": {
       "text": "Alertes"
     },
@@ -1669,7 +1669,7 @@
     "how_to_get_notified": "Comment être notifié lorsqu'une commande est passée",
     "how_to_get_notified_answer": "Ajoutez le [Bot Discord officiel de SC Market]({{BOT_INSTALL_PATH}}) à votre serveur et choisissez un salon d'alertes de commande : chaque nouvelle commande et offre y est publiée, et chacune peut avoir son propre fil de commande. Le bot peut aussi vous envoyer des messages privés, par exemple un rappel quand une offre attend votre réponse, dès que votre compte Discord est lié et que vous partagez un serveur avec le bot. Choisissez ce que vous recevez en MP dans Paramètres › Notifications. Vous pouvez aussi utiliser la configuration ci-dessous pour honorer les commandes via [le serveur officiel de SC Market]({{DISCORD_INVITE}}).",
     "how_to_communicate": "Comment communiquer avec les acheteurs via Discord",
-    "how_to_communicate_answer": "Ajoutez le bot Discord officiel de SC Market à votre serveur et choisissez un salon pour les fils de commande : chaque nouvelle commande ou offre y ouvre alors un fil privé avec l'acheteur et le vendeur assigné, et les acheteurs sont invités sur votre serveur pour traiter la commande ensemble.\n\n1. Dans **Paramètres › Discord** de votre boutique, ou dans l'onglet **Intégration Discord** de votre organisation, cliquez sur **[Ajouter le bot à un serveur]({{BOT_INSTALL_PATH}})** et choisissez votre serveur dans Discord. Vous revenez avec le serveur lié.\n\n2. Choisissez le salon des fils de commande et, si vous le souhaitez, des salons pour les alertes de commande (une publication pour chaque nouvelle commande et offre, avec un bouton Réclamer), puis enregistrez.\n\nVous avez ajouté le bot depuis Discord ? Liez votre compte Discord dans vos paramètres SC Market, puis lancez `/setup threads` dans le salon qui doit accueillir les fils de commande. Pour les commandes de votre organisation, renseignez `org` avec son Spectrum ID (par exemple `/setup threads org:SCMARKET`) ; pour les commandes passées auprès de vous, laissez-le vide. Pour les alertes, lancez `/setup alerts` (avec le même `org`) dans un salon d'équipe.\n\nAjouter le bot nécessite la permission **Gérer le serveur** sur le serveur Discord, et les commandes `/setup threads`, `/setup alerts` nécessitent **Gérer les salons**. Pour une organisation, il vous faut aussi sa permission **Manage Webhooks** sur SC Market (ou **Manage Orders** pour les alertes créées avec `/setup alerts`). Dans le salon des fils, le bot a besoin de Voir le salon, Créer des fils privés, Envoyer des messages dans les fils et Créer une invitation. Lancez `/setup status` pour voir ce que reçoit un salon, et `/help` pour voir toutes les commandes.",
+    "how_to_communicate_answer": "Ajoutez le bot Discord officiel de SC Market à votre serveur et choisissez un salon pour les fils de commande : chaque nouvelle commande ou offre y ouvre alors un fil privé avec l'acheteur et le vendeur assigné, et les acheteurs sont invités sur votre serveur pour traiter la commande ensemble.\n\n1. Dans **Paramètres › Discord** de votre boutique, ou dans l'onglet **Intégration Discord** de votre organisation, cliquez sur **[Ajouter le bot à un serveur]({{BOT_INSTALL_PATH}})** et choisissez votre serveur dans Discord. Vous revenez avec le serveur lié.\n\n2. Choisissez le salon des fils de commande et, si vous le souhaitez, des salons pour les alertes de commande (une publication pour chaque nouvelle commande et offre, avec un bouton Réclamer), puis enregistrez.\n\nVous avez ajouté le bot depuis Discord ? Liez votre compte Discord dans vos paramètres SC Market, puis lancez `/setup threads` dans le salon qui doit accueillir les fils de commande. Pour les commandes de votre organisation, renseignez `org` avec son Spectrum ID (par exemple `/setup threads org:SCMARKET`) ; pour les commandes passées auprès de vous, laissez-le vide. Pour les alertes, lancez `/setup alerts` (avec le même `org`) dans un salon d'équipe.\n\nAjouter le bot nécessite la permission **Gérer le serveur** sur le serveur Discord, et les commandes `/setup threads`, `/setup alerts` nécessitent **Gérer les salons**. Pour une organisation, il vous faut aussi sa permission **Gérer les webhooks** sur SC Market (ou **Gérer les commandes** pour les alertes créées avec `/setup alerts`). Dans le salon des fils, le bot a besoin de Voir le salon, Créer des fils privés, Envoyer des messages dans les fils et Créer une invitation. Lancez `/setup status` pour voir ce que reçoit un salon, et `/help` pour voir toutes les commandes.",
     "learn_connect": "Connecter le bot Discord",
     "learn_alerts": "Alertes de commande et prise en charge"
   },
@@ -1841,7 +1841,7 @@
   },
   "recruiting": {
     "viewDetails": "Voir les détails",
-    "viewContractor": "Voir le contractant",
+    "viewContractor": "Voir le prestataire",
     "share": "Partager",
     "title": "Recrutement",
     "scOrgsNote": "Vous recrutez ? SC Orgs propose les candidatures, un annuaire des orgs et des outils pour gérer les membres →",
@@ -1895,7 +1895,7 @@
     "orders": "Commandes",
     "total_value": "Valeur totale",
     "description": "Les personnes qui ont passé commande auprès de cette org ou de ses boutiques, membres compris. Chaque ligne ne compte que les commandes de ce client ; les commandes annulées ne sont pas comptées.",
-    "fulfilled": "Terminées",
+    "fulfilled": "Honorées",
     "last_order": "Dernière commande"
   },
   "profileNavAvatar": {
@@ -1917,7 +1917,7 @@
     "about_tab": "À propos",
     "services_tab": "Services",
     "market_tab": "Marché",
-    "order_tab": "Order",
+    "order_tab": "Commandes personnalisées",
     "reviews_tab": "Avis",
     "store_market": "Marché",
     "store_services": "Services",
@@ -1952,20 +1952,20 @@
     "title": "Commandes récentes"
   },
   "orderTrend": {
-    "order_count_daily": "Nombre de Commandes Quotidien",
-    "order_count_weekly": "Nombre de Commandes Hebdomadaire",
-    "order_count_monthly": "Nombre de Commandes Mensuel",
-    "average_order_value_monthly": "Valeur Moyenne des Commandes (Mensuel)",
-    "average_order_value": "Valeur Moyenne des Commandes",
-    "order_value_daily": "Valeur des Commandes Quotidienne",
-    "orders_daily": "Commandes Quotidiennes",
-    "orders_weekly": "Commandes Hebdomadaires",
-    "orders_monthly": "Commandes Mensuelles",
-    "status_trends": "Tendances de Statut",
-    "in_progress": "En Cours",
-    "fulfilled": "Rempli",
+    "order_count_daily": "Nombre de commandes par jour",
+    "order_count_weekly": "Nombre de commandes par semaine",
+    "order_count_monthly": "Nombre de commandes par mois",
+    "average_order_value_monthly": "Valeur moyenne des commandes (par mois)",
+    "average_order_value": "Valeur moyenne des commandes",
+    "order_value_daily": "Valeur des commandes par jour",
+    "orders_daily": "Commandes par jour",
+    "orders_weekly": "Commandes par semaine",
+    "orders_monthly": "Commandes par mois",
+    "status_trends": "Tendances par statut",
+    "in_progress": "En cours de traitement",
+    "fulfilled": "Honorée",
     "cancelled": "Annulé",
-    "not_started": "Non Commencé"
+    "not_started": "En file d'attente"
   },
   "orderServiceArea": {
     "associated_services": "Services associés",
@@ -2052,26 +2052,26 @@
     }
   },
   "orderMetrics": {
-    "activeOrders": "Commandes Actives",
-    "allOrders": "Toutes les Commandes",
-    "activeOrderValue": "Valeur des Commandes Actives",
-    "completedOrderValue": "Valeur des Commandes Terminées",
-    "completedOrders": "Commandes Terminées",
-    "totalValue": "Valeur Totale",
-    "recentActivity": "Activité Récente",
-    "ordersLast7Days": "Commandes 7 Derniers Jours",
-    "ordersLast30Days": "Commandes 30 Derniers Jours",
-    "valueLast7Days": "Valeur 7 Derniers Jours",
-    "valueLast30Days": "Valeur 30 Derniers Jours",
-    "statusBreakdown": "Répartition des Statuts",
-    "notStarted": "Non Commencé",
-    "inProgress": "En Cours",
-    "fulfilled": "Exécuté",
+    "activeOrders": "Commandes actives",
+    "allOrders": "Toutes les commandes",
+    "activeOrderValue": "Valeur des commandes actives",
+    "completedOrderValue": "Valeur des commandes terminées",
+    "completedOrders": "Commandes terminées",
+    "totalValue": "Valeur totale",
+    "recentActivity": "Activité récente",
+    "ordersLast7Days": "Commandes des 7 derniers jours",
+    "ordersLast30Days": "Commandes des 30 derniers jours",
+    "valueLast7Days": "Valeur des 7 derniers jours",
+    "valueLast30Days": "Valeur des 30 derniers jours",
+    "statusBreakdown": "Répartition des statuts",
+    "notStarted": "En file d'attente",
+    "inProgress": "En cours de traitement",
+    "fulfilled": "Honorée",
     "cancelled": "Annulé",
-    "topCustomers": "Meilleurs Clients",
+    "topCustomers": "Meilleurs clients",
     "orders": "Commandes",
-    "failedToLoad": "Échec du Chargement",
-    "noData": "Aucune Donnée"
+    "failedToLoad": "Échec du chargement",
+    "noData": "Aucune donnée"
   },
   "marketListings": {
     "associatedListings": "Annonces de marché associées",
@@ -2086,7 +2086,7 @@
       "fulfilled": "Honorée",
       "inProgress": "En cours de traitement",
       "cancelled": "Annulée",
-      "notStarted": "En attente",
+      "notStarted": "En file d'attente",
       "active": "Active",
       "inactive": "Inactive"
     },
@@ -2104,9 +2104,9 @@
       "past": "Passées",
       "fulfilled": "Honorées",
       "inProgress": "En cours de traitement",
-      "notStarted": "En attente",
+      "notStarted": "En file d'attente",
       "cancelled": "Annulées",
-      "unclaimed": "Non réclamée"
+      "unclaimed": "Non prises en charge"
     },
     "orderLabel": "Commande",
     "testChip": "Test",
@@ -2127,15 +2127,15 @@
     "buyer": "Acheteur",
     "buyer_username": "Nom d'utilisateur de l'acheteur",
     "buyer_username_placeholder": "Saisir le nom d'utilisateur de l'acheteur",
-    "claimed": "Commande réclamée",
-    "claimOrder": "Réclamer",
+    "claimed": "Commande prise en charge",
+    "claimOrder": "Prendre en charge",
     "clear_filters": "Tout effacer",
     "details": "Détails",
     "filter_orders": "Filtrer les commandes",
     "filters": "Filtres",
     "has_market_listings": "A des annonces du marché",
     "has_service": "A un service",
-    "marketListings": "Objets",
+    "marketListings": "Articles",
     "messages": "Messages",
     "seller": "Vendeur",
     "seller_username": "Nom d'utilisateur du vendeur",
@@ -2163,10 +2163,10 @@
     "cancel": "Annuler",
     "complete_order": "Terminer la commande",
     "begin_work": "Commencer le travail",
-    "not_started": "En attente",
-    "claim": "Réclamer",
-    "claimed": "Commande réclamée",
-    "claimFailed": "Échec de la réclamation de la commande",
+    "not_started": "En file d'attente",
+    "claim": "Prendre en charge",
+    "claimed": "Commande prise en charge",
+    "claimFailed": "Impossible de prendre en charge la commande",
     "discord_server_invite": "Invitation au serveur Discord",
     "failed_to_load": "Échec du chargement des détails de la commande. Veuillez réessayer.",
     "join_server": "Rejoindre le serveur",
@@ -2247,8 +2247,8 @@
     "offer": "Offre",
     "user": "Utilisateur",
     "status": "Statut",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "En attente de confirmation",
+    "waitingCustomer": "À vous de répondre",
     "accepted": "Acceptée",
     "rejected": "Rejetée",
     "items": "articles",
@@ -2282,10 +2282,10 @@
     "seller": "Vendeur",
     "seller_username": "Nom d'utilisateur du vendeur",
     "seller_username_placeholder": "Saisir le nom d'utilisateur ou l'identifiant Spectrum du vendeur",
-    "unclaimed": "Non réclamée",
+    "unclaimed": "Non prise en charge",
     "waitingForBuyer": "En attente de l'acheteur",
     "waitingForSeller": "En attente du vendeur",
-    "yourTurn": "À vous de jouer"
+    "yourTurn": "À vous"
   },
   "OfferServiceEditArea": {
     "associatedServices": "Services associés",
@@ -2343,8 +2343,8 @@
     "reject": "Rejeter",
     "cancelOrder": "Annuler la commande",
     "cancel": "Annuler",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "En attente de confirmation",
+    "waitingCustomer": "À vous de répondre",
     "rejected": "Rejetée",
     "accepted": "Acceptée",
     "discordServerInvite": "Invitation au serveur Discord",
@@ -2380,8 +2380,8 @@
   },
   "AddNotificationWebhook": {
     "addWebhook": "Ajouter un Webhook de notification Discord",
-    "webhookName": "Nom du Webhook",
-    "webhookUrl": "URL du Webhook",
+    "webhookName": "Nom du webhook",
+    "webhookUrl": "URL du webhook",
     "publicContractCreated": "Nouveaux contrats publics (sur tout le site)",
     "invalidUrl": "URL invalide",
     "orderCreated": "Commande créée",
@@ -2489,20 +2489,20 @@
     "sortAttribute": "Critère de tri",
     "none": "Aucun",
     "title": "Titre",
-    "priceLowHigh": "Prix (du plus bas au plus élevé)",
-    "priceHighLow": "Prix (du plus élevé au plus bas)",
-    "quantityLowHigh": "Quantité disponible (de la plus basse à la plus élevée)",
-    "quantityHighLow": "Quantité disponible (de la plus élevée à la plus basse)",
-    "dateOldNew": "Date de mise en vente (du plus ancien au plus récent)",
-    "dateNewOld": "Date de mise en vente (du plus récent au plus ancien)",
+    "priceLowHigh": "Prix (croissant)",
+    "priceHighLow": "Prix (décroissant)",
+    "quantityLowHigh": "Quantité disponible (croissante)",
+    "quantityHighLow": "Quantité disponible (décroissante)",
+    "dateOldNew": "Date de publication (plus anciennes d'abord)",
+    "dateNewOld": "Date de publication (plus récentes d'abord)",
     "activity": "Activité récente",
-    "rating": "Note (de la plus élevée à la plus basse)",
+    "rating": "Note (décroissante)",
     "filtering": "Filtrage",
     "quantityAvailable": "Quantité disponible",
     "listingStatus": "Statut de l'annonce",
     "either": "L'un ou l'autre",
-    "active": "Actif",
-    "inactive": "Inactif",
+    "active": "Active",
+    "inactive": "Inactive",
     "saleType": "Type de vente",
     "any": "Tous",
     "sale": "Vente",
@@ -2521,14 +2521,14 @@
     "sortNewest": "Date : plus récentes d'abord",
     "sortNone": "Aucun",
     "sortOldest": "Date : plus anciennes d'abord",
-    "sortPriceHigh": "Prix : du plus élevé au plus bas",
-    "sortPriceLow": "Prix : du plus bas au plus élevé",
-    "sortQualityHigh": "Qualité : de la plus élevée à la plus basse",
-    "sortQualityLow": "Qualité : de la plus basse à la plus élevée",
-    "sortQuantityHigh": "Quantité : de la plus élevée à la plus basse",
-    "sortQuantityLow": "Quantité : de la plus basse à la plus élevée",
-    "sortRatingHigh": "Note : de la plus élevée à la plus basse",
-    "sortRatingLow": "Note : de la plus basse à la plus élevée",
+    "sortPriceHigh": "Prix : décroissant",
+    "sortPriceLow": "Prix : croissant",
+    "sortQualityHigh": "Qualité : décroissante",
+    "sortQualityLow": "Qualité : croissante",
+    "sortQuantityHigh": "Quantité : décroissante",
+    "sortQuantityLow": "Quantité : croissante",
+    "sortRatingHigh": "Note : décroissante",
+    "sortRatingLow": "Note : croissante",
     "sortUpdated": "Récemment mises à jour",
     "status": "Statut"
   },
@@ -2577,12 +2577,12 @@
     "ended": "Terminée",
     "endingIn": "Se termine dans",
     "listed": "Publiée",
-    "updated": "Mis à jour",
+    "updated": "Mise à jour",
     "expires": "Expire",
     "description": "Description",
     "orders": "Commandes",
-    "activeOrders": "Commandes Actives",
-    "previousOrders": "Commandes Précédentes",
+    "activeOrders": "Commandes actives",
+    "previousOrders": "Commandes précédentes",
     "anonymousReviewer": "Anonyme",
     "inCarts_one": "{{count}} personne l'a dans son panier",
     "inCarts_many": "{{count}} personnes l'ont dans leur panier",
@@ -2645,7 +2645,7 @@
     "reason": "Raison",
     "additionalDetails": "Détails supplémentaires",
     "detailsPlaceholder": "Veuillez fournir tout contexte ou détail supplémentaire sur ce signalement...",
-    "detailsHelperText": "Optionnel : Fournissez plus de contexte pour aider les modérateurs à comprendre le problème (max 1000 caractères)",
+    "detailsHelperText": "Facultatif : fournissez plus de contexte pour aider les modérateurs à comprendre le problème (max 1000 caractères)",
     "cancel": "Annuler",
     "submit": "Soumettre le signalement",
     "submitting": "Soumission...",
@@ -2698,8 +2698,8 @@
     "price": "Prix",
     "minBidIncrement": "Incrément d'enchère minimum",
     "description": "Description",
-    "internalListing": "Annonce Interne",
-    "publicListing": "Annonce Publique",
+    "internalListing": "Annonce interne",
+    "publicListing": "Annonce publique",
     "updated": "Mis à jour !",
     "updateError": "Erreur lors de la mise à jour !"
   },
@@ -2874,11 +2874,11 @@
     "failed": "Échec de l'envoi ! {{error}}",
     "unknown_error": "Erreur inconnue",
     "agreedPriceRequired": "Veuillez saisir un prix convenu par unité (au moins 1 aUEC).",
-    "agreePriceDescription": "Cet ordre d'achat est négociable. Saisissez le prix convenu par unité en aUEC pour le remplir.",
+    "agreePriceDescription": "Cet ordre d'achat est négociable. Saisissez le prix convenu par unité en aUEC pour l'honorer.",
     "agreePriceTitle": "Prix convenu par unité",
     "created": "Ordre d'achat créé avec succès",
-    "fulfillQuantity": "Quantité à remplir",
-    "fulfillTitle": "Remplir l'ordre d'achat",
+    "fulfillQuantity": "Quantité à fournir",
+    "fulfillTitle": "Honorer l'ordre d'achat",
     "imageHint": "Ajoutez des photos de référence (facultatif, les grandes images sont optimisées automatiquement)",
     "negotiable": "Négociable",
     "negotiableSuggested": "Négociable (~{{price}} aUEC)",
@@ -3023,7 +3023,7 @@
       "manage_stock": "Gérer le stock",
       "manage_market": "Gérer le marché",
       "manage_recruiting": "Gérer le recrutement",
-      "manage_webhooks": "Gérer les Webhooks",
+      "manage_webhooks": "Gérer les webhooks",
       "kick_members": "Exclure des membres",
       "claim_orders": "Prendre en charge les commandes",
       "manage_blocklist": "Gérer la liste de blocage",
@@ -3190,7 +3190,7 @@
     "here": "ici",
     "submit": "Envoyer",
     "copy_and_open": "Copier le code et ouvrir le profil",
-    "instructions": "Afin de vérifier que vous êtes bien propriétaire du profil RSI ci-dessus, veuillez copier le code suivant <sentinelCode>your code</sentinelCode> et l'ajouter dans la courte bio de votre profil utilisateur, puis saisissez votre pseudo RSI (pas votre surnom) ci-dessus. Vous pouvez retirer ce code une fois la vérification terminée. Consultez <guideLink>here</guideLink> pour un guide illustré. Cliquez sur Envoyer dès que le code est visible sur votre profil.",
+    "instructions": "Afin de vérifier que vous êtes bien propriétaire du profil RSI ci-dessus, veuillez copier le code suivant <sentinelCode>votre code</sentinelCode> et l'ajouter dans la courte bio de votre profil utilisateur, puis saisissez votre pseudo RSI (pas votre surnom) ci-dessus. Vous pouvez retirer ce code une fois la vérification terminée. Consultez <guideLink>ce guide illustré</guideLink>. Cliquez sur Envoyer dès que le code est visible sur votre profil.",
     "click_to_copy": "Cliquez pour copier",
     "tos": "J'ai lu et j'accepte les <tosLink>Conditions d'utilisation</tosLink> de SC Market",
     "acceptTos": "Accepter les conditions d’utilisation"
@@ -3201,7 +3201,7 @@
     "copy_and_open": "Copier le code et ouvrir la page de l'org",
     "submit": "Envoyer",
     "failed_auth": "Échec de l'authentification ! {{reason}}",
-    "instructions": "Afin de vérifier que vous êtes bien propriétaire de l'organisation ci-dessus, veuillez copier le code suivant <sentinelCode>your code</sentinelCode> et l'ajouter dans les sections introduction, histoire, manifeste ou charte de votre org. Vous pouvez retirer ce code une fois la vérification terminée. Cliquez sur Envoyer dès que le code est visible sur la page de l'org."
+    "instructions": "Afin de vérifier que vous êtes bien propriétaire de l'organisation ci-dessus, veuillez copier le code suivant <sentinelCode>votre code</sentinelCode> et l'ajouter dans les sections introduction, histoire, manifeste ou charte de votre org. Vous pouvez retirer ce code une fois la vérification terminée. Cliquez sur Envoyer dès que le code est visible sur la page de l'org."
   },
   "people": {
     "title": "Personnes"
@@ -3251,10 +3251,10 @@
     "price": "Prix :",
     "subtotal": "Sous-total",
     "remove": "Retirer",
-    "seller": "Vendeur - ",
+    "seller": "Vendeur : ",
     "total": "Total",
     "note": "Note",
-    "submitOfferDesc": "Envoyez l'offre pour transmettre votre proposition et négocier et vous coordonner avec le vendeur.",
+    "submitOfferDesc": "Envoyez votre offre pour négocier et vous coordonner avec le vendeur.",
     "payTotal": "Total à payer : {{total}} aUEC",
     "offerOptional": "Offre (facultatif)",
     "submitOffer": "Envoyer l'offre",
@@ -3281,7 +3281,7 @@
     "exceedsStockWithCart": "Seulement {{available}} disponible(s), le panier en aurait {{total}}",
     "inCart": "Dans votre panier",
     "invalidQty": "La quantité doit être d'au moins 1",
-    "itemRemoved": "Objet retiré du panier",
+    "itemRemoved": "Article retiré du panier",
     "nextAvailable": "Prochaine disponibilité",
     "othersInCart_one": "{{count}} autre personne l'a dans son panier",
     "othersInCart_many": "{{count}} autres personnes l'ont dans leur panier",
@@ -3291,12 +3291,12 @@
     "priceDecreased": "Prix baissé",
     "priceIncreased": "Prix augmenté",
     "pricesChanged": "Les prix ont changé",
-    "pricesChangedMessage": "Certains prix d'objets ont changé depuis que vous les avez ajoutés à votre panier. Veuillez vérifier avant de passer la commande.",
+    "pricesChangedMessage": "Certains prix ont changé depuis que vous avez ajouté ces articles à votre panier. Vérifiez-les avant de passer la commande.",
     "quantityUpdated": "Quantité mise à jour",
     "title": "Panier",
     "unavailable": "Indisponible",
-    "unavailableItems": "Objets indisponibles",
-    "unavailableItemsMessage": "Certains objets de votre panier ne sont plus disponibles. Veuillez les retirer avant de passer la commande.",
+    "unavailableItems": "Articles indisponibles",
+    "unavailableItemsMessage": "Certains articles de votre panier ne sont plus disponibles. Retirez-les avant de passer la commande.",
     "unavailableMessage": "Cette variante n'est plus disponible",
     "variant": "Variante",
     "variantUpdated": "Variante mise à jour",
@@ -3317,15 +3317,15 @@
     "supporters": "soutiens",
     "faqTitle": "Vos questions, nos réponses",
     "faqSellItemsQ": "Comment vendre des articles ?",
-    "faqSellItemsA": "Créez des annonces sur le marché pour les articles que vous souhaitez vendre. Les acheteurs peuvent ajouter les articles qu'ils veulent à leur panier, puis passer une commande auprès de vous pour ces articles. Ensuite, c'est à vous et à l'acheteur de convenir d'un moment et d'un lieu pour échanger les aUEC et les marchandises.",
+    "faqSellItemsA": "Créez une annonce pour chaque article. Les acheteurs ajoutent les articles à leur panier et vous passent commande, puis vous convenez avec l'acheteur d'un moment et d'un lieu en jeu pour échanger la marchandise et les aUEC.",
     "faqSafeQ": "Est-il sûr d'utiliser SC Market ?",
-    "faqSafeA": "Comme nous ne gérons nous-mêmes aucune des marchandises ni des aUEC, nous ne pouvons offrir aucune garantie. Cependant, nous proposons des moyens pour les acheteurs et les vendeurs de s'évaluer mutuellement, afin que vous puissiez vous assurer que d'autres ont eu des expériences positives avec un vendeur si vous craignez de vous faire arnaquer.",
+    "faqSafeA": "Les échanges se font entre joueurs : nous ne pouvons donc pas les garantir, mais acheteurs et vendeurs s'évaluent mutuellement après chaque commande. Consultez les notes et l'historique de commandes d'un vendeur avant d'échanger.",
     "faqListThingsQ": "Quels types de choses puis-je mettre en vente sur SC Market ?",
-    "faqListThingsA": "Vous pouvez mettre en vente n'importe quel article ou service tant que vous acceptez des aUEC en échange. Les articles et services doivent généralement être liés à Star Citizen, et les services peuvent être réalisés dans le jeu ou en dehors.",
+    "faqListThingsA": "Tout article ou service Star Citizen que vous échangez contre des aUEC : armes, armures, composants, marchandises, cargaisons, et services comme le transport, l'escorte, le minage ou le sauvetage médical. Les services peuvent se dérouler en jeu ou en dehors.",
     "faqFeeQ": "SC Market prend-il une commission ?",
-    "faqFeeA": "Non. Tous les services sont fournis ici gratuitement et aucun aUEC ne transite par nous.",
+    "faqFeeA": "Non. SC Market est gratuit, et aucun aUEC ne transite par nous. Les acheteurs paient les vendeurs directement en jeu.",
     "faqRealMoneyQ": "Puis-je vendre des articles contre de l'argent réel ?",
-    "faqRealMoneyA": "Non. Toutes les transactions sur SC Market doivent être effectuées en aUEC.",
+    "faqRealMoneyA": "Non. Toutes les transactions sur SC Market se font en aUEC. Le commerce contre de l'argent réel est interdit, conformément aux conditions d'utilisation de CIG.",
     "seeAll": "Tout voir",
     "heroTitle": "La place de marché entre joueurs de Star Citizen",
     "heroText": "Achetez et vendez des articles, faites appel à des services, le tout payé en aUEC en jeu. Nous ne prenons aucune commission.",
@@ -3371,23 +3371,23 @@
     "topShopsEmpty": "Aucune boutique pour le moment.",
     "topShopsError": "Impossible de charger les boutiques.",
     "sellTitle": "Commencer à vendre",
-    "seoDescription": "SC Market est la place de marché Star Citizen où les joueurs achètent, vendent et échangent des objets en jeu, et engagent des orgs pour des services comme le transport, l'escorte, le médical et le salvage — le tout en aUEC.",
+    "seoDescription": "Échangez avec d'autres joueurs de Star Citizen : achetez et vendez des objets, des composants de vaisseau et des marchandises contre des aUEC, publiez des ordres d'achat et engagez des orgs pour le transport, l'escorte et la récupération.",
     "seoTitle": "SC Market — Place de marché Star Citizen : achetez, vendez et échangez des objets en aUEC",
     "sellText": "Ouvrez une boutique seul ou en tant qu'org. Les membres de l'org prennent en charge et honorent les commandes ensemble, avec une boutique, un stock et une réputation partagés.",
-    "sellStep1Title": "Mettez-le en vente",
+    "sellStep1Title": "Mettez en vente",
     "sellStep1Text": "N'importe quel article ou service, en n'importe quelle quantité, au prix en aUEC.",
     "sellStep2Title": "Recevez une alerte Discord",
     "sellStep2Text": "Le bot vous prévient et ouvre un fil pour chaque commande.",
     "sellStep3Title": "Retrouvez-vous en jeu",
     "sellStep3Text": "Échangez la marchandise et les aUEC, puis notez-vous mutuellement.",
-    "sellRegisterOrg": "Inscrire votre org",
+    "sellRegisterOrg": "Enregistrer votre org",
     "alertImageLabel": "Illustration d'une alerte de commande Discord",
     "alertTitle": "Nouvelle commande : {{item}}",
     "alertQuantity": "Quantité",
     "alertTotal": "Total",
     "alertBuyer": "Acheteur",
     "alertStatus": "Statut",
-    "alertStatusValue": "En attente de vous",
+    "alertStatusValue": "Vous attend",
     "alertNote": "Illustration d'une alerte de commande",
     "gameDataHeading": "Données du jeu",
     "gameDataOpenWiki": "Ouvrir le wiki",
@@ -3546,7 +3546,7 @@
     "category": {
       "activity": "Activité",
       "market": "Marché et annonces",
-      "orders": "Commandes et exécution",
+      "orders": "Commandes et traitement",
       "personal": "Personnel"
     },
     "customize": "Personnaliser",
@@ -3641,7 +3641,7 @@
         "title": "Notifications"
       },
       "offers": {
-        "description": "Offres entrantes que vous pouvez réclamer, fusionner ou traiter.",
+        "description": "Offres entrantes que vous pouvez prendre en charge, fusionner ou traiter.",
         "title": "Offres reçues"
       },
       "orderCountTrend": {
@@ -4184,7 +4184,7 @@
     "create_contract": "Créer un contrat"
   },
   "contractorListings": {
-    "apiWarning": "Remarque : le point de terminaison d'annonces spécifique aux contractants n'est pas encore implémenté. Affichage des résultats filtrés de la recherche générale.",
+    "apiWarning": "Remarque : le point de terminaison d'annonces propre aux prestataires n'est pas encore implémenté. Affichage des résultats filtrés de la recherche générale.",
     "created": "En vente",
     "edit": "Modifier",
     "empty": {
@@ -4269,7 +4269,7 @@
     "hideMoreOptions": "Masquer les options",
     "imageHint": "Ajoutez des photos à votre annonce",
     "imageSizeLimit": "(Les grandes images sont optimisées automatiquement)",
-    "inactive": "Inactive (Brouillon)",
+    "inactive": "Inactive (brouillon)",
     "inactiveHelp": "L'annonce sera enregistrée comme brouillon et ne sera pas visible par les acheteurs",
     "listed": "Mis en vente",
     "listingOptions": "Options de l'annonce",
@@ -4489,7 +4489,7 @@
       "errorDescription": "Une erreur s'est produite lors du chargement des annonces. Veuillez réessayer.",
       "errorTitle": "Impossible de charger les annonces",
       "noListings": "Aucune annonce pour l'instant",
-      "noListingsDescription": "Créez votre première annonce pour commencer à vendre des objets sur le marché",
+      "noListingsDescription": "Créez votre première annonce pour commencer à vendre des articles sur le marché",
       "noSearchResults": "Aucune annonce trouvée",
       "noSearchResultsDescription": "Essayez d'ajuster votre recherche ou vos filtres",
       "retry": "Réessayer"
@@ -4532,7 +4532,7 @@
       "noOffers": "Aucune offre pour l'instant",
       "noOrders": "Aucune commande pour l'instant",
       "noReceivedOffersDescription": "Créez des annonces du marché ou des annonces de service pour commencer à recevoir des offres de clients",
-      "noSentOffersDescription": "Parcourez le marché et les services pour trouver des objets et des services à acheter"
+      "noSentOffersDescription": "Parcourez le marché et les services pour trouver des articles et des services à acheter"
     },
     "profile": {
       "noContent": "Aucune annonce ni aucun service pour l'instant",
@@ -4882,7 +4882,7 @@
       "factions": {
         "title": "Missions de réputation {{name}} dans Star Citizen ({{count}}) | SC Market",
         "heading": "Missions de réputation {{name}}",
-        "lead": "{{missions}} dans Star Citizen augmentent ta réputation auprès de {{name}}."
+        "lead": "{{missions}} dans Star Citizen augmentent votre réputation auprès de {{name}}."
       },
       "types": {
         "title": "Missions {{name}} dans Star Citizen ({{count}}) | SC Market",
@@ -4910,7 +4910,7 @@
     "previous": "Page précédente",
     "next": "Page suivante",
     "notFound": "Cette catégorie de missions n'existe pas. Les catégories changent avec les mises à jour du jeu : retrouve-les toutes ci-dessous.",
-    "loadError": "Impossible de charger cette catégorie de missions. Réessaie.",
+    "loadError": "Impossible de charger cette catégorie de missions. Réessayez.",
     "columns": {
       "mission": "Mission",
       "system": "Système",
@@ -4947,14 +4947,14 @@
     "adminAuditLogs": "Journaux d'audit",
     "adminFeatureFlags": "Indicateurs de fonctionnalités",
     "adminGameData": "Import des données de jeu",
-    "adminGameItemAttrs": "Attributs des articles de jeu",
+    "adminGameItemAttrs": "Attributs des objets du jeu",
     "adminImportMonitoring": "Suivi des imports",
     "adminMarket": "Marché",
     "adminModeration": "Modération",
     "adminNotificationTest": "Test de notification",
     "groupAdminSecurity": "Sécurité et tests",
     "adminWipe": "Faire expirer les annonces",
-    "adminSupplierDashboard": "Tableau des fournisseurs",
+    "adminSupplierDashboard": "Tableau de bord fournisseurs",
     "adminSupplierRoster": "Liste des fournisseurs",
     "adminRequisitions": "Réquisitions",
     "adminTestAccounts": "Comptes de test",
@@ -6010,10 +6010,10 @@
       "pausedEdit": "En pause · Modifier"
     },
     "manager": {
-      "title": "Watchlist",
+      "title": "Liste de suivi",
       "description": "Surveillez un article et recevez une alerte quand une annonce publique est à votre prix cible ou moins. Utilisez Surveiller le prix sur la page d'un article ou d'une annonce, ajoutez-en un ici, ou utilisez /watchlist add sur Discord.",
-      "full": "Votre watchlist est pleine ({{max}} articles). Retirez-en un pour en ajouter un autre.",
-      "loadError": "Impossible de charger votre watchlist.",
+      "full": "Votre liste de suivi est pleine ({{max}} articles). Retirez-en un pour en ajouter un autre.",
+      "loadError": "Impossible de charger votre liste de suivi.",
       "removeError": "Impossible de retirer cet article.",
       "empty": "Vous ne surveillez encore rien.",
       "lowest": "Plus bas actuel",
@@ -6104,7 +6104,7 @@
       "spectrumClear": "Supprimer",
       "spectrumId": "Identifiant Spectrum (chiffres)",
       "spectrumSet": "Définir",
-      "stepUpNote": "Un code à deux facteurs te sera demandé si tu n'en as pas saisi un dans les 10 dernières minutes.",
+      "stepUpNote": "Un code à deux facteurs vous sera demandé si vous n'en avez pas saisi un dans les 10 dernières minutes.",
       "unlinkBody": "Retire le lien Discord et l'ancien identifiant Discord de ce compte pour que ce compte Discord puisse être utilisé ailleurs. Il n'est transféré à aucun autre compte."
     },
     "done": "{{action}} : enregistré, journalisé et l'utilisateur a été prévenu.",
@@ -6481,14 +6481,14 @@
     "cancelFailed": "Échec de l'annulation",
     "canYouSupply": "Pouvez-vous le fournir ?",
     "canYouSupplyBody": "Si vous avez {{item}} en stock, vous pouvez honorer cet ordre d'achat directement.",
-    "craftingShoppingList": "Liste de courses d'artisanat",
+    "craftingShoppingList": "Liste d'achats de fabrication",
     "deactivate": "Désactiver",
     "deactivated": "Annonce désactivée",
     "deactivateFailed": "Échec de la désactivation",
     "description": "Description",
     "edit": "Modifier",
     "expires": "Expire {{time}}",
-    "fulfillOrder": "Honorer l'ordre",
+    "fulfillOrder": "Honorer l'ordre d'achat",
     "gridView": "Vue en grille",
     "imageOf": "Image de {{name}}",
     "isLookingFor": "recherche cet objet",
@@ -7058,7 +7058,7 @@
         "item": "Article",
         "pricePerUnit": "Prix / unité",
         "subtotal": "Sous-total",
-        "filled": "Livré",
+        "filled": "Honorée",
         "title": "Titre",
         "status": "Statut",
         "items": "Articles",
@@ -7421,7 +7421,7 @@
       "showingOf": "Affichage de {{shown}} sur {{total}}",
       "loadMore": "Charger plus",
       "quantityRange": "La quantité doit être comprise entre 1 et {{max}}",
-      "fulfillFailed": "Échec de l'exécution",
+      "fulfillFailed": "Impossible d'honorer",
       "cancelFailed": "Échec de l'annulation",
       "colBuyer": "Acheteur",
       "colBidPerUnit": "Offre / unité",
@@ -7923,18 +7923,18 @@
       "notes": {
         "cells": "Chaque case : vendeurs · leurs annonces publiques.",
         "discordNoSignal": "MP Discord : Discord lié. Aucun résultat de remise des MP n'est enregistré.",
-        "email": "E-mail : une adresse vérifiée, non désabonnée des e-mails d'annonces. Les rebonds ne sont pas enregistrés : une adresse vérifiée peut quand même rebondir.",
-        "emailChecked": "E-mail : une adresse vérifiée qui n'a pas rejeté de message ni signalé de spam, sans désabonnement des e-mails d'annonces. Les vendeurs sans e-mail ces {{days}} derniers jours comptent, non confirmés ; « E-mail remis » compte ceux dont une remise a été confirmée sur cette période.",
+        "email": "E-mail : une adresse vérifiée, non désabonnée des e-mails de communiqués. Les rebonds ne sont pas enregistrés : une adresse vérifiée peut quand même rebondir.",
+        "emailChecked": "E-mail : une adresse vérifiée qui n'a pas rejeté de message ni signalé de spam, sans désabonnement des e-mails de communiqués. Les vendeurs sans e-mail ces {{days}} derniers jours comptent, non confirmés ; « E-mail remis » compte ceux dont une remise a été confirmée sur cette période.",
         "push": "Push : au moins un abonnement push. Ceux qui ont expiré sont supprimés quand un push échoue, mais aucun résultat de remise n'est enregistré.",
         "pushChecked": "Push : au moins un abonnement push.",
         "anyNone": "Au moins un canal : joignable par MP Discord, e-mail ou push. Aucun : par aucun d'eux.",
         "lastSeen": "La dernière connexion compte tous les vendeurs, y compris ceux qui masquent leur statut en ligne aux acheteurs.",
-        "discordRule": "DM Discord : Discord lié, leur dernier DM de SC Market (conservé {{days}} jours) n'a pas été refusé avec l'erreur {{code}}, et ils partagent un serveur avec le bot. Les vendeurs sans DM sur cette période comptent, non confirmés ; « DM reçu » compte ceux dont le dernier DM est arrivé.",
-        "discordClosedInstall": "DM échoué (fermé) : injoignable par DM car Discord a refusé leur dernier DM (erreur {{code}} : DM fermés, ou le bot ne peut pas les joindre). Un DM refusé efface aussi une installation de l'application enregistrée. Pour une org, cela vaut pour toutes les personnes à contacter.",
+        "discordRule": "MP Discord : Discord lié, leur dernier MP de SC Market (conservé {{days}} jours) n'a pas été refusé avec l'erreur {{code}}, et ils partagent un serveur avec le bot. Les vendeurs sans MP sur cette période comptent, non confirmés ; « MP reçu » compte ceux dont le dernier MP est arrivé.",
+        "discordClosedInstall": "MP échoué (fermé) : injoignable par MP car Discord a refusé leur dernier MP (erreur {{code}} : MP fermés, ou le bot ne peut pas les joindre). Un MP refusé efface aussi une installation de l'application enregistrée. Pour une org, cela vaut pour toutes les personnes à contacter.",
         "serverOrApp": "Serveur en commun ou application installée : Discord lié, et soit membre d'au moins un serveur où se trouve le bot SC Market (vérifié environ toutes les 12 heures à partir des listes de membres du bot, sans rien envoyer ; dernière vérification {{when}}), soit vu utilisant le bot via l'application installée sur son propre compte Discord. Non compté dans N'importe quel canal ni Aucun.",
         "serverOrAppNever": "Serveur en commun ou application installée : Discord lié, et soit membre d'au moins un serveur où se trouve le bot SC Market (vérifié environ toutes les 12 heures, sans rien envoyer ; pas encore vérifié), soit vu utilisant le bot via l'application installée sur son propre compte Discord. Non compté dans N'importe quel canal ni Aucun.",
-        "installCounts": "Installer l'application compte comme joignable par DM Discord.",
-        "installNotCounted": "Les installations de l'application sont enregistrées mais ne comptent pas comme joignables par DM Discord tant qu'il n'est pas confirmé que le bot peut écrire à quelqu'un sans serveur en commun."
+        "installCounts": "Installer l'application compte comme joignable par MP Discord.",
+        "installNotCounted": "Les installations de l'application sont enregistrées mais ne comptent pas comme joignables par MP Discord tant qu'il n'est pas confirmé que le bot peut écrire à quelqu'un sans serveur en commun."
       },
       "installClicks": {
         "title": "Clics sur « Ajouter SC Market à Discord »",
@@ -8253,7 +8253,7 @@
       "explosionRisk": "Risque d'explosion",
       "clusterFactor": "Facteur de regroupement",
       "qualityDistribution": "Distribution de la qualité",
-      "qualityHint": "Qualité 0–1000. Plus elle est élevée, meilleurs sont l'artisanat et le prix de vente.",
+      "qualityHint": "Qualité 0–1000. Plus elle est élevée, meilleurs sont la fabrication et le prix de vente.",
       "noLocationsTitle": "Aucun emplacement connu",
       "noLocationsDescription": "Ce minerai n'a aucun emplacement d'apparition enregistré dans les données de jeu actuelles.",
       "colLocation": "Emplacement",
@@ -8677,7 +8677,7 @@
       "unknown": "Notification inconnue",
       "orderCreate": "Nouvelle commande créée",
       "orderAssigned": "Commande qui vous est assignée",
-      "orderStatusFulfilled": "Commande exécutée",
+      "orderStatusFulfilled": "Commande honorée",
       "orderStatusInProgress": "Commande en cours",
       "orderStatusNotStarted": "Commande non commencée",
       "orderStatusCancelled": "Commande annulée",
@@ -9108,7 +9108,7 @@
       },
       "server_forbidden": {
         "title": "Vous ne pouvez pas gérer cette intégration Discord",
-        "body": "Lier un serveur nécessite Manage Market pour une boutique, ou Manage Webhooks pour une organisation. Rien n'a été lié ; si le bot a été ajouté, il est sur le serveur sans lien."
+        "body": "Lier un serveur nécessite la permission « Gérer le marché » pour une boutique, ou « Gérer les webhooks » pour une organisation. Rien n'a été lié ; si le bot a été ajouté, il est sur le serveur sans lien."
       },
       "cancelled": {
         "title": "Rien n'a été ajouté",
