@@ -14,6 +14,22 @@ import { MainRefContext } from "../../hooks/layout/MainRef"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 
+/**
+ * The page area under the top bar: grows to fill the rest of the scrolling
+ * <main> (a flex column), and is a column itself, so FOOTER_AT_BOTTOM_SX
+ * can push the footer to the bottom of the screen on a short page. Never
+ * shrinks: a long page still scrolls <main>, not this box.
+ */
+const PAGE_SHELL_SX = {
+  flexGrow: 1,
+  flexShrink: 0,
+  display: "flex",
+  flexDirection: "column",
+} as const
+
+/** The footer's wrapper: takes the page area's spare height above it. */
+const FOOTER_AT_BOTTOM_SX = { marginTop: "auto", flexShrink: 0 } as const
+
 export function ContainerGrid(
   props: {
     sidebarOpen: boolean
@@ -60,6 +76,10 @@ export function ContainerGrid(
           overflow: "auto",
           height: "100%", // Use 100% of parent instead of 100vh
           position: "relative",
+          // A column whose page area grows (PAGE_SHELL_SX), so the footer
+          // sits at the bottom of the screen on a short page.
+          display: "flex",
+          flexDirection: "column",
           marginLeft:
             !isMobile && sidebarOpen && sidebarWidth > 0 ? sidebarWidth : 0,
           transition:
@@ -83,6 +103,7 @@ export function ContainerGrid(
               width: drawerOpen ? "100%" : 1,
             },
             display: props.noTopSpacer ? "none" : "block",
+            flexShrink: 0,
           }}
         />
         <Container
@@ -110,6 +131,7 @@ export function ContainerGrid(
             [theme.breakpoints.down("sm")]: {
               maxWidth: "100%",
             },
+            ...PAGE_SHELL_SX,
             ...props.sx,
           }}
         >
@@ -123,8 +145,33 @@ export function ContainerGrid(
             {...GridProps}
           >
             {props.children}
-            {!props.noFooter && <Footer />}
           </Grid>
+          {!props.noFooter && (
+            // The Grid's negative top margin (its spacing) can't be
+            // overridden on the Grid itself (the breakpoint rule wins), so a
+            // wrapper takes the spare height; its top padding restores the
+            // gap the footer had as an item of the content grid.
+            <Box
+              sx={{
+                ...FOOTER_AT_BOTTOM_SX,
+                paddingTop: {
+                  xs: theme.spacing(theme.layoutSpacing.component),
+                  sm: theme.spacing(theme.layoutSpacing.layout),
+                },
+              }}
+            >
+              <Grid
+                container
+                spacing={{
+                  xs: theme.layoutSpacing.component,
+                  sm: theme.layoutSpacing.layout,
+                }}
+                justifyContent={"center"}
+              >
+                <Footer />
+              </Grid>
+            </Box>
+          )}
         </Container>
       </main>
     </MainRefContext.Provider>
@@ -171,8 +218,12 @@ export function OpenGrid(
         style={{
           flexGrow: 1,
           overflow: "auto",
-          height: "100vh",
+          height: "100%",
           position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          // Bottom spacer for mobile bottom nav (dynamically adjusts when keyboard opens)
+          paddingBottom: bottomNavHeight,
           ...mainProps?.style,
         }}
         ref={ref}
@@ -182,20 +233,35 @@ export function OpenGrid(
             ...theme.mixins.toolbar,
             position: "relative",
             display: "block",
+            flexShrink: 0,
           }}
         />
         <Grid
           container
           spacing={theme.layoutSpacing.layout * 4}
           justifyContent={"center"}
-          sx={{
-            paddingBottom: `${bottomNavHeight}px`, // Bottom spacer for mobile bottom nav (dynamically adjusts when keyboard opens)
-          }}
+          sx={{ flexShrink: 0 }}
           {...gridProps}
         >
           {props.children}
-          {!props.noFooter && <Footer />}
         </Grid>
+        {!props.noFooter && (
+          // See ContainerGrid: the wrapper takes the spare height.
+          <Box
+            sx={{
+              ...FOOTER_AT_BOTTOM_SX,
+              paddingTop: theme.spacing(theme.layoutSpacing.layout * 4),
+            }}
+          >
+            <Grid
+              container
+              spacing={theme.layoutSpacing.layout * 4}
+              justifyContent={"center"}
+            >
+              <Footer />
+            </Grid>
+          </Box>
+        )}
       </main>
     </MainRefContext.Provider>
   )
@@ -239,8 +305,10 @@ export function OpenLayout(
         style={{
           flexGrow: 1,
           overflow: "auto",
-          height: "100vh",
+          height: "100%", // Use 100% of parent instead of 100vh
           position: "relative",
+          display: "flex",
+          flexDirection: "column",
           ...mainProps?.style,
         }}
         ref={ref}
@@ -257,10 +325,12 @@ export function OpenLayout(
             },
             display: "block",
             height: 64,
+            flexShrink: 0,
           }}
         />
         <Box
           sx={{
+            flexShrink: 0,
             paddingLeft: {
               xs: noMobilePadding ? 0 : theme.spacing(1),
               sm: noMobilePadding ? 0 : theme.spacing(3),
@@ -275,7 +345,11 @@ export function OpenLayout(
         >
           {children}
         </Box>
-        {!noFooter && <Footer />}
+        {!noFooter && (
+          <Box sx={FOOTER_AT_BOTTOM_SX}>
+            <Footer />
+          </Box>
+        )}
       </main>
     </MainRefContext.Provider>
   )

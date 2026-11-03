@@ -602,7 +602,9 @@ exports[`routes (shard 3/4) > /discord/install 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/discord/install",
-  "h1": [],
+  "h1": [
+    "Add SC Market to Discord",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
@@ -641,7 +643,9 @@ exports[`routes (shard 3/4) > /email/unsubscribe/:token 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/email/unsubscribe/token-1",
-  "h1": [],
+  "h1": [
+    "Couldn't unsubscribe",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",
@@ -679,7 +683,9 @@ exports[`routes (shard 3/4) > /email/verify 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/email/verify",
-  "h1": [],
+  "h1": [
+    "Invalid Request",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",

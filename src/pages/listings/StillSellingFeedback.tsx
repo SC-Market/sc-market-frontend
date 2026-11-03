@@ -82,7 +82,7 @@ export function StillSellingFeedback({
   if (dismissed) return null
   if (alreadySubmitted || state.data?.ok) {
     return (
-      <Alert severity="success" sx={{ maxWidth: 520 }}>
+      <Alert severity="success">
         {t("stillSellingPage.feedback.thanks", "Thanks for telling us.")}
       </Alert>
     )
@@ -138,7 +138,7 @@ export function StillSellingFeedback({
 
   return (
     <Box
-      sx={{ maxWidth: 560, width: "100%", textAlign: "left" }}
+      sx={{ width: "100%" }}
       data-testid="still-selling-feedback"
     >
       <Typography variant="h6" component="h2" gutterBottom>
@@ -149,7 +149,7 @@ export function StillSellingFeedback({
               "Anything that would make selling here easier?",
             )}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+      <Typography variant="body2" sx={{ mb: 2 }}>
         {pause
           ? t(
               "stillSellingPage.feedback.pauseHint",
@@ -199,7 +199,7 @@ export function StillSellingFeedback({
           textField(
             easier,
             setEasier,
-            t("stillSellingPage.feedback.easierLabel", "Your idea (optional)"),
+            t("stillSellingPage.feedback.easierLabel", "Your thoughts (optional)"),
           )
         )}
         {failed && (

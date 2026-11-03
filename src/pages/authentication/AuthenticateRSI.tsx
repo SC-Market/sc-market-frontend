@@ -31,7 +31,6 @@ export function AuthenticateRSIPage() {
       title={t("login.accountLink")}
       headerTitle={t("login.authenticateWithRSI")}
       maxWidth="xl"
-      noSidebar
       // A failed identifier request is an error, not a skeleton forever.
       isLoading={identifier.isLoading}
       error={identifier.error}

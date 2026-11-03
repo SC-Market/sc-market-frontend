@@ -1,19 +1,12 @@
 import React from "react"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import {
-  Alert,
-  Box,
-  Button,
-  CircularProgress,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Alert, Box, Button, CircularProgress } from "@mui/material"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
 import { UnsubscribePageData } from "../hooks/usePageUnsubscribe"
 import { PATHS } from "../../../routes/paths"
+import { PageCard, PageCardActions } from "../../../components/paper/PageCard"
 
 interface UnsubscribeContentProps {
   data: UnsubscribePageData
@@ -43,76 +36,52 @@ export function UnsubscribeContent({
     </Button>
   )
 
-  return (
-    <Grid item xs={12}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "400px",
-          textAlign: "center",
-        }}
+  if (data.status === "loading" || isLoading) {
+    return (
+      <PageCard title={t("emailUi.unsubscribe.unsubscribing")}>
+        <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+          <CircularProgress size={48} aria-busy="true" />
+        </Box>
+      </PageCard>
+    )
+  }
+
+  if (data.status === "success") {
+    return (
+      <PageCard
+        title={t("emailUi.unsubscribe.successTitle")}
+        icon={<CheckCircleIcon sx={{ color: "success.main" }} />}
       >
-        {(data.status === "loading" || isLoading) && (
-          <>
-            <CircularProgress size={60} sx={{ mb: 3 }} />
-            <Typography variant="h6" gutterBottom>
-              {t("emailUi.unsubscribe.unsubscribing")}
-            </Typography>
-          </>
-        )}
-
-        {data.status === "success" && (
-          <>
-            <CheckCircleIcon
-              sx={{ fontSize: 60, color: "success.main", mb: 2 }}
-            />
-            <Typography variant="h5" gutterBottom>
-              {t("emailUi.unsubscribe.successTitle")}
-            </Typography>
-            <Alert severity="success" sx={{ mb: 3, maxWidth: 500 }}>
-              {data.messageKey ? t(data.messageKey) : data.message}
-            </Alert>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-              {!data.all && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={onUnsubscribeAll}
-                  disabled={isUnsubscribingAll}
-                >
-                  {t("emailUi.unsubscribe.turnOffAll")}
-                </Button>
-              )}
-              {manage}
-            </Stack>
-          </>
-        )}
-
-        {(data.status === "error" || data.status === "invalid") && (
-          <>
-            <ErrorIcon
-              sx={{
-                fontSize: 60,
-                color: data.status === "error" ? "error.main" : "warning.main",
-                mb: 2,
-              }}
-            />
-            <Typography variant="h5" gutterBottom>
-              {t("emailUi.unsubscribe.failedTitle")}
-            </Typography>
-            <Alert
-              severity={data.status === "error" ? "error" : "warning"}
-              sx={{ mb: 3, maxWidth: 500 }}
+        <Alert severity="success">
+          {data.messageKey ? t(data.messageKey) : data.message}
+        </Alert>
+        <PageCardActions>
+          {!data.all && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onUnsubscribeAll}
+              disabled={isUnsubscribingAll}
             >
-              {data.messageKey ? t(data.messageKey) : data.message}
-            </Alert>
-            {manage}
-          </>
-        )}
-      </Box>
-    </Grid>
+              {t("emailUi.unsubscribe.turnOffAll")}
+            </Button>
+          )}
+          {manage}
+        </PageCardActions>
+      </PageCard>
+    )
+  }
+
+  const severity = data.status === "error" ? "error" : "warning"
+  return (
+    <PageCard
+      title={t("emailUi.unsubscribe.failedTitle")}
+      icon={<ErrorIcon sx={{ color: `${severity}.main` }} />}
+    >
+      <Alert severity={severity}>
+        {data.messageKey ? t(data.messageKey) : data.message}
+      </Alert>
+      <PageCardActions>{manage}</PageCardActions>
+    </PageCard>
   )
 }

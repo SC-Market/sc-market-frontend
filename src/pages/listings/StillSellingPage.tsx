@@ -6,12 +6,11 @@ import {
   Box,
   Button,
   CircularProgress,
-  Grid,
-  Stack,
   Typography,
 } from "@mui/material"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { PageCard, PageCardActions } from "../../components/paper/PageCard"
 import {
   useConfirmStillSellingActionMutation,
   useGetStillSellingActionQuery,
@@ -51,8 +50,8 @@ function Preview({
   const count = preview.listings_applicable
   if (count === 0) {
     return (
-      <Stack spacing={3} alignItems="center">
-        <Alert severity="info" sx={{ maxWidth: 520 }}>
+      <>
+        <Alert severity="info">
           {keep
             ? t(
                 "stillSellingPage.keepNothing",
@@ -63,40 +62,42 @@ function Preview({
                 "Nothing to pause: these listings are already paused or aren't listed any more.",
               )}
         </Alert>
-        <ManageButton path={preview.manage_path} />
-      </Stack>
+        <PageCardActions>
+          <ManageButton path={preview.manage_path} />
+        </PageCardActions>
+      </>
     )
   }
   const more = count - preview.listings.length
   return (
-    <Stack spacing={3} alignItems="center" sx={{ maxWidth: 560 }}>
-      <Typography variant="h5" component="h2">
-        {keep
-          ? t("stillSellingPage.keepTitle", "Keep your listings live?")
-          : t("stillSellingPage.pauseTitle", "Pause your listings?")}
-      </Typography>
-      <Typography color="text.secondary">
+    <>
+      <Typography variant="body1">
         {keep
           ? t("stillSellingPage.keepBody", { count })
           : t("stillSellingPage.pauseBody", { count })}
       </Typography>
       <Box
         component="ul"
-        sx={{ textAlign: "left", m: 0, pl: 3, alignSelf: "stretch" }}
+        sx={{ m: 0, pl: 3 }}
         data-testid="still-selling-listings"
       >
         {preview.listings.map((l, i) => (
-          <Typography component="li" key={i} variant="body2">
+          <Typography
+            component="li"
+            key={i}
+            variant="body2"
+            color="text.secondary"
+          >
             {l.title}
           </Typography>
         ))}
         {more > 0 && (
-          <Typography component="li" variant="body2" color="text.secondary">
+          <Typography component="li" variant="body2">
             {t("stillSellingPage.moreListings", { count: more })}
           </Typography>
         )}
       </Box>
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+      <PageCardActions>
         <Button
           variant="contained"
           color={keep ? "primary" : "warning"}
@@ -115,8 +116,8 @@ function Preview({
         <Button component={RouterLink} to={PATHS.home}>
           {t("stillSellingPage.notNow", "Not now")}
         </Button>
-      </Stack>
-    </Stack>
+      </PageCardActions>
+    </>
   )
 }
 
@@ -132,7 +133,7 @@ function Done({
   const { t } = useTranslation()
   const count = result.changed
   return (
-    <Stack spacing={3} alignItems="center">
+    <>
       {result.test && (
         <Alert severity="info" data-testid="still-selling-test-done">
           {t(
@@ -141,8 +142,7 @@ function Done({
           )}
         </Alert>
       )}
-      <CheckCircleIcon sx={{ fontSize: 60, color: "success.main" }} />
-      <Alert severity="success" sx={{ maxWidth: 520 }}>
+      <Alert severity="success">
         {result.action === "keep"
           ? t("stillSellingPage.keepDone", { count })
           : t("stillSellingPage.pauseDone", { count })}
@@ -154,8 +154,10 @@ function Done({
           alreadySubmitted={feedbackSubmitted}
         />
       )}
-      <ManageButton path={result.manage_path} />
-    </Stack>
+      <PageCardActions>
+        <ManageButton path={result.manage_path} />
+      </PageCardActions>
+    </>
   )
 }
 
@@ -181,13 +183,20 @@ export function StillSellingPage() {
         ? (result.reason ?? "invalid")
         : null
 
+  const pageTitle = t("stillSellingPage.title", "Still selling?")
+  let title: React.ReactNode = pageTitle
+  let icon: React.ReactNode = undefined
   let body: React.ReactNode
   if (preview.isLoading) {
-    body = <CircularProgress size={60} aria-busy="true" />
+    body = (
+      <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+        <CircularProgress size={48} aria-busy="true" />
+      </Box>
+    )
   } else if (linkProblem) {
     body = (
-      <Stack spacing={3} alignItems="center">
-        <Alert severity="warning" sx={{ maxWidth: 520 }}>
+      <>
+        <Alert severity="warning">
           {linkProblem === "expired"
             ? t(
                 "stillSellingPage.expired",
@@ -198,10 +207,13 @@ export function StillSellingPage() {
                 "This link doesn't work. It may have been copied incompletely.",
               )}
         </Alert>
-        <ManageButton />
-      </Stack>
+        <PageCardActions>
+          <ManageButton />
+        </PageCardActions>
+      </>
     )
   } else if (result?.ok) {
+    icon = <CheckCircleIcon sx={{ color: "success.main" }} />
     body = (
       <Done
         result={result}
@@ -230,8 +242,14 @@ export function StillSellingPage() {
       </Alert>
     )
   } else {
+    if (preview.data.listings_applicable > 0) {
+      title =
+        preview.data.action === "keep"
+          ? t("stillSellingPage.keepTitle", "Keep your listings live?")
+          : t("stillSellingPage.pauseTitle", "Pause your listings?")
+    }
     body = (
-      <Stack spacing={2} alignItems="center">
+      <>
         {failed && (
           <Alert severity="error">
             {t(
@@ -253,30 +271,15 @@ export function StillSellingPage() {
           onConfirm={() => void confirm({ token })}
           isConfirming={confirmState.isLoading}
         />
-      </Stack>
+      </>
     )
   }
 
   return (
-    <StandardPageLayout
-      title={t("stillSellingPage.title", "Still selling?")}
-      maxWidth="sm"
-      noSidebar={true}
-    >
-      <Grid item xs={12}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: "400px",
-            textAlign: "center",
-          }}
-        >
-          {body}
-        </Box>
-      </Grid>
+    <StandardPageLayout title={pageTitle} maxWidth="sm">
+      <PageCard title={title} icon={icon} data-testid="still-selling-card">
+        {body}
+      </PageCard>
     </StandardPageLayout>
   )
 }

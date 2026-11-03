@@ -16,7 +16,6 @@ export function UnsubscribePage() {
     <StandardPageLayout
       title={t("emailUi.unsubscribe.pageTitle")}
       maxWidth="sm"
-      noSidebar={true}
     >
       <UnsubscribeContent
         data={page.data}

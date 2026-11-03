@@ -1351,7 +1351,9 @@ exports[`routes (shard 2/4) > /still-selling/:token 1`] = `
   "consoleErrors": [],
   "errorElementErrors": [],
   "finalUrl": "/still-selling/token-1",
-  "h1": [],
+  "h1": [
+    "Still selling?",
+  ],
   "hasMainLandmark": true,
   "hasMainNav": true,
   "historyAction": "POP",

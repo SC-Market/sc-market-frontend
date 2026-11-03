@@ -17,7 +17,6 @@ export function EmailVerificationPage() {
     <StandardPageLayout
       title={t("emailUi.verification.pageTitle")}
       maxWidth="sm"
-      noSidebar={true}
       isLoading={pageData.isLoading}
       error={pageData.error}
       skeleton={<EmailVerificationContentSkeleton />}

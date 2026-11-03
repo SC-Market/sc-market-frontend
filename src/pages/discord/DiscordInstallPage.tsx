@@ -1,17 +1,10 @@
 import React, { useEffect, useRef } from "react"
-import {
-  Alert,
-  AlertTitle,
-  Button,
-  Grid,
-  Link as MuiLink,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Alert, Button, Link as MuiLink, Stack, Typography } from "@mui/material"
 import { useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useHead } from "@unhead/react"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { PageCard, PageCardActions } from "../../components/paper/PageCard"
 import { useRecordDiscordInstallClickMutation } from "../../store/api/v2/market"
 import {
   type DiscordInstallResult,
@@ -127,29 +120,33 @@ function InstallResultView(props: {
   const signIn = result === "user_sign_in" || result === "server_sign_in"
   const retry = result === "failed" || result === "cancelled"
   return (
-    <Stack spacing={2} data-testid={`discord-install-result-${result}`}>
+    <PageCard
+      title={t(`discordInstall.result.${result}.title`, text.title)}
+      data-testid={`discord-install-result-${result}`}
+    >
       <Alert severity={RESULT_SEVERITY[result]}>
-        <AlertTitle>
-          {t(`discordInstall.result.${result}.title`, text.title)}
-        </AlertTitle>
         {noDmBody
           ? t(`discordInstall.result.${result}.bodyNoDm`, noDmBody)
           : t(`discordInstall.result.${result}.body`, text.body)}
       </Alert>
-      {signIn && (
-        <Button variant="contained" href={SIGN_IN_PATH}>
-          {t("discordInstall.result.signIn", "Sign in")}
-        </Button>
+      {(signIn || retry) && (
+        <PageCardActions>
+          {signIn && (
+            <Button variant="contained" href={SIGN_IN_PATH}>
+              {t("discordInstall.result.signIn", "Sign in")}
+            </Button>
+          )}
+          {retry && (
+            <Button
+              variant="outlined"
+              href={`${PATHS.discordInstall}?src=${props.src}`}
+            >
+              {t("discordInstall.result.startAgain", "Start again")}
+            </Button>
+          )}
+        </PageCardActions>
       )}
-      {retry && (
-        <Button
-          variant="outlined"
-          href={`${PATHS.discordInstall}?src=${props.src}`}
-        >
-          {t("discordInstall.result.startAgain", "Start again")}
-        </Button>
-      )}
-    </Stack>
+    </PageCard>
   )
 }
 
@@ -187,66 +184,65 @@ export function DiscordInstallPage() {
     void Promise.race([counted, timeout]).then(() => redirect.to(startUrl))
   }, [result, type, src, startUrl, recordClick])
 
+  const pageTitle = t("discordInstall.pageTitle", "Add SC Market to Discord")
   let body: React.ReactNode
   if (result) {
     body = <InstallResultView result={result} src={src} />
   } else if (startUrl) {
     body = (
-      <Stack spacing={1} data-testid="discord-install-opening">
+      <PageCard title={pageTitle} data-testid="discord-install-opening">
         <Typography variant="body1" color="text.secondary">
           {t("discordInstall.opening", "Opening Discord…")}
         </Typography>
-        <Typography variant="body2" color="text.primary">
+        <Typography variant="body2">
           {t("discordInstall.fallback", "If nothing happens,")}{" "}
           <MuiLink href={startUrl} rel="noopener noreferrer">
             {t("discordInstall.openManually", "open Discord's install page")}
           </MuiLink>
           .
         </Typography>
-      </Stack>
+      </PageCard>
     )
   } else {
     body = (
-      <Stack spacing={2} data-testid="discord-install-choices">
-        <Typography variant="body1" color="text.primary">
+      <PageCard title={pageTitle} data-testid="discord-install-choices">
+        <Typography variant="body1">
           {t("discordInstall.choose", "How do you want to add SC Market?")}
         </Typography>
-        <Button variant="contained" href={discordInstallPath("user", src)}>
-          {t("discordInstall.user", "To your Discord account")}
-        </Button>
-        <Typography variant="body2" color="text.primary">
-          {reachesDms
-            ? t(
-                "discordInstall.userHint",
-                "So we can reach you about offers and orders even if you're not in a shared server.",
-              )
-            : t(
-                "discordInstall.userHintNoDm",
-                "So you can use SC Market commands anywhere in Discord.",
-              )}
-        </Typography>
-        <Button variant="outlined" href={discordInstallPath("server", src)}>
-          {t("discordInstall.server", "To a Discord server")}
-        </Button>
-        <Typography variant="body2" color="text.primary">
-          {t(
-            "discordInstall.serverHint",
-            "For order threads and alerts in your own server.",
-          )}
-        </Typography>
-      </Stack>
+        <Stack spacing={0.75}>
+          <Button variant="contained" href={discordInstallPath("user", src)}>
+            {t("discordInstall.user", "To your Discord account")}
+          </Button>
+          <Typography variant="body2">
+            {reachesDms
+              ? t(
+                  "discordInstall.userHint",
+                  "So we can reach you about offers and orders even if you're not in a shared server.",
+                )
+              : t(
+                  "discordInstall.userHintNoDm",
+                  "So you can use SC Market commands anywhere in Discord.",
+                )}
+          </Typography>
+        </Stack>
+        <Stack spacing={0.75}>
+          <Button variant="outlined" href={discordInstallPath("server", src)}>
+            {t("discordInstall.server", "To a Discord server")}
+          </Button>
+          <Typography variant="body2">
+            {t(
+              "discordInstall.serverHint",
+              "For order threads and alerts in your own server.",
+            )}
+          </Typography>
+        </Stack>
+      </PageCard>
     )
   }
 
   return (
-    <StandardPageLayout
-      title={t("discordInstall.pageTitle", "Add SC Market to Discord")}
-      maxWidth="sm"
-    >
-      {/* StandardPageLayout lays children out in a Grid container. */}
-      <Grid item xs={12}>
-        {body}
-      </Grid>
+    <StandardPageLayout title={pageTitle} maxWidth="sm">
+      {body}
     </StandardPageLayout>
   )
 }

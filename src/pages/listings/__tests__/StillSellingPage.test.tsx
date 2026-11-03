@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, fireEvent } from "@testing-library/react"
+import { render, screen, fireEvent, within } from "@testing-library/react"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import * as marketApi from "../../../store/api/v2/market"
@@ -87,7 +87,11 @@ beforeEach(() => vi.clearAllMocks())
 describe("StillSellingPage", () => {
   it("keep: lists what it refreshes and asks to confirm before doing anything", () => {
     setup(keepPreview)
-    expect(screen.getByText("Keep your listings live?")).toBeInTheDocument()
+    // On a card with the question as its heading, not text on the background.
+    const card = within(screen.getByTestId("still-selling-card"))
+    expect(
+      card.getByRole("heading", { level: 1, name: "Keep your listings live?" }),
+    ).toBeInTheDocument()
     expect(screen.getByText(/This refreshes 2 listings/)).toBeInTheDocument()
     expect(screen.getByText("Quantainium")).toBeInTheDocument()
     expect(confirm).not.toHaveBeenCalled()
@@ -195,7 +199,7 @@ describe("StillSellingPage feedback", () => {
     expect(
       screen.getByText("Anything that would make selling here easier?"),
     ).toBeInTheDocument()
-    const box = screen.getByLabelText("Your idea (optional)")
+    const box = screen.getByLabelText("Your thoughts (optional)")
     fireEvent.change(box, { target: { value: "x".repeat(700) } })
     expect((box as HTMLTextAreaElement).value).toHaveLength(500)
   })
