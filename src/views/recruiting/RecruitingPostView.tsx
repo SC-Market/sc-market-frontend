@@ -27,7 +27,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { Link } from "react-router-dom"
 import { contractorKindIcons } from "../contractor/ContractorList"
-import { has_permission } from "../contractor/OrgRoles"
+import { canManageOrgRecruiting } from "../../features/contractor/domain/orgPermissions"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 import { ReportButton } from "../../components/button/ReportButton"
@@ -47,16 +47,7 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
   const { data: fullContractor } = useGetContractorBySpectrumIDQuery(
     contractor.spectrum_id, { skip: !belongsToPostOrg },
   )
-  const amContractorManager = useMemo(
-    () =>
-      has_permission(
-        fullContractor,
-        profile,
-        "manage_recruiting",
-        profile?.contractors,
-      ),
-    [fullContractor, profile],
-  )
+  const amContractorManager = canManageOrgRecruiting(fullContractor, profile)
 
   return (
     <Grid item xs={12} lg={12}>

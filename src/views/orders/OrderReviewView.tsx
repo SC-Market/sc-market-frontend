@@ -14,85 +14,17 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { Order, OrderReview } from "../../features/orders/domain/types"
+import { Order } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { ReviewRevisionButton } from "../../components/reviews/ReviewRevisionButton"
 import { EditableReview } from "../../components/reviews/EditableReview"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { UserProfileState } from "../../hooks/login/UserProfile"
-import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
-import { has_permission } from "../contractor/OrgRoles"
-import { Contractor } from "../../features/contractor/domain/types"
 import { useFormatters, useNow } from "../../util/format"
-
-// Helper function to determine if current user can request revision
-function canRequestRevision(
-  review: OrderReview,
-  currentUser: UserProfileState | undefined,
-  orderContractor: Contractor | undefined | null,
-  order: Order,
-): boolean {
-  if (!currentUser || !review) return false
-
-  if (review.role !== "customer" && order.customer === currentUser.username) {
-    return true
-  }
-
-  // Check if user is the recipient of the review
-  if (
-    review.role !== "contractor" &&
-    order.assigned_to === currentUser.username
-  ) {
-    return true
-  }
-
-  if (
-    review.role !== "contractor" &&
-    order.contractor &&
-    orderContractor &&
-    order.contractor === orderContractor.spectrum_id
-  ) {
-    return has_permission(
-      orderContractor,
-      currentUser,
-      "manage_orders",
-      currentUser?.contractors,
-    )
-  }
-
-  return false
-}
-
-// Helper function to determine if current user can edit review
-function canEditReview(
-  review: OrderReview,
-  currentUser: UserProfileState | undefined,
-  orderContractor: Contractor | null | undefined,
-  order: Order,
-): boolean {
-  if (!currentUser || !review || !review.revision_requested) return false
-
-  // Individual user can edit their own review
-  if (review.user_author?.username === currentUser.username) return true
-
-  // Organization member can edit org review if they have permission
-  if (
-    review.contractor_author &&
-    order.contractor &&
-    orderContractor &&
-    order.contractor === orderContractor.spectrum_id
-  ) {
-    // Check if user has manage_orders permission
-    return has_permission(
-      orderContractor,
-      currentUser,
-      "manage_orders",
-      currentUser?.contractors,
-    )
-  }
-
-  return false
-}
+import { useOrderViewerRoles } from "../../features/orders/hooks/useOrderViewerRoles"
+import {
+  canEditReview,
+  canRequestReviewRevision,
+} from "../../features/orders/domain/reviewPermissions"
 
 export function OrderReviewView(props: {
   customer?: boolean
@@ -106,13 +38,11 @@ export function OrderReviewView(props: {
   const theme = useTheme<ExtendedTheme>()
   const { data: currentUser } = useGetUserProfileQuery()
 
-  const belongsToOrderOrg = useMemo(
-    () => !!order.contractor && currentUser?.contractors?.some(c => c.spectrum_id === order.contractor),
-    [order.contractor, currentUser?.contractors],
-  )
-  const { data: orderContractor } = useGetContractorBySpectrumIDQuery(
-    order.contractor!, { skip: !order.contractor || !belongsToOrderOrg },
-  )
+  const viewerRoles = useOrderViewerRoles({
+    customer: order.customer,
+    assignedTo: order.assigned_to,
+    contractor: order.contractor,
+  })
 
   const review = useMemo(
     () => (props.customer ? order.customer_review! : order.contractor_review!),
@@ -207,14 +137,14 @@ export function OrderReviewView(props: {
         </Grid>
 
         {/* Review Revision Button */}
-        {canRequestRevision(review, currentUser, orderContractor, order) && (
+        {canRequestReviewRevision(review, viewerRoles) && (
           <Grid item xs={12} sx={{ mt: 2 }}>
             <ReviewRevisionButton review={review} orderId={order.order_id} />
           </Grid>
         )}
 
         {/* Editable Review Component */}
-        {canEditReview(review, currentUser, orderContractor, order) && (
+        {canEditReview(review, currentUser?.username, viewerRoles) && (
           <Grid item xs={12} sx={{ mt: 2 }}>
             <EditableReview review={review} />
           </Grid>

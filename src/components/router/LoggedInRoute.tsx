@@ -7,7 +7,7 @@ import { BACKEND_URL } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useCookies } from "react-cookie"
-import { has_permission } from "../../views/contractor/OrgRoles"
+import { canViewOrgArea } from "../../features/contractor/domain/orgPermissions"
 import type { Contractor, ContractorRole } from "../../features/contractor/domain/types"
 import type { UserProfileState } from "../../hooks/login/UserProfile"
 import { isSiteAdmin } from "../../util/siteRole"
@@ -146,24 +146,10 @@ export function OrgAdminRoute(props: {
 
   const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
 
-  const canView = useMemo(() => {
-    if (allow) {
-      return !!contractor && !!profile && allow(contractor, profile)
-    } else if (permission) {
-      return has_permission(
-        contractor!,
-        profile!,
-        permission,
-        profile?.contractors,
-      )
-    } else if (anyPermission) {
-      return anyPermission.some((perm) =>
-        has_permission(contractor!, profile!, perm, profile?.contractors),
-      )
-    } else {
-      return false
-    }
-  }, [allow, anyPermission, contractor, permission, profile])
+  const canView = useMemo(
+    () => canViewOrgArea(contractor, profile, { allow, permission, anyPermission }),
+    [allow, anyPermission, contractor, permission, profile],
+  )
 
   if (!cookies.current_contractor) {
     return <NoCurrentOrg />

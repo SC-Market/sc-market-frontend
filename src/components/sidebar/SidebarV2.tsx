@@ -87,7 +87,7 @@ import { useStartupGateOpen } from "../../util/startupDeferral"
 import { useFeatureFlag } from "../../hooks/market"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
-import { has_permission } from "../../views/contractor/OrgRoles"
+import { canManageOrgOrders } from "../../features/contractor/domain/orgPermissions"
 import { canOpenOrgManage } from "../../features/contractor/domain/manageTabs"
 import { shopContextFromState } from "./shopContextState"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
@@ -312,7 +312,7 @@ export function SidebarV2() {
       return items
     }
     if (context === "org" && selectedOrgId) {
-      const canManageOrders = has_permission(selectedContractor, profile, "manage_orders", profile?.contractors)
+      const canManageOrders = canManageOrgOrders(selectedContractor, profile)
       const items: NavItem[] = [
         { label: t("nav.orgPage", "Org Page"), to: ORG_PATHS.profile(selectedOrgId), icon: <StorefrontRounded /> },
         { label: t("nav.orgDashboard", "Dashboard"), to: flags.customizable_dashboard ? ORG_PATHS.dashboardOverview(selectedOrgId) : ORG_PATHS.dashboard(selectedOrgId), icon: <DashboardRounded /> },

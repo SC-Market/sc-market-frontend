@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { has_permission } from "./OrgRoles"
+import { canManageOrgDetails } from "../../features/contractor/domain/orgPermissions"
 import LoadingButton from "@mui/lab/LoadingButton"
 
 export function OrgLanguageSettings() {
@@ -21,15 +21,7 @@ export function OrgLanguageSettings() {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
 
-  const canManageOrgDetails =
-    contractor && profile
-      ? has_permission(
-          contractor,
-          profile,
-          "manage_org_details",
-          profile?.contractors,
-        )
-      : false
+  const canEditLanguages = canManageOrgDetails(contractor, profile)
 
   const {
     data: languagesData,
@@ -76,7 +68,7 @@ export function OrgLanguageSettings() {
     }
   }
 
-  if (!canManageOrgDetails) {
+  if (!canEditLanguages) {
     return (
       <FlatSection title={t("settings.languages.title", "Supported Languages")}>
         <Grid item xs={12}>
