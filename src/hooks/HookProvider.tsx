@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
-  Alert,
   Box,
   CssBaseline,
-  Snackbar,
   ThemeProvider,
   Typography,
   useMediaQuery,
@@ -27,6 +25,7 @@ import { CurrentOrgProvider } from "./login/CurrentOrg"
 import { useAppDispatch } from "../store/hooks"
 import { AlertInterface } from "../datatypes/Alert"
 import { AlertHookContext } from "./alert/AlertHook"
+import { AlertSnackbar } from "../components/alert/AlertSnackbar"
 import { ServiceSearchContext } from "../features/contracting/hooks/ServiceSearch"
 import { LightThemeContext, ThemeChoice } from "./styles/LightTheme"
 import { useCookies, CookiesProvider } from "react-cookie"
@@ -369,24 +368,10 @@ export function HookProvider(props: { children: React.ReactElement }) {
                     <CssBaseline key="css-baseline" />
                     {props.children}
                     <AdminMfaHost />
-                    <Snackbar
-                      open={!!alert}
-                      autoHideDuration={6000}
+                    <AlertSnackbar
+                      alert={alert}
                       onClose={() => issueAlert(null)}
-                      sx={{
-                        // Lift above mobile bottom navigation bar (64px)
-                        bottom: { xs: 80, sm: 24 },
-                      }}
-                    >
-                      <Alert
-                        onClose={() => issueAlert(null)}
-                        severity={alert?.severity}
-                        sx={{ width: "100%" }}
-                        variant={"filled"}
-                      >
-                        {alert?.message}
-                      </Alert>
-                    </Snackbar>
+                    />
                   </CurrentChatMessagesContext.Provider>
                 </CurrentChatContext.Provider>
               </CurrentChatIDContext.Provider>
