@@ -160,9 +160,9 @@ function PeopleRow(props: {
                   }
                 }
               }}
-              value={row.roles.map(
+              value={row.roles.flatMap(
                 (rowRole) =>
-                  contractor?.roles!.find((r) => rowRole === r.role_id)!,
+                  contractor?.roles?.find((r) => rowRole === r.role_id) ?? [],
               )}
               renderTags={(value: readonly ContractorRole[], getTagProps) =>
                 value.map((option: ContractorRole, index: number) => (

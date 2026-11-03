@@ -98,7 +98,7 @@ function MessageEntryMobile(props: { message: Message }) {
   const messageContent = (
     <Stack direction={"row"} spacing={1.5} justifyContent={"flex-start"}>
       {message.author ? (
-        <Link to={USER_PATHS.profile(author?.username!)}>
+        <Link to={USER_PATHS.profile(message.author)}>
           <Avatar
             variant="rounded"
             sx={{

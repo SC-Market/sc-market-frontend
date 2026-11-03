@@ -50,8 +50,9 @@ export function OrgInvite() {
   const submitInviteForm = useCallback(
     async (_event: React.SyntheticEvent) => {
       // event.preventDefault();
+      if (!currentOrg) return
       sendInvites({
-        contractor: currentOrg?.spectrum_id!,
+        contractor: currentOrg.spectrum_id,
         users: choices.map((u) => u.username),
         message: message,
       })
@@ -69,7 +70,7 @@ export function OrgInvite() {
 
       return false
     },
-    [choices, currentOrg?.spectrum_id, message, sendInvites, issueAlert, t],
+    [choices, currentOrg, message, sendInvites, issueAlert, t],
   )
 
   return (

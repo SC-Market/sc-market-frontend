@@ -6,6 +6,7 @@ import {
   useNotificationDeleteMutation,
 } from "../../notifications/api/notificationApi"
 import { useEffect } from "react"
+import { skipToken } from "@reduxjs/toolkit/query/react"
 
 export interface UsePageOrderResult {
   data:
@@ -30,13 +31,10 @@ export function usePageOrder(orderId: string): UsePageOrderResult {
   const orderQuery = useGetOrderByIdQuery(orderId)
   const order = orderQuery.data
 
-  const chatQuery = useGetChatByOrderIDQuery(order?.order_id!, {
-    skip: !order?.order_id,
-  })
+  const chatQuery = useGetChatByOrderIDQuery(order?.order_id || skipToken)
 
   const offerSessionQuery = useGetOfferSessionByIDQuery(
-    order?.offer_session_id!,
-    { skip: !order?.offer_session_id },
+    order?.offer_session_id || skipToken,
   )
 
   const notificationsQuery = useGetNotificationsQuery(

@@ -67,18 +67,24 @@ export function CommentTree(props: {
           })}
         />
         <Box>
-          <MaterialLink
-            component={Link}
-            to={USER_PATHS.profile(comment.author?.username!)}
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-            }}
-          >
-            <UnderlineLink variant={"subtitle2"}>
-              {comment.author?.display_name || t("commentTree.deleted")}
-            </UnderlineLink>
-          </MaterialLink>
+          {comment.author ? (
+            <MaterialLink
+              component={Link}
+              to={USER_PATHS.profile(comment.author.username)}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <UnderlineLink variant={"subtitle2"}>
+                {comment.author.display_name || t("commentTree.deleted")}
+              </UnderlineLink>
+            </MaterialLink>
+          ) : (
+            <Typography variant={"subtitle2"}>
+              {t("commentTree.deleted")}
+            </Typography>
+          )}
           <Typography component="div">
             <MarkdownRender text={comment.content} plainText />
           </Typography>

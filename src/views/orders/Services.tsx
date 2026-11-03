@@ -33,6 +33,7 @@ import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { ORDER_PATHS } from "../../routes/paths"
 
 import { useFormatters } from "../../util/format"
+import { skipToken } from "@reduxjs/toolkit/query/react"
 export interface ServiceRowProps {
   row: Service
   index: number
@@ -234,9 +235,9 @@ export function MyServices(props: { status: string }) {
   const contractorId = shopCtx?.shop.owner_contractor_spectrum_id
   const { t } = useTranslation()
 
-  const { data: listings } = useGetServicesQuery(profile?.username!, {
-    skip: !profile || !!contractorId,
-  })
+  const { data: listings } = useGetServicesQuery(
+    profile && !contractorId ? profile.username : skipToken,
+  )
 
   const { data: orglistings } = useGetServicesContractorQuery(
     contractorId!,

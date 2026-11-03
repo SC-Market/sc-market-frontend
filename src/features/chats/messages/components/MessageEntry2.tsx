@@ -56,7 +56,7 @@ export function MessageEntry2(props: { message: Message }) {
       justifyContent={"flex-start"}
     >
       {message.author ? (
-        <Link to={USER_PATHS.profile(author?.username!)}>
+        <Link to={USER_PATHS.profile(message.author)}>
           <Avatar
             variant="rounded"
             sx={{
@@ -91,7 +91,7 @@ export function MessageEntry2(props: { message: Message }) {
           {message.author ? (
             <MaterialLink
               component={Link}
-              to={USER_PATHS.profile(author?.username!)}
+              to={USER_PATHS.profile(message.author)}
               color={"text.secondary"}
             >
               <Typography variant={"subtitle2"}>{author?.username}</Typography>

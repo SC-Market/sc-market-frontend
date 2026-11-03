@@ -22,6 +22,7 @@ import { ContractorInviteCode } from "../../features/contractor/domain/types"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
+import { skipToken } from "@reduxjs/toolkit/query/react"
 
 export const headCells: readonly HeadCell<ContractorInviteCode>[] = [
   {
@@ -182,7 +183,7 @@ export function ListInviteCodes() {
   const [currentOrg] = useCurrentOrg()
   const { t } = useTranslation()
   const { data: contractorInvites } = useGetContractorInvitesQuery(
-    currentOrg?.spectrum_id!,
+    currentOrg?.spectrum_id ?? skipToken,
   )
 
   return (

@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next"
 import { ORDER_PATHS } from "../../../routes/paths"
 import type { OrderKind, PaymentType } from "../../orders/domain/types"
 import type { PublicContract } from "../domain/types"
+import { skipToken } from "@reduxjs/toolkit/query/react"
 
 export function useContractOfferForm(contract: PublicContract) {
   const { t } = useTranslation()
@@ -23,7 +24,7 @@ export function useContractOfferForm(contract: PublicContract) {
 
   const [createContractOffer, { isLoading }] = useCreateContractOfferMutation()
   const { data: profile } = useGetUserProfileQuery()
-  const { data: myUser } = useGetUserByUsernameQuery(profile?.username!, { skip: !profile })
+  const { data: myUser } = useGetUserByUsernameQuery(profile?.username ?? skipToken)
 
   const primaryContractorId = profile?.contractors?.[0]?.spectrum_id
   const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(primaryContractorId || "", { skip: !primaryContractorId })

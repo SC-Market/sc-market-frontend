@@ -7,6 +7,7 @@ import { RecruitingPostViewSkeleton } from "../../../components/skeletons"
 import { RecruitingPostView } from "../../../views/recruiting/RecruitingPostView"
 import { PostCommentArea } from "./PostCommentArea"
 import { isAwaitingData } from "../../../util/queryLoading"
+import { skipToken } from "@reduxjs/toolkit/query/react"
 
 export function RecruitingPostArea(props: { spectrum_id: string }) {
   const {
@@ -16,10 +17,7 @@ export function RecruitingPostArea(props: { spectrum_id: string }) {
   } = useRecruitingGetPostByOrgQuery(props.spectrum_id)
 
   const { data: comments } = useRecruitingGetPostCommentsByIDQuery(
-    post?.post_id!,
-    {
-      skip: !post?.post_id,
-    },
+    post?.post_id || skipToken,
   )
 
   return (

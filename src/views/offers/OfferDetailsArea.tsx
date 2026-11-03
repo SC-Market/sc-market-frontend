@@ -240,7 +240,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                     <MaterialLink
                       component={Link}
                       underline="hover"
-                      to={ORDER_PATHS.publicContract(publicContract?.id!)}
+                      to={ORDER_PATHS.publicContract(session.contract_id)}
                       color={"text.secondary"}
                     >
                       {publicContract?.title}

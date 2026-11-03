@@ -4,6 +4,7 @@ import {
 } from "../../services/api/servicesApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
+import { skipToken } from "@reduxjs/toolkit/query/react"
 
 interface UsePageMyServicesResult {
   data: {
@@ -22,9 +23,9 @@ export function usePageMyServices(): UsePageMyServicesResult {
   const contractorId = shopCtx?.shop.owner_contractor_spectrum_id
 
   // Get services for user or org (org when under a shop route)
-  const userServicesQuery = useGetServicesQuery(profile?.username!, {
-    skip: !profile || !!contractorId,
-  })
+  const userServicesQuery = useGetServicesQuery(
+    profile && !contractorId ? profile.username : skipToken,
+  )
 
   const orgServicesQuery = useGetServicesContractorQuery(
     contractorId!,

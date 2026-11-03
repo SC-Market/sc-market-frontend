@@ -73,7 +73,7 @@ export function UserContractorListItem(props: {
           marginRight: 1,
         }}
       >
-        <Link to={ORG_PATHS.profile(contractor?.spectrum_id!)}>
+        <Link to={ORG_PATHS.profile(spectrum_id)}>
           <Avatar
             variant={"rounded"}
             src={contractor?.avatar}
@@ -89,7 +89,7 @@ export function UserContractorListItem(props: {
         </Link>
       </ListItemIcon>
       <ListItemText>
-        <Link to={ORG_PATHS.profile(contractor?.spectrum_id!)}>
+        <Link to={ORG_PATHS.profile(spectrum_id)}>
           <UnderlineLink
             color={"text.secondary"}
             variant={"subtitle1"}

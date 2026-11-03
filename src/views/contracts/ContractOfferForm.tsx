@@ -15,6 +15,7 @@ import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { useContractOfferForm } from "../../features/contracting/hooks/useContractOfferForm"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
+import { skipToken } from "@reduxjs/toolkit/query/react"
 
 export function ContractOfferForm(props: { contract: PublicContract }) {
   const { contract } = props
@@ -30,7 +31,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
   } = useContractOfferForm(contract)
   const primaryContractor = profile?.contractors?.[0]
   const { data: primaryOrg } = useGetContractorBySpectrumIDQuery(
-    primaryContractor?.spectrum_id!, { skip: !primaryContractor },
+    primaryContractor?.spectrum_id ?? skipToken,
   )
   return (
     <>

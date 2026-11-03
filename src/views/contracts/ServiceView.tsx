@@ -83,6 +83,11 @@ export function ServiceSellerReviews(props: {
   const isLoading = userReviewsLoading || contractorReviewsLoading
   const sellerName = userSeller?.username || contractorSeller?.spectrum_id || ""
   const totalReviews = userReviews?.length || contractorReviews?.length || 0
+  const allReviewsPath = userSeller
+    ? USER_PATHS.profileTab(userSeller.username, "reviews")
+    : contractorSeller
+      ? ORG_PATHS.profileTab(contractorSeller.spectrum_id, "reviews")
+      : null
 
   // Don't show section if no seller info, still loading, or no reviews
   if (!sellerName || isLoading || !reviews.length) return null
@@ -104,17 +109,10 @@ export function ServiceSellerReviews(props: {
               defaultValue: `Reviews for ${sellerName}`,
             })}
           </Typography>
-          {totalReviews > 3 && (
+          {totalReviews > 3 && allReviewsPath && (
             <MaterialLink
               component={Link}
-              to={
-                userSeller
-                  ? USER_PATHS.profileTab(userSeller.username, "reviews")
-                  : ORG_PATHS.profileTab(
-                      contractorSeller?.spectrum_id!,
-                      "reviews",
-                    )
-              }
+              to={allReviewsPath}
               underline="hover"
               color="primary"
               variant="body2"
@@ -644,7 +642,7 @@ export function ServiceView(props: {
                         ? SHOP_PATHS.profile(service.shop.slug)
                         : service.user?.username
                           ? USER_PATHS.profile(service.user.username)
-                          : ORG_PATHS.profile(service.contractor?.spectrum_id!)
+                          : ORG_PATHS.profile(service.contractor?.spectrum_id ?? "")
                     }
                     style={{ textDecoration: "none", color: "inherit" }}
                   >

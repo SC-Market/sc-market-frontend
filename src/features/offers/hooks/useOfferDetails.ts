@@ -20,6 +20,7 @@ import { detectOfferChanges } from "../../../util/offerChanges"
 import { useAppDispatch } from "../../../store/hooks"
 import type { MinimalUser } from "../../../datatypes/User"
 import { ORDER_PATHS } from "../../../routes/paths"
+import { skipToken } from "@reduxjs/toolkit/query/react"
 
 export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?: number) {
   const { t } = useTranslation()
@@ -29,10 +30,10 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
   const dispatch = useAppDispatch()
 
   const { data: contractorData } = useGetContractorBySpectrumIDQuery(
-    session.contractor?.spectrum_id!, { skip: !session.contractor?.spectrum_id },
+    session.contractor?.spectrum_id || skipToken,
   )
 
-  const { data: publicContract } = useGetPublicContractQuery(session?.contract_id!, { skip: !session?.contract_id })
+  const { data: publicContract } = useGetPublicContractQuery(session?.contract_id || skipToken)
 
   // Offer selection — use provided index or default to 0
   const selectedOfferIndex = offerIndex ?? 0
