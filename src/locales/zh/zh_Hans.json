@@ -37,10 +37,10 @@
     "moderation.handleReport": "处理举报",
     "moderation.status": "状态",
     "moderation.notes": "备注",
-    "moderation.notesPlaceholder": "输入审核备注或已采取的措施……",
+    "moderation.notesPlaceholder": "输入审核备注或已采取的措施…",
     "moderation.notesHelperText": "关于此审核操作的可选备注（最多 2000 个字符）",
     "moderation.updateReport": "更新举报",
-    "moderation.updating": "正在更新……",
+    "moderation.updating": "正在更新…",
     "moderation.reportUpdated": "举报更新成功",
     "moderation.updateFailed": "更新举报失败",
     "moderation.actions": "操作",
@@ -109,19 +109,19 @@
     "alerts.active": "启用",
     "alerts.activeFilter": "启用状态",
     "alerts.content": "内容",
-    "alerts.contentPlaceholder": "以 Markdown 格式输入提醒内容...",
-    "alerts.contractorPlaceholder": "输入以搜索承包商...",
+    "alerts.contentPlaceholder": "以 Markdown 格式输入提醒内容…",
+    "alerts.contractorPlaceholder": "输入以搜索承包商…",
     "alerts.contractorRequired": "请选择一个承包商",
     "alerts.create": "创建",
     "alerts.createAlert": "创建提醒",
     "alerts.created": "提醒创建成功",
     "alerts.createdAt": "创建时间",
-    "alerts.creating": "创建中...",
+    "alerts.creating": "创建中…",
     "alerts.delete": "删除",
     "alerts.deleteAlert": "删除提醒",
     "alerts.deleteConfirm": "确定要删除此提醒吗？此操作无法撤销。",
     "alerts.deleted": "提醒删除成功",
-    "alerts.deleting": "删除中...",
+    "alerts.deleting": "删除中…",
     "alerts.editAlert": "编辑提醒",
     "alerts.invalidUrl": "请输入有效的 URL（http:// 或 https://）",
     "alerts.link": "链接",
@@ -130,14 +130,14 @@
     "alerts.noLink": "无链接",
     "alerts.openLink": "打开链接",
     "alerts.pageTitle": "管理员提醒",
-    "alerts.searching": "搜索中...",
+    "alerts.searching": "搜索中…",
     "alerts.selectContractor": "选择承包商",
     "alerts.targetType": "目标类型",
     "alerts.targetTypeFilter": "目标类型",
     "alerts.title": "标题",
     "alerts.update": "更新",
     "alerts.updated": "提醒更新成功",
-    "alerts.updating": "更新中...",
+    "alerts.updating": "更新中…",
     "attributes": {
       "actions": "操作",
       "allowedValues": "允许的值",
@@ -156,13 +156,13 @@
       "create": "创建",
       "created": "属性定义创建成功",
       "createDefinition": "创建属性定义",
-      "creating": "创建中...",
+      "creating": "创建中…",
       "delete": "删除",
       "deleteAttributes": "删除属性",
       "deleteConfirm": "确定要删除此属性定义吗？",
       "deleted": "属性定义删除成功",
       "deleteDefinition": "删除属性定义",
-      "deleting": "删除中...",
+      "deleting": "删除中…",
       "displayName": "显示名称",
       "displayNameHelp": "面向用户的名称（例如 '组件尺寸'、'组件等级'）",
       "editDefinition": "编辑属性定义",
@@ -179,7 +179,7 @@
       "title": "属性定义",
       "update": "更新",
       "updated": "属性定义更新成功",
-      "updating": "更新中..."
+      "updating": "更新中…"
     },
     "auditLogs": "管理员审计日志",
     "featureFlags": {
@@ -194,18 +194,18 @@
       "deleteAttribute": "删除属性",
       "deleteConfirm": "确定要删除此属性吗？",
       "deleted": "属性删除成功",
-      "deleting": "删除中...",
+      "deleting": "删除中…",
       "editAttribute": "编辑属性",
       "freeFormValue": "输入任意值",
       "gameItemId": "游戏物品 ID",
       "import": "从外部导入",
-      "importing": "导入中...",
+      "importing": "导入中…",
       "importPartial": "部分导入",
       "importSuccess": "导入成功",
       "noSelection": "输入游戏物品 ID 以开始",
       "save": "保存",
       "saved": "属性保存成功",
-      "saving": "保存中...",
+      "saving": "保存中…",
       "search": "搜索",
       "searchHelp": "输入游戏物品的 UUID 以查看和编辑其属性",
       "searchTitle": "搜索游戏物品",
@@ -230,7 +230,7 @@
       "success": "通知测试成功完成",
       "targetUser": "目标用户",
       "test": "测试通知",
-      "testing": "测试中...",
+      "testing": "测试中…",
       "title": "测试通知",
       "validation": {
         "fillAllFields": "请填写所有字段"
@@ -291,7 +291,7 @@
       "lastLogin": "上次登录",
       "failed24h": "登录失败（24 小时）",
       "status": "状态",
-      "loading": "加载中...",
+      "loading": "加载中…",
       "none": "尚无测试账号。",
       "disabled": "已停用",
       "active": "有效",
@@ -332,8 +332,8 @@
     "email": "邮箱",
     "username": "用户名",
     "password": "密码",
-    "repeatPassword": "重输密码",
-    "loginWith": "用此方法登录",
+    "repeatPassword": "确认密码",
+    "loginWith": "登录方式",
     "signIn": "登录",
     "terms": "点此同意服务条款",
     "submit": "提交",
@@ -344,24 +344,24 @@
       "outlinedGroup": "描边按钮组"
     },
     "accessibility": {
-      "signInWithCitizenIDDescription": "使用您的 Citizen iD 账户登录",
-      "signInWithDiscordDescription": "使用您的 Discord 账户登录",
-      "signUpWithCitizenIDDescription": "使用您的 Citizen iD 账户创建新账户",
-      "signUpWithDiscordDescription": "使用您的 Discord 账户创建新账户"
+      "signInWithCitizenIDDescription": "使用你的 Citizen iD 账户登录",
+      "signInWithDiscordDescription": "使用你的 Discord 账户登录",
+      "signUpWithCitizenIDDescription": "使用你的 Citizen iD 账户创建新账户",
+      "signUpWithDiscordDescription": "使用你的 Discord 账户创建新账户"
     },
     "accountAlreadyExists": "账户已存在。请改为登录。",
     "accountNotFound": "未找到账户。请先注册。",
     "authFailed": "身份验证失败。请重试。",
     "authTabs": "身份验证选项卡",
-    "citizenidAccountNotVerified": "您的 Citizen iD 账户必须经过验证才能注册或登录。",
-    "citizenIdBlurb": "使用您的 RSI 账户登录并验证，通过身份联合简化您在 Star Citizen 社区工具中的账户管理。",
+    "citizenidAccountNotVerified": "你的 Citizen iD 账户必须经过验证才能注册或登录。",
+    "citizenIdBlurb": "使用你的 RSI 账户登录并验证，通过身份联合简化你在 Star Citizen 社区工具中的账户管理。",
     "genericAuthError": "发生身份验证错误。请重试，如果问题持续存在请联系支持。",
     "genericError": "发生错误。请重试。",
     "linkCitizenID": "关联 Citizen iD",
     "loginFailed": "登录失败。请重试。",
     "loginWithCitizenID": "使用 Citizen iD 登录",
     "oauthError": "身份验证过程中发生错误。请重试。",
-    "signInBlurb": "免费加入 — 使用您的 RSI 账户（<citizenIdLink>Citizen iD</citizenIdLink>）或 Discord 账户登录。",
+    "signInBlurb": "免费加入 — 使用你的 RSI 账户（<citizenIdLink>Citizen iD</citizenIdLink>）或 Discord 账户登录。",
     "signInTab": "登录选项卡",
     "signInTitle": "登录 SC Market",
     "signInWithCitizenID": "使用 Citizen iD 登录",
@@ -371,8 +371,8 @@
     "signUpTitle": "注册 SC Market",
     "signUpWithCitizenID": "使用 Citizen iD 注册",
     "signUpWithDiscord": "使用 Discord 注册",
-    "legalAgreement": "登录即表示您同意我们的<termsLink>服务条款</termsLink>和<privacyLink>隐私政策</privacyLink>。",
-    "legalAgreementSignUp": "注册即表示您同意我们的<termsLink>服务条款</termsLink>和<privacyLink>隐私政策</privacyLink>。",
+    "legalAgreement": "登录即表示你同意我们的<termsLink>服务条款</termsLink>和<privacyLink>隐私政策</privacyLink>。",
+    "legalAgreementSignUp": "注册即表示你同意我们的<termsLink>服务条款</termsLink>和<privacyLink>隐私政策</privacyLink>。",
     "google": "Google",
     "discord": "Discord"
   },
@@ -383,14 +383,14 @@
     "title": "我的可用时间段",
     "updated": "可用时间段已更新！",
     "failed": "更新失败！",
-    "checking": "正在检查可用时间要求……",
+    "checking": "正在检查可用时间要求…",
     "edit": "编辑",
     "yourAvailability": "你的可用时间"
   },
   "buyOrderActions": {
-    "createBuyOrder": "创建购买订单",
+    "createBuyOrder": "创建求购单",
     "selectMarketItem": "选择物品",
-    "createBuyOrderTooltip": "创建一个新的购买订单",
+    "createBuyOrderTooltip": "创建一个新的求购单",
     "searchItem": "搜索游戏物品",
     "selectItem": "选择游戏物品"
   },
@@ -400,7 +400,7 @@
   },
   "cookie_consent": {
     "title": "同意Cookie",
-    "description": "我们使用 Cookie 来保持登录。仅在您同意时启用分析。",
+    "description": "我们使用 Cookie 来保持登录。仅在你同意时启用分析。",
     "privacy": "隐私",
     "accept_all": "接受",
     "accept_necessary": "仅必要"
@@ -422,17 +422,17 @@
     "support": "支持",
     "discord": "Discord",
     "discordBot": "Discord机器人",
-    "wiki": "维基",
+    "wiki": "百科",
     "donate": "捐赠",
     "github": "Github",
     "helpGuides": "帮助与指南",
     "privacyPolicy": "隐私政策",
     "termsOfService": "服务条款",
-    "copyright": "著作权©",
+    "copyright": "版权所有 © ",
     "trademark": "Star Citizen®（“星际公民”），Squadron 42®（“42中队”），Roberts Space Industries®（“罗伯茨太空工业”），以及Cloud Imperium®（“云间帝国”）均为Cloud Imperium Rights有限责任公司旗下的注册商标。",
-    "unofficial": "这是一个非官方的星际公民玩家自制网站，不附属于云间帝国（Cloud Imperium）公司集团。所有这个网站上不为站长或用户群体所作的内容均为它们对应所属人的财产。",
-    "officialSite": "星际公民官方网站：",
-    "referralCode": "使用我们的邀请码：{{code}}",
+    "unofficial": "这是一个非官方的 Star Citizen 粉丝网站，与 Cloud Imperium 集团旗下公司无关。本站中非由站长或用户创作的所有内容，均归其各自所有者所有。",
+    "officialSite": "Star Citizen 官方网站：",
+    "referralCode": "推荐码：{{code}}",
     "acknowledgments": "特别感谢 <ladyFleurLink>LadyFleur</ladyFleurLink> 提供标志，以及 <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>、<nexdLink>NEXD</nexdLink> 和 <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> 提供的 API。",
     "apiDocs": "API 文档",
     "scOrgs": "SC Orgs",
@@ -455,7 +455,7 @@
     "columnLocation": "地点",
     "columnSellPrice": "出售价",
     "columnShop": "商店",
-    "compareAll": "比较 {{name}} 的所有挂单",
+    "compareAll": "比较 {{name}} 的所有商品",
     "confidenceHigh": "可信度高",
     "confidenceMedium": "可信度中",
     "craftTime": "制作时间：{{time}}",
@@ -468,13 +468,13 @@
     "inStockCount": "库存 {{quantity}}",
     "jsonData": "JSON 数据",
     "license": "CC BY 4.0",
-    "listings": "挂单",
+    "listings": "商品",
     "lowestAsk": "最低报价",
     "medianAsk": "报价中位数",
     "miningLocations": "采矿地点",
     "minQuality": "最低品质 {{quality}}",
     "missionsTitle": "奖励它的任务",
-    "noSources": "{{name}} 暂无玩家挂单、任务、蓝图或游戏内商店。",
+    "noSources": "{{name}} 暂无玩家商品、任务、蓝图或游戏内商店。",
     "priceUnit": "{{price}} aUEC",
     "purchaseLocations": "购买地点",
     "resourceTitle": "采矿、打捞与战利品",
@@ -526,16 +526,16 @@
     "relatedListings": "相关商品"
   },
   "manageListingsActions": {
-    "activateListings": "上架商品页",
-    "activateTooltip": "上架选中的全部商品页",
-    "deactivateListings": "下架商品页",
-    "deactivateTooltip": "下架选中的全部商品页"
+    "activateListings": "上架商品",
+    "activateTooltip": "上架选中的全部商品",
+    "deactivateListings": "下架商品",
+    "deactivateTooltip": "下架选中的全部商品"
   },
   "market": {
     "search_query": "搜索关键字",
-    "filters": "过滤标签",
+    "filters": "筛选",
     "search": "搜索",
-    "sort_by": "排序法",
+    "sort_by": "排序方式",
     "none": "无",
     "title": "标题",
     "price_low_to_high": "价格（低到高）",
@@ -550,44 +550,44 @@
     "sale_type": "售卖类型",
     "any": "任意",
     "sale": "零售",
-    "aggregate": "合售",
+    "aggregate": "合并",
     "auction": "拍卖",
     "min_cost": "最低花费",
     "max_cost": "最高花费",
     "item_type": "物品类型",
-    "item_name": "物品名",
+    "item_name": "物品名称",
     "other_category": "其他",
-    "allListings": "市集上全部商品页",
-    "toggleSidebar": "开关市集侧边栏",
-    "activeListings": "在售商品页",
-    "inactiveListings": "停售商品页",
-    "archivedListings": "已归档商品页",
-    "viewMarketListing": "查看市集商品页",
-    "editMarketListing": "编辑市集商品页",
-    "editMultipleListing": "编辑多个商品页",
-    "createMarketListing": "创建市集商品页",
-    "bulkListingTab": "大宗商品页",
+    "allListings": "市场上全部商品",
+    "toggleSidebar": "切换市场侧边栏",
+    "activeListings": "在售商品",
+    "inactiveListings": "停售商品",
+    "archivedListings": "已归档商品",
+    "viewMarketListing": "查看市场商品",
+    "editMarketListing": "编辑市场商品",
+    "editMultipleListing": "编辑多个商品",
+    "createMarketListing": "创建市场商品",
+    "bulkListingTab": "批量上架",
     "uniqueListingTab": "独立商品",
     "auctionTab": "拍卖",
     "combinedListingTab": "合并商品",
-    "market": "市集",
+    "market": "市场",
     "itemsTab": "商品",
     "servicesTab": "服务",
-    "bulkItems": "大宗物品",
-    "bulkListings": "大宗商品页",
-    "buyOrders": "购买订单",
+    "bulkItems": "批量物品",
+    "bulkListings": "批量商品",
+    "buyOrders": "求购单",
     "total_requested": "总求购量",
-    "total_available": "全部在售数",
-    "starting_at": "起拍价为{{price}}aEUC",
+    "total_available": "总在售量",
+    "starting_at": "起价 {{price}} aUEC",
     "new": "新",
     "ended": "已结束",
     "ending_in": "{{time}} 结束",
     "expiration": "到期时间：{{time}}",
-    "unit": "ea",
-    "available": "{{count}}在售",
-    "internalListing": "内部商品页",
-    "unlistedListing": "未列出",
-    "showUnlistedAdmin": "显示未列出（管理员）",
+    "unit": "件",
+    "available": "{{count}} 件在售",
+    "internalListing": "内部商品",
+    "unlistedListing": "未上架",
+    "showUnlistedAdmin": "显示未上架（管理员）",
     "aria": {
       "listingTabs": "市场商品选项卡"
     },
@@ -609,7 +609,7 @@
     "bundleContents": "捆绑内容",
     "bundleTotal": "捆绑总计",
     "buyOrder": "求购单",
-    "contractsTab": "开放合同",
+    "contractsTab": "开放合约",
     "createListing": "创建商品",
     "delivery": "配送",
     "discountPercent": "折扣 %",
@@ -620,9 +620,9 @@
     "internalListings": "内部商品",
     "inventoryDistributionByQualityTier": "当前库存分布",
     "listings": "商品",
-    "loadingPriceHistory": "正在加载价格历史……",
-    "loadingQualityDistribution": "正在加载品质分布……",
-    "loadingSellerStats": "正在加载卖家分析……",
+    "loadingPriceHistory": "正在加载价格历史…",
+    "loadingQualityDistribution": "正在加载品质分布…",
+    "loadingSellerStats": "正在加载卖家分析…",
     "maxPrice": "最高价格",
     "minPrice": "最低价格",
     "minQuantity": "最小数量",
@@ -645,11 +645,11 @@
     "quantity": "数量",
     "quantityAvailable": "可供数量",
     "readyToPurchase": "可购买",
-    "requested": "已请求",
+    "requested": "需求量",
     "salesVolume": "销量",
     "salesVolumeByQualityTier": "按品质层级的销量",
-    "searching": "搜索中……",
-    "searchItemPlaceholder": "开始输入物品名称……",
+    "searching": "搜索中…",
+    "searchItemPlaceholder": "开始输入物品名称…",
     "selectAllVariants": "选择所有变体",
     "selectVariant": "请选择一个变体",
     "selectVariantsPrompt": "请为每个物品选择一个变体",
@@ -668,7 +668,7 @@
     "tierSilver": "白银",
     "timeToSaleByQualityTier": "按品质层级的成交时长",
     "totalQuantity": "总数量",
-    "typeToSearch": "输入以搜索……",
+    "typeToSearch": "输入以搜索…",
     "unspecified": "未指定",
     "variant": "变体",
     "verificationRequired": "你的账户必须经过验证才能创建市场商品。请使用 RSI/Citizen iD 验证你的账户以继续。",
@@ -681,10 +681,10 @@
     "applySearchNow": "立即应用搜索"
   },
   "marketActions": {
-    "createListing": "创建商品页",
-    "createListingTooltip": "创建一个新的商品页",
+    "createListing": "创建商品",
+    "createListingTooltip": "创建一个新的商品",
     "myCart": "我的购物车",
-    "myCartTooltip": "查看您的购物车"
+    "myCartTooltip": "查看你的购物车"
   },
   "navigation": {
     "goBack": "上一页"
@@ -699,7 +699,7 @@
     "new_offer_received_from": "收到新报价，来自",
     "counter_offer_received_from": "收到还价，来自",
     "order_status_updated_to": "订单状态已更新为 {{status}}，操作者",
-    "contractor_invite_from": "<contractorLink>{{spectrum_id}}</contractorLink>邀请您加入该合约组织",
+    "contractor_invite_from": "<contractorLink>{{spectrum_id}}</contractorLink>邀请你加入该承包商",
     "submitted": "已提交！",
     "accept": "同意",
     "decline": "拒绝",
@@ -727,12 +727,12 @@
     "share": "分享",
     "shareNotification": "查看此通知",
     "view_all": "查看全部",
-    "public_contract": "新的公共合同：",
+    "public_contract": "新的公开合约：",
     "someone": "有人",
     "org_member_joined": "{{who}} 加入了 {{org}}",
     "offer_accepted": "{{who}} 接受了你的报价",
     "offer_rejected": "{{who}} 拒绝了你的报价",
-    "contract_offer_received": "{{who}} 对你的合同提出了报价",
+    "contract_offer_received": "{{who}} 对你的合约提出了报价",
     "account_identity": {
       "account_deactivated": "管理员停用了你的账户。",
       "account_reactivated": "管理员重新启用了你的账户。",
@@ -770,19 +770,19 @@
       "buyer_one": "“{{title}}”仍在等待卖家回复。你可以继续等待、给卖家发消息，或撤回报价。",
       "buyer_many": "你有 {{n}} 个报价仍在等待卖家回复"
     },
-    "buy_order_match": "求购订单匹配：",
-    "buy_order_match_listed": "与你的一个求购订单匹配",
-    "buy_order_filled_by": "你的求购订单已成交，卖家："
+    "buy_order_match": "求购单匹配：",
+    "buy_order_match_listed": "与你的一个求购单匹配",
+    "buy_order_filled_by": "你的求购单已成交，卖家："
   },
   "onboarding": {
     "welcome": "欢迎来到 SC Market",
-    "subtitle": "让我们设置您的账户，以便您开始交易。",
+    "subtitle": "让我们设置你的账户，以便你开始交易。",
     "skipAll": "跳过设置，我自己探索",
     "skip": "跳过",
     "continue": "继续",
     "complete": "完成设置",
     "availabilitySaved": "可用时间已保存",
-    "emailVerificationSent": "验证邮件已发送！请检查您的收件箱。",
+    "emailVerificationSent": "验证邮件已发送！请检查你的收件箱。",
     "steps": {
       "discord": "关联 Discord",
       "availability": "可用时间",
@@ -793,33 +793,33 @@
       "pushNotifs": "推送提醒"
     },
     "discord": {
-      "title": "关联您的 Discord 账户",
+      "title": "关联你的 Discord 账户",
       "description": "连接 Discord 以接收交易通知并直接与买家沟通。",
       "link": "关联 Discord"
     },
     "availability": {
-      "title": "设置您的可用时间",
-      "description": "让其他人知道您何时在线进行交易。拖动以选择时间段。"
+      "title": "设置你的可用时间",
+      "description": "让其他人知道你何时在线进行交易。拖动以选择时间段。"
     },
     "email": {
-      "title": "添加您的邮箱",
-      "description": "在您离开时接收新消息和报价的通知。",
+      "title": "添加你的邮箱",
+      "description": "在你离开时接收新消息和报价的通知。",
       "verify": "发送验证",
-      "sent": "验证邮件已发送！您可以稍后验证。"
+      "sent": "验证邮件已发送！你可以稍后验证。"
     },
     "notifications": {
       "title": "通知偏好设置",
-      "description": "选择您希望如何收到未读消息的提醒。",
+      "description": "选择你希望如何收到未读消息的提醒。",
       "dmReminders": "通过邮件提醒我未读消息",
-      "dmRemindersHelp": "如果您有超过24小时未读的消息，我们会发送提醒。您可以随时在设置中更改此选项。"
+      "dmRemindersHelp": "如果你有超过24小时未读的消息，我们会发送提醒。你可以随时在设置中更改此选项。"
     },
     "emailNotifs": {
-      "description": "选择哪些事件会向您发送邮件。您可以随时在“设置”中更改。",
+      "description": "选择哪些事件会向你发送邮件。你可以随时在“设置”中更改。",
       "prefsTitle": "邮件偏好设置",
       "title": "邮件通知"
     },
     "org": {
-      "description": "如果您经营一个 Star Citizen 组织，可以将其注册，以团队形式管理成员、商品条目和订单。",
+      "description": "如果你经营一个 Star Citizen 组织，可以将其注册，以团队形式管理成员、商品和订单。",
       "register": "注册组织",
       "title": "注册组织"
     },
@@ -865,25 +865,25 @@
     "helperText": "比如说护送和运输服务，该订单的出发地和开始时间都是什么？协助服务的话，合约工该去哪里找你？"
   },
   "selectMarketListing": {
-    "label": "选择市集商品页"
+    "label": "选择市场商品"
   },
   "seoAnswers": {
     "commodity": {
       "cheapest": "已知最便宜的购买地点是{{location}}，约{{price}}。",
       "faqBuyA": "可以在{{locations}}购买{{name}}。",
-      "faqBuyQ": "在《星际公民》中哪里可以买到{{name}}？",
+      "faqBuyQ": "在 Star Citizen 中哪里可以买到{{name}}？",
       "faqMineA": "可以在{{locations}}开采{{name}}。",
-      "faqMineQ": "在《星际公民》中哪里可以开采{{name}}？",
+      "faqMineQ": "在 Star Citizen 中哪里可以开采{{name}}？",
       "faqUsesA": "{{name}}是{{items}}等物品的制作材料。",
-      "faqUsesQ": "{{name}}在《星际公民》中有什么用？",
-      "intro": "{{name}}是《星际公民》中的商品（类别：{{category}}）。",
+      "faqUsesQ": "{{name}}在 Star Citizen 中有什么用？",
+      "intro": "{{name}}是 Star Citizen 中的大宗商品（类别：{{category}}）。",
       "methods": "获取方式：{{methods}}。",
       "mined": "已知采矿地点包括{{locations}}。",
       "price": "当前市场价格为{{min}}至{{max}}。"
     },
     "faqTitle": "常见问题",
     "item": {
-      "intro": "{{name}}是《星际公民》中的物品。",
+      "intro": "{{name}}是 Star Citizen 中的物品。",
       "listings": "玩家在 SC Market 上以{{min}}至{{max}}出售（在售数量：{{total}}）。",
       "type": "类型：{{type}}。"
     },
@@ -896,12 +896,12 @@
     "ore": {
       "best": "已知地点包括{{locations}}。",
       "faqWhereA": "可以在{{locations}}等地点找到{{name}}。",
-      "faqWhereQ": "在《星际公民》中哪里可以开采{{name}}？",
-      "intro": "{{name}}是《星际公民》中可开采的矿石（稀有度：{{rarity}}）。"
+      "faqWhereQ": "在 Star Citizen 中哪里可以开采{{name}}？",
+      "intro": "{{name}}是 Star Citizen 中可开采的矿石（稀有度：{{rarity}}）。"
     },
     "ship": {
       "crew": "最大船员数：{{crew}}。",
-      "intro": "{{name}}是《星际公民》中的一艘舰船。",
+      "intro": "{{name}}是 Star Citizen 中的一艘舰船。",
       "length": "长度：{{length}} 米。",
       "role": "定位：{{role}}。"
     }
@@ -932,12 +932,12 @@
         "org": "组织邀请",
         "announcements": "公告",
         "reminders": "未读消息提醒",
-        "contracts": "公共合同",
+        "contracts": "公开合约",
         "storefront": "店面申请"
       },
       "events": {
         "order_created": "新订单",
-        "order_assigned": "分配给你的订单",
+        "order_assigned": "指派给你的订单",
         "order_status_not_started": "订单未开始",
         "order_status_in_progress": "订单进行中",
         "order_status_fulfilled": "订单已完成",
@@ -953,11 +953,11 @@
         "admin_alert": "公告",
         "reminder_unread_messages": "未读消息提醒",
         "watchlist_price_alert": "价格提醒",
-        "buy_order_match": "求购订单匹配",
-        "contract_public_created": "新的公共合同",
+        "buy_order_match": "求购单匹配",
+        "contract_public_created": "新的公开合约",
         "offer_accepted": "报价已接受",
         "offer_rejected": "报价已拒绝",
-        "contract_offer_received": "你的合同收到报价",
+        "contract_offer_received": "你的合约收到报价",
         "org_member_joined": "新成员加入",
         "listing_expiring": "商品即将到期",
         "storefront_enquiry_accepted": "店面申请已接受",
@@ -970,7 +970,7 @@
         "orders": "订单与报价",
         "messages": "消息",
         "market": "市场与关注列表",
-        "orgs": "组织与合同",
+        "orgs": "组织与合约",
         "account": "账户"
       },
       "sections": {
@@ -1003,16 +1003,16 @@
           "hint": "关注列表中的物品有公开商品达到目标价。"
         },
         "buy-orders": {
-          "label": "求购订单",
-          "hint": "有新的公开商品符合你的求购订单，或有卖家响应了你的求购订单。"
+          "label": "求购单",
+          "hint": "有新的公开商品符合你的求购单，或有卖家响应了你的求购单。"
         },
         "org": {
           "label": "组织",
           "hint": "加入组织的邀请，以及有成员加入你的组织。"
         },
         "contracts": {
-          "label": "公共合同",
-          "hint": "你的公共合同收到的报价，以及新的公共合同（需在下方开启）。"
+          "label": "公开合约",
+          "hint": "你的公开合约收到的报价，以及新的公开合约（需在下方开启）。"
         },
         "announcements": {
           "label": "公告",
@@ -1023,14 +1023,14 @@
           "hint": "对你提交的品牌店面申请的回复。"
         },
         "threads": {
-          "label": "Discord 帖子",
-          "hint": "你在卖家 Discord 服务器上的订单和报价帖子。"
+          "label": "Discord 讨论帖",
+          "hint": "你在卖家 Discord 服务器上的订单和报价讨论帖。"
         }
       },
       "rows": {
         "new-order": {
           "label": "新订单",
-          "hint": "你店铺的订单，或分配给你的订单"
+          "hint": "你店铺的订单，或指派给你的订单"
         },
         "new-offer": {
           "label": "新报价或还价"
@@ -1040,7 +1040,7 @@
           "hint": "进行中、已完成、已取消"
         },
         "assigned": {
-          "label": "分配给你"
+          "label": "指派给你"
         },
         "decisions": {
           "label": "报价被接受或拒绝"
@@ -1069,20 +1069,20 @@
           "label": "价格提醒"
         },
         "buy-order-match": {
-          "label": "求购订单匹配"
+          "label": "求购单匹配"
         },
         "buy-order-filled": {
-          "label": "求购订单已成交",
-          "hint": "有卖家响应了你的求购订单，并已创建订单"
+          "label": "求购单已成交",
+          "hint": "有卖家响应了你的求购单，并已创建订单"
         },
         "invite": {
           "label": "组织邀请"
         },
         "contract-offer": {
-          "label": "你的合同收到报价"
+          "label": "你的合约收到报价"
         },
         "contract-new": {
-          "label": "新的公共合同",
+          "label": "新的公开合约",
           "hint": "仅在下方开启提醒后"
         },
         "admin": {
@@ -1107,8 +1107,8 @@
         },
         "thread-invite": {
           "label": "Discord 服务器邀请",
-          "hint": "当机器人无法将你加入订单或报价帖子时",
-          "tip": "机器人会在卖家的 Discord 服务器上为每个订单或报价开一个私密帖子。如果无法把你加进去（通常是因为你还不在那个服务器里），它会私信你一个服务器邀请。"
+          "hint": "当机器人无法将你加入订单或报价讨论帖时",
+          "tip": "机器人会在卖家的 Discord 服务器上为每个订单或报价开一个私密讨论帖。如果无法把你加进去（通常是因为你还不在那个服务器里），它会私信你一个服务器邀请。"
         }
       },
       "subtitle": "选择每类通知的接收方式。",
@@ -1139,17 +1139,17 @@
       }
     },
     "contractAlerts": {
-      "title": "新公共合同提醒",
-      "description": "有人发布公共合同时，通过站内和推送通知提醒你。默认关闭。不勾选任何类型即接收全部类型。",
-      "error": "无法加载或保存你的合同提醒。",
-      "toggle": "合同提醒对象"
+      "title": "新公开合约提醒",
+      "description": "有人发布公开合约时，通过站内和推送通知提醒你。默认关闭。不勾选任何类型即接收全部类型。",
+      "error": "无法加载或保存你的合约提醒。",
+      "toggle": "合约提醒对象"
     },
     "tabs": {
       "profile": "个人资料",
       "privacy": "隐私",
       "discordIntegration": "Discord集成",
-      "market": "市集",
-      "contractors": "合约组织",
+      "market": "市场",
+      "contractors": "承包商",
       "blocklist": "已屏蔽用户",
       "scmdb": "SCMDB"
     },
@@ -1158,22 +1158,22 @@
       "authenticateWithRSI": "用RSI验证",
       "viewUserProfile": "查看用户资料",
       "reVerifyTitle": "重新验证资料",
-      "reVerifyDescription": "更新您的资料用户名以匹配您当前的Spectrum句柄。这只会更新您的用户名。",
+      "reVerifyDescription": "更新你的资料用户名，使其与你当前的 Spectrum 名称一致。这只会更新你的用户名。",
       "reVerifyButton": "重新验证资料",
-      "reVerifySuccess": "资料重新验证成功！您的用户名已更新。",
+      "reVerifySuccess": "资料重新验证成功！你的用户名已更新。",
       "reVerifyError": "重新验证资料失败。请稍后再试。",
-      "accountAlreadyCitizenId": "您的 SC Market 账户（{{username}}）已关联了一个 Citizen iD。请先取消关联，再关联新的账户。",
-      "accountAlreadyDiscord": "您的 SC Market 账户已关联 Discord。请先取消关联。",
+      "accountAlreadyCitizenId": "你的 SC Market 账户（{{username}}）已关联了一个 Citizen iD。请先取消关联，再关联新的账户。",
+      "accountAlreadyDiscord": "你的 SC Market 账户已关联 Discord。请先取消关联。",
       "accountLinks": "已关联的账户",
-      "accountLinksDescription": "管理您已关联的身份验证账户。您可以关联多个账户，并选择使用哪一个进行登录。",
-      "accountNotVerified": "您的 Citizen iD 账户必须先通过验证才能关联。请在 Citizen iD 上验证您的账户后重试。",
+      "accountLinksDescription": "管理你已关联的身份验证账户。你可以关联多个账户，并选择使用哪一个进行登录。",
+      "accountNotVerified": "你的 Citizen iD 账户必须先通过验证才能关联。请在 Citizen iD 上验证你的账户后重试。",
       "accountUsername": "账户用户名",
       "allAccountsLinked": "所有可用账户均已关联。",
       "citizenIdAlreadyLinked": "此 Citizen iD 账户已关联到另一个 SC Market 账户（{{username}}）。请先取消关联，或使用其他账户。",
       "citizenIDUsername": "Citizen iD 用户名",
       "discordAlreadyLinked": "此 Discord 账户已关联到另一个 SC Market 账户（{{username}}）。请先取消关联。",
       "inGame": "游戏中",
-      "linkingError": "关联您的账户时发生错误：{{error}}",
+      "linkingError": "关联你的账户时发生错误：{{error}}",
       "linkNewAccount": "关联新账户",
       "manualVerification": "手动验证",
       "or": "或",
@@ -1183,19 +1183,19 @@
       "showAsInGame": "显示为游戏中",
       "unlink": "取消关联",
       "unlinkButton": "取消关联账户",
-      "unlinkDescription": "取消关联您的 Star Citizen 账户以恢复到未验证状态。您的用户名将重置为基于您 Discord ID 的默认格式。",
+      "unlinkDescription": "取消关联你的 Star Citizen 账户以恢复到未验证状态。你的用户名将重置为基于你 Discord ID 的默认格式。",
       "unlinkDialogCancel": "取消",
       "unlinkDialogConfirm": "取消关联账户",
-      "unlinkDialogDescription": "确定要取消关联您的 Star Citizen 账户吗？这将把您的个人资料重置为未验证状态，并将您的用户名改回默认格式。您可以随时重新关联账户。",
+      "unlinkDialogDescription": "确定要取消关联你的 Star Citizen 账户吗？这将把你的个人资料重置为未验证状态，并将你的用户名改回默认格式。你可以随时重新关联账户。",
       "unlinkDialogTitle": "确认取消关联账户",
       "unlinkError": "取消关联 Star Citizen 账户失败。请稍后重试。",
-      "unlinkProviderDescription": "确定要取消关联此账户吗？您将无法再使用此方式登录。",
+      "unlinkProviderDescription": "确定要取消关联此账户吗？你将无法再使用此方式登录。",
       "unlinkProviderTitle": "取消关联账户",
-      "unlinkSuccess": "Star Citizen 账户已成功取消关联！您的个人资料已重置为未验证状态。",
+      "unlinkSuccess": "Star Citizen 账户已成功取消关联！你的个人资料已重置为未验证状态。",
       "unlinkTitle": "取消关联 Star Citizen 账户",
       "usernames": "用户名：",
-      "verifyAccount": "验证您的账户",
-      "verifyAccountDescription": "您需要验证账户才能使用所有功能。请选择以下方式之一：",
+      "verifyAccount": "验证你的账户",
+      "verifyAccountDescription": "你需要验证账户才能使用所有功能。请选择以下方式之一：",
       "hideOnlineStatus": "隐藏我的在线状态",
       "hideOnlineStatusHelp": "买家会在你的商品和店铺上看到你大致的最后活跃时间（例如“今天活跃”）。开启此项即可隐藏。",
       "hideOnlineStatusError": "无法保存你的在线状态设置"
@@ -1218,10 +1218,10 @@
     },
     "email": {
       "addEmail": "添加电子邮箱地址",
-      "addEmailDescription": "您尚未添加电子邮箱地址。添加一个以接收邮件通知。",
+      "addEmailDescription": "你尚未添加电子邮箱地址。添加一个以接收邮件通知。",
       "addEmailDialog": {
         "add": "添加邮箱",
-        "selectNotificationTypes": "选择您想启用的通知类型：",
+        "selectNotificationTypes": "选择你想启用的通知类型：",
         "title": "添加电子邮箱地址"
       },
       "addError": "添加电子邮箱地址失败",
@@ -1229,7 +1229,7 @@
       "deleteEmailDialog": {
         "cancel": "取消",
         "confirm": "移除邮箱",
-        "description": "确定要移除您的电子邮箱地址吗？您将不再收到邮件通知。",
+        "description": "确定要移除你的电子邮箱地址吗？你将不再收到邮件通知。",
         "title": "移除电子邮箱地址"
       },
       "deleteError": "移除电子邮箱地址失败",
@@ -1238,7 +1238,7 @@
         "newEmailLabel": "新的电子邮箱地址",
         "title": "更新电子邮箱地址",
         "update": "更新邮箱",
-        "verificationNote": "更新后您需要验证新的电子邮箱地址。"
+        "verificationNote": "更新后你需要验证新的电子邮箱地址。"
       },
       "emailAddress": "电子邮箱地址",
       "emailConfigured": "邮箱已配置",
@@ -1276,23 +1276,23 @@
       "notifications": "通知"
     },
     "languages": {
-      "description": "选择您可以使用的沟通语言。",
+      "description": "选择你可以使用的沟通语言。",
       "field": {
-        "helperText": "选择您可以使用的所有沟通语言"
+        "helperText": "选择你可以使用的所有沟通语言"
       },
       "label": "支持的语言",
       "loadError": "加载语言失败",
-      "noPermission": "您没有权限编辑组织语言",
+      "noPermission": "你没有权限编辑组织语言",
       "org": {
-        "description": "选择您的组织可以使用的沟通语言。",
-        "helperText": "选择您的组织可以使用的沟通语言"
+        "description": "选择你的组织可以使用的沟通语言。",
+        "helperText": "选择你的组织可以使用的沟通语言"
       },
-      "placeholder": "选择语言...",
+      "placeholder": "选择语言…",
       "save": "保存语言",
       "saveError": "更新语言失败",
       "saveSuccess": "语言更新成功",
       "section": {
-        "description": "选择您可以使用的沟通语言。这有助于他人了解您支持哪些语言。"
+        "description": "选择你可以使用的沟通语言。这有助于他人了解你支持哪些语言。"
       },
       "title": "支持的语言"
     },
@@ -1306,7 +1306,7 @@
     },
     "pushNotifications": {
       "androidPWARequired": "在 Android 上使用推送通知需要将应用安装为渐进式 Web 应用（PWA）。",
-      "browserNotSupported": "您的浏览器不支持推送通知。",
+      "browserNotSupported": "你的浏览器不支持推送通知。",
       "connected": "已连接",
       "connectedDevices": "已连接的设备：",
       "currentDevice": "当前设备",
@@ -1327,14 +1327,14 @@
       "otherDevices_other": "{{count}} 台其他设备",
       "permissionDeniedError": "权限{{status}}。请在浏览器设置中启用通知。",
       "permissionDeniedMessage": "请在浏览器设置中启用通知以使用推送通知。",
-      "permissionGrantedMessage": "权限已授予！您现在可以订阅推送通知。",
+      "permissionGrantedMessage": "权限已授予！你现在可以订阅推送通知。",
       "permissionStatus": "权限状态",
       "removeDevice": "移除设备",
       "requestPermission": "请求权限",
       "subscribe": "订阅推送通知",
       "subscribed": "已成功订阅推送通知！",
       "subscribedOn": "订阅于 {{date}}",
-      "subscribing": "订阅中...",
+      "subscribing": "订阅中…",
       "title": "推送通知",
       "totalDevices": "共 {{count}} 台设备",
       "totalDevices_other": "共 {{count}} 台设备",
@@ -1380,19 +1380,19 @@
     "scmdb": {
       "connect": "连接 SCMDB",
       "connected": "已连接",
-      "connectPrompt": "生成一个同步令牌以连接您的 SCMDB 账户。您将获得一个 URL，可粘贴到 SCMDB 的 Sync Sinks 设置中。",
-      "description": "连接您的 SCMDB 账户，将蓝图所有权自动同步到 SC Market。当您在 SCMDB 中将蓝图标记为已拥有时，此处会同步显示。",
+      "connectPrompt": "生成一个同步令牌以连接你的 SCMDB 账户。你将获得一个 URL，可粘贴到 SCMDB 的 Sync Sinks 设置中。",
+      "description": "连接你的 SCMDB 账户，将蓝图所有权自动同步到 SC Market。当你在 SCMDB 中将蓝图标记为已拥有时，此处会同步显示。",
       "disconnect": "断开连接",
       "disconnectTitle": "断开 SCMDB 连接？",
-      "disconnectWarning": "SCMDB 将无法再向 SC Market 同步蓝图。您当前的蓝图库存不会受到影响。",
+      "disconnectWarning": "SCMDB 将无法再向 SC Market 同步蓝图。你当前的蓝图库存不会受到影响。",
       "ingestUrl": "将此 URL 粘贴到 SCMDB → Profile → Sync Sinks 中：",
       "lastEvent": "最后收到的事件：",
       "noEvents": "尚未收到任何事件。将该 URL 添加到 SCMDB 以开始同步。",
       "notConnected": "未连接",
       "regenerate": "重新生成令牌",
       "regenerateTitle": "重新生成令牌？",
-      "regenerateWarning": "这将使您当前的 URL 失效。您需要在 SCMDB 中更新它。",
-      "snapshotWarning": "在启用快照事件的情况下连接 SCMDB，将用 SCMDB 的数据替换您在 SC Market 上当前的蓝图追踪。仅在 SC Market 上追踪的蓝图将被标记为未拥有。",
+      "regenerateWarning": "这将使你当前的 URL 失效。你需要在 SCMDB 中更新它。",
+      "snapshotWarning": "在启用快照事件的情况下连接 SCMDB，将用 SCMDB 的数据替换你在 SC Market 上当前的蓝图追踪。仅在 SC Market 上追踪的蓝图将被标记为未拥有。",
       "title": "SCMDB 同步",
       "tokenActive": "同步令牌已启用。其 URL 仅在创建时显示；如需新的 URL，请重新生成令牌。",
       "tokenHint": "尾号为 …{{hint}} 的同步令牌已启用。其 URL 仅在创建时显示；如需新的 URL，请重新生成令牌。",
@@ -1487,12 +1487,12 @@
   },
   "sidebar": {
     "dashboard": {
-      "title": "仪表板",
-      "text": "仪表板"
+      "title": "仪表盘",
+      "text": "仪表盘"
     },
-    "manage_market_listings": "管理市集商品页",
-    "manage_services": "管理提供服务",
-    "availability": "在线时间段",
+    "manage_market_listings": "管理市场商品",
+    "manage_services": "管理服务",
+    "availability": "可用时间",
     "my_fleet": "我的舰队",
     "messaging": "消息",
     "my_organization": {
@@ -1508,45 +1508,45 @@
       "title": "管理"
     },
     "settings": "设置",
-    "my_market_listings": "我的市集商品页",
-    "manage_listings": "管理商品页",
-    "archived_listings": "已归档商品页",
-    "money": "钱款",
+    "my_market_listings": "我的市场商品",
+    "manage_listings": "管理商品",
+    "archived_listings": "已归档商品",
+    "money": "资金",
     "invoices": "发票",
     "fleet": "舰队",
     "new_chip": "新！",
-    "people": "用户",
+    "people": "人员",
     "customers": "客户",
     "members": "成员",
     "market": {
-      "title": "市集",
-      "text": "市集"
+      "title": "市场",
+      "text": "市场"
     },
-    "player_market": "玩家市集",
-    "market_short": "市集",
+    "player_market": "玩家市场",
+    "market_short": "市场",
     "everything": "全部物品",
     "weapons": "武器",
     "armor": "护甲",
     "components": "组件",
-    "bulk_items": "大宗",
-    "buy_orders": "购买订单",
+    "bulk_items": "批量物品",
+    "buy_orders": "求购单",
     "contractor_services": "合约服务",
     "services_short": "服务",
-    "my_org_listings": "我的组织的商品页",
-    "sell_materials": "材料售卖",
+    "my_org_listings": "我的组织的商品",
+    "sell_materials": "出售材料",
     "contracting": {
       "title": "合约"
     },
     "my_orders": "我的订单",
     "orders_ive_placed": "我下的订单",
-    "orders_assigned_to_me": "分配给我的",
+    "orders_assigned_to_me": "指派给我的",
     "org_orders": "组织订单",
-    "contractors": "合约组织",
+    "contractors": "承包商",
     "open_contracts": "开放合约",
     "organizations": {
       "title": "组织"
     },
-    "recruiting": "招募中",
+    "recruiting": "招募",
     "register": "注册",
     "admin": {
       "title": "管理员",
@@ -1559,8 +1559,8 @@
     "sc_market": {
       "title": "SC Market"
     },
-    "sc_market_home": "SC市集主页",
-    "toggle_drawer": "切换抽屉",
+    "sc_market_home": "SC Market 主页",
+    "toggle_drawer": "切换侧边栏",
     "moderation": {
       "text": "审核"
     },
@@ -1573,11 +1573,11 @@
     "audit_logs": {
       "text": "审计日志"
     },
-    "availability_short": "可用性",
-    "browse_shops": "浏览商店",
-    "buyOrders": "求购订单",
+    "availability_short": "可用时间",
+    "browse_shops": "浏览店铺",
+    "buyOrders": "求购单",
     "contractors_short": "承包商",
-    "contracts_short": "合同",
+    "contracts_short": "合约",
     "feature_flags": {
       "text": "功能开关"
     },
@@ -1608,7 +1608,7 @@
     "manage_stock": "库存",
     "migration": "V2 迁移",
     "my_orgs": "我的组织",
-    "my_shops": "我的商店",
+    "my_shops": "我的店铺",
     "notification_test": {
       "text": "通知测试"
     },
@@ -1619,16 +1619,16 @@
     "search": "搜索",
     "shop_blocklist": "屏蔽名单",
     "shop_customers": "客户",
-    "shop_orders": "商店订单",
+    "shop_orders": "店铺订单",
     "starred": "已收藏",
     "stock_short": "库存",
     "wiki": {
-      "commodities": "商品",
+      "commodities": "大宗商品",
       "items": "物品",
       "locations": "地点",
       "manufacturers": "制造商",
-      "refinery": "精炼",
-      "ships": "飞船",
+      "refinery": "精炼厂",
+      "ships": "舰船",
       "title": "百科",
       "vehicles": "载具"
     },
@@ -1639,7 +1639,7 @@
     "login_to_select_role": "登录以选择身份",
     "avatar_of": "{{username}}的头像",
     "create_shop": "创建店铺",
-    "select_a_shop": "选择一个店铺...",
+    "select_a_shop": "选择一个店铺…",
     "select_shop": "店铺"
   },
   "select_all_items": "选择全部物品",
@@ -1647,21 +1647,21 @@
   "sorted_ascending": "升序",
   "select_all": "全选",
   "rows_per_page": "每页行数",
-  "no_listings": "无可用的商品页",
+  "no_listings": "无可用的商品",
   "displayed_rows": "{{from}}–{{to}}页，全{{count}}页",
   "displayed_rows_range": "{{from}}–{{to}} / 共{{count}}",
   "displayed_rows_range_more": "{{from}}–{{to}} / 超过{{to}}",
   "all": "全部",
   "recruiting_orgs": "招募中的组织",
-  "toggle_market_sidebar": "开关市集侧边栏",
+  "toggle_market_sidebar": "开关市场侧边栏",
   "update_post": "更新招募贴",
   "create_post": "创建帖子",
   "discord_bot": {
     "integrating_with_discord": "集成进Discord",
     "how_to_get_notified": "如何在有订单创建时收到提醒",
-    "how_to_get_notified_answer": "将官方的[SC市集Discord机器人]({{BOT_INSTALL_PATH}})加入到您的服务器，并选择一个订单提醒频道：每个新订单和报价都会发布在那里，并且都可以有自己的订单帖子。关联 Discord 账号并与机器人处于同一服务器后，机器人还可以给您发送私信，例如有报价等待您回复时的提醒。在 设置 › 通知 中选择哪些内容通过私信发送。您也可以用下方设置去在[SC市集的官方服务器]({{DISCORD_INVITE}})里完成订单。",
+    "how_to_get_notified_answer": "将官方的[SC Market Discord机器人]({{BOT_INSTALL_PATH}})加入到你的服务器，并选择一个订单提醒频道：每个新订单和报价都会发布在那里，并且都可以有自己的订单讨论帖。关联 Discord 账号并与机器人处于同一服务器后，机器人还可以给你发送私信，例如有报价等待你回复时的提醒。在 设置 › 通知 中选择哪些内容通过私信发送。你也可以用下方设置去在[SC Market 的官方服务器]({{DISCORD_INVITE}})里完成订单。",
     "how_to_communicate": "如何用Discord与买家交流",
-    "how_to_communicate_answer": "将官方 SC Market Discord 机器人添加到你的服务器，并选择一个订单帖子频道：之后每个新订单或报价都会在那里开启一个包含买家和指派卖家的私密帖子，买家会被邀请加入你的服务器，方便你们一起处理订单。\n\n1. 在你商店的 **设置 › Discord** 或组织的 **Discord 集成** 标签页中，点击 **[将机器人添加到服务器]({{BOT_INSTALL_PATH}})**，然后在 Discord 中选择你的服务器。返回时服务器已关联。\n\n2. 选择订单帖子频道，并可选择订单提醒频道（为每个新订单和报价发布一条带“认领”按钮的消息），然后保存。\n\n如果你是从 Discord 添加的机器人，请先在 SC Market 设置中关联你的 Discord 账号，然后在用于存放订单帖子的频道中运行 `/setup threads`。对于组织的订单，在 `org` 中填写其 Spectrum ID（例如 `/setup threads org:SCMARKET`）；对于向你本人下的订单，请留空。如需提醒，请在员工频道中运行 `/setup alerts`（使用相同的 `org`）。\n\n添加机器人需要 Discord 服务器中的 **管理服务器** 权限，`/setup threads`, `/setup alerts` 命令需要 **管理频道** 权限。对于组织，你还需要在 SC Market 上拥有该组织的 **Manage Webhooks** 权限（或使用 `/setup alerts` 设置提醒时拥有 **Manage Orders** 权限）。在帖子频道中，机器人需要“查看频道”“创建私密子区”“在子区中发送消息”和“创建邀请”权限。运行 `/setup status` 可查看频道接收的内容，运行 `/help` 可查看所有命令。",
+    "how_to_communicate_answer": "将官方 SC Market Discord 机器人添加到你的服务器，并选择一个订单讨论帖频道：之后每个新订单或报价都会在那里开启一个包含买家和指派卖家的私密讨论帖，买家会被邀请加入你的服务器，方便你们一起处理订单。\n\n1. 在你店铺的 **设置 › Discord** 或组织的 **Discord 集成** 标签页中，点击 **[将机器人添加到服务器]({{BOT_INSTALL_PATH}})**，然后在 Discord 中选择你的服务器。返回时服务器已关联。\n\n2. 选择订单讨论帖频道，并可选择订单提醒频道（为每个新订单和报价发布一条带“认领”按钮的消息），然后保存。\n\n如果你是从 Discord 添加的机器人，请先在 SC Market 设置中关联你的 Discord 账号，然后在用于存放订单讨论帖的频道中运行 `/setup threads`。对于组织的订单，在 `org` 中填写其 Spectrum ID（例如 `/setup threads org:SCMARKET`）；对于向你本人下的订单，请留空。如需提醒，请在员工频道中运行 `/setup alerts`（使用相同的 `org`）。\n\n添加机器人需要 Discord 服务器中的 **管理服务器** 权限，`/setup threads`, `/setup alerts` 命令需要 **管理频道** 权限。对于组织，你还需要在 SC Market 上拥有该组织的 **Manage Webhooks** 权限（或使用 `/setup alerts` 设置提醒时拥有 **Manage Orders** 权限）。在讨论帖频道中，机器人需要“查看频道”“创建私密子区”“在子区中发送消息”和“创建邀请”权限。运行 `/setup status` 可查看频道接收的内容，运行 `/help` 可查看所有命令。",
     "learn_connect": "连接 Discord 机器人",
     "learn_alerts": "订单提醒与认领"
   },
@@ -1715,14 +1715,14 @@
     "public_discord": "公开显示Discord账号",
     "share_discord_with_sellers": "与卖家分享Discord账号",
     "request_data_title": "申请我的数据",
-    "request_data_description": "申请您与该网站的相关信息。该功能仍在优化中，且不代表您的全部数据。我们仍在尽量扩展数据范围，但现在它包含了大部分与您的账号相关的数据。",
+    "request_data_description": "申请你与该网站的相关信息。该功能仍在优化中，且不代表你的全部数据。我们仍在尽量扩展数据范围，但现在它包含了大部分与你的账号相关的数据。",
     "request_data_button": "申请数据",
     "danger_zone": "危险操作区",
     "delete_account_button": "删除账户",
-    "delete_account_description": "永久删除您的账户及所有相关的个人数据。此操作在 30 天宽限期结束后将无法撤销。",
+    "delete_account_description": "永久删除你的账户及所有相关的个人数据。此操作在 30 天宽限期结束后将无法撤销。",
     "updated": "设置更新成功",
     "cookie_title": "Cookie 偏好",
-    "cookie_description": "登录 Cookie 和匿名错误报告始终开启。分析（Google Analytics 和页面速度测量）仅在您允许时运行。",
+    "cookie_description": "登录 Cookie 和匿名错误报告始终开启。分析（Google Analytics 和页面速度测量）仅在你允许时运行。",
     "cookie_status_all": "当前选择：允许分析。",
     "cookie_status_necessary": "当前选择：仅必要。"
   },
@@ -1818,10 +1818,10 @@
       "submitted": "已提交！",
       "failed": "提交失败！"
     },
-    "markdown_info": "Github式的Markdown可用，Youtube链接会自动嵌入，且用Imgur或RSI提供的图片也可内嵌。",
+    "markdown_info": "支持 GitHub 风格的 Markdown，YouTube 链接会自动嵌入，托管在 Imgur 或 RSI 上的图片也可以嵌入。",
     "markdown_link": "点此查看",
     "markdown_info_end": "更多细节",
-    "contractor": "合约组织",
+    "contractor": "承包商",
     "commentArea": {
       "replyToPost": "回复",
       "post": "发帖"
@@ -1833,11 +1833,11 @@
   },
   "recruiting": {
     "viewDetails": "查看详情",
-    "viewContractor": "查看合约组织",
+    "viewContractor": "查看承包商",
     "share": "分享",
     "title": "招募",
     "scOrgsNote": "正在招募成员？SC Orgs 提供入会申请、组织目录和成员管理工具 →",
-    "scOrgsLfoNote": "在找组织？在 SC Orgs 的「Looking for Org」看板上发帖，让组织主动来找你 →",
+    "scOrgsLfoNote": "在找组织？在 SC Orgs 的“Looking for Org”看板上发帖，让组织主动来找你 →",
     "editPost": "编辑帖子"
   },
   "scOrgs": {
@@ -1886,7 +1886,7 @@
     "username": "用户名",
     "orders": "订单",
     "total_value": "总价值",
-    "description": "在本组织或其商店下过订单的人（包括成员）。每一行仅统计该客户自己的订单，已取消的订单不计入。",
+    "description": "在本组织或其店铺下过订单的人（包括成员）。每一行仅统计该客户自己的订单，已取消的订单不计入。",
     "fulfilled": "已完成",
     "last_order": "最近订单"
   },
@@ -1909,7 +1909,7 @@
     "about_tab": "关于",
     "services_tab": "服务",
     "market_tab": "市场",
-    "order_tab": "Order",
+    "order_tab": "定制订单",
     "reviews_tab": "评价",
     "store_market": "市场",
     "store_services": "服务",
@@ -1967,16 +1967,16 @@
     "new": "新",
     "see_more": "查看更多",
     "apply": "申请",
-    "publicContractTitle": "公共合同",
-    "publicContracts": "公共合同",
-    "createPublicContract": "创建公共合同",
-    "contractsTitle": "合同",
+    "publicContractTitle": "公开合约",
+    "publicContracts": "公开合约",
+    "createPublicContract": "创建公开合约",
+    "contractsTitle": "合约",
     "toggleSidebar": "切换市场侧边栏",
-    "activeContracts": "进行中的合同",
-    "createOpenContract": "创建公开合同",
-    "contractShort": "合同 {{id}}",
-    "viewContract": "查看合同",
-    "contractTitle": "合同",
+    "activeContracts": "进行中的合约",
+    "createOpenContract": "创建公开合约",
+    "contractShort": "合约 {{id}}",
+    "viewContract": "查看合约",
+    "contractTitle": "合约",
     "kind": {
       "Escort": "护航",
       "Transport": "运输",
@@ -1987,7 +1987,7 @@
       "Other": "其他"
     },
     "filters": "筛选",
-    "openContracts": "开放合同"
+    "openContracts": "开放合约"
   },
   "serviceListings": {
     "new": "新",
@@ -2055,7 +2055,7 @@
     "ordersLast30Days": "过去30天订单",
     "valueLast7Days": "过去7天价值",
     "valueLast30Days": "过去30天价值",
-    "statusBreakdown": "状态分解",
+    "statusBreakdown": "状态分布",
     "notStarted": "未开始",
     "inProgress": "进行中",
     "fulfilled": "已完成",
@@ -2078,7 +2078,7 @@
       "fulfilled": "已完成",
       "inProgress": "处理中",
       "cancelled": "已取消",
-      "notStarted": "Not Started",
+      "notStarted": "排队中",
       "active": "生效中",
       "inactive": "未生效"
     },
@@ -2088,15 +2088,15 @@
       "contractor": "承包商",
       "status": "状态",
       "actions": "操作",
-      "shop": "商店"
+      "shop": "店铺"
     },
     "tabs": {
       "all": "全部",
       "active": "生效中",
       "past": "过往",
       "fulfilled": "已完成",
-      "inProgress": "In Progress",
-      "notStarted": "Not Started",
+      "inProgress": "处理中",
+      "notStarted": "排队中",
       "cancelled": "已取消",
       "unclaimed": "未认领"
     },
@@ -2115,7 +2115,7 @@
       "orderTabs": "订单选项卡"
     },
     "allocation": "库存分配",
-    "availability": "可用性",
+    "availability": "可用时间",
     "buyer": "买家",
     "buyer_username": "买家用户名",
     "buyer_username_placeholder": "输入买家用户名",
@@ -2143,7 +2143,7 @@
     "details_table": "详情表",
     "customer": "客户",
     "seller": "卖家",
-    "assigned": "已分配",
+    "assigned": "已指派",
     "date": "日期",
     "status": "状态",
     "title": "标题",
@@ -2155,7 +2155,7 @@
     "cancel": "取消",
     "complete_order": "完成订单",
     "begin_work": "开始工作",
-    "not_started": "Not Started",
+    "not_started": "排队中",
     "claim": "认领",
     "claimed": "订单已认领",
     "claimFailed": "认领订单失败",
@@ -2173,15 +2173,15 @@
     "title": "我的订单"
   },
   "memberAssignArea": {
-    "assigned": "已分配！",
-    "failed_assign": "分配失败！",
-    "unassigned": "已取消分配！",
-    "failed_unassign": "取消分配失败！",
-    "assign": "分配",
-    "reassign": "重新分配",
-    "unassign": "取消分配",
+    "assigned": "已指派！",
+    "failed_assign": "指派失败！",
+    "unassigned": "已取消指派！",
+    "failed_unassign": "取消指派失败！",
+    "assign": "指派",
+    "reassign": "重新指派",
+    "unassign": "取消指派",
     "handle": "用户名",
-    "assignMember": "分配成员"
+    "assignMember": "指派成员"
   },
   "CreateServiceForm": {
     "serviceDetails": "服务详情",
@@ -2239,11 +2239,11 @@
     "offer": "报价",
     "user": "用户",
     "status": "状态",
-    "waitingSeller": "等待卖家",
-    "waitingCustomer": "等待买家",
+    "waitingSeller": "等待确认",
+    "waitingCustomer": "轮到你回复",
     "accepted": "已接受",
     "rejected": "已拒绝",
-    "items": "物品",
+    "items": "件物品",
     "merge_offers": "合并报价 ({{count}})",
     "merge_offers_confirm_title": "合并报价会话？",
     "merge_offers_confirm_body": "合并 {{count}} 个报价会话将创建一个新的合并报价会话并关闭选中的会话。此操作无法撤销。",
@@ -2285,7 +2285,7 @@
   "OfferMarketListingsEditArea": {
     "associatedMarketListings": "关联市场商品",
     "addMarketListing": "添加市场商品",
-    "selectListing": "选择商品……",
+    "selectListing": "选择商品…",
     "of": "，共 {{count}}",
     "ofAvailable": "，共 {{count}} 件可用",
     "quantity": "数量",
@@ -2314,7 +2314,7 @@
   },
   "OfferDetailsArea": {
     "customer": "客户",
-    "associatedContract": "关联合同",
+    "associatedContract": "关联合约",
     "seller": "卖家",
     "date": "日期",
     "status": "状态",
@@ -2329,8 +2329,8 @@
     "reject": "拒绝",
     "cancelOrder": "取消订单",
     "cancel": "取消",
-    "waitingSeller": "Waiting for Seller",
-    "waitingCustomer": "Waiting for Customer",
+    "waitingSeller": "等待确认",
+    "waitingCustomer": "轮到你回复",
     "rejected": "已拒绝",
     "accepted": "已接受",
     "discordServerInvite": "Discord 服务器邀请",
@@ -2358,7 +2358,7 @@
     "orderManagement": "订单管理",
     "integratedChannel": "集成频道",
     "notConfigured": "未配置",
-    "setUpWithBot": "要使用你自己的 Discord 服务器，请从组织的 Discord 集成标签页或商店的 设置 › Discord 中添加机器人并在那里选择频道，或在用于存放订单帖子的频道中运行 /setup threads。",
+    "setUpWithBot": "要使用你自己的 Discord 服务器，请从组织的 Discord 集成标签页或店铺的 设置 › Discord 中添加机器人并在那里选择频道，或在用于存放订单讨论帖的频道中运行 /setup threads。",
     "useOfficial1": "使用官方",
     "serverName": "SC Market 服务器",
     "useOfficial2": "用于订单。这将替换你现有的集成设置。",
@@ -2368,11 +2368,11 @@
     "addWebhook": "添加 Discord 通知 Webhook",
     "webhookName": "Webhook 名称",
     "webhookUrl": "Webhook 链接",
-    "publicContractCreated": "新的公共合同（全站）",
+    "publicContractCreated": "新的公开合约（全站）",
     "invalidUrl": "无效的链接",
     "orderCreated": "订单已创建",
-    "orderAssigned": "分配给我的订单",
-    "publicOrderCreated": "公共合同已创建",
+    "orderAssigned": "指派给我的订单",
+    "publicOrderCreated": "公开合约已创建",
     "orderStatusChange": "订单状态变更",
     "orderReview": "收到订单评价",
     "orderComment": "收到订单评论",
@@ -2397,19 +2397,19 @@
     "scMarket": "SC Market",
     "dateTimePicker": "日期和时间选择器",
     "selectDateTime": "选择日期和时间",
-    "typeMessage": "输入消息..."
+    "typeMessage": "输入消息…"
   },
   "CreateMessageGroupBody": {
     "toggleSidebar": "切换侧边栏",
     "usernames": "用户名",
-    "create": "Create",
+    "create": "创建聊天",
     "close": "关闭",
-    "creating": "创建中……",
+    "creating": "创建中…",
     "minChars": "至少输入 3 个字符",
     "noUsersFound": "未找到用户",
     "searchAndSelect": "搜索并选择用户以创建群聊",
     "searchPlaceholder": "输入以搜索用户",
-    "searchUsers": "搜索用户……",
+    "searchUsers": "搜索用户…",
     "selectedUsers": "已选用户",
     "selectUsers": "选择用户以开始聊天",
     "startNewChat": "开始新聊天",
@@ -2422,7 +2422,7 @@
     "withdraw": "提现"
   },
   "MemberAssignments": {
-    "assignments": "分配"
+    "assignments": "指派"
   },
   "SellMaterialsList": {
     "title": "出售材料",
@@ -2485,8 +2485,8 @@
     "quantityAvailable": "可售数量",
     "listingStatus": "商品状态",
     "either": "均可",
-    "active": "生效中",
-    "inactive": "未生效",
+    "active": "上架中",
+    "inactive": "已下架",
     "saleType": "出售类型",
     "any": "任意",
     "sale": "出售",
@@ -2495,7 +2495,7 @@
     "cost": "费用",
     "minCost": "最低费用",
     "maxCost": "最高费用",
-    "activeAndInactive": "启用 + 停用",
+    "activeAndInactive": "上架中 + 已下架",
     "allStatuses": "全部状态",
     "archived": "已归档",
     "itemAttributes": "物品属性",
@@ -2546,7 +2546,7 @@
   "MarketListingView": {
     "addedToCart": "已加入购物车！",
     "price": "价格",
-    "ofAvailable": "，共 {{count}} 件可用",
+    "ofAvailable": "/ 共 {{count}} 件可售",
     "quantity": "数量",
     "addToCart": "加入购物车",
     "bidSuccess": "出价成功！",
@@ -2554,7 +2554,7 @@
     "currentBid": "当前出价：{{price}} aUEC",
     "bid": "出价",
     "placeBid": "出价",
-    "people": "用户",
+    "people": "人员",
     "seller": "卖家",
     "market": "市场",
     "new": "新",
@@ -2565,7 +2565,7 @@
     "expires": "到期",
     "description": "描述",
     "orders": "订单",
-    "activeOrders": "活跃订单",
+    "activeOrders": "进行中的订单",
     "previousOrders": "历史订单",
     "anonymousReviewer": "匿名",
     "inCarts_other": "{{count}} 人已将此商品加入购物车",
@@ -2586,7 +2586,7 @@
     "title": "标题",
     "quantityAvailable": "可售数量",
     "description": "描述",
-    "descriptionHelp": "例如：2020 年 8 月专属订阅者信号弹",
+    "descriptionHelp": "例如：2020 年 8 月订阅者专属装饰",
     "imageHint": "搜索图片或上传你自己的图片",
     "relatedListings": "相关商品",
     "availability": "可用时间",
@@ -2624,13 +2624,13 @@
     "reportingUrl": "举报的URL",
     "reason": "原因",
     "additionalDetails": "附加详情",
-    "detailsPlaceholder": "请提供有关此举报的任何附加背景或详情...",
+    "detailsPlaceholder": "请提供有关此举报的任何附加背景或详情…",
     "detailsHelperText": "可选：提供更多背景信息以帮助版主理解问题（最多1000个字符）",
     "cancel": "取消",
     "submit": "提交举报",
-    "submitting": "提交中...",
+    "submitting": "提交中…",
     "pleaseSelectReason": "请选择举报原因",
-    "reportSubmitted": "举报提交成功。感谢您帮助我们保持社区安全。",
+    "reportSubmitted": "举报提交成功。感谢你帮助我们保持社区安全。",
     "reportFailed": "举报提交失败。请重试。",
     "reasons": {
       "inappropriateContent": "不当内容",
@@ -2672,7 +2672,7 @@
     "activate": "启用商品",
     "archive": "归档商品",
     "updateBtn": "更新",
-    "updating": "更新中...",
+    "updating": "更新中…",
     "title": "标题",
     "quantityAvailable": "可售数量",
     "price": "价格",
@@ -2694,12 +2694,12 @@
     "sellerRating": "卖家评分",
     "price": "价格",
     "quantityAvailable": "可售数量",
-    "buyer": "Buyer",
+    "buyer": "卖家",
     "quantity": "数量",
     "total": "总计",
     "description": "描述",
     "sellOrders": "出售订单",
-    "buyOrders": "求购订单",
+    "buyOrders": "求购单",
     "priceHistory": "价格历史",
     "addedToCart": "已加入购物车！",
     "quantityToBuy": "购买数量",
@@ -2709,7 +2709,7 @@
     "submitted": "已提交！",
     "failedSubmit": "提交失败！",
     "cancelled": "已取消！",
-    "buyOrdersChart": "求购订单",
+    "buyOrdersChart": "求购单",
     "sellOrdersChart": "出售订单",
     "atPrice": "价格为 {{price}} aUEC 或{{direction}}的订单",
     "orLower": "更低",
@@ -2724,7 +2724,7 @@
     "updated": "已更新！",
     "errorWhileUpdating": "更新时出错！",
     "deactivate": "停用商品",
-    "activate": "启用商品",
+    "activate": "上架商品",
     "update": "更新",
     "title": "标题",
     "itemType": "物品类型",
@@ -2785,26 +2785,26 @@
     "save": "保存",
     "discard": "放弃",
     "editListing": "编辑商品",
-    "newListing": "新商品页",
-    "newListingPending": "新商品页 - 点击编辑",
+    "newListing": "新商品",
+    "newListingPending": "新商品 - 点击编辑",
     "views": "浏览量",
     "archive": "归档",
-    "bulkArchiveBody": "您即将归档 {{count}} 个商品条目。归档对买家和公开搜索而言是永久性的。您仍可在“我的商品条目”下查看已归档的条目。",
+    "bulkArchiveBody": "你即将归档 {{count}} 个商品。归档对买家和公开搜索而言是永久性的。你仍可在“我的商品”下查看已归档的条目。",
     "bulkArchiveBody_other": "你即将归档 {{count}} 个商品。归档后，买家和公开搜索将永久无法看到这些商品。你仍可在“我的商品”中查看已归档的商品。",
     "bulkArchiveCancel": "取消",
     "bulkArchiveConfirm": "永久归档",
-    "bulkArchivedSuccess": "已归档 {{count}} 个商品条目。",
+    "bulkArchivedSuccess": "已归档 {{count}} 个商品。",
     "bulkArchivedSuccess_other": "已归档 {{count}} 个商品。",
-    "bulkArchiveTitle": "归档所选商品条目？",
+    "bulkArchiveTitle": "归档所选商品？",
     "cannotReduceStock": "无法减少库存 — 部分单位已被分配给活动订单",
-    "editingNewListing": "正在编辑新商品条目...",
+    "editingNewListing": "正在编辑新商品…",
     "manageStock": "管理库存",
     "quality": "质量",
     "refresh": "刷新",
-    "refreshed": "商品条目已刷新",
-    "rowNotFound": "未找到商品条目",
+    "refreshed": "商品已刷新",
+    "rowNotFound": "未找到商品",
     "share": "分享",
-    "updateError": "更新商品条目失败",
+    "updateError": "更新商品失败",
     "variants": "变体",
     "paused": "已暂停",
     "reactivateListing": "已暂停：续期并重新上架",
@@ -2812,12 +2812,12 @@
     "renewedFromLink_other": "已将 {{count}} 个商品续期一个月",
     "renewedFromLinkPartial": "已续期 {{ok}}/{{total}} 个商品。请在下方续期其余商品。",
     "importFromUex": "从 UEX 导入",
-    "importFromUexFetchError": "无法获取你的 UEX 挂单",
+    "importFromUexFetchError": "无法获取你的 UEX 商品",
     "importFromUexError": "导入失败",
     "item": "物品",
-    "quantityUseStockPage": "请在库存页面按批次修改此挂单的数量",
-    "manageAccessNotice": "你可以查看此商店的挂单和库存。如需创建或修改，请向组织管理员申请“管理市场”权限。",
-    "stockAccessNotice": "你可以查看此商店的库存。如需添加或修改批次，请向组织管理员申请“管理库存”权限。",
+    "quantityUseStockPage": "请在库存页面按批次修改此商品的数量",
+    "manageAccessNotice": "你可以查看此店铺的商品和库存。如需创建或修改，请向组织管理员申请“管理市场”权限。",
+    "stockAccessNotice": "你可以查看此店铺的库存。如需添加或修改批次，请向组织管理员申请“管理库存”权限。",
     "increaseQuantity": "增加数量",
     "decreaseQuantity": "减少数量",
     "renewHelpLabel": "续期",
@@ -2847,7 +2847,7 @@
     "save_and_close": "保存并关闭"
   },
   "buyorder": {
-    "create_buy_order": "创建求购订单",
+    "create_buy_order": "创建求购单",
     "price_per_unit": "单价",
     "quantity": "数量",
     "total_price": "总价",
@@ -2902,9 +2902,9 @@
     "bid": "出价"
   },
   "ships": {
-    "section_title": "飞船",
+    "section_title": "舰船",
     "table": {
-      "ship": "飞船",
+      "ship": "舰船",
       "manufacturer": "制造商",
       "kind": "类型",
       "condition": "状态",
@@ -2918,8 +2918,8 @@
     },
     "report_condition": "报告状态",
     "register": {
-      "title": "注册飞船",
-      "ship_label": "飞船",
+      "title": "注册舰船",
+      "ship_label": "舰船",
       "submit": "提交"
     },
     "import": {
@@ -2972,14 +2972,14 @@
     "disband_org_confirm_title": "归档组织？",
     "disband_org_confirm_body": "归档 {{name}} 将移除所有成员，取消未完成的订单，并隐藏该组织。此操作无法撤销。",
     "disband_org_confirm_reason_label": "原因（可选）",
-    "disband_org_confirm_reason_placeholder": "为您的团队添加额外说明（可选）",
+    "disband_org_confirm_reason_placeholder": "为你的团队添加额外说明（可选）",
     "disband_org_confirm_cancel_button": "取消",
     "disband_org_confirm_confirm_button": "归档组织",
     "disband_org_success": "{{name}} 已被归档。",
     "disband_org_error": "归档 {{name}} 失败。",
     "transfer_ownership": "转移所有权",
     "transfer_ownership_confirm_title": "转移组织所有权？",
-    "transfer_ownership_confirm_body": "转移 {{name}} 的所有权将使新所有者获得组织的完全控制权。您将失去所有者权限，但保留其他角色。此操作无法撤销。",
+    "transfer_ownership_confirm_body": "转移 {{name}} 的所有权将使新所有者获得组织的完全控制权。你将失去所有者权限，但保留其他角色。此操作无法撤销。",
     "transfer_ownership_confirm_username_label": "新所有者用户名",
     "transfer_ownership_confirm_username_placeholder": "输入要转移所有权的成员用户名",
     "transfer_ownership_confirm_cancel_button": "取消",
@@ -3021,12 +3021,12 @@
       "kick_members": "从组织中移除成员",
       "manage_blocklist": "屏蔽和取消屏蔽与组织互动的用户",
       "manage_invites": "为组织创建和管理邀请码及链接",
-      "manage_market": "创建、编辑和删除组织的商品，并管理其商店：设置、库存批次和订单",
+      "manage_market": "创建、编辑和删除组织的商品，并管理其店铺：设置、库存批次和订单",
       "manage_orders": "查看、接受、拒绝和管理组织的所有订单",
       "manage_org_details": "编辑组织名称、描述、头像、横幅和语言，查看审计日志，并更改白标站点和侧边栏设置",
       "manage_recruiting": "为组织创建和管理招募帖子",
-      "manage_roles": "创建、编辑和删除角色并将其分配给成员",
-      "manage_stock": "添加、编辑和删除组织商店的库存批次，但不能编辑其商品",
+      "manage_roles": "创建、编辑和删除角色并将其指派给成员",
+      "manage_stock": "添加、编辑和删除组织店铺的库存批次，但不能编辑其商品",
       "manage_theme": "自定义组织的白标主题、颜色和品牌形象",
       "manage_webhooks": "创建、编辑和删除 Discord 和通知 Webhook"
     }
@@ -3082,7 +3082,7 @@
     "store": "店铺",
     "services": "服务",
     "market": "市场",
-    "order": "Order",
+    "order": "定制订单",
     "members": "成员",
     "recruiting": "招募",
     "reviews": "评价"
@@ -3198,7 +3198,7 @@
     "aria": {
       "offerTabs": "报价选项卡"
     },
-    "availability": "可用性",
+    "availability": "可用时间",
     "details": "详情",
     "details_table": "详情表格",
     "marketListings": "物品",
@@ -3229,7 +3229,7 @@
     "subtitle": "把你的资源批量卖给我们！省去精炼流程，以更高的价格卖给我们！"
   },
   "cart": {
-    "ofAvailable": "，共 {{available}} 件可用",
+    "ofAvailable": "/ 共 {{available}} 件可售",
     "quantity": "数量",
     "price": "价格：",
     "subtotal": "小计",
@@ -3247,7 +3247,7 @@
     "empty": "你的购物车是空的",
     "aboveMaxQty": "最大数量：{{max}}（购物车将有 {{total}}）",
     "added": "已加入购物车",
-    "adding": "正在添加...",
+    "adding": "正在添加…",
     "addToCart": "加入购物车",
     "alreadyInCart_other": "购物车中已有 {{count}} 件",
     "available": "可用",
@@ -3258,9 +3258,9 @@
     "checkoutSuccess": "报价提交成功",
     "confirmCheckout": "确认结账",
     "confirmOrder": "确认订单",
-    "confirmPriceChanges": "部分价格已变动。确认即表示您接受更新后的价格。",
+    "confirmPriceChanges": "部分价格已变动。确认即表示你接受更新后的价格。",
     "exceedsStockWithCart": "仅有 {{available}} 件可用，购物车将有 {{total}} 件",
-    "inCart": "在您的购物车中",
+    "inCart": "在你的购物车中",
     "invalidQty": "数量至少为 1",
     "itemRemoved": "物品已从购物车移除",
     "nextAvailable": "下次可用",
@@ -3270,12 +3270,12 @@
     "priceDecreased": "价格下降",
     "priceIncreased": "价格上涨",
     "pricesChanged": "价格已变动",
-    "pricesChangedMessage": "自您加入购物车以来，部分物品价格已变动。请在结账前查看。",
+    "pricesChangedMessage": "自你加入购物车以来，部分物品价格已变动。请在结账前查看。",
     "quantityUpdated": "数量已更新",
     "title": "购物车",
     "unavailable": "不可用",
     "unavailableItems": "不可用物品",
-    "unavailableItemsMessage": "您购物车中的部分物品已不再可用。请在结账前移除它们。",
+    "unavailableItemsMessage": "你购物车中的部分物品已不再可用。请在结账前移除它们。",
     "unavailableMessage": "此变体已不再可用",
     "variant": "变体",
     "variantUpdated": "变体已更新",
@@ -3294,15 +3294,15 @@
     "supporters": "位支持者",
     "faqTitle": "为你答疑解惑",
     "faqSellItemsQ": "我该如何出售物品？",
-    "faqSellItemsA": "为你想出售的物品创建市场商品。买家可以将想要的物品加入购物车，然后向你下单购买这些物品。之后就由你和买家自行安排交换 aUEC 和货物的时间与地点。",
+    "faqSellItemsA": "为每件物品创建一个商品。买家把物品加入购物车并向你下单，然后你和买家约定游戏内的时间和地点，交换货物和 aUEC。",
     "faqSafeQ": "SC Market 使用起来安全吗？",
-    "faqSafeA": "由于我们自身不经手任何货物或 aUEC，因此无法做出任何担保。不过，我们提供了买卖双方互相评价的方式，因此如果你担心被骗，可以确认其他人与某卖家是否有过良好的交易体验。",
+    "faqSafeA": "交易在玩家之间进行，所以我们无法担保，但每笔订单完成后买卖双方都会互相评价。交易前请先查看卖家的评分和订单记录。",
     "faqListThingsQ": "我可以在 SC Market 上架哪些东西？",
-    "faqListThingsA": "只要你接受以 aUEC 作为交换，你就可以上架任何物品或服务。物品和服务通常应与 Star Citizen 相关，服务可以在游戏内或游戏外进行。",
+    "faqListThingsA": "任何你愿意用 aUEC 交易的 Star Citizen 物品或服务：武器、护甲、组件、大宗商品、舰船货物，以及运输、护航、采矿或医疗救援等服务。服务可以在游戏内或游戏外进行。",
     "faqFeeQ": "SC Market 会收取费用吗？",
-    "faqFeeA": "不会。这里的所有服务均免费提供，也不会有任何 aUEC 经过我们。",
+    "faqFeeA": "不收。SC Market 免费使用，也没有任何 aUEC 经过我们。买家在游戏内直接向卖家付款。",
     "faqRealMoneyQ": "我可以用真实货币出售物品吗？",
-    "faqRealMoneyA": "不可以。SC Market 上的所有交易都应以 aUEC 完成。",
+    "faqRealMoneyA": "不可以。SC Market 上的所有交易都使用 aUEC。根据 CIG 的服务条款，禁止真钱交易。",
     "seeAll": "查看全部",
     "heroTitle": "Star Citizen 玩家对玩家交易市场",
     "heroText": "买卖物品、雇佣服务，在游戏内以 aUEC 支付。我们不抽取任何佣金。",
@@ -3311,7 +3311,7 @@
     "heroWeekOrdersLabel": "本周订单",
     "heroWeekValueLabel": "本周 aUEC 订单额",
     "heroSearchLabel": "搜索市场",
-    "heroSearchPlaceholder": "武器、护甲、商品……",
+    "heroSearchPlaceholder": "武器、护甲、大宗商品…",
     "heroSearchSubmit": "搜索",
     "heroListingsLabel": "个在售商品",
     "categoriesLabel": "热门分类",
@@ -3326,14 +3326,14 @@
     "categoryServices": "服务",
     "intentsLabel": "你想做什么？",
     "intentBuyTitle": "购买",
-    "intentBuyText": "来自玩家商店的物品",
+    "intentBuyText": "来自玩家店铺的物品",
     "intentBuyAction": "浏览市场",
     "intentHireTitle": "雇佣",
     "intentHireText": "为任务雇佣玩家和组织",
     "intentHireAction": "查找服务",
     "intentWantedTitle": "求购",
     "intentWantedText": "发布你需要的物品",
-    "intentWantedAction": "创建求购订单",
+    "intentWantedAction": "创建求购单",
     "intentSellTitle": "出售",
     "intentSellText": "免费上架，不抽成",
     "intentSellAction": "创建商品",
@@ -3341,16 +3341,16 @@
     "latestListingsEmpty": "暂无商品。",
     "latestListingsError": "无法加载最新商品。",
     "wantedNowTitle": "正在求购",
-    "wantedNowError": "无法加载求购订单。",
-    "topShopsTitle": "高评分商店",
+    "wantedNowError": "无法加载求购单。",
+    "topShopsTitle": "高评分店铺",
     "topShopsText": "每笔订单后由买家评分。",
-    "topShopsBrowse": "浏览商店",
-    "topShopsEmpty": "暂无商店。",
-    "topShopsError": "无法加载商店。",
+    "topShopsBrowse": "浏览店铺",
+    "topShopsEmpty": "暂无店铺。",
+    "topShopsError": "无法加载店铺。",
     "sellTitle": "开始出售",
     "seoDescription": "SC Market 是 Star Citizen 交易市场，玩家可以买卖、交易游戏内物品，并雇佣组织提供运输、护航、医疗、打捞等服务——全部以 aUEC 结算。",
     "seoTitle": "SC Market — Star Citizen 交易市场：用 aUEC 买卖和交易物品",
-    "sellText": "以个人或组织身份开设商店。组织成员可以共同认领并完成订单，共享同一个店面、库存和信誉。",
+    "sellText": "以个人或组织身份开设店铺。组织成员可以共同认领并完成订单，共享同一个店面、库存和信誉。",
     "sellStep1Title": "上架",
     "sellStep1Text": "任何物品或服务，任意数量，以 aUEC 定价。",
     "sellStep2Title": "接收 Discord 提醒",
@@ -3370,7 +3370,7 @@
     "gameDataOpenWiki": "打开 Wiki",
     "gameDataItems": "物品",
     "gameDataItemsText": "属性和变体",
-    "gameDataShips": "飞船",
+    "gameDataShips": "舰船",
     "gameDataShipsText": "规格和配装",
     "gameDataBlueprints": "蓝图",
     "gameDataBlueprintsText": "制作配方",
@@ -3384,7 +3384,7 @@
     "trustFeesTitle": "零手续费",
     "trustFeesText": "aUEC 不经过我们。买家在游戏内直接付款给卖家。",
     "trustAlertsTitle": "价格提醒",
-    "trustAlertsText": "在商品页面关注物品的价格。",
+    "trustAlertsText": "在商品面关注物品的价格。",
     "trustOrgsTitle": "为组织打造",
     "trustOrgsText": "共享店面、成员协作完成订单，还支持白标。",
     "faqBuyQ": "如何在 Star Citizen 中向其他玩家购买物品？",
@@ -3392,24 +3392,24 @@
     "faqOfficialQ": "SC Market 与 Cloud Imperium Games 有关联吗？",
     "faqOfficialA": "没有。SC Market 是由粉丝创建的社区网站，未获得 Cloud Imperium Games 或 Roberts Space Industries 的认可，也与其无关联。",
     "faqOrgsQ": "我的组织可以在 SC Market 上出售吗？",
-    "faqOrgsA": "可以。组织拥有共享店面，成员可以代表组织认领并完成订单。之后，顾客会对整个组织进行评价。",
+    "faqOrgsA": "可以。组织拥有共享店面，成员可以代表组织认领并完成订单。之后，客户会对整个组织进行评价。",
     "wantedNowItem": "物品",
     "wantedNowBuyer": "买家",
     "wantedNowPrice": "出价",
     "wantedNowQuantity": "×{{quantity}}",
-    "wantedNowPost": "发布求购订单：告诉卖家你需要什么",
-    "latestListingsText": "玩家商店的新品，直接来自卖家。"
+    "wantedNowPost": "发布求购单：告诉卖家你需要什么",
+    "latestListingsText": "玩家店铺的新品，直接来自卖家。"
   },
   "fleet": {
     "fleetTitle": "舰队",
     "importFleet": "导入舰队",
     "myFleetTitle": "我的舰队",
-    "addShips": "添加飞船",
+    "addShips": "添加舰船",
     "createDelivery": "创建运送"
   },
   "error404": {
     "title": "404：页面未找到",
-    "subtitle": "真好奇你是怎么到这里的……",
+    "subtitle": "真好奇你是怎么到这里的…",
     "returnToDashboard": "返回仪表盘"
   },
   "errorPage": {
@@ -3425,7 +3425,7 @@
     "newVersionTitle": "SC Market 有新版本可用",
     "reload": "重新加载",
     "title": "加载页面时发生错误",
-    "subtitle": "请告知我们，位于",
+    "subtitle": "请在以下位置告诉我们：",
     "afterRefresh": "如果你在刷新页面后仍看到此错误。",
     "page": "错误页面",
     "message": "消息",
@@ -3455,7 +3455,7 @@
       "allocationMode": "订单如何从你的批次中扣取库存。自动（FIFO）：从商品的已上架批次中按最早优先扣取。手动选择：在每个订单的“库存分配”标签中选择批次。无（旧版）：订单不预留库存。",
       "stockTiming": "订单何时从你的上架库存中扣减数量（自动分配时）。接受时（默认）：购物车订单在你接受时扣减；立即购买和向求购单出售会立即扣减。收到订单时：购物车订单在你考虑期间预留数量，你拒绝或买家撤回后会退回。从不：上架数量永远不会减少（适合无限库存）；但单个订单仍不能超过上架数量。",
       "discordServerId": "在 Discord 中开启开发者模式（用户设置 › 高级），然后右键点击服务器图标并选择“复制服务器 ID”。",
-      "threadChannelId": "右键点击频道并选择“复制频道 ID”。两个 ID 都要填写，或都留空以使用你组织或你自己的帖子频道。",
+      "threadChannelId": "右键点击频道并选择“复制频道 ID”。两个 ID 都要填写，或都留空以使用你组织或你自己的讨论帖频道。",
       "uexUsername": "你在 UEXCorp 上的用户名。最多显示 100 个未售罄的有效出售商品，确认之前不会导入任何内容。",
       "requireMembership": "访客必须是你组织的成员（不只是已登录）才能使用你的白标网站。你组织在 sc-market.space 上的页面仍然公开。"
     }
@@ -3491,7 +3491,7 @@
     "auditLogsTab": "审计日志",
     "blocklistTab": "已屏蔽用户",
     "customersTab": "客户",
-    "customOrdersMovedToShop": "定制订单现在通过商店下单。",
+    "customOrdersMovedToShop": "定制订单现在通过店铺下单。",
     "loading": "加载中",
     "settings": {
       "locale": {
@@ -3562,7 +3562,7 @@
     "noOrgsWidgetDropped": "你没有组织——此小组件将被舍弃。",
     "noShopsToAggregate": "你还没有可聚合的店铺。",
     "noShopsWidgetDropped": "你没有店铺——此小组件将被舍弃。",
-    "orgTitle": "{{name}} 仪表板",
+    "orgTitle": "{{name}} 仪表盘",
     "organization": "组织",
     "priceHistoryNoItem": "未选择物品。请删除此小组件并重新添加以选择物品。",
     "remapOrgLabel": "{{name}} — 组织",
@@ -3587,7 +3587,7 @@
     "searchItemNone": "未找到物品",
     "searchItemPlaceholder": "输入以搜索…",
     "shop": "店铺",
-    "title": "仪表板",
+    "title": "仪表盘",
     "unavailableOrg": "此小组件的组织已不可用。请移除它或选择新的范围。",
     "unavailableShop": "此小组件的店铺已不可用。请移除它或选择新的范围。",
     "viewAll": "查看全部",
@@ -3626,7 +3626,7 @@
         "title": "订单数趋势"
       },
       "orderMetrics": {
-        "description": "有效/已完成订单的数量与金额，以及顶级客户。",
+        "description": "进行中/已完成订单的数量与金额，以及主要客户。",
         "title": "订单指标"
       },
       "orderStatusTrend": {
@@ -3638,8 +3638,8 @@
         "title": "订单金额趋势"
       },
       "orders": {
-        "assignments": "分配",
-        "description": "分页订单表（分配，或某店铺的订单）。",
+        "assignments": "指派",
+        "description": "分页订单表（指派，或某店铺的订单）。",
         "title": "订单"
       },
       "priceHistory": {
@@ -3668,7 +3668,7 @@
     "filters": "筛选"
   },
   "services": {
-    "contractsTitle": "合同",
+    "contractsTitle": "合约",
     "toggleSidebar": "切换服务侧边栏",
     "contractorServices": "承包商服务",
     "createService": "创建服务",
@@ -3786,14 +3786,14 @@
     "commentVoting": "评论投票控件",
     "contract": {
       "orderDescriptionHelp": "详细描述你的需求（必填）",
-      "paymentTypeHelp": "选择你希望如何处理此合同的付款方式（必填）"
+      "paymentTypeHelp": "选择你希望如何处理此合约的付款方式（必填）"
     },
     "contractorAvatar": "{{name}} 的头像",
     "contractorIdentifierHelp": "为你的承包商组织输入唯一标识符（仅限字母和数字，最多 30 个字符）",
     "contractorIdentifierInput": "输入承包商标识符",
     "contractorNameHelp": "输入你承包商组织的名称（最多 50 个字符）",
     "contractorNameInput": "输入承包商名称",
-    "createListingDescription": "前往创建商品页面",
+    "createListingDescription": "前往创建商品面",
     "createMarketListing": "创建新的市场商品",
     "dataTableDescription": "包含 {{count}} 行的数据表",
     "dataTableDescription_other": "包含 {{count}} 行的数据表",
@@ -3841,7 +3841,7 @@
     "listingsToIncludeSelector": "要包含的商品选择器",
     "listingTitleHelp": "为你的市场商品输入描述性标题（必填）",
     "listingTitleInput": "输入商品标题",
-    "loading": "加载中……",
+    "loading": "加载中…",
     "loginWithDiscordDescription": "使用你的 Discord 账户进行身份验证",
     "mainNavigation": "主导航",
     "menu": "菜单",
@@ -3876,7 +3876,7 @@
     "orgRecruitmentImage": "组织招募功能",
     "orgTagsInput": "选择组织标签",
     "orgTagsSelector": "组织标签选择器",
-    "paymentTypeHelp": "选择你希望如何处理此合同的付款方式（必填）",
+    "paymentTypeHelp": "选择你希望如何处理此合约的付款方式（必填）",
     "placeBid": "出价",
     "placeBidHelp": "为此拍卖物品提交出价",
     "previous": "上一步",
@@ -3895,8 +3895,8 @@
     "recipientTypeHelp": "选择向用户还是承包商转账",
     "recruitmentUpvoteCount": "点赞数：{{count}}",
     "recruitmentUpvoteCount_other": "点赞数：{{count}}",
-    "registerShip": "登记飞船",
-    "registerShipHelp": "将所选飞船登记到你的舰队",
+    "registerShip": "登记舰船",
+    "registerShipHelp": "将所选舰船登记到你的舰队",
     "reportContent": "举报此内容",
     "reportContentDescription": "打开举报对话框以举报不当内容",
     "rushOrderHelp": "如果你需要紧急完成此订单，请勾选此框",
@@ -3924,7 +3924,7 @@
     "selectRowsPerPage": "选择每页行数",
     "selectService": "选择服务",
     "selectServiceHelp": "选择一项服务作为此订单的基础，或选择不使用服务",
-    "selectShip": "选择要登记的飞船",
+    "selectShip": "选择要登记的舰船",
     "sendMoney": "转账",
     "sendMoneyHelp": "完成向所选收款人的转账",
     "serviceDescriptionHelp": "详细描述你的服务",
@@ -3934,8 +3934,8 @@
     "serviceNameInput": "输入服务名称",
     "serviceStatusHelp": "切换以启用或停用你的服务",
     "serviceStatusToggle": "切换服务状态",
-    "shipSelectionHelp": "选择你要登记到舰队的飞船",
-    "shipSelector": "飞船选择器",
+    "shipSelectionHelp": "选择你要登记到舰队的舰船",
+    "shipSelector": "舰船选择器",
     "sidebarNavigation": "侧边栏导航",
     "signInWithCitizenIDDescription": "使用你的 Citizen iD 账户登录",
     "signInWithDiscordDescription": "使用你的 Discord 账户登录",
@@ -3954,8 +3954,8 @@
     "submit": "提交",
     "submitBuyOrder": "提交求购单",
     "submitBuyOrderHelp": "以指定的价格和数量提交你的求购单",
-    "submitContractHelp": "以指定的条款和条件提交你的合同报价",
-    "submitContractOffer": "提交合同报价",
+    "submitContractHelp": "以指定的条款和条件提交你的合约报价",
+    "submitContractOffer": "提交合约报价",
     "submitMarketListing": "提交市场商品",
     "submitMarketListingHelp": "以指定的详情和价格提交你的市场商品",
     "submitMultipleHelp": "以指定的详情提交你的组合市场商品",
@@ -3987,16 +3987,16 @@
     "zoomImage": "缩放图片"
   },
   "account_deletion": {
-    "blockers_title": "在解决以下问题之前，您无法删除账户：",
+    "blockers_title": "在解决以下问题之前，你无法删除账户：",
     "cancel_button": "取消删除",
     "cancel_error": "取消删除失败。请重试。",
     "confirm_button": "删除我的账户",
     "confirm_label": "确认标签",
     "dialog_title": "删除账户",
-    "pending_message": "您的账户计划于 {{date}} 永久删除。",
+    "pending_message": "你的账户计划于 {{date}} 永久删除。",
     "reason_label": "离开原因（可选）",
-    "warning": "这将安排您的账户在 30 天后永久删除。在此期间，您可以重新登录并取消删除。",
-    "what_happens": "30 天后，您的个人数据将被永久清除。您的订单、评价和消息仍会以“已删除用户”的形式对其他用户可见。活动的商品条目和采购订单将被立即取消。"
+    "warning": "这将安排你的账户在 30 天后永久删除。在此期间，你可以重新登录并取消删除。",
+    "what_happens": "30 天后，你的个人数据将被永久清除。你的订单、评价和消息仍会以“已删除用户”的形式对其他用户可见。活动的商品和采购订单将被立即取消。"
   },
   "adminAuditLogs": {
     "action": "操作",
@@ -4006,7 +4006,7 @@
     "action_invite_deleted": "邀请已删除",
     "action_member_added": "成员已添加",
     "action_member_removed": "成员已移除",
-    "action_member_role_assigned": "已为成员分配角色",
+    "action_member_role_assigned": "已为成员指派角色",
     "action_member_role_removed": "已移除成员角色",
     "action_offer_rejected": "报价已拒绝",
     "action_order_cancelled": "订单已取消",
@@ -4028,7 +4028,7 @@
     "filter_start_date": "开始日期",
     "filter_subject_id": "按对象 ID 筛选",
     "filter_subject_type": "按对象类型筛选",
-    "loading": "加载审计日志中...",
+    "loading": "加载审计日志中…",
     "metadata": "元数据",
     "no_contractor": "不适用",
     "no_logs": "未找到审计日志",
@@ -4064,8 +4064,8 @@
     "qualityTier": "品质层级（可选）",
     "qualityUpdated": "品质已更新",
     "quantity": "数量",
-    "selectListing": "选择一个商品……",
-    "selectLocation": "选择位置……",
+    "selectListing": "选择一个商品…",
+    "selectLocation": "选择位置…",
     "source": "来源",
     "storeBought": "商店购买",
     "title": "所有库存批次",
@@ -4084,13 +4084,13 @@
     "size": "尺寸"
   },
   "AvailabilityRequirement": {
-    "apiError": "提交此报价需要设置可用性。请先设置您的可用性。",
-    "required": "需要设置可用性",
-    "requiredMessage": "{{sellerName}} 要求您在提交报价前设置可用性。",
-    "set": "可用性已设置",
-    "setAvailability": "设置可用性",
-    "setMessage": "您的可用性已配置。您可以向 {{sellerName}} 提交报价。",
-    "submitDisabled": "设置可用性以继续"
+    "apiError": "提交此报价需要设置可用时间。请先设置你的可用时间。",
+    "required": "需要设置可用时间",
+    "requiredMessage": "{{sellerName}} 要求你在提交报价前设置可用时间。",
+    "set": "可用时间已设置",
+    "setAvailability": "设置可用时间",
+    "setMessage": "你的可用时间已配置。你可以向 {{sellerName}} 提交报价。",
+    "submitDisabled": "设置可用时间以继续"
   },
   "BidAreaV2": {
     "amount": "金额",
@@ -4116,31 +4116,31 @@
     "addUser": "屏蔽用户",
     "addUserDialog": {
       "confirm": "屏蔽用户",
-      "description": "输入您想屏蔽的用户的用户名",
+      "description": "输入你想屏蔽的用户的用户名",
       "reasonLabel": "原因（可选）",
-      "reasonPlaceholder": "输入屏蔽此用户的原因...",
+      "reasonPlaceholder": "输入屏蔽此用户的原因…",
       "title": "屏蔽用户",
       "usernameLabel": "用户名",
-      "usernamePlaceholder": "输入用户名..."
+      "usernamePlaceholder": "输入用户名…"
     },
     "blockedOn": "屏蔽于 {{date}}",
     "blockedUsers": "已屏蔽用户",
     "blockUser": "屏蔽用户",
-    "description": "管理您已屏蔽、无法与您创建订单或报价的用户",
-    "empty": "您还没有屏蔽任何用户",
+    "description": "管理你已屏蔽、无法与你创建订单或报价的用户",
+    "empty": "你还没有屏蔽任何用户",
     "error": "加载屏蔽列表失败",
-    "searchPlaceholder": "搜索要屏蔽的用户...",
+    "searchPlaceholder": "搜索要屏蔽的用户…",
     "selectedUser": "已选择的用户",
     "title": "已屏蔽用户"
   },
   "blockUser": {
     "button": "屏蔽用户",
     "confirm": "屏蔽用户",
-    "dialogDescription": "屏蔽此用户将阻止其与您创建订单或报价。他们不会收到此操作的通知。",
+    "dialogDescription": "屏蔽此用户将阻止其与你创建订单或报价。他们不会收到此操作的通知。",
     "dialogTitle": "屏蔽 {{username}}",
     "error": "屏蔽用户失败",
     "reasonLabel": "原因（可选）",
-    "reasonPlaceholder": "输入屏蔽此用户的原因...",
+    "reasonPlaceholder": "输入屏蔽此用户的原因…",
     "success": "已成功屏蔽 {{username}}"
   },
   "blueprints": {
@@ -4155,9 +4155,9 @@
     "minPrice": "最低价格",
     "minQty": "最小数量",
     "noItems": "没有可用的批量物品",
-    "noItemsDesc": "目前没有正在上架的物品。请稍后再来查看或创建一个商品条目。",
-    "noResults": "没有物品符合您的筛选条件",
-    "noResultsDesc": "请尝试调整您的搜索或清除筛选条件",
+    "noItemsDesc": "目前没有正在上架的物品。请稍后再来查看或创建一个商品。",
+    "noResults": "没有物品符合你的筛选条件",
+    "noResultsDesc": "请尝试调整你的搜索或清除筛选条件",
     "order": "订单",
     "search": "搜索物品",
     "sortBy": "排序方式"
@@ -4165,43 +4165,43 @@
   "BuyOrdersRedesign": {
     "by": "由 {{name}}",
     "cancel": "取消",
-    "cardLabel": "求购订单：{{item}}，{{price}}，需求 {{quantity}}，剩余 {{remaining}}",
-    "createBuyOrder": "创建求购订单",
-    "empty": "目前没有开放的求购订单。",
-    "error": "加载求购订单失败。",
+    "cardLabel": "求购单：{{item}}，{{price}}，需求 {{quantity}}，剩余 {{remaining}}",
+    "createBuyOrder": "创建求购单",
+    "empty": "目前没有开放的求购单。",
+    "error": "加载求购单失败。",
     "fulfil": "从库存履单",
-    "heading": "求购订单",
+    "heading": "求购单",
     "itemSearch": "物品",
-    "loading": "正在加载求购订单…",
+    "loading": "正在加载求购单…",
     "maxPrice": "最高出价",
     "maxPriceLabel": "每单位最高价",
     "minQuality": "品质",
     "minQualityLabel": "最低品质等级",
     "negotiable": "可议价",
     "negotiableLabel": "接受还价？",
-    "newBuyOrder": "新建求购订单",
+    "newBuyOrder": "新建求购单",
     "no": "否",
-    "post": "发布求购订单",
+    "post": "发布求购单",
     "priceNegotiable": "欢迎报价",
     "priceUnset": "未设定价格",
-    "posted": "求购订单已发布。",
+    "posted": "求购单已发布。",
     "public": "公开",
     "quantityLabel": "数量",
     "rosterOnly": "仅限名单",
     "selected": "已选择：{{name}}",
-    "subheading": "买家的需求。发布您自己的需求，或从库存中履行开放的需求。",
+    "subheading": "买家的需求。发布你自己的需求，或从库存中履行开放的需求。",
     "targeted": "定向",
     "targetedNote": "定向订单需要指定供应商——请从供应商名单中选择一个（即将推出）。",
     "tierN": "等级 {{n}}",
     "tierRange": "T{{min}}–T{{max}}",
-    "title": "求购订单",
+    "title": "求购单",
     "typeToSearch": "输入以搜索目录",
     "visibilityLabel": "可见性",
     "wants": "需求",
     "yes": "是"
   },
   "contract_actions": {
-    "create_contract": "创建合同"
+    "create_contract": "创建合约"
   },
   "contractorListings": {
     "apiWarning": "注意：承包商专属商品接口尚未实现。显示的是通用搜索的筛选结果。",
@@ -4211,7 +4211,7 @@
       "description": "该组织尚未创建任何商品。",
       "title": "未找到商品"
     },
-    "permissionWarning": "您没有权限管理此组织的商品。请联系管理员获取访问权限。",
+    "permissionWarning": "你没有权限管理此组织的商品。请联系管理员获取访问权限。",
     "priceRange": "价格区间",
     "qualityRange": "品质区间",
     "quantity": "可用数量",
@@ -4352,9 +4352,9 @@
     "unifiedPricingHelp": "所有变体将使用相同价格",
     "unitDiscrete": "单位（独立物品）",
     "unitHelp": "独立物品（武器、护甲、组件）",
-    "unitSCU": "SCU（货物/商品）",
+    "unitSCU": "SCU（货物/大宗商品）",
     "unknown": "未知",
-    "uploadingPhotos": "正在上传照片...",
+    "uploadingPhotos": "正在上传照片…",
     "validation": {
       "basePriceRequired": "基础价格必须大于 0",
       "descriptionRequired": "描述为必填项",
@@ -4379,10 +4379,10 @@
     "listedHelp": "已上架的库存会出现在公开商品中",
     "location": "位置（可选）",
     "notes": "备注（可选）",
-    "notesPlaceholder": "添加关于此批次的任何备注……",
+    "notesPlaceholder": "添加关于此批次的任何备注…",
     "notesTooLong": "备注不得超过 1000 个字符",
     "owner": "所有者（可选）",
-    "ownerPlaceholder": "搜索组织成员……",
+    "ownerPlaceholder": "搜索组织成员…",
     "quantity": "数量",
     "quantityHelp": "输入此批次中的单位数量",
     "quantityRequired": "数量必须大于 0",
@@ -4403,14 +4403,14 @@
     "item": "物品",
     "itemRequired": "选择要添加此批次的商品（及物品）",
     "listed": "已上架",
-    "listedHelper": "已上架的库存会出现在公开的商品条目中",
+    "listedHelper": "已上架的库存会出现在公开的商品中",
     "listing": "商品",
     "location": "位置（可选）",
     "locationOwnership": "位置与所有权",
     "noItems": "此商品没有可添加库存的物品",
     "none": "无",
     "notes": "备注（可选）",
-    "notesPlaceholder": "添加关于此批次的任何备注...",
+    "notesPlaceholder": "添加关于此批次的任何备注…",
     "notesTooLong": "备注不得超过 1000 个字符",
     "preview": "变体预览",
     "qualityTier": "质量档位",
@@ -4464,7 +4464,7 @@
     "title": "标题",
     "titleAriaLabel": "输入商品标题",
     "unifiedPricing": "统一价格",
-    "uploadingPhotos": "正在上传照片……",
+    "uploadingPhotos": "正在上传照片…",
     "validation": {
       "basePriceRequired": "基础价格必须大于 0",
       "descriptionRequired": "描述为必填项",
@@ -4483,7 +4483,7 @@
       "errorDescription": "加载购物车时出错。请重试。",
       "errorTitle": "无法加载购物车",
       "retry": "重试",
-      "title": "您的购物车是空的"
+      "title": "你的购物车是空的"
     },
     "contractors": {
       "errorDescription": "加载承包商时出错。请重试。",
@@ -4495,13 +4495,13 @@
       "retry": "重试"
     },
     "contracts": {
-      "createContract": "创建合同",
-      "errorDescription": "加载合同时出错。请重试。",
-      "errorTitle": "无法加载合同",
-      "noContracts": "暂无合同",
-      "noContractsDescription": "创建公开合同以宣传您的服务",
-      "noPublicContracts": "暂无公开合同",
-      "noPublicContractsDescription": "目前没有可用的公开合同",
+      "createContract": "创建合约",
+      "errorDescription": "加载合约时出错。请重试。",
+      "errorTitle": "无法加载合约",
+      "noContracts": "暂无合约",
+      "noContractsDescription": "创建公开合约以宣传你的服务",
+      "noPublicContracts": "暂无公开合约",
+      "noPublicContractsDescription": "目前没有可用的公开合约",
       "retry": "重试"
     },
     "listings": {
@@ -4509,7 +4509,7 @@
       "errorDescription": "加载商品时出错。请重试。",
       "errorTitle": "无法加载商品",
       "noListings": "暂无商品",
-      "noListingsDescription": "创建您的第一个商品，开始在市场上出售物品",
+      "noListingsDescription": "创建你的第一个商品，开始在市场上出售物品",
       "noSearchResults": "未找到商品",
       "noSearchResultsDescription": "请尝试调整搜索或筛选条件",
       "retry": "重试"
@@ -4541,7 +4541,7 @@
     },
     "notifications": {
       "noNotifications": "暂无通知",
-      "noNotificationsDescription": "您已查看全部通知！新通知将显示在此处"
+      "noNotificationsDescription": "你已查看全部通知！新通知将显示在此处"
     },
     "orders": {
       "browseMarket": "浏览市场",
@@ -4558,9 +4558,9 @@
       "noContent": "暂无商品或服务",
       "noContentDescription": "该用户尚未创建任何商品或服务",
       "noListings": "暂无商品",
-      "noListingsDescription": "创建您的第一个商品，开始在市场上出售物品",
+      "noListingsDescription": "创建你的第一个商品，开始在市场上出售物品",
       "noServices": "暂无服务",
-      "noServicesDescription": "创建您的第一个服务，开始提供您的专业技能"
+      "noServicesDescription": "创建你的第一个服务，开始提供你的专业技能"
     },
     "recruiting": {
       "createPost": "创建帖子",
@@ -4585,7 +4585,7 @@
       "errorDescription": "加载服务时出错。请重试。",
       "errorTitle": "无法加载服务",
       "noServices": "暂无服务",
-      "noServicesDescription": "创建您的第一个服务，开始提供您的专业技能",
+      "noServicesDescription": "创建你的第一个服务，开始提供你的专业技能",
       "retry": "重试"
     }
   },
@@ -4605,7 +4605,7 @@
   "errors": {
     "forbidden": {
       "browseMarket": "浏览市场",
-      "description": "您没有权限查看此页面。",
+      "description": "你没有权限查看此页面。",
       "goHome": "返回首页",
       "title": "访问被拒绝"
     }
@@ -4614,7 +4614,7 @@
     "max": "最大",
     "min": "最小",
     "none": "无",
-    "selectMultiple": "选择……"
+    "selectMultiple": "选择…"
   },
   "imageSearch": {
     "noImageSelected": "未选择图片",
@@ -4638,19 +4638,19 @@
     "gameItem": "物品（可选）",
     "item": "物品",
     "listed": "已上架",
-    "listing": "商品条目",
+    "listing": "商品",
     "location": "位置（可选）",
-    "noResults": "没有批次符合您的搜索",
+    "noResults": "没有批次符合你的搜索",
     "notes": "备注（可选）",
     "personal": "个人",
     "qtyHelp": "此批次中的单位数量",
     "qtyRequired": "必须大于 0",
     "quantity": "数量",
-    "search": "搜索...",
+    "search": "搜索…",
     "status": "状态",
     "title": "我的库存",
-    "unlink": "从商品条目取消关联",
-    "unlinked": "批次已从商品条目取消关联",
+    "unlink": "从商品取消关联",
+    "unlinked": "批次已从商品取消关联",
     "unlinkError": "取消关联批次失败",
     "unlisted": "未上架",
     "unspecified": "未指定",
@@ -4665,7 +4665,7 @@
     "noLocations": "未找到位置",
     "preset": "预设",
     "pressEnterToCreate": "按 Enter 键创建",
-    "searchOrCreate": "搜索或创建位置..."
+    "searchOrCreate": "搜索或创建位置…"
   },
   "LotListItem": {
     "cancel": "取消",
@@ -4679,7 +4679,7 @@
     "listed": "已上架",
     "location": "地点",
     "notes": "备注",
-    "notesPlaceholder": "添加关于此批次的备注...",
+    "notesPlaceholder": "添加关于此批次的备注…",
     "notesTooLong": "备注必须不超过 1000 个字符",
     "owner": "所有者",
     "quantity": "数量",
@@ -4703,7 +4703,7 @@
     "listed": "已上架",
     "location": "位置",
     "notes": "备注",
-    "notesPlaceholder": "添加关于此批次的备注……",
+    "notesPlaceholder": "添加关于此批次的备注…",
     "notesTooLong": "备注不得超过 1000 个字符",
     "owner": "所有者",
     "quantity": "数量",
@@ -4721,7 +4721,7 @@
     "actor": "店面",
     "addLot": "添加库存",
     "allocate": "分配给订单",
-    "allScopeNote": "显示您在各店铺中拥有的所有内容。“店铺”列显示每个商品条目当前的出售位置。",
+    "allScopeNote": "显示你在各店铺中拥有的所有内容。“店铺”列显示每个商品当前的出售位置。",
     "backingStock": "支持库存",
     "colActions": "操作",
     "colItem": "物品",
@@ -4729,13 +4729,13 @@
     "colQty": "可用",
     "colShop": "店铺",
     "colStatus": "状态",
-    "createListing": "创建商品条目",
-    "empty": "这里还没有内容。创建您的第一个商品条目。",
-    "error": "加载您的商品条目失败。",
+    "createListing": "创建商品",
+    "empty": "这里还没有内容。创建你的第一个商品。",
+    "error": "加载你的商品失败。",
     "everythingIOwn": "我拥有的所有内容",
     "heading": "管理市场",
     "listed": "已上架",
-    "loading": "正在加载您的商品条目…",
+    "loading": "正在加载你的商品…",
     "loadingLots": "正在加载库存…",
     "lotAllocated": "已分配",
     "lotHolder": "持有者",
@@ -4743,11 +4743,11 @@
     "lotLocation": "位置",
     "lotQty": "数量",
     "lotVariant": "变体",
-    "noLots": "此商品条目没有记录任何库存批次。",
+    "noLots": "此商品没有记录任何库存批次。",
     "org": "组织",
     "refresh": "刷新（即将推出）",
     "reserve": "预留",
-    "subheading": "您出售的所有内容集中在一处。展开某一行可查看其背后的库存。",
+    "subheading": "你出售的所有内容集中在一处。展开某一行可查看其背后的库存。",
     "title": "管理市场",
     "unspecified": "未指定",
     "variants_other": "{{count}} 个选项",
@@ -4760,8 +4760,8 @@
     "addedToCart": "已加入购物车",
     "addToCart": "加入购物车",
     "auction": "拍卖",
-    "availability": "{{count}} {{unit}}可用",
-    "availability_other": "{{count}} {{unit}}可用",
+    "availability": "{{count}} {{unit}}可售",
+    "availability_other": "{{count}} {{unit}}可售",
     "bidPreview": "出价预览",
     "bundle": "套装",
     "buyNow": "立即购买",
@@ -4769,14 +4769,14 @@
     "contactComingSoon": "联系功能即将推出",
     "contactSeller": "联系卖家",
     "description": "描述",
-    "error": "加载此商品条目失败。",
+    "error": "加载此商品失败。",
     "includedInSet": "每套包含",
-    "loading": "正在加载商品条目…",
+    "loading": "正在加载商品…",
     "makeOffer": "发起报价",
     "negotiable": "可议价",
     "ofAvailable": "共 {{count}}",
     "ofAvailable_other": "共 {{count}}",
-    "orderPlaced": "订单已下达",
+    "orderPlaced": "已下单",
     "placeBid": "出价",
     "quantityLabel": "数量",
     "sets": "套",
@@ -4785,7 +4785,7 @@
     "unavailable": "不可用",
     "unit": "件",
     "unitScu": "cSCU",
-    "yourBid": "您的出价（aUEC）",
+    "yourBid": "你的出价（aUEC）",
     "decreaseQuantity": "减少数量",
     "increaseQuantity": "增加数量"
   },
@@ -4794,22 +4794,22 @@
   },
   "MarketRedesign": {
     "acrossSellers_other": "来自 {{count}} 位卖家",
-    "addToCart": "添加",
-    "available_other": "{{count}} 件可用",
+    "addToCart": "加入",
+    "available_other": "{{count}} 件可售",
     "compare": "比较",
     "compareSellers_other": "比较 {{count}} 位卖家",
     "forSale": "出售中",
     "fromPrice": "起",
     "hide": "隐藏",
-    "highestQuality": "质量最高",
+    "highestQuality": "品质最高",
     "lowestPrice": "价格最低",
     "negotiable": "可议价",
     "noSellers": "目前没有可用的卖家。",
-    "seeAllCount_other": "查看全部 {{count}} 个商品条目",
+    "seeAllCount_other": "查看全部 {{count}} 个商品",
     "sellersCount_other": "{{count}} 位卖家",
     "topBid": "最高出价",
     "topRated": "评分最高的卖家",
-    "unitsAvailable_other": "{{count}} 件可用",
+    "unitsAvailable_other": "{{count}} 件可售",
     "wantedBy_other": "{{count}} 位买家想要"
   },
   "messages": {
@@ -4832,7 +4832,7 @@
       "header": "任务详情"
     },
     "filters": "筛选",
-    "noResults": "未找到结果。请尝试调整您的筛选条件。",
+    "noResults": "未找到结果。请尝试调整你的筛选条件。",
     "search": {
       "header": "任务数据库"
     },
@@ -4885,7 +4885,7 @@
       "types": {
         "title": "Star Citizen 中的 {{name}} 任务 ({{count}}) | SC Market",
         "heading": "{{name}} 任务",
-        "lead": "Star Citizen 中有 {{missions}}属于 {{name}} 类型。"
+        "lead": "Star Citizen 中有 {{missions}} 属于 {{name}} 类型。"
       },
       "systems": {
         "title": "Star Citizen 中 {{name}} 星系的任务 ({{count}}) | SC Market",
@@ -4960,13 +4960,13 @@
     "adminOrders": "订单",
     "adminPremium": "高级会员",
     "adminUsers": "用户",
-    "assignedOrders": "分配给我的",
+    "assignedOrders": "指派给我的",
     "availability": "可用时间",
     "browsing": "浏览",
     "buyOrders": "求购单",
     "clearSearch": "清除搜索",
-    "contracts": "合同",
-    "dashboard": "仪表板",
+    "contracts": "合约",
+    "dashboard": "仪表盘",
     "createListing": "创建商品",
     "customers": "客户",
     "groupAdminData": "数据与配置",
@@ -4985,7 +4985,7 @@
     "noResults": "无匹配页面",
     "orders": "订单",
     "orgAbout": "关于",
-    "orgDashboard": "仪表板",
+    "orgDashboard": "仪表盘",
     "orgInvites": "邀请",
     "orgManage": "管理",
     "orgOrders": "组织订单",
@@ -4995,7 +4995,7 @@
     "orgSettings": "设置",
     "pinned": "已固定",
     "recruiting": "招募",
-    "searchPlaceholder": "搜索导航……",
+    "searchPlaceholder": "搜索导航…",
     "services": "服务",
     "settings": "设置",
     "shopPage": "店铺页面",
@@ -5003,7 +5003,7 @@
     "shopSettings": "店铺设置",
     "star": "固定",
     "stock": "库存",
-    "switchContext": "切换上下文",
+    "switchContext": "切换身份",
     "unstar": "取消固定",
     "adminIdentity": "身份",
     "groupLinks": "链接"
@@ -5044,20 +5044,20 @@
     "allocationModeAutoDescription": "创建订单时使用 FIFO（先入先出）自动分配库存",
     "allocationModeLabel": "库存应如何分配给订单？",
     "allocationModeManual": "手动",
-    "allocationModeManualDescription": "您手动选择将哪些库存批次分配给每个订单",
+    "allocationModeManualDescription": "你手动选择将哪些库存批次分配给每个订单",
     "allocationModeMoved": "库存分配模式按店铺设置：请打开店铺的设置，在 库存管理 › 分配模式 中调整。",
     "allocationModeShops": "你的店铺",
     "allocationModeNone": "无（旧版）",
-    "allocationModeNoneDescription": "无实物分配 — 库存仅在商品条目层级追踪",
+    "allocationModeNoneDescription": "无实物分配 — 库存仅在商品层级追踪",
     "allocationModeNote": "注意：此设置控制库存如何实物分配给订单。它独立于上方的库存扣减时机设置，后者控制库存何时对买家可见。",
-    "availabilityRequirement": "可用性要求",
+    "availabilityRequirement": "可用时间要求",
     "confirmDelete": "确定要删除此设置吗？",
     "delete": "删除",
     "deletedSuccessfully": "设置删除成功！",
     "deleteError": "删除设置失败。请重试。",
     "description": "配置在创建报价或报价转为订单时自动发送的自定义消息。",
     "enabled": "已启用",
-    "limitsDescription": "为订单规模和金额设置最小和最大限制。仅在您作为卖家时适用。",
+    "limitsDescription": "为订单规模和金额设置最小和最大限制。仅在你作为卖家时适用。",
     "limitsTitle": "订单限制",
     "loadError": "加载设置失败。请刷新页面。",
     "maxLessThanMin": "最大值必须大于或等于最小值",
@@ -5076,22 +5076,22 @@
     "minOrderValueHelper": "要求的最小订单金额",
     "minOrderValuePlaceholder": "例如：50000",
     "offerMessage": "报价消息",
-    "offerMessagePlaceholder": "输入创建报价时要发送的消息...",
+    "offerMessagePlaceholder": "输入创建报价时要发送的消息…",
     "orderMessage": "订单消息",
-    "orderMessagePlaceholder": "输入报价转为订单时要发送的消息...",
+    "orderMessagePlaceholder": "输入报价转为订单时要发送的消息…",
     "orderSizeLimits": "订单规模限制",
     "orderSizeLimitsDescription": "设置最小和最大订单规模（物品总数量）。",
     "orderValueLimits": "订单金额限制",
     "orderValueLimitsDescription": "设置最小和最大订单金额（以 aUEC 计）。",
-    "requireAvailabilityDescription": "启用后，买家必须先设置可用性，才能向您提交报价。",
-    "requireAvailabilityLabel": "要求买家在提交报价前设置可用性",
+    "requireAvailabilityDescription": "启用后，买家必须先设置可用时间，才能向你提交报价。",
+    "requireAvailabilityLabel": "要求买家在提交报价前设置可用时间",
     "requirementsDescription": "配置下单前必须满足的要求。",
     "requirementsTitle": "订单要求",
     "save": "保存设置",
     "savedSuccessfully": "设置保存成功！",
     "saveError": "保存设置失败。请重试。",
-    "saving": "保存中...",
-    "stockDescription": "配置库存何时从您的库存中扣减。",
+    "saving": "保存中…",
+    "stockDescription": "配置库存何时从你的库存中扣减。",
     "stockSubtractionTiming": "库存扣减时机",
     "stockSubtractionMoved": "库存扣减时机按店铺设置：请打开店铺的设置，在 库存管理 › 库存扣减时机 中调整。",
     "stockTitle": "库存管理",
@@ -5102,7 +5102,7 @@
     "total": "总计"
   },
   "orgAbout": {
-    "appearanceSubtitle": "您组织的徽标和横幅",
+    "appearanceSubtitle": "你组织的徽标和横幅",
     "appearanceTitle": "外观",
     "banner": "横幅",
     "description": "描述",
@@ -5111,7 +5111,7 @@
     "logo": "徽标",
     "orgName": "组织名称",
     "saveChanges": "保存更改",
-    "tagsSubtitle": "帮助成员和客户找到您的组织",
+    "tagsSubtitle": "帮助成员和客户找到你的组织",
     "tagsTitle": "类别与标签",
     "uploadLogo": "上传徽标"
   },
@@ -5123,7 +5123,7 @@
     "action_invite_deleted": "邀请已删除",
     "action_member_added": "成员已添加",
     "action_member_removed": "成员已移除",
-    "action_member_role_assigned": "已为成员分配角色",
+    "action_member_role_assigned": "已为成员指派角色",
     "action_member_role_removed": "已移除成员角色",
     "action_offer_rejected": "报价已拒绝",
     "action_order_cancelled": "订单已取消",
@@ -5144,7 +5144,7 @@
     "filter_actor_placeholder": "用户名",
     "filter_end_date": "结束日期",
     "filter_start_date": "开始日期",
-    "loading": "正在加载审计日志...",
+    "loading": "正在加载审计日志…",
     "metadata": "元数据",
     "no_logs": "未找到审计日志",
     "summary": "显示 {{total}} 条记录中的 {{pageSize}} 条（第 {{page}} 页）",
@@ -5156,26 +5156,26 @@
     "addUser": "屏蔽用户",
     "addUserDialog": {
       "confirm": "屏蔽用户",
-      "description": "输入您想为组织屏蔽的用户的用户名",
+      "description": "输入你想为组织屏蔽的用户的用户名",
       "reasonLabel": "原因（可选）",
-      "reasonPlaceholder": "输入屏蔽此用户的原因...",
+      "reasonPlaceholder": "输入屏蔽此用户的原因…",
       "title": "屏蔽用户",
       "usernameLabel": "用户名",
-      "usernamePlaceholder": "输入用户名..."
+      "usernamePlaceholder": "输入用户名…"
     },
     "blockedOn": "屏蔽于 {{date}}",
     "blockedUsers": "已屏蔽用户",
     "blockUser": "屏蔽用户",
-    "description": "管理您的组织已屏蔽其创建订单或报价的用户",
-    "empty": "您的组织尚未屏蔽任何用户",
+    "description": "管理你的组织已屏蔽其创建订单或报价的用户",
+    "empty": "你的组织尚未屏蔽任何用户",
     "error": "加载组织屏蔽名单失败",
-    "searchPlaceholder": "搜索要屏蔽的用户...",
+    "searchPlaceholder": "搜索要屏蔽的用户…",
     "selectedUser": "已选择用户",
     "title": "已屏蔽用户"
   },
   "OrgMemberSearch": {
     "label": "组织成员",
-    "placeholder": "搜索成员..."
+    "placeholder": "搜索成员…"
   },
   "page": "1",
   "pages": {
@@ -5209,13 +5209,13 @@
       }
     },
     "availability": {
-      "title": "可用性"
+      "title": "可用时间"
     },
     "bulkItems": {
       "title": "批量物品"
     },
     "buyOrders": {
-      "title": "求购订单"
+      "title": "求购单"
     },
     "cart": {
       "title": "购物车"
@@ -5224,10 +5224,10 @@
       "title": "承包商"
     },
     "contracts": {
-      "title": "合同"
+      "title": "合约"
     },
     "createContract": {
-      "title": "创建合同"
+      "title": "创建合约"
     },
     "createListing": {
       "title": "创建商品"
@@ -5236,7 +5236,7 @@
       "title": "创建招募帖子"
     },
     "dashboard": {
-      "title": "仪表板"
+      "title": "仪表盘"
     },
     "home": {
       "title": "首页"
@@ -5311,7 +5311,7 @@
     "wikiPageThumbnail": "{{title}} 的缩略图"
   },
   "profile": {
-    "customOrdersMovedToShop": "自定义订单现在通过店铺下单。",
+    "customOrdersMovedToShop": "定制订单现在通过店铺下单。",
     "editDescription": "编辑简介",
     "discordProfile": "Discord 个人资料"
   },
@@ -5361,7 +5361,7 @@
     "qualityTiers": "品质层级",
     "qualityTiersDescription": "开采品质会被划分为离散的层级。范围内的原始品质映射为固定值。",
     "salvaged": "回收",
-    "search": "搜索资源……",
+    "search": "搜索资源…",
     "title": "资源",
     "usedIn": "用于蓝图",
     "viewOnMarket": "在市场中查看"
@@ -5370,11 +5370,11 @@
     "button": {
       "cancel": "取消",
       "editReview": "编辑评价",
-      "requesting": "请求中...",
+      "requesting": "请求中…",
       "requestRevision": "请求修改评价",
       "revisionRequested": "已请求修改",
       "save": "保存更改",
-      "saving": "保存中...",
+      "saving": "保存中…",
       "submit": "提交请求"
     },
     "error": {
@@ -5382,8 +5382,8 @@
       "updateFailed": "更新评价失败"
     },
     "info": {
-      "editInstructions": "请根据收到的反馈更新您的评价。请确保提供公正、准确的评估。",
-      "revisionRequested": "此评价已被请求修改。您现在可以编辑它以回应反馈。卖家留言：{{message}}"
+      "editInstructions": "请根据收到的反馈更新你的评价。请确保提供公正、准确的评估。",
+      "revisionRequested": "此评价已被请求修改。你现在可以编辑它以回应反馈。卖家留言：{{message}}"
     },
     "label": {
       "characters": "个字符",
@@ -5413,7 +5413,7 @@
     "languageFilter": {
       "helperText": "显示支持这些语言中任意一种的卖家的结果",
       "label": "按语言筛选",
-      "placeholder": "选择语言..."
+      "placeholder": "选择语言…"
     }
   },
   "SellFormRedesign": {
@@ -5422,25 +5422,25 @@
     "auctionType": "拍卖",
     "bundleHelp": "每套包含所有这些物品。上方的数量为套数。",
     "bundleItem": "套装中的物品",
-    "created": "商品条目已创建。",
+    "created": "商品已创建。",
     "customItem": "自定义物品（不在目录中）",
     "customNameLabel": "物品名称",
     "description": "描述",
-    "editHeading": "编辑商品条目",
-    "editNote": "数量和库存批次在“管理市场”页面中编辑。此表单用于编辑商品条目详情。",
-    "editTitle": "编辑商品条目",
+    "editHeading": "编辑商品",
+    "editNote": "数量和库存批次在“管理市场”页面中编辑。此表单用于编辑商品详情。",
+    "editTitle": "编辑商品",
     "estimatedTotal": "预计总价值",
     "fixed": "固定价格",
     "heading": "出售物品",
-    "listingTitle": "商品条目标题",
+    "listingTitle": "商品标题",
     "location": "位置（可选）",
     "locationHelp": "买家可取货的地点 — 例如 Area18、Everus Harbor。",
-    "needShop": "您需要先拥有店铺才能出售。请先从您的个人资料创建一个。",
+    "needShop": "你需要先拥有店铺才能出售。请先从你的个人资料创建一个。",
     "negotiableType": "可议价",
     "noShops": "没有可用的店铺",
     "org": "组织",
     "phase0Note": "在此阶段，自定义物品和套装仅为可视预览，尚不会被保存。",
-    "postListing": "发布商品条目",
+    "postListing": "发布商品",
     "price": "价格",
     "priceByQuality": "按质量定价",
     "pricePerUnit": "单价（aUEC）",
@@ -5449,10 +5449,10 @@
     "saveChanges": "保存更改",
     "searchCatalog": "搜索目录",
     "sellAsBundle": "作为套装出售（每套多个物品）",
-    "sellThrough": "通过...出售",
-    "sellThroughHelp": "您的个人商店或您协助管理的组织店铺。",
+    "sellThrough": "通过…出售",
+    "sellThroughHelp": "你的个人商店或你协助管理的组织店铺。",
     "storefront": "店面",
-    "subheading": "选择您要出售的物品 — 表单仅显示所需的字段。",
+    "subheading": "选择你要出售的物品 — 表单仅显示所需的字段。",
     "tier": "档位",
     "tierN": "档位 {{n}}",
     "title": "出售物品",
@@ -5460,7 +5460,7 @@
     "unitType": "单位类型",
     "unitUnit": "件",
     "visualOnly": "在此阶段，自定义物品和套装仅供预览 — 尚不会被保存。",
-    "whatSelling": "您要出售什么？",
+    "whatSelling": "你要出售什么？",
     "removeQualityRow": "移除品质行",
     "removeBundleItem": "移除套装物品"
   },
@@ -5482,7 +5482,7 @@
     "error": "加载店铺失败。",
     "helperText": "选择此商品所属的店铺",
     "label": "店铺",
-    "loading": "正在加载店铺……",
+    "loading": "正在加载店铺…",
     "noPersonalShops": "你还没有个人店铺。创建一个以开始销售。",
     "quickCreate": "创建店铺",
     "retry": "重试"
@@ -5495,10 +5495,10 @@
     "available": "可用：{{url}}",
     "suggestions": "试试：",
     "reason": {
-      "taken": "其他商店已在使用此 URL",
-      "reserved_word": "“{{slug}}”已被网站保留，不能用作商店 URL",
+      "taken": "其他店铺已在使用此 URL",
+      "reserved_word": "“{{slug}}”已被网站保留，不能用作店铺 URL",
       "reserved_org": "此 URL 已为组织 {{holder}} 保留",
-      "reserved_user": "此 URL 已为 {{holder}} 的个人商店保留",
+      "reserved_user": "此 URL 已为 {{holder}} 的个人店铺保留",
       "invalid": "请使用 3–50 个小写字母、数字和连字符，并以字母或数字开头和结尾"
     }
   },
@@ -5508,17 +5508,17 @@
     "allocatedStock": "已分配库存",
     "available": "可用",
     "filters": "筛选",
-    "listing": "商品条目",
+    "listing": "商品",
     "location": "位置",
     "maxQuantity": "最大数量",
     "minQuantity": "最小数量",
     "noAllocations": "没有已分配的库存",
-    "noAllocationsDesc": "当有订单针对您的商品条目下单时，库存将显示在此处。",
+    "noAllocationsDesc": "当有订单针对你的商品下单时，库存将显示在此处。",
     "noLots": "没有库存批次",
     "noLotsDesc": "库存批次保存你的商品可出售的数量。添加一个批次，开始跟踪本店的库存。",
     "order": "订单",
     "quantity": "数量",
-    "searchLots": "搜索批次...",
+    "searchLots": "搜索批次…",
     "status": "状态",
     "user": "用户"
   },
@@ -5535,7 +5535,7 @@
     "errorLoading": "加载库存信息失败",
     "lot": "批次",
     "lots": "批次",
-    "noLots": "未找到库存批次。创建您的第一个批次以开始。",
+    "noLots": "未找到库存批次。创建你的第一个批次以开始。",
     "preset": "预设",
     "title": "库存管理",
     "unspecifiedLocation": "未指定位置"
@@ -5578,7 +5578,7 @@
     "save": "保存主题",
     "saveError": "保存主题失败",
     "saveSuccess": "主题保存成功",
-    "saving": "保存中……",
+    "saving": "保存中…",
     "style": "样式",
     "unit": "单位"
   },
@@ -5619,7 +5619,7 @@
   "unblockUser": {
     "button": "取消屏蔽用户",
     "confirm": "取消屏蔽用户",
-    "dialogDescription": "确定要取消屏蔽此用户吗？他们将能够再次与您创建订单和报价。",
+    "dialogDescription": "确定要取消屏蔽此用户吗？他们将能够再次与你创建订单和报价。",
     "dialogTitle": "取消屏蔽 {{username}}",
     "error": "取消屏蔽用户失败",
     "success": "已成功取消屏蔽 {{username}}"
@@ -5633,13 +5633,13 @@
   },
   "userSearch": {
     "noResults": "未找到用户",
-    "placeholder": "搜索用户……",
+    "placeholder": "搜索用户…",
     "typeToSearch": "输入以搜索用户"
   },
   "whitelabel": {
     "backToMain": "返回 SC Market",
     "loginRequired": "登录以访问此工作区",
-    "membershipRequired": "您必须是此组织的成员才能访问此工作区。",
+    "membershipRequired": "你必须是此组织的成员才能访问此工作区。",
     "signInCitizenId": "使用 Citizen ID 登录",
     "signInDiscord": "使用 Discord 登录"
   },
@@ -5656,10 +5656,10 @@
       "category": "类别",
       "clearFilters": "清除筛选",
       "filters": "筛选",
-      "headerTitle": "商品",
-      "loadError": "加载商品失败。",
-      "noResults": "未找到商品。",
-      "searchPlaceholder": "搜索商品...",
+      "headerTitle": "大宗商品",
+      "loadError": "加载大宗商品失败。",
+      "noResults": "未找到大宗商品。",
+      "searchPlaceholder": "搜索大宗商品…",
       "acqFilter": {
         "all": "全部",
         "mined": "可开采",
@@ -5675,11 +5675,11 @@
       "acqSalvage": "回收",
       "baseLabel": "基础",
       "bestLocations": "最佳地点",
-      "breadcrumbCommodities": "商品",
+      "breadcrumbCommodities": "大宗商品",
       "breadcrumbDetail": "详情",
       "breadcrumbWiki": "百科",
       "explosionRisk": "爆炸风险",
-      "headerTitle": "商品详情",
+      "headerTitle": "大宗商品详情",
       "instability": "不稳定性",
       "marketPrice": "市场价格",
       "miningLocations": "采矿地点",
@@ -5695,12 +5695,12 @@
       "viewOnMarket": "在市场查看"
     },
     "hub": {
-      "description": "浏览完整的 Star Citizen 游戏数据库：物品、飞船、商品、地点、制造商、蓝图和采矿资源。",
+      "description": "浏览完整的 Star Citizen 游戏数据库：物品、舰船、大宗商品、地点、制造商、蓝图和采矿资源。",
       "header": "游戏数据库",
-      "title": "游戏数据库 — Star Citizen 物品、飞船及更多 | SC Market",
+      "title": "游戏数据库 — Star Citizen 物品、舰船及更多 | SC Market",
       "sectionItems": "物品",
       "sectionShips": "舰船与载具",
-      "sectionCommodities": "商品",
+      "sectionCommodities": "大宗商品",
       "sectionLocations": "地点",
       "sectionManufacturers": "制造商",
       "sectionRefinery": "精炼厂",
@@ -5725,7 +5725,7 @@
       "gradeLabel": "等级",
       "loadError": "加载物品失败。",
       "noResults": "未找到结果。请尝试调整搜索条件。",
-      "searchPlaceholder": "搜索物品、类型、制造商...",
+      "searchPlaceholder": "搜索物品、类型、制造商…",
       "sizeLabel": "尺寸"
     },
     "itemDetail": {
@@ -5781,7 +5781,7 @@
     },
     "locations": {
       "noResults": "未找到地点",
-      "search": "搜索地点...",
+      "search": "搜索地点…",
       "title": "星图与地点"
     },
     "manufacturerDetail": {
@@ -5810,7 +5810,7 @@
       "colMethod": "方法",
       "colSpeed": "速度",
       "colYield": "产出",
-      "description": "精炼方法决定了原矿的处理速度以及您获得的精炼材料数量。快速方法节省时间，但可能浪费材料。谨慎方法可最大化产出，但耗时更长。",
+      "description": "精炼方法决定了原矿的处理速度以及你获得的精炼材料数量。快速方法节省时间，但可能浪费材料。谨慎方法可最大化产出，但耗时更长。",
       "headerTitle": "精炼方法",
       "processingHeader": "处理速度：{{speed}}",
       "title": "精炼方法",
@@ -5844,10 +5844,10 @@
       "categoryAll": "全部",
       "categoryGround": "地面载具",
       "categoryHoverbikes": "悬浮摩托",
-      "categoryShips": "飞船",
+      "categoryShips": "舰船",
       "clearAllFilters": "清除所有筛选",
       "crew": "机组人数",
-      "failedToLoad": "加载飞船失败。",
+      "failedToLoad": "加载舰船失败。",
       "filterCareer": "职业",
       "filterCategory": "类别",
       "filterManufacturer": "制造商",
@@ -5855,27 +5855,27 @@
       "filters": "筛选",
       "filterSize": "尺寸",
       "ground": "地面",
-      "headerTitle": "飞船与载具",
+      "headerTitle": "舰船与载具",
       "hoverbike": "悬浮摩托",
       "noResults": "未找到结果。",
-      "searchPlaceholder": "搜索飞船、载具、制造商...",
+      "searchPlaceholder": "搜索舰船、载具、制造商…",
       "sectionGround": "地面载具",
       "sectionHoverbikes": "悬浮摩托",
-      "sectionShips": "飞船",
+      "sectionShips": "舰船",
       "size": "尺寸",
       "sizeOption": "尺寸 {{size}}",
       "allShips": "所有舰船和载具"
     },
     "shipDetail": {
-      "breadcrumbShips": "飞船与载具",
+      "breadcrumbShips": "舰船与载具",
       "breadcrumbWiki": "百科",
       "crew": "机组人数：",
       "defaultLoadout": "默认配装",
       "dimensions": "尺寸：",
-      "failedToLoad": "加载飞船详情失败。请重试。",
+      "failedToLoad": "加载舰船详情失败。请重试。",
       "sizeChip": "尺寸 {{size}}",
-      "specifications": "飞船规格",
-      "title": "飞船详情"
+      "specifications": "舰船规格",
+      "title": "舰船详情"
     }
   },
   "wishlists": {
@@ -5943,7 +5943,7 @@
     },
     "manager": {
       "title": "关注列表",
-      "description": "关注物品，当有公开商品的价格达到或低于你的目标价时收到提醒。可在物品或商品页面点击“关注价格”，在此处添加，或在 Discord 中使用 /watchlist add。",
+      "description": "关注物品，当有公开商品的价格达到或低于你的目标价时收到提醒。可在物品或商品面点击“关注价格”，在此处添加，或在 Discord 中使用 /watchlist add。",
       "full": "你的关注列表已满（{{max}} 件）。请移除一件后再添加。",
       "loadError": "无法加载你的关注列表。",
       "removeError": "无法移除该物品。",
@@ -6050,7 +6050,7 @@
       "spectrum_set": "已设置 Spectrum ID",
       "username_released": "已释放用户名"
     },
-    "loading": "加载中...",
+    "loading": "加载中…",
     "locked": "已删除的账户、测试账户和站点管理员无法在此更改。",
     "noResults": "没有匹配的账户。",
     "results": "搜索结果",
@@ -6075,10 +6075,10 @@
   "orgLinkBack": {
     "title": "可选：链接到我们",
     "manageTitle": "链接到我们",
-    "line": "在 SC Market 上找到我们的商店：{{url}}",
-    "verifyHint": "完全可选，验证不需要它：如果愿意，也可以把这一行加到你的 RSI 组织页面，方便访客在 SC Market 上找到你们的商店。验证只检查上面的代码。",
-    "verifiedHint": "你的组织已验证！现在可以从 RSI 移除验证代码。如果愿意，可以在组织页面保留这一可选行，方便访客找到你们的商店。只有代码可以移除；这一行可以保留。",
-    "manageHint": "可选：把这一行加到你的 RSI 组织页面，方便访客在 SC Market 上找到你们的商店。它与验证无关，从不是必需的。",
+    "line": "在 SC Market 上找到我们的店铺：{{url}}",
+    "verifyHint": "完全可选，验证不需要它：如果愿意，也可以把这一行加到你的 RSI 组织页面，方便访客在 SC Market 上找到你们的店铺。验证只检查上面的代码。",
+    "verifiedHint": "你的组织已验证！现在可以从 RSI 移除验证代码。如果愿意，可以在组织页面保留这一可选行，方便访客找到你们的店铺。只有代码可以移除；这一行可以保留。",
+    "manageHint": "可选：把这一行加到你的 RSI 组织页面，方便访客在 SC Market 上找到你们的店铺。它与验证无关，从不是必需的。",
     "copy": "复制此行",
     "copied": "已复制",
     "continue": "继续"
@@ -6156,9 +6156,9 @@
       "listing": "商品",
       "byMember": "按成员统计的订单",
       "byMemberNote": "只有拥有“管理订单”权限的成员可以看到。按名称排列，用于分配工作，并非排名。无人认领的未完成订单：{{n}}。",
-      "noAssigned": "还没有订单分配给成员。",
+      "noAssigned": "还没有订单指派给成员。",
       "member": "成员",
-      "assigned": "已分配",
+      "assigned": "已指派",
       "done": "已完成",
       "open": "未完成"
     },
@@ -6183,8 +6183,8 @@
     },
     "hub": {
       "title": "组织店面",
-      "description": "SC Market 上的星际公民组织店面：已验证组织的店铺、服务和招募，附带已完成订单和评价。",
-      "intro": "已验证的星际公民组织的店铺、服务和招募，每个组织一页。订单直接发给组织。",
+      "description": "SC Market 上的 Star Citizen 组织店面：已验证组织的店铺、服务和招募，附带已完成订单和评价。",
+      "intro": "已验证的 Star Citizen 组织的店铺、服务和招募，每个组织一页。订单直接发给组织。",
       "filter": "按方向筛选",
       "all": "全部",
       "empty": "还没有店面。",
@@ -6292,17 +6292,17 @@
   },
   "shops": {
     "blocklist": {
-      "block": "拉黑 {{username}}",
-      "blocked": "已拉黑 {{username}}",
-      "blockedCount_other": "已拉黑 {{count}} 位用户",
-      "blockFailed": "拉黑用户失败",
+      "block": "屏蔽 {{username}}",
+      "blocked": "已屏蔽 {{username}}",
+      "blockedCount_other": "已屏蔽 {{count}} 位用户",
+      "blockFailed": "屏蔽用户失败",
       "reason": "原因（可选）",
-      "searchPlaceholder": "搜索要拉黑的用户",
-      "subtitle": "被拉黑的用户无法在本店下单或报价",
-      "title": "黑名单",
-      "unblocked": "已将 {{username}} 移出黑名单",
-      "unblockFailed": "移出黑名单失败",
-      "unblockLabel": "将 {{name}} 移出黑名单"
+      "searchPlaceholder": "搜索要屏蔽的用户",
+      "subtitle": "被屏蔽的用户无法在本店下单或报价",
+      "title": "屏蔽名单",
+      "unblocked": "已取消屏蔽 {{username}}",
+      "unblockFailed": "取消屏蔽失败",
+      "unblockLabel": "取消屏蔽 {{name}}"
     },
     "card": {
       "byOwner": "店主：{{name}}"
@@ -6312,7 +6312,7 @@
     },
     "directory": {
       "empty": "未找到店铺",
-      "search": "搜索店铺...",
+      "search": "搜索店铺…",
       "sortLabel": "店铺排序",
       "sortMostSales": "销量最多",
       "sortNameAZ": "名称 A-Z",
@@ -6352,7 +6352,7 @@
       "byOwner": "店主：<owner>{{name}}</owner>",
       "headRating": "评分",
       "headReview": "评价",
-      "loading": "加载中...",
+      "loading": "加载中…",
       "noDescription": "暂无简介",
       "noListings": "暂无在售商品",
       "noMatches": "没有符合搜索条件的商品",
@@ -6360,7 +6360,7 @@
       "noReviewsBody": "订单完成后，评价会显示在这里",
       "notFound": "未找到店铺",
       "owner": "店主",
-      "searchListings": "搜索商品...",
+      "searchListings": "搜索商品…",
       "since": "始于 {{date}}",
       "sortListings": "商品排序",
       "sortMostStock": "库存最多",
@@ -6449,9 +6449,9 @@
     "remaining": "剩余 {{n}}",
     "removeItemFailed": "移除商品失败",
     "rosterOnly": "仅限成员",
-    "searchBuyOrders": "搜索求购单...",
-    "searchItems": "搜索物品、分类...",
-    "searchItemsSellers": "搜索物品、分类、卖家...",
+    "searchBuyOrders": "搜索求购单…",
+    "searchItems": "搜索物品、分类…",
+    "searchItemsSellers": "搜索物品、分类、卖家…",
     "selectVariant": "选择款式",
     "settingsMoved": "市场设置现已按店铺管理，请前往店铺设置页面。",
     "standardVariant": "标准",
@@ -6576,7 +6576,7 @@
     "missionGiver": "任务发布者",
     "missionGiverLower": "任务发布者",
     "missionGiverPlaceholder": "例如 Miles",
-    "missionNamePlaceholder": "任务名称...",
+    "missionNamePlaceholder": "任务名称…",
     "nOfM": "{{m}} 选 {{n}}",
     "onceOnly": "仅一次",
     "partOfChain": "任务链的一环",
@@ -6596,7 +6596,7 @@
     "satisfaction": "满意度",
     "scope": "范围",
     "search": "搜索",
-    "searchPlaceholder": "搜索任务、星系、类别...",
+    "searchPlaceholder": "搜索任务、星系、类别…",
     "shareable": "可共享",
     "shipCount_other": "{{count}} 艘舰船",
     "showEventMissions": "显示活动任务",
@@ -6643,7 +6643,7 @@
     "destinations": "目的地",
     "scuCargo": "{{amount}} SCU 货物",
     "resourceCount_other": "{{count}} 种资源",
-    "haulingDetailsUnavailable": "模板内嵌合同的货运详情暂不可用。",
+    "haulingDetailsUnavailable": "模板内嵌合约的货运详情暂不可用。",
     "scuOre": "{{amount}} SCU 矿石",
     "noMiningData": "暂无采矿订单数据。",
     "repairTargetCount_other": "{{count}} 个维修目标",
@@ -6654,7 +6654,7 @@
     "entryFee": "报名费",
     "raceRouteUnavailable": "比赛路线数据暂不可用。",
     "noTypeData": "此任务暂无特定类型数据。",
-    "loadingRanks": "正在加载等级...",
+    "loadingRanks": "正在加载等级…",
     "noRankData": "{{scope}} 暂无等级数据",
     "negativeRepWarning": "此任务会<strong>降低</strong>你在该阵营的声望。完成后将使你趋向更低等级。",
     "crewSizeValue": "机组人数：<strong>{{size}}</strong>",
@@ -6676,7 +6676,7 @@
     "satisfactionQuestion": "你对这个任务的满意度如何？",
     "starsOutOf5": "{{value}} / 5 星",
     "commentOptional": "评论（可选）",
-    "commentPlaceholder": "分享你对这个任务的体验...",
+    "commentPlaceholder": "分享你对这个任务的体验…",
     "commentCharCount": "{{length}}/{{max}} 个字符",
     "alreadyRated": "你已评价过此任务。提交将更新你现有的评分。",
     "submitRating": "提交评分",
@@ -6686,7 +6686,7 @@
     "errorSubmitFailed": "提交评分失败，请重试。"
   },
   "contractsUi": {
-    "topShopsOffers": "热门商店（报价）",
+    "topShopsOffers": "热门店铺（报价）",
     "topUsersOffers": "热门用户（报价）",
     "offerSummary": "报价摘要",
     "totalOffers": "报价总数：",
@@ -6723,7 +6723,7 @@
       "collectionCount_other": "可获得的 {{count}} 个蓝图中已有 {{owned}} 个",
       "newThisWeek_other": "本周新增 {{count}} 个",
       "search": "搜索",
-      "searchPlaceholder": "物品或蓝图名称...",
+      "searchPlaceholder": "物品或蓝图名称…",
       "category": "类别",
       "subcategory": "子类别",
       "tier": "层级",
@@ -6739,7 +6739,7 @@
       "ingredientPlaceholder": "例如 Hephaestanite",
       "resetFilters": "重置筛选",
       "filters": "筛选",
-      "searchBarPlaceholder": "搜索蓝图、材料、类别...",
+      "searchBarPlaceholder": "搜索蓝图、材料、类别…",
       "loadError": "加载蓝图失败，请重试。",
       "columnItem": "物品",
       "columnTags": "标签",
@@ -6800,7 +6800,7 @@
     "importFromInventory": "从库存导入",
     "importFromInventoryOrg": "从库存导入（+ 组织）",
     "addMaterial": "添加材料",
-    "searchResources": "搜索资源...",
+    "searchResources": "搜索资源…",
     "noMaterials": "请在上方搜索并添加材料",
     "removeMaterial": "移除材料",
     "weight": "权重：{{percent}}%",
@@ -6838,7 +6838,7 @@
     },
     "roster": {
       "title": "供应商名单",
-      "subtitle": "管理你信任的供应商。首选供应商在定向求购订单中享有优先曝光。",
+      "subtitle": "管理你信任的供应商。首选供应商在定向求购单中享有优先曝光。",
       "addSupplier": "添加供应商",
       "supplierType": "供应商类型",
       "userUuid": "用户 UUID",
@@ -6934,7 +6934,7 @@
     },
     "dashboard": {
       "title": "供应商面板",
-      "subtitle": "一览你的求购订单、采购申请和履约动态",
+      "subtitle": "一览你的求购单、采购申请和履约动态",
       "refreshAll": "全部刷新",
       "visibility": {
         "targeted": "定向",
@@ -6958,7 +6958,7 @@
         "hours_other": "{{count}} 小时前",
         "days_other": "{{count}} 天前"
       },
-      "incomingBuyOrders": "收到的求购订单",
+      "incomingBuyOrders": "收到的求购单",
       "activeCount_other": "{{count}} 个有效",
       "tabs": {
         "targeted": "定向",
@@ -6968,7 +6968,7 @@
         "rosterCount_other": "名单（{{count}}）",
         "publicCount_other": "公开（{{count}}）"
       },
-      "noBuyOrders": "此类别中没有求购订单",
+      "noBuyOrders": "此类别中没有求购单",
       "columns": {
         "item": "物品",
         "visibility": "可见性",
@@ -6990,14 +6990,14 @@
       "noRecentOrders": "暂无近期订单",
       "openOrder": "打开订单",
       "activity": {
-        "targetedBuyOrder": "<b>{{buyer}}</b> 发送了 <b>{{item}}</b> 的定向求购订单",
+        "targetedBuyOrder": "<b>{{buyer}}</b> 发送了 <b>{{item}}</b> 的定向求购单",
         "newRequisition": "来自 <b>{{buyer}}</b> 的新采购申请 <b>{{title}}</b>",
         "orderCompleted": "订单 <b>{{title}}</b> 已完成 — <b>{{amount}} aUEC</b>"
       },
       "noActivity": "暂无近期动态",
       "activityTitle": "动态",
       "stats": {
-        "activeBuyOrders": "有效求购订单",
+        "activeBuyOrders": "有效求购单",
         "targetedAtMe_other": "其中 {{count}} 个指定给我",
         "openRequisitions": "未完成的采购申请",
         "awaitingResponse_other": "{{count}} 个待回复",
@@ -7026,7 +7026,7 @@
       "general": "常规",
       "shopName": "店铺名称",
       "description": "描述",
-      "selectOrganization": "选择组织...",
+      "selectOrganization": "选择组织…",
       "addTag": "添加标签",
       "addLanguage": "添加语言",
       "orders": "订单",
@@ -7036,7 +7036,7 @@
       "backToMyShops": "← 返回我的店铺",
       "intro": "在 SC Market 上开设你的店面。创建后可以再调整设置。",
       "namePlaceholder": "我的超棒店铺",
-      "descriptionPlaceholder": "告诉买家你的店铺是做什么的...",
+      "descriptionPlaceholder": "告诉买家你的店铺是做什么的…",
       "ownership": "所有权",
       "personalShop": "个人店铺",
       "organizationShop": "组织店铺",
@@ -7054,14 +7054,14 @@
       "ordersSubtitle": "配置买家与店铺的互动方式",
       "marketOrderTemplate": "市场订单模板",
       "marketOrderTemplateHelper": "买家下定制订单时显示的模板",
-      "discordSubtitle": "本店订单和报价帖子的创建位置",
-      "discordInfoOrg": "要将此商店的订单和报价帖子发送到专属频道，请在下方将机器人添加到服务器并选择频道，或输入 Discord 服务器 ID 和频道 ID。两项都留空则使用你组织的帖子频道（在组织的 Discord 集成标签页或在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并能看到该频道。",
-      "discordInfoPersonal": "要将此商店的订单和报价帖子发送到专属频道，请在下方将机器人添加到服务器并选择频道，或输入 Discord 服务器 ID 和频道 ID。两项都留空则使用你自己的帖子频道（在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并能看到该频道。",
+      "discordSubtitle": "本店订单和报价讨论帖的创建位置",
+      "discordInfoOrg": "要将此店铺的订单和报价讨论帖发送到专属频道，请在下方将机器人添加到服务器并选择频道，或输入 Discord 服务器 ID 和频道 ID。两项都留空则使用你组织的讨论帖频道（在组织的 Discord 集成标签页或在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并能看到该频道。",
+      "discordInfoPersonal": "要将此店铺的订单和报价讨论帖发送到专属频道，请在下方将机器人添加到服务器并选择频道，或输入 Discord 服务器 ID 和频道 ID。两项都留空则使用你自己的讨论帖频道（在 Discord 中运行 /setup threads 设置）。SC Market 机器人必须在该服务器中并能看到该频道。",
       "discordServerId": "Discord 服务器 ID",
       "discordIdPlaceholder": "例如 123456789012345678",
       "discordServerIdHelper": "服务器（公会）ID",
-      "threadChannelId": "帖子频道 ID",
-      "threadChannelHelper": "创建帖子的频道",
+      "threadChannelId": "讨论帖频道 ID",
+      "threadChannelHelper": "创建讨论帖的频道",
       "saved": "店铺设置已保存"
     },
     "webhooks": {
@@ -7076,8 +7076,8 @@
           "description": "本店的新订单或报价"
         },
         "orderAssigned": {
-          "label": "订单已分配",
-          "description": "订单被分配给成员或被成员认领"
+          "label": "订单已指派",
+          "description": "订单被指派给成员或被成员认领"
         },
         "orderStatusChange": {
           "label": "订单状态变更",
@@ -7092,8 +7092,8 @@
           "description": "本店某个拍卖收到新出价"
         },
         "publicContractCreate": {
-          "label": "新的公开合同（全站）",
-          "description": "任何人在 SC Market 上发布的每一个新公开合同"
+          "label": "新的公开合约（全站）",
+          "description": "任何人在 SC Market 上发布的每一个新公开合约"
         }
       }
     },
@@ -7145,7 +7145,7 @@
       "confirmBodyUser": "你即将把 <strong>{{shop}}</strong> 转移到<strong>你的个人账户</strong>。",
       "confirmBodyOrg": "你即将把 <strong>{{shop}}</strong> 转移给 <strong>{{org}}</strong>。",
       "confirmBodySelectedOrg": "你即将把 <strong>{{shop}}</strong> 转移给<strong>所选组织</strong>。",
-      "confirmWarning": "所有权将立即转移。由已不再与新所有者关联的人员持有的进行中订单和报价分配可能会被重置，以便新所有者重新认领。已完成的订单不受影响。如果你无法管理新所有者，可能会失去对本店的访问权限。",
+      "confirmWarning": "所有权将立即转移。由已不再与新所有者关联的人员持有的进行中订单和报价指派可能会被重置，以便新所有者重新认领。已完成的订单不受影响。如果你无法管理新所有者，可能会失去对本店的访问权限。",
       "confirm": "确认转移",
       "transferred": "店铺所有权已转移"
     },
@@ -7222,7 +7222,7 @@
       "spreadPercentMid": "中间价的 {{percent}}%",
       "listings": "商品",
       "sellerCount_other": "{{count}} 位卖家",
-      "buyOrders": "求购订单",
+      "buyOrders": "求购单",
       "unitsWanted_other": "求购 {{formatted}} 件",
       "totalStock": "总库存",
       "unitsAvailable": "件可用",
@@ -7253,12 +7253,12 @@
       "colBidPerUnit": "出价 / 件",
       "colQty": "数量",
       "colTotal": "合计",
-      "noActiveBuyOrders": "暂无有效的求购订单",
+      "noActiveBuyOrders": "暂无有效的求购单",
       "analytics": "分析",
       "priceHistory": "价格历史",
       "orderDepth": "订单深度",
       "createListing": "+ 创建商品",
-      "createBuyOrder": "+ 求购订单",
+      "createBuyOrder": "+ 求购单",
       "qualityDistribution": "品质分布",
       "priceByQualityTier": "按品质层级划分的价格"
     },
@@ -7269,7 +7269,7 @@
       "addFailed": "无法添加物品。",
       "title": "添加物品到购物清单",
       "searchItem": "搜索物品 *",
-      "searchPlaceholder": "输入以搜索...",
+      "searchPlaceholder": "输入以搜索…",
       "minChars_other": "请至少输入 {{count}} 个字符",
       "noItemsFound": "未找到物品",
       "howToGet": "你想如何获取此物品？",
@@ -7286,7 +7286,7 @@
       "priorityMedium": "中",
       "priorityCritical": "紧急",
       "notesOptional": "备注（可选）",
-      "notesPlaceholder": "添加备注...",
+      "notesPlaceholder": "添加备注…",
       "addIngredients": "添加材料",
       "addItem": "添加物品"
     },
@@ -7294,10 +7294,10 @@
       "sortQuantity": "数量",
       "sortLowestPrice": "最低价格",
       "sortName": "名称",
-      "sortMostShops": "商店最多",
+      "sortMostShops": "店铺最多",
       "ascending": "升序",
       "descending": "降序",
-      "itemTypePlaceholder": "例如 Commodity",
+      "itemTypePlaceholder": "例如：大宗商品",
       "availableShort": "可用 {{quantity}}",
       "sellerCount_other": "{{count}} 位卖家"
     },
@@ -7341,7 +7341,7 @@
       "open": "打开调试面板",
       "featureFlags": "功能开关",
       "override": "已覆盖",
-      "updating": "正在更新开关……页面将重新加载。",
+      "updating": "正在更新开关…页面将重新加载。",
       "notice": "此面板仅对开发者可见。更改后页面将重新加载。"
     }
   },
@@ -7505,7 +7505,7 @@
       "notInEffect": "未生效——“已启用”处于关闭状态，因此无论此比例如何，所有用户都使用旧版体验。",
       "turnOnEnabled": "打开“已启用”",
       "rolloutPercentage": "发布比例",
-      "saving": "保存中...",
+      "saving": "保存中…",
       "perUserOverrides": "按用户覆盖",
       "addOverride": "添加覆盖",
       "username": "用户名",
@@ -7518,7 +7518,7 @@
       "searchByUsername": "按用户名搜索",
       "enabledForUser": "对此用户启用",
       "add": "添加",
-      "searchFlags": "搜索开关...",
+      "searchFlags": "搜索开关…",
       "retry": "重试",
       "loadFailed": "无法加载功能开关。",
       "flagSummary_other": "默认：{{version}} · 发布比例：{{percent}}% · {{count}} 个覆盖",
@@ -7555,13 +7555,13 @@
       "importStarted": "已开始导入",
       "uploadFailed": "上传失败",
       "intro": "上传从 Star Citizen 的 Data.p4k 中提取的 <code>game-data.zip</code>。",
-      "shopsNotice": "游戏内商店（维基物品页面上的“购买地点”）不会被导入：游戏文件中的商店数据已过时，不包含当前的商店库存和价格。ZIP 中的 <code>shop-inventories.json</code> 会被忽略（任务会注明）。",
+      "shopsNotice": "游戏内商店（百科物品页面上的“购买地点”）不会被导入：游戏文件中的商店数据已过时，不包含当前的商店库存和价格。ZIP 中的 <code>shop-inventories.json</code> 会被忽略（任务会注明）。",
       "dropHint": "将 game-data.zip 拖放到此处，或点击浏览",
       "channel": "渠道",
       "gameVersion": "游戏版本",
       "gameVersionPlaceholder": "例如 4.7.1",
-      "uploading": "上传中...",
-      "importRunning": "正在导入...",
+      "uploading": "上传中…",
+      "importRunning": "正在导入…",
       "importButton": "导入游戏数据",
       "history": "导入历史",
       "started": "开始时间",
@@ -7801,7 +7801,7 @@
       "active": "有效"
     },
     "list": {
-      "loading": "正在加载令牌...",
+      "loading": "正在加载令牌…",
       "loadError": "无法加载 API 令牌，请稍后再试。",
       "emptyTitle": "尚未创建 API 令牌",
       "emptyBody": "创建你的第一个 API 令牌，开始与第三方应用集成。",
@@ -7841,7 +7841,7 @@
       "howToAuth": "<strong>如何进行身份验证：</strong>在 API 请求的 <code>Authorization</code> 请求头中包含该令牌：",
       "important": "<strong>重要：</strong>请妥善保管此令牌。它可按你授予的权限访问你的账户。如果丢失此令牌，你需要重新创建一个。",
       "orgAccessHelp": "选择此令牌可代为操作的组织。留空则不授予任何组织访问权限：令牌只能使用你的个人账户。拥有“完全访问”范围的令牌可代表你的所有组织操作。",
-      "creating": "正在创建...",
+      "creating": "正在创建…",
       "submit": "创建令牌",
       "error": "无法创建令牌"
     },
@@ -7851,7 +7851,7 @@
       "error": "无法更新令牌",
       "contractorAccessTitle": "承包商访问权限",
       "contractorAccessHelp": "将此令牌限制为特定承包商。留空则可访问所有承包商。",
-      "updating": "正在更新...",
+      "updating": "正在更新…",
       "submit": "更新令牌"
     },
     "details": {
@@ -7880,7 +7880,7 @@
     "scopes": {
       "categories": {
         "profile": "个人资料",
-        "market": "市集",
+        "market": "市场",
         "orders": "订单",
         "contractors": "组织",
         "services": "服务",
@@ -7896,8 +7896,8 @@
       "labels": {
         "profileRead": "读取个人资料",
         "profileWrite": "写入个人资料",
-        "marketRead": "读取市集",
-        "marketWrite": "写入市集",
+        "marketRead": "读取市场",
+        "marketWrite": "写入市场",
         "ordersRead": "读取订单",
         "ordersWrite": "写入订单",
         "contractorsRead": "读取组织",
@@ -7942,18 +7942,18 @@
         "name": "购物清单名称",
         "namePlaceholder": "例如：舰船组件、护甲套装、采矿装备",
         "description": "描述（可选）",
-        "descriptionPlaceholder": "添加关于此购物清单的备注...",
+        "descriptionPlaceholder": "添加关于此购物清单的备注…",
         "makePublic": "设为公开",
         "collaborativeHelp": "{{org}} 的成员可以编辑此购物清单",
         "collaborativeNoOrg": "加入组织即可启用协作模式",
         "ownedBy": "此购物清单将归 <strong>{{org}}</strong> 所有，并对其成员可见。",
-        "creating": "正在创建...",
+        "creating": "正在创建…",
         "submit": "创建购物清单"
       },
       "deleteDialog": {
         "title": "删除购物清单？",
         "body": "确定要删除 <strong>{{name}}</strong> 吗？此操作无法撤销，并会移除此心愿单中的所有物品。",
-        "deleting": "正在删除..."
+        "deleting": "正在删除…"
       }
     },
     "share": {
@@ -8000,7 +8000,7 @@
       "description": "描述",
       "acquired": "已获得",
       "craft": "制作：{{name}}",
-      "buyFromMarket": "从市集购买",
+      "buyFromMarket": "从市场购买",
       "itemActionsFor": "{{name}} 的操作"
     }
   },
@@ -8021,7 +8021,7 @@
       "colType": "类型",
       "colMethod": "方式",
       "colProbability": "概率",
-      "viewMarketListings": "查看市集商品",
+      "viewMarketListings": "查看市场商品",
       "range": "范围",
       "mostLikely": "最可能"
     },
@@ -8039,13 +8039,13 @@
     },
     "oreBrowser": {
       "expShort": "爆炸：{{value}}",
-      "searchPlaceholder": "搜索矿石、星系、稀有度...",
+      "searchPlaceholder": "搜索矿石、星系、稀有度…",
       "marketPrice": "市场价格",
       "locations": "地点",
       "unknownSystem": "未知"
     },
     "locationBrowser": {
-      "searchPlaceholder": "搜索地点、星系、类型...",
+      "searchPlaceholder": "搜索地点、星系、类型…",
       "moreOres_other": "另外 {{count}} 种",
       "oreCount_other": "{{count}} 种矿石"
     }
@@ -8095,7 +8095,7 @@
       "tierValue": "等级 {{tier}}"
     },
     "search": {
-      "placeholder": "搜索...",
+      "placeholder": "搜索…",
       "ariaLabel": "搜索",
       "tags": {
         "illegal": "非法",
@@ -8142,7 +8142,7 @@
   "emailUi": {
     "verification": {
       "pageTitle": "邮箱验证",
-      "verifying": "正在验证你的邮箱地址...",
+      "verifying": "正在验证你的邮箱地址…",
       "successTitle": "邮箱已验证！",
       "failedTitle": "验证失败",
       "invalidTitle": "无效请求",
@@ -8151,7 +8151,7 @@
     "unsubscribe": {
       "pageTitle": "退订邮件",
       "managePreferences": "管理偏好设置",
-      "unsubscribing": "正在退订...",
+      "unsubscribing": "正在退订…",
       "successTitle": "你已退订",
       "turnOffAll": "关闭所有邮件",
       "failedTitle": "无法退订"
@@ -8160,7 +8160,7 @@
   "appUi": {
     "adminUsers": {
       "banned": "已封禁",
-      "membershipLoading": "正在加载成员分析...",
+      "membershipLoading": "正在加载成员分析…",
       "membershipError": "加载成员分析时出错：{{error}}",
       "membershipEmpty": "暂无成员数据",
       "totalMembers": "成员总数",
@@ -8178,11 +8178,11 @@
       "maximumAria": "{{name}}最大值"
     },
     "charts": {
-      "loadingChart": "正在加载图表...",
-      "loadingPriceChart": "正在加载价格图表..."
+      "loadingChart": "正在加载图表…",
+      "loadingPriceChart": "正在加载价格图表…"
     },
     "commandPalette": {
-      "placeholder": "搜索页面、操作、商品...",
+      "placeholder": "搜索页面、操作、商品…",
       "noResults": "没有与“{{query}}”匹配的结果",
       "hintNavigate": "导航",
       "hintSelect": "选择",
@@ -8193,22 +8193,22 @@
         "content": "商品"
       },
       "items": {
-        "market": "市集",
+        "market": "市场",
         "services": "服务",
-        "contracts": "合同",
-        "buyOrders": "求购订单",
+        "contracts": "合约",
+        "buyOrders": "求购单",
         "shops": "店铺",
         "orgs": "组织",
         "recruiting": "招募",
         "missions": "任务",
         "blueprints": "蓝图",
         "mining": "采矿",
-        "wiki": "维基",
+        "wiki": "百科",
         "resources": "资源",
         "help": "帮助与指南",
         "orders": "我的订单",
         "messages": "消息",
-        "dashboard": "仪表板",
+        "dashboard": "仪表盘",
         "settings": "设置",
         "priceAlerts": "价格提醒",
         "priceAlertsDescription": "你的关注列表和提醒渠道",
@@ -8412,7 +8412,7 @@
     "actions": {
       "unknown": "未知通知",
       "orderCreate": "新订单已创建",
-      "orderAssigned": "分配给你的订单",
+      "orderAssigned": "指派给你的订单",
       "orderStatusFulfilled": "订单已完成",
       "orderStatusInProgress": "订单进行中",
       "orderStatusNotStarted": "订单未开始",
@@ -8487,7 +8487,7 @@
   },
   "marketUi2": {
     "createBuyOrder": {
-      "failed": "创建购买订单失败"
+      "failed": "创建求购单失败"
     },
     "aggregate": {
       "askSupply": "卖价（供应）",
@@ -8505,7 +8505,7 @@
   },
   "chromeUi": {
     "fab": {
-      "viewContracts": "查看合同",
+      "viewContracts": "查看合约",
       "quickActions": "快捷操作"
     },
     "fonts": {
@@ -8735,7 +8735,7 @@
       "wasteful": "粗放"
     },
     "manufacturerSpecialties": {
-      "ships": "飞船",
+      "ships": "舰船",
       "armor": "护甲",
       "weapons": "武器",
       "consumer": "消费品",
@@ -8766,15 +8766,15 @@
     },
     "myStock": {
       "title": "我的库存是你自己的批次",
-      "body": "“我的库存”列出你在所有商店中拥有的每个库存批次。在这里添加的批次默认不上架，加入商品之前不会出售。"
+      "body": "“我的库存”列出你在所有店铺中拥有的每个库存批次。在这里添加的批次默认不上架，加入商品之前不会出售。"
     },
     "shopPermissions": {
-      "title": "谁可以管理你组织的商店",
-      "body": "“管理市场”负责整个商店：设置、商品和库存。“管理库存”只能修改库存批次，例如数量和地点。“管理订单”处理商店的订单和报价。"
+      "title": "谁可以管理你组织的店铺",
+      "body": "“管理市场”负责整个店铺：设置、商品和库存。“管理库存”只能修改库存批次，例如数量和地点。“管理订单”处理店铺的订单和报价。"
     },
     "discordThreadsAlerts": {
-      "title": "订单帖子还是订单提醒？",
-      "body": "订单帖子会为每个新订单和报价创建一个与买家的私密帖子。订单提醒会把每一个发布到频道中，并为组织成员附带认领按钮。请在你的商店或组织的 Discord 设置中添加机器人并在那里选择频道；对于直接向你个人下的订单，请在 Discord 中运行 /setup threads 或 /setup alerts。"
+      "title": "订单讨论帖还是订单提醒？",
+      "body": "订单讨论帖会为每个新订单和报价创建一个与买家的私密讨论帖。订单提醒会把每一个发布到频道中，并为组织成员附带认领按钮。请在你的店铺或组织的 Discord 设置中添加机器人并在那里选择频道；对于直接向你个人下的订单，请在 Discord 中运行 /setup threads 或 /setup alerts。"
     },
     "uexImport": {
       "title": "从 UEX 复制你的商品",
@@ -8799,7 +8799,7 @@
     "userHint": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
     "userHintNoDm": "让你可以在 Discord 的任何地方使用 SC Market 命令。",
     "server": "添加到 Discord 服务器",
-    "serverHint": "用于在你自己的服务器中使用订单讨论串和提醒。",
+    "serverHint": "用于在你自己的服务器中使用订单讨论帖和提醒。",
     "cta": {
       "title": "将 SC Market 添加到你的 Discord",
       "why": "这样即使我们不在同一个服务器中，也能就报价和订单联系你。",
@@ -8832,15 +8832,15 @@
       },
       "server_added": {
         "title": "机器人已加入你的服务器",
-        "body": "要在那里接收订单帖子和提醒，请从你的商店或组织的 Discord 设置中再次添加机器人（会自动为你关联服务器），或在频道中运行 /setup threads。"
+        "body": "要在那里接收订单讨论帖和提醒，请从你的店铺或组织的 Discord 设置中再次添加机器人（会自动为你关联服务器），或在频道中运行 /setup threads。"
       },
       "server_sign_in": {
         "title": "请先登录",
-        "body": "请登录 SC Market，然后从你的商店或组织的 Discord 设置中添加机器人。"
+        "body": "请登录 SC Market，然后从你的店铺或组织的 Discord 设置中添加机器人。"
       },
       "server_forbidden": {
         "title": "你无法管理此 Discord 集成",
-        "body": "关联服务器需要商店的 Manage Market 权限，或组织的 Manage Webhooks 权限。没有关联任何内容；如果机器人已添加，它会留在服务器中但未关联。"
+        "body": "关联服务器需要店铺的 Manage Market 权限，或组织的 Manage Webhooks 权限。没有关联任何内容；如果机器人已添加，它会留在服务器中但未关联。"
       },
       "cancelled": {
         "title": "没有添加任何内容",
@@ -8865,14 +8865,14 @@
     "pauseBody_other": "将暂停 {{count}} 个商品：它们会从市场中隐藏，不会被删除。你可以随时在商品页面重新上架。",
     "pauseConfirm": "暂停",
     "pauseNothing": "没有需要暂停的商品：这些商品已暂停或已不再上架。",
-    "pauseDone_other": "完成：已暂停 {{count}} 个商品。你可以随时在商品页面重新上架。",
+    "pauseDone_other": "完成：已暂停 {{count}} 个商品。你可以随时在商品面重新上架。",
     "manage": "管理商品",
     "notNow": "暂不",
     "invalid": "此链接无效，可能复制不完整。",
-    "expired": "此链接已过期。你仍可以在商品页面刷新或暂停你的商品。",
+    "expired": "此链接已过期。你仍可以在商品面刷新或暂停你的商品。",
     "failed": "出了点问题，请重试。",
     "retry": "重试",
-    "moreListings": "……还有 {{count}} 个",
+    "moreListings": "…还有 {{count}} 个",
     "testDone": "测试模式：没有更改任何商品。",
     "testPreview": "测试模式：确认不会更改任何商品。",
     "feedback": {
@@ -8902,13 +8902,13 @@
     "title": "你的 Discord 服务器",
     "saved": "已保存。新的订单和报价会发送到你选择的频道。",
     "botGone": "SC Market 机器人已不在此服务器中。请重新添加，或解除该服务器的关联。",
-    "threadChannel": "订单帖子频道",
-    "noThreads": "此服务器不创建订单帖子",
+    "threadChannel": "订单讨论帖频道",
+    "noThreads": "此服务器不创建订单讨论帖",
     "alertChannels": "订单提醒频道",
-    "channelHelp": "帖子：为每个新订单和报价与买家建立私密帖子（在论坛频道中为一篇帖子）。提醒：为每个新订单和报价发布一条带“认领”按钮的消息。机器人需要能查看所选频道并在其中发言。",
+    "channelHelp": "讨论帖：为每个新订单和报价与买家建立私密讨论帖（在论坛频道中为一篇讨论帖）。提醒：为每个新订单和报价发布一条带“认领”按钮的消息。机器人需要能查看所选频道并在其中发言。",
     "unlink": "解除服务器关联",
     "save": "保存频道",
-    "justLinked": "机器人已加入你的服务器，服务器已关联。请在下方选择订单帖子和提醒的频道。",
+    "justLinked": "机器人已加入你的服务器，服务器已关联。请在下方选择订单讨论帖和提醒的频道。",
     "add": "将机器人添加到服务器",
     "addHelp": "Discord 会询问要添加到哪个服务器（你需要在该服务器拥有“管理服务器”权限）。完成后你会回到这里，服务器已关联，可以选择频道。"
   }
