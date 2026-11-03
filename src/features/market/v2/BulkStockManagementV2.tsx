@@ -8,7 +8,7 @@
  * listing_item_lot, and "inventory" is the v2 API for your own lots.
  */
 
-import React, { useState, useCallback, useMemo, createContext, useContext, ReactNode } from "react"
+import React, { useState, useCallback, useMemo, createContext, useContext, useLayoutEffect, useRef, ReactNode } from "react"
 import {
   Avatar,
   Autocomplete,
@@ -294,12 +294,17 @@ function StockSearchAreaV2() {
 
 function QuantityEditCell(params: GridRenderEditCellParams) {
   const apiRef = useGridApiContext()
+  const inputRef = useRef<HTMLInputElement>(null)
+  // The grid says which cell holds focus (editing started there); follow it.
+  useLayoutEffect(() => {
+    if (params.hasFocus) inputRef.current?.focus()
+  }, [params.hasFocus])
   return (
     <TextField
       type="number"
       size="small"
       fullWidth
-      autoFocus
+      inputRef={inputRef}
       onFocus={selectOnFocus}
       value={params.value ?? 0}
       onChange={(e) => {

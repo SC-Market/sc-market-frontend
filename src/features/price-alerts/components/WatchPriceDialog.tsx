@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 import {
   useAddWatchlistItemMutation,
   useRemoveWatchlistItemMutation,
@@ -57,6 +58,7 @@ export function WatchPriceDialog({
   qualityRelevant = false,
 }: WatchPriceDialogProps) {
   const { t } = useTranslation()
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const fmt = useFormatters()
   const issueAlert = useAlertHook()
   const initial =
@@ -162,7 +164,7 @@ export function WatchPriceDialog({
             )}
           </Typography>
           <TextField
-            autoFocus
+            inputRef={focusOnReveal}
             label={t("priceAlerts.watch.targetPrice", "Target price")}
             value={value}
             onChange={(e) => setValue(e.target.value.replace(/[^\d]/g, ""))}

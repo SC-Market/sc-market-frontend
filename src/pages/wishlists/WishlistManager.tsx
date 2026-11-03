@@ -47,6 +47,7 @@ import {
 } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { Trans, useTranslation } from "react-i18next"
+import { useFocusOnReveal } from "../../hooks/accessibility/useFocusOnReveal"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -70,6 +71,7 @@ import { useFormatters } from "../../util/format"
 export function WishlistManager() {
   const fmt = useFormatters()
   const { t } = useTranslation()
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const theme = useTheme<ExtendedTheme>()
   const { data: userProfile } = useGetUserProfileQuery()
   const primaryContractor = userProfile?.contractors?.[0]
@@ -373,7 +375,7 @@ export function WishlistManager() {
               onChange={(e) => setNewWishlistName(e.target.value)}
               fullWidth
               required
-              autoFocus
+              inputRef={focusOnReveal}
               placeholder={t("wishlistsUi.manager.createDialog.namePlaceholder")}
             />
 

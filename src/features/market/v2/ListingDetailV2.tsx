@@ -358,7 +358,7 @@ export function ListingDetailV2() {
                                 />
                               </Box>
                             ) : (
-                              <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
+                              <Typography key={item.item_id} variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
                                 {t("marketV2.noVariants")}
                               </Typography>
                             ),

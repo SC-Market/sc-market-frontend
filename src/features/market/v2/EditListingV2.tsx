@@ -594,7 +594,6 @@ export function EditListingV2() {
               <TextField
                 fullWidth
                 size="small"
-                autoFocus
                 id={LISTING_FIELD_IDS.title}
                 label={t("EditListingV2.title", "Title")}
                 value={title}

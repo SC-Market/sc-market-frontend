@@ -12,18 +12,26 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
 import { useFormatters } from "../../util/format"
+const ARROW_MOVES: Record<string, [number, number]> = {
+  ArrowUp: [0, -1],
+  ArrowDown: [0, 1],
+  ArrowLeft: [-1, 0],
+  ArrowRight: [1, 0],
+}
+
 function AvailabilityItem(props: {
   day: number
   slot: number
   value: boolean
+  label: string
 }) {
   const theme = useTheme<ExtendedTheme>()
-  const { day, slot, value } = props
+  const { day, slot, value, label } = props
   const {
-    clicked,
     setClicked,
     startSelect,
     endSelect,
+    toggleSlot,
     startedSelect,
     endedSelect,
   } = useAvailability()
@@ -52,7 +60,29 @@ function AvailabilityItem(props: {
           ? theme.palette.success.main
           : theme.palette.action.disabledBackground || theme.palette.grey[700],
       }}
+      role="checkbox"
+      aria-checked={active}
+      aria-label={label}
+      data-cell={`${day}-${slot}`}
+      // One tab stop for the grid; arrow keys move between cells.
+      tabIndex={day === 0 && slot === 0 ? 0 : -1}
+      onKeyDown={(e) => {
+        const move = ARROW_MOVES[e.key]
+        if (move) {
+          e.preventDefault()
+          e.currentTarget
+            .closest("table")
+            ?.querySelector<HTMLElement>(
+              `[data-cell="${day + move[0]}-${slot + move[1]}"]`,
+            )
+            ?.focus()
+        } else if (e.key === " " || e.key === "Enter") {
+          e.preventDefault()
+          toggleSlot(day, slot)
+        }
+      }}
       onMouseOver={() => endSelect(day, slot)}
+      onFocus={() => endSelect(day, slot)}
       onMouseDown={() => startSelect(day, slot)}
       onMouseUp={() => setClicked(false)}
       onTouchMove={() => endSelect(day, slot)}
@@ -124,14 +154,15 @@ export function AvailabilitySelector(props: {
           const left = Math.min(startedSelect?.day, endedSelect?.day)
           const right = Math.max(startedSelect?.day, endedSelect?.day)
 
-          for (let day = left; day <= right; day++) {
-            for (let slot = top; slot <= bottom; slot++) {
-              setSelections((old) => {
-                old[day * 48 + slot] = startedSelect.value
-                return old
-              })
+          setSelections((old) => {
+            const next = [...old]
+            for (let day = left; day <= right; day++) {
+              for (let slot = top; slot <= bottom; slot++) {
+                next[day * 48 + slot] = startedSelect.value
+              }
             }
-          }
+            return next
+          })
         }
 
         setStartedSelect(null)
@@ -171,6 +202,12 @@ export function AvailabilitySelector(props: {
             },
             startedSelect,
             endSelect: (day, slot) => setEndedSelect({ day, slot }),
+            toggleSlot: (day, slot) =>
+              setSelections((old) => {
+                const next = [...old]
+                next[day * 48 + slot] = !old[day * 48 + slot]
+                return next
+              }),
             endedSelect,
           }}
         >
@@ -225,6 +262,7 @@ export function AvailabilitySelector(props: {
                       day={day}
                       slot={slot}
                       value={selections[day * 48 + slot]}
+                      label={`${daysOfWeek[day]} ${String(Math.floor(slot / 2)).padStart(2, "0")}:${slot % 2 ? "30" : "00"}`}
                     />
                   ))}
                 </tr>

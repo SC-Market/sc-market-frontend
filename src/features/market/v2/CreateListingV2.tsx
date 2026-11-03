@@ -448,7 +448,6 @@ export function CreateListingV2() {
           <FormPaper title={t("CreateListingV2.about", "About")}>
             <Grid item xs={12}>
               <GameItemSearchAutocomplete
-                autoFocus
                 required
                 errorText={fieldError("game_item_id")}
                 value={gameItemName}

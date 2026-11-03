@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 import {
   useConfirmTotpEnrollmentMutation,
   useStartTotpEnrollmentMutation,
@@ -31,6 +32,7 @@ import { RecoveryCodesPanel } from "./RecoveryCodesPanel"
  */
 export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boolean) => void }) {
   const { t } = useTranslation()
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const dispatch = useAppDispatch()
   const [step, setStep] = useState(0)
   const [code, setCode] = useState("")
@@ -159,7 +161,7 @@ export function MfaEnrollDialog(props: { open: boolean; onClose: (completed: boo
                   confirmState.reset()
                   setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
                 }}
-                autoFocus
+                inputRef={focusOnReveal}
                 autoComplete="one-time-code"
                 inputProps={{
                   inputMode: "numeric",

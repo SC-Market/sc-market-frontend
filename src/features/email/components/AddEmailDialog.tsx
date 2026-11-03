@@ -11,6 +11,7 @@ import {
   Checkbox,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 
 interface AddEmailDialogProps {
   open: boolean
@@ -38,12 +39,13 @@ export function AddEmailDialog({
   onSubmit,
 }: AddEmailDialogProps) {
   const { t } = useTranslation()
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{t("settings.email.addEmailDialog.title")}</DialogTitle>
       <DialogContent>
         <TextField
-          autoFocus
+          inputRef={focusOnReveal}
           margin="dense"
           label={t("settings.email.emailAddress")}
           type="email"

@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 
 interface EditEmailDialogProps {
   open: boolean
@@ -25,12 +26,13 @@ export function EditEmailDialog({
   onSubmit,
 }: EditEmailDialogProps) {
   const { t } = useTranslation()
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{t("settings.email.editEmailDialog.title")}</DialogTitle>
       <DialogContent>
         <TextField
-          autoFocus
+          inputRef={focusOnReveal}
           margin="dense"
           label={t("settings.email.editEmailDialog.newEmailLabel")}
           type="email"

@@ -6,6 +6,8 @@ interface AvailabilityHookData {
   setClicked: (value: boolean) => void
   startSelect: (day: number, slot: number) => void
   endSelect: (day: number, slot: number) => void
+  /** Flip one half-hour slot (keyboard: Space / Enter on a focused cell). */
+  toggleSlot: (day: number, slot: number) => void
   startedSelect: { day: number; slot: number; value: boolean } | null
   endedSelect: { day: number; slot: number } | null
 }

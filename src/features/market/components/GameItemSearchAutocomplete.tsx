@@ -20,7 +20,6 @@ interface GameItemSearchAutocompleteProps {
   onChange: (itemName: string | null, itemType: string | null, itemId: string | null) => void
   label?: string
   size?: "small" | "medium"
-  autoFocus?: boolean
   sx?: SxProps<Theme>
   /** Marks the field required (asterisk on the label) */
   required?: boolean
@@ -33,7 +32,6 @@ export function GameItemSearchAutocomplete({
   onChange,
   label,
   size = "medium",
-  autoFocus,
   sx,
   required,
   errorText,
@@ -106,7 +104,6 @@ export function GameItemSearchAutocomplete({
       renderInput={(params) => (
         <TextField
           {...params}
-          autoFocus={autoFocus}
           required={required}
           error={!!errorText}
           helperText={errorText}

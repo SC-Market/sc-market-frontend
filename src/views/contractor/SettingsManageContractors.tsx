@@ -223,7 +223,6 @@ export function SettingsManageContractors() {
               />
             )}
             disabled={isTransferring}
-            autoFocus
           />
         </DialogContent>
         <DialogActions>

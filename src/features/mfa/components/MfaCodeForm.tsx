@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { Alert, Box, Button, Link, Stack, TextField, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 import { useVerifyMfaMutation } from "../../../store/api/v2/market"
 import { serviceApi } from "../../../store/service"
 import { useAppDispatch } from "../../../store/hooks"
@@ -15,9 +16,11 @@ export function MfaCodeForm(props: {
   onVerified: (info: { usedRecoveryCode: boolean; remaining?: number }) => void
   onCancel?: () => void
   submitLabel?: string
-  autoFocus?: boolean
+  /** Focus the code field on mount: only where the user just asked for it (a dialog). */
+  focusOnOpen?: boolean
 }) {
   const { t } = useTranslation()
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>(props.focusOnOpen ?? false)
   const dispatch = useAppDispatch()
   const [useRecovery, setUseRecovery] = useState(false)
   const [value, setValue] = useState("")
@@ -59,7 +62,7 @@ export function MfaCodeForm(props: {
             const next = e.target.value
             setValue(useRecovery ? next.toUpperCase().slice(0, 11) : next.replace(/\D/g, "").slice(0, 6))
           }}
-          autoFocus={props.autoFocus ?? true}
+          inputRef={focusOnReveal}
           autoComplete="one-time-code"
           inputProps={{
             inputMode: useRecovery ? "text" : "numeric",

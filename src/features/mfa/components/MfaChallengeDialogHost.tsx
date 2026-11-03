@@ -42,6 +42,7 @@ export function MfaChallengeDialogHost() {
       <DialogContent>
         {kind !== null && (
           <MfaCodeForm
+            focusOnOpen
             onVerified={() => finish(true)}
             onCancel={() => finish(false)}
             submitLabel={

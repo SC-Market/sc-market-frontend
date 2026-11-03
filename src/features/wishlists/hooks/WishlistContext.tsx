@@ -20,6 +20,7 @@ import {
 } from "@mui/material"
 import { PlaylistAddRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
+import { useFocusOnReveal } from "../../../hooks/accessibility/useFocusOnReveal"
 import {
   useGetWishlistsQuery,
   useCreateWishlistMutation,
@@ -43,6 +44,7 @@ export const useShoppingList = () => useContext(ShoppingListCtx)
 
 export function ShoppingListProvider({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation()
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const [open, setOpen] = useState(false)
   const [request, setRequest] = useState<ShoppingListRequest | null>(null)
   const [creating, setCreating] = useState(false)
@@ -125,7 +127,7 @@ export function ShoppingListProvider({ children }: { children: React.ReactNode }
             <Stack spacing={1} sx={{ mt: 1 }}>
               <TextField
                 size="small" fullWidth label={t("wishlistsUi.quickAdd.listName")} value={newName}
-                onChange={(e) => setNewName(e.target.value)} autoFocus
+                onChange={(e) => setNewName(e.target.value)} inputRef={focusOnReveal}
                 onKeyDown={(e) => e.key === "Enter" && handleCreate()}
               />
               <Stack direction="row" spacing={1}>

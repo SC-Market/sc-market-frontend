@@ -27,6 +27,7 @@ import {
   Box,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { useFocusOnReveal } from "../../../../hooks/accessibility/useFocusOnReveal"
 import type { LocationInfo, VariantAttributes } from "../../../../store/api/v2/market"
 import {
   useCreateStockLotMutation,
@@ -63,6 +64,7 @@ export function CreateLotDialogV2({
   locations,
 }: CreateLotDialogV2Props) {
   const { t } = useTranslation()
+  const focusOnReveal = useFocusOnReveal<HTMLInputElement>()
   const issueAlert = useAlertHook()
 
   // Fetch variant type definitions from V2 API
@@ -299,7 +301,7 @@ export function CreateLotDialogV2({
             onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
             fullWidth
             required
-            autoFocus
+            inputRef={focusOnReveal}
             label={t("CreateLotDialogV2.quantity", "Quantity")}
             helperText={t(
               "CreateLotDialogV2.quantityHelper",

@@ -304,7 +304,6 @@ export function CommandPalette() {
           onKeyDown={handleKeyDown}
           fullWidth
           sx={{ fontSize: "1rem" }}
-          autoFocus
         />
         <Chip label="ESC" size="small" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
       </Box>
@@ -369,7 +368,7 @@ export function CommandPalette() {
           <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>↵</kbd> {t("appUi.commandPalette.hintSelect")}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>esc</kbd> {t("appUi.commandPalette.hintClose")}
+          <kbd style={{ padding: "1px 4px", border: `1px solid ${theme.palette.divider}`, borderRadius: 3, fontSize: "0.7rem" }}>ESC</kbd> {t("appUi.commandPalette.hintClose")}
         </Typography>
       </Box>
     </Dialog>
