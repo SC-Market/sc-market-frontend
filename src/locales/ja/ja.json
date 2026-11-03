@@ -1642,7 +1642,7 @@
   "select_all": "すべて選択",
   "rows_per_page": "1ページあたりの行数",
   "no_listings": "表示する出品がありません",
-  "displayed_rows": "{{from}}–{{to}} of {{count}}",
+  "displayed_rows": "{{from}}–{{to}} / {{count}}",
   "displayed_rows_range": "{{from}}–{{to}} / {{count}}",
   "displayed_rows_range_more": "{{from}}–{{to}} / {{to}}以上",
   "all": "すべて",
