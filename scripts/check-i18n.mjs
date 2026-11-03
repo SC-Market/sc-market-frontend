@@ -11,6 +11,9 @@
 // so e.g. a uk catalog with only _one/_other is reported as missing _few/_many
 // (i18next would otherwise show English for most counts).
 //
+// Wording (terminology, register, proper nouns) is not checked here; follow
+// docs/i18n-glossary.md when adding or reviewing translations.
+//
 // Usage: node scripts/check-i18n.mjs [--json] [--list]
 //   exits 1 when any locale is missing keys, has placeholder mismatches, or
 //   (ja, uk, zh) has values left in English.
