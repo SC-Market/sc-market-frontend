@@ -56,7 +56,7 @@ export function BuyOrderDetailV2() {
   const now = useNow()
   const { id } = useParams<{ id: string }>()
   const theme = useTheme<ExtendedTheme>()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const isMobile = useBreakpointDown("sm")
 
   const { data: buyOrder, isLoading, error } = useGetBuyOrderDetailQuery({ id: id! })
@@ -91,7 +91,7 @@ export function BuyOrderDetailV2() {
         : "Negotiable"
     }
     return `${fmt.number(buyOrder.price_per_unit)} aUEC per unit`
-  }, [buyOrder, i18n.language, fmt])
+  }, [buyOrder, fmt])
 
   return (
     <StandardPageLayout

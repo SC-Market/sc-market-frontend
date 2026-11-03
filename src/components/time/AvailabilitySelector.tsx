@@ -145,7 +145,7 @@ export function AvailabilitySelector(props: {
   return (
     <Section
       xs={12}
-      title={`${t("availability.select_availability")} (${Intl.DateTimeFormat().resolvedOptions().timeZone})`}
+      title={`${t("availability.select_availability")} (${Intl.DateTimeFormat(fmt.locale).resolvedOptions().timeZone})`}
     >
       <Grid
         item
@@ -271,7 +271,7 @@ export function AvailabilityDisplay(
       xs={12}
       lg={4}
       md={6}
-      title={`${t("availability.availability_for")} ${name} - (${Intl.DateTimeFormat().resolvedOptions().timeZone})`}
+      title={`${t("availability.availability_for")} ${name} - (${Intl.DateTimeFormat(fmt.locale).resolvedOptions().timeZone})`}
       subtitle={
         profile?.username === name ? (
           <Link to={"/availability"} style={{ color: "inherit" }}>

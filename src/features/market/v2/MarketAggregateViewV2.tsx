@@ -648,7 +648,7 @@ export function BuyOrderRowV2(props: {
   labelId: string;
 }) {
   const fmt = useFormatters()
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { row: buy_order, index } = props;
   const issueAlert = useAlertHook();
   const [fulfillDialogOpen, setFulfillDialogOpen] = useState(false);
@@ -694,7 +694,7 @@ export function BuyOrderRowV2(props: {
         : t("buyorder.status.negotiable", "Negotiable");
     }
     return `${fmt.number(buy_order.price_per_unit)} aUEC`;
-  }, [buy_order, t, i18n.language, fmt]);
+  }, [buy_order, t, fmt]);
 
   return (
     <TableRow

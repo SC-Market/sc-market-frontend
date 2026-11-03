@@ -85,6 +85,53 @@ const WHOLE_HEX = new RegExp(`^${HEX}$`, "i")
 const EMBEDDED_HEX = new RegExp(`(?:[(,]\\s*|solid\\s+)${HEX}\\b`, "i")
 const scmStyle = {
   rules: {
+    // Server and browser must format the same: a locale-less toLocale*() or
+    // Intl formatter uses the machine's language (util/format instead).
+    "no-locale-less-format": {
+      meta: {
+        type: "problem",
+        messages: {
+          toLocale:
+            "{{name}}() without a locale formats in the machine's language, so the server render and the browser disagree. Use util/format (useFormatters() in components, or a format* function with an explicit locale).",
+          intl:
+            "Intl.{{name}} without a locale uses the machine's language. Pass the page's locale (useFormatters().locale, pageLocale()) or use util/format.",
+        },
+      },
+      create(context) {
+        const noLocale = (args) =>
+          args.length === 0 ||
+          (args[0].type === "Identifier" && args[0].name === "undefined")
+        const INTL = /^(NumberFormat|DateTimeFormat|RelativeTimeFormat|ListFormat|PluralRules|DisplayNames|DurationFormat)$/
+        const intlCtor = (node) => {
+          const c = node.callee
+          if (
+            c.type === "MemberExpression" &&
+            c.object.type === "Identifier" &&
+            c.object.name === "Intl" &&
+            c.property.type === "Identifier" &&
+            INTL.test(c.property.name) &&
+            noLocale(node.arguments)
+          ) {
+            context.report({ node, messageId: "intl", data: { name: c.property.name } })
+          }
+        }
+        return {
+          CallExpression(node) {
+            const c = node.callee
+            if (
+              c.type === "MemberExpression" &&
+              c.property.type === "Identifier" &&
+              /^toLocale(String|DateString|TimeString)$/.test(c.property.name) &&
+              noLocale(node.arguments)
+            ) {
+              context.report({ node, messageId: "toLocale", data: { name: c.property.name } })
+            }
+            intlCtor(node)
+          },
+          NewExpression: intlCtor,
+        }
+      },
+    },
     "no-hex-colors": {
       meta: {
         type: "suggestion",
@@ -132,17 +179,12 @@ const ROUTE_STRING_SELECTORS = [
   },
 ]
 // See drafts/view-logic-refactor-audit-2026-11.md §9.
+// toLocale*() without a locale is an error: scm-style/no-locale-less-format.
 const FORMAT_SELECTORS = [
-  {
-    selector:
-      "CallExpression[callee.property.name=/^toLocale(String|DateString|TimeString)$/][arguments.length=0]",
-    message:
-      "toLocale*() without a locale formats in the machine's language, so server and browser disagree. Pass the render language (util/time.ts language()).",
-  },
   {
     selector: "NewExpression[callee.name='Date'][arguments.length=0]",
     message:
-      "new Date() during render differs between server and browser. Take `now` as a parameter in domain functions.",
+      "new Date() during render differs between server and browser. Use useNow() (util/format) in components; take `now` as a parameter in domain functions.",
   },
 ]
 const RENDER_LAYER_SELECTORS = [
@@ -335,6 +377,18 @@ export default [
     plugins: { "scm-style": scmStyle },
     rules: {
       "scm-style/no-hex-colors": "warn",
+    },
+  },
+
+  // ── Formatting (error): numbers, prices and dates go through util/format ──
+  // The sweep brought locale-less toLocale*() and Intl formatters to zero
+  // (they made SSR pages mismatch at hydration); keep it there.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**"],
+    plugins: { "scm-style": scmStyle },
+    rules: {
+      "scm-style/no-locale-less-format": "error",
     },
   },
 

@@ -1,5 +1,5 @@
 {
-  "warnings": 1572,
+  "warnings": 1341,
   "errors": 130,
   "byRule": {
     "(eslint)": 2,
@@ -8,7 +8,7 @@
     "@typescript-eslint/no-explicit-any": 46,
     "@typescript-eslint/no-non-null-asserted-optional-chain": 24,
     "@typescript-eslint/no-restricted-imports": 99,
-    "@typescript-eslint/no-unused-vars": 689,
+    "@typescript-eslint/no-unused-vars": 682,
     "jsx-a11y/anchor-is-valid": 1,
     "jsx-a11y/click-events-have-key-events": 1,
     "jsx-a11y/mouse-events-have-key-events": 1,
@@ -19,7 +19,7 @@
     "no-control-regex": 1,
     "no-empty": 14,
     "no-restricted-imports": 46,
-    "no-restricted-syntax": 434,
+    "no-restricted-syntax": 210,
     "no-useless-escape": 2,
     "react-hooks/exhaustive-deps": 79,
     "react/display-name": 1,

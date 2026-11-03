@@ -598,7 +598,7 @@ function ShopListingsGridV2({
               />
             )
           }
-          return params.value?.toLocaleString?.() ?? "0"
+          return fmt.number(params.value ?? 0)
         },
       },
       {

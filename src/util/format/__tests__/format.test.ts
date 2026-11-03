@@ -20,7 +20,7 @@ import {
 
 // Intl separates some groups and units with no-break spaces; compare with
 // plain spaces.
-const plain = (s: string | undefined) => s?.replace(/[  ]/g, " ")
+const plain = (s: string | undefined) => s?.replace(/[\u00a0\u202f]/g, " ")
 
 const MOMENT = Date.UTC(2026, 10, 3, 14, 5, 9) // 2026-11-03 14:05:09 UTC
 const HOUR = 60 * 60 * 1000

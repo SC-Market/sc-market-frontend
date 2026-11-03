@@ -199,7 +199,7 @@ export function CommandPalette() {
       action: () => go(`/market/${listing.listing_id}`),
       category: "content" as const,
     }))
-  }, [searchResults, go])
+  }, [searchResults, go, fmt])
 
   // Filter and combine results
   const filteredItems = useMemo(() => {
