@@ -1676,7 +1676,7 @@
     "yesterday": "昨天",
     "status": {
       "title": "狀態",
-      "completed": "完成",
+      "completed": "已完成",
       "pending": "進行中",
       "cancelled": "已取消"
     },
@@ -1897,7 +1897,7 @@
     "in_progress": "進行中",
     "fulfilled": "已完成",
     "cancelled": "已取消",
-    "not_started": "未開始"
+    "not_started": "排隊中"
   },
   "orderServiceArea": {
     "associated_services": "相關服務",
@@ -1996,7 +1996,7 @@
     "valueLast7Days": "過去7天價值",
     "valueLast30Days": "過去30天價值",
     "statusBreakdown": "狀態分佈",
-    "notStarted": "未開始",
+    "notStarted": "排隊中",
     "inProgress": "進行中",
     "fulfilled": "已完成",
     "cancelled": "已取消",
@@ -2547,7 +2547,7 @@
     "imageSearch": "圖片搜尋",
     "upload": "上傳",
     "addUrl": "添加URL",
-    "enterImageUrl": "輸入圖片URL:",
+    "enterImageUrl": "輸入圖片網址：",
     "urlModalTitle": "添加圖片URL",
     "imageUrl": "圖片URL",
     "imageUrlHelp": "輸入圖片的直接URL（來自Imgur、RSI或starcitizen.tools）",
@@ -4244,7 +4244,7 @@
     "create": "建立批次",
     "createError": "建立批次失敗",
     "createErrorReason": "建立批次失敗：{{reason}}",
-    "createSuccess": "批次建立成功",
+    "createSuccess": "已建立批次",
     "invalidQualityTier": "品質級距必須介於 1 與 5 之間",
     "invalidQualityValue": "品質數值必須介於 0 與 1000 之間",
     "invalidQuantity": "數量必須大於 0",
@@ -8876,7 +8876,7 @@
       "keepHint": "可選。",
       "aboutLabel": "關於 SC Market 的哪方面？（可選）",
       "otherLabel": "其他（可選）",
-      "easierLabel": "你的想法（可選）",
+      "easierLabel": "你的想法（選填）",
       "submit": "提交",
       "noThanks": "不用了",
       "thanks": "感謝你的回饋。",
