@@ -2620,8 +2620,8 @@
     "submit": "Envoyer",
     "submitted": "Envoyé !",
     "failedSubmit": "Échec de l'envoi !",
-    "photosUploaded": "Photos téléchargées avec succès !",
-    "photoUploadFailed": "Échec du téléchargement de certaines photos"
+    "photosUploaded": "Photos envoyées !",
+    "photoUploadFailed": "Échec de l'envoi de certaines photos"
   },
   "SelectPhotosArea": {
     "imageSearch": "Recherche d'images",
@@ -2714,7 +2714,7 @@
     "sellerRating": "Note du vendeur",
     "price": "Prix",
     "quantityAvailable": "Quantité disponible",
-    "buyer": "Buyer",
+    "buyer": "Vendeur",
     "quantity": "Quantité",
     "total": "Total",
     "description": "Description",
@@ -3099,7 +3099,7 @@
     "store": "Boutique",
     "services": "Services",
     "market": "Marché",
-    "order": "Order",
+    "order": "Commandes personnalisées",
     "members": "Membres",
     "recruiting": "Recrutement",
     "reviews": "Avis"
@@ -3372,7 +3372,7 @@
     "topShopsError": "Impossible de charger les boutiques.",
     "sellTitle": "Commencer à vendre",
     "seoDescription": "Échangez avec d'autres joueurs de Star Citizen : achetez et vendez des objets, des composants de vaisseau et des marchandises contre des aUEC, publiez des ordres d'achat et engagez des orgs pour le transport, l'escorte et la récupération.",
-    "seoTitle": "SC Market — Place de marché Star Citizen : achetez, vendez et échangez des objets en aUEC",
+    "seoTitle": "SC Market — Place de marché Star Citizen : achetez, vendez et échangez des articles en aUEC",
     "sellText": "Ouvrez une boutique seul ou en tant qu'org. Les membres de l'org prennent en charge et honorent les commandes ensemble, avec une boutique, un stock et une réputation partagés.",
     "sellStep1Title": "Mettez en vente",
     "sellStep1Text": "N'importe quel article ou service, en n'importe quelle quantité, au prix en aUEC.",
@@ -4372,7 +4372,7 @@
     "create": "Créer le lot",
     "createError": "Échec de la création du lot",
     "createErrorReason": "Échec de la création du lot : {{reason}}",
-    "createSuccess": "Lot créé avec succès",
+    "createSuccess": "Lot créé",
     "invalidQualityTier": "Le palier de qualité doit être compris entre 1 et 5",
     "invalidQualityValue": "La valeur de qualité doit être comprise entre 0 et 1000",
     "invalidQuantity": "La quantité doit être supérieure à 0",
