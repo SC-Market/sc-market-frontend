@@ -10,7 +10,7 @@ The canonical example is `features/email/`. When in doubt, look there.
 - Calling the API, chaining mutations, alerts and `t()` go in a hook in the feature's `hooks/`. One hook per job.
 - Components and pages render. They call hooks and domain functions, and never RTK mutations, `has_permission` or `toLocaleString()` directly.
 - A form edits a draft. Create it from server data once, keyed by the entity id, and turn it into a request with a domain function. Never copy server data into `useState` with a `useEffect` (see `features/shops/domain/shopSettingsForm.ts`).
-- Numbers, prices and dates are formatted in the render language (`util/time.ts` `language()`), never with a bare `toLocale*()`, and "now" is passed in, so server and browser agree.
+- Numbers, prices and dates go through `util/format` (`useFormatters()` in components: the render language, and UTC until hydrated), never a bare `toLocale*()` (a lint error), and "now" comes from `useNow()` or is passed in, so server and browser agree.
 - If you are about to write the same `if` a second time, it belongs in `domain/`.
 
 ---

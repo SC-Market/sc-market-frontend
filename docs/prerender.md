@@ -152,11 +152,12 @@ on a prerendered page is fetched in the browser until it is added there.
    `[hydration] recoverable error` in the console and no layout shift
    after the first paint. Anything that differs between the server and the
    browser's first render (window size, cookies, storage) must be CSS
-   (`sx` breakpoints) or wait for `useHydrated()`. Dates and numbers are
-   formatted in the page's language (`toSupportedLocale(i18n.language)`)
-   or with fixed `en-US` digits, never the browser's own locale
-   (`toLocaleString()` with no locale, `Intl.DateTimeFormat("default")`):
-   the server's default locale is en-US. HTML the parser rewrites breaks
+   (`sx` breakpoints) or wait for `useHydrated()`. Dates and numbers go
+   through `util/format` (`useFormatters()`: the page's language, dates in
+   UTC until hydrated), and "now" through `useNow()` (the render's time,
+   shipped as `PrerenderedData.renderedAt`), never the browser's own
+   locale, zone or clock (`toLocaleString()` with no locale is a lint
+   error). HTML the parser rewrites breaks
    hydration too: no `<p>` or `<div>` inside a `<p>` (a `Typography`
    around block content needs `component="div"`).
    The first-screen card staging (`components/grid/firstScreen.tsx`,
