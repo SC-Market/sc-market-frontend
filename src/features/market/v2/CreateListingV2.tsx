@@ -30,22 +30,17 @@ import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete";
 import { formatMarketUrl } from "../domain/urls";
 import { getQualityMode } from "../../../util/qualityMode";
-import { SelectPhotosArea, UploadedImageStatus } from "../../../components/modal/SelectPhotosArea";
+import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
 import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect";
 import { useCreateListingMutation, useSearchResourcesQuery } from "../../../store/api/v2/market";
-import { useUploadImageMutation } from "../../../store/api/v2/market-overrides";
+import { useListingPhotoUploads } from "../hooks/useListingPhotoUploads";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute";
 import { Alert, InputAdornment } from "@mui/material";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
-import type {
-  CreateListingRequest,
-  StockLotInput,
-  VariantAttributes,
-} from "../../../store/api/v2/market";
 import { HelpLink } from "../../help/components/HelpLink"
 import { HelpTip } from "../../help/components/HelpTip"
 import { withShopContext } from "../../../components/sidebar/shopContextState"
@@ -58,6 +53,14 @@ import {
   type ListingFormError,
   type ListingFormField,
 } from "../domain/listingFormErrors"
+import {
+  buildCreateListingRequest,
+  listingDraftIssueError,
+  quantityUnitFor,
+  validateListingDraft,
+  type CraftedSource,
+  type ListingDraft,
+} from "../domain/listingDraft"
 
 /**
  * Stock lot form data with variant attributes
@@ -67,7 +70,7 @@ interface StockLotFormData {
   quantity: number;
   quality_tier?: number;
   quality_value?: number;
-  crafted_source?: "crafted" | "store" | "looted" | "unknown";
+  crafted_source?: CraftedSource;
   location_id?: string;
   price?: number;
   notes?: string;
@@ -92,10 +95,15 @@ export function CreateListingV2() {
   const [gameItemType, setGameItemType] = useState<string | null>(searchParams.get("game_item_type"));
   const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">("unified");
   const [basePrice, setBasePrice] = useState<number>(0);
-  const [photos, setPhotos] = useState<string[]>([]);
-  const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([]);
-  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([]);
-  const isUploading = uploadedImages.some((img) => img.status === "uploading");
+  const {
+    photos,
+    setPhotos,
+    photoResourceIds,
+    uploadedImages,
+    isUploading,
+    handleFileUpload,
+    handleRemoveUploadedImage,
+  } = useListingPhotoUploads();
   const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">("");
   const [quantityUnit, setQuantityUnit] = useState<"unit" | "scu">("unit");
   const [minOrderQuantity, setMinOrderQuantity] = useState<number | null>(null);
@@ -151,7 +159,6 @@ export function CreateListingV2() {
 
   // RTK Query mutations
   const [createListing, { isLoading }] = useCreateListingMutation();
-  const [uploadImage] = useUploadImageMutation();
 
   // Add new stock lot
   const handleAddStockLot = useCallback(() => {
@@ -186,98 +193,45 @@ export function CreateListingV2() {
     []
   );
 
-  // Validate form. The description is optional.
-  const validateForm = (): ListingFormError | null => {
-    if (!gameItemId) {
-      return { field: "game_item_id", message: t("CreateListingV2.validation.gameItemRequired", "Game item is required") };
-    }
-    if (!title.trim()) {
-      return { field: "title", message: t("CreateListingV2.validation.titleRequired", "Title is required") };
-    }
-    if (title.length > 500) {
-      return {
-        field: "title",
-        message: t("CreateListingV2.validation.titleTooLong", "Title must be 500 characters or less"),
-      };
-    }
-    if (pricingMode === "unified" && (!basePrice || basePrice <= 0)) {
-      return {
-        field: "base_price",
-        message: t("CreateListingV2.validation.basePriceRequired", "Base price must be greater than 0"),
-      };
-    }
-    if (stockLots.length === 0) {
-      return {
-        field: "form",
-        message: t("CreateListingV2.validation.stockLotRequired", "At least one stock lot is required"),
-      };
-    }
-
-    for (let i = 0; i < stockLots.length; i++) {
-      const lot = stockLots[i];
-      // The first lot's quantity is the Quantity field up top; the rest are under More options
-      const lotField: ListingFormField = i === 0 ? "quantity" : "form";
-      if (!lot.quantity || lot.quantity <= 0) {
-        return {
-          field: lotField,
-          message: t(
-            "CreateListingV2.validation.quantityRequired",
-            "Quantity must be greater than 0 for lot {{index}}",
-            { index: i + 1 }
-          ),
-        };
-      }
-      if (lot.quality_tier !== undefined && (lot.quality_tier < 1 || lot.quality_tier > 5)) {
-        return {
-          field: "form",
-          message: t(
-            "CreateListingV2.validation.qualityTierRange",
-            "Quality tier must be between 1 and 5 for lot {{index}}",
-            { index: i + 1 }
-          ),
-        };
-      }
-      if (
-        lot.quality_value !== undefined &&
-        (lot.quality_value < 0 || lot.quality_value > 1000)
-      ) {
-        return {
-          field: "form",
-          message: t(
-            "CreateListingV2.validation.qualityValueRange",
-            "Quality value must be between 0 and 1000 for lot {{index}}",
-            { index: i + 1 }
-          ),
-        };
-      }
-      if (pricingMode === "per_variant" && (!lot.price || lot.price <= 0)) {
-        return {
-          field: "form",
-          message: t(
-            "CreateListingV2.validation.variantPriceRequired",
-            "Price must be greater than 0 for lot {{index}} in per-variant pricing mode",
-            { index: i + 1 }
-          ),
-        };
-      }
-    }
-
-    if (saleType === "auction" && !auctionEndTime) {
-      return {
-        field: "auction_end_time",
-        message: t("CreateListingV2.validation.auctionEndTimeRequired", "Auction end time is required"),
-      };
-    }
-
-    return null;
+  // The form as a draft: the rules and the request are shared with Quick List
+  const draft: ListingDraft = {
+    gameItemId,
+    title,
+    description,
+    pricingMode,
+    basePrice,
+    lots: stockLots.map((lot) => ({
+      quantity: lot.quantity,
+      quality_tier: lot.quality_tier,
+      quality_value: lot.quality_value,
+      crafted_source: lot.crafted_source,
+      location_id: lot.location_id,
+      price: lot.price,
+    })),
+    saleType,
+    auctionEndTime,
+    minBidIncrement,
+    reservePrice,
+    pickupMethod,
+    quantityUnit,
+    minOrderQuantity,
+    maxOrderQuantity,
+    minOrderValue,
+    maxOrderValue,
+    bulkDiscountTiers,
+    status: listingStatus,
+    visibility,
+    photoResourceIds,
+    externalPhotoUrls: photos,
   };
 
   // Submit form
   const handleSubmit = async (event: React.FormEvent) => {
       event.preventDefault();
 
-      const validationError = validateForm();
-      if (validationError) {
+      const issue = validateListingDraft(draft);
+      if (issue || !draft.gameItemId) {
+        const validationError = listingDraftIssueError(issue ?? { code: "gameItemRequired" }, t);
         showError(validationError);
         issueAlert({
           message: validationError.message,
@@ -287,52 +241,7 @@ export function CreateListingV2() {
       }
       setFormError(null);
 
-      const lots: StockLotInput[] = stockLots.map((lot) => {
-        const variant_attributes: VariantAttributes = {};
-        if (lot.quality_tier !== undefined) {
-          variant_attributes.quality_tier = lot.quality_tier;
-        }
-        if (lot.quality_value !== undefined) {
-          variant_attributes.quality_value = lot.quality_value;
-        }
-        if (lot.crafted_source !== undefined) {
-          variant_attributes.crafted_source = lot.crafted_source;
-        }
-
-        return {
-          quantity: lot.quantity,
-          variant_attributes,
-          location_id: lot.location_id,
-          price: pricingMode === "per_variant" ? lot.price : undefined,
-        };
-      });
-
-      const request: CreateListingRequest = {
-        title: title.trim(),
-        description: description.trim() || undefined,
-        game_item_id: gameItemId!,
-        pricing_mode: pricingMode,
-        base_price: pricingMode === "unified" ? basePrice : undefined,
-        lots,
-        pickup_method: pickupMethod || undefined,
-        quantity_unit: quantityUnit,
-        min_order_quantity: minOrderQuantity ?? undefined,
-        max_order_quantity: maxOrderQuantity ?? undefined,
-        min_order_value: minOrderValue ?? undefined,
-        max_order_value: maxOrderValue ?? undefined,
-        bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
-        shop_id: shop.shop_id,
-        visibility: shop.is_org_owned ? visibility : undefined,
-        sale_type: saleType,
-        status: listingStatus,
-        auction_details: saleType === "auction" ? {
-          end_time: new Date(auctionEndTime).toISOString(),
-          min_bid_increment: minBidIncrement,
-          reserve_price: reservePrice ?? undefined,
-        } : undefined,
-        photo_resource_ids: photoResourceIds.length > 0 ? photoResourceIds : undefined,
-        external_photo_urls: photos.length > 0 ? photos : undefined,
-      };
+      const request = buildCreateListingRequest({ ...draft, gameItemId: draft.gameItemId }, shop);
 
       try {
         const result = await createListing({ createListingRequest: request }).unwrap();
@@ -351,51 +260,6 @@ export function CreateListingV2() {
         issueAlert({ message: apiError.message, severity: "error" });
       }
   };
-
-  // Two-phase upload: upload each file immediately and track status
-  const handleFileUpload = useCallback((files: File[]) => {
-    for (const file of files) {
-      const tempId = `temp-${crypto.randomUUID()}`;
-      const newEntry: UploadedImageStatus = {
-        resource_id: tempId,
-        url: "",
-        status: "uploading",
-        file,
-      };
-
-      setUploadedImages((prev) => [...prev, newEntry]);
-
-      uploadImage(file)
-        .unwrap()
-        .then((result) => {
-          setUploadedImages((prev) =>
-            prev.map((img) =>
-              img.resource_id === tempId
-                ? { ...img, resource_id: result.resource_id, url: result.url, status: "success" as const }
-                : img
-            )
-          );
-          setPhotoResourceIds((prev) => [...prev, result.resource_id]);
-        })
-        .catch((err) => {
-          const e = err as { data?: { error?: { message?: string; validationErrors?: { message: string }[] }; message?: string; validationErrors?: { message: string }[] } };
-          const errBody = e?.data?.error || e?.data || {};
-          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || t("SelectPhotosArea.uploadFailed", "Upload failed");
-          setUploadedImages((prev) =>
-            prev.map((img) =>
-              img.resource_id === tempId
-                ? { ...img, status: "error" as const, error: detail }
-                : img
-            )
-          );
-        });
-    }
-  }, [uploadImage]);
-
-  const handleRemoveUploadedImage = useCallback((resourceId: string) => {
-    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId));
-    setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId));
-  }, []);
 
   // Org members without manage_market can't create listings: say so up
   // front instead of letting the save fail with a 403
@@ -456,7 +320,7 @@ export function CreateListingV2() {
                   setGameItemName(itemName);
                   setGameItemId(itemId);
                   setGameItemType(itemType);
-                  setQuantityUnit(itemType === "Commodity" ? "scu" : "unit");
+                  setQuantityUnit(quantityUnitFor(itemType));
                   if (!title && itemName) {
                     setTitle(itemName);
                   }

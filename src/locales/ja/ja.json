@@ -8781,6 +8781,10 @@
     "priceAlerts": {
       "title": "価格が下がったらアラートでお知らせ",
       "body": "目標価格を決めてアイテムをウォッチしましょう。公開出品がその価格以下になると、出品へのリンク付きでアラートが届きます。通知を止めたいだけなら、アラートを一時停止すれば設定は残ります。"
+    },
+    "quickList": {
+      "title": "数秒でアイテムを出品",
+      "body": "アイテムを選び、価格と数量を確認して出品します。在庫は数量だけで始められ、いつでも場所や品質ごとに分けられます。"
     }
   },
   "discordInstall": {
@@ -8905,5 +8909,70 @@
     "justLinked": "ボットがサーバーに追加され、サーバーが連携されました。下で注文スレッドとアラートのチャンネルを選んでください。",
     "add": "ボットをサーバーに追加",
     "addHelp": "Discord で追加先のサーバーを選びます（そのサーバーでサーバー管理の権限が必要です）。サーバーが連携された状態でここに戻り、チャンネルを選べます。"
+  },
+  "quickList": {
+    "title": "アイテムを出品",
+    "close": "閉じる",
+    "sellingAs": "出品ショップ",
+    "sellingAsHelp": "この出品を掲載するショップです。",
+    "item": "アイテム",
+    "pickedFromPage": "アイテムページから選択済みです。",
+    "wiki": "ウィキ",
+    "changeItem": "アイテムを変更",
+    "price": "単価",
+    "pricePerBatchActive": "ロットごとに価格を設定しています。",
+    "marketHint": "マーケット: 最安 {{low}} · 中央値 {{median}} · {{listings}}",
+    "noMarket": "まだ相場がありません。最初の価格を設定できます。",
+    "quantity": "数量",
+    "oneLess": "1つ減らす",
+    "oneMore": "1つ増やす",
+    "quality": "品質",
+    "anyQuality": "指定なし",
+    "tierShort": "T{{tier}}",
+    "stock": "在庫",
+    "stockSimple": "数量のみ",
+    "stockBatches": "場所・品質別",
+    "stockSimpleHelp": "数量だけで十分です。場所や品質ごとにいつでも分けられます。",
+    "batchLabel": "ロット {{index}}",
+    "batchQuantity": "数量",
+    "location": "場所",
+    "qualityValue": "品質 (0-1000)",
+    "batchPrice": "価格",
+    "removeBatch": "ロットを削除",
+    "addBatch": "ロットを追加",
+    "total": "合計 {{total}}",
+    "pricePerBatch": "ロットごとに価格を設定",
+    "moreOptions": "その他のオプション",
+    "moreOptionsSummary": "説明、写真、販売形式、受け渡し、注文の上限、割引",
+    "description": "説明（任意）",
+    "descriptionHelp": "Markdown が使えます。説明が不要なら空欄のままで構いません。",
+    "fullFormLead": "注文金額の上限や下書きが必要ですか？",
+    "fullForm": "詳細フォームを開く",
+    "learnMore": "Quick List の使い方",
+    "publishAnother": "出品して続けて出品",
+    "publish": "出品する",
+    "published": "出品しました: {{name}}",
+    "undone": "取り消しました: {{name}}",
+    "undoFailed": "取り消せませんでした。ショップの出品一覧からアーカイブしてください。",
+    "undo": "元に戻す",
+    "listedAnother": "出品しました: {{name}} · {{price}} × {{quantity}}。",
+    "errors": {
+      "noShop": "出品するショップを選んでください。",
+      "summary": "出品できませんでした: {{message}}"
+    },
+    "signIn": {
+      "title": "ログインして出品",
+      "bodyItem": "ログインすると、{{name}} の出品画面にそのまま戻ります。",
+      "body": "ログインすると、ここに戻ってアイテムを出品できます。",
+      "action": "ログイン"
+    },
+    "sellYours": "自分も出品",
+    "seeListings": "出品を見る",
+    "empty": {
+      "title": "現在、出品している人はいません",
+      "body": "お持ちですか？約15秒で出品できます。価格アラートを設定した購入者には、目標価格に合えば通知が届きます。"
+    },
+    "listingCount_other": "{{formatted}} 件",
+    "listedSoFar_other": "これまでに {{formatted}} 件出品しました。"
   }
 }

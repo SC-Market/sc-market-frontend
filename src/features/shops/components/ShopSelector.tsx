@@ -1,9 +1,10 @@
 /**
  * ShopSelector — dropdown for selecting which shop to create a listing under.
  *
- * Fetches the user's shops via GET /shops/mine and filters based on the
- * current org context. If no shops exist, offers a quick-create button
- * that calls POST /shops/quick.
+ * Fetches the user's shops via GET /shops/mine and offers the ones they can
+ * list in (canEditShopListings: their own, and org shops where they have
+ * Manage Market). If there are none, offers a quick-create button that
+ * calls POST /shops/quick.
  */
 
 import React, { useCallback, useEffect, useMemo } from "react"
@@ -27,21 +28,28 @@ import {
   type ShopResponse,
 } from "../../../store/api/v2/market"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { canEditShopListings } from "../domain/shopPermissions"
 
 interface ShopSelectorProps {
   value: string
   onChange: (shopId: string) => void
+  label?: string
+  helperText?: string
+  id?: string
 }
 
-export function ShopSelector({ value, onChange }: ShopSelectorProps) {
+export function ShopSelector({ value, onChange, label, helperText, id }: ShopSelectorProps) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
   const { data: shops, isLoading, isError, refetch } = useGetMyShopsQuery()
   const [quickCreateShop, { isLoading: isCreating }] = useQuickCreateShopMutation()
 
-  // Show all user's shops (both personal and org-owned)
-  const filteredShops = useMemo(() => shops || [], [shops])
+  // The user's shops they can list in (personal and org-owned)
+  const filteredShops = useMemo(
+    () => (shops || []).filter((s) => s.status !== "archived" && canEditShopListings(s)),
+    [shops],
+  )
 
   // Auto-select if only one shop is available
   useEffect(() => {
@@ -130,14 +138,15 @@ export function ShopSelector({ value, onChange }: ShopSelectorProps) {
       select
       fullWidth
       size="small"
-      label={t("ShopSelector.label", "Shop")}
-      value={value}
+      id={id}
+      label={label ?? t("ShopSelector.label", "Shop")}
+      value={filteredShops.some((s) => s.shop_id === value) ? value : ""}
       onChange={(e) => onChange(e.target.value)}
       color="secondary"
-      helperText={t(
-        "ShopSelector.helperText",
-        "Select which shop this listing belongs to"
-      )}
+      helperText={
+        helperText ??
+        t("ShopSelector.helperText", "Select which shop this listing belongs to")
+      }
       SelectProps={{
         renderValue: (selected) => {
           const shop = filteredShops.find((s) => s.shop_id === selected)

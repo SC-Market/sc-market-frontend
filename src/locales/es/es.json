@@ -9055,6 +9055,10 @@
     "priceAlerts": {
       "title": "Recibe una alerta cuando el precio sea el adecuado",
       "body": "Sigue un artículo con un precio objetivo. Cuando un anuncio público esté a ese precio o menos, recibirás una alerta con un enlace al anuncio. Pausa una alerta para conservarla sin recibir avisos."
+    },
+    "quickList": {
+      "title": "Anuncia un artículo en segundos",
+      "body": "Elige el artículo, revisa el precio y la cantidad, y publica. El stock empieza siendo un número; puedes dividirlo por ubicación o calidad cuando quieras."
     }
   },
   "discordInstall": {
@@ -9187,5 +9191,74 @@
     "justLinked": "El bot está en tu servidor y el servidor está vinculado. Elige abajo los canales para los hilos y las alertas de pedidos.",
     "add": "Añadir el bot a un servidor",
     "addHelp": "Discord te pregunta a qué servidor añadirlo (necesitas Gestionar servidor allí). Vuelves aquí con el servidor vinculado, listo para elegir canales."
+  },
+  "quickList": {
+    "title": "Anunciar un artículo",
+    "close": "Cerrar",
+    "sellingAs": "Vender como",
+    "sellingAsHelp": "La tienda en la que se publica este anuncio.",
+    "item": "Artículo",
+    "pickedFromPage": "Elegido desde la página del artículo.",
+    "wiki": "Wiki",
+    "changeItem": "Cambiar artículo",
+    "price": "Precio por unidad",
+    "pricePerBatchActive": "Cada lote tiene su propio precio.",
+    "marketHint": "Mercado: mínimo {{low}} · mediana {{median}} · {{listings}}",
+    "noMarket": "Aún no hay precio de mercado: tú pones el primero.",
+    "quantity": "Cantidad",
+    "oneLess": "Uno menos",
+    "oneMore": "Uno más",
+    "quality": "Calidad",
+    "anyQuality": "Cualquiera",
+    "tierShort": "T{{tier}}",
+    "stock": "Stock",
+    "stockSimple": "Solo un número",
+    "stockBatches": "Por ubicación / calidad",
+    "stockSimpleHelp": "Basta con un número. Puedes dividirlo por ubicación o calidad cuando quieras.",
+    "batchLabel": "Lote {{index}}",
+    "batchQuantity": "Cant.",
+    "location": "Ubicación",
+    "qualityValue": "Calidad (0-1000)",
+    "batchPrice": "Precio",
+    "removeBatch": "Quitar lote",
+    "addBatch": "Añadir lote",
+    "total": "Total {{total}}",
+    "pricePerBatch": "Cada lote tiene su propio precio",
+    "moreOptions": "Más opciones",
+    "moreOptionsSummary": "Descripción, fotos, tipo de venta, recogida, límites de pedido, descuentos",
+    "description": "Descripción (opcional)",
+    "descriptionHelp": "Aquí funciona Markdown. Déjalo vacío si el artículo habla por sí solo.",
+    "fullFormLead": "¿Necesitas límites de importe o un borrador?",
+    "fullForm": "Abrir el formulario completo",
+    "learnMore": "Cómo funciona Quick List",
+    "publishAnother": "Publicar y anunciar otro",
+    "publish": "Publicar",
+    "published": "Anunciado: {{name}}",
+    "undone": "Retirado: {{name}}",
+    "undoFailed": "No se pudo deshacer. Archívalo desde los anuncios de tu tienda.",
+    "undo": "Deshacer",
+    "listedAnother": "Anunciado: {{name}} · {{price}} × {{quantity}}.",
+    "errors": {
+      "noShop": "Elige la tienda con la que vendes.",
+      "summary": "No se pudo publicar: {{message}}"
+    },
+    "signIn": {
+      "title": "Inicia sesión para vender",
+      "bodyItem": "Inicia sesión y te traeremos de vuelta para anunciar {{name}}.",
+      "body": "Inicia sesión y te traeremos de vuelta aquí para anunciar tu artículo.",
+      "action": "Iniciar sesión"
+    },
+    "sellYours": "Vende el tuyo",
+    "seeListings": "Ver anuncios",
+    "empty": {
+      "title": "Ahora mismo nadie lo vende",
+      "body": "¿Tienes uno? Anúncialo en unos 15 segundos. Los compradores con una alerta de precio reciben un aviso si encaja con su objetivo."
+    },
+    "listingCount_one": "{{formatted}} anuncio",
+    "listingCount_many": "{{formatted}} anuncios",
+    "listingCount_other": "{{formatted}} anuncios",
+    "listedSoFar_one": "{{formatted}} anunciado hasta ahora.",
+    "listedSoFar_many": "{{formatted}} anunciados hasta ahora.",
+    "listedSoFar_other": "{{formatted}} anunciados hasta ahora."
   }
 }

@@ -8781,6 +8781,10 @@
     "priceAlerts": {
       "title": "價格合適時提醒你",
       "body": "為物品設定目標價格並追蹤。當公開上架達到或低於該價格時，你會收到附帶上架連結的提醒。暫停提醒可保留設定而不接收通知。"
+    },
+    "quickList": {
+      "title": "幾秒鐘刊登物品",
+      "body": "選擇物品，確認價格和數量，然後發布。庫存先填一個數量，之後隨時可以按地點或品質拆分。"
     }
   },
   "discordInstall": {
@@ -8905,5 +8909,70 @@
     "justLinked": "機器人已加入你的伺服器，伺服器已連結。請在下方選擇訂單討論串和提醒的頻道。",
     "add": "將機器人加入伺服器",
     "addHelp": "Discord 會詢問要加入哪個伺服器（你需要在該伺服器擁有「管理伺服器」權限）。完成後你會回到這裡，伺服器已連結，可以選擇頻道。"
+  },
+  "quickList": {
+    "title": "刊登物品",
+    "close": "關閉",
+    "sellingAs": "出售身分",
+    "sellingAsHelp": "這個商品要刊登到的商店。",
+    "item": "物品",
+    "pickedFromPage": "已從物品頁面選擇。",
+    "wiki": "維基",
+    "changeItem": "更換物品",
+    "price": "單價",
+    "pricePerBatchActive": "每個批次有自己的價格。",
+    "marketHint": "市場：最低 {{low}} · 中位數 {{median}} · {{listings}}",
+    "noMarket": "還沒有市場價：由你來定第一個價格。",
+    "quantity": "數量",
+    "oneLess": "減一",
+    "oneMore": "加一",
+    "quality": "品質",
+    "anyQuality": "不限",
+    "tierShort": "T{{tier}}",
+    "stock": "庫存",
+    "stockSimple": "只填數量",
+    "stockBatches": "按地點 / 品質",
+    "stockSimpleHelp": "填一個數量就夠了。之後隨時可以按地點或品質拆分。",
+    "batchLabel": "批次 {{index}}",
+    "batchQuantity": "數量",
+    "location": "地點",
+    "qualityValue": "品質 (0-1000)",
+    "batchPrice": "價格",
+    "removeBatch": "移除批次",
+    "addBatch": "新增批次",
+    "total": "合計 {{total}}",
+    "pricePerBatch": "每個批次單獨定價",
+    "moreOptions": "更多選項",
+    "moreOptionsSummary": "描述、照片、銷售方式、取貨、訂單限制、折扣",
+    "description": "描述（選填）",
+    "descriptionHelp": "支援 Markdown。物品一看就懂的話可以留空。",
+    "fullFormLead": "需要訂單金額限制或草稿？",
+    "fullForm": "開啟完整表單",
+    "learnMore": "Quick List 如何使用",
+    "publishAnother": "發布並繼續刊登",
+    "publish": "發布",
+    "published": "已刊登：{{name}}",
+    "undone": "已撤下：{{name}}",
+    "undoFailed": "無法復原。請在商店的商品列表中封存。",
+    "undo": "復原",
+    "listedAnother": "已刊登：{{name}} · {{price}} × {{quantity}}。",
+    "errors": {
+      "noShop": "請選擇出售用的商店。",
+      "summary": "無法發布：{{message}}"
+    },
+    "signIn": {
+      "title": "登入後出售",
+      "bodyItem": "登入後我們會直接帶你回來刊登 {{name}}。",
+      "body": "登入後我們會直接帶你回到這裡刊登物品。",
+      "action": "登入"
+    },
+    "sellYours": "出售我的",
+    "seeListings": "查看商品",
+    "empty": {
+      "title": "目前沒有人出售",
+      "body": "有這件物品？大約 15 秒就能刊登。設定了價格提醒的買家會在價格符合目標時收到提醒。"
+    },
+    "listingCount_other": "{{formatted}} 個商品",
+    "listedSoFar_other": "目前已刊登 {{formatted}} 個。"
   }
 }

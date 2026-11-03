@@ -8918,6 +8918,10 @@
     "priceAlerts": {
       "title": "Ein Alarm, wenn der Preis stimmt",
       "body": "Beobachte einen Gegenstand mit einem Zielpreis. Liegt ein öffentliches Inserat bei oder unter diesem Preis, erhältst du einen Alarm mit Link zum Inserat. Pausiere einen Alarm, um ihn ohne Benachrichtigungen zu behalten."
+    },
+    "quickList": {
+      "title": "Ein Artikel in Sekunden inseriert",
+      "body": "Wähle den Artikel, prüfe Preis und Menge und veröffentliche. Der Bestand ist zuerst nur eine Zahl; du kannst ihn jederzeit nach Ort oder Qualität aufteilen."
     }
   },
   "discordInstall": {
@@ -9046,5 +9050,72 @@
     "justLinked": "Der Bot ist auf deinem Server und der Server ist verknüpft. Wähle unten die Kanäle für Bestell-Threads und Alerts.",
     "add": "Bot zu einem Server hinzufügen",
     "addHelp": "Discord fragt, zu welchem Server er hinzugefügt werden soll (dort brauchst du Server verwalten). Danach kommst du mit verknüpftem Server hierher zurück und kannst die Kanäle wählen."
+  },
+  "quickList": {
+    "title": "Artikel inserieren",
+    "close": "Schließen",
+    "sellingAs": "Verkaufen als",
+    "sellingAsHelp": "Der Shop, in den dieses Inserat kommt.",
+    "item": "Artikel",
+    "pickedFromPage": "Von der Artikelseite übernommen.",
+    "wiki": "Wiki",
+    "changeItem": "Artikel ändern",
+    "price": "Stückpreis",
+    "pricePerBatchActive": "Jedes Los hat seinen eigenen Preis.",
+    "marketHint": "Markt: niedrigster {{low}} · Median {{median}} · {{listings}}",
+    "noMarket": "Noch kein Marktpreis: Du setzt den ersten.",
+    "quantity": "Menge",
+    "oneLess": "Eins weniger",
+    "oneMore": "Eins mehr",
+    "quality": "Qualität",
+    "anyQuality": "Beliebig",
+    "tierShort": "T{{tier}}",
+    "stock": "Bestand",
+    "stockSimple": "Nur eine Zahl",
+    "stockBatches": "Nach Ort / Qualität",
+    "stockSimpleHelp": "Eine Zahl reicht. Du kannst sie jederzeit nach Ort oder Qualität aufteilen.",
+    "batchLabel": "Los {{index}}",
+    "batchQuantity": "Menge",
+    "location": "Ort",
+    "qualityValue": "Qualität (0-1000)",
+    "batchPrice": "Preis",
+    "removeBatch": "Los entfernen",
+    "addBatch": "Los hinzufügen",
+    "total": "Gesamt {{total}}",
+    "pricePerBatch": "Jedes Los hat seinen eigenen Preis",
+    "moreOptions": "Weitere Optionen",
+    "moreOptionsSummary": "Beschreibung, Fotos, Verkaufsart, Abholung, Bestelllimits, Rabatte",
+    "description": "Beschreibung (optional)",
+    "descriptionHelp": "Markdown funktioniert hier. Lass das Feld leer, wenn der Artikel für sich spricht.",
+    "fullFormLead": "Brauchst du Bestellwert-Limits oder einen Entwurf?",
+    "fullForm": "Vollständiges Formular öffnen",
+    "learnMore": "So funktioniert Quick List",
+    "publishAnother": "Veröffentlichen und nächsten inserieren",
+    "publish": "Veröffentlichen",
+    "published": "Inseriert: {{name}}",
+    "undone": "Entfernt: {{name}}",
+    "undoFailed": "Rückgängig machen fehlgeschlagen. Archiviere es unter den Inseraten deines Shops.",
+    "undo": "Rückgängig",
+    "listedAnother": "Inseriert: {{name}} · {{price}} × {{quantity}}.",
+    "errors": {
+      "noShop": "Wähle den Shop, als der du verkaufst.",
+      "summary": "Veröffentlichen fehlgeschlagen: {{message}}"
+    },
+    "signIn": {
+      "title": "Zum Verkaufen anmelden",
+      "bodyItem": "Melde dich an, dann bringen wir dich direkt zurück, um {{name}} zu inserieren.",
+      "body": "Melde dich an, dann bringen wir dich direkt hierher zurück, um deinen Artikel zu inserieren.",
+      "action": "Anmelden"
+    },
+    "sellYours": "Deins verkaufen",
+    "seeListings": "Inserate ansehen",
+    "empty": {
+      "title": "Gerade verkauft niemand diesen Artikel",
+      "body": "Du hast so einen Artikel? Inseriere ihn in etwa 15 Sekunden. Käufer mit Preisalarm werden benachrichtigt, wenn der Preis passt."
+    },
+    "listingCount_one": "{{formatted}} Inserat",
+    "listingCount_other": "{{formatted}} Inserate",
+    "listedSoFar_one": "Bisher {{formatted}} inseriert.",
+    "listedSoFar_other": "Bisher {{formatted}} inseriert."
   }
 }

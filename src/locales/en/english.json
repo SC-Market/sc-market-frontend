@@ -8918,6 +8918,10 @@
     "priceAlerts": {
       "title": "Get an alert when the price is right",
       "body": "Watch an item with a target price. When a public listing is at or below it, you get an alert with a link to the listing. Pause an alert to keep it without being notified."
+    },
+    "quickList": {
+      "title": "List an item in seconds",
+      "body": "Pick the item, check the price and quantity, and publish. Stock starts as one number; split it by location or quality any time."
     }
   },
   "discordInstall": {
@@ -9046,5 +9050,72 @@
     "justLinked": "The bot is in your server and the server is linked. Pick the channels for order threads and alerts below.",
     "add": "Add the bot to a server",
     "addHelp": "Discord asks which server to add it to (you need Manage Server there). You come back here with the server linked, ready to pick channels."
+  },
+  "quickList": {
+    "title": "List an item",
+    "close": "Close",
+    "sellingAs": "Selling as",
+    "sellingAsHelp": "The shop this listing goes in.",
+    "item": "Item",
+    "pickedFromPage": "Picked from the item page.",
+    "wiki": "Wiki",
+    "changeItem": "Change item",
+    "price": "Price per unit",
+    "pricePerBatchActive": "Each batch has its own price.",
+    "marketHint": "Market: low {{low}} · median {{median}} · {{listings}}",
+    "noMarket": "No market price yet: you set the first one.",
+    "quantity": "Quantity",
+    "oneLess": "One less",
+    "oneMore": "One more",
+    "quality": "Quality",
+    "anyQuality": "Any",
+    "tierShort": "T{{tier}}",
+    "stock": "Stock",
+    "stockSimple": "Just a number",
+    "stockBatches": "By location / quality",
+    "stockSimpleHelp": "One number is enough. You can split it by location or quality any time.",
+    "batchLabel": "Batch {{index}}",
+    "batchQuantity": "Qty",
+    "location": "Location",
+    "qualityValue": "Quality (0-1000)",
+    "batchPrice": "Price",
+    "removeBatch": "Remove batch",
+    "addBatch": "Add batch",
+    "total": "Total {{total}}",
+    "pricePerBatch": "Each batch has its own price",
+    "moreOptions": "More options",
+    "moreOptionsSummary": "Description, photos, sale type, pickup, order limits, discounts",
+    "description": "Description (optional)",
+    "descriptionHelp": "Markdown works here. Leave it empty if the item speaks for itself.",
+    "fullFormLead": "Need order value limits or a draft?",
+    "fullForm": "Open the full form",
+    "learnMore": "How Quick List works",
+    "publishAnother": "Publish & list another",
+    "publish": "Publish",
+    "published": "Listed: {{name}}",
+    "undone": "Removed: {{name}}",
+    "undoFailed": "Couldn't undo. Archive it from your shop's Listings.",
+    "undo": "Undo",
+    "listedAnother": "Listed: {{name}} · {{price}} × {{quantity}}.",
+    "errors": {
+      "noShop": "Choose the shop to sell as.",
+      "summary": "Couldn't publish: {{message}}"
+    },
+    "signIn": {
+      "title": "Sign in to sell",
+      "bodyItem": "Sign in and we'll bring you straight back to listing {{name}}.",
+      "body": "Sign in and we'll bring you straight back here to list your item.",
+      "action": "Sign in"
+    },
+    "sellYours": "Sell yours",
+    "seeListings": "See listings",
+    "empty": {
+      "title": "Nobody is selling this right now",
+      "body": "Have one? List it in about 15 seconds. Buyers watching its price get an alert when it fits their target."
+    },
+    "listingCount_one": "{{formatted}} listing",
+    "listingCount_other": "{{formatted}} listings",
+    "listedSoFar_one": "{{formatted}} listed so far.",
+    "listedSoFar_other": "{{formatted}} listed so far."
   }
 }

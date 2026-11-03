@@ -89,7 +89,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api
 import { useCustomDomain } from "../../hooks/contractor/CustomDomain"
 import { canManageOrgOrders } from "../../features/contractor/domain/orgPermissions"
 import { canOpenOrgManage } from "../../features/contractor/domain/manageTabs"
-import { shopContextFromState } from "./shopContextState"
+import { setSidebarShopContext, shopContextFromState } from "./shopContextState"
 import { useGetMyShopsQuery, type ShopResponse } from "../../store/api/v2/market"
 import {
   ADMIN_PATHS,
@@ -244,6 +244,13 @@ export function SidebarV2() {
   const shopPendingOrderCount = useShopPendingOrderCount(
     context === "shop" ? selectedShop?.slug : undefined,
   )
+
+  // Pages outside /shop/:slug read the shop the sidebar is in (Quick List)
+  const sidebarShopSlug = context === "shop" ? (selectedShop?.slug ?? null) : null
+  useEffect(() => {
+    setSidebarShopContext(sidebarShopSlug)
+    return () => setSidebarShopContext(null)
+  }, [sidebarShopSlug])
 
   const contextLabel = useMemo(() => {
     if (context === "admin") return t("nav.admin", "Admin")

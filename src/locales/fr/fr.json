@@ -9055,6 +9055,10 @@
     "priceAlerts": {
       "title": "Recevez une alerte au bon prix",
       "body": "Surveillez un article avec un prix cible. Quand une annonce publique est à ce prix ou moins, vous recevez une alerte avec un lien vers l'annonce. Mettez une alerte en pause pour la garder sans être notifié."
+    },
+    "quickList": {
+      "title": "Mettez un article en vente en quelques secondes",
+      "body": "Choisissez l'article, vérifiez le prix et la quantité, puis publiez. Le stock commence par un seul nombre ; vous pouvez le répartir par lieu ou par qualité à tout moment."
     }
   },
   "discordInstall": {
@@ -9187,5 +9191,74 @@
     "justLinked": "Le bot est sur votre serveur et le serveur est lié. Choisissez ci-dessous les salons des fils et des alertes de commande.",
     "add": "Ajouter le bot à un serveur",
     "addHelp": "Discord vous demande à quel serveur l'ajouter (il vous faut Gérer le serveur sur celui-ci). Vous revenez ici avec le serveur lié, prêt à choisir les salons."
+  },
+  "quickList": {
+    "title": "Mettre un article en vente",
+    "close": "Fermer",
+    "sellingAs": "Vendre en tant que",
+    "sellingAsHelp": "La boutique où cette annonce sera publiée.",
+    "item": "Article",
+    "pickedFromPage": "Choisi depuis la page de l'article.",
+    "wiki": "Wiki",
+    "changeItem": "Changer d'article",
+    "price": "Prix unitaire",
+    "pricePerBatchActive": "Chaque lot a son propre prix.",
+    "marketHint": "Marché : plus bas {{low}} · médiane {{median}} · {{listings}}",
+    "noMarket": "Pas encore de prix de marché : vous fixez le premier.",
+    "quantity": "Quantité",
+    "oneLess": "Un de moins",
+    "oneMore": "Un de plus",
+    "quality": "Qualité",
+    "anyQuality": "Toutes",
+    "tierShort": "T{{tier}}",
+    "stock": "Stock",
+    "stockSimple": "Juste un nombre",
+    "stockBatches": "Par lieu / qualité",
+    "stockSimpleHelp": "Un seul nombre suffit. Vous pouvez le répartir par lieu ou par qualité à tout moment.",
+    "batchLabel": "Lot {{index}}",
+    "batchQuantity": "Qté",
+    "location": "Lieu",
+    "qualityValue": "Qualité (0-1000)",
+    "batchPrice": "Prix",
+    "removeBatch": "Retirer le lot",
+    "addBatch": "Ajouter un lot",
+    "total": "Total {{total}}",
+    "pricePerBatch": "Chaque lot a son propre prix",
+    "moreOptions": "Plus d'options",
+    "moreOptionsSummary": "Description, photos, type de vente, retrait, limites de commande, remises",
+    "description": "Description (facultative)",
+    "descriptionHelp": "Le Markdown fonctionne ici. Laissez vide si l'article se suffit à lui-même.",
+    "fullFormLead": "Besoin de limites de montant ou d'un brouillon ?",
+    "fullForm": "Ouvrir le formulaire complet",
+    "learnMore": "Comment fonctionne Quick List",
+    "publishAnother": "Publier et en ajouter une autre",
+    "publish": "Publier",
+    "published": "En vente : {{name}}",
+    "undone": "Retirée : {{name}}",
+    "undoFailed": "Impossible d'annuler. Archivez-la depuis les annonces de votre boutique.",
+    "undo": "Annuler",
+    "listedAnother": "En vente : {{name}} · {{price}} × {{quantity}}.",
+    "errors": {
+      "noShop": "Choisissez la boutique au nom de laquelle vous vendez.",
+      "summary": "Publication impossible : {{message}}"
+    },
+    "signIn": {
+      "title": "Connectez-vous pour vendre",
+      "bodyItem": "Connectez-vous et nous vous ramènerons directement à la mise en vente de {{name}}.",
+      "body": "Connectez-vous et nous vous ramènerons ici pour mettre votre article en vente.",
+      "action": "Se connecter"
+    },
+    "sellYours": "Vendre le vôtre",
+    "seeListings": "Voir les annonces",
+    "empty": {
+      "title": "Personne ne le vend en ce moment",
+      "body": "Vous en avez un ? Mettez-le en vente en 15 secondes environ. Les acheteurs qui suivent son prix reçoivent une alerte s'il correspond à leur objectif."
+    },
+    "listingCount_one": "{{formatted}} annonce",
+    "listingCount_many": "{{formatted}} annonces",
+    "listingCount_other": "{{formatted}} annonces",
+    "listedSoFar_one": "{{formatted}} mise en vente jusqu'ici.",
+    "listedSoFar_many": "{{formatted}} mises en vente jusqu'ici.",
+    "listedSoFar_other": "{{formatted}} mises en vente jusqu'ici."
   }
 }

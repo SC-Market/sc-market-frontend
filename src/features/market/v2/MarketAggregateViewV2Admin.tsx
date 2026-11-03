@@ -66,6 +66,7 @@ import {
 } from "./MarketAggregateViewV2";
 import { QualityHistogram } from "../../../components/market/v2/QualityHistogram";
 import { MARKET_PATHS } from "../../../routes/paths";
+import { QuickListProvider, SellYoursButton } from "../quick-list/SellYours";
 import { WatchPriceButton } from "../../price-alerts/components/WatchPriceButton";
 import { remainingQuantity, totalRemainingQuantity } from "../domain/buyOrders";
 import { useFormatters } from "../../../util/format"
@@ -717,7 +718,21 @@ function SellOrdersPanel({
         ))}
       </Box>
 
-      {sorted.length === 0 ? (
+      {sorted.length === 0 && totalCount === 0 ? (
+        // Nobody sells it: invite the visitor to be the first
+        <Stack alignItems="center" spacing={1} sx={{ px: 3, py: 3, textAlign: "center" }}>
+          <Typography color="text.secondary" fontWeight={700}>
+            {t("quickList.empty.title", "Nobody is selling this right now")}
+          </Typography>
+          <Typography variant="body2" color="text.primary" sx={{ maxWidth: 360 }}>
+            {t(
+              "quickList.empty.body",
+              "Have one? List it in about 15 seconds. Buyers watching this item get notified.",
+            )}
+          </Typography>
+          <SellYoursButton variant="contained" />
+        </Stack>
+      ) : sorted.length === 0 ? (
         <Box sx={{ px: 3, py: 3 }}>
           <Typography variant="body2" color="text.secondary">
             {t("marketUi.aggregateAdmin.noSellOrders")}
@@ -1334,14 +1349,15 @@ export function MarketAggregateViewV2Admin({
     return prices.length ? Math.min(...prices) : null;
   }, [listings]);
 
-  const createListingUrl = [
-    MARKET_PATHS.create,
-    `?game_item_id=${encodeURIComponent(gameItemId)}`,
-    `&game_item_name=${encodeURIComponent(game_item.name)}`,
-    `&game_item_type=${encodeURIComponent(game_item.type || "")}`,
-  ].join("");
+  // "Sell yours" opens Quick List with this item (game_item.id is the UUID;
+  // the route param may be a short slug)
+  const quickListItem = game_item.id && game_item.name
+    ? { id: game_item.id, name: game_item.name, type: game_item.type || null }
+    : null;
+  const activeListingCount = listings.filter((l) => l.quantity_available > 0).length;
 
   return (
+    <QuickListProvider item={quickListItem}>
     <Grid item xs={12}>
       <Grid container spacing={2}>
 
@@ -1386,7 +1402,9 @@ export function MarketAggregateViewV2Admin({
               direction="row"
               alignItems="center"
               justifyContent="flex-end"
-              spacing={1}
+              flexWrap="wrap"
+              useFlexGap
+              gap={1}
               sx={{ px: 2, pt: 1.5, pb: 1 }}
             >
               {/* game_item.id is the UUID; the route param may be a short slug */}
@@ -1398,16 +1416,12 @@ export function MarketAggregateViewV2Admin({
                   qualityRelevant={quality_distribution.length > 0}
                 />
               )}
-              <Button
-                component={Link}
-                to={createListingUrl}
-                variant="outlined"
-                color="success"
+              <SellYoursButton
+                variant="contained"
+                color="primary"
                 size="small"
                 sx={{ fontWeight: 600 }}
-              >
-                {t("marketUi.aggregateAdmin.createListing")}
-              </Button>
+              />
               <Button
                 component={Link}
                 to={`${MARKET_PATHS.buyOrderCreate}?game_item_id=${encodeURIComponent(gameItemId)}&game_item_name=${encodeURIComponent(game_item.name)}`}
@@ -1462,12 +1476,13 @@ export function MarketAggregateViewV2Admin({
           xs={12}
           lg={6}
           title={t("MarketAggregateView.sellOrders", "Sell Orders")}
+          subtitle={activeListingCount > 0 ? <SellYoursButton size="small" /> : undefined}
           disablePadding
         >
           <Grid item xs={12}>
             <SellOrdersPanel
               listings={filteredListings}
-              totalCount={listings.filter((l) => l.quantity_available > 0).length}
+              totalCount={activeListingCount}
             />
           </Grid>
         </Section>
@@ -1522,5 +1537,6 @@ export function MarketAggregateViewV2Admin({
 
       </Grid>
     </Grid>
+    </QuickListProvider>
   );
 }

@@ -8787,6 +8787,10 @@
     "priceAlerts": {
       "title": "价格合适时提醒你",
       "body": "为物品设置目标价格并关注。当公开上架达到或低于该价格时，你会收到附带上架链接的提醒。暂停提醒可保留设置而不接收通知。"
+    },
+    "quickList": {
+      "title": "几秒钟上架物品",
+      "body": "选择物品，确认价格和数量，然后发布。库存先填一个数量，之后随时可以按地点或品质拆分。"
     }
   },
   "discordInstall": {
@@ -8911,5 +8915,70 @@
     "justLinked": "机器人已加入你的服务器，服务器已关联。请在下方选择订单讨论帖和提醒的频道。",
     "add": "将机器人添加到服务器",
     "addHelp": "Discord 会询问要添加到哪个服务器（你需要在该服务器拥有“管理服务器”权限）。完成后你会回到这里，服务器已关联，可以选择频道。"
+  },
+  "quickList": {
+    "title": "上架物品",
+    "close": "关闭",
+    "sellingAs": "出售身份",
+    "sellingAsHelp": "这个商品要上架到的店铺。",
+    "item": "物品",
+    "pickedFromPage": "已从物品页面选择。",
+    "wiki": "百科",
+    "changeItem": "更换物品",
+    "price": "单价",
+    "pricePerBatchActive": "每个批次有自己的价格。",
+    "marketHint": "市场：最低 {{low}} · 中位数 {{median}} · {{listings}}",
+    "noMarket": "还没有市场价：由你来定第一个价格。",
+    "quantity": "数量",
+    "oneLess": "减一",
+    "oneMore": "加一",
+    "quality": "品质",
+    "anyQuality": "不限",
+    "tierShort": "T{{tier}}",
+    "stock": "库存",
+    "stockSimple": "只填数量",
+    "stockBatches": "按地点 / 品质",
+    "stockSimpleHelp": "填一个数量就够了。之后随时可以按地点或品质拆分。",
+    "batchLabel": "批次 {{index}}",
+    "batchQuantity": "数量",
+    "location": "地点",
+    "qualityValue": "品质 (0-1000)",
+    "batchPrice": "价格",
+    "removeBatch": "移除批次",
+    "addBatch": "添加批次",
+    "total": "合计 {{total}}",
+    "pricePerBatch": "每个批次单独定价",
+    "moreOptions": "更多选项",
+    "moreOptionsSummary": "描述、照片、销售方式、取货、订单限制、折扣",
+    "description": "描述（可选）",
+    "descriptionHelp": "支持 Markdown。物品一看就懂的话可以留空。",
+    "fullFormLead": "需要订单金额限制或草稿？",
+    "fullForm": "打开完整表单",
+    "learnMore": "Quick List 如何使用",
+    "publishAnother": "发布并继续上架",
+    "publish": "发布",
+    "published": "已上架：{{name}}",
+    "undone": "已撤下：{{name}}",
+    "undoFailed": "无法撤销。请在店铺的商品列表中归档。",
+    "undo": "撤销",
+    "listedAnother": "已上架：{{name}} · {{price}} × {{quantity}}。",
+    "errors": {
+      "noShop": "请选择出售用的店铺。",
+      "summary": "无法发布：{{message}}"
+    },
+    "signIn": {
+      "title": "登录后出售",
+      "bodyItem": "登录后我们会直接带你回来上架 {{name}}。",
+      "body": "登录后我们会直接带你回到这里上架物品。",
+      "action": "登录"
+    },
+    "sellYours": "出售我的",
+    "seeListings": "查看商品",
+    "empty": {
+      "title": "目前没有人出售",
+      "body": "有这件物品？大约 15 秒就能上架。设置了价格提醒的买家会在价格符合目标时收到提醒。"
+    },
+    "listingCount_other": "{{formatted}} 个商品",
+    "listedSoFar_other": "目前已上架 {{formatted}} 个。"
   }
 }

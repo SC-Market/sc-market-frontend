@@ -71,10 +71,13 @@ export function ItemAcquisitionSection({
   doc,
   itemName,
   onAddToCart,
+  actions,
 }: {
   doc: ItemAcquisitionDocument
   itemName: string
   onAddToCart?: (listingId: string) => void
+  /** Buttons beside the title (the wiki page's See listings / Sell yours) */
+  actions?: React.ReactNode
 }) {
   const { t, i18n } = useTranslation()
   const locale = i18n.language
@@ -88,9 +91,22 @@ export function ItemAcquisitionSection({
   return (
     <Card sx={{ mt: 2 }} component="section" aria-labelledby="how-to-get-title">
       <CardContent>
-        <Typography id="how-to-get-title" variant="h6" component="h2" gutterBottom>
-          {t("itemAcquisition.title", { defaultValue: "How to get {{name}}", name: itemName })}
-        </Typography>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "stretch", sm: "flex-start" }}
+          gap={1}
+          sx={{ mb: 1 }}
+        >
+          <Typography id="how-to-get-title" variant="h6" component="h2">
+            {t("itemAcquisition.title", { defaultValue: "How to get {{name}}", name: itemName })}
+          </Typography>
+          {actions && (
+            <Stack direction="row" gap={1} flexWrap="wrap" useFlexGap>
+              {actions}
+            </Stack>
+          )}
+        </Stack>
         {!any && (
           <Typography variant="body2" color="text.secondary">
             {t("itemAcquisition.noSources", {

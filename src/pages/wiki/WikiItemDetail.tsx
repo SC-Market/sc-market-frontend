@@ -30,7 +30,7 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, Link as RouterLink } from "react-router-dom"
 import { useGetItemDetailQuery, useGetAcquisitionQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintReference } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -38,7 +38,7 @@ import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
 import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHistoryChartV2"
 import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
-import { WIKI_PATHS, GAME_DATA_PATHS } from "../../routes/paths"
+import { WIKI_PATHS, GAME_DATA_PATHS, MARKET_PATHS } from "../../routes/paths"
 import { ItemAcquisitionSection } from "../../components/game-data/ItemAcquisitionSection"
 import { AnswerLead } from "../../components/game-data/AnswerSummary"
 import { buildItemSummary } from "../../util/answerContent"
@@ -50,6 +50,7 @@ import { SeoHead } from "../../seo/SeoHead"
 import { usePageReady } from "../../components/metadata/PageReady"
 import { isPrimaryLoading } from "../../components/metadata/pageReadyStore"
 import { WatchPriceButton } from "../../features/price-alerts/components/WatchPriceButton"
+import { QuickListProvider, SellYoursButton } from "../../features/market/quick-list/SellYours"
 
 import { useFormatters } from "../../util/format"
 const TAB_OVERVIEW = 0
@@ -131,6 +132,7 @@ export function WikiItemDetail() {
       maxWidth="md"
     >
       <SeoHead head={head} />
+      <QuickListProvider item={{ id: item.id, name: item.name, type: item.type ?? null }}>
       <Grid item xs={12}>
         <AnswerLead summary={answerSummary} />
         <Grid container spacing={3}>
@@ -161,21 +163,40 @@ export function WikiItemDetail() {
                       {item.manufacturer && <Chip label={item.manufacturer} clickable onClick={() => navigate(WIKI_PATHS.manufacturer(encodeURIComponent(item.manufacturer!)))} />}
                     </Stack>
 
-                    <Box sx={{ mb: 2 }}>
+                    <Stack direction="row" gap={1} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
                       <WatchPriceButton
                         gameItemId={item.id}
                         itemName={item.name}
                         currentPrice={item.market_stats.min_price}
                         qualityRelevant={item.craftable_from.length > 0}
                       />
-                    </Box>
+                      <SellYoursButton variant="contained" size="small" />
+                    </Stack>
                   </Box>
                 </Stack>
               </CardContent>
             </Card>
 
             {acquisition && (
-              <ItemAcquisitionSection doc={acquisition} itemName={item.name} onAddToCart={openAddToCart} />
+              <ItemAcquisitionSection
+                doc={acquisition}
+                itemName={item.name}
+                onAddToCart={openAddToCart}
+                actions={
+                  <>
+                    <Button
+                      component={RouterLink}
+                      to={MARKET_PATHS.aggregate(item.id, item.name)}
+                      variant="outlined"
+                      color="secondary"
+                      size="small"
+                    >
+                      {t("quickList.seeListings", "See listings")}
+                    </Button>
+                    <SellYoursButton variant="outlined" size="small" />
+                  </>
+                }
+              />
             )}
 
             {/* Tabs */}
@@ -371,6 +392,7 @@ export function WikiItemDetail() {
           </Grid>
         </Grid>
       </Grid>
+      </QuickListProvider>
     </StandardPageLayout>
   )
 }

@@ -35,6 +35,8 @@ export const HINTS = {
   discordUserInstall: { key: "discord.user-install", guide: "discordUserInstall" },
   /** Settings › Price Alerts: what a watch does, pausing. */
   priceAlerts: { key: "price-alerts.watchlist", guide: "priceAlerts" },
+  /** Quick List dialog: list an item in seconds, split stock later. */
+  quickList: { key: "quick-list.intro", guide: "quickList" },
 } as const satisfies Record<string, { key: string; guide: GuideLink }>
 
 export type HintId = keyof typeof HINTS
