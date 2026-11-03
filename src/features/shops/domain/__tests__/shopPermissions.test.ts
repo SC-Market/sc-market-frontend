@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest"
-import { canEditShopListings, canEditShopStockLots } from "../shopPermissions"
+import {
+  canEditShopListings,
+  canEditShopStockLots,
+  canOpenShopSettings,
+} from "../shopPermissions"
 
 const perms = (
   p: Partial<{
@@ -40,5 +44,26 @@ describe("shop permission helpers", () => {
   it("allows nothing without permissions (someone else's shop)", () => {
     expect(canEditShopListings({})).toBe(false)
     expect(canEditShopStockLots({})).toBe(false)
+  })
+
+  describe("canOpenShopSettings", () => {
+    it("allows shop managers (owner or Manage Market: can_manage)", () => {
+      expect(canOpenShopSettings(perms({ can_manage: true, manage_market: true }))).toBe(true)
+    })
+
+    it("follows can_manage, the flag the backend's canManageShop sets", () => {
+      expect(canOpenShopSettings(perms({ can_manage: true }))).toBe(true)
+      expect(canOpenShopSettings(perms({ manage_market: true }))).toBe(false)
+    })
+
+    it("denies Manage Stock and Manage Orders on their own", () => {
+      expect(canOpenShopSettings(perms({ manage_stock: true }))).toBe(false)
+      expect(canOpenShopSettings(perms({ manage_orders: true }))).toBe(false)
+      expect(canOpenShopSettings(perms({ manage_stock: true, manage_orders: true }))).toBe(false)
+    })
+
+    it("denies without permissions (someone else's shop)", () => {
+      expect(canOpenShopSettings({})).toBe(false)
+    })
   })
 })

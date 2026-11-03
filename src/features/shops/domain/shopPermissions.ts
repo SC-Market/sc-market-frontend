@@ -7,6 +7,7 @@ import type { ShopResponse } from "../../../store/api/v2/market"
  *
  * | helper                  | owner | Manage Market | Manage Stock | Manage Orders |
  * | ----------------------- | ----- | ------------- | ------------ | ------------- |
+ * | canOpenShopSettings     | yes   | yes           | no           | no            |
  * | canEditShopListings     | yes   | yes           | no           | no            |
  * | canEditShopStockLots    | yes   | yes           | yes          | no            |
  *
@@ -15,8 +16,18 @@ import type { ShopResponse } from "../../../store/api/v2/market"
 type ShopWithPermissions = Pick<ShopResponse, "permissions">
 
 /**
- * Edit the shop's settings and create, edit, renew and remove its listings
- * (backend canManageShop: `can_manage`).
+ * Open the shop's Settings page and save it: the backend's update-shop,
+ * webhook, blocklist and order-settings endpoints all check canManageShop
+ * (the owning user, or an org member with Manage Market), which /shops/mine
+ * reports as `can_manage`. The sidebar and the Settings route both use this.
+ */
+export function canOpenShopSettings(shop: ShopWithPermissions): boolean {
+  return shop.permissions?.can_manage === true
+}
+
+/**
+ * Create, edit, renew and remove the shop's listings (backend canManageShop:
+ * `can_manage`).
  */
 export function canEditShopListings(shop: ShopWithPermissions): boolean {
   return shop.permissions?.can_manage === true

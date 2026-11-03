@@ -111,6 +111,7 @@ import { whiteLabelTabIcon } from "../../features/contractor/components/whiteLab
 import { getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { isSiteAdmin } from "../../util/siteRole"
 import { isMfaLockedAdmin } from "../../features/mfa/adminLock"
+import { canOpenShopSettings } from "../../features/shops/domain/shopPermissions"
 import LockRounded from "@mui/icons-material/LockRounded"
 
 type NavContext = "browse" | "shop" | "org" | "admin"
@@ -303,10 +304,10 @@ export function SidebarV2() {
         items.push({ label: t("nav.stock", "Stock"), to: SHOP_PATHS.stock(slug), icon: <InventoryRounded /> })
       }
       if (perms?.can_manage) {
-        items.push(
-          { label: t("nav.customers", "Customers"), to: SHOP_PATHS.customers(slug), icon: <PeopleRounded />, group: manage },
-          { label: t("nav.shopSettings", "Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded />, group: manage },
-        )
+        items.push({ label: t("nav.customers", "Customers"), to: SHOP_PATHS.customers(slug), icon: <PeopleRounded />, group: manage })
+      }
+      if (canOpenShopSettings(selectedShop)) {
+        items.push({ label: t("nav.shopSettings", "Settings"), to: SHOP_PATHS.settings(slug), icon: <SettingsRounded />, group: manage })
       }
       return items
     }

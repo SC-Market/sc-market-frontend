@@ -48,6 +48,13 @@ import { useUploadImageMutation } from "../../../store/api/v2/market-overrides"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
 import { WEBHOOK_ACTIONS } from "../domain/webhookEvents"
+import { canOpenShopSettings } from "../domain/shopPermissions"
+import {
+  savedSettingsDraft,
+  settingsDraftToUpdateRequest,
+  shopToSettingsDraft,
+  type ShopSettingsDraft,
+} from "../domain/shopSettingsForm"
 import { HelpLink } from "../../help/components/HelpLink"
 import { HelpTip } from "../../help/components/HelpTip"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
@@ -709,6 +716,16 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
 
 export function ShopSettings() {
   const { shop } = useShopRouteContext()
+
+  if (!canOpenShopSettings(shop)) {
+    return <Navigate to={SHOP_PATHS.listings(shop.slug)} replace />
+  }
+  // Keyed by shop: the form's draft is made once per shop, so a refetch of
+  // the same shop never wipes what is being typed.
+  return <ShopSettingsForm key={shop.shop_id} shop={shop} />
+}
+
+function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   // Tags are stored in English; only their display label is translated.
@@ -717,57 +734,19 @@ export function ShopSettings() {
   const languageLabel = (code: string) =>
     t(`languages.${code}`, { defaultValue: code })
 
-  // Redirect if user doesn't have manage_market permission
-  if (!shop.permissions?.manage_market) {
-    return <Navigate to={SHOP_PATHS.listings(shop.slug)} replace />
-  }
   const [updateShop, { isLoading }] = useUpdateShopMutation()
   const issueAlert = useAlertHook()
+  const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation()
 
-  const [name, setName] = useState(shop.name)
-  const [slug, setSlug] = useState(shop.slug)
+  const [base, setBase] = useState(() => shopToSettingsDraft(shop))
+  const [draft, setDraft] = useState(base)
   const [slugConflict, setSlugConflict] = useState<
     ShopSlugAvailabilityResponse | undefined
   >(undefined)
-  const [description, setDescription] = useState(shop.description)
-  const [tags, setTags] = useState<string[]>(shop.tags)
-  const [supportedLanguages, setSupportedLanguages] = useState<string[]>(
-    shop.supported_languages,
-  )
-  const [acceptsCustomOrders, setAcceptsCustomOrders] = useState(
-    shop.accepts_custom_orders,
-  )
-  const [marketOrderTemplate, setMarketOrderTemplate] = useState(
-    shop.market_order_template,
-  )
-  const [officialServerId, setOfficialServerId] = useState<string>(
-    shop.official_server_id ?? "",
-  )
-  const [discordThreadChannelId, setDiscordThreadChannelId] = useState<string>(
-    shop.discord_thread_channel_id ?? "",
-  )
-  const [logoResourceId, setLogoResourceId] = useState<string | null>(null)
-  const [logoUrl, setLogoUrl] = useState<string | null>(shop.logo_url)
-  const [bannerResourceId, setBannerResourceId] = useState<string | null>(null)
-  const [bannerUrl, setBannerUrl] = useState<string | null>(shop.banner_url)
-  const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation()
-
-  // Reset form when shop changes (e.g. navigating between shops)
-  useEffect(() => {
-    setName(shop.name)
-    setSlug(shop.slug)
-    setDescription(shop.description)
-    setTags(shop.tags)
-    setSupportedLanguages(shop.supported_languages)
-    setAcceptsCustomOrders(shop.accepts_custom_orders)
-    setMarketOrderTemplate(shop.market_order_template)
-    setOfficialServerId(shop.official_server_id ?? "")
-    setDiscordThreadChannelId(shop.discord_thread_channel_id ?? "")
-    setLogoResourceId(null)
-    setLogoUrl(shop.logo_url)
-    setBannerResourceId(null)
-    setBannerUrl(shop.banner_url)
-  }, [shop])
+  const edit = <K extends keyof ShopSettingsDraft>(
+    field: K,
+    value: ShopSettingsDraft[K],
+  ) => setDraft((d) => ({ ...d, [field]: value }))
 
   const handleImageUpload = async (original: File, kind: "logo" | "banner") => {
     try {
@@ -776,21 +755,19 @@ export function ShopSettings() {
         kind === "logo" ? AVATAR_RESIZE : BANNER_RESIZE,
       )
       const result = await uploadImage(file).unwrap()
-      if (kind === "logo") {
-        setLogoResourceId(result.resource_id)
-        setLogoUrl(result.url)
-      } else {
-        setBannerResourceId(result.resource_id)
-        setBannerUrl(result.url)
-      }
+      setDraft((d) =>
+        kind === "logo"
+          ? { ...d, logo: result.resource_id, logoUrl: result.url }
+          : { ...d, banner: result.resource_id, bannerUrl: result.url },
+      )
     } catch (err) {
       issueAlert(err as { status: number; data: { message?: string } })
     }
   }
 
   const discordErrorReason = shopDiscordChannelError(
-    officialServerId,
-    discordThreadChannelId,
+    draft.officialServerId,
+    draft.discordThreadChannelId,
   )
   const discordError = discordErrorReason
     ? t(`shopsUi.discord.${discordErrorReason}`)
@@ -801,24 +778,20 @@ export function ShopSettings() {
       issueAlert({ message: discordError, severity: "error" })
       return
     }
+    const saving = draft
     try {
       await updateShop({
         shopId: shop.shop_id,
-        updateShopRequest: {
-          name,
-          slug,
-          description,
-          tags,
-          supported_languages: supportedLanguages,
-          accepts_custom_orders: acceptsCustomOrders,
-          market_order_template: marketOrderTemplate,
-          official_server_id: officialServerId.trim() || null,
-          discord_thread_channel_id: discordThreadChannelId.trim() || null,
-          ...(logoResourceId ? { logo: logoResourceId } : {}),
-          ...(bannerResourceId ? { banner: bannerResourceId } : {}),
-        },
+        updateShopRequest: settingsDraftToUpdateRequest(saving, base),
       }).unwrap()
 
+      setBase(savedSettingsDraft(saving))
+      // The uploads are saved; keep any edit made while the save was running.
+      setDraft((d) => ({
+        ...d,
+        logo: d.logo === saving.logo ? null : d.logo,
+        banner: d.banner === saving.banner ? null : d.banner,
+      }))
       issueAlert({ message: t("shopsUi.settings.saved"), severity: "success" })
     } catch (err) {
       // Taken or reserved: the slug field shows why, with free suggestions.
@@ -848,8 +821,8 @@ export function ShopSettings() {
             <Grid item xs={12}>
               <TextField
                 label={t("shopsUi.form.shopName")}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={draft.name}
+                onChange={(e) => edit("name", e.target.value)}
                 fullWidth
                 size="small"
                 required
@@ -857,8 +830,8 @@ export function ShopSettings() {
             </Grid>
             <Grid item xs={12} md={6}>
               <ShopSlugField
-                value={slug}
-                onChange={(value) => setSlug(value.trim().toLowerCase())}
+                value={draft.slug}
+                onChange={(value) => edit("slug", value.trim().toLowerCase())}
                 shopId={shop.shop_id}
                 currentSlug={shop.slug}
                 conflict={slugConflict}
@@ -869,8 +842,8 @@ export function ShopSettings() {
             <Grid item xs={12}>
               <TextField
                 label={t("shopsUi.form.description")}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                value={draft.description}
+                onChange={(e) => edit("description", e.target.value)}
                 fullWidth
                 size="small"
                 multiline
@@ -890,7 +863,7 @@ export function ShopSettings() {
               </Typography>
               <Stack direction="row" spacing={2} alignItems="center">
                 <Avatar
-                  src={logoUrl || undefined}
+                  src={draft.logoUrl || undefined}
                   variant="rounded"
                   sx={{ width: 64, height: 64 }}
                 >
@@ -926,7 +899,7 @@ export function ShopSettings() {
                     height: 64,
                     borderRadius: 1,
                     bgcolor: "background.default",
-                    backgroundImage: bannerUrl ? `url(${bannerUrl})` : undefined,
+                    backgroundImage: draft.bannerUrl ? `url(${draft.bannerUrl})` : undefined,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     display: "flex",
@@ -935,7 +908,7 @@ export function ShopSettings() {
                     border: `1px solid ${theme.palette.divider}`,
                   }}
                 >
-                  {!bannerUrl && <ImageRounded color="disabled" />}
+                  {!draft.bannerUrl && <ImageRounded color="disabled" />}
                 </Box>
                 <Button
                   component="label"
@@ -968,8 +941,8 @@ export function ShopSettings() {
                 multiple
                 options={AVAILABLE_TAGS.slice()}
                 getOptionLabel={tagLabel}
-                value={tags}
-                onChange={(_e, newValue) => setTags(newValue)}
+                value={draft.tags}
+                onChange={(_e, newValue) => edit("tags", newValue)}
                 renderTags={(value, getTagProps) =>
                   value.map((option, index) => {
                     const { key, ...rest } = getTagProps({ index })
@@ -998,8 +971,8 @@ export function ShopSettings() {
                 multiple
                 options={AVAILABLE_LANGUAGES.slice()}
                 getOptionLabel={languageLabel}
-                value={supportedLanguages}
-                onChange={(_e, newValue) => setSupportedLanguages(newValue)}
+                value={draft.supportedLanguages}
+                onChange={(_e, newValue) => edit("supportedLanguages", newValue)}
                 renderTags={(value, getTagProps) =>
                   value.map((code, index) => {
                     const { key, ...rest } = getTagProps({ index })
@@ -1034,8 +1007,8 @@ export function ShopSettings() {
               <FormControlLabel
                 control={
                   <Switch
-                    checked={acceptsCustomOrders}
-                    onChange={(e) => setAcceptsCustomOrders(e.target.checked)}
+                    checked={draft.acceptsCustomOrders}
+                    onChange={(e) => edit("acceptsCustomOrders", e.target.checked)}
                   />
                 }
                 label={t("shopsUi.form.acceptCustomOrders")}
@@ -1044,8 +1017,8 @@ export function ShopSettings() {
             <Grid item xs={12}>
               <TextField
                 label={t("shopsUi.settings.marketOrderTemplate")}
-                value={marketOrderTemplate}
-                onChange={(e) => setMarketOrderTemplate(e.target.value)}
+                value={draft.marketOrderTemplate}
+                onChange={(e) => edit("marketOrderTemplate", e.target.value)}
                 fullWidth
                 size="small"
                 multiline
@@ -1079,8 +1052,8 @@ export function ShopSettings() {
             <Grid item xs={12} md={6}>
               <TextField
                 label={t("shopsUi.settings.discordServerId")}
-                value={officialServerId}
-                onChange={(e) => setOfficialServerId(e.target.value)}
+                value={draft.officialServerId}
+                onChange={(e) => edit("officialServerId", e.target.value)}
                 fullWidth
                 size="small"
                 placeholder={t("shopsUi.settings.discordIdPlaceholder")}
@@ -1098,8 +1071,8 @@ export function ShopSettings() {
             <Grid item xs={12} md={6}>
               <TextField
                 label={t("shopsUi.settings.threadChannelId")}
-                value={discordThreadChannelId}
-                onChange={(e) => setDiscordThreadChannelId(e.target.value)}
+                value={draft.discordThreadChannelId}
+                onChange={(e) => edit("discordThreadChannelId", e.target.value)}
                 fullWidth
                 size="small"
                 placeholder={t("shopsUi.settings.discordIdPlaceholder")}
@@ -1141,7 +1114,7 @@ export function ShopSettings() {
               loading={isLoading}
               startIcon={<SaveRounded />}
               onClick={handleSave}
-              disabled={!name.trim()}
+              disabled={!draft.name.trim()}
             >
               {t("orgAbout.saveChanges")}
             </LoadingButton>
