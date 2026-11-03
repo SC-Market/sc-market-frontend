@@ -29,6 +29,8 @@ const member = (roleId: string, username = "me"): Viewer => ({
 })
 const stranger: Viewer = { username: "me" }
 const admin: Viewer = { username: "me", role: "admin" }
+const otherOrgMember: Viewer = { username: "me", contractors: [{ spectrum_id: "OTHER", role: "x", roles: ["manager"] }] }
+const customerViewer: Viewer = { username: "buyer" }
 
 const orgOrder = { customer: "buyer", assignedTo: null, contractor: "ORG" }
 
@@ -37,13 +39,13 @@ describe("orderViewerRoles", () => {
     ["anonymous", null, orgOrder, {}],
     ["stranger", stranger, orgOrder, {}],
     ["site admin (not a party)", admin, orgOrder, { siteAdmin: true }],
-    ["customer", { username: "buyer" }, orgOrder, { customer: true, related: true }],
+    ["customer", customerViewer, orgOrder, { customer: true, related: true }],
     ["assignee", stranger, { ...orgOrder, assignedTo: "me" }, { assigned: true, related: true }],
     ["plain org member", member("member"), orgOrder, { orgMember: true, related: true }],
     ["org member with Manage Orders", member("manager"), orgOrder, { orgMember: true, orgManager: true, related: true }],
     ["org member with Claim Orders", member("claimer"), orgOrder, { orgMember: true, orgClaimer: true, related: true }],
     ["org owner (every permission)", member("owner"), orgOrder, { orgMember: true, orgManager: true, orgClaimer: true, related: true }],
-    ["member of another org", { username: "me", contractors: [{ spectrum_id: "OTHER", role: "x", roles: ["manager"] }] }, orgOrder, {}],
+    ["member of another org", otherOrgMember, orgOrder, {}],
     ["member, order without an org", member("manager"), { ...orgOrder, contractor: null }, {}],
   ] as const)("%s", (_name, viewer, order, expected) => {
     expect(orderViewerRoles(order, viewer, org)).toEqual({
