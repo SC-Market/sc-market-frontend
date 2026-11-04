@@ -1,19 +1,19 @@
 {
-  "warnings": 1324,
+  "warnings": 1297,
   "errors": 0,
   "byRule": {
     "(eslint)": 2,
     "@typescript-eslint/ban-ts-comment": 3,
     "@typescript-eslint/no-restricted-imports": 99,
-    "@typescript-eslint/no-unused-vars": 672,
+    "@typescript-eslint/no-unused-vars": 669,
     "jsx-a11y/anchor-is-valid": 1,
     "jsx-a11y/click-events-have-key-events": 1,
     "jsx-a11y/no-static-element-interactions": 1,
     "max-lines": 74,
     "no-empty": 14,
     "no-restricted-imports": 46,
-    "no-restricted-syntax": 203,
-    "react-hooks/exhaustive-deps": 79,
+    "no-restricted-syntax": 183,
+    "react-hooks/exhaustive-deps": 75,
     "scm-style/no-hex-colors": 129
   }
 }
