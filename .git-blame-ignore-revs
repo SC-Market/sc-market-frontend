@@ -1,0 +1,5 @@
+# Formatting-only commits; git blame skips them.
+# Use: git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# style: apply prettier repo-wide (formatting only)
+e6023accbf8f8a11764e4edbbd841d42870817a9
