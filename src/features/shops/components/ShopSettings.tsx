@@ -35,16 +35,17 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { DeleteRounded, SaveRounded } from "@mui/icons-material"
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import {
-  useUpdateShopMutation,
   useGetShopWebhooksQuery,
-  useCreateShopWebhookMutation,
-  useDeleteShopWebhookMutation,
   useGetShopOrderSettingsQuery,
-  useUpsertShopOrderSettingMutation,
-  useDeleteShopOrderSettingMutation,
-  useTransferShopMutation,
 } from "../../../store/api/v2/market"
-import { useUploadImageMutation } from "../../../store/api/v2/market-overrides"
+import {
+  useSaveShopOrderSettings,
+  useSaveShopSettings,
+  useShopWebhooks,
+  useTransferShop,
+  useUploadShopImage,
+} from "../hooks/useShopSettingsActions"
+import { orderSettingsOps } from "../domain/orderSettingsPlan"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
 import { WEBHOOK_ACTIONS } from "../domain/webhookEvents"
@@ -109,42 +110,21 @@ const WEBHOOK_ACTION_KEYS: Record<string, string> = {
 function ShopWebhookSection({ shopId }: { shopId: string }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const issueAlert = useAlertHook()
-
   const { data: webhooks = [] } = useGetShopWebhooksQuery({ shopId })
-  const [createWebhook] = useCreateShopWebhookMutation()
-  const [deleteWebhook] = useDeleteShopWebhookMutation()
+  const shopWebhooks = useShopWebhooks(shopId)
 
   const [name, setName] = useState("")
   const [url, setUrl] = useState("")
   const [actions, setActions] = useState<string[]>([])
 
+  const { create: createWebhook, remove: handleDelete } = shopWebhooks
   const handleCreate = useCallback(async () => {
-    try {
-      await createWebhook({
-        shopId,
-        createShopWebhookRequest: { name, webhook_url: url, actions },
-      }).unwrap()
+    if (await createWebhook({ name, webhook_url: url, actions })) {
       setName("")
       setUrl("")
       setActions([])
-      issueAlert({ message: t("shopsUi.webhooks.created"), severity: "success" })
-    } catch (err) {
-      issueAlert(err as { status: number; data: { message?: string } })
     }
-  }, [shopId, name, url, actions, createWebhook, issueAlert, t])
-
-  const handleDelete = useCallback(
-    async (webhookId: string) => {
-      try {
-        await deleteWebhook({ shopId, webhookId }).unwrap()
-        issueAlert({ message: t("shopsUi.webhooks.deleted"), severity: "success" })
-      } catch (err) {
-        issueAlert(err as { status: number; data: { message?: string } })
-      }
-    },
-    [shopId, deleteWebhook, issueAlert, t],
-  )
+  }, [name, url, actions, createWebhook])
 
   const toggleAction = (action_name: string, checked: boolean) => {
     if (checked) {
@@ -280,10 +260,8 @@ function ShopWebhookSection({ shopId }: { shopId: string }) {
 
 function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const { data: settings = [], isLoading } = useGetShopOrderSettingsQuery({ shopId })
-  const [upsertSetting] = useUpsertShopOrderSettingMutation()
-  const [deleteSetting] = useDeleteShopOrderSettingMutation()
+  const saveOrderSettings = useSaveShopOrderSettings(shopId)
   const [saving, setSaving] = useState(false)
 
   // Local form state
@@ -332,56 +310,29 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
 
   const handleSave = async () => {
     setSaving(true)
-    try {
-      // Offer message
-      if (offerMessage.trim()) {
-        await upsertSetting({ shopId, settingType: "offer_message", upsertShopOrderSettingRequest: { message_content: offerMessage, enabled: offerEnabled } }).unwrap()
-      }
-      // Order message
-      if (orderMessage.trim()) {
-        await upsertSetting({ shopId, settingType: "order_message", upsertShopOrderSettingRequest: { message_content: orderMessage, enabled: orderEnabled } }).unwrap()
-      }
-      // Require availability
-      if (requireAvailability) {
-        await upsertSetting({ shopId, settingType: "require_availability", upsertShopOrderSettingRequest: { message_content: "", enabled: true } }).unwrap()
-      } else {
-        const existing = settings.find((s) => s.setting_type === "require_availability")
-        if (existing) await deleteSetting({ shopId, settingType: "require_availability" }).unwrap()
-      }
-      // Stock subtraction timing
-      if (stockTiming !== "on_accepted") {
-        await upsertSetting({ shopId, settingType: "stock_subtraction_timing", upsertShopOrderSettingRequest: { message_content: stockTiming, enabled: true } }).unwrap()
-      } else {
-        const existing = settings.find((s) => s.setting_type === "stock_subtraction_timing")
-        if (existing) await deleteSetting({ shopId, settingType: "stock_subtraction_timing" }).unwrap()
-      }
-      // Allocation mode
-      if (allocationMode !== "auto") {
-        await upsertSetting({ shopId, settingType: "allocation_mode", upsertShopOrderSettingRequest: { message_content: allocationMode, enabled: true } }).unwrap()
-      } else {
-        const existing = settings.find((s) => s.setting_type === "allocation_mode")
-        if (existing) await deleteSetting({ shopId, settingType: "allocation_mode" }).unwrap()
-      }
-      // Order limits
-      const saveLimitSetting = async (type: string, value: string, enabled: boolean) => {
-        if (enabled && value.trim()) {
-          await upsertSetting({ shopId, settingType: type, upsertShopOrderSettingRequest: { message_content: value.trim(), enabled: true } }).unwrap()
-        } else {
-          const existing = settings.find((s) => s.setting_type === type)
-          if (existing) await deleteSetting({ shopId, settingType: type }).unwrap()
-        }
-      }
-      await saveLimitSetting("min_order_size", minOrderSize, minOrderSizeEnabled)
-      await saveLimitSetting("max_order_size", maxOrderSize, maxOrderSizeEnabled)
-      await saveLimitSetting("min_order_value", minOrderValue, minOrderValueEnabled)
-      await saveLimitSetting("max_order_value", maxOrderValue, maxOrderValueEnabled)
-
-      issueAlert({ message: t("shopsUi.orderSettings.saved"), severity: "success" })
-    } catch (err) {
-      issueAlert(err as { status: number; data: { message?: string } })
-    } finally {
-      setSaving(false)
-    }
+    await saveOrderSettings(
+      orderSettingsOps(
+        {
+          offerMessage,
+          offerEnabled,
+          orderMessage,
+          orderEnabled,
+          requireAvailability,
+          stockTiming,
+          allocationMode,
+          minOrderSize,
+          minOrderSizeEnabled,
+          maxOrderSize,
+          maxOrderSizeEnabled,
+          minOrderValue,
+          minOrderValueEnabled,
+          maxOrderValue,
+          maxOrderValueEnabled,
+        },
+        settings.map((s) => s.setting_type),
+      ),
+    )
+    setSaving(false)
   }
 
   if (isLoading) {
@@ -556,9 +507,8 @@ function ShopOrderSettingsSection({ shopId }: { shopId: string }) {
 function ShopTransferSection({ shop }: { shop: ShopResponse }) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const issueAlert = useAlertHook()
   const { data: profile } = useGetUserProfileQuery()
-  const [transferShop, { isLoading }] = useTransferShopMutation()
+  const { transfer, isLoading } = useTransferShop(shop.shop_id)
 
   const [targetType, setTargetType] = useState<"user" | "contractor">(
     "contractor",
@@ -580,30 +530,14 @@ function ShopTransferSection({ shop }: { shop: ShopResponse }) {
     : true
 
   const handleConfirm = async () => {
-    try {
-      const target_id =
-        targetType === "user" ? profile?.username ?? "" : contractorSpectrumId
-      // The transfer endpoint expects a user_id for users; profile exposes
-      // username, so we transfer to self using the backend's own resolution.
-      const result = await transferShop({
-        shopId: shop.shop_id,
-        transferShopRequest: {
-          target_type: targetType,
-          target_id,
-        },
-      }).unwrap()
-
-      setConfirmOpen(false)
-      issueAlert({
-        message: t("shopsUi.transfer.transferred"),
-        severity: "success",
-      })
-      // Slug is preserved across transfers; navigate to the shop.
-      navigate(SHOP_PATHS.listings(result.slug))
-    } catch (err) {
-      setConfirmOpen(false)
-      issueAlert(err as { status: number; data: { message?: string } })
-    }
+    const target_id =
+      targetType === "user" ? profile?.username ?? "" : contractorSpectrumId
+    // The transfer endpoint expects a user_id for users; profile exposes
+    // username, so we transfer to self using the backend's own resolution.
+    const slug = await transfer({ target_type: targetType, target_id })
+    setConfirmOpen(false)
+    // Slug is preserved across transfers; navigate to the shop.
+    if (slug) navigate(SHOP_PATHS.listings(slug))
   }
 
   const canSubmit =
@@ -734,9 +668,9 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
   const languageLabel = (code: string) =>
     t(`languages.${code}`, { defaultValue: code })
 
-  const [updateShop, { isLoading }] = useUpdateShopMutation()
+  const { save: saveShop, isLoading } = useSaveShopSettings(shop.shop_id)
   const issueAlert = useAlertHook()
-  const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation()
+  const { upload: uploadImage, isLoading: isUploading } = useUploadShopImage()
 
   const [base, setBase] = useState(() => shopToSettingsDraft(shop))
   const [draft, setDraft] = useState(base)
@@ -749,20 +683,23 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
   ) => setDraft((d) => ({ ...d, [field]: value }))
 
   const handleImageUpload = async (original: File, kind: "logo" | "banner") => {
+    let file: File
     try {
-      const file = await resizeImageFile(
+      file = await resizeImageFile(
         original,
         kind === "logo" ? AVATAR_RESIZE : BANNER_RESIZE,
       )
-      const result = await uploadImage(file).unwrap()
-      setDraft((d) =>
-        kind === "logo"
-          ? { ...d, logo: result.resource_id, logoUrl: result.url }
-          : { ...d, banner: result.resource_id, bannerUrl: result.url },
-      )
     } catch (err) {
       issueAlert(err as { status: number; data: { message?: string } })
+      return
     }
+    const result = await uploadImage(file)
+    if (!result) return
+    setDraft((d) =>
+      kind === "logo"
+        ? { ...d, logo: result.resource_id, logoUrl: result.url }
+        : { ...d, banner: result.resource_id, bannerUrl: result.url },
+    )
   }
 
   const discordErrorReason = shopDiscordChannelError(
@@ -779,25 +716,19 @@ function ShopSettingsForm({ shop }: { shop: ShopResponse }) {
       return
     }
     const saving = draft
-    try {
-      await updateShop({
-        shopId: shop.shop_id,
-        updateShopRequest: settingsDraftToUpdateRequest(saving, base),
-      }).unwrap()
-
-      setBase(savedSettingsDraft(saving))
-      // The uploads are saved; keep any edit made while the save was running.
-      setDraft((d) => ({
-        ...d,
-        logo: d.logo === saving.logo ? null : d.logo,
-        banner: d.banner === saving.banner ? null : d.banner,
-      }))
-      issueAlert({ message: t("shopsUi.settings.saved"), severity: "success" })
-    } catch (err) {
+    const result = await saveShop(settingsDraftToUpdateRequest(saving, base))
+    if (!result.ok) {
       // Taken or reserved: the slug field shows why, with free suggestions.
-      setSlugConflict(shopSlugConflictFromError(err))
-      issueAlert(err as { status: number; data: { message?: string } })
+      setSlugConflict(shopSlugConflictFromError(result.error))
+      return
     }
+    setBase(savedSettingsDraft(saving))
+    // The uploads are saved; keep any edit made while the save was running.
+    setDraft((d) => ({
+      ...d,
+      logo: d.logo === saving.logo ? null : d.logo,
+      banner: d.banner === saving.banner ? null : d.banner,
+    }))
   }
 
   return (
