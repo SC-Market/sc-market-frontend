@@ -14,6 +14,7 @@ import { mockMutationTrigger, mutationIdle } from "../../../../__tests__/rtkQuer
 import {
   useCreateListingSubmit,
   useListingStatusActions,
+  useQuickEditListing,
   useUpdateListingSubmit,
 } from "../useListingMutations"
 
@@ -72,5 +73,25 @@ describe("useListingStatusActions", () => {
     const { result } = renderHook(() => useListingStatusActions())
     await expect(result.current.archive("L1")).resolves.toBe(false)
     expect(alert).toHaveBeenCalledWith(expect.objectContaining({ severity: "error" }))
+  })
+})
+
+describe("useCreateListingSubmit with its own message", () => {
+  it("alerts the given success message", async () => {
+    createListing.mockReturnValueOnce({ unwrap: () => Promise.resolve({ listing_id: "L2" }) })
+    const { result } = renderHook(() => useCreateListingSubmit("Listing created."))
+    await result.current.submit(request)
+    expect(alert).toHaveBeenCalledWith({ message: "Listing created.", severity: "success" })
+  })
+})
+
+describe("useQuickEditListing", () => {
+  it("saves and reports the API's message on failure", async () => {
+    const { result } = renderHook(() => useQuickEditListing())
+    await expect(result.current.save("L1", { base_price: 9 })).resolves.toBe(true)
+    expect(updateListing).toHaveBeenCalledWith({ id: "L1", updateListingRequest: { base_price: 9 } })
+    updateListing.mockReturnValueOnce({ unwrap: () => Promise.reject({ data: { message: "Locked" } }) })
+    await expect(result.current.save("L1", { base_price: 9 })).resolves.toBe(false)
+    expect(alert).toHaveBeenLastCalledWith({ message: "Locked", severity: "error" })
   })
 })

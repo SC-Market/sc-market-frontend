@@ -28,7 +28,6 @@ import { useTranslation } from "react-i18next"
 import {
   useSearchGameItemsQuery,
   useGetMyShopsQuery,
-  useCreateListingMutation,
 } from "../../../../store/api/v2/market"
 import type {
   GameItemSearchResult,
@@ -37,6 +36,7 @@ import type {
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { MARKET_PATHS } from "../../../../routes/paths"
 import { useFormatters } from "../../../../util/format"
+import { useCreateListingSubmit } from "../../hooks/useListingMutations"
 
 /**
  * SellFormRedesign — Phase 0 of the Market redesign (behind the
@@ -47,7 +47,7 @@ import { useFormatters } from "../../../../util/format"
  * (fixed / auction / negotiable) is a toggle inside the form. The word "fungible"
  * never appears.
  *
- * CREATE ONLY. Submits to the real `useCreateListingMutation`. Editing is NOT
+ * CREATE ONLY. Submits through useCreateListingSubmit. Editing is NOT
  * handled here: the update contract is a diff against existing variant/lot IDs
  * (variant_prices/lot_updates), which this create-shaped form can't express —
  * MarketV2Routes routes edit to EditListingV2 instead. Per-quality/bundle shapes
@@ -81,7 +81,9 @@ export function SellFormRedesign() {
     [shops],
   )
 
-  const [createListing, { isLoading: isCreating }] = useCreateListingMutation()
+  const { submit: submitListing, isLoading: isCreating } = useCreateListingSubmit(
+    t("SellFormRedesign.created", "Listing created."),
+  )
 
   // ---- Form state ----
   const [shopId, setShopId] = useState<string>("")
@@ -176,29 +178,19 @@ export function SellFormRedesign() {
           },
         ]
 
-    try {
-      await createListing({
-        createListingRequest: {
-          title: title.trim(),
-          description: description.trim(),
-          game_item_id: selectedItem.id,
-          pricing_mode: byQuality ? "per_variant" : "unified",
-          base_price: byQuality ? undefined : Number(price),
-          lots,
-          quantity_unit: quantityUnit,
-          shop_id: shopId,
-          sale_type: saleType,
-          status: "active",
-        },
-      }).unwrap()
-      issueAlert({
-        message: t("SellFormRedesign.created", "Listing created."),
-        severity: "success",
-      })
-      navigate(MARKET_PATHS.myListings)
-    } catch (e) {
-      issueAlert(e as never)
-    }
+    const result = await submitListing({
+      title: title.trim(),
+      description: description.trim(),
+      game_item_id: selectedItem.id,
+      pricing_mode: byQuality ? "per_variant" : "unified",
+      base_price: byQuality ? undefined : Number(price),
+      lots,
+      quantity_unit: quantityUnit,
+      shop_id: shopId,
+      sale_type: saleType,
+      status: "active",
+    })
+    if (result.ok) navigate(MARKET_PATHS.myListings)
   }
 
   return (

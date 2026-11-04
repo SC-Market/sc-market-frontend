@@ -30,7 +30,6 @@ import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../../components/mobile/BottomSheet"
 import {
-  useUpdateListingMutation,
   type MyListingItem,
   type UpdateListingRequest,
 } from "../../../../store/api/v2/market"
@@ -44,6 +43,7 @@ import { listingStatusLabel } from "../../domain/listingStatus"
 import { selectOnFocus } from "../../../../util/selectOnFocus"
 import { useFormatters } from "../../../../util/format"
 import { usePhotoUploads } from "../../hooks/usePhotoUploads"
+import { useQuickEditListing } from "../../hooks/useListingMutations"
 
 interface QuickEditListingSheetProps {
   listing: MyListingItem | null
@@ -61,7 +61,7 @@ export function QuickEditListingSheet({
   const { t } = useTranslation()
   const navigate = useNavigate()
   const issueAlert = useAlertHook()
-  const [updateListing, { isLoading }] = useUpdateListingMutation()
+  const { save: saveListing, isLoading } = useQuickEditListing()
 
   const [isActive, setIsActive] = useState(true)
   const [price, setPrice] = useState(0)
@@ -101,35 +101,14 @@ export function QuickEditListingSheet({
       onClose()
       return
     }
-    try {
-      await updateListing({
-        id: listing.listing_id,
-        updateListingRequest: req,
-      }).unwrap()
-      issueAlert({
-        message: t("quickEdit.saved", "Changes saved"),
-        severity: "success",
-      })
-      onClose()
-    } catch (error) {
-      const err = error as { data?: { error?: { message?: string }; message?: string } }
-      issueAlert({
-        message:
-          err?.data?.error?.message ||
-          err?.data?.message ||
-          t("quickEdit.error", "Failed to save changes"),
-        severity: "error",
-      })
-    }
+    if (await saveListing(listing.listing_id, req)) onClose()
   }, [
     listing,
     isActive,
     price,
     photoResourceIds,
     externalUrls,
-    updateListing,
-    issueAlert,
-    t,
+    saveListing,
     onClose,
   ])
 

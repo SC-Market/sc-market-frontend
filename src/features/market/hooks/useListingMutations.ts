@@ -17,8 +17,11 @@ export type ListingSaveResult =
   | { ok: true; listingId: string }
   | { ok: false; error: ListingFormError }
 
-/** Create a listing; on failure, the error for the form to show by its field. */
-export function useCreateListingSubmit() {
+/**
+ * Create a listing; on failure, the error for the form to show by its field.
+ * `successMessage` replaces the create page's own.
+ */
+export function useCreateListingSubmit(successMessage?: string) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [createListing, { isLoading }] = useCreateListingMutation()
@@ -28,7 +31,7 @@ export function useCreateListingSubmit() {
       try {
         const result = await createListing({ createListingRequest: request }).unwrap()
         issueAlert({
-          message: t("CreateListingV2.success", "Listing created successfully"),
+          message: successMessage ?? t("CreateListingV2.success", "Listing created successfully"),
           severity: "success",
         })
         return { ok: true, listingId: result.listing_id }
@@ -38,7 +41,7 @@ export function useCreateListingSubmit() {
         return { ok: false, error }
       }
     },
-    [createListing, issueAlert, t],
+    [createListing, issueAlert, successMessage, t],
   )
 
   return { submit, isLoading }
@@ -111,4 +114,37 @@ export function useListingStatusActions() {
   )
 
   return { activate, deactivate, archive }
+}
+
+/**
+ * Save the quick-edit sheet (status, price, appended photos). Resolves to
+ * whether it saved.
+ */
+export function useQuickEditListing() {
+  const { t } = useTranslation()
+  const issueAlert = useAlertHook()
+  const [updateListing, { isLoading }] = useUpdateListingMutation()
+
+  const save = useCallback(
+    async (id: string, request: UpdateListingRequest): Promise<boolean> => {
+      try {
+        await updateListing({ id, updateListingRequest: request }).unwrap()
+        issueAlert({ message: t("quickEdit.saved", "Changes saved"), severity: "success" })
+        return true
+      } catch (error) {
+        const err = error as { data?: { error?: { message?: string }; message?: string } }
+        issueAlert({
+          message:
+            err?.data?.error?.message ||
+            err?.data?.message ||
+            t("quickEdit.error", "Failed to save changes"),
+          severity: "error",
+        })
+        return false
+      }
+    },
+    [updateListing, issueAlert, t],
+  )
+
+  return { save, isLoading }
 }
