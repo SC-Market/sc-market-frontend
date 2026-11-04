@@ -29,7 +29,6 @@ import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
   useGetMyListingsQuery,
-  useUpdateListingMutation,
   type MyListingItem,
 } from "../../../store/api/v2/market"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
@@ -40,7 +39,6 @@ import { EmptyListings } from "../../../components/empty-states"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { LazySection } from "../../../components/layout/LazySection"
 import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MobileListingRow } from "./components/MobileListingRow"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 import { MyListingCardV2 } from "./components/MyListingCardV2"
@@ -48,6 +46,7 @@ import { WipeRelistBanner } from "./components/WipeRelistBanner"
 import { MARKET_PATHS } from "../../../routes/paths"
 import { isAwaitingData } from "../../../util/queryLoading"
 import { lazyWithRetry } from "../../../util/lazyWithRetry"
+import { useListingStatusActions } from "../hooks/useListingMutations"
 
 // ── Desktop section (unchanged) ───────────────────────────────────────────
 
@@ -131,8 +130,7 @@ function MobileListingsView() {
   const { t } = useTranslation()
   const shopCtx = useOptionalShopRouteContext()
   const spectrumId = shopCtx?.shop.owner_contractor_spectrum_id || undefined
-  const issueAlert = useAlertHook()
-  const [updateListing] = useUpdateListingMutation()
+  const { archive } = useListingStatusActions()
 
   const [selectedStatus, setSelectedStatus] = useState<MobileStatus>("active")
   const [editTarget, setEditTarget] = useState<MyListingItem | null>(null)
@@ -168,24 +166,9 @@ function MobileListingsView() {
 
   const handleArchiveConfirm = useCallback(async () => {
     if (!archiveTarget) return
-    try {
-      await updateListing({
-        id: archiveTarget.listing_id,
-        updateListingRequest: { status: "cancelled" },
-      }).unwrap()
-      issueAlert({
-        message: t("myListings.archived", "Listing archived"),
-        severity: "success",
-      })
-    } catch {
-      issueAlert({
-        message: t("myListings.archiveError", "Failed to archive listing"),
-        severity: "error",
-      })
-    } finally {
-      setArchiveTarget(null)
-    }
-  }, [archiveTarget, updateListing, issueAlert, t])
+    await archive(archiveTarget.listing_id)
+    setArchiveTarget(null)
+  }, [archiveTarget, archive])
 
   const statusTabs: { value: MobileStatus; label: string }[] = [
     { value: "active",    label: t("myListings.active", "Active") },

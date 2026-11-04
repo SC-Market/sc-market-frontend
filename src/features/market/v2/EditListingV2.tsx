@@ -33,7 +33,6 @@ import {
   useGetListingDetailQuery,
   useGetMyShopsQuery,
   useGetStockLotsQuery,
-  useUpdateListingMutation,
 } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
@@ -43,7 +42,6 @@ import { withShopContext } from "../../../components/sidebar/shopContextState";
 import {
   focusListingField,
   LISTING_FIELD_IDS,
-  listingApiError,
   type ListingFormError,
   type ListingFormField,
 } from "../domain/listingFormErrors";
@@ -54,6 +52,7 @@ import type {
   LotUpdate,
 } from "../../../store/api/v2/market";
 import { usePhotoUploads } from "../hooks/usePhotoUploads";
+import { useListingStatusActions, useUpdateListingSubmit } from "../hooks/useListingMutations";
 
 /**
  * Variant form data for editing — matches what the listing detail shows
@@ -83,7 +82,7 @@ interface VariantFormData {
  * - Pre-populates form with existing listing data
  * - Allows updating title, description, prices, quantities
  * - Shows variant breakdown with inline editing
- * - Uses useUpdateListingMutation hook
+ * - Saves through useUpdateListingSubmit
  * - Prevents editing sold or cancelled listings
  * - Shows success message after update
  *
@@ -139,7 +138,8 @@ export function EditListingV2() {
   const [variants, setVariants] = useState<VariantFormData[]>([]);
 
   // RTK Query mutations
-  const [updateListing, { isLoading: isUpdating }] = useUpdateListingMutation();
+  const { submit: submitListing, isLoading: isUpdating } = useUpdateListingSubmit();
+  const statusActions = useListingStatusActions();
 
   // Visibility state
   const [visibility, setVisibility] = useState<"public" | "private">("public");
@@ -392,29 +392,16 @@ export function EditListingV2() {
         return;
       }
 
-      try {
-        await updateListing({
-          id: id!,
-          updateListingRequest: request,
-        }).unwrap();
-
-        issueAlert({
-          message: t("EditListingV2.success", "Listing updated successfully"),
-          severity: "success",
-        });
-
-        // Navigate back to listing detail page
-        // The slug URL: /market/<id> is redirected to it, which drops the
-        // router state that keeps the shop context
-        navigate(MARKET_PATHS.listing(id!, title.trim()), navState);
-      } catch (error) {
-        const apiError = listingApiError(error, t("EditListingV2.error", "Failed to update listing"));
-        showError(apiError);
-        issueAlert({ message: apiError.message, severity: "error" });
+      const result = await submitListing(id!, request);
+      if (!result.ok) {
+        showError(result.error);
+        return;
       }
+      // Navigate back to listing detail page
+      // The slug URL: /market/<id> is redirected to it, which drops the
+      // router state that keeps the shop context
+      navigate(MARKET_PATHS.listing(id!, title.trim()), navState);
   };
-
-
 
   // Show loading state
   if (isLoadingListing) {
@@ -490,12 +477,7 @@ export function EditListingV2() {
                     variant="contained"
                     color="success"
                     startIcon={<CheckCircleRounded />}
-                    onClick={async () => {
-                      try {
-                        await updateListing({ id: id!, updateListingRequest: { status: "active" } }).unwrap()
-                        issueAlert({ message: t("marketV2.activated"), severity: "success" })
-                      } catch { issueAlert({ message: t("marketV2.activateFailed"), severity: "error" }) }
-                    }}
+                    onClick={() => void statusActions.activate(id!)}
                   >
                     {t("marketV2.activate")}
                   </Button>
@@ -503,12 +485,7 @@ export function EditListingV2() {
                   <Button
                     variant="outlined"
                     startIcon={<PauseCircleRounded />}
-                    onClick={async () => {
-                      try {
-                        await updateListing({ id: id!, updateListingRequest: { status: "inactive" } }).unwrap()
-                        issueAlert({ message: t("marketV2.deactivated"), severity: "success" })
-                      } catch { issueAlert({ message: t("marketV2.deactivateFailed"), severity: "error" }) }
-                    }}
+                    onClick={() => void statusActions.deactivate(id!)}
                   >
                     {t("marketV2.deactivate")}
                   </Button>
@@ -518,11 +495,9 @@ export function EditListingV2() {
                   color="warning"
                   startIcon={<ArchiveRounded />}
                   onClick={async () => {
-                    try {
-                      await updateListing({ id: id!, updateListingRequest: { status: "cancelled" } }).unwrap()
-                      issueAlert({ message: t("marketV2.archived"), severity: "success" })
+                    if (await statusActions.archive(id!)) {
                       navigate(shopSlug ? SHOP_PATHS.listings(shopSlug) : MARKET_PATHS.manage)
-                    } catch { issueAlert({ message: t("marketV2.archiveFailed"), severity: "error" }) }
+                    }
                   }}
                 >
                   {t("marketV2.archive")}

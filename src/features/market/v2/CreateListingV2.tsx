@@ -34,7 +34,8 @@ import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
 import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect";
-import { useCreateListingMutation, useSearchResourcesQuery } from "../../../store/api/v2/market";
+import { useSearchResourcesQuery } from "../../../store/api/v2/market";
+import { useCreateListingSubmit } from "../hooks/useListingMutations";
 import { useListingPhotoUploads } from "../hooks/useListingPhotoUploads";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
@@ -49,7 +50,6 @@ import { canEditShopListings } from "../../shops/domain/shopPermissions"
 import {
   focusListingField,
   LISTING_FIELD_IDS,
-  listingApiError,
   type ListingFormError,
   type ListingFormField,
 } from "../domain/listingFormErrors"
@@ -158,7 +158,7 @@ export function CreateListingV2() {
   const qualityBands = resourceData?.resources?.[0]?.quality_bands
 
   // RTK Query mutations
-  const [createListing, { isLoading }] = useCreateListingMutation();
+  const { submit: submitListing, isLoading } = useCreateListingSubmit();
 
   // Add new stock lot
   const handleAddStockLot = useCallback(() => {
@@ -243,22 +243,14 @@ export function CreateListingV2() {
 
       const request = buildCreateListingRequest({ ...draft, gameItemId: draft.gameItemId }, shop);
 
-      try {
-        const result = await createListing({ createListingRequest: request }).unwrap();
-
-        issueAlert({
-          message: t("CreateListingV2.success", "Listing created successfully"),
-          severity: "success",
-        });
-
-        navigate(formatMarketUrl({ listing_id: result.listing_id, title }), {
-          state: withShopContext(shop.slug),
-        });
-      } catch (error) {
-        const apiError = listingApiError(error, t("CreateListingV2.error", "Failed to create listing"));
-        showError(apiError);
-        issueAlert({ message: apiError.message, severity: "error" });
+      const result = await submitListing(request);
+      if (!result.ok) {
+        showError(result.error);
+        return;
       }
+      navigate(formatMarketUrl({ listing_id: result.listingId, title }), {
+        state: withShopContext(shop.slug),
+      });
   };
 
   // Org members without manage_market can't create listings: say so up
