@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import {
   useGetShopStorefrontDirectoryQuery,
-  useSetShopStorefrontDirectoryMutation,
   type ShopResponse,
 } from "../../../store/api/v2/market"
+import { useShopStorefrontDirectory } from "../hooks/useShopActions"
 import { StorefrontDirectoryCard } from "../../storefront/components/StorefrontDirectoryCard"
 import { StorefrontEnquiryCard } from "../../storefront/components/StorefrontEnquiryCard"
 
@@ -20,7 +20,7 @@ export function ShopStorefrontSection({ shop }: { shop: ShopResponse }) {
   const { t } = useTranslation()
   const orgShop = shop.is_org_owned
   const { data: directory } = useGetShopStorefrontDirectoryQuery({ shopId: shop.shop_id }, { skip: !orgShop })
-  const [setDirectory, state] = useSetShopStorefrontDirectoryMutation()
+  const directorySetting = useShopStorefrontDirectory(shop.shop_id)
 
   return (
     <FormPaper
@@ -49,11 +49,9 @@ export function ShopStorefrontSection({ shop }: { shop: ShopResponse }) {
           <StorefrontDirectoryCard
             kind="shop"
             status={directory}
-            saving={state.isLoading}
-            error={state.error}
-            onChange={(show) =>
-              void setDirectory({ shopId: shop.shop_id, storefrontDirectoryRequest: { show_in_directory: show } })
-            }
+            saving={directorySetting.isSaving}
+            error={directorySetting.error}
+            onChange={directorySetting.setShown}
             bare
           />
         </Grid>

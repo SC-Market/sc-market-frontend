@@ -20,7 +20,6 @@ import { StorefrontRounded } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
-  useCreateShopMutation,
   type ShopSlugAvailabilityResponse,
 } from "../../../store/api/v2/market"
 import { ShopSlugField, SHOP_SLUG_MIN_LENGTH } from "./ShopSlugField"
@@ -30,6 +29,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contract
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { PATHS, SHOP_PATHS } from "../../../routes/paths"
 import { usePageReady } from "../../../components/metadata/PageReady"
+import { useCreateShop } from "../hooks/useShopActions"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -64,7 +64,7 @@ export function CreateShop() {
   const languageLabel = (code: string) =>
     t(`languages.${code}`, { defaultValue: code })
   const navigate = useNavigate()
-  const [createShop, { isLoading }] = useCreateShopMutation()
+  const { create: createShop, isLoading } = useCreateShop()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
 
@@ -108,25 +108,20 @@ export function CreateShop() {
       return
     }
 
-    try {
-      const result = await createShop({
-        createShopRequest: {
-          name: name.trim(),
-          slug: slug,
-          description: description.trim() || undefined,
-          contractor_id: isOrgShop ? selectedOrg!.contractor_id : undefined,
-          tags,
-          supported_languages: supportedLanguages,
-          accepts_custom_orders: acceptsCustomOrders,
-        },
-      }).unwrap()
-
-      issueAlert({ message: t("shopsUi.create.created"), severity: "success" })
+    const result = await createShop({
+      name: name.trim(),
+      slug: slug,
+      description: description.trim() || undefined,
+      contractor_id: isOrgShop ? selectedOrg!.contractor_id : undefined,
+      tags,
+      supported_languages: supportedLanguages,
+      accepts_custom_orders: acceptsCustomOrders,
+    })
+    if (result.ok) {
       navigate(SHOP_PATHS.settings(result.slug))
-    } catch (err) {
+    } else {
       // Taken or reserved: the slug field shows why, with free suggestions.
-      setSlugConflict(shopSlugConflictFromError(err))
-      issueAlert(err as { status: number; data: { message?: string } })
+      setSlugConflict(shopSlugConflictFromError(result.error))
     }
   }
 

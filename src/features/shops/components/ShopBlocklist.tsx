@@ -14,49 +14,29 @@ import {
 import { Block, PersonRemove } from "@mui/icons-material"
 import {
   useGetShopBlocklistQuery,
-  useBlockUserFromShopMutation,
-  useUnblockUserFromShopMutation,
 } from "../../../store/api/v2/market"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import { UserSearch } from "../../../components/search/UserSearch"
 import { Link } from "react-router-dom"
 import type { User } from "../../../datatypes/User"
 import { USER_PATHS } from "../../../routes/paths"
 import { useTranslation } from "react-i18next"
+import { useShopBlocklist } from "../hooks/useShopActions"
 
 export function ShopBlocklistSection({ shopId }: { shopId: string }) {
-  const issueAlert = useAlertHook()
   const { t } = useTranslation()
 
   const { data: blocklist = [] } = useGetShopBlocklistQuery({ shopId })
-  const [blockUser] = useBlockUserFromShopMutation()
-  const [unblockUser] = useUnblockUserFromShopMutation()
+  const { block, unblock: handleUnblock } = useShopBlocklist(shopId)
 
   const [selectedUser, setSelectedUser] = useState<{ username: string } | null>(null)
   const [reason, setReason] = useState("")
 
   const handleBlock = async () => {
     if (!selectedUser) return
-    try {
-      await blockUser({
-        shopId,
-        blockUserRequest: { username: selectedUser.username, reason },
-      }).unwrap()
-      issueAlert({ severity: "success", message: t("shops.blocklist.blocked", { username: selectedUser.username }) })
+    if (await block(selectedUser.username, reason)) {
       setSelectedUser(null)
       setReason("")
-    } catch (err: unknown) {
-      issueAlert({ severity: "error", message: String((err as { data?: { message?: string } })?.data?.message || t("shops.blocklist.blockFailed")) })
-    }
-  }
-
-  const handleUnblock = async (userId: string, username: string) => {
-    try {
-      await unblockUser({ shopId, blockedUserId: userId }).unwrap()
-      issueAlert({ severity: "success", message: t("shops.blocklist.unblocked", { username }) })
-    } catch (err: unknown) {
-      issueAlert({ severity: "error", message: String((err as { data?: { message?: string } })?.data?.message || t("shops.blocklist.unblockFailed")) })
     }
   }
 

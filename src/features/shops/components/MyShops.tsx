@@ -24,7 +24,8 @@ import {
   CalendarToday,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { useGetMyShopsQuery, useQuickCreateShopMutation } from "../../../store/api/v2/market"
+import { useGetMyShopsQuery } from "../../../store/api/v2/market"
+import { useQuickCreateShop } from "../hooks/useShopActions"
 import type { ShopResponse } from "../../../store/api/v2/market"
 import { SHOP_PATHS } from "../../../routes/paths"
 import { usePageReady } from "../../../components/metadata/PageReady"
@@ -379,10 +380,10 @@ export function MyShops() {
   const { t } = useTranslation()
   const { data: shops, isLoading } = useGetMyShopsQuery()
   usePageReady(isLoading)
-  const [quickCreate, { isLoading: isCreating }] = useQuickCreateShopMutation()
+  const { create: quickCreate, isLoading: isCreating } = useQuickCreateShop()
 
   const handleQuickCreate = async () => {
-    await quickCreate({ quickCreateShopRequest: { owner_type: "user" } })
+    await quickCreate()
   }
 
   if (isLoading) {

@@ -24,11 +24,10 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
 import {
   useGetMyShopsQuery,
-  useQuickCreateShopMutation,
   type ShopResponse,
 } from "../../../store/api/v2/market"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { canEditShopListings } from "../domain/shopPermissions"
+import { useQuickCreateShop } from "../hooks/useShopActions"
 
 interface ShopSelectorProps {
   value: string
@@ -40,10 +39,9 @@ interface ShopSelectorProps {
 
 export function ShopSelector({ value, onChange, label, helperText, id }: ShopSelectorProps) {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
 
   const { data: shops, isLoading, isError, refetch } = useGetMyShopsQuery()
-  const [quickCreateShop, { isLoading: isCreating }] = useQuickCreateShopMutation()
+  const { create: quickCreateShop, isLoading: isCreating } = useQuickCreateShop()
 
   // The user's shops they can list in (personal and org-owned)
   const filteredShops = useMemo(
@@ -59,30 +57,9 @@ export function ShopSelector({ value, onChange, label, helperText, id }: ShopSel
   }, [filteredShops, value, onChange])
 
   const handleQuickCreate = useCallback(async () => {
-    try {
-      const result = await quickCreateShop({
-        quickCreateShopRequest: {
-          owner_type: "user",
-        },
-      }).unwrap()
-
-      onChange(result.shop_id)
-      issueAlert({
-        message: t("ShopSelector.created", "Shop created: {{name}}", {
-          name: result.name,
-        }),
-        severity: "success",
-      })
-    } catch (error) {
-      const err = error as { data?: { message?: string } }
-      issueAlert({
-        message:
-          err?.data?.message ||
-          t("ShopSelector.createError", "Failed to create shop"),
-        severity: "error",
-      })
-    }
-  }, [quickCreateShop, onChange, issueAlert, t])
+    const shop = await quickCreateShop(true)
+    if (shop) onChange(shop.shop_id)
+  }, [quickCreateShop, onChange])
 
   if (isLoading) {
     return (
