@@ -61,8 +61,8 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const bp = data?.blueprint
   const outputItem = data?.output_item
   const itemName = outputItem?.name || bp?.blueprint_name || t("crafting.blueprint")
-  const ingredients = data?.ingredients || []
-  const slotModifiers = data?.slot_modifiers || []
+  const ingredients = useMemo(() => data?.ingredients || [], [data?.ingredients])
+  const slotModifiers = useMemo(() => data?.slot_modifiers || [], [data?.slot_modifiers])
   const itemAttrs = data?.item_attributes || {}
   const craftedPropertyDefs = data?.crafted_property_defs
 

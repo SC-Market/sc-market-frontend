@@ -25,8 +25,6 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { NumericFormat } from "react-number-format"
 import { TrashCan } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import type { GetOfferSessionV2Response } from "../../../store/api/v2/market"
 import {
   useSearchListingsQuery,
@@ -59,7 +57,6 @@ interface DisplayItem extends V2Item {
  */
 export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV2Response }) {
   const fmt = useFormatters()
-  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { session } = props
   const [body, setBody] = useCounterOffer()
@@ -81,7 +78,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
     page: 1,
     pageSize: 50,
   })
-  const listings = searchResults?.listings || []
+  const listings = useMemo(() => searchResults?.listings || [], [searchResults?.listings])
 
   // Add-item state
   const [selectedListing, setSelectedListing] = useState<ListingSearchResult | null>(null)
@@ -93,7 +90,10 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
     { id: selectedListing?.listing_id || "" },
     { skip: !selectedListing },
   )
-  const availableVariants: VariantDetail[] = selectedDetail?.items?.[0]?.variants || []
+  const availableVariants: VariantDetail[] = useMemo(
+    () => selectedDetail?.items?.[0]?.variants || [],
+    [selectedDetail],
+  )
 
   // Fetch details for all listings in the body (for variant info)
   const uniqueListingIds = useMemo(

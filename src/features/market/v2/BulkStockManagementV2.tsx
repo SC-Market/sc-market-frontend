@@ -346,7 +346,7 @@ function AllStockLotsGridV2() {
   )
   const qualityBands = resourceData?.resources?.[0]?.quality_bands
 
-  const lots = lotsData?.lots ?? []
+  const lots = useMemo(() => lotsData?.lots ?? [], [lotsData?.lots])
 
   const locations = useMemo(() => {
     const map = new Map<string, LocationInfo>()

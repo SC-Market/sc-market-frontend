@@ -225,7 +225,7 @@ export function AdminGameDataImportView() {
         }
       }
     }
-  }, [jobs])
+  }, [jobs, issueAlert, t])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()

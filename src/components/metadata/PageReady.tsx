@@ -111,7 +111,6 @@ export function usePageReady(loading: boolean): void {
       store.unregister(id)
       idRef.current = null
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [store])
 
   useIsomorphicLayoutEffect(() => {

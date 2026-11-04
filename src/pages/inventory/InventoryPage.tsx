@@ -92,7 +92,7 @@ export default function InventoryPage() {
   const [deleteLot, { isLoading: deleting }] = useDeleteInventoryLotMutation()
   const [unlinkLot] = useUnlinkFromListingMutation()
 
-  const lots = data?.lots || []
+  const lots = useMemo(() => data?.lots || [], [data?.lots])
 
   const filtered = useMemo(() => {
     if (!search) return lots

@@ -4,7 +4,7 @@ import {
   useNotificationUpdateMutation,
 } from "../../notifications/api/notificationApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import type { Chat } from "../domain/types"
 import { isAwaitingData } from "../../../util/queryLoading"
 import type { UserProfileState } from "../../../hooks/login/UserProfile"
@@ -72,7 +72,7 @@ export function usePageMessages(
     : chatObj?.session_id
       ? offerNotificationsData
       : undefined
-  const notifications = notificationsData?.notifications || []
+  const notifications = useMemo(() => notificationsData?.notifications || [], [notificationsData?.notifications])
   const [updateNotification] = useNotificationUpdateMutation()
 
   // Mark chat notifications as read when viewing the chat

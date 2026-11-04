@@ -85,7 +85,7 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
 
       return false
     },
-    [contractor, createPost, post, issueAlert, state, updatePost, t],
+    [contractor, createPost, post, issueAlert, state, updatePost, t, navigate],
   )
 
   const [stateBuffer, setStateBuffer] = useState(state)

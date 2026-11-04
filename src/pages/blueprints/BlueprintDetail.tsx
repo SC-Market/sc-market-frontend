@@ -57,8 +57,8 @@ export function BlueprintDetail() {
   const bp = data?.blueprint
   const outputItem = data?.output_item
   const itemName = blueprintItemName(data)
-  const ingredients = data?.ingredients || []
-  const slotModifiers = data?.slot_modifiers || []
+  const ingredients = useMemo(() => data?.ingredients || [], [data?.ingredients])
+  const slotModifiers = useMemo(() => data?.slot_modifiers || [], [data?.slot_modifiers])
   const itemAttrs = data?.item_attributes || {}
 
   const { data: userProfile } = useGetUserProfileQuery()

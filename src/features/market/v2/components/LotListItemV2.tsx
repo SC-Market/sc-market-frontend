@@ -73,14 +73,14 @@ export function LotListItemV2({
     setIsEditing(true)
   }
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     setIsEditing(false)
     // Reset to original values
     setEditedQuantity(lot.quantity_total)
     setEditedLocationId(lot.location?.location_id || null)
     setEditedListed(lot.listed)
     setEditedNotes(lot.notes || "")
-  }
+  }, [lot])
 
   const handleSaveEdit = useCallback(async () => {
     if (editedQuantity < 0) {
@@ -120,6 +120,7 @@ export function LotListItemV2({
     editedNotes,
     lot.lot_id,
     saveLot,
+    handleCancelEdit,
     issueAlert,
     t,
   ])

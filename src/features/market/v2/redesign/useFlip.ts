@@ -47,7 +47,6 @@ export function useFlip(deps: unknown) {
     }
 
     prevRects.current = currentRects
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deps])
 
   const register = (key: string) => (el: HTMLElement | null) => {

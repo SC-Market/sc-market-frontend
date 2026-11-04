@@ -76,7 +76,7 @@ export function LocationSelector({
     useCreateLocationMutation()
 
   // Use provided locations or fetched locations
-  const locations = providedLocations || locationsData?.locations || []
+  const locations = useMemo(() => providedLocations || locationsData?.locations || [], [locationsData?.locations, providedLocations])
 
   // Sort locations: preset first, then custom
   // The API already returns them sorted, but we ensure it here for provided locations
@@ -146,7 +146,7 @@ export function LocationSelector({
         message: t("LocationSelector.createSuccess", "Custom location created"),
         severity: "success",
       })
-    } catch (error) {
+    } catch {
       issueAlert({
         message: t("LocationSelector.createError", "Failed to create location"),
         severity: "error",

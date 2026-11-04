@@ -115,10 +115,10 @@ export function CreateLotDialogV2({
   }, [])
 
   // Handle close
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     resetForm()
     onClose()
-  }
+  }, [resetForm, onClose])
 
   // Handle submit
   const handleSubmit = useCallback(async () => {

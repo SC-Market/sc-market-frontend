@@ -435,7 +435,7 @@ export function WikiShipBrowser() {
   usePageReady(
     isPrimaryLoading({ isLoading, isFetching: pageIsFetching, currentData: pageCurrentData }),
   )
-  const allVehicles = data?.ships ?? []
+  const allVehicles = useMemo(() => data?.ships ?? [], [data?.ships])
 
   const manufacturers = useMemo(
     () => [...new Set(allVehicles.map((s) => s.manufacturer).filter(Boolean))].sort() as string[],

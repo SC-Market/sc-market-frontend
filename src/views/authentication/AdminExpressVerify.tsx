@@ -49,7 +49,7 @@ export function AdminExpressVerify() {
         severity: "error",
       })
     }
-  }, [state, t])
+  }, [state, t, expressVerify, issueAlert])
 
   return (
     <FlatSection title={t("adminExpressVerify.title")}>

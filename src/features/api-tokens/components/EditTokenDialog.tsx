@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import {
   Dialog,
   DialogTitle,
@@ -48,7 +48,7 @@ export function EditTokenDialog({
   const { t } = useTranslation()
   const [updateToken, { isLoading }] = useUpdateTokenMutation()
   const { data: profile } = useGetUserProfileQuery()
-  const contractors = profile?.contractors || []
+  const contractors = useMemo(() => profile?.contractors || [], [profile?.contractors])
   const isAdmin = isSiteAdmin(profile)
   const issueAlert = useAlertHook()
 

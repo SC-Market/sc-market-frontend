@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Box, Grid, Typography, useTheme } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { Section } from "../../../../components/paper/Section"
@@ -40,7 +40,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
   })
 
   // Get tier name for display
-  const getTierName = (tier: number): string => {
+  const getTierName = useCallback((tier: number): string => {
     switch (tier) {
       case 1:
         return t("market.tierBronze", "Bronze")
@@ -55,7 +55,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
       default:
         return `Tier ${tier}`
     }
-  }
+  }, [t])
 
   // Transform sales volume data for chart
   const salesVolumeData = useMemo(() => {
@@ -72,7 +72,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
         })),
       },
     ]
-  }, [data, t])
+  }, [data, t, getTierName])
 
   // Transform average sale price data for chart
   const avgSalePriceData = useMemo(() => {
@@ -89,7 +89,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
         })),
       },
     ]
-  }, [data, t])
+  }, [data, t, getTierName])
 
   // Transform time-to-sale data for chart
   const timeToSaleData = useMemo(() => {
@@ -106,7 +106,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
         })),
       },
     ]
-  }, [data, t])
+  }, [data, t, getTierName])
 
   // Transform inventory distribution data for chart
   const inventoryDistributionData = useMemo(() => {
@@ -126,7 +126,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
         })),
       },
     ]
-  }, [data, t])
+  }, [data, t, getTierName])
 
   // Transform price premium data for chart
   const pricePremiumData = useMemo(() => {
@@ -143,7 +143,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
         })),
       },
     ]
-  }, [data, t])
+  }, [data, t, getTierName])
 
   // Loading state
   if (isLoading) {

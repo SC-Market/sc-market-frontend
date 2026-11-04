@@ -40,7 +40,7 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
     { skip: !rewardScope },
   )
 
-  const ranks = data?.ranks ?? []
+  const ranks = useMemo(() => data?.ranks ?? [], [data?.ranks])
   const scopeDisplayName = data?.display_name || rewardScope
 
   const xpPerRun = useMemo(() => {

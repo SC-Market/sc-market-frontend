@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useState, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import {
@@ -72,7 +72,7 @@ export function useWhiteLabelSettings() {
   const [updateSidebar, { isLoading: sidebarSaving }] = useUpdateWhitelabelSidebarMutation()
 
   const config = configRes?.data
-  const sidebarItems: SidebarConfigItem[] = sidebarRes?.data ?? []
+  const sidebarItems: SidebarConfigItem[] = useMemo(() => sidebarRes?.data ?? [], [sidebarRes?.data])
 
   // Config state
   const [focusMode, setFocusMode] = useState<"public" | "internal">("public")

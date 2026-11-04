@@ -180,7 +180,7 @@ export function OnboardingPage() {
     } catch {
       issueAlert({ severity: "error", message: t("onboarding.setupFailed") })
     }
-  }, [completeOnboarding, dispatch, navigate, issueAlert])
+  }, [completeOnboarding, dispatch, navigate, issueAlert, t])
 
   const handleLinkDiscord = useCallback(() => {
     window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent("/onboarding")}&action=link&origin=${encodeURIComponent(window.location.origin)}`

@@ -150,7 +150,7 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
         })
       })
       .catch((err) => issueAlert(err))
-  }, [currentOrg, role, issueAlert, newRole, t])
+  }, [currentOrg, role, issueAlert, newRole, t, updateRole])
 
   const deleteRoleCallback = useCallback(async () => {
     deleteRole({
@@ -165,7 +165,7 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
         })
       })
       .catch((err) => issueAlert(err))
-  }, [currentOrg, role, issueAlert, role, t])
+  }, [currentOrg, role, issueAlert, t, deleteRole])
 
   return (
     <>
@@ -437,7 +437,7 @@ export function AddRole() {
       .catch((err) => {
         issueAlert(err)
       })
-  }, [currentOrg, issueAlert, newRole, t])
+  }, [currentOrg, issueAlert, newRole, t, createRole])
 
   return (
     <>

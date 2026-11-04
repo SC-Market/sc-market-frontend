@@ -84,7 +84,7 @@ export function ListingDetailV2() {
   // Derived data
   const listing = listingData?.listing
   const seller = listingData?.seller
-  const items = listingData?.items ?? []
+  const items = useMemo(() => listingData?.items ?? [], [listingData?.items])
   const photos = listing?.photos?.length ? listing.photos : [FALLBACK_IMAGE_URL]
   const firstItem = items[0]
   const gameItemId = firstItem?.game_item?.id
