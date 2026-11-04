@@ -28,13 +28,13 @@ import {
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
-  useUpdateStockLotMutation,
   type StockLotDetail,
   type LocationInfo,
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
 import { useFormatters } from "../../../../util/format"
+import { useEditLot } from "../../hooks/useStockLotActions"
 
 export interface LotListItemV2Props {
   lot: StockLotDetail
@@ -67,7 +67,7 @@ export function LotListItemV2({
   const [editedNotes, setEditedNotes] = useState(lot.notes || "")
 
   // Mutations
-  const [updateLot, { isLoading: isUpdating }] = useUpdateStockLotMutation()
+  const { save: saveLot, isUpdating } = useEditLot()
 
   // Handle edit mode
   const handleEditClick = () => {
@@ -84,70 +84,43 @@ export function LotListItemV2({
   }
 
   const handleSaveEdit = useCallback(async () => {
-    try {
-      if (editedQuantity < 0) {
-        issueAlert({
-          message: t(
-            "LotListItemV2.invalidQuantity",
-            "Quantity must be non-negative",
-          ),
-          severity: "error",
-        })
-        return
-      }
-
-      if (editedNotes.length > 1000) {
-        issueAlert({
-          message: t(
-            "LotListItemV2.notesTooLong",
-            "Notes must be 1000 characters or less",
-          ),
-          severity: "error",
-        })
-        return
-      }
-
-      await updateLot({
-        id: lot.lot_id,
-        updateStockLotRequest: {
-          quantity_total: editedQuantity,
-          location_id: editedLocationId,
-          listed: editedListed,
-          notes: editedNotes || null,
-        },
-      }).unwrap()
-
-      setIsEditing(false)
+    if (editedQuantity < 0) {
       issueAlert({
-        message: t("LotListItemV2.updateSuccess", "Lot updated successfully"),
-        severity: "success",
+        message: t(
+          "LotListItemV2.invalidQuantity",
+          "Quantity must be non-negative",
+        ),
+        severity: "error",
       })
-    } catch (error) {
-      const e = error as { data?: { details?: { code?: string }; code?: string } }
-      const detail = e?.data?.details || e?.data
-      if (detail?.code === "INVALID_QUANTITY") {
-        issueAlert({
-          message: t(
-            "LotListItemV2.cannotReduceStock",
-            "Cannot reduce stock — units are committed to active orders",
-          ),
-          severity: "warning",
-        })
-      } else {
-        issueAlert({
-          message: t("LotListItemV2.updateError", "Failed to update lot"),
-          severity: "error",
-        })
-      }
-      handleCancelEdit()
+      return
     }
+
+    if (editedNotes.length > 1000) {
+      issueAlert({
+        message: t(
+          "LotListItemV2.notesTooLong",
+          "Notes must be 1000 characters or less",
+        ),
+        severity: "error",
+      })
+      return
+    }
+
+    const saved = await saveLot(lot.lot_id, {
+      quantity_total: editedQuantity,
+      location_id: editedLocationId,
+      listed: editedListed,
+      notes: editedNotes || null,
+    })
+    if (saved) setIsEditing(false)
+    else handleCancelEdit()
   }, [
     editedQuantity,
     editedLocationId,
     editedListed,
     editedNotes,
     lot.lot_id,
-    updateLot,
+    saveLot,
     issueAlert,
     t,
   ])

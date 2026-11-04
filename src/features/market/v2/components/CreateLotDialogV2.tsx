@@ -30,13 +30,12 @@ import { useTranslation } from "react-i18next"
 import { useFocusOnReveal } from "../../../../hooks/accessibility/useFocusOnReveal"
 import type { LocationInfo, VariantAttributes } from "../../../../store/api/v2/market"
 import {
-  useCreateStockLotMutation,
   useGetListingDetailQuery,
   useGetVariantTypesQuery,
 } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
-import { extractErrorMessage } from "../../../../store/api-utils"
 import { LocationSelector } from "../../components/stock/LocationSelector"
+import { useCreateLot } from "../../hooks/useStockLotActions"
 
 export interface CreateLotDialogV2Props {
   open: boolean
@@ -84,7 +83,7 @@ export function CreateLotDialogV2({
     setItemId(listingItems.length === 1 ? listingItems[0].item_id : "")
   }, [listingDetail]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [createStockLot] = useCreateStockLotMutation()
+  const createLot = useCreateLot()
 
   // Form state
   const [quantity, setQuantity] = useState(0)
@@ -194,34 +193,16 @@ export function CreateLotDialogV2({
     }
     if (blueprintTier !== undefined) variantAttributes.blueprint_tier = blueprintTier
 
-    try {
-      await createStockLot({
-        createStockLotRequest: {
-          item_id: itemId,
-          quantity,
-          variant_attributes: variantAttributes,
-          location_id: locationId ?? undefined,
-          listed,
-          notes: notes.trim() || undefined,
-        },
-      }).unwrap()
-
-      issueAlert({
-        message: t("CreateLotDialogV2.createSuccess", "Lot created"),
-        severity: "success",
-      })
-      handleClose()
-    } catch (error) {
-      const reason = extractErrorMessage((error as { data?: unknown })?.data)
-      issueAlert({
-        message: reason
-          ? t("CreateLotDialogV2.createErrorReason", "Failed to create lot: {{reason}}", { reason })
-          : t("CreateLotDialogV2.createError", "Failed to create lot"),
-        severity: "error",
-      })
-    } finally {
-      setIsLoading(false)
-    }
+    const created = await createLot({
+      item_id: itemId,
+      quantity,
+      variant_attributes: variantAttributes,
+      location_id: locationId ?? undefined,
+      listed,
+      notes: notes.trim() || undefined,
+    })
+    setIsLoading(false)
+    if (created) handleClose()
   }, [
     quantity,
     locationId,
@@ -232,7 +213,7 @@ export function CreateLotDialogV2({
     listed,
     notes,
     itemId,
-    createStockLot,
+    createLot,
     issueAlert,
     t,
     handleClose,

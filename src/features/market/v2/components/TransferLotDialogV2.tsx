@@ -19,13 +19,12 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
-  useUpdateStockLotMutation,
   type StockLotDetail,
   type LocationInfo,
 } from "../../../../store/api/v2/market"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
 import { useFormatters } from "../../../../util/format"
+import { useTransferLot } from "../../hooks/useStockLotActions"
 
 export interface TransferLotDialogV2Props {
   open: boolean
@@ -47,41 +46,16 @@ export function TransferLotDialogV2({
 }: TransferLotDialogV2Props) {
   const fmt = useFormatters()
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
 
   const [newLocationId, setNewLocationId] = useState<string | null>(
     lot.location?.location_id || null,
   )
 
-  const [updateLot, { isLoading }] = useUpdateStockLotMutation()
+  const { transfer, isLoading } = useTransferLot()
 
   const handleTransfer = useCallback(async () => {
-    try {
-      await updateLot({
-        id: lot.lot_id,
-        updateStockLotRequest: {
-          location_id: newLocationId,
-        },
-      }).unwrap()
-
-      issueAlert({
-        message: t(
-          "TransferLotDialogV2.transferSuccess",
-          "Lot transferred successfully",
-        ),
-        severity: "success",
-      })
-      onClose()
-    } catch (error) {
-      issueAlert({
-        message: t(
-          "TransferLotDialogV2.transferError",
-          "Failed to transfer lot",
-        ),
-        severity: "error",
-      })
-    }
-  }, [lot.lot_id, newLocationId, updateLot, issueAlert, t, onClose])
+    if (await transfer(lot.lot_id, newLocationId)) onClose()
+  }, [lot.lot_id, newLocationId, transfer, onClose])
 
   // Convert LocationInfo[] to Location[] format
   const locationsForSelector = locations.map((loc) => ({
