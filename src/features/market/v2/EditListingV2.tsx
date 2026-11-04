@@ -35,10 +35,9 @@ import {
   useGetStockLotsQuery,
   useUpdateListingMutation,
 } from "../../../store/api/v2/market";
-import { useUploadImageMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
-import { SelectPhotosArea, UploadedImageStatus } from "../../../components/modal/SelectPhotosArea";
+import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths";
 import { withShopContext } from "../../../components/sidebar/shopContextState";
 import {
@@ -54,6 +53,7 @@ import type {
   VariantPriceUpdate,
   LotUpdate,
 } from "../../../store/api/v2/market";
+import { usePhotoUploads } from "../hooks/usePhotoUploads";
 
 /**
  * Variant form data for editing — matches what the listing detail shows
@@ -140,16 +140,19 @@ export function EditListingV2() {
 
   // RTK Query mutations
   const [updateListing, { isLoading: isUpdating }] = useUpdateListingMutation();
-  const [uploadImage] = useUploadImageMutation();
 
   // Visibility state
   const [visibility, setVisibility] = useState<"public" | "private">("public");
 
   // Photo state
   const [photos, setPhotos] = useState<string[]>([]);
-  const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([]);
-  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([]);
-  const isUploading = uploadedImages.some((img) => img.status === "uploading");
+  const {
+    uploadedImages,
+    photoResourceIds,
+    isUploading,
+    upload: handleFileUpload,
+    remove: handleRemoveUploadedImage,
+  } = usePhotoUploads(t("SelectPhotosArea.uploadFailed", "Upload failed"));
 
   // Check if listing can be edited
   const canEdit = useMemo(() => {
@@ -411,50 +414,7 @@ export function EditListingV2() {
       }
   };
 
-  // Two-phase upload: upload each file immediately and track status
-  const handleFileUpload = useCallback((files: File[]) => {
-    for (const file of files) {
-      const tempId = `temp-${crypto.randomUUID()}`;
-      const newEntry: UploadedImageStatus = {
-        resource_id: tempId,
-        url: "",
-        status: "uploading",
-        file,
-      };
 
-      setUploadedImages((prev) => [...prev, newEntry]);
-
-      uploadImage(file)
-        .unwrap()
-        .then((result) => {
-          setUploadedImages((prev) =>
-            prev.map((img) =>
-              img.resource_id === tempId
-                ? { ...img, resource_id: result.resource_id, url: result.url, status: "success" as const }
-                : img
-            )
-          );
-          setPhotoResourceIds((prev) => [...prev, result.resource_id]);
-        })
-        .catch((err) => {
-          const e = err as { data?: { error?: { message?: string; validationErrors?: { message: string }[] }; message?: string; validationErrors?: { message: string }[] } };
-          const errBody = e?.data?.error || e?.data || {};
-          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || t("SelectPhotosArea.uploadFailed", "Upload failed");
-          setUploadedImages((prev) =>
-            prev.map((img) =>
-              img.resource_id === tempId
-                ? { ...img, status: "error" as const, error: detail }
-                : img
-            )
-          );
-        });
-    }
-  }, [uploadImage]);
-
-  const handleRemoveUploadedImage = useCallback((resourceId: string) => {
-    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId));
-    setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId));
-  }, []);
 
   // Show loading state
   if (isLoadingListing) {

@@ -20,14 +20,14 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
 import { useCreateStandingBuyOrderMutation, useGetMySuppliersQuery, useSearchResourcesQuery, type GameItemSearchResult } from "../../../../store/api/v2/market";
-import { useUploadImageMutation } from "../../../../store/api/v2/market-overrides";
-import { SelectPhotosArea, UploadedImageStatus } from "../../../../components/modal/SelectPhotosArea";
+import { SelectPhotosArea } from "../../../../components/modal/SelectPhotosArea";
 import { useNavigate } from "react-router-dom";
 import { MARKET_PATHS } from "../../../../routes/paths";
 
 import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
 import { QualityBandSelect } from "../../../../components/game-data/QualityBandSelect";
 import { useFormatters } from "../../../../util/format"
+import { usePhotoUploads } from "../../hooks/usePhotoUploads";
 
 /**
  * CreateBuyOrderV2 Component
@@ -66,56 +66,19 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
 
   // Photo upload state
   const [photos, setPhotos] = useState<string[]>([]);
-  const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([]);
-  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([]);
-  const isUploading = uploadedImages.some((img) => img.status === "uploading");
-  const [uploadImage] = useUploadImageMutation();
+  const {
+    uploadedImages,
+    photoResourceIds,
+    isUploading,
+    upload: handleFileUpload,
+    remove: handleRemoveUploadedImage,
+  } = usePhotoUploads(t("SelectPhotosArea.uploadFailed", "Upload failed"));
 
   // Supplier roster check (for roster_only visibility)
   const { data: suppliersData } = useGetMySuppliersQuery({});
   const hasSuppliers = (suppliersData?.suppliers?.length ?? 0) > 0;
 
-  const handleFileUpload = useCallback((files: File[]) => {
-    for (const file of files) {
-      const tempId = `temp-${crypto.randomUUID()}`;
-      const newEntry: UploadedImageStatus = {
-        resource_id: tempId,
-        url: "",
-        status: "uploading",
-        file,
-      };
-      setUploadedImages((prev) => [...prev, newEntry]);
-      uploadImage(file)
-        .unwrap()
-        .then((result) => {
-          setUploadedImages((prev) =>
-            prev.map((img) =>
-              img.resource_id === tempId
-                ? { ...img, resource_id: result.resource_id, url: result.url, status: "success" as const }
-                : img
-            )
-          );
-          setPhotoResourceIds((prev) => [...prev, result.resource_id]);
-        })
-        .catch((err) => {
-          const e = err as { data?: { error?: { message?: string; validationErrors?: { message: string }[] }; message?: string; validationErrors?: { message: string }[] } };
-          const errBody = e?.data?.error || e?.data || {};
-          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || t("SelectPhotosArea.uploadFailed", "Upload failed");
-          setUploadedImages((prev) =>
-            prev.map((img) =>
-              img.resource_id === tempId
-                ? { ...img, status: "error" as const, error: detail }
-                : img
-            )
-          );
-        });
-    }
-  }, [uploadImage]);
 
-  const handleRemoveUploadedImage = useCallback((resourceId: string) => {
-    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId));
-    setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId));
-  }, []);
 
   // Calculate total price range
   const totalMin = priceMin * quantity;

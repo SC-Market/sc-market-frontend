@@ -34,10 +34,8 @@ import {
   type MyListingItem,
   type UpdateListingRequest,
 } from "../../../../store/api/v2/market"
-import { useUploadImageMutation } from "../../../../store/api/v2/market-overrides"
 import {
   SelectPhotosArea,
-  type UploadedImageStatus,
 } from "../../../../components/modal/SelectPhotosArea"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
@@ -45,6 +43,7 @@ import { MARKET_PATHS } from "../../../../routes/paths"
 import { listingStatusLabel } from "../../domain/listingStatus"
 import { selectOnFocus } from "../../../../util/selectOnFocus"
 import { useFormatters } from "../../../../util/format"
+import { usePhotoUploads } from "../../hooks/usePhotoUploads"
 
 interface QuickEditListingSheetProps {
   listing: MyListingItem | null
@@ -63,7 +62,6 @@ export function QuickEditListingSheet({
   const navigate = useNavigate()
   const issueAlert = useAlertHook()
   const [updateListing, { isLoading }] = useUpdateListingMutation()
-  const [uploadImage] = useUploadImageMutation()
 
   const [isActive, setIsActive] = useState(true)
   const [price, setPrice] = useState(0)
@@ -71,9 +69,14 @@ export function QuickEditListingSheet({
   // "Add URL" flow, plus files uploaded through the two-phase image upload.
   // Removing/reordering existing photos still lives in the full editor.
   const [externalUrls, setExternalUrls] = useState<string[]>([])
-  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([])
-  const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([])
-  const isUploading = uploadedImages.some((img) => img.status === "uploading")
+  const {
+    uploadedImages,
+    photoResourceIds,
+    isUploading,
+    upload: handleFileUpload,
+    remove: handleRemoveUploadedImage,
+    reset: resetPhotoUploads,
+  } = usePhotoUploads(t("quickEdit.uploadFailed", "Upload failed"))
 
   // Sync local state whenever the target listing changes
   useEffect(() => {
@@ -81,70 +84,9 @@ export function QuickEditListingSheet({
       setIsActive(listing.status === "active")
       setPrice(listing.price_min)
       setExternalUrls([])
-      setUploadedImages([])
-      setPhotoResourceIds([])
+      resetPhotoUploads()
     }
-  }, [listing])
-
-  // Two-phase upload: upload each file immediately and track its status so a
-  // failure shows on the thumbnail (with a reason on hover/tap) rather than
-  // silently dropping the photo.
-  const handleFileUpload = useCallback(
-    (files: File[]) => {
-      for (const file of files) {
-        const tempId = `temp-${crypto.randomUUID()}`
-        setUploadedImages((prev) => [
-          ...prev,
-          { resource_id: tempId, url: "", status: "uploading", file },
-        ])
-
-        uploadImage(file)
-          .unwrap()
-          .then((result) => {
-            setUploadedImages((prev) =>
-              prev.map((img) =>
-                img.resource_id === tempId
-                  ? {
-                      ...img,
-                      resource_id: result.resource_id,
-                      url: result.url,
-                      status: "success" as const,
-                    }
-                  : img,
-              ),
-            )
-            setPhotoResourceIds((prev) => [...prev, result.resource_id])
-          })
-          .catch((err) => {
-            const e = err as {
-              data?: {
-                error?: { message?: string; validationErrors?: { message: string }[] }
-                message?: string
-                validationErrors?: { message: string }[]
-              }
-            }
-            const errBody = e?.data?.error || e?.data || {}
-            const detail =
-              errBody?.message ||
-              errBody?.validationErrors?.[0]?.message ||
-              t("quickEdit.uploadFailed", "Upload failed")
-            setUploadedImages((prev) =>
-              prev.map((img) =>
-                img.resource_id === tempId
-                  ? { ...img, status: "error" as const, error: detail }
-                  : img,
-              ),
-            )
-          })
-      }
-    },
-    [uploadImage, t],
-  )
-
-  const handleRemoveUploadedImage = useCallback((resourceId: string) => {
-    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId))
-    setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId))
-  }, [])
+  }, [listing, resetPhotoUploads])
 
   const handleSave = useCallback(async () => {
     if (!listing) return
