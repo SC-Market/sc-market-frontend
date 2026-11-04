@@ -77,22 +77,20 @@ import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { LongPressMenu, useLongPress } from "../../../components/gestures"
 import { EmptyListings } from "../../../components/empty-states"
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import {
   useGetMyListingsQuery,
-  useUpdateListingMutation,
-  useRefreshListingMutation,
-  useDeleteListingMutation,
-  useCreateListingMutation,
-  useUpdateStockLotMutation,
-  marketV2Api,
   type MyListingItem,
 } from "../../../store/api/v2/market"
+import {
+  useBulkListingStatus,
+  useRefreshListing,
+  useRenewListings,
+  useSaveStockRow,
+} from "../hooks/useStockListingActions"
 import { MobileListingRow } from "./components/MobileListingRow"
 import { formatMarketUrl } from "../domain/urls"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 import { MARKET_PATHS, SHOP_PATHS } from "../../../routes/paths"
-import { listingApiError } from "../domain/listingFormErrors"
 import { withShopContext } from "../../../components/sidebar/shopContextState"
 import { ShopManageAccessNotice } from "../../shops/components/ShopManageAccessNotice"
 import { ImportFromUexDialog } from "./ImportFromUex"
@@ -166,58 +164,29 @@ function ListingsToolbarV2(props: ListingsToolbarProps) {
   const [selectionModel] = useListingSelection()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const issueAlert = useAlertHook()
-  const [updateListing] = useUpdateListingMutation()
+  const bulkStatus = useBulkListingStatus()
 
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [archiving, setArchiving] = useState(false)
-  const [bulkLoading, setBulkLoading] = useState(false)
+  const bulkLoading = bulkStatus.isUpdating && !archiving
 
   const selectedCount = selectionModel.ids.size
   const hasSelection = selectedCount > 0
 
+  const { setStatus, archive } = bulkStatus
   const handleBulkStatus = useCallback(
-    async (status: "active" | "inactive") => {
-      const ids = [...selectionModel.ids].map(String)
-      if (ids.length === 0) return
-      setBulkLoading(true)
-      try {
-        await Promise.all(
-          ids.map((id) =>
-            updateListing({ id, updateListingRequest: { status } }).unwrap(),
-          ),
-        )
-        issueAlert({ message: t("ItemStock.updated"), severity: "success" })
-      } catch (e) {
-        issueAlert(e as Error)
-      } finally {
-        setBulkLoading(false)
-      }
-    },
-    [selectionModel.ids, updateListing, issueAlert, t],
+    (status: "active" | "inactive") =>
+      setStatus([...selectionModel.ids].map(String), status),
+    [selectionModel.ids, setStatus],
   )
 
   const handleConfirmBulkArchive = useCallback(async () => {
     const ids = [...selectionModel.ids].map(String)
     if (ids.length === 0) return
     setArchiving(true)
-    try {
-      await Promise.all(
-        ids.map((id) =>
-          updateListing({ id, updateListingRequest: { status: "cancelled" } }).unwrap(),
-        ),
-      )
-      setArchiveDialogOpen(false)
-      issueAlert({
-        message: t("ItemStock.bulkArchivedSuccess", { count: ids.length }),
-        severity: "success",
-      })
-    } catch (e) {
-      issueAlert(e as Error)
-    } finally {
-      setArchiving(false)
-    }
-  }, [selectionModel.ids, updateListing, issueAlert, t])
+    if (await archive(ids)) setArchiveDialogOpen(false)
+    setArchiving(false)
+  }, [selectionModel.ids, archive])
 
   const handleAddNewRow = () => {
     const id = `new-${Date.now()}`
@@ -335,13 +304,8 @@ function ShopListingsGridV2({
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useIsMobile()
   const { shop } = useShopRouteContext()
-  const issueAlert = useAlertHook()
-  const [updateListing] = useUpdateListingMutation()
-  const [refreshListing] = useRefreshListingMutation()
-  const [deleteListing] = useDeleteListingMutation()
-  const [createListing] = useCreateListingMutation()
-  const [updateStockLot] = useUpdateStockLotMutation()
-  const [fetchStockLots] = marketV2Api.endpoints.getStockLots.useLazyQuery()
+  const handleRefresh = useRefreshListing()
+  const { createRow, saveRow } = useSaveStockRow(shop.shop_id)
   const canManage = canEditShopListings(shop)
 
   const [newRows, setNewRows] = useState<NewListingRowV2[]>([])
@@ -357,18 +321,6 @@ function ShopListingsGridV2({
       event.defaultMuiPrevented = true
     }
   }
-
-  const handleRefresh = useCallback(
-    async (id: string) => {
-      try {
-        await refreshListing({ id }).unwrap()
-        issueAlert({ message: t("ItemStock.refreshed", "Listing refreshed"), severity: "success" })
-      } catch {
-        issueAlert({ message: t("marketV2.refreshFailed"), severity: "error" })
-      }
-    },
-    [refreshListing, issueAlert, t],
-  )
 
   const handleEditClick = useCallback(
     (id: GridRowId) => () => {
@@ -418,73 +370,10 @@ function ShopListingsGridV2({
     const existing = listings.find((l) => l.listing_id === id.toString())
 
     if (nr?.isNew) {
-      if (!editing.game_item_id) {
-        issueAlert({ message: t("ItemStock.selectItemError", "Select an item"), severity: "error" })
-        return
-      }
-      try {
-        await createListing({
-          createListingRequest: {
-            title: editing.game_item_name || "New Listing",
-            game_item_id: editing.game_item_id,
-            pricing_mode: "unified",
-            base_price: editing.price || 1,
-            lots: [{ quantity: editing.quantity_available || 1, variant_attributes: {} }],
-            shop_id: shop.shop_id,
-          },
-        }).unwrap()
-        issueAlert({ message: t("ItemStock.created"), severity: "success" })
-        setNewRows((prev) => prev.filter((r) => r.id !== id))
-      } catch (e) {
-        issueAlert({ message: listingApiError(e, t("ItemStock.createError")).message, severity: "error" })
-        return
-      }
+      if (!(await createRow(editing))) return
+      setNewRows((prev) => prev.filter((r) => r.id !== id))
     } else if (existing) {
-      try {
-        const req: Record<string, string | number> = {}
-        if (editing.status !== undefined && editing.status !== existing.status) req.status = editing.status
-        if (editing.price !== undefined && editing.price !== existing.price_min) req.base_price = editing.price
-        if (Object.keys(req).length > 0) {
-          await updateListing({ id: existing.listing_id, updateListingRequest: req }).unwrap()
-        }
-
-        // Quantity change: apply the difference to the listing's newest listed
-        // lot. The lookup is scoped to this shop: unscoped it only searched
-        // your own shops, so an org shop's lots were never found and the edit
-        // was silently dropped.
-        if (
-          editing.quantity_available !== undefined &&
-          editing.quantity_available !== existing.quantity_available
-        ) {
-          const { lots } = await fetchStockLots({
-            listingId: existing.listing_id,
-            listed: true,
-            pageSize: 1,
-            shopId: shop.shop_id,
-          }).unwrap()
-          const firstLot = lots[0]
-          const delta = editing.quantity_available - existing.quantity_available
-          if (!firstLot || firstLot.quantity_total + delta < 0) {
-            issueAlert({
-              message: t(
-                "ItemStock.quantityUseStockPage",
-                "Change this listing's quantity per lot on the Stock page",
-              ),
-              severity: "error",
-            })
-            return
-          }
-          await updateStockLot({
-            id: firstLot.lot_id,
-            updateStockLotRequest: { quantity_total: firstLot.quantity_total + delta },
-          }).unwrap()
-        }
-
-        issueAlert({ message: t("ItemStock.updated"), severity: "success" })
-      } catch {
-        issueAlert({ message: t("ItemStock.updateError", "Failed to update"), severity: "error" })
-        return
-      }
+      if (!(await saveRow(existing, editing))) return
     }
 
     setEditingRows((prev) => {
@@ -885,10 +774,8 @@ const RENEW_WINDOW_MS = 3 * 24 * 60 * 60 * 1000
  * the parameter.
  */
 function RenewFromLink() {
-  const { t } = useTranslation()
-  const issueAlert = useAlertHook()
   const [searchParams, setSearchParams] = useSearchParams()
-  const [refreshListing] = useRefreshListingMutation()
+  const renewListings = useRenewListings()
   const done = useRef(false)
   const ids = (searchParams.get("renew") || "")
     .split(",")
@@ -900,22 +787,7 @@ function RenewFromLink() {
     if (done.current || !ids.length) return
     done.current = true
     void (async () => {
-      const results = await Promise.allSettled(ids.map((id) => refreshListing({ id }).unwrap()))
-      const ok = results.filter((r) => r.status === "fulfilled").length
-      issueAlert(
-        ok === ids.length
-          ? {
-              message: t("ItemStock.renewedFromLink", "Renewed {{count}} listings for another month", { count: ok }),
-              severity: "success",
-            }
-          : {
-              message: t("ItemStock.renewedFromLinkPartial", "Renewed {{ok}} of {{total}} listings. Renew the rest below.", {
-                ok,
-                total: ids.length,
-              }),
-              severity: "warning",
-            },
-      )
+      await renewListings(ids)
       const next = new URLSearchParams(searchParams)
       next.delete("renew")
       setSearchParams(next, { replace: true })
