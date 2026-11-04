@@ -9,8 +9,7 @@ import {
 } from "@mui/material"
 import { EditRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useRequestReviewRevisionMutation } from "../../features/orders/api/ordersApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useRequestReviewRevision } from "../../features/orders/hooks/useReviewRevision"
 import { OrderReview } from "../../features/orders/domain/types"
 
 interface ReviewRevisionButtonProps {
@@ -23,8 +22,7 @@ export function ReviewRevisionButton({
   orderId,
 }: ReviewRevisionButtonProps) {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
-  const [requestRevision, { isLoading }] = useRequestReviewRevisionMutation()
+  const { request: requestRevision, isLoading } = useRequestReviewRevision()
   const [message, setMessage] = useState("")
   const [showMessageInput, setShowMessageInput] = useState(false)
 
@@ -34,21 +32,15 @@ export function ReviewRevisionButton({
       return
     }
 
-    requestRevision({
+    void requestRevision({
       reviewId: review.review_id,
       orderId,
       message: message.trim() || undefined,
+    }).then((requested) => {
+      if (!requested) return
+      setShowMessageInput(false)
+      setMessage("")
     })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("reviewRevision.success.requested"),
-          severity: "success",
-        })
-        setShowMessageInput(false)
-        setMessage("")
-      })
-      .catch(issueAlert)
   }
 
   if (review.revision_requested) {

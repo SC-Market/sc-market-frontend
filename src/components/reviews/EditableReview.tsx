@@ -12,8 +12,7 @@ import {
 } from "@mui/material"
 import { SaveRounded, EditRounded, CancelRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useUpdateOrderReviewMutation } from "../../features/orders/api/ordersApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useUpdateReview } from "../../features/orders/hooks/useReviewRevision"
 import { OrderReview } from "../../features/orders/domain/types"
 
 interface EditableReviewProps {
@@ -22,8 +21,7 @@ interface EditableReviewProps {
 
 export function EditableReview({ review }: EditableReviewProps) {
   const { t } = useTranslation()
-  const showAlert = useAlertHook()
-  const [updateReview, { isLoading }] = useUpdateOrderReviewMutation()
+  const { update: updateReview, isLoading } = useUpdateReview()
 
   const [isEditing, setIsEditing] = useState(false)
   const [content, setContent] = useState(review.content || "")
@@ -59,21 +57,14 @@ export function EditableReview({ review }: EditableReviewProps) {
       return
     }
 
-    updateReview({
+    void updateReview({
       reviewId: review.review_id,
       orderId: review.order_id,
       content: content.trim(),
       rating,
+    }).then((saved) => {
+      if (saved) setIsEditing(false)
     })
-      .unwrap()
-      .then(() => {
-        showAlert({
-          message: t("reviewRevision.success.updated"),
-          severity: "success",
-        })
-        setIsEditing(false)
-      })
-      .catch(showAlert)
   }
 
   const handleCancel = () => {
