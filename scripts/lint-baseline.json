@@ -1,5 +1,5 @@
 {
-  "warnings": 1272,
+  "warnings": 1248,
   "errors": 0,
   "byRule": {
     "(eslint)": 2,
@@ -12,8 +12,8 @@
     "max-lines": 74,
     "no-empty": 14,
     "no-restricted-imports": 46,
-    "no-restricted-syntax": 164,
-    "react-hooks/exhaustive-deps": 73,
+    "no-restricted-syntax": 142,
+    "react-hooks/exhaustive-deps": 71,
     "scm-style/no-hex-colors": 129
   }
 }
